@@ -14,7 +14,6 @@ import { useLanguage } from "@/contexts/LanguageContext";
 
 import ReellyProjectCard from "@/components/ReellyProjectCard";
 import { ProjectGridSkeleton } from "@/components/ProjectCardSkeleton";
-import { useReellyProjects, flattenReellyProjects } from "@/hooks/useReellyProjects";
 import { useDevelopers, useProjectsListing } from "@/hooks/useProjects";
 import { useLocalProjectSearch } from "@/hooks/useLocalProjectSearch";
 import { mapDbProjectToReellyProject } from "@/utils/mapDbToReellyProject";
@@ -151,51 +150,17 @@ const PropertiesReelly = () => {
     setSearchParams(params, { replace: true });
   }, [searchParams, setSearchParams]);
 
-  // Fetch projects from API (enrichment layer)
-  const {
-    data,
-    isLoading,
-    isError,
-    error,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useReellyProjects({});
-
   // Local DB fallback search
   const debouncedSearch = shortcutFilters.searchQuery || '';
   const { data: localResults } = useLocalProjectSearch(debouncedSearch);
 
-  // Convert DB projects to ReellyProject format
-  const dbProjectsMapped = useMemo(() => {
+  // Convert DB projects to ReellyProject format — DB is the sole data source
+  const mergedProjects = useMemo(() => {
     if (!dbProjects?.length) return [];
     return dbProjects
       .filter((p: any) => p.cover_image_url && p.cover_image_url !== '')
       .map(mapDbProjectToReellyProject);
   }, [dbProjects]);
-
-  // Flatten paginated API data
-  const reellyProjects = flattenReellyProjects(data);
-
-  // Merge: DB is primary, API enriches/overrides when available
-  const mergedProjects = useMemo(() => {
-    if (reellyProjects.length > 0) {
-      const apiBySlug = new Map(reellyProjects.map(p => [p.slug, p]));
-      const merged = new Map<string, ReellyProject>();
-      
-      for (const dbP of dbProjectsMapped) {
-        const apiP = apiBySlug.get(dbP.slug);
-        merged.set(dbP.slug, apiP || dbP);
-      }
-      for (const apiP of reellyProjects) {
-        if (!merged.has(apiP.slug)) {
-          merged.set(apiP.slug, apiP);
-        }
-      }
-      return Array.from(merged.values());
-    }
-    return dbProjectsMapped;
-  }, [dbProjectsMapped, reellyProjects]);
 
   // Apply shortcut filters to merged projects
   const projects = useMemo(() => {
@@ -203,7 +168,7 @@ const PropertiesReelly = () => {
   }, [mergedProjects, shortcutFilters]);
 
   // Total count — use raw DB length immediately on arrival (before cover_image filter)
-  const totalCount = dbProjects?.length ?? dbProjectsMapped.length;
+  const totalCount = dbProjects?.length ?? mergedProjects.length;
 
   // Apply URL params on mount
   useEffect(() => {
@@ -417,17 +382,6 @@ const PropertiesReelly = () => {
             {/* Projects Grid — 2 columns max */}
             {isDbLoading ? (
               <ProjectGridSkeleton count={6} />
-            ) : isError ? (
-              <div className="text-center py-20 px-4">
-                <div className="w-20 h-20 bg-gradient-to-br from-red-100 to-red-50 rounded-full flex items-center justify-center mx-auto mb-6 border border-red-200">
-                  <X className="w-10 h-10 text-red-500" />
-                </div>
-                <h3 className="text-xl font-semibold text-black mb-2">Failed to Load Properties</h3>
-                <p className="text-zinc-600 mb-4">{error?.message || 'Something went wrong. Please try again.'}</p>
-                <Button onClick={() => window.location.reload()} variant="primary">
-                  Retry
-                </Button>
-              </div>
             ) : paginatedProjects.length > 0 ? (
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">

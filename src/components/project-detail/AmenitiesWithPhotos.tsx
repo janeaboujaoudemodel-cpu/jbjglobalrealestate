@@ -74,6 +74,8 @@ const AMENITY_PHOTOS: Record<string, string> = {
   library: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=400&h=300&fit=crop&q=80",
   study: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=400&h=300&fit=crop&q=80",
   business: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=400&h=300&fit=crop&q=80",
+  conference: "https://images.unsplash.com/photo-1431540015160-0d3d4b6c8e2e?w=400&h=300&fit=crop&q=80",
+  meeting: "https://images.unsplash.com/photo-1431540015160-0d3d4b6c8e2e?w=400&h=300&fit=crop&q=80",
   cycling: "https://images.unsplash.com/photo-1541625602330-2277a4c46182?w=400&h=300&fit=crop&q=80",
   bike: "https://images.unsplash.com/photo-1541625602330-2277a4c46182?w=400&h=300&fit=crop&q=80",
   jogging: "https://images.unsplash.com/photo-1541625602330-2277a4c46182?w=400&h=300&fit=crop&q=80",
@@ -126,7 +128,7 @@ const getAmenityIcon = (amenity: string) => {
   if (lower.includes('retail') || lower.includes('shop') || lower.includes('mall')) return ShoppingBag;
   if (lower.includes('game') || lower.includes('arcade') || lower.includes('billiard')) return Gamepad2;
   if (lower.includes('cinema') || lower.includes('theater') || lower.includes('movie')) return Film;
-  if (lower.includes('library') || lower.includes('study') || lower.includes('business')) return BookOpen;
+  if (lower.includes('library') || lower.includes('study') || lower.includes('business') || lower.includes('conference') || lower.includes('meeting')) return BookOpen;
   if (lower.includes('clinic') || lower.includes('health') || lower.includes('medical')) return Stethoscope;
   if (lower.includes('cycling') || lower.includes('bike') || lower.includes('jogging')) return Bike;
   if (lower.includes('beach') || lower.includes('marina') || lower.includes('yacht')) return Sailboat;
