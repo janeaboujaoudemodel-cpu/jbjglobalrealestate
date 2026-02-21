@@ -12,9 +12,13 @@ import {
   ArrowLeft, ArrowRight, Check, Upload, Sparkles, Home, Building,
   Hotel, Key, FileText, Camera, Loader2, Wand2, X, Eye,
   MapPin, Bed, Bath, Maximize, DollarSign, Calendar, Star,
-  CheckCircle2, AlertCircle, Image, File, Trash2, Plus, RefreshCw
+  CheckCircle2, AlertCircle, Image, File, Trash2, Plus, RefreshCw,
+  TrendingUp, Shield, User, Phone, Mail, CreditCard
 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
+import { UNIFIED_APPROVAL_WORKFLOW } from '@/config/listing-approval-workflow';
 
 // Types
 interface ExtractedListing {
@@ -53,7 +57,13 @@ interface UploadedDoc {
   status: 'pending' | 'uploading' | 'ready';
 }
 
-// Merged categories: resale + off-plan → "Secondary / Off-Plan"
+interface PricePrediction {
+  estimatedValue: { low: number; high: number; mid: number };
+  marketInsights: string;
+  completionStatus: string;
+  pricePerSqft: number;
+}
+
 const listingCategories = [
   { id: 'secondary_offplan', label: 'Secondary / Off-Plan', icon: Home, desc: 'Resale or under-construction property' },
   { id: 'ready', label: 'Ready to Move', icon: Building, desc: 'Completed property' },
@@ -66,16 +76,35 @@ const propertyTypes = ['Apartment', 'Villa', 'Townhouse', 'Penthouse', 'Studio',
 const furnishingOptions = ['Furnished', 'Unfurnished', 'Semi-Furnished'];
 const emirates = ['Dubai', 'Abu Dhabi', 'Sharjah', 'Ajman', 'Ras Al Khaimah', 'Fujairah', 'Umm Al Quwain'];
 
+const sellerRoles = [
+  { value: 'owner', label: 'Property Owner' },
+  { value: 'broker', label: 'Broker' },
+  { value: 'investor', label: 'Investor' },
+  { value: 'representative', label: 'Representative (POA)' },
+];
+
+// Pricing: Half of Property Finder/Bayut (~AED 300-500 per listing)
+const LISTING_FEES = {
+  direct: { amount: 199, label: 'AED 199', description: 'Your direct contact details shown on listing' },
+  commission: { amount: 0, label: 'Free', description: 'JBJ handles enquiries. 1% sale / 5% rental commission on success' },
+};
+
+const PHASES = ['Upload', 'AI Extract', 'Price Predictor', 'Review & Edit', 'Pricing & Role', 'Submit for Approval'] as const;
+
 const ListingPortalSubmit = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, isOwner } = useAuth();
   
-  const [phase, setPhase] = useState<'upload' | 'extracting' | 'review' | 'submitting' | 'success'>('upload');
+  const [phase, setPhase] = useState<'upload' | 'extracting' | 'pricing_ai' | 'review' | 'pricing_role' | 'submitting' | 'success'>('upload');
   const [listingCategory, setListingCategory] = useState('secondary_offplan');
   const [uploadedDocs, setUploadedDocs] = useState<UploadedDoc[]>([]);
   const [extractedData, setExtractedData] = useState<ExtractedListing | null>(null);
   const [uploadedImageUrls, setUploadedImageUrls] = useState<string[]>([]);
   const [submittedId, setSubmittedId] = useState<string | null>(null);
+  const [pricePrediction, setPricePrediction] = useState<PricePrediction | null>(null);
+  const [isRunningPredictor, setIsRunningPredictor] = useState(false);
+  const [sellerRole, setSellerRole] = useState('owner');
+  const [contactMode, setContactMode] = useState<'direct' | 'commission'>('commission');
   
   const [form, setForm] = useState({
     title: '', description: '', listing_type: 'sale', listing_category: 'secondary_offplan',
@@ -85,6 +114,18 @@ const ListingPortalSubmit = () => {
     furnishing: '', handover_date: '', payment_plan: '',
     amenities: [] as string[], key_features: [] as string[],
   });
+
+  const getPhaseIndex = () => {
+    switch (phase) {
+      case 'upload': return 0;
+      case 'extracting': return 1;
+      case 'pricing_ai': return 2;
+      case 'review': return 3;
+      case 'pricing_role': return 4;
+      case 'submitting': return 5;
+      default: return 0;
+    }
+  };
 
   const handleFileDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -209,13 +250,55 @@ const ListingPortalSubmit = () => {
         key_features: extracted.key_features || [],
       });
 
-      setPhase('review');
+      setPhase('pricing_ai');
       toast.success(`AI extracted ${Object.values(extracted).filter(v => v !== null && v !== '' && v !== undefined).length} fields from your documents!`);
 
     } catch (err: any) {
       console.error('Extraction error:', err);
       toast.error(err.message || 'AI extraction failed. You can fill in details manually.');
-      setPhase('review');
+      setPhase('pricing_ai');
+    }
+  };
+
+  const runPricePredictor = async () => {
+    setIsRunningPredictor(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('property-evaluation', {
+        body: {
+          property: {
+            community: form.location || 'Dubai Marina',
+            subCommunity: form.area || '',
+            buildingName: form.project_name || '',
+            propertyType: form.property_type || 'apartment',
+            bedrooms: form.bedrooms ? parseInt(form.bedrooms) : 1,
+            sizeInternal: form.area_sqft ? parseFloat(form.area_sqft) : 1000,
+            floor: 10,
+            furnishedStatus: form.furnishing || 'unfurnished',
+            renovationCost: 0,
+          }
+        }
+      });
+
+      if (error) throw error;
+
+      if (data?.estimatedValue) {
+        setPricePrediction({
+          estimatedValue: data.estimatedValue,
+          marketInsights: data.marketInsights || '',
+          completionStatus: data.completionStatus || 'N/A',
+          pricePerSqft: data.pricePerSqft || 0,
+        });
+        // Auto-fill price if empty
+        if (!form.price && data.estimatedValue.mid) {
+          setForm(f => ({ ...f, price: Math.round(data.estimatedValue.mid).toString() }));
+        }
+        toast.success('Price prediction complete!');
+      }
+    } catch (err: any) {
+      console.error('Price predictor error:', err);
+      toast.error('Price prediction unavailable. You can set the price manually.');
+    } finally {
+      setIsRunningPredictor(false);
     }
   };
 
@@ -257,13 +340,53 @@ const ListingPortalSubmit = () => {
           ai_quality_score: extractedData?.confidence_score || 0,
           source_documents: uploadedDocs.map(d => ({ name: d.name, type: d.type })),
           gallery_images: uploadedImageUrls,
-          status: 'pending',
+          status: isOwner ? 'approved' : 'pending',
+          contact_mode: contactMode,
+          listing_fee: contactMode === 'direct' ? LISTING_FEES.direct.amount : 0,
+          seller_role: sellerRole,
+          approval_status: isOwner ? 'approved' : 'pending',
         } as any)
         .select()
         .single();
 
       if (error) throw error;
 
+      // Create approval workflow entries
+      if (!isOwner) {
+        const approvalEntries = UNIFIED_APPROVAL_WORKFLOW.map(step => ({
+          listing_id: data.id,
+          listing_type: 'portal_listing',
+          step_number: step.step,
+          step_name: step.name,
+          approver_role: step.role,
+          approver_name: step.approverName,
+          approver_email: step.approverEmail,
+          approver_photo: step.approverPhoto,
+          approver_title: step.approverTitle,
+          approver_department: step.approverDepartment,
+          status: 'pending',
+        }));
+
+        await supabase.from('listing_approvals').insert(approvalEntries as any);
+      } else {
+        // Owner self-approval — only step 4
+        await supabase.from('listing_approvals').insert({
+          listing_id: data.id,
+          listing_type: 'portal_listing',
+          step_number: 4,
+          step_name: 'Final Approval',
+          approver_role: 'founder',
+          approver_name: 'Jane Bou Jaoude',
+          approver_email: 'janeabujaudenails@gmail.com',
+          approver_photo: '',
+          approver_title: 'Founder & CEO',
+          approver_department: 'Executive',
+          status: 'approved',
+          approved_at: new Date().toISOString(),
+        } as any);
+      }
+
+      // Run AI scoring (non-blocking)
       try {
         const { data: scoreResult } = await supabase.functions.invoke('listing-score', {
           body: { listing: { ...form, images_count: uploadedImageUrls.length, source: 'ai_extraction' } }
@@ -280,12 +403,12 @@ const ListingPortalSubmit = () => {
 
       setSubmittedId(data.id);
       setPhase('success');
-      toast.success('Listing submitted for approval!');
+      toast.success(isOwner ? 'Listing approved and published!' : 'Listing submitted for approval!');
 
     } catch (err: any) {
       console.error('Submit error:', err);
       toast.error('Failed to submit listing. Please try again.');
-      setPhase('review');
+      setPhase('pricing_role');
     }
   };
 
@@ -302,27 +425,36 @@ const ListingPortalSubmit = () => {
             <div className="w-20 h-20 bg-emerald-500/15 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-emerald-500/30">
               <CheckCircle2 className="w-10 h-10 text-emerald-600" />
             </div>
-            <h1 className="text-3xl font-bold text-black mb-4">Listing Submitted Successfully!</h1>
+            <h1 className="text-3xl font-bold text-black mb-4">
+              {isOwner ? 'Listing Approved & Published!' : 'Listing Submitted for Approval!'}
+            </h1>
             <p className="text-zinc-600 mb-8">
-              Your listing has been submitted for review. You'll receive a notification once it's approved and published on the portal.
+              {isOwner 
+                ? 'Your listing has been approved and is now live on the portal.'
+                : 'Your listing has been submitted for review. You will receive notifications as it progresses through approval stages.'}
             </p>
-            <div className="bg-white/70 border-2 border-gold/20 rounded-xl p-6 mb-8 text-left">
-              <h3 className="text-gold font-semibold mb-3">What Happens Next?</h3>
-              <ul className="space-y-2 text-zinc-700 text-sm">
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
-                  <span>Our team will review your listing details and documents</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
-                  <span>You'll see the approval status in your dashboard & notifications</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
-                  <span>Once approved, your listing goes live on the JBJ Portal</span>
-                </li>
-              </ul>
-            </div>
+
+            {/* Approval Workflow Visual */}
+            {!isOwner && (
+              <div className="bg-white/70 border-2 border-gold/20 rounded-xl p-6 mb-8 text-left">
+                <h3 className="text-gold font-semibold mb-4">Approval Stages</h3>
+                <div className="space-y-3">
+                  {UNIFIED_APPROVAL_WORKFLOW.map((step) => (
+                    <div key={step.step} className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center flex-shrink-0">
+                        <span className="text-gold text-xs font-bold">{step.step}</span>
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-black text-sm font-medium">{step.name}</p>
+                        <p className="text-zinc-500 text-xs">{step.approverName} — {step.approverTitle}</p>
+                      </div>
+                      <Badge className="bg-gold/10 text-gold border-gold/30 text-xs">Pending</Badge>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div className="flex gap-3 justify-center">
               <Button onClick={() => navigate('/listing-portal/my-listings')} className="bg-gold hover:bg-gold/90 text-black border-0">
                 View My Listings
@@ -359,14 +491,14 @@ const ListingPortalSubmit = () => {
               </p>
             </div>
 
-            {/* Progress indicator */}
-            <div className="flex gap-2 mb-8">
-              {['Upload', 'AI Extract', 'Review & Edit', 'Submit'].map((step, i) => {
-                const stepIndex = phase === 'upload' ? 0 : phase === 'extracting' ? 1 : phase === 'review' ? 2 : 3;
+            {/* Progress indicator — 6 steps */}
+            <div className="flex gap-1.5 mb-8">
+              {PHASES.map((step, i) => {
+                const stepIndex = getPhaseIndex();
                 return (
                   <div key={step} className="flex-1">
                     <div className={`h-1.5 rounded-full transition-all ${i <= stepIndex ? 'bg-gold' : 'bg-gold/20'}`} />
-                    <p className={`text-[10px] mt-1 text-center ${i <= stepIndex ? 'text-gold' : 'text-zinc-400'}`}>{step}</p>
+                    <p className={`text-[9px] mt-1 text-center ${i <= stepIndex ? 'text-gold' : 'text-zinc-400'}`}>{step}</p>
                   </div>
                 );
               })}
@@ -382,7 +514,6 @@ const ListingPortalSubmit = () => {
                   exit={{ opacity: 0, y: -20 }}
                   className="space-y-6"
                 >
-                  {/* Background layer behind card */}
                   <div className="relative">
                     <div className="absolute inset-0 -m-3 rounded-3xl bg-white/40 border border-gold/15" />
                     <div className="relative space-y-6 p-3">
@@ -415,7 +546,7 @@ const ListingPortalSubmit = () => {
                       <div className="bg-white/70 border-2 border-gold/20 rounded-2xl p-6">
                         <h2 className="text-black font-semibold mb-2">Upload Documents</h2>
                         <p className="text-zinc-500 text-xs mb-4">
-                          Upload PDF brochures, floor plans, fact sheets, property photos, Word docs, Excel files — AI will extract everything
+                          Upload PDF brochures, floor plans, fact sheets, property photos, reservation forms, agreements — AI will extract everything
                         </p>
                         
                         <div
@@ -439,7 +570,6 @@ const ListingPortalSubmit = () => {
                           />
                         </div>
 
-                        {/* Uploaded Files List */}
                         {uploadedDocs.length > 0 && (
                           <div className="mt-4 space-y-2">
                             {uploadedDocs.map(doc => (
@@ -458,7 +588,7 @@ const ListingPortalSubmit = () => {
                                 <div className="flex-1 min-w-0">
                                   <p className="text-black text-sm truncate">{doc.name}</p>
                                   <p className="text-zinc-500 text-xs">
-                                    {(doc.file.size / 1024 / 1024).toFixed(1)} MB · {doc.type.toUpperCase()}
+                                    {(doc.file.size / 1024 / 1024).toFixed(1)} MB
                                   </p>
                                 </div>
                                 <button onClick={() => removeDoc(doc.id)} className="p-1.5 hover:bg-gold/10 rounded-lg">
@@ -470,7 +600,6 @@ const ListingPortalSubmit = () => {
                         )}
                       </div>
 
-                      {/* Extract Button — solid gold, no fading */}
                       <div className="flex gap-3">
                         <Button
                           onClick={runAIExtraction}
@@ -481,7 +610,7 @@ const ListingPortalSubmit = () => {
                           Extract with AI ({uploadedDocs.length} {uploadedDocs.length === 1 ? 'file' : 'files'})
                         </Button>
                         <Button
-                          onClick={() => setPhase('review')}
+                          onClick={() => setPhase('pricing_ai')}
                           className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 text-black hover:border-gold h-12"
                         >
                           Skip — Fill Manually
@@ -519,6 +648,119 @@ const ListingPortalSubmit = () => {
                 </motion.div>
               )}
 
+              {/* ========== PRICE PREDICTOR PHASE ========== */}
+              {phase === 'pricing_ai' && (
+                <motion.div
+                  key="pricing_ai"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
+                >
+                  <div className="relative">
+                    <div className="absolute inset-0 -m-3 rounded-3xl bg-white/40 border border-gold/15" />
+                    <div className="relative space-y-6 p-3">
+                      <div className="bg-white/70 border-2 border-gold/20 rounded-2xl p-6">
+                        <div className="flex items-center gap-3 mb-4">
+                          <div className="w-12 h-12 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center">
+                            <TrendingUp className="w-6 h-6 text-gold" />
+                          </div>
+                          <div>
+                            <h2 className="text-black font-bold text-lg">AI Price Predictor</h2>
+                            <p className="text-zinc-500 text-xs">Get an AI-powered market price estimate based on location, size, and market data</p>
+                          </div>
+                        </div>
+
+                        {/* Quick summary of extracted data */}
+                        {extractedData && (
+                          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+                            <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/20 rounded-lg p-3 text-center">
+                              <MapPin className="w-4 h-4 text-gold mx-auto mb-1" />
+                              <p className="text-xs text-zinc-500">Location</p>
+                              <p className="text-black text-sm font-medium truncate">{form.location || 'N/A'}</p>
+                            </div>
+                            <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/20 rounded-lg p-3 text-center">
+                              <Bed className="w-4 h-4 text-gold mx-auto mb-1" />
+                              <p className="text-xs text-zinc-500">Bedrooms</p>
+                              <p className="text-black text-sm font-medium">{form.bedrooms || 'N/A'}</p>
+                            </div>
+                            <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/20 rounded-lg p-3 text-center">
+                              <Maximize className="w-4 h-4 text-gold mx-auto mb-1" />
+                              <p className="text-xs text-zinc-500">Area</p>
+                              <p className="text-black text-sm font-medium">{form.area_sqft ? `${parseInt(form.area_sqft).toLocaleString()} sqft` : 'N/A'}</p>
+                            </div>
+                            <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/20 rounded-lg p-3 text-center">
+                              <Building className="w-4 h-4 text-gold mx-auto mb-1" />
+                              <p className="text-xs text-zinc-500">Type</p>
+                              <p className="text-black text-sm font-medium capitalize">{form.property_type || 'N/A'}</p>
+                            </div>
+                          </div>
+                        )}
+
+                        <Button
+                          onClick={runPricePredictor}
+                          disabled={isRunningPredictor}
+                          className="w-full bg-gold hover:bg-gold/90 text-black border-0 h-12 text-base"
+                        >
+                          {isRunningPredictor ? (
+                            <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> Analyzing Market Data...</>
+                          ) : (
+                            <><TrendingUp className="w-5 h-5 mr-2" /> Run Price Prediction</>
+                          )}
+                        </Button>
+
+                        {/* Price Prediction Results */}
+                        {pricePrediction && (
+                          <div className="mt-6 space-y-4">
+                            <div className="bg-emerald-50 border-2 border-emerald-300 rounded-xl p-5">
+                              <h3 className="text-black font-semibold mb-3 flex items-center gap-2">
+                                <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+                                Estimated Market Value
+                              </h3>
+                              <div className="grid grid-cols-3 gap-4 text-center">
+                                <div>
+                                  <p className="text-zinc-500 text-xs mb-1">Low</p>
+                                  <p className="text-black font-bold text-lg">AED {pricePrediction.estimatedValue.low.toLocaleString()}</p>
+                                </div>
+                                <div className="border-x border-emerald-200">
+                                  <p className="text-zinc-500 text-xs mb-1">Recommended</p>
+                                  <p className="text-emerald-700 font-bold text-xl">AED {pricePrediction.estimatedValue.mid.toLocaleString()}</p>
+                                </div>
+                                <div>
+                                  <p className="text-zinc-500 text-xs mb-1">High</p>
+                                  <p className="text-black font-bold text-lg">AED {pricePrediction.estimatedValue.high.toLocaleString()}</p>
+                                </div>
+                              </div>
+                            </div>
+
+                            {pricePrediction.marketInsights && (
+                              <div className="bg-white/80 border border-gold/20 rounded-xl p-4">
+                                <p className="text-zinc-600 text-sm">{pricePrediction.marketInsights}</p>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="flex gap-3">
+                        <Button
+                          onClick={() => setPhase('upload')}
+                          className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 text-black hover:border-gold h-12"
+                        >
+                          <ArrowLeft className="w-4 h-4 mr-2" /> Back
+                        </Button>
+                        <Button
+                          onClick={() => setPhase('review')}
+                          className="flex-1 bg-gold hover:bg-gold/90 text-black border-0 h-12 text-base"
+                        >
+                          Continue to Review <ArrowRight className="w-4 h-4 ml-2" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
               {/* ========== REVIEW PHASE ========== */}
               {phase === 'review' && (
                 <motion.div
@@ -527,7 +769,6 @@ const ListingPortalSubmit = () => {
                   animate={{ opacity: 1, y: 0 }}
                   className="space-y-6"
                 >
-                  {/* Background layer */}
                   <div className="relative">
                     <div className="absolute inset-0 -m-3 rounded-3xl bg-white/40 border border-gold/15" />
                     <div className="relative space-y-6 p-3">
@@ -551,7 +792,7 @@ const ListingPortalSubmit = () => {
                             </p>
                             <p className="text-zinc-600 text-xs">
                               {extractedData.confidence_score >= 80 
-                                ? 'High confidence — review and submit' 
+                                ? 'High confidence — review and continue' 
                                 : 'Please review and edit the details below'}
                             </p>
                           </div>
@@ -566,8 +807,42 @@ const ListingPortalSubmit = () => {
                         </div>
                       )}
 
+                      {/* Listing Card Preview */}
+                      {(form.title || uploadedImageUrls.length > 0) && (
+                        <div className="bg-white border-2 border-gold/30 rounded-2xl overflow-hidden shadow-sm">
+                          <div className="relative">
+                            {uploadedImageUrls.length > 0 ? (
+                              <img src={uploadedImageUrls[0]} alt="" className="w-full h-48 object-cover" />
+                            ) : (
+                              <div className="w-full h-48 bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] flex items-center justify-center">
+                                <Image className="w-12 h-12 text-gold/30" />
+                              </div>
+                            )}
+                            {form.listing_category && (
+                              <Badge className="absolute top-3 left-3 bg-black/70 text-white border-0 text-xs">
+                                {listingCategories.find(c => c.id === form.listing_category)?.label}
+                              </Badge>
+                            )}
+                          </div>
+                          <div className="p-4">
+                            <h3 className="text-black font-bold text-lg mb-1">{form.title || 'Untitled Listing'}</h3>
+                            <p className="text-zinc-500 text-sm flex items-center gap-1 mb-3">
+                              <MapPin className="w-3.5 h-3.5" /> {form.location || form.emirate}
+                            </p>
+                            <div className="flex items-center gap-4 text-zinc-600 text-sm mb-3">
+                              {form.bedrooms && <span className="flex items-center gap-1"><Bed className="w-3.5 h-3.5" /> {form.bedrooms} BR</span>}
+                              {form.bathrooms && <span className="flex items-center gap-1"><Bath className="w-3.5 h-3.5" /> {form.bathrooms} BA</span>}
+                              {form.area_sqft && <span className="flex items-center gap-1"><Maximize className="w-3.5 h-3.5" /> {parseInt(form.area_sqft).toLocaleString()} sqft</span>}
+                            </div>
+                            {form.price && (
+                              <p className="text-gold font-bold text-xl">AED {parseInt(form.price).toLocaleString()}</p>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
                       {/* Gallery Preview */}
-                      {uploadedImageUrls.length > 0 && (
+                      {uploadedImageUrls.length > 1 && (
                         <div className="bg-white/70 border-2 border-gold/20 rounded-2xl p-6">
                           <h3 className="text-black font-semibold mb-3 flex items-center gap-2">
                             <Image className="w-4 h-4 text-gold" />
@@ -755,21 +1030,157 @@ const ListingPortalSubmit = () => {
                         </div>
                       )}
 
-                      {/* Submit Actions — solid buttons */}
+                      {/* Navigation */}
                       <div className="flex gap-3">
                         <Button
-                          onClick={() => setPhase('upload')}
+                          onClick={() => setPhase('pricing_ai')}
+                          className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 text-black hover:border-gold h-12"
+                        >
+                          <ArrowLeft className="w-4 h-4 mr-2" /> Back
+                        </Button>
+                        <Button
+                          onClick={() => setPhase('pricing_role')}
+                          disabled={!form.title.trim()}
+                          className="flex-1 bg-gold hover:bg-gold/90 text-black border-0 h-12 text-base disabled:opacity-50"
+                        >
+                          Continue <ArrowRight className="w-4 h-4 ml-2" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {/* ========== PRICING & ROLE PHASE ========== */}
+              {phase === 'pricing_role' && (
+                <motion.div
+                  key="pricing_role"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
+                >
+                  <div className="relative">
+                    <div className="absolute inset-0 -m-3 rounded-3xl bg-white/40 border border-gold/15" />
+                    <div className="relative space-y-6 p-3">
+                      {/* Role Selection */}
+                      <div className="bg-white/70 border-2 border-gold/20 rounded-2xl p-6">
+                        <h3 className="text-black font-semibold mb-4 flex items-center gap-2">
+                          <User className="w-4 h-4 text-gold" />
+                          Your Role
+                        </h3>
+                        <RadioGroup value={sellerRole} onValueChange={setSellerRole} className="grid grid-cols-2 gap-3">
+                          {sellerRoles.map(role => (
+                            <div key={role.value} className={`flex items-center gap-3 p-3 rounded-xl border-2 transition-all cursor-pointer ${
+                              sellerRole === role.value ? 'bg-gold/10 border-gold/50' : 'bg-white/60 border-gold/15 hover:border-gold/30'
+                            }`}>
+                              <RadioGroupItem value={role.value} id={`role-${role.value}`} className="border-gold/50" />
+                              <Label htmlFor={`role-${role.value}`} className="text-black text-sm cursor-pointer">{role.label}</Label>
+                            </div>
+                          ))}
+                        </RadioGroup>
+                      </div>
+
+                      {/* Contact & Pricing Model */}
+                      <div className="bg-white/70 border-2 border-gold/20 rounded-2xl p-6">
+                        <h3 className="text-black font-semibold mb-2 flex items-center gap-2">
+                          <CreditCard className="w-4 h-4 text-gold" />
+                          Listing Contact & Pricing
+                        </h3>
+                        <p className="text-zinc-500 text-xs mb-4">Choose how enquiries are handled for your listing</p>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Direct Contact Option */}
+                          <button
+                            onClick={() => setContactMode('direct')}
+                            className={`text-left p-5 rounded-xl border-2 transition-all ${
+                              contactMode === 'direct' 
+                                ? 'bg-gold/10 border-gold/50' 
+                                : 'bg-white/60 border-gold/15 hover:border-gold/30'
+                            }`}
+                          >
+                            <div className="flex items-center gap-2 mb-2">
+                              <Phone className="w-4 h-4 text-gold" />
+                              <span className="text-black font-semibold text-sm">Direct Contact</span>
+                            </div>
+                            <p className="text-gold font-bold text-lg mb-1">{LISTING_FEES.direct.label}</p>
+                            <p className="text-zinc-500 text-xs">{LISTING_FEES.direct.description}</p>
+                            <div className="mt-3 bg-emerald-50 border border-emerald-200 rounded-lg p-2">
+                              <p className="text-emerald-700 text-xs font-medium">50% less than Property Finder & Bayut</p>
+                            </div>
+                          </button>
+
+                          {/* Commission Option */}
+                          <button
+                            onClick={() => setContactMode('commission')}
+                            className={`text-left p-5 rounded-xl border-2 transition-all ${
+                              contactMode === 'commission' 
+                                ? 'bg-gold/10 border-gold/50' 
+                                : 'bg-white/60 border-gold/15 hover:border-gold/30'
+                            }`}
+                          >
+                            <div className="flex items-center gap-2 mb-2">
+                              <Shield className="w-4 h-4 text-gold" />
+                              <span className="text-black font-semibold text-sm">Commission-Based</span>
+                            </div>
+                            <p className="text-gold font-bold text-lg mb-1">{LISTING_FEES.commission.label}</p>
+                            <p className="text-zinc-500 text-xs">{LISTING_FEES.commission.description}</p>
+                            <div className="mt-3 bg-gold/5 border border-gold/20 rounded-lg p-2">
+                              <p className="text-gold text-xs font-medium">JBJ handles all enquiries professionally</p>
+                            </div>
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Approval Preview */}
+                      {!isOwner && (
+                        <div className="bg-white/70 border-2 border-gold/20 rounded-2xl p-6">
+                          <h3 className="text-black font-semibold mb-4 flex items-center gap-2">
+                            <Shield className="w-4 h-4 text-gold" />
+                            Approval Workflow
+                          </h3>
+                          <p className="text-zinc-500 text-xs mb-4">Your listing will go through these approval stages before publishing</p>
+                          <div className="space-y-3">
+                            {UNIFIED_APPROVAL_WORKFLOW.map((step) => (
+                              <div key={step.step} className="flex items-center gap-3">
+                                <img src={step.approverPhoto} alt="" className="w-9 h-9 rounded-full object-cover border border-gold/30" />
+                                <div className="flex-1">
+                                  <p className="text-black text-sm font-medium">{step.name}</p>
+                                  <p className="text-zinc-500 text-xs">{step.approverName} — {step.approverTitle}</p>
+                                </div>
+                                <Badge className="bg-gold/10 text-gold border-gold/30 text-xs">Step {step.step}</Badge>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {isOwner && (
+                        <div className="bg-emerald-50 border-2 border-emerald-300 rounded-2xl p-5">
+                          <div className="flex items-center gap-3">
+                            <CheckCircle2 className="w-6 h-6 text-emerald-600" />
+                            <div>
+                              <p className="text-black font-semibold text-sm">Owner Auto-Approval</p>
+                              <p className="text-zinc-600 text-xs">As the Owner, your listing will be approved and published immediately upon submission.</p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Navigation */}
+                      <div className="flex gap-3">
+                        <Button
+                          onClick={() => setPhase('review')}
                           className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 text-black hover:border-gold h-12"
                         >
                           <ArrowLeft className="w-4 h-4 mr-2" /> Back
                         </Button>
                         <Button
                           onClick={handleSubmit}
-                          disabled={!form.title.trim()}
-                          className="flex-1 bg-gold hover:bg-gold/90 text-black border-0 h-12 text-base disabled:opacity-50"
+                          className="flex-1 bg-gold hover:bg-gold/90 text-black border-0 h-12 text-base"
                         >
                           <Check className="w-5 h-5 mr-2" />
-                          Submit for Approval
+                          {isOwner ? 'Approve & Publish' : 'Submit for Approval'}
                         </Button>
                       </div>
                     </div>
@@ -786,7 +1197,9 @@ const ListingPortalSubmit = () => {
                   className="bg-white/70 border-2 border-gold/20 rounded-2xl p-12 text-center"
                 >
                   <Loader2 className="w-12 h-12 text-gold animate-spin mx-auto mb-4" />
-                  <h2 className="text-black text-xl font-bold">Submitting your listing...</h2>
+                  <h2 className="text-black text-xl font-bold">
+                    {isOwner ? 'Approving & publishing...' : 'Submitting for approval...'}
+                  </h2>
                 </motion.div>
               )}
             </AnimatePresence>

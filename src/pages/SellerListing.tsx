@@ -714,10 +714,12 @@ Requirements:
                       <RadioGroup 
                         value={form.watch("seller_type")} 
                         onValueChange={(v) => form.setValue("seller_type", v)}
-                        className="grid grid-cols-3 gap-3"
+                        className="grid grid-cols-2 md:grid-cols-3 gap-3"
                       >
                         {[
-                          { value: "owner", label: "Owner" },
+                          { value: "owner", label: "Property Owner" },
+                          { value: "broker", label: "Broker" },
+                          { value: "investor", label: "Investor" },
                           { value: "representative", label: "Representative" },
                           { value: "poa", label: "Power of Attorney" },
                         ].map((option) => (
