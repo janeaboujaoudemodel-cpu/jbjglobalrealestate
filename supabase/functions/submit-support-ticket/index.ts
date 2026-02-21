@@ -277,8 +277,13 @@ body{margin:0;padding:0;width:100%!important;background-color:#F5EBD7;}
 <!-- Main Container 600px -->
 <table role="presentation" class="wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:linear-gradient(180deg,#FFFFFF 0%,#FDFBF7 50%,#F5F0E6 100%);border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(200,167,102,0.15);">
 
-<!-- HERO - Champagne Gold Gradient with Rounded Corners -->
-<tr><td class="hero-pad" style="background:linear-gradient(135deg,#C8A766 0%,#B8956E 50%,#A07D4A 100%);padding:40px 32px;text-align:center;border-radius:20px 20px 0 0;">
+<!-- Logo Banner -->
+<tr><td style="background:#ffffff;padding:24px 32px 16px;text-align:center;border-radius:20px 20px 0 0;">
+<img src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/jbj-logo.png?v=1" alt="JBJ Global Real Estate" width="160" style="max-width:160px;height:auto;" />
+</td></tr>
+
+<!-- HERO - Champagne Gold Gradient -->
+<tr><td class="hero-pad" style="background:linear-gradient(135deg,#C8A766 0%,#B8956E 50%,#A07D4A 100%);padding:40px 32px;text-align:center;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr><td style="font-size:28px;font-weight:bold;color:#1a1a1a;padding-bottom:8px;font-family:'Segoe UI',Arial,sans-serif;">JBJ Global Real Estate</td></tr>
 <tr><td style="font-size:16px;color:#2d2d2d;padding-bottom:24px;font-weight:500;">Support Ticket Confirmation</td></tr>
@@ -331,6 +336,21 @@ ${OFFICIAL_EMAILS.support}
 
 <!-- CONTENT -->
 <tr><td class="content-pad" style="padding:32px 32px 24px;">
+
+<!-- JBJ Support Header Card - Full width with rounded bottom -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:12px;margin-bottom:24px;">
+<tr><td style="padding:24px 20px;text-align:center;">
+<p style="margin:0 0 4px;font-size:15px;font-weight:700;color:#1a1a1a;">JBJ Global Real Estate</p>
+<p style="margin:0;font-size:13px;color:#C8A766;font-weight:600;">Support Ticket Confirmation</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:16px;border-top:1px solid #C8A766;padding-top:12px;">
+<tr>
+<td width="33%" style="text-align:center;padding:4px;"><a href="tel:+971565911000" style="color:#1a1a1a;text-decoration:none;font-size:12px;">&#9742; +971 56 591 1000</a></td>
+<td width="33%" style="text-align:center;padding:4px;"><a href="mailto:SUPPORT@JBJ.AE" style="color:#1a1a1a;text-decoration:none;font-size:12px;">&#9993; SUPPORT@JBJ.AE</a></td>
+<td width="33%" style="text-align:center;padding:4px;"><a href="https://jbj.ae" style="color:#1a1a1a;text-decoration:none;font-size:12px;">&#127760; jbj.ae</a></td>
+</tr>
+</table>
+</td></tr>
+</table>
 
 <!-- Greeting -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -415,11 +435,23 @@ ${attachmentUrls.map((url: string, i: number) => {
   const ext = (url.split('.').pop() || '').toLowerCase();
   const isImage = ['jpg','jpeg','png','gif','webp'].includes(ext);
   return `<tr><td style="padding:6px 0;">
-<a href="${url}" target="_blank" style="display:flex;align-items:center;gap:8px;padding:10px 14px;background:#ffffff;border:1px solid #C8A766;border-radius:8px;text-decoration:none;color:#1a1a1a;font-size:13px;font-weight:500;">
-${isImage ? `<img src="${url}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;border:1px solid #e5e5e5;" alt="Preview"/>` : `<span style="display:inline-block;width:40px;height:40px;border-radius:6px;background:#f5f0e6;text-align:center;line-height:40px;font-size:11px;color:#C8A766;font-weight:bold;border:1px solid #e5e5e5;">${ext.toUpperCase()}</span>`}
-<span style="flex:1;">${fileName}</span>
-<span style="color:#C8A766;font-size:12px;">View &#8599;</span>
-</a>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td style="padding:10px 14px;background:#ffffff;border:1px solid #C8A766;border-radius:8px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td width="48" style="vertical-align:middle;padding-right:12px;">
+${isImage ? `<img src="${url}" width="40" height="40" style="width:40px;height:40px;object-fit:cover;border-radius:6px;border:1px solid #e5e5e5;display:block;" alt="Preview"/>` : `<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td style="width:40px;height:40px;border-radius:6px;background:#f5f0e6;text-align:center;line-height:40px;font-size:11px;color:#C8A766;font-weight:bold;border:1px solid #e5e5e5;">${ext.toUpperCase()}</td></tr></table>`}
+</td>
+<td style="vertical-align:middle;font-size:13px;font-weight:500;color:#1a1a1a;">${fileName}</td>
+<td width="60" style="vertical-align:middle;text-align:right;">
+<a href="${url}" target="_blank" style="color:#1a1a1a;text-decoration:none;font-size:12px;font-weight:600;padding:4px 10px;background:#f5f0e6;border:1px solid #C8A766;border-radius:4px;">View</a>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
 </td></tr>`;
 }).join('')}
 </table>
@@ -545,9 +577,9 @@ Explore While You Wait</p>
 
 <!-- FOOTER -->
 <tr><td style="background:linear-gradient(135deg,#1a1a1a,#2d2d2d);text-align:center;padding:32px 24px;border-radius:0 0 20px 20px;">
-<!-- Logo: J on black circle -->
+<!-- JBJ Monogram -->
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:12px;">
-<tr><td style="width:48px;height:48px;border-radius:50%;background:#000000;color:#ffffff;text-align:center;line-height:48px;font-size:24px;font-weight:bold;font-family:'Georgia',serif;border:2px solid #C8A766;">J</td></tr>
+<tr><td style="width:48px;height:48px;border-radius:50%;background:#000000;color:#C8A766;text-align:center;line-height:48px;font-size:16px;font-weight:bold;font-family:'Georgia',serif;border:2px solid #C8A766;">JBJ</td></tr>
 </table>
 <p style="color:#C8A766;font-size:18px;font-weight:bold;margin:0 0 6px;">JBJ Global Real Estate</p>
 <p style="color:#888;font-size:12px;margin:0 0 4px;font-style:italic;">The Only Global AI-Powered Real Estate Intelligence Platform</p>

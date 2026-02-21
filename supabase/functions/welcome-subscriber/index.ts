@@ -40,8 +40,13 @@ const handler = async (req: Request): Promise<Response> => {
 <tr><td align="center" style="padding:20px 10px;">
 <table role="presentation" cellpadding="0" cellspacing="0" width="600" style="max-width:600px;width:100%;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
 
+<!-- Logo Banner -->
+<tr><td style="background:#ffffff;padding:24px 30px 16px;text-align:center;">
+<img src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/jbj-logo.png?v=1" alt="JBJ Global Real Estate" width="160" style="max-width:160px;height:auto;" />
+</td></tr>
+
 <!-- Header -->
-<tr><td style="background:linear-gradient(135deg,#0a0a0a 0%,#1a1a1a 50%,#2a2015 100%);padding:40px 30px;text-align:center;">
+<tr><td style="background:linear-gradient(135deg,#0a0a0a 0%,#1a1a1a 50%,#2a2015 100%);padding:32px 30px;text-align:center;">
 <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
 <tr><td align="center">
 <p style="margin:0;font-size:28px;font-weight:700;color:#D4AF37;letter-spacing:3px;font-family:'Georgia',serif;">JBJ GLOBAL</p>
@@ -61,16 +66,16 @@ const handler = async (req: Request): Promise<Response> => {
 
 <!-- Benefits Section -->
 <tr><td style="background-color:#FDFBF7;padding:0 30px 30px;">
-<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background:linear-gradient(135deg,#F5EBD7,#EDE4D3);border-left:4px solid #D4AF37;border-radius:0 8px 8px 0;padding:20px;">
+<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background:linear-gradient(135deg,#F5EBD7,#EDE4D3);border-left:4px solid #D4AF37;border-radius:0 8px 8px 0;">
 <tr><td style="padding:20px;">
 <p style="margin:0 0 16px;font-size:15px;font-weight:700;color:#1a1a1a;">You will receive:</p>
 <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
-<tr><td style="padding:6px 0;font-size:14px;color:#333;">✦ New project launches — off-plan &amp; ready</td></tr>
-<tr><td style="padding:6px 0;font-size:14px;color:#333;">✦ Market intelligence highlights &amp; reports</td></tr>
-<tr><td style="padding:6px 0;font-size:14px;color:#333;">✦ Exclusive early access &amp; priority viewing invitations</td></tr>
-<tr><td style="padding:6px 0;font-size:14px;color:#333;">✦ Price drops, limited offers &amp; developer promotions</td></tr>
-<tr><td style="padding:6px 0;font-size:14px;color:#333;">✦ AI tools hub updates, calculators &amp; comparisons</td></tr>
-<tr><td style="padding:6px 0;font-size:14px;color:#333;">✦ Area guides &amp; investment insights</td></tr>
+<tr><td style="padding:6px 0;font-size:14px;color:#333;">&#10022; New project launches — off-plan &amp; ready</td></tr>
+<tr><td style="padding:6px 0;font-size:14px;color:#333;">&#10022; Market intelligence highlights &amp; reports</td></tr>
+<tr><td style="padding:6px 0;font-size:14px;color:#333;">&#10022; Exclusive early access &amp; priority viewing invitations</td></tr>
+<tr><td style="padding:6px 0;font-size:14px;color:#333;">&#10022; Price drops, limited offers &amp; developer promotions</td></tr>
+<tr><td style="padding:6px 0;font-size:14px;color:#333;">&#10022; AI tools hub updates, calculators &amp; comparisons</td></tr>
+<tr><td style="padding:6px 0;font-size:14px;color:#333;">&#10022; Area guides &amp; investment insights</td></tr>
 </table>
 </td></tr>
 </table>
@@ -80,7 +85,7 @@ const handler = async (req: Request): Promise<Response> => {
 <tr><td style="background-color:#FDFBF7;padding:0 30px 36px;text-align:center;">
 <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
 <tr><td align="center" style="padding-bottom:12px;">
-<a href="${siteUrl}/properties" style="display:inline-block;background:linear-gradient(135deg,#D4AF37,#B8860B);color:#000;text-decoration:none;padding:14px 32px;border-radius:8px;font-weight:700;font-size:15px;letter-spacing:0.5px;">Browse Properties →</a>
+<a href="${siteUrl}/properties" style="display:inline-block;background:linear-gradient(135deg,#D4AF37,#B8860B);color:#000;text-decoration:none;padding:14px 32px;border-radius:8px;font-weight:700;font-size:15px;letter-spacing:0.5px;">Browse Properties &#8594;</a>
 </td></tr>
 <tr><td align="center">
 <a href="${prefsUrl}" style="display:inline-block;background:#ffffff;color:#D4AF37;text-decoration:none;padding:12px 28px;border-radius:8px;font-weight:600;font-size:14px;border:2px solid #D4AF37;">Manage Preferences</a>
@@ -90,9 +95,9 @@ const handler = async (req: Request): Promise<Response> => {
 
 <!-- Footer -->
 <tr><td style="background:linear-gradient(135deg,#1a1a1a,#2d2d2d);padding:28px 30px;text-align:center;">
-<!-- Logo: J on black circle -->
+<!-- JBJ Monogram -->
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:12px;">
-<tr><td style="width:48px;height:48px;border-radius:50%;background:#000000;color:#ffffff;text-align:center;line-height:48px;font-size:24px;font-weight:bold;font-family:'Georgia',serif;border:2px solid #C8A766;">J</td></tr>
+<tr><td style="width:48px;height:48px;border-radius:50%;background:#000000;color:#C8A766;text-align:center;line-height:48px;font-size:16px;font-weight:bold;font-family:'Georgia',serif;border:2px solid #C8A766;">JBJ</td></tr>
 </table>
 <p style="color:#C8A766;font-size:18px;font-weight:bold;margin:0 0 6px;">JBJ Global Real Estate</p>
 <p style="color:#888;font-size:12px;margin:0 0 4px;font-style:italic;">The Only Global AI-Powered Real Estate Intelligence Platform</p>
@@ -108,7 +113,7 @@ const handler = async (req: Request): Promise<Response> => {
 </p>
 <p style="margin:16px 0 0;font-size:11px;color:#666;">
 Developed, Created &amp; Implemented by The Founder &amp; CEO, <span style="color:#C8A766;">Jane Bou Jaoude</span><br/>
-© ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.<br/>
+&copy; ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.<br/>
 Dubai, United Arab Emirates<br/><br/>
 You are receiving this email because you opted in on jbj.ae.
 </p>
