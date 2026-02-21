@@ -57,7 +57,7 @@ Deno.serve(async (req) => {
 
   // Step 2: Discover new developers and logos (full mode to update all logos)
   try {
-    console.log("[daily-reelly-auto-sync] Step 2: Syncing developers (full mode)...");
+    console.log("[daily-reelly-auto-sync] Step 2: Syncing developers (quick mode)...");
     const devResult = await callFunction("reelly-developers-sync", {
       mode: "quick",
     });
@@ -137,18 +137,32 @@ Deno.serve(async (req) => {
     errors.push(msg);
   }
 
-  // Step 8: Backfill missing project data (bedrooms, prices, unit types) — offline resilience
+  // Step 8: Full backfill — mirror ALL assets (images, docs, floor plans) to local storage
   try {
-    console.log("[daily-reelly-auto-sync] Step 8: Backfilling missing Reelly project data...");
+    console.log("[daily-reelly-auto-sync] Step 8: Backfilling with full mirroring (images + docs)...");
     const backfillResult = await callFunction("reelly-complete-offline-save", {
       mode: "batch",
-      batch_size: 30,
-      mirror_images: false, // Skip image mirroring in daily to keep it fast
+      batch_size: 50,
+      mirror_images: true, // Always mirror to local storage
     });
     results.offline_backfill = backfillResult;
     console.log("[daily-reelly-auto-sync] Step 8 complete:", JSON.stringify(backfillResult).slice(0, 200));
   } catch (err) {
     const msg = `Step 8 (reelly-complete-offline-save) failed: ${err.message}`;
+    console.error("[daily-reelly-auto-sync]", msg);
+    errors.push(msg);
+  }
+
+  // Step 9: Convert remaining external URLs to local — gradual migration
+  try {
+    console.log("[daily-reelly-auto-sync] Step 9: Converting external URLs to local storage...");
+    const mirrorResult = await callFunction("reelly-emergency-mirror", {
+      mode: "start",
+    });
+    results.external_url_migration = mirrorResult;
+    console.log("[daily-reelly-auto-sync] Step 9 complete:", JSON.stringify(mirrorResult).slice(0, 200));
+  } catch (err) {
+    const msg = `Step 9 (reelly-emergency-mirror) failed: ${err.message}`;
     console.error("[daily-reelly-auto-sync]", msg);
     errors.push(msg);
   }
