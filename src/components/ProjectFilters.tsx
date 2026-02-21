@@ -310,10 +310,10 @@ const ProjectFilters = ({
   return (
     <div className="mb-8 space-y-4">
       {/* Always-Visible Top Bar */}
-      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-2xl p-3">
-        <div className="flex flex-wrap items-center gap-2">
+      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-2xl p-3 overflow-hidden">
+        <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-1 -mb-1" style={{ WebkitOverflowScrolling: 'touch' }}>
           {/* Search */}
-          <div className="relative flex-1 min-w-[200px]">
+          <div className="relative flex-1 min-w-[200px] snap-start flex-shrink-0">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
             <Input
               placeholder="Search projects, developers..."
@@ -338,7 +338,7 @@ const ProjectFilters = ({
               updateFilter("developerId", value === "all" ? null : value)
             }
           >
-            <SelectTrigger className="h-11 w-[180px] rounded-xl">
+            <SelectTrigger className="h-11 w-[180px] rounded-xl flex-shrink-0 snap-start">
               <Building2 className="w-4 h-4 mr-1 text-gold shrink-0" />
               <SelectValue placeholder="All Developers" />
             </SelectTrigger>
@@ -369,7 +369,7 @@ const ProjectFilters = ({
             value={filters.currency}
             onValueChange={(value) => updateFilter("currency", value as FilterState['currency'])}
           >
-            <SelectTrigger className="h-11 w-[90px] rounded-xl">
+            <SelectTrigger className="h-11 w-[90px] rounded-xl flex-shrink-0 snap-start">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -387,7 +387,7 @@ const ProjectFilters = ({
               updateFilter("emirate", value === "all" ? null : value)
             }
           >
-            <SelectTrigger className="h-11 w-[150px] rounded-xl">
+            <SelectTrigger className="h-11 w-[150px] rounded-xl flex-shrink-0 snap-start">
               <MapPin className="w-4 h-4 mr-1 text-gold shrink-0" />
               <SelectValue placeholder="Location" />
             </SelectTrigger>
@@ -401,7 +401,7 @@ const ProjectFilters = ({
           </Select>
 
           {/* Size Unit Toggle */}
-          <div className="flex items-center h-11 bg-white/80 border border-gold/40 rounded-xl overflow-hidden">
+          <div className="flex items-center h-11 bg-white/80 border border-gold/40 rounded-xl overflow-hidden flex-shrink-0 snap-start">
             <button
               onClick={() => updateFilter("sizeUnit", "sqft")}
               className={`px-3 h-full text-sm font-medium transition-all ${

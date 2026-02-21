@@ -242,250 +242,224 @@ const handler = async (req: Request): Promise<Response> => {
     const whatsappLink = `https://wa.me/971565911000?text=${whatsappMessage}`;
 
     // Send confirmation email to customer with enhanced design
-    const customerEmailHtml = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <style>
-          body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
-          .container { max-width: 600px; margin: 0 auto; background: #fff; }
-          .hero { background: linear-gradient(135deg, #000 0%, #1a1a1a 50%, #2d2d2d 100%); padding: 40px 30px; text-align: center; }
-          .hero h1 { color: #C8A766; margin: 0 0 10px 0; font-size: 28px; font-weight: bold; }
-          .hero p { color: #fff; margin: 0; font-size: 16px; }
-          .hero-contact { margin-top: 25px; padding-top: 20px; border-top: 1px solid rgba(200,167,102,0.3); }
-          .hero-contact-item { display: inline-block; margin: 8px 15px; }
-          .hero-contact-item a { color: #C8A766; text-decoration: none; font-size: 14px; }
-          .hero-contact-item a:hover { text-decoration: underline; }
-          .content { padding: 30px; background: #fff; }
-          .progress-tracker { display: table; width: 100%; margin: 25px 0; }
-          .progress-step { display: table-cell; text-align: center; position: relative; width: 33.33%; }
-          .progress-step .circle { width: 40px; height: 40px; border-radius: 50%; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
-          .progress-step.active .circle { background: linear-gradient(135deg, #C8A766, #B8956E); color: #fff; }
-          .progress-step.pending .circle { background: #e5e5e5; color: #999; }
-          .progress-step .label { font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; }
-          .progress-step.active .label { color: #C8A766; font-weight: 600; }
-          .progress-line { position: absolute; top: 20px; left: 50%; width: 100%; height: 2px; background: #e5e5e5; z-index: 0; }
-          .progress-step:last-child .progress-line { display: none; }
-          .priority-badge { display: inline-block; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-          .ticket-summary { background: linear-gradient(135deg, #fdfbf7, #f5f0e6); border: 2px solid #C8A766; border-radius: 12px; padding: 25px; margin: 20px 0; }
-          .ticket-summary h3 { color: #1a1a1a; margin: 0 0 20px 0; font-size: 18px; border-bottom: 1px solid #C8A766; padding-bottom: 10px; }
-          .summary-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e8e8e8; }
-          .summary-row:last-child { border-bottom: none; }
-          .summary-label { color: #666; font-size: 13px; }
-          .summary-value { color: #1a1a1a; font-weight: 600; font-size: 13px; text-align: right; }
-          .ticket-box { background: linear-gradient(135deg, #fdfbf7, #f5f0e6); border: 2px solid #C8A766; border-radius: 12px; padding: 25px; margin: 25px 0; }
-          .ticket-box h3 { color: #1a1a1a; margin: 0 0 20px 0; font-size: 18px; border-bottom: 1px solid #C8A766; padding-bottom: 10px; }
-          .ticket-number-row { display: flex; align-items: center; justify-content: space-between; }
-          .ticket-number { font-size: 24px; font-weight: bold; color: #C8A766; letter-spacing: 3px; font-family: 'Courier New', monospace; }
-          .copy-btn { background: linear-gradient(135deg, #C8A766, #B8956E); border: none; color: #fff; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; }
-          .copy-btn:hover { opacity: 0.9; }
-          .sla-badge { background: #000; color: #C8A766; padding: 10px 24px; border-radius: 25px; display: inline-block; margin-top: 15px; font-size: 13px; font-weight: 600; }
-          .message { background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0; }
-          .warning-box { background: #fff3cd; border: 1px solid #ffc107; border-radius: 8px; padding: 15px; margin: 20px 0; }
-          .warning-box strong { color: #856404; }
-          .action-buttons { display: table; width: 100%; margin: 25px 0; }
-          .action-btn { display: table-cell; width: 50%; padding: 5px; text-align: center; }
-          .action-btn a { display: block; padding: 14px 20px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 14px; }
-          .btn-whatsapp { background: linear-gradient(135deg, #25D366, #128C7E); color: #fff; }
-          .btn-call { background: linear-gradient(135deg, #000, #1a1a1a); color: #C8A766; border: 2px solid #C8A766; }
-          .contact-hero { background: linear-gradient(135deg, #000, #1a1a1a); padding: 30px; text-align: center; margin: 25px 0; border-radius: 12px; }
-          .contact-hero h3 { color: #C8A766; margin: 0 0 20px 0; font-size: 18px; }
-          .contact-grid { display: table; width: 100%; }
-          .contact-item { display: table-cell; width: 50%; text-align: center; padding: 10px; vertical-align: top; }
-          .contact-item a { color: #fff; text-decoration: none; font-size: 14px; display: block; }
-          .contact-item .icon { font-size: 20px; margin-bottom: 5px; }
-          .contact-item .label { color: #C8A766; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
-          .social-links { margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(200,167,102,0.3); }
-          .social-links a { display: inline-block; margin: 0 10px; padding: 8px 16px; background: rgba(200,167,102,0.1); border: 1px solid #C8A766; border-radius: 20px; color: #C8A766; text-decoration: none; font-size: 12px; }
-          .quick-links { background: #f9f9f9; padding: 25px; margin: 25px 0; border-radius: 12px; }
-          .quick-links h3 { color: #1a1a1a; margin: 0 0 15px 0; font-size: 16px; text-align: center; }
-          .links-grid { text-align: center; }
-          .link-item { display: inline-block; margin: 5px 10px; }
-          .link-item a { color: #C8A766; text-decoration: none; font-size: 13px; padding: 8px 16px; border: 1px solid #C8A766; border-radius: 6px; display: inline-block; }
-          .link-item a:hover { background: #C8A766; color: #000; }
-          .footer { background: #1a1a1a; text-align: center; padding: 30px; color: #888; font-size: 12px; }
-          .footer-brand { color: #C8A766; font-size: 16px; font-weight: bold; margin-bottom: 10px; }
-          .footer-tagline { color: #666; font-size: 11px; margin-bottom: 15px; }
-          .footer p { margin: 5px 0; }
-          .gold { color: #C8A766; }
-          .rating-stars { margin: 15px 0; }
-          .rating-stars span { font-size: 18px; color: #C8A766; }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <!-- Hero Section with Contact Info -->
-          <div class="hero">
-            <h1>JBJ Global Real Estate</h1>
-            <p>Support Ticket Confirmation</p>
-            <div class="hero-contact">
-              <span class="hero-contact-item">
-                <a href="tel:+971565911000">📞 +971 56 591 1000</a>
-              </span>
-              <span class="hero-contact-item">
-                <a href="mailto:${OFFICIAL_EMAILS.support}"">✉️ ${OFFICIAL_EMAILS.support}</a>
-              </span>
-              <span class="hero-contact-item">
-                <a href="mailto:${OFFICIAL_EMAILS.contact}">📧 ${OFFICIAL_EMAILS.contact}</a>
-              </span>
-            </div>
-          </div>
-          
-          <div class="content">
-            <p>Dear <strong>${fullName}</strong>,</p>
-            <p>We have received your support request and are sorry to hear you're experiencing an issue. Our team is committed to resolving this as quickly as possible.</p>
-            
-            <!-- Visual Progress Tracker -->
-            <div class="progress-tracker">
-              <div class="progress-step active">
-                <div class="progress-line"></div>
-                <div class="circle">✓</div>
-                <div class="label">Received</div>
-              </div>
-              <div class="progress-step pending">
-                <div class="progress-line"></div>
-                <div class="circle">2</div>
-                <div class="label">In Review</div>
-              </div>
-              <div class="progress-step pending">
-                <div class="circle">3</div>
-                <div class="label">Resolved</div>
-              </div>
-            </div>
-            
-            <!-- Ticket Number Box -->
-            <div class="ticket-box">
-              <h3>🎫 Your Ticket Number</h3>
-              <div class="ticket-number-row">
-                <span class="ticket-number">${ticket.ticket_number}</span>
-                <button class="copy-btn" onclick="navigator.clipboard.writeText('${ticket.ticket_number}'); this.innerHTML='✓ Copied!';">
-                  📋 Copy
-                </button>
-              </div>
-              <div style="margin-top: 15px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                <span class="priority-badge" style="background: ${priorityInfo.bgColor}; color: ${priorityInfo.color}; border: 1px solid ${priorityInfo.color};">
-                  ${aiAnalyzedPriority.toUpperCase()} PRIORITY
-                </span>
-                <span class="sla-badge">⏱️ Response within ${priorityInfo.label}</span>
-              </div>
-            </div>
+    const customerEmailHtml = `<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Support Ticket Confirmation</title>
+<!--[if mso]><style>table,td{font-family:Arial,sans-serif!important;}</style><![endif]-->
+<style type="text/css">
+body,table,td,a{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}
+table,td{mso-table-lspace:0;mso-table-rspace:0;}
+img{-ms-interpolation-mode:bicubic;border:0;height:auto;line-height:100%;outline:none;text-decoration:none;}
+body{margin:0;padding:0;width:100%!important;background-color:#f5f0e6;}
+@media only screen and (max-width:620px){
+.wrapper{width:100%!important;padding:0 8px!important;}
+.hero-pad{padding:32px 20px!important;}
+.content-pad{padding:24px 16px!important;}
+.btn-full{display:block!important;width:100%!important;text-align:center!important;box-sizing:border-box!important;}
+.btn-cell{display:block!important;width:100%!important;padding:4px 0!important;}
+.ticket-num{font-size:20px!important;letter-spacing:2px!important;}
+.stack{display:block!important;width:100%!important;padding:6px 0!important;text-align:center!important;}
+.hide-mobile{display:none!important;}
+.mobile-center{text-align:center!important;}
+}
+</style>
+</head>
+<body style="margin:0;padding:0;background-color:#f5f0e6;font-family:'Segoe UI',Arial,Helvetica,sans-serif;line-height:1.6;color:#333333;">
+<!-- Outer wrapper -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f5f0e6;">
+<tr><td align="center" style="padding:24px 16px;">
 
-            <!-- Quick Action Buttons -->
-            <div class="action-buttons">
-              <div class="action-btn">
-                <a href="${whatsappLink}" class="btn-whatsapp">💬 WhatsApp Follow-up</a>
-              </div>
-              <div class="action-btn">
-                <a href="tel:+971565911000" class="btn-call">📞 Call Support</a>
-              </div>
-            </div>
+<!-- Main Container 600px -->
+<table role="presentation" class="wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background-color:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
 
-            <!-- Ticket Summary -->
-            <div class="ticket-summary">
-              <h3>📋 Ticket Summary</h3>
-              <table style="width: 100%; border-collapse: collapse;">
-                <tr style="border-bottom: 1px solid #e8e8e8;">
-                  <td style="padding: 10px 0; color: #666; font-size: 13px;">Ticket Number</td>
-                  <td style="padding: 10px 0; color: #1a1a1a; font-weight: 600; font-size: 13px; text-align: right;">${ticket.ticket_number}</td>
-                </tr>
-                <tr style="border-bottom: 1px solid #e8e8e8;">
-                  <td style="padding: 10px 0; color: #666; font-size: 13px;">Priority Level</td>
-                  <td style="padding: 10px 0; font-weight: 600; font-size: 13px; text-align: right; color: ${priorityInfo.color};">${aiAnalyzedPriority.charAt(0).toUpperCase() + aiAnalyzedPriority.slice(1)}</td>
-                </tr>
-                <tr style="border-bottom: 1px solid #e8e8e8;">
-                  <td style="padding: 10px 0; color: #666; font-size: 13px;">Request Type</td>
-                  <td style="padding: 10px 0; color: #1a1a1a; font-weight: 600; font-size: 13px; text-align: right;">${serviceCategory}</td>
-                </tr>
-                <tr style="border-bottom: 1px solid #e8e8e8;">
-                  <td style="padding: 10px 0; color: #666; font-size: 13px;">Subject</td>
-                  <td style="padding: 10px 0; color: #1a1a1a; font-weight: 600; font-size: 13px; text-align: right;">${subject}</td>
-                </tr>
-                <tr style="border-bottom: 1px solid #e8e8e8;">
-                  <td style="padding: 10px 0; color: #666; font-size: 13px;">Submitted</td>
-                  <td style="padding: 10px 0; color: #1a1a1a; font-weight: 600; font-size: 13px; text-align: right;">${formattedDate} at ${formattedTime}</td>
-                </tr>
-                <tr>
-                  <td style="padding: 10px 0; color: #666; font-size: 13px;">Expected Response</td>
-                  <td style="padding: 10px 0; color: #C8A766; font-weight: 600; font-size: 13px; text-align: right;">By ${formattedSlaDate} ${formattedSlaTime}</td>
-                </tr>
-              </table>
-            </div>
+<!-- HERO -->
+<tr><td class="hero-pad" style="background:linear-gradient(135deg,#000000 0%,#1a1a1a 50%,#2d2d2d 100%);padding:40px 32px;text-align:center;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr><td style="font-size:28px;font-weight:bold;color:#C8A766;padding-bottom:8px;font-family:'Segoe UI',Arial,sans-serif;">JBJ Global Real Estate</td></tr>
+<tr><td style="font-size:16px;color:#ffffff;padding-bottom:24px;">Support Ticket Confirmation</td></tr>
+<tr><td style="border-top:1px solid rgba(200,167,102,0.3);padding-top:20px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+<td class="stack" style="text-align:center;padding:4px 8px;"><a href="tel:+971565911000" style="color:#C8A766;text-decoration:none;font-size:13px;">📞 +971 56 591 1000</a></td>
+<td class="stack" style="text-align:center;padding:4px 8px;"><a href="mailto:${OFFICIAL_EMAILS.support}" style="color:#C8A766;text-decoration:none;font-size:13px;">✉️ ${OFFICIAL_EMAILS.support}</a></td>
+</tr></table>
+</td></tr>
+</table>
+</td></tr>
 
-            <div class="message">
-              <p><strong>What happens next?</strong></p>
-              <ul>
-                <li>Our support team will review your ticket within <strong>${priorityInfo.label}</strong></li>
-                <li>You'll receive updates via email as we progress</li>
-                <li>Use WhatsApp for urgent follow-ups (include your ticket number)</li>
-                <li>Rate your experience once resolved - your feedback matters!</li>
-              </ul>
-            </div>
+<!-- CONTENT -->
+<tr><td class="content-pad" style="padding:32px 32px 24px;">
 
-            <div class="warning-box">
-              <strong>⚠️ Important:</strong> This is an automatic email generated from our system. <strong>Please do not reply to this email</strong> as we won't receive your message.
-            </div>
+<!-- Greeting -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr><td style="font-size:15px;color:#333;padding-bottom:16px;">Dear <strong>${fullName}</strong>,</td></tr>
+<tr><td style="font-size:14px;color:#555;padding-bottom:24px;">We have received your support request and are sorry to hear you're experiencing an issue. Our team is committed to resolving this as quickly as possible.</td></tr>
+</table>
 
-            <!-- Contact Hero Section -->
-            <div class="contact-hero">
-              <h3>Need to Follow Up?</h3>
-              <p style="color: #aaa; font-size: 13px; margin: 0 0 15px 0;">Copy your ticket number and include it in the subject line</p>
-              <div class="contact-grid">
-                <div class="contact-item">
-                  <a href="mailto:${OFFICIAL_EMAILS.support}?subject=[Ticket: ${ticket.ticket_number}] Follow-up">
-                    <span class="icon">✉️</span><br>
-                    ${OFFICIAL_EMAILS.support}<br>
-                    <span class="label">Support Email</span>
-                  </a>
-                </div>
-                <div class="contact-item">
-                  <a href="tel:+971565911000">
-                    <span class="icon">📞</span><br>
-                    +971 56 591 1000<br>
-                    <span class="label">Direct Line</span>
-                  </a>
-                </div>
-              </div>
-              
-              <!-- Social Media Links -->
-              <div class="social-links">
-                <a href="https://instagram.com/jbj.ae">Instagram</a>
-                <a href="https://facebook.com/jbjglobal">Facebook</a>
-                <a href="https://linkedin.com/company/jbjglobal">LinkedIn</a>
-                <a href="https://wa.me/971565911000">WhatsApp</a>
-              </div>
-            </div>
+<!-- Progress Tracker -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:32px;">
+<tr>
+<td width="33%" style="text-align:center;vertical-align:top;padding:0 4px;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#C8A766,#B8956E);color:#fff;text-align:center;line-height:40px;font-size:16px;font-weight:bold;">✓</td></tr></table>
+<p style="font-size:11px;color:#C8A766;text-transform:uppercase;letter-spacing:0.5px;margin:8px 0 0;font-weight:600;">Received</p>
+</td>
+<td width="33%" style="text-align:center;vertical-align:top;padding:0 4px;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td style="width:40px;height:40px;border-radius:50%;background:#e5e5e5;color:#999;text-align:center;line-height:40px;font-size:16px;">2</td></tr></table>
+<p style="font-size:11px;color:#999;text-transform:uppercase;letter-spacing:0.5px;margin:8px 0 0;">In Review</p>
+</td>
+<td width="33%" style="text-align:center;vertical-align:top;padding:0 4px;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td style="width:40px;height:40px;border-radius:50%;background:#e5e5e5;color:#999;text-align:center;line-height:40px;font-size:16px;">3</td></tr></table>
+<p style="font-size:11px;color:#999;text-transform:uppercase;letter-spacing:0.5px;margin:8px 0 0;">Resolved</p>
+</td>
+</tr>
+</table>
 
-            <!-- Quick Links Section -->
-            <div class="quick-links">
-              <h3>🔗 Explore While You Wait</h3>
-              <div class="links-grid">
-                <span class="link-item"><a href="https://jbj.ae/properties">Properties</a></span>
-                <span class="link-item"><a href="https://jbj.ae/services">Our Services</a></span>
-                <span class="link-item"><a href="https://jbj.ae/about">About Us</a></span>
-                <span class="link-item"><a href="https://jbj.ae/market-intelligence">Market Intelligence</a></span>
-                <span class="link-item"><a href="https://jbj.ae/buyer-guide">Buyer Guide</a></span>
-                <span class="link-item"><a href="https://jbj.ae/seller-guide">Seller Guide</a></span>
-                <span class="link-item"><a href="https://jbj.ae/contact">Contact</a></span>
-              </div>
-            </div>
+<!-- Ticket Number Box -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:12px;margin-bottom:32px;">
+<tr><td style="padding:24px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr><td style="font-size:16px;font-weight:bold;color:#1a1a1a;padding-bottom:16px;border-bottom:1px solid #C8A766;">🎫 Your Ticket Number</td></tr>
+<tr><td style="padding-top:16px;text-align:center;">
+<span class="ticket-num" style="font-size:24px;font-weight:bold;color:#C8A766;letter-spacing:3px;font-family:'Courier New',monospace;word-break:break-all;">${ticket.ticket_number}</span>
+</td></tr>
+<tr><td style="padding-top:16px;text-align:center;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr>
+<td class="stack" style="padding:4px 6px;"><span style="display:inline-block;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;background:${priorityInfo.bgColor};color:${priorityInfo.color};border:1px solid ${priorityInfo.color};white-space:nowrap;">${aiAnalyzedPriority.toUpperCase()} PRIORITY</span></td>
+<td class="stack" style="padding:4px 6px;"><span style="display:inline-block;background:#000;color:#C8A766;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;white-space:nowrap;">⏱️ Response within ${priorityInfo.label}</span></td>
+</tr></table>
+</td></tr>
+</table>
+</td></tr>
+</table>
 
-            <p>Best regards,<br><span class="gold">JBJ Global Real Estate Support Team</span></p>
-          </div>
-          
-          <!-- Footer -->
-          <div class="footer">
-            <p class="footer-brand">JBJ Global Real Estate</p>
-            <p class="footer-tagline">First Global Real Estate Platform of Its Kind</p>
-            <p>Developed, Created & Implemented by The Founder & CEO, <span class="gold">Jane Bou Jaoude</span></p>
-            <p style="margin-top: 15px;">© 2026 JBJ Global Real Estate. All rights reserved.</p>
-            <p style="margin-top: 10px; font-size: 10px; color: #666;"><strong>This is an automated confirmation. Do not reply to this email.</strong></p>
-          </div>
-        </div>
-      </body>
-      </html>
-    `;
+<!-- CTA Buttons -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:32px;">
+<tr>
+<td class="btn-cell" width="50%" style="padding:0 6px 0 0;">
+<a href="${whatsappLink}" class="btn-full" style="display:block;padding:16px 16px;border-radius:10px;text-decoration:none;font-weight:600;font-size:14px;text-align:center;background:linear-gradient(135deg,#25D366,#128C7E);color:#ffffff;">💬 WhatsApp Follow-up</a>
+</td>
+<td class="btn-cell" width="50%" style="padding:0 0 0 6px;">
+<a href="tel:+971565911000" class="btn-full" style="display:block;padding:16px 16px;border-radius:10px;text-decoration:none;font-weight:600;font-size:14px;text-align:center;background:linear-gradient(135deg,#000,#1a1a1a);color:#C8A766;border:2px solid #C8A766;">📞 Call Support</a>
+</td>
+</tr>
+</table>
+
+<!-- Ticket Summary Table -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:12px;margin-bottom:32px;">
+<tr><td style="padding:24px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr><td style="font-size:16px;font-weight:bold;color:#1a1a1a;padding-bottom:16px;border-bottom:1px solid #C8A766;">📋 Ticket Summary</td></tr>
+</table>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:12px;">
+<tr style="border-bottom:1px solid #e8e8e8;"><td style="padding:10px 0;color:#666;font-size:13px;">Ticket Number</td><td style="padding:10px 0;color:#1a1a1a;font-weight:600;font-size:13px;text-align:right;">${ticket.ticket_number}</td></tr>
+<tr style="border-bottom:1px solid #e8e8e8;"><td style="padding:10px 0;color:#666;font-size:13px;">Priority Level</td><td style="padding:10px 0;font-weight:600;font-size:13px;text-align:right;color:${priorityInfo.color};">${aiAnalyzedPriority.charAt(0).toUpperCase() + aiAnalyzedPriority.slice(1)}</td></tr>
+<tr style="border-bottom:1px solid #e8e8e8;"><td style="padding:10px 0;color:#666;font-size:13px;">Request Type</td><td style="padding:10px 0;color:#1a1a1a;font-weight:600;font-size:13px;text-align:right;">${serviceCategory}</td></tr>
+<tr style="border-bottom:1px solid #e8e8e8;"><td style="padding:10px 0;color:#666;font-size:13px;">Subject</td><td style="padding:10px 0;color:#1a1a1a;font-weight:600;font-size:13px;text-align:right;">${subject}</td></tr>
+<tr style="border-bottom:1px solid #e8e8e8;"><td style="padding:10px 0;color:#666;font-size:13px;">Submitted</td><td style="padding:10px 0;color:#1a1a1a;font-weight:600;font-size:13px;text-align:right;">${formattedDate} at ${formattedTime}</td></tr>
+<tr><td style="padding:10px 0;color:#666;font-size:13px;">Expected Response</td><td style="padding:10px 0;color:#C8A766;font-weight:600;font-size:13px;text-align:right;">By ${formattedSlaDate} ${formattedSlaTime}</td></tr>
+</table>
+</td></tr>
+</table>
+
+<!-- What happens next -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f9f9f9;border-radius:10px;margin-bottom:32px;">
+<tr><td style="padding:24px;">
+<p style="font-weight:bold;color:#1a1a1a;margin:0 0 12px;font-size:15px;">What happens next?</p>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0">
+<tr><td style="padding:4px 0;font-size:13px;color:#555;">• Our support team will review your ticket within <strong>${priorityInfo.label}</strong></td></tr>
+<tr><td style="padding:4px 0;font-size:13px;color:#555;">• You'll receive updates via email as we progress</td></tr>
+<tr><td style="padding:4px 0;font-size:13px;color:#555;">• Use WhatsApp for urgent follow-ups (include your ticket number)</td></tr>
+<tr><td style="padding:4px 0;font-size:13px;color:#555;">• Rate your experience once resolved - your feedback matters!</td></tr>
+</table>
+</td></tr>
+</table>
+
+<!-- Warning Box -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fffbeb;border:1px solid #f59e0b;border-radius:10px;margin-bottom:32px;">
+<tr><td style="padding:20px 24px;">
+<p style="margin:0;font-size:13px;color:#92400e;line-height:1.6;"><strong>⚠️ Important:</strong> This is an automatic email generated from our system. <strong>Please do not reply to this email</strong> as we won't receive your message.</p>
+</td></tr>
+</table>
+
+<!-- Contact Hero -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#000,#1a1a1a);border-radius:12px;margin-bottom:32px;">
+<tr><td style="padding:32px 24px;text-align:center;">
+<p style="color:#C8A766;font-size:18px;font-weight:bold;margin:0 0 8px;">Need to Follow Up?</p>
+<p style="color:#aaa;font-size:13px;margin:0 0 20px;">Copy your ticket number and include it in the subject line</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td class="stack" width="50%" style="text-align:center;padding:8px;vertical-align:top;">
+<a href="mailto:${OFFICIAL_EMAILS.support}?subject=[Ticket: ${ticket.ticket_number}] Follow-up" style="color:#fff;text-decoration:none;font-size:13px;">
+<span style="font-size:20px;">✉️</span><br>
+<span style="color:#fff;">${OFFICIAL_EMAILS.support}</span><br>
+<span style="color:#C8A766;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Support Email</span>
+</a>
+</td>
+<td class="stack" width="50%" style="text-align:center;padding:8px;vertical-align:top;">
+<a href="tel:+971565911000" style="color:#fff;text-decoration:none;font-size:13px;">
+<span style="font-size:20px;">📞</span><br>
++971 56 591 1000<br>
+<span style="color:#C8A766;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Direct Line</span>
+</a>
+</td>
+</tr>
+</table>
+<!-- Social Links -->
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-top:20px;border-top:1px solid rgba(200,167,102,0.3);padding-top:16px;">
+<tr>
+<td style="padding:4px 6px;"><a href="https://instagram.com/jbj.ae" style="display:inline-block;padding:6px 14px;background:rgba(200,167,102,0.1);border:1px solid #C8A766;border-radius:20px;color:#C8A766;text-decoration:none;font-size:12px;">Instagram</a></td>
+<td style="padding:4px 6px;"><a href="https://facebook.com/jbjglobal" style="display:inline-block;padding:6px 14px;background:rgba(200,167,102,0.1);border:1px solid #C8A766;border-radius:20px;color:#C8A766;text-decoration:none;font-size:12px;">Facebook</a></td>
+<td style="padding:4px 6px;"><a href="https://linkedin.com/company/jbjglobal" style="display:inline-block;padding:6px 14px;background:rgba(200,167,102,0.1);border:1px solid #C8A766;border-radius:20px;color:#C8A766;text-decoration:none;font-size:12px;">LinkedIn</a></td>
+</tr>
+</table>
+</td></tr>
+</table>
+
+<!-- Quick Links -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f9f9f9;border-radius:12px;margin-bottom:32px;">
+<tr><td style="padding:24px;text-align:center;">
+<p style="color:#1a1a1a;font-size:16px;font-weight:bold;margin:0 0 16px;">🔗 Explore While You Wait</p>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center">
+<tr>
+<td style="padding:4px 6px;"><a href="https://jbj.ae/properties" style="display:inline-block;color:#C8A766;text-decoration:none;font-size:13px;padding:6px 14px;border:1px solid #C8A766;border-radius:6px;">Properties</a></td>
+<td style="padding:4px 6px;"><a href="https://jbj.ae/services" style="display:inline-block;color:#C8A766;text-decoration:none;font-size:13px;padding:6px 14px;border:1px solid #C8A766;border-radius:6px;">Services</a></td>
+<td style="padding:4px 6px;"><a href="https://jbj.ae/about" style="display:inline-block;color:#C8A766;text-decoration:none;font-size:13px;padding:6px 14px;border:1px solid #C8A766;border-radius:6px;">About Us</a></td>
+</tr>
+<tr>
+<td style="padding:4px 6px;"><a href="https://jbj.ae/market-intelligence" style="display:inline-block;color:#C8A766;text-decoration:none;font-size:13px;padding:6px 14px;border:1px solid #C8A766;border-radius:6px;">Market Intel</a></td>
+<td style="padding:4px 6px;"><a href="https://jbj.ae/buyer-guide" style="display:inline-block;color:#C8A766;text-decoration:none;font-size:13px;padding:6px 14px;border:1px solid #C8A766;border-radius:6px;">Buyer Guide</a></td>
+<td style="padding:4px 6px;"><a href="https://jbj.ae/contact" style="display:inline-block;color:#C8A766;text-decoration:none;font-size:13px;padding:6px 14px;border:1px solid #C8A766;border-radius:6px;">Contact</a></td>
+</tr>
+</table>
+</td></tr>
+</table>
+
+<!-- Sign-off -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr><td style="font-size:14px;color:#333;padding-bottom:8px;">Best regards,<br><span style="color:#C8A766;font-weight:600;">JBJ Global Real Estate Support Team</span></td></tr>
+</table>
+
+</td></tr>
+
+<!-- FOOTER -->
+<tr><td style="background:#1a1a1a;text-align:center;padding:32px 24px;">
+<p style="color:#C8A766;font-size:16px;font-weight:bold;margin:0 0 6px;">JBJ Global Real Estate</p>
+<p style="color:#666;font-size:11px;margin:0 0 16px;">First Global Real Estate Platform of Its Kind</p>
+<p style="color:#888;font-size:12px;margin:0 0 4px;">Developed, Created &amp; Implemented by The Founder &amp; CEO, <span style="color:#C8A766;">Jane Bou Jaoude</span></p>
+<p style="color:#888;font-size:12px;margin:16px 0 0;">© 2026 JBJ Global Real Estate. All rights reserved.</p>
+<p style="color:#666;font-size:10px;margin:10px 0 0;"><strong>This is an automated confirmation. Do not reply to this email.</strong></p>
+</td></tr>
+
+</table>
+<!-- /Main Container -->
+
+</td></tr>
+</table>
+</body>
+</html>`;
 
     // Send BOTH emails in parallel for faster response
     const [supportEmailResult, customerEmailResult] = await Promise.allSettled([
