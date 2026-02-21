@@ -247,6 +247,9 @@ verify_jwt = false
 [functions.reelly-backfill-projects]
 verify_jwt = false
 
+[functions.reelly-emergency-full-extract]
+verify_jwt = false
+
 [functions.repair-approved-projects]
 verify_jwt = false
 
