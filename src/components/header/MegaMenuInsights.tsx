@@ -57,7 +57,7 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
     { label: 'Property Management', href: '/services/property-management', icon: Building2 },
     { label: 'Mortgage Advisory', href: '/partners/mortgage', icon: Calculator },
     { label: 'Valuation', href: '/sell/valuation', icon: BarChart3 },
-    { label: 'Sell Your Property', href: '/seller-listing', icon: ClipboardCheck },
+    { label: 'Listing Portal', href: '/listing-portal', icon: ClipboardCheck },
     { label: 'Customer Happiness', href: '/customer-happiness', icon: Users },
   ];
 
@@ -74,7 +74,7 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
   const investorLinks = [
     { label: 'Investor Dashboard', href: '/investor-dashboard', icon: LayoutDashboard },
     { label: 'Investor Education', href: '/investor-education', icon: GraduationCap },
-    { label: 'Listing Portal', href: '/listing-portal/submit', icon: ClipboardCheck },
+    { label: 'Listing Portal', href: '/listing-portal', icon: ClipboardCheck },
     { label: 'Investor FAQ', href: '/investor-faq', icon: HelpCircle },
     { label: 'Landlord FAQ', href: '/landlord-faq', icon: HelpCircle },
   ];
@@ -82,7 +82,7 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
   const brokerLinks = [
     { label: 'Broker Dashboard', href: '/broker-dashboard', icon: LayoutDashboard },
     { label: 'Broker Hub', href: '/broker-toolkit', icon: Briefcase },
-    { label: 'Listing Portal', href: '/listing-portal/submit', icon: ClipboardCheck },
+    { label: 'Listing Portal', href: '/listing-portal', icon: ClipboardCheck },
     { label: 'Broker Training', href: '/broker-education', icon: GraduationCap },
     { label: 'Broker FAQ', href: '/broker-faq', icon: HelpCircle },
     { label: 'Tenant FAQ', href: '/tenant-faq', icon: HelpCircle },

@@ -13,8 +13,7 @@ const MegaMenuSell = React.forwardRef<HTMLDivElement, MegaMenuSellProps>(({ onCl
     { label: "Seller's Guide", href: '/seller-guide', icon: FileText },
     { label: 'Property Valuation', href: '/sell/valuation', icon: DollarSign },
     { label: 'Selling Advisory', href: '/services/selling-advisory', icon: TrendingUp },
-    { label: 'List Your Property', href: '/seller-listing', icon: ClipboardCheck },
-    { label: 'AI Listing Portal', href: '/listing-portal/submit', icon: ClipboardCheck },
+    { label: 'Listing Portal', href: '/listing-portal', icon: ClipboardCheck },
   ];
 
   return (
@@ -24,14 +23,14 @@ const MegaMenuSell = React.forwardRef<HTMLDivElement, MegaMenuSellProps>(({ onCl
           {/* Left: Featured Photo with Video on Hover */}
           <div className="lg:col-span-6">
             <MegaMenuFeaturedCard
-              to="/seller-listing"
+              to="/listing-portal"
               onClick={onClose}
               image={sellPropertyBg}
               video={dubaiSellingVideo}
               kicker="SELL"
-              title="Sell Your Property"
-              description="Partner with Dubai's trusted real estate experts to sell your property at the best price"
-              cta="Get Started"
+              title="List Your Property"
+              description="List manually or use AI to create your listing — for sale or rent"
+              cta="Go to Listing Portal"
             />
           </div>
 
@@ -56,10 +55,10 @@ const MegaMenuSell = React.forwardRef<HTMLDivElement, MegaMenuSellProps>(({ onCl
             {/* Full-width CTA Button at bottom */}
             <div className="mt-6">
               <MegaMenuCTAButton
-                to="/seller-listing"
+                to="/listing-portal"
                 onClick={onClose}
                 icon={ArrowRight}
-                title="Start Selling Your Property"
+                title="Go to Listing Portal"
               />
             </div>
           </div>

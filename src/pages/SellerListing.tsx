@@ -425,6 +425,34 @@ Requirements:
 
       if (error) throw error;
 
+      // Run AI scoring in background (non-blocking)
+      try {
+        const { data: scoreResult } = await supabase.functions.invoke('listing-score', {
+          body: {
+            listing: {
+              title: values.listing_description?.substring(0, 100) || `${values.property_type} in ${values.property_location}`,
+              description: values.listing_description,
+              property_type: values.property_type,
+              location: values.property_location,
+              price: values.target_selling_price,
+              bedrooms: values.bedrooms,
+              area_sqft: values.property_size_sqft,
+              images_count: photoUrls.length,
+              has_documents: !!titleDeedUrl,
+              source: 'manual',
+            }
+          }
+        });
+        if (scoreResult?.score) {
+          await supabase.from('seller_listings').update({
+            ai_score: scoreResult.score.overall_score,
+            ai_score_data: scoreResult.score,
+          } as any).eq('id', data.id);
+        }
+      } catch (scoreErr) {
+        console.warn('AI scoring failed (non-blocking):', scoreErr);
+      }
+
       setListingId(data.id);
       clearDraft();
       toast.success("Your listing has been submitted successfully!");

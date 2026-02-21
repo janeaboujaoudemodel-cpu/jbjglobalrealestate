@@ -311,7 +311,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     { href: "/properties?transaction=buy", label: t('header.buyProperties') || "Buy Properties", icon: Home },
     { href: "/properties?transaction=rent", label: t('header.rentProperties') || "Rent Properties", icon: Building2 },
     { href: "/developers", label: "Developers", icon: Building2 },
-    { href: "/seller-listing", label: t('header.listProperty') || "List Your Property", icon: ClipboardCheck },
+    { href: "/listing-portal", label: t('header.listProperty') || "List Your Property", icon: ClipboardCheck },
   ];
 
   // Services dropdown
@@ -351,7 +351,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     { href: "/my-dashboard", label: t('header.investorDashboard') || "Investor Dashboard", icon: UserCircle },
     { href: "/ai-hub", label: t('header.investorTools') || "Investor Tools", icon: Briefcase },
     { href: "/favorites", label: t('header.portfolioViews') || "Portfolio Views", icon: Heart },
-    { href: "/listing-portal/submit", label: "Listing Portal", icon: ClipboardCheck },
+    { href: "/listing-portal", label: "Listing Portal", icon: ClipboardCheck },
     { href: "/market-intelligence/reports", label: t('header.reportsAccess') || "Reports Access", icon: FileText },
   ];
 
@@ -359,7 +359,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   const brokerHubLinks = [
     { href: "/broker-dashboard", label: t('header.brokerDashboard') || "Broker Dashboard", icon: UserCircle },
     { href: "/broker-toolkit#tools", label: t('header.brokerTools') || "Broker Tools", icon: Briefcase },
-    { href: "/listing-portal/submit", label: "Listing Portal", icon: ClipboardCheck },
+    { href: "/listing-portal", label: "Listing Portal", icon: ClipboardCheck },
     { href: "/broker-education", label: t('header.brokerEducation') || "Broker Education", icon: GraduationCap },
     { href: "/broker-resources", label: t('header.brokerResources') || "Broker Resources", icon: FolderOpen },
     { href: "/broker-faq", label: t('header.brokerFaq') || "Broker FAQ", icon: ClipboardCheck },
@@ -390,7 +390,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
   // Mobile menu links - Sell section
   const mobileSellLinks = [
-    { href: "/seller-listing", label: "List Your Property", icon: ClipboardCheck },
+    { href: "/listing-portal", label: "Listing Portal", icon: ClipboardCheck },
     { href: "/seller-guide", label: "Seller's Guide", icon: FileText },
     { href: "/sell/valuation", label: "Property Valuation", icon: BarChart3 },
     { href: "/services/selling-advisory", label: "Selling Advisory", icon: Briefcase },
@@ -452,7 +452,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     { href: "/map", label: "Property Map", icon: MapPin },
     { href: "/compare", label: "Compare Properties", icon: ClipboardCheck },
     { href: "/landlord-portal", label: "Landlord Portal", icon: Building2 },
-    { href: "/seller-listing", label: "Sell Your Property", icon: ClipboardCheck },
+    { href: "/listing-portal", label: "Listing Portal", icon: ClipboardCheck },
   ];
 
   // Mobile menu - Creative Toolkit

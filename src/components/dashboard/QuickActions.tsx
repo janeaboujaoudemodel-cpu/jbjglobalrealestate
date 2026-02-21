@@ -131,7 +131,7 @@ const ownerActions: QuickAction[] = [
     label: "Add Property",
     description: "List a new property",
     icon: Plus,
-    href: "/seller-listing",
+    href: "/listing-portal",
     color: "text-emerald-400",
   },
   {
