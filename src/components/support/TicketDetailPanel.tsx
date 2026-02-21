@@ -47,7 +47,7 @@ const priorityConfig: Record<
   critical: { label: "Critical", className: "bg-red-500/20 text-red-400 border-red-500/30" },
   high: { label: "High", className: "bg-orange-500/20 text-orange-400 border-orange-500/30" },
   normal: { label: "Normal", className: "bg-blue-500/20 text-blue-400 border-blue-500/30" },
-  low: { label: "Low", className: "bg-zinc-500/20 text-zinc-400 border-zinc-500/30" },
+  low: { label: "Low", className: "bg-green-500/20 text-green-400 border-green-500/30" },
 };
 
 const statusConfig: Record<
