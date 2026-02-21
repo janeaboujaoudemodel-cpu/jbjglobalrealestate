@@ -2670,6 +2670,9 @@ export type Database = {
           ip_hash: string | null
           is_spam_flagged: boolean | null
           messages: Json
+          owner_joined: boolean | null
+          owner_joined_at: string | null
+          owner_name: string | null
           page_source: string | null
           rating: number | null
           rating_feedback: string | null
@@ -2697,6 +2700,9 @@ export type Database = {
           ip_hash?: string | null
           is_spam_flagged?: boolean | null
           messages?: Json
+          owner_joined?: boolean | null
+          owner_joined_at?: string | null
+          owner_name?: string | null
           page_source?: string | null
           rating?: number | null
           rating_feedback?: string | null
@@ -2724,6 +2730,9 @@ export type Database = {
           ip_hash?: string | null
           is_spam_flagged?: boolean | null
           messages?: Json
+          owner_joined?: boolean | null
+          owner_joined_at?: string | null
+          owner_name?: string | null
           page_source?: string | null
           rating?: number | null
           rating_feedback?: string | null

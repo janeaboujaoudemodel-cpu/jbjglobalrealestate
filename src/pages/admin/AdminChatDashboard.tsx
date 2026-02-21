@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,11 +11,12 @@ import {
   Building2, Home, Scale, Paintbrush, MessageSquare, Calendar,
   Loader2, Award, Briefcase, ExternalLink, Copy, Send,
   AlertTriangle, Shield, ThumbsUp, ThumbsDown, Zap, Bell,
-  ChevronRight, BarChart3, Target
+  ChevronRight, BarChart3, Target, UserPlus, Radio
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
+import { useLiveChatNotifications } from '@/hooks/useLiveChatNotifications';
 
 interface ChatConversation {
   id: string;
@@ -138,6 +139,113 @@ const AdminChatDashboard = () => {
   const [loadingFallback, setLoadingFallback] = useState(false);
   const [aiSummary, setAiSummary] = useState<AISummary | null>(null);
   const [aiSummaryLoading, setAiSummaryLoading] = useState(false);
+  
+  // Live agent join state
+  const [isJoined, setIsJoined] = useState(false);
+  const [ownerReplyInput, setOwnerReplyInput] = useState('');
+  const [sendingReply, setSendingReply] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Enable real-time chat notifications
+  useLiveChatNotifications(true);
+
+  // Real-time subscription for the selected conversation
+  useEffect(() => {
+    if (!selectedConversation) return;
+
+    const channel = supabase
+      .channel(`chat-live-${selectedConversation.id}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'chat_conversations',
+          filter: `id=eq.${selectedConversation.id}`,
+        },
+        (payload) => {
+          const updated = payload.new as any;
+          setSelectedConversation(prev => prev ? {
+            ...prev,
+            messages: updated.messages,
+            status: updated.status,
+            owner_joined: updated.owner_joined,
+          } : null);
+          // Also update in list
+          setConversations(prev => prev.map(c => 
+            c.id === updated.id ? { ...c, messages: updated.messages, status: updated.status } : c
+          ));
+          // Scroll to bottom
+          setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [selectedConversation?.id]);
+
+  // Handle owner joining the chat
+  const handleJoinChat = useCallback(async () => {
+    if (!selectedConversation) return;
+    setIsJoined(true);
+    
+    try {
+      // Mark owner as joined
+      await supabase.from('chat_conversations').update({
+        owner_joined: true,
+        owner_joined_at: new Date().toISOString(),
+        owner_name: 'Sarah',
+      }).eq('id', selectedConversation.id);
+
+      // Add system message to chat
+      const currentMessages = selectedConversation.messages || [];
+      const joinMessage = {
+        role: 'assistant',
+        content: '🟢 Sarah has joined the conversation and is now available to assist you directly.',
+        timestamp: new Date().toISOString(),
+      };
+      
+      await supabase.from('chat_conversations').update({
+        messages: [...currentMessages, joinMessage],
+      }).eq('id', selectedConversation.id);
+
+      toast.success('You have joined the chat as Sarah');
+    } catch (err) {
+      console.error('Error joining chat:', err);
+      toast.error('Failed to join chat');
+      setIsJoined(false);
+    }
+  }, [selectedConversation]);
+
+  // Handle owner sending a reply
+  const handleSendOwnerReply = useCallback(async () => {
+    if (!ownerReplyInput.trim() || !selectedConversation || sendingReply) return;
+    
+    setSendingReply(true);
+    try {
+      const currentMessages = selectedConversation.messages || [];
+      const ownerMessage = {
+        role: 'assistant',
+        content: `👤 Sarah: ${ownerReplyInput.trim()}`,
+        timestamp: new Date().toISOString(),
+      };
+      
+      await supabase.from('chat_conversations').update({
+        messages: [...currentMessages, ownerMessage],
+        updated_at: new Date().toISOString(),
+      }).eq('id', selectedConversation.id);
+
+      setOwnerReplyInput('');
+      toast.success('Reply sent');
+    } catch (err) {
+      console.error('Error sending reply:', err);
+      toast.error('Failed to send reply');
+    } finally {
+      setSendingReply(false);
+    }
+  }, [ownerReplyInput, selectedConversation, sendingReply]);
 
   useEffect(() => { fetchData(); }, []);
 
@@ -654,8 +762,8 @@ const AdminChatDashboard = () => {
                   </span>
                 )}
               </div>
-              {/* AI Analyze button */}
-              <div className="mt-3">
+              {/* AI Analyze + Join Chat buttons */}
+              <div className="mt-3 flex items-center gap-2">
                 <Button
                   size="sm"
                   onClick={() => generateAISummary(selectedConversation, displayMessages)}
@@ -665,6 +773,20 @@ const AdminChatDashboard = () => {
                   {aiSummaryLoading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3 text-[#C9A84C]" />}
                   {aiSummaryLoading ? 'Analyzing...' : 'AI Summarize & Analyze'}
                 </Button>
+                {selectedConversation.status === 'active' && !isJoined && (
+                  <Button
+                    size="sm"
+                    onClick={handleJoinChat}
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold gap-1.5"
+                  >
+                    <UserPlus className="w-3 h-3" /> Join Chat Live
+                  </Button>
+                )}
+                {isJoined && (
+                  <Badge className="bg-emerald-100 text-emerald-800 border-emerald-300 gap-1">
+                    <Radio className="w-3 h-3 animate-pulse" /> Live - Joined as Sarah
+                  </Badge>
+                )}
               </div>
             </div>
 
@@ -809,16 +931,52 @@ const AdminChatDashboard = () => {
                     </div>
                   </div>
                 )}
+                <div ref={messagesEndRef} />
               </div>
             </ScrollArea>
+            
+            {/* Live Reply Input (when joined) */}
+            {isJoined && selectedConversation.status === 'active' && (
+              <div className="px-4 py-3 border-t border-emerald-200 bg-emerald-50/50">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-full bg-emerald-500 flex items-center justify-center shrink-0">
+                    <span className="text-white text-xs font-bold">S</span>
+                  </div>
+                  <Input
+                    value={ownerReplyInput}
+                    onChange={(e) => setOwnerReplyInput(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSendOwnerReply()}
+                    placeholder="Type your reply as Sarah..."
+                    className="flex-1 bg-white border-emerald-200 text-stone-900 text-sm focus:border-emerald-400 focus:ring-emerald-200"
+                  />
+                  <Button
+                    size="sm"
+                    onClick={handleSendOwnerReply}
+                    disabled={!ownerReplyInput.trim() || sendingReply}
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white gap-1"
+                  >
+                    {sendingReply ? <Loader2 className="w-3 h-3 animate-spin" /> : <Send className="w-3 h-3" />}
+                    Send
+                  </Button>
+                </div>
+              </div>
+            )}
+
             <div className="p-4 border-t border-[#C9A84C]/10 flex items-center justify-between">
               <p className="text-[10px] text-stone-500">
                 {displayMessages.length} messages
                 {(selectedConversation.messages?.length || 0) === 0 && displayMessages.length > 0 ? ' (from history log)' : ''}
               </p>
-              <Button onClick={() => { setSelectedConversation(null); setFallbackMessages([]); setAiSummary(null); }} size="sm" className="bg-gradient-to-r from-[#FDFBF7] to-[#F5EBD7] border border-[#C9A84C]/30 text-stone-700 hover:border-[#C9A84C]/60 text-xs">
-                Close
-              </Button>
+              <div className="flex items-center gap-2">
+                {!isJoined && selectedConversation.status === 'active' && (
+                  <Button onClick={handleJoinChat} size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs gap-1">
+                    <UserPlus className="w-3 h-3" /> Join
+                  </Button>
+                )}
+                <Button onClick={() => { setSelectedConversation(null); setFallbackMessages([]); setAiSummary(null); setIsJoined(false); setOwnerReplyInput(''); }} size="sm" className="bg-gradient-to-r from-[#FDFBF7] to-[#F5EBD7] border border-[#C9A84C]/30 text-stone-700 hover:border-[#C9A84C]/60 text-xs">
+                  Close
+                </Button>
+              </div>
             </div>
           </div>
         </div>

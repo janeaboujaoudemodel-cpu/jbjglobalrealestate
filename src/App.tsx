@@ -337,6 +337,7 @@ const Disclaimers = lazy(() => import("./pages/Disclaimers"));
 const OwnerAuditPage = lazy(() => import("./pages/owner/OwnerAuditPage"));
 const OwnerIntegrationsPage = lazy(() => import("./pages/owner/OwnerIntegrationsPage"));
 const OwnerSafetyPage = lazy(() => import("./pages/owner/OwnerSafetyPage"));
+const OwnerFounderSettings = lazy(() => import("./pages/owner/OwnerFounderSettings"));
 
 const queryClient = new QueryClient();
 
@@ -396,6 +397,7 @@ const App = () => (
                 <Route path="audit" element={<OwnerAuditPage />} />
                 <Route path="integrations" element={<OwnerIntegrationsPage />} />
                 <Route path="safety" element={<OwnerSafetyPage />} />
+                <Route path="founder-settings" element={<OwnerFounderSettings />} />
                 <Route path="properties" element={<PropertyManagement />} />
                 <Route path="documents" element={<Documents />} />
                 <Route path="settings" element={<OwnerCommSettings />} />

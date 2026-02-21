@@ -89,6 +89,12 @@ const NAV_SECTIONS: NavSection[] = [
     ],
   },
   {
+    label: "FOUNDER",
+    items: [
+      { label: "Founder & Podcast", icon: Users, path: "/owner/founder-settings" },
+    ],
+  },
+  {
     label: "SYSTEM",
     items: [
       { label: "Audit", icon: Eye, path: "/owner/audit" },
