@@ -29,7 +29,7 @@ const corsHeaders = {
 
 // Email Configuration - SUPPORT@JBJ.AE for replies so customers can respond
 const SUPPORT_EMAIL = "SUPPORT@JBJ.AE";
-const VERIFIED_SENDER = "NOREPLY@JBJ.AE"; // Must use verified sender for 'from'
+const VERIFIED_SENDER = "info@jbj.ae"; // Must use verified sender for 'from'
 
 // Official JBJ emails
 const OFFICIAL_EMAILS = {
