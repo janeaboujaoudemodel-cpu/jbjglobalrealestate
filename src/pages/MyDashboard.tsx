@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { SEOHead } from "@/components/SEOHead";
-import { Loader2 } from "lucide-react";
+import { Loader2, TrendingUp, Calendar, BookOpen, ChevronRight, ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 // Dashboard modules
 import FavoritesCard from "@/components/dashboard/FavoritesCard";
@@ -42,8 +45,69 @@ function getRoleBadgeColor(role: string | null): string {
   }
 }
 
+/** Useful Links card for dashboard */
+function UsefulLinksCard() {
+  const links = [
+    { label: 'Market Intelligence', href: '/market-intelligence/overview', icon: TrendingUp },
+    { label: 'Guides Library', href: '/guides', icon: BookOpen },
+    { label: 'Upcoming Events', href: '/news?category=events', icon: Calendar },
+    { label: 'Golden Visa Guide', href: '/guides/golden-visa-uae', icon: ExternalLink },
+  ];
+
+  return (
+    <Card className="border border-border bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))]">
+      <CardHeader className="pb-2">
+        <CardTitle className="text-base text-foreground flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center">
+            <BookOpen className="w-4 h-4 text-gold" />
+          </div>
+          Explore & Learn
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="pt-0">
+        <div className="space-y-1.5">
+          {links.map((link) => (
+            <Link
+              key={link.href}
+              to={link.href}
+              className="flex items-center gap-3 py-2.5 px-3 rounded-xl hover:bg-gold/10 transition-all group"
+            >
+              <link.icon className="w-4 h-4 text-gold/70 group-hover:text-gold transition-colors shrink-0" />
+              <span className="text-sm font-medium text-foreground group-hover:text-gold transition-colors">{link.label}</span>
+              <ChevronRight className="w-3.5 h-3.5 text-muted-foreground ml-auto" />
+            </Link>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+/** Account Settings shortcut card */
+function AccountSettingsCard() {
+  return (
+    <Card className="border border-border bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))]">
+      <CardContent className="py-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm font-semibold text-foreground">Account Settings</p>
+            <p className="text-xs text-muted-foreground mt-0.5">Profile, preferences & security</p>
+          </div>
+          <Button variant="outline" size="sm" asChild className="border-gold/30 text-gold hover:bg-gold/10 hover:text-gold">
+            <Link to="/profile">
+              Manage
+              <ChevronRight className="w-3.5 h-3.5 ml-1" />
+            </Link>
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 const MyDashboard = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, loading: authLoading } = useAuth();
   const { role, isLoading: roleLoading } = useUserRole();
   const { mode, isInvestorMode, isBrokerMode, isCombinedMode } = useUserModeContext();
@@ -55,6 +119,15 @@ const MyDashboard = () => {
     window.addEventListener('userModeChange', handleModeChange);
     return () => window.removeEventListener('userModeChange', handleModeChange);
   }, []);
+
+  // Scroll to notifications section if hash is present
+  useEffect(() => {
+    if (location.hash === '#notifications') {
+      setTimeout(() => {
+        document.getElementById('notifications-section')?.scrollIntoView({ behavior: 'smooth' });
+      }, 300);
+    }
+  }, [location.hash]);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -111,7 +184,7 @@ const MyDashboard = () => {
               </p>
             </div>
 
-            {/* Main Grid Layout - Improved responsive behavior */}
+            {/* Main Grid Layout */}
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
               {/* Left Column - Profile & Level */}
               <div className="space-y-6">
@@ -121,6 +194,7 @@ const MyDashboard = () => {
                 <DashboardCardErrorBoundary fallbackTitle="Badges unavailable">
                   <BadgesLevelCard />
                 </DashboardCardErrorBoundary>
+                <AccountSettingsCard />
               </div>
 
               {/* Center Column - Quick Actions & Activity */}
@@ -133,11 +207,12 @@ const MyDashboard = () => {
                 </DashboardCardErrorBoundary>
               </div>
 
-              {/* Right Column - Notifications */}
-              <div className="space-y-6 md:col-span-2 xl:col-span-1">
+              {/* Right Column - Notifications & Links */}
+              <div className="space-y-6 md:col-span-2 xl:col-span-1" id="notifications-section">
                 <DashboardCardErrorBoundary fallbackTitle="Notifications unavailable">
                   <NotificationsPreview />
                 </DashboardCardErrorBoundary>
+                <UsefulLinksCard />
               </div>
             </div>
 

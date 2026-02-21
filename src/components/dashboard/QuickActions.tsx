@@ -231,7 +231,7 @@ export function QuickActions() {
   const actions = getActionsForRole(role);
 
   return (
-    <Card className="bg-card border-border">
+    <Card className="border border-border bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))]">
       <CardHeader className="pb-3">
         <CardTitle className="text-base text-foreground">Quick Actions</CardTitle>
       </CardHeader>
@@ -241,15 +241,15 @@ export function QuickActions() {
             <button
               key={index}
               onClick={() => navigate(action.href)}
-              className="flex flex-col items-start gap-1.5 rounded-xl border border-border bg-gradient-to-br from-zinc-900/80 to-zinc-800/60 p-3.5 hover:border-gold/40 hover:bg-zinc-800/80 transition-all text-left w-full"
+              className="flex flex-col items-start gap-1.5 rounded-xl border border-border bg-gradient-to-br from-[#F5EBD7] via-[#EDE0C8] to-[#E2D4B8] p-3.5 hover:border-gold/40 hover:shadow-md transition-all text-left w-full"
             >
               <div className="flex items-center gap-2 w-full">
-                <div className="w-8 h-8 rounded-lg bg-black/40 border border-gold/20 flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 rounded-lg bg-white/60 border border-gold/30 flex items-center justify-center shrink-0">
                   <action.icon className={`h-4 w-4 ${action.color}`} />
                 </div>
-                <span className="text-sm font-medium text-foreground leading-tight">{action.label}</span>
+                <span className="text-sm font-semibold text-black leading-tight">{action.label}</span>
               </div>
-              <span className="text-[11px] text-muted-foreground leading-snug">{action.description}</span>
+              <span className="text-[11px] text-black/60 leading-snug">{action.description}</span>
             </button>
           ))}
         </div>
