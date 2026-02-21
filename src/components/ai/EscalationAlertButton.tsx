@@ -101,6 +101,7 @@ export function EscalationAlertButton({
       <PopoverContent 
         className="w-96 p-0 bg-[#0E0E0E] border-gold/20"
         align="end"
+        sideOffset={16}
       >
         {/* Header */}
         <div className="p-4 border-b border-gold/20 flex items-center justify-between">

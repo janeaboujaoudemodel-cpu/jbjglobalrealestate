@@ -113,9 +113,9 @@ Activity Details</p>
 </td></tr>
 
 <!-- Footer -->
-<tr><td style="background:linear-gradient(135deg,#1a1a1a,#2d2d2d);padding:28px 30px;text-align:center;">
+<tr><td style="background:#000000;padding:28px 30px;text-align:center;">
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:12px;">
-<tr><td style="text-align:center;"><img src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/jbj-monogram-light-on-dark.png?v=2" alt="JBJ" width="64" style="max-width:64px;height:auto;" /></td></tr>
+<tr><td style="text-align:center;"><img src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/jbj-monogram-light-on-dark.png?v=2" alt="JBJ" width="80" style="max-width:80px;height:auto;" /></td></tr>
 </table>
 <p style="color:#C8A766;font-size:18px;font-weight:bold;margin:0 0 6px;">JBJ Global Real Estate</p>
 <p style="color:#888;font-size:12px;margin:0 0 4px;font-style:italic;">The Only Global AI-Powered Real Estate Intelligence Platform</p>
