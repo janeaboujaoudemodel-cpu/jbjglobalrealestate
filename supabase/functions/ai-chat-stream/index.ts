@@ -124,26 +124,145 @@ const RequestSchema = z.object({
 });
 
 const WEBSITE_KNOWLEDGE = `
-JBJ GLOBAL REAL ESTATE - DUBAI REAL ESTATE BROKERAGE
+JBJ GLOBAL REAL ESTATE - COMPLETE SERVICES & INFORMATION:
+
+COMPANY OVERVIEW:
+- JBJ GLOBAL REAL ESTATE is a Dubai-based real estate brokerage licensed for BUY, SELL & RENT only
+- Founded by Jane Bou Jaoude
+- Headquarters: Dubai, UAE
+- Mission: Delivering premium real estate services with transparency and integrity
+- USPs: Multilingual team, AI-powered property matching, 24/7 support, end-to-end service
+
+CONTACT INFORMATION (USE ONLY THESE):
 - Email: ${APPROVED_CONTACT_INFO.email}
 - Phone: ${APPROVED_CONTACT_INFO.phone}
-- Services: Property Sales (Buy/Sell), Rentals, Holiday Homes, Design & Build, Partner Introductions (Mortgage, Legal, Visa, Company Setup)
-- Partner services are INTRODUCTIONS ONLY - JBJ is licensed for BUY, SELL & RENT
+- WhatsApp: ${APPROVED_CONTACT_INFO.phone}
+- Website: ${APPROVED_CONTACT_INFO.website}
 
-AREAS: Dubai Marina, Downtown Dubai, Palm Jumeirah, Business Bay, JBR, Dubai Hills, JVC (high ROI 7-9%), Creek Harbour, DAMAC Hills, Arabian Ranches, Sobha Hartland, Meydan, Al Furjan, Town Square, Dubai South, JLT, DIFC
+LICENSED SERVICES (Direct Services):
+1. BUYING PROPERTIES - Off-plan and ready properties across UAE
+2. SELLING PROPERTIES - Property listings and marketing
+3. RENTING - Tenant placements and landlord services
 
-DEVELOPERS: Emaar (largest - Burj Khalifa, Dubai Hills), DAMAC (luxury branded), Nakheel (Palm Jumeirah), Sobha (quality), Meraas (lifestyle), Azizi (affordable luxury), Binghatti, Ellington, Select Group, Omniyat
+PARTNER INTRODUCTIONS ONLY (NOT in-house services):
+- Mortgage services - We facilitate introductions to licensed mortgage brokers
+- Legal services - We facilitate introductions to licensed law firms
+- Visa services - We facilitate introductions to licensed immigration consultants
+- Company setup - We facilitate introductions to licensed corporate service providers
+- Property management - We facilitate introductions to property management firms
 
-KEY FACTS:
-- DLD Transfer Fee: 4% of property value
-- Registration Fee: AED 4,000 (properties >AED 500K)
-- Agency Fee: 2% (sale), 5% annual rent (rental)
-- Golden Visa: AED 2M+ property investment = 10-year visa
-- 0% property tax, 0% income tax
-- Rental yields: 5-9% (among highest globally)
-- Off-plan: lower prices, payment plans (10-20% down, installments, balance on handover)
-- Foreigners can buy freehold in designated areas
-- Ejari registration mandatory for all rentals
+DUBAI AREAS & COMMUNITIES:
+- Dubai Marina: Waterfront living, high-rise towers, walk-to-beach lifestyle. Avg rent: AED 80-150K/yr for 1BR
+- Downtown Dubai: Home to Burj Khalifa & Dubai Mall. Premium address. Avg rent: AED 90-180K/yr for 1BR
+- Palm Jumeirah: Iconic man-made island, luxury villas & apartments. Premium pricing
+- Business Bay: Central business district, canal views, mixed-use. Avg rent: AED 60-120K/yr for 1BR
+- JBR (Jumeirah Beach Residence): Beachfront community, tourist-friendly. Great for holiday homes
+- Dubai Hills Estate: Master-planned by Emaar, golf course community, family-friendly
+- JVC (Jumeirah Village Circle): Affordable, family-friendly, high ROI (7-9%). Avg rent: AED 40-70K/yr for 1BR
+- Dubai Creek Harbour: Emerging waterfront, future Creek Tower, by Emaar
+- DAMAC Hills: Golf community by DAMAC, villas and apartments
+- Arabian Ranches: Established villa community, family-friendly, parks & schools
+- Sobha Hartland: Premium green community by Sobha, MBR City location
+- Meydan: Horse racing district, emerging luxury residential
+- Al Furjan: Affordable villas and townhouses near Metro, family-friendly
+- Town Square: Budget-friendly community by Nshama, parks & retail
+- Dubai South/Expo City: Near Al Maktoum Airport, future growth area
+- Jumeirah Lakes Towers (JLT): Lake-view towers, commercial & residential
+- DIFC: Financial center, luxury residences, premium lifestyle
+
+KEY DEVELOPERS:
+- Emaar Properties: Burj Khalifa, Dubai Mall, Dubai Hills, Creek Harbour, Arabian Ranches. UAE's largest developer
+- DAMAC Properties: DAMAC Hills, Cavalli Tower, Safa One. Known for luxury branded residences
+- Nakheel: Palm Jumeirah, The World Islands, Dragon City, Ibn Battuta. Government-backed
+- Sobha Realty: Sobha Hartland, Sobha One. Known for quality construction
+- Meraas: Bluewaters, City Walk, La Mer, Port de La Mer. Lifestyle-focused
+- Azizi Developments: Riviera, Creek Views, Victoria. Affordable luxury
+- Binghatti: Known for unique architecture, affordable options in Business Bay & JVC
+- Ellington Properties: DT1, Belgravia, The Crestmark. Boutique design-led
+- MAG Property Development: MAG City, MAG Eye. Affordable segment
+- Select Group: Marina Gate, Peninsula, Six Senses. Premium waterfront
+- Omniyat: One Palm, The Opus by Zaha Hadid. Ultra-luxury segment
+
+BUYING PROCESS IN DUBAI:
+1. Define budget and requirements
+2. Property search and shortlisting
+3. Schedule viewings (virtual or in-person)
+4. Make an offer / sign MOU (Memorandum of Understanding)
+5. Pay 10% deposit to escrow
+6. Apply for NOC (No Objection Certificate) from developer
+7. Transfer at Dubai Land Department (DLD)
+8. Receive title deed
+
+SELLING PROCESS:
+1. Property valuation and market analysis
+2. Professional photography and marketing
+3. List on major portals (Bayut, Property Finder, Dubizzle)
+4. Conduct viewings
+5. Negotiate offers
+6. Sign Form F (listing agreement)
+7. Complete DLD transfer
+
+RENTAL PROCESS (Tenants):
+1. Define requirements and budget
+2. Property search and viewings
+3. Negotiate terms
+4. Sign tenancy contract
+5. Register Ejari (mandatory rental registration)
+6. Pay security deposit (typically 5% for unfurnished, 10% for furnished)
+7. Move in
+
+FEES & COSTS:
+- DLD Transfer Fee: 4% of property value (paid by buyer)
+- DLD Registration Fee: AED 4,000 for properties over AED 500,000; AED 2,000 for under
+- Agency Commission (Buy/Sell): Typically 2% of property value
+- Agency Commission (Rent): 5% of annual rent
+- Mortgage Registration Fee: 0.25% of loan amount
+- Service Charges: Vary by community (AED 10-30/sqft/year typical)
+- DEWA connection: AED 2,000 deposit (apartment), AED 4,000 (villa)
+
+GOLDEN VISA INFORMATION:
+- Property investment of AED 2M+ qualifies for 10-year Golden Visa
+- Can be single or multiple properties totaling AED 2M+
+- Off-plan properties from approved developers may qualify
+- Visa covers spouse, children, and domestic workers
+- No minimum stay requirement
+- Can sponsor parents on separate visa
+
+PAYMENT PLANS (Off-Plan):
+- Typical structure: 10-20% down payment, installments during construction, remainder on handover
+- Some developers offer 1% monthly payment plans
+- Post-handover payment plans available (up to 3-5 years after handover)
+- DLD fee can sometimes be waived by developer as promotion
+
+HOLIDAY HOMES & SHORT-TERM RENTALS:
+- DTCM (Department of Tourism) license required
+- Managed by licensed holiday home operators
+- Popular areas: Dubai Marina, JBR, Palm Jumeirah, Downtown
+- Average ROI: 8-12% for well-managed holiday homes
+- JBJ facilitates introductions to licensed holiday home management companies
+
+ROI EXPECTATIONS:
+- Rental yields in Dubai: 5-9% average (among highest globally)
+- JVC, Dubai South, Al Furjan: 7-9% yields
+- Dubai Marina, Downtown: 5-7% yields
+- Capital appreciation: varies by area, 5-15% annually in growth areas
+- Off-plan discount: typically 10-20% below ready market value
+
+FREQUENTLY ASKED QUESTIONS:
+Q: Is Dubai real estate a good investment?
+A: Yes - 0% property tax, 0% income tax, high rental yields (5-9%), strong capital appreciation, Golden Visa eligibility
+
+Q: Can foreigners buy property in Dubai?
+A: Yes, foreigners can buy freehold property in designated areas (most popular communities are freehold)
+
+Q: What is off-plan vs ready?
+A: Off-plan = under construction (lower price, payment plans). Ready = completed (immediate move-in/rental income)
+
+Q: How long does a property transfer take?
+A: Typically 2-4 weeks from signing MOU to receiving title deed
+
+Q: What documents do I need to buy?
+A: Passport copy, UAE ID (if resident), proof of funds. Non-residents can buy with passport only
 `;
 
 
