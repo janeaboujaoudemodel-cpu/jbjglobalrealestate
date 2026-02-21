@@ -65,7 +65,10 @@ export function EmbeddedHRDashboard() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-white border-2 border-amber-500/30">
+        <Card 
+          className="bg-white border-2 border-amber-500/30 cursor-pointer hover:border-amber-500/60 active:scale-95 transition-all"
+          onClick={() => setActiveTab('cv-center')}
+        >
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>

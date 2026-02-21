@@ -133,15 +133,15 @@ export function EmbeddedITDepartment() {
       <Tabs defaultValue="applications" className="space-y-4">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <TabsList className="bg-white/80 border-2 border-gold/30 p-1">
-            <TabsTrigger value="applications" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black text-xs">
+            <TabsTrigger value="applications" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black text-black text-xs">
               <UserPlus className="w-3.5 h-3.5 mr-1.5" />
               New Joiner Apps
             </TabsTrigger>
-            <TabsTrigger value="tasks" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black text-xs">
+            <TabsTrigger value="tasks" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black text-black text-xs">
               <FileText className="w-3.5 h-3.5 mr-1.5" />
               IT Tasks
             </TabsTrigger>
-            <TabsTrigger value="team" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black text-xs">
+            <TabsTrigger value="team" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black text-black text-xs">
               <Users className="w-3.5 h-3.5 mr-1.5" />
               IT Team
             </TabsTrigger>

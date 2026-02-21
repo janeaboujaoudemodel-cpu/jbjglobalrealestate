@@ -22,30 +22,19 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 
 interface MarketingConfig {
-  // Analytics
   ga4MeasurementId: string;
   gtmContainerId: string;
   clarityProjectId: string;
-  
-  // Advertising
   metaPixelId: string;
   linkedInPartnerId: string;
   googleAdsId: string;
   tiktokPixelId: string;
-  
-  // Email & CRM
   brevoApiKey: string;
   brevoListId: string;
   mailchimpApiKey: string;
   mailchimpListId: string;
-  
-  // Scheduling
   calendlyUrl: string;
-  
-  // Automation
   zapierWebhookUrl: string;
-  
-  // Local Presence
   googleBusinessUrl: string;
   trustpilotUrl: string;
 }
@@ -107,7 +96,7 @@ export const MarketingSettingsDashboard = () => {
   };
 
   const getStatus = (value: string) => {
-    if (!value) return <XCircle className="w-4 h-4 text-zinc-500" />;
+    if (!value) return <XCircle className="w-4 h-4 text-zinc-400" />;
     return <CheckCircle className="w-4 h-4 text-emerald-500" />;
   };
 
@@ -124,7 +113,7 @@ export const MarketingSettingsDashboard = () => {
     fields: { key: keyof MarketingConfig; label: string; placeholder: string }[];
     docsUrl?: string;
   }) => (
-    <Card className="bg-zinc-900/50 border-zinc-800">
+    <Card className="bg-white border-2 border-gold/30">
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -132,8 +121,8 @@ export const MarketingSettingsDashboard = () => {
               <Icon className="w-5 h-5 text-gold" />
             </div>
             <div>
-              <CardTitle className="text-white text-base">{title}</CardTitle>
-              <CardDescription className="text-zinc-500 text-sm">{description}</CardDescription>
+              <CardTitle className="text-black text-base">{title}</CardTitle>
+              <CardDescription className="text-black/40 text-sm">{description}</CardDescription>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -144,12 +133,11 @@ export const MarketingSettingsDashboard = () => {
       <CardContent className="space-y-4">
         {fields.map(field => (
           <div key={field.key} className="space-y-2">
-            <Label className="text-zinc-400 text-sm">{field.label}</Label>
+            <Label className="text-black/60 text-sm">{field.label}</Label>
             <Input
               value={config[field.key]}
               onChange={(e) => handleChange(field.key, e.target.value)}
               placeholder={field.placeholder}
-              className="bg-zinc-950 border-zinc-700 text-white placeholder:text-zinc-600"
             />
           </div>
         ))}
@@ -171,14 +159,14 @@ export const MarketingSettingsDashboard = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-white text-2xl font-bold">Marketing Integrations</h2>
-          <p className="text-zinc-400 text-sm mt-1">
+          <h2 className="text-black text-2xl font-bold">Marketing Integrations</h2>
+          <p className="text-black/60 text-sm mt-1">
             Configure analytics, advertising, and automation tools
           </p>
         </div>
         <div className="flex items-center gap-3">
           {hasChanges && (
-            <span className="text-amber-400 text-sm flex items-center gap-1">
+            <span className="text-amber-600 text-sm flex items-center gap-1">
               <RefreshCw className="w-4 h-4" />
               Unsaved changes
             </span>
@@ -186,7 +174,7 @@ export const MarketingSettingsDashboard = () => {
           <Button
             onClick={handleSave}
             disabled={!hasChanges || isSaving}
-            variant="dark"
+            className="bg-gold text-black hover:bg-gold/90"
           >
             <Save className="w-4 h-4 mr-2" />
             {isSaving ? 'Saving...' : 'Save Settings'}
@@ -195,24 +183,24 @@ export const MarketingSettingsDashboard = () => {
       </div>
 
       <Tabs defaultValue="analytics" className="space-y-6">
-        <TabsList className="bg-zinc-900 border border-zinc-800">
-          <TabsTrigger value="analytics" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+        <TabsList className="bg-white/80 border-2 border-gold/30">
+          <TabsTrigger value="analytics" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
             <BarChart3 className="w-4 h-4 mr-2" />
             Analytics
           </TabsTrigger>
-          <TabsTrigger value="advertising" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+          <TabsTrigger value="advertising" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
             <Target className="w-4 h-4 mr-2" />
             Advertising
           </TabsTrigger>
-          <TabsTrigger value="email" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+          <TabsTrigger value="email" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
             <Mail className="w-4 h-4 mr-2" />
             Email & CRM
           </TabsTrigger>
-          <TabsTrigger value="automation" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+          <TabsTrigger value="automation" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
             <Webhook className="w-4 h-4 mr-2" />
             Automation
           </TabsTrigger>
-          <TabsTrigger value="local" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+          <TabsTrigger value="local" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
             <Globe className="w-4 h-4 mr-2" />
             Local & Trust
           </TabsTrigger>
@@ -220,131 +208,41 @@ export const MarketingSettingsDashboard = () => {
 
         <TabsContent value="analytics" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <IntegrationCard
-              icon={BarChart}
-              title="Google Analytics 4"
-              description="Track website traffic and user behavior"
-              fields={[
-                { key: 'ga4MeasurementId', label: 'Measurement ID', placeholder: 'G-XXXXXXXXXX' },
-              ]}
-              docsUrl="https://support.google.com/analytics/answer/9304153"
-            />
-            <IntegrationCard
-              icon={Settings}
-              title="Google Tag Manager"
-              description="Manage all marketing tags in one place"
-              fields={[
-                { key: 'gtmContainerId', label: 'Container ID', placeholder: 'GTM-XXXXXXX' },
-              ]}
-              docsUrl="https://support.google.com/tagmanager/answer/6103696"
-            />
-            <IntegrationCard
-              icon={BarChart3}
-              title="Microsoft Clarity"
-              description="Heatmaps and session recordings"
-              fields={[
-                { key: 'clarityProjectId', label: 'Project ID', placeholder: 'xxxxxxxxxx' },
-              ]}
-              docsUrl="https://learn.microsoft.com/en-us/clarity/setup-and-installation/clarity-setup"
-            />
+            <IntegrationCard icon={BarChart} title="Google Analytics 4" description="Track website traffic and user behavior" fields={[{ key: 'ga4MeasurementId', label: 'Measurement ID', placeholder: 'G-XXXXXXXXXX' }]} docsUrl="https://support.google.com/analytics/answer/9304153" />
+            <IntegrationCard icon={Settings} title="Google Tag Manager" description="Manage all marketing tags in one place" fields={[{ key: 'gtmContainerId', label: 'Container ID', placeholder: 'GTM-XXXXXXX' }]} docsUrl="https://support.google.com/tagmanager/answer/6103696" />
+            <IntegrationCard icon={BarChart3} title="Microsoft Clarity" description="Heatmaps and session recordings" fields={[{ key: 'clarityProjectId', label: 'Project ID', placeholder: 'xxxxxxxxxx' }]} docsUrl="https://learn.microsoft.com/en-us/clarity/setup-and-installation/clarity-setup" />
           </div>
         </TabsContent>
 
         <TabsContent value="advertising" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <IntegrationCard
-              icon={Target}
-              title="Meta Pixel"
-              description="Facebook & Instagram tracking"
-              fields={[
-                { key: 'metaPixelId', label: 'Pixel ID', placeholder: 'XXXXXXXXXXXXXXXXX' },
-              ]}
-              docsUrl="https://www.facebook.com/business/help/952192354843755"
-            />
-            <IntegrationCard
-              icon={Target}
-              title="LinkedIn Insight Tag"
-              description="Track LinkedIn ad conversions"
-              fields={[
-                { key: 'linkedInPartnerId', label: 'Partner ID', placeholder: 'XXXXXXX' },
-              ]}
-              docsUrl="https://www.linkedin.com/help/lms/answer/a418880"
-            />
-            <IntegrationCard
-              icon={Target}
-              title="Google Ads"
-              description="Conversion tracking (via GTM recommended)"
-              fields={[
-                { key: 'googleAdsId', label: 'Conversion ID', placeholder: 'AW-XXXXXXXXXX' },
-              ]}
-              docsUrl="https://support.google.com/google-ads/answer/1722054"
-            />
-            <IntegrationCard
-              icon={Target}
-              title="TikTok Pixel"
-              description="TikTok ad tracking (optional)"
-              fields={[
-                { key: 'tiktokPixelId', label: 'Pixel ID', placeholder: 'XXXXXXXXXXXXX' },
-              ]}
-              docsUrl="https://ads.tiktok.com/help/article/get-started-pixel"
-            />
+            <IntegrationCard icon={Target} title="Meta Pixel" description="Facebook & Instagram tracking" fields={[{ key: 'metaPixelId', label: 'Pixel ID', placeholder: 'XXXXXXXXXXXXXXXXX' }]} docsUrl="https://www.facebook.com/business/help/952192354843755" />
+            <IntegrationCard icon={Target} title="LinkedIn Insight Tag" description="Track LinkedIn ad conversions" fields={[{ key: 'linkedInPartnerId', label: 'Partner ID', placeholder: 'XXXXXXX' }]} docsUrl="https://www.linkedin.com/help/lms/answer/a418880" />
+            <IntegrationCard icon={Target} title="Google Ads" description="Conversion tracking (via GTM recommended)" fields={[{ key: 'googleAdsId', label: 'Conversion ID', placeholder: 'AW-XXXXXXXXXX' }]} docsUrl="https://support.google.com/google-ads/answer/1722054" />
+            <IntegrationCard icon={Target} title="TikTok Pixel" description="TikTok ad tracking (optional)" fields={[{ key: 'tiktokPixelId', label: 'Pixel ID', placeholder: 'XXXXXXXXXXXXX' }]} docsUrl="https://ads.tiktok.com/help/article/get-started-pixel" />
           </div>
         </TabsContent>
 
         <TabsContent value="email" className="space-y-4">
-          <div className="bg-emerald-900/20 border border-emerald-700/30 rounded-xl p-4 mb-4">
-            <p className="text-emerald-400 text-sm">
+          <div className="bg-emerald-50 border-2 border-emerald-300 rounded-xl p-4 mb-4">
+            <p className="text-emerald-700 text-sm">
               <strong>Recommended:</strong> Brevo (SendinBlue) offers 300 free emails/day, superior automation, and transactional email support.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <IntegrationCard
-              icon={Mail}
-              title="Brevo (SendinBlue)"
-              description="Email marketing & automation (recommended)"
-              fields={[
-                { key: 'brevoApiKey', label: 'API Key', placeholder: 'xkeysib-...' },
-                { key: 'brevoListId', label: 'List ID', placeholder: '1' },
-              ]}
-              docsUrl="https://developers.brevo.com/docs/getting-started"
-            />
-            <IntegrationCard
-              icon={Mail}
-              title="Mailchimp"
-              description="Alternative email platform"
-              fields={[
-                { key: 'mailchimpApiKey', label: 'API Key', placeholder: 'xxxxxxxx-usX' },
-                { key: 'mailchimpListId', label: 'Audience ID', placeholder: 'abc123xyz' },
-              ]}
-              docsUrl="https://mailchimp.com/developer/marketing/api/"
-            />
-            <IntegrationCard
-              icon={Calendar}
-              title="Calendly"
-              description="Meeting scheduling"
-              fields={[
-                { key: 'calendlyUrl', label: 'Scheduling URL', placeholder: 'https://calendly.com/your-link' },
-              ]}
-              docsUrl="https://help.calendly.com/hc/en-us/articles/223147027"
-            />
+            <IntegrationCard icon={Mail} title="Brevo (SendinBlue)" description="Email marketing & automation (recommended)" fields={[{ key: 'brevoApiKey', label: 'API Key', placeholder: 'xkeysib-...' }, { key: 'brevoListId', label: 'List ID', placeholder: '1' }]} docsUrl="https://developers.brevo.com/docs/getting-started" />
+            <IntegrationCard icon={Mail} title="Mailchimp" description="Alternative email platform" fields={[{ key: 'mailchimpApiKey', label: 'API Key', placeholder: 'xxxxxxxx-usX' }, { key: 'mailchimpListId', label: 'Audience ID', placeholder: 'abc123xyz' }]} docsUrl="https://mailchimp.com/developer/marketing/api/" />
+            <IntegrationCard icon={Calendar} title="Calendly" description="Meeting scheduling" fields={[{ key: 'calendlyUrl', label: 'Scheduling URL', placeholder: 'https://calendly.com/your-link' }]} docsUrl="https://help.calendly.com/hc/en-us/articles/223147027" />
           </div>
         </TabsContent>
 
         <TabsContent value="automation" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <IntegrationCard
-              icon={Webhook}
-              title="Zapier Webhook"
-              description="Connect to Google Sheets, CRMs, and 5000+ apps"
-              fields={[
-                { key: 'zapierWebhookUrl', label: 'Webhook URL', placeholder: 'https://hooks.zapier.com/hooks/catch/...' },
-              ]}
-              docsUrl="https://zapier.com/help/create/code-webhooks/trigger-zaps-from-webhooks"
-            />
+            <IntegrationCard icon={Webhook} title="Zapier Webhook" description="Connect to Google Sheets, CRMs, and 5000+ apps" fields={[{ key: 'zapierWebhookUrl', label: 'Webhook URL', placeholder: 'https://hooks.zapier.com/hooks/catch/...' }]} docsUrl="https://zapier.com/help/create/code-webhooks/trigger-zaps-from-webhooks" />
           </div>
-          <div className="bg-zinc-800/50 border border-zinc-700 rounded-xl p-6">
-            <h3 className="text-white font-semibold mb-2">How to set up Zapier:</h3>
-            <ol className="text-zinc-400 text-sm space-y-2 list-decimal list-inside">
+          <div className="bg-gold/5 border border-gold/20 rounded-xl p-6">
+            <h3 className="text-black font-semibold mb-2">How to set up Zapier:</h3>
+            <ol className="text-black/60 text-sm space-y-2 list-decimal list-inside">
               <li>Create a Zap in Zapier with "Webhooks by Zapier" as the trigger</li>
               <li>Choose "Catch Hook" as the event</li>
               <li>Copy the webhook URL and paste it above</li>
@@ -356,32 +254,16 @@ export const MarketingSettingsDashboard = () => {
 
         <TabsContent value="local" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <IntegrationCard
-              icon={Globe}
-              title="Google Business Profile"
-              description="Local SEO and reviews"
-              fields={[
-                { key: 'googleBusinessUrl', label: 'Business Profile URL', placeholder: 'https://g.page/your-business' },
-              ]}
-              docsUrl="https://support.google.com/business/answer/3038177"
-            />
-            <IntegrationCard
-              icon={Globe}
-              title="Trustpilot"
-              description="Customer reviews widget"
-              fields={[
-                { key: 'trustpilotUrl', label: 'Trustpilot Page URL', placeholder: 'https://www.trustpilot.com/review/yourdomain.com' },
-              ]}
-              docsUrl="https://support.trustpilot.com/hc/en-us/articles/360019718593"
-            />
+            <IntegrationCard icon={Globe} title="Google Business Profile" description="Local SEO and reviews" fields={[{ key: 'googleBusinessUrl', label: 'Business Profile URL', placeholder: 'https://g.page/your-business' }]} docsUrl="https://support.google.com/business/answer/3038177" />
+            <IntegrationCard icon={Globe} title="Trustpilot" description="Customer reviews widget" fields={[{ key: 'trustpilotUrl', label: 'Trustpilot Page URL', placeholder: 'https://www.trustpilot.com/review/yourdomain.com' }]} docsUrl="https://support.trustpilot.com/hc/en-us/articles/360019718593" />
           </div>
         </TabsContent>
       </Tabs>
 
       {/* Integration Status Summary */}
-      <Card className="bg-zinc-900/50 border-zinc-800">
+      <Card className="bg-white border-2 border-gold/30">
         <CardHeader>
-          <CardTitle className="text-white text-lg">Integration Status</CardTitle>
+          <CardTitle className="text-black text-lg">Integration Status</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
@@ -396,15 +278,15 @@ export const MarketingSettingsDashboard = () => {
             ].map(item => (
               <div key={item.label} className="text-center">
                 <div className={`w-12 h-12 rounded-full mx-auto mb-2 flex items-center justify-center ${
-                  item.value ? 'bg-emerald-500/20 border border-emerald-500/50' : 'bg-zinc-800 border border-zinc-700'
+                  item.value ? 'bg-emerald-100 border-2 border-emerald-400' : 'bg-gold/5 border-2 border-gold/20'
                 }`}>
                   {item.value ? (
                     <CheckCircle className="w-6 h-6 text-emerald-500" />
                   ) : (
-                    <XCircle className="w-6 h-6 text-zinc-500" />
+                    <XCircle className="w-6 h-6 text-zinc-400" />
                   )}
                 </div>
-                <span className="text-zinc-400 text-xs">{item.label}</span>
+                <span className="text-black/60 text-xs">{item.label}</span>
               </div>
             ))}
           </div>

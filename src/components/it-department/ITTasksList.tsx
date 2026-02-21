@@ -8,7 +8,7 @@ import {
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Select, SelectContentDark, SelectItemDark, SelectTriggerDark, SelectValue } from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -55,10 +55,10 @@ const STATUS_CONFIG = {
 };
 
 const PRIORITY_CONFIG = {
-  low: { label: 'Low', color: 'text-zinc-400' },
-  medium: { label: 'Medium', color: 'text-yellow-400' },
-  high: { label: 'High', color: 'text-orange-400' },
-  critical: { label: 'Critical', color: 'text-red-400' }
+  low: { label: 'Low', color: 'text-zinc-500' },
+  medium: { label: 'Medium', color: 'text-yellow-600' },
+  high: { label: 'High', color: 'text-orange-500' },
+  critical: { label: 'Critical', color: 'text-red-500' }
 };
 
 const ITTasksList: React.FC<ITTasksListProps> = ({ searchQuery, onRefresh }) => {
@@ -140,39 +140,39 @@ const ITTasksList: React.FC<ITTasksListProps> = ({ searchQuery, onRefresh }) => 
       {/* Filter Bar */}
       <div className="flex flex-wrap items-center gap-4">
         <div className="flex items-center gap-2">
-          <Filter className="w-4 h-4 text-zinc-400" />
-          <span className="text-zinc-400 text-sm">Filters:</span>
+          <Filter className="w-4 h-4 text-black/60" />
+          <span className="text-black/60 text-sm">Filters:</span>
         </div>
         <Select value={filterStatus} onValueChange={setFilterStatus}>
-          <SelectTriggerDark className="w-40 border-gold/20">
+          <SelectTrigger className="w-40">
             <SelectValue placeholder="Status" />
-          </SelectTriggerDark>
-          <SelectContentDark className="border-gold/30">
-            <SelectItemDark value="all">All Status</SelectItemDark>
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Status</SelectItem>
             {Object.entries(STATUS_CONFIG).map(([key, config]) => (
-              <SelectItemDark key={key} value={key}>{config.label}</SelectItemDark>
+              <SelectItem key={key} value={key}>{config.label}</SelectItem>
             ))}
-          </SelectContentDark>
+          </SelectContent>
         </Select>
         <Select value={filterType} onValueChange={setFilterType}>
-          <SelectTriggerDark className="w-48 border-gold/20">
+          <SelectTrigger className="w-48">
             <SelectValue placeholder="Type" />
-          </SelectTriggerDark>
-          <SelectContentDark className="border-gold/30">
-            <SelectItemDark value="all">All Types</SelectItemDark>
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Types</SelectItem>
             {Object.entries(TASK_TYPE_CONFIG).map(([key, config]) => (
-              <SelectItemDark key={key} value={key}>{config.label}</SelectItemDark>
+              <SelectItem key={key} value={key}>{config.label}</SelectItem>
             ))}
-          </SelectContentDark>
+          </SelectContent>
         </Select>
       </div>
 
       {/* Tasks List */}
       {filteredTasks.length === 0 ? (
-        <Card className="bg-zinc-900/50 border-gold/20">
+        <Card className="bg-white border-2 border-gold/30">
           <CardContent className="py-12 text-center">
-            <FileText className="w-12 h-12 text-zinc-500 mx-auto mb-4" />
-            <p className="text-zinc-400">No tasks found</p>
+            <FileText className="w-12 h-12 text-gold mx-auto mb-4" />
+            <p className="text-black/60">No tasks found</p>
           </CardContent>
         </Card>
       ) : (
@@ -192,22 +192,22 @@ const ITTasksList: React.FC<ITTasksListProps> = ({ searchQuery, onRefresh }) => 
                   exit={{ opacity: 0, x: 20 }}
                   transition={{ delay: index * 0.03 }}
                 >
-                  <Card className="bg-zinc-900/50 border-gold/20 hover:border-gold/40 transition-all">
+                  <Card className="bg-white border-2 border-gold/30 hover:border-gold/50 transition-all">
                     <CardContent className="py-4">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
-                          <div className={`w-10 h-10 rounded-lg ${typeConfig?.color || 'bg-zinc-600'} flex items-center justify-center`}>
+                          <div className={`w-10 h-10 rounded-lg ${typeConfig?.color || 'bg-zinc-400'} flex items-center justify-center`}>
                             <FileText className="w-5 h-5 text-white" />
                           </div>
                           <div>
                             <div className="flex items-center gap-2">
-                              <h3 className="font-semibold text-white">{task.title}</h3>
+                              <h3 className="font-semibold text-black">{task.title}</h3>
                               <Badge variant="outline" className={`${priorityConfig?.color} border-current text-xs`}>
                                 {priorityConfig?.label}
                               </Badge>
                             </div>
-                            <p className="text-sm text-zinc-400 line-clamp-1">{task.description}</p>
-                            <div className="flex items-center gap-4 mt-1 text-xs text-zinc-500">
+                            <p className="text-sm text-black/60 line-clamp-1">{task.description}</p>
+                            <div className="flex items-center gap-4 mt-1 text-xs text-black/40">
                               <span className="flex items-center gap-1">
                                 <Calendar className="w-3 h-3" />
                                 {format(new Date(task.created_at), 'MMM d, yyyy')}
@@ -227,14 +227,14 @@ const ITTasksList: React.FC<ITTasksListProps> = ({ searchQuery, onRefresh }) => 
                           
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="icon" className="text-zinc-400 hover:text-white">
+                              <Button variant="ghost" size="icon" className="text-black/60 hover:text-black">
                                 <MoreVertical className="w-4 h-4" />
                               </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent className="bg-zinc-900 border-gold/30">
+                            <DropdownMenuContent className="bg-white border-2 border-gold/30">
                               {task.status === 'open' && (
                                 <DropdownMenuItem 
-                                  className="text-blue-400 hover:bg-gold/20"
+                                  className="text-blue-600 hover:bg-gold/10"
                                   onClick={() => handleStatusChange(task.id, 'in_progress')}
                                 >
                                   <Play className="w-4 h-4 mr-2" /> Start Task
@@ -243,13 +243,13 @@ const ITTasksList: React.FC<ITTasksListProps> = ({ searchQuery, onRefresh }) => 
                               {task.status === 'in_progress' && (
                                 <>
                                   <DropdownMenuItem 
-                                    className="text-purple-400 hover:bg-gold/20"
+                                    className="text-purple-600 hover:bg-gold/10"
                                     onClick={() => handleStatusChange(task.id, 'pending_review')}
                                   >
                                     <Clock className="w-4 h-4 mr-2" /> Send for Review
                                   </DropdownMenuItem>
                                   <DropdownMenuItem 
-                                    className="text-green-400 hover:bg-gold/20"
+                                    className="text-green-600 hover:bg-gold/10"
                                     onClick={() => handleStatusChange(task.id, 'completed')}
                                   >
                                     <Check className="w-4 h-4 mr-2" /> Mark Complete
@@ -258,7 +258,7 @@ const ITTasksList: React.FC<ITTasksListProps> = ({ searchQuery, onRefresh }) => 
                               )}
                               {task.status === 'pending_review' && (
                                 <DropdownMenuItem 
-                                  className="text-green-400 hover:bg-gold/20"
+                                  className="text-green-600 hover:bg-gold/10"
                                   onClick={() => handleStatusChange(task.id, 'completed')}
                                 >
                                   <Check className="w-4 h-4 mr-2" /> Approve & Complete
@@ -266,7 +266,7 @@ const ITTasksList: React.FC<ITTasksListProps> = ({ searchQuery, onRefresh }) => 
                               )}
                               {task.status !== 'completed' && task.status !== 'cancelled' && (
                                 <DropdownMenuItem 
-                                  className="text-red-400 hover:bg-gold/20"
+                                  className="text-red-500 hover:bg-gold/10"
                                   onClick={() => handleStatusChange(task.id, 'cancelled')}
                                 >
                                   <X className="w-4 h-4 mr-2" /> Cancel Task

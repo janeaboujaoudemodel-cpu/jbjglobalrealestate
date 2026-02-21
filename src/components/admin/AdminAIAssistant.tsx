@@ -174,7 +174,7 @@ export const AdminAIAssistant = () => {
           <div className="p-2 rounded-lg bg-gold/30 border border-gold/40">
             <Brain className="w-5 h-5 text-black" />
           </div>
-          AI Admin Assistant
+          Admin Assistant
           <Badge className="ml-auto bg-gold/30 text-black border-gold/50 font-medium">
             <Sparkles className="w-3 h-3 mr-1" />
             Live
