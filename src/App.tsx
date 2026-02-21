@@ -375,6 +375,13 @@ const App = () => (
                 </Suspense>
               } />
               
+              {/* Ticket Survey - Standalone, no header/footer for fast load from email links */}
+              <Route path="/ticket-survey" element={
+                <Suspense fallback={<div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#FDFBF7] to-[#F5F0E6] flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#C8A766]"></div></div>}>
+                  {React.createElement(React.lazy(() => import("./pages/TicketSurvey")))}
+                </Suspense>
+              } />
+
               {/* Public E-Signature Signing Page - No auth required */}
               <Route path="/sign/:token" element={
                 <Suspense fallback={<div className="min-h-screen bg-amber-50 flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
@@ -699,8 +706,7 @@ const App = () => (
                 {/* Reopen Ticket - Public for email links */}
                 <Route path="/reopen-ticket" element={<ReopenTicket />} />
                 
-                {/* Ticket Survey - Public */}
-                <Route path="/ticket-survey" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("./pages/TicketSurvey")))}</Suspense>} />
+                {/* Ticket Survey moved to standalone route above MainLayoutWrapper */}
                 
                 {/* Communication & Productivity Tools - Owner-only */}
                 <Route path="/automations" element={<OwnerGuard><Automations /></OwnerGuard>} />

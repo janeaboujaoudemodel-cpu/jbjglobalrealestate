@@ -301,8 +301,8 @@ const CRMAIToolsPanel = ({ lead, onGeneratePDF }: CRMAIToolsPanelProps) => {
             Select tools to use or generate reports for this client
           </p>
 
-          <ScrollArea className="h-[400px] pr-3">
-            <div className="space-y-4">
+          <ScrollArea className="h-[300px] pr-3">
+            <div className="space-y-3">
               {CATEGORIES.map((category) => {
                 const categoryTools = AI_TOOLS.filter(t => t.category === category.id);
                 
