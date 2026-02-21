@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { RefreshCw, Download, Smartphone, Monitor, Tablet, TrendingUp, TrendingDown, Users } from "lucide-react";
-import { format, subDays, startOfDay, endOfDay } from "date-fns";
+import { format, subDays } from "date-fns";
 import PageGuide from "./PageGuide";
 import { getGuide } from "@/config/page-guides";
 
@@ -40,6 +40,7 @@ const PWAAnalyticsDashboard = () => {
   const [deviceBreakdown, setDeviceBreakdown] = useState<DeviceBreakdown[]>([]);
   const [platformBreakdown, setPlatformBreakdown] = useState<PlatformBreakdown[]>([]);
   const [dateRange, setDateRange] = useState<'7d' | '30d' | 'all'>('7d');
+  const [pwaView, setPwaView] = useState<'device' | 'platform'>('device');
 
   const fetchAnalytics = async () => {
     setLoading(true);
@@ -61,7 +62,6 @@ const PWAAnalyticsDashboard = () => {
       
       setAnalytics(data || []);
       
-      // Calculate event counts
       const counts: Record<string, number> = {};
       const devices: Record<string, number> = {};
       const platforms: Record<string, number> = {};
@@ -239,8 +239,33 @@ const PWAAnalyticsDashboard = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div>
-                <h4 className="text-black/60 text-sm mb-2 font-medium">By Device</h4>
+              {/* Toggle Buttons */}
+              <div className="flex gap-2">
+                <Button
+                  variant={pwaView === 'device' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setPwaView('device')}
+                  className={pwaView === 'device' 
+                    ? 'bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold/40 font-semibold' 
+                    : 'border-gold/30 text-black hover:bg-gold/10'}
+                >
+                  <Monitor className="w-3.5 h-3.5 mr-1.5" />
+                  By Device
+                </Button>
+                <Button
+                  variant={pwaView === 'platform' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setPwaView('platform')}
+                  className={pwaView === 'platform' 
+                    ? 'bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold/40 font-semibold' 
+                    : 'border-gold/30 text-black hover:bg-gold/10'}
+                >
+                  <Smartphone className="w-3.5 h-3.5 mr-1.5" />
+                  By Platform
+                </Button>
+              </div>
+
+              {pwaView === 'device' ? (
                 <div className="space-y-2">
                   {deviceBreakdown.map((device) => (
                     <div key={device.device_type} className="flex items-center justify-between p-2 bg-white/60 border border-gold/20 rounded-lg">
@@ -251,20 +276,23 @@ const PWAAnalyticsDashboard = () => {
                       <span className="text-black/70 font-medium">{device.count}</span>
                     </div>
                   ))}
+                  {deviceBreakdown.length === 0 && (
+                    <p className="text-black/50 text-center py-4">No device data yet</p>
+                  )}
                 </div>
-              </div>
-              
-              <div>
-                <h4 className="text-black/60 text-sm mb-2 font-medium">By Platform</h4>
-                <div className="flex flex-wrap gap-2">
+              ) : (
+                <div className="space-y-2">
                   {platformBreakdown.map((platform) => (
-                    <div key={platform.platform} className="px-3 py-1.5 bg-white/60 border border-gold/20 rounded-full text-sm">
+                    <div key={platform.platform} className="flex items-center justify-between p-2 bg-white/60 border border-gold/20 rounded-lg">
                       <span className="text-black capitalize">{platform.platform}</span>
-                      <span className="text-black/50 ml-2">({platform.count})</span>
+                      <span className="text-black/70 font-medium">{platform.count}</span>
                     </div>
                   ))}
+                  {platformBreakdown.length === 0 && (
+                    <p className="text-black/50 text-center py-4">No platform data yet</p>
+                  )}
                 </div>
-              </div>
+              )}
             </div>
           </CardContent>
         </Card>
