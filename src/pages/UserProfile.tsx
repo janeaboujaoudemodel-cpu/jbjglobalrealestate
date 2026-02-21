@@ -93,13 +93,26 @@ const UserProfile = () => {
     setEmailNotifications(checked);
     setSavingNotifications(true);
     try {
+      // Update auth metadata
       const { error } = await supabase.auth.updateUser({
-        data: {
-          email_notifications: checked,
-        },
+        data: { email_notifications: checked },
       });
       if (error) throw error;
-      toast.success(checked ? "Email notifications enabled" : "Email notifications disabled");
+
+      // Sync with newsletter system (real backend wiring)
+      await supabase.functions.invoke('update-email-preferences', {
+        body: {
+          email: user.email,
+          marketing_enabled: checked,
+          source: 'settings_toggle',
+        },
+      });
+
+      toast.success(
+        checked
+          ? "Marketing emails enabled. Manage categories in Email Preferences."
+          : "You will no longer receive marketing emails."
+      );
     } catch (error: any) {
       console.error("Error updating notification preference:", error);
       setEmailNotifications(prev);
@@ -580,8 +593,10 @@ const UserProfile = () => {
                     <div className="flex items-center gap-3">
                       <Bell className="h-5 w-5 text-gold" />
                       <div>
-                        <p className="font-medium text-foreground">Email Notifications</p>
-                        <p className="text-sm text-muted-foreground">Receive updates about your properties</p>
+                        <p className="font-medium text-foreground">Marketing & Campaign Emails</p>
+                        <p className="text-sm text-muted-foreground">
+                          {emailNotifications ? "You are receiving marketing emails" : "Marketing emails are disabled"}
+                        </p>
                       </div>
                     </div>
                     <Switch
@@ -591,6 +606,20 @@ const UserProfile = () => {
                       aria-label="Toggle email notifications"
                     />
                   </div>
+                  
+                  <a
+                    href="/email-preferences"
+                    className="flex items-center justify-between p-4 rounded-lg border border-border hover:border-gold/40 transition-colors group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Mail className="h-5 w-5 text-gold" />
+                      <div>
+                        <p className="font-medium text-foreground">Manage Email Preferences</p>
+                        <p className="text-sm text-muted-foreground">Choose which categories of emails you receive</p>
+                      </div>
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-gold transition-colors" />
+                  </a>
 
                   <Separator />
 

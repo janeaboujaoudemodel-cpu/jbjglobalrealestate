@@ -12946,48 +12946,108 @@ export type Database = {
           },
         ]
       }
+      newsletter_events: {
+        Row: {
+          created_at: string
+          email: string
+          event_type: string
+          id: string
+          metadata: Json | null
+          source: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          event_type: string
+          id?: string
+          metadata?: Json | null
+          source?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          event_type?: string
+          id?: string
+          metadata?: Json | null
+          source?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       newsletter_subscribers: {
         Row: {
+          consent_version: string | null
           created_at: string | null
           email: string
+          full_name: string | null
+          gdpr_consent_at: string | null
           id: string
           is_active: boolean | null
+          last_email_sent_at: string | null
           name: string | null
+          phone: string | null
+          preference_tags: Json | null
           preferences: Json | null
+          resend_message_id: string | null
           source: string | null
           source_page: string | null
           subscribed_at: string | null
           unsubscribe_reason: string | null
+          unsubscribe_source: string | null
+          unsubscribe_token: string | null
           unsubscribed_at: string | null
           updated_at: string | null
+          user_id: string | null
         }
         Insert: {
+          consent_version?: string | null
           created_at?: string | null
           email: string
+          full_name?: string | null
+          gdpr_consent_at?: string | null
           id?: string
           is_active?: boolean | null
+          last_email_sent_at?: string | null
           name?: string | null
+          phone?: string | null
+          preference_tags?: Json | null
           preferences?: Json | null
+          resend_message_id?: string | null
           source?: string | null
           source_page?: string | null
           subscribed_at?: string | null
           unsubscribe_reason?: string | null
+          unsubscribe_source?: string | null
+          unsubscribe_token?: string | null
           unsubscribed_at?: string | null
           updated_at?: string | null
+          user_id?: string | null
         }
         Update: {
+          consent_version?: string | null
           created_at?: string | null
           email?: string
+          full_name?: string | null
+          gdpr_consent_at?: string | null
           id?: string
           is_active?: boolean | null
+          last_email_sent_at?: string | null
           name?: string | null
+          phone?: string | null
+          preference_tags?: Json | null
           preferences?: Json | null
+          resend_message_id?: string | null
           source?: string | null
           source_page?: string | null
           subscribed_at?: string | null
           unsubscribe_reason?: string | null
+          unsubscribe_source?: string | null
+          unsubscribe_token?: string | null
           unsubscribed_at?: string | null
           updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -19343,6 +19403,96 @@ export type Database = {
           selected_mode?: string | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      user_profile_summaries: {
+        Row: {
+          ai_summary: string | null
+          avg_budget_estimate: string | null
+          avg_time_on_site: number | null
+          device_type: string | null
+          email: string
+          engagement_score: number | null
+          full_name: string | null
+          id: string
+          inquiries_count: number | null
+          intent_score: string | null
+          last_active_at: string | null
+          phone: string | null
+          preference_tags: Json | null
+          preferred_bedrooms: string | null
+          preferred_property_type: string | null
+          recommended_campaign_tag: string | null
+          saved_count: number | null
+          segment_tag: string | null
+          sessions_count: number | null
+          subscribed: boolean | null
+          subscribed_at: string | null
+          tools_used: string | null
+          top_areas: string | null
+          top_projects: string | null
+          updated_at: string | null
+          user_id: string | null
+          viewed_count: number | null
+        }
+        Insert: {
+          ai_summary?: string | null
+          avg_budget_estimate?: string | null
+          avg_time_on_site?: number | null
+          device_type?: string | null
+          email: string
+          engagement_score?: number | null
+          full_name?: string | null
+          id?: string
+          inquiries_count?: number | null
+          intent_score?: string | null
+          last_active_at?: string | null
+          phone?: string | null
+          preference_tags?: Json | null
+          preferred_bedrooms?: string | null
+          preferred_property_type?: string | null
+          recommended_campaign_tag?: string | null
+          saved_count?: number | null
+          segment_tag?: string | null
+          sessions_count?: number | null
+          subscribed?: boolean | null
+          subscribed_at?: string | null
+          tools_used?: string | null
+          top_areas?: string | null
+          top_projects?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          viewed_count?: number | null
+        }
+        Update: {
+          ai_summary?: string | null
+          avg_budget_estimate?: string | null
+          avg_time_on_site?: number | null
+          device_type?: string | null
+          email?: string
+          engagement_score?: number | null
+          full_name?: string | null
+          id?: string
+          inquiries_count?: number | null
+          intent_score?: string | null
+          last_active_at?: string | null
+          phone?: string | null
+          preference_tags?: Json | null
+          preferred_bedrooms?: string | null
+          preferred_property_type?: string | null
+          recommended_campaign_tag?: string | null
+          saved_count?: number | null
+          segment_tag?: string | null
+          sessions_count?: number | null
+          subscribed?: boolean | null
+          subscribed_at?: string | null
+          tools_used?: string | null
+          top_areas?: string | null
+          top_projects?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          viewed_count?: number | null
         }
         Relationships: []
       }

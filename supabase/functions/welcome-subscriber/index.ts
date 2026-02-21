@@ -8,124 +8,141 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-interface WelcomeSubscriberRequest {
+interface WelcomeRequest {
   email: string;
   name?: string;
+  unsubscribe_token?: string;
 }
 
 const handler = async (req: Request): Promise<Response> => {
-  // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { email, name }: WelcomeSubscriberRequest = await req.json();
+    const { email, name, unsubscribe_token }: WelcomeRequest = await req.json();
+    if (!email) throw new Error("Email is required");
 
-    // Validate required fields
-    if (!email) {
-      throw new Error("Email is required");
-    }
+    const siteUrl = "https://jbjglobalrealestate.lovable.app";
+    const firstName = name ? name.split(' ')[0] : 'Valued Member';
+    const unsubUrl = `${siteUrl}/unsubscribe?token=${unsubscribe_token || ''}`;
+    const prefsUrl = `${siteUrl}/email-preferences?token=${unsubscribe_token || ''}`;
 
-    // Send welcome email via direct fetch
+    const emailHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcome to Stay in the Loop</title>
+</head>
+<body style="margin:0;padding:0;background-color:#ffffff;font-family:'Segoe UI',Arial,Helvetica,sans-serif;">
+<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background-color:#ffffff;">
+<tr><td align="center" style="padding:20px 10px;">
+<table role="presentation" cellpadding="0" cellspacing="0" width="600" style="max-width:600px;width:100%;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+
+<!-- Header -->
+<tr><td style="background:linear-gradient(135deg,#0a0a0a 0%,#1a1a1a 50%,#2a2015 100%);padding:40px 30px;text-align:center;">
+<table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+<tr><td align="center">
+<p style="margin:0;font-size:28px;font-weight:700;color:#D4AF37;letter-spacing:3px;font-family:'Georgia',serif;">JBJ GLOBAL</p>
+<p style="margin:4px 0 0;font-size:12px;color:#B8A070;letter-spacing:6px;text-transform:uppercase;">REAL ESTATE</p>
+</td></tr>
+<tr><td align="center" style="padding-top:24px;">
+<p style="margin:0;font-size:22px;color:#ffffff;font-weight:600;">Welcome to Stay in the Loop</p>
+</td></tr>
+</table>
+</td></tr>
+
+<!-- Greeting -->
+<tr><td style="background-color:#FDFBF7;padding:36px 30px 20px;">
+<p style="margin:0;font-size:18px;color:#1a1a1a;font-weight:600;">Dear ${firstName},</p>
+<p style="margin:14px 0 0;font-size:15px;line-height:1.7;color:#444;">You are now part of an exclusive real estate intelligence network. We are committed to delivering only strategic value — no spam, ever.</p>
+</td></tr>
+
+<!-- Benefits Section -->
+<tr><td style="background-color:#FDFBF7;padding:0 30px 30px;">
+<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background:linear-gradient(135deg,#F5EBD7,#EDE4D3);border-left:4px solid #D4AF37;border-radius:0 8px 8px 0;padding:20px;">
+<tr><td style="padding:20px;">
+<p style="margin:0 0 16px;font-size:15px;font-weight:700;color:#1a1a1a;">You will receive:</p>
+<table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+<tr><td style="padding:6px 0;font-size:14px;color:#333;">✦ New project launches — off-plan &amp; ready</td></tr>
+<tr><td style="padding:6px 0;font-size:14px;color:#333;">✦ Market intelligence highlights &amp; reports</td></tr>
+<tr><td style="padding:6px 0;font-size:14px;color:#333;">✦ Exclusive early access &amp; priority viewing invitations</td></tr>
+<tr><td style="padding:6px 0;font-size:14px;color:#333;">✦ Price drops, limited offers &amp; developer promotions</td></tr>
+<tr><td style="padding:6px 0;font-size:14px;color:#333;">✦ AI tools hub updates, calculators &amp; comparisons</td></tr>
+<tr><td style="padding:6px 0;font-size:14px;color:#333;">✦ Area guides &amp; investment insights</td></tr>
+</table>
+</td></tr>
+</table>
+</td></tr>
+
+<!-- CTA Buttons -->
+<tr><td style="background-color:#FDFBF7;padding:0 30px 36px;text-align:center;">
+<table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+<tr><td align="center" style="padding-bottom:12px;">
+<a href="${siteUrl}/properties" style="display:inline-block;background:linear-gradient(135deg,#D4AF37,#B8860B);color:#000;text-decoration:none;padding:14px 32px;border-radius:8px;font-weight:700;font-size:15px;letter-spacing:0.5px;">Browse Properties →</a>
+</td></tr>
+<tr><td align="center">
+<a href="${prefsUrl}" style="display:inline-block;background:#ffffff;color:#D4AF37;text-decoration:none;padding:12px 28px;border-radius:8px;font-weight:600;font-size:14px;border:2px solid #D4AF37;">Manage Preferences</a>
+</td></tr>
+</table>
+</td></tr>
+
+<!-- Footer -->
+<tr><td style="background-color:#f5f5f5;padding:28px 30px;text-align:center;border-top:1px solid #e5e5e5;">
+<p style="margin:0 0 8px;font-size:13px;color:#666;">You can turn email notifications on/off anytime from your account settings.</p>
+<p style="margin:0 0 8px;font-size:13px;color:#666;">You can unsubscribe or resubscribe anytime.</p>
+<p style="margin:16px 0 0;">
+<a href="${unsubUrl}" style="color:#999;font-size:12px;text-decoration:underline;">Unsubscribe</a>
+<span style="color:#ccc;margin:0 8px;">|</span>
+<a href="${prefsUrl}" style="color:#999;font-size:12px;text-decoration:underline;">Manage Preferences</a>
+<span style="color:#ccc;margin:0 8px;">|</span>
+<a href="mailto:contact@jbj.ae" style="color:#999;font-size:12px;text-decoration:underline;">Contact Us</a>
+</p>
+<p style="margin:16px 0 0;font-size:11px;color:#aaa;">
+© ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.<br/>
+Dubai, United Arab Emirates<br/><br/>
+You are receiving this email because you opted in on jbj.ae.
+</p>
+</td></tr>
+
+</table>
+</td></tr>
+</table>
+</body>
+</html>`;
+
     const emailRes = await fetch("https://api.resend.com/emails", {
       method: "POST",
-      headers: { "Authorization": `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
+      headers: {
+        "Authorization": `Bearer ${RESEND_API_KEY}`,
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
         from: "JBJ Global Real Estate <info@jbj.ae>",
+        reply_to: "contact@jbj.ae",
         to: [email],
-        subject: "Welcome to JBJ Global Real Estate Newsletter! 🏠",
-        html: `
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <style>
-              body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; background: #f5f5f5; }
-              .container { max-width: 600px; margin: 0 auto; background: #ffffff; }
-              .header { background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%); padding: 40px 30px; text-align: center; }
-              .logo { font-size: 28px; font-weight: bold; color: #D4AF37; letter-spacing: 2px; }
-              .content { padding: 40px 30px; }
-              .title { font-size: 24px; color: #000000; margin-bottom: 20px; }
-              .highlight { background: linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 100%); border-left: 4px solid #D4AF37; padding: 20px; margin: 20px 0; }
-              .message { font-size: 16px; line-height: 1.6; color: #555; margin-bottom: 15px; }
-              .benefits { list-style: none; padding: 0; }
-              .benefits li { padding: 10px 0; padding-left: 30px; position: relative; color: #333; }
-              .benefits li::before { content: "✓"; position: absolute; left: 0; color: #D4AF37; font-weight: bold; }
-              .cta-button { display: inline-block; background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%); color: #000; text-decoration: none; padding: 15px 30px; border-radius: 8px; font-weight: bold; margin-top: 20px; }
-              .footer { background: #f9f9f9; padding: 30px; text-align: center; border-top: 1px solid #eee; }
-              .footer-text { color: #888; font-size: 12px; }
-              .social { margin-top: 20px; }
-              .social a { margin: 0 10px; color: #D4AF37; text-decoration: none; }
-            </style>
-          </head>
-          <body>
-            <div class="container">
-              <div class="header">
-                <div class="logo">JBJ GLOBAL REAL ESTATE</div>
-              </div>
-              <div class="content">
-                <h1 class="title">Welcome${name ? `, ${name}` : ''}! 🎉</h1>
-                <p class="message">
-                  Thank you for subscribing to the JBJ Global Real Estate newsletter. 
-                  You're now part of an exclusive community that receives the latest updates on:
-                </p>
-                <ul class="benefits">
-                  <li>Premium property listings in Dubai & UAE</li>
-                  <li>Market insights and investment opportunities</li>
-                  <li>Exclusive off-plan launches and early-bird offers</li>
-                  <li>Real estate tips and expert advice</li>
-                  <li>VIP events and property viewing invitations</li>
-                </ul>
-                <div class="highlight">
-                  <p style="margin: 0; font-weight: bold; color: #333;">
-                    🏆 As a subscriber, you get priority access to our newest listings before they go public!
-                  </p>
-                </div>
-                <p class="message">
-                  Start exploring our current listings and find your dream property in the heart of Dubai.
-                </p>
-                <a href="https://jbj.ae/properties" class="cta-button">
-                  Browse Properties →
-                </a>
-              </div>
-              <div class="footer">
-                <div class="social">
-                  <a href="#">Instagram</a>
-                  <a href="#">LinkedIn</a>
-                  <a href="#">Facebook</a>
-                </div>
-                <p class="footer-text">
-                  © ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.<br/>
-                  Dubai, United Arab Emirates<br/><br/>
-                  <a href="#" style="color: #888;">Unsubscribe</a>
-                </p>
-              </div>
-            </div>
-          </body>
-          </html>
-        `,
+        subject: "Welcome to Stay in the Loop — JBJ Global Real Estate",
+        html: emailHtml,
       }),
     });
-    const emailResponse = await emailRes.json();
-    if (!emailRes.ok) console.error("Resend API error:", JSON.stringify(emailResponse));
 
-    console.log("Welcome email sent successfully:", emailResponse);
+    const emailResponse = await emailRes.json();
+    if (!emailRes.ok) {
+      console.error("Resend API error:", JSON.stringify(emailResponse));
+    } else {
+      console.log("Welcome email sent:", emailResponse);
+    }
 
     return new Response(JSON.stringify({ success: true, emailResponse }), {
       status: 200,
-      headers: {
-        "Content-Type": "application/json",
-        ...corsHeaders,
-      },
+      headers: { "Content-Type": "application/json", ...corsHeaders },
     });
   } catch (error: any) {
-    console.error("Error in welcome-subscriber function:", error);
+    console.error("Error in welcome-subscriber:", error);
     return new Response(
       JSON.stringify({ error: error.message }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
-      }
+      { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
     );
   }
 };
