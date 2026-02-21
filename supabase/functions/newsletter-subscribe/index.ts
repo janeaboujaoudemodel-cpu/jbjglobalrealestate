@@ -134,37 +134,33 @@ serve(async (req: Request): Promise<Response> => {
       metadata: { page_source: data.page_source, gdpr_consent: data.gdpr_consent },
     });
 
-    // Send welcome email via welcome-subscriber function
+    // Send welcome email via welcome-subscriber function (fire-and-forget for speed)
     const unsubscribeToken = subscriber?.unsubscribe_token || '';
-    try {
-      const welcomeRes = await fetch(`${supabaseUrl}/functions/v1/welcome-subscriber`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${supabaseServiceKey}`,
-        },
-        body: JSON.stringify({
-          email: normalizedEmail,
-          name: existingName || data.full_name || null,
-          unsubscribe_token: unsubscribeToken,
-        }),
-      });
-      const welcomeData = await welcomeRes.json();
-      console.log("[newsletter-subscribe] Welcome email result:", welcomeData);
-
-      // Store resend_message_id if available
-      if (welcomeData?.emailResponse?.id) {
-        await supabase
-          .from('newsletter_subscribers')
-          .update({
+    fetch(`${supabaseUrl}/functions/v1/welcome-subscriber`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${supabaseServiceKey}`,
+      },
+      body: JSON.stringify({
+        email: normalizedEmail,
+        name: existingName || data.full_name || null,
+        unsubscribe_token: unsubscribeToken,
+      }),
+    }).then(async (welcomeRes) => {
+      try {
+        const welcomeData = await welcomeRes.json();
+        console.log("[newsletter-subscribe] Welcome email result:", welcomeData);
+        if (welcomeData?.emailResponse?.id) {
+          await supabase.from('newsletter_subscribers').update({
             resend_message_id: welcomeData.emailResponse.id,
             last_email_sent_at: new Date().toISOString(),
-          })
-          .eq('email', normalizedEmail);
-      }
-    } catch (emailErr) {
+          }).eq('email', normalizedEmail);
+        }
+      } catch (e) { console.warn("[newsletter-subscribe] Welcome parse error:", e); }
+    }).catch(emailErr => {
       console.warn("[newsletter-subscribe] Welcome email error:", emailErr);
-    }
+    });
 
     // Sync to Brevo if configured
     if (brevoApiKey) {
