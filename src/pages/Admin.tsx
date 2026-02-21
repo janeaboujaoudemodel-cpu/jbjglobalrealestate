@@ -399,7 +399,7 @@ const Admin = () => {
               className="text-black hover:text-gold hover:bg-gold/10 relative"
             >
               <Bell className="h-4 w-4" />
-              <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-[10px] text-white flex items-center justify-center">5</span>
+              
             </Button>
             <Link to="/admin/marketing-hub">
               <Button
@@ -438,7 +438,7 @@ const Admin = () => {
               </TabsTrigger>
               <TabsTrigger value="ai-assistant" className="tab-trigger-champagne text-black">
                 <Bot className="w-4 h-4 mr-2" />
-                AI Assistant
+                Admin Assistant
               </TabsTrigger>
               <TabsTrigger value="security" className="tab-trigger-champagne text-black">
                 <Activity className="w-4 h-4 mr-2" />
@@ -500,6 +500,10 @@ const Admin = () => {
                 <Mic className="w-4 h-4 mr-2" />
                 Podcast Studio
               </TabsTrigger>
+              <TabsTrigger value="founder" className="tab-trigger-champagne text-black">
+                <Crown className="w-4 h-4 mr-2" />
+                Founder
+              </TabsTrigger>
             </TabsList>
           </div>
 
@@ -520,12 +524,6 @@ const Admin = () => {
             {/* Security Dashboard - Full Width */}
             <SecurityDashboardSummary />
             
-            {/* Toggles & Downloads */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <FounderVisibilityToggle />
-              <PodcastVisibilityToggle />
-              <CompanyProfileDownload />
-            </div>
           </TabsContent>
 
           <TabsContent value="audit-logs" className="space-y-8">
@@ -579,6 +577,14 @@ const Admin = () => {
           <TabsContent value="podcast-studio" className="space-y-8">
             <div className="max-w-3xl mx-auto">
               <VoiceRecorder />
+            </div>
+          </TabsContent>
+
+          <TabsContent value="founder" className="space-y-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <FounderVisibilityToggle />
+              <PodcastVisibilityToggle />
+              <CompanyProfileDownload />
             </div>
           </TabsContent>
 

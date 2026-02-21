@@ -10,7 +10,8 @@ import {
   ArrowLeft, Plus, Mail, MessageSquare, Share2, Send, Calendar, Users, Eye, Edit2, Trash2,
   Copy, BarChart3, Search, Filter, MoreHorizontal, Sparkles, Bot, FileText, Megaphone,
   Zap, BrainCircuit, PenTool, Globe, Headphones, BookOpen, LayoutDashboard, Settings,
-  MessageCircle, Target, TrendingUp, Lightbulb, Video, Palette, ClipboardList, Shield
+  MessageCircle, Target, TrendingUp, Lightbulb, Video, Palette, ClipboardList, Shield,
+  Building2, Heart, UserCog
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -63,6 +64,12 @@ const AI_TOOLS = [
   { label: 'AI Client Matcher', icon: Target, route: '/ai/client-matcher', color: 'text-cyan-400' },
   { label: 'AI Lead Qualification', icon: TrendingUp, route: '/ai/lead-qualification', color: 'text-amber-400' },
   { label: 'AI Meeting Summarizer', icon: ClipboardList, route: '/ai/meeting-summarizer', color: 'text-indigo-400' },
+  { label: 'AI Call Summarizer', icon: Headphones, route: '/ai/call-summarizer', color: 'text-sky-400' },
+  { label: 'AI Document Analyzer', icon: FileText, route: '/ai/document-analyzer', color: 'text-slate-400' },
+  { label: 'AI Property Evaluation', icon: Lightbulb, route: '/ai/property-evaluation', color: 'text-yellow-400' },
+  { label: 'AI Presentation Generator', icon: Palette, route: '/ai/presentation-generator', color: 'text-rose-400' },
+  { label: 'Marketing Creative Suite', icon: Palette, route: '/studio', color: 'text-fuchsia-400' },
+  { label: 'AI Video Studio', icon: Video, route: '/toolkit/ai-video-studio', color: 'text-violet-400' },
 ];
 
 const ADMIN_SHORTCUTS = [
@@ -211,7 +218,7 @@ const MarketingHub: React.FC = () => {
       {/* Left Sidebar - AI Tools & Admin Shortcuts */}
       <aside className={`${sidebarCollapsed ? 'w-16' : 'w-64'} shrink-0 border-r-2 border-gold/30 bg-gradient-to-b from-black via-zinc-900 to-black transition-all duration-300 hidden lg:flex flex-col`}>
         {/* Sidebar Header */}
-        <div className="p-4 border-b border-gold/20 flex items-center gap-3">
+        <div className="p-4 border-b border-gold/20 flex items-center gap-3 h-16">
           {!sidebarCollapsed && (
             <div className="flex items-center gap-2">
               <BrainCircuit className="w-5 h-5 text-gold" />
@@ -536,12 +543,20 @@ const MarketingHub: React.FC = () => {
             <TabsContent value="templates" className="m-0">
               <div className="grid md:grid-cols-3 gap-4">
                 {[
-                  { name: 'New Listing Announcement', description: 'Announce new property listings', icon: '🏠', type: 'email' },
-                  { name: 'Monthly Newsletter', description: 'Regular updates and insights', icon: '📰', type: 'email' },
-                  { name: 'Price Reduction Alert', description: 'Notify buyers of price drops', icon: '💰', type: 'email' },
-                  { name: 'Open House Invitation', description: 'Invite prospects to viewings', icon: '🚪', type: 'email' },
-                  { name: 'Market Update', description: 'Share market trends and data', icon: '📊', type: 'email' },
-                  { name: 'Thank You Follow-up', description: 'Thank clients after meetings', icon: '🙏', type: 'email' },
+                  { name: 'New Listing Announcement', description: 'Announce new property listings', icon: Building2, type: 'email' },
+                  { name: 'Monthly Newsletter', description: 'Regular updates and insights', icon: FileText, type: 'email' },
+                  { name: 'Price Reduction Alert', description: 'Notify buyers of price drops', icon: TrendingUp, type: 'email' },
+                  { name: 'Open House Invitation', description: 'Invite prospects to viewings', icon: Calendar, type: 'email' },
+                  { name: 'Market Update', description: 'Share market trends and data', icon: BarChart3, type: 'email' },
+                  { name: 'Thank You Follow-up', description: 'Thank clients after meetings', icon: Heart, type: 'email' },
+                  { name: 'Welcome Email', description: 'Onboard new clients warmly', icon: Mail, type: 'email' },
+                  { name: 'Property Inquiry Response', description: 'Auto-reply to property inquiries', icon: MessageSquare, type: 'email' },
+                  { name: 'Event Invitation', description: 'Invite clients to exclusive events', icon: Calendar, type: 'email' },
+                  { name: 'Referral Request', description: 'Ask satisfied clients for referrals', icon: Users, type: 'email' },
+                  { name: 'Holiday Greeting', description: 'Seasonal greetings to your network', icon: Sparkles, type: 'email' },
+                  { name: 'Investment Opportunity', description: 'Present new investment options', icon: Lightbulb, type: 'email' },
+                  { name: 'Broker Onboarding', description: 'Welcome new team members', icon: UserCog, type: 'email' },
+                  { name: 'Anniversary Follow-up', description: 'Mark purchase anniversaries', icon: Heart, type: 'email' },
                 ].map((template, idx) => (
                   <motion.div
                     key={idx}
@@ -551,7 +566,9 @@ const MarketingHub: React.FC = () => {
                     className="p-4 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F5F0E6] hover:border-gold hover:shadow-lg transition-all cursor-pointer group"
                     onClick={() => setIsCreating(true)}
                   >
-                    <div className="text-3xl mb-3">{template.icon}</div>
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gold/20 to-amber-500/20 flex items-center justify-center border border-gold/30 mb-3">
+                      <template.icon className="w-5 h-5 text-black" />
+                    </div>
                     <h4 className="font-semibold text-black group-hover:text-gold transition-colors">{template.name}</h4>
                     <p className="text-sm text-black/60 mt-1">{template.description}</p>
                     <Badge className="mt-3 bg-gold/10 text-gold border-gold/30">{template.type}</Badge>

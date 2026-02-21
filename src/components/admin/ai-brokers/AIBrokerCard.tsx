@@ -51,14 +51,14 @@ export function AIBrokerCard({
   };
 
   return (
-    <Card className="bg-zinc-900 border-zinc-800 overflow-hidden">
+    <Card className="bg-white border-2 border-gold/30 overflow-hidden">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-4">
             <div className="relative">
-              <Avatar className="h-16 w-16 border-2 border-zinc-700">
+              <Avatar className="h-16 w-16 border-2 border-gold/30">
                 <AvatarImage src={broker.avatar_url || undefined} alt={broker.name} />
-                <AvatarFallback className="bg-zinc-800 text-gold text-lg">
+                <AvatarFallback className="bg-gold/10 text-gold text-lg">
                   {broker.name
                     .split(" ")
                     .map((n) => n[0])
@@ -66,24 +66,24 @@ export function AIBrokerCard({
                 </AvatarFallback>
               </Avatar>
               <span
-                className={`absolute bottom-0 right-0 h-4 w-4 rounded-full border-2 border-zinc-900 ${
+                className={`absolute bottom-0 right-0 h-4 w-4 rounded-full border-2 border-white ${
                   broker.status === "active"
                     ? "bg-emerald-500"
                     : broker.status === "paused"
                     ? "bg-amber-500"
-                    : "bg-zinc-500"
+                    : "bg-zinc-400"
                 }`}
               />
             </div>
             <div>
-              <h3 className="text-white font-semibold text-lg">{broker.name}</h3>
-              <p className="text-gray-400 text-sm">{broker.email}</p>
+              <h3 className="text-black font-semibold text-lg">{broker.name}</h3>
+              <p className="text-black/60 text-sm">{broker.email}</p>
               <div className="flex gap-2 mt-1">
                 {broker.specialization?.slice(0, 2).map((spec) => (
                   <Badge
                     key={spec}
                     variant="outline"
-                    className="border-zinc-700 text-gray-400 text-xs"
+                    className="border-gold/30 text-black/60 text-xs"
                   >
                     {spec}
                   </Badge>
@@ -94,7 +94,7 @@ export function AIBrokerCard({
 
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-400">
+              <span className="text-sm text-black/60">
                 {isActive ? "Active" : "Paused"}
               </span>
               <Switch
@@ -108,24 +108,24 @@ export function AIBrokerCard({
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-gray-400">
+                <Button variant="ghost" size="icon" className="text-black/60">
                   <MoreVertical className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="end"
-                className="bg-zinc-900 border-zinc-700"
+                className="bg-white border-2 border-gold/30 z-50"
               >
                 <DropdownMenuItem
                   onClick={() => onEdit(broker)}
-                  className="text-gray-300 focus:bg-zinc-800"
+                  className="text-black hover:bg-gold/10"
                 >
                   <Settings className="h-4 w-4 mr-2" />
                   Edit Settings
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => onViewStats(broker.id)}
-                  className="text-gray-300 focus:bg-zinc-800"
+                  className="text-black hover:bg-gold/10"
                 >
                   <BarChart3 className="h-4 w-4 mr-2" />
                   View Analytics
@@ -140,12 +140,12 @@ export function AIBrokerCard({
         {/* Capacity Bar */}
         <div>
           <div className="flex justify-between text-sm mb-1">
-            <span className="text-gray-400">Daily Capacity</span>
-            <span className="text-white">
+            <span className="text-black/60">Daily Capacity</span>
+            <span className="text-black">
               {capacityUsed} / {capacityLimit}
             </span>
           </div>
-          <div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
+          <div className="h-2 bg-gold/10 rounded-full overflow-hidden">
             <div
               className={`h-full transition-all ${
                 capacityPercent > 90
@@ -161,44 +161,44 @@ export function AIBrokerCard({
 
         {/* Stats Grid */}
         <div className="grid grid-cols-4 gap-3">
-          <div className="bg-zinc-800/50 rounded-lg p-3 text-center">
+          <div className="bg-gold/5 border border-gold/20 rounded-lg p-3 text-center">
             <Users className="h-4 w-4 text-gold mx-auto mb-1" />
-            <p className="text-white font-semibold">
+            <p className="text-black font-semibold">
               {broker.total_leads_handled || 0}
             </p>
-            <p className="text-gray-500 text-xs">Leads</p>
+            <p className="text-black/50 text-xs">Leads</p>
           </div>
-          <div className="bg-zinc-800/50 rounded-lg p-3 text-center">
+          <div className="bg-gold/5 border border-gold/20 rounded-lg p-3 text-center">
             <TrendingUp className="h-4 w-4 text-emerald-500 mx-auto mb-1" />
-            <p className="text-white font-semibold">{conversionRate}%</p>
-            <p className="text-gray-500 text-xs">Conversion</p>
+            <p className="text-black font-semibold">{conversionRate}%</p>
+            <p className="text-black/50 text-xs">Conversion</p>
           </div>
-          <div className="bg-zinc-800/50 rounded-lg p-3 text-center">
+          <div className="bg-gold/5 border border-gold/20 rounded-lg p-3 text-center">
             <Clock className="h-4 w-4 text-blue-500 mx-auto mb-1" />
-            <p className="text-white font-semibold">
+            <p className="text-black font-semibold">
               {formatResponseTime(broker.average_response_time_seconds)}
             </p>
-            <p className="text-gray-500 text-xs">Avg Response</p>
+            <p className="text-black/50 text-xs">Avg Response</p>
           </div>
-          <div className="bg-zinc-800/50 rounded-lg p-3 text-center">
+          <div className="bg-gold/5 border border-gold/20 rounded-lg p-3 text-center">
             <MessageSquare className="h-4 w-4 text-purple-500 mx-auto mb-1" />
-            <p className="text-white font-semibold">
+            <p className="text-black font-semibold">
               {broker.working_hours_start?.slice(0, 5) || "09:00"} -{" "}
               {broker.working_hours_end?.slice(0, 5) || "18:00"}
             </p>
-            <p className="text-gray-500 text-xs">Hours</p>
+            <p className="text-black/50 text-xs">Hours</p>
           </div>
         </div>
 
         {/* Languages */}
         {broker.languages && broker.languages.length > 0 && (
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-gray-400">Languages:</span>
+            <span className="text-black/60">Languages:</span>
             <div className="flex gap-1">
               {broker.languages.map((lang) => (
                 <Badge
                   key={lang}
-                  className="bg-zinc-800 text-gray-300 text-xs"
+                  className="bg-gold/10 text-black/70 text-xs border border-gold/20"
                 >
                   {lang}
                 </Badge>
@@ -208,11 +208,11 @@ export function AIBrokerCard({
         )}
 
         {/* Quick Actions */}
-        <div className="flex gap-2 pt-2 border-t border-zinc-800">
+        <div className="flex gap-2 pt-2 border-t border-gold/20">
           <Button
             variant="outline"
             size="sm"
-            className="flex-1 border-zinc-700 text-gray-300 hover:bg-zinc-800"
+            className="flex-1 border-gold/30 text-black hover:bg-gold/10"
           >
             <Mail className="h-4 w-4 mr-2" />
             Test Email
@@ -220,7 +220,7 @@ export function AIBrokerCard({
           <Button
             variant="outline"
             size="sm"
-            className="flex-1 border-zinc-700 text-gray-300 hover:bg-zinc-800"
+            className="flex-1 border-gold/30 text-black hover:bg-gold/10"
           >
             <MessageSquare className="h-4 w-4 mr-2" />
             Test Chat
