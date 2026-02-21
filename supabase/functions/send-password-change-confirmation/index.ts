@@ -61,7 +61,7 @@ const handler = async (req: Request): Promise<Response> => {
 
 <!-- Logo Banner -->
 <tr><td style="background:#ffffff;padding:24px 30px 16px;text-align:center;">
-<img src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/jbj-logo.png?v=1" alt="JBJ Global Real Estate" width="160" style="max-width:160px;height:auto;" />
+<img src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/jbj-monogram-dark-on-light.png?v=2" alt="JBJ Global Real Estate" width="120" style="max-width:120px;height:auto;" />
 </td></tr>
 
 <!-- Header -->
@@ -115,7 +115,7 @@ Activity Details</p>
 <!-- Footer -->
 <tr><td style="background:linear-gradient(135deg,#1a1a1a,#2d2d2d);padding:28px 30px;text-align:center;">
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:12px;">
-<tr><td style="width:48px;height:48px;border-radius:50%;background:#000000;color:#C8A766;text-align:center;line-height:48px;font-size:16px;font-weight:bold;font-family:'Georgia',serif;border:2px solid #C8A766;">JBJ</td></tr>
+<tr><td style="text-align:center;"><img src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/jbj-monogram-light-on-dark.png?v=2" alt="JBJ" width="64" style="max-width:64px;height:auto;" /></td></tr>
 </table>
 <p style="color:#C8A766;font-size:18px;font-weight:bold;margin:0 0 6px;">JBJ Global Real Estate</p>
 <p style="color:#888;font-size:12px;margin:0 0 4px;font-style:italic;">The Only Global AI-Powered Real Estate Intelligence Platform</p>

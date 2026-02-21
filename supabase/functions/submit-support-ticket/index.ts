@@ -279,7 +279,7 @@ body{margin:0;padding:0;width:100%!important;background-color:#F5EBD7;}
 
 <!-- Logo Banner -->
 <tr><td style="background:#ffffff;padding:24px 32px 16px;text-align:center;border-radius:20px 20px 0 0;">
-<img src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/jbj-logo.png?v=1" alt="JBJ Global Real Estate" width="160" style="max-width:160px;height:auto;" />
+<img src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/jbj-monogram-dark-on-light.png?v=2" alt="JBJ Global Real Estate" width="120" style="max-width:120px;height:auto;" />
 </td></tr>
 
 <!-- HERO - Champagne Gold Gradient -->
@@ -502,12 +502,19 @@ ${isImage ? `<img src="${url}" width="40" height="40" style="width:40px;height:4
 </td>
 </tr>
 </table>
-<!-- Social Links -->
+<!-- Social Links - Row 1 -->
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-top:20px;border-top:1px solid rgba(26,26,26,0.2);padding-top:16px;">
 <tr>
-<td style="padding:4px 6px;"><a href="https://instagram.com/jbj.ae" style="display:inline-block;padding:6px 14px;background:rgba(26,26,26,0.1);border:1px solid #1a1a1a;border-radius:20px;color:#1a1a1a;text-decoration:none;font-size:12px;font-weight:600;">Instagram</a></td>
-<td style="padding:4px 6px;"><a href="https://facebook.com/jbjglobal" style="display:inline-block;padding:6px 14px;background:rgba(26,26,26,0.1);border:1px solid #1a1a1a;border-radius:20px;color:#1a1a1a;text-decoration:none;font-size:12px;font-weight:600;">Facebook</a></td>
-<td style="padding:4px 6px;"><a href="https://linkedin.com/company/jbjglobal" style="display:inline-block;padding:6px 14px;background:rgba(26,26,26,0.1);border:1px solid #1a1a1a;border-radius:20px;color:#1a1a1a;text-decoration:none;font-size:12px;font-weight:600;">LinkedIn</a></td>
+<td style="padding:4px 6px;"><a href="https://instagram.com/jbj.ae" style="display:inline-block;padding:6px 14px;background:rgba(26,26,26,0.1);border:2px solid #C8A766;border-radius:20px;color:#1a1a1a;text-decoration:none;font-size:12px;font-weight:600;">Instagram</a></td>
+<td style="padding:4px 6px;"><a href="https://facebook.com/jbjglobal" style="display:inline-block;padding:6px 14px;background:rgba(26,26,26,0.1);border:2px solid #C8A766;border-radius:20px;color:#1a1a1a;text-decoration:none;font-size:12px;font-weight:600;">Facebook</a></td>
+<td style="padding:4px 6px;"><a href="https://linkedin.com/company/jbjglobal" style="display:inline-block;padding:6px 14px;background:rgba(26,26,26,0.1);border:2px solid #C8A766;border-radius:20px;color:#1a1a1a;text-decoration:none;font-size:12px;font-weight:600;">LinkedIn</a></td>
+</tr>
+</table>
+<!-- Social Links - Row 2 -->
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-top:8px;">
+<tr>
+<td style="padding:4px 6px;"><a href="https://tiktok.com/@jbjglobal" style="display:inline-block;padding:6px 14px;background:rgba(26,26,26,0.1);border:2px solid #C8A766;border-radius:20px;color:#1a1a1a;text-decoration:none;font-size:12px;font-weight:600;">TikTok</a></td>
+<td style="padding:4px 6px;"><a href="https://youtube.com/@jbjglobal" style="display:inline-block;padding:6px 14px;background:rgba(26,26,26,0.1);border:2px solid #C8A766;border-radius:20px;color:#1a1a1a;text-decoration:none;font-size:12px;font-weight:600;">YouTube</a></td>
 </tr>
 </table>
 </td></tr>
@@ -579,7 +586,7 @@ Explore While You Wait</p>
 <tr><td style="background:linear-gradient(135deg,#1a1a1a,#2d2d2d);text-align:center;padding:32px 24px;border-radius:0 0 20px 20px;">
 <!-- JBJ Monogram -->
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:12px;">
-<tr><td style="width:48px;height:48px;border-radius:50%;background:#000000;color:#C8A766;text-align:center;line-height:48px;font-size:16px;font-weight:bold;font-family:'Georgia',serif;border:2px solid #C8A766;">JBJ</td></tr>
+<tr><td style="text-align:center;"><img src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/jbj-monogram-light-on-dark.png?v=2" alt="JBJ" width="64" style="max-width:64px;height:auto;" /></td></tr>
 </table>
 <p style="color:#C8A766;font-size:18px;font-weight:bold;margin:0 0 6px;">JBJ Global Real Estate</p>
 <p style="color:#888;font-size:12px;margin:0 0 4px;font-style:italic;">The Only Global AI-Powered Real Estate Intelligence Platform</p>
