@@ -347,7 +347,7 @@ const InvestorDashboard = () => {
                 <Button 
                   variant="secondary" 
                   className="w-full justify-start" 
-                  onClick={() => navigate('/seller-listing')}
+                  onClick={() => navigate('/listing-portal')}
                 >
                   <Building2 className="h-4 w-4 mr-3 text-gold" />
                   List Your Property for Sale

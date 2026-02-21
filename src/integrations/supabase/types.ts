@@ -16545,6 +16545,8 @@ export type Database = {
           admin_approved_at: string | null
           admin_approved_by: string | null
           ai_generated_description: string | null
+          ai_score: number | null
+          ai_score_data: Json | null
           assistant_approved_at: string | null
           assistant_approved_by: string | null
           bedrooms: number | null
@@ -16601,6 +16603,8 @@ export type Database = {
           admin_approved_at?: string | null
           admin_approved_by?: string | null
           ai_generated_description?: string | null
+          ai_score?: number | null
+          ai_score_data?: Json | null
           assistant_approved_at?: string | null
           assistant_approved_by?: string | null
           bedrooms?: number | null
@@ -16657,6 +16661,8 @@ export type Database = {
           admin_approved_at?: string | null
           admin_approved_by?: string | null
           ai_generated_description?: string | null
+          ai_score?: number | null
+          ai_score_data?: Json | null
           assistant_approved_at?: string | null
           assistant_approved_by?: string | null
           bedrooms?: number | null

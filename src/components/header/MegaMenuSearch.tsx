@@ -42,7 +42,7 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
   const servicesLinks = [
     { href: '/services/buying-advisory', label: 'Buying Advisory', icon: Home },
     { href: '/services/selling-advisory', label: 'Selling Advisory', icon: ClipboardCheck },
-    { href: '/seller-listing', label: 'Sell Your Property Now', icon: ClipboardCheck },
+    { href: '/listing-portal', label: 'List Your Property', icon: ClipboardCheck },
     { href: '/services/rental-advisory', label: 'Rental Advisory', icon: Building2 },
     { href: '/services/investment-advisory', label: 'Investment Advisory', icon: Briefcase },
     { href: '/services/fit-out', label: 'Fit-Out Services', icon: Building2 },

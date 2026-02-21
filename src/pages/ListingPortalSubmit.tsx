@@ -298,6 +298,21 @@ const ListingPortalSubmit = () => {
 
       if (error) throw error;
 
+      // Run AI scoring in background (non-blocking)
+      try {
+        const { data: scoreResult } = await supabase.functions.invoke('listing-score', {
+          body: { listing: { ...form, images_count: uploadedImageUrls.length, source: 'ai_extraction' } }
+        });
+        if (scoreResult?.score) {
+          await supabase.from('portal_listings').update({
+            ai_quality_score: scoreResult.score.overall_score,
+            ai_extracted_data: { ...(extractedData || {}), ai_score: scoreResult.score },
+          } as any).eq('id', data.id);
+        }
+      } catch (scoreErr) {
+        console.warn('AI scoring failed (non-blocking):', scoreErr);
+      }
+
       setSubmittedId(data.id);
       setPhase('success');
       toast.success('Listing submitted for approval!');

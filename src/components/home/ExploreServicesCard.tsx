@@ -73,7 +73,7 @@ const services: ServiceSlide[] = [
     title: "Sell Your Property",
     description: "Maximize your property's value with our expert selling services and market insights",
     icon: Tag,
-    href: "/seller-listing",
+    href: "/listing-portal",
     bgImage: sellPropertyBg,
     available: true
   },

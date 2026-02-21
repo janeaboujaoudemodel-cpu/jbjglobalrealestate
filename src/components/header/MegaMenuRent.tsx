@@ -22,7 +22,7 @@ const MegaMenuRent = React.forwardRef<HTMLDivElement, MegaMenuRentProps>(({ onCl
     { label: 'Rental Index', href: '/rental-index', icon: Key },
     { label: 'Property Management', href: '/services/property-management', icon: Shield },
     { label: 'Short-term Rentals', href: '/services/short-term-rentals', icon: Calendar },
-    { label: 'List Your Rental', href: '/listing-portal/submit', icon: ClipboardCheck },
+    { label: 'List Your Rental', href: '/listing-portal', icon: ClipboardCheck },
   ];
 
   return (

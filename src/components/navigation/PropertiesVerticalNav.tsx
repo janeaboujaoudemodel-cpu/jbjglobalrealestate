@@ -64,7 +64,7 @@ export default function PropertiesVerticalNav() {
       { label: "Seller's Guide", icon: FileText, href: '/seller-guide' },
       { label: 'Property Valuation', icon: DollarSign, href: '/sell/valuation' },
       { label: 'Selling Advisory', icon: TrendingUp, href: '/services/selling-advisory' },
-      { label: 'List Your Property', icon: ClipboardCheck, href: '/seller-listing' },
+      { label: 'Listing Portal', icon: ClipboardCheck, href: '/listing-portal' },
     ],
     rent: [
       { label: 'Apartments', icon: Building2, href: '/properties?type=apartment&transaction=rent' },

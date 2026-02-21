@@ -195,7 +195,7 @@ const TOOLS: ToolItem[] = [
     name: "JBJ Listing Portal",
     description: "AI-powered property listing submission",
     icon: FolderOpen,
-    link: "/listing-portal/submit",
+    link: "/listing-portal",
     tier: "free",
     category: "property",
   },

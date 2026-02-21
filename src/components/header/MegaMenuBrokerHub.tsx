@@ -19,7 +19,7 @@ const MegaMenuBrokerHub = React.forwardRef<HTMLDivElement, MegaMenuBrokerHubProp
   ];
 
   const educationLinks = [
-    { name: 'Listing Portal', href: '/listing-portal/submit', icon: ClipboardCheck },
+    { name: 'Listing Portal', href: '/listing-portal', icon: ClipboardCheck },
     { name: 'Broker Guides', href: '/guides?category=broker', icon: FolderOpen },
     { name: 'Broker Education', href: '/broker-education', icon: GraduationCap },
     { name: 'Broker Resources', href: '/broker-resources', icon: FolderOpen },

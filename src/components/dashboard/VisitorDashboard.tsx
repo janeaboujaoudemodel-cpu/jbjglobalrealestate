@@ -49,7 +49,7 @@ const PRIMARY_ACTIONS = [
     title: "List Your Property",
     description: "Submit your property for sale or rent with JBJ",
     icon: Home,
-    href: "/seller-listing",
+    href: "/listing-portal",
     color: "text-blue-500",
     bgGradient: "from-blue-500/20 to-blue-600/10"
   },

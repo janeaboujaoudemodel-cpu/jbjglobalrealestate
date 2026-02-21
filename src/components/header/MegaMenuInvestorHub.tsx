@@ -19,7 +19,7 @@ const MegaMenuInvestorHub = React.forwardRef<HTMLDivElement, MegaMenuInvestorHub
   ];
 
   const toolsLinks = [
-    { name: 'Listing Portal', href: '/listing-portal/submit', icon: FileText },
+    { name: 'Listing Portal', href: '/listing-portal', icon: FileText },
     { name: 'Investor Guides', href: '/guides?category=investor', icon: FileText },
     { name: 'Property Evaluator', href: '/property-evaluator', icon: BarChart3 },
     { name: 'Mortgage Calculator', href: '/mortgage-calculator', icon: Calculator },
