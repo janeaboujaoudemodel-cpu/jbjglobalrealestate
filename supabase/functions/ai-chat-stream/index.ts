@@ -127,11 +127,25 @@ const WEBSITE_KNOWLEDGE = `
 JBJ GLOBAL REAL ESTATE - DUBAI REAL ESTATE BROKERAGE
 - Email: ${APPROVED_CONTACT_INFO.email}
 - Phone: ${APPROVED_CONTACT_INFO.phone}
-- Services: Property Sales, Rentals, Holiday Homes, Design & Build, Legal Partner Introductions
-- Areas: Dubai Marina, Downtown, Palm Jumeirah, Business Bay, JBR, Dubai Hills
-- Developers: Emaar, DAMAC, Nakheel, Sobha, Meraas, Azizi
-- Benefits: 0% property tax, 0% income tax, Golden Visa eligibility
+- Services: Property Sales (Buy/Sell), Rentals, Holiday Homes, Design & Build, Partner Introductions (Mortgage, Legal, Visa, Company Setup)
+- Partner services are INTRODUCTIONS ONLY - JBJ is licensed for BUY, SELL & RENT
+
+AREAS: Dubai Marina, Downtown Dubai, Palm Jumeirah, Business Bay, JBR, Dubai Hills, JVC (high ROI 7-9%), Creek Harbour, DAMAC Hills, Arabian Ranches, Sobha Hartland, Meydan, Al Furjan, Town Square, Dubai South, JLT, DIFC
+
+DEVELOPERS: Emaar (largest - Burj Khalifa, Dubai Hills), DAMAC (luxury branded), Nakheel (Palm Jumeirah), Sobha (quality), Meraas (lifestyle), Azizi (affordable luxury), Binghatti, Ellington, Select Group, Omniyat
+
+KEY FACTS:
+- DLD Transfer Fee: 4% of property value
+- Registration Fee: AED 4,000 (properties >AED 500K)
+- Agency Fee: 2% (sale), 5% annual rent (rental)
+- Golden Visa: AED 2M+ property investment = 10-year visa
+- 0% property tax, 0% income tax
+- Rental yields: 5-9% (among highest globally)
+- Off-plan: lower prices, payment plans (10-20% down, installments, balance on handover)
+- Foreigners can buy freehold in designated areas
+- Ejari registration mandatory for all rentals
 `;
+
 
 serve(async (req) => {
   const corsHeaders = getCorsHeaders(req);
@@ -219,7 +233,7 @@ ONLY use these contacts:
       body: JSON.stringify({
         model: 'google/gemini-2.5-flash',
         messages,
-        max_tokens: 300,
+        max_tokens: 500,
         temperature: 0.6,
         stream: true,
       }),
