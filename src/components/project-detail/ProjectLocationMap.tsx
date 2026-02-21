@@ -200,7 +200,7 @@ export default function ProjectLocationMap({
   }
 
   return (
-    <div className={`rounded-xl overflow-hidden border border-gold/30 relative ${className}`} style={{ height: 450 }}>
+    <div className={`rounded-2xl overflow-hidden relative ${className}`} style={{ height: 450, border: '3px solid hsl(42 45% 59%)', boxShadow: '0 8px 32px rgba(200,167,102,0.25), 0 4px 16px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.1)' }}>
       <MapContainer
         center={coordinates}
         zoom={15}
