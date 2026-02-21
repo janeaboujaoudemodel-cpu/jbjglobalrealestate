@@ -1,0 +1,1 @@
+ALTER TABLE public.design_licenses ADD COLUMN IF NOT EXISTS asset_id uuid REFERENCES public.design_assets(id) ON DELETE SET NULL;
