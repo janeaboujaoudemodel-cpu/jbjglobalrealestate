@@ -80,21 +80,80 @@ const asFloorPlanTypes = (value: unknown): Array<{ label: string; pdfUrl?: strin
   return out.length ? out : null;
 };
 
-const asUnitTypes = (value: unknown): Array<{ type: string; size_from?: number; size_to?: number; price_from?: number; price_to?: number; available_units?: number; total_units?: number; status?: "available" | "limited" | "sold_out" }> | null => {
-  if (!Array.isArray(value)) return null;
-  const out = value.map((v) => {
+const asUnitTypes = (
+  value: unknown,
+  projectPriceFrom?: number | null,
+  projectPriceTo?: number | null,
+  projectSizeMin?: number | null,
+  projectSizeMax?: number | null,
+  projectBedroomsMin?: number | null,
+  projectBedroomsMax?: number | null,
+): Array<{ type: string; size_from?: number; size_to?: number; price_from?: number; price_to?: number; available_units?: number; total_units?: number; status?: "available" | "limited" | "sold_out" }> | null => {
+  if (!Array.isArray(value) || value.length === 0) {
+    // Generate unit types from project-level data if no unit_types array exists
+    if (projectBedroomsMin != null || projectBedroomsMax != null) {
+      const min = projectBedroomsMin ?? projectBedroomsMax ?? 0;
+      const max = projectBedroomsMax ?? projectBedroomsMin ?? 0;
+      const types: Array<{ type: string; size_from?: number; size_to?: number; price_from?: number; price_to?: number }> = [];
+      for (let br = min; br <= max; br++) {
+        const label = br === 0 ? "Studio" : br === 1 ? "1 Bedroom" : `${br} Bedrooms`;
+        types.push({
+          type: label,
+          size_from: projectSizeMin ?? undefined,
+          size_to: projectSizeMax ?? undefined,
+          price_from: projectPriceFrom ?? undefined,
+          price_to: projectPriceTo ?? undefined,
+        });
+      }
+      return types.length ? types : null;
+    }
+    return null;
+  }
+
+  // Group raw entries by bedroom count for aggregation
+  const grouped = new Map<string, { count: number; sizes: number[]; prices: number[] }>();
+  
+  for (const v of value) {
     const o = v as Record<string, unknown>;
-    return {
-      type: typeof o.type === "string" ? o.type : "Unit",
-      size_from: typeof o.size_from === "number" ? o.size_from : undefined,
-      size_to: typeof o.size_to === "number" ? o.size_to : undefined,
-      price_from: typeof o.price_from === "number" ? o.price_from : undefined,
-      price_to: typeof o.price_to === "number" ? o.price_to : undefined,
-      available_units: typeof o.available_units === "number" ? o.available_units : undefined,
-      total_units: typeof o.total_units === "number" ? o.total_units : undefined,
-      status: ["available", "limited", "sold_out"].includes(o.status as string) ? o.status as "available" | "limited" | "sold_out" : undefined,
-    };
-  }).filter(v => v.type);
+    const bedrooms = typeof o.bedrooms === "number" ? o.bedrooms : null;
+    const rawType = typeof o.type === "string" ? o.type : null;
+    
+    let label: string;
+    if (bedrooms !== null) {
+      label = bedrooms === 0 ? "Studio" : bedrooms === 1 ? "1 Bedroom" : `${bedrooms} Bedrooms`;
+    } else if (rawType && rawType !== "Unit") {
+      label = rawType;
+    } else {
+      label = "Unit";
+    }
+    
+    const entry = grouped.get(label) || { count: 0, sizes: [], prices: [] };
+    entry.count++;
+    
+    const sizeFrom = typeof o.size_from === "number" ? o.size_from : (typeof o.size === "number" ? o.size : null);
+    const sizeTo = typeof o.size_to === "number" ? o.size_to : null;
+    const priceFrom = typeof o.price_from === "number" ? o.price_from : (typeof o.price === "number" ? o.price : null);
+    const priceTo = typeof o.price_to === "number" ? o.price_to : null;
+    
+    if (sizeFrom) entry.sizes.push(sizeFrom);
+    if (sizeTo) entry.sizes.push(sizeTo);
+    if (priceFrom) entry.prices.push(priceFrom);
+    if (priceTo) entry.prices.push(priceTo);
+    
+    grouped.set(label, entry);
+  }
+
+  const out = Array.from(grouped.entries()).map(([type, data]) => ({
+    type,
+    size_from: data.sizes.length ? Math.min(...data.sizes) : (projectSizeMin ?? undefined),
+    size_to: data.sizes.length ? Math.max(...data.sizes) : (projectSizeMax ?? undefined),
+    price_from: data.prices.length ? Math.min(...data.prices) : (projectPriceFrom ?? undefined),
+    price_to: data.prices.length ? Math.max(...data.prices) : (projectPriceTo ?? undefined),
+    total_units: data.count > 1 ? data.count : undefined,
+    available_units: undefined,
+    status: undefined as "available" | "limited" | "sold_out" | undefined,
+  }));
+
   return out.length ? out : null;
 };
 
@@ -158,7 +217,7 @@ const ProjectDetail = () => {
       floor_plan_types: asFloorPlanTypes(project.floor_plan_types),
       faqs: asFaqs(project.faqs),
       payment_breakdown: asPaymentBreakdown(project.payment_breakdown),
-      unit_types: asUnitTypes(project.unit_types),
+      unit_types: asUnitTypes(project.unit_types, project.price_from, project.price_to, project.size_min, project.size_max, project.bedrooms_min, project.bedrooms_max),
       construction_progress: project.construction_progress ?? null,
       construction_start_date: project.construction_start_date ?? null,
       expected_completion: project.expected_completion ?? null,

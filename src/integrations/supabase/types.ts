@@ -2848,6 +2848,105 @@ export type Database = {
           },
         ]
       }
+      client_investors: {
+        Row: {
+          client_name: string | null
+          created_at: string
+          date_of_birth: string | null
+          email: string | null
+          handover_alert_14d_sent: boolean | null
+          handover_alert_1d_sent: boolean | null
+          handover_alert_30d_sent: boolean | null
+          handover_alert_7d_sent: boolean | null
+          handover_alert_sent: boolean | null
+          handover_date: string | null
+          home_address: string | null
+          id: string
+          notes: string | null
+          payment_plan: string | null
+          phone: string | null
+          project_id: string | null
+          project_name: string | null
+          purchase_date: string | null
+          purchase_price: number | null
+          source_document_type: string | null
+          source_listing_id: string | null
+          unit_number: string | null
+          unit_size_sqft: number | null
+          unit_type: string | null
+          updated_at: string
+        }
+        Insert: {
+          client_name?: string | null
+          created_at?: string
+          date_of_birth?: string | null
+          email?: string | null
+          handover_alert_14d_sent?: boolean | null
+          handover_alert_1d_sent?: boolean | null
+          handover_alert_30d_sent?: boolean | null
+          handover_alert_7d_sent?: boolean | null
+          handover_alert_sent?: boolean | null
+          handover_date?: string | null
+          home_address?: string | null
+          id?: string
+          notes?: string | null
+          payment_plan?: string | null
+          phone?: string | null
+          project_id?: string | null
+          project_name?: string | null
+          purchase_date?: string | null
+          purchase_price?: number | null
+          source_document_type?: string | null
+          source_listing_id?: string | null
+          unit_number?: string | null
+          unit_size_sqft?: number | null
+          unit_type?: string | null
+          updated_at?: string
+        }
+        Update: {
+          client_name?: string | null
+          created_at?: string
+          date_of_birth?: string | null
+          email?: string | null
+          handover_alert_14d_sent?: boolean | null
+          handover_alert_1d_sent?: boolean | null
+          handover_alert_30d_sent?: boolean | null
+          handover_alert_7d_sent?: boolean | null
+          handover_alert_sent?: boolean | null
+          handover_date?: string | null
+          home_address?: string | null
+          id?: string
+          notes?: string | null
+          payment_plan?: string | null
+          phone?: string | null
+          project_id?: string | null
+          project_name?: string | null
+          purchase_date?: string | null
+          purchase_price?: number | null
+          source_document_type?: string | null
+          source_listing_id?: string | null
+          unit_number?: string | null
+          unit_size_sqft?: number | null
+          unit_type?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_investors_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "client_investors_source_listing_id_fkey"
+            columns: ["source_listing_id"]
+            isOneToOne: false
+            referencedRelation: "portal_listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       communities: {
         Row: {
           created_at: string
@@ -8120,6 +8219,47 @@ export type Database = {
         }
         Relationships: []
       }
+      handover_alerts: {
+        Row: {
+          alert_type: string
+          client_investor_id: string | null
+          client_name: string | null
+          created_at: string
+          handover_date: string | null
+          id: string
+          is_read: boolean | null
+          project_name: string | null
+        }
+        Insert: {
+          alert_type: string
+          client_investor_id?: string | null
+          client_name?: string | null
+          created_at?: string
+          handover_date?: string | null
+          id?: string
+          is_read?: boolean | null
+          project_name?: string | null
+        }
+        Update: {
+          alert_type?: string
+          client_investor_id?: string | null
+          client_name?: string | null
+          created_at?: string
+          handover_date?: string | null
+          id?: string
+          is_read?: boolean | null
+          project_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "handover_alerts_client_investor_id_fkey"
+            columns: ["client_investor_id"]
+            isOneToOne: false
+            referencedRelation: "client_investors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       hr_access_logs: {
         Row: {
           access_type: string
@@ -11571,6 +11711,63 @@ export type Database = {
         }
         Relationships: []
       }
+      listing_enrichment_suggestions: {
+        Row: {
+          after_data: Json | null
+          before_data: Json | null
+          created_at: string
+          id: string
+          listing_id: string | null
+          project_id: string | null
+          project_name: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          suggestion_type: string
+        }
+        Insert: {
+          after_data?: Json | null
+          before_data?: Json | null
+          created_at?: string
+          id?: string
+          listing_id?: string | null
+          project_id?: string | null
+          project_name?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          suggestion_type?: string
+        }
+        Update: {
+          after_data?: Json | null
+          before_data?: Json | null
+          created_at?: string
+          id?: string
+          listing_id?: string | null
+          project_id?: string | null
+          project_name?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          suggestion_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listing_enrichment_suggestions_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "portal_listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "listing_enrichment_suggestions_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       listing_notifications: {
         Row: {
           created_at: string | null
@@ -14322,9 +14519,12 @@ export type Database = {
           contact_phone: string | null
           created_at: string
           currency: string | null
+          deleted_at: string | null
           description: string | null
           developer_name: string | null
+          edit_count: number | null
           emirate: string | null
+          expires_at: string | null
           featured_until: string | null
           floor_plan_images: Json | null
           furnishing: string | null
@@ -14375,9 +14575,12 @@ export type Database = {
           contact_phone?: string | null
           created_at?: string
           currency?: string | null
+          deleted_at?: string | null
           description?: string | null
           developer_name?: string | null
+          edit_count?: number | null
           emirate?: string | null
+          expires_at?: string | null
           featured_until?: string | null
           floor_plan_images?: Json | null
           furnishing?: string | null
@@ -14428,9 +14631,12 @@ export type Database = {
           contact_phone?: string | null
           created_at?: string
           currency?: string | null
+          deleted_at?: string | null
           description?: string | null
           developer_name?: string | null
+          edit_count?: number | null
           emirate?: string | null
+          expires_at?: string | null
           featured_until?: string | null
           floor_plan_images?: Json | null
           furnishing?: string | null

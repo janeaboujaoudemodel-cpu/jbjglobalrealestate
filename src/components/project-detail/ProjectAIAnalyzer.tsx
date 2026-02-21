@@ -262,6 +262,7 @@ export const ProjectAIAnalyzer = ({
                     style={{
                       animation: "jbj-breathe 2s ease-in-out infinite",
                       filter: "drop-shadow(0 0 16px rgba(184,134,11,0.6))",
+                      mixBlendMode: "multiply",
                     }}
                   />
                 </div>

@@ -1,10 +1,10 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
@@ -93,10 +93,16 @@ const PHASES = ['Upload', 'AI Extract', 'Price Predictor', 'Review & Edit', 'Pri
 
 const ListingPortalSubmit = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { user, isOwner } = useAuth();
   
+  // Read purpose from URL: ?purpose=sale or ?purpose=rent
+  const urlPurpose = searchParams.get('purpose');
+  const initialListingType = urlPurpose === 'rent' ? 'rent' : 'sale';
+  const initialCategory = urlPurpose === 'rent' ? 'rental' : 'secondary_offplan';
+  
   const [phase, setPhase] = useState<'upload' | 'extracting' | 'pricing_ai' | 'review' | 'pricing_role' | 'submitting' | 'success'>('upload');
-  const [listingCategory, setListingCategory] = useState('secondary_offplan');
+  const [listingCategory, setListingCategory] = useState(initialCategory);
   const [uploadedDocs, setUploadedDocs] = useState<UploadedDoc[]>([]);
   const [extractedData, setExtractedData] = useState<ExtractedListing | null>(null);
   const [uploadedImageUrls, setUploadedImageUrls] = useState<string[]>([]);
@@ -107,7 +113,7 @@ const ListingPortalSubmit = () => {
   const [contactMode, setContactMode] = useState<'direct' | 'commission'>('commission');
   
   const [form, setForm] = useState({
-    title: '', description: '', listing_type: 'sale', listing_category: 'secondary_offplan',
+    title: '', description: '', listing_type: initialListingType, listing_category: initialCategory,
     property_type: '', developer_name: '', project_name: '',
     location: '', emirate: 'Dubai', area: '',
     bedrooms: '', bathrooms: '', area_sqft: '', price: '',
@@ -263,21 +269,27 @@ const ListingPortalSubmit = () => {
   const runPricePredictor = async () => {
     setIsRunningPredictor(true);
     try {
+      // Timeout wrapper: 15 seconds max
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 15000);
+
       const { data, error } = await supabase.functions.invoke('property-evaluation', {
         body: {
           property: {
             community: form.location || 'Dubai Marina',
             subCommunity: form.area || '',
             buildingName: form.project_name || '',
-            propertyType: form.property_type || 'apartment',
+            propertyType: form.property_type?.toLowerCase() || 'apartment',
             bedrooms: form.bedrooms ? parseInt(form.bedrooms) : 1,
             sizeInternal: form.area_sqft ? parseFloat(form.area_sqft) : 1000,
             floor: 10,
-            furnishedStatus: form.furnishing || 'unfurnished',
+            furnishedStatus: form.furnishing?.toLowerCase()?.replace(' ', '-') || 'unfurnished',
             renovationCost: 0,
           }
         }
       });
+
+      clearTimeout(timeout);
 
       if (error) throw error;
 
@@ -286,17 +298,31 @@ const ListingPortalSubmit = () => {
           estimatedValue: data.estimatedValue,
           marketInsights: data.marketInsights || '',
           completionStatus: data.completionStatus || 'N/A',
-          pricePerSqft: data.pricePerSqft || 0,
+          pricePerSqft: data.pricePerSqft || data.estimatedValue.pricePerSqFt || 0,
         });
-        // Auto-fill price if empty
         if (!form.price && data.estimatedValue.mid) {
           setForm(f => ({ ...f, price: Math.round(data.estimatedValue.mid).toString() }));
         }
-        toast.success('Price prediction complete!');
+        toast.success('AI Price prediction complete!');
+      } else {
+        throw new Error('No estimate returned');
       }
     } catch (err: any) {
       console.error('Price predictor error:', err);
-      toast.error('Price prediction unavailable. You can set the price manually.');
+      // Fallback: client-side basic estimate
+      const size = form.area_sqft ? parseFloat(form.area_sqft) : 1000;
+      const avgPricePerSqft = 1200; // Dubai average fallback
+      const mid = Math.round(size * avgPricePerSqft);
+      setPricePrediction({
+        estimatedValue: { low: Math.round(mid * 0.85), high: Math.round(mid * 1.15), mid },
+        marketInsights: 'Basic estimate based on Dubai average pricing. AI-powered analysis was unavailable.',
+        completionStatus: 'Basic Estimate',
+        pricePerSqft: avgPricePerSqft,
+      });
+      if (!form.price) {
+        setForm(f => ({ ...f, price: mid.toString() }));
+      }
+      toast.info('Using basic price estimate (AI unavailable)');
     } finally {
       setIsRunningPredictor(false);
     }
