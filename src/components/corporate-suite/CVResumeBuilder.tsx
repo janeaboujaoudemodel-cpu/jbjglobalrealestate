@@ -6,6 +6,7 @@ import {
   ChevronRight, LayoutGrid, Check, RefreshCw, User, Briefcase,
   GraduationCap, Wrench, Languages, AlignLeft, ImageIcon, ChevronDown, Type,
   Link2, Camera, X, Loader2, Image as ImageLucide, Minus, Bold, Italic, QrCode,
+  Palette, FileImage, ImagePlus,
 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { DocumentExtractorUpload } from "@/components/corporate-suite/DocumentExtractorUpload";
@@ -170,14 +171,17 @@ function CVPreview({
   fontFamily, fontWeight: fwProp, fontStyle: fsProp, fontSizeOverride,
   logoUrl, logoSize = 80,
   qrEnabled, qrUrl, qrSize = 64, qrAccent,
+  accentOverride,
 }: {
   data: CVData; template: Template; scale?: number;
   fontFamily?: string; fontWeight?: string; fontStyle?: string; fontSizeOverride?: number | null;
   logoUrl?: string; logoSize?: number;
   qrEnabled?: boolean; qrUrl?: string; qrSize?: number; qrAccent?: string;
+  accentOverride?: string;
 }) {
   const cfg = TEMPLATES.find(t => t.id === template)!;
-  const { accent, bg } = cfg;
+  const accent = accentOverride || cfg.accent;
+  const { bg } = cfg;
   const white  = "#ffffff";
   const gray   = "#6b7280";
   const lgray  = "#9ca3af";
@@ -902,6 +906,7 @@ export default function CVResumeBuilder() {
   const [templateCategory,  setTemplateCategory]  = useState("All");
   const [logoUrl,           setLogoUrl]           = useState("");
   const [logoSize,          setLogoSize]          = useState(80);
+  const [accentColor,       setAccentColor]       = useState("");
   // Typography
   const [cvFontFamily, setCvFontFamily] = useState("");
   const [cvFontBold,   setCvFontBold]   = useState(false);
@@ -912,6 +917,8 @@ export default function CVResumeBuilder() {
   const [cvQrSize,    setCvQrSize]    = useState(64);
   const [cvQrColor,   setCvQrColor]   = useState("");
   const [cvQrOpen,    setCvQrOpen]    = useState(false);
+  // Accent color
+  const [accentOpen,  setAccentOpen]  = useState(false);
 
   const [data, setData] = useState<CVData>({
     name: "", title: "", email: "", phone: "", location: "",
@@ -1060,13 +1067,13 @@ export default function CVResumeBuilder() {
               {exportMenuOpen && (
                 <div className="absolute right-0 top-full mt-1 bg-white border border-[hsl(var(--border))] rounded-xl shadow-lg p-1 min-w-[140px] z-50">
                   {[
-                    { label: "Export PDF",  format: "pdf"  as const, icon: "📄" },
-                    { label: "Export PNG",  format: "png"  as const, icon: "🖼️" },
-                    { label: "Export JPEG", format: "jpeg" as const, icon: "📷" },
+                    { label: "Export PDF",  format: "pdf"  as const, Icon: FileText },
+                    { label: "Export PNG",  format: "png"  as const, Icon: FileImage },
+                    { label: "Export JPEG", format: "jpeg" as const, Icon: ImagePlus },
                   ].map(opt => (
                     <button key={opt.format} onClick={() => handleExport(opt.format)}
-                      className="w-full flex items-center gap-2 px-3 py-2 text-xs rounded-lg hover:bg-[hsl(var(--muted))] text-left">
-                      <span>{opt.icon}</span> {opt.label}
+                      className="w-full flex items-center gap-2 px-3 py-2 text-xs rounded-lg hover:bg-[hsl(var(--muted))] text-left text-[hsl(var(--foreground))]">
+                      <opt.Icon size={13} className="text-[hsl(var(--gold))]" /> {opt.label}
                     </button>
                   ))}
                 </div>
@@ -1112,6 +1119,14 @@ export default function CVResumeBuilder() {
                     showSizeControl sizeValue={logoSize} onSizeChange={setLogoSize}
                     sizeLabel="Logo Width (px)" sizeMin={30} sizeMax={120}
                   />
+                  {logoUrl && (
+                    <button
+                      onClick={() => setLogoUrl("")}
+                      className="mt-2 w-full flex items-center justify-center gap-1.5 py-2 rounded-lg border border-red-300 text-red-600 text-[11px] font-medium hover:bg-red-50 transition-colors"
+                    >
+                      <Trash2 size={12} /> Remove Logo
+                    </button>
+                  )}
                 </div>
               </CollapsibleContent>
             </div>
@@ -1246,6 +1261,77 @@ export default function CVResumeBuilder() {
                       <img src={cvQrUrl} alt="QR preview" className="rounded-lg border border-[hsl(var(--border))]" style={{ width: cvQrSize, height: cvQrSize }} />
                     </div>
                   )}
+                </div>
+              </CollapsibleContent>
+            </div>
+          </Collapsible>
+
+          {/* Accent Color */}
+          <Collapsible open={accentOpen} onOpenChange={setAccentOpen}>
+            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+              <CollapsibleTrigger asChild>
+                <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
+                  <div className="flex items-center gap-2">
+                    <Palette size={13} className="text-[hsl(var(--gold))]" />
+                    <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">Accent Color</span>
+                    {accentColor && <span className="w-3 h-3 rounded-full border border-[hsl(var(--border))]" style={{ background: accentColor }} />}
+                  </div>
+                  <ChevronDown size={13} className={`text-[hsl(var(--muted-foreground))] transition-transform ${accentOpen ? "rotate-180" : ""}`} />
+                </button>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="px-4 pb-4 pt-3 border-t border-[hsl(var(--border))] space-y-3">
+                  <p className="text-[10px] text-[hsl(var(--muted-foreground))]">Override the template accent color for headings, sidebar, and section titles.</p>
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="color"
+                      value={accentColor || (TEMPLATES.find(t => t.id === template)?.accent ?? "#111827")}
+                      onChange={e => setAccentColor(e.target.value)}
+                      className="w-10 h-10 rounded-xl cursor-pointer border-2 border-[hsl(var(--border))] p-0.5"
+                    />
+                    <div className="flex-1">
+                      <p className="text-xs font-medium text-[hsl(var(--foreground))]">
+                        {accentColor ? accentColor.toUpperCase() : "Template Default"}
+                      </p>
+                      <p className="text-[10px] text-[hsl(var(--muted-foreground))]">
+                        {TEMPLATES.find(t => t.id === template)?.label} default: {TEMPLATES.find(t => t.id === template)?.accent}
+                      </p>
+                    </div>
+                  </div>
+                  {/* Quick presets */}
+                  <div>
+                    <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))] mb-2">Presets</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {[
+                        { color: "", label: "Default" },
+                        { color: "#1e40af", label: "Blue" },
+                        { color: "#6d28d9", label: "Violet" },
+                        { color: "#0f766e", label: "Teal" },
+                        { color: "#dc2626", label: "Red" },
+                        { color: "#111827", label: "Charcoal" },
+                        { color: "#8b0000", label: "Crimson" },
+                        { color: "#003399", label: "Navy" },
+                        { color: "#C9A84C", label: "Gold" },
+                      ].map(p => (
+                        <button
+                          key={p.label}
+                          onClick={() => setAccentColor(p.color)}
+                          className={`flex items-center gap-1.5 px-2 py-1 rounded-lg text-[10px] border transition-all ${
+                            accentColor === p.color
+                              ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
+                              : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
+                          }`}
+                        >
+                          {p.color ? (
+                            <span className="w-3 h-3 rounded-full shrink-0" style={{ background: p.color }} />
+                          ) : (
+                            <RefreshCw size={10} />
+                          )}
+                          {p.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </CollapsibleContent>
             </div>
@@ -1405,7 +1491,7 @@ export default function CVResumeBuilder() {
                         placeholder="A results-driven professional with 8+ years of experience…"
                         className="text-xs min-h-[120px] resize-none" />
                       <p className="text-[10px] text-[hsl(var(--muted-foreground))]">
-                        💡 Fill in Personal Info & Experience first for better AI results.
+                        Tip: Fill in Personal Info and Experience first for better AI results.
                       </p>
                     </div>
                   )}
@@ -1490,25 +1576,42 @@ export default function CVResumeBuilder() {
             </p>
           </div>
 
-          <AnimatePresence mode="wait">
-            <motion.div key={template} id="cv-preview-target"
-              initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-              transition={{ duration: 0.25 }}>
-              <CVPreview
-                data={data} template={template} scale={0.85}
-                fontFamily={cvFontFamily || undefined}
-                fontWeight={cvFontBold   ? "bold"   : undefined}
-                fontStyle ={cvFontItalic ? "italic" : undefined}
-                fontSizeOverride={cvFontSize}
-                logoUrl={logoUrl || undefined}
-                logoSize={logoSize}
-                qrEnabled={cvQrEnabled}
-                qrUrl={cvQrUrl}
-                qrSize={cvQrSize}
-                qrAccent={cvQrColor_}
-              />
-            </motion.div>
-          </AnimatePresence>
+          {/* A4 aspect ratio container for full-page preview */}
+          <div className="relative w-full" style={{ aspectRatio: '210 / 297' }}>
+            <div className="absolute inset-0 overflow-hidden rounded-xl border border-[hsl(var(--border))] shadow-lg bg-white">
+              <div className="origin-top-left w-[595px] h-[842px]" style={{ transform: 'scale(var(--cv-scale, 1))' }} ref={(el) => {
+                if (el) {
+                  const parent = el.parentElement;
+                  if (parent) {
+                    const scaleX = parent.clientWidth / 595;
+                    el.style.setProperty('--cv-scale', String(scaleX));
+                    el.style.transform = `scale(${scaleX})`;
+                  }
+                }
+              }}>
+                <AnimatePresence mode="wait">
+                  <motion.div key={template + accentColor} id="cv-preview-target"
+                    initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}>
+                    <CVPreview
+                      data={data} template={template} scale={1}
+                      fontFamily={cvFontFamily || undefined}
+                      fontWeight={cvFontBold   ? "bold"   : undefined}
+                      fontStyle ={cvFontItalic ? "italic" : undefined}
+                      fontSizeOverride={cvFontSize}
+                      logoUrl={logoUrl || undefined}
+                      logoSize={logoSize}
+                      qrEnabled={cvQrEnabled}
+                      qrUrl={cvQrUrl}
+                      qrSize={cvQrSize}
+                      qrAccent={cvQrColor_}
+                      accentOverride={accentColor || undefined}
+                    />
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </div>
+          </div>
 
           {/* All templates mini grid */}
           <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-4 shadow-sm">
@@ -1528,6 +1631,7 @@ export default function CVResumeBuilder() {
                     fontSizeOverride={cvFontSize}
                     logoUrl={logoUrl || undefined}
                     logoSize={logoSize}
+                    accentOverride={accentColor || undefined}
                   />
                   {template === t.id && (
                     <div className="absolute top-1 right-1 w-4 h-4 rounded-full bg-[hsl(var(--gold))] flex items-center justify-center">
@@ -1542,10 +1646,12 @@ export default function CVResumeBuilder() {
 
           {/* Export info */}
           <div className="bg-[hsl(var(--gold)/0.06)] border border-[hsl(var(--gold)/0.2)] rounded-2xl p-4 text-xs space-y-2">
-            <p className="font-semibold text-[hsl(var(--foreground))]">📤 Export Options</p>
+            <p className="font-semibold text-[hsl(var(--foreground))] flex items-center gap-1.5">
+              <Download size={13} className="text-[hsl(var(--gold))]" /> Export Options
+            </p>
             <div className="space-y-1 text-[hsl(var(--muted-foreground))]">
               <p><span className="font-medium text-[hsl(var(--foreground))]">PDF</span> — Print-ready A4, all templates</p>
-              <p><span className="font-medium text-[hsl(var(--foreground))]">PNG</span> — High-res image (3× scale), transparent background</p>
+              <p><span className="font-medium text-[hsl(var(--foreground))]">PNG</span> — High-res image (3x scale), transparent background</p>
               <p><span className="font-medium text-[hsl(var(--foreground))]">JPEG</span> — Compressed image for sharing online</p>
             </div>
           </div>
