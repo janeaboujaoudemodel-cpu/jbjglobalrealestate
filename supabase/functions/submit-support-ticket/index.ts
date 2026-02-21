@@ -38,7 +38,7 @@ const OFFICIAL_EMAILS = {
 };
 
 // Verified sender domain for outgoing emails
-const VERIFIED_SENDER = 'info@jbj.ae';
+const VERIFIED_SENDER = 'noreply@jbj.ae';
 
 interface TicketRequest {
   fullName: string;
@@ -239,7 +239,7 @@ const handler = async (req: Request): Promise<Response> => {
     const whatsappLink = `https://wa.me/971565911000?text=${whatsappMessage}`;
 
     // Survey link
-    const surveyLink = `https://jbjglobalrealestate.lovable.app/ticket-survey?ticket=${encodeURIComponent(ticket.ticket_number)}&email=${encodeURIComponent(email)}`;
+    const surveyLink = `https://jbj.ae/ticket-survey?ticket=${encodeURIComponent(ticket.ticket_number)}&email=${encodeURIComponent(email)}`;
 
     // Send confirmation email to customer with premium champagne design
     const customerEmailHtml = `<!DOCTYPE html>
@@ -402,8 +402,28 @@ Ticket Summary</td></tr>
 <tr style="border-bottom:1px solid #e8e8e8;"><td style="padding:10px 0;color:#666;font-size:13px;">Request Type</td><td style="padding:10px 0;color:#1a1a1a;font-weight:600;font-size:13px;text-align:right;">${serviceCategory}</td></tr>
 <tr style="border-bottom:1px solid #e8e8e8;"><td style="padding:10px 0;color:#666;font-size:13px;">Subject</td><td style="padding:10px 0;color:#1a1a1a;font-weight:600;font-size:13px;text-align:right;">${subject}</td></tr>
 <tr style="border-bottom:1px solid #e8e8e8;"><td style="padding:10px 0;color:#666;font-size:13px;">Submitted</td><td style="padding:10px 0;color:#1a1a1a;font-weight:600;font-size:13px;text-align:right;">${formattedDate} at ${formattedTime}</td></tr>
-<tr><td style="padding:10px 0;color:#666;font-size:13px;">Expected Response</td><td style="padding:10px 0;color:#C8A766;font-weight:600;font-size:13px;text-align:right;">By ${formattedSlaDate} ${formattedSlaTime}</td></tr>
+<tr><td style="padding:10px 0;color:#666;font-size:13px;">Expected Response</td><td style="padding:10px 0;color:#C8A766;font-weight:600;font-size:13px;text-align:right;">Within 24-48 hours</td></tr>
 </table>
+${attachmentUrls.length > 0 ? `
+<!-- Attachments -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:16px;border-top:1px solid #C8A766;padding-top:12px;">
+<tr><td style="font-size:14px;font-weight:bold;color:#1a1a1a;padding-bottom:8px;">
+<span style="display:inline-block;width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#C8A766,#B8956E);color:#fff;text-align:center;line-height:24px;font-size:12px;margin-right:8px;">&#128206;</span>
+Attached Documents (${attachmentUrls.length})</td></tr>
+${attachmentUrls.map((url: string, i: number) => {
+  const fileName = decodeURIComponent(url.split('/').pop() || `Attachment ${i+1}`).replace(/^\d+-[a-z]+\./, '');
+  const ext = (url.split('.').pop() || '').toLowerCase();
+  const isImage = ['jpg','jpeg','png','gif','webp'].includes(ext);
+  return `<tr><td style="padding:6px 0;">
+<a href="${url}" target="_blank" style="display:flex;align-items:center;gap:8px;padding:10px 14px;background:#ffffff;border:1px solid #C8A766;border-radius:8px;text-decoration:none;color:#1a1a1a;font-size:13px;font-weight:500;">
+${isImage ? `<img src="${url}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;border:1px solid #e5e5e5;" alt="Preview"/>` : `<span style="display:inline-block;width:40px;height:40px;border-radius:6px;background:#f5f0e6;text-align:center;line-height:40px;font-size:11px;color:#C8A766;font-weight:bold;border:1px solid #e5e5e5;">${ext.toUpperCase()}</span>`}
+<span style="flex:1;">${fileName}</span>
+<span style="color:#C8A766;font-size:12px;">View &#8599;</span>
+</a>
+</td></tr>`;
+}).join('')}
+</table>
+` : ''}
 </td></tr>
 </table>
 
@@ -412,7 +432,7 @@ Ticket Summary</td></tr>
 <tr><td style="padding:24px;">
 <p style="font-weight:bold;color:#1a1a1a;margin:0 0 12px;font-size:15px;">What happens next?</p>
 <table role="presentation" cellpadding="0" cellspacing="0" border="0">
-<tr><td style="padding:4px 0;font-size:13px;color:#555;">&#8226; Our support team will review your ticket within <strong>${priorityInfo.label}</strong></td></tr>
+<tr><td style="padding:4px 0;font-size:13px;color:#555;">&#8226; Our support team will review your ticket within <strong>24-48 hours</strong></td></tr>
 <tr><td style="padding:4px 0;font-size:13px;color:#555;">&#8226; You'll receive updates via email as we progress</td></tr>
 <tr><td style="padding:4px 0;font-size:13px;color:#555;">&#8226; Use WhatsApp for urgent follow-ups (include your ticket number)</td></tr>
 <tr><td style="padding:4px 0;font-size:13px;color:#555;">&#8226; Rate your experience once resolved - your feedback matters!</td></tr>
@@ -485,13 +505,13 @@ Explore While You Wait</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr>
 <td class="card-cell" width="33%" style="padding:4px;">
-<a href="https://jbj.ae/market-intelligence" style="display:block;padding:16px 8px;background:#ffffff;border:2px solid #C8A766;border-radius:10px;text-decoration:none;color:#1a1a1a;font-size:13px;font-weight:600;text-align:center;">Market Intel</a>
+<a href="https://jbj.ae/market-intelligence" style="display:block;padding:16px 8px;background:#ffffff;border:2px solid #C8A766;border-radius:10px;text-decoration:none;color:#1a1a1a;font-size:13px;font-weight:600;text-align:center;">Market Intelligence</a>
 </td>
 <td class="card-cell" width="33%" style="padding:4px;">
 <a href="https://jbj.ae/buyer-guide" style="display:block;padding:16px 8px;background:#ffffff;border:2px solid #C8A766;border-radius:10px;text-decoration:none;color:#1a1a1a;font-size:13px;font-weight:600;text-align:center;">Buyer Guide</a>
 </td>
 <td class="card-cell" width="33%" style="padding:4px;">
-<a href="https://jbj.ae/contact" style="display:block;padding:16px 8px;background:#ffffff;border:2px solid #C8A766;border-radius:10px;text-decoration:none;color:#1a1a1a;font-size:13px;font-weight:600;text-align:center;">Contact</a>
+<a href="https://jbj.ae/ai-tools" style="display:block;padding:16px 8px;background:#ffffff;border:2px solid #C8A766;border-radius:10px;text-decoration:none;color:#1a1a1a;font-size:13px;font-weight:600;text-align:center;">AI Tools</a>
 </td>
 </tr>
 </table>
@@ -525,9 +545,13 @@ Explore While You Wait</p>
 
 <!-- FOOTER -->
 <tr><td style="background:linear-gradient(135deg,#1a1a1a,#2d2d2d);text-align:center;padding:32px 24px;border-radius:0 0 20px 20px;">
+<!-- Logo: J on black circle -->
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:12px;">
+<tr><td style="width:48px;height:48px;border-radius:50%;background:#000000;color:#ffffff;text-align:center;line-height:48px;font-size:24px;font-weight:bold;font-family:'Georgia',serif;border:2px solid #C8A766;">J</td></tr>
+</table>
 <p style="color:#C8A766;font-size:18px;font-weight:bold;margin:0 0 6px;">JBJ Global Real Estate</p>
 <p style="color:#888;font-size:12px;margin:0 0 4px;font-style:italic;">The Only Global AI-Powered Real Estate Intelligence Platform</p>
-<p style="color:#C8A766;font-size:22px;font-weight:bold;margin:12px 0;letter-spacing:1px;">41+ Countries &bull; 200+ Cities</p>
+<p style="color:#C8A766;font-size:22px;font-weight:bold;margin:12px 0;letter-spacing:1px;">175+ Countries &bull; 2,400+ Cities &bull; 12,000+ Clients Served</p>
 <p style="color:#888;font-size:12px;margin:0 0 4px;">Developed, Created &amp; Implemented by The Founder &amp; CEO, <span style="color:#C8A766;">Jane Bou Jaoude</span></p>
 <p style="color:#888;font-size:12px;margin:16px 0 0;">&copy; 2026 JBJ Global Real Estate. All rights reserved.</p>
 <p style="color:#666;font-size:10px;margin:10px 0 0;"><strong>This is an automated confirmation. Do not reply to this email.</strong></p>
@@ -545,14 +569,14 @@ Explore While You Wait</p>
     const [supportEmailResult, customerEmailResult] = await Promise.allSettled([
       // Support team email
       sendEmail({
-        from: `JBJ Support <${VERIFIED_SENDER}>`,
+        from: `JBJ Support <noreply@jbj.ae>`,
         to: [OFFICIAL_EMAILS.support],
         subject: `[${ticket.ticket_number}] New Support Ticket: ${subject}`,
         html: supportEmailHtml,
       }),
       // Customer confirmation email
       sendEmail({
-        from: `JBJ Support <${VERIFIED_SENDER}>`,
+        from: `JBJ Support <noreply@jbj.ae>`,
         to: [email],
         subject: `Ticket Received: ${ticket.ticket_number} - We're on it!`,
         html: customerEmailHtml,

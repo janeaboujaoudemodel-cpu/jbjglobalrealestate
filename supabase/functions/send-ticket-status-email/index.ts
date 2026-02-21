@@ -2,7 +2,7 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 const RESEND_API_URL = "https://api.resend.com/emails";
-const VERIFIED_SENDER = 'info@jbj.ae';
+const VERIFIED_SENDER = 'noreply@jbj.ae';
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
