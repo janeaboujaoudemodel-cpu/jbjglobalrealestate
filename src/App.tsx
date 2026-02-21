@@ -647,6 +647,8 @@ const App = () => (
                 <Route path="/admin/reelly-import-test" element={<OwnerGuard><ListingAdminGuard><ReellyImportTest /></ListingAdminGuard></OwnerGuard>} />
                 <Route path="/my-account" element={<BrokerAccount />} />
                 <Route path="/profile" element={<UserProfile />} />
+                <Route path="/unsubscribe" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("./pages/Unsubscribe")))}</Suspense>} />
+                <Route path="/email-preferences" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("./pages/EmailPreferences")))}</Suspense>} />
                 {/* Alias: older links pointing to /account */}
                 <Route path="/account" element={<Navigate to="/my-account" replace />} />
                 <Route path="/hr-agent" element={<OwnerGuard><HRAgent /></OwnerGuard>} />
