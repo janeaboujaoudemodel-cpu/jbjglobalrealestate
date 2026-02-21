@@ -119,7 +119,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       const portalStillOpen = document.querySelector('[data-radix-portal]');
       if (portalStillOpen) return;
       setActiveMegaMenu(null);
-    }, 80); // Fast close for snappy UX
+    }, 40); // Ultra-fast close for snappy menu switching
   };
 
   // Clear any pending close timeout when entering mega menu panels
