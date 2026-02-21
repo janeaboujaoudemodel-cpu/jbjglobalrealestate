@@ -1,125 +1,103 @@
 
-# AI Home Finder Results + Developer Card + Amenities + Map Upgrade
+# Comprehensive Fix: Founder Sidebar, Project Count, Alerts UI, Seller Listing Sale/Rent, and Champagne Theme
 
-## Issues Identified
-
-### 1. QuizResults Page Uses Purple/Dark Theme Instead of Champagne Gold
-The entire `QuizResults.tsx` page uses a purple-black theme (`bg-gradient-to-b from-purple-950 via-zinc-950 to-black`) with purple accents, purple borders, purple buttons. This violates the approved Champagne Gold standard.
-
-### 2. "Send to Contact@JBJ.AE" Button Issues
-- The email domain shows lowercase "jbj.ae" instead of uppercase "JBJ.AE" in the Share modal
-- The button and X close button use blue/purple colors instead of champagne gold
-- The "A" in JBJ.AE is not capitalized -- currently shows `CONTACT@JBJ.AE` in the mailto but the button text shows mixed case
-
-### 3. Top 3 Badge Visibility (Silver is Too Faded)
-The Silver badge for Top 2 (`from-zinc-300 via-slate-400 to-zinc-400`) appears washed out. All three badges (Gold, Silver, Bronze) need stronger frame highlights with better contrast.
-
-### 4. AI Recommendation Accuracy
-The scoring logic in `Quiz.tsx` (`getRecommendations()`) has weak area matching:
-- It only checks if project name or location contains the area name (e.g., "downtown"), which can match unrelated projects
-- It does not filter by area -- it only adds score points, so a Marina project can still appear for a Downtown-only search
-- Budget filtering is correct (hard filter), but area selection is only a soft score boost
-- Fix: Make selected areas a hard filter when specific areas are chosen (not "other")
-
-### 5. Download Report Uses Purple/Dark HTML Template
-The `handleDownloadReport` function generates an HTML file with purple-black styling. Must be updated to Champagne Gold institutional layout with smart AI formatting.
-
-### 6. DAMAC Logo Shows Black Background Instead of Full Black + White Text
-The `DeveloperCard.tsx` fallback photo section (lines 76-93) shows DAMAC's logo on a dark zinc gradient when no feature photo exists. Per the memory policy, DAMAC should use the official "D" initial monogram on a fully black background with white text. The issue is that DAMAC is not in the `WHITE_BG_DEVELOPERS` list, and its fallback styling needs to be specifically handled.
-
-### 7. Amenities Need Photos
-The `AmenitiesWithPhotos.tsx` component currently only shows icons, not actual photos. The user wants real photos for amenities like swimming pools, gyms, etc. -- similar to what Reelly shows. This requires mapping amenity keywords to stock/curated photos stored in the database or extracted from brochures.
-
-### 8. Map Needs 3D Borders
-The `ProjectLocationMap.tsx` currently has a flat `border border-gold/30`. User wants 3D-style borders around the map frame, matching the platform's 3D button/card aesthetic.
+## Overview
+This plan addresses all outstanding issues: the Founder section placement in the sidebar, inaccurate project counts, alerts dropdown styling, the Seller Listing page needing a sale/rent selection step, and enforcing the Champagne Gold UI standard across remaining pages.
 
 ---
 
-## Technical Implementation
+## 1. Founder Section in Sidebar - Move Next to Podcast Studio
 
-### File 1: `src/pages/QuizResults.tsx` (Major Rewrite)
+**Problem:** The "Founder & Podcast" nav item exists under a separate "FOUNDER" section at the bottom of the sidebar, far from the "Studio" item. It's hard to find.
 
-**Theme Overhaul:**
-- Replace all `purple-950`, `zinc-950`, `black` backgrounds with champagne gradients (`from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]`)
-- Replace all purple accents with gold (`#C9A84C`)
-- Text colors: black/stone-900 for headings, stone-600 for body text
-- Cards: white/champagne glass backgrounds with gold borders
-- Buttons: champagne gradient with gold borders (matching platform standard)
-
-**Badge Visibility Fix:**
-- Gold badge: Keep strong gradient but add gold border frame (`border-2 border-[#C9A84C]`)
-- Silver badge: Use `from-[#C0C0C0] via-[#E8E8E8] to-[#A0A0A0]` with stronger contrast and a visible border frame
-- Bronze badge: Use `from-[#CD7F32] via-[#E8A84C] to-[#B87333]` with border frame
-- All badges get `shadow-lg` and `border-2` for frame highlight effect
-
-**Share Modal:**
-- Replace purple modal background with champagne card
-- "Send to CONTACT@JBJ.AE" -- all uppercase, gold-styled button
-- X button uses gold/stone color, not blue
-- Text colors: stone-900 for dark, stone-500 for muted
-
-**Download Report:**
-- Rewrite the HTML template with champagne gold styling:
-  - Background: `#FDFBF7` (warm white)
-  - Headers: black text with gold underlines
-  - Cards: white background with gold borders
-  - Footer: gold accents
-  - Professional typography matching the platform
-
-### File 2: `src/pages/Quiz.tsx` (Accuracy Fix)
-
-**Area Matching - Hard Filter:**
-- In `getRecommendations()`, add a hard filter for selected areas
-- When user selects specific areas (not just "other"), only show projects whose `area_name` or `location` matches those areas
-- Map quiz area values to actual database area names:
-  - "downtown" matches projects with location/area containing "downtown"
-  - "marina" matches "marina"
-  - "palm" matches "palm jumeirah"
-  - "business-bay" matches "business bay"
-  - "creek-harbour" matches "creek harbour" or "creek"
-  - "hills" matches "dubai hills"
-  - "arabian-ranches" matches "arabian ranches"
-  - "other" = no area filter (show all)
-- If user selects "other" alongside specific areas, the filter includes both matched areas and unmatched ones
-
-**Timeline Accuracy:**
-- Already filtering handover_date < 2026, which is correct
-- Add matching for "ready" timeline to also check `construction_status` for "Ready" or "Completed"
-
-### File 3: `src/components/DeveloperCard.tsx` (DAMAC Fix)
-
-- Add DAMAC-specific handling in the logo overlay section
-- When slug includes "damac" and there's no feature image, use a fully black background (`bg-black`) instead of the zinc gradient
-- Display the "D" monogram initial in white with professional typography
-- The logo overlay (top-left) should use a black background for DAMAC specifically
-
-### File 4: `src/components/project-detail/AmenitiesWithPhotos.tsx` (Photo Enhancement)
-
-- Add a mapping of amenity keywords to curated stock photo URLs (stored as constants or fetched from database)
-- Common amenities mapped to representative photos:
-  - Swimming Pool, Gym/Fitness, Garden/Park, Parking, Kids Play Area, Spa, etc.
-- Display layout: Show the photo as a small thumbnail above the icon, or replace the icon circle with a photo thumbnail
-- Fallback: Keep the current icon-only display when no photo URL is available
-- Photos sourced from project's own gallery images where possible (via `project_images` table) or generic amenity photos stored in Supabase storage
-
-### File 5: `src/components/project-detail/ProjectLocationMap.tsx` (3D Border)
-
-- Replace the flat `border border-gold/30` with a 3D-style border matching the platform's card aesthetic:
-  ```
-  border: 3px solid hsl(42 45% 59%)
-  boxShadow: 0 8px 32px rgba(200,167,102,0.25), 0 4px 16px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.1)
-  ```
-- Add rounded-2xl for premium feel
-- This matches the `DeveloperCard` 3D border style already in use
+**Fix in `OwnerSidebarNav.tsx`:**
+- Move the Founder & Podcast item into the "CREATIVE" section, right after "Studio"
+- Add a second item "Podcast Controls" with a Mic icon for direct access
+- Remove the standalone "FOUNDER" section
+- Result: The CREATIVE section becomes:
+  - Studio
+  - Founder & Podcast (with User icon)
+  - Kanban Board
+  - Marketing Hub
 
 ---
 
-## Summary of Changes
+## 2. Total Projects Count - Show Accurate Published Count
+
+**Problem:** The Admin Overview Dashboard shows 2,525 total projects, but the database has only 1,849 published. The query counts ALL projects including unpublished/pending ones.
+
+**Fix in `AdminOverviewDashboard.tsx`:**
+- Change the projects query from:
+  ```
+  supabase.from("projects").select("id", { count: "exact", head: true })
+  ```
+  to:
+  ```
+  supabase.from("projects").select("id", { count: "exact", head: true }).eq("is_published", true)
+  ```
+- Update the label from "Total Projects" to "Published Projects" for clarity
+
+---
+
+## 3. Alerts Dropdown - Add Border and Champagne UI
+
+**Problem:** The alerts dropdown in the Chat Dashboard lacks borders and uses old red/amber styling that doesn't match the Champagne Gold standard.
+
+**Fix in `AdminChatDashboard.tsx`:**
+- Add `border-2 border-gold/30 rounded-xl` to alert cards
+- Update the alert banner from `border-red-200 bg-red-50/80` to a champagne-compatible style with gold accent borders
+- Style priority badges using the champagne palette (gold for critical, stone for medium)
+
+---
+
+## 4. Seller Listing - Add Sale/Rent Selection Step
+
+**Problem:** The Seller Listing page (`/seller-listing`) only says "List Your Property for Sale" with no option to list for rent. Per the Listing Portal pattern, after choosing Manual vs AI, users should choose "List for Sale" or "List for Rent."
+
+**Fix in `SellerListing.tsx`:**
+- Add a pre-form selection screen with two cards (matching Listing Portal style):
+  - "List for Sale" card (with DollarSign icon)
+  - "List for Rent" card (with Home icon)
+- Store the selection in form state as `listing_purpose: 'sale' | 'rent'`
+- Update the page title dynamically: "List Your Property for Sale" or "List Your Property for Rent"
+- Adjust form fields based on selection:
+  - For rent: Show "Monthly Rent" instead of "Target Selling Price", add "Lease Duration" field
+  - For sale: Keep existing fields
+- Style these cards identically to the Listing Portal's two-card layout (white bg, gold borders, hover effects)
+
+---
+
+## 5. Listing Portal - Add Sale/Rent Sub-Selection After AI/Manual Choice
+
+**Problem:** The Listing Portal shows Manual vs AI cards but doesn't ask if the user wants to list for sale or rent before proceeding.
+
+**Fix in `ListingPortal.tsx`:**
+- After the user clicks Manual or AI, show a second step with two cards:
+  - "For Sale" 
+  - "For Rent"
+- Pass the selection as a URL parameter (e.g., `/seller-listing?purpose=sale` or `/listing-portal/submit?purpose=rent`)
+- The downstream forms will read this parameter and configure accordingly
+
+---
+
+## 6. Enforce Champagne Gold UI on Remaining Pages
+
+**Problem:** The `ListingPortalMyListings.tsx` page uses purple/fuchsia buttons (`from-fuchsia-600 to-purple-600`), violating the champagne standard.
+
+**Fix:**
+- Replace all `from-fuchsia-600 to-purple-600` with `bg-gold hover:bg-gold/90 text-black`
+- Update any remaining dark backgrounds to champagne gradients
+- Ensure the page matches the Listing Portal's champagne aesthetic
+
+---
+
+## Technical Summary
 
 | File | Change |
 |------|--------|
-| `QuizResults.tsx` | Full champagne gold theme, badge frames, share modal fix, report template redesign |
-| `Quiz.tsx` | Hard area filter for recommendation accuracy |
-| `DeveloperCard.tsx` | DAMAC-specific black background with white "D" monogram |
-| `AmenitiesWithPhotos.tsx` | Add curated amenity photos with icon fallback |
-| `ProjectLocationMap.tsx` | 3D gold border frame around the map |
+| `src/components/owner-dashboard/OwnerSidebarNav.tsx` | Move Founder into CREATIVE section next to Studio |
+| `src/components/admin/AdminOverviewDashboard.tsx` | Fix project count query to filter `is_published = true` |
+| `src/pages/admin/AdminChatDashboard.tsx` | Add champagne-styled borders to alerts dropdown |
+| `src/pages/SellerListing.tsx` | Add sale/rent selection cards before the form |
+| `src/pages/ListingPortal.tsx` | Add sale/rent sub-selection after Manual/AI choice |
+| `src/pages/ListingPortalMyListings.tsx` | Replace purple/fuchsia buttons with champagne gold |
