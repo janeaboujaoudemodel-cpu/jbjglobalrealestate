@@ -9,7 +9,9 @@ import {
   User, Bot, Clock, Star, Phone, Mail, Globe, Filter, 
   ChevronDown, Sparkles, TrendingUp, AlertCircle, CheckCircle2,
   Building2, Home, Scale, Paintbrush, MessageSquare, Calendar,
-  Loader2, Award, Briefcase, ExternalLink
+  Loader2, Award, Briefcase, ExternalLink, Copy, Send,
+  AlertTriangle, Shield, ThumbsUp, ThumbsDown, Zap, Bell,
+  ChevronRight, BarChart3, Target
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
@@ -58,6 +60,23 @@ interface ChatHistoryMessage {
   user_email: string | null;
 }
 
+interface AISummary {
+  summary: string;
+  resolution_status: string;
+  resolution_explanation?: string;
+  sentiment: string;
+  sentiment_score: number;
+  key_topics: string[];
+  user_intent?: string;
+  improvement_suggestions: string[];
+  priority_level: string;
+  priority_reason?: string;
+  suggested_reply: string;
+  action_items: string[];
+  is_lead_opportunity: boolean;
+  lead_opportunity_detail?: string;
+}
+
 const ALL_SERVICES = [
   { id: 'real_estate', label: 'Property Sales & Rentals', icon: Building2 },
   { id: 'holiday_homes', label: 'Holiday Homes', icon: Home },
@@ -78,10 +97,19 @@ const getServiceIcon = (id: string | null) => {
 
 const getStatusConfig = (status: string | null) => {
   switch (status) {
-    case 'completed': return { label: 'Completed', bg: 'bg-emerald-900/40', text: 'text-emerald-300', border: 'border-emerald-700/50' };
-    case 'submitted_to_team': return { label: 'Submitted', bg: 'bg-sky-900/40', text: 'text-sky-300', border: 'border-sky-700/50' };
-    case 'closed': return { label: 'Closed', bg: 'bg-zinc-800/60', text: 'text-zinc-400', border: 'border-zinc-700/50' };
-    default: return { label: 'Active', bg: 'bg-gold/10', text: 'text-gold', border: 'border-gold/30' };
+    case 'completed': return { label: 'Completed', bg: 'bg-emerald-100', text: 'text-emerald-800', border: 'border-emerald-300' };
+    case 'submitted_to_team': return { label: 'Submitted', bg: 'bg-sky-100', text: 'text-sky-800', border: 'border-sky-300' };
+    case 'closed': return { label: 'Closed', bg: 'bg-stone-200', text: 'text-stone-700', border: 'border-stone-400' };
+    default: return { label: 'Active', bg: 'bg-[#F5EBD7]', text: 'text-[#8B7355]', border: 'border-[#C9A84C]/40' };
+  }
+};
+
+const getPriorityConfig = (level: string) => {
+  switch (level) {
+    case 'critical': return { icon: AlertTriangle, color: 'text-red-600', bg: 'bg-red-50 border-red-200' };
+    case 'high': return { icon: AlertCircle, color: 'text-orange-600', bg: 'bg-orange-50 border-orange-200' };
+    case 'medium': return { icon: Bell, color: 'text-amber-600', bg: 'bg-amber-50 border-amber-200' };
+    default: return { icon: CheckCircle2, color: 'text-emerald-600', bg: 'bg-emerald-50 border-emerald-200' };
   }
 };
 
@@ -94,11 +122,13 @@ const AdminChatDashboard = () => {
   const [filterService, setFilterService] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
   const [selectedConversation, setSelectedConversation] = useState<ChatConversation | null>(null);
-  const [tab, setTab] = useState<'chats' | 'cvs'>('chats');
+  const [tab, setTab] = useState<'chats' | 'cvs' | 'alerts'>('chats');
   const [selectedCV, setSelectedCV] = useState<CVSubmission | null>(null);
   const [cvAiLoading, setCvAiLoading] = useState(false);
   const [fallbackMessages, setFallbackMessages] = useState<ChatHistoryMessage[]>([]);
   const [loadingFallback, setLoadingFallback] = useState(false);
+  const [aiSummary, setAiSummary] = useState<AISummary | null>(null);
+  const [aiSummaryLoading, setAiSummaryLoading] = useState(false);
 
   useEffect(() => { fetchData(); }, []);
 
@@ -115,42 +145,46 @@ const AdminChatDashboard = () => {
     setLoading(false);
   };
 
-  // Fallback: load from chat_history when messages are empty
   const loadFallbackMessages = useCallback(async (conv: ChatConversation) => {
-    if ((conv.messages?.length || 0) > 0) {
-      setFallbackMessages([]);
-      return;
-    }
+    if ((conv.messages?.length || 0) > 0) { setFallbackMessages([]); return; }
     setLoadingFallback(true);
     try {
-      // Try matching by email and time range
       let query = supabase.from('chat_history').select('*').order('created_at', { ascending: true });
-      if (conv.user_email) {
-        query = query.eq('user_email', conv.user_email);
-      }
-      // Get messages within a reasonable window around the conversation
+      if (conv.user_email) query = query.eq('user_email', conv.user_email);
       query = query.gte('created_at', conv.created_at);
       if (conv.updated_at) {
-        // Add 1 hour buffer
         const endTime = new Date(new Date(conv.updated_at).getTime() + 3600000).toISOString();
         query = query.lte('created_at', endTime);
       }
       const { data } = await query.limit(200);
       setFallbackMessages((data || []) as ChatHistoryMessage[]);
-    } catch (err) {
-      console.error('Failed to load fallback messages:', err);
-    } finally {
-      setLoadingFallback(false);
-    }
+    } catch (err) { console.error('Failed to load fallback messages:', err); }
+    finally { setLoadingFallback(false); }
   }, []);
 
-  // When selecting a conversation, also load fallback
   const handleSelectConversation = useCallback((conv: ChatConversation) => {
     setSelectedConversation(conv);
+    setAiSummary(null);
     loadFallbackMessages(conv);
   }, [loadFallbackMessages]);
 
-  // Generate AI summary for a CV
+  // AI summarize chat
+  const generateAISummary = useCallback(async (conv: ChatConversation, msgs: Array<{role: string; content: string; timestamp?: string}>) => {
+    if (msgs.length === 0) { toast.error('No messages to analyze'); return; }
+    setAiSummaryLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('chat-ai-summarizer', {
+        body: { messages: msgs, user_name: conv.user_name, service_type: conv.service_type, rating: conv.rating, rating_feedback: conv.rating_feedback },
+      });
+      if (error) throw error;
+      setAiSummary(data as AISummary);
+      toast.success('AI analysis complete');
+    } catch (err) {
+      console.error('AI summary failed:', err);
+      toast.error('AI analysis unavailable');
+    } finally { setAiSummaryLoading(false); }
+  }, []);
+
   const generateCVSummary = useCallback(async (cv: CVSubmission) => {
     setCvAiLoading(true);
     try {
@@ -163,12 +197,8 @@ const AdminChatDashboard = () => {
         setSelectedCV(prev => prev?.id === cv.id ? { ...prev, ai_summary: data.summary, ai_ranking: data.ranking || 0 } : prev);
         toast.success('AI analysis complete');
       }
-    } catch (err) {
-      console.error('AI analysis failed:', err);
-      toast.error('AI analysis unavailable');
-    } finally {
-      setCvAiLoading(false);
-    }
+    } catch (err) { toast.error('AI analysis unavailable'); }
+    finally { setCvAiLoading(false); }
   }, []);
 
   const filteredConversations = useMemo(() => conversations.filter(c => {
@@ -190,6 +220,31 @@ const AdminChatDashboard = () => {
     return { total, active, submitted, rated, avgRating, cvCount: cvSubmissions.length };
   }, [conversations, cvSubmissions]);
 
+  // Alerts: conversations needing attention
+  const alerts = useMemo(() => {
+    return conversations.filter(c => {
+      // Low rating
+      if (c.rating && c.rating <= 2) return true;
+      // Feedback negative
+      if (c.feedback_type === 'negative' || c.was_helpful === false) return true;
+      // Submitted to team (needs follow-up)
+      if (c.status === 'submitted_to_team') return true;
+      // Active for more than 24 hours (user may need help)
+      const hoursSince = (Date.now() - new Date(c.updated_at).getTime()) / 3600000;
+      if (c.status === 'active' && hoursSince > 24) return true;
+      return false;
+    }).map(c => ({
+      ...c,
+      alertReason: c.rating && c.rating <= 2 ? 'Low rating - user unsatisfied'
+        : c.was_helpful === false ? 'User marked as not helpful'
+        : c.status === 'submitted_to_team' ? 'Submitted to team - needs follow-up'
+        : 'Active for 24h+ - potential lead at risk',
+      alertLevel: (c.rating && c.rating <= 2) || c.was_helpful === false ? 'critical' as const
+        : c.status === 'submitted_to_team' ? 'high' as const
+        : 'medium' as const,
+    }));
+  }, [conversations]);
+
   const exportToCSV = () => {
     const headers = ['Name', 'Email', 'Phone', 'Service', 'Status', 'Rating', 'Created', 'Messages'];
     const rows = filteredConversations.map(c => [
@@ -204,45 +259,53 @@ const AdminChatDashboard = () => {
     URL.revokeObjectURL(url);
   };
 
-  // Get messages to display (original or fallback)
   const displayMessages = useMemo(() => {
     if (!selectedConversation) return [];
     if ((selectedConversation.messages?.length || 0) > 0) return selectedConversation.messages!;
     return fallbackMessages.map(m => ({ role: m.role, content: m.message, timestamp: m.created_at }));
   }, [selectedConversation, fallbackMessages]);
 
-  // Render score bar
-  const renderScoreBar = (score: number) => {
-    const color = score >= 8 ? 'bg-emerald-500' : score >= 5 ? 'bg-gold' : 'bg-red-400';
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    toast.success('Copied to clipboard');
+  };
+
+  const renderScoreBar = (score: number, max = 10) => {
+    const pct = (score / max) * 100;
+    const color = score >= 8 ? 'bg-emerald-500' : score >= 5 ? 'bg-[#C9A84C]' : 'bg-red-400';
     return (
       <div className="flex items-center gap-3">
-        <div className="flex-1 h-2 bg-zinc-800 rounded-full overflow-hidden">
-          <div className={`h-full ${color} rounded-full transition-all`} style={{ width: `${score * 10}%` }} />
+        <div className="flex-1 h-2 bg-stone-200 rounded-full overflow-hidden">
+          <div className={`h-full ${color} rounded-full transition-all`} style={{ width: `${pct}%` }} />
         </div>
-        <span className="text-sm font-bold text-white">{score}/10</span>
+        <span className="text-sm font-bold text-stone-800">{score}/{max}</span>
       </div>
     );
   };
 
+  // Champagne theme classes
+  const cardBg = 'bg-gradient-to-br from-[#FDFBF7] via-[#F8F2E8] to-[#F0E8D8]';
+  const containerBg = 'bg-gradient-to-b from-[#FDFBF7] via-[#F9F3E9] to-[#F5EBD7]';
+
   return (
-    <div className="min-h-screen bg-[#0f0f0f] text-white">
-      {/* Header - Champagne Gold */}
-      <div className="border-b border-gold/20 bg-gradient-to-r from-[#1a1710] via-[#151210] to-[#0f0f0f] sticky top-0 z-30">
+    <div className={`min-h-screen ${containerBg} text-stone-900`}>
+      {/* Header - Champagne */}
+      <div className="border-b border-[#C9A84C]/25 bg-gradient-to-r from-[#F5EBD7] via-[#FDFBF7] to-[#F5EBD7] sticky top-0 z-30 shadow-sm">
         <div className="max-w-[1600px] mx-auto px-4 md:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Button variant="ghost" size="icon" onClick={() => navigate('/admin')} className="text-zinc-400 hover:text-gold hover:bg-gold/10">
+              <Button variant="ghost" size="icon" onClick={() => navigate('/admin')} className="text-stone-500 hover:text-[#C9A84C] hover:bg-[#C9A84C]/10">
                 <ArrowLeft className="w-5 h-5" />
               </Button>
               <div>
                 <div className="flex items-center gap-2">
-                  <Sparkles className="w-5 h-5 text-gold" />
-                  <h1 className="text-xl font-bold bg-gradient-to-r from-gold to-[#E8D5A3] bg-clip-text text-transparent">AI Chat Intelligence</h1>
+                  <Sparkles className="w-5 h-5 text-[#C9A84C]" />
+                  <h1 className="text-xl font-bold text-stone-900">AI Chat Intelligence</h1>
                 </div>
-                <p className="text-xs text-zinc-500 mt-0.5">Conversations, transcripts, and CV submissions</p>
+                <p className="text-xs text-stone-500 mt-0.5">Conversations, transcripts, CV submissions & alerts</p>
               </div>
             </div>
-            <Button onClick={exportToCSV} size="sm" className="bg-gold/10 border border-gold/30 text-gold hover:bg-gold/20 gap-2">
+            <Button onClick={exportToCSV} size="sm" className="bg-gradient-to-r from-[#FDFBF7] to-[#F5EBD7] border border-[#C9A84C]/30 text-stone-700 hover:border-[#C9A84C]/60 gap-2 shadow-sm">
               <Download className="w-3.5 h-3.5" /> Export
             </Button>
           </div>
@@ -250,48 +313,61 @@ const AdminChatDashboard = () => {
       </div>
 
       <div className="max-w-[1600px] mx-auto px-4 md:px-8 py-6 space-y-6">
-        {/* Stats Cards */}
+        {/* Stats Cards - clickable */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
           {[
-            { label: 'Total Chats', value: stats.total, icon: MessageCircle },
-            { label: 'Active', value: stats.active, icon: TrendingUp },
-            { label: 'Submitted', value: stats.submitted, icon: CheckCircle2 },
-            { label: 'Rated', value: stats.rated, icon: Star },
-            { label: 'Avg Rating', value: stats.avgRating, icon: Award },
-            { label: 'CVs Received', value: stats.cvCount, icon: FileText },
+            { label: 'Total Chats', value: stats.total, icon: MessageCircle, onClick: () => { setTab('chats'); setFilterStatus('all'); } },
+            { label: 'Active', value: stats.active, icon: TrendingUp, onClick: () => { setTab('chats'); setFilterStatus('active'); } },
+            { label: 'Submitted', value: stats.submitted, icon: CheckCircle2, onClick: () => { setTab('chats'); setFilterStatus('submitted_to_team'); } },
+            { label: 'Rated', value: stats.rated, icon: Star, onClick: () => { setTab('chats'); setFilterStatus('all'); } },
+            { label: 'Avg Rating', value: stats.avgRating, icon: Award, onClick: () => { setTab('chats'); } },
+            { label: 'CVs Received', value: stats.cvCount, icon: FileText, onClick: () => setTab('cvs') },
           ].map((stat) => (
-            <div key={stat.label} className="bg-[#1a1710]/80 border border-gold/15 rounded-xl p-4 hover:border-gold/30 transition-colors">
+            <div
+              key={stat.label}
+              onClick={stat.onClick}
+              className={`${cardBg} border border-[#C9A84C]/20 rounded-xl p-4 hover:border-[#C9A84C]/50 hover:shadow-md transition-all cursor-pointer group`}
+            >
               <div className="flex items-center gap-2 mb-1.5">
-                <stat.icon className="w-4 h-4 text-gold/70" />
-                <span className="text-[10px] uppercase tracking-widest text-zinc-500 font-medium">{stat.label}</span>
+                <stat.icon className="w-4 h-4 text-[#C9A84C]/70 group-hover:text-[#C9A84C] transition-colors" />
+                <span className="text-[10px] uppercase tracking-widest text-stone-500 font-medium">{stat.label}</span>
               </div>
-              <p className="text-2xl font-bold text-white">{stat.value}</p>
+              <p className="text-2xl font-bold text-stone-900">{stat.value}</p>
             </div>
           ))}
         </div>
 
-        {/* Tab Buttons - Gold active state */}
-        <div className="flex gap-1 bg-[#1a1710] rounded-xl p-1.5 w-fit border border-gold/15">
-          <button
-            onClick={() => setTab('chats')}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
-              tab === 'chats'
-                ? 'bg-gold text-black shadow-lg shadow-gold/20'
-                : 'text-zinc-400 hover:text-white hover:bg-white/5'
-            }`}
+        {/* Alerts Banner */}
+        {alerts.length > 0 && (
+          <div 
+            onClick={() => setTab('alerts')}
+            className="flex items-center gap-3 p-3 rounded-xl border border-red-200 bg-red-50/80 cursor-pointer hover:bg-red-50 transition-colors"
           >
-            <MessageCircle className="w-4 h-4" /> Chat Transcripts
-          </button>
-          <button
-            onClick={() => setTab('cvs')}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
-              tab === 'cvs'
-                ? 'bg-gold text-black shadow-lg shadow-gold/20'
-                : 'text-zinc-400 hover:text-white hover:bg-white/5'
-            }`}
-          >
-            <FileText className="w-4 h-4" /> CV Submissions ({stats.cvCount})
-          </button>
+            <AlertTriangle className="w-5 h-5 text-red-500 shrink-0" />
+            <span className="text-sm font-semibold text-red-800">{alerts.length} conversation{alerts.length > 1 ? 's' : ''} need your attention</span>
+            <ChevronRight className="w-4 h-4 text-red-400 ml-auto" />
+          </div>
+        )}
+
+        {/* Tab Buttons - Champagne active */}
+        <div className="flex gap-1 bg-[#F0E8D8] rounded-xl p-1.5 w-fit border border-[#C9A84C]/20">
+          {([
+            { id: 'chats' as const, label: 'Chat Transcripts', icon: MessageCircle },
+            { id: 'cvs' as const, label: `CV Submissions (${stats.cvCount})`, icon: FileText },
+            { id: 'alerts' as const, label: `Alerts (${alerts.length})`, icon: Bell },
+          ] as const).map(t => (
+            <button
+              key={t.id}
+              onClick={() => setTab(t.id)}
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                tab === t.id
+                  ? 'bg-gradient-to-r from-[#FDFBF7] to-[#F5EBD7] text-stone-900 shadow-md border border-[#C9A84C]/30'
+                  : 'text-stone-500 hover:text-stone-700 hover:bg-[#FDFBF7]/50'
+              }`}
+            >
+              <t.icon className={`w-4 h-4 ${tab === t.id ? 'text-[#C9A84C]' : ''}`} /> {t.label}
+            </button>
+          ))}
         </div>
 
         {/* ============ CHATS TAB ============ */}
@@ -299,19 +375,18 @@ const AdminChatDashboard = () => {
           <>
             <div className="flex flex-wrap gap-3">
               <div className="relative flex-1 min-w-[220px]">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
                 <Input
                   placeholder="Search by name, email, or phone..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 bg-[#1a1710] border-gold/20 text-white placeholder:text-zinc-600 focus:border-gold/50 focus:ring-gold/20"
+                  className="pl-10 bg-white border-[#C9A84C]/20 text-stone-900 placeholder:text-stone-400 focus:border-[#C9A84C]/50 focus:ring-[#C9A84C]/20"
                 />
               </div>
               <select
                 value={filterService}
                 onChange={(e) => setFilterService(e.target.value)}
-                className="h-10 rounded-lg border border-gold/20 bg-[#1a1710] text-zinc-300 pl-3 pr-8 text-sm appearance-none cursor-pointer hover:border-gold/40 focus:border-gold/50 focus:outline-none focus:ring-1 focus:ring-gold/20"
-                style={{ colorScheme: 'dark' }}
+                className="h-10 rounded-lg border border-[#C9A84C]/20 bg-white text-stone-700 pl-3 pr-8 text-sm cursor-pointer hover:border-[#C9A84C]/40 focus:border-[#C9A84C]/50 focus:outline-none focus:ring-1 focus:ring-[#C9A84C]/20"
               >
                 <option value="all">All Services</option>
                 {ALL_SERVICES.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
@@ -319,8 +394,7 @@ const AdminChatDashboard = () => {
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="h-10 rounded-lg border border-gold/20 bg-[#1a1710] text-zinc-300 pl-3 pr-8 text-sm appearance-none cursor-pointer hover:border-gold/40 focus:border-gold/50 focus:outline-none focus:ring-1 focus:ring-gold/20"
-                style={{ colorScheme: 'dark' }}
+                className="h-10 rounded-lg border border-[#C9A84C]/20 bg-white text-stone-700 pl-3 pr-8 text-sm cursor-pointer hover:border-[#C9A84C]/40 focus:border-[#C9A84C]/50 focus:outline-none focus:ring-1 focus:ring-[#C9A84C]/20"
               >
                 <option value="all">All Statuses</option>
                 <option value="active">Active</option>
@@ -331,11 +405,11 @@ const AdminChatDashboard = () => {
             </div>
 
             {loading ? (
-              <div className="text-center py-16"><Loader2 className="w-8 h-8 animate-spin text-gold mx-auto" /></div>
+              <div className="text-center py-16"><Loader2 className="w-8 h-8 animate-spin text-[#C9A84C] mx-auto" /></div>
             ) : filteredConversations.length === 0 ? (
               <div className="text-center py-16">
-                <MessageCircle className="w-10 h-10 text-zinc-700 mx-auto mb-3" />
-                <p className="text-zinc-500">No conversations found</p>
+                <MessageCircle className="w-10 h-10 text-stone-300 mx-auto mb-3" />
+                <p className="text-stone-500">No conversations found</p>
               </div>
             ) : (
               <div className="grid gap-3">
@@ -348,47 +422,55 @@ const AdminChatDashboard = () => {
                     <div
                       key={c.id}
                       onClick={() => handleSelectConversation(c)}
-                      className="bg-[#1a1710]/60 hover:bg-[#1a1710] border border-gold/10 hover:border-gold/30 rounded-xl p-4 cursor-pointer transition-all group"
+                      className={`${cardBg} hover:shadow-md border border-[#C9A84C]/15 hover:border-[#C9A84C]/40 rounded-xl p-4 cursor-pointer transition-all group`}
                     >
                       <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center shrink-0">
-                          <User className="w-5 h-5 text-gold/70 group-hover:text-gold transition-colors" />
+                        <div className="w-10 h-10 rounded-full bg-[#C9A84C]/10 flex items-center justify-center shrink-0">
+                          <User className="w-5 h-5 text-[#C9A84C]/70 group-hover:text-[#C9A84C] transition-colors" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 flex-wrap">
-                            <span className="font-semibold text-white text-sm">{c.user_name || 'Anonymous'}</span>
+                            <span className="font-semibold text-stone-900 text-sm">{c.user_name || 'Anonymous'}</span>
                             <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium border ${sc.bg} ${sc.text} ${sc.border}`}>
                               {sc.label}
                             </span>
                             {c.rating && (
-                              <span className="inline-flex items-center gap-0.5 text-[10px] text-gold">
-                                <Star className="w-3 h-3 fill-gold" /> {c.rating}/5
+                              <span className="inline-flex items-center gap-0.5 text-[10px] text-[#C9A84C]">
+                                <Star className="w-3 h-3 fill-[#C9A84C]" /> {c.rating}/5
                               </span>
                             )}
                           </div>
-                          <div className="flex items-center gap-3 mt-1 text-xs text-zinc-500">
-                            {c.user_email && <span className="flex items-center gap-1"><Mail className="w-3 h-3" /> {c.user_email}</span>}
-                            {c.user_phone && <span className="flex items-center gap-1"><Phone className="w-3 h-3" /> {c.user_phone}</span>}
+                          <div className="flex items-center gap-3 mt-1 text-xs text-stone-500">
+                            {c.user_email && (
+                              <a href={`mailto:${c.user_email}`} onClick={e => e.stopPropagation()} className="flex items-center gap-1 hover:text-[#C9A84C] underline-offset-2 hover:underline">
+                                <Mail className="w-3 h-3" /> {c.user_email}
+                              </a>
+                            )}
+                            {c.user_phone && (
+                              <a href={`tel:${c.user_phone}`} onClick={e => e.stopPropagation()} className="flex items-center gap-1 hover:text-[#C9A84C] underline-offset-2 hover:underline">
+                                <Phone className="w-3 h-3" /> {c.user_phone}
+                              </a>
+                            )}
                           </div>
                           {lastMsg && (
-                            <p className="text-xs text-zinc-500 mt-2 line-clamp-1">
-                              <span className="text-zinc-600 font-medium">{lastMsg.role === 'user' ? 'User' : 'AI'}:</span>{' '}
+                            <p className="text-xs text-stone-500 mt-2 line-clamp-1">
+                              <span className="text-stone-600 font-medium">{lastMsg.role === 'user' ? 'User' : 'AI'}:</span>{' '}
                               {lastMsg.content.slice(0, 120)}
                             </p>
                           )}
                           {msgCount === 0 && (
-                            <p className="text-xs text-gold/50 mt-2 italic">Transcript available via history log</p>
+                            <p className="text-xs text-[#C9A84C]/60 mt-2 italic">Transcript available via history log</p>
                           )}
                         </div>
                         <div className="flex flex-col items-end gap-2 shrink-0">
                           <div className="flex items-center gap-1.5">
-                            <SI className="w-3.5 h-3.5 text-gold/50" />
-                            <span className="text-[10px] text-zinc-500">{getServiceLabel(c.service_type)}</span>
+                            <SI className="w-3.5 h-3.5 text-[#C9A84C]/50" />
+                            <span className="text-[10px] text-stone-500">{getServiceLabel(c.service_type)}</span>
                           </div>
-                          <span className="text-[10px] text-zinc-600 flex items-center gap-1">
+                          <span className="text-[10px] text-stone-500 flex items-center gap-1">
                             <Clock className="w-3 h-3" /> {format(new Date(c.created_at), 'dd MMM yyyy')}
                           </span>
-                          <span className="text-[10px] text-zinc-600 flex items-center gap-1">
+                          <span className="text-[10px] text-stone-500 flex items-center gap-1">
                             <MessageCircle className="w-3 h-3" /> {msgCount > 0 ? `${msgCount} msgs` : 'history'}
                           </span>
                         </div>
@@ -401,44 +483,90 @@ const AdminChatDashboard = () => {
           </>
         )}
 
+        {/* ============ ALERTS TAB ============ */}
+        {tab === 'alerts' && (
+          <div className="space-y-3">
+            {alerts.length === 0 ? (
+              <div className="text-center py-16">
+                <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto mb-3" />
+                <p className="text-stone-500">No alerts - all conversations are healthy</p>
+              </div>
+            ) : alerts.map(a => {
+              const pc = getPriorityConfig(a.alertLevel);
+              const PIcon = pc.icon;
+              return (
+                <div
+                  key={a.id}
+                  onClick={() => handleSelectConversation(a)}
+                  className={`${pc.bg} border rounded-xl p-4 cursor-pointer hover:shadow-md transition-all`}
+                >
+                  <div className="flex items-start gap-3">
+                    <PIcon className={`w-5 h-5 ${pc.color} shrink-0 mt-0.5`} />
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="font-semibold text-stone-900 text-sm">{a.user_name || 'Anonymous'}</span>
+                        <Badge variant="outline" className={`text-[10px] ${pc.color} border-current`}>{a.alertLevel}</Badge>
+                      </div>
+                      <p className="text-xs text-stone-600 mt-1">{a.alertReason}</p>
+                      <div className="flex items-center gap-3 mt-2 text-xs text-stone-500">
+                        {a.user_email && (
+                          <a href={`mailto:${a.user_email}`} onClick={e => e.stopPropagation()} className="flex items-center gap-1 hover:text-[#C9A84C] hover:underline">
+                            <Mail className="w-3 h-3" /> {a.user_email}
+                          </a>
+                        )}
+                        {a.user_phone && (
+                          <a href={`tel:${a.user_phone}`} onClick={e => e.stopPropagation()} className="flex items-center gap-1 hover:text-[#C9A84C] hover:underline">
+                            <Phone className="w-3 h-3" /> {a.user_phone}
+                          </a>
+                        )}
+                        <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {format(new Date(a.updated_at), 'dd MMM, h:mm a')}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
         {/* ============ CVS TAB ============ */}
         {tab === 'cvs' && (
           <div className="space-y-3">
             {cvSubmissions.length === 0 ? (
               <div className="text-center py-16">
-                <FileText className="w-10 h-10 text-zinc-700 mx-auto mb-3" />
-                <p className="text-zinc-500">No CV submissions yet</p>
+                <FileText className="w-10 h-10 text-stone-300 mx-auto mb-3" />
+                <p className="text-stone-500">No CV submissions yet</p>
               </div>
             ) : (
               cvSubmissions.map(cv => (
                 <div
                   key={cv.id}
                   onClick={() => setSelectedCV(cv)}
-                  className="bg-[#1a1710]/60 border border-gold/10 hover:border-gold/30 rounded-xl p-4 flex items-center gap-4 cursor-pointer transition-all group"
+                  className={`${cardBg} border border-[#C9A84C]/15 hover:border-[#C9A84C]/40 rounded-xl p-4 flex items-center gap-4 cursor-pointer transition-all group hover:shadow-md`}
                 >
-                  <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center shrink-0">
-                    <FileText className="w-6 h-6 text-gold/70" />
+                  <div className="w-12 h-12 rounded-full bg-[#C9A84C]/10 flex items-center justify-center shrink-0">
+                    <FileText className="w-6 h-6 text-[#C9A84C]/70" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-white">{cv.full_name}</p>
-                    <div className="flex items-center gap-3 mt-0.5 text-xs text-zinc-500">
-                      <span className="flex items-center gap-1"><Mail className="w-3 h-3" /> {cv.email}</span>
-                      {cv.phone && <span className="flex items-center gap-1"><Phone className="w-3 h-3" /> {cv.phone}</span>}
+                    <p className="font-semibold text-stone-900">{cv.full_name}</p>
+                    <div className="flex items-center gap-3 mt-0.5 text-xs text-stone-500">
+                      <a href={`mailto:${cv.email}`} onClick={e => e.stopPropagation()} className="flex items-center gap-1 hover:text-[#C9A84C] hover:underline"><Mail className="w-3 h-3" /> {cv.email}</a>
+                      {cv.phone && <a href={`tel:${cv.phone}`} onClick={e => e.stopPropagation()} className="flex items-center gap-1 hover:text-[#C9A84C] hover:underline"><Phone className="w-3 h-3" /> {cv.phone}</a>}
                     </div>
                     {cv.ai_summary && (
-                      <p className="text-xs text-zinc-400 mt-1.5 line-clamp-1 italic">{cv.ai_summary}</p>
+                      <p className="text-xs text-stone-500 mt-1.5 line-clamp-1 italic">{cv.ai_summary}</p>
                     )}
                   </div>
                   <div className="flex items-center gap-3 shrink-0">
                     {cv.ai_ranking ? (
-                      <Badge className="bg-gold/15 text-gold border-gold/30">
-                        <Star className="w-3 h-3 mr-1 fill-gold" /> {cv.ai_ranking}/10
+                      <Badge className="bg-[#C9A84C]/10 text-[#8B7355] border-[#C9A84C]/30">
+                        <Star className="w-3 h-3 mr-1 fill-[#C9A84C] text-[#C9A84C]" /> {cv.ai_ranking}/10
                       </Badge>
                     ) : null}
-                    <Badge className={`${cv.status === 'approved' ? 'bg-emerald-900/40 text-emerald-300 border-emerald-700/40' : cv.status === 'rejected' ? 'bg-red-900/40 text-red-300 border-red-700/40' : 'bg-gold/10 text-gold border-gold/30'}`}>
+                    <Badge className={`${cv.status === 'approved' ? 'bg-emerald-100 text-emerald-800 border-emerald-300' : cv.status === 'rejected' ? 'bg-red-100 text-red-800 border-red-300' : 'bg-[#F5EBD7] text-[#8B7355] border-[#C9A84C]/30'}`}>
                       {cv.status || 'pending'}
                     </Badge>
-                    <span className="text-[10px] text-zinc-600">{format(new Date(cv.created_at), 'dd MMM yyyy')}</span>
+                    <span className="text-[10px] text-stone-500">{format(new Date(cv.created_at), 'dd MMM yyyy')}</span>
                   </div>
                 </div>
               ))
@@ -449,24 +577,28 @@ const AdminChatDashboard = () => {
 
       {/* ============ TRANSCRIPT MODAL ============ */}
       {selectedConversation && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => { setSelectedConversation(null); setFallbackMessages([]); }}>
-          <div className="bg-[#141210] border border-gold/20 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[85vh] flex flex-col" onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => { setSelectedConversation(null); setFallbackMessages([]); setAiSummary(null); }}>
+          <div className={`${cardBg} border border-[#C9A84C]/25 rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] flex flex-col`} onClick={e => e.stopPropagation()}>
             {/* Header */}
-            <div className="p-5 border-b border-gold/15 bg-gradient-to-r from-[#1a1710] to-[#141210] rounded-t-2xl">
+            <div className="p-5 border-b border-[#C9A84C]/15 bg-gradient-to-r from-[#F5EBD7] to-[#FDFBF7] rounded-t-2xl">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gold/15 flex items-center justify-center">
-                    <User className="w-5 h-5 text-gold" />
+                  <div className="w-10 h-10 rounded-full bg-[#C9A84C]/15 flex items-center justify-center">
+                    <User className="w-5 h-5 text-[#C9A84C]" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-white">{selectedConversation.user_name || 'Anonymous'}</h3>
+                    <h3 className="font-semibold text-stone-900">{selectedConversation.user_name || 'Anonymous'}</h3>
                     <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                      {selectedConversation.user_email && <span className="text-xs text-zinc-400 flex items-center gap-1"><Mail className="w-3 h-3" /> {selectedConversation.user_email}</span>}
-                      {selectedConversation.user_phone && <span className="text-xs text-zinc-400 flex items-center gap-1"><Phone className="w-3 h-3" /> {selectedConversation.user_phone}</span>}
+                      {selectedConversation.user_email && (
+                        <a href={`mailto:${selectedConversation.user_email}`} className="text-xs text-stone-500 flex items-center gap-1 hover:text-[#C9A84C] hover:underline"><Mail className="w-3 h-3" /> {selectedConversation.user_email}</a>
+                      )}
+                      {selectedConversation.user_phone && (
+                        <a href={`tel:${selectedConversation.user_phone}`} className="text-xs text-stone-500 flex items-center gap-1 hover:text-[#C9A84C] hover:underline"><Phone className="w-3 h-3" /> {selectedConversation.user_phone}</a>
+                      )}
                     </div>
                   </div>
                 </div>
-                <Button size="icon" variant="ghost" onClick={() => { setSelectedConversation(null); setFallbackMessages([]); }} className="text-zinc-400 hover:text-white hover:bg-white/10">
+                <Button size="icon" variant="ghost" onClick={() => { setSelectedConversation(null); setFallbackMessages([]); setAiSummary(null); }} className="text-stone-400 hover:text-stone-700 hover:bg-stone-200/50">
                   <X className="w-4 h-4" />
                 </Button>
               </div>
@@ -474,78 +606,182 @@ const AdminChatDashboard = () => {
                 {(() => { const sc = getStatusConfig(selectedConversation.status); return (
                   <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium border ${sc.bg} ${sc.text} ${sc.border}`}>{sc.label}</span>
                 ); })()}
-                <span className="text-[10px] text-zinc-500 flex items-center gap-1">
-                  {(() => { const SI = getServiceIcon(selectedConversation.service_type); return <SI className="w-3 h-3 text-gold/60" />; })()}
+                <span className="text-[10px] text-stone-500 flex items-center gap-1">
+                  {(() => { const SI = getServiceIcon(selectedConversation.service_type); return <SI className="w-3 h-3 text-[#C9A84C]/60" />; })()}
                   {getServiceLabel(selectedConversation.service_type)}
                 </span>
-                <span className="text-[10px] text-zinc-500 flex items-center gap-1">
+                <span className="text-[10px] text-stone-500 flex items-center gap-1">
                   <Calendar className="w-3 h-3" /> {format(new Date(selectedConversation.created_at), 'dd MMM yyyy, h:mm a')}
                 </span>
                 {selectedConversation.rating && (
-                  <span className="text-[10px] text-gold flex items-center gap-0.5">
-                    <Star className="w-3 h-3 fill-gold" /> {selectedConversation.rating}/5
+                  <span className="text-[10px] text-[#C9A84C] flex items-center gap-0.5">
+                    <Star className="w-3 h-3 fill-[#C9A84C]" /> {selectedConversation.rating}/5
                   </span>
                 )}
               </div>
+              {/* AI Analyze button */}
+              <div className="mt-3">
+                <Button
+                  size="sm"
+                  onClick={() => generateAISummary(selectedConversation, displayMessages)}
+                  disabled={aiSummaryLoading || displayMessages.length === 0}
+                  className="bg-gradient-to-r from-[#FDFBF7] to-[#F5EBD7] border border-[#C9A84C]/30 text-stone-700 hover:border-[#C9A84C]/60 text-xs font-semibold gap-1.5 shadow-sm"
+                >
+                  {aiSummaryLoading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3 text-[#C9A84C]" />}
+                  {aiSummaryLoading ? 'Analyzing...' : 'AI Summarize & Analyze'}
+                </Button>
+              </div>
             </div>
+
+            {/* AI Summary Panel */}
+            {aiSummary && (
+              <div className="mx-5 mt-4 p-4 rounded-xl border border-[#C9A84C]/20 bg-gradient-to-br from-[#FDFBF7] to-[#F5EBD7] space-y-3">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-[#C9A84C]" />
+                  <h4 className="text-sm font-bold text-stone-900">AI Intelligence Report</h4>
+                </div>
+                <p className="text-sm text-stone-700 leading-relaxed">{aiSummary.summary}</p>
+                
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                  <div className="p-2 rounded-lg bg-white/60 border border-stone-200 text-center">
+                    <p className="text-[9px] uppercase tracking-wider text-stone-500">Resolution</p>
+                    <p className={`text-xs font-bold ${aiSummary.resolution_status === 'resolved' ? 'text-emerald-700' : aiSummary.resolution_status === 'unresolved' ? 'text-red-600' : 'text-amber-600'}`}>
+                      {aiSummary.resolution_status?.replace('_', ' ')}
+                    </p>
+                  </div>
+                  <div className="p-2 rounded-lg bg-white/60 border border-stone-200 text-center">
+                    <p className="text-[9px] uppercase tracking-wider text-stone-500">Sentiment</p>
+                    <p className={`text-xs font-bold ${aiSummary.sentiment === 'positive' ? 'text-emerald-700' : aiSummary.sentiment === 'negative' ? 'text-red-600' : 'text-stone-600'}`}>
+                      {aiSummary.sentiment} ({aiSummary.sentiment_score}%)
+                    </p>
+                  </div>
+                  <div className="p-2 rounded-lg bg-white/60 border border-stone-200 text-center">
+                    <p className="text-[9px] uppercase tracking-wider text-stone-500">Priority</p>
+                    <p className={`text-xs font-bold ${aiSummary.priority_level === 'critical' ? 'text-red-600' : aiSummary.priority_level === 'high' ? 'text-orange-600' : 'text-stone-600'}`}>
+                      {aiSummary.priority_level}
+                    </p>
+                  </div>
+                  <div className="p-2 rounded-lg bg-white/60 border border-stone-200 text-center">
+                    <p className="text-[9px] uppercase tracking-wider text-stone-500">Lead</p>
+                    <p className={`text-xs font-bold ${aiSummary.is_lead_opportunity ? 'text-emerald-700' : 'text-stone-500'}`}>
+                      {aiSummary.is_lead_opportunity ? 'Yes' : 'No'}
+                    </p>
+                  </div>
+                </div>
+
+                {aiSummary.is_lead_opportunity && aiSummary.lead_opportunity_detail && (
+                  <div className="p-2 rounded-lg bg-emerald-50 border border-emerald-200 flex items-start gap-2">
+                    <Target className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <p className="text-xs text-emerald-800"><strong>Lead Opportunity:</strong> {aiSummary.lead_opportunity_detail}</p>
+                  </div>
+                )}
+
+                {aiSummary.improvement_suggestions?.length > 0 && (
+                  <div>
+                    <p className="text-[10px] uppercase tracking-wider text-stone-500 mb-1">Improvement Suggestions</p>
+                    <ul className="space-y-1">
+                      {aiSummary.improvement_suggestions.map((s, i) => (
+                        <li key={i} className="text-xs text-stone-600 flex items-start gap-1.5"><Zap className="w-3 h-3 text-[#C9A84C] shrink-0 mt-0.5" /> {s}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Suggested Reply */}
+                {aiSummary.suggested_reply && (
+                  <div className="p-3 rounded-lg bg-white border border-[#C9A84C]/20">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <p className="text-[10px] uppercase tracking-wider text-stone-500 font-semibold">Suggested Auto-Reply</p>
+                      <div className="flex gap-1">
+                        <Button size="sm" variant="ghost" onClick={() => copyToClipboard(aiSummary.suggested_reply)} className="h-6 px-2 text-[10px] text-stone-500 hover:text-[#C9A84C]">
+                          <Copy className="w-3 h-3 mr-1" /> Copy
+                        </Button>
+                        {selectedConversation.user_phone && (
+                          <a
+                            href={`https://wa.me/${selectedConversation.user_phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(aiSummary.suggested_reply)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center h-6 px-2 text-[10px] rounded-md text-emerald-700 hover:bg-emerald-50"
+                            onClick={e => e.stopPropagation()}
+                          >
+                            <Send className="w-3 h-3 mr-1" /> WhatsApp
+                          </a>
+                        )}
+                        {selectedConversation.user_email && (
+                          <a
+                            href={`mailto:${selectedConversation.user_email}?subject=Re: Your inquiry at JBJ Global Real Estate&body=${encodeURIComponent(aiSummary.suggested_reply)}`}
+                            className="inline-flex items-center h-6 px-2 text-[10px] rounded-md text-sky-700 hover:bg-sky-50"
+                            onClick={e => e.stopPropagation()}
+                          >
+                            <Mail className="w-3 h-3 mr-1" /> Email
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                    <p className="text-xs text-stone-700 leading-relaxed italic">"{aiSummary.suggested_reply}"</p>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Messages */}
             <ScrollArea className="flex-1 min-h-0">
               <div className="p-5 space-y-3">
                 {loadingFallback ? (
-                  <div className="text-center py-8"><Loader2 className="w-6 h-6 animate-spin text-gold mx-auto" /></div>
+                  <div className="text-center py-8"><Loader2 className="w-6 h-6 animate-spin text-[#C9A84C] mx-auto" /></div>
                 ) : displayMessages.length === 0 ? (
                   <div className="text-center py-12">
-                    <AlertCircle className="w-8 h-8 text-zinc-700 mx-auto mb-2" />
-                    <p className="text-sm text-zinc-500">No messages recorded for this session</p>
+                    <AlertCircle className="w-8 h-8 text-stone-300 mx-auto mb-2" />
+                    <p className="text-sm text-stone-500">No messages recorded for this session</p>
+                    <p className="text-xs text-stone-400 mt-1">Messages from future conversations will be saved automatically</p>
                   </div>
                 ) : (
                   displayMessages.map((msg, i) => (
                     <div key={i} className={`flex gap-2.5 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                       {msg.role !== 'user' && (
-                        <div className="w-7 h-7 rounded-full bg-gold/15 flex items-center justify-center shrink-0 mt-0.5">
-                          <Bot className="w-3.5 h-3.5 text-gold" />
+                        <div className="w-7 h-7 rounded-full bg-[#C9A84C]/15 flex items-center justify-center shrink-0 mt-0.5">
+                          <Bot className="w-3.5 h-3.5 text-[#C9A84C]" />
                         </div>
                       )}
                       <div className={`max-w-[75%] rounded-2xl px-3.5 py-2.5 text-sm ${
                         msg.role === 'user'
-                          ? 'bg-gold/15 text-white rounded-br-md border border-gold/20'
-                          : 'bg-zinc-800/80 text-zinc-200 rounded-bl-md border border-zinc-700/30'
+                          ? 'bg-[#C9A84C]/10 text-stone-900 rounded-br-md border border-[#C9A84C]/20'
+                          : 'bg-white text-stone-700 rounded-bl-md border border-stone-200 shadow-sm'
                       }`}>
                         <p className="whitespace-pre-wrap leading-relaxed text-[13px]">{msg.content}</p>
                         {msg.timestamp && (
-                          <p className="text-[9px] mt-1.5 opacity-40">{format(new Date(msg.timestamp), 'h:mm a')}</p>
+                          <p className="text-[9px] mt-1.5 text-stone-400">{format(new Date(msg.timestamp), 'h:mm a')}</p>
                         )}
                       </div>
                       {msg.role === 'user' && (
-                        <div className="w-7 h-7 rounded-full bg-zinc-800 flex items-center justify-center shrink-0 mt-0.5">
-                          <User className="w-3.5 h-3.5 text-zinc-400" />
+                        <div className="w-7 h-7 rounded-full bg-stone-200 flex items-center justify-center shrink-0 mt-0.5">
+                          <User className="w-3.5 h-3.5 text-stone-500" />
                         </div>
                       )}
                     </div>
                   ))
                 )}
                 {(selectedConversation.rating || selectedConversation.rating_feedback) && (
-                  <div className="border-t border-gold/10 pt-3 mt-4">
-                    <div className="bg-[#1a1710] rounded-xl p-3 space-y-1 border border-gold/10">
+                  <div className="border-t border-[#C9A84C]/10 pt-3 mt-4">
+                    <div className="bg-[#FDFBF7] rounded-xl p-3 space-y-1 border border-[#C9A84C]/15">
                       {selectedConversation.rating && (
                         <div className="flex items-center gap-2">
-                          <Star className="w-3.5 h-3.5 text-gold fill-gold" />
-                          <span className="text-xs text-white font-medium">Rating: {selectedConversation.rating}/5</span>
+                          <Star className="w-3.5 h-3.5 text-[#C9A84C] fill-[#C9A84C]" />
+                          <span className="text-xs text-stone-800 font-medium">Rating: {selectedConversation.rating}/5</span>
                         </div>
                       )}
-                      {selectedConversation.rating_feedback && <p className="text-xs text-zinc-400">"{selectedConversation.rating_feedback}"</p>}
+                      {selectedConversation.rating_feedback && <p className="text-xs text-stone-500">"{selectedConversation.rating_feedback}"</p>}
                     </div>
                   </div>
                 )}
               </div>
             </ScrollArea>
-            <div className="p-4 border-t border-gold/10 flex items-center justify-between">
-              <p className="text-[10px] text-zinc-600">
+            <div className="p-4 border-t border-[#C9A84C]/10 flex items-center justify-between">
+              <p className="text-[10px] text-stone-500">
                 {displayMessages.length} messages
                 {(selectedConversation.messages?.length || 0) === 0 && displayMessages.length > 0 ? ' (from history log)' : ''}
               </p>
-              <Button onClick={() => { setSelectedConversation(null); setFallbackMessages([]); }} size="sm" className="bg-gold/10 border border-gold/30 text-gold hover:bg-gold/20 text-xs">
+              <Button onClick={() => { setSelectedConversation(null); setFallbackMessages([]); setAiSummary(null); }} size="sm" className="bg-gradient-to-r from-[#FDFBF7] to-[#F5EBD7] border border-[#C9A84C]/30 text-stone-700 hover:border-[#C9A84C]/60 text-xs">
                 Close
               </Button>
             </div>
@@ -555,116 +791,127 @@ const AdminChatDashboard = () => {
 
       {/* ============ CV VIEWER MODAL ============ */}
       {selectedCV && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setSelectedCV(null)}>
-          <div className="bg-[#141210] border border-gold/20 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col" onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-start justify-center p-4 pt-8 overflow-y-auto" onClick={() => setSelectedCV(null)}>
+          <div className={`${cardBg} border border-[#C9A84C]/25 rounded-2xl shadow-2xl max-w-4xl w-full flex flex-col my-4`} onClick={e => e.stopPropagation()}>
             {/* CV Header */}
-            <div className="p-5 border-b border-gold/15 bg-gradient-to-r from-[#1a1710] to-[#141210] rounded-t-2xl">
+            <div className="p-5 border-b border-[#C9A84C]/15 bg-gradient-to-r from-[#F5EBD7] to-[#FDFBF7] rounded-t-2xl">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-full bg-gold/15 flex items-center justify-center">
-                    <User className="w-7 h-7 text-gold" />
+                  <div className="w-14 h-14 rounded-full bg-[#C9A84C]/15 flex items-center justify-center">
+                    <User className="w-7 h-7 text-[#C9A84C]" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-white">{selectedCV.full_name}</h3>
+                    <h3 className="text-lg font-bold text-stone-900">{selectedCV.full_name}</h3>
                     <div className="flex items-center gap-3 mt-1 flex-wrap">
-                      <span className="text-xs text-zinc-400 flex items-center gap-1"><Mail className="w-3 h-3" /> {selectedCV.email}</span>
-                      {selectedCV.phone && <span className="text-xs text-zinc-400 flex items-center gap-1"><Phone className="w-3 h-3" /> {selectedCV.phone}</span>}
-                      <span className="text-xs text-zinc-500 flex items-center gap-1"><Calendar className="w-3 h-3" /> {format(new Date(selectedCV.created_at), 'dd MMM yyyy')}</span>
-                      <Badge className="bg-gold/10 text-gold border-gold/30 text-[10px]">Source: Chat Widget</Badge>
+                      <a href={`mailto:${selectedCV.email}`} className="text-xs text-stone-500 flex items-center gap-1 hover:text-[#C9A84C] hover:underline"><Mail className="w-3 h-3" /> {selectedCV.email}</a>
+                      {selectedCV.phone && <a href={`tel:${selectedCV.phone}`} className="text-xs text-stone-500 flex items-center gap-1 hover:text-[#C9A84C] hover:underline"><Phone className="w-3 h-3" /> {selectedCV.phone}</a>}
+                      <span className="text-xs text-stone-400 flex items-center gap-1"><Calendar className="w-3 h-3" /> {format(new Date(selectedCV.created_at), 'dd MMM yyyy')}</span>
+                      <Badge className="bg-[#F5EBD7] text-[#8B7355] border-[#C9A84C]/30 text-[10px]">Source: Chat Widget</Badge>
                     </div>
                   </div>
                 </div>
-                <Button size="icon" variant="ghost" onClick={() => setSelectedCV(null)} className="text-zinc-400 hover:text-white hover:bg-white/10">
+                <Button size="icon" variant="ghost" onClick={() => setSelectedCV(null)} className="text-stone-400 hover:text-stone-700 hover:bg-stone-200/50">
                   <X className="w-4 h-4" />
                 </Button>
               </div>
             </div>
 
-            <ScrollArea className="flex-1 min-h-0">
-              <div className="p-5 space-y-5">
-                {/* AI Analysis Section */}
-                <div className="bg-[#1a1710] border border-gold/15 rounded-xl p-4 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 text-gold" />
-                      <h4 className="text-sm font-semibold text-white">AI Analysis</h4>
-                    </div>
-                    {!selectedCV.ai_summary && (
-                      <Button
-                        size="sm"
-                        onClick={() => generateCVSummary(selectedCV)}
-                        disabled={cvAiLoading}
-                        className="bg-gold text-black hover:bg-gold/90 text-xs font-semibold gap-1"
-                      >
-                        {cvAiLoading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
-                        {cvAiLoading ? 'Analyzing...' : 'Generate AI Summary'}
-                      </Button>
-                    )}
+            <div className="p-5 space-y-5 overflow-y-auto max-h-[calc(90vh-120px)]">
+              {/* AI Analysis Section */}
+              <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5EBD7] border border-[#C9A84C]/20 rounded-xl p-4 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-[#C9A84C]" />
+                    <h4 className="text-sm font-semibold text-stone-900">AI Analysis</h4>
                   </div>
-                  {selectedCV.ai_summary ? (
-                    <>
-                      <p className="text-sm text-zinc-300 leading-relaxed">{selectedCV.ai_summary}</p>
-                      {selectedCV.ai_ranking ? (
-                        <div>
-                          <p className="text-[10px] uppercase tracking-widest text-zinc-500 mb-1.5">Relevance Score</p>
-                          {renderScoreBar(selectedCV.ai_ranking)}
-                        </div>
-                      ) : null}
-                    </>
-                  ) : (
-                    <p className="text-xs text-zinc-500 italic">Click "Generate AI Summary" to analyze this CV</p>
+                  {!selectedCV.ai_summary && (
+                    <Button
+                      size="sm"
+                      onClick={() => generateCVSummary(selectedCV)}
+                      disabled={cvAiLoading}
+                      className="bg-gradient-to-r from-[#FDFBF7] to-[#F5EBD7] border border-[#C9A84C]/30 text-stone-700 hover:border-[#C9A84C]/60 text-xs font-semibold gap-1 shadow-sm"
+                    >
+                      {cvAiLoading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3 text-[#C9A84C]" />}
+                      {cvAiLoading ? 'Analyzing...' : 'Generate AI Summary'}
+                    </Button>
                   )}
                 </div>
+                {selectedCV.ai_summary ? (
+                  <>
+                    <p className="text-sm text-stone-700 leading-relaxed">{selectedCV.ai_summary}</p>
+                    {selectedCV.ai_ranking ? (
+                      <div>
+                        <p className="text-[10px] uppercase tracking-widest text-stone-500 mb-1.5">Relevance Score</p>
+                        {renderScoreBar(selectedCV.ai_ranking)}
+                      </div>
+                    ) : null}
+                  </>
+                ) : (
+                  <p className="text-xs text-stone-500 italic">Click "Generate AI Summary" to analyze this CV</p>
+                )}
+              </div>
 
-                {/* PDF Preview */}
-                {selectedCV.cv_url ? (
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <h4 className="text-sm font-semibold text-white flex items-center gap-2"><FileText className="w-4 h-4 text-gold" /> CV Document</h4>
+              {/* PDF Preview - Using object tag and Google Docs viewer to avoid Chrome blocking */}
+              {selectedCV.cv_url ? (
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-sm font-semibold text-stone-900 flex items-center gap-2"><FileText className="w-4 h-4 text-[#C9A84C]" /> CV Document</h4>
+                    <div className="flex gap-2">
                       <a
                         href={selectedCV.cv_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-1.5 px-3 py-1.5 bg-gold/10 hover:bg-gold/20 text-gold text-xs font-medium rounded-lg transition-colors border border-gold/20"
+                        download
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-stone-50 text-stone-700 text-xs font-medium rounded-lg transition-colors border border-stone-200"
                       >
                         <Download className="w-3 h-3" /> Download
                       </a>
-                    </div>
-                    <div className="border border-gold/15 rounded-xl overflow-hidden bg-white">
-                      <iframe
-                        src={selectedCV.cv_url}
-                        className="w-full h-[500px]"
-                        title={`CV - ${selectedCV.full_name}`}
-                      />
+                      {selectedCV.phone && (
+                        <a
+                          href={`https://wa.me/${selectedCV.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hi ${selectedCV.full_name}, regarding your CV submission to JBJ Global Real Estate...`)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-medium rounded-lg transition-colors border border-emerald-200"
+                        >
+                          <Send className="w-3 h-3" /> WhatsApp
+                        </a>
+                      )}
+                      <a
+                        href={`mailto:${selectedCV.email}?subject=Your CV Submission - JBJ Global Real Estate`}
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-700 text-xs font-medium rounded-lg transition-colors border border-sky-200"
+                      >
+                        <Mail className="w-3 h-3" /> Email
+                      </a>
                     </div>
                   </div>
-                ) : (
-                  <div className="text-center py-8 bg-[#1a1710] rounded-xl border border-gold/10">
-                    <FileText className="w-8 h-8 text-zinc-700 mx-auto mb-2" />
-                    <p className="text-sm text-zinc-500">No CV file uploaded</p>
+                  <div className="border border-[#C9A84C]/15 rounded-xl overflow-hidden bg-white">
+                    {/* Use Google Docs Viewer to avoid Chrome blocking */}
+                    <iframe
+                      src={`https://docs.google.com/gview?url=${encodeURIComponent(selectedCV.cv_url)}&embedded=true`}
+                      className="w-full h-[600px]"
+                      title={`CV - ${selectedCV.full_name}`}
+                      sandbox="allow-scripts allow-same-origin allow-popups"
+                    />
                   </div>
-                )}
-
-                {/* Action Buttons */}
-                <div className="flex gap-3 flex-wrap">
-                  <Button className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold gap-2">
-                    <CheckCircle2 className="w-4 h-4" /> Approve
-                  </Button>
-                  <Button className="bg-red-600 hover:bg-red-700 text-white font-semibold gap-2">
-                    <X className="w-4 h-4" /> Reject
-                  </Button>
-                  <Button className="bg-gold text-black hover:bg-gold/90 font-semibold gap-2">
-                    <Calendar className="w-4 h-4" /> Schedule Interview
-                  </Button>
-                  <a
-                    href={`mailto:${selectedCV.email}?subject=Your Application at JBJ Global Real Estate`}
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/30 text-gold text-sm font-medium rounded-lg hover:bg-gold/20 transition-colors"
-                  >
-                    <Mail className="w-4 h-4" /> Contact
-                  </a>
                 </div>
+              ) : (
+                <div className="text-center py-8 bg-[#FDFBF7] rounded-xl border border-stone-200">
+                  <FileText className="w-8 h-8 text-stone-300 mx-auto mb-2" />
+                  <p className="text-sm text-stone-500">No CV file uploaded</p>
+                </div>
+              )}
+
+              {/* Action Buttons */}
+              <div className="flex gap-3 flex-wrap">
+                <Button className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold gap-2">
+                  <CheckCircle2 className="w-4 h-4" /> Approve
+                </Button>
+                <Button className="bg-red-500 hover:bg-red-600 text-white font-semibold gap-2">
+                  <X className="w-4 h-4" /> Reject
+                </Button>
+                <Button className="bg-gradient-to-r from-[#FDFBF7] to-[#F5EBD7] border border-[#C9A84C]/30 text-stone-700 hover:border-[#C9A84C]/60 font-semibold gap-2 shadow-sm">
+                  <Calendar className="w-4 h-4 text-[#C9A84C]" /> Schedule Interview
+                </Button>
               </div>
-            </ScrollArea>
+            </div>
           </div>
         </div>
       )}

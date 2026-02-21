@@ -74,14 +74,28 @@ export function MegaMenuFeaturedCard({
   className,
 }: MegaMenuFeaturedCardProps) {
   const videoRef = React.useRef<HTMLVideoElement>(null);
+  const [videoReady, setVideoReady] = React.useState(false);
 
   // Play video immediately on mount for instant display
   React.useEffect(() => {
     const vid = videoRef.current;
     if (!vid || !video) return;
-    // Load and play eagerly — the mega menu is already open when this mounts
+    
+    // If already have enough data, play immediately
+    if (vid.readyState >= 3) {
+      setVideoReady(true);
+      vid.play().catch(() => {});
+      return;
+    }
+    
+    const onCanPlay = () => {
+      setVideoReady(true);
+      vid.play().catch(() => {});
+    };
+    vid.addEventListener('canplay', onCanPlay, { once: true });
     vid.load();
-    vid.play().catch(() => {});
+    
+    return () => vid.removeEventListener('canplay', onCanPlay);
   }, [video]);
 
   return (
@@ -96,16 +110,19 @@ export function MegaMenuFeaturedCard({
         className
       )}
     >
-      {/* Video background — eager load, plays immediately on open */}
+      {/* Video background — uses preload="metadata" for faster start, upgrades to full on play */}
       {video && (
         <video
           ref={videoRef}
-          className="absolute inset-0 w-full h-full object-cover z-[1]"
+          className={cn(
+            "absolute inset-0 w-full h-full object-cover z-[1] transition-opacity duration-500",
+            videoReady ? "opacity-100" : "opacity-0"
+          )}
           src={video}
           muted
           loop
           playsInline
-          preload="auto"
+          preload="metadata"
         />
       )}
       {/* Static image background */}
