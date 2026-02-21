@@ -574,7 +574,7 @@ const CRM = () => {
 
             {/* Leads Section with Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="bg-white/80 border-2 border-gold/30 p-1 mb-4 w-full flex gap-1 overflow-x-auto">
+              <TabsList className="bg-white/80 border-2 border-gold/30 p-1 mb-4 w-full flex flex-wrap gap-1">
                 <TabsTrigger 
                   value="all" 
                   className="tab-trigger-champagne text-black"
