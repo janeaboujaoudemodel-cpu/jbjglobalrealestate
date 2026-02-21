@@ -28,6 +28,7 @@ const aiTools = [
 const resources = [
   { title: 'Investor Education', desc: 'Learning resources', icon: BookOpen, href: '/investor-education' },
   { title: 'Buyer Guide', desc: 'Step-by-step buying guide', icon: FileText, href: '/buyer-guide' },
+  { title: 'Listing Portal', desc: 'AI-powered property listing', icon: FileText, href: '/listing-portal/submit' },
   { title: 'Market Intelligence', desc: 'Reports & data', icon: Compass, href: '/market-intelligence' },
   { title: 'Golden Visa Guide', desc: 'UAE residency through investment', icon: Shield, href: '/guides/golden-visa-uae' },
 ];
