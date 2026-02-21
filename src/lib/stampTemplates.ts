@@ -374,42 +374,52 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
   }
 
   // ────────────────────────────────────────────────────────────────
-  // T6: Bilingual Official — Arabic + English
+  // T6: Bilingual Official — English top arc, Arabic bottom arc (matching T12 pattern)
+  // Generates TWO variants: with and without license number
   // ────────────────────────────────────────────────────────────────
   if (isBilingual) {
     const outerR = R;
     const bandR = R - 12;
     const innerR = R - 16;
+    const arcR = R - 17; // safe zone for text arcs
     const displayArabic = arabicName || name;
     const displayArabicCity = arabicCity || city;
-    const enFontSize = autoFontSize(name, 9.5, 22);
-    const arFontSize = autoFontSize(displayArabic, 13, 16);
+    const enFontSize = autoFontSize(name, 10, 24);
+    const arFontSize = autoFontSize(displayArabic, 11, 18);
 
-    const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="${PRIMARY}"/>
-      <circle cx="${cx}" cy="${cy}" r="${bandR}" fill="#ffffff"/>
-      <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${SECONDARY}" stroke-width="0.9"/>
-      <!-- Center divider with ornament -->
-      ${hRule(cx - 70, cx + 70, cy + 2, ACCENT, 1.2)}
-      <text x="${cx}" y="${cy + 7}" text-anchor="middle" font-family="${font}" font-size="7" fill="${ACCENT}">✦</text>
-      <!-- Arabic UPPER -->
-      <text x="${cx}" y="${cy - 32}" text-anchor="middle" dominant-baseline="middle"
-        font-family="${arabicFont}" font-size="${arFontSize}" font-weight="bold" fill="${PRIMARY}"
-        direction="rtl" unicode-bidi="bidi-override">${displayArabic}</text>
-      <text x="${cx}" y="${cy - 14}" text-anchor="middle" dominant-baseline="middle"
-        font-family="${arabicFont}" font-size="8.5" fill="${SECONDARY}"
-        direction="rtl">${displayArabicCity}</text>
-      <!-- English LOWER -->
-      <text x="${cx}" y="${cy + 22}" text-anchor="middle" dominant-baseline="middle"
-        font-family="${font}" font-size="${enFontSize}" font-weight="bold" fill="${PRIMARY}">${name}</text>
-      <text x="${cx}" y="${cy + 36}" text-anchor="middle" dominant-baseline="middle"
-        font-family="${font}" font-size="7.5" fill="${SECONDARY}" letter-spacing="2">${city}</text>
-      ${regNo && project.density >= 3
+    // Generate bilingual with arc text (with regNo)
+    function buildT6Svg(showRegNo: boolean) {
+      const regLine = showRegNo && regNo
         ? `<text x="${cx}" y="${cy + 50}" text-anchor="middle" font-family="${font}" font-size="6.5" fill="${SECONDARY}">${regNo}</text>`
-        : ''
-      }
-    </svg>`;
-    concepts.push({ id: uid(), templateKey: 'bilingual-official', label: 'Bilingual Official', tags: ['bilingual', 'arabic', 'official', 'UAE'], svgSource: svg });
+        : '';
+      return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <path id="t6top${showRegNo ? 'r' : ''}" d="M ${cx - arcR} ${cy} A ${arcR} ${arcR} 0 1 1 ${cx + arcR} ${cy}"/>
+          <path id="t6bot${showRegNo ? 'r' : ''}" d="M ${cx + arcR} ${cy} A ${arcR} ${arcR} 0 0 0 ${cx - arcR} ${cy}"/>
+        </defs>
+        <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="${PRIMARY}"/>
+        <circle cx="${cx}" cy="${cy}" r="${bandR}" fill="#ffffff"/>
+        <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${SECONDARY}" stroke-width="0.9"/>
+        <!-- English top arc -->
+        <text font-family="${font}" font-size="${enFontSize}" fill="${PRIMARY}" letter-spacing="2" font-weight="700">
+          <textPath href="#t6top${showRegNo ? 'r' : ''}" startOffset="50%" text-anchor="middle">${name}</textPath>
+        </text>
+        <!-- Arabic bottom arc -->
+        <text font-family="${arabicFont}" font-size="${arFontSize}" fill="${PRIMARY}" letter-spacing="1.5" font-weight="600">
+          <textPath href="#t6bot${showRegNo ? 'r' : ''}" startOffset="50%" text-anchor="middle">${displayArabic}</textPath>
+        </text>
+        <!-- Center divider with ornament -->
+        ${divider(cx, cy - 2, ACCENT, 26)}
+        ${hasMono ? monogram(cx, cy + 14, mono, font, 22, ACCENT, ACCENT) : ''}
+        <text x="${cx}" y="${cy + (hasMono ? 38 : 16)}" text-anchor="middle" font-family="${font}" font-size="7" fill="${SECONDARY}" letter-spacing="3">${city}</text>
+        ${regLine}
+      </svg>`;
+    }
+
+    concepts.push({ id: uid(), templateKey: 'bilingual-official', label: 'Bilingual Official', tags: ['bilingual', 'arabic', 'official', 'UAE'], svgSource: buildT6Svg(true) });
+    if (regNo) {
+      concepts.push({ id: uid(), templateKey: 'bilingual-official-no-reg', label: 'Bilingual Official (No License)', tags: ['bilingual', 'arabic', 'official', 'UAE', 'no-license'], svgSource: buildT6Svg(false) });
+    }
   }
 
   // ────────────────────────────────────────────────────────────────
@@ -563,25 +573,44 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
     const outerR = R;
     const bandR = R - 12;
     const r2 = R - 16;
-    const arFontSize = autoFontSize(arabicName, 16, 14);
+    const arcR = R - 17;
+    const arFontSize = autoFontSize(arabicName, 12, 16);
+    const enFontSize = autoFontSize(name, 9, 22);
     const displayArabicCity = arabicCity || city;
 
-    const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="${PRIMARY}"/>
-      <circle cx="${cx}" cy="${cy}" r="${bandR}" fill="#ffffff"/>
-      <circle cx="${cx}" cy="${cy}" r="${r2}" fill="none" stroke="${SECONDARY}" stroke-width="1.2"/>
-      <text x="${cx}" y="${cy - r2 + 6}" text-anchor="middle" font-family="${font}" font-size="8" fill="${ACCENT}">✦</text>
-      <text x="${cx}" y="${cy + r2 - 1}" text-anchor="middle" font-family="${font}" font-size="8" fill="${ACCENT}">✦</text>
-      <text x="${cx}" y="${cy - 14}" text-anchor="middle" dominant-baseline="middle"
-        font-family="${arabicFont}" font-size="${arFontSize}" font-weight="bold" fill="${PRIMARY}"
-        direction="rtl" unicode-bidi="bidi-override">${arabicName}</text>
-      <text x="${cx}" y="${cy + 8}" text-anchor="middle" dominant-baseline="middle"
-        font-family="${arabicFont}" font-size="10" fill="${SECONDARY}" direction="rtl">${displayArabicCity}</text>
-      ${divider(cx, cy + 22, ACCENT, 28)}
-      <text x="${cx}" y="${cy + 36}" text-anchor="middle" dominant-baseline="middle"
-        font-family="${font}" font-size="8" fill="${PRIMARY}" letter-spacing="1.5">${name}</text>
-    </svg>`;
-    concepts.push({ id: uid(), templateKey: 'arabic-calligraphy', label: 'Arabic Calligraphy', tags: ['arabic', 'calligraphy', 'RTL', 'premium'], svgSource: svg });
+    function buildT9Svg(showRegNo: boolean) {
+      const regLine = showRegNo && regNo
+        ? `<text x="${cx}" y="${cy + 44}" text-anchor="middle" font-family="${font}" font-size="6" fill="${SECONDARY}">${regNo}</text>`
+        : '';
+      return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <path id="t9top${showRegNo ? 'r' : ''}" d="M ${cx - arcR} ${cy} A ${arcR} ${arcR} 0 1 1 ${cx + arcR} ${cy}"/>
+          <path id="t9bot${showRegNo ? 'r' : ''}" d="M ${cx + arcR} ${cy} A ${arcR} ${arcR} 0 0 0 ${cx - arcR} ${cy}"/>
+        </defs>
+        <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="${PRIMARY}"/>
+        <circle cx="${cx}" cy="${cy}" r="${bandR}" fill="#ffffff"/>
+        <circle cx="${cx}" cy="${cy}" r="${r2}" fill="none" stroke="${SECONDARY}" stroke-width="1.2"/>
+        <text x="${cx}" y="${cy - r2 + 6}" text-anchor="middle" font-family="${font}" font-size="8" fill="${ACCENT}">✦</text>
+        <text x="${cx}" y="${cy + r2 - 1}" text-anchor="middle" font-family="${font}" font-size="8" fill="${ACCENT}">✦</text>
+        <!-- English top arc -->
+        <text font-family="${font}" font-size="${enFontSize}" fill="${PRIMARY}" letter-spacing="1.8" font-weight="700">
+          <textPath href="#t9top${showRegNo ? 'r' : ''}" startOffset="50%" text-anchor="middle">${name}</textPath>
+        </text>
+        <!-- Arabic bottom arc -->
+        <text font-family="${arabicFont}" font-size="${arFontSize}" fill="${PRIMARY}" letter-spacing="1.2" font-weight="600">
+          <textPath href="#t9bot${showRegNo ? 'r' : ''}" startOffset="50%" text-anchor="middle">${arabicName}</textPath>
+        </text>
+        ${divider(cx, cy + 2, ACCENT, 28)}
+        <text x="${cx}" y="${cy + 18}" text-anchor="middle" dominant-baseline="middle"
+          font-family="${font}" font-size="7.5" fill="${SECONDARY}" letter-spacing="2">${city}</text>
+        ${regLine}
+      </svg>`;
+    }
+
+    concepts.push({ id: uid(), templateKey: 'arabic-calligraphy', label: 'Arabic Calligraphy', tags: ['arabic', 'calligraphy', 'RTL', 'premium'], svgSource: buildT9Svg(true) });
+    if (regNo) {
+      concepts.push({ id: uid(), templateKey: 'arabic-calligraphy-no-reg', label: 'Arabic Calligraphy (No License)', tags: ['arabic', 'calligraphy', 'RTL', 'no-license'], svgSource: buildT9Svg(false) });
+    }
   } else {
     // Official Seal for EN-only with star ornaments
     const outerR = R;

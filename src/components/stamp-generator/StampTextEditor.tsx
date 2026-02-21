@@ -1,10 +1,9 @@
 /**
- * StampTextEditor — Inline SVG text element editor/deleter
+ * StampTextEditor — Inline SVG text element editor/deleter with Undo/Redo
  * Parses <text> nodes from SVG, allows editing content or deleting them.
  */
-import React, { useState, useMemo } from 'react';
-import { Pencil, Trash2, Check, X, Plus } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import React, { useState, useMemo, useCallback } from 'react';
+import { Pencil, Trash2, Check, X, Undo2, Redo2, Save } from 'lucide-react';
 
 interface TextElement {
   index: number;
@@ -14,12 +13,10 @@ interface TextElement {
 
 function extractTextElements(svgString: string): TextElement[] {
   if (!svgString) return [];
-  // Method 1: DOMParser (preferred)
   if (typeof window !== 'undefined' && typeof DOMParser !== 'undefined') {
     try {
       const parser = new DOMParser();
       const doc = parser.parseFromString(svgString, 'image/svg+xml');
-      // Check for parse error
       const parseErr = doc.querySelector('parsererror');
       if (!parseErr) {
         const texts = Array.from(doc.querySelectorAll('text'));
@@ -32,7 +29,6 @@ function extractTextElements(svgString: string): TextElement[] {
       }
     } catch { /* fall through */ }
   }
-  // Method 2: Regex fallback — extract text content from <text ...>content</text> and <textPath>content</textPath>
   const elements: TextElement[] = [];
   const textTagRegex = /<text[\s>][^]*?<\/text>/gi;
   let globalIdx = 0;
@@ -40,7 +36,6 @@ function extractTextElements(svgString: string): TextElement[] {
   while ((match = textTagRegex.exec(svgString)) !== null) {
     const block = match[0];
     const isTextPath = /<textPath/i.test(block);
-    // Strip all inner tags to get text content
     const content = block
       .replace(/<[^>]+>/g, ' ')
       .replace(/\s+/g, ' ')
@@ -61,17 +56,14 @@ export function mutateTextElement(svgString: string, index: number, newContent: 
     const texts = Array.from(doc.querySelectorAll('text'));
     if (index >= texts.length) return svgString;
     if (newContent === null) {
-      // Delete — also remove associated <defs> path if it's a textPath
       const textEl = texts[index];
       const textPathEl = textEl.querySelector('textPath');
       if (textPathEl) {
         const href = textPathEl.getAttribute('href') || textPathEl.getAttribute('xlink:href') || '';
         if (href.startsWith('#')) {
           const pathId = href.slice(1);
-          // Remove the defs path
           const defPath = doc.getElementById(pathId);
           defPath?.parentElement?.removeChild(defPath);
-          // If defs is now empty, remove it
           const defs = doc.querySelector('defs');
           if (defs && !defs.children.length) defs.parentElement?.removeChild(defs);
         }
@@ -83,11 +75,9 @@ export function mutateTextElement(svgString: string, index: number, newContent: 
       if (textPathEl) {
         textPathEl.textContent = newContent;
       } else {
-        // Handle tspan children
         const tspans = textEl.querySelectorAll('tspan');
         if (tspans.length > 0) {
           tspans[0].textContent = newContent;
-          // remove extra tspans
           for (let i = 1; i < tspans.length; i++) tspans[i].parentElement?.removeChild(tspans[i]);
         } else {
           textEl.textContent = newContent;
@@ -103,16 +93,55 @@ export function mutateTextElement(svgString: string, index: number, newContent: 
 interface Props {
   svgSource: string;
   onSvgChange: (newSvg: string) => void;
+  onSaveVersion?: (svg: string, label: string) => void;
 }
 
-export function StampTextEditor({ svgSource, onSvgChange }: Props) {
+export function StampTextEditor({ svgSource, onSvgChange, onSaveVersion }: Props) {
   const elements = useMemo(() => extractTextElements(svgSource), [svgSource]);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editValue, setEditValue] = useState('');
 
+  // Undo/Redo history
+  const [history, setHistory] = useState<string[]>([svgSource]);
+  const [historyIndex, setHistoryIndex] = useState(0);
+
+  const pushHistory = useCallback((newSvg: string) => {
+    setHistory(prev => {
+      const sliced = prev.slice(0, historyIndex + 1);
+      return [...sliced, newSvg];
+    });
+    setHistoryIndex(prev => prev + 1);
+    onSvgChange(newSvg);
+  }, [historyIndex, onSvgChange]);
+
+  const canUndo = historyIndex > 0;
+  const canRedo = historyIndex < history.length - 1;
+
+  function undo() {
+    if (!canUndo) return;
+    const prevIdx = historyIndex - 1;
+    setHistoryIndex(prevIdx);
+    onSvgChange(history[prevIdx]);
+  }
+
+  function redo() {
+    if (!canRedo) return;
+    const nextIdx = historyIndex + 1;
+    setHistoryIndex(nextIdx);
+    onSvgChange(history[nextIdx]);
+  }
+
   if (elements.length === 0) {
     return (
-      <p className="text-xs text-[hsl(var(--muted-foreground))] italic">No editable text found in this stamp.</p>
+      <div className="space-y-2">
+        <p className="text-xs text-[hsl(var(--muted-foreground))] italic">No editable text found in this stamp.</p>
+        {(canUndo || canRedo) && (
+          <div className="flex gap-1">
+            <button onClick={undo} disabled={!canUndo} className="p-1.5 rounded text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))] disabled:opacity-30" title="Undo"><Undo2 size={13}/></button>
+            <button onClick={redo} disabled={!canRedo} className="p-1.5 rounded text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))] disabled:opacity-30" title="Redo"><Redo2 size={13}/></button>
+          </div>
+        )}
+      </div>
     );
   }
 
@@ -123,18 +152,37 @@ export function StampTextEditor({ svgSource, onSvgChange }: Props) {
 
   function commitEdit(index: number) {
     const newSvg = mutateTextElement(svgSource, index, editValue.trim() || null);
-    onSvgChange(newSvg);
+    pushHistory(newSvg);
     setEditingIndex(null);
   }
 
   function deleteElement(index: number) {
     const newSvg = mutateTextElement(svgSource, index, null);
-    onSvgChange(newSvg);
+    pushHistory(newSvg);
   }
 
   return (
     <div className="space-y-1.5">
-      <p className="text-[10px] font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide mb-2">Edit Text Elements</p>
+      <div className="flex items-center justify-between mb-2">
+        <p className="text-[10px] font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide">Edit Text Elements</p>
+        <div className="flex gap-1">
+          <button onClick={undo} disabled={!canUndo} className="p-1 rounded text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))] disabled:opacity-30 transition-all" title="Undo">
+            <Undo2 size={12}/>
+          </button>
+          <button onClick={redo} disabled={!canRedo} className="p-1 rounded text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))] disabled:opacity-30 transition-all" title="Redo">
+            <Redo2 size={12}/>
+          </button>
+          {onSaveVersion && (
+            <button
+              onClick={() => onSaveVersion(svgSource, `Version ${history.length}`)}
+              className="p-1 rounded text-[hsl(var(--gold-dark))] hover:bg-[hsl(var(--gold)/0.1)] transition-all"
+              title="Save as Version"
+            >
+              <Save size={12}/>
+            </button>
+          )}
+        </div>
+      </div>
       {elements.map((el) => (
         <div key={el.index} className="group border border-[hsl(var(--border))] rounded-lg bg-white overflow-hidden">
           {editingIndex === el.index ? (
@@ -182,7 +230,7 @@ export function StampTextEditor({ svgSource, onSvgChange }: Props) {
           )}
         </div>
       ))}
-      <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-1">Hover a row to edit or delete. Changes apply to live preview instantly.</p>
+      <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-1">Hover to edit/delete · Undo/Redo to save two versions · Changes apply instantly.</p>
     </div>
   );
 }
