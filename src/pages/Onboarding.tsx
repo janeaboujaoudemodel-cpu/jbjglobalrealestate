@@ -8,9 +8,10 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
-  Loader2, Clock, CheckCircle, XCircle, BookOpen, GraduationCap, 
+  Clock, CheckCircle, XCircle, BookOpen, GraduationCap, 
   Trophy, Lock, ChevronRight, Building2, Briefcase
 } from "lucide-react";
+import { BrandedLoader } from "@/components/ui/BrandedLoader";
 import { toast } from "sonner";
 import { CertificateGenerator } from "@/components/onboarding/CertificateGenerator";
 
@@ -212,7 +213,7 @@ export default function Onboarding() {
   if (authLoading || loading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-gold" />
+        <BrandedLoader text="Loading..." className="min-h-screen" />
       </div>
     );
   }

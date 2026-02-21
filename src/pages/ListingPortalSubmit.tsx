@@ -302,39 +302,42 @@ const ListingPortalSubmit = () => {
   const runPricePredictor = async () => {
     setIsRunningPredictor(true);
     try {
-      // Timeout wrapper: 15 seconds max
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 15000);
-
-      const { data, error } = await supabase.functions.invoke('property-evaluation', {
+      const { data, error } = await supabase.functions.invoke('ai-price-predictor', {
         body: {
-          property: {
-            community: form.location || 'Dubai Marina',
-            subCommunity: form.area || '',
-            buildingName: form.project_name || '',
-            propertyType: form.property_type?.toLowerCase() || 'apartment',
-            bedrooms: form.bedrooms ? parseInt(form.bedrooms) : 1,
-            sizeInternal: form.area_sqft ? parseFloat(form.area_sqft) : 1000,
-            floor: 10,
-            furnishedStatus: form.furnishing?.toLowerCase()?.replace(' ', '-') || 'unfurnished',
-            renovationCost: 0,
-          }
+          location: form.location || form.area || '',
+          propertyType: form.property_type?.toLowerCase() || 'apartment',
+          bedrooms: form.bedrooms || '2',
+          size: form.area_sqft || '',
+          developerName: form.developer_name || '',
+          projectName: form.project_name || '',
+          completionYear: form.handover_date || '',
+          currentPrice: form.price || '',
+          paymentPlan: form.payment_plan || '',
+          amenities: form.amenities || [],
+          keyFeatures: form.key_features || [],
+          listingCategory: listingCategory || '',
+          furnishing: form.furnishing || '',
+          bathrooms: form.bathrooms || '',
+          emirate: form.emirate || 'Dubai',
         }
       });
 
-      clearTimeout(timeout);
-
       if (error) throw error;
 
-      if (data?.estimatedValue) {
+      if (data?.success && data?.estimatedPrice) {
+        const band = data.confidenceBand || { low: 0, mid: data.estimatedPrice, high: 0 };
         setPricePrediction({
-          estimatedValue: data.estimatedValue,
-          marketInsights: data.marketInsights || '',
-          completionStatus: data.completionStatus || 'N/A',
-          pricePerSqft: data.pricePerSqft || data.estimatedValue.pricePerSqFt || 0,
+          estimatedValue: { 
+            low: band.low || Math.round(data.estimatedPrice * 0.9), 
+            mid: band.mid || data.estimatedPrice, 
+            high: band.high || Math.round(data.estimatedPrice * 1.1) 
+          },
+          marketInsights: data.prediction || data.marketPositionReason || '',
+          completionStatus: data.constructionProgress || data.marketPosition || 'N/A',
+          pricePerSqft: data.pricePerSqFt || 0,
         });
-        if (!form.price && data.estimatedValue.mid) {
-          setForm(f => ({ ...f, price: Math.round(data.estimatedValue.mid).toString() }));
+        if (!form.price && (band.mid || data.estimatedPrice)) {
+          setForm(f => ({ ...f, price: Math.round(band.mid || data.estimatedPrice).toString() }));
         }
         toast.success('AI Price prediction complete!');
       } else {
@@ -344,7 +347,7 @@ const ListingPortalSubmit = () => {
       console.error('Price predictor error:', err);
       // Fallback: client-side basic estimate
       const size = form.area_sqft ? parseFloat(form.area_sqft) : 1000;
-      const avgPricePerSqft = 1200; // Dubai average fallback
+      const avgPricePerSqft = 1200;
       const mid = Math.round(size * avgPricePerSqft);
       setPricePrediction({
         estimatedValue: { low: Math.round(mid * 0.85), high: Math.round(mid * 1.15), mid },

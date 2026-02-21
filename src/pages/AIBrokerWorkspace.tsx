@@ -21,8 +21,8 @@ import {
   Clock,
   BarChart3,
   Send,
-  Loader2,
 } from "lucide-react";
+import { BrandedLoader } from "@/components/ui/BrandedLoader";
 import { AIBrokerLeadCard } from "@/components/ai-broker/AIBrokerLeadCard";
 import { AIBrokerConversations } from "@/components/ai-broker/AIBrokerConversations";
 import { AIBrokerActivityFeed } from "@/components/ai-broker/AIBrokerActivityFeed";
@@ -186,7 +186,7 @@ export default function AIBrokerWorkspace() {
   if (authLoading || loading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-gold" />
+        <BrandedLoader text="Loading..." className="min-h-screen" />
       </div>
     );
   }
