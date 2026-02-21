@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { SEOHead } from "@/components/SEOHead";
+import { BrandedLoaderInline } from "@/components/ui/BrandedLoader";
 import { FeedbackPrompt } from "@/components/ui/FeedbackPrompt";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -80,6 +81,7 @@ const SUPPORT_PRIORITY_LEVELS = [
 
 const SupportTicketForm = () => {
   const { toast } = useToast();
+  const formTopRef = useRef<HTMLDivElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
@@ -154,6 +156,10 @@ const SupportTicketForm = () => {
         description: `Your support ticket #${ticketNumber} has been created. We'll get back to you within 24 hours.`,
       });
       setShowFeedback(true);
+      // Auto-scroll to the top of the form so confirmation is visible
+      setTimeout(() => {
+        formTopRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
 
       setFieldErrors({});
       setFormData({
@@ -179,6 +185,7 @@ const SupportTicketForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      <div ref={formTopRef} />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <Label htmlFor="fullName" className="text-black">
@@ -305,11 +312,14 @@ const SupportTicketForm = () => {
             "0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.9)",
         }}
       >
-        <Send className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
+        {isSubmitting ? (
+          <BrandedLoaderInline size={20} className="mr-2" />
+        ) : (
+          <Send className="w-4 h-4 text-gold group-hover:text-black transition-colors mr-1" />
+        )}
         <span className="text-black group-hover:text-gold transition-colors">
-          {isSubmitting ? "Submitting..." : "Submit Support"}
+          {isSubmitting ? "Submitting..." : "Submit Support Ticket"}
         </span>
-        <span className="text-gold group-hover:text-black transition-colors">Ticket</span>
       </button>
       {showFeedback && (
         <FeedbackPrompt 
@@ -1013,10 +1023,10 @@ const CustomerHappiness = () => {
         <section className="py-16">
           <div className="container mx-auto px-4">
             {/* Background Card Wrapper for Premium Look */}
-            <Card className="max-w-4xl mx-auto bg-zinc-900/80 border-2 border-gold/30 backdrop-blur-sm shadow-2xl">
-              <CardContent className="p-6 md:p-8">
+            <Card className="max-w-4xl mx-auto bg-gradient-to-br from-zinc-900/90 to-zinc-950/90 border-2 border-gold/30 backdrop-blur-sm shadow-[0_20px_60px_rgba(200,167,102,0.15)] overflow-hidden">
+              <CardContent className="p-4 md:p-8">
                 <Tabs defaultValue="support">
-                  <TabsList className="grid grid-cols-2 md:grid-cols-4 gap-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 p-2 rounded-xl mb-8 h-auto">
+                  <TabsList className="grid grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 p-1.5 md:p-2 rounded-xl mb-8 h-auto">
                     <TabsTrigger value="support" className="flex items-center gap-2 data-[state=active]:bg-white/80 data-[state=active]:text-black data-[state=active]:border-gold data-[state=active]:border-2 text-black py-3">
                       <TicketCheck className="w-4 h-4" />
                       <span className="hidden sm:inline">Support</span> Ticket
@@ -1036,7 +1046,7 @@ const CustomerHappiness = () => {
                   </TabsList>
 
               <TabsContent value="support">
-                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 overflow-hidden">
                   <CardHeader>
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center border border-blue-500/40">
@@ -1057,7 +1067,7 @@ const CustomerHappiness = () => {
               </TabsContent>
 
               <TabsContent value="feedback">
-                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 overflow-hidden">
                   <CardHeader>
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 bg-pink-500/20 rounded-xl flex items-center justify-center border border-pink-500/40">
@@ -1078,7 +1088,7 @@ const CustomerHappiness = () => {
               </TabsContent>
 
               <TabsContent value="issue">
-                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 overflow-hidden">
                   <CardHeader>
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center border border-red-500/40">
@@ -1099,7 +1109,7 @@ const CustomerHappiness = () => {
               </TabsContent>
 
               <TabsContent value="idea">
-                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 overflow-hidden">
                   <CardHeader>
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center border border-purple-500/40">
