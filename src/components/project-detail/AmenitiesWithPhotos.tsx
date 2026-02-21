@@ -151,26 +151,27 @@ export default function AmenitiesWithPhotos({ amenities, className = "" }: Ameni
               key={idx}
               className="group flex flex-col items-center gap-0 rounded-xl border border-gold/20 bg-card hover:border-gold/40 hover:bg-gold/5 transition-all text-center overflow-hidden"
             >
-              {photoUrl ? (
-                <div className="w-full h-24 overflow-hidden relative">
-                  <img 
-                    src={photoUrl} 
-                    alt={amenity}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                  <div className="absolute bottom-1.5 right-1.5 w-7 h-7 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
-                    <Icon className="w-3.5 h-3.5 text-gold" />
+              {/* Fixed-height top area for uniform alignment */}
+              <div className="w-full h-24 overflow-hidden relative flex items-center justify-center">
+                {photoUrl ? (
+                  <>
+                    <img 
+                      src={photoUrl} 
+                      alt={amenity}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                    <div className="absolute bottom-1.5 right-1.5 w-7 h-7 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
+                      <Icon className="w-3.5 h-3.5 text-gold" />
+                    </div>
+                  </>
+                ) : (
+                  <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+                    <Icon className="w-6 h-6 text-gold" />
                   </div>
-                </div>
-              ) : (
-                <div className="w-full pt-4 pb-2 flex justify-center">
-                  <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center group-hover:bg-gold/20 transition-colors">
-                    <Icon className="w-5 h-5 text-gold" />
-                  </div>
-                </div>
-              )}
+                )}
+              </div>
               <div className="px-2 py-2.5">
                 <span className="text-xs text-muted-foreground leading-tight">
                   {amenity}

@@ -207,15 +207,15 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
 
       {/* Fullscreen Dialog */}
       <Dialog open={isFullscreen} onOpenChange={setIsFullscreen}>
-        <DialogContent className="max-w-[95vw] max-h-[calc(100vh-4rem)] p-0 bg-background border-none top-[52%]" aria-describedby={undefined}>
+        <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 bg-black/95 backdrop-blur-xl border-none top-[50%]" aria-describedby={undefined}>
           <VisuallyHidden.Root>
             <DialogTitle>Image Gallery - {projectName}</DialogTitle>
           </VisuallyHidden.Root>
-          <div className="relative w-full h-[calc(90vh-2rem)] flex items-center justify-center bg-gradient-to-br from-muted via-background to-muted/80">
+          <div className="relative w-full h-[90vh] flex items-center justify-center bg-black/95">
             <img
               src={images[currentIndex].image_url}
               alt={images[currentIndex].alt_text || "Project image"}
-              className="w-full h-full max-w-none max-h-none object-cover"
+              className="max-w-full max-h-full object-contain"
             />
             
             {/* Close button */}

@@ -9,6 +9,7 @@ export default function RouteResume() {
   const location = useLocation();
   const navigate = useNavigate();
   const hasCheckedRef = useRef(false);
+  const initialPathRef = useRef(location.pathname);
 
   // Persist last visited route.
   // Important: On initial load, if the preview incorrectly lands on "/", don't overwrite the previous route.
@@ -17,7 +18,13 @@ export default function RouteResume() {
       const route = `${location.pathname}${location.search}${location.hash}`;
       const existing = sessionStorage.getItem("last-route");
 
+      // Don't overwrite a real deep route with "/" on initial mount
       if (!hasCheckedRef.current && route === "/" && existing && existing !== "/") {
+        return;
+      }
+
+      // Never save auth-redirect pages as last-route
+      if (route.startsWith("/auth") || route === "/403") {
         return;
       }
 

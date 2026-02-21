@@ -41,14 +41,14 @@ export default function QuickActionsGrid() {
             key={action.path}
             onClick={() => navigate(action.path)}
             className={cn(
-              "flex flex-col items-center justify-center gap-2 p-4 rounded-xl",
+              "flex flex-col items-center justify-center gap-2 p-4 rounded-xl min-w-0 overflow-hidden",
               "bg-[#FDFBF7] border border-[#C9A84C]/20",
               "hover:border-[#C9A84C]/50 hover:bg-[#C9A84C]/10 hover:-translate-y-0.5",
               "transition-all duration-200 cursor-pointer group"
             )}
           >
-            <action.icon className={cn("h-6 w-6", action.color, "group-hover:text-[#C9A84C] transition-colors")} />
-            <span className="text-xs text-zinc-600 group-hover:text-black transition-colors text-center whitespace-nowrap">
+            <action.icon className={cn("h-6 w-6 flex-shrink-0", action.color, "group-hover:text-[#C9A84C] transition-colors")} />
+            <span className="text-xs text-zinc-600 group-hover:text-black transition-colors text-center truncate w-full">
               {action.label}
             </span>
           </button>

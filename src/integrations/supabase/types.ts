@@ -15199,6 +15199,7 @@ export type Database = {
           provident_enrichments: Json | null
           reelly_developer_id: number | null
           reelly_id: number | null
+          reelly_raw_data: Json | null
           rental_yield_estimate: number | null
           roi_estimate: number | null
           sale_status: string | null
@@ -15222,6 +15223,7 @@ export type Database = {
           usp_headline: string | null
           usp_image_url: string | null
           video_url: string | null
+          video_urls: Json | null
           views: string[] | null
           virtual_tour_url: string | null
         }
@@ -15283,6 +15285,7 @@ export type Database = {
           provident_enrichments?: Json | null
           reelly_developer_id?: number | null
           reelly_id?: number | null
+          reelly_raw_data?: Json | null
           rental_yield_estimate?: number | null
           roi_estimate?: number | null
           sale_status?: string | null
@@ -15306,6 +15309,7 @@ export type Database = {
           usp_headline?: string | null
           usp_image_url?: string | null
           video_url?: string | null
+          video_urls?: Json | null
           views?: string[] | null
           virtual_tour_url?: string | null
         }
@@ -15367,6 +15371,7 @@ export type Database = {
           provident_enrichments?: Json | null
           reelly_developer_id?: number | null
           reelly_id?: number | null
+          reelly_raw_data?: Json | null
           rental_yield_estimate?: number | null
           roi_estimate?: number | null
           sale_status?: string | null
@@ -15390,6 +15395,7 @@ export type Database = {
           usp_headline?: string | null
           usp_image_url?: string | null
           video_url?: string | null
+          video_urls?: Json | null
           views?: string[] | null
           virtual_tour_url?: string | null
         }
