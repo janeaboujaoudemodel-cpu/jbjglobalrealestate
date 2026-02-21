@@ -546,14 +546,14 @@ const ListingPortalSubmit = () => {
                       {/* Category Selection */}
                       <div className="bg-white/70 border-2 border-gold/20 rounded-2xl p-6">
                         <h2 className="text-black font-semibold mb-4">What type of listing?</h2>
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        <div className="flex flex-wrap justify-center gap-3">
                           {listingCategories.map(cat => {
                             const Icon = cat.icon;
                             return (
                               <button
                                 key={cat.id}
                                 onClick={() => setListingCategory(cat.id)}
-                                className={`p-4 rounded-xl border-2 text-left transition-all ${
+                                className={`p-4 rounded-xl border-2 text-left transition-all w-[calc(33.333%-0.5rem)] min-w-[160px] ${
                                   listingCategory === cat.id
                                     ? 'bg-gold/10 border-gold/50 text-black'
                                     : 'bg-white/60 border-gold/15 text-zinc-600 hover:border-gold/30'
