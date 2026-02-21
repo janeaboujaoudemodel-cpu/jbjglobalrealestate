@@ -1,7 +1,7 @@
 import React from 'react';
 import { Building2, Eye } from 'lucide-react';
 import menuDubaiSkyline from '@/assets/menu-dubai-skyline.jpg';
-import burjAlArabVideo from '@/assets/videos/burj-al-arab-aerial.mp4';
+import dubaiLandmarksVideo from '@/assets/videos/dubai-landmarks-hero.mp4';
 import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuCard, MegaMenuCTAButton } from '@/components/header/mega-menu-primitives';
 import { useDevelopers } from '@/hooks/useProjects';
 
@@ -26,7 +26,7 @@ const MegaMenuDevelopers = React.forwardRef<HTMLDivElement, MegaMenuDevelopersPr
               to="/developers"
               onClick={onClose}
               image={menuDubaiSkyline}
-              video={burjAlArabVideo}
+              video={dubaiLandmarksVideo}
               kicker="DEVELOPERS"
               title="Top Developers"
               description="Dubai's most iconic developers"

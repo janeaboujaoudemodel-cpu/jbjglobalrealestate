@@ -8,7 +8,6 @@ import { motion, AnimatePresence } from "framer-motion";
 
 // Use URL references instead of static imports to avoid blocking the bundle
 const burjKhalifaVideo = new URL("@/assets/videos/burj-khalifa-day-to-night.mp4", import.meta.url).href;
-const burjAlArabVideo = new URL("@/assets/videos/burj-al-arab-aerial.mp4", import.meta.url).href;
 
 interface VideoScene {
   id: string;
@@ -18,7 +17,6 @@ interface VideoScene {
 
 const VIDEO_SCENES: VideoScene[] = [
   { id: "downtown", video: burjKhalifaVideo, label: "Downtown Dubai" },
-  { id: "burj-al-arab", video: burjAlArabVideo, label: "Burj Al Arab" },
 ];
 
 const SCENE_DURATION = 8000;

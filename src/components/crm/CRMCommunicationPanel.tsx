@@ -127,6 +127,7 @@ const CRMCommunicationPanel = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   // Current user (would come from auth context in production)
   const currentUser = { id: 'current', name: 'You' };
@@ -449,7 +450,19 @@ const CRMCommunicationPanel = () => {
                 {/* Message Input */}
                 <div className="p-2 border-t border-zinc-200">
                   <div className="flex gap-2">
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-500 hover:text-zinc-800">
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          toast.success(`File "${file.name}" selected (${(file.size / 1024).toFixed(1)} KB)`);
+                        }
+                        e.target.value = "";
+                      }}
+                    />
+                    <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-500 hover:text-zinc-800" onClick={() => fileInputRef.current?.click()}>
                       <Paperclip className="h-4 w-4" />
                     </Button>
                     <Input

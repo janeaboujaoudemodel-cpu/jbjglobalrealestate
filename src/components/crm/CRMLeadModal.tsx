@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   Dialog,
   DialogContent,
@@ -16,8 +16,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { COUNTRIES, LANGUAGES_WITH_FLAGS, ALL_NATIONALITIES, getCitiesForCountry } from "@/data/countries";
 
 interface CRMLeadModalProps {
   open: boolean;
@@ -25,18 +41,6 @@ interface CRMLeadModalProps {
   onSuccess: () => void;
   userId: string;
 }
-
-const LANGUAGES = [
-  { value: "en", label: "English" },
-  { value: "ar", label: "Arabic" },
-  { value: "ru", label: "Russian" },
-  { value: "zh", label: "Chinese" },
-  { value: "hi", label: "Hindi" },
-  { value: "fr", label: "French" },
-  { value: "de", label: "German" },
-  { value: "es", label: "Spanish" },
-  { value: "fa", label: "Farsi" },
-];
 
 const AGE_RANGES = [
   "18-25", "25-30", "30-40", "40-50", "50-60", "60+"
@@ -58,6 +62,14 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
     source: "manual",
     tags: ""
   });
+
+  // Popover open states
+  const [nationalityOpen, setNationalityOpen] = useState(false);
+  const [languageOpen, setLanguageOpen] = useState(false);
+  const [countryOpen, setCountryOpen] = useState(false);
+  const [cityOpen, setCityOpen] = useState(false);
+
+  const cities = useMemo(() => getCitiesForCountry(formData.current_location_country), [formData.current_location_country]);
 
   const normalizePhone = (phone: string): string | null => {
     if (!phone) return null;
@@ -133,7 +145,6 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
       onSuccess();
       onClose();
       
-      // Reset form
       setFormData({
         full_name: "",
         email: "",
@@ -158,7 +169,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-lg mt-8 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+      <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
         <DialogHeader className="pt-2">
           <DialogTitle className="text-black">Add New Lead</DialogTitle>
           <DialogDescription className="text-zinc-600">
@@ -166,98 +177,201 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Required Fields */}
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="full_name">Full Name *</Label>
-              <Input
-                id="full_name"
-                value={formData.full_name}
-                onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-                placeholder="John Doe"
-                required
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  placeholder="john@example.com"
-                />
-              </div>
-              <div>
-                <Label htmlFor="phone">Phone (E.164)</Label>
-                <Input
-                  id="phone"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  placeholder="+971501234567"
-                />
-              </div>
-            </div>
+        <form onSubmit={handleSubmit} className="space-y-3">
+          {/* Full Name */}
+          <div>
+            <Label htmlFor="full_name">Full Name *</Label>
+            <Input
+              id="full_name"
+              value={formData.full_name}
+              onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
+              placeholder="John Doe"
+              required
+            />
           </div>
 
-          {/* Demographics */}
-          <div className="grid grid-cols-2 gap-4">
+          {/* Email & Phone */}
+          <div className="grid grid-cols-2 gap-3">
             <div>
-              <Label htmlFor="nationality">Nationality</Label>
+              <Label htmlFor="email">Email</Label>
               <Input
-                id="nationality"
-                value={formData.nationality}
-                onChange={(e) => setFormData({ ...formData, nationality: e.target.value })}
-                placeholder="British"
+                id="email"
+                type="email"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                placeholder="john@example.com"
               />
             </div>
             <div>
-              <Label htmlFor="language">Preferred Language</Label>
-              <Select
-                value={formData.preferred_language}
-                onValueChange={(value) => setFormData({ ...formData, preferred_language: value })}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {LANGUAGES.map(lang => (
-                    <SelectItem key={lang.value} value={lang.value}>
-                      {lang.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          {/* Location */}
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="country">Country</Label>
+              <Label htmlFor="phone">Phone (E.164)</Label>
               <Input
-                id="country"
-                value={formData.current_location_country}
-                onChange={(e) => setFormData({ ...formData, current_location_country: e.target.value })}
-                placeholder="UAE"
-              />
-            </div>
-            <div>
-              <Label htmlFor="city">City</Label>
-              <Input
-                id="city"
-                value={formData.current_location_city}
-                onChange={(e) => setFormData({ ...formData, current_location_city: e.target.value })}
-                placeholder="Dubai"
+                id="phone"
+                value={formData.phone}
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                placeholder="+971501234567"
               />
             </div>
           </div>
 
-          {/* Optional Fields */}
-          <div className="grid grid-cols-2 gap-4">
+          {/* Nationality & Language - Searchable with flags */}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <Label>Nationality</Label>
+              <Popover open={nationalityOpen} onOpenChange={setNationalityOpen}>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" role="combobox" className="w-full justify-between h-10 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold text-black hover:bg-gold/10">
+                    {formData.nationality
+                      ? `${ALL_NATIONALITIES.find(n => n.nationality === formData.nationality)?.flag || ''} ${formData.nationality}`
+                      : "Select nationality"}
+                    <ChevronsUpDown className="ml-1 h-3.5 w-3.5 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[240px] p-0 z-[200] bg-white border-gold/40" align="start">
+                  <Command>
+                    <CommandInput placeholder="Search nationality..." className="text-black" />
+                    <CommandList>
+                      <CommandEmpty>No nationality found.</CommandEmpty>
+                      <CommandGroup>
+                        {ALL_NATIONALITIES.map((n) => (
+                          <CommandItem
+                            key={n.nationality}
+                            value={n.nationality}
+                            onSelect={() => {
+                              setFormData({ ...formData, nationality: n.nationality });
+                              setNationalityOpen(false);
+                            }}
+                            className="text-black"
+                          >
+                            <Check className={cn("mr-2 h-3.5 w-3.5", formData.nationality === n.nationality ? "opacity-100" : "opacity-0")} />
+                            <span className="mr-2">{n.flag}</span>
+                            {n.nationality}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+            </div>
+            <div>
+              <Label>Preferred Language</Label>
+              <Popover open={languageOpen} onOpenChange={setLanguageOpen}>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" role="combobox" className="w-full justify-between h-10 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold text-black hover:bg-gold/10">
+                    {formData.preferred_language
+                      ? `${LANGUAGES_WITH_FLAGS.find(l => l.code === formData.preferred_language)?.flag || ''} ${LANGUAGES_WITH_FLAGS.find(l => l.code === formData.preferred_language)?.name || ''}`
+                      : "Select language"}
+                    <ChevronsUpDown className="ml-1 h-3.5 w-3.5 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[240px] p-0 z-[200] bg-white border-gold/40" align="start">
+                  <Command>
+                    <CommandInput placeholder="Search language..." className="text-black" />
+                    <CommandList>
+                      <CommandEmpty>No language found.</CommandEmpty>
+                      <CommandGroup>
+                        {LANGUAGES_WITH_FLAGS.map((l) => (
+                          <CommandItem
+                            key={l.code}
+                            value={l.name}
+                            onSelect={() => {
+                              setFormData({ ...formData, preferred_language: l.code });
+                              setLanguageOpen(false);
+                            }}
+                            className="text-black"
+                          >
+                            <Check className={cn("mr-2 h-3.5 w-3.5", formData.preferred_language === l.code ? "opacity-100" : "opacity-0")} />
+                            <span className="mr-2">{l.flag}</span>
+                            {l.name}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+            </div>
+          </div>
+
+          {/* Country & City - Searchable with flags */}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <Label>Country</Label>
+              <Popover open={countryOpen} onOpenChange={setCountryOpen}>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" role="combobox" className="w-full justify-between h-10 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold text-black hover:bg-gold/10">
+                    {formData.current_location_country
+                      ? `${COUNTRIES.find(c => c.name === formData.current_location_country)?.flag || ''} ${formData.current_location_country}`
+                      : "Select country"}
+                    <ChevronsUpDown className="ml-1 h-3.5 w-3.5 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[260px] p-0 z-[200] bg-white border-gold/40" align="start">
+                  <Command>
+                    <CommandInput placeholder="Search country..." className="text-black" />
+                    <CommandList>
+                      <CommandEmpty>No country found.</CommandEmpty>
+                      <CommandGroup>
+                        {COUNTRIES.map((c) => (
+                          <CommandItem
+                            key={c.code}
+                            value={c.name}
+                            onSelect={() => {
+                              setFormData({ ...formData, current_location_country: c.name, current_location_city: "" });
+                              setCountryOpen(false);
+                            }}
+                            className="text-black"
+                          >
+                            <Check className={cn("mr-2 h-3.5 w-3.5", formData.current_location_country === c.name ? "opacity-100" : "opacity-0")} />
+                            <span className="mr-2">{c.flag}</span>
+                            {c.name}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+            </div>
+            <div>
+              <Label>City</Label>
+              <Popover open={cityOpen} onOpenChange={setCityOpen}>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" role="combobox" className="w-full justify-between h-10 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold text-black hover:bg-gold/10">
+                    {formData.current_location_city || "Select city"}
+                    <ChevronsUpDown className="ml-1 h-3.5 w-3.5 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[240px] p-0 z-[200] bg-white border-gold/40" align="start">
+                  <Command>
+                    <CommandInput placeholder="Search city..." className="text-black" />
+                    <CommandList>
+                      <CommandEmpty>No city found. Type to add custom.</CommandEmpty>
+                      <CommandGroup>
+                        {cities.map((city) => (
+                          <CommandItem
+                            key={city}
+                            value={city}
+                            onSelect={() => {
+                              setFormData({ ...formData, current_location_city: city });
+                              setCityOpen(false);
+                            }}
+                            className="text-black"
+                          >
+                            <Check className={cn("mr-2 h-3.5 w-3.5", formData.current_location_city === city ? "opacity-100" : "opacity-0")} />
+                            {city}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+            </div>
+          </div>
+
+          {/* Gender & Age Range */}
+          <div className="grid grid-cols-2 gap-3">
             <div>
               <Label htmlFor="gender">Gender</Label>
               <Select
@@ -267,7 +381,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                 <SelectTrigger>
                   <SelectValue placeholder="Select gender" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white z-[200]">
                   <SelectItem value="male">Male</SelectItem>
                   <SelectItem value="female">Female</SelectItem>
                   <SelectItem value="other">Other</SelectItem>
@@ -283,7 +397,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                 <SelectTrigger>
                   <SelectValue placeholder="Select age range" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white z-[200]">
                   {AGE_RANGES.map(range => (
                     <SelectItem key={range} value={range}>
                       {range}
@@ -296,7 +410,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
 
           {/* Birthday */}
           <div>
-            <Label htmlFor="birthday" className="flex items-center gap-2">
+            <Label htmlFor="birthday" className="flex items-center gap-2 mb-1.5">
               Birthday (Optional)
               <span className="text-xs text-muted-foreground">🎁 For birthday offers</span>
             </Label>
@@ -309,7 +423,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
           </div>
 
           {/* Source and Tags */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-3">
             <div>
               <Label htmlFor="source">Source</Label>
               <Input
@@ -330,7 +444,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
             </div>
           </div>
 
-          <div className="flex gap-3 pt-4">
+          <div className="flex gap-3 pt-3">
             <Button type="button" variant="outline" onClick={onClose} className="flex-1">
               Cancel
             </Button>

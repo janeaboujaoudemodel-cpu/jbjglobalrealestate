@@ -70,7 +70,8 @@ export default function WhyDubaiCapitalSection() {
               loop
               muted
               playsInline
-              preload="none"
+              preload={currentScene === 0 ? "auto" : "none"}
+              poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3Crect fill='%23000'/%3E%3C/svg%3E"
             >
               <source src={scenes[currentScene].src} type="video/mp4" />
             </video>
