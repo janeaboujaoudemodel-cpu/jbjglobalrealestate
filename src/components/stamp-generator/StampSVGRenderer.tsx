@@ -37,13 +37,19 @@ export function StampSVGRenderer({
   className = '',
   size = 240,
 }: Props) {
+  // Primary: outer borders & bands
   let tinted = svgSource.replace(/#1a2744/gi, tintColor);
+  // Secondary: inner rings & decorative accents
   if (secondaryColor) {
     tinted = tinted.replace(/#2a3a5c/gi, secondaryColor);
   }
+  // Accent: monogram disc & center art (dedicated hex token)
   if (accentColor) {
+    tinted = tinted.replace(/#8b6914/gi, accentColor);
+    // Fallback: also tint dominant-baseline="central" fills
     tinted = tinted.replace(/(dominant-baseline="central"[^>]*fill=")[^"]+(")/g, `$1${accentColor}$2`);
   } else if (secondaryColor) {
+    tinted = tinted.replace(/#8b6914/gi, secondaryColor);
     tinted = tinted.replace(/(dominant-baseline="central"[^>]*fill=")[^"]+(")/g, `$1${secondaryColor}$2`);
   }
 

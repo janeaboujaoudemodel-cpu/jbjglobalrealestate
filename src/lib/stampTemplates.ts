@@ -130,7 +130,10 @@ function starCluster(cx: number, cy: number, color: string) {
 const BLOCKED_RE = /\b(government|ministry|federal|municipality|دائرة|حكومة|وزارة|بلدية|هيئة الحكومة)\b/i;
 
 export function generateStampConcepts(project: StampProject): StampDesignConcept[] {
-  const COLOR = '#1a2744';
+  const PRIMARY = '#1a2744';    // outer borders, filled bands
+  const SECONDARY = '#2a3a5c';  // inner rings, decorative accents
+  const ACCENT = '#8b6914';     // monogram disc, center art, dividers
+  const COLOR = PRIMARY;        // backward compat alias
   const W = 320, H = 320;
   const cx = W / 2, cy = H / 2;
   const R = 116;
@@ -171,15 +174,15 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
     const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <radialGradient id="t1bg" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="${COLOR}" stop-opacity="0.04"/>
-          <stop offset="100%" stop-color="${COLOR}" stop-opacity="0.10"/>
+          <stop offset="0%" stop-color="${PRIMARY}" stop-opacity="0.04"/>
+          <stop offset="100%" stop-color="${PRIMARY}" stop-opacity="0.10"/>
         </radialGradient>
       </defs>
       <!-- Filled outer ring band -->
-      <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="${COLOR}"/>
+      <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="${PRIMARY}"/>
       <circle cx="${cx}" cy="${cy}" r="${bandR}" fill="#ffffff"/>
       <!-- Inner accent ring -->
-      <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="#2a3a5c" stroke-width="1.2"/>
+      <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${SECONDARY}" stroke-width="1.2"/>
       <!-- Subtle center fill -->
       <circle cx="${cx}" cy="${cy}" r="${innerR - 4}" fill="url(#t1bg)"/>
       <!-- Cardinal star ornaments on band -->
@@ -193,13 +196,13 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
       ${ringText('t1top', cx, cy, ringTextR, `✦  ${name}  ✦`, font, 8.5, '#ffffff', '25%', 1.6)}
       ${bottomArcText('t1bot', cx, cy, bottomArcR, `✦  ${city}  ✦`, font, 8, '#ffffff', 2)}
       ${hasMono
-        ? `${monogram(cx, cy - 8, mono, font, 42, COLOR, COLOR)}
-           ${divider(cx, cy + 28, COLOR, 26)}
-           <text x="${cx}" y="${cy + 42}" text-anchor="middle" font-family="${font}" font-size="7.5" fill="${COLOR}" letter-spacing="3.5">OFFICIAL STAMP</text>`
-        : `${wrapText(name, cx, cy - 8, font, nameFontSize, COLOR, 1.5)}
-           ${divider(cx, cy + 18, COLOR, 28)}
-           <text x="${cx}" y="${cy + 30}" text-anchor="middle" font-family="${font}" font-size="7.5" fill="${COLOR}" letter-spacing="3.5">OFFICIAL STAMP</text>
-           ${regNo && project.density >= 3 ? `<text x="${cx}" y="${cy + 44}" text-anchor="middle" font-family="${font}" font-size="6.5" fill="${COLOR}">${regNo}</text>` : ''}`
+        ? `${monogram(cx, cy - 8, mono, font, 42, ACCENT, ACCENT)}
+           ${divider(cx, cy + 28, ACCENT, 26)}
+           <text x="${cx}" y="${cy + 42}" text-anchor="middle" font-family="${font}" font-size="7.5" fill="${SECONDARY}" letter-spacing="3.5">OFFICIAL STAMP</text>`
+        : `${wrapText(name, cx, cy - 8, font, nameFontSize, PRIMARY, 1.5)}
+           ${divider(cx, cy + 18, ACCENT, 28)}
+           <text x="${cx}" y="${cy + 30}" text-anchor="middle" font-family="${font}" font-size="7.5" fill="${SECONDARY}" letter-spacing="3.5">OFFICIAL STAMP</text>
+           ${regNo && project.density >= 3 ? `<text x="${cx}" y="${cy + 44}" text-anchor="middle" font-family="${font}" font-size="6.5" fill="${SECONDARY}">${regNo}</text>` : ''}`
       }
     </svg>`;
     concepts.push({ id: uid(), templateKey: 'classic-double', label: 'Classic Official', tags: ['classic', 'round', 'professional', 'official'], svgSource: svg });
@@ -252,20 +255,20 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
     const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <radialGradient id="t2bg" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="${COLOR}" stop-opacity="0.03"/>
-          <stop offset="100%" stop-color="${COLOR}" stop-opacity="0.08"/>
+          <stop offset="0%" stop-color="${PRIMARY}" stop-opacity="0.03"/>
+          <stop offset="100%" stop-color="${PRIMARY}" stop-opacity="0.08"/>
         </radialGradient>
         <clipPath id="t2clip"><circle cx="${cx}" cy="${cy}" r="${safeR}"/></clipPath>
       </defs>
-      <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#t2bg)" stroke="${COLOR}" stroke-width="2"/>
-      <circle cx="${cx}" cy="${cy}" r="${r - 6}" fill="none" stroke="${COLOR}" stroke-width="0.5" stroke-dasharray="2,3"/>
+      <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#t2bg)" stroke="${PRIMARY}" stroke-width="2"/>
+      <circle cx="${cx}" cy="${cy}" r="${r - 6}" fill="none" stroke="${SECONDARY}" stroke-width="0.5" stroke-dasharray="2,3"/>
       <g clip-path="url(#t2clip)">
-        ${rulePad > 4 ? hRule(cx - rulePad, cx + rulePad, ruleTopY, COLOR, 1.2) : ''}
-        ${rulePad2 > 4 ? hRule(cx - rulePad2, cx + rulePad2, ruleTopY2, COLOR, 0.4) : ''}
-        ${hasMono ? monogram(cx, cy - safeR * 0.5, mono, font, 26, COLOR) : ''}
-        ${wrapText(name, cx, nameY, font, nameFontSize, COLOR, 2)}
-        <text x="${cx}" y="${cityY}" text-anchor="middle" dominant-baseline="middle" font-family="${font}" font-size="${cityFontSize}" fill="${COLOR}" letter-spacing="3.5">${city}</text>
-        ${regNo && project.density >= 3 && regY < cy + safeR - 2 ? `<text x="${cx}" y="${regY}" text-anchor="middle" font-family="${font}" font-size="6" fill="${COLOR}">${regNo}</text>` : ''}
+        ${rulePad > 4 ? hRule(cx - rulePad, cx + rulePad, ruleTopY, SECONDARY, 1.2) : ''}
+        ${rulePad2 > 4 ? hRule(cx - rulePad2, cx + rulePad2, ruleTopY2, SECONDARY, 0.4) : ''}
+        ${hasMono ? monogram(cx, cy - safeR * 0.5, mono, font, 26, ACCENT) : ''}
+        ${wrapText(name, cx, nameY, font, nameFontSize, PRIMARY, 2)}
+        <text x="${cx}" y="${cityY}" text-anchor="middle" dominant-baseline="middle" font-family="${font}" font-size="${cityFontSize}" fill="${SECONDARY}" letter-spacing="3.5">${city}</text>
+        ${regNo && project.density >= 3 && regY < cy + safeR - 2 ? `<text x="${cx}" y="${regY}" text-anchor="middle" font-family="${font}" font-size="6" fill="${SECONDARY}">${regNo}</text>` : ''}
       </g>
     </svg>`;
     concepts.push({ id: uid(), templateKey: 'modern-minimal', label: 'Modern Minimal', tags: ['modern', 'clean', 'minimal'], svgSource: svg });
@@ -281,23 +284,23 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
 
     const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
       <!-- Outer filled band -->
-      <circle cx="${cx}" cy="${cy}" r="${r1}" fill="${COLOR}"/>
+      <circle cx="${cx}" cy="${cy}" r="${r1}" fill="${PRIMARY}"/>
       <circle cx="${cx}" cy="${cy}" r="${r2}" fill="#ffffff"/>
       <!-- Accent rings -->
-      <circle cx="${cx}" cy="${cy}" r="${r3}" fill="none" stroke="#2a3a5c" stroke-width="1.8"/>
-      <circle cx="${cx}" cy="${cy}" r="${r4}" fill="none" stroke="#2a3a5c" stroke-width="0.5"/>
+      <circle cx="${cx}" cy="${cy}" r="${r3}" fill="none" stroke="${SECONDARY}" stroke-width="1.8"/>
+      <circle cx="${cx}" cy="${cy}" r="${r4}" fill="none" stroke="${SECONDARY}" stroke-width="0.5"/>
       <!-- Ring text in band -->
       ${ringText('t3ring', cx, cy, ringR, `★  ${name}  ★  ${city}  ★`, font, 8, '#ffffff', '50%', 1.5)}
       <!-- Top & bottom ornament dots on outer ring -->
       <circle cx="${cx}" cy="${cy - r1 + 4}" r="2" fill="#ffffff"/>
       <circle cx="${cx}" cy="${cy + r1 - 4}" r="2" fill="#ffffff"/>
       ${hasMono
-        ? monogram(cx, cy, mono, font, 50, COLOR, COLOR)
-        : wrapText(name, cx, cy - 6, font, nameFontSize, COLOR, 1)
+        ? monogram(cx, cy, mono, font, 50, ACCENT, ACCENT)
+        : wrapText(name, cx, cy - 6, font, nameFontSize, PRIMARY, 1)
       }
-      ${!hasMono ? `<text x="${cx}" y="${cy + 18}" text-anchor="middle" font-family="${font}" font-size="7.5" fill="${COLOR}" letter-spacing="3">${city}</text>` : ''}
-      ${divider(cx, cy + (hasMono ? 34 : 32), COLOR, 26)}
-      <text x="${cx}" y="${cy + 46}" text-anchor="middle" font-family="${font}" font-size="6.5" fill="${COLOR}" letter-spacing="5">EST. ${estYear}</text>
+      ${!hasMono ? `<text x="${cx}" y="${cy + 18}" text-anchor="middle" font-family="${font}" font-size="7.5" fill="${SECONDARY}" letter-spacing="3">${city}</text>` : ''}
+      ${divider(cx, cy + (hasMono ? 34 : 32), ACCENT, 26)}
+      <text x="${cx}" y="${cy + 46}" text-anchor="middle" font-family="${font}" font-size="6.5" fill="${SECONDARY}" letter-spacing="5">EST. ${estYear}</text>
     </svg>`;
     concepts.push({ id: uid(), templateKey: 'luxury-ring', label: 'Luxury Triple Ring', tags: ['luxury', 'premium', 'ornate'], svgSource: svg });
   }
@@ -313,22 +316,22 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
 
     const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
       <!-- Outer border -->
-      <rect x="${x1}" y="${y1}" width="${rw * 2}" height="${rh * 2}" rx="3" fill="none" stroke="${COLOR}" stroke-width="3.2"/>
-      <rect x="${x1 + 5}" y="${y1 + 5}" width="${rw * 2 - 10}" height="${rh * 2 - 10}" rx="1" fill="none" stroke="${COLOR}" stroke-width="0.6"/>
+      <rect x="${x1}" y="${y1}" width="${rw * 2}" height="${rh * 2}" rx="3" fill="none" stroke="${PRIMARY}" stroke-width="3.2"/>
+      <rect x="${x1 + 5}" y="${y1 + 5}" width="${rw * 2 - 10}" height="${rh * 2 - 10}" rx="1" fill="none" stroke="${SECONDARY}" stroke-width="0.6"/>
       <!-- Filled header band -->
-      <rect x="${x1 + 5}" y="${y1 + 5}" width="${rw * 2 - 10}" height="${headerH}" rx="1" fill="${COLOR}"/>
+      <rect x="${x1 + 5}" y="${y1 + 5}" width="${rw * 2 - 10}" height="${headerH}" rx="1" fill="${PRIMARY}"/>
       <!-- Filled footer band -->
-      <rect x="${x1 + 5}" y="${y1 + rh * 2 - 5 - footerH}" width="${rw * 2 - 10}" height="${footerH}" rx="1" fill="${COLOR}"/>
+      <rect x="${x1 + 5}" y="${y1 + rh * 2 - 5 - footerH}" width="${rw * 2 - 10}" height="${footerH}" rx="1" fill="${ACCENT}"/>
       <!-- Corner ornament diamonds -->
-      ${cornerOrnament(x1 + 2, y1 + rh, 5, COLOR)}
-      ${cornerOrnament(x1 + rw * 2 - 2, y1 + rh, 5, COLOR)}
+      ${cornerOrnament(x1 + 2, y1 + rh, 5, ACCENT)}
+      ${cornerOrnament(x1 + rw * 2 - 2, y1 + rh, 5, ACCENT)}
       <!-- Header text (white) -->
       <text x="${cx}" y="${y1 + 5 + headerH / 2 + 1}" text-anchor="middle" dominant-baseline="middle" font-family="${font}" font-size="9" fill="#ffffff" letter-spacing="4">${city}</text>
       <!-- Footer text (white) -->
       <text x="${cx}" y="${y1 + rh * 2 - 5 - footerH / 2 + 1}" text-anchor="middle" dominant-baseline="middle" font-family="${font}" font-size="8.5" fill="#ffffff" letter-spacing="3">OFFICIAL STAMP</text>
       <!-- Center content -->
-      ${wrapText(name, cx, cy, font, nameFontSize, COLOR, 2)}
-      ${regNo && project.density >= 3 ? `<text x="${cx}" y="${cy + 22}" text-anchor="middle" font-family="${font}" font-size="6.5" fill="${COLOR}">${regNo}</text>` : ''}
+      ${wrapText(name, cx, cy, font, nameFontSize, PRIMARY, 2)}
+      ${regNo && project.density >= 3 ? `<text x="${cx}" y="${cy + 22}" text-anchor="middle" font-family="${font}" font-size="6.5" fill="${SECONDARY}">${regNo}</text>` : ''}
     </svg>`;
     concepts.push({ id: uid(), templateKey: 'bold-rectangle', label: 'Bold Corporate Rectangle', tags: ['bold', 'rectangle', 'corporate'], svgSource: svg });
   }
@@ -352,20 +355,20 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
 
     const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
       <!-- Filled vintage outer band -->
-      <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="${COLOR}"/>
+      <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="${PRIMARY}"/>
       <circle cx="${cx}" cy="${cy}" r="${bandR}" fill="#ffffff"/>
       <!-- Dot ring on band -->
       ${dots}
       <!-- Inner dashed ring for vintage feel -->
-      <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${COLOR}" stroke-width="0.8" stroke-dasharray="4,3"/>
+      <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${SECONDARY}" stroke-width="0.8" stroke-dasharray="4,3"/>
       <!-- Ring text in band -->
       ${ringText('t5ring', cx, cy, ringR, `⬥  ${name}  ⬥  ${city}  ⬥`, font, 8.2, '#ffffff', '50%', 1.6)}
       ${hasMono
-        ? monogram(cx, cy - 6, mono, font, 42, COLOR)
-        : wrapText(name, cx, cy - 6, font, nameFontSize, COLOR, 1.5)
+        ? monogram(cx, cy - 6, mono, font, 42, ACCENT)
+        : wrapText(name, cx, cy - 6, font, nameFontSize, PRIMARY, 1.5)
       }
-      ${divider(cx, cy + (hasMono ? 18 : 14), COLOR, 28)}
-      <text x="${cx}" y="${cy + (hasMono ? 30 : 26)}" text-anchor="middle" font-family="${font}" font-size="7.5" fill="${COLOR}" letter-spacing="4">SINCE ${estYear}</text>
+      ${divider(cx, cy + (hasMono ? 18 : 14), ACCENT, 28)}
+      <text x="${cx}" y="${cy + (hasMono ? 30 : 26)}" text-anchor="middle" font-family="${font}" font-size="7.5" fill="${SECONDARY}" letter-spacing="4">SINCE ${estYear}</text>
     </svg>`;
     concepts.push({ id: uid(), templateKey: 'vintage-ornate', label: 'Vintage Seal', tags: ['vintage', 'ornate', 'classic'], svgSource: svg });
   }
@@ -383,26 +386,26 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
     const arFontSize = autoFontSize(displayArabic, 13, 16);
 
     const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="${COLOR}"/>
+      <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="${PRIMARY}"/>
       <circle cx="${cx}" cy="${cy}" r="${bandR}" fill="#ffffff"/>
-      <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="#2a3a5c" stroke-width="0.9"/>
+      <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${SECONDARY}" stroke-width="0.9"/>
       <!-- Center divider with ornament -->
-      ${hRule(cx - 70, cx + 70, cy + 2, COLOR, 1.2)}
-      <text x="${cx}" y="${cy + 7}" text-anchor="middle" font-family="${font}" font-size="7" fill="${COLOR}">✦</text>
+      ${hRule(cx - 70, cx + 70, cy + 2, ACCENT, 1.2)}
+      <text x="${cx}" y="${cy + 7}" text-anchor="middle" font-family="${font}" font-size="7" fill="${ACCENT}">✦</text>
       <!-- Arabic UPPER -->
       <text x="${cx}" y="${cy - 32}" text-anchor="middle" dominant-baseline="middle"
-        font-family="${arabicFont}" font-size="${arFontSize}" font-weight="bold" fill="${COLOR}"
+        font-family="${arabicFont}" font-size="${arFontSize}" font-weight="bold" fill="${PRIMARY}"
         direction="rtl" unicode-bidi="bidi-override">${displayArabic}</text>
       <text x="${cx}" y="${cy - 14}" text-anchor="middle" dominant-baseline="middle"
-        font-family="${arabicFont}" font-size="8.5" fill="${COLOR}"
+        font-family="${arabicFont}" font-size="8.5" fill="${SECONDARY}"
         direction="rtl">${displayArabicCity}</text>
       <!-- English LOWER -->
       <text x="${cx}" y="${cy + 22}" text-anchor="middle" dominant-baseline="middle"
-        font-family="${font}" font-size="${enFontSize}" font-weight="bold" fill="${COLOR}">${name}</text>
+        font-family="${font}" font-size="${enFontSize}" font-weight="bold" fill="${PRIMARY}">${name}</text>
       <text x="${cx}" y="${cy + 36}" text-anchor="middle" dominant-baseline="middle"
-        font-family="${font}" font-size="7.5" fill="${COLOR}" letter-spacing="2">${city}</text>
+        font-family="${font}" font-size="7.5" fill="${SECONDARY}" letter-spacing="2">${city}</text>
       ${regNo && project.density >= 3
-        ? `<text x="${cx}" y="${cy + 50}" text-anchor="middle" font-family="${font}" font-size="6.5" fill="${COLOR}">${regNo}</text>`
+        ? `<text x="${cx}" y="${cy + 50}" text-anchor="middle" font-family="${font}" font-size="6.5" fill="${SECONDARY}">${regNo}</text>`
         : ''
       }
     </svg>`;
@@ -449,29 +452,29 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
     const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <radialGradient id="t7bg" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="${COLOR}" stop-opacity="0.04"/>
-          <stop offset="100%" stop-color="${COLOR}" stop-opacity="0.10"/>
+          <stop offset="0%" stop-color="${PRIMARY}" stop-opacity="0.04"/>
+          <stop offset="100%" stop-color="${PRIMARY}" stop-opacity="0.10"/>
         </radialGradient>
         <clipPath id="t7clip">
           <rect x="${cx - halfW + 2}" y="${cy - halfH + 2}" width="${rectW - 4}" height="${rectH - 4}"/>
         </clipPath>
       </defs>
       <!-- Filled outer ring band -->
-      <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="${COLOR}"/>
+      <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="${PRIMARY}"/>
       <circle cx="${cx}" cy="${cy}" r="${bandR}" fill="#ffffff"/>
       <!-- Inner accent ring -->
-      <circle cx="${cx}" cy="${cy}" r="${bandR - 5}" fill="url(#t7bg)" stroke="#2a3a5c" stroke-width="0.6"/>
+      <circle cx="${cx}" cy="${cy}" r="${bandR - 5}" fill="url(#t7bg)" stroke="${SECONDARY}" stroke-width="0.6"/>
       <!-- Ring text: name on top arc, city on bottom arc -->
       ${ringText('t7top', cx, cy, ringTextR, `◆  ${ringName}  ◆`, font, 7.5, '#ffffff', '50%', 1.4)}
       ${bottomArcText('t7bot', cx, cy, ringTextR, `◆  ${ringCity}  ◆`, font, 7.5, '#ffffff', 1.4)}
       <!-- Center: monogram or rect frame + text clipped to safe area -->
       ${hasMono
-        ? `<rect x="${cx - diamondHalf}" y="${cy - diamondHalf}" width="${diamondHalf * 2}" height="${diamondHalf * 2}" fill="none" stroke="${COLOR}" stroke-width="1.4" transform="rotate(45, ${cx}, ${cy})"/>
-           ${monogram(cx, cy - 2, mono, font, Math.min(26, diamondHalf - 6), COLOR)}`
-        : `<rect x="${cx - halfW}" y="${cy - halfH}" width="${rectW}" height="${rectH}" rx="2" fill="none" stroke="${COLOR}" stroke-width="1.2"/>
-           <rect x="${cx - halfW + 4}" y="${cy - halfH + 4}" width="${rectW - 8}" height="${rectH - 8}" rx="1" fill="none" stroke="${COLOR}" stroke-width="0.4"/>
+        ? `<rect x="${cx - diamondHalf}" y="${cy - diamondHalf}" width="${diamondHalf * 2}" height="${diamondHalf * 2}" fill="none" stroke="${ACCENT}" stroke-width="1.4" transform="rotate(45, ${cx}, ${cy})"/>
+           ${monogram(cx, cy - 2, mono, font, Math.min(26, diamondHalf - 6), ACCENT)}`
+        : `<rect x="${cx - halfW}" y="${cy - halfH}" width="${rectW}" height="${rectH}" rx="2" fill="none" stroke="${SECONDARY}" stroke-width="1.2"/>
+           <rect x="${cx - halfW + 4}" y="${cy - halfH + 4}" width="${rectW - 8}" height="${rectH - 8}" rx="1" fill="none" stroke="${SECONDARY}" stroke-width="0.4"/>
            <g clip-path="url(#t7clip)">
-             ${wrapText(name, cx, nameY, font, nameFontSize, COLOR, 1.8)}
+             ${wrapText(name, cx, nameY, font, nameFontSize, PRIMARY, 1.8)}
            </g>`
       }
     </svg>`;
@@ -530,24 +533,24 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
           <rect x="${clipX}" y="${contentTop}" width="${clipW}" height="${contentH}"/>
         </clipPath>
       </defs>
-      <rect x="${x1}" y="${y1}" width="${s * 2}" height="${s * 2}" rx="3" fill="none" stroke="${COLOR}" stroke-width="2.8"/>
-      <rect x="${x1 + borderPad}" y="${y1 + borderPad}" width="${s * 2 - borderPad * 2}" height="${s * 2 - borderPad * 2}" rx="1" fill="none" stroke="${COLOR}" stroke-width="0.8"/>
+      <rect x="${x1}" y="${y1}" width="${s * 2}" height="${s * 2}" rx="3" fill="none" stroke="${PRIMARY}" stroke-width="2.8"/>
+      <rect x="${x1 + borderPad}" y="${y1 + borderPad}" width="${s * 2 - borderPad * 2}" height="${s * 2 - borderPad * 2}" rx="1" fill="none" stroke="${SECONDARY}" stroke-width="0.8"/>
       <!-- Filled header -->
-      <rect x="${x1 + borderPad}" y="${y1 + borderPad}" width="${s * 2 - borderPad * 2}" height="${hdrH}" rx="1" fill="${COLOR}"/>
+      <rect x="${x1 + borderPad}" y="${y1 + borderPad}" width="${s * 2 - borderPad * 2}" height="${hdrH}" rx="1" fill="${PRIMARY}"/>
       <text x="${cx}" y="${y1 + borderPad + hdrH / 2 + 1}" text-anchor="middle" dominant-baseline="middle" font-family="${font}" font-size="8" fill="#ffffff" letter-spacing="3">OFFICIAL STAMP</text>
       <!-- Corner dots -->
-      <circle cx="${x1 + borderPad}" cy="${y1 + borderPad}" r="2" fill="${COLOR}"/>
-      <circle cx="${x1 + s * 2 - borderPad}" cy="${y1 + borderPad}" r="2" fill="${COLOR}"/>
-      <circle cx="${x1 + borderPad}" cy="${y1 + s * 2 - borderPad}" r="2" fill="${COLOR}"/>
-      <circle cx="${x1 + s * 2 - borderPad}" cy="${y1 + s * 2 - borderPad}" r="2" fill="${COLOR}"/>
+      <circle cx="${x1 + borderPad}" cy="${y1 + borderPad}" r="2" fill="${ACCENT}"/>
+      <circle cx="${x1 + s * 2 - borderPad}" cy="${y1 + borderPad}" r="2" fill="${ACCENT}"/>
+      <circle cx="${x1 + borderPad}" cy="${y1 + s * 2 - borderPad}" r="2" fill="${ACCENT}"/>
+      <circle cx="${x1 + s * 2 - borderPad}" cy="${y1 + s * 2 - borderPad}" r="2" fill="${ACCENT}"/>
       <!-- Filled footer with city -->
-      <rect x="${x1 + borderPad}" y="${y1 + s * 2 - borderPad - ftrH}" width="${s * 2 - borderPad * 2}" height="${ftrH}" rx="1" fill="${COLOR}"/>
+      <rect x="${x1 + borderPad}" y="${y1 + s * 2 - borderPad - ftrH}" width="${s * 2 - borderPad * 2}" height="${ftrH}" rx="1" fill="${ACCENT}"/>
       <text x="${cx}" y="${y1 + s * 2 - borderPad - ftrH / 2 + 1}" text-anchor="middle" dominant-baseline="middle" font-family="${font}" font-size="7" fill="#ffffff" letter-spacing="2">${city}</text>
       <!-- Center content strictly clipped -->
       <g clip-path="url(#${clipId})">
-        ${hasMono ? monogram(cx, contentTop + monoSize + 2, mono, font, monoSize, COLOR) : ''}
-        ${wrapText(name, cx, nameY, font, nameFontSize, COLOR, 1.5)}
-        ${regNo && project.density >= 3 ? `<text x="${cx}" y="${Math.min(nameY + nameBlockHalfH + 10, contentBot - 4)}" text-anchor="middle" font-family="${font}" font-size="6" fill="${COLOR}">${regNo}</text>` : ''}
+        ${hasMono ? monogram(cx, contentTop + monoSize + 2, mono, font, monoSize, ACCENT) : ''}
+        ${wrapText(name, cx, nameY, font, nameFontSize, PRIMARY, 1.5)}
+        ${regNo && project.density >= 3 ? `<text x="${cx}" y="${Math.min(nameY + nameBlockHalfH + 10, contentBot - 4)}" text-anchor="middle" font-family="${font}" font-size="6" fill="${SECONDARY}">${regNo}</text>` : ''}
       </g>
     </svg>`;
     concepts.push({ id: uid(), templateKey: 'square-premium', label: 'Square Premium', tags: ['square', 'corporate', 'premium'], svgSource: svg });
@@ -564,19 +567,19 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
     const displayArabicCity = arabicCity || city;
 
     const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="${COLOR}"/>
+      <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="${PRIMARY}"/>
       <circle cx="${cx}" cy="${cy}" r="${bandR}" fill="#ffffff"/>
-      <circle cx="${cx}" cy="${cy}" r="${r2}" fill="none" stroke="${COLOR}" stroke-width="1.2"/>
-      <text x="${cx}" y="${cy - r2 + 6}" text-anchor="middle" font-family="${font}" font-size="8" fill="${COLOR}">✦</text>
-      <text x="${cx}" y="${cy + r2 - 1}" text-anchor="middle" font-family="${font}" font-size="8" fill="${COLOR}">✦</text>
+      <circle cx="${cx}" cy="${cy}" r="${r2}" fill="none" stroke="${SECONDARY}" stroke-width="1.2"/>
+      <text x="${cx}" y="${cy - r2 + 6}" text-anchor="middle" font-family="${font}" font-size="8" fill="${ACCENT}">✦</text>
+      <text x="${cx}" y="${cy + r2 - 1}" text-anchor="middle" font-family="${font}" font-size="8" fill="${ACCENT}">✦</text>
       <text x="${cx}" y="${cy - 14}" text-anchor="middle" dominant-baseline="middle"
-        font-family="${arabicFont}" font-size="${arFontSize}" font-weight="bold" fill="${COLOR}"
+        font-family="${arabicFont}" font-size="${arFontSize}" font-weight="bold" fill="${PRIMARY}"
         direction="rtl" unicode-bidi="bidi-override">${arabicName}</text>
       <text x="${cx}" y="${cy + 8}" text-anchor="middle" dominant-baseline="middle"
-        font-family="${arabicFont}" font-size="10" fill="${COLOR}" direction="rtl">${displayArabicCity}</text>
-      ${divider(cx, cy + 22, COLOR, 28)}
+        font-family="${arabicFont}" font-size="10" fill="${SECONDARY}" direction="rtl">${displayArabicCity}</text>
+      ${divider(cx, cy + 22, ACCENT, 28)}
       <text x="${cx}" y="${cy + 36}" text-anchor="middle" dominant-baseline="middle"
-        font-family="${font}" font-size="8" fill="${COLOR}" letter-spacing="1.5">${name}</text>
+        font-family="${font}" font-size="8" fill="${PRIMARY}" letter-spacing="1.5">${name}</text>
     </svg>`;
     concepts.push({ id: uid(), templateKey: 'arabic-calligraphy', label: 'Arabic Calligraphy', tags: ['arabic', 'calligraphy', 'RTL', 'premium'], svgSource: svg });
   } else {
@@ -594,15 +597,15 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
     }).join('');
 
     const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="${COLOR}"/>
+      <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="${PRIMARY}"/>
       <circle cx="${cx}" cy="${cy}" r="${bandR}" fill="#ffffff"/>
       ${dots}
-      <circle cx="${cx}" cy="${cy}" r="${r3}" fill="none" stroke="${COLOR}" stroke-width="0.6" stroke-dasharray="2,2"/>
+      <circle cx="${cx}" cy="${cy}" r="${r3}" fill="none" stroke="${SECONDARY}" stroke-width="0.6" stroke-dasharray="2,2"/>
       ${ringText('t9ring', cx, cy, ringR, `●  ${name}  ●  ${city}  ●`, font, 8, '#ffffff', '50%', 1.6)}
-      ${hasMono ? monogram(cx, cy - 4, mono, font, 44, COLOR) : wrapText(name, cx, cy - 8, font, nameFontSize, COLOR, 1.5)}
-      ${!hasMono ? `<text x="${cx}" y="${cy + 14}" text-anchor="middle" font-family="${font}" font-size="7.5" fill="${COLOR}" letter-spacing="3">${city}</text>` : ''}
-      ${divider(cx, cy + (hasMono ? 22 : 28), COLOR, 22)}
-      <text x="${cx}" y="${cy + (hasMono ? 34 : 40)}" text-anchor="middle" font-family="${font}" font-size="7" fill="${COLOR}" letter-spacing="4">OFFICIAL SEAL</text>
+      ${hasMono ? monogram(cx, cy - 4, mono, font, 44, ACCENT) : wrapText(name, cx, cy - 8, font, nameFontSize, PRIMARY, 1.5)}
+      ${!hasMono ? `<text x="${cx}" y="${cy + 14}" text-anchor="middle" font-family="${font}" font-size="7.5" fill="${SECONDARY}" letter-spacing="3">${city}</text>` : ''}
+      ${divider(cx, cy + (hasMono ? 22 : 28), ACCENT, 22)}
+      <text x="${cx}" y="${cy + (hasMono ? 34 : 40)}" text-anchor="middle" font-family="${font}" font-size="7" fill="${SECONDARY}" letter-spacing="4">OFFICIAL SEAL</text>
     </svg>`;
     concepts.push({ id: uid(), templateKey: 'official-seal', label: 'Official Seal', tags: ['seal', 'official', 'premium', 'concentric'], svgSource: svg });
   }
@@ -621,28 +624,28 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
     const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <radialGradient id="t10center" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="${COLOR}" stop-opacity="0.18"/>
-          <stop offset="100%" stop-color="${COLOR}" stop-opacity="0.04"/>
+          <stop offset="0%" stop-color="${SECONDARY}" stop-opacity="0.18"/>
+          <stop offset="100%" stop-color="${SECONDARY}" stop-opacity="0.04"/>
         </radialGradient>
       </defs>
       <!-- Filled outer medallion band -->
-      <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="${COLOR}"/>
+      <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="${PRIMARY}"/>
       <circle cx="${cx}" cy="${cy}" r="${bandR}" fill="#ffffff"/>
       <!-- Sunburst/star behind center -->
-      ${starBurst(cx, cy, bandR - 8, bandR - 22, COLOR, 16)}
+      ${starBurst(cx, cy, bandR - 8, bandR - 22, SECONDARY, 16)}
       <!-- White overlay to soften starburst -->
       <circle cx="${cx}" cy="${cy}" r="${bandR - 12}" fill="url(#t10center)"/>
       <!-- Accent inner ring -->
-      <circle cx="${cx}" cy="${cy}" r="${bandR - 8}" fill="none" stroke="${COLOR}" stroke-width="1.4"/>
+      <circle cx="${cx}" cy="${cy}" r="${bandR - 8}" fill="none" stroke="${SECONDARY}" stroke-width="1.4"/>
       <!-- Center monogram circle -->
-      <circle cx="${cx}" cy="${cy}" r="${innerCircR}" fill="${COLOR}"/>
+      <circle cx="${cx}" cy="${cy}" r="${innerCircR}" fill="${ACCENT}"/>
       <text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" font-family="${font}" font-size="22" font-weight="bold" fill="#ffffff">${mono}</text>
       <!-- Ring text -->
       ${ringText('t10ring', cx, cy, ringR, `✦  ${name}  ✦`, font, 8.5, '#ffffff', '25%', 1.8)}
       ${bottomArcText('t10bot', cx, cy, ringR, `✦  ${city}  ✦`, font, 8, '#ffffff', 2)}
       <!-- Company name arc below monogram -->
-      ${wrapText(name, cx, cy + innerCircR + 16, font, nameFontSize, COLOR, 1.5)}
-      ${regNo && project.density >= 3 ? `<text x="${cx}" y="${cy + innerCircR + 36}" text-anchor="middle" font-family="${font}" font-size="6.5" fill="${COLOR}">${regNo}</text>` : ''}
+      ${wrapText(name, cx, cy + innerCircR + 16, font, nameFontSize, PRIMARY, 1.5)}
+      ${regNo && project.density >= 3 ? `<text x="${cx}" y="${cy + innerCircR + 36}" text-anchor="middle" font-family="${font}" font-size="6.5" fill="${SECONDARY}">${regNo}</text>` : ''}
     </svg>`;
     concepts.push({ id: uid(), templateKey: 'embossed-medallion', label: 'Embossed Medallion', tags: ['medallion', 'wax-seal', 'luxury', 'premium', 'embossed'], svgSource: svg });
   }
@@ -660,11 +663,11 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
     // Art deco corner paths (L-shaped bracket ornament)
     function decoCorner(ox: number, oy: number, sx: number, sy: number) {
       return `
-        <line x1="${ox}" y1="${oy}" x2="${ox + sx * 18}" y2="${oy}" stroke="${COLOR}" stroke-width="2.5"/>
-        <line x1="${ox}" y1="${oy}" x2="${ox}" y2="${oy + sy * 18}" stroke="${COLOR}" stroke-width="2.5"/>
-        <line x1="${ox + sx * 6}" y1="${oy + sy * 6}" x2="${ox + sx * 16}" y2="${oy + sy * 6}" stroke="${COLOR}" stroke-width="0.8"/>
-        <line x1="${ox + sx * 6}" y1="${oy + sy * 6}" x2="${ox + sx * 6}" y2="${oy + sy * 16}" stroke="${COLOR}" stroke-width="0.8"/>
-        <circle cx="${ox + sx * 6}" cy="${oy + sy * 6}" r="1.5" fill="${COLOR}"/>`;
+        <line x1="${ox}" y1="${oy}" x2="${ox + sx * 18}" y2="${oy}" stroke="${PRIMARY}" stroke-width="2.5"/>
+        <line x1="${ox}" y1="${oy}" x2="${ox}" y2="${oy + sy * 18}" stroke="${PRIMARY}" stroke-width="2.5"/>
+        <line x1="${ox + sx * 6}" y1="${oy + sy * 6}" x2="${ox + sx * 16}" y2="${oy + sy * 6}" stroke="${SECONDARY}" stroke-width="0.8"/>
+        <line x1="${ox + sx * 6}" y1="${oy + sy * 6}" x2="${ox + sx * 6}" y2="${oy + sy * 16}" stroke="${SECONDARY}" stroke-width="0.8"/>
+        <circle cx="${ox + sx * 6}" cy="${oy + sy * 6}" r="1.5" fill="${ACCENT}"/>`;
     }
 
     const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
@@ -674,23 +677,23 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
       ${decoCorner(x1, y1 + sh * 2, 1, -1)}
       ${decoCorner(x1 + sw * 2, y1 + sh * 2, -1, -1)}
       <!-- Inner double border -->
-      <rect x="${x1 + 20}" y="${y1 + 20}" width="${sw * 2 - 40}" height="${sh * 2 - 40}" fill="none" stroke="${COLOR}" stroke-width="1.6"/>
-      <rect x="${x1 + 24}" y="${y1 + 24}" width="${sw * 2 - 48}" height="${sh * 2 - 48}" fill="none" stroke="${COLOR}" stroke-width="0.5"/>
+      <rect x="${x1 + 20}" y="${y1 + 20}" width="${sw * 2 - 40}" height="${sh * 2 - 40}" fill="none" stroke="${SECONDARY}" stroke-width="1.6"/>
+      <rect x="${x1 + 24}" y="${y1 + 24}" width="${sw * 2 - 48}" height="${sh * 2 - 48}" fill="none" stroke="${SECONDARY}" stroke-width="0.5"/>
       <!-- Deco header line with dot ornaments -->
-      <line x1="${x1 + 30}" y1="${y1 + 46}" x2="${cx - 10}" y2="${y1 + 46}" stroke="${COLOR}" stroke-width="0.8"/>
-      <circle cx="${cx}" cy="${y1 + 46}" r="2.5" fill="${COLOR}"/>
-      <line x1="${cx + 10}" y1="${y1 + 46}" x2="${x1 + sw * 2 - 30}" y2="${y1 + 46}" stroke="${COLOR}" stroke-width="0.8"/>
+      <line x1="${x1 + 30}" y1="${y1 + 46}" x2="${cx - 10}" y2="${y1 + 46}" stroke="${SECONDARY}" stroke-width="0.8"/>
+      <circle cx="${cx}" cy="${y1 + 46}" r="2.5" fill="${ACCENT}"/>
+      <line x1="${cx + 10}" y1="${y1 + 46}" x2="${x1 + sw * 2 - 30}" y2="${y1 + 46}" stroke="${SECONDARY}" stroke-width="0.8"/>
       <!-- City header -->
-      <text x="${cx}" y="${y1 + 36}" text-anchor="middle" font-family="${font}" font-size="8" fill="${COLOR}" letter-spacing="5">${city}</text>
+      <text x="${cx}" y="${y1 + 36}" text-anchor="middle" font-family="${font}" font-size="8" fill="${SECONDARY}" letter-spacing="5">${city}</text>
       <!-- Company name -->
-      ${wrapText(name, cx, cy, font, nameFontSize, COLOR, 2)}
+      ${wrapText(name, cx, cy, font, nameFontSize, PRIMARY, 2)}
       <!-- Footer line -->
-      <line x1="${x1 + 30}" y1="${y1 + sh * 2 - 46}" x2="${cx - 10}" y2="${y1 + sh * 2 - 46}" stroke="${COLOR}" stroke-width="0.8"/>
-      <circle cx="${cx}" cy="${y1 + sh * 2 - 46}" r="2.5" fill="${COLOR}"/>
-      <line x1="${cx + 10}" y1="${y1 + sh * 2 - 46}" x2="${x1 + sw * 2 - 30}" y2="${y1 + sh * 2 - 46}" stroke="${COLOR}" stroke-width="0.8"/>
+      <line x1="${x1 + 30}" y1="${y1 + sh * 2 - 46}" x2="${cx - 10}" y2="${y1 + sh * 2 - 46}" stroke="${SECONDARY}" stroke-width="0.8"/>
+      <circle cx="${cx}" cy="${y1 + sh * 2 - 46}" r="2.5" fill="${ACCENT}"/>
+      <line x1="${cx + 10}" y1="${y1 + sh * 2 - 46}" x2="${x1 + sw * 2 - 30}" y2="${y1 + sh * 2 - 46}" stroke="${SECONDARY}" stroke-width="0.8"/>
       <!-- Footer text -->
-      <text x="${cx}" y="${y1 + sh * 2 - 32}" text-anchor="middle" font-family="${font}" font-size="8" fill="${COLOR}" letter-spacing="4">OFFICIAL STAMP</text>
-      ${regNo && project.density >= 3 ? `<text x="${cx}" y="${y1 + sh * 2 - 20}" text-anchor="middle" font-family="${font}" font-size="6.5" fill="${COLOR}">${regNo}</text>` : ''}
+      <text x="${cx}" y="${y1 + sh * 2 - 32}" text-anchor="middle" font-family="${font}" font-size="8" fill="${PRIMARY}" letter-spacing="4">OFFICIAL STAMP</text>
+      ${regNo && project.density >= 3 ? `<text x="${cx}" y="${y1 + sh * 2 - 20}" text-anchor="middle" font-family="${font}" font-size="6.5" fill="${SECONDARY}">${regNo}</text>` : ''}
     </svg>`;
     concepts.push({ id: uid(), templateKey: 'art-deco-square', label: 'Art Deco Square', tags: ['art-deco', 'luxury', 'geometric', 'rectangle'], svgSource: svg });
   }
@@ -731,7 +734,7 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
     // Center artwork: logo image or filled monogram disc
     const centerArt = logoUrl
       ? `<!-- logo circle frame -->
-         <circle cx="${cx}" cy="${cy}" r="${logoSize / 2 + 5}" fill="#ffffff" stroke="${COLOR}" stroke-width="1.4"/>
+         <circle cx="${cx}" cy="${cy}" r="${logoSize / 2 + 5}" fill="#ffffff" stroke="${ACCENT}" stroke-width="1.4"/>
          <image href="${logoUrl}"
            x="${cx - logoSize / 2}" y="${cy - logoSize / 2}"
            width="${logoSize}" height="${logoSize}"
@@ -739,7 +742,7 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
            preserveAspectRatio="xMidYMid meet"/>
          `
       : `<!-- monogram disc -->
-         <circle cx="${cx}" cy="${cy}" r="${logoSize / 2 + 2}" fill="${COLOR}"/>
+         <circle cx="${cx}" cy="${cy}" r="${logoSize / 2 + 2}" fill="${ACCENT}"/>
          <text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central"
            font-family="${font}" font-size="28" font-weight="bold" fill="#ffffff"
            letter-spacing="2">${mono}</text>
@@ -759,13 +762,13 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
     const showRegNo = regNo && regNoY <= maxTextY;
 
     const cityLine = `
-      ${divider(cx, divBot + 6, COLOR, 22)}
+      ${divider(cx, divBot + 6, ACCENT, 22)}
       <text x="${cx}" y="${cityY}"
         text-anchor="middle" font-family="${font}" font-size="7"
-        fill="${COLOR}" letter-spacing="4">${cityStr}</text>
+        fill="${SECONDARY}" letter-spacing="4">${cityStr}</text>
       ${showRegNo ? `<text x="${cx}" y="${regNoY}"
         text-anchor="middle" font-family="${font}" font-size="6"
-        fill="${COLOR}" letter-spacing="2">${regNo}</text>` : ''}
+        fill="${SECONDARY}" letter-spacing="2">${regNo}</text>` : ''}
     `;
 
     const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
@@ -780,33 +783,33 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
       </defs>
 
       <!-- ── Double ring border ── -->
-      <circle cx="${cx}" cy="${cy}" r="${outerR}"  fill="none" stroke="${COLOR}" stroke-width="2.4"/>
-      <circle cx="${cx}" cy="${cy}" r="${midR}"    fill="none" stroke="#2a3a5c" stroke-width="0.5"/>
-      <circle cx="${cx}" cy="${cy}" r="${innerR}"  fill="none" stroke="#2a3a5c" stroke-width="1.2"/>
+      <circle cx="${cx}" cy="${cy}" r="${outerR}"  fill="none" stroke="${PRIMARY}" stroke-width="2.4"/>
+      <circle cx="${cx}" cy="${cy}" r="${midR}"    fill="none" stroke="${SECONDARY}" stroke-width="0.5"/>
+      <circle cx="${cx}" cy="${cy}" r="${innerR}"  fill="none" stroke="${SECONDARY}" stroke-width="1.2"/>
 
       <!-- ── 4 cardinal diamond ornaments ── -->
       ${[0, 90, 180, 270].map(deg => {
         const rad = (deg * Math.PI) / 180;
         const ox = cx + (outerR - 4) * Math.cos(rad);
         const oy = cy + (outerR - 4) * Math.sin(rad);
-        return `<polygon points="${ox},${oy - 3.5} ${ox + 3},${oy} ${ox},${oy + 3.5} ${ox - 3},${oy}" fill="${COLOR}"/>`;
+        return `<polygon points="${ox},${oy - 3.5} ${ox + 3},${oy} ${ox},${oy + 3.5} ${ox - 3},${oy}" fill="${ACCENT}"/>`;
       }).join('\n      ')}
 
       <!-- ── English: curved OVER the TOP ── -->
-      <text font-family="${font}" font-size="${enFontSize}" fill="${COLOR}" letter-spacing="2" font-weight="700">
+      <text font-family="${font}" font-size="${enFontSize}" fill="${PRIMARY}" letter-spacing="2" font-weight="700">
         <textPath href="#${topArcId}" startOffset="50%" text-anchor="middle">${name}</textPath>
       </text>
 
       <!-- ── Arabic: curved UNDER the BOTTOM (path goes right→left so RTL text reads naturally) ── -->
-      <text font-family="${arabicFont}" font-size="${arFontSize}" fill="${COLOR}" letter-spacing="1.5" font-weight="600">
+      <text font-family="${arabicFont}" font-size="${arFontSize}" fill="${PRIMARY}" letter-spacing="1.5" font-weight="600">
         <textPath href="#${botArcId}" startOffset="50%" text-anchor="middle">${displayArabic}</textPath>
       </text>
 
       <!-- ── Thin horizontal rules flanking artwork ── -->
-      ${hRule(cx - 38, cx - logoSize / 2 - 8, divTop, COLOR, 0.6)}
-      ${hRule(cx + logoSize / 2 + 8, cx + 38, divTop, COLOR, 0.6)}
-      ${hRule(cx - 38, cx - logoSize / 2 - 8, divBot, COLOR, 0.6)}
-      ${hRule(cx + logoSize / 2 + 8, cx + 38, divBot, COLOR, 0.6)}
+      ${hRule(cx - 38, cx - logoSize / 2 - 8, divTop, SECONDARY, 0.6)}
+      ${hRule(cx + logoSize / 2 + 8, cx + 38, divTop, SECONDARY, 0.6)}
+      ${hRule(cx - 38, cx - logoSize / 2 - 8, divBot, SECONDARY, 0.6)}
+      ${hRule(cx + logoSize / 2 + 8, cx + 38, divBot, SECONDARY, 0.6)}
 
       <!-- ── Center artwork (logo or monogram) ── -->
       ${centerArt}
