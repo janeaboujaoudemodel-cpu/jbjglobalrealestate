@@ -125,6 +125,7 @@ const Footer = () => {
   // Sell
   const sellLinks = [
     { label: "Sell Your Property", href: "/seller-listing" },
+    { label: "Listing Portal", href: "/listing-portal/submit" },
     { label: t('footer.sellerGuide') || "Seller's Guide", href: "/seller-guide" },
     { label: "Property Valuation", href: "/sell/valuation" },
     { label: "Selling Advisory", href: "/services/selling-advisory" },

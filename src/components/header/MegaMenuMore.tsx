@@ -57,6 +57,7 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
   const investorLinks = [
     { label: 'Investor Dashboard', href: '/investor-dashboard', icon: UserCircle },
     { label: 'Investor Education', href: '/investor-education', icon: GraduationCap },
+    { label: 'Listing Portal', href: '/listing-portal/submit', icon: ClipboardCheck },
     { label: 'Market Reports', href: '/market-intelligence/reports', icon: FileText },
     { label: 'Investment Guides', href: '/guides?category=investment', icon: TrendingUp },
     { label: 'Portfolio Views', href: '/favorites', icon: Heart },
@@ -66,6 +67,7 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
   const brokerLinks = [
     { label: 'Broker Hub', href: '/broker-toolkit', icon: Briefcase },
     { label: 'Broker Dashboard', href: '/broker-dashboard', icon: UserCircle },
+    { label: 'Listing Portal', href: '/listing-portal/submit', icon: ClipboardCheck },
     { label: 'Broker CRM', href: '/crm', icon: Users },
     { label: 'Training', href: '/broker-education', icon: GraduationCap },
     { label: 'Resources', href: '/broker-resources', icon: FolderOpen },
