@@ -1,23 +1,28 @@
-import jbjMonogram from "@/assets/jbj-monogram-light-transparent.png";
+import jbjMonogramDarkOnLight from "@/assets/jbj-monogram-dark-on-light.png";
+import jbjMonogramLightOnDark from "@/assets/jbj-monogram-light-on-dark.png";
 
 interface BrandedLoaderProps {
   text?: string;
   className?: string;
+  variant?: 'dark' | 'light';
 }
 
 /**
  * Premium branded loader — JBJ monogram with pulse animation and gold glow.
- * Used as the universal full-page loading indicator.
+ * variant='dark' (default): dark background → light monogram
+ * variant='light': light background → dark monogram
  */
-export function BrandedLoader({ text = "Loading...", className = "" }: BrandedLoaderProps) {
+export function BrandedLoader({ text = "Loading...", className = "", variant = "dark" }: BrandedLoaderProps) {
+  const logo = variant === 'light' ? jbjMonogramDarkOnLight : jbjMonogramLightOnDark;
+  
   return (
     <div className={`flex flex-col items-center justify-center min-h-screen gap-6 ${className}`}>
       <div className="relative w-24 h-24 md:w-32 md:h-32">
         <img
-          src={jbjMonogram}
+          src={logo}
           alt="Loading"
           className="w-full h-full object-contain animate-pulse"
-          style={{ filter: "drop-shadow(0 0 20px rgba(200,167,102,0.4))" }}
+          style={{ filter: "drop-shadow(0 0 20px rgba(200,167,102,0.4))", mixBlendMode: "multiply" }}
         />
       </div>
       <span
@@ -32,18 +37,20 @@ export function BrandedLoader({ text = "Loading...", className = "" }: BrandedLo
 
 /**
  * Compact branded loader for inline/button use — small monogram with pulse.
- * Use inside buttons, cards, and inline loading states.
  */
-export function BrandedLoaderInline({ size = 24, className = "" }: { size?: number; className?: string }) {
+export function BrandedLoaderInline({ size = 24, className = "", variant = "dark" }: { size?: number; className?: string; variant?: 'dark' | 'light' }) {
+  const logo = variant === 'light' ? jbjMonogramDarkOnLight : jbjMonogramLightOnDark;
+  
   return (
     <img
-      src={jbjMonogram}
+      src={logo}
       alt="Loading"
       className={`object-contain animate-pulse ${className}`}
       style={{ 
         width: size, 
         height: size, 
-        filter: "drop-shadow(0 0 8px rgba(200,167,102,0.4))" 
+        filter: "drop-shadow(0 0 8px rgba(200,167,102,0.4))",
+        mixBlendMode: "multiply"
       }}
     />
   );
