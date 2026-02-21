@@ -8631,6 +8631,8 @@ export type Database = {
       }
       hr_cv_submissions: {
         Row: {
+          ai_ranking: number | null
+          ai_summary: string | null
           chat_session_id: string | null
           cover_letter: string | null
           created_at: string
@@ -8648,6 +8650,8 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          ai_ranking?: number | null
+          ai_summary?: string | null
           chat_session_id?: string | null
           cover_letter?: string | null
           created_at?: string
@@ -8665,6 +8669,8 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          ai_ranking?: number | null
+          ai_summary?: string | null
           chat_session_id?: string | null
           cover_letter?: string | null
           created_at?: string

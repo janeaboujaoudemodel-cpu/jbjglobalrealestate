@@ -103,15 +103,16 @@ const CVCenter = ({ userId }: CVCenterProps) => {
   const fetchCVs = async () => {
     setIsLoading(true);
     try {
-      const { data, error } = await supabase
-        .from('hr_applications')
-        .select('*')
-        .order('created_at', { ascending: false });
+      // Fetch from both hr_applications AND hr_cv_submissions
+      const [appsRes, subsRes] = await Promise.all([
+        supabase.from('hr_applications').select('*').order('created_at', { ascending: false }),
+        supabase.from('hr_cv_submissions').select('*').order('created_at', { ascending: false }),
+      ]);
 
-      if (error) throw error;
+      if (appsRes.error) throw appsRes.error;
 
-      // Transform data with auto-categorization
-      const transformedData: CVEntry[] = (data || []).map((app: any) => ({
+      // Transform hr_applications
+      const fromApps: CVEntry[] = (appsRes.data || []).map((app: any) => ({
         id: app.id,
         full_name: app.full_name,
         email: app.email,
@@ -135,7 +136,44 @@ const CVCenter = ({ userId }: CVCenterProps) => {
         reviewed_by: app.reviewed_by,
       }));
 
-      setCvEntries(transformedData);
+      // Transform hr_cv_submissions (chat widget CVs)
+      const fromSubs: CVEntry[] = (subsRes.data || []).map((sub: any) => ({
+        id: sub.id,
+        full_name: sub.full_name,
+        email: sub.email,
+        phone_e164: sub.phone || null,
+        nationality: null,
+        preferred_language: null,
+        current_location_country: null,
+        current_location_city: null,
+        cv_url: sub.cv_url,
+        status: sub.status || 'pending',
+        department_category: detectDepartmentCategory(sub),
+        ai_summary: sub.ai_summary || `Candidate submitted CV via chat widget.`,
+        ai_ranking: sub.ai_ranking || 0,
+        languages: [],
+        experience_years: 0,
+        skills: [],
+        flag_reason: !sub.cv_url ? 'No CV file uploaded' : null,
+        source: 'chat_widget',
+        created_at: sub.created_at,
+        reviewed_at: sub.reviewed_at || null,
+        reviewed_by: sub.reviewed_by || null,
+      }));
+
+      // Merge and deduplicate by email (keep the most recent)
+      const allCVs = [...fromApps, ...fromSubs];
+      const emailMap = new Map<string, CVEntry>();
+      for (const cv of allCVs) {
+        const key = cv.email.toLowerCase();
+        const existing = emailMap.get(key);
+        if (!existing || new Date(cv.created_at) > new Date(existing.created_at)) {
+          emailMap.set(key, cv);
+        }
+      }
+      const merged = Array.from(emailMap.values()).sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+      setCvEntries(merged);
     } catch (error) {
       console.error('Error fetching CVs:', error);
       toast.error('Failed to load CVs');
