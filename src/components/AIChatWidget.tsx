@@ -502,7 +502,7 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
   }, [input, isLoading, messages, selectedService, userInfo.firstName, conversationId]);
 
   // Submit to team
-  const handleSubmitToTeam = async (inquirySummary?: string) => {
+  const handleSubmitToTeam = useCallback(async (inquirySummary?: string) => {
     if (!conversationId) return;
 
     try {
@@ -540,7 +540,7 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
       console.error('Error submitting to team:', error);
       toast.error('Failed to submit. Please try again.');
     }
-  };
+  }, [conversationId, userInfo, selectedService]);
 
   // Handle rating submission
   const handleSubmitRating = async (rating: number, feedback: string) => {
@@ -782,7 +782,7 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
             messages={messages}
             isLoading={isLoading}
             input={input}
-            onInputChange={(val) => setInput(val)}
+            onInputChange={setInput}
             onSend={handleSend}
             onSubmitToTeam={handleSubmitToTeam}
             userFirstName={userInfo.firstName}
