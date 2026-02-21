@@ -82,35 +82,10 @@ const asFloorPlanTypes = (value: unknown): Array<{ label: string; pdfUrl?: strin
 
 const asUnitTypes = (
   value: unknown,
-  projectPriceFrom?: number | null,
-  projectPriceTo?: number | null,
-  projectSizeMin?: number | null,
-  projectSizeMax?: number | null,
-  projectBedroomsMin?: number | null,
-  projectBedroomsMax?: number | null,
 ): Array<{ type: string; size_from?: number; size_to?: number; price_from?: number; price_to?: number; available_units?: number; total_units?: number; status?: "available" | "limited" | "sold_out" }> | null => {
-  if (!Array.isArray(value) || value.length === 0) {
-    // Generate unit types from project-level data if no unit_types array exists
-    if (projectBedroomsMin != null || projectBedroomsMax != null) {
-      const min = projectBedroomsMin ?? projectBedroomsMax ?? 0;
-      const max = projectBedroomsMax ?? projectBedroomsMin ?? 0;
-      const types: Array<{ type: string; size_from?: number; size_to?: number; price_from?: number; price_to?: number }> = [];
-      for (let br = min; br <= max; br++) {
-        const label = br === 0 ? "Studio" : br === 1 ? "1 Bedroom" : `${br} Bedrooms`;
-        types.push({
-          type: label,
-          size_from: projectSizeMin ?? undefined,
-          size_to: projectSizeMax ?? undefined,
-          price_from: projectPriceFrom ?? undefined,
-          price_to: projectPriceTo ?? undefined,
-        });
-      }
-      return types.length ? types : null;
-    }
-    return null;
-  }
+  if (!Array.isArray(value) || value.length === 0) return null;
 
-  // Group raw entries by bedroom count for aggregation
+  // Group raw entries by bedroom count — only use exact data from Reelly API
   const grouped = new Map<string, { count: number; sizes: number[]; prices: number[] }>();
   
   for (const v of value) {
@@ -145,10 +120,10 @@ const asUnitTypes = (
 
   const out = Array.from(grouped.entries()).map(([type, data]) => ({
     type,
-    size_from: data.sizes.length ? Math.min(...data.sizes) : (projectSizeMin ?? undefined),
-    size_to: data.sizes.length ? Math.max(...data.sizes) : (projectSizeMax ?? undefined),
-    price_from: data.prices.length ? Math.min(...data.prices) : (projectPriceFrom ?? undefined),
-    price_to: data.prices.length ? Math.max(...data.prices) : (projectPriceTo ?? undefined),
+    size_from: data.sizes.length ? Math.min(...data.sizes) : undefined,
+    size_to: data.sizes.length ? Math.max(...data.sizes) : undefined,
+    price_from: data.prices.length ? Math.min(...data.prices) : undefined,
+    price_to: data.prices.length ? Math.max(...data.prices) : undefined,
     total_units: data.count > 1 ? data.count : undefined,
     available_units: undefined,
     status: undefined as "available" | "limited" | "sold_out" | undefined,
@@ -217,7 +192,7 @@ const ProjectDetail = () => {
       floor_plan_types: asFloorPlanTypes(project.floor_plan_types),
       faqs: asFaqs(project.faqs),
       payment_breakdown: asPaymentBreakdown(project.payment_breakdown),
-      unit_types: asUnitTypes(project.unit_types, project.price_from, project.price_to, project.size_min, project.size_max, project.bedrooms_min, project.bedrooms_max),
+      unit_types: asUnitTypes(project.unit_types),
       construction_progress: project.construction_progress ?? null,
       construction_start_date: project.construction_start_date ?? null,
       expected_completion: project.expected_completion ?? null,
