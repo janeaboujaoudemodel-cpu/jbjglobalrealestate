@@ -38,7 +38,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
-  const [ownerLoading, setOwnerLoading] = useState(false);
+  const [ownerLoading, setOwnerLoading] = useState(true);
   const [ownerError, setOwnerError] = useState<string | null>(null);
   const [isOwner, setIsOwner] = useState(false);
 
@@ -113,6 +113,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!nextSession?.user) {
         setIsOwner(false);
         setOwnerError(null);
+        setOwnerLoading(false);
         setLoading(false);
         return;
       }
