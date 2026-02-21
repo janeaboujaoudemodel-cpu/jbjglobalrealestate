@@ -1,8 +1,6 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useRef, useCallback } from 'react';
 import { Send, ArrowRight, User, Mail, Phone, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { validateEmail, validateE164Phone, getRandomAgent } from './types';
 import { useLanguage } from '@/contexts/LanguageContext';
 
@@ -15,7 +13,7 @@ interface ChatConversationalCollectProps {
 
 type CollectStep = 'confirm_name' | 'name' | 'email' | 'phone' | 'complete';
 
-const ChatConversationalCollect = ({ onComplete, onPreferForm, initialEmail = '', detectedFullName }: ChatConversationalCollectProps) => {
+const ChatConversationalCollect = React.memo(({ onComplete, onPreferForm, initialEmail = '', detectedFullName }: ChatConversationalCollectProps) => {
   const { t } = useLanguage();
   const agent = getRandomAgent();
   
@@ -27,16 +25,19 @@ const ChatConversationalCollect = ({ onComplete, onPreferForm, initialEmail = ''
   const [isTyping, setIsTyping] = useState(false);
   const [nameConfirmed, setNameConfirmed] = useState(false);
 
-  // Simulate agent typing - fast for responsiveness
-  const simulateTyping = (callback: () => void, delay = 400) => {
+  const nameInputRef = useRef<HTMLInputElement>(null);
+  const emailInputRef = useRef<HTMLInputElement>(null);
+  const phoneInputRef = useRef<HTMLInputElement>(null);
+
+  const simulateTyping = useCallback((callback: () => void, delay = 400) => {
     setIsTyping(true);
     setTimeout(() => {
       setIsTyping(false);
       callback();
     }, delay);
-  };
+  }, []);
 
-  const handleConfirmName = () => {
+  const handleConfirmName = useCallback(() => {
     setNameConfirmed(true);
     setError('');
     simulateTyping(() => {
@@ -45,10 +46,10 @@ const ChatConversationalCollect = ({ onComplete, onPreferForm, initialEmail = ''
       } else {
         setCollectStep('email');
       }
-    }, 800);
-  };
+    }, 400);
+  }, [initialEmail, simulateTyping]);
 
-  const handleNameSubmit = () => {
+  const handleNameSubmit = useCallback(() => {
     if (!fullName.trim() || fullName.trim().split(' ').length < 1) {
       setError('Please enter your full name');
       return;
@@ -61,52 +62,41 @@ const ChatConversationalCollect = ({ onComplete, onPreferForm, initialEmail = ''
       } else {
         setCollectStep('email');
       }
-    }, 800);
-  };
+    }, 400);
+  }, [fullName, initialEmail, simulateTyping]);
 
-  const handleEmailSubmit = () => {
+  const handleEmailSubmit = useCallback(() => {
     if (!validateEmail(email)) {
       setError('Please enter a valid email address');
       return;
     }
     setError('');
-    simulateTyping(() => setCollectStep('phone'), 800);
-  };
+    simulateTyping(() => setCollectStep('phone'), 400);
+  }, [email, simulateTyping]);
 
-  const handlePhoneSubmit = () => {
+  const handlePhoneSubmit = useCallback(() => {
     if (!validateE164Phone(phone)) {
       setError('Please enter a valid phone number (e.g., +971501234567)');
       return;
     }
     setError('');
     
-    // Parse name
     const nameParts = fullName.trim().split(' ');
     const firstName = nameParts[0] || '';
     const lastName = nameParts.slice(1).join(' ') || '';
     
-    onComplete({
-      firstName,
-      lastName,
-      email,
-      phone,
-    });
-  };
+    onComplete({ firstName, lastName, email, phone });
+  }, [phone, fullName, email, onComplete]);
 
-  const handleKeyDown = (e: React.KeyboardEvent, handler: () => void) => {
+  const handleKeyDown = useCallback((e: React.KeyboardEvent, handler: () => void) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       handler();
     }
-  };
+  }, []);
 
   const renderAgentMessage = (message: string, key: string) => (
-    <motion.div
-      key={key}
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="flex gap-3 mb-4"
-    >
+    <div key={key} className="flex gap-3 mb-4">
       <img
         src={agent.photo}
         alt={agent.name}
@@ -115,29 +105,19 @@ const ChatConversationalCollect = ({ onComplete, onPreferForm, initialEmail = ''
       <div className="bg-white rounded-2xl rounded-tl-none px-4 py-3 shadow-sm border border-gold/20 max-w-[85%]">
         <p className="text-black text-sm">{message}</p>
       </div>
-    </motion.div>
+    </div>
   );
 
   const renderUserMessage = (message: string, key: string) => (
-    <motion.div
-      key={key}
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="flex justify-end mb-4"
-    >
+    <div key={key} className="flex justify-end mb-4">
       <div className="bg-gradient-to-br from-gold/20 to-gold/10 rounded-2xl rounded-tr-none px-4 py-3 shadow-sm border border-gold/30 max-w-[85%]">
         <p className="text-black text-sm font-medium">{message}</p>
       </div>
-    </motion.div>
+    </div>
   );
 
   const renderTypingIndicator = () => (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="flex gap-3 mb-4"
-    >
+    <div className="flex gap-3 mb-4">
       <img
         src={agent.photo}
         alt={agent.name}
@@ -150,14 +130,12 @@ const ChatConversationalCollect = ({ onComplete, onPreferForm, initialEmail = ''
           <span className="w-2 h-2 bg-gold/60 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
-      {/* Chat Messages Area */}
       <div className="flex-1 p-4 overflow-y-auto">
-        {/* Initial greeting - personalized for logged-in users */}
         {detectedFullName ? (
           renderAgentMessage(
             `Hi, ${detectedFullName}! 👋 I can see you're already a member. Could you please confirm that your full name is **${detectedFullName}**? If it's not correct, please type your correct full name below.`,
@@ -167,7 +145,6 @@ const ChatConversationalCollect = ({ onComplete, onPreferForm, initialEmail = ''
           renderAgentMessage(`Hi there! 👋 I'm ${agent.name}, and I'll be helping you today. To get started, may I know your full name?`, 'greeting')
         )}
         
-        {/* Confirmed name message */}
         {detectedFullName && nameConfirmed && collectStep !== 'confirm_name' && (
           <>
             {renderUserMessage(fullName === detectedFullName ? `Yes, that's correct ✓` : fullName, 'user-name')}
@@ -175,7 +152,6 @@ const ChatConversationalCollect = ({ onComplete, onPreferForm, initialEmail = ''
           </>
         )}
 
-        {/* Name step (non-logged-in flow) */}
         {!detectedFullName && collectStep !== 'name' && fullName && (
           <>
             {renderUserMessage(fullName, 'user-name')}
@@ -183,7 +159,6 @@ const ChatConversationalCollect = ({ onComplete, onPreferForm, initialEmail = ''
           </>
         )}
 
-        {/* Email step */}
         {collectStep !== 'name' && collectStep !== 'email' && email && !initialEmail && (
           <>
             {renderUserMessage(email, 'user-email')}
@@ -191,17 +166,11 @@ const ChatConversationalCollect = ({ onComplete, onPreferForm, initialEmail = ''
           </>
         )}
 
-        {/* Phone step confirmation */}
         {collectStep === 'complete' && phone && (
-          <>
-            {renderUserMessage(phone, 'user-phone')}
-          </>
+          renderUserMessage(phone, 'user-phone')
         )}
 
-        {/* Typing indicator */}
-        <AnimatePresence>
-          {isTyping && renderTypingIndicator()}
-        </AnimatePresence>
+        {isTyping && renderTypingIndicator()}
       </div>
 
       {/* Input Area */}
@@ -215,19 +184,23 @@ const ChatConversationalCollect = ({ onComplete, onPreferForm, initialEmail = ''
               Yes, my name is {detectedFullName} ✓
             </Button>
             <div className="relative">
-              <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gold" />
-              <Input
+              <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gold z-10" />
+              <input
+                ref={nameInputRef}
                 type="text"
-                value={fullName !== detectedFullName ? fullName : ''}
+                defaultValue={fullName !== detectedFullName ? fullName : ''}
                 onChange={(e) => setFullName(e.target.value)}
                 onKeyDown={(e) => handleKeyDown(e, handleNameSubmit)}
                 placeholder="Or type your correct full name..."
-                className="pl-10 pr-12"
+                inputMode="text"
+                enterKeyHint="send"
+                autoComplete="off"
+                className="w-full pl-10 pr-12 h-10 rounded-xl border-2 border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black placeholder:text-muted-foreground text-sm outline-none focus:ring-2 focus:ring-gold/50"
               />
               <Button
                 size="icon"
                 onClick={handleNameSubmit}
-                className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10 bg-gold hover:bg-gold-light hover:shadow-[0_4px_15px_rgba(200,167,102,0.5)] active:bg-gold-dark rounded-lg transition-all duration-200"
+                className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10 bg-gold hover:bg-gold-light rounded-lg"
               >
                 <Send className="w-4 h-4 text-black" />
               </Button>
@@ -239,20 +212,24 @@ const ChatConversationalCollect = ({ onComplete, onPreferForm, initialEmail = ''
         {collectStep === 'name' && (
           <div className="space-y-3">
             <div className="relative">
-              <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gold" />
-              <Input
+              <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gold z-10" />
+              <input
+                ref={nameInputRef}
                 type="text"
-                value={fullName}
+                defaultValue={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 onKeyDown={(e) => handleKeyDown(e, handleNameSubmit)}
                 placeholder="Enter your full name..."
-                className="pl-10 pr-12"
+                inputMode="text"
+                enterKeyHint="send"
+                autoComplete="off"
                 autoFocus
+                className="w-full pl-10 pr-12 h-10 rounded-xl border-2 border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black placeholder:text-muted-foreground text-sm outline-none focus:ring-2 focus:ring-gold/50"
               />
               <Button
                 size="icon"
                 onClick={handleNameSubmit}
-                className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10 bg-gold hover:bg-gold-light hover:shadow-[0_4px_15px_rgba(200,167,102,0.5)] active:bg-gold-dark rounded-lg transition-all duration-200"
+                className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10 bg-gold hover:bg-gold-light rounded-lg"
               >
                 <Send className="w-4 h-4 text-black" />
               </Button>
@@ -264,20 +241,24 @@ const ChatConversationalCollect = ({ onComplete, onPreferForm, initialEmail = ''
         {collectStep === 'email' && (
           <div className="space-y-3">
             <div className="relative">
-              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gold" />
-              <Input
+              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gold z-10" />
+              <input
+                ref={emailInputRef}
                 type="email"
-                value={email}
+                defaultValue={email}
                 onChange={(e) => setEmail(e.target.value)}
                 onKeyDown={(e) => handleKeyDown(e, handleEmailSubmit)}
                 placeholder="Enter your email address..."
-                className="pl-10 pr-12"
+                inputMode="email"
+                enterKeyHint="send"
+                autoComplete="off"
                 autoFocus
+                className="w-full pl-10 pr-12 h-10 rounded-xl border-2 border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black placeholder:text-muted-foreground text-sm outline-none focus:ring-2 focus:ring-gold/50"
               />
               <Button
                 size="icon"
                 onClick={handleEmailSubmit}
-                className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10 bg-gold hover:bg-gold-light hover:shadow-[0_4px_15px_rgba(200,167,102,0.5)] active:bg-gold-dark rounded-lg transition-all duration-200"
+                className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10 bg-gold hover:bg-gold-light rounded-lg"
               >
                 <Send className="w-4 h-4 text-black" />
               </Button>
@@ -289,20 +270,24 @@ const ChatConversationalCollect = ({ onComplete, onPreferForm, initialEmail = ''
         {collectStep === 'phone' && (
           <div className="space-y-3">
             <div className="relative">
-              <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gold" />
-              <Input
+              <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gold z-10" />
+              <input
+                ref={phoneInputRef}
                 type="tel"
-                value={phone}
+                defaultValue={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 onKeyDown={(e) => handleKeyDown(e, handlePhoneSubmit)}
                 placeholder="+971 50 123 4567"
-                className="pl-10 pr-12"
+                inputMode="tel"
+                enterKeyHint="send"
+                autoComplete="off"
                 autoFocus
+                className="w-full pl-10 pr-12 h-10 rounded-xl border-2 border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black placeholder:text-muted-foreground text-sm outline-none focus:ring-2 focus:ring-gold/50"
               />
               <Button
                 size="icon"
                 onClick={handlePhoneSubmit}
-                className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10 bg-gold hover:bg-gold-light hover:shadow-[0_4px_15px_rgba(200,167,102,0.5)] active:bg-gold-dark rounded-lg transition-all duration-200"
+                className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10 bg-gold hover:bg-gold-light rounded-lg"
               >
                 <Send className="w-4 h-4 text-black" />
               </Button>
@@ -311,7 +296,6 @@ const ChatConversationalCollect = ({ onComplete, onPreferForm, initialEmail = ''
           </div>
         )}
 
-        {/* Prefer form link */}
         <button
           onClick={onPreferForm}
           className="w-full mt-3 text-center text-xs text-black/50 hover:text-gold transition-colors flex items-center justify-center gap-1"
@@ -322,6 +306,8 @@ const ChatConversationalCollect = ({ onComplete, onPreferForm, initialEmail = ''
       </div>
     </div>
   );
-};
+});
+
+ChatConversationalCollect.displayName = 'ChatConversationalCollect';
 
 export default ChatConversationalCollect;

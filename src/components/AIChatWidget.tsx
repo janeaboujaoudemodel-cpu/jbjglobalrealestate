@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
@@ -249,7 +249,7 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
   };
 
   // Select service and create conversation
-  const handleSelectService = async (serviceId: string) => {
+  const handleSelectService = useCallback(async (serviceId: string) => {
     setSelectedService(serviceId);
     
     const fullName = `${userInfo.firstName} ${userInfo.lastName}`.trim();
@@ -303,7 +303,7 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
 
     // Show agent joining animation
     setStep('agent_joining');
-  };
+  }, [userInfo]);
 
   // When agent is ready, start the chat
   const handleAgentReady = () => {
@@ -366,7 +366,7 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
   };
 
   // Send message with streaming
-  const handleSend = async () => {
+  const handleSend = useCallback(async () => {
     if (!input.trim() || isLoading) return;
 
     const userMessage: Message = {
@@ -499,7 +499,7 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [input, isLoading, messages, selectedService, userInfo.firstName, conversationId]);
 
   // Submit to team
   const handleSubmitToTeam = async (inquirySummary?: string) => {
@@ -782,7 +782,7 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
             messages={messages}
             isLoading={isLoading}
             input={input}
-            onInputChange={setInput}
+            onInputChange={(val) => setInput(val)}
             onSend={handleSend}
             onSubmitToTeam={handleSubmitToTeam}
             userFirstName={userInfo.firstName}

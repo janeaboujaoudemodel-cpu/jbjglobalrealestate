@@ -1,11 +1,9 @@
-import { useRef, useEffect, useMemo, useState } from 'react';
+import React, { useRef, useEffect, useMemo, useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { User, Send, MessageCircle, Shield, Copy, X } from 'lucide-react';
 import { toast } from 'sonner';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Message, SERVICES, getRandomAgent } from './types';
 import { CONTACT_INFO } from '@/constants/stats';
 import { T } from '@/components/ui/T';
@@ -23,7 +21,7 @@ interface ChatMessagesProps {
   selectedService: string | null;
 }
 
-const ChatMessages = ({
+const ChatMessages = React.memo(({
   messages,
   isLoading,
   input,
@@ -36,12 +34,23 @@ const ChatMessages = ({
 }: ChatMessagesProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const localInputRef = useRef(input);
   const agent = useMemo(() => getRandomAgent(), []);
   const { t } = useLanguage();
   const [showSubmitPanel, setShowSubmitPanel] = useState(false);
   const [inquirySummary, setInquirySummary] = useState('');
 
   const userMessageCount = messages.filter(m => m.role === 'user').length;
+
+  // Keep local ref in sync with prop (only when prop changes from outside, e.g. after send clears it)
+  useEffect(() => {
+    if (input !== localInputRef.current) {
+      localInputRef.current = input;
+      if (inputRef.current && inputRef.current.value !== input) {
+        inputRef.current.value = input;
+      }
+    }
+  }, [input]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -53,12 +62,17 @@ const ChatMessages = ({
     inputRef.current?.focus();
   }, []);
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleLocalInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    localInputRef.current = e.target.value;
+    onInputChange(e.target.value);
+  }, [onInputChange]);
+
+  const handleKeyPress = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       onSend();
     }
-  };
+  }, [onSend]);
 
   const handleSubmitConfirm = () => {
     onSubmitToTeam(inquirySummary.trim() || undefined);
@@ -73,10 +87,8 @@ const ChatMessages = ({
       <ScrollArea className="flex-1 p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]" ref={scrollRef}>
         <div className="space-y-4">
           {messages.map((message) => (
-            <motion.div
+            <div
               key={message.id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
               className={`flex gap-3 group ${message.role === 'user' ? 'flex-row-reverse' : ''}`}
             >
               {message.role === 'user' ? (
@@ -105,7 +117,6 @@ const ChatMessages = ({
                     {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </p>
                 </div>
-                {/* Copy Button */}
                 <button
                   onClick={async () => {
                     await navigator.clipboard.writeText(message.content);
@@ -119,14 +130,10 @@ const ChatMessages = ({
                   <span>{t('chat.copy') || 'Copy'}</span>
                 </button>
               </div>
-            </motion.div>
+            </div>
           ))}
           {isLoading && messages[messages.length - 1]?.content === '' && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="flex gap-3"
-            >
+            <div className="flex gap-3">
               <div className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0 border-2 border-gold shadow-lg shadow-gold/20">
                 <img 
                   src={agent.photo} 
@@ -136,75 +143,56 @@ const ChatMessages = ({
               </div>
               <div className="flex flex-col gap-1">
                 <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] p-4 rounded-2xl rounded-tl-sm flex items-center gap-1.5 border border-gold/20 shadow-sm">
-                  <motion.span
-                    className="w-2.5 h-2.5 bg-gold rounded-full"
-                    animate={{ y: [0, -8, 0] }}
-                    transition={{ duration: 0.6, repeat: Infinity, delay: 0 }}
-                  />
-                  <motion.span
-                    className="w-2.5 h-2.5 bg-gold rounded-full"
-                    animate={{ y: [0, -8, 0] }}
-                    transition={{ duration: 0.6, repeat: Infinity, delay: 0.15 }}
-                  />
-                  <motion.span
-                    className="w-2.5 h-2.5 bg-gold rounded-full"
-                    animate={{ y: [0, -8, 0] }}
-                    transition={{ duration: 0.6, repeat: Infinity, delay: 0.3 }}
-                  />
+                  <span className="w-2.5 h-2.5 bg-gold rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                  <span className="w-2.5 h-2.5 bg-gold rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                  <span className="w-2.5 h-2.5 bg-gold rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                 </div>
                 <p className="text-gold text-xs font-medium ml-1"><T>{`${agent.name} is typing...`}</T></p>
               </div>
-            </motion.div>
+            </div>
           )}
         </div>
       </ScrollArea>
 
       {/* Submit to Team Panel */}
-      <AnimatePresence>
-        {showSubmitPanel && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="border-t border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] overflow-hidden"
-          >
-            <div className="p-4 space-y-3">
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-semibold text-black">
-                  <T>Describe your inquiry</T>
-                </p>
-                <button onClick={() => setShowSubmitPanel(false)} className="text-zinc-400 hover:text-black">
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-              <Textarea
-                value={inquirySummary}
-                onChange={(e) => setInquirySummary(e.target.value)}
-                placeholder="Please describe what you need from our team..."
-                className="min-h-[80px] text-sm"
-              />
-              <div className="flex gap-2">
-                <Button
-                  onClick={handleSubmitConfirm}
-                  className="flex-1 bg-gold hover:bg-gold-light text-black text-sm font-bold shadow-lg shadow-gold/20"
-                >
-                  <Shield className="w-4 h-4 mr-2" />
-                  <T>Submit Now</T>
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => setShowSubmitPanel(false)}
-                  className="border-gold/30 text-zinc-600"
-                >
-                  <T>Cancel</T>
-                </Button>
-              </div>
+      {showSubmitPanel && (
+        <div className="border-t border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+          <div className="p-4 space-y-3">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-semibold text-black">
+                <T>Describe your inquiry</T>
+              </p>
+              <button onClick={() => setShowSubmitPanel(false)} className="text-zinc-400 hover:text-black">
+                <X className="w-4 h-4" />
+              </button>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            <Textarea
+              value={inquirySummary}
+              onChange={(e) => setInquirySummary(e.target.value)}
+              placeholder="Please describe what you need from our team..."
+              className="min-h-[80px] text-sm"
+            />
+            <div className="flex gap-2">
+              <Button
+                onClick={handleSubmitConfirm}
+                className="flex-1 bg-gold hover:bg-gold-light text-black text-sm font-bold shadow-lg shadow-gold/20"
+              >
+                <Shield className="w-4 h-4 mr-2" />
+                <T>Submit Now</T>
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => setShowSubmitPanel(false)}
+                className="border-gold/30 text-zinc-600"
+              >
+                <T>Cancel</T>
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
-      {/* Action Buttons - Only show Submit to Team when user has sent messages */}
+      {/* Action Buttons */}
       {!showSubmitPanel && (
         <div className="px-4 py-3 border-t border-gold/30 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] flex gap-2">
           {isExistingUser && (
@@ -230,17 +218,21 @@ const ChatMessages = ({
         </div>
       )}
 
-      {/* Input */}
+      {/* Input - Using native input to prevent mobile keyboard dismissal */}
       <div className="p-4 border-t border-gold/30 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
         <div className="flex gap-3">
-          <Input
+          <input
             ref={inputRef}
-            value={input}
-            onChange={(e) => onInputChange(e.target.value)}
-            onKeyPress={handleKeyPress}
+            defaultValue={input}
+            onChange={handleLocalInput}
+            onKeyDown={handleKeyPress}
             placeholder="Type your message..."
-            className="flex-1 bg-white/80 border-gold/30 text-black placeholder:text-black/40 focus:border-gold focus:ring-gold/30 h-12 rounded-xl text-sm"
+            inputMode="text"
+            enterKeyHint="send"
+            autoComplete="off"
+            autoCorrect="off"
             disabled={isLoading}
+            className="flex-1 bg-white/80 border-2 border-gold/30 text-black placeholder:text-black/40 focus:border-gold focus:ring-2 focus:ring-gold/30 h-12 rounded-xl text-sm px-4 py-2 outline-none transition-all duration-200"
           />
           <Button
             onClick={onSend}
@@ -253,6 +245,8 @@ const ChatMessages = ({
       </div>
     </>
   );
-};
+});
+
+ChatMessages.displayName = 'ChatMessages';
 
 export default ChatMessages;

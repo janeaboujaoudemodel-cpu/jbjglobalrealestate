@@ -1,9 +1,8 @@
 import { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { FileText, Upload, CheckCircle, AlertCircle, ArrowLeft } from 'lucide-react';
+import { FileText, Upload, CheckCircle, AlertCircle, ArrowLeft, Loader2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { T } from '@/components/ui/T';
@@ -22,6 +21,12 @@ interface ChatCVSubmissionProps {
   onBack: () => void;
 }
 
+function formatFileSize(bytes: number): string {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
 const ChatCVSubmission = ({ 
   userInfo, 
   onUserInfoChange, 
@@ -31,7 +36,6 @@ const ChatCVSubmission = ({
 }: ChatCVSubmissionProps) => {
   const [cvFile, setCvFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -60,13 +64,11 @@ const ChatCVSubmission = ({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Validate file type
       const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
       if (!allowedTypes.includes(file.type)) {
         toast.error('Please upload a PDF or Word document');
         return;
       }
-      // Validate file size (5MB max)
       if (file.size > 5 * 1024 * 1024) {
         toast.error('File size must be less than 5MB');
         return;
@@ -80,22 +82,17 @@ const ChatCVSubmission = ({
     if (!validateForm() || !cvFile) return;
 
     setIsUploading(true);
-    setUploadProgress(10);
 
     try {
-      // Upload CV to storage
       const fileExt = cvFile.name.split('.').pop();
       const fileName = `cv_${Date.now()}_${userInfo.firstName}_${userInfo.lastName}.${fileExt}`;
       const filePath = `cv-submissions/${fileName}`;
-
-      setUploadProgress(30);
 
       const { error: uploadError } = await supabase.storage
         .from('documents')
         .upload(filePath, cvFile);
 
       if (uploadError) {
-        // Try with public bucket if documents doesn't exist
         const { error: publicUploadError } = await supabase.storage
           .from('public')
           .upload(filePath, cvFile);
@@ -105,18 +102,12 @@ const ChatCVSubmission = ({
         }
       }
 
-      setUploadProgress(60);
-
-      // Get public URL
       const { data: urlData } = supabase.storage
         .from('documents')
         .getPublicUrl(filePath);
 
       const cvUrl = urlData?.publicUrl || filePath;
 
-      setUploadProgress(80);
-
-      // Insert CV submission record
       const { error: insertError } = await supabase
         .from('hr_cv_submissions')
         .insert({
@@ -134,11 +125,9 @@ const ChatCVSubmission = ({
         throw new Error('Failed to submit CV. Please try again.');
       }
 
-      setUploadProgress(100);
       setSubmitted(true);
       toast.success('CV submitted successfully!');
 
-      // Proceed quickly after success
       setTimeout(() => {
         onSubmitSuccess();
       }, 800);
@@ -192,21 +181,25 @@ const ChatCVSubmission = ({
         <div className="grid grid-cols-2 gap-2">
           <div>
             <Label className="text-black text-xs mb-1 block"><T>First Name</T> *</Label>
-            <Input
+            <input
               value={userInfo.firstName}
               onChange={(e) => onUserInfoChange('firstName', e.target.value)}
               placeholder="First"
-              className={`bg-white border-2 border-gold/40 text-black placeholder:text-zinc-400 h-9 text-sm ${formErrors.firstName ? 'border-red-500' : ''}`}
+              inputMode="text"
+              autoComplete="off"
+              className={`w-full bg-white border-2 border-gold/40 text-black placeholder:text-zinc-400 h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold ${formErrors.firstName ? 'border-red-500' : ''}`}
             />
             {formErrors.firstName && <p className="text-red-500 text-xs mt-0.5">{formErrors.firstName}</p>}
           </div>
           <div>
             <Label className="text-black text-xs mb-1 block"><T>Last Name</T> *</Label>
-            <Input
+            <input
               value={userInfo.lastName}
               onChange={(e) => onUserInfoChange('lastName', e.target.value)}
               placeholder="Last"
-              className={`bg-white border-2 border-gold/40 text-black placeholder:text-zinc-400 h-9 text-sm ${formErrors.lastName ? 'border-red-500' : ''}`}
+              inputMode="text"
+              autoComplete="off"
+              className={`w-full bg-white border-2 border-gold/40 text-black placeholder:text-zinc-400 h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold ${formErrors.lastName ? 'border-red-500' : ''}`}
             />
             {formErrors.lastName && <p className="text-red-500 text-xs mt-0.5">{formErrors.lastName}</p>}
           </div>
@@ -215,12 +208,14 @@ const ChatCVSubmission = ({
         {/* Email */}
         <div>
           <Label className="text-black text-xs mb-1 block"><T>Email Address</T> *</Label>
-          <Input
+          <input
             type="email"
             value={userInfo.email}
             onChange={(e) => onUserInfoChange('email', e.target.value)}
             placeholder="your@email.com"
-            className={`bg-white border-2 border-gold/40 text-black placeholder:text-zinc-400 h-9 text-sm ${formErrors.email ? 'border-red-500' : ''}`}
+            inputMode="email"
+            autoComplete="off"
+            className={`w-full bg-white border-2 border-gold/40 text-black placeholder:text-zinc-400 h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold ${formErrors.email ? 'border-red-500' : ''}`}
           />
           {formErrors.email && <p className="text-red-500 text-xs mt-0.5">{formErrors.email}</p>}
         </div>
@@ -228,12 +223,14 @@ const ChatCVSubmission = ({
         {/* Phone */}
         <div>
           <Label className="text-black text-xs mb-1 block"><T>Phone Number</T> *</Label>
-          <Input
+          <input
             type="tel"
             value={userInfo.phone}
             onChange={(e) => onUserInfoChange('phone', e.target.value)}
             placeholder="+971 50 123 4567"
-            className={`bg-white border-2 border-gold/40 text-black placeholder:text-zinc-400 h-9 text-sm ${formErrors.phone ? 'border-red-500' : ''}`}
+            inputMode="tel"
+            autoComplete="off"
+            className={`w-full bg-white border-2 border-gold/40 text-black placeholder:text-zinc-400 h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold ${formErrors.phone ? 'border-red-500' : ''}`}
           />
           {formErrors.phone && <p className="text-red-500 text-xs mt-0.5">{formErrors.phone}</p>}
         </div>
@@ -261,8 +258,8 @@ const ChatCVSubmission = ({
             {cvFile ? (
               <>
                 <CheckCircle className="w-6 h-6 text-green-500" />
-                <span className="text-green-700 text-sm font-medium">{cvFile.name}</span>
-                <span className="text-green-600 text-xs">Click to change file</span>
+                <span className="text-green-700 text-sm font-medium truncate max-w-full px-2">{cvFile.name}</span>
+                <span className="text-green-600 text-xs">{formatFileSize(cvFile.size)} · Click to change file</span>
               </>
             ) : (
               <>
@@ -280,13 +277,11 @@ const ChatCVSubmission = ({
           )}
         </div>
 
-        {/* Progress bar during upload */}
+        {/* Indeterminate spinner during upload */}
         {isUploading && (
-          <div className="w-full bg-zinc-200 rounded-full h-2">
-            <div 
-              className="bg-gold h-2 rounded-full transition-all duration-300"
-              style={{ width: `${uploadProgress}%` }}
-            />
+          <div className="flex items-center justify-center gap-2 py-2">
+            <Loader2 className="w-5 h-5 text-gold animate-spin" />
+            <span className="text-sm text-black/70 font-medium">Uploading your CV...</span>
           </div>
         )}
 
@@ -296,7 +291,7 @@ const ChatCVSubmission = ({
           className="w-full bg-gold hover:bg-gold-light text-black font-bold py-3 rounded-xl shadow-lg shadow-gold/20"
         >
           {isUploading ? (
-            <T>Uploading...</T>
+            <><Loader2 className="w-4 h-4 mr-2 animate-spin" /><T>Uploading...</T></>
           ) : (
             <T>Submit CV</T>
           )}

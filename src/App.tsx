@@ -48,6 +48,7 @@ const CreativeSuite = lazy(() => import("./pages/business-suite/CreativeSuite"))
 const ProductivitySuite = lazy(() => import("./pages/business-suite/ProductivitySuite"));
 const SuitesHub = lazy(() => import("./pages/business-suite/SuitesHub"));
 const EducationHub = lazy(() => import("./pages/EducationHub"));
+const AdminChatDashboard = lazy(() => import("./pages/admin/AdminChatDashboard"));
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ActiveLeadProvider } from "@/contexts/ActiveLeadContext";
@@ -631,6 +632,7 @@ const App = () => (
                 <Route path="/crm/employees" element={<OwnerGuard><CRMEmployees /></OwnerGuard>} />
                 
                 <Route path="/admin/crm" element={<OwnerGuard><AdminCRM /></OwnerGuard>} />
+                <Route path="/admin/chat-conversations" element={<OwnerGuard><AdminChatDashboard /></OwnerGuard>} />
                 <Route path="/join" element={<JoinApplication />} />
                 <Route path="/onboarding" element={<Onboarding />} />
                 <Route path="/onboarding/module/:moduleId" element={<OnboardingModule />} />
