@@ -1537,7 +1537,16 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               <div className={`w-px h-5 bg-gradient-to-b from-transparent ${isFullyTransparent ? 'via-white/40' : 'via-gold/40'} to-transparent`} />
 
               {/* Listing Notification Bell */}
-              <ListingNotificationBell />
+              <ListingNotificationBell 
+                onOpen={() => {
+                  // Close any active mega menu when notification opens
+                  closeMegaMenu();
+                }}
+                forceClose={activeMegaMenu !== null}
+              />
+
+              {/* Divider */}
+              <div className={`w-px h-5 bg-gradient-to-b from-transparent ${isFullyTransparent ? 'via-white/40' : 'via-gold/40'} to-transparent`} />
 
               {/* Account Icon - triggers mega menu on hover (desktop only) */}
               <button
