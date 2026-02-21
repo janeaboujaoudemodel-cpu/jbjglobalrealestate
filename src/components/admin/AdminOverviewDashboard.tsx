@@ -96,7 +96,7 @@ export const AdminOverviewDashboard = () => {
         visitorSessionsRes,
         visitorEventsRes,
       ] = await Promise.all([
-        supabase.from("projects").select("id", { count: "exact", head: true }),
+        supabase.from("projects").select("id", { count: "exact", head: true }).eq("is_published", true),
         supabase.from("crm_leads").select("id", { count: "exact", head: true }),
         supabase.from("broker_profiles").select("id", { count: "exact", head: true }).eq("is_active", true),
         supabase.from("ip_blocklist").select("id", { count: "exact", head: true }),
@@ -186,7 +186,7 @@ export const AdminOverviewDashboard = () => {
 
   const quickStats: QuickStat[] = useMemo(() => [
     {
-      label: "Total Projects",
+      label: "Published Projects",
       value: stats.totalProjects,
       icon: <Building2 className="w-5 h-5" />,
       trend: "up",

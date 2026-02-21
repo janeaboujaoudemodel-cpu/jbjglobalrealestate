@@ -98,92 +98,91 @@ const ListingPortalMyListings = () => {
 
   const statusIcon = (status: string) => {
     switch (status) {
-      case 'approved': return <CheckCircle className="w-4 h-4 text-emerald-400" />;
-      case 'rejected': return <XCircle className="w-4 h-4 text-red-400" />;
-      default: return <Clock className="w-4 h-4 text-amber-400" />;
+      case 'approved': return <CheckCircle className="w-4 h-4 text-emerald-600" />;
+      case 'rejected': return <XCircle className="w-4 h-4 text-red-500" />;
+      default: return <Clock className="w-4 h-4 text-[#C9A84C]" />;
     }
   };
 
   const statusColor = (status: string) => {
     switch (status) {
-      case 'approved': return 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30';
-      case 'rejected': return 'bg-red-500/20 text-red-300 border-red-500/30';
-      default: return 'bg-amber-500/20 text-amber-300 border-amber-500/30';
+      case 'approved': return 'bg-emerald-100 text-emerald-800 border-emerald-300';
+      case 'rejected': return 'bg-red-100 text-red-800 border-red-300';
+      default: return 'bg-[#F5EBD7] text-[#8B7355] border-[#C9A84C]/30';
     }
   };
 
   if (!user) {
     return (
-      <section className="min-h-screen bg-black flex items-center justify-center">
+      <section className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-white text-xl font-bold mb-4">Please sign in</h2>
-          <Button onClick={() => navigate('/auth')} className="bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white">Sign In</Button>
+          <h2 className="text-black text-xl font-bold mb-4">Please sign in</h2>
+          <Button onClick={() => navigate('/auth')} className="bg-gold hover:bg-gold/90 text-black">Sign In</Button>
         </div>
       </section>
     );
   }
 
   return (
-    <section className="relative w-full min-h-screen bg-black">
+    <section className="relative w-full min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
       <div className="relative py-12 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-900/20 via-black to-purple-900/15" />
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto">
-            <Button variant="ghost" onClick={() => navigate('/listing-portal')} className="text-zinc-400 mb-4">
+            <Button variant="ghost" onClick={() => navigate('/listing-portal')} className="text-zinc-500 hover:text-gold mb-4">
               <ArrowLeft className="w-4 h-4 mr-2" /> Back to Portal
             </Button>
             <div className="flex justify-between items-center mb-8">
-              <h1 className="text-2xl font-bold text-white">My Listings</h1>
-              <Button onClick={() => navigate('/listing-portal/submit')} className="bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white">
+              <h1 className="text-2xl font-bold text-black">My Listings</h1>
+              <Button onClick={() => navigate('/listing-portal/submit')} className="bg-gold hover:bg-gold/90 text-black">
                 <Plus className="w-4 h-4 mr-2" /> New Listing
               </Button>
             </div>
 
             {/* Stats Cards */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-              <div className="bg-zinc-900/60 border border-fuchsia-500/20 rounded-xl p-4 text-center">
-                <Star className="w-5 h-5 text-amber-400 mx-auto mb-1" />
-                <p className="text-2xl font-bold text-white">{points?.points || 0}</p>
+              <div className="bg-white border-2 border-gold/20 rounded-xl p-4 text-center">
+                <Star className="w-5 h-5 text-gold mx-auto mb-1" />
+                <p className="text-2xl font-bold text-black">{points?.points || 0}</p>
                 <p className="text-xs text-zinc-500">Points</p>
               </div>
-              <div className="bg-zinc-900/60 border border-fuchsia-500/20 rounded-xl p-4 text-center">
-                <Award className="w-5 h-5 text-fuchsia-400 mx-auto mb-1" />
-                <p className="text-sm font-bold text-white capitalize">{points?.tier || 'Starter'}</p>
+              <div className="bg-white border-2 border-gold/20 rounded-xl p-4 text-center">
+                <Award className="w-5 h-5 text-gold mx-auto mb-1" />
+                <p className="text-sm font-bold text-black capitalize">{points?.tier || 'Starter'}</p>
                 <p className="text-xs text-zinc-500">Tier</p>
               </div>
-              <div className="bg-zinc-900/60 border border-fuchsia-500/20 rounded-xl p-4 text-center">
-                <Sparkles className="w-5 h-5 text-emerald-400 mx-auto mb-1" />
-                <p className="text-2xl font-bold text-white">{points?.free_listings_remaining ?? 3}</p>
+              <div className="bg-white border-2 border-gold/20 rounded-xl p-4 text-center">
+                <Sparkles className="w-5 h-5 text-emerald-500 mx-auto mb-1" />
+                <p className="text-2xl font-bold text-black">{points?.free_listings_remaining ?? 3}</p>
                 <p className="text-xs text-zinc-500">Free Left</p>
               </div>
-              <div className="bg-zinc-900/60 border border-fuchsia-500/20 rounded-xl p-4 text-center">
-                <Shield className={`w-5 h-5 mx-auto mb-1 ${verification?.status === 'verified' ? 'text-emerald-400' : 'text-zinc-600'}`} />
-                <p className="text-sm font-bold text-white capitalize">{verification?.status || 'Not Verified'}</p>
+              <div className="bg-white border-2 border-gold/20 rounded-xl p-4 text-center">
+                <Shield className={`w-5 h-5 mx-auto mb-1 ${verification?.status === 'verified' ? 'text-emerald-500' : 'text-zinc-400'}`} />
+                <p className="text-sm font-bold text-black capitalize">{verification?.status || 'Not Verified'}</p>
                 <p className="text-xs text-zinc-500">Broker Status</p>
               </div>
             </div>
 
             {/* Verification */}
             {(!verification || verification.status === 'pending') && (
-              <div className="bg-zinc-900/60 border border-amber-500/30 rounded-xl p-4 mb-6">
+              <div className="bg-white border-2 border-gold/30 rounded-xl p-4 mb-6">
                 <div className="flex justify-between items-center">
                   <div>
-                    <h3 className="text-white font-semibold text-sm">Broker Verification</h3>
+                    <h3 className="text-black font-semibold text-sm">Broker Verification</h3>
                     <p className="text-zinc-500 text-xs">
                       {verification?.status === 'pending' ? 'Your verification is under review' : 'Get verified to earn 2x points'}
                     </p>
                   </div>
                   {!verification && (
-                    <Button size="sm" onClick={() => setShowVerForm(!showVerForm)} className="bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                    <Button size="sm" onClick={() => setShowVerForm(!showVerForm)} className="bg-gold/15 text-gold border border-gold/30 hover:bg-gold/25">
                       <Upload className="w-3 h-3 mr-1" /> Verify
                     </Button>
                   )}
                 </div>
                 {showVerForm && (
                   <div className="mt-4 space-y-3">
-                    <Input value={reraNumber} onChange={e => setReraNumber(e.target.value)} placeholder="RERA Number" className="bg-zinc-800/50 border-zinc-600 text-white" />
-                    <Input value={companyName} onChange={e => setCompanyName(e.target.value)} placeholder="Company Name" className="bg-zinc-800/50 border-zinc-600 text-white" />
-                    <Button onClick={handleVerificationSubmit} size="sm" className="bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white">Submit Verification</Button>
+                    <Input value={reraNumber} onChange={e => setReraNumber(e.target.value)} placeholder="RERA Number" className="bg-white border-gold/30 text-black" />
+                    <Input value={companyName} onChange={e => setCompanyName(e.target.value)} placeholder="Company Name" className="bg-white border-gold/30 text-black" />
+                    <Button onClick={handleVerificationSubmit} size="sm" className="bg-gold hover:bg-gold/90 text-black">Submit Verification</Button>
                   </div>
                 )}
               </div>
@@ -192,23 +191,23 @@ const ListingPortalMyListings = () => {
             {/* Listings */}
             {loading ? (
               <div className="text-center py-12">
-                <div className="w-8 h-8 border-2 border-fuchsia-500/30 border-t-fuchsia-500 rounded-full animate-spin mx-auto" />
+                <div className="w-8 h-8 border-2 border-gold/30 border-t-gold rounded-full animate-spin mx-auto" />
               </div>
             ) : listings.length === 0 ? (
-              <div className="text-center py-12 bg-zinc-900/40 border border-zinc-800 rounded-2xl">
-                <h3 className="text-white font-semibold mb-2">No listings yet</h3>
+              <div className="text-center py-12 bg-white/60 border-2 border-gold/20 rounded-2xl">
+                <h3 className="text-black font-semibold mb-2">No listings yet</h3>
                 <p className="text-zinc-500 text-sm mb-4">Submit your first property listing!</p>
-                <Button onClick={() => navigate('/listing-portal/submit')} className="bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white">Submit Listing</Button>
+                <Button onClick={() => navigate('/listing-portal/submit')} className="bg-gold hover:bg-gold/90 text-black">Submit Listing</Button>
               </div>
             ) : (
               <div className="space-y-3">
                 {listings.map(listing => (
-                  <div key={listing.id} className="bg-zinc-900/60 border border-zinc-800 rounded-xl p-4 flex items-center justify-between hover:border-fuchsia-500/30 transition-all">
+                  <div key={listing.id} className="bg-white border-2 border-gold/20 rounded-xl p-4 flex items-center justify-between hover:border-gold/50 transition-all">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
                         {statusIcon(listing.status)}
-                        <h3 className="text-white font-medium text-sm">{listing.title}</h3>
-                        {listing.is_featured && <Badge className="bg-amber-500/20 text-amber-300 text-[10px]">Featured</Badge>}
+                        <h3 className="text-black font-medium text-sm">{listing.title}</h3>
+                        {listing.is_featured && <Badge className="bg-gold/15 text-gold border-gold/30 text-[10px]">Featured</Badge>}
                       </div>
                       <div className="flex items-center gap-3 text-xs text-zinc-500">
                         <Badge className={`text-[10px] ${statusColor(listing.status)}`}>{listing.status}</Badge>
@@ -217,7 +216,7 @@ const ListingPortalMyListings = () => {
                       </div>
                     </div>
                     <div className="flex gap-2">
-                      <Button size="icon" variant="ghost" className="text-zinc-500 hover:text-red-400" onClick={() => handleDelete(listing.id)}>
+                      <Button size="icon" variant="ghost" className="text-zinc-400 hover:text-red-500" onClick={() => handleDelete(listing.id)}>
                         <Trash2 className="w-4 h-4" />
                       </Button>
                     </div>

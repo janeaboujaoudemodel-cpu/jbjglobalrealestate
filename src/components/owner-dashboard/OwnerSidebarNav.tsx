@@ -76,6 +76,7 @@ const NAV_SECTIONS: NavSection[] = [
     label: "CREATIVE",
     items: [
       { label: "Studio", icon: Video, path: "/owner/studio" },
+      { label: "Founder & Podcast", icon: Users, path: "/owner/founder-settings" },
       { label: "Kanban Board", icon: Kanban, path: "/owner/kanban" },
       { label: "Marketing Hub", icon: Megaphone, path: "/owner/marketing-hub" },
     ],
@@ -86,12 +87,6 @@ const NAV_SECTIONS: NavSection[] = [
       { label: "Admin Panel", icon: Shield, path: "/owner/admin" },
       { label: "Analytics", icon: BarChart3, path: "/owner/analytics" },
       { label: "Documents", icon: FileText, path: "/owner/documents" },
-    ],
-  },
-  {
-    label: "FOUNDER",
-    items: [
-      { label: "Founder & Podcast", icon: Users, path: "/owner/founder-settings" },
     ],
   },
   {
