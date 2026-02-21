@@ -168,7 +168,7 @@ export default function StampGeneratorPage() {
 
     // Sync Center Art controls from project
     setLocalIconStyle((data.icon_style as any) || 'MONOGRAM');
-    setLocalMonogramText(data.monogram_text || '');
+    setLocalMonogramText(data.monogram_text || data.company_name?.slice(0, 2)?.toUpperCase() || '');
     setLocalLogoUrl((data as any).uploaded_logo_url || '');
 
     const isFresh = new URLSearchParams(location.search).get('fresh') === '1';
@@ -206,8 +206,9 @@ export default function StampGeneratorPage() {
     setBlocked(false);
     setSvgOverrides({});
 
-    // Merge any latest project state so generation matches preview
-    const latestProject = { ...p, ...project };
+    // Merge: prefer the explicitly passed proj over stale project state
+    // When called from loadProject, proj is fresh DB data and project may be null
+    const latestProject = project ? { ...project, ...p } : p;
 
     try {
       if (session?.access_token) {
