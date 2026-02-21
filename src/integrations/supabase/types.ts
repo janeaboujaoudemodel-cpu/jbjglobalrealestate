@@ -2594,6 +2594,36 @@ export type Database = {
         }
         Relationships: []
       }
+      card_link_clicks: {
+        Row: {
+          card_token: string
+          clicked_at: string
+          id: string
+          link_type: string
+          link_value: string | null
+          referrer: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          card_token: string
+          clicked_at?: string
+          id?: string
+          link_type: string
+          link_value?: string | null
+          referrer?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          card_token?: string
+          clicked_at?: string
+          id?: string
+          link_type?: string
+          link_value?: string | null
+          referrer?: string | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       certification_phases: {
         Row: {
           created_at: string | null

@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from "react";
+import CardShareAnalytics from "@/components/corporate-suite/CardShareAnalytics";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -2489,6 +2490,28 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
               </div>
             ))}
           </div>
+
+          {/* ── Share Analytics ─────────────────────────────────── */}
+          <Collapsible>
+            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+              <CollapsibleTrigger asChild>
+                <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
+                  <div className="flex items-center gap-2">
+                    <Eye size={13} className="text-[hsl(var(--gold))]" />
+                    <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">Share Analytics</span>
+                  </div>
+                  <ChevronDown size={13} className="text-[hsl(var(--muted-foreground))]" />
+                </button>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="px-4 pb-4 border-t border-[hsl(var(--border))]">
+                  <div className="pt-3">
+                    <CardShareAnalytics />
+                  </div>
+                </div>
+              </CollapsibleContent>
+            </div>
+          </Collapsible>
         </div>
 
         {/* ── Right panel: Preview ─────────────────────────────── */}
