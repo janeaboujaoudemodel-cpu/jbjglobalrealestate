@@ -1,115 +1,62 @@
 
-# Complete Offline Mirroring: Save ALL Reelly Data Locally
 
-## Current State (The Problem)
+# Smart Listing Creator: Scroll Fix, Session Persistence, and Loading Upgrade
 
-Your database currently stores external URLs (pointing to Reelly's servers) instead of saving the actual files locally. If the Reelly API disconnects, you lose:
+## Problem Summary
 
-| Asset Type | Total | Saved Locally | Still External |
-|------------|-------|---------------|----------------|
-| Cover Images | 1,838 | 106 (6%) | 1,732 (94%) |
-| Gallery Images | 5,470 | 3,424 (63%) | 2,046 (37%) |
-| Brochures/Documents | 263 | 0 (0%) | 263 (100%) |
-| Floor Plan Images | ~1,838 | 0 (0%) | All external |
-| Unit Types Data | 1,838 | 214 (12%) | 1,624 missing |
-| Amenities | 1,838 | 314 (17%) | 1,524 missing |
+Three critical UX issues on the Smart Listing Creator page (`/listing-portal/submit`):
 
-## What This Plan Does
-
-Downloads and saves EVERY asset into your own storage and database so the website works identically with or without the Reelly API.
+1. **Scroll jumps to footer** when clicking "Extract with AI" — should stay at/scroll to the Smart Listing Creator section
+2. **Refresh loses progress** — user is reset to the beginning instead of returning to where they were
+3. **Loading animation is generic** — uses a spinning wand icon instead of the branded JBJ monogram
 
 ---
 
-## 1. Mirror Documents and Brochures to Local Storage
+## 1. Fix Scroll Behavior on AI Extraction
 
-**File: `supabase/functions/reelly-complete-offline-save/index.ts`**
+**File: `src/pages/ListingPortalSubmit.tsx`**
 
-Add a `mirrorDocument` function (similar to `mirrorImage`) that:
-- Downloads the PDF/document from the external URL
-- Uploads it to the `project-media` storage bucket under `projects/{reellyId}/docs/`
-- Updates `project_documents.file_url` with the local storage URL
-- Handles Google Drive links by converting them to direct download URLs first
-
-This runs as part of `buildUpdateData` for every project, alongside the existing image mirroring.
+- Add a `ref` (`creatorRef`) to the main Smart Listing Creator container (the `max-w-3xl` div)
+- After `setPhase('extracting')` in `runAIExtraction()`, call `creatorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })` with a small offset for the header
+- Apply the same scroll-to-top-of-creator logic in every phase transition (`setPhase(...)`) using a `useEffect` that watches `phase` changes
+- This ensures the user always sees the active section, never the footer
 
 ---
 
-## 2. Mirror Floor Plan Images to Local Storage
+## 2. Session Persistence on Refresh
 
-**File: `supabase/functions/reelly-complete-offline-save/index.ts`**
+**File: `src/pages/ListingPortalSubmit.tsx`**
 
-Currently `floor_plan_types` stores JSON with external image URLs. The fix:
-- After extracting floor plans, download each floor plan image
-- Upload to `project-media` under `projects/{reellyId}/floorplans/`
-- Save the local URL back into the `floor_plan_types` JSON
-- Also create entries in `project_documents` with type `floor_plan`
-
----
-
-## 3. Full Data Enrichment for ALL 1,838 Projects
-
-**File: `supabase/functions/reelly-complete-offline-save/index.ts`**
-
-Currently batch mode only processes projects with missing bedrooms/price/cover. Change to process ALL projects missing ANY data:
-- Add checks for missing `amenities`, `unit_types`, `floor_plan_types`, documents
-- Expand the query: `or("amenities.is.null,unit_types.is.null,cover_image_url.not.like.%mdafrewypkkrildjgtey%")`
-- This ensures every project gets fully enriched with exact Reelly API data
+- On every phase change, save the current state to `sessionStorage`:
+  - `phase` (current step)
+  - `form` (all form fields)
+  - `listingCategory`
+  - `uploadedImageUrls` (already-uploaded image URLs)
+  - `extractedData`
+  - `pricePrediction`
+  - `sellerRole`, `contactMode`
+- On component mount, check `sessionStorage` for saved state and restore it
+- Clear `sessionStorage` on successful submission (`phase === 'success'`)
+- Note: uploaded `File` objects cannot be serialized, but the already-uploaded URLs and extracted data will persist
 
 ---
 
-## 4. New "Full Mirror" Mode for Emergency Complete Sync
+## 3. Replace Loading Animation with Branded Monogram
 
-**File: `supabase/functions/reelly-emergency-mirror/index.ts`**
+**File: `src/pages/ListingPortalSubmit.tsx`**
 
-Add a `full` mode that processes ALL projects (not just those with missing critical fields):
-- Iterates every published Reelly project in batches of 10
-- Calls `reelly-complete-offline-save` with `mirror_images: true` for each batch
-- This is the "run once" command to fully localize everything
-
----
-
-## 5. Update Daily Sync to Always Mirror New Assets
-
-**File: `supabase/functions/daily-reelly-auto-sync/index.ts`**
-
-Step 8 currently skips image mirroring (`mirror_images: false`). Change to:
-- `mirror_images: true` — always download new images/documents locally
-- Increase batch size to 50 for daily processing
-- Add a new Step 9 that specifically targets projects with external (non-local) URLs to gradually convert them
-
----
-
-## 6. Frontend: Load Everything from Local Database
-
-**File: `src/pages/ProjectDetail.tsx`**
-- The page already loads from the database — no changes needed for data source
-- Documents, images, and floor plans will automatically show local URLs once mirrored
-
-**File: `src/components/project-detail/ProjectDetailLayout.tsx`**
-- The brochure download handler already works with any URL — once documents point to local storage, downloads work without external dependencies
-
----
-
-## 7. Trigger the Full Enrichment
-
-After deploying the updated functions:
-- Call `reelly-emergency-mirror` with `mode: "full"` to start the complete mirroring process
-- This will process all 1,838 projects in batches, downloading every image, document, brochure, and floor plan to local storage
-- Estimated processing: ~180 batches of 10 projects, running in parallel groups
+Replace the extracting phase loading UI (lines 650-674) — currently a spinning border with a `Wand2` icon — with:
+- The JBJ monogram image (`jbj-monogram-light-transparent.png`) with a `pulse` animation and gold drop-shadow (matching `BrandedLoader`)
+- Text: "AI is analyzing your documents..."
+- Keep the step badges below but style them with the gold theme
+- Apply the same monogram treatment to the submitting phase (lines 1218-1230)
 
 ---
 
 ## Technical Execution Order
 
-1. Update `reelly-complete-offline-save` to add document/floor plan mirroring functions
-2. Update `reelly-emergency-mirror` to add "full" mode targeting ALL projects
-3. Update `daily-reelly-auto-sync` to enable `mirror_images: true` and add external URL cleanup step
-4. Deploy all three functions
-5. Trigger the full mirror job to start localizing all 1,838 projects
+1. Add `useRef` for the creator container and scroll-into-view logic on phase changes
+2. Add `sessionStorage` save/restore for form state and phase
+3. Replace the extracting/submitting loading animations with the branded monogram
+4. All changes in a single file: `src/pages/ListingPortalSubmit.tsx`
 
-## Result After Completion
-
-- Every image, brochure, floor plan, and document stored in your own storage
-- All unit types, amenities, and project details saved in the database
-- If Reelly API disconnects tomorrow, your website shows the exact same content
-- Daily sync keeps mirroring any new projects or updates automatically
