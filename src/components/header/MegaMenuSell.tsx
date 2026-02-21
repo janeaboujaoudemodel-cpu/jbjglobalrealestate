@@ -14,6 +14,7 @@ const MegaMenuSell = React.forwardRef<HTMLDivElement, MegaMenuSellProps>(({ onCl
     { label: 'Property Valuation', href: '/sell/valuation', icon: DollarSign },
     { label: 'Selling Advisory', href: '/services/selling-advisory', icon: TrendingUp },
     { label: 'List Your Property', href: '/seller-listing', icon: ClipboardCheck },
+    { label: 'AI Listing Portal', href: '/listing-portal/submit', icon: ClipboardCheck },
   ];
 
   return (

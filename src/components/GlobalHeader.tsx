@@ -351,6 +351,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     { href: "/my-dashboard", label: t('header.investorDashboard') || "Investor Dashboard", icon: UserCircle },
     { href: "/ai-hub", label: t('header.investorTools') || "Investor Tools", icon: Briefcase },
     { href: "/favorites", label: t('header.portfolioViews') || "Portfolio Views", icon: Heart },
+    { href: "/listing-portal/submit", label: "Listing Portal", icon: ClipboardCheck },
     { href: "/market-intelligence/reports", label: t('header.reportsAccess') || "Reports Access", icon: FileText },
   ];
 
@@ -358,6 +359,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   const brokerHubLinks = [
     { href: "/broker-dashboard", label: t('header.brokerDashboard') || "Broker Dashboard", icon: UserCircle },
     { href: "/broker-toolkit#tools", label: t('header.brokerTools') || "Broker Tools", icon: Briefcase },
+    { href: "/listing-portal/submit", label: "Listing Portal", icon: ClipboardCheck },
     { href: "/broker-education", label: t('header.brokerEducation') || "Broker Education", icon: GraduationCap },
     { href: "/broker-resources", label: t('header.brokerResources') || "Broker Resources", icon: FolderOpen },
     { href: "/broker-faq", label: t('header.brokerFaq') || "Broker FAQ", icon: ClipboardCheck },
