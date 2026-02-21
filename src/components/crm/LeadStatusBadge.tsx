@@ -88,10 +88,12 @@ const LeadStatusBadge = ({
   // Special styling for "New" status - blue neutral theme
   const isNew = status === 'new' || !status;
   
+  const Component = onClick ? 'button' : 'span';
+  
   return (
-    <button
+    <Component
       onClick={onClick}
-      disabled={!onClick}
+      disabled={onClick ? false : undefined}
       className={cn(
         "inline-flex items-center justify-center gap-2 rounded-full font-bold transition-all shadow-sm",
         sizeClasses[size],
@@ -129,7 +131,7 @@ const LeadStatusBadge = ({
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       )}
-    </button>
+    </Component>
   );
 };
 

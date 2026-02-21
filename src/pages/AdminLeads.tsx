@@ -58,6 +58,15 @@ import {
   PhoneCall,
   Video,
   Activity,
+  AlertTriangle,
+  Send,
+  Bot,
+  FileText,
+  Megaphone,
+  BookOpen,
+  PhoneIncoming,
+  Sparkles,
+  Upload,
 } from "lucide-react";
 import { format } from "date-fns";
 import LeadStatusBadge, { PIPELINE_STATUSES, getStatusInfo } from "@/components/crm/LeadStatusBadge";
@@ -117,42 +126,62 @@ const AdminLeads = () => {
   const [activeTab, setActiveTab] = useState<"leads" | "chats">("leads");
   const [leadDetailTab, setLeadDetailTab] = useState<"details" | "activity">("details");
 
-  // Source type categories
-  const WEBSITE_SOURCES = ['ai_chat_support', 'ai_matchmaker', 'contact_form', 'newsletter', 'inquiry_form', 'quiz', 'login', 'signup', 'book', 'video', 'ai_hub', 'property_inquiry', 'website', 'chat'];
+  // Source type categories - COMPREHENSIVE
+  const CHAT_SOURCES = ['ai_chat_support', 'chat_support', 'chat', 'live_chat'];
+  const WEBSITE_SOURCES = ['ai_matchmaker', 'contact_form', 'newsletter', 'inquiry_form', 'quiz', 'login', 'signup', 'book', 'video', 'ai_hub', 'property_inquiry', 'website', 'landing_page', 'popup', 'popup_main', 'lead_capture', 'register_interest', 'ai_phone', 'ai_tool', 'market_report', 'matchmaker', 'property_recommendation'];
   const DATABASE_SOURCES = ['csv_import', 'excel_import', 'manual_entry', 'broker_import', 'crm_import', 'import'];
   
   const getSourceCategory = useCallback((source: string | null) => {
     if (!source) return 'other';
     const s = source.toLowerCase();
-    if (WEBSITE_SOURCES.some(ws => s.includes(ws)) || s.includes('chat') || s.includes('form') || s.includes('ai_') || s.includes('website')) return 'website';
+    if (CHAT_SOURCES.some(cs => s.includes(cs)) || s === 'chat') return 'chat';
+    if (WEBSITE_SOURCES.some(ws => s.includes(ws)) || s.includes('form') || s.includes('ai_') || s.includes('website')) return 'website';
     if (DATABASE_SOURCES.some(ds => s.includes(ds)) || s.includes('import')) return 'database';
     return 'other';
+  }, []);
+
+  // Smart alert: leads needing action
+  const needsAction = useCallback((lead: Lead) => {
+    const stage = lead.pipeline_stage || 'new';
+    return stage === 'new' || stage === 'followup' || stage === 'callback' || stage === 'no_answer';
   }, []);
   
   const getSourceDisplayName = useCallback((source: string | null) => {
     if (!source) return 'Unknown';
     const sourceMap: Record<string, string> = {
-      'ai_chat_support': 'Chat Widget',
+      'ai_chat_support': 'Chat Support',
+      'chat_support': 'Chat Support',
+      'chat': 'Chat',
+      'live_chat': 'Live Chat',
       'ai_matchmaker': 'AI Matchmaker',
+      'matchmaker': 'Matchmaker',
       'contact_form': 'Contact Form',
       'newsletter': 'Newsletter',
       'inquiry_form': 'Inquiry Form',
       'quiz': 'Property Quiz',
       'login': 'Login',
       'signup': 'Sign Up',
-      'book': 'Book CTA',
+      'book': 'Book Download',
       'video': 'Video Lead',
       'ai_hub': 'AI Hub',
+      'ai_tool': 'AI Tool',
+      'ai_phone': 'AI Phone',
       'property_inquiry': 'Property Inquiry',
+      'property_recommendation': 'Property Recommendation',
+      'market_report': 'Market Report',
+      'landing_page': 'Landing Page',
+      'popup': 'Pop-up',
+      'popup_main': 'Main Page Pop-up',
+      'lead_capture': 'Lead Capture',
+      'register_interest': 'Register Interest',
       'csv_import': 'CSV Import',
       'excel_import': 'Excel Import',
       'manual_entry': 'Manual Entry',
       'broker_import': 'Broker Import',
       'crm_import': 'CRM Import',
       'website': 'Website',
-      'chat': 'Chat',
     };
-    return sourceMap[source] || source;
+    return sourceMap[source] || source.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
   }, []);
   // NOTE: Removed page-level redirect logic.
   // Access is now controlled by OwnerGuard at the route level.
@@ -271,10 +300,12 @@ const AdminLeads = () => {
         (lead.phone_e164 || "").includes(searchQuery);
       const matchesStatus = statusFilter === "all" || lead.pipeline_stage === statusFilter;
       const matchesSource = sourceFilter === "all" || lead.lead_source_type === sourceFilter;
-      const matchesSourceType = sourceTypeFilter === "all" || getSourceCategory(lead.lead_source_type) === sourceTypeFilter;
+      const matchesSourceType = sourceTypeFilter === "all" 
+        || (sourceTypeFilter === "needs_action" && needsAction(lead))
+        || getSourceCategory(lead.lead_source_type) === sourceTypeFilter;
       return matchesSearch && matchesStatus && matchesSource && matchesSourceType;
     });
-  }, [leads, searchQuery, statusFilter, sourceFilter, sourceTypeFilter, getSourceCategory]);
+  }, [leads, searchQuery, statusFilter, sourceFilter, sourceTypeFilter, getSourceCategory, needsAction]);
 
   const filteredConversations = useMemo(() => {
     return conversations.filter((chat) => {
@@ -498,7 +529,7 @@ const AdminLeads = () => {
                       </div>
                     </SelectItemDark>
                   ))}
-                  <div className="px-2 py-1 text-xs font-semibold text-red-400 uppercase mt-1">🔴 Negative</div>
+                  <div className="px-2 py-1 text-xs font-semibold text-red-400 uppercase mt-1">Negative</div>
                   {PIPELINE_STATUSES.filter(s => s.category === 'negative').map(status => (
                     <SelectItemDark key={status.value} value={status.value}>
                       <div className="flex items-center gap-2">
@@ -512,52 +543,106 @@ const AdminLeads = () => {
             </div>
             {activeTab === "leads" && (
               <>
-                {/* Source Type Filter (Website vs Database) */}
+                {/* Source Type Filter - Hierarchical with all sources */}
                 <Select value={sourceTypeFilter} onValueChange={setSourceTypeFilter}>
-                  <SelectTriggerDark className="w-44 cursor-pointer">
+                  <SelectTriggerDark className="w-52 cursor-pointer">
                     <SelectValue placeholder="Source Type" />
                   </SelectTriggerDark>
-                  <SelectContentDark>
+                  <SelectContentDark className="max-h-96">
                     <SelectItemDark value="all">
-                      <span className="flex items-center gap-2">📊 All Sources</span>
+                      <span className="flex items-center gap-2">
+                        <Filter className="w-3 h-3 text-gold" />
+                        All Sources
+                      </span>
+                    </SelectItemDark>
+                    <div className="px-2 py-1.5 text-xs font-bold text-gold uppercase tracking-wide border-t border-zinc-700/50 mt-1">Main Categories</div>
+                    <SelectItemDark value="chat">
+                      <span className="flex items-center gap-2">
+                        <MessageSquare className="w-3 h-3 text-purple-400" />
+                        Chat Leads
+                      </span>
                     </SelectItemDark>
                     <SelectItemDark value="website">
-                      <span className="flex items-center gap-2">🌐 Website Leads</span>
+                      <span className="flex items-center gap-2">
+                        <Globe className="w-3 h-3 text-emerald-400" />
+                        Website Leads
+                      </span>
                     </SelectItemDark>
                     <SelectItemDark value="database">
-                      <span className="flex items-center gap-2">💾 Database/Import</span>
+                      <span className="flex items-center gap-2">
+                        <Upload className="w-3 h-3 text-blue-400" />
+                        Database / Import
+                      </span>
                     </SelectItemDark>
                     <SelectItemDark value="other">
-                      <span className="flex items-center gap-2">📁 Other</span>
+                      <span className="flex items-center gap-2">
+                        <FileText className="w-3 h-3 text-zinc-400" />
+                        Other
+                      </span>
+                    </SelectItemDark>
+                    <SelectItemDark value="needs_action">
+                      <span className="flex items-center gap-2">
+                        <AlertTriangle className="w-3 h-3 text-amber-400" />
+                        Needs Action
+                      </span>
                     </SelectItemDark>
                   </SelectContentDark>
                 </Select>
                 
-                {/* Specific Source Filter */}
+                {/* Specific Source Filter - All sub-sources listed */}
                 <Select value={sourceFilter} onValueChange={setSourceFilter}>
-                  <SelectTriggerDark className="w-48 cursor-pointer">
+                  <SelectTriggerDark className="w-52 cursor-pointer">
                     <SelectValue placeholder="Specific Source" />
                   </SelectTriggerDark>
-                  <SelectContentDark className="max-h-64">
+                  <SelectContentDark className="max-h-80">
                     <SelectItemDark value="all">All Specific Sources</SelectItemDark>
-                    <div className="px-2 py-1 text-xs font-semibold text-emerald-400 uppercase">Website</div>
-                    {uniqueSources.filter(s => getSourceCategory(s) === 'website').map((source) => (
-                      <SelectItemDark key={source} value={source!}>
-                        {getSourceDisplayName(source)}
-                      </SelectItemDark>
-                    ))}
-                    <div className="px-2 py-1 text-xs font-semibold text-blue-400 uppercase mt-1">Database/Import</div>
+                    
+                    <div className="px-2 py-1.5 text-xs font-bold text-purple-400 uppercase tracking-wide border-t border-zinc-700/50 mt-1">Chat Sources</div>
+                    {['ai_chat_support', 'chat_support', 'chat', 'live_chat'].map(s => {
+                      const exists = uniqueSources.includes(s);
+                      return (
+                        <SelectItemDark key={s} value={s}>
+                          <span className={`flex items-center gap-2 ${!exists ? 'opacity-50' : ''}`}>
+                            <MessageSquare className="w-3 h-3 text-purple-400" />
+                            {getSourceDisplayName(s)}
+                            {!exists && <span className="text-[10px] text-zinc-500 ml-1">(0)</span>}
+                          </span>
+                        </SelectItemDark>
+                      );
+                    })}
+                    
+                    <div className="px-2 py-1.5 text-xs font-bold text-emerald-400 uppercase tracking-wide border-t border-zinc-700/50 mt-1">Website Sources</div>
+                    {['landing_page', 'popup', 'popup_main', 'contact_form', 'register_interest', 'inquiry_form', 'newsletter', 'property_inquiry', 'property_recommendation', 'ai_matchmaker', 'matchmaker', 'ai_phone', 'ai_tool', 'ai_hub', 'market_report', 'book', 'video', 'quiz', 'signup', 'login', 'lead_capture', 'website'].map(s => {
+                      const exists = uniqueSources.includes(s);
+                      return (
+                        <SelectItemDark key={s} value={s}>
+                          <span className={`flex items-center gap-2 ${!exists ? 'opacity-50' : ''}`}>
+                            <Globe className="w-3 h-3 text-emerald-400" />
+                            {getSourceDisplayName(s)}
+                            {!exists && <span className="text-[10px] text-zinc-500 ml-1">(0)</span>}
+                          </span>
+                        </SelectItemDark>
+                      );
+                    })}
+                    
+                    <div className="px-2 py-1.5 text-xs font-bold text-blue-400 uppercase tracking-wide border-t border-zinc-700/50 mt-1">Database / Import</div>
                     {uniqueSources.filter(s => getSourceCategory(s) === 'database').map((source) => (
                       <SelectItemDark key={source} value={source!}>
-                        {getSourceDisplayName(source)}
+                        <span className="flex items-center gap-2">
+                          <Upload className="w-3 h-3 text-blue-400" />
+                          {getSourceDisplayName(source)}
+                        </span>
                       </SelectItemDark>
                     ))}
                     {uniqueSources.filter(s => getSourceCategory(s) === 'other').length > 0 && (
                       <>
-                        <div className="px-2 py-1 text-xs font-semibold text-gray-400 uppercase mt-1">Other</div>
+                        <div className="px-2 py-1.5 text-xs font-bold text-zinc-400 uppercase tracking-wide border-t border-zinc-700/50 mt-1">Other</div>
                         {uniqueSources.filter(s => getSourceCategory(s) === 'other').map((source) => (
                           <SelectItemDark key={source} value={source!}>
-                            {getSourceDisplayName(source)}
+                            <span className="flex items-center gap-2">
+                              <FileText className="w-3 h-3 text-zinc-400" />
+                              {getSourceDisplayName(source)}
+                            </span>
                           </SelectItemDark>
                         ))}
                       </>
@@ -601,10 +686,16 @@ const AdminLeads = () => {
                       </TableCell>
                     </TableRow>
                   ) : (
-                    filteredLeads.map((lead) => (
-                      <TableRow key={lead.id} className="border-t border-zinc-800 hover:bg-zinc-950/50 transition-colors">
+                    filteredLeads.map((lead) => {
+                      const isChat = getSourceCategory(lead.lead_source_type) === 'chat';
+                      const alertNeeded = needsAction(lead);
+                      return (
+                      <TableRow key={lead.id} className={`border-t border-zinc-800 hover:bg-zinc-950/50 transition-colors ${alertNeeded ? 'bg-amber-500/5 border-l-2 border-l-amber-500' : ''}`}>
                         <TableCell>
-                          <div>
+                          <div className="flex items-center gap-2">
+                            {alertNeeded && (
+                              <AlertTriangle className="w-4 h-4 text-amber-400 flex-shrink-0 animate-pulse" />
+                            )}
                             <p className="text-white font-medium">{lead.full_name || "—"}</p>
                           </div>
                         </TableCell>
@@ -623,9 +714,25 @@ const AdminLeads = () => {
                           </div>
                         </TableCell>
                         <TableCell>
-                          <Badge variant="outline" className="text-gray-300 border-zinc-700">
-                            {getSourceDisplayName(lead.lead_source_type)}
-                          </Badge>
+                          <div className="flex items-center gap-2">
+                            <Badge variant="outline" className={`border-zinc-700 ${isChat ? 'text-purple-300 border-purple-500/40 bg-purple-500/10' : 'text-gray-300'}`}>
+                              {isChat && <MessageSquare className="w-3 h-3 mr-1" />}
+                              {getSourceDisplayName(lead.lead_source_type)}
+                            </Badge>
+                            {isChat && (
+                              <Button
+                                size="sm"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  toast.success("Lead sent to CRM");
+                                }}
+                                className="h-6 px-2 text-[10px] bg-gold/90 hover:bg-gold text-black font-bold"
+                              >
+                                <Send className="w-3 h-3 mr-1" />
+                                Send to CRM
+                              </Button>
+                            )}
+                          </div>
                         </TableCell>
                         <TableCell>
                           {lead.vip ? (
@@ -637,12 +744,12 @@ const AdminLeads = () => {
                         <TableCell>
                           <Popover>
                             <PopoverTrigger asChild>
-                              <button className="group flex items-center gap-1 cursor-pointer">
+                              <div className="group flex items-center gap-1 cursor-pointer">
                                 <LeadStatusBadge status={lead.pipeline_stage || "new"} size="sm" />
                                 <ChevronDown className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity text-gray-400" />
-                              </button>
+                              </div>
                             </PopoverTrigger>
-                            <PopoverContent className="w-56 p-2 bg-zinc-900 border-zinc-700" align="start">
+                            <PopoverContent className="w-56 p-2 bg-zinc-900 border-zinc-700 z-[10001]" align="start">
                               <div className="space-y-1">
                                 <p className="text-xs font-semibold text-emerald-400 px-2 py-1">Positive</p>
                                 {PIPELINE_STATUSES.filter(s => s.category === 'positive').map(status => (
@@ -666,7 +773,7 @@ const AdminLeads = () => {
                                     <span className="text-sm text-white">{status.label}</span>
                                   </button>
                                 ))}
-                                <p className="text-xs font-semibold text-red-400 px-2 py-1 mt-2">🔴 Negative</p>
+                                <p className="text-xs font-semibold text-red-400 px-2 py-1 mt-2">Negative</p>
                                 {PIPELINE_STATUSES.filter(s => s.category === 'negative').map(status => (
                                   <button
                                     key={status.value}
@@ -698,7 +805,8 @@ const AdminLeads = () => {
                           </Button>
                         </TableCell>
                       </TableRow>
-                    ))
+                      );
+                    })
                   )}
                 </TableBody>
               </Table>
@@ -757,12 +865,12 @@ const AdminLeads = () => {
                         <TableCell>
                           <Popover>
                             <PopoverTrigger asChild>
-                              <button className="group flex items-center gap-1 cursor-pointer">
+                              <div className="group flex items-center gap-1 cursor-pointer">
                                 <LeadStatusBadge status={chat.status || "new"} size="sm" />
                                 <ChevronDown className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity text-gray-400" />
-                              </button>
+                              </div>
                             </PopoverTrigger>
-                            <PopoverContent className="w-56 p-2 bg-zinc-900 border-zinc-700" align="start">
+                            <PopoverContent className="w-56 p-2 bg-zinc-900 border-zinc-700 z-[10001]" align="start">
                               <div className="space-y-1">
                                 <p className="text-xs font-semibold text-emerald-400 px-2 py-1">Positive</p>
                                 {PIPELINE_STATUSES.filter(s => s.category === 'positive').map(status => (
@@ -786,7 +894,7 @@ const AdminLeads = () => {
                                     <span className="text-sm text-white">{status.label}</span>
                                   </button>
                                 ))}
-                                <p className="text-xs font-semibold text-red-400 px-2 py-1 mt-2">🔴 Negative</p>
+                                <p className="text-xs font-semibold text-red-400 px-2 py-1 mt-2">Negative</p>
                                 {PIPELINE_STATUSES.filter(s => s.category === 'negative').map(status => (
                                   <button
                                     key={status.value}
