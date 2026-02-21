@@ -1,70 +1,125 @@
 
-# Admin Chat Intelligence - Complete Fix and Upgrade
+# AI Home Finder Results + Developer Card + Amenities + Map Upgrade
 
-## Problems Identified
+## Issues Identified
 
-### 1. CV Download Shows "Upstream Download Failed"
-The `documents` storage bucket is set to **private**, but the CV submission code uses `getPublicUrl()` which generates a URL that only works for public buckets. When the admin dashboard tries to download via the proxy, the upstream fetch fails because the bucket requires authentication.
+### 1. QuizResults Page Uses Purple/Dark Theme Instead of Champagne Gold
+The entire `QuizResults.tsx` page uses a purple-black theme (`bg-gradient-to-b from-purple-950 via-zinc-950 to-black`) with purple accents, purple borders, purple buttons. This violates the approved Champagne Gold standard.
 
-**Fix:** Make the `documents` bucket public (it stores CV files that need to be accessible), OR use signed URLs instead of public URLs.
+### 2. "Send to Contact@JBJ.AE" Button Issues
+- The email domain shows lowercase "jbj.ae" instead of uppercase "JBJ.AE" in the Share modal
+- The button and X close button use blue/purple colors instead of champagne gold
+- The "A" in JBJ.AE is not capitalized -- currently shows `CONTACT@JBJ.AE` in the mailto but the button text shows mixed case
 
-### 2. Chat Transcripts Are Empty (messages: [])
-All 6 existing conversations have `messages: []`. The `saveMessagesToDb` function works correctly and the RLS policy exists, but these conversations were created **before** the UPDATE policy was added. The messages were never saved because the database rejected the updates silently.
+### 3. Top 3 Badge Visibility (Silver is Too Faded)
+The Silver badge for Top 2 (`from-zinc-300 via-slate-400 to-zinc-400`) appears washed out. All three badges (Gold, Silver, Bronze) need stronger frame highlights with better contrast.
 
-**Fix:** The save mechanism is now working for new conversations. For the admin dashboard, we need to also pull from `chat_history` table (which logs individual messages with session IDs) as a fallback data source when `chat_conversations.messages` is empty.
+### 4. AI Recommendation Accuracy
+The scoring logic in `Quiz.tsx` (`getRecommendations()`) has weak area matching:
+- It only checks if project name or location contains the area name (e.g., "downtown"), which can match unrelated projects
+- It does not filter by area -- it only adds score points, so a Marina project can still appear for a Downtown-only search
+- Budget filtering is correct (hard filter), but area selection is only a soft score boost
+- Fix: Make selected areas a hard filter when specific areas are chosen (not "other")
 
-### 3. CV Not Showing Inline (Opens New Page with Error)
-The current CV download link opens in a new tab (`target="_blank"`). You want the CV to display inline in the dashboard with AI summary and scoring, matching the CVCenter style in the Employee Hub.
+### 5. Download Report Uses Purple/Dark HTML Template
+The `handleDownloadReport` function generates an HTML file with purple-black styling. Must be updated to Champagne Gold institutional layout with smart AI formatting.
 
-**Fix:** Replace the download link with an inline CV viewer panel that shows:
-- Candidate details (name, email, phone)
-- AI-generated summary of the CV
-- AI scoring/ranking
-- Inline PDF preview using an iframe
-- Action buttons (download, approve, reject)
+### 6. DAMAC Logo Shows Black Background Instead of Full Black + White Text
+The `DeveloperCard.tsx` fallback photo section (lines 76-93) shows DAMAC's logo on a dark zinc gradient when no feature photo exists. Per the memory policy, DAMAC should use the official "D" initial monogram on a fully black background with white text. The issue is that DAMAC is not in the `WHITE_BG_DEVELOPERS` list, and its fallback styling needs to be specifically handled.
 
-### 4. CV Submissions Not Appearing in Employee Hub
-The CVCenter component fetches from `hr_applications` table, but the chat widget saves to `hr_cv_submissions` table. These are two separate tables, so chat-submitted CVs never appear in the Employee Hub.
+### 7. Amenities Need Photos
+The `AmenitiesWithPhotos.tsx` component currently only shows icons, not actual photos. The user wants real photos for amenities like swimming pools, gyms, etc. -- similar to what Reelly shows. This requires mapping amenity keywords to stock/curated photos stored in the database or extracted from brochures.
 
-**Fix:** Modify CVCenter's `fetchCVs` function to ALSO query `hr_cv_submissions` and merge results into the same list. This ensures all CVs (from careers portal AND chat widget) appear in one unified view.
-
-### 5. UI Styling Needs Gold/Champagne Theme
-The current dashboard uses a dark zinc theme. Need to ensure active tab buttons are clearly visible and the overall aesthetic matches the platform's champagne gold standard.
-
-**Fix:** Refine active tab styling with stronger gold borders and backgrounds. Ensure dropdown selects don't show blue hover states. Apply the champagne gold design system consistently.
+### 8. Map Needs 3D Borders
+The `ProjectLocationMap.tsx` currently has a flat `border border-gold/30`. User wants 3D-style borders around the map frame, matching the platform's 3D button/card aesthetic.
 
 ---
 
 ## Technical Implementation
 
-### File 1: Database Migration - Make Documents Bucket Public
-- Update the `documents` storage bucket to `public = true`
-- This allows CV PDF URLs to be accessible without authentication
+### File 1: `src/pages/QuizResults.tsx` (Major Rewrite)
 
-### File 2: `src/pages/admin/AdminChatDashboard.tsx` (Major Rewrite)
-- **CV Viewer Panel:** Replace the download link with an inline viewer modal that shows:
-  - Candidate info card (name, email, phone, date, source)
-  - Embedded PDF preview via iframe (using the direct storage URL)
-  - AI summary section (generated on-the-fly via Gemini if not cached)
-  - AI scoring with visual indicators
-  - Action buttons: Download, Approve, Reject, Schedule Interview
-- **Chat History Fallback:** When a conversation's `messages` array is empty, query the `chat_history` table using the conversation's time range and email to find logged messages
-- **Active Tab Styling:** Ensure the active tab has a solid gold background with black text (not subtle gold/20 opacity), and inactive tabs show clear zinc styling without blue hover
-- **Service Filter:** Ensure all service types render correctly with proper labels
+**Theme Overhaul:**
+- Replace all `purple-950`, `zinc-950`, `black` backgrounds with champagne gradients (`from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]`)
+- Replace all purple accents with gold (`#C9A84C`)
+- Text colors: black/stone-900 for headings, stone-600 for body text
+- Cards: white/champagne glass backgrounds with gold borders
+- Buttons: champagne gradient with gold borders (matching platform standard)
 
-### File 3: `src/components/crm/CVCenter.tsx`
-- Modify `fetchCVs` to also query `hr_cv_submissions` table
-- Transform `hr_cv_submissions` records to match the `CVEntry` interface
-- Merge both data sources, deduplicate by email, sort by date
-- Chat-widget CVs will appear with source label "Chat Widget"
+**Badge Visibility Fix:**
+- Gold badge: Keep strong gradient but add gold border frame (`border-2 border-[#C9A84C]`)
+- Silver badge: Use `from-[#C0C0C0] via-[#E8E8E8] to-[#A0A0A0]` with stronger contrast and a visible border frame
+- Bronze badge: Use `from-[#CD7F32] via-[#E8A84C] to-[#B87333]` with border frame
+- All badges get `shadow-lg` and `border-2` for frame highlight effect
 
-### File 4: Edge Function or Inline Logic for CV AI Summary
-- When viewing a CV in the admin dashboard, call the existing document-extractor or a lightweight Gemini function to:
-  - Generate a 2-3 sentence summary of the candidate
-  - Score the CV on a 1-10 scale based on relevance to real estate
-  - Extract key skills and experience
-- Cache the results in the `hr_cv_submissions` table (add `ai_summary`, `ai_ranking` columns if not present)
+**Share Modal:**
+- Replace purple modal background with champagne card
+- "Send to CONTACT@JBJ.AE" -- all uppercase, gold-styled button
+- X button uses gold/stone color, not blue
+- Text colors: stone-900 for dark, stone-500 for muted
 
-### Database Changes
-1. Make `documents` bucket public: `UPDATE storage.buckets SET public = true WHERE id = 'documents'`
-2. Add AI columns to `hr_cv_submissions` if missing: `ai_summary TEXT`, `ai_ranking INTEGER DEFAULT 0`
+**Download Report:**
+- Rewrite the HTML template with champagne gold styling:
+  - Background: `#FDFBF7` (warm white)
+  - Headers: black text with gold underlines
+  - Cards: white background with gold borders
+  - Footer: gold accents
+  - Professional typography matching the platform
+
+### File 2: `src/pages/Quiz.tsx` (Accuracy Fix)
+
+**Area Matching - Hard Filter:**
+- In `getRecommendations()`, add a hard filter for selected areas
+- When user selects specific areas (not just "other"), only show projects whose `area_name` or `location` matches those areas
+- Map quiz area values to actual database area names:
+  - "downtown" matches projects with location/area containing "downtown"
+  - "marina" matches "marina"
+  - "palm" matches "palm jumeirah"
+  - "business-bay" matches "business bay"
+  - "creek-harbour" matches "creek harbour" or "creek"
+  - "hills" matches "dubai hills"
+  - "arabian-ranches" matches "arabian ranches"
+  - "other" = no area filter (show all)
+- If user selects "other" alongside specific areas, the filter includes both matched areas and unmatched ones
+
+**Timeline Accuracy:**
+- Already filtering handover_date < 2026, which is correct
+- Add matching for "ready" timeline to also check `construction_status` for "Ready" or "Completed"
+
+### File 3: `src/components/DeveloperCard.tsx` (DAMAC Fix)
+
+- Add DAMAC-specific handling in the logo overlay section
+- When slug includes "damac" and there's no feature image, use a fully black background (`bg-black`) instead of the zinc gradient
+- Display the "D" monogram initial in white with professional typography
+- The logo overlay (top-left) should use a black background for DAMAC specifically
+
+### File 4: `src/components/project-detail/AmenitiesWithPhotos.tsx` (Photo Enhancement)
+
+- Add a mapping of amenity keywords to curated stock photo URLs (stored as constants or fetched from database)
+- Common amenities mapped to representative photos:
+  - Swimming Pool, Gym/Fitness, Garden/Park, Parking, Kids Play Area, Spa, etc.
+- Display layout: Show the photo as a small thumbnail above the icon, or replace the icon circle with a photo thumbnail
+- Fallback: Keep the current icon-only display when no photo URL is available
+- Photos sourced from project's own gallery images where possible (via `project_images` table) or generic amenity photos stored in Supabase storage
+
+### File 5: `src/components/project-detail/ProjectLocationMap.tsx` (3D Border)
+
+- Replace the flat `border border-gold/30` with a 3D-style border matching the platform's card aesthetic:
+  ```
+  border: 3px solid hsl(42 45% 59%)
+  boxShadow: 0 8px 32px rgba(200,167,102,0.25), 0 4px 16px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.1)
+  ```
+- Add rounded-2xl for premium feel
+- This matches the `DeveloperCard` 3D border style already in use
+
+---
+
+## Summary of Changes
+
+| File | Change |
+|------|--------|
+| `QuizResults.tsx` | Full champagne gold theme, badge frames, share modal fix, report template redesign |
+| `Quiz.tsx` | Hard area filter for recommendation accuracy |
+| `DeveloperCard.tsx` | DAMAC-specific black background with white "D" monogram |
+| `AmenitiesWithPhotos.tsx` | Add curated amenity photos with icon fallback |
+| `ProjectLocationMap.tsx` | 3D gold border frame around the map |
