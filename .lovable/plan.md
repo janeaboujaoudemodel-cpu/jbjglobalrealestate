@@ -1,230 +1,246 @@
 
 
-# Comprehensive Admin Panel UI Fix: Champagne Gold Theme Enforcement Across All Sections
+# Comprehensive Fix: Projects Performance, Unit Types, Listing Portal, Price Predictor, and Client Database
 
 ## Overview
-This plan fixes all reported UI issues across 12+ admin panel sections. The core problem is that many components still use the old dark theme (zinc-900, text-white, text-gray-400) instead of the mandated Champagne Gold standard (bg-white, border-gold/30, text-black).
+This plan addresses all reported issues across the Projects section, Listing Portal, and backend systems. It covers performance optimization, data completeness, listing workflow improvements, and a new client investor database.
 
 ---
 
-## 1. Admin Assistant Tab Layout Fix
+## 1. Projects Loading Performance
 
-**Problem:** Two-column layout (AdminAIAssistant + AIBrokersDashboard) crammed into small space, content overflows.
+**Problem:** Projects page loads slowly because it fetches from both the database (batch 5000) AND the Reelly API simultaneously, with the API being the bottleneck.
 
-**File: `src/pages/Admin.tsx` (lines 514-521)**
-- Change from side-by-side 2-column grid to stacked vertical layout
-- Remove nested grid, place AdminAIAssistant full-width on top, AIBrokersDashboard full-width below
-- Replace: `grid grid-cols-1 lg:grid-cols-2 gap-6` with `space-y-6` (single column, stacked)
-
-**File: `src/components/admin/AdminAIAssistant.tsx` (line 177)**
-- Change title from "AI Admin Assistant" to "Admin Assistant"
+**File: `src/pages/PropertiesReelly.tsx`**
+- Remove the `useReellyProjects()` API call entirely — the database already has 1,849+ published projects mirrored locally
+- Use only `useProjectsListing()` (local database) as the data source
+- This eliminates the slow edge function round-trip and reduces load time from ~5-8s to under 1s
+- Keep the merge logic but make it DB-only: remove lines 155-163 (API fetch) and simplify `mergedProjects` to use `dbProjectsMapped` directly
 
 ---
 
-## 2. Pipeline Analytics Panel - Champagne Conversion
+## 2. Unit Types Data Enrichment
 
-**File: `src/components/admin/ai-brokers/PipelineAnalyticsPanel.tsx`**
+**Problem:** `unit_types` data exists for only 214 of 1,849 projects, and the data that exists is poorly structured (just `{type: "Unit", bedrooms: X}` with no sizes or prices). The UnitInventorySection shows empty because the raw data lacks `size_from`, `size_to`, `price_from`, `price_to`.
 
-All 4 summary cards (lines 204-249): Replace `bg-zinc-900 border-zinc-800` with `bg-white border-2 border-gold/30`, `text-gray-400` with `text-black/60`, `text-white` with `text-black`.
+**Fix: Transform raw unit_types into grouped, displayable data**
 
-All 3 pipeline breakdown cards (lines 252-330): Same conversion:
-- Card: `bg-zinc-900 border-zinc-800` to `bg-white border-2 border-gold/30`
-- Title: `text-white` to `text-black`
-- Labels: `text-gray-400` to `text-black/60`
-- Values: `text-white` to `text-black`
-- Progress bar bg: `bg-zinc-800` to `bg-zinc-200`
-- Border-t: `border-zinc-800` to `border-gold/20`
-- Broker names: `text-gray-300` to `text-black`
-- Badge: `border-zinc-700` to `border-gold/30`
-- SLA badge: `bg-emerald-900 text-emerald-300` to `bg-emerald-100 text-emerald-700`
+**File: `src/pages/ProjectDetail.tsx` (asUnitTypes function, line 83-99)**
+- Enhance `asUnitTypes` to aggregate raw unit entries: group by bedroom count, generate proper labels ("Studio", "1 Bedroom", "2 Bedrooms", etc.), and calculate unit counts per type
+- Use project-level `price_from`/`price_to` and `size_min`/`size_max` as fallback values when individual unit prices/sizes are missing
+- This ensures UnitInventorySection renders meaningful cards even with minimal raw data
 
-Pipeline legend card (lines 334-352): Same conversion.
+**New backend function: `reelly-enrich-unit-types`**
+- Create an edge function that iterates projects with missing/incomplete `unit_types` and queries the Reelly API detail endpoint for richer unit data (sizes, prices per unit type)
+- Run as a one-time enrichment job, then schedule as part of the daily sync
 
 ---
 
-## 3. Lead Assignment Rules Panel - Champagne Conversion
+## 3. AI Project Intelligence Loading Logo
 
-**File: `src/components/admin/ai-brokers/LeadAssignmentRulesPanel.tsx`**
+**Problem:** The monogram shows with a white box/background during the loading state.
 
-- Line 175: Title `text-white` to `text-black`
-- Line 177: Description `text-gray-400` to `text-black/60`
-- Line 190: Dialog `bg-zinc-900 border-zinc-700` to `bg-white border-2 border-gold/30`
-- Line 193: Dialog title `text-white` to `text-black`
-- Lines 211-215: Rule cards `bg-zinc-900 border-zinc-800` to `bg-white border-2 border-gold/30`
-- Line 226: Rule name `text-white` to `text-black`
-- Line 241: Description `text-gray-400` to `text-black/60`
-- Lines 245-256: Detail text `text-gray-500` to `text-black/40`
-- Lines 276-293: Edit/delete buttons from gray to gold-themed
-- Empty state card (lines 301-310): Same conversion
-- RuleForm (lines 324-445): All `text-gray-300` labels to `text-black`, inputs from `bg-zinc-800 border-zinc-700 text-white` to `bg-white border-2 border-gold/30 text-black`, SelectContent from `bg-zinc-900 border-zinc-700` to `bg-white border-2 border-gold/30`, border-t from `border-zinc-800` to `border-gold/20`
+**File: `src/components/project-detail/ProjectAIAnalyzer.tsx` (lines 256-266)**
+- The component already imports `jbj-monogram-nobuffer.png` which should be transparent
+- Verify the image file is truly transparent (no white background baked in)
+- If the PNG has a white background, switch to `jbj-monogram-transparent.png` from `BrandMonogram.tsx`
+- Add explicit `mix-blend-mode: multiply` or ensure the `<img>` has no background container that adds white
 
 ---
 
-## 4. Rate Limit Dashboard - Champagne Conversion
+## 4. Listing Portal: Auto-Label Sale/Rent from URL
 
-**File: `src/components/admin/RateLimitDashboard.tsx`**
+**Problem:** The `?purpose=sale` or `?purpose=rent` URL parameter is passed but never read in `ListingPortalSubmit.tsx`. The listing type is not synchronized with the category or filters.
 
-- Line 215: Title `text-white` to `text-black`
-- Line 219: Description `text-gray-400` to `text-black/60`
-- Lines 224-265: Buttons from `border-zinc-700 text-white hover:bg-zinc-800` to `border-gold/30 text-black hover:bg-gold/10`
-- Lines 271-298: All 4 stat cards from `bg-zinc-900 border-zinc-800` to `bg-white border-2 border-gold/30`, `text-gray-400` to `text-black/60`, `text-white` to `text-black`
-- Lines 302-326: Blocked alert from `bg-red-950/30 border-red-800/50` to `bg-red-50 border-2 border-red-300`
-- Lines 329-410: Table card from `bg-zinc-900 border-zinc-800` to `bg-white border-2 border-gold/30`, header from `bg-zinc-950` to `bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6]`, all table text from gray/white to black
-- Lines 413-429: Config card same conversion
-- Replace `SelectTriggerDark/SelectContentDark/SelectItemDark` with standard `SelectTrigger/SelectContent/SelectItem` using champagne styling
-
----
-
-## 5. IP Blocklist Dashboard - Champagne Conversion
-
-**File: `src/components/admin/IPBlocklistDashboard.tsx`**
-
-- Line 244: Title `text-white` to `text-black`
-- Line 248: Description `text-gray-400` to `text-black/60`
-- Lines 253-274: Buttons same champagne conversion
-- Lines 282-283: Dialog from `bg-zinc-900 border-zinc-800 text-white` to `bg-white border-2 border-gold/30 text-black`
-- All form labels from `text-gray-300` to `text-black`, inputs from `bg-zinc-950 border-zinc-700 text-white` to `bg-white border-2 border-gold/30 text-black`
-- Lines 347-376: All 4 stat cards same conversion as Rate Limits
-- Line 385: Search input from `bg-zinc-900 border-zinc-700 text-white` to `bg-white border-2 border-gold/30 text-black`
-- Lines 390-472: Table same conversion as Rate Limits
+**File: `src/pages/ListingPortalSubmit.tsx`**
+- Add `useSearchParams` import and read the `purpose` parameter
+- Initialize `form.listing_type` from the URL: `sale` or `rent`
+- Auto-select the correct `listingCategory` based on purpose:
+  - `purpose=rent` maps to `rental` category
+  - `purpose=sale` maps to `secondary_offplan` category
+- Show a visual badge ("For Sale" / "For Rent") in the header to confirm the listing type
+- Sync the listing type with the portal filters on the ListingPortal page
 
 ---
 
-## 6. Marketing Settings Dashboard - Champagne Conversion
+## 5. Price Predictor Fix
 
-**File: `src/components/admin/MarketingSettingsDashboard.tsx`**
+**Problem:** The price predictor calls `property-evaluation` edge function which requires authentication and has rate limiting. It's timing out or erroring.
 
-- Line 173: Title `text-white` to `text-black`
-- Line 175: Description `text-zinc-400` to `text-black/60`
-- Line 127: IntegrationCard from `bg-zinc-900/50 border-zinc-800` to `bg-white border-2 border-gold/30`
-- Line 135: CardTitle from `text-white` to `text-black`
-- Line 136: CardDescription from `text-zinc-500` to `text-black/40`
-- Line 147: Label from `text-zinc-400` to `text-black/60`
-- Line 152: Input from `bg-zinc-950 border-zinc-700 text-white` to `bg-white border-2 border-gold/30 text-black`
-- Lines 198-218: TabsList from `bg-zinc-900 border border-zinc-800` to `bg-white/80 border-2 border-gold/30`
-- Tab triggers: active state from `data-[state=active]:bg-gold` (keep this, it's correct) but ensure inactive text is `text-black`
-- Line 295: Info box from `bg-emerald-900/20 border border-emerald-700/30` to `bg-emerald-50 border-2 border-emerald-300`
-- Lines 345-354: Zapier instructions from `bg-zinc-800/50 border border-zinc-700` to `bg-gold/5 border border-gold/20`, text from `text-white`/`text-zinc-400` to `text-black`/`text-black/60`
-- Lines 382-412: Integration Status card same conversion
+**File: `supabase/functions/property-evaluation/index.ts`**
+- The function has aggressive rate limiting and IP blocklist checks
+- Add better error messages returned to the client so the UI can display actionable feedback
+- Increase the timeout tolerance and add a fallback calculation path that doesn't require AI (use the local `communityPrices` data directly)
+
+**File: `src/pages/ListingPortalSubmit.tsx` (runPricePredictor, lines 263-303)**
+- Add a timeout wrapper (15s) with graceful fallback
+- If the edge function fails, calculate a basic estimate client-side using community average prices
+- Show a "Basic Estimate" badge vs "AI Predicted" badge to indicate the quality level
+- Fix the bedrooms field: when AI extracts "1" bedroom, ensure it maps to the form correctly (currently the issue is bedrooms showing "N/A" because the value isn't being read from extracted data properly)
 
 ---
 
-## 7. IT Department - Fix Remaining Issues
+## 6. Listing Photos: Save and Project Enrichment Pipeline
 
-### 7A. IT Tasks - Champagne Conversion
-**File: `src/components/it-department/ITTasksList.tsx`**
+**Problem:** When users upload photos for their listing, the photos need to be (a) saved with the listing, (b) matched to existing projects, and (c) presented to the admin as enrichment suggestions.
 
-- Line 11: Replace `SelectContentDark, SelectItemDark, SelectTriggerDark` with standard champagne-styled selects
-- Lines 147-167: Select triggers/content from dark to `bg-white border-2 border-gold/30 text-black`
-- Lines 172-177: Empty state card from `bg-zinc-900/50` to `bg-white border-2 border-gold/30`, text from `text-zinc-400/500` to `text-black/60`
-- Lines 195-200: Task cards from `bg-zinc-900/50 border-gold/20` to `bg-white border-2 border-gold/30`
-- All `text-white` to `text-black`, `text-zinc-400` to `text-black/60`
-- Filter label from `text-zinc-400` to `text-black/60`
+### 6A. Photo Persistence
+**File: `src/pages/ListingPortalSubmit.tsx`**
+- Photos are already being uploaded to the `listing-documents` storage bucket and URLs saved to `uploadedImageUrls`
+- These are already saved to `portal_listings.images` and `portal_listings.gallery_images`
+- Verify this flow works end-to-end (it appears correct in the code)
 
-### 7B. IT Team Directory - Fix White Text
-**File: `src/components/it-department/ITTeamDirectory.tsx`**
+### 6B. Project Matching and Enrichment Suggestions
+**New table: `listing_enrichment_suggestions`**
+```sql
+CREATE TABLE listing_enrichment_suggestions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  listing_id UUID REFERENCES portal_listings(id),
+  project_id UUID REFERENCES projects(id),
+  project_name TEXT,
+  suggestion_type TEXT, -- 'photos', 'amenities', 'details'
+  before_data JSONB,
+  after_data JSONB,
+  status TEXT DEFAULT 'pending', -- 'pending', 'approved', 'rejected'
+  created_at TIMESTAMPTZ DEFAULT now(),
+  reviewed_at TIMESTAMPTZ,
+  reviewed_by UUID
+);
+```
 
-- Line 45: Title `text-white` to `text-black`
-- Line 46: Description `text-zinc-400` to `text-black/60`
-- Lines 61-63: Cards from `bg-zinc-900/50 border-gold/20` to `bg-white border-2 border-gold/30`
-- Line 79: Name `text-white` to `text-black`
-- Lines 86-92: Details `text-zinc-400` to `text-black/60`
-- Line 100: Badge `text-zinc-300` to `text-black/70`
-- Lines 107-112: Empty state from `bg-zinc-900/50` to `bg-white border-2 border-gold/30`
-- Photo container from `bg-zinc-800` to `bg-gold/10`
+**New edge function: `listing-enrichment-matcher`**
+- Triggered after listing submission (non-blocking)
+- Matches `project_name` from the listing to existing projects in the database using fuzzy name matching
+- If match found: creates an enrichment suggestion with before/after data (existing photos vs new photos, existing amenities vs AI-extracted amenities)
+- Flags sensitive documents (SPA, reservation agreements, personal data) as "private" — stored but never suggested for public enrichment
 
-### 7C. IT Department Active Tab Color
-**File: `src/components/admin/EmbeddedITDepartment.tsx` (lines 136-144)**
-- Change tab active state from `data-[state=active]:bg-gold` to champagne gradient: `data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8]`
-
----
-
-## 8. Podcast Studio (Voice Recorder) - Champagne Conversion
-
-**File: `src/components/admin/VoiceRecorder.tsx`**
-
-- Line 172: Card from `bg-zinc-900 border-zinc-800` to `bg-white border-2 border-gold/30`
-- Line 174: Title `text-gold` stays but ensure it reads on white bg
-- Line 179: Description from `text-zinc-400` to `text-black/60`
-- Line 209: Select from `bg-zinc-800 border-zinc-700 text-white` to `bg-white border-2 border-gold/30 text-black`
-- Line 216: Instruction box from `bg-zinc-800/50 border-zinc-700` to `bg-gold/5 border border-gold/20`
-- Line 218: Title keep `text-gold`
-- Line 220: Text from `text-white` to `text-black`
-- Line 222: Note from `text-zinc-500` to `text-black/50`
-- Line 260: Heading from `text-white` to `text-black`
-- Line 265: Recording item from `bg-zinc-800` to `bg-gold/5 border border-gold/20`
-- Line 281: Name from `text-white` to `text-black`
-- Line 283: Duration from `text-zinc-500` to `text-black/40`
-- Lines 315-323: Tips box from `bg-zinc-800/30 border-zinc-700/50` to `bg-gold/5 border border-gold/20`, text from `text-white`/`text-zinc-400` to `text-black`/`text-black/60`
+### 6C. Admin Panel: Enrichment Review
+**File: `src/pages/Admin.tsx` or new component**
+- Add a notification/section in the admin panel showing pending enrichment suggestions
+- Display before/after comparison cards: existing project data vs proposed updates
+- "Approve" button applies the changes to the project record
+- "Reject" button dismisses the suggestion
 
 ---
 
-## 9. Owner Panel Header Icon Fix
+## 7. Client/Investor Database from Documents
 
-**File: `src/pages/Admin.tsx` (lines 372-373)**
-- The icon container uses `bg-gradient-to-br from-gold to-amber-600` -- this creates the "orange/yellow" look
-- Change to `bg-gradient-to-br from-[#C9A84C] to-[#B8973F]` for a cleaner gold (not orange)
+**Problem:** User wants to extract client information from uploaded SPAs, reservation agreements, and other documents to build a client database with handover alerts.
+
+### 7A. New Database Table
+```sql
+CREATE TABLE client_investors (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  client_name TEXT,
+  email TEXT,
+  phone TEXT,
+  home_address TEXT,
+  date_of_birth DATE,
+  project_name TEXT,
+  project_id UUID REFERENCES projects(id),
+  unit_number TEXT,
+  unit_type TEXT, -- '1BR', '2BR', etc.
+  unit_size_sqft NUMERIC,
+  purchase_price NUMERIC,
+  purchase_date DATE,
+  handover_date DATE,
+  payment_plan TEXT,
+  source_document_type TEXT, -- 'spa', 'reservation', 'booking_form'
+  source_listing_id UUID REFERENCES portal_listings(id),
+  notes TEXT,
+  handover_alert_sent BOOLEAN DEFAULT false,
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now()
+);
+-- RLS: Owner-only access
+ALTER TABLE client_investors ENABLE ROW LEVEL SECURITY;
+```
+
+### 7B. AI Document Extraction Enhancement
+**File: `supabase/functions/ai-listing-extractor/index.ts`**
+- Enhance the AI prompt to also extract client/buyer information when documents contain SPAs or reservation agreements
+- Add a separate `client_data` field in the response: `{ client_name, email, phone, home_address, unit_number, purchase_price, purchase_date, date_of_birth }`
+- This data is saved to `client_investors` but flagged as sensitive (never published)
+
+### 7C. Handover Alert System
+**New edge function: `handover-alerts`**
+- Scheduled daily via pg_cron
+- Queries `client_investors` where `handover_date` is within 30 days, 14 days, 7 days, or today
+- Creates alert entries in a `handover_alerts` table
+- Displays in the admin panel as notifications
 
 ---
 
-## 10. Properties Tab - Fix Description Truncation and Brochure Visibility
+## 8. Listing Edit, Delete, and Restore
 
-**File: `src/pages/Admin.tsx` (lines 684-706)**
-- Project description shows "..." because only name/developer/location are displayed. Add a truncated description line under the project name:
-  ```
-  <p className="text-xs text-zinc-500 line-clamp-1 max-w-md">{project.description || 'No description'}</p>
-  ```
-- For the brochure button visibility: The SmartDocumentUploader header should use champagne styling. The "Select Document" button inside needs `bg-gold text-black` instead of blending with background.
+**Problem:** Users need to edit listings post-submission (re-triggers approval), delete with confirmation and soft-delete for restoration.
+
+### 8A. Database Changes
+```sql
+ALTER TABLE portal_listings ADD COLUMN IF NOT EXISTS deleted_at TIMESTAMPTZ;
+ALTER TABLE portal_listings ADD COLUMN IF NOT EXISTS expires_at TIMESTAMPTZ;
+ALTER TABLE portal_listings ADD COLUMN IF NOT EXISTS edit_count INTEGER DEFAULT 0;
+```
+
+### 8B. My Listings Page Enhancement
+**File: `src/pages/ListingPortalMyListings.tsx`**
+- Add "Edit" button that navigates to `/listing-portal/submit?edit=<listing_id>`
+- Replace `confirm('Delete this listing?')` with a proper confirmation dialog (AlertDialog component)
+- Soft-delete: set `deleted_at = now()` instead of hard delete
+- Add a "Recently Deleted" tab showing soft-deleted listings with "Restore" button
+- Restore: clears `deleted_at`, sets status back to previous state
+
+### 8C. Edit Flow
+**File: `src/pages/ListingPortalSubmit.tsx`**
+- Read `?edit=<id>` from URL params
+- If editing: load existing listing data, pre-fill all form fields
+- On submit: update instead of insert, increment `edit_count`, reset `approval_status` to 'pending'
+- Re-create approval workflow entries
+
+### 8D. Paid Listing Expiration
+- When `contact_mode === 'direct'` (paid), set `expires_at = now() + 30 days`
+- Show a countdown badge on the listing card
+- A daily cron job marks expired listings as `status = 'expired'`
 
 ---
 
-## 11. Support Tickets - Fix Card Click Not Opening Detail
+## 9. Amenities Section Cleanup
 
-**File: `src/components/admin/EmbeddedSupportTickets.tsx`**
-- The stat cards already have `onClick` handlers (lines 157-234) that change filters - they work correctly
-- The ticket row click (line 403) sets `setSelectedTicketId(ticket.id)` which should open TicketDetailPanel
-- Check if TicketDetailPanel renders based on `selectedTicketId` - it should be in the layout (line 343 flex gap)
+**File: `src/components/project-detail/AmenitiesWithPhotos.tsx`**
+- The amenities photo mapping uses stock/placeholder images. "Conference Halls" likely maps to a missing photo URL
+- Add fallback icons (Lucide) for amenities without photos
+- Clean up the grid layout for a more polished look
 
 ---
 
-## 12. HR Hub - CVs Collected Click Functionality
+## Execution Order
 
-**File: `src/components/admin/EmbeddedHRDashboard.tsx` (lines 68-81)**
-- The CVs Collected card is not clickable. Add `onClick` handler to switch to the CV Center tab:
-  ```
-  onClick={() => setActiveTab('cv-center')}
-  className="cursor-pointer hover:border-amber-500/60 active:scale-95 transition-all"
-  ```
+1. **Projects performance** — Remove API fetch, use DB-only (immediate speed fix)
+2. **URL purpose parameter** — Auto-label sale/rent in ListingPortalSubmit
+3. **Price predictor fix** — Add timeout, fallback calculation, fix bedrooms mapping
+4. **AI loading logo** — Fix transparent monogram
+5. **Unit types aggregation** — Enhance asUnitTypes for better display
+6. **Database migrations** — Create `client_investors`, `listing_enrichment_suggestions`, add soft-delete columns
+7. **Listing edit/delete/restore** — Full My Listings workflow
+8. **Enrichment pipeline** — Project matching edge function + admin review UI
+9. **Client extraction** — Enhanced AI extractor + handover alerts
+10. **Amenities cleanup** — Photo fallbacks
 
 ---
 
 ## Technical Summary
 
-| # | File | Issue | Fix |
-|---|------|-------|-----|
-| 1 | Admin.tsx | AI Assistant layout cramped | Stack vertically, rename title |
-| 2 | PipelineAnalyticsPanel.tsx | Gray cards, white text | Full champagne conversion |
-| 3 | LeadAssignmentRulesPanel.tsx | Gray cards, white title | Full champagne conversion |
-| 4 | RateLimitDashboard.tsx | Gray UI, black text, non-clickable | Full champagne conversion |
-| 5 | IPBlocklistDashboard.tsx | Black/gray color scheme | Full champagne conversion |
-| 6 | MarketingSettingsDashboard.tsx | Old gray boxes, white title | Full champagne conversion |
-| 7 | ITTasksList.tsx | Dark selects, gray cards | Champagne selects and cards |
-| 8 | ITTeamDirectory.tsx | White text on bright bg | Black text, champagne cards |
-| 9 | EmbeddedITDepartment.tsx | Old gold active tab color | Champagne gradient active state |
-| 10 | VoiceRecorder.tsx | Gray podcast studio UI | Full champagne conversion |
-| 11 | Admin.tsx (header) | Orange/yellow icon | Cleaner gold gradient |
-| 12 | Admin.tsx (properties) | Description shows "..." | Show truncated description |
-| 13 | EmbeddedHRDashboard.tsx | CVs card not clickable | Add onClick to switch tab |
-
-## Execution Order
-
-1. Admin.tsx: Layout fix (stacked columns), header icon, properties description
-2. PipelineAnalyticsPanel.tsx: Full champagne conversion
-3. LeadAssignmentRulesPanel.tsx: Full champagne conversion
-4. RateLimitDashboard.tsx: Full champagne conversion
-5. IPBlocklistDashboard.tsx: Full champagne conversion
-6. MarketingSettingsDashboard.tsx: Full champagne conversion
-7. ITTasksList.tsx + ITTeamDirectory.tsx + EmbeddedITDepartment.tsx: Champagne fixes
-8. VoiceRecorder.tsx: Podcast studio champagne conversion
-9. EmbeddedHRDashboard.tsx: CV card click handler
+| # | Component | Change |
+|---|-----------|--------|
+| 1 | PropertiesReelly.tsx | Remove API fetch, DB-only for speed |
+| 2 | ListingPortalSubmit.tsx | Read `?purpose=` param, auto-label sale/rent |
+| 3 | property-evaluation/index.ts | Better error handling, fallback path |
+| 4 | ProjectAIAnalyzer.tsx | Fix monogram white background |
+| 5 | ProjectDetail.tsx | Aggregate unit_types for display |
+| 6 | Database | New tables: client_investors, listing_enrichment_suggestions |
+| 7 | ListingPortalMyListings.tsx | Edit, soft-delete, restore, expiration |
+| 8 | listing-enrichment-matcher (new) | Match listings to projects, suggest enrichment |
+| 9 | ai-listing-extractor/index.ts | Extract client/buyer PII from documents |
+| 10 | handover-alerts (new) | Daily cron for handover reminders |
+| 11 | AmenitiesWithPhotos.tsx | Photo fallbacks, cleaner grid |
 
