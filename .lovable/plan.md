@@ -1,80 +1,88 @@
 
+# Comprehensive Fix Plan -- Add New Lead Form, CRM Layout, Homepage Performance & Video Scenes
 
-# Owner Command Center -- Full Premium Champagne Gold UI Overhaul
-
-This plan converts the entire Owner Command Center from its current dark zinc/black theme to the platform's premium **Champagne Gold** standard -- white/champagne backgrounds, gold borders, black text -- matching the listing portal style.
+This plan addresses all reported issues across the CRM and homepage in a single pass.
 
 ---
 
-## Scope of Changes
+## 1. Add New Lead Form (`CRMLeadModal.tsx`)
 
-### 1. Shell Layout (`OwnerDashboardShell.tsx`)
-- **Sidebar**: Change from `bg-zinc-950` dark gradient to champagne linen gradient (`from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]`) with gold borders
-- **Top Header Bar**: Convert from dark `bg-zinc-950` to white/champagne with gold bottom border
-- **Title text**: "Owner Command Center" becomes black text on light background
-- **Owner Badge**: Keep gold accent but on champagne background
-- **Bottom actions** (Return to Site, Sign Out): Dark text on champagne, gold hover states
-- **Sidebar border**: Change from `border-zinc-800` to `border-gold/30`
+**Problems**: Form is cropped at bottom, padding issues around birthday, no auto-save, no flags on language/nationality/city, no searchable dropdowns.
 
-### 2. Sidebar Navigation (`OwnerSidebarNav.tsx`)
-- **Section labels**: Change from `text-zinc-500` to `text-gold` uppercase labels
-- **Nav items (inactive)**: Change from `text-zinc-400 hover:bg-zinc-800` to `text-zinc-700 hover:bg-gold/10 hover:text-black`
-- **Nav items (active)**: Keep `bg-gold/10 text-gold border-gold/20` (already correct)
-- **Scrollbar**: Apply `jj-scrollbar-gold` class
+**Fixes**:
+- Change `DialogContent` to use `max-h-[90vh] overflow-y-auto` so the form scrolls within the dialog and is never cropped
+- Add consistent `space-y-3` padding between all fields including birthday label and input
+- Replace plain `Input` for **Nationality** with a searchable `Command`-based dropdown listing all countries with flag emojis (e.g. "British", "Emirati", "Indian")
+- Replace **Preferred Language** `Select` with a searchable `Command`-based dropdown with flag emojis (e.g. "English", "Arabic", "Russian")
+- Replace **Country** `Input` with a searchable `Command`-based dropdown with flag emojis
+- Replace **City** `Input` with a searchable `Command`-based dropdown (populated based on selected country, with common cities)
+- Add `useFormAutoSave` hook integration (already exists in codebase at `src/hooks/useFormAutoSave.ts`) to auto-save all form fields to localStorage, restoring on re-open
+- Create a shared data file `src/data/countries.ts` with country names, codes, flag emojis, nationalities, languages, and major cities
 
-### 3. Overview Page (`OwnerDashboardOverview.tsx`)
-- **KPI Cards**: Convert from `bg-zinc-900 border-zinc-800` to `bg-white/80 border-2 border-gold/30` with black text values
-- **KPI values**: Change from `text-white` to `text-black`
-- **KPI labels**: Change from `text-zinc-400` to `text-zinc-600`
-- **KPI icon containers**: Keep gold gradient styling (already correct)
-- **Tab bar**: Convert from `bg-zinc-900 border-zinc-800` to `bg-white/80 border border-gold/30`
-- **Tab triggers**: Already using `tab-trigger-champagne` class (keep as-is)
-- **All Card containers** (Newest Leads, Follow-up, Conversations, All Leads, Flagged, VIP, Employees, Audit): Convert from `bg-zinc-900/80 border-zinc-800` to `bg-white/70 border-2 border-gold/30`
-- **Card titles**: Change from `text-white` to `text-black`
-- **Card descriptions**: Change from `text-zinc-400` to `text-zinc-500`
-- **LeadRow component**: Convert from `bg-zinc-800/50 hover:bg-zinc-800` to `bg-[#FDFBF7] hover:bg-gold/5 border-gold/20`
-- **ConversationRow**: Same champagne treatment
-- **FollowUpItem**: Same champagne treatment
-- **Empty states**: Change icon colors from `text-zinc-600` to `text-gold/40`, text from `text-zinc-500` to `text-zinc-600`
-- **Header accent bar**: Keep gold gradient bar (already correct)
-- **Welcome text**: Change from `text-zinc-400` to `text-zinc-600`
-- **Page title**: Change from `text-white` to `text-black`
+---
 
-### 4. Quick Actions Grid (`QuickActionsGrid.tsx`)
-- **Container**: Convert from `bg-zinc-900/80 border-zinc-800` to `bg-white/70 border-2 border-gold/30`
-- **Title**: Change from `text-white` to `text-black`
-- **Action buttons**: Convert from `bg-zinc-800/50 border-zinc-700` to `bg-[#FDFBF7] border-gold/20 hover:border-gold/50 hover:bg-gold/10`
-- **Action labels**: Change from `text-zinc-400` to `text-zinc-600`
+## 2. Team Communication Attach Button (`CRMCommunicationPanel.tsx`)
 
-### 5. Department Shortcuts (`DepartmentShortcuts.tsx`)
-- **Container**: Convert from `bg-zinc-900/80 border-zinc-800` to `bg-white/70 border-2 border-gold/30`
-- **Title**: Change from `text-white` to `text-black`
-- **Shortcut buttons**: Convert from `bg-zinc-800/50 border-zinc-700` to `bg-[#FDFBF7] border-gold/20`
-- **Icon containers**: Change from `bg-zinc-700/50` to `bg-gold/10`
-- **Labels**: Change from `text-white` to `text-black`, descriptions from `text-zinc-500` to `text-zinc-600`
+**Problem**: The Paperclip (attach) button at line 452-454 is a ghost button with no `onClick` handler -- clicking it does nothing.
 
-### 6. Integration Widgets (`IntegrationWidgets.tsx`)
-- **Containers**: Convert from `bg-zinc-900/80 border-zinc-800` to `bg-white/70 border-2 border-gold/30`
-- **Titles**: Change from `text-white` to `text-black`
-- **Event rows**: Convert from `bg-zinc-800/50` to `bg-[#FDFBF7]`
-- **Quick action buttons**: Convert border colors from `border-zinc-700` to `border-gold/30`
-- **Automations status row**: Convert from `bg-zinc-800/50` to `bg-[#FDFBF7]`
+**Fix**:
+- Add a hidden `<input type="file">` ref
+- Wire the Paperclip button's `onClick` to trigger the file input
+- On file select, show a toast confirming the file name (full upload integration would require storage, but the button will at least open the file picker and acknowledge the selection)
 
-### 7. Main Page Background
-- Change `OwnerDashboardShell.tsx` outer `div` from `bg-black` to `bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]`
-- Change main content area background accordingly
+---
 
-### 8. Missing Routes & Features to Add
-Several sidebar nav items currently point to pages that may not exist or may be placeholder. Verify and ensure these are properly wired:
-- `/owner/toolkit` -- AI Tools Hub (currently renders `RoyalToolsHub`, confirmed in routes)
-- `/owner/automations` -- Workflow Automation (confirmed)
-- `/owner/studio` -- Studio (confirmed)
-- `/owner/kanban` -- Kanban Board (confirmed)
-- `/owner/email-client` -- Email Client (confirmed)
-- `/owner/team-chat` -- Team Chat (confirmed)
-- `/owner/map` -- Property Map (confirmed)
+## 3. CRM Vertical Sidebar
 
-All routes are already registered. No missing routes.
+**Problem**: User wants a persistent vertical sidebar in the CRM (like the Owner Command Center) so they don't have to navigate back each time.
+
+**Fix**:
+- The CRM already has `CRMToolsSidebar` imported. Verify it renders persistently on the left side with the same champagne gold styling. If it's toggled/hidden by default, make it visible by default on desktop with a collapse toggle.
+
+---
+
+## 4. Mortgage Calculator Duplicate Title (`Index.tsx` + `MortgageCalculator.tsx`)
+
+**Problem**: The homepage section at line 478 shows "Mortgage Calculator" as its own heading, then the `<MortgageCalculator compact />` component renders in compact mode (no internal title), BUT the section heading at line 478-479 is fine -- it shows "Mortgage" in black and "Calculator" in gold. The issue is likely that the non-compact header (lines 201-212) is also rendering. 
+
+**Fix**:
+- The compact mode (line 99) returns early before the non-compact header, so the homepage should only show one title. Investigate if `compact` prop is missing. Looking at line 487: `<MortgageCalculator compact />` -- this is correct. The duplicate may come from the section heading AND the compact cards having similar styling. Will verify and ensure only ONE title ("Mortgage" in black + "Calculator" in gold) appears.
+
+---
+
+## 5. Why Dubai Section -- Remove Photo, Fix Video Loading (`WhyDubaiCapitalSection.tsx`)
+
+**Problem**: Shows a static photo of Burj Khalifa before video loads; video takes time to load.
+
+**Fix**:
+- Add `preload="auto"` for the first video scene to start loading immediately
+- Use `poster` attribute with a dark/black poster or gradient so no static photo appears
+- Ensure crossfade only triggers after `canplay` event fires
+
+---
+
+## 6. Remove "Burj Al Arab Aerial" Video Scene Completely
+
+**Problem**: The `burj-al-arab-aerial.mp4` scene (described as "Icon tower" between Burj Khalifa and Palm scenes) must be deleted from the entire website.
+
+**Files affected**:
+- `src/components/PropertiesHeroVideo.tsx` -- Remove `burjAlArabVideo` from `VIDEO_SCENES` array (keep only downtown/burj-khalifa scene)
+- `src/components/header/MegaMenuDevelopers.tsx` -- Replace `burjAlArabVideo` import with a different premium video (e.g. `why-dubai-downtown-burj-khalifa.mp4` or `dubai-landmarks-hero.mp4`)
+- `src/components/home/WhyDubaiCapitalSection.tsx` -- This file does NOT use burj-al-arab-aerial (it uses downtown, burj-khalifa-day-to-night, and atlantis-palm), so the "second scene" complaint may refer to `burj-khalifa-day-to-night.mp4`. Since user says to keep Burj Khalifa and Palm but remove the middle one, the WhyDubai section is fine (3 scenes: downtown, burj-khalifa, atlantis-palm). The issue is only in PropertiesHeroVideo and MegaMenuDevelopers.
+
+**Replacement**: Use `dubai-landmarks-hero.mp4` for the MegaMenuDevelopers featured card video.
+
+---
+
+## 7. Homepage Loading Performance
+
+**Problem**: Navigation from CRM to homepage is slow; videos and content sections take time.
+
+**Fix**:
+- Ensure videos use `preload="none"` with IntersectionObserver (already implemented in WhyDubaiCapitalSection)
+- For PropertiesHeroVideo, reduce to 1 scene (removing burj-al-arab), which cuts loading in half
+- Add `fetchPriority="high"` to first visible content images
+- Use `Suspense` boundaries already in place -- verify they have lightweight fallbacks
 
 ---
 
@@ -82,12 +90,11 @@ All routes are already registered. No missing routes.
 
 | File | Changes |
 |------|---------|
-| `src/pages/OwnerDashboardShell.tsx` | Shell background, sidebar, header -- full champagne conversion |
-| `src/pages/OwnerDashboardOverview.tsx` | All cards, KPIs, tabs, rows, empty states -- champagne gold |
-| `src/components/owner-dashboard/OwnerSidebarNav.tsx` | Nav item colors, section labels |
-| `src/components/owner-dashboard/QuickActionsGrid.tsx` | Container and button colors |
-| `src/components/owner-dashboard/DepartmentShortcuts.tsx` | Container and card colors |
-| `src/components/owner-dashboard/IntegrationWidgets.tsx` | Container and row colors |
-
-No new files needed. No database changes. This is a pure UI theme conversion across 6 files.
-
+| `src/components/crm/CRMLeadModal.tsx` | Scrollable dialog, auto-save, searchable flag dropdowns for nationality/language/country/city, padding fixes |
+| `src/data/countries.ts` | NEW -- Country data with flags, nationalities, languages, cities |
+| `src/components/crm/CRMCommunicationPanel.tsx` | Wire attach button to file input |
+| `src/pages/CRM.tsx` | Ensure CRMToolsSidebar is visible by default on desktop |
+| `src/pages/Index.tsx` | Remove duplicate mortgage title if present |
+| `src/components/home/WhyDubaiCapitalSection.tsx` | Video preload optimization |
+| `src/components/PropertiesHeroVideo.tsx` | Remove burj-al-arab scene, keep only downtown scene |
+| `src/components/header/MegaMenuDevelopers.tsx` | Replace burj-al-arab video with dubai-landmarks-hero |
