@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -63,6 +63,62 @@ const getApproximateLocation = (): string => {
   }
 };
 
+// ── Event Queue for batching ──
+interface QueuedEvent {
+  user_id: string | null;
+  session_id: string;
+  event_type: string;
+  page_path: string;
+  event_data: Record<string, unknown> | null;
+  referrer: string | null;
+  device_type: string | null;
+}
+
+const EVENT_QUEUE: QueuedEvent[] = [];
+let flushTimer: ReturnType<typeof setTimeout> | null = null;
+const BATCH_INTERVAL_MS = 5000;
+const MAX_BATCH_SIZE = 20;
+
+async function flushEventQueue() {
+  if (EVENT_QUEUE.length === 0) return;
+  const batch = EVENT_QUEUE.splice(0, MAX_BATCH_SIZE);
+  try {
+    const { error } = await supabase
+      .from("user_journey_events")
+      .insert(batch.map(e => ({
+        ...e,
+        event_data: e.event_data as any,
+      })));
+    if (error) console.error("Batch insert error:", error);
+  } catch (err) {
+    console.error("Batch flush failed:", err);
+  }
+}
+
+function scheduleFlush() {
+  if (flushTimer) return;
+  flushTimer = setTimeout(() => {
+    flushTimer = null;
+    flushEventQueue();
+  }, BATCH_INTERVAL_MS);
+}
+
+// Map session to email when user identifies
+export function linkSessionToEmail(email: string) {
+  const sid = getSessionId();
+  try {
+    // Fire-and-forget: update past events with this session to have the email
+    supabase
+      .from("user_journey_events")
+      .update({ event_data: supabase.rpc ? undefined : undefined }) // can't update event_data easily; instead store mapping
+      .eq("session_id", sid);
+  } catch {
+    // silent
+  }
+  // Store locally for future correlation
+  sessionStorage.setItem("jbj_identified_email", email);
+}
+
 export function useUserTracking() {
   const { user } = useAuth();
   const location = useLocation();
@@ -70,43 +126,39 @@ export function useUserTracking() {
   const maxScrollDepth = useRef<number>(0);
   const sessionId = useRef<string>(getSessionId());
 
-  // Track event with enhanced data
-  const trackEvent = useCallback(async (
+  // Track event with batching
+  const trackEvent = useCallback((
     eventType: string,
     eventData: EventData = {}
   ) => {
-    try {
-      const pagesVisited = trackPageVisited(location.pathname);
-      const userRole = getUserRole();
-      const timezone = getApproximateLocation();
+    const pagesVisited = trackPageVisited(location.pathname);
+    const userRole = getUserRole();
+    const timezone = getApproximateLocation();
 
-      const { error } = await supabase
-        .from("user_journey_events")
-        .insert({
-          user_id: user?.id || null,
-          session_id: sessionId.current,
-          event_type: eventType,
-          page_path: location.pathname,
-          event_data: {
-            ...eventData,
-            user_role: userRole,
-            pages_visited: pagesVisited,
-            timezone,
-            total_pages: pagesVisited.length,
-          },
-          referrer: document.referrer || null,
-          device_type: getDeviceType(),
-        });
+    EVENT_QUEUE.push({
+      user_id: user?.id || null,
+      session_id: sessionId.current,
+      event_type: eventType,
+      page_path: location.pathname,
+      event_data: {
+        ...eventData,
+        user_role: userRole,
+        pages_visited: pagesVisited,
+        timezone,
+        total_pages: pagesVisited.length,
+      },
+      referrer: document.referrer || null,
+      device_type: getDeviceType(),
+    });
 
-      if (error) {
-        console.error("Error tracking event:", error);
-      }
-    } catch (err) {
-      console.error("Failed to track event:", err);
+    if (EVENT_QUEUE.length >= MAX_BATCH_SIZE) {
+      flushEventQueue();
+    } else {
+      scheduleFlush();
     }
   }, [user, location.pathname]);
 
-  // Track page view with enhanced data
+  // Track page view
   const trackPageView = useCallback(() => {
     trackEvent("page_view", {
       title: document.title,
@@ -171,7 +223,7 @@ export function useUserTracking() {
     });
   }, [trackEvent]);
 
-  // Track user role selection (Buyer, Seller, Broker, Visitor)
+  // Track user role selection
   const trackRoleSelection = useCallback((role: string) => {
     localStorage.setItem("jbj_user_role", role);
     trackEvent("role_selection", {
@@ -179,7 +231,7 @@ export function useUserTracking() {
     });
   }, [trackEvent]);
 
-  // Track form submission with source
+  // Track form submission
   const trackFormSubmission = useCallback((formName: string, formData?: Record<string, any>) => {
     trackEvent("form_submission", {
       form_name: formName,
@@ -188,12 +240,14 @@ export function useUserTracking() {
     });
   }, [trackEvent, location.pathname]);
 
-  // Track exit (called when user leaves the page)
+  // Track exit (uses sendBeacon for reliability)
   const trackExit = useCallback(() => {
+    // Flush remaining queued events
+    flushEventQueue();
+
     const timeSpent = Math.round((Date.now() - pageStartTime.current) / 1000);
     const pagesVisited = trackPageVisited(location.pathname);
-    
-    // Use sendBeacon for reliable exit tracking
+
     const data = JSON.stringify({
       user_id: user?.id || null,
       session_id: sessionId.current,
@@ -205,15 +259,14 @@ export function useUserTracking() {
         total_pages_visited: pagesVisited.length,
         pages_visited: pagesVisited,
         user_role: getUserRole(),
-        exit_url: document.activeElement instanceof HTMLAnchorElement 
-          ? document.activeElement.href 
+        exit_url: document.activeElement instanceof HTMLAnchorElement
+          ? document.activeElement.href
           : null,
       },
       referrer: document.referrer || null,
       device_type: getDeviceType(),
     });
 
-    // Try to use sendBeacon for reliable exit tracking
     if (navigator.sendBeacon) {
       navigator.sendBeacon(
         `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/user_journey_events`,
@@ -233,25 +286,20 @@ export function useUserTracking() {
   useEffect(() => {
     const handleScroll = () => {
       const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const scrollPercent = scrollHeight > 0 
-        ? Math.round((window.scrollY / scrollHeight) * 100) 
+      const scrollPercent = scrollHeight > 0
+        ? Math.round((window.scrollY / scrollHeight) * 100)
         : 0;
-      
       if (scrollPercent > maxScrollDepth.current) {
         maxScrollDepth.current = scrollPercent;
       }
     };
-
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   // Track exit on page unload
   useEffect(() => {
-    const handleBeforeUnload = () => {
-      trackExit();
-    };
-
+    const handleBeforeUnload = () => trackExit();
     window.addEventListener("beforeunload", handleBeforeUnload);
     return () => window.removeEventListener("beforeunload", handleBeforeUnload);
   }, [trackExit]);
@@ -273,10 +321,7 @@ export function useUserTracking() {
   };
 }
 
-// Need to import useRef
-import { useRef } from "react";
-
-// Export a singleton for use outside React components
+// Export utilities for use outside React components
 export const trackingUtils = {
   getSessionId,
   getDeviceType,

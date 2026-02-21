@@ -86,6 +86,7 @@ const NAV_SECTIONS: NavSection[] = [
     items: [
       { label: "Admin Panel", icon: Shield, path: "/owner/admin" },
       { label: "Analytics", icon: BarChart3, path: "/owner/analytics" },
+      { label: "Research Users", icon: Users, path: "/owner/research-users" },
       { label: "Documents", icon: FileText, path: "/owner/documents" },
     ],
   },
