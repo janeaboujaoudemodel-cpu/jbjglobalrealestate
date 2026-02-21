@@ -160,44 +160,42 @@ export default function RoyalToolsHub() {
               
               {/* Search & Filters - Inside Container */}
               <div className="p-6 md:p-8 border-b border-gold/30">
-                <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-                  {/* Search */}
-                  <div className="relative flex-1 max-w-md w-full">
+              <div className="flex flex-wrap gap-2 items-center justify-center">
+                  {/* Search - Inline with pills, before All Tools */}
+                  <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
                     <Input
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
-                      placeholder="Search tools..."
-                      className="pl-10 bg-white/50 border-gold/30 text-black placeholder:text-zinc-500"
+                      placeholder="Search..."
+                      className="pl-9 pr-3 py-2 h-9 w-40 md:w-48 rounded-full bg-white/50 border-gold/30 text-black text-sm placeholder:text-zinc-500"
                     />
                   </div>
-                  
+
                   {/* Category Filters - Champagne Pills */}
-                  <div className="flex flex-wrap gap-2 justify-center">
+                  <button
+                    onClick={() => setSelectedCategory('all')}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                      selectedCategory === 'all' 
+                        ? 'bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold text-black shadow-md' 
+                        : 'bg-white/30 border border-gold/30 text-zinc-600 hover:border-gold/60'
+                    }`}
+                  >
+                    All Tools
+                  </button>
+                  {categories.map(cat => (
                     <button
-                      onClick={() => setSelectedCategory('all')}
+                      key={cat}
+                      onClick={() => setSelectedCategory(cat)}
                       className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                        selectedCategory === 'all' 
+                        selectedCategory === cat 
                           ? 'bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold text-black shadow-md' 
                           : 'bg-white/30 border border-gold/30 text-zinc-600 hover:border-gold/60'
                       }`}
                     >
-                      All Tools
+                      {categoryLabels[cat]}
                     </button>
-                    {categories.map(cat => (
-                      <button
-                        key={cat}
-                        onClick={() => setSelectedCategory(cat)}
-                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                          selectedCategory === cat 
-                            ? 'bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold text-black shadow-md' 
-                            : 'bg-white/30 border border-gold/30 text-zinc-600 hover:border-gold/60'
-                        }`}
-                      >
-                        {categoryLabels[cat]}
-                      </button>
-                    ))}
-                  </div>
+                  ))}
                 </div>
               </div>
               
