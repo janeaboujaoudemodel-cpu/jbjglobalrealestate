@@ -415,6 +415,11 @@ const App = () => (
                 <Route path="admin/leads" element={<AdminLeads />} />
                 <Route path="marketing-hub" element={<MarketingHub />} />
                 <Route path="analytics" element={<JBJAnalyticsDashboard />} />
+                <Route path="research-users" element={
+                  <Suspense fallback={<PageLoader />}>
+                    {React.createElement(React.lazy(() => import("./components/admin/ResearchUsersPanel")))}
+                  </Suspense>
+                } />
                 {/* Nested tools routes */}
                 <Route path="founder-assistant" element={<FoundersAssistant />} />
                 <Route path="toolkit" element={<RoyalToolsHub />} />
