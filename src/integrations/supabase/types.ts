@@ -14308,6 +14308,7 @@ export type Database = {
           ai_extracted_data: Json | null
           ai_quality_score: number | null
           amenities: Json | null
+          approval_status: string | null
           approved_at: string | null
           approved_by: string | null
           area: string | null
@@ -14316,6 +14317,7 @@ export type Database = {
           bedrooms: number | null
           cheques: number | null
           contact_email: string | null
+          contact_mode: string | null
           contact_name: string | null
           contact_phone: string | null
           created_at: string
@@ -14334,6 +14336,7 @@ export type Database = {
           is_featured: boolean | null
           key_features: Json | null
           listing_category: string | null
+          listing_fee: number | null
           listing_type: string
           location: string | null
           passport_copy_url: string | null
@@ -14343,6 +14346,7 @@ export type Database = {
           property_type: string | null
           rejection_reason: string | null
           rent_frequency: string | null
+          seller_role: string | null
           source_documents: Json | null
           status: string | null
           title: string
@@ -14357,6 +14361,7 @@ export type Database = {
           ai_extracted_data?: Json | null
           ai_quality_score?: number | null
           amenities?: Json | null
+          approval_status?: string | null
           approved_at?: string | null
           approved_by?: string | null
           area?: string | null
@@ -14365,6 +14370,7 @@ export type Database = {
           bedrooms?: number | null
           cheques?: number | null
           contact_email?: string | null
+          contact_mode?: string | null
           contact_name?: string | null
           contact_phone?: string | null
           created_at?: string
@@ -14383,6 +14389,7 @@ export type Database = {
           is_featured?: boolean | null
           key_features?: Json | null
           listing_category?: string | null
+          listing_fee?: number | null
           listing_type?: string
           location?: string | null
           passport_copy_url?: string | null
@@ -14392,6 +14399,7 @@ export type Database = {
           property_type?: string | null
           rejection_reason?: string | null
           rent_frequency?: string | null
+          seller_role?: string | null
           source_documents?: Json | null
           status?: string | null
           title: string
@@ -14406,6 +14414,7 @@ export type Database = {
           ai_extracted_data?: Json | null
           ai_quality_score?: number | null
           amenities?: Json | null
+          approval_status?: string | null
           approved_at?: string | null
           approved_by?: string | null
           area?: string | null
@@ -14414,6 +14423,7 @@ export type Database = {
           bedrooms?: number | null
           cheques?: number | null
           contact_email?: string | null
+          contact_mode?: string | null
           contact_name?: string | null
           contact_phone?: string | null
           created_at?: string
@@ -14432,6 +14442,7 @@ export type Database = {
           is_featured?: boolean | null
           key_features?: Json | null
           listing_category?: string | null
+          listing_fee?: number | null
           listing_type?: string
           location?: string | null
           passport_copy_url?: string | null
@@ -14441,6 +14452,7 @@ export type Database = {
           property_type?: string | null
           rejection_reason?: string | null
           rent_frequency?: string | null
+          seller_role?: string | null
           source_documents?: Json | null
           status?: string | null
           title?: string
@@ -16603,10 +16615,12 @@ export type Database = {
           ai_generated_description: string | null
           ai_score: number | null
           ai_score_data: Json | null
+          approval_status: string | null
           assistant_approved_at: string | null
           assistant_approved_by: string | null
           bedrooms: number | null
           community_building: string | null
+          contact_mode: string | null
           created_at: string
           estimated_value_range: Json | null
           floor_plan_urls: string[] | null
@@ -16619,6 +16633,7 @@ export type Database = {
           leadership_approved_at: string | null
           leadership_approved_by: string | null
           listing_description: string | null
+          listing_fee: number | null
           minimum_acceptable_price: number | null
           passport_url: string | null
           photo_urls: string[] | null
@@ -16661,10 +16676,12 @@ export type Database = {
           ai_generated_description?: string | null
           ai_score?: number | null
           ai_score_data?: Json | null
+          approval_status?: string | null
           assistant_approved_at?: string | null
           assistant_approved_by?: string | null
           bedrooms?: number | null
           community_building?: string | null
+          contact_mode?: string | null
           created_at?: string
           estimated_value_range?: Json | null
           floor_plan_urls?: string[] | null
@@ -16677,6 +16694,7 @@ export type Database = {
           leadership_approved_at?: string | null
           leadership_approved_by?: string | null
           listing_description?: string | null
+          listing_fee?: number | null
           minimum_acceptable_price?: number | null
           passport_url?: string | null
           photo_urls?: string[] | null
@@ -16719,10 +16737,12 @@ export type Database = {
           ai_generated_description?: string | null
           ai_score?: number | null
           ai_score_data?: Json | null
+          approval_status?: string | null
           assistant_approved_at?: string | null
           assistant_approved_by?: string | null
           bedrooms?: number | null
           community_building?: string | null
+          contact_mode?: string | null
           created_at?: string
           estimated_value_range?: Json | null
           floor_plan_urls?: string[] | null
@@ -16735,6 +16755,7 @@ export type Database = {
           leadership_approved_at?: string | null
           leadership_approved_by?: string | null
           listing_description?: string | null
+          listing_fee?: number | null
           minimum_acceptable_price?: number | null
           passport_url?: string | null
           photo_urls?: string[] | null

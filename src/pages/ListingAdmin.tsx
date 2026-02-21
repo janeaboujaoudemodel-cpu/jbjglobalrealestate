@@ -52,7 +52,7 @@ import { ReellyImportPanel } from "@/components/listing-admin/ReellyImportPanel"
 import { SourceCountsPanel } from "@/components/listing-admin/SourceCountsPanel";
 import { EmergencyMirrorPanel } from "@/components/listing-admin/EmergencyMirrorPanel";
 // OffPlanInquiryCTA removed from admin per user request
-import { RefreshCw, Globe, Check } from "lucide-react";
+import { RefreshCw, Globe, Check, AlertTriangle } from "lucide-react";
 
 interface ProjectDocument {
   id: string;
@@ -664,9 +664,10 @@ const ListingAdmin = () => {
                 </TabsTrigger>
                 <TabsTrigger 
                   value="emergency"
-                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-red-100 data-[state=active]:to-red-200 data-[state=active]:text-red-800 text-red-600"
+                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
                 >
-                  🚨 Emergency Mirror
+                  <AlertTriangle className="w-4 h-4 mr-2" />
+                  Emergency Mirror
                 </TabsTrigger>
                 <TabsTrigger 
                   value="dev-visibility"

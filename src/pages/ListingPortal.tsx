@@ -307,24 +307,47 @@ const ListingPortal = () => {
                 className="pl-12 bg-white border-gold/30 text-black placeholder:text-zinc-400 h-12"
               />
             </div>
-            <div className="flex gap-2 flex-wrap">
-              {typeFilters.map(f => {
-                const Icon = f.icon;
-                return (
-                  <button
-                    key={f.id}
-                    onClick={() => setTypeFilter(f.id)}
-                    className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm border transition-all ${
-                      typeFilter === f.id
-                        ? 'bg-gold/20 border-gold/50 text-gold'
-                        : 'bg-white border-gold/20 text-zinc-600 hover:border-gold/40'
-                    }`}
-                  >
-                    <Icon className="w-3.5 h-3.5" />
-                    {f.label}
-                  </button>
-                );
-              })}
+            <div className="space-y-2">
+              {/* Row 1: All, For Sale, Yearly Rent */}
+              <div className="flex justify-center gap-2">
+                {typeFilters.filter(f => ['all', 'sale', 'yearly_rent'].includes(f.id)).map(f => {
+                  const Icon = f.icon;
+                  return (
+                    <button
+                      key={f.id}
+                      onClick={() => setTypeFilter(f.id)}
+                      className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm border transition-all ${
+                        typeFilter === f.id
+                          ? 'bg-gold/20 border-gold/50 text-gold'
+                          : 'bg-white border-gold/20 text-zinc-600 hover:border-gold/40'
+                      }`}
+                    >
+                      <Icon className="w-3.5 h-3.5" />
+                      {f.label}
+                    </button>
+                  );
+                })}
+              </div>
+              {/* Row 2: Short-term, Holiday Home — centered */}
+              <div className="flex justify-center gap-2 max-w-md mx-auto">
+                {typeFilters.filter(f => ['short_term_rental', 'holiday_home'].includes(f.id)).map(f => {
+                  const Icon = f.icon;
+                  return (
+                    <button
+                      key={f.id}
+                      onClick={() => setTypeFilter(f.id)}
+                      className={`flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-full text-sm border transition-all ${
+                        typeFilter === f.id
+                          ? 'bg-gold/20 border-gold/50 text-gold'
+                          : 'bg-white border-gold/20 text-zinc-600 hover:border-gold/40'
+                      }`}
+                    >
+                      <Icon className="w-3.5 h-3.5" />
+                      {f.label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
 
