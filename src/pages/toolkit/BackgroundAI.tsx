@@ -506,46 +506,77 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
     });
   };
 
-  // ── Remove Background: try AI first, fall back to improved flood-fill ──
+  // ── Remove Background: AI-powered via edge function, flood-fill fallback ──
   const handleRemoveBackground = async () => {
     if (!image || !consent) { toast.error('Please upload an image and confirm consent'); return; }
     setIsProcessing(true);
     setProgress(5);
     setProgressLabel('Preparing image...');
     try {
-      // Step 1: Get AI guidance from the remove-background edge function
-      setProgress(15);
-      setProgressLabel('Analyzing with AI...');
-      let guidance: { bgColorApprox?: string; recommendedTolerance?: number; hasFineDetails?: boolean } | undefined;
-      try {
-        const resizedDataUrl = await resizeImageForAI(image, 1024);
-        const base64 = resizedDataUrl.split(',')[1];
-        const mimeType = resizedDataUrl.split(';')[0].split(':')[1];
-        const { data } = await supabase.functions.invoke('remove-background', {
-          body: { image_base64: base64, image_type: mimeType }
-        });
-        if (data?.success && data?.guidance) {
-          guidance = data.guidance;
-        }
-      } catch {
-        // Guidance is optional — proceed without it
+      // Step 1: Convert image to data URL for the AI edge function
+      setProgress(10);
+      setProgressLabel('Uploading to AI...');
+      const resizedDataUrl = await resizeImageForAI(image, 1536);
+
+      // Step 2: Call AI-powered background removal
+      setProgress(25);
+      setProgressLabel('AI removing background...');
+      const { data, error } = await supabase.functions.invoke('ai-background-remove', {
+        body: { mode: 'remove', image: resizedDataUrl }
+      });
+
+      if (error) throw new Error(error.message);
+
+      if (data?.success && data?.processedImage) {
+        // AI removal succeeded — use the returned image directly
+        setProgress(85);
+        setProgressLabel('Applying background...');
+        setTransparentResult(data.processedImage);
+        const composited = await applyBackground(data.processedImage, selectedBackground);
+        setResult(composited);
+        setProgress(100);
+        setProgressLabel('Done!');
+        toast.success('AI background removal complete!');
+      } else if (data?.fallbackToClientSide) {
+        // AI failed — fall back to client-side flood-fill
+        console.warn('AI removal unavailable, falling back to client-side:', data?.reason);
+        setProgress(35);
+        setProgressLabel('Falling back to smart detection...');
+
+        // Get guidance from the analysis function
+        let guidance: { bgColorApprox?: string; recommendedTolerance?: number; hasFineDetails?: boolean } | undefined;
+        try {
+          const base64 = resizedDataUrl.split(',')[1];
+          const mimeType = resizedDataUrl.split(';')[0].split(':')[1];
+          const { data: guideData } = await supabase.functions.invoke('remove-background', {
+            body: { image_base64: base64, image_type: mimeType }
+          });
+          if (guideData?.success && guideData?.guidance) guidance = guideData.guidance;
+        } catch { /* proceed without guidance */ }
+
+        setProgress(50);
+        setProgressLabel(guidance ? 'AI-guided background removal...' : 'Running smart background detection...');
+        const transparent = await removeBackgroundAIGuided(image, guidance);
+        setProgress(85);
+        setProgressLabel('Applying background...');
+        setTransparentResult(transparent);
+        const composited = await applyBackground(transparent, selectedBackground);
+        setResult(composited);
+        setProgress(100);
+        setProgressLabel('Done!');
+        toast.success('Background removed!');
+      } else {
+        throw new Error(data?.error || 'Background removal failed');
       }
-
-      // Step 2: Run AI-guided client-side removal
-      setProgress(35);
-      setProgressLabel(guidance ? 'AI-guided background removal...' : 'Running smart background detection...');
-      const transparent = await removeBackgroundAIGuided(image, guidance);
-      setProgress(85);
-      setProgressLabel('Applying background...');
-      setTransparentResult(transparent);
-
-      const composited = await applyBackground(transparent, selectedBackground);
-      setResult(composited);
-      setProgress(100);
-      setProgressLabel('Done!');
-      toast.success(guidance ? 'AI-guided background removal complete!' : 'Background removed!');
     } catch (err) {
-      toast.error('Failed to process image. Please try again.');
+      const message = err instanceof Error ? err.message : 'Failed to process image';
+      if (message.includes('429') || message.includes('Rate limit')) {
+        toast.error('Rate limit reached. Please wait a moment and try again.');
+      } else if (message.includes('402') || message.includes('credits')) {
+        toast.error('AI credits exhausted. Please try again later.');
+      } else {
+        toast.error(message);
+      }
       console.error(err);
     } finally {
       setIsProcessing(false);
@@ -584,12 +615,23 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
         setProgressLabel('Done!');
         toast.success('AI background generated successfully!');
       } else if (data?.fallbackToRemoval) {
+        // Scene generation failed — try AI removal instead
         setProgress(50);
-        setProgressLabel('Falling back to background removal...');
-        const transparent = await removeBackgroundAIGuided(image);
-        setTransparentResult(transparent);
-        const composited = await applyBackground(transparent, 'transparent');
-        setResult(composited);
+        setProgressLabel('Falling back to AI background removal...');
+        const { data: removeData } = await supabase.functions.invoke('ai-background-remove', {
+          body: { mode: 'remove', image: dataUrl }
+        });
+        if (removeData?.success && removeData?.processedImage) {
+          setTransparentResult(removeData.processedImage);
+          const composited = await applyBackground(removeData.processedImage, 'transparent');
+          setResult(composited);
+        } else {
+          // Final fallback to flood-fill
+          const transparent = await removeBackgroundAIGuided(image);
+          setTransparentResult(transparent);
+          const composited = await applyBackground(transparent, 'transparent');
+          setResult(composited);
+        }
         setProgress(100);
         setProgressLabel('Done!');
         toast.info('Background removed. AI scene generation is temporarily unavailable.');
@@ -640,107 +682,122 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
         wasmURL: await toBlobURL('https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm/ffmpeg-core.wasm', 'application/wasm'),
       });
 
-      setVideoProgress(20);
+      setVideoProgress(15);
       setVideoProgressLabel('Loading video...');
       await ffmpeg.writeFile('input.mp4', await fetchFile(videoFile));
 
-      // Extract first frame to get AI guidance for the background color
-      setVideoProgress(25);
-      setVideoProgressLabel('Sampling background with AI...');
-      await ffmpeg.exec(['-i', 'input.mp4', '-vframes', '1', '-f', 'image2', 'frame0.jpg']);
-      const frameData = await ffmpeg.readFile('frame0.jpg');
-      const frameBlob = new Blob([frameData as unknown as BlobPart], { type: 'image/jpeg' });
-      const frameFile = new File([frameBlob], 'frame0.jpg', { type: 'image/jpeg' });
-
-      // Get AI guidance from edge function on first frame
-      let bgColor = '#FFFFFF';
-      let tolerance = 40;
-      try {
-        const resized = await resizeImageForAI(frameFile, 512);
-        const base64 = resized.split(',')[1];
-        const mimeType = resized.split(';')[0].split(':')[1];
-        const { data } = await supabase.functions.invoke('remove-background', {
-          body: { image_base64: base64, image_type: mimeType }
-        });
-        if (data?.success && data?.guidance?.bgColorApprox) {
-          bgColor = data.guidance.bgColorApprox;
-          tolerance = data.guidance.recommendedTolerance ?? 40;
-        }
-      } catch { /* use defaults */ }
-
-      setVideoProgress(35);
+      // Extract frames at 10fps for AI processing
+      setVideoProgress(20);
       setVideoProgressLabel('Extracting frames...');
+      await ffmpeg.exec(['-i', 'input.mp4', '-vf', 'fps=10,scale=768:-1', '-q:v', '3', 'frame_%04d.jpg']);
 
-      // Get video duration info
-      let totalFrames = 0;
-      ffmpeg.on('log', ({ message }) => {
-        const match = message.match(/frame=\s*(\d+)/);
-        if (match) totalFrames = parseInt(match[1]);
-      });
+      // List extracted frames
+      const files = await ffmpeg.listDir('/');
+      const frameFiles = files.filter(f => f.name.startsWith('frame_') && f.name.endsWith('.jpg')).sort((a, b) => a.name.localeCompare(b.name));
+      const totalFrames = frameFiles.length;
 
-      // Apply chromakey-style background removal using detected color
-      // Parse hex to RGB for ffmpeg colorkey filter
-      const hex = bgColor.replace('#', '');
-      const r = parseInt(hex.slice(0,2),16);
-      const g = parseInt(hex.slice(2,4),16);
-      const b = parseInt(hex.slice(4,6),16);
-      const ffmpegColor = `0x${hex.padEnd(6, '0')}`;
+      if (totalFrames === 0) { throw new Error('No frames extracted from video'); }
 
-      // Normalize tolerance (0-80 scale → 0.0-0.5 ffmpeg scale)
-      const ffmpegTolerance = Math.min(0.5, Math.max(0.05, tolerance / 160));
-      const ffmpegSimilarity = ffmpegTolerance;
-      const ffmpegBlend = Math.min(0.1, ffmpegTolerance * 0.5);
+      setVideoProgress(25);
+      setVideoProgressLabel(`Processing ${totalFrames} frames with AI...`);
 
-      setVideoProgress(40);
-      setVideoProgressLabel(`Removing background (color: ${bgColor})...`);
+      // Process each frame through AI background removal
+      const BATCH_SIZE = 3; // process 3 frames concurrently to manage rate limits
+      for (let i = 0; i < totalFrames; i += BATCH_SIZE) {
+        const batch = frameFiles.slice(i, Math.min(i + BATCH_SIZE, totalFrames));
+        
+        await Promise.all(batch.map(async (frameFile) => {
+          const frameData = await ffmpeg.readFile(frameFile.name);
+          const frameBlob = new Blob([frameData as unknown as BlobPart], { type: 'image/jpeg' });
+          
+          // Convert to data URL for AI
+          const reader = new FileReader();
+          const dataUrl: string = await new Promise((res, rej) => {
+            reader.onload = () => res(reader.result as string);
+            reader.onerror = rej;
+            reader.readAsDataURL(frameBlob);
+          });
 
-      // Apply background removal with colorkey + background color
-      let outputFilter = '';
+          // Call AI removal
+          const { data } = await supabase.functions.invoke('ai-background-remove', {
+            body: { mode: 'remove', image: dataUrl }
+          });
+
+          if (data?.success && data?.processedImage) {
+            // Convert base64 result back to file for FFmpeg
+            const b64 = data.processedImage.split(',')[1];
+            const byteStr = atob(b64);
+            const bytes = new Uint8Array(byteStr.length);
+            for (let j = 0; j < byteStr.length; j++) bytes[j] = byteStr.charCodeAt(j);
+            const outName = frameFile.name.replace('.jpg', '.png');
+            await ffmpeg.writeFile(outName, bytes);
+          } else {
+            // If AI fails for a frame, copy original as fallback
+            const outName = frameFile.name.replace('.jpg', '.png');
+            await ffmpeg.writeFile(outName, frameData);
+          }
+        }));
+
+        const processed = Math.min(i + BATCH_SIZE, totalFrames);
+        const pct = 25 + Math.round((processed / totalFrames) * 55);
+        setVideoProgress(pct);
+        setVideoProgressLabel(`AI processed ${processed}/${totalFrames} frames...`);
+      }
+
+      // Reassemble frames into video
+      setVideoProgress(82);
+      setVideoProgressLabel('Reassembling video...');
+
+      // Get original audio track
+      await ffmpeg.exec(['-i', 'input.mp4', '-vn', '-acodec', 'copy', 'audio.aac']).catch(() => {});
+      const hasAudio = files.some(f => f.name === 'audio.aac');
+
       if (videoBackground === 'transparent') {
-        // Output as WebM with alpha channel
-        outputFilter = `colorkey=${ffmpegColor}:${ffmpegSimilarity}:${ffmpegBlend}`;
-        await ffmpeg.exec([
-          '-i', 'input.mp4',
-          '-vf', outputFilter,
-          '-c:v', 'libvpx-vp9',
-          '-pix_fmt', 'yuva420p',
-          '-auto-alt-ref', '0',
-          '-b:v', '2M',
-          'output.webm'
-        ]);
+        // WebM with alpha
+        const args = ['-framerate', '10', '-i', 'frame_%04d.png', '-c:v', 'libvpx-vp9', '-pix_fmt', 'yuva420p', '-auto-alt-ref', '0', '-b:v', '2M'];
+        if (hasAudio) args.push('-i', 'audio.aac', '-c:a', 'libopus', '-shortest');
+        args.push('output.webm');
+        await ffmpeg.exec(args);
         const data = await ffmpeg.readFile('output.webm');
         const blob = new Blob([data as unknown as BlobPart], { type: 'video/webm' });
-        const url = URL.createObjectURL(blob);
-        setVideoResult(url);
+        setVideoResult(URL.createObjectURL(blob));
       } else {
-        // Apply solid background color
-        const bgMap: Record<string, string> = {
-          white: '0xFFFFFF', black: '0x000000', navy: '0x1E3A5F',
-          gray: '0x6B7280', 'gradient-blue': '0x3B82F6'
+        // Composite with solid background color
+        const bgColorMap: Record<string, string> = {
+          white: 'white', black: 'black', navy: '#1E3A5F',
+          gray: '#6B7280', 'gradient-blue': '#3B82F6'
         };
-        const bgFfmpegColor = bgMap[videoBackground] || '0x000000';
-        outputFilter = `[0:v]colorkey=${ffmpegColor}:${ffmpegSimilarity}:${ffmpegBlend}[fg];color=${bgFfmpegColor}:size=${r}x${b}[bg];[bg][fg]overlay=format=auto`;
-        // Simpler approach: apply colorkey and replace with background color
-        await ffmpeg.exec([
-          '-i', 'input.mp4',
-          '-vf', `colorkey=${ffmpegColor}:${ffmpegSimilarity}:${ffmpegBlend},split[main][alpha];[main]drawbox=0:0:iw:ih:${bgFfmpegColor}:fill[bg];[bg][alpha]alphamerge`,
-          '-c:v', 'libx264',
-          '-pix_fmt', 'yuv420p',
-          '-movflags', '+faststart',
-          'output.mp4'
-        ]);
+        const bgCol = bgColorMap[videoBackground] || 'black';
+        const vfFilter = `color=${bgCol}:size=768x432[bg];[0:v][bg]overlay=shortest=1`;
+        
+        const args = ['-framerate', '10', '-i', 'frame_%04d.png'];
+        if (hasAudio) args.push('-i', 'audio.aac');
+        args.push('-vf', `split[main][alpha];[alpha]alphaextract[mask];color=${bgCol}:s=768x432[bg];[bg][main][mask]maskedmerge`);
+        // Simpler: just overlay the transparent frames on solid color
+        args.length = 0; // reset
+        args.push('-framerate', '10', '-i', 'frame_%04d.png', '-filter_complex', `color=${bgCol}:size=768x432:d=999[bg];[bg][0:v]overlay=shortest=1`);
+        if (hasAudio) args.push('-i', 'audio.aac', '-map', '0', '-map', '2:a', '-shortest');
+        args.push('-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', 'output.mp4');
+        
+        await ffmpeg.exec(args);
         const data = await ffmpeg.readFile('output.mp4');
         const blob = new Blob([data as unknown as BlobPart], { type: 'video/mp4' });
-        const url = URL.createObjectURL(blob);
-        setVideoResult(url);
+        setVideoResult(URL.createObjectURL(blob));
       }
 
       setVideoProgress(100);
       setVideoProgressLabel('Done!');
-      toast.success('Video background removed!');
+      toast.success('Video background removed with AI!');
     } catch (err) {
       console.error('Video processing error:', err);
-      toast.error('Video processing failed. Try a shorter clip or smaller file.');
+      const message = err instanceof Error ? err.message : 'Video processing failed';
+      if (message.includes('429') || message.includes('Rate limit')) {
+        toast.error('Rate limit reached. Try a shorter video or wait a moment.');
+      } else if (message.includes('402') || message.includes('credits')) {
+        toast.error('AI credits exhausted. Please try again later.');
+      } else {
+        toast.error('Video processing failed. Try a shorter clip or smaller file.');
+      }
     } finally {
       setIsVideoProcessing(false);
     }
