@@ -499,7 +499,7 @@ const SupportTicketBox = () => {
                       </Button>
                     </DialogTrigger>
 
-                      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold max-w-xl z-[10050] flex flex-col overflow-hidden shadow-[0_8px_40px_rgba(200,167,102,0.4),0_4px_20px_rgba(0,0,0,0.2)] p-0">
+                      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold max-w-2xl z-[10050] flex flex-col overflow-hidden shadow-[0_8px_40px_rgba(200,167,102,0.4),0_4px_20px_rgba(0,0,0,0.2)] p-0">
                       <DialogHeader className="flex-shrink-0 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] z-10 pb-4 px-6 pt-6 border-b border-gold/20">
                         <DialogTitle className="text-black text-xl font-bold flex items-center gap-2">
                           <Headphones className="w-5 h-5 text-red-500" />
@@ -673,14 +673,19 @@ const SupportTicketBox = () => {
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     exit={{ opacity: 0 }}
-                                    className="absolute inset-0 bg-white/60 backdrop-blur-[2px] z-20 flex flex-col items-center justify-center rounded-lg"
+                                    className="absolute inset-0 bg-white/70 backdrop-blur-[3px] z-20 flex flex-col items-center justify-center rounded-lg"
                                   >
                                     <motion.div
                                       initial={{ scale: 0.8, opacity: 0 }}
                                       animate={{ scale: 1, opacity: 1 }}
-                                      className="bg-white/90 rounded-xl p-6 shadow-lg border border-gold/20 text-center"
+                                      className="bg-white/90 rounded-xl p-8 shadow-lg border border-gold/20 text-center flex flex-col items-center"
                                     >
-                                      <Loader2 className="w-10 h-10 text-gold animate-spin mx-auto mb-3" />
+                                      <img 
+                                        src="/jbj-monogram-dark-on-light.png" 
+                                        alt="JBJ" 
+                                        className="w-16 h-16 object-contain animate-pulse mb-4"
+                                        style={{ filter: 'drop-shadow(0 0 8px rgba(200,167,102,0.4))' }}
+                                      />
                                       <motion.p
                                         key={submissionStep}
                                         initial={{ opacity: 0, y: 5 }}

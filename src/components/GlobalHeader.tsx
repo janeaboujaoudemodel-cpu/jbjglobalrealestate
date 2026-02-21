@@ -1591,7 +1591,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               {/* Panel with real boundaries so pointer leave fires */}
               <div 
                 className="absolute right-0 z-[9998] pointer-events-auto"
-                style={{ top: 'calc(100% + 4px)', maxWidth: 'calc(100vw - 32px)' }}
+                style={{ top: 'calc(100% + 16px)', maxWidth: 'calc(100vw - 32px)' }}
                 onPointerEnter={handleMegaMenuPanelEnter}
                 onPointerLeave={handleMegaMenuLeave}
               >

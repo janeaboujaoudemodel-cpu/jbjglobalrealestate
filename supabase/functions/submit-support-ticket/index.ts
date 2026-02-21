@@ -343,11 +343,9 @@ ${OFFICIAL_EMAILS.support}
 <p style="margin:0 0 4px;font-size:15px;font-weight:700;color:#1a1a1a;">JBJ Global Real Estate</p>
 <p style="margin:0;font-size:13px;color:#C8A766;font-weight:600;">Support Ticket Confirmation</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:16px;border-top:1px solid #C8A766;padding-top:12px;">
-<tr>
-<td width="33%" style="text-align:center;padding:4px;"><a href="tel:+971565911000" style="color:#1a1a1a;text-decoration:none;font-size:12px;">&#9742; +971 56 591 1000</a></td>
-<td width="33%" style="text-align:center;padding:4px;"><a href="mailto:SUPPORT@JBJ.AE" style="color:#1a1a1a;text-decoration:none;font-size:12px;">&#9993; SUPPORT@JBJ.AE</a></td>
-<td width="33%" style="text-align:center;padding:4px;"><a href="https://jbj.ae" style="color:#1a1a1a;text-decoration:none;font-size:12px;">&#127760; jbj.ae</a></td>
-</tr>
+<tr><td style="text-align:center;padding:6px 0;"><a href="tel:+971565911000" style="color:#1a1a1a;text-decoration:none;font-size:12px;">&#9742; +971 56 591 1000</a></td></tr>
+<tr><td style="text-align:center;padding:6px 0;"><a href="mailto:SUPPORT@JBJ.AE" style="color:#1a1a1a;text-decoration:none;font-size:12px;">&#9993; SUPPORT@JBJ.AE</a></td></tr>
+<tr><td style="text-align:center;padding:6px 0;"><a href="https://jbj.ae" style="color:#1a1a1a;text-decoration:none;font-size:12px;">&#127760; jbj.ae</a></td></tr>
 </table>
 </td></tr>
 </table>
@@ -445,7 +443,7 @@ ${isImage ? `<img src="${url}" width="40" height="40" style="width:40px;height:4
 </td>
 <td style="vertical-align:middle;font-size:13px;font-weight:500;color:#1a1a1a;">${fileName}</td>
 <td width="60" style="vertical-align:middle;text-align:right;">
-<a href="${url}" target="_blank" style="color:#1a1a1a;text-decoration:none;font-size:12px;font-weight:600;padding:4px 10px;background:#f5f0e6;border:1px solid #C8A766;border-radius:4px;">View</a>
+<a href="${url}" target="_blank" style="color:#1a1a1a;text-decoration:none;font-size:12px;font-weight:600;padding:4px 10px;background:#f5f0e6;border:1px solid #C8A766;border-radius:4px;">View &#8599;</a>
 </td>
 </tr>
 </table>
@@ -480,7 +478,7 @@ ${isImage ? `<img src="${url}" width="40" height="40" style="width:40px;height:4
 </table>
 
 <!-- Need to Follow Up? - Premium Champagne -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#C8A766 0%,#B8956E 50%,#A07D4A 100%);border-radius:12px;margin-bottom:32px;border:2px solid #D4B87A;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#F5EBD7 0%,#EDE4D3 50%,#E0D4BE 100%);border-radius:12px;margin-bottom:32px;border:2px solid #C8A766;">
 <tr><td style="padding:32px 24px;text-align:center;">
 <p style="color:#1a1a1a;font-size:18px;font-weight:bold;margin:0 0 8px;">Need to Follow Up?</p>
 <p style="color:#2d2d2d;font-size:13px;margin:0 0 20px;">Copy your ticket number and include it in the subject line</p>
@@ -583,10 +581,10 @@ Explore While You Wait</p>
 </td></tr>
 
 <!-- FOOTER -->
-<tr><td style="background:linear-gradient(135deg,#1a1a1a,#2d2d2d);text-align:center;padding:32px 24px;border-radius:0 0 20px 20px;">
+<tr><td style="background:#000000;text-align:center;padding:32px 24px;border-radius:0 0 20px 20px;">
 <!-- JBJ Monogram -->
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:12px;">
-<tr><td style="text-align:center;"><img src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/jbj-monogram-light-on-dark.png?v=2" alt="JBJ" width="64" style="max-width:64px;height:auto;" /></td></tr>
+<tr><td style="text-align:center;"><img src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/jbj-monogram-light-on-dark.png?v=2" alt="JBJ" width="80" style="max-width:80px;height:auto;" /></td></tr>
 </table>
 <p style="color:#C8A766;font-size:18px;font-weight:bold;margin:0 0 6px;">JBJ Global Real Estate</p>
 <p style="color:#888;font-size:12px;margin:0 0 4px;font-style:italic;">The Only Global AI-Powered Real Estate Intelligence Platform</p>
