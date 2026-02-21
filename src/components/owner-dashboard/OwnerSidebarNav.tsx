@@ -1,3 +1,4 @@
+import { useEffect, useRef, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { 
   LayoutDashboard, 
@@ -109,6 +110,7 @@ interface OwnerSidebarNavProps {
 export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarNavProps) {
   const navigate = useNavigate();
   const location = useLocation();
+  const activeRef = useRef<HTMLButtonElement | null>(null);
 
   const isActivePath = (path: string) => {
     if (path === "/owner") {
@@ -116,6 +118,23 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
     }
     return location.pathname.startsWith(path);
   };
+
+  // Scroll the active nav item into view on route change without disturbing the page
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      activeRef.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    });
+  }, [location.pathname]);
+
+  const setActiveRefCallback = useCallback(
+    (path: string) => (el: HTMLButtonElement | null) => {
+      if (isActivePath(path)) {
+        activeRef.current = el;
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [location.pathname]
+  );
 
   const handleNavClick = (path: string) => {
     navigate(path);
@@ -135,6 +154,7 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
             {section.items.map((item) => (
               <button
                 key={item.path}
+                ref={setActiveRefCallback(item.path)}
                 onClick={() => handleNavClick(item.path)}
                 className={cn(
                   "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-200",

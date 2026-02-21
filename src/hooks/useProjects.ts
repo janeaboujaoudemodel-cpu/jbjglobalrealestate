@@ -304,6 +304,8 @@ export function useProjectsByDeveloper(developerSlug: string) {
 export function useProject(projectSlug: string) {
   return useQuery({
     queryKey: ["project", projectSlug],
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("projects")

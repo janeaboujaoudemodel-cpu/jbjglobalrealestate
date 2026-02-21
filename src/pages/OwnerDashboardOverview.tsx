@@ -449,7 +449,7 @@ export default function OwnerDashboardOverview() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 min-w-0 overflow-hidden">
       {/* Command Center Header */}
       <div className="mb-4">
         <div className="flex items-center gap-3 mb-2">
@@ -551,7 +551,7 @@ export default function OwnerDashboardOverview() {
 
           <div className="grid lg:grid-cols-3 gap-6">
             {/* Newest Leads */}
-            <Card className="bg-white/70 border-2 border-[#C9A84C]/30 lg:col-span-2 shadow-sm">
+            <Card className="bg-white/70 border-2 border-[#C9A84C]/30 lg:col-span-2 shadow-sm overflow-hidden min-w-0">
               <CardHeader className="flex flex-row items-center justify-between">
                 <div>
                   <CardTitle className="text-lg text-black">Newest Leads</CardTitle>
@@ -601,7 +601,7 @@ export default function OwnerDashboardOverview() {
             </Card>
 
             {/* Needs Follow-up */}
-            <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
+            <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm overflow-hidden min-w-0">
               <CardHeader className="flex flex-row items-center justify-between">
                 <div>
                   <CardTitle className="text-lg text-black flex items-center gap-2">
