@@ -2,7 +2,8 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTierProgress } from "@/hooks/useTierProgress";
 import { SEOHead } from "@/components/SEOHead";
-import { Loader2, ArrowLeft, Award, Star, Zap, Crown, Trophy, Compass, Search, TrendingUp } from "lucide-react";
+import { ArrowLeft, Award, Star, Zap, Crown, Trophy, Compass, Search, TrendingUp } from "lucide-react";
+import { BrandedLoader } from "@/components/ui/BrandedLoader";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -49,7 +50,7 @@ const MyDashboardProgress = () => {
   if (authLoading || isLoading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-gold animate-spin" />
+        <BrandedLoader text="Loading..." className="min-h-screen" />
       </div>
     );
   }
