@@ -568,8 +568,8 @@ export default function LogoCreator() {
     <div className="flex flex-col items-center gap-6 py-6">
       {generating ? (
         <div className="flex flex-col items-center gap-4">
-          <div className="w-20 h-20 rounded-full bg-orange-100 flex items-center justify-center">
-            <Loader2 size={32} className="text-orange-500 animate-spin" />
+          <div className="w-20 h-20 rounded-full bg-[#C9A84C]/10 flex items-center justify-center">
+            <Loader2 size={32} className="text-[#C9A84C] animate-spin" />
           </div>
           <p className="text-sm text-[hsl(var(--muted-foreground))]">AI is designing your logo…</p>
           <p className="text-xs text-[hsl(var(--muted-foreground))] opacity-60">This usually takes 10–20 seconds</p>
@@ -579,7 +579,7 @@ export default function LogoCreator() {
           <motion.div key={logo.timestamp} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-col items-center gap-6">
             {/* Main preview */}
             <button onClick={() => setFullscreenOpen(true)}
-              className="rounded-2xl border-2 border-[hsl(var(--border))] p-8 flex items-center justify-center shadow-inner hover:border-orange-300 transition-colors group relative"
+              className="rounded-2xl border-2 border-[hsl(var(--border))] p-8 flex items-center justify-center shadow-inner hover:border-[#C9A84C]/60 transition-colors group relative"
               style={{ background: previewBg === "white" ? "#fff" : previewBg === "black" ? "#111" : colors.primary }}>
               <LogoPreview svgContent={logo.svgContent} size={260} />
               <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -604,8 +604,8 @@ export default function LogoCreator() {
         </AnimatePresence>
       ) : (
         <div className="flex flex-col items-center gap-4 py-16">
-          <div className="w-24 h-24 rounded-full border-2 border-dashed border-orange-200 bg-orange-50 flex items-center justify-center">
-            <ImageIcon size={36} className="text-orange-300" />
+          <div className="w-24 h-24 rounded-full border-2 border-dashed border-[#C9A84C]/30 bg-[#C9A84C]/5 flex items-center justify-center">
+            <ImageIcon size={36} className="text-[#C9A84C]/40" />
           </div>
           <div className="text-center">
             <p className="font-semibold text-[hsl(var(--foreground))]">Ready to generate</p>
@@ -621,7 +621,7 @@ export default function LogoCreator() {
       <StudioShell
         toolName="Logo Creator"
         toolIcon={<ImageIcon size={14} />}
-        toolColor="#f97316"
+        toolColor="#C9A84C"
         sections={sections}
         activeSection={activeSection}
         onSectionChange={setActiveSection}
@@ -640,7 +640,7 @@ export default function LogoCreator() {
             <div className="flex gap-2 flex-wrap">
               {(["white", "black", "brand", "transparent"] as const).map(bg => (
                 <button key={bg} onClick={() => setFullscreenBg(bg)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold border-2 transition-all capitalize ${fullscreenBg === bg ? "border-orange-400 bg-orange-50 text-orange-700" : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-orange-300"}`}>
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold border-2 transition-all capitalize ${fullscreenBg === bg ? "border-[#C9A84C] bg-[#C9A84C]/10 text-[#C9A84C]" : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[#C9A84C]/60"}`}>
                   {bg === "brand" ? "Brand Color" : bg.charAt(0).toUpperCase() + bg.slice(1)}
                 </button>
               ))}
