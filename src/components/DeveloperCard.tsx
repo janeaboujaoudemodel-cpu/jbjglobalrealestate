@@ -43,6 +43,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
 
   const WHITE_BG_DEVELOPERS = ["azizi", "binghatti", "imtiaz", "h-h-development", "h&h"];
   const needsWhiteBg = WHITE_BG_DEVELOPERS.some(d => (developer.slug || "").toLowerCase().includes(d) || developer.name.toLowerCase().includes(d));
+  const isDamac = (developer.slug || "").toLowerCase().includes("damac");
   const showFeatureImage = developer.feature_image_url && !imageError;
   
   return (
@@ -72,6 +73,13 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
               referrerPolicy="no-referrer"
               onError={() => setImageError(true)}
             />
+          ) : isDamac ? (
+            <div className="w-full h-full bg-black flex items-center justify-center">
+              <div className="text-center">
+                <span className="text-white text-6xl font-bold tracking-tight" style={{ fontFamily: 'serif' }}>D</span>
+                <p className="text-white/70 text-xs font-medium tracking-[0.3em] uppercase mt-2">DAMAC</p>
+              </div>
+            </div>
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 flex items-center justify-center">
               {developer.logo_url ? (

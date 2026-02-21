@@ -139,6 +139,17 @@ const QUIZ_QUESTIONS = [
   },
 ];
 
+// Area value to database area name mapping for hard filtering
+const AREA_NAME_MAP: Record<string, string[]> = {
+  "downtown": ["downtown"],
+  "marina": ["marina"],
+  "palm": ["palm jumeirah", "palm"],
+  "business-bay": ["business bay"],
+  "creek-harbour": ["creek harbour", "creek", "dubai creek"],
+  "hills": ["dubai hills", "hills estate"],
+  "arabian-ranches": ["arabian ranches"],
+};
+
 const LANGUAGES = getLanguageList();
 const NATIONALITIES = getCountryList();
 
@@ -160,7 +171,7 @@ const Quiz = () => {
     nationality: "",
     preferredLanguage: "",
   });
-  const estimatedTime = 45; // Reduced from 60 - streamlined quiz
+  const estimatedTime = 45;
 
   // Auto-fill form data from logged-in user's profile
   useEffect(() => {
@@ -254,7 +265,6 @@ const Quiz = () => {
     if (currentStep < QUIZ_QUESTIONS.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
-      // If logged in and all fields filled, skip form
       if (user && isFormValid()) {
         proceedToResults();
       } else {
@@ -265,6 +275,17 @@ const Quiz = () => {
 
   const getRecommendations = () => {
     if (!allProjects?.length) return [];
+
+    // Build hard area filter from selected areas
+    const preferredAreas = (answers.areas as string[]) || [];
+    const hasOther = preferredAreas.includes("other");
+    const specificAreas = preferredAreas.filter(a => a !== "other");
+    const areaKeywords: string[] = [];
+    specificAreas.forEach(area => {
+      const mapped = AREA_NAME_MAP[area];
+      if (mapped) areaKeywords.push(...mapped);
+    });
+    const useHardAreaFilter = areaKeywords.length > 0 && !hasOther;
 
     const filteredProjects = allProjects.filter((project) => {
       if (project.is_sold_out) return false;
@@ -281,9 +302,9 @@ const Quiz = () => {
 
       if (!project.cover_image_url) return false;
 
+      // Budget hard filter
       const priceFrom = project.price_from;
       const budget = answers.budget;
-
       if (priceFrom != null) {
         if (budget === "under-1m" && priceFrom >= 1000000) return false;
         if (budget === "1m-2m" && (priceFrom < 1000000 || priceFrom >= 2000000)) return false;
@@ -292,10 +313,10 @@ const Quiz = () => {
         if (budget === "10m-plus" && priceFrom < 10000000) return false;
       }
 
+      // Bedroom hard filter
       const bedrooms = answers.bedrooms;
       const minBr = project.bedrooms_min;
       const maxBr = project.bedrooms_max ?? minBr;
-
       if (minBr != null) {
         const minBrNum = minBr ?? 0;
         const maxBrNum = maxBr ?? minBrNum;
@@ -306,10 +327,33 @@ const Quiz = () => {
         if (bedrooms === "4br-plus" && maxBrNum < 4) return false;
       }
 
+      // HARD AREA FILTER: Only show projects in selected areas
+      if (useHardAreaFilter) {
+        const projectName = (project.name || "").toLowerCase();
+        const projectLocation = (project.location || "").toLowerCase();
+        const projectAreaName = ((project as any).area_name || "").toLowerCase();
+        const matchesArea = areaKeywords.some(keyword =>
+          projectName.includes(keyword) ||
+          projectLocation.includes(keyword) ||
+          projectAreaName.includes(keyword)
+        );
+        if (!matchesArea) return false;
+      }
+
+      // Timeline hard filter for "ready"
+      const timeline = answers.timeline;
+      if (timeline === "ready") {
+        const handover = (project.handover_date || "").toLowerCase();
+        const constructionStatus = ((project as any).construction_status || "").toLowerCase();
+        if (!handover.includes("ready") && !constructionStatus.includes("ready") && !constructionStatus.includes("completed")) {
+          return false;
+        }
+      }
+
       return true;
     });
 
-      return filteredProjects
+    return filteredProjects
       .map((project) => {
         let score = 100;
 
@@ -319,7 +363,6 @@ const Quiz = () => {
 
         const location = answers.location_type;
         const projectViews = project.views || [];
-        // location_type is now multi-select — check array
         const locationArr = Array.isArray(location) ? location : (location ? [location] : []);
         locationArr.forEach((loc: string) => {
           if (loc === "beachfront" && projectViews.some((v: string) => v.toLowerCase().includes("sea") || v.toLowerCase().includes("beach"))) score += 20;
@@ -344,13 +387,14 @@ const Quiz = () => {
           if (projectAmenities.some((a: string) => a.toLowerCase().includes(pf.replace("-", " ")))) score += 3;
         });
 
-        const preferredAreas = answers.areas as string[] || [];
-        const projectName = (project.name || "").toLowerCase();
-        const projectLocation = (project.location || "").toLowerCase();
-        preferredAreas.forEach((pa) => {
-          const areaName = pa.replace("-", " ");
-          if (projectName.includes(areaName) || projectLocation.includes(areaName)) score += 10;
-        });
+        // Area scoring boost (soft score for when "other" is selected alongside specific areas)
+        if (hasOther && areaKeywords.length > 0) {
+          const projectName = (project.name || "").toLowerCase();
+          const projectLocation = (project.location || "").toLowerCase();
+          areaKeywords.forEach(keyword => {
+            if (projectName.includes(keyword) || projectLocation.includes(keyword)) score += 10;
+          });
+        }
 
         return { ...project, matchScore: score };
       })
@@ -362,8 +406,6 @@ const Quiz = () => {
 
   const handleSubmitForm = async () => {
     if (!isFormValid()) return;
-    
-    // Everything is FREE now - proceed directly
     await proceedToResults();
   };
 
@@ -409,19 +451,19 @@ const Quiz = () => {
   // Intro screen before starting
   if (!started && currentStep === 0 && Object.keys(answers).length === 0 && !showForm) {
     return (
-      <section className="min-h-screen bg-gradient-to-b from-purple-950 via-zinc-950 to-black flex flex-col">
+      <section className="min-h-screen bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex flex-col">
         {/* Header */}
-        <div className="border-b border-purple-900/30 bg-purple-950/50 backdrop-blur-sm">
+        <div className="border-b border-[#C9A84C]/20 bg-white/50 backdrop-blur-sm">
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <button
                 onClick={() => navigate(-1)}
-                className="text-zinc-400 hover:text-white transition-colors flex items-center gap-2"
+                className="text-stone-500 hover:text-stone-900 transition-colors flex items-center gap-2"
               >
                 <ChevronLeft className="w-5 h-5" />
                 Exit
               </button>
-              <div className="flex items-center gap-3 text-zinc-400">
+              <div className="flex items-center gap-3 text-stone-500">
                 <Clock className="w-4 h-4" />
                 <span className="text-sm">~{estimatedTime} seconds</span>
               </div>
@@ -433,89 +475,89 @@ const Quiz = () => {
         <div className="flex-1 flex items-center justify-center px-4 py-12">
           <div className="w-full max-w-2xl text-center">
             {/* Free Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-600/30 to-purple-800/30 border border-purple-500/40 mb-8">
-              <Gift className="w-4 h-4 text-white" />
-              <span className="text-white text-sm font-medium">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#C9A84C]/20 to-[#C9A84C]/10 border border-[#C9A84C]/40 mb-8">
+              <Gift className="w-4 h-4 text-[#C9A84C]" />
+              <span className="text-stone-800 text-sm font-medium">
                 Completely Free
               </span>
             </div>
 
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-500 via-purple-600 to-purple-800 mx-auto mb-8 flex items-center justify-center shadow-2xl shadow-purple-500/30">
-              <Wand2 className="w-10 h-10 text-white" />
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#C9A84C] to-[#B8973F] mx-auto mb-8 flex items-center justify-center shadow-2xl shadow-[#C9A84C]/30">
+              <Wand2 className="w-10 h-10 text-black" />
             </div>
 
-            <h1 className="text-white text-4xl md:text-5xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h1 className="text-stone-900 text-4xl md:text-5xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
               AI Property Finder
             </h1>
             
-            <p className="text-zinc-400 text-lg mb-6 max-w-lg mx-auto">
+            <p className="text-stone-500 text-lg mb-6 max-w-lg mx-auto">
               Try our AI Property Matchmaker and Analysis completely FREE!
             </p>
 
-            {/* Single Free Card - No VIP comparison */}
+            {/* Single Free Card */}
             <div className="max-w-sm mx-auto mb-8">
-              <div className="rounded-2xl p-5 text-left bg-gradient-to-br from-green-500/20 to-emerald-500/10 border-2 border-green-500/50">
+              <div className="rounded-2xl p-5 text-left bg-gradient-to-br from-[#C9A84C]/15 to-[#C9A84C]/5 border-2 border-[#C9A84C]/40">
                 <div className="flex items-center gap-2 mb-3">
-                  <Gift className="w-5 h-5 text-green-400" />
-                  <span className="font-semibold text-green-400">FREE Access</span>
+                  <Gift className="w-5 h-5 text-[#C9A84C]" />
+                  <span className="font-semibold text-[#C9A84C]">FREE Access</span>
                 </div>
                 <ul className="space-y-2 text-sm">
-                  <li className="flex items-center gap-2 text-zinc-300">
-                    <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0" />
+                  <li className="flex items-center gap-2 text-stone-700">
+                    <CheckCircle2 className="w-4 h-4 text-[#C9A84C] flex-shrink-0" />
                     <span>Unlimited AI Property Matches</span>
                   </li>
-                  <li className="flex items-center gap-2 text-zinc-300">
-                    <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0" />
+                  <li className="flex items-center gap-2 text-stone-700">
+                    <CheckCircle2 className="w-4 h-4 text-[#C9A84C] flex-shrink-0" />
                     <span>AI Comparison Reports</span>
                   </li>
-                  <li className="flex items-center gap-2 text-zinc-300">
-                    <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0" />
+                  <li className="flex items-center gap-2 text-stone-700">
+                    <CheckCircle2 className="w-4 h-4 text-[#C9A84C] flex-shrink-0" />
                     <span>Download Excel Report</span>
                   </li>
                 </ul>
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-zinc-400 mb-10">
+            <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-stone-500 mb-10">
               <div className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded-full bg-purple-600/30 flex items-center justify-center">
-                  <Clock className="w-3 h-3 text-white" />
+                <div className="w-5 h-5 rounded-full bg-[#C9A84C]/20 flex items-center justify-center">
+                  <Clock className="w-3 h-3 text-[#C9A84C]" />
                 </div>
-                <span className="text-white">~60 seconds</span>
+                <span className="text-stone-700">~60 seconds</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded-full bg-purple-600/30 flex items-center justify-center">
-                  <Sparkles className="w-3 h-3 text-white" />
+                <div className="w-5 h-5 rounded-full bg-[#C9A84C]/20 flex items-center justify-center">
+                  <Sparkles className="w-3 h-3 text-[#C9A84C]" />
                 </div>
-                <span className="text-white">AI-Powered</span>
+                <span className="text-stone-700">AI-Powered</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded-full bg-purple-600/30 flex items-center justify-center">
-                  <CheckCircle2 className="w-3 h-3 text-white" />
+                <div className="w-5 h-5 rounded-full bg-[#C9A84C]/20 flex items-center justify-center">
+                  <CheckCircle2 className="w-3 h-3 text-[#C9A84C]" />
                 </div>
-                <span className="text-white">100% Free</span>
+                <span className="text-stone-700">100% Free</span>
               </div>
             </div>
 
             <Button
               onClick={() => setStarted(true)}
-              className="font-semibold px-10 py-6 text-lg shadow-lg transition-all hover:shadow-xl bg-gradient-to-r from-purple-600 to-purple-800 text-white hover:from-purple-500 hover:to-purple-700 shadow-purple-500/30 hover:shadow-purple-500/40"
+              className="font-semibold px-10 py-6 text-lg shadow-lg transition-all hover:shadow-xl bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-black hover:brightness-110 shadow-[#C9A84C]/30"
             >
               Find My Property
               <ArrowUpRight className="w-5 h-5 ml-2" />
             </Button>
 
-            <p className="text-zinc-500 text-xs mt-6">
+            <p className="text-stone-400 text-xs mt-6">
               Save money by choosing the right property the first time
             </p>
 
-            <p className="text-purple-300/80 text-xs mt-8 leading-relaxed">
+            <p className="text-stone-400 text-xs mt-8 leading-relaxed">
               Software developed and implemented by<br />
-              <FounderContent fallback={<span className="text-white font-medium">JBJ Global Real Estate Team</span>}>
-                <span className="text-white font-medium">The Founder & CEO, Jane Bou Jaoude</span>
+              <FounderContent fallback={<span className="text-stone-700 font-medium">JBJ Global Real Estate Team</span>}>
+                <span className="text-stone-700 font-medium">The Founder & CEO, Jane Bou Jaoude</span>
               </FounderContent><br />
               Designed exclusively for{" "}
-              <span className="text-white font-medium">JBJ Global Real Estate</span>
+              <span className="text-stone-700 font-medium">JBJ Global Real Estate</span>
             </p>
           </div>
         </div>
@@ -526,19 +568,19 @@ const Quiz = () => {
   // Form Screen after completing questions
   if (showForm) {
     return (
-      <section className="min-h-screen bg-gradient-to-b from-purple-950 via-zinc-950 to-black flex flex-col">
+      <section className="min-h-screen bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex flex-col">
         {/* Header */}
-        <div className="border-b border-purple-900/30 bg-purple-950/50 backdrop-blur-sm">
+        <div className="border-b border-[#C9A84C]/20 bg-white/50 backdrop-blur-sm">
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <button
                 onClick={() => setShowForm(false)}
-                className="text-zinc-400 hover:text-white transition-colors flex items-center gap-2"
+                className="text-stone-500 hover:text-stone-900 transition-colors flex items-center gap-2"
               >
                 <ChevronLeft className="w-5 h-5" />
                 Back to Questions
               </button>
-              <div className="flex items-center gap-3 text-purple-300">
+              <div className="flex items-center gap-3 text-[#C9A84C]">
                 <CheckCircle2 className="w-4 h-4" />
                 <span className="text-sm">Almost there!</span>
               </div>
@@ -550,50 +592,50 @@ const Quiz = () => {
         <div className="flex-1 flex items-center justify-center px-4 py-12">
           <div className="w-full max-w-lg">
             <div className="text-center mb-8">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-purple-700 mx-auto mb-4 flex items-center justify-center shadow-lg shadow-purple-500/30">
-                <Sparkles className="w-8 h-8 text-white" />
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#C9A84C] to-[#B8973F] mx-auto mb-4 flex items-center justify-center shadow-lg shadow-[#C9A84C]/30">
+                <Sparkles className="w-8 h-8 text-black" />
               </div>
-              <h2 className="text-white text-3xl font-bold mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h2 className="text-stone-900 text-3xl font-bold mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
                 Get Your AI Analysis
               </h2>
-              <p className="text-zinc-400">
+              <p className="text-stone-500">
                 Enter your details to receive your personalized property recommendations
               </p>
             </div>
 
-            <div className="bg-zinc-900/50 border border-purple-900/30 rounded-2xl p-6 md:p-8">
+            <div className="bg-white/70 border border-[#C9A84C]/30 rounded-2xl p-6 md:p-8 backdrop-blur-sm">
               <div className="space-y-5">
                 <div>
-                  <Label className="text-zinc-300 mb-2 block">Full Name *</Label>
+                  <Label className="text-stone-700 mb-2 block">Full Name *</Label>
                   <Input
                     value={formData.fullName}
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                     placeholder="Enter your full name"
-                    className="bg-zinc-800/50 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-purple-500"
+                    className="bg-white border-[#C9A84C]/30 text-stone-900 placeholder:text-stone-400 focus:border-[#C9A84C]"
                   />
                 </div>
                 <div>
-                  <Label className="text-zinc-300 mb-2 block">Email Address *</Label>
+                  <Label className="text-stone-700 mb-2 block">Email Address *</Label>
                   <Input
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="Enter your email"
-                    className="bg-zinc-800/50 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-purple-500"
+                    className="bg-white border-[#C9A84C]/30 text-stone-900 placeholder:text-stone-400 focus:border-[#C9A84C]"
                   />
                 </div>
                 <div>
-                  <Label className="text-zinc-300 mb-2 block">Phone Number *</Label>
+                  <Label className="text-stone-700 mb-2 block">Phone Number *</Label>
                   <Input
                     type="tel"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     placeholder="+971 XX XXX XXXX"
-                    className="bg-zinc-800/50 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-purple-500"
+                    className="bg-white border-[#C9A84C]/30 text-stone-900 placeholder:text-stone-400 focus:border-[#C9A84C]"
                   />
                 </div>
                 <div>
-                  <Label className="text-zinc-300 mb-2 block">Nationality *</Label>
+                  <Label className="text-stone-700 mb-2 block">Nationality *</Label>
                   <SearchableSelect
                     value={formData.nationality}
                     onChange={(value) => setFormData({ ...formData, nationality: value })}
@@ -601,12 +643,12 @@ const Quiz = () => {
                     placeholder="Select your nationality"
                     searchPlaceholder="Search countries..."
                     priorityItem="United Arab Emirates"
-                    triggerClassName="bg-zinc-800/50 border-zinc-700 text-white hover:bg-zinc-700 hover:text-white"
-                    className="bg-zinc-900 border-zinc-700"
+                    triggerClassName="bg-white border-[#C9A84C]/30 text-stone-900 hover:bg-[#F5F0E6] hover:text-stone-900"
+                    className="bg-white border-[#C9A84C]/30"
                   />
                 </div>
                 <div>
-                  <Label className="text-zinc-300 mb-2 block">Preferred Language *</Label>
+                  <Label className="text-stone-700 mb-2 block">Preferred Language *</Label>
                   <SearchableSelect
                     value={formData.preferredLanguage}
                     onChange={(value) => setFormData({ ...formData, preferredLanguage: value })}
@@ -614,8 +656,8 @@ const Quiz = () => {
                     placeholder="Select preferred language"
                     searchPlaceholder="Search languages..."
                     priorityItem="English"
-                    triggerClassName="bg-zinc-800/50 border-zinc-700 text-white hover:bg-zinc-700 hover:text-white"
-                    className="bg-zinc-900 border-zinc-700"
+                    triggerClassName="bg-white border-[#C9A84C]/30 text-stone-900 hover:bg-[#F5F0E6] hover:text-stone-900"
+                    className="bg-white border-[#C9A84C]/30"
                   />
                 </div>
               </div>
@@ -625,8 +667,8 @@ const Quiz = () => {
                 disabled={!isFormValid() || isSubmitting}
                 className={`w-full mt-6 font-semibold py-6 text-lg disabled:opacity-50 ${
                   needsPayment
-                    ? "bg-gradient-to-r from-gold via-gold to-gold-dark text-black hover:brightness-110"
-                    : "bg-gradient-to-r from-purple-600 to-purple-800 text-white hover:from-purple-500 hover:to-purple-700"
+                    ? "bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-black hover:brightness-110"
+                    : "bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-black hover:brightness-110"
                 }`}
               >
                 {isSubmitting ? (
@@ -648,27 +690,27 @@ const Quiz = () => {
               </Button>
 
               {!needsPayment && (
-                <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3 mt-4 text-center">
-                  <p className="text-green-400 text-sm font-medium">
-                    ✨ Your first AI Property Match & Analysis is FREE!
+                <div className="bg-[#C9A84C]/10 border border-[#C9A84C]/30 rounded-lg p-3 mt-4 text-center">
+                  <p className="text-[#C9A84C] text-sm font-medium">
+                    Your first AI Property Match & Analysis is FREE!
                   </p>
                 </div>
               )}
 
               {needsPayment && (
-                <div className="bg-gold/10 border border-gold/30 rounded-lg p-3 mt-4 text-center">
-                  <p className="text-gold text-sm">
+                <div className="bg-[#C9A84C]/10 border border-[#C9A84C]/30 rounded-lg p-3 mt-4 text-center">
+                  <p className="text-[#C9A84C] text-sm">
                     You've used your free trial. Upgrade to VIP for unlimited access.
                   </p>
                 </div>
               )}
 
-              <p className="text-purple-300/60 text-xs text-center mt-6 leading-relaxed">
+              <p className="text-stone-400 text-xs text-center mt-6 leading-relaxed">
                 Software developed and implemented by<br />
-                <FounderContent fallback={<span className="text-white">JBJ Global Real Estate Team</span>}>
-                  <span className="text-white">The Founder & CEO, Jane Bou Jaoude</span>
+                <FounderContent fallback={<span className="text-stone-700">JBJ Global Real Estate Team</span>}>
+                  <span className="text-stone-700">The Founder & CEO, Jane Bou Jaoude</span>
                 </FounderContent><br />
-                Designed exclusively for <span className="text-white">JBJ Global Real Estate</span>
+                Designed exclusively for <span className="text-stone-700">JBJ Global Real Estate</span>
               </p>
             </div>
           </div>
@@ -688,23 +730,23 @@ const Quiz = () => {
 
   // Quiz Questions Screen
   return (
-    <section className="min-h-screen bg-gradient-to-b from-purple-950 via-zinc-950 to-black flex flex-col">
+    <section className="min-h-screen bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex flex-col">
       {/* Header */}
-      <div className="border-b border-purple-900/30 bg-purple-950/50 backdrop-blur-sm sticky top-0 z-10">
+      <div className="border-b border-[#C9A84C]/20 bg-white/50 backdrop-blur-sm sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between mb-3">
             <button
               onClick={() => currentStep > 0 ? setCurrentStep(currentStep - 1) : setStarted(false)}
-              className="text-zinc-400 hover:text-white transition-colors flex items-center gap-2"
+              className="text-stone-500 hover:text-stone-900 transition-colors flex items-center gap-2"
             >
               <ChevronLeft className="w-5 h-5" />
               {currentStep > 0 ? "Back" : "Exit"}
             </button>
-            <div className="text-zinc-400 text-sm">
+            <div className="text-stone-500 text-sm">
               Question {currentStep + 1} of {QUIZ_QUESTIONS.length}
             </div>
           </div>
-          <Progress value={progress} className="h-1.5 bg-zinc-800" />
+          <Progress value={progress} className="h-1.5 bg-[#C9A84C]/20" />
         </div>
       </div>
 
@@ -712,7 +754,7 @@ const Quiz = () => {
       <div className="flex-1 flex items-center justify-center px-4 py-8 md:py-12">
         <div className="w-full max-w-2xl">
           <h2
-            className="text-white text-2xl md:text-3xl font-bold mb-8 text-center"
+            className="text-stone-900 text-2xl md:text-3xl font-bold mb-8 text-center"
             style={{ fontFamily: "Poppins, sans-serif" }}
           >
             {currentQuestion.question}
@@ -726,7 +768,7 @@ const Quiz = () => {
                 size="sm"
                 onClick={handleSelectAll}
                 disabled={allSelected()}
-                className="bg-white text-zinc-900 hover:bg-zinc-200 border-white/80 font-semibold disabled:opacity-50"
+                className="bg-white text-stone-900 hover:bg-[#F5F0E6] border-[#C9A84C]/40 font-semibold disabled:opacity-50"
               >
                 Select All
               </Button>
@@ -735,7 +777,7 @@ const Quiz = () => {
                 size="sm"
                 onClick={handleClearAll}
                 disabled={!answers[currentQuestion.id] || (answers[currentQuestion.id] as string[]).length === 0}
-                className="bg-white text-zinc-900 hover:bg-zinc-200 border-white/80 font-semibold disabled:opacity-50"
+                className="bg-white text-stone-900 hover:bg-[#F5F0E6] border-[#C9A84C]/40 font-semibold disabled:opacity-50"
               >
                 Clear All
               </Button>
@@ -756,19 +798,19 @@ const Quiz = () => {
                   onClick={() => handleAnswer(option.value)}
                   className={`relative p-4 md:p-5 rounded-xl border-2 transition-all text-left group ${
                     isSelected
-                      ? "border-gold bg-white shadow-lg shadow-gold/30"
-                      : "border-zinc-300 bg-white hover:border-gold/50 hover:shadow-md"
+                      ? "border-[#C9A84C] bg-white shadow-lg shadow-[#C9A84C]/20"
+                      : "border-stone-200 bg-white hover:border-[#C9A84C]/50 hover:shadow-md"
                   }`}
                 >
                   {currentQuestion.type === "multiple" && (
                     <div className={`absolute top-3 right-3 w-5 h-5 rounded border-2 flex items-center justify-center ${
-                      isSelected ? "border-gold bg-gold" : "border-zinc-400"
+                      isSelected ? "border-[#C9A84C] bg-[#C9A84C]" : "border-stone-300"
                     }`}>
                       {isSelected && <CheckCircle2 className="w-3 h-3 text-black" />}
                     </div>
                   )}
                   <span className="text-2xl mb-2 block">{option.icon}</span>
-                  <span className={`font-medium text-sm md:text-base ${isSelected ? "text-gold" : "text-black"}`}>
+                  <span className={`font-medium text-sm md:text-base ${isSelected ? "text-[#C9A84C]" : "text-stone-900"}`}>
                     {option.label}
                   </span>
                 </button>
@@ -781,7 +823,7 @@ const Quiz = () => {
             <Button
               variant="outline"
               onClick={() => currentStep > 0 ? setCurrentStep(currentStep - 1) : setStarted(false)}
-              className="border-white/60 text-white bg-white/10 hover:bg-white/20 hover:text-white px-8 py-6 text-lg"
+              className="border-[#C9A84C]/40 text-stone-700 bg-white hover:bg-[#F5F0E6] hover:text-stone-900 px-8 py-6 text-lg"
             >
               <ChevronLeft className="w-5 h-5 mr-2" />
               Back
@@ -789,7 +831,7 @@ const Quiz = () => {
             <Button
               onClick={handleNext}
               disabled={!isAnswered()}
-              className="bg-gradient-to-r from-purple-600 to-purple-800 text-white font-semibold px-10 py-6 text-lg hover:from-purple-500 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-purple-500/20"
+              className="bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-black font-semibold px-10 py-6 text-lg hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-[#C9A84C]/20"
             >
               {currentStep === QUIZ_QUESTIONS.length - 1 ? "Continue" : "Next"}
               <ChevronRight className="w-5 h-5 ml-2" />
