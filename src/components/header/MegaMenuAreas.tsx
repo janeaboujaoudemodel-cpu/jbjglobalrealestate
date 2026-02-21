@@ -1,32 +1,57 @@
 import React from 'react';
 import { MapPin, Eye } from 'lucide-react';
 import menuDowntownSkyline from '@/assets/menu-downtown-dubai-skyline.jpg';
-import dubaiLandmarksVideo from '@/assets/videos/dubai-landmarks-hero.mp4';
-import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuCard, MegaMenuCTAButton } from '@/components/header/mega-menu-primitives';
+import dubaiDowntownVideo from '@/assets/videos/why-dubai-downtown-burj-khalifa.mp4';
+import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuCard, MegaMenuCTAButton, MegaMenuSectionDivider } from '@/components/header/mega-menu-primitives';
 import { useAreas } from '@/hooks/useAreas';
+
+/** Curated premium areas shown first — famous & trending */
+const FEATURED_AREA_SLUGS = [
+  'downtown-dubai',
+  'palm-jumeirah',
+  'dubai-marina',
+  'dubai-hills',
+  'business-bay',
+  'dubai-islands',
+  'jvc-jumeirah-village-circle',
+  'dubai-creek-harbour',
+  'emaar-beachfront',
+  'al-marjan-island',
+  'meydan-nad-al-sheba-1',
+  'jumeirah-beach-residence',
+];
 
 interface MegaMenuAreasProps {
   onClose: () => void;
 }
 
 const MegaMenuAreas = React.forwardRef<HTMLDivElement, MegaMenuAreasProps>(({ onClose }, ref) => {
-  // Fetch ALL active areas (no limit)
-  const { data: areas, isLoading } = useAreas();
+  const { data: areas } = useAreas();
 
-  const displayAreas = areas && areas.length > 0 
-    ? areas.map(a => ({ name: a.name, slug: a.slug }))
-    : [];
+  // Sort: featured slugs first (in order), then rest alphabetically — but cap at ~12
+  const displayAreas = React.useMemo(() => {
+    if (!areas || areas.length === 0) return [];
+    const slugMap = new Map(areas.map(a => [a.slug, a]));
+    const ordered: { name: string; slug: string }[] = [];
+    // Add featured first in defined order
+    for (const slug of FEATURED_AREA_SLUGS) {
+      const a = slugMap.get(slug);
+      if (a) ordered.push({ name: a.name, slug: a.slug });
+    }
+    return ordered.slice(0, 12);
+  }, [areas]);
 
   return (
     <MegaMenuShell ref={ref}>
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-6 lg:py-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <div className="lg:col-span-4 flex">
+          {/* Featured card — wider (5 cols) */}
+          <div className="lg:col-span-5 flex">
             <MegaMenuFeaturedCard
               to="/areas"
               onClick={onClose}
               image={menuDowntownSkyline}
-              video={dubaiLandmarksVideo}
+              video={dubaiDowntownVideo}
               kicker="AREAS"
               title="Dubai's Prime Locations"
               description="Discover the best communities"
@@ -35,9 +60,10 @@ const MegaMenuAreas = React.forwardRef<HTMLDivElement, MegaMenuAreasProps>(({ on
             />
           </div>
 
-          <div className="lg:col-span-8 lg:border-l lg:border-gold/30 lg:pl-8">
-            <MegaMenuCard icon={MapPin} title="All Areas">
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-0.5 max-h-[350px] overflow-y-auto pr-2">
+          {/* Areas list — narrower (7 cols), no scroll */}
+          <div className="lg:col-span-7 lg:border-l lg:border-gold/30 lg:pl-8">
+            <MegaMenuCard icon={MapPin} title="Top Areas">
+              <div className="grid grid-cols-2 gap-1">
                 {displayAreas.map((area) => (
                   <MegaMenuIconLink
                     key={area.slug}
@@ -51,14 +77,14 @@ const MegaMenuAreas = React.forwardRef<HTMLDivElement, MegaMenuAreasProps>(({ on
               </div>
             </MegaMenuCard>
             
-            <div className="mt-4">
-              <MegaMenuCTAButton
-                to="/areas"
-                onClick={onClose}
-                icon={Eye}
-                title="View All Areas"
-              />
-            </div>
+            <MegaMenuSectionDivider />
+
+            <MegaMenuCTAButton
+              to="/areas"
+              onClick={onClose}
+              icon={Eye}
+              title="View All Areas"
+            />
           </div>
         </div>
       </div>
