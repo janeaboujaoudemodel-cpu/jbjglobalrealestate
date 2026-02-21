@@ -3,53 +3,42 @@ import { Building2, Eye } from 'lucide-react';
 import menuDubaiSkyline from '@/assets/menu-dubai-skyline.jpg';
 import burjAlArabVideo from '@/assets/videos/burj-al-arab-aerial.mp4';
 import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuCard, MegaMenuCTAButton } from '@/components/header/mega-menu-primitives';
+import { useDevelopers } from '@/hooks/useProjects';
 
 interface MegaMenuDevelopersProps {
   onClose: () => void;
 }
 
 const MegaMenuDevelopers = React.forwardRef<HTMLDivElement, MegaMenuDevelopersProps>(({ onClose }, ref) => {
-  // Reduced list - top 12 developers for more compact menu
-  const developers = [
-    { name: 'Emaar Properties', slug: 'emaar' },
-    { name: 'DAMAC Properties', slug: 'damac' },
-    { name: 'Sobha Realty', slug: 'sobha' },
-    { name: 'Nakheel Properties', slug: 'nakheel' },
-    { name: 'Binghatti', slug: 'binghatti' },
-    { name: 'Meraas', slug: 'meraas' },
-    { name: 'Ellington Properties', slug: 'ellington' },
-    { name: 'Azizi Developments', slug: 'azizi' },
-    { name: 'Select Group', slug: 'select-group' },
-    { name: 'Danube Properties', slug: 'danube' },
-    { name: 'Dubai Properties', slug: 'dubai-properties' },
-    { name: 'Aldar Properties', slug: 'aldar' },
-  ];
+  // Fetch from DB, excluding hidden developers
+  const { data: developers } = useDevelopers(false);
+
+  const displayDevelopers = developers && developers.length > 0
+    ? developers.map(d => ({ name: d.name, slug: d.slug }))
+    : [];
 
   return (
     <MegaMenuShell ref={ref}>
-      {/* Reduced padding for smaller menu */}
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-6 lg:py-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Featured card - smaller height */}
-          <div className="lg:col-span-5 flex">
+          <div className="lg:col-span-4 flex">
             <MegaMenuFeaturedCard
-              to="/developer/emaar"
+              to="/developers"
               onClick={onClose}
               image={menuDubaiSkyline}
               video={burjAlArabVideo}
               kicker="DEVELOPERS"
-              title="Emaar Properties"
-              description="Dubai's most iconic developer"
+              title="Top Developers"
+              description="Dubai's most iconic developers"
               cta="View All Developers"
               className="flex-1 min-h-[260px] lg:min-h-[300px]"
             />
           </div>
 
-          <div className="lg:col-span-7 lg:border-l lg:border-gold/30 lg:pl-8">
-            {/* Single Premium Card for Developers */}
-            <MegaMenuCard icon={Building2} title="Top Developers in Dubai">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-0.5">
-                {developers.map((dev) => (
+          <div className="lg:col-span-8 lg:border-l lg:border-gold/30 lg:pl-8">
+            <MegaMenuCard icon={Building2} title="All Developers">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-0.5 max-h-[350px] overflow-y-auto pr-2">
+                {displayDevelopers.map((dev) => (
                   <MegaMenuIconLink
                     key={dev.slug}
                     to={`/developer/${dev.slug}`}
@@ -62,7 +51,6 @@ const MegaMenuDevelopers = React.forwardRef<HTMLDivElement, MegaMenuDevelopersPr
               </div>
             </MegaMenuCard>
             
-            {/* View All CTA */}
             <div className="mt-4">
               <MegaMenuCTAButton
                 to="/developers"

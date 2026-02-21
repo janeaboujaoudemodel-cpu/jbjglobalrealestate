@@ -10,19 +10,18 @@ interface MegaMenuAreasProps {
 }
 
 const MegaMenuAreas = React.forwardRef<HTMLDivElement, MegaMenuAreasProps>(({ onClose }, ref) => {
-  const { data: areas, isLoading } = useAreas({ limit: 12 });
+  // Fetch ALL active areas (no limit)
+  const { data: areas, isLoading } = useAreas();
 
-  // Only show database areas - no static fallbacks
   const displayAreas = areas && areas.length > 0 
     ? areas.map(a => ({ name: a.name, slug: a.slug }))
     : [];
 
   return (
     <MegaMenuShell ref={ref}>
-      {/* Reduced padding for smaller menu */}
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-6 lg:py-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <div className="lg:col-span-5 flex">
+          <div className="lg:col-span-4 flex">
             <MegaMenuFeaturedCard
               to="/areas"
               onClick={onClose}
@@ -36,10 +35,9 @@ const MegaMenuAreas = React.forwardRef<HTMLDivElement, MegaMenuAreasProps>(({ on
             />
           </div>
 
-          <div className="lg:col-span-7 lg:border-l lg:border-gold/30 lg:pl-8">
-            {/* Single Premium Card for Areas */}
-            <MegaMenuCard icon={MapPin} title="Top Areas in Dubai">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-0.5">
+          <div className="lg:col-span-8 lg:border-l lg:border-gold/30 lg:pl-8">
+            <MegaMenuCard icon={MapPin} title="All Areas">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-0.5 max-h-[350px] overflow-y-auto pr-2">
                 {displayAreas.map((area) => (
                   <MegaMenuIconLink
                     key={area.slug}
@@ -53,7 +51,6 @@ const MegaMenuAreas = React.forwardRef<HTMLDivElement, MegaMenuAreasProps>(({ on
               </div>
             </MegaMenuCard>
             
-            {/* View All CTA */}
             <div className="mt-4">
               <MegaMenuCTAButton
                 to="/areas"
