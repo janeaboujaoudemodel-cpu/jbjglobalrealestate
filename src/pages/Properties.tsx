@@ -232,6 +232,20 @@ const Properties = () => {
       searchParams.get('keyword') ||
       searchParams.get('search');
 
+    // New params from HeroSearchBar
+    const bedsParam = searchParams.get('beds');
+    const typeParam = searchParams.get('type');
+    const priceMinParam = searchParams.get('priceMin');
+    const priceMaxParam = searchParams.get('priceMax');
+    const sizeMinParam = searchParams.get('sizeMin');
+    const sizeMaxParam = searchParams.get('sizeMax');
+    const sizeUnitParam = searchParams.get('sizeUnit') as 'sqft' | 'sqm' | null;
+    const currencyParam = searchParams.get('currency') as ExtendedCurrency | null;
+    const emirateParam = searchParams.get('emirate');
+    const saleStatusParam = searchParams.get('saleStatus');
+    const communityParam = searchParams.get('community');
+    const sortParam = searchParams.get('sort');
+
     const hasDeveloperParam = !!developerParam;
     const developersLoaded = !!developers && developers.length > 0;
 
@@ -256,16 +270,31 @@ const Properties = () => {
       if (matchedDeveloper) {
         developerIdFromUrl = matchedDeveloper.id;
       } else {
-        // If a developer param exists but we can't resolve it, don't clobber current filters
         return;
       }
+    }
+
+    // Resolve communityId from param
+    let communityIdFromUrl: string | null = null;
+    if (communityParam && communities && communities.length > 0) {
+      const normalized = communityParam.toLowerCase().trim();
+      const matched = communities.find((c) => c.id === communityParam) ||
+        communities.find((c) => c.name.toLowerCase() === normalized) ||
+        communities.find((c) => c.name.toLowerCase().includes(normalized));
+      if (matched) communityIdFromUrl = matched.id;
     }
 
     const tx: ExtendedFilterState['transactionType'] =
       newTransaction === 'rent' ? 'rent' : 'buy';
 
+    const hasAnyParam = newTransaction || newStatus || developerIdFromUrl || keywordParam || areaParam ||
+      bedsParam || typeParam || priceMinParam || priceMaxParam || sizeMinParam || sizeMaxParam ||
+      currencyParam || emirateParam || saleStatusParam || communityIdFromUrl || sortParam;
+
     // Apply filters if any URL params exist
-    if (newTransaction || newStatus || developerIdFromUrl || keywordParam || areaParam) {
+    if (hasAnyParam) {
+      const bedroomsMin = bedsParam ? (bedsParam === 'studio' ? 0 : bedsParam === 'any' ? null : parseInt(bedsParam) || null) : null;
+
       const updated: ExtendedFilterState = {
         ...defaultExtendedFilters,
         transactionType: tx,
@@ -273,15 +302,27 @@ const Properties = () => {
         developerId: developerIdFromUrl,
         search: keywordParam ?? "",
         trendingArea: areaParam || null,
+        bedroomsMin: bedroomsMin,
+        propertyType: typeParam && typeParam !== 'all' ? typeParam : null,
+        priceMin: priceMinParam ? Number(priceMinParam) : 0,
+        priceMax: priceMaxParam ? Number(priceMaxParam) : 500000000,
+        sizeMin: sizeMinParam ? Number(sizeMinParam) : 0,
+        sizeMax: sizeMaxParam ? Number(sizeMaxParam) : 50000,
+        sizeUnit: sizeUnitParam || 'sqft',
+        currency: (currencyParam || 'AED') as ExtendedCurrency,
+        emirate: emirateParam && emirateParam !== 'all' ? emirateParam : null,
+        saleStatus: saleStatusParam && saleStatusParam !== 'all' ? saleStatusParam : null,
+        communityId: communityIdFromUrl,
       };
       setFilters(updated);
       setAppliedFilters(updated);
+      if (sortParam) setSortBy(sortParam);
     } else if (searchParams.toString() === '') {
       // No URL params at all — ensure defaults show all projects
       setFilters(defaultExtendedFilters);
       setAppliedFilters(defaultExtendedFilters);
     }
-  }, [searchParams, developers]);
+  }, [searchParams, developers, communities]);
   
   // Convert extended filters to standard FilterState for useFilteredProjects
   // Use appliedFilters instead of filters for actual filtering
