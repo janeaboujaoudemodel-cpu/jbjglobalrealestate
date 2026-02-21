@@ -57,7 +57,20 @@ Return ONLY valid JSON with this structure:
   "gallery_images_detected": number of property photos found,
   "total_pages_analyzed": number,
   "confidence_score": 1-100 how confident you are in the extraction,
-  "extracted_highlights": ["key selling points extracted from documents"]
+  "extracted_highlights": ["key selling points extracted from documents"],
+  "client_data": null or {
+    "client_name": "buyer/investor full name if found in SPA, reservation agreement, or booking form",
+    "email": "buyer email if found",
+    "phone": "buyer phone if found",
+    "home_address": "buyer home address if found",
+    "date_of_birth": "buyer DOB if found (YYYY-MM-DD)",
+    "unit_number": "specific unit number purchased",
+    "purchase_price": null or number in AED,
+    "purchase_date": "date of purchase/booking (YYYY-MM-DD)",
+    "passport_number": "passport/ID number if found",
+    "nationality": "buyer nationality if found",
+    "source_document_type": "spa|reservation|booking_form|other"
+  }
 }
 
 IMPORTANT:
@@ -67,7 +80,9 @@ IMPORTANT:
 - Detect floor plans vs property photos vs brochure graphics
 - Count how many distinct property images and floor plans you found
 - Be thorough with amenities and features
-- Generate a professional description even if one isn't explicitly in the document`
+- Generate a professional description even if one isn't explicitly in the document
+- If the document is a Sales Purchase Agreement (SPA), Reservation Agreement, or Booking Form, extract the buyer/client data into the "client_data" field
+- client_data should be null if no buyer/investor information is found`
     });
 
     // Add each document
