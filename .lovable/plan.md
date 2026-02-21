@@ -1,137 +1,116 @@
 
 
-# Fix Quiz / AI Home Finder: Multiple UI and Logic Issues
+# Stamp Generator - Comprehensive Fix Plan
 
-## Issues to Fix (8 items)
+## Issues Identified and Solutions
 
-### 1. Founder Name Not Wrapped with FounderContent Toggle
-**Lines 494-498 and 642-645 in Quiz.tsx** display "The Founder & CEO, Jane Bou Jaoude" in plain text without the `<FounderContent>` wrapper. When the admin toggle hides founder info, these still show.
+### 1. Multi-Color Pack Missing White + Engraved 3D Styles
 
-**Fix:** Import `FounderContent` and wrap both instances. Show fallback text "JBJ Global Real Estate Team" when founder is hidden.
+**Problem:** The `PACK_COLORS` array in `StampExportPage.tsx` (line 189-196) has only 6 colors: Navy, Black, Dark Red, Forest Green, Royal Purple, Gold. No White or Engraved/3D styles.
 
----
+**Fix:**
+- Add White (`#ffffff`) to `PACK_COLORS`
+- Add Engraved/3D style variants (Silver Embossed `#C0C0C0`, Bronze `#8B4513`)
+- Add a color wheel (`StampColorWheel`) inside the Multi-Color Pack section so users can pick custom colors for the pack
+- Also add White to the `PRESET_COLORS` array (line 198-205) which is used for the export page quick presets
 
-### 2. "Select All" / "Clear All" Buttons Not Visible (Purple on Purple)
-**Lines 698-716 in Quiz.tsx** — the buttons use `border-purple-500/50 text-white` and `border-zinc-700 text-white` on a purple/dark background, making them nearly invisible.
+### 2. Secondary and Accent Colors Not Affecting SVG
 
-**Fix:** Change both buttons to use solid white background with dark text: `bg-white text-zinc-900 hover:bg-zinc-200 border-white/80` so they stand out clearly, matching the style of the Next button area.
+**Problem:** The `tintSvgFull` function in `StampExportPage.tsx` (line 157-162) only replaces `#1a2744` (primary) and `#2a3a5c` (secondary), but does NOT replace the accent token `#8b6914`. The accent replacement only targets `dominant-baseline="central"` fill patterns which may not match many SVG elements.
 
----
-
-### 3. "Location Type" Question Needs to Be Multi-Select with "Select All"
-**Line 92-99 in Quiz.tsx** — `location_type` is currently `type: "single"`. The user wants it to allow multiple selections and include a "Select All" option.
-
-**Fix:** Change `type: "single"` to `type: "multiple"` and add `hasSelectAll: true` to the `location_type` question definition.
-
----
-
-### 4. Back Button Missing on Quiz Question Screen
-**Lines 753-763 in Quiz.tsx** — Only a "Next" button exists, centered. There is a Back in the header but the user wants explicit Back/Next buttons at the bottom.
-
-**Fix:** Replace the single centered Next button with a two-column layout:
-- Left: "Back" button (goes to previous step or exit)
-- Right: "Next" button (current behavior)
-
----
-
-### 5. Auto-Recognize Logged-In Users (Skip Form)
-**Lines 507-660 in Quiz.tsx** — The form always shows asking for name, email, phone, nationality, language. If the user is already logged in (`user` from `useAuth()`), their profile data should be auto-filled and the form should be skipped or pre-populated.
-
-**Fix:** When `user` is authenticated, auto-populate `formData` from the user's profile (query the `profiles` table for name, phone, nationality, language). If all required fields are filled from the profile, skip the form entirely and go straight to results. Same principle applies to any other download forms that ask for details.
-
----
-
-### 6. Nationality / Preferred Language Dropdowns — Black on Black (Unreadable)
-**Lines 577-596 in Quiz.tsx** — The `SearchableSelect` component has `bg-white text-black` styling (from searchable-select.tsx line 75), but on the dark quiz background (zinc-900/50), the trigger button renders with white background which should be fine. However, the issue is the popover content and trigger might not have proper contrast on this dark page.
-
-**Fix:** Pass custom `triggerClassName` to both SearchableSelect instances in the quiz form to use dark-themed styling: `bg-zinc-800/50 border-zinc-700 text-white hover:bg-zinc-700 hover:text-white`. Also pass a `className` for the popover to use dark styling.
-
----
-
-### 7. "Add Badge" Button Not Visible (Gray on Dark Background)
-**Lines 343-345 and 408 in QuizResults.tsx** — The badge button uses `border-white/40 text-white bg-white/10 hover:bg-white/20` which is extremely faint on the dark background.
-
-**Fix:** Change to a more visible style: `border-purple-500 text-white bg-purple-600/30 hover:bg-purple-600/50 border` to make it clearly visible with a purple accent.
-
----
-
-### 8. Project Cards Need Purple Border + Consistent Height for Area Guide Cards
-**Lines 383-434 in QuizResults.tsx** — The "More Great Options" cards have no visible border, and area guide cards may render shorter.
-
-**Fix:** Add `border-2 border-purple-500/40 rounded-2xl overflow-hidden` to each card wrapper div. Add `min-h-[420px]` to ensure consistent card heights across the grid.
-
----
-
-## Technical Details
-
-### Files to Edit
-
-| File | Changes |
-|------|---------|
-| `src/pages/Quiz.tsx` | (1) Import + wrap founder text with `FounderContent`, (2) Fix Select All/Clear All button colors, (3) Change location_type to multiple + hasSelectAll, (4) Add Back button next to Next, (5) Auto-fill form from profile + skip if complete, (6) Fix SearchableSelect dark theme |
-| `src/pages/QuizResults.tsx` | (7) Fix Add Badge button visibility, (8) Add purple border + min-height to cards |
-| `src/components/ui/searchable-select.tsx` | Add support for dark-mode variant via optional prop or triggerClassName override |
-
-### Auto-Recognize User Logic
-
-```text
-// In Quiz.tsx, after user is available:
-useEffect(() => {
-  if (user) {
-    // Fetch profile from profiles table
-    supabase.from("profiles").select("*").eq("id", user.id).single()
-      .then(({ data }) => {
-        if (data) {
-          setFormData(prev => ({
-            fullName: data.full_name || data.display_name || prev.fullName,
-            email: user.email || prev.email,
-            phone: data.phone || prev.phone,
-            nationality: data.nationality || prev.nationality,
-            preferredLanguage: data.preferred_language || prev.preferredLanguage,
-          }));
-        } else {
-          // At minimum fill email from auth
-          setFormData(prev => ({ ...prev, email: user.email || prev.email }));
-        }
-      });
+**Fix:** Update `tintSvgFull` to also replace `#8b6914` with the accent color, matching the logic in `StampSVGRenderer.tsx`:
+```
+function tintSvgFull(svgString, primary, secondary, accent) {
+  let s = svgString.replace(/#1a2744/gi, primary);
+  if (secondary) s = s.replace(/#2a3a5c/gi, secondary);
+  if (accent) {
+    s = s.replace(/#8b6914/gi, accent);
+    s = s.replace(/(dominant-baseline="central"[^>]*fill=")[^"]+(")/g, `$1${accent}$2`);
   }
-}, [user]);
-
-// In handleNext — if user is logged in and formData is complete, skip form
-const handleNext = () => {
-  if (currentStep < QUIZ_QUESTIONS.length - 1) {
-    setCurrentStep(currentStep + 1);
-  } else {
-    // If logged in and all fields filled, skip form
-    if (user && isFormValid()) {
-      proceedToResults();
-    } else {
-      setShowForm(true);
-    }
-  }
-};
+  return s;
+}
 ```
 
-### Back/Next Button Layout
+### 3. Export Downloads as ZIP/Chrome Links Instead of Direct Files
 
-```text
-<div className="flex justify-between mt-10 gap-4">
-  <Button
-    onClick={() => currentStep > 0 ? setCurrentStep(currentStep - 1) : setStarted(false)}
-    variant="outline"
-    className="border-white text-white bg-white/10 hover:bg-white/20 px-8 py-6 text-lg"
-  >
-    <ChevronLeft className="w-5 h-5 mr-2" />
-    Back
-  </Button>
-  <Button
-    onClick={handleNext}
-    disabled={!isAnswered()}
-    className="bg-gradient-to-r from-purple-600 to-purple-800 ..."
-  >
-    {currentStep === QUIZ_QUESTIONS.length - 1 ? "Continue" : "Next"}
-    <ChevronRight className="w-5 h-5 ml-2" />
-  </Button>
-</div>
-```
+**Problem:** The `generateBundle` function (line 358-408) downloads each file individually using `triggerDownload` with `URL.createObjectURL`. Some browsers may intercept multiple rapid downloads. The 200ms delays between downloads may not be sufficient.
+
+**Fix:**
+- Bundle all selected files into a single ZIP (using JSZip which is already imported) instead of triggering individual file downloads
+- This prevents browsers from blocking multiple rapid downloads
+- Add a "Download All as ZIP" option alongside individual file downloads
+
+### 4. Monogram Tab Missing from Left Panel Tab Switcher
+
+**Problem:** The left panel has 4 tabs: Colors, Fonts, Text, Art. The user wants a dedicated "Monogram" tab visible alongside them (not hidden inside Art). The Center Art tab already handles monogram but the user wants it more prominent and clickable.
+
+**Fix:**
+- Add a 5th tab "Logo" (or "Mono") to the left panel tab switcher in `StampGeneratorPage.tsx`
+- This tab will show the monogram upload/editing controls currently in the "centerart" tab but with a clearer UX
+- Make the monogram/logo clickable in the preview to remove it
+
+### 5. Preview Zoom Only Affects Preview, Not Scrolling to Document Mockups
+
+**Problem:** In `StampPreviewModal.tsx`, clicking the stamp zooms it via `logoScale` state but doesn't scroll down to show the document mockups (business card, letterhead, etc.).
+
+**Fix:** When zoom changes, if the stamp is already at max zoom (1.5), auto-scroll to the mockup area instead of cycling back to 1.0.
+
+### 6. Preview Card Touching Header + Gray Gap at Bottom
+
+**Problem:** In `StampPreviewModal.tsx`, the stamp preview card in the left sidebar has insufficient top padding (line 129: `pt-8`), and the bottom of the mockup area shows a gray background gap.
+
+**Fix:**
+- Increase top padding on the left sidebar from `pt-8` to `pt-10`
+- Extend the mockup area background to fill the full height by adding `min-h-full` and ensuring the footer area has consistent white/pearl background
+
+### 7. Bilingual Stamp Layout (English Top Arc, Arabic Bottom Arc)
+
+**Problem:** T12 template already implements this correctly (English curved over top, Arabic curved under bottom). The user wants this to be the standard for ALL bilingual stamps, and wants two versions generated: one with license number and one without.
+
+**Fix:**
+- For every bilingual stamp, generate TWO variants: one with REG number and one without
+- Ensure T6 (Bilingual Official) uses arc text layout like T12 instead of flat horizontal text
+- Apply the same English-top-arc / Arabic-bottom-arc pattern to T9 (Arabic Calligraphy)
+
+### 8. Delete + Undo + Save Two Versions
+
+**Problem:** User wants the ability to delete elements, save, then undo and save again to create two versions (with and without license number).
+
+**Fix:**
+- Add an undo history stack to `StampTextEditor` or the generator page
+- Track SVG mutations with a history array
+- Add Undo/Redo buttons
+- Add a "Save as Version" button that saves the current state as a separate design variant
+
+---
+
+## Technical Implementation Details
+
+### Files to Modify
+
+1. **`src/components/stamp-generator/StampExportPage.tsx`**
+   - Fix `tintSvgFull` function to replace `#8b6914` accent token
+   - Add White + Engraved colors to `PACK_COLORS` and `PRESET_COLORS`
+   - Add color wheel to Multi-Color Pack section
+   - Change `generateBundle` to use ZIP download instead of multiple individual files
+   - Add White to export preset colors
+
+2. **`src/components/stamp-generator/StampGeneratorPage.tsx`**
+   - Add 5th "Logo" tab to left panel tab switcher
+   - Add undo/redo state management for SVG edits
+   - Add "Save as Version" functionality
+
+3. **`src/components/stamp-generator/StampPreviewModal.tsx`**
+   - Increase top padding on left sidebar
+   - Fix bottom gray gap by extending background
+   - Improve zoom behavior to scroll to document mockups
+
+4. **`src/lib/stampTemplates.ts`**
+   - Update T6 (Bilingual Official) to use arc text instead of flat text
+   - Update T9 (Arabic Calligraphy) similarly
+   - Generate two variants per bilingual stamp (with/without license number)
+
+5. **`src/components/stamp-generator/StampTextEditor.tsx`**
+   - Add undo/redo history stack
+   - Add clickable delete on individual elements
 
