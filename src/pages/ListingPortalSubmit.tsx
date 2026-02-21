@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -15,6 +15,7 @@ import {
   CheckCircle2, AlertCircle, Image, File, Trash2, Plus, RefreshCw,
   TrendingUp, Shield, User, Phone, Mail, CreditCard
 } from 'lucide-react';
+import jbjMonogram from "@/assets/jbj-monogram-light-transparent.png";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
@@ -91,28 +92,41 @@ const LISTING_FEES = {
 
 const PHASES = ['Upload', 'AI Extract', 'Price Predictor', 'Review & Edit', 'Pricing & Role', 'Submit for Approval'] as const;
 
+const SESSION_KEY = 'jbj_listing_creator_state';
+
 const ListingPortalSubmit = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { user, isOwner } = useAuth();
+  const creatorRef = useRef<HTMLDivElement>(null);
   
   // Read purpose from URL: ?purpose=sale or ?purpose=rent
   const urlPurpose = searchParams.get('purpose');
   const initialListingType = urlPurpose === 'rent' ? 'rent' : 'sale';
   const initialCategory = urlPurpose === 'rent' ? 'rental' : 'secondary_offplan';
+
+  // Restore from sessionStorage on mount
+  const savedState = (() => {
+    try {
+      const raw = sessionStorage.getItem(SESSION_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch { return null; }
+  })();
   
-  const [phase, setPhase] = useState<'upload' | 'extracting' | 'pricing_ai' | 'review' | 'pricing_role' | 'submitting' | 'success'>('upload');
-  const [listingCategory, setListingCategory] = useState(initialCategory);
+  const [phase, setPhase] = useState<'upload' | 'extracting' | 'pricing_ai' | 'review' | 'pricing_role' | 'submitting' | 'success'>(
+    savedState?.phase && savedState.phase !== 'success' ? savedState.phase : 'upload'
+  );
+  const [listingCategory, setListingCategory] = useState(savedState?.listingCategory || initialCategory);
   const [uploadedDocs, setUploadedDocs] = useState<UploadedDoc[]>([]);
-  const [extractedData, setExtractedData] = useState<ExtractedListing | null>(null);
-  const [uploadedImageUrls, setUploadedImageUrls] = useState<string[]>([]);
+  const [extractedData, setExtractedData] = useState<ExtractedListing | null>(savedState?.extractedData || null);
+  const [uploadedImageUrls, setUploadedImageUrls] = useState<string[]>(savedState?.uploadedImageUrls || []);
   const [submittedId, setSubmittedId] = useState<string | null>(null);
-  const [pricePrediction, setPricePrediction] = useState<PricePrediction | null>(null);
+  const [pricePrediction, setPricePrediction] = useState<PricePrediction | null>(savedState?.pricePrediction || null);
   const [isRunningPredictor, setIsRunningPredictor] = useState(false);
-  const [sellerRole, setSellerRole] = useState('owner');
-  const [contactMode, setContactMode] = useState<'direct' | 'commission'>('commission');
+  const [sellerRole, setSellerRole] = useState(savedState?.sellerRole || 'owner');
+  const [contactMode, setContactMode] = useState<'direct' | 'commission'>(savedState?.contactMode || 'commission');
   
-  const [form, setForm] = useState({
+  const [form, setForm] = useState(savedState?.form || {
     title: '', description: '', listing_type: initialListingType, listing_category: initialCategory,
     property_type: '', developer_name: '', project_name: '',
     location: '', emirate: 'Dubai', area: '',
@@ -120,6 +134,25 @@ const ListingPortalSubmit = () => {
     furnishing: '', handover_date: '', payment_plan: '',
     amenities: [] as string[], key_features: [] as string[],
   });
+
+  // Persist state to sessionStorage on changes
+  useEffect(() => {
+    if (phase === 'success') {
+      sessionStorage.removeItem(SESSION_KEY);
+      return;
+    }
+    const stateToSave = { phase, form, listingCategory, uploadedImageUrls, extractedData, pricePrediction, sellerRole, contactMode };
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify(stateToSave));
+  }, [phase, form, listingCategory, uploadedImageUrls, extractedData, pricePrediction, sellerRole, contactMode]);
+
+  // Scroll to creator section on phase changes
+  useEffect(() => {
+    if (creatorRef.current) {
+      const headerOffset = 100;
+      const elementTop = creatorRef.current.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({ top: Math.max(0, elementTop - headerOffset), behavior: 'smooth' });
+    }
+  }, [phase]);
 
   const getPhaseIndex = () => {
     switch (phase) {
@@ -499,7 +532,7 @@ const ListingPortalSubmit = () => {
     <section className="relative w-full min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
       <div className="relative py-12 overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-3xl mx-auto">
+          <div ref={creatorRef} className="max-w-3xl mx-auto">
             <Button variant="ghost" onClick={() => navigate('/listing-portal')} className="text-zinc-600 hover:text-black mb-4">
               <ArrowLeft className="w-4 h-4 mr-2" /> Back to Portal
             </Button>
@@ -655,9 +688,13 @@ const ListingPortalSubmit = () => {
                   animate={{ opacity: 1 }}
                   className="bg-white/70 border-2 border-gold/20 rounded-2xl p-12 text-center"
                 >
-                  <div className="relative w-16 h-16 mx-auto mb-6">
-                    <div className="absolute inset-0 border-2 border-gold/30 border-t-gold rounded-full animate-spin" />
-                    <Wand2 className="w-8 h-8 text-gold absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+                  <div className="relative w-24 h-24 mx-auto mb-6">
+                    <img
+                      src={jbjMonogram}
+                      alt="Loading"
+                      className="w-full h-full object-contain animate-pulse"
+                      style={{ filter: "drop-shadow(0 0 20px rgba(200,167,102,0.4))" }}
+                    />
                   </div>
                   <h2 className="text-black text-xl font-bold mb-2">AI is analyzing your documents...</h2>
                   <p className="text-zinc-600 text-sm mb-6">
@@ -1222,7 +1259,14 @@ const ListingPortalSubmit = () => {
                   animate={{ opacity: 1 }}
                   className="bg-white/70 border-2 border-gold/20 rounded-2xl p-12 text-center"
                 >
-                  <Loader2 className="w-12 h-12 text-gold animate-spin mx-auto mb-4" />
+                  <div className="relative w-24 h-24 mx-auto mb-6">
+                    <img
+                      src={jbjMonogram}
+                      alt="Loading"
+                      className="w-full h-full object-contain animate-pulse"
+                      style={{ filter: "drop-shadow(0 0 20px rgba(200,167,102,0.4))" }}
+                    />
+                  </div>
                   <h2 className="text-black text-xl font-bold">
                     {isOwner ? 'Approving & publishing...' : 'Submitting for approval...'}
                   </h2>
