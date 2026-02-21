@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -919,6 +919,24 @@ export default function CVResumeBuilder() {
   const [cvQrOpen,    setCvQrOpen]    = useState(false);
   // Accent color
   const [accentOpen,  setAccentOpen]  = useState(false);
+  // A4 preview scaling
+  const previewContainerRef = useRef<HTMLDivElement>(null);
+  const previewInnerRef = useRef<HTMLDivElement>(null);
+  const [previewScale, setPreviewScale] = useState(1);
+
+  // Reactive scaling with ResizeObserver
+  useEffect(() => {
+    const container = previewContainerRef.current;
+    if (!container) return;
+    const updateScale = () => {
+      const parentW = container.clientWidth;
+      setPreviewScale(parentW / 595);
+    };
+    updateScale();
+    const ro = new ResizeObserver(updateScale);
+    ro.observe(container);
+    return () => ro.disconnect();
+  }, []);
 
   const [data, setData] = useState<CVData>({
     name: "", title: "", email: "", phone: "", location: "",
@@ -1058,10 +1076,10 @@ export default function CVResumeBuilder() {
               <Button
                 onClick={() => setExportMenuOpen(o => !o)}
                 disabled={isExporting}
-                className="gap-2 h-8 text-xs font-semibold text-white hover:opacity-90"
-                style={{ background: "linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-dark)))" }}>
+                className="gap-2 h-8 text-xs font-semibold hover:opacity-90"
+                style={{ background: "linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)", color: "#1a1a1a", border: "1px solid #C9A84C40" }}>
                 {isExporting ? <RefreshCw size={12} className="animate-spin" /> : <Download size={12} />}
-                {isExporting ? "Exporting…" : "Export"}
+                {isExporting ? "Exporting..." : "Export"}
                 <ChevronDown size={11} />
               </Button>
               {exportMenuOpen && (
@@ -1072,7 +1090,7 @@ export default function CVResumeBuilder() {
                     { label: "Export JPEG", format: "jpeg" as const, Icon: ImagePlus },
                   ].map(opt => (
                     <button key={opt.format} onClick={() => handleExport(opt.format)}
-                      className="w-full flex items-center gap-2 px-3 py-2 text-xs rounded-lg hover:bg-[hsl(var(--muted))] text-left text-[hsl(var(--foreground))]">
+                      className="w-full flex items-center gap-2 px-3 py-2 text-xs rounded-lg hover:bg-[hsl(var(--gold)/0.08)] text-left text-[hsl(var(--foreground))]">
                       <opt.Icon size={13} className="text-[hsl(var(--gold))]" /> {opt.label}
                     </button>
                   ))}
@@ -1087,6 +1105,19 @@ export default function CVResumeBuilder() {
 
         {/* ── Left: Controls ────────────────────────────────────── */}
         <div className="space-y-4">
+
+          {/* Quick Photo Upload — prominent position */}
+          <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm p-4">
+            <div className="flex items-center gap-2 mb-3">
+              <Camera size={13} className="text-[hsl(var(--gold))]" />
+              <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">Profile Photo</span>
+              {data.photoUrl && <span className="w-2 h-2 rounded-full bg-[hsl(var(--gold))]" />}
+            </div>
+            <PhotoUploadPanel
+              photoUrl={data.photoUrl}
+              onPhotoChange={url => setData(prev => ({ ...prev, photoUrl: url }))}
+            />
+          </div>
 
           {/* Scan Existing CV */}
           <DocumentExtractorUpload
@@ -1578,17 +1609,8 @@ export default function CVResumeBuilder() {
 
           {/* A4 aspect ratio container for full-page preview */}
           <div className="relative w-full" style={{ aspectRatio: '210 / 297' }}>
-            <div className="absolute inset-0 overflow-hidden rounded-xl border border-[hsl(var(--border))] shadow-lg bg-white">
-              <div className="origin-top-left w-[595px] h-[842px]" style={{ transform: 'scale(var(--cv-scale, 1))' }} ref={(el) => {
-                if (el) {
-                  const parent = el.parentElement;
-                  if (parent) {
-                    const scaleX = parent.clientWidth / 595;
-                    el.style.setProperty('--cv-scale', String(scaleX));
-                    el.style.transform = `scale(${scaleX})`;
-                  }
-                }
-              }}>
+            <div ref={previewContainerRef} className="absolute inset-0 overflow-hidden rounded-xl border border-[hsl(var(--border))] shadow-lg bg-white">
+              <div className="origin-top-left w-[595px] h-[842px]" style={{ transform: `scale(${previewScale})` }}>
                 <AnimatePresence mode="wait">
                   <motion.div key={template + accentColor} id="cv-preview-target"
                     initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
