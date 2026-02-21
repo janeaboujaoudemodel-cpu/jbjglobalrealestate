@@ -9,7 +9,8 @@ import {
   Lock, Unlock, RotateCcw, Sparkles, RectangleHorizontal,
   RectangleVertical, Square, Maximize2, Monitor, Ticket,
   Save, Palette, Zap, Star, Cpu, Minus, Type, User,
-  ArrowLeft, ChevronRight, Share2, Copy, ExternalLink,
+  ArrowLeft, ChevronRight, Share2, Copy, ExternalLink, HelpCircle,
+  Smartphone, Wifi,
 } from "lucide-react";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
@@ -1309,6 +1310,7 @@ export default function BusinessCardDesigner() {
   // Card shape
   const [cardShape, setCardShape] = useState<CardShape>("horizontal");
   const [shapeOpen, setShapeOpen] = useState(true);
+  const [nfcGuideOpen, setNfcGuideOpen] = useState(false);
 
   // Drag-to-rearrange
   const [editLayout, setEditLayout] = useState(false);
@@ -1618,6 +1620,7 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
   ];
 
   return (
+    <>
     <div className="min-h-screen" style={{ background: "hsl(var(--pearl-1,48 30% 97%))" }}>
       {/* ── Sticky Header ──────────────────────────────────────── */}
       <div className="sticky top-0 z-20 border-b border-[hsl(var(--border))] bg-white/95 backdrop-blur-sm shadow-sm">
@@ -1830,18 +1833,28 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                 <div className="px-4 pb-4 border-t border-[hsl(var(--border))]">
                   <div className="grid grid-cols-4 gap-2 pt-3">
                     {CARD_SHAPES.map(s => (
-                      <button
-                        key={s.id}
-                        onClick={() => setCardShape(s.id)}
-                        className={`flex flex-col items-center gap-1 py-2 px-1 rounded-xl border transition-all ${
-                          cardShape === s.id
-                            ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)]"
-                            : "border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]"
-                        }`}
-                      >
-                        <span className={cardShape === s.id ? "text-[hsl(var(--gold))]" : "text-[hsl(var(--muted-foreground))]"}>{s.icon}</span>
-                        <span className={`text-[9px] font-semibold leading-none ${cardShape === s.id ? "text-[hsl(var(--gold-dark))]" : "text-[hsl(var(--muted-foreground))]"}`}>{s.label}</span>
-                      </button>
+                      <div key={s.id} className="relative">
+                        <button
+                          onClick={() => setCardShape(s.id)}
+                          className={`w-full flex flex-col items-center gap-1 py-2 px-1 rounded-xl border transition-all ${
+                            cardShape === s.id
+                              ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)]"
+                              : "border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]"
+                          }`}
+                        >
+                          <span className={cardShape === s.id ? "text-[hsl(var(--gold))]" : "text-[hsl(var(--muted-foreground))]"}>{s.icon}</span>
+                          <span className={`text-[9px] font-semibold leading-none ${cardShape === s.id ? "text-[hsl(var(--gold-dark))]" : "text-[hsl(var(--muted-foreground))]"}`}>{s.label}</span>
+                        </button>
+                        {s.id === "digital" && (
+                          <button
+                            onClick={(e) => { e.stopPropagation(); setNfcGuideOpen(true); }}
+                            className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-[hsl(var(--gold))] text-white flex items-center justify-center shadow-sm hover:scale-110 transition-transform"
+                            title="NFC Programming Guide"
+                          >
+                            <HelpCircle size={11} />
+                          </button>
+                        )}
+                      </div>
                     ))}
                   </div>
                 </div>
@@ -2788,5 +2801,99 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
         </div>
       </div>
     </div>
+
+      {/* NFC Programming Guide Modal */}
+      <Dialog open={nfcGuideOpen} onOpenChange={setNfcGuideOpen}>
+        <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-lg">
+              <Wifi size={20} className="text-[hsl(var(--gold))]" />
+              NFC Tag Programming Guide
+            </DialogTitle>
+            <DialogDescription>
+              Write your digital card URL to an NFC sticker so anyone can tap and view your card instantly.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-5 mt-2">
+            {/* What you need */}
+            <div className="rounded-xl border border-[hsl(var(--border))] p-4 bg-[hsl(var(--muted))]">
+              <h4 className="text-sm font-bold text-[hsl(var(--foreground))] mb-2 flex items-center gap-2">
+                <CreditCard size={14} className="text-[hsl(var(--gold))]" />
+                What You Need
+              </h4>
+              <ul className="text-xs text-[hsl(var(--muted-foreground))] space-y-1.5 list-disc pl-4">
+                <li>An NFC sticker/card (NTAG213 or NTAG215 — available on Amazon for ~$1 each)</li>
+                <li>A smartphone with NFC capability (most modern phones have it)</li>
+                <li>A free NFC writer app (see below)</li>
+                <li>Your shared card URL (from the Share button after saving)</li>
+              </ul>
+            </div>
+
+            {/* Step-by-step */}
+            <div className="space-y-3">
+              <h4 className="text-sm font-bold text-[hsl(var(--foreground))] flex items-center gap-2">
+                <Sparkles size={14} className="text-[hsl(var(--gold))]" />
+                Step-by-Step Instructions
+              </h4>
+
+              {[
+                { step: 1, title: "Download a Free NFC App", desc: "Install \"NFC Tools\" (free on both iOS and Android) from the App Store or Google Play.", icon: <Smartphone size={16} /> },
+                { step: 2, title: "Get Your Card URL", desc: "Save your digital card, click \"Share\", and copy the public link (e.g., yoursite.com/card/abc123).", icon: <Copy size={16} /> },
+                { step: 3, title: "Open NFC Tools → Write", desc: "Open the app, tap the \"Write\" tab, then tap \"Add a record\" → select \"URL/URI\".", icon: <Type size={16} /> },
+                { step: 4, title: "Paste Your Card URL", desc: "Paste your shared card URL into the URL field. Make sure it starts with https://.", icon: <Globe size={16} /> },
+                { step: 5, title: "Hold Phone to NFC Tag", desc: "Tap \"Write\", then hold the back of your phone against the NFC sticker until you see a success confirmation.", icon: <Wifi size={16} /> },
+                { step: 6, title: "Test It!", desc: "Have someone tap their phone on the sticker — your digital card page opens instantly in their browser.", icon: <Check size={16} /> },
+              ].map(({ step, title, desc, icon }) => (
+                <div key={step} className="flex gap-3 items-start">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold))] flex items-center justify-center text-xs font-bold">
+                    {step}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-1.5">
+                      {icon} {title}
+                    </p>
+                    <p className="text-xs text-[hsl(var(--muted-foreground))] mt-0.5">{desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Recommended apps */}
+            <div className="rounded-xl border border-[hsl(var(--gold)/0.3)] p-4 bg-[hsl(var(--gold)/0.05)]">
+              <h4 className="text-sm font-bold text-[hsl(var(--foreground))] mb-2">Recommended Free Apps</h4>
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  { name: "NFC Tools", platform: "iOS & Android", note: "Most popular, clean UI" },
+                  { name: "NFC TagWriter", platform: "Android", note: "By NXP (chip maker)" },
+                  { name: "Simply NFC", platform: "iOS", note: "Minimal & fast" },
+                  { name: "TagInfo", platform: "Android", note: "Read & diagnose tags" },
+                ].map(app => (
+                  <div key={app.name} className="p-2.5 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))]">
+                    <p className="text-xs font-semibold text-[hsl(var(--foreground))]">{app.name}</p>
+                    <p className="text-[10px] text-[hsl(var(--muted-foreground))]">{app.platform}</p>
+                    <p className="text-[10px] text-[hsl(var(--gold-dark))]">{app.note}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Pro tips */}
+            <div className="rounded-xl border border-[hsl(var(--border))] p-4 bg-[hsl(var(--muted))]">
+              <h4 className="text-sm font-bold text-[hsl(var(--foreground))] mb-2 flex items-center gap-2">
+                <Star size={14} className="text-[hsl(var(--gold))]" />
+                Pro Tips
+              </h4>
+              <ul className="text-xs text-[hsl(var(--muted-foreground))] space-y-1.5 list-disc pl-4">
+                <li>Stick NFC tags on the back of your physical business card, phone case, or portfolio</li>
+                <li>NTAG215 tags hold more data and are more reliable than NTAG213</li>
+                <li>Lock the tag after writing to prevent accidental overwrites</li>
+                <li>Test with both iPhone (top edge) and Android (center back) — NFC antenna position varies</li>
+              </ul>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
