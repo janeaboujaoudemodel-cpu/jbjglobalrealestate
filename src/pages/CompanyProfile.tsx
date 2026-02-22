@@ -1,4 +1,5 @@
 import { useState, type ReactNode } from "react";
+import { Link } from "react-router-dom";
 import YouTubeVideoPlayer from "@/components/YouTubeVideoPlayer";
 import { motion } from "framer-motion";
 import { 
@@ -23,7 +24,8 @@ import {
   HardHat,
   ChevronRight,
   User,
-  BookOpen
+  BookOpen,
+  Flame
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -31,8 +33,8 @@ import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import { toast } from "sonner";
 import { FounderContent } from "@/components/FounderContent";
 import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
-import { BookShelf } from "@/components/books/BookShelf";
-import { COMPANY_BOOKS } from "@/data/bookCollections";
+import { useAreas } from "@/hooks/useAreas";
+import { companyProfileBook } from "@/data/bookCollections";
 
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
 import founderCompanyProfile from "@/assets/founder-company-profile.jpg";
@@ -219,68 +221,49 @@ Clients working with JBJ can expect direct oversight, transparent communication,
   ]
 };
 
-// 3D Book Preview Component with Founder Photo & Dubai Skyline
-const BookPreview3D = ({ onClick, isGenerating, showFounder }: { onClick: () => void; isGenerating: boolean; showFounder: boolean }) => {
+// Consistent 3D Book using the same cover asset from bookCollections
+const ConsistentBook3D = ({ onClick, isGenerating }: { onClick: () => void; isGenerating: boolean }) => {
   return (
-    <div className="relative group cursor-pointer" onClick={onClick}>
-      {/* 3D Book Container */}
-      <div className="relative w-64 h-80 mx-auto perspective-1000">
-        {/* Book wrapper with 3D transform */}
-        <div className="relative w-full h-full transform-style-3d transition-transform duration-500 group-hover:rotate-y-[-15deg]">
-          {/* Front Cover */}
-          <div className="absolute inset-0 rounded-r-lg shadow-2xl border border-[#C8A766]/50 overflow-hidden">
-            {/* Background: Dubai Skyline */}
-            <img src={luxuryVillaHero} alt="Dubai Skyline" className="absolute inset-0 w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/80" />
-            
-            {/* Gold accent top */}
-            <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-[#C8A766] via-[#E8DCC8] to-[#C8A766] z-20" />
-            
-            {/* JBJ Logo */}
-            <div className="absolute top-4 left-1/2 -translate-x-1/2 text-center z-20">
-              <span className="text-3xl font-bold text-[#C8A766]" style={{ fontFamily: "Poppins, sans-serif" }}>JBJ</span>
-              <p className="text-white text-[8px] tracking-[0.3em]">GLOBAL REAL ESTATE</p>
-            </div>
-            
-            {/* Founder Photo (centered) */}
-            {showFounder && (
-              <div className="absolute top-14 left-1/2 -translate-x-1/2 z-10">
-                <div className="w-28 h-28 rounded-full overflow-hidden border-2 border-[#C8A766]/60 shadow-lg">
-                  <img src={founderCompanyProfile} alt="Founder" className="w-full h-full object-cover" />
-                </div>
-              </div>
-            )}
-            
-            {/* Title */}
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-center w-full px-4 z-20">
-              <div className="h-px w-3/4 mx-auto bg-gradient-to-r from-transparent via-[#C8A766] to-transparent mb-3" />
-              <p className="text-[#C8A766] text-sm font-bold tracking-[0.2em]">COMPANY PROFILE</p>
-              <p className="text-white/60 text-[10px] mt-1">{new Date().getFullYear()} Edition</p>
-            </div>
-            
-            {/* Gold accent bottom */}
-            <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-[#C8A766] via-[#E8DCC8] to-[#C8A766] z-20" />
-          </div>
-          
-          {/* Book Spine */}
-          <div className="absolute top-0 left-0 w-4 h-full bg-gradient-to-r from-zinc-800 to-black transform origin-left rotate-y-[-90deg] translate-x-[-8px] rounded-l">
-            <div className="absolute top-0 left-0 right-0 h-2 bg-[#C8A766]" />
-            <div className="absolute bottom-0 left-0 right-0 h-2 bg-[#C8A766]" />
-          </div>
-          
-          {/* Pages peek */}
-          <div className="absolute top-1 right-0 bottom-1 w-2 bg-gradient-to-r from-zinc-200 to-zinc-100 transform origin-right translate-x-1 rounded-r-sm">
-            <div className="absolute inset-0 flex flex-col justify-evenly px-0.5">
-              {[...Array(20)].map((_, i) => (
-                <div key={i} className="h-px bg-zinc-300" />
-              ))}
-            </div>
-          </div>
+    <div className="relative group cursor-pointer" onClick={onClick} style={{ perspective: '1200px' }}>
+      {/* Book shadow */}
+      <div className="absolute -bottom-4 left-4 right-4 h-8 bg-black/20 blur-xl rounded-full" />
+
+      {/* 3D Book */}
+      <div
+        className="relative w-52 sm:w-60 md:w-64 mx-auto transition-transform duration-500 group-hover:[transform:rotateY(-8deg)]"
+        style={{ transformStyle: 'preserve-3d' }}
+      >
+        {/* Front cover */}
+        <div className="relative rounded-r-lg overflow-hidden shadow-[8px_8px_30px_rgba(0,0,0,0.35)]">
+          {/* Spine edge */}
+          <div className="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-black/40 via-black/20 to-transparent z-10" />
+          {/* Top light reflection */}
+          <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-white/15 to-transparent z-10" />
+
+          <img
+            src={companyProfileBook.cover}
+            alt={companyProfileBook.title}
+            className="w-full aspect-[2/3] object-cover"
+          />
+
+          {/* Subtle overlay sheen */}
+          <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-black/10 z-10" />
         </div>
+
+        {/* Book spine (3D depth) */}
+        <div
+          className="absolute top-0 left-0 w-4 h-full bg-gradient-to-r from-zinc-800 to-zinc-700 origin-left"
+          style={{ transform: 'rotateY(-90deg) translateX(-8px)' }}
+        />
+        {/* Book pages (3D bottom edge) */}
+        <div
+          className="absolute bottom-0 left-0 right-0 h-3 bg-gradient-to-b from-[#f5f0e0] to-[#e8dcc8]"
+          style={{ transform: 'rotateX(90deg) translateY(6px)', transformOrigin: 'bottom' }}
+        />
       </div>
-      
+
       {/* Download overlay on hover */}
-      <div className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
+      <div className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg z-20">
         <div className="text-center">
           {isGenerating ? (
             <div className="w-12 h-12 border-4 border-[#C8A766]/30 border-t-[#C8A766] rounded-full animate-spin mx-auto" />
@@ -292,9 +275,6 @@ const BookPreview3D = ({ onClick, isGenerating, showFounder }: { onClick: () => 
           )}
         </div>
       </div>
-      
-      {/* Shadow */}
-      <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-48 h-4 bg-black/30 blur-lg rounded-full" />
     </div>
   );
 };
@@ -302,6 +282,7 @@ const BookPreview3D = ({ onClick, isGenerating, showFounder }: { onClick: () => 
 const CompanyProfile = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const { isFounderVisible } = useFounderVisibility();
+  const { data: areasData } = useAreas({ limit: 12 });
 
   const generatePDF = async () => {
     setIsGenerating(true);
@@ -704,7 +685,7 @@ const CompanyProfile = () => {
         </motion.div>
       </SectionShell>
 
-      {/* 8. Areas of Focus */}
+      {/* 8. Areas of Focus — Photo Cards */}
       <SectionShell>
         <div className="text-center mb-12">
           <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Where We Operate</span>
@@ -713,22 +694,78 @@ const CompanyProfile = () => {
           </h2>
         </div>
 
-        <motion.div
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-6xl mx-auto"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={staggerContainer}
-        >
-          {PROFILE_CONTENT.areas.map((area) => (
-            <motion.div key={area} className="jj-card-inner p-4 flex items-center gap-3" variants={fadeInUp}>
-              <div className="jj-icon-box-active w-10 h-10">
-                <MapPin className="w-5 h-5" />
-              </div>
-              <span className="text-black/80 text-sm">{area}</span>
-            </motion.div>
-          ))}
-        </motion.div>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 max-w-6xl mx-auto">
+          {(areasData || [])
+            .filter(a => PROFILE_CONTENT.areas.some(name => a.name.toLowerCase().includes(name.toLowerCase().split(' ')[0])))
+            .slice(0, 12)
+            .map((area, index) => (
+              <motion.div
+                key={area.slug}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: index * 0.06 }}
+                whileHover={{ y: -6 }}
+              >
+                <Link
+                  to={`/area/${area.slug}`}
+                  className="group relative block h-[180px] md:h-[200px] rounded-xl overflow-hidden border-[3px] border-transparent hover:border-[#C8A766] transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.45)]"
+                >
+                  {area.image_url ? (
+                    <div
+                      className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+                      style={{ backgroundImage: `url(${area.image_url})` }}
+                    />
+                  ) : (
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#FDFBF7] via-[#E8DCC8] to-[#D4C4A8] flex items-center justify-center">
+                      <span className="text-6xl font-black text-black select-none" style={{ opacity: 0.1, fontFamily: "Poppins, sans-serif" }}>JBJ</span>
+                    </div>
+                  )}
+
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+
+                  {/* Badges */}
+                  <div className="absolute top-2 right-2 flex flex-col gap-1 items-end">
+                    {area.is_trending && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-[#C8A766] to-[#E8DCC8] text-black text-[9px] font-bold uppercase tracking-wider shadow-lg">
+                        <TrendingUp className="w-2.5 h-2.5" />
+                        Trending
+                      </span>
+                    )}
+                    {area.is_high_demand && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-orange-500 to-red-500 text-white text-[9px] font-bold uppercase tracking-wider shadow-lg">
+                        <Flame className="w-2.5 h-2.5" />
+                        High Demand
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Bottom content */}
+                  <div className="absolute bottom-0 left-0 right-0 p-3">
+                    {area.property_count != null && area.property_count > 0 && (
+                      <span className="inline-block mb-1.5 px-2 py-0.5 rounded-full bg-black/60 text-[#C8A766] text-[9px] font-semibold tracking-wide border border-[#C8A766]/30">
+                        {area.property_count} Projects
+                      </span>
+                    )}
+                    <h3 className="text-white font-bold text-sm md:text-base leading-tight drop-shadow-lg group-hover:text-[#C8A766] transition-colors duration-300">
+                      {area.name}
+                    </h3>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+        </div>
+
+        {/* View All Areas CTA */}
+        <div className="text-center mt-8">
+          <Link
+            to="/areas"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-[#C8A766] rounded-xl text-black font-semibold text-sm hover:shadow-[0_4px_20px_rgba(200,167,102,0.4)] hover:-translate-y-0.5 transition-all duration-300 group"
+          >
+            <span>View All Areas</span>
+            <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
       </SectionShell>
 
       {/* 9. Client Experience Standards */}
@@ -957,7 +994,7 @@ const CompanyProfile = () => {
 
           <div className="jj-card-inner py-12">
             {/* 3D Book Preview */}
-            <BookPreview3D onClick={generatePDF} isGenerating={isGenerating} showFounder={isFounderVisible} />
+            <ConsistentBook3D onClick={generatePDF} isGenerating={isGenerating} />
 
             <div className="mt-8 flex flex-col items-center gap-4">
               <p className="text-black/60 text-sm">
@@ -987,10 +1024,6 @@ const CompanyProfile = () => {
         </motion.div>
       </SectionShell>
 
-      {/* BookShelf Section */}
-      <SectionShell>
-        <BookShelf books={COMPANY_BOOKS} title="Company Publications" />
-      </SectionShell>
 
       {/* Mobile Sticky Actions */}
       <div className="lg:hidden fixed bottom-4 left-4 right-4 z-50 flex gap-2">
