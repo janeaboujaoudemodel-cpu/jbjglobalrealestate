@@ -1,514 +1,534 @@
-import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  Building2,
-  Users,
-  Wrench,
-  FileText,
-  CheckCircle2,
-  ArrowRight,
-  HelpCircle,
-  Phone,
-  Clock,
-  ClipboardList,
-  Home,
-  Key,
-  Shield,
-  Calendar,
-  BarChart3,
-  MessageSquare,
-  RefreshCw,
-  Settings,
-  Play,
-  AlertCircle,
+  Building2, Users, Wrench, FileText, CheckCircle2, ArrowRight,
+  Phone, Clock, ClipboardList, Home, Key, Shield, Calendar,
+  BarChart3, MessageSquare, RefreshCw, Settings, Briefcase,
+  Scale, Eye, DollarSign, UserCheck, Hammer, BookOpen,
+  ChevronRight, Sparkles, MapPin, Send,
 } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
-import { Button } from "@/components/ui/button";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
+import { SectionDivider } from "@/components/ui/section-divider";
+import { Input } from "@/components/ui/input";
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
+  Accordion, AccordionContent, AccordionItem, AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useState } from "react";
 
 const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
-
-const staggerContainer = {
+const stagger = {
   hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1 },
-  },
+  visible: { opacity: 1, transition: { staggerChildren: 0.08 } },
 };
 
-const managementCoverage = [
-  { 
-    icon: MessageSquare, 
-    title: "Tenant Communication Routing", 
-    description: "Issues, requests, scheduling" 
-  },
-  { 
-    icon: Wrench, 
-    title: "Maintenance Coordination", 
-    description: "Approved providers, appointment scheduling, follow-ups" 
-  },
-  { 
-    icon: RefreshCw, 
-    title: "Renewal Process Coordination", 
-    description: "Timelines, documentation, reminders" 
-  },
-  { 
-    icon: ClipboardList, 
-    title: "Move-in / Move-out Checklists", 
-    description: "Condition baseline + evidence" 
-  },
-  { 
-    icon: Home, 
-    title: "Property Readiness Planning", 
-    description: "Minor fixes, cleaning coordination, compliance reminders" 
-  },
+const scrollTo = (id: string) => {
+  document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+};
+
+const tocSections = [
+  { id: "overview", label: "Management Overview" },
+  { id: "residential", label: "Residential Management" },
+  { id: "commercial", label: "Commercial Management" },
+  { id: "leasing", label: "Leasing & Tenant Placement" },
+  { id: "financial", label: "Financial Management" },
+  { id: "maintenance", label: "Maintenance & Operations" },
+  { id: "legal", label: "Legal & Regulatory Compliance" },
+  { id: "reporting", label: "Reporting & Transparency" },
+  { id: "dashboard", label: "Owner Dashboard" },
+  { id: "onboarding", label: "Management Onboarding Process" },
+  { id: "fees", label: "Service Fees & Structure" },
+  { id: "consultation", label: "Request Consultation" },
 ];
 
-const ownerControls = [
-  "What requires your approval (major repairs, replacements, vendor changes)",
-  "What can be actioned within a threshold you define",
-  "How you want updates (weekly summary, monthly snapshot, urgent alerts)",
+const onboardingSteps = [
+  { step: 1, title: "Asset Review", icon: Eye },
+  { step: 2, title: "Property Inspection", icon: ClipboardList },
+  { step: 3, title: "Management Agreement Signing", icon: FileText },
+  { step: 4, title: "Documentation Collection", icon: BookOpen },
+  { step: 5, title: "Market Strategy Activation", icon: BarChart3 },
+  { step: 6, title: "Tenant Placement or Transition", icon: UserCheck },
+  { step: 7, title: "Reporting Initiation", icon: Send },
 ];
 
-const ownerReporting = [
-  { title: "Monthly Asset Snapshot", description: "Occupancy status, issues opened/closed, key actions" },
-  { title: "Maintenance Log", description: "Dates, issue types, status updates, vendor notes" },
-  { title: "Tenant Interaction Log", description: "Summarized communications and outcomes" },
-  { title: "Renewal/Notice Timeline", description: "Key dates and reminders" },
-];
-
-const processSteps = [
-  { step: 1, title: "Onboarding", description: "Unit details, documents, access rules, approval rules", icon: Home },
-  { step: 2, title: "Baseline Condition", description: "Structured checklist and photo baseline (where possible)", icon: ClipboardList },
-  { step: 3, title: "Operating Workflow", description: "Tenant routing + maintenance coordination process", icon: Settings },
-  { step: 4, title: "Reporting", description: "Monthly snapshot + urgent alerts when needed", icon: BarChart3 },
-];
-
-const requiredDocuments = [
-  "Ownership proof (e.g., title deed or equivalent)",
-  "Existing tenancy contract (if currently leased)",
-  "Building access & parking info (as applicable)",
-  "DEWA / utility status (as applicable)",
+const leasingSteps = [
+  "Market Assessment",
+  "Pricing Strategy",
+  "Professional Photography & Listing",
+  "Tenant Screening",
+  "Contract Drafting",
+  "Ejari Registration (Dubai)",
+  "Handover Documentation",
 ];
 
 const faqData = [
-  {
-    question: "Do you collect rent on my behalf?",
-    answer: "Depending on structure and approvals, management can coordinate payment reminders and documentation. Collection and regulated activities follow applicable rules and agreed scope.",
-  },
-  {
-    question: "Do I lose control of decisions?",
-    answer: "No. You set approval rules. Major decisions remain yours.",
-  },
-  {
-    question: "Can you manage vacant units?",
-    answer: "Yes—readiness coordination, repairs, and preparation for marketing can be included.",
-  },
-  {
-    question: "Do you do maintenance yourself?",
-    answer: "We coordinate with suitable providers. Work is performed by qualified vendors.",
-  },
-  {
-    question: "How do you handle urgent issues?",
-    answer: "Urgent issues are escalated with priority communication and clear options.",
-  },
-  {
-    question: "Can I see what was done each month?",
-    answer: "Yes—monthly snapshot + logs.",
-  },
-  {
-    question: "Can I stop the service anytime?",
-    answer: "Offboarding terms are defined in the service agreement.",
-  },
-  {
-    question: "Can you help with tenant screening?",
-    answer: "Tenant screening is typically handled under leasing/rental advisory workflows.",
-  },
-  {
-    question: "Is this the same as brokerage services?",
-    answer: "No. Management is an operational service separate from brokerage transactions.",
-  },
-  {
-    question: "Do you handle short-term rentals here?",
-    answer: "Short-term rentals are handled under the dedicated short-term service page.",
-  },
+  { q: "Do you collect rent on my behalf?", a: "Rent collection and follow-up are included as part of our financial management services, with structured reporting provided to owners." },
+  { q: "Do I lose control of my property decisions?", a: "No. You define the approval thresholds. Major decisions always require your authorization." },
+  { q: "Can you manage vacant units?", a: "Yes. We coordinate property readiness, repairs, and marketing preparation for vacant units." },
+  { q: "Do you handle maintenance directly?", a: "We coordinate with qualified, vetted vendors. All work is performed by licensed professionals." },
+  { q: "How are urgent issues handled?", a: "Urgent matters are escalated immediately via priority communication with clear options presented for your approval." },
+  { q: "Can I see monthly activity reports?", a: "Yes. Owners receive structured monthly financial summaries, maintenance logs, and tenant status updates." },
+  { q: "Can I terminate the service?", a: "Offboarding terms are clearly defined in the management agreement." },
+  { q: "Is this the same as brokerage?", a: "No. Property management is an ongoing operational service, separate from sales or leasing brokerage transactions." },
 ];
 
+/* ─── Divider ─── */
+const GoldDivider = () => (
+  <div className="py-6 md:py-8">
+    <div className="max-w-5xl mx-auto px-4 flex items-center gap-6">
+      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+      <Sparkles className="w-4 h-4 text-gold/40" />
+      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+    </div>
+  </div>
+);
+
+/* ─── Section wrapper ─── */
+const Section = ({ id, children, className = "" }: { id: string; children: React.ReactNode; className?: string }) => (
+  <section id={id} className={`scroll-mt-24 py-16 md:py-20 ${className}`}>
+    <div className="max-w-5xl mx-auto px-4">{children}</div>
+  </section>
+);
+
+const SectionTitle = ({ children }: { children: React.ReactNode }) => (
+  <motion.h2
+    variants={fadeInUp}
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true }}
+    className="text-3xl md:text-4xl font-bold text-black mb-8"
+    style={{ fontFamily: "Playfair Display, serif" }}
+  >
+    {children}
+  </motion.h2>
+);
+
+const BulletList = ({ items, icon: Icon = CheckCircle2 }: { items: string[]; icon?: any }) => (
+  <ul className="space-y-3">
+    {items.map((item, i) => (
+      <li key={i} className="flex items-start gap-3 text-zinc-700 leading-relaxed">
+        <Icon className="w-5 h-5 text-gold shrink-0 mt-0.5" />
+        <span>{item}</span>
+      </li>
+    ))}
+  </ul>
+);
+
+/* ═══════════════════════════════════════════ */
+
 const PropertyManagement = () => {
+  const [formData, setFormData] = useState({
+    name: "", email: "", phone: "", propertyType: "", location: "", notes: "",
+  });
+
   return (
     <>
       <SEOHead
-        title="Property Management Services | JBJ Global Real Estate"
-        description="Operational support for owners who want cleaner tenant experience, reduced friction, and structured oversight—without losing control of approvals."
+        title="Property Management & Asset Stewardship | JBJ Global Real Estate"
+        description="Comprehensive property management for residential, commercial and investment properties in the UAE. Structured oversight, financial accountability, and regulatory compliance."
         canonicalPath="/services/property-management"
       />
 
-      {/* HERO SECTION */}
-      <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-black">
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/10 via-transparent to-transparent" />
-        </div>
-        
-        <div className="absolute top-1/4 left-10 w-64 h-64 bg-gold/10 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-gold/15 rounded-full blur-[120px] pointer-events-none" />
+      {/* ═══ 1. HERO ═══ */}
+      <section className="relative py-28 md:py-36 overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F8F4EC] to-[#EDE4D3]">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-gold/8 via-transparent to-transparent" />
+        <div className="absolute top-20 right-20 w-72 h-72 bg-gold/6 rounded-full blur-[100px]" />
+        <div className="absolute bottom-10 left-10 w-56 h-56 bg-gold/8 rounded-full blur-[80px]" />
 
-        <div className="container mx-auto px-4 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center max-w-4xl mx-auto"
-          >
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-black/30 backdrop-blur-md">
+        <div className="max-w-5xl mx-auto px-4 relative z-10">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full mb-6 border border-gold/30 bg-white/60 backdrop-blur-sm">
               <Building2 className="w-4 h-4 text-gold" />
-              <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">
-                Services
-              </span>
-            </div>
-            
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-[-0.02em]">
-              Property Management
-            </h1>
-            
-            <p className="text-zinc-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
-              Operational support for owners who want cleaner tenant experience, reduced friction, and structured oversight—without losing control of approvals.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-              <PremiumHeroButton href="/contact?service=property-management">
-                Request Property Management
-              </PremiumHeroButton>
-              <PremiumHeroButton href="/contact">
-                Speak to a Manager
-              </PremiumHeroButton>
+              <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">Services</span>
             </div>
 
-            {/* Hero Video Placeholder */}
-            <div className="max-w-xl mx-auto">
-              <div className="relative rounded-xl overflow-hidden border border-gold/30 bg-black/50 backdrop-blur-sm">
-                <div className="aspect-video flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-gold/20 flex items-center justify-center">
-                      <Play className="w-8 h-8 text-gold" />
-                    </div>
-                    <p className="text-gold text-sm font-medium">How We Protect Your Asset Daily</p>
-                    <p className="text-zinc-500 text-xs mt-1">Video Coming Soon</p>
-                  </div>
-                </div>
-              </div>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-4 tracking-tight" style={{ fontFamily: "Playfair Display, serif" }}>
+              Property Management &<br />Asset Stewardship
+            </h1>
+
+            <p className="text-lg md:text-xl text-gold/80 font-medium mb-6" style={{ fontFamily: "Playfair Display, serif" }}>
+              Comprehensive Management for Residential, Commercial & Investment Properties in the UAE
+            </p>
+
+            <p className="text-zinc-700 text-base md:text-lg max-w-3xl leading-relaxed mb-4">
+              Our Property Management division delivers structured, transparent, and performance-driven management solutions designed to protect, optimize, and enhance the value of your real estate assets.
+            </p>
+            <p className="text-zinc-600 text-base max-w-3xl leading-relaxed mb-10">
+              We manage properties with operational precision, financial accountability, and regulatory compliance in alignment with UAE real estate laws and authority requirements.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4">
+              <PremiumHeroButton href="/contact?service=property-management" variant="light-bg">
+                Request Management Proposal
+              </PremiumHeroButton>
+              <PremiumHeroButton href="/contact" variant="light-bg">
+                Schedule Asset Consultation
+              </PremiumHeroButton>
             </div>
           </motion.div>
         </div>
-        
-        <motion.div 
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1, duration: 0.6 }}
-        >
-          <span className="text-gold/60 text-xs tracking-widest uppercase">Explore</span>
-          <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
-        </motion.div>
       </section>
 
-      {/* WHAT PROPERTY MANAGEMENT MEANS */}
-      <section className="bg-black py-20">
-        <div className="jj-layer-2">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-            className="max-w-4xl mx-auto"
-          >
-            <motion.h2
-              variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
-              style={{ fontFamily: "Playfair Display, serif" }}
-            >
-              What Property Management Means at JBJ
-            </motion.h2>
-            <motion.div variants={fadeInUp} className="jj-card-inner">
-              <p className="text-zinc-700 leading-relaxed text-center">
-                Property management is a structured workflow that helps you protect your asset and reduce tenant friction through coordination, issue logging, and owner reporting. You keep decision control via approval rules (what needs owner approval vs. auto-approved).
+      {/* ═══ 2. TABLE OF CONTENTS ═══ */}
+      <section className="bg-white py-12 md:py-16 border-b border-gold/10">
+        <div className="max-w-5xl mx-auto px-4">
+          <h2 className="text-2xl font-bold text-black mb-8 text-center" style={{ fontFamily: "Playfair Display, serif" }}>
+            Table of Contents
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+            {tocSections.map((s, i) => (
+              <button
+                key={s.id}
+                onClick={() => scrollTo(s.id)}
+                className="text-left px-4 py-3 rounded-xl border border-gold/20 bg-gradient-to-br from-white to-[#FDFBF7] hover:border-gold/50 hover:shadow-md transition-all text-sm text-zinc-700 hover:text-black flex items-center gap-2 group"
+              >
+                <span className="text-gold/60 font-semibold text-xs">{String(i + 1).padStart(2, "0")}</span>
+                <span className="group-hover:text-black transition-colors">{s.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ 3. MANAGEMENT OVERVIEW ═══ */}
+      <div className="bg-gradient-to-br from-[#FDFBF7] via-white to-[#F8F4EC]">
+        <Section id="overview">
+          <SectionTitle>Management Overview</SectionTitle>
+          <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+            <p className="text-zinc-700 leading-relaxed mb-6">
+              We provide full-spectrum property management for:
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+              <div className="p-6 rounded-xl border border-gold/20 bg-white">
+                <h3 className="font-semibold text-black mb-3" style={{ fontFamily: "Playfair Display, serif" }}>Clients We Serve</h3>
+                <BulletList icon={Users} items={[
+                  "Individual investors",
+                  "Portfolio owners",
+                  "Family offices",
+                  "Overseas investors",
+                  "Corporate property owners",
+                ]} />
+              </div>
+              <div className="p-6 rounded-xl border border-gold/20 bg-white">
+                <h3 className="font-semibold text-black mb-3" style={{ fontFamily: "Playfair Display, serif" }}>Services Designed to Ensure</h3>
+                <BulletList items={[
+                  "Revenue optimization",
+                  "Tenant quality control",
+                  "Maintenance efficiency",
+                  "Legal compliance",
+                  "Risk mitigation",
+                ]} />
+              </div>
+            </div>
+          </motion.div>
+        </Section>
+        <GoldDivider />
+
+        {/* ═══ 4. RESIDENTIAL ═══ */}
+        <Section id="residential">
+          <SectionTitle>Residential Property Management</SectionTitle>
+          <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+            <div className="p-6 md:p-8 rounded-xl border border-gold/20 bg-white mb-6">
+              <h3 className="font-semibold text-black mb-4 text-lg" style={{ fontFamily: "Playfair Display, serif" }}>Services Include</h3>
+              <BulletList items={[
+                "Tenant marketing & screening",
+                "Lease preparation & renewals",
+                "Move-in / move-out inspections",
+                "Rent collection & follow-up",
+                "Maintenance coordination",
+                "Service charge monitoring",
+                "Condition reporting",
+              ]} />
+            </div>
+            <div className="flex items-start gap-3 p-4 rounded-xl bg-gold/5 border border-gold/15">
+              <Shield className="w-5 h-5 text-gold shrink-0 mt-0.5" />
+              <p className="text-sm text-zinc-600">
+                We follow RERA-compliant procedures in Dubai and applicable regulations across the UAE.
+              </p>
+            </div>
+          </motion.div>
+        </Section>
+        <GoldDivider />
+
+        {/* ═══ 5. COMMERCIAL ═══ */}
+        <Section id="commercial">
+          <SectionTitle>Commercial Property Management</SectionTitle>
+          <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+            <div className="p-6 md:p-8 rounded-xl border border-gold/20 bg-white mb-6">
+              <h3 className="font-semibold text-black mb-4 text-lg" style={{ fontFamily: "Playfair Display, serif" }}>Services Include</h3>
+              <BulletList items={[
+                "Commercial leasing strategy",
+                "Tenant retention planning",
+                "Contract negotiation support",
+                "Property performance analysis",
+                "Maintenance oversight",
+                "Compliance monitoring",
+              ]} />
+            </div>
+            <p className="text-zinc-600 text-sm leading-relaxed">
+              Financial reporting aligned with commercial tenancy laws. Our structured approach ensures operational transparency and performance accountability.
+            </p>
+          </motion.div>
+        </Section>
+        <GoldDivider />
+
+        {/* ═══ 6. LEASING ═══ */}
+        <Section id="leasing">
+          <SectionTitle>Leasing & Tenant Placement</SectionTitle>
+          <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+            <div className="relative max-w-2xl mx-auto">
+              <div className="absolute left-6 top-0 bottom-0 w-px bg-gold/20" />
+              <div className="space-y-5">
+                {leasingSteps.map((step, i) => (
+                  <motion.div key={i} variants={fadeInUp} className="flex items-center gap-5 pl-1">
+                    <div className="w-12 h-12 rounded-full bg-white border-2 border-gold/40 flex items-center justify-center shrink-0 z-10">
+                      <span className="text-gold font-bold text-sm">{i + 1}</span>
+                    </div>
+                    <div className="flex-1 p-4 rounded-xl bg-white border border-gold/15">
+                      <span className="font-medium text-black">{step}</span>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+            <motion.div variants={fadeInUp} className="mt-6 flex items-start gap-3 p-4 rounded-xl bg-gold/5 border border-gold/15">
+              <Scale className="w-5 h-5 text-gold shrink-0 mt-0.5" />
+              <p className="text-sm text-zinc-600">
+                All tenancy registrations are processed in accordance with relevant local authority regulations.
               </p>
             </motion.div>
           </motion.div>
-        </div>
-      </section>
+        </Section>
+        <GoldDivider />
 
-      {/* MANAGEMENT COVERAGE */}
-      <section className="bg-black py-20">
-        <div className="jj-layer-2">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-          >
-            <motion.h2
-              variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
-              style={{ fontFamily: "Playfair Display, serif" }}
-            >
-              Management Coverage
-            </motion.h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-              {managementCoverage.map((item, index) => (
-                <motion.div key={index} variants={fadeInUp}>
-                  <div className="h-full jj-card-inner">
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center shrink-0">
-                        <item.icon className="w-6 h-6 text-gold" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-black mb-1">{item.title}</h3>
-                        <p className="text-sm text-zinc-600">{item.description}</p>
-                      </div>
-                    </div>
+        {/* ═══ 7. FINANCIAL ═══ */}
+        <Section id="financial">
+          <SectionTitle>Financial Management</SectionTitle>
+          <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              {[
+                { icon: DollarSign, label: "Rent collection" },
+                { icon: Shield, label: "Escrow tracking (where applicable)" },
+                { icon: ClipboardList, label: "Expense management" },
+                { icon: BarChart3, label: "Service charge monitoring" },
+                { icon: Briefcase, label: "Vendor payments" },
+                { icon: FileText, label: "Monthly statements" },
+                { icon: Calendar, label: "Annual income summary" },
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-3 p-4 rounded-xl bg-white border border-gold/15">
+                  <item.icon className="w-5 h-5 text-gold shrink-0" />
+                  <span className="text-zinc-700">{item.label}</span>
+                </div>
+              ))}
+            </div>
+            <div className="flex items-start gap-3 p-4 rounded-xl bg-gold/5 border border-gold/15">
+              <Eye className="w-5 h-5 text-gold shrink-0 mt-0.5" />
+              <p className="text-sm text-zinc-600">
+                Financial transparency is maintained through structured reporting and documentation.
+              </p>
+            </div>
+          </motion.div>
+        </Section>
+        <GoldDivider />
+
+        {/* ═══ 8. MAINTENANCE ═══ */}
+        <Section id="maintenance">
+          <SectionTitle>Maintenance & Operations</SectionTitle>
+          <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {[
+                { icon: Calendar, label: "Preventive maintenance planning" },
+                { icon: Phone, label: "Emergency coordination" },
+                { icon: Users, label: "Vendor management" },
+                { icon: Eye, label: "Quality control inspection" },
+                { icon: Shield, label: "Cost approval protocol" },
+                { icon: ClipboardList, label: "Property condition reporting" },
+              ].map((item, i) => (
+                <div key={i} className="p-5 rounded-xl bg-white border border-gold/15 flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center shrink-0">
+                    <item.icon className="w-5 h-5 text-gold" />
                   </div>
-                </motion.div>
+                  <span className="text-zinc-700 text-sm mt-2">{item.label}</span>
+                </div>
               ))}
             </div>
           </motion.div>
-        </div>
-      </section>
+        </Section>
+        <GoldDivider />
 
-      {/* OWNER CONTROLS */}
-      <section className="bg-black py-20">
-        <div className="jj-layer-2">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-            className="max-w-4xl mx-auto"
-          >
-            <motion.h2
-              variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
-              style={{ fontFamily: "Playfair Display, serif" }}
-            >
-              Owner Controls (Premium Standard)
-            </motion.h2>
-            <motion.p variants={fadeInUp} className="text-center text-zinc-600 mb-6">
-              You choose the rules:
-            </motion.p>
-            <motion.div variants={fadeInUp} className="jj-card-inner">
-              <ul className="space-y-4">
-                {ownerControls.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-3 text-zinc-700">
-                    <Shield className="w-5 h-5 text-gold shrink-0 mt-0.5" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
+        {/* ═══ 9. LEGAL ═══ */}
+        <Section id="legal">
+          <SectionTitle>Legal & Regulatory Compliance</SectionTitle>
+          <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+            <p className="text-zinc-700 mb-6 leading-relaxed">We operate in alignment with:</p>
+            <div className="p-6 md:p-8 rounded-xl border border-gold/20 bg-white mb-6">
+              <BulletList icon={Scale} items={[
+                "Dubai Land Department (DLD)",
+                "RERA regulations",
+                "Tenancy Law (Dubai Law No. 26 of 2007 and amendments where applicable)",
+                "UAE Civil Code provisions governing lease agreements",
+              ]} />
+            </div>
+            <div className="flex items-start gap-3 p-4 rounded-xl bg-gold/5 border border-gold/15">
+              <Shield className="w-5 h-5 text-gold shrink-0 mt-0.5" />
+              <p className="text-sm text-zinc-600">
+                We do not provide legal representation but coordinate with licensed legal professionals when required.
+              </p>
+            </div>
           </motion.div>
-        </div>
-      </section>
+        </Section>
+        <GoldDivider />
 
-      {/* WHAT YOU RECEIVE */}
-      <section className="bg-black py-20">
-        <div className="jj-layer-2">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-            className="max-w-4xl mx-auto"
-          >
-            <motion.h2
-              variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
-              style={{ fontFamily: "Playfair Display, serif" }}
-            >
-              What You Receive
-            </motion.h2>
-            <motion.p variants={fadeInUp} className="text-center text-zinc-600 mb-6">
-              Owner reporting package:
-            </motion.p>
-            <motion.div variants={fadeInUp} className="jj-card-inner">
-              <div className="space-y-6">
-                {ownerReporting.map((item, idx) => (
-                  <div key={idx} className="flex items-start gap-3">
-                    <BarChart3 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="font-semibold text-black">{item.title}</h4>
-                      <p className="text-sm text-zinc-600">{item.description}</p>
-                    </div>
+        {/* ═══ 10. REPORTING ═══ */}
+        <Section id="reporting">
+          <SectionTitle>Reporting & Owner Dashboard</SectionTitle>
+          <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+            <p className="text-zinc-700 mb-6 leading-relaxed">Owners receive:</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4" id="dashboard">
+              {[
+                { icon: BarChart3, title: "Monthly Financial Summary", desc: "Income, expenses, and net position." },
+                { icon: Wrench, title: "Maintenance Log", desc: "Dates, issue types, status, and vendor notes." },
+                { icon: UserCheck, title: "Tenant Status Updates", desc: "Occupancy, communications, and compliance." },
+                { icon: RefreshCw, title: "Lease Renewal Alerts", desc: "Key dates and renewal reminders." },
+                { icon: Eye, title: "Occupancy Performance", desc: "Utilization rates and market positioning." },
+              ].map((item, i) => (
+                <div key={i} className="p-5 rounded-xl bg-white border border-gold/15">
+                  <div className="flex items-center gap-3 mb-2">
+                    <item.icon className="w-5 h-5 text-gold" />
+                    <h4 className="font-semibold text-black">{item.title}</h4>
                   </div>
-                ))}
-              </div>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* HOW IT WORKS */}
-      <section className="bg-black py-20">
-        <div className="jj-layer-2">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-          >
-            <motion.h2
-              variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
-              style={{ fontFamily: "Playfair Display, serif" }}
-            >
-              How It Works
-            </motion.h2>
-            <div className="max-w-3xl mx-auto">
-              <div className="relative">
-                <div className="absolute left-6 top-0 bottom-0 w-px bg-gold/30 hidden md:block" />
-                <div className="space-y-6">
-                  {processSteps.map((step, index) => (
-                    <motion.div
-                      key={index}
-                      variants={fadeInUp}
-                      className="flex items-start gap-6"
-                    >
-                      <div className="w-12 h-12 rounded-full bg-black flex items-center justify-center shrink-0 z-10 border-2 border-gold">
-                        <span className="text-gold font-bold">{step.step}</span>
-                      </div>
-                      <div className="flex-1 jj-card-inner !p-4">
-                        <div className="flex items-center gap-4 mb-1">
-                          <step.icon className="w-5 h-5 text-gold shrink-0" />
-                          <span className="font-semibold text-black">{step.title}</span>
-                        </div>
-                        <p className="text-sm text-zinc-600 ml-9">{step.description}</p>
-                      </div>
-                    </motion.div>
-                  ))}
+                  <p className="text-sm text-zinc-600">{item.desc}</p>
                 </div>
+              ))}
+            </div>
+          </motion.div>
+        </Section>
+        <GoldDivider />
+
+        {/* ═══ 11. ONBOARDING ═══ */}
+        <Section id="onboarding">
+          <SectionTitle>Management Onboarding Process</SectionTitle>
+          <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+            <div className="relative max-w-2xl mx-auto">
+              <div className="absolute left-6 top-0 bottom-0 w-px bg-gold/20" />
+              <div className="space-y-5">
+                {onboardingSteps.map((s) => (
+                  <motion.div key={s.step} variants={fadeInUp} className="flex items-center gap-5 pl-1">
+                    <div className="w-12 h-12 rounded-full bg-white border-2 border-gold/40 flex items-center justify-center shrink-0 z-10">
+                      <span className="text-gold font-bold text-sm">{s.step}</span>
+                    </div>
+                    <div className="flex-1 p-4 rounded-xl bg-white border border-gold/15 flex items-center gap-3">
+                      <s.icon className="w-5 h-5 text-gold shrink-0" />
+                      <span className="font-medium text-black">{s.title}</span>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
             </div>
           </motion.div>
-        </div>
-      </section>
+        </Section>
+        <GoldDivider />
 
-      {/* REQUIRED DOCUMENTS */}
-      <section className="bg-black py-20">
-        <div className="jj-layer-2">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-            className="max-w-4xl mx-auto"
-          >
-            <motion.h2
-              variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
-              style={{ fontFamily: "Playfair Display, serif" }}
-            >
-              Required Documents (Typical)
-            </motion.h2>
-            <motion.div variants={fadeInUp} className="jj-card-inner">
-              <ul className="space-y-4">
-                {requiredDocuments.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-3 text-zinc-700">
-                    <FileText className="w-5 h-5 text-gold shrink-0 mt-0.5" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
+        {/* ═══ 12. FEES ═══ */}
+        <Section id="fees">
+          <SectionTitle>Service Fees & Structure</SectionTitle>
+          <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+            <div className="p-6 md:p-8 rounded-xl border border-gold/20 bg-white">
+              <p className="text-zinc-700 leading-relaxed">
+                Management fees are structured based on property type, asset size, and scope of service. A tailored proposal is issued following asset evaluation.
+              </p>
+              <p className="text-zinc-500 text-sm mt-4">
+                Contact our team to receive a detailed management proposal customized to your property portfolio.
+              </p>
+            </div>
           </motion.div>
-        </div>
-      </section>
+        </Section>
+        <GoldDivider />
 
-      {/* FAQ */}
-      <section className="bg-black py-20">
-        <div className="jj-layer-2">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-            className="max-w-4xl mx-auto"
-          >
-            <motion.h2
-              variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
-              style={{ fontFamily: "Playfair Display, serif" }}
-            >
-              Frequently Asked Questions
-            </motion.h2>
-            <motion.div variants={fadeInUp}>
-              <Accordion type="single" collapsible className="space-y-4">
-                {faqData.map((faq, index) => (
-                  <AccordionItem
-                    key={index}
-                    value={`item-${index}`}
-                    className="jj-card-inner border-none"
-                  >
-                    <AccordionTrigger className="text-left text-black hover:text-gold">
-                      <div className="flex items-center gap-3">
-                        <HelpCircle className="w-5 h-5 text-gold shrink-0" />
-                        {faq.question}
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent className="text-zinc-600 pl-8">
-                      {faq.answer}
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </motion.div>
+        {/* ═══ FAQ ═══ */}
+        <Section id="faq">
+          <SectionTitle>Frequently Asked Questions</SectionTitle>
+          <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+            <Accordion type="single" collapsible className="space-y-3">
+              {faqData.map((faq, i) => (
+                <AccordionItem key={i} value={`faq-${i}`} className="border border-gold/20 rounded-xl px-5 bg-white">
+                  <AccordionTrigger className="text-black hover:no-underline font-medium">
+                    {faq.q}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-zinc-600 leading-relaxed">
+                    {faq.a}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
           </motion.div>
-        </div>
-      </section>
+        </Section>
+        <GoldDivider />
 
-      {/* CTA BLOCK */}
-      <section className="bg-black py-20">
-        <div className="jj-layer-2">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-            className="text-center max-w-3xl mx-auto"
-          >
-            <motion.h2
-              variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black mb-4"
-              style={{ fontFamily: "Playfair Display, serif" }}
-            >
-              Build a Stable, Low-Friction Ownership Experience
-            </motion.h2>
-            <motion.p variants={fadeInUp} className="text-zinc-600 mb-8">
-              Request management onboarding and define your approval rules.
-            </motion.p>
-            <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button variant="primary" size="lg" asChild>
-                <Link to="/contact?service=property-management">
-                  Request Property Management
-                </Link>
-              </Button>
-              <Button variant="outline" size="lg" asChild>
-                <Link to="/contact">
-                  <Phone className="w-4 h-4 mr-2" />
-                  Contact Support
-                </Link>
-              </Button>
-            </motion.div>
+        {/* ═══ 13. CTA / CONSULTATION ═══ */}
+        <Section id="consultation">
+          <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-black mb-4" style={{ fontFamily: "Playfair Display, serif" }}>
+                Entrust Your Asset to Structured Management
+              </h2>
+              <p className="text-zinc-600 max-w-2xl mx-auto">
+                Request a tailored management proposal or speak directly with a property manager.
+              </p>
+            </div>
+
+            <div className="max-w-2xl mx-auto p-6 md:p-8 rounded-2xl border border-gold/20 bg-white shadow-[0_4px_20px_rgba(200,167,102,0.08)]">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label className="text-sm font-medium text-black mb-1 block">Full Name</label>
+                  <Input placeholder="Your full name" value={formData.name} onChange={e => setFormData(p => ({ ...p, name: e.target.value }))} />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-black mb-1 block">Email</label>
+                  <Input type="email" placeholder="your@email.com" value={formData.email} onChange={e => setFormData(p => ({ ...p, email: e.target.value }))} />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-black mb-1 block">Phone</label>
+                  <Input placeholder="+971 ..." value={formData.phone} onChange={e => setFormData(p => ({ ...p, phone: e.target.value }))} />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-black mb-1 block">Property Type</label>
+                  <Input placeholder="Residential / Commercial" value={formData.propertyType} onChange={e => setFormData(p => ({ ...p, propertyType: e.target.value }))} />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-black mb-1 block">Location</label>
+                  <Input placeholder="Dubai, Abu Dhabi..." value={formData.location} onChange={e => setFormData(p => ({ ...p, location: e.target.value }))} />
+                </div>
+              </div>
+              <div className="mb-6">
+                <label className="text-sm font-medium text-black mb-1 block">Additional Notes</label>
+                <textarea
+                  placeholder="Describe your property or management requirements..."
+                  value={formData.notes}
+                  onChange={e => setFormData(p => ({ ...p, notes: e.target.value }))}
+                  className="w-full rounded-xl px-4 py-3 text-sm bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold text-black placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-gold/50 min-h-[100px] resize-none"
+                />
+              </div>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <PremiumHeroButton variant="light-bg" onClick={() => {}}>
+                  Request Proposal
+                </PremiumHeroButton>
+                <PremiumHeroButton variant="light-bg" href="/contact">
+                  Book Consultation
+                </PremiumHeroButton>
+                <PremiumHeroButton variant="light-bg" href="/contact?service=property-management">
+                  Speak to Property Manager
+                </PremiumHeroButton>
+              </div>
+              <p className="text-xs text-zinc-400 mt-4 text-center">
+                Submission does not constitute a service agreement. A dedicated property manager will contact you to discuss your requirements.
+              </p>
+            </div>
           </motion.div>
-        </div>
-      </section>
+        </Section>
+      </div>
     </>
   );
 };
