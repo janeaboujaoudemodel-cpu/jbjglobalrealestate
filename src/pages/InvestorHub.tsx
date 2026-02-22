@@ -17,11 +17,9 @@ import {
 } from 'lucide-react';
 import { format } from 'date-fns';
 
-// Book cover imports
-import investorEducationCover from '@/assets/books/investor-education-cover.jpg';
-import marketIntelligenceCover from '@/assets/books/market-intelligence-cover.jpg';
-import goldenVisaCover from '@/assets/books/golden-visa-cover.jpg';
-import buyerGuideCover from '@/assets/books/buyer-guide-cover.jpg';
+// Book imports
+import { BookShelf } from '@/components/books/BookShelf';
+import { INVESTOR_BOOKS } from '@/data/bookCollections';
 
 const quickCards = [
   { title: 'Dashboard', desc: 'Overview of your investments', icon: BarChart3, href: '/investor-dashboard', color: 'from-fuchsia-500 to-purple-600' },
@@ -41,12 +39,6 @@ const aiTools = [
   { title: 'Neighborhood Insights', desc: 'Area intelligence', icon: MapPin, href: '/ai-neighborhood-insights' },
 ];
 
-const investorBooks = [
-  { title: 'Investor Education Guide', cover: investorEducationCover, href: '/investor-education' },
-  { title: 'Market Intelligence Report', cover: marketIntelligenceCover, href: '/market-intelligence' },
-  { title: 'Golden Visa UAE Guide', cover: goldenVisaCover, href: '/guides/golden-visa-uae' },
-  { title: "Buyer's Guide", cover: buyerGuideCover, href: '/buyer-guide' },
-];
 
 const tierConfig = [
   { min: 0, max: 4999, name: 'Bronze', color: 'from-amber-700 to-amber-900', text: 'text-amber-300' },
@@ -195,46 +187,7 @@ const InvestorHub = () => {
         </div>
 
         {/* Books, Guides & Intelligence - Bookshelf */}
-        <div>
-          <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-            <BookOpen className="w-5 h-5 text-amber-400" />
-            Books, Guides & Intelligence
-          </h2>
-          <Card className="bg-gradient-to-br from-zinc-900/80 to-zinc-950 border border-amber-500/20 overflow-hidden">
-            <CardContent className="p-8">
-              {/* Bookshelf */}
-              <div className="flex flex-wrap justify-center gap-8">
-                {investorBooks.map((book) => (
-                  <motion.button
-                    key={book.title}
-                    onClick={() => navigate(book.href)}
-                    className="group flex flex-col items-center gap-3 w-36"
-                    whileHover={{ y: -8 }}
-                    transition={{ type: 'spring', stiffness: 300 }}
-                  >
-                    {/* Book with 3D effect */}
-                    <div className="relative w-32 h-44 rounded-r-md overflow-hidden shadow-[4px_4px_20px_rgba(0,0,0,0.6)] group-hover:shadow-[6px_6px_30px_rgba(200,167,102,0.3)] transition-shadow">
-                      {/* Spine effect */}
-                      <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-black/40 to-transparent z-10" />
-                      <img
-                        src={book.cover}
-                        alt={book.title}
-                        className="w-full h-full object-cover"
-                      />
-                      {/* Glossy overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </div>
-                    <p className="text-xs text-zinc-400 text-center font-medium group-hover:text-amber-300 transition-colors leading-tight">
-                      {book.title}
-                    </p>
-                  </motion.button>
-                ))}
-              </div>
-              {/* Shelf line */}
-              <div className="mt-6 h-1 bg-gradient-to-r from-transparent via-amber-800/50 to-transparent rounded-full" />
-            </CardContent>
-          </Card>
-        </div>
+        <BookShelf books={INVESTOR_BOOKS} />
 
         {/* AI Investment Tools */}
         <div>
