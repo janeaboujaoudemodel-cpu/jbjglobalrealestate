@@ -1,59 +1,54 @@
 import React, { useState } from 'react';
 import {
   Building2, Scale, BarChart3, ShieldCheck, Cpu, Handshake,
-  ClipboardCheck, Server, Eye, Landmark, ChevronDown
+  ClipboardCheck, Server, Eye, Landmark, ChevronDown, ChevronLeft
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import SEOHead from '@/components/SEOHead';
 
 const GoldDivider = () => (
-  <div className="flex items-center gap-4 my-10">
-    <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#C8A766]/40 to-transparent" />
-    <div className="w-1.5 h-1.5 rounded-full bg-[#C8A766]/60" />
-    <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#C8A766]/40 to-transparent" />
+  <div className="flex items-center gap-4 my-8">
+    <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#C8A766]/30 to-transparent" />
+    <div className="w-1.5 h-1.5 rounded-full bg-[#C8A766]/40" />
+    <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#C8A766]/30 to-transparent" />
   </div>
 );
 
-/* Trust Pillar Card */
-const PillarCard = ({ icon: Icon, title, description, accentClass }: {
-  icon: React.ElementType;
-  title: string;
-  description: string;
-  accentClass: string;
+const CCard = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
+  <div className={`bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-[#C8A766]/30 rounded-xl p-6 ${className}`}>{children}</div>
+);
+
+const PillarCard = ({ icon: Icon, title, description }: {
+  icon: React.ElementType; title: string; description: string;
 }) => (
-  <div className="bg-white/80 backdrop-blur-sm border border-[#C8A766]/20 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
-    <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${accentClass}`}>
-      <Icon className="w-6 h-6" />
+  <CCard>
+    <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 bg-[#C8A766]/15">
+      <Icon className="w-6 h-6 text-[#C8A766]" />
     </div>
-    <h3 className="text-lg font-serif font-bold text-zinc-900 mb-2">{title}</h3>
+    <h3 className="text-lg font-bold text-black mb-2" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>{title}</h3>
     <p className="text-zinc-600 text-[15px] leading-relaxed">{description}</p>
-  </div>
+  </CCard>
 );
 
-/* Collapsible Section */
 const Section = ({ icon: Icon, title, children }: {
-  icon: React.ElementType;
-  title: string;
-  children: React.ReactNode;
+  icon: React.ElementType; title: string; children: React.ReactNode;
 }) => {
   const [open, setOpen] = useState(true);
   return (
-    <div className="bg-white/80 backdrop-blur-sm border border-[#C8A766]/20 rounded-2xl overflow-hidden shadow-sm">
-      <button
-        onClick={() => setOpen(!open)}
-        className="w-full flex items-center gap-4 px-6 py-5 text-left hover:bg-[#FAF7F2]/60 transition-colors"
-      >
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#C8A766]/20 to-[#C8A766]/5 flex items-center justify-center shrink-0">
+    <CCard className="!p-0 overflow-hidden">
+      <button onClick={() => setOpen(!open)} className="w-full flex items-center gap-4 px-6 py-5 text-left hover:bg-[#C8A766]/5 transition-colors">
+        <div className="w-10 h-10 rounded-xl bg-[#C8A766]/20 flex items-center justify-center shrink-0">
           <Icon className="w-5 h-5 text-[#C8A766]" />
         </div>
-        <h2 className="flex-1 text-lg md:text-xl font-serif font-bold text-zinc-900">{title}</h2>
+        <h2 className="flex-1 text-lg md:text-xl font-bold text-black" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>{title}</h2>
         <ChevronDown className={`w-5 h-5 text-[#C8A766]/60 transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>
       {open && (
-        <div className="px-6 pb-6 text-zinc-700 leading-relaxed text-[15px] space-y-4 border-t border-[#C8A766]/10 pt-5">
+        <div className="px-6 pb-6 text-zinc-700 leading-relaxed text-[15px] space-y-4 border-t border-[#C8A766]/20 pt-5">
           {children}
         </div>
       )}
-    </div>
+    </CCard>
   );
 };
 
@@ -69,42 +64,12 @@ const BulletList = ({ items }: { items: string[] }) => (
 );
 
 const pillars = [
-  {
-    icon: Building2,
-    title: 'Licensed Brokerage',
-    description: 'JBJ Global Real Estate operates under a valid UAE real estate brokerage license, conducting buy, sell, and leasing activities in accordance with regulatory requirements.',
-    accentClass: 'bg-[#C8A766]/15 text-[#C8A766]',
-  },
-  {
-    icon: Scale,
-    title: 'Regulatory Compliance',
-    description: 'All real estate transactions are conducted in alignment with applicable UAE property regulations, contract frameworks, and developer compliance standards.',
-    accentClass: 'bg-emerald-500/10 text-emerald-700',
-  },
-  {
-    icon: BarChart3,
-    title: 'Transparent Advisory',
-    description: 'We provide structured market analysis, pricing insights, and investment evaluation within the scope of licensed brokerage activities.',
-    accentClass: 'bg-[#C8A766]/15 text-[#C8A766]',
-  },
-  {
-    icon: ShieldCheck,
-    title: 'Data Protection Standards',
-    description: 'Client data is handled with strict confidentiality, secure storage practices, and controlled access permissions.',
-    accentClass: 'bg-slate-500/10 text-slate-700',
-  },
-  {
-    icon: Cpu,
-    title: 'AI & Digital Governance',
-    description: 'AI-powered tools are deployed responsibly, with safeguards to prevent misuse, misinformation, and unauthorized data storage.',
-    accentClass: 'bg-emerald-500/10 text-emerald-700',
-  },
-  {
-    icon: Handshake,
-    title: 'Ethical Conduct',
-    description: 'Our brokerage practices follow principles of transparency, client-first advisory, and conflict-of-interest mitigation.',
-    accentClass: 'bg-slate-500/10 text-slate-700',
-  },
+  { icon: Building2, title: 'Licensed Brokerage', description: 'JBJ Global Real Estate operates under a valid UAE real estate brokerage license, conducting buy, sell, and leasing activities in accordance with regulatory requirements.' },
+  { icon: Scale, title: 'Regulatory Compliance', description: 'All real estate transactions are conducted in alignment with applicable UAE property regulations, contract frameworks, and developer compliance standards.' },
+  { icon: BarChart3, title: 'Transparent Advisory', description: 'We provide structured market analysis, pricing insights, and investment evaluation within the scope of licensed brokerage activities.' },
+  { icon: ShieldCheck, title: 'Data Protection Standards', description: 'Client data is handled with strict confidentiality, secure storage practices, and controlled access permissions.' },
+  { icon: Cpu, title: 'AI & Digital Governance', description: 'AI-powered tools are deployed responsibly, with safeguards to prevent misuse, misinformation, and unauthorized data storage.' },
+  { icon: Handshake, title: 'Ethical Conduct', description: 'Our brokerage practices follow principles of transparency, client-first advisory, and conflict-of-interest mitigation.' },
 ];
 
 const TrustAndAuditCenter = () => {
@@ -117,29 +82,29 @@ const TrustAndAuditCenter = () => {
         canonicalPath="/trust-and-audit-center"
       />
 
-      <div className="min-h-screen bg-gradient-to-b from-[#FDFBF7] via-[#FAF7F2] to-[#F5F0E8]">
+      <section className="min-h-screen bg-gradient-to-b from-[#151210] via-[#0F0D0B] to-[#0A0908]">
         {/* Hero */}
-        <section className="relative py-20 md:py-28 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#FAF7F2] via-white/60 to-[#F5F0E8]" />
-          <div className="relative max-w-4xl mx-auto px-6 text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#C8A766]/10 border border-[#C8A766]/25 rounded-full mb-6">
-              <ShieldCheck className="w-4 h-4 text-[#C8A766]" />
-              <span className="text-xs font-semibold text-[#C8A766] tracking-widest uppercase">Trust & Compliance</span>
+        <div className="bg-gradient-to-b from-[#1a1714] to-[#151210] border-b border-[#C8A766]/20">
+          <div className="max-w-[1200px] mx-auto px-6 pt-8 pb-16">
+            <Link to="/" className="inline-flex items-center gap-2 text-[#C8A766]/70 hover:text-[#C8A766] transition-colors mb-10">
+              <ChevronLeft className="w-4 h-4" /><span className="text-sm">Back to Home</span>
+            </Link>
+            <div className="max-w-3xl">
+              <p className="text-[#C8A766] text-sm font-medium tracking-[0.2em] uppercase mb-4">Trust & Compliance</p>
+              <h1 className="text-white text-3xl md:text-5xl font-bold mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>
+                Trust, Compliance & Audit Framework
+              </h1>
+              <p className="text-[#C8A766] text-lg md:text-xl mb-6" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>
+                Institutional Standards. Regulated Brokerage. Transparent Operations.
+              </p>
+              <p className="text-zinc-400 leading-relaxed max-w-2xl">
+                At JBJ Global Real Estate, trust is built through regulatory compliance, operational transparency, data protection, and ethical brokerage standards. This page outlines the internal and external safeguards that support our clients, partners, and investors.
+              </p>
             </div>
-            <h1 className="text-3xl md:text-5xl font-serif font-bold text-zinc-900 mb-4 leading-tight">
-              Trust, Compliance & Audit Framework
-            </h1>
-            <p className="text-lg md:text-xl text-[#C8A766] font-medium mb-6">
-              Institutional Standards. Regulated Brokerage. Transparent Operations.
-            </p>
-            <p className="text-zinc-600 leading-relaxed max-w-3xl mx-auto text-[15px] md:text-base">
-              At JBJ Global Real Estate, trust is built through regulatory compliance, operational transparency, data protection, and ethical brokerage standards. This page outlines the internal and external safeguards that support our clients, partners, and investors.
-            </p>
-            <div className="mt-8 h-px w-32 mx-auto bg-gradient-to-r from-transparent via-[#C8A766]/50 to-transparent" />
           </div>
-        </section>
+        </div>
 
-        <div className="max-w-5xl mx-auto px-6 pb-20">
+        <div className="max-w-5xl mx-auto px-6 pb-20 pt-12">
           {/* Trust Pillars Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-12">
             {pillars.map((p) => (
@@ -219,14 +184,20 @@ const TrustAndAuditCenter = () => {
             </Section>
           </div>
 
-          {/* Footer note */}
-          <div className="pt-10 text-center">
-            <p className="text-xs text-zinc-400 max-w-2xl mx-auto leading-relaxed">
+          {/* Footer */}
+          <div className="mt-16 pt-8 border-t border-[#C8A766]/15 text-center">
+            <p className="text-xs text-zinc-500 max-w-2xl mx-auto leading-relaxed mb-4">
               This Trust & Audit Framework may be updated periodically to reflect regulatory developments and operational enhancements.
             </p>
+            <p className="text-zinc-500 text-sm">&copy; {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.</p>
+            <div className="flex justify-center gap-4 mt-3 text-sm">
+              <Link to="/privacy" className="text-[#C8A766] hover:underline">Privacy Policy</Link>
+              <span className="text-zinc-600">|</span>
+              <Link to="/terms" className="text-[#C8A766] hover:underline">Terms of Service</Link>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
     </>
   );
 };

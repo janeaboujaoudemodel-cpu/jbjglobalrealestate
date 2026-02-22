@@ -1,72 +1,73 @@
 import { Link } from "react-router-dom";
-import { ArrowLeft, Shield, Lock, FileText, Scale, Eye, AlertTriangle, Copyright, Fingerprint } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
+import { Shield, Lock, FileText, Scale, Eye, AlertTriangle, Copyright, Fingerprint } from "lucide-react";
+
+const GoldDivider = () => (
+  <div className="flex items-center gap-4 my-8">
+    <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#C8A766]/30 to-transparent" />
+    <div className="w-1.5 h-1.5 rounded-full bg-[#C8A766]/40" />
+    <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#C8A766]/30 to-transparent" />
+  </div>
+);
+
+const CCard = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
+  <div className={`bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-[#C8A766]/30 rounded-xl p-6 ${className}`}>{children}</div>
+);
 
 const IntellectualProperty = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <div className="min-h-screen bg-black">
-      {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-b from-zinc-900 to-black border-b border-gold/20">
-        <div className="container mx-auto px-4">
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 text-gold hover:text-gold/80 transition-colors mb-8"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Home
+    <section className="min-h-screen bg-gradient-to-b from-[#151210] via-[#0F0D0B] to-[#0A0908]">
+      {/* Hero */}
+      <div className="bg-gradient-to-b from-[#1a1714] to-[#151210] border-b border-[#C8A766]/20">
+        <div className="max-w-[1200px] mx-auto px-6 pt-8 pb-16">
+          <Link to="/" className="inline-flex items-center gap-2 text-[#C8A766]/70 hover:text-[#C8A766] transition-colors mb-10">
+            <ChevronLeft className="w-4 h-4" /><span className="text-sm">Back to Home</span>
           </Link>
-
-          <div className="flex items-center gap-4 mb-6">
-            <div className="w-16 h-16 rounded-full bg-gold/10 flex items-center justify-center">
-              <Shield className="w-8 h-8 text-gold" />
-            </div>
-            <div>
-              <h1 className="text-4xl md:text-5xl font-bold text-white" style={{ fontFamily: "Poppins, sans-serif" }}>
-                Intellectual Property
-              </h1>
-              <p className="text-gold text-lg">Legal Protection & Copyright Notice</p>
-            </div>
+          <div className="max-w-3xl">
+            <p className="text-[#C8A766] text-sm font-medium tracking-[0.2em] uppercase mb-4">Legal</p>
+            <h1 className="text-white text-4xl md:text-5xl font-bold mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Intellectual Property</h1>
+            <p className="text-[#C8A766] text-lg md:text-xl mb-6" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Legal Protection & Copyright Notice</p>
+            <p className="text-zinc-400 leading-relaxed max-w-2xl">
+              This page outlines the comprehensive intellectual property protections governing the JBJ Global Real Estate platform, 
+              its proprietary AI tools, designs, and all associated digital assets.
+            </p>
           </div>
-
-          <p className="text-zinc-400 max-w-3xl text-lg">
-            This page outlines the comprehensive intellectual property protections governing the JBJ Global Real Estate platform, 
-            its proprietary AI tools, designs, and all associated digital assets.
-          </p>
         </div>
-      </section>
+      </div>
 
-      {/* Main Content */}
-      <section className="py-16">
-        <div className="container mx-auto px-4 max-w-4xl">
-          
+      <div className="max-w-[1200px] mx-auto px-6 py-12">
+        <div className="max-w-4xl mx-auto space-y-8">
+
           {/* Copyright Statement */}
-          <div className="bg-gradient-to-br from-gold/10 to-transparent rounded-2xl p-8 border border-gold/30 mb-12">
+          <CCard className="!p-8">
             <div className="flex items-start gap-4">
-              <Copyright className="w-8 h-8 text-gold flex-shrink-0 mt-1" />
+              <Copyright className="w-8 h-8 text-[#C8A766] flex-shrink-0 mt-1" />
               <div>
-                <h2 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h2 className="text-2xl font-bold text-black mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>
                   Official Copyright Statement
                 </h2>
-                <p className="text-white text-lg leading-relaxed">
-                  © {currentYear} <span className="text-gold font-semibold">JBJ Global Real Estate</span>. All Rights Reserved.
+                <p className="text-black text-lg leading-relaxed">
+                  © {currentYear} <span className="text-[#C8A766] font-semibold">JBJ Global Real Estate</span>. All Rights Reserved.
                 </p>
-                <p className="text-zinc-300 mt-4 leading-relaxed">
+                <p className="text-zinc-700 mt-4 leading-relaxed">
                   This platform, including but not limited to all software code, AI algorithms, user interface designs, 
                   branding elements, written content, graphics, and digital assets, is the exclusive intellectual property 
-                  of <span className="text-white font-medium">JBJ Global Real Estate</span>.
+                  of <span className="text-black font-medium">JBJ Global Real Estate</span>.
                 </p>
               </div>
             </div>
-          </div>
+          </CCard>
+
+          <GoldDivider />
 
           {/* Protected Assets */}
-          <div className="mb-12">
-            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3" style={{ fontFamily: "Poppins, sans-serif" }}>
-              <Lock className="w-6 h-6 text-gold" />
+          <div>
+            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>
+              <Lock className="w-6 h-6 text-[#C8A766]" />
               Protected Assets & Technologies
             </h2>
-            
             <div className="grid md:grid-cols-2 gap-4">
               {[
                 { title: "JBJ AI Property Evaluator", desc: "Proprietary valuation algorithms" },
@@ -79,189 +80,156 @@ const IntellectualProperty = () => {
                 { title: "JBJ Guides & Resources", desc: "Educational content library" },
                 { title: "JBJ Platform UI/UX Design", desc: "Interface designs & layouts" },
               ].map((item, index) => (
-                <div key={index} className="bg-zinc-900/50 rounded-xl p-4 border border-zinc-800 hover:border-gold/30 transition-colors">
-                  <h3 className="text-white font-medium">{item.title}</h3>
-                  <p className="text-zinc-500 text-sm">{item.desc}</p>
-                </div>
+                <CCard key={index} className="hover:border-[#C8A766]/60 transition-colors">
+                  <h3 className="text-black font-medium">{item.title}</h3>
+                  <p className="text-zinc-600 text-sm">{item.desc}</p>
+                </CCard>
               ))}
             </div>
           </div>
 
+          <GoldDivider />
+
           {/* Legal Framework */}
-          <div className="mb-12">
-            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3" style={{ fontFamily: "Poppins, sans-serif" }}>
-              <Scale className="w-6 h-6 text-gold" />
+          <div>
+            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>
+              <Scale className="w-6 h-6 text-[#C8A766]" />
               Legal Framework & Jurisdiction
             </h2>
-            
-            <div className="bg-zinc-900 rounded-xl p-6 border border-zinc-800 space-y-4">
-              <p className="text-zinc-300 leading-relaxed">
-                All intellectual property rights are protected under the laws of the <span className="text-white font-medium">United Arab Emirates</span>, 
+            <CCard className="space-y-4">
+              <p className="text-zinc-700 leading-relaxed">
+                All intellectual property rights are protected under the laws of the <span className="text-black font-medium">United Arab Emirates</span>, 
                 including but not limited to:
               </p>
-              <ul className="space-y-3 text-zinc-400">
-                <li className="flex items-start gap-3">
-                  <span className="text-gold">•</span>
-                  <span><span className="text-white">UAE Federal Law No. 38 of 2021</span> - Concerning Copyrights and Related Rights</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-gold">•</span>
-                  <span><span className="text-white">UAE Trademark Law</span> - Federal Law No. 37 of 1992 (as amended)</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-gold">•</span>
-                  <span><span className="text-white">DIFC Intellectual Property Law</span> - Law No. 4 of 2019</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-gold">•</span>
-                  <span><span className="text-white">International WIPO Treaties</span> - Berne Convention & Paris Convention</span>
-                </li>
+              <ul className="space-y-3 text-zinc-700">
+                {[
+                  { law: "UAE Federal Law No. 38 of 2021", desc: "Concerning Copyrights and Related Rights" },
+                  { law: "UAE Trademark Law", desc: "Federal Law No. 37 of 1992 (as amended)" },
+                  { law: "DIFC Intellectual Property Law", desc: "Law No. 4 of 2019" },
+                  { law: "International WIPO Treaties", desc: "Berne Convention & Paris Convention" },
+                ].map((item, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#C8A766] mt-2 shrink-0" />
+                    <span><strong className="text-black">{item.law}</strong> — {item.desc}</span>
+                  </li>
+                ))}
               </ul>
-            </div>
+            </CCard>
           </div>
+
+          <GoldDivider />
 
           {/* Prohibited Actions */}
-          <div className="mb-12">
-            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3" style={{ fontFamily: "Poppins, sans-serif" }}>
-              <AlertTriangle className="w-6 h-6 text-red-500" />
+          <div>
+            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>
+              <AlertTriangle className="w-6 h-6 text-[#C8A766]" />
               Strictly Prohibited Actions
             </h2>
-            
-            <div className="bg-red-950/20 rounded-xl p-6 border border-red-900/30 space-y-4">
-              <p className="text-zinc-300 leading-relaxed">
-                The following activities are <span className="text-red-400 font-semibold">strictly prohibited</span> and will result in legal action:
+            <CCard className="space-y-4">
+              <p className="text-zinc-700 leading-relaxed">
+                The following activities are <span className="text-red-700 font-semibold">strictly prohibited</span> and will result in legal action:
               </p>
-              <ul className="space-y-3 text-zinc-400">
-                <li className="flex items-start gap-3">
-                  <span className="text-red-500">✕</span>
-                  <span>Copying, reproducing, or cloning any part of this platform or its features</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-red-500">✕</span>
-                  <span>Reverse engineering AI algorithms or proprietary systems</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-red-500">✕</span>
-                  <span>Unauthorized distribution of platform content, documents, or materials</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-red-500">✕</span>
-                  <span>Removing watermarks, copyright notices, or attribution statements</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-red-500">✕</span>
-                  <span>Creating derivative works without explicit written consent</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-red-500">✕</span>
-                  <span>Commercial use of any platform assets without licensing agreement</span>
-                </li>
+              <ul className="space-y-3 text-zinc-700">
+                {[
+                  "Copying, reproducing, or cloning any part of this platform or its features",
+                  "Reverse engineering AI algorithms or proprietary systems",
+                  "Unauthorized distribution of platform content, documents, or materials",
+                  "Removing watermarks, copyright notices, or attribution statements",
+                  "Creating derivative works without explicit written consent",
+                  "Commercial use of any platform assets without licensing agreement",
+                ].map((item, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <span className="text-red-600 mt-0.5 shrink-0 font-bold">✕</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
               </ul>
-            </div>
+            </CCard>
           </div>
+
+          <GoldDivider />
 
           {/* Digital Protection */}
-          <div className="mb-12">
-            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3" style={{ fontFamily: "Poppins, sans-serif" }}>
-              <Fingerprint className="w-6 h-6 text-gold" />
+          <div>
+            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>
+              <Fingerprint className="w-6 h-6 text-[#C8A766]" />
               Digital Protection Measures
             </h2>
-            
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-zinc-900 rounded-xl p-6 border border-zinc-800">
-                <Eye className="w-8 h-8 text-gold mb-4" />
-                <h3 className="text-white font-semibold mb-2">Dynamic Watermarking</h3>
-                <p className="text-zinc-400 text-sm">
-                  All downloadable documents and PDFs contain unique, traceable watermarks linking content to the downloading user.
-                </p>
-              </div>
-              <div className="bg-zinc-900 rounded-xl p-6 border border-zinc-800">
-                <Lock className="w-8 h-8 text-gold mb-4" />
-                <h3 className="text-white font-semibold mb-2">Session Security</h3>
-                <p className="text-zinc-400 text-sm">
-                  Content access is monitored with device fingerprinting and session validation to prevent unauthorized sharing.
-                </p>
-              </div>
-              <div className="bg-zinc-900 rounded-xl p-6 border border-zinc-800">
-                <FileText className="w-8 h-8 text-gold mb-4" />
-                <h3 className="text-white font-semibold mb-2">Access Logging</h3>
-                <p className="text-zinc-400 text-sm">
-                  All content access is logged and can be audited to trace any unauthorized distribution back to its source.
-                </p>
-              </div>
-              <div className="bg-zinc-900 rounded-xl p-6 border border-zinc-800">
-                <Shield className="w-8 h-8 text-gold mb-4" />
-                <h3 className="text-white font-semibold mb-2">Copy Protection</h3>
-                <p className="text-zinc-400 text-sm">
-                  Platform implements measures to prevent unauthorized copying, screenshots, and screen recording of protected content.
-                </p>
-              </div>
+            <div className="grid md:grid-cols-2 gap-4">
+              {[
+                { icon: Eye, title: "Dynamic Watermarking", desc: "All downloadable documents and PDFs contain unique, traceable watermarks linking content to the downloading user." },
+                { icon: Lock, title: "Session Security", desc: "Content access is monitored with device fingerprinting and session validation to prevent unauthorized sharing." },
+                { icon: FileText, title: "Access Logging", desc: "All content access is logged and can be audited to trace any unauthorized distribution back to its source." },
+                { icon: Shield, title: "Copy Protection", desc: "Platform implements measures to prevent unauthorized copying, screenshots, and screen recording of protected content." },
+              ].map((item, i) => (
+                <CCard key={i}>
+                  <item.icon className="w-8 h-8 text-[#C8A766] mb-4" />
+                  <h3 className="text-black font-semibold mb-2">{item.title}</h3>
+                  <p className="text-zinc-600 text-sm">{item.desc}</p>
+                </CCard>
+              ))}
             </div>
           </div>
 
-          {/* Legal Remedies */}
-          <div className="mb-12">
-            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3" style={{ fontFamily: "Poppins, sans-serif" }}>
-              <Scale className="w-6 h-6 text-gold" />
+          <GoldDivider />
+
+          {/* Enforcement */}
+          <div>
+            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>
+              <Scale className="w-6 h-6 text-[#C8A766]" />
               Enforcement & Legal Remedies
             </h2>
-            
-            <div className="bg-zinc-900 rounded-xl p-6 border border-zinc-800 space-y-4">
-              <p className="text-zinc-300 leading-relaxed">
+            <CCard className="space-y-4">
+              <p className="text-zinc-700 leading-relaxed">
                 JBJ Global Real Estate reserves the right to pursue all available legal remedies against infringers, including but not limited to:
               </p>
-              <ul className="space-y-3 text-zinc-400">
-                <li className="flex items-start gap-3">
-                  <span className="text-gold">•</span>
-                  <span>Injunctive relief to immediately cease infringing activities</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-gold">•</span>
-                  <span>Monetary damages including actual damages and disgorgement of profits</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-gold">•</span>
-                  <span>Statutory damages as provided under UAE copyright law</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-gold">•</span>
-                  <span>Recovery of attorney fees and litigation costs</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-gold">•</span>
-                  <span>Criminal prosecution where applicable under UAE law</span>
-                </li>
+              <ul className="space-y-3 text-zinc-700">
+                {[
+                  "Injunctive relief to immediately cease infringing activities",
+                  "Monetary damages including actual damages and disgorgement of profits",
+                  "Statutory damages as provided under UAE copyright law",
+                  "Recovery of attorney fees and litigation costs",
+                  "Criminal prosecution where applicable under UAE law",
+                ].map((item, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#C8A766] mt-2 shrink-0" />
+                    <span>{item}</span>
+                  </li>
+                ))}
               </ul>
-            </div>
+            </CCard>
           </div>
+
+          <GoldDivider />
 
           {/* Contact */}
-          <div className="bg-gradient-to-br from-gold/10 to-transparent rounded-2xl p-8 border border-gold/30">
-            <h2 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <CCard className="!p-8">
+            <h2 className="text-2xl font-bold text-black mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>
               Licensing & Legal Inquiries
             </h2>
-            <p className="text-zinc-300 mb-6">
+            <p className="text-zinc-700 mb-6">
               For licensing requests, partnership inquiries, or to report intellectual property violations, please contact our legal department:
             </p>
-            <div className="space-y-2 text-zinc-400">
-              <p><span className="text-white">Email:</span> Privacy@JBJ.ae</p>
-              <p><span className="text-white">Legal Representative:</span> JBJ Global Real Estate</p>
-              <p><span className="text-white">Jurisdiction:</span> Dubai, United Arab Emirates</p>
+            <div className="bg-[#C8A766]/10 border border-[#C8A766]/20 rounded-lg p-5 space-y-2 text-zinc-700">
+              <p><strong className="text-black">Email:</strong> Privacy@JBJ.ae</p>
+              <p><strong className="text-black">Legal Representative:</strong> JBJ Global Real Estate</p>
+              <p><strong className="text-black">Jurisdiction:</strong> Dubai, United Arab Emirates</p>
+            </div>
+          </CCard>
+
+          {/* Footer */}
+          <div className="mt-16 pt-8 border-t border-[#C8A766]/15 text-center">
+            <p className="text-zinc-500 text-sm">Last Updated: {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
+            <p className="text-[#C8A766] text-sm mt-2">© {currentYear} JBJ Global Real Estate. All Rights Reserved.</p>
+            <div className="flex justify-center gap-4 mt-3 text-sm">
+              <Link to="/privacy" className="text-[#C8A766] hover:underline">Privacy Policy</Link>
+              <span className="text-zinc-600">|</span>
+              <Link to="/terms" className="text-[#C8A766] hover:underline">Terms of Service</Link>
             </div>
           </div>
-
-          {/* Final Notice */}
-          <div className="mt-12 text-center">
-            <p className="text-zinc-500 text-sm">
-              Last Updated: {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
-            </p>
-            <p className="text-gold text-sm mt-2">
-              © {currentYear} JBJ Global Real Estate. All Rights Reserved.
-            </p>
-          </div>
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
   );
 };
 
