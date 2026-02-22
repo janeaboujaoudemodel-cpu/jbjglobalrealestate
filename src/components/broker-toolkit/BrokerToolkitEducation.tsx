@@ -122,7 +122,7 @@ export function BrokerToolkitEducation() {
   return (
     <>
       {/* Training & Education Section - Blue Theme with Layer */}
-      <section id="section-education" className="py-16 md:py-20 bg-black">
+      <section id="section-education" className="py-8 md:py-10 bg-black">
         <div className="container mx-auto px-4">
           {/* Active Blue Layer */}
           <div className="bg-gradient-to-br from-blue-900/90 via-blue-900/80 to-blue-950/90 border border-blue-500/30 rounded-2xl p-6 md:p-8 shadow-lg">
@@ -190,7 +190,7 @@ export function BrokerToolkitEducation() {
       </section>
 
       {/* Free Books Section - Emerald Theme with Layer */}
-      <section className="py-16 md:py-20 bg-black">
+      <section className="py-8 md:py-10 bg-black">
         <div className="container mx-auto px-4">
           {/* Active Emerald Layer */}
           <div className="bg-gradient-to-br from-emerald-900/90 via-emerald-900/80 to-emerald-950/90 border border-emerald-500/30 rounded-2xl p-6 md:p-8 shadow-lg">

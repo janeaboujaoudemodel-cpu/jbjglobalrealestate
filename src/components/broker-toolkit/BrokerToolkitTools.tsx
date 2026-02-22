@@ -483,7 +483,7 @@ export function BrokerToolkitTools() {
   };
 
   return (
-    <section id="section-tools" className="py-16 md:py-20 bg-black">
+    <section id="section-tools" className="py-8 md:py-10 bg-black">
       <div className="container mx-auto px-4">
         {/* Discover All Free Tools - Light Cyan/Slate Layer */}
         <div className="bg-gradient-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 border border-slate-600/30 rounded-2xl p-6 md:p-8 shadow-lg mb-12">

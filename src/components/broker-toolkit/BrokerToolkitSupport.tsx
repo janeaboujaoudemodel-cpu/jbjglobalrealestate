@@ -80,7 +80,7 @@ export function BrokerToolkitSupport() {
   return (
     <>
       {/* SUPPORT TEAM SECTION - Pink Layer (Separate) */}
-      <section id="section-support" className="py-16 md:py-20 bg-black">
+      <section id="section-support" className="py-8 md:py-10 bg-black">
         <div className="container mx-auto px-3 sm:px-4">
           {/* Active Pink Layer */}
           <div className="bg-gradient-to-br from-pink-900/90 via-pink-900/80 to-pink-950/90 border border-pink-500/30 rounded-2xl p-6 md:p-8 shadow-lg">
@@ -136,7 +136,7 @@ export function BrokerToolkitSupport() {
       </section>
 
       {/* MEDIA & MARKETING TEAM - Teal/Green Layer (Separate) */}
-      <section className="py-16 md:py-20 bg-black">
+      <section className="py-8 md:py-10 bg-black">
         <div className="container mx-auto px-3 sm:px-4">
           {/* Active Teal Layer */}
           <div className="bg-gradient-to-br from-teal-900/90 via-teal-900/80 to-teal-950/90 border border-teal-500/30 rounded-2xl p-6 md:p-8 shadow-lg">
