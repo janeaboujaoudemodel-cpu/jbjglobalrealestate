@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { SEOHead } from "@/components/SEOHead";
 import { motion } from "framer-motion";
 import {
@@ -75,6 +75,26 @@ const GoldenVisaGuide = () => {
   const [formData, setFormData] = useState({
     fullName: "", email: "", phone: "", country: "", category: "", budget: "", notes: "",
   });
+  const [activeSection, setActiveSection] = useState("overview");
+
+  // Scroll-spy for sticky side nav
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        }
+      },
+      { rootMargin: '-30% 0px -60% 0px', threshold: 0 }
+    );
+    tocSections.forEach((s) => {
+      const el = document.getElementById(s.id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -202,6 +222,31 @@ const GoldenVisaGuide = () => {
         </div>
       </section>
       <div className="h-px bg-gradient-to-r from-transparent via-[#C8A766]/40 to-transparent" />
+
+      {/* Sticky Side Navigator (desktop) / Top scroll nav (mobile) */}
+      <div className="sticky top-20 z-30 lg:hidden bg-[#FAF6EE]/95 backdrop-blur-sm border-b border-[#C8A766]/20 py-2 px-4">
+        <div className="overflow-x-auto scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch' }}>
+          <div className="flex gap-2">
+            {tocSections.map((section) => {
+              const Icon = section.icon;
+              return (
+                <button
+                  key={section.id}
+                  onClick={() => scrollTo(section.id)}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap min-w-fit transition-all ${
+                    activeSection === section.id
+                      ? "bg-[#C8A766]/20 text-[#C8A766] border border-[#C8A766]/40"
+                      : "text-[#6B6B6B] hover:text-[#C8A766] hover:bg-[#C8A766]/10 border border-transparent"
+                  }`}
+                >
+                  <Icon className="w-3.5 h-3.5" />
+                  <span>{section.title}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
 
       {/* ═══════════════════════════════════════════ */}
       {/* 3. PROGRAM OVERVIEW */}

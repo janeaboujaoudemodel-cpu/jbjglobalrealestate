@@ -220,7 +220,7 @@ const RealEstateSuite = () => {
         {/* Tool Selector - Sub-tabs within section */}
         <div className="bg-zinc-950 border-b border-zinc-800">
           <div className="max-w-7xl mx-auto px-4">
-            <div className="flex gap-2 py-3 overflow-x-auto">
+            <div className="flex gap-2 py-3 overflow-x-auto scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch' }}>
               {currentSection.tools.map((tool) => {
                 const Icon = tool.icon;
                 const isActive = activeTool === tool.id;
@@ -229,7 +229,7 @@ const RealEstateSuite = () => {
                     key={tool.id}
                     onClick={() => setActiveTool(tool.id)}
                     className={cn(
-                      "flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all",
+                      "flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all whitespace-nowrap min-w-fit",
                       isActive
                         ? `${currentColors.active} border ${currentColors.border}`
                         : "text-zinc-500 hover:text-zinc-300 border border-zinc-800 hover:border-zinc-700"

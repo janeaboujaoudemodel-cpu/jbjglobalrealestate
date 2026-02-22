@@ -395,6 +395,42 @@ const BrokerHub = () => {
           </Card>
         </div>
 
+        {/* Professional Certification Section */}
+        <div>
+          <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+            <Award className="w-5 h-5 text-gold" />
+            Professional Certification
+          </h2>
+          <Card className="bg-gradient-to-br from-zinc-900/80 to-zinc-800/60 border-2 border-gold/40 overflow-hidden">
+            <CardContent className="p-6 md:p-8">
+              <div className="flex flex-col md:flex-row items-center gap-6">
+                <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-gold/20 to-amber-500/10 border-2 border-gold/50 flex items-center justify-center flex-shrink-0">
+                  <Award className="w-12 h-12 text-gold" />
+                </div>
+                <div className="flex-1 text-center md:text-left">
+                  <h3 className="text-lg font-bold text-white mb-2">JBJ Certified Broker</h3>
+                  <p className="text-zinc-400 text-sm mb-4">
+                    Complete our professional certification program to earn the JBJ Certified Broker badge. 
+                    Demonstrate your expertise in Dubai real estate, legal compliance, and premium client service.
+                  </p>
+                  <div className="flex flex-wrap gap-3 justify-center md:justify-start">
+                    <Badge className="bg-gold/20 text-gold border-gold/40">RERA Compliant</Badge>
+                    <Badge className="bg-gold/20 text-gold border-gold/40">Market Expert</Badge>
+                    <Badge className="bg-gold/20 text-gold border-gold/40">Client Excellence</Badge>
+                  </div>
+                </div>
+                <Button 
+                  onClick={() => navigate('/services/broker-certification')}
+                  className="bg-gradient-to-r from-gold to-amber-600 text-black font-bold px-6 whitespace-nowrap"
+                >
+                  Get Certified
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
         {/* Broker AI Tools - Show top 3 only */}
         <div>
           <h2 className="text-xl font-bold text-white mb-4">AI Sales & Communication Tools</h2>

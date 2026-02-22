@@ -240,6 +240,39 @@ export default function ProjectDetailLayout({
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Scroll-spy: track which section is in view and update activeTab
+  const tabNavRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const refMap: Record<string, React.RefObject<HTMLDivElement>> = {
+      details: detailsRef, gallery: galleryRef, usp: uspRef,
+      "floor-plans": floorPlansRef, amenities: amenitiesRef,
+      location: locationRef, brochure: brochureRef, payment: paymentRef,
+      faq: faqRef, ai: aiRef, mortgage: mortgageRef,
+      units: unitsRef, construction: constructionRef, media: mediaRef,
+      investment: investmentRef, developer: developerRef,
+      "house-details": houseDetailsRef, "master-plan": masterPlanRef,
+    };
+    const entries = Object.entries(refMap);
+    const observer = new IntersectionObserver(
+      (observed) => {
+        for (const entry of observed) {
+          if (entry.isIntersecting) {
+            const match = entries.find(([, ref]) => ref.current === entry.target);
+            if (match) {
+              setActiveTab(match[0]);
+              // Auto-scroll the tab button into view
+              const btn = tabNavRef.current?.querySelector(`[data-tab="${match[0]}"]`) as HTMLElement;
+              btn?.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
+            }
+          }
+        }
+      },
+      { rootMargin: '-30% 0px -60% 0px', threshold: 0 }
+    );
+    entries.forEach(([, ref]) => { if (ref.current) observer.observe(ref.current); });
+    return () => observer.disconnect();
+  }, []);
+
   // Signal GlobalHeader to hide when sticky sub-nav is active
   useEffect(() => {
     if (showStickyNav) {
@@ -597,8 +630,8 @@ export default function ProjectDetailLayout({
         {/* Row 2: Curated Shortcuts */}
         <div className="bg-gradient-to-r from-[#EDE0C8] via-[#E2D4B8] to-[#D4C4A8] border-b border-gold/30 shadow-md">
           <div className="container mx-auto px-4">
-            <div className="overflow-x-auto scrollbar-hide" style={{ touchAction: 'pan-y', overscrollBehaviorX: 'contain' }}>
-              <div className="flex items-center gap-1 py-1.5">
+            <div className="overflow-x-auto scrollbar-hide" style={{ touchAction: 'pan-x', WebkitOverflowScrolling: 'touch', overscrollBehaviorX: 'contain' }}>
+             <div ref={tabNavRef} className="flex items-center gap-1 py-1.5">
                 {[
                   { id: "details", label: "Details", icon: FileText },
                   { id: "gallery", label: "Gallery", icon: ImageIcon },
@@ -610,6 +643,7 @@ export default function ProjectDetailLayout({
                 ].map((tab) => (
                   <button
                     key={tab.id}
+                    data-tab={tab.id}
                     onClick={() => handleTabClick(tab.id)}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium whitespace-nowrap min-w-fit transition-all ${
                       activeTab === tab.id

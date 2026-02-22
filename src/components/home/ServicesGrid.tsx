@@ -52,6 +52,22 @@ const getServices = (t: (key: string, fallback?: string) => string): ServiceCard
     href: "/landlord-guide",
     color: "from-purple-500 to-purple-600",
   },
+  {
+    id: "golden-visa",
+    title: t('services.card.goldenVisa', 'Golden Visa'),
+    description: t('services.card.goldenVisaDesc', 'Secure long-term UAE residency through property investment.'),
+    icon: Key,
+    href: "/guides/golden-visa",
+    color: "from-amber-500 to-yellow-600",
+  },
+  {
+    id: "properties",
+    title: t('services.card.properties', 'Off-Plan'),
+    description: t('services.card.propertiesDesc', 'Explore premium off-plan projects across Dubai and the UAE.'),
+    icon: Home,
+    href: "/properties",
+    color: "from-teal-500 to-teal-600",
+  },
 ];
 
 const ServicesGrid = () => {
@@ -171,7 +187,7 @@ const ServicesGrid = () => {
           {/* Cards container: horizontal scroll on mobile, grid on desktop */}
           <div
             ref={scrollRef}
-            className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide lg:grid lg:grid-cols-4 lg:overflow-visible px-1"
+            className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide lg:grid lg:grid-cols-3 xl:grid-cols-3 lg:overflow-visible px-1"
           >
             {services.map((service, index) => renderCard(service, index))}
           </div>
