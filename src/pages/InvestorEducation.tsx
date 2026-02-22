@@ -1,4 +1,6 @@
 import { SEOHead } from "@/components/SEOHead";
+import { GuideBookSection } from "@/components/books/GuideBookSection";
+import { investorEducationBook } from "@/data/bookCollections";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { 
@@ -159,6 +161,9 @@ const InvestorEducation = () => {
           </>
         }
       />
+
+      {/* 3D Book Cover + Table of Contents */}
+      <GuideBookSection book={investorEducationBook} />
 
       {/* Main Content with Right Padding for TOC */}
       <div className="lg:pr-80">

@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapPin, Eye } from 'lucide-react';
+import { MapPin, Eye, BookOpen } from 'lucide-react';
 import menuDowntownSkyline from '@/assets/menu-downtown-dubai-skyline.jpg';
 import dubaiDowntownVideo from '@/assets/videos/why-dubai-downtown-burj-khalifa.mp4';
 import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuCard, MegaMenuCTAButton, MegaMenuSectionDivider } from '@/components/header/mega-menu-primitives';
@@ -79,12 +79,20 @@ const MegaMenuAreas = React.forwardRef<HTMLDivElement, MegaMenuAreasProps>(({ on
             
             <MegaMenuSectionDivider />
 
-            <MegaMenuCTAButton
-              to="/areas"
-              onClick={onClose}
-              icon={Eye}
-              title="View All Areas"
-            />
+            <div className="flex flex-col sm:flex-row gap-2">
+              <MegaMenuCTAButton
+                to="/areas"
+                onClick={onClose}
+                icon={Eye}
+                title="View All Areas"
+              />
+              <MegaMenuCTAButton
+                to="/guides"
+                onClick={onClose}
+                icon={BookOpen}
+                title="Read Area Guides"
+              />
+            </div>
           </div>
         </div>
       </div>

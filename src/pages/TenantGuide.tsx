@@ -1,4 +1,6 @@
 import { SEOHead } from "@/components/SEOHead";
+import { GuideBookSection } from "@/components/books/GuideBookSection";
+import { tenantGuideBook } from "@/data/bookCollections";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { FounderPhilosophySection } from "@/components/FounderPhilosophySection";
@@ -228,6 +230,9 @@ const TenantGuide = () => {
           </>
         }
       />
+
+      {/* 3D Book Cover + Table of Contents */}
+      <GuideBookSection book={tenantGuideBook} sectionIds={tocItems.map(i => i.id)} />
 
       {/* Sticky Table of Contents */}
       <div className="hidden lg:block fixed right-8 top-1/4 z-[60] max-w-xs">

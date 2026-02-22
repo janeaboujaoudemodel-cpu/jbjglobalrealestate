@@ -544,4 +544,20 @@ export {
   guidesLibraryBook,
   investorEducationBook,
   marketIntelligenceBook,
+  // FAQ books
+  investorFaqBook,
+  buyerFaqBook,
+  sellerFaqBook,
+  landlordFaqBook,
+  tenantFaqBook,
+  brokerFaqBook,
+  // Broker books
+  brokerTrainingBook,
+  brokerCertificationBook,
+  // Legal books
+  termsOfServiceBook,
+  privacyPolicyBook,
+  cookiePolicyBook,
+  disclaimersBook,
+  trustComplianceBook,
 };

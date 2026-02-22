@@ -1,4 +1,6 @@
 import { SEOHead } from "@/components/SEOHead";
+import { GuideBookSection } from "@/components/books/GuideBookSection";
+import { sellerGuideBook } from "@/data/bookCollections";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { FounderPhilosophySection } from "@/components/FounderPhilosophySection";
@@ -351,6 +353,9 @@ const SellerGuide = () => {
             </div>
           </motion.div>
         </section>
+
+        {/* 3D Book Cover + Table of Contents */}
+        <GuideBookSection book={sellerGuideBook} sectionIds={tocItems.map(i => i.id)} />
 
         {/* Sticky Table of Contents - z-[60] to appear above JBJ support widget */}
         <div className="hidden lg:block fixed right-8 top-1/4 z-[60] max-w-xs">

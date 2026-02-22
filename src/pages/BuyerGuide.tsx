@@ -2,6 +2,8 @@ import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { FounderPhilosophySection } from "@/components/FounderPhilosophySection";
+import { GuideBookSection } from "@/components/books/GuideBookSection";
+import { buyerGuideBook } from "@/data/bookCollections";
 import { 
   CheckCircle2, 
   Search, 
@@ -354,7 +356,13 @@ const BuyerGuide = () => {
         }
       />
 
-      {/* Divider between Hero and Who This Guide Is For */}
+      {/* 3D Book Cover + Table of Contents */}
+      <GuideBookSection
+        book={buyerGuideBook}
+        sectionIds={tocItems.map(item => item.id)}
+      />
+
+      {/* Divider between Book Section and Who This Guide Is For */}
       <SectionDivider />
 
       {/* Sticky Table of Contents - z-[60] to appear above JBJ support widget */}
