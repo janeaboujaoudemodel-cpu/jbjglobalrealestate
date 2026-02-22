@@ -92,24 +92,13 @@ const Index = () => {
             fetchPriority="high"
             decoding="sync"
           />
-          {/* Video overlays the image when it loads/plays - deferred for performance */}
+          {/* Video overlays the image when it loads/plays - stable single-source */}
           <video 
-            ref={(el) => {
-              if (el && !el.dataset.deferred) {
-                el.dataset.deferred = 'true';
-                // Defer video loading to avoid competing with hero image & JS
-                setTimeout(() => {
-                  el.preload = 'auto';
-                  el.src = 'https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/videos/hero-video.mp4';
-                  el.load();
-                }, 3000);
-              }
-            }}
             autoPlay 
             loop 
             muted 
             playsInline
-            preload="none"
+            preload="auto"
             poster={luxuryVillaHero}
             webkit-playsinline="true"
             x-webkit-airplay="allow"
@@ -118,7 +107,7 @@ const Index = () => {
               WebkitTransform: 'translateZ(0)',
               backfaceVisibility: 'hidden',
               opacity: 0,
-              transition: 'opacity 1s ease-in-out',
+              transition: 'opacity 0.8s ease-in-out',
             }}
             onCanPlay={(e) => {
               e.currentTarget.style.opacity = '1';
@@ -126,9 +115,8 @@ const Index = () => {
             onError={(e) => {
               e.currentTarget.style.display = 'none';
             }}
-          >
-            <source src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/videos/hero-video.mp4" type="video/mp4" />
-          </video>
+            src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/videos/hero-video.mp4"
+          />
           {/* Video overlay gradient - above video */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/60 z-[2]" />
           {/* Additional cinematic vignette */}

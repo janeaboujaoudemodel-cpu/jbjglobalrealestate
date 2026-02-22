@@ -666,7 +666,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 </SheetTrigger>
                 <SheetContent
                   side="right"
-                  className="bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-l border-gold/30 w-[320px] sm:w-[360px] p-0 flex flex-col h-[100dvh] top-0 inset-y-0"
+                  className="bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-l border-gold/30 w-[320px] sm:w-[360px] p-0 flex flex-col"
+                  style={{ top: 'var(--header-height, 128px)', height: 'calc(100dvh - var(--header-height, 128px))' }}
                 >
                 {/* Menu Header - Bigger monogram */}
                 <div className="relative border-b border-gold/30 flex items-center gap-3 px-5 py-3 shrink-0">
