@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { Camera, RotateCcw, Loader2, SwitchCamera, Zap, Scan, CheckCircle, AlertCircle, Lightbulb, Focus } from "lucide-react";
 import { ScannedContact, generateContactId } from "@/utils/businessCardEncryption";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 import { Progress } from "@/components/ui/progress";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -25,6 +26,7 @@ const BusinessCardCamera = ({
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const detectionIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const { user } = useAuth();
   
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [isCameraReady, setIsCameraReady] = useState(false);
@@ -296,6 +298,22 @@ const BusinessCardCamera = ({
         onScanComplete(contacts);
         setCapturedImages([]);
         toast.success(`${contacts.length} business card(s) processed successfully!`);
+        
+        // Track scanned business cards in visitor_documents
+        try {
+          const sessionId = sessionStorage.getItem('visitor_session_id') || `session_${Date.now()}`;
+          for (const contact of contacts) {
+            await supabase.from('visitor_documents').insert({
+              session_id: sessionId,
+              document_type: 'business_card_scan',
+              document_name: `Business Card - ${contact.name || 'Unknown'}`,
+              action: 'scan',
+              user_id: user?.id || null,
+            } as any);
+          }
+        } catch (e) {
+          console.error('Error tracking scanned cards:', e);
+        }
       } else {
         setScanStatus('error');
         setStatusMessage('Could not extract contact information. Please try again.');

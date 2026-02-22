@@ -1584,14 +1584,14 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               />
               {/* Bridge zone between icons and panel */}
               <div 
-                className="absolute right-0 h-4 z-[9998] pointer-events-auto"
+                className="absolute right-0 h-1 z-[9998] pointer-events-auto"
                 style={{ top: '100%' }}
                 onPointerEnter={handleMegaMenuPanelEnter}
               />
               {/* Panel with real boundaries so pointer leave fires */}
               <div 
                 className="absolute right-0 z-[9998] pointer-events-auto"
-                style={{ top: 'calc(100% + 12px)', maxWidth: 'calc(100vw - 32px)' }}
+                style={{ top: 'calc(100% + 1px)', maxWidth: 'calc(100vw - 32px)' }}
                 onPointerEnter={handleMegaMenuPanelEnter}
                 onPointerLeave={handleMegaMenuLeave}
               >

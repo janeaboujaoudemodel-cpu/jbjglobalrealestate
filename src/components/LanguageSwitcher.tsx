@@ -65,7 +65,7 @@ const LanguageSwitcher = ({ variant = 'default' }: LanguageSwitcherProps) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent 
         align="end" 
-        sideOffset={16}
+        sideOffset={1}
         className="z-[9999] min-w-[280px] rounded-xl shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)] p-0 overflow-hidden border-2 border-gold/40"
         style={{
           background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)',

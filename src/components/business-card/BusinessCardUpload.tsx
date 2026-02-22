@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { Upload, Loader2, X, Image as ImageIcon, Zap } from "lucide-react";
 import { ScannedContact, generateContactId } from "@/utils/businessCardEncryption";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface BusinessCardUploadProps {
   onScanComplete: (contacts: ScannedContact[]) => void;
@@ -21,6 +22,7 @@ const BusinessCardUpload = ({
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
   const [isDragging, setIsDragging] = useState(false);
+  const { user } = useAuth();
 
   const handleFileSelect = useCallback((files: FileList | null) => {
     if (!files) return;
@@ -121,6 +123,22 @@ const BusinessCardUpload = ({
       if (contacts.length > 0) {
         onScanComplete(contacts);
         clearAll();
+        
+        // Track scanned business cards in visitor_documents
+        try {
+          const sessionId = sessionStorage.getItem('visitor_session_id') || `session_${Date.now()}`;
+          for (const contact of contacts) {
+            await supabase.from('visitor_documents').insert({
+              session_id: sessionId,
+              document_type: 'business_card_upload',
+              document_name: `Business Card - ${contact.name || 'Unknown'}`,
+              action: 'upload_scan',
+              user_id: user?.id || null,
+            } as any);
+          }
+        } catch (e) {
+          console.error('Error tracking uploaded cards:', e);
+        }
       } else {
         toast.error("Could not extract contact information from the cards");
       }
