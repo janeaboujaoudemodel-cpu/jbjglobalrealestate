@@ -128,7 +128,7 @@ const ListingNotificationBell = ({ onOpen, forceClose }: ListingNotificationBell
       {open && (
         <div
           className="absolute right-0 w-80 bg-white border-2 border-gold/40 rounded-xl shadow-xl shadow-gold/10 z-[10001] overflow-hidden"
-          style={{ top: 'calc(100% + 16px)' }}
+          style={{ top: 'calc(100% + 24px)' }}
         >
           {/* Header */}
           <div className="p-3 border-b border-gold/20 bg-gradient-to-r from-[#FDF9F3] to-[#F5EBD7] flex items-center justify-between">
