@@ -8,15 +8,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
 import { SEOHead } from "@/components/SEOHead";
 import { SectionDivider } from "@/components/ui/section-divider";
-import {
-  BrokerToolkitSupport,
-  BrokerToolkitEducation,
-  BrokerToolkitAcademy,
-  BrokerToolkitOperations,
-  BrokerToolkitCRM,
-  BrokerToolkitGrowth,
-  BrokerToolkitReferral,
-} from "@/components/broker-toolkit";
 import { 
   ArrowUpRight, 
   Sparkles, 
@@ -959,156 +950,39 @@ const AIHub = () => {
           );
         })}
 
-        {/* BROKER HUB PREVIEW - GREEN THEME (What you get as a registered broker) */}
+        {/* CTA - Join Broker Hub or Investor Hub */}
         <section className="py-8 md:py-10 bg-black">
           <div className="container mx-auto px-4">
-            {/* Active Green Layer - matching the card theme */}
-            <div className="bg-gradient-to-br from-gold/20 via-zinc-900/90 to-zinc-950/90 border border-gold/30 rounded-2xl p-6 md:p-10 shadow-lg">
-              <motion.div
-                className="text-center mb-12"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-              >
-                <Badge className="bg-gold/30 text-gold border-gold/50 mb-4">
-                  <Lock className="w-3 h-3 mr-1" />
-                  JBJ Broker Hub Exclusive
-                </Badge>
-                <h2 className="text-2xl md:text-3xl font-bold mb-2">
-                  <span className="text-white">Unlock More with </span>
-                  <span className="text-gold">JBJ Broker Hub</span>
-                </h2>
-                <p className="text-zinc-300 max-w-2xl mx-auto">
-                  Registered JBJ brokers get access to additional tools, operation support, creative suite, and marketing automation.
-                </p>
-              </motion.div>
-
-              {/* AI Tools Grid */}
-              <motion.div 
-                className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={staggerContainer}
-              >
-                {brokerOnlyTools.map((tool) => renderLockedCard(tool))}
-              </motion.div>
-
-              {/* SUPPORT & OPERATIONS SECTION */}
-              <motion.div
-                className="mt-10 mb-8"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-              >
-                <Badge className="bg-cyan-500/30 text-cyan-200 border-cyan-400/50 mb-4">
-                  <Headphones className="w-3 h-3 mr-1" />
-                  Support & Operations
-                </Badge>
-                <h3 className="text-xl font-bold mb-2">
-                  <span className="text-white">Human Personas & </span>
-                  <span className="text-cyan-300">Operations Support</span>
-                </h3>
-                <p className="text-cyan-100/70 max-w-2xl text-sm mb-6">
-                  These are human support roles (not AI tools) providing operational assistance, coordination, and compliance support.
-                </p>
-              </motion.div>
-
-              <motion.div 
-                className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12"
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={staggerContainer}
-              >
-                {supportOperationsTools.map((tool) => (
-                  <motion.div key={tool.id} variants={fadeInUp}>
-                    <div 
-                      className="block group h-full cursor-pointer" 
-                      onClick={() => navigate(user ? tool.link : "/join")}
-                    >
-                      <Card className="bg-cyan-900/80 border-2 border-cyan-500/50 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] shadow-[0_0_20px_rgba(6,182,212,0.3)] h-full relative overflow-hidden transition-all duration-300">
-                        <CardContent className="p-5 relative z-10">
-                          <div className="flex items-start gap-4">
-                            <div className="w-12 h-12 bg-cyan-500/30 border border-cyan-400/40 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                              <tool.icon className="w-6 h-6 text-cyan-300" />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-start gap-2 mb-1 flex-wrap">
-                                <h3 className="text-white font-semibold text-sm leading-tight">{tool.title}</h3>
-                                <Badge className="bg-cyan-500/30 text-cyan-200 border-cyan-400/50 text-[10px] px-1.5 py-0 flex-shrink-0">
-                                  SUPPORT
-                                </Badge>
-                              </div>
-                              <p className="text-cyan-100/80 text-sm line-clamp-2">{tool.description}</p>
-                            </div>
-                            <ArrowUpRight className="w-5 h-5 text-cyan-300 opacity-0 group-hover:opacity-100 group-hover:text-gold transition-all flex-shrink-0" />
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
-
-              {/* CTA to Join Broker Hub - with breathing room */}
-              <motion.div 
-                className="text-center mt-8"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-              >
-                <div className="inline-flex flex-col items-center gap-4 p-8 rounded-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 shadow-[0_0_40px_rgba(200,167,102,0.3)]">
-                  <h3 className="text-black text-xl font-bold">Want Access to All Tools?</h3>
-                  <p className="text-zinc-600 max-w-md">
-                    Join JBJ Broker Hub and unlock operation support, creative & marketing suite, HR management, and exclusive training.
-                  </p>
-                  <div className="flex flex-wrap justify-center gap-3">
-                    <button
-                      onClick={() => document.getElementById('broker-sections')?.scrollIntoView({ behavior: 'smooth' })}
-                        className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden"
-                        style={{
-                          background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
-                          border: '2px solid rgba(200,167,102,0.5)',
-                          boxShadow: `
-                            0 10px 30px rgba(200,167,102,0.4),
-                            0 6px 15px rgba(0,0,0,0.2),
-                            inset 0 2px 4px rgba(255,255,255,0.9),
-                            inset 0 -2px 4px rgba(200,167,102,0.2),
-                            0 0 20px rgba(200,167,102,0.3)
-                          `,
-                        }}
-                      >
-                        <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                        <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
-                        <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
-                        <span className="relative flex items-center justify-center gap-2">
-                          <Sparkles className="w-5 h-5 text-gold" />
-                          <span className="text-gold">Explore</span>
-                          <span className="text-black">Broker Hub Sections Below</span>
-                          <ArrowUpRight className="w-5 h-5 text-black" />
-                        </span>
-                      </button>
-                  </div>
-                </div>
-              </motion.div>
+            <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+              {/* Broker Hub CTA */}
+              <div className="bg-gradient-to-br from-fuchsia-900/30 to-purple-900/30 border border-fuchsia-500/20 rounded-2xl p-8 text-center">
+                <GraduationCap className="w-8 h-8 text-fuchsia-400 mx-auto mb-3" />
+                <h3 className="text-xl font-bold text-white mb-2">JBJ Broker Hub</h3>
+                <p className="text-zinc-400 text-sm mb-4">Training, education, books, certifications, listing portal, and CRM tools for brokers.</p>
+                <button 
+                  onClick={() => navigate('/broker-hub')}
+                  className="inline-flex items-center gap-2 px-6 py-3 text-sm font-bold rounded-xl bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white hover:opacity-90 transition-all"
+                >
+                  Go to Broker Hub
+                  <ArrowUpRight className="w-4 h-4" />
+                </button>
+              </div>
+              {/* Investor Hub CTA */}
+              <div className="bg-gradient-to-br from-emerald-900/30 to-teal-900/30 border border-emerald-500/20 rounded-2xl p-8 text-center">
+                <TrendingUp className="w-8 h-8 text-emerald-400 mx-auto mb-3" />
+                <h3 className="text-xl font-bold text-white mb-2">JBJ Investor Hub</h3>
+                <p className="text-zinc-400 text-sm mb-4">Portfolio, market intelligence, guides, books, and investment tools for investors.</p>
+                <button 
+                  onClick={() => navigate('/investor-hub')}
+                  className="inline-flex items-center gap-2 px-6 py-3 text-sm font-bold rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white hover:opacity-90 transition-all"
+                >
+                  Go to Investor Hub
+                  <ArrowUpRight className="w-4 h-4" />
+                </button>
+              </div>
             </div>
           </div>
         </section>
-
-        {/* Divider */}
-        <SectionDivider />
-
-        {/* BROKER SECTIONS - Education, Academy, Support, Operations, CRM, Growth, Referral */}
-        <div id="broker-sections">
-          <BrokerToolkitSupport />
-          <BrokerToolkitEducation />
-          <BrokerToolkitAcademy />
-          <BrokerToolkitOperations />
-          <BrokerToolkitCRM />
-          <BrokerToolkitGrowth />
-          <BrokerToolkitReferral />
-        </div>
 
         {/* Divider */}
         <SectionDivider />
