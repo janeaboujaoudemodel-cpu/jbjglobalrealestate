@@ -290,6 +290,7 @@ const Footer = () => {
     { label: "Intellectual Property", href: "/intellectual-property" },
     { label: "AML & KYC Policy", href: "/aml-kyc" },
     { label: "Accessibility", href: "/accessibility" },
+    { label: "Risk Disclosure", href: "/risk-disclosure" },
     { label: "Trust & Audit", href: "/trust-and-audit-center" },
   ];
 

@@ -92,18 +92,26 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
   const companyLinks = [
     { label: 'About JBJ', href: '/about', icon: Building2 },
     ...(isFounderVisible ? [{ label: 'Founder & Leadership', href: '/founder', icon: UserCircle }] : []),
+    { label: 'Company Profile', href: '/company-profile', icon: FileText },
     { label: 'Meet the Team', href: '/team', icon: Users },
     { label: 'Awards', href: '/awards', icon: Award },
+    { label: 'Philanthropy', href: '/philanthropy', icon: Globe },
+    { label: 'Press Kit', href: '/press-kit', icon: Newspaper },
     { label: 'Contact Us', href: '/contact', icon: Phone },
     { label: 'Careers', href: '/join', icon: Briefcase },
+    { label: 'Reviews', href: '/reviews', icon: Target },
   ];
 
-  // Block 8: Legal
+  // Block 8: Legal & Compliance
   const legalLinks = [
     { label: 'Terms of Service', href: '/terms', icon: FileText },
     { label: 'Privacy Policy', href: '/privacy', icon: Shield },
     { label: 'Cookie Policy', href: '/cookies', icon: FileText },
     { label: 'Disclaimers', href: '/disclaimers', icon: FileText },
+    { label: 'AML & KYC Policy', href: '/aml-kyc', icon: Shield },
+    { label: 'Accessibility', href: '/accessibility', icon: FileText },
+    { label: 'Intellectual Property', href: '/intellectual-property', icon: Shield },
+    { label: 'Risk Disclosure', href: '/risk-disclosure', icon: FileText },
     { label: 'Trust & Audit', href: '/trust-and-audit-center', icon: Shield },
   ];
 

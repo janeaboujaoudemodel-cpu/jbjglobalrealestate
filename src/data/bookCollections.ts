@@ -1,6 +1,6 @@
 import type { BookData } from '@/components/books/BookShelf';
 
-// Book cover imports
+// Book cover imports - Guides
 import investorEducationCover from '@/assets/books/investor-education-cover.jpg';
 import marketIntelligenceCover from '@/assets/books/market-intelligence-cover.jpg';
 import goldenVisaCover from '@/assets/books/golden-visa-cover.jpg';
@@ -9,14 +9,47 @@ import sellerGuideCover from '@/assets/books/seller-guide-cover.jpg';
 import landlordGuideCover from '@/assets/books/landlord-guide-cover.jpg';
 import rentGuideCover from '@/assets/books/rent-guide-cover.jpg';
 import tenantGuideCover from '@/assets/books/tenant-guide-cover.jpg';
+import guidesLibraryCover from '@/assets/books/guides-library-cover.jpg';
+
+// Book cover imports - Broker
 import brokerEducationCover from '@/assets/books/broker-education-cover.jpg';
 import brokerCertificationCover from '@/assets/books/broker-certification-cover.jpg';
 import brokerFaqCover from '@/assets/books/broker-faq-cover.jpg';
+
+// Book cover imports - FAQs
 import investorFaqCover from '@/assets/books/investor-faq-cover.jpg';
 import landlordFaqCover from '@/assets/books/landlord-faq-cover.jpg';
 import sellerFaqCover from '@/assets/books/seller-faq-cover.jpg';
 import buyerFaqCover from '@/assets/books/buyer-faq-cover.jpg';
 import tenantFaqCover from '@/assets/books/tenant-faq-cover.jpg';
+
+// Book cover imports - Legal
+import termsOfServiceCover from '@/assets/books/terms-of-service-cover.jpg';
+import privacyPolicyCover from '@/assets/books/privacy-policy-cover.jpg';
+import cookiePolicyCover from '@/assets/books/cookie-policy-cover.jpg';
+import disclaimersCover from '@/assets/books/disclaimers-cover.jpg';
+import trustComplianceCover from '@/assets/books/trust-compliance-cover.jpg';
+
+// Book cover imports - Company
+import companyProfileCover from '@/assets/books/company-profile-cover.jpg';
+
+// ─── Guides Library ───
+
+const guidesLibraryBook: BookData = {
+  title: 'Guides Library',
+  cover: guidesLibraryCover,
+  href: '/guides',
+  category: 'guide',
+  tableOfContents: [
+    { title: 'All Available Guides', duration: '5 min' },
+    { title: 'Buyer Guides & Resources', duration: '10 min' },
+    { title: 'Seller Guides & Resources', duration: '10 min' },
+    { title: 'Landlord Guides & Resources', duration: '10 min' },
+    { title: 'Tenant & Renter Resources', duration: '10 min' },
+    { title: 'Golden Visa & Immigration', duration: '15 min' },
+    { title: 'Market Intelligence', duration: '15 min' },
+  ],
+};
 
 // ─── Shared Books (used by both investor & broker) ───
 
@@ -312,9 +345,116 @@ const brokerFaqBook: BookData = {
   ],
 };
 
+// ─── Legal Books ───
+
+const termsOfServiceBook: BookData = {
+  title: 'Terms of Service',
+  cover: termsOfServiceCover,
+  href: '/terms',
+  category: 'guide',
+  tableOfContents: [
+    { title: 'Definitions & Interpretation', duration: '5 min' },
+    { title: 'Scope of Services', duration: '5 min' },
+    { title: 'Eligibility & User Responsibilities', duration: '10 min' },
+    { title: 'Property Listings & Information Accuracy', duration: '10 min' },
+    { title: 'Immigration & Golden Visa Disclaimer', duration: '5 min' },
+    { title: 'Third-Party Services', duration: '5 min' },
+    { title: 'Intellectual Property', duration: '5 min' },
+    { title: 'Limitation of Liability', duration: '10 min' },
+    { title: 'Indemnification & Privacy', duration: '5 min' },
+    { title: 'Governing Law (UAE Courts)', duration: '5 min' },
+  ],
+};
+
+const privacyPolicyBook: BookData = {
+  title: 'Privacy Policy',
+  cover: privacyPolicyCover,
+  href: '/privacy',
+  category: 'guide',
+  tableOfContents: [
+    { title: 'Information We Collect', duration: '5 min' },
+    { title: 'How We Use Your Information', duration: '10 min' },
+    { title: 'Data Sharing & Third Parties', duration: '10 min' },
+    { title: 'Data Security Measures', duration: '5 min' },
+    { title: 'Your Privacy Rights', duration: '10 min' },
+    { title: 'Cookie Usage & Tracking', duration: '5 min' },
+    { title: 'International Data Transfers', duration: '5 min' },
+    { title: 'Contact & Data Protection Officer', duration: '5 min' },
+  ],
+};
+
+const cookiePolicyBook: BookData = {
+  title: 'Cookie Policy',
+  cover: cookiePolicyCover,
+  href: '/cookies',
+  category: 'guide',
+  tableOfContents: [
+    { title: 'What Are Cookies', duration: '5 min' },
+    { title: 'Types of Cookies We Use', duration: '10 min' },
+    { title: 'Essential Cookies', duration: '5 min' },
+    { title: 'Performance & Analytics Cookies', duration: '5 min' },
+    { title: 'Functional Cookies', duration: '5 min' },
+    { title: 'Managing & Disabling Cookies', duration: '5 min' },
+    { title: 'Third-Party Cookies', duration: '5 min' },
+    { title: 'Changes to This Policy', duration: '5 min' },
+  ],
+};
+
+const disclaimersBook: BookData = {
+  title: 'Disclaimers',
+  cover: disclaimersCover,
+  href: '/disclaimers',
+  category: 'guide',
+  tableOfContents: [
+    { title: 'General Disclaimer', duration: '5 min' },
+    { title: 'Property Information Disclaimer', duration: '5 min' },
+    { title: 'Financial & Investment Disclaimers', duration: '10 min' },
+    { title: 'AI Tools & Technology Disclaimer', duration: '5 min' },
+    { title: 'Golden Visa & Immigration Disclaimer', duration: '5 min' },
+    { title: 'Third-Party Content Disclaimer', duration: '5 min' },
+    { title: 'Market Data & Analytics Disclaimer', duration: '5 min' },
+  ],
+};
+
+const trustComplianceBook: BookData = {
+  title: 'Trust & Compliance',
+  cover: trustComplianceCover,
+  href: '/trust-and-audit-center',
+  category: 'guide',
+  tableOfContents: [
+    { title: 'Our Commitment to Trust', duration: '5 min' },
+    { title: 'Regulatory Compliance (RERA/DLD)', duration: '10 min' },
+    { title: 'AML & KYC Policies', duration: '10 min' },
+    { title: 'Data Protection & Security', duration: '10 min' },
+    { title: 'Audit Trail & Transparency', duration: '5 min' },
+    { title: 'Complaint Resolution Process', duration: '5 min' },
+  ],
+};
+
+// ─── Company Profile (Brochure Style) ───
+
+const companyProfileBook: BookData = {
+  title: 'Company Profile',
+  cover: companyProfileCover,
+  href: '/company-profile',
+  category: 'report',
+  tableOfContents: [
+    { title: 'About JBJ Global Real Estate', duration: '5 min' },
+    { title: 'Our Vision & Mission', duration: '5 min' },
+    { title: 'Leadership Team', duration: '5 min' },
+    { title: 'Core Services', duration: '10 min' },
+    { title: 'Technology & Innovation', duration: '10 min' },
+    { title: 'Our Portfolio & Track Record', duration: '10 min' },
+    { title: 'Awards & Recognition', duration: '5 min' },
+    { title: 'Download Company Profile', duration: '2 min' },
+  ],
+};
+
 // ─── Collections ───
 
 export const INVESTOR_BOOKS: BookData[] = [
+  // Guides
+  guidesLibraryBook,
   investorEducationBook,
   marketIntelligenceBook,
   goldenVisaBook,
@@ -323,11 +463,14 @@ export const INVESTOR_BOOKS: BookData[] = [
   landlordGuideBook,
   rentGuideBook,
   tenantGuideBook,
+  // FAQs
   investorFaqBook,
   buyerFaqBook,
   sellerFaqBook,
   landlordFaqBook,
   tenantFaqBook,
+  // Company
+  companyProfileBook,
 ];
 
 export const BROKER_BOOKS: BookData[] = [
@@ -335,20 +478,34 @@ export const BROKER_BOOKS: BookData[] = [
   brokerTrainingBook,
   brokerCertificationBook,
   brokerFaqBook,
-  // Market
+  // Guides
+  guidesLibraryBook,
   marketIntelligenceBook,
   goldenVisaBook,
-  // All investor guides (broker needs to know these)
   investorEducationBook,
   buyerGuideBook,
   sellerGuideBook,
   landlordGuideBook,
   rentGuideBook,
   tenantGuideBook,
-  // All FAQ books
+  // FAQs
   investorFaqBook,
   buyerFaqBook,
   sellerFaqBook,
   landlordFaqBook,
   tenantFaqBook,
+  // Company
+  companyProfileBook,
+];
+
+export const LEGAL_BOOKS: BookData[] = [
+  termsOfServiceBook,
+  privacyPolicyBook,
+  cookiePolicyBook,
+  disclaimersBook,
+  trustComplianceBook,
+];
+
+export const COMPANY_BOOKS: BookData[] = [
+  companyProfileBook,
 ];
