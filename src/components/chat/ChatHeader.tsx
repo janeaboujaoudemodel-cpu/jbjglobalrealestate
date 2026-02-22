@@ -20,6 +20,7 @@ const ChatHeader = React.forwardRef<HTMLDivElement, ChatHeaderProps>(({ step, is
     switch (step) {
       case 'welcome_choice': return t('chat.howCanWeHelp', 'How can we help you?');
       case 'check_email': return t('chat.justNeedEmail', 'Just need your email');
+      case 'confirm_details': return t('chat.confirmYourDetails', 'Confirm your details');
       case 'collect_info': return t('chat.letsGetToKnow', "Let's get to know you");
       case 'chat_history': return t('chat.yourConversations', 'Your conversations');
       case 'select_service': return t('chat.whatCanWeHelp', "What can we help with?");

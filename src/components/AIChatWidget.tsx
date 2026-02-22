@@ -32,6 +32,7 @@ import ChatCVSubmission from './chat/ChatCVSubmission';
 import ChatCVConfirmation from './chat/ChatCVConfirmation';
 import ChatFeedback, { FeedbackType } from './chat/ChatFeedback';
 import ChatConversationalCollect from './chat/ChatConversationalCollect';
+import ChatConfirmDetails from './chat/ChatConfirmDetails';
 
 interface AIChatWidgetProps {
   isCollapsed: boolean;
@@ -102,26 +103,55 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
     fetchUserName();
   }, [user]);
 
-  // Restore session from sessionStorage on mount
+  // Restore session from localStorage on mount (persistent across sessions)
   useEffect(() => {
-    const savedStep = sessionStorage.getItem('jbj_chat_step');
-    const savedUserInfo = sessionStorage.getItem('jbj_chat_user');
-    if (savedStep) {
-      setStep(savedStep as ChatStep);
-    }
+    const savedStep = localStorage.getItem('jbj_chat_step');
+    const savedUserInfo = localStorage.getItem('jbj_chat_user');
+    
+    // Check if we have saved user data
     if (savedUserInfo) {
       try {
-        setUserInfo(JSON.parse(savedUserInfo));
+        const parsed = JSON.parse(savedUserInfo);
+        setUserInfo(parsed);
+        
+        // If user has a valid email, they're a returning user
+        if (parsed.email && parsed.email.trim()) {
+          setIsExistingUser(true);
+          // If the saved step is a data-entry step, skip to confirm_details
+          if (!savedStep || savedStep === 'check_email' || savedStep === 'conversational_collect' || savedStep === 'collect_info' || savedStep === 'welcome_choice') {
+            setStep('confirm_details');
+          } else {
+            setStep(savedStep as ChatStep);
+          }
+          return;
+        }
       } catch (e) {
         console.error('Failed to parse saved user info:', e);
       }
     }
-  }, []);
+    
+    // If logged-in user but no saved chat data, try to pre-fill from auth
+    if (user?.email) {
+      const metaName = user.user_metadata?.full_name || user.user_metadata?.name || '';
+      const nameParts = metaName.split(' ');
+      setUserInfo(prev => ({
+        ...prev,
+        email: user.email || '',
+        firstName: nameParts[0] || prev.firstName,
+        lastName: nameParts.slice(1).join(' ') || prev.lastName,
+      }));
+      // Don't skip to confirm_details yet - they haven't chatted before
+    }
+    
+    if (savedStep) {
+      setStep(savedStep as ChatStep);
+    }
+  }, [user]);
 
-  // Persist step and userInfo to sessionStorage
+  // Persist step and userInfo to localStorage
   useEffect(() => {
-    sessionStorage.setItem('jbj_chat_step', step);
-    sessionStorage.setItem('jbj_chat_user', JSON.stringify(userInfo));
+    localStorage.setItem('jbj_chat_step', step);
+    localStorage.setItem('jbj_chat_user', JSON.stringify(userInfo));
   }, [step, userInfo]);
 
   // Check email in database
@@ -621,7 +651,7 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
     setUserInfo(prev => ({ ...prev, [field]: value }));
   };
 
-  // Reset chat and clear session storage
+  // Reset chat and clear local storage
   const resetChat = () => {
     setStep('welcome_choice');
     setIsExistingUser(false);
@@ -632,9 +662,56 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
     setConversationId(null);
     setFormErrors({});
     setChatHistory([]);
-    // Clear session storage
-    sessionStorage.removeItem('jbj_chat_step');
-    sessionStorage.removeItem('jbj_chat_user');
+    // Clear local storage
+    localStorage.removeItem('jbj_chat_step');
+    localStorage.removeItem('jbj_chat_user');
+  };
+
+  // Handle confirm details update (with admin notification)
+  const handleUpdateDetails = async (updated: { name: string; email: string; phone: string }) => {
+    const oldDetails = { name: `${userInfo.firstName} ${userInfo.lastName}`.trim(), email: userInfo.email, phone: userInfo.phone };
+    
+    const nameParts = updated.name.split(' ');
+    const newUserInfo = {
+      ...userInfo,
+      firstName: nameParts[0] || '',
+      lastName: nameParts.slice(1).join(' ') || '',
+      email: updated.email.toLowerCase().trim(),
+      phone: updated.phone,
+    };
+    setUserInfo(newUserInfo);
+    
+    // Save to localStorage immediately
+    localStorage.setItem('jbj_chat_user', JSON.stringify(newUserInfo));
+    
+    // Update lead in backend (upsert)
+    try {
+      await supabase.functions.invoke('capture-lead', {
+        body: {
+          email: newUserInfo.email,
+          fullName: updated.name,
+          phone: updated.phone?.replace(/[\s\-\(\)]/g, '') || null,
+          source: 'chat_details_update',
+          pageSource: window.location.pathname,
+          contactType: 'client',
+        },
+      });
+      
+      // Log the change for admin notification
+      await supabase.from('jbj_analytics').insert({
+        tool_name: 'chat_support',
+        action_type: 'contact_details_updated',
+        user_email: updated.email,
+        metadata: {
+          old_details: oldDetails,
+          new_details: { name: updated.name, email: updated.email, phone: updated.phone },
+        },
+      });
+    } catch (err) {
+      console.warn('Failed to update details in backend:', err);
+    }
+    
+    toast.success('Your details have been updated!');
   };
 
   // Handle back navigation
@@ -643,8 +720,11 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
       case 'check_email':
         setStep('welcome_choice');
         break;
+      case 'confirm_details':
+        setStep('welcome_choice');
+        break;
       case 'shortcuts':
-        setStep('check_email');
+        setStep('welcome_choice');
         break;
       case 'cv_submission':
         setStep('shortcuts');
@@ -659,7 +739,7 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
         setStep('conversational_collect');
         break;
       case 'chat_history':
-        setStep('check_email');
+        setStep('shortcuts');
         break;
       case 'select_service':
         setStep(isExistingUser ? 'chat_history' : 'collect_info');
@@ -695,7 +775,25 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
         />
 
         {step === 'welcome_choice' && (
-          <ChatWelcome onStartChat={() => setStep('conversational_collect')} />
+          <ChatWelcome onStartChat={() => {
+            // If returning user with saved data, go to confirm_details
+            if (userInfo.email && userInfo.email.trim()) {
+              setIsExistingUser(true);
+              setStep('confirm_details');
+            } else {
+              setStep('conversational_collect');
+            }
+          }} />
+        )}
+
+        {step === 'confirm_details' && (
+          <ChatConfirmDetails
+            name={`${userInfo.firstName} ${userInfo.lastName}`.trim()}
+            email={userInfo.email}
+            phone={userInfo.phone}
+            onContinue={() => setStep('shortcuts')}
+            onUpdateDetails={handleUpdateDetails}
+          />
         )}
 
         {step === 'check_email' && (
