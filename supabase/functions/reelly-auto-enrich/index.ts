@@ -1,7 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import {
   corsHeaders, REELLY_API_BASE,
-  extractGalleryImages, extractVideos, extractDocuments, extractFloorPlans, extractAmenities, extractUnitTypes, extractAmenityImages
+  extractGalleryImages, extractDocuments, extractAmenities, extractAmenityImages
 } from "../_shared/reelly-types.ts";
 
 function json(status: number, body: unknown) {
@@ -25,11 +25,89 @@ function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-/**
- * Auto-batch enrichment: processes projects in small batches within a single invocation.
- * Designed to stay within edge function time limits (~25s safe window).
- * Stores progress so it can be called repeatedly to process all projects.
- */
+// ── Direct extraction from raw Reelly API response ──
+
+function extractPaymentBreakdown(raw: any): any[] | null {
+  const plans = raw?.payment_plans;
+  if (!Array.isArray(plans) || plans.length === 0) return null;
+  const steps = plans[0]?.steps;
+  if (!Array.isArray(steps) || steps.length === 0) return null;
+  return steps
+    .filter((s: any) => s.percentage > 0)
+    .map((s: any) => ({
+      milestone: s.name || s.stage_type || "Payment",
+      percentage: s.percentage,
+      stage_type: s.stage_type || null,
+    }));
+}
+
+function extractPaymentPlanText(raw: any): string | null {
+  const plans = raw?.payment_plans;
+  if (!Array.isArray(plans) || plans.length === 0) return null;
+  const steps = plans[0]?.steps;
+  if (!Array.isArray(steps) || steps.length === 0) {
+    return plans[0]?.name || null;
+  }
+  // Build shorthand like "10/50/40"
+  const pcts = steps.filter((s: any) => s.percentage > 0).map((s: any) => s.percentage);
+  if (pcts.length > 0) return pcts.join("/") + " Payment Plan";
+  return plans[0]?.name || null;
+}
+
+function extractLocationDistances(raw: any): any[] | null {
+  const points = raw?.project_map_points;
+  if (!Array.isArray(points) || points.length === 0) return null;
+  return points.map((p: any) => ({
+    label: p.map_point_name || p.name,
+    time: p.time ? `${p.time} min` : `${p.distance} km`,
+    distance_km: p.distance,
+  })).filter((d: any) => d.label);
+}
+
+function extractVideoUrls(raw: any): { video_url: string | null; video_urls: string[] } {
+  const reviews = raw?.video_reviews;
+  if (!Array.isArray(reviews) || reviews.length === 0) return { video_url: null, video_urls: [] };
+  const urls = reviews
+    .map((v: any) => v.url || v.video_url || v.link)
+    .filter(Boolean);
+  return { video_url: urls[0] || null, video_urls: urls };
+}
+
+function extractTypicalUnits(raw: any): any[] | null {
+  const units = raw?.typical_units;
+  if (!Array.isArray(units) || units.length === 0) return null;
+  return units.map((u: any) => ({
+    bedrooms: u.bedrooms,
+    from_size: u.from_size_sqft || u.from_size_m2,
+    to_size: u.to_size_sqft || u.to_size_m2,
+    size_unit: u.from_size_sqft ? "sqft" : "m2",
+    from_price: u.from_price_aed || u.from_price_usd,
+    to_price: u.to_price_aed || u.to_price_usd,
+    price_currency: u.from_price_aed ? "AED" : "USD",
+    layouts: Array.isArray(u.layout) ? u.layout.map((l: any) => ({
+      name: l.name,
+      size: l.size_sqft || l.size_m2,
+      image_url: l.image?.url || null,
+    })) : [],
+  }));
+}
+
+function extractFloorPlanTypes(raw: any): any[] | null {
+  const fps = raw?.floor_plans;
+  if (!Array.isArray(fps) || fps.length === 0) return null;
+  return fps.map((fp: any) => ({
+    name: fp.name || "Floor Plan",
+    file_url: fp.file,
+    file_type: fp.file_type || "floor_plan",
+    description: fp.description || null,
+  }));
+}
+
+function extractServiceCharge(raw: any): string | null {
+  if (raw?.service_charge) return String(raw.service_charge);
+  return null;
+}
+
 Deno.serve(async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
   if (req.method !== "POST") return json(405, { error: "Method not allowed" });
@@ -44,50 +122,96 @@ Deno.serve(async (req: Request): Promise<Response> => {
 
   const supabase = createClient(supabaseUrl, supabaseKey);
   const startTime = Date.now();
-  const MAX_RUNTIME_MS = 22_000; // Stay well within 25s limit
+  const MAX_RUNTIME_MS = 22_000;
 
   try {
     const body = await req.json().catch(() => ({}));
     const action = body.action || "run";
     const forceRefresh = body.force_refresh || false;
-    const batchSize = Math.min(body.batch_size || 8, 15);
+    const batchSize = Math.min(body.batch_size || 10, 15);
 
     // ── Stats ──
     if (action === "stats") {
       const { count: totalWithReelly } = await supabase
-        .from("projects")
-        .select("id", { count: "exact", head: true })
-        .eq("is_published", true)
-        .not("reelly_id", "is", null);
+        .from("projects").select("id", { count: "exact", head: true })
+        .eq("is_published", true).not("reelly_id", "is", null);
 
-      const { data: projectsWithDocs } = await supabase
-        .from("project_documents")
-        .select("project_id")
-        .limit(5000);
-      const uniqueWithDocs = new Set((projectsWithDocs || []).map((d: any) => d.project_id)).size;
+      const { count: enrichedCount } = await supabase
+        .from("projects").select("id", { count: "exact", head: true })
+        .eq("is_published", true).not("reelly_id", "is", null)
+        .not("reelly_raw_data", "is", null);
+
+      const { count: withPayment } = await supabase
+        .from("projects").select("id", { count: "exact", head: true })
+        .eq("is_published", true).not("reelly_id", "is", null)
+        .not("payment_breakdown", "is", null);
+
+      const { count: withPOI } = await supabase
+        .from("projects").select("id", { count: "exact", head: true })
+        .eq("is_published", true).not("reelly_id", "is", null)
+        .not("location_distances", "is", null);
 
       const { count: totalImages } = await supabase
-        .from("project_images")
-        .select("id", { count: "exact", head: true });
-
+        .from("project_images").select("id", { count: "exact", head: true });
       const { count: totalDocs } = await supabase
-        .from("project_documents")
-        .select("id", { count: "exact", head: true });
+        .from("project_documents").select("id", { count: "exact", head: true });
 
       return json(200, {
         success: true,
         total_projects: totalWithReelly || 0,
-        enriched: uniqueWithDocs,
-        remaining: (totalWithReelly || 0) - uniqueWithDocs,
+        enriched_with_raw_data: enrichedCount || 0,
+        remaining: (totalWithReelly || 0) - (enrichedCount || 0),
+        with_payment_plans: withPayment || 0,
+        with_poi: withPOI || 0,
         total_images: totalImages || 0,
         total_documents: totalDocs || 0,
       });
     }
 
-    // ── Get candidates ──
+    // ── Re-extract mode: extract from stored reelly_raw_data without API calls ──
+    if (action === "re-extract") {
+      const { data: rawProjects } = await supabase
+        .from("projects")
+        .select("id, name, reelly_raw_data, payment_plan, payment_breakdown, location_distances, video_url, video_urls, unit_types, floor_plan_types, service_charge, faqs, highlights, usp_bullets, description")
+        .eq("is_published", true)
+        .not("reelly_id", "is", null)
+        .not("reelly_raw_data", "is", null)
+        .limit(2000);
+
+      if (!rawProjects?.length) return json(200, { success: true, message: "No projects with raw data", processed: 0 });
+
+      let updated = 0;
+      for (const p of rawProjects) {
+        const raw = p.reelly_raw_data;
+        const updates: Record<string, any> = {};
+        
+        const ppBreakdown = extractPaymentBreakdown(raw);
+        if (ppBreakdown && !p.payment_breakdown) updates.payment_breakdown = ppBreakdown;
+        const ppText = extractPaymentPlanText(raw);
+        if (ppText && !p.payment_plan) updates.payment_plan = ppText;
+        const poi = extractLocationDistances(raw);
+        if (poi && !(p.location_distances as any[])?.length) updates.location_distances = poi;
+        const vids = extractVideoUrls(raw);
+        if (vids.video_url && !p.video_url) { updates.video_url = vids.video_url; updates.video_urls = vids.video_urls; }
+        const units = extractTypicalUnits(raw);
+        if (units) updates.unit_types = units;
+        const fps = extractFloorPlanTypes(raw);
+        if (fps) updates.floor_plan_types = fps;
+        const sc = extractServiceCharge(raw);
+        if (sc && !p.service_charge) updates.service_charge = sc;
+
+        if (Object.keys(updates).length > 0) {
+          await supabase.from("projects").update(updates).eq("id", p.id);
+          updated++;
+        }
+      }
+      return json(200, { success: true, mode: "re-extract", processed: rawProjects.length, updated });
+    }
+
+    // ── Get candidates (projects WITHOUT raw data stored) ──
     const { data: allProjects } = await supabase
       .from("projects")
-      .select("id, name, slug, reelly_id, amenities, amenity_images, usp_bullets, location_distances, description, cover_image_url, faqs, floor_plan_types, payment_plan, payment_breakdown, unit_types, video_url, highlights, service_charge, roi_estimate")
+      .select("id, name, slug, reelly_id, amenities, amenity_images, usp_bullets, location_distances, description, cover_image_url, faqs, floor_plan_types, payment_plan, payment_breakdown, unit_types, video_url, highlights, service_charge, roi_estimate, reelly_raw_data")
       .eq("is_published", true)
       .not("reelly_id", "is", null)
       .order("created_at", { ascending: true })
@@ -97,47 +221,23 @@ Deno.serve(async (req: Request): Promise<Response> => {
       return json(200, { success: true, message: "No projects found", processed: 0 });
     }
 
-    // Filter to only those needing enrichment
+    // Filter: projects without raw data stored (need API fetch)
     let candidates = allProjects;
     if (!forceRefresh) {
-      // Get all project IDs that already have images (means we fetched API data for them)
-      const { data: imgData } = await supabase.from("project_images").select("project_id").limit(10000);
-      const projectsWithImages = new Set((imgData || []).map((d: any) => d.project_id));
-      
-      const { data: docsData } = await supabase.from("project_documents").select("project_id").limit(5000);
-      const projectsWithDocs = new Set((docsData || []).map((d: any) => d.project_id));
-      
-      // A project is "done" if it has BOTH images and documents, OR if it has images and all key fields filled
-      candidates = allProjects.filter((p: any) => {
-        const hasImages = projectsWithImages.has(p.id);
-        const hasDocs = projectsWithDocs.has(p.id);
-        // If it has both images and docs, it's fully enriched
-        if (hasImages && hasDocs) return false;
-        // If it has images and all key fields, skip it (API just didn't have docs)
-        if (hasImages && p.amenities?.length && p.description) return false;
-        return true;
-      });
+      candidates = allProjects.filter((p: any) => !p.reelly_raw_data);
     }
 
     if (candidates.length === 0) {
-      return json(200, { success: true, message: "All projects fully enriched", processed: 0, remaining: 0 });
+      return json(200, { success: true, message: "All projects have raw data stored", processed: 0, remaining: 0 });
     }
 
-    console.log(`[auto-enrich] ${candidates.length} projects need enrichment. Processing up to ${batchSize} within time limit.`);
+    console.log(`[auto-enrich] ${candidates.length} projects need API fetch + enrichment. Processing up to ${batchSize}.`);
 
-    let processed = 0;
-    let imagesAdded = 0;
-    let docsAdded = 0;
-    let fieldsUpdated = 0;
-    let errors = 0;
+    let processed = 0, imagesAdded = 0, docsAdded = 0, fieldsUpdated = 0, errors = 0;
     const results: Array<{ name: string; status: string; images: number; docs: number; fields: number }> = [];
 
     for (const project of candidates) {
-      // Check time budget
-      if (Date.now() - startTime > MAX_RUNTIME_MS) {
-        console.log(`[auto-enrich] Time limit reached after ${processed} projects`);
-        break;
-      }
+      if (Date.now() - startTime > MAX_RUNTIME_MS) break;
       if (processed >= batchSize) break;
 
       try {
@@ -148,12 +248,20 @@ Deno.serve(async (req: Request): Promise<Response> => {
           continue;
         }
 
+        // Use shared extractors for gallery/docs/amenities
         const gallery = extractGalleryImages(reellyData);
         const documents = extractDocuments(reellyData);
-        const floorPlans = extractFloorPlans(reellyData);
         const amenities = extractAmenities(reellyData);
-        const unitTypes = extractUnitTypes(reellyData);
-        const videoUrl = extractVideos(reellyData).video_url;
+        const amenityImages = extractAmenityImages(reellyData);
+
+        // Use direct extractors for fields the shared lib missed
+        const ppBreakdown = extractPaymentBreakdown(reellyData);
+        const ppText = extractPaymentPlanText(reellyData);
+        const poi = extractLocationDistances(reellyData);
+        const vids = extractVideoUrls(reellyData);
+        const units = extractTypicalUnits(reellyData);
+        const fps = extractFloorPlanTypes(reellyData);
+        const sc = extractServiceCharge(reellyData);
 
         let pImages = 0, pDocs = 0, pFields = 0;
 
@@ -162,7 +270,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
           const { data: existing } = await supabase.from("project_images").select("image_url").eq("project_id", project.id);
           const existingUrls = new Set((existing || []).map((i: any) => i.image_url));
           const { count: existingCount } = await supabase.from("project_images").select("id", { count: "exact", head: true }).eq("project_id", project.id);
-          const newImages = gallery.filter(img => !existingUrls.has(img.url)).map((img, i) => ({
+          const newImages = gallery.filter((img: any) => !existingUrls.has(img.url)).map((img: any, i: number) => ({
             project_id: project.id, image_url: img.url, alt_text: img.alt_text, display_order: (existingCount || 0) + i, data_source: "auto_enrich",
           }));
           if (newImages.length > 0) {
@@ -175,55 +283,63 @@ Deno.serve(async (req: Request): Promise<Response> => {
         if (documents.length > 0) {
           const { data: existingDocs } = await supabase.from("project_documents").select("file_url").eq("project_id", project.id);
           const existingDocUrls = new Set((existingDocs || []).map((d: any) => d.file_url));
-          const newDocs = documents.filter(d => !existingDocUrls.has(d.url)).map((doc, i) => ({
+          const newDocs = documents.filter((d: any) => !existingDocUrls.has(d.url)).map((doc: any, i: number) => ({
             project_id: project.id, file_url: doc.url, document_type: doc.type || "brochure",
             file_name: doc.name || "Document", data_source: "auto_enrich", display_order: i,
           }));
-          if (newDocs.length > 0) {
-            for (const doc of newDocs) {
-              const { error: err } = await supabase.from("project_documents").insert(doc);
-              if (!err) pDocs++;
-            }
+          for (const doc of newDocs) {
+            const { error: err } = await supabase.from("project_documents").insert(doc);
+            if (!err) pDocs++;
           }
         }
 
-        // 3. Update project fields (non-destructive fill)
-        const updates: Record<string, any> = {};
+        // 3. Update project fields — STORE RAW DATA + extract all fields
+        const updates: Record<string, any> = {
+          reelly_raw_data: reellyData,
+          detail_fetched_at: new Date().toISOString(),
+        };
+
+        // Amenities
         if (amenities.length > 0 && !(project.amenities as any[])?.length) updates.amenities = amenities;
-        // Extract and store amenity images (real photos from Reelly)
-        const amenityImages = extractAmenityImages(reellyData);
         if (Object.keys(amenityImages).length > 0 && !project.amenity_images) updates.amenity_images = amenityImages;
-        // Always overwrite unit_types & floor_plan_types with latest Reelly data (old extracts may be incomplete)
-        if (unitTypes.length > 0) updates.unit_types = unitTypes;
-        if (floorPlans.length > 0) updates.floor_plan_types = floorPlans;
-        if (videoUrl && !project.video_url) updates.video_url = videoUrl;
-        if (!project.description && reellyData?.overview) updates.description = reellyData.overview;
-        if (reellyData?.faqs?.length > 0 && !(project.faqs as any[])?.length) {
-          updates.faqs = reellyData.faqs.filter((f: any) => f?.question && f?.answer);
+
+        // Payment
+        if (ppBreakdown && !project.payment_breakdown) updates.payment_breakdown = ppBreakdown;
+        if (ppText && !project.payment_plan) updates.payment_plan = ppText;
+
+        // Location/POI
+        if (poi && !(project.location_distances as any[])?.length) updates.location_distances = poi;
+
+        // Videos
+        if (vids.video_url && !project.video_url) {
+          updates.video_url = vids.video_url;
+          updates.video_urls = vids.video_urls;
         }
+
+        // Unit types & floor plans (always overwrite with latest)
+        if (units) updates.unit_types = units;
+        if (fps) updates.floor_plan_types = fps;
+
+        // Service charge
+        if (sc && !project.service_charge) updates.service_charge = sc;
+
+        // Description
+        if (!project.description && reellyData?.overview) updates.description = reellyData.overview;
+        if (!project.description && reellyData?.short_description) updates.description = reellyData.short_description;
+
+        // Highlights / USP
         if (reellyData?.highlights?.length > 0 && !(project.highlights as any[])?.length) {
           updates.highlights = reellyData.highlights.map((h: any) => typeof h === 'string' ? h : h?.text).filter(Boolean);
         }
         if (!(project.usp_bullets as any[])?.length && reellyData?.highlights?.length > 0) {
           updates.usp_bullets = reellyData.highlights.map((h: any) => typeof h === 'string' ? h : h?.text).filter(Boolean);
         }
-        if (!project.payment_plan && reellyData?.payment_plan) {
-          updates.payment_plan = reellyData.payment_plan.name || reellyData.payment_plan.description || JSON.stringify(reellyData.payment_plan);
-          if (reellyData.payment_plan.milestones?.length) updates.payment_breakdown = reellyData.payment_plan.milestones;
-        }
-        if (!(project.location_distances as any[])?.length) {
-          if (reellyData?.location_distances?.length) updates.location_distances = reellyData.location_distances;
-          else if (reellyData?.nearby_places?.length) {
-            updates.location_distances = reellyData.nearby_places.map((p: any) => ({ label: p.name, time: p.distance })).filter((d: any) => d.label && d.time);
-          }
-        }
-        if (reellyData?.service_charge != null && project.service_charge == null) updates.service_charge = reellyData.service_charge;
+
+        // ROI
         if (reellyData?.roi_estimate != null && project.roi_estimate == null) updates.roi_estimate = reellyData.roi_estimate;
 
-        if (Object.keys(updates).length > 0) {
-          const { error: err } = await supabase.from("projects").update(updates).eq("id", project.id);
-          if (!err) pFields = Object.keys(updates).length;
-        }
+        const { error: err } = await supabase.from("projects").update(updates).eq("id", project.id);
+        if (!err) pFields = Object.keys(updates).length - 2; // exclude raw_data + detail_fetched_at
 
         imagesAdded += pImages;
         docsAdded += pDocs;
@@ -241,7 +357,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
         console.error(`[auto-enrich] ✗ ${project.name}: ${msg}`);
       }
 
-      await sleep(800);
+      await sleep(300);
     }
 
     return json(200, {
