@@ -51,8 +51,9 @@ import SyncDashboard from "@/components/listing-admin/SyncDashboard";
 import { ReellyImportPanel } from "@/components/listing-admin/ReellyImportPanel";
 import { SourceCountsPanel } from "@/components/listing-admin/SourceCountsPanel";
 import { EmergencyMirrorPanel } from "@/components/listing-admin/EmergencyMirrorPanel";
+import { EnrichmentCenter } from "@/components/listing-admin/EnrichmentCenter";
 // OffPlanInquiryCTA removed from admin per user request
-import { RefreshCw, Globe, Check, AlertTriangle } from "lucide-react";
+import { RefreshCw, Globe, Check, AlertTriangle, Zap } from "lucide-react";
 
 interface ProjectDocument {
   id: string;
@@ -118,7 +119,7 @@ const ListingAdmin = () => {
     }
     
     // Handle syncTab URL param for Data Ops sub-tabs (updated tab names)
-    if (syncTab && ['reelly', 'approvals', 'updates', 'external', 'emergency'].includes(syncTab)) {
+    if (syncTab && ['reelly', 'approvals', 'updates', 'external', 'emergency', 'enrichment'].includes(syncTab)) {
       setDataOpsTab(syncTab);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -663,6 +664,13 @@ const ListingAdmin = () => {
                   External Sources
                 </TabsTrigger>
                 <TabsTrigger 
+                  value="enrichment"
+                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
+                >
+                  <Zap className="w-4 h-4 mr-2" />
+                  Enrichment Center
+                </TabsTrigger>
+                <TabsTrigger 
                   value="emergency"
                   className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
                 >
@@ -689,6 +697,9 @@ const ListingAdmin = () => {
               </TabsContent>
               <TabsContent value="external" className="mt-0">
                 <ExtractionJobsPanel />
+              </TabsContent>
+              <TabsContent value="enrichment" className="mt-0">
+                <EnrichmentCenter />
               </TabsContent>
               <TabsContent value="emergency" className="mt-0">
                 <EmergencyMirrorPanel />
