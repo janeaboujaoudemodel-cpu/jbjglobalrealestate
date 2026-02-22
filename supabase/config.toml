@@ -337,3 +337,6 @@ verify_jwt = false
 [functions.submit-ticket-survey]
 verify_jwt = false
 
+[functions.compute-user-scores]
+verify_jwt = false
+
