@@ -32,7 +32,7 @@ const ChatEmailCheck = ({ onEmailVerified, checkEmailInDatabase }: ChatEmailChec
   };
 
   return (
-    <div className="flex-1 p-5 flex flex-col items-center justify-center text-center">
+    <div className="flex-1 p-5 pb-8 flex flex-col items-center justify-center text-center overflow-y-auto">
       {/* Logo - centered */}
       <div className="mb-4">
         <img
