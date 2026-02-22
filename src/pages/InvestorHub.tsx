@@ -1,16 +1,21 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { useNavigate } from 'react-router-dom';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { usePointsLedger } from '@/hooks/usePointsLedger';
+import { supabase } from '@/integrations/supabase/client';
 import {
   BarChart3, Heart, Star, User, Calculator, TrendingUp,
   Home, BookOpen, FileText, Compass, ArrowRight, Sparkles,
   PieChart, Search, Shield, MapPin, Trophy, FolderOpen,
-  FileSignature, ArrowUpRight
+  FileSignature, ArrowUpRight, Palette, Wrench, Ticket,
+  FileUp, Award
 } from 'lucide-react';
+import { format } from 'date-fns';
 
 const quickCards = [
   { title: 'Dashboard', desc: 'Overview of your investments', icon: BarChart3, href: '/investor-dashboard', color: 'from-fuchsia-500 to-purple-600' },
@@ -18,7 +23,7 @@ const quickCards = [
   { title: 'Shortlisted', desc: 'Compare properties', icon: Star, href: '/compare', color: 'from-amber-500 to-orange-600' },
   { title: 'My Profile', desc: 'Account settings', icon: User, href: '/profile', color: 'from-blue-500 to-indigo-600' },
   { title: 'My Listings', desc: 'Manage your listings', icon: FileSignature, href: '/listing-portal', color: 'from-emerald-500 to-teal-600' },
-  { title: 'My Documents', desc: 'Uploaded documents', icon: FolderOpen, href: '/my-account', color: 'from-cyan-500 to-blue-600' },
+  { title: 'My Documents', desc: 'Uploaded documents', icon: FolderOpen, href: '/investor-documents', color: 'from-cyan-500 to-blue-600' },
 ];
 
 const aiTools = [
@@ -28,14 +33,6 @@ const aiTools = [
   { title: 'Home Finder', desc: 'AI quiz to find your match', icon: Home, href: '/quiz' },
   { title: 'Price Predictor', desc: 'Forecast market trends', icon: PieChart, href: '/ai-price-predictor' },
   { title: 'Neighborhood Insights', desc: 'Area intelligence', icon: MapPin, href: '/ai-neighborhood-insights' },
-];
-
-const resources = [
-  { title: 'Investor Education', desc: 'Learning resources', icon: BookOpen, href: '/investor-education' },
-  { title: 'Buyer Guide', desc: 'Step-by-step buying guide', icon: FileText, href: '/buyer-guide' },
-  { title: 'Listing Portal', desc: 'AI-powered property listing', icon: FileText, href: '/listing-portal' },
-  { title: 'Market Intelligence', desc: 'Reports & data', icon: Compass, href: '/market-intelligence' },
-  { title: 'Golden Visa Guide', desc: 'UAE residency through investment', icon: Shield, href: '/guides/golden-visa-uae' },
 ];
 
 const tierConfig = [
@@ -55,6 +52,30 @@ const InvestorHub = () => {
   const { user } = useAuth();
   const { summary, isLoading } = usePointsLedger();
   const tier = getTier(summary.totalPoints);
+  const [supportTickets, setSupportTickets] = useState<any[]>([]);
+  const [ticketsLoading, setTicketsLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user) { setTicketsLoading(false); return; }
+    const fetchTickets = async () => {
+      try {
+        const { data } = await supabase
+          .from('support_tickets')
+          .select('id, ticket_number, subject, status, priority, created_at')
+          .eq('email', user.email || '')
+          .order('created_at', { ascending: false })
+          .limit(10);
+        if (data) setSupportTickets(data);
+      } catch (err) {
+        console.error('Error fetching tickets:', err);
+      } finally {
+        setTicketsLoading(false);
+      }
+    };
+    fetchTickets();
+  }, [user]);
+
+  const openTickets = supportTickets.filter(t => t.status === 'open' || t.status === 'in_progress').length;
 
   return (
     <section className="relative w-full min-h-screen bg-black">
@@ -72,9 +93,26 @@ const InvestorHub = () => {
               JBJ Investor Hub
             </Badge>
             <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
-              Welcome{user?.email ? `, ${user.email.split('@')[0]}` : ''} 👋
+              Welcome{user?.email ? `, ${user.email.split('@')[0]}` : ''}
             </h1>
             <p className="text-zinc-400">Your central hub for property investment tools, insights, and portfolio management.</p>
+            {/* Favorites & Shortlist */}
+            <div className="flex items-center justify-center gap-3 mt-5">
+              <Link
+                to="/favorites"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-rose-500/15 to-pink-500/15 border border-rose-500/30 text-rose-400 hover:border-rose-400 hover:bg-rose-500/20 transition-all text-sm font-medium"
+              >
+                <Heart className="w-4 h-4" />
+                My Favorites
+              </Link>
+              <Link
+                to="/compare"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-amber-500/15 to-orange-500/15 border border-amber-500/30 text-amber-400 hover:border-amber-400 hover:bg-amber-500/20 transition-all text-sm font-medium"
+              >
+                <Star className="w-4 h-4" />
+                My Shortlist
+              </Link>
+            </div>
           </motion.div>
         </div>
       </div>
@@ -117,7 +155,7 @@ const InvestorHub = () => {
           </motion.div>
         )}
 
-        {/* Quick Access */}
+        {/* Quick Access - Premium */}
         <div>
           <h2 className="text-xl font-bold text-white mb-4">Quick Access</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -127,22 +165,48 @@ const InvestorHub = () => {
                 <motion.button
                   key={card.title}
                   onClick={() => navigate(card.href)}
-                  className="bg-zinc-900/60 border border-fuchsia-500/20 rounded-2xl p-5 text-left hover:border-fuchsia-500/50 transition-all group"
-                  whileHover={{ y: -2 }}
+                  className="relative bg-gradient-to-br from-zinc-900/80 to-zinc-950/90 border border-fuchsia-500/25 rounded-2xl p-5 text-left hover:border-fuchsia-400/60 transition-all group overflow-hidden"
+                  whileHover={{ y: -4, scale: 1.02 }}
                 >
-                  <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${card.color} flex items-center justify-center mb-3`}>
-                    <Icon className="w-5 h-5 text-white" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${card.color} flex items-center justify-center mb-3 shadow-lg`}>
+                    <Icon className="w-6 h-6 text-white" />
                   </div>
-                  <h3 className="text-white font-semibold text-sm mb-1">{card.title}</h3>
-                  <p className="text-zinc-500 text-xs">{card.desc}</p>
-                  <ArrowRight className="w-4 h-4 text-fuchsia-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <h3 className="text-white font-semibold text-sm mb-1 relative z-10">{card.title}</h3>
+                  <p className="text-zinc-500 text-xs relative z-10">{card.desc}</p>
+                  <ArrowRight className="w-4 h-4 text-fuchsia-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity relative z-10" />
                 </motion.button>
               );
             })}
           </div>
         </div>
 
-        {/* AI Tools */}
+        {/* Books, Guides & Market Intelligence */}
+        <div>
+          <h2 className="text-xl font-bold text-white mb-4">Books, Guides & Intelligence</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <button onClick={() => navigate('/investor-education')} className="bg-gradient-to-br from-amber-900/30 to-zinc-900/60 border border-amber-500/25 rounded-2xl p-6 text-left hover:border-amber-400/50 transition-all group">
+              <BookOpen className="w-8 h-8 text-amber-400 mb-3" />
+              <h3 className="text-white font-semibold mb-1">Investor Books & Guides</h3>
+              <p className="text-zinc-500 text-sm">Access educational books, buyer guides, and golden visa resources for smart investing.</p>
+              <ArrowRight className="w-4 h-4 text-amber-400 mt-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+            </button>
+            <button onClick={() => navigate('/market-intelligence')} className="bg-gradient-to-br from-cyan-900/30 to-zinc-900/60 border border-cyan-500/25 rounded-2xl p-6 text-left hover:border-cyan-400/50 transition-all group">
+              <Compass className="w-8 h-8 text-cyan-400 mb-3" />
+              <h3 className="text-white font-semibold mb-1">Market Intelligence</h3>
+              <p className="text-zinc-500 text-sm">In-depth reports, DLD data, project comparisons, and area analytics.</p>
+              <ArrowRight className="w-4 h-4 text-cyan-400 mt-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+            </button>
+            <button onClick={() => navigate('/guides/golden-visa-uae')} className="bg-gradient-to-br from-emerald-900/30 to-zinc-900/60 border border-emerald-500/25 rounded-2xl p-6 text-left hover:border-emerald-400/50 transition-all group">
+              <Shield className="w-8 h-8 text-emerald-400 mb-3" />
+              <h3 className="text-white font-semibold mb-1">Golden Visa Guide</h3>
+              <p className="text-zinc-500 text-sm">Complete guide to UAE residency through property investment.</p>
+              <ArrowRight className="w-4 h-4 text-emerald-400 mt-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+            </button>
+          </div>
+        </div>
+
+        {/* AI Investment Tools */}
         <div>
           <h2 className="text-xl font-bold text-white mb-4">AI Investment Tools</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -163,25 +227,80 @@ const InvestorHub = () => {
           </div>
         </div>
 
-        {/* Resources */}
-        <div>
-          <h2 className="text-xl font-bold text-white mb-4">Education & Guides</h2>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            {resources.map(res => {
-              const Icon = res.icon;
-              return (
-                <button
-                  key={res.title}
-                  onClick={() => navigate(res.href)}
-                  className="bg-zinc-900/60 border border-zinc-800 rounded-xl p-4 text-left hover:border-fuchsia-500/40 transition-all"
-                >
-                  <Icon className="w-5 h-5 text-fuchsia-400 mb-2" />
-                  <h3 className="text-white font-medium text-sm">{res.title}</h3>
-                  <p className="text-zinc-500 text-xs mt-1">{res.desc}</p>
-                </button>
-              );
-            })}
+        {/* Support Tickets */}
+        {user && (
+          <div>
+            <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+              <Ticket className="w-5 h-5 text-fuchsia-400" />
+              Support Tickets
+            </h2>
+            <Card className="bg-zinc-900/60 border border-zinc-800">
+              <CardContent className="p-6">
+                {supportTickets.length === 0 ? (
+                  <div className="text-center py-8">
+                    <Ticket className="w-8 h-8 text-zinc-600 mx-auto mb-3" />
+                    <p className="text-zinc-500">No support tickets</p>
+                    <Button variant="outline" className="mt-4 border-zinc-700 text-zinc-300" onClick={() => navigate('/support')}>
+                      Create a Ticket
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center mb-4">
+                      <p className="text-sm text-zinc-400">{openTickets} open ticket{openTickets !== 1 ? 's' : ''}</p>
+                      <Button variant="outline" size="sm" className="border-zinc-700 text-zinc-300" onClick={() => navigate('/support')}>
+                        New Ticket
+                      </Button>
+                    </div>
+                    {supportTickets.map((ticket: any) => (
+                      <div key={ticket.id} className="flex items-center justify-between p-3 bg-zinc-800/50 rounded-lg">
+                        <div>
+                          <p className="text-sm text-white">{ticket.subject}</p>
+                          <p className="text-xs text-zinc-500">#{ticket.ticket_number} · {format(new Date(ticket.created_at), 'MMM d')}</p>
+                        </div>
+                        <Badge className={
+                          ticket.status === 'open' ? 'bg-amber-500/20 text-amber-300 border-amber-500/30' :
+                          ticket.status === 'resolved' ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' :
+                          'bg-blue-500/20 text-blue-300 border-blue-500/30'
+                        }>
+                          {ticket.status}
+                        </Badge>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </div>
+        )}
+
+        {/* My Documents */}
+        <div>
+          <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+            <FolderOpen className="w-5 h-5 text-fuchsia-400" />
+            My Documents
+          </h2>
+          <Card className="bg-zinc-900/60 border border-fuchsia-500/20">
+            <CardContent className="p-6">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                {[
+                  { label: 'Emirates ID', icon: FileText },
+                  { label: 'Title Deeds', icon: FileText },
+                  { label: 'SPA / Contracts', icon: FileText },
+                  { label: 'Other Documents', icon: Award },
+                ].map(doc => (
+                  <div key={doc.label} className="p-4 bg-zinc-800/50 rounded-xl text-center border border-zinc-700/50 hover:border-fuchsia-500/30 transition-colors cursor-pointer">
+                    <doc.icon className="w-8 h-8 mx-auto text-fuchsia-400 mb-2" />
+                    <p className="text-xs text-zinc-400">{doc.label}</p>
+                  </div>
+                ))}
+              </div>
+              <Button variant="outline" className="w-full border-fuchsia-500/30 text-fuchsia-300 hover:bg-fuchsia-500/10" onClick={() => navigate('/investor-documents')}>
+                <FileUp className="w-4 h-4 mr-2" />
+                Upload & Manage Documents
+              </Button>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Explore All Tools CTA */}
@@ -189,10 +308,20 @@ const InvestorHub = () => {
           <Sparkles className="w-8 h-8 text-fuchsia-400 mx-auto mb-3" />
           <h3 className="text-xl font-bold text-white mb-2">Explore All AI Tools</h3>
           <p className="text-zinc-400 text-sm mb-4">Access 30+ free AI tools including creative suites, corporate tools, and productivity apps.</p>
-          <Button onClick={() => navigate('/ai-hub')} className="bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white">
-            Go to JBJ Tools Hub
-            <ArrowUpRight className="w-4 h-4 ml-2" />
-          </Button>
+          <div className="flex flex-wrap justify-center gap-3">
+            <Button onClick={() => navigate('/ai-hub')} className="bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white">
+              Go to JBJ Tools Hub
+              <ArrowUpRight className="w-4 h-4 ml-2" />
+            </Button>
+            <Button onClick={() => navigate('/ai-hub?suite=creative')} variant="outline" className="border-pink-500/30 text-pink-300 hover:bg-pink-500/10">
+              <Palette className="w-4 h-4 mr-2" />
+              Creative Suite
+            </Button>
+            <Button onClick={() => navigate('/ai-hub?suite=productivity')} variant="outline" className="border-teal-500/30 text-teal-300 hover:bg-teal-500/10">
+              <Wrench className="w-4 h-4 mr-2" />
+              Productivity Suite
+            </Button>
+          </div>
         </div>
 
         {/* CTA */}
