@@ -17,13 +17,31 @@ export function BrandedLoader({ text = "Loading...", className = "", variant = "
   
   return (
     <div className={`flex flex-col items-center justify-center min-h-screen gap-6 ${className}`}>
-      <div className="relative w-24 h-24 md:w-32 md:h-32">
+      <div className="relative w-32 h-32 md:w-44 md:h-44">
+        {/* Gold fill animation overlay */}
+        <div className="absolute inset-0 overflow-hidden rounded-full">
+          <img
+            src={logo}
+            alt="Loading"
+            className="w-full h-full object-contain opacity-20"
+            style={{ filter: "grayscale(1)" }}
+          />
+        </div>
         <img
           src={logo}
           alt="Loading"
-          className="w-full h-full object-contain animate-pulse"
-          style={{ filter: "drop-shadow(0 0 20px rgba(200,167,102,0.4))", mixBlendMode: "multiply" }}
+          className="relative w-full h-full object-contain"
+          style={{ 
+            filter: "drop-shadow(0 0 24px rgba(200,167,102,0.5))",
+            animation: "goldFill 2s ease-in-out infinite",
+          }}
         />
+        <style>{`
+          @keyframes goldFill {
+            0%, 100% { opacity: 0.6; filter: drop-shadow(0 0 16px rgba(200,167,102,0.3)); }
+            50% { opacity: 1; filter: drop-shadow(0 0 32px rgba(200,167,102,0.7)); }
+          }
+        `}</style>
       </div>
       <span
         className="text-gold/60 text-xs tracking-[0.25em] uppercase animate-pulse"

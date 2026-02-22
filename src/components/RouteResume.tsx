@@ -2,21 +2,19 @@ import { useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 /**
- * Helps the preview experience: some refreshes drop you back on "/".
- * We restore the last in-app route, and also resume the Interior Design AI flow when it has saved progress.
+ * Persists and restores the last visited route using localStorage.
+ * Only restores when the app genuinely loads on "/" but has a saved deep route.
  */
 export default function RouteResume() {
   const location = useLocation();
   const navigate = useNavigate();
   const hasCheckedRef = useRef(false);
-  const initialPathRef = useRef(location.pathname);
 
-  // Persist last visited route.
-  // Important: On initial load, if the preview incorrectly lands on "/", don't overwrite the previous route.
+  // Persist last visited route to localStorage (survives tab close).
   useEffect(() => {
     try {
       const route = `${location.pathname}${location.search}${location.hash}`;
-      const existing = sessionStorage.getItem("last-route");
+      const existing = localStorage.getItem("last-route");
 
       // Don't overwrite a real deep route with "/" on initial mount
       if (!hasCheckedRef.current && route === "/" && existing && existing !== "/") {
@@ -28,7 +26,7 @@ export default function RouteResume() {
         return;
       }
 
-      sessionStorage.setItem("last-route", route);
+      localStorage.setItem("last-route", route);
     } catch {
       // ignore
     }
@@ -39,6 +37,7 @@ export default function RouteResume() {
     if (hasCheckedRef.current) return;
     hasCheckedRef.current = true;
 
+    // If browser already loaded on the correct deep route, do nothing
     if (location.pathname !== "/") return;
 
     try {
@@ -65,8 +64,8 @@ export default function RouteResume() {
         return;
       }
 
-      // 2) Generic last-route resume
-      const lastRoute = sessionStorage.getItem("last-route") || "";
+      // 2) Generic last-route resume from localStorage
+      const lastRoute = localStorage.getItem("last-route") || "";
       if (lastRoute && lastRoute !== "/") {
         navigate(lastRoute, { replace: true });
       }

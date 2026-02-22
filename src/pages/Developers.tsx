@@ -25,8 +25,6 @@ import {
 import AdvancedFilterPanel from "@/components/filters/AdvancedFilterPanel";
 import { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 
-import developersHeroVideo from "@/assets/videos/burj-khalifa-day-to-night.mp4";
-
 // Developer tier classification for filtering
 const TIER_FILTERS = [
   { value: "all", label: "All Tiers" },
@@ -223,16 +221,7 @@ const Developers = () => {
         {/* Hero Section - Full-width Video */}
         <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
           {/* Video Background */}
-          <div className="absolute inset-0 bg-black">
-            <video
-              className="absolute inset-0 w-full h-full object-cover"
-              src={developersHeroVideo}
-              muted
-              playsInline
-              autoPlay
-              loop
-              preload="metadata"
-            />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#1a1510] via-[#0d0b08] to-black">
             <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
           </div>
           

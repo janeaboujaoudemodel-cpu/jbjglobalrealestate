@@ -1,7 +1,6 @@
 import React from 'react';
 import { Building2, Calendar, Check, Sparkles, Eye } from 'lucide-react';
 import menuOffplanProject from '@/assets/menu-offplan-project.jpg';
-import dubaiLandmarksVideo from '@/assets/videos/burj-khalifa-day-to-night.mp4';
 import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuCard, MegaMenuCTAButton } from '@/components/header/mega-menu-primitives';
 
 interface MegaMenuProjectsProps {
@@ -26,7 +25,6 @@ const MegaMenuProjects = React.forwardRef<HTMLDivElement, MegaMenuProjectsProps>
               to="/properties"
               onClick={onClose}
               image={menuOffplanProject}
-              video={dubaiLandmarksVideo}
               kicker="PROJECTS"
               title="Dubai Off-Plan Projects"
               description="Invest in Dubai's most promising developments"
