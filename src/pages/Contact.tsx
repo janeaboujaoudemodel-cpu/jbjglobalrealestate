@@ -203,7 +203,7 @@ const Contact = () => {
         window.location.href = `tel:${phoneNumber}`;
         break;
       case 'whatsapp':
-        window.open(getWhatsAppUrl(), '_blank');
+        window.location.href = getWhatsAppUrl();
         break;
       case 'save':
         // Create vCard

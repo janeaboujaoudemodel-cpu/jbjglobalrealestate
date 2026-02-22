@@ -138,10 +138,7 @@ const openWhatsApp = (phone: string) => {
   // Try native first, fallback to web
   window.location.href = whatsappUrl;
   
-  // Fallback after short delay if native doesn't work
-  setTimeout(() => {
-    window.open(`https://wa.me/${phone}?text=${message}`, "_blank");
-  }, 300);
+  // No fallback needed - window.location.href handles it
 };
 
 const DigitalCard = () => {
@@ -224,7 +221,7 @@ const DigitalCard = () => {
 
   const shareViaWhatsApp = () => {
     const message = encodeURIComponent(`${shareText}\n${cardUrl}`);
-    window.open(`https://wa.me/?text=${message}`, "_blank");
+    window.location.href = `https://wa.me/?text=${message}`;
   };
 
   const shareViaInstagram = () => {

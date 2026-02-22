@@ -509,3 +509,39 @@ export const LEGAL_BOOKS: BookData[] = [
 export const COMPANY_BOOKS: BookData[] = [
   companyProfileBook,
 ];
+
+// ─── News Book ───
+
+const newsBook: BookData = {
+  title: 'News & Updates',
+  cover: companyProfileCover, // reuse company cover for now
+  href: '/news',
+  category: 'report',
+  tableOfContents: [
+    { title: 'Latest Market News', duration: '5 min' },
+    { title: 'Regulatory Updates', duration: '5 min' },
+    { title: 'Company Announcements', duration: '5 min' },
+    { title: 'Industry Reports', duration: '10 min' },
+    { title: 'Developer News', duration: '5 min' },
+  ],
+};
+
+export const NEWS_BOOKS: BookData[] = [
+  newsBook,
+  companyProfileBook,
+];
+
+// ─── Individual Book Exports (for single-page use) ───
+
+export {
+  buyerGuideBook,
+  sellerGuideBook,
+  landlordGuideBook,
+  rentGuideBook,
+  tenantGuideBook,
+  goldenVisaBook,
+  companyProfileBook,
+  guidesLibraryBook,
+  investorEducationBook,
+  marketIntelligenceBook,
+};

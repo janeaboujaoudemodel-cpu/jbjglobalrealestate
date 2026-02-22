@@ -57,7 +57,7 @@ export function SecureLeadCard({ lead, brokerId, onContact }: SecureLeadCardProp
       const message = `Hi, I'm reaching out regarding a property inquiry from ${lead.first_name}. Lead ID: ${lead.id}`;
       const whatsappUrl = getWhatsAppUrl(message);
       
-      window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+      window.location.href = whatsappUrl;
       
       onContact?.();
       toast.success("Opening company WhatsApp...");

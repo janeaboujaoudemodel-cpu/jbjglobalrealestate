@@ -1177,7 +1177,7 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
                     onClick={() => {
                       const shareText = `Property Valuation: ${property.buildingName} - AED ${evaluation.estimatedValue.toLocaleString()}`;
                       const whatsappUrl = `https://wa.me/971565911000?text=${encodeURIComponent(shareText)}`;
-                      window.open(whatsappUrl, '_blank');
+                      window.location.href = whatsappUrl;
                     }}
                   >
                     Share with JJ Advisor

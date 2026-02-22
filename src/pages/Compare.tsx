@@ -681,7 +681,7 @@ const Compare = () => {
                       const projectSummary = projects.map(p => `- ${p.name} | ${p.developer?.name || 'N/A'} | ${p.location || 'Dubai'} | ${p.price_from ? `AED ${(p.price_from/1000000).toFixed(1)}M` : 'Price on request'}`).join('\n');
                       const shareText = `JBJ GLOBAL REAL ESTATE\nAI Property Comparison Report\n\n${projectSummary}\n\nPrepared by JBJ Global Real Estate\n+971 56 591 1000 | www.JBJ.ae\n\nView: ${window.location.href}`;
                       const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
-                      window.open(whatsappUrl, '_blank');
+                      window.location.href = whatsappUrl;
                     }}
                     className="relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-green-600 hover:bg-green-500 text-white group"
                   >

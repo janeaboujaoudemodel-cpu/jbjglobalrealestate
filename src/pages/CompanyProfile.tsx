@@ -31,6 +31,8 @@ import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import { toast } from "sonner";
 import { FounderContent } from "@/components/FounderContent";
 import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
+import { BookShelf } from "@/components/books/BookShelf";
+import { COMPANY_BOOKS } from "@/data/bookCollections";
 
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
 import founderCompanyProfile from "@/assets/founder-company-profile.jpg";
@@ -43,7 +45,7 @@ function SectionShell({
   className?: string;
 }) {
   return (
-    <section className={`py-12 md:py-16 bg-black ${className ?? ""}`.trim()}>
+    <section className={`py-8 md:py-10 bg-black ${className ?? ""}`.trim()}>
       <div className="jj-layer-2">
         <div className="w-full px-4 sm:px-6 lg:px-8">{children}</div>
       </div>
@@ -217,8 +219,8 @@ Clients working with JBJ can expect direct oversight, transparent communication,
   ]
 };
 
-// 3D Book Preview Component
-const BookPreview3D = ({ onClick, isGenerating }: { onClick: () => void; isGenerating: boolean }) => {
+// 3D Book Preview Component with Founder Photo & Dubai Skyline
+const BookPreview3D = ({ onClick, isGenerating, showFounder }: { onClick: () => void; isGenerating: boolean; showFounder: boolean }) => {
   return (
     <div className="relative group cursor-pointer" onClick={onClick}>
       {/* 3D Book Container */}
@@ -226,31 +228,44 @@ const BookPreview3D = ({ onClick, isGenerating }: { onClick: () => void; isGener
         {/* Book wrapper with 3D transform */}
         <div className="relative w-full h-full transform-style-3d transition-transform duration-500 group-hover:rotate-y-[-15deg]">
           {/* Front Cover */}
-          <div className="absolute inset-0 bg-gradient-to-br from-black via-zinc-900 to-black rounded-r-lg shadow-2xl border border-gold/30 overflow-hidden">
+          <div className="absolute inset-0 rounded-r-lg shadow-2xl border border-[#C8A766]/50 overflow-hidden">
+            {/* Background: Dubai Skyline */}
+            <img src={luxuryVillaHero} alt="Dubai Skyline" className="absolute inset-0 w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/80" />
+            
             {/* Gold accent top */}
-            <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-gold via-gold-light to-gold" />
+            <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-[#C8A766] via-[#E8DCC8] to-[#C8A766] z-20" />
             
             {/* JBJ Logo */}
-            <div className="absolute top-1/4 left-1/2 -translate-x-1/2 text-center">
-              <span className="text-5xl font-bold text-gold" style={{ fontFamily: "Poppins, sans-serif" }}>JBJ</span>
-              <p className="text-white text-xs tracking-[0.3em] mt-2">GLOBAL REAL ESTATE</p>
+            <div className="absolute top-4 left-1/2 -translate-x-1/2 text-center z-20">
+              <span className="text-3xl font-bold text-[#C8A766]" style={{ fontFamily: "Poppins, sans-serif" }}>JBJ</span>
+              <p className="text-white text-[8px] tracking-[0.3em]">GLOBAL REAL ESTATE</p>
             </div>
             
+            {/* Founder Photo (centered) */}
+            {showFounder && (
+              <div className="absolute top-14 left-1/2 -translate-x-1/2 z-10">
+                <div className="w-28 h-28 rounded-full overflow-hidden border-2 border-[#C8A766]/60 shadow-lg">
+                  <img src={founderCompanyProfile} alt="Founder" className="w-full h-full object-cover" />
+                </div>
+              </div>
+            )}
+            
             {/* Title */}
-            <div className="absolute bottom-1/4 left-1/2 -translate-x-1/2 text-center w-full px-4">
-              <div className="h-px w-3/4 mx-auto bg-gradient-to-r from-transparent via-gold to-transparent mb-4" />
-              <p className="text-gold text-lg font-semibold tracking-wider">COMPANY PROFILE</p>
-              <p className="text-white/60 text-xs mt-2">{new Date().getFullYear()} Edition</p>
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-center w-full px-4 z-20">
+              <div className="h-px w-3/4 mx-auto bg-gradient-to-r from-transparent via-[#C8A766] to-transparent mb-3" />
+              <p className="text-[#C8A766] text-sm font-bold tracking-[0.2em]">COMPANY PROFILE</p>
+              <p className="text-white/60 text-[10px] mt-1">{new Date().getFullYear()} Edition</p>
             </div>
             
             {/* Gold accent bottom */}
-            <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-gold via-gold-light to-gold" />
+            <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-[#C8A766] via-[#E8DCC8] to-[#C8A766] z-20" />
           </div>
           
           {/* Book Spine */}
           <div className="absolute top-0 left-0 w-4 h-full bg-gradient-to-r from-zinc-800 to-black transform origin-left rotate-y-[-90deg] translate-x-[-8px] rounded-l">
-            <div className="absolute top-0 left-0 right-0 h-2 bg-gold" />
-            <div className="absolute bottom-0 left-0 right-0 h-2 bg-gold" />
+            <div className="absolute top-0 left-0 right-0 h-2 bg-[#C8A766]" />
+            <div className="absolute bottom-0 left-0 right-0 h-2 bg-[#C8A766]" />
           </div>
           
           {/* Pages peek */}
@@ -268,10 +283,10 @@ const BookPreview3D = ({ onClick, isGenerating }: { onClick: () => void; isGener
       <div className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
         <div className="text-center">
           {isGenerating ? (
-            <div className="w-12 h-12 border-4 border-gold/30 border-t-gold rounded-full animate-spin mx-auto" />
+            <div className="w-12 h-12 border-4 border-[#C8A766]/30 border-t-[#C8A766] rounded-full animate-spin mx-auto" />
           ) : (
             <>
-              <Download className="w-12 h-12 text-gold mx-auto mb-2" />
+              <Download className="w-12 h-12 text-[#C8A766] mx-auto mb-2" />
               <p className="text-white font-semibold">Download PDF</p>
             </>
           )}
@@ -393,6 +408,56 @@ const CompanyProfile = () => {
           </motion.div>
         </motion.div>
       </section>
+
+      {/* Table of Contents */}
+      <SectionShell>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="max-w-4xl mx-auto"
+        >
+          <div className="text-center mb-8">
+            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Contents</span>
+            <h2 className="text-black text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Table of Contents
+            </h2>
+          </div>
+          <div className="jj-card-inner">
+            <div className="space-y-1">
+              {[
+                { title: 'Executive Summary', anchor: 'executive-summary' },
+                { title: 'Brand Story', anchor: 'brand-story' },
+                { title: 'Vision, Mission & Values', anchor: 'vision-mission' },
+                { title: 'Core Services', anchor: 'services' },
+                { title: 'Our Process', anchor: 'process' },
+                { title: 'What Sets Us Apart', anchor: 'differentiators' },
+                { title: 'Areas of Operation', anchor: 'areas' },
+                { title: 'Client Experience', anchor: 'client-experience' },
+                { title: 'Trust & Compliance', anchor: 'trust' },
+                { title: 'Founder & Leadership', anchor: 'founder' },
+                { title: 'Company Snapshot', anchor: 'snapshot' },
+                { title: 'Download Company Profile', anchor: 'download' },
+              ].map((item, index) => (
+                <a
+                  key={index}
+                  href={`#${item.anchor}`}
+                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#C8A766]/10 transition-colors group"
+                >
+                  <span className="w-8 h-8 rounded-lg bg-[#C8A766]/10 border border-[#C8A766]/20 flex items-center justify-center text-[#C8A766] text-sm font-medium flex-shrink-0">
+                    {index + 1}
+                  </span>
+                  <span className="text-black/80 text-sm flex-1 group-hover:text-[#C8A766] transition-colors">{item.title}</span>
+                  <ChevronRight className="w-4 h-4 text-black/30 group-hover:text-[#C8A766] transition-colors flex-shrink-0" />
+                </a>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      </SectionShell>
+
+      {/* Gold Divider */}
+      <div className="h-px bg-gradient-to-r from-transparent via-[#C8A766]/40 to-transparent" />
 
       {/* 2. Executive Summary */}
       <SectionShell>
@@ -892,7 +957,7 @@ const CompanyProfile = () => {
 
           <div className="jj-card-inner py-12">
             {/* 3D Book Preview */}
-            <BookPreview3D onClick={generatePDF} isGenerating={isGenerating} />
+            <BookPreview3D onClick={generatePDF} isGenerating={isGenerating} showFounder={isFounderVisible} />
 
             <div className="mt-8 flex flex-col items-center gap-4">
               <p className="text-black/60 text-sm">
@@ -920,6 +985,11 @@ const CompanyProfile = () => {
             </div>
           </div>
         </motion.div>
+      </SectionShell>
+
+      {/* BookShelf Section */}
+      <SectionShell>
+        <BookShelf books={COMPANY_BOOKS} title="Company Publications" />
       </SectionShell>
 
       {/* Mobile Sticky Actions */}

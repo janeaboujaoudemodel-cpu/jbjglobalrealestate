@@ -500,7 +500,7 @@ const VideoMeeting = () => {
 
   const shareViaWhatsApp = () => {
     const text = encodeURIComponent(generateInviteText());
-    window.open(`https://wa.me/?text=${text}`, '_blank');
+    window.location.href = `https://wa.me/?text=${text}`;
     setShowShareDialog(false);
   };
 
@@ -1459,7 +1459,7 @@ const VideoMeeting = () => {
               </Button>
               <Button 
                 variant="outline" 
-                onClick={() => window.open('https://wa.me/971565911000?text=I need help with JBJ Video Meet', '_blank')}
+                onClick={() => window.location.href = 'https://wa.me/971565911000?text=I%20need%20help%20with%20JBJ%20Video%20Meet'}
               >
                 WhatsApp
               </Button>
