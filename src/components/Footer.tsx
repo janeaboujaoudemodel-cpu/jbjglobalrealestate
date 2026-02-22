@@ -216,6 +216,8 @@ const Footer = () => {
     { label: "Cookie Policy", href: "/cookies" },
     { label: "Disclaimers", href: "/disclaimers" },
     { label: "Intellectual Property", href: "/intellectual-property" },
+    { label: "AML & KYC Policy", href: "/aml-kyc" },
+    { label: "Accessibility", href: "/accessibility" },
     { label: "Trust & Audit", href: "/trust-and-audit-center" },
   ];
 

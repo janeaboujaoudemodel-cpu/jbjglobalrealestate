@@ -90,6 +90,8 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
     { label: 'Cookie Policy', href: '/cookies', icon: FileText },
     { label: 'Disclaimers', href: '/disclaimers', icon: FileText },
     { label: 'Intellectual Property', href: '/intellectual-property', icon: Shield },
+    { label: 'AML & KYC Policy', href: '/aml-kyc', icon: Scale },
+    { label: 'Accessibility', href: '/accessibility', icon: Users },
     { label: 'Trust & Audit Center', href: '/trust-and-audit-center', icon: Shield },
   ];
 
