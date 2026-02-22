@@ -195,7 +195,8 @@ export const ConsultationRequestForm = ({
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className={`bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-2xl p-6 md:p-8 shadow-[0_8px_30px_rgba(200,167,102,0.35)] max-w-2xl mx-auto ${className}`}
+      className={`bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-[3px] border-gold rounded-2xl p-6 md:p-8 shadow-[0_12px_40px_rgba(200,167,102,0.4),0_4px_6px_rgba(0,0,0,0.1)] max-w-3xl mx-auto ${className}`}
+      style={{ transform: 'perspective(1200px) rotateX(1deg)' }}
     >
       {/* Header */}
       <div className="text-center mb-6">

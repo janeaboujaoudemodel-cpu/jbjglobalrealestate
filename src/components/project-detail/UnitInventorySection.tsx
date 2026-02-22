@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useCurrency } from "@/hooks/useCurrency";
+import { useAreaUnit } from "@/hooks/useAreaUnit";
 
 export interface UnitType {
   type: string; // e.g., "Studio", "1BR", "2BR", "3BR", "Penthouse"
@@ -35,6 +36,7 @@ export default function UnitInventorySection({
   projectName,
 }: UnitInventorySectionProps) {
   const { formatPrice: formatPriceUtil } = useCurrency();
+  const { formatSize, convertSize, unitLabel } = useAreaUnit();
   // Calculate overall availability
   const overallAvailability = useMemo(() => {
     if (typeof availableUnits === "number" && typeof totalUnits === "number" && totalUnits > 0) {
@@ -128,8 +130,8 @@ export default function UnitInventorySection({
                 <Maximize className="w-4 h-4 text-muted-foreground" />
                 <span className="text-sm text-muted-foreground">
                   {unit.size_from === unit.size_to 
-                    ? `${unit.size_from?.toLocaleString()} sqft`
-                    : `${unit.size_from?.toLocaleString() || '—'} - ${unit.size_to?.toLocaleString() || '—'} sqft`
+                    ? formatSize(unit.size_from || 0)
+                    : `${unit.size_from ? convertSize(unit.size_from).toLocaleString() : '—'} - ${unit.size_to ? formatSize(unit.size_to) : '—'}`
                   }
                 </span>
               </div>

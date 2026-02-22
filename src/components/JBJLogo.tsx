@@ -32,9 +32,7 @@ export const JBJLogo = ({
 }: JBJLogoProps) => {
   const config = sizeConfig[size];
   
-  const logoSrc = variant === 'light' 
-    ? jbjMonogramTransparent 
-    : variant === 'nobuffer' 
+  const logoSrc = variant === 'nobuffer' || variant === 'light'
       ? jbjMonogramNobuffer 
       : jbjMonogramDark;
   

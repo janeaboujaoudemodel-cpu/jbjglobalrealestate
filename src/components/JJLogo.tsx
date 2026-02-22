@@ -3,7 +3,7 @@
 // Kept for backward compatibility only
 
 import jbjMonogramDark from "@/assets/jbj-monogram-dark.png";
-import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
+import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
 
 interface JJLogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'footer';
@@ -28,7 +28,7 @@ export const JJLogo = ({ size = 'md', showText = true, className = '' }: JJLogoP
     <div className={`flex flex-col items-center ${className}`}>
       {/* JBJ Monogram */}
       <img 
-        src={isFooter ? jbjMonogramTransparent : jbjMonogramDark} 
+        src={isFooter ? jbjMonogramNobuffer : jbjMonogramDark} 
         alt="JBJ GLOBAL REAL ESTATE"
         width={config.width}
         height={config.height}

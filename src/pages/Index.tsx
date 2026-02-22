@@ -144,7 +144,7 @@ const Index = () => {
           animate="visible"
           variants={staggerContainer}
         >
-          <div className="max-w-4xl pt-56 sm:pt-40 md:pt-48 lg:pt-56">
+          <div className="max-w-4xl pt-72 sm:pt-60 md:pt-64 lg:pt-72">
             {/* Buy · Sell · Rent - Smaller headline */}
             <motion.h1 
               variants={fadeInUp} 

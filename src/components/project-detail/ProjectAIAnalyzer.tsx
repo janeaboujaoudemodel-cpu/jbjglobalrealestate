@@ -307,7 +307,7 @@ export const ProjectAIAnalyzer = ({
                   <p className="text-zinc-400 text-sm italic">Area overview data not available.</p>
                 )}
               </div>
-              <div className="bg-black rounded-2xl p-6 shadow-lg flex flex-col items-center justify-center text-center">
+              <div className="bg-gradient-to-br from-[#1a1a1a] via-[#2a2520] to-[#1a1815] rounded-2xl p-6 shadow-lg border border-gold/20 flex flex-col items-center justify-center text-center">
                 <Star className="w-8 h-8 text-gold mb-2" />
                 {ratingScore !== null ? (
                   <>
@@ -437,13 +437,13 @@ export const ProjectAIAnalyzer = ({
                   <>
                     <div className="grid grid-cols-2 gap-3 mb-4">
                       {rentalYield !== null && (
-                        <div className="bg-black rounded-xl p-4 text-center">
+                        <div className="bg-gradient-to-br from-[#1a1a1a] via-[#2a2520] to-[#1a1815] rounded-xl p-4 text-center border border-gold/20">
                           <div className="text-2xl font-bold text-gold">{rentalYield}%</div>
                           <div className="text-gold/60 text-[11px] mt-1 font-medium">Rental Yield</div>
                         </div>
                       )}
                       {appreciation !== null && (
-                        <div className="bg-black rounded-xl p-4 text-center">
+                        <div className="bg-gradient-to-br from-[#1a1a1a] via-[#2a2520] to-[#1a1815] rounded-xl p-4 text-center border border-gold/20">
                           <div className="text-2xl font-bold text-gold">{appreciation}%</div>
                           <div className="text-gold/60 text-[11px] mt-1 font-medium">Capital Growth</div>
                         </div>

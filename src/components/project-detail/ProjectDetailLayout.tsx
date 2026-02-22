@@ -67,6 +67,7 @@ import { useLeadCapture } from "@/hooks/useLeadCapture";
 import { SafeImage } from "@/components/SafeImage";
 import { filterValidImages, getFirstValidImageUrl, getHighResImageUrl } from "@/lib/imageUtils";
 import { useCurrency } from "@/hooks/useCurrency";
+import { useAreaUnit } from "@/hooks/useAreaUnit";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
 import { formatDisplayDate } from "@/utils/formatDate";
 import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUtils";
@@ -199,6 +200,7 @@ export default function ProjectDetailLayout({
   showFooter = true,
 }: ProjectDetailLayoutProps) {
   const { formatPrice: formatPriceUtil } = useCurrency();
+  const { formatSize, convertSize, unitLabel } = useAreaUnit();
   const [activeTab, setActiveTab] = useState("details");
   const [leadCaptureOpen, setLeadCaptureOpen] = useState(false);
   const [captureDocType, setCaptureDocType] = useState<"brochure" | "floor_plan" | "payment_plan" | "images">("brochure");
@@ -268,7 +270,7 @@ export default function ProjectDetailLayout({
           }
         }
       },
-      { rootMargin: '-30% 0px -60% 0px', threshold: 0 }
+      { rootMargin: '-20% 0px -70% 0px', threshold: 0 }
     );
     entries.forEach(([, ref]) => { if (ref.current) observer.observe(ref.current); });
     return () => observer.disconnect();
@@ -473,8 +475,8 @@ export default function ProjectDetailLayout({
     const minSize = Math.min(...sizes);
     const maxSize = Math.max(...sizes);
     
-    if (minSize === maxSize) return `${minSize.toLocaleString()} sqft`;
-    return `${minSize.toLocaleString()} - ${maxSize.toLocaleString()} sqft`;
+    if (minSize === maxSize) return formatSize(minSize);
+    return `${formatSize(minSize).split(' ')[0]} - ${formatSize(maxSize)}`;
   };
 
   // Format bedrooms text - prefer bedroom_types array if available
@@ -493,9 +495,9 @@ export default function ProjectDetailLayout({
   // Format size text
   const sizeText = useMemo(() => {
     if (!project.size_min) return null;
-    if (project.size_min === project.size_max) return `${project.size_min.toLocaleString()} sqft`;
-    return `${project.size_min.toLocaleString()} - ${project.size_max?.toLocaleString()} sqft`;
-  }, [project.size_min, project.size_max]);
+    if (project.size_min === project.size_max) return formatSize(project.size_min);
+    return `${convertSize(project.size_min).toLocaleString()} - ${formatSize(project.size_max || 0)}`;
+  }, [project.size_min, project.size_max, formatSize, convertSize]);
 
   return (
     <>

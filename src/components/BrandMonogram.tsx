@@ -39,9 +39,8 @@ export function BrandMonogram({
   const cfg = sizeConfig[size];
   const wordmarkColor = variant === "light" ? "text-foreground" : "text-white";
 
-  // Use transparent monogram (black J letters, no black box behind B) on light backgrounds
-  // Use nobuffer version on dark backgrounds (clean transparent)
-  const logoSrc = variant === "light" ? jbjMonogramTransparent : jbjMonogramNobuffer;
+  // Always use nobuffer version (no background behind B)
+  const logoSrc = jbjMonogramNobuffer;
 
   return (
     <div
@@ -101,7 +100,7 @@ export function BrandMonogramHeader({ className = "" }: { className?: string }) 
       style={{ fontFamily: "Poppins, sans-serif" }}
     >
       <img 
-        src={jbjMonogramTransparent}
+        src={jbjMonogramNobuffer}
         alt="JBJ"
         width={48}
         height={48}
