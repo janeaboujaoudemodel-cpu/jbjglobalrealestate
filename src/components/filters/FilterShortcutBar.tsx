@@ -217,7 +217,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
     arr.includes(val) ? arr.filter(v => v !== val) : [...arr, val];
 
   // Pill styling
-  const pillBase = "inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-semibold transition-all cursor-pointer whitespace-nowrap select-none overflow-hidden text-ellipsis max-w-[160px]";
+  const pillBase = "inline-flex items-center justify-center gap-1.5 px-3.5 md:px-5 py-2 md:py-2.5 rounded-full text-xs md:text-[13px] font-semibold transition-all cursor-pointer whitespace-nowrap select-none overflow-hidden text-ellipsis max-w-[200px] md:flex-1";
   const pillInactive = isDark
     ? "bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20"
     : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 text-black hover:border-gold/60";
@@ -294,7 +294,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         {/* Row 1: Connected toolbar - Search + Sort Pills + Map + Saved + Currency + Filter + Mode */}
         <div className="relative">
           <div ref={row1Ref} className="flex items-center w-full overflow-x-auto scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-x' }}>
-            <div className="flex items-center min-w-max border border-gold/30 rounded-lg overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+            <div className="flex items-center w-full min-w-max border border-gold/30 rounded-lg overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
               {/* Search slot or built-in search */}
               {searchSlot ? (
                 <div className="min-w-0 max-w-[220px] border-r border-gold/20">
@@ -350,6 +350,8 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               </button>
               {/* Mode Investor - compact, no stretch */}
               <ConnectedModeButton />
+              {/* Spacer to fill remaining width on desktop */}
+              <div className="flex-1 min-w-0" />
             </div>
           </div>
           {/* Scroll indicator arrow for Row 1 */}
@@ -367,7 +369,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
 
         {/* Row 2: Filter popovers + Sort pills */}
         <div className="relative">
-          <div ref={row2Ref} className="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-1 -mb-1" style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-x' }}>
+          <div ref={row2Ref} className="flex items-center gap-2 md:gap-3 overflow-x-auto scrollbar-hide pb-1 -mb-1 w-full" style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-x' }}>
         {/* Price */}
         <Popover>
           <PopoverTrigger asChild>
