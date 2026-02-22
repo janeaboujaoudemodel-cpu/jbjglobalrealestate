@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useActivityStats } from "@/hooks/useActivityStats";
 import { SEOHead } from "@/components/SEOHead";
-import { Loader2, ArrowLeft, Activity, Calendar, Flame, TrendingUp, Clock, Smartphone, Monitor, Tablet, Zap, BarChart3 } from "lucide-react";
+import { Loader2, ArrowLeft, Activity, Calendar, Flame, TrendingUp, Clock, Smartphone, Monitor, Tablet, Zap, BarChart3, Crown, Shield, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -166,7 +166,45 @@ const MyDashboardActivity = () => {
               </Card>
             </div>
 
-            {/* Activity Chart */}
+            {/* VIP Tier & Scores */}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
+              <Card className="border-gold/20 bg-gradient-to-r from-gold/5 via-white/5 to-gold/5 mb-8">
+                <CardContent className="p-5">
+                  <div className="flex flex-col md:flex-row items-center gap-6">
+                    {/* VIP Badge */}
+                    <div className="flex items-center gap-3">
+                      <div className="w-14 h-14 rounded-full bg-gradient-to-br from-gold/30 to-gold/10 border-2 border-gold/50 flex items-center justify-center">
+                        <Crown className="w-7 h-7 text-gold" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-zinc-500 uppercase tracking-wider">VIP Status</p>
+                        <p className="text-xl font-bold text-gold">{stats.vipTier}</p>
+                      </div>
+                    </div>
+
+                    {/* Score bars */}
+                    <div className="flex-1 grid grid-cols-3 gap-4 w-full">
+                      {[
+                        { label: 'Intent', value: stats.intentScore, icon: Target, color: 'from-purple-500 to-purple-600' },
+                        { label: 'Engagement', value: stats.engagementScore, icon: Shield, color: 'from-blue-500 to-blue-600' },
+                        { label: 'Confidence', value: stats.confidenceScore, icon: Zap, color: 'from-emerald-500 to-emerald-600' },
+                      ].map(score => (
+                        <div key={score.label} className="text-center">
+                          <div className="flex items-center justify-center gap-1 mb-1">
+                            <score.icon className="w-3.5 h-3.5 text-zinc-400" />
+                            <span className="text-xs text-zinc-400">{score.label}</span>
+                          </div>
+                          <p className="text-lg font-bold text-white">{score.value}<span className="text-xs text-zinc-500">/100</span></p>
+                          <div className="h-1.5 bg-white/10 rounded-full overflow-hidden mt-1">
+                            <div className={`h-full bg-gradient-to-r ${score.color} rounded-full transition-all duration-1000`} style={{ width: `${score.value}%` }} />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
             {stats.dailyActivity.length > 0 && (
               <Card className="border-gold/20 bg-white/5 mb-8">
                 <CardHeader className="pb-2">
