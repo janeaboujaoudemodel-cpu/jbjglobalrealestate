@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Heart, ChevronRight, Building2 } from "lucide-react";
+import { Heart, ChevronRight, Building2, ArrowRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -81,7 +81,7 @@ const FavoritesCard = () => {
               ))}
             </div>
             {count > 3 && (
-              <Button variant="link" className="w-full text-gold mt-4" asChild>
+              <Button variant="link" className="w-full text-gold mt-2" asChild>
                 <Link to="/favorites">
                   View All {count} Favorites
                   <ChevronRight className="w-4 h-4 ml-1" />
@@ -90,6 +90,18 @@ const FavoritesCard = () => {
             )}
           </>
         )}
+
+        {/* Always-visible portal CTA */}
+        <div className="mt-4 pt-4 border-t border-gold/20">
+          <Link
+            to="/favorites"
+            className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#C8A766]/15 to-[#C8A766]/5 border border-[#C8A766]/30 hover:border-[#C8A766]/60 hover:from-[#C8A766]/25 hover:to-[#C8A766]/10 transition-all duration-300 group"
+          >
+            <Heart className="w-4 h-4 text-[#C8A766]" />
+            <span className="text-sm font-semibold text-[#C8A766]">Visit Favorites Portal</span>
+            <ArrowRight className="w-4 h-4 text-[#C8A766] group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
       </CardContent>
     </Card>
   );
