@@ -3,8 +3,8 @@
  * Row 1: Search + Map + Saved + Currency + Filter + Mode Investor (connected bar)
  * Row 2: Filter popovers + Sort pills + Hide Sold (last)
  */
-import { useState, useCallback, useEffect } from "react";
-import { ChevronDown, X, Heart, Building2, Bed, Calendar, DollarSign, CreditCard, Activity, Map, Users, Trash2, ArrowUpDown, EyeOff, HardHat, Clock, ArrowUp, ArrowDown, SortAsc, SlidersHorizontal, Check, TrendingUp } from "lucide-react";
+import { useState, useCallback, useEffect, useRef } from "react";
+import { ChevronDown, ChevronRight as ChevronRightIcon, X, Heart, Building2, Bed, Calendar, DollarSign, CreditCard, Activity, Map, Users, Trash2, ArrowUpDown, EyeOff, HardHat, Clock, ArrowUp, ArrowDown, SortAsc, SlidersHorizontal, Check, TrendingUp } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { SUPPORTED_CURRENCIES } from "@/components/CurrencySwitcher";
@@ -254,72 +254,118 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
     return first;
   };
 
+  // Scroll indicator refs
+  const row1Ref = useRef<HTMLDivElement>(null);
+  const row2Ref = useRef<HTMLDivElement>(null);
+  const [row1CanScroll, setRow1CanScroll] = useState(false);
+  const [row2CanScroll, setRow2CanScroll] = useState(false);
+
+  useEffect(() => {
+    const checkScroll = () => {
+      if (row1Ref.current) {
+        const el = row1Ref.current;
+        setRow1CanScroll(el.scrollWidth > el.clientWidth && el.scrollLeft + el.clientWidth < el.scrollWidth - 10);
+      }
+      if (row2Ref.current) {
+        const el = row2Ref.current;
+        setRow2CanScroll(el.scrollWidth > el.clientWidth && el.scrollLeft + el.clientWidth < el.scrollWidth - 10);
+      }
+    };
+    checkScroll();
+    const r1 = row1Ref.current;
+    const r2 = row2Ref.current;
+    r1?.addEventListener('scroll', checkScroll, { passive: true });
+    r2?.addEventListener('scroll', checkScroll, { passive: true });
+    window.addEventListener('resize', checkScroll);
+    return () => {
+      r1?.removeEventListener('scroll', checkScroll);
+      r2?.removeEventListener('scroll', checkScroll);
+      window.removeEventListener('resize', checkScroll);
+    };
+  }, []);
+
+  const scrollRow = (ref: React.RefObject<HTMLDivElement | null>) => {
+    ref.current?.scrollBy({ left: 200, behavior: 'smooth' });
+  };
+
   return (
     <>
       <div className="flex flex-col gap-2 w-full">
         {/* Row 1: Connected toolbar - Search + Sort Pills + Map + Saved + Currency + Filter + Mode */}
-        <div className="flex items-center w-full overflow-x-auto scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-x' }}>
-          <div className="flex items-center min-w-max border border-gold/30 rounded-lg overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-            {/* Search slot or built-in search */}
-            {searchSlot ? (
-              <div className="min-w-0 max-w-[220px] border-r border-gold/20">
-                {searchSlot}
-              </div>
-            ) : (
-              <div className="min-w-0 max-w-[220px] border-r border-gold/20 flex items-center px-3">
-                <input
-                  type="text"
-                  value={filters.searchQuery}
-                  onChange={(e) => update({ searchQuery: e.target.value })}
-                  placeholder="Search..."
-                  className="w-full h-full py-2.5 bg-transparent text-xs text-black placeholder:text-black/40 outline-none"
-                />
-              </div>
-            )}
-            {/* Sort pills inline in Row 1 */}
-            {SORT_OPTIONS.map((opt) => (
-              <button
-                key={opt.value}
-                onClick={() => update({ sortBy: filters.sortBy === opt.value ? null : opt.value })}
-                className={cn(
-                  "flex items-center gap-1 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors border-r border-gold/20",
-                  filters.sortBy === opt.value ? "bg-gold/20 text-black font-bold" : "text-black/70 hover:bg-gold/10"
-                )}
-              >
-                {opt.value === 'trending' ? <TrendingUp className="w-3.5 h-3.5" /> : opt.label}
-              </button>
-            ))}
-            {/* Map toggle */}
-            <button
-              onClick={() => onMapToggle ? onMapToggle(!isMapMode) : navigate('/properties?view=map')}
-              className={cn(
-                "flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors border-r border-gold/20",
-                isMapMode ? "bg-gold/20 text-black" : "text-black/70 hover:bg-gold/10"
+        <div className="relative">
+          <div ref={row1Ref} className="flex items-center w-full overflow-x-auto scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-x' }}>
+            <div className="flex items-center min-w-max border border-gold/30 rounded-lg overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+              {/* Search slot or built-in search */}
+              {searchSlot ? (
+                <div className="min-w-0 max-w-[220px] border-r border-gold/20">
+                  {searchSlot}
+                </div>
+              ) : (
+                <div className="min-w-0 max-w-[220px] border-r border-gold/20 flex items-center px-3">
+                  <input
+                    type="text"
+                    value={filters.searchQuery}
+                    onChange={(e) => update({ searchQuery: e.target.value })}
+                    placeholder="Search..."
+                    className="w-full h-full py-2.5 bg-transparent text-xs text-black placeholder:text-black/40 outline-none"
+                  />
+                </div>
               )}
-              title="Map View"
-            >
-              <Map className="w-3.5 h-3.5" />
-              {isMapMode ? 'List' : 'Map'}
-            </button>
-            {/* Saved */}
-            <ConnectedSavedButton variant={variant} onApplySavedFilter={onFilterChange} />
-            {/* Currency */}
-            <ConnectedCurrencyButton />
-            {/* Filter */}
-            <button
-              onClick={() => setAdvancedOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors border-r border-gold/20 text-black/70 hover:bg-gold/10"
-            >
-              <SlidersHorizontal className="w-3.5 h-3.5" />
-              Filter
-            </button>
-            {/* Mode Investor - compact, no stretch */}
-            <ConnectedModeButton />
+              {/* Sort pills inline in Row 1 */}
+              {SORT_OPTIONS.map((opt) => (
+                <button
+                  key={opt.value}
+                  onClick={() => update({ sortBy: filters.sortBy === opt.value ? null : opt.value })}
+                  className={cn(
+                    "flex items-center gap-1 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors border-r border-gold/20",
+                    filters.sortBy === opt.value ? "bg-gold/20 text-black font-bold" : "text-black/70 hover:bg-gold/10"
+                  )}
+                >
+                  {opt.value === 'trending' ? <TrendingUp className="w-3.5 h-3.5" /> : opt.label}
+                </button>
+              ))}
+              {/* Map toggle */}
+              <button
+                onClick={() => onMapToggle ? onMapToggle(!isMapMode) : navigate('/properties?view=map')}
+                className={cn(
+                  "flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors border-r border-gold/20",
+                  isMapMode ? "bg-gold/20 text-black" : "text-black/70 hover:bg-gold/10"
+                )}
+                title="Map View"
+              >
+                <Map className="w-3.5 h-3.5" />
+                {isMapMode ? 'List' : 'Map'}
+              </button>
+              {/* Saved */}
+              <ConnectedSavedButton variant={variant} onApplySavedFilter={onFilterChange} />
+              {/* Currency */}
+              <ConnectedCurrencyButton />
+              {/* Filter */}
+              <button
+                onClick={() => setAdvancedOpen(true)}
+                className="flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors border-r border-gold/20 text-black/70 hover:bg-gold/10"
+              >
+                <SlidersHorizontal className="w-3.5 h-3.5" />
+                Filter
+              </button>
+              {/* Mode Investor - compact, no stretch */}
+              <ConnectedModeButton />
+            </div>
           </div>
+          {/* Scroll indicator arrow for Row 1 */}
+          {row1CanScroll && (
+            <button 
+              onClick={() => scrollRow(row1Ref)}
+              className="absolute right-0 top-0 bottom-0 w-8 flex items-center justify-center bg-gradient-to-l from-[#F5F0E6] via-[#F5F0E6]/90 to-transparent pointer-events-auto z-10"
+            >
+              <ChevronRightIcon className="w-4 h-4 text-gold animate-pulse" />
+            </button>
+          )}
         </div>
 
         {/* Row 2: Filter popovers + Sort pills */}
-        <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-1 -mb-1">
+        <div className="relative">
+          <div ref={row2Ref} className="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-1 -mb-1" style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-x' }}>
         {/* Price */}
         <Popover>
           <PopoverTrigger asChild>
@@ -630,6 +676,16 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
           </button>
         )}
 
+        </div>
+          {/* Scroll indicator arrow for Row 2 */}
+          {row2CanScroll && (
+            <button 
+              onClick={() => scrollRow(row2Ref)}
+              className="absolute right-0 top-0 bottom-0 w-8 flex items-center justify-center bg-gradient-to-l from-[#F5F0E6] via-[#F5F0E6]/90 to-transparent pointer-events-auto z-10"
+            >
+              <ChevronRightIcon className="w-4 h-4 text-gold animate-pulse" />
+            </button>
+          )}
         </div>
       </div>
 

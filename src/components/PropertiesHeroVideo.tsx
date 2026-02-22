@@ -1,86 +1,44 @@
 /**
- * Properties Cinematic Hero - Multi-Scene Video Background
- * Optimized: videos loaded via URL (not bundled), first video plays immediately
+ * Properties Cinematic Hero - Premium Video Background
+ * Uses cloud-hosted video for fast loading, no bundle impact
  */
 
-import { useState, useEffect, useRef, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useRef, useCallback } from "react";
+import { motion } from "framer-motion";
 
-// Use URL references instead of static imports to avoid blocking the bundle
-import burjKhalifaVideo from "@/assets/videos/burj-khalifa-day-to-night.mp4";
-
-interface VideoScene {
-  id: string;
-  video: string;
-  label: string;
-}
-
-const VIDEO_SCENES: VideoScene[] = [
-  { id: "downtown", video: burjKhalifaVideo, label: "Downtown Dubai" },
-];
-
-const SCENE_DURATION = 8000;
+const HERO_VIDEO_URL = "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/videos/hero-video.mp4";
 
 interface PropertiesHeroVideoProps {
   children?: React.ReactNode;
 }
 
 const PropertiesHeroVideo = ({ children }: PropertiesHeroVideoProps) => {
-  const [currentScene, setCurrentScene] = useState(0);
   const [videoReady, setVideoReady] = useState(false);
-  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  // Mark ready as soon as first video can play
-  const handleCanPlay = useCallback((index: number) => {
-    if (index === 0 && !videoReady) setVideoReady(true);
+  const handleCanPlay = useCallback(() => {
+    if (!videoReady) setVideoReady(true);
   }, [videoReady]);
-
-  // Auto-advance scenes
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentScene((prev) => (prev + 1) % VIDEO_SCENES.length);
-    }, SCENE_DURATION);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Play/pause videos on scene change
-  useEffect(() => {
-    videoRefs.current.forEach((video, index) => {
-      if (video) {
-        if (index === currentScene) {
-          video.currentTime = 0;
-          video.play().catch(() => {});
-        } else {
-          video.pause();
-        }
-      }
-    });
-  }, [currentScene]);
 
   return (
     <section className="jj-hero-fullscreen relative flex items-end justify-start overflow-hidden pb-16 md:pb-20 px-4 md:px-8 lg:px-12">
       {/* Video background */}
       <div className="absolute inset-0 bg-black">
-        {VIDEO_SCENES.map((scene, index) => (
-          <div
-            key={scene.id}
-            className="absolute inset-0 transition-opacity duration-700"
-            style={{ opacity: index === currentScene ? 1 : 0 }}
-          >
-            <video
-              ref={(el) => { videoRefs.current[index] = el; }}
-              autoPlay={index === 0}
-              muted
-              loop
-              playsInline
-              preload={index === 0 ? "auto" : "none"}
-              onCanPlay={() => handleCanPlay(index)}
-              className="absolute inset-0 w-full h-full object-cover"
-            >
-              <source src={scene.video} type="video/mp4" />
-            </video>
-          </div>
-        ))}
+        <video
+          ref={videoRef}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          onCanPlay={handleCanPlay}
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{
+            opacity: videoReady ? 1 : 0,
+            transition: 'opacity 0.8s ease-in-out',
+          }}
+          src={HERO_VIDEO_URL}
+        />
         
         {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black" />
@@ -93,14 +51,13 @@ const PropertiesHeroVideo = ({ children }: PropertiesHeroVideoProps) => {
       {/* Children (hero content) */}
       {children}
 
-      {/* Scroll indicator */}
+      {/* Scroll indicator - no "Explore" text, just the line */}
       <motion.div 
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1, duration: 0.6 }}
       >
-        <span className="text-gold/60 text-xs tracking-widest uppercase">Explore</span>
         <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
       </motion.div>
     </section>

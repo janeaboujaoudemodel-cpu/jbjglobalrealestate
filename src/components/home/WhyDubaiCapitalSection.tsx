@@ -3,16 +3,12 @@ import { useState, useEffect, useRef } from "react";
 import { T } from "@/components/ui/T";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 
-// Use URL references instead of static imports to avoid blocking the bundle
-const downtownDubaiVideo = new URL("@/assets/videos/why-dubai-downtown-burj-khalifa.mp4", import.meta.url).href;
-const burjKhalifaVideo = new URL("@/assets/videos/burj-khalifa-day-to-night.mp4", import.meta.url).href;
-const atlantisPalmVideo = new URL("@/assets/videos/why-dubai-atlantis-palm.mp4", import.meta.url).href;
-
-const scenes = [
-  { src: downtownDubaiVideo },
-  { src: burjKhalifaVideo },
-  { src: atlantisPalmVideo },
+// Cloud-hosted premium videos for fast loading
+const SCENE_URLS = [
+  "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/videos/hero-video.mp4",
 ];
+
+const scenes = SCENE_URLS.map(src => ({ src }));
 
 const stats = [
   { value: "0%", label: "Income Tax" },
