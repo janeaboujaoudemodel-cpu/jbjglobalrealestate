@@ -21041,6 +21041,7 @@ export type Database = {
           id: string
           session_id: string
           storage_path: string | null
+          user_id: string | null
         }
         Insert: {
           action: string
@@ -21052,6 +21053,7 @@ export type Database = {
           id?: string
           session_id: string
           storage_path?: string | null
+          user_id?: string | null
         }
         Update: {
           action?: string
@@ -21063,6 +21065,7 @@ export type Database = {
           id?: string
           session_id?: string
           storage_path?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }

@@ -157,18 +157,19 @@ export const useVisitorTracking = () => {
       // Log download event
       await trackEvent('download', `Downloaded ${documentName}`, { document_name: documentName, document_type: documentType });
 
-      // Save document record
+      // Save document record with user_id
       await supabase.from('visitor_documents').insert({
         session_id: sessionId,
         document_type: documentType,
         document_name: documentName,
         document_url: documentUrl || null,
         action: 'download',
-      });
+        user_id: user?.id || null,
+      } as any);
     } catch (error) {
       console.error('Error tracking download:', error);
     }
-  }, [trackEvent]);
+  }, [trackEvent, user]);
 
   // Track upload
   const trackUpload = useCallback(async (documentName: string, documentType: string, documentUrl?: string, storagePath?: string) => {
@@ -178,7 +179,7 @@ export const useVisitorTracking = () => {
       // Log upload event
       await trackEvent('upload', `Uploaded ${documentName}`, { document_name: documentName, document_type: documentType });
 
-      // Save document record
+      // Save document record with user_id
       await supabase.from('visitor_documents').insert({
         session_id: sessionId,
         document_type: documentType,
@@ -186,11 +187,12 @@ export const useVisitorTracking = () => {
         document_url: documentUrl || null,
         storage_path: storagePath || null,
         action: 'upload',
-      });
+        user_id: user?.id || null,
+      } as any);
     } catch (error) {
       console.error('Error tracking upload:', error);
     }
-  }, [trackEvent]);
+  }, [trackEvent, user]);
 
   // Track form submission
   const trackFormSubmission = useCallback((formName: string, formData?: Record<string, any>) => {
