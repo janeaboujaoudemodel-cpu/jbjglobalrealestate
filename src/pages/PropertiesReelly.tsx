@@ -301,8 +301,7 @@ const PropertiesReelly = () => {
       {/* Spacer for fixed filter bar — only when sticky nav is shown */}
       {showStickyNav && <div className="h-[60px]" />}
 
-      {/* Divider */}
-      <div className="h-1 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+      {/* Divider removed per user request */}
 
       {/* Pre-render map hidden in background so Leaflet initialises before user switches to map mode */}
       <div style={{ display: isMapMode ? 'block' : 'none', minHeight: '600px', maxHeight: '85vh' }} className="relative bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark overflow-hidden">
