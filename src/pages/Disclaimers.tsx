@@ -1,221 +1,215 @@
-import { motion } from "framer-motion";
-import { Shield, Building2, Users, Bot, FileText, Lock } from "lucide-react";
-import SEOHead from "@/components/SEOHead";
+import React, { useState } from 'react';
+import { 
+  Building2, Scale, BarChart3, Globe, Cpu, ExternalLink, 
+  ShieldCheck, UserCheck, Landmark, ChevronDown
+} from 'lucide-react';
+import SEOHead from '@/components/SEOHead';
 
-const fadeInUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 }
+const GoldDivider = () => (
+  <div className="flex items-center gap-4 my-10">
+    <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#C8A766]/40 to-transparent" />
+    <div className="w-1.5 h-1.5 rounded-full bg-[#C8A766]/60" />
+    <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#C8A766]/40 to-transparent" />
+  </div>
+);
+
+interface SectionProps {
+  icon: React.ElementType;
+  number: string;
+  title: string;
+  children: React.ReactNode;
+}
+
+const Section = ({ icon: Icon, number, title, children }: SectionProps) => {
+  const [open, setOpen] = useState(true);
+
+  return (
+    <div className="bg-white/80 backdrop-blur-sm border border-[#C8A766]/20 rounded-2xl overflow-hidden shadow-sm">
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-full flex items-center gap-4 px-6 py-5 text-left hover:bg-[#FAF7F2]/60 transition-colors"
+      >
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#C8A766]/20 to-[#C8A766]/5 flex items-center justify-center shrink-0">
+          <Icon className="w-5 h-5 text-[#C8A766]" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <span className="text-xs font-semibold text-[#C8A766] tracking-widest uppercase">Section {number}</span>
+          <h2 className="text-lg md:text-xl font-serif font-bold text-zinc-900 mt-0.5">{title}</h2>
+        </div>
+        <ChevronDown className={`w-5 h-5 text-[#C8A766]/60 transition-transform ${open ? 'rotate-180' : ''}`} />
+      </button>
+      {open && (
+        <div className="px-6 pb-6 text-zinc-700 leading-relaxed text-[15px] space-y-4 border-t border-[#C8A766]/10 pt-5">
+          {children}
+        </div>
+      )}
+    </div>
+  );
 };
 
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1 }
-  }
-};
+const BulletList = ({ items }: { items: string[] }) => (
+  <ul className="space-y-2.5 ml-1">
+    {items.map((item, i) => (
+      <li key={i} className="flex items-start gap-3">
+        <span className="w-1.5 h-1.5 rounded-full bg-[#C8A766] mt-2 shrink-0" />
+        <span>{item}</span>
+      </li>
+    ))}
+  </ul>
+);
 
 const Disclaimers = () => {
-  const sections = [
-    {
-      icon: Building2,
-      title: "Brokerage Scope",
-      content: [
-        "JBJ Global Real Estate is a licensed real estate brokerage operating for property buy, sell, and rent services within the UAE (Dubai Mainland).",
-        "All property transactions are conducted in accordance with applicable RERA regulations and licensing requirements.",
-        "Brokerage services are limited to residential and commercial property transactions within our licensed scope."
-      ]
-    },
-    {
-      icon: Users,
-      title: "Third-Party Partner Services",
-      content: [
-        "For legal, mortgage, visa, corporate services, and other regulated services, JBJ Global Real Estate may introduce independent licensed partners.",
-        "Clients contract directly with partners under their terms, licensing, and regulatory requirements.",
-        "JBJ Global Real Estate does not provide legal, financial, mortgage, or visa advisory services directly.",
-        "Partner introductions are provided as a courtesy and do not constitute endorsement or guarantee of partner services."
-      ]
-    },
-    {
-      icon: FileText,
-      title: "Market Intelligence & Data Use",
-      content: [
-        "Market insights, reports, and analytics provided through this platform are descriptive and informational only.",
-        "Data is aggregated from available sources and may not reflect real-time market conditions.",
-        "Price estimates, yield calculations, and market projections are indicative and do not constitute investment advice.",
-        "Users should conduct independent due diligence before making property decisions based on any information provided."
-      ]
-    },
-    {
-      icon: Bot,
-      title: "AI Tools & Outputs",
-      content: [
-        "AI-powered tools and features on this platform provide informational support and convenience functions.",
-        "AI outputs may be incomplete, outdated, or require validation before use in decision-making.",
-        "AI-generated content, recommendations, and calculations should be verified with appropriate professionals.",
-        "JBJ Global Real Estate is not liable for decisions made based on AI tool outputs without independent verification."
-      ]
-    },
-    {
-      icon: Shield,
-      title: "Investment & Return Disclaimers",
-      content: [
-        "No returns on property investments are guaranteed.",
-        "Past performance of property markets or specific assets does not predict future results.",
-        "Property values, rental yields, and market conditions are subject to change.",
-        "All investment decisions carry risk and should be made with professional financial advice."
-      ]
-    },
-    {
-      icon: Lock,
-      title: "Intellectual Property",
-      content: [
-        "All branding, content, design elements, and platform features are the intellectual property of JBJ Global Real Estate.",
-        "Unauthorized reproduction, distribution, or use of platform content is prohibited.",
-        "Trademarks, logos, and proprietary methodologies remain the exclusive property of JBJ Global Real Estate.",
-        "Use of the platform constitutes acceptance of intellectual property terms as outlined in the Terms of Use."
-      ]
-    }
-  ];
-
   return (
     <>
       <SEOHead
-        title="Licensing & Disclaimers | JBJ Global Real Estate"
-        description="Important legal notices, licensing information, and disclaimers for JBJ Global Real Estate services."
-        keywords="jbj disclaimers, real estate licensing dubai, legal notices"
+        title="Disclaimer & Professional Scope | JBJ Global Real Estate"
+        description="Licensed real estate brokerage transparency — professional scope, regulatory clarifications, and user responsibilities."
+        keywords="jbj disclaimers, real estate licensing dubai, legal notices, professional scope"
         canonicalPath="/disclaimers"
       />
-      
-      <main className="min-h-screen bg-black">
-        {/* Hero Section */}
-        <section className="relative pt-32 pb-16 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-gold/5 via-transparent to-transparent" />
-          
-          <div className="container mx-auto px-4 relative z-10">
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={staggerContainer}
-              className="max-w-3xl mx-auto text-center"
-            >
-              <motion.span
-                variants={fadeInUp}
-                className="inline-block px-4 py-2 bg-gold/10 border border-gold/30 rounded-full text-gold text-sm font-medium mb-6"
-              >
-                Legal
-              </motion.span>
-              
-              <motion.h1
-                variants={fadeInUp}
-                className="text-4xl md:text-5xl font-bold text-white mb-6"
-              >
-                Licensing, Disclosures & Important Notices
-              </motion.h1>
-              
-              <motion.p
-                variants={fadeInUp}
-                className="text-lg text-zinc-400"
-              >
-                Please review the following important information about our services, data use, and limitations.
-              </motion.p>
-            </motion.div>
-          </div>
-        </section>
 
-        {/* Content Sections */}
-        <section className="py-16">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto space-y-8">
-              {sections.map((section, index) => (
-                <motion.div
-                  key={index}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  variants={fadeInUp}
-                  className="jj-card-inner p-8"
-                >
-                  <div className="flex items-start gap-4 mb-6">
-                    <div className="w-12 h-12 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <section.icon className="w-6 h-6 text-gold" />
-                    </div>
-                    <h2 className="text-2xl font-bold text-white pt-2">{section.title}</h2>
-                  </div>
-                  
-                  <ul className="space-y-4">
-                    {section.content.map((item, itemIndex) => (
-                      <li key={itemIndex} className="flex items-start gap-3">
-                        <div className="w-2 h-2 bg-gold/50 rounded-full mt-2 flex-shrink-0" />
-                        <span className="text-zinc-300 leading-relaxed">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-              ))}
+      <div className="min-h-screen bg-gradient-to-b from-[#FDFBF7] via-[#FAF7F2] to-[#F5F0E8]">
+        {/* Hero */}
+        <section className="relative py-20 md:py-28 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#FAF7F2] via-white/60 to-[#F5F0E8]" />
+          <div className="relative max-w-4xl mx-auto px-6 text-center">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#C8A766]/10 border border-[#C8A766]/25 rounded-full mb-6">
+              <Scale className="w-4 h-4 text-[#C8A766]" />
+              <span className="text-xs font-semibold text-[#C8A766] tracking-widest uppercase">Legal Transparency</span>
             </div>
+            <h1 className="text-3xl md:text-5xl font-serif font-bold text-zinc-900 mb-4 leading-tight">
+              Disclaimer & Professional Scope
+            </h1>
+            <p className="text-lg md:text-xl text-[#C8A766] font-medium mb-6">
+              Licensed Real Estate Brokerage Transparency
+            </p>
+            <p className="text-zinc-600 leading-relaxed max-w-3xl mx-auto text-[15px] md:text-base">
+              JBJ Global Real Estate operates as a licensed real estate brokerage within the United Arab Emirates. This page outlines the professional scope of services, regulatory clarifications, and user responsibilities associated with our platform and advisory services.
+            </p>
+            <div className="mt-8 h-px w-32 mx-auto bg-gradient-to-r from-transparent via-[#C8A766]/50 to-transparent" />
           </div>
         </section>
 
-        {/* Related Links */}
-        <section className="py-16 border-t border-zinc-800">
-          <div className="container mx-auto px-4">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={staggerContainer}
-              className="max-w-3xl mx-auto text-center"
-            >
-              <motion.h2
-                variants={fadeInUp}
-                className="text-2xl font-bold text-white mb-6"
-              >
-                Related Legal Documents
-              </motion.h2>
-              
-              <motion.div
-                variants={fadeInUp}
-                className="flex flex-wrap gap-4 justify-center"
-              >
-                <a
-                  href="/privacy"
-                  className="px-6 py-3 bg-zinc-800/50 border border-zinc-700 rounded-lg text-zinc-300 hover:text-white hover:border-gold/50 transition-colors"
-                >
-                  Privacy Policy
-                </a>
-                <a
-                  href="/terms"
-                  className="px-6 py-3 bg-zinc-800/50 border border-zinc-700 rounded-lg text-zinc-300 hover:text-white hover:border-gold/50 transition-colors"
-                >
-                  Terms of Use
-                </a>
-                <a
-                  href="/cookies"
-                  className="px-6 py-3 bg-zinc-800/50 border border-zinc-700 rounded-lg text-zinc-300 hover:text-white hover:border-gold/50 transition-colors"
-                >
-                  Cookie Policy
-                </a>
-                <a
-                  href="/trust-and-audit-center"
-                  className="px-6 py-3 bg-zinc-800/50 border border-zinc-700 rounded-lg text-zinc-300 hover:text-white hover:border-gold/50 transition-colors"
-                >
-                  Trust & Audit Center
-                </a>
-              </motion.div>
-            </motion.div>
-          </div>
-        </section>
+        {/* Sections */}
+        <div className="max-w-4xl mx-auto px-6 pb-20 space-y-5">
+          <Section icon={Building2} number="01" title="Licensed Brokerage Scope">
+            <p>JBJ Global Real Estate is authorized to conduct the following activities under its UAE commercial license:</p>
+            <BulletList items={[
+              "Buying and selling real estate",
+              "Leasing and rental brokerage",
+              "Property acquisition advisory",
+              "Real estate investment analysis within brokerage scope",
+              "Market research and pricing analysis",
+              "Developer project consulting",
+              "Portfolio advisory related to property assets",
+            ]} />
+            <p>All advisory services provided relate strictly to property and real estate transactions within the framework of applicable UAE regulations.</p>
+            <p className="text-zinc-800 font-medium">We are legally permitted to provide real estate investment advisory as part of licensed brokerage services.</p>
+          </Section>
 
-        {/* Last Updated */}
-        <section className="py-8 border-t border-zinc-800">
-          <div className="container mx-auto px-4">
-            <p className="text-center text-sm text-zinc-500">
-              Last updated: February 2025
+          <Section icon={Scale} number="02" title="Scope Boundaries">
+            <p>JBJ Global Real Estate does not provide:</p>
+            <BulletList items={[
+              "Legal representation services",
+              "Immigration law representation",
+              "Certified tax consultancy",
+              "Corporate structuring advice",
+              "Independent financial planning outside property scope",
+            ]} />
+            <p>Where required, clients may engage licensed legal advisors, tax consultants, or government-approved entities for specialized services.</p>
+            <p>This clarification ensures regulatory alignment and protects both parties.</p>
+          </Section>
+
+          <GoldDivider />
+
+          <Section icon={BarChart3} number="03" title="Data & Market Information">
+            <p>Property pricing, availability, rental yield projections, and investment analytics are based on:</p>
+            <BulletList items={[
+              "Developer data",
+              "Market statistics",
+              "Government publications",
+              "Internal analytical tools",
+            ]} />
+            <p>While reasonable care is taken to ensure accuracy:</p>
+            <BulletList items={[
+              "Prices may change without notice",
+              "Availability may vary",
+              "Market conditions fluctuate",
+              "Projected returns are not guaranteed outcomes",
+            ]} />
+            <p>All investment decisions should be supported by independent due diligence.</p>
+          </Section>
+
+          <Section icon={Globe} number="04" title="Residency & Golden Visa Information">
+            <p>Information provided regarding UAE Golden Visa or residency eligibility is based on publicly available government guidelines.</p>
+            <p>Final approval, eligibility, and processing decisions remain exclusively under the authority of relevant UAE government entities.</p>
+            <p className="text-zinc-800 font-medium">JBJ Global Real Estate does not issue visas nor guarantee residency approval.</p>
+          </Section>
+
+          <GoldDivider />
+
+          <Section icon={Cpu} number="05" title="Digital & AI Advisory Tools">
+            <p>AI-powered tools provided on this platform offer analytical insights, forecasts, and data modeling for real estate evaluation.</p>
+            <p>These tools:</p>
+            <BulletList items={[
+              "Provide predictive insights",
+              "Do not guarantee investment outcomes",
+              "Support decision-making",
+              "Do not replace professional consultation",
+            ]} />
+            <p>Users are responsible for validating outputs before executing financial commitments.</p>
+          </Section>
+
+          <Section icon={ExternalLink} number="06" title="External Platforms & References">
+            <p>The platform may reference third-party data sources, developers, or external property platforms.</p>
+            <p>JBJ Global Real Estate is not responsible for:</p>
+            <BulletList items={[
+              "Third-party platform content",
+              "External website policies",
+              "Developer operational decisions",
+              "Construction delays",
+              "Changes in external terms",
+            ]} />
+            <p>Users interacting with third-party platforms do so under their respective policies.</p>
+          </Section>
+
+          <GoldDivider />
+
+          <Section icon={ShieldCheck} number="07" title="Liability Clarification">
+            <p>JBJ Global Real Estate shall not be held liable for:</p>
+            <BulletList items={[
+              "Market fluctuations",
+              "Developer timeline changes",
+              "Investment performance outcomes",
+              "Financing approvals",
+              "Government processing delays",
+            ]} />
+            <p>Real estate transactions inherently carry market risks.</p>
+          </Section>
+
+          <Section icon={UserCheck} number="08" title="Client Responsibility">
+            <p>By using this platform, users acknowledge:</p>
+            <BulletList items={[
+              "Responsibility for independent verification",
+              "Understanding of market risk",
+              "Acceptance of advisory nature of projections",
+              "Commitment to due diligence",
+            ]} />
+          </Section>
+
+          <Section icon={Landmark} number="09" title="Regulatory Position">
+            <p>JBJ Global Real Estate operates in compliance with UAE real estate regulations and conducts brokerage activities within licensed scope.</p>
+            <p>This disclaimer ensures transparency and regulatory clarity.</p>
+          </Section>
+
+          {/* Footer note */}
+          <div className="pt-8 text-center">
+            <p className="text-xs text-zinc-400 max-w-2xl mx-auto leading-relaxed">
+              This Disclaimer may be updated periodically to reflect regulatory developments and operational changes.
             </p>
           </div>
-        </section>
-      </main>
+        </div>
+      </div>
     </>
   );
 };
