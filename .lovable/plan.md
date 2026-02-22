@@ -1,78 +1,112 @@
 
+# Project Detail Page Performance, Layout, and UX Fixes
 
-# Chat Support Memory and Flow Fix
-
-## Problem Summary
-The chat support widget has no persistent memory. Every time a user opens the chat, they must re-enter their name, email, and phone -- even if they are already logged in or have chatted before. The back button from the shortcuts screen incorrectly navigates to an old "check_email" step. The bottom of the email check form is cropped.
+This plan addresses all reported issues across the project detail page, homepage, and listing grid.
 
 ---
 
-## Fix 1: Persistent User Memory with localStorage
+## 1. Payment Plan Tab Order and Active Color Fix
 
-**Current:** Uses `sessionStorage` (lost when tab closes). User details are never remembered across sessions.
+**Problem:** The "100% Payment" tab shows first (as default), and the active tab uses the old flat `bg-gold` yellow instead of champagne.
 
-**Fix in `src/components/AIChatWidget.tsx`:**
-- Switch from `sessionStorage` to `localStorage` for `jbj_chat_user` and `jbj_chat_step`
-- On mount, check three sources in order:
-  1. **Logged-in user** -- if `user` exists, fetch their profile from `crm_users_profile` or `leads` table and pre-fill `userInfo`
-  2. **localStorage** -- if saved user data exists with a valid email, restore it
-  3. **Fresh start** -- show the welcome screen
-- If user data is found (from either source), skip `conversational_collect` entirely and go straight to `shortcuts` (or a new "confirm details" step)
+**Fix in `src/components/project-detail/PaymentPlanVisualization.tsx`:**
+- Line 126: Change `defaultValue` from conditional to always `"installment"` first -- the payment plan tab should always be the primary/first tab
+- Swap the tab order: Payment Plan tab first (left), then 100% Payment tab second (right)
+- Lines 128, 132: Change `data-[state=active]:bg-gold data-[state=active]:text-black` to `data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border data-[state=active]:border-[#C8A766]/60`
 
 ---
 
-## Fix 2: New "Confirm Details" Step for Returning Users
+## 2. Sticky Nav Active Tab -- Champagne Instead of Gold
 
-**New step: `confirm_details`** added to `ChatStep` type.
+**Problem:** Active tab in Row 2 sticky nav uses `bg-gold/20 text-gold border border-gold/40` which is the old yellow.
 
-**New component: `src/components/chat/ChatConfirmDetails.tsx`**
-- Shows the user's saved details (name, email, phone) in a read-only card
-- Two buttons:
-  - "Continue" -- proceeds directly to `shortcuts`
-  - "Update My Details" -- switches to an editable mode where the user can change their info
-- When details are updated:
-  - Save new details to `localStorage`
-  - Update the `leads` table with new contact info (keeping old data)
-  - Create an admin alert in `chat_conversations` or `jbj_analytics` flagging "Contact details updated" with both old and new values
-  - The admin chat dashboard will show a notification that the user changed their details
-
-**Flow for returning users:**
-`welcome_choice` -> (user data found in memory) -> `confirm_details` -> `shortcuts`
-
-**Flow for new users (no change):**
-`welcome_choice` -> `conversational_collect` -> `shortcuts`
+**Fix in `src/components/project-detail/ProjectDetailLayout.tsx` (line 649-650):**
+- Change active state to champagne gradient: `bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-[#C8A766]/60 shadow-sm`
 
 ---
 
-## Fix 3: Fix Back Button Navigation
+## 3. Add Missing Sections to Sticky Navigation (Amenities, Payment Plan, etc.)
 
-**Current broken mapping in `handleBack`:**
-- `shortcuts` -> `check_email` (wrong -- `check_email` is not in the current flow)
-- `chat_history` -> `check_email` (same issue)
+**Problem:** The hardcoded Row 2 nav (lines 635-657) only has 7 tabs (Details, Gallery, Developer, Location, Brochure, AI Analyzer, Mortgage) while there are 17+ sections. This creates huge gaps between visible nav items and actual content.
 
-**Fix:**
-- `shortcuts` -> `welcome_choice`
-- `chat_history` -> `shortcuts`
-- `confirm_details` -> `welcome_choice`
-- `conversational_collect` -> `welcome_choice` (already correct)
+**Fix:** Replace the hardcoded 7-tab array with the dynamic `visibleTabs` array that already exists (line 323-357), which includes all sections: Details, Gallery, Units, Progress, Developer, Highlights, Floor Plans, Specs, Amenities, Media, Location, Master Plan, Brochure, Payment Plan, Investment, Useful Info, AI Analyzer, Mortgage.
 
 ---
 
-## Fix 4: Admin Notification for Contact Detail Changes
+## 4. AI Analyzer Loading Monogram -- Make Bigger
 
-When a user updates their details from the `confirm_details` screen:
-- Call `capture-lead` edge function with updated info (it handles upsert)
-- Insert a record into `jbj_analytics` with `action_type: 'contact_details_updated'` and metadata containing both old and new values
-- The admin chat dashboard already reads from `jbj_analytics`, so the alert will appear automatically
+**Problem:** The JBJ monogram during AI analysis loading is `w-20 h-20` which is too small.
+
+**Fix in `src/components/project-detail/ProjectAIAnalyzer.tsx` (line 261):**
+- Change `w-20 h-20` to `w-32 h-32 md:w-40 md:h-40`
+- Increase the glow blur from `scale-150` to `scale-[1.8]`
 
 ---
 
-## Fix 5: Bottom Padding / Cropping on Email Check Form
+## 5. Reduce Padding Between AI Intelligence Section and DLD Market Widget
 
-**In `src/components/chat/ChatEmailCheck.tsx`:**
-- The "Your information is secure..." text and form are cropped at the bottom
-- Add `pb-6` to the outer container and reduce unnecessary elements
-- Since this form is now only shown for the very first interaction (before any data exists), simplify the button text to just "Continue to Support"
+**Problem:** The gold divider between AI Analyzer and DLD Market Widget has too much vertical padding (`py-14 md:py-16`), making the spacing asymmetric.
+
+**Fix in `src/components/project-detail/ProjectDetailLayout.tsx` (line 1027):**
+- Change `py-14 md:py-16` to `py-6 md:py-8` to tighten the gap
+
+---
+
+## 6. Investment Metric Cards -- More Premium Styling
+
+**Problem:** The cards for Rental Yield, Capital Growth, Investment Rating use plain `bg-card` with simple borders.
+
+**Fix in `src/components/project-detail/InvestmentMetricsSection.tsx`:**
+- Upgrade each card from `rounded-xl border border-gold/30 bg-card` to `rounded-xl border-2 border-gold/40 bg-gradient-to-br from-card via-card to-gold/5 shadow-md hover:shadow-lg hover:shadow-gold/15 transition-all`
+- Add `ring-4 ring-gold/10` to the icon circle containers for a premium feel
+
+---
+
+## 7. Inaura Ad Image Fix
+
+**Problem:** The Inaura Hotels ad in `FEATURED_ADS` has a broken/missing image.
+
+**Fix in `src/components/FeaturedProjectAd.tsx` (line 102):**
+- The URL `https://d3h330vgpwpjr8.cloudfront.net/x/1128x/Feature_309f6a8c5c.webp` may be dead
+- Look up the Inaura project in the database and use its `cover_image_url` or first gallery image as the ad image
+- If no database image is available, use a working CDN URL or fallback gradient
+
+---
+
+## 8. Listing Card Padding -- Equal Spacing from Edges
+
+**Problem:** Project cards in the grid touch the left edge of the container but have spacing on the right. The layout should have equal margins on both sides and equal gaps between cards.
+
+**Fix in `src/components/project-detail/ProjectDetailLayout.tsx` (line 675):**
+- The container uses `px-6 md:px-12 lg:px-16` which should provide equal padding. The issue may be that the max-width container is misaligned.
+- Verify the `max-w-[1600px] mx-auto` container is not being overridden by parent styles
+- Add `w-full` to ensure centering works properly
+
+---
+
+## 9. Homepage Mortgage Calculator -- Remove Duplicate Title
+
+**Problem:** The homepage has its own "Mortgage Calculator" heading (Index.tsx line 466-468) and below it the MortgageCalculator component. The user sees "Mortgage Calculator" appearing twice.
+
+**Fix in `src/pages/Index.tsx`:** The component is called with `compact` so it shouldn't show its own title. The "duplication" is likely the "Financial Tools" badge + the "Mortgage Calculator" heading + the subtitle all appearing redundant. Simplify by removing either the badge or the subtitle to make it look like one clean title block.
+
+---
+
+## 10. Amenity Photos -- Ensure Photos Load
+
+**Problem:** Amenities still show only icons without photos. The `AmenitiesWithPhotos` component relies on `amenity_images` data from the project.
+
+**Fix:** The `amenity_images` field needs to be populated during the enrichment pipeline. This is a data issue -- the `reelly-auto-enrich` function should map amenity names to their corresponding images from the project gallery or Reelly API. For now, ensure the component gracefully handles missing photos (it already does with icon fallback), but the real fix is to run the enrichment to populate `amenity_images`.
+
+---
+
+## 11. Filter Shortcut Bar -- Edge-to-Edge Layout
+
+**Problem:** The fixed filter bar and shortcut buttons have gaps at the edges instead of filling the full width.
+
+**Fix in the Row 1 container (line 624):**
+- Remove `container mx-auto` constraint so the bar stretches edge-to-edge
+- Change to `max-w-full px-2` to allow full-width scrolling content
 
 ---
 
@@ -80,8 +114,9 @@ When a user updates their details from the `confirm_details` screen:
 
 | File | Changes |
 |------|---------|
-| `src/components/chat/types.ts` | Add `'confirm_details'` to `ChatStep` type |
-| `src/components/chat/ChatConfirmDetails.tsx` | New component: shows saved details, confirm or update |
-| `src/components/AIChatWidget.tsx` | Switch to `localStorage`, add returning-user detection on mount, add `confirm_details` step rendering, fix back button mapping |
-| `src/components/chat/ChatEmailCheck.tsx` | Fix bottom padding, simplify button text |
-| `src/components/chat/ChatHeader.tsx` | Add title for `confirm_details` step |
+| `src/components/project-detail/PaymentPlanVisualization.tsx` | Swap tab order (Payment Plan first), champagne active color |
+| `src/components/project-detail/ProjectDetailLayout.tsx` | Champagne active tab, use `visibleTabs` in Row 2, reduce AI-DLD divider padding, fix filter bar width |
+| `src/components/project-detail/ProjectAIAnalyzer.tsx` | Larger loading monogram (w-32 h-32 / w-40 h-40) |
+| `src/components/project-detail/InvestmentMetricsSection.tsx` | Premium card styling with gradients and rings |
+| `src/components/FeaturedProjectAd.tsx` | Fix Inaura image URL |
+| `src/pages/Index.tsx` | Clean up duplicate mortgage title elements |
