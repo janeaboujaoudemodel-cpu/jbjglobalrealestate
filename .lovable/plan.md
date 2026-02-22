@@ -1,128 +1,122 @@
 
 
-# Comprehensive Bug Fix and UX Improvement Plan
+# Comprehensive Mobile Audit and UX Fix Plan
 
-This plan addresses all reported issues across the Properties page, Project Detail page, Homepage, and mobile experience.
-
----
-
-## 1. Properties Page Hero Video -- Use a Unique Video (Not Homepage Video)
-
-**Problem:** The "Discover Dubai's Finest Off-Plan Properties" page reuses the same hero video (`hero-video.mp4`) from the homepage.
-
-**Fix:** Upload or reference a different premium Dubai skyline/real estate video for the Properties page. Change the `HERO_VIDEO_URL` in `src/components/PropertiesHeroVideo.tsx` to a new unique video (e.g., a Downtown Dubai morning skyline drone shot). If no alternate video exists in storage, we will use a high-quality static hero image as a fallback with a cinematic Ken Burns animation effect, giving the Properties page its own visual identity.
-
-**File:** `src/components/PropertiesHeroVideo.tsx`
+This plan addresses all reported issues: vertical/broken content on mobile, project detail navigation, news extraction, homepage service wiring, guide book structure, and broker hub certificate.
 
 ---
 
-## 2. Remove Gold Divider on Properties Page
+## 1. Fix Vertical/Broken Content in Real Estate Intelligence Suite (CRITICAL)
 
-**Problem:** A gold gradient divider (`h-1 bg-gradient-to-r from-transparent via-gold/40 to-transparent`) appears between the hero/filter bar and the project grid on the Properties page (line 305 in `PropertiesReelly.tsx`).
+**Problem:** Tool sub-tabs in `RealEstateSuite.tsx` render as single vertical characters on mobile because buttons lack `whitespace-nowrap` and `min-w-fit`, and the container doesn't properly enable horizontal scrolling.
 
-**Fix:** Remove the divider element entirely from `src/pages/PropertiesReelly.tsx` (line 304-305).
+**Fix in `src/pages/business-suite/RealEstateSuite.tsx`:**
+- Add `whitespace-nowrap min-w-fit` to all tool sub-tab buttons (line 232)
+- Add `scrollbar-hide` to the flex container (line 223)
+- Add `whitespace-nowrap min-w-fit` to section tab buttons (line 205)
+- Ensure both tab rows use `overflow-x-auto` with proper touch scrolling
 
-**File:** `src/pages/PropertiesReelly.tsx`
-
----
-
-## 3. Fix Filter Bar Overflow and Scroll Arrows
-
-**Problem:** Filter pills overflow their containers on mobile. The scroll indicator arrows are invisible or blocked by adjacent buttons. Content text overflows filter buttons.
-
-**Fix in `src/components/filters/FilterShortcutBar.tsx`:**
-- Make scroll arrows more visible: larger size, higher contrast, solid gold background instead of transparent gradient
-- Ensure arrow buttons have no overlapping elements -- increase the right-side gradient fade width
-- Add `overflow-hidden text-ellipsis` to all pill buttons to prevent text overflow
-- Increase minimum width of filter pills to prevent text wrapping/overflow
-- Make Row 1 (connected toolbar) items use `min-w-fit` to prevent content clipping
+This same fix pattern will be applied globally to **all suite pages** that use similar tab layouts:
+- `src/pages/business-suite/ProductivitySuite.tsx`
+- `src/pages/business-suite/CreativeSuite.tsx`
+- `src/pages/toolkit/VoiceSuite.tsx`
+- Any other suite page with horizontal tabs
 
 ---
 
-## 4. Fix Project Photo Loading Performance
+## 2. Fix Project Detail Sticky Navigation (Row 3: Details/Gallery/Developer)
 
-**Problem:** Project card photos load very slowly or not at all on mobile.
-
-**Fix in `src/components/ReellyProjectCard.tsx` and `src/components/SafeImage.tsx`:**
-- Add `loading="lazy"` with proper `fetchPriority` settings
-- Use optimized storage URLs (`?width=400&height=300`) for card thumbnails to reduce payload
-- Add a shimmer placeholder while images load to prevent layout shifts
-- Ensure fallback chain works: `cover_image_url` -> first gallery image -> branded placeholder
-
----
-
-## 5. Fix Project Detail Page Hero Image Quality
-
-**Problem:** The hero image on the project detail page sometimes uses a low-quality or cropped photo.
-
-**Fix in `src/components/project-detail/ProjectDetailLayout.tsx` (lines 254-263):**
-- Update `heroImage` selection logic to pick the highest-resolution image from the gallery
-- Use `getHighResImageUrl()` (already imported) to request the full-size version
-- Prioritize images that have landscape orientation and high resolution over cover thumbnails
-- Remove any width/height constraints from the hero `SafeImage` that could cause cropping
-
----
-
-## 6. Fix Amenities Photos Display
-
-**Problem:** Amenities section doesn't show photos even when `amenity_images` data exists from Reelly.
-
-**Fix in `src/components/project-detail/AmenitiesWithPhotos.tsx`:**
-- Verify the `findRealPhoto` matching logic works with actual Reelly data keys
-- Add broader keyword matching (e.g., "Swimming Pool" should match "pool", "swimming-pool")
-- When amenity photos exist, display them as the card background with the icon overlaid, instead of icon-only cards
-- If no photo is found for a specific amenity, fall back to the icon-only card
-
----
-
-## 7. Fix JBJ AI Project Intelligence Logo
-
-**Problem:** The AI Analyzer loading state uses `jbj-monogram-nobuffer.png` which has a background the user doesn't want.
-
-**Fix in `src/components/project-detail/ProjectAIAnalyzer.tsx` (line 9):**
-- Switch from `jbjMonogramNobuffer` to `jbjMonogramTransparent` (the transparent variant with no black background)
-- The transparent monogram (`jbj-monogram-transparent.png`) was already imported and available in `BrandMonogram.tsx`
-
----
-
-## 8. Project Detail -- Ensure Construction Progress, Handover, Payment Plan Visibility
-
-**Problem:** These data points aren't always visible on project detail pages.
+**Problem:** The third navigation row (Details, Gallery, Developer, Location, Brochure, AI Analyzer, Mortgage) doesn't scroll horizontally on mobile swipe. The active tab doesn't update when scrolling through sections.
 
 **Fix in `src/components/project-detail/ProjectDetailLayout.tsx`:**
-- The `QuickFactsBar` already displays handover date when available (line 44-48)
-- The `ConstructionTimelineSection` only shows when `construction_progress` is not null (line 300)
-- The `PaymentPlanVisualization` shows when payment data exists (line 1047)
-- Ensure all three are always visible by relaxing the visibility conditions: show construction section with a "Data pending" state, show payment section with at least the payment_plan text string, and always show the handover in QuickFactsBar even with a "TBD" fallback
+- Add `touch-action: pan-x` and `-webkit-overflow-scrolling: touch` to the Row 2 scroll container (line 600)
+- Add `whitespace-nowrap min-w-fit` to each button (line 614)
+- Implement an `IntersectionObserver` that watches each section ref and updates `activeTab` when a section enters the viewport (scroll-spy behavior)
+- Ensure the active tab button auto-scrolls into view using `scrollIntoView({ inline: 'center', block: 'nearest' })`
 
 ---
 
-## 9. Fix DLD Market Intelligence Padding on Mobile
+## 3. Global Mobile Audit -- Prevent Content Overflow Everywhere
 
-**Problem:** The Dubai Market Intelligence widget touches the project brochure card below it, and the divider between pros/cons and the widget isn't centered.
+**Problem:** Buttons, cards, and content overflow their containers across multiple pages on mobile.
 
-**Fix in `src/components/project-detail/ProjectDetailLayout.tsx` (lines 992-1000):**
-- Increase bottom padding on the divider section from `py-10` to `py-14 md:py-16`
-- Add `mb-8` to the DLDMarketWidget wrapper to create space before the brochure section
-
----
-
-## 10. Remove Extra Layer from Consultation Form
-
-**Problem:** The "Register Interest" form has three visual layers: main background -> champagne card (`jj-card-inner` with border) -> form card. User wants to remove the middle layer.
-
-**Fix in `src/components/project-detail/ProjectDetailLayout.tsx` (lines 1137-1146):**
-- Remove the wrapping `jj-card-inner` div with champagne background styling
-- Keep only the `ConsultationRequestForm` which already has its own premium card styling (gradient + gold border + shadow)
-- The form card will sit directly on the main section background
+**Fix -- apply `whitespace-nowrap min-w-fit` or `overflow-hidden text-ellipsis` pattern to:**
+- All horizontal pill/tab navigations site-wide
+- Filter shortcut buttons in `FilterShortcutBar.tsx` (already partially addressed, reinforce)
+- Ensure no card or button text wraps to 2-3 lines by adding `line-clamp-1` or `truncate` where appropriate
+- Add `overflow-hidden` to card containers to prevent content from visually escaping
 
 ---
 
-## 11. SectionDivider Removal for Specific Sections
+## 4. News Extraction from Provident (One-Time Batch Import)
 
-**Problem:** User wants gold dividers removed under "Explore Areas" and "Top Developer" sections on the homepage.
+**Problem:** Need to extract all blog/news articles from Provident's website into the `market_news` table.
 
-**Clarification needed:** The homepage uses `SectionDivider` between every section. The user specifically mentioned removing dividers under "Areas We Cover" and potentially other sections. Will remove the `SectionDivider` immediately after `AreasWeCover` (line 543-544 in Index.tsx).
+**Fix:**
+- The edge function `import-provident-blog` already exists and works
+- Invoke it with a high limit (e.g., `{ "limit": 500 }`) to capture all articles in one batch
+- The function already handles deduplication by normalized title and URL
+- It strips Provident branding from source attribution
+- After import, verify data in `market_news` table and update source attribution to point to original publishers (Dubai Holding, Khaleej Times, etc.) where identifiable from article content
+- No Provident logos or links will be shown -- the existing `source` field says "Provident Estate" but the UI should display only the article's original publisher
+
+**Post-import cleanup:**
+- Update `source` field entries from "Provident Estate" to neutral "Market Intelligence" or the actual original source
+- Ensure the News & Insights page (`/news`) displays all imported articles with proper cards, photos, and links
+
+---
+
+## 5. Homepage Services Cards -- Wire to Existing Pages
+
+**Problem:** Services cards may show "Coming Soon" instead of linking to already-created pages.
+
+**Fix in `src/components/home/ServicesGrid.tsx`:**
+- Verify all 4 service cards (Buy, Rent, Sell, Management) link to their respective guide pages
+- Current links: `/buyer-guide`, `/tenant-guide`, `/seller-guide`, `/landlord-guide` -- these already exist
+- Remove any "Coming Soon" labels if present
+- Add additional service cards if the user has created more service pages (e.g., Property Valuation, Golden Visa, Listing Portal)
+
+---
+
+## 6. Golden Visa Guide -- Add Book Cover and Book-Style Structure
+
+**Problem:** The Golden Visa page needs a premium book cover photo, book-style layout with TOC, and side navigator.
+
+**Fix in `src/pages/guides/GoldenVisaGuide.tsx`:**
+- Add a 3D book cover component (using existing `Book3D` component) at the top of the hero section, styled with gold/champagne cover featuring "UAE Golden Visa" title
+- The Table of Contents section already exists (lines 176-203) with clickable navigation
+- Add a sticky side navigator (similar to `GuideSectionNav`) that tracks the active section using IntersectionObserver
+- Fix the React warning about `SectionHeader` not using `forwardRef` (line 56) -- wrap it with `React.forwardRef` or remove the ref usage
+
+---
+
+## 7. Broker Hub -- Add Certificate Section
+
+**Problem:** The Broker Hub page needs a visible certificate section.
+
+**Fix in `src/pages/BrokerHub.tsx`:**
+- Add a "Professional Certification" section after the documents section (around line 396)
+- Display a premium certificate card with gold border, showing JBJ broker certification details
+- Include a CTA button linking to `/services/broker-certification`
+- The certification card in `quickAccessCards` already exists (line 42) but needs a dedicated visual section
+
+---
+
+## 8. Apply Book-Style Structure to All Guide Pages
+
+**Problem:** All guide, FAQ, and market intelligence pages should follow a consistent book structure: cover photo, table of contents, then detailed content.
+
+**Fix pattern applied to:**
+- Buyer Guide, Seller Guide, Landlord Guide, Tenant Guide
+- FAQ pages (Buyer FAQ, Seller FAQ)
+- Market Overview, Area Intelligence, Market Reports
+- Legal pages (styled as legal books): Terms of Service, Privacy Policy, Cookie Policy, Disclaimers
+
+Each page will:
+1. Show the corresponding book cover (from `bookCollections.ts`) at the top
+2. Display an interactive Table of Contents with numbered sections
+3. Include a sticky side navigator (desktop) / top scroll nav (mobile)
+4. Content sections with proper IDs for scroll-to navigation
 
 ---
 
@@ -130,12 +124,14 @@ This plan addresses all reported issues across the Properties page, Project Deta
 
 | File | Changes |
 |------|---------|
-| `src/components/PropertiesHeroVideo.tsx` | Replace video URL with unique properties-page video |
-| `src/pages/PropertiesReelly.tsx` | Remove gold divider (line 304-305) |
-| `src/components/filters/FilterShortcutBar.tsx` | Fix overflow, visible arrows, pill sizing |
-| `src/components/project-detail/ProjectDetailLayout.tsx` | Hero image quality, form layer removal, DLD padding, section visibility |
-| `src/components/project-detail/AmenitiesWithPhotos.tsx` | Photo display improvements |
-| `src/components/project-detail/ProjectAIAnalyzer.tsx` | Fix monogram import |
-| `src/components/project-detail/QuickFactsBar.tsx` | Handover TBD fallback |
-| `src/pages/Index.tsx` | Remove specific section dividers |
+| `src/pages/business-suite/RealEstateSuite.tsx` | Add `whitespace-nowrap min-w-fit` to tab buttons, fix mobile scroll |
+| `src/pages/business-suite/ProductivitySuite.tsx` | Same tab button fix |
+| `src/pages/business-suite/CreativeSuite.tsx` | Same tab button fix |
+| `src/pages/toolkit/VoiceSuite.tsx` | Same tab button fix |
+| `src/components/project-detail/ProjectDetailLayout.tsx` | Fix Row 3 scroll, add scroll-spy, auto-scroll active tab |
+| `src/components/filters/FilterShortcutBar.tsx` | Reinforce overflow protection |
+| `src/pages/guides/GoldenVisaGuide.tsx` | Add book cover, sticky side nav, fix forwardRef warning |
+| `src/pages/BrokerHub.tsx` | Add certificate section |
+| `src/components/home/ServicesGrid.tsx` | Verify all links, remove "Coming Soon" |
+| Edge function invocation | One-time batch import of Provident news |
 
