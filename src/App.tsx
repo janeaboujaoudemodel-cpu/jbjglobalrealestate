@@ -484,6 +484,7 @@ const App = () => (
                 <Route path="/my-dashboard" element={<MyDashboard />} />
                 <Route path="/my-dashboard/progress" element={<MyDashboardProgress />} />
                 <Route path="/my-dashboard/activity" element={<MyDashboardActivity />} />
+                <Route path="/my-activity" element={<Navigate to="/my-dashboard/activity" replace />} />
                 <Route path="/investor-dashboard" element={<InvestorDashboard />} />
                 <Route path="/investor-dashboard/portfolio" element={<PortfolioViews />} />
                 <Route path="/investor-dashboard/reports" element={<ReportAccess />} />

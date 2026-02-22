@@ -53,6 +53,7 @@ import {
   Monitor,
   Heart,
 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { SmartDocumentUploader } from "@/components/SmartDocumentUploader";
 import { RateLimitDashboard } from "@/components/admin/RateLimitDashboard";
 import { IPBlocklistDashboard } from "@/components/admin/IPBlocklistDashboard";
@@ -82,6 +83,7 @@ const EmbeddedITDepartment = lazy(() => import("@/components/admin/EmbeddedITDep
 const EmbeddedEmployeeHub = lazy(() => import("@/components/admin/EmbeddedEmployeeHub").then(m => ({ default: m.EmbeddedEmployeeHub })));
 const EmbeddedSupportTickets = lazy(() => import("@/components/admin/EmbeddedSupportTickets").then(m => ({ default: m.EmbeddedSupportTickets })));
 const EmbeddedCustomerHappinessHub = lazy(() => import("@/components/admin/EmbeddedCustomerHappinessHub").then(m => ({ default: m.EmbeddedCustomerHappinessHub })));
+const AdminIntelligence = lazy(() => import("@/pages/admin/AdminIntelligence"));
 
 const TabLoadingFallback = () => (
   <div className="space-y-4 p-4">
@@ -500,6 +502,10 @@ const Admin = () => {
                 <Mic className="w-4 h-4 mr-2" />
                 Podcast Studio
               </TabsTrigger>
+              <TabsTrigger value="intelligence" className="tab-trigger-champagne text-black">
+                <Brain className="w-4 h-4 mr-2" />
+                User Intelligence
+              </TabsTrigger>
               <TabsTrigger value="founder" className="tab-trigger-champagne text-black">
                 <Crown className="w-4 h-4 mr-2" />
                 Founder
@@ -576,6 +582,12 @@ const Admin = () => {
             <div className="max-w-3xl mx-auto">
               <VoiceRecorder />
             </div>
+          </TabsContent>
+
+          <TabsContent value="intelligence" className="space-y-8">
+            <Suspense fallback={<div className="flex items-center justify-center p-12"><Loader2 className="w-6 h-6 animate-spin text-gold" /></div>}>
+              <AdminIntelligence embedded />
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="founder" className="space-y-8">
