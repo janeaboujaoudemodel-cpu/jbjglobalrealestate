@@ -29,11 +29,9 @@ import {
 } from 'lucide-react';
 import { format, startOfWeek, endOfWeek, startOfMonth, endOfMonth } from 'date-fns';
 
-// Book cover imports
-import brokerEducationCover from '@/assets/books/broker-education-cover.jpg';
-import brokerCertificationCover from '@/assets/books/broker-certification-cover.jpg';
-import marketIntelligenceCover from '@/assets/books/market-intelligence-cover.jpg';
-import goldenVisaCover from '@/assets/books/golden-visa-cover.jpg';
+// Book imports
+import { BookShelf } from '@/components/books/BookShelf';
+import { BROKER_BOOKS } from '@/data/bookCollections';
 
 const quickAccessCards = [
   { title: 'Broker Dashboard', desc: 'Performance & analytics', icon: BarChart3, href: '/broker-dashboard', color: 'from-fuchsia-500 to-purple-600' },
@@ -53,12 +51,6 @@ const brokerAITools = [
   { title: 'Call Summarizer', desc: 'Summarize client calls', icon: Phone, href: '/ai-call-summarizer' },
 ];
 
-const brokerBooks = [
-  { title: 'Broker Training Manual', cover: brokerEducationCover, href: '/broker-education' },
-  { title: 'Broker Certification Guide', cover: brokerCertificationCover, href: '/services/broker-certification' },
-  { title: 'Market Intelligence Report', cover: marketIntelligenceCover, href: '/market-intelligence' },
-  { title: 'Golden Visa UAE Guide', cover: goldenVisaCover, href: '/guides/golden-visa-uae' },
-];
 
 const BrokerHub = () => {
   const navigate = useNavigate();
@@ -189,46 +181,7 @@ const BrokerHub = () => {
         </div>
 
         {/* Books, Guides & Intelligence - Bookshelf */}
-        <div>
-          <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-            <BookOpen className="w-5 h-5 text-amber-400" />
-            Books, Guides & Intelligence
-          </h2>
-          <Card className="bg-gradient-to-br from-zinc-900/80 to-zinc-950 border border-amber-500/20 overflow-hidden">
-            <CardContent className="p-8">
-              {/* Bookshelf */}
-              <div className="flex flex-wrap justify-center gap-8">
-                {brokerBooks.map((book) => (
-                  <motion.button
-                    key={book.title}
-                    onClick={() => navigate(book.href)}
-                    className="group flex flex-col items-center gap-3 w-36"
-                    whileHover={{ y: -8 }}
-                    transition={{ type: 'spring', stiffness: 300 }}
-                  >
-                    {/* Book with 3D effect */}
-                    <div className="relative w-32 h-44 rounded-r-md overflow-hidden shadow-[4px_4px_20px_rgba(0,0,0,0.6)] group-hover:shadow-[6px_6px_30px_rgba(200,167,102,0.3)] transition-shadow">
-                      {/* Spine effect */}
-                      <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-black/40 to-transparent z-10" />
-                      <img
-                        src={book.cover}
-                        alt={book.title}
-                        className="w-full h-full object-cover"
-                      />
-                      {/* Glossy overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </div>
-                    <p className="text-xs text-zinc-400 text-center font-medium group-hover:text-amber-300 transition-colors leading-tight">
-                      {book.title}
-                    </p>
-                  </motion.button>
-                ))}
-              </div>
-              {/* Shelf line */}
-              <div className="mt-6 h-1 bg-gradient-to-r from-transparent via-amber-800/50 to-transparent rounded-full" />
-            </CardContent>
-          </Card>
-        </div>
+        <BookShelf books={BROKER_BOOKS} />
 
         {/* Activity, Training, Support Tabs */}
         {user && (
