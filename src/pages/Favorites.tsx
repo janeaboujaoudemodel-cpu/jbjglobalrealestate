@@ -306,27 +306,27 @@ const Favorites = () => {
   };
 
   return (
-    <section className="min-h-screen bg-gradient-to-b from-pink-950/30 via-zinc-950 to-zinc-950 py-8 md:py-16">
+    <section className="min-h-screen bg-gradient-to-b from-[#1a1810] via-[#0f0e0a] to-black py-8 md:py-16">
       <div className="container mx-auto px-4">
         {/* Header */}
         <Link
           to="/"
-          className="inline-flex items-center gap-2 text-zinc-400 hover:text-pink-400 transition-colors mb-8"
+          className="inline-flex items-center gap-2 text-gold/60 hover:text-gold transition-colors mb-8"
         >
           <ChevronLeft className="w-5 h-5" />
           <span>Back to Properties</span>
         </Link>
 
         <h1 className="text-white text-3xl font-bold mb-2">My Saved Properties</h1>
-        <p className="text-pink-400/80 mb-8">Manage your favorites and shortlist</p>
+        <p className="text-gold/70 mb-8">Manage your favorites and shortlist</p>
 
         {!user && (
-          <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-4 mb-8 flex items-center justify-between">
-            <p className="text-zinc-400">
-              <span className="text-zinc-300">Guest Mode:</span> Your saved properties are stored locally. Sign in to sync across devices.
+          <div className="bg-gradient-to-br from-[#1c1a14] to-[#15130e] border border-gold/20 rounded-xl p-4 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <p className="text-white/60 text-sm">
+              <span className="text-white/80 font-medium">Guest Mode:</span> Your saved properties are stored locally. Sign in to sync across devices.
             </p>
-            <Link to="/auth">
-              <Button variant="outline" size="sm" className="border-zinc-700 text-zinc-300 hover:bg-zinc-800">
+            <Link to="/auth" className="shrink-0">
+              <Button size="sm" className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:brightness-110">
                 Sign In
               </Button>
             </Link>
@@ -334,17 +334,17 @@ const Favorites = () => {
         )}
 
         <Tabs defaultValue={defaultTab} className="w-full">
-          <TabsList className="bg-zinc-900 border border-zinc-800 p-1 mb-8">
+          <TabsList className="bg-[#1c1a14] border border-gold/20 p-1 mb-8">
             <TabsTrigger
               value="favorites"
-              className="data-[state=active]:bg-white data-[state=active]:text-zinc-900 text-zinc-400"
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-gold data-[state=active]:to-gold-dark data-[state=active]:text-black text-white/60"
             >
               <Heart className="w-4 h-4 mr-2" />
               Favorites ({favCount})
             </TabsTrigger>
             <TabsTrigger
               value="shortlist"
-              className="data-[state=active]:bg-white data-[state=active]:text-zinc-900 text-zinc-400"
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-gold data-[state=active]:to-gold-dark data-[state=active]:text-black text-white/60"
             >
               <ListPlus className="w-4 h-4 mr-2" />
               Shortlist ({shortlistCount})
@@ -361,18 +361,18 @@ const Favorites = () => {
             ) : favoriteProjects?.length ? (
               <>
                 {/* Actions Bar for Favorites */}
-                <div className="flex items-center justify-between mb-6 bg-zinc-900 rounded-lg p-4 border border-zinc-800">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 bg-gradient-to-br from-[#1c1a14] to-[#15130e] rounded-xl p-4 border border-gold/20 gap-3">
                   <div className="flex items-center gap-4">
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={selectAllFavorites}
-                      className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+                      className="border-gold/30 text-gold hover:bg-gold/10"
                     >
                       <CheckSquare className="w-4 h-4 mr-2" />
                       Select All
                     </Button>
-                    <span className="text-zinc-500 text-sm">
+                    <span className="text-white/50 text-sm">
                       {selectedFavorites.length} selected
                     </span>
                   </div>
@@ -416,28 +416,28 @@ const Favorites = () => {
                 </div>
               </>
             ) : (
-              <div className="text-center py-16 bg-zinc-900 rounded-2xl border border-zinc-800">
-                <div className="max-w-md mx-auto">
-                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-pink-500/20 to-pink-600/10 border border-pink-500/20 flex items-center justify-center mx-auto mb-6">
-                    <Heart className="w-10 h-10 text-pink-500/70" />
+              <div className="text-center py-16 bg-gradient-to-br from-[#1c1a14] to-[#15130e] rounded-2xl border border-gold/20">
+                <div className="max-w-md mx-auto px-4">
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 flex items-center justify-center mx-auto mb-6">
+                    <Heart className="w-10 h-10 text-gold/70" />
                   </div>
                   <h3 className="text-white text-xl font-semibold mb-3">Your Favorites List is Empty</h3>
-                  <p className="text-zinc-400 mb-3">
+                  <p className="text-white/50 mb-3">
                     Save properties you love by clicking the heart icon on any listing. 
                     Your favorites will appear here for easy access and comparison.
                   </p>
-                  <p className="text-zinc-500 text-sm mb-8">
+                  <p className="text-white/30 text-sm mb-8">
                     Tip: Add properties to your favorites, then move your top picks to your shortlist for final evaluation.
                   </p>
                   <div className="flex flex-col sm:flex-row gap-3 justify-center">
                     <Link to="/properties">
                       <Button className="bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90">
                         Explore Properties
-                        <ArrowUpRight className="w-4 h-4 ml-2 text-gold" />
+                        <ArrowUpRight className="w-4 h-4 ml-2" />
                       </Button>
                     </Link>
                     <Link to="/quiz">
-                      <Button variant="outline" className="border-pink-500/30 text-pink-400 hover:bg-pink-500/10">
+                      <Button variant="outline" className="border-gold/30 text-gold hover:bg-gold/10">
                         <Sparkles className="w-4 h-4 mr-2" />
                         AI Home Finder
                       </Button>
@@ -458,8 +458,8 @@ const Favorites = () => {
             ) : shortlistedProjects?.length ? (
               <>
                 {/* Shortlist Actions Bar */}
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 bg-zinc-900 rounded-lg p-4 border border-zinc-800">
-                  <p className="text-zinc-400 text-sm">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 bg-gradient-to-br from-[#1c1a14] to-[#15130e] rounded-xl p-4 border border-gold/20">
+                  <p className="text-white/50 text-sm">
                     Rank your top properties with badges: <span className="text-yellow-400">🥇 Gold</span>, <span className="text-zinc-300">🥈 Silver</span>, <span className="text-amber-500">🥉 Bronze</span>
                   </p>
                   <Button
@@ -504,7 +504,7 @@ const Favorites = () => {
                               <Button
                                 variant="outline"
                                 size="sm"
-                                className="w-full border-zinc-700 text-zinc-400 hover:bg-zinc-800 hover:text-white"
+                                className="w-full border-gold/30 text-gold hover:bg-gold/10 hover:text-gold"
                               >
                                 <Award className="w-4 h-4 mr-2" />
                                 {badge ? `Change Badge` : `Add Badge`}
