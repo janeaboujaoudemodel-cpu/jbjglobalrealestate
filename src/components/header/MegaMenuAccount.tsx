@@ -1,6 +1,6 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { User, Heart, Sparkles, Users, FolderOpen, LogOut, ChevronRight, LayoutDashboard, Shield, Headphones, Loader2, Bell } from 'lucide-react';
+import { User, Heart, Sparkles, Users, FolderOpen, LogOut, ChevronRight, LayoutDashboard, Shield, Headphones, Loader2, Bell, DollarSign, Ruler } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -12,6 +12,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import ModeSwitcher from '@/components/ModeSwitcher';
 import { useTierProgress } from '@/hooks/useTierProgress';
 import { useUserModeContext } from '@/contexts/UserModeContext';
+import { SUPPORTED_CURRENCIES } from '@/components/CurrencySwitcher';
+import { cn } from '@/lib/utils';
 
 interface MegaMenuAccountProps {
   onClose: () => void;
@@ -23,6 +25,37 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
   const { t } = useLanguage();
   const { tierProgress, isCombinedMode, investorTierProgress, brokerTierProgress } = useTierProgress();
   const { mode } = useUserModeContext();
+
+  // Currency & unit state synced with localStorage
+  const [activeCurrency, setActiveCurrency] = useState<string>(() =>
+    typeof window !== 'undefined' ? localStorage.getItem('jj_currency') || 'AED' : 'AED'
+  );
+  const [areaUnit, setAreaUnit] = useState<string>(() =>
+    typeof window !== 'undefined' ? localStorage.getItem('jj_area_unit') || 'sqft' : 'sqft'
+  );
+
+  useEffect(() => {
+    const onCurrency = (e: Event) => setActiveCurrency((e as CustomEvent).detail);
+    const onUnit = (e: Event) => setAreaUnit((e as CustomEvent).detail);
+    window.addEventListener('currencyChange', onCurrency);
+    window.addEventListener('areaUnitChange', onUnit);
+    return () => {
+      window.removeEventListener('currencyChange', onCurrency);
+      window.removeEventListener('areaUnitChange', onUnit);
+    };
+  }, []);
+
+  const handleCurrencyChange = (code: string) => {
+    setActiveCurrency(code);
+    localStorage.setItem('jj_currency', code);
+    window.dispatchEvent(new CustomEvent('currencyChange', { detail: code }));
+  };
+
+  const handleAreaUnitChange = (unit: string) => {
+    setAreaUnit(unit);
+    localStorage.setItem('jj_area_unit', unit);
+    window.dispatchEvent(new CustomEvent('areaUnitChange', { detail: unit }));
+  };
   
   const { data: crmProfile, isLoading: crmLoading } = useQuery({
     queryKey: ['crm-profile-account-menu', user?.id],
@@ -288,8 +321,57 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                   ))}
                 </div>
 
-                {/* Sign Out Button */}
+                {/* Currency & Unit Settings */}
                 <div className="mt-4 pt-4 border-t border-gold/30">
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-gold font-bold px-2 mb-2">
+                    {t('account.preferences', 'Preferences')}
+                  </p>
+                  {/* Currency */}
+                  <div className="px-2 mb-3">
+                    <p className="text-xs font-semibold text-black/50 mb-1.5 flex items-center gap-1"><DollarSign className="w-3 h-3" /> Currency</p>
+                    <div className="grid grid-cols-5 gap-1">
+                      {SUPPORTED_CURRENCIES.map((cur) => (
+                        <button
+                          key={cur.code}
+                          onClick={(e) => { e.stopPropagation(); handleCurrencyChange(cur.code); }}
+                          onPointerDown={(e) => e.stopPropagation()}
+                          className={cn(
+                            "py-1.5 rounded-lg text-[10px] font-medium transition-colors text-center",
+                            activeCurrency === cur.code
+                              ? "bg-gold text-black"
+                              : "bg-champagne-light text-black hover:bg-champagne"
+                          )}
+                        >
+                          {cur.code}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  {/* Area Unit */}
+                  <div className="px-2 mb-3">
+                    <p className="text-xs font-semibold text-black/50 mb-1.5 flex items-center gap-1"><Ruler className="w-3 h-3" /> Area Unit</p>
+                    <div className="flex gap-2">
+                      {(['sqft', 'sqm'] as const).map((unit) => (
+                        <button
+                          key={unit}
+                          onClick={(e) => { e.stopPropagation(); handleAreaUnitChange(unit); }}
+                          onPointerDown={(e) => e.stopPropagation()}
+                          className={cn(
+                            "flex-1 py-1.5 rounded-lg text-xs font-medium transition-colors",
+                            areaUnit === unit
+                              ? "bg-gold text-black"
+                              : "bg-champagne-light text-black hover:bg-champagne"
+                          )}
+                        >
+                          {unit}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Sign Out Button */}
+                <div className="mt-2 pt-3 border-t border-gold/30">
                   <button 
                     onClick={handleSignOut} 
                     className="flex items-center gap-3 py-2.5 px-2 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-red-500/10 hover:to-red-500/5 group w-full"

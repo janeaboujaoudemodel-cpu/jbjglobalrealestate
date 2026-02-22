@@ -7,9 +7,10 @@
  * - Comprehensive filters with all property types, developer, community, etc.
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Search, ChevronDown, SlidersHorizontal, Sparkles, DollarSign, Ruler, Home, MapPin, Calendar, Save, FolderOpen, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
@@ -385,8 +386,67 @@ const HeroSearchBar = () => {
   const [locationSearch, setLocationSearch] = useState('');
   const [bedrooms, setBedrooms] = useState('any');
   const [priceRange, setPriceRange] = useState('any');
-  const [currency, setCurrency] = useState<CurrencyCode>('AED');
-  const [areaUnit, setAreaUnit] = useState<'sqft' | 'sqm'>('sqft');
+  const [currency, setCurrencyState] = useState<CurrencyCode>(() => {
+    if (typeof window !== 'undefined') {
+      return (localStorage.getItem('jj_currency') as CurrencyCode) || 'AED';
+    }
+    return 'AED';
+  });
+  const [areaUnit, setAreaUnitState] = useState<'sqft' | 'sqm'>(() => {
+    if (typeof window !== 'undefined') {
+      return (localStorage.getItem('jj_area_unit') as 'sqft' | 'sqm') || 'sqft';
+    }
+    return 'sqft';
+  });
+
+  // Sync currency globally
+  const setCurrency = (code: CurrencyCode) => {
+    setCurrencyState(code);
+    localStorage.setItem('jj_currency', code);
+    window.dispatchEvent(new CustomEvent('currencyChange', { detail: code }));
+    // First-time notification
+    const key = 'jj_currency_first_change';
+    if (!localStorage.getItem(key)) {
+      localStorage.setItem(key, 'true');
+      toast.success(`Currency set to ${code}`, {
+        description: 'You can change this anytime from the homepage search bar, My Account, or the footer.',
+        duration: 6000,
+      });
+    }
+  };
+
+  // Sync area unit globally
+  const setAreaUnit = (unit: 'sqft' | 'sqm') => {
+    setAreaUnitState(unit);
+    localStorage.setItem('jj_area_unit', unit);
+    window.dispatchEvent(new CustomEvent('areaUnitChange', { detail: unit }));
+    const key = 'jj_area_unit_first_change';
+    if (!localStorage.getItem(key)) {
+      localStorage.setItem(key, 'true');
+      toast.success(`Area unit set to ${unit}`, {
+        description: 'You can change this anytime from the homepage search bar, My Account, or the footer.',
+        duration: 6000,
+      });
+    }
+  };
+
+  // Listen for external currency/unit changes
+  useEffect(() => {
+    const onCurrency = (e: Event) => {
+      const code = (e as CustomEvent).detail;
+      if (code) setCurrencyState(code);
+    };
+    const onUnit = (e: Event) => {
+      const unit = (e as CustomEvent).detail;
+      if (unit) setAreaUnitState(unit);
+    };
+    window.addEventListener('currencyChange', onCurrency);
+    window.addEventListener('areaUnitChange', onUnit);
+    return () => {
+      window.removeEventListener('currencyChange', onCurrency);
+      window.removeEventListener('areaUnitChange', onUnit);
+    };
+  }, []);
   const [sizeRange, setSizeRange] = useState('any');
   const [propertyType, setPropertyType] = useState('all');
   const [propertyStatus, setPropertyStatus] = useState('all');
@@ -609,7 +669,7 @@ const HeroSearchBar = () => {
             avoidCollisions={false}
             collisionPadding={0}
             onWheelCapture={(e) => e.stopPropagation()}
-            onPointerDownOutside={(e) => e.preventDefault()}
+            
           >
             <div className="text-xs font-semibold text-black/60 px-3 py-1.5 uppercase tracking-wider">Currency</div>
             {SUPPORTED_CURRENCIES.map((c) => (
