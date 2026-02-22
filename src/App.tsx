@@ -336,6 +336,7 @@ const Disclaimers = lazy(() => import("./pages/Disclaimers"));
 const TrustAndCompliance = lazy(() => import("./pages/TrustAndCompliance"));
 const RiskDisclosure = lazy(() => import("./pages/RiskDisclosure"));
 const AmlKycPolicy = lazy(() => import("./pages/AmlKycPolicy"));
+const Accessibility = lazy(() => import("./pages/Accessibility"));
 
 // Owner Pages - lazy loaded
 const OwnerAuditPage = lazy(() => import("./pages/owner/OwnerAuditPage"));
@@ -531,6 +532,7 @@ const App = () => (
                 <Route path="/trust-compliance" element={<TrustAndCompliance />} />
                 <Route path="/risk-disclosure" element={<RiskDisclosure />} />
                 <Route path="/aml-kyc" element={<AmlKycPolicy />} />
+                <Route path="/accessibility" element={<Accessibility />} />
                 
                 {/* Blueprint routes - New pages */}
                 <Route path="/sell" element={<SellWithUs />} />
