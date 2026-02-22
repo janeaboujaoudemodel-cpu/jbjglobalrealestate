@@ -2,10 +2,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import { T } from "@/components/ui/T";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
+import whyDubaiVideo from "@/assets/why-dubai-scenes.mp4";
 
-// Cloud-hosted premium videos for fast loading
+// Unique video for Why Dubai section - NOT the hero video
 const SCENE_URLS = [
-  "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/videos/hero-video.mp4",
+  whyDubaiVideo,
 ];
 
 const scenes = SCENE_URLS.map(src => ({ src }));

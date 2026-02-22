@@ -47,7 +47,8 @@ const CTA_LABELS: Record<string, string> = {
   sell: "List Now",
   rent: "Browse Now",
   "list-rent": "List Now",
-  "golden-visa": "Read Guide",
+  "golden-visa": "Get Your Golden Visa",
+  "property-management": "Manage My Property",
   mortgage: "Calculate Now",
   passport: "Request Introduction",
   inquiries: "Contact Us",
@@ -102,6 +103,15 @@ const services: ServiceSlide[] = [
     icon: Globe,
     href: "/guides/golden-visa-uae",
     bgImage: goldenVisaBg,
+    available: true
+  },
+  {
+    id: "property-management",
+    title: "Property Management",
+    description: "Professional property maintenance and management services for landlords and investors",
+    icon: Building2,
+    href: "/services/property-management",
+    bgImage: listRentalBg,
     available: true
   },
   {
@@ -259,12 +269,21 @@ const ExploreServicesCard = () => {
 
               <div className="flex items-center justify-between">
                 {currentService.available ? (
-                  <Link to={currentService.href}>
-                    <Button variant="primary" size="lg" className="gap-2 px-8 py-4 rounded-lg group">
-                      <span className="tracking-wide">{CTA_LABELS[currentService.id] ?? "Explore Now"}</span>
-                      <ArrowRight className="w-4 h-4 md:w-5 md:h-5 text-gold group-hover:translate-x-1 transition-transform" />
-                    </Button>
-                  </Link>
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <Link to={currentService.href}>
+                      <Button variant="primary" size="lg" className="gap-2 px-8 py-4 rounded-lg group">
+                        <span className="tracking-wide">{CTA_LABELS[currentService.id] ?? "Explore Now"}</span>
+                        <ArrowRight className="w-4 h-4 md:w-5 md:h-5 text-gold group-hover:translate-x-1 transition-transform" />
+                      </Button>
+                    </Link>
+                    {currentService.id === "golden-visa" && (
+                      <Link to="/guides/golden-visa-uae">
+                        <Button variant="outline" size="lg" className="gap-2 px-6 py-4 rounded-lg border-white/40 text-white hover:bg-white/10">
+                          Read Guide
+                        </Button>
+                      </Link>
+                    )}
+                  </div>
                 ) : (
                   <Button variant="primary" size="lg" disabled className="gap-2 px-8 py-4 rounded-lg">
                     {CTA_LABELS[currentService.id] ?? "Coming Soon"}
