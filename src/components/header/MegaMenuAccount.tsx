@@ -338,7 +338,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                           className={cn(
                             "py-1.5 rounded-lg text-[10px] font-medium transition-colors text-center",
                             activeCurrency === cur.code
-                              ? "bg-gold text-black"
+                              ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-[#C8A766]/60 shadow-sm"
                               : "bg-champagne-light text-black hover:bg-champagne"
                           )}
                         >
@@ -359,7 +359,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                           className={cn(
                             "flex-1 py-1.5 rounded-lg text-xs font-medium transition-colors",
                             areaUnit === unit
-                              ? "bg-gold text-black"
+                              ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-[#C8A766]/60 shadow-sm"
                               : "bg-champagne-light text-black hover:bg-champagne"
                           )}
                         >

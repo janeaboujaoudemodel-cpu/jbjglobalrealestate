@@ -1,7 +1,7 @@
 import React from 'react';
 import { 
   Calculator, Handshake, Coins, FileText, Key, Home, 
-  Wrench, Calendar, ClipboardCheck, Award, Building2, Globe, Eye
+  Wrench, Calendar, ClipboardCheck, Award, Building2, Globe, Eye, TrendingUp
 } from 'lucide-react';
 import servicesHero from '@/assets/property-consultation.png';
 import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuCard, MegaMenuCTAButton } from '@/components/header/mega-menu-primitives';
@@ -18,6 +18,8 @@ const MegaMenuServices = React.forwardRef<HTMLDivElement, MegaMenuServicesProps>
     { name: 'Currency Exchange', href: '/services/currency-exchange', icon: Coins },
     { name: 'Concierge Services', href: '/services/concierge', icon: Handshake },
     { name: 'Company Setup', href: '/services/company-setup', icon: Building2 },
+    { name: 'Property Valuation', href: '/sell/valuation', icon: Calculator },
+    { name: 'Rental Index', href: '/rental-index', icon: TrendingUp },
   ];
 
   const additionalServices = [

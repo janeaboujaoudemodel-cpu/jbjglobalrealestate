@@ -57,6 +57,9 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
     { label: 'Property Management', href: '/services/property-management', icon: Building2 },
     { label: 'Mortgage Advisory', href: '/partners/mortgage', icon: Calculator },
     { label: 'Valuation', href: '/sell/valuation', icon: BarChart3 },
+    { label: 'Rental Index', href: '/rental-index', icon: TrendingUp },
+    { label: 'Short-term Rentals', href: '/services/short-term-rentals', icon: Calendar },
+    { label: 'Snagging & Inspection', href: '/services/snagging', icon: ClipboardCheck },
     { label: 'Listing Portal', href: '/listing-portal', icon: ClipboardCheck },
     { label: 'Customer Happiness', href: '/customer-happiness', icon: Users },
   ];
