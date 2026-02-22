@@ -317,8 +317,16 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
     <section className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-950">
       {/* Hero Section with Video */}
       <div className="relative min-h-[50vh] flex items-center justify-center overflow-hidden">
-        {/* Premium gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0a1628] via-[#0d0b08] to-black opacity-80" />
+        {/* Video Background */}
+        <video 
+          autoPlay 
+          loop 
+          muted 
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover opacity-30"
+        >
+          <source src="/videos/burj-khalifa-day-to-night.mp4" type="video/mp4" />
+        </video>
         
         {/* Overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-blue-950/80 via-black/70 to-black" />
