@@ -7,7 +7,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 // Use URL references instead of static imports to avoid blocking the bundle
-const burjKhalifaVideo = new URL("@/assets/videos/burj-khalifa-day-to-night.mp4", import.meta.url).href;
+import burjKhalifaVideo from "@/assets/videos/burj-khalifa-day-to-night.mp4";
 
 interface VideoScene {
   id: string;
