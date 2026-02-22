@@ -1,128 +1,85 @@
 
-# FAQ Gold Styling, Book System, Company Profile, and WhatsApp Fix
+# Critical Fixes: Mega Menu Scene, Route Persistence, Monogram, Description Formatting, and More
 
-This plan addresses four major areas: FAQ active state styling, consistent book system across pages, company profile premium overhaul, and WhatsApp/contact link blocking fix.
-
----
-
-## 1. FAQ Accordion -- Gold Active State (Title and Arrow)
-
-**Problem:** When an FAQ item is expanded, the title and chevron arrow remain the default color instead of turning gold.
-
-**Fix in `src/components/ui/accordion.tsx`:**
-- Add `[&[data-state=open]]:text-[#C8A766]` to the `AccordionTrigger` className (line 25) so that when open, both the trigger text and the ChevronDown icon turn champagne gold
-- Also add `[&[data-state=open]>svg]:text-[#C8A766]` to explicitly color the arrow gold
-- This is a global change -- every Accordion across every page (Golden Visa FAQ, Portfolio FAQ, Report Access FAQ, Snagging FAQ, etc.) will automatically inherit the gold active styling
+This plan addresses all the outstanding issues reported across the project.
 
 ---
 
-## 2. Consistent Book System Across All Pages
+## 1. Remove Old "Burj Khalifa Day-to-Night" Video Scene from Mega Menu
 
-**Problem:** Books are only rendered on InvestorHub and BrokerHub via `BookShelf`. The user wants the same books to appear on every page that has related guide/content, using the same covers and titles everywhere.
+**Problem:** The `MegaMenuProjects.tsx` dropdown still uses `burj-khalifa-day-to-night.mp4` -- the old scene the user has repeatedly asked to remove.
 
-### 2a. Add a `NEWS_BOOKS` collection and `companyProfileBook` export
-
-**Fix in `src/data/bookCollections.ts`:**
-- Add a new `newsBook` entry with title "News & Updates", a cover image, href `/news`, and category `report`
-- Export a new `NEWS_BOOKS` collection containing the news book
-- The `COMPANY_BOOKS` collection already exists with `companyProfileBook` -- export it individually too for single-book usage
-
-### 2b. Add BookShelf to pages that have guide/book content
-
-Add the `BookShelf` component to these pages (importing from `bookCollections.ts`):
-
-| Page | Books to Show |
-|------|--------------|
-| `/guides` (GuidesPage) | Full `INVESTOR_BOOKS` collection (all guides + FAQs) |
-| `/guides/golden-visa-uae` (GoldenVisaGuide) | `goldenVisaBook` single + related guides |
-| `/buyer-guide` | `buyerGuideBook` + related |
-| `/seller-guide` | `sellerGuideBook` + related |
-| `/landlord-guide` | `landlordGuideBook` + related |
-| `/rent-guide` | `rentGuideBook` + related |
-| `/tenant-guide` | `tenantGuideBook` + related |
-| `/company-profile` | `COMPANY_BOOKS` collection |
-| `/news` (News page) | `NEWS_BOOKS` collection |
-
-Each page will import `BookShelf` and render it near the top or after the hero, using the same book data and covers as everywhere else.
-
-### 2c. Upgrade BookShelf visual style
-
-**Fix in `src/components/books/BookShelf.tsx`:**
-- Upgrade the book card container from dark zinc to a premium champagne/pearl style matching the site theme
-- Add a subtle gold border around each book cover
-- Add a slight shadow and hover glow effect for premium feel
-- The book covers remain the same images -- consistent across all pages
+**Fix in `src/components/header/MegaMenuProjects.tsx`:**
+- Remove the import of `burj-khalifa-day-to-night.mp4`
+- Replace with a premium static image from existing assets (e.g., `menu-offplan-project.jpg` is already imported but the video overrides it)
+- Remove the `video` prop from `MegaMenuFeaturedCard` so only the static premium image is used
+- Also remove usage in `src/pages/Developers.tsx` (line 28) and `src/pages/PropertyEvaluator.tsx` (line 328) -- replace with static images or remove the video element
 
 ---
 
-## 3. Company Profile Page -- Premium Overhaul
+## 2. Fix Page Refresh Losing Current Route (RouteResume)
 
-**Problem:** Huge gaps between sections, plain styling, no table of contents, book cover needs founder photo with Downtown/Burj Khalifa background.
+**Problem:** Refreshing takes the user back to the homepage instead of staying on the current page. The `RouteResume` component uses `sessionStorage` which loses data on tab close, and may have race conditions.
 
-### 3a. Reduce Section Padding
-
-**Fix in `src/pages/CompanyProfile.tsx`:**
-- Change `SectionShell` padding from `py-12 md:py-16` (line 46) to `py-8 md:py-10` to tighten spacing between all sections
-- This eliminates the large gaps the user reported
-
-### 3b. Add Table of Contents
-
-- Add a sticky or anchor-based Table of Contents section after the hero, listing all sections (Executive Summary, Brand Story, Vision/Mission/Values, Services, Process, etc.)
-- Each item links to its section via anchor IDs
-
-### 3c. Upgrade Book Cover with Founder Photo
-
-**Fix in the `BookPreview3D` component (line 221-285):**
-- Replace the plain black/JBJ text cover with a premium cover that includes:
-  - Background: Downtown Dubai skyline with Burj Khalifa (using existing hero image or a CDN photo)
-  - Foreground: Founder photo overlay (using `founderCompanyProfile` import already in the file)
-  - Gold "COMPANY PROFILE" title text overlay
-  - Gold accent bars top and bottom
-- Wrap founder photo display in `FounderContent` so it only shows when founder visibility is enabled
-
-### 3d. Add Visuals and Photos
-
-- Add a premium Dubai skyline divider image between major sections
-- Use the existing `luxuryVillaHero` and `founderCompanyProfile` assets more prominently
-- Add gold gradient dividers between sections instead of plain spacing
-
-### 3e. Add BookShelf with Company Profile Book
-
-- Import `BookShelf` and `COMPANY_BOOKS` from `bookCollections`
-- Render the BookShelf section near the PDF download area
+**Fix in `src/components/RouteResume.tsx`:**
+- Switch `sessionStorage` to `localStorage` for `last-route` persistence -- this survives tab closes and browser restarts
+- Add a guard: if `window.location.pathname !== "/"` on initial load, the browser already has the correct route (direct URL or refresh) -- do NOT redirect at all. Only restore from storage when the app genuinely loads on `/` but has a saved deep route
+- This prevents the race condition where the app loads on the correct route but the component overwrites it
 
 ---
 
-## 4. WhatsApp and Contact Links -- Fix Blocking
+## 3. AI Analyzer Monogram -- Use Correct Logo (No Background Behind B)
 
-**Problem:** `window.open('https://wa.me/...', '_blank')` gets blocked by popup blockers and iframe sandboxing. The `ContactActions.tsx` helper already uses `window.location.href` which works, but many pages still use `window.open`.
+**Problem:** The AI Analyzer in `ProjectAIAnalyzer.tsx` uses `jbj-monogram-transparent.png` which has a black box behind the B letter. The user wants `jbj-monogram-nobuffer.png` (clean, no background behind B).
 
-### 4a. Fix Contact page
+**Fix in `src/components/project-detail/ProjectAIAnalyzer.tsx`:**
+- Change import from `jbj-monogram-transparent.png` to `jbj-monogram-nobuffer.png`
+- Keep the size at `w-32 h-32 md:w-40 md:h-40` (already updated in previous change)
 
-**Fix in `src/pages/Contact.tsx` (line 206):**
-- Change `window.open(getWhatsAppUrl(), '_blank')` to `window.location.href = getWhatsAppUrl()`
+Also audit all other loading/analyzer components to ensure they use the correct monogram:
+- `BrandedLoader.tsx` -- uses `jbj-monogram-dark-on-light.png` and `jbj-monogram-light-on-dark.png` -- verify these are the correct variants without the black box behind B
 
-### 4b. Fix all other public-facing pages using `window.open` for WhatsApp
+---
 
-Replace `window.open(...wa.me..., '_blank')` with `window.location.href = ...` in these files:
-- `src/pages/Compare.tsx` (line 684)
-- `src/pages/Favorites.tsx` (line 201)
-- `src/pages/PropertyEvaluator.tsx` (line 1180)
-- `src/pages/VideoMeeting.tsx` (lines 503, 1462)
-- `src/pages/DigitalCard.tsx` (lines 143, 227)
+## 4. Project Description -- Add Spacing Between Paragraphs and Visual Breaks
 
-Admin/CRM pages (CRMLeadDetail, CRMLeadsInbox, KanbanPipeline, etc.) can keep `window.open` since those are internal tools not subject to iframe/popup restrictions.
+**Problem:** The "About" section description renders as one continuous block with no paragraph spacing.
 
-### 4c. Fix component-level WhatsApp calls
+**Fix in `src/components/project-detail/ProjectDetailLayout.tsx` (lines 726-732):**
+- Add proper prose spacing classes to the description container: `prose-p:mb-4 prose-headings:mt-6 prose-headings:mb-3`
+- In `src/lib/markdownUtils.ts` -- ensure `formatReellyDescription` converts double newlines into proper paragraph breaks (`<p>` tags) instead of `<br>` tags
+- Add a subtle gold accent divider above and below the description block for visual separation
 
-Replace `window.open` with `window.location.href` in these public-facing components:
-- `src/components/ChatTracker.tsx` (line 44)
-- `src/components/FloatingWhatsApp.tsx` -- already uses `window.location.href` (confirmed correct)
-- `src/components/jbj-broker/SecureLeadCard.tsx` (line 60)
+---
 
-### 4d. Ensure Google Maps links are not blocked
+## 5. Project Hero Section Slow Loading
 
-Search for any Google Maps `window.open` calls and convert to `window.location.href` or proper `<a>` tags with `target="_blank"` and `rel="noopener noreferrer"`.
+**Problem:** The hero section takes too long to load, showing nothing while the image loads.
+
+**Fix in `src/components/project-detail/ProjectDetailLayout.tsx`:**
+- Add a champagne gradient placeholder background behind the hero image so users see a premium background immediately while the image loads
+- Change the fallback from `bg-premium-bg` (line 515) to a champagne gradient: `bg-gradient-to-br from-[#1a1510] via-[#0d0b08] to-[#000]` with a subtle gold shimmer animation
+- Add `BrandedLoader` as a loading state overlay that fades out once the hero image loads (using an `onLoad` callback on `SafeImage`)
+
+---
+
+## 6. BrandedLoader Monogram Size -- Make It Larger Everywhere
+
+**Problem:** The loading monogram across the site is too small (`w-24 h-24`).
+
+**Fix in `src/components/ui/BrandedLoader.tsx`:**
+- Increase the monogram size from `w-24 h-24 md:w-32 md:h-32` to `w-32 h-32 md:w-44 md:h-44`
+- Add a gold fill animation effect (clip-path or mask-based) that progressively fills the monogram with gold color while loading, instead of just pulsing
+
+---
+
+## 7. Project Page Hero Gradient Overlay Fix (from-black for description fade)
+
+**Problem:** The description fade gradient uses `from-black` (line 734) which may not match the champagne background of the content area.
+
+**Fix:**
+- Change `from-black` to `from-[#EDE0C8]` to match the champagne content background
+- This applies to the "Read More" truncation gradient
 
 ---
 
@@ -130,16 +87,10 @@ Search for any Google Maps `window.open` calls and convert to `window.location.h
 
 | File | Changes |
 |------|---------|
-| `src/components/ui/accordion.tsx` | Add gold text + arrow color on `[data-state=open]` |
-| `src/data/bookCollections.ts` | Add `NEWS_BOOKS`, export individual books for single-page use |
-| `src/components/books/BookShelf.tsx` | Premium visual upgrade to match champagne theme |
-| `src/pages/CompanyProfile.tsx` | Reduce section padding, add TOC, upgrade book cover with founder photo, add visuals/dividers |
-| `src/pages/Contact.tsx` | Fix WhatsApp `window.open` to `window.location.href` |
-| `src/pages/Compare.tsx` | Fix WhatsApp link |
-| `src/pages/Favorites.tsx` | Fix WhatsApp link |
-| `src/pages/PropertyEvaluator.tsx` | Fix WhatsApp link |
-| `src/pages/VideoMeeting.tsx` | Fix WhatsApp links (2 locations) |
-| `src/pages/DigitalCard.tsx` | Fix WhatsApp links (2 locations) |
-| `src/components/ChatTracker.tsx` | Fix WhatsApp link |
-| `src/components/jbj-broker/SecureLeadCard.tsx` | Fix WhatsApp link |
-| Multiple guide pages | Add `BookShelf` component with consistent book collections |
+| `src/components/header/MegaMenuProjects.tsx` | Remove old video, use only static premium image |
+| `src/pages/Developers.tsx` | Remove old video import, use alternative hero |
+| `src/pages/PropertyEvaluator.tsx` | Remove old video reference |
+| `src/components/RouteResume.tsx` | Switch to localStorage, fix race condition logic |
+| `src/components/project-detail/ProjectAIAnalyzer.tsx` | Use `jbj-monogram-nobuffer.png` |
+| `src/components/ui/BrandedLoader.tsx` | Larger monogram, gold fill animation |
+| `src/components/project-detail/ProjectDetailLayout.tsx` | Description paragraph spacing, hero loading state, gradient fix |
