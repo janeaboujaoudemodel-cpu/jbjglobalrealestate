@@ -303,7 +303,7 @@ const Index = () => {
           {/* ROW 3: Large Feature Cards (2 cards) - Premium Hub Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full">
             {/* JBJ Broker Hub */}
-            <Link to="/broker-toolkit" className="group">
+              <Link to="/broker-hub" className="group">
               <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/60 rounded-xl p-6 md:p-8 hover:border-gold hover:shadow-[0_0_50px_rgba(200,167,102,0.6),0_25px_60px_rgba(0,0,0,0.4)] hover:-translate-y-2 shadow-[0_12px_40px_rgba(200,167,102,0.4),0_6px_20px_rgba(0,0,0,0.25)] transition-all duration-300 relative overflow-hidden h-full">
                 {/* Premium glow effect */}
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/10 via-transparent to-gold/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl" />
@@ -325,7 +325,7 @@ const Index = () => {
             </Link>
 
             {/* JBJ Investor Hub */}
-            <Link to="/ai-hub" className="group">
+            <Link to="/investor-hub" className="group">
               <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/60 rounded-xl p-6 md:p-8 hover:border-gold hover:shadow-[0_0_50px_rgba(200,167,102,0.6),0_25px_60px_rgba(0,0,0,0.4)] hover:-translate-y-2 shadow-[0_12px_40px_rgba(200,167,102,0.4),0_6px_20px_rgba(0,0,0,0.25)] transition-all duration-300 relative overflow-hidden h-full">
                 {/* Premium glow effect */}
                 <div className="absolute inset-0 bg-gradient-to-br from-gold/10 via-transparent to-gold/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl" />

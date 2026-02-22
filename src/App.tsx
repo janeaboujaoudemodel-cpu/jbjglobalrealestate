@@ -778,11 +778,7 @@ const App = () => (
                 <Route path="/settings" element={<Navigate to="/profile?tab=settings" replace />} />
                 
 {/* Toolkit Routes */}
-                <Route path="/toolkit" element={
-                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
-                    <RoyalToolsHub />
-                  </Suspense>
-                } />
+                <Route path="/toolkit" element={<Navigate to="/ai-hub" replace />} />
                 <Route path="/royal-tools" element={<Navigate to="/toolkit" replace />} />
                 
                 {/* Business Suite Routes */}
