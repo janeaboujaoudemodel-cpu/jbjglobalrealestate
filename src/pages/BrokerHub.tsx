@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import { useNavigate, Link } from 'react-router-dom';
@@ -29,6 +29,12 @@ import {
 } from 'lucide-react';
 import { format, startOfWeek, endOfWeek, startOfMonth, endOfMonth } from 'date-fns';
 
+// Book cover imports
+import brokerEducationCover from '@/assets/books/broker-education-cover.jpg';
+import brokerCertificationCover from '@/assets/books/broker-certification-cover.jpg';
+import marketIntelligenceCover from '@/assets/books/market-intelligence-cover.jpg';
+import goldenVisaCover from '@/assets/books/golden-visa-cover.jpg';
+
 const quickAccessCards = [
   { title: 'Broker Dashboard', desc: 'Performance & analytics', icon: BarChart3, href: '/broker-dashboard', color: 'from-fuchsia-500 to-purple-600' },
   { title: 'CRM', desc: 'Manage leads & clients', icon: Users, href: '/crm', color: 'from-violet-500 to-purple-600' },
@@ -45,6 +51,13 @@ const brokerAITools = [
   { title: 'Client Matcher', desc: 'AI-powered lead matching', icon: UserCheck, href: '/ai-client-matcher' },
   { title: 'Meeting Summarizer', desc: 'Summarize meetings', icon: Video, href: '/ai-meeting-summarizer' },
   { title: 'Call Summarizer', desc: 'Summarize client calls', icon: Phone, href: '/ai-call-summarizer' },
+];
+
+const brokerBooks = [
+  { title: 'Broker Training Manual', cover: brokerEducationCover, href: '/broker-education' },
+  { title: 'Broker Certification Guide', cover: brokerCertificationCover, href: '/services/broker-certification' },
+  { title: 'Market Intelligence Report', cover: marketIntelligenceCover, href: '/market-intelligence' },
+  { title: 'Golden Visa UAE Guide', cover: goldenVisaCover, href: '/guides/golden-visa-uae' },
 ];
 
 const BrokerHub = () => {
@@ -175,6 +188,48 @@ const BrokerHub = () => {
           </div>
         </div>
 
+        {/* Books, Guides & Intelligence - Bookshelf */}
+        <div>
+          <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+            <BookOpen className="w-5 h-5 text-amber-400" />
+            Books, Guides & Intelligence
+          </h2>
+          <Card className="bg-gradient-to-br from-zinc-900/80 to-zinc-950 border border-amber-500/20 overflow-hidden">
+            <CardContent className="p-8">
+              {/* Bookshelf */}
+              <div className="flex flex-wrap justify-center gap-8">
+                {brokerBooks.map((book) => (
+                  <motion.button
+                    key={book.title}
+                    onClick={() => navigate(book.href)}
+                    className="group flex flex-col items-center gap-3 w-36"
+                    whileHover={{ y: -8 }}
+                    transition={{ type: 'spring', stiffness: 300 }}
+                  >
+                    {/* Book with 3D effect */}
+                    <div className="relative w-32 h-44 rounded-r-md overflow-hidden shadow-[4px_4px_20px_rgba(0,0,0,0.6)] group-hover:shadow-[6px_6px_30px_rgba(200,167,102,0.3)] transition-shadow">
+                      {/* Spine effect */}
+                      <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-black/40 to-transparent z-10" />
+                      <img
+                        src={book.cover}
+                        alt={book.title}
+                        className="w-full h-full object-cover"
+                      />
+                      {/* Glossy overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
+                    <p className="text-xs text-zinc-400 text-center font-medium group-hover:text-amber-300 transition-colors leading-tight">
+                      {book.title}
+                    </p>
+                  </motion.button>
+                ))}
+              </div>
+              {/* Shelf line */}
+              <div className="mt-6 h-1 bg-gradient-to-r from-transparent via-amber-800/50 to-transparent rounded-full" />
+            </CardContent>
+          </Card>
+        </div>
+
         {/* Activity, Training, Support Tabs */}
         {user && (
           <div>
@@ -244,7 +299,7 @@ const BrokerHub = () => {
                         );
                       })}
                     </div>
-                    <Button variant="outline" className="w-full border-zinc-700 text-zinc-300" onClick={() => navigate('/onboarding')}>
+                    <Button className="w-full bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-medium" onClick={() => navigate('/onboarding')}>
                       View All Courses <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
                   </CardContent>
@@ -308,7 +363,10 @@ const BrokerHub = () => {
                       <div className="text-center py-8">
                         <Ticket className="w-8 h-8 text-zinc-600 mx-auto mb-3" />
                         <p className="text-zinc-500">No support tickets</p>
-                        <Button variant="outline" className="mt-4 border-zinc-700 text-zinc-300" onClick={() => navigate('/support')}>
+                        <Button
+                          className="mt-4 bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-medium"
+                          onClick={() => navigate('/support')}
+                        >
                           Create a Ticket
                         </Button>
                       </div>
@@ -316,12 +374,20 @@ const BrokerHub = () => {
                       <div className="space-y-2">
                         <div className="flex justify-between items-center mb-4">
                           <p className="text-sm text-zinc-400">{openTickets} open ticket{openTickets !== 1 ? 's' : ''}</p>
-                          <Button variant="outline" size="sm" className="border-zinc-700 text-zinc-300" onClick={() => navigate('/support')}>
+                          <Button
+                            size="sm"
+                            className="bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-medium"
+                            onClick={() => navigate('/support')}
+                          >
                             New Ticket
                           </Button>
                         </div>
                         {supportTickets.map((ticket: any) => (
-                          <div key={ticket.id} className="flex items-center justify-between p-3 bg-zinc-800/50 rounded-lg">
+                          <button
+                            key={ticket.id}
+                            onClick={() => navigate(`/support?ticket=${ticket.id}`)}
+                            className="w-full flex items-center justify-between p-3 bg-zinc-800/50 rounded-lg hover:bg-zinc-800 transition-colors text-left"
+                          >
                             <div>
                               <p className="text-sm text-white">{ticket.subject}</p>
                               <p className="text-xs text-zinc-500">#{ticket.ticket_number} · {format(new Date(ticket.created_at), 'MMM d')}</p>
@@ -333,7 +399,7 @@ const BrokerHub = () => {
                             }>
                               {ticket.status}
                             </Badge>
-                          </div>
+                          </button>
                         ))}
                       </div>
                     )}
@@ -365,7 +431,10 @@ const BrokerHub = () => {
                   </div>
                 ))}
               </div>
-              <Button variant="outline" className="w-full border-fuchsia-500/30 text-fuchsia-300 hover:bg-fuchsia-500/10" onClick={() => navigate('/broker-documents')}>
+              <Button
+                className="w-full bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-medium"
+                onClick={() => navigate('/broker-documents')}
+              >
                 <FileUp className="w-4 h-4 mr-2" />
                 Upload & Manage Documents
               </Button>
@@ -400,15 +469,15 @@ const BrokerHub = () => {
           <h3 className="text-xl font-bold text-white mb-2">Explore All AI Tools</h3>
           <p className="text-zinc-400 text-sm mb-4">Access 30+ free AI tools including creative suites, corporate tools, and productivity apps.</p>
           <div className="flex flex-wrap justify-center gap-3">
-            <Button onClick={() => navigate('/ai-hub')} className="bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white">
+            <Button onClick={() => navigate('/ai-hub')} className="bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white font-medium">
               Go to JBJ Tools Hub
               <ArrowUpRight className="w-4 h-4 ml-2" />
             </Button>
-            <Button onClick={() => navigate('/ai-hub?suite=creative')} variant="outline" className="border-pink-500/30 text-pink-300 hover:bg-pink-500/10">
+            <Button onClick={() => navigate('/ai-hub?suite=creative')} className="bg-pink-600 hover:bg-pink-700 text-white font-medium">
               <Palette className="w-4 h-4 mr-2" />
               Creative Suite
             </Button>
-            <Button onClick={() => navigate('/ai-hub?suite=productivity')} variant="outline" className="border-teal-500/30 text-teal-300 hover:bg-teal-500/10">
+            <Button onClick={() => navigate('/ai-hub?suite=productivity')} className="bg-teal-600 hover:bg-teal-700 text-white font-medium">
               <Wrench className="w-4 h-4 mr-2" />
               Productivity Suite
             </Button>
@@ -419,7 +488,7 @@ const BrokerHub = () => {
       {/* Divider */}
       <SectionDivider />
 
-      {/* Broker Toolkit Sections - Education, Training, Operations, etc. */}
+      {/* Broker Toolkit Sections */}
       <BrokerToolkitTools />
       <SectionDivider />
       <BrokerToolkitSupport />
@@ -442,7 +511,7 @@ const BrokerHub = () => {
           <div className="bg-gradient-to-r from-fuchsia-950/40 to-purple-950/40 border border-fuchsia-500/20 rounded-2xl p-8">
             <h3 className="text-xl font-bold text-white mb-2">Access All AI Tools</h3>
             <p className="text-zinc-400 text-sm mb-4">Browse the complete collection of 30+ AI-powered tools.</p>
-            <Button onClick={() => navigate('/ai-hub')} className="bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white border-0">
+            <Button onClick={() => navigate('/ai-hub')} className="bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white border-0 font-medium">
               Go to JBJ Tools Hub
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
