@@ -83,7 +83,7 @@ const getSaleStatusBadge = (status?: string | null) => {
   }
   // "sold" / "out of stock" handled by dedicated red Sold Out badge, not here
   if (normalizedStatus.includes('announced')) {
-    return { label: 'Announced', className: 'bg-gold text-black' };
+    return { label: 'Announced', className: 'bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-[#C8A766]/40' };
   }
   if (normalizedStatus.includes('presale') || normalizedStatus.includes('eoi')) {
     return { label: 'Presale', className: 'bg-amber-500 text-black' };
@@ -219,7 +219,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           <VerifiedMedia
             src={images[currentImageIndex]?.image_url || images[0]?.image_url}
             alt={images[currentImageIndex]?.alt_text || project.name}
-            className="object-cover group-hover:scale-105 transition-transform duration-500"
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
             placeholderLabel="Media pending verification"
           />
           

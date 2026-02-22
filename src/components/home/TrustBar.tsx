@@ -45,7 +45,7 @@ const TrustBar = () => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.5, duration: 0.6 }}
+      transition={{ delay: 0.1, duration: 0.3 }}
       className="grid grid-cols-2 md:grid-cols-4 auto-rows-fr gap-3 md:gap-5 lg:gap-6 max-w-[1100px] mx-auto py-6 md:py-8 px-4 md:px-6"
     >
       {trustItems.map((item, index) => (
@@ -53,7 +53,7 @@ const TrustBar = () => {
           key={index}
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.6 + index * 0.1, duration: 0.4 }}
+          transition={{ delay: 0.15 + index * 0.05, duration: 0.25 }}
           className="group relative"
         >
           {/* Premium 3D champagne-gold card */}
