@@ -1536,13 +1536,13 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               {/* Divider */}
               <div className={`w-px h-5 bg-gradient-to-b from-transparent ${isFullyTransparent ? 'via-white/40' : 'via-gold/40'} to-transparent`} />
 
-              {/* Listing Notification Bell */}
+              {/* Notification Bell Icon - triggers mega menu */}
               <ListingNotificationBell 
-                onOpen={() => {
-                  // Close any active mega menu when notification opens
-                  closeMegaMenu();
-                }}
-                forceClose={activeMegaMenu !== null}
+                onOpen={() => handleMegaMenuClick('notifications')}
+                onHoverEnter={() => handleMegaMenuEnter('notifications')}
+                onHoverLeave={() => handleMegaMenuLeave()}
+                forceClose={activeMegaMenu !== null && activeMegaMenu !== 'notifications'}
+                bellOnly
               />
 
               {/* Divider */}
@@ -1564,7 +1564,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
           )}
 
           {/* Utility Mega Menu Panels (Language, Account, Search) */}
-          {!shouldUseMobileHeader && (activeMegaMenu === 'language' || activeMegaMenu === 'account' || activeMegaMenu === 'search') && (
+          {!shouldUseMobileHeader && (activeMegaMenu === 'language' || activeMegaMenu === 'account' || activeMegaMenu === 'search' || activeMegaMenu === 'notifications') && (
             <>
               {/* Backdrop only - click to close */}
               <div 
@@ -1615,6 +1615,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   </div>
                 )}
                 {activeMegaMenu === 'language' && <MegaMenuLanguage onClose={closeMegaMenu} />}
+                {activeMegaMenu === 'notifications' && <ListingNotificationBell panelMode onClose={closeMegaMenu} />}
                 {activeMegaMenu === 'account' && <MegaMenuAccount onClose={closeMegaMenu} />}
               </div>
             </>

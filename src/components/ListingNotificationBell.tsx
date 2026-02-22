@@ -15,43 +15,23 @@ interface ListingNotification {
 
 interface ListingNotificationBellProps {
   onOpen?: () => void;
+  onHoverEnter?: () => void;
+  onHoverLeave?: () => void;
   forceClose?: boolean;
+  bellOnly?: boolean;
+  panelMode?: boolean;
+  onClose?: () => void;
 }
 
-const ListingNotificationBell = ({ onOpen, forceClose }: ListingNotificationBellProps = {}) => {
+const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClose, bellOnly, panelMode, onClose }: ListingNotificationBellProps) => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [notifications, setNotifications] = useState<ListingNotification[]>([]);
-  const [open, setOpen] = useState(false);
-  const [pinned, setPinned] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!user) return;
     fetchNotifications();
   }, [user]);
-
-  // Force close when another dropdown opens
-  useEffect(() => {
-    if (forceClose) {
-      setOpen(false);
-      setPinned(false);
-    }
-  }, [forceClose]);
-
-  // Close on outside click only if not pinned by click
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        setOpen(false);
-        setPinned(false);
-      }
-    };
-    if (open) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [open]);
 
   const fetchNotifications = async () => {
     if (!user) return;
@@ -86,30 +66,79 @@ const ListingNotificationBell = ({ onOpen, forceClose }: ListingNotificationBell
 
   if (!user) return null;
 
-  return (
-    <div
-      ref={containerRef}
-      className="relative"
-      onMouseEnter={() => { 
-        if (!pinned) {
-          setOpen(true);
-          onOpen?.();
-        }
-      }}
-      onMouseLeave={() => { if (!pinned) setOpen(false); }}
-    >
-      {/* Bell trigger */}
+  // Panel mode: render just the dropdown content (used inside mega menu system)
+  if (panelMode) {
+    return (
+      <div className="w-80 bg-white border-2 border-gold/40 rounded-xl shadow-xl shadow-gold/10 overflow-hidden">
+        {/* Header */}
+        <div className="p-3 border-b border-gold/20 bg-gradient-to-r from-[#FDF9F3] to-[#F5EBD7] flex items-center justify-between">
+          <h3 className="font-semibold text-sm text-stone-900">Notifications</h3>
+          {unreadCount > 0 && (
+            <button onClick={markAllRead} className="text-xs text-gold hover:text-gold/80 font-medium transition-colors">
+              Mark all read
+            </button>
+          )}
+        </div>
+
+        {/* List */}
+        <div className="max-h-[300px] overflow-y-auto bg-white">
+          {notifications.length === 0 ? (
+            <div className="p-6 text-center text-stone-400 text-sm">
+              <Bell className="w-8 h-8 mx-auto mb-2 opacity-30 text-gold/40" />
+              No notifications yet
+            </div>
+          ) : (
+            notifications.map(n => (
+              <button
+                key={n.id}
+                onClick={() => {
+                  markAsRead(n.id);
+                  if (n.listing_id) navigate('/listing-portal/my-listings');
+                  onClose?.();
+                }}
+                className={`w-full text-left p-3 border-b border-gold/10 hover:bg-gold/5 transition-colors ${
+                  !n.is_read ? 'bg-gold/[0.04]' : ''
+                }`}
+              >
+                <div className="flex items-start gap-2">
+                  {!n.is_read && (
+                    <span className="w-2 h-2 rounded-full bg-gold mt-1.5 flex-shrink-0" />
+                  )}
+                  <div className={!n.is_read ? '' : 'pl-4'}>
+                    <p className="text-sm font-medium text-stone-900">{n.title}</p>
+                    {n.message && (
+                      <p className="text-xs text-stone-500 mt-0.5 line-clamp-2">{n.message}</p>
+                    )}
+                    <p className="text-[10px] text-stone-400 mt-1">
+                      {new Date(n.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+                    </p>
+                  </div>
+                </div>
+              </button>
+            ))
+          )}
+        </div>
+
+        {/* Footer */}
+        <div className="p-2 border-t border-gold/20 bg-gradient-to-r from-[#FDF9F3] to-[#F5EBD7]">
+          <button
+            onClick={() => { navigate('/listing-portal/my-listings'); onClose?.(); }}
+            className="w-full text-center text-xs text-gold hover:text-gold/80 font-semibold py-1.5 transition-colors"
+          >
+            View all listings
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Bell-only mode: just render the bell icon button (dropdown handled externally by mega menu)
+  if (bellOnly) {
+    return (
       <button
-        onClick={() => {
-          if (pinned) {
-            setPinned(false);
-            setOpen(false);
-          } else {
-            setPinned(true);
-            setOpen(true);
-            onOpen?.();
-          }
-        }}
+        onMouseEnter={onHoverEnter}
+        onMouseLeave={onHoverLeave}
+        onClick={onOpen}
         className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-white/10 relative"
         aria-label="Notifications"
       >
@@ -123,76 +152,11 @@ const ListingNotificationBell = ({ onOpen, forceClose }: ListingNotificationBell
           </span>
         )}
       </button>
+    );
+  }
 
-      {/* Dropdown - aligned to match account mega menu offset (16px from bottom of header) */}
-      {open && (
-        <div
-          className="absolute right-0 w-80 bg-white border-2 border-gold/40 rounded-xl shadow-xl shadow-gold/10 z-[10001] overflow-hidden"
-          style={{ top: 'calc(100% + 24px)' }}
-        >
-          {/* Header */}
-          <div className="p-3 border-b border-gold/20 bg-gradient-to-r from-[#FDF9F3] to-[#F5EBD7] flex items-center justify-between">
-            <h3 className="font-semibold text-sm text-stone-900">Notifications</h3>
-            {unreadCount > 0 && (
-              <button onClick={markAllRead} className="text-xs text-gold hover:text-gold/80 font-medium transition-colors">
-                Mark all read
-              </button>
-            )}
-          </div>
-
-          {/* List */}
-          <div className="max-h-[300px] overflow-y-auto bg-white">
-            {notifications.length === 0 ? (
-              <div className="p-6 text-center text-stone-400 text-sm">
-                <Bell className="w-8 h-8 mx-auto mb-2 opacity-30 text-gold/40" />
-                No notifications yet
-              </div>
-            ) : (
-              notifications.map(n => (
-                <button
-                  key={n.id}
-                  onClick={() => {
-                    markAsRead(n.id);
-                    if (n.listing_id) navigate('/listing-portal/my-listings');
-                    setOpen(false);
-                    setPinned(false);
-                  }}
-                  className={`w-full text-left p-3 border-b border-gold/10 hover:bg-gold/5 transition-colors ${
-                    !n.is_read ? 'bg-gold/[0.04]' : ''
-                  }`}
-                >
-                  <div className="flex items-start gap-2">
-                    {!n.is_read && (
-                      <span className="w-2 h-2 rounded-full bg-gold mt-1.5 flex-shrink-0" />
-                    )}
-                    <div className={!n.is_read ? '' : 'pl-4'}>
-                      <p className="text-sm font-medium text-stone-900">{n.title}</p>
-                      {n.message && (
-                        <p className="text-xs text-stone-500 mt-0.5 line-clamp-2">{n.message}</p>
-                      )}
-                      <p className="text-[10px] text-stone-400 mt-1">
-                        {new Date(n.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
-                      </p>
-                    </div>
-                  </div>
-                </button>
-              ))
-            )}
-          </div>
-
-          {/* Footer */}
-          <div className="p-2 border-t border-gold/20 bg-gradient-to-r from-[#FDF9F3] to-[#F5EBD7]">
-            <button
-              onClick={() => { navigate('/listing-portal/my-listings'); setOpen(false); setPinned(false); }}
-              className="w-full text-center text-xs text-gold hover:text-gold/80 font-semibold py-1.5 transition-colors"
-            >
-              View all listings
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
-  );
+  // Default: standalone bell with its own dropdown (used in mobile/other contexts)
+  return null;
 };
 
 export default ListingNotificationBell;
