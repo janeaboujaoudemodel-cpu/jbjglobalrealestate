@@ -193,8 +193,9 @@ Deno.serve(async (req: Request): Promise<Response> => {
         // Extract and store amenity images (real photos from Reelly)
         const amenityImages = extractAmenityImages(reellyData);
         if (Object.keys(amenityImages).length > 0 && !project.amenity_images) updates.amenity_images = amenityImages;
-        if (unitTypes.length > 0 && !(project.unit_types as any[])?.length) updates.unit_types = unitTypes;
-        if (floorPlans.length > 0 && !(project.floor_plan_types as any[])?.length) updates.floor_plan_types = floorPlans;
+        // Always overwrite unit_types & floor_plan_types with latest Reelly data (old extracts may be incomplete)
+        if (unitTypes.length > 0) updates.unit_types = unitTypes;
+        if (floorPlans.length > 0) updates.floor_plan_types = floorPlans;
         if (videoUrl && !project.video_url) updates.video_url = videoUrl;
         if (!project.description && reellyData?.overview) updates.description = reellyData.overview;
         if (reellyData?.faqs?.length > 0 && !(project.faqs as any[])?.length) {

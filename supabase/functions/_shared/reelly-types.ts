@@ -384,9 +384,37 @@ export function extractAmenityImages(project: ReellyProject): Record<string, str
   return images;
 }
 
-export function extractUnitTypes(project: ReellyProject): Array<{ type: string; bedrooms?: number; bathrooms?: number; size_min?: number; size_max?: number; price_from?: number; price_to?: number; available?: number; layout_url?: string }> {
-  const units: Array<{ type: string; bedrooms?: number; bathrooms?: number; size_min?: number; size_max?: number; price_from?: number; price_to?: number; available?: number; layout_url?: string }> = [];
-  // Standard fields
+export function extractUnitTypes(project: ReellyProject): Array<{ type: string; bedrooms?: number; bathrooms?: number; size_min?: number; size_max?: number; price_from?: number; price_to?: number; available?: number; layout_url?: string; layout_urls?: string[] }> {
+  const units: Array<{ type: string; bedrooms?: number; bathrooms?: number; size_min?: number; size_max?: number; price_from?: number; price_to?: number; available?: number; layout_url?: string; layout_urls?: string[] }> = [];
+
+  // Reelly-specific: typical_units (the richest data source from Reelly API)
+  // Fields: from_price_aed, to_price_aed, from_size_sqft, to_size_sqft, bedrooms, layout[].image.url
+  if (Array.isArray(project.typical_units) && project.typical_units.length > 0) {
+    for (const u of project.typical_units) {
+      // Extract ALL layout images, not just the first
+      const layoutUrls: string[] = [];
+      if (Array.isArray(u.layout)) {
+        for (const l of u.layout) {
+          const url = l?.image?.url || l?.url;
+          if (url) layoutUrls.push(url);
+        }
+      }
+      units.push({
+        type: u.type || u.name || u.unit_type || 'Unit',
+        bedrooms: u.bedrooms ?? u.bedroom_count,
+        bathrooms: u.bathrooms ?? u.bathroom_count,
+        size_min: u.from_size_sqft || u.from_size_m2 || u.size_min || u.area || u.size,
+        size_max: u.to_size_sqft || u.to_size_m2 || u.size_max || u.area || u.size,
+        price_from: u.from_price_aed || u.price_from || u.price,
+        price_to: u.to_price_aed || u.price_to || u.price,
+        layout_url: layoutUrls[0] || undefined,
+        layout_urls: layoutUrls.length > 0 ? layoutUrls : undefined,
+      });
+    }
+    return units;
+  }
+
+  // Fallback: standard fields (units / unit_types)
   for (const u of project.units || project.unit_types || []) {
     units.push({
       type: u.type || u.name || 'Unit',
@@ -399,26 +427,34 @@ export function extractUnitTypes(project: ReellyProject): Array<{ type: string; 
       available: u.available || u.count,
     });
   }
-  // Reelly-specific: typical_units (the actual rich data from Reelly API)
-  // Fields: from_price_aed, to_price_aed, from_size_sqft, to_size_sqft, bedrooms, layout[].image.url
-  if (Array.isArray(project.typical_units) && project.typical_units.length > 0) {
-    // If we already have units from above, clear them — typical_units has richer data
-    if (project.typical_units.some((u: any) => u.from_price_aed || u.from_size_sqft)) {
-      units.length = 0;
-    }
-    for (const u of project.typical_units) {
-      const layoutUrl = Array.isArray(u.layout) && u.layout[0]?.image?.url ? u.layout[0].image.url : undefined;
-      units.push({
-        type: u.type || u.name || u.unit_type || 'Unit',
-        bedrooms: u.bedrooms ?? u.bedroom_count,
-        bathrooms: u.bathrooms ?? u.bathroom_count,
-        size_min: u.from_size_sqft || u.from_size_m2 || u.size_min || u.area || u.size,
-        size_max: u.to_size_sqft || u.to_size_m2 || u.size_max || u.area || u.size,
-        price_from: u.from_price_aed || u.price_from || u.price,
-        price_to: u.to_price_aed || u.price_to || u.price,
-        layout_url: layoutUrl,
-      });
+
+  // Also check buildings for unit breakdowns
+  if (units.length === 0 && Array.isArray(project.buildings)) {
+    for (const bldg of project.buildings) {
+      if (Array.isArray(bldg.typical_units)) {
+        for (const u of bldg.typical_units) {
+          const layoutUrls: string[] = [];
+          if (Array.isArray(u.layout)) {
+            for (const l of u.layout) {
+              const url = l?.image?.url || l?.url;
+              if (url) layoutUrls.push(url);
+            }
+          }
+          units.push({
+            type: u.type || u.name || u.unit_type || 'Unit',
+            bedrooms: u.bedrooms ?? u.bedroom_count,
+            bathrooms: u.bathrooms ?? u.bathroom_count,
+            size_min: u.from_size_sqft || u.size_min || u.area,
+            size_max: u.to_size_sqft || u.size_max || u.area,
+            price_from: u.from_price_aed || u.price_from,
+            price_to: u.to_price_aed || u.price_to,
+            layout_url: layoutUrls[0] || undefined,
+            layout_urls: layoutUrls.length > 0 ? layoutUrls : undefined,
+          });
+        }
+      }
     }
   }
+
   return units;
 }
