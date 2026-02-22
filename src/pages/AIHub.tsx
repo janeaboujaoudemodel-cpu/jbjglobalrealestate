@@ -836,19 +836,28 @@ const AIHub = () => {
                   />
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  {(['all', 'property', 'corporate', 'productivity', 'design', 'marketing'] as const).map(cat => (
-                    <button
-                      key={cat}
-                      onClick={() => setToolFilter(cat)}
-                      className={`px-4 py-2 rounded-full text-xs font-medium uppercase tracking-wider transition-all ${
-                        toolFilter === cat
-                          ? 'bg-gold text-black'
-                          : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white border border-zinc-600'
-                      }`}
-                    >
-                      {cat === 'all' ? 'All' : cat}
-                    </button>
-                  ))}
+                  {(['all', 'property', 'corporate', 'productivity', 'design', 'marketing'] as const).map(cat => {
+                    const pillColors: Record<string, { active: string; inactive: string }> = {
+                      all: { active: 'bg-white text-black border-white', inactive: 'text-white/70 border-white/20 hover:border-white/50 hover:text-white' },
+                      property: { active: 'bg-purple-500 text-white border-purple-400', inactive: 'text-purple-300 border-purple-500/30 hover:border-purple-400 hover:text-purple-200' },
+                      corporate: { active: 'bg-teal-500 text-white border-teal-400', inactive: 'text-teal-300 border-teal-500/30 hover:border-teal-400 hover:text-teal-200' },
+                      productivity: { active: 'bg-blue-500 text-white border-blue-400', inactive: 'text-blue-300 border-blue-500/30 hover:border-blue-400 hover:text-blue-200' },
+                      design: { active: 'bg-pink-500 text-white border-pink-400', inactive: 'text-pink-300 border-pink-500/30 hover:border-pink-400 hover:text-pink-200' },
+                      marketing: { active: 'bg-amber-500 text-white border-amber-400', inactive: 'text-amber-300 border-amber-500/30 hover:border-amber-400 hover:text-amber-200' },
+                    };
+                    const colors = pillColors[cat] || pillColors.all;
+                    return (
+                      <button
+                        key={cat}
+                        onClick={() => setToolFilter(cat)}
+                        className={`px-4 py-2 rounded-full text-xs font-medium uppercase tracking-wider transition-all border ${
+                          toolFilter === cat ? colors.active : colors.inactive
+                        }`}
+                      >
+                        {cat === 'all' ? 'All' : cat}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -890,11 +899,19 @@ const AIHub = () => {
             corporate: 'bg-gradient-to-br from-teal-900/90 via-teal-900/80 to-teal-950/90',
           };
 
+          const borderColorMap: Record<ToolCategory, string> = {
+            property: 'border-purple-500/30',
+            productivity: 'border-blue-500/30',
+            design: 'border-pink-500/30',
+            marketing: 'border-amber-500/30',
+            corporate: 'border-teal-500/30',
+          };
+
           return (
-            <section key={category} id={category === 'property' ? 'investor-tools' : `${category}-tools`} className="py-16 md:py-20 bg-black">
+            <section key={category} id={category === 'property' ? 'investor-tools' : `${category}-tools`} className="py-8 md:py-10 bg-black">
               <div className="container mx-auto px-3 sm:px-4">
                 {/* Active Color Layer - Category-specific */}
-                <div className={`${categoryBgMap[category]} border border-${category === 'property' ? 'purple' : category === 'productivity' ? 'blue' : category === 'design' ? 'pink' : 'amber'}-500/30 rounded-2xl p-4 sm:p-6 shadow-lg`}>
+                <div className={`${categoryBgMap[category]} ${borderColorMap[category]} border rounded-2xl p-4 sm:p-6 shadow-lg`}>
                   <motion.div
                     className="text-center mb-8"
                     initial={{ opacity: 0, y: 20 }}
@@ -910,8 +927,9 @@ const AIHub = () => {
                       <span className={meta.iconClass}>{meta.coloredLabel}</span>
                     </h2>
                     <p className="text-white/70 max-w-2xl mx-auto">
-                      {category === 'property' && "Powerful AI tools for property analysis, valuation, and investment decisions."}
+                    {category === 'property' && "Powerful AI tools for property analysis, valuation, and investment decisions."}
                       {category === 'productivity' && "Video meetings, documents, calendar, and signing tools."}
+                      {category === 'corporate' && "Professional stamps, business cards, logos, CVs, e-signatures and more."}
                       {category === 'design' && "Creative tools for interior design and visual content."}
                       {category === 'marketing' && "Marketing and content creation tools."}
                     </p>
