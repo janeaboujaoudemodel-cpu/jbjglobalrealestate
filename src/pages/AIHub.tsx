@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
+import { Link, useNavigate } from "react-router-dom";
+
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -38,10 +38,7 @@ import {
   Home,
   Image,
   Share2,
-  CheckCircle2,
-  Gift,
   Lock,
-  DollarSign,
   Globe,
   FileSignature,
   Handshake,
@@ -456,23 +453,7 @@ const quickBenefits = [
   { icon: Clock, title: "Save Time", desc: "Automate tedious tasks." },
 ];
 
-// Referral commission examples
-const referralCommissionExamples = {
-  passiveReferral: {
-    rate: 2.5,
-    dealValue: 2000000,
-    developerCommission: 4, // 4% is the minimum
-    get brokerCommission() { return this.dealValue * (this.developerCommission / 100); },
-    get referralEarning() { return this.brokerCommission * (this.rate / 100); },
-  },
-  activeReferral: {
-    rate: 5,
-    dealValue: 2000000,
-    developerCommission: 4,
-    get brokerCommission() { return this.dealValue * (this.developerCommission / 100); },
-    get referralEarning() { return this.brokerCommission * (this.rate / 100); },
-  }
-};
+
 
 const AIHub = () => {
   const { user } = useAuth();
@@ -861,12 +842,21 @@ const AIHub = () => {
                 </div>
               </div>
 
-              {/* Creative Suite Shortcut */}
-              <Link to="/studio" className="inline-flex items-center gap-2 px-5 py-2.5 mb-6 rounded-xl bg-pink-900/40 border border-pink-500/30 text-pink-300 hover:border-gold hover:text-gold transition-all text-sm font-medium">
-                <Palette className="w-4 h-4" />
-                Creative Suite Shortcut
-                <ArrowUpRight className="w-3.5 h-3.5" />
-              </Link>
+              {/* Suite Shortcut Cards */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+                {[
+                  { label: 'Creative Suite', href: '/studio', icon: Palette, border: 'border-pink-500/40', bg: 'bg-pink-900/30', text: 'text-pink-300', hover: 'hover:border-pink-400' },
+                  { label: 'Broker Intelligence', href: '/business-suite/broker', icon: Brain, border: 'border-teal-500/40', bg: 'bg-teal-900/30', text: 'text-teal-300', hover: 'hover:border-teal-400' },
+                  { label: 'Productivity Suite', href: '/business-suite/productivity', icon: Zap, border: 'border-blue-500/40', bg: 'bg-blue-900/30', text: 'text-blue-300', hover: 'hover:border-blue-400' },
+                  { label: 'All Suites', href: '/business-suite', icon: Layers, border: 'border-purple-500/40', bg: 'bg-purple-900/30', text: 'text-purple-300', hover: 'hover:border-purple-400' },
+                ].map(suite => (
+                  <Link key={suite.label} to={suite.href} className={`flex items-center gap-2 px-4 py-3 rounded-xl ${suite.bg} border ${suite.border} ${suite.text} ${suite.hover} transition-all text-sm font-medium group`}>
+                    <suite.icon className="w-4 h-4" />
+                    <span className="flex-1">{suite.label}</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </Link>
+                ))}
+              </div>
 
               <motion.div 
                 className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
@@ -954,7 +944,7 @@ const AIHub = () => {
         })}
 
         {/* BROKER HUB PREVIEW - GREEN THEME (What you get as a registered broker) */}
-        <section className="py-16 md:py-20 bg-black">
+        <section className="py-8 md:py-10 bg-black">
           <div className="container mx-auto px-4">
             {/* Active Green Layer - matching the card theme */}
             <div className="bg-gradient-to-br from-gold/20 via-zinc-900/90 to-zinc-950/90 border border-gold/30 rounded-2xl p-6 md:p-10 shadow-lg">
@@ -1094,340 +1084,40 @@ const AIHub = () => {
         {/* Divider */}
         <SectionDivider />
 
-        {/* MAKE MONEY SECTION - JBJ Academy, Employment Hub, Referral Program */}
-        <section className="py-16 md:py-20 bg-black">
-          <div className="container mx-auto px-4 max-w-7xl">
-            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-6 md:p-10">
-            <motion.div
-              className="text-center mb-12"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              <span className="inline-flex items-center gap-2 px-5 py-2 bg-black border-2 border-gold/50 rounded-full shadow-lg mb-4">
-                <DollarSign className="w-3.5 h-3.5 text-gold" />
-                <span className="text-white text-xs uppercase tracking-wider font-medium">Earn With Us</span>
-              </span>
-              <h2 className="text-2xl md:text-3xl font-bold text-black mb-2">
-                Make Money by Joining <span className="text-gold">JBJ Global Real Estate Circle</span>
-              </h2>
-              <p className="text-zinc-600 max-w-3xl mx-auto">
-                From anywhere in the world, you can become a broker with us, or you can become a referral partner and start earning commission on every successful deal.
-              </p>
-            </motion.div>
-
-            {/* Three Cards - FLEX with bottom-aligned CTAs */}
-            <div className="grid md:grid-cols-3 gap-6 mb-12">
-              {/* JBJ Academy - For Employees */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-              >
-                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 hover:border-gold shadow-lg hover:shadow-[0_0_30px_rgba(200,167,102,0.3)] transition-all duration-300 h-full flex flex-col">
-                  <CardContent className="p-6 flex flex-col flex-1">
-                    <div className="w-14 h-14 rounded-xl bg-transparent border-2 border-gold/40 flex items-center justify-center mb-4">
-                      <GraduationCap className="w-7 h-7 text-gold" />
-                    </div>
-                    <Badge className="bg-blue-500/20 text-blue-600 border-blue-500/30 mb-3 w-fit">
-                      For JBJ Employees
-                    </Badge>
-                    <h3 className="text-black text-xl font-bold mb-2">JBJ Academy</h3>
-                    <p className="text-zinc-600 mb-4 flex-1">
-                      Professional training, video tutorials, and internal certifications for JBJ Global Real Estate employees.
-                    </p>
-                    <Link to="/broker-toolkit" className="inline-flex items-center gap-2 text-gold font-semibold hover:gap-3 transition-all mt-auto">
-                      Access Academy
-                      <ArrowRight className="w-4 h-4" />
-                    </Link>
-                  </CardContent>
-                </Card>
-              </motion.div>
-
-              {/* JBJ Employment Hub - For Job Seekers */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
-              >
-                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 hover:border-gold shadow-lg hover:shadow-[0_0_30px_rgba(200,167,102,0.3)] transition-all duration-300 h-full flex flex-col">
-                  <CardContent className="p-6 flex flex-col flex-1">
-                    <div className="w-14 h-14 rounded-xl bg-transparent border-2 border-gold/40 flex items-center justify-center mb-4">
-                      <Briefcase className="w-7 h-7 text-gold" />
-                    </div>
-                    <Badge className="bg-purple-500/20 text-purple-600 border-purple-500/30 mb-3 w-fit">
-                      For Job Seekers
-                    </Badge>
-                    <h3 className="text-black text-xl font-bold mb-2">JBJ Employment Hub</h3>
-                    <p className="text-zinc-600 mb-4 flex-1">
-                      Join our team as a licensed broker. We provide training, tools, leads, and support to help you succeed.
-                    </p>
-                    <Link to="/join" className="inline-flex items-center gap-2 text-gold font-semibold hover:gap-3 transition-all mt-auto">
-                      Apply Now
-                      <ArrowRight className="w-4 h-4" />
-                    </Link>
-                  </CardContent>
-                </Card>
-              </motion.div>
-
-              {/* JBJ Referral Program - For Everyone */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-              >
-                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 hover:border-gold shadow-lg hover:shadow-[0_0_30px_rgba(200,167,102,0.3)] transition-all duration-300 h-full flex flex-col">
-                  <CardContent className="p-6 flex flex-col flex-1">
-                    <div className="w-14 h-14 rounded-xl bg-transparent border-2 border-gold/40 flex items-center justify-center mb-4">
-                      <Award className="w-7 h-7 text-gold" />
-                    </div>
-                    <Badge className="bg-emerald-500/20 text-emerald-600 border-emerald-500/30 mb-3 w-fit">
-                      <Globe className="w-3 h-3 mr-1" />
-                      Open to Everyone Worldwide
-                    </Badge>
-                    <h3 className="text-black text-xl font-bold mb-2">JBJ Referral Program</h3>
-                    <p className="text-zinc-600 mb-4 flex-1">
-                      Earn 5% or 2.5% commission on successful referrals. No license required — anyone from any country can join!
-                    </p>
-                    <Link to="/referral-onboarding" className="inline-flex items-center gap-2 text-gold font-semibold hover:gap-3 transition-all mt-auto">
-                      Start Earning
-                      <ArrowRight className="w-4 h-4" />
-                    </Link>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            </div>
-
-            {/* Referral Program Details */}
-            <motion.div
-              className="max-w-4xl mx-auto"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              <Card className="bg-gradient-to-br from-black via-zinc-900 to-black border-2 border-gold/50 shadow-[0_0_40px_rgba(200,167,102,0.2)]">
-                <CardContent className="p-8">
-                  <div className="text-center mb-10">
-                    {/* Logo - Larger size with breathable spacing */}
-                    <div className="flex flex-col items-center justify-center mb-8">
-                      <img 
-                        src={jbjMonogramDarkBg} 
-                        alt="JBJ Global Real Estate"
-                        className="w-28 h-28 md:w-32 md:h-32 object-contain mb-3"
-                      />
-                      <span 
-                        className="text-white font-semibold text-lg md:text-xl tracking-[0.12em] uppercase"
-                        style={{ fontFamily: "Poppins, sans-serif" }}
-                      >
-                        JBJ GLOBAL REAL ESTATE
-                      </span>
-                    </div>
-                    <span className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 rounded-full shadow-lg mb-4">
-                      <Handshake className="w-3.5 h-3.5 text-black" />
-                      <span className="text-black text-xs uppercase tracking-wider font-medium">How Referral Works</span>
-                    </span>
-                    <h3 className="text-2xl md:text-3xl font-bold mb-2">
-                      <span className="text-gold">Join the Referral Circle</span>
-                    </h3>
-                    <p className="text-gold font-semibold text-lg">
-                      Earn 5% or 2.5% Commission
-                    </p>
-                  </div>
-
-                  {/* Steps - White/champagne square boxes with gold border, alternating number colors */}
-                  <div className="grid md:grid-cols-4 gap-6 mb-10">
-                    {[
-                      { step: 1, title: "Submit Documents", desc: "Send us your ID and basic information" },
-                      { step: 2, title: "Receive Contract", desc: "We'll send you a referral partnership agreement" },
-                      { step: 3, title: "Sign & Activate", desc: "Sign digitally and your account is active" },
-                      { step: 4, title: "Start Referring", desc: "Refer clients and earn commission on deals" },
-                    ].map((item, idx) => (
-                      <div key={item.step} className="text-center">
-                        <div 
-                          className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3"
-                          style={{
-                            background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
-                            border: '2px solid rgba(200,167,102,0.6)',
-                          }}
-                        >
-                          <span className={`font-bold text-lg ${idx % 2 === 0 ? 'text-black' : 'text-gold'}`}>{item.step}</span>
-                        </div>
-                        <h4 className="text-white font-semibold mb-1">{item.title}</h4>
-                        <p className="text-zinc-400 text-sm">{item.desc}</p>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Commission Tiers */}
-                  <div className="grid md:grid-cols-2 gap-6 mb-8">
-                    {/* Passive Referral */}
-                    <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6">
-                      <Badge className="bg-blue-500/20 text-blue-600 border-blue-500/30 mb-3">
-                        Passive Referral — 2.5%
-                      </Badge>
-                      <h4 className="text-black font-bold text-lg mb-2">Share Contact Details Only</h4>
-                      <p className="text-zinc-600 text-sm mb-4">
-                        Simply provide us with your contact's details. We'll reach out discreetly without mentioning your name. Privacy protected.
-                      </p>
-                    </div>
-
-                    {/* Active Referral */}
-                    <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6">
-                      <Badge className="bg-emerald-500/20 text-emerald-600 border-emerald-500/30 mb-3">
-                        Active Referral — 5%
-                      </Badge>
-                      <h4 className="text-black font-bold text-lg mb-2">Facilitate the Introduction</h4>
-                      <p className="text-zinc-600 text-sm mb-4">
-                        Introduce your contact directly to us. Inform them we'll be in touch. Help convince them to invest — earn double!
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* CTA - Matching Ready to Get Started Style */}
-                  <div className="text-center">
-                    <Link to="/referral-onboarding">
-                      <button 
-                        className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden"
-                        style={{
-                          background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
-                          border: '2px solid rgba(200,167,102,0.5)',
-                          boxShadow: `
-                            0 10px 30px rgba(200,167,102,0.4),
-                            0 6px 15px rgba(0,0,0,0.2),
-                            inset 0 2px 4px rgba(255,255,255,0.9),
-                            inset 0 -2px 4px rgba(200,167,102,0.2),
-                            0 0 20px rgba(200,167,102,0.3)
-                          `,
-                        }}
-                      >
-                        <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                        <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
-                        <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
-                        <span className="relative flex items-center justify-center gap-2">
-                          <DollarSign className="w-5 h-5 text-gold" />
-                          <span className="text-gold">Become</span>
-                          <span className="text-black">a Referral Partner Now</span>
-                          <ArrowUpRight className="w-5 h-5 text-black" />
-                        </span>
-                      </button>
-                    </Link>
-                    <p className="text-zinc-400 text-sm mt-4">
-                      Available worldwide — No license required
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-            </div>
-          </div>
-        </section>
-
-        {/* Divider */}
-        <SectionDivider />
-
-        {/* JOIN SECTION - 3-Layer System */}
-        <section className="py-16 md:py-20 bg-black">
+        {/* Simple Bottom CTA */}
+        <section className="py-8 md:py-10 bg-black">
           <div className="container mx-auto px-4">
-            <div className="max-w-[1100px] mx-auto">
-              {/* OUTER CARD (Active Champagne) */}
-              <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl sm:rounded-3xl p-2 sm:p-3">
-                {/* INNER CARD (Pearl) */}
-                <motion.div
-                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-8 md:p-12 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                >
-                  <h2 className="text-2xl md:text-3xl font-bold text-black mb-6">
-                    {user ? (
-                      <>Welcome back, <span className="text-gold">{user.email?.split('@')[0]}</span>!</>
-                    ) : (
-                      <>Start Your <span className="text-gold">Investment Journey</span></>
-                    )}
-                  </h2>
-
-                  {/* Features list */}
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 max-w-2xl mx-auto mb-10">
-                    {[
-                      "12+ Free AI Tools",
-                      "Property Analysis & Comparison",
-                      "Mortgage Calculator",
-                      "Rental Index Evaluator",
-                      "Video Meetings",
-                      "Documents & Spreadsheets"
-                    ].map((feature, idx) => (
-                      <motion.div
-                        key={idx}
-                        className="flex items-center gap-2 p-3 rounded-lg border border-gold/30 bg-white/50"
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: idx * 0.08 }}
-                      >
-                        <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-                        <span className="text-black text-left text-sm">{feature}</span>
-                      </motion.div>
-                    ))}
-                  </div>
-
-                  {/* CTA */}
+            <div className="max-w-[900px] mx-auto text-center">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl p-8 md:p-12">
+                <h2 className="text-2xl md:text-3xl font-bold text-black mb-4">
                   {user ? (
-                    <button 
-                      onClick={() => navigate("/my-account")}
-                      className="relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] group"
-                      style={{
-                        background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
-                        boxShadow: `
-                          0 10px 30px rgba(200,167,102,0.4),
-                          0 6px 15px rgba(0,0,0,0.2),
-                          inset 0 2px 4px rgba(255,255,255,0.9),
-                          inset 0 -2px 4px rgba(200,167,102,0.2),
-                          0 0 20px rgba(200,167,102,0.3)
-                        `,
-                      }}
-                    >
-                      <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                      <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
-                      <span className="relative flex items-center gap-1">
-                        <Sparkles className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
-                        <span className="text-black group-hover:text-gold transition-colors">Access</span>
-                        <span className="text-gold group-hover:text-black transition-colors">All Tools</span>
-                        <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
-                      </span>
-                    </button>
+                    <>Welcome back, <span className="text-gold">{user.email?.split('@')[0]}</span>!</>
                   ) : (
-                    <div className="space-y-4">
-                      <button 
-                        onClick={() => navigate("/auth?redirect=/ai-hub")}
-                        className="relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] group"
-                        style={{
-                          background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
-                          boxShadow: `
-                            0 10px 30px rgba(200,167,102,0.4),
-                            0 6px 15px rgba(0,0,0,0.2),
-                            inset 0 2px 4px rgba(255,255,255,0.9),
-                            inset 0 -2px 4px rgba(200,167,102,0.2),
-                            0 0 20px rgba(200,167,102,0.3)
-                          `,
-                        }}
-                      >
-                        <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                        <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
-                        <span className="relative flex items-center gap-1">
-                          <Gift className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
-                          <span className="text-black group-hover:text-gold transition-colors">Sign In</span>
-                          <span className="text-gold group-hover:text-black transition-colors">/ Create Account</span>
-                          <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
-                        </span>
-                      </button>
-                      <p className="text-gold text-sm">
-                        100% Free — No Credit Card Required
-                      </p>
-                    </div>
+                    <>Start Using <span className="text-gold">All Free Tools</span></>
                   )}
-                </motion.div>
+                </h2>
+                <p className="text-zinc-600 mb-6 max-w-lg mx-auto">
+                  30+ free AI tools for property analysis, corporate documents, creative design, and productivity.
+                </p>
+                {user ? (
+                  <button 
+                    onClick={() => document.getElementById('investor-tools')?.scrollIntoView({ behavior: 'smooth' })}
+                    className="inline-flex items-center gap-2 px-8 py-4 text-base font-bold rounded-xl bg-black text-gold border-2 border-gold/50 hover:bg-gold/10 transition-all"
+                  >
+                    <Sparkles className="w-5 h-5" />
+                    Explore Tools Above
+                    <ArrowUpRight className="w-5 h-5" />
+                  </button>
+                ) : (
+                  <button 
+                    onClick={() => navigate("/auth?redirect=/ai-hub")}
+                    className="inline-flex items-center gap-2 px-8 py-4 text-base font-bold rounded-xl bg-black text-gold border-2 border-gold/50 hover:bg-gold/10 transition-all"
+                  >
+                    <Sparkles className="w-5 h-5" />
+                    Sign In / Create Account
+                    <ArrowUpRight className="w-5 h-5" />
+                  </button>
+                )}
               </div>
             </div>
           </div>
