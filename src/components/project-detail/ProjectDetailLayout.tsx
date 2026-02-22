@@ -621,8 +621,8 @@ export default function ProjectDetailLayout({
         }`}
       >
         {/* Row 1: Filter Shortcut Bar */}
-        <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-2 px-2 sm:py-2 sm:px-4">
-          <div className="container mx-auto overflow-x-auto scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch' }}>
+        <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-2 px-2">
+          <div className="max-w-full overflow-x-auto scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch' }}>
             <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} />
           </div>
         </div>
@@ -632,22 +632,14 @@ export default function ProjectDetailLayout({
           <div className="container mx-auto px-4">
             <div className="overflow-x-auto scrollbar-hide" style={{ touchAction: 'pan-x', WebkitOverflowScrolling: 'touch', overscrollBehaviorX: 'contain' }}>
              <div ref={tabNavRef} className="flex items-center gap-1 py-1.5">
-                {[
-                  { id: "details", label: "Details", icon: FileText },
-                  { id: "gallery", label: "Gallery", icon: ImageIcon },
-                  { id: "developer", label: "Developer", icon: Building2 },
-                  { id: "location", label: "Location", icon: MapPin },
-                  { id: "brochure", label: "Brochure", icon: Download },
-                  { id: "ai", label: "AI Analyzer", icon: Sparkles },
-                  { id: "mortgage", label: "Mortgage", icon: Calculator },
-                ].map((tab) => (
+                {visibleTabs.map((tab) => (
                   <button
                     key={tab.id}
                     data-tab={tab.id}
                     onClick={() => handleTabClick(tab.id)}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium whitespace-nowrap min-w-fit transition-all ${
                       activeTab === tab.id
-                        ? "bg-gold/20 text-gold border border-gold/40"
+                        ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-[#C8A766]/60 shadow-sm"
                         : "text-black/70 hover:text-gold hover:bg-gold/10"
                     }`}
                   >
@@ -1024,7 +1016,7 @@ export default function ProjectDetailLayout({
           </div>
 
           {/* Gold divider before DLD - increased spacing */}
-          <div className="py-14 md:py-16">
+          <div className="py-6 md:py-8">
             <div className="flex items-center justify-center gap-6">
               <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
               <div className="w-2 h-2 rotate-45 bg-gold/40" />

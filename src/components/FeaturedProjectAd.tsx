@@ -99,7 +99,7 @@ export const FEATURED_ADS = [
     title: 'Inaura Hotels & Residences',
     subtitle: 'Luxury Living in Downtown Dubai',
     description: 'A landmark branded living destination rising in Downtown Dubai, defined by architectural movement and wellness integration.',
-    imageUrl: 'https://d3h330vgpwpjr8.cloudfront.net/x/1128x/Feature_309f6a8c5c.webp',
+    imageUrl: 'https://d3h330vgpwpjr8.cloudfront.net/x/1128x/Inaura_Hotels_Residences_5_0dcce21497.webp',
     projectSlug: 'inaura-hotels-and-residences-arada-properties-downtown-dubai',
     ctaText: 'Explore Now'
   },

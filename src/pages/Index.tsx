@@ -459,10 +459,6 @@ const Index = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <span className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-gold/20 via-[#F5F0E6] to-gold/20 border border-gold/50 rounded-full mb-4 shadow-lg shadow-gold/10">
-                <Calculator className="w-4 h-4 text-gold" />
-                <span className="text-black text-xs font-semibold uppercase tracking-wider">Financial Tools</span>
-              </span>
               <h3 className="text-zinc-900 text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
                 {t('mortgage.title', 'Mortgage')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold">{t('mortgage.calculator', 'Calculator')}</span>
               </h3>

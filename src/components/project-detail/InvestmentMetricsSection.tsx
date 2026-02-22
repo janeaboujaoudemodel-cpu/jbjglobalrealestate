@@ -40,8 +40,8 @@ export default function InvestmentMetricsSection({
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {/* ROI Estimate */}
         {roiEstimate && (
-          <div className="rounded-xl border border-gold/30 bg-card p-5 text-center">
-            <div className="w-12 h-12 rounded-full bg-emerald-500/20 mx-auto mb-3 flex items-center justify-center">
+          <div className="rounded-xl border-2 border-gold/40 bg-gradient-to-br from-card via-card to-gold/5 shadow-md hover:shadow-lg hover:shadow-gold/15 transition-all p-5 text-center">
+            <div className="w-12 h-12 rounded-full bg-emerald-500/20 mx-auto mb-3 flex items-center justify-center ring-4 ring-gold/10">
               <TrendingUp className="w-6 h-6 text-emerald-500" />
             </div>
             <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Estimated ROI</p>
@@ -52,8 +52,8 @@ export default function InvestmentMetricsSection({
 
         {/* Rental Yield */}
         {rentalYieldEstimate && (
-          <div className="rounded-xl border border-gold/30 bg-card p-5 text-center">
-            <div className="w-12 h-12 rounded-full bg-gold/20 mx-auto mb-3 flex items-center justify-center">
+          <div className="rounded-xl border-2 border-gold/40 bg-gradient-to-br from-card via-card to-gold/5 shadow-md hover:shadow-lg hover:shadow-gold/15 transition-all p-5 text-center">
+            <div className="w-12 h-12 rounded-full bg-gold/20 mx-auto mb-3 flex items-center justify-center ring-4 ring-gold/10">
               <Percent className="w-6 h-6 text-gold" />
             </div>
             <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Rental Yield</p>
@@ -64,8 +64,8 @@ export default function InvestmentMetricsSection({
 
         {/* Estimated Annual Income */}
         {estimatedAnnualRental && (
-          <div className="rounded-xl border border-gold/30 bg-card p-5 text-center">
-            <div className="w-12 h-12 rounded-full bg-blue-500/20 mx-auto mb-3 flex items-center justify-center">
+          <div className="rounded-xl border-2 border-gold/40 bg-gradient-to-br from-card via-card to-gold/5 shadow-md hover:shadow-lg hover:shadow-gold/15 transition-all p-5 text-center">
+            <div className="w-12 h-12 rounded-full bg-blue-500/20 mx-auto mb-3 flex items-center justify-center ring-4 ring-gold/10">
               <PiggyBank className="w-6 h-6 text-blue-400" />
             </div>
             <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Est. Annual Rental</p>
