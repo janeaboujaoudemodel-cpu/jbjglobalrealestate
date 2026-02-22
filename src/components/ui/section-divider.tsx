@@ -21,7 +21,7 @@ export function SectionDivider({ className, fullWidth = false, bg, variant = "de
     : "bg-black");
 
   return (
-    <section className={`${bgClass} py-14 md:py-20 ${className ?? ""}`.trim()}>
+    <section className={`${bgClass} py-4 md:py-6 ${className ?? ""}`.trim()}>
       <div className={fullWidth 
         ? "w-full max-w-[1600px] mx-auto px-6 md:px-12 lg:px-16" 
         : "container mx-auto px-4"

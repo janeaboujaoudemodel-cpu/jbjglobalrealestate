@@ -11,6 +11,7 @@ import {
   BrokerToolkitCRM,
   BrokerToolkitGrowth,
   BrokerToolkitCTA,
+  BrokerToolkitReferral,
 } from "@/components/broker-toolkit";
 
 export default function BrokerToolkit() {
@@ -31,6 +32,7 @@ export default function BrokerToolkit() {
       <BrokerToolkitOperations />
       <BrokerToolkitCRM />
       <BrokerToolkitGrowth />
+      <BrokerToolkitReferral />
       <BrokerToolkitCTA />
     </div>
   );
