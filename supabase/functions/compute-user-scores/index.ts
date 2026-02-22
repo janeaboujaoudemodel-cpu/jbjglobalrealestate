@@ -2,7 +2,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
 Deno.serve(async (req) => {
@@ -15,209 +15,352 @@ Deno.serve(async (req) => {
 
   try {
     const body = await req.json().catch(() => ({}));
-    const targetUserId = body.user_id; // optional: score single user
+    const targetUserId = body.user_id;
 
-    // Get all users with activity, or just one
-    let userIds: string[] = [];
+    // Gather all user IDs from multiple sources
+    const userIdSet = new Set<string>();
+
     if (targetUserId) {
-      userIds = [targetUserId];
+      userIdSet.add(targetUserId);
     } else {
-      const { data: activeUsers } = await supabase
+      // From visitor_sessions (primary tracking)
+      const { data: vs } = await supabase
+        .from("visitor_sessions")
+        .select("user_id")
+        .not("user_id", "is", null);
+      (vs || []).forEach((s: any) => { if (s.user_id) userIdSet.add(s.user_id); });
+
+      // From user_events
+      const { data: ue } = await supabase
+        .from("user_events")
+        .select("user_id");
+      (ue || []).forEach((s: any) => { if (s.user_id) userIdSet.add(s.user_id); });
+
+      // From user_daily_activity
+      const { data: da } = await supabase
         .from("user_daily_activity")
         .select("user_id")
         .gte("day_date", new Date(Date.now() - 60 * 86400000).toISOString().split("T")[0]);
-      userIds = [...new Set((activeUsers || []).map((u: any) => u.user_id))];
+      (da || []).forEach((s: any) => { if (s.user_id) userIdSet.add(s.user_id); });
     }
 
+    const userIds = Array.from(userIdSet);
     const results: any[] = [];
     const now = new Date();
     const thirtyDaysAgo = new Date(now.getTime() - 30 * 86400000);
     const sevenDaysAgo = new Date(now.getTime() - 7 * 86400000);
 
     for (const userId of userIds) {
-      // Parallel data fetch
-      const [eventsRes, sessionsRes, dailyRes, pointsRes] = await Promise.all([
-        supabase.from("user_events").select("event_name, event_time, metadata")
-          .eq("user_id", userId).gte("event_time", thirtyDaysAgo.toISOString()).limit(1000),
-        supabase.from("user_sessions").select("started_at, duration_seconds, device_type")
-          .eq("user_id", userId).gte("started_at", thirtyDaysAgo.toISOString()).limit(200),
-        supabase.from("user_daily_activity").select("day_date, total_events, points_earned")
-          .eq("user_id", userId).gte("day_date", thirtyDaysAgo.toISOString().split("T")[0]),
-        supabase.from("user_points_ledger").select("points")
-          .eq("user_id", userId),
-      ]);
+      try {
+        // Get visitor session IDs for this user
+        const { data: userSessions } = await supabase
+          .from("visitor_sessions")
+          .select("session_id, device_type, total_time_spent, pages_visited, created_at, last_activity_at")
+          .eq("user_id", userId)
+          .order("created_at", { ascending: false })
+          .limit(500);
 
-      const events = eventsRes.data || [];
-      const sessions = sessionsRes.data || [];
-      const daily = dailyRes.data || [];
-      const totalPoints = (pointsRes.data || []).reduce((s: number, p: any) => s + (p.points || 0), 0);
+        const vSessions = userSessions || [];
+        const sessionIds = vSessions.map((s: any) => s.session_id);
 
-      // Count event types
-      const eventCounts: Record<string, number> = {};
-      events.forEach((e: any) => {
-        eventCounts[e.event_name] = (eventCounts[e.event_name] || 0) + 1;
-      });
+        // Parallel data fetch from all sources
+        const [visitorEventsRes, userEventsRes, userSessionsRes, dailyRes, pointsRes, leadsRes, scannedRes, docsRes, activityLogRes] = await Promise.all([
+          // Visitor events (primary tracking - 30d)
+          sessionIds.length > 0
+            ? supabase.from("visitor_events")
+                .select("event_type, event_name, page_path, created_at, event_data")
+                .in("session_id", sessionIds.slice(0, 100))
+                .gte("created_at", thirtyDaysAgo.toISOString())
+                .limit(1000)
+            : Promise.resolve({ data: [] }),
+          // User events (secondary tracking)
+          supabase.from("user_events")
+            .select("event_name, page_path, created_at, metadata, points_awarded")
+            .eq("user_id", userId)
+            .gte("created_at", thirtyDaysAgo.toISOString())
+            .limit(500),
+          // User sessions table
+          supabase.from("user_sessions")
+            .select("started_at, duration_seconds, device_type")
+            .eq("user_id", userId)
+            .gte("started_at", thirtyDaysAgo.toISOString())
+            .limit(200),
+          // Daily activity
+          supabase.from("user_daily_activity")
+            .select("day_date, total_events, points_earned")
+            .eq("user_id", userId)
+            .gte("day_date", thirtyDaysAgo.toISOString().split("T")[0]),
+          // Points
+          supabase.from("user_points_ledger")
+            .select("points")
+            .eq("user_id", userId),
+          // Leads
+          supabase.from("crm_leads")
+            .select("id, created_at")
+            .eq("user_id", userId),
+          // Scanned cards
+          supabase.from("admin_scanned_cards")
+            .select("id")
+            .eq("user_id", userId),
+          // Documents
+          sessionIds.length > 0
+            ? supabase.from("visitor_documents")
+                .select("id, action, document_type")
+                .in("session_id", sessionIds.slice(0, 100))
+            : Promise.resolve({ data: [] }),
+          // Activity log
+          supabase.from("user_activity_log")
+            .select("event_type, created_at")
+            .eq("user_id", userId)
+            .gte("created_at", thirtyDaysAgo.toISOString())
+            .limit(500),
+        ]);
 
-      const leads = eventCounts["lead_submit"] || 0;
-      const saves = (eventCounts["listing_save"] || 0) + (eventCounts["favorite"] || 0);
-      const compares = eventCounts["compare_used"] || 0;
-      const contactClicks = (eventCounts["click_call"] || 0) + (eventCounts["click_whatsapp"] || 0) + (eventCounts["click_email"] || 0);
-      const aiTools = eventCounts["ai_tool_used"] || 0;
-      const searches = eventCounts["search"] || 0;
-      const totalEvents = events.length;
+        const visitorEvents = visitorEventsRes.data || [];
+        const userEvents = userEventsRes.data || [];
+        const uSessions = userSessionsRes.data || [];
+        const daily = dailyRes.data || [];
+        const totalPoints = (pointsRes.data || []).reduce((s: number, p: any) => s + (p.points || 0), 0);
+        const leads = leadsRes.data || [];
+        const scannedCards = scannedRes.data || [];
+        const docs = docsRes.data || [];
+        const activityLog = activityLogRes.data || [];
 
-      // Last active
-      const lastEvent = events.length > 0 ? new Date(events[0].event_time) : thirtyDaysAgo;
-      const daysSinceActive = Math.floor((now.getTime() - lastEvent.getTime()) / 86400000);
+        // === AGGREGATE METRICS ===
+        const totalVisitorSessions = vSessions.length;
+        const totalUserSessions = uSessions.length;
+        const totalSessions = Math.max(totalVisitorSessions, totalUserSessions);
+        
+        const visitorTimeSpent = vSessions.reduce((s: number, se: any) => s + (se.total_time_spent || 0), 0);
+        const userTimeSpent = uSessions.reduce((s: number, se: any) => s + (se.duration_seconds || 0), 0);
+        const totalTimeSeconds = Math.max(visitorTimeSpent, userTimeSpent);
 
-      // Recency multiplier (1.0 if active today, decays to 0.3 if 30+ days inactive)
-      const recencyMultiplier = Math.max(0.3, 1.0 - (daysSinceActive / 45));
+        // Sessions in last 7d
+        const vSessionsLast7d = vSessions.filter((s: any) => new Date(s.created_at) >= sevenDaysAgo).length;
+        const uSessionsLast7d = uSessions.filter((s: any) => new Date(s.started_at) >= sevenDaysAgo).length;
+        const sessionsLast7d = Math.max(vSessionsLast7d, uSessionsLast7d);
 
-      // === INTENT SCORE (0-100) ===
-      // 40% lead submissions, 20% saves, 15% compares + contact clicks, 10% AI tools, 10% recency, 5% compares
-      const intentRaw =
-        Math.min(leads * 12, 40) +            // leads: up to 40
-        Math.min(saves * 4, 20) +             // saves: up to 20
-        Math.min(contactClicks * 3, 15) +     // contact clicks: up to 15
-        Math.min(aiTools * 2, 10) +           // AI tools: up to 10
-        Math.min(compares * 5, 5) +           // compares: up to 5
-        (recencyMultiplier * 10);             // recency: up to 10
-      const intentScore = Math.min(100, Math.round(intentRaw));
+        // Device mix (merge both sources)
+        const deviceMap: Record<string, number> = {};
+        vSessions.forEach((s: any) => { const d = s.device_type || "unknown"; deviceMap[d] = (deviceMap[d] || 0) + 1; });
+        uSessions.forEach((s: any) => { const d = s.device_type || "unknown"; deviceMap[d] = (deviceMap[d] || 0) + 1; });
 
-      // === ENGAGEMENT SCORE (0-100) ===
-      const sessions7d = sessions.filter((s: any) => new Date(s.started_at) >= sevenDaysAgo).length;
-      const totalDuration = sessions.reduce((s: number, x: any) => s + (x.duration_seconds || 0), 0);
-      const uniqueEventTypes = new Set(events.map((e: any) => e.event_name)).size;
+        // Event type counts from visitor_events
+        const pageViews = visitorEvents.filter((e: any) => e.event_type === "page_view").length;
+        const clicks = visitorEvents.filter((e: any) => e.event_type === "click").length;
+        const vSearches = visitorEvents.filter((e: any) => e.event_type === "search").length;
+        const formSubmits = visitorEvents.filter((e: any) => e.event_type === "form_submit").length;
+        const toolUsages = visitorEvents.filter((e: any) => e.event_type === "tool_usage").length;
+        const downloads = docs.filter((d: any) => d.action === "download").length;
+        const uploads = docs.filter((d: any) => d.action === "upload").length;
 
-      const engagementRaw =
-        Math.min(sessions7d * 5, 30) +           // sessions/week: up to 30
-        Math.min(totalDuration / 600, 25) +       // total time (per 10min): up to 25
-        Math.min(uniqueEventTypes * 3, 20) +      // feature diversity: up to 20
-        Math.min(searches * 2, 15) +              // searches: up to 15
-        Math.min(saves * 2, 10);                  // saves: up to 10
-      const engagementScore = Math.min(100, Math.round(engagementRaw));
+        // Event counts from user_events
+        const ueEventCounts: Record<string, number> = {};
+        userEvents.forEach((e: any) => { ueEventCounts[e.event_name] = (ueEventCounts[e.event_name] || 0) + 1; });
+        const ueLeads = ueEventCounts["lead_submit"] || 0;
+        const ueSaves = (ueEventCounts["listing_save"] || 0) + (ueEventCounts["favorite"] || 0);
+        const ueSearches = ueEventCounts["search"] || 0;
+        const ueContactClicks = (ueEventCounts["click_call"] || 0) + (ueEventCounts["click_whatsapp"] || 0) + (ueEventCounts["click_email"] || 0);
 
-      // === CONVERSION PROBABILITY ===
-      let conversionProb = intentScore * 0.7 + engagementScore * 0.3;
-      if (daysSinceActive > 14) conversionProb *= 0.6;
-      if (saves === 0 && leads === 0) conversionProb *= 0.5;
-      conversionProb = Math.min(100, Math.round(conversionProb));
+        // Merge counts (take max from both sources)
+        const totalLeads = Math.max(leads.length, ueLeads);
+        const totalSaves = Math.max(ueSaves, visitorEvents.filter((e: any) => e.event_name?.toLowerCase().includes("save")).length);
+        const totalSearches = Math.max(vSearches, ueSearches);
+        const totalContactClicks = Math.max(ueContactClicks, visitorEvents.filter((e: any) => 
+          e.event_name?.toLowerCase().includes("contact") || e.event_name?.toLowerCase().includes("whatsapp") || e.event_name?.toLowerCase().includes("call")
+        ).length);
+        const totalFormSubmits = formSubmits;
 
-      // === BUDGET ESTIMATION ===
-      // Look for price-related metadata in events
-      let budgetEstimate = 0;
-      const priceSignals: number[] = [];
-      events.forEach((e: any) => {
-        if (e.metadata?.price) priceSignals.push(Number(e.metadata.price));
-        if (e.metadata?.min_price) priceSignals.push(Number(e.metadata.min_price));
-        if (e.metadata?.max_price) priceSignals.push(Number(e.metadata.max_price));
-      });
-      if (priceSignals.length > 0) {
-        budgetEstimate = Math.round(priceSignals.reduce((s, p) => s + p, 0) / priceSignals.length);
-      } else {
-        budgetEstimate = 2000000; // default 2M AED
-      }
+        // Feature diversity
+        const allEventTypes = new Set([
+          ...visitorEvents.map((e: any) => e.event_type),
+          ...userEvents.map((e: any) => e.event_name),
+        ]);
+        const featureDiversity = allEventTypes.size;
 
-      // === REVENUE PREDICTION ===
-      const { data: commRates } = await supabase.from("commission_rates").select("rate_percent").eq("property_type", "off_plan").single();
-      const commRate = (commRates?.rate_percent || 5) / 100;
-      const revenuePotential = Math.round(budgetEstimate * (conversionProb / 100) * commRate);
-      const timeToConversion = leads > 0 ? Math.max(7, 90 - intentScore) : Math.max(30, 180 - intentScore);
-      const confidence = Math.min(100, Math.round((events.length / 50) * 50 + (sessions.length / 10) * 30 + (leads > 0 ? 20 : 0)));
+        // Unique pages
+        const uniquePages = new Set([
+          ...visitorEvents.map((e: any) => e.page_path),
+          ...userEvents.map((e: any) => e.page_path),
+        ].filter(Boolean));
 
-      // === VIP TIER ===
-      let vipTier = "Visitor";
-      if (totalPoints >= 5000 || intentScore >= 90) vipTier = "Royal VIP";
-      else if (totalPoints >= 2000 || intentScore >= 70) vipTier = "Platinum";
-      else if (totalPoints >= 1000 || intentScore >= 50) vipTier = "Gold";
-      else if (totalPoints >= 500 || intentScore >= 30) vipTier = "Silver";
-      else if (totalPoints >= 100 || intentScore >= 15) vipTier = "Bronze";
+        // Top pages
+        const pageMap: Record<string, number> = {};
+        visitorEvents.filter((e: any) => e.event_type === "page_view").forEach((e: any) => {
+          if (e.page_path) pageMap[e.page_path] = (pageMap[e.page_path] || 0) + 1;
+        });
+        const topPages = Object.entries(pageMap).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([p]) => p);
 
-      // Inactivity downgrade (except Royal VIP manual override)
-      if (daysSinceActive > 30 && vipTier !== "Royal VIP") {
-        const tierOrder = ["Visitor", "Bronze", "Silver", "Gold", "Platinum"];
-        const idx = tierOrder.indexOf(vipTier);
-        if (idx > 0) vipTier = tierOrder[idx - 1];
-      }
+        // Tools used
+        const toolSet = new Set<string>();
+        visitorEvents.filter((e: any) => e.event_type === "tool_usage").forEach((e: any) => {
+          const name = e.event_data?.tool_name || e.event_name?.replace("Used ", "");
+          if (name) toolSet.add(name);
+        });
 
-      // === STREAK ===
-      const sortedDates = daily.map((d: any) => d.day_date).sort().reverse();
-      let streak = 0;
-      const today = now.toISOString().split("T")[0];
-      const yesterday = new Date(now.getTime() - 86400000).toISOString().split("T")[0];
-      if (sortedDates.length > 0 && (sortedDates[0] === today || sortedDates[0] === yesterday)) {
-        streak = 1;
-        for (let i = 1; i < sortedDates.length; i++) {
-          const prev = new Date(sortedDates[i - 1]);
-          const curr = new Date(sortedDates[i]);
-          if (Math.round((prev.getTime() - curr.getTime()) / 86400000) === 1) streak++;
-          else break;
+        // === INTENT SCORE (0-100) ===
+        let intentScore = 0;
+        intentScore += Math.min(totalLeads * 12, 35);           // Leads: up to 35
+        intentScore += Math.min(totalSaves * 4, 15);            // Saves: up to 15
+        intentScore += Math.min(totalContactClicks * 5, 15);    // Contact clicks: up to 15
+        intentScore += Math.min(totalSearches * 2, 10);         // Searches: up to 10
+        intentScore += Math.min(totalFormSubmits * 8, 10);      // Form submits: up to 10
+        intentScore += Math.min(downloads * 5, 5);              // Downloads: up to 5
+        intentScore += scannedCards.length > 0 ? 5 : 0;         // Business cards: 5
+        intentScore += uploads > 0 ? 5 : 0;                     // Document uploads: 5
+        intentScore = Math.min(Math.round(intentScore), 100);
+
+        // === ENGAGEMENT SCORE (0-100) ===
+        let engagementScore = 0;
+        engagementScore += Math.min(sessionsLast7d * 5, 25);             // Recent sessions: up to 25
+        engagementScore += Math.min(Math.round(totalTimeSeconds / 300), 20); // Time (5min blocks): up to 20
+        engagementScore += Math.min(featureDiversity * 3, 15);           // Feature diversity: up to 15
+        engagementScore += Math.min(Math.round(clicks / 50), 15);       // Click depth: up to 15
+        engagementScore += Math.min(uniquePages.size, 15);               // Page diversity: up to 15
+        engagementScore += Math.min(activityLog.length > 0 ? 5 : 0, 5); // Activity log presence: 5
+        engagementScore += scannedCards.length > 0 ? 5 : 0;             // Business card: 5
+        engagementScore = Math.min(Math.round(engagementScore), 100);
+
+        // === CONVERSION PROBABILITY (0-100) ===
+        const lastActiveDate = vSessions.length > 0 
+          ? new Date(vSessions[0].last_activity_at || vSessions[0].created_at)
+          : thirtyDaysAgo;
+        const daysSinceActive = Math.floor((now.getTime() - lastActiveDate.getTime()) / 86400000);
+        const recencyMultiplier = Math.max(0.3, 1.0 - (daysSinceActive / 45));
+        
+        let conversionProbability = Math.round(
+          (intentScore * 0.5 + engagementScore * 0.3) * recencyMultiplier +
+          (totalLeads > 0 ? 15 : 0) +
+          (totalContactClicks > 0 ? 5 : 0)
+        );
+        conversionProbability = Math.min(95, Math.max(0, conversionProbability));
+
+        // === CONFIDENCE SCORE (0-100) ===
+        // How reliable are our scores based on data volume
+        const totalEventCount = visitorEvents.length + userEvents.length;
+        let confidenceScore = 0;
+        confidenceScore += Math.min(totalSessions * 4, 20);       // Sessions
+        confidenceScore += Math.min(totalEventCount / 20, 25);    // Events volume
+        confidenceScore += totalTimeSeconds > 600 ? 15 : Math.round(totalTimeSeconds / 40); // Time
+        confidenceScore += totalLeads > 0 ? 15 : 0;              // Has leads
+        confidenceScore += sessionsLast7d > 0 ? 10 : 0;          // Recent
+        confidenceScore += uniquePages.size >= 5 ? 10 : Math.round(uniquePages.size * 2);
+        confidenceScore += scannedCards.length > 0 ? 5 : 0;
+        confidenceScore = Math.min(Math.round(confidenceScore), 100);
+
+        // === BUDGET ESTIMATION (AED) ===
+        // Check property pages visited
+        const propertyPageViews = visitorEvents.filter((e: any) => 
+          e.page_path?.includes("/project/") || e.page_path?.includes("/listing/") || e.page_path?.includes("/property/")
+        ).length;
+
+        let budgetEstimate = 500000; // Default casual
+        if (totalLeads > 0) budgetEstimate = 2500000;           // Submitted leads = serious
+        else if (propertyPageViews > 10) budgetEstimate = 2000000; // Heavy property browsing
+        else if (propertyPageViews > 3) budgetEstimate = 1500000;
+        else if (totalSessions > 5) budgetEstimate = 1000000;
+
+        // Check price metadata for better accuracy
+        const priceSignals: number[] = [];
+        userEvents.forEach((e: any) => {
+          if (e.metadata?.price) priceSignals.push(Number(e.metadata.price));
+          if (e.metadata?.min_price) priceSignals.push(Number(e.metadata.min_price));
+          if (e.metadata?.max_price) priceSignals.push(Number(e.metadata.max_price));
+        });
+        if (priceSignals.length > 0) {
+          budgetEstimate = Math.round(priceSignals.reduce((s, p) => s + p, 0) / priceSignals.length);
         }
+
+        // === REVENUE POTENTIAL ===
+        const commRate = 0.02; // 2% commission
+        const revenuePotential = Math.round(budgetEstimate * commRate * (conversionProbability / 100));
+
+        // === TIME TO CONVERSION ===
+        let timeToConversion: number;
+        if (conversionProbability >= 70) timeToConversion = 14;
+        else if (conversionProbability >= 50) timeToConversion = 30;
+        else if (conversionProbability >= 30) timeToConversion = 60;
+        else if (conversionProbability >= 15) timeToConversion = 90;
+        else timeToConversion = 180;
+
+        // === STREAK ===
+        const allDates = new Set<string>();
+        daily.forEach((d: any) => allDates.add(d.day_date));
+        vSessions.forEach((s: any) => { if (s.created_at) allDates.add(s.created_at.split("T")[0]); });
+        const sortedDates = [...allDates].sort().reverse();
+        let streak = 0;
+        const today = now.toISOString().split("T")[0];
+        const yesterday = new Date(now.getTime() - 86400000).toISOString().split("T")[0];
+        if (sortedDates.length > 0 && (sortedDates[0] === today || sortedDates[0] === yesterday)) {
+          streak = 1;
+          for (let i = 1; i < sortedDates.length; i++) {
+            const prev = new Date(sortedDates[i - 1]);
+            const curr = new Date(sortedDates[i]);
+            if (Math.round((prev.getTime() - curr.getTime()) / 86400000) === 1) streak++;
+            else break;
+          }
+        }
+
+        // === VIP TIER ===
+        let vipTier = "Visitor";
+        const combinedScore = intentScore + engagementScore;
+        if (totalPoints >= 50000 || combinedScore >= 160) vipTier = "Royal VIP";
+        else if (totalPoints >= 25000 || combinedScore >= 130) vipTier = "Platinum";
+        else if (totalPoints >= 10000 || combinedScore >= 100) vipTier = "Gold";
+        else if (totalPoints >= 3000 || combinedScore >= 60) vipTier = "Silver";
+        else if (totalPoints >= 500 || combinedScore >= 25) vipTier = "Bronze";
+
+        // Inactivity downgrade
+        if (daysSinceActive > 30 && vipTier !== "Royal VIP") {
+          const tierOrder = ["Visitor", "Bronze", "Silver", "Gold", "Platinum"];
+          const idx = tierOrder.indexOf(vipTier);
+          if (idx > 0) vipTier = tierOrder[idx - 1];
+        }
+
+        const vipTierReason = `Points:${totalPoints} | Intent:${intentScore}/100 | Engagement:${engagementScore}/100 | Sessions:${totalSessions} | Leads:${totalLeads} | Last active: ${daysSinceActive}d ago`;
+
+        // Upsert
+        const profileData = {
+          user_id: userId,
+          intent_score: intentScore,
+          engagement_score: engagementScore,
+          conversion_probability: conversionProbability,
+          avg_budget_estimate: budgetEstimate,
+          revenue_potential: revenuePotential,
+          estimated_ticket_aed: budgetEstimate,
+          time_to_conversion_days: timeToConversion,
+          confidence_score: confidenceScore,
+          vip_tier: vipTier,
+          vip_tier_reason: vipTierReason,
+          total_sessions: totalSessions,
+          total_time_seconds: totalTimeSeconds,
+          total_points: totalPoints,
+          current_streak: streak,
+          longest_streak: streak,
+          device_mix: deviceMap,
+          top_pages: topPages,
+          tools_used: [...toolSet],
+          lead_count_30d: totalLeads,
+          saves_count_30d: totalSaves,
+          compares_count_30d: 0,
+          contact_clicks_30d: totalContactClicks,
+          sessions_last_7d: sessionsLast7d,
+          feature_diversity: featureDiversity,
+          searches_30d: totalSearches,
+          last_active_at: lastActiveDate.toISOString(),
+          last_updated_at: now.toISOString(),
+        };
+
+        const { error } = await supabase.from("user_interest_profile").upsert(profileData, { onConflict: "user_id" });
+        if (error) console.error(`Error upserting ${userId}:`, error);
+
+        results.push({ userId, intentScore, engagementScore, conversionProbability, vipTier, revenuePotential });
+      } catch (err) {
+        console.error(`Error processing user ${userId}:`, err);
       }
-
-      // Device mix
-      const deviceMap: Record<string, number> = {};
-      sessions.forEach((s: any) => {
-        const d = s.device_type || "unknown";
-        deviceMap[d] = (deviceMap[d] || 0) + 1;
-      });
-
-      // Top pages
-      const pageMap: Record<string, number> = {};
-      events.forEach((e: any) => {
-        if (e.event_name === "page_view" && e.metadata?.title) {
-          pageMap[e.metadata.title] = (pageMap[e.metadata.title] || 0) + 1;
-        }
-      });
-      const topPages = Object.entries(pageMap).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([p]) => p);
-
-      // Tools used
-      const toolSet = new Set<string>();
-      events.forEach((e: any) => {
-        if (["ai_tool_used", "tool_use"].includes(e.event_name) && e.metadata?.tool_name) {
-          toolSet.add(e.metadata.tool_name);
-        }
-      });
-
-      // Upsert profile
-      const profileData = {
-        user_id: userId,
-        intent_score: intentScore,
-        engagement_score: engagementScore,
-        conversion_probability: conversionProb,
-        avg_budget_estimate: budgetEstimate,
-        revenue_potential: revenuePotential,
-        estimated_ticket_aed: budgetEstimate,
-        time_to_conversion_days: timeToConversion,
-        confidence_score: confidence,
-        vip_tier: vipTier,
-        vip_tier_reason: `Points:${totalPoints} Intent:${intentScore} Engagement:${engagementScore}`,
-        total_sessions: sessions.length,
-        total_time_seconds: totalDuration,
-        total_points: totalPoints,
-        current_streak: streak,
-        longest_streak: streak, // simplified
-        device_mix: deviceMap,
-        top_pages: topPages,
-        tools_used: [...toolSet],
-        lead_count_30d: leads,
-        saves_count_30d: saves,
-        compares_count_30d: compares,
-        contact_clicks_30d: contactClicks,
-        sessions_last_7d: sessions7d,
-        feature_diversity: uniqueEventTypes,
-        searches_30d: searches,
-        last_active_at: lastEvent.toISOString(),
-        last_updated_at: now.toISOString(),
-      };
-
-      const { error } = await supabase.from("user_interest_profile").upsert(profileData, { onConflict: "user_id" });
-      if (error) console.error(`Error upserting profile for ${userId}:`, error);
-      
-      results.push({ userId, intentScore, engagementScore, conversionProb, vipTier, revenuePotential });
     }
 
-    return new Response(JSON.stringify({ success: true, processed: results.length, results }), {
+    return new Response(JSON.stringify({ success: true, processed: results.length, total: userIds.length }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error: any) {

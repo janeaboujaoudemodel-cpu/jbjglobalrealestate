@@ -71,6 +71,8 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedUser, setSelectedUser] = useState<UserProfile | null>(null);
   const [tierFilter, setTierFilter] = useState<string>("all");
+  const [userActivities, setUserActivities] = useState<any[] | null>(null);
+  const [activitiesLoading, setActivitiesLoading] = useState(false);
 
   const { data: profiles, isLoading, refetch } = useQuery({
     queryKey: ["admin-intelligence-profiles"],
@@ -83,22 +85,83 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
       if (error) throw error;
 
       const userIds = (data || []).map((p: any) => p.user_id);
+      
+      // Fetch from profiles table (correct column names)
       const { data: profilesData } = await supabase
         .from("profiles")
-        .select("id, full_name, email, phone, role")
+        .select("id, full_name, first_name, last_name, email, phone_number, user_role")
         .in("id", userIds);
 
+      // Also fetch from crm_users_profile for display names
+      const { data: crmProfiles } = await supabase
+        .from("crm_users_profile")
+        .select("user_id, display_name, phone_number")
+        .in("user_id", userIds);
+
       const profileMap = new Map((profilesData || []).map((p: any) => [p.id, p]));
-      return (data || []).map((p: any) => ({
-        ...p,
-        full_name: profileMap.get(p.user_id)?.full_name || "Unknown",
-        email: profileMap.get(p.user_id)?.email || "",
-        phone: profileMap.get(p.user_id)?.phone || "",
-        role: profileMap.get(p.user_id)?.role || "visitor",
-      })) as UserProfile[];
+      const crmMap = new Map((crmProfiles || []).map((p: any) => [p.user_id, p]));
+
+      return (data || []).map((p: any) => {
+        const prof = profileMap.get(p.user_id);
+        const crm = crmMap.get(p.user_id);
+        const fullName = prof?.full_name || crm?.display_name || 
+          (prof?.first_name && prof?.last_name ? `${prof.first_name} ${prof.last_name}` : null) ||
+          prof?.email?.split("@")[0] || "Unknown";
+        return {
+          ...p,
+          full_name: fullName,
+          email: prof?.email || "",
+          phone: prof?.phone_number || crm?.phone_number || "",
+          role: prof?.user_role || "visitor",
+        };
+      }) as UserProfile[];
     },
     staleTime: 30_000,
   });
+
+  const loadUserActivities = async (userId: string) => {
+    setActivitiesLoading(true);
+    try {
+      // Get session IDs for user
+      const { data: sessions } = await supabase
+        .from("visitor_sessions")
+        .select("session_id")
+        .eq("user_id", userId)
+        .limit(100);
+      const sessionIds = (sessions || []).map((s: any) => s.session_id);
+
+      // Fetch visitor events + user events in parallel
+      const [vEventsRes, uEventsRes] = await Promise.all([
+        sessionIds.length > 0
+          ? supabase.from("visitor_events")
+              .select("event_type, event_name, page_path, created_at")
+              .in("session_id", sessionIds)
+              .order("created_at", { ascending: false })
+              .limit(100)
+          : Promise.resolve({ data: [] }),
+        supabase.from("user_events")
+          .select("event_name, page_path, created_at")
+          .eq("user_id", userId)
+          .order("created_at", { ascending: false })
+          .limit(50),
+      ]);
+
+      const vEvents = (vEventsRes.data || []).map((e: any) => ({
+        event_type: e.event_type, event_name: e.event_name, page_path: e.page_path, created_at: e.created_at,
+      }));
+      const uEvents = (uEventsRes.data || []).map((e: any) => ({
+        event_type: "user_event", event_name: e.event_name, page_path: e.page_path, created_at: e.created_at,
+      }));
+
+      const merged = [...vEvents, ...uEvents].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).slice(0, 100);
+      setUserActivities(merged);
+    } catch (err) {
+      console.error("Error loading activities:", err);
+      setUserActivities([]);
+    } finally {
+      setActivitiesLoading(false);
+    }
+  };
 
   const scoreMutation = useMutation({
     mutationFn: async () => {
@@ -310,8 +373,8 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
         </div>
 
         {/* User Detail Dialog */}
-        <Dialog open={!!selectedUser} onOpenChange={() => setSelectedUser(null)}>
-          <DialogContent className="bg-gradient-to-br from-[#FDFBF7] to-[#F5EBD7] border-2 border-gold/40 text-black max-w-2xl max-h-[80vh] overflow-y-auto">
+        <Dialog open={!!selectedUser} onOpenChange={() => { setSelectedUser(null); setUserActivities(null); }}>
+          <DialogContent className="bg-gradient-to-br from-[#FDFBF7] to-[#F5EBD7] border-2 border-gold/40 text-black max-w-3xl max-h-[85vh] overflow-y-auto">
             {selectedUser && (
               <>
                 <DialogHeader>
@@ -327,21 +390,21 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
                 <div className="space-y-4 mt-4">
                   {/* Contact */}
                   <div className="grid grid-cols-3 gap-3 text-sm">
-                    <div><span className="text-stone-500">Email:</span> <span className="text-black font-medium">{selectedUser.email}</span></div>
+                    <div><span className="text-stone-500">Email:</span> <span className="text-black font-medium">{selectedUser.email || "—"}</span></div>
                     <div><span className="text-stone-500">Phone:</span> <span className="text-black font-medium">{selectedUser.phone || "—"}</span></div>
                     <div><span className="text-stone-500">Role:</span> <span className="text-black font-medium capitalize">{selectedUser.role}</span></div>
                   </div>
 
-                  {/* Scores */}
+                  {/* Scores with explanations */}
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     {[
-                      { label: "Intent", value: selectedUser.intent_score, color: "text-purple-700" },
-                      { label: "Engagement", value: selectedUser.engagement_score, color: "text-blue-700" },
-                      { label: "Conversion", value: selectedUser.conversion_probability, color: "text-emerald-700", suffix: "%" },
-                      { label: "Confidence", value: selectedUser.confidence_score, color: "text-gold" },
+                      { label: "Intent", value: selectedUser.intent_score, color: "text-purple-700", tooltip: "Purchase intent based on leads, saves, contact clicks, searches" },
+                      { label: "Engagement", value: selectedUser.engagement_score, color: "text-blue-700", tooltip: "Activity depth based on sessions, time spent, feature usage" },
+                      { label: "Conversion", value: selectedUser.conversion_probability, color: "text-emerald-700", suffix: "%", tooltip: "Likelihood to transact based on intent + engagement + recency" },
+                      { label: "Data Confidence", value: selectedUser.confidence_score, color: "text-gold", tooltip: "How much data we have to trust these scores (more data = higher)" },
                     ].map(s => (
-                      <div key={s.label} className="bg-white/60 rounded-lg p-3 text-center border border-gold/20">
-                        <p className={`text-xl font-bold ${s.color}`}>{s.value}{s.suffix || ""}</p>
+                      <div key={s.label} className="bg-white/60 rounded-lg p-3 text-center border border-gold/20" title={s.tooltip}>
+                        <p className={`text-xl font-bold ${s.color}`}>{s.value}{s.suffix || "/100"}</p>
                         <p className="text-xs text-stone-500">{s.label}</p>
                       </div>
                     ))}
@@ -352,14 +415,17 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
                     <div className="bg-emerald-50 rounded-lg p-3 text-center border border-emerald-200">
                       <p className="text-lg font-bold text-emerald-700">AED {formatAED(selectedUser.revenue_potential)}</p>
                       <p className="text-xs text-stone-500">Revenue Potential</p>
+                      <p className="text-[10px] text-stone-400 mt-1">Ticket × 2% × Convert%</p>
                     </div>
                     <div className="bg-white/60 rounded-lg p-3 text-center border border-gold/20">
                       <p className="text-lg font-bold text-black">AED {formatAED(selectedUser.estimated_ticket_aed)}</p>
-                      <p className="text-xs text-stone-500">Est. Ticket Size</p>
+                      <p className="text-xs text-stone-500">Est. Budget</p>
+                      <p className="text-[10px] text-stone-400 mt-1">Based on browsing patterns</p>
                     </div>
                     <div className="bg-white/60 rounded-lg p-3 text-center border border-gold/20">
                       <p className="text-lg font-bold text-black">{selectedUser.time_to_conversion_days}d</p>
-                      <p className="text-xs text-stone-500">Time to Convert</p>
+                      <p className="text-xs text-stone-500">Est. Time to Convert</p>
+                      <p className="text-[10px] text-stone-400 mt-1">Based on conversion probability</p>
                     </div>
                   </div>
 
@@ -388,11 +454,12 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
                     <div className="bg-white/60 rounded-lg p-3 border border-gold/20">
                       <p className="text-gold font-bold mb-2">30-Day Signals</p>
                       <div className="space-y-1 text-stone-700">
-                        <div className="flex justify-between"><span>Leads</span><span className="text-black font-semibold">{selectedUser.lead_count_30d}</span></div>
-                        <div className="flex justify-between"><span>Saves</span><span className="text-black font-semibold">{selectedUser.saves_count_30d}</span></div>
+                        <div className="flex justify-between"><span>Leads Submitted</span><span className="text-black font-semibold">{selectedUser.lead_count_30d}</span></div>
+                        <div className="flex justify-between"><span>Properties Saved</span><span className="text-black font-semibold">{selectedUser.saves_count_30d}</span></div>
+                        <div className="flex justify-between"><span>Contact Clicks</span><span className="text-black font-semibold">{(selectedUser as any).contact_clicks_30d || 0}</span></div>
                         <div className="flex justify-between"><span>Sessions (7d)</span><span className="text-black font-semibold">{selectedUser.sessions_last_7d}</span></div>
                         <div className="flex justify-between"><span>Searches</span><span className="text-black font-semibold">{selectedUser.searches_30d}</span></div>
-                        <div className="flex justify-between"><span>Feature Diversity</span><span className="text-black font-semibold">{selectedUser.feature_diversity}</span></div>
+                        <div className="flex justify-between"><span>Feature Types Used</span><span className="text-black font-semibold">{selectedUser.feature_diversity}</span></div>
                       </div>
                     </div>
                     <div className="bg-white/60 rounded-lg p-3 border border-gold/20">
@@ -415,6 +482,52 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
                         </div>
                       )}
                     </div>
+                  </div>
+
+                  {/* Top Pages Visited */}
+                  {selectedUser.top_pages?.length > 0 && (
+                    <div className="bg-white/60 rounded-lg p-3 border border-gold/20">
+                      <p className="text-gold font-bold mb-2">Top Pages Visited</p>
+                      <div className="space-y-1">
+                        {selectedUser.top_pages.slice(0, 6).map((page, i) => (
+                          <div key={i} className="text-xs text-stone-600 truncate flex items-center gap-2">
+                            <span className="text-gold font-bold w-4">{i + 1}.</span>
+                            <span className="truncate">{page}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Recent Activity Timeline */}
+                  <div className="bg-white/60 rounded-lg p-3 border border-gold/20">
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="text-gold font-bold">Recent Activity Timeline</p>
+                      {!userActivities && (
+                        <Button size="sm" variant="outline" onClick={() => loadUserActivities(selectedUser.user_id)}
+                          className="text-gold border-gold/30 hover:bg-gold/10 h-7 text-xs font-semibold">
+                          {activitiesLoading ? <Loader2 className="w-3 h-3 animate-spin" /> : "Load Activities"}
+                        </Button>
+                      )}
+                    </div>
+                    {activitiesLoading && <div className="flex justify-center py-4"><Loader2 className="w-5 h-5 text-gold animate-spin" /></div>}
+                    {userActivities && userActivities.length === 0 && <p className="text-xs text-stone-400 text-center py-2">No recent activities found</p>}
+                    {userActivities && userActivities.length > 0 && (
+                      <ScrollArea className="h-[200px]">
+                        <div className="space-y-1.5">
+                          {userActivities.map((act, i) => (
+                            <div key={i} className="flex items-start gap-2 text-xs border-b border-gold/10 pb-1.5">
+                              <span className="text-stone-400 whitespace-nowrap w-28 shrink-0">
+                                {format(new Date(act.created_at), "dd MMM HH:mm")}
+                              </span>
+                              <Badge variant="outline" className="text-[10px] h-4 px-1 border-gold/30 bg-gold/5 shrink-0">{act.event_type}</Badge>
+                              <span className="text-stone-700 truncate">{act.event_name}</span>
+                              {act.page_path && <span className="text-stone-400 truncate ml-auto">{act.page_path}</span>}
+                            </div>
+                          ))}
+                        </div>
+                      </ScrollArea>
+                    )}
                   </div>
 
                   {/* Tier Reason */}
