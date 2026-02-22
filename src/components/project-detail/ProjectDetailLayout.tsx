@@ -37,6 +37,7 @@ import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } f
 import ImageCarousel from "@/components/ImageCarousel";
 import ConsultationRequestForm from "@/components/ConsultationRequestForm";
 import { ProjectAIAnalyzer } from "@/components/project-detail/ProjectAIAnalyzer";
+import { BrandedLoader } from "@/components/ui/BrandedLoader";
 import PremiumBrochureCard from "@/components/project-detail/PremiumBrochureCard";
 import LeadCaptureModal from "@/components/project-detail/LeadCaptureModal";
 import ProjectBreadcrumb from "@/components/project-detail/ProjectBreadcrumb";
@@ -512,7 +513,9 @@ export default function ProjectDetailLayout({
               fallbackSrc="/placeholder.svg"
             />
           ) : (
-            <div className="w-full h-full bg-premium-bg" />
+            <div className="w-full h-full bg-gradient-to-br from-[#1a1510] via-[#0d0b08] to-black flex items-center justify-center">
+              <BrandedLoader text="Loading project..." />
+            </div>
           )}
           {/* Enhanced gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
@@ -725,13 +728,13 @@ export default function ProjectDetailLayout({
                 <>
                   <div className={`mt-4 relative ${!isDescriptionExpanded && (project.description?.length ?? 0) > 500 ? 'max-h-48 overflow-hidden' : ''}`}>
                     <div 
-                      className="text-body text-muted-foreground leading-relaxed prose prose-sm dark:prose-invert max-w-none"
+                      className="text-body text-muted-foreground leading-relaxed prose prose-sm dark:prose-invert max-w-none [&>p]:mb-4 [&>h2]:mt-8 [&>h2]:mb-3 [&>h3]:mt-6 [&>h3]:mb-2 [&>ul]:mb-4"
                       dangerouslySetInnerHTML={{ 
                         __html: renderMarkdownToHtml(formatReellyDescription(project.description || '')) 
                       }}
                     />
                     {!isDescriptionExpanded && (project.description?.length ?? 0) > 500 && (
-                      <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-black to-transparent pointer-events-none" />
+                      <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[hsl(var(--premium-bg))] to-transparent pointer-events-none" />
                     )}
                   </div>
                   {(project.description?.length ?? 0) > 500 && (

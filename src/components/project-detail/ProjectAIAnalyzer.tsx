@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, ReferenceLine } from "recharts";
-import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
+import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
 
 interface ProjectAIAnalyzerProps {
   projectName: string;
@@ -256,7 +256,7 @@ export const ProjectAIAnalyzer = ({
                 <div className="relative">
                   <div className="absolute inset-0 rounded-full bg-gold/20 blur-2xl animate-pulse scale-[1.8]" />
                   <img
-                    src={jbjMonogramTransparent}
+                    src={jbjMonogramNobuffer}
                     alt="JBJ AI analyzing..."
                     className="relative w-32 h-32 md:w-40 md:h-40 object-contain"
                     style={{
