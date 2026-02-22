@@ -241,7 +241,7 @@ export function QuickActions() {
             <button
               key={index}
               onClick={() => navigate(action.href)}
-              className="flex flex-col items-start gap-1.5 rounded-xl border border-border bg-gradient-to-br from-[#F5EBD7] via-[#EDE0C8] to-[#E2D4B8] p-3.5 hover:border-gold/40 hover:shadow-md transition-all text-left w-full"
+              className="flex flex-col gap-1.5 rounded-xl border border-border bg-gradient-to-br from-[#F5EBD7] via-[#EDE0C8] to-[#E2D4B8] p-3.5 hover:border-gold/40 hover:shadow-md transition-all text-left w-full h-full"
             >
               <div className="flex items-center gap-2 w-full">
                 <div className="w-8 h-8 rounded-lg bg-white/60 border border-gold/30 flex items-center justify-center shrink-0">
@@ -249,7 +249,7 @@ export function QuickActions() {
                 </div>
                 <span className="text-sm font-semibold text-black leading-tight">{action.label}</span>
               </div>
-              <span className="text-[11px] text-black/60 leading-snug">{action.description}</span>
+              <span className="text-[11px] text-black/60 leading-snug mt-auto">{action.description}</span>
             </button>
           ))}
         </div>

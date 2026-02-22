@@ -65,7 +65,7 @@ interface UserProfile {
   role?: string;
 }
 
-export default function AdminIntelligencePage() {
+export default function AdminIntelligencePage({ embedded = false }: { embedded?: boolean }) {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
@@ -152,7 +152,7 @@ export default function AdminIntelligencePage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#F5EBD7] via-[#EDE4D3] to-[#E0D5C0] flex items-center justify-center">
+      <div className={`${embedded ? '' : 'min-h-screen bg-gradient-to-b from-[#F5EBD7] via-[#EDE4D3] to-[#E0D5C0]'} flex items-center justify-center p-12`}>
         <Loader2 className="w-8 h-8 text-gold animate-spin" />
       </div>
     );
@@ -160,16 +160,18 @@ export default function AdminIntelligencePage() {
 
   return (
     <>
-      <SEOHead title="Intelligence Panel | JBJ Admin" description="AI-driven user intelligence and scoring" />
-      <div className="min-h-screen bg-gradient-to-b from-[#F5EBD7] via-[#EDE4D3] to-[#E0D5C0]">
-        <div className="container mx-auto px-4 py-8 max-w-7xl">
+      {!embedded && <SEOHead title="Intelligence Panel | JBJ Admin" description="AI-driven user intelligence and scoring" />}
+      <div className={embedded ? '' : 'min-h-screen bg-gradient-to-b from-[#F5EBD7] via-[#EDE4D3] to-[#E0D5C0]'}>
+        <div className={embedded ? '' : 'container mx-auto px-4 py-8 max-w-7xl'}>
           {/* Header */}
           <div className="flex items-center justify-between mb-8">
             <div>
-              <Button variant="ghost" onClick={() => navigate(-1)} className="mb-2 text-gold hover:text-gold/80 hover:bg-gold/10">
-                <ArrowLeft className="w-4 h-4 mr-2" /> Back
-              </Button>
-              <h1 className="text-3xl font-bold text-black" style={{ fontFamily: 'Poppins, sans-serif' }}>
+              {!embedded && (
+                <Button variant="ghost" onClick={() => navigate(-1)} className="mb-2 text-gold hover:text-gold/80 hover:bg-gold/10">
+                  <ArrowLeft className="w-4 h-4 mr-2" /> Back
+                </Button>
+              )}
+              <h1 className={`${embedded ? 'text-2xl' : 'text-3xl'} font-bold text-black`} style={{ fontFamily: 'Poppins, sans-serif' }}>
                 User Intelligence Panel
               </h1>
               <p className="text-stone-500 mt-1">{filteredProfiles.length} users profiled</p>
