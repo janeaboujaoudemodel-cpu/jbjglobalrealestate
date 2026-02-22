@@ -17,6 +17,12 @@ import {
 } from 'lucide-react';
 import { format } from 'date-fns';
 
+// Book cover imports
+import investorEducationCover from '@/assets/books/investor-education-cover.jpg';
+import marketIntelligenceCover from '@/assets/books/market-intelligence-cover.jpg';
+import goldenVisaCover from '@/assets/books/golden-visa-cover.jpg';
+import buyerGuideCover from '@/assets/books/buyer-guide-cover.jpg';
+
 const quickCards = [
   { title: 'Dashboard', desc: 'Overview of your investments', icon: BarChart3, href: '/investor-dashboard', color: 'from-fuchsia-500 to-purple-600' },
   { title: 'Favorites', desc: 'Saved properties', icon: Heart, href: '/favorites', color: 'from-rose-500 to-pink-600' },
@@ -33,6 +39,13 @@ const aiTools = [
   { title: 'Home Finder', desc: 'AI quiz to find your match', icon: Home, href: '/quiz' },
   { title: 'Price Predictor', desc: 'Forecast market trends', icon: PieChart, href: '/ai-price-predictor' },
   { title: 'Neighborhood Insights', desc: 'Area intelligence', icon: MapPin, href: '/ai-neighborhood-insights' },
+];
+
+const investorBooks = [
+  { title: 'Investor Education Guide', cover: investorEducationCover, href: '/investor-education' },
+  { title: 'Market Intelligence Report', cover: marketIntelligenceCover, href: '/market-intelligence' },
+  { title: 'Golden Visa UAE Guide', cover: goldenVisaCover, href: '/guides/golden-visa-uae' },
+  { title: "Buyer's Guide", cover: buyerGuideCover, href: '/buyer-guide' },
 ];
 
 const tierConfig = [
@@ -181,29 +194,46 @@ const InvestorHub = () => {
           </div>
         </div>
 
-        {/* Books, Guides & Market Intelligence */}
+        {/* Books, Guides & Intelligence - Bookshelf */}
         <div>
-          <h2 className="text-xl font-bold text-white mb-4">Books, Guides & Intelligence</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <button onClick={() => navigate('/investor-education')} className="bg-gradient-to-br from-amber-900/30 to-zinc-900/60 border border-amber-500/25 rounded-2xl p-6 text-left hover:border-amber-400/50 transition-all group">
-              <BookOpen className="w-8 h-8 text-amber-400 mb-3" />
-              <h3 className="text-white font-semibold mb-1">Investor Books & Guides</h3>
-              <p className="text-zinc-500 text-sm">Access educational books, buyer guides, and golden visa resources for smart investing.</p>
-              <ArrowRight className="w-4 h-4 text-amber-400 mt-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </button>
-            <button onClick={() => navigate('/market-intelligence')} className="bg-gradient-to-br from-cyan-900/30 to-zinc-900/60 border border-cyan-500/25 rounded-2xl p-6 text-left hover:border-cyan-400/50 transition-all group">
-              <Compass className="w-8 h-8 text-cyan-400 mb-3" />
-              <h3 className="text-white font-semibold mb-1">Market Intelligence</h3>
-              <p className="text-zinc-500 text-sm">In-depth reports, DLD data, project comparisons, and area analytics.</p>
-              <ArrowRight className="w-4 h-4 text-cyan-400 mt-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </button>
-            <button onClick={() => navigate('/guides/golden-visa-uae')} className="bg-gradient-to-br from-emerald-900/30 to-zinc-900/60 border border-emerald-500/25 rounded-2xl p-6 text-left hover:border-emerald-400/50 transition-all group">
-              <Shield className="w-8 h-8 text-emerald-400 mb-3" />
-              <h3 className="text-white font-semibold mb-1">Golden Visa Guide</h3>
-              <p className="text-zinc-500 text-sm">Complete guide to UAE residency through property investment.</p>
-              <ArrowRight className="w-4 h-4 text-emerald-400 mt-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </button>
-          </div>
+          <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+            <BookOpen className="w-5 h-5 text-amber-400" />
+            Books, Guides & Intelligence
+          </h2>
+          <Card className="bg-gradient-to-br from-zinc-900/80 to-zinc-950 border border-amber-500/20 overflow-hidden">
+            <CardContent className="p-8">
+              {/* Bookshelf */}
+              <div className="flex flex-wrap justify-center gap-8">
+                {investorBooks.map((book) => (
+                  <motion.button
+                    key={book.title}
+                    onClick={() => navigate(book.href)}
+                    className="group flex flex-col items-center gap-3 w-36"
+                    whileHover={{ y: -8 }}
+                    transition={{ type: 'spring', stiffness: 300 }}
+                  >
+                    {/* Book with 3D effect */}
+                    <div className="relative w-32 h-44 rounded-r-md overflow-hidden shadow-[4px_4px_20px_rgba(0,0,0,0.6)] group-hover:shadow-[6px_6px_30px_rgba(200,167,102,0.3)] transition-shadow">
+                      {/* Spine effect */}
+                      <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-black/40 to-transparent z-10" />
+                      <img
+                        src={book.cover}
+                        alt={book.title}
+                        className="w-full h-full object-cover"
+                      />
+                      {/* Glossy overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
+                    <p className="text-xs text-zinc-400 text-center font-medium group-hover:text-amber-300 transition-colors leading-tight">
+                      {book.title}
+                    </p>
+                  </motion.button>
+                ))}
+              </div>
+              {/* Shelf line */}
+              <div className="mt-6 h-1 bg-gradient-to-r from-transparent via-amber-800/50 to-transparent rounded-full" />
+            </CardContent>
+          </Card>
         </div>
 
         {/* AI Investment Tools */}
@@ -240,7 +270,10 @@ const InvestorHub = () => {
                   <div className="text-center py-8">
                     <Ticket className="w-8 h-8 text-zinc-600 mx-auto mb-3" />
                     <p className="text-zinc-500">No support tickets</p>
-                    <Button variant="outline" className="mt-4 border-zinc-700 text-zinc-300" onClick={() => navigate('/support')}>
+                    <Button
+                      className="mt-4 bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-medium"
+                      onClick={() => navigate('/support')}
+                    >
                       Create a Ticket
                     </Button>
                   </div>
@@ -248,12 +281,20 @@ const InvestorHub = () => {
                   <div className="space-y-2">
                     <div className="flex justify-between items-center mb-4">
                       <p className="text-sm text-zinc-400">{openTickets} open ticket{openTickets !== 1 ? 's' : ''}</p>
-                      <Button variant="outline" size="sm" className="border-zinc-700 text-zinc-300" onClick={() => navigate('/support')}>
+                      <Button
+                        size="sm"
+                        className="bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-medium"
+                        onClick={() => navigate('/support')}
+                      >
                         New Ticket
                       </Button>
                     </div>
                     {supportTickets.map((ticket: any) => (
-                      <div key={ticket.id} className="flex items-center justify-between p-3 bg-zinc-800/50 rounded-lg">
+                      <button
+                        key={ticket.id}
+                        onClick={() => navigate(`/support?ticket=${ticket.id}`)}
+                        className="w-full flex items-center justify-between p-3 bg-zinc-800/50 rounded-lg hover:bg-zinc-800 transition-colors text-left"
+                      >
                         <div>
                           <p className="text-sm text-white">{ticket.subject}</p>
                           <p className="text-xs text-zinc-500">#{ticket.ticket_number} · {format(new Date(ticket.created_at), 'MMM d')}</p>
@@ -265,7 +306,7 @@ const InvestorHub = () => {
                         }>
                           {ticket.status}
                         </Badge>
-                      </div>
+                      </button>
                     ))}
                   </div>
                 )}
@@ -295,7 +336,10 @@ const InvestorHub = () => {
                   </div>
                 ))}
               </div>
-              <Button variant="outline" className="w-full border-fuchsia-500/30 text-fuchsia-300 hover:bg-fuchsia-500/10" onClick={() => navigate('/investor-documents')}>
+              <Button
+                className="w-full bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-medium"
+                onClick={() => navigate('/investor-documents')}
+              >
                 <FileUp className="w-4 h-4 mr-2" />
                 Upload & Manage Documents
               </Button>
@@ -309,15 +353,15 @@ const InvestorHub = () => {
           <h3 className="text-xl font-bold text-white mb-2">Explore All AI Tools</h3>
           <p className="text-zinc-400 text-sm mb-4">Access 30+ free AI tools including creative suites, corporate tools, and productivity apps.</p>
           <div className="flex flex-wrap justify-center gap-3">
-            <Button onClick={() => navigate('/ai-hub')} className="bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white">
+            <Button onClick={() => navigate('/ai-hub')} className="bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white font-medium">
               Go to JBJ Tools Hub
               <ArrowUpRight className="w-4 h-4 ml-2" />
             </Button>
-            <Button onClick={() => navigate('/ai-hub?suite=creative')} variant="outline" className="border-pink-500/30 text-pink-300 hover:bg-pink-500/10">
+            <Button onClick={() => navigate('/ai-hub?suite=creative')} className="bg-pink-600 hover:bg-pink-700 text-white font-medium">
               <Palette className="w-4 h-4 mr-2" />
               Creative Suite
             </Button>
-            <Button onClick={() => navigate('/ai-hub?suite=productivity')} variant="outline" className="border-teal-500/30 text-teal-300 hover:bg-teal-500/10">
+            <Button onClick={() => navigate('/ai-hub?suite=productivity')} className="bg-teal-600 hover:bg-teal-700 text-white font-medium">
               <Wrench className="w-4 h-4 mr-2" />
               Productivity Suite
             </Button>
@@ -328,7 +372,7 @@ const InvestorHub = () => {
         <div className="bg-gradient-to-r from-fuchsia-900/30 to-purple-900/30 border border-fuchsia-500/20 rounded-2xl p-8 text-center">
           <h3 className="text-xl font-bold text-white mb-2">Ready to Find Your Next Investment?</h3>
           <p className="text-zinc-400 text-sm mb-4">Browse 10,000+ properties across Dubai's top communities.</p>
-          <Button onClick={() => navigate('/properties')} className="bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white">
+          <Button onClick={() => navigate('/properties')} className="bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white font-medium">
             Browse Properties
             <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
