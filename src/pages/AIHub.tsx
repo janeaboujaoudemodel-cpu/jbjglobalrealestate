@@ -8,6 +8,15 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
 import { SEOHead } from "@/components/SEOHead";
 import { SectionDivider } from "@/components/ui/section-divider";
+import {
+  BrokerToolkitSupport,
+  BrokerToolkitEducation,
+  BrokerToolkitAcademy,
+  BrokerToolkitOperations,
+  BrokerToolkitCRM,
+  BrokerToolkitGrowth,
+  BrokerToolkitReferral,
+} from "@/components/broker-toolkit";
 import { 
   ArrowUpRight, 
   Sparkles, 
@@ -602,7 +611,7 @@ const AIHub = () => {
       
       <section className="relative w-full min-h-screen bg-[#0D0D0D]">
         {/* HERO SECTION - With Video Background */}
-        <div className="relative py-16 md:py-24 overflow-hidden">
+        <div className="relative py-10 md:py-14 overflow-hidden">
           {/* Video Background */}
           <div className="absolute inset-0 z-0">
             <video 
@@ -783,7 +792,7 @@ const AIHub = () => {
         <SectionDivider />
 
         {/* ALL TOOLS SECTION - Bulk view with Active Color Layer */}
-        <section className="py-10 md:py-14 bg-black">
+        <section className="py-8 md:py-10 bg-black">
           <div className="container mx-auto px-3 sm:px-4">
             {/* Active Slate/Blue Layer - matching Broker Hub */}
             <div className="bg-gradient-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 border border-slate-600/30 rounded-2xl p-6 md:p-8 shadow-lg">
@@ -842,18 +851,25 @@ const AIHub = () => {
                 </div>
               </div>
 
-              {/* Suite Shortcut Cards */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+              {/* Suite Shortcut Cards - Prominent */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                 {[
-                  { label: 'Creative Suite', href: '/studio', icon: Palette, border: 'border-pink-500/40', bg: 'bg-pink-900/30', text: 'text-pink-300', hover: 'hover:border-pink-400' },
-                  { label: 'Broker Intelligence', href: '/business-suite/broker', icon: Brain, border: 'border-teal-500/40', bg: 'bg-teal-900/30', text: 'text-teal-300', hover: 'hover:border-teal-400' },
-                  { label: 'Productivity Suite', href: '/business-suite/productivity', icon: Zap, border: 'border-blue-500/40', bg: 'bg-blue-900/30', text: 'text-blue-300', hover: 'hover:border-blue-400' },
-                  { label: 'All Suites', href: '/business-suite', icon: Layers, border: 'border-purple-500/40', bg: 'bg-purple-900/30', text: 'text-purple-300', hover: 'hover:border-purple-400' },
+                  { label: 'Creative Suite', desc: 'Design studio, graphics & media', href: '/studio', icon: Palette, border: 'border-pink-500/50', bg: 'bg-gradient-to-br from-pink-900/60 to-pink-950/60', text: 'text-pink-300', glow: 'shadow-[0_0_20px_rgba(236,72,153,0.3)] hover:shadow-[0_0_30px_rgba(236,72,153,0.5)]' },
+                  { label: 'Broker Intelligence', desc: 'Sales tools & market insights', href: '/business-suite/broker', icon: Brain, border: 'border-teal-500/50', bg: 'bg-gradient-to-br from-teal-900/60 to-teal-950/60', text: 'text-teal-300', glow: 'shadow-[0_0_20px_rgba(20,184,166,0.3)] hover:shadow-[0_0_30px_rgba(20,184,166,0.5)]' },
+                  { label: 'Productivity Suite', desc: 'Docs, calendar & meetings', href: '/business-suite/productivity', icon: Zap, border: 'border-blue-500/50', bg: 'bg-gradient-to-br from-blue-900/60 to-blue-950/60', text: 'text-blue-300', glow: 'shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(59,130,246,0.5)]' },
+                  { label: 'All Suites', desc: 'Browse all available suites', href: '/business-suite', icon: Layers, border: 'border-purple-500/50', bg: 'bg-gradient-to-br from-purple-900/60 to-purple-950/60', text: 'text-purple-300', glow: 'shadow-[0_0_20px_rgba(147,51,234,0.3)] hover:shadow-[0_0_30px_rgba(147,51,234,0.5)]' },
                 ].map(suite => (
-                  <Link key={suite.label} to={suite.href} className={`flex items-center gap-2 px-4 py-3 rounded-xl ${suite.bg} border ${suite.border} ${suite.text} ${suite.hover} transition-all text-sm font-medium group`}>
-                    <suite.icon className="w-4 h-4" />
-                    <span className="flex-1">{suite.label}</span>
-                    <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <Link key={suite.label} to={suite.href} className={`flex flex-col gap-2 p-5 rounded-2xl ${suite.bg} border-2 ${suite.border} ${suite.text} ${suite.glow} hover:border-white hover:shadow-[0_0_35px_rgba(255,255,255,0.3)] transition-all duration-300 group`}>
+                    <div className="flex items-center gap-3">
+                      <div className={`w-10 h-10 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center`}>
+                        <suite.icon className="w-5 h-5" />
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-sm text-white">{suite.label}</h4>
+                        <p className="text-xs text-white/50">{suite.desc}</p>
+                      </div>
+                      <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity text-white" />
+                    </div>
                   </Link>
                 ))}
               </div>
@@ -1048,8 +1064,8 @@ const AIHub = () => {
                     Join JBJ Broker Hub and unlock operation support, creative & marketing suite, HR management, and exclusive training.
                   </p>
                   <div className="flex flex-wrap justify-center gap-3">
-                    <Link to="/broker-toolkit">
-                      <button 
+                    <button
+                      onClick={() => document.getElementById('broker-sections')?.scrollIntoView({ behavior: 'smooth' })}
                         className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden"
                         style={{
                           background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
@@ -1068,18 +1084,31 @@ const AIHub = () => {
                         <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                         <span className="relative flex items-center justify-center gap-2">
                           <Sparkles className="w-5 h-5 text-gold" />
-                          <span className="text-gold">Become Part</span>
-                          <span className="text-black">of JBJ Broker Hub</span>
+                          <span className="text-gold">Explore</span>
+                          <span className="text-black">Broker Hub Sections Below</span>
                           <ArrowUpRight className="w-5 h-5 text-black" />
                         </span>
                       </button>
-                    </Link>
                   </div>
                 </div>
               </motion.div>
             </div>
           </div>
         </section>
+
+        {/* Divider */}
+        <SectionDivider />
+
+        {/* BROKER SECTIONS - Education, Academy, Support, Operations, CRM, Growth, Referral */}
+        <div id="broker-sections">
+          <BrokerToolkitSupport />
+          <BrokerToolkitEducation />
+          <BrokerToolkitAcademy />
+          <BrokerToolkitOperations />
+          <BrokerToolkitCRM />
+          <BrokerToolkitGrowth />
+          <BrokerToolkitReferral />
+        </div>
 
         {/* Divider */}
         <SectionDivider />

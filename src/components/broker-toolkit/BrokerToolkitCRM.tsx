@@ -93,7 +93,7 @@ export function BrokerToolkitCRM() {
   return (
     <>
       {/* CRM Section - with gold/amber premium layer */}
-      <section id="section-crm" className="py-16 md:py-20 bg-black">
+      <section id="section-crm" className="py-8 md:py-10 bg-black">
         <div className="container mx-auto px-4">
           {/* Active Gold/Amber Premium Layer */}
           <div className="bg-gradient-to-br from-amber-900/90 via-amber-900/80 to-amber-950/90 border border-gold/30 rounded-2xl p-6 md:p-8 shadow-lg">

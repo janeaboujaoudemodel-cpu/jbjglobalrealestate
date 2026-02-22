@@ -71,7 +71,7 @@ const CARD_THEME = {
 
 export function BrokerToolkitAcademy() {
   return (
-    <section id="section-academy" className="py-16 md:py-20 bg-black">
+    <section id="section-academy" className="py-8 md:py-10 bg-black">
       <div className="container mx-auto px-4">
         {/* Active Sky Blue Layer */}
         <div className="bg-gradient-to-br from-sky-900/90 via-sky-900/80 to-sky-950/90 border border-sky-500/30 rounded-2xl p-6 md:p-8 shadow-lg">

@@ -47,7 +47,7 @@ export function BrokerToolkitGrowth() {
   const { user } = useAuth();
 
   return (
-    <section id="section-growth" className="py-16 md:py-20 bg-black">
+    <section id="section-growth" className="py-8 md:py-10 bg-black">
       <div className="container mx-auto px-3 sm:px-4">
         {/* Active Champagne Layer for Growth Section - matching global design */}
         <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30 rounded-2xl p-6 md:p-8 shadow-lg">
