@@ -45,16 +45,16 @@ const scrollTo = (id: string) => {
 // ─── Reusable section wrapper ───
 const Section = ({ id, children, ivory = false }: { id: string; children: React.ReactNode; ivory?: boolean }) => (
   <section id={id} className="scroll-mt-24">
-    <div className={`py-16 md:py-20 ${ivory ? "bg-[#FAF6EE]" : "bg-white"}`}>
+    <div className={`py-16 md:py-20 ${ivory ? "bg-gradient-to-br from-[#FAF6EE] via-[#F5EBD7]/30 to-[#FAF6EE]" : "bg-gradient-to-b from-white to-[#FDFBF7]"}`}>
       <div className="max-w-5xl mx-auto px-4 md:px-8">{children}</div>
     </div>
     {/* Gold divider */}
-    <div className="h-px bg-gradient-to-r from-transparent via-[#C8A766]/40 to-transparent" />
+    <div className="h-[2px] bg-gradient-to-r from-transparent via-[#C8A766]/50 to-transparent" />
   </section>
 );
 
 const SectionHeader = ({ icon: Icon, title, gold }: { icon: any; title: string; gold: string }) => (
-  <div className="flex items-center gap-4 mb-8">
+  <div className="flex items-center gap-4 mb-8 pb-4 border-b-2 border-[#C8A766]/30">
     <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] border border-[#C8A766]/40 flex items-center justify-center flex-shrink-0">
       <Icon className="w-6 h-6 text-[#8B7340]" />
     </div>
@@ -626,12 +626,28 @@ const GoldenVisaGuide = () => {
         </form>
       </Section>
 
-      {/* Professional guidance link */}
-      <div className="py-8 bg-white text-center">
-        <Link to="/contact" className="text-[#C8A766] hover:text-[#B89650] text-sm font-medium underline underline-offset-4 transition-colors">
-          Contact our team for professional guidance
-        </Link>
-      </div>
+      {/* Premium Contact CTA */}
+      <section className="py-16 md:py-20 bg-gradient-to-br from-[#FAF6EE] via-[#F5EBD7] to-[#E8DCC8]">
+        <div className="max-w-3xl mx-auto px-4 md:px-8 text-center">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-[#C8A766]/40 rounded-2xl p-10 md:p-14 shadow-[0_0_30px_rgba(200,167,102,0.25)]">
+            <div className="w-16 h-16 bg-black border border-[#C8A766]/30 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <Phone className="w-8 h-8 text-[#C8A766]" />
+            </div>
+            <h3 className="text-2xl md:text-3xl font-serif font-bold text-[#1A1A1A] mb-3">
+              Need Professional <span className="text-[#C8A766]">Guidance?</span>
+            </h3>
+            <p className="text-[#6B6B6B] mb-8 max-w-lg mx-auto">
+              Our licensed advisors are ready to assist you with your Golden Visa application, documentation, and eligibility assessment.
+            </p>
+            <Link to="/contact?type=golden-visa-consultation">
+              <Button className="bg-[#C8A766] hover:bg-[#B89650] text-white font-bold text-lg px-10 py-6 rounded-xl shadow-lg shadow-[#C8A766]/30 transition-all hover:scale-[1.02]">
+                <Phone className="w-5 h-5 mr-3" />
+                Contact Our Team
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
 
       {/* Guide Navigation */}
       <section className="py-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-2 md:mx-4 lg:mx-6 rounded-2xl">
