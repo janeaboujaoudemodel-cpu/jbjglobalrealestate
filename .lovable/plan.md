@@ -1,112 +1,128 @@
 
-# Project Detail Page Performance, Layout, and UX Fixes
+# FAQ Gold Styling, Book System, Company Profile, and WhatsApp Fix
 
-This plan addresses all reported issues across the project detail page, homepage, and listing grid.
-
----
-
-## 1. Payment Plan Tab Order and Active Color Fix
-
-**Problem:** The "100% Payment" tab shows first (as default), and the active tab uses the old flat `bg-gold` yellow instead of champagne.
-
-**Fix in `src/components/project-detail/PaymentPlanVisualization.tsx`:**
-- Line 126: Change `defaultValue` from conditional to always `"installment"` first -- the payment plan tab should always be the primary/first tab
-- Swap the tab order: Payment Plan tab first (left), then 100% Payment tab second (right)
-- Lines 128, 132: Change `data-[state=active]:bg-gold data-[state=active]:text-black` to `data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border data-[state=active]:border-[#C8A766]/60`
+This plan addresses four major areas: FAQ active state styling, consistent book system across pages, company profile premium overhaul, and WhatsApp/contact link blocking fix.
 
 ---
 
-## 2. Sticky Nav Active Tab -- Champagne Instead of Gold
+## 1. FAQ Accordion -- Gold Active State (Title and Arrow)
 
-**Problem:** Active tab in Row 2 sticky nav uses `bg-gold/20 text-gold border border-gold/40` which is the old yellow.
+**Problem:** When an FAQ item is expanded, the title and chevron arrow remain the default color instead of turning gold.
 
-**Fix in `src/components/project-detail/ProjectDetailLayout.tsx` (line 649-650):**
-- Change active state to champagne gradient: `bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-[#C8A766]/60 shadow-sm`
-
----
-
-## 3. Add Missing Sections to Sticky Navigation (Amenities, Payment Plan, etc.)
-
-**Problem:** The hardcoded Row 2 nav (lines 635-657) only has 7 tabs (Details, Gallery, Developer, Location, Brochure, AI Analyzer, Mortgage) while there are 17+ sections. This creates huge gaps between visible nav items and actual content.
-
-**Fix:** Replace the hardcoded 7-tab array with the dynamic `visibleTabs` array that already exists (line 323-357), which includes all sections: Details, Gallery, Units, Progress, Developer, Highlights, Floor Plans, Specs, Amenities, Media, Location, Master Plan, Brochure, Payment Plan, Investment, Useful Info, AI Analyzer, Mortgage.
+**Fix in `src/components/ui/accordion.tsx`:**
+- Add `[&[data-state=open]]:text-[#C8A766]` to the `AccordionTrigger` className (line 25) so that when open, both the trigger text and the ChevronDown icon turn champagne gold
+- Also add `[&[data-state=open]>svg]:text-[#C8A766]` to explicitly color the arrow gold
+- This is a global change -- every Accordion across every page (Golden Visa FAQ, Portfolio FAQ, Report Access FAQ, Snagging FAQ, etc.) will automatically inherit the gold active styling
 
 ---
 
-## 4. AI Analyzer Loading Monogram -- Make Bigger
+## 2. Consistent Book System Across All Pages
 
-**Problem:** The JBJ monogram during AI analysis loading is `w-20 h-20` which is too small.
+**Problem:** Books are only rendered on InvestorHub and BrokerHub via `BookShelf`. The user wants the same books to appear on every page that has related guide/content, using the same covers and titles everywhere.
 
-**Fix in `src/components/project-detail/ProjectAIAnalyzer.tsx` (line 261):**
-- Change `w-20 h-20` to `w-32 h-32 md:w-40 md:h-40`
-- Increase the glow blur from `scale-150` to `scale-[1.8]`
+### 2a. Add a `NEWS_BOOKS` collection and `companyProfileBook` export
 
----
+**Fix in `src/data/bookCollections.ts`:**
+- Add a new `newsBook` entry with title "News & Updates", a cover image, href `/news`, and category `report`
+- Export a new `NEWS_BOOKS` collection containing the news book
+- The `COMPANY_BOOKS` collection already exists with `companyProfileBook` -- export it individually too for single-book usage
 
-## 5. Reduce Padding Between AI Intelligence Section and DLD Market Widget
+### 2b. Add BookShelf to pages that have guide/book content
 
-**Problem:** The gold divider between AI Analyzer and DLD Market Widget has too much vertical padding (`py-14 md:py-16`), making the spacing asymmetric.
+Add the `BookShelf` component to these pages (importing from `bookCollections.ts`):
 
-**Fix in `src/components/project-detail/ProjectDetailLayout.tsx` (line 1027):**
-- Change `py-14 md:py-16` to `py-6 md:py-8` to tighten the gap
+| Page | Books to Show |
+|------|--------------|
+| `/guides` (GuidesPage) | Full `INVESTOR_BOOKS` collection (all guides + FAQs) |
+| `/guides/golden-visa-uae` (GoldenVisaGuide) | `goldenVisaBook` single + related guides |
+| `/buyer-guide` | `buyerGuideBook` + related |
+| `/seller-guide` | `sellerGuideBook` + related |
+| `/landlord-guide` | `landlordGuideBook` + related |
+| `/rent-guide` | `rentGuideBook` + related |
+| `/tenant-guide` | `tenantGuideBook` + related |
+| `/company-profile` | `COMPANY_BOOKS` collection |
+| `/news` (News page) | `NEWS_BOOKS` collection |
 
----
+Each page will import `BookShelf` and render it near the top or after the hero, using the same book data and covers as everywhere else.
 
-## 6. Investment Metric Cards -- More Premium Styling
+### 2c. Upgrade BookShelf visual style
 
-**Problem:** The cards for Rental Yield, Capital Growth, Investment Rating use plain `bg-card` with simple borders.
-
-**Fix in `src/components/project-detail/InvestmentMetricsSection.tsx`:**
-- Upgrade each card from `rounded-xl border border-gold/30 bg-card` to `rounded-xl border-2 border-gold/40 bg-gradient-to-br from-card via-card to-gold/5 shadow-md hover:shadow-lg hover:shadow-gold/15 transition-all`
-- Add `ring-4 ring-gold/10` to the icon circle containers for a premium feel
-
----
-
-## 7. Inaura Ad Image Fix
-
-**Problem:** The Inaura Hotels ad in `FEATURED_ADS` has a broken/missing image.
-
-**Fix in `src/components/FeaturedProjectAd.tsx` (line 102):**
-- The URL `https://d3h330vgpwpjr8.cloudfront.net/x/1128x/Feature_309f6a8c5c.webp` may be dead
-- Look up the Inaura project in the database and use its `cover_image_url` or first gallery image as the ad image
-- If no database image is available, use a working CDN URL or fallback gradient
-
----
-
-## 8. Listing Card Padding -- Equal Spacing from Edges
-
-**Problem:** Project cards in the grid touch the left edge of the container but have spacing on the right. The layout should have equal margins on both sides and equal gaps between cards.
-
-**Fix in `src/components/project-detail/ProjectDetailLayout.tsx` (line 675):**
-- The container uses `px-6 md:px-12 lg:px-16` which should provide equal padding. The issue may be that the max-width container is misaligned.
-- Verify the `max-w-[1600px] mx-auto` container is not being overridden by parent styles
-- Add `w-full` to ensure centering works properly
+**Fix in `src/components/books/BookShelf.tsx`:**
+- Upgrade the book card container from dark zinc to a premium champagne/pearl style matching the site theme
+- Add a subtle gold border around each book cover
+- Add a slight shadow and hover glow effect for premium feel
+- The book covers remain the same images -- consistent across all pages
 
 ---
 
-## 9. Homepage Mortgage Calculator -- Remove Duplicate Title
+## 3. Company Profile Page -- Premium Overhaul
 
-**Problem:** The homepage has its own "Mortgage Calculator" heading (Index.tsx line 466-468) and below it the MortgageCalculator component. The user sees "Mortgage Calculator" appearing twice.
+**Problem:** Huge gaps between sections, plain styling, no table of contents, book cover needs founder photo with Downtown/Burj Khalifa background.
 
-**Fix in `src/pages/Index.tsx`:** The component is called with `compact` so it shouldn't show its own title. The "duplication" is likely the "Financial Tools" badge + the "Mortgage Calculator" heading + the subtitle all appearing redundant. Simplify by removing either the badge or the subtitle to make it look like one clean title block.
+### 3a. Reduce Section Padding
+
+**Fix in `src/pages/CompanyProfile.tsx`:**
+- Change `SectionShell` padding from `py-12 md:py-16` (line 46) to `py-8 md:py-10` to tighten spacing between all sections
+- This eliminates the large gaps the user reported
+
+### 3b. Add Table of Contents
+
+- Add a sticky or anchor-based Table of Contents section after the hero, listing all sections (Executive Summary, Brand Story, Vision/Mission/Values, Services, Process, etc.)
+- Each item links to its section via anchor IDs
+
+### 3c. Upgrade Book Cover with Founder Photo
+
+**Fix in the `BookPreview3D` component (line 221-285):**
+- Replace the plain black/JBJ text cover with a premium cover that includes:
+  - Background: Downtown Dubai skyline with Burj Khalifa (using existing hero image or a CDN photo)
+  - Foreground: Founder photo overlay (using `founderCompanyProfile` import already in the file)
+  - Gold "COMPANY PROFILE" title text overlay
+  - Gold accent bars top and bottom
+- Wrap founder photo display in `FounderContent` so it only shows when founder visibility is enabled
+
+### 3d. Add Visuals and Photos
+
+- Add a premium Dubai skyline divider image between major sections
+- Use the existing `luxuryVillaHero` and `founderCompanyProfile` assets more prominently
+- Add gold gradient dividers between sections instead of plain spacing
+
+### 3e. Add BookShelf with Company Profile Book
+
+- Import `BookShelf` and `COMPANY_BOOKS` from `bookCollections`
+- Render the BookShelf section near the PDF download area
 
 ---
 
-## 10. Amenity Photos -- Ensure Photos Load
+## 4. WhatsApp and Contact Links -- Fix Blocking
 
-**Problem:** Amenities still show only icons without photos. The `AmenitiesWithPhotos` component relies on `amenity_images` data from the project.
+**Problem:** `window.open('https://wa.me/...', '_blank')` gets blocked by popup blockers and iframe sandboxing. The `ContactActions.tsx` helper already uses `window.location.href` which works, but many pages still use `window.open`.
 
-**Fix:** The `amenity_images` field needs to be populated during the enrichment pipeline. This is a data issue -- the `reelly-auto-enrich` function should map amenity names to their corresponding images from the project gallery or Reelly API. For now, ensure the component gracefully handles missing photos (it already does with icon fallback), but the real fix is to run the enrichment to populate `amenity_images`.
+### 4a. Fix Contact page
 
----
+**Fix in `src/pages/Contact.tsx` (line 206):**
+- Change `window.open(getWhatsAppUrl(), '_blank')` to `window.location.href = getWhatsAppUrl()`
 
-## 11. Filter Shortcut Bar -- Edge-to-Edge Layout
+### 4b. Fix all other public-facing pages using `window.open` for WhatsApp
 
-**Problem:** The fixed filter bar and shortcut buttons have gaps at the edges instead of filling the full width.
+Replace `window.open(...wa.me..., '_blank')` with `window.location.href = ...` in these files:
+- `src/pages/Compare.tsx` (line 684)
+- `src/pages/Favorites.tsx` (line 201)
+- `src/pages/PropertyEvaluator.tsx` (line 1180)
+- `src/pages/VideoMeeting.tsx` (lines 503, 1462)
+- `src/pages/DigitalCard.tsx` (lines 143, 227)
 
-**Fix in the Row 1 container (line 624):**
-- Remove `container mx-auto` constraint so the bar stretches edge-to-edge
-- Change to `max-w-full px-2` to allow full-width scrolling content
+Admin/CRM pages (CRMLeadDetail, CRMLeadsInbox, KanbanPipeline, etc.) can keep `window.open` since those are internal tools not subject to iframe/popup restrictions.
+
+### 4c. Fix component-level WhatsApp calls
+
+Replace `window.open` with `window.location.href` in these public-facing components:
+- `src/components/ChatTracker.tsx` (line 44)
+- `src/components/FloatingWhatsApp.tsx` -- already uses `window.location.href` (confirmed correct)
+- `src/components/jbj-broker/SecureLeadCard.tsx` (line 60)
+
+### 4d. Ensure Google Maps links are not blocked
+
+Search for any Google Maps `window.open` calls and convert to `window.location.href` or proper `<a>` tags with `target="_blank"` and `rel="noopener noreferrer"`.
 
 ---
 
@@ -114,9 +130,16 @@ This plan addresses all reported issues across the project detail page, homepage
 
 | File | Changes |
 |------|---------|
-| `src/components/project-detail/PaymentPlanVisualization.tsx` | Swap tab order (Payment Plan first), champagne active color |
-| `src/components/project-detail/ProjectDetailLayout.tsx` | Champagne active tab, use `visibleTabs` in Row 2, reduce AI-DLD divider padding, fix filter bar width |
-| `src/components/project-detail/ProjectAIAnalyzer.tsx` | Larger loading monogram (w-32 h-32 / w-40 h-40) |
-| `src/components/project-detail/InvestmentMetricsSection.tsx` | Premium card styling with gradients and rings |
-| `src/components/FeaturedProjectAd.tsx` | Fix Inaura image URL |
-| `src/pages/Index.tsx` | Clean up duplicate mortgage title elements |
+| `src/components/ui/accordion.tsx` | Add gold text + arrow color on `[data-state=open]` |
+| `src/data/bookCollections.ts` | Add `NEWS_BOOKS`, export individual books for single-page use |
+| `src/components/books/BookShelf.tsx` | Premium visual upgrade to match champagne theme |
+| `src/pages/CompanyProfile.tsx` | Reduce section padding, add TOC, upgrade book cover with founder photo, add visuals/dividers |
+| `src/pages/Contact.tsx` | Fix WhatsApp `window.open` to `window.location.href` |
+| `src/pages/Compare.tsx` | Fix WhatsApp link |
+| `src/pages/Favorites.tsx` | Fix WhatsApp link |
+| `src/pages/PropertyEvaluator.tsx` | Fix WhatsApp link |
+| `src/pages/VideoMeeting.tsx` | Fix WhatsApp links (2 locations) |
+| `src/pages/DigitalCard.tsx` | Fix WhatsApp links (2 locations) |
+| `src/components/ChatTracker.tsx` | Fix WhatsApp link |
+| `src/components/jbj-broker/SecureLeadCard.tsx` | Fix WhatsApp link |
+| Multiple guide pages | Add `BookShelf` component with consistent book collections |
