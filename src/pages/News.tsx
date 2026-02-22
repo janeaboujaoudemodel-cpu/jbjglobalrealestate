@@ -28,23 +28,23 @@ interface MarketNews {
   is_featured: boolean;
 }
 
-// Category-specific accent colors for premium badges
-const CATEGORY_COLORS: Record<string, { bg: string; border: string }> = {
-  'Market Update': { bg: 'bg-amber-600/70', border: 'border-amber-400/40' },
-  'Analysis': { bg: 'bg-blue-600/70', border: 'border-blue-400/40' },
-  'Policy': { bg: 'bg-sky-600/70', border: 'border-sky-400/40' },
-  'Economic': { bg: 'bg-emerald-600/70', border: 'border-emerald-400/40' },
-  'Monthly Report': { bg: 'bg-purple-600/70', border: 'border-purple-400/40' },
-  'Market Outlook': { bg: 'bg-indigo-600/70', border: 'border-indigo-400/40' },
-  'Developer News': { bg: 'bg-orange-600/70', border: 'border-orange-400/40' },
-  'Government': { bg: 'bg-red-600/70', border: 'border-red-400/40' },
-  'Company News': { bg: 'bg-gold/80', border: 'border-gold/60' },
+// Category-specific accent colors for premium editorial badges
+const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string }> = {
+  'Market Update': { bg: 'bg-amber-50', text: 'text-amber-800', border: 'border-amber-200' },
+  'Analysis': { bg: 'bg-blue-50', text: 'text-blue-800', border: 'border-blue-200' },
+  'Policy': { bg: 'bg-sky-50', text: 'text-sky-800', border: 'border-sky-200' },
+  'Economic': { bg: 'bg-emerald-50', text: 'text-emerald-800', border: 'border-emerald-200' },
+  'Monthly Report': { bg: 'bg-purple-50', text: 'text-purple-800', border: 'border-purple-200' },
+  'Market Outlook': { bg: 'bg-indigo-50', text: 'text-indigo-800', border: 'border-indigo-200' },
+  'Developer News': { bg: 'bg-orange-50', text: 'text-orange-800', border: 'border-orange-200' },
+  'Government': { bg: 'bg-red-50', text: 'text-red-800', border: 'border-red-200' },
+  'Company News': { bg: 'bg-[hsl(43,45%,94%)]', text: 'text-[hsl(43,45%,30%)]', border: 'border-[hsl(43,45%,54%)]/30' },
 };
 
 const CategoryBadge = ({ category }: { category: string }) => {
-  const colors = CATEGORY_COLORS[category] || { bg: 'bg-black/50', border: 'border-white/20' };
+  const colors = CATEGORY_COLORS[category] || { bg: 'bg-zinc-100', text: 'text-zinc-700', border: 'border-zinc-200' };
   return (
-    <span className={`text-xs text-white ${colors.bg} backdrop-blur-sm px-3 py-1 rounded-full border ${colors.border} font-medium`}>
+    <span className={`text-xs ${colors.text} ${colors.bg} px-3 py-1 rounded-full border ${colors.border} font-medium`}>
       {category}
     </span>
   );
@@ -272,59 +272,44 @@ const News = () => {
   return (
     <>
       <SEOHead {...pagesSEO.news} />
-      <section className="min-h-screen bg-black">
-      {/* Hero Section - Premium Video Background */}
-      <section className="relative py-24 md:py-32 overflow-hidden">
-        {/* Video Background */}
-        <div className="absolute inset-0 z-0 bg-black">
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            className="absolute inset-0 w-full h-full object-cover"
-          >
-            <source src={dubaiLandmarksVideo} type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black" />
-        </div>
+      <section className="min-h-screen bg-gradient-to-br from-[hsl(40,30%,96%)] via-[hsl(39,25%,94%)] to-[hsl(38,20%,92%)]">
+      {/* Hero Section - Editorial Premium */}
+      <section className="relative py-20 md:py-28 overflow-hidden bg-gradient-to-b from-[hsl(40,30%,96%)] to-[hsl(39,25%,93%)] border-b border-[hsl(43,45%,54%)]/15">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[hsl(43,45%,54%)]/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[hsl(43,45%,54%)]/5 rounded-full blur-3xl" />
         
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-3xl z-[1]" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gold/5 rounded-full blur-3xl z-[1]" />
-        
-        <div className="container mx-auto px-4 relative z-10">
-          <Link to="/" className="inline-flex items-center gap-2 text-zinc-400 hover:text-gold mb-8 transition-colors group">
+        <div className="max-w-[1200px] mx-auto px-6 relative z-10">
+          <Link to="/" className="inline-flex items-center gap-2 text-[hsl(0,0%,45%)] hover:text-[hsl(43,45%,44%)] mb-8 transition-colors group">
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-            Back to Properties
+            Back to Home
           </Link>
           
           <div className="max-w-4xl">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 border border-gold/40 bg-black/30 backdrop-blur-md">
-              <Landmark className="w-4 h-4 text-gold" />
-              <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">
-                Government & Market Sources
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 border border-[hsl(43,45%,54%)]/30 bg-white/50 backdrop-blur-sm">
+              <Landmark className="w-4 h-4 text-[hsl(43,45%,54%)]" />
+              <span className="text-[hsl(43,45%,44%)] font-semibold text-xs uppercase tracking-[0.2em]">
+                Government &amp; Market Sources
               </span>
             </div>
             
             <h1 
-              className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6"
-              style={{ fontFamily: "Poppins, sans-serif" }}
+              className="text-4xl md:text-6xl lg:text-7xl font-bold text-[hsl(0,0%,12%)] mb-6"
+              style={{ fontFamily: "Playfair Display, Georgia, serif" }}
             >
-              News & <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Insights</span>
+              News &amp; <span className="text-[hsl(43,45%,54%)]">Insights</span>
             </h1>
-            <p className="text-zinc-300 text-lg md:text-xl max-w-2xl leading-relaxed">
+            <p className="text-[hsl(0,0%,40%)] text-lg md:text-xl max-w-2xl leading-relaxed">
               Stay informed about the latest UAE real estate market updates, economic developments, and investment opportunities.
-              <span className="text-gold font-medium"> Curated from official sources daily.</span>
+              <span className="text-[hsl(43,45%,44%)] font-medium"> Curated from official sources daily.</span>
             </p>
           </div>
         </div>
       </section>
 
       {/* Category Filter */}
-      <div className="border-b border-gold/20 sticky top-16 bg-black z-20">
-        <div className="jj-layer-2 !bg-transparent !py-0">
-          <div className="jj-layer-active rounded-xl my-2 p-2">
+      <div className="border-b border-[hsl(43,45%,54%)]/15 sticky top-16 bg-[hsl(40,30%,96%)]/95 backdrop-blur-md z-20">
+        <div className="max-w-[1200px] mx-auto px-6">
+          <div className="py-3">
             <div className="flex gap-2 py-2 overflow-x-auto scrollbar-hide">
               {categories.map((category) => (
                 <button
@@ -332,8 +317,8 @@ const News = () => {
                   onClick={() => setSelectedCategory(category === "All" ? null : category)}
                   className={`px-5 py-2.5 text-sm whitespace-nowrap transition-all duration-300 rounded-full font-medium ${
                     (category === "All" && !selectedCategory) || selectedCategory === category
-                      ? "bg-gradient-to-r from-[#F5EBD7] via-[#EDE0C8] to-[#E2D4B8] text-black border border-gold/50 shadow-lg"
-                      : "jj-card-inner text-black hover:border-gold/60"
+                      ? "bg-[hsl(43,45%,54%)] text-white shadow-md"
+                      : "bg-white/70 text-[hsl(0,0%,30%)] border border-[hsl(43,45%,54%)]/15 hover:border-[hsl(43,45%,54%)]/40"
                   }`}
                 >
                   {category}
@@ -346,20 +331,20 @@ const News = () => {
 
       {/* Loading State */}
       {isLoading && (
-        <div className="jj-layer-2 !bg-transparent py-16 flex justify-center">
+        <div className="max-w-[1200px] mx-auto px-6 py-16 flex justify-center">
           <BrandedLoader text="Loading news..." className="min-h-[40vh]" />
         </div>
       )}
 
       {/* News Grid */}
       {!isLoading && (
-        <div className="jj-layer-2 !bg-transparent py-12 md:py-16">
+        <div className="max-w-[1200px] mx-auto px-6 py-12 md:py-16">
           {/* Featured Article */}
           {filteredNews.length > 0 && (
             <div className="mb-12">
-              <div className="py-6 px-4 md:px-6 jj-layer-active rounded-2xl">
+              <div className="py-6 px-4 md:px-6">
                 <article 
-                  className="group relative jj-card-inner rounded-2xl overflow-hidden transition-all duration-500 cursor-pointer"
+                  className="group relative bg-white/80 border border-[hsl(43,45%,54%)]/15 rounded-2xl overflow-hidden transition-all duration-500 cursor-pointer hover:shadow-lg"
                   onClick={() => navigate(`/news/${filteredNews[0].id}`)}
                 >
                   <div className="grid md:grid-cols-2 gap-0">
@@ -375,7 +360,7 @@ const News = () => {
                             if (parent) {
                               e.currentTarget.style.display = 'none';
                               const fallback = document.createElement('div');
-                              fallback.className = 'w-full h-full min-h-[250px] bg-gradient-to-br from-amber-900/80 via-zinc-900 to-black flex flex-col items-center justify-center gap-3';
+                              fallback.className = 'w-full h-full min-h-[250px] bg-gradient-to-br from-[hsl(43,45%,90%)] via-[hsl(40,30%,96%)] to-[hsl(39,25%,93%)] flex flex-col items-center justify-center gap-3';
                               const cat = filteredNews[0]?.category || 'News';
                               const src = filteredNews[0]?.source || '';
                               fallback.innerHTML = `<div class="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-gold"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></div><span class="text-gold/80 text-sm font-semibold uppercase tracking-wider">${cat}</span><span class="text-zinc-500 text-xs">${src}</span>`;
@@ -384,41 +369,41 @@ const News = () => {
                           }}
                         />
                       ) : (
-                        <div className="w-full h-full min-h-[250px] bg-gradient-to-br from-amber-900/80 via-zinc-900 to-black flex flex-col items-center justify-center gap-3">
-                          <div className="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center">
-                            <TrendingUp className="w-8 h-8 text-gold" />
+                        <div className="w-full h-full min-h-[250px] bg-gradient-to-br from-[hsl(43,45%,90%)] via-[hsl(40,30%,96%)] to-[hsl(39,25%,93%)] flex flex-col items-center justify-center gap-3">
+                          <div className="w-16 h-16 rounded-full bg-[hsl(43,45%,54%)]/15 flex items-center justify-center">
+                            <TrendingUp className="w-8 h-8 text-[hsl(43,45%,54%)]" />
                           </div>
-                          <span className="text-gold/80 text-sm font-semibold uppercase tracking-wider">{filteredNews[0]?.category || 'News'}</span>
-                          <span className="text-zinc-500 text-xs">{filteredNews[0]?.source || ''}</span>
+                          <span className="text-[hsl(43,45%,44%)] text-sm font-semibold uppercase tracking-wider">{filteredNews[0]?.category || 'News'}</span>
+                          <span className="text-[hsl(0,0%,55%)] text-xs">{filteredNews[0]?.source || ''}</span>
                         </div>
                       )}
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/15" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent to-white/10" />
                     </div>
                     <div className="p-8 md:p-10 flex flex-col justify-center">
                       <div className="flex items-center gap-3 mb-4 flex-wrap">
-                        <span className="text-xs text-black bg-gradient-to-r from-[#F5EBD7] via-[#EDE0C8] to-[#E2D4B8] px-3 py-1 rounded-full font-medium border border-gold/50">
+                        <span className="text-xs text-[hsl(43,45%,30%)] bg-[hsl(43,45%,94%)] px-3 py-1 rounded-full font-medium border border-[hsl(43,45%,54%)]/30">
                           Featured
                         </span>
                     <CategoryBadge category={filteredNews[0].category} />
-                        <span className="text-xs text-zinc-600 bg-zinc-100 px-3 py-1 rounded-full flex items-center gap-1 border border-zinc-200">
+                        <span className="text-xs text-[hsl(0,0%,45%)] bg-[hsl(40,30%,96%)] px-3 py-1 rounded-full flex items-center gap-1 border border-[hsl(43,45%,54%)]/15">
                           <Landmark className="w-3 h-3" />
                           {filteredNews[0].source}
                         </span>
                       </div>
-                      <h2 className="text-2xl md:text-3xl font-bold text-black mb-4 group-hover:text-gold transition-colors line-clamp-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+                      <h2 className="text-2xl md:text-3xl font-bold text-[hsl(0,0%,12%)] mb-4 group-hover:text-[hsl(43,45%,44%)] transition-colors line-clamp-2" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>
                         {filteredNews[0].title}
                       </h2>
-                      <p className="text-zinc-700 mb-6 line-clamp-3">
+                      <p className="text-[hsl(0,0%,40%)] mb-6 line-clamp-3">
                         {filteredNews[0].excerpt}
                       </p>
                       <div className="flex items-center justify-between gap-4 flex-wrap">
-                        <div className="flex items-center gap-4 text-sm text-zinc-600 flex-wrap">
+                        <div className="flex items-center gap-4 text-sm text-[hsl(0,0%,45%)] flex-wrap">
                           <span className="flex items-center gap-1">
                             <Calendar className="w-4 h-4" />
                             {new Date(filteredNews[0].date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                           </span>
                         </div>
-                        <div className="flex items-center text-gold font-semibold">
+                        <div className="flex items-center text-[hsl(43,45%,44%)] font-semibold">
                           <span>Read More</span>
                           <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
                         </div>
@@ -436,7 +421,7 @@ const News = () => {
               <article 
                 key={article.id}
                 onClick={() => navigate(`/news/${article.id}`)}
-                className="group jj-card-inner border-2 border-gold rounded-xl overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] cursor-pointer"
+                className="group bg-white/80 border border-[hsl(43,45%,54%)]/15 rounded-xl overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-lg cursor-pointer"
               >
                 <div className="aspect-video relative overflow-hidden">
                   {article.image ? (
@@ -450,7 +435,7 @@ const News = () => {
                         if (parent) {
                           e.currentTarget.style.display = 'none';
                           const fallback = document.createElement('div');
-                          fallback.className = 'w-full h-full bg-gradient-to-br from-amber-900/80 via-zinc-900 to-black flex flex-col items-center justify-center gap-2 p-4';
+                          fallback.className = 'w-full h-full bg-gradient-to-br from-[hsl(43,45%,90%)] via-[hsl(40,30%,96%)] to-[hsl(39,25%,93%)] flex flex-col items-center justify-center gap-2 p-4';
                           const cat = article.category || 'News';
                           const src = article.source || '';
                           fallback.innerHTML = `<div class="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-gold"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></div><span class="text-gold/80 text-xs font-semibold uppercase tracking-wider">${cat}</span><span class="text-zinc-500 text-[10px]">${src}</span>`;
@@ -459,21 +444,21 @@ const News = () => {
                       }}
                     />
                   ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-amber-900/80 via-zinc-900 to-black flex flex-col items-center justify-center gap-2 p-4">
-                      <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center">
-                        <TrendingUp className="w-6 h-6 text-gold" />
+                    <div className="w-full h-full bg-gradient-to-br from-[hsl(43,45%,90%)] via-[hsl(40,30%,96%)] to-[hsl(39,25%,93%)] flex flex-col items-center justify-center gap-2 p-4">
+                      <div className="w-12 h-12 rounded-full bg-[hsl(43,45%,54%)]/15 flex items-center justify-center">
+                        <TrendingUp className="w-6 h-6 text-[hsl(43,45%,54%)]" />
                       </div>
-                      <span className="text-gold/80 text-xs font-semibold uppercase tracking-wider">{article.category}</span>
-                      <span className="text-zinc-500 text-[10px]">{article.source}</span>
+                      <span className="text-[hsl(43,45%,44%)] text-xs font-semibold uppercase tracking-wider">{article.category}</span>
+                      <span className="text-[hsl(0,0%,55%)] text-[10px]">{article.source}</span>
                     </div>
                   )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-white/30 via-transparent to-transparent" />
                   <div className="absolute top-3 left-3 flex gap-2">
                     <CategoryBadge category={article.category} />
                   </div>
                 </div>
                 <div className="p-5">
-                  <div className="flex items-center gap-3 mb-3 text-xs text-zinc-600">
+                  <div className="flex items-center gap-3 mb-3 text-xs text-[hsl(0,0%,45%)]">
                     <span className="flex items-center gap-1">
                       <Calendar className="w-3 h-3" />
                       {new Date(article.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
@@ -484,13 +469,13 @@ const News = () => {
                       {article.source}
                     </span>
                   </div>
-                  <h3 className="text-lg font-semibold text-black mb-2 group-hover:text-gold transition-colors line-clamp-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  <h3 className="text-lg font-semibold text-[hsl(0,0%,12%)] mb-2 group-hover:text-[hsl(43,45%,44%)] transition-colors line-clamp-2" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>
                     {article.title}
                   </h3>
-                  <p className="text-sm text-zinc-700 mb-4 line-clamp-2">
+                  <p className="text-sm text-[hsl(0,0%,40%)] mb-4 line-clamp-2">
                     {article.excerpt}
                   </p>
-                  <div className="flex items-center text-gold text-sm font-medium">
+                  <div className="flex items-center text-[hsl(43,45%,44%)] text-sm font-medium">
                     <span>Read More</span>
                     <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
                   </div>
@@ -501,12 +486,12 @@ const News = () => {
 
           {/* Empty State */}
           {filteredNews.length === 0 && !isLoading && (
-            <div className="text-center py-16">
-              <Newspaper className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
-              <h3 className="text-white text-xl font-semibold mb-2">
+             <div className="text-center py-16">
+              <Newspaper className="w-12 h-12 text-[hsl(0,0%,55%)] mx-auto mb-4" />
+              <h3 className="text-[hsl(0,0%,15%)] text-xl font-semibold mb-2">
                 {selectedCategory ? "No news in this category" : "No news articles yet"}
               </h3>
-              <p className="text-zinc-400 mb-4">
+              <p className="text-[hsl(0,0%,45%)] mb-4">
                 {selectedCategory 
                   ? "Try selecting a different category or refresh the news."
                   : "Click \"Refresh News\" to collect the latest articles from official UAE sources."
@@ -519,8 +504,8 @@ const News = () => {
           
           {/* 2026 YTD Market Stats with YTD / Daily Toggle */}
           <div className="mt-16">
-            <div className="jj-layer-active p-3 md:p-4">
-              <div className="jj-card-inner rounded-2xl p-8 md:p-10">
+            <div className="p-3 md:p-4">
+              <div className="bg-white/80 border border-[hsl(43,45%,54%)]/15 rounded-2xl p-8 md:p-10">
                 <div className="flex items-center justify-between gap-3 mb-6 flex-wrap">
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-black/10 flex items-center justify-center">
@@ -633,8 +618,8 @@ const News = () => {
 
           {/* Top Areas Performance Table - 2026 */}
           <div className="mt-6">
-            <div className="jj-layer-active p-3 md:p-4">
-              <div className="jj-card-inner rounded-2xl p-6 md:p-8">
+            <div className="p-3 md:p-4">
+              <div className="bg-white/80 border border-[hsl(43,45%,54%)]/15 rounded-2xl p-6 md:p-8">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-black/10 flex items-center justify-center">
                     <MapPin className="w-5 h-5 text-black" />
@@ -653,8 +638,8 @@ const News = () => {
 
           {/* Top Buyer Nationalities */}
           <div className="mt-6">
-            <div className="jj-layer-active p-3 md:p-4">
-              <div className="jj-card-inner rounded-2xl p-6 md:p-8">
+            <div className="p-3 md:p-4">
+              <div className="bg-white/80 border border-[hsl(43,45%,54%)]/15 rounded-2xl p-6 md:p-8">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-black/10 flex items-center justify-center">
                     <Globe className="w-5 h-5 text-black" />
@@ -695,8 +680,8 @@ const News = () => {
 
           {/* 2025 Full Year Recap Card — Unified UI */}
           <div className="mt-4">
-            <div className="jj-layer-active p-3 md:p-4">
-              <div className="jj-card-inner rounded-2xl p-8 md:p-10 opacity-90">
+            <div className="p-3 md:p-4">
+              <div className="bg-white/80 border border-[hsl(43,45%,54%)]/15 rounded-2xl p-8 md:p-10 opacity-90">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-black/10 flex items-center justify-center">
                     <Calendar className="w-5 h-5 text-black" />
@@ -754,8 +739,8 @@ const News = () => {
 
           {/* Top 10 Areas 2025 */}
           <div className="mt-6">
-            <div className="jj-layer-active p-3 md:p-4">
-              <div className="jj-card-inner rounded-2xl p-6 md:p-8 opacity-90">
+            <div className="p-3 md:p-4">
+              <div className="bg-white/80 border border-[hsl(43,45%,54%)]/15 rounded-2xl p-6 md:p-8 opacity-90">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-black/10 flex items-center justify-center">
                     <MapPin className="w-5 h-5 text-black" />
@@ -774,8 +759,8 @@ const News = () => {
 
           {/* News Reporter Info - Victoria Hayes */}
           <div className="mt-8">
-            <div className="jj-layer-active p-3 md:p-4">
-              <div className="jj-card-inner rounded-2xl p-6 md:p-8">
+            <div className="p-3 md:p-4">
+              <div className="bg-white/80 border border-[hsl(43,45%,54%)]/15 rounded-2xl p-6 md:p-8">
                 <div className="flex items-start gap-4">
                   <div className="w-16 h-16 rounded-full bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-black/10 flex items-center justify-center flex-shrink-0 overflow-hidden">
                     <img 
