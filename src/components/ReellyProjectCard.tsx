@@ -7,6 +7,7 @@
  import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
  import { VerifiedMedia } from "@/components/ui/verified-media";
  import { Button } from "@/components/ui/button";
+ import { DeveloperLink } from "@/components/ui/developer-link";
  
 interface ReellyProjectCardProps {
   project: ReellyProject;
@@ -68,7 +69,7 @@ interface ReellyProjectCardProps {
    }
     // "sold" / "out of stock" handled by dedicated red Sold Out badge, not here
    if (normalizedStatus.includes('announced')) {
-     return { label: 'Announced', className: 'bg-gold text-black' };
+     return { label: 'Announced', className: 'bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-[#C8A766]/40' };
    }
    if (normalizedStatus.includes('presale') || normalizedStatus.includes('eoi')) {
      return { label: 'Presale', className: 'bg-amber-500 text-black' };
@@ -131,11 +132,11 @@ const ReellyProjectCard = ({
    return (
       <div
         className={
-          "group relative overflow-hidden rounded-xl border-[3px] border-gold transition-all duration-300 flex flex-col " +
+          "group relative overflow-hidden rounded-xl border-[3px] border-gold transition-all duration-200 flex flex-col " +
           "bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))] " +
           "shadow-[0_8px_32px_rgba(200,167,102,0.25),0_4px_16px_rgba(0,0,0,0.15)] " +
           "hover:shadow-[0_12px_40px_rgba(200,167,102,0.3),0_8px_24px_rgba(0,0,0,0.2)] " +
-          "hover:-translate-y-1.5 hover:[transform:perspective(1000px)_rotateX(2deg)_rotateY(-1deg)]"
+          "hover:-translate-y-1"
         }
       >
        {/* Favorite Button */}
@@ -174,7 +175,7 @@ const ReellyProjectCard = ({
              <VerifiedMedia
                src={images[currentImageIndex]?.image_url || project.thumbnail || project.gallery?.[0] || null}
                alt={images[currentImageIndex]?.alt_text || project.name}
-               className="object-cover group-hover:scale-105 transition-transform duration-500"
+               className="object-cover group-hover:scale-105 transition-transform duration-300"
                placeholderLabel="Media pending verification"
              />
            
@@ -278,12 +279,14 @@ const ReellyProjectCard = ({
             )}
           </p>
            
-           {/* Developer - Gold styled */}
+           {/* Developer - Clickable */}
             {project.developer_name && (
-              <p className="text-sm mb-3">
-                <span className="text-black">by </span>
-                <span className="text-gold font-semibold">{project.developer_name}</span>
-              </p>
+              <DeveloperLink
+                name={project.developer_name}
+                slug={(project as any).developer?.slug || null}
+                className="text-sm mb-3 block"
+                showPrefix={true}
+              />
             )}
            
            {/* Size info - hidden in compact mode */}
