@@ -242,8 +242,8 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       {!isBackOfficeRoute && !isToolkitGeneratorRoute && <Footer />}
       {/* All popups rendered centrally - only when ready */}
       {popupsReady && <PopupLayer />}
-      {/* Chat widget always visible (collapsed), only attention pulse waits for popupsReady */}
-      {!isBackOfficeRoute && (
+      {/* Chat widget hidden on homepage first fold, visible after scroll */}
+      {!isBackOfficeRoute && (!isHomePage || popupsReady) && (
         <AIChatWidget
           isCollapsed={effectiveCollapsed}
           onToggleCollapse={handleToggleChat}

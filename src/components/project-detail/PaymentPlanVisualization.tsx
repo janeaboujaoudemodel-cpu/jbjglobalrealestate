@@ -246,6 +246,16 @@ export default function PaymentPlanVisualization({
             </div>
           )}
 
+          {milestones.length === 0 && !paymentPlan && (
+            <div className="p-6 rounded-xl border border-gold/30 bg-gradient-to-br from-gold/5 to-gold/10 text-center">
+              <div className="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center mx-auto mb-4 ring-4 ring-gold/10">
+                <CreditCard className="w-8 h-8 text-gold" />
+              </div>
+              <p className="text-lg font-semibold text-foreground mb-2">Payment Plan Available</p>
+              <p className="text-sm text-muted-foreground mb-4">Contact us to receive the full payment plan details for {projectName}</p>
+            </div>
+          )}
+
           {handoverDate && (
             <p className="mt-6 text-sm text-muted-foreground italic text-center">
               Benefit from extended payment terms until {handoverDate} handover

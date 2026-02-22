@@ -409,7 +409,7 @@ const HeroSearchBar = () => {
     if (!localStorage.getItem(key)) {
       localStorage.setItem(key, 'true');
       toast.success(`Currency set to ${code}`, {
-        description: 'You can change this anytime from the homepage search bar, My Account, or the footer.',
+        description: 'You can change this anytime from any Search, Developer, Area, or Project page, My Account dropdown, or the Footer.',
         duration: 6000,
       });
     }
@@ -424,7 +424,7 @@ const HeroSearchBar = () => {
     if (!localStorage.getItem(key)) {
       localStorage.setItem(key, 'true');
       toast.success(`Area unit set to ${unit}`, {
-        description: 'You can change this anytime from the homepage search bar, My Account, or the footer.',
+        description: 'You can change this anytime from any Search, Developer, Area, or Project page, My Account dropdown, or the Footer.',
         duration: 6000,
       });
     }

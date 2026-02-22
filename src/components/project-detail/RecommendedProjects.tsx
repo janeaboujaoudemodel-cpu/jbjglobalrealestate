@@ -65,7 +65,7 @@ export default function RecommendedProjects({
           </div>
           <Link
             to="/properties"
-            className="text-gold hover:underline text-sm font-medium flex items-center gap-1"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-[#C8A766]/60 text-black font-semibold text-sm shadow-md hover:shadow-lg hover:border-gold transition-all"
           >
             View All <ChevronRight className="w-4 h-4" />
           </Link>
@@ -116,7 +116,7 @@ export default function RecommendedProjects({
                       </span>
                     </div>
                     {/* Recommended Badge */}
-                    <span className="bg-gold/90 text-black px-2 py-0.5 rounded text-[11px] font-bold">
+                    <span className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-[#C8A766]/60 px-2 py-0.5 rounded text-[11px] font-bold">
                       Recommended
                     </span>
                   </div>
