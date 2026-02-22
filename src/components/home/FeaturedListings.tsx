@@ -7,7 +7,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Home, MapPin, ArrowRight, Building2, ArrowUpRight, CreditCard } from "lucide-react";
+import { Home, MapPin, ArrowRight, Building2, ArrowUpRight, CreditCard, Heart, Star } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -304,6 +304,24 @@ const FeaturedListings = () => {
           >
             {t('featured.heading', 'Handpicked For You')}
           </h2>
+
+          {/* My Favorites & My Shortlist Tabs */}
+          <div className="flex items-center justify-center gap-3 mt-4">
+            <Link
+              to="/favorites"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-rose-500/15 to-pink-500/15 border border-rose-500/30 text-rose-400 hover:border-rose-400 hover:bg-rose-500/20 transition-all text-sm font-medium"
+            >
+              <Heart className="w-4 h-4" />
+              {t('featured.myFavorites', 'My Favorites')}
+            </Link>
+            <Link
+              to="/compare"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-amber-500/15 to-orange-500/15 border border-amber-500/30 text-amber-400 hover:border-amber-400 hover:bg-amber-500/20 transition-all text-sm font-medium"
+            >
+              <Star className="w-4 h-4" />
+              {t('featured.myShortlist', 'My Shortlist')}
+            </Link>
+          </div>
         </div>
 
         {/* Listings Grid */}
