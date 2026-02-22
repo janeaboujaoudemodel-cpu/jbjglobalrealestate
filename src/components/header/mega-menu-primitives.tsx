@@ -76,26 +76,25 @@ export function MegaMenuFeaturedCard({
   const videoRef = React.useRef<HTMLVideoElement>(null);
   const [videoReady, setVideoReady] = React.useState(false);
 
-  // Play video immediately on mount for instant display
+  // Play video immediately on mount with aggressive preloading
   React.useEffect(() => {
     const vid = videoRef.current;
     if (!vid || !video) return;
     
     // If already have enough data, play immediately
-    if (vid.readyState >= 3) {
+    if (vid.readyState >= 2) {
       setVideoReady(true);
       vid.play().catch(() => {});
       return;
     }
     
-    const onCanPlay = () => {
+    const onLoadedData = () => {
       setVideoReady(true);
       vid.play().catch(() => {});
     };
-    vid.addEventListener('canplay', onCanPlay, { once: true });
-    vid.load();
+    vid.addEventListener('loadeddata', onLoadedData, { once: true });
     
-    return () => vid.removeEventListener('canplay', onCanPlay);
+    return () => vid.removeEventListener('loadeddata', onLoadedData);
   }, [video]);
 
   return (
@@ -122,7 +121,7 @@ export function MegaMenuFeaturedCard({
           muted
           loop
           playsInline
-          preload="metadata"
+          preload="auto"
         />
       )}
       {/* Static image background */}

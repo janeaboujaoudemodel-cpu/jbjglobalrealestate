@@ -33,12 +33,14 @@ class AppErrorBoundary extends React.Component<
       msg.includes("import") ||
       msg.includes("chunk") ||
       msg.includes("Loading") ||
-      msg.includes("Failed to fetch");
+      msg.includes("Failed to fetch") ||
+      msg.includes("dynamically imported") ||
+      msg.includes("Importing a module");
 
-    // Auto-retry once for chunk/module loading failures
-    if (isChunkError && this.state.retryCount < 1) {
-      this.setState((prev) => ({ retryCount: prev.retryCount + 1 }));
-      setTimeout(() => window.location.reload(), 2000);
+    // Auto-retry up to 2 times for chunk/module loading failures
+    if (isChunkError && this.state.retryCount < 2) {
+      this.setState((prev) => ({ hasError: false, retryCount: prev.retryCount + 1 }));
+      setTimeout(() => window.location.reload(), 1500);
     }
   }
 
