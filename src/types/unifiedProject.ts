@@ -107,6 +107,7 @@ export interface UnifiedProject {
   
   // Features & Amenities
   amenities?: string[] | null;
+  amenity_images?: Record<string, string> | Json | null;
   amenities_list?: Json | null;
   facilities?: string[] | null;
   views?: string[] | null;

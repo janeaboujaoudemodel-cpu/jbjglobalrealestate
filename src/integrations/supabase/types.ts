@@ -15278,6 +15278,7 @@ export type Database = {
         Row: {
           amenities: string[] | null
           amenities_list: Json | null
+          amenity_images: Json | null
           area_id: string | null
           area_name: string | null
           area_unit: string | null
@@ -15364,6 +15365,7 @@ export type Database = {
         Insert: {
           amenities?: string[] | null
           amenities_list?: Json | null
+          amenity_images?: Json | null
           area_id?: string | null
           area_name?: string | null
           area_unit?: string | null
@@ -15450,6 +15452,7 @@ export type Database = {
         Update: {
           amenities?: string[] | null
           amenities_list?: Json | null
+          amenity_images?: Json | null
           area_id?: string | null
           area_name?: string | null
           area_unit?: string | null

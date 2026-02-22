@@ -1,7 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import {
   corsHeaders, REELLY_API_BASE,
-  extractGalleryImages, extractVideos, extractDocuments, extractFloorPlans, extractAmenities, extractUnitTypes
+  extractGalleryImages, extractVideos, extractDocuments, extractFloorPlans, extractAmenities, extractUnitTypes, extractAmenityImages
 } from "../_shared/reelly-types.ts";
 
 function json(status: number, body: unknown) {
@@ -87,7 +87,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
     // ── Get candidates ──
     const { data: allProjects } = await supabase
       .from("projects")
-      .select("id, name, slug, reelly_id, amenities, usp_bullets, location_distances, description, cover_image_url, faqs, floor_plan_types, payment_plan, payment_breakdown, unit_types, video_url, highlights, service_charge, roi_estimate")
+      .select("id, name, slug, reelly_id, amenities, amenity_images, usp_bullets, location_distances, description, cover_image_url, faqs, floor_plan_types, payment_plan, payment_breakdown, unit_types, video_url, highlights, service_charge, roi_estimate")
       .eq("is_published", true)
       .not("reelly_id", "is", null)
       .order("created_at", { ascending: true })
@@ -190,6 +190,9 @@ Deno.serve(async (req: Request): Promise<Response> => {
         // 3. Update project fields (non-destructive fill)
         const updates: Record<string, any> = {};
         if (amenities.length > 0 && !(project.amenities as any[])?.length) updates.amenities = amenities;
+        // Extract and store amenity images (real photos from Reelly)
+        const amenityImages = extractAmenityImages(reellyData);
+        if (Object.keys(amenityImages).length > 0 && !project.amenity_images) updates.amenity_images = amenityImages;
         if (unitTypes.length > 0 && !(project.unit_types as any[])?.length) updates.unit_types = unitTypes;
         if (floorPlans.length > 0 && !(project.floor_plan_types as any[])?.length) updates.floor_plan_types = floorPlans;
         if (videoUrl && !project.video_url) updates.video_url = videoUrl;

@@ -180,6 +180,7 @@ const ProjectDetail = () => {
       property_type_label: project.property_type_label,
       status_label: project.status_label,
       amenities: project.amenities,
+      amenity_images: project.amenity_images ? (project.amenity_images as Record<string, string>) : null,
       images,
       documents,
       usp_headline: project.usp_headline ?? null,

@@ -104,6 +104,7 @@ export type ProjectDetailData = {
   property_type_label?: string | null;
   status_label?: string | null;
   amenities?: string[] | null;
+  amenity_images?: Record<string, string> | null;
   images: { id: string; url: string; alt?: string | null }[];
   documents: { id: string; type: string; url: string; name?: string | null }[];
   // Mirroring fields
@@ -882,7 +883,7 @@ export default function ProjectDetailLayout({
                      <Building2 className="w-5 h-5 text-gold" />
                      Amenities & Features
                    </h3>
-                   <AmenitiesWithPhotos amenities={project.amenities!} />
+                   <AmenitiesWithPhotos amenities={project.amenities!} amenityImages={project.amenity_images} />
                  </div>
                </div>
               )}
