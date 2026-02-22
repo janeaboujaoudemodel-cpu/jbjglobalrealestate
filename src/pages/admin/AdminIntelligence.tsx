@@ -527,87 +527,88 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
                     </div>
                   )}
 
-                  {/* Load Activities + Documents */}
-                  <div className="bg-white/60 rounded-lg p-4 border border-gold/20">
-                    <div className="flex items-center justify-between mb-3">
-                      <p className="text-gold font-bold">Activity Timeline, Documents & Scanned Cards</p>
-                      {!userActivities && (
-                        <Button size="sm" variant="outline" onClick={() => loadUserDetails(selectedUser.user_id)}
-                          disabled={activitiesLoading}
-                          className="text-gold border-gold/30 hover:bg-gold/10 h-7 text-xs font-semibold">
-                          {activitiesLoading ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : null}
-                          Load Details
-                        </Button>
-                      )}
+                  {/* Load Details Button */}
+                  {!userActivities && (
+                    <div className="flex justify-center">
+                      <Button variant="outline" onClick={() => loadUserDetails(selectedUser.user_id)}
+                        disabled={activitiesLoading}
+                        className="text-gold border-2 border-gold/40 hover:bg-gold/10 font-semibold bg-white/80">
+                        {activitiesLoading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
+                        Load Activity Timeline, Documents & Scanned Cards
+                      </Button>
                     </div>
+                  )}
 
-                    {activitiesLoading && <div className="flex justify-center py-4"><Loader2 className="w-5 h-5 text-gold animate-spin" /></div>}
+                  {activitiesLoading && <div className="flex justify-center py-4"><Loader2 className="w-5 h-5 text-gold animate-spin" /></div>}
 
-                    {/* Scanned Cards */}
-                    {userScannedCards && userScannedCards.length > 0 && (
-                      <div className="mb-4">
-                        <p className="text-sm font-bold text-stone-700 mb-2 flex items-center gap-2"><CreditCard className="w-4 h-4 text-gold" /> Scanned Business Cards ({userScannedCards.length})</p>
-                        <div className="space-y-2">
-                          {userScannedCards.map((card: any, i: number) => {
-                            const cd = card.card_data || {};
-                            return (
-                              <div key={i} className="bg-gold/5 rounded p-2 border border-gold/20 text-xs">
-                                <div className="flex flex-wrap gap-4">
-                                  {cd.name && <span><strong>Name:</strong> {cd.name}</span>}
-                                  {cd.company && <span><strong>Company:</strong> {cd.company}</span>}
-                                  {cd.email && <span><strong>Email:</strong> {cd.email}</span>}
-                                  {cd.phone && <span><strong>Phone:</strong> {cd.phone}</span>}
-                                  {cd.title && <span><strong>Title:</strong> {cd.title}</span>}
-                                </div>
-                                <div className="text-stone-400 mt-1">Scanned: {format(new Date(card.scanned_at), "dd MMM yyyy HH:mm")} • Source: {card.scan_source || "manual"}</div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Documents */}
-                    {userDocuments && userDocuments.length > 0 && (
-                      <div className="mb-4">
-                        <p className="text-sm font-bold text-stone-700 mb-2 flex items-center gap-2"><FileText className="w-4 h-4 text-gold" /> Documents ({userDocuments.length})</p>
-                        <div className="space-y-1.5">
-                          {userDocuments.map((doc: any, i: number) => (
-                            <div key={i} className="flex items-center gap-3 text-xs bg-gold/5 rounded p-2 border border-gold/10">
-                              <Badge variant="outline" className="text-[10px] h-4 px-1 border-gold/30 bg-gold/5 shrink-0 uppercase">{doc.action}</Badge>
-                              <span className="font-medium text-stone-800 truncate">{doc.document_name}</span>
-                              <span className="text-stone-400">{doc.document_type}</span>
-                              <span className="text-stone-400 ml-auto whitespace-nowrap">{format(new Date(doc.created_at), "dd MMM HH:mm")}</span>
+                  {/* Activity Timeline - separate section */}
+                  {userActivities && userActivities.length > 0 && (
+                    <div className="bg-white/60 rounded-lg p-4 border border-gold/20">
+                      <p className="text-gold font-bold mb-3 flex items-center gap-2"><Clock className="w-4 h-4" /> Activity Timeline ({userActivities.length} events)</p>
+                      <ScrollArea className="h-[250px]">
+                        <div className="space-y-1">
+                          {userActivities.map((act, i) => (
+                            <div key={i} className="flex items-center gap-2 text-xs border-b border-gold/10 pb-1 py-0.5">
+                              <span className="text-stone-400 whitespace-nowrap w-32 shrink-0">
+                                {format(new Date(act.created_at), "dd MMM yyyy HH:mm")}
+                              </span>
+                              <Badge variant="outline" className="text-[10px] h-4 px-1.5 border-gold/30 bg-gold/5 shrink-0">{act.event_type}</Badge>
+                              <span className="text-stone-700 truncate flex-1">{act.event_name}</span>
+                              {act.page_path && <span className="text-stone-400 truncate max-w-[150px]">{act.page_path}</span>}
                             </div>
                           ))}
                         </div>
-                      </div>
-                    )}
+                      </ScrollArea>
+                    </div>
+                  )}
 
-                    {/* Activity Timeline */}
-                    {userActivities && userActivities.length === 0 && !userScannedCards?.length && !userDocuments?.length && (
-                      <p className="text-xs text-stone-400 text-center py-2">No activities found</p>
-                    )}
-                    {userActivities && userActivities.length > 0 && (
-                      <>
-                        <p className="text-sm font-bold text-stone-700 mb-2">Activity Timeline ({userActivities.length} events)</p>
-                        <ScrollArea className="h-[250px]">
-                          <div className="space-y-1">
-                            {userActivities.map((act, i) => (
-                              <div key={i} className="flex items-center gap-2 text-xs border-b border-gold/10 pb-1 py-0.5">
-                                <span className="text-stone-400 whitespace-nowrap w-32 shrink-0">
-                                  {format(new Date(act.created_at), "dd MMM yyyy HH:mm")}
-                                </span>
-                                <Badge variant="outline" className="text-[10px] h-4 px-1.5 border-gold/30 bg-gold/5 shrink-0">{act.event_type}</Badge>
-                                <span className="text-stone-700 truncate flex-1">{act.event_name}</span>
-                                {act.page_path && <span className="text-stone-400 truncate max-w-[150px]">{act.page_path}</span>}
-                              </div>
-                            ))}
+                  {/* Documents - separate section */}
+                  {userDocuments && userDocuments.length > 0 && (
+                    <div className="bg-white/60 rounded-lg p-4 border border-gold/20">
+                      <p className="text-gold font-bold mb-3 flex items-center gap-2"><FileText className="w-4 h-4" /> Documents ({userDocuments.length})</p>
+                      <div className="space-y-1.5">
+                        {userDocuments.map((doc: any, i: number) => (
+                          <div key={i} className="flex items-center gap-3 text-xs bg-gold/5 rounded p-2 border border-gold/10">
+                            <Badge variant="outline" className="text-[10px] h-4 px-1 border-gold/30 bg-gold/5 shrink-0 uppercase">{doc.action}</Badge>
+                            <span className="font-medium text-stone-800 truncate">{doc.document_name}</span>
+                            <span className="text-stone-400">{doc.document_type}</span>
+                            <span className="text-stone-400 ml-auto whitespace-nowrap">{format(new Date(doc.created_at), "dd MMM HH:mm")}</span>
                           </div>
-                        </ScrollArea>
-                      </>
-                    )}
-                  </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Scanned Business Cards - separate section */}
+                  {userScannedCards && userScannedCards.length > 0 && (
+                    <div className="bg-white/60 rounded-lg p-4 border border-gold/20">
+                      <p className="text-gold font-bold mb-3 flex items-center gap-2"><CreditCard className="w-4 h-4" /> Scanned Business Cards ({userScannedCards.length})</p>
+                      <div className="space-y-2">
+                        {userScannedCards.map((card: any, i: number) => {
+                          const cd = card.card_data || {};
+                          return (
+                            <div key={i} className="bg-gold/5 rounded p-3 border border-gold/20 text-xs">
+                              <div className="flex flex-wrap gap-4">
+                                {cd.name && <span><strong>Name:</strong> {cd.name}</span>}
+                                {cd.company && <span><strong>Company:</strong> {cd.company}</span>}
+                                {cd.email && <span><strong>Email:</strong> {cd.email}</span>}
+                                {cd.phone && <span><strong>Phone:</strong> {cd.phone}</span>}
+                                {cd.title && <span><strong>Title:</strong> {cd.title}</span>}
+                              </div>
+                              <div className="text-stone-400 mt-1">Scanned: {format(new Date(card.scanned_at), "dd MMM yyyy HH:mm")} • Source: {card.scan_source || "manual"}</div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* No data message */}
+                  {userActivities && userActivities.length === 0 && !userScannedCards?.length && !userDocuments?.length && (
+                    <div className="bg-white/60 rounded-lg p-4 border border-gold/20 text-center">
+                      <p className="text-xs text-stone-400">No activities, documents, or scanned cards found</p>
+                    </div>
+                  )}
 
                   {/* VIP Tier Reason */}
                   <div className="bg-gold/10 rounded-lg p-3 border-2 border-gold/30">
