@@ -1,12 +1,12 @@
 /**
  * Properties Cinematic Hero - Premium Video Background
- * Uses cloud-hosted video for fast loading, no bundle impact
+ * Uses unique properties-page video (separate from homepage)
  */
 
 import { useState, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
+import propertiesHeroVideo from "@/assets/properties-hero-video.mp4";
 
-const HERO_VIDEO_URL = "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/videos/hero-video.mp4";
 
 interface PropertiesHeroVideoProps {
   children?: React.ReactNode;
@@ -37,7 +37,7 @@ const PropertiesHeroVideo = ({ children }: PropertiesHeroVideoProps) => {
             opacity: videoReady ? 1 : 0,
             transition: 'opacity 0.8s ease-in-out',
           }}
-          src={HERO_VIDEO_URL}
+          src={propertiesHeroVideo}
         />
         
         {/* Gradient overlay */}

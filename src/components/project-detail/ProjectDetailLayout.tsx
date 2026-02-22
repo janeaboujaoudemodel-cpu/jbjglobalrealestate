@@ -297,7 +297,7 @@ export default function ProjectDetailLayout({
     const hasBrochure = brochureDocs.length > 0;
     // Reelly-style sections
     const hasUnits = (project.unit_types?.length ?? 0) > 0;
-    const hasConstruction = project.construction_progress !== null && project.construction_progress !== undefined;
+    const hasConstruction = true; // Always show construction section
     const hasMedia = !!project.video_url || !!project.virtual_tour_url;
     const hasInvestment = !!project.roi_estimate || !!project.rental_yield_estimate;
     const hasDeveloper = !!project.developer;
@@ -989,15 +989,17 @@ export default function ProjectDetailLayout({
             />
           </div>
 
-          {/* Gold divider before DLD */}
-          <div className="py-10">
+          {/* Gold divider before DLD - increased spacing */}
+          <div className="py-14 md:py-16">
             <div className="flex items-center justify-center gap-6">
               <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
               <div className="w-2 h-2 rotate-45 bg-gold/40" />
               <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
             </div>
           </div>
-          <DLDMarketWidget />
+          <div className="mb-8">
+            <DLDMarketWidget />
+          </div>
 
           {/* BROCHURE - Full width two-column layout - Always visible */}
           <div ref={brochureRef} id="brochure" className="mb-12 scroll-mt-40">
@@ -1044,7 +1046,7 @@ export default function ProjectDetailLayout({
           </div>
 
            {/* PAYMENT PLAN VISUALIZATION (Reelly-style enhanced) */}
-           {(!!project.payment_plan || paymentPlanDocs.length > 0 || !!project.payment_breakdown) && (
+           {(true) && ( /* Always show payment section */
            <div ref={paymentRef} id="payment" className="mb-16 scroll-mt-40">
              <PaymentPlanVisualization
                paymentPlan={project.payment_plan}
@@ -1135,14 +1137,12 @@ export default function ProjectDetailLayout({
 
           {/* INQUIRY FORM - Full Width with premium styling - Uses Contact Page Form */}
           <div ref={inquiryRef} className="scroll-mt-32 mb-8">
-            <div className="jj-card-inner p-8 md:p-10 border-2 border-gold/40 bg-gradient-to-br from-champagne/50 via-champagne-light/30 to-champagne/50">
               <ConsultationRequestForm
                 title={`Register Interest in ${project.name}`}
                 subtitle={`Get expert guidance on ${project.name}${project.location ? ` at ${project.location}` : ''}. Our specialists are ready to assist you.`}
                 projectId={project.id}
                 projectName={project.name}
               />
-            </div>
           </div>
 
 

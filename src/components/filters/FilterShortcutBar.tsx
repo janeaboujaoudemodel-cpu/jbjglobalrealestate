@@ -217,7 +217,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
     arr.includes(val) ? arr.filter(v => v !== val) : [...arr, val];
 
   // Pill styling
-  const pillBase = "inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-semibold transition-all cursor-pointer whitespace-nowrap select-none";
+  const pillBase = "inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-semibold transition-all cursor-pointer whitespace-nowrap select-none overflow-hidden text-ellipsis max-w-[160px]";
   const pillInactive = isDark
     ? "bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20"
     : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 text-black hover:border-gold/60";
@@ -356,9 +356,11 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
           {row1CanScroll && (
             <button 
               onClick={() => scrollRow(row1Ref)}
-              className="absolute right-0 top-0 bottom-0 w-8 flex items-center justify-center bg-gradient-to-l from-[#F5F0E6] via-[#F5F0E6]/90 to-transparent pointer-events-auto z-10"
+              className="absolute right-0 top-0 bottom-0 w-12 flex items-center justify-center bg-gradient-to-l from-[#EDE4D3] via-[#EDE4D3]/95 to-transparent pointer-events-auto z-10"
             >
-              <ChevronRightIcon className="w-4 h-4 text-gold animate-pulse" />
+              <span className="w-7 h-7 rounded-full bg-gold flex items-center justify-center shadow-lg">
+                <ChevronRightIcon className="w-4 h-4 text-black" />
+              </span>
             </button>
           )}
         </div>
@@ -681,9 +683,11 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
           {row2CanScroll && (
             <button 
               onClick={() => scrollRow(row2Ref)}
-              className="absolute right-0 top-0 bottom-0 w-8 flex items-center justify-center bg-gradient-to-l from-[#F5F0E6] via-[#F5F0E6]/90 to-transparent pointer-events-auto z-10"
+              className="absolute right-0 top-0 bottom-0 w-12 flex items-center justify-center bg-gradient-to-l from-[#EDE4D3] via-[#EDE4D3]/95 to-transparent pointer-events-auto z-10"
             >
-              <ChevronRightIcon className="w-4 h-4 text-gold animate-pulse" />
+              <span className="w-7 h-7 rounded-full bg-gold flex items-center justify-center shadow-lg">
+                <ChevronRightIcon className="w-4 h-4 text-black" />
+              </span>
             </button>
           )}
         </div>

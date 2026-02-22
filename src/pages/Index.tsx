@@ -534,14 +534,12 @@ const Index = () => {
       {/* WHY CHOOSE US - Master Blueprint: Section 5 */}
       <WhyChooseUs />
 
-      {/* DIVIDER */}
-      <SectionDivider />
+      {/* DIVIDER removed under Why Choose Us per user request */}
 
       {/* AREAS WE COVER - Master Blueprint: Section 6 (12 area links) */}
       <AreasWeCover />
 
-      {/* DIVIDER */}
-      <SectionDivider />
+      {/* DIVIDER removed under Areas We Cover per user request */}
 
       {/* TESTIMONIALS - Master Blueprint: Section 7 (3 testimonials) */}
       <Suspense fallback={<SectionLoader />}>
