@@ -395,11 +395,11 @@ const BrokerHub = () => {
           </Card>
         </div>
 
-        {/* Broker AI Tools */}
+        {/* Broker AI Tools - Show top 3 only */}
         <div>
           <h2 className="text-xl font-bold text-white mb-4">AI Sales & Communication Tools</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {brokerAITools.map(tool => {
+            {brokerAITools.slice(0, 3).map(tool => {
               const Icon = tool.icon;
               return (
                 <button
@@ -413,6 +413,12 @@ const BrokerHub = () => {
                 </button>
               );
             })}
+          </div>
+          <div className="mt-4 text-center">
+            <Button onClick={() => navigate('/ai-hub')} className="bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white font-medium">
+              Explore All AI Tools
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
           </div>
         </div>
 
