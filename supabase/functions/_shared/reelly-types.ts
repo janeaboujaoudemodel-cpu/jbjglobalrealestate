@@ -366,6 +366,24 @@ export function extractAmenities(project: ReellyProject): string[] {
   return amenities;
 }
 
+/**
+ * Extract amenity images mapping from Reelly project_amenities.
+ * Returns a Record<string, string> mapping amenity name → real photo URL.
+ */
+export function extractAmenityImages(project: ReellyProject): Record<string, string> {
+  const images: Record<string, string> = {};
+  if (Array.isArray(project.project_amenities)) {
+    for (const item of project.project_amenities) {
+      const name = item?.amenity?.name || item?.name;
+      const iconUrl = item?.amenity?.icon?.url || item?.icon?.url;
+      if (name && iconUrl) {
+        images[name] = iconUrl;
+      }
+    }
+  }
+  return images;
+}
+
 export function extractUnitTypes(project: ReellyProject): Array<{ type: string; bedrooms?: number; bathrooms?: number; size_min?: number; size_max?: number; price_from?: number; price_to?: number; available?: number; layout_url?: string }> {
   const units: Array<{ type: string; bedrooms?: number; bathrooms?: number; size_min?: number; size_max?: number; price_from?: number; price_to?: number; available?: number; layout_url?: string }> = [];
   // Standard fields
