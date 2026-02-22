@@ -92,13 +92,18 @@ const Section = ({ id, children, className = "" }: { id: string; children: React
   </section>
 );
 
+/* ─── Champagne Card ─── */
+const CCard = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
+  <div className={`bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-[#C8A766]/30 rounded-xl p-6 ${className}`}>{children}</div>
+);
+
 const SectionTitle = ({ children }: { children: React.ReactNode }) => (
   <motion.h2
     variants={fadeInUp}
     initial="hidden"
     whileInView="visible"
     viewport={{ once: true }}
-    className="text-3xl md:text-4xl font-bold text-black mb-8"
+    className="text-3xl md:text-4xl font-bold text-white mb-8"
     style={{ fontFamily: "Playfair Display, serif" }}
   >
     {children}
@@ -132,38 +137,38 @@ const PropertyManagement = () => {
       />
 
       {/* ═══ 1. HERO ═══ */}
-      <section className="relative py-28 md:py-36 overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F8F4EC] to-[#EDE4D3]">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-gold/8 via-transparent to-transparent" />
-        <div className="absolute top-20 right-20 w-72 h-72 bg-gold/6 rounded-full blur-[100px]" />
-        <div className="absolute bottom-10 left-10 w-56 h-56 bg-gold/8 rounded-full blur-[80px]" />
+      <section className="relative py-28 md:py-36 overflow-hidden bg-gradient-to-b from-[#1a1714] to-[#151210] border-b border-[#C8A766]/20">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#C8A766]/8 via-transparent to-transparent" />
+        <div className="absolute top-20 right-20 w-72 h-72 bg-[#C8A766]/6 rounded-full blur-[100px]" />
+        <div className="absolute bottom-10 left-10 w-56 h-56 bg-[#C8A766]/8 rounded-full blur-[80px]" />
 
         <div className="max-w-5xl mx-auto px-4 relative z-10">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full mb-6 border border-gold/30 bg-white/60 backdrop-blur-sm">
-              <Building2 className="w-4 h-4 text-gold" />
-              <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">Services</span>
+            <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full mb-6 border border-[#C8A766]/30 bg-black/30 backdrop-blur-sm">
+              <Building2 className="w-4 h-4 text-[#C8A766]" />
+              <span className="text-[#C8A766] font-semibold text-xs uppercase tracking-[0.2em]">Services</span>
             </div>
 
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-4 tracking-tight" style={{ fontFamily: "Playfair Display, serif" }}>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 tracking-tight" style={{ fontFamily: "Playfair Display, serif" }}>
               Property Management &<br />Asset Stewardship
             </h1>
 
-            <p className="text-lg md:text-xl text-gold/80 font-medium mb-6" style={{ fontFamily: "Playfair Display, serif" }}>
+            <p className="text-lg md:text-xl text-[#C8A766]/80 font-medium mb-6" style={{ fontFamily: "Playfair Display, serif" }}>
               Comprehensive Management for Residential, Commercial & Investment Properties in the UAE
             </p>
 
-            <p className="text-zinc-700 text-base md:text-lg max-w-3xl leading-relaxed mb-4">
+            <p className="text-zinc-300 text-base md:text-lg max-w-3xl leading-relaxed mb-4">
               Our Property Management division delivers structured, transparent, and performance-driven management solutions designed to protect, optimize, and enhance the value of your real estate assets.
             </p>
-            <p className="text-zinc-600 text-base max-w-3xl leading-relaxed mb-10">
+            <p className="text-zinc-400 text-base max-w-3xl leading-relaxed mb-10">
               We manage properties with operational precision, financial accountability, and regulatory compliance in alignment with UAE real estate laws and authority requirements.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <PremiumHeroButton href="/contact?service=property-management" variant="light-bg">
+              <PremiumHeroButton href="/contact?service=property-management">
                 Request Management Proposal
               </PremiumHeroButton>
-              <PremiumHeroButton href="/contact" variant="light-bg">
+              <PremiumHeroButton href="/contact">
                 Schedule Asset Consultation
               </PremiumHeroButton>
             </div>
@@ -172,9 +177,9 @@ const PropertyManagement = () => {
       </section>
 
       {/* ═══ 2. TABLE OF CONTENTS ═══ */}
-      <section className="bg-white py-12 md:py-16 border-b border-gold/10">
+      <section className="bg-[#151210] py-12 md:py-16 border-b border-[#C8A766]/10">
         <div className="max-w-5xl mx-auto px-4">
-          <h2 className="text-2xl font-bold text-black mb-8 text-center" style={{ fontFamily: "Playfair Display, serif" }}>
+          <h2 className="text-2xl font-bold text-white mb-8 text-center" style={{ fontFamily: "Playfair Display, serif" }}>
             Table of Contents
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
@@ -182,9 +187,9 @@ const PropertyManagement = () => {
               <button
                 key={s.id}
                 onClick={() => scrollTo(s.id)}
-                className="text-left px-4 py-3 rounded-xl border border-gold/20 bg-gradient-to-br from-white to-[#FDFBF7] hover:border-gold/50 hover:shadow-md transition-all text-sm text-zinc-700 hover:text-black flex items-center gap-2 group"
+                className="text-left px-4 py-3 rounded-xl border border-[#C8A766]/20 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] hover:border-[#C8A766]/50 hover:shadow-md transition-all text-sm text-zinc-700 hover:text-black flex items-center gap-2 group"
               >
-                <span className="text-gold/60 font-semibold text-xs">{String(i + 1).padStart(2, "0")}</span>
+                <span className="text-[#C8A766]/80 font-semibold text-xs">{String(i + 1).padStart(2, "0")}</span>
                 <span className="group-hover:text-black transition-colors">{s.label}</span>
               </button>
             ))}
@@ -193,7 +198,7 @@ const PropertyManagement = () => {
       </section>
 
       {/* ═══ 3. MANAGEMENT OVERVIEW ═══ */}
-      <div className="bg-gradient-to-br from-[#FDFBF7] via-white to-[#F8F4EC]">
+      <div className="bg-gradient-to-b from-[#151210] via-[#0F0D0B] to-[#0A0908]">
         <Section id="overview">
           <SectionTitle>Management Overview</SectionTitle>
           <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
@@ -201,7 +206,7 @@ const PropertyManagement = () => {
               We provide full-spectrum property management for:
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-              <div className="p-6 rounded-xl border border-gold/20 bg-white">
+              <div className="p-6 rounded-xl border border-[#C8A766]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
                 <h3 className="font-semibold text-black mb-3" style={{ fontFamily: "Playfair Display, serif" }}>Clients We Serve</h3>
                 <BulletList icon={Users} items={[
                   "Individual investors",
@@ -211,7 +216,7 @@ const PropertyManagement = () => {
                   "Corporate property owners",
                 ]} />
               </div>
-              <div className="p-6 rounded-xl border border-gold/20 bg-white">
+              <div className="p-6 rounded-xl border border-[#C8A766]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
                 <h3 className="font-semibold text-black mb-3" style={{ fontFamily: "Playfair Display, serif" }}>Services Designed to Ensure</h3>
                 <BulletList items={[
                   "Revenue optimization",
@@ -230,7 +235,7 @@ const PropertyManagement = () => {
         <Section id="residential">
           <SectionTitle>Residential Property Management</SectionTitle>
           <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <div className="p-6 md:p-8 rounded-xl border border-gold/20 bg-white mb-6">
+            <div className="p-6 md:p-8 rounded-xl border border-[#C8A766]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] mb-6">
               <h3 className="font-semibold text-black mb-4 text-lg" style={{ fontFamily: "Playfair Display, serif" }}>Services Include</h3>
               <BulletList items={[
                 "Tenant marketing & screening",
@@ -256,7 +261,7 @@ const PropertyManagement = () => {
         <Section id="commercial">
           <SectionTitle>Commercial Property Management</SectionTitle>
           <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <div className="p-6 md:p-8 rounded-xl border border-gold/20 bg-white mb-6">
+            <div className="p-6 md:p-8 rounded-xl border border-[#C8A766]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] mb-6">
               <h3 className="font-semibold text-black mb-4 text-lg" style={{ fontFamily: "Playfair Display, serif" }}>Services Include</h3>
               <BulletList items={[
                 "Commercial leasing strategy",
@@ -283,10 +288,10 @@ const PropertyManagement = () => {
               <div className="space-y-5">
                 {leasingSteps.map((step, i) => (
                   <motion.div key={i} variants={fadeInUp} className="flex items-center gap-5 pl-1">
-                    <div className="w-12 h-12 rounded-full bg-white border-2 border-gold/40 flex items-center justify-center shrink-0 z-10">
-                      <span className="text-gold font-bold text-sm">{i + 1}</span>
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-[#C8A766]/40 flex items-center justify-center shrink-0 z-10">
+                      <span className="text-[#C8A766] font-bold text-sm">{i + 1}</span>
                     </div>
-                    <div className="flex-1 p-4 rounded-xl bg-white border border-gold/15">
+                    <div className="flex-1 p-4 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-[#C8A766]/30">
                       <span className="font-medium text-black">{step}</span>
                     </div>
                   </motion.div>
@@ -317,7 +322,7 @@ const PropertyManagement = () => {
                 { icon: FileText, label: "Monthly statements" },
                 { icon: Calendar, label: "Annual income summary" },
               ].map((item, i) => (
-                <div key={i} className="flex items-center gap-3 p-4 rounded-xl bg-white border border-gold/15">
+                <div key={i} className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-[#C8A766]/30">
                   <item.icon className="w-5 h-5 text-gold shrink-0" />
                   <span className="text-zinc-700">{item.label}</span>
                 </div>
@@ -346,7 +351,7 @@ const PropertyManagement = () => {
                 { icon: Shield, label: "Cost approval protocol" },
                 { icon: ClipboardList, label: "Property condition reporting" },
               ].map((item, i) => (
-                <div key={i} className="p-5 rounded-xl bg-white border border-gold/15 flex items-start gap-3">
+                <div key={i} className="p-5 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-[#C8A766]/30 flex items-start gap-3">
                   <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center shrink-0">
                     <item.icon className="w-5 h-5 text-gold" />
                   </div>
@@ -363,7 +368,7 @@ const PropertyManagement = () => {
           <SectionTitle>Legal & Regulatory Compliance</SectionTitle>
           <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             <p className="text-zinc-700 mb-6 leading-relaxed">We operate in alignment with:</p>
-            <div className="p-6 md:p-8 rounded-xl border border-gold/20 bg-white mb-6">
+            <div className="p-6 md:p-8 rounded-xl border border-[#C8A766]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] mb-6">
               <BulletList icon={Scale} items={[
                 "Dubai Land Department (DLD)",
                 "RERA regulations",
@@ -394,7 +399,7 @@ const PropertyManagement = () => {
                 { icon: RefreshCw, title: "Lease Renewal Alerts", desc: "Key dates and renewal reminders." },
                 { icon: Eye, title: "Occupancy Performance", desc: "Utilization rates and market positioning." },
               ].map((item, i) => (
-                <div key={i} className="p-5 rounded-xl bg-white border border-gold/15">
+                <div key={i} className="p-5 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-[#C8A766]/30">
                   <div className="flex items-center gap-3 mb-2">
                     <item.icon className="w-5 h-5 text-gold" />
                     <h4 className="font-semibold text-black">{item.title}</h4>
@@ -416,11 +421,11 @@ const PropertyManagement = () => {
               <div className="space-y-5">
                 {onboardingSteps.map((s) => (
                   <motion.div key={s.step} variants={fadeInUp} className="flex items-center gap-5 pl-1">
-                    <div className="w-12 h-12 rounded-full bg-white border-2 border-gold/40 flex items-center justify-center shrink-0 z-10">
-                      <span className="text-gold font-bold text-sm">{s.step}</span>
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-[#C8A766]/40 flex items-center justify-center shrink-0 z-10">
+                      <span className="text-[#C8A766] font-bold text-sm">{s.step}</span>
                     </div>
-                    <div className="flex-1 p-4 rounded-xl bg-white border border-gold/15 flex items-center gap-3">
-                      <s.icon className="w-5 h-5 text-gold shrink-0" />
+                    <div className="flex-1 p-4 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-[#C8A766]/30 flex items-center gap-3">
+                      <s.icon className="w-5 h-5 text-[#C8A766] shrink-0" />
                       <span className="font-medium text-black">{s.title}</span>
                     </div>
                   </motion.div>
@@ -435,7 +440,7 @@ const PropertyManagement = () => {
         <Section id="fees">
           <SectionTitle>Service Fees & Structure</SectionTitle>
           <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <div className="p-6 md:p-8 rounded-xl border border-gold/20 bg-white">
+            <div className="p-6 md:p-8 rounded-xl border border-[#C8A766]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
               <p className="text-zinc-700 leading-relaxed">
                 Management fees are structured based on property type, asset size, and scope of service. A tailored proposal is issued following asset evaluation.
               </p>
@@ -453,7 +458,7 @@ const PropertyManagement = () => {
           <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             <Accordion type="single" collapsible className="space-y-3">
               {faqData.map((faq, i) => (
-                <AccordionItem key={i} value={`faq-${i}`} className="border border-gold/20 rounded-xl px-5 bg-white">
+                <AccordionItem key={i} value={`faq-${i}`} className="border border-[#C8A766]/30 rounded-xl px-5 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
                   <AccordionTrigger className="text-black hover:no-underline font-medium">
                     {faq.q}
                   </AccordionTrigger>
@@ -471,7 +476,7 @@ const PropertyManagement = () => {
         <Section id="consultation">
           <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-black mb-4" style={{ fontFamily: "Playfair Display, serif" }}>
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4" style={{ fontFamily: "Playfair Display, serif" }}>
                 Entrust Your Asset to Structured Management
               </h2>
               <p className="text-zinc-600 max-w-2xl mx-auto">
@@ -479,7 +484,7 @@ const PropertyManagement = () => {
               </p>
             </div>
 
-            <div className="max-w-2xl mx-auto p-6 md:p-8 rounded-2xl border border-gold/20 bg-white shadow-[0_4px_20px_rgba(200,167,102,0.08)]">
+            <div className="max-w-2xl mx-auto p-6 md:p-8 rounded-2xl border border-[#C8A766]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
                   <label className="text-sm font-medium text-black mb-1 block">Full Name</label>
