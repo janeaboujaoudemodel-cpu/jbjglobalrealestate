@@ -333,6 +333,8 @@ const JoinInvestorList = lazy(() => import("./pages/JoinInvestorList"));
 const Reviews = lazy(() => import("./pages/Reviews"));
 const ThankYou = lazy(() => import("./pages/ThankYou"));
 const Disclaimers = lazy(() => import("./pages/Disclaimers"));
+const TrustAndCompliance = lazy(() => import("./pages/TrustAndCompliance"));
+const RiskDisclosure = lazy(() => import("./pages/RiskDisclosure"));
 
 // Owner Pages - lazy loaded
 const OwnerAuditPage = lazy(() => import("./pages/owner/OwnerAuditPage"));
@@ -525,6 +527,8 @@ const App = () => (
                 <Route path="/cookies" element={<Cookies />} />
                 <Route path="/disclaimers" element={<Disclaimers />} />
                 <Route path="/trust-and-audit-center" element={<TrustAndAuditCenter />} />
+                <Route path="/trust-compliance" element={<TrustAndCompliance />} />
+                <Route path="/risk-disclosure" element={<RiskDisclosure />} />
                 
                 {/* Blueprint routes - New pages */}
                 <Route path="/sell" element={<SellWithUs />} />
