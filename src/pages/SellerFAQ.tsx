@@ -1,4 +1,6 @@
 import { SEOHead } from "@/components/SEOHead";
+import { GuideBookSection } from "@/components/books/GuideBookSection";
+import { sellerFaqBook } from "@/data/bookCollections";
 import { motion } from "framer-motion";
 import { HelpCircle, Shield, Banknote, FileText, Clock, Phone, Search, LucideIcon } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -48,6 +50,7 @@ const SellerFAQ = () => {
           <Button asChild className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3)]"><Link to="/contact"><Phone className="w-4 h-4 mr-2 text-black" /><span className="text-gold font-semibold">Ask Our Team</span></Link></Button>
         </>}
       />
+      <GuideBookSection book={sellerFaqBook} />
       <div className="hidden lg:block fixed right-8 top-1/4 z-[55] max-w-xs" style={{ marginBottom: '180px' }}><FAQFloatingSidebar categories={categories} title="Navigator" /></div>
       <section id="faq-content" className="py-16 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl relative">
         <div className="w-full px-4 sm:px-6 lg:px-8">
