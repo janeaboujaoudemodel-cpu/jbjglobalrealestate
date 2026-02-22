@@ -198,7 +198,7 @@ const Favorites = () => {
   const handleShareWhatsApp = () => {
     if (!shortlistedProjects?.length) return;
     const { whatsapp } = buildShortlistShareText();
-    window.open(getWhatsAppUrl(whatsapp), "_blank");
+    window.location.href = getWhatsAppUrl(whatsapp);
   };
 
   const handleCopyShortlist = async () => {

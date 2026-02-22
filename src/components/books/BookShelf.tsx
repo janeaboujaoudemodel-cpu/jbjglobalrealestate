@@ -34,7 +34,7 @@ export function BookShelf({ books, title = 'Books, Guides & Intelligence' }: Boo
           <BookOpen className="w-5 h-5 text-amber-400" />
           {title}
         </h2>
-        <Card className="bg-gradient-to-br from-zinc-900/80 to-zinc-950 border border-amber-500/20 overflow-hidden">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-[#C8A766]/40 overflow-hidden shadow-[0_0_30px_rgba(200,167,102,0.15)]">
           <CardContent className="p-8">
             <div className="flex flex-wrap justify-center gap-8">
               {books.map((book) => (
@@ -45,18 +45,18 @@ export function BookShelf({ books, title = 'Books, Guides & Intelligence' }: Boo
                   whileHover={{ y: -8 }}
                   transition={{ type: 'spring', stiffness: 300 }}
                 >
-                  <div className="relative w-32 h-44 rounded-r-md overflow-hidden shadow-[4px_4px_20px_rgba(0,0,0,0.6)] group-hover:shadow-[6px_6px_30px_rgba(200,167,102,0.3)] transition-shadow">
-                    <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-black/40 to-transparent z-10" />
+                  <div className="relative w-32 h-44 rounded-r-md overflow-hidden border border-[#C8A766]/40 shadow-[4px_4px_20px_rgba(0,0,0,0.25)] group-hover:shadow-[6px_6px_30px_rgba(200,167,102,0.4)] transition-shadow">
+                    <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-black/30 to-transparent z-10" />
                     <img src={book.cover} alt={book.title} className="w-full h-full object-cover" />
                     <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
-                  <p className="text-xs text-zinc-400 text-center font-medium group-hover:text-amber-300 transition-colors leading-tight">
+                  <p className="text-xs text-black/70 text-center font-medium group-hover:text-[#C8A766] transition-colors leading-tight">
                     {book.title}
                   </p>
                 </motion.button>
               ))}
             </div>
-            <div className="mt-6 h-1 bg-gradient-to-r from-transparent via-amber-800/50 to-transparent rounded-full" />
+            <div className="mt-6 h-1 bg-gradient-to-r from-transparent via-[#C8A766]/50 to-transparent rounded-full" />
           </CardContent>
         </Card>
       </div>
