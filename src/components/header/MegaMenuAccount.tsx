@@ -181,19 +181,21 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
           <>
             {/* Premium User Header - Horizontal Layout */}
             <div className="flex items-center gap-5 pb-5 mb-5 border-b-2 border-gold/40">
-              {/* Fixed-size avatar container to prevent layout shift */}
-              <div className="w-16 h-16 flex-shrink-0">
-                <Avatar className="h-16 w-16 border border-gold bg-transparent">
+              {/* Fixed-size avatar container - clickable to profile */}
+              <Link to="/profile" onClick={onClose} className="w-16 h-16 flex-shrink-0 cursor-pointer group">
+                <Avatar className="h-16 w-16 border border-gold bg-transparent group-hover:border-gold/80 transition-all group-hover:ring-2 group-hover:ring-gold/30">
                   <AvatarImage src={accountPhotoUrl ?? ""} alt={`${accountDisplayName} profile photo`} className="object-cover" />
                   <AvatarFallback className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold text-black text-xl font-bold">
                     {avatarInitials}
                   </AvatarFallback>
                 </Avatar>
-              </div>
+              </Link>
               <div className="min-w-0 flex-1">
-                <p className="text-black font-bold text-lg truncate" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                  {firstName} {lastName}
-                </p>
+                <Link to="/profile" onClick={onClose} className="block hover:text-gold transition-colors">
+                  <p className="text-black font-bold text-lg truncate" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                    {accountDisplayName}
+                  </p>
+                </Link>
                 <p className="text-black/60 text-sm truncate">{user.email}</p>
                 {/* Show mode + tier badges + points */}
                 {isCombinedMode && investorTierProgress && brokerTierProgress ? (

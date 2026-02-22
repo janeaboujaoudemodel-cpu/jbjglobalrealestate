@@ -34,15 +34,15 @@ const EVENT_LABELS: Record<string, string> = {
 };
 
 const EVENT_COLORS: Record<string, string> = {
-  page_view: "text-blue-500",
-  click: "text-zinc-500",
-  login: "text-emerald-500",
-  search: "text-purple-500",
+  page_view: "text-blue-600",
+  click: "text-stone-500",
+  login: "text-emerald-600",
+  search: "text-purple-600",
   listing_view: "text-gold",
   property_view: "text-gold",
   favorite: "text-red-500",
-  lead_submit: "text-emerald-600",
-  ai_tool_used: "text-purple-600",
+  lead_submit: "text-emerald-700",
+  ai_tool_used: "text-purple-700",
 };
 
 const DeviceIcon = ({ device }: { device: string }) => {
@@ -81,7 +81,7 @@ const MyDashboardActivity = () => {
 
   if (authLoading || isLoading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-[#F5EBD7] via-[#EDE4D3] to-[#E0D5C0] flex items-center justify-center">
         <Loader2 className="w-8 h-8 text-gold animate-spin" />
       </div>
     );
@@ -102,39 +102,39 @@ const MyDashboardActivity = () => {
         description="View your activity history and engagement on the platform."
       />
       
-      <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0d0d0d 100%)' }}>
-        <div className="mx-3 md:mx-4 lg:mx-6 my-6 rounded-2xl border border-gold/30 overflow-hidden"
-          style={{ background: 'linear-gradient(145deg, rgba(20,18,14,0.95) 0%, rgba(30,26,20,0.9) 50%, rgba(15,13,10,0.95) 100%)' }}
+      <div className="min-h-screen bg-gradient-to-b from-[#F5EBD7] via-[#EDE4D3] to-[#E0D5C0]">
+        <div className="mx-3 md:mx-4 lg:mx-6 my-6 rounded-2xl border-2 border-gold/30 overflow-hidden"
+          style={{ background: 'linear-gradient(145deg, #FDFBF7 0%, #F5EBD7 50%, #EDE4D3 100%)' }}
         >
           <div className="container mx-auto px-4 py-8 max-w-5xl">
             {/* Back Button */}
-            <Button variant="ghost" onClick={() => navigate('/my-dashboard')} className="mb-6 text-gold hover:text-gold/80">
+            <Button variant="ghost" onClick={() => navigate('/my-dashboard')} className="mb-6 text-gold hover:text-gold/80 hover:bg-gold/10">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Dashboard
             </Button>
 
             {/* Header */}
             <div className="mb-8">
-              <h1 className="text-3xl font-bold" style={{ fontFamily: 'Poppins, sans-serif', background: 'linear-gradient(135deg, #FFFFFF 0%, #F5EBD7 40%, #C8A766 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              <h1 className="text-3xl font-bold text-black" style={{ fontFamily: 'Poppins, sans-serif' }}>
                 My Activity Intelligence
               </h1>
-              <p className="text-zinc-400 mt-2">Real-time behavioral analytics and engagement tracking.</p>
+              <p className="text-stone-500 mt-2">Real-time behavioral analytics and engagement tracking.</p>
             </div>
 
             {/* Stats Cards — 4 columns */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
               {[
-                { icon: Calendar, label: 'Days Active (30d)', value: stats.daysActive30d, color: 'from-blue-500/20 to-blue-600/10' },
-                { icon: Flame, label: 'Day Streak', value: stats.currentStreak, color: 'from-orange-500/20 to-red-500/10' },
-                { icon: TrendingUp, label: 'Points This Week', value: stats.pointsThisWeek, color: 'from-emerald-500/20 to-emerald-600/10' },
-                { icon: Activity, label: 'Activities (30d)', value: stats.totalActivities30d, color: 'from-gold/20 to-gold/10' },
+                { icon: Calendar, label: 'Days Active (30d)', value: stats.daysActive30d, color: 'from-blue-500/15 to-blue-600/5' },
+                { icon: Flame, label: 'Day Streak', value: stats.currentStreak, color: 'from-orange-500/15 to-red-500/5' },
+                { icon: TrendingUp, label: 'Points This Week', value: stats.pointsThisWeek, color: 'from-emerald-500/15 to-emerald-600/5' },
+                { icon: Activity, label: 'Activities (30d)', value: stats.totalActivities30d, color: 'from-gold/20 to-gold/5' },
               ].map((stat, i) => (
                 <motion.div key={stat.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
-                  <Card className={`border-gold/20 bg-gradient-to-br ${stat.color} backdrop-blur-sm`}>
+                  <Card className={`border-2 border-gold/30 bg-gradient-to-br ${stat.color} backdrop-blur-sm shadow-sm`}>
                     <CardContent className="p-4 text-center">
                       <stat.icon className="w-6 h-6 text-gold mx-auto mb-2" />
-                      <p className="text-2xl font-bold text-white"><AnimatedCounter value={stat.value} /></p>
-                      <p className="text-xs text-zinc-400">{stat.label}</p>
+                      <p className="text-2xl font-bold text-black"><AnimatedCounter value={stat.value} /></p>
+                      <p className="text-xs text-stone-500">{stat.label}</p>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -143,32 +143,32 @@ const MyDashboardActivity = () => {
 
             {/* Secondary stats row */}
             <div className="grid grid-cols-3 gap-4 mb-8">
-              <Card className="border-gold/20 bg-white/5">
+              <Card className="border-2 border-gold/30 bg-white/60">
                 <CardContent className="p-4 text-center">
                   <Zap className="w-5 h-5 text-gold mx-auto mb-1" />
-                  <p className="text-xl font-bold text-white"><AnimatedCounter value={stats.totalPoints} /></p>
-                  <p className="text-xs text-zinc-400">Total Points</p>
+                  <p className="text-xl font-bold text-black"><AnimatedCounter value={stats.totalPoints} /></p>
+                  <p className="text-xs text-stone-500">Total Points</p>
                 </CardContent>
               </Card>
-              <Card className="border-gold/20 bg-white/5">
+              <Card className="border-2 border-gold/30 bg-white/60">
                 <CardContent className="p-4 text-center">
                   <BarChart3 className="w-5 h-5 text-gold mx-auto mb-1" />
-                  <p className="text-xl font-bold text-white"><AnimatedCounter value={stats.totalSessions} /></p>
-                  <p className="text-xs text-zinc-400">Total Sessions</p>
+                  <p className="text-xl font-bold text-black"><AnimatedCounter value={stats.totalSessions} /></p>
+                  <p className="text-xs text-stone-500">Total Sessions</p>
                 </CardContent>
               </Card>
-              <Card className="border-gold/20 bg-white/5">
+              <Card className="border-2 border-gold/30 bg-white/60">
                 <CardContent className="p-4 text-center">
                   <Clock className="w-5 h-5 text-gold mx-auto mb-1" />
-                  <p className="text-xl font-bold text-white">{formatDuration(stats.avgSessionDuration)}</p>
-                  <p className="text-xs text-zinc-400">Avg Session</p>
+                  <p className="text-xl font-bold text-black">{formatDuration(stats.avgSessionDuration)}</p>
+                  <p className="text-xs text-stone-500">Avg Session</p>
                 </CardContent>
               </Card>
             </div>
 
             {/* VIP Tier & Scores */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
-              <Card className="border-gold/20 bg-gradient-to-r from-gold/5 via-white/5 to-gold/5 mb-8">
+              <Card className="border-2 border-gold/40 bg-gradient-to-r from-gold/10 via-white/80 to-gold/10 mb-8 shadow-sm">
                 <CardContent className="p-5">
                   <div className="flex flex-col md:flex-row items-center gap-6">
                     {/* VIP Badge */}
@@ -177,7 +177,7 @@ const MyDashboardActivity = () => {
                         <Crown className="w-7 h-7 text-gold" />
                       </div>
                       <div>
-                        <p className="text-xs text-zinc-500 uppercase tracking-wider">VIP Status</p>
+                        <p className="text-xs text-stone-500 uppercase tracking-wider">VIP Status</p>
                         <p className="text-xl font-bold text-gold">{stats.vipTier}</p>
                       </div>
                     </div>
@@ -191,11 +191,11 @@ const MyDashboardActivity = () => {
                       ].map(score => (
                         <div key={score.label} className="text-center">
                           <div className="flex items-center justify-center gap-1 mb-1">
-                            <score.icon className="w-3.5 h-3.5 text-zinc-400" />
-                            <span className="text-xs text-zinc-400">{score.label}</span>
+                            <score.icon className="w-3.5 h-3.5 text-stone-500" />
+                            <span className="text-xs text-stone-500">{score.label}</span>
                           </div>
-                          <p className="text-lg font-bold text-white">{score.value}<span className="text-xs text-zinc-500">/100</span></p>
-                          <div className="h-1.5 bg-white/10 rounded-full overflow-hidden mt-1">
+                          <p className="text-lg font-bold text-black">{score.value}<span className="text-xs text-stone-400">/100</span></p>
+                          <div className="h-1.5 bg-gold/10 rounded-full overflow-hidden mt-1">
                             <div className={`h-full bg-gradient-to-r ${score.color} rounded-full transition-all duration-1000`} style={{ width: `${score.value}%` }} />
                           </div>
                         </div>
@@ -206,19 +206,19 @@ const MyDashboardActivity = () => {
               </Card>
             </motion.div>
             {stats.dailyActivity.length > 0 && (
-              <Card className="border-gold/20 bg-white/5 mb-8">
+              <Card className="border-2 border-gold/30 bg-white/70 mb-8">
                 <CardHeader className="pb-2">
                   <div className="flex items-center justify-between">
-                    <CardTitle className="text-white flex items-center gap-2">
+                    <CardTitle className="text-black flex items-center gap-2">
                       <BarChart3 className="w-5 h-5 text-gold" />
                       Daily Activity
                     </CardTitle>
                     <div className="flex gap-1">
                       <Button size="sm" variant={chartMode === 'events' ? 'default' : 'ghost'}
-                        className={chartMode === 'events' ? 'bg-gold text-black hover:bg-gold/90 h-7 text-xs' : 'text-zinc-400 h-7 text-xs'}
+                        className={chartMode === 'events' ? 'bg-gold text-black hover:bg-gold/90 h-7 text-xs font-semibold' : 'text-stone-500 hover:text-black hover:bg-gold/10 h-7 text-xs'}
                         onClick={() => setChartMode('events')}>Events</Button>
                       <Button size="sm" variant={chartMode === 'points' ? 'default' : 'ghost'}
-                        className={chartMode === 'points' ? 'bg-gold text-black hover:bg-gold/90 h-7 text-xs' : 'text-zinc-400 h-7 text-xs'}
+                        className={chartMode === 'points' ? 'bg-gold text-black hover:bg-gold/90 h-7 text-xs font-semibold' : 'text-stone-500 hover:text-black hover:bg-gold/10 h-7 text-xs'}
                         onClick={() => setChartMode('points')}>Points</Button>
                     </div>
                   </div>
@@ -226,11 +226,11 @@ const MyDashboardActivity = () => {
                 <CardContent>
                   <ResponsiveContainer width="100%" height={200}>
                     <AreaChart data={stats.dailyActivity}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(200,167,102,0.1)" />
-                      <XAxis dataKey="date" tick={{ fill: '#999', fontSize: 10 }} tickFormatter={d => d.slice(5)} />
-                      <YAxis tick={{ fill: '#999', fontSize: 10 }} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(200,167,102,0.15)" />
+                      <XAxis dataKey="date" tick={{ fill: '#78716c', fontSize: 10 }} tickFormatter={d => d.slice(5)} />
+                      <YAxis tick={{ fill: '#78716c', fontSize: 10 }} />
                       <Tooltip 
-                        contentStyle={{ background: '#1a1a1a', border: '1px solid rgba(200,167,102,0.3)', borderRadius: 8, color: '#fff' }}
+                        contentStyle={{ background: '#FDFBF7', border: '2px solid rgba(200,167,102,0.4)', borderRadius: 8, color: '#000' }}
                         labelFormatter={l => `Date: ${l}`}
                       />
                       <Area
@@ -256,9 +256,9 @@ const MyDashboardActivity = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               {/* Device Mix */}
               {stats.deviceMix.length > 0 && (
-                <Card className="border-gold/20 bg-white/5">
+                <Card className="border-2 border-gold/30 bg-white/70">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-white text-sm">Device Mix</CardTitle>
+                    <CardTitle className="text-black text-sm">Device Mix</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
@@ -270,10 +270,10 @@ const MyDashboardActivity = () => {
                             <DeviceIcon device={d.device} />
                             <div className="flex-1">
                               <div className="flex justify-between text-sm mb-1">
-                                <span className="text-zinc-300 capitalize">{d.device}</span>
+                                <span className="text-stone-700 capitalize">{d.device}</span>
                                 <span className="text-gold font-semibold">{pct}%</span>
                               </div>
-                              <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                              <div className="h-1.5 bg-gold/10 rounded-full overflow-hidden">
                                 <div className="h-full bg-gradient-to-r from-gold to-gold/60 rounded-full transition-all" style={{ width: `${pct}%` }} />
                               </div>
                             </div>
@@ -286,9 +286,9 @@ const MyDashboardActivity = () => {
               )}
 
               {/* Recent Activity Timeline */}
-              <Card className="border-gold/20 bg-white/5 md:col-span-2">
+              <Card className="border-2 border-gold/30 bg-white/70 md:col-span-2">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-white flex items-center gap-2">
+                  <CardTitle className="text-black flex items-center gap-2">
                     <Clock className="w-5 h-5 text-gold" />
                     Recent Activity
                   </CardTitle>
@@ -298,7 +298,7 @@ const MyDashboardActivity = () => {
                     <ScrollArea className="h-[300px] pr-4">
                       <div className="space-y-2">
                         {stats.recentEvents
-                          .filter(e => e.event_name !== 'click') // filter out noise
+                          .filter(e => e.event_name !== 'click')
                           .slice(0, 30)
                           .map((event, index) => (
                           <motion.div
@@ -306,21 +306,21 @@ const MyDashboardActivity = () => {
                             initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: index * 0.02 }}
-                            className="flex items-center gap-3 p-2.5 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
+                            className="flex items-center gap-3 p-2.5 rounded-lg bg-gold/5 hover:bg-gold/10 transition-colors border border-gold/10"
                           >
                             <div className={`w-8 h-8 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center shrink-0 ${EVENT_COLORS[event.event_name] || 'text-gold'}`}>
                               <Activity className="w-3.5 h-3.5" />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <p className="text-sm font-medium text-zinc-200 truncate">
+                              <p className="text-sm font-medium text-black truncate">
                                 {EVENT_LABELS[event.event_name] || event.event_name}
                               </p>
-                              <p className="text-xs text-zinc-500 truncate">
+                              <p className="text-xs text-stone-500 truncate">
                                 {event.page_path} · {formatDistanceToNow(new Date(event.created_at), { addSuffix: true })}
                               </p>
                             </div>
                             {event.points_awarded > 0 && (
-                              <Badge variant="outline" className="text-emerald-400 border-emerald-500/30 text-xs shrink-0">
+                              <Badge variant="outline" className="text-emerald-700 border-emerald-500/30 bg-emerald-50 text-xs shrink-0">
                                 +{event.points_awarded} pts
                               </Badge>
                             )}
@@ -330,9 +330,9 @@ const MyDashboardActivity = () => {
                     </ScrollArea>
                   ) : (
                     <div className="text-center py-12">
-                      <Activity className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
-                      <p className="text-zinc-400">Activity is being recorded live.</p>
-                      <p className="text-sm text-zinc-500 mt-1">Browse the platform to see your activity appear here.</p>
+                      <Activity className="w-12 h-12 text-gold/40 mx-auto mb-4" />
+                      <p className="text-stone-600">Activity is being recorded live.</p>
+                      <p className="text-sm text-stone-400 mt-1">Browse the platform to see your activity appear here.</p>
                     </div>
                   )}
                 </CardContent>
