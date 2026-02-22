@@ -13,6 +13,14 @@ export interface ActivityStats {
   dailyActivity: { date: string; events: number; points: number; duration: number }[];
   recentEvents: { id: string; event_name: string; page_path: string; points_awarded: number; created_at: string; metadata: any }[];
   deviceMix: { device: string; count: number }[];
+  // Scoring & VIP
+  intentScore: number;
+  engagementScore: number;
+  conversionProbability: number;
+  vipTier: string;
+  vipTierReason: string;
+  revenuePotential: number;
+  confidenceScore: number;
 }
 
 export function useActivityStats() {
@@ -31,7 +39,7 @@ export function useActivityStats() {
       weekStart.setHours(0, 0, 0, 0);
 
       // Parallel queries
-      const [dailyRes, eventsRes, sessionsRes, pointsRes] = await Promise.all([
+      const [dailyRes, eventsRes, sessionsRes, pointsRes, profileRes] = await Promise.all([
         // Daily activity for last 30 days
         supabase
           .from('user_daily_activity')
@@ -62,12 +70,20 @@ export function useActivityStats() {
           .from('user_points_ledger')
           .select('points, created_at')
           .eq('user_id', userId),
+
+        // User intelligence profile (scores & VIP)
+        supabase
+          .from('user_interest_profile')
+          .select('intent_score, engagement_score, conversion_probability, vip_tier, vip_tier_reason, revenue_potential, confidence_score')
+          .eq('user_id', userId)
+          .maybeSingle(),
       ]);
 
       const daily = (dailyRes.data || []) as any[];
       const events = (eventsRes.data || []) as any[];
       const sessions = (sessionsRes.data || []) as any[];
       const points = (pointsRes.data || []) as any[];
+      const profile = profileRes.data as any;
 
       // Days active (30d)
       const daysActive30d = daily.length;
@@ -133,6 +149,13 @@ export function useActivityStats() {
         dailyActivity,
         recentEvents: events,
         deviceMix,
+        intentScore: profile?.intent_score ?? 0,
+        engagementScore: profile?.engagement_score ?? 0,
+        conversionProbability: profile?.conversion_probability ?? 0,
+        vipTier: profile?.vip_tier ?? 'Visitor',
+        vipTierReason: profile?.vip_tier_reason ?? '',
+        revenuePotential: profile?.revenue_potential ?? 0,
+        confidenceScore: profile?.confidence_score ?? 0,
       };
     },
   });

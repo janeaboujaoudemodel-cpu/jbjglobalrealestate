@@ -19783,15 +19783,7 @@ export type Database = {
           reason?: string
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "user_points_ledger_event_id_fkey"
-            columns: ["event_id"]
-            isOneToOne: false
-            referencedRelation: "user_events"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       user_preferences: {
         Row: {
