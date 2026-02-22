@@ -12,18 +12,9 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
-import { formatPriceAbbreviated } from "@/utils/formatNumber";
+import { useCurrency } from "@/hooks/useCurrency";
 
 const ELITE_DEVELOPERS = ['Emaar', 'Omniyat', 'Sobha', 'ALDAR', 'Binghatti', 'Nakheel', 'Dubai Properties', 'DAMAC', 'Meraas'];
-
-const formatPrice = (price: number): string => {
-  const rounded = Math.round(price);
-  if (rounded >= 1000000) {
-    const m = rounded / 1000000;
-    return `AED ${m % 1 === 0 ? m.toFixed(0) : m.toFixed(1)}M`;
-  }
-  return `AED ${rounded.toLocaleString()}`;
-};
 
 interface FeaturedProject {
   id: string;
@@ -140,7 +131,7 @@ const prefetchProjectDetail = () => {
   import("../../pages/ProjectDetail");
 };
 
-const ProjectCard = ({ project }: { project: FeaturedProject }) => {
+const ProjectCard = ({ project, formatPrice }: { project: FeaturedProject; formatPrice: (price: number | null | undefined) => string }) => {
   const imageUrl = project.cover_image_url || project.images?.[0]?.image_url;
   const devName = project.developer_name || '';
   // Binghatti logo is locked to the canonical webp per branding policy
@@ -203,7 +194,7 @@ const ProjectCard = ({ project }: { project: FeaturedProject }) => {
             {project.price_from && (
               <div className="absolute bottom-3 right-3 z-10 px-3 py-1.5 rounded-lg bg-gradient-to-br from-black/90 via-black/80 to-gold/20 backdrop-blur-md border border-gold/50 shadow-lg">
                 <span className="text-gold font-bold text-xs tracking-wide">
-                  From {formatPriceAbbreviated(project.price_from)}
+                  From {formatPrice(project.price_from)}
                 </span>
               </div>
             )}
@@ -288,6 +279,7 @@ const ProjectCard = ({ project }: { project: FeaturedProject }) => {
 const FeaturedListings = () => {
   const { t } = useLanguage();
   const { data: projects, isLoading } = useFeaturedProjects();
+  const { formatPrice } = useCurrency();
 
   return (
     <section className="bg-black">
@@ -338,7 +330,7 @@ const FeaturedListings = () => {
                 </div>
               ))
             : projects?.map((project) => (
-                <ProjectCard key={project.id} project={project} />
+                <ProjectCard key={project.id} project={project} formatPrice={formatPrice} />
               ))}
           {!isLoading && (!projects || projects.length === 0) && (
             <div className="col-span-full text-center py-12">

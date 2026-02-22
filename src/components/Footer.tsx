@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   MapPin,
   Phone,
@@ -22,6 +22,8 @@ import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
 import { FounderContent } from "@/components/FounderContent";
 import { ModeSwitcher } from "@/components/ModeSwitcher";
 import { useUserModeContext } from "@/contexts/UserModeContext";
+import { SUPPORTED_CURRENCIES } from "@/components/CurrencySwitcher";
+import { cn } from "@/lib/utils";
 
 // Removed: AI_TOOL_COLORS and CREATIVE_TOOL_COLORS maps (no longer needed with card layout)
 
@@ -100,6 +102,76 @@ const DivisionAccordion = ({
         ))}
       </CollapsibleContent>
     </Collapsible>
+  );
+};
+
+/** Currency & Unit switcher for footer */
+const FooterCurrencyUnit = () => {
+  const [activeCurrency, setActiveCurrency] = useState<string>(() =>
+    typeof window !== 'undefined' ? localStorage.getItem('jj_currency') || 'AED' : 'AED'
+  );
+  const [areaUnit, setAreaUnit] = useState<string>(() =>
+    typeof window !== 'undefined' ? localStorage.getItem('jj_area_unit') || 'sqft' : 'sqft'
+  );
+
+  useEffect(() => {
+    const onCurrency = (e: Event) => setActiveCurrency((e as CustomEvent).detail);
+    const onUnit = (e: Event) => setAreaUnit((e as CustomEvent).detail);
+    window.addEventListener('currencyChange', onCurrency);
+    window.addEventListener('areaUnitChange', onUnit);
+    return () => {
+      window.removeEventListener('currencyChange', onCurrency);
+      window.removeEventListener('areaUnitChange', onUnit);
+    };
+  }, []);
+
+  const handleCurrency = (code: string) => {
+    setActiveCurrency(code);
+    localStorage.setItem('jj_currency', code);
+    window.dispatchEvent(new CustomEvent('currencyChange', { detail: code }));
+  };
+  const handleUnit = (unit: string) => {
+    setAreaUnit(unit);
+    localStorage.setItem('jj_area_unit', unit);
+    window.dispatchEvent(new CustomEvent('areaUnitChange', { detail: unit }));
+  };
+
+  return (
+    <div className="mt-6 flex flex-col items-center gap-3">
+      <p className="text-gold/60 text-xs uppercase tracking-[0.15em]">Currency & Unit</p>
+      <div className="flex flex-wrap justify-center gap-1.5 max-w-xs">
+        {SUPPORTED_CURRENCIES.slice(0, 6).map((cur) => (
+          <button
+            key={cur.code}
+            onClick={() => handleCurrency(cur.code)}
+            className={cn(
+              "px-3 py-1.5 rounded-lg text-[11px] font-medium transition-colors",
+              activeCurrency === cur.code
+                ? "bg-gold text-black"
+                : "bg-white/10 text-white/70 hover:bg-white/20"
+            )}
+          >
+            {cur.flag} {cur.code}
+          </button>
+        ))}
+      </div>
+      <div className="flex gap-2">
+        {(['sqft', 'sqm'] as const).map((unit) => (
+          <button
+            key={unit}
+            onClick={() => handleUnit(unit)}
+            className={cn(
+              "px-4 py-1.5 rounded-lg text-xs font-medium transition-colors",
+              areaUnit === unit
+                ? "bg-gold text-black"
+                : "bg-white/10 text-white/70 hover:bg-white/20"
+            )}
+          >
+            {unit}
+          </button>
+        ))}
+      </div>
+    </div>
   );
 };
 
@@ -571,6 +643,9 @@ const Footer = () => {
                 <ModeSwitcher variant="header" showForUnselected={true} />
               </div>
               </div>
+              
+              {/* Currency & Unit Switcher */}
+              <FooterCurrencyUnit />
             </div>
           </div>
           

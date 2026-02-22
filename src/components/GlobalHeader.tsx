@@ -473,8 +473,11 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     { href: "/terms", label: "Terms of Service", icon: FileText },
     { href: "/privacy", label: "Privacy Policy", icon: FileText },
     { href: "/cookies", label: "Cookies Policy", icon: FileText },
-    { href: "/trust-and-audit-center", label: "Trust & Audit Center", icon: FileText },
+    { href: "/disclaimers", label: "Disclaimers", icon: FileText },
     { href: "/intellectual-property", label: "Intellectual Property", icon: FileText },
+    { href: "/aml-kyc", label: "AML & KYC Policy", icon: Shield },
+    { href: "/accessibility", label: "Accessibility", icon: FileText },
+    { href: "/trust-and-audit-center", label: "Trust & Audit Center", icon: Shield },
     { href: "/investor-faq", label: "Investor FAQ", icon: ClipboardCheck },
     { href: "/broker-faq", label: "Broker FAQ", icon: ClipboardCheck },
   ];
@@ -1592,7 +1595,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               {/* Panel with real boundaries so pointer leave fires */}
               <div 
                 className="absolute right-0 z-[9998] pointer-events-auto"
-                style={{ top: 'calc(100% + 1px)', maxWidth: 'calc(100vw - 32px)' }}
+                style={{ top: 'calc(100% + 1px)', maxWidth: 'calc(100vw - 48px)', right: '16px' }}
                 onPointerEnter={handleMegaMenuPanelEnter}
                 onPointerLeave={handleMegaMenuLeave}
               >
