@@ -49,6 +49,14 @@ interface SavedProject {
   updatedAt: Date;
 }
 
+// Helper to format a Date as YYYY-MM-DD using LOCAL date components (avoids UTC shift)
+const formatLocalDate = (d: Date): string => {
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
 const AICalendar = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -68,7 +76,7 @@ const AICalendar = () => {
   const [eventForm, setEventForm] = useState({
     title: '',
     description: '',
-    date: new Date().toISOString().split('T')[0],
+    date: formatLocalDate(new Date()),
     time: '10:00',
     duration: 60,
     location: '',
@@ -108,7 +116,7 @@ const AICalendar = () => {
         ...prev,
         title: decodeURIComponent(titleParam),
         description: `Ticket: ${ticketParam}`,
-        date: new Date().toISOString().split('T')[0],
+        date: formatLocalDate(new Date()),
         type: 'reminder',
       }));
       setEditingEvent(null);
@@ -141,7 +149,7 @@ const AICalendar = () => {
   };
 
   const getEventsForDate = (date: Date) => {
-    const dateStr = date.toISOString().split('T')[0];
+    const dateStr = formatLocalDate(date);
     return events.filter(e => e.date === dateStr);
   };
 
@@ -198,7 +206,7 @@ const AICalendar = () => {
     setEventForm({
       title: '',
       description: '',
-      date: new Date().toISOString().split('T')[0],
+      date: formatLocalDate(new Date()),
       time: '10:00',
       duration: 60,
       location: '',
@@ -333,10 +341,9 @@ const AICalendar = () => {
         <div className="container mx-auto px-4 py-12">
           {/* Back Arrow */}
           <Button
-            variant="ghost"
             size="sm"
             onClick={() => navigate(-1)}
-            className="mb-4 text-white hover:bg-white/10 gap-2"
+            className="mb-4 bg-cyan-600 hover:bg-cyan-700 text-white border-0 gap-2 font-semibold"
           >
             <ArrowLeft className="w-4 h-4" />
             Back
@@ -406,12 +413,12 @@ const AICalendar = () => {
               const project = projects.find(p => p.id === id);
               if (project) loadProject(project);
             }}>
-              <SelectTrigger className="w-40 bg-zinc-800 border-zinc-700 text-sm text-white">
+              <SelectTrigger className="w-40 bg-white border-2 border-gold/30 text-sm text-black">
                 <SelectValue placeholder="Load Project" />
               </SelectTrigger>
-              <SelectContent className="bg-zinc-800 border-zinc-700">
+              <SelectContent className="bg-white border-2 border-gold/30 z-[200]">
                 {projects.map(p => (
-                  <SelectItem key={p.id} value={p.id} className="text-white">
+                  <SelectItem key={p.id} value={p.id} className="text-black hover:bg-gold/10">
                     {p.name}
                   </SelectItem>
                 ))}
@@ -628,10 +635,10 @@ const AICalendar = () => {
                       Events for {selectedDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
                     </h3>
                     <div className="flex gap-2">
-                      <Button
+                       <Button
                         size="sm"
                         onClick={() => {
-                          setEventForm(prev => ({ ...prev, date: selectedDate.toISOString().split('T')[0] }));
+                          setEventForm(prev => ({ ...prev, date: formatLocalDate(selectedDate) }));
                           setEditingEvent(null);
                           setShowEventModal(true);
                         }}
@@ -646,7 +653,7 @@ const AICalendar = () => {
                           setNoteForm({ title: '', content: '' });
                           setShowNoteModal(true);
                         }}
-                        className="bg-zinc-700 hover:bg-zinc-600 text-white text-xs"
+                        className="bg-cyan-600 hover:bg-cyan-700 text-white text-xs"
                       >
                         <Plus className="w-3 h-3 mr-1" /> Add Note
                       </Button>
@@ -713,7 +720,7 @@ const AICalendar = () => {
 
           {/* Notes Sidebar */}
           <div className="space-y-6">
-            <Card className="bg-zinc-900/50 border-zinc-800">
+            <Card className="bg-zinc-900/50 border-2 border-cyan-500/40">
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle className="text-white text-sm">Quick Notes</CardTitle>
                 <Dialog open={showNoteModal} onOpenChange={setShowNoteModal}>
@@ -780,7 +787,7 @@ const AICalendar = () => {
             </Card>
 
             {/* Upcoming Events */}
-            <Card className="bg-zinc-900/50 border-zinc-800">
+            <Card className="bg-zinc-900/50 border-2 border-cyan-500/40">
               <CardHeader>
                 <CardTitle className="text-white text-sm">Upcoming Events</CardTitle>
               </CardHeader>
