@@ -26,7 +26,8 @@ const StartingPointSection = () => {
     { to: "/tenant-guide", icon: User, label: t('hero.tenants', 'Tenants'), sub: t('hero.tenantGuide', 'Tenant Guide') },
     { to: "/investor-hub", icon: Layers, label: t('hero.investors'), sub: t('hero.investorPortal', 'Investor Portal') },
     { to: "/quiz", icon: Users, label: t('hero.visitors'), sub: t('hero.discoverDubai', 'Discover Dubai') },
-    { to: "/join", icon: GraduationCap, label: t('hero.careers'), sub: t('hero.joinOurTeam', 'Join Our Team') },
+    { to: "/partners", icon: Briefcase, label: t('hero.partners', 'Partners'), sub: t('hero.partnerWithUs', 'Partner With Us') },
+    { to: "/join", icon: GraduationCap, label: t('hero.careers'), sub: t('hero.lookingForJob', 'Looking for a Job?') },
   ];
 
   const serviceCards = [
