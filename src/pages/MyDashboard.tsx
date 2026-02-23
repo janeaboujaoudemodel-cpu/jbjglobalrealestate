@@ -4,7 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { SEOHead } from "@/components/SEOHead";
-import { Loader2, TrendingUp, Calendar, BookOpen, ChevronRight, ExternalLink } from "lucide-react";
+import { Loader2, TrendingUp, Calendar, BookOpen, ChevronRight, ExternalLink, ListChecks } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,7 @@ import ActivityOverviewCard from "@/components/dashboard/ActivityOverviewCard";
 import NotificationsPreview from "@/components/dashboard/NotificationsPreview";
 import { QuickActions } from "@/components/dashboard/QuickActions";
 import DashboardCardErrorBoundary from "@/components/dashboard/DashboardCardErrorBoundary";
+import MyTasksCard from "@/components/dashboard/MyTasksCard";
 
 // Role label mapping
 function getRoleLabel(role: string | null): string {
@@ -120,11 +121,15 @@ const MyDashboard = () => {
     return () => window.removeEventListener('userModeChange', handleModeChange);
   }, []);
 
-  // Scroll to notifications section if hash is present
+  // Scroll to section if hash is present
   useEffect(() => {
     if (location.hash === '#notifications') {
       setTimeout(() => {
         document.getElementById('notifications-section')?.scrollIntoView({ behavior: 'smooth' });
+      }, 300);
+    } else if (location.hash === '#tasks') {
+      setTimeout(() => {
+        document.getElementById('tasks-section')?.scrollIntoView({ behavior: 'smooth' });
       }, 300);
     }
   }, [location.hash]);
@@ -214,6 +219,13 @@ const MyDashboard = () => {
                 </DashboardCardErrorBoundary>
                 <UsefulLinksCard />
               </div>
+            </div>
+
+            {/* My Tasks Section - Full Width */}
+            <div className="mt-6" id="tasks-section">
+              <DashboardCardErrorBoundary fallbackTitle="Tasks unavailable">
+                <MyTasksCard />
+              </DashboardCardErrorBoundary>
             </div>
 
             {/* Bottom Row - Favorites & Shortlists */}
