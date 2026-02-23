@@ -1,14 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { SEOHead } from "@/components/SEOHead";
-import { Loader2, TrendingUp, Calendar, BookOpen, ChevronRight, ExternalLink, ListChecks } from "lucide-react";
+import { Loader2, TrendingUp, Calendar, BookOpen, ChevronRight, ExternalLink, ListChecks, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { scrollToId } from "@/lib/scroll";
+import { cn } from "@/lib/utils";
 
 // Dashboard modules
 import FavoritesCard from "@/components/dashboard/FavoritesCard";
@@ -45,6 +47,18 @@ function getRoleBadgeColor(role: string | null): string {
     default: return 'bg-gold/20 text-gold border-gold/30';
   }
 }
+
+// Valid section hash names
+const SECTION_IDS: Record<string, string> = {
+  '#profile': 'profile-section',
+  '#notifications': 'notifications-section',
+  '#tasks': 'tasks-section',
+  '#favorites': 'favorites-section',
+  '#shortlist': 'shortlist-section',
+  '#activity': 'activity-section',
+  '#badges': 'badges-section',
+  '#ai-tools': 'ai-tools-section',
+};
 
 /** Useful Links card for dashboard */
 function UsefulLinksCard() {
@@ -113,6 +127,9 @@ const MyDashboard = () => {
   const { role, isLoading: roleLoading } = useUserRole();
   const { mode, isInvestorMode, isBrokerMode, isCombinedMode } = useUserModeContext();
 
+  // Track which section is highlighted via hash
+  const [activeSection, setActiveSection] = useState<string | null>(null);
+
   // Listen for mode changes
   const [, forceUpdate] = useState(0);
   useEffect(() => {
@@ -121,17 +138,32 @@ const MyDashboard = () => {
     return () => window.removeEventListener('userModeChange', handleModeChange);
   }, []);
 
-  // Scroll to section if hash is present
+  // Scroll to section if hash is present, with proper offset and gold highlight
   useEffect(() => {
-    if (location.hash === '#notifications') {
-      setTimeout(() => {
-        document.getElementById('notifications-section')?.scrollIntoView({ behavior: 'smooth' });
-      }, 300);
-    } else if (location.hash === '#tasks') {
-      setTimeout(() => {
-        document.getElementById('tasks-section')?.scrollIntoView({ behavior: 'smooth' });
-      }, 300);
+    const hash = location.hash;
+    const sectionId = SECTION_IDS[hash];
+    if (!sectionId) {
+      setActiveSection(null);
+      return;
     }
+
+    // Set active section for gold highlight
+    setActiveSection(sectionId);
+
+    // Scroll after a short delay to ensure DOM is ready
+    const timer = setTimeout(() => {
+      scrollToId(sectionId, { extraOffset: 16 });
+    }, 400);
+
+    // Remove highlight after 4 seconds
+    const clearTimer = setTimeout(() => {
+      setActiveSection(null);
+    }, 4000);
+
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(clearTimer);
+    };
   }, [location.hash]);
 
   useEffect(() => {
@@ -152,6 +184,14 @@ const MyDashboard = () => {
     return null;
   }
 
+  // Helper for section wrapper classes with gold highlight
+  const sectionClass = (id: string) => cn(
+    "rounded-2xl transition-all duration-700",
+    activeSection === id
+      ? "ring-2 ring-gold/70 shadow-[0_0_24px_rgba(200,167,102,0.3)] bg-gold/5"
+      : ""
+  );
+
   return (
     <>
       <SEOHead 
@@ -168,7 +208,6 @@ const MyDashboard = () => {
                 <h1 className="text-3xl font-bold text-foreground" style={{ fontFamily: 'Poppins, sans-serif' }}>
                   My <span className="text-gold">Dashboard</span>
                 </h1>
-                {/* Show only ONE badge based on mode - combined takes priority */}
                 {isCombinedMode ? (
                   <Badge className="bg-purple-500/20 text-purple-600 border-purple-500/30">
                     Investor + Broker
@@ -193,12 +232,16 @@ const MyDashboard = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
               {/* Left Column - Profile & Level */}
               <div className="space-y-6">
-                <DashboardCardErrorBoundary fallbackTitle="Profile unavailable">
-                  <ProfileSummaryCard />
-                </DashboardCardErrorBoundary>
-                <DashboardCardErrorBoundary fallbackTitle="Badges unavailable">
-                  <BadgesLevelCard />
-                </DashboardCardErrorBoundary>
+                <div id="profile-section" className={sectionClass('profile-section')}>
+                  <DashboardCardErrorBoundary fallbackTitle="Profile unavailable">
+                    <ProfileSummaryCard />
+                  </DashboardCardErrorBoundary>
+                </div>
+                <div id="badges-section" className={sectionClass('badges-section')}>
+                  <DashboardCardErrorBoundary fallbackTitle="Badges unavailable">
+                    <BadgesLevelCard />
+                  </DashboardCardErrorBoundary>
+                </div>
                 <AccountSettingsCard />
               </div>
 
@@ -207,35 +250,73 @@ const MyDashboard = () => {
                 <DashboardCardErrorBoundary fallbackTitle="Quick Actions unavailable">
                   <QuickActions />
                 </DashboardCardErrorBoundary>
-                <DashboardCardErrorBoundary fallbackTitle="Activity unavailable">
-                  <ActivityOverviewCard />
-                </DashboardCardErrorBoundary>
+                <div id="activity-section" className={sectionClass('activity-section')}>
+                  <DashboardCardErrorBoundary fallbackTitle="Activity unavailable">
+                    <ActivityOverviewCard />
+                  </DashboardCardErrorBoundary>
+                </div>
               </div>
 
               {/* Right Column - Notifications & Links */}
-              <div className="space-y-6 md:col-span-2 xl:col-span-1" id="notifications-section">
-                <DashboardCardErrorBoundary fallbackTitle="Notifications unavailable">
-                  <NotificationsPreview />
-                </DashboardCardErrorBoundary>
+              <div className="space-y-6 md:col-span-2 xl:col-span-1">
+                <div id="notifications-section" className={sectionClass('notifications-section')}>
+                  <DashboardCardErrorBoundary fallbackTitle="Notifications unavailable">
+                    <NotificationsPreview />
+                  </DashboardCardErrorBoundary>
+                </div>
                 <UsefulLinksCard />
               </div>
             </div>
 
             {/* My Tasks Section - Full Width */}
             <div className="mt-6" id="tasks-section">
-              <DashboardCardErrorBoundary fallbackTitle="Tasks unavailable">
-                <MyTasksCard />
-              </DashboardCardErrorBoundary>
+              <div className={sectionClass('tasks-section')}>
+                <DashboardCardErrorBoundary fallbackTitle="Tasks unavailable">
+                  <MyTasksCard />
+                </DashboardCardErrorBoundary>
+              </div>
             </div>
 
             {/* Bottom Row - Favorites & Shortlists */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-              <DashboardCardErrorBoundary fallbackTitle="Favorites unavailable">
-                <FavoritesCard />
-              </DashboardCardErrorBoundary>
-              <DashboardCardErrorBoundary fallbackTitle="Shortlist unavailable">
-                <ShortlistCard />
-              </DashboardCardErrorBoundary>
+              <div id="favorites-section" className={sectionClass('favorites-section')}>
+                <DashboardCardErrorBoundary fallbackTitle="Favorites unavailable">
+                  <FavoritesCard />
+                </DashboardCardErrorBoundary>
+              </div>
+              <div id="shortlist-section" className={sectionClass('shortlist-section')}>
+                <DashboardCardErrorBoundary fallbackTitle="Shortlist unavailable">
+                  <ShortlistCard />
+                </DashboardCardErrorBoundary>
+              </div>
+            </div>
+
+            {/* AI Tools Section with "Explore All Tools" button */}
+            <div className="mt-6" id="ai-tools-section">
+              <div className={sectionClass('ai-tools-section')}>
+                <Card className="border border-border bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))]">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base text-foreground flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center">
+                        <Sparkles className="w-4 h-4 text-gold" />
+                      </div>
+                      AI Tools
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Access your suite of AI-powered professional tools — design studio, video builder, copywriter, and more.
+                    </p>
+                    <Button asChild className="w-full bg-gradient-to-r from-gold/90 to-gold hover:from-gold hover:to-gold/90 text-black font-semibold shadow-lg">
+                      <Link to="/toolkit">
+                        <Sparkles className="w-4 h-4 mr-2" />
+                        Explore All AI Tools
+                        <ChevronRight className="w-4 h-4 ml-2" />
+                      </Link>
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           </div>
         </div>
