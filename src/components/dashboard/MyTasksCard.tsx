@@ -166,7 +166,11 @@ export default function MyTasksCard() {
     onError: () => toast.error("Failed to delete tasks"),
   });
 
-  const toggleSelect = (id: string) => {
+  const toggleSelect = (id: string, e?: React.MouseEvent) => {
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
     setSelectedIds(prev => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
@@ -188,14 +192,6 @@ export default function MyTasksCard() {
     setSelectedIds(new Set());
   };
 
-  const allSelectedCompleted = useMemo(() => {
-    if (selectedIds.size === 0) return false;
-    return [...selectedIds].every(id => tasks.find(t => t.id === id)?.status === "completed");
-  }, [selectedIds, tasks]);
-
-  const anySelectedPending = useMemo(() => {
-    return [...selectedIds].some(id => tasks.find(t => t.id === id)?.status !== "completed");
-  }, [selectedIds, tasks]);
 
   return (
     <Card className="border border-border bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))]">
@@ -275,13 +271,14 @@ export default function MyTasksCard() {
                 <span className="text-[10px] text-gold font-medium">{selectedIds.size} selected</span>
                 <div className="w-[1px] h-4 bg-gold/30" />
                 
-                {anySelectedPending && (
+                {/* Show Mark Complete only if any selected task is pending */}
+                {[...selectedIds].some(id => tasks.find(t => t.id === id)?.status !== "completed") && (
                   <Button
                     size="sm"
                     variant="outline"
                     onClick={() => {
-                      const pending = [...selectedIds].filter(id => tasks.find(t => t.id === id)?.status !== "completed");
-                      if (pending.length) bulkComplete.mutate(pending);
+                      const ids = [...selectedIds].filter(id => tasks.find(t => t.id === id)?.status !== "completed");
+                      if (ids.length) bulkComplete.mutate(ids);
                     }}
                     disabled={bulkComplete.isPending}
                     className="h-6 px-2 text-[10px] border-emerald-500/30 text-emerald-600 hover:bg-emerald-500/10"
@@ -291,16 +288,20 @@ export default function MyTasksCard() {
                   </Button>
                 )}
                 
-                {allSelectedCompleted && (
+                {/* Show Bulk Restore if any selected task is completed */}
+                {[...selectedIds].some(id => tasks.find(t => t.id === id)?.status === "completed") && (
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={() => bulkReopen.mutate([...selectedIds])}
+                    onClick={() => {
+                      const ids = [...selectedIds].filter(id => tasks.find(t => t.id === id)?.status === "completed");
+                      if (ids.length) bulkReopen.mutate(ids);
+                    }}
                     disabled={bulkReopen.isPending}
                     className="h-6 px-2 text-[10px] border-gold/30 text-gold hover:bg-gold/10"
                   >
                     {bulkReopen.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : <RotateCcw className="w-3 h-3 mr-1" />}
-                    Reopen
+                    Bulk Restore
                   </Button>
                 )}
                 
@@ -373,7 +374,7 @@ export default function MyTasksCard() {
               return (
                 <div
                   key={task.id}
-                  onClick={() => selectionMode && toggleSelect(task.id)}
+                  onClick={(e) => { if (selectionMode) toggleSelect(task.id, e); }}
                   className={cn(
                     "flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all group",
                     selectionMode && "cursor-pointer",
@@ -384,7 +385,8 @@ export default function MyTasksCard() {
                   {/* Selection checkbox OR completion checkbox */}
                   {selectionMode ? (
                     <button
-                      onClick={(e) => { e.stopPropagation(); toggleSelect(task.id); }}
+                      type="button"
+                      onClick={(e) => toggleSelect(task.id, e)}
                       className={cn(
                         "w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-colors",
                         isSelected
@@ -396,6 +398,7 @@ export default function MyTasksCard() {
                     </button>
                   ) : (
                     <button
+                      type="button"
                       onClick={() => toggleComplete.mutate({ id: task.id, completed: !isCompleted })}
                       className={cn(
                         "w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-colors",
