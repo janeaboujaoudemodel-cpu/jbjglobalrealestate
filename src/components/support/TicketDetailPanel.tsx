@@ -161,7 +161,7 @@ const AttachmentItem = ({ url, index }: { url: string; index: number }) => {
   );
 };
 
-// AI Suggestion Card Component
+// AI Suggestion Card Component with expandable preview
 const SuggestionCard = ({ 
   suggestion, 
   onSelect,
@@ -171,28 +171,84 @@ const SuggestionCard = ({
   onSelect: () => void;
   isSelected: boolean;
 }) => {
+  const [expanded, setExpanded] = useState(false);
   const typeColors = {
     quick_resolution: 'border-green-500/30 bg-green-500/10',
     needs_info: 'border-blue-500/30 bg-blue-500/10',
     acknowledgment: 'border-yellow-500/30 bg-yellow-500/10',
   };
 
+  const typeLabels = {
+    quick_resolution: '✅ Quick Resolution',
+    needs_info: 'ℹ️ Needs Info',
+    acknowledgment: '👋 Acknowledgment',
+  };
+
   return (
-    <button
-      onClick={onSelect}
-      className={cn(
-        "w-full text-left p-3 rounded-lg border transition-all duration-200",
-        typeColors[suggestion.type] || 'border-gold/30 bg-gold/10',
-        isSelected ? 'ring-2 ring-gold' : 'hover:border-gold/50'
+    <>
+      <button
+        onClick={() => setExpanded(true)}
+        className={cn(
+          "w-full text-left p-3 rounded-lg border transition-all duration-200",
+          typeColors[suggestion.type] || 'border-gold/30 bg-gold/10',
+          isSelected ? 'ring-2 ring-gold' : 'hover:border-gold/50'
+        )}
+      >
+        <p className="text-xs font-semibold text-gold uppercase tracking-wide mb-1">
+          {typeLabels[suggestion.type] || suggestion.title}
+        </p>
+        <p className="text-xs text-zinc-300 line-clamp-2">
+          {suggestion.message.slice(0, 120)}...
+        </p>
+        <p className="text-[10px] text-gold/60 mt-1">Click to preview full response</p>
+      </button>
+
+      {/* Expanded Preview Modal */}
+      {expanded && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4" onClick={() => setExpanded(false)}>
+          <div
+            className="bg-gradient-to-br from-zinc-900 to-zinc-950 border-2 border-gold/40 rounded-2xl shadow-[0_0_60px_rgba(200,167,102,0.2)] max-w-lg w-full max-h-[80vh] flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="px-5 py-4 border-b border-gold/20 flex items-center justify-between">
+              <div>
+                <Badge className={cn("border text-xs mb-1", typeColors[suggestion.type])}>
+                  {typeLabels[suggestion.type] || suggestion.title}
+                </Badge>
+                <h3 className="text-white font-bold text-lg">{suggestion.title}</h3>
+              </div>
+              <Button variant="ghost" size="icon" onClick={() => setExpanded(false)} className="text-zinc-400 hover:text-white">
+                <X className="w-5 h-5" />
+              </Button>
+            </div>
+            <ScrollArea className="flex-1 p-5">
+              <div className="bg-zinc-800/50 border border-gold/10 rounded-lg p-4">
+                <p className="text-white text-sm whitespace-pre-wrap leading-relaxed">{suggestion.message}</p>
+              </div>
+            </ScrollArea>
+            <div className="px-5 py-4 border-t border-gold/20 flex gap-3">
+              <Button
+                onClick={() => {
+                  onSelect();
+                  setExpanded(false);
+                }}
+                className="flex-1 bg-gradient-to-r from-gold to-gold/80 text-black font-bold hover:from-gold/90 hover:to-gold/70"
+              >
+                <CheckCircle className="w-4 h-4 mr-2" />
+                Use This Reply
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => setExpanded(false)}
+                className="border-gold/50 text-gold hover:bg-gold/10"
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </div>
       )}
-    >
-      <p className="text-xs font-semibold text-gold uppercase tracking-wide mb-1">
-        {suggestion.title}
-      </p>
-      <p className="text-xs text-zinc-300 line-clamp-3">
-        {suggestion.message.slice(0, 150)}...
-      </p>
-    </button>
+    </>
   );
 };
 
