@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -8,11 +8,10 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { 
   ListChecks, Plus, Check, Clock, AlertCircle, ChevronRight, 
-  Loader2, Trash2, RotateCcw, X 
+  Loader2, Trash2, RotateCcw, X, CheckCheck, Square, CheckSquare
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { Link } from "react-router-dom";
 
 interface Task {
   id: string;
@@ -32,18 +31,14 @@ const PRIORITY_STYLES: Record<string, string> = {
   low: "bg-emerald-500/15 text-emerald-600 border-emerald-500/30",
 };
 
-const STATUS_ICON: Record<string, React.ReactNode> = {
-  completed: <Check className="w-3.5 h-3.5 text-emerald-500" />,
-  in_progress: <Clock className="w-3.5 h-3.5 text-amber-500" />,
-  pending: <AlertCircle className="w-3.5 h-3.5 text-gold" />,
-};
-
 export default function MyTasksCard() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const [showAddForm, setShowAddForm] = useState(false);
   const [newTitle, setNewTitle] = useState("");
   const [filter, setFilter] = useState<"all" | "pending" | "completed">("all");
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [selectionMode, setSelectionMode] = useState(false);
 
   const { data: tasks = [], isLoading } = useQuery({
     queryKey: ["my-tasks", user?.id],
@@ -60,6 +55,15 @@ export default function MyTasksCard() {
     },
     enabled: !!user,
   });
+
+  const filtered = useMemo(() => tasks.filter((t) => {
+    if (filter === "pending") return t.status !== "completed";
+    if (filter === "completed") return t.status === "completed";
+    return true;
+  }), [tasks, filter]);
+
+  const pendingCount = tasks.filter((t) => t.status !== "completed").length;
+  const completedCount = tasks.filter((t) => t.status === "completed").length;
 
   const addTask = useMutation({
     mutationFn: async (title: string) => {
@@ -97,6 +101,46 @@ export default function MyTasksCard() {
     },
   });
 
+  const bulkComplete = useMutation({
+    mutationFn: async (ids: string[]) => {
+      const { error } = await supabase
+        .from("admin_tasks")
+        .update({
+          status: "completed",
+          completed_at: new Date().toISOString(),
+        })
+        .in("id", ids);
+      if (error) throw error;
+    },
+    onSuccess: (_, ids) => {
+      queryClient.invalidateQueries({ queryKey: ["my-tasks"] });
+      setSelectedIds(new Set());
+      setSelectionMode(false);
+      toast.success(`${ids.length} task${ids.length > 1 ? 's' : ''} completed`);
+    },
+    onError: () => toast.error("Failed to complete tasks"),
+  });
+
+  const bulkReopen = useMutation({
+    mutationFn: async (ids: string[]) => {
+      const { error } = await supabase
+        .from("admin_tasks")
+        .update({
+          status: "pending",
+          completed_at: null,
+        })
+        .in("id", ids);
+      if (error) throw error;
+    },
+    onSuccess: (_, ids) => {
+      queryClient.invalidateQueries({ queryKey: ["my-tasks"] });
+      setSelectedIds(new Set());
+      setSelectionMode(false);
+      toast.success(`${ids.length} task${ids.length > 1 ? 's' : ''} reopened`);
+    },
+    onError: () => toast.error("Failed to reopen tasks"),
+  });
+
   const deleteTask = useMutation({
     mutationFn: async (id: string) => {
       const { error } = await supabase.from("admin_tasks").delete().eq("id", id);
@@ -108,14 +152,50 @@ export default function MyTasksCard() {
     },
   });
 
-  const filtered = tasks.filter((t) => {
-    if (filter === "pending") return t.status !== "completed";
-    if (filter === "completed") return t.status === "completed";
-    return true;
+  const bulkDelete = useMutation({
+    mutationFn: async (ids: string[]) => {
+      const { error } = await supabase.from("admin_tasks").delete().in("id", ids);
+      if (error) throw error;
+    },
+    onSuccess: (_, ids) => {
+      queryClient.invalidateQueries({ queryKey: ["my-tasks"] });
+      setSelectedIds(new Set());
+      setSelectionMode(false);
+      toast.success(`${ids.length} task${ids.length > 1 ? 's' : ''} deleted`);
+    },
+    onError: () => toast.error("Failed to delete tasks"),
   });
 
-  const pendingCount = tasks.filter((t) => t.status !== "completed").length;
-  const completedCount = tasks.filter((t) => t.status === "completed").length;
+  const toggleSelect = (id: string) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const selectAll = () => {
+    if (selectedIds.size === filtered.length) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(filtered.map(t => t.id)));
+    }
+  };
+
+  const exitSelection = () => {
+    setSelectionMode(false);
+    setSelectedIds(new Set());
+  };
+
+  const allSelectedCompleted = useMemo(() => {
+    if (selectedIds.size === 0) return false;
+    return [...selectedIds].every(id => tasks.find(t => t.id === id)?.status === "completed");
+  }, [selectedIds, tasks]);
+
+  const anySelectedPending = useMemo(() => {
+    return [...selectedIds].some(id => tasks.find(t => t.id === id)?.status !== "completed");
+  }, [selectedIds, tasks]);
 
   return (
     <Card className="border border-border bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))]">
@@ -131,6 +211,21 @@ export default function MyTasksCard() {
             <Badge className="bg-gold/10 text-gold border-gold/30 text-[10px]">
               {pendingCount} pending
             </Badge>
+            {/* Toggle selection mode */}
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => selectionMode ? exitSelection() : setSelectionMode(true)}
+              className={cn(
+                "h-7 px-2 text-[10px]",
+                selectionMode
+                  ? "border-gold bg-gold/10 text-gold"
+                  : "border-gold/30 text-gold hover:bg-gold/10 hover:text-gold"
+              )}
+              title={selectionMode ? "Exit selection" : "Select tasks"}
+            >
+              {selectionMode ? <X className="w-3.5 h-3.5" /> : <CheckSquare className="w-3.5 h-3.5" />}
+            </Button>
             <Button
               size="sm"
               variant="outline"
@@ -147,7 +242,7 @@ export default function MyTasksCard() {
           {(["all", "pending", "completed"] as const).map((f) => (
             <button
               key={f}
-              onClick={() => setFilter(f)}
+              onClick={() => { setFilter(f); setSelectedIds(new Set()); }}
               className={cn(
                 "px-3 py-1 rounded-lg text-[10px] font-semibold uppercase tracking-wider transition-colors",
                 filter === f
@@ -155,10 +250,74 @@ export default function MyTasksCard() {
                   : "text-black/50 hover:text-gold hover:bg-gold/5"
               )}
             >
-              {f === "all" ? `All (${tasks.length})` : f === "pending" ? `Pending (${pendingCount})` : `Done (${completedCount})`}
+              {f === "all" ? `All (${tasks.length})` : f === "pending" ? `Pending (${pendingCount})` : `Completed (${completedCount})`}
             </button>
           ))}
         </div>
+
+        {/* Bulk action bar */}
+        {selectionMode && (
+          <div className="flex items-center gap-2 mt-2 px-2 py-2 rounded-xl bg-gold/5 border border-gold/20">
+            <button
+              onClick={selectAll}
+              className="flex items-center gap-1.5 text-[10px] font-semibold text-gold hover:text-black transition-colors"
+            >
+              {selectedIds.size === filtered.length && filtered.length > 0
+                ? <CheckSquare className="w-3.5 h-3.5" />
+                : <Square className="w-3.5 h-3.5" />
+              }
+              {selectedIds.size === filtered.length && filtered.length > 0 ? "Deselect All" : "Select All"}
+            </button>
+            
+            {selectedIds.size > 0 && (
+              <>
+                <div className="w-[1px] h-4 bg-gold/30" />
+                <span className="text-[10px] text-gold font-medium">{selectedIds.size} selected</span>
+                <div className="w-[1px] h-4 bg-gold/30" />
+                
+                {anySelectedPending && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                      const pending = [...selectedIds].filter(id => tasks.find(t => t.id === id)?.status !== "completed");
+                      if (pending.length) bulkComplete.mutate(pending);
+                    }}
+                    disabled={bulkComplete.isPending}
+                    className="h-6 px-2 text-[10px] border-emerald-500/30 text-emerald-600 hover:bg-emerald-500/10"
+                  >
+                    {bulkComplete.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : <CheckCheck className="w-3 h-3 mr-1" />}
+                    Mark Complete
+                  </Button>
+                )}
+                
+                {allSelectedCompleted && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => bulkReopen.mutate([...selectedIds])}
+                    disabled={bulkReopen.isPending}
+                    className="h-6 px-2 text-[10px] border-gold/30 text-gold hover:bg-gold/10"
+                  >
+                    {bulkReopen.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : <RotateCcw className="w-3 h-3 mr-1" />}
+                    Reopen
+                  </Button>
+                )}
+                
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => bulkDelete.mutate([...selectedIds])}
+                  disabled={bulkDelete.isPending}
+                  className="h-6 px-2 text-[10px] border-red-500/30 text-red-500 hover:bg-red-500/10 ml-auto"
+                >
+                  {bulkDelete.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : <Trash2 className="w-3 h-3 mr-1" />}
+                  Delete
+                </Button>
+              </>
+            )}
+          </div>
+        )}
       </CardHeader>
 
       <CardContent className="pt-0">
@@ -203,33 +362,51 @@ export default function MyTasksCard() {
           <div className="text-center py-8">
             <ListChecks className="w-8 h-8 text-gold/30 mx-auto mb-2" />
             <p className="text-xs text-muted-foreground">
-              {filter === "all" ? "No tasks yet. Click + to add one." : `No ${filter} tasks.`}
+              {filter === "all" ? "No tasks yet. Click + to add one." : filter === "completed" ? "No completed tasks yet." : "No pending tasks."}
             </p>
           </div>
         ) : (
           <div className="space-y-1.5 max-h-[320px] overflow-y-auto pr-1">
             {filtered.map((task) => {
               const isCompleted = task.status === "completed";
+              const isSelected = selectedIds.has(task.id);
               return (
                 <div
                   key={task.id}
+                  onClick={() => selectionMode && toggleSelect(task.id)}
                   className={cn(
                     "flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all group",
-                    isCompleted ? "opacity-60" : "hover:bg-gold/5"
+                    selectionMode && "cursor-pointer",
+                    isSelected && "bg-gold/10 ring-1 ring-gold/40",
+                    isCompleted && !isSelected ? "opacity-60" : "hover:bg-gold/5"
                   )}
                 >
-                  {/* Checkbox */}
-                  <button
-                    onClick={() => toggleComplete.mutate({ id: task.id, completed: !isCompleted })}
-                    className={cn(
-                      "w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-colors",
-                      isCompleted
-                        ? "bg-emerald-500 border-emerald-500"
-                        : "border-gold/40 hover:border-gold"
-                    )}
-                  >
-                    {isCompleted && <Check className="w-3 h-3 text-white" />}
-                  </button>
+                  {/* Selection checkbox OR completion checkbox */}
+                  {selectionMode ? (
+                    <button
+                      onClick={(e) => { e.stopPropagation(); toggleSelect(task.id); }}
+                      className={cn(
+                        "w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-colors",
+                        isSelected
+                          ? "bg-gold border-gold"
+                          : "border-gold/40 hover:border-gold"
+                      )}
+                    >
+                      {isSelected && <Check className="w-3 h-3 text-white" />}
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => toggleComplete.mutate({ id: task.id, completed: !isCompleted })}
+                      className={cn(
+                        "w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-colors",
+                        isCompleted
+                          ? "bg-emerald-500 border-emerald-500"
+                          : "border-gold/40 hover:border-gold"
+                      )}
+                    >
+                      {isCompleted && <Check className="w-3 h-3 text-white" />}
+                    </button>
+                  )}
 
                   {/* Task info */}
                   <div className="flex-1 min-w-0">
@@ -250,28 +427,35 @@ export default function MyTasksCard() {
                           Due {new Date(task.due_date).toLocaleDateString()}
                         </span>
                       )}
+                      {isCompleted && task.completed_at && (
+                        <span className="text-[10px] text-emerald-500/70">
+                          ✓ {new Date(task.completed_at).toLocaleDateString()}
+                        </span>
+                      )}
                     </div>
                   </div>
 
-                  {/* Actions */}
-                  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    {isCompleted && (
+                  {/* Actions - only show outside selection mode */}
+                  {!selectionMode && (
+                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      {isCompleted && (
+                        <button
+                          onClick={() => toggleComplete.mutate({ id: task.id, completed: false })}
+                          className="w-6 h-6 rounded flex items-center justify-center hover:bg-gold/10 text-gold"
+                          title="Reopen"
+                        >
+                          <RotateCcw className="w-3 h-3" />
+                        </button>
+                      )}
                       <button
-                        onClick={() => toggleComplete.mutate({ id: task.id, completed: false })}
-                        className="w-6 h-6 rounded flex items-center justify-center hover:bg-gold/10 text-gold"
-                        title="Reopen"
+                        onClick={() => deleteTask.mutate(task.id)}
+                        className="w-6 h-6 rounded flex items-center justify-center hover:bg-red-500/10 text-red-500/60 hover:text-red-500"
+                        title="Delete"
                       >
-                        <RotateCcw className="w-3 h-3" />
+                        <Trash2 className="w-3 h-3" />
                       </button>
-                    )}
-                    <button
-                      onClick={() => deleteTask.mutate(task.id)}
-                      className="w-6 h-6 rounded flex items-center justify-center hover:bg-red-500/10 text-red-500/60 hover:text-red-500"
-                      title="Delete"
-                    >
-                      <Trash2 className="w-3 h-3" />
-                    </button>
-                  </div>
+                    </div>
+                  )}
                 </div>
               );
             })}
