@@ -9,6 +9,7 @@ import BestIdeaAward from "@/components/BestIdeaAward";
 import SupportTicketBox from "@/components/SupportTicketBox";
 import ExploreServicesCard from "@/components/home/ExploreServicesCard";
 import { ToolkitShowcaseCard } from "@/components/home/ToolkitShowcaseCard";
+import StartingPointSection from "@/components/home/StartingPointSection";
 
 // Master Blueprint Components - Lazy load below-fold heavy sections
 import TrustBar from "@/components/home/TrustBar";
@@ -222,120 +223,8 @@ const Index = () => {
       {/* DIVIDER */}
       <SectionDivider />
 
-      {/* FIND YOUR STARTING POINT - Clear Entry Points with Champagne Layer - ALL 11 CARDS RESTORED */}
-      <section className="bg-black">
-        <div className="jj-layer-2">
-          <div className="text-center mb-6 md:mb-10">
-            <span className="inline-flex items-center gap-1.5 md:gap-2 px-3 md:px-5 py-1.5 md:py-2 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-full text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] font-semibold shadow-md">
-              <Users className="w-3 h-3 md:w-3.5 md:h-3.5 text-gold" />
-              <span className="text-black">{t('hero.findStartingPoint')}</span>
-            </span>
-          </div>
-
-          {/* Audience Entry Cards - Full set with 11 cards */}
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 xl:grid-cols-11 gap-3 md:gap-4 w-full mb-6 md:mb-10">
-            {[
-              { to: "/buyer-guide", icon: Heart, label: t('hero.buyers') },
-              { to: "/seller-guide", icon: Target, label: t('hero.sellers') },
-              { to: "/rent-guide", icon: Key, label: t('hero.rentals') },
-              { to: "/landlord-guide", icon: Home, label: t('hero.landlords', 'Landlords') },
-              { to: "/tenant-guide", icon: User, label: t('hero.tenants', 'Tenants') },
-              { to: "/ai-hub", icon: Layers, label: t('hero.investors') },
-              { to: "/quiz", icon: Users, label: t('hero.visitors') },
-              { to: "/partners", icon: Briefcase, label: t('hero.partners', 'Partners') },
-              { to: "/guides/golden-visa-uae", icon: Globe, label: t('hero.goldenVisa', 'Golden Visa') },
-              { to: "/referral", icon: Award, label: t('hero.referral') },
-              { to: "/join", icon: GraduationCap, label: t('hero.careers') },
-            ].map((card) => (
-              <Link key={card.to} to={card.to} className="group">
-                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 hover:border-gold rounded-2xl p-3 md:p-4 text-center hover:shadow-[0_12px_40px_rgba(200,167,102,0.5)] hover:-translate-y-1.5 shadow-[0_4px_20px_rgba(200,167,102,0.25)] transition-all duration-300 aspect-square flex items-center justify-center relative overflow-hidden min-h-0">
-                  <div className="absolute inset-0 bg-gradient-to-br from-gold/5 via-transparent to-gold/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />
-                  <div className="relative flex flex-col items-center gap-1.5 md:gap-2 w-full">
-                    <div className="w-10 h-10 md:w-12 md:h-12 bg-black rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(200,167,102,0.4)] transition-all duration-300 shadow-lg shrink-0">
-                      <card.icon className="w-4 h-4 md:w-5 md:h-5 text-gold" />
-                    </div>
-                    <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-bold transition-colors leading-tight tracking-wide text-center line-clamp-2 w-full">{card.label}</h4>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-
-          {/* ROW 2: Action Cards with Subtitles (7 cards) */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2.5 md:gap-3 w-full mb-6 md:mb-10">
-            {[
-              { to: "/properties", icon: Home, title: t('hero.exploreProperties'), sub: t('hero.browseListings') },
-              { to: "/list-property", icon: FileText, title: t('hero.listYourProperty'), sub: t('hero.sellOrRent') },
-              { to: "/market-report", icon: BarChart3, title: t('hero.marketReport'), sub: t('hero.latestInsights') },
-              { to: "/ai-hub", icon: Layers, title: t('hero.investorHub'), sub: t('hero.aiTools') },
-              { to: "/partners/legal", icon: Scale, title: t('hero.legalPartners'), sub: t('hero.legalServices') },
-              { to: "/partners/mortgage", icon: Calculator, title: t('hero.mortgagePartners'), sub: t('hero.financingOptions') },
-              { to: "/services/design-build", icon: Palette, title: t('hero.designBuild'), sub: t('hero.constructionFitout') },
-            ].map((card) => (
-              <Link key={card.to} to={card.to} className="group">
-                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 hover:border-gold rounded-xl p-3 md:p-4 text-center hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] hover:-translate-y-1 shadow-[0_4px_16px_rgba(200,167,102,0.2)] transition-all duration-300 h-full flex items-center justify-center min-h-[100px] md:min-h-[120px]">
-                  <div className="flex flex-col items-center gap-1.5 md:gap-2">
-                    <div className="w-10 h-10 md:w-11 md:h-11 bg-black rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-md">
-                      <card.icon className="w-5 h-5 text-gold" />
-                    </div>
-                    <div>
-                      <h4 className="text-black group-hover:text-gold text-[11px] md:text-xs font-bold transition-colors leading-tight">{card.title}</h4>
-                      <p className="text-black/50 text-[9px] md:text-[10px] mt-0.5 font-medium">{card.sub}</p>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-
-          {/* ROW 3: Large Feature Cards (2 cards) - Premium Hub Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full">
-            {/* JBJ Broker Hub */}
-              <Link to="/broker-hub" className="group">
-              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/60 rounded-xl p-6 md:p-8 hover:border-gold hover:shadow-[0_0_50px_rgba(200,167,102,0.6),0_25px_60px_rgba(0,0,0,0.4)] hover:-translate-y-2 shadow-[0_12px_40px_rgba(200,167,102,0.4),0_6px_20px_rgba(0,0,0,0.25)] transition-all duration-300 relative overflow-hidden h-full">
-                {/* Premium glow effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-gold/10 via-transparent to-gold/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl" />
-                <div className="relative z-10 flex flex-col md:flex-row md:items-start gap-4">
-                  <div className="w-16 h-16 bg-gradient-to-br from-gold/20 to-gold/10 border-2 border-gold/40 rounded-xl flex items-center justify-center flex-shrink-0 shadow-[0_4px_12px_rgba(200,167,102,0.3)]">
-                    <Building2 className="w-8 h-8 text-gold" strokeWidth={1.5} />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="text-black group-hover:text-gold text-lg md:text-xl font-bold transition-colors leading-tight mb-1">{t('hero.jbjBrokerHub')}</h4>
-                    <p className="text-gold font-semibold text-sm mb-2">{t('hero.professionalTools')}</p>
-                    <p className="text-black/70 text-sm leading-relaxed mb-4">{t('hero.brokerHubDesc', 'Access AI-powered broker tools, training modules, CRM, and marketing resources.')}</p>
-                    <Button variant="primary" size="sm" className="group-hover:shadow-[0_0_20px_rgba(200,167,102,0.5)] transition-all">
-                      {t('hero.accessBrokerHub')}
-                      <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </Link>
-
-            {/* JBJ Investor Hub */}
-            <Link to="/investor-hub" className="group">
-              <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/60 rounded-xl p-6 md:p-8 hover:border-gold hover:shadow-[0_0_50px_rgba(200,167,102,0.6),0_25px_60px_rgba(0,0,0,0.4)] hover:-translate-y-2 shadow-[0_12px_40px_rgba(200,167,102,0.4),0_6px_20px_rgba(0,0,0,0.25)] transition-all duration-300 relative overflow-hidden h-full">
-                {/* Premium glow effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-gold/10 via-transparent to-gold/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl" />
-                <div className="relative z-10 flex flex-col md:flex-row md:items-start gap-4">
-                  <div className="w-16 h-16 bg-gradient-to-br from-gold/20 to-gold/10 border-2 border-gold/40 rounded-xl flex items-center justify-center flex-shrink-0 shadow-[0_4px_12px_rgba(200,167,102,0.3)]">
-                    <Layers className="w-8 h-8 text-gold" strokeWidth={1.5} />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="text-black group-hover:text-gold text-lg md:text-xl font-bold transition-colors leading-tight mb-1">{t('hero.jbjInvestorHub')}</h4>
-                    <p className="text-gold font-semibold text-sm mb-2">{t('hero.freeAiTools')}</p>
-                    <p className="text-black/70 text-sm leading-relaxed mb-4">{t('hero.investorHubDesc', 'AI-powered property analysis, comparison, mortgage calculator, and productivity tools.')}</p>
-                    <Button variant="primary" size="sm" className="group-hover:shadow-[0_0_20px_rgba(200,167,102,0.5)] transition-all">
-                      {t('hero.exploreInvestorHub')}
-                      <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* FIND YOUR STARTING POINT - Tabbed Premium Section */}
+      <StartingPointSection />
 
       <SectionDivider />
 
