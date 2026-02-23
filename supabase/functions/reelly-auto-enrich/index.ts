@@ -3,6 +3,9 @@ import {
   corsHeaders, REELLY_API_BASE,
   extractGalleryImages, extractDocuments, extractAmenities, extractAmenityImages
 } from "../_shared/reelly-types.ts";
+import { acquireLock, releaseLock } from "../_shared/safe-execution.ts";
+
+const FUNCTION_NAME = "reelly-auto-enrich";
 
 function json(status: number, body: unknown) {
   return new Response(JSON.stringify(body), {
@@ -10,6 +13,29 @@ function json(status: number, body: unknown) {
     headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
 }
+
+// Wrap entire handler with concurrency lock
+const originalServe = async (req: Request): Promise<Response> => {
+  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+
+  // Concurrency guard — skip if already running
+  const gotLock = await acquireLock(FUNCTION_NAME, 12);
+  if (!gotLock) {
+    console.log(`[${FUNCTION_NAME}] Skipped — previous execution still running`);
+    return json(200, { success: true, skipped: true, message: "Previous execution still running" });
+  }
+
+  const startTime = Date.now();
+  try {
+    return await handleEnrich(req, startTime);
+  } finally {
+    await releaseLock(FUNCTION_NAME, Date.now() - startTime);
+  }
+};
+
+Deno.serve(originalServe);
+
+async function handleEnrich(req: Request, startTime: number): Promise<Response> {
 
 async function fetchReellyProject(reellyId: number, apiKey: string) {
   const res = await fetch(
@@ -108,8 +134,7 @@ function extractServiceCharge(raw: any): string | null {
   return null;
 }
 
-Deno.serve(async (req: Request): Promise<Response> => {
-  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+// -- handler continues from guarded entry point above --
   if (req.method !== "POST") return json(405, { error: "Method not allowed" });
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
@@ -121,7 +146,6 @@ Deno.serve(async (req: Request): Promise<Response> => {
   }
 
   const supabase = createClient(supabaseUrl, supabaseKey);
-  const startTime = Date.now();
   const MAX_RUNTIME_MS = 22_000;
 
   try {
@@ -375,4 +399,4 @@ Deno.serve(async (req: Request): Promise<Response> => {
     console.error("[auto-enrich] Fatal:", err);
     return json(500, { error: err instanceof Error ? err.message : String(err) });
   }
-});
+}

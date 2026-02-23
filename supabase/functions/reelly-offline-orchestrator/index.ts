@@ -9,6 +9,7 @@
  */
 
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { acquireLock, releaseLock } from "../_shared/safe-execution.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -17,16 +18,28 @@ const corsHeaders = {
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-const BATCH_SIZE = 10; // projects per sub-batch (keeps sub-function well under timeout)
-const MAX_BATCHES = 6; // fire up to 6 concurrent sub-batches = 60 projects per orchestrator call
+const BATCH_SIZE = 10;
+const MAX_BATCHES = 4; // reduced from 6 to 4 = max 40 projects per run
+
+const FUNCTION_NAME = "reelly-offline-orchestrator";
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
+  // Concurrency guard
+  const gotLock = await acquireLock(FUNCTION_NAME, 15);
+  if (!gotLock) {
+    console.log(`[${FUNCTION_NAME}] Skipped — previous execution still running`);
+    return new Response(JSON.stringify({ success: true, skipped: true, message: "Previous execution still running" }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  const startTime = Date.now();
   try {
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
     const body = await req.json().catch(() => ({}));
-    const forceAll = body.force_all === true; // re-mirror even already-done projects
+    const forceAll = body.force_all === true;
     const mirrorImages = body.mirror_images !== false;
 
     // ── 1. Find projects that still need enrichment ──────────────────────────
@@ -94,16 +107,19 @@ Deno.serve(async (req) => {
     // Fire all batches without awaiting — true fire-and-forget
     fireAndForget(batches, mirrorImages);
 
+    await releaseLock(FUNCTION_NAME, Date.now() - startTime);
     return new Response(JSON.stringify({
       success: true,
       message: `Dispatched ${batches.length} sub-batches covering ${reellyIds.length} projects`,
       batches_fired: batches.length,
       projects_queued: reellyIds.length,
       sample_ids: reellyIds.slice(0, 5),
+      duration_ms: Date.now() - startTime,
     }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
 
   } catch (e: any) {
     console.error("[orchestrator] Fatal:", e);
+    await releaseLock(FUNCTION_NAME, Date.now() - startTime);
     return new Response(JSON.stringify({ success: false, error: e.message }), {
       status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

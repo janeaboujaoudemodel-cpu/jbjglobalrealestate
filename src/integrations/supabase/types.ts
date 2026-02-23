@@ -4786,6 +4786,36 @@ export type Database = {
         }
         Relationships: []
       }
+      db_health_logs: {
+        Row: {
+          check_type: string
+          connection_count: number | null
+          created_at: string
+          details: Json | null
+          id: string
+          is_healthy: boolean | null
+          latency_ms: number | null
+        }
+        Insert: {
+          check_type?: string
+          connection_count?: number | null
+          created_at?: string
+          details?: Json | null
+          id?: string
+          is_healthy?: boolean | null
+          latency_ms?: number | null
+        }
+        Update: {
+          check_type?: string
+          connection_count?: number | null
+          created_at?: string
+          details?: Json | null
+          id?: string
+          is_healthy?: boolean | null
+          latency_ms?: number | null
+        }
+        Relationships: []
+      }
       deal_bonus_thresholds: {
         Row: {
           bonus_description: string | null
@@ -6094,6 +6124,39 @@ export type Database = {
           source?: string | null
           unit?: string | null
           value?: number
+        }
+        Relationships: []
+      }
+      edge_function_locks: {
+        Row: {
+          created_at: string
+          execution_count: number | null
+          expires_at: string
+          function_name: string
+          id: string
+          last_duration_ms: number | null
+          locked_at: string
+          locked_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          execution_count?: number | null
+          expires_at?: string
+          function_name: string
+          id?: string
+          last_duration_ms?: number | null
+          locked_at?: string
+          locked_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          execution_count?: number | null
+          expires_at?: string
+          function_name?: string
+          id?: string
+          last_duration_ms?: number | null
+          locked_at?: string
+          locked_by?: string | null
         }
         Relationships: []
       }
@@ -18558,6 +18621,7 @@ export type Database = {
       }
       sync_jobs: {
         Row: {
+          batch_size: number | null
           completed_at: string | null
           created_at: string | null
           created_by: string | null
@@ -18565,8 +18629,11 @@ export type Database = {
           error_log: Json | null
           id: string
           job_type: string
+          last_cursor: string | null
+          max_duration_ms: number | null
           next_cursor: string | null
           paused_at: string | null
+          processed_records: number | null
           source: string | null
           started_at: string | null
           stats_created: number | null
@@ -18577,9 +18644,11 @@ export type Database = {
           stats_updated: number | null
           status: string
           total_pages: number
+          total_records: number | null
           updated_at: string | null
         }
         Insert: {
+          batch_size?: number | null
           completed_at?: string | null
           created_at?: string | null
           created_by?: string | null
@@ -18587,8 +18656,11 @@ export type Database = {
           error_log?: Json | null
           id?: string
           job_type?: string
+          last_cursor?: string | null
+          max_duration_ms?: number | null
           next_cursor?: string | null
           paused_at?: string | null
+          processed_records?: number | null
           source?: string | null
           started_at?: string | null
           stats_created?: number | null
@@ -18599,9 +18671,11 @@ export type Database = {
           stats_updated?: number | null
           status?: string
           total_pages?: number
+          total_records?: number | null
           updated_at?: string | null
         }
         Update: {
+          batch_size?: number | null
           completed_at?: string | null
           created_at?: string | null
           created_by?: string | null
@@ -18609,8 +18683,11 @@ export type Database = {
           error_log?: Json | null
           id?: string
           job_type?: string
+          last_cursor?: string | null
+          max_duration_ms?: number | null
           next_cursor?: string | null
           paused_at?: string | null
+          processed_records?: number | null
           source?: string | null
           started_at?: string | null
           stats_created?: number | null
@@ -18621,6 +18698,7 @@ export type Database = {
           stats_updated?: number | null
           status?: string
           total_pages?: number
+          total_records?: number | null
           updated_at?: string | null
         }
         Relationships: []
@@ -22805,6 +22883,10 @@ export type Database = {
       }
     }
     Functions: {
+      acquire_function_lock: {
+        Args: { p_function_name: string; p_timeout_minutes?: number }
+        Returns: boolean
+      }
       add_points: {
         Args: {
           _created_by?: string
@@ -22947,6 +23029,7 @@ export type Database = {
       cleanup_expired_vapi_calls: { Args: never; Returns: number }
       cleanup_expired_vapi_recordings: { Args: never; Returns: number }
       cleanup_expired_verifications: { Args: never; Returns: undefined }
+      cleanup_old_health_logs: { Args: never; Returns: undefined }
       cleanup_rate_limit_records: { Args: never; Returns: number }
       cleanup_temp_video_files: { Args: never; Returns: undefined }
       crm_hard_delete_import: {
@@ -23295,6 +23378,10 @@ export type Database = {
       redact_sensitive_transcript: {
         Args: { p_transcript: string }
         Returns: string
+      }
+      release_function_lock: {
+        Args: { p_duration_ms?: number; p_function_name: string }
+        Returns: undefined
       }
       set_founder_visibility: { Args: { p_enabled: boolean }; Returns: boolean }
       set_podcast_visibility: { Args: { p_enabled: boolean }; Returns: boolean }
