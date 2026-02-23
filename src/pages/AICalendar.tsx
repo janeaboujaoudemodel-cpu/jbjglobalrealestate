@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { 
   Calendar, Plus, Clock, MapPin, Users, Bell, Mail, Phone, Trash2, 
@@ -49,6 +50,7 @@ interface SavedProject {
 }
 
 const AICalendar = () => {
+  const [searchParams] = useSearchParams();
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [notes, setNotes] = useState<Note[]>([]);
   const [projects, setProjects] = useState<SavedProject[]>([]);
@@ -95,6 +97,23 @@ const AICalendar = () => {
       })));
     }
   }, []);
+
+  // Auto-open event modal from URL params (follow-up from ticket)
+  useEffect(() => {
+    const ticketParam = searchParams.get('ticket');
+    const titleParam = searchParams.get('title');
+    if (ticketParam && titleParam) {
+      setEventForm(prev => ({
+        ...prev,
+        title: decodeURIComponent(titleParam),
+        description: `Ticket: ${ticketParam}`,
+        date: new Date().toISOString().split('T')[0],
+        type: 'reminder',
+      }));
+      setEditingEvent(null);
+      setShowEventModal(true);
+    }
+  }, [searchParams]);
 
   const saveProjects = (updated: SavedProject[]) => {
     localStorage.setItem('ai_calendar_projects', JSON.stringify(updated));
@@ -341,12 +360,12 @@ const AICalendar = () => {
             </span>
           </div>
           <div className="flex-1" />
-          <Button size="sm" variant="outline" onClick={saveCurrentProject} className="text-xs">
+          <Button size="sm" onClick={saveCurrentProject} className="text-xs bg-cyan-600 hover:bg-cyan-700 text-white border-0">
             <Save className="w-3 h-3 mr-1" /> Save Project
           </Button>
           <Dialog open={showProjectModal} onOpenChange={setShowProjectModal}>
             <DialogTrigger asChild>
-              <Button size="sm" variant="outline" className="text-xs">
+              <Button size="sm" className="text-xs bg-cyan-600 hover:bg-cyan-700 text-white border-0">
                 <Plus className="w-3 h-3 mr-1" /> New Project
               </Button>
             </DialogTrigger>
@@ -361,10 +380,10 @@ const AICalendar = () => {
                     value={newProjectName}
                     onChange={(e) => setNewProjectName(e.target.value)}
                     placeholder="My Calendar Project"
-                    className="bg-zinc-800 border-zinc-700"
+                    className="bg-zinc-800 border-zinc-700 text-white"
                   />
                 </div>
-                <Button onClick={createProject} className="w-full bg-cyan-600 hover:bg-cyan-700">
+                <Button onClick={createProject} className="w-full bg-cyan-600 hover:bg-cyan-700 text-white">
                   Create Project
                 </Button>
               </div>
@@ -376,7 +395,7 @@ const AICalendar = () => {
               const project = projects.find(p => p.id === id);
               if (project) loadProject(project);
             }}>
-              <SelectTrigger className="w-40 bg-zinc-800 border-zinc-700 text-sm">
+              <SelectTrigger className="w-40 bg-zinc-800 border-zinc-700 text-sm text-white">
                 <SelectValue placeholder="Load Project" />
               </SelectTrigger>
               <SelectContent className="bg-zinc-800 border-zinc-700">
@@ -396,19 +415,19 @@ const AICalendar = () => {
             <Card className="bg-cyan-900/20 border-cyan-500/30">
               <CardHeader className="flex flex-row items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <Button size="sm" variant="ghost" onClick={prevMonth}>
+                  <Button size="sm" onClick={prevMonth} className="bg-cyan-600 hover:bg-cyan-700 text-white border-0 h-8 w-8 p-0">
                     <ChevronLeft className="w-4 h-4" />
                   </Button>
                   <CardTitle className="text-white">
                     {currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                   </CardTitle>
-                  <Button size="sm" variant="ghost" onClick={nextMonth}>
+                  <Button size="sm" onClick={nextMonth} className="bg-cyan-600 hover:bg-cyan-700 text-white border-0 h-8 w-8 p-0">
                     <ChevronRight className="w-4 h-4" />
                   </Button>
                 </div>
                 <Dialog open={showEventModal} onOpenChange={setShowEventModal}>
                   <DialogTrigger asChild>
-                    <Button size="sm" className="bg-cyan-600 hover:bg-cyan-700">
+                    <Button size="sm" className="bg-cyan-600 hover:bg-cyan-700 text-white">
                       <Plus className="w-4 h-4 mr-1" /> Add Event
                     </Button>
                   </DialogTrigger>
@@ -592,11 +611,37 @@ const AICalendar = () => {
 
                 {/* Selected Day Events */}
                 <div className="mt-6 pt-6 border-t border-zinc-800">
-                  <h3 className="text-white font-medium mb-4">
-                    Events for {selectedDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
-                  </h3>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-white font-medium">
+                      Events for {selectedDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+                    </h3>
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        onClick={() => {
+                          setEventForm(prev => ({ ...prev, date: selectedDate.toISOString().split('T')[0] }));
+                          setEditingEvent(null);
+                          setShowEventModal(true);
+                        }}
+                        className="bg-cyan-600 hover:bg-cyan-700 text-white text-xs"
+                      >
+                        <Plus className="w-3 h-3 mr-1" /> Add Event
+                      </Button>
+                      <Button
+                        size="sm"
+                        onClick={() => {
+                          setEditingNote(null);
+                          setNoteForm({ title: '', content: '' });
+                          setShowNoteModal(true);
+                        }}
+                        className="bg-zinc-700 hover:bg-zinc-600 text-white text-xs"
+                      >
+                        <Plus className="w-3 h-3 mr-1" /> Add Note
+                      </Button>
+                    </div>
+                  </div>
                   {getEventsForDate(selectedDate).length === 0 ? (
-                    <p className="text-zinc-500 text-sm">No events scheduled</p>
+                    <p className="text-zinc-500 text-sm">No events scheduled. Click "Add Event" to create one.</p>
                   ) : (
                     <div className="space-y-3">
                       {getEventsForDate(selectedDate).map(event => (
@@ -661,7 +706,7 @@ const AICalendar = () => {
                 <CardTitle className="text-white text-sm">Quick Notes</CardTitle>
                 <Dialog open={showNoteModal} onOpenChange={setShowNoteModal}>
                   <DialogTrigger asChild>
-                    <Button size="sm" variant="outline" className="text-xs">
+                    <Button size="sm" className="text-xs bg-cyan-600 hover:bg-cyan-700 text-white border-0">
                       <Plus className="w-3 h-3 mr-1" /> Add Note
                     </Button>
                   </DialogTrigger>
