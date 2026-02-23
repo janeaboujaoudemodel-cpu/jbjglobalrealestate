@@ -57,7 +57,7 @@ function getDeveloperTierKey(slug: string): string {
 }
 
 const Developers = () => {
-  const { data: developers, isLoading } = useDevelopers();
+  const { data: developers, isLoading, refetch: refetchDevelopers } = useDevelopers();
   const { data: projects } = useProjects();
   
   // Filter states
@@ -508,13 +508,18 @@ const Developers = () => {
                 <p className="text-foreground/70 max-w-lg mx-auto mb-6">
                   {activeFilterCount > 0 
                     ? "Try adjusting your search or filter criteria."
-                    : "No developers available at the moment."}
+                    : "Having trouble loading developers. Please try again."}
                 </p>
-                {activeFilterCount > 0 && (
-                  <Button variant="secondary" onClick={clearFilters}>
-                    Clear Filters
+                <div className="flex items-center justify-center gap-3">
+                  {activeFilterCount > 0 && (
+                    <Button variant="secondary" onClick={clearFilters}>
+                      Clear Filters
+                    </Button>
+                  )}
+                  <Button variant="outline" onClick={() => refetchDevelopers()} className="border-gold/40 text-gold hover:bg-gold/10">
+                    Retry
                   </Button>
-                )}
+                </div>
               </div>
             ) : (
               <>

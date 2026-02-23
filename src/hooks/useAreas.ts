@@ -60,7 +60,8 @@ export function useAreas(options?: {
 
       return (data || []) as Area[];
     },
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 10 * 60 * 1000, // 10 minutes
+    gcTime: 30 * 60 * 1000,
   });
 }
 

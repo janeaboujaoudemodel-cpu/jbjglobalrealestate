@@ -144,6 +144,8 @@ export interface TrendingArea {
 export function useCommunities() {
   return useQuery({
     queryKey: ["communities"],
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("communities")
@@ -159,6 +161,8 @@ export function useCommunities() {
 export function useDevelopers(includeHidden = false) {
   return useQuery({
     queryKey: ["developers", includeHidden],
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
     queryFn: async () => {
       let query = supabase
         .from("developers")
@@ -179,6 +183,8 @@ export function useDevelopers(includeHidden = false) {
 export function useTrendingAreas() {
   return useQuery({
     queryKey: ["trending-areas"],
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("trending_areas")
@@ -370,6 +376,8 @@ export interface AreaItem {
 export function useAreas() {
   return useQuery({
     queryKey: ["areas-all"],
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("areas")
