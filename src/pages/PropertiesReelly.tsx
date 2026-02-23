@@ -84,7 +84,7 @@ const PropertiesReelly = () => {
   const { data: developers } = useDevelopers();
   
   // Database as PRIMARY source (always available, 2,410+ projects)
-  const { data: dbProjects, isLoading: isDbLoading } = useProjectsListing();
+  const { data: dbProjects, isLoading: isDbLoading, refetch: refetchProjects } = useProjectsListing();
   
   // Display currency/size preferences — synced with global currency switcher
   const [currency, setCurrency] = useState<ExtendedCurrency>(() => {
@@ -463,6 +463,9 @@ const PropertiesReelly = () => {
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
                   <Button onClick={() => setShortcutFilters(defaultShortcutFilters)} variant="primary" className="h-12 px-8">
                     Browse All Properties
+                  </Button>
+                  <Button onClick={() => refetchProjects()} variant="outline" className="border-gold/40 text-gold hover:bg-gold/10 h-12 px-6">
+                    Retry Loading
                   </Button>
                   <Button asChild variant="outline" className="border-zinc-300 text-black hover:bg-zinc-100 h-12 px-6">
                     <a 
