@@ -383,20 +383,20 @@ const SupportTicketHub = () => {
                   <Table>
                     <TableHeader>
                       <TableRow className="border-gold/20 hover:bg-transparent">
-                        <TableHead className="w-12">
+                        <TableHead className="w-10 px-2">
                           <Checkbox
                             checked={isAllSelected}
                             onCheckedChange={handleSelectAll}
                             className="border-gold/50 data-[state=checked]:bg-gold data-[state=checked]:border-gold"
                           />
                         </TableHead>
-                        <TableHead className="text-gold font-semibold">Ticket #</TableHead>
-                        <TableHead className="text-gold font-semibold">Customer</TableHead>
-                        <TableHead className="text-gold font-semibold">Subject</TableHead>
-                        <TableHead className="text-gold font-semibold">Category</TableHead>
-                        <TableHead className="text-gold font-semibold">Priority</TableHead>
-                        <TableHead className="text-gold font-semibold">Status</TableHead>
-                        <TableHead className="text-gold font-semibold">
+                        <TableHead className="text-gold font-semibold text-xs px-2 whitespace-nowrap">Ticket #</TableHead>
+                        <TableHead className="text-gold font-semibold text-xs px-2">Customer</TableHead>
+                        <TableHead className="text-gold font-semibold text-xs px-2">Subject</TableHead>
+                        <TableHead className="text-gold font-semibold text-xs px-2 hidden xl:table-cell">Category</TableHead>
+                        <TableHead className="text-gold font-semibold text-xs px-2 whitespace-nowrap">Priority</TableHead>
+                        <TableHead className="text-gold font-semibold text-xs px-2">Status</TableHead>
+                        <TableHead className="text-gold font-semibold text-xs px-2 whitespace-nowrap">
                           <button
                             onClick={() => setSortAscending(!sortAscending)}
                             className="flex items-center gap-1 hover:text-white transition-colors"
@@ -427,7 +427,7 @@ const SupportTicketHub = () => {
                                 : "hover:bg-zinc-800/50"
                             )}
                           >
-                            <TableCell onClick={(e) => e.stopPropagation()}>
+                            <TableCell onClick={(e) => e.stopPropagation()} className="px-2">
                               <Checkbox
                                 checked={isSelected}
                                 onCheckedChange={() => {
@@ -444,46 +444,46 @@ const SupportTicketHub = () => {
                                 className="border-gold/50 data-[state=checked]:bg-gold data-[state=checked]:border-gold"
                               />
                             </TableCell>
-                            <TableCell className="font-mono text-gold font-bold">
+                            <TableCell className="font-mono text-gold font-bold text-xs px-2 whitespace-nowrap">
                               {ticket.ticket_number}
                             </TableCell>
-                            <TableCell>
-                              <div>
-                                <p className="text-white font-medium truncate max-w-[150px]">
+                            <TableCell className="px-2">
+                              <div className="min-w-[100px]">
+                                <p className="text-white font-medium text-xs truncate max-w-[130px]">
                                   {ticket.full_name}
                                 </p>
-                                <p className="text-xs text-zinc-400 truncate max-w-[150px]">
+                                <p className="text-[10px] text-zinc-400 truncate max-w-[130px]">
                                   {ticket.email}
                                 </p>
                               </div>
                             </TableCell>
-                            <TableCell className="max-w-[200px]">
-                              <p className="text-white truncate">{ticket.subject}</p>
+                            <TableCell className="px-2 max-w-[160px]">
+                              <p className="text-white text-xs truncate">{ticket.subject}</p>
                             </TableCell>
-                            <TableCell>
-                              <span className="text-zinc-300 text-sm truncate block max-w-[120px]">
+                            <TableCell className="px-2 hidden xl:table-cell">
+                              <span className="text-zinc-300 text-xs truncate block max-w-[100px]">
                                 {ticket.service_category}
                               </span>
                             </TableCell>
-                            <TableCell>
-                              <div className="flex items-center gap-1.5">
-                                <Badge className={cn("border text-xs", priority.className)}>
+                            <TableCell className="px-2">
+                              <div className="flex items-center gap-1 flex-nowrap">
+                                <Badge className={cn("border text-[10px] px-1.5 py-0 whitespace-nowrap", priority.className)}>
                                   {priority.label}
                                 </Badge>
                                 {ticket.is_reopened && (
-                                  <Badge className="bg-orange-500/20 text-orange-400 border-orange-500/30 text-xs">
-                                    🔄 Reopened
+                                  <Badge className="bg-orange-500/20 text-orange-400 border-orange-500/30 text-[10px] px-1.5 py-0 whitespace-nowrap">
+                                    🔄
                                   </Badge>
                                 )}
                               </div>
                             </TableCell>
-                            <TableCell>
-                              <Badge className={cn("flex items-center gap-1 w-fit text-xs", status.className)}>
-                                <StatusIcon className="w-3 h-3" />
+                            <TableCell className="px-2">
+                              <Badge className={cn("flex items-center gap-1 w-fit text-[10px] px-1.5 py-0 whitespace-nowrap", status.className)}>
+                                <StatusIcon className="w-2.5 h-2.5" />
                                 {status.label}
                               </Badge>
                             </TableCell>
-                            <TableCell className="text-zinc-300 text-sm">
+                            <TableCell className="text-zinc-300 text-[11px] px-2 whitespace-nowrap">
                               {format(new Date(ticket.created_at), "MMM d, h:mm a")}
                             </TableCell>
                           </TableRow>

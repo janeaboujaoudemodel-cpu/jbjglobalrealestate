@@ -107,8 +107,10 @@ const AICalendar = () => {
     }
   }, []);
 
-  // Auto-open event modal from URL params (follow-up from ticket)
+  // Auto-open event modal from URL params (follow-up from ticket) — runs once
+  const [paramsProcessed, setParamsProcessed] = useState(false);
   useEffect(() => {
+    if (paramsProcessed) return;
     const ticketParam = searchParams.get('ticket');
     const titleParam = searchParams.get('title');
     if (ticketParam && titleParam) {
@@ -121,8 +123,11 @@ const AICalendar = () => {
       }));
       setEditingEvent(null);
       setShowEventModal(true);
+      setParamsProcessed(true);
+      // Clear URL params so back button doesn't re-trigger
+      window.history.replaceState({}, '', window.location.pathname);
     }
-  }, [searchParams]);
+  }, [searchParams, paramsProcessed]);
 
   const saveProjects = (updated: SavedProject[]) => {
     localStorage.setItem('ai_calendar_projects', JSON.stringify(updated));
