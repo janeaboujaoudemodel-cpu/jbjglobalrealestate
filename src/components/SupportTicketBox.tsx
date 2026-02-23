@@ -666,35 +666,57 @@ const SupportTicketBox = () => {
                               onSubmit={handleSubmit}
                               className="space-y-4 py-4 relative"
                             >
-                              {/* Form Overlay During Submission */}
+                              {/* Form Overlay During Submission - Fixed centered, non-scrollable */}
                               <AnimatePresence>
                                 {isSubmitting && (
                                   <motion.div
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     exit={{ opacity: 0 }}
-                                    className="absolute inset-0 bg-white/70 backdrop-blur-[3px] z-20 flex flex-col items-center justify-center rounded-lg"
+                                    className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[10100] flex items-center justify-center"
                                   >
                                     <motion.div
                                       initial={{ scale: 0.8, opacity: 0 }}
                                       animate={{ scale: 1, opacity: 1 }}
-                                      className="bg-white/90 rounded-xl p-8 shadow-lg border border-gold/20 text-center flex flex-col items-center"
+                                      className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-10 shadow-[0_8px_40px_rgba(200,167,102,0.4)] border-2 border-gold text-center flex flex-col items-center max-w-sm mx-4"
                                     >
                                       <img 
                                         src="/jbj-monogram-dark-on-light.png" 
                                         alt="JBJ" 
-                                        className="w-16 h-16 object-contain animate-pulse mb-4"
-                                        style={{ filter: 'drop-shadow(0 0 8px rgba(200,167,102,0.4))' }}
+                                        className="w-20 h-20 object-contain animate-pulse mb-6"
+                                        style={{ filter: 'drop-shadow(0 0 12px rgba(200,167,102,0.5))' }}
                                       />
+                                      
+                                      {/* Upload progress for each file */}
+                                      {attachments.length > 0 && submissionStep === 'uploading' && (
+                                        <div className="w-full mb-4 space-y-2">
+                                          {attachments.map((file, idx) => (
+                                            <div key={idx} className="flex items-center gap-2 text-xs">
+                                              {getUploadStatusIcon(idx)}
+                                              <span className="text-zinc-600 truncate flex-1 text-left">{file.name}</span>
+                                            </div>
+                                          ))}
+                                        </div>
+                                      )}
+                                      
                                       <motion.p
                                         key={submissionStep}
                                         initial={{ opacity: 0, y: 5 }}
                                         animate={{ opacity: 1, y: 0 }}
-                                        className="text-sm font-medium text-zinc-700"
+                                        className="text-base font-semibold text-black"
                                       >
                                         {STEP_MESSAGES[submissionStep]}
                                       </motion.p>
-                                      <p className="text-xs text-zinc-500 mt-1">Please wait...</p>
+                                      <p className="text-sm text-zinc-500 mt-2">Please wait...</p>
+                                      
+                                      {/* Animated progress bar */}
+                                      <div className="w-full mt-4 h-1.5 bg-gold/20 rounded-full overflow-hidden">
+                                        <motion.div
+                                          className="h-full bg-gradient-to-r from-gold to-gold/70 rounded-full"
+                                          animate={{ width: ['0%', '100%'] }}
+                                          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                                        />
+                                      </div>
                                     </motion.div>
                                   </motion.div>
                                 )}

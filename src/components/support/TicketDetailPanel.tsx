@@ -21,6 +21,7 @@ import {
   Calendar,
   StickyNote,
   RotateCcw,
+  Download,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -80,7 +81,26 @@ const AttachmentItem = ({ url, index }: { url: string; index: number }) => {
     fetchSignedUrl();
   }, [url, getSignedUrl, isImage]);
 
-  const handleClick = () => {
+  const handleDownload = async () => {
+    if (!signedUrl) return;
+    try {
+      const response = await fetch(signedUrl);
+      const blob = await response.blob();
+      const downloadUrl = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.download = filename || `attachment-${index + 1}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(downloadUrl);
+    } catch {
+      // Fallback: open in new tab
+      window.open(signedUrl, '_blank', 'noopener,noreferrer');
+    }
+  };
+
+  const handleView = () => {
     if (signedUrl) {
       window.open(signedUrl, '_blank', 'noopener,noreferrer');
     }
@@ -108,7 +128,7 @@ const AttachmentItem = ({ url, index }: { url: string; index: number }) => {
     <div className="flex flex-col gap-2">
       {imagePreview && (
         <div 
-          onClick={handleClick}
+          onClick={handleView}
           className="cursor-pointer rounded-lg overflow-hidden border border-gold/20 hover:border-gold transition-colors"
         >
           <img 
@@ -118,15 +138,25 @@ const AttachmentItem = ({ url, index }: { url: string; index: number }) => {
           />
         </div>
       )}
-      <button
-        onClick={handleClick}
-        disabled={!signedUrl}
-        className="flex items-center gap-2 bg-zinc-800 px-3 py-2 rounded-lg text-sm text-gold hover:bg-zinc-700 transition-colors border border-gold/20 disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        {isImage ? <ImageIcon className="w-4 h-4" /> : <FileText className="w-4 h-4" />}
-        <span className="truncate max-w-[150px]">{filename || `Attachment ${index + 1}`}</span>
-        <ExternalLink className="w-3 h-3 ml-auto" />
-      </button>
+      <div className="flex gap-1">
+        <button
+          onClick={handleView}
+          disabled={!signedUrl}
+          className="flex items-center gap-2 bg-zinc-800 px-3 py-2 rounded-lg text-sm text-gold hover:bg-zinc-700 transition-colors border border-gold/20 disabled:opacity-50 disabled:cursor-not-allowed flex-1"
+        >
+          {isImage ? <ImageIcon className="w-4 h-4" /> : <FileText className="w-4 h-4" />}
+          <span className="truncate max-w-[120px]">{filename || `Attachment ${index + 1}`}</span>
+          <ExternalLink className="w-3 h-3 ml-auto" />
+        </button>
+        <button
+          onClick={handleDownload}
+          disabled={!signedUrl}
+          className="flex items-center gap-1 bg-gold/20 px-3 py-2 rounded-lg text-sm text-gold hover:bg-gold/30 transition-colors border border-gold/30 disabled:opacity-50 disabled:cursor-not-allowed"
+          title="Download"
+        >
+          <Download className="w-4 h-4" />
+        </button>
+      </div>
     </div>
   );
 };
