@@ -4,13 +4,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { SEOHead } from "@/components/SEOHead";
-import { Loader2, TrendingUp, Calendar, BookOpen, ChevronRight, ExternalLink, ListChecks, Sparkles } from "lucide-react";
+import { Loader2, BookOpen, ChevronRight, ListChecks, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
-import marketIntelligenceCover from "@/assets/books/market-intelligence-cover.jpg";
-import guidesLibraryCover from "@/assets/books/guides-library-cover.jpg";
-import goldenVisaCover from "@/assets/books/golden-visa-cover.jpg";
-import investorEducationCover from "@/assets/books/investor-education-cover.jpg";
-import brokerEducationCover from "@/assets/books/broker-education-cover.jpg";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -66,13 +61,38 @@ const SECTION_IDS: Record<string, string> = {
   '#ai-tools': 'ai-tools-section',
 };
 
+/** Styled 3D book cover — no background image, pure design */
+function StyledBookCover({ title, accent }: { title: string; accent: string }) {
+  return (
+    <div className="relative w-full h-full flex flex-col justify-between p-3 bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 rounded-r-md overflow-hidden">
+      {/* Gold accent bar */}
+      <div className={`w-8 h-[2px] ${accent} mb-auto`} />
+      {/* Title */}
+      <div className="flex-1 flex items-center">
+        <h4 className="text-[10px] sm:text-[11px] font-bold text-white leading-tight" style={{ fontFamily: "'Playfair Display', serif" }}>
+          {title.split(' ').map((word, i) => (
+            <span key={i} className={i === title.split(' ').length - 1 ? 'text-[#C8A766]' : ''}>
+              {word}{' '}
+            </span>
+          ))}
+        </h4>
+      </div>
+      {/* Company name */}
+      <div className="mt-auto pt-2 border-t border-zinc-700">
+        <p className="text-[6px] sm:text-[7px] tracking-[0.2em] uppercase text-zinc-500 leading-none">JBJ Global</p>
+        <p className="text-[6px] sm:text-[7px] tracking-[0.2em] uppercase text-zinc-500 leading-none">Real Estate</p>
+      </div>
+    </div>
+  );
+}
+
 /** Useful Links card for dashboard */
 function UsefulLinksCard() {
-  const links = [
-    { label: 'Market Intelligence', href: '/market-intelligence/overview', icon: TrendingUp, cover: marketIntelligenceCover },
-    { label: 'Guides Library', href: '/guides', icon: BookOpen, cover: guidesLibraryCover },
-    { label: 'Golden Visa Guide', href: '/guides/golden-visa-uae', icon: ExternalLink, cover: goldenVisaCover },
-    { label: 'Investor Hub', href: '/investor-hub', icon: Sparkles, cover: investorEducationCover },
+  const books = [
+    { label: 'Market Intelligence', href: '/market-intelligence/overview', accent: 'bg-[#C8A766]' },
+    { label: 'Guides Library', href: '/guides', accent: 'bg-[#C8A766]' },
+    { label: 'Golden Visa Guide', href: '/guides/golden-visa-uae', accent: 'bg-[#C8A766]' },
+    { label: 'Investor Education Guide', href: '/investor-hub', accent: 'bg-[#C8A766]' },
   ];
 
   return (
@@ -86,43 +106,56 @@ function UsefulLinksCard() {
         </CardTitle>
       </CardHeader>
       <CardContent className="pt-0">
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          {links.map((link) => (
-            <Link key={link.href} to={link.href} className="group flex flex-col items-center gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+          {books.map((book) => (
+            <Link key={book.href} to={book.href} className="group flex flex-col items-center gap-2">
               <motion.div
-                whileHover={{ y: -6 }}
+                whileHover={{ y: -8 }}
                 transition={{ type: 'spring', stiffness: 300 }}
                 className="relative w-full aspect-[2/3] max-w-[120px] mx-auto"
-                style={{ perspective: '800px' }}
+                style={{ perspective: '1000px' }}
               >
+                {/* Book shadow */}
+                <div className="absolute -bottom-2 left-2 right-2 h-4 bg-black/30 blur-lg rounded-full group-hover:blur-xl group-hover:bg-[#C8A766]/20 transition-all" />
+
                 <div
-                  className="relative w-full h-full rounded-r-md overflow-hidden border border-gold/40 shadow-[4px_4px_20px_rgba(0,0,0,0.3)] group-hover:shadow-[6px_6px_30px_rgba(200,167,102,0.4)] transition-shadow transform-gpu"
+                  className="relative w-full h-full border border-[#C8A766]/30 shadow-[4px_4px_15px_rgba(0,0,0,0.4)] group-hover:shadow-[8px_8px_35px_rgba(200,167,102,0.35)] transition-all duration-500 transform-gpu rounded-r-md overflow-hidden"
                   style={{
                     transformStyle: 'preserve-3d',
                     transform: 'rotateY(-8deg) rotateX(2deg)',
                   }}
                 >
-                  {/* Spine effect */}
-                  <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-black/40 to-transparent z-10" />
-                  {/* Cover image */}
-                  <img
-                    src={link.cover}
-                    alt={link.label}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
+                  {/* Spine edge */}
+                  <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-[#C8A766]/30 via-black/30 to-transparent z-10" />
+
+                  {/* Styled cover content */}
+                  <StyledBookCover title={book.label} accent={book.accent} />
+
                   {/* Hover sheen */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  {/* Page edge effect */}
-                  <div className="absolute right-0 top-0 bottom-0 w-2">
-                    <div className="h-full bg-gradient-to-l from-zinc-100/10 via-zinc-200/15 to-transparent" style={{ clipPath: 'polygon(100% 0, 100% 100%, 0 95%, 0 5%)' }} />
-                    <div className="absolute right-0 top-[5%] bottom-[5%] w-[1.5px] bg-zinc-300/20" />
-                    <div className="absolute right-[3px] top-[6%] bottom-[6%] w-[1px] bg-zinc-300/10" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10 opacity-0 group-hover:opacity-100 transition-opacity z-10" />
+
+                  {/* Page edge (right side thickness) */}
+                  <div className="absolute right-0 top-0 bottom-0 w-[6px] z-10">
+                    <div className="h-full bg-gradient-to-l from-zinc-200/15 via-zinc-300/10 to-transparent" style={{ clipPath: 'polygon(100% 0, 100% 100%, 0 95%, 0 5%)' }} />
+                    <div className="absolute right-0 top-[4%] bottom-[4%] w-[2px] bg-zinc-400/15" />
+                    <div className="absolute right-[3px] top-[5%] bottom-[5%] w-[1px] bg-zinc-400/10" />
+                    <div className="absolute right-[5px] top-[6%] bottom-[6%] w-[1px] bg-zinc-400/5" />
                   </div>
                 </div>
+
+                {/* 3D spine side */}
+                <div
+                  className="absolute top-0 left-0 w-[6px] h-full bg-gradient-to-r from-zinc-700 to-zinc-800 origin-left rounded-l-sm"
+                  style={{ transform: 'rotateY(-90deg) translateX(-3px)' }}
+                />
+                {/* 3D bottom pages */}
+                <div
+                  className="absolute bottom-0 left-0 right-0 h-[4px] bg-gradient-to-b from-[#f0e8d8] to-[#ddd0b8]"
+                  style={{ transform: 'rotateX(90deg) translateY(2px)', transformOrigin: 'bottom' }}
+                />
               </motion.div>
               <p className="text-xs text-foreground/70 text-center font-medium group-hover:text-gold transition-colors leading-tight max-w-[120px]">
-                {link.label}
+                {book.label}
               </p>
             </Link>
           ))}
