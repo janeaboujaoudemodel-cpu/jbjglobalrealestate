@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { 
   Calendar, Plus, Clock, MapPin, Users, Bell, Mail, Phone, Trash2, 
-  Edit2, Check, X, ChevronLeft, ChevronRight, Save, FolderOpen
+  Edit2, Check, X, ChevronLeft, ChevronRight, Save, FolderOpen, ArrowLeft
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -50,6 +50,7 @@ interface SavedProject {
 }
 
 const AICalendar = () => {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [notes, setNotes] = useState<Note[]>([]);
@@ -330,6 +331,16 @@ const AICalendar = () => {
       {/* Header */}
       <div className="bg-gradient-to-r from-cyan-900/30 via-cyan-800/20 to-cyan-900/30 border-b border-cyan-500/30">
         <div className="container mx-auto px-4 py-12">
+          {/* Back Arrow */}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate(-1)}
+            className="mb-4 text-white hover:bg-white/10 gap-2"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back
+          </Button>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -369,23 +380,23 @@ const AICalendar = () => {
                 <Plus className="w-3 h-3 mr-1" /> New Project
               </Button>
             </DialogTrigger>
-            <DialogContent className="bg-zinc-900 border-zinc-700">
-              <DialogHeader>
-                <DialogTitle className="text-white">Create New Project</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-4">
-                <div>
-                  <Label className="text-zinc-400">Project Name</Label>
-                  <Input
-                    value={newProjectName}
-                    onChange={(e) => setNewProjectName(e.target.value)}
-                    placeholder="My Calendar Project"
-                    className="bg-zinc-800 border-zinc-700 text-white"
-                  />
-                </div>
-                <Button onClick={createProject} className="w-full bg-cyan-600 hover:bg-cyan-700 text-white">
-                  Create Project
-                </Button>
+             <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold shadow-[0_8px_40px_rgba(200,167,102,0.4)]">
+               <DialogHeader>
+                 <DialogTitle className="text-black font-bold">Create New Project</DialogTitle>
+               </DialogHeader>
+               <div className="space-y-4">
+                 <div>
+                   <Label className="text-zinc-700">Project Name</Label>
+                   <Input
+                     value={newProjectName}
+                     onChange={(e) => setNewProjectName(e.target.value)}
+                     placeholder="My Calendar Project"
+                     className="bg-white border-2 border-gold/40 focus:border-gold text-black"
+                   />
+                 </div>
+                 <Button onClick={createProject} className="w-full bg-gradient-to-r from-gold to-gold/80 text-black font-bold hover:from-gold/90 hover:to-gold/70">
+                   Create Project
+                 </Button>
               </div>
             </DialogContent>
           </Dialog>
@@ -431,101 +442,102 @@ const AICalendar = () => {
                       <Plus className="w-4 h-4 mr-1" /> Add Event
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="bg-zinc-900 border-zinc-700 max-w-lg">
-                    <DialogHeader>
-                      <DialogTitle className="text-white">
-                        {editingEvent ? 'Edit Event' : 'Create New Event'}
-                      </DialogTitle>
-                    </DialogHeader>
-                    <div className="space-y-4 max-h-[60vh] overflow-y-auto">
-                      <div>
-                        <Label className="text-zinc-400">Title *</Label>
-                        <Input
-                          value={eventForm.title}
-                          onChange={(e) => setEventForm(prev => ({ ...prev, title: e.target.value }))}
-                          placeholder="Meeting with client"
-                          className="bg-zinc-800 border-zinc-700"
-                        />
+                   <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold max-w-lg shadow-[0_8px_40px_rgba(200,167,102,0.4)]">
+                     <DialogHeader>
+                       <DialogTitle className="text-black font-bold flex items-center gap-2">
+                         <Calendar className="w-5 h-5 text-gold" />
+                         {editingEvent ? 'Edit Event' : 'Create New Event'}
+                       </DialogTitle>
+                     </DialogHeader>
+                     <div className="space-y-4 max-h-[60vh] overflow-y-auto">
+                       <div>
+                         <Label className="text-zinc-700">Title *</Label>
+                         <Input
+                           value={eventForm.title}
+                           onChange={(e) => setEventForm(prev => ({ ...prev, title: e.target.value }))}
+                           placeholder="Meeting with client"
+                           className="bg-white border-2 border-gold/40 focus:border-gold text-black"
+                         />
                       </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <Label className="text-zinc-400">Date</Label>
-                          <Input
-                            type="date"
-                            value={eventForm.date}
-                            onChange={(e) => setEventForm(prev => ({ ...prev, date: e.target.value }))}
-                            className="bg-zinc-800 border-zinc-700"
-                          />
-                        </div>
-                        <div>
-                          <Label className="text-zinc-400">Time</Label>
-                          <Input
-                            type="time"
-                            value={eventForm.time}
-                            onChange={(e) => setEventForm(prev => ({ ...prev, time: e.target.value }))}
-                            className="bg-zinc-800 border-zinc-700"
-                          />
-                        </div>
+                       <div className="grid grid-cols-2 gap-4">
+                         <div>
+                           <Label className="text-zinc-700">Date</Label>
+                           <Input
+                             type="date"
+                             value={eventForm.date}
+                             onChange={(e) => setEventForm(prev => ({ ...prev, date: e.target.value }))}
+                             className="bg-white border-2 border-gold/40 focus:border-gold text-black"
+                           />
+                         </div>
+                         <div>
+                           <Label className="text-zinc-700">Time</Label>
+                           <Input
+                             type="time"
+                             value={eventForm.time}
+                             onChange={(e) => setEventForm(prev => ({ ...prev, time: e.target.value }))}
+                             className="bg-white border-2 border-gold/40 focus:border-gold text-black"
+                           />
+                         </div>
+                       </div>
+                       <div className="grid grid-cols-2 gap-4">
+                         <div>
+                           <Label className="text-zinc-700">Duration (mins)</Label>
+                           <Input
+                             type="number"
+                             value={eventForm.duration}
+                             onChange={(e) => setEventForm(prev => ({ ...prev, duration: parseInt(e.target.value) || 60 }))}
+                             className="bg-white border-2 border-gold/40 focus:border-gold text-black"
+                           />
+                         </div>
+                         <div>
+                           <Label className="text-zinc-700">Type</Label>
+                           <Select value={eventForm.type} onValueChange={(v: CalendarEvent['type']) => setEventForm(prev => ({ ...prev, type: v }))}>
+                             <SelectTrigger className="bg-white border-2 border-gold/40 focus:border-gold text-black">
+                               <SelectValue />
+                             </SelectTrigger>
+                             <SelectContent>
+                               <SelectItem value="meeting">Meeting</SelectItem>
+                               <SelectItem value="viewing">Property Viewing</SelectItem>
+                               <SelectItem value="call">Call</SelectItem>
+                               <SelectItem value="reminder">Reminder</SelectItem>
+                               <SelectItem value="other">Other</SelectItem>
+                             </SelectContent>
+                           </Select>
+                         </div>
+                       </div>
+                       <div>
+                         <Label className="text-zinc-700">Location</Label>
+                         <Input
+                           value={eventForm.location}
+                           onChange={(e) => setEventForm(prev => ({ ...prev, location: e.target.value }))}
+                           placeholder="Dubai Marina, Tower A"
+                           className="bg-white border-2 border-gold/40 focus:border-gold text-black"
+                         />
                       </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <Label className="text-zinc-400">Duration (mins)</Label>
-                          <Input
-                            type="number"
-                            value={eventForm.duration}
-                            onChange={(e) => setEventForm(prev => ({ ...prev, duration: parseInt(e.target.value) || 60 }))}
-                            className="bg-zinc-800 border-zinc-700"
-                          />
-                        </div>
-                        <div>
-                          <Label className="text-zinc-400">Type</Label>
-                          <Select value={eventForm.type} onValueChange={(v: CalendarEvent['type']) => setEventForm(prev => ({ ...prev, type: v }))}>
-                            <SelectTrigger className="bg-zinc-800 border-zinc-700">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent className="bg-zinc-800 border-zinc-700">
-                              <SelectItem value="meeting">Meeting</SelectItem>
-                              <SelectItem value="viewing">Property Viewing</SelectItem>
-                              <SelectItem value="call">Call</SelectItem>
-                              <SelectItem value="reminder">Reminder</SelectItem>
-                              <SelectItem value="other">Other</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
+                       <div>
+                         <Label className="text-zinc-700">Attendees (comma-separated emails)</Label>
+                         <Input
+                           value={eventForm.attendees}
+                           onChange={(e) => setEventForm(prev => ({ ...prev, attendees: e.target.value }))}
+                           placeholder="client@email.com, broker@email.com"
+                           className="bg-white border-2 border-gold/40 focus:border-gold text-black"
+                         />
                       </div>
-                      <div>
-                        <Label className="text-zinc-400">Location</Label>
-                        <Input
-                          value={eventForm.location}
-                          onChange={(e) => setEventForm(prev => ({ ...prev, location: e.target.value }))}
-                          placeholder="Dubai Marina, Tower A"
-                          className="bg-zinc-800 border-zinc-700"
-                        />
-                      </div>
-                      <div>
-                        <Label className="text-zinc-400">Attendees (comma-separated emails)</Label>
-                        <Input
-                          value={eventForm.attendees}
-                          onChange={(e) => setEventForm(prev => ({ ...prev, attendees: e.target.value }))}
-                          placeholder="client@email.com, broker@email.com"
-                          className="bg-zinc-800 border-zinc-700"
-                        />
-                      </div>
-                      <div>
-                        <Label className="text-zinc-400">Description</Label>
-                        <Textarea
-                          value={eventForm.description}
-                          onChange={(e) => setEventForm(prev => ({ ...prev, description: e.target.value }))}
-                          placeholder="Event details..."
-                          className="bg-zinc-800 border-zinc-700"
-                        />
-                      </div>
-                      <div className="space-y-3 p-4 bg-zinc-800/50 rounded-lg">
-                        <p className="text-sm text-zinc-400 font-medium">Reminders</p>
-                        <div className="flex items-center justify-between">
+                       <div>
+                         <Label className="text-zinc-700">Description</Label>
+                         <Textarea
+                           value={eventForm.description}
+                           onChange={(e) => setEventForm(prev => ({ ...prev, description: e.target.value }))}
+                           placeholder="Event details..."
+                           className="bg-white border-2 border-gold/40 focus:border-gold text-black"
+                         />
+                       </div>
+                       <div className="space-y-3 p-4 bg-white/60 rounded-lg border border-gold/20">
+                         <p className="text-sm text-zinc-600 font-medium">Reminders</p>
+                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             <Mail className="w-4 h-4 text-blue-400" />
-                            <span className="text-sm text-zinc-300">Email Reminder</span>
+                            <span className="text-sm text-zinc-700">Email Reminder</span>
                           </div>
                           <Switch
                             checked={eventForm.emailReminder}
@@ -535,20 +547,20 @@ const AICalendar = () => {
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             <Phone className="w-4 h-4 text-green-400" />
-                            <span className="text-sm text-zinc-300">Phone Notification</span>
+                            <span className="text-sm text-zinc-700">Phone Notification</span>
                           </div>
                           <Switch
                             checked={eventForm.phoneReminder}
                             onCheckedChange={(v) => setEventForm(prev => ({ ...prev, phoneReminder: v }))}
                           />
                         </div>
-                        <div>
-                          <Label className="text-xs text-zinc-500">Remind before (minutes)</Label>
-                          <Select value={eventForm.reminderTime.toString()} onValueChange={(v) => setEventForm(prev => ({ ...prev, reminderTime: parseInt(v) }))}>
-                            <SelectTrigger className="bg-zinc-800 border-zinc-700">
+                         <div>
+                           <Label className="text-xs text-zinc-500">Remind before (minutes)</Label>
+                           <Select value={eventForm.reminderTime.toString()} onValueChange={(v) => setEventForm(prev => ({ ...prev, reminderTime: parseInt(v) }))}>
+                             <SelectTrigger className="bg-white border-2 border-gold/40 text-black">
                               <SelectValue />
                             </SelectTrigger>
-                            <SelectContent className="bg-zinc-800 border-zinc-700">
+                             <SelectContent>
                               <SelectItem value="15">15 minutes</SelectItem>
                               <SelectItem value="30">30 minutes</SelectItem>
                               <SelectItem value="60">1 hour</SelectItem>
@@ -557,7 +569,7 @@ const AICalendar = () => {
                           </Select>
                         </div>
                       </div>
-                      <Button onClick={handleCreateEvent} className="w-full bg-blue-600">
+                      <Button onClick={handleCreateEvent} className="w-full bg-gradient-to-r from-gold to-gold/80 text-black font-bold hover:from-gold/90 hover:to-gold/70">
                         {editingEvent ? 'Update Event' : 'Create Event'}
                       </Button>
                     </div>
@@ -710,34 +722,34 @@ const AICalendar = () => {
                       <Plus className="w-3 h-3 mr-1" /> Add Note
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="bg-zinc-900 border-zinc-700">
-                    <DialogHeader>
-                      <DialogTitle className="text-white">
-                        {editingNote ? 'Edit Note' : 'Create Note'}
-                      </DialogTitle>
-                    </DialogHeader>
-                    <div className="space-y-4">
-                      <div>
-                        <Label className="text-zinc-400">Title</Label>
-                        <Input
-                          value={noteForm.title}
-                          onChange={(e) => setNoteForm(prev => ({ ...prev, title: e.target.value }))}
-                          placeholder="Note title"
-                          className="bg-zinc-800 border-zinc-700"
-                        />
-                      </div>
-                      <div>
-                        <Label className="text-zinc-400">Content</Label>
-                        <Textarea
-                          value={noteForm.content}
-                          onChange={(e) => setNoteForm(prev => ({ ...prev, content: e.target.value }))}
-                          placeholder="Write your note..."
-                          className="bg-zinc-800 border-zinc-700 min-h-[150px]"
-                        />
-                      </div>
-                      <Button onClick={handleCreateNote} className="w-full bg-blue-600">
-                        {editingNote ? 'Update Note' : 'Save Note'}
-                      </Button>
+                   <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold shadow-[0_8px_40px_rgba(200,167,102,0.4)]">
+                     <DialogHeader>
+                       <DialogTitle className="text-black font-bold">
+                         {editingNote ? 'Edit Note' : 'Create Note'}
+                       </DialogTitle>
+                     </DialogHeader>
+                     <div className="space-y-4">
+                       <div>
+                         <Label className="text-zinc-700">Title</Label>
+                         <Input
+                           value={noteForm.title}
+                           onChange={(e) => setNoteForm(prev => ({ ...prev, title: e.target.value }))}
+                           placeholder="Note title"
+                           className="bg-white border-2 border-gold/40 focus:border-gold text-black"
+                         />
+                       </div>
+                       <div>
+                         <Label className="text-zinc-700">Content</Label>
+                         <Textarea
+                           value={noteForm.content}
+                           onChange={(e) => setNoteForm(prev => ({ ...prev, content: e.target.value }))}
+                           placeholder="Write your note..."
+                           className="bg-white border-2 border-gold/40 focus:border-gold text-black min-h-[150px]"
+                         />
+                       </div>
+                       <Button onClick={handleCreateNote} className="w-full bg-gradient-to-r from-gold to-gold/80 text-black font-bold hover:from-gold/90 hover:to-gold/70">
+                         {editingNote ? 'Update Note' : 'Save Note'}
+                       </Button>
                     </div>
                   </DialogContent>
                 </Dialog>

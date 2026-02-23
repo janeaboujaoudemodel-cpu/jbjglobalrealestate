@@ -559,103 +559,186 @@ const SupportTicketBox = () => {
                                 We're sorry you're experiencing issues. Our team is on it!
                               </motion.p>
 
-                              {/* Ticket Number Box */}
-                              <motion.div 
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.5 }}
-                                className="bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 border border-gold/40 rounded-xl p-6 mb-6"
-                              >
-                                <p className="text-sm text-zinc-600 mb-2">Your Ticket Number</p>
-                                <div className="flex items-center justify-center gap-3">
-                                  <span className="text-2xl font-bold text-gold tracking-wider">{ticketNumber}</span>
-                                  <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    onClick={copyTicketNumber}
-                                    className="hover:bg-gold/10"
-                                  >
-                                    {copied ? (
-                                      <Check className="w-5 h-5 text-green-500" />
-                                    ) : (
-                                      <Copy className="w-5 h-5 text-gold" />
-                                    )}
-                                  </Button>
-                                </div>
-                              </motion.div>
+                               {/* Ticket Number Box */}
+                               <motion.div 
+                                 initial={{ opacity: 0, y: 10 }}
+                                 animate={{ opacity: 1, y: 0 }}
+                                 transition={{ delay: 0.5 }}
+                                 className="bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 border border-gold/40 rounded-xl p-6 mb-4"
+                               >
+                                 <p className="text-sm text-zinc-600 mb-2">Your Ticket Number</p>
+                                 <div className="flex items-center justify-center gap-3">
+                                   <span className="text-2xl font-bold text-gold tracking-wider">{ticketNumber}</span>
+                                   <Button
+                                     variant="ghost"
+                                     size="icon"
+                                     onClick={copyTicketNumber}
+                                     className="hover:bg-gold/10"
+                                   >
+                                     {copied ? (
+                                       <Check className="w-5 h-5 text-green-500" />
+                                     ) : (
+                                       <Copy className="w-5 h-5 text-gold" />
+                                     )}
+                                   </Button>
+                                 </div>
+                               </motion.div>
 
-                              {/* Email Status & Resend Button */}
-                              <motion.div 
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 0.6 }}
-                                className="mb-6"
-                              >
-                                {emailWasSent || emailResent ? (
-                                  <p className="text-sm text-zinc-500 flex items-center justify-center gap-2">
-                                    <MailCheck className="w-4 h-4 text-green-500" />
-                                    Confirmation email {emailResent ? "resent" : "sent"} to <strong>{formData.email}</strong>
-                                  </p>
-                                ) : (
-                                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-center">
-                                    <div className="flex items-center justify-center gap-2 text-amber-700 mb-2">
-                                      <AlertTriangle className="w-4 h-4" />
-                                      <span className="text-sm font-medium">Email delivery failed</span>
-                                    </div>
-                                    <p className="text-xs text-amber-600 mb-3">
-                                      We couldn't send the confirmation email. Please save your ticket number above.
-                                    </p>
-                                    <Button
-                                      onClick={async () => {
-                                        const result = await resendConfirmation(ticketNumber, formData.email);
-                                        if (result.success) {
-                                          setEmailResent(true);
-                                        }
-                                      }}
-                                      disabled={isResending}
-                                      variant="outline"
-                                      size="sm"
-                                      className="border-amber-400 text-amber-700 hover:bg-amber-100"
-                                    >
-                                      {isResending ? (
-                                        <>
-                                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                                          Sending...
-                                        </>
-                                      ) : (
-                                        <>
-                                          <RefreshCw className="w-4 h-4 mr-2" />
-                                          Resend Confirmation Email
-                                        </>
-                                      )}
-                                    </Button>
-                                  </div>
-                                )}
-                              </motion.div>
+                               {/* Ticket Summary Card */}
+                               <motion.div
+                                 initial={{ opacity: 0, y: 10 }}
+                                 animate={{ opacity: 1, y: 0 }}
+                                 transition={{ delay: 0.55 }}
+                                 className="bg-white border border-gold/30 rounded-xl p-4 mb-4 text-left"
+                               >
+                                 <p className="text-sm font-bold text-black mb-3 flex items-center gap-2">
+                                   <FileText className="w-4 h-4 text-gold" />
+                                   Ticket Summary
+                                 </p>
+                                 <div className="space-y-2 text-xs">
+                                   <div className="flex justify-between">
+                                     <span className="text-zinc-500">Ticket #</span>
+                                     <span className="text-black font-semibold">{ticketNumber}</span>
+                                   </div>
+                                   <div className="flex justify-between">
+                                     <span className="text-zinc-500">Category</span>
+                                     <span className="text-black font-medium">{formData.serviceCategory}</span>
+                                   </div>
+                                   <div className="flex justify-between">
+                                     <span className="text-zinc-500">Subject</span>
+                                     <span className="text-black font-medium truncate max-w-[180px]">{formData.subject}</span>
+                                   </div>
+                                   <div className="flex justify-between">
+                                     <span className="text-zinc-500">Priority</span>
+                                     <span className={`font-medium ${
+                                       formData.priority === 'critical' ? 'text-red-500' :
+                                       formData.priority === 'high' ? 'text-orange-500' :
+                                       formData.priority === 'normal' ? 'text-blue-500' : 'text-green-500'
+                                     }`}>
+                                       {formData.priority.charAt(0).toUpperCase() + formData.priority.slice(1)}
+                                     </span>
+                                   </div>
+                                   <div className="flex justify-between">
+                                     <span className="text-zinc-500">Submitted</span>
+                                     <span className="text-black font-medium">{new Date().toLocaleDateString()}</span>
+                                   </div>
+                                   {attachments.length > 0 && (
+                                     <div className="flex justify-between">
+                                       <span className="text-zinc-500">Attachments</span>
+                                       <span className="text-black font-medium">{attachments.length} file(s)</span>
+                                     </div>
+                                   )}
+                                 </div>
+                                 <Button
+                                   variant="ghost"
+                                   size="sm"
+                                   onClick={() => {
+                                     const summary = `Ticket: ${ticketNumber}\nCategory: ${formData.serviceCategory}\nSubject: ${formData.subject}\nPriority: ${formData.priority}\nDate: ${new Date().toLocaleDateString()}`;
+                                     navigator.clipboard.writeText(summary);
+                                     toast.success("Ticket summary copied!");
+                                   }}
+                                   className="mt-3 w-full text-gold hover:bg-gold/10 text-xs"
+                                 >
+                                   <Copy className="w-3 h-3 mr-1" /> Copy Full Summary
+                                 </Button>
+                               </motion.div>
 
-                              {/* Action Buttons */}
-                              <motion.div 
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.7 }}
-                                className="space-y-3"
-                              >
-                                <Button
-                                  onClick={submitAnotherTicket}
-                                  variant="secondary"
-                                  className="w-full"
-                                >
-                                  <Plus className="w-4 h-4 mr-2" />
-                                  Have Another Problem? Submit Another Ticket
-                                </Button>
-                                <Button
-                                  onClick={resetForm}
-                                  variant="dark"
-                                  className="w-full"
-                                >
-                                  Close
-                                </Button>
-                              </motion.div>
+                               {/* Email Status & Resend Button */}
+                               <motion.div 
+                                 initial={{ opacity: 0 }}
+                                 animate={{ opacity: 1 }}
+                                 transition={{ delay: 0.6 }}
+                                 className="mb-4"
+                               >
+                                 {emailWasSent || emailResent ? (
+                                   <p className="text-sm text-zinc-500 flex items-center justify-center gap-2">
+                                     <MailCheck className="w-4 h-4 text-green-500" />
+                                     Confirmation email {emailResent ? "resent" : "sent"} to <strong>{formData.email}</strong>
+                                   </p>
+                                 ) : (
+                                   <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-center">
+                                     <div className="flex items-center justify-center gap-2 text-amber-700 mb-2">
+                                       <AlertTriangle className="w-4 h-4" />
+                                       <span className="text-sm font-medium">Email delivery failed</span>
+                                     </div>
+                                     <p className="text-xs text-amber-600 mb-3">
+                                       We couldn't send the confirmation email. Please save your ticket number above.
+                                     </p>
+                                     <Button
+                                       onClick={async () => {
+                                         const result = await resendConfirmation(ticketNumber, formData.email);
+                                         if (result.success) {
+                                           setEmailResent(true);
+                                         }
+                                       }}
+                                       disabled={isResending}
+                                       variant="outline"
+                                       size="sm"
+                                       className="border-amber-400 text-amber-700 hover:bg-amber-100"
+                                     >
+                                       {isResending ? (
+                                         <>
+                                           <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                           Sending...
+                                         </>
+                                       ) : (
+                                         <>
+                                           <RefreshCw className="w-4 h-4 mr-2" />
+                                           Resend Confirmation Email
+                                         </>
+                                       )}
+                                     </Button>
+                                   </div>
+                                 )}
+                               </motion.div>
+
+                               {/* Quick Actions - Explore while waiting */}
+                               <motion.div
+                                 initial={{ opacity: 0, y: 10 }}
+                                 animate={{ opacity: 1, y: 0 }}
+                                 transition={{ delay: 0.65 }}
+                                 className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-xl p-4 mb-4"
+                               >
+                                 <p className="text-sm font-bold text-black mb-3 text-center">⏳ Explore While You Wait</p>
+                                 <div className="grid grid-cols-2 gap-2">
+                                   <a href="/properties" className="flex items-center justify-center gap-1 px-3 py-2.5 bg-white border border-gold/30 rounded-lg text-xs font-semibold text-black hover:border-gold transition-colors">
+                                     🏠 Properties
+                                   </a>
+                                   <a href="/ai-hub" className="flex items-center justify-center gap-1 px-3 py-2.5 bg-white border border-gold/30 rounded-lg text-xs font-semibold text-black hover:border-gold transition-colors">
+                                     🤖 AI Tools
+                                   </a>
+                                   <a href="/buyer-guide" className="flex items-center justify-center gap-1 px-3 py-2.5 bg-white border border-gold/30 rounded-lg text-xs font-semibold text-black hover:border-gold transition-colors">
+                                     📖 Guides
+                                   </a>
+                                   <a href="/careers" className="flex items-center justify-center gap-1 px-3 py-2.5 bg-white border border-gold/30 rounded-lg text-xs font-semibold text-black hover:border-gold transition-colors">
+                                     💼 Careers
+                                   </a>
+                                 </div>
+                               </motion.div>
+
+                               {/* Action Buttons */}
+                               <motion.div 
+                                 initial={{ opacity: 0, y: 10 }}
+                                 animate={{ opacity: 1, y: 0 }}
+                                 transition={{ delay: 0.7 }}
+                                 className="space-y-3"
+                               >
+                                 <Button
+                                   onClick={submitAnotherTicket}
+                                   variant="secondary"
+                                   className="w-full"
+                                 >
+                                   <Plus className="w-4 h-4 mr-2" />
+                                   Have Another Problem? Submit Another Ticket
+                                 </Button>
+                                 <Button
+                                   onClick={resetForm}
+                                   variant="dark"
+                                   className="w-full"
+                                 >
+                                   Close
+                                 </Button>
+                               </motion.div>
                             </motion.div>
                           ) : (
                             <motion.form

@@ -278,12 +278,12 @@ body{margin:0;padding:0;width:100%!important;background-color:#F5EBD7;}
 <table role="presentation" class="wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:linear-gradient(180deg,#FFFFFF 0%,#FDFBF7 50%,#F5F0E6 100%);border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(200,167,102,0.15);">
 
 <!-- Logo Banner -->
-<tr><td style="background:#ffffff;padding:24px 32px 16px;text-align:center;border-radius:20px 20px 0 0;">
+<tr><td style="background:#ffffff;padding:24px 0 16px;text-align:center;border-radius:20px 20px 0 0;">
 <img src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/jbj-monogram-dark-on-light.png?v=2" alt="JBJ Global Real Estate" width="120" style="max-width:120px;height:auto;" />
 </td></tr>
 
 <!-- HERO - Champagne Gold Gradient -->
-<tr><td class="hero-pad" style="background:linear-gradient(135deg,#C8A766 0%,#B8956E 50%,#A07D4A 100%);padding:40px 32px;text-align:center;">
+<tr><td class="hero-pad" style="background:linear-gradient(135deg,#C8A766 0%,#B8956E 50%,#A07D4A 100%);padding:40px 24px;text-align:center;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr><td style="font-size:28px;font-weight:bold;color:#1a1a1a;padding-bottom:8px;font-family:'Segoe UI',Arial,sans-serif;">JBJ Global Real Estate</td></tr>
 <tr><td style="font-size:16px;color:#2d2d2d;padding-bottom:24px;font-weight:500;">Support Ticket Confirmation</td></tr>
@@ -335,7 +335,7 @@ ${OFFICIAL_EMAILS.support}
 </td></tr>
 
 <!-- CONTENT -->
-<tr><td class="content-pad" style="padding:32px 32px 24px;">
+<tr><td class="content-pad" style="padding:32px 24px 24px;">
 
 <!-- JBJ Support Header Card - Full width with rounded bottom -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:12px;margin-bottom:24px;">
