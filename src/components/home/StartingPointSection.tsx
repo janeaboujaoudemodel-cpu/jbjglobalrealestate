@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Heart, Target, Home, User, Layers, Briefcase, Globe, Award, GraduationCap,
-  FileText, BarChart3, Scale, Calculator, Palette, Building2, ArrowRight, Users
+  FileText, BarChart3, Scale, Calculator, Palette, Building2, ArrowRight, Users, Key, Wrench
 } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { cn } from '@/lib/utils';
@@ -33,10 +33,14 @@ const StartingPointSection = () => {
   const serviceCards = [
     { to: "/properties", icon: Home, label: t('hero.exploreProperties'), sub: t('hero.browseListings', 'Browse Listings') },
     { to: "/list-property", icon: FileText, label: t('hero.listYourProperty'), sub: t('hero.sellOrRent', 'Sell or Rent') },
+    { to: "/services/property-management", icon: Building2, label: t('hero.propertyManagement', 'Property Management'), sub: t('hero.manageProperty', 'Manage Property') },
+    { to: "/services/valuation", icon: BarChart3, label: t('hero.valuation', 'Valuation'), sub: t('hero.propertyValuation', 'Property Valuation') },
+    { to: "/services/short-term-rental", icon: Key, label: t('hero.shortTermRental', 'Short-Term Rental'), sub: t('hero.holidayHomes', 'Holiday Homes') },
+    { to: "/services/snagging", icon: Wrench, label: t('hero.snagging', 'Snagging'), sub: t('hero.inspectionService', 'Inspection Service') },
+    { to: "/services/design-build", icon: Palette, label: t('hero.designBuild'), sub: t('hero.constructionFitout', 'Construction & Fitout') },
     { to: "/market-report", icon: BarChart3, label: t('hero.marketReport'), sub: t('hero.latestInsights', 'Latest Insights') },
     { to: "/partners/legal", icon: Scale, label: t('hero.legalPartners'), sub: t('hero.legalServices', 'Legal Services') },
     { to: "/partners/mortgage", icon: Calculator, label: t('hero.mortgagePartners'), sub: t('hero.financingOptions', 'Financing Options') },
-    { to: "/services/design-build", icon: Palette, label: t('hero.designBuild'), sub: t('hero.constructionFitout', 'Construction & Fitout') },
     { to: "/guides/golden-visa-uae", icon: Globe, label: t('hero.goldenVisa', 'Golden Visa'), sub: t('hero.visaGuide', 'Visa Guide') },
   ];
 
