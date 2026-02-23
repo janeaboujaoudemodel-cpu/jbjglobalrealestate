@@ -424,7 +424,8 @@ const Index = () => {
       {/* AREAS WE COVER - Master Blueprint: Section 6 (12 area links) */}
       <AreasWeCover />
 
-      {/* DIVIDER removed under Areas We Cover per user request */}
+      {/* DIVIDER between Areas and Testimonials */}
+      <SectionDivider />
 
       {/* TESTIMONIALS - Master Blueprint: Section 7 (3 testimonials) */}
       <Suspense fallback={<SectionLoader />}>

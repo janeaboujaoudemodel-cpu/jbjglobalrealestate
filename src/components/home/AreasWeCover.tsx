@@ -29,22 +29,17 @@ const AreasWeCover = () => {
   }
 
   return (
-    <section className="bg-black">
+    <section className="bg-black pt-8 md:pt-12">
       <div className="jj-layer-2">
         {/* Section Header */}
         <div className="text-center mb-10">
           <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4">
             <MapPin className="w-3.5 h-3.5 text-gold" />
-            <span className="text-black">{t('areas.label', 'Explore Dubai')}</span>
+            <span className="text-black">{t('areas.label', 'Explore Areas')}</span>
           </span>
           <h2
-            className="text-2xl md:text-3xl font-bold"
-            style={{ 
-              fontFamily: "Poppins, sans-serif",
-              background: 'linear-gradient(135deg, #FFFFFF 0%, #F5EBD7 40%, #C8A766 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-            }}
+            className="text-2xl md:text-3xl font-bold text-black"
+            style={{ fontFamily: "Poppins, sans-serif" }}
           >
             {t('areas.title', 'Areas We Cover')}
           </h2>
