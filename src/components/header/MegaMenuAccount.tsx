@@ -1,8 +1,8 @@
 import React, { useMemo, useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { User, Heart, Sparkles, Users, FolderOpen, LogOut, ChevronRight, LayoutDashboard, Shield, Headphones, Loader2, Bell, DollarSign, Ruler, Check } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { User, Heart, Sparkles, Users, FolderOpen, LogOut, ChevronRight, LayoutDashboard, Shield, Headphones, Loader2, Bell, DollarSign, Ruler, Check, Globe, Search, Clock, ListChecks } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { useLanguage, SUPPORTED_LANGUAGES } from '@/contexts/LanguageContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { useQuery } from '@tanstack/react-query';
@@ -13,6 +13,7 @@ import ModeSwitcher from '@/components/ModeSwitcher';
 import { useTierProgress } from '@/hooks/useTierProgress';
 import { useUserModeContext } from '@/contexts/UserModeContext';
 import { SUPPORTED_CURRENCIES } from '@/components/CurrencySwitcher';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 
 interface MegaMenuAccountProps {
@@ -22,7 +23,7 @@ interface MegaMenuAccountProps {
 const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>(({ onClose }, ref) => {
   // IMPORTANT: Get ownerLoading from AuthContext to handle owner verification timing
   const { user, isOwner, ownerLoading, signOut } = useAuth();
-  const { t } = useLanguage();
+  const { t, language, setLanguage } = useLanguage();
   const { tierProgress, isCombinedMode, investorTierProgress, brokerTierProgress } = useTierProgress();
   const { mode } = useUserModeContext();
 
@@ -166,12 +167,24 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
     onClose();
   };
 
+  const navigate = useNavigate();
+  const [showLangDropdown, setShowLangDropdown] = useState(false);
+  const [showSearchDropdown, setShowSearchDropdown] = useState(false);
+
+  // Recently viewed pages from localStorage
+  const recentlyViewed = useMemo(() => {
+    try {
+      const stored = localStorage.getItem('jj_recent_pages');
+      return stored ? (JSON.parse(stored) as Array<{ path: string; title: string; timestamp: number }>).slice(0, 6) : [];
+    } catch { return []; }
+  }, []);
+
   const accountLinks = [
     { href: '/my-dashboard', label: t('account.myDashboard', 'My Dashboard'), icon: LayoutDashboard, description: t('account.myDashboardDesc', 'Your personalized dashboard') },
     { href: '/my-dashboard#notifications', label: t('account.notifications', 'Notification Inbox'), icon: Bell, description: t('account.notificationsDesc', 'View your notifications') },
     { href: '/my-dashboard#tasks', label: t('account.myTasks', 'My Tasks'), icon: Check, description: t('account.myTasksDesc', 'View and manage your tasks') },
     { href: '/profile', label: t('account.myProfile', 'My Profile'), icon: User, description: t('account.myProfileDesc', 'View and edit your profile') },
-    { href: '/favorites', label: t('nav.favorites', 'Favorites'), icon: Heart, description: t('account.favoritesDesc', 'Your saved properties') },
+    { href: '/favorites', label: t('nav.favorites', 'Favorites') + ' / ' + t('nav.shortlist', 'Shortlist'), icon: Heart, description: t('account.favoritesDesc', 'Your saved & shortlisted properties') },
     { href: '/toolkit', label: t('account.aiTools', 'AI Tools'), icon: Sparkles, description: t('account.aiToolsDesc', 'Professional AI-powered tools') },
   ];
 
@@ -323,10 +336,95 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                 </div>
 
                 {/* Currency & Unit Settings */}
-                <div className="mt-4 pt-4 border-t border-gold/30">
-                  <p className="text-[10px] uppercase tracking-[0.2em] text-gold font-bold px-2 mb-2">
-                    {t('account.preferences', 'Preferences')}
-                  </p>
+                <div className="mt-4 pt-0">
+                  {/* Full-width divider above Preferences */}
+                  <div className="h-[1px] bg-gradient-to-r from-gold/40 via-gold/50 to-gold/40 -mx-2 mb-3" />
+                  
+                  {/* Preferences header row with Language & Search icons */}
+                  <div className="flex items-center justify-between px-2 mb-2">
+                    <p className="text-[10px] uppercase tracking-[0.2em] text-gold font-bold">
+                      {t('account.preferences', 'Preferences')}
+                    </p>
+                    <div className="flex items-center gap-1.5">
+                      {/* Search Icon with dropdown */}
+                      <div className="relative">
+                        <button
+                          onClick={(e) => { e.stopPropagation(); setShowSearchDropdown(!showSearchDropdown); setShowLangDropdown(false); }}
+                          onPointerDown={(e) => e.stopPropagation()}
+                          className="w-7 h-7 rounded-lg border border-gold/30 flex items-center justify-center hover:bg-gold/10 hover:border-gold transition-colors"
+                          title="Recent Activity"
+                        >
+                          <Search className="w-3.5 h-3.5 text-gold" />
+                        </button>
+                        {showSearchDropdown && (
+                          <div className="absolute right-0 top-9 w-64 rounded-xl border-2 border-gold/30 shadow-xl z-[10001] p-3 max-h-72 overflow-y-auto"
+                            style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%)' }}
+                          >
+                            <p className="text-[10px] uppercase tracking-wider text-gold font-bold mb-2 flex items-center gap-1.5">
+                              <Clock className="w-3 h-3" /> Recently Viewed
+                            </p>
+                            {recentlyViewed.length > 0 ? (
+                              <div className="space-y-1">
+                                {recentlyViewed.map((item, i) => (
+                                  <button
+                                    key={i}
+                                    onClick={() => { navigate(item.path); onClose(); }}
+                                    className="w-full text-left px-2 py-1.5 rounded-lg text-xs text-black hover:bg-gold/10 hover:text-gold transition-colors truncate"
+                                  >
+                                    {item.title || item.path}
+                                  </button>
+                                ))}
+                              </div>
+                            ) : (
+                              <p className="text-xs text-black/40 px-2 py-2">No recent activity</p>
+                            )}
+                            <div className="h-[1px] bg-gold/20 my-2" />
+                            <Link
+                              to="/my-dashboard#activity"
+                              onClick={onClose}
+                              className="block text-center text-[10px] font-semibold text-gold hover:underline"
+                            >
+                              See all recent activity →
+                            </Link>
+                          </div>
+                        )}
+                      </div>
+                      {/* Language Icon with dropdown */}
+                      <div className="relative">
+                        <button
+                          onClick={(e) => { e.stopPropagation(); setShowLangDropdown(!showLangDropdown); setShowSearchDropdown(false); }}
+                          onPointerDown={(e) => e.stopPropagation()}
+                          className="w-7 h-7 rounded-lg border border-gold/30 flex items-center justify-center hover:bg-gold/10 hover:border-gold transition-colors"
+                          title="Language"
+                        >
+                          <Globe className="w-3.5 h-3.5 text-gold" />
+                        </button>
+                        {showLangDropdown && (
+                          <div className="absolute right-0 top-9 w-56 rounded-xl border-2 border-gold/30 shadow-xl z-[10001] p-2 max-h-64 overflow-y-auto"
+                            style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%)' }}
+                          >
+                            {SUPPORTED_LANGUAGES.map((lang) => (
+                              <button
+                                key={lang.code}
+                                onClick={(e) => { e.stopPropagation(); setLanguage(lang.code as any); setShowLangDropdown(false); }}
+                                className={cn(
+                                  "flex items-center gap-2 w-full px-3 py-2 rounded-lg text-xs transition-colors",
+                                  language === lang.code
+                                    ? "bg-gold/15 text-gold font-semibold border border-gold/30"
+                                    : "text-black hover:bg-gold/10 hover:text-gold"
+                                )}
+                              >
+                                <span className="text-base">{lang.flag}</span>
+                                <span>{lang.nativeName}</span>
+                                {language === lang.code && <Check className="w-3.5 h-3.5 ml-auto text-gold" />}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
                   {/* Currency */}
                   <div className="px-2 mb-3">
                     <p className="text-xs font-semibold text-black/50 mb-1.5 flex items-center gap-1"><DollarSign className="w-3 h-3" /> Currency</p>
@@ -491,6 +589,8 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                           </span>
                         </Link>
                       )}
+                      {/* Full-width divider under CRM Dashboard */}
+                      <div className="h-[1px] bg-gradient-to-r from-gold/40 via-gold/50 to-gold/40 -mx-2 my-2" />
                     </div>
                   </>
                 )}

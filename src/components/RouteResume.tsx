@@ -1,32 +1,57 @@
 import { useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
+const ROUTE_NAMES: Record<string, string> = {
+  '/': 'Home',
+  '/my-dashboard': 'My Dashboard',
+  '/profile': 'My Profile',
+  '/favorites': 'Favorites',
+  '/compare': 'Shortlist',
+  '/toolkit': 'AI Tools',
+  '/crm': 'CRM Dashboard',
+  '/owner': 'Owner Dashboard',
+  '/admin': 'Admin Panel',
+  '/ai-calendar': 'AI Calendar & Notes',
+  '/support-tickets': 'Support Tickets',
+  '/market-intelligence': 'Market Intelligence',
+  '/area-guides': 'Area Guides',
+};
+
 /**
  * Persists and restores the last visited route using localStorage.
- * Only restores when the app genuinely loads on "/" but has a saved deep route.
+ * Also tracks recently viewed pages for the account dropdown.
  */
 export default function RouteResume() {
   const location = useLocation();
   const navigate = useNavigate();
   const hasCheckedRef = useRef(false);
 
-  // Persist last visited route to localStorage (survives tab close).
+  // Persist last visited route + track recent pages
   useEffect(() => {
     try {
       const route = `${location.pathname}${location.search}${location.hash}`;
       const existing = localStorage.getItem("last-route");
 
-      // Don't overwrite a real deep route with "/" on initial mount
       if (!hasCheckedRef.current && route === "/" && existing && existing !== "/") {
         return;
       }
 
-      // Never save auth-redirect pages as last-route
       if (route.startsWith("/auth") || route === "/403") {
         return;
       }
 
       localStorage.setItem("last-route", route);
+
+      // Track recently viewed pages
+      const path = location.pathname;
+      if (path.length > 1) {
+        const stored = localStorage.getItem('jj_recent_pages');
+        const pages: Array<{ path: string; title: string; timestamp: number }> = stored ? JSON.parse(stored) : [];
+        const filtered = pages.filter(p => p.path !== path);
+        const title = ROUTE_NAMES[path] || path.split('/').filter(Boolean).map(s => s.charAt(0).toUpperCase() + s.slice(1).replace(/-/g, ' ')).join(' › ');
+        filtered.unshift({ path, title, timestamp: Date.now() });
+        localStorage.setItem('jj_recent_pages', JSON.stringify(filtered.slice(0, 12)));
+      }
     } catch {
       // ignore
     }
