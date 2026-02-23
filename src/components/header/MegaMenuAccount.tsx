@@ -20,6 +20,19 @@ interface MegaMenuAccountProps {
   onClose: () => void;
 }
 
+const SEARCH_SHORTCUTS = [
+  { path: '/my-dashboard', label: 'My Dashboard', icon: LayoutDashboard, keywords: ['dashboard', 'home'] },
+  { path: '/favorites', label: 'Favorites & Shortlist', icon: Heart, keywords: ['favorites', 'shortlist', 'saved'] },
+  { path: '/toolkit', label: 'AI Tools', icon: Sparkles, keywords: ['ai', 'tools', 'toolkit'] },
+  { path: '/profile', label: 'My Profile', icon: User, keywords: ['profile', 'account', 'settings'] },
+  { path: '/crm', label: 'CRM Dashboard', icon: Users, keywords: ['crm', 'leads', 'clients'] },
+  { path: '/ai-calendar', label: 'AI Calendar & Notes', icon: Bell, keywords: ['calendar', 'notes', 'events'] },
+  { path: '/support-tickets', label: 'Support Tickets', icon: Headphones, keywords: ['support', 'tickets', 'help'] },
+  { path: '/market-intelligence', label: 'Market Intelligence', icon: LayoutDashboard, keywords: ['market', 'analytics', 'data'] },
+  { path: '/area-guides', label: 'Area Guides', icon: Globe, keywords: ['areas', 'guides', 'locations'] },
+  { path: '/owner', label: 'Owner Dashboard', icon: Shield, keywords: ['owner', 'admin', 'command'] },
+];
+
 const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>(({ onClose }, ref) => {
   // IMPORTANT: Get ownerLoading from AuthContext to handle owner verification timing
   const { user, isOwner, ownerLoading, signOut } = useAuth();
@@ -170,6 +183,8 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
   const navigate = useNavigate();
   const [showLangDropdown, setShowLangDropdown] = useState(false);
   const [showSearchDropdown, setShowSearchDropdown] = useState(false);
+  const [searchTab, setSearchTab] = useState<'search' | 'recent'>('search');
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Recently viewed pages from localStorage
   const recentlyViewed = useMemo(() => {
@@ -334,155 +349,6 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                     </Link>
                   ))}
                 </div>
-
-                {/* Currency & Unit Settings */}
-                <div className="mt-4 pt-0">
-                  {/* Full-width divider above Preferences */}
-                  <div className="h-[1px] bg-gradient-to-r from-gold/40 via-gold/50 to-gold/40 -mx-2 mb-3" />
-                  
-                  {/* Preferences header row with Language & Search icons */}
-                  <div className="flex items-center justify-between px-2 mb-2">
-                    <p className="text-[10px] uppercase tracking-[0.2em] text-gold font-bold">
-                      {t('account.preferences', 'Preferences')}
-                    </p>
-                    <div className="flex items-center gap-1.5">
-                      {/* Search Icon with dropdown */}
-                      <div className="relative">
-                        <button
-                          onClick={(e) => { e.stopPropagation(); setShowSearchDropdown(!showSearchDropdown); setShowLangDropdown(false); }}
-                          onPointerDown={(e) => e.stopPropagation()}
-                          className="w-7 h-7 rounded-lg border border-gold/30 flex items-center justify-center hover:bg-gold/10 hover:border-gold transition-colors"
-                          title="Recent Activity"
-                        >
-                          <Search className="w-3.5 h-3.5 text-gold" />
-                        </button>
-                        {showSearchDropdown && (
-                          <div className="absolute right-0 top-9 w-64 rounded-xl border-2 border-gold/30 shadow-xl z-[10001] p-3 max-h-72 overflow-y-auto"
-                            style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%)' }}
-                          >
-                            <p className="text-[10px] uppercase tracking-wider text-gold font-bold mb-2 flex items-center gap-1.5">
-                              <Clock className="w-3 h-3" /> Recently Viewed
-                            </p>
-                            {recentlyViewed.length > 0 ? (
-                              <div className="space-y-1">
-                                {recentlyViewed.map((item, i) => (
-                                  <button
-                                    key={i}
-                                    onClick={() => { navigate(item.path); onClose(); }}
-                                    className="w-full text-left px-2 py-1.5 rounded-lg text-xs text-black hover:bg-gold/10 hover:text-gold transition-colors truncate"
-                                  >
-                                    {item.title || item.path}
-                                  </button>
-                                ))}
-                              </div>
-                            ) : (
-                              <p className="text-xs text-black/40 px-2 py-2">No recent activity</p>
-                            )}
-                            <div className="h-[1px] bg-gold/20 my-2" />
-                            <Link
-                              to="/my-dashboard#activity"
-                              onClick={onClose}
-                              className="block text-center text-[10px] font-semibold text-gold hover:underline"
-                            >
-                              See all recent activity →
-                            </Link>
-                          </div>
-                        )}
-                      </div>
-                      {/* Language Icon with dropdown */}
-                      <div className="relative">
-                        <button
-                          onClick={(e) => { e.stopPropagation(); setShowLangDropdown(!showLangDropdown); setShowSearchDropdown(false); }}
-                          onPointerDown={(e) => e.stopPropagation()}
-                          className="w-7 h-7 rounded-lg border border-gold/30 flex items-center justify-center hover:bg-gold/10 hover:border-gold transition-colors"
-                          title="Language"
-                        >
-                          <Globe className="w-3.5 h-3.5 text-gold" />
-                        </button>
-                        {showLangDropdown && (
-                          <div className="absolute right-0 top-9 w-56 rounded-xl border-2 border-gold/30 shadow-xl z-[10001] p-2 max-h-64 overflow-y-auto"
-                            style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%)' }}
-                          >
-                            {SUPPORTED_LANGUAGES.map((lang) => (
-                              <button
-                                key={lang.code}
-                                onClick={(e) => { e.stopPropagation(); setLanguage(lang.code as any); setShowLangDropdown(false); }}
-                                className={cn(
-                                  "flex items-center gap-2 w-full px-3 py-2 rounded-lg text-xs transition-colors",
-                                  language === lang.code
-                                    ? "bg-gold/15 text-gold font-semibold border border-gold/30"
-                                    : "text-black hover:bg-gold/10 hover:text-gold"
-                                )}
-                              >
-                                <span className="text-base">{lang.flag}</span>
-                                <span>{lang.nativeName}</span>
-                                {language === lang.code && <Check className="w-3.5 h-3.5 ml-auto text-gold" />}
-                              </button>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Currency */}
-                  <div className="px-2 mb-3">
-                    <p className="text-xs font-semibold text-black/50 mb-1.5 flex items-center gap-1"><DollarSign className="w-3 h-3" /> Currency</p>
-                    <div className="grid grid-cols-5 gap-1">
-                      {SUPPORTED_CURRENCIES.map((cur) => (
-                        <button
-                          key={cur.code}
-                          onClick={(e) => { e.stopPropagation(); handleCurrencyChange(cur.code); }}
-                          onPointerDown={(e) => e.stopPropagation()}
-                          className={cn(
-                            "py-1.5 rounded-lg text-[10px] font-medium transition-colors text-center",
-                            activeCurrency === cur.code
-                              ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-[#C8A766]/60 shadow-sm"
-                              : "bg-champagne-light text-black hover:bg-champagne"
-                          )}
-                        >
-                          {cur.code}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  {/* Area Unit */}
-                  <div className="px-2 mb-3">
-                    <p className="text-xs font-semibold text-black/50 mb-1.5 flex items-center gap-1"><Ruler className="w-3 h-3" /> Area Unit</p>
-                    <div className="flex gap-2">
-                      {(['sqft', 'sqm'] as const).map((unit) => (
-                        <button
-                          key={unit}
-                          onClick={(e) => { e.stopPropagation(); handleAreaUnitChange(unit); }}
-                          onPointerDown={(e) => e.stopPropagation()}
-                          className={cn(
-                            "flex-1 py-1.5 rounded-lg text-xs font-medium transition-colors",
-                            areaUnit === unit
-                              ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-[#C8A766]/60 shadow-sm"
-                              : "bg-champagne-light text-black hover:bg-champagne"
-                          )}
-                        >
-                          {unit}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Sign Out Button */}
-                <div className="mt-2 pt-3 border-t border-gold/30">
-                  <button 
-                    onClick={handleSignOut} 
-                    className="flex items-center gap-3 py-2.5 px-2 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-red-500/10 hover:to-red-500/5 group w-full"
-                  >
-                    <div className="w-9 h-9 rounded-lg bg-transparent border-2 border-red-500/30 flex items-center justify-center group-hover:border-red-500 group-hover:bg-red-500/10 transition-colors">
-                      <LogOut className="w-4 h-4 text-red-600 group-hover:text-red-500" />
-                    </div>
-                    <span className="text-black font-semibold text-sm group-hover:text-red-600 transition-colors">
-                      {t('nav.signOut')}
-                    </span>
-                  </button>
-                </div>
               </div>
 
               {/* Right Column - Owner Links (LOCKED: Always show during loading or when owner has access) */}
@@ -521,7 +387,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                           <ChevronRight className="w-4 h-4 text-gold" />
                         </Link>
                       )}
-                      {/* Admin Panel - Second Primary Link (Consolidated Hub) */}
+                      {/* Admin Panel */}
                       {isOwner && (
                         <Link 
                           to="/admin" 
@@ -540,7 +406,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                           <ChevronRight className="w-3.5 h-3.5 text-purple-500" />
                         </Link>
                       )}
-                      {/* Customer Happiness Hub - Direct Admin Access */}
+                      {/* Customer Happiness Hub */}
                       {isOwner && (
                         <Link 
                           to="/admin?tab=customer-happiness" 
@@ -589,12 +455,216 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                           </span>
                         </Link>
                       )}
-                      {/* Full-width divider under CRM Dashboard */}
-                      <div className="h-[1px] bg-gradient-to-r from-gold/40 via-gold/50 to-gold/40 -mx-2 my-2" />
                     </div>
                   </>
                 )}
               </div>
+            </div>
+
+            {/* ═══ FULL-WIDTH DIVIDER — spans under both columns, under CRM ═══ */}
+            <div className="h-[1px] bg-gradient-to-r from-gold/40 via-gold/50 to-gold/40 mt-4 mb-3" />
+
+            {/* ═══ FULL-WIDTH: Preferences row with Language & Search icons ═══ */}
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-gold font-bold">
+                {t('account.preferences', 'Preferences')}
+              </p>
+              <div className="flex items-center gap-2">
+                {/* Search Icon with dropdown */}
+                <div className="relative">
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setShowSearchDropdown(!showSearchDropdown); setShowLangDropdown(false); }}
+                    onPointerDown={(e) => e.stopPropagation()}
+                    className="w-8 h-8 rounded-lg border border-gold/30 flex items-center justify-center hover:bg-gold/10 hover:border-gold transition-colors group"
+                    title="Quick Search & Recent Activity"
+                  >
+                    <Search className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
+                  </button>
+                  {showSearchDropdown && (
+                    <div
+                      className="absolute right-0 top-10 w-72 rounded-xl border-2 border-gold/30 shadow-2xl z-[10001] overflow-hidden"
+                      style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%)' }}
+                      onClick={(e) => e.stopPropagation()}
+                      onPointerDown={(e) => e.stopPropagation()}
+                    >
+                      {/* Tabs: Quick Search | Recent Activity */}
+                      <div className="flex border-b border-gold/20">
+                        <button
+                          onClick={() => setSearchTab('search')}
+                          className={cn(
+                            "flex-1 py-2 text-[10px] font-bold uppercase tracking-wider transition-colors flex items-center justify-center gap-1",
+                            searchTab === 'search' ? "text-gold border-b-2 border-gold bg-gold/5" : "text-black/50 hover:text-gold"
+                          )}
+                        >
+                          <Search className="w-3 h-3" /> Quick Search
+                        </button>
+                        <button
+                          onClick={() => setSearchTab('recent')}
+                          className={cn(
+                            "flex-1 py-2 text-[10px] font-bold uppercase tracking-wider transition-colors flex items-center justify-center gap-1",
+                            searchTab === 'recent' ? "text-gold border-b-2 border-gold bg-gold/5" : "text-black/50 hover:text-gold"
+                          )}
+                        >
+                          <Clock className="w-3 h-3" /> Recent Activity
+                        </button>
+                      </div>
+                      <div className="p-3 max-h-64 overflow-y-auto">
+                        {searchTab === 'search' ? (
+                          <>
+                            <input
+                              type="text"
+                              value={searchQuery}
+                              onChange={(e) => setSearchQuery(e.target.value)}
+                              placeholder="Search pages, tools, settings..."
+                              className="w-full px-3 py-2 rounded-lg border border-gold/30 bg-white/80 text-xs text-black placeholder:text-black/40 focus:outline-none focus:border-gold mb-2"
+                              autoFocus
+                            />
+                            <div className="space-y-0.5">
+                              {SEARCH_SHORTCUTS
+                                .filter(s => !searchQuery || s.label.toLowerCase().includes(searchQuery.toLowerCase()) || s.keywords.some(k => k.includes(searchQuery.toLowerCase())))
+                                .slice(0, 8)
+                                .map((shortcut) => (
+                                <button
+                                  key={shortcut.path}
+                                  onClick={() => { navigate(shortcut.path); onClose(); }}
+                                  className="w-full text-left px-2.5 py-2 rounded-lg text-xs text-black hover:bg-gold/10 hover:text-gold transition-colors flex items-center gap-2"
+                                >
+                                  <shortcut.icon className="w-3.5 h-3.5 text-gold/60 shrink-0" />
+                                  <span className="truncate">{shortcut.label}</span>
+                                </button>
+                              ))}
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            {recentlyViewed.length > 0 ? (
+                              <div className="space-y-0.5">
+                                {recentlyViewed.map((item, i) => (
+                                  <button
+                                    key={i}
+                                    onClick={() => { navigate(item.path); onClose(); }}
+                                    className="w-full text-left px-2.5 py-2 rounded-lg text-xs text-black hover:bg-gold/10 hover:text-gold transition-colors flex items-center gap-2"
+                                  >
+                                    <Clock className="w-3 h-3 text-gold/40 shrink-0" />
+                                    <span className="truncate">{item.title || item.path}</span>
+                                  </button>
+                                ))}
+                              </div>
+                            ) : (
+                              <p className="text-xs text-black/40 text-center py-4">No recent activity yet</p>
+                            )}
+                            <div className="h-[1px] bg-gold/20 my-2" />
+                            <Link
+                              to="/my-dashboard#activity"
+                              onClick={onClose}
+                              className="block text-center text-[10px] font-semibold text-gold hover:underline"
+                            >
+                              See all recent activity →
+                            </Link>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+                {/* Language Icon with dropdown */}
+                <div className="relative">
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setShowLangDropdown(!showLangDropdown); setShowSearchDropdown(false); }}
+                    onPointerDown={(e) => e.stopPropagation()}
+                    className="w-8 h-8 rounded-lg border border-gold/30 flex items-center justify-center hover:bg-gold/10 hover:border-gold transition-colors group"
+                    title="Language"
+                  >
+                    <Globe className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
+                  </button>
+                  {showLangDropdown && (
+                    <div
+                      className="absolute right-0 top-10 w-60 rounded-xl border-2 border-gold/30 shadow-2xl z-[10001] p-2 max-h-64 overflow-y-auto"
+                      style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%)' }}
+                      onClick={(e) => e.stopPropagation()}
+                      onPointerDown={(e) => e.stopPropagation()}
+                    >
+                      {SUPPORTED_LANGUAGES.map((lang) => (
+                        <button
+                          key={lang.code}
+                          onClick={(e) => { e.stopPropagation(); setLanguage(lang.code as any); setShowLangDropdown(false); }}
+                          className={cn(
+                            "flex items-center gap-2 w-full px-3 py-2 rounded-lg text-xs transition-colors",
+                            language === lang.code
+                              ? "bg-gold/15 text-gold font-semibold border border-gold/30"
+                              : "text-black hover:bg-gold/10 hover:text-gold"
+                          )}
+                        >
+                          <span className="text-base">{lang.flag}</span>
+                          <span>{lang.nativeName}</span>
+                          {language === lang.code && <Check className="w-3.5 h-3.5 ml-auto text-gold" />}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* ═══ FULL-WIDTH: Currency & Area Unit Settings ═══ */}
+            <div className="grid grid-cols-2 gap-4 mb-3">
+              {/* Currency */}
+              <div>
+                <p className="text-xs font-semibold text-black/50 mb-1.5 flex items-center gap-1"><DollarSign className="w-3 h-3" /> Currency</p>
+                <div className="grid grid-cols-5 gap-1">
+                  {SUPPORTED_CURRENCIES.map((cur) => (
+                    <button
+                      key={cur.code}
+                      onClick={(e) => { e.stopPropagation(); handleCurrencyChange(cur.code); }}
+                      onPointerDown={(e) => e.stopPropagation()}
+                      className={cn(
+                        "py-1.5 rounded-lg text-[10px] font-medium transition-colors text-center",
+                        activeCurrency === cur.code
+                          ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-[#C8A766]/60 shadow-sm"
+                          : "bg-champagne-light text-black hover:bg-champagne"
+                      )}
+                    >
+                      {cur.code}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              {/* Area Unit */}
+              <div>
+                <p className="text-xs font-semibold text-black/50 mb-1.5 flex items-center gap-1"><Ruler className="w-3 h-3" /> Area Unit</p>
+                <div className="flex gap-2">
+                  {(['sqft', 'sqm'] as const).map((unit) => (
+                    <button
+                      key={unit}
+                      onClick={(e) => { e.stopPropagation(); handleAreaUnitChange(unit); }}
+                      onPointerDown={(e) => e.stopPropagation()}
+                      className={cn(
+                        "flex-1 py-1.5 rounded-lg text-xs font-medium transition-colors",
+                        areaUnit === unit
+                          ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-[#C8A766]/60 shadow-sm"
+                          : "bg-champagne-light text-black hover:bg-champagne"
+                      )}
+                    >
+                      {unit}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Sign Out Button */}
+            <div className="pt-3 border-t border-gold/30">
+              <button 
+                onClick={handleSignOut} 
+                className="flex items-center gap-3 py-2.5 px-2 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-red-500/10 hover:to-red-500/5 group w-full"
+              >
+                <div className="w-9 h-9 rounded-lg bg-transparent border-2 border-red-500/30 flex items-center justify-center group-hover:border-red-500 group-hover:bg-red-500/10 transition-colors">
+                  <LogOut className="w-4 h-4 text-red-600 group-hover:text-red-500" />
+                </div>
+                <span className="text-black font-semibold text-sm group-hover:text-red-600 transition-colors">
+                  {t('nav.signOut')}
+                </span>
+              </button>
             </div>
           </>
         ) : (
