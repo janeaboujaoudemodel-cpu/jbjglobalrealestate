@@ -47,6 +47,7 @@ const StartingPointSection = () => {
   const professionalCards = [
     { to: "/broker-hub", icon: Building2, label: t('hero.jbjBrokerHub'), sub: t('hero.professionalTools', 'Professional Tools') },
     { to: "/investor-hub", icon: Layers, label: t('hero.jbjInvestorHub'), sub: t('hero.freeAiTools', 'Free AI Tools') },
+    { to: "/ai-hub", icon: Globe, label: t('hero.jbjAiToolsHub', 'JBJ AI Tools Hub'), sub: t('hero.aiPoweredTools', 'AI-Powered Tools') },
     { to: "/partners", icon: Briefcase, label: t('hero.partners', 'Partners'), sub: t('hero.partnerWithUs', 'Partner With Us') },
     { to: "/referral", icon: Award, label: t('hero.referral'), sub: t('hero.earnRewards', 'Earn Rewards') },
     { to: "/join", icon: GraduationCap, label: t('hero.careers'), sub: t('hero.joinOurTeam', 'Join Our Team') },
