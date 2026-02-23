@@ -5,6 +5,12 @@ import { useUserRole } from "@/hooks/useUserRole";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { SEOHead } from "@/components/SEOHead";
 import { Loader2, TrendingUp, Calendar, BookOpen, ChevronRight, ExternalLink, ListChecks, Sparkles } from "lucide-react";
+import { motion } from "framer-motion";
+import marketIntelligenceCover from "@/assets/books/market-intelligence-cover.jpg";
+import guidesLibraryCover from "@/assets/books/guides-library-cover.jpg";
+import goldenVisaCover from "@/assets/books/golden-visa-cover.jpg";
+import investorEducationCover from "@/assets/books/investor-education-cover.jpg";
+import brokerEducationCover from "@/assets/books/broker-education-cover.jpg";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -63,10 +69,10 @@ const SECTION_IDS: Record<string, string> = {
 /** Useful Links card for dashboard */
 function UsefulLinksCard() {
   const links = [
-    { label: 'Market Intelligence', href: '/market-intelligence/overview', icon: TrendingUp },
-    { label: 'Guides Library', href: '/guides', icon: BookOpen },
-    { label: 'Upcoming Events', href: '/news?category=events', icon: Calendar },
-    { label: 'Golden Visa Guide', href: '/guides/golden-visa-uae', icon: ExternalLink },
+    { label: 'Market Intelligence', href: '/market-intelligence/overview', icon: TrendingUp, cover: marketIntelligenceCover },
+    { label: 'Guides Library', href: '/guides', icon: BookOpen, cover: guidesLibraryCover },
+    { label: 'Golden Visa Guide', href: '/guides/golden-visa-uae', icon: ExternalLink, cover: goldenVisaCover },
+    { label: 'Investor Hub', href: '/investor-hub', icon: Sparkles, cover: investorEducationCover },
   ];
 
   return (
@@ -80,16 +86,44 @@ function UsefulLinksCard() {
         </CardTitle>
       </CardHeader>
       <CardContent className="pt-0">
-        <div className="space-y-1.5">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {links.map((link) => (
-            <Link
-              key={link.href}
-              to={link.href}
-              className="flex items-center gap-3 py-2.5 px-3 rounded-xl hover:bg-gold/10 transition-all group"
-            >
-              <link.icon className="w-4 h-4 text-gold/70 group-hover:text-gold transition-colors shrink-0" />
-              <span className="text-sm font-medium text-foreground group-hover:text-gold transition-colors">{link.label}</span>
-              <ChevronRight className="w-3.5 h-3.5 text-muted-foreground ml-auto" />
+            <Link key={link.href} to={link.href} className="group flex flex-col items-center gap-2">
+              <motion.div
+                whileHover={{ y: -6 }}
+                transition={{ type: 'spring', stiffness: 300 }}
+                className="relative w-full aspect-[2/3] max-w-[120px] mx-auto"
+                style={{ perspective: '800px' }}
+              >
+                <div
+                  className="relative w-full h-full rounded-r-md overflow-hidden border border-gold/40 shadow-[4px_4px_20px_rgba(0,0,0,0.3)] group-hover:shadow-[6px_6px_30px_rgba(200,167,102,0.4)] transition-shadow transform-gpu"
+                  style={{
+                    transformStyle: 'preserve-3d',
+                    transform: 'rotateY(-8deg) rotateX(2deg)',
+                  }}
+                >
+                  {/* Spine effect */}
+                  <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-black/40 to-transparent z-10" />
+                  {/* Cover image */}
+                  <img
+                    src={link.cover}
+                    alt={link.label}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                  {/* Hover sheen */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  {/* Page edge effect */}
+                  <div className="absolute right-0 top-0 bottom-0 w-2">
+                    <div className="h-full bg-gradient-to-l from-zinc-100/10 via-zinc-200/15 to-transparent" style={{ clipPath: 'polygon(100% 0, 100% 100%, 0 95%, 0 5%)' }} />
+                    <div className="absolute right-0 top-[5%] bottom-[5%] w-[1.5px] bg-zinc-300/20" />
+                    <div className="absolute right-[3px] top-[6%] bottom-[6%] w-[1px] bg-zinc-300/10" />
+                  </div>
+                </div>
+              </motion.div>
+              <p className="text-xs text-foreground/70 text-center font-medium group-hover:text-gold transition-colors leading-tight max-w-[120px]">
+                {link.label}
+              </p>
             </Link>
           ))}
         </div>
