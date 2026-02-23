@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Command, Bell, Sparkles, Search, Home, Settings, LogOut, ChevronDown, User } from 'lucide-react';
+import { Command, Bell, Sparkles, Search, Home, Settings, LogOut, ChevronDown, User, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { CommandPalette, useCommandPalette } from './command-palette';
 import { SmartNotifications, NotificationBell } from './smart-notifications';
@@ -119,6 +119,13 @@ export const PremiumBackendHeader: React.FC<PremiumBackendHeaderProps> = ({
                         <p className="text-sm font-medium text-black truncate">{user.email}</p>
                         <p className="text-xs text-zinc-500">Logged in</p>
                       </div>
+                      <button
+                        onClick={() => navigate('/my-dashboard#tasks')}
+                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-zinc-600 hover:text-gold hover:bg-gold/5 transition-colors"
+                      >
+                        <Check className="w-4 h-4" />
+                        My Tasks
+                      </button>
                       <button
                         onClick={() => navigate('/broker-account')}
                         className="w-full flex items-center gap-2 px-4 py-2 text-sm text-zinc-600 hover:text-gold hover:bg-gold/5 transition-colors"
