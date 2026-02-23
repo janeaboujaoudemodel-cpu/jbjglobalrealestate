@@ -23,6 +23,10 @@ import NotificationsPreview from "@/components/dashboard/NotificationsPreview";
 import { QuickActions } from "@/components/dashboard/QuickActions";
 import DashboardCardErrorBoundary from "@/components/dashboard/DashboardCardErrorBoundary";
 import MyTasksCard from "@/components/dashboard/MyTasksCard";
+import marketIntelligenceCover from "@/assets/books/market-intelligence-cover.jpg";
+import guidesLibraryCover from "@/assets/books/guides-library-cover.jpg";
+import goldenVisaCover from "@/assets/books/golden-visa-cover.jpg";
+import investorEducationCover from "@/assets/books/investor-education-cover.jpg";
 
 // Role label mapping
 function getRoleLabel(role: string | null): string {
@@ -61,38 +65,13 @@ const SECTION_IDS: Record<string, string> = {
   '#ai-tools': 'ai-tools-section',
 };
 
-/** Styled 3D book cover — no background image, pure design */
-function StyledBookCover({ title, accent }: { title: string; accent: string }) {
-  return (
-    <div className="relative w-full h-full flex flex-col justify-between p-3 bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 rounded-r-md overflow-hidden">
-      {/* Gold accent bar */}
-      <div className={`w-8 h-[2px] ${accent} mb-auto`} />
-      {/* Title */}
-      <div className="flex-1 flex items-center">
-        <h4 className="text-[10px] sm:text-[11px] font-bold text-white leading-tight" style={{ fontFamily: "'Playfair Display', serif" }}>
-          {title.split(' ').map((word, i) => (
-            <span key={i} className={i === title.split(' ').length - 1 ? 'text-[#C8A766]' : ''}>
-              {word}{' '}
-            </span>
-          ))}
-        </h4>
-      </div>
-      {/* Company name */}
-      <div className="mt-auto pt-2 border-t border-zinc-700">
-        <p className="text-[6px] sm:text-[7px] tracking-[0.2em] uppercase text-zinc-500 leading-none">JBJ Global</p>
-        <p className="text-[6px] sm:text-[7px] tracking-[0.2em] uppercase text-zinc-500 leading-none">Real Estate</p>
-      </div>
-    </div>
-  );
-}
-
 /** Useful Links card for dashboard */
 function UsefulLinksCard() {
   const books = [
-    { label: 'Market Intelligence', href: '/market-intelligence/overview', accent: 'bg-[#C8A766]' },
-    { label: 'Guides Library', href: '/guides', accent: 'bg-[#C8A766]' },
-    { label: 'Golden Visa Guide', href: '/guides/golden-visa-uae', accent: 'bg-[#C8A766]' },
-    { label: 'Investor Education Guide', href: '/investor-hub', accent: 'bg-[#C8A766]' },
+    { label: 'Market Intelligence', href: '/market-intelligence/overview', cover: marketIntelligenceCover },
+    { label: 'Guides Library', href: '/guides', cover: guidesLibraryCover },
+    { label: 'Golden Visa Guide', href: '/guides/golden-visa-uae', cover: goldenVisaCover },
+    { label: 'Investor Education Guide', href: '/investor-hub', cover: investorEducationCover },
   ];
 
   return (
@@ -128,8 +107,8 @@ function UsefulLinksCard() {
                   {/* Spine edge */}
                   <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-[#C8A766]/30 via-black/30 to-transparent z-10" />
 
-                  {/* Styled cover content */}
-                  <StyledBookCover title={book.label} accent={book.accent} />
+                  {/* Cover image */}
+                  <img src={book.cover} alt={book.label} className="w-full h-full object-cover" />
 
                   {/* Hover sheen */}
                   <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10 opacity-0 group-hover:opacity-100 transition-opacity z-10" />
