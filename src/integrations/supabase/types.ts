@@ -14074,6 +14074,99 @@ export type Database = {
           },
         ]
       }
+      partnership_applications: {
+        Row: {
+          admin_notes: string | null
+          admin_reviewed_at: string | null
+          ceo_notes: string | null
+          ceo_reviewed_at: string | null
+          company_name: string
+          company_profile: string | null
+          compliance_confirmed: boolean
+          contact_person: string
+          country: string
+          created_at: string
+          email: string
+          id: string
+          instagram_url: string | null
+          partnership_type: string
+          phone: string
+          portfolio_size: string | null
+          position: string
+          proposal: string
+          rejection_reason: string | null
+          reviewed_by_admin: string | null
+          reviewed_by_ceo: string | null
+          reviewed_by_senior: string | null
+          senior_mgmt_notes: string | null
+          senior_reviewed_at: string | null
+          stage: Database["public"]["Enums"]["partnership_stage"]
+          updated_at: string
+          user_id: string | null
+          website_url: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          admin_reviewed_at?: string | null
+          ceo_notes?: string | null
+          ceo_reviewed_at?: string | null
+          company_name: string
+          company_profile?: string | null
+          compliance_confirmed?: boolean
+          contact_person: string
+          country: string
+          created_at?: string
+          email: string
+          id?: string
+          instagram_url?: string | null
+          partnership_type: string
+          phone: string
+          portfolio_size?: string | null
+          position: string
+          proposal: string
+          rejection_reason?: string | null
+          reviewed_by_admin?: string | null
+          reviewed_by_ceo?: string | null
+          reviewed_by_senior?: string | null
+          senior_mgmt_notes?: string | null
+          senior_reviewed_at?: string | null
+          stage?: Database["public"]["Enums"]["partnership_stage"]
+          updated_at?: string
+          user_id?: string | null
+          website_url?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          admin_reviewed_at?: string | null
+          ceo_notes?: string | null
+          ceo_reviewed_at?: string | null
+          company_name?: string
+          company_profile?: string | null
+          compliance_confirmed?: boolean
+          contact_person?: string
+          country?: string
+          created_at?: string
+          email?: string
+          id?: string
+          instagram_url?: string | null
+          partnership_type?: string
+          phone?: string
+          portfolio_size?: string | null
+          position?: string
+          proposal?: string
+          rejection_reason?: string | null
+          reviewed_by_admin?: string | null
+          reviewed_by_ceo?: string | null
+          reviewed_by_senior?: string | null
+          senior_mgmt_notes?: string | null
+          senior_reviewed_at?: string | null
+          stage?: Database["public"]["Enums"]["partnership_stage"]
+          updated_at?: string
+          user_id?: string | null
+          website_url?: string | null
+        }
+        Relationships: []
+      }
       payment_history_access_logs: {
         Row: {
           access_type: string
@@ -23625,6 +23718,13 @@ export type Database = {
         | "approved"
         | "rejected"
         | "expired"
+      partnership_stage:
+        | "submitted"
+        | "admin_review"
+        | "senior_management_review"
+        | "ceo_approval"
+        | "approved"
+        | "rejected"
       points_event_type:
         | "training_complete"
         | "daily_checkin"
@@ -24055,6 +24155,14 @@ export const Constants = {
         "approved",
         "rejected",
         "expired",
+      ],
+      partnership_stage: [
+        "submitted",
+        "admin_review",
+        "senior_management_review",
+        "ceo_approval",
+        "approved",
+        "rejected",
       ],
       points_event_type: [
         "training_complete",
