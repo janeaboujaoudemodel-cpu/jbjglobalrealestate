@@ -146,7 +146,7 @@ const DOCUMENT_TYPE_CONFIGS: Record<string, DocTypeConfig> = {
     outputHint: "Full newsletter with headline, sections & CTA block",
     fields: [
       { key: "newsletterTopic", label: "Main Topic / Theme *", type: "input", placeholder: "e.g. Dubai real estate market update – Q1 2026", required: true },
-      { key: "targetSegment", label: "Target Audience", type: "select", options: ["All clients", "Investors only", "Buyers looking for own use", "Renters / tenant leads", "Off-plan buyers", "High-net-worth clients", "International buyers"] },
+      { key: "targetSegment", label: "Target Audience", type: "select", options: ["All clients", "Investors only", "Buyers looking for own use", "Rental / tenant leads", "Off-plan buyers", "High-net-worth clients", "International buyers"] },
       { key: "keyProperties", label: "Featured Properties to Highlight", type: "textarea", placeholder: "e.g. Emaar Beachfront 2BR @ AED 2.2M, Creek Harbour 1BR @ AED 1.1M", rows: 3 },
       { key: "marketStat", label: "Market Statistic to Include", type: "input", placeholder: "e.g. Dubai property transactions up 22% YoY in Q1 2026" },
       { key: "specialOffer", label: "Special Offer / Event", type: "input", placeholder: "e.g. Open day at The Palm Residences, Sat 22 Feb" },
