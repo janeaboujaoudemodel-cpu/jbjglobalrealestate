@@ -292,8 +292,6 @@ const CVCenter = ({ userId }: CVCenterProps) => {
     }
 
     // Sort by strongest score first
-
-    // Sort by strongest score first
     return filtered.sort((a, b) => {
       const aScore = getScoreBreakdown(a).final;
       const bScore = getScoreBreakdown(b).final;

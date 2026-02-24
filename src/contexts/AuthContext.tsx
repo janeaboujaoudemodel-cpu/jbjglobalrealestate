@@ -132,7 +132,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoading(false);
 
       // Skip duplicate verification for the same token
-      if (newSessionId === latestSessionId && !ownerLoading) return;
+      if (newSessionId === latestSessionId) return;
       latestSessionId = newSessionId;
 
       // Prevent concurrent verify calls
