@@ -1,10 +1,10 @@
 /**
  * TrustBar Component - Premium Trust Indicators
- * Champagne-gold 3D cards with luxury styling
+ * 8 champagne-gold 3D cards in 4x2 grid
  */
 
 import { motion } from "framer-motion";
-import { Shield, MessageCircle, CheckCircle, Award } from "lucide-react";
+import { Shield, MessageCircle, CheckCircle, Award, Star, Clock, BadgeCheck, HeartHandshake } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface TrustItem {
@@ -38,6 +38,26 @@ const TrustBar = () => {
       icon: Award,
       text: t('trust.awardWinning', 'Award Winning'),
       subtext: t('trust.excellenceInService', 'Excellence in Service'),
+    },
+    {
+      icon: HeartHandshake,
+      text: 'Trusted by Thousands',
+      subtext: 'Clients Worldwide',
+    },
+    {
+      icon: Star,
+      text: 'Excellence Guaranteed',
+      subtext: 'Premium Standards',
+    },
+    {
+      icon: Clock,
+      text: '24/7 Support',
+      subtext: 'Always Available',
+    },
+    {
+      icon: BadgeCheck,
+      text: 'Certified Experts',
+      subtext: 'Licensed Professionals',
     },
   ];
 
@@ -101,7 +121,7 @@ const TrustBar = () => {
                 {item.text}
               </span>
               {item.subtext && (
-                <span className="text-[10px] md:text-xs text-zinc-600 font-medium tracking-wide transition-colors duration-300 break-words">
+                <span className="text-[10px] md:text-xs text-black/50 font-medium tracking-wide transition-colors duration-300 break-words">
                   {item.subtext}
                 </span>
               )}
