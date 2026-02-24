@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -40,10 +40,15 @@ interface Review {
   rating: number;
   service_type: string;
   review_text: string;
+  improve_text: string | null;
+  feature_key: string;
   would_recommend: string;
   status: string;
   loyalty_points_awarded: number;
   admin_notes: string | null;
+  is_anonymous: boolean;
+  publish_requested: boolean;
+  user_id: string | null;
   created_at: string;
 }
 
@@ -84,6 +89,8 @@ export const EmbeddedCustomerHappinessHub = () => {
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
   const [selectedIdea, setSelectedIdea] = useState<IdeaSubmission | null>(null);
   const [adminNotes, setAdminNotes] = useState("");
+  const [selectedReviewIds, setSelectedReviewIds] = useState<Set<string>>(new Set());
+  const [reviewFilter, setReviewFilter] = useState<string>("all");
 
   // Fetch reviews
   const { data: reviews, isLoading: reviewsLoading } = useQuery({
@@ -134,13 +141,13 @@ export const EmbeddedCustomerHappinessHub = () => {
           admin_notes: notes,
           reviewed_at: new Date().toISOString(),
           published_at: action === "approve" ? new Date().toISOString() : null,
-          loyalty_points_awarded: action === "approve" ? 50 : 0,
         })
         .eq("id", id);
       if (error) throw error;
+      // Points are handled automatically by the DB trigger (handle_customer_review_status_change)
     },
     onSuccess: (_, { action }) => {
-      toast.success(`Review ${action === "approve" ? "approved" : "rejected"} successfully`);
+      toast.success(`Review ${action === "approve" ? "approved (+2 pts)" : "rejected (points deducted)"}`);
       queryClient.invalidateQueries({ queryKey: ["customer-reviews-admin"] });
       setSelectedReview(null);
       setAdminNotes("");
@@ -149,6 +156,50 @@ export const EmbeddedCustomerHappinessHub = () => {
       toast.error(error.message || "Failed to update review");
     },
   });
+
+  // Bulk review mutation
+  const bulkReviewMutation = useMutation({
+    mutationFn: async ({ ids, action }: { ids: string[]; action: "approve" | "reject" | "pending_approval" }) => {
+      const updateData: any = {
+        status: action === "approve" ? "approved" : action === "reject" ? "rejected" : "pending_approval",
+        admin_notes: action === "approve" ? "Bulk approved" : action === "reject" ? "Bulk rejected" : null,
+        reviewed_at: new Date().toISOString(),
+        published_at: action === "approve" ? new Date().toISOString() : null,
+      };
+      const { error } = await supabase
+        .from("customer_reviews")
+        .update(updateData)
+        .in("id", ids);
+      if (error) throw error;
+    },
+    onSuccess: (_, { action, ids }) => {
+      toast.success(`${ids.length} review(s) ${action === "approve" ? "approved" : action === "reject" ? "rejected" : "set to pending"}`);
+      queryClient.invalidateQueries({ queryKey: ["customer-reviews-admin"] });
+      setSelectedReviewIds(new Set());
+    },
+    onError: (error: any) => {
+      toast.error(error.message || "Failed to bulk update reviews");
+    },
+  });
+
+  // Filtered reviews
+  const filteredReviews = useMemo(() => {
+    if (!reviews) return [];
+    if (reviewFilter === "all") return reviews;
+    return reviews.filter(r => r.status === reviewFilter);
+  }, [reviews, reviewFilter]);
+
+  const toggleReviewSelect = (id: string) => {
+    setSelectedReviewIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  };
+
+  const selectAllFiltered = () => {
+    setSelectedReviewIds(new Set(filteredReviews.map(r => r.id)));
+  };
 
   // Approve/Reject idea mutation with points
   const ideaMutation = useMutation({
@@ -342,14 +393,51 @@ export const EmbeddedCustomerHappinessHub = () => {
           <TicketSurveysTab />
         </TabsContent>
 
-        {/* Reviews Tab */}
+        {/* Reviews Tab - With Bulk Actions */}
         <TabsContent value="reviews">
           <Card className="bg-white border-2 border-gold/30">
             <CardHeader>
-              <CardTitle className="text-black flex items-center gap-2">
-                <MessageSquareHeart className="w-5 h-5 text-pink-500" />
-                Customer Reviews
-              </CardTitle>
+              <div className="flex items-center justify-between flex-wrap gap-3">
+                <CardTitle className="text-black flex items-center gap-2">
+                  <MessageSquareHeart className="w-5 h-5 text-pink-500" />
+                  Customer Reviews ({filteredReviews.length})
+                </CardTitle>
+                <div className="flex items-center gap-2 flex-wrap">
+                  {/* Filter */}
+                  {["all", "pending_approval", "approved", "rejected"].map((f) => (
+                    <Button
+                      key={f}
+                      size="sm"
+                      variant={reviewFilter === f ? "default" : "outline"}
+                      className={reviewFilter === f ? "bg-gold text-black" : "border-gold/30"}
+                      onClick={() => { setReviewFilter(f); setSelectedReviewIds(new Set()); }}
+                    >
+                      {f === "all" ? "All" : f === "pending_approval" ? "Pending" : f === "approved" ? "Approved" : "Rejected"}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+              {/* Bulk Action Bar */}
+              {selectedReviewIds.size > 0 && (
+                <div className="flex items-center gap-2 mt-3 p-3 bg-gold/10 rounded-lg border border-gold/30">
+                  <span className="text-sm font-semibold text-black">{selectedReviewIds.size} selected</span>
+                  <Button size="sm" className="bg-emerald-500 hover:bg-emerald-600 text-white" onClick={() => bulkReviewMutation.mutate({ ids: Array.from(selectedReviewIds), action: "approve" })} disabled={bulkReviewMutation.isPending}>
+                    <ThumbsUp className="w-3 h-3 mr-1" /> Approve All
+                  </Button>
+                  <Button size="sm" variant="destructive" onClick={() => bulkReviewMutation.mutate({ ids: Array.from(selectedReviewIds), action: "reject" })} disabled={bulkReviewMutation.isPending}>
+                    <ThumbsDown className="w-3 h-3 mr-1" /> Reject All
+                  </Button>
+                  <Button size="sm" variant="outline" className="border-gold/30" onClick={() => bulkReviewMutation.mutate({ ids: Array.from(selectedReviewIds), action: "pending_approval" })} disabled={bulkReviewMutation.isPending}>
+                    <Clock className="w-3 h-3 mr-1" /> Set Pending
+                  </Button>
+                  <Button size="sm" variant="ghost" onClick={() => setSelectedReviewIds(new Set())}>Clear</Button>
+                </div>
+              )}
+              {filteredReviews.length > 0 && selectedReviewIds.size === 0 && (
+                <Button size="sm" variant="outline" className="mt-2 border-gold/30" onClick={selectAllFiltered}>
+                  Select All ({filteredReviews.length})
+                </Button>
+              )}
             </CardHeader>
             <CardContent>
               {reviewsLoading ? (
@@ -359,36 +447,51 @@ export const EmbeddedCustomerHappinessHub = () => {
                   ))}
                 </div>
               ) : (
-                <ScrollArea className="h-[400px]">
+                <ScrollArea className="h-[500px]">
                   <div className="space-y-3">
-                    {reviews?.map((review) => (
+                    {filteredReviews.map((review) => (
                       <div
                         key={review.id}
-                        className="p-4 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-white border border-gold/20 hover:border-gold/40 transition-all cursor-pointer"
-                        onClick={() => setSelectedReview(review)}
+                        className={`p-4 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-white border transition-all ${
+                          selectedReviewIds.has(review.id) ? "border-gold ring-2 ring-gold/30" : "border-gold/20 hover:border-gold/40"
+                        }`}
                       >
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-3 mb-2">
+                        <div className="flex items-start gap-3">
+                          {/* Checkbox */}
+                          <input
+                            type="checkbox"
+                            checked={selectedReviewIds.has(review.id)}
+                            onChange={() => toggleReviewSelect(review.id)}
+                            className="mt-1 h-4 w-4 rounded border-zinc-300 text-gold focus:ring-gold"
+                          />
+                          {/* Content */}
+                          <div className="flex-1 cursor-pointer" onClick={() => setSelectedReview(review)}>
+                            <div className="flex items-center gap-3 mb-1 flex-wrap">
                               <span className="font-semibold text-black">{review.full_name}</span>
                               {renderStars(review.rating)}
                               {getStatusBadge(review.status)}
+                              {review.is_anonymous && <Badge className="bg-zinc-100 text-zinc-600 border-zinc-300 text-xs">Anonymous</Badge>}
+                              {review.feature_key && <Badge className="bg-blue-50 text-blue-600 border-blue-200 text-xs">{review.feature_key}</Badge>}
                             </div>
                             <p className="text-sm text-zinc-600 line-clamp-2">{review.review_text}</p>
+                            {review.improve_text && (
+                              <p className="text-xs text-zinc-500 mt-1 italic">💡 {review.improve_text}</p>
+                            )}
                             <div className="flex items-center gap-4 mt-2 text-xs text-zinc-500">
                               <span>{review.service_type}</span>
                               <span>•</span>
                               <span>{new Date(review.created_at).toLocaleDateString()}</span>
+                              {review.publish_requested && <Badge className="bg-green-50 text-green-600 border-green-200 text-xs">Wants publishing</Badge>}
                             </div>
                           </div>
-                          <Button variant="ghost" size="sm" className="text-gold hover:text-black">
+                          <Button variant="ghost" size="sm" className="text-gold hover:text-black" onClick={() => setSelectedReview(review)}>
                             <Eye className="w-4 h-4" />
                           </Button>
                         </div>
                       </div>
                     ))}
-                    {(!reviews || reviews.length === 0) && (
-                      <p className="text-center text-zinc-500 py-8">No reviews yet</p>
+                    {filteredReviews.length === 0 && (
+                      <p className="text-center text-zinc-500 py-8">No reviews match this filter</p>
                     )}
                   </div>
                 </ScrollArea>
@@ -534,10 +637,14 @@ export const EmbeddedCustomerHappinessHub = () => {
                 <div>
                   <p className="font-semibold text-black">{selectedReview.full_name}</p>
                   <p className="text-sm text-zinc-500">{selectedReview.email}</p>
+                  {selectedReview.is_anonymous && <Badge className="mt-1 bg-zinc-100 text-zinc-600 border-zinc-300 text-xs">Anonymous</Badge>}
                 </div>
                 <div className="text-right">
                   {renderStars(selectedReview.rating)}
                   <p className="text-xs text-zinc-500 mt-1">{selectedReview.service_type}</p>
+                  {selectedReview.feature_key && (
+                    <Badge className="mt-1 bg-blue-50 text-blue-600 border-blue-200 text-xs">{selectedReview.feature_key}</Badge>
+                  )}
                 </div>
               </div>
 
@@ -545,45 +652,54 @@ export const EmbeddedCustomerHappinessHub = () => {
                 <p className="text-black">{selectedReview.review_text}</p>
               </div>
 
-              <div className="flex items-center gap-2">
+              {selectedReview.improve_text && (
+                <div className="p-3 bg-amber-50 rounded-lg border border-amber-200">
+                  <p className="text-xs text-zinc-500 mb-1">💡 Improvement suggestion</p>
+                  <p className="text-sm text-black">{selectedReview.improve_text}</p>
+                </div>
+              )}
+
+              <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-sm text-zinc-600">Would recommend:</span>
                 <Badge className="bg-gold/20 text-gold border-gold/40">{selectedReview.would_recommend}</Badge>
+                {selectedReview.publish_requested && <Badge className="bg-green-50 text-green-600 border-green-200 text-xs">Wants publishing</Badge>}
               </div>
 
               {getStatusBadge(selectedReview.status)}
 
-              {selectedReview.status === "pending_approval" && (
-                <>
-                  <div>
-                    <label className="text-sm text-zinc-600 mb-2 block">Admin Notes (optional)</label>
-                    <Textarea
-                      value={adminNotes}
-                      onChange={(e) => setAdminNotes(e.target.value)}
-                      placeholder="Add any notes about this review..."
-                      className="bg-white border-gold/30"
-                    />
-                  </div>
-                  <div className="flex gap-3">
-                    <Button
-                      className="flex-1 bg-green-500 hover:bg-green-600 text-white"
-                      onClick={() => reviewMutation.mutate({ id: selectedReview.id, action: "approve", notes: adminNotes })}
-                      disabled={reviewMutation.isPending}
-                    >
-                      <ThumbsUp className="w-4 h-4 mr-2" />
-                      Approve (+50 pts)
-                    </Button>
-                    <Button
-                      variant="destructive"
-                      className="flex-1"
-                      onClick={() => reviewMutation.mutate({ id: selectedReview.id, action: "reject", notes: adminNotes })}
-                      disabled={reviewMutation.isPending}
-                    >
-                      <ThumbsDown className="w-4 h-4 mr-2" />
-                      Reject
-                    </Button>
-                  </div>
-                </>
-              )}
+              {/* Action buttons for any non-approved status */}
+              <div>
+                <label className="text-sm text-zinc-600 mb-2 block">Admin Notes (optional)</label>
+                <Textarea
+                  value={adminNotes}
+                  onChange={(e) => setAdminNotes(e.target.value)}
+                  placeholder="Add any notes about this review..."
+                  className="bg-white border-gold/30"
+                />
+              </div>
+              <div className="flex gap-3">
+                {selectedReview.status !== "approved" && (
+                  <Button
+                    className="flex-1 bg-green-500 hover:bg-green-600 text-white"
+                    onClick={() => reviewMutation.mutate({ id: selectedReview.id, action: "approve", notes: adminNotes })}
+                    disabled={reviewMutation.isPending}
+                  >
+                    <ThumbsUp className="w-4 h-4 mr-2" />
+                    Approve (+2 pts)
+                  </Button>
+                )}
+                {selectedReview.status !== "rejected" && (
+                  <Button
+                    variant="destructive"
+                    className="flex-1"
+                    onClick={() => reviewMutation.mutate({ id: selectedReview.id, action: "reject", notes: adminNotes })}
+                    disabled={reviewMutation.isPending}
+                  >
+                    <ThumbsDown className="w-4 h-4 mr-2" />
+                    Reject (deduct pts)
+                  </Button>
+                )}
+              </div>
             </div>
           )}
         </DialogContent>
