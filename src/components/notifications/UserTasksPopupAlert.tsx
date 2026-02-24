@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { X, Bell, ArrowRight } from "lucide-react";
+import { X, Bell, ArrowRight, CheckCircle, Headphones } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
@@ -9,11 +9,12 @@ export function UserTasksPopupAlert() {
   const { user, isOwner } = useAuth();
   const navigate = useNavigate();
   const [pendingCount, setPendingCount] = useState(0);
+  const [ticketAlerts, setTicketAlerts] = useState<Array<{ id: string; title: string; message: string }>>([]);
   const [dismissed, setDismissed] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    if (!user || isOwner) return; // Owner has their own popup
+    if (!user || isOwner) return;
 
     const sessionKey = `user_tasks_popup_${new Date().toDateString()}`;
     if (sessionStorage.getItem(sessionKey)) {
@@ -22,7 +23,8 @@ export function UserTasksPopupAlert() {
       return;
     }
 
-    const checkTasks = async () => {
+    const checkAlerts = async () => {
+      // Check pending tasks
       const { count } = await supabase
         .from("admin_tasks")
         .select("id", { count: "exact", head: true })
@@ -30,10 +32,22 @@ export function UserTasksPopupAlert() {
         .eq("status", "pending");
 
       setPendingCount(count || 0);
+
+      // Check unread ticket notifications
+      const { data: notifications } = await supabase
+        .from("user_notifications")
+        .select("id, title, message")
+        .eq("user_id", user.id)
+        .eq("type", "support_ticket")
+        .eq("is_read", false)
+        .order("created_at", { ascending: false })
+        .limit(5);
+
+      setTicketAlerts(notifications || []);
       setLoaded(true);
     };
 
-    checkTasks();
+    checkAlerts();
   }, [user, isOwner]);
 
   const handleDismiss = () => {
@@ -42,7 +56,8 @@ export function UserTasksPopupAlert() {
     setDismissed(true);
   };
 
-  if (!loaded || dismissed || pendingCount === 0) return null;
+  const totalAlerts = pendingCount + ticketAlerts.length;
+  if (!loaded || dismissed || totalAlerts === 0) return null;
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm">
@@ -59,24 +74,61 @@ export function UserTasksPopupAlert() {
             <Bell className="w-6 h-6 text-[#C9A84C]" />
           </div>
           <div>
-            <h3 className="text-black font-bold text-lg">You Have Pending Tasks</h3>
-            <p className="text-zinc-500 text-sm">Action required from JBJ team</p>
+            <h3 className="text-black font-bold text-lg">
+              {ticketAlerts.length > 0 && pendingCount > 0
+                ? "Updates & Tasks"
+                : ticketAlerts.length > 0
+                  ? "Ticket Updates"
+                  : "Pending Tasks"}
+            </h3>
+            <p className="text-zinc-500 text-sm">
+              {totalAlerts} notification{totalAlerts !== 1 ? "s" : ""} for you
+            </p>
           </div>
         </div>
 
-        <div className="bg-white/60 border border-[#C9A84C]/20 rounded-xl p-4 mb-5">
-          <p className="text-black text-sm">
-            You have <span className="font-bold text-[#C9A84C] text-lg">{pendingCount}</span> pending task{pendingCount !== 1 ? "s" : ""} that require your attention. This may include application updates, document requests, or messages from the JBJ support team.
-          </p>
-        </div>
+        {/* Ticket Alerts */}
+        {ticketAlerts.length > 0 && (
+          <div className="space-y-2 mb-4">
+            {ticketAlerts.map((alert) => (
+              <div key={alert.id} className="bg-green-50 border border-green-200 rounded-xl p-3 flex items-start gap-2.5">
+                <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 shrink-0" />
+                <div>
+                  <p className="text-black font-semibold text-sm">{alert.title}</p>
+                  <p className="text-zinc-600 text-xs">{alert.message}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Pending Tasks */}
+        {pendingCount > 0 && (
+          <div className="bg-white/60 border border-[#C9A84C]/20 rounded-xl p-4 mb-5">
+            <p className="text-black text-sm">
+              You have <span className="font-bold text-[#C9A84C] text-lg">{pendingCount}</span> pending task{pendingCount !== 1 ? "s" : ""} that require your attention. This may include application updates, document requests, or messages from the JBJ support team.
+            </p>
+          </div>
+        )}
 
         <div className="flex gap-3">
-          <Button
-            onClick={() => { handleDismiss(); navigate("/my-account#tasks"); }}
-            className="flex-1 bg-gradient-to-r from-[#C9A84C] to-[#B8973F] hover:from-[#B8973F] hover:to-[#A7862E] text-black font-bold rounded-xl"
-          >
-            View Tasks <ArrowRight className="w-4 h-4 ml-2" />
-          </Button>
+          {ticketAlerts.length > 0 && (
+            <Button
+              onClick={() => { handleDismiss(); navigate("/my-tickets"); }}
+              className="flex-1 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold rounded-xl"
+            >
+              <Headphones className="w-4 h-4 mr-2" />
+              My Tickets
+            </Button>
+          )}
+          {pendingCount > 0 && (
+            <Button
+              onClick={() => { handleDismiss(); navigate("/my-account#tasks"); }}
+              className="flex-1 bg-gradient-to-r from-[#C9A84C] to-[#B8973F] hover:from-[#B8973F] hover:to-[#A7862E] text-black font-bold rounded-xl"
+            >
+              View Tasks <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
+          )}
           <Button
             variant="outline"
             onClick={handleDismiss}
