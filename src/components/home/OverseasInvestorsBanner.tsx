@@ -195,14 +195,21 @@ const OverseasInvestorsBanner = () => {
         </div>
       </div>
 
-      {/* TOC Modal */}
+      {/* TOC Modal — Gold Champagne, not touching header */}
       {selectedBook && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4" onClick={() => setSelectedBook(null)}>
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 pt-20"
+          style={{ backgroundColor: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)' }}
+          onClick={() => setSelectedBook(null)}
+        >
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            className="bg-black border border-gold/30 rounded-2xl max-w-2xl w-full max-h-[85vh] overflow-hidden"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden"
+            style={{
+              boxShadow: '0 20px 60px rgba(200,167,102,0.3), 0 10px 30px rgba(0,0,0,0.2)',
+            }}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-start gap-5 p-6 border-b border-gold/20">
@@ -210,50 +217,57 @@ const OverseasInvestorsBanner = () => {
                 <img src={selectedBook.cover} alt={selectedBook.title} className="w-full h-full object-cover" />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="text-xl font-bold text-white mb-1">{selectedBook.title}</h3>
-                <p className="text-gold text-sm capitalize">{selectedBook.category}</p>
-                <p className="text-white/40 text-xs mt-2">
+                <h3 className="text-xl font-bold text-black mb-1">{selectedBook.title}</h3>
+                <p className="text-gold text-sm capitalize font-semibold">{selectedBook.category}</p>
+                <p className="text-black/40 text-xs mt-2">
                   {selectedBook.tableOfContents.length} chapters
                 </p>
               </div>
-              <button onClick={() => setSelectedBook(null)} className="text-gold hover:text-white transition-colors">
+              <button onClick={() => setSelectedBook(null)} className="text-gold hover:text-black transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="p-6 overflow-y-auto max-h-[50vh]">
+            <div className="p-6 overflow-y-auto max-h-[45vh]">
               <h4 className="text-sm font-semibold text-gold uppercase tracking-wider mb-4">Table of Contents</h4>
               <div className="space-y-1">
                 {selectedBook.tableOfContents.map((item, index) => (
-                  <div
+                  <button
                     key={index}
-                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 transition-colors group"
+                    className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gold/10 transition-colors group text-left"
+                    onClick={() => {
+                      setSelectedBook(null);
+                      navigate(`${selectedBook.href}#chapter-${index + 1}`);
+                    }}
                   >
-                    <span className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/20 flex items-center justify-center text-gold text-sm font-medium flex-shrink-0">
+                    <span className="w-8 h-8 rounded-lg bg-black border border-gold/30 flex items-center justify-center text-gold text-sm font-medium flex-shrink-0">
                       {index + 1}
                     </span>
-                    <span className="text-white/80 text-sm flex-1">{item.title}</span>
+                    <span className="text-black/80 text-sm flex-1">{item.title}</span>
                     {item.duration && (
-                      <span className="flex items-center gap-1 text-white/40 text-xs flex-shrink-0">
+                      <span className="flex items-center gap-1 text-black/40 text-xs flex-shrink-0">
                         <Clock className="w-3 h-3" />
                         {item.duration}
                       </span>
                     )}
-                    <ChevronRight className="w-4 h-4 text-white/20 group-hover:text-gold transition-colors flex-shrink-0" />
-                  </div>
+                    <ChevronRight className="w-4 h-4 text-black/20 group-hover:text-gold transition-colors flex-shrink-0" />
+                  </button>
                 ))}
               </div>
             </div>
 
             <div className="p-6 border-t border-gold/20">
               <Button
-                className="w-full bg-gradient-to-r from-[#C9A84C] to-[#B8973F] hover:from-[#B8973F] hover:to-[#A7862E] text-black font-bold"
+                className="w-full bg-gradient-to-r from-[#C9A84C] to-[#B8973F] hover:from-[#B8973F] hover:to-[#A7862E] text-black font-bold py-3 rounded-xl"
+                style={{
+                  boxShadow: '0 6px 20px rgba(200,167,102,0.3), inset 0 1px 3px rgba(255,255,255,0.5)',
+                }}
                 onClick={() => {
                   setSelectedBook(null);
                   navigate(selectedBook.href);
                 }}
               >
-                Open Full Book <ArrowRight className="w-4 h-4 ml-2" />
+                Open Full Guide <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>
           </motion.div>

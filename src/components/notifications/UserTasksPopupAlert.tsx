@@ -72,7 +72,7 @@ export function UserTasksPopupAlert() {
 
         <div className="flex gap-3">
           <Button
-            onClick={() => { handleDismiss(); navigate("/my-account"); }}
+            onClick={() => { handleDismiss(); navigate("/my-account#tasks"); }}
             className="flex-1 bg-gradient-to-r from-[#C9A84C] to-[#B8973F] hover:from-[#B8973F] hover:to-[#A7862E] text-black font-bold rounded-xl"
           >
             View Tasks <ArrowRight className="w-4 h-4 ml-2" />

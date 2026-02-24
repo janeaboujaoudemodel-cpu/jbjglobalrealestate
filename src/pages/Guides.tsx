@@ -299,10 +299,10 @@ const Guides = () => {
         </div>
       </section>
 
-      {/* TOC Modal — Gold Champagne Theme */}
+      {/* TOC Modal — Gold Champagne Theme, not touching header */}
       {selectedBook && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 pt-20"
           style={{ backgroundColor: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)' }}
           onClick={() => setSelectedBook(null)}
         >
@@ -310,7 +310,7 @@ const Guides = () => {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl max-w-2xl w-full max-h-[85vh] overflow-hidden"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden"
             style={{
               boxShadow: '0 20px 60px rgba(200,167,102,0.3), 0 10px 30px rgba(0,0,0,0.2)',
             }}
@@ -333,14 +333,18 @@ const Guides = () => {
               </button>
             </div>
 
-            {/* Table of Contents */}
-            <div className="p-6 overflow-y-auto max-h-[50vh]">
+            {/* Table of Contents — Clickable sections */}
+            <div className="p-6 overflow-y-auto max-h-[45vh]">
               <h4 className="text-sm font-semibold text-gold uppercase tracking-wider mb-4">Table of Contents</h4>
               <div className="space-y-1">
                 {selectedBook.tableOfContents.map((item, index) => (
-                  <div
+                  <button
                     key={index}
-                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-gold/10 transition-colors group"
+                    className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gold/10 transition-colors group text-left"
+                    onClick={() => {
+                      setSelectedBook(null);
+                      navigate(`${selectedBook.href}#chapter-${index + 1}`);
+                    }}
                   >
                     <span className="w-8 h-8 rounded-lg bg-black border border-gold/30 flex items-center justify-center text-gold text-sm font-medium flex-shrink-0">
                       {index + 1}
@@ -353,7 +357,7 @@ const Guides = () => {
                       </span>
                     )}
                     <ChevronRight className="w-4 h-4 text-black/20 group-hover:text-gold transition-colors flex-shrink-0" />
-                  </div>
+                  </button>
                 ))}
               </div>
             </div>
