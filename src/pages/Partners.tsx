@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Building2,
@@ -21,6 +20,7 @@ import { SectionDivider } from "@/components/ui/section-divider";
 import ComplianceDisclaimer from "@/components/ComplianceDisclaimer";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import { useToast } from "@/hooks/use-toast";
+import { PartnerApplicationPortal } from "@/components/partners/PartnerApplicationPortal";
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
@@ -85,22 +85,6 @@ const PARTNERSHIP_TYPES = [
 ];
 
 const Partners = () => {
-  const { toast } = useToast();
-  const [formData, setFormData] = useState({
-    companyName: "", contactPerson: "", position: "", email: "", phone: "", country: "",
-    partnershipType: "", portfolioSize: "", message: "", compliance: false,
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.compliance) {
-      toast({ title: "Please confirm regulatory compliance", variant: "destructive" });
-      return;
-    }
-    const msg = `Partnership Inquiry\n\nCompany: ${formData.companyName}\nContact: ${formData.contactPerson}\nPosition: ${formData.position}\nEmail: ${formData.email}\nPhone: ${formData.phone}\nCountry: ${formData.country}\nType: ${formData.partnershipType}\nPortfolio: ${formData.portfolioSize}\n\n${formData.message}`;
-    window.open(getWhatsAppUrl(msg), "_blank");
-    toast({ title: "Redirecting to WhatsApp", description: "Your partnership inquiry is being sent." });
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
@@ -382,86 +366,20 @@ const Partners = () => {
 
         <SectionDivider variant="champagne" />
 
-        {/* ═══ SECTION 7: APPLICATION FORM ═══ */}
+        {/* ═══ SECTION 7: PARTNER PORTAL ═══ */}
         <section id="partner-application" className="py-20">
           <div className="container mx-auto px-4">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="max-w-3xl mx-auto">
-              <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold text-center text-black mb-10" style={{ fontFamily: "'Playfair Display', serif" }}>
-                Partner <span className="text-gold">Application</span>
+              <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold text-center text-black mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>
+                Partner <span className="text-gold">Portal</span>
               </motion.h2>
+              <motion.p variants={fadeIn} className="text-center text-zinc-500 mb-10">
+                Apply for partnership, submit your proposal, and track your application status in real-time.
+              </motion.p>
 
-              <motion.form variants={fadeIn} onSubmit={handleSubmit} className="jj-card-inner p-8 md:p-10 border-2 border-gold/50 space-y-5">
-                <div className="grid md:grid-cols-2 gap-5">
-                  {[
-                    { label: "Company Name", key: "companyName", type: "text" },
-                    { label: "Contact Person", key: "contactPerson", type: "text" },
-                    { label: "Position / Title", key: "position", type: "text" },
-                    { label: "Email", key: "email", type: "email" },
-                    { label: "Phone", key: "phone", type: "tel" },
-                    { label: "Country", key: "country", type: "text" },
-                  ].map((field) => (
-                    <div key={field.key}>
-                      <label className="block text-sm font-semibold text-black mb-1.5">{field.label}</label>
-                      <input
-                        type={field.type}
-                        required
-                        value={(formData as any)[field.key]}
-                        onChange={(e) => setFormData({ ...formData, [field.key]: e.target.value })}
-                        className="w-full px-4 py-2.5 rounded-lg border-2 border-gold/30 bg-white/60 text-black placeholder:text-zinc-400 focus:border-gold focus:outline-none transition-colors text-sm"
-                      />
-                    </div>
-                  ))}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-black mb-1.5">Type of Partnership</label>
-                  <select
-                    required
-                    value={formData.partnershipType}
-                    onChange={(e) => setFormData({ ...formData, partnershipType: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-lg border-2 border-gold/30 bg-white/60 text-black focus:border-gold focus:outline-none transition-colors text-sm"
-                  >
-                    <option value="">Select partnership type</option>
-                    {PARTNERSHIP_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-black mb-1.5">Estimated Portfolio Size</label>
-                  <input
-                    type="text"
-                    value={formData.portfolioSize}
-                    onChange={(e) => setFormData({ ...formData, portfolioSize: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-lg border-2 border-gold/30 bg-white/60 text-black placeholder:text-zinc-400 focus:border-gold focus:outline-none transition-colors text-sm"
-                    placeholder="e.g. $5M - $50M"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-black mb-1.5">Message / Proposal Overview</label>
-                  <textarea
-                    rows={4}
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-lg border-2 border-gold/30 bg-white/60 text-black placeholder:text-zinc-400 focus:border-gold focus:outline-none transition-colors text-sm resize-none"
-                  />
-                </div>
-
-                <label className="flex items-start gap-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={formData.compliance}
-                    onChange={(e) => setFormData({ ...formData, compliance: e.target.checked })}
-                    className="mt-1 accent-gold w-4 h-4"
-                  />
-                  <span className="text-sm text-zinc-600">I confirm my company operates within regulatory compliance.</span>
-                </label>
-
-                <Button type="submit" variant="primary" size="lg" className="w-full">
-                  <Send className="w-5 h-5 mr-2" />
-                  Submit Partnership Request
-                </Button>
-              </motion.form>
+              <motion.div variants={fadeIn}>
+                <PartnerApplicationPortal />
+              </motion.div>
             </motion.div>
           </div>
         </section>
