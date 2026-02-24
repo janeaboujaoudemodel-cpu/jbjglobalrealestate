@@ -330,7 +330,7 @@ The community attracts families, young professionals, and investors seeking qual
     ],
     residents: [
       "Young families seeking space and value",
-      "First-time buyers and renters",
+      "First-time buyers and tenants",
       "Investors seeking rental yields",
       "Professionals working in central Dubai"
     ],
@@ -1255,7 +1255,7 @@ Its central location makes Al Barsha ideal for those who need quick access to mu
       wellness: "Gyms, fitness centers, and outdoor spaces."
     },
     propertyTypes: ["Apartments", "Villas", "Affordable housing", "Commercial properties"],
-    residents: ["Families", "Working professionals", "Long-term residents", "Budget-conscious renters"],
+    residents: ["Families", "Working professionals", "Long-term residents", "Budget-conscious tenants"],
     seo: {
       title: "Al Rashidiya Ajman Area Guide",
       description: "Explore Al Rashidiya — central Ajman living with diverse housing and commercial amenities.",

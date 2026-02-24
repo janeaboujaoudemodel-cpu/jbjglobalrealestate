@@ -45,7 +45,7 @@ const guidesLibraryBook: BookData = {
     { title: 'Buyer Guides & Resources', duration: '10 min' },
     { title: 'Seller Guides & Resources', duration: '10 min' },
     { title: 'Landlord Guides & Resources', duration: '10 min' },
-    { title: 'Tenant & Renter Resources', duration: '10 min' },
+    { title: 'Tenant & Rental Resources', duration: '10 min' },
     { title: 'Golden Visa & Immigration', duration: '15 min' },
     { title: 'Market Intelligence', duration: '15 min' },
   ],
@@ -167,7 +167,7 @@ const landlordGuideBook: BookData = {
 };
 
 const rentGuideBook: BookData = {
-  title: "Renter's Guide to Dubai",
+  title: "Rental Guide to Dubai",
   cover: rentGuideCover,
   href: '/rent-guide',
   category: 'guide',

@@ -17,7 +17,7 @@ const MegaMenuRent = React.forwardRef<HTMLDivElement, MegaMenuRentProps>(({ onCl
     { label: 'Commercial', icon: Briefcase, href: '/properties?type=commercial&transaction=rent' },
   ];
 
-  const renterResources = [
+  const rentalResources = [
     { label: "Tenant's Guide", href: '/tenant-guide', icon: FileText },
     { label: 'Rental Index', href: '/rental-index', icon: Key },
     { label: 'Property Management', href: '/services/property-management', icon: Shield },
@@ -59,9 +59,9 @@ const MegaMenuRent = React.forwardRef<HTMLDivElement, MegaMenuRentProps>(({ onCl
                 ))}
               </MegaMenuCard>
 
-              {/* Card 2: Renter Resources */}
-              <MegaMenuCard icon={FileText} title="Renter Resources">
-                {renterResources.map((item) => (
+              {/* Card 2: Rental Resources */}
+              <MegaMenuCard icon={FileText} title="Rental Resources">
+                {rentalResources.map((item) => (
                   <MegaMenuIconLink
                     key={item.label}
                     to={item.href}
