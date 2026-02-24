@@ -398,7 +398,7 @@ const FeedbackForm = () => {
 
       toast({
         title: "Review Submitted!",
-        description: "Thank you! Your review is pending approval. You'll receive 50 loyalty points once approved.",
+        description: "Thank you! Your review is pending approval. You'll receive 2 loyalty points once approved.",
       });
 
       setFormData({ fullName: "", email: "", serviceType: "", review: "", wouldRecommend: "" });
