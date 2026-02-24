@@ -921,10 +921,16 @@ const SupportTicketBox = () => {
                                 />
                                 <VoiceNoteRecorder
                                   onTranscript={(text) => handleVoiceTranscript(text, 'subject')}
+                                  onTranscriptResult={(result) => {
+                                    if (result.translated && !result.isEnglish) {
+                                      const combined = `${result.original} [EN: ${result.translated}]`;
+                                      handleVoiceTranscript(combined, 'subject');
+                                    }
+                                  }}
                                 />
                               </div>
                               <p className="text-xs text-zinc-400 mt-1 flex items-center gap-1">
-                                <Mic className="w-3 h-3" /> Use voice note for convenience
+                                <Mic className="w-3 h-3" /> 🎙️ Speak in any language — auto-translated
                               </p>
                             </div>
 
@@ -961,6 +967,15 @@ const SupportTicketBox = () => {
                                 <span>Detailed Description *</span>
                                 <VoiceNoteRecorder
                                   onTranscript={(text) => handleVoiceTranscript(text, 'description')}
+                                  onTranscriptResult={(result) => {
+                                    if (result.translated && !result.isEnglish) {
+                                      const combined = `[${result.languageName || 'Original'}]: ${result.original}\n[English]: ${result.translated}`;
+                                      setFormData(prev => ({
+                                        ...prev,
+                                        description: prev.description ? `${prev.description}\n\n${combined}` : combined
+                                      }));
+                                    }
+                                  }}
                                 />
                               </Label>
                               <Textarea
@@ -971,7 +986,7 @@ const SupportTicketBox = () => {
                                 required
                               />
                               <p className="text-xs text-zinc-400 mt-1 flex items-center gap-1">
-                                <Mic className="w-3 h-3" /> Click the microphone to dictate your description
+                                <Mic className="w-3 h-3" /> 🎙️ Speak in any language — auto-translated to English
                               </p>
                             </div>
 

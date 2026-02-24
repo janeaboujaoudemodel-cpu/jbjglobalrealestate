@@ -34,7 +34,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Find the ticket and validate token
     const { data: ticket, error: fetchError } = await supabaseClient
       .from("support_tickets")
-      .select("id, ticket_number, reopen_token, status, reopen_count, full_name, email, subject")
+      .select("id, ticket_number, reopen_token, status, reopen_count, full_name, email, subject, user_id")
       .eq("ticket_number", ticketNumber)
       .single();
 
@@ -97,6 +97,32 @@ const handler = async (req: Request): Promise<Response> => {
         message: `🔄 Ticket reopened by customer via email link. The customer indicated their issue was not resolved.`,
         attachment_urls: []
       });
+
+    // Create notification for the customer if they have a user_id
+    if (ticket.user_id) {
+      await supabaseClient.from("user_notifications").insert({
+        user_id: ticket.user_id,
+        type: "support_ticket",
+        title: `Ticket ${ticket.ticket_number} Reopened`,
+        message: `Your support ticket "${ticket.subject}" has been reopened. Our team will review it again.`,
+        metadata: { ticket_number: ticket.ticket_number, ticket_id: ticket.id, action: "reopened" }
+      });
+    }
+
+    // Send reopened confirmation email to customer
+    try {
+      const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
+      await fetch(`${supabaseUrl}/functions/v1/send-ticket-status-email`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+        },
+        body: JSON.stringify({ ticketId: ticket.id, newStatus: "open" }),
+      });
+    } catch (emailErr) {
+      console.error("Reopen email failed (non-critical):", emailErr);
+    }
 
     console.log(`Ticket ${ticketNumber} reopened successfully`);
 

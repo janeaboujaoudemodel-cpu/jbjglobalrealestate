@@ -4,8 +4,19 @@ import { Mic, Square, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
+interface TranscriptResult {
+  original: string;
+  translated?: string | null;
+  detectedLanguage?: string;
+  languageName?: string;
+  isEnglish?: boolean;
+}
+
 interface VoiceInputButtonProps {
+  /** Called with the text to insert. If auto-translation is enabled, receives the original text. */
   onTranscript: (text: string) => void;
+  /** Called with full result including original + translated text. */
+  onTranscriptResult?: (result: TranscriptResult) => void;
   disabled?: boolean;
   language?: string;
   className?: string;
@@ -15,16 +26,18 @@ interface VoiceInputButtonProps {
 
 /**
  * Unified voice input button for record + transcribe functionality.
+ * Supports auto-detection of language, transcription, and translation to English.
  * 
  * States:
- * - Idle: Mic icon (default styling) - "Click to record"
+ * - Idle: Mic icon (default styling) - "Speak in any language"
  * - Recording: Square icon (red, pulsing) - "Click to stop"
  * - Processing: Loader icon (spinning) - "Transcribing..."
  */
 export function VoiceInputButton({
   onTranscript,
+  onTranscriptResult,
   disabled,
-  language = "en",
+  language = "auto",
   className,
   size = "icon",
   variant = "outline"
@@ -80,8 +93,28 @@ export function VoiceInputButton({
             if (error) throw error;
             
             if (data?.text) {
+              // Build result
+              const result: TranscriptResult = {
+                original: data.text,
+                translated: data.translated_text || null,
+                detectedLanguage: data.detected_language,
+                languageName: data.language_name,
+                isEnglish: data.is_english,
+              };
+
+              // Call callbacks
               onTranscript(data.text);
-              toast.success("Voice transcribed!");
+              onTranscriptResult?.(result);
+
+              // Show appropriate toast
+              if (data.translated_text && !data.is_english) {
+                toast.success(`Transcribed from ${data.language_name || 'detected language'}`, {
+                  description: "Original + English translation added",
+                  duration: 3000,
+                });
+              } else {
+                toast.success("Voice transcribed!");
+              }
             } else {
               toast.error(data?.error || "No speech detected");
             }
@@ -102,7 +135,7 @@ export function VoiceInputButton({
 
       mediaRecorder.start();
       setStatus("recording");
-      toast.info("Recording... Click to stop", { duration: 2000 });
+      toast.info("🎙️ Recording... Speak in any language. Click to stop.", { duration: 3000 });
     } catch (err: any) {
       console.error("Recording error:", err);
       if (err.name === 'NotAllowedError') {
@@ -114,7 +147,7 @@ export function VoiceInputButton({
       }
       setStatus("idle");
     }
-  }, [language, onTranscript]);
+  }, [language, onTranscript, onTranscriptResult]);
 
   const stopRecording = useCallback(() => {
     if (mediaRecorderRef.current && status === "recording") {
@@ -136,7 +169,7 @@ export function VoiceInputButton({
       return <Loader2 className="h-4 w-4 animate-spin" />;
     }
     if (status === "recording") {
-      return <Square className="h-4 w-4 fill-current" />; // Solid square = stop
+      return <Square className="h-4 w-4 fill-current" />;
     }
     return <Mic className="h-4 w-4" />;
   };
@@ -158,8 +191,8 @@ export function VoiceInputButton({
       className={`${getButtonClasses()} ${className || ""}`}
       title={
         status === "recording" ? "Stop recording" :
-        status === "processing" ? "Processing..." :
-        "Start voice input"
+        status === "processing" ? "Transcribing & translating..." :
+        "🎙️ Speak in any language — auto-translated"
       }
     >
       {getIcon()}

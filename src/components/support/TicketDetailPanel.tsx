@@ -24,7 +24,9 @@ import {
   Download,
   Maximize2,
   Minimize2,
+  Mic,
 } from "lucide-react";
+import { VoiceInputButton } from "@/components/ui/VoiceInputButton";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -367,14 +369,14 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
       {/* Header */}
       <div className="px-3 py-2.5 border-b border-gold/30 flex items-start justify-between bg-gradient-to-r from-[#F5EBD7] to-[#EDE4D3]">
         <div className="min-w-0 flex-1 mr-2">
-          <div className="flex items-center gap-2 mb-1 flex-wrap">
-            <span className="text-gold font-mono font-bold text-sm whitespace-nowrap">
+          <div className="flex items-center gap-2 mb-1 overflow-x-auto scrollbar-hide whitespace-nowrap">
+            <span className="text-gold font-mono font-bold text-sm whitespace-nowrap shrink-0">
               {ticket.ticket_number}
             </span>
-            <Badge className={cn("border text-[10px] px-1.5 py-0", priority.className)}>
+            <Badge className={cn("border text-[10px] px-1.5 py-0 whitespace-nowrap shrink-0", priority.className)}>
               {priority.label}
             </Badge>
-            <Badge className={cn("flex items-center gap-1 text-[10px] px-1.5 py-0", status.className)}>
+            <Badge className={cn("flex items-center gap-1 text-[10px] px-1.5 py-0 whitespace-nowrap shrink-0", status.className)}>
               <StatusIcon className="w-2.5 h-2.5" />
               {status.label}
             </Badge>
@@ -651,6 +653,9 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
 
       {/* Reply Composer */}
       <div className="p-3 border-t border-gold/30 bg-gradient-to-r from-[#F5EBD7] to-[#EDE4D3]">
+        <p className="text-[10px] text-gold/60 mb-1 flex items-center gap-1">
+          <Mic className="w-3 h-3" /> Speak in any language — auto-translated to English
+        </p>
         <div className="flex gap-2">
           <div className="flex-1 relative">
             <textarea
@@ -658,15 +663,30 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
               onChange={(e) => setReplyMessage(e.target.value)}
               placeholder="Type your reply to the customer..."
               rows={2}
-              className="w-full min-h-[56px] px-3 py-2 pr-10 rounded-lg bg-white/80 border border-gold/30 text-black text-sm placeholder:text-gold/40 resize-none focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all"
+              className="w-full min-h-[56px] px-3 py-2 pr-16 rounded-lg bg-white/80 border border-gold/30 text-black text-sm placeholder:text-gold/40 resize-none focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all"
             />
-            <button
-              onClick={() => setReplyMaximized(true)}
-              className="absolute top-2 right-2 text-gold/60 hover:text-gold transition-colors"
-              title="Maximize reply editor"
-            >
-              <Maximize2 className="w-4 h-4" />
-            </button>
+            <div className="absolute top-2 right-2 flex items-center gap-1">
+              <VoiceInputButton
+                onTranscript={(text) => setReplyMessage(prev => prev ? `${prev} ${text}` : text)}
+                onTranscriptResult={(result) => {
+                  if (result.translated && !result.isEnglish) {
+                    // Show both original and translated
+                    const combined = `[${result.languageName || 'Original'}]: ${result.original}\n[English]: ${result.translated}`;
+                    setReplyMessage(prev => prev ? `${prev}\n\n${combined}` : combined);
+                  }
+                }}
+                size="icon"
+                variant="ghost"
+                className="h-6 w-6 text-gold/60 hover:text-gold"
+              />
+              <button
+                onClick={() => setReplyMaximized(true)}
+                className="text-gold/60 hover:text-gold transition-colors p-0.5"
+                title="Maximize reply editor"
+              >
+                <Maximize2 className="w-4 h-4" />
+              </button>
+            </div>
           </div>
           <Button
             onClick={handleSendReply}
@@ -707,7 +727,20 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
                 autoFocus
               />
             </div>
-            <div className="px-5 py-4 border-t border-gold/30 flex gap-3 justify-end">
+            <div className="px-5 py-4 border-t border-gold/30 flex gap-3 items-center">
+              <VoiceInputButton
+                onTranscript={(text) => setReplyMessage(prev => prev ? `${prev} ${text}` : text)}
+                onTranscriptResult={(result) => {
+                  if (result.translated && !result.isEnglish) {
+                    const combined = `[${result.languageName || 'Original'}]: ${result.original}\n[English]: ${result.translated}`;
+                    setReplyMessage(prev => prev ? `${prev}\n\n${combined}` : combined);
+                  }
+                }}
+                size="default"
+                variant="outline"
+                className="border-2 border-gold text-gold hover:bg-gold/20"
+              />
+              <div className="flex-1" />
               <Button
                 variant="outline"
                 onClick={() => setReplyMaximized(false)}
