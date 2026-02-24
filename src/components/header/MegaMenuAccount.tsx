@@ -582,13 +582,14 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                       onClick={(e) => { e.stopPropagation(); handleCurrencyChange(cur.code); }}
                       onPointerDown={(e) => e.stopPropagation()}
                       className={cn(
-                        "py-1.5 rounded-lg text-[10px] font-medium transition-colors text-center tracking-wide",
+                        "py-1.5 rounded-lg text-[10px] font-medium transition-colors text-center tracking-wide flex flex-col items-center gap-0.5",
                         activeCurrency === cur.code
                           ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-[#C8A766]/60 shadow-sm"
                           : "bg-champagne-light text-black hover:bg-champagne"
                       )}
                     >
-                      {cur.code}
+                      <span className="text-sm leading-none">{cur.flag}</span>
+                      <span>{cur.code}</span>
                     </button>
                   ))}
                 </div>

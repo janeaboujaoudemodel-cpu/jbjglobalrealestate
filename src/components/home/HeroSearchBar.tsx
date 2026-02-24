@@ -656,7 +656,7 @@ const HeroSearchBar = () => {
         <Popover>
           <PopoverTrigger asChild>
             <button className="flex items-center gap-2 h-[38px] px-4 rounded-lg bg-white/10 backdrop-blur-sm border border-gold/40 text-white hover:bg-white/20 transition-all text-sm font-semibold min-w-[64px] justify-center">
-              <DollarSign className="w-3.5 h-3.5 text-gold" />
+              <span className="text-base leading-none">{currentCurrency.flag}</span>
               <span className="font-semibold">{currentCurrency.code}</span>
               <ChevronDown className="w-3 h-3 text-white/60" />
             </button>
