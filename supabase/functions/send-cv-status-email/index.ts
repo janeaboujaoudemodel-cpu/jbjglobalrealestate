@@ -131,8 +131,8 @@ function buildEmailHtml(req: CVEmailRequest): { html: string; subject: string } 
 <table role="presentation" class="wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:linear-gradient(180deg,#FFFFFF,#FDFBF7,#F5F0E6);border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(200,167,102,0.15);">
 
 <!-- Logo -->
-<tr><td style="background:#ffffff;padding:24px 0 16px;text-align:center;border-radius:20px 20px 0 0;">
-<img src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/jbj-monogram-dark-on-light.png?v=2" alt="JBJ Global Real Estate" width="120" style="max-width:120px;height:auto;" />
+<tr><td style="background:#000000;padding:24px 0 16px;text-align:center;border-radius:20px 20px 0 0;">
+<img src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/jbj-monogram-dark.png?v=3" alt="JBJ Global Real Estate" width="120" style="max-width:120px;height:auto;" />
 </td></tr>
 
 <!-- Hero -->
