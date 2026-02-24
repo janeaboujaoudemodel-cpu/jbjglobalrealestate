@@ -182,14 +182,16 @@ export default function JoinApplication() {
 
       if (appError) throw appError;
 
+      // Send CV confirmation email + create notifications
       await Promise.allSettled([
-        supabase.from('user_notifications').insert({
-          user_id: user.id,
-          type: 'cv_application',
-          title: 'CV received - Under review',
-          message: 'Your CV application has been submitted successfully. JBJ Global Real Estate HR team is reviewing your profile.',
-          is_read: false,
-          metadata: { status: 'under_review' },
+        supabase.functions.invoke('send-cv-status-email', {
+          body: {
+            email: user.email!,
+            fullName: `${formData.firstName} ${formData.lastName}`.trim(),
+            status: 'submitted',
+            position: formData.nationality || 'General Application',
+            userId: user.id,
+          },
         }),
         supabase.from('admin_tasks').insert({
           user_id: user.id,
