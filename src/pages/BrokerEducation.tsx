@@ -56,6 +56,7 @@ const BrokerEducation = () => {
   const isLocked = !accessLoading && !canAccessCourses;
 
   const handleOpenBook = (book: EducationBook) => {
+    // Allow opening for preview even when locked (modal will show locks on modules)
     if (!book.is_restricted) {
       setSelectedBook(book);
       setIsModalOpen(true);
@@ -182,40 +183,33 @@ const BrokerEducation = () => {
         </motion.div>
       </section>
 
-      {/* Locked Gate for Non-JBJ Broker Circle Members */}
+      {/* Locked Banner for Non-JBJ Broker Circle Members */}
       {isLocked && (
-        <section className="py-16 md:py-24">
-          <div className="max-w-3xl mx-auto px-4">
+        <section className="py-8">
+          <div className="max-w-4xl mx-auto px-4">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
               <Card className="jj-card-inner border-2 border-gold/40 overflow-hidden">
-                <CardContent className="p-8 md:p-12 text-center">
-                  <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-black flex items-center justify-center">
-                    <Lock className="w-10 h-10 text-gold" />
+                <CardContent className="p-6 md:p-8 flex flex-col sm:flex-row items-center gap-6">
+                  <div className="w-16 h-16 rounded-2xl bg-black flex items-center justify-center flex-shrink-0">
+                    <Lock className="w-8 h-8 text-gold" />
                   </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-                    Training is <span className="text-gold">Locked</span>
-                  </h2>
-                  <p className="text-black/60 text-lg mb-3">
-                    You're not yet part of the JBJ Broker Circle.
-                  </p>
-                  <p className="text-black/50 text-sm mb-8 max-w-xl mx-auto">
-                    Join the JBJ Broker Circle to unlock all training modules, certification exams, AI tools, and dedicated support. Submit your application to get started.
-                  </p>
-                  <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <Button variant="primary" size="lg" asChild>
+                  <div className="text-center sm:text-left flex-1">
+                    <h2 className="text-xl md:text-2xl font-bold text-black mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+                      Training is <span className="text-gold">Locked</span>
+                    </h2>
+                    <p className="text-black/60 text-sm mb-0">
+                      You can preview all content below, but access is locked until you join the JBJ Broker Circle.
+                    </p>
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
+                    <Button variant="primary" size="sm" asChild>
                       <Link to="/join">
-                        <ArrowRight className="w-5 h-5 mr-2" />
-                        {user ? 'Submit Application' : 'Register & Apply'}
-                      </Link>
-                    </Button>
-                    <Button variant="secondary" size="lg" asChild>
-                      <Link to="/broker-toolkit">
-                        <Briefcase className="w-5 h-5 mr-2" />
-                        Learn About Broker Circle
+                        <ArrowRight className="w-4 h-4 mr-2" />
+                        {user ? 'Apply Now' : 'Register & Apply'}
                       </Link>
                     </Button>
                   </div>
@@ -226,8 +220,7 @@ const BrokerEducation = () => {
         </section>
       )}
 
-      {/* Page Intro + Education Library - Connected Flow (visible only for approved brokers) */}
-      {!isLocked && (<>
+      {/* Page Intro + Education Library - Always Visible */}
       <section className="py-8 md:py-10">
         <div className="jj-layer-2">
           {/* About This Program */}
@@ -343,6 +336,7 @@ const BrokerEducation = () => {
                           progress={progressMap[book.id]}
                           onOpen={handleOpenBook}
                           index={bookIndex}
+                          isLocked={isLocked}
                         />
                       ))}
                     </div>
@@ -485,10 +479,9 @@ const BrokerEducation = () => {
       {/* Certification Section - After Books */}
       <section className="py-8 md:py-10">
         <div className="jj-layer-2">
-          <CertificationSection />
+          <CertificationSection isLocked={isLocked} />
         </div>
       </section>
-      </>)}
 
       {/* CTA Section - Layer 2 Active Champagne */}
       <section className="py-16 md:py-24">
@@ -529,6 +522,7 @@ const BrokerEducation = () => {
         book={selectedBook}
         isOpen={isModalOpen}
         onClose={handleCloseModal}
+        isLocked={isLocked}
       />
     </div>
   );
