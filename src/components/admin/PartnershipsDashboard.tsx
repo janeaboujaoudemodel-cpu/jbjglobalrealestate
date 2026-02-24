@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import {
@@ -32,12 +32,16 @@ import {
   UserCheck,
   Shield,
   Crown,
+  Send,
+  MessageSquare,
+  Edit3,
 } from "lucide-react";
 
 type PartnershipStage = "submitted" | "admin_review" | "senior_management_review" | "ceo_approval" | "approved" | "rejected";
 
 interface PartnershipApplication {
   id: string;
+  user_id: string | null;
   company_name: string;
   contact_person: string;
   position: string;
@@ -61,13 +65,42 @@ interface PartnershipApplication {
 }
 
 const STAGE_CONFIG: Record<PartnershipStage, { label: string; color: string; icon: any }> = {
-  submitted: { label: "Submitted", color: "bg-zinc-100 text-zinc-700 border-zinc-300", icon: Clock },
+  submitted: { label: "Submitted", color: "bg-[#C9A84C]/10 text-[#C9A84C] border-[#C9A84C]/30", icon: Clock },
   admin_review: { label: "Admin Review", color: "bg-blue-50 text-blue-700 border-blue-300", icon: Eye },
   senior_management_review: { label: "Senior Mgmt Review", color: "bg-amber-50 text-amber-700 border-amber-300", icon: Shield },
   ceo_approval: { label: "CEO Approval", color: "bg-purple-50 text-purple-700 border-purple-300", icon: Crown },
   approved: { label: "Approved — Partner", color: "bg-green-50 text-green-700 border-green-300", icon: CheckCircle },
   rejected: { label: "Rejected", color: "bg-red-50 text-red-700 border-red-300", icon: XCircle },
 };
+
+async function sendStatusNotification(
+  app: PartnershipApplication,
+  newStatus: string,
+  statusLabel: string,
+  adminMessage?: string,
+  actionRequired?: boolean,
+  actionLabel?: string
+) {
+  try {
+    await supabase.functions.invoke("send-application-status-email", {
+      body: {
+        applicationType: "partnership",
+        recipientEmail: app.email,
+        recipientName: app.contact_person,
+        applicationId: app.id,
+        newStatus,
+        statusLabel,
+        adminMessage,
+        applicationTitle: app.company_name,
+        actionRequired,
+        actionLabel,
+        userId: app.user_id,
+      },
+    });
+  } catch (e) {
+    console.error("Notification send error:", e);
+  }
+}
 
 export function PartnershipsDashboard() {
   const [applications, setApplications] = useState<PartnershipApplication[]>([]);
@@ -76,6 +109,8 @@ export function PartnershipsDashboard() {
   const [notes, setNotes] = useState("");
   const [filterStage, setFilterStage] = useState<string>("all");
   const [updating, setUpdating] = useState(false);
+  const [messageMode, setMessageMode] = useState<"action" | "message" | "request_edit">("action");
+  const [messageText, setMessageText] = useState("");
 
   const fetchApplications = async () => {
     setLoading(true);
@@ -112,6 +147,17 @@ export function PartnershipsDashboard() {
       toast.error("Failed to update application");
     } else {
       toast.success(`Application moved to ${STAGE_CONFIG[newStage].label}`);
+      
+      if (selectedApp) {
+        await sendStatusNotification(
+          selectedApp,
+          newStage,
+          STAGE_CONFIG[newStage].label,
+          noteValue || undefined,
+          false
+        );
+      }
+      
       fetchApplications();
       setSelectedApp(null);
       setNotes("");
@@ -129,10 +175,42 @@ export function PartnershipsDashboard() {
     if (error) toast.error("Failed to reject");
     else {
       toast.success("Application rejected");
+      
+      if (selectedApp) {
+        await sendStatusNotification(
+          selectedApp,
+          "rejected",
+          "Rejected",
+          reason || "Your application has been reviewed and unfortunately was not approved at this time.",
+          false
+        );
+      }
+      
       fetchApplications();
       setSelectedApp(null);
       setNotes("");
     }
+    setUpdating(false);
+  };
+
+  const sendMessage = async () => {
+    if (!selectedApp || !messageText.trim()) return;
+    setUpdating(true);
+
+    const isRequestEdit = messageMode === "request_edit";
+
+    await sendStatusNotification(
+      selectedApp,
+      isRequestEdit ? "request_edit" : selectedApp.stage,
+      isRequestEdit ? "Revision Requested" : "Message from JBJ Team",
+      messageText,
+      isRequestEdit,
+      isRequestEdit ? "Please review and resubmit your partnership application" : undefined
+    );
+
+    toast.success(isRequestEdit ? "Edit request sent to applicant" : "Message sent to applicant");
+    setMessageText("");
+    setMessageMode("action");
     setUpdating(false);
   };
 
@@ -165,7 +243,7 @@ export function PartnershipsDashboard() {
           { label: "Approved Partners", value: stats.approved, color: "text-green-600" },
           { label: "Rejected", value: stats.rejected, color: "text-red-500" },
         ].map(s => (
-          <Card key={s.label} className="bg-white/80 border-gold/30">
+          <Card key={s.label} className="bg-white/80 border-[#C9A84C]/30">
             <CardContent className="p-4 text-center">
               <p className="text-2xl font-bold text-black">{s.value}</p>
               <p className="text-xs text-zinc-500">{s.label}</p>
@@ -177,7 +255,7 @@ export function PartnershipsDashboard() {
       {/* Filter & Refresh */}
       <div className="flex items-center gap-3">
         <Select value={filterStage} onValueChange={setFilterStage}>
-          <SelectTrigger className="w-[200px] border-gold/30 text-black">
+          <SelectTrigger className="w-[200px] border-[#C9A84C]/30 text-black">
             <SelectValue placeholder="Filter by stage" />
           </SelectTrigger>
           <SelectContent>
@@ -187,16 +265,16 @@ export function PartnershipsDashboard() {
             ))}
           </SelectContent>
         </Select>
-        <Button variant="outline" size="sm" onClick={fetchApplications} className="border-gold/30 text-black">
+        <Button variant="outline" size="sm" onClick={fetchApplications} className="border-[#C9A84C]/30 text-black">
           <RefreshCw className="w-4 h-4 mr-1" /> Refresh
         </Button>
       </div>
 
       {/* Applications List */}
       {loading ? (
-        <div className="flex justify-center py-12"><Loader2 className="w-6 h-6 animate-spin text-gold" /></div>
+        <div className="flex justify-center py-12"><Loader2 className="w-6 h-6 animate-spin text-[#C9A84C]" /></div>
       ) : filtered.length === 0 ? (
-        <Card className="bg-white/80 border-gold/20">
+        <Card className="bg-white/80 border-[#C9A84C]/20">
           <CardContent className="p-12 text-center text-zinc-400">No partnership applications found.</CardContent>
         </Card>
       ) : (
@@ -205,12 +283,12 @@ export function PartnershipsDashboard() {
             const stageInfo = STAGE_CONFIG[app.stage];
             const StageIcon = stageInfo.icon;
             return (
-              <Card key={app.id} className="bg-white/80 border-gold/20 hover:border-gold/40 transition-colors cursor-pointer" onClick={() => { setSelectedApp(app); setNotes(""); }}>
+              <Card key={app.id} className="bg-white/80 border-[#C9A84C]/20 hover:border-[#C9A84C]/40 transition-colors cursor-pointer" onClick={() => { setSelectedApp(app); setNotes(""); setMessageMode("action"); setMessageText(""); }}>
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between gap-4">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <Building2 className="w-4 h-4 text-gold flex-shrink-0" />
+                        <Building2 className="w-4 h-4 text-[#C9A84C] flex-shrink-0" />
                         <h3 className="font-bold text-black truncate">{app.company_name}</h3>
                       </div>
                       <p className="text-sm text-zinc-500">{app.contact_person} · {app.position} · {app.partnership_type}</p>
@@ -229,7 +307,7 @@ export function PartnershipsDashboard() {
       )}
 
       {/* Detail Dialog */}
-      <Dialog open={!!selectedApp} onOpenChange={(open) => { if (!open) setSelectedApp(null); }}>
+      <Dialog open={!!selectedApp} onOpenChange={(open) => { if (!open) { setSelectedApp(null); setMessageMode("action"); } }}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           {selectedApp && (() => {
             const stageInfo = STAGE_CONFIG[selectedApp.stage];
@@ -274,14 +352,14 @@ export function PartnershipsDashboard() {
                   {selectedApp.company_profile && (
                     <div>
                       <p className="text-xs text-zinc-400 uppercase tracking-wider mb-1">Company Profile</p>
-                      <p className="text-sm text-black bg-zinc-50 p-3 rounded-lg">{selectedApp.company_profile}</p>
+                      <p className="text-sm text-black bg-[#FDFBF7] border border-[#C9A84C]/20 p-3 rounded-lg">{selectedApp.company_profile}</p>
                     </div>
                   )}
 
                   {/* Proposal */}
                   <div>
                     <p className="text-xs text-zinc-400 uppercase tracking-wider mb-1">Proposal</p>
-                    <p className="text-sm text-black bg-zinc-50 p-3 rounded-lg whitespace-pre-wrap">{selectedApp.proposal}</p>
+                    <p className="text-sm text-black bg-[#FDFBF7] border border-[#C9A84C]/20 p-3 rounded-lg whitespace-pre-wrap">{selectedApp.proposal}</p>
                   </div>
 
                   {/* Existing Notes */}
@@ -310,41 +388,98 @@ export function PartnershipsDashboard() {
                     </div>
                   )}
 
-                  {/* Action Area */}
-                  {action && (
-                    <div className="border-t border-gold/20 pt-4 space-y-3">
-                      <Textarea
-                        placeholder="Add notes for this review stage..."
-                        value={notes}
-                        onChange={(e) => setNotes(e.target.value)}
-                        rows={3}
-                      />
-                      <div className="flex gap-2">
+                  {/* Message / Request Edit Tabs */}
+                  <div className="border-t border-[#C9A84C]/20 pt-4">
+                    <div className="flex gap-2 mb-3">
+                      <Button
+                        variant={messageMode === "action" ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setMessageMode("action")}
+                        className={messageMode === "action" ? "bg-[#C9A84C] text-black" : "border-[#C9A84C]/30 text-black"}
+                      >
+                        <UserCheck className="w-3.5 h-3.5 mr-1" /> Actions
+                      </Button>
+                      <Button
+                        variant={messageMode === "message" ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setMessageMode("message")}
+                        className={messageMode === "message" ? "bg-blue-500 text-white" : "border-blue-300 text-blue-600"}
+                      >
+                        <MessageSquare className="w-3.5 h-3.5 mr-1" /> Send Message
+                      </Button>
+                      <Button
+                        variant={messageMode === "request_edit" ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setMessageMode("request_edit")}
+                        className={messageMode === "request_edit" ? "bg-amber-500 text-white" : "border-amber-300 text-amber-600"}
+                      >
+                        <Edit3 className="w-3.5 h-3.5 mr-1" /> Request Edit
+                      </Button>
+                    </div>
+
+                    {messageMode === "action" && action && (
+                      <div className="space-y-3">
+                        <Textarea
+                          placeholder="Add notes for this review stage..."
+                          value={notes}
+                          onChange={(e) => setNotes(e.target.value)}
+                          rows={3}
+                          className="border-[#C9A84C]/30"
+                        />
+                        <div className="flex gap-2">
+                          <Button
+                            onClick={() => updateStage(selectedApp.id, action.next, action.noteField, notes)}
+                            disabled={updating}
+                            className="flex-1 bg-gradient-to-r from-[#C9A84C] to-amber-600 text-black font-semibold"
+                          >
+                            {updating ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <UserCheck className="w-4 h-4 mr-2" />}
+                            {action.label}
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            onClick={() => rejectApplication(selectedApp.id, notes || "Application rejected")}
+                            disabled={updating}
+                          >
+                            <XCircle className="w-4 h-4 mr-1" /> Reject
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+
+                    {messageMode === "action" && !action && selectedApp.stage === "approved" && (
+                      <div className="bg-green-50 border border-green-200 p-4 rounded-lg text-center">
+                        <CheckCircle className="w-8 h-8 text-green-500 mx-auto mb-2" />
+                        <p className="text-green-700 font-semibold">This partner has been approved and onboarded.</p>
+                      </div>
+                    )}
+
+                    {(messageMode === "message" || messageMode === "request_edit") && (
+                      <div className="space-y-3">
+                        <div className={`p-3 rounded-lg border ${messageMode === "request_edit" ? "bg-amber-50 border-amber-200" : "bg-blue-50 border-blue-200"}`}>
+                          <p className="text-xs font-semibold mb-1" style={{ color: messageMode === "request_edit" ? "#92400e" : "#1d4ed8" }}>
+                            {messageMode === "request_edit" ? "⚠️ This will notify the applicant to edit & resubmit their application" : "📧 Send a direct message to the applicant"}
+                          </p>
+                        </div>
+                        <Textarea
+                          placeholder={messageMode === "request_edit" 
+                            ? "Describe what needs to be edited (e.g., 'Please update your company profile and add financial documents')..." 
+                            : "Type your message to the applicant..."}
+                          value={messageText}
+                          onChange={(e) => setMessageText(e.target.value)}
+                          rows={4}
+                          className="border-[#C9A84C]/30"
+                        />
                         <Button
-                          onClick={() => updateStage(selectedApp.id, action.next, action.noteField, notes)}
-                          disabled={updating}
-                          className="flex-1 bg-gradient-to-r from-gold to-amber-600 text-black font-semibold"
+                          onClick={sendMessage}
+                          disabled={updating || !messageText.trim()}
+                          className={`w-full font-semibold ${messageMode === "request_edit" ? "bg-amber-500 hover:bg-amber-600 text-white" : "bg-blue-500 hover:bg-blue-600 text-white"}`}
                         >
-                          {updating ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <UserCheck className="w-4 h-4 mr-2" />}
-                          {action.label}
-                        </Button>
-                        <Button
-                          variant="destructive"
-                          onClick={() => rejectApplication(selectedApp.id, notes || "Application rejected")}
-                          disabled={updating}
-                        >
-                          <XCircle className="w-4 h-4 mr-1" /> Reject
+                          {updating ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Send className="w-4 h-4 mr-2" />}
+                          {messageMode === "request_edit" ? "Send Edit Request" : "Send Message"}
                         </Button>
                       </div>
-                    </div>
-                  )}
-
-                  {selectedApp.stage === "approved" && (
-                    <div className="bg-green-50 border border-green-200 p-4 rounded-lg text-center">
-                      <CheckCircle className="w-8 h-8 text-green-500 mx-auto mb-2" />
-                      <p className="text-green-700 font-semibold">This partner has been approved and onboarded.</p>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
               </>
             );

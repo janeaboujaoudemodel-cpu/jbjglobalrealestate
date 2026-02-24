@@ -11,6 +11,7 @@ import CookiesConsentBanner from "@/components/CookiesConsentBanner";
 import LeadCapturePopup from "@/components/LeadCapturePopup";
 import PropertyRecommendationPopup from "@/components/PropertyRecommendationPopup";
 import ModeSelectionModal from "@/components/ModeSelectionModal";
+import { UserTasksPopupAlert } from "@/components/notifications/UserTasksPopupAlert";
 
 const PopupLayer = () => {
   // NOTE: InstallAppButton removed per user request - caused persistent 
@@ -21,6 +22,7 @@ const PopupLayer = () => {
       <LeadCapturePopup />
       <PropertyRecommendationPopup />
       <ModeSelectionModal />
+      <UserTasksPopupAlert />
     </>
   );
 };
