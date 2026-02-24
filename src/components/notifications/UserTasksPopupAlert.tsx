@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
 export function UserTasksPopupAlert() {
-  const { user, isOwner } = useAuth();
+  const { user, isOwner, ownerLoading } = useAuth();
   const navigate = useNavigate();
   const [pendingCount, setPendingCount] = useState(0);
   const [ticketAlerts, setTicketAlerts] = useState<Array<{ id: string; title: string; message: string }>>([]);
@@ -14,7 +14,12 @@ export function UserTasksPopupAlert() {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    if (!user || isOwner) return;
+    // Wait for owner verification to settle before deciding
+    if (!user || ownerLoading) return;
+    if (isOwner) {
+      setLoaded(true);
+      return;
+    }
 
     // Check localStorage for 24h snooze
     const dismissedAt = localStorage.getItem('user_tasks_popup_dismissed_at');
@@ -54,7 +59,7 @@ export function UserTasksPopupAlert() {
     };
 
     checkAlerts();
-  }, [user, isOwner]);
+  }, [user, isOwner, ownerLoading]);
 
   const handleDismiss = () => {
     localStorage.setItem('user_tasks_popup_dismissed_at', Date.now().toString());

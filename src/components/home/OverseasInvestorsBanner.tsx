@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Globe, Shield, TrendingUp, BadgeCheck, ArrowRight, Building2, Users, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { INVESTOR_BOOKS, companyProfileBook } from "@/data/bookCollections";
+import { CompanyProfileBrochure } from "@/components/books/CompanyProfileBrochure";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Clock, ChevronRight, X } from "lucide-react";
@@ -155,42 +156,7 @@ const OverseasInvestorsBanner = () => {
 
           {/* Company Profile — Premium standalone row */}
           <div className="border-t border-gold/20 pt-8">
-            <motion.button
-              onClick={() => setSelectedBook(companyProfileBook)}
-              className="group mx-auto flex flex-col sm:flex-row items-center gap-6 max-w-lg"
-              whileHover={{ y: -4 }}
-              transition={{ type: 'spring', stiffness: 300 }}
-            >
-              <div 
-                className="relative w-36 h-48 md:w-40 md:h-52 rounded-md overflow-hidden border-2 border-gold/60 flex-shrink-0"
-                style={{
-                  boxShadow: `
-                    0 12px 35px rgba(200,167,102,0.4),
-                    0 8px 20px rgba(0,0,0,0.2),
-                    inset 0 1px 3px rgba(255,255,255,0.3)
-                  `,
-                }}
-              >
-                <img src={companyProfileBook.cover} alt="Company Profile" className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-3 text-center">
-                  <p className="text-gold text-[10px] uppercase tracking-[0.2em] font-semibold">JBJ Global Real Estate</p>
-                  <p className="text-white text-xs font-bold mt-0.5">Company Profile</p>
-                </div>
-              </div>
-              <div className="text-center sm:text-left">
-                <p className="text-gold text-[10px] uppercase tracking-[0.2em] font-semibold mb-1">Corporate Dossier</p>
-                <h3 className="text-black text-lg md:text-xl font-bold mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
-                  JBJ Global Real Estate
-                </h3>
-                <p className="text-black/50 text-xs leading-relaxed mb-3">
-                  Our comprehensive company profile — vision, leadership, portfolio, awards, and investment track record.
-                </p>
-                <span className="inline-flex items-center gap-1.5 text-gold text-xs font-semibold group-hover:gap-2 transition-all">
-                  View Company Profile <ArrowRight className="w-3.5 h-3.5" />
-                </span>
-              </div>
-            </motion.button>
+            <CompanyProfileBrochure />
           </div>
         </div>
       </div>
