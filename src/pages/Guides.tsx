@@ -1,11 +1,17 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { 
-  BookOpen, ArrowRight, HelpCircle, FileText, DollarSign, Shield, BarChart3, CheckCircle, MessageCircle
+  BookOpen, ArrowRight, HelpCircle, FileText, DollarSign, Shield, BarChart3, CheckCircle, Clock, ChevronRight, X
 } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { SectionDivider } from "@/components/ui/section-divider";
+import { INVESTOR_BOOKS } from "@/data/bookCollections";
+import type { BookData } from "@/components/books/BookShelf";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -20,79 +26,8 @@ const staggerContainer = {
   }
 };
 
-// Premium 3D book cards linking to existing guides
-const guides = [
-  {
-    title: "Buyer Guide",
-    description: "Complete guide to purchasing property in Dubai",
-    href: "/buyer-guide",
-    color: "from-amber-600 to-amber-800",
-    spineColor: "bg-amber-900"
-  },
-  {
-    title: "Seller Guide",
-    description: "Steps and strategies for selling your property",
-    href: "/seller-guide",
-    color: "from-emerald-600 to-emerald-800",
-    spineColor: "bg-emerald-900"
-  },
-  {
-    title: "Landlord Guide",
-    description: "Managing and leasing your investment property",
-    href: "/landlord-guide",
-    color: "from-blue-600 to-blue-800",
-    spineColor: "bg-blue-900"
-  },
-  {
-    title: "Tenant Guide",
-    description: "Finding and renting your ideal home",
-    href: "/tenant-guide",
-    color: "from-purple-600 to-purple-800",
-    spineColor: "bg-purple-900"
-  },
-  {
-    title: "Area Guides",
-    description: "Explore Dubai's prime locations and communities",
-    href: "/areas",
-    color: "from-cyan-600 to-cyan-800",
-    spineColor: "bg-cyan-900"
-  },
-  {
-    title: "Investor Education",
-    description: "Real estate investment strategies and insights",
-    href: "/investor-education",
-    color: "from-gold to-amber-700",
-    spineColor: "bg-amber-950"
-  },
-  {
-    title: "General FAQ",
-    description: "Common questions about Dubai real estate",
-    href: "/faq",
-    color: "from-slate-600 to-slate-800",
-    spineColor: "bg-slate-900"
-  },
-  {
-    title: "Investor FAQ",
-    description: "Investment-specific questions answered",
-    href: "/investor-faq",
-    color: "from-rose-600 to-rose-800",
-    spineColor: "bg-rose-900"
-  },
-  {
-    title: "Broker FAQ",
-    description: "For real estate professionals",
-    href: "/broker-faq",
-    color: "from-indigo-600 to-indigo-800",
-    spineColor: "bg-indigo-900"
-  },
-  {
-    title: "Golden Visa Guide",
-    description: "UAE residency through property investment",
-    href: "/guides/golden-visa-uae",
-    color: "from-yellow-500 to-yellow-700",
-    spineColor: "bg-yellow-900"
-  }
-];
+// All guide books from the collections (guides + FAQs)
+const allGuideBooks = INVESTOR_BOOKS;
 
 // What You'll Learn items
 const learningTopics = [
@@ -128,80 +63,10 @@ const learningTopics = [
   }
 ];
 
-// 3D Book Card Component
-const BookCard = ({ guide, index }: { guide: typeof guides[0]; index: number }) => {
-  return (
-    <motion.div
-      variants={fadeInUp}
-      whileHover={{ 
-        rotateY: -15,
-        translateX: 10,
-        translateZ: 20,
-        transition: { duration: 0.3 }
-      }}
-      className="perspective-1000"
-    >
-      <Link 
-        to={guide.href}
-        className="block group"
-        style={{ transformStyle: 'preserve-3d' }}
-      >
-        <div className="relative h-[280px] w-[200px] mx-auto" style={{ transformStyle: 'preserve-3d' }}>
-          {/* Book spine */}
-          <div 
-            className={`absolute left-0 top-0 w-[20px] h-full ${guide.spineColor} rounded-l-sm shadow-inner`}
-            style={{ 
-              transform: 'rotateY(-90deg) translateX(-10px)',
-              transformOrigin: 'right center'
-            }}
-          />
-          
-          {/* Book cover */}
-          <div 
-            className={`absolute inset-0 bg-gradient-to-br ${guide.color} rounded-r-lg rounded-l-sm shadow-xl group-hover:shadow-2xl transition-shadow`}
-            style={{ transformStyle: 'preserve-3d' }}
-          >
-            {/* Cover content */}
-            <div className="absolute inset-0 p-6 flex flex-col justify-between">
-              {/* Top decoration */}
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-1 bg-white/30 rounded-full" />
-                <div className="w-4 h-1 bg-white/20 rounded-full" />
-              </div>
-              
-              {/* Title */}
-              <div className="flex-1 flex flex-col justify-center">
-                <BookOpen className="w-8 h-8 text-white/80 mb-3" />
-                <h3 className="text-white font-bold text-lg leading-tight mb-2">
-                  {guide.title}
-                </h3>
-                <p className="text-white/70 text-xs line-clamp-2">
-                  {guide.description}
-                </p>
-              </div>
-              
-              {/* Bottom decoration */}
-              <div className="flex items-center justify-between">
-                <span className="text-white/50 text-xs">JBJ Global</span>
-                <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center">
-                  <ArrowRight className="w-3 h-3 text-white" />
-                </div>
-              </div>
-            </div>
-            
-            {/* Shine effect */}
-            <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-r-lg rounded-l-sm" />
-            
-            {/* Page edges */}
-            <div className="absolute right-0 top-2 bottom-2 w-[3px] bg-gradient-to-r from-white/40 to-white/20 rounded-r" />
-          </div>
-        </div>
-      </Link>
-    </motion.div>
-  );
-};
-
 const Guides = () => {
+  const [selectedBook, setSelectedBook] = useState<BookData | null>(null);
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-black">
       <SEOHead 
@@ -226,9 +91,6 @@ const Guides = () => {
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/10 via-transparent to-transparent" />
         </div>
-        
-        <div className="absolute top-1/4 left-10 w-64 h-64 bg-gold/10 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-gold/15 rounded-full blur-[120px] pointer-events-none" />
 
         <motion.div 
           className="relative z-10 container mx-auto px-4 py-32 text-center max-w-4xl"
@@ -255,7 +117,7 @@ const Guides = () => {
           </motion.h1>
 
           <motion.p 
-            className="text-zinc-300 text-base md:text-lg max-w-3xl mx-auto mb-10 leading-relaxed"
+            className="text-white/70 text-base md:text-lg max-w-3xl mx-auto mb-10 leading-relaxed"
             variants={fadeInUp}
           >
             Structured guides built to answer real questions—fees, steps, timelines, and best-practice workflows across buying, selling, renting, and investing.
@@ -283,7 +145,7 @@ const Guides = () => {
       </section>
 
       {/* How This Library Works */}
-      <section className="bg-black py-20">
+      <section className="bg-black py-10 md:py-12">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -305,7 +167,7 @@ const Guides = () => {
                   <BookOpen className="w-7 h-7 text-gold" />
                 </div>
                 <div className="text-left">
-                  <p className="text-zinc-700 leading-relaxed">
+                  <p className="text-black/70 leading-relaxed">
                     Choose a guide like a book. Each guide follows the same structure so you can scan quickly and act confidently.
                   </p>
                 </div>
@@ -315,48 +177,55 @@ const Guides = () => {
         </div>
       </section>
 
-      {/* Guide Books Grid */}
-      <section id="guides-library" className="py-20 bg-black">
+      <SectionDivider />
+
+      {/* Guide Books Grid — Using actual book covers, no card background */}
+      <section id="guides-library" className="py-10 md:py-12 bg-black">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={staggerContainer}
-            className="w-full px-4 sm:px-6 lg:px-8"
           >
-            <motion.div className="text-center mb-16" variants={fadeInUp}>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black" style={{ fontFamily: "Playfair Display, serif" }}>
+            <motion.div className="text-center mb-10" variants={fadeInUp}>
+              <h2 className="text-3xl md:text-4xl font-bold mb-3 text-black" style={{ fontFamily: "Playfair Display, serif" }}>
                 Explore Guides
               </h2>
-              <p className="text-zinc-600 max-w-2xl mx-auto">
-                Select a guide to open the full page.
+              <p className="text-black/60 max-w-2xl mx-auto text-sm">
+                Select a guide to view the table of contents and open the full page.
               </p>
             </motion.div>
 
-            {/* 3D Book Shelf */}
-            <div 
-              className="max-w-6xl mx-auto"
-              style={{ perspective: '1500px' }}
-            >
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8 justify-items-center">
-                {guides.map((guide, index) => (
-                  <BookCard key={guide.href} guide={guide} index={index} />
-                ))}
-              </div>
-            </div>
-
-            {/* Shelf decoration */}
-            <div className="max-w-5xl mx-auto mt-12">
-              <div className="h-3 bg-gradient-to-r from-amber-800 via-amber-700 to-amber-800 rounded-lg shadow-lg" />
-              <div className="h-1 bg-amber-900/50 rounded-b-lg mx-4" />
+            {/* Books — No card bg, straight, with proper spacing */}
+            <div className="flex flex-wrap justify-center gap-6 md:gap-8 max-w-6xl mx-auto">
+              {allGuideBooks.map((book) => (
+                <motion.button
+                  key={book.title}
+                  variants={fadeInUp}
+                  onClick={() => setSelectedBook(book)}
+                  className="group flex flex-col items-center gap-3 w-28 md:w-36"
+                  whileHover={{ y: -8 }}
+                  transition={{ type: 'spring', stiffness: 300 }}
+                >
+                  <div className="relative w-24 h-36 md:w-32 md:h-44 rounded-md overflow-hidden border border-gold/40 shadow-[4px_4px_20px_rgba(0,0,0,0.25)] group-hover:shadow-[6px_6px_30px_rgba(200,167,102,0.4)] transition-shadow">
+                    <img src={book.cover} alt={book.title} className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+                  <p className="text-xs text-black/70 text-center font-medium group-hover:text-gold transition-colors leading-tight">
+                    {book.title}
+                  </p>
+                </motion.button>
+              ))}
             </div>
           </motion.div>
         </div>
       </section>
 
+      <SectionDivider />
+
       {/* What You'll Learn */}
-      <section className="bg-black py-20">
+      <section className="bg-black py-10 md:py-12">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -366,12 +235,12 @@ const Guides = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
+              className="text-3xl md:text-4xl font-bold text-black text-center mb-10"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               What You'll Learn
             </motion.h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 max-w-5xl mx-auto">
               {learningTopics.map((topic, index) => {
                 const Icon = topic.icon;
                 return (
@@ -384,7 +253,7 @@ const Guides = () => {
                           </div>
                           <div>
                             <h3 className="font-semibold text-black mb-1">{topic.title}</h3>
-                            <p className="text-sm text-zinc-600">{topic.description}</p>
+                            <p className="text-sm text-black/60">{topic.description}</p>
                           </div>
                         </div>
                       </CardContent>
@@ -397,22 +266,24 @@ const Guides = () => {
         </div>
       </section>
 
+      <SectionDivider />
+
       {/* CTA Block */}
-      <section className="py-20 bg-black">
+      <section className="py-10 md:py-12 bg-black">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeInUp}
-            className="text-center w-full px-4 sm:px-6 lg:px-8"
+            className="text-center"
           >
             <div className="max-w-5xl mx-auto jj-card-inner border-2 border-gold/30">
               <HelpCircle className="w-12 h-12 text-gold mx-auto mb-6" />
               <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black" style={{ fontFamily: "Playfair Display, serif" }}>
                 Not sure where to start?
               </h2>
-              <p className="text-zinc-600 mb-8 max-w-xl mx-auto">
+              <p className="text-black/60 mb-8 max-w-xl mx-auto">
                 Tell us your goal (buy, sell, rent, invest) and we'll route you to the right guide.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -427,6 +298,84 @@ const Guides = () => {
           </motion.div>
         </div>
       </section>
+
+      {/* TOC Modal — Gold Champagne Theme */}
+      {selectedBook && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ backgroundColor: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)' }}
+          onClick={() => setSelectedBook(null)}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl max-w-2xl w-full max-h-[85vh] overflow-hidden"
+            style={{
+              boxShadow: '0 20px 60px rgba(200,167,102,0.3), 0 10px 30px rgba(0,0,0,0.2)',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="flex items-start gap-5 p-6 border-b border-gold/20">
+              <div className="relative w-24 h-32 rounded-md overflow-hidden shadow-lg flex-shrink-0 border border-gold/40">
+                <img src={selectedBook.cover} alt={selectedBook.title} className="w-full h-full object-cover" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <h3 className="text-xl font-bold text-black mb-1">{selectedBook.title}</h3>
+                <p className="text-gold text-sm capitalize font-semibold">{selectedBook.category}</p>
+                <p className="text-black/40 text-xs mt-2">
+                  {selectedBook.tableOfContents.length} chapters
+                </p>
+              </div>
+              <button onClick={() => setSelectedBook(null)} className="text-gold hover:text-black transition-colors">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Table of Contents */}
+            <div className="p-6 overflow-y-auto max-h-[50vh]">
+              <h4 className="text-sm font-semibold text-gold uppercase tracking-wider mb-4">Table of Contents</h4>
+              <div className="space-y-1">
+                {selectedBook.tableOfContents.map((item, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-gold/10 transition-colors group"
+                  >
+                    <span className="w-8 h-8 rounded-lg bg-black border border-gold/30 flex items-center justify-center text-gold text-sm font-medium flex-shrink-0">
+                      {index + 1}
+                    </span>
+                    <span className="text-black/80 text-sm flex-1">{item.title}</span>
+                    {item.duration && (
+                      <span className="flex items-center gap-1 text-black/40 text-xs flex-shrink-0">
+                        <Clock className="w-3 h-3" />
+                        {item.duration}
+                      </span>
+                    )}
+                    <ChevronRight className="w-4 h-4 text-black/20 group-hover:text-gold transition-colors flex-shrink-0" />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="p-6 border-t border-gold/20">
+              <Button
+                className="w-full bg-gradient-to-r from-[#C9A84C] to-[#B8973F] hover:from-[#B8973F] hover:to-[#A7862E] text-black font-bold py-3 rounded-xl"
+                style={{
+                  boxShadow: '0 6px 20px rgba(200,167,102,0.3), inset 0 1px 3px rgba(255,255,255,0.5)',
+                }}
+                onClick={() => {
+                  setSelectedBook(null);
+                  navigate(selectedBook.href);
+                }}
+              >
+                Open Full Guide <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 };
