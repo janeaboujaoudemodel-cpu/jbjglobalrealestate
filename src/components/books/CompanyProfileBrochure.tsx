@@ -35,7 +35,7 @@ export function CompanyProfileBrochure({
   return (
     <motion.button
       onClick={handleClick}
-      className={`group flex ${compact ? 'flex-col items-center gap-4 mx-auto' : 'flex-row items-center gap-8'} max-w-2xl`}
+      className={`group flex ${compact ? 'flex-col items-center gap-4 mx-auto' : 'flex-col items-center gap-4'} max-w-2xl mx-auto`}
       whileHover={{ y: -4 }}
       transition={{ type: 'spring', stiffness: 300 }}
     >
@@ -86,13 +86,13 @@ export function CompanyProfileBrochure({
 
       {/* Text description — pushed right with gap */}
       {!compact && (
-        <div className="text-left">
+        <div className="text-center">
           <p className="text-gold text-[10px] uppercase tracking-[0.2em] font-semibold mb-1">Corporate Dossier</p>
           <h3 className="text-gold text-lg md:text-xl font-bold" style={{ fontFamily: "'Playfair Display', serif" }}>
             JBJ Global Real Estate
           </h3>
           <p className="text-white text-sm font-semibold mb-2">Company Profile</p>
-          <p className="text-black/50 text-xs leading-relaxed mb-3">
+          <p className="text-black/50 text-xs leading-relaxed mb-3 max-w-xs mx-auto">
             Our comprehensive company profile — vision, leadership, portfolio, awards, and investment track record.
           </p>
           <span className="inline-flex items-center gap-1.5 text-gold text-xs font-semibold group-hover:gap-2 transition-all">
