@@ -83,8 +83,17 @@ const handler = async (req: Request): Promise<Response> => {
       const bg = active ? 'background:linear-gradient(135deg,#C8A766,#B8956E);color:#fff;' : 'background:#e5e5e5;color:#999;';
       const textColor = active ? 'color:#C8A766;font-weight:600;' : 'color:#999;';
       const icon = active ? '&#10003;' : num;
-      return `<td width="33%" style="text-align:center;vertical-align:top;padding:0 4px;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td style="width:40px;height:40px;border-radius:50%;${bg}text-align:center;line-height:40px;font-size:16px;font-weight:bold;">${icon}</td></tr></table><p style="font-size:11px;${textColor}text-transform:uppercase;letter-spacing:0.5px;margin:8px 0 0;">${label}</p></td>`;
+      return `<td width="33%" style="text-align:center;vertical-align:top;padding:0 8px;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td style="width:44px;height:44px;border-radius:50%;${bg}text-align:center;vertical-align:middle;line-height:44px;font-size:18px;font-weight:bold;">${icon}</td></tr></table><p style="font-size:11px;${textColor}text-transform:uppercase;letter-spacing:0.5px;margin:8px 0 0;">${label}</p></td>`;
     };
+
+    // Only show reopen section for resolved tickets
+    const reopenHtml = newStatus === 'resolved' ? `
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:20px 0;">
+<tr><td style="background:linear-gradient(135deg,#fff5f5,#fff0f0);border:2px dashed #e74c3c;border-radius:12px;padding:25px;text-align:center;">
+<p style="color:#c0392b;margin:0 0 10px;font-size:16px;font-weight:bold;">🔄 Issue Not Resolved?</p>
+<p style="color:#666;font-size:13px;margin:0 0 15px;">If your issue persists, you can reopen this ticket anytime.</p>
+<a href="https://jbjglobalrealestate.lovable.app/reopen-ticket?ticket=${encodeURIComponent(ticket.ticket_number)}" style="display:inline-block;background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;text-decoration:none;padding:14px 30px;border-radius:8px;font-weight:bold;font-size:14px;">Reopen This Ticket</a>
+</td></tr></table>` : '';
 
     const emailHtml = `<!DOCTYPE html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -95,8 +104,8 @@ const handler = async (req: Request): Promise<Response> => {
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#F5EBD7;">
 <tr><td align="center" style="padding:24px 16px;">
 <table role="presentation" class="wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:linear-gradient(180deg,#FFFFFF,#FDFBF7,#F5F0E6);border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(200,167,102,0.15);">
-<!-- Header -->
-<tr><td class="hero-pad" style="background:linear-gradient(135deg,#C8A766,#B8956E,#A07D4A);padding:40px 32px;text-align:center;border-radius:20px 20px 0 0;">
+<!-- Header - Full width touching edges -->
+<tr><td class="hero-pad" style="background:linear-gradient(135deg,#C8A766,#B8956E,#A07D4A);padding:40px 32px;text-align:center;">
 <p style="font-size:28px;font-weight:bold;color:#1a1a1a;margin:0 0 8px;">JBJ Global Real Estate</p>
 <p style="font-size:16px;color:#2d2d2d;margin:0;font-weight:500;">${content.title}</p>
 </td></tr>
@@ -104,7 +113,7 @@ const handler = async (req: Request): Promise<Response> => {
 <tr><td class="content-pad" style="padding:32px;">
 <p style="font-size:15px;color:#333;margin:0 0 16px;">Dear <strong>${ticket.full_name}</strong>,</p>
 <p style="font-size:14px;color:#555;margin:0 0 24px;">${content.subtitle}</p>
-<!-- Progress -->
+<!-- Progress - circles with proper containment -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;">
 <tr>${makeStep('1', 'Received', content.step1Active)}${makeStep('2', 'In Review', content.step2Active)}${makeStep('3', 'Resolved', content.step3Active)}</tr>
 </table>
@@ -115,10 +124,11 @@ const handler = async (req: Request): Promise<Response> => {
 <p style="color:#C8A766;font-size:22px;font-weight:bold;margin:0;letter-spacing:2px;font-family:'Courier New',monospace;">${ticket.ticket_number}</p>
 </td></tr></table>
 ${content.extraHtml}
+${reopenHtml}
 <p style="font-size:14px;color:#333;">Best regards,<br><span style="color:#C8A766;font-weight:600;">JBJ Global Real Estate Support Team</span></p>
 </td></tr>
-<!-- Footer -->
-<tr><td style="background:linear-gradient(135deg,#1a1a1a,#2d2d2d);text-align:center;padding:24px;border-radius:0 0 20px 20px;">
+<!-- Footer - Full width touching edges -->
+<tr><td style="background:linear-gradient(135deg,#1a1a1a,#2d2d2d);text-align:center;padding:24px;">
 <p style="color:#C8A766;font-size:16px;font-weight:bold;margin:0 0 4px;">JBJ Global Real Estate</p>
 <p style="color:#888;font-size:11px;margin:0 0 8px;font-style:italic;">The Only Global AI-Powered Real Estate Intelligence Platform</p>
 <p style="color:#888;font-size:11px;margin:0;">&copy; 2026 JBJ Global Real Estate. All rights reserved.</p>
