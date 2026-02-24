@@ -182,6 +182,8 @@ export function useUpdateTicketStatus() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["support-tickets"] });
       queryClient.invalidateQueries({ queryKey: ["support-ticket-detail"] });
+      queryClient.invalidateQueries({ queryKey: ["my-tickets"] });
+      queryClient.invalidateQueries({ queryKey: ["ticket-notifications"] });
       toast.success("Ticket status updated");
     },
     onError: (error) => {
