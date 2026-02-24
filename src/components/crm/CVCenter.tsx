@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -35,6 +35,13 @@ import {
   ExternalLink,
   Download,
   MessageSquare,
+  Brain,
+  Sparkles,
+  Target,
+  HelpCircle,
+  ThumbsUp,
+  ThumbsDown,
+  Zap,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
@@ -109,6 +116,10 @@ const CVCenter = ({ userId }: CVCenterProps) => {
   const [interviewDate, setInterviewDate] = useState('');
   const [interviewTime, setInterviewTime] = useState('');
   const [interviewNotes, setInterviewNotes] = useState('');
+  const [analyzingIds, setAnalyzingIds] = useState<Set<string>>(new Set());
+  const [analyzingAll, setAnalyzingAll] = useState(false);
+  const [analysisDetail, setAnalysisDetail] = useState<any | null>(null);
+  const [analysisDetailOpen, setAnalysisDetailOpen] = useState(false);
 
   // Fetch CVs from database
   useEffect(() => {
@@ -378,6 +389,97 @@ const CVCenter = ({ userId }: CVCenterProps) => {
     setScheduleOpen(true);
   };
 
+  // AI Analysis - single CV
+  const handleAnalyzeCV = useCallback(async (cv: CVEntry) => {
+    setAnalyzingIds(prev => new Set(prev).add(cv.id));
+    try {
+      const { data, error } = await supabase.functions.invoke('cv-ai-analyzer', {
+        body: { applicationId: cv.id, source: cv.record_source },
+      });
+
+      if (error) throw error;
+      if (!data?.success) throw new Error(data?.error || 'Analysis failed');
+
+      const a = data.analysis;
+      // Update local state with AI results
+      setCvEntries(prev => prev.map(entry => 
+        entry.id === cv.id ? {
+          ...entry,
+          experience_years: a.experience_years ?? entry.experience_years,
+          languages: a.languages ?? entry.languages,
+          skills: a.skills ?? entry.skills,
+          ai_ranking: a.ai_ranking ?? entry.ai_ranking,
+          ai_summary: a.ai_summary ?? entry.ai_summary,
+          department_category: a.department_category ?? entry.department_category,
+          flag_reason: a.flag_reason ?? entry.flag_reason,
+        } : entry
+      ));
+
+      // Show detailed results
+      setAnalysisDetail({ ...a, full_name: cv.full_name, email: cv.email });
+      setAnalysisDetailOpen(true);
+      toast.success(`AI analysis complete for ${cv.full_name}`);
+    } catch (err: any) {
+      console.error('AI analysis error:', err);
+      toast.error(`Analysis failed: ${err.message}`);
+    } finally {
+      setAnalyzingIds(prev => {
+        const next = new Set(prev);
+        next.delete(cv.id);
+        return next;
+      });
+    }
+  }, []);
+
+  // AI Analysis - all unanalyzed CVs
+  const handleAnalyzeAll = useCallback(async () => {
+    const unanalyzed = cvEntries.filter(cv => !cv.ai_ranking || cv.ai_ranking === 0);
+    if (unanalyzed.length === 0) {
+      toast.info('All CVs have already been analyzed');
+      return;
+    }
+
+    setAnalyzingAll(true);
+    let completed = 0;
+    
+    for (const cv of unanalyzed) {
+      try {
+        setAnalyzingIds(prev => new Set(prev).add(cv.id));
+        const { data, error } = await supabase.functions.invoke('cv-ai-analyzer', {
+          body: { applicationId: cv.id, source: cv.record_source },
+        });
+
+        if (!error && data?.success) {
+          const a = data.analysis;
+          setCvEntries(prev => prev.map(entry => 
+            entry.id === cv.id ? {
+              ...entry,
+              experience_years: a.experience_years ?? entry.experience_years,
+              languages: a.languages ?? entry.languages,
+              skills: a.skills ?? entry.skills,
+              ai_ranking: a.ai_ranking ?? entry.ai_ranking,
+              ai_summary: a.ai_summary ?? entry.ai_summary,
+              department_category: a.department_category ?? entry.department_category,
+              flag_reason: a.flag_reason ?? entry.flag_reason,
+            } : entry
+          ));
+          completed++;
+        }
+      } catch (err) {
+        console.error(`Failed to analyze ${cv.full_name}:`, err);
+      } finally {
+        setAnalyzingIds(prev => {
+          const next = new Set(prev);
+          next.delete(cv.id);
+          return next;
+        });
+      }
+    }
+
+    setAnalyzingAll(false);
+    toast.success(`Analyzed ${completed}/${unanalyzed.length} CVs`);
+  }, [cvEntries]);
+
   const getCategoryIcon = (categoryId: string) => {
     const cat = DEPARTMENT_CATEGORIES.find(c => c.id === categoryId);
     if (!cat) return <FileText className="h-4 w-4" />;
@@ -417,10 +519,20 @@ const CVCenter = ({ userId }: CVCenterProps) => {
             Centralized CV collection, categorization & candidate management
           </p>
         </div>
-        <Button className="gap-2 bg-gold text-white hover:bg-gold-dark font-semibold">
-          <Upload className="h-4 w-4" />
-          Upload CV
-        </Button>
+        <div className="flex gap-2">
+          <Button 
+            onClick={handleAnalyzeAll}
+            disabled={analyzingAll}
+            className="gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold"
+          >
+            {analyzingAll ? <Loader2 className="h-4 w-4 animate-spin" /> : <Brain className="h-4 w-4" />}
+            {analyzingAll ? 'Analyzing...' : 'AI Analyze All'}
+          </Button>
+          <Button className="gap-2 bg-gold text-white hover:bg-gold-dark font-semibold">
+            <Upload className="h-4 w-4" />
+            Upload CV
+          </Button>
+        </div>
       </div>
 
       {/* Status Stats Cards */}
@@ -572,19 +684,34 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                               </div>
                             </div>
 
-                            {/* Languages, Score & Ranking */}
+                            {/* AI Score & Analysis */}
                             <div className="flex items-center gap-3 mt-3 flex-wrap">
                               {(() => {
                                 const score = getScoreBreakdown(cv);
+                                const isAnalyzed = cv.ai_ranking > 0;
+                                const scoreColor = score.final >= 7 ? 'text-emerald-600 bg-emerald-50 border-emerald-200' : 
+                                                   score.final >= 4 ? 'text-amber-600 bg-amber-50 border-amber-200' : 
+                                                   'text-zinc-500 bg-zinc-50 border-zinc-200';
                                 return (
                                   <>
-                                    <Badge className="bg-gold/10 text-gold border-gold/30 font-semibold">
-                                      <Star className="h-3 w-3 mr-1 fill-gold" />
-                                      Score: {score.final}/10 · {score.level}
+                                    <Badge className={`${scoreColor} font-bold px-3 py-1`}>
+                                      <Star className="h-3.5 w-3.5 mr-1.5 fill-current" />
+                                      {isAnalyzed ? `${score.final}/10 · ${score.level}` : 'Not Scored'}
                                     </Badge>
-                                    <Badge variant="outline" className="text-crm-text border-crm-border text-xs">
-                                      Experience {score.exp}/4 · Languages {score.lang}/3 · Skills {score.skills}/3
-                                    </Badge>
+                                    {isAnalyzed ? (
+                                      <Badge variant="outline" className="text-crm-text border-crm-border text-xs font-medium">
+                                        <Briefcase className="h-3 w-3 mr-1" /> {score.exp}/4 
+                                        <span className="mx-1">·</span>
+                                        <Globe2 className="h-3 w-3 mr-1" /> {score.lang}/3
+                                        <span className="mx-1">·</span>
+                                        <Zap className="h-3 w-3 mr-1" /> {score.skills}/3
+                                      </Badge>
+                                    ) : (
+                                      <Badge variant="outline" className="text-purple-600 border-purple-200 bg-purple-50 text-xs">
+                                        <HelpCircle className="h-3 w-3 mr-1" />
+                                        Needs AI Analysis
+                                      </Badge>
+                                    )}
                                   </>
                                 );
                               })()}
@@ -592,6 +719,18 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                                 <Badge variant="outline" className="text-crm-text border-crm-border">
                                   <Globe2 className="h-3 w-3 mr-1" />
                                   {cv.languages.join(', ')}
+                                </Badge>
+                              )}
+                              {cv.skills.length > 0 && (
+                                <Badge variant="outline" className="text-blue-600 border-blue-200 bg-blue-50 text-xs">
+                                  <Zap className="h-3 w-3 mr-1" />
+                                  {cv.skills.slice(0, 3).join(', ')}{cv.skills.length > 3 ? ` +${cv.skills.length - 3}` : ''}
+                                </Badge>
+                              )}
+                              {cv.experience_years > 0 && (
+                                <Badge variant="outline" className="text-crm-text border-crm-border text-xs">
+                                  <Briefcase className="h-3 w-3 mr-1" />
+                                  {cv.experience_years} yr{cv.experience_years !== 1 ? 's' : ''} exp
                                 </Badge>
                               )}
                               {cv.current_location_city && (
@@ -616,6 +755,15 @@ const CVCenter = ({ userId }: CVCenterProps) => {
 
                         {/* Right: Action Buttons - HIGH VISIBILITY GOLD */}
                         <div className="flex flex-col gap-2 flex-shrink-0">
+                          <Button 
+                            size="sm"
+                            onClick={() => handleAnalyzeCV(cv)}
+                            disabled={analyzingIds.has(cv.id)}
+                            className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold shadow-lg px-5 py-2.5 transition-all duration-200 hover:scale-105"
+                          >
+                            {analyzingIds.has(cv.id) ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Brain className="h-4 w-4 mr-2" />}
+                            {analyzingIds.has(cv.id) ? 'Analyzing...' : cv.ai_ranking > 0 ? 'Re-Analyze' : 'AI Analyze'}
+                          </Button>
                           <Button 
                             size="sm"
                             onClick={() => handleScheduleInterview(cv)}
@@ -784,6 +932,190 @@ const CVCenter = ({ userId }: CVCenterProps) => {
               }} className="w-full gap-2">
                 <Video className="h-4 w-4" /> Confirm Schedule
               </Button>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* AI Analysis Detail Dialog */}
+      <Dialog open={analysisDetailOpen} onOpenChange={setAnalysisDetailOpen}>
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Brain className="h-5 w-5 text-purple-600" />
+              AI Candidate Analysis
+            </DialogTitle>
+          </DialogHeader>
+          {analysisDetail && (
+            <div className="space-y-5">
+              {/* Candidate Header */}
+              <div className="bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-200 rounded-xl p-4">
+                <h3 className="font-bold text-lg text-black">{analysisDetail.full_name}</h3>
+                <p className="text-sm text-zinc-500">{analysisDetail.email}</p>
+                <div className="flex items-center gap-3 mt-2">
+                  <Badge className={`font-bold px-3 py-1 ${
+                    analysisDetail.ai_ranking >= 7 ? 'bg-emerald-100 text-emerald-700 border-emerald-300' :
+                    analysisDetail.ai_ranking >= 4 ? 'bg-amber-100 text-amber-700 border-amber-300' :
+                    'bg-red-100 text-red-700 border-red-300'
+                  }`}>
+                    <Star className="h-4 w-4 mr-1 fill-current" />
+                    {analysisDetail.ai_ranking}/10 · {
+                      analysisDetail.ai_ranking >= 9 ? 'Elite' :
+                      analysisDetail.ai_ranking >= 7 ? 'Advanced' :
+                      analysisDetail.ai_ranking >= 5 ? 'Intermediate' :
+                      analysisDetail.ai_ranking >= 3 ? 'Developing' : 'Beginner'
+                    }
+                  </Badge>
+                  <Badge variant="outline" className="text-purple-600 border-purple-300">
+                    <Target className="h-3 w-3 mr-1" />
+                    {analysisDetail.best_suited_role || 'General'}
+                  </Badge>
+                  <Badge variant="outline" className={`font-semibold ${
+                    analysisDetail.overall_recommendation === 'Strongly Recommend' ? 'text-emerald-600 border-emerald-300 bg-emerald-50' :
+                    analysisDetail.overall_recommendation === 'Recommend' ? 'text-green-600 border-green-300 bg-green-50' :
+                    analysisDetail.overall_recommendation === 'Consider' ? 'text-amber-600 border-amber-300 bg-amber-50' :
+                    'text-red-600 border-red-300 bg-red-50'
+                  }`}>
+                    {analysisDetail.overall_recommendation}
+                  </Badge>
+                </div>
+                {analysisDetail.recommendation_reason && (
+                  <p className="text-sm text-zinc-600 mt-2 italic">{analysisDetail.recommendation_reason}</p>
+                )}
+              </div>
+
+              {/* AI Summary */}
+              <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+                <h4 className="font-semibold text-sm text-amber-800 mb-1 flex items-center gap-1">
+                  <Sparkles className="h-4 w-4" /> Professional Summary
+                </h4>
+                <p className="text-sm text-black">{analysisDetail.ai_summary}</p>
+              </div>
+
+              {/* Scoring Breakdown */}
+              {analysisDetail.scoring_breakdown && (
+                <div className="border border-zinc-200 rounded-xl p-4 space-y-3">
+                  <h4 className="font-semibold text-sm text-black flex items-center gap-1">
+                    <Star className="h-4 w-4 text-gold" /> Scoring Breakdown
+                  </h4>
+                  {[
+                    { label: 'Experience', score: analysisDetail.scoring_breakdown.experience_score, max: 4, reason: analysisDetail.scoring_breakdown.experience_reason, icon: Briefcase },
+                    { label: 'Languages', score: analysisDetail.scoring_breakdown.language_score, max: 3, reason: analysisDetail.scoring_breakdown.language_reason, icon: Globe2 },
+                    { label: 'Skills', score: analysisDetail.scoring_breakdown.skills_score, max: 3, reason: analysisDetail.scoring_breakdown.skills_reason, icon: Zap },
+                  ].map((item) => (
+                    <div key={item.label} className="flex items-start gap-3">
+                      <div className="w-28 flex items-center gap-1.5 pt-0.5">
+                        <item.icon className="h-4 w-4 text-zinc-500" />
+                        <span className="text-sm font-medium text-zinc-700">{item.label}</span>
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <div className="flex-1 bg-zinc-200 rounded-full h-2">
+                            <div 
+                              className={`h-2 rounded-full ${item.score >= item.max * 0.7 ? 'bg-emerald-500' : item.score >= item.max * 0.4 ? 'bg-amber-500' : 'bg-red-400'}`}
+                              style={{ width: `${(item.score / item.max) * 100}%` }}
+                            />
+                          </div>
+                          <span className="text-sm font-bold text-black w-10 text-right">{item.score}/{item.max}</span>
+                        </div>
+                        <p className="text-xs text-zinc-500">{item.reason}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Strengths & Weaknesses */}
+              <div className="grid grid-cols-2 gap-4">
+                {analysisDetail.strengths?.length > 0 && (
+                  <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+                    <h4 className="font-semibold text-sm text-green-800 mb-2 flex items-center gap-1">
+                      <ThumbsUp className="h-4 w-4" /> Strengths
+                    </h4>
+                    <ul className="space-y-1">
+                      {analysisDetail.strengths.map((s: string, i: number) => (
+                        <li key={i} className="text-sm text-green-700 flex items-start gap-1.5">
+                          <CheckCircle className="h-3.5 w-3.5 mt-0.5 flex-shrink-0" /> {s}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {analysisDetail.weaknesses?.length > 0 && (
+                  <div className="bg-red-50 border border-red-200 rounded-xl p-4">
+                    <h4 className="font-semibold text-sm text-red-800 mb-2 flex items-center gap-1">
+                      <ThumbsDown className="h-4 w-4" /> Weaknesses
+                    </h4>
+                    <ul className="space-y-1">
+                      {analysisDetail.weaknesses.map((w: string, i: number) => (
+                        <li key={i} className="text-sm text-red-700 flex items-start gap-1.5">
+                          <XCircle className="h-3.5 w-3.5 mt-0.5 flex-shrink-0" /> {w}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+
+              {/* Missing Items */}
+              {analysisDetail.missing_items?.length > 0 && (
+                <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
+                  <h4 className="font-semibold text-sm text-yellow-800 mb-2 flex items-center gap-1">
+                    <AlertTriangle className="h-4 w-4" /> Missing Items to Request
+                  </h4>
+                  <ul className="space-y-1">
+                    {analysisDetail.missing_items.map((m: string, i: number) => (
+                      <li key={i} className="text-sm text-yellow-700 flex items-start gap-1.5">
+                        <Flag className="h-3.5 w-3.5 mt-0.5 flex-shrink-0" /> {m}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Interview Questions */}
+              {analysisDetail.interview_questions?.length > 0 && (
+                <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-4">
+                  <h4 className="font-semibold text-sm text-indigo-800 mb-2 flex items-center gap-1">
+                    <HelpCircle className="h-4 w-4" /> Suggested Interview Questions
+                  </h4>
+                  <ol className="space-y-2">
+                    {analysisDetail.interview_questions.map((q: string, i: number) => (
+                      <li key={i} className="text-sm text-indigo-700 flex items-start gap-2">
+                        <span className="font-bold text-indigo-500 mt-0.5">{i + 1}.</span> {q}
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              )}
+
+              {/* Skills & Languages Detail */}
+              <div className="grid grid-cols-2 gap-4">
+                {analysisDetail.languages?.length > 0 && (
+                  <div className="border border-zinc-200 rounded-xl p-4">
+                    <h4 className="font-semibold text-sm text-zinc-700 mb-2 flex items-center gap-1">
+                      <Globe2 className="h-4 w-4" /> Languages
+                    </h4>
+                    <div className="flex flex-wrap gap-1.5">
+                      {analysisDetail.languages.map((l: string, i: number) => (
+                        <Badge key={i} variant="outline" className="text-xs">{l}</Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {analysisDetail.skills?.length > 0 && (
+                  <div className="border border-zinc-200 rounded-xl p-4">
+                    <h4 className="font-semibold text-sm text-zinc-700 mb-2 flex items-center gap-1">
+                      <Zap className="h-4 w-4" /> Skills
+                    </h4>
+                    <div className="flex flex-wrap gap-1.5">
+                      {analysisDetail.skills.map((s: string, i: number) => (
+                        <Badge key={i} variant="outline" className="text-xs">{s}</Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </DialogContent>
