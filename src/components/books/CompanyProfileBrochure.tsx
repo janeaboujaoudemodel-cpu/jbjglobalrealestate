@@ -35,18 +35,18 @@ export function CompanyProfileBrochure({
   return (
     <motion.button
       onClick={handleClick}
-      className={`group mx-auto flex ${compact ? 'flex-col items-center gap-4' : 'flex-col sm:flex-row items-center gap-6'} max-w-lg`}
+      className={`group flex ${compact ? 'flex-col items-center gap-4 mx-auto' : 'flex-row items-center gap-8'} max-w-2xl`}
       whileHover={{ y: -4 }}
       transition={{ type: 'spring', stiffness: 300 }}
     >
       {/* 3D Brochure Cover */}
-      <div className="relative" style={{ perspective: '1200px' }}>
+      <div className="relative flex-shrink-0" style={{ perspective: '1200px' }}>
         <div className="absolute -bottom-3 left-3 right-3 h-6 bg-black/20 blur-xl rounded-full" />
         <div
           className={`relative ${compact ? 'w-32 h-44' : 'w-36 h-48 md:w-40 md:h-52'} transition-transform duration-500 group-hover:[transform:rotateY(-8deg)]`}
           style={{ transformStyle: 'preserve-3d' }}
         >
-          {/* Front cover */}
+          {/* Front cover — clean, no overlay text */}
           <div className="relative rounded-r-lg overflow-hidden border-2 border-gold/60"
             style={{
               boxShadow: '0 12px 35px rgba(200,167,102,0.4), 0 8px 20px rgba(0,0,0,0.2), inset 0 1px 3px rgba(255,255,255,0.3)',
@@ -55,11 +55,6 @@ export function CompanyProfileBrochure({
             <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-black/40 via-black/20 to-transparent z-10" />
             <div className="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-white/15 to-transparent z-10" />
             <img src={companyProfileBook.cover} alt="Company Profile" className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10" />
-            <div className="absolute bottom-0 left-0 right-0 p-3 text-center z-20">
-              <p className="text-gold text-[10px] uppercase tracking-[0.2em] font-semibold">JBJ Global Real Estate</p>
-              <p className="text-white text-xs font-bold mt-0.5">Company Profile</p>
-            </div>
           </div>
 
           {/* 3D Spine */}
@@ -89,13 +84,14 @@ export function CompanyProfileBrochure({
         )}
       </div>
 
-      {/* Text description */}
+      {/* Text description — pushed right with gap */}
       {!compact && (
-        <div className="text-center sm:text-left">
+        <div className="text-left">
           <p className="text-gold text-[10px] uppercase tracking-[0.2em] font-semibold mb-1">Corporate Dossier</p>
-          <h3 className="text-lg md:text-xl font-bold mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
+          <h3 className="text-gold text-lg md:text-xl font-bold" style={{ fontFamily: "'Playfair Display', serif" }}>
             JBJ Global Real Estate
           </h3>
+          <p className="text-white text-sm font-semibold mb-2">Company Profile</p>
           <p className="text-black/50 text-xs leading-relaxed mb-3">
             Our comprehensive company profile — vision, leadership, portfolio, awards, and investment track record.
           </p>
