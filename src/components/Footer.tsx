@@ -105,7 +105,7 @@ const DivisionAccordion = ({
   );
 };
 
-/** Currency & Unit switcher for footer */
+/** Currency & Unit switcher for footer - Premium dropdown style */
 const FooterCurrencyUnit = () => {
   const [activeCurrency, setActiveCurrency] = useState<string>(() =>
     typeof window !== 'undefined' ? localStorage.getItem('jj_currency') || 'AED' : 'AED'
@@ -113,6 +113,8 @@ const FooterCurrencyUnit = () => {
   const [areaUnit, setAreaUnit] = useState<string>(() =>
     typeof window !== 'undefined' ? localStorage.getItem('jj_area_unit') || 'sqft' : 'sqft'
   );
+  const [currencyOpen, setCurrencyOpen] = useState(false);
+  const [unitOpen, setUnitOpen] = useState(false);
 
   useEffect(() => {
     const onCurrency = (e: Event) => setActiveCurrency((e as CustomEvent).detail);
@@ -129,47 +131,99 @@ const FooterCurrencyUnit = () => {
     setActiveCurrency(code);
     localStorage.setItem('jj_currency', code);
     window.dispatchEvent(new CustomEvent('currencyChange', { detail: code }));
+    setCurrencyOpen(false);
   };
   const handleUnit = (unit: string) => {
     setAreaUnit(unit);
     localStorage.setItem('jj_area_unit', unit);
     window.dispatchEvent(new CustomEvent('areaUnitChange', { detail: unit }));
+    setUnitOpen(false);
   };
+
+  const currentCur = SUPPORTED_CURRENCIES.find(c => c.code === activeCurrency);
 
   return (
     <div className="mt-6 flex flex-col items-center gap-3">
       <p className="text-gold/60 text-xs uppercase tracking-[0.15em]">Currency & Unit</p>
-      <div className="flex flex-wrap justify-center gap-1.5 max-w-xs">
-        {SUPPORTED_CURRENCIES.slice(0, 6).map((cur) => (
+      <div className="flex items-center gap-3">
+        {/* Currency Dropdown */}
+        <div className="relative">
           <button
-            key={cur.code}
-            onClick={() => handleCurrency(cur.code)}
-            className={cn(
-              "px-3 py-1.5 rounded-lg text-[11px] font-medium transition-colors",
-              activeCurrency === cur.code
-                ? "bg-gold text-black"
-                : "bg-white/10 text-white/70 hover:bg-white/20"
-            )}
+            onClick={() => { setCurrencyOpen(!currencyOpen); setUnitOpen(false); }}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black text-sm font-semibold transition-all hover:border-gold"
+            style={{
+              boxShadow: '0 6px 20px rgba(200,167,102,0.3), inset 0 1px 3px rgba(255,255,255,0.7), inset 0 -1px 3px rgba(200,167,102,0.2)',
+            }}
           >
-            {cur.flag} {cur.code}
+            <span>{currentCur?.flag} {activeCurrency}</span>
+            <ChevronDown className={cn("w-4 h-4 text-gold transition-transform", currencyOpen && "rotate-180")} />
           </button>
-        ))}
-      </div>
-      <div className="flex gap-2">
-        {(['sqft', 'sqm'] as const).map((unit) => (
+          {currencyOpen && (
+            <div 
+              className="absolute bottom-full mb-2 left-0 w-48 rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] overflow-hidden z-50"
+              style={{
+                boxShadow: '0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2)',
+              }}
+            >
+              {SUPPORTED_CURRENCIES.slice(0, 6).map((cur) => (
+                <button
+                  key={cur.code}
+                  onClick={() => handleCurrency(cur.code)}
+                  className={cn(
+                    "w-full flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-colors text-left",
+                    activeCurrency === cur.code
+                      ? "bg-gold/30 text-black font-bold"
+                      : "text-black/80 hover:bg-gold/15"
+                  )}
+                >
+                  <span>{cur.flag}</span>
+                  <span>{cur.code}</span>
+                  <span className="text-black/50 text-xs ml-auto">{cur.symbol}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Vertical gold divider */}
+        <div className="w-px h-8 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
+
+        {/* Area Unit Dropdown */}
+        <div className="relative">
           <button
-            key={unit}
-            onClick={() => handleUnit(unit)}
-            className={cn(
-              "px-4 py-1.5 rounded-lg text-xs font-medium transition-colors",
-              areaUnit === unit
-                ? "bg-gold text-black"
-                : "bg-white/10 text-white/70 hover:bg-white/20"
-            )}
+            onClick={() => { setUnitOpen(!unitOpen); setCurrencyOpen(false); }}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black text-sm font-semibold transition-all hover:border-gold"
+            style={{
+              boxShadow: '0 6px 20px rgba(200,167,102,0.3), inset 0 1px 3px rgba(255,255,255,0.7), inset 0 -1px 3px rgba(200,167,102,0.2)',
+            }}
           >
-            {unit}
+            <span>{areaUnit === 'sqft' ? 'sq ft' : 'sq m'}</span>
+            <ChevronDown className={cn("w-4 h-4 text-gold transition-transform", unitOpen && "rotate-180")} />
           </button>
-        ))}
+          {unitOpen && (
+            <div 
+              className="absolute bottom-full mb-2 left-0 w-36 rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] overflow-hidden z-50"
+              style={{
+                boxShadow: '0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2)',
+              }}
+            >
+              {(['sqft', 'sqm'] as const).map((unit) => (
+                <button
+                  key={unit}
+                  onClick={() => handleUnit(unit)}
+                  className={cn(
+                    "w-full px-4 py-2.5 text-sm font-medium transition-colors text-left",
+                    areaUnit === unit
+                      ? "bg-gold/30 text-black font-bold"
+                      : "text-black/80 hover:bg-gold/15"
+                  )}
+                >
+                  {unit === 'sqft' ? 'Square Feet (sq ft)' : 'Square Meters (sq m)'}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
