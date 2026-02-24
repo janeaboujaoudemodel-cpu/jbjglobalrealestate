@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Globe, Shield, TrendingUp, BadgeCheck, ArrowRight, Building2, Users } from "lucide-react";
+import { Globe, Shield, TrendingUp, BadgeCheck, ArrowRight, Building2, Users, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { BookShelf } from "@/components/books/BookShelf";
-import { INVESTOR_BOOKS } from "@/data/bookCollections";
+import { INVESTOR_BOOKS, companyProfileBook } from "@/data/bookCollections";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Clock, ChevronRight, X } from "lucide-react";
+import type { BookData } from "@/components/books/BookShelf";
 
 const highlights = [
   { icon: Shield, label: "0% Income Tax", desc: "No personal income or capital gains tax in the UAE" },
@@ -14,12 +17,15 @@ const highlights = [
   { icon: Globe, label: "Remote Purchase Ready", desc: "Buy from anywhere — virtual viewings, digital signing, full coordination" },
 ];
 
-// Select key guide books for the homepage (not all — curated selection)
+// Select key guide books (exclude company profile — shown separately)
 const homepageGuideBooks = INVESTOR_BOOKS.filter(b => 
-  ['guide', 'education', 'report'].includes(b.category)
+  ['guide', 'education', 'report'].includes(b.category) && b.title !== 'Company Profile'
 );
 
 const OverseasInvestorsBanner = () => {
+  const [selectedBook, setSelectedBook] = useState<BookData | null>(null);
+  const navigate = useNavigate();
+
   return (
     <section className="bg-black">
       <div className="jj-layer-2">
@@ -39,7 +45,7 @@ const OverseasInvestorsBanner = () => {
           transition={{ duration: 0.6 }}
           className="max-w-4xl mx-auto text-center mb-8 md:mb-12"
         >
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>
             <span className="text-gold">Invest in Dubai</span>{" "}
             <span className="text-black">From Anywhere in the World</span>
           </h2>
@@ -76,7 +82,7 @@ const OverseasInvestorsBanner = () => {
           viewport={{ once: true }}
           className="max-w-3xl mx-auto text-center mb-8"
         >
-          <p className="text-white/50 text-xs md:text-sm italic leading-relaxed">
+          <p className="text-black/50 text-xs md:text-sm italic leading-relaxed">
             "From your first inquiry to key collection — our multilingual team guides international investors through every step. 
             Property selection, legal structuring, visa processing, and ongoing asset management. You don't need to be in Dubai. We are."
           </p>
@@ -119,11 +125,140 @@ const OverseasInvestorsBanner = () => {
           </Link>
         </div>
 
-        {/* Guides BookShelf */}
-        <div className="pt-4 border-t border-gold/20">
-          <BookShelf books={homepageGuideBooks} title="Explore Our Guides & Reports" />
+        {/* Guides Section — No background, floating books */}
+        <div className="pt-6 border-t border-gold/20">
+          <h2 className="text-xl font-bold text-black mb-8 flex items-center justify-center gap-2">
+            <BookOpen className="w-5 h-5 text-gold" />
+            Explore Our Guides & Reports
+          </h2>
+
+          {/* Books — No card background, straight layout */}
+          <div className="flex flex-wrap justify-center gap-8 mb-10">
+            {homepageGuideBooks.map((book) => (
+              <motion.button
+                key={book.title}
+                onClick={() => setSelectedBook(book)}
+                className="group flex flex-col items-center gap-3 w-32 md:w-36"
+                whileHover={{ y: -8 }}
+                transition={{ type: 'spring', stiffness: 300 }}
+              >
+                <div className="relative w-28 h-40 md:w-32 md:h-44 rounded-md overflow-hidden border border-gold/40 shadow-[4px_4px_20px_rgba(0,0,0,0.25)] group-hover:shadow-[6px_6px_30px_rgba(200,167,102,0.4)] transition-shadow">
+                  <img src={book.cover} alt={book.title} className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </div>
+                <p className="text-xs text-black/70 text-center font-medium group-hover:text-gold transition-colors leading-tight">
+                  {book.title}
+                </p>
+              </motion.button>
+            ))}
+          </div>
+
+          {/* Company Profile — Premium standalone row */}
+          <div className="border-t border-gold/20 pt-8">
+            <motion.button
+              onClick={() => setSelectedBook(companyProfileBook)}
+              className="group mx-auto flex flex-col sm:flex-row items-center gap-6 max-w-lg"
+              whileHover={{ y: -4 }}
+              transition={{ type: 'spring', stiffness: 300 }}
+            >
+              <div 
+                className="relative w-36 h-48 md:w-40 md:h-52 rounded-md overflow-hidden border-2 border-gold/60 flex-shrink-0"
+                style={{
+                  boxShadow: `
+                    0 12px 35px rgba(200,167,102,0.4),
+                    0 8px 20px rgba(0,0,0,0.2),
+                    inset 0 1px 3px rgba(255,255,255,0.3)
+                  `,
+                }}
+              >
+                <img src={companyProfileBook.cover} alt="Company Profile" className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-3 text-center">
+                  <p className="text-gold text-[10px] uppercase tracking-[0.2em] font-semibold">JBJ Global Real Estate</p>
+                  <p className="text-white text-xs font-bold mt-0.5">Company Profile</p>
+                </div>
+              </div>
+              <div className="text-center sm:text-left">
+                <p className="text-gold text-[10px] uppercase tracking-[0.2em] font-semibold mb-1">Corporate Dossier</p>
+                <h3 className="text-black text-lg md:text-xl font-bold mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
+                  JBJ Global Real Estate
+                </h3>
+                <p className="text-black/50 text-xs leading-relaxed mb-3">
+                  Our comprehensive company profile — vision, leadership, portfolio, awards, and investment track record.
+                </p>
+                <span className="inline-flex items-center gap-1.5 text-gold text-xs font-semibold group-hover:gap-2 transition-all">
+                  View Company Profile <ArrowRight className="w-3.5 h-3.5" />
+                </span>
+              </div>
+            </motion.button>
+          </div>
         </div>
       </div>
+
+      {/* TOC Modal */}
+      {selectedBook && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4" onClick={() => setSelectedBook(null)}>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="bg-black border border-gold/30 rounded-2xl max-w-2xl w-full max-h-[85vh] overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-start gap-5 p-6 border-b border-gold/20">
+              <div className="relative w-24 h-32 rounded-md overflow-hidden shadow-lg flex-shrink-0 border border-gold/40">
+                <img src={selectedBook.cover} alt={selectedBook.title} className="w-full h-full object-cover" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <h3 className="text-xl font-bold text-white mb-1">{selectedBook.title}</h3>
+                <p className="text-gold text-sm capitalize">{selectedBook.category}</p>
+                <p className="text-white/40 text-xs mt-2">
+                  {selectedBook.tableOfContents.length} chapters
+                </p>
+              </div>
+              <button onClick={() => setSelectedBook(null)} className="text-gold hover:text-white transition-colors">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-6 overflow-y-auto max-h-[50vh]">
+              <h4 className="text-sm font-semibold text-gold uppercase tracking-wider mb-4">Table of Contents</h4>
+              <div className="space-y-1">
+                {selectedBook.tableOfContents.map((item, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 transition-colors group"
+                  >
+                    <span className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/20 flex items-center justify-center text-gold text-sm font-medium flex-shrink-0">
+                      {index + 1}
+                    </span>
+                    <span className="text-white/80 text-sm flex-1">{item.title}</span>
+                    {item.duration && (
+                      <span className="flex items-center gap-1 text-white/40 text-xs flex-shrink-0">
+                        <Clock className="w-3 h-3" />
+                        {item.duration}
+                      </span>
+                    )}
+                    <ChevronRight className="w-4 h-4 text-white/20 group-hover:text-gold transition-colors flex-shrink-0" />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="p-6 border-t border-gold/20">
+              <Button
+                className="w-full bg-gradient-to-r from-[#C9A84C] to-[#B8973F] hover:from-[#B8973F] hover:to-[#A7862E] text-black font-bold"
+                onClick={() => {
+                  setSelectedBook(null);
+                  navigate(selectedBook.href);
+                }}
+              >
+                Open Full Book <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </section>
   );
 };
