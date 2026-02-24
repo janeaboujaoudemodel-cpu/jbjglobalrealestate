@@ -43,12 +43,15 @@ interface SafeTooltipProviderProps {
   disableHoverableContent?: boolean;
 }
 
-export const SafeTooltipProvider = ({
+export const SafeTooltipProvider = React.forwardRef<
+  HTMLDivElement,
+  SafeTooltipProviderProps
+>(({
   children,
   delayDuration = 300,
   skipDelayDuration = 200,
   disableHoverableContent = false,
-}: SafeTooltipProviderProps) => {
+}, _ref) => {
   return (
     <TooltipErrorBoundary>
       <TooltipPrimitive.Provider
@@ -60,6 +63,8 @@ export const SafeTooltipProvider = ({
       </TooltipPrimitive.Provider>
     </TooltipErrorBoundary>
   );
-};
+});
+
+SafeTooltipProvider.displayName = "SafeTooltipProvider";
 
 export default SafeTooltipProvider;
