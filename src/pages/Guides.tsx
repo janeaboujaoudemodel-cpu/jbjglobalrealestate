@@ -179,9 +179,9 @@ const Guides = () => {
 
       <SectionDivider />
 
-      {/* Guide Books Grid — Using actual book covers, no card background */}
+      {/* Guide Books Grid — Floating books on black, no card background */}
       <section id="guides-library" className="py-10 md:py-12 bg-black">
-        <div className="jj-layer-2">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -189,10 +189,10 @@ const Guides = () => {
             variants={staggerContainer}
           >
             <motion.div className="text-center mb-10" variants={fadeInUp}>
-              <h2 className="text-3xl md:text-4xl font-bold mb-3 text-black" style={{ fontFamily: "Playfair Display, serif" }}>
+              <h2 className="text-3xl md:text-4xl font-bold mb-3 text-white" style={{ fontFamily: "Playfair Display, serif" }}>
                 Explore Guides
               </h2>
-              <p className="text-black/60 max-w-2xl mx-auto text-sm">
+              <p className="text-white/60 max-w-2xl mx-auto text-sm">
                 Select a guide to view the table of contents and open the full page.
               </p>
             </motion.div>
@@ -212,7 +212,7 @@ const Guides = () => {
                     <img src={book.cover} alt={book.title} className="w-full h-full object-cover" />
                     <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
-                  <p className="text-xs text-black/70 text-center font-medium group-hover:text-gold transition-colors leading-tight">
+                  <p className="text-xs text-white/70 text-center font-medium group-hover:text-gold transition-colors leading-tight">
                     {book.title}
                   </p>
                 </motion.button>

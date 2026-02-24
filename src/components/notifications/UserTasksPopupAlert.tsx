@@ -16,11 +16,17 @@ export function UserTasksPopupAlert() {
   useEffect(() => {
     if (!user || isOwner) return;
 
-    const sessionKey = `user_tasks_popup_${new Date().toDateString()}`;
-    if (sessionStorage.getItem(sessionKey)) {
-      setDismissed(true);
-      setLoaded(true);
-      return;
+    // Check localStorage for 24h snooze
+    const dismissedAt = localStorage.getItem('user_tasks_popup_dismissed_at');
+    if (dismissedAt) {
+      const elapsed = Date.now() - parseInt(dismissedAt, 10);
+      if (elapsed < 24 * 60 * 60 * 1000) {
+        setDismissed(true);
+        setLoaded(true);
+        return;
+      }
+      // Expired — clear and continue
+      localStorage.removeItem('user_tasks_popup_dismissed_at');
     }
 
     const checkAlerts = async () => {
@@ -51,8 +57,7 @@ export function UserTasksPopupAlert() {
   }, [user, isOwner]);
 
   const handleDismiss = () => {
-    const sessionKey = `user_tasks_popup_${new Date().toDateString()}`;
-    sessionStorage.setItem(sessionKey, "1");
+    localStorage.setItem('user_tasks_popup_dismissed_at', Date.now().toString());
     setDismissed(true);
   };
 
