@@ -250,6 +250,16 @@ const CVCenter = ({ userId }: CVCenterProps) => {
     );
   }, [cvEntries]);
 
+  const getScoreBreakdown = (cv: CVEntry) => {
+    const exp = cv.experience_years >= 7 ? 4 : cv.experience_years >= 4 ? 3 : cv.experience_years >= 2 ? 2 : cv.experience_years > 0 ? 1 : 0;
+    const lang = cv.languages.length >= 3 ? 3 : cv.languages.length >= 2 ? 2 : cv.languages.length >= 1 ? 1 : 0;
+    const skills = cv.skills.length >= 6 ? 3 : cv.skills.length >= 3 ? 2 : cv.skills.length >= 1 ? 1 : 0;
+    const base = exp + lang + skills;
+    const final = cv.ai_ranking > 0 ? Math.max(1, Math.min(10, Math.round((cv.ai_ranking * 0.6) + (base * 0.4)))) : Math.max(1, base);
+    const level = final >= 9 ? 'Elite' : final >= 7 ? 'Advanced' : final >= 5 ? 'Intermediate' : 'Beginner';
+    return { exp, lang, skills, final, level };
+  };
+
   // Filter CVs
   const filteredCVs = useMemo(() => {
     let filtered = cvEntries;
@@ -282,6 +292,8 @@ const CVCenter = ({ userId }: CVCenterProps) => {
     }
 
     // Sort by strongest score first
+
+    // Sort by strongest score first
     return filtered.sort((a, b) => {
       const aScore = getScoreBreakdown(a).final;
       const bScore = getScoreBreakdown(b).final;
@@ -297,16 +309,6 @@ const CVCenter = ({ userId }: CVCenterProps) => {
     rejected: cvEntries.filter(cv => cv.status === 'rejected').length,
     flagged: cvEntries.filter(cv => cv.flag_reason !== null).length,
   }), [cvEntries]);
-
-  const getScoreBreakdown = (cv: CVEntry) => {
-    const exp = cv.experience_years >= 7 ? 4 : cv.experience_years >= 4 ? 3 : cv.experience_years >= 2 ? 2 : cv.experience_years > 0 ? 1 : 0;
-    const lang = cv.languages.length >= 3 ? 3 : cv.languages.length >= 2 ? 2 : cv.languages.length >= 1 ? 1 : 0;
-    const skills = cv.skills.length >= 6 ? 3 : cv.skills.length >= 3 ? 2 : cv.skills.length >= 1 ? 1 : 0;
-    const base = exp + lang + skills;
-    const final = cv.ai_ranking > 0 ? Math.max(1, Math.min(10, Math.round((cv.ai_ranking * 0.6) + (base * 0.4)))) : Math.max(1, base);
-    const level = final >= 9 ? 'Elite' : final >= 7 ? 'Advanced' : final >= 5 ? 'Intermediate' : 'Beginner';
-    return { exp, lang, skills, final, level };
-  };
 
   const resolvePreviewUrl = async (cvUrl: string | null) => {
     if (!cvUrl) return null;
