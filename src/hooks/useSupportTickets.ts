@@ -229,6 +229,38 @@ export function useSendTicketReply() {
 
       if (insertError) throw insertError;
 
+      // Fetch ticket to get user_id for notification
+      const { data: ticketData } = await supabase
+        .from("support_tickets")
+        .select("user_id, ticket_number, subject")
+        .eq("id", ticketId)
+        .single();
+
+      // Create in-app notification for the user that staff replied
+      if (ticketData?.user_id) {
+        await supabase.from("user_notifications").insert({
+          user_id: ticketData.user_id,
+          type: "support_ticket",
+          title: `New reply on ${ticketNumber}`,
+          message: `The JBJ support team replied to your ticket "${ticketData.subject}". Please review and respond if needed.`,
+          metadata: { ticket_number: ticketNumber, ticket_id: ticketId, action: "staff_reply" },
+        }).then(({ error: notifErr }) => {
+          if (notifErr) console.error("Reply notification insert failed:", notifErr);
+        });
+
+        // Create a task for the user to respond
+        await supabase.from("admin_tasks").insert({
+          user_id: ticketData.user_id,
+          title: `Respond to ticket ${ticketNumber}`,
+          description: `The JBJ support team sent you a message on ticket "${ticketData.subject}". Please review and reply.`,
+          status: "pending",
+          priority: "high",
+          category: "support_ticket",
+        }).then(({ error: taskErr }) => {
+          if (taskErr) console.error("Task insert failed:", taskErr);
+        });
+      }
+
       // Update ticket status to in_progress if it was open
       await supabase
         .from("support_tickets")
@@ -257,6 +289,8 @@ export function useSendTicketReply() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["support-ticket-detail"] });
+      queryClient.invalidateQueries({ queryKey: ["user-alert-counts"] });
+      queryClient.invalidateQueries({ queryKey: ["ticket-notifications"] });
       toast.success("Reply sent successfully");
     },
     onError: (error) => {

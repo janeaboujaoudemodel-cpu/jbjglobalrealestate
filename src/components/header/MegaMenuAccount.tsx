@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { User, Heart, Sparkles, Users, FolderOpen, LogOut, ChevronRight, LayoutDashboard, Shield, Headphones, Loader2, Bell, DollarSign, Ruler, Check, Globe, Search, Clock, ListChecks } from 'lucide-react';
+import { User, Heart, Sparkles, Users, FolderOpen, LogOut, ChevronRight, LayoutDashboard, Shield, Headphones, Loader2, Bell, DollarSign, Ruler, Check, Globe, Search, Clock, ListChecks, AlertCircle } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage, SUPPORTED_LANGUAGES } from '@/contexts/LanguageContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -15,6 +15,7 @@ import { useUserModeContext } from '@/contexts/UserModeContext';
 import { SUPPORTED_CURRENCIES } from '@/components/CurrencySwitcher';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
+import { useUserAlerts } from '@/hooks/useUserAlerts';
 
 interface MegaMenuAccountProps {
   onClose: () => void;
@@ -39,6 +40,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
   const { t, language, setLanguage } = useLanguage();
   const { tierProgress, isCombinedMode, investorTierProgress, brokerTierProgress } = useTierProgress();
   const { mode } = useUserModeContext();
+  const { data: alertCounts } = useUserAlerts();
 
   // Currency & unit state synced with localStorage
   const [activeCurrency, setActiveCurrency] = useState<string>(() =>
@@ -195,12 +197,12 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
   }, []);
 
   const accountLinks = [
-    { href: '/my-dashboard', label: t('account.myDashboard', 'My Dashboard'), icon: LayoutDashboard, description: t('account.myDashboardDesc', 'Your personalized dashboard') },
-    { href: '/my-dashboard#notifications', label: t('account.notifications', 'Notification Inbox'), icon: Bell, description: t('account.notificationsDesc', 'View your notifications') },
-    { href: '/my-dashboard#tasks', label: t('account.myTasks', 'My Tasks'), icon: Check, description: t('account.myTasksDesc', 'View and manage your tasks') },
-    { href: '/profile', label: t('account.myProfile', 'My Profile'), icon: User, description: t('account.myProfileDesc', 'View and edit your profile') },
-    { href: '/favorites', label: t('nav.favorites', 'Favorites') + ' / ' + t('nav.shortlist', 'Shortlist'), icon: Heart, description: t('account.favoritesDesc', 'Your saved & shortlisted properties') },
-    { href: '/toolkit', label: t('account.aiTools', 'AI Tools'), icon: Sparkles, description: t('account.aiToolsDesc', 'Professional AI-powered tools') },
+    { href: '/my-dashboard', label: t('account.myDashboard', 'My Dashboard'), icon: LayoutDashboard, description: t('account.myDashboardDesc', 'Your personalized dashboard'), badge: 0 },
+    { href: '/my-dashboard#notifications', label: t('account.notifications', 'Notification Inbox'), icon: Bell, description: t('account.notificationsDesc', 'View your notifications'), badge: alertCounts?.unreadTicketNotifications || 0 },
+    { href: '/my-dashboard#tasks', label: t('account.myTasks', 'My Tasks'), icon: Check, description: t('account.myTasksDesc', 'View and manage your tasks'), badge: alertCounts?.pendingTasks || 0 },
+    { href: '/profile', label: t('account.myProfile', 'My Profile'), icon: User, description: t('account.myProfileDesc', 'View and edit your profile'), badge: 0 },
+    { href: '/favorites', label: t('nav.favorites', 'Favorites') + ' / ' + t('nav.shortlist', 'Shortlist'), icon: Heart, description: t('account.favoritesDesc', 'Your saved & shortlisted properties'), badge: 0 },
+    { href: '/toolkit', label: t('account.aiTools', 'AI Tools'), icon: Sparkles, description: t('account.aiToolsDesc', 'Professional AI-powered tools'), badge: 0 },
   ];
 
   // Filter admin links based on actual access - consolidated shortcuts
@@ -333,12 +335,22 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                       onClick={onClose}
                       className="flex items-center gap-3 py-2.5 px-2 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-gold/15 hover:to-gold/5 group"
                     >
-                      <div className="w-9 h-9 rounded-lg bg-transparent border-2 border-gold/40 flex items-center justify-center group-hover:border-gold group-hover:bg-gold/10 transition-colors">
+                      <div className="w-9 h-9 rounded-lg bg-transparent border-2 border-gold/40 flex items-center justify-center group-hover:border-gold group-hover:bg-gold/10 transition-colors relative">
                         <link.icon className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
+                        {link.badge > 0 && (
+                          <span className="absolute -top-1.5 -right-1.5 min-w-[18px] min-h-[18px] bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none">
+                            {link.badge > 9 ? '9+' : link.badge}
+                          </span>
+                        )}
                       </div>
                       <div className="flex-1 min-w-0">
                         <span className="text-black font-semibold text-sm group-hover:text-gold transition-colors block">
                           {link.label}
+                          {link.badge > 0 && (
+                            <span className="ml-2 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 bg-red-500 text-white text-[10px] font-bold rounded-full">
+                              {link.badge}
+                            </span>
+                          )}
                         </span>
                         {link.description && (
                           <span className="text-black/50 text-xs truncate block">
@@ -348,6 +360,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                       </div>
                     </Link>
                   ))}
+
                 </div>
               </div>
 
