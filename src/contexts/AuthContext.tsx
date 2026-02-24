@@ -47,6 +47,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return false;
     }
 
+    if (!currentSession?.user) {
+      setIsOwner(false);
+      setOwnerLoading(false);
+      setOwnerError(null);
+      return false;
+    }
+
     const attemptVerify = async (): Promise<boolean> => {
       const timeoutPromise = new Promise<{ data: null; error: Error }>((_, reject) => {
         setTimeout(() => reject(new Error("Owner verification timeout")), 15000);
