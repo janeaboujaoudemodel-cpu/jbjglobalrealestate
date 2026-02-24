@@ -22,11 +22,11 @@ const StartingPointSection = () => {
   const audienceCards = [
     { to: "/buyer-guide", icon: Heart, label: t('hero.buyers'), sub: t('hero.browseListings', 'Browse Listings') },
     { to: "/seller-guide", icon: Target, label: t('hero.sellers'), sub: t('hero.sellOrRent', 'Sell or Rent') },
-    { to: "/landlord-guide", icon: Home, label: t('hero.landlords', 'Landlords'), sub: t('hero.manageProperty', 'Manage Property') },
-    { to: "/tenant-guide", icon: User, label: t('hero.tenants', 'Tenants'), sub: t('hero.tenantGuide', 'Tenant Guide') },
+    { to: "/landlord-guide", icon: Home, label: t('hero.landlords', 'Landlord'), sub: t('hero.manageProperty', 'Manage Property') },
+    { to: "/tenant-guide", icon: User, label: t('hero.tenants', 'Tenant'), sub: t('hero.tenantGuide', 'Tenant Guide') },
     { to: "/investor-hub", icon: Layers, label: t('hero.investors'), sub: t('hero.investorPortal', 'Investor Portal') },
     { to: "/quiz", icon: Users, label: t('hero.visitors'), sub: t('hero.discoverDubai', 'Discover Dubai') },
-    { to: "/partners", icon: Briefcase, label: t('hero.partners', 'Partners'), sub: t('hero.partnerWithUs', 'Partner With Us') },
+    { to: "/partners", icon: Briefcase, label: t('hero.partners', 'Partner'), sub: t('hero.partnerWithUs', 'Partner With Us') },
     { to: "/join", icon: GraduationCap, label: t('hero.careers'), sub: t('hero.lookingForJob', 'Looking for a Job?') },
   ];
 
@@ -48,7 +48,7 @@ const StartingPointSection = () => {
     { to: "/broker-hub", icon: Building2, label: t('hero.jbjBrokerHub'), sub: t('hero.professionalTools', 'Professional Tools') },
     { to: "/investor-hub", icon: Layers, label: t('hero.jbjInvestorHub'), sub: t('hero.freeAiTools', 'Free AI Tools') },
     { to: "/ai-hub", icon: Globe, label: t('hero.jbjAiToolsHub', 'JBJ AI Tools Hub'), sub: t('hero.aiPoweredTools', 'AI-Powered Tools') },
-    { to: "/partners", icon: Briefcase, label: t('hero.partners', 'Partners'), sub: t('hero.partnerWithUs', 'Partner With Us') },
+    { to: "/partners", icon: Briefcase, label: t('hero.partners', 'Partner'), sub: t('hero.partnerWithUs', 'Partner With Us') },
     { to: "/referral", icon: Award, label: t('hero.referral'), sub: t('hero.earnRewards', 'Earn Rewards') },
     { to: "/join", icon: GraduationCap, label: t('hero.careers'), sub: t('hero.joinOurTeam', 'Join Our Team') },
   ];
