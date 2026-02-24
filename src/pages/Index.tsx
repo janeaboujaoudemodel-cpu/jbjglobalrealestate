@@ -198,6 +198,9 @@ const Index = () => {
         <DeveloperPartnersMarquee />
       </div>
 
+      {/* DIVIDER before Trust Bar */}
+      <SectionDivider />
+
       {/* TRUST BAR (4 Cards) - Flows directly from Developer Partners */}
       <div id="trust-bar" className="bg-black py-16 md:py-20">
         <div className="container mx-auto px-4">
@@ -216,6 +219,9 @@ const Index = () => {
           </div>
         </div>
       </div>
+
+      {/* DIVIDER after Trust Bar */}
+      <SectionDivider />
 
       {/* FEATURED LISTINGS - Master Blueprint: Section 3 (8 cards, Buy/Rent tabs) */}
       <FeaturedListings />
