@@ -19,6 +19,8 @@ import {
 import { useBrokerEducation, EducationBook } from "@/hooks/useBrokerEducation";
 import { Book3DCard, BookDetailModal, BookLanguageFilter } from "@/components/broker-education";
 import { CertificationSection } from "@/components/certification";
+import { useAccessControl } from "@/hooks/useAccessControl";
+import { useAuth } from "@/contexts/AuthContext";
 
 
 const fadeInUp = {
@@ -44,9 +46,14 @@ const LEARNING_PATH_ORDER = [
 
 const BrokerEducation = () => {
   const { books, loading, progressMap } = useBrokerEducation();
+  const { canAccessCourses, isLoading: accessLoading, isJBJEmployee } = useAccessControl();
+  const { user } = useAuth();
   const [selectedBook, setSelectedBook] = useState<EducationBook | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [bookLanguage, setBookLanguage] = useState('en');
+
+  // Courses are locked for non-JBJ Broker Circle members
+  const isLocked = !accessLoading && !canAccessCourses;
 
   const handleOpenBook = (book: EducationBook) => {
     if (!book.is_restricted) {
@@ -175,7 +182,52 @@ const BrokerEducation = () => {
         </motion.div>
       </section>
 
-      {/* Page Intro + Education Library - Connected Flow */}
+      {/* Locked Gate for Non-JBJ Broker Circle Members */}
+      {isLocked && (
+        <section className="py-16 md:py-24">
+          <div className="max-w-3xl mx-auto px-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <Card className="jj-card-inner border-2 border-gold/40 overflow-hidden">
+                <CardContent className="p-8 md:p-12 text-center">
+                  <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-black flex items-center justify-center">
+                    <Lock className="w-10 h-10 text-gold" />
+                  </div>
+                  <h2 className="text-2xl md:text-3xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    Training is <span className="text-gold">Locked</span>
+                  </h2>
+                  <p className="text-black/60 text-lg mb-3">
+                    You're not yet part of the JBJ Broker Circle.
+                  </p>
+                  <p className="text-black/50 text-sm mb-8 max-w-xl mx-auto">
+                    Join the JBJ Broker Circle to unlock all training modules, certification exams, AI tools, and dedicated support. Submit your application to get started.
+                  </p>
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <Button variant="primary" size="lg" asChild>
+                      <Link to="/join">
+                        <ArrowRight className="w-5 h-5 mr-2" />
+                        {user ? 'Submit Application' : 'Register & Apply'}
+                      </Link>
+                    </Button>
+                    <Button variant="secondary" size="lg" asChild>
+                      <Link to="/broker-toolkit">
+                        <Briefcase className="w-5 h-5 mr-2" />
+                        Learn About Broker Circle
+                      </Link>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </div>
+        </section>
+      )}
+
+      {/* Page Intro + Education Library - Connected Flow (visible only for approved brokers) */}
+      {!isLocked && (<>
       <section className="py-8 md:py-10">
         <div className="jj-layer-2">
           {/* About This Program */}
@@ -436,6 +488,7 @@ const BrokerEducation = () => {
           <CertificationSection />
         </div>
       </section>
+      </>)}
 
       {/* CTA Section - Layer 2 Active Champagne */}
       <section className="py-16 md:py-24">
