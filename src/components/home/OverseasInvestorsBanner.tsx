@@ -7,7 +7,8 @@ import { CompanyProfileBrochure } from "@/components/books/CompanyProfileBrochur
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Clock, ChevronRight, X } from "lucide-react";
-import type { BookData } from "@/components/books/BookShelf";
+import { BookCoverFace } from "@/components/books/BookCoverFace";
+import type { BookData } from "@/types/books";
 
 const highlights = [
   { icon: Shield, label: "0% Income Tax", desc: "No personal income or capital gains tax in the UAE" },
@@ -144,7 +145,7 @@ const OverseasInvestorsBanner = () => {
                 transition={{ type: 'spring', stiffness: 300 }}
               >
                 <div className="relative w-28 h-40 md:w-32 md:h-44 rounded-md overflow-hidden border border-gold/40 shadow-[4px_4px_20px_rgba(0,0,0,0.25)] group-hover:shadow-[6px_6px_30px_rgba(200,167,102,0.4)] transition-shadow">
-                  <img src={book.cover} alt={book.title} className="w-full h-full object-cover" />
+                  <BookCoverFace book={book} />
                   <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
                 <p className="text-xs text-black/70 text-center font-medium group-hover:text-gold transition-colors leading-tight">

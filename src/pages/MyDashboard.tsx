@@ -27,6 +27,8 @@ import marketIntelligenceCover from "@/assets/books/market-intelligence-cover.jp
 import guidesLibraryCover from "@/assets/books/guides-library-cover.jpg";
 import goldenVisaCover from "@/assets/books/golden-visa-cover.jpg";
 import investorEducationCover from "@/assets/books/investor-education-cover.jpg";
+import { BookCoverFace } from "@/components/books/BookCoverFace";
+import type { BookData } from "@/types/books";
 
 // Role label mapping
 function getRoleLabel(role: string | null): string {
@@ -67,11 +69,43 @@ const SECTION_IDS: Record<string, string> = {
 
 /** Useful Links card for dashboard */
 function UsefulLinksCard() {
-  const books = [
-    { label: 'Market Intelligence', href: '/market-intelligence/overview', cover: marketIntelligenceCover },
-    { label: 'Guides Library', href: '/guides', cover: guidesLibraryCover },
-    { label: 'Golden Visa Guide', href: '/guides/golden-visa-uae', cover: goldenVisaCover },
-    { label: 'Investor Education Guide', href: '/investor-hub', cover: investorEducationCover },
+  const books: BookData[] = [
+    {
+      title: "Market Intelligence Report",
+      href: "/market-intelligence/overview",
+      cover: marketIntelligenceCover,
+      category: "report",
+      icon: "chart",
+      coverLocked: false,
+      tableOfContents: [],
+    },
+    {
+      title: "Guides Library",
+      href: "/guides",
+      cover: guidesLibraryCover,
+      category: "guide",
+      icon: "book",
+      coverLocked: true,
+      tableOfContents: [],
+    },
+    {
+      title: "Golden Visa UAE Guide",
+      href: "/guides/golden-visa-uae",
+      cover: goldenVisaCover,
+      category: "guide",
+      icon: "flag",
+      coverLocked: true,
+      tableOfContents: [],
+    },
+    {
+      title: "Investor Education Guide",
+      href: "/investor-hub",
+      cover: investorEducationCover,
+      category: "education",
+      icon: "graduation",
+      coverLocked: false,
+      tableOfContents: [],
+    },
   ];
 
   return (
@@ -104,8 +138,7 @@ function UsefulLinksCard() {
                 {/* Spine edge */}
                 <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-[#C8A766]/30 via-black/30 to-transparent z-10" />
 
-                {/* Cover image */}
-                <img src={book.cover} alt={book.label} className="w-full h-full object-cover" />
+                <BookCoverFace book={book} size="modal" />
 
                 {/* Hover sheen */}
                 <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10 opacity-0 group-hover:opacity-100 transition-opacity z-10" />
@@ -131,7 +164,7 @@ function UsefulLinksCard() {
               />
             </motion.div>
             <p className="text-xs text-foreground/70 text-center font-medium group-hover:text-gold transition-colors leading-tight max-w-[120px]">
-              {book.label}
+              {book.title}
             </p>
           </Link>
         ))}
