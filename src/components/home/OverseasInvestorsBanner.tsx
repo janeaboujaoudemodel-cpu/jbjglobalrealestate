@@ -155,7 +155,7 @@ const OverseasInvestorsBanner = () => {
           </div>
 
           {/* Company Profile — Premium standalone row */}
-          <div className="border-t border-gold/20 pt-8">
+          <div className="border-t border-gold/20 pt-10 pb-4 mt-4">
             <CompanyProfileBrochure />
           </div>
         </div>
