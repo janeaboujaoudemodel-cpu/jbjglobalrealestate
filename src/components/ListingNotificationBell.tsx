@@ -1,16 +1,18 @@
-import { useState, useEffect, useRef } from 'react';
-import { Bell } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Bell, Headphones, CheckCircle, MessageSquare, ArrowRight } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { useUserAlerts } from '@/hooks/useUserAlerts';
 
-interface ListingNotification {
+interface Notification {
   id: string;
   title: string;
   message: string;
   is_read: boolean;
   created_at: string;
-  listing_id: string | null;
+  type: string;
+  metadata: any;
 }
 
 interface ListingNotificationBellProps {
@@ -26,7 +28,8 @@ interface ListingNotificationBellProps {
 const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClose, bellOnly, panelMode, onClose }: ListingNotificationBellProps) => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [notifications, setNotifications] = useState<ListingNotification[]>([]);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const { data: alertCounts } = useUserAlerts();
 
   useEffect(() => {
     if (!user) return;
@@ -35,33 +38,89 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
 
   const fetchNotifications = async () => {
     if (!user) return;
-    const { data } = await supabase
-      .from('user_listing_notifications')
-      .select('*')
-      .eq('user_id', user.id)
-      .order('created_at', { ascending: false })
-      .limit(10);
-    if (data) setNotifications(data as ListingNotification[]);
+    
+    // Fetch both listing notifications and support ticket notifications
+    const [listingResult, ticketResult] = await Promise.all([
+      supabase
+        .from('user_listing_notifications')
+        .select('id, title, message, is_read, created_at')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(5),
+      supabase
+        .from('user_notifications')
+        .select('id, title, message, is_read, created_at, type, metadata')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(10),
+    ]);
+
+    const listingNotifs: Notification[] = (listingResult.data || []).map(n => ({
+      ...n,
+      type: 'listing',
+      metadata: null,
+    }));
+
+    const ticketNotifs: Notification[] = (ticketResult.data || []).map(n => ({
+      ...n,
+      type: n.type || 'support_ticket',
+      metadata: n.metadata,
+    }));
+
+    // Merge and sort by date
+    const all = [...listingNotifs, ...ticketNotifs].sort(
+      (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    );
+
+    setNotifications(all.slice(0, 15));
   };
 
   const unreadCount = notifications.filter(n => !n.is_read).length;
 
-  const markAsRead = async (id: string) => {
+  const markAsRead = async (notif: Notification) => {
+    const table = notif.type === 'listing' ? 'user_listing_notifications' : 'user_notifications';
     await supabase
-      .from('user_listing_notifications')
+      .from(table)
       .update({ is_read: true } as any)
-      .eq('id', id);
-    setNotifications(prev => prev.map(n => n.id === id ? { ...n, is_read: true } : n));
+      .eq('id', notif.id);
+    setNotifications(prev => prev.map(n => n.id === notif.id ? { ...n, is_read: true } : n));
   };
 
   const markAllRead = async () => {
     if (!user) return;
-    await supabase
-      .from('user_listing_notifications')
-      .update({ is_read: true } as any)
-      .eq('user_id', user.id)
-      .eq('is_read', false);
+    await Promise.all([
+      supabase
+        .from('user_listing_notifications')
+        .update({ is_read: true } as any)
+        .eq('user_id', user.id)
+        .eq('is_read', false),
+      supabase
+        .from('user_notifications')
+        .update({ is_read: true } as any)
+        .eq('user_id', user.id)
+        .eq('is_read', false),
+    ]);
     setNotifications(prev => prev.map(n => ({ ...n, is_read: true })));
+  };
+
+  const getNotifIcon = (type: string, metadata: any) => {
+    if (type === 'support_ticket') {
+      const action = metadata?.action;
+      if (action === 'resolved') return <CheckCircle className="w-4 h-4 text-emerald-500" />;
+      if (action === 'staff_reply') return <MessageSquare className="w-4 h-4 text-blue-500" />;
+      return <Headphones className="w-4 h-4 text-gold" />;
+    }
+    return <Bell className="w-4 h-4 text-gold" />;
+  };
+
+  const handleNotifClick = (notif: Notification) => {
+    markAsRead(notif);
+    if (notif.type === 'support_ticket') {
+      navigate('/my-tickets');
+    } else {
+      navigate('/listing-portal/my-listings');
+    }
+    onClose?.();
   };
 
   if (!user) return null;
@@ -90,28 +149,29 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
           ) : (
             notifications.map(n => (
               <button
-                key={n.id}
-                onClick={() => {
-                  markAsRead(n.id);
-                  if (n.listing_id) navigate('/listing-portal/my-listings');
-                  onClose?.();
-                }}
+                key={`${n.type}-${n.id}`}
+                onClick={() => handleNotifClick(n)}
                 className={`w-full text-left p-3 border-b border-gold/10 hover:bg-gold/5 transition-colors ${
                   !n.is_read ? 'bg-gold/[0.04]' : ''
                 }`}
               >
                 <div className="flex items-start gap-2">
                   {!n.is_read && (
-                    <span className="w-2 h-2 rounded-full bg-gold mt-1.5 flex-shrink-0" />
+                    <span className="w-2 h-2 rounded-full bg-red-500 mt-1.5 flex-shrink-0" />
                   )}
-                  <div className={!n.is_read ? '' : 'pl-4'}>
-                    <p className="text-sm font-medium text-stone-900">{n.title}</p>
-                    {n.message && (
-                      <p className="text-xs text-stone-500 mt-0.5 line-clamp-2">{n.message}</p>
-                    )}
-                    <p className="text-[10px] text-stone-400 mt-1">
-                      {new Date(n.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
-                    </p>
+                  <div className="flex items-start gap-2 flex-1">
+                    <div className="mt-0.5 flex-shrink-0">
+                      {getNotifIcon(n.type, n.metadata)}
+                    </div>
+                    <div className={!n.is_read ? '' : 'pl-0'}>
+                      <p className="text-sm font-medium text-stone-900">{n.title}</p>
+                      {n.message && (
+                        <p className="text-xs text-stone-500 mt-0.5 line-clamp-2">{n.message}</p>
+                      )}
+                      <p className="text-[10px] text-stone-400 mt-1">
+                        {new Date(n.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </button>
@@ -120,12 +180,18 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
         </div>
 
         {/* Footer */}
-        <div className="p-2 border-t border-gold/20 bg-gradient-to-r from-[#FDF9F3] to-[#F5EBD7]">
+        <div className="p-2 border-t border-gold/20 bg-gradient-to-r from-[#FDF9F3] to-[#F5EBD7] flex gap-2">
           <button
-            onClick={() => { navigate('/listing-portal/my-listings'); onClose?.(); }}
-            className="w-full text-center text-xs text-gold hover:text-gold/80 font-semibold py-1.5 transition-colors"
+            onClick={() => { navigate('/my-tickets'); onClose?.(); }}
+            className="flex-1 text-center text-xs text-gold hover:text-gold/80 font-semibold py-1.5 transition-colors"
           >
-            View all listings
+            My Tickets
+          </button>
+          <button
+            onClick={() => { navigate('/my-dashboard#notifications'); onClose?.(); }}
+            className="flex-1 text-center text-xs text-gold hover:text-gold/80 font-semibold py-1.5 transition-colors"
+          >
+            All Notifications
           </button>
         </div>
       </div>
@@ -147,7 +213,7 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
           style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' }}
         />
         {unreadCount > 0 && (
-          <span className="absolute -top-0.5 -right-0.5 min-w-[18px] min-h-[18px] bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none">
+          <span className="absolute -top-0.5 -right-0.5 min-w-[18px] min-h-[18px] bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none animate-pulse">
             {unreadCount > 9 ? '9+' : unreadCount}
           </span>
         )}

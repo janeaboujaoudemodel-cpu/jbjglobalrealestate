@@ -43,6 +43,7 @@ import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
 import jbjMonogramLightTransparent from "@/assets/jbj-monogram-light-transparent.png";
 import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png";
 import ListingNotificationBell from "@/components/ListingNotificationBell";
+import { useUserAlerts } from "@/hooks/useUserAlerts";
 
 // Mega Menu Components
 import MegaMenuBuy from "@/components/header/MegaMenuBuy";
@@ -72,6 +73,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   const [filterBarActive, setFilterBarActive] = useState(false);
   const { t } = useLanguage();
   const isTouchLayout = useIsTouchLayout();
+  const { data: alertCounts } = useUserAlerts();
+  const totalUserAlerts = alertCounts?.totalAlerts || 0;
 
   // Listen for filter-bar-fixed class on body to hide header
   useEffect(() => {
@@ -1556,13 +1559,18 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               <button
                 onMouseEnter={() => handleMegaMenuEnter('account')}
                 onClick={() => handleMegaMenuClick('account')}
-                className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-white/10"
+                className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-white/10 relative"
                 aria-label={user ? t('nav.myAccount') : t('nav.signIn')}
               >
                 <User 
                   className={`w-5 h-5 transition-colors duration-300 text-gold group-hover:text-white ${activeMegaMenu === 'account' ? '!text-gold' : ''}`}
                   style={{ filter: isFullyTransparent ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' : 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' }}
                 />
+                {totalUserAlerts > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 min-w-[18px] min-h-[18px] bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none">
+                    {totalUserAlerts > 9 ? '9+' : totalUserAlerts}
+                  </span>
+                )}
               </button>
             </div>
           )}
