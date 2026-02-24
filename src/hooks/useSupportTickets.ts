@@ -148,7 +148,7 @@ export function useUpdateTicketStatus() {
         .eq("id", ticketId)
         .single();
 
-      // Create user notification if ticket has a user_id
+      // Create user notification via edge function (service_role)
       if (ticket?.user_id) {
         const statusLabels: Record<string, string> = {
           open: "is now open",
@@ -157,14 +157,18 @@ export function useUpdateTicketStatus() {
         };
         const label = statusLabels[status] || `status changed to ${status}`;
         
-        await supabase.from("user_notifications").insert({
-          user_id: ticket.user_id,
-          type: "support_ticket",
-          title: `Ticket ${ticket.ticket_number} Update`,
-          message: `Your ticket "${ticket.subject}" ${label}.`,
-          metadata: { ticket_number: ticket.ticket_number, ticket_id: ticketId, action: status }
-        }).then(({ error: notifErr }) => {
-          if (notifErr) console.error("Notification insert failed:", notifErr);
+        await supabase.functions.invoke("create-user-alert", {
+          body: {
+            notification: {
+              user_id: ticket.user_id,
+              type: "support_ticket",
+              title: `Ticket ${ticket.ticket_number} Update`,
+              message: `Your ticket "${ticket.subject}" ${label}.`,
+              metadata: { ticket_number: ticket.ticket_number, ticket_id: ticketId, action: status },
+            },
+          },
+        }).then(({ error }) => {
+          if (error) console.error("Alert creation failed:", error);
         });
       }
 
@@ -236,28 +240,27 @@ export function useSendTicketReply() {
         .eq("id", ticketId)
         .single();
 
-      // Create in-app notification for the user that staff replied
+      // Create notification + task via edge function (service_role)
       if (ticketData?.user_id) {
-        await supabase.from("user_notifications").insert({
-          user_id: ticketData.user_id,
-          type: "support_ticket",
-          title: `New reply on ${ticketNumber}`,
-          message: `The JBJ support team replied to your ticket "${ticketData.subject}". Please review and respond if needed.`,
-          metadata: { ticket_number: ticketNumber, ticket_id: ticketId, action: "staff_reply" },
-        }).then(({ error: notifErr }) => {
-          if (notifErr) console.error("Reply notification insert failed:", notifErr);
-        });
-
-        // Create a task for the user to respond
-        await supabase.from("admin_tasks").insert({
-          user_id: ticketData.user_id,
-          title: `Respond to ticket ${ticketNumber}`,
-          description: `The JBJ support team sent you a message on ticket "${ticketData.subject}". Please review and reply.`,
-          status: "pending",
-          priority: "high",
-          category: "support_ticket",
-        }).then(({ error: taskErr }) => {
-          if (taskErr) console.error("Task insert failed:", taskErr);
+        await supabase.functions.invoke("create-user-alert", {
+          body: {
+            notification: {
+              user_id: ticketData.user_id,
+              type: "support_ticket",
+              title: `New reply on ${ticketNumber}`,
+              message: `The JBJ support team replied to your ticket "${ticketData.subject}". Please review and respond if needed.`,
+              metadata: { ticket_number: ticketNumber, ticket_id: ticketId, action: "staff_reply" },
+            },
+            task: {
+              user_id: ticketData.user_id,
+              title: `Respond to ticket ${ticketNumber}`,
+              description: `The JBJ support team sent you a message on ticket "${ticketData.subject}". Please review and reply.`,
+              category: "support_ticket",
+              priority: "high",
+            },
+          },
+        }).then(({ error }) => {
+          if (error) console.error("Alert creation failed:", error);
         });
       }
 
