@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import OwnerSidebarNav from "@/components/owner-dashboard/OwnerSidebarNav";
+import { OwnerTasksPopupAlert } from "@/components/owner-dashboard/OwnerTasksPopupAlert";
 
 const OwnerDashboardShell = () => {
   const navigate = useNavigate();
@@ -87,6 +88,8 @@ const OwnerDashboardShell = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex">
+      {/* Owner Tasks Popup Alert */}
+      <OwnerTasksPopupAlert />
       {/* Mobile Sidebar */}
       {isMobile && (
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
@@ -120,36 +123,36 @@ const OwnerDashboardShell = () => {
         )}
         role="main"
       >
-        {/* Top Bar */}
-        <header className="h-16 bg-white/80 backdrop-blur-md border-b border-[#C9A84C]/30 sticky top-0 z-30 flex items-center justify-between px-4 md:px-6 shadow-sm">
-          <div className="flex items-center gap-3">
+        {/* Top Bar - always horizontal, never vertical stacking */}
+        <header className="h-16 bg-white/80 backdrop-blur-md border-b border-[#C9A84C]/30 sticky top-0 z-30 flex items-center justify-between px-3 md:px-6 shadow-sm min-w-0">
+          <div className="flex items-center gap-2 md:gap-3 min-w-0 flex-shrink-1">
             {isMobile && (
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => setMobileOpen(true)}
-                className="text-zinc-600 hover:text-[#C9A84C] hover:bg-[#C9A84C]/10 focus:ring-2 focus:ring-[#C9A84C]/40"
+                className="text-zinc-600 hover:text-[#C9A84C] hover:bg-[#C9A84C]/10 focus:ring-2 focus:ring-[#C9A84C]/40 flex-shrink-0"
                 aria-label="Open navigation menu"
               >
                 <Menu className="w-5 h-5" />
               </Button>
             )}
-            <div>
-              <h1 className="text-black font-semibold text-sm md:text-base tracking-wide">Owner Command Center</h1>
-              <p className="text-zinc-500 text-xs hidden md:block">Full system access & oversight</p>
+            <div className="min-w-0">
+              <h1 className="text-black font-semibold text-sm md:text-base tracking-wide whitespace-nowrap truncate">Owner Command Center</h1>
+              <p className="text-zinc-500 text-xs hidden md:block whitespace-nowrap">Full system access & oversight</p>
             </div>
           </div>
           
-          <div className="flex items-center gap-2 md:gap-4">
+          <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
             {/* Owner Badge */}
-            <div className="flex items-center gap-2 bg-gradient-to-r from-[#C9A84C]/15 to-[#C9A84C]/10 border border-[#C9A84C]/40 rounded-xl px-3 md:px-4 py-2 shadow-sm">
-              <Shield className="w-4 h-4 text-[#C9A84C] drop-shadow-[0_0_8px_rgba(200,167,102,0.5)]" />
+            <div className="flex items-center gap-1.5 md:gap-2 bg-gradient-to-r from-[#C9A84C]/15 to-[#C9A84C]/10 border border-[#C9A84C]/40 rounded-xl px-2 md:px-4 py-1.5 md:py-2 shadow-sm whitespace-nowrap">
+              <Shield className="w-4 h-4 text-[#C9A84C] drop-shadow-[0_0_8px_rgba(200,167,102,0.5)] flex-shrink-0" />
               <span className="text-[#C9A84C] text-xs md:text-sm font-semibold hidden sm:inline tracking-wide">Owner</span>
             </div>
             
             {/* User Email */}
-            <div className="text-right hidden md:block">
-              <p className="text-black text-sm font-medium">
+            <div className="text-right hidden md:block whitespace-nowrap">
+              <p className="text-black text-sm font-medium truncate max-w-[120px]">
                 {user?.email?.split("@")[0] || "Jane"}
               </p>
               <p className="text-[#C9A84C]/70 text-xs">Verified Owner</p>

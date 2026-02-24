@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight, Minus, MessageCircle } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Minus } from 'lucide-react';
+import { SquareChatIcon } from '@/components/ui/SquareChatIcon';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { ChatStep, getRandomAgent } from './types';
 import { useMemo } from 'react';
@@ -61,7 +62,7 @@ const ChatHeader = React.forwardRef<HTMLDivElement, ChatHeaderProps>(({ step, is
           </div>
         ) : (
           <div className="w-10 h-10 rounded-lg bg-white border-2 border-gold flex items-center justify-center shadow-lg shadow-gold/20">
-            <MessageCircle className="w-5 h-5 text-gold" />
+            <SquareChatIcon className="w-5 h-5 text-gold" size={20} />
           </div>
         )}
         <div>

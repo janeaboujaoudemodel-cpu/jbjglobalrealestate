@@ -10,6 +10,7 @@ import SupportTicketBox from "@/components/SupportTicketBox";
 import ExploreServicesCard from "@/components/home/ExploreServicesCard";
 import { ToolkitShowcaseCard } from "@/components/home/ToolkitShowcaseCard";
 import StartingPointSection from "@/components/home/StartingPointSection";
+import OverseasInvestorsBanner from "@/components/home/OverseasInvestorsBanner";
 
 // Master Blueprint Components - Lazy load below-fold heavy sections
 import TrustBar from "@/components/home/TrustBar";
@@ -231,6 +232,11 @@ const Index = () => {
 
       {/* FIND YOUR STARTING POINT - Tabbed Premium Section */}
       <StartingPointSection />
+
+      <SectionDivider />
+
+      {/* OVERSEAS INVESTORS - Golden Visa & International Investment */}
+      <OverseasInvestorsBanner />
 
       <SectionDivider />
 
