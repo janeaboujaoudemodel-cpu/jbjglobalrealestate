@@ -329,61 +329,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* DIVIDER */}
-      <SectionDivider />
-
-      {/* MORTGAGE CALCULATOR SECTION - Compact on mobile */}
-      <section className="bg-black">
-        <div className="jj-layer-2">
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 md:border-2 rounded-xl md:rounded-3xl p-4 md:p-12 shadow-xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 md:w-64 h-32 md:h-64 bg-gold/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-            <div className="absolute bottom-0 left-0 w-24 md:w-48 h-24 md:h-48 bg-gold/5 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
-            
-            <motion.div
-              className="text-center mb-8 relative z-10"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              <h3 className="text-zinc-900 text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
-                {t('mortgage.title', 'Mortgage')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold">{t('mortgage.calculator', 'Calculator')}</span>
-              </h3>
-              <p className="text-zinc-600 mt-3 max-w-lg mx-auto">
-                Estimate your monthly payments and explore financing options.
-              </p>
-            </motion.div>
-            <div className="relative z-10">
-              <Suspense fallback={<SectionLoader />}>
-                <MortgageCalculator compact />
-              </Suspense>
-              <p className="text-zinc-500 text-xs text-center mt-4">
-                Estimates only. We connect you with independent licensed mortgage advisors for personalized guidance.
-              </p>
-              
-              {/* Dual Buttons with 3D Premium Styling */}
-              <div className="flex flex-col sm:flex-row gap-4 mt-8 justify-center">
-                {/* Primary 3D Button - Try Our AI Mortgage Calculator */}
-                <Link to="/mortgage-calculator">
-                  <Button variant="primary" size="lg" className="gap-2 px-8 py-5 text-base group">
-                    <Sparkles className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
-                    <span className="whitespace-nowrap"><span className="text-black group-hover:text-gold transition-colors">{t('home.tryOurAi', 'Try Our AI')} </span><span className="text-gold group-hover:text-black transition-colors">{t('mortgage.calculator', 'Mortgage Calculator')}</span></span>
-                    <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
-                  </Button>
-                </Link>
-                
-                {/* Secondary Button - Connect With Mortgage Partners */}
-                <Link to="/partners/mortgage">
-                  <Button variant="secondary" size="lg" className="gap-2 px-8 py-5 text-base group">
-                    <Users className="w-5 h-5 text-gold" />
-                    <span>{t('home.connectMortgagePartners', 'Connect With Mortgage Partners')}</span>
-                    <ArrowUpRight className="w-5 h-5" />
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* DIVIDER - Before Why Dubai (fullWidth to match edge-to-edge section) */}
       <SectionDivider fullWidth />
