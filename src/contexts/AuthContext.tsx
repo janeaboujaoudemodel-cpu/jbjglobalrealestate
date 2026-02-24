@@ -107,11 +107,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     let mounted = true;
-    let applySeq = 0;
+    let verifyInFlight = false;
+    let latestSessionId: string | null = null;
 
     const applySession = async (nextSession: Session | null) => {
-      const seq = ++applySeq;
       if (!mounted) return;
+
+      const newSessionId = nextSession?.access_token ?? null;
 
       // Set session and user immediately
       setSession(nextSession);
@@ -129,16 +131,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Mark auth as done loading, but owner verification may still be running
       setLoading(false);
 
-      // Now verify owner status (isOwner is set inside verifyOwner)
-      const ownerStatus = await verifyOwner(nextSession);
+      // Skip duplicate verification for the same token
+      if (newSessionId === latestSessionId && !ownerLoading) return;
+      latestSessionId = newSessionId;
 
-      if (!mounted || seq !== applySeq) return;
+      // Prevent concurrent verify calls
+      if (verifyInFlight) return;
+      verifyInFlight = true;
 
-      if (nextSession?.user?.email) {
-        console.info("Owner check resolved", {
-          email: nextSession.user.email,
-          isOwner: ownerStatus,
-        });
+      try {
+        const ownerStatus = await verifyOwner(nextSession);
+        if (!mounted) return;
+
+        if (nextSession?.user?.email) {
+          console.info("Owner check resolved", {
+            email: nextSession.user.email,
+            isOwner: ownerStatus,
+          });
+        }
+      } finally {
+        verifyInFlight = false;
       }
     };
 
@@ -146,7 +158,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, nextSession) => {
-      // Fire-and-forget; applySession handles loading state.
       void applySession(nextSession);
     });
 
