@@ -117,8 +117,12 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
     markAsRead(notif);
     if (notif.type === 'support_ticket') {
       navigate('/my-tickets');
-    } else {
+    } else if (notif.type === 'cv_application' || notif.metadata?.category === 'cv') {
+      navigate('/admin/hr?tab=cv-center');
+    } else if (notif.type === 'listing') {
       navigate('/listing-portal/my-listings');
+    } else {
+      navigate('/my-dashboard#notifications');
     }
     onClose?.();
   };

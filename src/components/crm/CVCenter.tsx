@@ -321,14 +321,26 @@ const CVCenter = ({ userId }: CVCenterProps) => {
 
   const resolvePreviewUrl = async (cvUrl: string | null) => {
     if (!cvUrl) return null;
-    if (/^https?:\/\//i.test(cvUrl)) return cvUrl;
+    if (/^https?:\/\//i.test(cvUrl)) {
+      // For Word docs, wrap in Google Docs viewer to prevent download
+      if (/\.(docx?|odt)$/i.test(cvUrl)) {
+        return `https://docs.google.com/gview?url=${encodeURIComponent(cvUrl)}&embedded=true`;
+      }
+      return cvUrl;
+    }
 
     const cleanPath = cvUrl.replace(/^\/+/, '');
     const buckets = ['hr-documents', 'documents', 'public'];
 
     for (const bucket of buckets) {
       const { data, error } = await supabase.storage.from(bucket).createSignedUrl(cleanPath, 60 * 60);
-      if (!error && data?.signedUrl) return data.signedUrl;
+      if (!error && data?.signedUrl) {
+        // Wrap Word docs in Google Docs viewer for inline preview
+        if (/\.(docx?|odt)$/i.test(cleanPath)) {
+          return `https://docs.google.com/gview?url=${encodeURIComponent(data.signedUrl)}&embedded=true`;
+        }
+        return data.signedUrl;
+      }
     }
 
     return null;

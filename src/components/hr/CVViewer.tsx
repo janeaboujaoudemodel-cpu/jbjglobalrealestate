@@ -92,12 +92,23 @@ const CVViewer = ({
           .getPublicUrl(cvUrl);
         
         if (publicUrlData?.publicUrl) {
-          setSignedUrl(publicUrlData.publicUrl);
+          const url = publicUrlData.publicUrl;
+          // Wrap Word docs in Google Docs viewer for inline preview
+          if (/\.(docx?|odt)$/i.test(cvUrl)) {
+            setSignedUrl(`https://docs.google.com/gview?url=${encodeURIComponent(url)}&embedded=true`);
+          } else {
+            setSignedUrl(url);
+          }
         } else {
           toast.error('Unable to load CV. Please try downloading instead.');
         }
       } else if (data?.signedUrl) {
-        setSignedUrl(data.signedUrl);
+        // Wrap Word docs in Google Docs viewer for inline preview
+        if (/\.(docx?|odt)$/i.test(cvUrl)) {
+          setSignedUrl(`https://docs.google.com/gview?url=${encodeURIComponent(data.signedUrl)}&embedded=true`);
+        } else {
+          setSignedUrl(data.signedUrl);
+        }
       }
     } catch (error) {
       console.error('Error loading CV:', error);
