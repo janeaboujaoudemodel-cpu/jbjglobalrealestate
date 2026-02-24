@@ -23,13 +23,13 @@ export type PartnerServiceType =
   | 'visa_schengen'
   | null;
 
-export type RenterType = 'tenant' | 'landlord' | null;
+export type RentalUserType = 'tenant' | 'landlord' | null;
 
 export interface IntentClassification {
   intent: LeadIntent;
   confidence: number;
   partnerServiceType?: PartnerServiceType;
-  renterType?: RenterType;
+  rentalUserType?: RentalUserType;
   keywords: string[];
 }
 
@@ -149,16 +149,16 @@ export function classifyIntent(message: string): IntentClassification {
     }
   }
 
-  // Determine renter type if rental intent
-  let renterType: RenterType = null;
+  // Determine rental user type if rental intent
+  let rentalUserType: RentalUserType = null;
   if (primaryIntent === 'rent') {
     const tenantScore = RENTAL_TENANT_KEYWORDS.filter(k => lowerMessage.includes(k)).length;
     const landlordScore = RENTAL_LANDLORD_KEYWORDS.filter(k => lowerMessage.includes(k)).length;
     
     if (landlordScore > tenantScore) {
-      renterType = 'landlord';
+      rentalUserType = 'landlord';
     } else if (tenantScore > 0) {
-      renterType = 'tenant';
+      rentalUserType = 'tenant';
     }
   }
 
@@ -166,7 +166,7 @@ export function classifyIntent(message: string): IntentClassification {
     intent: primaryIntent,
     confidence,
     partnerServiceType,
-    renterType,
+    rentalUserType,
     keywords: foundKeywords
   };
 }
@@ -198,7 +198,7 @@ export const SELL_RENT_CLARIFICATION_PROMPT =
 // ============================================
 
 export interface RentalQualificationData {
-  renterType?: 'tenant' | 'landlord';
+  rentalUserType?: 'tenant' | 'landlord';
   budgetMin?: number;
   budgetMax?: number;
   preferredAreas?: string[];
@@ -210,7 +210,7 @@ export interface RentalQualificationData {
 }
 
 export const RENTAL_QUALIFICATION_QUESTIONS = {
-  renterType: {
+  rentalUserType: {
     question: "Are you a **tenant** looking to rent a property, or a **landlord** looking to rent out your property?",
     options: ['Tenant - Looking to rent', 'Landlord - Want to rent out my property']
   },
@@ -244,7 +244,7 @@ export type BrokerSpecialization = 'sales' | 'rentals' | 'off_plan' | 'secondary
 
 export function getBrokerSpecializationForIntent(
   intent: LeadIntent,
-  renterType?: RenterType
+  rentalUserType?: RentalUserType
 ): BrokerSpecialization[] {
   switch (intent) {
     case 'buy':
@@ -252,7 +252,7 @@ export function getBrokerSpecializationForIntent(
     case 'sell':
       return ['sales', 'secondary'];
     case 'rent':
-      if (renterType === 'landlord') {
+      if (rentalUserType === 'landlord') {
         return ['rentals', 'sales']; // Landlords might also sell
       }
       return ['rentals'];

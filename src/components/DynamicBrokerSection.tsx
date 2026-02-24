@@ -18,7 +18,7 @@ import {
   Award,
 } from 'lucide-react';
 
-type UserType = 'broker' | 'buyer' | 'seller' | 'renter' | 'investor' | 'visitor';
+type UserType = 'broker' | 'buyer' | 'seller' | 'rental' | 'investor' | 'visitor';
 
 interface ContentConfig {
   badge: string;
@@ -90,7 +90,7 @@ const CONTENT_BY_USER_TYPE: Record<UserType, ContentConfig> = {
       icon: Phone,
     },
   },
-  renter: {
+  rental: {
     badge: 'For Property Rentals',
     badgeIcon: Home,
     title: 'Ready to Find Your',
@@ -178,7 +178,7 @@ const DynamicBrokerSection = ({ forcedUserType }: DynamicBrokerSectionProps) => 
     } else if (path.includes('sell') || path.includes('evaluation')) {
       setUserType('seller');
     } else if (path.includes('rent') || search.includes('transaction=rent')) {
-      setUserType('renter');
+      setUserType('rental');
     } else if (path.includes('properties') || path.includes('search') || path.includes('buy') || search.includes('transaction=buy')) {
       setUserType('buyer');
     }
