@@ -18,9 +18,9 @@ const highlights = [
   { icon: Globe, label: "Remote Purchase Ready", desc: "Buy from anywhere — virtual viewings, digital signing, full coordination" },
 ];
 
-// Select key guide books (exclude company profile — shown separately)
+// Select guide + FAQ books (exclude company profile — shown separately)
 const homepageGuideBooks = INVESTOR_BOOKS.filter(b => 
-  ['guide', 'education', 'report'].includes(b.category) && b.title !== 'Company Profile'
+  ['guide', 'education', 'report', 'faq'].includes(b.category) && b.title !== 'Company Profile'
 );
 
 const OverseasInvestorsBanner = () => {
