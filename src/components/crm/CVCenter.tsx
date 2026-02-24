@@ -311,6 +311,19 @@ const CVCenter = ({ userId }: CVCenterProps) => {
         cv.id === cvId ? { ...cv, status: newStatus, reviewed_at: new Date().toISOString() } : cv
       ));
       toast.success(`CV marked as ${newStatus}`);
+
+      // Send status email to the applicant
+      if (target.email && (newStatus === 'approved' || newStatus === 'rejected')) {
+        supabase.functions.invoke('send-cv-status-email', {
+          body: {
+            email: target.email,
+            fullName: target.full_name || 'Applicant',
+            status: newStatus,
+            position: target.department_category || 'General Application',
+            userId: target.user_id || undefined,
+          },
+        }).catch(err => console.error('CV email error:', err));
+      }
     } catch (error) {
       console.error('Error updating CV status:', error);
       toast.error('Failed to update CV status');
