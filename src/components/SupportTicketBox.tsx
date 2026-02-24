@@ -396,7 +396,7 @@ const SupportTicketBox = () => {
   };
 
   return (
-    <section className="py-12 md:py-16 bg-black flex items-center justify-center min-h-[60vh]">
+    <section className="bg-black">
       {/* Two-layer system only: Active Champagne (jj-layer-2) + Pearl card */}
       <div className="jj-layer-2">
         <motion.div
@@ -404,7 +404,6 @@ const SupportTicketBox = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="max-w-4xl mx-auto"
         >
           {/* Main Card - Pearl style inside champagne layer */}
           <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl border-2 border-gold shadow-[0_8px_30px_rgba(200,167,102,0.35),0_4px_15px_rgba(0,0,0,0.15)] overflow-hidden relative">
