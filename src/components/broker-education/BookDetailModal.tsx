@@ -1,9 +1,10 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Progress } from "@/components/ui/progress";
-import { BookOpen, Clock, Target, Play, CheckCircle, Circle, Sparkles } from "lucide-react";
+import { BookOpen, Clock, Target, Play, CheckCircle, Circle, Sparkles, Lock, ArrowRight } from "lucide-react";
 import type { EducationBook, EducationModule } from "@/hooks/useBrokerEducation";
 import { useBookModules } from "@/hooks/useBrokerEducation";
 
@@ -11,6 +12,7 @@ interface BookDetailModalProps {
   book: EducationBook | null;
   isOpen: boolean;
   onClose: () => void;
+  isLocked?: boolean;
 }
 
 const LEARNING_PATH_COLORS: Record<string, { badge: string; accent: string }> = {
@@ -23,7 +25,7 @@ const LEARNING_PATH_COLORS: Record<string, { badge: string; accent: string }> = 
 
 const DEFAULT_PATH_COLORS = { badge: 'bg-zinc-500/20 text-zinc-700 border-zinc-500/30', accent: 'text-zinc-600' };
 
-export function BookDetailModal({ book, isOpen, onClose }: BookDetailModalProps) {
+export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: BookDetailModalProps) {
   const { modules, loading } = useBookModules(book?.id || null);
   
   if (!book) return null;
@@ -144,13 +146,17 @@ export function BookDetailModal({ book, isOpen, onClose }: BookDetailModalProps)
                       <div className="flex items-center gap-3 text-left w-full">
                         {/* Status Icon */}
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                          isCompleted 
-                            ? 'bg-emerald-500 text-white' 
-                            : isCurrentModule 
-                              ? 'bg-gold/20 border-2 border-gold text-gold' 
-                              : 'bg-muted border border-border text-muted-foreground'
+                          isLocked
+                            ? 'bg-gold/10 border border-gold/30 text-gold/50'
+                            : isCompleted 
+                              ? 'bg-emerald-500 text-white' 
+                              : isCurrentModule 
+                                ? 'bg-gold/20 border-2 border-gold text-gold' 
+                                : 'bg-muted border border-border text-muted-foreground'
                         }`}>
-                          {isCompleted ? (
+                          {isLocked ? (
+                            <Lock className="w-3.5 h-3.5" />
+                          ) : isCompleted ? (
                             <CheckCircle className="w-4 h-4" />
                           ) : (
                             <span className="text-sm font-medium">{module.module_number}</span>
@@ -158,11 +164,16 @@ export function BookDetailModal({ book, isOpen, onClose }: BookDetailModalProps)
                         </div>
                         
                         <div className="flex-1 min-w-0">
-                          <div className="text-foreground font-medium truncate">{module.title}</div>
+                          <div className={`font-medium truncate ${isLocked ? 'text-foreground/60' : 'text-foreground'}`}>{module.title}</div>
                           <div className="text-muted-foreground text-xs flex items-center gap-2 mt-0.5">
                             <Clock className="w-3 h-3" />
                             {module.estimated_minutes} min
-                            {isCurrentModule && !isCompleted && (
+                            {isLocked && (
+                              <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 border-gold/30 text-gold/50">
+                                Locked
+                              </Badge>
+                            )}
+                            {!isLocked && isCurrentModule && !isCompleted && (
                               <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 border-gold text-gold">
                                 Continue
                               </Badge>
@@ -176,14 +187,21 @@ export function BookDetailModal({ book, isOpen, onClose }: BookDetailModalProps)
                         <p className="text-muted-foreground text-sm">
                           {module.description || "Complete this module to learn key concepts and best practices."}
                         </p>
-                        <Button 
-                          size="sm"
-                          variant="secondary"
-                          className="bg-gold hover:bg-gold-dark text-black"
-                        >
-                          <Play className="w-3 h-3 mr-2" />
-                          {isCompleted ? 'Review Module' : 'Start Module'}
-                        </Button>
+                        {isLocked ? (
+                          <div className="flex items-center gap-2 text-gold/70 text-sm">
+                            <Lock className="w-4 h-4" />
+                            <span>Join JBJ Broker Circle to access this module</span>
+                          </div>
+                        ) : (
+                          <Button 
+                            size="sm"
+                            variant="secondary"
+                            className="bg-gold hover:bg-gold-dark text-black"
+                          >
+                            <Play className="w-3 h-3 mr-2" />
+                            {isCompleted ? 'Review Module' : 'Start Module'}
+                          </Button>
+                        )}
                       </div>
                     </AccordionContent>
                   </AccordionItem>
@@ -193,12 +211,26 @@ export function BookDetailModal({ book, isOpen, onClose }: BookDetailModalProps)
           )}
         </div>
 
-        {/* Internal Notice */}
-        <div className="mt-6 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30 rounded-lg p-4">
-          <p className="text-muted-foreground text-xs text-center">
-            This content is proprietary to JBJ Global Real Estate. Internal recognition only — not for external certification.
-          </p>
-        </div>
+        {/* Locked CTA or Internal Notice */}
+        {isLocked ? (
+          <div className="mt-6 bg-gold/10 border border-gold/30 rounded-lg p-5 text-center">
+            <Lock className="w-6 h-6 text-gold mx-auto mb-2" />
+            <p className="text-foreground font-medium mb-1">Content Locked</p>
+            <p className="text-muted-foreground text-xs mb-3">Join the JBJ Broker Circle to access all training modules.</p>
+            <Button size="sm" variant="secondary" className="bg-gold hover:bg-gold/90 text-black" asChild>
+              <Link to="/join">
+                <ArrowRight className="w-3 h-3 mr-2" />
+                Apply to Join
+              </Link>
+            </Button>
+          </div>
+        ) : (
+          <div className="mt-6 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30 rounded-lg p-4">
+            <p className="text-muted-foreground text-xs text-center">
+              This content is proprietary to JBJ Global Real Estate. Internal recognition only — not for external certification.
+            </p>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );

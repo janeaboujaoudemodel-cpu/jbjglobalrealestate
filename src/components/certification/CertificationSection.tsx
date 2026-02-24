@@ -2,16 +2,17 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { useCertification } from "@/hooks/useCertification";
-import { Loader2, Award, CheckCircle } from "lucide-react";
+import { Loader2, Award, CheckCircle, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PhaseCard } from "./PhaseCard";
 import { CertificatePreview } from "./CertificatePreview";
 
 interface CertificationSectionProps {
   className?: string;
+  isLocked?: boolean;
 }
 
-export function CertificationSection({ className }: CertificationSectionProps) {
+export function CertificationSection({ className, isLocked = false }: CertificationSectionProps) {
   const { 
     phases, 
     isLoading, 
@@ -91,23 +92,34 @@ export function CertificationSection({ className }: CertificationSectionProps) {
           </CardContent>
         </Card>
 
+        {/* Locked Banner */}
+        {isLocked && (
+          <div className="mb-8 p-4 bg-gold/10 border border-gold/30 rounded-xl flex items-center gap-4">
+            <Lock className="w-6 h-6 text-gold flex-shrink-0" />
+            <p className="text-black/70 text-sm">
+              Certification phases are visible for preview. Join the JBJ Broker Circle to start your certification journey.
+            </p>
+          </div>
+        )}
+
         {/* Phases Grid */}
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-10">
           {phases.map((phase, index) => (
             <PhaseCard
               key={phase.id}
               phase={phase}
-              status={getPhaseStatus(phase.id)}
+              status={isLocked ? 'locked' : getPhaseStatus(phase.id)}
               index={index}
-              onStart={() => startPhase(phase.id)}
+              onStart={() => !isLocked && startPhase(phase.id)}
               isFirst={index === 0}
               previousCompleted={index === 0 || getPhaseStatus(phases[index - 1].id) === 'completed'}
+              isLocked={isLocked}
             />
           ))}
         </div>
 
-        {/* Certificate Preview */}
-        {certified && <CertificatePreview />}
+        {/* Certificate Preview - Always show so users can see what they'll earn */}
+        <CertificatePreview isLocked={isLocked} />
       </div>
     </section>
   );

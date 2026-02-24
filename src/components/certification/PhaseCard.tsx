@@ -13,6 +13,7 @@ interface PhaseCardProps {
   onStart: () => void;
   isFirst: boolean;
   previousCompleted: boolean;
+  isLocked?: boolean;
 }
 
 export function PhaseCard({ 
@@ -21,7 +22,8 @@ export function PhaseCard({
   index, 
   onStart, 
   isFirst, 
-  previousCompleted 
+  previousCompleted,
+  isLocked = false,
 }: PhaseCardProps) {
   const canStart = (isFirst || previousCompleted) && status === 'locked';
 

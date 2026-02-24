@@ -10,6 +10,7 @@ interface Book3DCardProps {
   progress?: BookProgress;
   onOpen: (book: EducationBook) => void;
   index: number;
+  isLocked?: boolean;
 }
 
 const LEARNING_PATH_COLORS: Record<string, { bg: string; text: string; border: string; glow: string }> = {
@@ -52,8 +53,9 @@ const DEFAULT_PATH_COLOR = {
   glow: 'rgba(161, 161, 170, 0.3)'
 };
 
-export function Book3DCard({ book, progress, onOpen, index }: Book3DCardProps) {
+export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: Book3DCardProps) {
   const pathStyle = LEARNING_PATH_COLORS[book.learning_path] || DEFAULT_PATH_COLOR;
+  const effectivelyLocked = isLocked || book.is_restricted;
   
   const getStatusBadge = () => {
     if (!progress) return null;
@@ -156,10 +158,13 @@ export function Book3DCard({ book, progress, onOpen, index }: Book3DCardProps) {
                 <span className="text-gold text-xl font-bold">{book.book_number}</span>
               </div>
               
-              {/* Restricted Overlay */}
-              {book.is_restricted && (
-                <div className="absolute inset-0 bg-black/70 flex items-center justify-center backdrop-blur-sm">
-                  <Lock className="w-10 h-10 text-red-400" />
+              {/* Locked Overlay (restricted or access-locked) */}
+              {effectivelyLocked && (
+                <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center backdrop-blur-sm gap-2">
+                  <Lock className="w-10 h-10 text-gold/80" />
+                  {isLocked && !book.is_restricted && (
+                    <span className="text-gold/70 text-[10px] uppercase tracking-widest">Join to Unlock</span>
+                  )}
                 </div>
               )}
             </div>
@@ -187,22 +192,24 @@ export function Book3DCard({ book, progress, onOpen, index }: Book3DCardProps) {
 
               {/* Footer */}
               <div className="pt-3 border-t border-zinc-700 mt-auto">
-                {book.is_restricted ? (
+                {effectivelyLocked ? (
                   <div className="space-y-2">
-                    <p className="text-red-300/80 text-[10px] leading-tight">
-                      Available after completing all foundational books and manager approval.
+                    <p className="text-gold/60 text-[10px] leading-tight">
+                      {book.is_restricted 
+                        ? 'Available after completing all foundational books and manager approval.'
+                        : 'Join the JBJ Broker Circle to unlock this book.'}
                     </p>
                     <Button
                       variant="secondary"
                       size="sm"
-                      className="w-full bg-red-900/30 hover:bg-red-900/50 text-red-200 border border-red-500/30"
+                      className="w-full bg-gold/10 hover:bg-gold/20 text-gold/70 border border-gold/30"
                       onClick={(e) => {
                         e.stopPropagation();
-                        toast.success("Access request submitted. Your manager will review it.");
+                        if (!book.is_restricted) onOpen(book);
                       }}
                     >
                       <Lock className="w-3 h-3 mr-2" />
-                      Request Access
+                      {book.is_restricted ? 'Restricted' : 'Preview Book'}
                     </Button>
                   </div>
                 ) : (

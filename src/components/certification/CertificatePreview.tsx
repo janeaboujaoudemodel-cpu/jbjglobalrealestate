@@ -1,12 +1,16 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Award, Download, Share2 } from "lucide-react";
+import { Award, Download, Share2, Lock } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { motion } from "framer-motion";
 
-export function CertificatePreview() {
+interface CertificatePreviewProps {
+  isLocked?: boolean;
+}
+
+export function CertificatePreview({ isLocked = false }: CertificatePreviewProps) {
   const { user } = useAuth();
-  const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Broker';
+  const userName = isLocked ? 'Your Name Here' : (user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Broker');
   const currentDate = new Date().toLocaleDateString('en-US', { 
     year: 'numeric', 
     month: 'long', 
@@ -18,16 +22,19 @@ export function CertificatePreview() {
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5 }}
+      className="relative"
     >
       <Card className="bg-gradient-to-br from-gold/10 via-black/40 to-gold/5 border-gold/30 overflow-hidden">
         <CardContent className="p-8">
           <div className="text-center mb-6">
             <Award className="w-12 h-12 text-gold mx-auto mb-4" />
             <h3 className="text-2xl font-bold text-white">
-              Congratulations!
+              {isLocked ? 'Certificate Preview' : 'Congratulations!'}
             </h3>
             <p className="text-white/70">
-              You've completed the JBJ Broker Certification Program
+              {isLocked 
+                ? 'Complete all certification phases to earn this certificate'
+                : "You've completed the JBJ Broker Certification Program"}
             </p>
           </div>
 
@@ -45,7 +52,6 @@ export function CertificatePreview() {
             <div className="absolute bottom-4 right-4 w-12 h-12 border-b-2 border-r-2 border-gold/60 rounded-br-lg" />
 
             <div className="text-center relative z-10">
-              {/* Logo Placeholder */}
               <div 
                 className="text-3xl font-bold mb-6"
                 style={{
@@ -107,14 +113,23 @@ export function CertificatePreview() {
 
           {/* Actions */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button className="bg-gold hover:bg-gold/90 text-black">
-              <Download className="w-4 h-4 mr-2" />
-              Download Certificate
-            </Button>
-            <Button variant="outline" className="border-gold/50 text-gold hover:bg-gold/10">
-              <Share2 className="w-4 h-4 mr-2" />
-              Share Achievement
-            </Button>
+            {isLocked ? (
+              <Button disabled className="bg-gold/50 text-black/50 cursor-not-allowed">
+                <Lock className="w-4 h-4 mr-2" />
+                Complete Certification to Download
+              </Button>
+            ) : (
+              <>
+                <Button className="bg-gold hover:bg-gold/90 text-black">
+                  <Download className="w-4 h-4 mr-2" />
+                  Download Certificate
+                </Button>
+                <Button variant="outline" className="border-gold/50 text-gold hover:bg-gold/10">
+                  <Share2 className="w-4 h-4 mr-2" />
+                  Share Achievement
+                </Button>
+              </>
+            )}
           </div>
         </CardContent>
       </Card>
