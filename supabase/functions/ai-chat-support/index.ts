@@ -195,7 +195,7 @@ function sanitizeContactInfo(text: string): string {
 // ============================================
 
 type LeadIntent = 'buy' | 'sell' | 'rent_lease' | 'broker_registration' | 'partner_services' | 'general';
-type RenterType = 'tenant' | 'landlord' | null;
+type RentalUserType = 'tenant' | 'landlord' | null;
 
 const INTENT_KEYWORDS = {
   buy: ['buy', 'purchase', 'invest', 'investment', 'looking to buy', 'want to buy', 'buying', 'off-plan', 'offplan', 'investor', 'freehold', 'own', 'ownership', 'first home', 'golden visa property', 'roi', 'yield', 'returns'],
@@ -208,7 +208,7 @@ const INTENT_KEYWORDS = {
 const RENTAL_TENANT_KEYWORDS = ['looking for apartment', 'looking for villa', 'need to rent', 'want to rent', 'move in', 'relocating', 'moving to dubai', 'monthly budget'];
 const RENTAL_LANDLORD_KEYWORDS = ['list my property', 'rent out', 'rent my', 'find tenant', 'my property', 'vacant property', 'rental income', 'property management'];
 
-function classifyIntent(message: string): { intent: LeadIntent; renterType: RenterType; confidence: number } {
+function classifyIntent(message: string): { intent: LeadIntent; rentalUserType: RentalUserType; confidence: number } {
   const lowerMessage = message.toLowerCase();
   const scores: Record<LeadIntent, number> = { buy: 0, sell: 0, rent_lease: 0, broker_registration: 0, partner_services: 0, general: 0 };
 
@@ -233,14 +233,14 @@ function classifyIntent(message: string): { intent: LeadIntent; renterType: Rent
   const totalScore = Object.values(scores).reduce((a, b) => a + b, 0);
   const confidence = totalScore > 0 ? maxScore / totalScore : 0.5;
 
-  let renterType: RenterType = null;
+  let rentalUserType: RentalUserType = null;
   if (primaryIntent === 'rent_lease') {
     const tenantScore = RENTAL_TENANT_KEYWORDS.filter(k => lowerMessage.includes(k)).length;
     const landlordScore = RENTAL_LANDLORD_KEYWORDS.filter(k => lowerMessage.includes(k)).length;
-    renterType = landlordScore > tenantScore ? 'landlord' : (tenantScore > 0 ? 'tenant' : null);
+    rentalUserType = landlordScore > tenantScore ? 'landlord' : (tenantScore > 0 ? 'tenant' : null);
   }
 
-  return { intent: primaryIntent, renterType, confidence };
+  return { intent: primaryIntent, rentalUserType, confidence };
 }
 
 function needsSellRentClarification(message: string): boolean {
@@ -401,7 +401,7 @@ A: Passport copy, UAE ID (if resident), proof of funds. Non-residents can buy wi
 // ============================================
 
 const RENTAL_QUALIFICATION_FLOW = {
-  renterType: "Are you a **tenant** looking to rent a property, or a **landlord** looking to rent out your property?",
+  rentalUserType: "Are you a **tenant** looking to rent a property, or a **landlord** looking to rent out your property?",
   budget: {
     tenant: "What's your **monthly budget range** for rent? (e.g., AED 5,000 - 10,000)",
     landlord: "What's your **expected monthly rent** for the property?"
@@ -500,7 +500,7 @@ serve(async (req) => {
                   classification.intent === 'sell' ? 'sell_pipeline' : 
                   classification.intent === 'rent_lease' ? 'rent_lease_pipeline' : 'general_pipeline',
         metadata: {
-          renter_type: classification.renterType,
+          rental_user_type: classification.rentalUserType,
           intent_confidence: classification.confidence,
           classified_at: new Date().toISOString()
         }
@@ -555,9 +555,9 @@ Focus on:
       case 'rent_lease':
         intentContext = `
 DETECTED INTENT: RENT
-Renter Type: ${classification.renterType || 'Unknown - need to clarify'}
+Rental User Type: ${classification.rentalUserType || 'Unknown - need to clarify'}
 
-${classification.renterType === 'tenant' ? `
+${classification.rentalUserType === 'tenant' ? `
 USER IS A TENANT looking to rent. Ask these qualification questions (one at a time):
 1. Monthly budget range
 2. Preferred areas (Dubai Marina, Downtown, JVC, etc.)
@@ -565,7 +565,7 @@ USER IS A TENANT looking to rent. Ask these qualification questions (one at a ti
 4. Rental duration (short/long term)
 5. Move-in timeline
 ` : ''}
-${classification.renterType === 'landlord' ? `
+${classification.rentalUserType === 'landlord' ? `
 USER IS A LANDLORD wanting to rent out property. Ask:
 1. Property location and type
 2. Expected monthly rent
@@ -573,7 +573,7 @@ USER IS A LANDLORD wanting to rent out property. Ask:
 4. Property availability
 5. Property management needs
 ` : ''}
-${!classification.renterType ? `
+${!classification.rentalUserType ? `
 CLARIFY: Ask if they are a tenant looking to rent OR a landlord wanting to rent out.
 ` : ''}`;
         break;
@@ -717,7 +717,7 @@ Keep responses SHORT (2-3 sentences). Be helpful and conversational.`
       response: aiResponse,
       classification: {
         intent: classification.intent,
-        renterType: classification.renterType,
+        rentalUserType: classification.rentalUserType,
         confidence: classification.confidence,
         needsClarification
       }
