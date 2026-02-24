@@ -364,22 +364,22 @@ export function EmbeddedSupportTickets() {
               </CardContent>
             ) : sortedTickets && sortedTickets.length > 0 ? (
               <div className="overflow-auto max-h-[600px]">
-                <Table>
+                <Table className="min-w-[700px]">
                   <TableHeader>
                     <TableRow className="border-gold/20 hover:bg-transparent">
-                      <TableHead className="w-12">
+                      <TableHead className="w-10 min-w-[40px]">
                         <Checkbox
                           checked={isAllSelected}
                           onCheckedChange={handleSelectAll}
                           className="border-gold/50"
                         />
                       </TableHead>
-                      <TableHead className="text-gold font-semibold text-xs">Ticket #</TableHead>
-                      <TableHead className="text-gold font-semibold text-xs">Customer</TableHead>
-                      <TableHead className="text-gold font-semibold text-xs">Subject</TableHead>
-                      <TableHead className="text-gold font-semibold text-xs">Priority</TableHead>
-                      <TableHead className="text-gold font-semibold text-xs">Status</TableHead>
-                      <TableHead className="text-gold font-semibold text-xs">
+                      <TableHead className="text-gold font-semibold text-xs whitespace-nowrap min-w-[100px]">Ticket #</TableHead>
+                      <TableHead className="text-gold font-semibold text-xs whitespace-nowrap min-w-[120px]">Customer</TableHead>
+                      <TableHead className="text-gold font-semibold text-xs whitespace-nowrap min-w-[140px]">Subject</TableHead>
+                      <TableHead className="text-gold font-semibold text-xs whitespace-nowrap min-w-[90px]">Priority</TableHead>
+                      <TableHead className="text-gold font-semibold text-xs whitespace-nowrap min-w-[90px]">Status</TableHead>
+                      <TableHead className="text-gold font-semibold text-xs whitespace-nowrap min-w-[90px]">
                         <button
                           onClick={() => setSortAscending(!sortAscending)}
                           className="flex items-center gap-1 hover:text-black transition-colors"
@@ -418,16 +418,16 @@ export function EmbeddedSupportTickets() {
                               className="border-gold/50"
                             />
                           </TableCell>
-                          <TableCell className="font-mono text-xs font-semibold text-black">
+                          <TableCell className="font-mono text-xs font-semibold text-black whitespace-nowrap">
                             {ticket.ticket_number}
                           </TableCell>
-                          <TableCell>
+                          <TableCell className="whitespace-nowrap">
                             <div>
                               <p className="font-medium text-black text-xs truncate max-w-[150px]">
                                 {ticket.full_name}
                               </p>
-              <p className="text-zinc-500 text-[10px] truncate max-w-[150px]">
-                {ticket.email}
+                              <p className="text-zinc-500 text-[10px] truncate max-w-[150px]">
+                                {ticket.email}
                               </p>
                             </div>
                           </TableCell>
@@ -436,26 +436,26 @@ export function EmbeddedSupportTickets() {
                               {ticket.subject}
                             </p>
                           </TableCell>
-                          <TableCell>
+                          <TableCell className="whitespace-nowrap">
                             <div className="flex items-center gap-1.5">
-                              <Badge className={cn("text-[10px] px-1.5", priority.className)}>
-                                <span className={cn("w-1.5 h-1.5 rounded-full mr-1", priority.dotColor)} />
+                              <Badge className={cn("text-[10px] px-1.5 whitespace-nowrap", priority.className)}>
+                                <span className={cn("w-1.5 h-1.5 rounded-full mr-1 inline-block", priority.dotColor)} />
                                 {priority.label}
                               </Badge>
                               {ticket.is_reopened && (
-                                <Badge className="bg-orange-500/20 text-orange-600 border-orange-500/30 text-[10px] px-1.5">
-                                  🔄 Reopened
+                                <Badge className="bg-orange-500/20 text-orange-600 border-orange-500/30 text-[10px] px-1.5 whitespace-nowrap">
+                                  🔄
                                 </Badge>
                               )}
                             </div>
                           </TableCell>
-                          <TableCell>
-                            <Badge className={cn("text-[10px] px-1.5", status.className)}>
+                          <TableCell className="whitespace-nowrap">
+                            <Badge className={cn("text-[10px] px-1.5 whitespace-nowrap", status.className)}>
                               <StatusIcon className="w-3 h-3 mr-1" />
                               {status.label}
                             </Badge>
                           </TableCell>
-                          <TableCell className="text-gold/70 text-xs">
+                          <TableCell className="text-gold/70 text-xs whitespace-nowrap">
                             {format(new Date(ticket.created_at), "MMM d, HH:mm")}
                           </TableCell>
                         </TableRow>

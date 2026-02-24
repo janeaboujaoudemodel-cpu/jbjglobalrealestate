@@ -141,6 +141,33 @@ export function useUpdateTicketStatus() {
 
       if (error) throw error;
 
+      // Fetch ticket for notification context
+      const { data: ticket } = await supabase
+        .from("support_tickets")
+        .select("ticket_number, subject, user_id, email, full_name")
+        .eq("id", ticketId)
+        .single();
+
+      // Create user notification if ticket has a user_id
+      if (ticket?.user_id) {
+        const statusLabels: Record<string, string> = {
+          open: "is now open",
+          in_progress: "is under review",
+          resolved: "has been resolved",
+        };
+        const label = statusLabels[status] || `status changed to ${status}`;
+        
+        await supabase.from("user_notifications").insert({
+          user_id: ticket.user_id,
+          type: "support_ticket",
+          title: `Ticket ${ticket.ticket_number} Update`,
+          message: `Your ticket "${ticket.subject}" ${label}.`,
+          metadata: { ticket_number: ticket.ticket_number, ticket_id: ticketId, action: status }
+        }).then(({ error: notifErr }) => {
+          if (notifErr) console.error("Notification insert failed:", notifErr);
+        });
+      }
+
       // Send status update email for in_progress and resolved
       if (status === "in_progress" || status === "resolved") {
         try {

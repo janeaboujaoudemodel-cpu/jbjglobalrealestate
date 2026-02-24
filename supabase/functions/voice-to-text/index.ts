@@ -2,7 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, accept-language",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, accept-language, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
 serve(async (req) => {
@@ -11,44 +11,22 @@ serve(async (req) => {
   }
 
   try {
-    const ELEVENLABS_API_KEY = Deno.env.get("ELEVENLABS_API_KEY");
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    
-    // Get preferred language from header or default to English
-    const preferredLang = req.headers.get("accept-language")?.split(",")[0]?.split("-")[0] || "en";
 
     const { audio, language } = await req.json();
-    const targetLang = language || preferredLang;
     
     if (!audio) {
       throw new Error("No audio data provided");
     }
 
-    // Decode base64 audio to binary
-    const audioBytes = Uint8Array.from(atob(audio), c => c.charCodeAt(0));
-    const audioBlob = new Blob([audioBytes], { type: "audio/webm" });
-
-    // Full ISO 639-3 mapping for all 28 supported languages
-    const LANG_TO_ISO639_3: Record<string, string> = {
-      en: "eng", ar: "ara", hi: "hin", ur: "urd", zh: "zho",
-      es: "spa", fr: "fra", de: "deu", ru: "rus", pt: "por",
-      ja: "jpn", ko: "kor", it: "ita", nl: "nld", tr: "tur",
-      fa: "fas", he: "heb", pl: "pol", th: "tha", vi: "vie",
-      id: "ind", ms: "msa", tl: "tgl", bn: "ben", ta: "tam",
-      te: "tel", ml: "mal", sw: "swa",
-    };
-
-    // Use Gemini multimodal for transcription (free, no ElevenLabs credits)
     if (!LOVABLE_API_KEY) {
       throw new Error("No transcription service available");
     }
 
     const audioDataUrl = `data:audio/webm;base64,${audio}`;
-    const langInstruction = targetLang === "ar" 
-      ? "Transcribe this audio in Arabic. Return ONLY the Arabic transcription."
-      : "Transcribe this audio in English. Return ONLY the English transcription.";
     
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    // Step 1: Transcribe in the original spoken language and detect the language
+    const transcribeResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${LOVABLE_API_KEY}`,
@@ -62,7 +40,14 @@ serve(async (req) => {
             content: [
               {
                 type: "text",
-                text: `${langInstruction} If the audio is silent or unclear, respond with exactly: [NO_SPEECH_DETECTED]. Do not add any commentary.`
+                text: `Transcribe this audio EXACTLY as spoken, in the original language. Also detect what language is being spoken.
+
+Return your response in this exact JSON format (no markdown, no code blocks):
+{"text": "the transcription here", "detected_language": "en", "language_name": "English"}
+
+Use ISO 639-1 two-letter codes for detected_language (en, ar, hi, fr, es, de, ru, zh, ja, ko, tr, fa, ur, etc.)
+
+If the audio is silent or unclear, respond with exactly: {"text": "", "detected_language": "unknown", "language_name": "Unknown"}`
               },
               {
                 type: "image_url",
@@ -73,12 +58,12 @@ serve(async (req) => {
             ]
           }
         ],
-        max_tokens: 1000,
+        max_tokens: 1500,
       }),
     });
 
-    if (!response.ok) {
-      console.error("Gemini transcription error:", response.status);
+    if (!transcribeResponse.ok) {
+      console.error("Gemini transcription error:", transcribeResponse.status);
       return new Response(JSON.stringify({ 
         text: null,
         error: "Voice transcription is temporarily unavailable. Please type your message instead."
@@ -87,11 +72,25 @@ serve(async (req) => {
       });
     }
 
-    const data = await response.json();
-    let transcribedText = data.choices?.[0]?.message?.content?.trim();
+    const transcribeData = await transcribeResponse.json();
+    let rawContent = transcribeData.choices?.[0]?.message?.content?.trim();
     
+    // Clean markdown code blocks if present
+    if (rawContent?.startsWith("```")) {
+      rawContent = rawContent.replace(/^```(?:json)?\n?/, "").replace(/\n?```$/, "").trim();
+    }
+    
+    // Parse the JSON response
+    let transcription: { text: string; detected_language: string; language_name: string };
+    try {
+      transcription = JSON.parse(rawContent);
+    } catch {
+      // Fallback: treat entire response as English text
+      transcription = { text: rawContent || "", detected_language: "en", language_name: "English" };
+    }
+
     // Handle no speech detected
-    if (transcribedText === "[NO_SPEECH_DETECTED]" || !transcribedText) {
+    if (!transcription.text || transcription.detected_language === "unknown") {
       return new Response(JSON.stringify({ 
         text: null,
         error: "No speech detected. Please speak clearly and try again."
@@ -100,8 +99,45 @@ serve(async (req) => {
       });
     }
 
+    // Step 2: If the detected language is NOT English, also translate to English
+    let translatedText: string | null = null;
+    const isEnglish = transcription.detected_language === "en" || transcription.detected_language === "eng";
+
+    if (!isEnglish) {
+      try {
+        const translateResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${LOVABLE_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: "google/gemini-2.5-flash-lite",
+            messages: [
+              {
+                role: "user",
+                content: `Translate the following text from ${transcription.language_name} to English. Return ONLY the English translation, nothing else.\n\nText: ${transcription.text}`
+              }
+            ],
+            max_tokens: 1000,
+          }),
+        });
+
+        if (translateResponse.ok) {
+          const translateData = await translateResponse.json();
+          translatedText = translateData.choices?.[0]?.message?.content?.trim() || null;
+        }
+      } catch (translateErr) {
+        console.error("Translation error (non-critical):", translateErr);
+      }
+    }
+
     return new Response(JSON.stringify({ 
-      text: transcribedText,
+      text: transcription.text,
+      translated_text: translatedText,
+      detected_language: transcription.detected_language,
+      language_name: transcription.language_name,
+      is_english: isEnglish,
       success: true,
       provider: "gemini"
     }), {
