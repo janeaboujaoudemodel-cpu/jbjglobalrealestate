@@ -22,6 +22,8 @@ import {
   StickyNote,
   RotateCcw,
   Download,
+  Maximize2,
+  Minimize2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -108,7 +110,7 @@ const AttachmentItem = ({ url, index }: { url: string; index: number }) => {
 
   if (loading[url]) {
     return (
-      <div className="flex items-center gap-2 bg-zinc-800 px-3 py-2 rounded-lg text-sm text-zinc-400 border border-zinc-700">
+      <div className="flex items-center gap-2 bg-[#F5EBD7]/20 px-3 py-2 rounded-lg text-sm text-gold border border-gold/30">
         <Loader2 className="w-4 h-4 animate-spin" />
         Loading...
       </div>
@@ -142,7 +144,7 @@ const AttachmentItem = ({ url, index }: { url: string; index: number }) => {
         <button
           onClick={handleView}
           disabled={!signedUrl}
-          className="flex items-center gap-2 bg-zinc-800 px-3 py-2 rounded-lg text-sm text-gold hover:bg-zinc-700 transition-colors border border-gold/20 disabled:opacity-50 disabled:cursor-not-allowed flex-1"
+          className="flex items-center gap-2 bg-[#FDFBF7] px-3 py-2 rounded-lg text-sm text-gold hover:bg-[#F5EBD7] transition-colors border border-gold/30 disabled:opacity-50 disabled:cursor-not-allowed flex-1"
         >
           {isImage ? <ImageIcon className="w-4 h-4" /> : <FileText className="w-4 h-4" />}
           <span className="truncate max-w-[120px]">{filename || `Attachment ${index + 1}`}</span>
@@ -173,9 +175,9 @@ const SuggestionCard = ({
 }) => {
   const [expanded, setExpanded] = useState(false);
   const typeColors = {
-    quick_resolution: 'border-green-500/30 bg-green-500/10',
-    needs_info: 'border-blue-500/30 bg-blue-500/10',
-    acknowledgment: 'border-yellow-500/30 bg-yellow-500/10',
+    quick_resolution: 'border-gold/40 bg-gradient-to-br from-[#FDFBF7] to-[#F5EBD7]',
+    needs_info: 'border-gold/40 bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3]',
+    acknowledgment: 'border-gold/40 bg-gradient-to-br from-[#F5EBD7] to-[#D4C4A8]/30',
   };
 
   const typeLabels = {
@@ -197,7 +199,7 @@ const SuggestionCard = ({
         <p className="text-xs font-semibold text-gold uppercase tracking-wide mb-1">
           {typeLabels[suggestion.type] || suggestion.title}
         </p>
-        <p className="text-xs text-zinc-300 line-clamp-2">
+        <p className="text-xs text-[#8B7355] line-clamp-2">
           {suggestion.message.slice(0, 120)}...
         </p>
         <p className="text-[10px] text-gold/60 mt-1">Click to preview full response</p>
@@ -207,26 +209,26 @@ const SuggestionCard = ({
       {expanded && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4" onClick={() => setExpanded(false)}>
           <div
-            className="bg-gradient-to-br from-zinc-900 to-zinc-950 border-2 border-gold/40 rounded-2xl shadow-[0_0_60px_rgba(200,167,102,0.2)] max-w-lg w-full max-h-[80vh] flex flex-col"
+            className="bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl shadow-[0_0_60px_rgba(200,167,102,0.3)] max-w-lg w-full max-h-[80vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="px-5 py-4 border-b border-gold/20 flex items-center justify-between">
+            <div className="px-5 py-4 border-b border-gold/30 flex items-center justify-between">
               <div>
                 <Badge className={cn("border text-xs mb-1", typeColors[suggestion.type])}>
                   {typeLabels[suggestion.type] || suggestion.title}
                 </Badge>
-                <h3 className="text-white font-bold text-lg">{suggestion.title}</h3>
+                <h3 className="text-black font-bold text-lg">{suggestion.title}</h3>
               </div>
-              <Button variant="ghost" size="icon" onClick={() => setExpanded(false)} className="text-zinc-400 hover:text-white">
+              <Button variant="ghost" size="icon" onClick={() => setExpanded(false)} className="text-gold hover:text-black hover:bg-gold/20 border border-gold/40">
                 <X className="w-5 h-5" />
               </Button>
             </div>
             <ScrollArea className="flex-1 p-5">
-              <div className="bg-zinc-800/50 border border-gold/10 rounded-lg p-4">
-                <p className="text-white text-sm whitespace-pre-wrap leading-relaxed">{suggestion.message}</p>
+              <div className="bg-white/60 border border-gold/20 rounded-lg p-4">
+                <p className="text-black text-sm whitespace-pre-wrap leading-relaxed">{suggestion.message}</p>
               </div>
             </ScrollArea>
-            <div className="px-5 py-4 border-t border-gold/20 flex gap-3">
+            <div className="px-5 py-4 border-t border-gold/30 flex gap-3">
               <Button
                 onClick={() => {
                   onSelect();
@@ -240,7 +242,7 @@ const SuggestionCard = ({
               <Button
                 variant="outline"
                 onClick={() => setExpanded(false)}
-                className="border-gold/50 text-gold hover:bg-gold/10"
+                className="border-2 border-gold text-gold hover:bg-gold/20 font-semibold"
               >
                 Cancel
               </Button>
@@ -259,6 +261,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
   const sendReply = useSendTicketReply();
   const aiSuggestions = useAITicketSuggestions();
   const [replyMessage, setReplyMessage] = useState("");
+  const [replyMaximized, setReplyMaximized] = useState(false);
   const [selectedSuggestion, setSelectedSuggestion] = useState<number | null>(null);
 
   // Clear state when ticket changes
@@ -277,8 +280,8 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
 
   if (!ticketId) {
     return (
-      <div className="flex-1 flex items-center justify-center bg-gradient-to-b from-zinc-900/80 to-zinc-950/80 rounded-xl border border-gold/20">
-        <div className="text-center text-zinc-400">
+      <div className="flex-1 flex items-center justify-center bg-gradient-to-b from-[#FDFBF7]/80 to-[#EDE4D3]/80 rounded-xl border border-gold/20">
+        <div className="text-center text-gold/60">
           <MessageSquare className="w-12 h-12 mx-auto mb-3 text-gold/30" />
           <p>Select a ticket to view details</p>
         </div>
@@ -288,12 +291,12 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
 
   if (isLoading) {
     return (
-      <div className="flex-1 bg-gradient-to-b from-zinc-900/80 to-zinc-950/80 rounded-xl border border-gold/20 p-6">
+      <div className="flex-1 bg-gradient-to-b from-[#FDFBF7]/80 to-[#EDE4D3]/80 rounded-xl border border-gold/20 p-6">
         <div className="space-y-4">
-          <Skeleton className="h-8 w-48 bg-zinc-800" />
-          <Skeleton className="h-4 w-full bg-zinc-800" />
-          <Skeleton className="h-4 w-3/4 bg-zinc-800" />
-          <Skeleton className="h-32 w-full bg-zinc-800" />
+          <Skeleton className="h-8 w-48 bg-gold/20" />
+          <Skeleton className="h-4 w-full bg-gold/20" />
+          <Skeleton className="h-4 w-3/4 bg-gold/20" />
+          <Skeleton className="h-32 w-full bg-gold/20" />
         </div>
       </div>
     );
@@ -301,8 +304,8 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
 
   if (!data) {
     return (
-      <div className="flex-1 flex items-center justify-center bg-gradient-to-b from-zinc-900/80 to-zinc-950/80 rounded-xl border border-gold/20">
-        <p className="text-zinc-400">Ticket not found</p>
+      <div className="flex-1 flex items-center justify-center bg-gradient-to-b from-[#FDFBF7]/80 to-[#EDE4D3]/80 rounded-xl border border-gold/20">
+        <p className="text-gold/60">Ticket not found</p>
       </div>
     );
   }
@@ -360,9 +363,9 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
   };
 
   return (
-    <div className="flex-1 bg-gradient-to-b from-zinc-900/80 to-zinc-950/80 rounded-xl border border-gold/20 flex flex-col overflow-hidden shadow-[0_0_30px_rgba(200,167,102,0.05)]">
+    <div className="flex-1 bg-gradient-to-b from-[#FDFBF7] to-[#EDE4D3] rounded-xl border border-gold/30 flex flex-col overflow-hidden shadow-[0_0_30px_rgba(200,167,102,0.1)]">
       {/* Header */}
-      <div className="px-3 py-2.5 border-b border-gold/20 flex items-start justify-between bg-zinc-900/50">
+      <div className="px-3 py-2.5 border-b border-gold/30 flex items-start justify-between bg-gradient-to-r from-[#F5EBD7] to-[#EDE4D3]">
         <div className="min-w-0 flex-1 mr-2">
           <div className="flex items-center gap-2 mb-1 flex-wrap">
             <span className="text-gold font-mono font-bold text-sm whitespace-nowrap">
@@ -376,7 +379,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
               {status.label}
             </Badge>
           </div>
-          <h2 className="text-sm font-semibold text-white truncate">{ticket.subject}</h2>
+          <h2 className="text-sm font-semibold text-black truncate">{ticket.subject}</h2>
         </div>
         <Button
           variant="ghost"
@@ -408,14 +411,14 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
           )}
 
           {/* Customer Info */}
-          <div className="bg-zinc-800/50 rounded-lg p-3 space-y-2 border border-gold/10">
+          <div className="bg-white/50 rounded-lg p-3 space-y-2 border border-gold/20">
             <h3 className="text-xs font-semibold text-gold uppercase tracking-wide mb-2">
               Customer Details
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div className="flex items-center gap-2 text-sm">
                 <User className="w-4 h-4 text-gold" />
-                <span className="text-white">{ticket.full_name}</span>
+                <span className="text-black">{ticket.full_name}</span>
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <Mail className="w-4 h-4 text-gold" />
@@ -440,7 +443,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
               )}
               <div className="flex items-center gap-2 text-sm">
                 <Tag className="w-4 h-4 text-gold" />
-                <span className="text-white">{ticket.service_category}</span>
+                <span className="text-black">{ticket.service_category}</span>
               </div>
             </div>
           </div>
@@ -450,7 +453,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
             <h3 className="text-sm font-semibold text-gold uppercase tracking-wide mb-3">
               Issue Description
             </h3>
-            <div className="bg-zinc-800/30 rounded-lg p-4 text-white text-sm whitespace-pre-wrap break-words overflow-hidden max-w-full border border-gold/10">
+            <div className="bg-white/40 rounded-lg p-4 text-black text-sm whitespace-pre-wrap break-words overflow-hidden max-w-full border border-gold/20">
               {ticket.description}
             </div>
           </div>
@@ -533,7 +536,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
               <Button
                 size="sm"
                 onClick={() => navigate(`/ai-notes?ticket=${ticket.ticket_number}&title=${encodeURIComponent(`Note: ${ticket.subject}`)}`)}
-                className="bg-zinc-700 hover:bg-zinc-600 text-white"
+                className="bg-gold/30 hover:bg-gold/50 text-black border border-gold/40"
               >
                 <StickyNote className="w-4 h-4 mr-2" />
                 Add Note
@@ -551,7 +554,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
                 size="sm"
                 onClick={handleGenerateAISuggestions}
                 disabled={aiSuggestions.isLoading}
-                className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white"
+                className="bg-gradient-to-r from-gold to-[#D4C4A8] hover:from-gold/90 hover:to-[#D4C4A8]/90 text-black font-semibold"
               >
                 {aiSuggestions.isLoading ? (
                   <Loader2 className="w-4 h-4 animate-spin mr-2" />
@@ -564,9 +567,9 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
 
             {aiSuggestions.isLoading && (
               <div className="space-y-2">
-                <Skeleton className="h-16 w-full bg-zinc-800" />
-                <Skeleton className="h-16 w-full bg-zinc-800" />
-                <Skeleton className="h-16 w-full bg-zinc-800" />
+                <Skeleton className="h-16 w-full bg-gold/20" />
+                <Skeleton className="h-16 w-full bg-gold/20" />
+                <Skeleton className="h-16 w-full bg-gold/20" />
               </div>
             )}
 
@@ -597,7 +600,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
             </h3>
             <div className="space-y-3">
               {messages.length === 0 ? (
-                <p className="text-zinc-400 text-sm italic">No messages yet</p>
+                <p className="text-gold/60 text-sm italic">No messages yet</p>
               ) : (
                 messages.map((msg) => (
                   <div
@@ -606,7 +609,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
                       "rounded-lg p-3",
                       msg.sender_type === "staff"
                         ? "bg-gold/10 border border-gold/20 ml-6"
-                        : "bg-zinc-800/50 border border-zinc-700 mr-6"
+                        : "bg-white/40 border border-gold/15 mr-6"
                     )}
                   >
                     <div className="flex items-center justify-between mb-2">
@@ -615,16 +618,16 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
                           "text-xs font-semibold uppercase",
                           msg.sender_type === "staff"
                             ? "text-gold"
-                            : "text-zinc-300"
+                            : "text-[#8B7355]"
                         )}
                       >
                         {msg.sender_type === "staff" ? "Staff Reply" : "Customer"}
                       </span>
-                      <span className="text-xs text-zinc-400">
+                      <span className="text-xs text-gold/60">
                         {format(new Date(msg.created_at), "MMM d, yyyy h:mm a")}
                       </span>
                     </div>
-                    <p className="text-sm text-white whitespace-pre-wrap">
+                    <p className="text-sm text-black whitespace-pre-wrap">
                       {msg.message}
                     </p>
                   </div>
@@ -634,7 +637,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
           </div>
 
           {/* Metadata */}
-          <div className="text-xs text-zinc-400 pt-4 border-t border-gold/10">
+          <div className="text-xs text-gold/60 pt-4 border-t border-gold/20">
             <p>Created: {format(new Date(ticket.created_at), "MMM d, yyyy h:mm a")}</p>
             {ticket.customer_confirmation_sent_at && (
               <p className="text-green-400">
@@ -647,15 +650,24 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
       </ScrollArea>
 
       {/* Reply Composer */}
-      <div className="p-3 border-t border-gold/20 bg-zinc-900/80">
+      <div className="p-3 border-t border-gold/30 bg-gradient-to-r from-[#F5EBD7] to-[#EDE4D3]">
         <div className="flex gap-2">
-          <textarea
-            value={replyMessage}
-            onChange={(e) => setReplyMessage(e.target.value)}
-            placeholder="Type your reply to the customer..."
-            rows={2}
-            className="flex-1 min-h-[56px] px-3 py-2 rounded-lg bg-zinc-800 border border-gold/30 text-white text-sm placeholder:text-zinc-500 resize-none focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all"
-          />
+          <div className="flex-1 relative">
+            <textarea
+              value={replyMessage}
+              onChange={(e) => setReplyMessage(e.target.value)}
+              placeholder="Type your reply to the customer..."
+              rows={2}
+              className="w-full min-h-[56px] px-3 py-2 pr-10 rounded-lg bg-white/80 border border-gold/30 text-black text-sm placeholder:text-gold/40 resize-none focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all"
+            />
+            <button
+              onClick={() => setReplyMaximized(true)}
+              className="absolute top-2 right-2 text-gold/60 hover:text-gold transition-colors"
+              title="Maximize reply editor"
+            >
+              <Maximize2 className="w-4 h-4" />
+            </button>
+          </div>
           <Button
             onClick={handleSendReply}
             disabled={!replyMessage.trim() || sendReply.isPending}
@@ -669,6 +681,60 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
           </Button>
         </div>
       </div>
+
+      {/* Maximized Reply Editor Modal */}
+      {replyMaximized && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={() => setReplyMaximized(false)}>
+          <div
+            className="bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl shadow-[0_0_60px_rgba(200,167,102,0.3)] max-w-2xl w-full max-h-[80vh] flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="px-5 py-4 border-b border-gold/30 flex items-center justify-between">
+              <h3 className="text-black font-bold text-lg flex items-center gap-2">
+                <MessageSquare className="w-5 h-5 text-gold" />
+                Reply Editor
+              </h3>
+              <Button variant="ghost" size="icon" onClick={() => setReplyMaximized(false)} className="text-gold hover:text-black hover:bg-gold/20 border border-gold/40">
+                <Minimize2 className="w-5 h-5" />
+              </Button>
+            </div>
+            <div className="flex-1 p-5">
+              <textarea
+                value={replyMessage}
+                onChange={(e) => setReplyMessage(e.target.value)}
+                placeholder="Type your reply to the customer..."
+                className="w-full h-[45vh] px-4 py-3 rounded-lg bg-white/80 border border-gold/30 text-black text-sm placeholder:text-gold/40 resize-none focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all leading-relaxed"
+                autoFocus
+              />
+            </div>
+            <div className="px-5 py-4 border-t border-gold/30 flex gap-3 justify-end">
+              <Button
+                variant="outline"
+                onClick={() => setReplyMaximized(false)}
+                className="border-2 border-gold text-gold hover:bg-gold/20 font-semibold"
+              >
+                <Minimize2 className="w-4 h-4 mr-2" />
+                Minimize
+              </Button>
+              <Button
+                onClick={() => {
+                  handleSendReply();
+                  setReplyMaximized(false);
+                }}
+                disabled={!replyMessage.trim() || sendReply.isPending}
+                className="bg-gradient-to-r from-gold to-gold/80 text-black font-bold hover:from-gold/90 hover:to-gold/70"
+              >
+                {sendReply.isPending ? (
+                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                ) : (
+                  <Send className="w-4 h-4 mr-2" />
+                )}
+                Send Reply
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

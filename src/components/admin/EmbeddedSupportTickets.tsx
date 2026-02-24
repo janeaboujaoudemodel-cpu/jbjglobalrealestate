@@ -426,8 +426,8 @@ export function EmbeddedSupportTickets() {
                               <p className="font-medium text-black text-xs truncate max-w-[150px]">
                                 {ticket.full_name}
                               </p>
-                              <p className="text-zinc-500 text-[10px] truncate max-w-[150px]">
-                                {ticket.email}
+              <p className="text-zinc-500 text-[10px] truncate max-w-[150px]">
+                {ticket.email}
                               </p>
                             </div>
                           </TableCell>
@@ -455,7 +455,7 @@ export function EmbeddedSupportTickets() {
                               {status.label}
                             </Badge>
                           </TableCell>
-                          <TableCell className="text-zinc-500 text-xs">
+                          <TableCell className="text-gold/70 text-xs">
                             {format(new Date(ticket.created_at), "MMM d, HH:mm")}
                           </TableCell>
                         </TableRow>
@@ -466,9 +466,9 @@ export function EmbeddedSupportTickets() {
               </div>
             ) : (
               <CardContent className="p-12 text-center">
-                <Ticket className="w-12 h-12 text-zinc-300 mx-auto mb-3" />
-                <p className="text-zinc-500 font-medium">No tickets found</p>
-                <p className="text-zinc-400 text-sm mt-1">
+                <Ticket className="w-12 h-12 text-gold/30 mx-auto mb-3" />
+                <p className="text-gold/70 font-medium">No tickets found</p>
+                <p className="text-gold/50 text-sm mt-1">
                   Try adjusting your filters
                 </p>
               </CardContent>
@@ -497,7 +497,7 @@ export function EmbeddedSupportTickets() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel className="border-2 border-gold text-gold hover:bg-gold/20 font-semibold">Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleBulkDelete}
               className="bg-red-600 hover:bg-red-700"
