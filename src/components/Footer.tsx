@@ -160,12 +160,12 @@ const FooterCurrencyUnit = () => {
           </button>
           {currencyOpen && (
             <div 
-              className="absolute bottom-full mb-2 left-0 w-48 rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] overflow-hidden z-50"
+              className="absolute bottom-full mb-2 left-0 w-52 rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] overflow-hidden z-50 max-h-80 overflow-y-auto"
               style={{
                 boxShadow: '0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2)',
               }}
             >
-              {SUPPORTED_CURRENCIES.slice(0, 6).map((cur) => (
+              {SUPPORTED_CURRENCIES.map((cur) => (
                 <button
                   key={cur.code}
                   onClick={() => handleCurrency(cur.code)}
@@ -178,7 +178,7 @@ const FooterCurrencyUnit = () => {
                 >
                   <span>{cur.flag}</span>
                   <span>{cur.code}</span>
-                  <span className="text-black/50 text-xs ml-auto">{cur.symbol}</span>
+                  <span className="text-black/50 text-xs ml-auto">{cur.name}</span>
                 </button>
               ))}
             </div>
@@ -188,41 +188,26 @@ const FooterCurrencyUnit = () => {
         {/* Vertical gold divider */}
         <div className="w-px h-8 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
 
-        {/* Area Unit Dropdown */}
-        <div className="relative">
-          <button
-            onClick={() => { setUnitOpen(!unitOpen); setCurrencyOpen(false); }}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black text-sm font-semibold transition-all hover:border-gold"
-            style={{
-              boxShadow: '0 6px 20px rgba(200,167,102,0.3), inset 0 1px 3px rgba(255,255,255,0.7), inset 0 -1px 3px rgba(200,167,102,0.2)',
-            }}
-          >
-            <span>{areaUnit === 'sqft' ? 'sq ft' : 'sq m'}</span>
-            <ChevronDown className={cn("w-4 h-4 text-gold transition-transform", unitOpen && "rotate-180")} />
-          </button>
-          {unitOpen && (
-            <div 
-              className="absolute bottom-full mb-2 left-0 w-36 rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] overflow-hidden z-50"
-              style={{
-                boxShadow: '0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2)',
-              }}
+        {/* Area Unit Inline Toggle */}
+        <div className="flex rounded-xl border-2 border-gold/40 overflow-hidden"
+          style={{
+            boxShadow: '0 6px 20px rgba(200,167,102,0.3), inset 0 1px 3px rgba(255,255,255,0.7), inset 0 -1px 3px rgba(200,167,102,0.2)',
+          }}
+        >
+          {(['sqft', 'sqm'] as const).map((unit) => (
+            <button
+              key={unit}
+              onClick={() => handleUnit(unit)}
+              className={cn(
+                "px-4 py-2.5 text-sm font-semibold transition-all",
+                areaUnit === unit
+                  ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black"
+                  : "bg-[#F5EBD7]/40 text-black/50 hover:bg-[#F5EBD7]/70 hover:text-black/80"
+              )}
             >
-              {(['sqft', 'sqm'] as const).map((unit) => (
-                <button
-                  key={unit}
-                  onClick={() => handleUnit(unit)}
-                  className={cn(
-                    "w-full px-4 py-2.5 text-sm font-medium transition-colors text-left",
-                    areaUnit === unit
-                      ? "bg-gold/30 text-black font-bold"
-                      : "text-black/80 hover:bg-gold/15"
-                  )}
-                >
-                  {unit === 'sqft' ? 'Square Feet (sq ft)' : 'Square Meters (sq m)'}
-                </button>
-              ))}
-            </div>
-          )}
+              {unit === 'sqft' ? 'sq ft' : 'sq m'}
+            </button>
+          ))}
         </div>
       </div>
     </div>
