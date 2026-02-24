@@ -35,7 +35,7 @@ export function CompanyProfileBrochure({
   return (
     <motion.button
       onClick={handleClick}
-      className={`group flex ${compact ? 'flex-col items-center gap-4 mx-auto' : 'flex-col items-center gap-4'} max-w-2xl mx-auto`}
+      className={`group flex ${compact ? 'flex-col items-center gap-4 mx-auto' : 'flex-col items-center gap-6'} max-w-2xl mx-auto`}
       whileHover={{ y: -4 }}
       transition={{ type: 'spring', stiffness: 300 }}
     >
@@ -47,9 +47,13 @@ export function CompanyProfileBrochure({
           style={{ transformStyle: 'preserve-3d' }}
         >
           {/* Front cover — clean, no overlay text */}
-          <div className="relative rounded-r-lg overflow-hidden border-2 border-gold/60"
+          <div
+            className="relative rounded-r-lg overflow-hidden ring-1 ring-gold/50 bg-black"
             style={{
-              boxShadow: '0 12px 35px rgba(200,167,102,0.4), 0 8px 20px rgba(0,0,0,0.2), inset 0 1px 3px rgba(255,255,255,0.3)',
+              transform: 'translateZ(1px)',
+              backfaceVisibility: 'hidden',
+              boxShadow:
+                '0 12px 35px rgba(200,167,102,0.4), 0 8px 20px rgba(0,0,0,0.2), inset 0 1px 3px rgba(255,255,255,0.3)',
             }}
           >
             <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-black/40 via-black/20 to-transparent z-10" />

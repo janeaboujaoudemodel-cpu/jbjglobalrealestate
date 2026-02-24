@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Clock, ChevronRight, BookOpen } from 'lucide-react';
-import type { BookData } from './BookShelf';
+import { BookCoverFace } from '@/components/books/BookCoverFace';
+import type { BookData } from '@/types/books';
 
 interface GuideBookSectionProps {
   book: BookData;
@@ -51,11 +52,7 @@ export function GuideBookSection({ book, sectionIds }: GuideBookSectionProps) {
                   {/* Top light reflection */}
                   <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-white/15 to-transparent z-10" />
 
-                  <img
-                    src={book.cover}
-                    alt={book.title}
-                    className="w-full aspect-[2/3] object-cover"
-                  />
+                  <BookCoverFace book={book} size="hero" className="w-full aspect-[2/3]" bare />
 
                   {/* Subtle overlay sheen */}
                   <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-black/10 z-10" />

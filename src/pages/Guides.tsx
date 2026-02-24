@@ -11,7 +11,8 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { SectionDivider } from "@/components/ui/section-divider";
 import { INVESTOR_BOOKS } from "@/data/bookCollections";
-import type { BookData } from "@/components/books/BookShelf";
+import { BookCoverFace } from "@/components/books/BookCoverFace";
+import type { BookData } from "@/types/books";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -209,7 +210,7 @@ const Guides = () => {
                   transition={{ type: 'spring', stiffness: 300 }}
                 >
                   <div className="relative w-24 h-36 md:w-32 md:h-44 rounded-md overflow-hidden border border-gold/40 shadow-[4px_4px_20px_rgba(0,0,0,0.25)] group-hover:shadow-[6px_6px_30px_rgba(200,167,102,0.4)] transition-shadow">
-                    <img src={book.cover} alt={book.title} className="w-full h-full object-cover" />
+                    <BookCoverFace book={book} />
                     <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
                   <p className="text-xs text-white/70 text-center font-medium group-hover:text-gold transition-colors leading-tight">
@@ -319,7 +320,7 @@ const Guides = () => {
             {/* Header */}
             <div className="flex items-start gap-5 p-6 border-b border-gold/20">
               <div className="relative w-24 h-32 rounded-md overflow-hidden shadow-lg flex-shrink-0 border border-gold/40">
-                <img src={selectedBook.cover} alt={selectedBook.title} className="w-full h-full object-cover" />
+                <BookCoverFace book={selectedBook} size="modal" />
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="text-xl font-bold text-black mb-1">{selectedBook.title}</h3>

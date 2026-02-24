@@ -1,4 +1,4 @@
-import type { BookData } from '@/components/books/BookShelf';
+import type { BookData } from '@/types/books';
 
 // Book cover imports - Guides
 import investorEducationCover from '@/assets/books/investor-education-cover.jpg';
@@ -40,6 +40,8 @@ const guidesLibraryBook: BookData = {
   cover: guidesLibraryCover,
   href: '/guides',
   category: 'guide',
+  icon: 'book',
+  coverLocked: true,
   tableOfContents: [
     { title: 'All Available Guides', duration: '5 min' },
     { title: 'Buyer Guides & Resources', duration: '10 min' },
@@ -58,6 +60,7 @@ const investorEducationBook: BookData = {
   cover: investorEducationCover,
   href: '/investor-education',
   category: 'education',
+  icon: 'graduation',
   tableOfContents: [
     { title: 'Introduction to Dubai Real Estate Investment', duration: '15 min' },
     { title: 'Understanding Property Types & Freehold Zones', duration: '20 min' },
@@ -77,6 +80,7 @@ const marketIntelligenceBook: BookData = {
   cover: marketIntelligenceCover,
   href: '/market-intelligence',
   category: 'report',
+  icon: 'chart',
   tableOfContents: [
     { title: 'Dubai Market Overview 2024–2025', duration: '20 min' },
     { title: 'Key Market Indicators & Trends', duration: '25 min' },
@@ -95,6 +99,8 @@ const goldenVisaBook: BookData = {
   cover: goldenVisaCover,
   href: '/guides/golden-visa-uae',
   category: 'guide',
+  icon: 'flag',
+  coverLocked: true,
   tableOfContents: [
     { title: 'What is the UAE Golden Visa?', duration: '10 min' },
     { title: 'Eligibility Categories & Requirements', duration: '20 min' },
@@ -114,6 +120,7 @@ const buyerGuideBook: BookData = {
   cover: buyerGuideCover,
   href: '/buyer-guide',
   category: 'guide',
+  icon: 'key',
   tableOfContents: [
     { title: 'Getting Started: Buying Property in Dubai', duration: '15 min' },
     { title: 'Choosing the Right Location', duration: '20 min' },
@@ -133,6 +140,7 @@ const sellerGuideBook: BookData = {
   cover: sellerGuideCover,
   href: '/seller-guide',
   category: 'guide',
+  icon: 'tag',
   tableOfContents: [
     { title: 'Preparing Your Property for Sale', duration: '15 min' },
     { title: 'Property Valuation & Pricing Strategy', duration: '20 min' },
@@ -152,6 +160,7 @@ const landlordGuideBook: BookData = {
   cover: landlordGuideCover,
   href: '/landlord-guide',
   category: 'guide',
+  icon: 'home',
   tableOfContents: [
     { title: 'Becoming a Landlord in Dubai', duration: '15 min' },
     { title: 'Rental Market Overview', duration: '20 min' },
@@ -171,6 +180,7 @@ const rentGuideBook: BookData = {
   cover: rentGuideCover,
   href: '/rent-guide',
   category: 'guide',
+  icon: 'building',
   tableOfContents: [
     { title: 'Renting in Dubai: Getting Started', duration: '15 min' },
     { title: 'Finding the Right Neighborhood', duration: '20 min' },
@@ -190,6 +200,7 @@ const tenantGuideBook: BookData = {
   cover: tenantGuideCover,
   href: '/tenant-guide',
   category: 'guide',
+  icon: 'help',
   tableOfContents: [
     { title: 'Tenant Rights & Responsibilities', duration: '15 min' },
     { title: 'Understanding Your Lease Agreement', duration: '20 min' },
@@ -211,6 +222,7 @@ const investorFaqBook: BookData = {
   cover: investorFaqCover,
   href: '/investor-faq',
   category: 'faq',
+  icon: 'help',
   tableOfContents: [
     { title: 'General Investment Questions', duration: '10 min' },
     { title: 'Legal & Ownership FAQs', duration: '15 min' },
@@ -228,6 +240,7 @@ const buyerFaqBook: BookData = {
   cover: buyerFaqCover,
   href: '/buyer-faq',
   category: 'faq',
+  icon: 'help',
   tableOfContents: [
     { title: 'Before You Buy: Common Questions', duration: '10 min' },
     { title: 'Pricing & Negotiation FAQs', duration: '10 min' },
@@ -244,6 +257,7 @@ const sellerFaqBook: BookData = {
   cover: sellerFaqCover,
   href: '/seller-faq',
   category: 'faq',
+  icon: 'help',
   tableOfContents: [
     { title: 'Getting Ready to Sell: FAQs', duration: '10 min' },
     { title: 'Pricing & Valuation FAQs', duration: '10 min' },
@@ -259,6 +273,7 @@ const landlordFaqBook: BookData = {
   cover: landlordFaqCover,
   href: '/landlord-faq',
   category: 'faq',
+  icon: 'help',
   tableOfContents: [
     { title: 'Getting Started as a Landlord: FAQs', duration: '10 min' },
     { title: 'Tenant Management FAQs', duration: '15 min' },
@@ -274,6 +289,7 @@ const tenantFaqBook: BookData = {
   cover: tenantFaqCover,
   href: '/tenant-faq',
   category: 'faq',
+  icon: 'help',
   tableOfContents: [
     { title: 'Renting Basics: FAQs', duration: '10 min' },
     { title: 'Contract & Ejari FAQs', duration: '10 min' },
@@ -292,6 +308,7 @@ const brokerTrainingBook: BookData = {
   cover: brokerEducationCover,
   href: '/broker-education',
   category: 'education',
+  icon: 'graduation',
   tableOfContents: [
     { title: 'Introduction to JBJ Broker Program', duration: '15 min' },
     { title: 'Understanding the Dubai Real Estate Market', duration: '25 min' },
@@ -313,6 +330,7 @@ const brokerCertificationBook: BookData = {
   cover: brokerCertificationCover,
   href: '/services/broker-certification',
   category: 'education',
+  icon: 'shield',
   tableOfContents: [
     { title: 'Certification Overview & Requirements', duration: '10 min' },
     { title: 'Module 1: Real Estate Fundamentals', duration: '30 min' },
@@ -333,6 +351,7 @@ const brokerFaqBook: BookData = {
   cover: brokerFaqCover,
   href: '/broker-faq',
   category: 'faq',
+  icon: 'help',
   tableOfContents: [
     { title: 'Getting Started as a JBJ Broker', duration: '10 min' },
     { title: 'Commission & Compensation FAQs', duration: '15 min' },
@@ -438,6 +457,7 @@ const companyProfileBook: BookData = {
   cover: companyProfileCover,
   href: '/company-profile',
   category: 'report',
+  icon: 'file',
   tableOfContents: [
     { title: 'About JBJ Global Real Estate', duration: '5 min' },
     { title: 'Our Vision & Mission', duration: '5 min' },
