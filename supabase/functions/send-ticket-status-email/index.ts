@@ -154,6 +154,25 @@ ${reopenHtml}
     }
 
     console.log(`Status email sent for ${ticket.ticket_number} -> ${newStatus}`);
+
+    // Create user_notification for the ticket owner (server-side, bypasses RLS)
+    if (ticket.user_id) {
+      const statusLabels: Record<string, string> = {
+        in_progress: "is under review",
+        resolved: "has been resolved",
+      };
+      const label = statusLabels[newStatus] || `status changed to ${newStatus}`;
+
+      await supabaseClient.from("user_notifications").insert({
+        user_id: ticket.user_id,
+        type: "support_ticket",
+        title: `Ticket ${ticket.ticket_number} Update`,
+        message: `Your ticket "${ticket.subject}" ${label}.`,
+        metadata: { ticket_number: ticket.ticket_number, ticket_id: ticketId, action: newStatus },
+        is_read: false,
+      });
+    }
+
     return new Response(JSON.stringify({ success: true }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
 

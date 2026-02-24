@@ -196,8 +196,19 @@ const handler = async (req: Request): Promise<Response> => {
       console.error("Email send failed:", emailResult.error);
     }
 
-    // Create notification for user if userId provided
+    // Create notification + task for user if userId provided
     if (body.userId) {
+      // Insert into user_notifications (visible in bell dropdown)
+      await supabaseClient.from("user_notifications").insert({
+        user_id: body.userId,
+        type: body.applicationType,
+        title: `${typeLabel}: ${body.statusLabel}`,
+        message: body.adminMessage || `Your ${typeLabel.toLowerCase()} "${body.applicationTitle}" status has been updated to ${body.statusLabel}.`,
+        metadata: { application_id: body.applicationId, status: body.newStatus, action: body.newStatus },
+        is_read: false,
+      });
+
+      // Also insert into legacy notifications table
       await supabaseClient.from("notifications").insert({
         user_id: body.userId,
         title: `${typeLabel}: ${body.statusLabel}`,
