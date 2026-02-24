@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Globe, Shield, TrendingUp, BadgeCheck, ArrowRight, Building2, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { BookShelf } from "@/components/books/BookShelf";
+import { INVESTOR_BOOKS } from "@/data/bookCollections";
 
 const highlights = [
   { icon: Shield, label: "0% Income Tax", desc: "No personal income or capital gains tax in the UAE" },
@@ -11,6 +13,11 @@ const highlights = [
   { icon: Users, label: "End-to-End Support", desc: "From property selection to handover — we manage every step" },
   { icon: Globe, label: "Remote Purchase Ready", desc: "Buy from anywhere — virtual viewings, digital signing, full coordination" },
 ];
+
+// Select key guide books for the homepage (not all — curated selection)
+const homepageGuideBooks = INVESTOR_BOOKS.filter(b => 
+  ['guide', 'education', 'report'].includes(b.category)
+);
 
 const OverseasInvestorsBanner = () => {
   return (
@@ -32,10 +39,11 @@ const OverseasInvestorsBanner = () => {
           transition={{ duration: 0.6 }}
           className="max-w-4xl mx-auto text-center mb-8 md:mb-12"
         >
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>
-            Invest in Dubai From <span className="text-gold">Anywhere in the World</span>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>
+            <span className="text-gold">Invest in Dubai</span>{" "}
+            <span className="text-black">From Anywhere in the World</span>
           </h2>
-          <p className="text-white/60 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
+          <p className="text-black/60 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
             Whether you're in Europe, Asia, the Americas, or CIS markets — Dubai offers the world's most investor-friendly environment. 
             Zero income tax, world-class infrastructure, and a 10-year Golden Visa make it the ideal destination for wealth preservation and growth.
           </p>
@@ -74,21 +82,46 @@ const OverseasInvestorsBanner = () => {
           </p>
         </motion.div>
 
-        {/* CTA Buttons */}
-        <div className="flex flex-wrap justify-center gap-3 md:gap-4">
+        {/* CTA Buttons - Bigger, 3D, Premium */}
+        <div className="flex flex-wrap justify-center gap-4 md:gap-6 mb-12 md:mb-16">
           <Link to="/guides/golden-visa-uae">
-            <Button className="bg-gradient-to-r from-[#C9A84C] to-[#B8973F] hover:from-[#B8973F] hover:to-[#A7862E] text-black font-bold px-6 md:px-8 py-3 rounded-xl shadow-lg shadow-gold/20 text-sm md:text-base">
-              <Shield className="w-4 h-4 mr-2" />
+            <Button 
+              className="bg-gradient-to-r from-[#C9A84C] to-[#B8973F] hover:from-[#B8973F] hover:to-[#A7862E] text-black font-bold px-8 md:px-10 py-4 md:py-5 rounded-2xl text-base md:text-lg border-2 border-gold/60"
+              style={{
+                boxShadow: `
+                  0 10px 30px rgba(200,167,102,0.4),
+                  0 6px 15px rgba(0,0,0,0.2),
+                  inset 0 2px 4px rgba(255,255,255,0.5),
+                  inset 0 -2px 4px rgba(200,167,102,0.3)
+                `,
+              }}
+            >
+              <Shield className="w-5 h-5 mr-2" />
               Golden Visa for Investors
             </Button>
           </Link>
           <Link to="/investor-hub">
-            <Button variant="outline" className="border-2 border-gold/50 text-gold hover:bg-gold/10 font-bold px-6 md:px-8 py-3 rounded-xl text-sm md:text-base">
-              <TrendingUp className="w-4 h-4 mr-2" />
+            <Button 
+              className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black font-bold px-8 md:px-10 py-4 md:py-5 rounded-2xl text-base md:text-lg border-2 border-gold/60 hover:border-gold"
+              style={{
+                boxShadow: `
+                  0 10px 30px rgba(200,167,102,0.35),
+                  0 6px 15px rgba(0,0,0,0.15),
+                  inset 0 2px 4px rgba(255,255,255,0.8),
+                  inset 0 -2px 4px rgba(200,167,102,0.2)
+                `,
+              }}
+            >
+              <TrendingUp className="w-5 h-5 mr-2" />
               Explore Investment Options
-              <ArrowRight className="w-4 h-4 ml-2" />
+              <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
           </Link>
+        </div>
+
+        {/* Guides BookShelf */}
+        <div className="pt-4 border-t border-gold/20">
+          <BookShelf books={homepageGuideBooks} title="Explore Our Guides & Reports" />
         </div>
       </div>
     </section>
