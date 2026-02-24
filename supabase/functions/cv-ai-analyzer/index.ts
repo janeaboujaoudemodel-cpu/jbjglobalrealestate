@@ -7,73 +7,7 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
-
-  try {
-    const authHeader = req.headers.get("Authorization");
-    if (!authHeader) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
-    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
-    const lovableApiKey = Deno.env.get("LOVABLE_API_KEY") ?? "";
-
-    // Verify caller is owner
-    const userClient = createClient(supabaseUrl, Deno.env.get("SUPABASE_ANON_KEY") ?? "", {
-      global: { headers: { Authorization: authHeader } },
-    });
-    const { data: { user }, error: authErr } = await userClient.auth.getUser();
-    if (authErr || !user) {
-      return new Response(JSON.stringify({ error: "Auth failed" }), {
-        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    const ownerEmail = Deno.env.get("OWNER_EMAIL");
-    if (!ownerEmail || user.email?.toLowerCase() !== ownerEmail.toLowerCase()) {
-      return new Response(JSON.stringify({ error: "Owner access required" }), {
-        status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    const { applicationId, source } = await req.json();
-    if (!applicationId || !source) {
-      return new Response(JSON.stringify({ error: "applicationId and source required" }), {
-        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    const adminClient = createClient(supabaseUrl, supabaseServiceKey);
-
-    const { data: app, error: fetchErr } = await adminClient
-      .from(source)
-      .select("*")
-      .eq("id", applicationId)
-      .single();
-
-    if (fetchErr || !app) {
-      return new Response(JSON.stringify({ error: "Application not found" }), {
-        status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    const candidateInfo = `
-CANDIDATE APPLICATION:
-- Full Name: ${app.full_name || "N/A"}
-- Email: ${app.email || "N/A"}
-- Phone: ${app.phone_e164 || app.phone || "Not provided"}
-- Nationality: ${app.nationality || "Not stated"}
-- Preferred Language: ${app.preferred_language || "Not stated"}
-- Location: ${app.current_location_city || "?"}, ${app.current_location_country || "?"}
-- Source: ${app.source || source}
-- CV Uploaded: ${app.cv_url ? "Yes" : "No"}
-- Applied: ${app.created_at}`.trim();
-
-    const systemPrompt = `You are a senior HR professional at JBJ Global Real Estate, a luxury real estate brokerage in Dubai, UAE. Analyze a candidate application with PROFESSIONAL, FAIR, and THOROUGH scoring.
+const SYSTEM_PROMPT = `You are a senior HR professional at JBJ Global Real Estate, a luxury real estate brokerage in Dubai, UAE. Analyze a candidate application with PROFESSIONAL, FAIR, and THOROUGH scoring.
 
 SCORING CRITERIA (1–10 total):
 ■ Experience (0–4 points):
@@ -132,68 +66,163 @@ Respond ONLY in valid JSON (no markdown, no code blocks):
   "recommendation_reason": "Insufficient data for strong recommendation; request CV and interview."
 }`;
 
-    const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${lovableApiKey}`,
-      },
-      body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: candidateInfo },
-        ],
-        temperature: 0.3,
-        max_tokens: 2000,
-      }),
-    });
+function buildCandidateInfo(app: Record<string, any>): string {
+  return `
+CANDIDATE APPLICATION:
+- Full Name: ${app.full_name || "N/A"}
+- Email: ${app.email || "N/A"}
+- Phone: ${app.phone_e164 || app.phone || "Not provided"}
+- Nationality: ${app.nationality || "Not stated"}
+- Preferred Language: ${app.preferred_language || "Not stated"}
+- Location: ${app.current_location_city || "?"}, ${app.current_location_country || "?"}
+- Source: ${app.source || "unknown"}
+- CV Uploaded: ${app.cv_url ? "Yes" : "No"}
+- Applied: ${app.created_at}`.trim();
+}
 
-    if (!aiResponse.ok) {
-      const errText = await aiResponse.text();
-      console.error("AI API error:", errText);
-      return new Response(JSON.stringify({ error: "AI analysis failed" }), {
-        status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" },
+async function analyzeApplication(
+  adminClient: any,
+  lovableApiKey: string,
+  applicationId: string,
+  source: string,
+): Promise<{ success: boolean; analysis?: any; error?: string }> {
+  const { data: app, error: fetchErr } = await adminClient
+    .from(source)
+    .select("*")
+    .eq("id", applicationId)
+    .single();
+
+  if (fetchErr || !app) {
+    return { success: false, error: "Application not found" };
+  }
+
+  // Skip if already analyzed (ai_ranking > 0)
+  if (app.ai_ranking && app.ai_ranking > 0) {
+    return { success: true, analysis: { ai_ranking: app.ai_ranking, ai_summary: app.ai_summary, already_analyzed: true } };
+  }
+
+  const candidateInfo = buildCandidateInfo(app);
+
+  const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${lovableApiKey}`,
+    },
+    body: JSON.stringify({
+      model: "google/gemini-2.5-flash-lite",
+      messages: [
+        { role: "system", content: SYSTEM_PROMPT },
+        { role: "user", content: candidateInfo },
+      ],
+      temperature: 0.2,
+      max_tokens: 1500,
+    }),
+  });
+
+  if (!aiResponse.ok) {
+    const errText = await aiResponse.text();
+    console.error("AI API error:", errText);
+    return { success: false, error: "AI analysis failed" };
+  }
+
+  const aiData = await aiResponse.json();
+  let rawContent = aiData.choices?.[0]?.message?.content?.trim() || "";
+  rawContent = rawContent.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "").trim();
+
+  let analysis;
+  try {
+    analysis = JSON.parse(rawContent);
+  } catch {
+    console.error("Failed to parse AI response:", rawContent);
+    return { success: false, error: "Failed to parse AI analysis" };
+  }
+
+  // Persist to database
+  const updatePayload: Record<string, unknown> = {
+    experience_years: analysis.experience_years ?? 0,
+    languages: analysis.languages ?? [],
+    skills: analysis.skills ?? [],
+    ai_ranking: Math.max(1, Math.min(10, analysis.ai_ranking ?? 1)),
+    ai_summary: analysis.ai_summary ?? "Analysis completed.",
+    flag_reason: analysis.flag_reason ?? null,
+  };
+
+  if (source === "hr_applications") {
+    updatePayload.department_category = analysis.department_category ?? "general";
+  }
+
+  const { error: updateErr } = await adminClient.from(source).update(updatePayload).eq("id", applicationId);
+  if (updateErr) {
+    console.error("DB update error:", updateErr);
+  }
+
+  return { success: true, analysis };
+}
+
+serve(async (req) => {
+  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+
+  try {
+    const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+    const lovableApiKey = Deno.env.get("LOVABLE_API_KEY") ?? "";
+
+    const body = await req.json();
+    const { applicationId, source, mode } = body;
+
+    // MODE: "auto" = called internally from capture-lead, no owner check needed
+    // MODE: undefined/manual = called from UI, requires owner auth
+    if (mode !== "auto") {
+      const authHeader = req.headers.get("Authorization");
+      if (!authHeader) {
+        return new Response(JSON.stringify({ error: "Unauthorized" }), {
+          status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      const userClient = createClient(supabaseUrl, Deno.env.get("SUPABASE_ANON_KEY") ?? "", {
+        global: { headers: { Authorization: authHeader } },
+      });
+      const { data: { user }, error: authErr } = await userClient.auth.getUser();
+      if (authErr || !user) {
+        return new Response(JSON.stringify({ error: "Auth failed" }), {
+          status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      const ownerEmail = Deno.env.get("OWNER_EMAIL");
+      if (!ownerEmail || user.email?.toLowerCase() !== ownerEmail.toLowerCase()) {
+        return new Response(JSON.stringify({ error: "Owner access required" }), {
+          status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    } else {
+      // Auto mode: verify internal secret
+      const internalKey = req.headers.get("x-internal-key");
+      if (internalKey !== supabaseServiceKey) {
+        return new Response(JSON.stringify({ error: "Forbidden" }), {
+          status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    }
+
+    if (!applicationId || !source) {
+      return new Response(JSON.stringify({ error: "applicationId and source required" }), {
+        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    const aiData = await aiResponse.json();
-    let rawContent = aiData.choices?.[0]?.message?.content?.trim() || "";
+    const adminClient = createClient(supabaseUrl, supabaseServiceKey);
+    const result = await analyzeApplication(adminClient, lovableApiKey, applicationId, source);
 
-    // Strip markdown code fences if present
-    rawContent = rawContent.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "").trim();
-
-    let analysis;
-    try {
-      analysis = JSON.parse(rawContent);
-    } catch {
-      console.error("Failed to parse AI response:", rawContent);
-      return new Response(JSON.stringify({ error: "Failed to parse AI analysis", raw: rawContent }), {
+    if (!result.success) {
+      return new Response(JSON.stringify({ error: result.error }), {
         status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    // Persist core fields to database
-    const updatePayload: Record<string, unknown> = {
-      experience_years: analysis.experience_years ?? 0,
-      languages: analysis.languages ?? [],
-      skills: analysis.skills ?? [],
-      ai_ranking: Math.max(1, Math.min(10, analysis.ai_ranking ?? 1)),
-      ai_summary: analysis.ai_summary ?? "Analysis completed.",
-      flag_reason: analysis.flag_reason ?? null,
-    };
-
-    // Only hr_applications has department_category column
-    if (source === "hr_applications") {
-      updatePayload.department_category = analysis.department_category ?? "general";
-    }
-
-    const { error: updateErr } = await adminClient.from(source).update(updatePayload).eq("id", applicationId);
-    if (updateErr) {
-      console.error("DB update error:", updateErr);
-    }
-
-    return new Response(JSON.stringify({ success: true, analysis, updated: updatePayload }), {
+    return new Response(JSON.stringify({ success: true, analysis: result.analysis }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (err) {
