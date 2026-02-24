@@ -1,18 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useHRApprovals, ApprovalRequest } from "@/hooks/useHRApprovals";
+import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
 import { 
   CheckCircle, XCircle, Clock, User, ArrowRight,
-  FileText, DollarSign, Briefcase, GraduationCap
+  FileText, DollarSign, Briefcase, GraduationCap, UserPlus, CalendarDays
 } from "lucide-react";
 
 const REQUEST_TYPE_CONFIG: Record<string, { label: string; icon: React.ElementType; color: string }> = {
-  leave_request: { label: 'Leave Request', icon: Clock, color: 'bg-blue-100 text-blue-700' },
+  leave_request: { label: 'Leave Request', icon: CalendarDays, color: 'bg-blue-100 text-blue-700' },
+  cv_application: { label: 'CV Application', icon: UserPlus, color: 'bg-cyan-100 text-cyan-700' },
   expense_claim: { label: 'Expense Claim', icon: DollarSign, color: 'bg-emerald-100 text-emerald-700' },
   document_request: { label: 'Document Request', icon: FileText, color: 'bg-purple-100 text-purple-700' },
   salary_advance: { label: 'Salary Advance', icon: DollarSign, color: 'bg-amber-100 text-amber-700' },
@@ -72,11 +74,81 @@ const StatusBadge = ({ status }: { status: string }) => {
 };
 
 export function ApprovalWorkflowPanel() {
-  const { approvals, loading, processApproval } = useHRApprovals();
+  const { approvals, loading: approvalsLoading, processApproval } = useHRApprovals();
+  const [extraApprovals, setExtraApprovals] = useState<ApprovalRequest[]>([]);
+  const [extraLoading, setExtraLoading] = useState(true);
 
-  const pendingApprovals = approvals.filter(a => a.overall_status === 'pending');
-  const approvedRequests = approvals.filter(a => a.overall_status === 'approved');
-  const rejectedRequests = approvals.filter(a => a.overall_status === 'rejected');
+  const fetchExtraApprovals = useCallback(async () => {
+    setExtraLoading(true);
+    try {
+      const [cvRes, leaveRes] = await Promise.all([
+        supabase.from('hr_cv_submissions').select('*').order('created_at', { ascending: false }),
+        supabase.from('hr_leave_requests').select('*').order('created_at', { ascending: false }),
+      ]);
+
+      const cvApprovals: ApprovalRequest[] = (cvRes.data || []).map((cv: any) => ({
+        id: cv.id,
+        request_type: 'cv_application',
+        reference_id: cv.id,
+        reference_table: 'hr_cv_submissions',
+        requester_id: cv.user_id || '',
+        requester_name: cv.full_name || 'Unknown',
+        department: cv.position_applied || null,
+        title: `CV: ${cv.full_name}`,
+        description: cv.ai_summary || `CV from ${cv.email || 'unknown'}`,
+        amount: null,
+        currency: 'AED',
+        current_stage: 1,
+        total_stages: 1,
+        stage1_approver_name: cv.reviewed_by,
+        stage1_status: cv.status === 'approved' ? 'approved' : cv.status === 'rejected' ? 'rejected' : 'pending',
+        stage1_decision_at: cv.reviewed_at,
+        stage1_notes: cv.notes,
+        stage2_approver_name: null, stage2_status: 'pending', stage2_decision_at: null, stage2_notes: null,
+        stage3_approver_name: null, stage3_status: 'pending', stage3_decision_at: null, stage3_notes: null,
+        overall_status: cv.status === 'approved' ? 'approved' : cv.status === 'rejected' ? 'rejected' : 'pending',
+        created_at: cv.created_at,
+      }));
+
+      const leaveApprovals: ApprovalRequest[] = (leaveRes.data || []).map((lr: any) => ({
+        id: lr.id,
+        request_type: 'leave_request',
+        reference_id: lr.id,
+        reference_table: 'hr_leave_requests',
+        requester_id: lr.user_id || '',
+        requester_name: lr.employee_name || 'Unknown',
+        department: lr.department || null,
+        title: `${lr.leave_type?.replace('_', ' ')} Leave: ${lr.employee_name}`,
+        description: `${lr.start_date} to ${lr.end_date} (${lr.total_days} days)${lr.reason ? ' - ' + lr.reason : ''}`,
+        amount: null,
+        currency: 'AED',
+        current_stage: lr.current_stage === 'manager' ? 1 : lr.current_stage === 'hr' ? 2 : 3,
+        total_stages: 3,
+        stage1_approver_name: lr.manager_name, stage1_status: lr.manager_decision ? 'approved' : 'pending', stage1_decision_at: lr.manager_decision_at, stage1_notes: lr.manager_notes,
+        stage2_approver_name: lr.hr_name, stage2_status: lr.hr_decision ? 'approved' : 'pending', stage2_decision_at: lr.hr_decision_at, stage2_notes: lr.hr_notes,
+        stage3_approver_name: lr.owner_name, stage3_status: lr.owner_decision ? 'approved' : 'pending', stage3_decision_at: lr.owner_decision_at, stage3_notes: lr.owner_notes,
+        overall_status: lr.status === 'rejected' ? 'rejected' : lr.status?.includes('approved') && lr.current_stage === 'completed' ? 'approved' : 'pending',
+        created_at: lr.created_at,
+      }));
+
+      setExtraApprovals([...cvApprovals, ...leaveApprovals]);
+    } catch (err) {
+      console.error('Error fetching extra approvals:', err);
+    } finally {
+      setExtraLoading(false);
+    }
+  }, []);
+
+  useEffect(() => { fetchExtraApprovals(); }, [fetchExtraApprovals]);
+
+  const loading = approvalsLoading || extraLoading;
+
+  // Merge and deduplicate (hr_approval_requests + cv + leave)
+  const allApprovals = [...approvals, ...extraApprovals.filter(ea => !approvals.some(a => a.id === ea.id))];
+
+  const pendingApprovals = allApprovals.filter(a => a.overall_status === 'pending');
+  const approvedRequests = allApprovals.filter(a => a.overall_status === 'approved');
+  const rejectedRequests = allApprovals.filter(a => a.overall_status === 'rejected');
 
   const handleApproval = async (request: ApprovalRequest, approved: boolean) => {
     const stage = request.current_stage as 1 | 2 | 3;

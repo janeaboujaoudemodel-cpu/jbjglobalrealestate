@@ -130,23 +130,39 @@ const ChatCVSubmission = ({
         throw new Error('Failed to submit CV. Please try again.');
       }
 
+      // Notify the submitter if logged in
       if (user?.id) {
+        await supabase.from('user_notifications').insert({
+          user_id: user.id,
+          type: 'cv_application',
+          title: 'CV received - Under review',
+          message: 'Your CV has been received. JBJ Global Real Estate HR team is reviewing your profile.',
+          is_read: false,
+          metadata: { status: 'under_review' },
+        });
+      }
+
+      // Always notify the Owner about new CV
+      const ownerId = '72ca2405-b4ca-48df-9b47-623ee260a3cc';
+      
+      // Don't double-notify if the submitter IS the owner
+      if (ownerId !== user?.id) {
         await Promise.allSettled([
           supabase.from('user_notifications').insert({
-            user_id: user.id,
+            user_id: ownerId,
             type: 'cv_application',
-            title: 'CV received - Under review',
-            message: 'Your CV has been received. JBJ Global Real Estate HR team is reviewing your profile.',
+            title: `New CV Received: ${userInfo.firstName} ${userInfo.lastName}`,
+            message: `A new CV has been submitted by ${userInfo.firstName} ${userInfo.lastName} (${userInfo.email}). Please review in the CV Center.`,
             is_read: false,
-            metadata: { status: 'under_review' },
+            metadata: { cv_name: `${userInfo.firstName} ${userInfo.lastName}`, cv_email: userInfo.email, status: 'pending_review' } as any,
           }),
           supabase.from('admin_tasks').insert({
-            user_id: user.id,
-            title: 'CV under review',
-            description: 'Your CV is currently under review by the HR team.',
+            user_id: ownerId,
+            title: `Review CV: ${userInfo.firstName} ${userInfo.lastName}`,
+            description: `New CV received from ${userInfo.firstName} ${userInfo.lastName} (${userInfo.email}). Review in the CV Center.`,
             category: 'cv_application',
             status: 'pending',
-            priority: 'medium',
+            priority: 'high',
           }),
         ]);
       }
