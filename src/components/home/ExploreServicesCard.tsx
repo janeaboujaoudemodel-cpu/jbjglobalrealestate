@@ -377,14 +377,6 @@ const ExploreServicesCard = () => {
         </AnimatePresence>
       </div>
 
-      {/* Footer - Premium bar with dotted divider (different from outer section divider) */}
-      <div className="py-3 md:py-4 border-t-2 border-dashed border-gold/40 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
-        <div className="flex items-center justify-center gap-6">
-          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-gold/50" />
-          <Sparkles className="w-4 h-4 text-gold/60" />
-          <div className="flex-1 h-px bg-gradient-to-l from-transparent via-gold/30 to-gold/50" />
-        </div>
-      </div>
     </div>
   );
 };
