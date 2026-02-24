@@ -4695,9 +4695,13 @@ export type Database = {
           admin_notes: string | null
           created_at: string | null
           email: string
+          feature_key: string
           full_name: string
           id: string
+          improve_text: string | null
+          is_anonymous: boolean
           loyalty_points_awarded: number | null
+          publish_requested: boolean
           published_at: string | null
           rating: number
           review_text: string
@@ -4713,9 +4717,13 @@ export type Database = {
           admin_notes?: string | null
           created_at?: string | null
           email: string
+          feature_key?: string
           full_name: string
           id?: string
+          improve_text?: string | null
+          is_anonymous?: boolean
           loyalty_points_awarded?: number | null
+          publish_requested?: boolean
           published_at?: string | null
           rating: number
           review_text: string
@@ -4731,9 +4739,13 @@ export type Database = {
           admin_notes?: string | null
           created_at?: string | null
           email?: string
+          feature_key?: string
           full_name?: string
           id?: string
+          improve_text?: string | null
+          is_anonymous?: boolean
           loyalty_points_awarded?: number | null
+          publish_requested?: boolean
           published_at?: string | null
           rating?: number
           review_text?: string
@@ -8994,6 +9006,7 @@ export type Database = {
           source: string | null
           status: string | null
           updated_at: string
+          user_id: string | null
         }
         Insert: {
           ai_ranking?: number | null
@@ -9013,6 +9026,7 @@ export type Database = {
           source?: string | null
           status?: string | null
           updated_at?: string
+          user_id?: string | null
         }
         Update: {
           ai_ranking?: number | null
@@ -9032,6 +9046,7 @@ export type Database = {
           source?: string | null
           status?: string | null
           updated_at?: string
+          user_id?: string | null
         }
         Relationships: [
           {
