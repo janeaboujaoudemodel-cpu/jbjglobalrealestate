@@ -16,13 +16,19 @@ export function OwnerTasksPopupAlert() {
     if (!user) return;
 
     const checkTasks = async () => {
-      const { count } = await supabase
-        .from("admin_tasks")
-        .select("id", { count: "exact", head: true })
-        .eq("user_id", user.id)
-        .eq("status", "pending");
+      const [tasksRes, cvsRes] = await Promise.all([
+        supabase
+          .from("admin_tasks")
+          .select("id", { count: "exact", head: true })
+          .eq("user_id", user.id)
+          .eq("status", "pending"),
+        supabase
+          .from("hr_cv_submissions")
+          .select("id", { count: "exact", head: true })
+          .eq("status", "pending"),
+      ]);
 
-      setPendingCount(count || 0);
+      setPendingCount((tasksRes.count || 0) + (cvsRes.count || 0));
       setLoaded(true);
     };
 
@@ -67,7 +73,7 @@ export function OwnerTasksPopupAlert() {
 
         <div className="bg-white/60 border border-[#C9A84C]/20 rounded-xl p-4 mb-5">
           <p className="text-black text-sm">
-            You have <span className="font-bold text-[#C9A84C] text-lg">{pendingCount}</span> pending task{pendingCount !== 1 ? 's' : ''} that need your review today, including partnership applications, support tickets, career submissions, and more.
+            You have <span className="font-bold text-[#C9A84C] text-lg">{pendingCount}</span> pending item{pendingCount !== 1 ? 's' : ''} that need your review today, including CV applications, leave requests, partnership applications, support tickets, and more.
           </p>
         </div>
 
