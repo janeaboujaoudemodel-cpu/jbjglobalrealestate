@@ -251,7 +251,7 @@ export const useHRApplicants = () => {
     }
   };
 
-  const updateApplicantStatus = async (applicantId: string, status: string) => {
+  const updateApplicantStatus = async (applicantId: string, status: string, adminMessage?: string) => {
     try {
       const { error } = await supabase
         .from('hr_job_applicants')
@@ -259,6 +259,43 @@ export const useHRApplicants = () => {
         .eq('id', applicantId);
 
       if (error) throw error;
+      
+      // Find the applicant to send notification
+      const applicant = applicants.find(a => a.id === applicantId);
+      if (applicant) {
+        const statusLabels: Record<string, string> = {
+          applied: "Application Received",
+          screening: "Under Screening",
+          interview_scheduled: "Interview Scheduled",
+          interviewed: "Interview Completed",
+          offer_sent: "Offer Sent",
+          hired: "Congratulations — Hired!",
+          rejected: "Application Not Selected",
+          shortlisted: "Shortlisted",
+        };
+        const actionStatuses = ["rejected", "interview_scheduled", "offer_sent"];
+        
+        try {
+          await supabase.functions.invoke("send-application-status-email", {
+            body: {
+              applicationType: "career",
+              recipientEmail: applicant.email,
+              recipientName: applicant.full_name,
+              applicationId: applicant.id,
+              newStatus: status,
+              statusLabel: statusLabels[status] || status,
+              adminMessage,
+              applicationTitle: `${applicant.department} Position`,
+              actionRequired: actionStatuses.includes(status),
+              actionLabel: status === "interview_scheduled" ? "Please confirm your interview date" 
+                : status === "offer_sent" ? "Please review and respond to your job offer"
+                : status === "rejected" ? undefined : undefined,
+            },
+          });
+        } catch (e) {
+          console.error("Notification error:", e);
+        }
+      }
       
       toast.success('Applicant status updated');
       await fetchApplicants();
@@ -270,11 +307,40 @@ export const useHRApplicants = () => {
     }
   };
 
+  const sendMessageToApplicant = async (applicantId: string, message: string, isRequestEdit = false) => {
+    const applicant = applicants.find(a => a.id === applicantId);
+    if (!applicant) return false;
+
+    try {
+      await supabase.functions.invoke("send-application-status-email", {
+        body: {
+          applicationType: "career",
+          recipientEmail: applicant.email,
+          recipientName: applicant.full_name,
+          applicationId: applicant.id,
+          newStatus: isRequestEdit ? "request_edit" : applicant.status,
+          statusLabel: isRequestEdit ? "Revision Requested" : "Message from JBJ HR Team",
+          adminMessage: message,
+          applicationTitle: `${applicant.department} Position`,
+          actionRequired: isRequestEdit,
+          actionLabel: isRequestEdit ? "Please update your application and resubmit" : undefined,
+        },
+      });
+      toast.success(isRequestEdit ? "Edit request sent" : "Message sent to applicant");
+      return true;
+    } catch (e) {
+      console.error("Message send error:", e);
+      toast.error("Failed to send message");
+      return false;
+    }
+  };
+
   return {
     applicants,
     isLoading,
     sendJobOffer,
     updateApplicantStatus,
+    sendMessageToApplicant,
     refreshApplicants: fetchApplicants
   };
 };
