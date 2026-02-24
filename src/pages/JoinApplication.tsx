@@ -182,6 +182,25 @@ export default function JoinApplication() {
 
       if (appError) throw appError;
 
+      await Promise.allSettled([
+        supabase.from('user_notifications').insert({
+          user_id: user.id,
+          type: 'cv_application',
+          title: 'CV received - Under review',
+          message: 'Your CV application has been submitted successfully. JBJ Global Real Estate HR team is reviewing your profile.',
+          is_read: false,
+          metadata: { status: 'under_review' },
+        }),
+        supabase.from('admin_tasks').insert({
+          user_id: user.id,
+          title: 'CV under review',
+          description: 'Your CV is currently under review by the HR team.',
+          category: 'cv_application',
+          status: 'pending',
+          priority: 'medium',
+        }),
+      ]);
+
       // Create HR user role as candidate
       const { error: roleError } = await supabase
         .from("hr_user_roles")

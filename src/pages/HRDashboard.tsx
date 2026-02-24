@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Users, FileText, Activity, Linkedin, Building2, DollarSign, Briefcase, Wallet, TrendingUp, UserCheck, Brain, Calendar, AlertTriangle, CheckSquare, Target, Plus, FolderOpen } from "lucide-react";
 import JobOfferManager from "@/components/hr/JobOfferManager";
@@ -27,9 +28,18 @@ import {
 } from "@/components/ui/premium-backend-layout";
 
 export default function HRDashboard() {
-  const [activeTab, setActiveTab] = useState("performance");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialTab = searchParams.get('tab') || "performance";
+  const [activeTab, setActiveTab] = useState(initialTab);
   const { data: stats, isLoading: statsLoading } = useHRStats();
   const { user } = useAuth();
+
+  useEffect(() => {
+    const tabFromUrl = searchParams.get('tab');
+    if (tabFromUrl && tabFromUrl !== activeTab) {
+      setActiveTab(tabFromUrl);
+    }
+  }, [searchParams, activeTab]);
 
   return (
     <PremiumBackendLayout>
@@ -100,7 +110,12 @@ export default function HRDashboard() {
       {/* Main Content */}
       <PremiumSection variant="white" className="py-8">
         <PremiumContainer>
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          <Tabs value={activeTab} onValueChange={(nextTab) => {
+            setActiveTab(nextTab);
+            const next = new URLSearchParams(searchParams);
+            next.set('tab', nextTab);
+            setSearchParams(next, { replace: true });
+          }} className="space-y-6">
             <TabsList className="bg-gradient-to-r from-[#F5EBD7] to-[#E8DCC8] border-2 border-gold/30 p-1.5 h-auto flex-wrap rounded-xl shadow-sm">
               <TabsTrigger 
                 value="performance" 

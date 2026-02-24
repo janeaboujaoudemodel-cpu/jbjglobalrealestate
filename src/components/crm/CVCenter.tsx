@@ -1,10 +1,12 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
   FileText,
@@ -17,7 +19,6 @@ import {
   Calendar,
   Globe2,
   Briefcase,
-  GraduationCap,
   Clock,
   CheckCircle,
   XCircle,
@@ -31,6 +32,9 @@ import {
   Code,
   Calculator,
   Loader2,
+  ExternalLink,
+  Download,
+  MessageSquare,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
@@ -70,7 +74,7 @@ interface CVEntry {
   current_location_country: string | null;
   current_location_city: string | null;
   cv_url: string | null;
-  status: 'pending' | 'approved' | 'rejected';
+  status: string;
   department_category: string;
   ai_summary: string | null;
   ai_ranking: number;
@@ -82,6 +86,8 @@ interface CVEntry {
   created_at: string;
   reviewed_at: string | null;
   reviewed_by: string | null;
+  user_id: string | null;
+  record_source: 'hr_applications' | 'hr_cv_submissions';
 }
 
 interface CVCenterProps {
@@ -94,6 +100,15 @@ const CVCenter = ({ userId }: CVCenterProps) => {
   const [activeStatusTab, setActiveStatusTab] = useState('all');
   const [activeDeptCategory, setActiveDeptCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCV, setSelectedCV] = useState<CVEntry | null>(null);
+  const [cvPreviewOpen, setCvPreviewOpen] = useState(false);
+  const [cvPreviewUrl, setCvPreviewUrl] = useState<string | null>(null);
+  const [cvPreviewLoading, setCvPreviewLoading] = useState(false);
+  const [contactOpen, setContactOpen] = useState(false);
+  const [scheduleOpen, setScheduleOpen] = useState(false);
+  const [interviewDate, setInterviewDate] = useState('');
+  const [interviewTime, setInterviewTime] = useState('');
+  const [interviewNotes, setInterviewNotes] = useState('');
 
   // Fetch CVs from database
   useEffect(() => {
@@ -125,7 +140,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
         status: app.status,
         department_category: detectDepartmentCategory(app),
         ai_summary: app.ai_summary || generateAutoSummary(app),
-        ai_ranking: app.ai_ranking || Math.floor(Math.random() * 5) + 5,
+        ai_ranking: app.ai_ranking || 0,
         languages: app.languages || [app.preferred_language].filter(Boolean),
         experience_years: app.experience_years || 0,
         skills: app.skills || [],
@@ -134,6 +149,8 @@ const CVCenter = ({ userId }: CVCenterProps) => {
         created_at: app.created_at,
         reviewed_at: app.reviewed_at,
         reviewed_by: app.reviewed_by,
+        user_id: app.user_id || null,
+        record_source: 'hr_applications',
       }));
 
       // Transform hr_cv_submissions (chat widget CVs)
@@ -159,6 +176,8 @@ const CVCenter = ({ userId }: CVCenterProps) => {
         created_at: sub.created_at,
         reviewed_at: sub.reviewed_at || null,
         reviewed_by: sub.reviewed_by || null,
+        user_id: null,
+        record_source: 'hr_cv_submissions',
       }));
 
       // Merge and deduplicate by email (keep the most recent)
@@ -262,8 +281,12 @@ const CVCenter = ({ userId }: CVCenterProps) => {
       );
     }
 
-    // Sort by ranking
-    return filtered.sort((a, b) => b.ai_ranking - a.ai_ranking);
+    // Sort by strongest score first
+    return filtered.sort((a, b) => {
+      const aScore = getScoreBreakdown(a).final;
+      const bScore = getScoreBreakdown(b).final;
+      return bScore - aScore;
+    });
   }, [cvEntries, activeStatusTab, activeDeptCategory, searchQuery]);
 
   // Stats
@@ -275,11 +298,39 @@ const CVCenter = ({ userId }: CVCenterProps) => {
     flagged: cvEntries.filter(cv => cv.flag_reason !== null).length,
   }), [cvEntries]);
 
+  const getScoreBreakdown = (cv: CVEntry) => {
+    const exp = cv.experience_years >= 7 ? 4 : cv.experience_years >= 4 ? 3 : cv.experience_years >= 2 ? 2 : cv.experience_years > 0 ? 1 : 0;
+    const lang = cv.languages.length >= 3 ? 3 : cv.languages.length >= 2 ? 2 : cv.languages.length >= 1 ? 1 : 0;
+    const skills = cv.skills.length >= 6 ? 3 : cv.skills.length >= 3 ? 2 : cv.skills.length >= 1 ? 1 : 0;
+    const base = exp + lang + skills;
+    const final = cv.ai_ranking > 0 ? Math.max(1, Math.min(10, Math.round((cv.ai_ranking * 0.6) + (base * 0.4)))) : Math.max(1, base);
+    const level = final >= 9 ? 'Elite' : final >= 7 ? 'Advanced' : final >= 5 ? 'Intermediate' : 'Beginner';
+    return { exp, lang, skills, final, level };
+  };
+
+  const resolvePreviewUrl = async (cvUrl: string | null) => {
+    if (!cvUrl) return null;
+    if (/^https?:\/\//i.test(cvUrl)) return cvUrl;
+
+    const cleanPath = cvUrl.replace(/^\/+/, '');
+    const buckets = ['hr-documents', 'documents', 'public'];
+
+    for (const bucket of buckets) {
+      const { data, error } = await supabase.storage.from(bucket).createSignedUrl(cleanPath, 60 * 60);
+      if (!error && data?.signedUrl) return data.signedUrl;
+    }
+
+    return null;
+  };
+
   // Update CV status
   const handleUpdateStatus = async (cvId: string, newStatus: 'pending' | 'approved' | 'rejected') => {
+    const target = cvEntries.find((entry) => entry.id === cvId);
+    if (!target) return;
+
     try {
       const { error } = await supabase
-        .from('hr_applications')
+        .from(target.record_source)
         .update({ 
           status: newStatus,
           reviewed_at: new Date().toISOString(),
@@ -300,30 +351,31 @@ const CVCenter = ({ userId }: CVCenterProps) => {
     }
   };
 
-  // View CV
-  const handleViewCV = (cv: CVEntry) => {
-    if (cv.cv_url) {
-      window.open(cv.cv_url, '_blank');
-    } else {
-      toast.info('No CV file available for this candidate');
+  // View CV inline (same page)
+  const handleViewCV = async (cv: CVEntry) => {
+    setSelectedCV(cv);
+    setCvPreviewOpen(true);
+    setCvPreviewLoading(true);
+
+    const resolved = await resolvePreviewUrl(cv.cv_url);
+    setCvPreviewUrl(resolved);
+    setCvPreviewLoading(false);
+
+    if (!resolved) {
+      toast.error('Unable to load CV preview');
     }
   };
 
   // Contact candidate
   const handleContact = (cv: CVEntry) => {
-    if (cv.email) {
-      window.location.href = `mailto:${cv.email}?subject=Your Application at JBJ Global Real Estate`;
-    } else if (cv.phone_e164) {
-      window.location.href = `tel:${cv.phone_e164}`;
-    } else {
-      toast.error('No contact information available');
-    }
+    setSelectedCV(cv);
+    setContactOpen(true);
   };
 
   // Schedule interview
   const handleScheduleInterview = (cv: CVEntry) => {
-    toast.success(`Opening interview scheduler for ${cv.full_name}...`);
-    // Could integrate with calendar or interview scheduler
+    setSelectedCV(cv);
+    setScheduleOpen(true);
   };
 
   const getCategoryIcon = (categoryId: string) => {
@@ -520,12 +572,22 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                               </div>
                             </div>
 
-                            {/* Languages & Ranking Row */}
+                            {/* Languages, Score & Ranking */}
                             <div className="flex items-center gap-3 mt-3 flex-wrap">
-                              <Badge className="bg-gold/10 text-gold border-gold/30 font-semibold">
-                                <Star className="h-3 w-3 mr-1 fill-gold" />
-                                Ranking: {cv.ai_ranking}/10
-                              </Badge>
+                              {(() => {
+                                const score = getScoreBreakdown(cv);
+                                return (
+                                  <>
+                                    <Badge className="bg-gold/10 text-gold border-gold/30 font-semibold">
+                                      <Star className="h-3 w-3 mr-1 fill-gold" />
+                                      Score: {score.final}/10 · {score.level}
+                                    </Badge>
+                                    <Badge variant="outline" className="text-crm-text border-crm-border text-xs">
+                                      Experience {score.exp}/4 · Languages {score.lang}/3 · Skills {score.skills}/3
+                                    </Badge>
+                                  </>
+                                );
+                              })()}
                               {cv.languages.length > 0 && (
                                 <Badge variant="outline" className="text-crm-text border-crm-border">
                                   <Globe2 className="h-3 w-3 mr-1" />
@@ -620,6 +682,112 @@ const CVCenter = ({ userId }: CVCenterProps) => {
           )}
         </CardContent>
       </Card>
+
+      <Dialog open={cvPreviewOpen} onOpenChange={setCvPreviewOpen}>
+        <DialogContent className="max-w-6xl h-[85vh]">
+          <DialogHeader>
+            <DialogTitle>CV Preview {selectedCV ? `· ${selectedCV.full_name}` : ''}</DialogTitle>
+          </DialogHeader>
+          <div className="h-full">
+            {cvPreviewLoading ? (
+              <div className="h-full flex items-center justify-center">
+                <Loader2 className="h-6 w-6 animate-spin text-gold" />
+              </div>
+            ) : cvPreviewUrl ? (
+              <iframe title="CV Preview" src={cvPreviewUrl} className="w-full h-full rounded-md border" />
+            ) : (
+              <div className="h-full flex items-center justify-center text-sm text-muted-foreground">
+                CV preview unavailable
+              </div>
+            )}
+          </div>
+          {cvPreviewUrl && (
+            <div className="flex gap-2">
+              <Button variant="outline" className="gap-2" onClick={() => window.open(cvPreviewUrl, '_blank')}>
+                <ExternalLink className="h-4 w-4" /> Open in new tab
+              </Button>
+              <Button className="gap-2" onClick={() => window.open(cvPreviewUrl, '_blank')}>
+                <Download className="h-4 w-4" /> Download
+              </Button>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={contactOpen} onOpenChange={setContactOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Contact Candidate</DialogTitle>
+          </DialogHeader>
+          {selectedCV && (
+            <div className="space-y-4">
+              <div className="text-sm text-muted-foreground">{selectedCV.full_name}</div>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between rounded-md border p-3">
+                  <div className="flex items-center gap-2"><Mail className="h-4 w-4" /> {selectedCV.email}</div>
+                  <Button size="sm" variant="outline" onClick={() => window.location.href = `mailto:${selectedCV.email}?subject=JBJ Global Real Estate - CV Update&body=Hello ${selectedCV.full_name}, your CV is currently under review by our HR team.`}>Email</Button>
+                </div>
+                {selectedCV.phone_e164 && (
+                  <>
+                    <div className="flex items-center justify-between rounded-md border p-3">
+                      <div className="flex items-center gap-2"><Phone className="h-4 w-4" /> {selectedCV.phone_e164}</div>
+                      <Button size="sm" variant="outline" onClick={() => window.location.href = `tel:${selectedCV.phone_e164}`}>Call</Button>
+                    </div>
+                    <div className="flex items-center justify-between rounded-md border p-3">
+                      <div className="flex items-center gap-2"><MessageSquare className="h-4 w-4" /> WhatsApp</div>
+                      <Button size="sm" variant="outline" onClick={() => window.open(`https://wa.me/${(selectedCV.phone_e164 || '').replace(/[^0-9]/g, '')}?text=Hello ${selectedCV.full_name}, your CV is under review by JBJ Global Real Estate HR team.`, '_blank')}>WhatsApp</Button>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={scheduleOpen} onOpenChange={setScheduleOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Schedule Interview</DialogTitle>
+          </DialogHeader>
+          {selectedCV && (
+            <div className="space-y-4">
+              <div className="text-sm text-muted-foreground">{selectedCV.full_name}</div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label>Date</Label>
+                  <Input type="date" value={interviewDate} onChange={(e) => setInterviewDate(e.target.value)} />
+                </div>
+                <div>
+                  <Label>Time</Label>
+                  <Input type="time" value={interviewTime} onChange={(e) => setInterviewTime(e.target.value)} />
+                </div>
+              </div>
+              <div>
+                <Label>Notes</Label>
+                <Textarea value={interviewNotes} onChange={(e) => setInterviewNotes(e.target.value)} placeholder="Interview notes" />
+              </div>
+              <Button onClick={async () => {
+                if (!selectedCV || !interviewDate || !interviewTime) {
+                  toast.error('Please select date and time');
+                  return;
+                }
+                const updatedStatus = selectedCV.record_source === 'hr_applications' ? 'approved' : 'under_review';
+                const { error } = await supabase.from(selectedCV.record_source).update({ status: updatedStatus, reviewed_at: new Date().toISOString(), reviewed_by: userId }).eq('id', selectedCV.id);
+                if (error) {
+                  toast.error('Failed to save interview schedule');
+                  return;
+                }
+                setCvEntries(prev => prev.map(cv => cv.id === selectedCV.id ? { ...cv, status: updatedStatus } : cv));
+                setScheduleOpen(false);
+                toast.success(`Interview scheduled for ${selectedCV.full_name}`);
+              }} className="w-full gap-2">
+                <Video className="h-4 w-4" /> Confirm Schedule
+              </Button>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

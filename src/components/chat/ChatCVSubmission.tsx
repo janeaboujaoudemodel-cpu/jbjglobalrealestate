@@ -7,6 +7,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { T } from '@/components/ui/T';
 import { validateEmail, validateE164Phone } from './types';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface ChatCVSubmissionProps {
   userInfo: {
@@ -34,6 +35,7 @@ const ChatCVSubmission = ({
   onSubmitSuccess,
   onBack 
 }: ChatCVSubmissionProps) => {
+  const { user } = useAuth();
   const [cvFile, setCvFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
@@ -88,6 +90,8 @@ const ChatCVSubmission = ({
       const fileName = `cv_${Date.now()}_${userInfo.firstName}_${userInfo.lastName}.${fileExt}`;
       const filePath = `cv-submissions/${fileName}`;
 
+      let uploadedBucket: 'documents' | 'public' = 'documents';
+
       const { error: uploadError } = await supabase.storage
         .from('documents')
         .upload(filePath, cvFile);
@@ -100,10 +104,11 @@ const ChatCVSubmission = ({
         if (publicUploadError) {
           throw new Error('Failed to upload CV. Please try again.');
         }
+        uploadedBucket = 'public';
       }
 
       const { data: urlData } = supabase.storage
-        .from('documents')
+        .from(uploadedBucket)
         .getPublicUrl(filePath);
 
       const cvUrl = urlData?.publicUrl || filePath;
@@ -123,6 +128,27 @@ const ChatCVSubmission = ({
       if (insertError) {
         console.error('CV submission error:', insertError);
         throw new Error('Failed to submit CV. Please try again.');
+      }
+
+      if (user?.id) {
+        await Promise.allSettled([
+          supabase.from('user_notifications').insert({
+            user_id: user.id,
+            type: 'cv_application',
+            title: 'CV received - Under review',
+            message: 'Your CV has been received. JBJ Global Real Estate HR team is reviewing your profile.',
+            is_read: false,
+            metadata: { status: 'under_review' },
+          }),
+          supabase.from('admin_tasks').insert({
+            user_id: user.id,
+            title: 'CV under review',
+            description: 'Your CV is currently under review by the HR team.',
+            category: 'cv_application',
+            status: 'pending',
+            priority: 'medium',
+          }),
+        ]);
       }
 
       setSubmitted(true);
