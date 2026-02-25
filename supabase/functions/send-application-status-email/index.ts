@@ -56,6 +56,18 @@ function getApplicationTypeLabel(type: ApplicationType): string {
   }
 }
 
+function getUserActionUrl(type: ApplicationType): string {
+  switch (type) {
+    case "listing":
+      return "/listing-portal/my-listings";
+    case "career":
+      return "/my-dashboard#notifications";
+    case "partnership":
+    default:
+      return "/my-account";
+  }
+}
+
 function buildEmailHtml(req: StatusEmailRequest): string {
   const statusColor = getStatusColor(req.newStatus);
   const typeLabel = getApplicationTypeLabel(req.applicationType);
@@ -208,12 +220,19 @@ const handler = async (req: Request): Promise<Response> => {
     // Create notification + task for user if userId provided
     if (body.userId) {
       // Insert into user_notifications (visible in bell dropdown)
+      const userActionUrl = getUserActionUrl(body.applicationType);
+
       await supabaseClient.from("user_notifications").insert({
         user_id: body.userId,
         type: body.applicationType,
         title: `${typeLabel}: ${body.statusLabel}`,
         message: body.adminMessage || `Your ${typeLabel.toLowerCase()} "${body.applicationTitle}" status has been updated to ${body.statusLabel}.`,
-        metadata: { application_id: body.applicationId, status: body.newStatus, action: body.newStatus },
+        metadata: {
+          application_id: body.applicationId,
+          status: body.newStatus,
+          action: body.newStatus,
+          action_url: userActionUrl,
+        },
         is_read: false,
       });
 
@@ -223,7 +242,7 @@ const handler = async (req: Request): Promise<Response> => {
         title: `${typeLabel}: ${body.statusLabel}`,
         body: body.adminMessage || `Your ${typeLabel.toLowerCase()} "${body.applicationTitle}" status has been updated to ${body.statusLabel}.`,
         notification_type: body.actionRequired ? "reminder" : "approval",
-        action_url: "/my-account",
+        action_url: userActionUrl,
       });
 
       // Create task if action is required

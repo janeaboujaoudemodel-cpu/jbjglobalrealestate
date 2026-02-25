@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { normalizeNotificationRoute } from "@/lib/notificationRouting";
 import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -26,6 +28,7 @@ interface NotificationsPanelProps {
 
 export function NotificationsPanel({ maxHeight = "350px", compact = false }: NotificationsPanelProps) {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -118,6 +121,17 @@ export function NotificationsPanel({ maxHeight = "350px", compact = false }: Not
     }
   };
 
+  const handleNotificationAction = (actionUrl: string) => {
+    const destination = normalizeNotificationRoute(actionUrl);
+
+    if (/^https?:\/\//i.test(destination)) {
+      window.open(destination, "_blank", "noopener,noreferrer");
+      return;
+    }
+
+    navigate(destination);
+  };
+
   if (isLoading) {
     return (
       <Card className="bg-card border-border">
@@ -203,11 +217,9 @@ export function NotificationsPanel({ maxHeight = "350px", compact = false }: Not
                           variant="ghost"
                           size="icon"
                           className="h-6 w-6"
-                          asChild
+                          onClick={() => handleNotificationAction(notification.action_url as string)}
                         >
-                          <a href={notification.action_url}>
-                            <ExternalLink className="h-3 w-3" />
-                          </a>
+                          <ExternalLink className="h-3 w-3" />
                         </Button>
                       )}
                       {!notification.is_read && (

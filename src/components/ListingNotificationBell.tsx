@@ -3,7 +3,7 @@ import { Bell, Headphones, CheckCircle, MessageSquare, ArrowRight } from 'lucide
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { useUserAlerts } from '@/hooks/useUserAlerts';
+import { resolveNotificationRoute } from '@/lib/notificationRouting';
 
 interface Notification {
   id: string;
@@ -29,7 +29,6 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
   const { user } = useAuth();
   const navigate = useNavigate();
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const { data: alertCounts } = useUserAlerts();
 
   useEffect(() => {
     if (!user) return;
@@ -114,16 +113,21 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
   };
 
   const handleNotifClick = (notif: Notification) => {
-    markAsRead(notif);
-    if (notif.type === 'support_ticket') {
-      navigate('/my-tickets');
-    } else if (notif.type === 'cv_application' || notif.metadata?.category === 'cv') {
-      navigate('/admin/hr?tab=cv-center');
-    } else if (notif.type === 'listing') {
-      navigate('/listing-portal/my-listings');
+    void markAsRead(notif);
+
+    const destination = resolveNotificationRoute({
+      type: notif.type,
+      metadata: notif.metadata,
+      title: notif.title,
+      message: notif.message,
+    });
+
+    if (/^https?:\/\//i.test(destination)) {
+      window.open(destination, '_blank', 'noopener,noreferrer');
     } else {
-      navigate('/my-dashboard#notifications');
+      navigate(destination);
     }
+
     onClose?.();
   };
 

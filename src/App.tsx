@@ -921,6 +921,7 @@ const App = () => (
                 <Route path="/it-department" element={<OwnerGuard><EmployeeManagementHub /></OwnerGuard>} />
                 <Route path="/employee-management" element={<OwnerGuard><EmployeeManagementHub /></OwnerGuard>} />
                 <Route path="/hr-dashboard" element={<OwnerGuard><HRDashboard /></OwnerGuard>} />
+                <Route path="/admin/hr" element={<Navigate to="/hr-dashboard?tab=cv-center" replace />} />
                 <Route path="/hr-hub" element={<Navigate to="/employee-management" replace />} />
                 <Route path="/interior-design-studio" element={<Navigate to="/interior-design-ai" replace />} />
                 <Route path="/projects" element={<Navigate to="/properties" replace />} />

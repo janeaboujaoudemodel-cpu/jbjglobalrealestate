@@ -15,6 +15,7 @@ interface AlertRequest {
     title: string;
     message: string;
     metadata?: Record<string, unknown>;
+    action_url?: string;
   };
   // Task fields
   task?: {
@@ -74,6 +75,11 @@ serve(async (req) => {
 
     // Insert notification
     if (body.notification) {
+      const notificationMetadata = {
+        ...(body.notification.metadata || {}),
+        ...(body.notification.action_url ? { action_url: body.notification.action_url } : {}),
+      };
+
       const { error: notifErr } = await serviceClient
         .from("user_notifications")
         .insert({
@@ -81,7 +87,7 @@ serve(async (req) => {
           type: body.notification.type,
           title: body.notification.title,
           message: body.notification.message,
-          metadata: body.notification.metadata || null,
+          metadata: Object.keys(notificationMetadata).length > 0 ? notificationMetadata : null,
           is_read: false,
         });
       results.notification = notifErr ? { error: notifErr.message } : { success: true };
