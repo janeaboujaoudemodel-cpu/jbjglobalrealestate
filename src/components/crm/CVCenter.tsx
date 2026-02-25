@@ -21,6 +21,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { format } from 'date-fns';
+import { maybeProxyStorageUrl } from '@/utils/downloadProxy';
 
 // Department categories with icons
 const DEPARTMENT_CATEGORIES = [
@@ -85,12 +86,19 @@ const CVCenter = ({ userId }: CVCenterProps) => {
   const [selectedCV, setSelectedCV] = useState<CVEntry | null>(null);
   const [cvPreviewOpen, setCvPreviewOpen] = useState(false);
   const [cvPreviewUrl, setCvPreviewUrl] = useState<string | null>(null);
-  const [cvDirectUrl, setCvDirectUrl] = useState<string | null>(null); // Raw signed URL for "open in new tab" / download
+  const [cvDirectUrl, setCvDirectUrl] = useState<string | null>(null); // Raw signed URL for open/download fallback
   const [cvPreviewLoading, setCvPreviewLoading] = useState(false);
+  const previewBlobUrlRef = useRef<string | null>(null);
   const [contactOpen, setContactOpen] = useState(false);
   const [adminMessageSubject, setAdminMessageSubject] = useState('');
   const [adminMessageBody, setAdminMessageBody] = useState('');
+  const [aiRewritePrompt, setAiRewritePrompt] = useState('');
+  const [isGeneratingDraft, setIsGeneratingDraft] = useState(false);
+  const [createTaskForUser, setCreateTaskForUser] = useState(false);
+  const [candidateTaskTitle, setCandidateTaskTitle] = useState('');
+  const [candidateTaskDescription, setCandidateTaskDescription] = useState('');
   const [sendingMessage, setSendingMessage] = useState(false);
+  const [creatingTask, setCreatingTask] = useState(false);
   const [scheduleOpen, setScheduleOpen] = useState(false);
   const [interviewDate, setInterviewDate] = useState('');
   const [interviewTime, setInterviewTime] = useState('');
@@ -101,6 +109,15 @@ const CVCenter = ({ userId }: CVCenterProps) => {
   const autoAnalyzeRef = useRef(false);
 
   useEffect(() => { fetchCVs(); }, []);
+
+  useEffect(() => {
+    return () => {
+      if (previewBlobUrlRef.current) {
+        URL.revokeObjectURL(previewBlobUrlRef.current);
+        previewBlobUrlRef.current = null;
+      }
+    };
+  }, []);
 
   const fetchCVs = async () => {
     setIsLoading(true);
@@ -174,14 +191,18 @@ const CVCenter = ({ userId }: CVCenterProps) => {
   // Auto-analyze unscored CVs after initial load
   useEffect(() => {
     if (isLoading || autoAnalyzeRef.current || cvEntries.length === 0) return;
-    const unscored = cvEntries.filter(cv => !cv.ai_ranking || cv.ai_ranking === 0);
-    if (unscored.length === 0) return;
+    const pendingAnalysis = cvEntries.filter((cv) => {
+      const hasNoScore = !cv.ai_ranking || cv.ai_ranking === 0;
+      const markedUnreadable = /unreadable|corrupt|malformed/i.test(cv.ai_summary || '') || /unreadable|corrupt|malformed/i.test(cv.flag_reason || '');
+      return hasNoScore || markedUnreadable;
+    });
+    if (pendingAnalysis.length === 0) return;
 
     autoAnalyzeRef.current = true;
     // Run in background without blocking UI
     (async () => {
       let completed = 0;
-      for (const cv of unscored) {
+      for (const cv of pendingAnalysis) {
         try {
           setAnalyzingIds(prev => new Set(prev).add(cv.id));
           const { data, error } = await supabase.functions.invoke('cv-ai-analyzer', {
@@ -413,11 +434,35 @@ const CVCenter = ({ userId }: CVCenterProps) => {
     setCvPreviewLoading(true);
     setCvDirectUrl(null);
     setCvPreviewUrl(null);
-    const { directUrl, previewUrl } = await resolvePreviewUrl(cv.cv_url);
-    setCvDirectUrl(directUrl);
-    setCvPreviewUrl(previewUrl);
-    setCvPreviewLoading(false);
-    if (!directUrl && !previewUrl) toast.error('Unable to load CV preview');
+
+    if (previewBlobUrlRef.current) {
+      URL.revokeObjectURL(previewBlobUrlRef.current);
+      previewBlobUrlRef.current = null;
+    }
+
+    try {
+      const { directUrl, previewUrl } = await resolvePreviewUrl(cv.cv_url);
+      setCvDirectUrl(directUrl);
+
+      if (previewUrl) {
+        const previewSource = maybeProxyStorageUrl(previewUrl, `CV-${cv.full_name.replace(/\s+/g, '-')}`);
+        const response = await fetch(previewSource);
+        if (!response.ok) throw new Error('Preview fetch failed');
+        const blob = await response.blob();
+        const objectUrl = URL.createObjectURL(blob);
+        previewBlobUrlRef.current = objectUrl;
+        setCvPreviewUrl(objectUrl);
+      } else {
+        setCvPreviewUrl(null);
+      }
+
+      if (!directUrl && !previewUrl) toast.error('Unable to load CV preview');
+    } catch (error) {
+      console.error('CV preview error:', error);
+      toast.error('Preview blocked by browser — try Open in new tab');
+    } finally {
+      setCvPreviewLoading(false);
+    }
   };
 
   const handleAnalyzeCV = useCallback(async (cv: CVEntry, forceReanalyze: boolean = false) => {
@@ -472,6 +517,105 @@ const CVCenter = ({ userId }: CVCenterProps) => {
     rec === 'Recommend' ? 'text-green-600 border-green-300 bg-green-50' :
     rec === 'Consider' ? 'text-amber-600 border-amber-300 bg-amber-50' :
     'text-red-600 border-red-300 bg-red-50';
+
+  const resetContactComposer = () => {
+    setAdminMessageSubject('');
+    setAdminMessageBody('');
+    setAiRewritePrompt('');
+    setCreateTaskForUser(false);
+    setCandidateTaskTitle('');
+    setCandidateTaskDescription('');
+    setCreatingTask(false);
+    setIsGeneratingDraft(false);
+  };
+
+  const handleGenerateAiDraft = async () => {
+    if (!selectedCV) return;
+
+    const prompt = aiRewritePrompt.trim() || adminMessageBody.trim();
+    if (!prompt) {
+      toast.error('Describe what you need first');
+      return;
+    }
+
+    setIsGeneratingDraft(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('ai-email-generator', {
+        body: {
+          emailType: 'follow-up',
+          context: {
+            recipientName: selectedCV.full_name,
+            language: selectedCV.preferred_language || 'English',
+            tone: 'professional',
+            purpose: 'Career application update',
+            additionalContext: `Candidate: ${selectedCV.full_name}, position: ${selectedCV.position_applied || 'General'}\nAdmin request: ${prompt}`,
+          },
+        },
+      });
+
+      if (error) throw error;
+
+      const generatedBody = [data?.greeting, data?.body, data?.callToAction, data?.closing, data?.signature]
+        .filter(Boolean)
+        .join('\n\n')
+        .trim();
+
+      setAdminMessageSubject(data?.subject || `Update on your application - ${selectedCV.full_name}`);
+      setAdminMessageBody(generatedBody || data?.body || '');
+
+      if (createTaskForUser) {
+        setCandidateTaskTitle((prev) => prev || `Follow up: ${selectedCV.position_applied || 'Application'}`);
+        setCandidateTaskDescription((prev) => prev || prompt);
+      }
+
+      toast.success('AI draft generated — review and approve');
+    } catch (err) {
+      console.error('AI draft generation failed:', err);
+      toast.error('Could not generate AI draft');
+    } finally {
+      setIsGeneratingDraft(false);
+    }
+  };
+
+  const handleCreateTaskForCandidate = async (cv: CVEntry) => {
+    if (!createTaskForUser) return;
+
+    if (!cv.user_id) {
+      toast.info('Task skipped: this candidate has no linked account yet');
+      return;
+    }
+
+    const taskTitle = candidateTaskTitle.trim() || `Action required: ${cv.position_applied || 'Career application'}`;
+    const taskDescription = candidateTaskDescription.trim() || adminMessageBody.trim() || 'Please review the latest message from HR.';
+
+    setCreatingTask(true);
+    const { error } = await supabase.functions.invoke('create-user-alert', {
+      body: {
+        task: {
+          user_id: cv.user_id,
+          title: taskTitle,
+          description: taskDescription,
+          category: 'cv_application',
+          priority: 'high',
+        },
+        notification: {
+          user_id: cv.user_id,
+          type: 'cv_application',
+          title: 'New HR Task',
+          message: taskTitle,
+          metadata: { cv_id: cv.id, source: 'cv_center' },
+        },
+      },
+    });
+
+    if (error) {
+      setCreatingTask(false);
+      throw error;
+    }
+
+    setCreatingTask(false);
+    toast.success('Task added for candidate');
+  };
 
   return (
     <div className="space-y-6">
@@ -715,22 +859,45 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                             <Button size="sm" onClick={() => { setSelectedCV(cv); setContactOpen(true); }} className="bg-gold hover:bg-gold-dark text-white font-bold px-4 py-2">
                               <Mail className="h-4 w-4 mr-1.5" /> Contact
                             </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => {
+                                setSelectedCV(cv);
+                                setCreateTaskForUser(true);
+                                setCandidateTaskTitle(`Follow up: ${cv.position_applied || 'Career application'}`);
+                                setCandidateTaskDescription(`Please review the latest update regarding your ${cv.position_applied || 'application'}.`);
+                                setContactOpen(true);
+                              }}
+                              className="text-gold border-gold/40 hover:bg-gold/10 font-semibold"
+                            >
+                              <Flag className="h-4 w-4 mr-1.5" /> Add Task
+                            </Button>
                             <div className="flex gap-1.5 mt-1 flex-wrap">
-                              {cv.status !== 'approved' && (
-                                <Button size="sm" onClick={() => handleUpdateStatus(cv.id, 'approved')} className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white font-bold">
-                                  <CheckCircle className="h-3.5 w-3.5 mr-1" /> Accept
-                                </Button>
-                              )}
-                              {cv.status !== 'pending' && (
-                                <Button size="sm" onClick={() => handleUpdateStatus(cv.id, 'pending')} className="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-bold">
-                                  <Clock className="h-3.5 w-3.5 mr-1" /> Pending
-                                </Button>
-                              )}
-                              {cv.status !== 'rejected' && (
-                                <Button size="sm" onClick={() => handleUpdateStatus(cv.id, 'rejected')} className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold">
-                                  <XCircle className="h-3.5 w-3.5 mr-1" /> Reject
-                                </Button>
-                              )}
+                              <Button
+                                size="sm"
+                                onClick={() => handleUpdateStatus(cv.id, 'approved')}
+                                disabled={cv.status === 'approved'}
+                                className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white font-bold disabled:opacity-60"
+                              >
+                                <CheckCircle className="h-3.5 w-3.5 mr-1" /> Accept
+                              </Button>
+                              <Button
+                                size="sm"
+                                onClick={() => handleUpdateStatus(cv.id, 'pending')}
+                                disabled={cv.status === 'pending'}
+                                className="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-bold disabled:opacity-60"
+                              >
+                                <Clock className="h-3.5 w-3.5 mr-1" /> Pending
+                              </Button>
+                              <Button
+                                size="sm"
+                                onClick={() => handleUpdateStatus(cv.id, 'rejected')}
+                                disabled={cv.status === 'rejected'}
+                                className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold disabled:opacity-60"
+                              >
+                                <XCircle className="h-3.5 w-3.5 mr-1" /> Reject
+                              </Button>
                             </div>
                           </div>
                         </div>
@@ -848,13 +1015,13 @@ const CVCenter = ({ userId }: CVCenterProps) => {
           </div>
           {cvDirectUrl && (
             <div className="flex gap-2 pt-2 border-t">
-              <Button variant="outline" className="gap-2" onClick={() => window.open(cvDirectUrl, '_blank')}>
+              <Button variant="outline" className="gap-2" onClick={() => window.open(cvPreviewUrl || maybeProxyStorageUrl(cvDirectUrl), '_blank')}>
                 <ExternalLink className="h-4 w-4" /> Open in new tab
               </Button>
               <Button variant="outline" className="gap-2" onClick={async () => {
                 try {
                   const filename = selectedCV ? `CV-${selectedCV.full_name.replace(/\s+/g, '-')}.pdf` : 'CV.pdf';
-                  const res = await fetch(cvDirectUrl);
+                  const res = await fetch(maybeProxyStorageUrl(cvDirectUrl, filename));
                   const blob = await res.blob();
                   const url = URL.createObjectURL(blob);
                   const a = document.createElement('a');
@@ -887,14 +1054,14 @@ const CVCenter = ({ userId }: CVCenterProps) => {
         </DialogContent>
       </Dialog>
 
-      {/* Contact Dialog - Full Compose & Send */}
+      {/* Contact Dialog - AI Rewrite + Approval + Send */}
       <Dialog open={contactOpen} onOpenChange={(open) => {
         setContactOpen(open);
-        if (!open) { setAdminMessageSubject(''); setAdminMessageBody(''); }
+        if (!open) resetContactComposer();
       }}>
-        <DialogContent className="max-w-lg" aria-describedby="contact-desc">
+        <DialogContent className="max-w-xl" aria-describedby="contact-desc">
           <DialogHeader><DialogTitle className="flex items-center gap-2"><Mail className="h-5 w-5 text-gold" /> Message Candidate</DialogTitle></DialogHeader>
-          <p id="contact-desc" className="sr-only">Send message to the selected candidate via email</p>
+          <p id="contact-desc" className="sr-only">Describe the message, let AI rewrite it, approve, then send automatically.</p>
           {selectedCV && (
             <div className="space-y-4">
               <div className="flex items-center gap-3 p-3 rounded-lg bg-zinc-50 border">
@@ -908,43 +1075,101 @@ const CVCenter = ({ userId }: CVCenterProps) => {
               </div>
 
               <div>
+                <Label className="text-sm font-medium text-crm-text">Describe what you need (AI will rewrite)</Label>
+                <Textarea
+                  value={aiRewritePrompt}
+                  onChange={(e) => setAiRewritePrompt(e.target.value)}
+                  placeholder="Example: Tell the candidate we need an updated CV and available interview slots this week"
+                  className="mt-1 min-h-[90px]"
+                  rows={4}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="mt-2 gap-2 border-gold/40 text-gold hover:bg-gold/10"
+                  onClick={handleGenerateAiDraft}
+                  disabled={isGeneratingDraft}
+                >
+                  {isGeneratingDraft ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+                  AI Rewrite Draft
+                </Button>
+              </div>
+
+              <div>
                 <Label className="text-sm font-medium text-crm-text">Subject</Label>
                 <Input
                   value={adminMessageSubject}
                   onChange={(e) => setAdminMessageSubject(e.target.value)}
-                  placeholder="e.g. Your Application at JBJ Global Real Estate"
+                  placeholder="e.g. Update on Your Application"
                   className="mt-1"
                 />
               </div>
 
               <div>
-                <Label className="text-sm font-medium text-crm-text">Message</Label>
+                <Label className="text-sm font-medium text-crm-text">Approved Email Body</Label>
                 <Textarea
                   value={adminMessageBody}
                   onChange={(e) => setAdminMessageBody(e.target.value)}
-                  placeholder="Write your message to the candidate..."
-                  className="mt-1 min-h-[120px]"
-                  rows={5}
+                  placeholder="Review and edit the final message before sending..."
+                  className="mt-1 min-h-[140px]"
+                  rows={7}
                 />
               </div>
 
+              <div className="rounded-lg border p-3 space-y-3">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-sm font-medium text-crm-text">Add task for candidate</p>
+                    <p className="text-xs text-crm-text-muted">Creates a pending task in the candidate account.</p>
+                  </div>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant={createTaskForUser ? 'default' : 'outline'}
+                    onClick={() => setCreateTaskForUser((v) => !v)}
+                    className={createTaskForUser ? 'bg-gold text-black hover:bg-gold/90' : 'border-gold/40 text-gold hover:bg-gold/10'}
+                  >
+                    {createTaskForUser ? 'Task ON' : 'Enable Task'}
+                  </Button>
+                </div>
+
+                {createTaskForUser && (
+                  <div className="space-y-2">
+                    <Input
+                      value={candidateTaskTitle}
+                      onChange={(e) => setCandidateTaskTitle(e.target.value)}
+                      placeholder="Task title"
+                    />
+                    <Textarea
+                      value={candidateTaskDescription}
+                      onChange={(e) => setCandidateTaskDescription(e.target.value)}
+                      placeholder="Task instructions for the candidate"
+                      rows={3}
+                    />
+                  </div>
+                )}
+              </div>
+
               <p className="text-xs text-crm-text-muted">
-                ⭐ A review & survey link will be automatically included in the email.
+                ⭐ Feedback links are appended automatically to the sent email.
               </p>
 
               <div className="flex gap-2">
                 <Button
                   className="flex-1 bg-gold hover:bg-gold/90 text-black font-bold"
-                  disabled={!adminMessageSubject.trim() || !adminMessageBody.trim() || sendingMessage}
+                  disabled={!adminMessageSubject.trim() || !adminMessageBody.trim() || sendingMessage || isGeneratingDraft || creatingTask}
                   onClick={async () => {
+                    if (!selectedCV) return;
                     setSendingMessage(true);
                     try {
+                      await handleCreateTaskForCandidate(selectedCV);
+
                       const { error } = await supabase.functions.invoke('send-admin-message', {
                         body: {
                           recipientEmail: selectedCV.email,
                           recipientName: selectedCV.full_name,
-                          subject: adminMessageSubject,
-                          message: adminMessageBody,
+                          subject: adminMessageSubject.trim(),
+                          message: adminMessageBody.trim(),
                           serviceCategory: 'career',
                           referenceId: selectedCV.id,
                           referenceLabel: selectedCV.position_applied || 'Career Application',
@@ -952,20 +1177,21 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                         },
                       });
                       if (error) throw error;
-                      toast.success(`Message sent to ${selectedCV.full_name}`);
+
+                      toast.success(`Email approved and sent to ${selectedCV.full_name}`);
                       setContactOpen(false);
-                      setAdminMessageSubject('');
-                      setAdminMessageBody('');
+                      resetContactComposer();
                     } catch (err: any) {
                       console.error('Send message error:', err);
-                      toast.error('Failed to send message');
+                      toast.error(err?.message || 'Failed to send message');
                     } finally {
                       setSendingMessage(false);
+                      setCreatingTask(false);
                     }
                   }}
                 >
-                  {sendingMessage ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Mail className="h-4 w-4 mr-2" />}
-                  Send Email
+                  {(sendingMessage || creatingTask) ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Mail className="h-4 w-4 mr-2" />}
+                  Approve & Send Email
                 </Button>
                 {selectedCV.phone_e164 && (
                   <Button size="icon" variant="outline" title="WhatsApp" onClick={() => window.open(`https://wa.me/${(selectedCV.phone_e164 || '').replace(/[^0-9]/g, '')}`, '_blank')}>

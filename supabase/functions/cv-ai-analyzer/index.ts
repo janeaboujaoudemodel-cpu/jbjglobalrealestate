@@ -37,7 +37,8 @@ RULES:
 - THOROUGHLY read the CV text content provided. Extract ALL languages mentioned ANYWHERE in the CV — including skills sections, personal info, language proficiency sections, education sections, or even just mentioned in passing (e.g. "translated documents to French").
 - Count ALL languages listed, regardless of proficiency level (native, fluent, intermediate, basic, conversational, beginner). Include ALL of them in the "languages" array.
 - If the candidate lists a language section, copy every single language from it — do NOT skip any.
-- If CV text is provided, USE IT as the primary data source — it contains the real information. NEVER say "unreadable" or "content is unreadable" if CV text is provided.
+- If CV text is provided, USE IT as the primary data source — it contains the real information.
+- NEVER use words like "unreadable", "corrupted", or "malformed" in summary/flags; if extraction is limited, state that details are limited and manual review is required.
 - Infer reasonable estimates from context (email domain, nationality → likely languages, location → market familiarity).
 - Identify which ROLE the candidate is best suited for.
 - List SPECIFIC missing items the candidate should provide.
@@ -86,7 +87,7 @@ CANDIDATE APPLICATION:
     info += `\n\n--- CV DOCUMENT CONTENT (extracted text) ---\n${cvText.slice(0, 12000)}\n--- END CV CONTENT ---`;
     info += `\n\nIMPORTANT: The CV text above is the PRIMARY source. Extract ALL languages, skills, and experience from it. Do NOT say "unreadable" if text is provided above.`;
   } else {
-    info += `\n\nNOTE: No CV text could be extracted. Score based on available application data only.`;
+    info += `\n\nNOTE: CV text extraction was limited. Provide a provisional assessment using available application data, request manual HR review, and avoid terms like unreadable/corrupted.`;
   }
 
   return info;
@@ -475,6 +476,17 @@ async function analyzeApplication(
   let analysis;
   try {
     analysis = JSON.parse(rawContent);
+
+    const cleanUnreadable = (value: unknown, fallback: string | null) => {
+      if (typeof value !== "string") return fallback;
+      if (/unreadable|corrupt|malformed/i.test(value)) {
+        return "CV details are limited from automated extraction; manual HR review is recommended.";
+      }
+      return value;
+    };
+
+    analysis.ai_summary = cleanUnreadable(analysis.ai_summary, "Analysis completed.");
+    analysis.flag_reason = cleanUnreadable(analysis.flag_reason, null);
   } catch {
     console.error("Failed to parse AI response:", rawContent);
     return { success: false, error: "Failed to parse AI analysis" };
