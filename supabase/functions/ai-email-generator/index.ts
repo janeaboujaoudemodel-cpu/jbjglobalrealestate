@@ -96,9 +96,9 @@ serve(async (req) => {
 
     const templateDesc = emailTemplates[sanitized.emailType] || sanitized.emailType;
 
-    const systemPrompt = `You are a professional real estate email writer for JBJ Global Real Estate in Dubai.
-Write polished, engaging emails that maintain professionalism while building client relationships.
-Use appropriate greetings and closings. Be concise but warm.`;
+    const systemPrompt = `You are an HR professional at JBJ Global Real Estate in Dubai.
+Write polished, engaging HR emails. Always sign as "HR Department" (never use personal names or CEO title).
+Always mention the specific position name the candidate applied for. Be concise but warm.`;
 
     const userPrompt = `Generate a ${templateDesc} email with these details:
 
@@ -117,7 +117,7 @@ Provide the email in this JSON format:
   "body": "Main email content with proper paragraphs",
   "callToAction": "Clear call to action",
   "closing": "Professional closing",
-  "signature": "Jane Bou Jaoude\\nFounder & CEO\\nJBJ Global Real Estate\\n+971 56 591 1000\\nContact@JBJ.ae",
+  "signature": "HR Department\\nJBJ Global Real Estate\\nDubai, UAE\\nContact@JBJ.ae",
   "tips": ["Personalization tip 1", "Follow-up tip"],
   "alternativeSubjects": ["Subject option 2", "Subject option 3"]
 }`;
