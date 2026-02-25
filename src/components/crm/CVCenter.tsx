@@ -191,24 +191,30 @@ const CVCenter = ({ userId }: CVCenterProps) => {
   // Auto-analyze unscored CVs after initial load
   useEffect(() => {
     if (isLoading || autoAnalyzeRef.current || cvEntries.length === 0) return;
-    const pendingAnalysis = cvEntries.filter((cv) => {
-      const hasNoScore = !cv.ai_ranking || cv.ai_ranking === 0;
-      const markedUnreadable = /unreadable|corrupt|malformed/i.test(cv.ai_summary || '') || /unreadable|corrupt|malformed/i.test(cv.flag_reason || '');
-      return hasNoScore || markedUnreadable;
-    });
+    const pendingAnalysis = cvEntries
+      .map((cv) => {
+        const hasNoScore = !cv.ai_ranking || cv.ai_ranking === 0;
+        const markedUnreadable =
+          /unreadable|corrupt|malformed/i.test(cv.ai_summary || '') ||
+          /unreadable|corrupt|malformed/i.test(cv.flag_reason || '');
+
+        return { cv, markedUnreadable, shouldAnalyze: hasNoScore || markedUnreadable };
+      })
+      .filter((entry) => entry.shouldAnalyze);
+
     if (pendingAnalysis.length === 0) return;
 
     autoAnalyzeRef.current = true;
     // Run in background without blocking UI
     (async () => {
       let completed = 0;
-      for (const cv of pendingAnalysis) {
+      for (const { cv, markedUnreadable } of pendingAnalysis) {
         try {
           setAnalyzingIds(prev => new Set(prev).add(cv.id));
           const { data, error } = await supabase.functions.invoke('cv-ai-analyzer', {
-            body: { applicationId: cv.id, source: cv.record_source },
+            body: { applicationId: cv.id, source: cv.record_source, forceReanalyze: markedUnreadable },
           });
-          if (!error && data?.success && data.analysis && !data.analysis.already_analyzed) {
+          if (!error && data?.success && data.analysis) {
             const a = data.analysis;
             setCvEntries(prev => prev.map(entry =>
               entry.id === cv.id ? {
@@ -222,7 +228,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                 flag_reason: a.flag_reason ?? entry.flag_reason,
               } : entry
             ));
-            completed++;
+            if (!a.already_analyzed || markedUnreadable) completed++;
           }
         } catch (err) {
           console.error(`Auto-analyze failed for ${cv.full_name}:`, err);
@@ -603,7 +609,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
           type: 'cv_application',
           title: 'New HR Task',
           message: taskTitle,
-          metadata: { cv_id: cv.id, source: 'cv_center' },
+          metadata: { cv_id: cv.id, source: 'cv_center', action_url: '/my-account#tasks' },
         },
       },
     });
@@ -738,6 +744,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                   const isAnalyzed = cv.ai_ranking > 0;
                   const isAnalyzing = analyzingIds.has(cv.id);
                   const isExpanded = expandedCards.has(cv.id);
+                  const hasUnreadableSummary = /unreadable|corrupt|malformed/i.test(cv.ai_summary || '');
 
                   return (
                     <Card key={cv.id} className="bg-gradient-to-r from-zinc-50 to-white border border-crm-border hover:border-gold/50 hover:shadow-md transition-all">
@@ -802,10 +809,17 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                               </div>
 
                               {/* AI Summary - compact */}
-                              {cv.ai_summary && (
+                              {cv.ai_summary && !hasUnreadableSummary && (
                                 <p className="text-sm text-crm-text bg-amber-50 border border-amber-200 rounded-md px-3 py-2 mb-2">
                                   <Sparkles className="h-3.5 w-3.5 inline mr-1 text-amber-500" />
                                   {cv.ai_summary}
+                                </p>
+                              )}
+
+                              {hasUnreadableSummary && (
+                                <p className="text-sm text-crm-text bg-zinc-50 border border-zinc-200 rounded-md px-3 py-2 mb-2">
+                                  <Sparkles className="h-3.5 w-3.5 inline mr-1 text-zinc-500" />
+                                  AI summary is being regenerated for better readability.
                                 </p>
                               )}
 

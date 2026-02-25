@@ -302,7 +302,7 @@ serve(async (req) => {
                      emailStatus === 'rejected' ? 'Thank you for applying. After review, we\'ve decided to pursue other candidates at this time.' :
                      'Your CV is currently being reviewed by our HR team. You\'ll be notified once a decision is made.',
             is_read: false,
-            metadata: { status: emailStatus, category: 'cv' },
+            metadata: { status: emailStatus, category: 'cv', action_url: '/my-dashboard#notifications' },
           });
         }
 
@@ -355,7 +355,7 @@ serve(async (req) => {
         title: notifTitle,
         message: notifMessage,
         is_read: false,
-        metadata: { status: body.status, category: 'cv' },
+        metadata: { status: body.status, category: 'cv', action_url: '/my-dashboard#notifications' },
       });
     }
 

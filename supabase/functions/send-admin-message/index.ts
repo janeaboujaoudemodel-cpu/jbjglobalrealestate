@@ -173,7 +173,7 @@ const handler = async (req: Request): Promise<Response> => {
         type: body.serviceCategory || "general",
         title: body.subject,
         message: body.message,
-        metadata: { reference_id: body.referenceId, service: body.serviceCategory },
+        metadata: { reference_id: body.referenceId, service: body.serviceCategory, action_url: "/my-account" },
         is_read: false,
       }).catch(e => console.error("Notification insert error:", e));
 
