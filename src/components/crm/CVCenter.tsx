@@ -280,25 +280,56 @@ const CVCenter = ({ userId }: CVCenterProps) => {
   const resolvePreviewUrl = async (cvUrl: string | null) => {
     if (!cvUrl) return null;
 
-    // Helper: wrap any document URL in Google Docs Viewer for reliable iframe preview
-    const wrapForPreview = (url: string, filename: string) => {
-      // Google Docs Viewer handles PDF, DOC, DOCX, ODT reliably in iframes
-      if (/\.(pdf|docx?|odt)$/i.test(filename)) {
-        return `https://docs.google.com/gview?url=${encodeURIComponent(url)}&embedded=true`;
-      }
-      return url;
-    };
-
+    // For full URLs (already public), wrap in Google Docs Viewer for reliable preview
     if (/^https?:\/\//i.test(cvUrl)) {
-      return wrapForPreview(cvUrl, cvUrl);
+      if (/\.(pdf|docx?|odt)$/i.test(cvUrl)) {
+        return `https://docs.google.com/gview?url=${encodeURIComponent(cvUrl)}&embedded=true`;
+      }
+      return cvUrl;
     }
 
     const cleanPath = cvUrl.replace(/^\/+/, '');
-    const buckets = ['hr-documents', 'documents', 'public'];
-    for (const bucket of buckets) {
-      const { data, error } = await supabase.storage.from(bucket).createSignedUrl(cleanPath, 60 * 60);
-      if (!error && data?.signedUrl) {
-        return wrapForPreview(data.signedUrl, cleanPath);
+    
+    // Strategy per bucket:
+    // - Public buckets: use public URL + Google Docs Viewer (Google can fetch it)
+    // - Private buckets: use signed URL directly for PDFs (browser renders natively),
+    //   or use public URL fallback + Google Docs Viewer for DOC/DOCX
+    const isDocFile = /\.(docx?|odt)$/i.test(cleanPath);
+
+    // Try public buckets first (Google Docs Viewer works with public URLs)
+    for (const bucket of ['documents', 'public']) {
+      const { data: pubData } = supabase.storage.from(bucket).getPublicUrl(cleanPath);
+      if (pubData?.publicUrl) {
+        // Verify the file exists by trying a HEAD request
+        try {
+          const resp = await fetch(pubData.publicUrl, { method: 'HEAD' });
+          if (resp.ok) {
+            return `https://docs.google.com/gview?url=${encodeURIComponent(pubData.publicUrl)}&embedded=true`;
+          }
+        } catch { /* file not in this bucket */ }
+      }
+    }
+
+    // Try hr-documents (private bucket)
+    const { data, error } = await supabase.storage.from('hr-documents').createSignedUrl(cleanPath, 60 * 60);
+    if (!error && data?.signedUrl) {
+      if (isDocFile) {
+        // DOC/DOCX: Google Docs Viewer needs a public URL, but signed URLs work too
+        // (Google can follow the redirect from the signed URL)
+        return `https://docs.google.com/gview?url=${encodeURIComponent(data.signedUrl)}&embedded=true`;
+      }
+      // PDF: use signed URL directly — browsers render PDFs natively in iframes
+      return data.signedUrl;
+    }
+
+    // Final fallback: try all buckets with signed URLs
+    for (const bucket of ['hr-documents', 'documents', 'public']) {
+      const { data: fallback, error: fbErr } = await supabase.storage.from(bucket).createSignedUrl(cleanPath, 60 * 60);
+      if (!fbErr && fallback?.signedUrl) {
+        if (isDocFile) {
+          return `https://docs.google.com/gview?url=${encodeURIComponent(fallback.signedUrl)}&embedded=true`;
+        }
+        return fallback.signedUrl;
       }
     }
     return null;
