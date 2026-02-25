@@ -32,11 +32,13 @@ import {
   Heart,
   Folder,
   Settings,
+  GraduationCap,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { Link } from 'react-router-dom';
 import { useCRMActionLog } from '@/hooks/useCRMActionLog';
 import CVCenter from './CVCenter';
+import TrainingManagement from './TrainingManagement';
 
 // Import team members from centralized config
 import { 
@@ -631,6 +633,16 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
             <p className="text-xs text-crm-text-muted font-medium">CV Center</p>
           </CardContent>
         </Card>
+        <Card 
+          className={`bg-white border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'training' ? 'border-purple-500 ring-2 ring-purple-200' : 'border-crm-border'}`}
+          onClick={() => setActiveTab('training')}
+        >
+          <CardContent className="p-4 text-center">
+            <GraduationCap className="h-5 w-5 text-purple-500 mx-auto mb-2" />
+            <p className="text-xl font-bold text-crm-text">Training</p>
+            <p className="text-xs text-crm-text-muted font-medium">Programs</p>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Main Content - Tabs hidden, controlled by cards above */}
@@ -638,7 +650,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
         {/* TabsList removed - using top cards for filtering instead */}
 
         {/* Search Bar - WHITE BACKGROUND */}
-        {activeTab !== 'cv' && (
+        {activeTab !== 'cv' && activeTab !== 'training' && (
           <div className="mt-4 mb-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-crm-text-muted" />
@@ -655,6 +667,11 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
         {/* CV Center Tab Content */}
         <TabsContent value="cv" className="mt-4">
           <CVCenter userId={userId} />
+        </TabsContent>
+
+        {/* Training Management Tab Content */}
+        <TabsContent value="training" className="mt-4">
+          <TrainingManagement />
         </TabsContent>
 
         {/* Employee List Tab Content - Grouped by Department */}
