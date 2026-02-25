@@ -82,6 +82,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
   const [selectedCV, setSelectedCV] = useState<CVEntry | null>(null);
   const [cvPreviewOpen, setCvPreviewOpen] = useState(false);
   const [cvPreviewUrl, setCvPreviewUrl] = useState<string | null>(null);
+  const [cvDirectUrl, setCvDirectUrl] = useState<string | null>(null); // Raw signed URL for "open in new tab" / download
   const [cvPreviewLoading, setCvPreviewLoading] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
   const [scheduleOpen, setScheduleOpen] = useState(false);
@@ -277,62 +278,73 @@ const CVCenter = ({ userId }: CVCenterProps) => {
     flagged: cvEntries.filter(cv => cv.flag_reason !== null).length,
   }), [cvEntries]);
 
-  const resolvePreviewUrl = async (cvUrl: string | null) => {
-    if (!cvUrl) return null;
+  /**
+   * Resolves a cv_url (either a storage path or full URL) into:
+   * - directUrl: raw signed/public URL for download / open-in-new-tab
+   * - previewUrl: URL suitable for iframe embedding (Google Docs Viewer for DOC/DOCX, direct for PDF)
+   */
+  const resolvePreviewUrl = async (cvUrl: string | null): Promise<{ directUrl: string | null; previewUrl: string | null }> => {
+    if (!cvUrl) return { directUrl: null, previewUrl: null };
 
-    // For full URLs (already public), wrap in Google Docs Viewer for reliable preview
-    if (/^https?:\/\//i.test(cvUrl)) {
-      if (/\.(pdf|docx?|odt)$/i.test(cvUrl)) {
-        return `https://docs.google.com/gview?url=${encodeURIComponent(cvUrl)}&embedded=true`;
-      }
-      return cvUrl;
+    let directUrl: string | null = null;
+    let storagePath: string | null = null;
+    let sourceBucket: string | null = null;
+
+    // Case 1: Full public storage URL — extract bucket + path, generate fresh signed URL
+    const publicMatch = cvUrl.match(/\/storage\/v1\/object\/public\/([^/]+)\/(.+)$/);
+    if (publicMatch) {
+      sourceBucket = publicMatch[1];
+      storagePath = publicMatch[2];
+    }
+    // Case 2: Full signed URL (already expired or about to) — extract bucket + path
+    const signedMatch = !publicMatch && cvUrl.match(/\/storage\/v1\/object\/sign\/([^/]+)\/(.+?)(\?|$)/);
+    if (signedMatch) {
+      sourceBucket = signedMatch[1];
+      storagePath = signedMatch[2];
+    }
+    // Case 3: Path only (e.g., "userId/cv-timestamp.doc") — default to hr-documents bucket
+    if (!publicMatch && !signedMatch && !/^https?:\/\//i.test(cvUrl)) {
+      storagePath = cvUrl.replace(/^\/+/, '');
+      sourceBucket = 'hr-documents'; // JoinApplication uploads here
+    }
+    // Case 4: Full external URL (not Supabase storage)
+    if (!storagePath && /^https?:\/\//i.test(cvUrl)) {
+      directUrl = cvUrl;
     }
 
-    const cleanPath = cvUrl.replace(/^\/+/, '');
-    
-    // Strategy per bucket:
-    // - Public buckets: use public URL + Google Docs Viewer (Google can fetch it)
-    // - Private buckets: use signed URL directly for PDFs (browser renders natively),
-    //   or use public URL fallback + Google Docs Viewer for DOC/DOCX
-    const isDocFile = /\.(docx?|odt)$/i.test(cleanPath);
+    // Generate a fresh signed URL if we have bucket + path
+    if (sourceBucket && storagePath) {
+      const { data, error } = await supabase.storage
+        .from(sourceBucket)
+        .createSignedUrl(storagePath, 3600);
 
-    // Try public buckets first (Google Docs Viewer works with public URLs)
-    for (const bucket of ['documents', 'public']) {
-      const { data: pubData } = supabase.storage.from(bucket).getPublicUrl(cleanPath);
-      if (pubData?.publicUrl) {
-        // Verify the file exists by trying a HEAD request
-        try {
-          const resp = await fetch(pubData.publicUrl, { method: 'HEAD' });
-          if (resp.ok) {
-            return `https://docs.google.com/gview?url=${encodeURIComponent(pubData.publicUrl)}&embedded=true`;
+      if (!error && data?.signedUrl) {
+        directUrl = data.signedUrl;
+      } else {
+        // Fallback: try other common buckets
+        for (const fallbackBucket of ['hr-documents', 'documents', 'public']) {
+          if (fallbackBucket === sourceBucket) continue;
+          const { data: fb, error: fbErr } = await supabase.storage
+            .from(fallbackBucket)
+            .createSignedUrl(storagePath, 3600);
+          if (!fbErr && fb?.signedUrl) {
+            directUrl = fb.signedUrl;
+            break;
           }
-        } catch { /* file not in this bucket */ }
-      }
-    }
-
-    // Try hr-documents (private bucket)
-    const { data, error } = await supabase.storage.from('hr-documents').createSignedUrl(cleanPath, 60 * 60);
-    if (!error && data?.signedUrl) {
-      if (isDocFile) {
-        // DOC/DOCX: Google Docs Viewer needs a public URL, but signed URLs work too
-        // (Google can follow the redirect from the signed URL)
-        return `https://docs.google.com/gview?url=${encodeURIComponent(data.signedUrl)}&embedded=true`;
-      }
-      // PDF: use signed URL directly — browsers render PDFs natively in iframes
-      return data.signedUrl;
-    }
-
-    // Final fallback: try all buckets with signed URLs
-    for (const bucket of ['hr-documents', 'documents', 'public']) {
-      const { data: fallback, error: fbErr } = await supabase.storage.from(bucket).createSignedUrl(cleanPath, 60 * 60);
-      if (!fbErr && fallback?.signedUrl) {
-        if (isDocFile) {
-          return `https://docs.google.com/gview?url=${encodeURIComponent(fallback.signedUrl)}&embedded=true`;
         }
-        return fallback.signedUrl;
       }
     }
-    return null;
+
+    if (!directUrl) return { directUrl: null, previewUrl: null };
+
+    // For preview: PDFs render natively in iframes, DOC/DOCX need Google Docs Viewer
+    const fileName = storagePath || cvUrl;
+    const isDocFile = /\.(docx?|odt)$/i.test(fileName);
+    const previewUrl = isDocFile
+      ? `https://docs.google.com/gview?url=${encodeURIComponent(directUrl)}&embedded=true`
+      : directUrl;
+
+    return { directUrl, previewUrl };
   };
 
   const handleUpdateStatus = async (cvId: string, newStatus: 'pending' | 'approved' | 'rejected') => {
@@ -370,10 +382,13 @@ const CVCenter = ({ userId }: CVCenterProps) => {
     setSelectedCV(cv);
     setCvPreviewOpen(true);
     setCvPreviewLoading(true);
-    const resolved = await resolvePreviewUrl(cv.cv_url);
-    setCvPreviewUrl(resolved);
+    setCvDirectUrl(null);
+    setCvPreviewUrl(null);
+    const { directUrl, previewUrl } = await resolvePreviewUrl(cv.cv_url);
+    setCvDirectUrl(directUrl);
+    setCvPreviewUrl(previewUrl);
     setCvPreviewLoading(false);
-    if (!resolved) toast.error('Unable to load CV preview');
+    if (!previewUrl) toast.error('Unable to load CV preview');
   };
 
   const handleAnalyzeCV = useCallback(async (cv: CVEntry) => {
@@ -751,11 +766,11 @@ const CVCenter = ({ userId }: CVCenterProps) => {
         </CardContent>
       </Card>
 
-      {/* CV Preview Dialog */}
       <Dialog open={cvPreviewOpen} onOpenChange={setCvPreviewOpen}>
-        <DialogContent className="max-w-6xl h-[85vh]">
+        <DialogContent className="max-w-6xl h-[85vh]" aria-describedby="cv-preview-desc">
           <DialogHeader>
             <DialogTitle>CV Preview {selectedCV ? `· ${selectedCV.full_name}` : ''}</DialogTitle>
+            <p id="cv-preview-desc" className="sr-only">Preview of the candidate's CV document</p>
           </DialogHeader>
           <div className="h-full">
             {cvPreviewLoading ? (
@@ -766,11 +781,16 @@ const CVCenter = ({ userId }: CVCenterProps) => {
               <div className="h-full flex items-center justify-center text-sm text-muted-foreground">CV preview unavailable</div>
             )}
           </div>
-          {cvPreviewUrl && (
+          {cvDirectUrl && (
             <div className="flex gap-2">
-              <Button variant="outline" className="gap-2" onClick={() => window.open(cvPreviewUrl, '_blank')}>
+              <Button variant="outline" className="gap-2" onClick={() => window.open(cvDirectUrl, '_blank')}>
                 <ExternalLink className="h-4 w-4" /> Open in new tab
               </Button>
+              <a href={cvDirectUrl} download={selectedCV ? `CV-${selectedCV.full_name.replace(/\s+/g, '-')}` : 'CV'}>
+                <Button variant="outline" className="gap-2">
+                  <Download className="h-4 w-4" /> Download
+                </Button>
+              </a>
             </div>
           )}
         </DialogContent>
@@ -778,8 +798,9 @@ const CVCenter = ({ userId }: CVCenterProps) => {
 
       {/* Contact Dialog */}
       <Dialog open={contactOpen} onOpenChange={setContactOpen}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="max-w-lg" aria-describedby="contact-desc">
           <DialogHeader><DialogTitle>Contact Candidate</DialogTitle></DialogHeader>
+          <p id="contact-desc" className="sr-only">Options to contact the selected candidate</p>
           {selectedCV && (
             <div className="space-y-4">
               <div className="text-sm text-muted-foreground">{selectedCV.full_name}</div>
@@ -808,8 +829,9 @@ const CVCenter = ({ userId }: CVCenterProps) => {
 
       {/* Schedule Dialog */}
       <Dialog open={scheduleOpen} onOpenChange={setScheduleOpen}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="max-w-lg" aria-describedby="schedule-desc">
           <DialogHeader><DialogTitle>Schedule Interview</DialogTitle></DialogHeader>
+          <p id="schedule-desc" className="sr-only">Schedule an interview with the selected candidate</p>
           {selectedCV && (
             <div className="space-y-4">
               <div className="text-sm text-muted-foreground">{selectedCV.full_name}</div>
