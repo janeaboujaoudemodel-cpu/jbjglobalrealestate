@@ -283,26 +283,50 @@ export const GlobalVisitorTracking = () => {
     const sessionStartTime = parseInt(sessionStorage.getItem('session_start_time') || Date.now().toString());
     const totalTimeSpent = Math.floor((Date.now() - sessionStartTime) / 1000);
 
-    // Update new user_sessions
-    const data = JSON.stringify({
-      ended_at: new Date().toISOString(),
-      duration_seconds: totalTimeSpent,
-    });
+    // Update user_sessions via sendBeacon with proper auth headers
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
-    // sendBeacon for reliability on page close
-    if (navigator.sendBeacon) {
-      const url = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/user_sessions?session_id=eq.${encodeURIComponent(sessionId)}`;
-      navigator.sendBeacon(url, new Blob([data], { type: 'application/json' }));
+    if (navigator.sendBeacon && supabaseUrl && supabaseKey) {
+      const url = `${supabaseUrl}/rest/v1/user_sessions?session_id=eq.${encodeURIComponent(sessionId)}`;
+      const body = JSON.stringify({
+        ended_at: new Date().toISOString(),
+        duration_seconds: totalTimeSpent,
+      });
+      // sendBeacon doesn't support custom headers, so use fetch with keepalive instead
+      try {
+        fetch(url, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': supabaseKey,
+            'Authorization': `Bearer ${supabaseKey}`,
+            'Prefer': 'return=minimal',
+          },
+          body,
+          keepalive: true,
+        });
+      } catch { /* silent */ }
     }
 
     // Legacy update
-    void (async () => {
-      try {
-        await supabase.from('visitor_sessions')
-          .update({ total_time_spent: totalTimeSpent, last_activity_at: new Date().toISOString(), scroll_depth_max: scrollDepth.current })
-          .eq('session_id', sessionId);
-      } catch { /* silent */ }
-    })();
+    try {
+      fetch(`${supabaseUrl}/rest/v1/visitor_sessions?session_id=eq.${encodeURIComponent(sessionId)}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': supabaseKey || '',
+          'Authorization': `Bearer ${supabaseKey || ''}`,
+          'Prefer': 'return=minimal',
+        },
+        body: JSON.stringify({
+          total_time_spent: totalTimeSpent,
+          last_activity_at: new Date().toISOString(),
+          scroll_depth_max: scrollDepth.current,
+        }),
+        keepalive: true,
+      });
+    } catch { /* silent */ }
   }, []);
 
   // ── Track visibility change (mobile background) ──
@@ -313,9 +337,24 @@ export const GlobalVisitorTracking = () => {
       const sessionStartTime = parseInt(sessionStorage.getItem('session_start_time') || Date.now().toString());
       const totalTimeSpent = Math.floor((Date.now() - sessionStartTime) / 1000);
       
-      void supabase.from('user_sessions')
-        .update({ duration_seconds: totalTimeSpent } as any)
-        .eq('session_id', sessionId);
+      // Use keepalive fetch for reliability when tab is hidden
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+      if (supabaseUrl && supabaseKey) {
+        try {
+          fetch(`${supabaseUrl}/rest/v1/user_sessions?session_id=eq.${encodeURIComponent(sessionId)}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': supabaseKey,
+              'Authorization': `Bearer ${supabaseKey}`,
+              'Prefer': 'return=minimal',
+            },
+            body: JSON.stringify({ duration_seconds: totalTimeSpent }),
+            keepalive: true,
+          });
+        } catch { /* silent */ }
+      }
     }
   }, []);
 
@@ -354,11 +393,25 @@ export const GlobalVisitorTracking = () => {
     window.addEventListener('beforeunload', handleBeforeUnload);
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
+    // Heartbeat: update session duration every 30s for accurate tracking
+    const heartbeat = setInterval(() => {
+      const sessionId = getSessionId();
+      const sessionStartTime = parseInt(sessionStorage.getItem('session_start_time') || Date.now().toString());
+      const totalTimeSpent = Math.floor((Date.now() - sessionStartTime) / 1000);
+      void supabase.from('user_sessions')
+        .update({ duration_seconds: totalTimeSpent, ended_at: new Date().toISOString() } as any)
+        .eq('session_id', sessionId);
+      void supabase.from('visitor_sessions')
+        .update({ total_time_spent: totalTimeSpent, last_activity_at: new Date().toISOString() })
+        .eq('session_id', sessionId);
+    }, 30000);
+
     return () => {
       window.removeEventListener('click', handleGlobalClick);
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('beforeunload', handleBeforeUnload);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
+      clearInterval(heartbeat);
     };
   }, [handleGlobalClick, handleScroll, handleBeforeUnload, handleVisibilityChange]);
 
