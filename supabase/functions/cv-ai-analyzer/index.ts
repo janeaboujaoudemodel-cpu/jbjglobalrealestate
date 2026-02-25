@@ -34,7 +34,8 @@ Levels: 9–10 Elite | 7–8 Advanced | 5–6 Intermediate | 3–4 Developing | 
 
 RULES:
 - Be FAIR. Score only on available information.
-- THOROUGHLY read the CV text content provided. Extract ALL languages, skills, experience details.
+- THOROUGHLY read the CV text content provided. Extract ALL languages mentioned anywhere in the CV, including in skills sections, personal info, or language proficiency sections.
+- Count ALL languages listed, even if proficiency level varies (native, fluent, intermediate, basic).
 - If CV text is provided, USE IT as the primary data source — it contains the real information.
 - Infer reasonable estimates from context (email domain, nationality → likely languages, location → market familiarity).
 - Identify which ROLE the candidate is best suited for.
@@ -75,12 +76,14 @@ CANDIDATE APPLICATION:
 - Nationality: ${app.nationality || "Not stated"}
 - Preferred Language: ${app.preferred_language || "Not stated"}
 - Location: ${app.current_location_city || "?"}, ${app.current_location_country || "?"}
+- Position Applied For: ${app.position_applied || "Not specified"}
 - Source: ${app.source || "unknown"}
 - CV Uploaded: ${app.cv_url ? "Yes" : "No"}
 - Applied: ${app.created_at}`.trim();
 
   if (cvText && cvText.trim().length > 20) {
-    info += `\n\n--- CV DOCUMENT CONTENT (extracted text) ---\n${cvText.slice(0, 8000)}\n--- END CV CONTENT ---`;
+    info += `\n\n--- CV DOCUMENT CONTENT (extracted text) ---\n${cvText.slice(0, 12000)}\n--- END CV CONTENT ---`;
+    info += `\n\nIMPORTANT: The CV text above is the PRIMARY source. Extract ALL languages, skills, and experience from it. Do NOT say "unreadable" if text is provided above.`;
   } else {
     info += `\n\nNOTE: No CV text could be extracted. Score based on available application data only.`;
   }
@@ -89,13 +92,83 @@ CANDIDATE APPLICATION:
 }
 
 /**
+ * Use Gemini Vision API to extract text from a PDF/image when programmatic extraction fails.
+ * Sends the file as base64 to the AI gateway for OCR.
+ */
+async function extractWithVisionApi(
+  fileBytes: Uint8Array,
+  mimeType: string,
+  lovableApiKey: string,
+): Promise<string | null> {
+  try {
+    // Convert to base64
+    let binary = '';
+    const chunkSize = 32768;
+    for (let i = 0; i < fileBytes.length; i += chunkSize) {
+      const chunk = fileBytes.slice(i, i + chunkSize);
+      for (let j = 0; j < chunk.length; j++) {
+        binary += String.fromCharCode(chunk[j]);
+      }
+    }
+    const base64 = btoa(binary);
+    const dataUrl = `data:${mimeType};base64,${base64}`;
+
+    console.log(`Vision API extraction: sending ${(fileBytes.length / 1024).toFixed(1)}KB as ${mimeType}`);
+
+    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${lovableApiKey}`,
+      },
+      body: JSON.stringify({
+        model: "google/gemini-2.5-flash",
+        messages: [
+          {
+            role: "user",
+            content: [
+              {
+                type: "text",
+                text: "Extract ALL text from this CV/Resume document. Preserve the structure. Include every section: personal info, contact details, education, work experience, skills, languages, certifications, and any other content. Return ONLY the extracted text, no commentary.",
+              },
+              {
+                type: "image_url",
+                image_url: { url: dataUrl },
+              },
+            ],
+          },
+        ],
+        max_tokens: 4000,
+        temperature: 0.1,
+      }),
+    });
+
+    if (!response.ok) {
+      const errText = await response.text();
+      console.error("Vision API error:", response.status, errText);
+      return null;
+    }
+
+    const aiData = await response.json();
+    const text = aiData.choices?.[0]?.message?.content?.trim() || "";
+    console.log(`Vision API extracted ${text.length} chars`);
+    return text.length > 20 ? text.slice(0, 12000) : null;
+  } catch (err) {
+    console.error("Vision API extraction error:", err);
+    return null;
+  }
+}
+
+/**
  * Attempt to download and extract text from the CV file.
- * Supports PDF text extraction and plain text files.
- * For DOC/DOCX, attempts basic text extraction.
+ * Uses a two-stage approach:
+ * 1. Programmatic text extraction (fast, no API cost)
+ * 2. Vision API fallback for scanned/complex PDFs
  */
 async function extractCvText(
   adminClient: any,
   cvUrl: string,
+  lovableApiKey: string,
 ): Promise<string | null> {
   try {
     let fileBytes: Uint8Array | null = null;
@@ -106,20 +179,17 @@ async function extractCvText(
     const isFullUrl = /^https?:\/\//i.test(cvUrl);
 
     if (publicMatch) {
-      // Full public URL — download directly
       const resp = await fetch(cvUrl);
       if (resp.ok) {
         fileBytes = new Uint8Array(await resp.arrayBuffer());
         fileName = publicMatch[2];
       }
     } else if (isFullUrl) {
-      // Some other full URL
       const resp = await fetch(cvUrl);
       if (resp.ok) {
         fileBytes = new Uint8Array(await resp.arrayBuffer());
       }
     } else {
-      // Relative storage path — try multiple buckets
       const storagePath = cvUrl.replace(/^\/+/, '');
       const buckets = ['hr-documents', 'documents', 'public'];
       for (const bucket of buckets) {
@@ -138,28 +208,51 @@ async function extractCvText(
     }
 
     const ext = fileName.split('?')[0].split('.').pop()?.toLowerCase() || '';
+    const mimeType = ext === 'pdf' ? 'application/pdf' :
+                     ext === 'docx' ? 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' :
+                     ext === 'doc' ? 'application/msword' :
+                     'application/octet-stream';
 
-    // Plain text files
+    // Stage 1: Programmatic text extraction
+    let text: string | null = null;
+
     if (['txt', 'md', 'csv'].includes(ext)) {
       return new TextDecoder().decode(fileBytes);
     }
 
-    // PDF: Extract text by finding text streams
     if (ext === 'pdf') {
-      return extractTextFromPdf(fileBytes);
+      text = extractTextFromPdf(fileBytes);
+    } else if (['doc', 'docx'].includes(ext)) {
+      text = extractTextFromDoc(fileBytes);
     }
 
-    // DOC/DOCX: Basic text extraction
-    if (['doc', 'docx'].includes(ext)) {
-      return extractTextFromDoc(fileBytes);
+    // Quality check: does the extracted text contain meaningful content?
+    if (text) {
+      const cleanText = text.replace(/\s+/g, ' ').trim();
+      const letterCount = (cleanText.match(/[a-zA-Z]/g) || []).length;
+      const wordCount = cleanText.split(/\s+/).filter(w => w.length >= 2).length;
+      
+      if (letterCount > 100 && wordCount > 20) {
+        console.log(`Programmatic extraction successful: ${wordCount} words, ${letterCount} letters`);
+        return text;
+      }
+      console.log(`Programmatic extraction yielded poor results: ${wordCount} words, ${letterCount} letters - falling back to Vision API`);
+    } else {
+      console.log(`Programmatic extraction returned nothing for ${ext} - falling back to Vision API`);
     }
 
-    // Fallback: try decoding as text
+    // Stage 2: Vision API fallback (handles scanned PDFs, complex layouts, images)
+    // Only for supported types
+    if (['pdf', 'png', 'jpg', 'jpeg', 'webp', 'gif', 'doc', 'docx'].includes(ext)) {
+      const visionText = await extractWithVisionApi(fileBytes, mimeType, lovableApiKey);
+      if (visionText) return visionText;
+    }
+
+    // Last resort: try decoding as text
     try {
-      const text = new TextDecoder().decode(fileBytes);
-      // If it looks like readable text (not binary garbage)
-      const printableRatio = text.split('').filter(c => c.charCodeAt(0) >= 32 && c.charCodeAt(0) < 127).length / text.length;
-      if (printableRatio > 0.7) return text.slice(0, 8000);
+      const rawText = new TextDecoder().decode(fileBytes);
+      const printableRatio = rawText.split('').filter(c => c.charCodeAt(0) >= 32 && c.charCodeAt(0) < 127).length / rawText.length;
+      if (printableRatio > 0.7) return rawText.slice(0, 12000);
     } catch { /* ignore */ }
 
     return null;
@@ -200,7 +293,6 @@ function extractTextFromPdf(bytes: Uint8Array): string {
   const streamRegex = /stream\r?\n([\s\S]*?)\r?\nendstream/g;
   while ((match = streamRegex.exec(raw)) !== null) {
     const content = match[1];
-    // Extract readable text segments
     const readable = content.replace(/[^\x20-\x7E\n\r\t]/g, ' ')
       .replace(/\s{3,}/g, ' ')
       .trim();
@@ -222,28 +314,23 @@ function extractTextFromPdf(bytes: Uint8Array): string {
     const bruteText = raw.replace(/[^\x20-\x7E\n\r\t]/g, ' ')
       .replace(/\s{3,}/g, ' ')
       .trim();
-    // Filter to segments that look like real words
     const words = bruteText.split(/\s+/).filter(w => /^[a-zA-Z@.]{2,}$/.test(w) || /^\d{4}$/.test(w) || /^\+?\d[\d\s-]{6,}$/.test(w));
     if (words.length > 10) {
       text = words.join(' ');
     }
   }
 
-  return text.length > 20 ? text.slice(0, 8000) : "";
+  return text.length > 20 ? text.slice(0, 12000) : "";
 }
 
 /**
  * Basic DOC/DOCX text extraction.
- * For DOCX (zip-based), extracts from word/document.xml.
- * For DOC (binary), extracts readable ASCII segments.
  */
 function extractTextFromDoc(bytes: Uint8Array): string {
-  // Check if it's a DOCX (ZIP file: starts with PK)
   if (bytes[0] === 0x50 && bytes[1] === 0x4B) {
     return extractTextFromDocx(bytes);
   }
 
-  // Binary DOC: extract readable text segments
   const raw = new TextDecoder('latin1').decode(bytes);
   const segments: string[] = [];
   let current = '';
@@ -261,26 +348,18 @@ function extractTextFromDoc(bytes: Uint8Array): string {
   }
   if (current.trim().length > 3) segments.push(current.trim());
 
-  // Filter out noise — keep segments that contain word-like content
   const meaningful = segments.filter(s => {
     const wordCount = s.split(/\s+/).filter(w => /^[a-zA-Z]{2,}$/.test(w)).length;
     return wordCount >= 2 || s.length > 20;
   });
 
-  const text = meaningful.join('\n').slice(0, 8000);
+  const text = meaningful.join('\n').slice(0, 12000);
   return text.length > 20 ? text : "";
 }
 
-/**
- * Extract text from DOCX (ZIP) by finding word/document.xml
- * and stripping XML tags.
- */
 function extractTextFromDocx(bytes: Uint8Array): string {
   try {
-    // Simple ZIP parsing to find word/document.xml
     const raw = new TextDecoder('latin1').decode(bytes);
-
-    // Find all local file headers (PK\x03\x04)
     let offset = 0;
     const files: { name: string; data: string }[] = [];
 
@@ -300,7 +379,6 @@ function extractTextFromDocx(bytes: Uint8Array): string {
       const name = new TextDecoder('latin1').decode(bytes.slice(nameStart, nameStart + nameLen));
       const dataStart = nameStart + nameLen + extraLen;
 
-      // Only handle stored (uncompressed) files for simplicity
       if (compressionMethod === 0 && name.includes('document.xml')) {
         const data = new TextDecoder('utf-8').decode(bytes.slice(dataStart, dataStart + compSize));
         files.push({ name, data });
@@ -309,10 +387,8 @@ function extractTextFromDocx(bytes: Uint8Array): string {
       offset = dataStart + compSize;
     }
 
-    // Find word/document.xml
     const docFile = files.find(f => f.name.includes('word/document.xml'));
     if (docFile) {
-      // Strip XML tags and extract text
       const text = docFile.data
         .replace(/<w:p[^>]*>/g, '\n')
         .replace(/<w:tab\/>/g, '\t')
@@ -324,14 +400,13 @@ function extractTextFromDocx(bytes: Uint8Array): string {
         .replace(/&#39;/g, "'")
         .replace(/\s{2,}/g, ' ')
         .trim();
-      return text.length > 20 ? text.slice(0, 8000) : "";
+      return text.length > 20 ? text.slice(0, 12000) : "";
     }
 
-    // Fallback: extract any readable text from DOCX
     const fallback = raw.replace(/[^\x20-\x7E\n\r\t]/g, ' ')
       .replace(/\s{3,}/g, ' ')
       .trim();
-    return fallback.length > 50 ? fallback.slice(0, 8000) : "";
+    return fallback.length > 50 ? fallback.slice(0, 12000) : "";
   } catch {
     return "";
   }
@@ -359,11 +434,11 @@ async function analyzeApplication(
     return { success: true, analysis: { ai_ranking: app.ai_ranking, ai_summary: app.ai_summary, already_analyzed: true } };
   }
 
-  // Extract CV text content
+  // Extract CV text content with Vision API fallback
   let cvText: string | null = null;
   if (app.cv_url) {
     console.log(`Extracting CV text for ${app.full_name} from: ${app.cv_url}`);
-    cvText = await extractCvText(adminClient, app.cv_url);
+    cvText = await extractCvText(adminClient, app.cv_url, lovableApiKey);
     console.log(`CV text extracted: ${cvText ? cvText.length + ' chars' : 'none'}`);
   }
 
@@ -464,7 +539,6 @@ serve(async (req) => {
         });
       }
     } else {
-      // Auto mode: verify internal secret
       const internalKey = req.headers.get("x-internal-key");
       if (internalKey !== supabaseServiceKey) {
         return new Response(JSON.stringify({ error: "Forbidden" }), {

@@ -69,6 +69,7 @@ interface CVEntry {
   reviewed_by: string | null;
   user_id: string | null;
   record_source: 'hr_applications' | 'hr_cv_submissions';
+  position_applied: string | null;
 }
 
 interface CVCenterProps {
@@ -125,6 +126,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
         created_at: app.created_at, reviewed_at: app.reviewed_at,
         reviewed_by: app.reviewed_by, user_id: app.user_id || null,
         record_source: 'hr_applications',
+        position_applied: app.position_applied || null,
       }));
 
       const fromSubs: CVEntry[] = (subsRes.data || []).map((sub: any) => ({
@@ -141,6 +143,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
         source: 'chat_widget', created_at: sub.created_at,
         reviewed_at: sub.reviewed_at || null, reviewed_by: sub.reviewed_by || null,
         user_id: null, record_source: 'hr_cv_submissions',
+        position_applied: sub.position_applied || null,
       }));
 
       const allCVs = [...fromApps, ...fromSubs];
@@ -621,6 +624,11 @@ const CVCenter = ({ userId }: CVCenterProps) => {
 
                               {/* Quick info pills */}
                               <div className="flex flex-wrap gap-2 mb-2 text-sm">
+                                {cv.position_applied && cv.position_applied !== 'Unspecified' && (
+                                  <span className="flex items-center gap-1 text-indigo-700 bg-indigo-50 border border-indigo-200 rounded-full px-2.5 py-0.5 font-medium">
+                                    <Target className="h-3.5 w-3.5" /> {cv.position_applied}
+                                  </span>
+                                )}
                                 {cv.nationality && (
                                   <span className="flex items-center gap-1 text-crm-text">
                                     <Globe2 className="h-3.5 w-3.5 text-crm-text-muted" /> {cv.nationality}
