@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -95,6 +95,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
   const [aiRewritePrompt, setAiRewritePrompt] = useState('');
   const [isGeneratingDraft, setIsGeneratingDraft] = useState(false);
   const [createTaskForUser, setCreateTaskForUser] = useState(false);
+  const [approveTaskForUser, setApproveTaskForUser] = useState(false);
   const [candidateTaskTitle, setCandidateTaskTitle] = useState('');
   const [candidateTaskDescription, setCandidateTaskDescription] = useState('');
   const [sendingMessage, setSendingMessage] = useState(false);
@@ -107,8 +108,6 @@ const CVCenter = ({ userId }: CVCenterProps) => {
   const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
   const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'score' | 'position'>('newest');
   const autoAnalyzeRef = useRef(false);
-
-  useEffect(() => { fetchCVs(); }, []);
 
   useEffect(() => {
     return () => {
@@ -223,9 +222,9 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                 languages: a.languages ?? entry.languages,
                 skills: a.skills ?? entry.skills,
                 ai_ranking: a.ai_ranking ?? entry.ai_ranking,
-                ai_summary: a.ai_summary ?? entry.ai_summary,
+                ai_summary: a.ai_summary !== undefined ? a.ai_summary : entry.ai_summary,
                 department_category: a.department_category ?? entry.department_category,
-                flag_reason: a.flag_reason ?? entry.flag_reason,
+                flag_reason: a.flag_reason !== undefined ? a.flag_reason : entry.flag_reason,
               } : entry
             ));
             if (!a.already_analyzed || markedUnreadable) completed++;
@@ -487,9 +486,9 @@ const CVCenter = ({ userId }: CVCenterProps) => {
           languages: a.languages ?? entry.languages,
           skills: a.skills ?? entry.skills,
           ai_ranking: a.ai_ranking ?? entry.ai_ranking,
-          ai_summary: a.ai_summary ?? entry.ai_summary,
+          ai_summary: a.ai_summary !== undefined ? a.ai_summary : entry.ai_summary,
           department_category: a.department_category ?? entry.department_category,
-          flag_reason: a.flag_reason ?? entry.flag_reason,
+          flag_reason: a.flag_reason !== undefined ? a.flag_reason : entry.flag_reason,
         } : entry
       ));
       // Auto-expand the card to show results
