@@ -709,10 +709,50 @@ const CVCenter = ({ userId }: CVCenterProps) => {
             AI-powered candidate scoring & management — analysis runs automatically
           </p>
         </div>
-        <Button className="gap-2 bg-gold text-white hover:bg-gold-dark font-semibold">
-          <Upload className="h-4 w-4" />
-          Upload CV
-        </Button>
+        <div>
+          <input
+            type="file"
+            id="cv-upload-input"
+            accept=".pdf,.doc,.docx,.txt"
+            multiple
+            className="hidden"
+            onChange={async (e) => {
+              const files = e.target.files;
+              if (!files || files.length === 0) return;
+              let uploaded = 0;
+              for (const file of Array.from(files)) {
+                try {
+                  const ext = file.name.split('.').pop()?.toLowerCase() || 'pdf';
+                  const safeName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+                  const storagePath = `cv-uploads/${safeName}`;
+                  const { error: uploadErr } = await supabase.storage.from('hr-documents').upload(storagePath, file, { upsert: false });
+                  if (uploadErr) { console.error('Upload error:', uploadErr); toast.error(`Failed to upload ${file.name}`); continue; }
+                  const { data: urlData } = supabase.storage.from('hr-documents').getPublicUrl(storagePath);
+                  const cvUrl = urlData?.publicUrl || storagePath;
+                  const nameFromFile = file.name.replace(/\.[^.]+$/, '').replace(/[_-]/g, ' ');
+                  const { error: insertErr } = await supabase.from('hr_cv_submissions').insert({
+                    full_name: nameFromFile || 'Unnamed',
+                    email: `upload-${Date.now()}@pending-review.local`,
+                    cv_url: cvUrl,
+                    status: 'pending',
+                    position_applied: 'Unspecified',
+                  });
+                  if (insertErr) { console.error('Insert error:', insertErr); toast.error(`Failed to save ${file.name}`); continue; }
+                  uploaded++;
+                } catch (err) { console.error('Upload error:', err); toast.error(`Error uploading ${file.name}`); }
+              }
+              if (uploaded > 0) { toast.success(`${uploaded} CV${uploaded > 1 ? 's' : ''} uploaded`); fetchCVs(); }
+              e.target.value = '';
+            }}
+          />
+          <Button
+            className="gap-2 bg-gold text-white hover:bg-gold-dark font-semibold"
+            onClick={() => document.getElementById('cv-upload-input')?.click()}
+          >
+            <Upload className="h-4 w-4" />
+            Upload CV
+          </Button>
+        </div>
       </div>
 
       {/* Status Stats */}
@@ -1047,22 +1087,22 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                                           e.stopPropagation();
                                           const clean = cv.phone_e164!.replace(/[^0-9]/g, '');
                                           const msg = encodeURIComponent(`Hello ${cv.full_name}, this is JBJ Global Real Estate HR. We would like to discuss your application.`);
-                                          window.location.href = `https://wa.me/${clean}?text=${msg}`;
-                                        }}
-                                      >
-                                        <MessageSquare className="h-3 w-3" /> WhatsApp
-                                      </Button>
-                                      <Button
-                                        size="sm"
-                                        variant="outline"
-                                        className="h-7 gap-1.5 text-xs border-amber-500/30 text-amber-400 hover:bg-amber-500/10"
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          window.location.href = `tel:${cv.phone_e164}`;
-                                        }}
-                                      >
-                                        <Phone className="h-3 w-3" /> Call
-                                      </Button>
+                    window.open(`https://wa.me/${clean}?text=${msg}`, '_blank', 'noopener');
+                        }}
+                      >
+                        <MessageSquare className="h-3 w-3" /> WhatsApp
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-7 gap-1.5 text-xs border-amber-500/30 text-amber-400 hover:bg-amber-500/10"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          window.open(`tel:${cv.phone_e164}`, '_self');
+                        }}
+                      >
+                        <Phone className="h-3 w-3" /> Call
+                      </Button>
                                     </>
                                   )}
                                   {!cv.phone_e164 && (
@@ -1214,7 +1254,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                     if (!selectedCV.phone_e164) return;
                     const clean = selectedCV.phone_e164.replace(/[^0-9]/g, '');
                     const msg = encodeURIComponent(`Hello ${selectedCV.full_name}, this is JBJ Global Real Estate HR.`);
-                    window.open(`https://wa.me/${clean}?text=${msg}`, '_blank');
+                    window.open(`https://wa.me/${clean}?text=${msg}`, '_blank', 'noopener');
                   }}
                 >
                   <MessageSquare className="h-4 w-4 mr-1.5" /> WhatsApp
@@ -1226,7 +1266,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                   className="border-amber-500/40 text-amber-700 hover:bg-amber-50"
                   onClick={() => {
                     if (!selectedCV.phone_e164) return;
-                    window.location.href = `tel:${selectedCV.phone_e164}`;
+                    window.open(`tel:${selectedCV.phone_e164}`, '_self');
                   }}
                 >
                   <Phone className="h-4 w-4 mr-1.5" /> Call
@@ -1389,12 +1429,12 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                   Approve & Send Email
                 </Button>
                 {selectedCV.phone_e164 && (
-                  <Button size="icon" variant="outline" title="WhatsApp" onClick={() => window.open(`https://wa.me/${(selectedCV.phone_e164 || '').replace(/[^0-9]/g, '')}`, '_blank')}>
+                  <Button size="icon" variant="outline" title="WhatsApp" onClick={() => window.open(`https://wa.me/${(selectedCV.phone_e164 || '').replace(/[^0-9]/g, '')}`, '_blank', 'noopener')}>
                     <MessageSquare className="h-4 w-4" />
                   </Button>
                 )}
                 {selectedCV.phone_e164 && (
-                  <Button size="icon" variant="outline" title="Call" onClick={() => window.location.href = `tel:${selectedCV.phone_e164}`}>
+                  <Button size="icon" variant="outline" title="Call" onClick={() => window.open(`tel:${selectedCV.phone_e164}`, '_self')}>
                     <Phone className="h-4 w-4" />
                   </Button>
                 )}

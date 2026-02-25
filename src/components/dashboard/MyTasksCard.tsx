@@ -446,22 +446,22 @@ export default function MyTasksCard() {
 
                   {/* Actions - only show outside selection mode */}
                   {!selectionMode && (
-                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
                       {isCompleted && (
                         <button
                           onClick={() => toggleComplete.mutate({ id: task.id, completed: false })}
-                          className="w-6 h-6 rounded flex items-center justify-center hover:bg-gold/10 text-gold"
-                          title="Reopen"
+                          className="w-8 h-8 rounded-lg flex items-center justify-center bg-gold/10 hover:bg-gold/20 text-gold border border-gold/30 transition-colors"
+                          title="Reopen task"
                         >
-                          <RotateCcw className="w-3 h-3" />
+                          <RotateCcw className="w-4 h-4" />
                         </button>
                       )}
                       <button
                         onClick={() => deleteTask.mutate(task.id)}
-                        className="w-6 h-6 rounded flex items-center justify-center hover:bg-red-500/10 text-red-500/60 hover:text-red-500"
-                        title="Delete"
+                        className="w-8 h-8 rounded-lg flex items-center justify-center bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/30 transition-colors"
+                        title="Delete task"
                       >
-                        <Trash2 className="w-3 h-3" />
+                        <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
                   )}
