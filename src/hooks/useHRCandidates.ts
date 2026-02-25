@@ -285,13 +285,18 @@ export const useHRCandidates = (userId: string) => {
 
       if (error) throw error;
 
-      // Create interview invitation record
+      // Create interview invitation record + task + calendar note + notification
       const candidate = candidates.find(c => c.id === candidateId);
       if (candidate) {
         const interviewer = stage === 'first'
           ? { name: 'Jessica', title: 'HR Manager' }
           : { name: 'David Carter', title: 'Head of Recruitment / COO' };
 
+        const meetingLink = `https://meet.jbj.com/${crypto.randomUUID().slice(0, 8)}`;
+        const stageLabel = stage === 'first' ? 'First' : 'Second';
+        const dateStr = date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+        // 1) Interview invitation
         await supabase
           .from('hr_interview_invitations')
           .insert({
@@ -300,13 +305,49 @@ export const useHRCandidates = (userId: string) => {
             interviewer_name: interviewer.name,
             interviewer_title: interviewer.title,
             scheduled_date: date.toISOString(),
-            meeting_link: `https://meet.jbj.com/${crypto.randomUUID().slice(0, 8)}`,
+            meeting_link: meetingLink,
             created_by: userId,
             email_sent: true,
             email_sent_at: new Date().toISOString(),
             whatsapp_sent: true,
             whatsapp_sent_at: new Date().toISOString(),
             calendar_added: true
+          });
+
+        // 2) Auto-create admin task so it shows in My Tasks & alerts
+        await supabase
+          .from('admin_tasks')
+          .insert({
+            user_id: userId,
+            title: `${stageLabel} Interview: ${candidate.candidateName}`,
+            description: `${stageLabel} interview with ${candidate.candidateName} (${candidate.position}) scheduled for ${dateStr}. Interviewer: ${interviewer.name}. Meeting: ${meetingLink}`,
+            due_date: date.toISOString(),
+            priority: 'high',
+            status: 'pending',
+            category: 'interview'
+          });
+
+        // 3) Auto-create calendar/notes entry
+        await supabase
+          .from('ai_notes')
+          .insert({
+            user_id: userId,
+            title: `📅 ${stageLabel} Interview – ${candidate.candidateName}`,
+            content: `**${stageLabel} Interview**\n- Candidate: ${candidate.candidateName}\n- Position: ${candidate.position}\n- Date: ${dateStr}\n- Interviewer: ${interviewer.name} (${interviewer.title})\n- Meeting Link: ${meetingLink}`,
+            source_type: 'interview',
+            tags: ['interview', stage, candidate.position],
+            ai_schedule: JSON.stringify([{ date: date.toISOString(), event: `${stageLabel} Interview with ${candidate.candidateName}` }]),
+          });
+
+        // 4) Create notification
+        await supabase
+          .from('user_notifications')
+          .insert({
+            user_id: userId,
+            title: `Interview Scheduled: ${candidate.candidateName}`,
+            message: `${stageLabel} interview with ${candidate.candidateName} on ${dateStr}`,
+            type: 'interview_scheduled',
+            is_read: false
           });
       }
     } catch (error) {

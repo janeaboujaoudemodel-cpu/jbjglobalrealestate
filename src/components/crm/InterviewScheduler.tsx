@@ -62,7 +62,9 @@ const InterviewScheduler = ({
         </p>
         <p className="text-xs text-green-400">✓ Email invitation sent</p>
         <p className="text-xs text-green-400">✓ WhatsApp notification sent</p>
-        <p className="text-xs text-green-400">✓ Added to JBJ Calendar</p>
+        <p className="text-xs text-green-400">✓ Added to JBJ Calendar & Notes</p>
+        <p className="text-xs text-green-400">✓ Task created in My Tasks</p>
+        <p className="text-xs text-green-400">✓ Alert notification created</p>
       </div>
     );
 

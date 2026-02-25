@@ -994,14 +994,54 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                                   ))}
                                 </div>
 
-                                {/* Contact info */}
-                                <div className="grid grid-cols-2 gap-2 text-sm">
-                                  <div className="flex items-center gap-2 text-crm-text">
-                                    <Mail className="h-3.5 w-3.5 text-crm-text-muted" /> {cv.email}
-                                  </div>
-                                  <div className="flex items-center gap-2 text-crm-text">
-                                    <Phone className="h-3.5 w-3.5 text-crm-text-muted" /> {cv.phone_e164 || '—'}
-                                  </div>
+                                {/* Contact info - clickable actions */}
+                                <div className="flex flex-wrap gap-2">
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    className="h-7 gap-1.5 text-xs border-blue-500/30 text-blue-400 hover:bg-blue-500/10"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      const subject = encodeURIComponent(`Interview Invitation – JBJ Global Real Estate`);
+                                      const body = encodeURIComponent(`Dear ${cv.full_name},\n\nThank you for your application to JBJ Global Real Estate.\n\nBest regards,\nJBJ Global Real Estate HR Team`);
+                                      window.location.href = `mailto:${cv.email}?subject=${subject}&body=${body}`;
+                                    }}
+                                  >
+                                    <Mail className="h-3 w-3" /> {cv.email}
+                                  </Button>
+                                  {cv.phone_e164 && (
+                                    <>
+                                      <Button
+                                        size="sm"
+                                        variant="outline"
+                                        className="h-7 gap-1.5 text-xs border-green-500/30 text-green-400 hover:bg-green-500/10"
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          const clean = cv.phone_e164!.replace(/[^0-9]/g, '');
+                                          const msg = encodeURIComponent(`Hello ${cv.full_name}, this is JBJ Global Real Estate HR. We would like to discuss your application.`);
+                                          window.location.href = `https://wa.me/${clean}?text=${msg}`;
+                                        }}
+                                      >
+                                        <MessageSquare className="h-3 w-3" /> WhatsApp
+                                      </Button>
+                                      <Button
+                                        size="sm"
+                                        variant="outline"
+                                        className="h-7 gap-1.5 text-xs border-amber-500/30 text-amber-400 hover:bg-amber-500/10"
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          window.location.href = `tel:${cv.phone_e164}`;
+                                        }}
+                                      >
+                                        <Phone className="h-3 w-3" /> Call
+                                      </Button>
+                                    </>
+                                  )}
+                                  {!cv.phone_e164 && (
+                                    <span className="text-xs text-crm-text-muted flex items-center gap-1">
+                                      <Phone className="h-3 w-3" /> No phone
+                                    </span>
+                                  )}
                                 </div>
 
                                 {/* Category & Source */}
