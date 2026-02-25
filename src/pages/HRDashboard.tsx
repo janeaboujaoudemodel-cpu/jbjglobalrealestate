@@ -72,6 +72,7 @@ export default function HRDashboard() {
               trend={stats?.newHires ? "up" : undefined}
               trendValue={stats?.newHires ? `+${stats.newHires} this month` : undefined}
               accentColor="gold"
+              onClick={() => setActiveTab('performance')}
             />
             <PremiumStatCard
               title="Open Positions"
@@ -79,6 +80,7 @@ export default function HRDashboard() {
               subtitle="Hiring now"
               icon={Briefcase}
               accentColor="blue"
+              onClick={() => setActiveTab('positions')}
             />
             <PremiumStatCard
               title="New Hires"
@@ -87,6 +89,7 @@ export default function HRDashboard() {
               icon={UserCheck}
               trend={stats?.newHires ? "up" : undefined}
               accentColor="green"
+              onClick={() => setActiveTab('performance')}
             />
             <PremiumStatCard
               title="CVs Collected"
@@ -94,6 +97,7 @@ export default function HRDashboard() {
               subtitle={`${stats?.pendingCVs || 0} pending review`}
               icon={FileText}
               accentColor="orange"
+              onClick={() => setActiveTab('cv-center')}
             />
             <PremiumStatCard
               title="AI Insights"
@@ -101,6 +105,7 @@ export default function HRDashboard() {
               subtitle="Pending prospects"
               icon={Brain}
               accentColor="purple"
+              onClick={() => setActiveTab('hunting')}
             />
           </PremiumGrid>
         </PremiumContainer>

@@ -824,32 +824,61 @@ const CVCenter = ({ userId }: CVCenterProps) => {
             <DialogTitle>CV Preview {selectedCV ? `· ${selectedCV.full_name}` : ''}</DialogTitle>
             <p id="cv-preview-desc" className="sr-only">Preview of the candidate's CV document</p>
           </DialogHeader>
-          <div className="h-full">
+          <div className="flex-1 min-h-0">
             {cvPreviewLoading ? (
               <div className="h-full flex items-center justify-center"><Loader2 className="h-6 w-6 animate-spin text-gold" /></div>
             ) : cvPreviewUrl ? (
               <iframe title="CV Preview" src={cvPreviewUrl} className="w-full h-full rounded-md border" />
             ) : cvDirectUrl ? (
-              <div className="h-full flex flex-col items-center justify-center gap-3 text-center text-sm text-muted-foreground">
-                <p>Inline preview is unavailable for this file format.</p>
-                <p>Please use <span className="font-semibold text-foreground">Open in new tab</span> or <span className="font-semibold text-foreground">Download</span>.</p>
+              <div className="h-full flex flex-col items-center justify-center gap-4 text-center text-sm text-muted-foreground">
+                <FileText className="h-16 w-16 text-gold/40" />
+                <p className="text-lg font-medium text-foreground">This file format cannot be previewed inline.</p>
+                <p>Use the buttons below to open or download the CV.</p>
               </div>
             ) : (
-              <div className="h-full flex items-center justify-center text-sm text-muted-foreground">CV preview unavailable</div>
+              <div className="h-full flex flex-col items-center justify-center gap-4 text-center text-sm text-muted-foreground">
+                <AlertTriangle className="h-12 w-12 text-amber-400" />
+                <p className="text-lg font-medium text-foreground">Unable to load CV</p>
+                <p>The file may have been moved or deleted. Try re-uploading.</p>
+              </div>
             )}
           </div>
           {cvDirectUrl && (
-            <div className="flex gap-2">
-              <a href={cvDirectUrl} target="_blank" rel="noopener noreferrer">
-                <Button variant="outline" className="gap-2">
-                  <ExternalLink className="h-4 w-4" /> Open in new tab
+            <div className="flex gap-2 pt-2 border-t">
+              <Button variant="outline" className="gap-2" onClick={() => window.open(cvDirectUrl, '_blank')}>
+                <ExternalLink className="h-4 w-4" /> Open in new tab
+              </Button>
+              <Button variant="outline" className="gap-2" onClick={async () => {
+                try {
+                  const filename = selectedCV ? `CV-${selectedCV.full_name.replace(/\s+/g, '-')}.pdf` : 'CV.pdf';
+                  const res = await fetch(cvDirectUrl);
+                  const blob = await res.blob();
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = filename;
+                  document.body.appendChild(a);
+                  a.click();
+                  document.body.removeChild(a);
+                  URL.revokeObjectURL(url);
+                  toast.success('Download started');
+                } catch {
+                  toast.error('Download failed — try "Open in new tab" instead');
+                }
+              }}>
+                <Download className="h-4 w-4" /> Download
+              </Button>
+              {cvPreviewUrl && (
+                <Button variant="outline" className="gap-2 ml-auto" onClick={() => {
+                  const win = window.open('', '_blank');
+                  if (win) {
+                    win.document.write(`<!DOCTYPE html><html><head><title>CV - ${selectedCV?.full_name || 'Preview'}</title><style>body{margin:0;overflow:hidden}iframe{width:100vw;height:100vh;border:none}</style></head><body><iframe src="${cvPreviewUrl}"></iframe></body></html>`);
+                    win.document.close();
+                  }
+                }}>
+                  <Eye className="h-4 w-4" /> Maximize
                 </Button>
-              </a>
-              <a href={cvDirectUrl} download={selectedCV ? `CV-${selectedCV.full_name.replace(/\s+/g, '-')}` : 'CV'}>
-                <Button variant="outline" className="gap-2">
-                  <Download className="h-4 w-4" /> Download
-                </Button>
-              </a>
+              )}
             </div>
           )}
         </DialogContent>

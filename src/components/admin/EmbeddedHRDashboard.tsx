@@ -26,7 +26,7 @@ export function EmbeddedHRDashboard() {
     <div className="space-y-6">
       {/* Stats Section */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <Card className="bg-white border-2 border-gold/30">
+        <Card className="bg-white border-2 border-gold/30 cursor-pointer hover:border-gold/60 active:scale-95 transition-all" onClick={() => setActiveTab('performance')}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -39,7 +39,7 @@ export function EmbeddedHRDashboard() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-white border-2 border-blue-500/30">
+        <Card className="bg-white border-2 border-blue-500/30 cursor-pointer hover:border-blue-500/60 active:scale-95 transition-all" onClick={() => setActiveTab('positions')}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -52,7 +52,7 @@ export function EmbeddedHRDashboard() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-white border-2 border-green-500/30">
+        <Card className="bg-white border-2 border-green-500/30 cursor-pointer hover:border-green-500/60 active:scale-95 transition-all" onClick={() => setActiveTab('performance')}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -82,7 +82,7 @@ export function EmbeddedHRDashboard() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-white border-2 border-purple-500/30">
+        <Card className="bg-white border-2 border-purple-500/30 cursor-pointer hover:border-purple-500/60 active:scale-95 transition-all" onClick={() => setActiveTab('hunting')}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
