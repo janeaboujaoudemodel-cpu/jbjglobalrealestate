@@ -38,11 +38,9 @@ const LeadContactActions = ({ lead, onGenerateReport }: LeadContactActionsProps)
 
   const handleSendWhatsApp = () => {
     if (lead.phone) {
-      // Clean the phone number
       const cleanPhone = lead.phone.replace(/[^0-9+]/g, '').replace('+', '');
       const message = encodeURIComponent(`Hello ${lead.full_name || ''}! Thank you for your interest in JBJ Global Real Estate. How can I assist you today?`);
-      // Use direct navigation to avoid popup blocking
-      window.location.href = `https://wa.me/${cleanPhone}?text=${message}`;
+      window.open(`https://wa.me/${cleanPhone}?text=${message}`, '_blank', 'noopener,noreferrer');
       toast.success("Opening WhatsApp...");
     } else {
       toast.error("No phone number available");

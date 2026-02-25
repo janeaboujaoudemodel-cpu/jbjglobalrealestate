@@ -98,7 +98,7 @@ const SmartWhatsAppComposer = ({ lead, onSend }: SmartWhatsAppComposerProps) => 
 
     const phone = lead.phone_e164.replace("+", "");
     const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, "_blank");
+    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
     onSend?.(message);
   };
 

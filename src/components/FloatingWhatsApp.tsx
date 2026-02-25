@@ -122,10 +122,11 @@ const FloatingWhatsApp = () => {
       
       <a
         href={whatsappHref}
+        target="_blank"
+        rel="noopener noreferrer"
         onClick={(e) => {
-          // Avoid popup blockers / iframe restrictions by navigating directly.
           e.preventDefault();
-          window.location.href = whatsappHref;
+          window.open(whatsappHref, '_blank', 'noopener,noreferrer');
         }}
         className="relative flex items-center gap-2 bg-green-500 hover:bg-green-400 text-white px-4 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
         style={{

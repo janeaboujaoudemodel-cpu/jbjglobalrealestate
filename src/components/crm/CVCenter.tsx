@@ -232,8 +232,12 @@ const CVCenter = ({ userId }: CVCenterProps) => {
         const markedUnreadable =
           /unreadable|corrupt|malformed/i.test(cv.ai_summary || '') ||
           /unreadable|corrupt|malformed/i.test(cv.flag_reason || '');
+        // Also re-analyze CVs stuck at score 1 with the generic "limited" summary
+        const stuckAtDefault =
+          cv.ai_ranking === 1 &&
+          /limited from.*extraction|manual HR review/i.test(cv.ai_summary || '');
 
-        return { cv, markedUnreadable, shouldAnalyze: hasNoScore || markedUnreadable };
+        return { cv, markedUnreadable: markedUnreadable || stuckAtDefault, shouldAnalyze: hasNoScore || markedUnreadable || stuckAtDefault };
       })
       .filter((entry) => entry.shouldAnalyze);
 
@@ -383,7 +387,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
       return lastDot > -1 ? cleanValue.slice(lastDot + 1).toLowerCase() : '';
     };
 
-    const canInlinePreview = (extension: string) => ['pdf', 'png', 'jpg', 'jpeg', 'webp', 'gif', 'txt'].includes(extension);
+    const canInlinePreview = (extension: string) => ['pdf', 'png', 'jpg', 'jpeg', 'webp', 'gif', 'txt', 'doc', 'docx'].includes(extension);
 
     let directUrl: string | null = null;
     let storagePath: string | null = null;
@@ -430,11 +434,15 @@ const CVCenter = ({ userId }: CVCenterProps) => {
 
     if (!directUrl) return { directUrl: null, previewUrl: null };
 
-    // Avoid external office viewers in iframe to prevent browser security blocking.
-    // Inline preview only when browser can render directly.
     const extension = getExtension(storagePath || directUrl || cvUrl);
+    
+    // For doc/docx, use Google Docs Viewer for inline preview
+    if (['doc', 'docx'].includes(extension) && directUrl) {
+      const googleViewerUrl = `https://docs.google.com/gview?url=${encodeURIComponent(directUrl)}&embedded=true`;
+      return { directUrl, previewUrl: googleViewerUrl };
+    }
+    
     const previewUrl = canInlinePreview(extension) ? directUrl : null;
-
     return { directUrl, previewUrl };
   };
 
