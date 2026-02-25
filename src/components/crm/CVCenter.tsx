@@ -281,68 +281,77 @@ const CVCenter = ({ userId }: CVCenterProps) => {
   /**
    * Resolves a cv_url (either a storage path or full URL) into:
    * - directUrl: raw signed/public URL for download / open-in-new-tab
-   * - previewUrl: URL suitable for iframe embedding (Google Docs Viewer for DOC/DOCX, direct for PDF)
+   * - previewUrl: URL suitable for inline iframe preview (PDF/images/text only)
    */
   const resolvePreviewUrl = async (cvUrl: string | null): Promise<{ directUrl: string | null; previewUrl: string | null }> => {
     if (!cvUrl) return { directUrl: null, previewUrl: null };
+
+    const normalizePath = (value: string) => {
+      const trimmed = value.replace(/^\/+/, '');
+      try {
+        return decodeURIComponent(trimmed);
+      } catch {
+        return trimmed;
+      }
+    };
+
+    const getExtension = (value: string) => {
+      const cleanValue = value.split('?')[0].split('#')[0];
+      const lastDot = cleanValue.lastIndexOf('.');
+      return lastDot > -1 ? cleanValue.slice(lastDot + 1).toLowerCase() : '';
+    };
+
+    const canInlinePreview = (extension: string) => ['pdf', 'png', 'jpg', 'jpeg', 'webp', 'gif', 'txt'].includes(extension);
 
     let directUrl: string | null = null;
     let storagePath: string | null = null;
     let sourceBucket: string | null = null;
 
-    // Case 1: Full public storage URL — extract bucket + path, generate fresh signed URL
-    const publicMatch = cvUrl.match(/\/storage\/v1\/object\/public\/([^/]+)\/(.+)$/);
+    // Case 1: Full public storage URL — extract bucket + path
+    const publicMatch = cvUrl.match(/\/storage\/v1\/object\/public\/([^/]+)\/(.+)$/i);
+    // Case 2: Full signed URL — extract bucket + path
+    const signedMatch = !publicMatch && cvUrl.match(/\/storage\/v1\/object\/sign\/([^/]+)\/(.+?)(?:\?|$)/i);
+
     if (publicMatch) {
       sourceBucket = publicMatch[1];
-      storagePath = publicMatch[2];
-    }
-    // Case 2: Full signed URL (already expired or about to) — extract bucket + path
-    const signedMatch = !publicMatch && cvUrl.match(/\/storage\/v1\/object\/sign\/([^/]+)\/(.+?)(\?|$)/);
-    if (signedMatch) {
+      storagePath = normalizePath(publicMatch[2]);
+    } else if (signedMatch) {
       sourceBucket = signedMatch[1];
-      storagePath = signedMatch[2];
-    }
-    // Case 3: Path only (e.g., "userId/cv-timestamp.doc") — default to hr-documents bucket
-    if (!publicMatch && !signedMatch && !/^https?:\/\//i.test(cvUrl)) {
-      storagePath = cvUrl.replace(/^\/+/, '');
-      sourceBucket = 'hr-documents'; // JoinApplication uploads here
-    }
-    // Case 4: Full external URL (not Supabase storage)
-    if (!storagePath && /^https?:\/\//i.test(cvUrl)) {
+      storagePath = normalizePath(signedMatch[2]);
+    } else if (/^https?:\/\//i.test(cvUrl)) {
+      // Case 3: Non-storage full URL
       directUrl = cvUrl;
+    } else {
+      // Case 4: Relative path only (common in hr_applications)
+      storagePath = normalizePath(cvUrl);
+      sourceBucket = 'hr-documents';
     }
 
-    // Generate a fresh signed URL if we have bucket + path
-    if (sourceBucket && storagePath) {
-      const { data, error } = await supabase.storage
-        .from(sourceBucket)
-        .createSignedUrl(storagePath, 3600);
+    // Generate signed URLs across common buckets in parallel (faster than sequential retries)
+    if (storagePath) {
+      const bucketCandidates = Array.from(
+        new Set(
+          [sourceBucket, 'hr-documents', 'documents', 'public'].filter((bucket): bucket is string => Boolean(bucket))
+        )
+      );
 
-      if (!error && data?.signedUrl) {
-        directUrl = data.signedUrl;
-      } else {
-        // Fallback: try other common buckets
-        for (const fallbackBucket of ['hr-documents', 'documents', 'public']) {
-          if (fallbackBucket === sourceBucket) continue;
-          const { data: fb, error: fbErr } = await supabase.storage
-            .from(fallbackBucket)
-            .createSignedUrl(storagePath, 3600);
-          if (!fbErr && fb?.signedUrl) {
-            directUrl = fb.signedUrl;
-            break;
-          }
-        }
-      }
+      const attempts = await Promise.all(
+        bucketCandidates.map(async (bucket) => {
+          const { data, error } = await supabase.storage.from(bucket).createSignedUrl(storagePath!, 3600);
+          return { bucket, signedUrl: data?.signedUrl ?? null, error };
+        })
+      );
+
+      const firstSuccess = attempts.find((attempt) => !!attempt.signedUrl);
+      directUrl = firstSuccess?.signedUrl ?? null;
     }
 
     if (!directUrl) return { directUrl: null, previewUrl: null };
 
-    // For preview: PDFs render natively in iframes, DOC/DOCX need Google Docs Viewer
-    const fileName = storagePath || cvUrl;
-    const isDocFile = /\.(docx?|odt)$/i.test(fileName);
-    const previewUrl = isDocFile
-      ? `https://docs.google.com/gview?url=${encodeURIComponent(directUrl)}&embedded=true`
-      : directUrl;
+    // Avoid external office viewers in iframe to prevent browser security blocking.
+    // Inline preview only when browser can render directly.
+    const extension = getExtension(storagePath || directUrl || cvUrl);
+    const previewUrl = canInlinePreview(extension) ? directUrl : null;
 
     return { directUrl, previewUrl };
   };
@@ -777,15 +786,22 @@ const CVCenter = ({ userId }: CVCenterProps) => {
               <div className="h-full flex items-center justify-center"><Loader2 className="h-6 w-6 animate-spin text-gold" /></div>
             ) : cvPreviewUrl ? (
               <iframe title="CV Preview" src={cvPreviewUrl} className="w-full h-full rounded-md border" />
+            ) : cvDirectUrl ? (
+              <div className="h-full flex flex-col items-center justify-center gap-3 text-center text-sm text-muted-foreground">
+                <p>Inline preview is unavailable for this file format.</p>
+                <p>Please use <span className="font-semibold text-foreground">Open in new tab</span> or <span className="font-semibold text-foreground">Download</span>.</p>
+              </div>
             ) : (
               <div className="h-full flex items-center justify-center text-sm text-muted-foreground">CV preview unavailable</div>
             )}
           </div>
           {cvDirectUrl && (
             <div className="flex gap-2">
-              <Button variant="outline" className="gap-2" onClick={() => window.open(cvDirectUrl, '_blank')}>
-                <ExternalLink className="h-4 w-4" /> Open in new tab
-              </Button>
+              <a href={cvDirectUrl} target="_blank" rel="noopener noreferrer">
+                <Button variant="outline" className="gap-2">
+                  <ExternalLink className="h-4 w-4" /> Open in new tab
+                </Button>
+              </a>
               <a href={cvDirectUrl} download={selectedCV ? `CV-${selectedCV.full_name.replace(/\s+/g, '-')}` : 'CV'}>
                 <Button variant="outline" className="gap-2">
                   <Download className="h-4 w-4" /> Download

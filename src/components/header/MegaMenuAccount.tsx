@@ -346,11 +346,6 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                       <div className="flex-1 min-w-0">
                         <span className="text-black font-semibold text-sm group-hover:text-gold transition-colors block">
                           {link.label}
-                          {link.badge > 0 && (
-                            <span className="ml-2 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 bg-red-500 text-white text-[10px] font-bold rounded-full">
-                              {link.badge}
-                            </span>
-                          )}
                         </span>
                         {link.description && (
                           <span className="text-black/50 text-xs truncate block">
