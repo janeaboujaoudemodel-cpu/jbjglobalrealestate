@@ -35,7 +35,7 @@ function escapeHtml(str: string | null | undefined): string {
 interface CVEmailRequest {
   email: string;
   fullName: string;
-  status: 'submitted' | 'under_review' | 'approved' | 'rejected';
+  status: 'submitted' | 'under_review' | 'pending' | 'approved' | 'rejected';
   position?: string;
   userId?: string;
   adminNote?: string;
@@ -111,11 +111,13 @@ function buildEmailHtml(req: CVEmailRequest): { html: string; subject: string } 
     },
   };
 
-  const config = statusConfig[req.status] || statusConfig.submitted;
+  const normalizedStatus = req.status === 'pending' ? 'under_review' : req.status;
+  const config = statusConfig[normalizedStatus] || statusConfig.submitted;
 
   const subjectMap: Record<string, string> = {
     submitted: `CV Received – ${name} | JBJ Global Real Estate`,
     under_review: `Your CV Is Under Review | JBJ Global Real Estate`,
+    pending: `Your CV Is Under Review | JBJ Global Real Estate`,
     approved: `Congratulations! Application Approved | JBJ Global Real Estate`,
     rejected: `Application Update | JBJ Global Real Estate`,
   };
@@ -175,14 +177,14 @@ ${makeStep('3', 'Decision', config.steps[2], config.stepChecks[2])}
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;">
 <tr><td style="text-align:center;">
 <span style="display:inline-block;padding:8px 24px;border-radius:20px;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;${
-  req.status === 'approved' ? 'background:#dcfce7;color:#166534;border:1px solid #22c55e;' :
-  req.status === 'rejected' ? 'background:#fef2f2;color:#991b1b;border:1px solid #ef4444;' :
-  req.status === 'under_review' ? 'background:#fef3c7;color:#92400e;border:1px solid #f59e0b;' :
+  normalizedStatus === 'approved' ? 'background:#dcfce7;color:#166534;border:1px solid #22c55e;' :
+  normalizedStatus === 'rejected' ? 'background:#fef2f2;color:#991b1b;border:1px solid #ef4444;' :
+  normalizedStatus === 'under_review' ? 'background:#fef3c7;color:#92400e;border:1px solid #f59e0b;' :
   'background:#dbeafe;color:#1e40af;border:1px solid #3b82f6;'
 }">${
-  req.status === 'approved' ? '✅ APPROVED' :
-  req.status === 'rejected' ? 'NOT SELECTED' :
-  req.status === 'under_review' ? '🔍 UNDER REVIEW' :
+  normalizedStatus === 'approved' ? '✅ APPROVED' :
+  normalizedStatus === 'rejected' ? 'NOT SELECTED' :
+  normalizedStatus === 'under_review' ? '🔍 UNDER REVIEW' :
   '📩 APPLICATION RECEIVED'
 }</span>
 </td></tr></table>
@@ -204,12 +206,12 @@ ${config.extraHtml}
 <!-- Review & Survey Section -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0 0;border-top:2px solid #C8A76633;padding-top:20px;">
 <tr><td align="center">
-<p style="color:#C8A766;font-size:15px;font-weight:700;margin:0 0 6px;">⭐ We Value Your Feedback</p>
-<p style="color:#666;font-size:12px;margin:0 0 14px;">Help us improve our recruitment process</p>
+<p style="color:#C8A766;font-size:15px;font-weight:700;margin:0 0 6px;">★★★★★ Rate Your Experience</p>
+<p style="color:#666;font-size:12px;margin:0 0 14px;">Leave a 5-star review and complete our quick 1-minute survey.</p>
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center">
 <tr>
-<td style="padding:0 6px;"><a href="https://jbjglobalrealestate.lovable.app/reviews?source=career" style="display:inline-block;background:linear-gradient(135deg,#C8A766,#B8956E);color:#000;text-decoration:none;padding:10px 24px;border-radius:8px;font-weight:700;font-size:12px;">⭐ Leave a Review</a></td>
-<td style="padding:0 6px;"><a href="https://jbjglobalrealestate.lovable.app/survey?source=career" style="display:inline-block;background:#1a1a2e;border:2px solid #C8A766;color:#C8A766;text-decoration:none;padding:8px 24px;border-radius:8px;font-weight:700;font-size:12px;">📋 Take Survey</a></td>
+<td style="padding:0 6px;"><a href="https://jbjglobalrealestate.lovable.app/reviews?source=career" style="display:inline-block;background:linear-gradient(135deg,#C8A766,#B8956E);color:#000;text-decoration:none;padding:10px 20px;border-radius:8px;font-weight:700;font-size:12px;">★★★★★ Leave 5-Star Review</a></td>
+<td style="padding:0 6px;"><a href="https://jbjglobalrealestate.lovable.app/survey?source=career" style="display:inline-block;background:#1a1a2e;border:2px solid #C8A766;color:#C8A766;text-decoration:none;padding:8px 20px;border-radius:8px;font-weight:700;font-size:12px;white-space:nowrap;">Take Quick Survey (1 min)</a></td>
 </tr>
 </table>
 </td></tr>
@@ -224,9 +226,10 @@ ${config.extraHtml}
 <p style="color:#888;font-size:11px;margin:0 0 8px;font-style:italic;">The Only Global AI-Powered Real Estate Intelligence Platform</p>
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:12px 0;">
 <tr>
-<td style="padding:0 6px;"><a href="https://www.instagram.com/jbjglobalrealestate/" style="display:inline-block;width:32px;height:32px;border-radius:50%;background:#333;text-align:center;line-height:32px;font-size:16px;color:#C8A766;text-decoration:none;">&#9782;</a></td>
-<td style="padding:0 6px;"><a href="https://www.linkedin.com/company/jbjglobalrealestate/" style="display:inline-block;width:32px;height:32px;border-radius:50%;background:#333;text-align:center;line-height:32px;font-size:16px;color:#C8A766;text-decoration:none;">in</a></td>
-<td style="padding:0 6px;"><a href="https://www.facebook.com/JBJGlobalRealEstate" style="display:inline-block;width:32px;height:32px;border-radius:50%;background:#333;text-align:center;line-height:32px;font-size:16px;color:#C8A766;text-decoration:none;">f</a></td>
+<td style="padding:0 6px;"><a href="https://www.instagram.com/jbj.ae" style="display:inline-block;width:32px;height:32px;border-radius:50%;background:#333;text-align:center;line-height:32px;font-size:13px;color:#C8A766;text-decoration:none;font-weight:700;">IG</a></td>
+<td style="padding:0 6px;"><a href="https://www.linkedin.com/company/jbj-global-real-estate/" style="display:inline-block;width:32px;height:32px;border-radius:50%;background:#333;text-align:center;line-height:32px;font-size:13px;color:#C8A766;text-decoration:none;font-weight:700;">in</a></td>
+<td style="padding:0 6px;"><a href="https://www.facebook.com/share/1G7CgSaV2L/?mibextid=wwXIfr" style="display:inline-block;width:32px;height:32px;border-radius:50%;background:#333;text-align:center;line-height:32px;font-size:13px;color:#C8A766;text-decoration:none;font-weight:700;">f</a></td>
+<td style="padding:0 6px;"><a href="https://youtube.com/@jbjglobalrealestate" style="display:inline-block;width:32px;height:32px;border-radius:50%;background:#333;text-align:center;line-height:32px;font-size:13px;color:#C8A766;text-decoration:none;font-weight:700;">▶</a></td>
 </tr></table>
 <p style="color:#888;font-size:11px;margin:0;">&copy; 2026 JBJ Global Real Estate. All rights reserved.</p>
 </td></tr>
@@ -341,13 +344,14 @@ serve(async (req) => {
 
     // Create user notification
     if (body.userId) {
-      const notifTitle = body.status === 'submitted' ? 'CV Application Received' :
-                         body.status === 'under_review' ? 'Your CV is Under Review' :
-                         body.status === 'approved' ? 'Application Approved!' :
+      const normalizedBodyStatus = body.status === 'pending' ? 'under_review' : body.status;
+      const notifTitle = normalizedBodyStatus === 'submitted' ? 'CV Application Received' :
+                         normalizedBodyStatus === 'under_review' ? 'Your CV is Under Review' :
+                         normalizedBodyStatus === 'approved' ? 'Application Approved!' :
                          'Application Update';
-      const notifMessage = body.status === 'submitted' ? 'Your CV has been received. Our HR team will review your profile shortly.' :
-                           body.status === 'under_review' ? 'Your CV is currently being reviewed by our HR team.' :
-                           body.status === 'approved' ? 'Congratulations! Your application has been approved.' :
+      const notifMessage = normalizedBodyStatus === 'submitted' ? 'Your CV has been received. Our HR team will review your profile shortly.' :
+                           normalizedBodyStatus === 'under_review' ? 'Your CV is currently being reviewed by our HR team.' :
+                           normalizedBodyStatus === 'approved' ? 'Congratulations! Your application has been approved.' :
                            'Thank you for applying. We\'ve decided to pursue other candidates at this time.';
 
       await supabaseClient.from('user_notifications').insert({

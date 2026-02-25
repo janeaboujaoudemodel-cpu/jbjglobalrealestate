@@ -53,15 +53,15 @@ function buildReviewSurveyFooter(serviceCategory: string): string {
   return `
 <table width="100%" cellpadding="0" cellspacing="0" style="margin:30px 0 10px;border-top:2px solid #C9A84C33;padding-top:24px;">
 <tr><td align="center">
-  <p style="color:#C9A84C;font-size:16px;font-weight:700;margin:0 0 6px;">⭐ We Value Your Feedback</p>
-  <p style="color:#666;font-size:13px;margin:0 0 18px;">Help us improve by sharing your experience</p>
+  <p style="color:#C9A84C;font-size:16px;font-weight:700;margin:0 0 6px;">★★★★★ Rate Your Experience</p>
+  <p style="color:#666;font-size:13px;margin:0 0 18px;">Leave a 5-star review and complete our quick 1-minute survey.</p>
   <table cellpadding="0" cellspacing="0" align="center">
   <tr>
     <td style="padding:0 8px;">
-      <a href="${reviewUrl}" style="display:inline-block;background:linear-gradient(135deg,#C9A84C,#B8973F);color:#000;text-decoration:none;padding:12px 28px;border-radius:10px;font-weight:700;font-size:13px;">⭐ Leave a Review</a>
+      <a href="${reviewUrl}" style="display:inline-block;background:linear-gradient(135deg,#C9A84C,#B8973F);color:#000;text-decoration:none;padding:12px 20px;border-radius:10px;font-weight:700;font-size:13px;">★★★★★ Leave 5-Star Review</a>
     </td>
     <td style="padding:0 8px;">
-      <a href="${surveyUrl}" style="display:inline-block;background:#1a1a2e;border:2px solid #C9A84C;color:#C9A84C;text-decoration:none;padding:10px 28px;border-radius:10px;font-weight:700;font-size:13px;">📋 Take Survey</a>
+      <a href="${surveyUrl}" style="display:inline-block;background:#1a1a2e;border:2px solid #C9A84C;color:#C9A84C;text-decoration:none;padding:10px 20px;border-radius:10px;font-weight:700;font-size:13px;white-space:nowrap;">Take Quick Survey (1 min)</a>
     </td>
   </tr>
   </table>

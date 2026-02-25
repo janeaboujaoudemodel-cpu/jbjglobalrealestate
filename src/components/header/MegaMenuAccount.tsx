@@ -15,7 +15,7 @@ import { useUserModeContext } from '@/contexts/UserModeContext';
 import { SUPPORTED_CURRENCIES } from '@/components/CurrencySwitcher';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
-import { useUserAlerts } from '@/hooks/useUserAlerts';
+import { searchItems } from '@/config/globalSearchIndex';
 
 interface MegaMenuAccountProps {
   onClose: () => void;
@@ -195,6 +195,35 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
       return stored ? (JSON.parse(stored) as Array<{ path: string; title: string; timestamp: number }>).slice(0, 6) : [];
     } catch { return []; }
   }, []);
+
+  const quickSearchResults = useMemo(() => {
+    const q = searchQuery.trim();
+
+    if (!q) return SEARCH_SHORTCUTS.slice(0, 10);
+
+    const dynamic = searchItems(q, {
+      isOwner,
+      hasCRMAccess: !!hasCRMAccess,
+      hasListingAdminAccess: !!hasListingAdminAccess,
+      isBroker: false,
+      isAuthenticated: !!user,
+      limit: 20,
+    }).map((item) => ({
+      path: item.route,
+      label: item.label,
+      icon: item.icon,
+      keywords: item.keywords,
+    }));
+
+    const staticMatches = SEARCH_SHORTCUTS.filter((s) =>
+      s.label.toLowerCase().includes(q.toLowerCase()) ||
+      s.keywords.some((k) => k.toLowerCase().includes(q.toLowerCase()))
+    );
+
+    const merged = [...dynamic, ...staticMatches];
+    const unique = merged.filter((item, idx, arr) => arr.findIndex((x) => x.path === item.path) === idx);
+    return unique.slice(0, 12);
+  }, [searchQuery, isOwner, hasCRMAccess, hasListingAdminAccess, user]);
 
   const accountLinks = [
     { href: '/my-dashboard', label: t('account.myDashboard', 'My Dashboard'), icon: LayoutDashboard, description: t('account.myDashboardDesc', 'Your personalized dashboard'), badge: 0 },
@@ -528,10 +557,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                               autoFocus
                             />
                             <div className="space-y-0.5">
-                              {SEARCH_SHORTCUTS
-                                .filter(s => !searchQuery || s.label.toLowerCase().includes(searchQuery.toLowerCase()) || s.keywords.some(k => k.includes(searchQuery.toLowerCase())))
-                                .slice(0, 8)
-                                .map((shortcut) => (
+                              {quickSearchResults.length > 0 ? quickSearchResults.map((shortcut) => (
                                 <button
                                   key={shortcut.path}
                                   onClick={() => { navigate(shortcut.path); onClose(); }}
@@ -540,7 +566,9 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                                   <shortcut.icon className="w-3.5 h-3.5 text-gold/60 shrink-0" />
                                   <span className="truncate">{shortcut.label}</span>
                                 </button>
-                              ))}
+                              )) : (
+                                <p className="text-xs text-black/50 py-2 text-center">No matching shortcut found</p>
+                              )}
                             </div>
                           </>
                         ) : (
