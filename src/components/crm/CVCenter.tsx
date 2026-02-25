@@ -387,7 +387,14 @@ const CVCenter = ({ userId }: CVCenterProps) => {
       return lastDot > -1 ? cleanValue.slice(lastDot + 1).toLowerCase() : '';
     };
 
-    const canInlinePreview = (extension: string) => ['pdf', 'png', 'jpg', 'jpeg', 'webp', 'gif', 'txt', 'doc', 'docx'].includes(extension);
+    const canInlinePreview = (extension: string) => ['pdf', 'png', 'jpg', 'jpeg', 'webp', 'gif', 'txt', 'rtf', 'svg'].includes(extension);
+
+    const buildStoragePublicUrl = (bucket: string, path: string) => {
+      const base = import.meta.env.VITE_SUPABASE_URL;
+      if (!base) return null;
+      const encodedPath = path.split('/').map(segment => encodeURIComponent(segment)).join('/');
+      return `${base}/storage/v1/object/public/${bucket}/${encodedPath}`;
+    };
 
     let directUrl: string | null = null;
     let storagePath: string | null = null;
@@ -429,19 +436,24 @@ const CVCenter = ({ userId }: CVCenterProps) => {
       );
 
       const firstSuccess = attempts.find((attempt) => !!attempt.signedUrl);
-      directUrl = firstSuccess?.signedUrl ?? null;
+      if (firstSuccess?.signedUrl) {
+        directUrl = firstSuccess.signedUrl;
+      } else {
+        const fallbackBucket = bucketCandidates[0];
+        directUrl = fallbackBucket ? buildStoragePublicUrl(fallbackBucket, storagePath) : null;
+      }
     }
 
     if (!directUrl) return { directUrl: null, previewUrl: null };
 
     const extension = getExtension(storagePath || directUrl || cvUrl);
-    
+
     // For doc/docx, use Google Docs Viewer for inline preview
-    if (['doc', 'docx'].includes(extension) && directUrl) {
+    if (['doc', 'docx', 'odt'].includes(extension) && directUrl) {
       const googleViewerUrl = `https://docs.google.com/gview?url=${encodeURIComponent(directUrl)}&embedded=true`;
       return { directUrl, previewUrl: googleViewerUrl };
     }
-    
+
     const previewUrl = canInlinePreview(extension) ? directUrl : null;
     return { directUrl, previewUrl };
   };
@@ -505,23 +517,55 @@ const CVCenter = ({ userId }: CVCenterProps) => {
       const { directUrl, previewUrl } = await resolvePreviewUrl(cv.cv_url);
       setCvDirectUrl(directUrl);
 
+      const inlineMimeAllowList = ['application/pdf', 'application/rtf'];
+      const inlineExtAllowList = ['pdf', 'png', 'jpg', 'jpeg', 'webp', 'gif', 'txt', 'rtf', 'svg'];
+
+      const loadPreviewBlob = async (url: string) => {
+        const previewSource = maybeProxyStorageUrl(url, {
+          filename: `CV-${cv.full_name.replace(/\s+/g, '-')}`,
+          disposition: 'inline',
+        });
+
+        const response = await fetch(previewSource, {
+          headers: { Accept: 'application/pdf,image/*,text/*,*/*' },
+        });
+        if (!response.ok) throw new Error('Preview fetch failed');
+
+        let blob = await response.blob();
+        const ext = (cv.cv_url || '').split('?')[0].split('.').pop()?.toLowerCase();
+        const contentType = (response.headers.get('content-type') || blob.type || '').toLowerCase();
+
+        const isInlineMime = inlineMimeAllowList.some((mime) => contentType.includes(mime)) ||
+          contentType.startsWith('image/') ||
+          contentType.startsWith('text/');
+        const isInlineExt = ext ? inlineExtAllowList.includes(ext) : false;
+
+        if (!isInlineMime && !isInlineExt) {
+          throw new Error('Not an inline-previewable mime type');
+        }
+
+        // Ensure correct MIME type for PDF blobs (some proxies return generic type)
+        if ((ext === 'pdf' || contentType.includes('application/pdf')) && (!blob.type || blob.type === 'application/octet-stream')) {
+          blob = new Blob([blob], { type: 'application/pdf' });
+        }
+
+        const objectUrl = URL.createObjectURL(blob);
+        previewBlobUrlRef.current = objectUrl;
+        setCvPreviewUrl(objectUrl);
+      };
+
       if (previewUrl) {
-        const previewSource = maybeProxyStorageUrl(previewUrl, { filename: `CV-${cv.full_name.replace(/\s+/g, '-')}`, disposition: 'inline' });
         try {
-          const response = await fetch(previewSource);
-          if (!response.ok) throw new Error('Preview fetch failed');
-          let blob = await response.blob();
-          // Ensure correct MIME type for PDF blobs (some proxies return generic type)
-          const ext = (cv.cv_url || '').split('?')[0].split('.').pop()?.toLowerCase();
-          if (ext === 'pdf' && (!blob.type || blob.type === 'application/octet-stream')) {
-            blob = new Blob([blob], { type: 'application/pdf' });
-          }
-          const objectUrl = URL.createObjectURL(blob);
-          previewBlobUrlRef.current = objectUrl;
-          setCvPreviewUrl(objectUrl);
+          await loadPreviewBlob(previewUrl);
         } catch {
-          // Fallback to direct preview URL when blob fetch is blocked
+          // Fallback to direct preview URL when blob fetch is blocked (e.g. Google Docs viewer)
           setCvPreviewUrl(previewUrl);
+        }
+      } else if (directUrl) {
+        try {
+          await loadPreviewBlob(directUrl);
+        } catch {
+          setCvPreviewUrl(null);
         }
       } else {
         setCvPreviewUrl(null);
