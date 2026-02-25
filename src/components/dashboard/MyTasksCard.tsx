@@ -78,6 +78,7 @@ export default function MyTasksCard() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["my-tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["user-alert-counts"] });
       setNewTitle("");
       setShowAddForm(false);
       toast.success("Task added");
@@ -98,6 +99,7 @@ export default function MyTasksCard() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["my-tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["user-alert-counts"] });
     },
   });
 
@@ -114,6 +116,7 @@ export default function MyTasksCard() {
     },
     onSuccess: (_, ids) => {
       queryClient.invalidateQueries({ queryKey: ["my-tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["user-alert-counts"] });
       setSelectedIds(new Set());
       setSelectionMode(false);
       toast.success(`${ids.length} task${ids.length > 1 ? 's' : ''} completed`);
@@ -134,6 +137,7 @@ export default function MyTasksCard() {
     },
     onSuccess: (_, ids) => {
       queryClient.invalidateQueries({ queryKey: ["my-tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["user-alert-counts"] });
       setSelectedIds(new Set());
       setSelectionMode(false);
       toast.success(`${ids.length} task${ids.length > 1 ? 's' : ''} reopened`);
@@ -148,6 +152,7 @@ export default function MyTasksCard() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["my-tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["user-alert-counts"] });
       toast.success("Task deleted");
     },
   });
@@ -159,6 +164,7 @@ export default function MyTasksCard() {
     },
     onSuccess: (_, ids) => {
       queryClient.invalidateQueries({ queryKey: ["my-tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["user-alert-counts"] });
       setSelectedIds(new Set());
       setSelectionMode(false);
       toast.success(`${ids.length} task${ids.length > 1 ? 's' : ''} deleted`);

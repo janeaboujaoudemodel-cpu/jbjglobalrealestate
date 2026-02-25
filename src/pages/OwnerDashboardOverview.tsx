@@ -442,6 +442,7 @@ export default function OwnerDashboardOverview() {
         .eq('id', taskId);
       queryClient.invalidateQueries({ queryKey: ['owner-followup-items'] });
       queryClient.invalidateQueries({ queryKey: ['owner-kpi-pending-tasks'] });
+      queryClient.invalidateQueries({ queryKey: ['user-alert-counts'] });
       toast.success('Task completed');
     } catch {
       toast.error('Failed to complete task');
