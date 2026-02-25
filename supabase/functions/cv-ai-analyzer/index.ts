@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
+import pako from "npm:pako@2.1.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -161,11 +162,47 @@ async function extractWithVisionApi(
   }
 }
 
+function scoreExtractedTextQuality(text: string): number {
+  const normalized = text.replace(/\s+/g, " ").trim();
+  if (!normalized) return 0;
+
+  const tokens = normalized.split(/\s+/).filter(Boolean);
+  if (tokens.length === 0) return 0;
+
+  const letterTokens = tokens.filter((token) => /\p{L}/u.test(token));
+  const readableTokens = letterTokens.filter((token) => /^\p{L}[\p{L}'’.-]{1,}$/u.test(token));
+  const readableRatio = readableTokens.length / Math.max(1, letterTokens.length);
+
+  const keywordSignals = [
+    "experience", "education", "skills", "languages", "email", "phone", "summary",
+    "manager", "sales", "project", "profile", "work", "resume", "cv",
+  ];
+  const lower = normalized.toLowerCase();
+  const keywordHits = keywordSignals.filter((keyword) => lower.includes(keyword)).length;
+
+  const hasEmail = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/i.test(normalized);
+  const hasYear = /\b(19|20)\d{2}\b/.test(normalized);
+  const hasPhone = /\+?\d[\d\s().-]{7,}/.test(normalized);
+
+  const averageTokenLength = letterTokens.reduce((sum, token) => sum + token.length, 0) / Math.max(1, letterTokens.length);
+  const lengthScore = averageTokenLength >= 3 && averageTokenLength <= 14 ? 1 : 0;
+
+  const structureSignals = Number(hasEmail) + Number(hasYear) + Number(hasPhone);
+
+  const score =
+    readableRatio * 0.5 +
+    Math.min(1, keywordHits / 6) * 0.25 +
+    Math.min(1, structureSignals / 3) * 0.2 +
+    lengthScore * 0.05;
+
+  return Math.max(0, Math.min(1, score));
+}
+
 /**
  * Attempt to download and extract text from the CV file.
- * Uses a two-stage approach:
- * 1. Programmatic text extraction (fast, no API cost)
- * 2. Vision API fallback for scanned/complex PDFs
+ * Uses a layered approach:
+ * 1. Programmatic text extraction
+ * 2. Vision API fallback when extraction quality is weak
  */
 async function extractCvText(
   adminClient: any,
@@ -213,51 +250,78 @@ async function extractCvText(
     const mimeType = ext === 'pdf' ? 'application/pdf' :
                      ext === 'docx' ? 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' :
                      ext === 'doc' ? 'application/msword' :
+                     ext === 'rtf' ? 'application/rtf' :
                      'application/octet-stream';
 
-    // Stage 1: Programmatic text extraction
-    let text: string | null = null;
+    // Stage 1: programmatic extraction
+    let programmaticText: string | null = null;
 
     if (['txt', 'md', 'csv'].includes(ext)) {
       return new TextDecoder().decode(fileBytes);
     }
 
     if (ext === 'pdf') {
-      text = extractTextFromPdf(fileBytes);
-    } else if (['doc', 'docx'].includes(ext)) {
-      text = extractTextFromDoc(fileBytes);
+      programmaticText = extractTextFromPdf(fileBytes);
+    } else if (['doc', 'docx', 'rtf'].includes(ext)) {
+      programmaticText = extractTextFromDoc(fileBytes);
     }
 
-    // Quality check: does the extracted text contain meaningful content?
-    if (text) {
-      const cleanText = text.replace(/\s+/g, ' ').trim();
-      const letterCount = (cleanText.match(/[a-zA-Z]/g) || []).length;
-      const wordCount = cleanText.split(/\s+/).filter(w => w.length >= 2).length;
-      
-      if (letterCount > 100 && wordCount > 20) {
-        console.log(`Programmatic extraction successful: ${wordCount} words, ${letterCount} letters`);
-        return text;
-      }
-      console.log(`Programmatic extraction yielded poor results: ${wordCount} words, ${letterCount} letters - falling back to Vision API`);
+    const getStats = (text: string | null) => {
+      if (!text) return { words: 0, letters: 0, quality: 0 };
+      const clean = text.replace(/\s+/g, ' ').trim();
+      return {
+        words: clean.split(/\s+/).filter(w => w.length >= 2).length,
+        letters: (clean.match(/\p{L}/gu) || []).length,
+        quality: scoreExtractedTextQuality(clean),
+      };
+    };
+
+    let bestText = programmaticText;
+    let bestStats = getStats(programmaticText);
+
+    if (programmaticText) {
+      console.log(`Programmatic extraction: words=${bestStats.words}, letters=${bestStats.letters}, quality=${bestStats.quality.toFixed(2)}`);
     } else {
-      console.log(`Programmatic extraction returned nothing for ${ext} - falling back to Vision API`);
+      console.log(`Programmatic extraction returned nothing for ${ext}`);
     }
 
-    // Stage 2: Vision API fallback (handles scanned PDFs, complex layouts, images)
-    // Only for supported types
-    if (['pdf', 'png', 'jpg', 'jpeg', 'webp', 'gif', 'doc', 'docx'].includes(ext)) {
+    // Stage 2: Vision fallback for weak extraction quality
+    const shouldTryVision =
+      ['pdf', 'png', 'jpg', 'jpeg', 'webp', 'gif', 'doc', 'docx', 'rtf'].includes(ext) &&
+      (!bestText || bestStats.quality < 0.62 || bestStats.words < 120);
+
+    if (shouldTryVision) {
       const visionText = await extractWithVisionApi(fileBytes, mimeType, lovableApiKey);
-      if (visionText) return visionText;
+      const visionStats = getStats(visionText);
+
+      if (visionText) {
+        console.log(`Vision extraction: words=${visionStats.words}, letters=${visionStats.letters}, quality=${visionStats.quality.toFixed(2)}`);
+      }
+
+      const shouldUseVision =
+        !!visionText &&
+        (!bestText || visionStats.quality >= bestStats.quality + 0.06 || (visionStats.quality > 0.5 && bestStats.quality < 0.45));
+
+      if (shouldUseVision) {
+        bestText = visionText;
+        bestStats = visionStats;
+      }
     }
 
-    // Last resort: try decoding as text
+    if (bestText && bestStats.letters > 80 && bestStats.words > 20 && bestStats.quality >= 0.3) {
+      return bestText.slice(0, 12000);
+    }
+
+    // Last resort: try decoding as plain text
     try {
       const rawText = new TextDecoder().decode(fileBytes);
-      const printableRatio = rawText.split('').filter(c => c.charCodeAt(0) >= 32 && c.charCodeAt(0) < 127).length / rawText.length;
+      const printableRatio = rawText.split('').filter(c => c.charCodeAt(0) >= 32 && c.charCodeAt(0) < 127).length / Math.max(1, rawText.length);
       if (printableRatio > 0.7) return rawText.slice(0, 12000);
-    } catch { /* ignore */ }
+    } catch {
+      // ignore
+    }
 
-    return null;
+    return bestText?.slice(0, 12000) || null;
   } catch (err) {
     console.error("CV text extraction error:", err);
     return null;
@@ -265,45 +329,66 @@ async function extractCvText(
 }
 
 /**
- * Basic PDF text extraction — finds text between BT/ET operators
- * and decodes text strings in parentheses and hex strings.
+ * PDF text extraction with support for Flate-compressed streams.
  */
 function extractTextFromPdf(bytes: Uint8Array): string {
   const raw = new TextDecoder('latin1').decode(bytes);
   const textParts: string[] = [];
 
-  // Method 1: Extract text from PDF streams (Tj, TJ operators)
-  const tjRegex = /\(([^)]*)\)\s*Tj/g;
-  let match;
-  while ((match = tjRegex.exec(raw)) !== null) {
-    textParts.push(match[1]);
-  }
+  const extractTextOperators = (content: string) => {
+    const parts: string[] = [];
 
-  // Method 2: Extract from TJ arrays
-  const tjArrayRegex = /\[([^\]]*)\]\s*TJ/g;
-  while ((match = tjArrayRegex.exec(raw)) !== null) {
-    const inner = match[1];
-    const strings = inner.match(/\(([^)]*)\)/g);
-    if (strings) {
-      for (const s of strings) {
-        textParts.push(s.slice(1, -1));
+    const tjRegex = /\(([^)]*)\)\s*Tj/g;
+    let match: RegExpExecArray | null;
+    while ((match = tjRegex.exec(content)) !== null) {
+      parts.push(match[1]);
+    }
+
+    const tjArrayRegex = /\[([^\]]*)\]\s*TJ/g;
+    while ((match = tjArrayRegex.exec(content)) !== null) {
+      const inner = match[1];
+      const strings = inner.match(/\(([^)]*)\)/g);
+      if (strings) {
+        for (const s of strings) {
+          parts.push(s.slice(1, -1));
+        }
+      }
+    }
+
+    const readable = content
+      .replace(/[^\x20-\x7E\n\r\t]/g, ' ')
+      .replace(/\s{3,}/g, ' ')
+      .trim();
+    if (readable.length > 40) {
+      parts.push(readable);
+    }
+
+    return parts;
+  };
+
+  // 1) Extract directly from raw payload
+  textParts.push(...extractTextOperators(raw));
+
+  // 2) Extract and inflate compressed streams
+  const streamRegex = /<<(.*?)>>\s*stream\r?\n([\s\S]*?)\r?\nendstream/g;
+  let streamMatch: RegExpExecArray | null;
+  while ((streamMatch = streamRegex.exec(raw)) !== null) {
+    const dict = streamMatch[1] || '';
+    const streamData = streamMatch[2] || '';
+
+    if (/FlateDecode/i.test(dict)) {
+      try {
+        const compressedBytes = Uint8Array.from(streamData, (char) => char.charCodeAt(0));
+        const inflated = pako.inflate(compressedBytes, { to: 'string' }) as string;
+        textParts.push(...extractTextOperators(inflated));
+      } catch {
+        // keep going
       }
     }
   }
 
-  // Method 3: Simple text extraction from stream content
-  const streamRegex = /stream\r?\n([\s\S]*?)\r?\nendstream/g;
-  while ((match = streamRegex.exec(raw)) !== null) {
-    const content = match[1];
-    const readable = content.replace(/[^\x20-\x7E\n\r\t]/g, ' ')
-      .replace(/\s{3,}/g, ' ')
-      .trim();
-    if (readable.length > 20) {
-      textParts.push(readable);
-    }
-  }
-
-  let text = textParts.join(' ')
+  let text = textParts
+    .join(' ')
     .replace(/\\n/g, '\n')
     .replace(/\\r/g, '')
     .replace(/\\\(/g, '(')
@@ -311,18 +396,22 @@ function extractTextFromPdf(bytes: Uint8Array): string {
     .replace(/\s{2,}/g, ' ')
     .trim();
 
-  // If extraction yielded very little, try brute-force readable content
-  if (text.length < 50) {
-    const bruteText = raw.replace(/[^\x20-\x7E\n\r\t]/g, ' ')
+  if (text.length < 80) {
+    const bruteText = raw
+      .replace(/[^\x20-\x7E\n\r\t]/g, ' ')
       .replace(/\s{3,}/g, ' ')
       .trim();
-    const words = bruteText.split(/\s+/).filter(w => /^[a-zA-Z@.]{2,}$/.test(w) || /^\d{4}$/.test(w) || /^\+?\d[\d\s-]{6,}$/.test(w));
-    if (words.length > 10) {
+
+    const words = bruteText
+      .split(/\s+/)
+      .filter((w) => /^[a-zA-Z@.]{2,}$/.test(w) || /^\d{4}$/.test(w) || /^\+?\d[\d\s-]{6,}$/.test(w));
+
+    if (words.length > 12) {
       text = words.join(' ');
     }
   }
 
-  return text.length > 20 ? text.slice(0, 12000) : "";
+  return text.length > 20 ? text.slice(0, 12000) : '';
 }
 
 /**
@@ -350,18 +439,17 @@ function extractTextFromDoc(bytes: Uint8Array): string {
   }
   if (current.trim().length > 3) segments.push(current.trim());
 
-  const meaningful = segments.filter(s => {
-    const wordCount = s.split(/\s+/).filter(w => /^[a-zA-Z]{2,}$/.test(w)).length;
+  const meaningful = segments.filter((s) => {
+    const wordCount = s.split(/\s+/).filter((w) => /^\p{L}{2,}$/u.test(w)).length;
     return wordCount >= 2 || s.length > 20;
   });
 
   const text = meaningful.join('\n').slice(0, 12000);
-  return text.length > 20 ? text : "";
+  return text.length > 20 ? text : '';
 }
 
 function extractTextFromDocx(bytes: Uint8Array): string {
   try {
-    const raw = new TextDecoder('latin1').decode(bytes);
     let offset = 0;
     const files: { name: string; data: string }[] = [];
 
@@ -380,16 +468,33 @@ function extractTextFromDocx(bytes: Uint8Array): string {
       const nameStart = offset + 30;
       const name = new TextDecoder('latin1').decode(bytes.slice(nameStart, nameStart + nameLen));
       const dataStart = nameStart + nameLen + extraLen;
+      const compressed = bytes.slice(dataStart, dataStart + compSize);
 
-      if (compressionMethod === 0 && name.includes('document.xml')) {
-        const data = new TextDecoder('utf-8').decode(bytes.slice(dataStart, dataStart + compSize));
-        files.push({ name, data });
+      if (name.includes('document.xml')) {
+        try {
+          let xmlBytes: Uint8Array;
+          if (compressionMethod === 0) {
+            xmlBytes = compressed;
+          } else if (compressionMethod === 8) {
+            xmlBytes = pako.inflateRaw(compressed) as Uint8Array;
+          } else {
+            xmlBytes = new Uint8Array();
+          }
+
+          if (xmlBytes.length > 0) {
+            const data = new TextDecoder('utf-8').decode(xmlBytes);
+            files.push({ name, data });
+          }
+        } catch {
+          // ignore bad zip entries
+        }
       }
 
       offset = dataStart + compSize;
+      if (compSize <= 0) break;
     }
 
-    const docFile = files.find(f => f.name.includes('word/document.xml'));
+    const docFile = files.find((f) => f.name.includes('word/document.xml'));
     if (docFile) {
       const text = docFile.data
         .replace(/<w:p[^>]*>/g, '\n')
@@ -402,15 +507,16 @@ function extractTextFromDocx(bytes: Uint8Array): string {
         .replace(/&#39;/g, "'")
         .replace(/\s{2,}/g, ' ')
         .trim();
-      return text.length > 20 ? text.slice(0, 12000) : "";
+      return text.length > 20 ? text.slice(0, 12000) : '';
     }
 
-    const fallback = raw.replace(/[^\x20-\x7E\n\r\t]/g, ' ')
+    const fallback = new TextDecoder('latin1').decode(bytes)
+      .replace(/[^\x20-\x7E\n\r\t]/g, ' ')
       .replace(/\s{3,}/g, ' ')
       .trim();
-    return fallback.length > 50 ? fallback.slice(0, 12000) : "";
+    return fallback.length > 50 ? fallback.slice(0, 12000) : '';
   } catch {
-    return "";
+    return '';
   }
 }
 
