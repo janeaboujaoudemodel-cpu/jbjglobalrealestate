@@ -76,7 +76,7 @@ function UsefulLinksCard() {
       cover: marketIntelligenceCover,
       category: "report",
       icon: "chart",
-      coverLocked: false,
+      coverLocked: true,
       tableOfContents: [],
     },
     {
@@ -103,7 +103,7 @@ function UsefulLinksCard() {
       cover: investorEducationCover,
       category: "education",
       icon: "graduation",
-      coverLocked: false,
+      coverLocked: true,
       tableOfContents: [],
     },
   ];
