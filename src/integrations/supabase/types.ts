@@ -1806,6 +1806,7 @@ export type Database = {
           is_restricted: boolean | null
           learning_objective: string | null
           learning_path: string
+          min_tier: Database["public"]["Enums"]["broker_training_tier"] | null
           sort_order: number | null
           title: string
           unlock_requirements: Json | null
@@ -1820,6 +1821,7 @@ export type Database = {
           is_restricted?: boolean | null
           learning_objective?: string | null
           learning_path: string
+          min_tier?: Database["public"]["Enums"]["broker_training_tier"] | null
           sort_order?: number | null
           title: string
           unlock_requirements?: Json | null
@@ -1834,6 +1836,7 @@ export type Database = {
           is_restricted?: boolean | null
           learning_objective?: string | null
           learning_path?: string
+          min_tier?: Database["public"]["Enums"]["broker_training_tier"] | null
           sort_order?: number | null
           title?: string
           unlock_requirements?: Json | null
@@ -2349,6 +2352,48 @@ export type Database = {
         }
         Relationships: []
       }
+      broker_program_books: {
+        Row: {
+          book_id: string
+          created_at: string | null
+          id: string
+          is_mandatory: boolean | null
+          program_id: string
+          sort_order: number | null
+        }
+        Insert: {
+          book_id: string
+          created_at?: string | null
+          id?: string
+          is_mandatory?: boolean | null
+          program_id: string
+          sort_order?: number | null
+        }
+        Update: {
+          book_id?: string
+          created_at?: string | null
+          id?: string
+          is_mandatory?: boolean | null
+          program_id?: string
+          sort_order?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "broker_program_books_book_id_fkey"
+            columns: ["book_id"]
+            isOneToOne: false
+            referencedRelation: "broker_education_books"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "broker_program_books_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "broker_training_programs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       broker_subscriptions: {
         Row: {
           ai_credits_limit: number | null
@@ -2505,6 +2550,98 @@ export type Database = {
           },
         ]
       }
+      broker_training_assignments: {
+        Row: {
+          assigned_at: string | null
+          assigned_by: string | null
+          broker_tier: Database["public"]["Enums"]["broker_training_tier"]
+          created_at: string | null
+          first_deal_closed_at: string | null
+          id: string
+          is_active: boolean | null
+          notes: string | null
+          probation_end_date: string | null
+          probation_start_date: string | null
+          program_id: string
+          promoted_to_elite_at: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          assigned_at?: string | null
+          assigned_by?: string | null
+          broker_tier?: Database["public"]["Enums"]["broker_training_tier"]
+          created_at?: string | null
+          first_deal_closed_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          notes?: string | null
+          probation_end_date?: string | null
+          probation_start_date?: string | null
+          program_id: string
+          promoted_to_elite_at?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          assigned_at?: string | null
+          assigned_by?: string | null
+          broker_tier?: Database["public"]["Enums"]["broker_training_tier"]
+          created_at?: string | null
+          first_deal_closed_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          notes?: string | null
+          probation_end_date?: string | null
+          probation_start_date?: string | null
+          program_id?: string
+          promoted_to_elite_at?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "broker_training_assignments_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "broker_training_programs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      broker_training_programs: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          sort_order: number | null
+          tier: Database["public"]["Enums"]["broker_training_tier"]
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          sort_order?: number | null
+          tier: Database["public"]["Enums"]["broker_training_tier"]
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          sort_order?: number | null
+          tier?: Database["public"]["Enums"]["broker_training_tier"]
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       broker_training_progress: {
         Row: {
           completed_at: string | null
@@ -2542,6 +2679,44 @@ export type Database = {
             columns: ["module_id"]
             isOneToOne: false
             referencedRelation: "hr_training_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      broker_user_book_access: {
+        Row: {
+          book_id: string
+          granted_at: string | null
+          granted_by: string | null
+          id: string
+          is_active: boolean | null
+          revoked_at: string | null
+          user_id: string
+        }
+        Insert: {
+          book_id: string
+          granted_at?: string | null
+          granted_by?: string | null
+          id?: string
+          is_active?: boolean | null
+          revoked_at?: string | null
+          user_id: string
+        }
+        Update: {
+          book_id?: string
+          granted_at?: string | null
+          granted_by?: string | null
+          id?: string
+          is_active?: boolean | null
+          revoked_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "broker_user_book_access_book_id_fkey"
+            columns: ["book_id"]
+            isOneToOne: false
+            referencedRelation: "broker_education_books"
             referencedColumns: ["id"]
           },
         ]
@@ -23585,6 +23760,7 @@ export type Database = {
         | "meeting"
         | "other"
       broker_tier: "starter" | "rising" | "performer" | "elite" | "legend"
+      broker_training_tier: "probation" | "elite"
       card_status: "active" | "suspended" | "expired"
       checkin_type: "gps_selfie" | "manual_register" | "qr_scan"
       client_tier: "bronze" | "silver" | "gold" | "platinum" | "diamond"
@@ -24012,6 +24188,7 @@ export const Constants = {
         "other",
       ],
       broker_tier: ["starter", "rising", "performer", "elite", "legend"],
+      broker_training_tier: ["probation", "elite"],
       card_status: ["active", "suspended", "expired"],
       checkin_type: ["gps_selfie", "manual_register", "qr_scan"],
       client_tier: ["bronze", "silver", "gold", "platinum", "diamond"],
