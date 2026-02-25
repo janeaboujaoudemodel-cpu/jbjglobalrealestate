@@ -149,10 +149,10 @@ const ShortTermRentals = () => {
       {/* ═══════════════════════════════════════════
           1. HERO
       ═══════════════════════════════════════════ */}
-      <section className="relative flex items-center justify-center min-h-[85vh] overflow-hidden bg-gradient-to-b from-[#0d0b09] via-[#1a1610] to-[#0d0b09]">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_#C8A76615_0%,_transparent_60%)]" />
-        <div className="absolute top-20 left-10 w-72 h-72 bg-[#C8A766]/8 rounded-full blur-[120px]" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#C8A766]/6 rounded-full blur-[140px]" />
+      <section className="relative flex items-center justify-center min-h-[85vh] overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F8F3EA] to-[#F0E8D8]">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_#C8A76612_0%,_transparent_60%)]" />
+        <div className="absolute top-20 left-10 w-72 h-72 bg-[#C8A766]/6 rounded-full blur-[120px]" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#C8A766]/5 rounded-full blur-[140px]" />
 
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
@@ -161,7 +161,7 @@ const ShortTermRentals = () => {
             transition={{ duration: 0.7 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full mb-8 border border-[#C8A766]/40 bg-white/5 backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full mb-8 border border-[#C8A766]/40 bg-white/60 backdrop-blur-md">
               <Home className="w-4 h-4 text-[#C8A766]" />
               <span className="text-[#C8A766] font-semibold text-xs uppercase tracking-[0.2em]">
                 Holiday Home Services
@@ -169,18 +169,18 @@ const ShortTermRentals = () => {
             </div>
 
             <h1
-              className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight"
+              className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#1a1714] mb-6 tracking-tight"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Luxury Short-Term Rental &<br />
               <span className="text-[#C8A766]">Holiday Home Management</span>
             </h1>
 
-            <p className="text-zinc-300 text-lg md:text-xl mb-4 font-medium tracking-wide">
+            <p className="text-[#6b5d4d] text-lg md:text-xl mb-4 font-medium tracking-wide">
               Maximize Yield. Maintain Standards. Operate in Full Compliance.
             </p>
 
-            <p className="text-zinc-400 text-base max-w-3xl mx-auto leading-relaxed mb-10">
+            <p className="text-[#5a4d3f] text-base max-w-3xl mx-auto leading-relaxed mb-10">
               Short-term rental operations require more than simply listing a property online.
               From licensing and guest vetting to dynamic pricing and hospitality management,
               we provide a structured short-term rental framework designed to maximize occupancy
