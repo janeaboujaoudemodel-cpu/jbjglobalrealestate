@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Bell, Check, CheckCheck, ExternalLink, X } from "lucide-react";
+import { Bell, CalendarPlus, Check, CheckCheck, ExternalLink, MailOpen, Mail, StickyNote, X } from "lucide-react";
+import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
 
 interface Notification {
@@ -90,6 +91,49 @@ export function NotificationsPanel({ maxHeight = "350px", compact = false }: Not
         prev.map(n => (n.id === id ? { ...n, is_read: true } : n))
       );
       setUnreadCount(prev => Math.max(0, prev - 1));
+    }
+  };
+
+  const markAsUnread = async (id: string) => {
+    const { error } = await supabase
+      .from("notifications")
+      .update({ is_read: false, read_at: null })
+      .eq("id", id);
+
+    if (!error) {
+      setNotifications(prev =>
+        prev.map(n => (n.id === id ? { ...n, is_read: false } : n))
+      );
+      setUnreadCount(prev => prev + 1);
+    }
+  };
+
+  const addToCalendar = async (notification: Notification) => {
+    if (!user) return;
+    const { error } = await supabase.from("ai_notes").insert({
+      user_id: user.id,
+      title: notification.title,
+      content: notification.body || "",
+      source_type: "notification",
+      ai_schedule: { date: new Date().toISOString().split("T")[0], title: notification.title },
+    });
+    if (!error) {
+      toast.success("Added to calendar");
+      markAsRead(notification.id);
+    }
+  };
+
+  const addToNotes = async (notification: Notification) => {
+    if (!user) return;
+    const { error } = await supabase.from("ai_notes").insert({
+      user_id: user.id,
+      title: notification.title,
+      content: notification.body || "",
+      source_type: "notification",
+    });
+    if (!error) {
+      toast.success("Saved to notes");
+      markAsRead(notification.id);
     }
   };
 
@@ -211,25 +255,55 @@ export function NotificationsPanel({ maxHeight = "350px", compact = false }: Not
                         {formatDistanceToNow(new Date(notification.created_at), { addSuffix: true })}
                       </p>
                     </div>
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-0.5">
                       {notification.action_url && (
                         <Button
                           variant="ghost"
                           size="icon"
                           className="h-6 w-6"
+                          title="Open"
                           onClick={() => handleNotificationAction(notification.action_url as string)}
                         >
                           <ExternalLink className="h-3 w-3" />
                         </Button>
                       )}
-                      {!notification.is_read && (
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-6 w-6"
+                        title="Add to Calendar"
+                        onClick={() => addToCalendar(notification)}
+                      >
+                        <CalendarPlus className="h-3 w-3" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-6 w-6"
+                        title="Save to Notes"
+                        onClick={() => addToNotes(notification)}
+                      >
+                        <StickyNote className="h-3 w-3" />
+                      </Button>
+                      {notification.is_read ? (
                         <Button
                           variant="ghost"
                           size="icon"
                           className="h-6 w-6"
+                          title="Mark as Unread"
+                          onClick={() => markAsUnread(notification.id)}
+                        >
+                          <Mail className="h-3 w-3" />
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-6 w-6"
+                          title="Mark as Read"
                           onClick={() => markAsRead(notification.id)}
                         >
-                          <X className="h-3 w-3" />
+                          <MailOpen className="h-3 w-3" />
                         </Button>
                       )}
                     </div>
