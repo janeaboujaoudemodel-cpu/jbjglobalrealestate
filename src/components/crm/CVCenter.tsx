@@ -15,7 +15,9 @@ import {
   Flag, Eye, User, Building2, Camera, Megaphone, Code, Calculator,
   Loader2, ExternalLink, Download, MessageSquare, Brain, Sparkles,
   Target, HelpCircle, ThumbsUp, ThumbsDown, Zap, ChevronDown, ChevronUp,
+  ArrowUpDown,
 } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { format } from 'date-fns';
@@ -91,6 +93,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
   const [interviewNotes, setInterviewNotes] = useState('');
   const [analyzingIds, setAnalyzingIds] = useState<Set<string>>(new Set());
   const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
+  const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'score' | 'position'>('newest');
   const autoAnalyzeRef = useRef(false);
 
   useEffect(() => { fetchCVs(); }, []);
@@ -267,8 +270,19 @@ const CVCenter = ({ userId }: CVCenterProps) => {
         cv.languages.some(l => l.toLowerCase().includes(query))
       );
     }
-    return filtered.sort((a, b) => getScoreBreakdown(b).final - getScoreBreakdown(a).final);
-  }, [cvEntries, activeStatusTab, activeDeptCategory, searchQuery]);
+    // Apply selected sort
+    switch (sortBy) {
+      case 'oldest':
+        return filtered.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+      case 'score':
+        return filtered.sort((a, b) => getScoreBreakdown(b).final - getScoreBreakdown(a).final);
+      case 'position':
+        return filtered.sort((a, b) => a.department_category.localeCompare(b.department_category));
+      case 'newest':
+      default:
+        return filtered.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    }
+  }, [cvEntries, activeStatusTab, activeDeptCategory, searchQuery, sortBy]);
 
   const stats = useMemo(() => ({
     total: cvEntries.length,
@@ -528,15 +542,29 @@ const CVCenter = ({ userId }: CVCenterProps) => {
         </CardContent>
       </Card>
 
-      {/* Search */}
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-crm-text-muted" />
-        <Input
-          placeholder="Search by name, email, nationality, skills..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="pl-10 bg-white border-crm-border text-crm-text placeholder:text-crm-text-muted focus:ring-2 focus:ring-gold/30 focus:border-gold"
-        />
+      {/* Search + Sort */}
+      <div className="flex gap-3 items-center">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-crm-text-muted" />
+          <Input
+            placeholder="Search by name, email, nationality, skills..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10 bg-white border-crm-border text-crm-text placeholder:text-crm-text-muted focus:ring-2 focus:ring-gold/30 focus:border-gold"
+          />
+        </div>
+        <Select value={sortBy} onValueChange={(v) => setSortBy(v as any)}>
+          <SelectTrigger className="w-[180px] bg-white border-crm-border text-crm-text">
+            <ArrowUpDown className="h-3.5 w-3.5 mr-2 text-crm-text-muted" />
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="newest">Newest First</SelectItem>
+            <SelectItem value="oldest">Oldest First</SelectItem>
+            <SelectItem value="score">Highest Score</SelectItem>
+            <SelectItem value="position">By Position</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       {/* CV List */}

@@ -41,6 +41,47 @@ const LANGUAGES = [
   { code: "tr", name: "Turkish" },
 ];
 
+const JOB_POSITIONS = [
+  { value: "property_consultant", label: "Property Consultant / Real Estate Broker" },
+  { value: "senior_property_consultant", label: "Senior Property Consultant" },
+  { value: "team_leader", label: "Team Leader – Sales" },
+  { value: "sales_manager", label: "Sales Manager" },
+  { value: "sales_director", label: "Sales Director" },
+  { value: "listing_agent", label: "Listing Agent" },
+  { value: "off_plan_specialist", label: "Off-Plan Sales Specialist" },
+  { value: "secondary_market_agent", label: "Secondary Market Agent" },
+  { value: "luxury_specialist", label: "Luxury Property Specialist" },
+  { value: "commercial_broker", label: "Commercial Real Estate Broker" },
+  { value: "leasing_consultant", label: "Leasing Consultant" },
+  { value: "marketing_manager", label: "Marketing Manager" },
+  { value: "digital_marketing_specialist", label: "Digital Marketing Specialist" },
+  { value: "social_media_manager", label: "Social Media Manager" },
+  { value: "content_creator", label: "Content Creator" },
+  { value: "seo_specialist", label: "SEO Specialist" },
+  { value: "graphic_designer", label: "Graphic Designer" },
+  { value: "photographer", label: "Photographer" },
+  { value: "videographer", label: "Videographer" },
+  { value: "video_editor", label: "Video Editor" },
+  { value: "crm_administrator", label: "CRM Administrator" },
+  { value: "business_development_manager", label: "Business Development Manager" },
+  { value: "client_relations_manager", label: "Client Relations Manager" },
+  { value: "hr_coordinator", label: "HR Coordinator" },
+  { value: "recruitment_specialist", label: "Recruitment Specialist" },
+  { value: "finance_accountant", label: "Finance & Accounting" },
+  { value: "office_administrator", label: "Office Administrator" },
+  { value: "executive_assistant", label: "Executive Assistant / PA" },
+  { value: "receptionist", label: "Receptionist / Front Desk" },
+  { value: "it_support", label: "IT Support Specialist" },
+  { value: "web_developer", label: "Web Developer" },
+  { value: "mobile_developer", label: "Mobile App Developer" },
+  { value: "data_analyst", label: "Data Analyst" },
+  { value: "legal_advisor", label: "Legal Advisor / Compliance" },
+  { value: "property_management", label: "Property Management" },
+  { value: "customer_service", label: "Customer Service Representative" },
+  { value: "internship", label: "Internship / Trainee" },
+  { value: "other", label: "Other – General Application" },
+];
+
 const COUNTRIES = [
   "Afghanistan", "Albania", "Algeria", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan",
   "Bahrain", "Bangladesh", "Belgium", "Bolivia", "Bosnia", "Brazil", "Bulgaria", "Cambodia",
@@ -75,6 +116,7 @@ export default function JoinApplication() {
     preferredLanguage: "en",
     country: "",
     city: "",
+    positionApplied: "",
     consentAccurate: false,
     consentTerms: false,
   });
@@ -150,6 +192,11 @@ export default function JoinApplication() {
       return;
     }
 
+    if (!formData.positionApplied) {
+      toast.error("Please select a position to apply for");
+      return;
+    }
+
     if (!cvFile) {
       toast.error("Please upload your CV");
       return;
@@ -161,6 +208,8 @@ export default function JoinApplication() {
       setUploadProgress(30);
       const cvPath = await uploadCV(cvFile);
       setUploadProgress(60);
+
+      const positionLabel = JOB_POSITIONS.find(p => p.value === formData.positionApplied)?.label || formData.positionApplied;
 
       // Create application
       const { error: appError } = await supabase
@@ -175,6 +224,7 @@ export default function JoinApplication() {
           current_location_country: formData.country,
           current_location_city: formData.city,
           cv_url: cvPath,
+          position_applied: positionLabel,
           consent_accurate: formData.consentAccurate,
           consent_terms: formData.consentTerms,
           status: "pending",
@@ -189,14 +239,14 @@ export default function JoinApplication() {
             email: user.email!,
             fullName: `${formData.firstName} ${formData.lastName}`.trim(),
             status: 'submitted',
-            position: formData.nationality || 'General Application',
+            position: positionLabel,
             userId: user.id,
           },
         }),
         supabase.from('admin_tasks').insert({
           user_id: user.id,
           title: 'CV under review',
-          description: 'Your CV is currently under review by the HR team.',
+          description: `Your CV for ${positionLabel} is currently under review by the HR team.`,
           category: 'cv_application',
           status: 'pending',
           priority: 'medium',
@@ -458,7 +508,26 @@ export default function JoinApplication() {
                 </Select>
               </div>
 
-              {/* Current Location */}
+              {/* Position Applied For */}
+              <div className="space-y-2">
+                <Label htmlFor="position">Position Applied For <span className="text-red-500">*</span></Label>
+                <Select
+                  value={formData.positionApplied}
+                  onValueChange={(value) => setFormData({ ...formData, positionApplied: value })}
+                  disabled={!user || loading}
+                >
+                  <SelectTrigger className="bg-background">
+                    <SelectValue placeholder="Select the position you're applying for" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {JOB_POSITIONS.map((pos) => (
+                      <SelectItem key={pos.value} value={pos.value}>{pos.label}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="country">Country</Label>
