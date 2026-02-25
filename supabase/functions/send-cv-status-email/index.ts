@@ -198,7 +198,7 @@ ${config.extraHtml}
 <!-- Warning -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fffbeb;border:1px solid #f59e0b;border-radius:10px;margin-bottom:24px;">
 <tr><td style="padding:16px 20px;">
-<p style="margin:0;font-size:13px;color:#92400e;line-height:1.6;"><strong>&#9888;&#65039; Important:</strong> This is an automated email. <strong>Please do not reply</strong> to this message. For inquiries, contact us at <a href="mailto:careers@jbj.ae" style="color:#C8A766;">careers@jbj.ae</a></p>
+<p style="margin:0;font-size:13px;color:#92400e;line-height:1.6;"><strong>&#9888;&#65039; Important:</strong> For inquiries about your application, contact us at <a href="mailto:HR@JBJ.AE" style="color:#C8A766;">HR@JBJ.AE</a> or reply to this email.</p>
 </td></tr></table>
 
 <!-- Review & Survey Section -->
@@ -326,10 +326,11 @@ serve(async (req) => {
 
     const result = await sendEmail({
       from: `JBJ Careers <${VERIFIED_SENDER}>`,
+      reply_to: "HR@JBJ.AE",
       to: [body.email],
       subject,
       html,
-    });
+    } as any);
 
     if (result.error) {
       console.error("CV email failed:", result.error);

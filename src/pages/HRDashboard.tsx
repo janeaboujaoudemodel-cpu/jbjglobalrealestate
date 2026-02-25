@@ -1,6 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Users, FileText, Activity, Linkedin, Building2, DollarSign, Briefcase, Wallet, TrendingUp, UserCheck, Brain, Calendar, AlertTriangle, CheckSquare, Target, Plus, FolderOpen } from "lucide-react";
+import { Users, FileText, Activity, Linkedin, Building2, DollarSign, Briefcase, Wallet, TrendingUp, UserCheck, Brain, Calendar, AlertTriangle, CheckSquare, Target, Plus, FolderOpen, Inbox } from "lucide-react";
 import JobOfferManager from "@/components/hr/JobOfferManager";
 import { EmployeePerformanceDashboard } from "@/components/hr/EmployeePerformanceDashboard";
 import { LinkedInInsightsPanel } from "@/components/hr/LinkedInInsightsPanel";
@@ -13,6 +13,7 @@ import { ApprovalWorkflowPanel } from "@/components/hr/ApprovalWorkflowPanel";
 import { HuntingDashboard } from "@/components/hr/hunting/HuntingDashboard";
 import { OpenPositionsPanel } from "@/components/hr/OpenPositionsPanel";
 import CVCenter from "@/components/crm/CVCenter";
+import { HRInboxTab } from "@/components/hr/HRInboxTab";
 import { useHRStats } from "@/hooks/useHRStats";
 import { useAuth } from "@/contexts/AuthContext";
 import { 
@@ -200,6 +201,13 @@ export default function HRDashboard() {
                 <Building2 className="h-4 w-4" />
                 Competitors
               </TabsTrigger>
+              <TabsTrigger 
+                value="inbox" 
+                className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 data-[state=active]:shadow-sm"
+              >
+                <Inbox className="h-4 w-4" />
+                Inbox
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="performance" className="mt-6">
@@ -248,6 +256,10 @@ export default function HRDashboard() {
 
             <TabsContent value="competitors" className="mt-6">
               <CompetitorTrackingPanel />
+            </TabsContent>
+
+            <TabsContent value="inbox" className="mt-6">
+              <HRInboxTab />
             </TabsContent>
           </Tabs>
         </PremiumContainer>
