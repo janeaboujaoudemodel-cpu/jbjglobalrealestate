@@ -492,18 +492,26 @@ async function analyzeApplication(
     return { success: false, error: "Failed to parse AI analysis" };
   }
 
-  // Persist to database
-  const updatePayload: Record<string, unknown> = {
-    experience_years: analysis.experience_years ?? 0,
-    languages: analysis.languages ?? [],
-    skills: analysis.skills ?? [],
-    ai_ranking: Math.max(1, Math.min(10, analysis.ai_ranking ?? 1)),
-    ai_summary: analysis.ai_summary ?? "Analysis completed.",
-    flag_reason: analysis.flag_reason ?? null,
-  };
+  // Persist to database (source-aware columns)
+  let updatePayload: Record<string, unknown>;
 
   if (source === "hr_applications") {
-    updatePayload.department_category = analysis.department_category ?? "general";
+    updatePayload = {
+      experience_years: analysis.experience_years ?? 0,
+      languages: analysis.languages ?? [],
+      skills: analysis.skills ?? [],
+      ai_ranking: Math.max(1, Math.min(10, analysis.ai_ranking ?? 1)),
+      ai_summary: analysis.ai_summary ?? "Analysis completed.",
+      flag_reason: analysis.flag_reason ?? null,
+      department_category: analysis.department_category ?? "general",
+    };
+  } else {
+    // hr_cv_submissions has a smaller schema
+    updatePayload = {
+      ai_ranking: Math.max(1, Math.min(10, analysis.ai_ranking ?? 1)),
+      ai_summary: analysis.ai_summary ?? "Analysis completed.",
+      ...(analysis.flag_reason ? { notes: String(analysis.flag_reason).slice(0, 1000) } : {}),
+    };
   }
 
   const { error: updateErr } = await adminClient.from(source).update(updatePayload).eq("id", applicationId);

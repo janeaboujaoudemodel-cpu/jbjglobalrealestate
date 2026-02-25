@@ -89,6 +89,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
   const [cvDirectUrl, setCvDirectUrl] = useState<string | null>(null); // Raw signed URL for open/download fallback
   const [cvPreviewLoading, setCvPreviewLoading] = useState(false);
   const previewBlobUrlRef = useRef<string | null>(null);
+  const [contactActionsOpen, setContactActionsOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
   const [adminMessageSubject, setAdminMessageSubject] = useState('');
   const [adminMessageBody, setAdminMessageBody] = useState('');
@@ -445,22 +446,34 @@ const CVCenter = ({ userId }: CVCenterProps) => {
         .update({ status: newStatus, reviewed_at: new Date().toISOString(), reviewed_by: userId })
         .eq('id', cvId);
       if (error) throw error;
+
       setCvEntries(prev => prev.map(cv =>
         cv.id === cvId ? { ...cv, status: newStatus, reviewed_at: new Date().toISOString() } : cv
       ));
       toast.success(`CV marked as ${newStatus}`);
 
-      // Send status email to the applicant
-      if (target.email && (newStatus === 'approved' || newStatus === 'rejected')) {
-        supabase.functions.invoke('send-cv-status-email', {
+      // Send status email for pending/approved/rejected
+      if (target.email && ['pending', 'approved', 'rejected'].includes(newStatus)) {
+        const emailStatus = newStatus === 'pending' ? 'under_review' : newStatus;
+        const pendingReviewNote = newStatus === 'pending'
+          ? 'Your profile has been moved back to pending review for a deeper HR audit. Our team is reviewing your CV again and will update you shortly with the next step.'
+          : undefined;
+
+        const { error: emailError } = await supabase.functions.invoke('send-cv-status-email', {
           body: {
             email: target.email,
             fullName: target.full_name || 'Applicant',
-            status: newStatus,
-            position: target.department_category || 'General Application',
+            status: emailStatus,
+            position: target.department_category || target.position_applied || 'General Application',
             userId: target.user_id || undefined,
+            adminNote: pendingReviewNote,
           },
-        }).catch(err => console.error('CV email error:', err));
+        });
+
+        if (emailError) {
+          console.error('CV email error:', emailError);
+          toast.error('Status updated, but email delivery failed');
+        }
       }
     } catch (error) {
       console.error('Error updating CV status:', error);
@@ -486,17 +499,22 @@ const CVCenter = ({ userId }: CVCenterProps) => {
 
       if (previewUrl) {
         const previewSource = maybeProxyStorageUrl(previewUrl, { filename: `CV-${cv.full_name.replace(/\s+/g, '-')}`, disposition: 'inline' });
-        const response = await fetch(previewSource);
-        if (!response.ok) throw new Error('Preview fetch failed');
-        let blob = await response.blob();
-        // Ensure correct MIME type for PDF blobs (some proxies return generic type)
-        const ext = (cv.cv_url || '').split('?')[0].split('.').pop()?.toLowerCase();
-        if (ext === 'pdf' && (!blob.type || blob.type === 'application/octet-stream')) {
-          blob = new Blob([blob], { type: 'application/pdf' });
+        try {
+          const response = await fetch(previewSource);
+          if (!response.ok) throw new Error('Preview fetch failed');
+          let blob = await response.blob();
+          // Ensure correct MIME type for PDF blobs (some proxies return generic type)
+          const ext = (cv.cv_url || '').split('?')[0].split('.').pop()?.toLowerCase();
+          if (ext === 'pdf' && (!blob.type || blob.type === 'application/octet-stream')) {
+            blob = new Blob([blob], { type: 'application/pdf' });
+          }
+          const objectUrl = URL.createObjectURL(blob);
+          previewBlobUrlRef.current = objectUrl;
+          setCvPreviewUrl(objectUrl);
+        } catch {
+          // Fallback to direct preview URL when blob fetch is blocked
+          setCvPreviewUrl(previewUrl);
         }
-        const objectUrl = URL.createObjectURL(blob);
-        previewBlobUrlRef.current = objectUrl;
-        setCvPreviewUrl(objectUrl);
       } else {
         setCvPreviewUrl(null);
       }
@@ -574,6 +592,16 @@ const CVCenter = ({ userId }: CVCenterProps) => {
     setCreatingTask(false);
     setIsGeneratingDraft(false);
     try { localStorage.removeItem(DRAFT_KEY); } catch { /* ignore */ }
+  };
+
+  const openContactActions = (cv: CVEntry) => {
+    setSelectedCV(cv);
+    setContactActionsOpen(true);
+  };
+
+  const openEmailComposerFromContact = () => {
+    setContactActionsOpen(false);
+    setContactOpen(true);
   };
 
   const handleGenerateAiDraft = async () => {
@@ -915,7 +943,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                             <Button size="sm" onClick={() => handleViewCV(cv)} className="bg-zinc-800 hover:bg-zinc-700 text-white font-bold shadow-lg px-4 py-2">
                               <Eye className="h-4 w-4 mr-1.5" /> View CV
                             </Button>
-                            <Button size="sm" onClick={() => { setSelectedCV(cv); setContactOpen(true); }} className="bg-gold hover:bg-gold-dark text-white font-bold px-4 py-2">
+                            <Button size="sm" onClick={() => openContactActions(cv)} className="bg-gold hover:bg-gold-dark text-white font-bold px-4 py-2">
                               <Mail className="h-4 w-4 mr-1.5" /> Contact
                             </Button>
                             <Button
@@ -937,14 +965,14 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                                 size="sm"
                                 onClick={() => handleUpdateStatus(cv.id, 'approved')}
                                 disabled={cv.status === 'approved'}
-                                className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white font-bold disabled:opacity-60"
+                                className={`flex-1 rounded-xl border font-bold ${cv.status === 'approved' ? 'border-emerald-500 bg-emerald-100 text-emerald-800' : 'border-emerald-500 bg-emerald-50 text-emerald-700 hover:bg-emerald-100'} disabled:opacity-90`}
                               >
                                 <CheckCircle className="h-3.5 w-3.5 mr-1" /> Accept
                               </Button>
                               <Button
                                 size="sm"
                                 onClick={() => handleUpdateStatus(cv.id, 'pending')}
-                                className={`flex-1 font-bold ${cv.status === 'pending' ? 'bg-amber-600 ring-2 ring-amber-300 text-white' : 'bg-amber-500 hover:bg-amber-600 text-white'}`}
+                                className={`flex-1 rounded-xl border font-bold ${cv.status === 'pending' ? 'border-amber-500 bg-amber-100 text-amber-800 ring-2 ring-amber-200' : 'border-amber-500 bg-amber-50 text-amber-700 hover:bg-amber-100'}`}
                               >
                                 <Clock className="h-3.5 w-3.5 mr-1" /> Pending
                               </Button>
@@ -952,7 +980,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                                 size="sm"
                                 onClick={() => handleUpdateStatus(cv.id, 'rejected')}
                                 disabled={cv.status === 'rejected'}
-                                className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold disabled:opacity-60"
+                                className={`flex-1 rounded-xl border font-bold ${cv.status === 'rejected' ? 'border-red-500 bg-red-100 text-red-800' : 'border-red-500 bg-red-50 text-red-700 hover:bg-red-100'} disabled:opacity-90`}
                               >
                                 <XCircle className="h-3.5 w-3.5 mr-1" /> Reject
                               </Button>
@@ -1151,6 +1179,59 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                   <Eye className="h-4 w-4" /> Maximize
                 </Button>
               )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Contact Actions Dialog */}
+      <Dialog open={contactActionsOpen} onOpenChange={setContactActionsOpen}>
+        <DialogContent className="max-w-md" aria-describedby="contact-actions-desc">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Phone className="h-5 w-5 text-gold" /> Candidate Contact Options
+            </DialogTitle>
+          </DialogHeader>
+          <p id="contact-actions-desc" className="sr-only">Choose how to contact this candidate</p>
+          {selectedCV && (
+            <div className="space-y-3">
+              <div className="p-3 rounded-lg bg-zinc-50 border text-sm">
+                <p className="font-semibold text-crm-text">{selectedCV.full_name}</p>
+                <p className="text-crm-text-muted">{selectedCV.email}</p>
+                <p className="text-crm-text-muted">{selectedCV.phone_e164 || 'No phone number available'}</p>
+              </div>
+
+              <Button className="w-full bg-gold hover:bg-gold-dark text-white font-bold" onClick={openEmailComposerFromContact}>
+                <Mail className="h-4 w-4 mr-2" /> Send Email
+              </Button>
+
+              <div className="grid grid-cols-2 gap-2">
+                <Button
+                  variant="outline"
+                  disabled={!selectedCV.phone_e164}
+                  className="border-green-500/40 text-green-700 hover:bg-green-50"
+                  onClick={() => {
+                    if (!selectedCV.phone_e164) return;
+                    const clean = selectedCV.phone_e164.replace(/[^0-9]/g, '');
+                    const msg = encodeURIComponent(`Hello ${selectedCV.full_name}, this is JBJ Global Real Estate HR.`);
+                    window.open(`https://wa.me/${clean}?text=${msg}`, '_blank');
+                  }}
+                >
+                  <MessageSquare className="h-4 w-4 mr-1.5" /> WhatsApp
+                </Button>
+
+                <Button
+                  variant="outline"
+                  disabled={!selectedCV.phone_e164}
+                  className="border-amber-500/40 text-amber-700 hover:bg-amber-50"
+                  onClick={() => {
+                    if (!selectedCV.phone_e164) return;
+                    window.location.href = `tel:${selectedCV.phone_e164}`;
+                  }}
+                >
+                  <Phone className="h-4 w-4 mr-1.5" /> Call
+                </Button>
+              </div>
             </div>
           )}
         </DialogContent>
