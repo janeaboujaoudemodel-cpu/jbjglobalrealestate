@@ -88,6 +88,9 @@ const CVCenter = ({ userId }: CVCenterProps) => {
   const [cvDirectUrl, setCvDirectUrl] = useState<string | null>(null); // Raw signed URL for "open in new tab" / download
   const [cvPreviewLoading, setCvPreviewLoading] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
+  const [adminMessageSubject, setAdminMessageSubject] = useState('');
+  const [adminMessageBody, setAdminMessageBody] = useState('');
+  const [sendingMessage, setSendingMessage] = useState(false);
   const [scheduleOpen, setScheduleOpen] = useState(false);
   const [interviewDate, setInterviewDate] = useState('');
   const [interviewTime, setInterviewTime] = useState('');
@@ -884,30 +887,95 @@ const CVCenter = ({ userId }: CVCenterProps) => {
         </DialogContent>
       </Dialog>
 
-      {/* Contact Dialog */}
-      <Dialog open={contactOpen} onOpenChange={setContactOpen}>
+      {/* Contact Dialog - Full Compose & Send */}
+      <Dialog open={contactOpen} onOpenChange={(open) => {
+        setContactOpen(open);
+        if (!open) { setAdminMessageSubject(''); setAdminMessageBody(''); }
+      }}>
         <DialogContent className="max-w-lg" aria-describedby="contact-desc">
-          <DialogHeader><DialogTitle>Contact Candidate</DialogTitle></DialogHeader>
-          <p id="contact-desc" className="sr-only">Options to contact the selected candidate</p>
+          <DialogHeader><DialogTitle className="flex items-center gap-2"><Mail className="h-5 w-5 text-gold" /> Message Candidate</DialogTitle></DialogHeader>
+          <p id="contact-desc" className="sr-only">Send message to the selected candidate via email</p>
           {selectedCV && (
             <div className="space-y-4">
-              <div className="text-sm text-muted-foreground">{selectedCV.full_name}</div>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between rounded-md border p-3">
-                  <div className="flex items-center gap-2"><Mail className="h-4 w-4" /> {selectedCV.email}</div>
-                  <Button size="sm" variant="outline" onClick={() => window.location.href = `mailto:${selectedCV.email}?subject=JBJ Global Real Estate - CV Update`}>Email</Button>
+              <div className="flex items-center gap-3 p-3 rounded-lg bg-zinc-50 border">
+                <Avatar className="h-10 w-10 border border-gold/30">
+                  <AvatarFallback className="bg-gold/10 text-gold font-bold">{selectedCV.full_name.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className="font-medium text-crm-text">{selectedCV.full_name}</p>
+                  <p className="text-xs text-crm-text-muted">{selectedCV.email}</p>
                 </div>
+              </div>
+
+              <div>
+                <Label className="text-sm font-medium text-crm-text">Subject</Label>
+                <Input
+                  value={adminMessageSubject}
+                  onChange={(e) => setAdminMessageSubject(e.target.value)}
+                  placeholder="e.g. Your Application at JBJ Global Real Estate"
+                  className="mt-1"
+                />
+              </div>
+
+              <div>
+                <Label className="text-sm font-medium text-crm-text">Message</Label>
+                <Textarea
+                  value={adminMessageBody}
+                  onChange={(e) => setAdminMessageBody(e.target.value)}
+                  placeholder="Write your message to the candidate..."
+                  className="mt-1 min-h-[120px]"
+                  rows={5}
+                />
+              </div>
+
+              <p className="text-xs text-crm-text-muted">
+                ⭐ A review & survey link will be automatically included in the email.
+              </p>
+
+              <div className="flex gap-2">
+                <Button
+                  className="flex-1 bg-gold hover:bg-gold/90 text-black font-bold"
+                  disabled={!adminMessageSubject.trim() || !adminMessageBody.trim() || sendingMessage}
+                  onClick={async () => {
+                    setSendingMessage(true);
+                    try {
+                      const { error } = await supabase.functions.invoke('send-admin-message', {
+                        body: {
+                          recipientEmail: selectedCV.email,
+                          recipientName: selectedCV.full_name,
+                          subject: adminMessageSubject,
+                          message: adminMessageBody,
+                          serviceCategory: 'career',
+                          referenceId: selectedCV.id,
+                          referenceLabel: selectedCV.position_applied || 'Career Application',
+                          userId: selectedCV.user_id || undefined,
+                        },
+                      });
+                      if (error) throw error;
+                      toast.success(`Message sent to ${selectedCV.full_name}`);
+                      setContactOpen(false);
+                      setAdminMessageSubject('');
+                      setAdminMessageBody('');
+                    } catch (err: any) {
+                      console.error('Send message error:', err);
+                      toast.error('Failed to send message');
+                    } finally {
+                      setSendingMessage(false);
+                    }
+                  }}
+                >
+                  {sendingMessage ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Mail className="h-4 w-4 mr-2" />}
+                  Send Email
+                </Button>
                 {selectedCV.phone_e164 && (
-                  <>
-                    <div className="flex items-center justify-between rounded-md border p-3">
-                      <div className="flex items-center gap-2"><Phone className="h-4 w-4" /> {selectedCV.phone_e164}</div>
-                      <Button size="sm" variant="outline" onClick={() => window.location.href = `tel:${selectedCV.phone_e164}`}>Call</Button>
-                    </div>
-                    <div className="flex items-center justify-between rounded-md border p-3">
-                      <div className="flex items-center gap-2"><MessageSquare className="h-4 w-4" /> WhatsApp</div>
-                      <Button size="sm" variant="outline" onClick={() => window.open(`https://wa.me/${(selectedCV.phone_e164 || '').replace(/[^0-9]/g, '')}`, '_blank')}>WhatsApp</Button>
-                    </div>
-                  </>
+                  <Button size="icon" variant="outline" title="WhatsApp" onClick={() => window.open(`https://wa.me/${(selectedCV.phone_e164 || '').replace(/[^0-9]/g, '')}`, '_blank')}>
+                    <MessageSquare className="h-4 w-4" />
+                  </Button>
+                )}
+                {selectedCV.phone_e164 && (
+                  <Button size="icon" variant="outline" title="Call" onClick={() => window.location.href = `tel:${selectedCV.phone_e164}`}>
+                    <Phone className="h-4 w-4" />
+                  </Button>
                 )}
               </div>
             </div>

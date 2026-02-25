@@ -327,22 +327,53 @@ export default function TrainingManagement() {
               Books in {programs.find(p => p.id === activeProgram)?.name}
             </CardTitle>
           </CardHeader>
-          <CardContent>
+           <CardContent>
             {getProgramBooksForProgram(activeProgram).length === 0 ? (
               <p className="text-crm-text-muted text-sm py-4 text-center">No books assigned to this program yet. Click "Books" above to configure.</p>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {getProgramBooksForProgram(activeProgram).map(book => (
-                  <div key={book.id} className="flex items-center gap-3 p-3 rounded-lg border border-crm-border bg-gray-50/50">
-                    <div className="w-8 h-8 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center flex-shrink-0">
-                      <span className="text-gold text-xs font-bold">{book.book_number}</span>
+              <div className="space-y-4">
+                {(() => {
+                  const programBooksList = getProgramBooksForProgram(activeProgram);
+                  const sectionMap: Record<string, string> = {
+                    'Foundations': 'Company Knowledge',
+                    'Market Intelligence': 'Company Knowledge',
+                    'Advanced (Restricted)': 'Company Knowledge',
+                    'Buyer & Investor Advisory': 'Real Estate',
+                    'Seller & Landlord Advisory': 'Real Estate',
+                  };
+                  const sections: Record<string, typeof programBooksList> = {};
+                  programBooksList.forEach(book => {
+                    const section = sectionMap[book.learning_path] || 'Real Estate';
+                    if (!sections[section]) sections[section] = [];
+                    sections[section].push(book);
+                  });
+                  return Object.entries(sections).map(([sectionName, sectionBooks]) => (
+                    <div key={sectionName}>
+                      <div className="flex items-center gap-2 mb-2">
+                        {sectionName === 'Company Knowledge' ? (
+                          <Shield className="h-4 w-4 text-amber-500" />
+                        ) : (
+                          <BookOpen className="h-4 w-4 text-purple-500" />
+                        )}
+                        <span className="text-sm font-semibold text-crm-text">{sectionName}</span>
+                        <Badge variant="outline" className="text-[10px] text-crm-text-muted border-crm-border">{sectionBooks.length}</Badge>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        {sectionBooks.map(book => (
+                          <div key={book.id} className="flex items-center gap-3 p-3 rounded-lg border border-crm-border bg-gray-50/50">
+                            <div className="w-8 h-8 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center flex-shrink-0">
+                              <span className="text-gold text-xs font-bold">{book.book_number}</span>
+                            </div>
+                            <div className="min-w-0">
+                              <p className="text-sm font-medium text-crm-text truncate">{book.title}</p>
+                              <p className="text-xs text-crm-text-muted">{book.learning_path}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium text-crm-text truncate">{book.title}</p>
-                      <p className="text-xs text-crm-text-muted">{book.learning_path}</p>
-                    </div>
-                  </div>
-                ))}
+                  ));
+                })()}
               </div>
             )}
           </CardContent>
@@ -516,30 +547,68 @@ export default function TrainingManagement() {
             </DialogDescription>
           </DialogHeader>
           <ScrollArea className="max-h-[50vh] pr-4">
-            <div className="space-y-2">
-              {books.map(book => (
-                <label
-                  key={book.id}
-                  className="flex items-center gap-3 p-3 rounded-lg border border-crm-border hover:bg-gray-50 cursor-pointer transition-colors"
-                >
-                  <Checkbox
-                    checked={selectedBooks.has(book.id)}
-                    onCheckedChange={(checked) => {
-                      const updated = new Set(selectedBooks);
-                      if (checked) updated.add(book.id);
-                      else updated.delete(book.id);
-                      setSelectedBooks(updated);
-                    }}
-                  />
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-crm-text">Book {book.book_number}: {book.title}</span>
-                      {book.is_restricted && <Badge className="bg-red-500/20 text-red-700 text-[10px]">Restricted</Badge>}
+            <div className="space-y-4">
+              {(() => {
+                // Group books by learning_path category
+                const groups: Record<string, typeof books> = {};
+                books.forEach(book => {
+                  const category = book.learning_path || 'Other';
+                  if (!groups[category]) groups[category] = [];
+                  groups[category].push(book);
+                });
+                // Map paths to display sections
+                const sectionMap: Record<string, string> = {
+                  'Foundations': 'Company Knowledge',
+                  'Market Intelligence': 'Company Knowledge',
+                  'Advanced (Restricted)': 'Company Knowledge',
+                  'Buyer & Investor Advisory': 'Real Estate',
+                  'Seller & Landlord Advisory': 'Real Estate',
+                };
+                const sections: Record<string, typeof books> = {};
+                Object.entries(groups).forEach(([path, pathBooks]) => {
+                  const section = sectionMap[path] || 'Real Estate';
+                  if (!sections[section]) sections[section] = [];
+                  sections[section].push(...pathBooks);
+                });
+                return Object.entries(sections).map(([sectionName, sectionBooks]) => (
+                  <div key={sectionName}>
+                    <div className="flex items-center gap-2 mb-2">
+                      {sectionName === 'Company Knowledge' ? (
+                        <Shield className="h-4 w-4 text-amber-500" />
+                      ) : (
+                        <BookOpen className="h-4 w-4 text-purple-500" />
+                      )}
+                      <span className="text-sm font-semibold text-crm-text">{sectionName}</span>
+                      <span className="text-xs text-crm-text-muted">({sectionBooks.length})</span>
                     </div>
-                    <p className="text-xs text-crm-text-muted">{book.learning_path} · Tier: {book.min_tier || 'any'}</p>
+                    <div className="space-y-1.5">
+                      {sectionBooks.map(book => (
+                        <label
+                          key={book.id}
+                          className="flex items-center gap-3 p-3 rounded-lg border border-crm-border hover:bg-gray-50 cursor-pointer transition-colors"
+                        >
+                          <Checkbox
+                            checked={selectedBooks.has(book.id)}
+                            onCheckedChange={(checked) => {
+                              const updated = new Set(selectedBooks);
+                              if (checked) updated.add(book.id);
+                              else updated.delete(book.id);
+                              setSelectedBooks(updated);
+                            }}
+                          />
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm font-medium text-crm-text">Book {book.book_number}: {book.title}</span>
+                              {book.is_restricted && <Badge className="bg-red-500/20 text-red-700 text-[10px]">Restricted</Badge>}
+                            </div>
+                            <p className="text-xs text-crm-text-muted">{book.learning_path} · Tier: {book.min_tier || 'any'}</p>
+                          </div>
+                        </label>
+                      ))}
+                    </div>
                   </div>
-                </label>
-              ))}
+                ));
+              })()}
             </div>
           </ScrollArea>
           <div className="flex items-center justify-between pt-2">

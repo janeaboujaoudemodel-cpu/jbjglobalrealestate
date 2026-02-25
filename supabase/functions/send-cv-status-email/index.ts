@@ -201,6 +201,20 @@ ${config.extraHtml}
 <p style="margin:0;font-size:13px;color:#92400e;line-height:1.6;"><strong>&#9888;&#65039; Important:</strong> This is an automated email. <strong>Please do not reply</strong> to this message. For inquiries, contact us at <a href="mailto:careers@jbj.ae" style="color:#C8A766;">careers@jbj.ae</a></p>
 </td></tr></table>
 
+<!-- Review & Survey Section -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0 0;border-top:2px solid #C8A76633;padding-top:20px;">
+<tr><td align="center">
+<p style="color:#C8A766;font-size:15px;font-weight:700;margin:0 0 6px;">⭐ We Value Your Feedback</p>
+<p style="color:#666;font-size:12px;margin:0 0 14px;">Help us improve our recruitment process</p>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center">
+<tr>
+<td style="padding:0 6px;"><a href="https://jbjglobalrealestate.lovable.app/reviews?source=career" style="display:inline-block;background:linear-gradient(135deg,#C8A766,#B8956E);color:#000;text-decoration:none;padding:10px 24px;border-radius:8px;font-weight:700;font-size:12px;">⭐ Leave a Review</a></td>
+<td style="padding:0 6px;"><a href="https://jbjglobalrealestate.lovable.app/survey?source=career" style="display:inline-block;background:#1a1a2e;border:2px solid #C8A766;color:#C8A766;text-decoration:none;padding:8px 24px;border-radius:8px;font-weight:700;font-size:12px;">📋 Take Survey</a></td>
+</tr>
+</table>
+</td></tr>
+</table>
+
 <p style="font-size:14px;color:#333;">Best regards,<br><span style="color:#C8A766;font-weight:600;">JBJ Global Real Estate HR Team</span></p>
 </td></tr>
 
