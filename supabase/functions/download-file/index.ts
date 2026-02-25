@@ -92,11 +92,13 @@ serve(async (req: Request): Promise<Response> => {
 
     if (contentLength) headers.set("Content-Length", contentLength);
 
+    const dispositionParam = requestUrl.searchParams.get("disposition") || "attachment";
+    const disposition = dispositionParam === "inline" ? "inline" : "attachment";
     const filename = filenameParam ? sanitizeFilename(filenameParam) : undefined;
     if (filename) {
-      headers.set("Content-Disposition", `attachment; filename="${filename}"`);
+      headers.set("Content-Disposition", `${disposition}; filename="${filename}"`);
     } else {
-      headers.set("Content-Disposition", "attachment");
+      headers.set("Content-Disposition", disposition);
     }
 
     return new Response(upstream.body, { status: 200, headers });

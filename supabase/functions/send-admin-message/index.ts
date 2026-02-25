@@ -5,13 +5,33 @@ const RESEND_API_URL = "https://api.resend.com/emails";
 const VERIFIED_SENDER = "noreply@jbj.ae";
 const SITE_URL = "https://jbjglobalrealestate.lovable.app";
 
+// Per-channel reply-to addresses
+const CHANNEL_REPLY_TO: Record<string, string> = {
+  hr: "HR@JBJ.AE",
+  career: "HR@JBJ.AE",
+  cv: "HR@JBJ.AE",
+  inquiries: "INQUIRIES@JBJ.AE",
+  inquiry: "INQUIRIES@JBJ.AE",
+  partnerships: "PARTNERSHIPS@JBJ.AE",
+  partnership: "PARTNERSHIPS@JBJ.AE",
+  listings: "LISTINGS@JBJ.AE",
+  listing: "LISTINGS@JBJ.AE",
+  support: "SUPPORT@JBJ.AE",
+  ticket: "SUPPORT@JBJ.AE",
+  general: "contact@jbj.com",
+};
+
+function getReplyTo(serviceCategory: string): string {
+  return CHANNEL_REPLY_TO[serviceCategory?.toLowerCase()] || "contact@jbj.com";
+}
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-async function sendEmail(payload: { from: string; to: string[]; subject: string; html: string }) {
+async function sendEmail(payload: { from: string; reply_to: string; to: string[]; subject: string; html: string }) {
   const apiKey = Deno.env.get("RESEND_API_KEY");
   const res = await fetch(RESEND_API_URL, {
     method: "POST",
@@ -26,12 +46,11 @@ async function sendEmail(payload: { from: string; to: string[]; subject: string;
   return { data };
 }
 
-function buildReviewSurveyFooter(serviceCategory: string, recipientName: string): string {
+function buildReviewSurveyFooter(serviceCategory: string): string {
   const reviewUrl = `${SITE_URL}/reviews?source=${encodeURIComponent(serviceCategory)}`;
   const surveyUrl = `${SITE_URL}/survey?source=${encodeURIComponent(serviceCategory)}`;
 
   return `
-<!-- Review & Survey Section -->
 <table width="100%" cellpadding="0" cellspacing="0" style="margin:30px 0 10px;border-top:2px solid #C9A84C33;padding-top:24px;">
 <tr><td align="center">
   <p style="color:#C9A84C;font-size:16px;font-weight:700;margin:0 0 6px;">⭐ We Value Your Feedback</p>
@@ -55,14 +74,15 @@ interface AdminMessageRequest {
   recipientName: string;
   subject: string;
   message: string;
-  serviceCategory: string; // cv, ticket, listing, partnership, inquiry, general
+  serviceCategory: string;
   referenceId?: string;
   referenceLabel?: string;
   userId?: string;
 }
 
 function buildEmailHtml(req: AdminMessageRequest): string {
-  const reviewFooter = buildReviewSurveyFooter(req.serviceCategory, req.recipientName);
+  const replyTo = getReplyTo(req.serviceCategory);
+  const reviewFooter = buildReviewSurveyFooter(req.serviceCategory);
 
   return `<!DOCTYPE html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
@@ -98,6 +118,13 @@ ${req.referenceLabel ? `
 </td></tr>
 </table>
 
+<!-- Reply info -->
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f0fdf4;border:1px solid #22c55e33;border-radius:12px;margin:0 0 24px;">
+<tr><td style="padding:12px 20px;text-align:center;">
+<p style="margin:0;font-size:13px;color:#166534;">💬 You can reply directly to this email at <a href="mailto:${replyTo}" style="color:#C9A84C;font-weight:600;">${replyTo}</a></p>
+</td></tr>
+</table>
+
 <!-- CTA Button -->
 <table width="100%" cellpadding="0" cellspacing="0">
 <tr><td align="center" style="padding:8px 0 24px;">
@@ -130,6 +157,62 @@ If you have questions, reply to this email or contact our support team.
 </body></html>`;
 }
 
+async function logToInbox(supabaseClient: any, req: AdminMessageRequest, direction: 'outbound') {
+  try {
+    const channelType = req.serviceCategory === 'career' || req.serviceCategory === 'hr' || req.serviceCategory === 'cv'
+      ? 'email' : 'email';
+
+    // Find or create thread
+    const { data: existingThread } = await supabaseClient
+      .from('owner_comm_threads')
+      .select('id')
+      .eq('contact_identifier', req.recipientEmail)
+      .eq('channel_type', channelType)
+      .maybeSingle();
+
+    let threadId = existingThread?.id;
+
+    if (!threadId) {
+      const { data: newThread } = await supabaseClient
+        .from('owner_comm_threads')
+        .insert({
+          contact_identifier: req.recipientEmail,
+          contact_name: req.recipientName,
+          channel_type: channelType,
+          status: 'active',
+          last_message_preview: req.message.substring(0, 100),
+          last_message_at: new Date().toISOString(),
+          unread_count: 0,
+          metadata: { service: req.serviceCategory, reference_id: req.referenceId },
+        })
+        .select('id')
+        .single();
+      threadId = newThread?.id;
+    } else {
+      await supabaseClient
+        .from('owner_comm_threads')
+        .update({
+          last_message_preview: req.message.substring(0, 100),
+          last_message_at: new Date().toISOString(),
+          status: 'active',
+        })
+        .eq('id', threadId);
+    }
+
+    if (threadId) {
+      await supabaseClient.from('owner_comm_messages').insert({
+        thread_id: threadId,
+        direction: direction,
+        content: req.message,
+        sender_identifier: 'JBJ Team',
+        metadata: { subject: req.subject, service: req.serviceCategory, reference_id: req.referenceId },
+      });
+    }
+  } catch (e) {
+    console.error("Inbox logging error:", e);
+  }
+}
+
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -150,9 +233,12 @@ const handler = async (req: Request): Promise<Response> => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
-    // Send email
+    const replyTo = getReplyTo(body.serviceCategory);
+
+    // Send email with reply-to
     const emailResult = await sendEmail({
       from: `JBJ Global Real Estate <${VERIFIED_SENDER}>`,
+      reply_to: replyTo,
       to: [body.recipientEmail],
       subject: body.subject,
       html: buildEmailHtml(body),
@@ -165,6 +251,9 @@ const handler = async (req: Request): Promise<Response> => {
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
+
+    // Log outbound email to inbox
+    await logToInbox(supabaseClient, body, 'outbound');
 
     // Create user notification if userId provided
     if (body.userId) {

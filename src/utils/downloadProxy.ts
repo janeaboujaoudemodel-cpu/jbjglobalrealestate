@@ -3,23 +3,30 @@
  * This avoids client-side blockers that target /storage/v1 URLs.
  */
 
-export function buildDownloadProxyUrl(originalUrl: string, filename?: string) {
+interface ProxyOptions {
+  filename?: string;
+  disposition?: 'inline' | 'attachment';
+}
+
+export function buildDownloadProxyUrl(originalUrl: string, options?: string | ProxyOptions) {
   const base = import.meta.env.VITE_SUPABASE_URL;
-  // Fallback to the original URL if env is missing (shouldn't happen in this project)
   if (!base) return originalUrl;
+
+  // Support legacy string-only filename parameter
+  const opts: ProxyOptions = typeof options === 'string' ? { filename: options } : (options || {});
 
   const proxy = new URL(`${base}/functions/v1/download-file`);
   proxy.searchParams.set("url", originalUrl);
-  if (filename) proxy.searchParams.set("filename", filename);
+  if (opts.filename) proxy.searchParams.set("filename", opts.filename);
+  if (opts.disposition) proxy.searchParams.set("disposition", opts.disposition);
   return proxy.toString();
 }
 
-export function maybeProxyStorageUrl(url: string, filename?: string) {
+export function maybeProxyStorageUrl(url: string, options?: string | ProxyOptions) {
   try {
     const u = new URL(url);
-    // Only proxy storage endpoints; leave everything else untouched
     if (u.pathname.includes("/storage/v1/")) {
-      return buildDownloadProxyUrl(url, filename);
+      return buildDownloadProxyUrl(url, options);
     }
     return url;
   } catch {

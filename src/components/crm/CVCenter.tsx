@@ -485,10 +485,15 @@ const CVCenter = ({ userId }: CVCenterProps) => {
       setCvDirectUrl(directUrl);
 
       if (previewUrl) {
-        const previewSource = maybeProxyStorageUrl(previewUrl, `CV-${cv.full_name.replace(/\s+/g, '-')}`);
+        const previewSource = maybeProxyStorageUrl(previewUrl, { filename: `CV-${cv.full_name.replace(/\s+/g, '-')}`, disposition: 'inline' });
         const response = await fetch(previewSource);
         if (!response.ok) throw new Error('Preview fetch failed');
-        const blob = await response.blob();
+        let blob = await response.blob();
+        // Ensure correct MIME type for PDF blobs (some proxies return generic type)
+        const ext = (cv.cv_url || '').split('?')[0].split('.').pop()?.toLowerCase();
+        if (ext === 'pdf' && (!blob.type || blob.type === 'application/octet-stream')) {
+          blob = new Blob([blob], { type: 'application/pdf' });
+        }
         const objectUrl = URL.createObjectURL(blob);
         previewBlobUrlRef.current = objectUrl;
         setCvPreviewUrl(objectUrl);
@@ -939,8 +944,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                               <Button
                                 size="sm"
                                 onClick={() => handleUpdateStatus(cv.id, 'pending')}
-                                disabled={cv.status === 'pending'}
-                                className="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-bold disabled:opacity-60"
+                                className={`flex-1 font-bold ${cv.status === 'pending' ? 'bg-amber-600 ring-2 ring-amber-300 text-white' : 'bg-amber-500 hover:bg-amber-600 text-white'}`}
                               >
                                 <Clock className="h-3.5 w-3.5 mr-1" /> Pending
                               </Button>
@@ -1069,7 +1073,11 @@ const CVCenter = ({ userId }: CVCenterProps) => {
           </div>
           {cvDirectUrl && (
             <div className="flex gap-2 pt-2 border-t">
-              <Button variant="outline" className="gap-2" onClick={() => window.open(cvPreviewUrl || maybeProxyStorageUrl(cvDirectUrl), '_blank')}>
+              <Button variant="outline" className="gap-2" onClick={() => {
+                // Use blob URL if available (avoids cross-origin blocking), otherwise proxy with inline disposition
+                const url = cvPreviewUrl || maybeProxyStorageUrl(cvDirectUrl, { disposition: 'inline' });
+                window.open(url, '_blank');
+              }}>
                 <ExternalLink className="h-4 w-4" /> Open in new tab
               </Button>
               <Button variant="outline" className="gap-2" onClick={async () => {

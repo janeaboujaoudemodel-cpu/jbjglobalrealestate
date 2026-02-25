@@ -27,6 +27,12 @@ async function sendEmail(payload: { from: string; to: string[]; subject: string;
 
 type ApplicationType = "partnership" | "career" | "listing";
 
+const CHANNEL_REPLY_TO: Record<string, string> = {
+  partnership: "PARTNERSHIPS@JBJ.AE",
+  career: "HR@JBJ.AE",
+  listing: "LISTINGS@JBJ.AE",
+};
+
 interface StatusEmailRequest {
   applicationType: ApplicationType;
   recipientEmail: string;
@@ -206,12 +212,15 @@ const handler = async (req: Request): Promise<Response> => {
     const subject = `${typeLabel} Update: ${body.statusLabel} — ${body.applicationTitle}`;
 
     // Send email
+    const replyTo = CHANNEL_REPLY_TO[body.applicationType] || "contact@jbj.com";
+
     const emailResult = await sendEmail({
       from: `JBJ Global Real Estate <${VERIFIED_SENDER}>`,
+      reply_to: replyTo,
       to: [body.recipientEmail],
       subject,
       html: buildEmailHtml(body),
-    });
+    } as any);
 
     if (emailResult.error) {
       console.error("Email send failed:", emailResult.error);

@@ -148,8 +148,39 @@ export const ALL_NATIONALITIES = COUNTRIES
   .map(c => ({ nationality: c.nationality, flag: c.flag, country: c.name }))
   .sort((a, b) => a.nationality.localeCompare(b.nationality));
 
-// Helper to get cities for a country
-export const getCitiesForCountry = (countryName: string): string[] => {
-  const country = COUNTRIES.find(c => c.name === countryName);
-  return country?.cities || [];
+// Common aliases → ISO code mapping
+const COUNTRY_ALIASES: Record<string, string> = {
+  'uae': 'AE', 'emirates': 'AE', 'united arab emirates (uae)': 'AE',
+  'uk': 'GB', 'united kingdom (uk)': 'GB', 'great britain': 'GB', 'england': 'GB',
+  'usa': 'US', 'united states (usa)': 'US', 'america': 'US', 'united states of america': 'US',
+  'ksa': 'SA', 'saudi': 'SA',
+  'south korea': 'KR', 'korea': 'KR',
+};
+
+// Helper to get cities for a country (supports name, ISO code, and common aliases)
+export const getCitiesForCountry = (input: string): string[] => {
+  if (!input) return [];
+  const trimmed = input.trim();
+  const lower = trimmed.toLowerCase();
+
+  // 1. Exact name match (case-insensitive)
+  const byName = COUNTRIES.find(c => c.name.toLowerCase() === lower);
+  if (byName) return byName.cities;
+
+  // 2. ISO code match (case-insensitive)
+  const byCode = COUNTRIES.find(c => c.code.toLowerCase() === lower);
+  if (byCode) return byCode.cities;
+
+  // 3. Alias match
+  const aliasCode = COUNTRY_ALIASES[lower];
+  if (aliasCode) {
+    const byAlias = COUNTRIES.find(c => c.code === aliasCode);
+    if (byAlias) return byAlias.cities;
+  }
+
+  // 4. Partial / contains match as last resort
+  const partial = COUNTRIES.find(c =>
+    c.name.toLowerCase().includes(lower) || lower.includes(c.name.toLowerCase())
+  );
+  return partial?.cities || [];
 };
