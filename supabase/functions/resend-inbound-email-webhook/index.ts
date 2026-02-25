@@ -59,6 +59,23 @@ serve(async (req: Request): Promise<Response> => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
+    // Resolve owner user_id (required for RLS and NOT NULL constraint)
+    const ownerEmail = Deno.env.get("OWNER_EMAIL") || "janeaboujaoudenails@gmail.com";
+    const { data: ownerUser } = await supabaseClient
+      .from("profiles")
+      .select("id")
+      .eq("email", ownerEmail)
+      .maybeSingle();
+
+    const ownerUserId = ownerUser?.id;
+    if (!ownerUserId) {
+      console.error("Owner user_id not found for:", ownerEmail);
+      return new Response(
+        JSON.stringify({ error: "Owner not found" }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     // Find or create thread by sender email
     const { data: existingThread } = await supabaseClient
       .from("owner_comm_threads")
@@ -70,13 +87,14 @@ serve(async (req: Request): Promise<Response> => {
     let threadId = existingThread?.id;
 
     if (!threadId) {
-      const { data: newThread } = await supabaseClient
+      const { data: newThread, error: threadErr } = await supabaseClient
         .from("owner_comm_threads")
         .insert({
+          user_id: ownerUserId,
           contact_identifier: senderEmail,
           contact_name: senderName,
           channel_type: "email",
-          status: "open",
+          status: "needs_reply",
           last_message_preview: (textBody || subject).substring(0, 100),
           last_message_at: new Date().toISOString(),
           unread_count: 1,
@@ -84,6 +102,7 @@ serve(async (req: Request): Promise<Response> => {
         })
         .select("id")
         .single();
+      if (threadErr) console.error("Thread insert error:", threadErr);
       threadId = newThread?.id;
     } else {
       await supabaseClient
@@ -92,18 +111,20 @@ serve(async (req: Request): Promise<Response> => {
           last_message_preview: (textBody || subject).substring(0, 100),
           last_message_at: new Date().toISOString(),
           unread_count: (existingThread.unread_count || 0) + 1,
-          status: "open",
+          status: "needs_reply",
         })
         .eq("id", threadId);
     }
 
     // Insert inbound message
     if (threadId) {
-      await supabaseClient.from("owner_comm_messages").insert({
+      const { error: msgErr } = await supabaseClient.from("owner_comm_messages").insert({
         thread_id: threadId,
+        user_id: ownerUserId,
         direction: "inbound",
         content: textBody || htmlBody || "(Empty message)",
         sender_identifier: senderEmail,
+        sender_name: senderName,
         metadata: {
           subject,
           service,
@@ -113,19 +134,13 @@ serve(async (req: Request): Promise<Response> => {
           raw_from: from,
         },
       });
+      if (msgErr) console.error("Message insert error:", msgErr);
     }
 
     // Create owner notification
-    const ownerEmail = "janeaboujaoudenails@gmail.com";
-    const { data: ownerProfile } = await supabaseClient
-      .from("profiles")
-      .select("id")
-      .eq("email", ownerEmail)
-      .maybeSingle();
-
-    if (ownerProfile?.id) {
+    if (ownerUserId) {
       await supabaseClient.from("user_notifications").insert({
-        user_id: ownerProfile.id,
+        user_id: ownerUserId,
         type: "message",
         title: `New email from ${senderName}`,
         message: `Subject: ${subject} — ${(textBody || "").substring(0, 80)}`,
