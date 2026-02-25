@@ -103,7 +103,7 @@ export const AdminOverviewDashboard = () => {
         supabase.from("ai_usage_logs").select("id", { count: "exact", head: true }).gte("created_at", subDays(new Date(), 7).toISOString()),
         supabase.from("pending_project_imports").select("id", { count: "exact", head: true }).eq("status", "pending"),
         // Real visitor session count (last 24h)
-        supabase.from("visitor_sessions").select("id", { count: "exact", head: true }).gte("started_at", last24Hours),
+        supabase.from("visitor_sessions").select("id", { count: "exact", head: true }).gte("first_visit_at", last24Hours),
         // Real visitor event count (last 24h)
         supabase.from("visitor_events").select("id", { count: "exact", head: true }).gte("created_at", last24Hours),
       ]);
