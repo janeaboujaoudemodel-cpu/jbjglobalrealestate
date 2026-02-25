@@ -109,6 +109,41 @@ const CVCenter = ({ userId }: CVCenterProps) => {
   const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'score' | 'position'>('newest');
   const autoAnalyzeRef = useRef(false);
 
+  // --- Auto-save composer drafts to survive page reloads ---
+  const DRAFT_KEY = 'jbj_cv_composer_draft';
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(DRAFT_KEY);
+      if (saved) {
+        const d = JSON.parse(saved);
+        if (d.aiRewritePrompt) setAiRewritePrompt(d.aiRewritePrompt);
+        if (d.adminMessageSubject) setAdminMessageSubject(d.adminMessageSubject);
+        if (d.adminMessageBody) setAdminMessageBody(d.adminMessageBody);
+        if (d.candidateTaskTitle) setCandidateTaskTitle(d.candidateTaskTitle);
+        if (d.candidateTaskDescription) setCandidateTaskDescription(d.candidateTaskDescription);
+        if (d.createTaskForUser) setCreateTaskForUser(true);
+      }
+    } catch { /* ignore */ }
+  }, []);
+
+  // Save drafts on change (debounced)
+  const draftTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    if (draftTimerRef.current) clearTimeout(draftTimerRef.current);
+    draftTimerRef.current = setTimeout(() => {
+      try {
+        const hasData = aiRewritePrompt || adminMessageSubject || adminMessageBody || candidateTaskTitle || candidateTaskDescription;
+        if (hasData) {
+          localStorage.setItem(DRAFT_KEY, JSON.stringify({ aiRewritePrompt, adminMessageSubject, adminMessageBody, candidateTaskTitle, candidateTaskDescription, createTaskForUser }));
+        }
+      } catch { /* ignore */ }
+    }, 400);
+    return () => { if (draftTimerRef.current) clearTimeout(draftTimerRef.current); };
+  }, [aiRewritePrompt, adminMessageSubject, adminMessageBody, candidateTaskTitle, candidateTaskDescription, createTaskForUser]);
+
+  // Load CVs on mount
+  useEffect(() => { fetchCVs(); }, []);
+
   useEffect(() => {
     return () => {
       if (previewBlobUrlRef.current) {
@@ -528,10 +563,12 @@ const CVCenter = ({ userId }: CVCenterProps) => {
     setAdminMessageBody('');
     setAiRewritePrompt('');
     setCreateTaskForUser(false);
+    setApproveTaskForUser(false);
     setCandidateTaskTitle('');
     setCandidateTaskDescription('');
     setCreatingTask(false);
     setIsGeneratingDraft(false);
+    try { localStorage.removeItem(DRAFT_KEY); } catch { /* ignore */ }
   };
 
   const handleGenerateAiDraft = async () => {
@@ -568,9 +605,13 @@ const CVCenter = ({ userId }: CVCenterProps) => {
       setAdminMessageSubject(data?.subject || `Update on your application - ${selectedCV.full_name}`);
       setAdminMessageBody(generatedBody || data?.body || '');
 
+      // Auto-generate task from email context
       if (createTaskForUser) {
-        setCandidateTaskTitle((prev) => prev || `Follow up: ${selectedCV.position_applied || 'Application'}`);
-        setCandidateTaskDescription((prev) => prev || prompt);
+        const posLabel = selectedCV.position_applied || 'Application';
+        setCandidateTaskTitle((prev) => prev || `Action required: ${posLabel}`);
+        const autoTaskDesc = `Please review the email regarding your ${posLabel} at JBJ Global Real Estate and follow the instructions provided.`;
+        setCandidateTaskDescription((prev) => prev || autoTaskDesc);
+        setApproveTaskForUser(true); // Show approval step
       }
 
       toast.success('AI draft generated — review and approve');
@@ -1133,13 +1174,13 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <p className="text-sm font-medium text-crm-text">Add task for candidate</p>
-                    <p className="text-xs text-crm-text-muted">Creates a pending task in the candidate account.</p>
+                    <p className="text-xs text-crm-text-muted">Creates a pending task in the candidate's account.</p>
                   </div>
                   <Button
                     type="button"
                     size="sm"
                     variant={createTaskForUser ? 'default' : 'outline'}
-                    onClick={() => setCreateTaskForUser((v) => !v)}
+                    onClick={() => { setCreateTaskForUser((v) => !v); setApproveTaskForUser(false); }}
                     className={createTaskForUser ? 'bg-gold text-black hover:bg-gold/90' : 'border-gold/40 text-gold hover:bg-gold/10'}
                   >
                     {createTaskForUser ? 'Task ON' : 'Enable Task'}
@@ -1151,14 +1192,26 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                     <Input
                       value={candidateTaskTitle}
                       onChange={(e) => setCandidateTaskTitle(e.target.value)}
-                      placeholder="Task title"
+                      placeholder="Task title (auto-generated from email context)"
                     />
                     <Textarea
                       value={candidateTaskDescription}
                       onChange={(e) => setCandidateTaskDescription(e.target.value)}
-                      placeholder="Task instructions for the candidate"
+                      placeholder="Task instructions for the candidate (auto-generated)"
                       rows={3}
                     />
+                    {approveTaskForUser && (
+                      <div className="flex items-center gap-2 p-2 rounded-md bg-amber-50 border border-amber-200">
+                        <AlertTriangle className="h-4 w-4 text-amber-500 flex-shrink-0" />
+                        <span className="text-xs text-amber-700 flex-1">Review the task above before sending. Approve?</span>
+                        <Button size="sm" className="bg-emerald-500 hover:bg-emerald-600 text-white h-7 px-3 text-xs" onClick={() => setApproveTaskForUser(false)}>
+                          <CheckCircle className="h-3 w-3 mr-1" /> Approve Task
+                        </Button>
+                        <Button size="sm" variant="outline" className="h-7 px-3 text-xs border-red-300 text-red-600 hover:bg-red-50" onClick={() => { setCreateTaskForUser(false); setApproveTaskForUser(false); }}>
+                          Skip Task
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -1170,7 +1223,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
               <div className="flex gap-2">
                 <Button
                   className="flex-1 bg-gold hover:bg-gold/90 text-black font-bold"
-                  disabled={!adminMessageSubject.trim() || !adminMessageBody.trim() || sendingMessage || isGeneratingDraft || creatingTask}
+                  disabled={!adminMessageSubject.trim() || !adminMessageBody.trim() || sendingMessage || isGeneratingDraft || creatingTask || approveTaskForUser}
                   onClick={async () => {
                     if (!selectedCV) return;
                     setSendingMessage(true);
