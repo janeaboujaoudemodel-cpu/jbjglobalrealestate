@@ -323,17 +323,48 @@ export default function JoinApplication() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="text-center space-y-6">
-                <p className="text-black/60 text-lg leading-relaxed">
-                  Continue your journey with JBJ Global Real Estate. Access your onboarding dashboard to track progress, complete training modules, and unlock broker tools.
-                </p>
-                <div className="pt-4">
-                  <Button variant="primary" size="lg" asChild className="px-8 py-6 text-lg">
-                    <Link to="/onboarding">
-                      <span className="text-black">Continue to</span>
-                      <span className="text-gold ml-1">Onboarding Dashboard</span>
-                    </Link>
-                  </Button>
-                </div>
+                {existingApplication.status === 'approved' ? (
+                  <>
+                    <p className="text-black/60 text-lg leading-relaxed">
+                      Congratulations! Your application has been approved. Our HR team will assign your training program and onboarding materials shortly. You'll receive a notification when your training is ready.
+                    </p>
+                    <div className="pt-4">
+                      <Button variant="primary" size="lg" asChild className="px-8 py-6 text-lg">
+                        <Link to="/onboarding">
+                          <span className="text-black">Go to</span>
+                          <span className="text-gold ml-1">Onboarding Dashboard</span>
+                        </Link>
+                      </Button>
+                    </div>
+                  </>
+                ) : existingApplication.status === 'pending' ? (
+                  <>
+                    <p className="text-black/60 text-lg leading-relaxed">
+                      Your application is currently under review. Our HR team will get back to you within 2-3 business days. In the meantime, feel free to explore our resources.
+                    </p>
+                    <div className="pt-4">
+                      <Button variant="secondary" size="lg" asChild className="px-8 py-6 text-lg">
+                        <Link to="/">
+                          <span>Explore JBJ Global</span>
+                        </Link>
+                      </Button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-black/60 text-lg leading-relaxed">
+                      Continue your journey with JBJ Global Real Estate. Access your onboarding dashboard to track progress and unlock broker tools.
+                    </p>
+                    <div className="pt-4">
+                      <Button variant="primary" size="lg" asChild className="px-8 py-6 text-lg">
+                        <Link to="/onboarding">
+                          <span className="text-black">Continue to</span>
+                          <span className="text-gold ml-1">Onboarding Dashboard</span>
+                        </Link>
+                      </Button>
+                    </div>
+                  </>
+                )}
                 <div className="pt-2">
                   <Link to="/hr-agent" className="text-gold hover:underline text-sm">
                     Need help? Chat with Jessica, our HR Assistant

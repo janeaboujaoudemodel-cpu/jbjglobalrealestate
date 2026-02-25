@@ -34,9 +34,10 @@ Levels: 9–10 Elite | 7–8 Advanced | 5–6 Intermediate | 3–4 Developing | 
 
 RULES:
 - Be FAIR. Score only on available information.
-- THOROUGHLY read the CV text content provided. Extract ALL languages mentioned anywhere in the CV, including in skills sections, personal info, or language proficiency sections.
-- Count ALL languages listed, even if proficiency level varies (native, fluent, intermediate, basic).
-- If CV text is provided, USE IT as the primary data source — it contains the real information.
+- THOROUGHLY read the CV text content provided. Extract ALL languages mentioned ANYWHERE in the CV — including skills sections, personal info, language proficiency sections, education sections, or even just mentioned in passing (e.g. "translated documents to French").
+- Count ALL languages listed, regardless of proficiency level (native, fluent, intermediate, basic, conversational, beginner). Include ALL of them in the "languages" array.
+- If the candidate lists a language section, copy every single language from it — do NOT skip any.
+- If CV text is provided, USE IT as the primary data source — it contains the real information. NEVER say "unreadable" or "content is unreadable" if CV text is provided.
 - Infer reasonable estimates from context (email domain, nationality → likely languages, location → market familiarity).
 - Identify which ROLE the candidate is best suited for.
 - List SPECIFIC missing items the candidate should provide.
@@ -138,7 +139,7 @@ async function extractWithVisionApi(
             ],
           },
         ],
-        max_tokens: 4000,
+        max_tokens: 8000,
         temperature: 0.1,
       }),
     });
