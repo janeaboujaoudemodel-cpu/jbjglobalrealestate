@@ -21,11 +21,11 @@ interface ContactActionOptions {
  * Uses direct navigation to avoid popup blocking
  */
 export function openWhatsApp(options: ContactActionOptions = {}) {
-  const { whatsappMessage, stopPropagation } = options;
+  const { whatsappMessage } = options;
   const url = getWhatsAppUrl(whatsappMessage);
   
-  // Direct navigation works better on mobile and in iframes
-  window.location.href = url;
+  // Use window.open to avoid iframe/popup blocking issues
+  window.open(url, '_blank', 'noopener,noreferrer');
 }
 
 /**
