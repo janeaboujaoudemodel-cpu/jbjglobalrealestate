@@ -279,21 +279,26 @@ const CVCenter = ({ userId }: CVCenterProps) => {
 
   const resolvePreviewUrl = async (cvUrl: string | null) => {
     if (!cvUrl) return null;
-    if (/^https?:\/\//i.test(cvUrl)) {
-      if (/\.(docx?|odt)$/i.test(cvUrl)) {
-        return `https://docs.google.com/gview?url=${encodeURIComponent(cvUrl)}&embedded=true`;
+
+    // Helper: wrap any document URL in Google Docs Viewer for reliable iframe preview
+    const wrapForPreview = (url: string, filename: string) => {
+      // Google Docs Viewer handles PDF, DOC, DOCX, ODT reliably in iframes
+      if (/\.(pdf|docx?|odt)$/i.test(filename)) {
+        return `https://docs.google.com/gview?url=${encodeURIComponent(url)}&embedded=true`;
       }
-      return cvUrl;
+      return url;
+    };
+
+    if (/^https?:\/\//i.test(cvUrl)) {
+      return wrapForPreview(cvUrl, cvUrl);
     }
+
     const cleanPath = cvUrl.replace(/^\/+/, '');
     const buckets = ['hr-documents', 'documents', 'public'];
     for (const bucket of buckets) {
       const { data, error } = await supabase.storage.from(bucket).createSignedUrl(cleanPath, 60 * 60);
       if (!error && data?.signedUrl) {
-        if (/\.(docx?|odt)$/i.test(cleanPath)) {
-          return `https://docs.google.com/gview?url=${encodeURIComponent(data.signedUrl)}&embedded=true`;
-        }
-        return data.signedUrl;
+        return wrapForPreview(data.signedUrl, cleanPath);
       }
     }
     return null;
