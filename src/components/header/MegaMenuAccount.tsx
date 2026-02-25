@@ -16,6 +16,7 @@ import { SUPPORTED_CURRENCIES } from '@/components/CurrencySwitcher';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { searchItems } from '@/config/globalSearchIndex';
+import { useUserAlerts } from '@/hooks/useUserAlerts';
 
 interface MegaMenuAccountProps {
   onClose: () => void;
