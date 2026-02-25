@@ -397,14 +397,14 @@ const CVCenter = ({ userId }: CVCenterProps) => {
     setCvDirectUrl(directUrl);
     setCvPreviewUrl(previewUrl);
     setCvPreviewLoading(false);
-    if (!previewUrl) toast.error('Unable to load CV preview');
+    if (!directUrl && !previewUrl) toast.error('Unable to load CV preview');
   };
 
-  const handleAnalyzeCV = useCallback(async (cv: CVEntry) => {
+  const handleAnalyzeCV = useCallback(async (cv: CVEntry, forceReanalyze: boolean = false) => {
     setAnalyzingIds(prev => new Set(prev).add(cv.id));
     try {
       const { data, error } = await supabase.functions.invoke('cv-ai-analyzer', {
-        body: { applicationId: cv.id, source: cv.record_source },
+        body: { applicationId: cv.id, source: cv.record_source, forceReanalyze },
       });
       if (error) throw error;
       if (!data?.success) throw new Error(data?.error || 'Analysis failed');
@@ -662,7 +662,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                             {isAnalyzed && (
                               <Button
                                 size="sm" variant="outline"
-                                onClick={() => handleAnalyzeCV(cv)}
+                                onClick={() => handleAnalyzeCV(cv, true)}
                                 disabled={isAnalyzing}
                                 className="text-purple-600 border-purple-200 hover:bg-purple-50 text-xs"
                               >
@@ -676,16 +676,23 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                             <Button size="sm" onClick={() => { setSelectedCV(cv); setContactOpen(true); }} className="bg-gold hover:bg-gold-dark text-white font-bold px-4 py-2">
                               <Mail className="h-4 w-4 mr-1.5" /> Contact
                             </Button>
-                            {cv.status === 'pending' && (
-                              <div className="flex gap-1.5 mt-1">
+                            <div className="flex gap-1.5 mt-1 flex-wrap">
+                              {cv.status !== 'approved' && (
                                 <Button size="sm" onClick={() => handleUpdateStatus(cv.id, 'approved')} className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white font-bold">
                                   <CheckCircle className="h-3.5 w-3.5 mr-1" /> Accept
                                 </Button>
+                              )}
+                              {cv.status !== 'pending' && (
+                                <Button size="sm" onClick={() => handleUpdateStatus(cv.id, 'pending')} className="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-bold">
+                                  <Clock className="h-3.5 w-3.5 mr-1" /> Pending
+                                </Button>
+                              )}
+                              {cv.status !== 'rejected' && (
                                 <Button size="sm" onClick={() => handleUpdateStatus(cv.id, 'rejected')} className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold">
                                   <XCircle className="h-3.5 w-3.5 mr-1" /> Reject
                                 </Button>
-                              </div>
-                            )}
+                              )}
+                            </div>
                           </div>
                         </div>
 
