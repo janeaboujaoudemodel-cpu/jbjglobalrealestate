@@ -8571,6 +8571,7 @@ export type Database = {
           languages: string[] | null
           nationality: string
           phone_e164: string
+          position_applied: string | null
           preferred_language: string
           rejection_reason: string | null
           reviewed_at: string | null
@@ -8599,6 +8600,7 @@ export type Database = {
           languages?: string[] | null
           nationality: string
           phone_e164: string
+          position_applied?: string | null
           preferred_language?: string
           rejection_reason?: string | null
           reviewed_at?: string | null
@@ -8627,6 +8629,7 @@ export type Database = {
           languages?: string[] | null
           nationality?: string
           phone_e164?: string
+          position_applied?: string | null
           preferred_language?: string
           rejection_reason?: string | null
           reviewed_at?: string | null
