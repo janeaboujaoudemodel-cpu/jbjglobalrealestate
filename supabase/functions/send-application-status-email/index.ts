@@ -131,6 +131,20 @@ ${req.actionRequired ? `
 </table>
 ` : ""}
 
+<!-- Review & Survey Section -->
+<table width="100%" cellpadding="0" cellspacing="0" style="margin:24px 0 0;border-top:2px solid #C9A84C33;padding-top:20px;">
+<tr><td align="center">
+<p style="color:#C9A84C;font-size:15px;font-weight:700;margin:0 0 6px;">⭐ We Value Your Feedback</p>
+<p style="color:#666;font-size:12px;margin:0 0 14px;">Help us improve by sharing your experience</p>
+<table cellpadding="0" cellspacing="0" align="center">
+<tr>
+<td style="padding:0 6px;"><a href="https://jbjglobalrealestate.lovable.app/reviews?source=${encodeURIComponent(req.applicationType)}" style="display:inline-block;background:linear-gradient(135deg,#C9A84C,#B8973F);color:#000;text-decoration:none;padding:10px 24px;border-radius:8px;font-weight:700;font-size:12px;">⭐ Leave a Review</a></td>
+<td style="padding:0 6px;"><a href="https://jbjglobalrealestate.lovable.app/survey?source=${encodeURIComponent(req.applicationType)}" style="display:inline-block;background:#1a1a2e;border:2px solid #C9A84C;color:#C9A84C;text-decoration:none;padding:8px 24px;border-radius:8px;font-weight:700;font-size:12px;">📋 Take Survey</a></td>
+</tr>
+</table>
+</td></tr>
+</table>
+
 <!-- CTA Button -->
 <table width="100%" cellpadding="0" cellspacing="0">
 <tr><td align="center" style="padding:8px 0 24px;">
@@ -139,11 +153,6 @@ View in My Account
 </a>
 </td></tr>
 </table>
-
-<p style="color:#888;font-size:13px;line-height:1.5;margin:0;">
-If you have questions, reply to this email or contact our support team.
-</p>
-</td></tr>
 
 <!-- Footer -->
 <tr><td style="background:#1a1a2e;padding:24px 40px;">
