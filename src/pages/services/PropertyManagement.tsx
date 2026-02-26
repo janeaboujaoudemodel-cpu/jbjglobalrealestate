@@ -169,7 +169,7 @@ const PropertyManagement = () => {
       />
 
       {/* ═══ 1. HERO ═══ */}
-      <section className="relative py-28 md:py-36 overflow-hidden bg-gradient-to-b from-[#1a1714] to-[#151210] border-b border-[#C8A766]/20">
+      <section className="jj-hero-fullscreen relative py-28 md:py-36 overflow-hidden bg-gradient-to-b from-[#1a1714] to-[#151210] border-b border-[#C8A766]/20">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#C8A766]/8 via-transparent to-transparent" />
         <div className="absolute top-20 right-20 w-72 h-72 bg-[#C8A766]/6 rounded-full blur-[100px]" />
         <div className="absolute bottom-10 left-10 w-56 h-56 bg-[#C8A766]/8 rounded-full blur-[80px]" />
