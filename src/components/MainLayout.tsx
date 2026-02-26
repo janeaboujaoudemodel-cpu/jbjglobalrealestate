@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
+import {
+  hasTransparentHeader,
+  isBackOfficeRoute as isBackOfficePath,
+  needsHeaderSpacing as shouldAddHeaderSpacing,
+} from "@/config/mainLayoutRoutes";
+import {
+  getServiceLayoutSnapshot,
+  hasVisibleServiceBody,
+  type ServiceLayoutSnapshot,
+} from "@/lib/serviceLayoutGuard";
 import GlobalHeader from "@/components/GlobalHeader";
 import AIChatWidget from "@/components/AIChatWidget";
 import MarketingScripts from "@/components/marketing/MarketingScripts";
@@ -49,13 +58,16 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   const { isRTL } = useLanguage();
   const isMobile = useIsMobile();
   const location = useLocation();
-  // Recognize ALL back-office routes (owner panel, listing management, broker dashboards, etc.)
-  const isBackOfficeRoute = 
-    location.pathname.startsWith("/admin") || 
-    location.pathname.startsWith("/listing-admin") ||
-    location.pathname.startsWith("/broker-dashboard");
+  const isBackOfficeRoute = isBackOfficePath(location.pathname);
+  const isServiceRoute = location.pathname.startsWith("/services/");
   const isHomePage = location.pathname === "/";
-  const isDetailPage = location.pathname.startsWith("/project/") || location.pathname.startsWith("/area/");
+  const isDetailPage =
+    location.pathname.startsWith("/project/") ||
+    location.pathname.startsWith("/area/");
+  const showLayoutDebug =
+    isServiceRoute &&
+    new URLSearchParams(location.search).get("layoutDebug") === "1";
+
   // Toolkit generator routes are full-screen app experiences — suppress Footer & CTA
   const isToolkitGeneratorRoute =
     location.pathname.startsWith('/toolkit/stamp-generator/') ||
@@ -70,6 +82,11 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 
   // Chat collapsed state - always start collapsed
   const [isChatCollapsed, setIsChatCollapsed] = useState(true);
+
+  // Layout safeguard state (only used if service body collapses unexpectedly)
+  const [layoutGuardTriggered, setLayoutGuardTriggered] = useState(false);
+  const [layoutDebugSnapshot, setLayoutDebugSnapshot] =
+    useState<ServiceLayoutSnapshot | null>(null);
 
   // Auto-collapse chat when navigating to project/area detail pages
   useEffect(() => {
@@ -89,6 +106,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     window.addEventListener('recommendation-popup-opened', handleRecPopup);
     return () => window.removeEventListener('recommendation-popup-opened', handleRecPopup);
   }, []);
+
   // Show attention pulse only after scroll delay on homepage, or immediately on other pages
   const [showAttentionPulse, setShowAttentionPulse] = useState(false);
   // Track if popups should be visible (delayed on homepage until user scrolls past hero)
@@ -97,7 +115,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   // On homepage: wait for user to scroll past hero section, then delay 3.5s before showing popups/pulse
   useEffect(() => {
     if (isBackOfficeRoute) return;
-    
+
     // Not on homepage - show immediately
     if (!isHomePage) {
       setPopupsReady(true);
@@ -113,12 +131,12 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 
     const handleScroll = () => {
       if (hasTriggered) return;
-      
+
       // Hero section is roughly viewport height
       const heroHeight = window.innerHeight;
       if (window.scrollY > heroHeight * 0.5) {
         hasTriggered = true;
-        
+
         // Wait 3.5 seconds after scrolling past hero
         scrollTimer = window.setTimeout(() => {
           setPopupsReady(true);
@@ -130,7 +148,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
       if (scrollTimer) window.clearTimeout(scrollTimer);
@@ -155,99 +173,65 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   // Chat is always an overlay – no content pushing
   const effectiveCollapsed = isBackOfficeRoute ? true : isChatCollapsed;
 
-  // Deterministic transparent-header routing (no post-render hero probing)
-  const transparentHeaderRoutes = new Set([
-    '/',
-    '/properties',
-    '/quiz',
-    '/about',
-    '/team',
-    '/founder',
-    '/awards',
-    '/developers',
-    '/services',
-    '/market-intelligence',
-    '/broker-dashboard',
-    '/broker-resources',
-    '/broker-education',
-    '/company-profile',
-    '/investor/portfolio-views',
-    '/areas',
-    '/buyer-guide',
-    '/rent-guide',
-    '/seller-guide',
-    '/landlord-guide',
-    '/tenant-guide',
-    '/investor-education',
-    '/guides/legal',
-    '/guides/golden-visa',
-  ]);
+  // Deterministic, route-only layout mode (no DOM probing / no state flip)
+  const hasDarkHero = hasTransparentHeader(location.pathname);
+  const needsHeaderSpacing = shouldAddHeaderSpacing(location.pathname);
 
-  const transparentHeaderPrefixes = [
-    '/developers/',
-    '/project/',
-    '/properties/',
-    '/market-intelligence/',
-    '/guides/',
-    '/services/',
-    '/investor/',
-  ];
-
-  const hasDarkHero = !isBackOfficeRoute && (
-    transparentHeaderRoutes.has(location.pathname) ||
-    transparentHeaderPrefixes.some((prefix) => location.pathname.startsWith(prefix))
-  );
-
-  // Pages with bright backgrounds need content pushed below header
-  const needsHeaderSpacing = !hasDarkHero;
-
-  // Runtime regression guard for collapsed service pages (Option B)
+  // Runtime safeguard (no backend writes): recover if all service body sections collapse to 0-height
   useEffect(() => {
-    if (isBackOfficeRoute || !location.pathname.startsWith('/services/')) return;
+    if (isBackOfficeRoute || !isServiceRoute) {
+      setLayoutGuardTriggered(false);
+      return;
+    }
 
-    const timer = window.setTimeout(async () => {
-      const sections = Array.from(document.querySelectorAll('main section'));
-      const contentSections = sections.slice(1);
-      const hasVisibleBodySection = contentSections.some((section) => {
-        if (!(section instanceof HTMLElement)) return false;
-        return section.offsetHeight > 120 && section.scrollHeight > 120;
-      });
+    const timer = window.setTimeout(() => {
+      const snapshot = getServiceLayoutSnapshot();
 
-      if (hasVisibleBodySection) return;
+      if (hasVisibleServiceBody(snapshot)) {
+        setLayoutGuardTriggered(false);
+        return;
+      }
 
       const main = document.querySelector('main');
-      if (main) {
-        main.classList.add('pt-24', 'sm:pt-28', 'lg:pt-32');
+      if (main instanceof HTMLElement) {
+        main.style.paddingTop = '6rem';
+        main.style.minHeight = '100vh';
         main.getBoundingClientRect();
       }
 
-      console.error('[layout-guard] Service page visibility fallback triggered', {
-        pathname: location.pathname,
-        totalSections: sections.length,
-      });
+      window.dispatchEvent(new Event('resize'));
+      setLayoutGuardTriggered(true);
 
-      try {
-        const { data: authData } = await supabase.auth.getUser();
-        await supabase.from('audit_logs').insert({
-          user_id: authData.user?.id ?? null,
-          user_email: authData.user?.email ?? null,
-          action_type: 'read',
-          resource_type: 'settings',
-          description: 'Service layout visibility guard fallback triggered',
-          details: {
-            pathname: location.pathname,
-            totalSections: sections.length,
-            triggeredAt: new Date().toISOString(),
-          },
-          user_agent: navigator.userAgent,
-        } as any);
-      } catch (error) {
-        console.warn('[layout-guard] Failed to write audit log', error);
-      }
+      console.error('[layout-guard] Service layout recovered after collapsed body detection', {
+        pathname: location.pathname,
+        heroSections: snapshot.heroSections.length,
+        bodySections: snapshot.bodySections.length,
+      });
     }, 1000);
 
     return () => window.clearTimeout(timer);
-  }, [location.pathname, isBackOfficeRoute]);
+  }, [isBackOfficeRoute, isServiceRoute, location.pathname]);
+
+  // Optional debug overlay for proofing: /services/...?...&layoutDebug=1
+  useEffect(() => {
+    if (!showLayoutDebug) {
+      setLayoutDebugSnapshot(null);
+      return;
+    }
+
+    const syncSnapshot = () => {
+      setLayoutDebugSnapshot(getServiceLayoutSnapshot());
+    };
+
+    syncSnapshot();
+    window.addEventListener('scroll', syncSnapshot, { passive: true });
+    window.addEventListener('resize', syncSnapshot);
+
+    return () => {
+      window.removeEventListener('scroll', syncSnapshot);
+      window.removeEventListener('resize', syncSnapshot);
+    };
+  }, [showLayoutDebug, location.pathname]);
 
   return (
     <div className="min-h-screen bg-black">
@@ -258,6 +242,13 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       {/* Content spacing: dark hero pages sit behind header, bright pages pushed below */}
       <GlobalContactGating>
         <main className={`w-full max-w-full overflow-x-hidden ${needsHeaderSpacing ? "pt-24 sm:pt-28 lg:pt-32" : "pt-0"}`}>
+          {layoutGuardTriggered && isServiceRoute && (
+            <div role="alert" className="mx-auto mt-4 w-full max-w-6xl px-4 sm:px-6 lg:px-8">
+              <div className="rounded-lg border border-destructive/30 bg-background/95 px-4 py-3 text-sm text-foreground shadow-sm backdrop-blur">
+                Layout safeguard restored body visibility for this service page.
+              </div>
+            </div>
+          )}
           {children}
         </main>
       </GlobalContactGating>
@@ -277,6 +268,22 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           onMinimize={handleMinimizeChat}
           showAttentionPulse={showAttentionPulse && popupsReady}
         />
+      )}
+      {showLayoutDebug && layoutDebugSnapshot && (
+        <div
+          data-testid="layout-debug-overlay"
+          className="fixed bottom-4 right-4 z-[120] w-72 rounded-xl border border-border bg-background/95 p-3 text-xs text-foreground shadow-xl backdrop-blur"
+        >
+          <p className="font-semibold">Service Layout Debug</p>
+          <p className="mt-1">Path: {layoutDebugSnapshot.pathname}</p>
+          <p>Scroll: {layoutDebugSnapshot.scrollPercent}%</p>
+          <p>Main height: {layoutDebugSnapshot.mainHeight}px</p>
+          {layoutDebugSnapshot.bodySections.slice(0, 3).map((section) => (
+            <p key={section.id}>
+              {section.id}: {section.offsetHeight}px
+            </p>
+          ))}
+        </div>
       )}
       {/* Guided Tour for tablet users */}
       <GuidedTour 
