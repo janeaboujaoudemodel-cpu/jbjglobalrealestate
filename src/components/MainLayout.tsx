@@ -1,5 +1,6 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 import GlobalHeader from "@/components/GlobalHeader";
 import AIChatWidget from "@/components/AIChatWidget";
 import MarketingScripts from "@/components/marketing/MarketingScripts";
@@ -154,10 +155,8 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   // Chat is always an overlay – no content pushing
   const effectiveCollapsed = isBackOfficeRoute ? true : isChatCollapsed;
 
-  // Determine if page has a dark hero that can use transparent header
-  // These pages have full-screen dark heroes where content should sit behind header
-  // Include ALL pages that use jj-hero-fullscreen or GuideHero component
-  const darkHeroPages = [
+  // Deterministic transparent-header routing (no post-render hero probing)
+  const transparentHeaderRoutes = new Set([
     '/',
     '/properties',
     '/quiz',
@@ -173,7 +172,6 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     '/broker-education',
     '/company-profile',
     '/investor/portfolio-views',
-    // Guide pages (use GuideHero which includes jj-hero-fullscreen)
     '/areas',
     '/buyer-guide',
     '/rent-guide',
@@ -183,44 +181,73 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     '/investor-education',
     '/guides/legal',
     '/guides/golden-visa',
-    // Service sub-pages
-    '/services/architecture',
-    '/services/interior-design',
-    '/services/fit-out',
-    '/services/design-build',
-    '/services/law-firm',
-    '/services/buying-advisory',
-    '/services/selling-advisory',
-    '/services/rental-advisory',
-    '/services/investment-advisory',
+  ]);
+
+  const transparentHeaderPrefixes = [
+    '/developers/',
+    '/project/',
+    '/properties/',
+    '/market-intelligence/',
+    '/guides/',
+    '/services/',
+    '/investor/',
   ];
-  // Route-level hint used for first render; final decision is based on whether the page actually
-  // renders a full-screen hero (.jj-hero-fullscreen). This enforces the rule:
-  // - Hero pages: transparent header, content can sit behind.
-  // - Non-hero pages: solid header + top spacing, content must never slide under.
-  const routeSuggestsDarkHero =
-    darkHeroPages.includes(location.pathname) ||
-    location.pathname.startsWith('/developers/') ||
-    location.pathname.startsWith('/project/') ||
-    location.pathname.startsWith('/properties/') ||
-    location.pathname.startsWith('/market-intelligence/') ||
-    location.pathname.startsWith('/guides/') ||
-    location.pathname.startsWith('/services/') ||
-    location.pathname.startsWith('/investor/');
 
-  const [hasDarkHero, setHasDarkHero] = useState<boolean>(routeSuggestsDarkHero);
+  const hasDarkHero = !isBackOfficeRoute && (
+    transparentHeaderRoutes.has(location.pathname) ||
+    transparentHeaderPrefixes.some((prefix) => location.pathname.startsWith(prefix))
+  );
 
-  useLayoutEffect(() => {
-    if (isBackOfficeRoute) {
-      setHasDarkHero(false);
-      return;
-    }
-    const hasHero = !!document.querySelector('.jj-hero-fullscreen');
-    setHasDarkHero(hasHero);
-  }, [location.pathname, isBackOfficeRoute]);
-  
   // Pages with bright backgrounds need content pushed below header
   const needsHeaderSpacing = !hasDarkHero;
+
+  // Runtime regression guard for collapsed service pages (Option B)
+  useEffect(() => {
+    if (isBackOfficeRoute || !location.pathname.startsWith('/services/')) return;
+
+    const timer = window.setTimeout(async () => {
+      const sections = Array.from(document.querySelectorAll('main section'));
+      const contentSections = sections.slice(1);
+      const hasVisibleBodySection = contentSections.some((section) => {
+        if (!(section instanceof HTMLElement)) return false;
+        return section.offsetHeight > 120 && section.scrollHeight > 120;
+      });
+
+      if (hasVisibleBodySection) return;
+
+      const main = document.querySelector('main');
+      if (main) {
+        main.classList.add('pt-24', 'sm:pt-28', 'lg:pt-32');
+        main.getBoundingClientRect();
+      }
+
+      console.error('[layout-guard] Service page visibility fallback triggered', {
+        pathname: location.pathname,
+        totalSections: sections.length,
+      });
+
+      try {
+        const { data: authData } = await supabase.auth.getUser();
+        await supabase.from('audit_logs').insert({
+          user_id: authData.user?.id ?? null,
+          user_email: authData.user?.email ?? null,
+          action_type: 'read',
+          resource_type: 'settings',
+          description: 'Service layout visibility guard fallback triggered',
+          details: {
+            pathname: location.pathname,
+            totalSections: sections.length,
+            triggeredAt: new Date().toISOString(),
+          },
+          user_agent: navigator.userAgent,
+        } as any);
+      } catch (error) {
+        console.warn('[layout-guard] Failed to write audit log', error);
+      }
+    }, 1000);
+
+    return () => window.clearTimeout(timer);
+  }, [location.pathname, isBackOfficeRoute]);
 
   return (
     <div className="min-h-screen bg-black">
