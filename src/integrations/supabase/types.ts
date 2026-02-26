@@ -10685,6 +10685,33 @@ export type Database = {
         }
         Relationships: []
       }
+      inbound_email_dead_letters: {
+        Row: {
+          created_at: string
+          error_message: string | null
+          id: string
+          raw_payload: Json | null
+          sender_email: string | null
+          subject: string | null
+        }
+        Insert: {
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          raw_payload?: Json | null
+          sender_email?: string | null
+          subject?: string | null
+        }
+        Update: {
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          raw_payload?: Json | null
+          sender_email?: string | null
+          subject?: string | null
+        }
+        Relationships: []
+      }
       instagram_scheduled_posts: {
         Row: {
           access_token: string | null
