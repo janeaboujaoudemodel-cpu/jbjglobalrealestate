@@ -278,7 +278,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           <p className="mt-1">Path: {layoutDebugSnapshot.pathname}</p>
           <p>Scroll: {layoutDebugSnapshot.scrollPercent}%</p>
           <p>Main height: {layoutDebugSnapshot.mainHeight}px</p>
-          {layoutDebugSnapshot.bodySections.slice(0, 3).map((section) => (
+          {layoutDebugSnapshot.bodySections.map((section) => (
             <p key={section.id}>
               {section.id}: {section.offsetHeight}px
             </p>
