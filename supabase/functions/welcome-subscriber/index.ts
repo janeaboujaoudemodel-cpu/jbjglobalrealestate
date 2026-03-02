@@ -38,7 +38,7 @@ const handler = async (req: Request): Promise<Response> => {
 <body style="margin:0;padding:0;background-color:#ffffff;font-family:'Segoe UI',Arial,Helvetica,sans-serif;">
 <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background-color:#ffffff;">
 <tr><td align="center" style="padding:20px 10px;">
-<table role="presentation" cellpadding="0" cellspacing="0" width="600" style="max-width:600px;width:100%;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="max-width:600px;width:100%;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
 
 <!-- Logo Banner -->
 <tr><td style="background:#ffffff;padding:24px 30px 16px;text-align:center;">
@@ -82,13 +82,13 @@ const handler = async (req: Request): Promise<Response> => {
 </td></tr>
 
 <!-- CTA Buttons -->
-<tr><td style="background-color:#FDFBF7;padding:0 30px 36px;text-align:center;">
+<tr><td style="background-color:#FDFBF7;padding:0 20px 36px;text-align:center;">
 <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
 <tr><td align="center" style="padding-bottom:12px;">
-<a href="${siteUrl}/properties" style="display:inline-block;background:linear-gradient(135deg,#F5EBD7,#EDE4D3);color:#1a1a1a;text-decoration:none;padding:14px 32px;border-radius:8px;font-weight:700;font-size:15px;letter-spacing:0.5px;border:2px solid #C8A766;">Browse Properties &#8594;</a>
+<a href="${siteUrl}/properties" style="display:inline-block;background:transparent;color:#1a1a1a;text-decoration:none;padding:14px 32px;border-radius:8px;font-weight:700;font-size:15px;letter-spacing:0.5px;border:2px solid #C8A766;">Browse Properties &#8594;</a>
 </td></tr>
 <tr><td align="center">
-<a href="${prefsUrl}" style="display:inline-block;background:#ffffff;color:#D4AF37;text-decoration:none;padding:12px 28px;border-radius:8px;font-weight:600;font-size:14px;border:2px solid #D4AF37;">Manage Preferences</a>
+<a href="${prefsUrl}" style="display:inline-block;background:transparent;color:#1a1a1a;text-decoration:none;padding:12px 28px;border-radius:8px;font-weight:600;font-size:14px;border:2px solid #C8A766;">Manage Preferences</a>
 </td></tr>
 </table>
 </td></tr>

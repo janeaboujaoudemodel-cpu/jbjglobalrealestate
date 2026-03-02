@@ -81,7 +81,7 @@ function buildWelcomeHtml(displayName: string, email: string, role: string, ctaT
 <body style="margin:0;padding:0;background-color:#ffffff;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;">
 <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#ffffff;padding:32px 16px;">
 <tr><td align="center">
-<table width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #e8e0d0;">
+<table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background-color:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #e8e0d0;">
 
 <!-- Header — Pure Black with Monogram -->
 <tr><td style="background:#000000;padding:28px 40px;text-align:center;">
@@ -97,8 +97,8 @@ function buildWelcomeHtml(displayName: string, email: string, role: string, ctaT
 <tr><td style="background:linear-gradient(90deg,#C8A766,#D4C4A8,#C8A766);height:3px;font-size:0;line-height:0;">&nbsp;</td></tr>
 
 <!-- Content -->
-<tr><td style="padding:36px 40px;">
-<h2 style="color:#1a1a1a;margin:0 0 20px;font-size:22px;font-weight:700;">Welcome on Board, ${displayName}!</h2>
+<tr><td style="padding:28px 20px 28px 28px;">
+<h2 style="color:#1a1a1a;margin:0 0 20px;font-size:20px;font-weight:700;">Welcome on Board, ${displayName}!</h2>
 
 <p style="color:#555;font-size:15px;line-height:1.6;margin:0 0 20px;">
 You have successfully created your account with <strong>JBJ Global Real Estate</strong>. We're thrilled to have you!
@@ -108,9 +108,7 @@ You have successfully created your account with <strong>JBJ Global Real Estate</
 <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
 <tr><td style="padding:18px 22px;background:linear-gradient(135deg,#F5EBD7 0%,#FDFBF7 100%);border-radius:12px;border-left:4px solid #C8A766;">
 <p style="color:#1a1a1a;font-size:14px;font-weight:700;margin:0 0 10px;">Your Account Details</p>
-<p style="color:#555;font-size:13px;margin:0 0 6px;"><strong>Email:</strong> ${email}</p>
-<p style="color:#555;font-size:13px;margin:0 0 10px;"><strong>Password:</strong> The password you chose during registration. For security, we never store or send passwords in emails.</p>
-<p style="color:#C8A766;font-size:12px;font-weight:600;margin:0;">Save this email for anytime you need to sign in or recover your account.</p>
+<p style="color:#555;font-size:13px;margin:0;"><strong>Registered Email:</strong> ${email}</p>
 </td></tr>
 </table>
 
@@ -123,26 +121,28 @@ As a Dubai-based real estate brokerage, we specialize in connecting clients with
 ${benefitsHtml}
 </table>
 
-<!-- CTA — Premium Dark Button -->
+<!-- CTA — Premium Outlined Button -->
 <table width="100%" cellpadding="0" cellspacing="0">
 <tr><td align="center" style="padding:0 0 28px;">
-<a href="${ctaUrl}" style="display:inline-block;background:#000000;color:#C8A766;text-decoration:none;padding:14px 40px;border-radius:10px;font-weight:700;font-size:14px;letter-spacing:0.5px;border:1px solid #C8A76650;">
-${ctaText}
+<a href="${ctaUrl}" style="display:inline-block;background:transparent;color:#1a1a1a;text-decoration:none;padding:14px 40px;border-radius:10px;font-weight:700;font-size:14px;letter-spacing:0.5px;border:2px solid #C8A766;">
+${ctaText} &#8594;
 </a>
 </td></tr>
 </table>
 </td></tr>
 
-<!-- Quick Links -->
-<tr><td style="padding:24px 40px;background:#FDFBF7;">
+<!-- Quick Links — Responsive -->
+<tr><td style="padding:24px 20px;background:#FDFBF7;">
 <p style="color:#1a1a1a;margin:0 0 14px;font-size:14px;font-weight:700;text-align:center;">Explore Our Platform</p>
 <table width="100%" cellpadding="0" cellspacing="0">
 <tr><td align="center">
-<a href="${SITE_URL}/properties" style="display:inline-block;margin:4px;padding:7px 14px;border:1px solid #C8A766;border-radius:6px;color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">Properties</a>
-<a href="${SITE_URL}/services" style="display:inline-block;margin:4px;padding:7px 14px;border:1px solid #C8A766;border-radius:6px;color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">Services</a>
-<a href="${SITE_URL}/about" style="display:inline-block;margin:4px;padding:7px 14px;border:1px solid #C8A766;border-radius:6px;color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">About Us</a>
-<a href="${SITE_URL}/market-intelligence" style="display:inline-block;margin:4px;padding:7px 14px;border:1px solid #C8A766;border-radius:6px;color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">Market Intelligence</a>
-<a href="${SITE_URL}/contact" style="display:inline-block;margin:4px;padding:7px 14px;border:1px solid #C8A766;border-radius:6px;color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">Contact</a>
+<a href="${SITE_URL}/properties" style="display:inline-block;margin:4px;padding:10px 16px;border:1px solid #C8A766;border-radius:8px;color:#1a1a1a;text-decoration:none;font-size:13px;font-weight:600;">Properties</a>
+<a href="${SITE_URL}/services" style="display:inline-block;margin:4px;padding:10px 16px;border:1px solid #C8A766;border-radius:8px;color:#1a1a1a;text-decoration:none;font-size:13px;font-weight:600;">Services</a>
+<a href="${SITE_URL}/about" style="display:inline-block;margin:4px;padding:10px 16px;border:1px solid #C8A766;border-radius:8px;color:#1a1a1a;text-decoration:none;font-size:13px;font-weight:600;">About Us</a>
+</td></tr>
+<tr><td align="center" style="padding-top:4px;">
+<a href="${SITE_URL}/market-intelligence" style="display:inline-block;margin:4px;padding:10px 16px;border:1px solid #C8A766;border-radius:8px;color:#1a1a1a;text-decoration:none;font-size:13px;font-weight:600;">Market Intelligence</a>
+<a href="${SITE_URL}/contact" style="display:inline-block;margin:4px;padding:10px 16px;border:1px solid #C8A766;border-radius:8px;color:#1a1a1a;text-decoration:none;font-size:13px;font-weight:600;">Contact</a>
 </td></tr>
 </table>
 </td></tr>
@@ -150,14 +150,20 @@ ${ctaText}
 <!-- Divider -->
 <tr><td style="padding:0 40px;"><table width="100%" cellpadding="0" cellspacing="0"><tr><td style="border-top:1px solid #e8e0d0;"></td></tr></table></td></tr>
 
-<!-- Review & Survey -->
-<tr><td style="padding:24px 40px;text-align:center;">
+<!-- Review & Survey — Responsive -->
+<tr><td style="padding:24px 20px;text-align:center;">
 <p style="color:#1a1a1a;font-size:15px;font-weight:700;margin:0 0 4px;">We Value Your Feedback</p>
 <p style="color:#888;font-size:12px;margin:0 0 16px;">Help us improve by sharing your experience</p>
-<table cellpadding="0" cellspacing="0" align="center">
+<table width="100%" cellpadding="0" cellspacing="0">
 <tr>
-<td style="padding:0 8px;"><a href="${reviewUrl}" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:11px 26px;border-radius:8px;font-weight:700;font-size:12px;border:1px solid #C8A76650;">&#9733;&#9733;&#9733;&#9733;&#9733; Leave a Review</a></td>
-<td style="padding:0 8px;"><a href="${surveyUrl}" style="display:inline-block;background:#FDFBF7;border:1px solid #C8A766;color:#1a1a1a;text-decoration:none;padding:11px 26px;border-radius:8px;font-weight:700;font-size:12px;">Take Survey</a></td>
+<td align="center" style="padding:0 0 10px;">
+<a href="${reviewUrl}" style="display:inline-block;background:transparent;color:#1a1a1a;text-decoration:none;padding:12px 28px;border-radius:8px;font-weight:700;font-size:13px;border:2px solid #C8A766;">&#9733;&#9733;&#9733;&#9733;&#9733; Leave a Review</a>
+</td>
+</tr>
+<tr>
+<td align="center">
+<a href="${surveyUrl}" style="display:inline-block;background:transparent;color:#1a1a1a;text-decoration:none;padding:12px 28px;border-radius:8px;font-weight:700;font-size:13px;border:2px solid #C8A766;">Take Survey &#8594;</a>
+</td>
 </tr>
 </table>
 </td></tr>
@@ -258,19 +264,28 @@ serve(async (req) => {
           <p style="color:#666;margin:4px 0 0;font-size:13px;">Stay informed with the latest UAE real estate trends.</p>
         </td></tr>`,
       visitor: `
-        <tr><td style="padding:14px 18px;background:linear-gradient(135deg,#F5EBD7,#FDFBF7);border-radius:10px;">
-          <strong style="color:#1a1a1a;font-size:14px;">Browse Properties</strong>
-          <p style="color:#666;margin:4px 0 0;font-size:13px;">Explore our curated selection of UAE properties.</p>
+        <tr><td style="padding:16px 20px;background:#FDFBF7;border-radius:10px;border:1px solid #E8DCC8;">
+          <table cellpadding="0" cellspacing="0"><tr>
+          <td style="vertical-align:top;padding-right:12px;"><span style="color:#C8A766;font-size:20px;">&#9632;</span></td>
+          <td><strong style="color:#1a1a1a;font-size:14px;">Browse Premium Properties</strong>
+          <p style="color:#666;margin:4px 0 0;font-size:13px;">Explore our curated selection of UAE properties across all emirates.</p></td>
+          </tr></table>
         </td></tr>
         <tr><td style="height:8px;"></td></tr>
-        <tr><td style="padding:14px 18px;background:linear-gradient(135deg,#F5EBD7,#FDFBF7);border-radius:10px;">
-          <strong style="color:#1a1a1a;font-size:14px;">Save Favorites</strong>
-          <p style="color:#666;margin:4px 0 0;font-size:13px;">Shortlist properties you love for easy access.</p>
+        <tr><td style="padding:16px 20px;background:#FDFBF7;border-radius:10px;border:1px solid #E8DCC8;">
+          <table cellpadding="0" cellspacing="0"><tr>
+          <td style="vertical-align:top;padding-right:12px;"><span style="color:#C8A766;font-size:20px;">&#9829;</span></td>
+          <td><strong style="color:#1a1a1a;font-size:14px;">Save Your Favorites</strong>
+          <p style="color:#666;margin:4px 0 0;font-size:13px;">Shortlist properties you love and access them anytime from your dashboard.</p></td>
+          </tr></table>
         </td></tr>
         <tr><td style="height:8px;"></td></tr>
-        <tr><td style="padding:14px 18px;background:linear-gradient(135deg,#F5EBD7,#FDFBF7);border-radius:10px;">
-          <strong style="color:#1a1a1a;font-size:14px;">Expert Support</strong>
-          <p style="color:#666;margin:4px 0 0;font-size:13px;">Our team is ready to answer your questions.</p>
+        <tr><td style="padding:16px 20px;background:#FDFBF7;border-radius:10px;border:1px solid #E8DCC8;">
+          <table cellpadding="0" cellspacing="0"><tr>
+          <td style="vertical-align:top;padding-right:12px;"><span style="color:#C8A766;font-size:20px;">&#9733;</span></td>
+          <td><strong style="color:#1a1a1a;font-size:14px;">Expert Support 24/7</strong>
+          <p style="color:#666;margin:4px 0 0;font-size:13px;">Our dedicated team is ready to assist with any property inquiry.</p></td>
+          </tr></table>
         </td></tr>`,
     };
 
