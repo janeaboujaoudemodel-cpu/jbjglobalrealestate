@@ -380,21 +380,32 @@ const UserProfile = () => {
   const executeAccountLifecycle = async (action: 'deactivate' | 'delete') => {
     setAccountActionLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke('account-lifecycle', {
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        window.setTimeout(() => reject(new Error('Request timed out. Please try again.')), 15000);
+      });
+
+      const invokePromise = supabase.functions.invoke('account-lifecycle', {
         body: { action },
       });
+
+      const { data, error } = await Promise.race([invokePromise, timeoutPromise]) as {
+        data: any;
+        error: any;
+      };
 
       if (error || data?.error) throw error || new Error(data?.error || 'Action failed');
 
       toast.success(action === 'delete'
         ? 'Your account has been scheduled for deletion. You have 30 days to recover it by signing in again.'
         : 'Your account has been deactivated. You can recover it anytime by signing in again.');
+
       setAccountDialogType(null);
       await signOut();
       navigate('/auth');
     } catch (error: any) {
       console.error('Account lifecycle error:', error);
       toast.error(error?.message || 'Failed to update account status');
+      setAccountDialogType(null);
     } finally {
       setAccountActionLoading(false);
     }
@@ -877,12 +888,21 @@ const UserProfile = () => {
 
       {/* Premium Account Lifecycle Dialogs */}
       <AlertDialog open={accountDialogType === 'deactivate'} onOpenChange={(open) => !open && setAccountDialogType(null)}>
-        <AlertDialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 max-w-md">
+        <AlertDialogContent className="relative w-full max-w-[calc(100vw-1.5rem)] sm:max-w-xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+          <button
+            type="button"
+            aria-label="Close"
+            onClick={() => setAccountDialogType(null)}
+            className="absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full border border-gold/30 bg-background/70 text-foreground transition-colors hover:bg-background"
+          >
+            <X className="h-4 w-4" />
+          </button>
+
           <AlertDialogHeader>
             <div className="mx-auto mb-4 w-16 h-16 rounded-full bg-amber-100 border-2 border-amber-300 flex items-center justify-center">
-              <Lock className="h-7 w-7 text-amber-600" />
+              <Lock className="h-7 w-7 text-amber-700" />
             </div>
-            <AlertDialogTitle className="text-center text-xl text-foreground">
+            <AlertDialogTitle className="text-center text-xl text-foreground pr-10">
               Deactivate Your Account
             </AlertDialogTitle>
             <AlertDialogDescription asChild>
@@ -892,32 +912,33 @@ const UserProfile = () => {
                 </p>
                 <div className="bg-white/60 rounded-lg p-4 border border-gold/20 text-left space-y-2">
                   <p className="font-semibold text-foreground text-sm">What happens when you deactivate:</p>
-                  <ul className="space-y-1.5 text-xs">
-                    <li className="flex items-start gap-2">
-                      <Shield className="h-3.5 w-3.5 mt-0.5 text-amber-600 shrink-0" />
-                      Your profile and data are hidden from view
+                  <ul className="space-y-1.5 text-xs sm:text-sm">
+                    <li className="flex items-start gap-2 leading-relaxed">
+                      <Shield className="h-3.5 w-3.5 mt-0.5 text-amber-700 shrink-0" />
+                      Your profile and data are hidden from view.
                     </li>
-                    <li className="flex items-start gap-2">
-                      <Shield className="h-3.5 w-3.5 mt-0.5 text-amber-600 shrink-0" />
-                      Your account is securely stored for recovery
+                    <li className="flex items-start gap-2 leading-relaxed">
+                      <Shield className="h-3.5 w-3.5 mt-0.5 text-amber-700 shrink-0" />
+                      Your account is securely stored for recovery.
                     </li>
-                    <li className="flex items-start gap-2">
-                      <Shield className="h-3.5 w-3.5 mt-0.5 text-amber-600 shrink-0" />
-                      Sign in anytime to reactivate your account instantly
+                    <li className="flex items-start gap-2 leading-relaxed">
+                      <Shield className="h-3.5 w-3.5 mt-0.5 text-amber-700 shrink-0" />
+                      Sign in anytime to reactivate your account instantly.
                     </li>
                   </ul>
                 </div>
               </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter className="flex-col sm:flex-row gap-2 pt-2">
-            <AlertDialogCancel disabled={accountActionLoading} className="border-gold/30">
+
+          <AlertDialogFooter className="flex-col sm:flex-row sm:flex-wrap gap-2 pt-2">
+            <AlertDialogCancel className="w-full sm:flex-1 min-w-0 border-emerald-500/40 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 hover:text-emerald-900 text-[13px] sm:text-sm">
               Keep My Account
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={() => executeAccountLifecycle('deactivate')}
               disabled={accountActionLoading}
-              className="bg-amber-600 hover:bg-amber-700 text-white"
+              className="w-full sm:flex-1 min-w-0 border border-amber-500/50 bg-amber-50 text-amber-800 hover:bg-amber-100 hover:text-amber-900 text-[13px] sm:text-sm"
             >
               {accountActionLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Lock className="h-4 w-4 mr-2" />}
               Deactivate Account
@@ -977,7 +998,6 @@ const UserProfile = () => {
 
           <AlertDialogFooter className="flex-col sm:flex-row sm:flex-wrap gap-2 pt-2">
             <AlertDialogCancel
-              disabled={accountActionLoading}
               className="w-full sm:flex-1 min-w-0 border-emerald-500/40 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 hover:text-emerald-900 text-[13px] sm:text-sm"
             >
               Keep My Account
