@@ -26,9 +26,10 @@ function getCorsHeaders(req: Request) {
   };
 }
 
-// Input validation schema
+// Input validation schema — userId is optional so internal service-to-service
+// calls (e.g. from user-registration) that don't yet have a userId still pass.
 const RequestSchema = z.object({
-  userId: z.string().uuid(),
+  userId: z.string().uuid().optional(),
   email: z.string().email().max(255),
   fullName: z.string().max(200).optional(),
   userRole: z.enum(["broker", "investor", "visitor"]).optional(),
@@ -173,7 +174,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: "JBJ Global Real Estate <info@jbj.ae>",
+        from: "JBJ Global Real Estate <noreply@jbj.ae>",
         to: [email],
         subject: subjectByRole[role],
         html: `
