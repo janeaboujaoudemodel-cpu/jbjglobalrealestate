@@ -5,7 +5,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Eye, EyeOff, Mail, Lock, ArrowLeft, Scan, KeyRound, CheckCircle2, Loader2 } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, ArrowLeft, Scan, KeyRound, CheckCircle2, Loader2, Shield, UserCheck } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 import { z } from "zod";
 import { JJLogoImage } from "@/components/JJLogoImage";
 import { useBiometricAuth } from "@/hooks/useBiometricAuth";
@@ -41,6 +51,10 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string; confirmPassword?: string; otp?: string }>({});
+  const [showReactivationDialog, setShowReactivationDialog] = useState(false);
+  const [reactivationEmail, setReactivationEmail] = useState("");
+  const [reactivationPassword, setReactivationPassword] = useState("");
+  const [reactivating, setReactivating] = useState(false);
 
   // Resend cooldown
   const [resendCooldown, setResendCooldown] = useState(0);
@@ -167,7 +181,12 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
         case "signin": {
           const { error } = await signIn(email, password);
           if (error) {
-            if (error.message.includes("Email not confirmed")) {
+            // Check if account is deactivated/banned — offer reactivation
+            if (error.message.includes("banned") || error.message.includes("User is banned")) {
+              setReactivationEmail(email);
+              setReactivationPassword(password);
+              setShowReactivationDialog(true);
+            } else if (error.message.includes("Email not confirmed")) {
               toast.error("Please verify your email before signing in. Check your inbox.");
             } else if (error.message.includes("Invalid login credentials")) {
               toast.error("Invalid email or password. Please try again.");
@@ -247,6 +266,33 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
       toast.error(err.message || "Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleReactivateAccount = async () => {
+    setReactivating(true);
+    try {
+      // Call reactivate endpoint (no auth needed - uses service role)
+      const { data, error } = await supabase.functions.invoke('account-lifecycle-reactivate', {
+        body: { email: reactivationEmail, password: reactivationPassword },
+      });
+      
+      if (error || data?.error) throw new Error(data?.error || error?.message || 'Reactivation failed');
+
+      setShowReactivationDialog(false);
+      toast.success("Your account has been reactivated! Welcome back.");
+      
+      // Now sign in
+      const { error: signInError } = await signIn(reactivationEmail, reactivationPassword);
+      if (signInError) {
+        toast.error("Account reactivated, but sign-in failed. Please try signing in again.");
+      } else {
+        navigate("/");
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Failed to reactivate account. Please contact support.");
+    } finally {
+      setReactivating(false);
     }
   };
 
@@ -604,6 +650,53 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
 
         <p className="text-center text-gray-400 text-xs mt-8">© {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.</p>
       </div>
+
+      {/* Account Reactivation Dialog */}
+      <AlertDialog open={showReactivationDialog} onOpenChange={setShowReactivationDialog}>
+        <AlertDialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 max-w-md">
+          <AlertDialogHeader>
+            <div className="mx-auto mb-4 w-16 h-16 rounded-full bg-emerald-100 border-2 border-emerald-300 flex items-center justify-center">
+              <UserCheck className="h-7 w-7 text-emerald-600" />
+            </div>
+            <AlertDialogTitle className="text-center text-xl text-foreground">
+              We Found Your Account
+            </AlertDialogTitle>
+            <AlertDialogDescription asChild>
+              <div className="text-center space-y-4 text-sm text-muted-foreground">
+                <p>
+                  We identified an existing account associated with <strong className="text-foreground">{reactivationEmail}</strong> that was previously deactivated or scheduled for deletion.
+                </p>
+                <div className="bg-white/60 rounded-lg p-4 border border-emerald-200 text-left space-y-2">
+                  <p className="font-semibold text-foreground text-sm">Your options:</p>
+                  <ul className="space-y-1.5 text-xs">
+                    <li className="flex items-start gap-2">
+                      <Shield className="h-3.5 w-3.5 mt-0.5 text-emerald-600 shrink-0" />
+                      <strong>Reactivate</strong> — Restore your account, profile, and data instantly
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <Shield className="h-3.5 w-3.5 mt-0.5 text-emerald-600 shrink-0" />
+                      <strong>Create New</strong> — Start fresh with a new account using a different email
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="flex-col sm:flex-row gap-2 pt-2">
+            <AlertDialogCancel disabled={reactivating} className="border-gold/30">
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleReactivateAccount}
+              disabled={reactivating}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white"
+            >
+              {reactivating ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <UserCheck className="h-4 w-4 mr-2" />}
+              Reactivate My Account
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 });

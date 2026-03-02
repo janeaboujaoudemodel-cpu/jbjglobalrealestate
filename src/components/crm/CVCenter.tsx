@@ -521,20 +521,39 @@ const CVCenter = ({ userId }: CVCenterProps) => {
       const inlineExtAllowList = ['pdf', 'png', 'jpg', 'jpeg', 'webp', 'gif', 'txt', 'rtf', 'svg'];
 
       const loadPreviewBlob = async (url: string) => {
-        const previewSource = maybeProxyStorageUrl(url, {
-          filename: `CV-${cv.full_name.replace(/\s+/g, '-')}`,
-          disposition: 'inline',
-        });
-
-        const response = await fetch(previewSource, {
-          headers: { Accept: 'application/pdf,image/*,text/*,*/*' },
-        });
-        if (!response.ok) throw new Error('Preview fetch failed');
-
-        let blob = await response.blob();
         const ext = (cv.cv_url || '').split('?')[0].split('.').pop()?.toLowerCase();
-        const contentType = (response.headers.get('content-type') || blob.type || '').toLowerCase();
 
+        // Try authenticated blob download first (bypasses CORS/auth issues)
+        const storagePath = cv.cv_url?.replace(/^\/+/, '') || '';
+        const buckets = ['hr-documents', 'documents', 'public'];
+        let blob: Blob | null = null;
+
+        for (const bucket of buckets) {
+          const { data, error } = await supabase.storage.from(bucket).download(storagePath);
+          if (!error && data) {
+            blob = data;
+            break;
+          }
+        }
+
+        // Fallback to proxy fetch with auth header
+        if (!blob) {
+          const session = (await supabase.auth.getSession()).data.session;
+          const previewSource = maybeProxyStorageUrl(url, {
+            filename: `CV-${cv.full_name.replace(/\s+/g, '-')}`,
+            disposition: 'inline',
+          });
+          const response = await fetch(previewSource, {
+            headers: {
+              Accept: 'application/pdf,image/*,text/*,*/*',
+              ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
+            },
+          });
+          if (!response.ok) throw new Error('Preview fetch failed');
+          blob = await response.blob();
+        }
+
+        const contentType = (blob.type || '').toLowerCase();
         const isInlineMime = inlineMimeAllowList.some((mime) => contentType.includes(mime)) ||
           contentType.startsWith('image/') ||
           contentType.startsWith('text/');
@@ -544,7 +563,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
           throw new Error('Not an inline-previewable mime type');
         }
 
-        // Ensure correct MIME type for PDF blobs (some proxies return generic type)
+        // Ensure correct MIME type for PDF blobs
         if ((ext === 'pdf' || contentType.includes('application/pdf')) && (!blob.type || blob.type === 'application/octet-stream')) {
           blob = new Blob([blob], { type: 'application/pdf' });
         }

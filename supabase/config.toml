@@ -345,3 +345,6 @@ verify_jwt = false
 
 [functions.business-card-ocr]
 verify_jwt = false
+
+[functions.account-lifecycle-reactivate]
+verify_jwt = false

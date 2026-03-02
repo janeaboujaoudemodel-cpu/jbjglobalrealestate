@@ -16,6 +16,16 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -351,15 +361,11 @@ const UserProfile = () => {
     setShowEmailChangeDialog(open);
   };
 
-  const handleAccountLifecycle = async (action: 'deactivate' | 'delete') => {
-    const confirmed = window.confirm(
-      action === 'delete'
-        ? 'Are you sure you want to permanently delete your account? This cannot be undone.'
-        : 'Are you sure you want to deactivate your account?'
-    );
+  const [accountDialogType, setAccountDialogType] = useState<'deactivate' | 'delete' | null>(null);
+  const [accountActionLoading, setAccountActionLoading] = useState(false);
 
-    if (!confirmed) return;
-
+  const executeAccountLifecycle = async (action: 'deactivate' | 'delete') => {
+    setAccountActionLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke('account-lifecycle', {
         body: { action },
@@ -367,12 +373,17 @@ const UserProfile = () => {
 
       if (error || data?.error) throw error || new Error(data?.error || 'Action failed');
 
-      toast.success(action === 'delete' ? 'Account deleted successfully' : 'Account deactivated successfully');
+      toast.success(action === 'delete' 
+        ? 'Your account has been scheduled for deletion. You have 30 days to recover it by signing in again.' 
+        : 'Your account has been deactivated. You can recover it anytime by signing in again.');
+      setAccountDialogType(null);
       await signOut();
       navigate('/auth');
     } catch (error: any) {
       console.error('Account lifecycle error:', error);
       toast.error(error?.message || 'Failed to update account status');
+    } finally {
+      setAccountActionLoading(false);
     }
   };
 
@@ -662,11 +673,11 @@ const UserProfile = () => {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="font-medium text-destructive">Deactivate Account</p>
-                        <p className="text-sm text-destructive/80">Temporarily disable account access</p>
+                        <p className="text-sm text-destructive/80">Hide your profile &amp; pause access. Recover anytime.</p>
                       </div>
                       <Button
                         variant="outline"
-                        onClick={() => handleAccountLifecycle('deactivate')}
+                        onClick={() => setAccountDialogType('deactivate')}
                         className="border-destructive/40 text-destructive hover:bg-destructive/10"
                       >
                         <Lock className="h-4 w-4 mr-2" />
@@ -677,11 +688,11 @@ const UserProfile = () => {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="font-medium text-destructive">Delete Account</p>
-                        <p className="text-sm text-destructive/80">Permanently remove your account and data</p>
+                        <p className="text-sm text-destructive/80">Permanently remove your account after 30 days</p>
                       </div>
                       <Button
                         variant="outline"
-                        onClick={() => handleAccountLifecycle('delete')}
+                        onClick={() => setAccountDialogType('delete')}
                         className="border-destructive/40 text-destructive hover:bg-destructive/10"
                       >
                         <Trash2 className="h-4 w-4 mr-2" />
@@ -845,6 +856,121 @@ const UserProfile = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Premium Account Lifecycle Dialogs */}
+      <AlertDialog open={accountDialogType === 'deactivate'} onOpenChange={(open) => !open && setAccountDialogType(null)}>
+        <AlertDialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 max-w-md">
+          <AlertDialogHeader>
+            <div className="mx-auto mb-4 w-16 h-16 rounded-full bg-amber-100 border-2 border-amber-300 flex items-center justify-center">
+              <Lock className="h-7 w-7 text-amber-600" />
+            </div>
+            <AlertDialogTitle className="text-center text-xl text-foreground">
+              Deactivate Your Account
+            </AlertDialogTitle>
+            <AlertDialogDescription asChild>
+              <div className="text-center space-y-4 text-sm text-muted-foreground">
+                <p>
+                  Deactivating your account will immediately hide all your personal information and remove your visibility from the platform.
+                </p>
+                <div className="bg-white/60 rounded-lg p-4 border border-gold/20 text-left space-y-2">
+                  <p className="font-semibold text-foreground text-sm">What happens when you deactivate:</p>
+                  <ul className="space-y-1.5 text-xs">
+                    <li className="flex items-start gap-2">
+                      <Shield className="h-3.5 w-3.5 mt-0.5 text-amber-600 shrink-0" />
+                      Your profile and data are hidden from view
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <Shield className="h-3.5 w-3.5 mt-0.5 text-amber-600 shrink-0" />
+                      Your account is securely stored for recovery
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <Shield className="h-3.5 w-3.5 mt-0.5 text-amber-600 shrink-0" />
+                      Sign in anytime to reactivate your account instantly
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="flex-col sm:flex-row gap-2 pt-2">
+            <AlertDialogCancel disabled={accountActionLoading} className="border-gold/30">
+              Keep My Account
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => executeAccountLifecycle('deactivate')}
+              disabled={accountActionLoading}
+              className="bg-amber-600 hover:bg-amber-700 text-white"
+            >
+              {accountActionLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Lock className="h-4 w-4 mr-2" />}
+              Deactivate Account
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={accountDialogType === 'delete'} onOpenChange={(open) => !open && setAccountDialogType(null)}>
+        <AlertDialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 max-w-md">
+          <AlertDialogHeader>
+            <div className="mx-auto mb-4 w-16 h-16 rounded-full bg-red-100 border-2 border-red-300 flex items-center justify-center">
+              <Trash2 className="h-7 w-7 text-red-600" />
+            </div>
+            <AlertDialogTitle className="text-center text-xl text-foreground">
+              Delete Your Account Permanently
+            </AlertDialogTitle>
+            <AlertDialogDescription asChild>
+              <div className="text-center space-y-4 text-sm text-muted-foreground">
+                <p>
+                  Are you sure you want to permanently delete your account? Your data will be permanently erased after the recovery period.
+                </p>
+                <div className="bg-white/60 rounded-lg p-4 border border-red-200 text-left space-y-2">
+                  <p className="font-semibold text-foreground text-sm">Before you proceed:</p>
+                  <ul className="space-y-1.5 text-xs">
+                    <li className="flex items-start gap-2">
+                      <Shield className="h-3.5 w-3.5 mt-0.5 text-red-500 shrink-0" />
+                      You have <strong>30 days</strong> to recover your account by signing in again
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <Shield className="h-3.5 w-3.5 mt-0.5 text-red-500 shrink-0" />
+                      After 30 days, all your data will be permanently deleted
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <Shield className="h-3.5 w-3.5 mt-0.5 text-red-500 shrink-0" />
+                      This includes your profile, preferences, and activity history
+                    </li>
+                  </ul>
+                </div>
+                <div className="bg-amber-50 rounded-lg p-3 border border-amber-200 text-left">
+                  <p className="text-xs text-amber-800">
+                    <strong>Not sure?</strong> We recommend deactivating your account instead. You can hide your profile and come back anytime without losing any data.
+                  </p>
+                </div>
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="flex-col sm:flex-row gap-2 pt-2">
+            <AlertDialogCancel disabled={accountActionLoading} className="border-gold/30">
+              Keep My Account
+            </AlertDialogCancel>
+            <Button
+              variant="outline"
+              onClick={() => { setAccountDialogType('deactivate'); }}
+              disabled={accountActionLoading}
+              className="border-amber-400 text-amber-700 hover:bg-amber-50"
+            >
+              <Lock className="h-4 w-4 mr-2" />
+              Deactivate Instead
+            </Button>
+            <AlertDialogAction
+              onClick={() => executeAccountLifecycle('delete')}
+              disabled={accountActionLoading}
+              className="bg-red-600 hover:bg-red-700 text-white"
+            >
+              {accountActionLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Trash2 className="h-4 w-4 mr-2" />}
+              Delete Account
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 };
