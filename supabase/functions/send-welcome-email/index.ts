@@ -4,6 +4,7 @@ import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 const SITE_URL = "https://jbj.ae";
+const LOGO_URL = "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/jbj-monogram-dark.png?v=3";
 
 const ALLOWED_ORIGINS = [
   "https://jbj.ae",
@@ -33,12 +34,9 @@ const RequestSchema = z.object({
   userRole: z.enum(["broker", "investor", "visitor"]).optional(),
 });
 
-// Shared footer HTML
-function footerHtml(): string {
+function sharedFooterHtml(): string {
   return `
-<!-- Footer — Pure Black -->
 <tr><td style="background:#000000;padding:32px 40px;text-align:center;">
-
 <p style="color:#C8A766;font-size:14px;margin:0 0 14px;">Need assistance? We're here to help.</p>
 <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;">
 <tr><td align="center">
@@ -47,8 +45,6 @@ function footerHtml(): string {
 <a href="mailto:Contact@JBJ.ae" style="color:#ffffff;text-decoration:none;font-size:13px;">Contact@JBJ.ae</a>
 </td></tr>
 </table>
-
-<!-- Social Links with proper spacing -->
 <table cellpadding="0" cellspacing="0" align="center" style="margin-bottom:22px;">
 <tr>
 <td style="padding:0 14px;"><a href="https://www.instagram.com/jbj.ae" style="color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">Instagram</a></td>
@@ -60,7 +56,6 @@ function footerHtml(): string {
 <td style="padding:0 14px;"><a href="https://youtube.com/@jbjglobalrealestate" style="color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">YouTube</a></td>
 </tr>
 </table>
-
 <p style="color:#C8A766;font-size:13px;margin:0 0 4px;font-weight:600;">JBJ Global Real Estate</p>
 <p style="color:#777;font-size:11px;margin:0 0 8px;">First Global Real Estate Platform of Its Kind</p>
 <p style="color:#555;font-size:10px;margin:0 0 12px;">
@@ -83,13 +78,9 @@ function buildWelcomeHtml(displayName: string, email: string, role: string, ctaT
 <tr><td align="center">
 <table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background-color:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #e8e0d0;">
 
-<!-- Header — Pure Black with Monogram -->
+<!-- Header — Pure Black with Company Logo Monogram -->
 <tr><td style="background:#000000;padding:28px 40px;text-align:center;">
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center">
-<div style="width:56px;height:56px;border-radius:12px;border:2px solid #C8A766;display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px;">
-<span style="color:#ffffff;font-size:28px;font-weight:800;font-family:Georgia,serif;line-height:56px;">J</span>
-</div>
-</td></tr></table>
+<img src="${LOGO_URL}" alt="JBJ Global Real Estate" width="80" style="max-width:80px;height:auto;margin-bottom:12px;display:block;margin-left:auto;margin-right:auto;" />
 <p style="color:#C8A766;margin:0;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;">JBJ GLOBAL REAL ESTATE</p>
 </td></tr>
 
@@ -131,7 +122,7 @@ ${ctaText} &#8594;
 </table>
 </td></tr>
 
-<!-- Quick Links — Responsive -->
+<!-- Quick Links -->
 <tr><td style="padding:24px 20px;background:#FDFBF7;">
 <p style="color:#1a1a1a;margin:0 0 14px;font-size:14px;font-weight:700;text-align:center;">Explore Our Platform</p>
 <table width="100%" cellpadding="0" cellspacing="0">
@@ -150,7 +141,7 @@ ${ctaText} &#8594;
 <!-- Divider -->
 <tr><td style="padding:0 40px;"><table width="100%" cellpadding="0" cellspacing="0"><tr><td style="border-top:1px solid #e8e0d0;"></td></tr></table></td></tr>
 
-<!-- Review & Survey — Responsive -->
+<!-- Review & Survey -->
 <tr><td style="padding:24px 20px;text-align:center;">
 <p style="color:#1a1a1a;font-size:15px;font-weight:700;margin:0 0 4px;">We Value Your Feedback</p>
 <p style="color:#888;font-size:12px;margin:0 0 16px;">Help us improve by sharing your experience</p>
@@ -168,7 +159,7 @@ ${ctaText} &#8594;
 </table>
 </td></tr>
 
-${footerHtml()}
+${sharedFooterHtml()}
 
 </table>
 </td></tr>

@@ -4,6 +4,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 const RESEND_API_URL = "https://api.resend.com/emails";
 const VERIFIED_SENDER = "noreply@jbj.ae";
 const SITE_URL = "https://jbj.ae";
+const LOGO_URL = "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/jbj-monogram-dark.png?v=3";
 
 const CHANNEL_REPLY_TO: Record<string, string> = {
   hr: "HR@JBJ.AE",
@@ -66,6 +67,39 @@ function getDepartmentLabel(category: string): string {
   }
 }
 
+function sharedFooterHtml(): string {
+  return `
+<tr><td style="background:#000000;padding:32px 40px;text-align:center;">
+<p style="color:#C8A766;font-size:14px;margin:0 0 14px;">Need assistance? We're here to help.</p>
+<table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;">
+<tr><td align="center">
+<a href="tel:+971565911000" style="color:#ffffff;text-decoration:none;font-size:13px;">+971 56 591 1000</a>
+<span style="color:#444;margin:0 12px;">|</span>
+<a href="mailto:Contact@JBJ.ae" style="color:#ffffff;text-decoration:none;font-size:13px;">Contact@JBJ.ae</a>
+</td></tr>
+</table>
+<table cellpadding="0" cellspacing="0" align="center" style="margin-bottom:22px;">
+<tr>
+<td style="padding:0 14px;"><a href="https://www.instagram.com/jbj.ae" style="color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">Instagram</a></td>
+<td style="color:#444;font-size:10px;">&#8226;</td>
+<td style="padding:0 14px;"><a href="https://www.facebook.com/share/1G7CgSaV2L/" style="color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">Facebook</a></td>
+<td style="color:#444;font-size:10px;">&#8226;</td>
+<td style="padding:0 14px;"><a href="https://www.linkedin.com/company/jbj-global-real-estate/" style="color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">LinkedIn</a></td>
+<td style="color:#444;font-size:10px;">&#8226;</td>
+<td style="padding:0 14px;"><a href="https://youtube.com/@jbjglobalrealestate" style="color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">YouTube</a></td>
+</tr>
+</table>
+<p style="color:#C8A766;font-size:13px;margin:0 0 4px;font-weight:600;">JBJ Global Real Estate</p>
+<p style="color:#777;font-size:11px;margin:0 0 8px;">First Global Real Estate Platform of Its Kind</p>
+<p style="color:#555;font-size:10px;margin:0 0 12px;">
+Developed, Created &amp; Implemented by The Founder &amp; CEO, <span style="color:#C8A766;">Jane Bou Jaoude</span>
+</p>
+<p style="color:#444;font-size:10px;margin:12px 0 0;">
+&copy; ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
+</p>
+</td></tr>`;
+}
+
 interface AdminMessageRequest {
   recipientEmail: string;
   recipientName: string;
@@ -89,16 +123,11 @@ function buildEmailHtml(req: AdminMessageRequest): string {
 <body style="margin:0;padding:0;background-color:#ffffff;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;">
 <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#ffffff;padding:32px 16px;">
 <tr><td align="center">
-<table width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #e8e0d0;">
+<table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background-color:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #e8e0d0;">
 
-<!-- Header — Pure Black -->
+<!-- Header — Pure Black with Company Logo Monogram -->
 <tr><td style="background:#000000;padding:28px 40px;text-align:center;">
-<!-- Monogram: White J on black -->
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center">
-<div style="width:56px;height:56px;border-radius:12px;border:2px solid #C8A766;display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px;">
-<span style="color:#ffffff;font-size:28px;font-weight:800;font-family:Georgia,serif;line-height:56px;">J</span>
-</div>
-</td></tr></table>
+<img src="${LOGO_URL}" alt="JBJ Global Real Estate" width="80" style="max-width:80px;height:auto;margin-bottom:12px;display:block;margin-left:auto;margin-right:auto;" />
 <p style="color:#C8A766;margin:0;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;">JBJ GLOBAL REAL ESTATE</p>
 </td></tr>
 
@@ -120,7 +149,6 @@ function buildEmailHtml(req: AdminMessageRequest): string {
 <p style="color:#333;font-size:15px;line-height:1.6;margin:0 0 20px;">Dear <strong>${req.recipientName}</strong>,</p>
 
 ${req.referenceLabel ? `
-<!-- Reference Details -->
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#FDFBF7;border:1px solid #C8A76633;border-radius:12px;margin:0 0 24px;">
 <tr><td style="padding:16px 20px;">
 <table width="100%" cellpadding="0" cellspacing="0">
@@ -149,19 +177,26 @@ ${req.referenceLabel ? `
 </td></tr>
 </table>
 
-<!-- Reply Info -->
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#FDFBF7;border:1px solid #C8A76630;border-radius:10px;margin:0 0 24px;">
+<!-- Reply Info — Green -->
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f0fdf4;border:1px solid #22c55e40;border-radius:10px;margin:0 0 24px;">
 <tr><td style="padding:12px 20px;text-align:center;">
-<p style="margin:0;font-size:13px;color:#666;">You can reply directly to <a href="mailto:${replyTo}" style="color:#C8A766;font-weight:700;text-decoration:none;">${replyTo}</a></p>
+<p style="margin:0;font-size:13px;color:#166534;">You can reply directly to <a href="mailto:${replyTo}" style="color:#15803d;font-weight:700;text-decoration:none;">${replyTo}</a></p>
 </td></tr>
 </table>
 
 <!-- CTA — Premium Dark Button -->
 <table width="100%" cellpadding="0" cellspacing="0">
-<tr><td align="center" style="padding:8px 0 28px;">
+<tr><td align="center" style="padding:8px 0 20px;">
 <a href="${SITE_URL}/my-account" style="display:inline-block;background:#000000;color:#C8A766;text-decoration:none;padding:14px 40px;border-radius:10px;font-weight:700;font-size:14px;letter-spacing:0.5px;border:1px solid #C8A76650;">
 View My Account
 </a>
+</td></tr>
+</table>
+
+<!-- Notification Guidance -->
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#FDFBF7;border:1px solid #C8A76630;border-radius:10px;margin:0 0 24px;">
+<tr><td style="padding:14px 20px;">
+<p style="margin:0;font-size:13px;color:#555;line-height:1.6;">You have also received a notification in your account. You can access updates from your <strong>Account Notifications</strong>, <strong>Tasks</strong>, or <strong>Inbox</strong>.</p>
 </td></tr>
 </table>
 
@@ -175,7 +210,7 @@ View My Account
 <p style="color:#888;font-size:12px;margin:0 0 16px;">Help us improve by sharing your experience</p>
 <table cellpadding="0" cellspacing="0" align="center">
 <tr>
-<td style="padding:0 8px;"><a href="${reviewUrl}" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:11px 26px;border-radius:8px;font-weight:700;font-size:12px;border:1px solid #C8A76650;">★★★★★ Leave a Review</a></td>
+<td style="padding:0 8px;"><a href="${reviewUrl}" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:11px 26px;border-radius:8px;font-weight:700;font-size:12px;border:1px solid #C8A76650;">&#9733;&#9733;&#9733;&#9733;&#9733; Leave a Review</a></td>
 <td style="padding:0 8px;"><a href="${surveyUrl}" style="display:inline-block;background:#FDFBF7;border:1px solid #C8A766;color:#1a1a1a;text-decoration:none;padding:11px 26px;border-radius:8px;font-weight:700;font-size:12px;">Take Survey</a></td>
 </tr>
 </table>
@@ -186,40 +221,7 @@ View My Account
 
 </td></tr>
 
-<!-- Footer — Pure Black -->
-<tr><td style="background:#000000;padding:32px 40px;text-align:center;">
-
-<p style="color:#C8A766;font-size:14px;margin:0 0 14px;">Need assistance? We're here to help.</p>
-<table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;">
-<tr><td align="center">
-<a href="tel:+971565911000" style="color:#ffffff;text-decoration:none;font-size:13px;">+971 56 591 1000</a>
-<span style="color:#444;margin:0 12px;">|</span>
-<a href="mailto:Contact@JBJ.ae" style="color:#ffffff;text-decoration:none;font-size:13px;">Contact@JBJ.ae</a>
-</td></tr>
-</table>
-
-<!-- Social Links with spacing -->
-<table cellpadding="0" cellspacing="0" align="center" style="margin-bottom:22px;">
-<tr>
-<td style="padding:0 14px;"><a href="https://www.instagram.com/jbj.ae" style="color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">Instagram</a></td>
-<td style="color:#444;font-size:10px;">&#8226;</td>
-<td style="padding:0 14px;"><a href="https://www.facebook.com/share/1G7CgSaV2L/" style="color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">Facebook</a></td>
-<td style="color:#444;font-size:10px;">&#8226;</td>
-<td style="padding:0 14px;"><a href="https://www.linkedin.com/company/jbj-global-real-estate/" style="color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">LinkedIn</a></td>
-<td style="color:#444;font-size:10px;">&#8226;</td>
-<td style="padding:0 14px;"><a href="https://youtube.com/@jbjglobalrealestate" style="color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">YouTube</a></td>
-</tr>
-</table>
-
-<p style="color:#C8A766;font-size:13px;margin:0 0 4px;font-weight:600;">JBJ Global Real Estate</p>
-<p style="color:#777;font-size:11px;margin:0 0 8px;">First Global Real Estate Platform of Its Kind</p>
-<p style="color:#555;font-size:10px;margin:0 0 12px;">
-Developed, Created &amp; Implemented by The Founder &amp; CEO, <span style="color:#C8A766;">Jane Bou Jaoude</span>
-</p>
-<p style="color:#444;font-size:10px;margin:12px 0 0;">
-&copy; ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
-</p>
-</td></tr>
+${sharedFooterHtml()}
 
 </table>
 </td></tr>

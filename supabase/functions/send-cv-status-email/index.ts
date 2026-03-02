@@ -3,13 +3,15 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 
 const RESEND_API_URL = "https://api.resend.com/emails";
 const VERIFIED_SENDER = 'noreply@jbj.ae';
+const SITE_URL = "https://jbj.ae";
+const LOGO_URL = "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/jbj-monogram-dark.png?v=3";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-async function sendEmail(payload: { from: string; to: string[]; subject: string; html: string }) {
+async function sendEmail(payload: { from: string; to: string[]; subject: string; html: string; reply_to?: string }) {
   const apiKey = Deno.env.get("RESEND_API_KEY");
   const res = await fetch(RESEND_API_URL, {
     method: "POST",
@@ -53,6 +55,39 @@ function makeStep(num: string, label: string, active: boolean, isCheck: boolean)
   </td>`;
 }
 
+function sharedFooterHtml(): string {
+  return `
+<tr><td style="background:#000000;text-align:center;padding:32px 40px;">
+<p style="color:#C8A766;font-size:14px;margin:0 0 14px;">Need assistance? We're here to help.</p>
+<table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;">
+<tr><td align="center">
+<a href="tel:+971565911000" style="color:#ffffff;text-decoration:none;font-size:13px;">+971 56 591 1000</a>
+<span style="color:#444;margin:0 12px;">|</span>
+<a href="mailto:Contact@JBJ.ae" style="color:#ffffff;text-decoration:none;font-size:13px;">Contact@JBJ.ae</a>
+</td></tr>
+</table>
+<table cellpadding="0" cellspacing="0" align="center" style="margin-bottom:22px;">
+<tr>
+<td style="padding:0 14px;"><a href="https://www.instagram.com/jbj.ae" style="color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">Instagram</a></td>
+<td style="color:#444;font-size:10px;">&#8226;</td>
+<td style="padding:0 14px;"><a href="https://www.facebook.com/share/1G7CgSaV2L/" style="color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">Facebook</a></td>
+<td style="color:#444;font-size:10px;">&#8226;</td>
+<td style="padding:0 14px;"><a href="https://www.linkedin.com/company/jbj-global-real-estate/" style="color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">LinkedIn</a></td>
+<td style="color:#444;font-size:10px;">&#8226;</td>
+<td style="padding:0 14px;"><a href="https://youtube.com/@jbjglobalrealestate" style="color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">YouTube</a></td>
+</tr>
+</table>
+<p style="color:#C8A766;font-size:13px;margin:0 0 4px;font-weight:600;">JBJ Global Real Estate</p>
+<p style="color:#777;font-size:11px;margin:0 0 8px;">First Global Real Estate Platform of Its Kind</p>
+<p style="color:#555;font-size:10px;margin:0 0 12px;">
+Developed, Created &amp; Implemented by The Founder &amp; CEO, <span style="color:#C8A766;">Jane Bou Jaoude</span>
+</p>
+<p style="color:#444;font-size:10px;margin:12px 0 0;">
+&copy; ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
+</p>
+</td></tr>`;
+}
+
 function buildEmailHtml(req: CVEmailRequest): { html: string; subject: string } {
   const name = escapeHtml(req.fullName);
   const position = escapeHtml(req.position) || 'General Application';
@@ -71,7 +106,7 @@ function buildEmailHtml(req: CVEmailRequest): { html: string; subject: string } 
 <table role="presentation" cellpadding="0" cellspacing="0" border="0">
 <tr><td style="padding:4px 0;font-size:13px;color:#555;">&#8226; Our HR team will review your CV within <strong>3-5 business days</strong></td></tr>
 <tr><td style="padding:4px 0;font-size:13px;color:#555;">&#8226; You'll receive email updates as your application progresses</td></tr>
-<tr><td style="padding:4px 0;font-size:13px;color:#555;">&#8226; Check your notification inbox on our platform for real-time status</td></tr>
+<tr><td style="padding:4px 0;font-size:13px;color:#555;">&#8226; You will also receive notifications in your account (Notifications, Tasks, or Inbox)</td></tr>
 <tr><td style="padding:4px 0;font-size:13px;color:#555;">&#8226; Qualified candidates will be contacted for an interview</td></tr>
 </table>
 </td></tr></table>`,
@@ -85,15 +120,19 @@ function buildEmailHtml(req: CVEmailRequest): { html: string; subject: string } 
     },
     approved: {
       title: "Congratulations! Your Application Has Been Approved",
-      subtitle: "We're excited to inform you that your application has been approved. Our team will reach out shortly to discuss the next steps, including scheduling an interview.",
+      subtitle: "We're excited to inform you that your application has been approved. Please find below the details regarding the next steps.",
       steps: [true, true, true],
       stepChecks: [true, true, true],
       extraHtml: `
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:2px solid #22c55e;border-radius:12px;margin-bottom:24px;">
-<tr><td style="padding:24px;text-align:center;">
-<p style="font-size:36px;margin:0 0 8px;">🎉</p>
-<p style="color:#166534;font-size:16px;font-weight:bold;margin:0 0 8px;">Welcome Aboard!</p>
-<p style="color:#15803d;font-size:13px;margin:0;">We'll be in touch within 48 hours to discuss interview scheduling and next steps.</p>
+<tr><td style="padding:24px;">
+<p style="color:#166534;font-size:16px;font-weight:bold;margin:0 0 12px;text-align:center;">Welcome Aboard!</p>
+<p style="color:#15803d;font-size:13px;margin:0 0 16px;text-align:center;">Our HR team will contact you within 48 hours to discuss interview scheduling and next steps.</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#ffffff;border:1px solid #22c55e40;border-radius:10px;">
+<tr><td style="padding:16px 20px;">
+<p style="margin:0;font-size:13px;color:#555;line-height:1.6;">You have also received a notification in your account. You can access updates from your <strong>Account Notifications</strong>, <strong>Tasks</strong>, or <strong>Inbox</strong> — as well as in this email.</p>
+</td></tr>
+</table>
 </td></tr></table>`,
     },
     rejected: {
@@ -106,7 +145,7 @@ function buildEmailHtml(req: CVEmailRequest): { html: string; subject: string } 
 <tr><td style="padding:24px;text-align:center;">
 <p style="color:#1a1a1a;font-size:15px;font-weight:bold;margin:0 0 8px;">Don't Give Up!</p>
 <p style="color:#555;font-size:13px;margin:0 0 16px;">New positions open regularly. Stay connected for future opportunities.</p>
-<a href="https://jbjglobalrealestate.lovable.app/join" style="display:inline-block;padding:12px 32px;background:linear-gradient(135deg,#C8A766,#B8956E);color:#fff;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;">View Open Positions</a>
+<a href="${SITE_URL}/join" style="display:inline-block;padding:12px 32px;background:linear-gradient(135deg,#C8A766,#B8956E);color:#fff;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;">View Open Positions</a>
 </td></tr></table>`,
     },
   };
@@ -124,17 +163,17 @@ function buildEmailHtml(req: CVEmailRequest): { html: string; subject: string } 
 
   const html = `<!DOCTYPE html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<style>body{margin:0;padding:0;background-color:#F5EBD7;font-family:'Segoe UI',Arial,sans-serif;}
+<style>body{margin:0;padding:0;background-color:#ffffff;font-family:'Segoe UI',Arial,sans-serif;}
 @media only screen and (max-width:620px){.wrapper{width:100%!important;padding:0 8px!important;}.hero-pad{padding:32px 20px!important;}.content-pad{padding:24px 16px!important;}}</style>
 </head>
-<body style="margin:0;padding:0;background-color:#F5EBD7;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#F5EBD7;">
+<body style="margin:0;padding:0;background-color:#ffffff;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#ffffff;">
 <tr><td align="center" style="padding:24px 16px;">
 <table role="presentation" class="wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:linear-gradient(180deg,#FFFFFF,#FDFBF7,#F5F0E6);border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(200,167,102,0.15);">
 
-<!-- Logo -->
+<!-- Logo — Company Monogram -->
 <tr><td style="background:#000000;padding:24px 0 16px;text-align:center;border-radius:20px 20px 0 0;">
-<img src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/jbj-monogram-dark.png?v=3" alt="JBJ Global Real Estate" width="120" style="max-width:120px;height:auto;" />
+<img src="${LOGO_URL}" alt="JBJ Global Real Estate" width="80" style="max-width:80px;height:auto;display:block;margin:0 auto;" />
 </td></tr>
 
 <!-- Hero -->
@@ -146,8 +185,8 @@ function buildEmailHtml(req: CVEmailRequest): { html: string; subject: string } 
 </table>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:16px;">
 <tr>
-<td style="text-align:center;padding:4px 8px;"><a href="mailto:careers@jbj.ae" style="color:#1a1a1a;text-decoration:none;font-size:13px;"><span style="display:inline-block;width:28px;height:28px;border-radius:50%;background:#1a1a1a;color:#C8A766;text-align:center;line-height:28px;font-size:14px;margin-bottom:4px;">&#9993;</span><br>careers@jbj.ae</a></td>
-<td style="text-align:center;padding:4px 8px;"><a href="tel:+971565911000" style="color:#1a1a1a;text-decoration:none;font-size:13px;"><span style="display:inline-block;width:28px;height:28px;border-radius:50%;background:#1a1a1a;color:#C8A766;text-align:center;line-height:28px;font-size:14px;margin-bottom:4px;">&#9742;</span><br>+971 56 591 1000</a></td>
+<td style="text-align:center;padding:4px 8px;"><a href="mailto:careers@jbj.ae" style="color:#1a1a1a;text-decoration:none;font-size:13px;">careers@jbj.ae</a></td>
+<td style="text-align:center;padding:4px 8px;"><a href="tel:+971565911000" style="color:#1a1a1a;text-decoration:none;font-size:13px;">+971 56 591 1000</a></td>
 </tr></table>
 </td></tr>
 
@@ -182,10 +221,10 @@ ${makeStep('3', 'Decision', config.steps[2], config.stepChecks[2])}
   normalizedStatus === 'under_review' ? 'background:#fef3c7;color:#92400e;border:1px solid #f59e0b;' :
   'background:#dbeafe;color:#1e40af;border:1px solid #3b82f6;'
 }">${
-  normalizedStatus === 'approved' ? '✅ APPROVED' :
+  normalizedStatus === 'approved' ? 'APPROVED' :
   normalizedStatus === 'rejected' ? 'NOT SELECTED' :
-  normalizedStatus === 'under_review' ? '🔍 UNDER REVIEW' :
-  '📩 APPLICATION RECEIVED'
+  normalizedStatus === 'under_review' ? 'UNDER REVIEW' :
+  'APPLICATION RECEIVED'
 }</span>
 </td></tr></table>
 
@@ -194,45 +233,33 @@ ${config.extraHtml}
 <!-- CTA -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;">
 <tr><td style="text-align:center;">
-<a href="https://jbjglobalrealestate.lovable.app/my-dashboard#notifications" style="display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#C8A766,#B8956E);color:#fff;border-radius:10px;text-decoration:none;font-weight:600;font-size:14px;">View My Application Status</a>
+<a href="${SITE_URL}/my-account" style="display:inline-block;padding:14px 32px;background:#000;color:#C8A766;border-radius:10px;text-decoration:none;font-weight:600;font-size:14px;border:1px solid #C8A76650;">View My Application Status</a>
 </td></tr></table>
 
-<!-- Warning -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fffbeb;border:1px solid #f59e0b;border-radius:10px;margin-bottom:24px;">
-<tr><td style="padding:16px 20px;">
-<p style="margin:0;font-size:13px;color:#92400e;line-height:1.6;"><strong>&#9888;&#65039; Important:</strong> For inquiries about your application, contact us at <a href="mailto:HR@JBJ.AE" style="color:#C8A766;">HR@JBJ.AE</a> or reply to this email.</p>
+<!-- Reply Info — Green -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f0fdf4;border:1px solid #22c55e40;border-radius:10px;margin-bottom:24px;">
+<tr><td style="padding:14px 20px;text-align:center;">
+<p style="margin:0;font-size:13px;color:#166534;line-height:1.6;">For inquiries about your application, you can reply directly to <a href="mailto:HR@JBJ.AE" style="color:#15803d;font-weight:700;text-decoration:none;">HR@JBJ.AE</a></p>
 </td></tr></table>
 
-<!-- Review & Survey Section -->
+<!-- Review & Survey -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0 0;border-top:2px solid #C8A76633;padding-top:20px;">
 <tr><td align="center">
-<p style="color:#C8A766;font-size:15px;font-weight:700;margin:0 0 6px;">★★★★★ Rate Your Experience</p>
-<p style="color:#666;font-size:12px;margin:0 0 14px;">Leave a 5-star review and complete our quick 1-minute survey.</p>
+<p style="color:#1a1a1a;font-size:15px;font-weight:700;margin:0 0 6px;">We Value Your Feedback</p>
+<p style="color:#666;font-size:12px;margin:0 0 14px;">Help us improve by sharing your experience</p>
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center">
 <tr>
-<td style="padding:0 6px;"><a href="https://jbjglobalrealestate.lovable.app/reviews?source=career" style="display:inline-block;background:linear-gradient(135deg,#C8A766,#B8956E);color:#000;text-decoration:none;padding:10px 20px;border-radius:8px;font-weight:700;font-size:12px;">★★★★★ Leave 5-Star Review</a></td>
-<td style="padding:0 6px;"><a href="https://jbjglobalrealestate.lovable.app/survey?source=career" style="display:inline-block;background:#1a1a2e;border:2px solid #C8A766;color:#C8A766;text-decoration:none;padding:8px 20px;border-radius:8px;font-weight:700;font-size:12px;white-space:nowrap;">Take Quick Survey (1 min)</a></td>
+<td style="padding:0 6px;"><a href="${SITE_URL}/reviews?source=career" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:10px 20px;border-radius:8px;font-weight:700;font-size:12px;border:1px solid #C8A76650;">&#9733;&#9733;&#9733;&#9733;&#9733; Leave a Review</a></td>
+<td style="padding:0 6px;"><a href="${SITE_URL}/survey?source=career" style="display:inline-block;background:#FDFBF7;border:2px solid #C8A766;color:#1a1a1a;text-decoration:none;padding:8px 20px;border-radius:8px;font-weight:700;font-size:12px;white-space:nowrap;">Take Survey</a></td>
 </tr>
 </table>
 </td></tr>
 </table>
 
-<p style="font-size:14px;color:#333;">Best regards,<br><span style="color:#C8A766;font-weight:600;">JBJ Global Real Estate HR Team</span></p>
+<p style="font-size:14px;color:#333;margin-top:24px;">Best regards,<br><span style="color:#C8A766;font-weight:600;">JBJ Global Real Estate HR Team</span></p>
 </td></tr>
 
-<!-- Footer -->
-<tr><td style="background:linear-gradient(135deg,#1a1a1a,#2d2d2d);text-align:center;padding:24px;">
-<p style="color:#C8A766;font-size:16px;font-weight:bold;margin:0 0 4px;">JBJ Global Real Estate</p>
-<p style="color:#888;font-size:11px;margin:0 0 8px;font-style:italic;">The Only Global AI-Powered Real Estate Intelligence Platform</p>
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:12px 0;">
-<tr>
-<td style="padding:0 6px;"><a href="https://www.instagram.com/jbj.ae" style="display:inline-block;width:32px;height:32px;border-radius:50%;background:#333;text-align:center;line-height:32px;font-size:13px;color:#C8A766;text-decoration:none;font-weight:700;">IG</a></td>
-<td style="padding:0 6px;"><a href="https://www.linkedin.com/company/jbj-global-real-estate/" style="display:inline-block;width:32px;height:32px;border-radius:50%;background:#333;text-align:center;line-height:32px;font-size:13px;color:#C8A766;text-decoration:none;font-weight:700;">in</a></td>
-<td style="padding:0 6px;"><a href="https://www.facebook.com/share/1G7CgSaV2L/?mibextid=wwXIfr" style="display:inline-block;width:32px;height:32px;border-radius:50%;background:#333;text-align:center;line-height:32px;font-size:13px;color:#C8A766;text-decoration:none;font-weight:700;">f</a></td>
-<td style="padding:0 6px;"><a href="https://youtube.com/@jbjglobalrealestate" style="display:inline-block;width:32px;height:32px;border-radius:50%;background:#333;text-align:center;line-height:32px;font-size:13px;color:#C8A766;text-decoration:none;font-weight:700;">▶</a></td>
-</tr></table>
-<p style="color:#888;font-size:11px;margin:0;">&copy; 2026 JBJ Global Real Estate. All rights reserved.</p>
-</td></tr>
+${sharedFooterHtml()}
 
 </table></td></tr></table>
 </body></html>`;
@@ -253,11 +280,10 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
-    // Bulk send mode - send to all existing applicants with a certain status
+    // Bulk send mode
     if (body.bulkSend) {
       const results: { sent: number; failed: number; errors: string[] } = { sent: 0, failed: 0, errors: [] };
 
-      // Fetch all applications from both tables
       const [appsRes, subsRes] = await Promise.all([
         supabaseClient.from('hr_applications').select('id, full_name, email, status, user_id, department_category').order('created_at', { ascending: false }),
         supabaseClient.from('hr_cv_submissions').select('id, full_name, email, status, user_id, position_applied').order('created_at', { ascending: false }),
@@ -284,6 +310,7 @@ serve(async (req) => {
           to: [app.email],
           subject,
           html,
+          reply_to: "HR@JBJ.AE",
         });
 
         if (result.error) {
@@ -293,7 +320,6 @@ serve(async (req) => {
           results.sent++;
         }
 
-        // Create notification for user
         if (app.user_id) {
           await supabaseClient.from('user_notifications').insert({
             user_id: app.user_id,
@@ -305,11 +331,10 @@ serve(async (req) => {
                      emailStatus === 'rejected' ? 'Thank you for applying. After review, we\'ve decided to pursue other candidates at this time.' :
                      'Your CV is currently being reviewed by our HR team. You\'ll be notified once a decision is made.',
             is_read: false,
-            metadata: { status: emailStatus, category: 'cv', action_url: '/my-dashboard#notifications' },
+            metadata: { status: emailStatus, category: 'cv', action_url: '/my-account' },
           });
         }
 
-        // Small delay to avoid rate limits
         await new Promise(r => setTimeout(r, 200));
       }
 
@@ -329,11 +354,11 @@ serve(async (req) => {
 
     const result = await sendEmail({
       from: `JBJ Careers <${VERIFIED_SENDER}>`,
-      reply_to: "HR@JBJ.AE",
       to: [body.email],
       subject,
       html,
-    } as any);
+      reply_to: "HR@JBJ.AE",
+    });
 
     if (result.error) {
       console.error("CV email failed:", result.error);
@@ -342,7 +367,6 @@ serve(async (req) => {
       });
     }
 
-    // Create user notification
     if (body.userId) {
       const normalizedBodyStatus = body.status === 'pending' ? 'under_review' : body.status;
       const notifTitle = normalizedBodyStatus === 'submitted' ? 'CV Application Received' :
@@ -360,7 +384,7 @@ serve(async (req) => {
         title: notifTitle,
         message: notifMessage,
         is_read: false,
-        metadata: { status: body.status, category: 'cv', action_url: '/my-dashboard#notifications' },
+        metadata: { status: body.status, category: 'cv', action_url: '/my-account' },
       });
     }
 
