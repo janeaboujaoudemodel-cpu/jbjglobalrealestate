@@ -1,10 +1,9 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { LOGO_URL, SITE_URL, emailShell, inquiryBox, recommendedActionsHtml, suggestedActionsHtml, ticketSupportEmbed, feedbackHtml } from "../_shared/email-html.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
-const SITE_URL = "https://jbj.ae";
-const LOGO_URL = "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/jbj-monogram-dark.png?v=3";
 
 const ALLOWED_ORIGINS = [
   "https://jbj.ae",
@@ -16,9 +15,7 @@ const ALLOWED_ORIGINS = [
 function getCorsHeaders(req: Request) {
   const origin = req.headers.get("origin") || "";
   const isAllowed = ALLOWED_ORIGINS.some(allowed =>
-    origin === allowed ||
-    origin.endsWith(".lovableproject.com") ||
-    origin.endsWith(".lovable.app")
+    origin === allowed || origin.endsWith(".lovableproject.com") || origin.endsWith(".lovable.app")
   );
   return {
     "Access-Control-Allow-Origin": isAllowed ? origin : ALLOWED_ORIGINS[0],
@@ -34,171 +31,19 @@ const RequestSchema = z.object({
   userRole: z.enum(["broker", "investor", "visitor"]).optional(),
 });
 
-/* ── SVG Icons — minimal black outline, no fill, no borders ── */
-const svgIcons = {
-  building: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 21V7l9-4 9 4v14" stroke="#111" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 21V13h6v8" stroke="#111" stroke-width="1.8"/><path d="M7 9h2M7 12h2M15 9h2M15 12h2" stroke="#111" stroke-width="1.8" stroke-linecap="round"/></svg>`,
-  heart: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 21C12 21 4 15 4 9.5C4 6.46 6.46 4 9.5 4C11.06 4 12 5 12 5S12.94 4 14.5 4C17.54 4 20 6.46 20 9.5C20 15 12 21 12 21Z" stroke="#111" stroke-width="1.8" stroke-linejoin="round"/></svg>`,
-  headset: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 17V12C4 7.58 7.58 4 12 4s8 3.58 8 8v5" stroke="#111" stroke-width="1.8"/><path d="M2 15v4a2 2 0 002 2h1V13H4a2 2 0 00-2 2zM22 15v4a2 2 0 01-2 2h-1V13h1a2 2 0 012 2z" stroke="#111" stroke-width="1.8"/></svg>`,
-  ticket: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 9V6a2 2 0 012-2h16a2 2 0 012 2v3" stroke="#111" stroke-width="1.8"/><path d="M2 15v3a2 2 0 002 2h16a2 2 0 002-2v-3" stroke="#111" stroke-width="1.8"/><path d="M22 9a3 3 0 00-3 3 3 3 0 003 3M2 9a3 3 0 013 3 3 3 0 01-3 3" stroke="#111" stroke-width="1.8"/><path d="M9 4v2M9 18v2M15 4v2M15 18v2" stroke="#111" stroke-width="1.8" stroke-linecap="round"/></svg>`,
-  gear: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="3.5" stroke="#111" stroke-width="1.8"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4" stroke="#111" stroke-width="1.8" stroke-linecap="round"/></svg>`,
-  book: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4.5A2.5 2.5 0 016.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15z" stroke="#111" stroke-width="1.8"/><path d="M4 19.5A2.5 2.5 0 016.5 17H20" stroke="#111" stroke-width="1.8"/><path d="M8 7h8M8 11h5" stroke="#111" stroke-width="1.8" stroke-linecap="round"/></svg>`,
-  house: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 11.5L12 4l9 7.5" stroke="#111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 10v10h14V10" stroke="#111" stroke-width="1.8"/><rect x="9" y="14" width="6" height="6" stroke="#111" stroke-width="1.8"/></svg>`,
-  phone: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" stroke="#111" stroke-width="1.8"/></svg>`,
-  academy: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3L2 9l10 6 10-6-10-6z" stroke="#111" stroke-width="1.8" stroke-linejoin="round"/><path d="M20 9v6" stroke="#111" stroke-width="1.8" stroke-linecap="round"/><path d="M6 12v5c0 2 3 3 6 3s6-1 6-3v-5" stroke="#111" stroke-width="1.8"/></svg>`,
-  chart: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 20V6M4 20h16" stroke="#111" stroke-width="1.8" stroke-linecap="round"/><path d="M7 16l4-4 3 3 5-5" stroke="#111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-};
-
-/* ── Benefit row — SVG icon only, NO border box ── */
-function benefitRow(iconSvg: string, title: string, desc: string): string {
+/* ── Benefit row — table-based centering, monogram icon ── */
+function benefitRow(iconChar: string, title: string, desc: string): string {
   return `<tr><td style="padding:8px 0;">
-  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
-  <td style="width:36px;min-width:36px;vertical-align:top;padding-top:2px;text-align:center;">${iconSvg}</td>
-  <td style="padding-left:12px;"><strong style="color:#1a1a1a;font-size:14px;">${title}</strong>
-  <p style="color:#666;margin:2px 0 0;font-size:13px;line-height:1.4;">${desc}</p></td>
-  </tr></table>
-</td></tr>`;
-}
-
-/* ── Inquiry contact box (green border) ── */
-function inquiryBox(contextLabel: string): string {
-  return `
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:20px 0;">
-<tr><td style="padding:18px 24px;background:#f0fdf4;border:2px solid #bbf7d0;border-radius:12px;text-align:center;">
-<p style="margin:0;font-size:15px;color:#333;line-height:1.6;">For inquiries about your ${contextLabel}, you can reply<br/>directly to <a href="mailto:contact@jbj.ae" style="color:#1a1a1a;font-weight:700;text-decoration:none;">contact@jbj.ae</a></p>
-</td></tr>
-</table>`;
-}
-
-/* ── Recommended For You — SVG icons ── */
-function recommendedActionsHtml(): string {
-  return `
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0;border-top:2px solid #C8A76633;padding-top:20px;">
-<tr><td style="text-align:center;">
-<p style="color:#1a1a1a;font-size:16px;font-weight:700;margin:0 0 14px;">Recommended For You</p>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-<tr>
-<td width="33%" style="text-align:center;padding:4px;">
-<a href="${SITE_URL}/ai-tools" style="display:block;padding:16px 8px;background:#fff;border:2px solid #C8A766;border-radius:12px;text-decoration:none;">
-<div style="text-align:center;">${svgIcons.gear}</div>
-<p style="margin:8px 0 0;font-size:12px;color:#1a1a1a;font-weight:700;">AI Tools</p>
-</a>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
+<td style="width:40px;min-width:40px;vertical-align:top;padding-top:2px;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+<td style="width:36px;height:36px;border:2px solid #111;border-radius:10px;text-align:center;vertical-align:middle;font-size:18px;line-height:36px;">${iconChar}</td>
+</tr></table>
 </td>
-<td width="33%" style="text-align:center;padding:4px;">
-<a href="${SITE_URL}/guides" style="display:block;padding:16px 8px;background:#fff;border:2px solid #C8A766;border-radius:12px;text-decoration:none;">
-<div style="text-align:center;">${svgIcons.book}</div>
-<p style="margin:8px 0 0;font-size:12px;color:#1a1a1a;font-weight:700;">Guides</p>
-</a>
-</td>
-<td width="33%" style="text-align:center;padding:4px;">
-<a href="${SITE_URL}/properties" style="display:block;padding:16px 8px;background:#fff;border:2px solid #C8A766;border-radius:12px;text-decoration:none;">
-<div style="text-align:center;">${svgIcons.house}</div>
-<p style="margin:8px 0 0;font-size:12px;color:#1a1a1a;font-weight:700;">Properties</p>
-</a>
-</td>
-</tr>
-</table>
-</td></tr>
-</table>`;
-}
-
-/* ── Feedback section ── */
-function feedbackHtml(context: string = "welcome"): string {
-  const reviewUrl = `${SITE_URL}/reviews?source=${context}&mode=quick`;
-  const surveyUrl = `${SITE_URL}/ticket-survey?source=${context}&context=${context}`;
-  return `
-<table width="100%" cellpadding="0" cellspacing="0" style="border-top:2px solid #C8A76633;padding-top:20px;margin-top:4px;">
-<tr><td align="center">
-<p style="color:#1a1a1a;font-size:16px;font-weight:700;margin:0 0 4px;">We Value Your Feedback</p>
-<p style="color:#888;font-size:13px;margin:0 0 16px;">Help us improve by sharing your experience</p>
-<table cellpadding="0" cellspacing="0" align="center">
-<tr>
-<td style="padding:0 6px;"><a href="${reviewUrl}" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:12px 28px;border-radius:8px;font-weight:700;font-size:13px;border:1px solid #C8A76650;">Leave a Review</a></td>
-<td style="padding:0 6px;"><a href="${surveyUrl}" style="display:inline-block;background:#FDFBF7;border:2px solid #C8A766;color:#1a1a1a;text-decoration:none;padding:10px 28px;border-radius:8px;font-weight:700;font-size:13px;">Take Survey</a></td>
-</tr>
-</table>
-</td></tr>
-</table>`;
-}
-
-function sharedHeader(departmentLabel: string): string {
-  return `
-<!-- Header — Black with centered monogram + wordmark -->
-<tr><td style="background:#000000;padding:24px 40px 20px;text-align:center;border-radius:24px 24px 0 0;">
-<img src="${LOGO_URL}" alt="JBJ Global Real Estate" width="180" style="max-width:180px;height:auto;display:block;margin:0 auto 12px;" />
-<p style="color:#C8A766;margin:0;font-size:14px;font-weight:700;letter-spacing:3px;text-transform:uppercase;">JBJ GLOBAL REAL ESTATE</p>
-</td></tr>
-<!-- Sub-header band -->
-<tr><td style="background:linear-gradient(135deg,#C8A766,#B8956E,#A07D4A);padding:20px 32px;text-align:center;">
-<p style="font-size:18px;font-weight:bold;color:#fff;margin:0 0 4px;">${departmentLabel}</p>
-<table role="presentation" width="60%" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-top:8px;">
-<tr><td style="height:2px;background:rgba(255,255,255,0.4);border-radius:2px;"></td></tr>
-</table>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:10px;">
-<tr>
-<td style="text-align:center;padding:4px 8px;"><a href="mailto:contact@jbj.ae" style="color:#fff;text-decoration:underline;font-size:12px;">contact@jbj.ae</a></td>
-<td style="text-align:center;padding:4px 8px;"><a href="tel:+971565911000" style="color:#fff;text-decoration:none;font-size:12px;">+971 56 591 1000</a></td>
+<td style="padding-left:12px;"><strong style="color:#1a1a1a;font-size:14px;">${title}</strong>
+<p style="color:#666;margin:2px 0 0;font-size:13px;line-height:1.4;">${desc}</p></td>
 </tr></table>
 </td></tr>`;
-}
-
-function sharedFooterHtml(): string {
-  return `
-<!-- Do not reply notice -->
-<tr><td style="padding:0 32px 16px;text-align:center;">
-<p style="margin:0;font-size:11px;color:#999;line-height:1.5;">This is an automated message. Please do not reply directly to this email.<br/>For any inquiries, contact us at <a href="mailto:contact@jbj.ae" style="color:#C8A766;text-decoration:underline;font-weight:600;">contact@jbj.ae</a></p>
-</td></tr>
-<!-- Footer -->
-<tr><td style="background:#000000;padding:30px 40px;text-align:center;border-radius:0 0 20px 20px;">
-<p style="color:#C8A766;font-size:14px;margin:0 0 14px;">Need assistance? We're here to help.</p>
-<table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;">
-<tr><td align="center">
-<a href="tel:+971565911000" style="color:#ffffff;text-decoration:none;font-size:13px;">+971 56 591 1000</a>
-<span style="color:#444;margin:0 12px;">|</span>
-<a href="mailto:Contact@JBJ.ae" style="color:#ffffff;text-decoration:underline;font-size:13px;">Contact@JBJ.ae</a>
-</td></tr>
-</table>
-<p style="color:#C8A766;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin:0 0 12px;">Follow Us &middot; Stay in the Loop</p>
-<table cellpadding="0" cellspacing="0" align="center" style="margin-bottom:14px;">
-<tr>
-<td style="padding:0 4px;"><a href="https://www.instagram.com/jbj.ae" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#FDFBF7,#F5EBD7);border:1px solid #C8A766;border-radius:6px;color:#1a1a1a;text-decoration:none;font-size:11px;font-weight:600;">Instagram</a></td>
-<td style="padding:0 4px;"><a href="https://www.facebook.com/share/1G7CgSaV2L/" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#FDFBF7,#F5EBD7);border:1px solid #C8A766;border-radius:6px;color:#1a1a1a;text-decoration:none;font-size:11px;font-weight:600;">Facebook</a></td>
-<td style="padding:0 4px;"><a href="https://www.linkedin.com/company/jbj-global-real-estate/" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#FDFBF7,#F5EBD7);border:1px solid #C8A766;border-radius:6px;color:#1a1a1a;text-decoration:none;font-size:11px;font-weight:600;">LinkedIn</a></td>
-<td style="padding:0 4px;"><a href="https://youtube.com/@jbjglobalrealestate" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#FDFBF7,#F5EBD7);border:1px solid #C8A766;border-radius:6px;color:#1a1a1a;text-decoration:none;font-size:11px;font-weight:600;">YouTube</a></td>
-</tr>
-</table>
-<table cellpadding="0" cellspacing="0" align="center" style="margin-bottom:16px;">
-<tr><td style="padding:0 4px;"><a href="mailto:contact@jbj.ae" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#FDFBF7,#F5EBD7);border:1px solid #C8A766;border-radius:6px;color:#1a1a1a;text-decoration:none;font-size:11px;font-weight:600;">contact@jbj.ae</a></td></tr>
-</table>
-<p style="color:#C8A766;font-size:13px;margin:0 0 4px;font-weight:600;">JBJ Global Real Estate</p>
-<p style="color:#777;font-size:11px;margin:0 0 8px;">First Global Real Estate Platform of Its Kind</p>
-<p style="color:#888;font-size:10px;margin:0 0 12px;white-space:nowrap;">
-Developed, Created &amp; Implemented by The Founder &amp; CEO, <span style="color:#C8A766;">Jane Bou Jaoude</span>
-</p>
-<p style="color:#C8A766;font-size:11px;margin:12px 0 0;font-weight:600;">
-&copy; ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
-</p>
-</td></tr>`;
-}
-
-function emailShell(departmentLabel: string, bodyContent: string): string {
-  return `<!DOCTYPE html>
-<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<style>body{margin:0;padding:0;background-color:#ffffff;font-family:'Segoe UI',Arial,sans-serif;}
-@media only screen and (max-width:620px){.wrapper{width:100%!important;padding:0 8px!important;}.content-pad{padding:24px 16px!important;}}</style>
-</head>
-<body style="margin:0;padding:0;background-color:#ffffff;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#ffffff;">
-<tr><td align="center" style="padding:24px 16px;">
-<table role="presentation" class="wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:#F5F0E6;border-radius:24px;overflow:hidden;">
-<tr><td>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(180deg,#FFFFFF,#FDFBF7,#F5F0E6);border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(200,167,102,0.18);">
-${sharedHeader(departmentLabel)}
-${bodyContent}
-${sharedFooterHtml()}
-</table>
-</td></tr>
-</table></td></tr></table>
-</body></html>`;
 }
 
 function buildWelcomeHtml(displayName: string, email: string, role: string, ctaText: string, ctaUrl: string, benefitsHtml: string): string {
@@ -208,7 +53,6 @@ function buildWelcomeHtml(displayName: string, email: string, role: string, ctaT
 <!-- Content -->
 <tr><td class="content-pad" style="padding:32px;">
 
-<!-- Welcome Headline -->
 <p style="margin:0 0 6px;font-size:28px;font-weight:800;color:#1a1a1a;line-height:1.2;">Thank You for Joining Us, ${displayName}</p>
 <p style="margin:0 0 24px;font-size:18px;color:#C8A766;font-weight:600;line-height:1.3;">Your JBJ account is ready — we're thrilled to have you.</p>
 
@@ -228,7 +72,7 @@ You have successfully created your account with <strong>JBJ Global Real Estate</
 As a Dubai-based real estate brokerage, we specialize in connecting clients with exceptional properties across the UAE.
 </p>
 
-<!-- Benefits — SVG icon only, no border boxes -->
+<!-- Benefits -->
 <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
 ${benefitsHtml}
 </table>
@@ -244,7 +88,11 @@ ${ctaText}
 
 ${inquiryBox("account")}
 
+${ticketSupportEmbed()}
+
 ${recommendedActionsHtml()}
+
+${suggestedActionsHtml()}
 
 ${feedbackHtml("welcome")}
 
@@ -254,6 +102,7 @@ ${feedbackHtml("welcome")}
 <!-- ═══ Arabic Content ═══ -->
 <tr><td style="padding:24px 32px 0;text-align:center;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="border-top:2px solid #C8A76650;"></td></tr></table>
+<p style="margin:16px 0 8px;font-size:12px;color:#C8A766;font-weight:700;letter-spacing:2px;">النسخة العربية — ARABIC VERSION</p>
 </td></tr>
 <tr><td class="content-pad" style="padding:32px;direction:rtl;text-align:right;">
 
@@ -276,7 +125,6 @@ ${feedbackHtml("welcome")}
 بصفتنا شركة وساطة عقارية مقرها دبي، نحن متخصصون في ربط العملاء بأفضل العقارات في جميع أنحاء الإمارات.
 </p>
 
-<!-- Arabic CTA -->
 <table width="100%" cellpadding="0" cellspacing="0">
 <tr><td align="center" style="padding:0 0 28px;">
 <a href="${ctaUrl}" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:14px 40px;border-radius:10px;font-weight:700;font-size:14px;letter-spacing:0.5px;border:1px solid #C8A76650;">
@@ -339,22 +187,21 @@ serve(async (req) => {
       visitor: { text: "Start Browsing", url: `${SITE_URL}/properties` },
     };
 
-    // Benefits with black SVG icons
     const benefitsByRole: Record<string, string> = {
       broker:
-        benefitRow(svgIcons.gear, 'Free AI Tools', 'Unlimited access to property analysis, market reports, and smart recommendations.') +
-        benefitRow(svgIcons.academy, 'Free Training Academy', 'Complete courses and videos to boost your real estate career.') +
-        benefitRow(svgIcons.headset, 'Dedicated HR Manager & Personal Assistant', 'Jessica and our team provide dedicated support for all your inquiries.') +
-        benefitRow(svgIcons.ticket, 'Support Tickets & Events', 'Submit tickets for any query and join exclusive company events and webinars.'),
+        benefitRow('⚙', 'Free AI Tools', 'Unlimited access to property analysis, market reports, and smart recommendations.') +
+        benefitRow('🎓', 'Free Training Academy', 'Complete courses and videos to boost your real estate career.') +
+        benefitRow('🎧', 'Dedicated HR Manager & Personal Assistant', 'Jessica and our team provide dedicated support for all your inquiries.') +
+        benefitRow('🎫', 'Support Tickets & Events', 'Submit tickets for any query and join exclusive company events and webinars.'),
       investor:
-        benefitRow(svgIcons.building, 'Premium Properties', 'Browse exclusive listings across Dubai and the UAE.') +
-        benefitRow(svgIcons.chart, 'AI Property Analysis', 'Smart insights and ROI calculations for better investment decisions.') +
-        benefitRow(svgIcons.ticket, 'Support Tickets & Events', 'Submit tickets for any query and join exclusive company events.'),
+        benefitRow('🏢', 'Premium Properties', 'Browse exclusive listings across Dubai and the UAE.') +
+        benefitRow('📊', 'AI Property Analysis', 'Smart insights and ROI calculations for better investment decisions.') +
+        benefitRow('🎫', 'Support Tickets & Events', 'Submit tickets for any query and join exclusive company events.'),
       visitor:
-        benefitRow(svgIcons.building, 'Browse Premium Properties', 'Explore our curated selection of UAE properties across all emirates.') +
-        benefitRow(svgIcons.heart, 'Save Your Favorites', 'Shortlist properties you love and access them anytime from your dashboard.') +
-        benefitRow(svgIcons.headset, 'Expert Support 24/7', 'Our dedicated team is ready to assist with any property inquiry.') +
-        benefitRow(svgIcons.ticket, 'Support Tickets & Events', 'Submit tickets, get help, and stay updated on company events.'),
+        benefitRow('🏢', 'Browse Premium Properties', 'Explore our curated selection of UAE properties across all emirates.') +
+        benefitRow('❤', 'Save Your Favorites', 'Shortlist properties you love and access them anytime from your dashboard.') +
+        benefitRow('🎧', 'Expert Support 24/7', 'Our dedicated team is ready to assist with any property inquiry.') +
+        benefitRow('🎫', 'Support Tickets & Events', 'Submit tickets, get help, and stay updated on company events.'),
     };
 
     const cta = ctaByRole[role] || ctaByRole.visitor;
@@ -368,7 +215,7 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         from: "JBJ Global Real Estate <contact@jbj.ae>",
-        reply_to: "contact@jbj.ae",
+        reply_to: "CONTACT@JBJ.AE",
         to: [email],
         subject: subjectByRole[role] || subjectByRole.visitor,
         html: emailHtml,

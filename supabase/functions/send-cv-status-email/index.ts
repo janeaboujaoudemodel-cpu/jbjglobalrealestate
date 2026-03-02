@@ -1,10 +1,9 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { LOGO_URL, SITE_URL, emailShell, sharedHeader, sharedFooterHtml, doNotReplyNotice, inquiryBox, recommendedActionsHtml, suggestedActionsHtml, ticketSupportEmbed, feedbackHtml, progressSteps, arabicDivider } from "../_shared/email-html.ts";
 
 const RESEND_API_URL = "https://api.resend.com/emails";
 const VERIFIED_SENDER = 'contact@jbj.ae';
-const SITE_URL = "https://jbj.ae";
-const LOGO_URL = "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/jbj-monogram-dark.png?v=3";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -19,19 +18,13 @@ async function sendEmail(payload: { from: string; to: string[]; subject: string;
     body: JSON.stringify(payload),
   });
   const data = await res.json();
-  if (!res.ok) {
-    console.error("Resend API error:", JSON.stringify(data));
-    return { error: data };
-  }
+  if (!res.ok) { console.error("Resend API error:", JSON.stringify(data)); return { error: data }; }
   return { data };
 }
 
 function escapeHtml(str: string | null | undefined): string {
   if (!str) return '';
-  return String(str).replace(/[&<>"']/g, (m) => {
-    const map: Record<string, string> = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
-    return map[m] || m;
-  });
+  return String(str).replace(/[&<>"']/g, (m) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m] || m));
 }
 
 interface CVEmailRequest {
@@ -46,95 +39,24 @@ interface CVEmailRequest {
 function isLikelyAbbreviatedName(name: string): boolean {
   const parts = name.trim().split(/\s+/).filter(Boolean);
   if (parts.length < 2) return false;
-  const last = parts[parts.length - 1];
-  return last.length <= 2;
+  return parts[parts.length - 1].length <= 2;
 }
 
-async function resolveRecipientName(
-  supabaseClient: any,
-  rawName: string | null | undefined,
-  email: string,
-  userId?: string
-): Promise<string> {
+async function resolveRecipientName(supabaseClient: any, rawName: string | null | undefined, email: string, userId?: string): Promise<string> {
   const fallback = (rawName || '').trim() || 'Applicant';
-
-  if (fallback !== 'Applicant' && !isLikelyAbbreviatedName(fallback)) {
-    return fallback;
-  }
-
+  if (fallback !== 'Applicant' && !isLikelyAbbreviatedName(fallback)) return fallback;
   try {
     if (userId) {
       const { data: byId } = await supabaseClient.auth.admin.getUserById(userId);
       const fullById = (byId?.user?.user_metadata as any)?.full_name || (byId?.user?.user_metadata as any)?.name;
       if (fullById && !isLikelyAbbreviatedName(fullById)) return String(fullById).trim();
     }
-
     const { data: listed } = await supabaseClient.auth.admin.listUsers({ perPage: 1000 });
     const match = listed?.users?.find((u: any) => u.email?.toLowerCase() === email.toLowerCase());
     const fullByEmail = (match?.user_metadata as any)?.full_name || (match?.user_metadata as any)?.name;
     if (fullByEmail && !isLikelyAbbreviatedName(fullByEmail)) return String(fullByEmail).trim();
-  } catch (e) {
-    console.warn('Name resolution warning:', e);
-  }
-
+  } catch (e) { console.warn('Name resolution warning:', e); }
   return fallback;
-}
-
-function makeStep(num: string, label: string, active: boolean, isCheck: boolean) {
-  const bg = active ? 'background:linear-gradient(135deg,#C8A766,#B8956E);color:#fff;' : 'background:#e5e5e5;color:#999;';
-  const textColor = active ? 'color:#C8A766;font-weight:600;' : 'color:#999;';
-  const icon = isCheck ? '&#10003;' : num;
-  return `<td width="33%" style="text-align:center;vertical-align:top;padding:0 8px;">
-    <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center">
-      <tr><td style="width:44px;height:44px;border-radius:50%;${bg}text-align:center;vertical-align:middle;line-height:44px;font-size:18px;font-weight:bold;">${icon}</td></tr>
-    </table>
-    <p style="font-size:11px;${textColor}text-transform:uppercase;letter-spacing:0.5px;margin:8px 0 0;">${label}</p>
-  </td>`;
-}
-
-function sharedFooterHtml(): string {
-  return `
-<!-- Do not reply -->
-<tr><td style="padding:0 32px 16px;text-align:center;">
-<p style="margin:0;font-size:11px;color:#999;line-height:1.5;">This is an automated message. Please do not reply directly to this email.<br/>For any inquiries, contact us at <a href="mailto:contact@jbj.ae" style="color:#C8A766;text-decoration:underline;font-weight:600;">contact@jbj.ae</a></p>
-</td></tr>
-<tr><td style="background:#000000;text-align:center;padding:32px 40px;border-radius:0 0 20px 20px;">
-<p style="color:#C8A766;font-size:14px;margin:0 0 14px;">Need assistance? We're here to help.</p>
-<table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;">
-<tr><td align="center">
-<a href="tel:+971565911000" style="color:#ffffff;text-decoration:none;font-size:13px;">+971 56 591 1000</a>
-<span style="color:#444;margin:0 12px;">|</span>
-<a href="mailto:Contact@JBJ.ae" style="color:#ffffff;text-decoration:underline;font-size:13px;">Contact@JBJ.ae</a>
-</td></tr>
-</table>
-<p style="color:#C8A766;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin:0 0 12px;">Follow Us &middot; Stay in the Loop</p>
-<table cellpadding="0" cellspacing="0" align="center" style="margin-bottom:14px;">
-<tr>
-<td style="padding:0 4px;"><a href="https://www.instagram.com/jbj.ae" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#FDFBF7,#F5EBD7);border:1px solid #C8A766;border-radius:6px;color:#1a1a1a;text-decoration:none;font-size:11px;font-weight:600;">Instagram</a></td>
-<td style="padding:0 4px;"><a href="https://www.facebook.com/share/1G7CgSaV2L/" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#FDFBF7,#F5EBD7);border:1px solid #C8A766;border-radius:6px;color:#1a1a1a;text-decoration:none;font-size:11px;font-weight:600;">Facebook</a></td>
-<td style="padding:0 4px;"><a href="https://www.linkedin.com/company/jbj-global-real-estate/" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#FDFBF7,#F5EBD7);border:1px solid #C8A766;border-radius:6px;color:#1a1a1a;text-decoration:none;font-size:11px;font-weight:600;">LinkedIn</a></td>
-<td style="padding:0 4px;"><a href="https://youtube.com/@jbjglobalrealestate" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#FDFBF7,#F5EBD7);border:1px solid #C8A766;border-radius:6px;color:#1a1a1a;text-decoration:none;font-size:11px;font-weight:600;">YouTube</a></td>
-</tr>
-</table>
-<table cellpadding="0" cellspacing="0" align="center" style="margin-bottom:16px;">
-<tr><td><a href="mailto:contact@jbj.ae" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#FDFBF7,#F5EBD7);border:1px solid #C8A766;border-radius:6px;color:#1a1a1a;text-decoration:none;font-size:11px;font-weight:600;">&#9993; contact@jbj.ae</a></td></tr>
-</table>
-<p style="color:#C8A766;font-size:13px;margin:0 0 4px;font-weight:600;">JBJ Global Real Estate</p>
-<p style="color:#777;font-size:11px;margin:0 0 8px;">First Global Real Estate Platform of Its Kind</p>
-<p style="color:#888;font-size:10px;margin:0 0 12px;white-space:nowrap;">
-Developed, Created &amp; Implemented by The Founder &amp; CEO, <span style="color:#C8A766;">Jane Bou Jaoude</span>
-</p>
-<p style="color:#C8A766;font-size:11px;margin:12px 0 0;font-weight:600;">
-&copy; ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
-</p>
-</td></tr>`;
-}
-
-function arabicDivider(): string {
-  return `<tr><td style="padding:24px 32px 0;text-align:center;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="border-top:2px solid #C8A76650;"></td></tr></table>
-<p style="margin:16px 0 8px;font-size:12px;color:#C8A766;font-weight:700;letter-spacing:2px;text-transform:uppercase;">النسخة العربية — ARABIC VERSION</p>
-</td></tr>`;
 }
 
 function buildEmailHtml(req: CVEmailRequest): { html: string; subject: string } {
@@ -144,14 +66,11 @@ function buildEmailHtml(req: CVEmailRequest): { html: string; subject: string } 
 
   const statusConfig: Record<string, { title: string; titleAr: string; subtitle: string; subtitleAr: string; steps: [boolean, boolean, boolean]; stepChecks: [boolean, boolean, boolean]; extraHtml: string; extraHtmlAr: string }> = {
     submitted: {
-      title: "CV Application Received",
-      titleAr: "تم استلام طلب التوظيف",
+      title: "CV Application Received", titleAr: "تم استلام طلب التوظيف",
       subtitle: "Thank you for your interest in joining JBJ Global Real Estate. We've received your application and our HR team will begin reviewing your profile shortly.",
       subtitleAr: "شكراً لاهتمامك بالانضمام إلى JBJ Global Real Estate. لقد استلمنا طلبك وسيبدأ فريق الموارد البشرية بمراجعة ملفك قريباً.",
-      steps: [true, false, false],
-      stepChecks: [true, false, false],
-      extraHtml: `
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border-radius:10px;margin-bottom:24px;border:1px solid #C8A766;">
+      steps: [true, false, false], stepChecks: [true, false, false],
+      extraHtml: `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border-radius:10px;margin-bottom:24px;border:1px solid #C8A766;">
 <tr><td style="padding:24px;">
 <p style="font-weight:bold;color:#1a1a1a;margin:0 0 12px;font-size:15px;">What happens next?</p>
 <table role="presentation" cellpadding="0" cellspacing="0" border="0">
@@ -159,74 +78,59 @@ function buildEmailHtml(req: CVEmailRequest): { html: string; subject: string } 
 <tr><td style="padding:4px 0;font-size:13px;color:#555;">&#8226; You'll receive email updates as your application progresses</td></tr>
 <tr><td style="padding:4px 0;font-size:13px;color:#555;">&#8226; You will also receive notifications in your account (Notifications, Tasks, or Inbox)</td></tr>
 <tr><td style="padding:4px 0;font-size:13px;color:#555;">&#8226; Qualified candidates will be contacted for an interview</td></tr>
-</table>
-</td></tr></table>`,
-      extraHtmlAr: `
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border-radius:10px;margin-bottom:24px;border:1px solid #C8A766;">
+</table></td></tr></table>`,
+      extraHtmlAr: `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border-radius:10px;margin-bottom:24px;border:1px solid #C8A766;">
 <tr><td style="padding:24px;direction:rtl;text-align:right;">
 <p style="font-weight:bold;color:#1a1a1a;margin:0 0 12px;font-size:15px;">ماذا يحدث بعد ذلك؟</p>
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="direction:rtl;">
 <tr><td style="padding:4px 0;font-size:13px;color:#555;text-align:right;">&#8226; سيقوم فريق الموارد البشرية بمراجعة سيرتك الذاتية خلال <strong>٣-٥ أيام عمل</strong></td></tr>
 <tr><td style="padding:4px 0;font-size:13px;color:#555;text-align:right;">&#8226; ستتلقى تحديثات عبر البريد الإلكتروني مع تقدم طلبك</td></tr>
-<tr><td style="padding:4px 0;font-size:13px;color:#555;text-align:right;">&#8226; ستتلقى أيضاً إشعارات في حسابك (الإشعارات، المهام، أو صندوق الوارد)</td></tr>
+<tr><td style="padding:4px 0;font-size:13px;color:#555;text-align:right;">&#8226; ستتلقى أيضاً إشعارات في حسابك</td></tr>
 <tr><td style="padding:4px 0;font-size:13px;color:#555;text-align:right;">&#8226; سيتم التواصل مع المرشحين المؤهلين لإجراء مقابلة</td></tr>
-</table>
-</td></tr></table>`,
+</table></td></tr></table>`,
     },
     under_review: {
-      title: "Your CV Is Under Review",
-      titleAr: "سيرتك الذاتية قيد المراجعة",
+      title: "Your CV Is Under Review", titleAr: "سيرتك الذاتية قيد المراجعة",
       subtitle: "Great news! Our HR team is now actively reviewing your application. We'll be in touch soon with an update.",
       subtitleAr: "أخبار رائعة! يقوم فريق الموارد البشرية الآن بمراجعة طلبك بشكل فعّال. سنتواصل معك قريباً بتحديث.",
-      steps: [true, true, false],
-      stepChecks: [true, true, false],
+      steps: [true, true, false], stepChecks: [true, true, false],
       extraHtml: adminNote ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:12px;margin-bottom:24px;"><tr><td style="padding:20px;"><p style="font-weight:bold;color:#1a1a1a;margin:0 0 8px;">HR Team Note:</p><p style="color:#555;margin:0;">${adminNote}</p></td></tr></table>` : '',
       extraHtmlAr: adminNote ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:12px;margin-bottom:24px;"><tr><td style="padding:20px;direction:rtl;text-align:right;"><p style="font-weight:bold;color:#1a1a1a;margin:0 0 8px;">ملاحظة فريق الموارد البشرية:</p><p style="color:#555;margin:0;">${adminNote}</p></td></tr></table>` : '',
     },
     approved: {
-      title: "Congratulations! Your Application Has Been Approved",
-      titleAr: "تهانينا! تمت الموافقة على طلبك",
+      title: "Congratulations! Your Application Has Been Approved", titleAr: "تهانينا! تمت الموافقة على طلبك",
       subtitle: "We're excited to inform you that your application has been approved. Please find below the details regarding the next steps.",
       subtitleAr: "يسعدنا إبلاغك بأنه تمت الموافقة على طلبك. يرجى الاطلاع أدناه على تفاصيل الخطوات التالية.",
-      steps: [true, true, true],
-      stepChecks: [true, true, true],
-      extraHtml: `
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:2px solid #22c55e;border-radius:12px;margin-bottom:24px;">
+      steps: [true, true, true], stepChecks: [true, true, true],
+      extraHtml: `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:2px solid #22c55e;border-radius:12px;margin-bottom:24px;">
 <tr><td style="padding:24px;">
 <p style="color:#166534;font-size:16px;font-weight:bold;margin:0 0 12px;text-align:center;">Welcome Aboard!</p>
 <p style="color:#15803d;font-size:13px;margin:0 0 16px;text-align:center;">Our HR team will contact you within 48 hours to discuss interview scheduling and next steps.</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#ffffff;border:1px solid #22c55e40;border-radius:10px;">
 <tr><td style="padding:16px 20px;">
-<p style="margin:0;font-size:13px;color:#555;line-height:1.6;">You have also received a notification in your account. You can access updates from your <strong>Account Notifications</strong>, <strong>Tasks</strong>, or <strong>Inbox</strong> — as well as in this email.</p>
-</td></tr>
-</table>
-</td></tr></table>`,
-      extraHtmlAr: `
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:2px solid #22c55e;border-radius:12px;margin-bottom:24px;">
+<p style="margin:0;font-size:13px;color:#555;line-height:1.6;">You have also received a notification in your account. You can access updates from your <strong>Account Notifications</strong>, <strong>Tasks</strong>, or <strong>Inbox</strong>.</p>
+</td></tr></table></td></tr></table>`,
+      extraHtmlAr: `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:2px solid #22c55e;border-radius:12px;margin-bottom:24px;">
 <tr><td style="padding:24px;direction:rtl;text-align:right;">
 <p style="color:#166534;font-size:16px;font-weight:bold;margin:0 0 12px;text-align:center;">مرحباً بك معنا!</p>
-<p style="color:#15803d;font-size:13px;margin:0 0 16px;text-align:center;">سيتواصل معك فريق الموارد البشرية خلال ٤٨ ساعة لمناقشة جدولة المقابلة والخطوات التالية.</p>
+<p style="color:#15803d;font-size:13px;margin:0 0 16px;text-align:center;">سيتواصل معك فريق الموارد البشرية خلال ٤٨ ساعة.</p>
 </td></tr></table>`,
     },
     rejected: {
-      title: "Application Update",
-      titleAr: "تحديث الطلب",
+      title: "Application Update", titleAr: "تحديث الطلب",
       subtitle: "Thank you for your interest in JBJ Global Real Estate. After careful review, we've decided to pursue other candidates at this time. We appreciate your effort and encourage you to apply for future openings.",
-      subtitleAr: "شكراً لاهتمامك بـ JBJ Global Real Estate. بعد مراجعة دقيقة، قررنا متابعة مرشحين آخرين في الوقت الحالي. نقدّر جهودك ونشجعك على التقدم للوظائف المستقبلية.",
-      steps: [true, true, true],
-      stepChecks: [true, true, false],
-      extraHtml: `
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border-radius:10px;margin-bottom:24px;border:1px solid #C8A766;">
+      subtitleAr: "شكراً لاهتمامك بـ JBJ Global Real Estate. بعد مراجعة دقيقة، قررنا متابعة مرشحين آخرين في الوقت الحالي.",
+      steps: [true, true, true], stepChecks: [true, true, false],
+      extraHtml: `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border-radius:10px;margin-bottom:24px;border:1px solid #C8A766;">
 <tr><td style="padding:24px;text-align:center;">
 <p style="color:#1a1a1a;font-size:15px;font-weight:bold;margin:0 0 8px;">Don't Give Up!</p>
 <p style="color:#555;font-size:13px;margin:0 0 16px;">New positions open regularly. Stay connected for future opportunities.</p>
 <a href="${SITE_URL}/join" style="display:inline-block;padding:12px 32px;background:linear-gradient(135deg,#C8A766,#B8956E);color:#fff;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;">View Open Positions</a>
 </td></tr></table>`,
-      extraHtmlAr: `
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border-radius:10px;margin-bottom:24px;border:1px solid #C8A766;">
+      extraHtmlAr: `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border-radius:10px;margin-bottom:24px;border:1px solid #C8A766;">
 <tr><td style="padding:24px;text-align:center;direction:rtl;">
 <p style="color:#1a1a1a;font-size:15px;font-weight:bold;margin:0 0 8px;">لا تستسلم!</p>
-<p style="color:#555;font-size:13px;margin:0 0 16px;">تُفتح وظائف جديدة بانتظام. ابقَ على تواصل للفرص المستقبلية.</p>
+<p style="color:#555;font-size:13px;margin:0 0 16px;">تُفتح وظائف جديدة بانتظام.</p>
 <a href="${SITE_URL}/join" style="display:inline-block;padding:12px 32px;background:linear-gradient(135deg,#C8A766,#B8956E);color:#fff;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;">عرض الوظائف المتاحة</a>
 </td></tr></table>`,
     },
@@ -234,6 +138,11 @@ function buildEmailHtml(req: CVEmailRequest): { html: string; subject: string } 
 
   const normalizedStatus = req.status === 'pending' ? 'under_review' : req.status;
   const config = statusConfig[normalizedStatus] || statusConfig.submitted;
+  const statusBadgeStyle = normalizedStatus === 'approved' ? 'background:#dcfce7;color:#166534;border:1px solid #22c55e;' :
+    normalizedStatus === 'rejected' ? 'background:#fef2f2;color:#991b1b;border:1px solid #ef4444;' :
+    normalizedStatus === 'under_review' ? 'background:#fef3c7;color:#92400e;border:1px solid #f59e0b;' :
+    'background:#dbeafe;color:#1e40af;border:1px solid #3b82f6;';
+  const statusBadgeText = normalizedStatus === 'approved' ? 'APPROVED' : normalizedStatus === 'rejected' ? 'NOT SELECTED' : normalizedStatus === 'under_review' ? 'UNDER REVIEW' : 'APPLICATION RECEIVED';
 
   const subjectMap: Record<string, string> = {
     submitted: `CV Received – ${name} | JBJ Global Real Estate`,
@@ -243,37 +152,7 @@ function buildEmailHtml(req: CVEmailRequest): { html: string; subject: string } 
     rejected: `Application Update | JBJ Global Real Estate`,
   };
 
-  const arabicStepLabels = ['مُستلم', 'قيد المراجعة', 'القرار'];
-
-  const html = `<!DOCTYPE html>
-<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<style>body{margin:0;padding:0;background-color:#F5F0E6;font-family:'Segoe UI',Arial,sans-serif;}
-@media only screen and (max-width:620px){.wrapper{width:100%!important;padding:0 8px!important;}.hero-pad{padding:32px 20px!important;}.content-pad{padding:24px 16px!important;}}</style>
-</head>
-<body style="margin:0;padding:0;background-color:#F5F0E6;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#F5F0E6;">
-<tr><td align="center" style="padding:24px 16px;">
-<table role="presentation" class="wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:linear-gradient(180deg,#FFFFFF,#FDFBF7,#F5F0E6);border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(200,167,102,0.18);">
-
-<!-- Logo — Company Monogram -->
-<tr><td style="background:#000000;padding:20px 0 16px;text-align:center;border-radius:20px 20px 0 0;">
-<img src="${LOGO_URL}" alt="JBJ Global Real Estate" width="120" style="max-width:120px;height:auto;display:block;margin:0 auto;" />
-</td></tr>
-
-<!-- Hero -->
-<tr><td class="hero-pad" style="background:linear-gradient(135deg,#C8A766,#B8956E,#A07D4A);padding:40px 32px;text-align:center;">
-<p style="font-size:28px;font-weight:bold;color:#1a1a1a;margin:0 0 8px;">JBJ Global Real Estate</p>
-<p style="font-size:16px;color:#2d2d2d;margin:0 0 20px;font-weight:500;">Careers & Recruitment</p>
-<table role="presentation" width="80%" cellpadding="0" cellspacing="0" border="0" align="center">
-<tr><td style="height:3px;background:linear-gradient(90deg,transparent,#1a1a1a 20%,#1a1a1a 80%,transparent);border-radius:2px;"></td></tr>
-</table>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:16px;">
-<tr>
-<td style="text-align:center;padding:4px 8px;"><a href="mailto:contact@jbj.ae" style="color:#1a1a1a;text-decoration:none;font-size:13px;">contact@jbj.ae</a></td>
-<td style="text-align:center;padding:4px 8px;"><a href="tel:+971565911000" style="color:#1a1a1a;text-decoration:none;font-size:13px;">+971 56 591 1000</a></td>
-</tr></table>
-</td></tr>
-
+  const bodyContent = `
 <!-- ENGLISH CONTENT -->
 <tr><td class="content-pad" style="padding:32px;">
 
@@ -284,7 +163,7 @@ function buildEmailHtml(req: CVEmailRequest): { html: string; subject: string } 
 <p style="margin:0;font-size:13px;color:#C8A766;font-weight:600;">Position: ${position}</p>
 </td></tr></table>
 
-<!-- Profile icon + Greeting -->
+<!-- Greeting -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;">
 <tr>
 <td width="52" style="vertical-align:top;padding-right:14px;">
@@ -292,33 +171,16 @@ function buildEmailHtml(req: CVEmailRequest): { html: string; subject: string } 
 </td>
 <td style="vertical-align:middle;">
 <p style="margin:0;font-size:15px;color:#333;">Dear <strong>${name}</strong>,</p>
-</td>
-</tr>
-</table>
+</td></tr></table>
 <p style="font-size:14px;color:#555;margin:0 0 24px;">${config.subtitle}</p>
 
 <!-- Progress Tracker -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;">
-<tr>
-${makeStep('1', 'Received', config.steps[0], config.stepChecks[0])}
-${makeStep('2', 'Under Review', config.steps[1], config.stepChecks[1])}
-${makeStep('3', 'Decision', config.steps[2], config.stepChecks[2])}
-</tr></table>
+${progressSteps(['Received', 'Under Review', 'Decision'], config.steps, config.stepChecks)}
 
 <!-- Status Badge -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;">
 <tr><td style="text-align:center;">
-<span style="display:inline-block;padding:8px 24px;border-radius:20px;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;${
-  normalizedStatus === 'approved' ? 'background:#dcfce7;color:#166534;border:1px solid #22c55e;' :
-  normalizedStatus === 'rejected' ? 'background:#fef2f2;color:#991b1b;border:1px solid #ef4444;' :
-  normalizedStatus === 'under_review' ? 'background:#fef3c7;color:#92400e;border:1px solid #f59e0b;' :
-  'background:#dbeafe;color:#1e40af;border:1px solid #3b82f6;'
-}">${
-  normalizedStatus === 'approved' ? 'APPROVED' :
-  normalizedStatus === 'rejected' ? 'NOT SELECTED' :
-  normalizedStatus === 'under_review' ? 'UNDER REVIEW' :
-  'APPLICATION RECEIVED'
-}</span>
+<span style="display:inline-block;padding:8px 24px;border-radius:20px;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;${statusBadgeStyle}">${statusBadgeText}</span>
 </td></tr></table>
 
 ${config.extraHtml}
@@ -329,39 +191,15 @@ ${config.extraHtml}
 <a href="${SITE_URL}/my-account" style="display:inline-block;padding:14px 32px;background:#000;color:#C8A766;border-radius:10px;text-decoration:none;font-weight:600;font-size:14px;border:1px solid #C8A76650;">View My Application Status</a>
 </td></tr></table>
 
-<!-- Reply Info — Green -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f0fdf4;border:1px solid #22c55e40;border-radius:10px;margin-bottom:24px;">
-<tr><td style="padding:14px 20px;text-align:center;">
-<p style="margin:0;font-size:13px;color:#166534;line-height:1.6;">For inquiries about your application, you can reply directly to <a href="mailto:contact@jbj.ae" style="color:#15803d;font-weight:700;text-decoration:none;">contact@jbj.ae</a></p>
-</td></tr></table>
+${inquiryBox("career application")}
 
-<!-- Recommended Actions -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0;border-top:2px solid #C8A76633;padding-top:20px;">
-<tr><td style="text-align:center;">
-<p style="color:#1a1a1a;font-size:14px;font-weight:700;margin:0 0 12px;">Recommended For You</p>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-<tr>
-<td width="33%" style="text-align:center;padding:4px;"><a href="${SITE_URL}/ai-tools" style="display:block;padding:14px 8px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:10px;text-decoration:none;"><p style="margin:0 0 4px;font-size:20px;">&#9881;</p><p style="margin:0;font-size:11px;color:#1a1a1a;font-weight:600;">AI Tools</p></a></td>
-<td width="33%" style="text-align:center;padding:4px;"><a href="${SITE_URL}/guides" style="display:block;padding:14px 8px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:10px;text-decoration:none;"><p style="margin:0 0 4px;font-size:20px;">&#128218;</p><p style="margin:0;font-size:11px;color:#1a1a1a;font-weight:600;">Guides</p></a></td>
-<td width="33%" style="text-align:center;padding:4px;"><a href="${SITE_URL}/properties" style="display:block;padding:14px 8px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:10px;text-decoration:none;"><p style="margin:0 0 4px;font-size:20px;">&#127969;</p><p style="margin:0;font-size:11px;color:#1a1a1a;font-weight:600;">Properties</p></a></td>
-</tr>
-</table>
-</td></tr>
-</table>
+${ticketSupportEmbed()}
 
-<!-- Review & Survey -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0 0;border-top:2px solid #C8A76633;padding-top:20px;">
-<tr><td align="center">
-<p style="color:#1a1a1a;font-size:15px;font-weight:700;margin:0 0 6px;">We Value Your Feedback</p>
-<p style="color:#666;font-size:12px;margin:0 0 14px;">Help us improve by sharing your experience</p>
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center">
-<tr>
-<td style="padding:0 6px;"><a href="${SITE_URL}/reviews?source=career" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:10px 20px;border-radius:8px;font-weight:700;font-size:12px;border:1px solid #C8A76650;">Leave a Review</a></td>
-<td style="padding:0 6px;"><a href="${SITE_URL}/survey?source=career" style="display:inline-block;background:#FDFBF7;border:2px solid #C8A766;color:#1a1a1a;text-decoration:none;padding:8px 20px;border-radius:8px;font-weight:700;font-size:12px;white-space:nowrap;">Take Survey</a></td>
-</tr>
-</table>
-</td></tr>
-</table>
+${recommendedActionsHtml()}
+
+${suggestedActionsHtml()}
+
+${feedbackHtml("career")}
 
 <p style="font-size:14px;color:#333;margin-top:24px;">Best regards,<br><span style="color:#C8A766;font-weight:600;">JBJ Global Real Estate HR Team</span></p>
 </td></tr>
@@ -370,7 +208,6 @@ ${config.extraHtml}
 ${arabicDivider()}
 <tr><td class="content-pad" style="padding:32px;direction:rtl;text-align:right;">
 
-<!-- Title Card Arabic -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:12px;margin-bottom:24px;">
 <tr><td style="padding:24px 20px;text-align:center;">
 <p style="margin:0 0 4px;font-size:15px;font-weight:700;color:#1a1a1a;">${config.titleAr}</p>
@@ -380,52 +217,24 @@ ${arabicDivider()}
 <p style="margin:0;font-size:15px;color:#333;">عزيزي/عزيزتي <strong>${name}</strong>،</p>
 <p style="font-size:14px;color:#555;margin:12px 0 24px;">${config.subtitleAr}</p>
 
-<!-- Arabic Progress Tracker -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;direction:ltr;">
-<tr>
-${makeStep('1', arabicStepLabels[0], config.steps[0], config.stepChecks[0])}
-${makeStep('2', arabicStepLabels[1], config.steps[1], config.stepChecks[1])}
-${makeStep('3', arabicStepLabels[2], config.steps[2], config.stepChecks[2])}
-</tr></table>
-
-<!-- Arabic Status Badge -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;">
-<tr><td style="text-align:center;">
-<span style="display:inline-block;padding:8px 24px;border-radius:20px;font-size:13px;font-weight:600;${
-  normalizedStatus === 'approved' ? 'background:#dcfce7;color:#166534;border:1px solid #22c55e;' :
-  normalizedStatus === 'rejected' ? 'background:#fef2f2;color:#991b1b;border:1px solid #ef4444;' :
-  normalizedStatus === 'under_review' ? 'background:#fef3c7;color:#92400e;border:1px solid #f59e0b;' :
-  'background:#dbeafe;color:#1e40af;border:1px solid #3b82f6;'
-}">${
-  normalizedStatus === 'approved' ? 'تمت الموافقة' :
-  normalizedStatus === 'rejected' ? 'لم يتم الاختيار' :
-  normalizedStatus === 'under_review' ? 'قيد المراجعة' :
-  'تم استلام الطلب'
-}</span>
-</td></tr></table>
+${progressSteps(['مُستلم', 'قيد المراجعة', 'القرار'], config.steps, config.stepChecks)}
 
 ${config.extraHtmlAr}
 
-<!-- Arabic CTA -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;">
 <tr><td style="text-align:center;">
 <a href="${SITE_URL}/my-account" style="display:inline-block;padding:14px 32px;background:#000;color:#C8A766;border-radius:10px;text-decoration:none;font-weight:600;font-size:14px;border:1px solid #C8A76650;">عرض حالة طلبي</a>
 </td></tr></table>
 
-<!-- Arabic Reply Info -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f0fdf4;border:1px solid #22c55e40;border-radius:10px;margin-bottom:24px;">
 <tr><td style="padding:14px 20px;text-align:center;">
-<p style="margin:0;font-size:13px;color:#166534;line-height:1.6;">للاستفسار حول طلبك، يمكنك التواصل مع <a href="mailto:contact@jbj.ae" style="color:#15803d;font-weight:700;text-decoration:none;">contact@jbj.ae</a></p>
+<p style="margin:0;font-size:13px;color:#166534;line-height:1.6;">للاستفسار حول طلبك، يمكنك التواصل مع <a href="mailto:CONTACT@JBJ.AE" style="color:#15803d;font-weight:700;text-decoration:underline;">CONTACT@JBJ.AE</a></p>
 </td></tr></table>
 
 <p style="font-size:14px;color:#333;margin-top:24px;text-align:right;">مع أطيب التحيات،<br><span style="color:#C8A766;font-weight:600;">فريق الموارد البشرية - JBJ Global Real Estate</span></p>
-</td></tr>
+</td></tr>`;
 
-${sharedFooterHtml()}
-
-</table></td></tr></table>
-</body></html>`;
-
+  const html = emailShell("Careers & Recruitment", bodyContent);
   return { html, subject: subjectMap[req.status] || 'CV Application Update | JBJ Global Real Estate' };
 }
 
@@ -442,125 +251,54 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
-    // Bulk send mode
     if (body.bulkSend) {
       const results: { sent: number; failed: number; errors: string[] } = { sent: 0, failed: 0, errors: [] };
-
       const [appsRes, subsRes] = await Promise.all([
         supabaseClient.from('hr_applications').select('id, full_name, email, status, user_id, department_category').order('created_at', { ascending: false }),
         supabaseClient.from('hr_cv_submissions').select('id, full_name, email, status, user_id, position_applied').order('created_at', { ascending: false }),
       ]);
-
       const allApps = [
         ...(appsRes.data || []).map((a: any) => ({ ...a, position: a.department_category, source: 'hr_applications' })),
         ...(subsRes.data || []).map((a: any) => ({ ...a, position: a.position_applied, source: 'hr_cv_submissions' })),
       ];
-
       for (const app of allApps) {
         if (!app.email) continue;
-        const emailStatus = app.status === 'approved' ? 'approved' : app.status === 'rejected' ? 'rejected' : 'under_review';
         const recipientName = await resolveRecipientName(supabaseClient, app.full_name, app.email, app.user_id);
-        const { html, subject } = buildEmailHtml({
-          email: app.email,
-          fullName: recipientName,
-          position: app.position,
-          userId: app.user_id,
-        });
-
-        const result = await sendEmail({
-          from: `JBJ Careers <${VERIFIED_SENDER}>`,
-          to: [app.email],
-          subject,
-          html,
-          reply_to: "contact@jbj.ae",
-        });
-
-        if (result.error) {
-          results.failed++;
-          results.errors.push(`${app.email}: ${JSON.stringify(result.error)}`);
-        } else {
-          results.sent++;
-        }
-
+        const { html, subject } = buildEmailHtml({ ...app, fullName: recipientName });
+        const result = await sendEmail({ from: `JBJ Careers <${VERIFIED_SENDER}>`, to: [app.email], subject, html, reply_to: "CONTACT@JBJ.AE" });
+        if (result.error) { results.failed++; results.errors.push(`${app.email}: ${JSON.stringify(result.error)}`); } else { results.sent++; }
         if (app.user_id) {
-          await supabaseClient.from('user_notifications').insert({
-            user_id: app.user_id,
-            type: 'cv_application',
-            title: emailStatus === 'approved' ? 'Application Approved!' :
-                   emailStatus === 'rejected' ? 'Application Update' :
-                   'Your CV is Under Review',
-            message: emailStatus === 'approved' ? 'Congratulations! Your application has been approved. We will contact you shortly.' :
-                     emailStatus === 'rejected' ? 'Thank you for applying. After review, we\'ve decided to pursue other candidates at this time.' :
-                     'Your CV is currently being reviewed by our HR team. You\'ll be notified once a decision is made.',
-            is_read: false,
-            metadata: { status: emailStatus, category: 'cv', action_url: '/my-account' },
-          });
+          await supabaseClient.from('user_notifications').insert({ user_id: app.user_id, type: 'cv_application', title: 'CV Application Update', message: `Your CV application status has been updated.`, is_read: false, metadata: { status: app.status, category: 'cv', action_url: '/my-account' } });
         }
-
         await new Promise(r => setTimeout(r, 200));
       }
-
-      return new Response(JSON.stringify({ success: true, ...results }), {
-        status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return new Response(JSON.stringify({ success: true, ...results }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    // Single email mode
     if (!body.email || !body.status) {
-      return new Response(JSON.stringify({ error: "Missing email or status" }), {
-        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return new Response(JSON.stringify({ error: "Missing email or status" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
     const recipientName = await resolveRecipientName(supabaseClient, body.fullName, body.email, body.userId);
     const { html, subject } = buildEmailHtml({ ...body, fullName: recipientName });
-
-    const result = await sendEmail({
-      from: `JBJ Careers <${VERIFIED_SENDER}>`,
-      to: [body.email],
-      subject,
-      html,
-      reply_to: "contact@jbj.ae",
-    });
+    const result = await sendEmail({ from: `JBJ Careers <${VERIFIED_SENDER}>`, to: [body.email], subject, html, reply_to: "CONTACT@JBJ.AE" });
 
     if (result.error) {
       console.error("CV email failed:", result.error);
-      return new Response(JSON.stringify({ error: "Email send failed", details: result.error }), {
-        status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return new Response(JSON.stringify({ error: "Email send failed", details: result.error }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
     if (body.userId) {
       const normalizedBodyStatus = body.status === 'pending' ? 'under_review' : body.status;
-      const notifTitle = normalizedBodyStatus === 'submitted' ? 'CV Application Received' :
-                         normalizedBodyStatus === 'under_review' ? 'Your CV is Under Review' :
-                         normalizedBodyStatus === 'approved' ? 'Application Approved!' :
-                         'Application Update';
-      const notifMessage = normalizedBodyStatus === 'submitted' ? 'Your CV has been received. Our HR team will review your profile shortly.' :
-                           normalizedBodyStatus === 'under_review' ? 'Your CV is currently being reviewed by our HR team.' :
-                           normalizedBodyStatus === 'approved' ? 'Congratulations! Your application has been approved.' :
-                           'Thank you for applying. We\'ve decided to pursue other candidates at this time.';
-
-      await supabaseClient.from('user_notifications').insert({
-        user_id: body.userId,
-        type: 'cv_application',
-        title: notifTitle,
-        message: notifMessage,
-        is_read: false,
-        metadata: { status: body.status, category: 'cv', action_url: '/my-account' },
-      });
+      const notifTitle = normalizedBodyStatus === 'submitted' ? 'CV Application Received' : normalizedBodyStatus === 'under_review' ? 'Your CV is Under Review' : normalizedBodyStatus === 'approved' ? 'Application Approved!' : 'Application Update';
+      const notifMessage = normalizedBodyStatus === 'submitted' ? 'Your CV has been received. Our HR team will review your profile shortly.' : normalizedBodyStatus === 'under_review' ? 'Your CV is currently being reviewed by our HR team.' : normalizedBodyStatus === 'approved' ? 'Congratulations! Your application has been approved.' : 'Thank you for applying. We\'ve decided to pursue other candidates at this time.';
+      await supabaseClient.from('user_notifications').insert({ user_id: body.userId, type: 'cv_application', title: notifTitle, message: notifMessage, is_read: false, metadata: { status: body.status, category: 'cv', action_url: '/my-account' } });
     }
 
     console.log(`CV status email sent to ${body.email} -> ${body.status}`);
-
-    return new Response(JSON.stringify({ success: true }), {
-      status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
-
+    return new Response(JSON.stringify({ success: true }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
   } catch (error: unknown) {
     console.error("Error in send-cv-status-email:", error);
-    return new Response(JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }), {
-      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    return new Response(JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
   }
 });
