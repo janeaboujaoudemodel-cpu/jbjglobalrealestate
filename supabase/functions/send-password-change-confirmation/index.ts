@@ -17,18 +17,18 @@ interface PasswordChangeRequest {
   timestamp?: string;
 }
 
-const iconSvg = {
+const svgIcons = {
   lock: `<svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="10" width="14" height="10" rx="2" stroke="#111" stroke-width="1.8"/><path d="M8 10V7.5C8 5.57 9.57 4 11.5 4H12.5C14.43 4 16 5.57 16 7.5V10" stroke="#111" stroke-width="1.8" stroke-linecap="round"/></svg>`,
-  ai: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="3.5" stroke="#111" stroke-width="1.8"/><path d="M12 2V5M12 19V22M2 12H5M19 12H22M4.9 4.9L7 7M17 17L19.1 19.1M19.1 4.9L17 7M7 17L4.9 19.1" stroke="#111" stroke-width="1.8" stroke-linecap="round"/></svg>`,
-  market: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 18V6" stroke="#111" stroke-width="1.8" stroke-linecap="round"/><path d="M4 18H20" stroke="#111" stroke-width="1.8" stroke-linecap="round"/><path d="M7.5 15L11 11.5L13.5 14L18 9.5" stroke="#111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-  library: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="5" width="4" height="14" stroke="#111" stroke-width="1.8"/><rect x="10" y="5" width="4" height="14" stroke="#111" stroke-width="1.8"/><rect x="16" y="5" width="4" height="14" stroke="#111" stroke-width="1.8"/></svg>`,
-  properties: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 11.5L12 4L21 11.5" stroke="#111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.5 10V20H17.5V10" stroke="#111" stroke-width="1.8"/><rect x="10" y="14" width="4" height="6" stroke="#111" stroke-width="1.8"/></svg>`,
+  gear: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="3.5" stroke="#111" stroke-width="1.8"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4" stroke="#111" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+  chart: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 20V6M4 20h16" stroke="#111" stroke-width="1.8" stroke-linecap="round"/><path d="M7 16l4-4 3 3 5-5" stroke="#111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  book: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4.5A2.5 2.5 0 016.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15z" stroke="#111" stroke-width="1.8"/><path d="M4 19.5A2.5 2.5 0 016.5 17H20" stroke="#111" stroke-width="1.8"/><path d="M8 7h8M8 11h5" stroke="#111" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+  house: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 11.5L12 4l9 7.5" stroke="#111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 10v10h14V10" stroke="#111" stroke-width="1.8"/><rect x="9" y="14" width="6" height="6" stroke="#111" stroke-width="1.8"/></svg>`,
 };
 
 const recommendationCard = (icon: string, label: string, href: string) => `
 <td width="50%" style="text-align:center;padding:6px;">
   <a href="${href}" style="display:block;padding:14px 8px;background:#fff;border:2px solid #C8A766;border-radius:12px;text-decoration:none;">
-    <div style="height:30px;display:flex;align-items:center;justify-content:center;">${icon}</div>
+    <div style="text-align:center;">${icon}</div>
     <p style="margin:8px 0 0;font-size:12px;color:#111;font-weight:700;">${label}</p>
   </a>
 </td>`;
@@ -44,16 +44,8 @@ const handler = async (req: Request): Promise<Response> => {
 
     const recipientName = name?.trim() || "User";
     const changeTime = timestamp || new Date().toISOString();
-    const formattedDate = new Date(changeTime).toLocaleDateString("en-GB", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    });
-    const formattedTime = new Date(changeTime).toLocaleTimeString("en-GB", {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-    });
+    const formattedDate = new Date(changeTime).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+    const formattedTime = new Date(changeTime).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
 
     const ua = userAgent || "Unknown device";
     let deviceInfo = "Unknown device";
@@ -93,9 +85,9 @@ const handler = async (req: Request): Promise<Response> => {
 </td></tr>
 
 <tr><td style="background:#111;padding:26px 32px;text-align:center;">
-  <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td style="width:86px;height:86px;background:linear-gradient(135deg,#C8A766,#D4B87A);border-radius:50%;text-align:center;vertical-align:middle;">${iconSvg.lock}</td></tr></table>
-  <h1 style="color:#fff;font-size:30px;font-weight:800;margin:18px 0 6px;line-height:1.2;">Password Changed Successfully</h1>
-  <p style="font-size:18px;color:#C8A766;margin:0;font-weight:700;">Your account security has been updated</p>
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td style="width:86px;height:86px;background:linear-gradient(135deg,#C8A766,#D4B87A);border-radius:50%;text-align:center;vertical-align:middle;">${svgIcons.lock}</td></tr></table>
+  <h1 style="color:#fff;font-size:26px;font-weight:800;margin:18px 0 6px;line-height:1.2;">Password Changed Successfully</h1>
+  <p style="font-size:16px;color:#C8A766;margin:0;font-weight:700;">Your account security has been updated</p>
 </td></tr>
 
 <tr><td class="content-pad" style="padding:30px;">
@@ -137,12 +129,12 @@ const handler = async (req: Request): Promise<Response> => {
       <p style="color:#1a1a1a;font-size:16px;font-weight:700;margin:0 0 12px;">Recommended For You</p>
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          ${recommendationCard(iconSvg.ai, "AI Tools", `${SITE_URL}/ai-tools`)}
-          ${recommendationCard(iconSvg.market, "Market Reports", `${SITE_URL}/market-reports`)}
+          ${recommendationCard(svgIcons.gear, "AI Tools", `${SITE_URL}/ai-tools`)}
+          ${recommendationCard(svgIcons.chart, "Market Reports", `${SITE_URL}/market-reports`)}
         </tr>
         <tr>
-          ${recommendationCard(iconSvg.library, "Library & Guides", `${SITE_URL}/guides`)}
-          ${recommendationCard(iconSvg.properties, "Properties", `${SITE_URL}/properties`)}
+          ${recommendationCard(svgIcons.book, "Library & Guides", `${SITE_URL}/guides`)}
+          ${recommendationCard(svgIcons.house, "Properties", `${SITE_URL}/properties`)}
         </tr>
       </table>
     </td></tr>
@@ -167,8 +159,25 @@ const handler = async (req: Request): Promise<Response> => {
 </td></tr>
 
 <tr><td style="background:#000000;padding:28px 36px;text-align:center;border-radius:0 0 20px 20px;">
-  <p style="color:#C8A766;font-size:13px;margin:0 0 6px;font-weight:600;">JBJ Global Real Estate</p>
-  <p style="color:#777;font-size:11px;margin:0 0 10px;">First Global Real Estate Platform of Its Kind</p>
+  <p style="color:#C8A766;font-size:14px;margin:0 0 14px;">Need assistance? We're here to help.</p>
+  <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;">
+  <tr><td align="center">
+  <a href="tel:+971565911000" style="color:#ffffff;text-decoration:none;font-size:13px;">+971 56 591 1000</a>
+  <span style="color:#444;margin:0 12px;">|</span>
+  <a href="mailto:Contact@JBJ.ae" style="color:#ffffff;text-decoration:underline;font-size:13px;">Contact@JBJ.ae</a>
+  </td></tr>
+  </table>
+  <p style="color:#C8A766;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin:0 0 12px;">Follow Us &middot; Stay in the Loop</p>
+  <table cellpadding="0" cellspacing="0" align="center" style="margin-bottom:14px;">
+  <tr>
+  <td style="padding:0 4px;"><a href="https://www.instagram.com/jbj.ae" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#FDFBF7,#F5EBD7);border:1px solid #C8A766;border-radius:6px;color:#1a1a1a;text-decoration:none;font-size:11px;font-weight:600;">Instagram</a></td>
+  <td style="padding:0 4px;"><a href="https://www.facebook.com/share/1G7CgSaV2L/" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#FDFBF7,#F5EBD7);border:1px solid #C8A766;border-radius:6px;color:#1a1a1a;text-decoration:none;font-size:11px;font-weight:600;">Facebook</a></td>
+  <td style="padding:0 4px;"><a href="https://www.linkedin.com/company/jbj-global-real-estate/" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#FDFBF7,#F5EBD7);border:1px solid #C8A766;border-radius:6px;color:#1a1a1a;text-decoration:none;font-size:11px;font-weight:600;">LinkedIn</a></td>
+  <td style="padding:0 4px;"><a href="https://youtube.com/@jbjglobalrealestate" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#FDFBF7,#F5EBD7);border:1px solid #C8A766;border-radius:6px;color:#1a1a1a;text-decoration:none;font-size:11px;font-weight:600;">YouTube</a></td>
+  </tr>
+  </table>
+  <p style="color:#C8A766;font-size:13px;margin:0 0 4px;font-weight:600;">JBJ Global Real Estate</p>
+  <p style="color:#777;font-size:11px;margin:0 0 8px;">First Global Real Estate Platform of Its Kind</p>
   <p style="color:#888;font-size:10px;margin:0 0 8px;white-space:nowrap;">Developed, Created &amp; Implemented by The Founder &amp; CEO, <span style="color:#C8A766;">Jane Bou Jaoude</span></p>
   <p style="color:#C8A766;font-size:11px;margin:0;font-weight:600;">&copy; ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.</p>
 </td></tr>

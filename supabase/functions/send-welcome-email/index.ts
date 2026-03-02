@@ -34,11 +34,25 @@ const RequestSchema = z.object({
   userRole: z.enum(["broker", "investor", "visitor"]).optional(),
 });
 
-/* ── Benefit row — icon character only, NO border box ── */
-function benefitRow(icon: string, iconColor: string, title: string, desc: string): string {
+/* ── SVG Icons — minimal black outline, no fill, no borders ── */
+const svgIcons = {
+  building: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 21V7l9-4 9 4v14" stroke="#111" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 21V13h6v8" stroke="#111" stroke-width="1.8"/><path d="M7 9h2M7 12h2M15 9h2M15 12h2" stroke="#111" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+  heart: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 21C12 21 4 15 4 9.5C4 6.46 6.46 4 9.5 4C11.06 4 12 5 12 5S12.94 4 14.5 4C17.54 4 20 6.46 20 9.5C20 15 12 21 12 21Z" stroke="#111" stroke-width="1.8" stroke-linejoin="round"/></svg>`,
+  headset: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 17V12C4 7.58 7.58 4 12 4s8 3.58 8 8v5" stroke="#111" stroke-width="1.8"/><path d="M2 15v4a2 2 0 002 2h1V13H4a2 2 0 00-2 2zM22 15v4a2 2 0 01-2 2h-1V13h1a2 2 0 012 2z" stroke="#111" stroke-width="1.8"/></svg>`,
+  ticket: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 9V6a2 2 0 012-2h16a2 2 0 012 2v3" stroke="#111" stroke-width="1.8"/><path d="M2 15v3a2 2 0 002 2h16a2 2 0 002-2v-3" stroke="#111" stroke-width="1.8"/><path d="M22 9a3 3 0 00-3 3 3 3 0 003 3M2 9a3 3 0 013 3 3 3 0 01-3 3" stroke="#111" stroke-width="1.8"/><path d="M9 4v2M9 18v2M15 4v2M15 18v2" stroke="#111" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+  gear: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="3.5" stroke="#111" stroke-width="1.8"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4" stroke="#111" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+  book: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4.5A2.5 2.5 0 016.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15z" stroke="#111" stroke-width="1.8"/><path d="M4 19.5A2.5 2.5 0 016.5 17H20" stroke="#111" stroke-width="1.8"/><path d="M8 7h8M8 11h5" stroke="#111" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+  house: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 11.5L12 4l9 7.5" stroke="#111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 10v10h14V10" stroke="#111" stroke-width="1.8"/><rect x="9" y="14" width="6" height="6" stroke="#111" stroke-width="1.8"/></svg>`,
+  phone: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" stroke="#111" stroke-width="1.8"/></svg>`,
+  academy: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3L2 9l10 6 10-6-10-6z" stroke="#111" stroke-width="1.8" stroke-linejoin="round"/><path d="M20 9v6" stroke="#111" stroke-width="1.8" stroke-linecap="round"/><path d="M6 12v5c0 2 3 3 6 3s6-1 6-3v-5" stroke="#111" stroke-width="1.8"/></svg>`,
+  chart: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 20V6M4 20h16" stroke="#111" stroke-width="1.8" stroke-linecap="round"/><path d="M7 16l4-4 3 3 5-5" stroke="#111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+};
+
+/* ── Benefit row — SVG icon only, NO border box ── */
+function benefitRow(iconSvg: string, title: string, desc: string): string {
   return `<tr><td style="padding:8px 0;">
   <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
-  <td style="width:32px;min-width:32px;vertical-align:top;padding-top:2px;font-size:20px;line-height:1;text-align:center;color:${iconColor};">${icon}</td>
+  <td style="width:36px;min-width:36px;vertical-align:top;padding-top:2px;text-align:center;">${iconSvg}</td>
   <td style="padding-left:12px;"><strong style="color:#1a1a1a;font-size:14px;">${title}</strong>
   <p style="color:#666;margin:2px 0 0;font-size:13px;line-height:1.4;">${desc}</p></td>
   </tr></table>
@@ -55,7 +69,7 @@ function inquiryBox(contextLabel: string): string {
 </table>`;
 }
 
-/* ── Recommended For You — with visible icons ── */
+/* ── Recommended For You — SVG icons ── */
 function recommendedActionsHtml(): string {
   return `
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0;border-top:2px solid #C8A76633;padding-top:20px;">
@@ -65,19 +79,19 @@ function recommendedActionsHtml(): string {
 <tr>
 <td width="33%" style="text-align:center;padding:4px;">
 <a href="${SITE_URL}/ai-tools" style="display:block;padding:16px 8px;background:#fff;border:2px solid #C8A766;border-radius:12px;text-decoration:none;">
-<div style="font-size:36px;line-height:1;">&#9881;</div>
+<div style="text-align:center;">${svgIcons.gear}</div>
 <p style="margin:8px 0 0;font-size:12px;color:#1a1a1a;font-weight:700;">AI Tools</p>
 </a>
 </td>
 <td width="33%" style="text-align:center;padding:4px;">
 <a href="${SITE_URL}/guides" style="display:block;padding:16px 8px;background:#fff;border:2px solid #C8A766;border-radius:12px;text-decoration:none;">
-<div style="font-size:36px;line-height:1;">&#128218;</div>
+<div style="text-align:center;">${svgIcons.book}</div>
 <p style="margin:8px 0 0;font-size:12px;color:#1a1a1a;font-weight:700;">Guides</p>
 </a>
 </td>
 <td width="33%" style="text-align:center;padding:4px;">
 <a href="${SITE_URL}/properties" style="display:block;padding:16px 8px;background:#fff;border:2px solid #C8A766;border-radius:12px;text-decoration:none;">
-<div style="font-size:36px;line-height:1;">&#127968;</div>
+<div style="text-align:center;">${svgIcons.house}</div>
 <p style="margin:8px 0 0;font-size:12px;color:#1a1a1a;font-weight:700;">Properties</p>
 </a>
 </td>
@@ -88,9 +102,9 @@ function recommendedActionsHtml(): string {
 }
 
 /* ── Feedback section ── */
-function feedbackHtml(): string {
-  const reviewUrl = `${SITE_URL}/reviews?source=welcome&mode=quick`;
-  const surveyUrl = `${SITE_URL}/ticket-survey?source=welcome&context=general`;
+function feedbackHtml(context: string = "welcome"): string {
+  const reviewUrl = `${SITE_URL}/reviews?source=${context}&mode=quick`;
+  const surveyUrl = `${SITE_URL}/ticket-survey?source=${context}&context=${context}`;
   return `
 <table width="100%" cellpadding="0" cellspacing="0" style="border-top:2px solid #C8A76633;padding-top:20px;margin-top:4px;">
 <tr><td align="center">
@@ -214,7 +228,7 @@ You have successfully created your account with <strong>JBJ Global Real Estate</
 As a Dubai-based real estate brokerage, we specialize in connecting clients with exceptional properties across the UAE.
 </p>
 
-<!-- Benefits — icon only, no border boxes -->
+<!-- Benefits — SVG icon only, no border boxes -->
 <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
 ${benefitsHtml}
 </table>
@@ -232,7 +246,7 @@ ${inquiryBox("account")}
 
 ${recommendedActionsHtml()}
 
-${feedbackHtml()}
+${feedbackHtml("welcome")}
 
 <p style="font-size:14px;color:#333;margin-top:24px;">Best regards,<br><span style="color:#C8A766;font-weight:600;">JBJ Global Real Estate Team</span></p>
 </td></tr>
@@ -325,22 +339,22 @@ serve(async (req) => {
       visitor: { text: "Start Browsing", url: `${SITE_URL}/properties` },
     };
 
-    // Benefits with black minimal icons
+    // Benefits with black SVG icons
     const benefitsByRole: Record<string, string> = {
       broker:
-        benefitRow('&#9881;', '#111111', 'Free AI Tools', 'Unlimited access to property analysis, market reports, and smart recommendations.') +
-        benefitRow('&#128218;', '#111111', 'Free Training Academy', 'Complete courses and videos to boost your real estate career.') +
-        benefitRow('&#9742;', '#111111', 'Dedicated HR Manager & Personal Assistant', 'Jessica and our team provide dedicated support for all your inquiries.') +
-        benefitRow('&#127915;', '#111111', 'Support Tickets & Events', 'Submit tickets for any query and join exclusive company events and webinars.'),
+        benefitRow(svgIcons.gear, 'Free AI Tools', 'Unlimited access to property analysis, market reports, and smart recommendations.') +
+        benefitRow(svgIcons.academy, 'Free Training Academy', 'Complete courses and videos to boost your real estate career.') +
+        benefitRow(svgIcons.headset, 'Dedicated HR Manager & Personal Assistant', 'Jessica and our team provide dedicated support for all your inquiries.') +
+        benefitRow(svgIcons.ticket, 'Support Tickets & Events', 'Submit tickets for any query and join exclusive company events and webinars.'),
       investor:
-        benefitRow('&#127970;', '#111111', 'Premium Properties', 'Browse exclusive listings across Dubai and the UAE.') +
-        benefitRow('&#9881;', '#111111', 'AI Property Analysis', 'Smart insights and ROI calculations for better investment decisions.') +
-        benefitRow('&#127915;', '#111111', 'Support Tickets & Events', 'Submit tickets for any query and join exclusive company events.'),
+        benefitRow(svgIcons.building, 'Premium Properties', 'Browse exclusive listings across Dubai and the UAE.') +
+        benefitRow(svgIcons.chart, 'AI Property Analysis', 'Smart insights and ROI calculations for better investment decisions.') +
+        benefitRow(svgIcons.ticket, 'Support Tickets & Events', 'Submit tickets for any query and join exclusive company events.'),
       visitor:
-        benefitRow('&#127970;', '#111111', 'Browse Premium Properties', 'Explore our curated selection of UAE properties across all emirates.') +
-        benefitRow('&#9825;', '#111111', 'Save Your Favorites', 'Shortlist properties you love and access them anytime from your dashboard.') +
-        benefitRow('&#9742;', '#111111', 'Expert Support 24/7', 'Our dedicated team is ready to assist with any property inquiry.') +
-        benefitRow('&#127915;', '#111111', 'Support Tickets & Events', 'Submit tickets, get help, and stay updated on company events.'),
+        benefitRow(svgIcons.building, 'Browse Premium Properties', 'Explore our curated selection of UAE properties across all emirates.') +
+        benefitRow(svgIcons.heart, 'Save Your Favorites', 'Shortlist properties you love and access them anytime from your dashboard.') +
+        benefitRow(svgIcons.headset, 'Expert Support 24/7', 'Our dedicated team is ready to assist with any property inquiry.') +
+        benefitRow(svgIcons.ticket, 'Support Tickets & Events', 'Submit tickets, get help, and stay updated on company events.'),
     };
 
     const cta = ctaByRole[role] || ctaByRole.visitor;
