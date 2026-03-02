@@ -125,7 +125,7 @@ Your ideas help us improve and innovate. Keep sharing your brilliant suggestions
 <table cellpadding="0" cellspacing="0" align="center">
 <tr>
 <td style="padding:0 6px;"><a href="${SITE_URL}/reviews?source=idea" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:10px 24px;border-radius:8px;font-weight:700;font-size:12px;border:1px solid #C8A76650;">Leave a Review</a></td>
-<td style="padding:0 6px;"><a href="${SITE_URL}/survey?source=idea" style="display:inline-block;background:#FDFBF7;border:2px solid #C8A766;color:#1a1a1a;text-decoration:none;padding:8px 24px;border-radius:8px;font-weight:700;font-size:12px;">Take Survey</a></td>
+<td style="padding:0 6px;"><a href="${SITE_URL}/ticket-survey?source=idea" style="display:inline-block;background:#FDFBF7;border:2px solid #C8A766;color:#1a1a1a;text-decoration:none;padding:8px 24px;border-radius:8px;font-weight:700;font-size:12px;">Take Survey</a></td>
 </tr>
 </table>
 </td></tr>

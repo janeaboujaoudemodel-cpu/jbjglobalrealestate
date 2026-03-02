@@ -37,7 +37,7 @@ const RequestSchema = z.object({
 function sharedHeader(departmentLabel: string): string {
   return `
 <!-- Header — Black with large monogram -->
-<tr><td style="background:#000000;padding:36px 40px 20px;text-align:center;border-radius:20px 20px 0 0;">
+<tr><td style="background:#000000;padding:30px 40px;text-align:center;border-radius:24px 24px 0 0;">
 <img src="${LOGO_URL}" alt="JBJ Global Real Estate" width="180" style="max-width:180px;height:auto;display:block;margin:0 auto 14px;" />
 <p style="color:#C8A766;margin:0;font-size:14px;font-weight:700;letter-spacing:3px;text-transform:uppercase;">JBJ GLOBAL REAL ESTATE</p>
 </td></tr>
@@ -145,7 +145,7 @@ ${sharedFooterHtml()}
 
 function buildWelcomeHtml(displayName: string, email: string, role: string, ctaText: string, ctaUrl: string, benefitsHtml: string): string {
   const reviewUrl = `${SITE_URL}/reviews?source=welcome`;
-  const surveyUrl = `${SITE_URL}/survey?source=welcome`;
+  const surveyUrl = `${SITE_URL}/ticket-survey?source=welcome`;
 
   const arabicGreeting = role === 'broker' ? 'مرحباً بك في دائرة وسطاء JBJ!' : role === 'investor' ? 'مرحباً بك في JBJ — رحلتك الاستثمارية تبدأ!' : 'مرحباً بك في JBJ Global Real Estate!';
 
@@ -153,18 +153,9 @@ function buildWelcomeHtml(displayName: string, email: string, role: string, ctaT
 <!-- Content -->
 <tr><td class="content-pad" style="padding:32px;">
 
-<!-- Profile icon (monogram) + Greeting -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:20px;">
-<tr>
-<td width="52" style="vertical-align:top;padding-right:14px;">
-<img src="${LOGO_URL}" alt="JBJ" width="48" style="width:48px;height:48px;border-radius:50%;object-fit:contain;border:2px solid #C8A766;" />
-</td>
-<td style="vertical-align:middle;">
-<p style="margin:0;font-size:18px;font-weight:700;color:#1a1a1a;">Welcome on Board, ${displayName}!</p>
-<p style="margin:4px 0 0;font-size:13px;color:#888;">Your JBJ account is ready</p>
-</td>
-</tr>
-</table>
+<!-- Greeting -->
+<p style="margin:0 0 4px;font-size:18px;font-weight:700;color:#1a1a1a;">Welcome on Board, ${displayName}!</p>
+<p style="margin:0 0 20px;font-size:13px;color:#888;">Your JBJ account is ready</p>
 
 <p style="color:#555;font-size:15px;line-height:1.6;margin:0 0 20px;">
 You have successfully created your account with <strong>JBJ Global Real Estate</strong>. We're thrilled to have you!

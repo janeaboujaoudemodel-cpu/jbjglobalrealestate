@@ -264,8 +264,8 @@ ${reopenHtml}
 <p style="color:#666;font-size:12px;margin:0 0 14px;">Help us improve our support</p>
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center">
 <tr>
-<td style="padding:0 6px;"><a href="https://jbjglobalrealestate.lovable.app/reviews?source=ticket" style="display:inline-block;background:linear-gradient(135deg,#C8A766,#B8956E);color:#000;text-decoration:none;padding:10px 24px;border-radius:8px;font-weight:700;font-size:12px;">⭐ Leave a Review</a></td>
-<td style="padding:0 6px;"><a href="https://jbjglobalrealestate.lovable.app/survey?source=ticket" style="display:inline-block;background:#1a1a2e;border:2px solid #C8A766;color:#C8A766;text-decoration:none;padding:8px 24px;border-radius:8px;font-weight:700;font-size:12px;">📋 Take Survey</a></td>
+<td style="padding:0 6px;"><a href="https://jbjglobalrealestate.lovable.app/reviews?source=ticket" style="display:inline-block;background:linear-gradient(135deg,#C8A766,#B8956E);color:#000;text-decoration:none;padding:10px 24px;border-radius:8px;font-weight:700;font-size:12px;">Leave a Review</a></td>
+<td style="padding:0 6px;"><a href="https://jbjglobalrealestate.lovable.app/ticket-survey?source=ticket" style="display:inline-block;background:#1a1a2e;border:2px solid #C8A766;color:#C8A766;text-decoration:none;padding:8px 24px;border-radius:8px;font-weight:700;font-size:12px;">Take Survey</a></td>
 </tr>
 </table>
 </td></tr>

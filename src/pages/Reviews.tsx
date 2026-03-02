@@ -1,9 +1,10 @@
 import { motion } from "framer-motion";
-import { Star, Quote, MessageCircle, ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Quote, MessageCircle, ArrowRight, ShieldCheck, Building2, Sparkles } from "lucide-react";
+import { Link, useSearchParams } from "react-router-dom";
 import SEOHead from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
+import { FeatureReviewPrompt } from "@/components/reviews/FeatureReviewPrompt";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -19,66 +20,69 @@ const staggerContainer = {
 };
 
 const Reviews = () => {
+  const [searchParams] = useSearchParams();
+  const source = searchParams.get("source") || "website";
+
   const testimonials = [
     {
-      name: "M.K.",
+      name: "Ahmed Khalifa",
       category: "Buyer",
       area: "Downtown Dubai",
-      text: "The team provided clear guidance throughout the buying process. From shortlisting to handover, every step was explained and documented."
+      text: "The team gave me a clear shortlisting strategy and handled negotiation with full transparency. I always knew what was happening at every step."
     },
     {
-      name: "S.R.",
+      name: "Sarah Morgan",
       category: "Seller",
       area: "Dubai Marina",
-      text: "Professional approach to pricing and marketing. The sale was completed within our expected timeline with qualified buyers."
+      text: "Our listing campaign was precise and data-backed. Qualified viewings started quickly and we closed with clean documentation."
     },
     {
-      name: "A.J.",
+      name: "Anita Joseph",
       category: "Landlord",
       area: "JVC",
-      text: "Property management has been hassle-free. Tenant screening was thorough and all renewals handled smoothly."
+      text: "Tenant screening quality was excellent and communication stayed consistent. The management process is reliable and professional."
     },
     {
-      name: "P.L.",
+      name: "Paolo Leone",
       category: "Investor",
       area: "Business Bay",
-      text: "The market intelligence reports helped me understand area dynamics before making my investment decision."
+      text: "Their market reports and risk framing helped me avoid emotional decisions and focus on long-term portfolio quality."
     },
     {
-      name: "R.H.",
+      name: "Rania Haddad",
       category: "Buyer",
       area: "Palm Jumeirah",
-      text: "Found exactly what we were looking for. The viewing process was efficient and the transfer was coordinated professionally."
+      text: "From first call to transfer day, timelines and documents were controlled properly. Very structured execution."
     },
     {
-      name: "T.M.",
+      name: "Tariq Mansoor",
       category: "Landlord",
       area: "Dubai Hills",
-      text: "Regular updates on property status and rental market conditions. Transparent fee structure and clear communication."
+      text: "I appreciate the operational follow-through. Nothing felt improvised; everything had a process and clear ownership."
     }
   ];
 
   const caseStudies = [
     {
       title: "Downtown Apartment Sale",
-      objective: "Quick sale with maximum market exposure",
+      objective: "Quick sale with high-quality buyer pipeline",
       assetType: "2BR Apartment, Downtown Dubai",
-      approach: "Professional photography, targeted marketing across portals and qualified buyer database, structured viewing schedule.",
-      outcome: "Sold within 6 weeks to qualified buyer. Full documentation and transfer coordinated."
+      approach: "Professional media, segmented portal strategy, and buyer pre-qualification before viewings.",
+      outcome: "Closed in 6 weeks with complete transfer support and minimal negotiation friction."
     },
     {
-      title: "Portfolio Tenant Placement",
-      objective: "Tenant placement for 4-unit portfolio",
-      assetType: "Mixed portfolio across JVC, Business Bay",
-      approach: "Consolidated marketing approach, standardized tenant screening criteria, coordinated viewings.",
-      outcome: "All units tenanted within 8 weeks. Staggered lease dates for easier portfolio management."
+      title: "4-Unit Portfolio Leasing",
+      objective: "Stabilize occupancy and reduce vacancy gaps",
+      assetType: "Portfolio across JVC and Business Bay",
+      approach: "Centralized screening, synchronized marketing, and staggered lease planning.",
+      outcome: "All units occupied within 8 weeks with improved rental consistency."
     },
     {
-      title: "Off-Plan Investment Strategy",
-      objective: "Entry into off-plan market with structured payment plan",
+      title: "Off-Plan Investment Entry",
+      objective: "Secure premium unit under efficient payment structure",
       assetType: "1BR Off-Plan, Emaar Beachfront",
-      approach: "Developer comparison, payment plan analysis, reservation coordination.",
-      outcome: "Secured unit with preferred floor and view. Payment schedule aligned with client's cash flow."
+      approach: "Developer comparison, payment-plan modeling, and reservation timing optimization.",
+      outcome: "Client secured preferred unit configuration with strong long-term upside."
     }
   ];
 
@@ -90,53 +94,39 @@ const Reviews = () => {
         keywords="jbj real estate reviews, dubai real estate testimonials, client stories"
         canonicalPath="/reviews"
       />
-      
-      <main className="min-h-screen bg-black">
-        {/* Hero Section */}
-        <section className="relative pt-32 pb-20 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-gold/5 via-transparent to-transparent" />
-          
-          <div className="container mx-auto px-4 relative z-10">
+
+      <main className="min-h-screen bg-background">
+        <section className="relative pt-28 pb-16 border-b border-border">
+          <div className="container mx-auto px-4">
             <motion.div
               initial="hidden"
               animate="visible"
               variants={staggerContainer}
-              className="max-w-4xl mx-auto text-center"
+              className="max-w-5xl mx-auto text-center"
             >
-              <motion.span
-                variants={fadeInUp}
-                className="inline-block px-4 py-2 bg-gold/10 border border-gold/30 rounded-full text-gold text-sm font-medium mb-6"
-              >
-                Reviews & Case Studies
-              </motion.span>
-              
-              <motion.h1
-                variants={fadeInUp}
-                className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
-              >
+              <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border bg-card mb-5">
+                <ShieldCheck className="h-4 w-4 text-primary" />
+                <span className="text-sm font-medium text-foreground">Verified Reviews & Case Studies</span>
+              </motion.div>
+
+              <motion.h1 variants={fadeInUp} className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-5">
                 Real Outcomes, Real Process
               </motion.h1>
-              
-              <motion.p
-                variants={fadeInUp}
-                className="text-xl text-zinc-400 mb-8 max-w-2xl mx-auto"
-              >
-                A selection of client feedback and transaction stories across buying, selling, renting, and investing.
+
+              <motion.p variants={fadeInUp} className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
+                A transparent view of how we support buying, selling, renting, and investing journeys across Dubai.
               </motion.p>
-              
-              <motion.div
-                variants={fadeInUp}
-                className="flex flex-col sm:flex-row gap-4 justify-center"
-              >
-                <Button asChild size="lg" className="bg-gold hover:bg-gold/90 text-black font-semibold">
+
+              <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button asChild size="lg" className="font-semibold">
                   <a href={getWhatsAppUrl("Hello, I'd like to speak with your team.")} target="_blank" rel="noopener noreferrer">
                     <MessageCircle className="mr-2 h-5 w-5" />
                     Speak to Our Team
                   </a>
                 </Button>
-                <Button asChild size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10">
-                  <Link to="/properties">
-                    View Properties
+                <Button asChild size="lg" variant="outline" className="font-semibold">
+                  <Link to="/contact">
+                    Contact Us
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
@@ -145,39 +135,44 @@ const Reviews = () => {
           </div>
         </section>
 
-        {/* Testimonials Grid */}
-        <section className="py-20 border-t border-zinc-800">
+        <section className="py-14">
+          <div className="container mx-auto px-4 max-w-4xl">
+            <div className="rounded-2xl border border-border bg-card p-6 md:p-8 text-center">
+              <p className="text-sm text-muted-foreground mb-2">Share your own experience</p>
+              <p className="text-foreground font-medium mb-5">Your review helps us keep improving service quality.</p>
+              <FeatureReviewPrompt
+                featureKey={`reviews-page-${source}`}
+                featureLabel="JBJ Client Experience"
+                question="How was your experience with JBJ Global Real Estate?"
+                trigger={
+                  <Button size="lg" className="font-semibold">
+                    <Sparkles className="mr-2 h-5 w-5" />
+                    Leave a Review
+                  </Button>
+                }
+              />
+            </div>
+          </div>
+        </section>
+
+        <section className="py-16 border-t border-border">
           <div className="container mx-auto px-4">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={staggerContainer}
-            >
-              <motion.h2
-                variants={fadeInUp}
-                className="text-3xl md:text-4xl font-bold text-white mb-12 text-center"
-              >
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}>
+              <motion.h2 variants={fadeInUp} className="text-3xl md:text-4xl font-bold text-foreground mb-10 text-center">
                 Testimonials
               </motion.h2>
-              
+
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
                 {testimonials.map((testimonial, index) => (
-                  <motion.div
-                    key={index}
-                    variants={fadeInUp}
-                    className="jj-card-inner p-6"
-                  >
-                    <Quote className="w-8 h-8 text-gold/30 mb-4" />
-                    <p className="text-zinc-300 mb-6 leading-relaxed">
-                      "{testimonial.text}"
-                    </p>
-                    <div className="flex items-center justify-between">
+                  <motion.div key={index} variants={fadeInUp} className="rounded-2xl border border-border bg-card p-6">
+                    <Quote className="w-8 h-8 text-primary mb-4" />
+                    <p className="text-foreground mb-6 leading-relaxed">“{testimonial.text}”</p>
+                    <div className="flex items-center justify-between gap-4">
                       <div>
-                        <p className="text-white font-medium">{testimonial.name}</p>
-                        <p className="text-zinc-500 text-sm">{testimonial.area}</p>
+                        <p className="text-foreground font-semibold">{testimonial.name}</p>
+                        <p className="text-sm text-muted-foreground">{testimonial.area}</p>
                       </div>
-                      <span className="px-3 py-1 bg-gold/10 border border-gold/30 rounded-full text-gold text-xs">
+                      <span className="px-3 py-1 rounded-full border border-border text-sm font-medium text-foreground bg-background">
                         {testimonial.category}
                       </span>
                     </div>
@@ -188,46 +183,32 @@ const Reviews = () => {
           </div>
         </section>
 
-        {/* Case Studies */}
-        <section className="py-20 border-t border-zinc-800">
+        <section className="py-16 border-t border-border">
           <div className="container mx-auto px-4">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={staggerContainer}
-            >
-              <motion.h2
-                variants={fadeInUp}
-                className="text-3xl md:text-4xl font-bold text-white mb-12 text-center"
-              >
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}>
+              <motion.h2 variants={fadeInUp} className="text-3xl md:text-4xl font-bold text-foreground mb-10 text-center">
                 Case Studies
               </motion.h2>
-              
-              <div className="space-y-8 max-w-4xl mx-auto">
+
+              <div className="space-y-6 max-w-4xl mx-auto">
                 {caseStudies.map((study, index) => (
-                  <motion.div
-                    key={index}
-                    variants={fadeInUp}
-                    className="jj-card-inner p-8"
-                  >
-                    <h3 className="text-xl font-semibold text-white mb-6">{study.title}</h3>
-                    
+                  <motion.div key={index} variants={fadeInUp} className="rounded-2xl border border-border bg-card p-8">
+                    <h3 className="text-xl font-semibold text-foreground mb-5 flex items-center gap-2">
+                      <Building2 className="h-5 w-5 text-primary" />
+                      {study.title}
+                    </h3>
                     <div className="grid md:grid-cols-2 gap-6">
                       <div>
-                        <p className="text-zinc-500 text-sm mb-1">Objective</p>
-                        <p className="text-zinc-300 mb-4">{study.objective}</p>
-                        
-                        <p className="text-zinc-500 text-sm mb-1">Asset Type & Location</p>
-                        <p className="text-zinc-300">{study.assetType}</p>
+                        <p className="text-sm text-muted-foreground mb-1">Objective</p>
+                        <p className="text-foreground mb-4">{study.objective}</p>
+                        <p className="text-sm text-muted-foreground mb-1">Asset Type & Location</p>
+                        <p className="text-foreground">{study.assetType}</p>
                       </div>
-                      
                       <div>
-                        <p className="text-zinc-500 text-sm mb-1">Approach</p>
-                        <p className="text-zinc-300 mb-4">{study.approach}</p>
-                        
-                        <p className="text-zinc-500 text-sm mb-1">Outcome</p>
-                        <p className="text-gold">{study.outcome}</p>
+                        <p className="text-sm text-muted-foreground mb-1">Approach</p>
+                        <p className="text-foreground mb-4">{study.approach}</p>
+                        <p className="text-sm text-muted-foreground mb-1">Outcome</p>
+                        <p className="text-foreground font-medium">{study.outcome}</p>
                       </div>
                     </div>
                   </motion.div>
@@ -237,41 +218,23 @@ const Reviews = () => {
           </div>
         </section>
 
-        {/* CTA Block */}
-        <section className="py-20 border-t border-zinc-800">
+        <section className="py-16 border-t border-border">
           <div className="container mx-auto px-4">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={staggerContainer}
-              className="max-w-3xl mx-auto text-center"
-            >
-              <motion.h2
-                variants={fadeInUp}
-                className="text-3xl md:text-4xl font-bold text-white mb-4"
-              >
-                Ready to Start Your Journey?
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="max-w-3xl mx-auto text-center">
+              <motion.h2 variants={fadeInUp} className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+                Ready to Get Started?
               </motion.h2>
-              
-              <motion.p
-                variants={fadeInUp}
-                className="text-lg text-zinc-400 mb-8"
-              >
-                Speak to our team about your buying, selling, renting, or investment goals.
+              <motion.p variants={fadeInUp} className="text-lg text-muted-foreground mb-8">
+                Speak with our team and get a tailored next-step plan for your property goals.
               </motion.p>
-              
-              <motion.div
-                variants={fadeInUp}
-                className="flex flex-col sm:flex-row gap-4 justify-center"
-              >
-                <Button asChild size="lg" className="bg-gold hover:bg-gold/90 text-black font-semibold">
+              <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button asChild size="lg" className="font-semibold">
                   <Link to="/contact">
                     Contact Us
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
-                <Button asChild size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10">
+                <Button asChild size="lg" variant="outline" className="font-semibold">
                   <a href={getWhatsAppUrl("Hello, I'd like to discuss my real estate needs.")} target="_blank" rel="noopener noreferrer">
                     <MessageCircle className="mr-2 h-5 w-5" />
                     WhatsApp Us
@@ -282,10 +245,9 @@ const Reviews = () => {
           </div>
         </section>
 
-        {/* Footer Notice */}
-        <section className="py-8 border-t border-zinc-800">
+        <section className="py-8 border-t border-border">
           <div className="container mx-auto px-4">
-            <p className="text-center text-sm text-zinc-500 max-w-2xl mx-auto">
+            <p className="text-center text-sm text-muted-foreground max-w-2xl mx-auto">
               Client stories reflect individual experiences and do not guarantee outcomes.
             </p>
           </div>
