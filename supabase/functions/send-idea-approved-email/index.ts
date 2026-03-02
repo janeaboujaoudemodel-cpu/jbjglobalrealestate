@@ -56,8 +56,8 @@ const handler = async (req: Request): Promise<Response> => {
 <tr><td align="center" style="padding:24px 16px;">
 <table role="presentation" class="wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:linear-gradient(180deg,#FFFFFF,#FDFBF7,#F5F0E6);border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(200,167,102,0.18);">
 
-<!-- Header -->
-<tr><td style="background:#000000;padding:36px 40px 20px;text-align:center;border-radius:20px 20px 0 0;">
+<!-- Header — Centered -->
+<tr><td style="background:#000000;padding:30px 40px;text-align:center;border-radius:20px 20px 0 0;">
 <img src="${LOGO_URL}" alt="JBJ Global Real Estate" width="180" style="max-width:180px;height:auto;display:block;margin:0 auto 14px;" />
 <p style="color:#C8A766;margin:0;font-size:14px;font-weight:700;letter-spacing:3px;text-transform:uppercase;">JBJ GLOBAL REAL ESTATE</p>
 </td></tr>
@@ -69,17 +69,7 @@ const handler = async (req: Request): Promise<Response> => {
 <!-- Content -->
 <tr><td class="content-pad" style="padding:32px;">
 
-<!-- Profile icon -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:20px;">
-<tr>
-<td width="52" style="vertical-align:top;padding-right:14px;">
-<img src="${LOGO_URL}" alt="JBJ" width="48" style="width:48px;height:48px;border-radius:50%;object-fit:contain;border:2px solid #C8A766;" />
-</td>
-<td style="vertical-align:middle;">
-<p style="margin:0;font-size:18px;font-weight:700;color:#1a1a1a;">Congratulations, ${userName || 'Valued Customer'}!</p>
-</td>
-</tr>
-</table>
+<p style="margin:0 0 8px;font-size:28px;font-weight:800;color:#1a1a1a;">Congratulations, ${userName || 'Valued Customer'}!</p>
 
 <!-- Points Card -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:12px;margin-bottom:24px;">
@@ -109,9 +99,9 @@ Your ideas help us improve and innovate. Keep sharing your brilliant suggestions
 <p style="color:#1a1a1a;font-size:14px;font-weight:700;margin:0 0 12px;">Recommended For You</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr>
-<td width="33%" style="text-align:center;padding:4px;"><a href="${SITE_URL}/ai-tools" style="display:block;padding:14px 8px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:10px;text-decoration:none;"><p style="margin:0 0 4px;font-size:20px;">&#9881;</p><p style="margin:0;font-size:11px;color:#1a1a1a;font-weight:600;">AI Tools</p></a></td>
-<td width="33%" style="text-align:center;padding:4px;"><a href="${SITE_URL}/guides" style="display:block;padding:14px 8px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:10px;text-decoration:none;"><p style="margin:0 0 4px;font-size:20px;">&#128218;</p><p style="margin:0;font-size:11px;color:#1a1a1a;font-weight:600;">Guides</p></a></td>
-<td width="33%" style="text-align:center;padding:4px;"><a href="${SITE_URL}/properties" style="display:block;padding:14px 8px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:10px;text-decoration:none;"><p style="margin:0 0 4px;font-size:20px;">&#127969;</p><p style="margin:0;font-size:11px;color:#1a1a1a;font-weight:600;">Properties</p></a></td>
+<td width="33%" style="text-align:center;padding:4px;"><a href="${SITE_URL}/ai-tools" style="display:block;padding:14px 8px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:10px;text-decoration:none;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td style="width:32px;height:32px;background:#1a1a1a;border-radius:8px;text-align:center;vertical-align:middle;"><span style="color:#fff;font-size:13px;line-height:32px;font-weight:700;font-family:Arial,sans-serif;display:block;">AI</span></td></tr></table><p style="margin:6px 0 0;font-size:11px;color:#1a1a1a;font-weight:600;">AI Tools</p></a></td>
+<td width="33%" style="text-align:center;padding:4px;"><a href="${SITE_URL}/guides" style="display:block;padding:14px 8px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:10px;text-decoration:none;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td style="width:32px;height:32px;background:#1e3a5f;border-radius:8px;text-align:center;vertical-align:middle;"><span style="color:#fff;font-size:13px;line-height:32px;font-weight:700;font-family:Arial,sans-serif;display:block;">G</span></td></tr></table><p style="margin:6px 0 0;font-size:11px;color:#1a1a1a;font-weight:600;">Guides</p></a></td>
+<td width="33%" style="text-align:center;padding:4px;"><a href="${SITE_URL}/properties" style="display:block;padding:14px 8px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:10px;text-decoration:none;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td style="width:32px;height:32px;background:#1a1a1a;border-radius:8px;text-align:center;vertical-align:middle;"><span style="color:#fff;font-size:13px;line-height:32px;font-weight:700;font-family:Arial,sans-serif;display:block;">P</span></td></tr></table><p style="margin:6px 0 0;font-size:11px;color:#1a1a1a;font-weight:600;">Properties</p></a></td>
 </tr>
 </table>
 </td></tr>
@@ -133,12 +123,11 @@ Your ideas help us improve and innovate. Keep sharing your brilliant suggestions
 
 <p style="font-size:14px;color:#333;margin-top:24px;">Best regards,<br><span style="color:#C8A766;font-weight:600;">JBJ Global Real Estate Team</span></p>
 
-<!-- ========== ARABIC VERSION ========== -->
+<!-- ═══ Arabic Content ═══ -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:24px;"><tr><td style="border-top:2px solid #C8A76650;padding-top:16px;"></td></tr></table>
-<p style="text-align:center;margin:0 0 16px;font-size:12px;color:#C8A766;font-weight:700;letter-spacing:2px;">النسخة العربية — ARABIC VERSION</p>
 
 <div style="direction:rtl;text-align:right;">
-<p style="margin:0;font-size:18px;font-weight:700;color:#1a1a1a;">تهانينا، ${userName || 'عميلنا الكريم'}!</p>
+<p style="margin:0;font-size:28px;font-weight:800;color:#1a1a1a;">تهانينا، ${userName || 'عميلنا الكريم'}!</p>
 
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:12px;margin:16px 0 24px;">
 <tr><td style="padding:24px;text-align:center;">

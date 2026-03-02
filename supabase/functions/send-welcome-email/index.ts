@@ -34,11 +34,18 @@ const RequestSchema = z.object({
   userRole: z.enum(["broker", "investor", "visitor"]).optional(),
 });
 
+/* ── Premium Icon Helper ── */
+function premiumIcon(letter: string, bg: string = '#1a1a1a'): string {
+  return `<td style="width:40px;min-width:40px;height:40px;background:${bg};border-radius:10px;text-align:center;vertical-align:middle;padding:0;">
+    <span style="color:#fff;font-size:15px;line-height:40px;font-weight:700;font-family:Arial,sans-serif;display:block;">${letter}</span>
+  </td>`;
+}
+
 function sharedHeader(departmentLabel: string): string {
   return `
-<!-- Header — Black with large monogram, perfectly centered -->
-<tr><td style="background:#000000;padding:32px 40px 24px;text-align:center;border-radius:24px 24px 0 0;">
-<img src="${LOGO_URL}" alt="JBJ Global Real Estate" width="180" style="max-width:180px;height:auto;display:block;margin:0 auto 16px;" />
+<!-- Header — Black with centered monogram + wordmark -->
+<tr><td style="background:#000000;padding:30px 40px;text-align:center;border-radius:24px 24px 0 0;">
+<img src="${LOGO_URL}" alt="JBJ Global Real Estate" width="180" style="max-width:180px;height:auto;display:block;margin:0 auto 14px;" />
 <p style="color:#C8A766;margin:0;font-size:14px;font-weight:700;letter-spacing:3px;text-transform:uppercase;">JBJ GLOBAL REAL ESTATE</p>
 </td></tr>
 <!-- Sub-header band -->
@@ -65,20 +72,26 @@ function recommendedActionsHtml(): string {
 <tr>
 <td width="33%" style="text-align:center;padding:4px;">
 <a href="${SITE_URL}/ai-tools" style="display:block;padding:14px 8px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:10px;text-decoration:none;">
-<p style="margin:0 0 4px;font-size:20px;">&#9881;</p>
-<p style="margin:0;font-size:11px;color:#1a1a1a;font-weight:600;">AI Tools</p>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr>
+<td style="width:32px;height:32px;background:#1a1a1a;border-radius:8px;text-align:center;vertical-align:middle;"><span style="color:#fff;font-size:13px;line-height:32px;font-weight:700;font-family:Arial,sans-serif;display:block;">AI</span></td>
+</tr></table>
+<p style="margin:6px 0 0;font-size:11px;color:#1a1a1a;font-weight:600;">AI Tools</p>
 </a>
 </td>
 <td width="33%" style="text-align:center;padding:4px;">
 <a href="${SITE_URL}/guides" style="display:block;padding:14px 8px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:10px;text-decoration:none;">
-<p style="margin:0 0 4px;font-size:20px;">&#128218;</p>
-<p style="margin:0;font-size:11px;color:#1a1a1a;font-weight:600;">Guides</p>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr>
+<td style="width:32px;height:32px;background:#1e3a5f;border-radius:8px;text-align:center;vertical-align:middle;"><span style="color:#fff;font-size:13px;line-height:32px;font-weight:700;font-family:Arial,sans-serif;display:block;">G</span></td>
+</tr></table>
+<p style="margin:6px 0 0;font-size:11px;color:#1a1a1a;font-weight:600;">Guides</p>
 </a>
 </td>
 <td width="33%" style="text-align:center;padding:4px;">
 <a href="${SITE_URL}/properties" style="display:block;padding:14px 8px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:10px;text-decoration:none;">
-<p style="margin:0 0 4px;font-size:20px;">&#127969;</p>
-<p style="margin:0;font-size:11px;color:#1a1a1a;font-weight:600;">Properties</p>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr>
+<td style="width:32px;height:32px;background:#1a1a1a;border-radius:8px;text-align:center;vertical-align:middle;"><span style="color:#fff;font-size:13px;line-height:32px;font-weight:700;font-family:Arial,sans-serif;display:block;">P</span></td>
+</tr></table>
+<p style="margin:6px 0 0;font-size:11px;color:#1a1a1a;font-weight:600;">Properties</p>
 </a>
 </td>
 </tr>
@@ -94,7 +107,7 @@ function sharedFooterHtml(): string {
 <p style="margin:0;font-size:11px;color:#999;line-height:1.5;">This is an automated message. Please do not reply directly to this email.<br/>For any inquiries, contact us at <a href="mailto:contact@jbj.ae" style="color:#C8A766;text-decoration:underline;font-weight:600;">contact@jbj.ae</a></p>
 </td></tr>
 <!-- Footer -->
-<tr><td style="background:#000000;padding:32px 40px;text-align:center;border-radius:0 0 20px 20px;">
+<tr><td style="background:#000000;padding:30px 40px;text-align:center;border-radius:0 0 20px 20px;">
 <p style="color:#C8A766;font-size:14px;margin:0 0 14px;">Need assistance? We're here to help.</p>
 <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;">
 <tr><td align="center">
@@ -113,7 +126,7 @@ function sharedFooterHtml(): string {
 </tr>
 </table>
 <table cellpadding="0" cellspacing="0" align="center" style="margin-bottom:16px;">
-<tr><td style="padding:0 4px;"><a href="mailto:contact@jbj.ae" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#FDFBF7,#F5EBD7);border:1px solid #C8A766;border-radius:6px;color:#1a1a1a;text-decoration:none;font-size:11px;font-weight:600;">&#9993; contact@jbj.ae</a></td></tr>
+<tr><td style="padding:0 4px;"><a href="mailto:contact@jbj.ae" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#FDFBF7,#F5EBD7);border:1px solid #C8A766;border-radius:6px;color:#1a1a1a;text-decoration:none;font-size:11px;font-weight:600;">contact@jbj.ae</a></td></tr>
 </table>
 <p style="color:#C8A766;font-size:13px;margin:0 0 4px;font-weight:600;">JBJ Global Real Estate</p>
 <p style="color:#777;font-size:11px;margin:0 0 8px;">First Global Real Estate Platform of Its Kind</p>
@@ -147,6 +160,18 @@ ${sharedFooterHtml()}
 </body></html>`;
 }
 
+/* ── Benefit card with premium icon ── */
+function benefitCard(iconLetter: string, iconBg: string, title: string, desc: string): string {
+  return `<tr><td style="padding:14px 18px;background:linear-gradient(135deg,#F5EBD7,#FDFBF7);border-radius:10px;border:1px solid #C8A76640;">
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+  ${premiumIcon(iconLetter, iconBg)}
+  <td style="padding-left:14px;"><strong style="color:#1a1a1a;font-size:14px;">${title}</strong>
+  <p style="color:#666;margin:4px 0 0;font-size:13px;">${desc}</p></td>
+  </tr></table>
+</td></tr>
+<tr><td style="height:8px;"></td></tr>`;
+}
+
 function buildWelcomeHtml(displayName: string, email: string, role: string, ctaText: string, ctaUrl: string, benefitsHtml: string): string {
   const reviewUrl = `${SITE_URL}/reviews?source=welcome`;
   const surveyUrl = `${SITE_URL}/ticket-survey?source=welcome`;
@@ -157,12 +182,12 @@ function buildWelcomeHtml(displayName: string, email: string, role: string, ctaT
 <!-- Content -->
 <tr><td class="content-pad" style="padding:32px;">
 
-<!-- Greeting -->
-<p style="margin:0 0 4px;font-size:18px;font-weight:700;color:#1a1a1a;">Welcome on Board, ${displayName}!</p>
-<p style="margin:0 0 20px;font-size:13px;color:#888;">Your JBJ account is ready</p>
+<!-- Welcome Headline — Large & Premium -->
+<p style="margin:0 0 6px;font-size:28px;font-weight:800;color:#1a1a1a;line-height:1.2;">Thank You for Joining Us, ${displayName}</p>
+<p style="margin:0 0 24px;font-size:14px;color:#888;">Your JBJ account is ready — we're thrilled to have you.</p>
 
 <p style="color:#555;font-size:15px;line-height:1.6;margin:0 0 20px;">
-You have successfully created your account with <strong>JBJ Global Real Estate</strong>. We're thrilled to have you!
+You have successfully created your account with <strong>JBJ Global Real Estate</strong>. As a valued member, you now have access to our full suite of services and tools.
 </p>
 
 <!-- Account Details — Champagne Card -->
@@ -186,7 +211,7 @@ ${benefitsHtml}
 <table width="100%" cellpadding="0" cellspacing="0">
 <tr><td align="center" style="padding:0 0 28px;">
 <a href="${ctaUrl}" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:14px 40px;border-radius:10px;font-weight:700;font-size:14px;letter-spacing:0.5px;border:1px solid #C8A76650;">
-${ctaText} &#8594;
+${ctaText}
 </a>
 </td></tr>
 </table>
@@ -210,18 +235,17 @@ ${recommendedActionsHtml()}
 <p style="font-size:14px;color:#333;margin-top:24px;">Best regards,<br><span style="color:#C8A766;font-weight:600;">JBJ Global Real Estate Team</span></p>
 </td></tr>
 
-<!-- ========== ARABIC VERSION ========== -->
+<!-- ═══ Arabic Content ═══ -->
 <tr><td style="padding:24px 32px 0;text-align:center;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="border-top:2px solid #C8A76650;"></td></tr></table>
-<p style="margin:16px 0 8px;font-size:12px;color:#C8A766;font-weight:700;letter-spacing:2px;text-transform:uppercase;">النسخة العربية — ARABIC VERSION</p>
 </td></tr>
 <tr><td class="content-pad" style="padding:32px;direction:rtl;text-align:right;">
 
-<p style="margin:0;font-size:18px;font-weight:700;color:#1a1a1a;">${arabicGreeting}</p>
-<p style="margin:8px 0 0;font-size:13px;color:#888;">حسابك في JBJ جاهز</p>
+<p style="margin:0;font-size:28px;font-weight:800;color:#1a1a1a;line-height:1.2;">${arabicGreeting}</p>
+<p style="margin:8px 0 0;font-size:14px;color:#888;">حسابك في JBJ جاهز — يسعدنا انضمامك إلينا.</p>
 
 <p style="color:#555;font-size:15px;line-height:1.6;margin:16px 0 20px;">
-لقد قمت بإنشاء حسابك بنجاح مع <strong>JBJ Global Real Estate</strong>. يسعدنا انضمامك إلينا!
+لقد قمت بإنشاء حسابك بنجاح مع <strong>JBJ Global Real Estate</strong>. بصفتك عضواً مميزاً، يمكنك الآن الوصول إلى جميع خدماتنا وأدواتنا.
 </p>
 
 <!-- Arabic Account Details -->
@@ -240,7 +264,7 @@ ${recommendedActionsHtml()}
 <table width="100%" cellpadding="0" cellspacing="0">
 <tr><td align="center" style="padding:0 0 28px;">
 <a href="${ctaUrl}" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:14px 40px;border-radius:10px;font-weight:700;font-size:14px;letter-spacing:0.5px;border:1px solid #C8A76650;">
-&#8592; ابدأ التصفح
+ابدأ التصفح
 </a>
 </td></tr>
 </table>
@@ -300,94 +324,20 @@ serve(async (req) => {
     };
 
     const benefitsByRole: Record<string, string> = {
-      broker: `
-        <tr><td style="padding:14px 18px;background:linear-gradient(135deg,#F5EBD7,#FDFBF7);border-radius:10px;border:1px solid #C8A76640;">
-          <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
-          <td style="vertical-align:top;padding-right:12px;"><span style="font-size:22px;">&#9881;</span></td>
-          <td><strong style="color:#1a1a1a;font-size:14px;">Free AI Tools</strong>
-          <p style="color:#666;margin:4px 0 0;font-size:13px;">Unlimited access to property analysis, market reports, and smart recommendations.</p></td>
-          </tr></table>
-        </td></tr>
-        <tr><td style="height:8px;"></td></tr>
-        <tr><td style="padding:14px 18px;background:linear-gradient(135deg,#F5EBD7,#FDFBF7);border-radius:10px;border:1px solid #C8A76640;">
-          <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
-          <td style="vertical-align:top;padding-right:12px;"><span style="font-size:22px;">&#127891;</span></td>
-          <td><strong style="color:#1a1a1a;font-size:14px;">Free Training Academy</strong>
-          <p style="color:#666;margin:4px 0 0;font-size:13px;">Complete courses and videos to boost your real estate career.</p></td>
-          </tr></table>
-        </td></tr>
-        <tr><td style="height:8px;"></td></tr>
-        <tr><td style="padding:14px 18px;background:linear-gradient(135deg,#F5EBD7,#FDFBF7);border-radius:10px;border:1px solid #C8A76640;">
-          <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
-          <td style="vertical-align:top;padding-right:12px;"><span style="font-size:22px;">&#128100;</span></td>
-          <td><strong style="color:#1a1a1a;font-size:14px;">Dedicated HR Manager &amp; Personal Assistant</strong>
-          <p style="color:#666;margin:4px 0 0;font-size:13px;">Jessica and our team provide dedicated support for all your inquiries.</p></td>
-          </tr></table>
-        </td></tr>
-        <tr><td style="height:8px;"></td></tr>
-        <tr><td style="padding:14px 18px;background:linear-gradient(135deg,#F5EBD7,#FDFBF7);border-radius:10px;border:1px solid #C8A76640;">
-          <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
-          <td style="vertical-align:top;padding-right:12px;"><span style="font-size:22px;">&#127919;</span></td>
-          <td><strong style="color:#1a1a1a;font-size:14px;">Support Tickets &amp; Events</strong>
-          <p style="color:#666;margin:4px 0 0;font-size:13px;">Submit tickets for any query and join exclusive company events and webinars.</p></td>
-          </tr></table>
-        </td></tr>`,
-      investor: `
-        <tr><td style="padding:14px 18px;background:linear-gradient(135deg,#F5EBD7,#FDFBF7);border-radius:10px;border:1px solid #C8A76640;">
-          <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
-          <td style="vertical-align:top;padding-right:12px;"><span style="font-size:22px;">&#127968;</span></td>
-          <td><strong style="color:#1a1a1a;font-size:14px;">Premium Properties</strong>
-          <p style="color:#666;margin:4px 0 0;font-size:13px;">Browse exclusive listings across Dubai and the UAE.</p></td>
-          </tr></table>
-        </td></tr>
-        <tr><td style="height:8px;"></td></tr>
-        <tr><td style="padding:14px 18px;background:linear-gradient(135deg,#F5EBD7,#FDFBF7);border-radius:10px;border:1px solid #C8A76640;">
-          <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
-          <td style="vertical-align:top;padding-right:12px;"><span style="font-size:22px;">&#128202;</span></td>
-          <td><strong style="color:#1a1a1a;font-size:14px;">AI Property Analysis</strong>
-          <p style="color:#666;margin:4px 0 0;font-size:13px;">Smart insights and ROI calculations for better investment decisions.</p></td>
-          </tr></table>
-        </td></tr>
-        <tr><td style="height:8px;"></td></tr>
-        <tr><td style="padding:14px 18px;background:linear-gradient(135deg,#F5EBD7,#FDFBF7);border-radius:10px;border:1px solid #C8A76640;">
-          <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
-          <td style="vertical-align:top;padding-right:12px;"><span style="font-size:22px;">&#127919;</span></td>
-          <td><strong style="color:#1a1a1a;font-size:14px;">Support Tickets &amp; Events</strong>
-          <p style="color:#666;margin:4px 0 0;font-size:13px;">Submit tickets for any query and join exclusive company events.</p></td>
-          </tr></table>
-        </td></tr>`,
-      visitor: `
-        <tr><td style="padding:16px 20px;background:linear-gradient(135deg,#F5EBD7,#FDFBF7);border-radius:10px;border:1px solid #C8A76640;">
-          <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
-          <td style="vertical-align:top;padding-right:12px;"><span style="font-size:22px;">&#127968;</span></td>
-          <td><strong style="color:#1a1a1a;font-size:14px;">Browse Premium Properties</strong>
-          <p style="color:#666;margin:4px 0 0;font-size:13px;">Explore our curated selection of UAE properties across all emirates.</p></td>
-          </tr></table>
-        </td></tr>
-        <tr><td style="height:8px;"></td></tr>
-        <tr><td style="padding:16px 20px;background:linear-gradient(135deg,#F5EBD7,#FDFBF7);border-radius:10px;border:1px solid #C8A76640;">
-          <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
-          <td style="vertical-align:top;padding-right:12px;"><span style="font-size:22px;">&#11088;</span></td>
-          <td><strong style="color:#1a1a1a;font-size:14px;">Save Your Favorites</strong>
-          <p style="color:#666;margin:4px 0 0;font-size:13px;">Shortlist properties you love and access them anytime from your dashboard.</p></td>
-          </tr></table>
-        </td></tr>
-        <tr><td style="height:8px;"></td></tr>
-        <tr><td style="padding:16px 20px;background:linear-gradient(135deg,#F5EBD7,#FDFBF7);border-radius:10px;border:1px solid #C8A76640;">
-          <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
-          <td style="vertical-align:top;padding-right:12px;"><span style="font-size:22px;">&#128222;</span></td>
-          <td><strong style="color:#1a1a1a;font-size:14px;">Expert Support 24/7</strong>
-          <p style="color:#666;margin:4px 0 0;font-size:13px;">Our dedicated team is ready to assist with any property inquiry.</p></td>
-          </tr></table>
-        </td></tr>
-        <tr><td style="height:8px;"></td></tr>
-        <tr><td style="padding:16px 20px;background:linear-gradient(135deg,#F5EBD7,#FDFBF7);border-radius:10px;border:1px solid #C8A76640;">
-          <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
-          <td style="vertical-align:top;padding-right:12px;"><span style="font-size:22px;">&#127919;</span></td>
-          <td><strong style="color:#1a1a1a;font-size:14px;">Support Tickets &amp; Events</strong>
-          <p style="color:#666;margin:4px 0 0;font-size:13px;">Submit tickets, get help, and stay updated on company events.</p></td>
-          </tr></table>
-        </td></tr>`,
+      broker:
+        benefitCard('AI', '#1a1a1a', 'Free AI Tools', 'Unlimited access to property analysis, market reports, and smart recommendations.') +
+        benefitCard('T', '#1e3a5f', 'Free Training Academy', 'Complete courses and videos to boost your real estate career.') +
+        benefitCard('HR', '#1a1a1a', 'Dedicated HR Manager &amp; Personal Assistant', 'Jessica and our team provide dedicated support for all your inquiries.') +
+        benefitCard('E', '#1e3a5f', 'Support Tickets &amp; Events', 'Submit tickets for any query and join exclusive company events and webinars.'),
+      investor:
+        benefitCard('P', '#1a1a1a', 'Premium Properties', 'Browse exclusive listings across Dubai and the UAE.') +
+        benefitCard('AI', '#1e3a5f', 'AI Property Analysis', 'Smart insights and ROI calculations for better investment decisions.') +
+        benefitCard('E', '#1a1a1a', 'Support Tickets &amp; Events', 'Submit tickets for any query and join exclusive company events.'),
+      visitor:
+        benefitCard('P', '#1a1a1a', 'Browse Premium Properties', 'Explore our curated selection of UAE properties across all emirates.') +
+        benefitCard('F', '#1e3a5f', 'Save Your Favorites', 'Shortlist properties you love and access them anytime from your dashboard.') +
+        benefitCard('S', '#1a1a1a', 'Expert Support 24/7', 'Our dedicated team is ready to assist with any property inquiry.') +
+        benefitCard('E', '#1e3a5f', 'Support Tickets &amp; Events', 'Submit tickets, get help, and stay updated on company events.'),
     };
 
     const cta = ctaByRole[role] || ctaByRole.visitor;

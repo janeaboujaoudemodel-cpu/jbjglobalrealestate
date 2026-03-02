@@ -58,14 +58,18 @@ const handler = async (req: Request): Promise<Response> => {
 <tr><td>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(180deg,#FFFFFF,#FDFBF7,#F5F0E6);border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(200,167,102,0.18);">
 
-<!-- Header -->
-<tr><td style="background:#000000;padding:32px 40px 24px;text-align:center;border-radius:20px 20px 0 0;">
-<img src="${LOGO_URL}" alt="JBJ Global Real Estate" width="180" style="max-width:180px;height:auto;display:block;margin:0 auto 16px;" />
+<!-- Header — Centered -->
+<tr><td style="background:#000000;padding:30px 40px;text-align:center;border-radius:20px 20px 0 0;">
+<img src="${LOGO_URL}" alt="JBJ Global Real Estate" width="180" style="max-width:180px;height:auto;display:block;margin:0 auto 14px;" />
 <p style="color:#C8A766;margin:0;font-size:14px;font-weight:700;letter-spacing:3px;text-transform:uppercase;">JBJ GLOBAL REAL ESTATE</p>
 </td></tr>
-<!-- Sub-header with lock icon -->
+<!-- Sub-header with lock icon container -->
 <tr><td style="background:linear-gradient(135deg,#C8A766,#B8956E,#A07D4A);padding:20px 32px;text-align:center;">
-<p style="font-size:28px;margin:0 0 8px;">&#128274;</p>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;">
+<tr><td style="width:44px;height:44px;background:#1a1a1a;border-radius:12px;text-align:center;vertical-align:middle;">
+<span style="color:#fff;font-size:20px;line-height:44px;font-weight:700;font-family:Arial,sans-serif;display:block;">L</span>
+</td></tr>
+</table>
 <p style="font-size:18px;font-weight:bold;color:#fff;margin:0 0 4px;">Password Changed Successfully</p>
 <p style="font-size:14px;color:rgba(255,255,255,0.85);margin:0;">Your account security has been updated</p>
 </td></tr>
@@ -73,18 +77,8 @@ const handler = async (req: Request): Promise<Response> => {
 <!-- Content -->
 <tr><td class="content-pad" style="padding:32px;">
 
-<!-- Profile icon -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:20px;">
-<tr>
-<td width="52" style="vertical-align:top;padding-right:14px;">
-<img src="${LOGO_URL}" alt="JBJ" width="48" style="width:48px;height:48px;border-radius:50%;object-fit:contain;border:2px solid #C8A766;" />
-</td>
-<td style="vertical-align:middle;">
 <p style="margin:0;font-size:16px;font-weight:600;color:#1a1a1a;">Dear ${recipientName},</p>
-<p style="margin:4px 0 0;font-size:13px;color:#888;">Your account security has been updated</p>
-</td>
-</tr>
-</table>
+<p style="margin:4px 0 24px;font-size:13px;color:#888;">Your account security has been updated</p>
 
 <p style="margin:0 0 24px;font-size:14px;line-height:1.7;color:#444;">Your password was successfully changed. If you made this change, no further action is needed.</p>
 
@@ -123,20 +117,20 @@ const handler = async (req: Request): Promise<Response> => {
 <tr>
 <td width="33%" style="text-align:center;padding:4px;">
 <a href="${SITE_URL}/ai-tools" style="display:block;padding:14px 8px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:10px;text-decoration:none;">
-<p style="margin:0 0 4px;font-size:20px;">&#9881;</p>
-<p style="margin:0;font-size:11px;color:#1a1a1a;font-weight:600;">AI Tools</p>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td style="width:32px;height:32px;background:#1a1a1a;border-radius:8px;text-align:center;vertical-align:middle;"><span style="color:#fff;font-size:13px;line-height:32px;font-weight:700;font-family:Arial,sans-serif;display:block;">AI</span></td></tr></table>
+<p style="margin:6px 0 0;font-size:11px;color:#1a1a1a;font-weight:600;">AI Tools</p>
 </a>
 </td>
 <td width="33%" style="text-align:center;padding:4px;">
 <a href="${SITE_URL}/guides" style="display:block;padding:14px 8px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:10px;text-decoration:none;">
-<p style="margin:0 0 4px;font-size:20px;">&#128218;</p>
-<p style="margin:0;font-size:11px;color:#1a1a1a;font-weight:600;">Guides</p>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td style="width:32px;height:32px;background:#1e3a5f;border-radius:8px;text-align:center;vertical-align:middle;"><span style="color:#fff;font-size:13px;line-height:32px;font-weight:700;font-family:Arial,sans-serif;display:block;">G</span></td></tr></table>
+<p style="margin:6px 0 0;font-size:11px;color:#1a1a1a;font-weight:600;">Guides</p>
 </a>
 </td>
 <td width="33%" style="text-align:center;padding:4px;">
 <a href="${SITE_URL}/properties" style="display:block;padding:14px 8px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:10px;text-decoration:none;">
-<p style="margin:0 0 4px;font-size:20px;">&#127969;</p>
-<p style="margin:0;font-size:11px;color:#1a1a1a;font-weight:600;">Properties</p>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td style="width:32px;height:32px;background:#1a1a1a;border-radius:8px;text-align:center;vertical-align:middle;"><span style="color:#fff;font-size:13px;line-height:32px;font-weight:700;font-family:Arial,sans-serif;display:block;">P</span></td></tr></table>
+<p style="margin:6px 0 0;font-size:11px;color:#1a1a1a;font-weight:600;">Properties</p>
 </a>
 </td>
 </tr>
@@ -144,9 +138,8 @@ const handler = async (req: Request): Promise<Response> => {
 </td></tr>
 </table>
 
-<!-- ========== ARABIC VERSION ========== -->
+<!-- ═══ Arabic Content ═══ -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="border-top:2px solid #C8A76650;padding-top:16px;"></td></tr></table>
-<p style="text-align:center;margin:0 0 16px;font-size:12px;color:#C8A766;font-weight:700;letter-spacing:2px;">النسخة العربية — ARABIC VERSION</p>
 
 <div style="direction:rtl;text-align:right;">
 <p style="margin:0;font-size:16px;font-weight:600;color:#1a1a1a;">عزيزي/عزيزتي ${recipientName}،</p>
@@ -187,7 +180,7 @@ const handler = async (req: Request): Promise<Response> => {
 <p style="margin:0;font-size:11px;color:#999;line-height:1.5;">This is a security notification. Please do not reply directly to this email.<br/>For any inquiries, contact us at <a href="mailto:contact@jbj.ae" style="color:#C8A766;text-decoration:underline;font-weight:600;">contact@jbj.ae</a></p>
 </td></tr>
 <!-- Footer -->
-<tr><td style="background:#000000;padding:32px 40px;text-align:center;border-radius:0 0 20px 20px;">
+<tr><td style="background:#000000;padding:30px 40px;text-align:center;border-radius:0 0 20px 20px;">
 <p style="color:#C8A766;font-size:14px;margin:0 0 14px;">Need assistance? We're here to help.</p>
 <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;">
 <tr><td align="center">
@@ -206,7 +199,7 @@ const handler = async (req: Request): Promise<Response> => {
 </tr>
 </table>
 <table cellpadding="0" cellspacing="0" align="center" style="margin-bottom:16px;">
-<tr><td><a href="mailto:contact@jbj.ae" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#FDFBF7,#F5EBD7);border:1px solid #C8A766;border-radius:6px;color:#1a1a1a;text-decoration:none;font-size:11px;font-weight:600;">&#9993; contact@jbj.ae</a></td></tr>
+<tr><td><a href="mailto:contact@jbj.ae" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#FDFBF7,#F5EBD7);border:1px solid #C8A766;border-radius:6px;color:#1a1a1a;text-decoration:none;font-size:11px;font-weight:600;">contact@jbj.ae</a></td></tr>
 </table>
 <p style="color:#C8A766;font-size:13px;margin:0 0 4px;font-weight:600;">JBJ Global Real Estate</p>
 <p style="color:#777;font-size:11px;margin:0 0 8px;">First Global Real Estate Platform of Its Kind</p>
