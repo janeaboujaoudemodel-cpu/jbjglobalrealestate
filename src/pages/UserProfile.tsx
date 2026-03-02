@@ -351,6 +351,31 @@ const UserProfile = () => {
     setShowEmailChangeDialog(open);
   };
 
+  const handleAccountLifecycle = async (action: 'deactivate' | 'delete') => {
+    const confirmed = window.confirm(
+      action === 'delete'
+        ? 'Are you sure you want to permanently delete your account? This cannot be undone.'
+        : 'Are you sure you want to deactivate your account?'
+    );
+
+    if (!confirmed) return;
+
+    try {
+      const { data, error } = await supabase.functions.invoke('account-lifecycle', {
+        body: { action },
+      });
+
+      if (error || data?.error) throw error || new Error(data?.error || 'Action failed');
+
+      toast.success(action === 'delete' ? 'Account deleted successfully' : 'Account deactivated successfully');
+      await signOut();
+      navigate('/auth');
+    } catch (error: any) {
+      console.error('Account lifecycle error:', error);
+      toast.error(error?.message || 'Failed to update account status');
+    }
+  };
+
   const handleSignOut = async () => {
     await signOut();
     navigate('/');
@@ -633,7 +658,39 @@ const UserProfile = () => {
 
                   <Separator />
 
-                  <div className="p-4 bg-destructive/10 rounded-lg border border-destructive/30">
+                  <div className="p-4 bg-destructive/10 rounded-lg border border-destructive/30 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="font-medium text-destructive">Deactivate Account</p>
+                        <p className="text-sm text-destructive/80">Temporarily disable account access</p>
+                      </div>
+                      <Button
+                        variant="outline"
+                        onClick={() => handleAccountLifecycle('deactivate')}
+                        className="border-destructive/40 text-destructive hover:bg-destructive/10"
+                      >
+                        <Lock className="h-4 w-4 mr-2" />
+                        Deactivate
+                      </Button>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="font-medium text-destructive">Delete Account</p>
+                        <p className="text-sm text-destructive/80">Permanently remove your account and data</p>
+                      </div>
+                      <Button
+                        variant="outline"
+                        onClick={() => handleAccountLifecycle('delete')}
+                        className="border-destructive/40 text-destructive hover:bg-destructive/10"
+                      >
+                        <Trash2 className="h-4 w-4 mr-2" />
+                        Delete Account
+                      </Button>
+                    </div>
+
+                    <Separator />
+
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="font-medium text-destructive">Sign Out</p>

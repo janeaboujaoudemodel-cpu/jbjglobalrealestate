@@ -115,7 +115,7 @@ Deno.serve(async (req) => {
                       If you didn't request this code, please ignore this email.
                     </p>
                     <p style="margin: 0; color: #999999; font-size: 12px; line-height: 1.6;">
-                      Need help? Contact us at <a href="mailto:support@jbj.ae" style="color: #C4A962;">support@jbj.ae</a>
+                      Need help? Contact us at <a href="mailto:contact@jbj.ae" style="color: #C4A962;">contact@jbj.ae</a>
                     </p>
                   </td>
                 </tr>

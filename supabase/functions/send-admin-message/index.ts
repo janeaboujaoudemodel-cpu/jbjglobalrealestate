@@ -7,18 +7,18 @@ const SITE_URL = "https://jbj.ae";
 const LOGO_URL = "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/jbj-monogram-dark.png?v=3";
 
 const CHANNEL_REPLY_TO: Record<string, string> = {
-  hr: "HR@JBJ.AE",
-  career: "HR@JBJ.AE",
-  cv: "HR@JBJ.AE",
-  inquiries: "INQUIRIES@JBJ.AE",
-  inquiry: "INQUIRIES@JBJ.AE",
-  partnerships: "PARTNERSHIPS@JBJ.AE",
-  partnership: "PARTNERSHIPS@JBJ.AE",
-  listings: "LISTINGS@JBJ.AE",
-  listing: "LISTINGS@JBJ.AE",
-  support: "SUPPORT@JBJ.AE",
-  ticket: "SUPPORT@JBJ.AE",
-  general: "contact@jbj.com",
+  hr: "contact@jbj.ae",
+  career: "contact@jbj.ae",
+  cv: "contact@jbj.ae",
+  inquiries: "contact@jbj.ae",
+  inquiry: "contact@jbj.ae",
+  partnerships: "contact@jbj.ae",
+  partnership: "contact@jbj.ae",
+  listings: "contact@jbj.ae",
+  listing: "contact@jbj.ae",
+  support: "contact@jbj.ae",
+  ticket: "contact@jbj.ae",
+  general: "contact@jbj.ae",
 };
 
 function getReplyTo(serviceCategory: string): string {

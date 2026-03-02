@@ -3,6 +3,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 
 const RESEND_API_URL = "https://api.resend.com/emails";
 const VERIFIED_SENDER = "contact@jbj.ae";
+const LOGO_URL = "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/jbj-monogram-dark.png?v=3";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -28,9 +29,9 @@ async function sendEmail(payload: { from: string; to: string[]; subject: string;
 type ApplicationType = "partnership" | "career" | "listing";
 
 const CHANNEL_REPLY_TO: Record<string, string> = {
-  partnership: "PARTNERSHIPS@JBJ.AE",
-  career: "HR@JBJ.AE",
-  listing: "LISTINGS@JBJ.AE",
+  partnership: "contact@jbj.ae",
+  career: "contact@jbj.ae",
+  listing: "contact@jbj.ae",
 };
 
 interface StatusEmailRequest {
@@ -77,6 +78,23 @@ function getUserActionUrl(type: ApplicationType): string {
 function buildEmailHtml(req: StatusEmailRequest): string {
   const statusColor = getStatusColor(req.newStatus);
   const typeLabel = getApplicationTypeLabel(req.applicationType);
+  const normalizedStatus = req.newStatus.toLowerCase();
+  const steps = [
+    true,
+    ["screening", "under_review", "shortlisted", "interview_scheduled", "interviewed", "offer_sent", "hired", "approved", "accepted", "published", "active", "rejected", "declined", "removed", "request_edit", "revision_needed", "info_requested"].includes(normalizedStatus),
+    ["offer_sent", "hired", "approved", "accepted", "published", "active", "rejected", "declined", "removed"].includes(normalizedStatus),
+  ];
+
+  const makeStep = (num: string, label: string, active: boolean) => {
+    const bg = active ? "background:linear-gradient(135deg,#C8A766,#B8956E);color:#fff;" : "background:#e5e5e5;color:#999;";
+    const textColor = active ? "color:#C8A766;font-weight:600;" : "color:#999;";
+    return `<td width="33%" style="text-align:center;vertical-align:top;padding:0 8px;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center">
+        <tr><td style="width:44px;height:44px;border-radius:50%;${bg}text-align:center;vertical-align:middle;line-height:44px;font-size:18px;font-weight:bold;">${num}</td></tr>
+      </table>
+      <p style="font-size:11px;${textColor}text-transform:uppercase;letter-spacing:0.5px;margin:8px 0 0;">${label}</p>
+    </td>`;
+  };
 
   return `<!DOCTYPE html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
@@ -86,9 +104,9 @@ function buildEmailHtml(req: StatusEmailRequest): string {
 <table width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(201,168,76,0.15);">
 
 <!-- Header -->
-<tr><td style="background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);padding:32px 40px;text-align:center;">
-<h1 style="color:#C9A84C;margin:0;font-size:24px;font-weight:700;letter-spacing:1px;">JBJ GLOBAL REAL ESTATE</h1>
-<p style="color:#C9A84C99;margin:6px 0 0;font-size:12px;letter-spacing:3px;">BUY · SELL · RENT</p>
+<tr><td style="background:#000000;padding:20px 40px;text-align:center;">
+<img src="${LOGO_URL}" alt="JBJ Global Real Estate" width="120" style="max-width:120px;height:auto;margin:0 auto 10px;display:block;" />
+<p style="color:#C8A766;margin:0;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;">JBJ GLOBAL REAL ESTATE</p>
 </td></tr>
 
 <!-- Status Banner -->
@@ -108,6 +126,15 @@ function buildEmailHtml(req: StatusEmailRequest): string {
 <p style="color:#333;font-size:15px;line-height:1.6;margin:0 0 20px;">
 Your <strong>${typeLabel.toLowerCase()}</strong> — <strong>${req.applicationTitle}</strong> — has been updated.
 </p>
+
+<!-- Progress Tracker -->
+<table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
+<tr>
+${makeStep('1', 'Received', steps[0])}
+${makeStep('2', 'Under Review', steps[1])}
+${makeStep('3', 'Decision', steps[2])}
+</tr>
+</table>
 
 <!-- Application Details -->
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#fdfbf7;border:1px solid #C9A84C33;border-radius:12px;margin:0 0 24px;">
@@ -148,6 +175,13 @@ ${req.actionRequired ? `
 </td></tr>
 </table>
 ` : ""}
+
+<!-- Reply Info -->
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f0fdf4;border:1px solid #22c55e40;border-radius:10px;margin:0 0 24px;">
+<tr><td style="padding:12px 20px;text-align:center;">
+<p style="margin:0;font-size:13px;color:#166534;line-height:1.6;">For inquiries about your application, you can reply directly to <a href="mailto:contact@jbj.ae" style="color:#15803d;font-weight:700;text-decoration:none;">contact@jbj.ae</a>.</p>
+</td></tr>
+</table>
 
 <!-- Review & Survey Section -->
 <table width="100%" cellpadding="0" cellspacing="0" style="margin:24px 0 0;border-top:2px solid #C9A84C33;padding-top:20px;">
@@ -220,7 +254,7 @@ const handler = async (req: Request): Promise<Response> => {
     const subject = `${typeLabel} Update: ${body.statusLabel} — ${body.applicationTitle}`;
 
     // Send email
-    const replyTo = CHANNEL_REPLY_TO[body.applicationType] || "contact@jbj.com";
+    const replyTo = CHANNEL_REPLY_TO[body.applicationType] || "contact@jbj.ae";
 
     const emailResult = await sendEmail({
       from: `JBJ Global Real Estate <${VERIFIED_SENDER}>`,
