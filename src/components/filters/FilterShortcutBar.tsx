@@ -217,7 +217,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
     arr.includes(val) ? arr.filter(v => v !== val) : [...arr, val];
 
   // Pill styling
-  const pillBase = "inline-flex items-center justify-center gap-1.5 px-3.5 md:px-5 py-2 md:py-2.5 rounded-full text-xs md:text-[13px] font-semibold transition-all cursor-pointer whitespace-nowrap select-none overflow-hidden text-ellipsis max-w-[200px] md:flex-1";
+  const pillBase = "inline-flex items-center justify-center gap-1.5 px-3.5 md:px-5 py-2 md:py-2.5 rounded-full text-xs md:text-[13px] font-semibold transition-all cursor-pointer whitespace-nowrap select-none overflow-hidden text-ellipsis max-w-[200px] flex-shrink-0";
   const pillInactive = isDark
     ? "bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20"
     : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 text-black hover:border-gold/60";

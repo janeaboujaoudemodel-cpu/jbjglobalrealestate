@@ -268,22 +268,23 @@ serve(async (req) => {
                         <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 20px;">
                           <tr>
                             <td align="center">
-                              <a href="tel:+971565911000" style="color: #fff; text-decoration: none; font-size: 14px; margin: 0 15px;">📞 +971 56 591 1000</a>
-                              <a href="mailto:Contact@JBJ.ae" style="color: #fff; text-decoration: none; font-size: 14px; margin: 0 15px;">✉️ Contact@JBJ.ae</a>
-                              <a href="mailto:Support@JBJ.ae" style="color: #fff; text-decoration: none; font-size: 14px; margin: 0 15px;">🎫 Support@JBJ.ae</a>
+                              <a href="tel:+971565911000" style="color: #fff; text-decoration: none; font-size: 14px;">📞 +971 56 591 1000</a>
+                              <span style="color: #444; margin: 0 10px;">|</span>
+                              <a href="mailto:Contact@JBJ.ae" style="color: #fff; text-decoration: none; font-size: 14px;">Contact@JBJ.ae</a>
                             </td>
                           </tr>
                         </table>
                         
                         <!-- Social Media Links -->
-                        <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 20px;">
+                        <table cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 20px;">
                           <tr>
-                            <td align="center">
-                              <a href="https://instagram.com/jbj.ae" style="display: inline-block; margin: 0 8px; padding: 8px 16px; background: rgba(200,167,102,0.1); border: 1px solid #C8A766; border-radius: 20px; color: #C8A766; text-decoration: none; font-size: 12px;">Instagram</a>
-                              <a href="https://facebook.com/jbjglobal" style="display: inline-block; margin: 0 8px; padding: 8px 16px; background: rgba(200,167,102,0.1); border: 1px solid #C8A766; border-radius: 20px; color: #C8A766; text-decoration: none; font-size: 12px;">Facebook</a>
-                              <a href="https://linkedin.com/company/jbjglobal" style="display: inline-block; margin: 0 8px; padding: 8px 16px; background: rgba(200,167,102,0.1); border: 1px solid #C8A766; border-radius: 20px; color: #C8A766; text-decoration: none; font-size: 12px;">LinkedIn</a>
-                              <a href="https://wa.me/971565911000" style="display: inline-block; margin: 0 8px; padding: 8px 16px; background: rgba(200,167,102,0.1); border: 1px solid #C8A766; border-radius: 20px; color: #C8A766; text-decoration: none; font-size: 12px;">WhatsApp</a>
-                            </td>
+                            <td style="padding: 0 10px;"><a href="https://www.instagram.com/jbj.ae" style="color: #C8A766; text-decoration: none; font-size: 13px; font-weight: 600;">Instagram</a></td>
+                            <td style="color: #444;">·</td>
+                            <td style="padding: 0 10px;"><a href="https://www.facebook.com/share/1G7CgSaV2L/" style="color: #C8A766; text-decoration: none; font-size: 13px; font-weight: 600;">Facebook</a></td>
+                            <td style="color: #444;">·</td>
+                            <td style="padding: 0 10px;"><a href="https://www.linkedin.com/company/jbj-global-real-estate/" style="color: #C8A766; text-decoration: none; font-size: 13px; font-weight: 600;">LinkedIn</a></td>
+                            <td style="color: #444;">·</td>
+                            <td style="padding: 0 10px;"><a href="https://youtube.com/@jbjglobalrealestate" style="color: #C8A766; text-decoration: none; font-size: 13px; font-weight: 600;">YouTube</a></td>
                           </tr>
                         </table>
                         
@@ -291,15 +292,14 @@ serve(async (req) => {
                         <p style="color: #C8A766; font-size: 14px; margin: 0 0 5px 0; font-weight: 600;">JBJ Global Real Estate</p>
                         <p style="color: #888; font-size: 12px; margin: 0 0 10px 0;">First Global Real Estate Platform of Its Kind</p>
                         <p style="color: #666; font-size: 11px; margin: 0 0 15px 0;">
-                          Developed, Created & Implemented by The Founder & CEO, <span style="color: #C8A766;">Jane Bou Jaoude</span>
+                          Developed, Created &amp; Implemented by The Founder &amp; CEO, <span style="color: #C8A766;">Jane Bou Jaoude</span>
                         </p>
-                        
                         <p style="color: #555; font-size: 11px; margin: 15px 0 0 0;">
                           JBJ Global Real Estate provides brokerage support and partner introductions only.<br>
                           We do not provide legal, mortgage, financial, or advisory services.
                         </p>
                         <p style="color: #444; font-size: 10px; margin: 15px 0 0 0;">
-                          © 2026 JBJ Global Real Estate. All rights reserved.
+                          © ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
                         </p>
                       </td>
                     </tr>

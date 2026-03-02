@@ -30,15 +30,16 @@ const PropertiesHeroVideo = ({ children }: PropertiesHeroVideoProps) => {
           muted
           loop
           playsInline
-          preload="auto"
+          preload="metadata"
           onCanPlay={handleCanPlay}
           className="absolute inset-0 w-full h-full object-cover"
           style={{
             opacity: videoReady ? 1 : 0,
             transition: 'opacity 0.8s ease-in-out',
           }}
-          src={propertiesHeroVideo}
-        />
+        >
+          <source src={propertiesHeroVideo} type="video/mp4" />
+        </video>
         
         {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black" />
