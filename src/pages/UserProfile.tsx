@@ -365,6 +365,18 @@ const UserProfile = () => {
   const [accountDialogType, setAccountDialogType] = useState<'deactivate' | 'delete' | null>(null);
   const [accountActionLoading, setAccountActionLoading] = useState(false);
 
+  const openAccountDialog = (type: 'deactivate' | 'delete') => {
+    setAccountDialogType(type);
+  };
+
+  const switchDeleteToDeactivate = () => {
+    // Close current dialog first to avoid focus-trap/overlay lock, then open deactivation confirmation.
+    setAccountDialogType(null);
+    window.setTimeout(() => {
+      setAccountDialogType('deactivate');
+    }, 60);
+  };
+
   const executeAccountLifecycle = async (action: 'deactivate' | 'delete') => {
     setAccountActionLoading(true);
     try {
@@ -374,8 +386,8 @@ const UserProfile = () => {
 
       if (error || data?.error) throw error || new Error(data?.error || 'Action failed');
 
-      toast.success(action === 'delete' 
-        ? 'Your account has been scheduled for deletion. You have 30 days to recover it by signing in again.' 
+      toast.success(action === 'delete'
+        ? 'Your account has been scheduled for deletion. You have 30 days to recover it by signing in again.'
         : 'Your account has been deactivated. You can recover it anytime by signing in again.');
       setAccountDialogType(null);
       await signOut();
@@ -389,8 +401,13 @@ const UserProfile = () => {
   };
 
   const handleSignOut = async () => {
-    await signOut();
-    navigate('/');
+    try {
+      await signOut();
+      navigate('/');
+    } catch (error) {
+      console.error('Sign out failed:', error);
+      toast.error('Failed to sign out. Please try again.');
+    }
   };
 
   // Handle tab from query params
@@ -678,7 +695,7 @@ const UserProfile = () => {
                       </div>
                       <Button
                         variant="outline"
-                        onClick={() => setAccountDialogType('deactivate')}
+                        onClick={() => openAccountDialog('deactivate')}
                         className="border-destructive/40 text-destructive hover:bg-destructive/10"
                       >
                         <Lock className="h-4 w-4 mr-2" />
@@ -693,7 +710,7 @@ const UserProfile = () => {
                       </div>
                       <Button
                         variant="outline"
-                        onClick={() => setAccountDialogType('delete')}
+                        onClick={() => openAccountDialog('delete')}
                         className="border-destructive/40 text-destructive hover:bg-destructive/10"
                       >
                         <Trash2 className="h-4 w-4 mr-2" />
@@ -968,7 +985,7 @@ const UserProfile = () => {
 
             <button
               type="button"
-              onClick={() => { setAccountDialogType('deactivate'); }}
+              onClick={switchDeleteToDeactivate}
               disabled={accountActionLoading}
               className="inline-flex h-10 w-full sm:flex-1 min-w-0 items-center justify-center gap-2 rounded-md border border-amber-500/50 bg-amber-50 px-3 text-[13px] sm:text-sm font-semibold text-amber-800 transition-colors hover:bg-amber-100 disabled:pointer-events-none disabled:opacity-50 overflow-hidden text-ellipsis whitespace-nowrap"
             >
