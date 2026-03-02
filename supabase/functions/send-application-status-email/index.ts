@@ -103,10 +103,10 @@ function buildEmailHtml(req: StatusEmailRequest): string {
 <tr><td align="center">
 <table width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(201,168,76,0.15);">
 
-<!-- Header -->
-<tr><td style="background:#000000;padding:20px 40px;text-align:center;">
-<img src="${LOGO_URL}" alt="JBJ Global Real Estate" width="120" style="max-width:120px;height:auto;margin:0 auto 10px;display:block;" />
-<p style="color:#C8A766;margin:0;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;">JBJ GLOBAL REAL ESTATE</p>
+<!-- Header — Centered -->
+<tr><td style="background:#000000;padding:30px 40px;text-align:center;">
+<img src="${LOGO_URL}" alt="JBJ Global Real Estate" width="180" style="max-width:180px;height:auto;margin:0 auto 14px;display:block;" />
+<p style="color:#C8A766;margin:0;font-size:14px;font-weight:700;letter-spacing:3px;text-transform:uppercase;">JBJ GLOBAL REAL ESTATE</p>
 </td></tr>
 
 <!-- Status Banner -->
@@ -186,7 +186,7 @@ ${req.actionRequired ? `
 <!-- Review & Survey Section -->
 <table width="100%" cellpadding="0" cellspacing="0" style="margin:24px 0 0;border-top:2px solid #C9A84C33;padding-top:20px;">
 <tr><td align="center">
-<p style="color:#C9A84C;font-size:15px;font-weight:700;margin:0 0 6px;">⭐ We Value Your Feedback</p>
+<p style="color:#C9A84C;font-size:15px;font-weight:700;margin:0 0 6px;">We Value Your Feedback</p>
 <p style="color:#666;font-size:12px;margin:0 0 14px;">Help us improve by sharing your experience</p>
 <table cellpadding="0" cellspacing="0" align="center">
 <tr>
