@@ -3,7 +3,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 
 const RESEND_API_URL = "https://api.resend.com/emails";
 const VERIFIED_SENDER = "noreply@jbj.ae";
-const SITE_URL = "https://jbjglobalrealestate.lovable.app";
+const SITE_URL = "https://jbj.ae";
 
 // Per-channel reply-to addresses
 const CHANNEL_REPLY_TO: Record<string, string> = {
@@ -205,20 +205,23 @@ If you have questions, reply to this email or contact our support team.
 <p style="color:#C8A766;font-size:14px;margin:0 0 15px 0;">Need assistance? We're here to help.</p>
 <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;">
 <tr><td align="center">
-<a href="tel:+971565911000" style="color:#fff;text-decoration:none;font-size:14px;margin:0 15px;">📞 +971 56 591 1000</a>
-<a href="mailto:Contact@JBJ.ae" style="color:#fff;text-decoration:none;font-size:14px;margin:0 15px;">✉️ Contact@JBJ.ae</a>
-<a href="mailto:Support@JBJ.ae" style="color:#fff;text-decoration:none;font-size:14px;margin:0 15px;">🎫 Support@JBJ.ae</a>
+<a href="tel:+971565911000" style="color:#fff;text-decoration:none;font-size:14px;">📞 +971 56 591 1000</a>
+<span style="color:#444;margin:0 10px;">|</span>
+<a href="mailto:Contact@JBJ.ae" style="color:#fff;text-decoration:none;font-size:14px;">Contact@JBJ.ae</a>
 </td></tr>
 </table>
 
 <!-- Social Media Links -->
-<table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;">
-<tr><td align="center">
-<a href="https://instagram.com/jbj.ae" style="display:inline-block;margin:0 8px;padding:8px 16px;background:rgba(200,167,102,0.1);border:1px solid #C8A766;border-radius:20px;color:#C8A766;text-decoration:none;font-size:12px;">Instagram</a>
-<a href="https://facebook.com/jbjglobal" style="display:inline-block;margin:0 8px;padding:8px 16px;background:rgba(200,167,102,0.1);border:1px solid #C8A766;border-radius:20px;color:#C8A766;text-decoration:none;font-size:12px;">Facebook</a>
-<a href="https://linkedin.com/company/jbjglobal" style="display:inline-block;margin:0 8px;padding:8px 16px;background:rgba(200,167,102,0.1);border:1px solid #C8A766;border-radius:20px;color:#C8A766;text-decoration:none;font-size:12px;">LinkedIn</a>
-<a href="https://wa.me/971565911000" style="display:inline-block;margin:0 8px;padding:8px 16px;background:rgba(200,167,102,0.1);border:1px solid #C8A766;border-radius:20px;color:#C8A766;text-decoration:none;font-size:12px;">WhatsApp</a>
-</td></tr>
+<table cellpadding="0" cellspacing="0" align="center" style="margin-bottom:20px;">
+<tr>
+<td style="padding:0 10px;"><a href="https://www.instagram.com/jbj.ae" style="color:#C8A766;text-decoration:none;font-size:13px;font-weight:600;">Instagram</a></td>
+<td style="color:#444;">·</td>
+<td style="padding:0 10px;"><a href="https://www.facebook.com/share/1G7CgSaV2L/" style="color:#C8A766;text-decoration:none;font-size:13px;font-weight:600;">Facebook</a></td>
+<td style="color:#444;">·</td>
+<td style="padding:0 10px;"><a href="https://www.linkedin.com/company/jbj-global-real-estate/" style="color:#C8A766;text-decoration:none;font-size:13px;font-weight:600;">LinkedIn</a></td>
+<td style="color:#444;">·</td>
+<td style="padding:0 10px;"><a href="https://youtube.com/@jbjglobalrealestate" style="color:#C8A766;text-decoration:none;font-size:13px;font-weight:600;">YouTube</a></td>
+</tr>
 </table>
 
 <!-- Brand Attribution -->
