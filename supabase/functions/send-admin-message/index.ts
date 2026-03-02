@@ -257,22 +257,24 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Create user notification if userId provided
     if (body.userId) {
-      await supabaseClient.from("user_notifications").insert({
+      const { error: notifErr } = await supabaseClient.from("user_notifications").insert({
         user_id: body.userId,
         type: body.serviceCategory || "general",
         title: body.subject,
         message: body.message,
         metadata: { reference_id: body.referenceId, service: body.serviceCategory, action_url: "/my-account" },
         is_read: false,
-      }).catch(e => console.error("Notification insert error:", e));
+      });
+      if (notifErr) console.error("Notification insert error:", notifErr);
 
-      await supabaseClient.from("notifications").insert({
+      const { error: legacyErr } = await supabaseClient.from("notifications").insert({
         user_id: body.userId,
         title: body.subject,
         body: body.message,
         notification_type: "message",
         action_url: "/my-account",
-      }).catch(e => console.error("Legacy notification error:", e));
+      });
+      if (legacyErr) console.error("Legacy notification error:", legacyErr);
     }
 
     return new Response(
