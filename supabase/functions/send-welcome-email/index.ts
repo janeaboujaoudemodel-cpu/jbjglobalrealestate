@@ -89,8 +89,8 @@ function recommendedActionsHtml(): string {
 
 /* ── Feedback section ── */
 function feedbackHtml(): string {
-  const reviewUrl = `${SITE_URL}/reviews?source=email`;
-  const surveyUrl = `${SITE_URL}/ticket-survey?source=email`;
+  const reviewUrl = `${SITE_URL}/reviews?source=welcome&mode=quick`;
+  const surveyUrl = `${SITE_URL}/ticket-survey?source=welcome&context=general`;
   return `
 <table width="100%" cellpadding="0" cellspacing="0" style="border-top:2px solid #C8A76633;padding-top:20px;margin-top:4px;">
 <tr><td align="center">
@@ -325,22 +325,22 @@ serve(async (req) => {
       visitor: { text: "Start Browsing", url: `${SITE_URL}/properties` },
     };
 
-    // Benefits with Unicode icons that render in all email clients
+    // Benefits with black minimal icons
     const benefitsByRole: Record<string, string> = {
       broker:
-        benefitRow('&#9881;', '#1a1a1a', 'Free AI Tools', 'Unlimited access to property analysis, market reports, and smart recommendations.') +
-        benefitRow('&#127891;', '#1a1a1a', 'Free Training Academy', 'Complete courses and videos to boost your real estate career.') +
-        benefitRow('&#128101;', '#1a1a1a', 'Dedicated HR Manager & Personal Assistant', 'Jessica and our team provide dedicated support for all your inquiries.') +
-        benefitRow('&#127915;', '#dc2626', 'Support Tickets & Events', 'Submit tickets for any query and join exclusive company events and webinars.'),
+        benefitRow('&#9881;', '#111111', 'Free AI Tools', 'Unlimited access to property analysis, market reports, and smart recommendations.') +
+        benefitRow('&#128218;', '#111111', 'Free Training Academy', 'Complete courses and videos to boost your real estate career.') +
+        benefitRow('&#9742;', '#111111', 'Dedicated HR Manager & Personal Assistant', 'Jessica and our team provide dedicated support for all your inquiries.') +
+        benefitRow('&#127915;', '#111111', 'Support Tickets & Events', 'Submit tickets for any query and join exclusive company events and webinars.'),
       investor:
-        benefitRow('&#127970;', '#1a1a1a', 'Premium Properties', 'Browse exclusive listings across Dubai and the UAE.') +
-        benefitRow('&#9881;', '#1a1a1a', 'AI Property Analysis', 'Smart insights and ROI calculations for better investment decisions.') +
-        benefitRow('&#127915;', '#dc2626', 'Support Tickets & Events', 'Submit tickets for any query and join exclusive company events.'),
+        benefitRow('&#127970;', '#111111', 'Premium Properties', 'Browse exclusive listings across Dubai and the UAE.') +
+        benefitRow('&#9881;', '#111111', 'AI Property Analysis', 'Smart insights and ROI calculations for better investment decisions.') +
+        benefitRow('&#127915;', '#111111', 'Support Tickets & Events', 'Submit tickets for any query and join exclusive company events.'),
       visitor:
-        benefitRow('&#127970;', '#1a1a1a', 'Browse Premium Properties', 'Explore our curated selection of UAE properties across all emirates.') +
-        benefitRow('&#10084;', '#1a1a1a', 'Save Your Favorites', 'Shortlist properties you love and access them anytime from your dashboard.') +
-        benefitRow('&#128222;', '#16a34a', 'Expert Support 24/7', 'Our dedicated team is ready to assist with any property inquiry.') +
-        benefitRow('&#127915;', '#dc2626', 'Support Tickets & Events', 'Submit tickets, get help, and stay updated on company events.'),
+        benefitRow('&#127970;', '#111111', 'Browse Premium Properties', 'Explore our curated selection of UAE properties across all emirates.') +
+        benefitRow('&#9825;', '#111111', 'Save Your Favorites', 'Shortlist properties you love and access them anytime from your dashboard.') +
+        benefitRow('&#9742;', '#111111', 'Expert Support 24/7', 'Our dedicated team is ready to assist with any property inquiry.') +
+        benefitRow('&#127915;', '#111111', 'Support Tickets & Events', 'Submit tickets, get help, and stay updated on company events.'),
     };
 
     const cta = ctaByRole[role] || ctaByRole.visitor;
