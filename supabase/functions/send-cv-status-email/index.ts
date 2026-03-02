@@ -130,15 +130,24 @@ Developed, Created &amp; Implemented by The Founder &amp; CEO, <span style="colo
 </td></tr>`;
 }
 
+function arabicDivider(): string {
+  return `<tr><td style="padding:24px 32px 0;text-align:center;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="border-top:2px solid #C8A76650;"></td></tr></table>
+<p style="margin:16px 0 8px;font-size:12px;color:#C8A766;font-weight:700;letter-spacing:2px;text-transform:uppercase;">النسخة العربية — ARABIC VERSION</p>
+</td></tr>`;
+}
+
 function buildEmailHtml(req: CVEmailRequest): { html: string; subject: string } {
   const name = escapeHtml(req.fullName);
   const position = escapeHtml(req.position) || 'General Application';
   const adminNote = escapeHtml(req.adminNote);
 
-  const statusConfig: Record<string, { title: string; subtitle: string; steps: [boolean, boolean, boolean]; stepChecks: [boolean, boolean, boolean]; extraHtml: string }> = {
+  const statusConfig: Record<string, { title: string; titleAr: string; subtitle: string; subtitleAr: string; steps: [boolean, boolean, boolean]; stepChecks: [boolean, boolean, boolean]; extraHtml: string; extraHtmlAr: string }> = {
     submitted: {
       title: "CV Application Received",
+      titleAr: "تم استلام طلب التوظيف",
       subtitle: "Thank you for your interest in joining JBJ Global Real Estate. We've received your application and our HR team will begin reviewing your profile shortly.",
+      subtitleAr: "شكراً لاهتمامك بالانضمام إلى JBJ Global Real Estate. لقد استلمنا طلبك وسيبدأ فريق الموارد البشرية بمراجعة ملفك قريباً.",
       steps: [true, false, false],
       stepChecks: [true, false, false],
       extraHtml: `
@@ -152,17 +161,33 @@ function buildEmailHtml(req: CVEmailRequest): { html: string; subject: string } 
 <tr><td style="padding:4px 0;font-size:13px;color:#555;">&#8226; Qualified candidates will be contacted for an interview</td></tr>
 </table>
 </td></tr></table>`,
+      extraHtmlAr: `
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border-radius:10px;margin-bottom:24px;border:1px solid #C8A766;">
+<tr><td style="padding:24px;direction:rtl;text-align:right;">
+<p style="font-weight:bold;color:#1a1a1a;margin:0 0 12px;font-size:15px;">ماذا يحدث بعد ذلك؟</p>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="direction:rtl;">
+<tr><td style="padding:4px 0;font-size:13px;color:#555;text-align:right;">&#8226; سيقوم فريق الموارد البشرية بمراجعة سيرتك الذاتية خلال <strong>٣-٥ أيام عمل</strong></td></tr>
+<tr><td style="padding:4px 0;font-size:13px;color:#555;text-align:right;">&#8226; ستتلقى تحديثات عبر البريد الإلكتروني مع تقدم طلبك</td></tr>
+<tr><td style="padding:4px 0;font-size:13px;color:#555;text-align:right;">&#8226; ستتلقى أيضاً إشعارات في حسابك (الإشعارات، المهام، أو صندوق الوارد)</td></tr>
+<tr><td style="padding:4px 0;font-size:13px;color:#555;text-align:right;">&#8226; سيتم التواصل مع المرشحين المؤهلين لإجراء مقابلة</td></tr>
+</table>
+</td></tr></table>`,
     },
     under_review: {
       title: "Your CV Is Under Review",
+      titleAr: "سيرتك الذاتية قيد المراجعة",
       subtitle: "Great news! Our HR team is now actively reviewing your application. We'll be in touch soon with an update.",
+      subtitleAr: "أخبار رائعة! يقوم فريق الموارد البشرية الآن بمراجعة طلبك بشكل فعّال. سنتواصل معك قريباً بتحديث.",
       steps: [true, true, false],
       stepChecks: [true, true, false],
       extraHtml: adminNote ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:12px;margin-bottom:24px;"><tr><td style="padding:20px;"><p style="font-weight:bold;color:#1a1a1a;margin:0 0 8px;">HR Team Note:</p><p style="color:#555;margin:0;">${adminNote}</p></td></tr></table>` : '',
+      extraHtmlAr: adminNote ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:12px;margin-bottom:24px;"><tr><td style="padding:20px;direction:rtl;text-align:right;"><p style="font-weight:bold;color:#1a1a1a;margin:0 0 8px;">ملاحظة فريق الموارد البشرية:</p><p style="color:#555;margin:0;">${adminNote}</p></td></tr></table>` : '',
     },
     approved: {
       title: "Congratulations! Your Application Has Been Approved",
+      titleAr: "تهانينا! تمت الموافقة على طلبك",
       subtitle: "We're excited to inform you that your application has been approved. Please find below the details regarding the next steps.",
+      subtitleAr: "يسعدنا إبلاغك بأنه تمت الموافقة على طلبك. يرجى الاطلاع أدناه على تفاصيل الخطوات التالية.",
       steps: [true, true, true],
       stepChecks: [true, true, true],
       extraHtml: `
@@ -176,10 +201,18 @@ function buildEmailHtml(req: CVEmailRequest): { html: string; subject: string } 
 </td></tr>
 </table>
 </td></tr></table>`,
+      extraHtmlAr: `
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:2px solid #22c55e;border-radius:12px;margin-bottom:24px;">
+<tr><td style="padding:24px;direction:rtl;text-align:right;">
+<p style="color:#166534;font-size:16px;font-weight:bold;margin:0 0 12px;text-align:center;">مرحباً بك معنا!</p>
+<p style="color:#15803d;font-size:13px;margin:0 0 16px;text-align:center;">سيتواصل معك فريق الموارد البشرية خلال ٤٨ ساعة لمناقشة جدولة المقابلة والخطوات التالية.</p>
+</td></tr></table>`,
     },
     rejected: {
       title: "Application Update",
+      titleAr: "تحديث الطلب",
       subtitle: "Thank you for your interest in JBJ Global Real Estate. After careful review, we've decided to pursue other candidates at this time. We appreciate your effort and encourage you to apply for future openings.",
+      subtitleAr: "شكراً لاهتمامك بـ JBJ Global Real Estate. بعد مراجعة دقيقة، قررنا متابعة مرشحين آخرين في الوقت الحالي. نقدّر جهودك ونشجعك على التقدم للوظائف المستقبلية.",
       steps: [true, true, true],
       stepChecks: [true, true, false],
       extraHtml: `
@@ -188,6 +221,13 @@ function buildEmailHtml(req: CVEmailRequest): { html: string; subject: string } 
 <p style="color:#1a1a1a;font-size:15px;font-weight:bold;margin:0 0 8px;">Don't Give Up!</p>
 <p style="color:#555;font-size:13px;margin:0 0 16px;">New positions open regularly. Stay connected for future opportunities.</p>
 <a href="${SITE_URL}/join" style="display:inline-block;padding:12px 32px;background:linear-gradient(135deg,#C8A766,#B8956E);color:#fff;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;">View Open Positions</a>
+</td></tr></table>`,
+      extraHtmlAr: `
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border-radius:10px;margin-bottom:24px;border:1px solid #C8A766;">
+<tr><td style="padding:24px;text-align:center;direction:rtl;">
+<p style="color:#1a1a1a;font-size:15px;font-weight:bold;margin:0 0 8px;">لا تستسلم!</p>
+<p style="color:#555;font-size:13px;margin:0 0 16px;">تُفتح وظائف جديدة بانتظام. ابقَ على تواصل للفرص المستقبلية.</p>
+<a href="${SITE_URL}/join" style="display:inline-block;padding:12px 32px;background:linear-gradient(135deg,#C8A766,#B8956E);color:#fff;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;">عرض الوظائف المتاحة</a>
 </td></tr></table>`,
     },
   };
@@ -202,6 +242,8 @@ function buildEmailHtml(req: CVEmailRequest): { html: string; subject: string } 
     approved: `Congratulations! Application Approved | JBJ Global Real Estate`,
     rejected: `Application Update | JBJ Global Real Estate`,
   };
+
+  const arabicStepLabels = ['مُستلم', 'قيد المراجعة', 'القرار'];
 
   const html = `<!DOCTYPE html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -232,7 +274,7 @@ function buildEmailHtml(req: CVEmailRequest): { html: string; subject: string } 
 </tr></table>
 </td></tr>
 
-<!-- Content -->
+<!-- ENGLISH CONTENT -->
 <tr><td class="content-pad" style="padding:32px;">
 
 <!-- Title Card -->
@@ -322,6 +364,61 @@ ${config.extraHtml}
 </table>
 
 <p style="font-size:14px;color:#333;margin-top:24px;">Best regards,<br><span style="color:#C8A766;font-weight:600;">JBJ Global Real Estate HR Team</span></p>
+</td></tr>
+
+<!-- ========== ARABIC VERSION ========== -->
+${arabicDivider()}
+<tr><td class="content-pad" style="padding:32px;direction:rtl;text-align:right;">
+
+<!-- Title Card Arabic -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:12px;margin-bottom:24px;">
+<tr><td style="padding:24px 20px;text-align:center;">
+<p style="margin:0 0 4px;font-size:15px;font-weight:700;color:#1a1a1a;">${config.titleAr}</p>
+<p style="margin:0;font-size:13px;color:#C8A766;font-weight:600;">الوظيفة: ${position}</p>
+</td></tr></table>
+
+<p style="margin:0;font-size:15px;color:#333;">عزيزي/عزيزتي <strong>${name}</strong>،</p>
+<p style="font-size:14px;color:#555;margin:12px 0 24px;">${config.subtitleAr}</p>
+
+<!-- Arabic Progress Tracker -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;direction:ltr;">
+<tr>
+${makeStep('1', arabicStepLabels[0], config.steps[0], config.stepChecks[0])}
+${makeStep('2', arabicStepLabels[1], config.steps[1], config.stepChecks[1])}
+${makeStep('3', arabicStepLabels[2], config.steps[2], config.stepChecks[2])}
+</tr></table>
+
+<!-- Arabic Status Badge -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;">
+<tr><td style="text-align:center;">
+<span style="display:inline-block;padding:8px 24px;border-radius:20px;font-size:13px;font-weight:600;${
+  normalizedStatus === 'approved' ? 'background:#dcfce7;color:#166534;border:1px solid #22c55e;' :
+  normalizedStatus === 'rejected' ? 'background:#fef2f2;color:#991b1b;border:1px solid #ef4444;' :
+  normalizedStatus === 'under_review' ? 'background:#fef3c7;color:#92400e;border:1px solid #f59e0b;' :
+  'background:#dbeafe;color:#1e40af;border:1px solid #3b82f6;'
+}">${
+  normalizedStatus === 'approved' ? 'تمت الموافقة' :
+  normalizedStatus === 'rejected' ? 'لم يتم الاختيار' :
+  normalizedStatus === 'under_review' ? 'قيد المراجعة' :
+  'تم استلام الطلب'
+}</span>
+</td></tr></table>
+
+${config.extraHtmlAr}
+
+<!-- Arabic CTA -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;">
+<tr><td style="text-align:center;">
+<a href="${SITE_URL}/my-account" style="display:inline-block;padding:14px 32px;background:#000;color:#C8A766;border-radius:10px;text-decoration:none;font-weight:600;font-size:14px;border:1px solid #C8A76650;">عرض حالة طلبي</a>
+</td></tr></table>
+
+<!-- Arabic Reply Info -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f0fdf4;border:1px solid #22c55e40;border-radius:10px;margin-bottom:24px;">
+<tr><td style="padding:14px 20px;text-align:center;">
+<p style="margin:0;font-size:13px;color:#166534;line-height:1.6;">للاستفسار حول طلبك، يمكنك التواصل مع <a href="mailto:contact@jbj.ae" style="color:#15803d;font-weight:700;text-decoration:none;">contact@jbj.ae</a></p>
+</td></tr></table>
+
+<p style="font-size:14px;color:#333;margin-top:24px;text-align:right;">مع أطيب التحيات،<br><span style="color:#C8A766;font-weight:600;">فريق الموارد البشرية - JBJ Global Real Estate</span></p>
 </td></tr>
 
 ${sharedFooterHtml()}

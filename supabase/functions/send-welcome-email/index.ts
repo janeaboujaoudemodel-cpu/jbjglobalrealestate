@@ -147,6 +147,8 @@ function buildWelcomeHtml(displayName: string, email: string, role: string, ctaT
   const reviewUrl = `${SITE_URL}/reviews?source=welcome`;
   const surveyUrl = `${SITE_URL}/survey?source=welcome`;
 
+  const arabicGreeting = role === 'broker' ? 'مرحباً بك في دائرة وسطاء JBJ!' : role === 'investor' ? 'مرحباً بك في JBJ — رحلتك الاستثمارية تبدأ!' : 'مرحباً بك في JBJ Global Real Estate!';
+
   const bodyContent = `
 <!-- Content -->
 <tr><td class="content-pad" style="padding:32px;">
@@ -211,6 +213,44 @@ ${recommendedActionsHtml()}
 </table>
 
 <p style="font-size:14px;color:#333;margin-top:24px;">Best regards,<br><span style="color:#C8A766;font-weight:600;">JBJ Global Real Estate Team</span></p>
+</td></tr>
+
+<!-- ========== ARABIC VERSION ========== -->
+<tr><td style="padding:24px 32px 0;text-align:center;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="border-top:2px solid #C8A76650;"></td></tr></table>
+<p style="margin:16px 0 8px;font-size:12px;color:#C8A766;font-weight:700;letter-spacing:2px;text-transform:uppercase;">النسخة العربية — ARABIC VERSION</p>
+</td></tr>
+<tr><td class="content-pad" style="padding:32px;direction:rtl;text-align:right;">
+
+<p style="margin:0;font-size:18px;font-weight:700;color:#1a1a1a;">${arabicGreeting}</p>
+<p style="margin:8px 0 0;font-size:13px;color:#888;">حسابك في JBJ جاهز</p>
+
+<p style="color:#555;font-size:15px;line-height:1.6;margin:16px 0 20px;">
+لقد قمت بإنشاء حسابك بنجاح مع <strong>JBJ Global Real Estate</strong>. يسعدنا انضمامك إلينا!
+</p>
+
+<!-- Arabic Account Details -->
+<table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
+<tr><td style="padding:18px 22px;background:linear-gradient(135deg,#F5EBD7 0%,#FDFBF7 100%);border-radius:12px;border:1px solid #C8A766;">
+<p style="color:#1a1a1a;font-size:14px;font-weight:700;margin:0 0 10px;">تفاصيل حسابك</p>
+<p style="color:#555;font-size:13px;margin:0;"><strong>البريد الإلكتروني المسجل:</strong> ${email}</p>
+</td></tr>
+</table>
+
+<p style="color:#555;font-size:15px;line-height:1.6;margin:0 0 24px;">
+بصفتنا شركة وساطة عقارية مقرها دبي، نحن متخصصون في ربط العملاء بأفضل العقارات في جميع أنحاء الإمارات.
+</p>
+
+<!-- Arabic CTA -->
+<table width="100%" cellpadding="0" cellspacing="0">
+<tr><td align="center" style="padding:0 0 28px;">
+<a href="${ctaUrl}" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:14px 40px;border-radius:10px;font-weight:700;font-size:14px;letter-spacing:0.5px;border:1px solid #C8A76650;">
+&#8592; ابدأ التصفح
+</a>
+</td></tr>
+</table>
+
+<p style="font-size:14px;color:#333;margin-top:24px;text-align:right;">مع أطيب التحيات،<br><span style="color:#C8A766;font-weight:600;">فريق JBJ Global Real Estate</span></p>
 </td></tr>`;
 
   return emailShell("Welcome to JBJ Global Real Estate", bodyContent);
