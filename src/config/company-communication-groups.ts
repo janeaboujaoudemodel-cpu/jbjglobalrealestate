@@ -193,7 +193,7 @@ export const LEADERSHIP_GROUPS: CommunicationGroup[] = [
       FOUNDER_ASSISTANT_ID,
       'natasha-daoud',
       'anthony-crawford',
-      'roy-davi',
+      'alexander-nasser',
       'michael-anderson',
       'victoria-sterling',
       'jessica-whitmore',
@@ -229,7 +229,7 @@ export const LEADERSHIP_GROUPS: CommunicationGroup[] = [
       FOUNDER_ASSISTANT_ID,
       'david-thornton',
       'richard-pemberton',
-      'roy-davi',
+      'alexander-nasser',
       'victoria-sterling',
       'jessica-whitmore',
       'catherine-brooks',
@@ -265,7 +265,7 @@ interface DepartmentConfig {
 }
 
 const DEPARTMENT_CONFIGS: DepartmentConfig[] = [
-  { id: 'sales', name: 'Sales', members: salesTeam, leaderId: 'roy-davi', leaderName: 'Roy Davi', reportsTo: FOUNDER_ID },
+  { id: 'sales', name: 'Sales', members: salesTeam, leaderId: 'alexander-nasser', leaderName: 'Alexander Nasser', reportsTo: FOUNDER_ID },
   { id: 'after-sales', name: 'After Sales', members: afterSalesTeam, leaderId: 'charles-ashford', leaderName: 'Charles Ashford', reportsTo: 'richard-pemberton' },
   { id: 'marketing-content', name: 'Marketing & Content', members: [...marketingTeam, ...contentTeam], leaderId: 'victoria-sterling', leaderName: 'Victoria Sterling', reportsTo: 'david-thornton' },
   { id: 'client-relations', name: 'Client Relations', members: [...clientRelationsTeam, ...vipClientRelationsTeam], leaderId: 'george-hamilton', leaderName: 'George Hamilton', reportsTo: 'michael-anderson' },

@@ -22,7 +22,7 @@ import {
 
 // Mock top performers data
 const topPerformers = {
-  'Sales': { memberId: 'roy-davi', metric: '47 Deals Closed', badge: 'gold' as const },
+  'Sales': { memberId: 'alexander-nasser', metric: '47 Deals Closed', badge: 'gold' as const },
   'Human Resources': { memberId: 'jessica-whitmore', metric: '23 Hires', badge: 'gold' as const },
   'Marketing & Content': { memberId: 'victoria-sterling', metric: '156% Campaign ROI', badge: 'gold' as const },
   'Customer Happiness': { memberId: 'lisa-henderson', metric: '98% Satisfaction', badge: 'gold' as const },

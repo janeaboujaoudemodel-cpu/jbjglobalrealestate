@@ -716,7 +716,7 @@ REPORT COLLECTION HIERARCHY:
 - Alexander Shaw (Operations) → Operational status by 17:30
 - Daniel Parker (IT) → System health, security by 17:00
 
-ROY DAVI NOTE: He is a real human Sales Director. In the system, brokers report to him, but actual reports come to you for CEO compilation.
+ALEXANDER NASSER NOTE: He is an AI persona VP Sales. In the system, brokers report to him, but actual reports come to you for CEO compilation.
 
 TRANSLATION NOTICE:
 When speaking in languages other than English/Spanish, say:

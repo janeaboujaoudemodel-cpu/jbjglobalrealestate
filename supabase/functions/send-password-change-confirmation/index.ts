@@ -48,23 +48,26 @@ const handler = async (req: Request): Promise<Response> => {
 
     const emailHtml = `<!DOCTYPE html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<style>body{margin:0;padding:0;background-color:#F5F0E6;font-family:'Segoe UI',Arial,sans-serif;}
+<style>body{margin:0;padding:0;background-color:#ffffff;font-family:'Segoe UI',Arial,sans-serif;}
 @media only screen and (max-width:620px){.wrapper{width:100%!important;padding:0 8px!important;}.content-pad{padding:24px 16px!important;}}</style>
 </head>
-<body style="margin:0;padding:0;background-color:#F5F0E6;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#F5F0E6;">
+<body style="margin:0;padding:0;background-color:#ffffff;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#ffffff;">
 <tr><td align="center" style="padding:24px 16px;">
-<table role="presentation" class="wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:linear-gradient(180deg,#FFFFFF,#FDFBF7,#F5F0E6);border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(200,167,102,0.18);">
+<table role="presentation" class="wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:#F5F0E6;border-radius:24px;overflow:hidden;">
+<tr><td>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(180deg,#FFFFFF,#FDFBF7,#F5F0E6);border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(200,167,102,0.18);">
 
 <!-- Header -->
-<tr><td style="background:#000000;padding:36px 40px 20px;text-align:center;border-radius:20px 20px 0 0;">
-<img src="${LOGO_URL}" alt="JBJ Global Real Estate" width="180" style="max-width:180px;height:auto;display:block;margin:0 auto 14px;" />
+<tr><td style="background:#000000;padding:32px 40px 24px;text-align:center;border-radius:20px 20px 0 0;">
+<img src="${LOGO_URL}" alt="JBJ Global Real Estate" width="180" style="max-width:180px;height:auto;display:block;margin:0 auto 16px;" />
 <p style="color:#C8A766;margin:0;font-size:14px;font-weight:700;letter-spacing:3px;text-transform:uppercase;">JBJ GLOBAL REAL ESTATE</p>
 </td></tr>
-<!-- Sub-header -->
+<!-- Sub-header with lock icon -->
 <tr><td style="background:linear-gradient(135deg,#C8A766,#B8956E,#A07D4A);padding:20px 32px;text-align:center;">
-<p style="font-size:18px;font-weight:bold;color:#fff;margin:0 0 4px;">Account Security</p>
-<p style="font-size:14px;color:rgba(255,255,255,0.85);margin:0;">Password Changed Successfully</p>
+<p style="font-size:28px;margin:0 0 8px;">&#128274;</p>
+<p style="font-size:18px;font-weight:bold;color:#fff;margin:0 0 4px;">Password Changed Successfully</p>
+<p style="font-size:14px;color:rgba(255,255,255,0.85);margin:0;">Your account security has been updated</p>
 </td></tr>
 
 <!-- Content -->
@@ -211,6 +214,8 @@ const handler = async (req: Request): Promise<Response> => {
 <p style="color:#C8A766;font-size:11px;margin:12px 0 0;font-weight:600;">&copy; ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.</p>
 </td></tr>
 
+</table>
+</td></tr>
 </table></td></tr></table>
 </body></html>`;
 
