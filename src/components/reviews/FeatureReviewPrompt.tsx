@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Star, Send, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -14,6 +15,8 @@ interface FeatureReviewPromptProps {
   featureLabel: string;
   question?: string;
   trigger?: React.ReactNode;
+  initialTitle?: string;
+  initialReview?: string;
 }
 
 export function FeatureReviewPrompt({
@@ -21,16 +24,27 @@ export function FeatureReviewPrompt({
   featureLabel,
   question,
   trigger,
+  initialTitle,
+  initialReview,
 }: FeatureReviewPromptProps) {
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
+  const [reviewTitle, setReviewTitle] = useState(initialTitle || "");
   const [improveText, setImproveText] = useState("");
-  const [reviewText, setReviewText] = useState("");
+  const [reviewText, setReviewText] = useState(initialReview || "");
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [publishRequested, setPublishRequested] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    setReviewTitle(initialTitle || "");
+  }, [initialTitle]);
+
+  useEffect(() => {
+    setReviewText(initialReview || "");
+  }, [initialReview]);
 
   const handleSubmit = async () => {
     if (!rating) {
@@ -40,9 +54,8 @@ export function FeatureReviewPrompt({
 
     setSubmitting(true);
     try {
-      // Get user profile
       let fullName = "Anonymous";
-      let email = user?.email || "";
+      const email = user?.email || "";
 
       if (user?.id) {
         const { data: profile } = await supabase
@@ -53,12 +66,16 @@ export function FeatureReviewPrompt({
         if (profile?.display_name) fullName = profile.display_name;
       }
 
+      const title = reviewTitle.trim() || `${featureLabel} Feedback`;
+      const body = reviewText.trim() || `Rated ${featureLabel} ${rating}/5 stars`;
+      const composedReview = `${title}\n\n${body}`;
+
       const { error } = await supabase.from("customer_reviews").insert({
         user_id: user?.id || null,
         full_name: isAnonymous ? "Anonymous" : fullName,
         email,
         rating,
-        review_text: reviewText || `Rated ${featureLabel} ${rating}/5 stars`,
+        review_text: composedReview,
         improve_text: improveText || null,
         feature_key: featureKey,
         service_type: featureLabel,
@@ -74,7 +91,8 @@ export function FeatureReviewPrompt({
       setOpen(false);
       setRating(0);
       setImproveText("");
-      setReviewText("");
+      setReviewTitle(initialTitle || "");
+      setReviewText(initialReview || "");
     } catch (err: any) {
       console.error("Review submit error:", err);
       toast.error("Failed to submit review");
@@ -102,12 +120,8 @@ export function FeatureReviewPrompt({
         </DialogHeader>
 
         <div className="space-y-5">
-          {/* Question */}
-          <p className="text-sm text-zinc-600">
-            {question || `How would you rate your experience with ${featureLabel}?`}
-          </p>
+          <p className="text-sm text-zinc-600">{question || `How would you rate your experience with ${featureLabel}?`}</p>
 
-          {/* Star Rating */}
           <div className="flex gap-2 justify-center py-2">
             {[1, 2, 3, 4, 5].map((star) => (
               <button
@@ -120,9 +134,7 @@ export function FeatureReviewPrompt({
               >
                 <Star
                   className={`h-10 w-10 transition-colors ${
-                    star <= (hoverRating || rating)
-                      ? "fill-gold text-gold"
-                      : "text-zinc-300"
+                    star <= (hoverRating || rating) ? "fill-gold text-gold" : "text-zinc-300"
                   }`}
                 />
               </button>
@@ -134,7 +146,16 @@ export function FeatureReviewPrompt({
             </p>
           )}
 
-          {/* Review Text */}
+          <div>
+            <Label className="text-zinc-700 text-sm">Review title</Label>
+            <Input
+              value={reviewTitle}
+              onChange={(e) => setReviewTitle(e.target.value)}
+              placeholder="Review title"
+              className="mt-1 bg-zinc-50 border-zinc-200"
+            />
+          </div>
+
           <div>
             <Label className="text-zinc-700 text-sm">Your review (optional)</Label>
             <Textarea
@@ -146,7 +167,6 @@ export function FeatureReviewPrompt({
             />
           </div>
 
-          {/* Improvement Suggestion */}
           <div>
             <Label className="text-zinc-700 text-sm">What can we improve?</Label>
             <Textarea
@@ -158,7 +178,6 @@ export function FeatureReviewPrompt({
             />
           </div>
 
-          {/* Toggles */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <Label className="text-sm text-zinc-600">Publish anonymously</Label>
@@ -170,15 +189,9 @@ export function FeatureReviewPrompt({
             </div>
           </div>
 
-          <p className="text-xs text-zinc-400">
-            Reviews are moderated before publishing. You earn 2 points when your review is approved.
-          </p>
+          <p className="text-xs text-zinc-400">Reviews are moderated before publishing. You earn 2 points when your review is approved.</p>
 
-          <Button
-            onClick={handleSubmit}
-            disabled={submitting || !rating}
-            className="w-full bg-gold hover:bg-gold/90 text-black font-bold"
-          >
+          <Button onClick={handleSubmit} disabled={submitting || !rating} className="w-full bg-gold hover:bg-gold/90 text-black font-bold">
             {submitting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Send className="h-4 w-4 mr-2" />}
             Submit Review
           </Button>
