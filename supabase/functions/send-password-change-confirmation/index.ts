@@ -1,13 +1,11 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { LOGO_URL, SITE_URL, emailShell, inquiryBox, recommendedActionsHtml, suggestedActionsHtml, ticketSupportEmbed, feedbackHtml } from "../_shared/email-html.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
-const LOGO_URL = "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/jbj-monogram-dark.png?v=3";
-const SITE_URL = "https://jbj.ae";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
 interface PasswordChangeRequest {
@@ -16,22 +14,6 @@ interface PasswordChangeRequest {
   userAgent?: string;
   timestamp?: string;
 }
-
-const svgIcons = {
-  lock: `<svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="10" width="14" height="10" rx="2" stroke="#111" stroke-width="1.8"/><path d="M8 10V7.5C8 5.57 9.57 4 11.5 4H12.5C14.43 4 16 5.57 16 7.5V10" stroke="#111" stroke-width="1.8" stroke-linecap="round"/></svg>`,
-  gear: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="3.5" stroke="#111" stroke-width="1.8"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4" stroke="#111" stroke-width="1.8" stroke-linecap="round"/></svg>`,
-  chart: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 20V6M4 20h16" stroke="#111" stroke-width="1.8" stroke-linecap="round"/><path d="M7 16l4-4 3 3 5-5" stroke="#111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-  book: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4.5A2.5 2.5 0 016.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15z" stroke="#111" stroke-width="1.8"/><path d="M4 19.5A2.5 2.5 0 016.5 17H20" stroke="#111" stroke-width="1.8"/><path d="M8 7h8M8 11h5" stroke="#111" stroke-width="1.8" stroke-linecap="round"/></svg>`,
-  house: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 11.5L12 4l9 7.5" stroke="#111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 10v10h14V10" stroke="#111" stroke-width="1.8"/><rect x="9" y="14" width="6" height="6" stroke="#111" stroke-width="1.8"/></svg>`,
-};
-
-const recommendationCard = (icon: string, label: string, href: string) => `
-<td width="50%" style="text-align:center;padding:6px;">
-  <a href="${href}" style="display:block;padding:14px 8px;background:#fff;border:2px solid #C8A766;border-radius:12px;text-decoration:none;">
-    <div style="text-align:center;">${icon}</div>
-    <p style="margin:8px 0 0;font-size:12px;color:#111;font-weight:700;">${label}</p>
-  </a>
-</td>`;
 
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
@@ -62,128 +44,64 @@ const handler = async (req: Request): Promise<Response> => {
     else if (ua.includes("Firefox")) browserInfo = "Firefox";
     else if (ua.includes("Edge")) browserInfo = "Microsoft Edge";
 
-    const reviewUrl = `${SITE_URL}/reviews?source=password_change&mode=quick`;
-    const surveyUrl = `${SITE_URL}/ticket-survey?source=password_change&context=password_change`;
-
-    const emailHtml = `<!DOCTYPE html>
-<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<style>
-  body{margin:0;padding:0;background-color:#ffffff;font-family:'Segoe UI',Arial,sans-serif;}
-  @media only screen and (max-width:620px){.wrapper{width:100%!important;padding:0 8px!important;}.content-pad{padding:24px 16px!important;}}
-</style>
-</head>
-<body style="margin:0;padding:0;background-color:#ffffff;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#ffffff;">
-<tr><td align="center" style="padding:24px 16px;">
-<table role="presentation" class="wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:#F5F0E6;border-radius:24px;overflow:hidden;">
-<tr><td>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(180deg,#FFFFFF,#FDFBF7,#F5F0E6);border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(200,167,102,0.18);">
-
-<tr><td style="background:#000000;padding:24px 40px 20px;text-align:center;border-radius:24px 24px 0 0;">
-  <img src="${LOGO_URL}" alt="JBJ Global Real Estate" width="180" style="max-width:180px;height:auto;display:block;margin:0 auto 12px;" />
-  <p style="color:#C8A766;margin:0;font-size:14px;font-weight:700;letter-spacing:3px;text-transform:uppercase;">JBJ GLOBAL REAL ESTATE</p>
+    const bodyContent = `
+<!-- Security Icon -->
+<tr><td style="background:#111;padding:28px 32px;text-align:center;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr>
+<td style="width:86px;height:86px;background:linear-gradient(135deg,#C8A766,#D4B87A);border-radius:50%;text-align:center;vertical-align:middle;">
+<img src="${LOGO_URL}" alt="JBJ" width="50" style="width:50px;height:50px;display:block;margin:18px auto;" />
+</td>
+</tr></table>
+<h1 style="color:#fff;font-size:24px;font-weight:800;margin:18px 0 6px;line-height:1.2;">Password Changed Successfully</h1>
+<p style="font-size:16px;color:#C8A766;margin:0;font-weight:700;">Your account security has been updated</p>
 </td></tr>
 
-<tr><td style="background:#111;padding:26px 32px;text-align:center;">
-  <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td style="width:86px;height:86px;background:linear-gradient(135deg,#C8A766,#D4B87A);border-radius:50%;text-align:center;vertical-align:middle;">${svgIcons.lock}</td></tr></table>
-  <h1 style="color:#fff;font-size:26px;font-weight:800;margin:18px 0 6px;line-height:1.2;">Password Changed Successfully</h1>
-  <p style="font-size:16px;color:#C8A766;margin:0;font-weight:700;">Your account security has been updated</p>
-</td></tr>
-
+<!-- Content — single unbroken card -->
 <tr><td class="content-pad" style="padding:30px;">
-  <p style="margin:0;font-size:16px;font-weight:600;color:#1a1a1a;">Dear ${recipientName},</p>
-  <p style="margin:8px 0 20px;font-size:14px;line-height:1.6;color:#444;">Your password was changed. If this was you, no further action is needed.</p>
+<p style="margin:0;font-size:16px;font-weight:600;color:#1a1a1a;">Dear ${recipientName},</p>
+<p style="margin:8px 0 20px;font-size:14px;line-height:1.6;color:#444;">Your password was changed. If this was you, no further action is needed.</p>
 
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:12px;margin-bottom:20px;">
-    <tr><td style="padding:18px;">
-      <p style="margin:0 0 12px;font-size:15px;font-weight:700;color:#1a1a1a;border-bottom:1px solid #C8A76640;padding-bottom:10px;">Activity Details</p>
-      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr><td style="padding:7px 0;color:#666;font-size:13px;width:40%;">Date</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${formattedDate}</td></tr>
-        <tr><td style="padding:7px 0;color:#666;font-size:13px;">Time</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${formattedTime} (GMT)</td></tr>
-        <tr><td style="padding:7px 0;color:#666;font-size:13px;">Device</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${deviceInfo}</td></tr>
-        <tr><td style="padding:7px 0;color:#666;font-size:13px;">Browser</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${browserInfo}</td></tr>
-      </table>
-    </td></tr>
-  </table>
-
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fef2f2;border:1px solid #fca5a5;border-radius:10px;margin-bottom:20px;">
-    <tr><td style="padding:16px;">
-      <p style="margin:0;font-size:14px;color:#991b1b;line-height:1.6;"><strong>Didn't make this change?</strong><br/>Please contact our support team immediately.</p>
-    </td></tr>
-  </table>
-
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:20px;">
-    <tr><td align="center">
-      <a href="mailto:contact@jbj.ae?subject=Unauthorized Password Change" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:14px 32px;border-radius:10px;font-weight:700;font-size:14px;border:1px solid #C8A76650;">Report Unauthorized Access</a>
-    </td></tr>
-  </table>
-
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:20px 0;">
-    <tr><td style="padding:18px 24px;background:#f0fdf4;border:2px solid #bbf7d0;border-radius:12px;text-align:center;">
-      <p style="margin:0;font-size:15px;color:#333;line-height:1.6;">For inquiries about your account security, you can reply directly to <a href="mailto:contact@jbj.ae" style="color:#1a1a1a;font-weight:700;text-decoration:none;">contact@jbj.ae</a></p>
-    </td></tr>
-  </table>
-
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0;border-top:2px solid #C8A76633;padding-top:20px;">
-    <tr><td style="text-align:center;">
-      <p style="color:#1a1a1a;font-size:16px;font-weight:700;margin:0 0 12px;">Recommended For You</p>
-      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          ${recommendationCard(svgIcons.gear, "AI Tools", `${SITE_URL}/ai-tools`)}
-          ${recommendationCard(svgIcons.chart, "Market Reports", `${SITE_URL}/market-reports`)}
-        </tr>
-        <tr>
-          ${recommendationCard(svgIcons.book, "Library & Guides", `${SITE_URL}/guides`)}
-          ${recommendationCard(svgIcons.house, "Properties", `${SITE_URL}/properties`)}
-        </tr>
-      </table>
-    </td></tr>
-  </table>
-
-  <table width="100%" cellpadding="0" cellspacing="0" style="border-top:2px solid #C8A76633;padding-top:20px;margin-top:4px;">
-    <tr><td align="center">
-      <p style="color:#1a1a1a;font-size:16px;font-weight:700;margin:0 0 4px;">We Value Your Feedback</p>
-      <p style="color:#888;font-size:13px;margin:0 0 16px;">Help us improve by sharing your experience</p>
-      <table cellpadding="0" cellspacing="0" align="center"><tr>
-        <td style="padding:0 6px;"><a href="${reviewUrl}" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:12px 26px;border-radius:8px;font-weight:700;font-size:13px;border:1px solid #C8A76650;">Leave a Review</a></td>
-        <td style="padding:0 6px;"><a href="${surveyUrl}" style="display:inline-block;background:#FDFBF7;border:2px solid #C8A766;color:#1a1a1a;text-decoration:none;padding:10px 26px;border-radius:8px;font-weight:700;font-size:13px;">Take Survey</a></td>
-      </tr></table>
-    </td></tr>
-  </table>
-
-  <p style="font-size:14px;color:#333;margin-top:22px;">Best regards,<br><span style="color:#C8A766;font-weight:600;">JBJ Global Real Estate Team</span></p>
+<!-- Activity Details -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:12px;margin-bottom:20px;">
+<tr><td style="padding:18px;">
+<p style="margin:0 0 12px;font-size:15px;font-weight:700;color:#1a1a1a;border-bottom:1px solid #C8A76640;padding-bottom:10px;">Activity Details</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr><td style="padding:7px 0;color:#666;font-size:13px;width:40%;">Date</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${formattedDate}</td></tr>
+<tr><td style="padding:7px 0;color:#666;font-size:13px;">Time</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${formattedTime} (GMT)</td></tr>
+<tr><td style="padding:7px 0;color:#666;font-size:13px;">Device</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${deviceInfo}</td></tr>
+<tr><td style="padding:7px 0;color:#666;font-size:13px;">Browser</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${browserInfo}</td></tr>
+</table>
 </td></tr>
+</table>
 
-<tr><td style="padding:0 32px 16px;text-align:center;">
-  <p style="margin:0;font-size:11px;color:#999;line-height:1.5;">This is a security notification.<br/>For inquiries contact <a href="mailto:contact@jbj.ae" style="color:#C8A766;text-decoration:underline;font-weight:600;">contact@jbj.ae</a></p>
+<!-- Warning -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fef2f2;border:1px solid #fca5a5;border-radius:10px;margin-bottom:20px;">
+<tr><td style="padding:16px;">
+<p style="margin:0;font-size:14px;color:#991b1b;line-height:1.6;"><strong>Didn't make this change?</strong><br/>Please contact our support team immediately.</p>
 </td></tr>
+</table>
 
-<tr><td style="background:#000000;padding:28px 36px;text-align:center;border-radius:0 0 20px 20px;">
-  <p style="color:#C8A766;font-size:14px;margin:0 0 14px;">Need assistance? We're here to help.</p>
-  <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;">
-  <tr><td align="center">
-  <a href="tel:+971565911000" style="color:#ffffff;text-decoration:none;font-size:13px;">+971 56 591 1000</a>
-  <span style="color:#444;margin:0 12px;">|</span>
-  <a href="mailto:Contact@JBJ.ae" style="color:#ffffff;text-decoration:underline;font-size:13px;">Contact@JBJ.ae</a>
-  </td></tr>
-  </table>
-  <p style="color:#C8A766;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin:0 0 12px;">Follow Us &middot; Stay in the Loop</p>
-  <table cellpadding="0" cellspacing="0" align="center" style="margin-bottom:14px;">
-  <tr>
-  <td style="padding:0 4px;"><a href="https://www.instagram.com/jbj.ae" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#FDFBF7,#F5EBD7);border:1px solid #C8A766;border-radius:6px;color:#1a1a1a;text-decoration:none;font-size:11px;font-weight:600;">Instagram</a></td>
-  <td style="padding:0 4px;"><a href="https://www.facebook.com/share/1G7CgSaV2L/" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#FDFBF7,#F5EBD7);border:1px solid #C8A766;border-radius:6px;color:#1a1a1a;text-decoration:none;font-size:11px;font-weight:600;">Facebook</a></td>
-  <td style="padding:0 4px;"><a href="https://www.linkedin.com/company/jbj-global-real-estate/" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#FDFBF7,#F5EBD7);border:1px solid #C8A766;border-radius:6px;color:#1a1a1a;text-decoration:none;font-size:11px;font-weight:600;">LinkedIn</a></td>
-  <td style="padding:0 4px;"><a href="https://youtube.com/@jbjglobalrealestate" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#FDFBF7,#F5EBD7);border:1px solid #C8A766;border-radius:6px;color:#1a1a1a;text-decoration:none;font-size:11px;font-weight:600;">YouTube</a></td>
-  </tr>
-  </table>
-  <p style="color:#C8A766;font-size:13px;margin:0 0 4px;font-weight:600;">JBJ Global Real Estate</p>
-  <p style="color:#777;font-size:11px;margin:0 0 8px;">First Global Real Estate Platform of Its Kind</p>
-  <p style="color:#888;font-size:10px;margin:0 0 8px;white-space:nowrap;">Developed, Created &amp; Implemented by The Founder &amp; CEO, <span style="color:#C8A766;">Jane Bou Jaoude</span></p>
-  <p style="color:#C8A766;font-size:11px;margin:0;font-weight:600;">&copy; ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.</p>
+<!-- Report Button -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:20px;">
+<tr><td align="center">
+<a href="mailto:CONTACT@JBJ.AE?subject=Unauthorized Password Change" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:14px 32px;border-radius:10px;font-weight:700;font-size:14px;border:1px solid #C8A76650;">Report Unauthorized Access</a>
 </td></tr>
+</table>
 
-</table></td></tr></table></td></tr></table>
-</body></html>`;
+${inquiryBox("account security")}
+
+${ticketSupportEmbed()}
+
+${recommendedActionsHtml()}
+
+${suggestedActionsHtml()}
+
+${feedbackHtml("password_change")}
+
+<p style="font-size:14px;color:#333;margin-top:22px;">Best regards,<br><span style="color:#C8A766;font-weight:600;">JBJ Global Real Estate Team</span></p>
+</td></tr>`;
+
+    const emailHtml = emailShell("Security Notification", bodyContent);
 
     const emailRes = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -193,7 +111,7 @@ const handler = async (req: Request): Promise<Response> => {
       },
       body: JSON.stringify({
         from: "JBJ Security <contact@jbj.ae>",
-        reply_to: "contact@jbj.ae",
+        reply_to: "CONTACT@JBJ.AE",
         to: [email],
         subject: "Your Password Was Changed — JBJ Global Real Estate",
         html: emailHtml,
