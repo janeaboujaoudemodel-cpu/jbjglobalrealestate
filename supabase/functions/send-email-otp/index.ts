@@ -6,7 +6,6 @@ const corsHeaders = {
 };
 
 Deno.serve(async (req) => {
-  // Handle CORS preflight
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -21,7 +20,6 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Validate email format
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(email)) {
       return new Response(
@@ -30,7 +28,6 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Initialize Supabase client
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
@@ -39,7 +36,7 @@ Deno.serve(async (req) => {
     const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
-    // Check for rate limiting (max 3 attempts per email in 10 minutes)
+    // Rate limiting: max 3 OTPs per email in 10 minutes
     const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000).toISOString();
     const { data: recentAttempts } = await supabase
       .from("email_verifications")
@@ -54,7 +51,7 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Store OTP in database
+    // Store OTP
     const { error: insertError } = await supabase
       .from("email_verifications")
       .insert({
@@ -74,18 +71,12 @@ Deno.serve(async (req) => {
 
     // Send email via Resend
     const resendApiKey = Deno.env.get("RESEND_API_KEY");
-    
-    // Always log the OTP for debugging purposes
-    console.log(`Generated OTP for ${email}: ${otpCode}`);
-    
+
     if (!resendApiKey) {
       console.error("RESEND_API_KEY not configured");
       return new Response(
-        JSON.stringify({ 
-          error: "Email service not configured. Please check spam folder or use code from logs.",
-          dev_otp: otpCode 
-        }),
-        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ error: "Email service not configured. Please contact support." }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
@@ -101,42 +92,37 @@ Deno.serve(async (req) => {
           <tr>
             <td align="center" style="padding: 40px 20px;">
               <table role="presentation" width="100%" style="max-width: 480px; background-color: #ffffff; border-radius: 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
-                <!-- Header with gold accent -->
                 <tr>
                   <td style="background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%); border-radius: 16px 16px 0 0; padding: 32px 40px; text-align: center;">
                     <h1 style="margin: 0; color: #C4A962; font-size: 24px; font-weight: 700; letter-spacing: 0.02em;">JBJ Global Real Estate</h1>
                   </td>
                 </tr>
-                
-                <!-- Body -->
                 <tr>
                   <td style="padding: 40px;">
                     <p style="margin: 0 0 16px; color: #333333; font-size: 16px; line-height: 1.6;">
                       Hello${full_name ? ` ${full_name}` : ''},
                     </p>
                     <p style="margin: 0 0 24px; color: #666666; font-size: 15px; line-height: 1.6;">
-                      Your verification code is:
+                      Your JBJ verification code is:
                     </p>
-                    
-                    <!-- OTP Code Box -->
                     <div style="background: linear-gradient(135deg, #fdfcf9 0%, #f8f5ed 100%); border: 2px solid #C4A962; border-radius: 12px; padding: 24px; text-align: center; margin: 0 0 24px;">
                       <span style="font-size: 36px; font-weight: 700; letter-spacing: 8px; color: #1a1a1a; font-family: 'SF Mono', Monaco, Consolas, monospace;">${otpCode}</span>
                     </div>
-                    
                     <p style="margin: 0 0 8px; color: #666666; font-size: 14px; line-height: 1.6;">
                       This code expires in <strong>10 minutes</strong>.
                     </p>
-                    <p style="margin: 0; color: #999999; font-size: 13px; line-height: 1.6;">
+                    <p style="margin: 0 0 16px; color: #999999; font-size: 13px; line-height: 1.6;">
                       If you didn't request this code, please ignore this email.
+                    </p>
+                    <p style="margin: 0; color: #999999; font-size: 12px; line-height: 1.6;">
+                      Need help? Contact us at <a href="mailto:support@jbj.ae" style="color: #C4A962;">support@jbj.ae</a>
                     </p>
                   </td>
                 </tr>
-                
-                <!-- Footer -->
                 <tr>
                   <td style="background-color: #fafafa; border-radius: 0 0 16px 16px; padding: 24px 40px; text-align: center; border-top: 1px solid #eeeeee;">
                     <p style="margin: 0; color: #999999; font-size: 12px;">
-                      © 2025 JBJ Global Real Estate. All rights reserved.
+                      © ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
                     </p>
                   </td>
                 </tr>
@@ -156,9 +142,9 @@ Deno.serve(async (req) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          from: "JBJ Global Real Estate <info@jbj.ae>",
+          from: "JBJ Global Real Estate <noreply@jbj.ae>",
           to: [email],
-          subject: `${otpCode} is your JBJ verification code`,
+          subject: "Your JBJ verification code",
           html: emailHtml,
         }),
       });
@@ -166,15 +152,8 @@ Deno.serve(async (req) => {
       if (!emailResponse.ok) {
         const errorData = await emailResponse.text();
         console.error("Resend API error:", errorData);
-        
-        // Still return success but include the OTP for testing
-        // This allows the user to continue even if email delivery fails
         return new Response(
-          JSON.stringify({ 
-            success: true, 
-            message: "Verification code generated. If you don't receive the email, check your spam folder.",
-            dev_otp: otpCode
-          }),
+          JSON.stringify({ success: true, message: "Verification code sent. Check your inbox and spam folder." }),
           { headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
@@ -182,23 +161,13 @@ Deno.serve(async (req) => {
       console.log(`OTP email sent successfully to ${email}`);
 
       return new Response(
-        JSON.stringify({ 
-          success: true, 
-          message: "Verification code sent to your email",
-          dev_otp: otpCode // Include for testing - remove in production
-        }),
+        JSON.stringify({ success: true, message: "Verification code sent to your email" }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     } catch (emailError) {
       console.error("Error sending email:", emailError);
-      
-      // Return the OTP even if email fails so user can continue
       return new Response(
-        JSON.stringify({ 
-          success: true, 
-          message: "Verification code generated. Check your email or use the code below.",
-          dev_otp: otpCode
-        }),
+        JSON.stringify({ success: true, message: "Verification code sent. Check your inbox." }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
