@@ -19,6 +19,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { GuideSectionHeader } from "@/components/guides/GuideSectionHeader";
 import brokerResourcesHeroVideo from "@/assets/videos/broker-resources-hero.mp4";
+import VideoBackground from "@/components/VideoBackground";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -145,15 +146,7 @@ const BrokerResources = () => {
       {/* Hero Section with Video */}
       <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
         {/* Background Video */}
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-        >
-          <source src={brokerResourcesHeroVideo} type="video/mp4" />
-        </video>
+        <VideoBackground src={brokerResourcesHeroVideo} poster="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80" />
         
         {/* Overlays */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black" />

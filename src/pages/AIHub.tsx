@@ -1,4 +1,5 @@
 import { useState } from "react";
+import VideoBackground from "@/components/VideoBackground";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -605,19 +606,11 @@ const AIHub = () => {
         <div className="relative py-10 md:py-14 overflow-hidden">
           {/* Video Background */}
           <div className="absolute inset-0 z-0">
-            <video 
-              autoPlay 
-              loop 
-              muted 
-              playsInline
-              className="w-full h-full object-cover opacity-40"
+            <VideoBackground 
+              src="https://videos.pexels.com/video-files/3571264/3571264-uhd_2560_1440_30fps.mp4"
               poster="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80"
-            >
-              <source 
-                src="https://videos.pexels.com/video-files/3571264/3571264-uhd_2560_1440_30fps.mp4" 
-                type="video/mp4" 
-              />
-            </video>
+              opacity={0.4}
+            />
             <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-[#0D0D0D]" />
           </div>
           

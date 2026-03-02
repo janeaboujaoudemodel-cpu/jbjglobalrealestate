@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import VideoBackground from "@/components/VideoBackground";
 import { motion } from "framer-motion";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { SEOHead } from "@/components/SEOHead";
@@ -278,15 +279,10 @@ const MeetTheTeam: React.FC = () => {
           <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
           {/* Background Video */}
           <div className="absolute inset-0 z-0">
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-full h-full object-cover"
-            >
-              <source src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/videos/team-hero-dubai-landmarks.mp4" type="video/mp4" />
-            </video>
+            <VideoBackground 
+              src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/videos/team-hero-dubai-landmarks.mp4"
+              poster="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80"
+            />
             {/* Overlay gradient for readability */}
             <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black" />
           </div>

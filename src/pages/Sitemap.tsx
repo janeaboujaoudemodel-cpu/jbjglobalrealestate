@@ -5,6 +5,7 @@
  */
 
 import { useState, useEffect } from "react";
+import VideoBackground from "@/components/VideoBackground";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
@@ -351,15 +352,10 @@ const Sitemap = () => {
         <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden" style={{ minHeight: '50vh' }}>
           {/* Video Background */}
           <div className="absolute inset-0 z-0">
-            <video 
-              autoPlay 
-              loop 
-              muted 
-              playsInline 
-              className="absolute inset-0 w-full h-full object-cover"
-            >
-              <source src={sitemapHeroVideo} type="video/mp4" />
-            </video>
+            <VideoBackground 
+              src={sitemapHeroVideo}
+              poster="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80"
+            />
             <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black" />
           </div>
           

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import VideoBackground from "@/components/VideoBackground";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
@@ -165,15 +166,10 @@ export default function BrokerDashboard() {
     <div className="min-h-screen bg-background">
       {/* Hero Section with Video */}
       <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
-        <video 
-          autoPlay 
-          loop 
-          muted 
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-        >
-          <source src={brokerDashboardHeroVideo} type="video/mp4" />
-        </video>
+        <VideoBackground 
+          src={brokerDashboardHeroVideo} 
+          poster="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80" 
+        />
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black" />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/40" />
         

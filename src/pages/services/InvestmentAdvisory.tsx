@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import VideoBackground from "@/components/VideoBackground";
 import { Link } from "react-router-dom";
 import { 
   TrendingUp, 
@@ -148,14 +149,9 @@ const InvestmentAdvisory = () => {
       <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
         {/* Video Background */}
         <div className="absolute inset-0 bg-black">
-          <video
-            className="absolute inset-0 w-full h-full object-cover"
+          <VideoBackground 
             src={investmentAdvisoryHeroVideo}
-            muted
-            playsInline
-            autoPlay
-            loop
-            preload="metadata"
+            poster="https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=1920&q=80"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
         </div>

@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import VideoBackground from "@/components/VideoBackground";
 import { motion } from "framer-motion";
 import { 
   Hammer, Wrench, Shield, Clock, Award, Users,
@@ -100,16 +101,10 @@ const FitOut = () => {
       {/* Hero Section - Bright Video Background */}
       <section className="jj-hero-fullscreen relative flex items-center overflow-hidden">
         <div className="absolute inset-0">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-cover"
+          <VideoBackground 
+            src={fitOutHeroVideo}
             poster="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1920&q=80"
-          >
-            <source src={fitOutHeroVideo} type="video/mp4" />
-          </video>
+          />
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-black" />
         </div>
         

@@ -61,17 +61,26 @@ export default function WhyDubaiCapitalSection() {
           className="absolute inset-0"
         >
           {isVisible && (
-            <video
-              className="absolute inset-0 w-full h-full object-cover"
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload={currentScene === 0 ? "auto" : "none"}
-              poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3Crect fill='%23000'/%3E%3C/svg%3E"
-            >
-              <source src={scenes[currentScene].src} type="video/mp4" />
-            </video>
+            <>
+              <img
+                src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80"
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 w-full h-full object-cover"
+                loading="eager"
+              />
+              <video
+                className="absolute inset-0 w-full h-full object-cover"
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="metadata"
+                style={{ position: 'absolute' }}
+              >
+                <source src={scenes[currentScene].src} type="video/mp4" />
+              </video>
+            </>
           )}
           {/* Refined gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/35 to-transparent" />

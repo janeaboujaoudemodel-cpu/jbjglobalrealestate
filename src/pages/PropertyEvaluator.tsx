@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import VideoBackground from "@/components/VideoBackground";
 import { motion } from "framer-motion";
 import { 
   Home, Search, TrendingUp, FileText, Download, Upload, Building, MapPin, 
@@ -318,15 +319,11 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
       {/* Hero Section with Video */}
       <div className="relative min-h-[50vh] flex items-center justify-center overflow-hidden">
         {/* Video Background */}
-        <video 
-          autoPlay 
-          loop 
-          muted 
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover opacity-30"
-        >
-          <source src="/videos/burj-khalifa-day-to-night.mp4" type="video/mp4" />
-        </video>
+        <VideoBackground 
+          src="/videos/burj-khalifa-day-to-night.mp4"
+          poster="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80"
+          opacity={0.3}
+        />
         
         {/* Overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-blue-950/80 via-black/70 to-black" />
