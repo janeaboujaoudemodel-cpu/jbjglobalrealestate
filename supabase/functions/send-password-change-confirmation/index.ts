@@ -136,7 +136,7 @@ Activity Details</p>
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "JBJ Security <noreply@jbj.ae>",
+        from: "JBJ Security <contact@jbj.ae>",
         to: [email],
         subject: "Your Password Was Changed — JBJ Global Real Estate",
         html: emailHtml,

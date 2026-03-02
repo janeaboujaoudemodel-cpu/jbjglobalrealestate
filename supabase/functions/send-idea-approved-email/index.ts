@@ -53,7 +53,7 @@ const handler = async (req: Request): Promise<Response> => {
       method: "POST",
       headers: { "Authorization": `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
       body: JSON.stringify({
-        from: "JBJ Global Real Estate <info@jbj.ae>",
+        from: "JBJ Global Real Estate <contact@jbj.ae>",
         to: [userEmail],
         subject: `🎉 Your idea has been approved! +${pointsAwarded} points`,
         html: `

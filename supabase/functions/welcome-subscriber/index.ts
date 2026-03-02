@@ -102,6 +102,15 @@ const handler = async (req: Request): Promise<Response> => {
 <p style="color:#C8A766;font-size:18px;font-weight:bold;margin:0 0 6px;">JBJ Global Real Estate</p>
 <p style="color:#888;font-size:12px;margin:0 0 4px;font-style:italic;">The Only Global AI-Powered Real Estate Intelligence Platform</p>
 <p style="color:#C8A766;font-size:22px;font-weight:bold;margin:12px 0;letter-spacing:1px;">175+ Countries &bull; 2,400+ Cities &bull; 12,000+ Clients Served</p>
+<p style="color:#C8A766;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin:16px 0 10px;">Follow Us &middot; Stay in the Loop</p>
+<table cellpadding="0" cellspacing="0" align="center" style="margin-bottom:16px;">
+<tr>
+<td style="padding:0 5px;"><a href="https://www.instagram.com/jbj.ae" style="display:inline-block;padding:7px 14px;border:1px solid #C8A766;border-radius:6px;color:#C8A766;text-decoration:none;font-size:11px;font-weight:600;">Instagram</a></td>
+<td style="padding:0 5px;"><a href="https://www.facebook.com/share/1G7CgSaV2L/" style="display:inline-block;padding:7px 14px;border:1px solid #C8A766;border-radius:6px;color:#C8A766;text-decoration:none;font-size:11px;font-weight:600;">Facebook</a></td>
+<td style="padding:0 5px;"><a href="https://www.linkedin.com/company/jbj-global-real-estate/" style="display:inline-block;padding:7px 14px;border:1px solid #C8A766;border-radius:6px;color:#C8A766;text-decoration:none;font-size:11px;font-weight:600;">LinkedIn</a></td>
+<td style="padding:0 5px;"><a href="https://youtube.com/@jbjglobalrealestate" style="display:inline-block;padding:7px 14px;border:1px solid #C8A766;border-radius:6px;color:#C8A766;text-decoration:none;font-size:11px;font-weight:600;">YouTube</a></td>
+</tr>
+</table>
 <p style="margin:0 0 8px;font-size:13px;color:#888;">You can turn email notifications on/off anytime from your account settings.</p>
 <p style="margin:0 0 8px;font-size:13px;color:#888;">You can unsubscribe or resubscribe anytime.</p>
 <p style="margin:16px 0 0;">
@@ -111,12 +120,14 @@ const handler = async (req: Request): Promise<Response> => {
 <span style="color:#555;margin:0 8px;">|</span>
 <a href="mailto:contact@jbj.ae" style="color:#C8A766;font-size:12px;text-decoration:underline;">Contact Us</a>
 </p>
-<p style="margin:16px 0 0;font-size:11px;color:#666;">
-Developed, Created &amp; Implemented by The Founder &amp; CEO, <span style="color:#C8A766;">Jane Bou Jaoude</span><br/>
-&copy; ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.<br/>
-Dubai, United Arab Emirates<br/><br/>
-You are receiving this email because you opted in on jbj.ae.
+<p style="margin:16px 0 0;font-size:10px;white-space:nowrap;color:#888;">
+Developed, Created &amp; Implemented by The Founder &amp; CEO, <span style="color:#C8A766;">Jane Bou Jaoude</span>
 </p>
+<p style="margin:8px 0 0;color:#C8A766;font-size:11px;font-weight:600;">
+&copy; ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
+</p>
+<p style="margin:4px 0 0;font-size:10px;color:#777;">Dubai, United Arab Emirates</p>
+<p style="margin:8px 0 0;font-size:10px;color:#666;">You are receiving this email because you opted in on jbj.ae.</p>
 </td></tr>
 
 </table>
@@ -132,7 +143,7 @@ You are receiving this email because you opted in on jbj.ae.
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "JBJ Global Real Estate <noreply@jbj.ae>",
+        from: "JBJ Global Real Estate <contact@jbj.ae>",
         reply_to: "contact@jbj.ae",
         to: [email],
         subject: "Welcome to Stay in the Loop — JBJ Global Real Estate",

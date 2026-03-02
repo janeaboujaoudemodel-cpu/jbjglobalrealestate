@@ -146,7 +146,7 @@ Deno.serve(async (req) => {
             method: "POST",
             headers: { "Authorization": `Bearer ${resendApiKey}`, "Content-Type": "application/json" },
             body: JSON.stringify({
-              from: "JBJ E-Signature <info@jbj.ae>",
+              from: "JBJ E-Signature <contact@jbj.ae>",
               to: [recipient.email],
               subject: envelope.email_subject || `Please sign: ${envelope.name}`,
               html: emailHtml,

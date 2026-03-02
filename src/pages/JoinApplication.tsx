@@ -9,7 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Loader2, Upload, CheckCircle, FileText, Bot, MessageCircle } from "lucide-react";
+import { Loader2, Upload, CheckCircle, FileText, Bot, MessageCircle, Briefcase, User } from "lucide-react";
 import { PhoneInput } from "@/components/ui/phone-input";
 
 const NATIONALITIES = [
@@ -119,6 +119,20 @@ export default function JoinApplication() {
     positionApplied: "",
     consentAccurate: false,
     consentTerms: false,
+    // Position-based qualification fields
+    dealsClosed: "",
+    totalDealValue: "",
+    projectsSold: "",
+    developerWorkedWith: "",
+    reasonForLeaving: "",
+    reference1Name: "",
+    reference1Title: "",
+    reference1Email: "",
+    reference1Phone: "",
+    reference2Name: "",
+    reference2Title: "",
+    reference2Email: "",
+    reference2Phone: "",
   });
 
   // Honeypot field for anti-spam
@@ -590,7 +604,61 @@ export default function JoinApplication() {
                 </div>
               </div>
 
-              {/* CV Upload */}
+              {/* Position-Based Qualification Questions */}
+              {['property_consultant', 'senior_property_consultant', 'team_leader', 'sales_manager', 'sales_director', 'listing_agent', 'off_plan_specialist', 'secondary_market_agent', 'luxury_specialist', 'commercial_broker', 'leasing_consultant'].includes(formData.positionApplied) && (
+                <div className="space-y-4 p-4 rounded-xl border border-gold/30 bg-gold/5">
+                  <h3 className="text-lg font-semibold text-black flex items-center gap-2">
+                    <Briefcase className="h-5 w-5 text-gold" />
+                    Sales Qualification
+                  </h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label>How many deals have you closed?</Label>
+                      <Input value={formData.dealsClosed} onChange={(e) => setFormData({ ...formData, dealsClosed: e.target.value })} placeholder="e.g. 25" disabled={!user || loading} className="bg-background" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Total value of deals closed (AED)</Label>
+                      <Input value={formData.totalDealValue} onChange={(e) => setFormData({ ...formData, totalDealValue: e.target.value })} placeholder="e.g. 50,000,000" disabled={!user || loading} className="bg-background" />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Which projects/areas have you sold in?</Label>
+                    <Input value={formData.projectsSold} onChange={(e) => setFormData({ ...formData, projectsSold: e.target.value })} placeholder="e.g. Dubai Marina, Downtown, Palm Jumeirah" disabled={!user || loading} className="bg-background" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Which developers have you worked with?</Label>
+                    <Input value={formData.developerWorkedWith} onChange={(e) => setFormData({ ...formData, developerWorkedWith: e.target.value })} placeholder="e.g. DAMAC, Emaar, Meraas" disabled={!user || loading} className="bg-background" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Why are you leaving your current position?</Label>
+                    <Input value={formData.reasonForLeaving} onChange={(e) => setFormData({ ...formData, reasonForLeaving: e.target.value })} placeholder="Reason for seeking new opportunity" disabled={!user || loading} className="bg-background" />
+                  </div>
+
+                  <h3 className="text-lg font-semibold text-black mt-4 flex items-center gap-2">
+                    <User className="h-5 w-5 text-gold" />
+                    Professional References (2 required)
+                  </h3>
+                  <p className="text-sm text-black/60">Provide references from your previous employer so we can verify your experience.</p>
+                  <div className="space-y-3 p-3 rounded-lg border border-gold/20 bg-white">
+                    <p className="text-sm font-semibold text-black">Reference 1</p>
+                    <div className="grid grid-cols-2 gap-3">
+                      <Input value={formData.reference1Name} onChange={(e) => setFormData({ ...formData, reference1Name: e.target.value })} placeholder="Full name (e.g. Director / HR Manager)" disabled={!user || loading} className="bg-background" />
+                      <Input value={formData.reference1Title} onChange={(e) => setFormData({ ...formData, reference1Title: e.target.value })} placeholder="Title & Company" disabled={!user || loading} className="bg-background" />
+                      <Input type="email" value={formData.reference1Email} onChange={(e) => setFormData({ ...formData, reference1Email: e.target.value })} placeholder="Company email" disabled={!user || loading} className="bg-background" />
+                      <Input value={formData.reference1Phone} onChange={(e) => setFormData({ ...formData, reference1Phone: e.target.value })} placeholder="Phone number" disabled={!user || loading} className="bg-background" />
+                    </div>
+                  </div>
+                  <div className="space-y-3 p-3 rounded-lg border border-gold/20 bg-white">
+                    <p className="text-sm font-semibold text-black">Reference 2</p>
+                    <div className="grid grid-cols-2 gap-3">
+                      <Input value={formData.reference2Name} onChange={(e) => setFormData({ ...formData, reference2Name: e.target.value })} placeholder="Full name (e.g. Director / HR Manager)" disabled={!user || loading} className="bg-background" />
+                      <Input value={formData.reference2Title} onChange={(e) => setFormData({ ...formData, reference2Title: e.target.value })} placeholder="Title & Company" disabled={!user || loading} className="bg-background" />
+                      <Input type="email" value={formData.reference2Email} onChange={(e) => setFormData({ ...formData, reference2Email: e.target.value })} placeholder="Company email" disabled={!user || loading} className="bg-background" />
+                      <Input value={formData.reference2Phone} onChange={(e) => setFormData({ ...formData, reference2Phone: e.target.value })} placeholder="Phone number" disabled={!user || loading} className="bg-background" />
+                    </div>
+                  </div>
+                </div>
+              )}
               <div className="space-y-2">
                 <Label>CV / Resume</Label>
                 <div className="border-2 border-dashed border-border rounded-lg p-6 text-center">
