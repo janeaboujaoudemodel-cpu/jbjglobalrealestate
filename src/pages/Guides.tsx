@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import VideoBackground from "@/components/VideoBackground";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { 
@@ -80,15 +81,10 @@ const Guides = () => {
       {/* Hero Section */}
       <section className="jj-hero-fullscreen relative flex items-center overflow-hidden">
         <div className="absolute inset-0 bg-black">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover"
-          >
-            <source src="https://videos.pexels.com/video-files/3629519/3629519-uhd_2560_1440_25fps.mp4" type="video/mp4" />
-          </video>
+          <VideoBackground 
+            src="https://videos.pexels.com/video-files/3629519/3629519-uhd_2560_1440_25fps.mp4"
+            poster="https://images.unsplash.com/photo-1518684079-3c830dcef090?w=1920&q=80"
+          />
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/10 via-transparent to-transparent" />
         </div>

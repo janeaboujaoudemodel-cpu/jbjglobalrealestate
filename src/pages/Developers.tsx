@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect, useRef } from "react";
+import VideoBackground from "@/components/VideoBackground";
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
 import {
@@ -224,14 +225,9 @@ const Developers = () => {
         <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
           {/* Video Background */}
           <div className="absolute inset-0 bg-black">
-            <video
-              className="absolute inset-0 w-full h-full object-cover"
+            <VideoBackground 
               src={developersHeroVideo}
-              muted
-              playsInline
-              autoPlay
-              loop
-              preload="metadata"
+              poster="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80"
             />
             <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
           </div>

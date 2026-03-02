@@ -1,4 +1,5 @@
 import { useCountUp } from "@/hooks/useCountUp";
+import VideoBackground from "@/components/VideoBackground";
 import { COMPANY_STATS, CONTACT_INFO } from "@/constants/stats";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 
@@ -74,16 +75,11 @@ const Awards = () => {
         {/* Hero Section with Video */}
         <section className="relative py-24 md:py-32 bg-black overflow-hidden">
           {/* Video Background */}
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover opacity-30"
-            poster=""
-          >
-            <source src="https://videos.pexels.com/video-files/3129671/3129671-uhd_2560_1440_30fps.mp4" type="video/mp4" />
-          </video>
+          <VideoBackground 
+            src="https://videos.pexels.com/video-files/3129671/3129671-uhd_2560_1440_30fps.mp4"
+            poster="https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=1920&q=80"
+            opacity={0.3}
+          />
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80" />
           
           <div className="jj-layer-2 relative z-10">

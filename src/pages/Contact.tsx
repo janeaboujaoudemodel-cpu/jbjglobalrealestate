@@ -24,6 +24,7 @@ import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { MeetingBookingModal } from "@/components/MeetingBookingModal";
 import SupportTicketBox from "@/components/SupportTicketBox";
 import contactHeroVideo from "@/assets/videos/services-hero.mp4";
+import VideoBackground from "@/components/VideoBackground";
 
 const consultationSchema = z.object({
   fullName: z.string().min(2, "Full name is required").max(100, "Name must be less than 100 characters"),
@@ -289,16 +290,7 @@ END:VCARD`;
       {/* Hero Section with Video */}
       <section className="relative pt-28 pb-20 md:pt-36 md:pb-28">
         <div className="absolute inset-0">
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            className="w-full h-full object-cover"
-          >
-            <source src={contactHeroVideo} type="video/mp4" />
-          </video>
+          <VideoBackground src={contactHeroVideo} poster="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black" />
         </div>
         <div className="relative container mx-auto px-4">

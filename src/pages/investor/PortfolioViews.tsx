@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import VideoBackground from "@/components/VideoBackground";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
@@ -211,16 +212,10 @@ export default function PortfolioViews() {
       <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
         {/* Video Background */}
         <div className="absolute inset-0">
-          <video 
-            autoPlay 
-            loop 
-            muted 
-            playsInline
-            preload="auto"
-            className="absolute inset-0 w-full h-full object-cover"
-          >
-            <source src="https://videos.pexels.com/video-files/5528027/5528027-uhd_2560_1440_30fps.mp4" type="video/mp4" />
-          </video>
+          <VideoBackground 
+            src="https://videos.pexels.com/video-files/5528027/5528027-uhd_2560_1440_30fps.mp4"
+            poster="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80"
+          />
           {/* Overlay gradients */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/70" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/40" />

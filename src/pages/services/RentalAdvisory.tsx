@@ -30,6 +30,7 @@ import { SEOHead } from "@/components/SEOHead";
 
 // Import hero video
 import rentalAdvisoryHeroVideo from "@/assets/videos/dubai-rental-hero.mp4";
+import VideoBackground from "@/components/VideoBackground";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -131,15 +132,7 @@ const RentalAdvisory = () => {
       <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
         {/* Video Background */}
         <div className="absolute inset-0 bg-black">
-          <video
-            className="absolute inset-0 w-full h-full object-cover"
-            src={rentalAdvisoryHeroVideo}
-            muted
-            playsInline
-            autoPlay
-            loop
-            preload="metadata"
-          />
+          <VideoBackground src={rentalAdvisoryHeroVideo} poster="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
         </div>
         
