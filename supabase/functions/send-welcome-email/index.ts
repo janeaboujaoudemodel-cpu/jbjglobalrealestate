@@ -34,56 +34,62 @@ const RequestSchema = z.object({
   userRole: z.enum(["broker", "investor", "visitor"]).optional(),
 });
 
-/* ── SVG Icon Helper ── */
-function svgIcon(svgContent: string, borderColor: string = '#1a1a1a'): string {
-  return `<td style="width:40px;min-width:40px;height:40px;border:2px solid ${borderColor};border-radius:10px;text-align:center;vertical-align:middle;padding:0;">
-    <div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;">
-      ${svgContent}
-    </div>
-  </td>`;
+/* ── SVG icons ── */
+const SVG_BUILDING = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>`;
+const SVG_HEART = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>`;
+const SVG_HEADSET = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5Zm0 0a9 9 0 1 1 18 0m0 0v5a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3Z"/></svg>`;
+const SVG_TICKET = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>`;
+
+/* Recommended For You icons — matching screenshot style (gear, books, house) */
+const SVG_REC_AI = `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`;
+const SVG_REC_GUIDE = `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="M8 7h6"/><path d="M8 11h4"/></svg>`;
+const SVG_REC_PROP = `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`;
+
+/* ── Benefit row — icon only, NO border box ── */
+function benefitRow(svgContent: string, title: string, desc: string): string {
+  return `<tr><td style="padding:10px 0;">
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+  <td style="width:24px;min-width:24px;vertical-align:top;padding-top:2px;">${svgContent}</td>
+  <td style="padding-left:12px;"><strong style="color:#1a1a1a;font-size:14px;">${title}</strong>
+  <p style="color:#666;margin:2px 0 0;font-size:13px;line-height:1.4;">${desc}</p></td>
+  </tr></table>
+</td></tr>`;
 }
 
-/* SVG icons for email (inline, no external deps) */
-const SVG_BUILDING = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>`;
-const SVG_HEART = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>`;
-const SVG_HEADSET = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5Zm0 0a9 9 0 1 1 18 0m0 0v5a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3Z"/></svg>`;
-const SVG_TICKET = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>`;
+/* ── Inquiry contact box (green border, contextual) ── */
+function inquiryBox(contextLabel: string): string {
+  return `
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:20px 0;">
+<tr><td style="padding:18px 24px;background:#f0fdf4;border:2px solid #bbf7d0;border-radius:12px;text-align:center;">
+<p style="margin:0;font-size:15px;color:#333;line-height:1.6;">For inquiries about your ${contextLabel}, you can reply<br/>directly to <a href="mailto:contact@jbj.ae" style="color:#1a1a1a;font-weight:700;text-decoration:none;">contact@jbj.ae</a></p>
+</td></tr>
+</table>`;
+}
 
-// Recommended For You icons
-const SVG_REC_AI = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C8A766" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="m15.5 7.5 2.8-2.8"/><path d="M20 12h4"/><path d="m15.5 16.5 2.8 2.8"/><path d="M12 20v4"/><path d="m4.9 19.1 2.8-2.8"/><path d="M2 12h4"/><path d="m4.9 4.9 2.8 2.8"/><circle cx="12" cy="12" r="4"/></svg>`;
-const SVG_REC_GUIDE = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C8A766" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>`;
-const SVG_REC_PROP = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C8A766" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`;
-
+/* ── Recommended For You — screenshot style (large icons, gold border cards) ── */
 function recommendedActionsHtml(): string {
   return `
-<!-- Recommended For You -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0;border-top:2px solid #C8A76633;padding-top:20px;">
 <tr><td style="text-align:center;">
-<p style="color:#1a1a1a;font-size:14px;font-weight:700;margin:0 0 12px;">Recommended For You</p>
+<p style="color:#1a1a1a;font-size:16px;font-weight:700;margin:0 0 14px;">Recommended For You</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr>
 <td width="33%" style="text-align:center;padding:4px;">
-<a href="${SITE_URL}/ai-tools" style="display:block;padding:14px 8px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:10px;text-decoration:none;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr>
-<td style="width:32px;height:32px;border:2px solid #C8A766;border-radius:8px;text-align:center;vertical-align:middle;">${SVG_REC_AI}</td>
-</tr></table>
-<p style="margin:6px 0 0;font-size:11px;color:#1a1a1a;font-weight:600;">AI Tools</p>
+<a href="${SITE_URL}/ai-tools" style="display:block;padding:18px 8px;background:#fff;border:2px solid #C8A766;border-radius:12px;text-decoration:none;">
+${SVG_REC_AI}
+<p style="margin:8px 0 0;font-size:12px;color:#1a1a1a;font-weight:700;">AI Tools</p>
 </a>
 </td>
 <td width="33%" style="text-align:center;padding:4px;">
-<a href="${SITE_URL}/guides" style="display:block;padding:14px 8px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:10px;text-decoration:none;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr>
-<td style="width:32px;height:32px;border:2px solid #C8A766;border-radius:8px;text-align:center;vertical-align:middle;">${SVG_REC_GUIDE}</td>
-</tr></table>
-<p style="margin:6px 0 0;font-size:11px;color:#1a1a1a;font-weight:600;">Guides</p>
+<a href="${SITE_URL}/guides" style="display:block;padding:18px 8px;background:#fff;border:2px solid #C8A766;border-radius:12px;text-decoration:none;">
+${SVG_REC_GUIDE}
+<p style="margin:8px 0 0;font-size:12px;color:#1a1a1a;font-weight:700;">Guides</p>
 </a>
 </td>
 <td width="33%" style="text-align:center;padding:4px;">
-<a href="${SITE_URL}/properties" style="display:block;padding:14px 8px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:10px;text-decoration:none;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr>
-<td style="width:32px;height:32px;border:2px solid #C8A766;border-radius:8px;text-align:center;vertical-align:middle;">${SVG_REC_PROP}</td>
-</tr></table>
-<p style="margin:6px 0 0;font-size:11px;color:#1a1a1a;font-weight:600;">Properties</p>
+<a href="${SITE_URL}/properties" style="display:block;padding:18px 8px;background:#fff;border:2px solid #C8A766;border-radius:12px;text-decoration:none;">
+${SVG_REC_PROP}
+<p style="margin:8px 0 0;font-size:12px;color:#1a1a1a;font-weight:700;">Properties</p>
 </a>
 </td>
 </tr>
@@ -92,11 +98,30 @@ function recommendedActionsHtml(): string {
 </table>`;
 }
 
+/* ── Feedback section — matching screenshot ── */
+function feedbackHtml(): string {
+  const reviewUrl = `${SITE_URL}/reviews?source=email`;
+  const surveyUrl = `${SITE_URL}/ticket-survey?source=email`;
+  return `
+<table width="100%" cellpadding="0" cellspacing="0" style="border-top:2px solid #C8A76633;padding-top:20px;margin-top:4px;">
+<tr><td align="center">
+<p style="color:#1a1a1a;font-size:16px;font-weight:700;margin:0 0 4px;">We Value Your Feedback</p>
+<p style="color:#888;font-size:13px;margin:0 0 16px;">Help us improve by sharing your experience</p>
+<table cellpadding="0" cellspacing="0" align="center">
+<tr>
+<td style="padding:0 6px;"><a href="${reviewUrl}" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:12px 28px;border-radius:8px;font-weight:700;font-size:13px;border:1px solid #C8A76650;">Leave a Review</a></td>
+<td style="padding:0 6px;"><a href="${surveyUrl}" style="display:inline-block;background:#FDFBF7;border:2px solid #C8A766;color:#1a1a1a;text-decoration:none;padding:10px 28px;border-radius:8px;font-weight:700;font-size:13px;">Take Survey</a></td>
+</tr>
+</table>
+</td></tr>
+</table>`;
+}
+
 function sharedHeader(departmentLabel: string): string {
   return `
-<!-- Header — Black with centered monogram + wordmark (equal padding) -->
-<tr><td style="background:#000000;padding:32px 40px 32px;text-align:center;border-radius:24px 24px 0 0;">
-<img src="${LOGO_URL}" alt="JBJ Global Real Estate" width="180" style="max-width:180px;height:auto;display:block;margin:0 auto 16px;" />
+<!-- Header — Black with centered monogram + wordmark (lifted up) -->
+<tr><td style="background:#000000;padding:24px 40px 20px;text-align:center;border-radius:24px 24px 0 0;">
+<img src="${LOGO_URL}" alt="JBJ Global Real Estate" width="180" style="max-width:180px;height:auto;display:block;margin:0 auto 12px;" />
 <p style="color:#C8A766;margin:0;font-size:14px;font-weight:700;letter-spacing:3px;text-transform:uppercase;">JBJ GLOBAL REAL ESTATE</p>
 </td></tr>
 <!-- Sub-header band -->
@@ -173,22 +198,7 @@ ${sharedFooterHtml()}
 </body></html>`;
 }
 
-/* ── Benefit card with SVG icon ── */
-function benefitCard(svgContent: string, borderColor: string, title: string, desc: string): string {
-  return `<tr><td style="padding:14px 18px;background:linear-gradient(135deg,#F5EBD7,#FDFBF7);border-radius:10px;border:1px solid #C8A76640;">
-  <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
-  ${svgIcon(svgContent, borderColor)}
-  <td style="padding-left:14px;"><strong style="color:#1a1a1a;font-size:14px;">${title}</strong>
-  <p style="color:#666;margin:4px 0 0;font-size:13px;">${desc}</p></td>
-  </tr></table>
-</td></tr>
-<tr><td style="height:8px;"></td></tr>`;
-}
-
 function buildWelcomeHtml(displayName: string, email: string, role: string, ctaText: string, ctaUrl: string, benefitsHtml: string): string {
-  const reviewUrl = `${SITE_URL}/reviews?source=welcome`;
-  const surveyUrl = `${SITE_URL}/ticket-survey?source=welcome`;
-
   const arabicGreeting = role === 'broker' ? 'مرحباً بك في دائرة وسطاء JBJ!' : role === 'investor' ? 'مرحباً بك في JBJ — رحلتك الاستثمارية تبدأ!' : 'مرحباً بك في JBJ Global Real Estate!';
 
   const bodyContent = `
@@ -197,7 +207,7 @@ function buildWelcomeHtml(displayName: string, email: string, role: string, ctaT
 
 <!-- Welcome Headline — Large & Premium -->
 <p style="margin:0 0 6px;font-size:28px;font-weight:800;color:#1a1a1a;line-height:1.2;">Thank You for Joining Us, ${displayName}</p>
-<p style="margin:0 0 24px;font-size:14px;color:#888;">Your JBJ account is ready — we're thrilled to have you.</p>
+<p style="margin:0 0 24px;font-size:18px;color:#C8A766;font-weight:600;line-height:1.3;">Your JBJ account is ready — we're thrilled to have you.</p>
 
 <p style="color:#555;font-size:15px;line-height:1.6;margin:0 0 20px;">
 You have successfully created your account with <strong>JBJ Global Real Estate</strong>. As a valued member, you now have access to our full suite of services and tools.
@@ -215,7 +225,7 @@ You have successfully created your account with <strong>JBJ Global Real Estate</
 As a Dubai-based real estate brokerage, we specialize in connecting clients with exceptional properties across the UAE.
 </p>
 
-<!-- Benefits -->
+<!-- Benefits — icon only, no border boxes -->
 <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
 ${benefitsHtml}
 </table>
@@ -229,21 +239,11 @@ ${ctaText}
 </td></tr>
 </table>
 
+${inquiryBox("account")}
+
 ${recommendedActionsHtml()}
 
-<!-- Review & Survey -->
-<table width="100%" cellpadding="0" cellspacing="0" style="border-top:2px solid #C8A76633;padding-top:20px;">
-<tr><td align="center">
-<p style="color:#1a1a1a;font-size:14px;font-weight:700;margin:0 0 4px;">We Value Your Feedback</p>
-<p style="color:#888;font-size:12px;margin:0 0 14px;">Help us improve by sharing your experience</p>
-<table cellpadding="0" cellspacing="0" align="center">
-<tr>
-<td style="padding:0 6px;"><a href="${reviewUrl}" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:10px 24px;border-radius:8px;font-weight:700;font-size:12px;border:1px solid #C8A76650;">Leave a Review</a></td>
-<td style="padding:0 6px;"><a href="${surveyUrl}" style="display:inline-block;background:#FDFBF7;border:2px solid #C8A766;color:#1a1a1a;text-decoration:none;padding:8px 24px;border-radius:8px;font-weight:700;font-size:12px;">Take Survey</a></td>
-</tr>
-</table>
-</td></tr>
-</table>
+${feedbackHtml()}
 
 <p style="font-size:14px;color:#333;margin-top:24px;">Best regards,<br><span style="color:#C8A766;font-weight:600;">JBJ Global Real Estate Team</span></p>
 </td></tr>
@@ -255,7 +255,7 @@ ${recommendedActionsHtml()}
 <tr><td class="content-pad" style="padding:32px;direction:rtl;text-align:right;">
 
 <p style="margin:0;font-size:28px;font-weight:800;color:#1a1a1a;line-height:1.2;">${arabicGreeting}</p>
-<p style="margin:8px 0 0;font-size:14px;color:#888;">حسابك في JBJ جاهز — يسعدنا انضمامك إلينا.</p>
+<p style="margin:8px 0 0;font-size:18px;color:#C8A766;font-weight:600;">حسابك في JBJ جاهز — يسعدنا انضمامك إلينا.</p>
 
 <p style="color:#555;font-size:15px;line-height:1.6;margin:16px 0 20px;">
 لقد قمت بإنشاء حسابك بنجاح مع <strong>JBJ Global Real Estate</strong>. بصفتك عضواً مميزاً، يمكنك الآن الوصول إلى جميع خدماتنا وأدواتنا.
@@ -336,28 +336,28 @@ serve(async (req) => {
       visitor: { text: "Start Browsing", url: `${SITE_URL}/properties` },
     };
 
-    // SVG icons for benefit cards
-    const SVG_AI_TOOLS = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="m15.5 7.5 2.8-2.8"/><path d="M20 12h4"/><path d="m15.5 16.5 2.8 2.8"/><path d="M12 20v4"/><path d="m4.9 19.1 2.8-2.8"/><path d="M2 12h4"/><path d="m4.9 4.9 2.8 2.8"/><circle cx="12" cy="12" r="4"/></svg>`;
-    const SVG_TRAINING = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 10 3 12 0v-5"/></svg>`;
-    const SVG_HR = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`;
-    const SVG_BEN_TICKET = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>`;
-    const SVG_BEN_PROP = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>`;
+    // SVG icons for benefit rows
+    const SVG_AI_TOOLS = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="m15.5 7.5 2.8-2.8"/><path d="M20 12h4"/><path d="m15.5 16.5 2.8 2.8"/><path d="M12 20v4"/><path d="m4.9 19.1 2.8-2.8"/><path d="M2 12h4"/><path d="m4.9 4.9 2.8 2.8"/><circle cx="12" cy="12" r="4"/></svg>`;
+    const SVG_TRAINING = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 10 3 12 0v-5"/></svg>`;
+    const SVG_HR = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`;
+    const SVG_BEN_TICKET = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>`;
+    const SVG_BEN_PROP = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>`;
 
     const benefitsByRole: Record<string, string> = {
       broker:
-        benefitCard(SVG_AI_TOOLS, '#1a1a1a', 'Free AI Tools', 'Unlimited access to property analysis, market reports, and smart recommendations.') +
-        benefitCard(SVG_TRAINING, '#1a1a1a', 'Free Training Academy', 'Complete courses and videos to boost your real estate career.') +
-        benefitCard(SVG_HR, '#1a1a1a', 'Dedicated HR Manager &amp; Personal Assistant', 'Jessica and our team provide dedicated support for all your inquiries.') +
-        benefitCard(SVG_BEN_TICKET, '#dc2626', 'Support Tickets &amp; Events', 'Submit tickets for any query and join exclusive company events and webinars.'),
+        benefitRow(SVG_AI_TOOLS, 'Free AI Tools', 'Unlimited access to property analysis, market reports, and smart recommendations.') +
+        benefitRow(SVG_TRAINING, 'Free Training Academy', 'Complete courses and videos to boost your real estate career.') +
+        benefitRow(SVG_HR, 'Dedicated HR Manager & Personal Assistant', 'Jessica and our team provide dedicated support for all your inquiries.') +
+        benefitRow(SVG_BEN_TICKET, 'Support Tickets & Events', 'Submit tickets for any query and join exclusive company events and webinars.'),
       investor:
-        benefitCard(SVG_BEN_PROP, '#1a1a1a', 'Premium Properties', 'Browse exclusive listings across Dubai and the UAE.') +
-        benefitCard(SVG_AI_TOOLS, '#1a1a1a', 'AI Property Analysis', 'Smart insights and ROI calculations for better investment decisions.') +
-        benefitCard(SVG_BEN_TICKET, '#dc2626', 'Support Tickets &amp; Events', 'Submit tickets for any query and join exclusive company events.'),
+        benefitRow(SVG_BEN_PROP, 'Premium Properties', 'Browse exclusive listings across Dubai and the UAE.') +
+        benefitRow(SVG_AI_TOOLS, 'AI Property Analysis', 'Smart insights and ROI calculations for better investment decisions.') +
+        benefitRow(SVG_BEN_TICKET, 'Support Tickets & Events', 'Submit tickets for any query and join exclusive company events.'),
       visitor:
-        benefitCard(SVG_BUILDING, '#1a1a1a', 'Browse Premium Properties', 'Explore our curated selection of UAE properties across all emirates.') +
-        benefitCard(SVG_HEART, '#1a1a1a', 'Save Your Favorites', 'Shortlist properties you love and access them anytime from your dashboard.') +
-        benefitCard(SVG_HEADSET, '#16a34a', 'Expert Support 24/7', 'Our dedicated team is ready to assist with any property inquiry.') +
-        benefitCard(SVG_TICKET, '#dc2626', 'Support Tickets &amp; Events', 'Submit tickets, get help, and stay updated on company events.'),
+        benefitRow(SVG_BUILDING, 'Browse Premium Properties', 'Explore our curated selection of UAE properties across all emirates.') +
+        benefitRow(SVG_HEART, 'Save Your Favorites', 'Shortlist properties you love and access them anytime from your dashboard.') +
+        benefitRow(SVG_HEADSET, 'Expert Support 24/7', 'Our dedicated team is ready to assist with any property inquiry.') +
+        benefitRow(SVG_TICKET, 'Support Tickets & Events', 'Submit tickets, get help, and stay updated on company events.'),
     };
 
     const cta = ctaByRole[role] || ctaByRole.visitor;

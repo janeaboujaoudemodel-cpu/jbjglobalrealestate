@@ -17,6 +17,11 @@ interface PasswordChangeRequest {
   timestamp?: string;
 }
 
+/* Recommended For You icons */
+const SVG_REC_AI = `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`;
+const SVG_REC_GUIDE = `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="M8 7h6"/><path d="M8 11h4"/></svg>`;
+const SVG_REC_PROP = `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`;
+
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -46,6 +51,9 @@ const handler = async (req: Request): Promise<Response> => {
     else if (ua.includes('Firefox')) browserInfo = 'Firefox';
     else if (ua.includes('Edge')) browserInfo = 'Microsoft Edge';
 
+    const reviewUrl = `${SITE_URL}/reviews?source=password-change`;
+    const surveyUrl = `${SITE_URL}/ticket-survey?source=password-change`;
+
     const emailHtml = `<!DOCTYPE html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <style>body{margin:0;padding:0;background-color:#ffffff;font-family:'Segoe UI',Arial,sans-serif;}
@@ -58,12 +66,12 @@ const handler = async (req: Request): Promise<Response> => {
 <tr><td>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(180deg,#FFFFFF,#FDFBF7,#F5F0E6);border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(200,167,102,0.18);">
 
-<!-- Header — Centered (equal padding) -->
-<tr><td style="background:#000000;padding:32px 40px 32px;text-align:center;border-radius:20px 20px 0 0;">
-<img src="${LOGO_URL}" alt="JBJ Global Real Estate" width="180" style="max-width:180px;height:auto;display:block;margin:0 auto 16px;" />
+<!-- Header — Centered (lifted up) -->
+<tr><td style="background:#000000;padding:24px 40px 20px;text-align:center;border-radius:20px 20px 0 0;">
+<img src="${LOGO_URL}" alt="JBJ Global Real Estate" width="180" style="max-width:180px;height:auto;display:block;margin:0 auto 12px;" />
 <p style="color:#C8A766;margin:0;font-size:14px;font-weight:700;letter-spacing:3px;text-transform:uppercase;">JBJ GLOBAL REAL ESTATE</p>
 </td></tr>
-<!-- Sub-header with lock icon container -->
+<!-- Sub-header with lock icon -->
 <tr><td style="background:linear-gradient(135deg,#C8A766,#B8956E,#A07D4A);padding:20px 32px;text-align:center;">
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;">
 <tr><td style="width:44px;height:44px;background:#1a1a1a;border-radius:12px;text-align:center;vertical-align:middle;">
@@ -109,40 +117,57 @@ const handler = async (req: Request): Promise<Response> => {
 </td></tr>
 </table>
 
+<!-- Inquiry Box -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:20px 0;">
+<tr><td style="padding:18px 24px;background:#f0fdf4;border:2px solid #bbf7d0;border-radius:12px;text-align:center;">
+<p style="margin:0;font-size:15px;color:#333;line-height:1.6;">For inquiries about your account security, you can reply<br/>directly to <a href="mailto:contact@jbj.ae" style="color:#1a1a1a;font-weight:700;text-decoration:none;">contact@jbj.ae</a></p>
+</td></tr>
+</table>
+
 <!-- Recommended For You -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0;border-top:2px solid #C8A76633;padding-top:20px;">
 <tr><td style="text-align:center;">
-<p style="color:#1a1a1a;font-size:14px;font-weight:700;margin:0 0 12px;">Recommended For You</p>
+<p style="color:#1a1a1a;font-size:16px;font-weight:700;margin:0 0 14px;">Recommended For You</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr>
 <td width="33%" style="text-align:center;padding:4px;">
-<a href="${SITE_URL}/ai-tools" style="display:block;padding:14px 8px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:10px;text-decoration:none;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr>
-<td style="width:32px;height:32px;border:2px solid #C8A766;border-radius:8px;text-align:center;vertical-align:middle;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C8A766" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;"><path d="M12 2v4"/><path d="m15.5 7.5 2.8-2.8"/><path d="M20 12h4"/><path d="m15.5 16.5 2.8 2.8"/><path d="M12 20v4"/><path d="m4.9 19.1 2.8-2.8"/><path d="M2 12h4"/><path d="m4.9 4.9 2.8 2.8"/><circle cx="12" cy="12" r="4"/></svg></td>
-</tr></table>
-<p style="margin:6px 0 0;font-size:11px;color:#1a1a1a;font-weight:600;">AI Tools</p>
+<a href="${SITE_URL}/ai-tools" style="display:block;padding:18px 8px;background:#fff;border:2px solid #C8A766;border-radius:12px;text-decoration:none;">
+${SVG_REC_AI}
+<p style="margin:8px 0 0;font-size:12px;color:#1a1a1a;font-weight:700;">AI Tools</p>
 </a>
 </td>
 <td width="33%" style="text-align:center;padding:4px;">
-<a href="${SITE_URL}/guides" style="display:block;padding:14px 8px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:10px;text-decoration:none;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr>
-<td style="width:32px;height:32px;border:2px solid #C8A766;border-radius:8px;text-align:center;vertical-align:middle;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C8A766" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg></td>
-</tr></table>
-<p style="margin:6px 0 0;font-size:11px;color:#1a1a1a;font-weight:600;">Guides</p>
+<a href="${SITE_URL}/guides" style="display:block;padding:18px 8px;background:#fff;border:2px solid #C8A766;border-radius:12px;text-decoration:none;">
+${SVG_REC_GUIDE}
+<p style="margin:8px 0 0;font-size:12px;color:#1a1a1a;font-weight:700;">Guides</p>
 </a>
 </td>
 <td width="33%" style="text-align:center;padding:4px;">
-<a href="${SITE_URL}/properties" style="display:block;padding:14px 8px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:10px;text-decoration:none;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr>
-<td style="width:32px;height:32px;border:2px solid #C8A766;border-radius:8px;text-align:center;vertical-align:middle;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C8A766" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></td>
-</tr></table>
-<p style="margin:6px 0 0;font-size:11px;color:#1a1a1a;font-weight:600;">Properties</p>
+<a href="${SITE_URL}/properties" style="display:block;padding:18px 8px;background:#fff;border:2px solid #C8A766;border-radius:12px;text-decoration:none;">
+${SVG_REC_PROP}
+<p style="margin:8px 0 0;font-size:12px;color:#1a1a1a;font-weight:700;">Properties</p>
 </a>
 </td>
 </tr>
 </table>
 </td></tr>
 </table>
+
+<!-- Feedback -->
+<table width="100%" cellpadding="0" cellspacing="0" style="border-top:2px solid #C8A76633;padding-top:20px;margin-top:4px;">
+<tr><td align="center">
+<p style="color:#1a1a1a;font-size:16px;font-weight:700;margin:0 0 4px;">We Value Your Feedback</p>
+<p style="color:#888;font-size:13px;margin:0 0 16px;">Help us improve by sharing your experience</p>
+<table cellpadding="0" cellspacing="0" align="center">
+<tr>
+<td style="padding:0 6px;"><a href="${reviewUrl}" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:12px 28px;border-radius:8px;font-weight:700;font-size:13px;border:1px solid #C8A76650;">Leave a Review</a></td>
+<td style="padding:0 6px;"><a href="${surveyUrl}" style="display:inline-block;background:#FDFBF7;border:2px solid #C8A766;color:#1a1a1a;text-decoration:none;padding:10px 28px;border-radius:8px;font-weight:700;font-size:13px;">Take Survey</a></td>
+</tr>
+</table>
+</td></tr>
+</table>
+
+<p style="font-size:14px;color:#333;margin-top:24px;">Best regards,<br><span style="color:#C8A766;font-weight:600;">JBJ Global Real Estate Team</span></p>
 
 <!-- ═══ Arabic Content ═══ -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="border-top:2px solid #C8A76650;padding-top:16px;"></td></tr></table>
