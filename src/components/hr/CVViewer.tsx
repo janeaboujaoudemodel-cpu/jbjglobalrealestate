@@ -81,34 +81,45 @@ const CVViewer = ({
     
     setLoading(true);
     try {
-      const { data, error } = await supabase.storage
-        .from('hr-documents')
-        .createSignedUrl(cvUrl, 3600);
+      const isWordDoc = /\.(docx?|odt)$/i.test(cvUrl);
 
-      if (error) {
-        console.error('Error getting signed URL:', error);
-        const { data: publicUrlData } = supabase.storage
+      // For Word docs, we need a publicly accessible URL for Google Docs viewer
+      if (isWordDoc) {
+        const { data, error } = await supabase.storage
           .from('hr-documents')
-          .getPublicUrl(cvUrl);
-        
-        if (publicUrlData?.publicUrl) {
-          const url = publicUrlData.publicUrl;
-          // Wrap Word docs in Google Docs viewer for inline preview
-          if (/\.(docx?|odt)$/i.test(cvUrl)) {
-            setSignedUrl(`https://docs.google.com/gview?url=${encodeURIComponent(url)}&embedded=true`);
-          } else {
-            setSignedUrl(url);
-          }
-        } else {
-          toast.error('Unable to load CV. Please try downloading instead.');
-        }
-      } else if (data?.signedUrl) {
-        // Wrap Word docs in Google Docs viewer for inline preview
-        if (/\.(docx?|odt)$/i.test(cvUrl)) {
+          .createSignedUrl(cvUrl, 3600);
+        if (!error && data?.signedUrl) {
           setSignedUrl(`https://docs.google.com/gview?url=${encodeURIComponent(data.signedUrl)}&embedded=true`);
         } else {
-          setSignedUrl(data.signedUrl);
+          toast.error('Unable to load Word document preview.');
         }
+        return;
+      }
+
+      // For PDF/images: download as blob to bypass CORS/auth issues
+      const buckets = ['hr-documents', 'documents', 'public'];
+      let downloaded = false;
+
+      for (const bucket of buckets) {
+        const { data, error } = await supabase.storage
+          .from(bucket)
+          .download(cvUrl);
+        
+        if (!error && data) {
+          // Ensure correct MIME type for PDFs
+          let blob = data;
+          if (/\.pdf$/i.test(cvUrl) && (!blob.type || blob.type === 'application/octet-stream')) {
+            blob = new Blob([data], { type: 'application/pdf' });
+          }
+          const objectUrl = URL.createObjectURL(blob);
+          setSignedUrl(objectUrl);
+          downloaded = true;
+          break;
+        }
+      }
+
+      if (!downloaded) {
+        toast.error('Unable to load CV preview. Try downloading instead.');
       }
     } catch (error) {
       console.error('Error loading CV:', error);
