@@ -737,7 +737,7 @@ const App = () => (
                 <Route path="/kanban" element={<OwnerGuard><KanbanBoard /></OwnerGuard>} />
                 <Route path="/whiteboard" element={<OwnerGuard><Whiteboard /></OwnerGuard>} />
                 <Route path="/mindmap" element={<OwnerGuard><MindMap /></OwnerGuard>} />
-                <Route path="/presentations" element={<OwnerGuard><Presentations /></OwnerGuard>} />
+                <Route path="/presentations" element={<Presentations />} />
                 <Route path="/form-builder" element={<OwnerGuard><FormBuilder /></OwnerGuard>} />
 
                 {/* Scan & Sign Toolkit */}
