@@ -5,7 +5,6 @@ const RESEND_API_URL = "https://api.resend.com/emails";
 const VERIFIED_SENDER = "noreply@jbj.ae";
 const SITE_URL = "https://jbj.ae";
 
-// Per-channel reply-to addresses
 const CHANNEL_REPLY_TO: Record<string, string> = {
   hr: "HR@JBJ.AE",
   career: "HR@JBJ.AE",
@@ -48,44 +47,22 @@ async function sendEmail(payload: { from: string; reply_to: string; to: string[]
 
 function getServiceLabel(category: string): string {
   switch (category?.toLowerCase()) {
-    case "career":
-    case "hr":
-    case "cv":
-      return "Career Application";
-    case "partnership":
-    case "partnerships":
-      return "Partnership Application";
-    case "listing":
-    case "listings":
-      return "Listing Submission";
-    case "inquiry":
-    case "inquiries":
-      return "Inquiry";
-    case "support":
-    case "ticket":
-      return "Support Ticket";
-    default:
-      return "Notification";
+    case "career": case "hr": case "cv": return "Career Application";
+    case "partnership": case "partnerships": return "Partnership Application";
+    case "listing": case "listings": return "Listing Submission";
+    case "inquiry": case "inquiries": return "Inquiry";
+    case "support": case "ticket": return "Support Ticket";
+    default: return "Notification";
   }
 }
 
 function getDepartmentLabel(category: string): string {
   switch (category?.toLowerCase()) {
-    case "career":
-    case "hr":
-    case "cv":
-      return "HR Department";
-    case "partnership":
-    case "partnerships":
-      return "Partnerships Team";
-    case "listing":
-    case "listings":
-      return "Listings Team";
-    case "support":
-    case "ticket":
-      return "Support Team";
-    default:
-      return "JBJ Team";
+    case "career": case "hr": case "cv": return "HR Department";
+    case "partnership": case "partnerships": return "Partnerships Team";
+    case "listing": case "listings": return "Listings Team";
+    case "support": case "ticket": return "Support Team";
+    default: return "JBJ Team";
   }
 }
 
@@ -109,133 +86,138 @@ function buildEmailHtml(req: AdminMessageRequest): string {
 
   return `<!DOCTYPE html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
-<body style="margin:0;padding:0;background-color:#f5f0e6;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;">
-<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f0e6;padding:32px 16px;">
+<body style="margin:0;padding:0;background-color:#ffffff;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#ffffff;padding:32px 16px;">
 <tr><td align="center">
-<table width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(201,168,76,0.15);">
+<table width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #e8e0d0;">
 
-<!-- Header -->
-<tr><td style="background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);padding:32px 40px;text-align:center;">
-<h1 style="color:#C9A84C;margin:0;font-size:24px;font-weight:700;letter-spacing:1px;">JBJ GLOBAL REAL ESTATE</h1>
-<p style="color:#C9A84C99;margin:6px 0 0;font-size:12px;letter-spacing:3px;">BUY · SELL · RENT</p>
+<!-- Header — Pure Black -->
+<tr><td style="background:#000000;padding:28px 40px;text-align:center;">
+<!-- Monogram: White J on black -->
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center">
+<div style="width:56px;height:56px;border-radius:12px;border:2px solid #C8A766;display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px;">
+<span style="color:#ffffff;font-size:28px;font-weight:800;font-family:Georgia,serif;line-height:56px;">J</span>
+</div>
+</td></tr></table>
+<p style="color:#C8A766;margin:0;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;">JBJ GLOBAL REAL ESTATE</p>
 </td></tr>
 
-<!-- Category Banner -->
-<tr><td style="padding:0;">
+<!-- Gold Accent Line -->
+<tr><td style="background:linear-gradient(90deg,#C8A766,#D4C4A8,#C8A766);height:3px;font-size:0;line-height:0;">&nbsp;</td></tr>
+
+<!-- Category Label -->
+<tr><td style="padding:24px 40px 0;">
 <table width="100%" cellpadding="0" cellspacing="0">
-<tr><td style="background-color:#C9A84C15;border-left:4px solid #C9A84C;padding:20px 40px;">
-<p style="margin:0;font-size:11px;color:#666;text-transform:uppercase;letter-spacing:2px;">${typeLabel}</p>
-<h2 style="margin:8px 0 0;font-size:22px;color:#C9A84C;font-weight:700;">Message from ${departmentLabel}</h2>
+<tr><td style="background:linear-gradient(135deg,#F5EBD7 0%,#FDFBF7 100%);border-left:4px solid #C8A766;border-radius:0 10px 10px 0;padding:14px 20px;">
+<p style="margin:0;font-size:10px;color:#888;text-transform:uppercase;letter-spacing:2px;">Department</p>
+<p style="margin:4px 0 0;font-size:16px;color:#1a1a1a;font-weight:700;">${typeLabel}</p>
 </td></tr>
 </table>
 </td></tr>
 
 <!-- Body -->
-<tr><td style="padding:32px 40px;">
+<tr><td style="padding:28px 40px;">
 <p style="color:#333;font-size:15px;line-height:1.6;margin:0 0 20px;">Dear <strong>${req.recipientName}</strong>,</p>
 
 ${req.referenceLabel ? `
 <!-- Reference Details -->
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#fdfbf7;border:1px solid #C9A84C33;border-radius:12px;margin:0 0 24px;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#FDFBF7;border:1px solid #C8A76633;border-radius:12px;margin:0 0 24px;">
 <tr><td style="padding:16px 20px;">
 <table width="100%" cellpadding="0" cellspacing="0">
 <tr>
-<td style="padding:6px 0;color:#888;font-size:13px;width:120px;">Reference:</td>
-<td style="padding:6px 0;color:#333;font-size:13px;font-weight:600;">${req.referenceId ? req.referenceId.substring(0, 8).toUpperCase() : 'N/A'}</td>
+<td style="padding:5px 0;color:#888;font-size:12px;width:100px;">Reference</td>
+<td style="padding:5px 0;color:#333;font-size:13px;font-weight:600;">${req.referenceId ? req.referenceId.substring(0, 8).toUpperCase() : 'N/A'}</td>
 </tr>
 <tr>
-<td style="padding:6px 0;color:#888;font-size:13px;">Regarding:</td>
-<td style="padding:6px 0;color:#333;font-size:13px;font-weight:600;">${req.referenceLabel}</td>
+<td style="padding:5px 0;color:#888;font-size:12px;">Regarding</td>
+<td style="padding:5px 0;color:#333;font-size:13px;font-weight:600;">${req.referenceLabel}</td>
 </tr>
 <tr>
-<td style="padding:6px 0;color:#888;font-size:13px;">Type:</td>
-<td style="padding:6px 0;color:#333;font-size:13px;">${typeLabel}</td>
+<td style="padding:5px 0;color:#888;font-size:12px;">Type</td>
+<td style="padding:5px 0;color:#333;font-size:13px;">${typeLabel}</td>
 </tr>
 </table>
 </td></tr>
 </table>
 ` : ''}
 
-<!-- Admin Message -->
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#f0f7ff;border:1px solid #3b82f633;border-radius:12px;margin:0 0 24px;">
-<tr><td style="padding:16px 20px;">
-<p style="margin:0 0 8px;font-size:12px;color:#3b82f6;font-weight:600;text-transform:uppercase;letter-spacing:1px;">Message from ${departmentLabel}</p>
+<!-- Admin Message — Champagne/Gold Card -->
+<table width="100%" cellpadding="0" cellspacing="0" style="background:linear-gradient(135deg,#F5EBD7 0%,#FDFBF7 100%);border:1px solid #C8A76640;border-radius:12px;margin:0 0 24px;">
+<tr><td style="padding:18px 22px;">
+<p style="margin:0 0 8px;font-size:11px;color:#C8A766;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;">Message from ${departmentLabel}</p>
 <p style="margin:0;color:#333;font-size:14px;line-height:1.8;white-space:pre-wrap;">${req.message}</p>
 </td></tr>
 </table>
 
-<!-- Reply info -->
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#f0fdf4;border:1px solid #22c55e33;border-radius:12px;margin:0 0 24px;">
+<!-- Reply Info -->
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#FDFBF7;border:1px solid #C8A76630;border-radius:10px;margin:0 0 24px;">
 <tr><td style="padding:12px 20px;text-align:center;">
-<p style="margin:0;font-size:13px;color:#166534;">💬 You can reply directly to this email at <a href="mailto:${replyTo}" style="color:#C9A84C;font-weight:600;">${replyTo}</a></p>
+<p style="margin:0;font-size:13px;color:#666;">You can reply directly to <a href="mailto:${replyTo}" style="color:#C8A766;font-weight:700;text-decoration:none;">${replyTo}</a></p>
 </td></tr>
 </table>
 
-<!-- CTA Button -->
+<!-- CTA — Premium Dark Button -->
 <table width="100%" cellpadding="0" cellspacing="0">
-<tr><td align="center" style="padding:8px 0 24px;">
-<a href="${SITE_URL}/my-account" style="display:inline-block;background:linear-gradient(135deg,#C9A84C,#B8973F);color:#000;text-decoration:none;padding:14px 36px;border-radius:12px;font-weight:700;font-size:14px;letter-spacing:0.5px;">
-View in My Account
+<tr><td align="center" style="padding:8px 0 28px;">
+<a href="${SITE_URL}/my-account" style="display:inline-block;background:#000000;color:#C8A766;text-decoration:none;padding:14px 40px;border-radius:10px;font-weight:700;font-size:14px;letter-spacing:0.5px;border:1px solid #C8A76650;">
+View My Account
 </a>
 </td></tr>
 </table>
 
-<!-- Review & Survey Section -->
-<table width="100%" cellpadding="0" cellspacing="0" style="margin:24px 0 0;border-top:2px solid #C9A84C33;padding-top:20px;">
+<!-- Divider -->
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="border-top:1px solid #e8e0d0;padding-top:24px;">
+
+<!-- Review & Survey -->
+<table width="100%" cellpadding="0" cellspacing="0">
 <tr><td align="center">
-<p style="color:#C9A84C;font-size:15px;font-weight:700;margin:0 0 6px;">⭐ We Value Your Feedback</p>
-<p style="color:#666;font-size:12px;margin:0 0 14px;">Help us improve by sharing your experience</p>
+<p style="color:#1a1a1a;font-size:15px;font-weight:700;margin:0 0 4px;">We Value Your Feedback</p>
+<p style="color:#888;font-size:12px;margin:0 0 16px;">Help us improve by sharing your experience</p>
 <table cellpadding="0" cellspacing="0" align="center">
 <tr>
-<td style="padding:0 6px;"><a href="${reviewUrl}" style="display:inline-block;background:linear-gradient(135deg,#C9A84C,#B8973F);color:#000;text-decoration:none;padding:10px 24px;border-radius:8px;font-weight:700;font-size:12px;">⭐ Leave a Review</a></td>
-<td style="padding:0 6px;"><a href="${surveyUrl}" style="display:inline-block;background:#1a1a2e;border:2px solid #C9A84C;color:#C9A84C;text-decoration:none;padding:8px 24px;border-radius:8px;font-weight:700;font-size:12px;">📋 Take Survey</a></td>
+<td style="padding:0 8px;"><a href="${reviewUrl}" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:11px 26px;border-radius:8px;font-weight:700;font-size:12px;border:1px solid #C8A76650;">★★★★★ Leave a Review</a></td>
+<td style="padding:0 8px;"><a href="${surveyUrl}" style="display:inline-block;background:#FDFBF7;border:1px solid #C8A766;color:#1a1a1a;text-decoration:none;padding:11px 26px;border-radius:8px;font-weight:700;font-size:12px;">Take Survey</a></td>
 </tr>
 </table>
 </td></tr>
 </table>
 
-<p style="color:#888;font-size:13px;line-height:1.5;margin:20px 0 0;">
-If you have questions, reply to this email or contact our support team.
-</p>
+</td></tr></table>
+
 </td></tr>
 
-<!-- Social Media & Contact Footer -->
-<tr><td style="background:linear-gradient(135deg,#000 0%,#1a1a1a 100%);padding:35px 40px;text-align:center;">
-<!-- Contact Info -->
-<p style="color:#C8A766;font-size:14px;margin:0 0 15px 0;">Need assistance? We're here to help.</p>
+<!-- Footer — Pure Black -->
+<tr><td style="background:#000000;padding:32px 40px;text-align:center;">
+
+<p style="color:#C8A766;font-size:14px;margin:0 0 14px;">Need assistance? We're here to help.</p>
 <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;">
 <tr><td align="center">
-<a href="tel:+971565911000" style="color:#fff;text-decoration:none;font-size:14px;">📞 +971 56 591 1000</a>
-<span style="color:#444;margin:0 10px;">|</span>
-<a href="mailto:Contact@JBJ.ae" style="color:#fff;text-decoration:none;font-size:14px;">Contact@JBJ.ae</a>
+<a href="tel:+971565911000" style="color:#ffffff;text-decoration:none;font-size:13px;">+971 56 591 1000</a>
+<span style="color:#444;margin:0 12px;">|</span>
+<a href="mailto:Contact@JBJ.ae" style="color:#ffffff;text-decoration:none;font-size:13px;">Contact@JBJ.ae</a>
 </td></tr>
 </table>
 
-<!-- Social Media Links -->
-<table cellpadding="0" cellspacing="0" align="center" style="margin-bottom:20px;">
+<!-- Social Links with spacing -->
+<table cellpadding="0" cellspacing="0" align="center" style="margin-bottom:22px;">
 <tr>
-<td style="padding:0 10px;"><a href="https://www.instagram.com/jbj.ae" style="color:#C8A766;text-decoration:none;font-size:13px;font-weight:600;">Instagram</a></td>
-<td style="color:#444;">·</td>
-<td style="padding:0 10px;"><a href="https://www.facebook.com/share/1G7CgSaV2L/" style="color:#C8A766;text-decoration:none;font-size:13px;font-weight:600;">Facebook</a></td>
-<td style="color:#444;">·</td>
-<td style="padding:0 10px;"><a href="https://www.linkedin.com/company/jbj-global-real-estate/" style="color:#C8A766;text-decoration:none;font-size:13px;font-weight:600;">LinkedIn</a></td>
-<td style="color:#444;">·</td>
-<td style="padding:0 10px;"><a href="https://youtube.com/@jbjglobalrealestate" style="color:#C8A766;text-decoration:none;font-size:13px;font-weight:600;">YouTube</a></td>
+<td style="padding:0 14px;"><a href="https://www.instagram.com/jbj.ae" style="color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">Instagram</a></td>
+<td style="color:#444;font-size:10px;">&#8226;</td>
+<td style="padding:0 14px;"><a href="https://www.facebook.com/share/1G7CgSaV2L/" style="color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">Facebook</a></td>
+<td style="color:#444;font-size:10px;">&#8226;</td>
+<td style="padding:0 14px;"><a href="https://www.linkedin.com/company/jbj-global-real-estate/" style="color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">LinkedIn</a></td>
+<td style="color:#444;font-size:10px;">&#8226;</td>
+<td style="padding:0 14px;"><a href="https://youtube.com/@jbjglobalrealestate" style="color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">YouTube</a></td>
 </tr>
 </table>
 
-<!-- Brand Attribution -->
-<p style="color:#C8A766;font-size:14px;margin:0 0 5px 0;font-weight:600;">JBJ Global Real Estate</p>
-<p style="color:#888;font-size:12px;margin:0 0 10px 0;">First Global Real Estate Platform of Its Kind</p>
-<p style="color:#666;font-size:11px;margin:0 0 15px 0;">
+<p style="color:#C8A766;font-size:13px;margin:0 0 4px;font-weight:600;">JBJ Global Real Estate</p>
+<p style="color:#777;font-size:11px;margin:0 0 8px;">First Global Real Estate Platform of Its Kind</p>
+<p style="color:#555;font-size:10px;margin:0 0 12px;">
 Developed, Created &amp; Implemented by The Founder &amp; CEO, <span style="color:#C8A766;">Jane Bou Jaoude</span>
 </p>
-<p style="color:#555;font-size:11px;margin:15px 0 0 0;">
-JBJ Global Real Estate provides brokerage support and partner introductions only.<br>
-We do not provide legal, mortgage, financial, or advisory services.
-</p>
-<p style="color:#444;font-size:10px;margin:15px 0 0 0;">
-© ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
+<p style="color:#444;font-size:10px;margin:12px 0 0;">
+&copy; ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
 </p>
 </td></tr>
 
@@ -248,8 +230,6 @@ We do not provide legal, mortgage, financial, or advisory services.
 async function logToInbox(supabaseClient: any, req: AdminMessageRequest, direction: 'outbound') {
   try {
     const channelType = 'email';
-
-    // Find or create thread
     const { data: existingThread } = await supabaseClient
       .from('owner_comm_threads')
       .select('id')
@@ -322,7 +302,6 @@ const handler = async (req: Request): Promise<Response> => {
 
     const replyTo = getReplyTo(body.serviceCategory);
 
-    // Send email with reply-to
     const emailResult = await sendEmail({
       from: `JBJ Global Real Estate <${VERIFIED_SENDER}>`,
       reply_to: replyTo,
@@ -339,10 +318,8 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    // Log outbound email to inbox
     await logToInbox(supabaseClient, body, 'outbound');
 
-    // Create user notification if userId provided
     if (body.userId) {
       const { error: notifErr } = await supabaseClient.from("user_notifications").insert({
         user_id: body.userId,
