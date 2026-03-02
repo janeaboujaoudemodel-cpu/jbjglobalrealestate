@@ -94,23 +94,30 @@ function makeStep(num: string, label: string, active: boolean, isCheck: boolean)
 
 function sharedFooterHtml(): string {
   return `
-<tr><td style="background:#000000;text-align:center;padding:32px 40px;">
+<!-- Do not reply -->
+<tr><td style="padding:0 32px 16px;text-align:center;">
+<p style="margin:0;font-size:11px;color:#999;line-height:1.5;">This is an automated message. Please do not reply directly to this email.<br/>For any inquiries, contact us at <a href="mailto:contact@jbj.ae" style="color:#C8A766;text-decoration:underline;font-weight:600;">contact@jbj.ae</a></p>
+</td></tr>
+<tr><td style="background:#000000;text-align:center;padding:32px 40px;border-radius:0 0 20px 20px;">
 <p style="color:#C8A766;font-size:14px;margin:0 0 14px;">Need assistance? We're here to help.</p>
 <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;">
 <tr><td align="center">
 <a href="tel:+971565911000" style="color:#ffffff;text-decoration:none;font-size:13px;">+971 56 591 1000</a>
 <span style="color:#444;margin:0 12px;">|</span>
-<a href="mailto:Contact@JBJ.ae" style="color:#ffffff;text-decoration:none;font-size:13px;">Contact@JBJ.ae</a>
+<a href="mailto:Contact@JBJ.ae" style="color:#ffffff;text-decoration:underline;font-size:13px;">Contact@JBJ.ae</a>
 </td></tr>
 </table>
 <p style="color:#C8A766;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin:0 0 12px;">Follow Us &middot; Stay in the Loop</p>
-<table cellpadding="0" cellspacing="0" align="center" style="margin-bottom:22px;">
+<table cellpadding="0" cellspacing="0" align="center" style="margin-bottom:14px;">
 <tr>
-<td style="padding:0 6px;"><a href="https://www.instagram.com/jbj.ae" style="display:inline-block;padding:8px 16px;border:1px solid #C8A766;border-radius:6px;color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">Instagram</a></td>
-<td style="padding:0 6px;"><a href="https://www.facebook.com/share/1G7CgSaV2L/" style="display:inline-block;padding:8px 16px;border:1px solid #C8A766;border-radius:6px;color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">Facebook</a></td>
-<td style="padding:0 6px;"><a href="https://www.linkedin.com/company/jbj-global-real-estate/" style="display:inline-block;padding:8px 16px;border:1px solid #C8A766;border-radius:6px;color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">LinkedIn</a></td>
-<td style="padding:0 6px;"><a href="https://youtube.com/@jbjglobalrealestate" style="display:inline-block;padding:8px 16px;border:1px solid #C8A766;border-radius:6px;color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">YouTube</a></td>
+<td style="padding:0 4px;"><a href="https://www.instagram.com/jbj.ae" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#FDFBF7,#F5EBD7);border:1px solid #C8A766;border-radius:6px;color:#1a1a1a;text-decoration:none;font-size:11px;font-weight:600;">Instagram</a></td>
+<td style="padding:0 4px;"><a href="https://www.facebook.com/share/1G7CgSaV2L/" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#FDFBF7,#F5EBD7);border:1px solid #C8A766;border-radius:6px;color:#1a1a1a;text-decoration:none;font-size:11px;font-weight:600;">Facebook</a></td>
+<td style="padding:0 4px;"><a href="https://www.linkedin.com/company/jbj-global-real-estate/" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#FDFBF7,#F5EBD7);border:1px solid #C8A766;border-radius:6px;color:#1a1a1a;text-decoration:none;font-size:11px;font-weight:600;">LinkedIn</a></td>
+<td style="padding:0 4px;"><a href="https://youtube.com/@jbjglobalrealestate" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#FDFBF7,#F5EBD7);border:1px solid #C8A766;border-radius:6px;color:#1a1a1a;text-decoration:none;font-size:11px;font-weight:600;">YouTube</a></td>
 </tr>
+</table>
+<table cellpadding="0" cellspacing="0" align="center" style="margin-bottom:16px;">
+<tr><td><a href="mailto:contact@jbj.ae" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#FDFBF7,#F5EBD7);border:1px solid #C8A766;border-radius:6px;color:#1a1a1a;text-decoration:none;font-size:11px;font-weight:600;">&#9993; contact@jbj.ae</a></td></tr>
 </table>
 <p style="color:#C8A766;font-size:13px;margin:0 0 4px;font-weight:600;">JBJ Global Real Estate</p>
 <p style="color:#777;font-size:11px;margin:0 0 8px;">First Global Real Estate Platform of Its Kind</p>
@@ -198,13 +205,13 @@ function buildEmailHtml(req: CVEmailRequest): { html: string; subject: string } 
 
   const html = `<!DOCTYPE html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<style>body{margin:0;padding:0;background-color:#ffffff;font-family:'Segoe UI',Arial,sans-serif;}
+<style>body{margin:0;padding:0;background-color:#F5F0E6;font-family:'Segoe UI',Arial,sans-serif;}
 @media only screen and (max-width:620px){.wrapper{width:100%!important;padding:0 8px!important;}.hero-pad{padding:32px 20px!important;}.content-pad{padding:24px 16px!important;}}</style>
 </head>
-<body style="margin:0;padding:0;background-color:#ffffff;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#ffffff;">
+<body style="margin:0;padding:0;background-color:#F5F0E6;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#F5F0E6;">
 <tr><td align="center" style="padding:24px 16px;">
-<table role="presentation" class="wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:linear-gradient(180deg,#FFFFFF,#FDFBF7,#F5F0E6);border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(200,167,102,0.15);">
+<table role="presentation" class="wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:linear-gradient(180deg,#FFFFFF,#FDFBF7,#F5F0E6);border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(200,167,102,0.18);">
 
 <!-- Logo — Company Monogram -->
 <tr><td style="background:#000000;padding:20px 0 16px;text-align:center;border-radius:20px 20px 0 0;">
@@ -235,8 +242,17 @@ function buildEmailHtml(req: CVEmailRequest): { html: string; subject: string } 
 <p style="margin:0;font-size:13px;color:#C8A766;font-weight:600;">Position: ${position}</p>
 </td></tr></table>
 
-<!-- Greeting -->
-<p style="font-size:15px;color:#333;margin:0 0 16px;">Dear <strong>${name}</strong>,</p>
+<!-- Profile icon + Greeting -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;">
+<tr>
+<td width="52" style="vertical-align:top;padding-right:14px;">
+<img src="${LOGO_URL}" alt="JBJ" width="48" style="width:48px;height:48px;border-radius:50%;object-fit:contain;border:2px solid #C8A766;" />
+</td>
+<td style="vertical-align:middle;">
+<p style="margin:0;font-size:15px;color:#333;">Dear <strong>${name}</strong>,</p>
+</td>
+</tr>
+</table>
 <p style="font-size:14px;color:#555;margin:0 0 24px;">${config.subtitle}</p>
 
 <!-- Progress Tracker -->
@@ -277,6 +293,20 @@ ${config.extraHtml}
 <p style="margin:0;font-size:13px;color:#166534;line-height:1.6;">For inquiries about your application, you can reply directly to <a href="mailto:contact@jbj.ae" style="color:#15803d;font-weight:700;text-decoration:none;">contact@jbj.ae</a></p>
 </td></tr></table>
 
+<!-- Recommended Actions -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0;border-top:2px solid #C8A76633;padding-top:20px;">
+<tr><td style="text-align:center;">
+<p style="color:#1a1a1a;font-size:14px;font-weight:700;margin:0 0 12px;">Recommended For You</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td width="33%" style="text-align:center;padding:4px;"><a href="${SITE_URL}/ai-tools" style="display:block;padding:14px 8px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:10px;text-decoration:none;"><p style="margin:0 0 4px;font-size:20px;">&#9881;</p><p style="margin:0;font-size:11px;color:#1a1a1a;font-weight:600;">AI Tools</p></a></td>
+<td width="33%" style="text-align:center;padding:4px;"><a href="${SITE_URL}/guides" style="display:block;padding:14px 8px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:10px;text-decoration:none;"><p style="margin:0 0 4px;font-size:20px;">&#128218;</p><p style="margin:0;font-size:11px;color:#1a1a1a;font-weight:600;">Guides</p></a></td>
+<td width="33%" style="text-align:center;padding:4px;"><a href="${SITE_URL}/properties" style="display:block;padding:14px 8px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:10px;text-decoration:none;"><p style="margin:0 0 4px;font-size:20px;">&#127969;</p><p style="margin:0;font-size:11px;color:#1a1a1a;font-weight:600;">Properties</p></a></td>
+</tr>
+</table>
+</td></tr>
+</table>
+
 <!-- Review & Survey -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0 0;border-top:2px solid #C8A76633;padding-top:20px;">
 <tr><td align="center">
@@ -284,7 +314,7 @@ ${config.extraHtml}
 <p style="color:#666;font-size:12px;margin:0 0 14px;">Help us improve by sharing your experience</p>
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center">
 <tr>
-<td style="padding:0 6px;"><a href="${SITE_URL}/reviews?source=career" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:10px 20px;border-radius:8px;font-weight:700;font-size:12px;border:1px solid #C8A76650;">&#9733;&#9733;&#9733;&#9733;&#9733; Leave a Review</a></td>
+<td style="padding:0 6px;"><a href="${SITE_URL}/reviews?source=career" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:10px 20px;border-radius:8px;font-weight:700;font-size:12px;border:1px solid #C8A76650;">Leave a Review</a></td>
 <td style="padding:0 6px;"><a href="${SITE_URL}/survey?source=career" style="display:inline-block;background:#FDFBF7;border:2px solid #C8A766;color:#1a1a1a;text-decoration:none;padding:8px 20px;border-radius:8px;font-weight:700;font-size:12px;white-space:nowrap;">Take Survey</a></td>
 </tr>
 </table>

@@ -1,6 +1,8 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+const LOGO_URL = "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/jbj-monogram-dark.png?v=3";
+const SITE_URL = "https://jbj.ae";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -28,66 +30,65 @@ const handler = async (req: Request): Promise<Response> => {
     const changeTime = timestamp || new Date().toISOString();
     const formattedDate = new Date(changeTime).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
     const formattedTime = new Date(changeTime).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    
-    // Parse user agent for device info
+
     const ua = userAgent || 'Unknown device';
     let deviceInfo = 'Unknown device';
     let browserInfo = 'Unknown browser';
-    
+
     if (ua.includes('iPhone') || ua.includes('iPad')) deviceInfo = 'Apple iOS Device';
     else if (ua.includes('Android')) deviceInfo = 'Android Device';
     else if (ua.includes('Windows')) deviceInfo = 'Windows PC';
     else if (ua.includes('Mac')) deviceInfo = 'macOS Device';
     else if (ua.includes('Linux')) deviceInfo = 'Linux Device';
-    
+
     if (ua.includes('Chrome') && !ua.includes('Edge')) browserInfo = 'Google Chrome';
     else if (ua.includes('Safari') && !ua.includes('Chrome')) browserInfo = 'Safari';
     else if (ua.includes('Firefox')) browserInfo = 'Firefox';
     else if (ua.includes('Edge')) browserInfo = 'Microsoft Edge';
 
-    const siteUrl = "https://jbjglobalrealestate.lovable.app";
-
     const emailHtml = `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Password Changed</title>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<style>body{margin:0;padding:0;background-color:#F5F0E6;font-family:'Segoe UI',Arial,sans-serif;}
+@media only screen and (max-width:620px){.wrapper{width:100%!important;padding:0 8px!important;}.content-pad{padding:24px 16px!important;}}</style>
 </head>
-<body style="margin:0;padding:0;background-color:#ffffff;font-family:'Segoe UI',Arial,Helvetica,sans-serif;">
-<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background-color:#ffffff;">
-<tr><td align="center" style="padding:20px 10px;">
-<table role="presentation" cellpadding="0" cellspacing="0" width="600" style="max-width:600px;width:100%;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
-
-<!-- Logo Banner -->
-<tr><td style="background:#ffffff;padding:24px 30px 16px;text-align:center;">
-<img src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/jbj-monogram-dark-on-light.png?v=2" alt="JBJ Global Real Estate" width="120" style="max-width:120px;height:auto;" />
-</td></tr>
+<body style="margin:0;padding:0;background-color:#F5F0E6;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#F5F0E6;">
+<tr><td align="center" style="padding:24px 16px;">
+<table role="presentation" class="wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:linear-gradient(180deg,#FFFFFF,#FDFBF7,#F5F0E6);border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(200,167,102,0.18);">
 
 <!-- Header -->
-<tr><td style="background:linear-gradient(135deg,#0a0a0a 0%,#1a1a1a 50%,#2a2015 100%);padding:32px 30px;text-align:center;">
-<table role="presentation" cellpadding="0" cellspacing="0" width="100%">
-<tr><td align="center">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:16px;">
-<tr><td style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#C8A766,#B8956E);color:#fff;text-align:center;line-height:56px;font-size:28px;">&#128274;</td></tr>
-</table>
-<p style="margin:0;font-size:22px;color:#ffffff;font-weight:600;">Password Changed Successfully</p>
-<p style="margin:8px 0 0;font-size:14px;color:#B8A070;">Your account security has been updated</p>
+<tr><td style="background:#000000;padding:36px 40px 20px;text-align:center;border-radius:20px 20px 0 0;">
+<img src="${LOGO_URL}" alt="JBJ Global Real Estate" width="180" style="max-width:180px;height:auto;display:block;margin:0 auto 14px;" />
+<p style="color:#C8A766;margin:0;font-size:14px;font-weight:700;letter-spacing:3px;text-transform:uppercase;">JBJ GLOBAL REAL ESTATE</p>
 </td></tr>
-</table>
+<!-- Sub-header -->
+<tr><td style="background:linear-gradient(135deg,#C8A766,#B8956E,#A07D4A);padding:20px 32px;text-align:center;">
+<p style="font-size:18px;font-weight:bold;color:#fff;margin:0 0 4px;">Account Security</p>
+<p style="font-size:14px;color:rgba(255,255,255,0.85);margin:0;">Password Changed Successfully</p>
 </td></tr>
 
 <!-- Content -->
-<tr><td style="background-color:#FDFBF7;padding:36px 30px;">
-<p style="margin:0 0 16px;font-size:16px;color:#1a1a1a;font-weight:600;">Dear ${recipientName},</p>
+<tr><td class="content-pad" style="padding:32px;">
+
+<!-- Profile icon -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:20px;">
+<tr>
+<td width="52" style="vertical-align:top;padding-right:14px;">
+<img src="${LOGO_URL}" alt="JBJ" width="48" style="width:48px;height:48px;border-radius:50%;object-fit:contain;border:2px solid #C8A766;" />
+</td>
+<td style="vertical-align:middle;">
+<p style="margin:0;font-size:16px;font-weight:600;color:#1a1a1a;">Dear ${recipientName},</p>
+<p style="margin:4px 0 0;font-size:13px;color:#888;">Your account security has been updated</p>
+</td>
+</tr>
+</table>
+
 <p style="margin:0 0 24px;font-size:14px;line-height:1.7;color:#444;">Your password was successfully changed. If you made this change, no further action is needed.</p>
 
 <!-- Activity Details -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#ffffff;border:2px solid #C8A766;border-radius:12px;margin-bottom:24px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:12px;margin-bottom:24px;">
 <tr><td style="padding:20px;">
-<p style="margin:0 0 16px;font-size:15px;font-weight:700;color:#1a1a1a;border-bottom:1px solid #C8A766;padding-bottom:12px;">
-<span style="display:inline-block;width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#C8A766,#B8956E);color:#fff;text-align:center;line-height:24px;font-size:12px;margin-right:8px;">&#9432;</span>
-Activity Details</p>
+<p style="margin:0 0 16px;font-size:15px;font-weight:700;color:#1a1a1a;border-bottom:1px solid #C8A76640;padding-bottom:12px;">Activity Details</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr style="border-bottom:1px solid #f0f0f0;"><td style="padding:8px 0;color:#666;font-size:13px;width:40%;">Date</td><td style="padding:8px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${formattedDate}</td></tr>
 <tr style="border-bottom:1px solid #f0f0f0;"><td style="padding:8px 0;color:#666;font-size:13px;">Time</td><td style="padding:8px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${formattedTime} (GMT)</td></tr>
@@ -100,34 +101,82 @@ Activity Details</p>
 <!-- Warning -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fef2f2;border:1px solid #fca5a5;border-radius:10px;margin-bottom:24px;">
 <tr><td style="padding:20px;">
-<p style="margin:0;font-size:14px;color:#991b1b;line-height:1.6;"><strong>&#9888;&#65039; Didn't make this change?</strong><br/>If you did not change your password, your account may be compromised. Please contact our support team immediately.</p>
+<p style="margin:0;font-size:14px;color:#991b1b;line-height:1.6;"><strong>Didn't make this change?</strong><br/>If you did not change your password, your account may be compromised. Please contact our support team immediately.</p>
 </td></tr>
 </table>
 
 <!-- CTA -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;">
 <tr><td align="center">
-<a href="mailto:contact@jbj.ae?subject=Unauthorized Password Change" style="display:inline-block;background:linear-gradient(135deg,#dc2626,#b91c1c);color:#fff;text-decoration:none;padding:14px 32px;border-radius:8px;font-weight:700;font-size:14px;">Report Unauthorized Access</a>
+<a href="mailto:contact@jbj.ae?subject=Unauthorized Password Change" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:14px 32px;border-radius:10px;font-weight:700;font-size:14px;border:1px solid #C8A76650;">Report Unauthorized Access</a>
 </td></tr>
 </table>
+
+<!-- Recommended Actions -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0;border-top:2px solid #C8A76633;padding-top:20px;">
+<tr><td style="text-align:center;">
+<p style="color:#1a1a1a;font-size:14px;font-weight:700;margin:0 0 12px;">Recommended For You</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td width="33%" style="text-align:center;padding:4px;">
+<a href="${SITE_URL}/ai-tools" style="display:block;padding:14px 8px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:10px;text-decoration:none;">
+<p style="margin:0 0 4px;font-size:20px;">&#9881;</p>
+<p style="margin:0;font-size:11px;color:#1a1a1a;font-weight:600;">AI Tools</p>
+</a>
+</td>
+<td width="33%" style="text-align:center;padding:4px;">
+<a href="${SITE_URL}/guides" style="display:block;padding:14px 8px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:10px;text-decoration:none;">
+<p style="margin:0 0 4px;font-size:20px;">&#128218;</p>
+<p style="margin:0;font-size:11px;color:#1a1a1a;font-weight:600;">Guides</p>
+</a>
+</td>
+<td width="33%" style="text-align:center;padding:4px;">
+<a href="${SITE_URL}/properties" style="display:block;padding:14px 8px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:10px;text-decoration:none;">
+<p style="margin:0 0 4px;font-size:20px;">&#127969;</p>
+<p style="margin:0;font-size:11px;color:#1a1a1a;font-weight:600;">Properties</p>
+</a>
+</td>
+</tr>
+</table>
+</td></tr>
+</table>
+
 </td></tr>
 
+<!-- Do not reply -->
+<tr><td style="padding:0 32px 16px;text-align:center;">
+<p style="margin:0;font-size:11px;color:#999;line-height:1.5;">This is a security notification. Please do not reply directly to this email.<br/>For any inquiries, contact us at <a href="mailto:contact@jbj.ae" style="color:#C8A766;text-decoration:underline;font-weight:600;">contact@jbj.ae</a></p>
+</td></tr>
 <!-- Footer -->
-<tr><td style="background:#000000;padding:28px 30px;text-align:center;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:12px;">
-<tr><td style="text-align:center;"><img src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/jbj-monogram-light-on-dark.png?v=2" alt="JBJ" width="80" style="max-width:80px;height:auto;" /></td></tr>
+<tr><td style="background:#000000;padding:32px 40px;text-align:center;border-radius:0 0 20px 20px;">
+<p style="color:#C8A766;font-size:14px;margin:0 0 14px;">Need assistance? We're here to help.</p>
+<table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;">
+<tr><td align="center">
+<a href="tel:+971565911000" style="color:#ffffff;text-decoration:none;font-size:13px;">+971 56 591 1000</a>
+<span style="color:#444;margin:0 12px;">|</span>
+<a href="mailto:Contact@JBJ.ae" style="color:#ffffff;text-decoration:underline;font-size:13px;">Contact@JBJ.ae</a>
+</td></tr>
 </table>
-<p style="color:#C8A766;font-size:18px;font-weight:bold;margin:0 0 6px;">JBJ Global Real Estate</p>
-<p style="color:#888;font-size:12px;margin:0 0 4px;font-style:italic;">The Only Global AI-Powered Real Estate Intelligence Platform</p>
-<p style="color:#888;font-size:12px;margin:16px 0 0;">&copy; ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.</p>
-<p style="color:#666;font-size:10px;margin:10px 0 0;"><strong>This is a security notification. Do not reply to this email.</strong></p>
+<p style="color:#C8A766;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin:0 0 12px;">Follow Us &middot; Stay in the Loop</p>
+<table cellpadding="0" cellspacing="0" align="center" style="margin-bottom:14px;">
+<tr>
+<td style="padding:0 4px;"><a href="https://www.instagram.com/jbj.ae" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#FDFBF7,#F5EBD7);border:1px solid #C8A766;border-radius:6px;color:#1a1a1a;text-decoration:none;font-size:11px;font-weight:600;">Instagram</a></td>
+<td style="padding:0 4px;"><a href="https://www.facebook.com/share/1G7CgSaV2L/" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#FDFBF7,#F5EBD7);border:1px solid #C8A766;border-radius:6px;color:#1a1a1a;text-decoration:none;font-size:11px;font-weight:600;">Facebook</a></td>
+<td style="padding:0 4px;"><a href="https://www.linkedin.com/company/jbj-global-real-estate/" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#FDFBF7,#F5EBD7);border:1px solid #C8A766;border-radius:6px;color:#1a1a1a;text-decoration:none;font-size:11px;font-weight:600;">LinkedIn</a></td>
+<td style="padding:0 4px;"><a href="https://youtube.com/@jbjglobalrealestate" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#FDFBF7,#F5EBD7);border:1px solid #C8A766;border-radius:6px;color:#1a1a1a;text-decoration:none;font-size:11px;font-weight:600;">YouTube</a></td>
+</tr>
+</table>
+<table cellpadding="0" cellspacing="0" align="center" style="margin-bottom:16px;">
+<tr><td><a href="mailto:contact@jbj.ae" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#FDFBF7,#F5EBD7);border:1px solid #C8A766;border-radius:6px;color:#1a1a1a;text-decoration:none;font-size:11px;font-weight:600;">&#9993; contact@jbj.ae</a></td></tr>
+</table>
+<p style="color:#C8A766;font-size:13px;margin:0 0 4px;font-weight:600;">JBJ Global Real Estate</p>
+<p style="color:#777;font-size:11px;margin:0 0 8px;">First Global Real Estate Platform of Its Kind</p>
+<p style="color:#888;font-size:10px;margin:0 0 12px;white-space:nowrap;">Developed, Created &amp; Implemented by The Founder &amp; CEO, <span style="color:#C8A766;">Jane Bou Jaoude</span></p>
+<p style="color:#C8A766;font-size:11px;margin:12px 0 0;font-weight:600;">&copy; ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.</p>
 </td></tr>
 
-</table>
-</td></tr>
-</table>
-</body>
-</html>`;
+</table></td></tr></table>
+</body></html>`;
 
     const emailRes = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -137,6 +186,7 @@ Activity Details</p>
       },
       body: JSON.stringify({
         from: "JBJ Security <contact@jbj.ae>",
+        reply_to: "contact@jbj.ae",
         to: [email],
         subject: "Your Password Was Changed — JBJ Global Real Estate",
         html: emailHtml,
