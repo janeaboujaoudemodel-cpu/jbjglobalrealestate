@@ -169,31 +169,33 @@ const PropertyManagement = () => {
       />
 
       {/* ═══ 1. HERO ═══ */}
-      <section className="jj-hero-fullscreen relative py-28 md:py-36 overflow-hidden bg-gradient-to-b from-[#1a1714] to-[#151210] border-b border-[#C8A766]/20">
+      <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
+        {/* Dark gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#1a1714] to-[#151210]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#C8A766]/8 via-transparent to-transparent" />
-        <div className="absolute top-20 right-20 w-72 h-72 bg-[#C8A766]/6 rounded-full blur-[100px]" />
-        <div className="absolute bottom-10 left-10 w-56 h-56 bg-[#C8A766]/8 rounded-full blur-[80px]" />
+        <div className="absolute top-20 right-20 w-72 h-72 bg-[#C8A766]/6 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-10 left-10 w-56 h-56 bg-[#C8A766]/8 rounded-full blur-[80px] pointer-events-none" />
 
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div>
-            <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full mb-6 border border-[#C8A766]/30 bg-black/30 backdrop-blur-sm">
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="text-center max-w-4xl mx-auto">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-[#C8A766]/40 bg-black/30 backdrop-blur-md">
               <Building2 className="w-4 h-4 text-[#C8A766]" />
               <span className="text-[#C8A766] font-semibold text-xs uppercase tracking-[0.2em]">Property Management</span>
             </div>
 
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 tracking-tight" style={{ fontFamily: "Playfair Display, serif" }}>
-              Property Management &<br className="hidden sm:block" />Asset Stewardship
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-[-0.02em]" style={{ fontFamily: "Playfair Display, serif" }}>
+              Property Management &<br className="hidden sm:block" /> Asset Stewardship
             </h1>
 
-            <p className="text-lg md:text-xl text-[#C8A766]/80 font-medium mb-6 max-w-3xl" style={{ fontFamily: "Playfair Display, serif" }}>
+            <p className="text-[#C8A766]/80 text-lg md:text-xl font-medium mb-4 max-w-2xl mx-auto" style={{ fontFamily: "Playfair Display, serif" }}>
               Structured. Transparent. Performance-Driven.
             </p>
 
-            <p className="text-zinc-300 text-base md:text-lg max-w-3xl leading-relaxed mb-10">
-              Our Property Management division delivers comprehensive management solutions designed to protect, optimize, and enhance the value of your real estate assets across the UAE — with operational precision, financial accountability, and full regulatory compliance.
+            <p className="text-zinc-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
+              Comprehensive management solutions designed to protect, optimize, and enhance the value of your real estate assets across the UAE.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <PremiumHeroButton href="/contact?service=property-management">
                 Request Management Proposal
               </PremiumHeroButton>
@@ -203,10 +205,20 @@ const PropertyManagement = () => {
             </div>
           </div>
         </div>
+
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+          <span className="text-[#C8A766]/60 text-xs tracking-widest uppercase">Explore</span>
+          <div className="w-[1px] h-12 bg-gradient-to-b from-[#C8A766]/60 to-transparent" />
+        </div>
       </section>
 
       {/* ═══ CHAMPAGNE BODY ═══ */}
+      <SectionDivider />
+
       <div className={pageBg}>
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14">
+          <div className="bg-white/70 backdrop-blur-sm border border-[#C8A766]/20 rounded-2xl shadow-[0_4px_30px_rgba(200,167,102,0.08)] overflow-hidden">
 
         {/* ═══ 2. TABLE OF CONTENTS ═══ */}
         <section className="py-12 md:py-16 border-b border-[#C8A766]/15">
@@ -758,7 +770,12 @@ const PropertyManagement = () => {
             </p>
           </div>
         </Section>
-      </div>
+
+          </div>{/* close rounded card */}
+        </div>{/* close max-w container */}
+      </div>{/* close pageBg */}
+
+      <SectionDivider />
     </>
   );
 };
