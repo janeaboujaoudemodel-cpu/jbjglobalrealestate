@@ -142,7 +142,7 @@ Deno.serve(async (req) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          from: "JBJ Global Real Estate <noreply@jbj.ae>",
+          from: "JBJ Global Real Estate <contact@jbj.ae>",
           to: [email],
           subject: "Your JBJ verification code",
           html: emailHtml,

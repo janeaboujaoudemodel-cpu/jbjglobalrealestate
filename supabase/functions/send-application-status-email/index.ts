@@ -2,7 +2,7 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 const RESEND_API_URL = "https://api.resend.com/emails";
-const VERIFIED_SENDER = "noreply@jbj.ae";
+const VERIFIED_SENDER = "contact@jbj.ae";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -156,8 +156,8 @@ ${req.actionRequired ? `
 <p style="color:#666;font-size:12px;margin:0 0 14px;">Help us improve by sharing your experience</p>
 <table cellpadding="0" cellspacing="0" align="center">
 <tr>
-<td style="padding:0 6px;"><a href="https://jbjglobalrealestate.lovable.app/reviews?source=${encodeURIComponent(req.applicationType)}" style="display:inline-block;background:linear-gradient(135deg,#C9A84C,#B8973F);color:#000;text-decoration:none;padding:10px 24px;border-radius:8px;font-weight:700;font-size:12px;">⭐ Leave a Review</a></td>
-<td style="padding:0 6px;"><a href="https://jbjglobalrealestate.lovable.app/survey?source=${encodeURIComponent(req.applicationType)}" style="display:inline-block;background:#1a1a2e;border:2px solid #C9A84C;color:#C9A84C;text-decoration:none;padding:8px 24px;border-radius:8px;font-weight:700;font-size:12px;">📋 Take Survey</a></td>
+        <td style="padding:0 6px;"><a href="https://jbj.ae/reviews?source=${encodeURIComponent(req.applicationType)}" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:10px 24px;border-radius:8px;font-weight:700;font-size:12px;border:1px solid #C8A76650;">&#9733;&#9733;&#9733;&#9733;&#9733; Leave a Review</a></td>
+        <td style="padding:0 6px;"><a href="https://jbj.ae/survey?source=${encodeURIComponent(req.applicationType)}" style="display:inline-block;background:#FDFBF7;border:2px solid #C8A766;color:#1a1a1a;text-decoration:none;padding:8px 24px;border-radius:8px;font-weight:700;font-size:12px;">Take Survey</a></td>
 </tr>
 </table>
 </td></tr>
@@ -166,20 +166,28 @@ ${req.actionRequired ? `
 <!-- CTA Button -->
 <table width="100%" cellpadding="0" cellspacing="0">
 <tr><td align="center" style="padding:8px 0 24px;">
-<a href="https://jbjglobalrealestate.lovable.app/my-account" style="display:inline-block;background:linear-gradient(135deg,#C9A84C,#B8973F);color:#000;text-decoration:none;padding:14px 36px;border-radius:12px;font-weight:700;font-size:14px;letter-spacing:0.5px;">
+<a href="https://jbj.ae/my-account" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:14px 36px;border-radius:12px;font-weight:700;font-size:14px;letter-spacing:0.5px;border:1px solid #C8A76650;">
 View in My Account
 </a>
 </td></tr>
 </table>
 
 <!-- Footer -->
-<tr><td style="background:#1a1a2e;padding:24px 40px;">
-<table width="100%" cellpadding="0" cellspacing="0">
+<tr><td style="background:#000;padding:28px 40px;text-align:center;">
+<p style="color:#C8A766;font-size:13px;margin:0 0 4px;font-weight:600;">JBJ Global Real Estate</p>
+<p style="color:#777;font-size:11px;margin:0 0 8px;">First Global Real Estate Platform of Its Kind</p>
+<p style="color:#C8A766;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin:0 0 10px;">Follow Us &middot; Stay in the Loop</p>
+<table cellpadding="0" cellspacing="0" align="center" style="margin-bottom:14px;">
 <tr>
-<td style="color:#C9A84C99;font-size:12px;">© ${new Date().getFullYear()} JBJ Global Real Estate</td>
-<td align="right" style="color:#C9A84C60;font-size:11px;">Dubai, UAE</td>
+<td style="padding:0 5px;"><a href="https://www.instagram.com/jbj.ae" style="display:inline-block;padding:7px 14px;border:1px solid #C8A766;border-radius:6px;color:#C8A766;text-decoration:none;font-size:11px;font-weight:600;">Instagram</a></td>
+<td style="padding:0 5px;"><a href="https://www.facebook.com/share/1G7CgSaV2L/" style="display:inline-block;padding:7px 14px;border:1px solid #C8A766;border-radius:6px;color:#C8A766;text-decoration:none;font-size:11px;font-weight:600;">Facebook</a></td>
+<td style="padding:0 5px;"><a href="https://www.linkedin.com/company/jbj-global-real-estate/" style="display:inline-block;padding:7px 14px;border:1px solid #C8A766;border-radius:6px;color:#C8A766;text-decoration:none;font-size:11px;font-weight:600;">LinkedIn</a></td>
+<td style="padding:0 5px;"><a href="https://youtube.com/@jbjglobalrealestate" style="display:inline-block;padding:7px 14px;border:1px solid #C8A766;border-radius:6px;color:#C8A766;text-decoration:none;font-size:11px;font-weight:600;">YouTube</a></td>
 </tr>
 </table>
+<p style="color:#888;font-size:10px;margin:0 0 8px;white-space:nowrap;">Developed, Created &amp; Implemented by The Founder &amp; CEO, <span style="color:#C8A766;">Jane Bou Jaoude</span></p>
+<p style="color:#C8A766;font-size:11px;margin:0;font-weight:600;">&copy; ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.</p>
+<p style="color:#666;font-size:10px;margin:4px 0 0;">Dubai, UAE</p>
 </td></tr>
 
 </table>

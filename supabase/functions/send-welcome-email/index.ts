@@ -45,23 +45,21 @@ function sharedFooterHtml(): string {
 <a href="mailto:Contact@JBJ.ae" style="color:#ffffff;text-decoration:none;font-size:13px;">Contact@JBJ.ae</a>
 </td></tr>
 </table>
+<p style="color:#C8A766;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin:0 0 12px;">Follow Us &middot; Stay in the Loop</p>
 <table cellpadding="0" cellspacing="0" align="center" style="margin-bottom:22px;">
 <tr>
-<td style="padding:0 14px;"><a href="https://www.instagram.com/jbj.ae" style="color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">Instagram</a></td>
-<td style="color:#444;font-size:10px;">&#8226;</td>
-<td style="padding:0 14px;"><a href="https://www.facebook.com/share/1G7CgSaV2L/" style="color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">Facebook</a></td>
-<td style="color:#444;font-size:10px;">&#8226;</td>
-<td style="padding:0 14px;"><a href="https://www.linkedin.com/company/jbj-global-real-estate/" style="color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">LinkedIn</a></td>
-<td style="color:#444;font-size:10px;">&#8226;</td>
-<td style="padding:0 14px;"><a href="https://youtube.com/@jbjglobalrealestate" style="color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">YouTube</a></td>
+<td style="padding:0 6px;"><a href="https://www.instagram.com/jbj.ae" style="display:inline-block;padding:8px 16px;border:1px solid #C8A766;border-radius:6px;color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">Instagram</a></td>
+<td style="padding:0 6px;"><a href="https://www.facebook.com/share/1G7CgSaV2L/" style="display:inline-block;padding:8px 16px;border:1px solid #C8A766;border-radius:6px;color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">Facebook</a></td>
+<td style="padding:0 6px;"><a href="https://www.linkedin.com/company/jbj-global-real-estate/" style="display:inline-block;padding:8px 16px;border:1px solid #C8A766;border-radius:6px;color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">LinkedIn</a></td>
+<td style="padding:0 6px;"><a href="https://youtube.com/@jbjglobalrealestate" style="display:inline-block;padding:8px 16px;border:1px solid #C8A766;border-radius:6px;color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">YouTube</a></td>
 </tr>
 </table>
 <p style="color:#C8A766;font-size:13px;margin:0 0 4px;font-weight:600;">JBJ Global Real Estate</p>
 <p style="color:#777;font-size:11px;margin:0 0 8px;">First Global Real Estate Platform of Its Kind</p>
-<p style="color:#555;font-size:10px;margin:0 0 12px;">
+<p style="color:#888;font-size:10px;margin:0 0 12px;white-space:nowrap;">
 Developed, Created &amp; Implemented by The Founder &amp; CEO, <span style="color:#C8A766;">Jane Bou Jaoude</span>
 </p>
-<p style="color:#444;font-size:10px;margin:12px 0 0;">
+<p style="color:#C8A766;font-size:11px;margin:12px 0 0;font-weight:600;">
 &copy; ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
 </p>
 </td></tr>`;
@@ -290,7 +288,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: "JBJ Global Real Estate <noreply@jbj.ae>",
+        from: "JBJ Global Real Estate <contact@jbj.ae>",
         to: [email],
         subject: subjectByRole[role] || subjectByRole.visitor,
         html: emailHtml,

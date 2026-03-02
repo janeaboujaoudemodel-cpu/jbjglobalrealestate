@@ -38,7 +38,7 @@ const OFFICIAL_EMAILS = {
 };
 
 // Verified sender domain for outgoing emails
-const VERIFIED_SENDER = 'noreply@jbj.ae';
+const VERIFIED_SENDER = 'contact@jbj.ae';
 
 interface TicketRequest {
   fullName: string;
@@ -606,14 +606,14 @@ Explore While You Wait</p>
     const [supportEmailResult, customerEmailResult] = await Promise.allSettled([
       // Support team email
       sendEmail({
-        from: `JBJ Support <noreply@jbj.ae>`,
+        from: `JBJ Support <contact@jbj.ae>`,
         to: [OFFICIAL_EMAILS.support],
         subject: `[${ticket.ticket_number}] New Support Ticket: ${subject}`,
         html: supportEmailHtml,
       }),
       // Customer confirmation email
       sendEmail({
-        from: `JBJ Support <noreply@jbj.ae>`,
+        from: `JBJ Support <contact@jbj.ae>`,
         to: [email],
         subject: `Ticket Received: ${ticket.ticket_number} - We're on it!`,
         html: customerEmailHtml,
