@@ -116,7 +116,7 @@ function buildEmailHtml(req: AdminMessageRequest): string {
   const typeLabel = getServiceLabel(req.serviceCategory);
   const departmentLabel = getDepartmentLabel(req.serviceCategory);
   const reviewUrl = `${SITE_URL}/reviews?source=${encodeURIComponent(req.serviceCategory)}`;
-  const surveyUrl = `${SITE_URL}/survey?source=${encodeURIComponent(req.serviceCategory)}`;
+  const surveyUrl = `${SITE_URL}/ticket-survey?source=${encodeURIComponent(req.serviceCategory)}`;
 
   return `<!DOCTYPE html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
@@ -210,7 +210,7 @@ View My Account
 <p style="color:#888;font-size:12px;margin:0 0 16px;">Help us improve by sharing your experience</p>
 <table cellpadding="0" cellspacing="0" align="center">
 <tr>
-<td style="padding:0 8px;"><a href="${reviewUrl}" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:11px 26px;border-radius:8px;font-weight:700;font-size:12px;border:1px solid #C8A76650;">&#9733;&#9733;&#9733;&#9733;&#9733; Leave a Review</a></td>
+<td style="padding:0 8px;"><a href="${reviewUrl}" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:11px 26px;border-radius:8px;font-weight:700;font-size:12px;border:1px solid #C8A76650;">Leave a Review</a></td>
 <td style="padding:0 8px;"><a href="${surveyUrl}" style="display:inline-block;background:#FDFBF7;border:1px solid #C8A766;color:#1a1a1a;text-decoration:none;padding:11px 26px;border-radius:8px;font-weight:700;font-size:12px;">Take Survey</a></td>
 </tr>
 </table>

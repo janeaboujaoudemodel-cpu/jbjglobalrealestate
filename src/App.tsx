@@ -396,6 +396,7 @@ const App = () => (
                   {React.createElement(React.lazy(() => import("./pages/TicketSurvey")))}
                 </Suspense>
               } />
+              <Route path="/survey" element={<Navigate to="/ticket-survey" replace />} />
 
               {/* Public E-Signature Signing Page - No auth required */}
               <Route path="/sign/:token" element={
