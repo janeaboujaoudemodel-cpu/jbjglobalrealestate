@@ -19,13 +19,7 @@ export function useHRStats() {
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
       // Run all queries in parallel for better performance
-      const [
-        employeesResult,
-        positionsResult,
-        hiresResult,
-        totalCVsResult,
-        pendingCVsResult,
-      ] = await Promise.all([
+      const results = await Promise.all([
         // Get active employees count
         supabase
           .from("crm_users_profile")
@@ -44,26 +38,40 @@ export function useHRStats() {
           .select("*", { count: "exact", head: true })
           .gte("created_at", thirtyDaysAgo.toISOString()),
         
-        // Get total CVs from hr_applications
+      // Get total CVs from hr_applications
         supabase
           .from("hr_applications")
           .select("*", { count: "exact", head: true }),
         
-        // Get pending CVs
+        // Get pending CVs from hr_applications
         supabase
           .from("hr_applications")
           .select("*", { count: "exact", head: true })
           .eq("status", "pending"),
+
+        // Get total CVs from hr_cv_submissions (chat widget submissions)
+        supabase
+          .from("hr_cv_submissions")
+          .select("*", { count: "exact", head: true }),
+
+        // Get pending CVs from hr_cv_submissions
+        supabase
+          .from("hr_cv_submissions")
+          .select("*", { count: "exact", head: true })
+          .eq("status", "pending"),
       ]);
 
+      const cvSubsResult = results[5];
+      const pendingCvSubsResult = results[6];
+
       return {
-        activeEmployees: employeesResult.count || 0,
-        openPositions: positionsResult.count || 0,
-        newHires: hiresResult.count || 0,
-        aiInsights: 0, // Will be populated when hunting system has data
-        avgPerformance: 0, // Will be calculated from performance data
-        totalCVs: totalCVsResult.count || 0,
-        pendingCVs: pendingCVsResult.count || 0,
+        activeEmployees: results[0].count || 0,
+        openPositions: results[1].count || 0,
+        newHires: results[2].count || 0,
+        aiInsights: 0,
+        avgPerformance: 0,
+        totalCVs: (results[3].count || 0) + (cvSubsResult?.count || 0),
+        pendingCVs: (results[4].count || 0) + (pendingCvSubsResult?.count || 0),
       };
     },
     staleTime: 120000, // 2 minutes - reduces refetching
