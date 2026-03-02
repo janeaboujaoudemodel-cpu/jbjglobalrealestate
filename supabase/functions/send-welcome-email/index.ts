@@ -34,18 +34,69 @@ const RequestSchema = z.object({
   userRole: z.enum(["broker", "investor", "visitor"]).optional(),
 });
 
-/* ── Premium Icon Helper ── */
-function premiumIcon(letter: string, bg: string = '#1a1a1a'): string {
-  return `<td style="width:40px;min-width:40px;height:40px;background:${bg};border-radius:10px;text-align:center;vertical-align:middle;padding:0;">
-    <span style="color:#fff;font-size:15px;line-height:40px;font-weight:700;font-family:Arial,sans-serif;display:block;">${letter}</span>
+/* ── SVG Icon Helper ── */
+function svgIcon(svgContent: string, borderColor: string = '#1a1a1a'): string {
+  return `<td style="width:40px;min-width:40px;height:40px;border:2px solid ${borderColor};border-radius:10px;text-align:center;vertical-align:middle;padding:0;">
+    <div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;">
+      ${svgContent}
+    </div>
   </td>`;
+}
+
+/* SVG icons for email (inline, no external deps) */
+const SVG_BUILDING = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>`;
+const SVG_HEART = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>`;
+const SVG_HEADSET = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5Zm0 0a9 9 0 1 1 18 0m0 0v5a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3Z"/></svg>`;
+const SVG_TICKET = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>`;
+
+// Recommended For You icons
+const SVG_REC_AI = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C8A766" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="m15.5 7.5 2.8-2.8"/><path d="M20 12h4"/><path d="m15.5 16.5 2.8 2.8"/><path d="M12 20v4"/><path d="m4.9 19.1 2.8-2.8"/><path d="M2 12h4"/><path d="m4.9 4.9 2.8 2.8"/><circle cx="12" cy="12" r="4"/></svg>`;
+const SVG_REC_GUIDE = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C8A766" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>`;
+const SVG_REC_PROP = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C8A766" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`;
+
+function recommendedActionsHtml(): string {
+  return `
+<!-- Recommended For You -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0;border-top:2px solid #C8A76633;padding-top:20px;">
+<tr><td style="text-align:center;">
+<p style="color:#1a1a1a;font-size:14px;font-weight:700;margin:0 0 12px;">Recommended For You</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td width="33%" style="text-align:center;padding:4px;">
+<a href="${SITE_URL}/ai-tools" style="display:block;padding:14px 8px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:10px;text-decoration:none;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr>
+<td style="width:32px;height:32px;border:2px solid #C8A766;border-radius:8px;text-align:center;vertical-align:middle;">${SVG_REC_AI}</td>
+</tr></table>
+<p style="margin:6px 0 0;font-size:11px;color:#1a1a1a;font-weight:600;">AI Tools</p>
+</a>
+</td>
+<td width="33%" style="text-align:center;padding:4px;">
+<a href="${SITE_URL}/guides" style="display:block;padding:14px 8px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:10px;text-decoration:none;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr>
+<td style="width:32px;height:32px;border:2px solid #C8A766;border-radius:8px;text-align:center;vertical-align:middle;">${SVG_REC_GUIDE}</td>
+</tr></table>
+<p style="margin:6px 0 0;font-size:11px;color:#1a1a1a;font-weight:600;">Guides</p>
+</a>
+</td>
+<td width="33%" style="text-align:center;padding:4px;">
+<a href="${SITE_URL}/properties" style="display:block;padding:14px 8px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:10px;text-decoration:none;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr>
+<td style="width:32px;height:32px;border:2px solid #C8A766;border-radius:8px;text-align:center;vertical-align:middle;">${SVG_REC_PROP}</td>
+</tr></table>
+<p style="margin:6px 0 0;font-size:11px;color:#1a1a1a;font-weight:600;">Properties</p>
+</a>
+</td>
+</tr>
+</table>
+</td></tr>
+</table>`;
 }
 
 function sharedHeader(departmentLabel: string): string {
   return `
-<!-- Header — Black with centered monogram + wordmark -->
-<tr><td style="background:#000000;padding:30px 40px;text-align:center;border-radius:24px 24px 0 0;">
-<img src="${LOGO_URL}" alt="JBJ Global Real Estate" width="180" style="max-width:180px;height:auto;display:block;margin:0 auto 14px;" />
+<!-- Header — Black with centered monogram + wordmark (equal padding) -->
+<tr><td style="background:#000000;padding:32px 40px 32px;text-align:center;border-radius:24px 24px 0 0;">
+<img src="${LOGO_URL}" alt="JBJ Global Real Estate" width="180" style="max-width:180px;height:auto;display:block;margin:0 auto 16px;" />
 <p style="color:#C8A766;margin:0;font-size:14px;font-weight:700;letter-spacing:3px;text-transform:uppercase;">JBJ GLOBAL REAL ESTATE</p>
 </td></tr>
 <!-- Sub-header band -->
@@ -60,44 +111,6 @@ function sharedHeader(departmentLabel: string): string {
 <td style="text-align:center;padding:4px 8px;"><a href="tel:+971565911000" style="color:#fff;text-decoration:none;font-size:12px;">+971 56 591 1000</a></td>
 </tr></table>
 </td></tr>`;
-}
-
-function recommendedActionsHtml(): string {
-  return `
-<!-- Recommended Actions -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0;border-top:2px solid #C8A76633;padding-top:20px;">
-<tr><td style="text-align:center;">
-<p style="color:#1a1a1a;font-size:14px;font-weight:700;margin:0 0 12px;">Recommended For You</p>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-<tr>
-<td width="33%" style="text-align:center;padding:4px;">
-<a href="${SITE_URL}/ai-tools" style="display:block;padding:14px 8px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:10px;text-decoration:none;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr>
-<td style="width:32px;height:32px;background:#1a1a1a;border-radius:8px;text-align:center;vertical-align:middle;"><span style="color:#fff;font-size:13px;line-height:32px;font-weight:700;font-family:Arial,sans-serif;display:block;">AI</span></td>
-</tr></table>
-<p style="margin:6px 0 0;font-size:11px;color:#1a1a1a;font-weight:600;">AI Tools</p>
-</a>
-</td>
-<td width="33%" style="text-align:center;padding:4px;">
-<a href="${SITE_URL}/guides" style="display:block;padding:14px 8px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:10px;text-decoration:none;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr>
-<td style="width:32px;height:32px;background:#1e3a5f;border-radius:8px;text-align:center;vertical-align:middle;"><span style="color:#fff;font-size:13px;line-height:32px;font-weight:700;font-family:Arial,sans-serif;display:block;">G</span></td>
-</tr></table>
-<p style="margin:6px 0 0;font-size:11px;color:#1a1a1a;font-weight:600;">Guides</p>
-</a>
-</td>
-<td width="33%" style="text-align:center;padding:4px;">
-<a href="${SITE_URL}/properties" style="display:block;padding:14px 8px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:10px;text-decoration:none;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr>
-<td style="width:32px;height:32px;background:#1a1a1a;border-radius:8px;text-align:center;vertical-align:middle;"><span style="color:#fff;font-size:13px;line-height:32px;font-weight:700;font-family:Arial,sans-serif;display:block;">P</span></td>
-</tr></table>
-<p style="margin:6px 0 0;font-size:11px;color:#1a1a1a;font-weight:600;">Properties</p>
-</a>
-</td>
-</tr>
-</table>
-</td></tr>
-</table>`;
 }
 
 function sharedFooterHtml(): string {
@@ -160,11 +173,11 @@ ${sharedFooterHtml()}
 </body></html>`;
 }
 
-/* ── Benefit card with premium icon ── */
-function benefitCard(iconLetter: string, iconBg: string, title: string, desc: string): string {
+/* ── Benefit card with SVG icon ── */
+function benefitCard(svgContent: string, borderColor: string, title: string, desc: string): string {
   return `<tr><td style="padding:14px 18px;background:linear-gradient(135deg,#F5EBD7,#FDFBF7);border-radius:10px;border:1px solid #C8A76640;">
   <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
-  ${premiumIcon(iconLetter, iconBg)}
+  ${svgIcon(svgContent, borderColor)}
   <td style="padding-left:14px;"><strong style="color:#1a1a1a;font-size:14px;">${title}</strong>
   <p style="color:#666;margin:4px 0 0;font-size:13px;">${desc}</p></td>
   </tr></table>
@@ -323,21 +336,28 @@ serve(async (req) => {
       visitor: { text: "Start Browsing", url: `${SITE_URL}/properties` },
     };
 
+    // SVG icons for benefit cards
+    const SVG_AI_TOOLS = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="m15.5 7.5 2.8-2.8"/><path d="M20 12h4"/><path d="m15.5 16.5 2.8 2.8"/><path d="M12 20v4"/><path d="m4.9 19.1 2.8-2.8"/><path d="M2 12h4"/><path d="m4.9 4.9 2.8 2.8"/><circle cx="12" cy="12" r="4"/></svg>`;
+    const SVG_TRAINING = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 10 3 12 0v-5"/></svg>`;
+    const SVG_HR = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`;
+    const SVG_BEN_TICKET = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>`;
+    const SVG_BEN_PROP = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>`;
+
     const benefitsByRole: Record<string, string> = {
       broker:
-        benefitCard('AI', '#1a1a1a', 'Free AI Tools', 'Unlimited access to property analysis, market reports, and smart recommendations.') +
-        benefitCard('T', '#1e3a5f', 'Free Training Academy', 'Complete courses and videos to boost your real estate career.') +
-        benefitCard('HR', '#1a1a1a', 'Dedicated HR Manager &amp; Personal Assistant', 'Jessica and our team provide dedicated support for all your inquiries.') +
-        benefitCard('E', '#1e3a5f', 'Support Tickets &amp; Events', 'Submit tickets for any query and join exclusive company events and webinars.'),
+        benefitCard(SVG_AI_TOOLS, '#1a1a1a', 'Free AI Tools', 'Unlimited access to property analysis, market reports, and smart recommendations.') +
+        benefitCard(SVG_TRAINING, '#1a1a1a', 'Free Training Academy', 'Complete courses and videos to boost your real estate career.') +
+        benefitCard(SVG_HR, '#1a1a1a', 'Dedicated HR Manager &amp; Personal Assistant', 'Jessica and our team provide dedicated support for all your inquiries.') +
+        benefitCard(SVG_BEN_TICKET, '#dc2626', 'Support Tickets &amp; Events', 'Submit tickets for any query and join exclusive company events and webinars.'),
       investor:
-        benefitCard('P', '#1a1a1a', 'Premium Properties', 'Browse exclusive listings across Dubai and the UAE.') +
-        benefitCard('AI', '#1e3a5f', 'AI Property Analysis', 'Smart insights and ROI calculations for better investment decisions.') +
-        benefitCard('E', '#1a1a1a', 'Support Tickets &amp; Events', 'Submit tickets for any query and join exclusive company events.'),
+        benefitCard(SVG_BEN_PROP, '#1a1a1a', 'Premium Properties', 'Browse exclusive listings across Dubai and the UAE.') +
+        benefitCard(SVG_AI_TOOLS, '#1a1a1a', 'AI Property Analysis', 'Smart insights and ROI calculations for better investment decisions.') +
+        benefitCard(SVG_BEN_TICKET, '#dc2626', 'Support Tickets &amp; Events', 'Submit tickets for any query and join exclusive company events.'),
       visitor:
-        benefitCard('P', '#1a1a1a', 'Browse Premium Properties', 'Explore our curated selection of UAE properties across all emirates.') +
-        benefitCard('F', '#1e3a5f', 'Save Your Favorites', 'Shortlist properties you love and access them anytime from your dashboard.') +
-        benefitCard('S', '#1a1a1a', 'Expert Support 24/7', 'Our dedicated team is ready to assist with any property inquiry.') +
-        benefitCard('E', '#1e3a5f', 'Support Tickets &amp; Events', 'Submit tickets, get help, and stay updated on company events.'),
+        benefitCard(SVG_BUILDING, '#1a1a1a', 'Browse Premium Properties', 'Explore our curated selection of UAE properties across all emirates.') +
+        benefitCard(SVG_HEART, '#1a1a1a', 'Save Your Favorites', 'Shortlist properties you love and access them anytime from your dashboard.') +
+        benefitCard(SVG_HEADSET, '#16a34a', 'Expert Support 24/7', 'Our dedicated team is ready to assist with any property inquiry.') +
+        benefitCard(SVG_TICKET, '#dc2626', 'Support Tickets &amp; Events', 'Submit tickets, get help, and stay updated on company events.'),
     };
 
     const cta = ctaByRole[role] || ctaByRole.visitor;
