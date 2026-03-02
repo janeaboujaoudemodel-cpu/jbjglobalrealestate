@@ -200,11 +200,23 @@ serve(async (req) => {
                     <!-- Content -->
                     <tr>
                       <td style="padding: 40px;">
-                        <h2 style="color: #1a1a2e; margin: 0 0 20px 0; font-size: 24px;">Welcome, ${displayName}!</h2>
+                        <h2 style="color: #1a1a2e; margin: 0 0 20px 0; font-size: 24px;">Welcome on Board, ${displayName}! 🎉</h2>
                         
-                        <p style="color: #555; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
-                          Thank you for joining JBJ Global Real Estate. We're thrilled to have you as part of our community of discerning property seekers.
+                        <p style="color: #555; font-size: 16px; line-height: 1.6; margin: 0 0 15px 0;">
+                          You have successfully created your account with <strong>JBJ Global Real Estate</strong>. We're thrilled to have you!
                         </p>
+
+                        <!-- Credentials Reminder Box -->
+                        <table width="100%" cellpadding="0" cellspacing="0" style="margin: 0 0 20px 0;">
+                          <tr>
+                            <td style="padding: 20px; background: linear-gradient(135deg, #f8f6f0 0%, #f0ece0 100%); border-radius: 10px; border-left: 4px solid #d4af37;">
+                              <p style="color: #1a1a2e; font-size: 15px; font-weight: 600; margin: 0 0 10px 0;">📋 Your Account Details</p>
+                              <p style="color: #555; font-size: 14px; margin: 0 0 8px 0;"><strong>Email:</strong> ${email}</p>
+                              <p style="color: #555; font-size: 14px; margin: 0 0 12px 0;"><strong>Password:</strong> The password you chose during registration. For security, we never store or send passwords in emails.</p>
+                              <p style="color: #d4af37; font-size: 13px; font-weight: 600; margin: 0;">💡 Save this email for anytime you need to sign in or recover your account.</p>
+                            </td>
+                          </tr>
+                        </table>
                         
                         <p style="color: #555; font-size: 16px; line-height: 1.6; margin: 0 0 30px 0;">
                           As a Dubai-based real estate brokerage, we specialize in connecting clients with exceptional properties across the UAE.

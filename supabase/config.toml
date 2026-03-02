@@ -340,5 +340,8 @@ verify_jwt = false
 [functions.compute-user-scores]
 verify_jwt = false
 
+[functions.reset-password-with-otp]
+verify_jwt = false
+
 [functions.business-card-ocr]
 verify_jwt = false

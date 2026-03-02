@@ -1,11 +1,13 @@
 import React, { useState, useEffect, forwardRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { lovable } from "@/integrations/lovable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { toast } from "sonner";
-import { Eye, EyeOff, Mail, Lock, ArrowLeft, Fingerprint, Scan } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, ArrowLeft, Scan } from "lucide-react";
 import { z } from "zod";
 import { JJLogoImage } from "@/components/JJLogoImage";
 import { useBiometricAuth } from "@/hooks/useBiometricAuth";
@@ -14,18 +16,19 @@ import { supabase } from "@/integrations/supabase/client";
 const emailSchema = z.string().email("Please enter a valid email address");
 const passwordSchema = z.string().min(6, "Password must be at least 6 characters");
 
-type AuthMode = "signin" | "signup" | "forgot" | "reset";
+type AuthMode = "signin" | "signup" | "forgot" | "verify-otp" | "reset";
 
 const Auth = forwardRef<HTMLDivElement>((_, ref) => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { user, signIn, signUp, signInWithGoogle, resetPassword, updatePassword, signOut, loading } = useAuth();
+  const { user, signIn, signUp, resetPassword, updatePassword, signOut, loading } = useAuth();
   const { isAvailable: isBiometricAvailable, authenticate: biometricAuth, hasStoredCredential, isLoading: biometricLoading } = useBiometricAuth();
   
   const [mode, setMode] = useState<AuthMode>("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [otpCode, setOtpCode] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string; confirmPassword?: string }>({});
@@ -40,7 +43,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
   const validateForm = () => {
     const newErrors: { email?: string; password?: string; confirmPassword?: string } = {};
     
-    if (mode !== "reset") {
+    if (mode !== "reset" && mode !== "verify-otp") {
       try {
         emailSchema.parse(email);
       } catch (e) {
@@ -50,7 +53,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
       }
     }
 
-    if (mode !== "forgot") {
+    if (mode !== "forgot" && mode !== "verify-otp") {
       try {
         passwordSchema.parse(password);
       } catch (e) {
@@ -60,7 +63,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
       }
     }
 
-    if (mode === "reset" && password !== confirmPassword) {
+    if ((mode === "signup" || mode === "reset") && password !== confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match";
     }
 
@@ -85,6 +88,14 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
             toast.error(error.message);
           }
         } else {
+          // Send welcome email
+          try {
+            await supabase.functions.invoke("send-welcome-email", {
+              body: { userId: "new-user", email, fullName: email.split("@")[0] },
+            });
+          } catch (welcomeErr) {
+            console.warn("Welcome email failed (non-blocking):", welcomeErr);
+          }
           toast.success("Account created successfully! Welcome to JBJ GLOBAL REAL ESTATE.");
           navigate("/");
         }
@@ -101,20 +112,32 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
           navigate("/");
         }
       } else if (mode === "forgot") {
-        const { error } = await resetPassword(email);
-        if (error) {
-          toast.error(error.message);
-        } else {
-          toast.success("Password reset link sent! Check your email.");
-          setMode("signin");
+        // Send OTP instead of reset link
+        try {
+          const { data, error: otpError } = await supabase.functions.invoke("send-email-otp", {
+            body: { email },
+          });
+          if (otpError) throw otpError;
+          toast.success("Verification code sent! Check your email.");
+          setMode("verify-otp");
+        } catch (err: any) {
+          toast.error(err?.message || "Failed to send verification code. Please try again.");
         }
       } else if (mode === "reset") {
-        const { error } = await updatePassword(password);
-        if (error) {
-          toast.error(error.message);
-        } else {
-          toast.success("Password updated successfully! Welcome back.");
-          navigate("/");
+        // OTP-based password reset
+        try {
+          const { data, error: resetErr } = await supabase.functions.invoke("reset-password-with-otp", {
+            body: { email, otp_code: otpCode, new_password: password },
+          });
+          if (resetErr) throw resetErr;
+          if (data?.error) throw new Error(data.error);
+          toast.success("Password updated successfully! Please sign in with your new password.");
+          setMode("signin");
+          setPassword("");
+          setConfirmPassword("");
+          setOtpCode("");
+        } catch (err: any) {
+          toast.error(err?.message || "Failed to reset password. Please try again.");
         }
       }
     } finally {
@@ -122,21 +145,37 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
     }
   };
 
-  const handleGoogleSignIn = async () => {
+  const handleVerifyOtp = async () => {
+    if (otpCode.length !== 6) {
+      toast.error("Please enter the complete 6-digit code.");
+      return;
+    }
+
     setIsSubmitting(true);
     try {
-      const { error } = await signInWithGoogle();
+      const { data, error } = await supabase.functions.invoke("verify-email-otp", {
+        body: { email, otp_code: otpCode },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+
+      toast.success("Code verified! Set your new password.");
+      setMode("reset");
+    } catch (err: any) {
+      toast.error(err?.message || "Invalid code. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleSocialSignIn = async (provider: "google" | "apple") => {
+    setIsSubmitting(true);
+    try {
+      const { error } = await lovable.auth.signInWithOAuth(provider, {
+        redirect_uri: window.location.origin,
+      });
       if (error) {
-        // Provide user-friendly error messages
-        if (error.message.includes("provider")) {
-          toast.error("Google sign-in is temporarily unavailable. Please use email/password or try again later.");
-        } else if (error.message.includes("popup")) {
-          toast.error("Sign-in popup was blocked. Please allow popups and try again.");
-        } else if (error.message.includes("network")) {
-          toast.error("Network error. Please check your connection and try again.");
-        } else {
-          toast.error("We're sorry, there was a temporary issue. Please try again or contact us via WhatsApp or email.");
-        }
+        toast.error("We're sorry, there was a temporary issue. Please try again or contact us via WhatsApp or email.");
       }
     } finally {
       setIsSubmitting(false);
@@ -149,10 +188,8 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
       const result = await biometricAuth(true);
       
       if (result.success) {
-        // Get stored user email and auto-login
         const storedUser = localStorage.getItem('jbj_biometric_user');
         if (storedUser) {
-          // Retrieve session - user should already be authenticated via WebAuthn
           const { data: { session } } = await supabase.auth.getSession();
           if (session) {
             toast.success('Welcome back! Signed in with Face ID.');
@@ -184,6 +221,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
     switch (mode) {
       case "signup": return "Join Our Network";
       case "forgot": return "Reset Your Password";
+      case "verify-otp": return "Enter Verification Code";
       case "reset": return "Create New Password";
       default: return "Welcome Back";
     }
@@ -192,7 +230,8 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
   const getSubtitle = () => {
     switch (mode) {
       case "signup": return "Create your account to access exclusive UAE Real Estate opportunities";
-      case "forgot": return "Enter your email address and we'll send you a secure reset link";
+      case "forgot": return "Enter your email address and we'll send you a secure verification code";
+      case "verify-otp": return `We sent a 6-digit code to ${email}. Enter it below.`;
       case "reset": return "Please enter your new password below";
       default: return "Greetings from JBJ Global Real Estate. We're delighted to have you back.";
     }
@@ -205,30 +244,20 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
         ref={ref}
         className="min-h-screen flex items-center justify-center py-12 px-4 bg-gradient-to-br from-white via-gray-50 to-white"
       >
-        {/* Decorative gold accent */}
-        <div
-          className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent"
-        />
-
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
         <div className="relative z-10 w-full max-w-md">
           <div className="bg-white border border-gray-200 rounded-2xl p-10 shadow-xl">
-            {/* Logo */}
             <div className="flex justify-center mb-8">
               <JJLogoImage variant="light" size="md" />
             </div>
-
             <div className="text-center mb-8">
-              <h1
-                className="text-black text-2xl font-semibold mb-3"
-                style={{ fontFamily: "Poppins, sans-serif" }}
-              >
+              <h1 className="text-black text-2xl font-semibold mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
                 You're Signed In
               </h1>
               <p className="text-gray-600 text-sm">
                 Welcome back, <span className="text-gold font-medium">{user.email}</span>
               </p>
             </div>
-
             <div className="space-y-4">
               <Button
                 type="button"
@@ -258,7 +287,6 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
               </Button>
             </div>
           </div>
-
           <p className="text-center text-gray-400 text-xs mt-8">
             © {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
           </p>
@@ -272,21 +300,22 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
       ref={ref}
       className="min-h-screen flex items-center justify-center py-12 px-4 bg-gradient-to-br from-white via-gray-50 to-white"
     >
-      {/* Decorative gold accent line at top */}
-      <div
-        className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent"
-      />
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
 
       <div className="relative z-10 w-full max-w-md">
         <div className="bg-white border border-gray-200 rounded-2xl p-10 shadow-xl">
-          {/* Back button for forgot/reset modes */}
-          {(mode === "forgot" || mode === "reset") && (
+          {/* Back button */}
+          {(mode === "forgot" || mode === "reset" || mode === "verify-otp") && (
             <button
-              onClick={() => setMode("signin")}
+              onClick={() => {
+                if (mode === "verify-otp") setMode("forgot");
+                else setMode("signin");
+                setOtpCode("");
+              }}
               className="flex items-center gap-2 text-gray-500 hover:text-gold mb-6 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span className="text-sm">Back to Sign In</span>
+              <span className="text-sm">Back</span>
             </button>
           )}
 
@@ -296,10 +325,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
           </div>
 
           <div className="text-center mb-8">
-            <h1
-              className="text-black text-2xl font-semibold mb-3"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
+            <h1 className="text-black text-2xl font-semibold mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
               {getTitle()}
             </h1>
             <p className="text-gray-600 text-sm leading-relaxed">
@@ -307,10 +333,10 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
             </p>
           </div>
 
-          {/* Biometric & Google Sign In */}
+          {/* Social Sign In — Google + Apple */}
           {(mode === "signin" || mode === "signup") && (
             <>
-              {/* Face ID / Touch ID Button - Only show on signin if available */}
+              {/* Face ID */}
               {mode === "signin" && isBiometricAvailable && hasStoredCredential && (
                 <Button
                   type="button"
@@ -323,31 +349,33 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                 </Button>
               )}
 
+              {/* Google */}
               <Button
                 type="button"
-                onClick={handleGoogleSignIn}
+                onClick={() => handleSocialSignIn("google")}
                 disabled={isSubmitting}
-                className="w-full h-12 bg-white hover:bg-gray-50 text-black font-medium rounded-xl flex items-center justify-center gap-3 mb-4 border border-gray-300 hover:border-gold/50 transition-all duration-300 shadow-sm"
+                className="w-full h-12 bg-white hover:bg-gray-50 text-black font-medium rounded-xl flex items-center justify-center gap-3 mb-3 border border-gray-300 hover:border-gold/50 transition-all duration-300 shadow-sm"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
-                  <path
-                    fill="#4285F4"
-                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                  />
-                  <path
-                    fill="#34A853"
-                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                  />
-                  <path
-                    fill="#FBBC05"
-                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                  />
-                  <path
-                    fill="#EA4335"
-                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                  />
+                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
                 </svg>
                 Continue with Google
+              </Button>
+
+              {/* Apple */}
+              <Button
+                type="button"
+                onClick={() => handleSocialSignIn("apple")}
+                disabled={isSubmitting}
+                className="w-full h-12 bg-black hover:bg-zinc-900 text-white font-medium rounded-xl flex items-center justify-center gap-3 mb-4 border border-zinc-800 transition-all duration-300 shadow-sm"
+              >
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" />
+                </svg>
+                Continue with Apple
               </Button>
 
               <div className="relative mb-6">
@@ -361,114 +389,170 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
             </>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Email field */}
-            {mode !== "reset" && (
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-black font-medium">
-                  Email Address
-                </Label>
-                <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <Input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="you@example.com"
-                    className="pl-12 h-12 bg-gray-50 border-gray-200 text-black placeholder:text-gray-400 focus:border-gold focus:ring-gold/20 rounded-xl transition-all duration-300"
-                  />
-                </div>
-                {errors.email && (
-                  <p className="text-red-500 text-sm">{errors.email}</p>
-                )}
+          {/* OTP Verification Step */}
+          {mode === "verify-otp" && (
+            <div className="space-y-6">
+              <div className="flex justify-center">
+                <InputOTP maxLength={6} value={otpCode} onChange={setOtpCode}>
+                  <InputOTPGroup>
+                    <InputOTPSlot index={0} className="w-12 h-14 text-lg font-semibold border-gray-300 text-black" />
+                    <InputOTPSlot index={1} className="w-12 h-14 text-lg font-semibold border-gray-300 text-black" />
+                    <InputOTPSlot index={2} className="w-12 h-14 text-lg font-semibold border-gray-300 text-black" />
+                    <InputOTPSlot index={3} className="w-12 h-14 text-lg font-semibold border-gray-300 text-black" />
+                    <InputOTPSlot index={4} className="w-12 h-14 text-lg font-semibold border-gray-300 text-black" />
+                    <InputOTPSlot index={5} className="w-12 h-14 text-lg font-semibold border-gray-300 text-black" />
+                  </InputOTPGroup>
+                </InputOTP>
               </div>
-            )}
 
-            {/* Password field */}
-            {mode !== "forgot" && (
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-black font-medium">
-                  {mode === "reset" ? "New Password" : "Password"}
-                </Label>
-                <div className="relative">
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <Input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••"
-                    className="pl-12 pr-12 h-12 bg-gray-50 border-gray-200 text-black placeholder:text-gray-400 focus:border-gold focus:ring-gold/20 rounded-xl transition-all duration-300"
-                  />
+              <Button
+                type="button"
+                onClick={handleVerifyOtp}
+                disabled={isSubmitting || otpCode.length !== 6}
+                className="w-full h-12 bg-gradient-to-r from-gold to-gold-dark hover:opacity-90 text-black font-semibold rounded-xl shadow-lg shadow-gold/20 transition-all duration-300 hover:shadow-gold/40 hover:scale-[1.02]"
+              >
+                {isSubmitting ? (
+                  <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-black" />
+                ) : (
+                  "Verify Code"
+                )}
+              </Button>
+
+              <button
+                type="button"
+                onClick={async () => {
+                  try {
+                    await supabase.functions.invoke("send-email-otp", { body: { email } });
+                    toast.success("New code sent!");
+                    setOtpCode("");
+                  } catch {
+                    toast.error("Failed to resend code.");
+                  }
+                }}
+                className="w-full text-center text-sm text-gold hover:text-gold-dark hover:underline transition-colors"
+              >
+                Didn't receive the code? Resend
+              </button>
+            </div>
+          )}
+
+          {/* Email/Password Form */}
+          {mode !== "verify-otp" && (
+            <form onSubmit={handleSubmit} className="space-y-5" autoComplete="on">
+              {/* Email field */}
+              {mode !== "reset" && (
+                <div className="space-y-2">
+                  <Label htmlFor="email" className="text-black font-medium">
+                    Email Address
+                  </Label>
+                  <div className="relative">
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      autoComplete="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="you@example.com"
+                      className="pl-12 h-12 bg-gray-50 border-gray-200 text-black placeholder:text-gray-400 focus:border-gold focus:ring-gold/20 rounded-xl transition-all duration-300"
+                    />
+                  </div>
+                  {errors.email && (
+                    <p className="text-red-500 text-sm">{errors.email}</p>
+                  )}
+                </div>
+              )}
+
+              {/* Password field */}
+              {mode !== "forgot" && (
+                <div className="space-y-2">
+                  <Label htmlFor="password" className="text-black font-medium">
+                    {mode === "reset" ? "New Password" : "Password"}
+                  </Label>
+                  <div className="relative">
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Input
+                      id="password"
+                      name="password"
+                      type={showPassword ? "text" : "password"}
+                      autoComplete={mode === "signin" ? "current-password" : "new-password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="••••••••"
+                      className="pl-12 pr-12 h-12 bg-gray-50 border-gray-200 text-black placeholder:text-gray-400 focus:border-gold focus:ring-gold/20 rounded-xl transition-all duration-300"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gold transition-colors"
+                    >
+                      {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    </button>
+                  </div>
+                  {errors.password && (
+                    <p className="text-red-500 text-sm">{errors.password}</p>
+                  )}
+                </div>
+              )}
+
+              {/* Confirm Password — on signup AND reset */}
+              {(mode === "signup" || mode === "reset") && (
+                <div className="space-y-2">
+                  <Label htmlFor="confirmPassword" className="text-black font-medium">
+                    Confirm Password
+                  </Label>
+                  <div className="relative">
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Input
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      type={showPassword ? "text" : "password"}
+                      autoComplete="new-password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder="••••••••"
+                      className="pl-12 h-12 bg-gray-50 border-gray-200 text-black placeholder:text-gray-400 focus:border-gold focus:ring-gold/20 rounded-xl transition-all duration-300"
+                    />
+                  </div>
+                  {errors.confirmPassword && (
+                    <p className="text-red-500 text-sm">{errors.confirmPassword}</p>
+                  )}
+                </div>
+              )}
+
+              {/* Forgot Password link */}
+              {mode === "signin" && (
+                <div className="text-right">
                   <button
                     type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gold transition-colors"
+                    onClick={() => setMode("forgot")}
+                    className="text-sm text-gold hover:text-gold-dark hover:underline transition-colors"
                   >
-                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    Forgot password?
                   </button>
                 </div>
-                {errors.password && (
-                  <p className="text-red-500 text-sm">{errors.password}</p>
-                )}
-              </div>
-            )}
-
-            {/* Confirm Password */}
-            {mode === "reset" && (
-              <div className="space-y-2">
-                <Label htmlFor="confirmPassword" className="text-black font-medium">
-                  Confirm New Password
-                </Label>
-                <div className="relative">
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <Input
-                    id="confirmPassword"
-                    type={showPassword ? "text" : "password"}
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="••••••••"
-                    className="pl-12 h-12 bg-gray-50 border-gray-200 text-black placeholder:text-gray-400 focus:border-gold focus:ring-gold/20 rounded-xl transition-all duration-300"
-                  />
-                </div>
-                {errors.confirmPassword && (
-                  <p className="text-red-500 text-sm">{errors.confirmPassword}</p>
-                )}
-              </div>
-            )}
-
-            {/* Forgot Password link */}
-            {mode === "signin" && (
-              <div className="text-right">
-                <button
-                  type="button"
-                  onClick={() => setMode("forgot")}
-                  className="text-sm text-gold hover:text-gold-dark hover:underline transition-colors"
-                >
-                  Forgot password?
-                </button>
-              </div>
-            )}
-
-            <Button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full h-12 bg-gradient-to-r from-gold to-gold-dark hover:opacity-90 text-black font-semibold rounded-xl shadow-lg shadow-gold/20 transition-all duration-300 hover:shadow-gold/40 hover:scale-[1.02]"
-            >
-              {isSubmitting ? (
-                <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-black" />
-              ) : mode === "signup" ? (
-                "Create Account"
-              ) : mode === "forgot" ? (
-                "Send Reset Link"
-              ) : mode === "reset" ? (
-                "Update Password"
-              ) : (
-                "Sign In"
               )}
-            </Button>
-          </form>
+
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full h-12 bg-gradient-to-r from-gold to-gold-dark hover:opacity-90 text-black font-semibold rounded-xl shadow-lg shadow-gold/20 transition-all duration-300 hover:shadow-gold/40 hover:scale-[1.02]"
+              >
+                {isSubmitting ? (
+                  <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-black" />
+                ) : mode === "signup" ? (
+                  "Create Account"
+                ) : mode === "forgot" ? (
+                  "Send Verification Code"
+                ) : mode === "reset" ? (
+                  "Update Password"
+                ) : (
+                  "Sign In"
+                )}
+              </Button>
+            </form>
+          )}
 
           {/* Toggle signin/signup */}
           {(mode === "signin" || mode === "signup") && (
