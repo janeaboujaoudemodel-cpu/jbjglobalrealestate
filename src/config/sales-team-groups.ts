@@ -3,8 +3,8 @@
  * Divides sales team into 3 groups under Sales Managers
  * 
  * HIERARCHY:
- * - Roy Davi (VP Sales) - Real human, reports to Founder
- * - Michael Anderson (Sales Director) - Reports to Roy, leads entire team
+ * - Alexander Nasser (VP Sales) - AI persona, reports to Founder
+ * - Michael Anderson (Sales Director) - Reports to Alexander, leads entire team
  * - Sales Managers (3): Adaeze Okonkwo, Emily Richardson, Emma Hartley
  * - Each Sales Manager has their own group of Property Consultants
  * 
@@ -36,8 +36,8 @@ export interface SalesHierarchy {
   managementGroup: TeamMember[];
 }
 
-// Get VP of Sales (Roy Davi - Real Human)
-const vpSales = salesTeam.find(m => m.id === 'roy-davi');
+// Get VP of Sales (Alexander Nasser - AI Persona)
+const vpSales = salesTeam.find(m => m.id === 'alexander-nasser');
 
 // Get Sales Director (Michael Anderson - leads entire team)
 const salesDirector = salesTeam.find(m => m.id === 'michael-anderson');
@@ -148,7 +148,7 @@ export const COMMUNICATION_GROUPS: CommunicationGroup[] = [
     type: 'all-sales',
     members: [
       'jane-abou-jaoude', // Founder
-      'roy-davi', // VP Sales
+      'alexander-nasser', // VP Sales
       salesDirector?.id || 'michael-anderson',
       ...salesManagers.map(m => m.id),
       ...salesAgents.map(a => a.id),
@@ -166,11 +166,11 @@ export const COMMUNICATION_GROUPS: CommunicationGroup[] = [
     members: [
       'jane-abou-jaoude', // Founder
       'amanda-clarke', // Founder's Assistant - receives reports
-      'roy-davi',
+      'alexander-nasser',
       salesDirector?.id || 'michael-anderson',
       ...salesManagers.map(m => m.id),
     ],
-    managerId: 'roy-davi',
+    managerId: 'alexander-nasser',
     description: 'Sales leadership team for strategic decisions',
     founderAccess: true,
   },
@@ -187,7 +187,7 @@ export const COMMUNICATION_GROUPS: CommunicationGroup[] = [
       'amanda-clarke', // CEO's Assistant
       'natasha-daoud', // CSO
       'anthony-crawford', // CIO
-      'roy-davi', // VP Sales
+      'alexander-nasser', // VP Sales
       salesDirector?.id || 'michael-anderson', // Sales Director
       'victoria-sterling', // Marketing Director
       'jessica-whitmore', // HR Manager
@@ -233,7 +233,7 @@ export const SALES_REPORTING_CHAIN: ReportingChain[] = [
     reportType: 'Team Performance Report',
   })),
   
-  // Sales Director reports to Amanda (on behalf of Roy Davi who is busy)
+  // Sales Director reports to Amanda (on behalf of Alexander Nasser)
   {
     from: salesDirector?.id || 'michael-anderson',
     to: 'amanda-clarke',

@@ -36,9 +36,9 @@ const RequestSchema = z.object({
 
 function sharedHeader(departmentLabel: string): string {
   return `
-<!-- Header — Black with large monogram -->
-<tr><td style="background:#000000;padding:30px 40px;text-align:center;border-radius:24px 24px 0 0;">
-<img src="${LOGO_URL}" alt="JBJ Global Real Estate" width="180" style="max-width:180px;height:auto;display:block;margin:0 auto 14px;" />
+<!-- Header — Black with large monogram, perfectly centered -->
+<tr><td style="background:#000000;padding:32px 40px 24px;text-align:center;border-radius:24px 24px 0 0;">
+<img src="${LOGO_URL}" alt="JBJ Global Real Estate" width="180" style="max-width:180px;height:auto;display:block;margin:0 auto 16px;" />
 <p style="color:#C8A766;margin:0;font-size:14px;font-weight:700;letter-spacing:3px;text-transform:uppercase;">JBJ GLOBAL REAL ESTATE</p>
 </td></tr>
 <!-- Sub-header band -->
@@ -129,16 +129,20 @@ Developed, Created &amp; Implemented by The Founder &amp; CEO, <span style="colo
 function emailShell(departmentLabel: string, bodyContent: string): string {
   return `<!DOCTYPE html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<style>body{margin:0;padding:0;background-color:#F5F0E6;font-family:'Segoe UI',Arial,sans-serif;}
+<style>body{margin:0;padding:0;background-color:#ffffff;font-family:'Segoe UI',Arial,sans-serif;}
 @media only screen and (max-width:620px){.wrapper{width:100%!important;padding:0 8px!important;}.content-pad{padding:24px 16px!important;}}</style>
 </head>
-<body style="margin:0;padding:0;background-color:#F5F0E6;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#F5F0E6;">
+<body style="margin:0;padding:0;background-color:#ffffff;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#ffffff;">
 <tr><td align="center" style="padding:24px 16px;">
-<table role="presentation" class="wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:linear-gradient(180deg,#FFFFFF,#FDFBF7,#F5F0E6);border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(200,167,102,0.18);">
+<table role="presentation" class="wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:#F5F0E6;border-radius:24px;overflow:hidden;">
+<tr><td>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(180deg,#FFFFFF,#FDFBF7,#F5F0E6);border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(200,167,102,0.18);">
 ${sharedHeader(departmentLabel)}
 ${bodyContent}
 ${sharedFooterHtml()}
+</table>
+</td></tr>
 </table></td></tr></table>
 </body></html>`;
 }
@@ -298,43 +302,91 @@ serve(async (req) => {
     const benefitsByRole: Record<string, string> = {
       broker: `
         <tr><td style="padding:14px 18px;background:linear-gradient(135deg,#F5EBD7,#FDFBF7);border-radius:10px;border:1px solid #C8A76640;">
-          <strong style="color:#1a1a1a;font-size:14px;">Free AI Tools</strong>
-          <p style="color:#666;margin:4px 0 0;font-size:13px;">Unlimited access to property analysis, market reports, and smart recommendations.</p>
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+          <td style="vertical-align:top;padding-right:12px;"><span style="font-size:22px;">&#9881;</span></td>
+          <td><strong style="color:#1a1a1a;font-size:14px;">Free AI Tools</strong>
+          <p style="color:#666;margin:4px 0 0;font-size:13px;">Unlimited access to property analysis, market reports, and smart recommendations.</p></td>
+          </tr></table>
         </td></tr>
         <tr><td style="height:8px;"></td></tr>
         <tr><td style="padding:14px 18px;background:linear-gradient(135deg,#F5EBD7,#FDFBF7);border-radius:10px;border:1px solid #C8A76640;">
-          <strong style="color:#1a1a1a;font-size:14px;">Free Training Academy</strong>
-          <p style="color:#666;margin:4px 0 0;font-size:13px;">Complete courses and videos to boost your real estate career.</p>
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+          <td style="vertical-align:top;padding-right:12px;"><span style="font-size:22px;">&#127891;</span></td>
+          <td><strong style="color:#1a1a1a;font-size:14px;">Free Training Academy</strong>
+          <p style="color:#666;margin:4px 0 0;font-size:13px;">Complete courses and videos to boost your real estate career.</p></td>
+          </tr></table>
         </td></tr>
         <tr><td style="height:8px;"></td></tr>
         <tr><td style="padding:14px 18px;background:linear-gradient(135deg,#F5EBD7,#FDFBF7);border-radius:10px;border:1px solid #C8A76640;">
-          <strong style="color:#1a1a1a;font-size:14px;">Dedicated HR Manager &amp; Personal Assistant</strong>
-          <p style="color:#666;margin:4px 0 0;font-size:13px;">Jessica and our team provide dedicated support for all your inquiries.</p>
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+          <td style="vertical-align:top;padding-right:12px;"><span style="font-size:22px;">&#128100;</span></td>
+          <td><strong style="color:#1a1a1a;font-size:14px;">Dedicated HR Manager &amp; Personal Assistant</strong>
+          <p style="color:#666;margin:4px 0 0;font-size:13px;">Jessica and our team provide dedicated support for all your inquiries.</p></td>
+          </tr></table>
+        </td></tr>
+        <tr><td style="height:8px;"></td></tr>
+        <tr><td style="padding:14px 18px;background:linear-gradient(135deg,#F5EBD7,#FDFBF7);border-radius:10px;border:1px solid #C8A76640;">
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+          <td style="vertical-align:top;padding-right:12px;"><span style="font-size:22px;">&#127919;</span></td>
+          <td><strong style="color:#1a1a1a;font-size:14px;">Support Tickets &amp; Events</strong>
+          <p style="color:#666;margin:4px 0 0;font-size:13px;">Submit tickets for any query and join exclusive company events and webinars.</p></td>
+          </tr></table>
         </td></tr>`,
       investor: `
         <tr><td style="padding:14px 18px;background:linear-gradient(135deg,#F5EBD7,#FDFBF7);border-radius:10px;border:1px solid #C8A76640;">
-          <strong style="color:#1a1a1a;font-size:14px;">Premium Properties</strong>
-          <p style="color:#666;margin:4px 0 0;font-size:13px;">Browse exclusive listings across Dubai and the UAE.</p>
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+          <td style="vertical-align:top;padding-right:12px;"><span style="font-size:22px;">&#127968;</span></td>
+          <td><strong style="color:#1a1a1a;font-size:14px;">Premium Properties</strong>
+          <p style="color:#666;margin:4px 0 0;font-size:13px;">Browse exclusive listings across Dubai and the UAE.</p></td>
+          </tr></table>
         </td></tr>
         <tr><td style="height:8px;"></td></tr>
         <tr><td style="padding:14px 18px;background:linear-gradient(135deg,#F5EBD7,#FDFBF7);border-radius:10px;border:1px solid #C8A76640;">
-          <strong style="color:#1a1a1a;font-size:14px;">AI Property Analysis</strong>
-          <p style="color:#666;margin:4px 0 0;font-size:13px;">Smart insights and ROI calculations for better investment decisions.</p>
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+          <td style="vertical-align:top;padding-right:12px;"><span style="font-size:22px;">&#128202;</span></td>
+          <td><strong style="color:#1a1a1a;font-size:14px;">AI Property Analysis</strong>
+          <p style="color:#666;margin:4px 0 0;font-size:13px;">Smart insights and ROI calculations for better investment decisions.</p></td>
+          </tr></table>
+        </td></tr>
+        <tr><td style="height:8px;"></td></tr>
+        <tr><td style="padding:14px 18px;background:linear-gradient(135deg,#F5EBD7,#FDFBF7);border-radius:10px;border:1px solid #C8A76640;">
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+          <td style="vertical-align:top;padding-right:12px;"><span style="font-size:22px;">&#127919;</span></td>
+          <td><strong style="color:#1a1a1a;font-size:14px;">Support Tickets &amp; Events</strong>
+          <p style="color:#666;margin:4px 0 0;font-size:13px;">Submit tickets for any query and join exclusive company events.</p></td>
+          </tr></table>
         </td></tr>`,
       visitor: `
         <tr><td style="padding:16px 20px;background:linear-gradient(135deg,#F5EBD7,#FDFBF7);border-radius:10px;border:1px solid #C8A76640;">
-          <strong style="color:#1a1a1a;font-size:14px;">Browse Premium Properties</strong>
-          <p style="color:#666;margin:4px 0 0;font-size:13px;">Explore our curated selection of UAE properties across all emirates.</p>
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+          <td style="vertical-align:top;padding-right:12px;"><span style="font-size:22px;">&#127968;</span></td>
+          <td><strong style="color:#1a1a1a;font-size:14px;">Browse Premium Properties</strong>
+          <p style="color:#666;margin:4px 0 0;font-size:13px;">Explore our curated selection of UAE properties across all emirates.</p></td>
+          </tr></table>
         </td></tr>
         <tr><td style="height:8px;"></td></tr>
         <tr><td style="padding:16px 20px;background:linear-gradient(135deg,#F5EBD7,#FDFBF7);border-radius:10px;border:1px solid #C8A76640;">
-          <strong style="color:#1a1a1a;font-size:14px;">Save Your Favorites</strong>
-          <p style="color:#666;margin:4px 0 0;font-size:13px;">Shortlist properties you love and access them anytime from your dashboard.</p>
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+          <td style="vertical-align:top;padding-right:12px;"><span style="font-size:22px;">&#11088;</span></td>
+          <td><strong style="color:#1a1a1a;font-size:14px;">Save Your Favorites</strong>
+          <p style="color:#666;margin:4px 0 0;font-size:13px;">Shortlist properties you love and access them anytime from your dashboard.</p></td>
+          </tr></table>
         </td></tr>
         <tr><td style="height:8px;"></td></tr>
         <tr><td style="padding:16px 20px;background:linear-gradient(135deg,#F5EBD7,#FDFBF7);border-radius:10px;border:1px solid #C8A76640;">
-          <strong style="color:#1a1a1a;font-size:14px;">Expert Support 24/7</strong>
-          <p style="color:#666;margin:4px 0 0;font-size:13px;">Our dedicated team is ready to assist with any property inquiry.</p>
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+          <td style="vertical-align:top;padding-right:12px;"><span style="font-size:22px;">&#128222;</span></td>
+          <td><strong style="color:#1a1a1a;font-size:14px;">Expert Support 24/7</strong>
+          <p style="color:#666;margin:4px 0 0;font-size:13px;">Our dedicated team is ready to assist with any property inquiry.</p></td>
+          </tr></table>
+        </td></tr>
+        <tr><td style="height:8px;"></td></tr>
+        <tr><td style="padding:16px 20px;background:linear-gradient(135deg,#F5EBD7,#FDFBF7);border-radius:10px;border:1px solid #C8A76640;">
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+          <td style="vertical-align:top;padding-right:12px;"><span style="font-size:22px;">&#127919;</span></td>
+          <td><strong style="color:#1a1a1a;font-size:14px;">Support Tickets &amp; Events</strong>
+          <p style="color:#666;margin:4px 0 0;font-size:13px;">Submit tickets, get help, and stay updated on company events.</p></td>
+          </tr></table>
         </td></tr>`,
     };
 

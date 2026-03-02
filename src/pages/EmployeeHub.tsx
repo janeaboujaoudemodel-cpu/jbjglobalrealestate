@@ -47,7 +47,7 @@ import {
 // Mock top performers data - in production this would come from database
 const topPerformers = {
   'Sales': { 
-    memberId: 'roy-davi', 
+    memberId: 'alexander-nasser', 
     metric: '47 Deals Closed',
     badge: 'gold' as const
   },

@@ -24,7 +24,7 @@ import michaelBrennanLegal from '@/assets/team/michael-brennan-legal-v2.png';
 import sarahMitchellListingAdmin from '@/assets/team/sarah-mitchell-listing-admin.png';
 
 // Import team portraits - Sales Team
-import royDaviHeadOfSale from '@/assets/team/roy-davi-original.jpg';
+import alexanderNasserVpSales from '@/assets/team/alexander-nasser-vp-sales.jpg';
 import williamHarrisonSales from '@/assets/team/william-harrison-sales.png';
 
 // Import diverse international team members (natural photos without AI filters)
@@ -365,7 +365,7 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     joinDate: '2025-09-10',
     hierarchyLevel: 2,
     reportsTo: 'jane-abou-jaoude',
-    directReports: ['layla-mansour', 'roy-davi', 'victoria-sterling', 'catherine-brooks'],
+    directReports: ['layla-mansour', 'alexander-nasser', 'victoria-sterling', 'catherine-brooks'],
     status: 'online',
     canConductInterviews: true,
   },
@@ -480,13 +480,13 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
 // AUTO_SYNC_HIERARCHY = TRUE - Categories auto-assigned based on title
 export const salesTeam: TeamMember[] = classifySalesDepartment(sortByHierarchy([
   {
-    id: 'roy-davi',
-    name: 'Roy Davi',
+    id: 'alexander-nasser',
+    name: 'Alexander Nasser',
     role: 'Vice President of Sales',
     department: 'Sales',
-    avatar: royDaviHeadOfSale,
-    isAI: false,
-    email: 'roy.davi@JBJ.ae',
+    avatar: alexanderNasserVpSales,
+    isAI: true,
+    email: 'alexander.nasser@JBJ.ae',
     bio: 'Leads the global sales organization, setting strategy and mentoring regional directors.',
     specializations: ['Luxury Properties', 'High-Net-Worth Clients', 'Investment Properties', 'Team Leadership'],
     languages: ['English', 'Arabic'],
@@ -512,7 +512,7 @@ export const salesTeam: TeamMember[] = classifySalesDepartment(sortByHierarchy([
     nationality: 'British',
     yearsExperience: 9,
     hierarchyLevel: 3,
-    reportsTo: 'roy-davi',
+    reportsTo: 'alexander-nasser',
     directReports: ['george-hamilton', 'li-wei-chen', 'dmitri-volkov'],
     status: 'online',
     canConductInterviews: true,
@@ -531,7 +531,7 @@ export const salesTeam: TeamMember[] = classifySalesDepartment(sortByHierarchy([
     nationality: 'British',
     yearsExperience: 8,
     hierarchyLevel: 4,
-    reportsTo: 'roy-davi',
+    reportsTo: 'alexander-nasser',
     directReports: ['priya-sharma', 'ahmed-hassan'],
     status: 'online',
     // Photo Status: LOCKED_EXISTING
@@ -549,7 +549,7 @@ export const salesTeam: TeamMember[] = classifySalesDepartment(sortByHierarchy([
     nationality: 'British',
     yearsExperience: 9,
     hierarchyLevel: 4,
-    reportsTo: 'roy-davi',
+    reportsTo: 'alexander-nasser',
     status: 'online',
     // Photo Status: LOCKED_EXISTING
   },
@@ -804,7 +804,7 @@ export const salesTeam: TeamMember[] = classifySalesDepartment(sortByHierarchy([
     nationality: 'Canadian',
     yearsExperience: 10,
     hierarchyLevel: 4,
-    reportsTo: 'roy-davi',
+    reportsTo: 'alexander-nasser',
     directReports: ['adaeze-okonkwo'],
     status: 'online',
     canConductInterviews: true,
@@ -2255,7 +2255,7 @@ export const afterSalesTeam: TeamMember[] = sortByHierarchy([
     nationality: 'British',
     yearsExperience: 18,
     hierarchyLevel: 3,
-    reportsTo: 'roy-davi',
+    reportsTo: 'alexander-nasser',
     directReports: ['catherine-wells', 'marcus-van-der-berg'],
     status: 'online',
     canConductInterviews: true,
@@ -3158,7 +3158,7 @@ export const companyChannels: CompanyChannel[] = [
     name: 'Developer Relations',
     description: 'Coordination with real estate developers',
     type: 'project',
-    members: ['sarah-mitchell', 'roy-davi', 'michael-anderson', 'emma-hartley', 'william-harrison'],
+    members: ['sarah-mitchell', 'alexander-nasser', 'michael-anderson', 'emma-hartley', 'william-harrison'],
     isPrivate: false,
   },
 ];
@@ -3223,7 +3223,7 @@ export const salesInterviewFlow: InterviewRound[] = [
   {
     round: 2,
     title: 'Sales Leadership Interview',
-    interviewers: ['roy-davi', 'michael-anderson'],
+    interviewers: ['alexander-nasser', 'michael-anderson'],
     duration: 45,
     type: 'technical',
     description: 'Sales skills assessment, scenario discussions, and team fit.',

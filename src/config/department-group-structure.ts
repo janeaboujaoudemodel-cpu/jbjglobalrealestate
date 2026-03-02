@@ -67,7 +67,7 @@ export interface ReportingNode {
 
 const DEPARTMENT_LEADERS: Record<string, { leaderId: string; leaderName: string; reportsTo: string }> = {
   'Executive': { leaderId: 'jane-bou-jaoude', leaderName: 'Jane Bou Jaoude', reportsTo: '' },
-  'Sales': { leaderId: 'roy-davi', leaderName: 'Roy Davi', reportsTo: 'jane-bou-jaoude' },
+  'Sales': { leaderId: 'alexander-nasser', leaderName: 'Alexander Nasser', reportsTo: 'jane-bou-jaoude' },
   'After Sales': { leaderId: 'charles-ashford', leaderName: 'Charles Ashford', reportsTo: 'richard-pemberton' },
   'Marketing & Content': { leaderId: 'victoria-sterling', leaderName: 'Victoria Sterling', reportsTo: 'david-thornton' },
   'Client Relations': { leaderId: 'george-hamilton', leaderName: 'George Hamilton', reportsTo: 'michael-anderson' },

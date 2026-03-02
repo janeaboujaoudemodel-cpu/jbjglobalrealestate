@@ -200,7 +200,7 @@ export const REPORTING_HIERARCHY: ReportingStructure[] = [
   // Sales Department - Brokers report to Sales Directors
   {
     roleId: 'broker',
-    reportsTo: 'roy_davi', // Sales Director (real human - reports actually go to Amanda)
+    reportsTo: 'alexander_nasser', // VP Sales (AI persona - reports actually go to Amanda)
     reportFrequency: 'daily',
     reportType: 'individual',
     reportDeadline: '18:00',
