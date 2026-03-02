@@ -24,7 +24,7 @@ const handler = async (req: Request): Promise<Response> => {
     const { email, name, userAgent, timestamp }: PasswordChangeRequest = await req.json();
     if (!email) throw new Error("Email is required");
 
-    const firstName = name ? name.split(' ')[0] : 'User';
+    const recipientName = name?.trim() || 'User';
     const changeTime = timestamp || new Date().toISOString();
     const formattedDate = new Date(changeTime).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
     const formattedTime = new Date(changeTime).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -79,7 +79,7 @@ const handler = async (req: Request): Promise<Response> => {
 
 <!-- Content -->
 <tr><td style="background-color:#FDFBF7;padding:36px 30px;">
-<p style="margin:0 0 16px;font-size:16px;color:#1a1a1a;font-weight:600;">Dear ${firstName},</p>
+<p style="margin:0 0 16px;font-size:16px;color:#1a1a1a;font-weight:600;">Dear ${recipientName},</p>
 <p style="margin:0 0 24px;font-size:14px;line-height:1.7;color:#444;">Your password was successfully changed. If you made this change, no further action is needed.</p>
 
 <!-- Activity Details -->
@@ -107,7 +107,7 @@ Activity Details</p>
 <!-- CTA -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr><td align="center">
-<a href="mailto:SUPPORT@JBJ.AE?subject=Unauthorized Password Change" style="display:inline-block;background:linear-gradient(135deg,#dc2626,#b91c1c);color:#fff;text-decoration:none;padding:14px 32px;border-radius:8px;font-weight:700;font-size:14px;">Report Unauthorized Access</a>
+<a href="mailto:contact@jbj.ae?subject=Unauthorized Password Change" style="display:inline-block;background:linear-gradient(135deg,#dc2626,#b91c1c);color:#fff;text-decoration:none;padding:14px 32px;border-radius:8px;font-weight:700;font-size:14px;">Report Unauthorized Access</a>
 </td></tr>
 </table>
 </td></tr>

@@ -43,6 +43,43 @@ interface CVEmailRequest {
   adminNote?: string;
 }
 
+function isLikelyAbbreviatedName(name: string): boolean {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length < 2) return false;
+  const last = parts[parts.length - 1];
+  return last.length <= 2;
+}
+
+async function resolveRecipientName(
+  supabaseClient: any,
+  rawName: string | null | undefined,
+  email: string,
+  userId?: string
+): Promise<string> {
+  const fallback = (rawName || '').trim() || 'Applicant';
+
+  if (fallback !== 'Applicant' && !isLikelyAbbreviatedName(fallback)) {
+    return fallback;
+  }
+
+  try {
+    if (userId) {
+      const { data: byId } = await supabaseClient.auth.admin.getUserById(userId);
+      const fullById = (byId?.user?.user_metadata as any)?.full_name || (byId?.user?.user_metadata as any)?.name;
+      if (fullById && !isLikelyAbbreviatedName(fullById)) return String(fullById).trim();
+    }
+
+    const { data: listed } = await supabaseClient.auth.admin.listUsers({ perPage: 1000 });
+    const match = listed?.users?.find((u: any) => u.email?.toLowerCase() === email.toLowerCase());
+    const fullByEmail = (match?.user_metadata as any)?.full_name || (match?.user_metadata as any)?.name;
+    if (fullByEmail && !isLikelyAbbreviatedName(fullByEmail)) return String(fullByEmail).trim();
+  } catch (e) {
+    console.warn('Name resolution warning:', e);
+  }
+
+  return fallback;
+}
+
 function makeStep(num: string, label: string, active: boolean, isCheck: boolean) {
   const bg = active ? 'background:linear-gradient(135deg,#C8A766,#B8956E);color:#fff;' : 'background:#e5e5e5;color:#999;';
   const textColor = active ? 'color:#C8A766;font-weight:600;' : 'color:#999;';
@@ -170,8 +207,8 @@ function buildEmailHtml(req: CVEmailRequest): { html: string; subject: string } 
 <table role="presentation" class="wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:linear-gradient(180deg,#FFFFFF,#FDFBF7,#F5F0E6);border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(200,167,102,0.15);">
 
 <!-- Logo — Company Monogram -->
-<tr><td style="background:#000000;padding:24px 0 16px;text-align:center;border-radius:20px 20px 0 0;">
-<img src="${LOGO_URL}" alt="JBJ Global Real Estate" width="80" style="max-width:80px;height:auto;display:block;margin:0 auto;" />
+<tr><td style="background:#000000;padding:20px 0 16px;text-align:center;border-radius:20px 20px 0 0;">
+<img src="${LOGO_URL}" alt="JBJ Global Real Estate" width="120" style="max-width:120px;height:auto;display:block;margin:0 auto;" />
 </td></tr>
 
 <!-- Hero -->
@@ -183,7 +220,7 @@ function buildEmailHtml(req: CVEmailRequest): { html: string; subject: string } 
 </table>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:16px;">
 <tr>
-<td style="text-align:center;padding:4px 8px;"><a href="mailto:careers@jbj.ae" style="color:#1a1a1a;text-decoration:none;font-size:13px;">careers@jbj.ae</a></td>
+<td style="text-align:center;padding:4px 8px;"><a href="mailto:contact@jbj.ae" style="color:#1a1a1a;text-decoration:none;font-size:13px;">contact@jbj.ae</a></td>
 <td style="text-align:center;padding:4px 8px;"><a href="tel:+971565911000" style="color:#1a1a1a;text-decoration:none;font-size:13px;">+971 56 591 1000</a></td>
 </tr></table>
 </td></tr>
@@ -237,7 +274,7 @@ ${config.extraHtml}
 <!-- Reply Info — Green -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f0fdf4;border:1px solid #22c55e40;border-radius:10px;margin-bottom:24px;">
 <tr><td style="padding:14px 20px;text-align:center;">
-<p style="margin:0;font-size:13px;color:#166534;line-height:1.6;">For inquiries about your application, you can reply directly to <a href="mailto:HR@JBJ.AE" style="color:#15803d;font-weight:700;text-decoration:none;">HR@JBJ.AE</a></p>
+<p style="margin:0;font-size:13px;color:#166534;line-height:1.6;">For inquiries about your application, you can reply directly to <a href="mailto:contact@jbj.ae" style="color:#15803d;font-weight:700;text-decoration:none;">contact@jbj.ae</a></p>
 </td></tr></table>
 
 <!-- Review & Survey -->
@@ -295,10 +332,10 @@ serve(async (req) => {
       for (const app of allApps) {
         if (!app.email) continue;
         const emailStatus = app.status === 'approved' ? 'approved' : app.status === 'rejected' ? 'rejected' : 'under_review';
+        const recipientName = await resolveRecipientName(supabaseClient, app.full_name, app.email, app.user_id);
         const { html, subject } = buildEmailHtml({
           email: app.email,
-          fullName: app.full_name || 'Applicant',
-          status: emailStatus,
+          fullName: recipientName,
           position: app.position,
           userId: app.user_id,
         });
@@ -308,7 +345,7 @@ serve(async (req) => {
           to: [app.email],
           subject,
           html,
-          reply_to: "HR@JBJ.AE",
+          reply_to: "contact@jbj.ae",
         });
 
         if (result.error) {
@@ -342,20 +379,21 @@ serve(async (req) => {
     }
 
     // Single email mode
-    if (!body.email || !body.fullName || !body.status) {
-      return new Response(JSON.stringify({ error: "Missing email, fullName, or status" }), {
+    if (!body.email || !body.status) {
+      return new Response(JSON.stringify({ error: "Missing email or status" }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    const { html, subject } = buildEmailHtml(body);
+    const recipientName = await resolveRecipientName(supabaseClient, body.fullName, body.email, body.userId);
+    const { html, subject } = buildEmailHtml({ ...body, fullName: recipientName });
 
     const result = await sendEmail({
       from: `JBJ Careers <${VERIFIED_SENDER}>`,
       to: [body.email],
       subject,
       html,
-      reply_to: "HR@JBJ.AE",
+      reply_to: "contact@jbj.ae",
     });
 
     if (result.error) {
