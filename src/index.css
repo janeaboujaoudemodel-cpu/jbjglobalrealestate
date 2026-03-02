@@ -8,6 +8,8 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
+    /* Responsive header height — used by mobile menu Sheet positioning */
+    --responsive-header-height: 96px;
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
@@ -1815,4 +1817,12 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
   textarea {
     font-size: 16px !important;
   }
+}
+
+/* Responsive header height breakpoints */
+@media (min-width: 640px) {
+  :root { --responsive-header-height: 112px; }
+}
+@media (min-width: 1024px) {
+  :root { --responsive-header-height: 128px; }
 }
