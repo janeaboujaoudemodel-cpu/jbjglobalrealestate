@@ -129,6 +129,30 @@ Deno.serve(async (req) => {
 <p style="margin:0;font-size:13px;color:#166534;">Need help? Contact us at <a href="mailto:contact@jbj.ae" style="color:#15803d;font-weight:700;text-decoration:underline;">contact@jbj.ae</a></p>
 </td></tr>
 </table>
+
+<!-- Arabic Divider -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="border-top:2px solid #C8A76650;padding-top:16px;"></td></tr></table>
+<p style="text-align:center;margin:0 0 16px;font-size:12px;color:#C8A766;font-weight:700;letter-spacing:2px;">النسخة العربية — ARABIC VERSION</p>
+
+<div style="direction:rtl;text-align:right;">
+<p style="margin:0;font-size:16px;color:#333;">مرحباً${full_name ? ` <strong>${full_name}</strong>` : ''}،</p>
+<p style="margin:4px 0 16px;font-size:13px;color:#888;">رمز التحقق الخاص بك من JBJ أدناه</p>
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;">
+<tr><td style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:12px;padding:28px;text-align:center;">
+<span style="font-size:40px;font-weight:700;letter-spacing:10px;color:#1a1a1a;font-family:'SF Mono',Monaco,Consolas,monospace;">${otpCode}</span>
+</td></tr>
+</table>
+
+<p style="margin:0 0 8px;color:#555;font-size:14px;">ينتهي هذا الرمز خلال <strong>١٠ دقائق</strong>.</p>
+<p style="margin:0 0 16px;color:#999;font-size:13px;">إذا لم تطلب هذا الرمز، يرجى تجاهل هذا البريد الإلكتروني.</p>
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f0fdf4;border:1px solid #22c55e40;border-radius:10px;">
+<tr><td style="padding:12px 20px;text-align:center;">
+<p style="margin:0;font-size:13px;color:#166534;">تحتاج مساعدة؟ تواصل معنا على <a href="mailto:contact@jbj.ae" style="color:#15803d;font-weight:700;text-decoration:underline;">contact@jbj.ae</a></p>
+</td></tr>
+</table>
+</div>
 </td></tr>
 
 <!-- Do not reply -->

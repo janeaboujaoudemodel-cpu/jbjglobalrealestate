@@ -132,6 +132,36 @@ Your ideas help us improve and innovate. Keep sharing your brilliant suggestions
 </table>
 
 <p style="font-size:14px;color:#333;margin-top:24px;">Best regards,<br><span style="color:#C8A766;font-weight:600;">JBJ Global Real Estate Team</span></p>
+
+<!-- ========== ARABIC VERSION ========== -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:24px;"><tr><td style="border-top:2px solid #C8A76650;padding-top:16px;"></td></tr></table>
+<p style="text-align:center;margin:0 0 16px;font-size:12px;color:#C8A766;font-weight:700;letter-spacing:2px;">النسخة العربية — ARABIC VERSION</p>
+
+<div style="direction:rtl;text-align:right;">
+<p style="margin:0;font-size:18px;font-weight:700;color:#1a1a1a;">تهانينا، ${userName || 'عميلنا الكريم'}!</p>
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:12px;margin:16px 0 24px;">
+<tr><td style="padding:24px;text-align:center;">
+<p style="font-size:36px;font-weight:bold;color:#C8A766;margin:0 0 8px;">+${pointsAwarded} نقطة</p>
+<p style="font-size:16px;color:#333;font-style:italic;margin:0;">"${ideaTitle}"</p>
+</td></tr>
+</table>
+
+<p style="font-size:14px;line-height:1.7;color:#555;margin:0 0 16px;">
+أخبار رائعة! تمت مراجعة فكرتك الإبداعية والموافقة عليها من قبل فريقنا. كتقدير لجهودك، أضفنا <strong>${pointsAwarded} نقطة ولاء</strong> إلى حسابك.
+</p>
+<p style="font-size:14px;line-height:1.7;color:#555;margin:0 0 16px;">
+أفكارك تساعدنا على التحسين والابتكار. استمر في مشاركة اقتراحاتك — كل فكرة معتمدة تمنحك المزيد من النقاط!
+</p>
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;">
+<tr><td align="center">
+<a href="${SITE_URL}/my-account" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:14px 32px;border-radius:10px;font-weight:700;font-size:14px;border:1px solid #C8A76650;">عرض حسابي</a>
+</td></tr>
+</table>
+
+<p style="font-size:14px;color:#333;">مع أطيب التحيات،<br><span style="color:#C8A766;font-weight:600;">فريق JBJ Global Real Estate</span></p>
+</div>
 </td></tr>
 
 <!-- Do not reply -->

@@ -141,6 +141,42 @@ const handler = async (req: Request): Promise<Response> => {
 </td></tr>
 </table>
 
+<!-- ========== ARABIC VERSION ========== -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="border-top:2px solid #C8A76650;padding-top:16px;"></td></tr></table>
+<p style="text-align:center;margin:0 0 16px;font-size:12px;color:#C8A766;font-weight:700;letter-spacing:2px;">النسخة العربية — ARABIC VERSION</p>
+
+<div style="direction:rtl;text-align:right;">
+<p style="margin:0;font-size:16px;font-weight:600;color:#1a1a1a;">عزيزي/عزيزتي ${recipientName}،</p>
+<p style="margin:8px 0 24px;font-size:14px;color:#444;">تم تغيير كلمة المرور الخاصة بك بنجاح. إذا قمت بهذا التغيير، فلا حاجة لاتخاذ أي إجراء إضافي.</p>
+
+<!-- Arabic Activity Details -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:12px;margin-bottom:24px;">
+<tr><td style="padding:20px;">
+<p style="margin:0 0 16px;font-size:15px;font-weight:700;color:#1a1a1a;border-bottom:1px solid #C8A76640;padding-bottom:12px;">تفاصيل النشاط</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="direction:rtl;">
+<tr><td style="padding:8px 0;color:#666;font-size:13px;width:40%;">التاريخ</td><td style="padding:8px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${formattedDate}</td></tr>
+<tr><td style="padding:8px 0;color:#666;font-size:13px;">الوقت</td><td style="padding:8px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${formattedTime} (GMT)</td></tr>
+<tr><td style="padding:8px 0;color:#666;font-size:13px;">الجهاز</td><td style="padding:8px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${deviceInfo}</td></tr>
+<tr><td style="padding:8px 0;color:#666;font-size:13px;">المتصفح</td><td style="padding:8px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${browserInfo}</td></tr>
+</table>
+</td></tr>
+</table>
+
+<!-- Arabic Warning -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fef2f2;border:1px solid #fca5a5;border-radius:10px;margin-bottom:24px;">
+<tr><td style="padding:20px;">
+<p style="margin:0;font-size:14px;color:#991b1b;line-height:1.6;"><strong>لم تقم بهذا التغيير؟</strong><br/>إذا لم تقم بتغيير كلمة المرور، فقد يكون حسابك معرضاً للخطر. يرجى التواصل مع فريق الدعم فوراً.</p>
+</td></tr>
+</table>
+
+<!-- Arabic CTA -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;">
+<tr><td align="center">
+<a href="mailto:contact@jbj.ae?subject=تغيير كلمة مرور غير مصرح" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:14px 32px;border-radius:10px;font-weight:700;font-size:14px;border:1px solid #C8A76650;">الإبلاغ عن وصول غير مصرح</a>
+</td></tr>
+</table>
+</div>
+
 </td></tr>
 
 <!-- Do not reply -->
