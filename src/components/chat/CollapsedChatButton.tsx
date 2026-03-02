@@ -84,23 +84,23 @@ const CollapsedChatButton = ({ onToggle, onMinimize, showAttentionPulse = false 
             onPointerDown={onPointerDown}
             onPointerMove={onPointerMove}
             onPointerUp={onPointerUp}
-            className="relative flex items-center gap-3 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-xl px-4 sm:px-5 py-3 sm:py-3.5 shadow-2xl shadow-gold/20 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] transition-shadow duration-300 group select-none"
+            className="relative flex items-center gap-2 sm:gap-3 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-xl px-3 sm:px-5 py-2.5 sm:py-3.5 shadow-2xl shadow-gold/20 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] transition-shadow duration-300 group select-none max-w-[240px] sm:max-w-none"
             aria-label={t('chat.openChat', 'Open chat support')}
           >
-            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold flex items-center justify-center flex-shrink-0 shadow-md shadow-gold/20">
+            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold flex items-center justify-center flex-shrink-0 shadow-md shadow-gold/20">
               <SquareChatIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gold" size={20} />
             </div>
-            <div className="flex flex-col items-start">
-              <span className="text-black text-sm font-bold">{t('chat.title', 'JBJ Support')}</span>
-              <div className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-gold animate-pulse" />
-                <span className="text-gold text-xs font-medium">{t('chat.available247', 'Available 24/7')}</span>
+            <div className="flex flex-col items-start min-w-0">
+              <span className="text-black text-xs sm:text-sm font-bold truncate">{t('chat.title', 'JBJ Support')}</span>
+              <div className="flex items-center gap-1 sm:gap-1.5">
+                <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-gold animate-pulse flex-shrink-0" />
+                <span className="text-gold text-[10px] sm:text-xs font-medium truncate">{t('chat.available247', 'Available 24/7')}</span>
               </div>
             </div>
             {isRTL ? (
-              <ChevronRight className="w-5 h-5 text-gold hidden sm:block" />
+              <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-gold hidden sm:block flex-shrink-0" />
             ) : (
-              <ChevronLeft className="w-5 h-5 text-gold hidden sm:block" />
+              <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-gold hidden sm:block flex-shrink-0" />
             )}
           </div>
           {onMinimize && (

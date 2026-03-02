@@ -545,7 +545,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
         "fixed top-0 left-0 right-0 z-[9999] h-24 sm:h-28 lg:h-32 overflow-visible transition-all duration-300",
         filterBarActive && "-translate-y-full opacity-0 pointer-events-none"
       )}
-      style={{ '--header-height': '128px' } as React.CSSProperties}
+      style={{ '--header-height': 'var(--responsive-header-height)' } as React.CSSProperties}
       data-tour-target="header"
     >
       {/* Ultra Premium Multi-Layer Background - Pure Black on scroll (same as footer) */}
