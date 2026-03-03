@@ -14,6 +14,7 @@ import { useDevelopers, useProjects } from "@/hooks/useProjects";
 import DeveloperCard from "@/components/DeveloperCard";
 import { SEOHead } from "@/components/SEOHead";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
+import ContinueSearching from "@/components/ContinueSearching";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -579,6 +580,9 @@ const Developers = () => {
             )}
           </div>
         </section>
+
+        {/* Continue Searching - Recently viewed developers */}
+        <ContinueSearching type="developer" />
 
         {/* DLD Market Intelligence */}
         <DLDMarketWidget />

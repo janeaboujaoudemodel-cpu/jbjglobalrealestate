@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect, useRef, lazy, Suspense } from "react";
 import { createPortal } from "react-dom";
 import { useParams, Link } from "react-router-dom";
 import { useDeveloper, useProjectsByDeveloper, useCommunities, useTrendingAreas, useDevelopers } from "@/hooks/useProjects";
+import { useRecentSearches } from "@/hooks/useRecentSearches";
 import { useFilteredProjects, defaultFilters } from "@/hooks/useProjectFilters";
 import { type FilterState } from "@/components/ProjectFilters";
 import ProjectCard from "@/components/ProjectCard";
@@ -39,6 +40,20 @@ const DeveloperDetail = () => {
   const { data: communities } = useCommunities();
   const { data: trendingAreas } = useTrendingAreas();
   const { data: allDevelopers } = useDevelopers();
+  const { trackView } = useRecentSearches();
+
+  // Track developer view
+  useEffect(() => {
+    if (!developer) return;
+    trackView({
+      id: developer.id,
+      type: "developer",
+      name: developer.name,
+      slug: developer.slug || slug || "",
+      imageUrl: (developer as any).logo_url || undefined,
+      subtitle: `${projects?.length || 0} Projects`,
+    });
+  }, [developer, projects?.length]);
 
   const [filters, setFilters] = useState<FilterState>(() => {
     const storedCurrency = typeof window !== 'undefined' ? localStorage.getItem('jj_currency') : null;

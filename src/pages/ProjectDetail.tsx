@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useProject } from "@/hooks/useProjects";
 import { useReellyProjectBySlug } from "@/hooks/useReellyProjects";
@@ -7,6 +7,7 @@ import PropertyReportModal from "@/components/PropertyReportModal";
 import ProjectDetailLayout, { type ProjectDetailData } from "@/components/project-detail/ProjectDetailLayout";
 import { BrandedLoader } from "@/components/ui/BrandedLoader";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useRecentSearches } from "@/hooks/useRecentSearches";
 import { Button } from "@/components/ui/button";
 
 const asStringArray = (value: unknown): string[] | null => {
@@ -137,6 +138,21 @@ const ProjectDetail = () => {
   const { data: project, isLoading } = useProject(slug || "");
   const { data: reellyProject, isLoading: reellyLoading } = useReellyProjectBySlug(slug, !project && !isLoading);
   const [showReportModal, setShowReportModal] = useState(false);
+  const { trackView } = useRecentSearches();
+
+  // Track property view
+  useEffect(() => {
+    const p = project || reellyProject;
+    if (!p) return;
+    trackView({
+      id: String(p.id),
+      type: "property",
+      name: p.name,
+      slug: p.slug || slug || "",
+      imageUrl: (project?.cover_image_url || (project?.images?.[0] as any)?.image_url || (reellyProject as any)?.thumbnail) ?? undefined,
+      subtitle: project?.developer?.name || (reellyProject as any)?.developer_name || undefined,
+    });
+  }, [project, reellyProject]);
 
   // Map from local DB project
   const mappedFromDb = useMemo<ProjectDetailData | null>(() => {

@@ -19,6 +19,7 @@ import ServicesGrid from "@/components/home/ServicesGrid";
 import WhyChooseUs from "@/components/home/WhyChooseUs";
 import AreasWeCover from "@/components/home/AreasWeCover";
 import HeroSearchBar from "@/components/home/HeroSearchBar";
+import ContinueSearching from "@/components/ContinueSearching";
 
 // Lazy load heavier below-fold sections for performance
 const WhyDubaiCapitalSection = lazy(() => import("@/components/home/WhyDubaiCapitalSection"));
@@ -211,6 +212,9 @@ const Index = () => {
 
       {/* FEATURED LISTINGS - Master Blueprint: Section 3 (8 cards, Buy/Rent tabs) */}
       <FeaturedListings />
+
+      {/* CONTINUE SEARCHING - Recently viewed properties, developers, areas */}
+      <ContinueSearching className="bg-black" />
 
       {/* DIVIDER */}
       <SectionDivider />
