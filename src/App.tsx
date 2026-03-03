@@ -50,7 +50,7 @@ const SuitesHub = lazy(() => import("./pages/business-suite/SuitesHub"));
 const EducationHub = lazy(() => import("./pages/EducationHub"));
 const AdminChatDashboard = lazy(() => import("./pages/admin/AdminChatDashboard"));
 const AdminIntelligence = lazy(() => import("./pages/admin/AdminIntelligence"));
-const InquiryManagementHub = lazy(() => import("./pages/admin/InquiryManagementHub"));
+import InquiryManagementHub from "./pages/admin/InquiryManagementHub";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ActiveLeadProvider } from "@/contexts/ActiveLeadContext";
@@ -104,7 +104,7 @@ const AIInsights = lazy(() => import("./pages/market-intelligence/internal/AIIns
 const DataOperations = lazy(() => import("./pages/market-intelligence/internal/DataOperations"));
 const Favorites = lazy(() => import("./pages/Favorites"));
 const Compare = lazy(() => import("./pages/Compare"));
-const Auth = lazy(() => import("./pages/Auth"));
+import Auth from "./pages/Auth";
 const AccessDenied = lazy(() => import("./pages/AccessDenied"));
 const Admin = lazy(() => import("./pages/Admin"));
 const AdminLeads = lazy(() => import("./pages/AdminLeads"));
@@ -379,7 +379,7 @@ const App = () => (
             {/* Auth route is always accessible for login */}
             <Suspense fallback={<PageLoader />}>
             <Routes>
-              <Route path="/auth" element={<Auth />} />
+              <Route path="/auth" element={<RouteErrorBoundary routeName="Auth"><Auth /></RouteErrorBoundary>} />
               {/* Access Denied page for auth-non-owner */}
               <Route path="/403" element={<AccessDenied />} />
               {/* Hidden standalone pages - no header/footer */}
@@ -536,8 +536,8 @@ const App = () => (
                 <Route path="/compare" element={<Compare />} />
                 <Route path="/admin" element={<OwnerGuard><Admin /></OwnerGuard>} />
                 <Route path="/admin/leads" element={<OwnerGuard><AdminLeads /></OwnerGuard>} />
-                <Route path="/admin/inquiries" element={<OwnerGuard><InquiryManagementHub /></OwnerGuard>} />
-                <Route path="/admin-inquiries" element={<OwnerGuard><InquiryManagementHub /></OwnerGuard>} />
+                <Route path="/admin/inquiries" element={<OwnerGuard><RouteErrorBoundary routeName="Inquiry Management Hub"><InquiryManagementHub /></RouteErrorBoundary></OwnerGuard>} />
+                <Route path="/admin-inquiries" element={<OwnerGuard><RouteErrorBoundary routeName="Inquiry Management Hub"><InquiryManagementHub /></RouteErrorBoundary></OwnerGuard>} />
                 <Route path="/terms" element={<Terms />} />
                 <Route path="/privacy" element={<Privacy />} />
                 <Route path="/cookies" element={<Cookies />} />
