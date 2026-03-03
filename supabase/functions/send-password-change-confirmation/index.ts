@@ -1,5 +1,5 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { LOGO_URL, SITE_URL, emailShell, inquiryBox, recommendedActionsHtml, suggestedActionsHtml, ticketSupportEmbed, feedbackHtml } from "../_shared/email-html.ts";
+import { emailShell, monogramBadge, inquiryBox, recommendedActionsHtml, suggestedActionsHtml, ticketSupportEmbed, feedbackHtml } from "../_shared/email-html.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
@@ -45,20 +45,15 @@ const handler = async (req: Request): Promise<Response> => {
     else if (ua.includes("Edge")) browserInfo = "Microsoft Edge";
 
     const bodyContent = `
-<!-- Security Icon -->
-<tr><td style="background:#111;padding:28px 32px;text-align:center;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr>
-<td style="width:86px;height:86px;background:linear-gradient(135deg,#C8A766,#D4B87A);border-radius:50%;text-align:center;vertical-align:middle;">
-<img src="${LOGO_URL}" alt="JBJ" width="50" style="width:50px;height:50px;display:block;margin:18px auto;" />
-</td>
-</tr></table>
-<h1 style="color:#fff;font-size:24px;font-weight:800;margin:18px 0 6px;line-height:1.2;">Password Changed Successfully</h1>
-<p style="font-size:16px;color:#C8A766;margin:0;font-weight:700;">Your account security has been updated</p>
-</td></tr>
+<tr><td class="content-pad" style="padding:32px;">
+<p style="margin:0 0 8px;font-size:26px;font-weight:800;color:#1a1a1a;line-height:1.2;">Password Changed Successfully</p>
+<p style="margin:0 0 20px;font-size:15px;color:#C8A766;font-weight:700;">Your account security has been updated</p>
 
-<!-- Content — single unbroken card -->
-<tr><td class="content-pad" style="padding:30px;">
-<p style="margin:0;font-size:16px;font-weight:600;color:#1a1a1a;">Dear ${recipientName},</p>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="left" style="margin:0 0 14px;">
+<tr><td>${monogramBadge(70)}</td></tr>
+</table>
+
+<p style="margin:0;clear:both;font-size:16px;font-weight:600;color:#1a1a1a;">Dear ${recipientName},</p>
 <p style="margin:8px 0 20px;font-size:14px;line-height:1.6;color:#444;">Your password was changed. If this was you, no further action is needed.</p>
 
 <!-- Activity Details -->
