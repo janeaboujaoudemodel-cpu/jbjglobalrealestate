@@ -61,6 +61,7 @@ Deno.serve(async (req) => {
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
+    // STRUCTURE: EN content → Arabic divider → AR content → sharedSections (LTR, ONCE)
     const bodyContent = `<tr><td class="content-pad" style="padding:32px;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:20px;">
 <tr>
@@ -73,16 +74,16 @@ ${monogramBadge(52)}
 </td>
 </tr>
 </table>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin-bottom:24px;">
 <tr><td style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:12px;padding:28px;text-align:center;">
 <span style="font-size:40px;font-weight:700;letter-spacing:10px;color:#1a1a1a;font-family:'SF Mono',Monaco,Consolas,monospace;">${otpCode}</span>
 </td></tr>
 </table>
 <p style="margin:0 0 8px;color:#555;font-size:14px;line-height:1.6;">This code expires in <strong>10 minutes</strong>.</p>
 <p style="margin:0 0 16px;color:#999;font-size:13px;line-height:1.6;">If you didn't request this code, please ignore this email.</p>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f0fdf4;border:1px solid #22c55e40;border-radius:16px;margin-bottom:16px;min-height:74px;">
-<tr><td style="padding:12px 20px;text-align:center;line-height:1.7;">
-<p style="margin:0;font-size:13px;color:#166534;line-height:1.7;"><span style="display:inline-block;max-width:320px;">Need help with this code?<br/>Contact us at <a href="mailto:CONTACT@JBJ.AE" style="color:#15803d;font-weight:700;text-decoration:underline;">CONTACT@JBJ.AE</a></span></p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:#f0fdf4;border:1px solid #22c55e40;border-radius:16px;margin-bottom:16px;">
+<tr><td style="padding:16px 20px;text-align:center;line-height:1.7;">
+<p style="margin:0;font-size:13px;color:#166534;line-height:1.7;">Need help with this code?<br/>Contact us at <a href="mailto:CONTACT@JBJ.AE" style="color:#15803d;font-weight:700;text-decoration:underline;">CONTACT@JBJ.AE</a></p>
 </td></tr>
 </table>
 ${arabicDivider()}
@@ -90,20 +91,19 @@ ${arabicDivider()}
 <tr><td class="content-pad" style="padding:32px;direction:rtl;text-align:right;">
 <p style="margin:0;font-size:16px;color:#333;">مرحباً${full_name ? ` <strong>${full_name}</strong>` : ''}،</p>
 <p style="margin:4px 0 16px;font-size:13px;color:#888;">رمز التحقق الخاص بك من JBJ أدناه</p>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin-bottom:24px;">
 <tr><td style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:12px;padding:28px;text-align:center;">
 <span style="font-size:40px;font-weight:700;letter-spacing:10px;color:#1a1a1a;font-family:'SF Mono',Monaco,Consolas,monospace;">${otpCode}</span>
 </td></tr>
 </table>
 <p style="margin:0 0 8px;color:#555;font-size:14px;line-height:1.7;">ينتهي هذا الرمز خلال <strong>١٠ دقائق</strong>.</p>
 <p style="margin:0 0 16px;color:#999;font-size:13px;line-height:1.7;">إذا لم تطلب هذا الرمز، يرجى تجاهل هذا البريد الإلكتروني.</p>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f0fdf4;border:1px solid #22c55e40;border-radius:16px;margin-bottom:16px;min-height:74px;">
-<tr><td style="padding:12px 20px;text-align:center;line-height:1.7;">
-<p style="margin:0;font-size:13px;color:#166534;line-height:1.7;"><span style="display:inline-block;max-width:320px;">تحتاج مساعدة بخصوص الرمز؟<br/>تواصل معنا على <a href="mailto:CONTACT@JBJ.AE" style="color:#15803d;font-weight:700;text-decoration:underline;">CONTACT@JBJ.AE</a></span></p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:#f0fdf4;border:1px solid #22c55e40;border-radius:16px;margin-bottom:16px;">
+<tr><td style="padding:16px 20px;text-align:center;line-height:1.7;">
+<p style="margin:0;font-size:13px;color:#166534;line-height:1.7;">تحتاج مساعدة بخصوص الرمز؟<br/>تواصل معنا على <a href="mailto:CONTACT@JBJ.AE" style="color:#15803d;font-weight:700;text-decoration:underline;">CONTACT@JBJ.AE</a></p>
 </td></tr>
 </table>
-${sharedSections("verification")}
-</td></tr>`;
+${sharedSections("verification")}`;
 
     const emailHtml = emailShell("Email Verification", bodyContent);
 

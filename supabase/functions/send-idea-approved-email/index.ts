@@ -30,26 +30,22 @@ const handler = async (req: Request): Promise<Response> => {
 
     const supabase = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
     const isApproved = status === "approved";
-    const pointsAwarded = isApproved ? 50 : 0;
 
-    // Insert notifications
     if (userId) {
       const notifTitle = isApproved ? "Idea Approved! +50 Points" : "Idea Received!";
       const notifMessage = isApproved
         ? `Your idea "${ideaTitle}" has been approved! You earned 50 loyalty points!`
         : `Your idea "${ideaTitle}" has been received and is under review.`;
-      const actionUrl = "/my-account";
-
       await Promise.all([
         supabase.from("user_notifications").insert({
           user_id: userId, type: isApproved ? "idea_approved" : "idea_received",
           title: notifTitle, message: notifMessage,
-          metadata: { ideaId, pointsAwarded, action_url: actionUrl },
+          metadata: { ideaId, pointsAwarded: isApproved ? 50 : 0, action_url: "/my-account" },
         }),
         supabase.from("notifications").insert({
           user_id: userId, title: notifTitle,
           body: notifMessage, notification_type: isApproved ? "approval" : "event",
-          action_url: actionUrl,
+          action_url: "/my-account",
         }),
       ]);
     }
@@ -60,10 +56,11 @@ const handler = async (req: Request): Promise<Response> => {
     let bodyContent: string;
 
     if (isApproved) {
+      // STRUCTURE: EN → divider → AR → sharedSections (LTR, ONCE)
       bodyContent = `<tr><td class="content-pad" style="padding:32px;">
 <p style="margin:0 0 8px;font-size:28px;font-weight:800;color:#1a1a1a;">Congratulations, ${displayName}!</p>
 ${progressSteps(['Received', 'Under Review', 'Accepted'], [true, true, true], [true, true, true])}
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:2px solid #22c55e;border-radius:18px;margin-bottom:24px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:2px solid #22c55e;border-radius:18px;margin-bottom:24px;">
 <tr><td style="padding:24px;text-align:center;">
 <p style="font-size:36px;font-weight:bold;color:#16a34a;margin:0 0 8px;">+50 Points</p>
 <p style="font-size:12px;font-weight:700;color:#166534;text-transform:uppercase;letter-spacing:2px;margin:0 0 12px;">LOYALTY POINTS EARNED</p>
@@ -78,7 +75,7 @@ ${arabicDivider()}
 </td></tr>
 <tr><td class="content-pad" style="padding:32px;direction:rtl;text-align:right;">
 <p style="margin:0;font-size:28px;font-weight:800;color:#1a1a1a;">تهانينا، ${displayNameAr}!</p>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:2px solid #22c55e;border-radius:18px;margin:16px 0 24px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:2px solid #22c55e;border-radius:18px;margin:16px 0 24px;">
 <tr><td style="padding:24px;text-align:center;">
 <p style="font-size:36px;font-weight:bold;color:#16a34a;margin:0 0 8px;">+50 نقطة</p>
 <p style="font-size:12px;font-weight:700;color:#166534;text-transform:uppercase;letter-spacing:2px;margin:0 0 12px;">نقاط الولاء المكتسبة</p>
@@ -89,13 +86,12 @@ ${arabicDivider()}
 <tr><td align="center">
 <a href="${SITE_URL}/my-account" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:14px 32px;border-radius:12px;font-weight:700;font-size:14px;border:1px solid #C8A76650;">عرض حسابي</a>
 </td></tr></table>
-${sharedSections("idea submission")}
-</td></tr>`;
+${sharedSections("idea submission")}`;
     } else {
       bodyContent = `<tr><td class="content-pad" style="padding:32px;">
 <p style="margin:0 0 8px;font-size:28px;font-weight:800;color:#1a1a1a;">Thank You, ${displayName}!</p>
 ${progressSteps(['Received', 'Under Review', 'Accepted'], [true, false, false], [true, false, false])}
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;">
 <tr><td style="padding:24px;text-align:center;">
 <p style="font-size:16px;color:#333;font-style:italic;margin:0;">"${ideaTitle}"</p>
 </td></tr></table>
@@ -108,13 +104,12 @@ ${arabicDivider()}
 </td></tr>
 <tr><td class="content-pad" style="padding:32px;direction:rtl;text-align:right;">
 <p style="margin:0;font-size:28px;font-weight:800;color:#1a1a1a;">شكراً لك، ${displayNameAr}!</p>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin:16px 0 24px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin:16px 0 24px;">
 <tr><td style="padding:24px;text-align:center;">
 <p style="font-size:16px;color:#333;font-style:italic;margin:0;">"${ideaTitle}"</p>
 </td></tr></table>
 <p style="font-size:14px;line-height:1.7;color:#555;margin:0 0 16px;">تم استلام فكرتك وهي الآن قيد المراجعة. إذا تمت الموافقة عليها، ستحصل على <span style="color:#16a34a;font-weight:700;">50 نقطة ولاء</span>!</p>
-${sharedSections("idea submission")}
-</td></tr>`;
+${sharedSections("idea submission")}`;
     }
 
     const emailHtml = emailShell(isApproved ? "Idea Approved" : "Idea Received", bodyContent);

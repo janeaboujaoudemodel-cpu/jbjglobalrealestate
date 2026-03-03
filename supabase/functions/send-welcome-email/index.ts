@@ -35,8 +35,8 @@ function benefitRow(num: string, title: string, desc: string): string {
   return `<tr><td style="padding:8px 0;">
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
 <td style="width:40px;min-width:40px;vertical-align:top;padding-top:2px;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
-<td style="width:36px;height:36px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:999px;text-align:center;vertical-align:middle;font-size:16px;font-weight:700;line-height:36px;color:#C8A766;">${num}</td>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;"><tr>
+<td style="width:36px;height:36px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:36px;text-align:center;vertical-align:middle;font-size:16px;font-weight:700;line-height:36px;color:#C8A766;">${num}</td>
 </tr></table>
 </td>
 <td style="padding-left:12px;"><strong style="color:#1a1a1a;font-size:14px;">${title}</strong>
@@ -48,13 +48,14 @@ function benefitRow(num: string, title: string, desc: string): string {
 function buildWelcomeHtml(displayName: string, email: string, role: string, ctaText: string, ctaUrl: string, benefitsHtml: string): string {
   const arabicGreeting = role === 'broker' ? 'مرحباً بك في دائرة وسطاء JBJ!' : role === 'investor' ? 'مرحباً بك في JBJ — رحلتك الاستثمارية تبدأ!' : 'مرحباً بك في JBJ Global Real Estate!';
 
+  // STRUCTURE: EN → divider → AR → sharedSections (LTR, ONCE)
   const bodyContent = `<tr><td class="content-pad" style="padding:32px;">
 <p style="margin:0 0 6px;font-size:28px;font-weight:800;color:#1a1a1a;line-height:1.2;">Thank You for Joining Us, ${displayName}</p>
 <p style="margin:0 0 24px;font-size:18px;color:#C8A766;font-weight:600;line-height:1.3;">Your JBJ account is ready — we're thrilled to have you.</p>
 <p style="color:#555;font-size:15px;line-height:1.6;margin:0 0 20px;">
 You have successfully created your account with <strong>JBJ Global Real Estate</strong>. As a valued member, you now have access to our full suite of services and tools.
 </p>
-<table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
+<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate;margin:0 0 24px;">
 <tr><td style="padding:18px 22px;background:linear-gradient(135deg,#F5EBD7 0%,#FDFBF7 100%);border-radius:18px;border:1px solid #C8A766;">
 <p style="color:#1a1a1a;font-size:14px;font-weight:700;margin:0 0 10px;">Your Account Details</p>
 <p style="color:#555;font-size:13px;margin:0;"><strong>Registered Email:</strong> ${email}</p>
@@ -81,7 +82,7 @@ ${arabicDivider()}
 <p style="color:#555;font-size:15px;line-height:1.6;margin:16px 0 20px;">
 لقد قمت بإنشاء حسابك بنجاح مع <strong>JBJ Global Real Estate</strong>. بصفتك عضواً مميزاً، يمكنك الآن الوصول إلى جميع خدماتنا وأدواتنا.
 </p>
-<table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
+<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate;margin:0 0 24px;">
 <tr><td style="padding:18px 22px;background:linear-gradient(135deg,#F5EBD7 0%,#FDFBF7 100%);border-radius:18px;border:1px solid #C8A766;">
 <p style="color:#1a1a1a;font-size:14px;font-weight:700;margin:0 0 10px;">تفاصيل حسابك</p>
 <p style="color:#555;font-size:13px;margin:0;"><strong>البريد الإلكتروني المسجل:</strong> ${email}</p>
@@ -97,8 +98,7 @@ ${arabicDivider()}
 </a>
 </td></tr>
 </table>
-${sharedSections("account")}
-</td></tr>`;
+${sharedSections("account")}`;
 
   return emailShell("Welcome to JBJ Global Real Estate", bodyContent);
 }

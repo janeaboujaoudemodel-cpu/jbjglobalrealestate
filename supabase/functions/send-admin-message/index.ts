@@ -60,9 +60,10 @@ function buildEmailHtml(req: AdminMessageRequest): string {
   const departmentLabel = getDepartmentLabel(req.serviceCategory);
   const isInquiry = req.serviceCategory?.toLowerCase() === 'inquiry' || req.serviceCategory?.toLowerCase() === 'inquiries';
 
+  // Admin messages: EN only with sharedSections at end (LTR)
   const bodyContent = `<tr><td style="padding:0;">
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
-<tr><td style="background:linear-gradient(135deg,#F5EBD7 0%,#FDFBF7 100%);padding:16px 32px 14px;border-left:0;border-right:0;">
+<tr><td style="background:linear-gradient(135deg,#F5EBD7 0%,#FDFBF7 100%);padding:16px 32px 14px;">
 <p style="margin:0;font-size:10px;color:#888;text-transform:uppercase;letter-spacing:2px;">Department Inquiry</p>
 <p style="margin:4px 0 0;font-size:16px;color:#1a1a1a;font-weight:700;">${typeLabel}</p>
 </td></tr></table>
@@ -71,7 +72,7 @@ function buildEmailHtml(req: AdminMessageRequest): string {
 <p style="color:#333;font-size:15px;line-height:1.6;margin:0 0 20px;">Dear <strong>${req.recipientName}</strong>,</p>
 ${isInquiry && req.inquiryStage ? inquiryStages(req.inquiryStage) : ''}
 ${req.referenceLabel ? `
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#FDFBF7;border:1px solid #C8A76633;border-radius:18px;margin:0 0 24px;">
+<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate;background:#FDFBF7;border:1px solid #C8A76633;border-radius:18px;margin:0 0 24px;">
 <tr><td style="padding:16px 20px;">
 <table width="100%" cellpadding="0" cellspacing="0">
 <tr><td style="padding:5px 0;color:#888;font-size:12px;width:100px;border-right:1px solid #C8A76630;padding-right:12px;">Reference</td><td style="padding:5px 0 5px 12px;color:#333;font-size:13px;font-weight:600;">${req.referenceId ? req.referenceId.substring(0, 8).toUpperCase() : 'N/A'}</td></tr>
@@ -83,12 +84,11 @@ ${teamReplyCard(`${departmentLabel} Reply`, req.message)}
 <tr><td align="center" style="padding:8px 0 20px;">
 <a href="${SITE_URL}/my-account" style="display:inline-block;background:#000000;color:#C8A766;text-decoration:none;padding:14px 40px;border-radius:12px;font-weight:700;font-size:14px;border:1px solid #C8A76650;">View My Account</a>
 </td></tr></table>
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#FDFBF7;border:1px solid #C8A76630;border-radius:18px;margin:0 0 24px;">
+<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate;background:#FDFBF7;border:1px solid #C8A76630;border-radius:18px;margin:0 0 24px;">
 <tr><td style="padding:14px 20px;">
 <p style="margin:0;font-size:13px;color:#555;line-height:1.6;">You have also received a notification in your account. You can access updates from your <strong>Account Notifications</strong>, <strong>Tasks</strong>, or <strong>Inbox</strong>.</p>
 </td></tr></table>
-${sharedSections(typeLabel.toLowerCase())}
-</td></tr>`;
+${sharedSections(typeLabel.toLowerCase())}`;
 
   return emailShell(`${departmentLabel} — Message`, bodyContent);
 }
