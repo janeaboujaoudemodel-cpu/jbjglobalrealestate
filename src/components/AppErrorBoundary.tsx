@@ -5,6 +5,7 @@ interface AppErrorBoundaryState {
   hasError: boolean;
   errorMessage?: string;
   retryCount: number;
+  isReloading: boolean;
 }
 
 /**
@@ -16,7 +17,7 @@ class AppErrorBoundary extends React.Component<
   { children: React.ReactNode },
   AppErrorBoundaryState
 > {
-  state: AppErrorBoundaryState = { hasError: false, retryCount: 0 };
+  state: AppErrorBoundaryState = { hasError: false, retryCount: 0, isReloading: false };
 
   static getDerivedStateFromError(error: unknown): Partial<AppErrorBoundaryState> {
     const msg = error instanceof Error ? error.message : "Unknown error";
@@ -45,7 +46,20 @@ class AppErrorBoundary extends React.Component<
   }
 
   private handleReload = () => {
-    window.location.reload();
+    this.setState({ isReloading: true });
+
+    try {
+      // Clear potentially corrupted client cache/state that can trap users in a crash loop.
+      localStorage.removeItem("jbj_recent_searches");
+      sessionStorage.removeItem("jbj_recent_searches");
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.warn("Failed to clear cached recent search data before reload", e);
+    }
+
+    const url = new URL(window.location.href);
+    url.searchParams.set("_retry", Date.now().toString());
+    window.location.assign(url.toString());
   };
 
   private handleGoHome = () => {
@@ -104,6 +118,7 @@ class AppErrorBoundary extends React.Component<
             <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
               <button
                 onClick={this.handleReload}
+                disabled={this.state.isReloading}
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
@@ -114,13 +129,14 @@ class AppErrorBoundary extends React.Component<
                   border: "none",
                   borderRadius: "8px",
                   fontWeight: 600,
-                  cursor: "pointer",
+                  cursor: this.state.isReloading ? "wait" : "pointer",
                   fontSize: "0.875rem",
                   boxShadow: "0 4px 12px rgba(200,167,102,0.3)",
+                  opacity: this.state.isReloading ? 0.75 : 1,
                 }}
               >
                 <RefreshCcw size={16} />
-                Refresh Page
+                {this.state.isReloading ? "Refreshing..." : "Refresh Page"}
               </button>
               <button
                 onClick={this.handleGoHome}

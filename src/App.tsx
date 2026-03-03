@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react";
+import React, { lazy, Suspense, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { SafeTooltipProvider } from "@/components/ui/SafeTooltipProvider";
@@ -357,7 +357,19 @@ const queryClient = new QueryClient({
   },
 });
 
-const App = () => (
+const App = () => {
+  useEffect(() => {
+    const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
+      // eslint-disable-next-line no-console
+      console.error("Unhandled promise rejection:", event.reason);
+      event.preventDefault();
+    };
+
+    window.addEventListener("unhandledrejection", handleUnhandledRejection);
+    return () => window.removeEventListener("unhandledrejection", handleUnhandledRejection);
+  }, []);
+
+  return (
   <AppErrorBoundary>
     <QueryClientProvider client={queryClient}>
       <SafeTooltipProvider>
@@ -946,6 +958,7 @@ const App = () => (
       </SafeTooltipProvider>
     </QueryClientProvider>
   </AppErrorBoundary>
-);
+  );
+};
 
 export default App;
