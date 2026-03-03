@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { emailShell, sharedSections, progressSteps, teamReplyCard } from "../_shared/email-html.ts";
+import { emailShell, sharedSections, progressSteps, teamReplyCard, ticketSummaryCard } from "../_shared/email-html.ts";
 
 const RESEND_API_URL = "https://api.resend.com/emails";
 
@@ -86,16 +86,12 @@ const handler = async (req: Request): Promise<Response> => {
 <p style="font-size:15px;color:#333;margin:0 0 16px;">Dear <strong>${customerName}</strong>,</p>
 <p style="font-size:14px;color:#555;margin:0 0 24px;">Our support team has reviewed your ticket and provided a response below.</p>
 ${progressSteps(['Received', 'In Review', 'Resolved'], [step1, step2, step3], [step1, step2, step3])}
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;">
-<tr><td style="padding:20px;">
-<p style="color:#666;font-size:12px;margin:0 0 8px;text-transform:uppercase;letter-spacing:1px;">Ticket Summary</p>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-<tr><td style="padding:7px 0;color:#666;font-size:13px;width:40%;border-right:1px solid #C8A76630;padding-right:12px;">Ticket Number</td><td style="padding:7px 0 7px 12px;color:#C8A766;font-weight:700;font-size:14px;font-family:'Courier New',monospace;">${ticketNumber}</td></tr>
-<tr><td style="padding:7px 0;color:#666;font-size:13px;border-right:1px solid #C8A76630;padding-right:12px;">Subject</td><td style="padding:7px 0 7px 12px;color:#1a1a1a;font-weight:600;font-size:13px;">${subject}</td></tr>
-<tr><td style="padding:7px 0;color:#666;font-size:13px;border-right:1px solid #C8A76630;padding-right:12px;">Category</td><td style="padding:7px 0 7px 12px;color:#1a1a1a;font-weight:600;font-size:13px;">${category}</td></tr>
-<tr><td style="padding:7px 0;color:#666;font-size:13px;border-right:1px solid #C8A76630;padding-right:12px;">Submitted</td><td style="padding:7px 0 7px 12px;color:#1a1a1a;font-weight:600;font-size:13px;">${createdDate}</td></tr>
-</table>
-</td></tr></table>
+${ticketSummaryCard([
+  { label: 'Ticket Number', value: ticketNumber, highlight: true },
+  { label: 'Subject', value: subject },
+  { label: 'Category', value: category },
+  { label: 'Submitted', value: createdDate },
+])}
 ${teamReplyCard("JBJ Support Team Reply", replyMessage)}
 ${reopenHtml}
 ${sharedSections("support ticket", "JBJ Global Real Estate Support Team")}

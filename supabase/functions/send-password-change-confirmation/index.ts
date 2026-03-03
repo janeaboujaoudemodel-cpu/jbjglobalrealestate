@@ -1,5 +1,5 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { emailShell, lockIconBadge, sharedSections, arabicDivider } from "../_shared/email-html.ts";
+import { emailShell, lockIconBadge, sharedSections, arabicDivider, ticketSummaryCard } from "../_shared/email-html.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
@@ -52,16 +52,12 @@ const handler = async (req: Request): Promise<Response> => {
 </table>
 <p style="margin:0;font-size:16px;font-weight:600;color:#1a1a1a;">Dear ${recipientName},</p>
 <p style="margin:8px 0 20px;font-size:14px;line-height:1.6;color:#444;">Your password was changed. If this was you, no further action is needed.</p>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin-bottom:20px;">
-<tr><td style="padding:18px;">
-<p style="margin:0 0 12px;font-size:15px;font-weight:700;color:#1a1a1a;border-bottom:1px solid #C8A76640;padding-bottom:10px;">Activity Details</p>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-<tr><td style="padding:7px 0;color:#666;font-size:13px;width:40%;border-right:1px solid #C8A76630;padding-right:12px;">Date</td><td style="padding:7px 0 7px 12px;color:#1a1a1a;font-weight:600;font-size:13px;">${formattedDate}</td></tr>
-<tr><td style="padding:7px 0;color:#666;font-size:13px;border-right:1px solid #C8A76630;padding-right:12px;">Time</td><td style="padding:7px 0 7px 12px;color:#1a1a1a;font-weight:600;font-size:13px;">${formattedTime} (GMT)</td></tr>
-<tr><td style="padding:7px 0;color:#666;font-size:13px;border-right:1px solid #C8A76630;padding-right:12px;">Device</td><td style="padding:7px 0 7px 12px;color:#1a1a1a;font-weight:600;font-size:13px;">${deviceInfo}</td></tr>
-<tr><td style="padding:7px 0;color:#666;font-size:13px;border-right:1px solid #C8A76630;padding-right:12px;">Browser</td><td style="padding:7px 0 7px 12px;color:#1a1a1a;font-weight:600;font-size:13px;">${browserInfo}</td></tr>
-</table>
-</td></tr></table>
+${ticketSummaryCard([
+  { label: 'Date', value: formattedDate },
+  { label: 'Time', value: `${formattedTime} (GMT)` },
+  { label: 'Device', value: deviceInfo },
+  { label: 'Browser', value: browserInfo },
+])}
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fef2f2;border:1px solid #fca5a5;border-radius:18px;margin-bottom:20px;">
 <tr><td style="padding:16px;">
 <p style="margin:0;font-size:14px;color:#991b1b;line-height:1.6;"><strong>Didn't make this change?</strong><br/>Please contact our support team immediately.</p>

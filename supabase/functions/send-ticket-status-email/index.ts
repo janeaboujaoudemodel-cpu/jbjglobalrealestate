@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { emailShell, sharedSections, progressSteps, arabicDivider } from "../_shared/email-html.ts";
+import { emailShell, sharedSections, progressSteps, ticketSummaryCard, arabicDivider } from "../_shared/email-html.ts";
 
 const RESEND_API_URL = "https://api.resend.com/emails";
 const VERIFIED_SENDER = 'contact@jbj.ae';
@@ -67,7 +67,7 @@ const handler = async (req: Request): Promise<Response> => {
 <td style="padding:0 4px;"><a href="${surveyLink}&rating=4" style="font-size:28px;text-decoration:none;color:#C8A766;">&#9733;</a></td>
 <td style="padding:0 4px;"><a href="${surveyLink}&rating=5" style="font-size:28px;text-decoration:none;color:#C8A766;">&#9733;</a></td>
 </tr></table>
-<p style="margin:12px 0 0;"><a href="${surveyLink}" style="display:inline-block;padding:12px 32px;background:linear-gradient(135deg,#C8A766,#B8956E);color:#fff;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;">Complete Survey &amp; Earn 50 Points</a></p>
+<p style="margin:12px 0 0;"><a href="${surveyLink}" style="display:inline-block;padding:12px 32px;background:linear-gradient(135deg,#C8A766,#B8956E);color:#fff;border-radius:12px;text-decoration:none;font-weight:600;font-size:14px;">Complete Survey &amp; Earn 50 Points</a></p>
 </td></tr></table>`,
       },
     };
@@ -82,23 +82,19 @@ const handler = async (req: Request): Promise<Response> => {
 <tr><td style="background:linear-gradient(135deg,#fff5f5,#fff0f0);border:2px dashed #e74c3c;border-radius:18px;padding:25px;text-align:center;">
 <p style="color:#c0392b;margin:0 0 10px;font-size:16px;font-weight:bold;">Issue Not Resolved?</p>
 <p style="color:#666;font-size:13px;margin:0 0 15px;">If your issue persists, you can reopen this ticket anytime.</p>
-<a href="https://jbj.ae/reopen-ticket?ticket=${encodeURIComponent(ticket.ticket_number)}" style="display:inline-block;background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;text-decoration:none;padding:14px 30px;border-radius:8px;font-weight:bold;font-size:14px;">Reopen This Ticket</a>
+<a href="https://jbj.ae/reopen-ticket?ticket=${encodeURIComponent(ticket.ticket_number)}" style="display:inline-block;background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;text-decoration:none;padding:14px 30px;border-radius:12px;font-weight:bold;font-size:14px;">Reopen This Ticket</a>
 </td></tr></table>` : '';
 
     const bodyContent = `<tr><td class="content-pad" style="padding:32px;">
 <p style="font-size:15px;color:#333;margin:0 0 16px;">Dear <strong>${ticket.full_name}</strong>,</p>
 <p style="font-size:14px;color:#555;margin:0 0 24px;">${content.subtitle}</p>
 ${progressSteps(['Received', 'In Review', 'Resolved'], content.steps, content.checks)}
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;">
-<tr><td style="padding:20px;">
-<p style="color:#666;font-size:12px;margin:0 0 4px;text-transform:uppercase;letter-spacing:1px;">Ticket Summary</p>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:10px;">
-<tr><td style="padding:7px 0;color:#666;font-size:13px;width:40%;">Ticket Number</td><td style="padding:7px 0;color:#C8A766;font-weight:bold;font-size:14px;font-family:'Courier New',monospace;letter-spacing:2px;">${ticket.ticket_number}</td></tr>
-<tr><td style="padding:7px 0;color:#666;font-size:13px;">Subject</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${ticket.subject}</td></tr>
-<tr><td style="padding:7px 0;color:#666;font-size:13px;">Category</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${ticket.service_category || 'General'}</td></tr>
-<tr><td style="padding:7px 0;color:#666;font-size:13px;">Submitted</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${createdDate}</td></tr>
-</table>
-</td></tr></table>
+${ticketSummaryCard([
+  { label: 'Ticket Number', value: ticket.ticket_number, highlight: true },
+  { label: 'Subject', value: ticket.subject },
+  { label: 'Category', value: ticket.service_category || 'General' },
+  { label: 'Submitted', value: createdDate },
+])}
 ${content.extraHtml}
 ${reopenHtml}
 ${sharedSections("support ticket", "JBJ Global Real Estate Support Team")}
