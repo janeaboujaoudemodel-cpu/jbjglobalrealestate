@@ -42,7 +42,9 @@ export const PIPELINE_STATUSES: PipelineStatus[] = [
   { value: "viewing", label: "Viewing Scheduled", color: "bg-emerald-600", bgColor: "bg-emerald-600/20", textColor: "text-emerald-200", dotColor: "#22C55E", category: "positive" },
   { value: "viewing_done", label: "Viewing Done", color: "bg-green-600", bgColor: "bg-green-600/20", textColor: "text-green-200", dotColor: "#22C55E", category: "positive" },
   { value: "negotiation", label: "Negotiation", color: "bg-emerald-500", bgColor: "bg-emerald-500/20", textColor: "text-emerald-300", dotColor: "#22C55E", category: "positive" },
+  { value: "offer_sent", label: "Offer Sent", color: "bg-emerald-400", bgColor: "bg-emerald-400/20", textColor: "text-emerald-300", dotColor: "#22C55E", category: "positive" },
   { value: "closed_won", label: "Closed Won", color: "bg-green-600", bgColor: "bg-green-600/20", textColor: "text-green-100", dotColor: "#22C55E", category: "positive" },
+  { value: "already_bought", label: "Already Bought", color: "bg-green-700", bgColor: "bg-green-700/20", textColor: "text-green-200", dotColor: "#16A34A", category: "positive" },
   
   // NEUTRAL (blue) - New / Follow-up / Pending
   { value: "new", label: "New", color: "bg-blue-500", bgColor: "bg-blue-500/20", textColor: "text-blue-300", dotColor: "#3B82F6", category: "neutral" },
@@ -50,6 +52,7 @@ export const PIPELINE_STATUSES: PipelineStatus[] = [
   { value: "followup", label: "Follow-up", color: "bg-blue-500", bgColor: "bg-blue-500/20", textColor: "text-blue-300", dotColor: "#3B82F6", category: "neutral" },
   { value: "callback", label: "Call Back", color: "bg-blue-400", bgColor: "bg-blue-400/20", textColor: "text-blue-200", dotColor: "#3B82F6", category: "neutral" },
   { value: "no_answer", label: "No Response", color: "bg-blue-600", bgColor: "bg-blue-600/20", textColor: "text-blue-300", dotColor: "#3B82F6", category: "neutral" },
+  { value: "on_hold", label: "On Hold", color: "bg-blue-300", bgColor: "bg-blue-300/20", textColor: "text-blue-200", dotColor: "#93C5FD", category: "neutral" },
   
   // NEGATIVE (red) - Lost / DNC / Invalid
   { value: "not_interested", label: "Not Interested", color: "bg-red-500", bgColor: "bg-red-500/20", textColor: "text-red-300", dotColor: "#EF4444", category: "negative" },
