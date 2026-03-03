@@ -15,6 +15,7 @@ import {
   Send,
   Mic,
   Inbox,
+  Copy,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -86,25 +87,34 @@ const MyTickets = () => {
     enabled: !!user,
   });
 
-  // Fetch user notifications related to tickets
-  const { data: ticketNotifications } = useQuery({
-    queryKey: ["ticket-notifications", user?.id],
+  // Inbox should show only real JBJ message replies (not status notifications)
+  const { data: inboxMessages = [] } = useQuery({
+    queryKey: ["ticket-inbox-messages", user?.id, userTickets?.length],
     queryFn: async () => {
-      if (!user) return [];
+      if (!user || !userTickets?.length) return [];
+
+      const ticketIds = userTickets.map((ticket) => ticket.id);
       const { data, error } = await supabase
-        .from("user_notifications")
-        .select("*")
-        .eq("user_id", user.id)
-        .eq("type", "support_ticket")
+        .from("support_ticket_messages")
+        .select("id, message, created_at, ticket_id, support_tickets!inner(ticket_number, subject)")
+        .eq("sender_type", "staff")
+        .in("ticket_id", ticketIds)
         .order("created_at", { ascending: false })
-        .limit(50);
+        .limit(100);
+
       if (error) throw error;
-      return data;
+      return (data || []) as Array<{
+        id: string;
+        message: string;
+        created_at: string;
+        ticket_id: string;
+        support_tickets?: { ticket_number?: string; subject?: string } | null;
+      }>;
     },
     enabled: !!user,
   });
 
-  const unreadCount = ticketNotifications?.filter(n => !n.is_read)?.length || 0;
+  const inboxCount = inboxMessages.length;
 
   // Send reply mutation
   const sendReplyMutation = useMutation({
@@ -155,10 +165,13 @@ const MyTickets = () => {
     },
   });
 
-  // Mark notifications as read
-  const markAsRead = async (notifId: string) => {
-    await supabase.from("user_notifications").update({ is_read: true }).eq("id", notifId);
-    queryClient.invalidateQueries({ queryKey: ["ticket-notifications"] });
+  const handleCopyTicketNumber = async (ticketNumber: string) => {
+    try {
+      await navigator.clipboard.writeText(ticketNumber);
+      toast.success("Ticket number copied");
+    } catch {
+      toast.error("Could not copy ticket number");
+    }
   };
 
   // Handle guest ticket tracking
@@ -252,6 +265,14 @@ const MyTickets = () => {
             <span className="font-mono text-gold font-semibold shrink-0">
               {selectedTicket.ticket_number}
             </span>
+            <button
+              type="button"
+              onClick={() => handleCopyTicketNumber(selectedTicket.ticket_number)}
+              className="inline-flex h-6 w-6 items-center justify-center rounded-md border border-gold/30 text-gold hover:bg-gold/10 shrink-0"
+              aria-label="Copy ticket number"
+            >
+              <Copy className="w-3.5 h-3.5" />
+            </button>
             <Badge className={cn("shrink-0", statusConfig[selectedTicket.status]?.className)}>
               {statusConfig[selectedTicket.status]?.label}
             </Badge>
@@ -465,9 +486,9 @@ const MyTickets = () => {
                 <TabsTrigger value="inbox" className="data-[state=active]:bg-gold data-[state=active]:text-black relative">
                   <Inbox className="w-4 h-4 mr-2" />
                   Inbox
-                  {unreadCount > 0 && (
+                  {inboxCount > 0 && (
                     <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] rounded-full w-5 h-5 flex items-center justify-center font-bold">
-                      {unreadCount}
+                      {inboxCount}
                     </span>
                   )}
                 </TabsTrigger>
@@ -541,48 +562,42 @@ const MyTickets = () => {
                 </div>
               </TabsContent>
 
-              {/* Inbox Tab - Ticket notifications */}
+              {/* Inbox Tab - JBJ messages only */}
               <TabsContent value="inbox">
                 <div className="bg-white rounded-2xl border-2 border-gold/30 shadow-lg overflow-hidden">
                   <div className="p-4 border-b border-gold/20 bg-gold/5">
                     <h2 className="font-semibold text-black flex items-center gap-2">
                       <Inbox className="w-4 h-4 text-gold" />
-                      Ticket Notifications
-                      {unreadCount > 0 && (
-                        <Badge className="bg-red-500 text-white text-xs">{unreadCount} unread</Badge>
+                      JBJ Messages Inbox
+                      {inboxCount > 0 && (
+                        <Badge className="bg-red-500 text-white text-xs">{inboxCount}</Badge>
                       )}
                     </h2>
                   </div>
 
                   <ScrollArea className="h-[500px]">
-                    {ticketNotifications && ticketNotifications.length > 0 ? (
+                    {inboxMessages.length > 0 ? (
                       <div className="divide-y divide-gold/10">
-                        {ticketNotifications.map((notif) => (
+                        {inboxMessages.map((msg) => (
                           <button
-                            key={notif.id}
+                            key={msg.id}
                             onClick={() => {
-                              markAsRead(notif.id);
-                              // If metadata has ticket info, select that ticket
-                              const meta = notif.metadata as any;
-                              if (meta?.ticket_id) {
-                                handleSelectUserTicket(meta.ticket_id);
-                                setActiveTab("tickets");
-                              }
+                              handleSelectUserTicket(msg.ticket_id);
+                              setActiveTab("tickets");
                             }}
-                            className={cn(
-                              "w-full p-4 text-left hover:bg-gold/5 transition-colors",
-                              !notif.is_read && "bg-gold/5 border-l-4 border-l-gold"
-                            )}
+                            className="w-full p-4 text-left hover:bg-gold/5 transition-colors"
                           >
-                            <div className="flex items-center justify-between mb-1">
-                              <span className="text-sm font-semibold text-black">{notif.title}</span>
-                              {!notif.is_read && (
-                                <span className="w-2 h-2 bg-gold rounded-full shrink-0" />
-                              )}
+                            <div className="flex items-center justify-between mb-1 gap-2">
+                              <span className="text-sm font-semibold text-black truncate">
+                                {msg.support_tickets?.subject || "Message from JBJ"}
+                              </span>
+                              <span className="font-mono text-[11px] text-gold shrink-0">
+                                {msg.support_tickets?.ticket_number || ""}
+                              </span>
                             </div>
-                            <p className="text-sm text-zinc-600">{notif.message}</p>
+                            <p className="text-sm text-zinc-600 line-clamp-2">{msg.message}</p>
                             <p className="text-xs text-zinc-400 mt-1">
-                              {format(new Date(notif.created_at), "MMM d, yyyy h:mm a")}
+                              {format(new Date(msg.created_at), "MMM d, yyyy h:mm a")}
                             </p>
                           </button>
                         ))}
@@ -590,12 +605,13 @@ const MyTickets = () => {
                     ) : (
                       <div className="p-12 text-center text-zinc-400">
                         <Inbox className="w-10 h-10 mx-auto mb-3 opacity-40" />
-                        <p>No notifications yet</p>
-                        <p className="text-xs mt-1">You'll receive updates when your ticket status changes</p>
+                        <p>No JBJ messages yet</p>
+                        <p className="text-xs mt-1">Only direct JBJ replies appear here</p>
                       </div>
                     )}
                   </ScrollArea>
                 </div>
+
               </TabsContent>
             </Tabs>
           )}
