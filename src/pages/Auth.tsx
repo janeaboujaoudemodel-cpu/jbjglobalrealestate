@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Eye, EyeOff, Mail, Lock, ArrowLeft, Scan, KeyRound, CheckCircle2, Loader2, Shield, UserCheck } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, ArrowLeft, Scan, KeyRound, CheckCircle2, Loader2, Shield, UserCheck, X } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -683,7 +683,18 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
           if (!open && isReactivationPreview) setIsReactivationPreview(false);
         }}
       >
-        <AlertDialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 max-w-md">
+        <AlertDialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 max-w-md relative">
+          {/* X close button */}
+          <button
+            onClick={() => {
+              setShowReactivationDialog(false);
+              if (isReactivationPreview) setIsReactivationPreview(false);
+            }}
+            className="absolute top-3 right-3 text-muted-foreground hover:text-foreground transition-colors z-10"
+            aria-label="Close"
+          >
+            <X className="w-5 h-5" />
+          </button>
           <AlertDialogHeader>
             <div className="mx-auto mb-4 w-16 h-16 rounded-full bg-emerald-100 border-2 border-emerald-300 flex items-center justify-center">
               <UserCheck className="h-7 w-7 text-emerald-600" />
