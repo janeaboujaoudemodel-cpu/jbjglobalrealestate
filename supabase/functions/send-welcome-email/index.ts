@@ -73,9 +73,8 @@ ${ctaText}
 </a>
 </td></tr>
 </table>
-${sharedSections("account")}
-</td></tr>
 ${arabicDivider()}
+</td></tr>
 <tr><td class="content-pad" style="padding:32px;direction:rtl;text-align:right;">
 <p style="margin:0;font-size:28px;font-weight:800;color:#1a1a1a;line-height:1.2;">${arabicGreeting}</p>
 <p style="margin:8px 0 0;font-size:18px;color:#C8A766;font-weight:600;">حسابك في JBJ جاهز — يسعدنا انضمامك إلينا.</p>
@@ -92,13 +91,13 @@ ${arabicDivider()}
 بصفتنا شركة وساطة عقارية مقرها دبي، نحن متخصصون في ربط العملاء بأفضل العقارات في جميع أنحاء الإمارات.
 </p>
 <table width="100%" cellpadding="0" cellspacing="0">
-<tr><td align="center" style="padding:0 0 28px;">
+<tr><td align="center" style="padding:0 0 20px;">
 <a href="${ctaUrl}" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:14px 40px;border-radius:12px;font-weight:700;font-size:14px;letter-spacing:0.5px;border:1px solid #C8A76650;">
 ابدأ التصفح
 </a>
 </td></tr>
 </table>
-<p style="font-size:14px;color:#333;margin-top:24px;text-align:right;">مع أطيب التحيات،<br><span style="color:#C8A766;font-weight:600;">فريق JBJ Global Real Estate</span></p>
+${sharedSections("account")}
 </td></tr>`;
 
   return emailShell("Welcome to JBJ Global Real Estate", bodyContent);

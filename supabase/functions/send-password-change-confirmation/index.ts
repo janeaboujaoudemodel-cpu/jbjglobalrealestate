@@ -48,25 +48,27 @@ const handler = async (req: Request): Promise<Response> => {
 <p style="margin:0 0 8px;font-size:26px;font-weight:800;color:#1a1a1a;line-height:1.2;">Password Changed Successfully</p>
 <p style="margin:0 0 20px;font-size:15px;color:#C8A766;font-weight:700;">Your account security has been updated</p>
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto 20px;">
-<tr><td style="text-align:center;">${lockIconBadge(70)}</td></tr>
+<tr><td style="text-align:center;">${lockIconBadge(74)}</td></tr>
 </table>
 <p style="margin:0;font-size:16px;font-weight:600;color:#1a1a1a;">Dear ${recipientName},</p>
 <p style="margin:8px 0 20px;font-size:14px;line-height:1.6;color:#444;">Your password was changed. If this was you, no further action is needed.</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A76640;border-radius:22px;margin:0 0 20px;">
+<tr><td style="padding:18px;">
 ${ticketSummaryCard([
   { label: 'Date', value: formattedDate },
   { label: 'Time', value: `${formattedTime} (GMT)` },
   { label: 'Device', value: deviceInfo },
   { label: 'Browser', value: browserInfo },
 ])}
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fef2f2;border:1px solid #fca5a5;border-radius:18px;margin-bottom:20px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fef2f2;border:1px solid #fca5a5;border-radius:18px;margin-bottom:16px;">
 <tr><td style="padding:16px;">
 <p style="margin:0;font-size:14px;color:#991b1b;line-height:1.6;"><strong>Didn't make this change?</strong><br/>Please contact our support team immediately.</p>
 </td></tr></table>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:20px;">
-<tr><td align="center">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:8px;"><tr><td align="center">
 <a href="mailto:CONTACT@JBJ.AE?subject=Unauthorized Password Change" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:14px 32px;border-radius:12px;font-weight:700;font-size:14px;border:1px solid #C8A76650;">Report Unauthorized Access</a>
 </td></tr></table>
 ${sharedSections("account security", "JBJ Global Real Estate Team")}
+</td></tr></table>
 </td></tr>`;
 
     const emailHtml = emailShell("Security Notification", bodyContent);

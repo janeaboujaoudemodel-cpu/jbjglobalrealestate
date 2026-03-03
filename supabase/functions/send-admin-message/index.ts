@@ -61,9 +61,9 @@ function buildEmailHtml(req: AdminMessageRequest): string {
   const isInquiry = req.serviceCategory?.toLowerCase() === 'inquiry' || req.serviceCategory?.toLowerCase() === 'inquiries';
 
   const bodyContent = `<tr><td style="padding:0;">
-<table width="100%" cellpadding="0" cellspacing="0">
-<tr><td style="background:linear-gradient(135deg,#F5EBD7 0%,#FDFBF7 100%);padding:16px 32px;">
-<p style="margin:0;font-size:10px;color:#888;text-transform:uppercase;letter-spacing:2px;">Department</p>
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr><td style="background:linear-gradient(135deg,#F5EBD7 0%,#FDFBF7 100%);padding:16px 32px 14px;border-left:0;border-right:0;">
+<p style="margin:0;font-size:10px;color:#888;text-transform:uppercase;letter-spacing:2px;">Department Inquiry</p>
 <p style="margin:4px 0 0;font-size:16px;color:#1a1a1a;font-weight:700;">${typeLabel}</p>
 </td></tr></table>
 </td></tr>

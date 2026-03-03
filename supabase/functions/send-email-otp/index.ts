@@ -80,7 +80,6 @@ ${monogramBadge(52)}
 </table>
 <p style="margin:0 0 8px;color:#555;font-size:14px;line-height:1.6;">This code expires in <strong>10 minutes</strong>.</p>
 <p style="margin:0 0 20px;color:#999;font-size:13px;line-height:1.6;">If you didn't request this code, please ignore this email.</p>
-${sharedSections("verification")}
 ${arabicDivider()}
 </td></tr>
 <tr><td class="content-pad" style="padding:32px;direction:rtl;text-align:right;">
@@ -91,13 +90,14 @@ ${arabicDivider()}
 <span style="font-size:40px;font-weight:700;letter-spacing:10px;color:#1a1a1a;font-family:'SF Mono',Monaco,Consolas,monospace;">${otpCode}</span>
 </td></tr>
 </table>
-<p style="margin:0 0 8px;color:#555;font-size:14px;">ينتهي هذا الرمز خلال <strong>١٠ دقائق</strong>.</p>
-<p style="margin:0 0 16px;color:#999;font-size:13px;">إذا لم تطلب هذا الرمز، يرجى تجاهل هذا البريد الإلكتروني.</p>
+<p style="margin:0 0 8px;color:#555;font-size:14px;line-height:1.7;">ينتهي هذا الرمز خلال <strong>١٠ دقائق</strong>.</p>
+<p style="margin:0 0 16px;color:#999;font-size:13px;line-height:1.7;">إذا لم تطلب هذا الرمز، يرجى تجاهل هذا البريد الإلكتروني.</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f0fdf4;border:1px solid #22c55e40;border-radius:16px;">
 <tr><td style="padding:12px 20px;text-align:center;">
-<p style="margin:0;font-size:13px;color:#166534;">تحتاج مساعدة؟ تواصل معنا على <a href="mailto:CONTACT@JBJ.AE" style="color:#15803d;font-weight:700;text-decoration:underline;">CONTACT@JBJ.AE</a></p>
+<p style="margin:0;font-size:13px;color:#166534;line-height:1.7;"><span style="display:inline-block;max-width:320px;">تحتاج مساعدة بخصوص الرمز؟<br/>تواصل معنا على <a href="mailto:CONTACT@JBJ.AE" style="color:#15803d;font-weight:700;text-decoration:underline;">CONTACT@JBJ.AE</a></span></p>
 </td></tr>
 </table>
+${sharedSections("verification")}
 </td></tr>`;
 
     const emailHtml = emailShell("Email Verification", bodyContent);
