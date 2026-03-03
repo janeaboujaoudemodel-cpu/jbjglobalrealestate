@@ -45,6 +45,37 @@ function formatDetailedDateTime(date: Date, locale: "en-GB" | "ar-AE") {
   }).format(date);
 }
 
+const hasArabic = (text: string) => /[\u0600-\u06FF]/.test(text);
+
+const commonArMap: Record<string, string> = {
+  "ticket": "تذكرة",
+  "support": "الدعم",
+  "issue": "مشكلة",
+  "resolved": "تم الحل",
+  "review": "مراجعة",
+  "in progress": "قيد التنفيذ",
+  "in review": "قيد المراجعة",
+  "pending": "قيد الانتظار",
+  "priority": "الأولوية",
+  "billing": "الفوترة",
+  "account": "الحساب",
+  "technical": "تقني",
+  "general": "عام",
+  "property": "العقار",
+  "partnership": "الشراكة",
+};
+
+function toArabicText(input?: string | null): string {
+  const text = (input || "").trim();
+  if (!text) return "";
+  if (hasArabic(text)) return text;
+  let out = text;
+  for (const [en, ar] of Object.entries(commonArMap)) {
+    out = out.replace(new RegExp(`\\b${en}\\b`, "gi"), ar);
+  }
+  return out;
+}
+
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -92,18 +123,21 @@ const handler = async (req: Request): Promise<Response> => {
       },
     };
 
-    const content = statusContent[newStatus];
+    const normalizedStatus = newStatus === "closed" ? "resolved" : newStatus;
+    const content = statusContent[normalizedStatus];
     if (!content) {
       return new Response(JSON.stringify({ error: "Unsupported status for email" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
+    const adminNoteArText = toArabicText(adminNote);
     const adminNoteHtml = adminNote ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;overflow:hidden;margin-bottom:24px;"><tr><td style="padding:20px;"><p style="font-weight:bold;color:#1a1a1a;margin:0 0 8px;">Admin Note:</p><p style="color:#555;margin:0;">${adminNote}</p></td></tr></table>` : '';
-    const adminNoteHtmlAr = adminNote ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;overflow:hidden;margin-bottom:24px;direction:rtl;"><tr><td style="padding:20px;"><p style="font-weight:bold;color:#1a1a1a;margin:0 0 8px;">ملاحظة الإدارة:</p><p style="color:#555;margin:0;">${adminNote}</p></td></tr></table>` : '';
+    const adminNoteHtmlAr = adminNote ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;overflow:hidden;margin-bottom:24px;direction:rtl;"><tr><td style="padding:20px;"><p style="font-weight:bold;color:#1a1a1a;margin:0 0 8px;">ملاحظة الإدارة:</p><p style="color:#555;margin:0;">${adminNoteArText}</p></td></tr></table>` : '';
 
-    const rateHtml = newStatus === 'resolved' ? rateExperienceCard(surveyLink) : '';
-    const rateHtmlAr = newStatus === 'resolved' ? rateExperienceCardAr(surveyLink) : '';
-    const reopenHtml = newStatus === 'resolved' ? issueNotResolvedCard(reopenUrl) : '';
-    const reopenHtmlAr = newStatus === 'resolved' ? issueNotResolvedCardAr(reopenUrl) : '';
+    const isResolved = normalizedStatus === 'resolved';
+    const rateHtml = isResolved ? rateExperienceCard(surveyLink) : '';
+    const rateHtmlAr = isResolved ? rateExperienceCardAr(surveyLink) : '';
+    const reopenHtml = isResolved ? issueNotResolvedCard(reopenUrl) : '';
+    const reopenHtmlAr = isResolved ? issueNotResolvedCardAr(reopenUrl) : '';
 
     const bodyContent = `<tr><td class="content-pad" style="padding:32px;">
 <p style="font-size:15px;color:#333;margin:0 0 16px;">Dear <strong>${ticket.full_name}</strong>,</p>
@@ -125,8 +159,8 @@ ${arabicDivider()}
 <p style="font-size:14px;color:#555;margin:0 0 24px;">${content.subtitleAr}</p>
 ${ticketSummaryCardAr([
   { label: 'رقم التذكرة', value: ticket.ticket_number, highlight: true },
-  { label: 'الموضوع', value: ticket.subject },
-  { label: 'الفئة', value: categoryAr },
+  { label: 'الموضوع', value: toArabicText(ticket.subject) },
+  { label: 'الفئة', value: toArabicText(categoryAr) },
   { label: 'الأولوية', value: priorityAr },
   { label: 'تاريخ ووقت الإرسال', value: createdDateTimeAr },
 ])}
@@ -138,7 +172,7 @@ ${sharedSections("support ticket", "JBJ Global Real Estate Support Team")}
 </td></tr>`;
 
     const emailHtml = emailShell("Support Ticket Update", bodyContent);
-    const subjectLine = newStatus === 'resolved'
+    const subjectLine = normalizedStatus === 'resolved'
       ? `[${ticket.ticket_number}] Your Ticket Has Been Resolved`
       : `[${ticket.ticket_number}] Your Ticket Is Being Reviewed`;
 
@@ -152,8 +186,8 @@ ${sharedSections("support ticket", "JBJ Global Real Estate Support Team")}
     console.log(`Status email sent for ${ticket.ticket_number} -> ${newStatus}`);
 
     if (ticket.user_id) {
-      const statusLabels: Record<string, string> = { in_progress: "is under review", resolved: "has been resolved" };
-      const label = statusLabels[newStatus] || `status changed to ${newStatus}`;
+      const statusLabels: Record<string, string> = { in_progress: "is under review", resolved: "has been resolved", closed: "has been resolved" };
+      const label = statusLabels[normalizedStatus] || `status changed to ${normalizedStatus}`;
       await Promise.all([
         supabaseClient.from("user_notifications").insert({ user_id: ticket.user_id, type: "support_ticket", title: `Ticket ${ticket.ticket_number} Update`, message: `Your ticket "${ticket.subject}" ${label}.`, metadata: { ticket_number: ticket.ticket_number, ticket_id: ticketId, action: newStatus, action_url: "/my-tickets" }, is_read: false }),
         supabaseClient.from("notifications").insert({ user_id: ticket.user_id, title: `Ticket ${ticket.ticket_number} Update`, body: `Your ticket "${ticket.subject}" ${label}.`, notification_type: "reminder", action_url: "/my-tickets" }),
