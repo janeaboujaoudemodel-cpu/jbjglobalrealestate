@@ -4,11 +4,12 @@ const ASSET_BASE = "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/p
 const LOGO_URL = `${ASSET_BASE}/jbj-monogram-dark.png?v=3`;
 const SITE_URL = "https://jbj.ae";
 
-const ICON_AI_TOOLS = `${ASSET_BASE}/email-icons/ai-tools.svg`;
-const ICON_GUIDES = `${ASSET_BASE}/email-icons/guides.svg`;
-const ICON_PROPERTIES = `${ASSET_BASE}/email-icons/properties.svg`;
-const ICON_LOCK = `${ASSET_BASE}/email-icons/lock.svg`;
-const ICON_HEADPHONES = `${ASSET_BASE}/email-icons/headphones.svg`;
+// Use %2F encoding for storage paths
+const ICON_AI_TOOLS = `${ASSET_BASE}/email-icons%2Fai-tools.svg`;
+const ICON_GUIDES = `${ASSET_BASE}/email-icons%2Fguides.svg`;
+const ICON_PROPERTIES = `${ASSET_BASE}/email-icons%2Fproperties.svg`;
+const ICON_LOCK = `${ASSET_BASE}/email-icons%2Flock.svg`;
+const ICON_HEADPHONES = `${ASSET_BASE}/email-icons%2Fheadphones.svg`;
 
 const BOOK_MARKET_REPORT = `${ASSET_BASE}/email-books/market-report-book.jpg`;
 const BOOK_GUIDES_LIBRARY = `${ASSET_BASE}/email-books/guides-library-book.jpg`;
@@ -35,17 +36,16 @@ export function sharedHeader(departmentLabel: string): string {
 }
 
 /**
- * Monogram badge — CIRCLE only, thin 1px gold border, no square borders.
+ * Monogram badge — CIRCLE only, NO gold border on monogram. Just clean circle.
  */
-export function monogramBadge(size = 48, ringColor = "#C8A766", bgColor = "#000000"): string {
+export function monogramBadge(size = 48, _ringColor = "#C8A766", bgColor = "#000000"): string {
   const logoSize = Math.round(size * 0.86);
-  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td style="width:${size}px;height:${size}px;background:${bgColor};border:1px solid ${ringColor};border-radius:999px;text-align:center;vertical-align:middle;overflow:hidden;"><img src="${LOGO_URL}" alt="JBJ" width="${logoSize}" style="width:${logoSize}px;height:${logoSize}px;display:block;margin:0 auto;object-fit:cover;border-radius:999px;" /></td></tr></table>`;
+  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td style="width:${size}px;height:${size}px;background:${bgColor};border-radius:999px;text-align:center;vertical-align:middle;overflow:hidden;"><img src="${LOGO_URL}" alt="JBJ" width="${logoSize}" style="width:${logoSize}px;height:${logoSize}px;display:block;margin:0 auto;object-fit:cover;border-radius:999px;" /></td></tr></table>`;
 }
 
 /**
  * Profile photo badge — ALWAYS circle, thin 1px gold border ONLY.
  * NEVER square. NEVER thick borders. Circular frame only.
- * Includes fallback monogram if image fails.
  */
 export function profilePhotoBadge(photoUrl: string, size = 52): string {
   if (!photoUrl || photoUrl === 'null' || photoUrl === 'undefined') {
@@ -64,11 +64,11 @@ export function inquiryBox(contextLabel: string): string {
 }
 
 export function ticketSupportEmbed(): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0;"><tr><td style="padding:24px;background:linear-gradient(135deg,#fff5f5,#ffe8e8,#fef2f2);border:2px solid #e74c3c;border-radius:18px;text-align:center;"><img src="${ICON_HEADPHONES}" alt="Support" width="30" height="30" style="display:block;margin:0 auto 10px;" /><p style="margin:0 0 4px;font-size:11px;font-weight:700;color:#e74c3c;text-transform:uppercase;letter-spacing:2px;">24/7 SUPPORT</p><p style="margin:0 0 6px;font-size:16px;font-weight:700;color:#7f1d1d;">Need Help? Open a Support Ticket</p><p style="margin:0 0 14px;font-size:13px;color:#991b1b;">Our team typically responds within 24 hours</p><a href="${SITE_URL}/support" style="display:inline-block;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;text-decoration:none;padding:12px 30px;border-radius:12px;font-weight:700;font-size:13px;">Submit a Ticket</a></td></tr></table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0;"><tr><td style="padding:24px;background:linear-gradient(135deg,#fff5f5,#ffe8e8,#fef2f2);border:2px solid #e74c3c;border-radius:18px;text-align:center;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;"><tr><td style="width:44px;height:44px;background:linear-gradient(135deg,#ef4444,#dc2626);border-radius:999px;text-align:center;vertical-align:middle;"><img src="${ICON_HEADPHONES}" alt="Support" width="22" height="22" style="display:block;margin:0 auto;filter:brightness(0) invert(1);" /></td></tr></table><p style="margin:0 0 4px;font-size:11px;font-weight:700;color:#e74c3c;text-transform:uppercase;letter-spacing:2px;">24/7 SUPPORT</p><p style="margin:0 0 6px;font-size:16px;font-weight:700;color:#7f1d1d;">Need Help? Open a Support Ticket</p><p style="margin:0 0 14px;font-size:13px;color:#991b1b;">Our team typically responds within 24 hours</p><a href="${SITE_URL}/support" style="display:inline-block;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;text-decoration:none;padding:12px 30px;border-radius:12px;font-weight:700;font-size:13px;">Submit a Ticket</a></td></tr></table>`;
 }
 
 function recommendedCard(title: string, href: string, iconUrl: string): string {
-  return `<td width="33%" style="text-align:center;padding:4px;vertical-align:top;"><a href="${href}" style="display:block;padding:16px 8px;background:#fff;border:2px solid #C8A766;border-radius:18px;text-decoration:none;box-shadow:0 6px 16px rgba(200,167,102,0.2),0 2px 4px rgba(0,0,0,0.05);"><img src="${iconUrl}" alt="${title}" width="28" height="28" style="display:block;margin:0 auto 10px;" /><p style="margin:0;font-size:12px;color:#1a1a1a;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">${title}</p></a></td>`;
+  return `<td width="33%" style="text-align:center;padding:4px;vertical-align:top;"><a href="${href}" style="display:block;padding:16px 8px;background:#fff;border:2px solid #C8A766;border-radius:18px;text-decoration:none;box-shadow:0 6px 16px rgba(200,167,102,0.2),0 2px 4px rgba(0,0,0,0.05);"><img src="${iconUrl}" alt="${title}" width="28" height="28" style="display:block;margin:0 auto 10px;width:28px;height:28px;" /><p style="margin:0;font-size:12px;color:#1a1a1a;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">${title}</p></a></td>`;
 }
 
 export function recommendedActionsHtml(): string {
@@ -77,9 +77,10 @@ export function recommendedActionsHtml(): string {
 
 /**
  * Books showcase — NO borders around books. 3D shadow style. Side by side aligned.
+ * Market report and guides library same size.
  */
 function bookCard(title: string, subtitle: string, href: string, img: string): string {
-  return `<td width="50%" style="text-align:center;padding:6px;vertical-align:top;"><a href="${href}" style="display:block;text-decoration:none;"><img src="${img}" alt="${title}" width="130" style="width:130px;max-width:100%;height:auto;display:block;margin:0 auto 10px;border-radius:8px;box-shadow:8px 10px 24px rgba(0,0,0,0.22),2px 2px 8px rgba(0,0,0,0.1);transform:perspective(400px) rotateY(-3deg);" /><p style="margin:0 0 3px;font-size:13px;color:#1a1a1a;font-weight:700;">${title}</p><p style="margin:0;font-size:11px;color:#777;">${subtitle}</p></a></td>`;
+  return `<td width="50%" style="text-align:center;padding:6px;vertical-align:top;"><a href="${href}" style="display:block;text-decoration:none;"><img src="${img}" alt="${title}" width="140" style="width:140px;max-width:100%;height:auto;display:block;margin:0 auto 10px;border-radius:8px;box-shadow:8px 10px 24px rgba(0,0,0,0.22),2px 2px 8px rgba(0,0,0,0.1);transform:perspective(400px) rotateY(-3deg);" /><p style="margin:0 0 3px;font-size:13px;color:#1a1a1a;font-weight:700;">${title}</p><p style="margin:0;font-size:11px;color:#777;">${subtitle}</p></a></td>`;
 }
 
 export function booksShowcaseHtml(): string {
@@ -101,24 +102,27 @@ export function signOffHtml(teamName = "JBJ Global Real Estate Team"): string {
 }
 
 /**
- * Ready to Get Started — matches website exactly: champagne/pearl/gold background,
- * 3-column contact (WhatsApp/Call/Email), Stay in the Loop with newsletter input link.
+ * Ready to Get Started — matches website exactly: champagne/pearl/gold,
+ * 3D bordered contact cards, star divider, Stay in the Loop with email input arrow.
  */
 export function readyToGetStartedHtml(): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:28px 0;background:linear-gradient(135deg,#FDFBF7,#F5F0E6,#F0EBE0);border:1px solid #C8A76640;border-radius:20px;overflow:hidden;">
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:28px 0;background:linear-gradient(135deg,#FDFBF7,#F5F0E6,#EDE4D3);border:2px solid #C8A766;border-radius:20px;overflow:hidden;box-shadow:0 8px 28px rgba(200,167,102,0.2),0 2px 6px rgba(0,0,0,0.06);">
 <tr><td style="padding:28px 22px;text-align:center;">
 <p style="font-size:22px;font-weight:800;margin:0 0 6px;letter-spacing:1px;background:linear-gradient(135deg,#1a1a1a 0%,#333 30%,#D4AF37 50%,#333 70%,#1a1a1a 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">READY TO GET STARTED?</p>
 <p style="color:#666;font-size:13px;margin:0 0 20px;">Connect with our expert team for personalized guidance.</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
-<td width="33%" style="text-align:center;padding:4px;"><a href="https://wa.me/971565911000" style="display:block;padding:14px 4px;background:#fff;border:2px solid #C8A766;border-radius:16px;text-decoration:none;box-shadow:0 4px 12px rgba(200,167,102,0.15);"><p style="color:#25d366;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;margin:0 0 4px;font-weight:700;">WhatsApp</p><p style="color:#1a1a1a;font-size:11px;margin:0;font-weight:600;">+971 56 591 1000</p></a></td>
-<td width="33%" style="text-align:center;padding:4px;"><a href="tel:+971565911000" style="display:block;padding:14px 4px;background:#fff;border:2px solid #C8A766;border-radius:16px;text-decoration:none;box-shadow:0 4px 12px rgba(200,167,102,0.15);"><p style="color:#3b82f6;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;margin:0 0 4px;font-weight:700;">Call Us</p><p style="color:#1a1a1a;font-size:11px;margin:0;font-weight:600;">+971 56 591 1000</p></a></td>
-<td width="33%" style="text-align:center;padding:4px;"><a href="mailto:CONTACT@JBJ.AE" style="display:block;padding:14px 4px;background:#fff;border:2px solid #C8A766;border-radius:16px;text-decoration:none;box-shadow:0 4px 12px rgba(200,167,102,0.15);"><p style="color:#C8A766;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;margin:0 0 4px;font-weight:700;">Email</p><p style="color:#1a1a1a;font-size:11px;margin:0;font-weight:600;">CONTACT@JBJ.AE</p></a></td>
+<td width="33%" style="text-align:center;padding:4px;"><a href="https://wa.me/971565911000" style="display:block;padding:14px 6px;background:#fff;border:2px solid #C8A766;border-radius:16px;text-decoration:none;box-shadow:0 6px 16px rgba(200,167,102,0.2),0 2px 4px rgba(0,0,0,0.06);"><p style="color:#25d366;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;margin:0 0 4px;font-weight:700;">WhatsApp</p><p style="color:#1a1a1a;font-size:11px;margin:0;font-weight:600;">+971 56 591 1000</p></a></td>
+<td width="33%" style="text-align:center;padding:4px;"><a href="tel:+971565911000" style="display:block;padding:14px 6px;background:#fff;border:2px solid #C8A766;border-radius:16px;text-decoration:none;box-shadow:0 6px 16px rgba(200,167,102,0.2),0 2px 4px rgba(0,0,0,0.06);"><p style="color:#3b82f6;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;margin:0 0 4px;font-weight:700;">Call Us</p><p style="color:#1a1a1a;font-size:11px;margin:0;font-weight:600;">+971 56 591 1000</p></a></td>
+<td width="33%" style="text-align:center;padding:4px;"><a href="mailto:CONTACT@JBJ.AE" style="display:block;padding:14px 6px;background:#fff;border:2px solid #C8A766;border-radius:16px;text-decoration:none;box-shadow:0 6px 16px rgba(200,167,102,0.2),0 2px 4px rgba(0,0,0,0.06);"><p style="color:#C8A766;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;margin:0 0 4px;font-weight:700;">Email</p><p style="color:#1a1a1a;font-size:11px;margin:0;font-weight:600;">CONTACT@JBJ.AE</p></a></td>
 </tr></table>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:20px;"><tr><td><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="border-top:1px solid #C8A76640;"></td><td style="width:30px;text-align:center;"><span style="color:#C8A76660;font-size:12px;">&#10022;</span></td><td style="border-top:1px solid #C8A76640;"></td></tr></table></td></tr></table>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:22px;"><tr><td style="border-top:1px solid #C8A76650;"></td><td style="width:30px;text-align:center;"><span style="color:#C8A766;font-size:14px;">&#10022;</span></td><td style="border-top:1px solid #C8A76650;"></td></tr></table>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:18px;"><tr><td style="text-align:center;">
 <p style="font-size:16px;font-weight:800;letter-spacing:2px;margin:0 0 6px;background:linear-gradient(135deg,#1a1a1a 0%,#333 30%,#D4AF37 50%,#333 70%,#1a1a1a 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">&#10022; STAY IN THE LOOP &#10022;</p>
 <p style="color:#666;font-size:12px;margin:0 0 14px;">Be the first to access new listings, market updates, and personalized guidance.</p>
-<a href="${SITE_URL}/#ready-to-get-started" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;font-size:13px;border:1px solid #C8A76650;border-radius:999px;padding:10px 28px;font-weight:700;letter-spacing:0.5px;">Subscribe to Updates</a>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="border:2px solid #C8A766;border-radius:999px;overflow:hidden;"><tr>
+<td style="padding:0;"><input type="text" placeholder="Enter your email" style="border:none;outline:none;padding:10px 18px;font-size:13px;color:#333;background:transparent;width:180px;" readonly /></td>
+<td style="padding:0;"><a href="${SITE_URL}/#ready-to-get-started" style="display:block;background:#000;color:#C8A766;text-decoration:none;padding:10px 22px;font-weight:700;font-size:13px;letter-spacing:0.5px;">Subscribe &rarr;</a></td>
+</tr></table>
 </td></tr></table>
 </td></tr></table>`;
 }
@@ -127,8 +131,29 @@ export function doNotReplyNotice(): string {
   return `<tr><td style="padding:0 32px 16px;text-align:center;"><p style="margin:0;font-size:11px;color:#999;line-height:1.5;">This is an automated message. Please do not reply directly to this email.<br/>For any inquiries, contact us at <a href="mailto:CONTACT@JBJ.AE" style="color:#C8A766;text-decoration:underline;font-weight:600;">CONTACT@JBJ.AE</a></p></td></tr>`;
 }
 
+/**
+ * Premium footer — larger, more detailed, rounded top corners matching header.
+ */
 export function sharedFooterHtml(): string {
-  return `${doNotReplyNotice()}<tr><td style="background:#000;padding:30px 34px;border-radius:0 0 24px 24px;text-align:center;"><p style="color:#C8A766;font-size:15px;margin:0 0 14px;font-weight:600;">Need assistance? We're here to help.</p><p style="margin:0 0 16px;"><a href="tel:+971565911000" style="color:#fff;text-decoration:none;font-size:14px;font-weight:600;">+971 56 591 1000</a><span style="color:#444;margin:0 14px;">|</span><a href="mailto:CONTACT@JBJ.AE" style="color:#fff;text-decoration:underline;font-size:14px;font-weight:600;">CONTACT@JBJ.AE</a></p><p style="color:#C8A766;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin:0 0 10px;">Follow Us</p><p style="color:#888;font-size:11px;margin:0 0 12px;">Developed, Created &amp; Implemented by The Founder &amp; CEO, <span style="color:#C8A766;">Jane Bou Jaoude</span></p><p style="color:#C8A766;font-size:11px;margin:0;font-weight:600;">&copy; ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.</p></td></tr>`;
+  return `${doNotReplyNotice()}<tr><td style="background:#000;padding:36px 34px 32px;border-radius:0 0 24px 24px;text-align:center;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="text-align:center;">
+<img src="${LOGO_URL}" alt="JBJ" width="60" style="width:60px;height:auto;display:block;margin:0 auto 14px;border-radius:999px;" />
+<p style="color:#C8A766;font-size:16px;margin:0 0 6px;font-weight:700;letter-spacing:2px;">JBJ GLOBAL REAL ESTATE</p>
+<p style="color:#888;font-size:12px;margin:0 0 18px;">Your Trusted Partner in Dubai Real Estate</p>
+</td></tr></table>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:18px;"><tr>
+<td style="border-top:1px solid #333;"></td>
+</tr></table>
+<p style="color:#C8A766;font-size:15px;margin:0 0 14px;font-weight:600;">Need assistance? We're here to help.</p>
+<p style="margin:0 0 16px;"><a href="tel:+971565911000" style="color:#fff;text-decoration:none;font-size:14px;font-weight:600;">+971 56 591 1000</a><span style="color:#444;margin:0 14px;">|</span><a href="mailto:CONTACT@JBJ.AE" style="color:#fff;text-decoration:underline;font-size:14px;font-weight:600;">CONTACT@JBJ.AE</a></p>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:16px;"><tr>
+<td style="padding:0 8px;"><a href="https://www.instagram.com/jbjglobalrealestate/" style="color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">Instagram</a></td>
+<td style="padding:0 8px;"><a href="https://www.linkedin.com/company/jbjglobalrealestate/" style="color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">LinkedIn</a></td>
+<td style="padding:0 8px;"><a href="https://www.facebook.com/jbjglobalrealestate" style="color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">Facebook</a></td>
+</tr></table>
+<p style="color:#888;font-size:11px;margin:0 0 8px;">Developed, Created &amp; Implemented by The Founder &amp; CEO, <span style="color:#C8A766;">Jane Bou Jaoude</span></p>
+<p style="color:#C8A766;font-size:11px;margin:0;font-weight:600;">&copy; ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.</p>
+</td></tr>`;
 }
 
 export function progressSteps(labels: [string, string, string], active: [boolean, boolean, boolean], checks: [boolean, boolean, boolean] = [false, false, false]): string {
@@ -147,7 +172,6 @@ export function arabicDivider(): string {
 
 /**
  * JBJ Team Reply card — LOCKED premium style. 18px rounded borders.
- * Reuse this for ALL team replies: support, HR, partnerships, career, etc.
  */
 export function teamReplyCard(teamLabel: string, replyMessage: string): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;">
@@ -171,7 +195,6 @@ export function inquiryStages(currentStage: 'received' | 'reviewing' | 'responde
 
 /**
  * Ticket summary card with thin vertical divider between label and value.
- * Premium rounded styling.
  */
 export function ticketSummaryCard(rows: Array<{label: string; value: string; highlight?: boolean}>): string {
   const rowsHtml = rows.map(r => {
@@ -192,7 +215,11 @@ export function sharedSections(context: string, teamName = "JBJ Global Real Esta
   return `${inquiryBox(context)}${ticketSupportEmbed()}${recommendedActionsHtml()}${booksShowcaseHtml()}${suggestedActionsHtml()}${feedbackHtml(context)}${readyToGetStartedHtml()}${signOffHtml(teamName)}`;
 }
 
+/**
+ * emailShell — single-layer card. Gold champagne background for content area.
+ * White outer background. Everything on ONE continuous layer.
+ */
 export function emailShell(departmentLabel: string, bodyContent: string): string {
-  const raw = `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><style>body{margin:0;padding:0;background:#ffffff;font-family:'Segoe UI',Arial,sans-serif;}table{border-collapse:collapse;}@media only screen and (max-width:620px){.wrapper{width:100%!important;}.content-pad{padding:24px 16px!important;}}</style></head><body style="margin:0;padding:0;background:#fff;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fff;"><tr><td align="center" style="padding:24px 12px;"><table role="presentation" class="wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:linear-gradient(180deg,#fff,#FDFBF7,#F5F0E6);border-radius:24px;overflow:hidden;box-shadow:0 8px 32px rgba(200,167,102,0.18);">${sharedHeader(departmentLabel)}${bodyContent}${sharedFooterHtml()}</table></td></tr></table></body></html>`;
+  const raw = `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><style>body{margin:0;padding:0;background:#ffffff;font-family:'Segoe UI',Arial,sans-serif;}table{border-collapse:collapse;}@media only screen and (max-width:620px){.wrapper{width:100%!important;}.content-pad{padding:24px 16px!important;}}</style></head><body style="margin:0;padding:0;background:#fff;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fff;"><tr><td align="center" style="padding:24px 12px;"><table role="presentation" class="wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:linear-gradient(180deg,#F5F0E6,#F0EBE0,#EDE4D3);border-radius:24px;overflow:hidden;box-shadow:0 8px 32px rgba(200,167,102,0.22);">${sharedHeader(departmentLabel)}${bodyContent}${sharedFooterHtml()}</table></td></tr></table></body></html>`;
   return minifyHtml(raw);
 }

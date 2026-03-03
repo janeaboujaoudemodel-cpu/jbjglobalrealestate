@@ -585,17 +585,23 @@ const ListingPortalSubmit = () => {
                         <div className="flex flex-wrap justify-center gap-3">
                           {listingCategories.map(cat => {
                             const Icon = cat.icon;
+                            const isSelected = listingCategory === cat.id;
                             return (
                               <button
                                 key={cat.id}
                                 onClick={() => setListingCategory(cat.id)}
-                                className={`p-4 rounded-xl border-2 text-left transition-all w-[calc(33.333%-0.5rem)] min-w-[160px] ${
-                                  listingCategory === cat.id
-                                    ? 'bg-gold/10 border-gold/50 text-black'
+                                className={`relative p-4 rounded-2xl border-2 text-left transition-all w-[calc(33.333%-0.5rem)] min-w-[160px] ${
+                                  isSelected
+                                    ? 'bg-gold/10 border-gold/50 text-black shadow-lg shadow-gold/15'
                                     : 'bg-white/60 border-gold/15 text-zinc-600 hover:border-gold/30'
                                 }`}
                               >
-                                <Icon className={`w-5 h-5 mb-2 ${listingCategory === cat.id ? 'text-gold' : 'text-zinc-400'}`} />
+                                {isSelected && (
+                                  <div className="absolute top-2 right-2 w-6 h-6 bg-gold rounded-full flex items-center justify-center">
+                                    <Check className="w-3.5 h-3.5 text-white" />
+                                  </div>
+                                )}
+                                <Icon className={`w-5 h-5 mb-2 ${isSelected ? 'text-gold' : 'text-zinc-400'}`} />
                                 <div className="font-medium text-sm">{cat.label}</div>
                                 <div className="text-xs text-zinc-500">{cat.desc}</div>
                               </button>
@@ -1137,8 +1143,8 @@ const ListingPortalSubmit = () => {
                         </h3>
                         <RadioGroup value={sellerRole} onValueChange={setSellerRole} className="grid grid-cols-2 gap-3">
                           {sellerRoles.map(role => (
-                            <div key={role.value} className={`flex items-center gap-3 p-3 rounded-xl border-2 transition-all cursor-pointer ${
-                              sellerRole === role.value ? 'bg-gold/10 border-gold/50' : 'bg-white/60 border-gold/15 hover:border-gold/30'
+                            <div key={role.value} className={`flex items-center gap-3 p-3 rounded-2xl border-2 transition-all cursor-pointer ${
+                              sellerRole === role.value ? 'bg-gold/10 border-gold/50 shadow-md shadow-gold/10' : 'bg-white/60 border-gold/15 hover:border-gold/30'
                             }`}>
                               <RadioGroupItem value={role.value} id={`role-${role.value}`} className="border-gold/50" />
                               <Label htmlFor={`role-${role.value}`} className="text-black text-sm cursor-pointer">{role.label}</Label>
@@ -1159,19 +1165,24 @@ const ListingPortalSubmit = () => {
                           {/* Direct Contact Option */}
                           <button
                             onClick={() => setContactMode('direct')}
-                            className={`text-left p-5 rounded-xl border-2 transition-all ${
+                            className={`relative text-left p-5 rounded-2xl border-2 transition-all ${
                               contactMode === 'direct' 
-                                ? 'bg-gold/10 border-gold/50' 
+                                ? 'bg-gold/10 border-gold/50 shadow-lg shadow-gold/15' 
                                 : 'bg-white/60 border-gold/15 hover:border-gold/30'
                             }`}
                           >
+                            {contactMode === 'direct' && (
+                              <div className="absolute top-3 right-3 w-6 h-6 bg-gold rounded-full flex items-center justify-center">
+                                <Check className="w-3.5 h-3.5 text-white" />
+                              </div>
+                            )}
                             <div className="flex items-center gap-2 mb-2">
                               <Phone className="w-4 h-4 text-gold" />
                               <span className="text-black font-semibold text-sm">Direct Contact</span>
                             </div>
                             <p className="text-gold font-bold text-lg mb-1">{LISTING_FEES.direct.label}</p>
                             <p className="text-zinc-500 text-xs">{LISTING_FEES.direct.description}</p>
-                            <div className="mt-3 bg-emerald-50 border border-emerald-200 rounded-lg p-2">
+                            <div className="mt-3 bg-emerald-50 border border-emerald-200 rounded-2xl p-2">
                               <p className="text-emerald-700 text-xs font-medium">50% less than Property Finder & Bayut</p>
                             </div>
                           </button>
@@ -1179,19 +1190,24 @@ const ListingPortalSubmit = () => {
                           {/* Commission Option */}
                           <button
                             onClick={() => setContactMode('commission')}
-                            className={`text-left p-5 rounded-xl border-2 transition-all ${
+                            className={`relative text-left p-5 rounded-2xl border-2 transition-all ${
                               contactMode === 'commission' 
-                                ? 'bg-gold/10 border-gold/50' 
+                                ? 'bg-gold/10 border-gold/50 shadow-lg shadow-gold/15' 
                                 : 'bg-white/60 border-gold/15 hover:border-gold/30'
                             }`}
                           >
+                            {contactMode === 'commission' && (
+                              <div className="absolute top-3 right-3 w-6 h-6 bg-gold rounded-full flex items-center justify-center">
+                                <Check className="w-3.5 h-3.5 text-white" />
+                              </div>
+                            )}
                             <div className="flex items-center gap-2 mb-2">
                               <Shield className="w-4 h-4 text-gold" />
                               <span className="text-black font-semibold text-sm">Commission-Based</span>
                             </div>
                             <p className="text-gold font-bold text-lg mb-1">{LISTING_FEES.commission.label}</p>
                             <p className="text-zinc-500 text-xs">{LISTING_FEES.commission.description}</p>
-                            <div className="mt-3 bg-gold/5 border border-gold/20 rounded-lg p-2">
+                            <div className="mt-3 bg-gold/5 border border-gold/20 rounded-2xl p-2">
                               <p className="text-gold text-xs font-medium">JBJ handles all enquiries professionally</p>
                             </div>
                           </button>
