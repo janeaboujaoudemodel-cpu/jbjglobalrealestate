@@ -36,6 +36,19 @@ interface ReplyEmailRequest {
   ticketCategory?: string;
 }
 
+function formatDetailedDateTime(date: Date, locale: "en-GB" | "ar-AE") {
+  return new Intl.DateTimeFormat(locale, {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+    timeZone: "Asia/Dubai",
+  }).format(date);
+}
+
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -74,9 +87,8 @@ const handler = async (req: Request): Promise<Response> => {
     const priorityEn = priorityLabelsEn[priority] || "Medium";
     const priorityAr = priorityLabelsAr[priority] || "متوسطة";
     const createdAt = ticket?.created_at ? new Date(ticket.created_at) : new Date();
-    const createdDate = createdAt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-    const createdTime = createdAt.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true });
-    const createdDateTime = `${createdDate}, ${createdTime}`;
+    const createdDateTimeEn = formatDetailedDateTime(createdAt, "en-GB");
+    const createdDateTimeAr = formatDetailedDateTime(createdAt, "ar-AE");
 
     const reopenUrl = `https://jbj.ae/reopen-ticket?ticket=${ticketNumber}&token=${reopenToken}`;
     const surveyLink = `https://jbj.ae/ticket-survey?ticket=${encodeURIComponent(ticketNumber)}&email=${encodeURIComponent(customerEmail)}`;
@@ -90,7 +102,6 @@ const handler = async (req: Request): Promise<Response> => {
     const rateHtml = isResolved ? rateExperienceCard(surveyLink) : '';
     const rateHtmlAr = isResolved ? rateExperienceCardAr(surveyLink) : '';
 
-    // BILINGUAL: EN → Arabic divider → AR → Gold divider → Locked sections
     const bodyContent = `<tr><td class="content-pad" style="padding:32px;">
 <p style="font-size:15px;color:#333;margin:0 0 16px;">Dear <strong>${customerName}</strong>,</p>
 <p style="font-size:14px;color:#555;margin:0 0 24px;">Our support team has reviewed your ticket and provided a response below.</p>
@@ -100,14 +111,13 @@ ${ticketSummaryCard([
   { label: 'Subject', value: subject },
   { label: 'Category', value: categoryEn },
   { label: 'Priority', value: priorityEn },
-  { label: 'Submitted', value: createdDateTime },
+  { label: 'Submitted', value: createdDateTimeEn },
 ])}
 ${teamReplyCard("JBJ Support Team Reply", replyMessage)}
 ${rateHtml}
 ${reopenHtml}
 ${arabicDivider()}
-</td></tr>
-<tr><td class="content-pad" style="padding:0 32px 32px;direction:rtl;text-align:right;">
+<div style="direction:rtl;text-align:right;">
 <p style="font-size:15px;color:#333;margin:0 0 16px;">عزيزي/عزيزتي <strong>${customerName}</strong>،</p>
 <p style="font-size:14px;color:#555;margin:0 0 24px;">قام فريق الدعم لدينا بمراجعة تذكرتك وقدم رداً أدناه.</p>
 ${ticketSummaryCardAr([
@@ -115,11 +125,12 @@ ${ticketSummaryCardAr([
   { label: 'الموضوع', value: subject },
   { label: 'الفئة', value: categoryAr },
   { label: 'الأولوية', value: priorityAr },
-  { label: 'تاريخ ووقت الإرسال', value: createdDateTime },
+  { label: 'تاريخ ووقت الإرسال', value: createdDateTimeAr },
 ])}
 ${teamReplyCard("رد فريق دعم JBJ", replyMessage)}
 ${rateHtmlAr}
 ${reopenHtmlAr}
+</div>
 ${sharedSections("support ticket", "JBJ Global Real Estate Support Team")}
 </td></tr>`;
 
