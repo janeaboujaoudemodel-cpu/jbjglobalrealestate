@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -35,14 +35,63 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
     signOut,
   } = useAuth();
   const location = useLocation();
+  const [loadingTimedOut, setLoadingTimedOut] = useState(false);
+
+  useEffect(() => {
+    if (!(authLoading || ownerLoading)) {
+      setLoadingTimedOut(false);
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      setLoadingTimedOut(true);
+    }, 8000);
+
+    return () => window.clearTimeout(timer);
+  }, [authLoading, ownerLoading, location.pathname]);
 
   // Show loading state while checking auth OR owner status
   if ((authLoading || ownerLoading) && showLoading) {
+    if (!loadingTimedOut) {
+      return (
+        <div className="min-h-screen bg-black flex items-center justify-center">
+          <div className="text-center px-6">
+            <Shield className="w-12 h-12 text-gold animate-pulse mx-auto mb-4" />
+            <p className="text-zinc-200 font-medium">Verifying owner access…</p>
+            <p className="text-zinc-400 text-sm mt-2">Please wait a moment.</p>
+          </div>
+        </div>
+      );
+    }
+
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-center">
-          <Shield className="w-12 h-12 text-gold animate-pulse mx-auto mb-4" />
-          <p className="text-zinc-400">Verifying owner access...</p>
+      <div className="min-h-screen bg-black flex items-center justify-center p-6">
+        <div className="max-w-md text-center">
+          <div className="w-20 h-20 rounded-full bg-amber-500/10 flex items-center justify-center mx-auto mb-6">
+            <AlertTriangle className="w-10 h-10 text-amber-500" />
+          </div>
+          <h1 className="text-2xl font-bold text-white mb-3">Still verifying access</h1>
+          <p className="text-zinc-300 mb-6">The verification is taking longer than expected. You can retry now.</p>
+
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Button
+              onClick={() => {
+                setLoadingTimedOut(false);
+                refreshOwnerVerification();
+              }}
+              className="bg-gold hover:bg-gold/90 text-black font-semibold"
+            >
+              <RefreshCw className="w-4 h-4 mr-2" />
+              Retry Verification
+            </Button>
+            <Button
+              onClick={() => signOut()}
+              className="bg-white hover:bg-zinc-100 text-black border-2 border-white font-semibold"
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              Sign Out
+            </Button>
+          </div>
         </div>
       </div>
     );

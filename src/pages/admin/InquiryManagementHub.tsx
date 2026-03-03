@@ -56,6 +56,22 @@ const STATUS_CONFIG: Record<InquiryStatus, { label: string; color: string; icon:
 
 const PIPELINE_STAGES: InquiryStatus[] = ['pending', 'under_review', 'response_sent', 'completed'];
 
+const safeText = (value: unknown) => (typeof value === 'string' ? value : '');
+
+const formatSafeDate = (value: string | null | undefined, pattern: string) => {
+  if (!value) return '—';
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return '—';
+  return format(parsed, pattern);
+};
+
+const formatSafeDistance = (value: string | null | undefined) => {
+  if (!value) return 'Unknown';
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return 'Unknown';
+  return formatDistanceToNow(parsed, { addSuffix: true });
+};
+
 const InquiryManagementHub: React.FC = () => {
   const queryClient = useQueryClient();
   const [search, setSearch] = useState('');
@@ -113,29 +129,48 @@ const InquiryManagementHub: React.FC = () => {
   });
 
   const handleWhatsAppClick = (inquiry: Inquiry) => {
-    const phone = inquiry.phone?.replace(/[^0-9]/g, '');
-    if (!phone) { toast.error('No phone number available'); return; }
-    const msg = encodeURIComponent(`Hello ${inquiry.full_name}, regarding your inquiry about "${inquiry.subject}" — `);
-    window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
-    if (inquiry.status === 'pending') {
-      updateStatusMutation.mutate({ id: inquiry.id, status: 'under_review' });
+    try {
+      const phone = inquiry.phone?.replace(/[^0-9]/g, '');
+      if (!phone) {
+        toast.error('No phone number available');
+        return;
+      }
+
+      const msg = encodeURIComponent(`Hello ${inquiry.full_name}, regarding your inquiry about "${inquiry.subject}" — `);
+      window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+
+      if (inquiry.status === 'pending') {
+        updateStatusMutation.mutate({ id: inquiry.id, status: 'under_review' });
+      }
+
+      void supabase
+        .from('inquiries')
+        .update({ whatsapp_clicked_at: new Date().toISOString() })
+        .eq('id', inquiry.id)
+        .then(({ error }) => {
+          if (error) console.error('Failed to store WhatsApp timestamp:', error.message);
+        });
+    } catch (err) {
+      console.error('WhatsApp action failed:', err);
+      toast.error('Unable to open WhatsApp for this inquiry');
     }
-    supabase.from('inquiries').update({ whatsapp_clicked_at: new Date().toISOString() }).eq('id', inquiry.id);
   };
 
   const filtered = useMemo(() => {
-    return inquiries.filter(inq => {
+    return inquiries.filter((inq) => {
       if (activeTab !== 'all' && inq.status !== activeTab) return false;
       if (typeFilter !== 'all' && inq.inquiry_type !== typeFilter) return false;
+
       if (search) {
         const q = search.toLowerCase();
         return (
-          inq.full_name.toLowerCase().includes(q) ||
-          inq.email.toLowerCase().includes(q) ||
-          inq.subject.toLowerCase().includes(q) ||
-          (inq.property_name || '').toLowerCase().includes(q)
+          safeText(inq.full_name).toLowerCase().includes(q) ||
+          safeText(inq.email).toLowerCase().includes(q) ||
+          safeText(inq.subject).toLowerCase().includes(q) ||
+          safeText(inq.property_name).toLowerCase().includes(q)
         );
       }
+
       return true;
     });
   }, [inquiries, activeTab, typeFilter, search]);
@@ -305,8 +340,8 @@ const InquiryManagementHub: React.FC = () => {
                             </TableCell>
                             <TableCell>
                               <div className="text-xs text-zinc-500">
-                                <p>{format(new Date(inq.created_at), 'MMM d, yyyy')}</p>
-                                <p>{formatDistanceToNow(new Date(inq.created_at), { addSuffix: true })}</p>
+                                <p>{formatSafeDate(inq.created_at, 'MMM d, yyyy')}</p>
+                                <p>{formatSafeDistance(inq.created_at)}</p>
                               </div>
                             </TableCell>
                             <TableCell className="text-right">
@@ -379,7 +414,7 @@ const InquiryManagementHub: React.FC = () => {
                       <p className="text-xs text-zinc-500 uppercase tracking-wide mb-1">Details</p>
                       <div className="space-y-1 text-sm">
                         <p><span className="text-zinc-500">Type:</span> <span className="capitalize">{(selectedInquiry.inquiry_type || 'general').replace(/_/g, ' ')}</span></p>
-                        <p><span className="text-zinc-500">Source:</span> {selectedInquiry.source}</p>
+                        <p><span className="text-zinc-500">Source:</span> {selectedInquiry.source || '—'}</p>
                         {selectedInquiry.property_name && (
                           <p className="flex items-center gap-1">
                             <Building2 className="w-3.5 h-3.5 text-gold" />
@@ -388,7 +423,7 @@ const InquiryManagementHub: React.FC = () => {
                         )}
                         <p className="flex items-center gap-1 text-zinc-400">
                           <Calendar className="w-3.5 h-3.5" />
-                          {format(new Date(selectedInquiry.created_at), 'PPpp')}
+                          {formatSafeDate(selectedInquiry.created_at, 'PPpp')}
                         </p>
                       </div>
                     </div>
@@ -492,7 +527,7 @@ const InquiryManagementHub: React.FC = () => {
                   {selectedInquiry.whatsapp_clicked_at && (
                     <p className="text-xs text-zinc-400 flex items-center gap-1">
                       <MessageCircle className="w-3 h-3" />
-                      WhatsApp contacted {formatDistanceToNow(new Date(selectedInquiry.whatsapp_clicked_at), { addSuffix: true })}
+                      WhatsApp contacted {formatSafeDistance(selectedInquiry.whatsapp_clicked_at)}
                     </p>
                   )}
                 </div>

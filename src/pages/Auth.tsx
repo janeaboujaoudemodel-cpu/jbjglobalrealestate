@@ -55,6 +55,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
   const [reactivationEmail, setReactivationEmail] = useState("");
   const [reactivationPassword, setReactivationPassword] = useState("");
   const [reactivating, setReactivating] = useState(false);
+  const [isReactivationPreview, setIsReactivationPreview] = useState(false);
 
   // Resend cooldown
   const [resendCooldown, setResendCooldown] = useState(0);
@@ -77,11 +78,21 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
 
   useEffect(() => () => { if (cooldownRef.current) clearInterval(cooldownRef.current); }, []);
 
-  // Handle reset mode from URL (e.g. magic link redirect)
+  // Handle mode from URL (e.g. magic link redirect)
   useEffect(() => {
     const modeParam = searchParams.get("mode");
     if (modeParam === "reset") setMode("reset");
   }, [searchParams]);
+
+  // Test-only: force reactivation dialog preview via /auth?test_reactivation=1
+  useEffect(() => {
+    if (searchParams.get("test_reactivation") !== "1") return;
+
+    setIsReactivationPreview(true);
+    setReactivationEmail(searchParams.get("test_email") || email || "preview@jbj.test");
+    setReactivationPassword("__preview__");
+    setShowReactivationDialog(true);
+  }, [searchParams, email]);
 
   // ─── Validation ────────────────────────────────────────────
   const validateForm = () => {
@@ -270,6 +281,13 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
   };
 
   const handleReactivateAccount = async () => {
+    if (isReactivationPreview) {
+      setShowReactivationDialog(false);
+      setIsReactivationPreview(false);
+      toast.success("Preview complete — this popup only appears in real cases for users.");
+      return;
+    }
+
     setReactivating(true);
     try {
       // Call reactivate endpoint (no auth needed - uses service role)
@@ -653,14 +671,20 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
       </div>
 
       {/* Account Reactivation Dialog */}
-      <AlertDialog open={showReactivationDialog} onOpenChange={setShowReactivationDialog}>
+      <AlertDialog
+        open={showReactivationDialog}
+        onOpenChange={(open) => {
+          setShowReactivationDialog(open);
+          if (!open && isReactivationPreview) setIsReactivationPreview(false);
+        }}
+      >
         <AlertDialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 max-w-md">
           <AlertDialogHeader>
             <div className="mx-auto mb-4 w-16 h-16 rounded-full bg-emerald-100 border-2 border-emerald-300 flex items-center justify-center">
               <UserCheck className="h-7 w-7 text-emerald-600" />
             </div>
             <AlertDialogTitle className="text-center text-xl text-foreground">
-              We Found Your Account
+              {isReactivationPreview ? "We Found Your Account (Preview)" : "We Found Your Account"}
             </AlertDialogTitle>
             <AlertDialogDescription asChild>
               <div className="text-center space-y-4 text-sm text-muted-foreground">
@@ -696,6 +720,10 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
               disabled={reactivating}
               onClick={() => {
                 setShowReactivationDialog(false);
+                if (isReactivationPreview) {
+                  setIsReactivationPreview(false);
+                  return;
+                }
                 setEmail("");
                 setPassword("");
                 setMode("signup");
