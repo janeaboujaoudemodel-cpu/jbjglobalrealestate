@@ -621,28 +621,24 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 }}
               />
             </div>
-            {/* Premium Typography - changes based on transparent state */}
+            {/* Premium Typography - clean transition, no text-shadow ghosting */}
             <div className="flex flex-col shrink-0">
               <span 
-                className={`font-bold text-sm xl:text-base tracking-[0.12em] uppercase whitespace-nowrap leading-none transition-all duration-300`}
+                className={`font-bold text-sm xl:text-base tracking-[0.12em] uppercase whitespace-nowrap leading-none transition-colors duration-300`}
                 style={isFullyTransparent ? {
                   color: '#FFFFFF',
-                  textShadow: '0 2px 8px rgba(0,0,0,0.5)'
                 } : {
                   background: 'linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 30%, #C8A766 70%, #D4AF37 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
-                  textShadow: '0 2px 10px rgba(200,167,102,0.3)',
-                  filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.5))'
                 }}
               >
                 JBJ Global Real Estate
               </span>
               <span 
-                className="text-[9px] tracking-[0.25em] uppercase mt-1 transition-all duration-300"
+                className="text-[9px] tracking-[0.25em] uppercase mt-1 transition-colors duration-300"
                 style={isFullyTransparent ? {
                   color: '#FFFFFF',
-                  textShadow: '0 1px 4px rgba(0,0,0,0.5)'
                 } : {
                   background: 'linear-gradient(90deg, #C8A766 0%, #D4AF37 50%, #C8A766 100%)',
                   WebkitBackgroundClip: 'text',
