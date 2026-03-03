@@ -4,14 +4,14 @@ const ASSET_BASE = "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/p
 const LOGO_URL = `${ASSET_BASE}/jbj-monogram-dark.png?v=3`;
 const SITE_URL = "https://jbj.ae";
 
-const ICON_AI_TOOLS = `${ASSET_BASE}/email-icons%2Fai-tools.svg`;
-const ICON_GUIDES = `${ASSET_BASE}/email-icons%2Fguides.svg`;
-const ICON_PROPERTIES = `${ASSET_BASE}/email-icons%2Fproperties.svg`;
-const ICON_LOCK = `${ASSET_BASE}/email-icons%2Flock.svg`;
-const ICON_HEADPHONES = `${ASSET_BASE}/email-icons%2Fheadphones.svg`;
+const ICON_AI_TOOLS = `${ASSET_BASE}/email-icons/ai-tools.svg`;
+const ICON_GUIDES = `${ASSET_BASE}/email-icons/guides.svg`;
+const ICON_PROPERTIES = `${ASSET_BASE}/email-icons/properties.svg`;
+const ICON_LOCK = `${ASSET_BASE}/email-icons/lock.svg`;
+const ICON_HEADPHONES = `${ASSET_BASE}/email-icons/headphones.svg`;
 
-const BOOK_MARKET_REPORT = `${ASSET_BASE}/email-books%2Fmarket-report-book.jpg`;
-const BOOK_GUIDES_LIBRARY = `${ASSET_BASE}/email-books%2Fguides-library-book.jpg`;
+const BOOK_MARKET_REPORT = `${ASSET_BASE}/email-books/market-report-book.jpg`;
+const BOOK_GUIDES_LIBRARY = `${ASSET_BASE}/email-books/guides-library-book.jpg`;
 
 export { LOGO_URL, SITE_URL };
 
@@ -57,7 +57,7 @@ function recommendedCard(title: string, href: string, iconUrl: string): string {
 }
 
 export function recommendedActionsHtml(): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:32px 0 24px;"><tr><td style="padding-top:28px;border-top:2px solid #C8A76633;text-align:center;"><p style="color:#1a1a1a;font-size:16px;font-weight:700;margin:0 0 16px;">Recommended For You</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${recommendedCard("AI Tools", `${SITE_URL}/ai-tools`, ICON_AI_TOOLS)}${recommendedCard("Guides", `${SITE_URL}/guides`, ICON_GUIDES)}${recommendedCard("Properties", `${SITE_URL}/properties`, ICON_PROPERTIES)}</tr></table></td></tr></table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:36px 0 28px;"><tr><td style="padding-top:34px;border-top:2px solid #C8A76633;text-align:center;"><p style="color:#1a1a1a;font-size:16px;font-weight:700;margin:0 0 18px;line-height:1.4;">Recommended For You</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${recommendedCard("AI Tools", `${SITE_URL}/ai-tools`, ICON_AI_TOOLS)}${recommendedCard("Guides", `${SITE_URL}/guides`, ICON_GUIDES)}${recommendedCard("Properties", `${SITE_URL}/properties`, ICON_PROPERTIES)}</tr></table></td></tr></table>`;
 }
 
 function bookCard(title: string, subtitle: string, href: string, img: string): string {
@@ -65,7 +65,7 @@ function bookCard(title: string, subtitle: string, href: string, img: string): s
 }
 
 export function booksShowcaseHtml(): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:10px 0 20px;"><tr><td style="text-align:center;"><p style="color:#1a1a1a;font-size:14px;font-weight:700;margin:0 0 14px;">Explore Our Library</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${bookCard("Market Report", "Real Estate Intelligence", `${SITE_URL}/market-intelligence`, BOOK_MARKET_REPORT)}${bookCard("Guides Library", "Expert Knowledge Hub", `${SITE_URL}/guides`, BOOK_GUIDES_LIBRARY)}</tr></table></td></tr></table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:12px 0 24px;"><tr><td style="text-align:center;"><p style="color:#1a1a1a;font-size:14px;font-weight:700;margin:0 0 14px;">Explore Our Library</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${bookCard("Market Report", "Real Estate Intelligence", `${SITE_URL}/market-intelligence/reports`, BOOK_MARKET_REPORT)}${bookCard("Guides Library", "Expert Knowledge Hub", `${SITE_URL}/guides`, BOOK_GUIDES_LIBRARY)}</tr></table></td></tr></table>`;
 }
 
 export function suggestedActionsHtml(): string {
@@ -75,7 +75,7 @@ export function suggestedActionsHtml(): string {
 export function feedbackHtml(context = "general"): string {
   const reviewUrl = `${SITE_URL}/reviews?source=${context}&mode=quick`;
   const surveyUrl = `${SITE_URL}/ticket-survey?source=${context}&context=${context}`;
-  return `<table width="100%" cellpadding="0" cellspacing="0" style="margin-top:32px;"><tr><td style="padding-top:28px;border-top:2px solid #C8A76633;" align="center"><p style="color:#1a1a1a;font-size:16px;font-weight:700;margin:0 0 6px;">We Value Your Feedback</p><p style="color:#888;font-size:13px;margin:0 0 18px;">Help us improve by sharing your experience</p><table cellpadding="0" cellspacing="0" align="center"><tr><td style="padding:0 6px;"><a href="${reviewUrl}" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:12px 26px;border-radius:12px;font-weight:700;font-size:13px;border:1px solid #C8A76650;">Leave a Review</a></td><td style="padding:0 6px;"><a href="${surveyUrl}" style="display:inline-block;background:#FDFBF7;border:2px solid #C8A766;color:#1a1a1a;text-decoration:none;padding:10px 24px;border-radius:12px;font-weight:700;font-size:13px;">Take Survey</a></td></tr></table></td></tr></table>`;
+  return `<table width="100%" cellpadding="0" cellspacing="0" style="margin-top:34px;"><tr><td style="padding-top:30px;border-top:2px solid #C8A76633;" align="center"><p style="color:#1a1a1a;font-size:16px;font-weight:700;line-height:1.4;margin:0 0 8px;">We Value Your Feedback</p><p style="color:#888;font-size:13px;margin:0 0 18px;">Help us improve by sharing your experience</p><table cellpadding="0" cellspacing="0" align="center"><tr><td style="padding:0 6px;"><a href="${reviewUrl}" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:12px 26px;border-radius:12px;font-weight:700;font-size:13px;border:1px solid #C8A76650;">Leave a Review</a></td><td style="padding:0 6px;"><a href="${surveyUrl}" style="display:inline-block;background:#FDFBF7;border:2px solid #C8A766;color:#1a1a1a;text-decoration:none;padding:10px 24px;border-radius:12px;font-weight:700;font-size:13px;">Take Survey</a></td></tr></table></td></tr></table>`;
 }
 
 export function signOffHtml(teamName = "JBJ Global Real Estate Team"): string {

@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { emailShell, sharedSections } from "../_shared/email-html.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
@@ -177,7 +178,7 @@ const sendEmail = async (to: string, subject: string, html: string) => {
     body: JSON.stringify({
       from: "JBJ Global Real Estate <contact@jbj.ae>",
       to: [to],
-      replyTo: "CONTACT@JBJ.AE",
+      reply_to: "CONTACT@JBJ.AE",
       subject,
       html,
     }),
@@ -273,71 +274,27 @@ const handler = async (req: Request): Promise<Response> => {
     console.log("Processing market report request for:", safeEmail);
 
     // Build email template with escaped content
-    const companyEmailHtml = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <style>
-          body { font-family: Arial, sans-serif; background: #0a0a0a; color: #fff; padding: 40px; }
-          .container { max-width: 600px; margin: 0 auto; background: #1a1a1a; border-radius: 16px; padding: 30px; border: 1px solid #333; }
-          .header { text-align: center; margin-bottom: 30px; border-bottom: 1px solid rgba(168, 146, 90, 0.3); padding-bottom: 20px; }
-          .logo { font-size: 24px; font-weight: 700; letter-spacing: 0.1em; }
-          .logo span { color: #A8925A; }
-          .badge { display: inline-block; padding: 8px 16px; background: rgba(168, 146, 90, 0.2); border-radius: 50px; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: #A8925A; margin-bottom: 20px; }
-          h1 { color: #A8925A; font-size: 22px; margin-bottom: 20px; }
-          .field { margin-bottom: 16px; padding: 15px; background: #0a0a0a; border-radius: 8px; border: 1px solid #333; }
-          .label { color: #888; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 5px; }
-          .value { color: #fff; font-size: 16px; }
-          .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #333; text-align: center; color: #666; font-size: 12px; }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <div class="header">
-            <div class="logo"><span>JBJ</span> GLOBAL REAL ESTATE</div>
-          </div>
-          <div class="badge">New Market Report Download</div>
-          <h1>New Lead from Market Report</h1>
-          <p style="color: #aaa; margin-bottom: 25px;">A visitor has downloaded the UAE Market Intelligence book.</p>
-          
-          <div class="field">
-            <div class="label">Full Name</div>
-            <div class="value">${safeFullName}</div>
-          </div>
-          
-          <div class="field">
-            <div class="label">Email</div>
-            <div class="value"><a href="mailto:${safeEmail}" style="color: #A8925A;">${safeEmail}</a></div>
-          </div>
-          
-          <div class="field">
-            <div class="label">Phone</div>
-            <div class="value"><a href="tel:${safePhone}" style="color: #A8925A;">${safePhone}</a></div>
-          </div>
-          
-          <div class="field">
-            <div class="label">Nationality</div>
-            <div class="value">${safeNationality}</div>
-          </div>
-          
-          <div class="field">
-            <div class="label">Preferred Language</div>
-            <div class="value">${safeLanguage}</div>
-          </div>
-          
-          <div class="footer">
-            <p>This lead was captured from the Market Report download page.</p>
-            <p style="margin-top: 10px;">JBJ Global Real Estate — Real Estate Brokerage</p>
-          </div>
-        </div>
-      </body>
-      </html>
-    `;
+    const companyEmailHtml = emailShell("Market Intelligence Desk", `<tr><td class="content-pad" style="padding:32px;">
+<p style="font-size:15px;color:#333;margin:0 0 16px;">A new lead has downloaded the UAE Market Report.</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;">
+<tr><td style="padding:20px;">
+<p style="color:#666;font-size:12px;margin:0 0 8px;text-transform:uppercase;letter-spacing:1px;">Lead Summary</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr><td style="padding:7px 0;color:#666;font-size:13px;width:40%;">Lead Type</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">Market Report Download</td></tr>
+<tr><td style="padding:7px 0;color:#666;font-size:13px;">Full Name</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${safeFullName}</td></tr>
+<tr><td style="padding:7px 0;color:#666;font-size:13px;">Email</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;"><a href="mailto:${safeEmail}" style="color:#1a1a1a;text-decoration:underline;">${safeEmail}</a></td></tr>
+<tr><td style="padding:7px 0;color:#666;font-size:13px;">Phone</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;"><a href="tel:${safePhone}" style="color:#1a1a1a;text-decoration:underline;">${safePhone}</a></td></tr>
+<tr><td style="padding:7px 0;color:#666;font-size:13px;">Nationality</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${safeNationality}</td></tr>
+<tr><td style="padding:7px 0;color:#666;font-size:13px;">Preferred Language</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${safeLanguage}</td></tr>
+</table>
+</td></tr></table>
+${sharedSections("market report", "JBJ Global Real Estate Market Intelligence Team")}
+</td></tr>`);
 
     const subject = `New Market Report Download: ${safeFullName}`;
 
     // Send to company email
-    await sendEmail("contact@jbj.ae", subject, companyEmailHtml);
+    await sendEmail("CONTACT@JBJ.AE", subject, companyEmailHtml);
 
     console.log("Emails sent successfully for:", safeEmail);
 
