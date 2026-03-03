@@ -70,9 +70,9 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
     <div
       className={`bg-zinc-950/90 backdrop-blur-md border border-zinc-800/50 rounded-2xl p-4 md:p-6 w-full ${className}`}
     >
-      <div className="flex flex-wrap items-center gap-3 w-full">
+      <div className="flex flex-wrap items-center gap-3 md:gap-4 w-full">
         {/* Keyword Search */}
-        <div className="relative flex-1 min-w-[140px]">
+        <div className="relative flex-1 min-w-[170px]">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
           <Input
             placeholder="Keyword"
@@ -84,11 +84,11 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
         </div>
 
         {/* Divider */}
-        <div className="hidden md:block h-8 w-px bg-gradient-to-b from-transparent via-zinc-600 to-transparent" />
+        <div className="hidden md:block h-8 w-px bg-gradient-to-b from-transparent via-zinc-500/90 to-transparent" />
 
         {/* Emirates / Location */}
         <Select value={location || "all"} onValueChange={(value) => setLocation(value === "all" ? null : value)}>
-          <SelectTriggerDark className="w-[140px] h-12 rounded-lg">
+          <SelectTriggerDark className="w-[150px] h-12 rounded-lg">
             <MapPin className="w-4 h-4 mr-2 text-zinc-500" />
             <SelectValue placeholder="Emirates" />
           </SelectTriggerDark>
@@ -105,13 +105,13 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
         </Select>
 
         {/* Divider */}
-        <div className="hidden md:block h-8 w-px bg-gradient-to-b from-transparent via-zinc-600 to-transparent" />
+        <div className="hidden md:block h-8 w-px bg-gradient-to-b from-transparent via-zinc-500/90 to-transparent" />
 
         {/* Developer */}
         <Select value={developerId || "all"} onValueChange={(value) => setDeveloperId(value === "all" ? null : value)}>
-          <SelectTriggerDark className="w-[160px] h-12 rounded-lg">
+          <SelectTriggerDark className="w-[190px] h-12 rounded-lg">
             <Building2 className="w-4 h-4 mr-2 text-zinc-500" />
-            <SelectValue placeholder="Developer" />
+            <SelectValue placeholder="Developer / Project" />
           </SelectTriggerDark>
           <SelectContentDark className="max-h-72">
             <SelectItemDark value="all">All Developers</SelectItemDark>
@@ -129,7 +129,7 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
                       {dev.name.charAt(0)}
                     </span>
                   )}
-                  <span className="truncate max-w-[120px]">{dev.name}</span>
+                  <span className="truncate max-w-[132px]">{dev.name}</span>
                 </span>
               </SelectItemDark>
             ))}
@@ -137,11 +137,11 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
         </Select>
 
         {/* Divider */}
-        <div className="hidden md:block h-8 w-px bg-gradient-to-b from-transparent via-zinc-600 to-transparent" />
+        <div className="hidden md:block h-8 w-px bg-gradient-to-b from-transparent via-zinc-500/90 to-transparent" />
 
         {/* Beds */}
         <Select value={beds || "all"} onValueChange={(value) => setBeds(value === "all" ? null : value)}>
-          <SelectTriggerDark className="w-[110px] h-12 rounded-lg">
+          <SelectTriggerDark className="w-[126px] h-12 rounded-lg">
             <BedDouble className="w-4 h-4 mr-2 text-zinc-500" />
             <SelectValue placeholder="Beds" />
           </SelectTriggerDark>
@@ -157,11 +157,11 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
         </Select>
 
         {/* Divider */}
-        <div className="hidden md:block h-8 w-px bg-gradient-to-b from-transparent via-zinc-600 to-transparent" />
+        <div className="hidden md:block h-8 w-px bg-gradient-to-b from-transparent via-zinc-500/90 to-transparent" />
 
         {/* Price Range */}
         <Select value={priceRange || "all"} onValueChange={(value) => setPriceRange(value === "all" ? null : value)}>
-          <SelectTriggerDark className="w-[140px] h-12 rounded-lg">
+          <SelectTriggerDark className="w-[148px] h-12 rounded-lg">
             <DollarSign className="w-4 h-4 mr-2 text-zinc-500" />
             <SelectValue placeholder="Price Range" />
           </SelectTriggerDark>
@@ -176,7 +176,7 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
         </Select>
 
         {/* Divider */}
-        <div className="hidden md:block h-8 w-px bg-gradient-to-b from-transparent via-zinc-600 to-transparent" />
+        <div className="hidden md:block h-8 w-px bg-gradient-to-b from-transparent via-zinc-500/90 to-transparent" />
 
         {/* Advanced Filters Link */}
         <Button
@@ -184,16 +184,17 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
           onClick={() => navigate("/properties")}
           className="h-12 px-4 bg-zinc-900/80 border-zinc-700/50 text-white hover:bg-zinc-800 hover:text-white rounded-lg"
         >
-          <Filter className="w-4 h-4" />
+          <Filter className="w-4 h-4 mr-2" />
+          Filters
         </Button>
 
         {/* Divider */}
-        <div className="hidden md:block h-8 w-px bg-gradient-to-b from-transparent via-zinc-600 to-transparent" />
+        <div className="hidden md:block h-8 w-px bg-gradient-to-b from-transparent via-zinc-500/90 to-transparent" />
 
         {/* Search Button */}
         <Button
           onClick={handleSearch}
-          className="h-12 px-8 rounded-lg bg-gradient-to-r from-gold to-gold-dark text-black font-bold hover:brightness-110 hover:shadow-[0_0_25px_rgba(200,167,102,0.6)] transition-all duration-300 shadow-[0_0_15px_rgba(200,167,102,0.4)] cursor-pointer"
+          className="h-12 px-8 rounded-lg bg-gradient-to-r from-gold to-gold-dark text-black font-bold hover:brightness-110 hover:shadow-[0_0_25px_rgba(200,167,102,0.6)] transition-all duration-300 shadow-[0_0_15px_rgba(200,167,102,0.4)] cursor-pointer ml-0.5"
         >
           SEARCH
         </Button>
