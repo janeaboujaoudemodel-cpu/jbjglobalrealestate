@@ -1,6 +1,8 @@
 const SITE_URL = "https://jbj.ae";
 const ASSET_BASE_URL = "https://jbjglobalrealestate.lovable.app";
 const LOGO_URL = `${ASSET_BASE_URL}/jbj-monogram-light-on-dark.png`;
+const ICON_BASE_URL = `${ASSET_BASE_URL}/email-icons`;
+const BOOK_BASE_URL = `${ASSET_BASE_URL}/email-books`;
 
 export { LOGO_URL, SITE_URL };
 
@@ -67,47 +69,28 @@ export function inquiryBox(contextLabel: string): string {
 
 // Ticket support: RED filled CIRCLE with WHITE headset icon
 export function ticketSupportEmbed(): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:16px 0 22px;"><tr><td style="padding:24px 20px;background:linear-gradient(135deg,#fff5f5,#ffe9e9);border:1px solid #ef4444;border-radius:18px;text-align:center;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;"><tr><td style="width:48px;height:48px;background:#dc2626;border-radius:48px;border:2px solid #b91c1c;text-align:center;vertical-align:middle;line-height:48px;">${SVG_ICONS.headsetWhite}</td></tr></table><p style="margin:0 0 4px;font-size:11px;font-weight:700;color:#dc2626;text-transform:uppercase;letter-spacing:2px;">24/7 SUPPORT</p><p style="margin:0 0 6px;font-size:16px;font-weight:700;color:#7f1d1d;">Need Help? Open a Support Ticket</p><p style="margin:0 0 14px;font-size:13px;color:#991b1b;">Our team typically responds within 24 hours</p><a href="${SITE_URL}/support" style="display:inline-block;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;text-decoration:none;padding:12px 30px;border-radius:12px;font-weight:700;font-size:13px;">Submit a Ticket</a></td></tr></table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:16px 0 22px;"><tr><td style="padding:24px 20px;background:linear-gradient(135deg,#fff5f5,#ffe9e9);border:1px solid #ef4444;border-radius:18px;text-align:center;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:#dc2626;border-radius:52px;text-align:center;vertical-align:middle;"><img src="${ICON_BASE_URL}/headphones-white.svg" alt="Support" width="24" height="24" style="display:block;width:24px;height:24px;margin:14px auto;" /></td></tr></table><p style="margin:0 0 4px;font-size:11px;font-weight:700;color:#dc2626;text-transform:uppercase;letter-spacing:2px;">24/7 SUPPORT</p><p style="margin:0 0 6px;font-size:16px;font-weight:700;color:#7f1d1d;">Need Help? Open a Support Ticket</p><p style="margin:0 0 14px;font-size:13px;color:#991b1b;">Our team typically responds within 24 hours</p><a href="${SITE_URL}/support" style="display:inline-block;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;text-decoration:none;padding:12px 30px;border-radius:12px;font-weight:700;font-size:13px;">Submit a Ticket</a></td></tr></table>`;
 }
 
 export function ticketSupportEmbedAr(): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:16px 0 22px;direction:rtl;"><tr><td style="padding:24px 20px;background:linear-gradient(135deg,#fff5f5,#ffe9e9);border:1px solid #ef4444;border-radius:18px;text-align:center;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;"><tr><td style="width:48px;height:48px;background:#dc2626;border-radius:48px;border:2px solid #b91c1c;text-align:center;vertical-align:middle;line-height:48px;">${SVG_ICONS.headsetWhite}</td></tr></table><p style="margin:0 0 4px;font-size:11px;font-weight:700;color:#dc2626;text-transform:uppercase;letter-spacing:2px;">دعم على مدار الساعة</p><p style="margin:0 0 6px;font-size:16px;font-weight:700;color:#7f1d1d;">هل تحتاج مساعدة؟ افتح تذكرة دعم</p><p style="margin:0 0 14px;font-size:13px;color:#991b1b;">فريقنا يرد عادةً خلال ٢٤ ساعة</p><a href="${SITE_URL}/support" style="display:inline-block;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;text-decoration:none;padding:12px 30px;border-radius:12px;font-weight:700;font-size:13px;">إرسال تذكرة</a></td></tr></table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:16px 0 22px;direction:rtl;"><tr><td style="padding:24px 20px;background:linear-gradient(135deg,#fff5f5,#ffe9e9);border:1px solid #ef4444;border-radius:18px;text-align:center;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:#dc2626;border-radius:52px;text-align:center;vertical-align:middle;"><img src="${ICON_BASE_URL}/headphones-white.svg" alt="الدعم" width="24" height="24" style="display:block;width:24px;height:24px;margin:14px auto;" /></td></tr></table><p style="margin:0 0 4px;font-size:11px;font-weight:700;color:#dc2626;text-transform:uppercase;letter-spacing:2px;">دعم على مدار الساعة</p><p style="margin:0 0 6px;font-size:16px;font-weight:700;color:#7f1d1d;">هل تحتاج مساعدة؟ افتح تذكرة دعم</p><p style="margin:0 0 14px;font-size:13px;color:#991b1b;">فريقنا يرد عادةً خلال ٢٤ ساعة</p><a href="${SITE_URL}/support" style="display:inline-block;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;text-decoration:none;padding:12px 30px;border-radius:12px;font-weight:700;font-size:13px;">إرسال تذكرة</a></td></tr></table>`;
 }
 
 // Recommended cards: circle icon frame only, NO square border around card
-function recommendedCard(title: string, href: string, iconSvg: string): string {
-  return `<td width="33%" style="text-align:center;padding:4px;vertical-align:top;"><a href="${href}" style="display:block;text-decoration:none;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;"><tr><td style="padding:18px 8px;text-align:center;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:#fff;border:1.5px solid #1a1a1a;border-radius:52px;text-align:center;vertical-align:middle;">${iconSvg}</td></tr></table><p style="margin:0;font-size:12px;color:#1a1a1a;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">${title}</p></td></tr></table></a></td>`;
+function recommendedCard(title: string, href: string, iconPath: string): string {
+  return `<td width="33%" style="text-align:center;padding:4px;vertical-align:top;"><a href="${href}" style="display:block;text-decoration:none;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;"><tr><td style="padding:18px 8px;text-align:center;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:#fff;border:1.5px solid #1a1a1a;border-radius:52px;text-align:center;vertical-align:middle;"><img src="${iconPath}" alt="${title}" width="24" height="24" style="display:block;width:24px;height:24px;margin:14px auto;" /></td></tr></table><p style="margin:0;font-size:12px;color:#1a1a1a;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">${title}</p></td></tr></table></a></td>`;
 }
 
 export function recommendedActionsHtml(): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:10px 0 18px;"><tr><td style="text-align:center;"><p style="color:#1a1a1a;font-size:16px;font-weight:700;margin:0 0 14px;">Recommended For You</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${recommendedCard("AI Tools", `${SITE_URL}/ai-tools`, SVG_ICONS.aiTools)}${recommendedCard("Guides", `${SITE_URL}/guides`, SVG_ICONS.guides)}${recommendedCard("Properties", `${SITE_URL}/properties`, SVG_ICONS.properties)}</tr></table></td></tr></table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:10px 0 18px;"><tr><td style="text-align:center;"><p style="color:#1a1a1a;font-size:16px;font-weight:700;margin:0 0 14px;">Recommended For You</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${recommendedCard("AI Tools", `${SITE_URL}/ai-tools`, `${ICON_BASE_URL}/ai-tools.svg`)}${recommendedCard("Guides", `${SITE_URL}/guides`, `${ICON_BASE_URL}/guides.svg`)}${recommendedCard("Properties", `${SITE_URL}/properties`, `${ICON_BASE_URL}/properties.svg`)}</tr></table></td></tr></table>`;
 }
 
-function book3dCover(title: string, subtitle: string, href: string, accentColor: string): string {
-  return `<td width="50%" style="vertical-align:top;padding:6px;"><a href="${href}" style="display:block;text-decoration:none;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;"><tr><td style="padding:0;text-align:center;">
-<div style="display:inline-block;position:relative;width:140px;height:170px;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;width:140px;height:170px;">
-<tr><td style="background:linear-gradient(135deg,#1a1a1a,#111,#1a1a1a);border:1px solid #C8A766;border-radius:8px;padding:0;vertical-align:top;position:relative;box-shadow:8px 8px 24px rgba(0,0,0,0.5),-2px -2px 8px rgba(200,167,102,0.08);">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="height:6px;background:linear-gradient(90deg,#C8A766,#B8956E);border-radius:8px 8px 0 0;"></td></tr></table>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding:16px 12px 10px;text-align:center;">
-<p style="margin:0 0 4px;font-size:9px;color:#C8A766;text-transform:uppercase;letter-spacing:2px;font-weight:700;">★ 2026 Edition</p>
-<p style="margin:0 0 6px;font-size:14px;color:#fff;font-weight:800;line-height:1.2;">${title}</p>
-<p style="margin:0 0 8px;font-size:13px;color:${accentColor};font-weight:700;line-height:1.2;">${subtitle}</p>
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td style="width:30px;height:2px;background:linear-gradient(90deg,#C8A766,#B8956E);"></td></tr></table>
-</td></tr></table>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding:6px 12px 12px;text-align:center;">
-<p style="margin:0;font-size:8px;color:#666;text-transform:uppercase;letter-spacing:1.5px;">JBJ Global Real Estate</p>
-</td></tr></table>
-</td></tr>
-</table>
-</div>
-<p style="margin:10px 0 2px;color:#1a1a1a;font-size:13px;font-weight:700;">${title}</p>
-<p style="margin:0;color:#8b7355;font-size:11px;letter-spacing:1px;text-transform:uppercase;">${subtitle}</p>
-</td></tr></table></a></td>`;
+function book3dCover(title: string, subtitle: string, href: string, imageUrl: string): string {
+  return `<td width="50%" style="vertical-align:top;padding:6px;"><a href="${href}" style="display:block;text-decoration:none;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;"><tr><td style="padding:0;text-align:center;"><img src="${imageUrl}" alt="${title}" width="140" style="width:140px;height:170px;object-fit:cover;display:block;margin:0 auto;border-radius:8px;border:1px solid #C8A766;box-shadow:8px 8px 24px rgba(0,0,0,0.35);" /><p style="margin:10px 0 2px;color:#1a1a1a;font-size:13px;font-weight:700;">${title}</p><p style="margin:0;color:#8b7355;font-size:11px;letter-spacing:1px;text-transform:uppercase;">${subtitle}</p></td></tr></table></a></td>`;
 }
 
 export function booksShowcaseHtml(): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:6px 0 16px;"><tr><td style="text-align:center;"><p style="color:#1a1a1a;font-size:14px;font-weight:700;margin:0 0 12px;">Explore Our Library</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${book3dCover("UAE Real Estate", "Market Intelligence", `${SITE_URL}/market-intelligence/reports`, "#C8A766")}${book3dCover("Guides Library", "2026 Edition", `${SITE_URL}/guides`, "#C8A766")}</tr></table></td></tr></table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:6px 0 16px;"><tr><td style="text-align:center;"><p style="color:#1a1a1a;font-size:14px;font-weight:700;margin:0 0 12px;">Explore Our Library</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${book3dCover("Market Intelligence Report", "UAE Real Estate", `${SITE_URL}/market-intelligence`, `${BOOK_BASE_URL}/market-intelligence-cover.jpg`)}${book3dCover("Guides Library", "2026 Edition", `${SITE_URL}/guides`, `${BOOK_BASE_URL}/guides-library-cover.jpg`)}</tr></table></td></tr></table>`;
 }
 
 export function suggestedActionsHtml(): string {
@@ -132,7 +115,7 @@ export function signOffHtml(teamName = "JBJ Global Real Estate Team"): string {
   } else {
     teamSuffix = teamName;
   }
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:28px;"><tr><td><p style="font-size:18px;color:#333;margin:0 0 6px;font-weight:700;">BEST REGARDS,</p><p style="font-size:19px;color:#C8A766;font-weight:800;margin:0 0 2px;letter-spacing:0.4px;">JBJ GLOBAL REAL ESTATE</p><p style="font-size:16px;color:#C8A766;font-weight:700;margin:0;letter-spacing:0.4px;">${teamSuffix.toUpperCase()}</p></td></tr></table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:28px;margin-bottom:22px;"><tr><td><p style="font-size:18px;color:#333;margin:0 0 6px;font-weight:700;">BEST REGARDS,</p><p style="font-size:19px;color:#C8A766;font-weight:800;margin:0 0 2px;letter-spacing:0.4px;">JBJ GLOBAL REAL ESTATE</p><p style="font-size:16px;color:#C8A766;font-weight:700;margin:0;letter-spacing:0.4px;">${teamSuffix.toUpperCase()}</p></td></tr></table>`;
 }
 
 export function readyToGetStartedHtml(): string {
@@ -150,22 +133,17 @@ export function doNotReplyNotice(): string {
  */
 function socialLinksFooter(): string {
   const links = [
-    { icon: SVG_ICONS.instagram, url: "https://www.instagram.com/jbj.ae" },
-    { icon: SVG_ICONS.facebook, url: "https://www.facebook.com/share/1G7CgSaV2L/?mibextid=wwXIfr" },
-    { icon: SVG_ICONS.linkedin, url: "https://www.linkedin.com/company/jbj-global-real-estate/" },
-    { icon: SVG_ICONS.youtube, url: "https://youtube.com/@jbjglobalrealestate" },
-    { icon: SVG_ICONS.tiktok, url: "https://www.tiktok.com/@jbj.ae" },
+    { label: "Instagram", icon: `${ICON_BASE_URL}/social-instagram.svg`, url: "https://www.instagram.com/jbj.ae" },
+    { label: "Facebook", icon: `${ICON_BASE_URL}/social-facebook.svg`, url: "https://www.facebook.com/share/1G7CgSaV2L/?mibextid=wwXIfr" },
+    { label: "LinkedIn", icon: `${ICON_BASE_URL}/social-linkedin.svg`, url: "https://www.linkedin.com/company/jbj-global-real-estate/" },
+    { label: "YouTube", icon: `${ICON_BASE_URL}/social-youtube.svg`, url: "https://youtube.com/@jbjglobalrealestate" },
+    { label: "TikTok", icon: `${ICON_BASE_URL}/social-tiktok.svg`, url: "https://www.tiktok.com/@jbj.ae" },
   ];
-  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:14px;"><tr>${links.map(l => `<td style="padding:0 5px;"><a href="${l.url}" style="display:inline-block;width:36px;height:36px;border:1px solid #C8A766;border-radius:8px;text-align:center;line-height:36px;text-decoration:none;">${l.icon}</a></td>`).join("")}</tr></table>`;
+  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:14px;"><tr>${links.map(l => `<td style="padding:0 4px;"><a href="${l.url}" style="display:inline-block;background:#f5f0e6;padding:6px 10px;border-radius:999px;text-decoration:none;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;"><tr><td style="padding-right:5px;"><img src="${l.icon}" alt="${l.label}" width="14" height="14" style="display:block;width:14px;height:14px;" /></td><td style="color:#8b6a3d;font-size:10px;font-weight:700;letter-spacing:0.4px;">${l.label}</td></tr></table></a></td>`).join("")}</tr></table>`;
 }
 
-/**
- * LOCKED FOOTER — This footer MUST appear on every single email sent by the company.
- * No email is allowed to be sent without this footer.
- * Contains: monogram, company name, tagline, stats, social icons, legal text.
- */
 export function sharedFooterHtml(): string {
-  return `${doNotReplyNotice()}<tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:#000;overflow:hidden;"><tr><td style="padding:30px 26px 28px;text-align:center;">
+  return `${doNotReplyNotice()}<tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:#000;overflow:hidden;"><tr><td style="padding:32px 26px 28px;text-align:center;">
 <img src="${LOGO_URL}" alt="JBJ" width="130" style="width:130px;height:auto;display:block;margin:0 auto 12px;border-radius:130px;" />
 <p style="color:#C8A766;font-size:16px;margin:0 0 4px;font-weight:700;letter-spacing:1.8px;">JBJ Global Real Estate</p>
 <p style="color:#9ca3af;font-size:12px;font-style:italic;margin:0 0 16px;">The Only Global AI-Powered Real Estate Intelligence Platform</p>
@@ -204,7 +182,7 @@ export function arabicDivider(): string {
 }
 
 export function goldDivider(): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0 16px;"><tr><td style="height:2px;background:linear-gradient(90deg,transparent,#C8A766,transparent);"></td></tr></table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:18px 0 18px;"><tr><td style="height:2px;background:linear-gradient(90deg,transparent,#C8A766,#C8A766,transparent);"></td></tr></table>`;
 }
 
 export function teamReplyCard(teamLabel: string, replyMessage: string): string {
