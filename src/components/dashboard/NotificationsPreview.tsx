@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Bell, ChevronRight, Settings, Check, AlertCircle, Info, Headphones, MessageSquare, Mail, MailOpen, LucideIcon } from "lucide-react";
+import { Bell, ChevronRight, Settings, Headphones, Eye, EyeOff, LucideIcon } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -9,13 +9,13 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatDistanceToNow } from "date-fns";
+import { toast } from "sonner";
 
-const NotifIcon = ({ icon: Icon }: { icon: LucideIcon }) => (
-  <div className="w-8 h-8 rounded-full bg-black flex items-center justify-center flex-shrink-0">
-    <Icon className="w-4 h-4 text-gold" />
+const NotifIcon = () => (
+  <div className="w-8 h-8 rounded-full border border-gold/50 flex items-center justify-center flex-shrink-0">
+    <Headphones className="w-4 h-4 text-gold" />
   </div>
 );
-import { toast } from "sonner";
 
 interface UnifiedNotification {
   id: string;
@@ -27,17 +27,6 @@ interface UnifiedNotification {
   source_table: 'notifications' | 'user_notifications' | 'user_listing_notifications';
   metadata: any;
 }
-
-const typeIconMap: Record<string, LucideIcon> = {
-  info: Info,
-  success: Check,
-  warning: AlertCircle,
-  alert: AlertCircle,
-  system: Info,
-  support_ticket: Headphones,
-  listing: Bell,
-  staff_reply: MessageSquare,
-};
 
 const NotificationsPreview = () => {
   const { user } = useAuth();
@@ -107,45 +96,46 @@ const NotificationsPreview = () => {
 
   const markAsRead = async (notif: UnifiedNotification) => {
     if (notif.is_read) return;
-    await supabase
-      .from(notif.source_table)
-      .update({ is_read: true, read_at: new Date().toISOString() } as any)
-      .eq('id', notif.id);
-    invalidateAll();
-    toast.success("Marked as read");
+    try {
+      await supabase
+        .from(notif.source_table)
+        .update({ is_read: true, read_at: new Date().toISOString() } as any)
+        .eq('id', notif.id);
+      invalidateAll();
+      toast.success("Marked as read");
+    } catch (err) {
+      console.error("Failed to mark as read:", err);
+    }
   };
 
   const markAsUnread = async (notif: UnifiedNotification) => {
     if (!notif.is_read) return;
-    await supabase
-      .from(notif.source_table)
-      .update({ is_read: false, read_at: null } as any)
-      .eq('id', notif.id);
-    invalidateAll();
-    toast.success("Marked as unread");
+    try {
+      await supabase
+        .from(notif.source_table)
+        .update({ is_read: false, read_at: null } as any)
+        .eq('id', notif.id);
+      invalidateAll();
+      toast.success("Marked as unread");
+    } catch (err) {
+      console.error("Failed to mark as unread:", err);
+    }
   };
 
   const markAllRead = async () => {
     if (!user?.id) return;
-    const readAt = new Date().toISOString();
-    await Promise.all([
-      supabase.from('notifications').update({ is_read: true, read_at: readAt } as any).eq('user_id', user.id).eq('is_read', false),
-      supabase.from('user_notifications').update({ is_read: true, read_at: readAt } as any).eq('user_id', user.id).eq('is_read', false),
-      supabase.from('user_listing_notifications').update({ is_read: true, read_at: readAt } as any).eq('user_id', user.id).eq('is_read', false),
-    ]);
-    invalidateAll();
-    toast.success("All notifications marked as read");
-  };
-
-  const getIcon = (notif: UnifiedNotification) => {
-    if (notif.type === 'support_ticket') {
-      const action = notif.metadata?.action;
-      if (action === 'resolved') return <NotifIcon icon={Check} />;
-      if (action === 'staff_reply') return <NotifIcon icon={MessageSquare} />;
-      return <NotifIcon icon={Headphones} />;
+    try {
+      const readAt = new Date().toISOString();
+      await Promise.all([
+        supabase.from('notifications').update({ is_read: true, read_at: readAt } as any).eq('user_id', user.id).eq('is_read', false),
+        supabase.from('user_notifications').update({ is_read: true, read_at: readAt } as any).eq('user_id', user.id).eq('is_read', false),
+        supabase.from('user_listing_notifications').update({ is_read: true, read_at: readAt } as any).eq('user_id', user.id).eq('is_read', false),
+      ]);
+      invalidateAll();
+      toast.success("All notifications marked as read");
+    } catch (err) {
+      console.error("Failed to mark all as read:", err);
     }
-    const IconComp = typeIconMap[notif.type] || Info;
-    return <NotifIcon icon={IconComp} />;
   };
 
   return (
@@ -180,13 +170,13 @@ const NotificationsPreview = () => {
         <div className="flex gap-1 mb-3 p-1 bg-muted/50 rounded-lg">
           <button
             onClick={() => setActiveTab('unread')}
-            className={`flex-1 text-xs font-semibold py-1.5 px-3 rounded-md transition-all flex items-center justify-center gap-1.5 ${
+            className={`flex-1 text-xs font-semibold py-1.5 px-3 rounded-md transition-colors duration-150 flex items-center justify-center gap-1.5 ${
               activeTab === 'unread'
                 ? 'bg-white text-foreground shadow-sm'
                 : 'text-muted-foreground hover:text-foreground'
             }`}
           >
-            <Mail className="w-3.5 h-3.5" />
+            <Eye className="w-3.5 h-3.5" />
             Unread
             {unreadCount > 0 && (
               <Badge className="bg-red-500 text-white text-[10px] px-1.5 py-0 ml-0.5">
@@ -196,13 +186,13 @@ const NotificationsPreview = () => {
           </button>
           <button
             onClick={() => setActiveTab('read')}
-            className={`flex-1 text-xs font-semibold py-1.5 px-3 rounded-md transition-all flex items-center justify-center gap-1.5 ${
+            className={`flex-1 text-xs font-semibold py-1.5 px-3 rounded-md transition-colors duration-150 flex items-center justify-center gap-1.5 ${
               activeTab === 'read'
                 ? 'bg-white text-foreground shadow-sm'
                 : 'text-muted-foreground hover:text-foreground'
             }`}
           >
-            <MailOpen className="w-3.5 h-3.5" />
+            <EyeOff className="w-3.5 h-3.5" />
             Read
             {readNotifications.length > 0 && (
               <span className="text-[10px] text-muted-foreground ml-0.5">
@@ -236,14 +226,14 @@ const NotificationsPreview = () => {
               {displayedNotifications.map(notification => (
                 <div
                   key={`${notification.source_table}-${notification.id}`}
-                  className={`w-full text-left flex items-start gap-3 p-3 rounded-lg border transition-all ${
+                  className={`w-full text-left flex items-start gap-3 p-3 rounded-lg border transition-colors duration-150 ${
                     notification.is_read 
                       ? 'border-border/50 bg-transparent hover:bg-muted/30' 
                       : 'border-gold/30 bg-gold/5 hover:bg-gold/10'
                   }`}
                 >
                   <div className="mt-0.5">
-                    {getIcon(notification)}
+                    <NotifIcon />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
@@ -272,7 +262,7 @@ const NotificationsPreview = () => {
                         title="Mark as Unread"
                         onClick={() => markAsUnread(notification)}
                       >
-                        <Mail className="h-3.5 w-3.5" />
+                        <EyeOff className="h-3.5 w-3.5" />
                       </Button>
                     ) : (
                       <Button
@@ -282,7 +272,7 @@ const NotificationsPreview = () => {
                         title="Mark as Read"
                         onClick={() => markAsRead(notification)}
                       >
-                        <MailOpen className="h-3.5 w-3.5" />
+                        <Eye className="h-3.5 w-3.5" />
                       </Button>
                     )}
                   </div>

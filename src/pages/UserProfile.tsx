@@ -383,6 +383,9 @@ const UserProfile = () => {
   const executeAccountLifecycle = async (action: 'deactivate' | 'delete') => {
     setAccountActionLoading(true);
     try {
+      // Close dialog FIRST to prevent frozen overlay
+      setAccountDialogType(null);
+
       const timeoutPromise = new Promise<never>((_, reject) => {
         window.setTimeout(() => reject(new Error('Request timed out. Please try again.')), 15000);
       });
@@ -402,14 +405,16 @@ const UserProfile = () => {
         ? 'Your account has been scheduled for deletion. You have 30 days to recover it by signing in again.'
         : 'Your account has been deactivated. You can recover it anytime by signing in again.');
 
-      setAccountDialogType(null);
-      await signOut();
+      setAccountActionLoading(false);
+      try {
+        await signOut();
+      } catch (_) {
+        // signOut may fail if session already invalidated — that's fine
+      }
       navigate('/auth');
     } catch (error: any) {
       console.error('Account lifecycle error:', error);
       toast.error(error?.message || 'Failed to update account status');
-      setAccountDialogType(null);
-    } finally {
       setAccountActionLoading(false);
     }
   };

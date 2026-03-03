@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Bell, Headphones, CheckCircle, MessageSquare, Info } from 'lucide-react';
+import { Bell, Headphones, Eye, EyeOff } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -43,7 +43,6 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
   const fetchNotifications = async () => {
     if (!user) return;
     
-    // Fetch from ALL 3 notification tables
     const [listingResult, ticketResult, systemResult] = await Promise.all([
       supabase
         .from('user_listing_notifications')
@@ -97,7 +96,6 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
     setNotifications(all.slice(0, 15));
   };
 
-  // Use the global alert count for accurate badge
   const unreadCount = (alertCounts?.unreadTicketNotifications || 0) + (alertCounts?.unreadListingNotifications || 0) + (alertCounts?.unreadSystemNotifications || 0);
 
   const invalidateCounts = () => {
@@ -108,81 +106,53 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
 
   const markAsRead = async (notif: Notification) => {
     if (notif.is_read) return;
-    await supabase
-      .from(notif.source_table)
-      .update({ is_read: true, read_at: new Date().toISOString() } as any)
-      .eq('id', notif.id);
-    setNotifications(prev => prev.map(n => n.id === notif.id ? { ...n, is_read: true } : n));
-    invalidateCounts();
-  };
-
-  const markAsUnread = async (notif: Notification) => {
-    if (!notif.is_read) return;
-    await supabase
-      .from(notif.source_table)
-      .update({ is_read: false, read_at: null } as any)
-      .eq('id', notif.id);
-    setNotifications(prev => prev.map(n => n.id === notif.id ? { ...n, is_read: false } : n));
-    invalidateCounts();
+    try {
+      await supabase
+        .from(notif.source_table)
+        .update({ is_read: true, read_at: new Date().toISOString() } as any)
+        .eq('id', notif.id);
+      setNotifications(prev => prev.map(n => n.id === notif.id ? { ...n, is_read: true } : n));
+      invalidateCounts();
+    } catch (err) {
+      console.error("Failed to mark as read:", err);
+    }
   };
 
   const markAllRead = async () => {
     if (!user) return;
-    const readAt = new Date().toISOString();
-    await Promise.all([
-      supabase
-        .from('user_listing_notifications')
-        .update({ is_read: true, read_at: readAt } as any)
-        .eq('user_id', user.id)
-        .eq('is_read', false),
-      supabase
-        .from('user_notifications')
-        .update({ is_read: true, read_at: readAt } as any)
-        .eq('user_id', user.id)
-        .eq('is_read', false),
-      supabase
-        .from('notifications')
-        .update({ is_read: true, read_at: readAt } as any)
-        .eq('user_id', user.id)
-        .eq('is_read', false),
-    ]);
-    setNotifications(prev => prev.map(n => ({ ...n, is_read: true })));
-    invalidateCounts();
-  };
-
-  const getNotifIcon = (type: string, metadata: any) => {
-    if (type === 'support_ticket') {
-      const action = metadata?.action;
-      if (action === 'resolved') return <CheckCircle className="w-4 h-4 text-emerald-500" />;
-      if (action === 'staff_reply') return <MessageSquare className="w-4 h-4 text-blue-500" />;
-      return <Headphones className="w-4 h-4 text-gold" />;
+    try {
+      const readAt = new Date().toISOString();
+      await Promise.all([
+        supabase.from('user_listing_notifications').update({ is_read: true, read_at: readAt } as any).eq('user_id', user.id).eq('is_read', false),
+        supabase.from('user_notifications').update({ is_read: true, read_at: readAt } as any).eq('user_id', user.id).eq('is_read', false),
+        supabase.from('notifications').update({ is_read: true, read_at: readAt } as any).eq('user_id', user.id).eq('is_read', false),
+      ]);
+      setNotifications(prev => prev.map(n => ({ ...n, is_read: true })));
+      invalidateCounts();
+    } catch (err) {
+      console.error("Failed to mark all as read:", err);
     }
-    if (type === 'system' || type === 'info') return <Info className="w-4 h-4 text-blue-400" />;
-    return <Bell className="w-4 h-4 text-gold" />;
   };
 
   const handleNotifClick = (notif: Notification) => {
     void markAsRead(notif);
-
     const destination = resolveNotificationRoute({
       type: notif.type,
       metadata: notif.metadata,
       title: notif.title,
       message: notif.message,
     });
-
     if (/^https?:\/\//i.test(destination)) {
       window.open(destination, '_blank', 'noopener,noreferrer');
     } else {
       navigate(destination);
     }
-
     onClose?.();
   };
 
   if (!user) return null;
 
-  // Panel mode
+  // Panel mode - unified consistent icon: gold headset in gold circle
   if (panelMode) {
     return (
       <div className="w-80 bg-white border-2 border-gold/40 rounded-xl shadow-xl shadow-gold/10 overflow-hidden">
@@ -210,23 +180,24 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
                   !n.is_read ? 'bg-gold/[0.04]' : ''
                 }`}
               >
-                <div className="flex items-start gap-2">
+                <div className="flex items-start gap-2.5">
+                  {/* Red unread dot */}
                   {!n.is_read && (
-                    <span className="w-2 h-2 rounded-full bg-red-500 mt-1.5 flex-shrink-0" />
+                    <span className="w-2 h-2 rounded-full bg-red-500 mt-2 flex-shrink-0" />
                   )}
-                  <div className="flex items-start gap-2 flex-1">
-                    <div className="mt-0.5 flex-shrink-0">
-                      {getNotifIcon(n.type, n.metadata)}
-                    </div>
-                    <div className={!n.is_read ? '' : 'pl-0'}>
-                      <p className="text-sm font-medium text-stone-900">{n.title}</p>
-                      {n.message && (
-                        <p className="text-xs text-stone-500 mt-0.5 line-clamp-2">{n.message}</p>
-                      )}
-                      <p className="text-[10px] text-stone-400 mt-1">
-                        {new Date(n.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
-                      </p>
-                    </div>
+                  {n.is_read && <span className="w-2 flex-shrink-0" />}
+                  {/* Consistent gold headset icon in gold circle */}
+                  <div className="w-8 h-8 rounded-full border border-gold/50 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Headphones className="w-4 h-4 text-gold" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-stone-900 truncate">{n.title}</p>
+                    {n.message && (
+                      <p className="text-xs text-stone-500 mt-0.5 line-clamp-2">{n.message}</p>
+                    )}
+                    <p className="text-[10px] text-stone-400 mt-1">
+                      {new Date(n.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+                    </p>
                   </div>
                 </div>
               </button>
