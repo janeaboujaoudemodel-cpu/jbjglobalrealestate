@@ -732,11 +732,11 @@ const HeroSearchBar = () => {
             <Search className="w-5 h-5 text-gold shrink-0" style={{ filter: 'drop-shadow(0 0 4px rgba(200,167,102,0.5))' }} />
           <input
               type="text"
-              placeholder="Area, project or community..."
+              placeholder="Community, area, or project..."
               value={locationSearch}
               onChange={(e) => setLocationSearch(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-              className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-white px-3 text-sm font-medium min-w-[180px] w-full"
+              className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-white px-3 text-sm font-medium min-w-[220px] w-full"
             />
           </div>
           {/* Premium Gradient Divider */}
@@ -1265,7 +1265,7 @@ const HeroSearchBar = () => {
           <Search className="w-5 h-5 text-gold shrink-0" style={{ filter: 'drop-shadow(0 0 4px rgba(200,167,102,0.5))' }} />
           <input
             type="text"
-            placeholder="Area, project or community"
+            placeholder="Community, area, or project"
             value={locationSearch}
             onChange={(e) => setLocationSearch(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
