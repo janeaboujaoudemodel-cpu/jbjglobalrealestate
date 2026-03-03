@@ -159,6 +159,12 @@ const BrokerAccount = () => {
     }
   };
 
+  useEffect(() => {
+    if (!authLoading && !roleLoading && !loading && !user) {
+      navigate('/auth?redirect=/my-account', { replace: true });
+    }
+  }, [authLoading, roleLoading, loading, user, navigate]);
+
   const completedModules = progress.filter(p => p.is_completed).length;
   const totalModules = modules.length;
   const trainingProgress = totalModules > 0 ? (completedModules / totalModules) * 100 : 0;
@@ -196,24 +202,7 @@ const BrokerAccount = () => {
     );
   }
 
-  // Show investor/visitor dashboard if not an employee or broker
-  if (!isEmployee && !isBroker && user) {
-    return (
-      <MainLayout>
-        <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-          <div className="container mx-auto px-4 py-8">
-            <InvestorDashboard />
-          </div>
-        </div>
-      </MainLayout>
-    );
-  }
-
-  // Redirect if not authenticated
-  if (!user) {
-    navigate('/auth?redirect=/my-account');
-    return null;
-  }
+  if (!user) return null;
 
   return (
     <MainLayout>

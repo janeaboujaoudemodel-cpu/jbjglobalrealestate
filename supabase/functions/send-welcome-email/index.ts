@@ -186,19 +186,19 @@ serve(async (req) => {
 
     const benefitsByRole: Record<string, string> = {
       broker:
-        benefitRow('⚙', 'Free AI Tools', 'Unlimited access to property analysis, market reports, and smart recommendations.') +
-        benefitRow('🎓', 'Free Training Academy', 'Complete courses and videos to boost your real estate career.') +
-        benefitRow('🎧', 'Dedicated HR Manager & Personal Assistant', 'Jessica and our team provide dedicated support for all your inquiries.') +
-        benefitRow('🎫', 'Support Tickets & Events', 'Submit tickets for any query and join exclusive company events and webinars.'),
+        benefitRow('1', 'Free AI Tools', 'Unlimited access to property analysis, market reports, and smart recommendations.') +
+        benefitRow('2', 'Free Training Academy', 'Complete courses and videos to boost your real estate career.') +
+        benefitRow('3', 'Dedicated HR Manager & Personal Assistant', 'Jessica and our team provide dedicated support for all your inquiries.') +
+        benefitRow('4', 'Support Tickets & Events', 'Submit tickets for any query and join exclusive company events and webinars.'),
       investor:
-        benefitRow('🏢', 'Premium Properties', 'Browse exclusive listings across Dubai and the UAE.') +
-        benefitRow('📊', 'AI Property Analysis', 'Smart insights and ROI calculations for better investment decisions.') +
-        benefitRow('🎫', 'Support Tickets & Events', 'Submit tickets for any query and join exclusive company events.'),
+        benefitRow('1', 'Premium Properties', 'Browse exclusive listings across Dubai and the UAE.') +
+        benefitRow('2', 'AI Property Analysis', 'Smart insights and ROI calculations for better investment decisions.') +
+        benefitRow('3', 'Support Tickets & Events', 'Submit tickets for any query and join exclusive company events.'),
       visitor:
-        benefitRow('🏢', 'Browse Premium Properties', 'Explore our curated selection of UAE properties across all emirates.') +
-        benefitRow('❤', 'Save Your Favorites', 'Shortlist properties you love and access them anytime from your dashboard.') +
-        benefitRow('🎧', 'Expert Support 24/7', 'Our dedicated team is ready to assist with any property inquiry.') +
-        benefitRow('🎫', 'Support Tickets & Events', 'Submit tickets, get help, and stay updated on company events.'),
+        benefitRow('1', 'Browse Premium Properties', 'Explore our curated selection of UAE properties across all emirates.') +
+        benefitRow('2', 'Save Your Favorites', 'Shortlist properties you love and access them anytime from your dashboard.') +
+        benefitRow('3', 'Expert Support 24/7', 'Our dedicated team is ready to assist with any property inquiry.') +
+        benefitRow('4', 'Support Tickets & Events', 'Submit tickets, get help, and stay updated on company events.'),
     };
 
     const cta = ctaByRole[role] || ctaByRole.visitor;
