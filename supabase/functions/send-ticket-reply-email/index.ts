@@ -48,6 +48,37 @@ function formatDetailedDateTime(date: Date, locale: "en-GB" | "ar-AE") {
   }).format(date);
 }
 
+const hasArabic = (text: string) => /[\u0600-\u06FF]/.test(text);
+
+const commonArMap: Record<string, string> = {
+  "ticket": "تذكرة",
+  "support": "الدعم",
+  "issue": "مشكلة",
+  "resolved": "تم الحل",
+  "review": "مراجعة",
+  "in progress": "قيد التنفيذ",
+  "in review": "قيد المراجعة",
+  "pending": "قيد الانتظار",
+  "priority": "الأولوية",
+  "billing": "الفوترة",
+  "account": "الحساب",
+  "technical": "تقني",
+  "general": "عام",
+  "property": "العقار",
+  "partnership": "الشراكة",
+};
+
+function toArabicText(input?: string | null): string {
+  const text = (input || "").trim();
+  if (!text) return "";
+  if (hasArabic(text)) return text;
+  let out = text;
+  for (const [en, ar] of Object.entries(commonArMap)) {
+    out = out.replace(new RegExp(`\\b${en}\\b`, "gi"), ar);
+  }
+  return out;
+}
+
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -81,7 +112,7 @@ const handler = async (req: Request): Promise<Response> => {
     const categoryEn = ticketCategory || ticket?.service_category || "General";
     const categoryAr = categoryLabelsAr[categoryEn] || categoryEn;
     const ticketStatus = ticket?.status || "in_progress";
-    const isResolved = ticketStatus === "resolved";
+    const isResolved = ticketStatus === "resolved" || ticketStatus === "closed";
     const priority = ticket?.priority || "medium";
     const priorityEn = priorityLabelsEn[priority] || "Medium";
     const priorityAr = priorityLabelsAr[priority] || "متوسطة";
@@ -121,8 +152,8 @@ ${arabicDivider()}
 <p style="font-size:14px;color:#555;margin:0 0 24px;">قام فريق الدعم لدينا بمراجعة تذكرتك وقدم رداً أدناه.</p>
 ${ticketSummaryCardAr([
   { label: 'رقم التذكرة', value: ticketNumber, highlight: true },
-  { label: 'الموضوع', value: subject },
-  { label: 'الفئة', value: categoryAr },
+  { label: 'الموضوع', value: toArabicText(subject) },
+  { label: 'الفئة', value: toArabicText(categoryAr) },
   { label: 'الأولوية', value: priorityAr },
   { label: 'تاريخ ووقت الإرسال', value: createdDateTimeAr },
 ])}
