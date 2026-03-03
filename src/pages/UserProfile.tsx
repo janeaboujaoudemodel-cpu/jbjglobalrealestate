@@ -161,31 +161,34 @@ const UserProfile = () => {
 
     setUploadingPhoto(true);
     try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${user.id}/avatar.${fileExt}`;
+      const fileExt = file.name.split('.').pop() || 'jpg';
+      const fileName = `${user.id}/${Date.now()}-avatar.${fileExt}`;
+      const bucket = 'profile-pictures';
 
       // Upload to storage
       const { error: uploadError } = await supabase.storage
-        .from('avatars')
-        .upload(fileName, file, { upsert: true });
+        .from(bucket)
+        .upload(fileName, file, { upsert: false, cacheControl: '3600' });
 
       if (uploadError) throw uploadError;
 
       // Get public URL
       const { data: urlData } = supabase.storage
-        .from('avatars')
+        .from(bucket)
         .getPublicUrl(fileName);
+
+      const nextPhotoUrl = urlData.publicUrl;
 
       // Update user metadata
       const { error: updateError } = await supabase.auth.updateUser({
         data: {
-          avatar_url: urlData.publicUrl
+          avatar_url: nextPhotoUrl
         }
       });
 
       if (updateError) throw updateError;
 
-      setPhotoUrl(urlData.publicUrl);
+      setPhotoUrl(nextPhotoUrl);
       toast.success("Photo uploaded successfully");
     } catch (error: any) {
       console.error("Error uploading photo:", error);

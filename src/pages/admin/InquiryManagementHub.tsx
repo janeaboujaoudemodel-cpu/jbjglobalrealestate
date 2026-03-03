@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import OwnerGuard from '@/components/OwnerGuard';
+
 import PremiumBackendHeader from '@/components/ui/premium-backend-header';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -65,7 +65,7 @@ const InquiryManagementHub: React.FC = () => {
   const [replyText, setReplyText] = useState('');
   const [adminNotes, setAdminNotes] = useState('');
 
-  const { data: inquiries = [], isLoading } = useQuery({
+  const { data: inquiries = [], isLoading, isError, error } = useQuery({
     queryKey: ['admin-inquiries'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -147,7 +147,11 @@ const InquiryManagementHub: React.FC = () => {
   }, [inquiries]);
 
   const inquiryTypes = useMemo(() => {
-    const types = new Set(inquiries.map(i => i.inquiry_type));
+    const types = new Set(
+      inquiries
+        .map(i => i.inquiry_type)
+        .filter((v): v is string => typeof v === 'string' && v.trim().length > 0)
+    );
     return Array.from(types);
   }, [inquiries]);
 
@@ -158,8 +162,7 @@ const InquiryManagementHub: React.FC = () => {
   };
 
   return (
-    <OwnerGuard>
-      <div className="min-h-screen bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6]">
+    <div className="min-h-screen bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6]">
         <PremiumBackendHeader
           title="Inquiry Management Hub"
           subtitle={`${counts.all} total inquiries • ${counts.pending || 0} awaiting action`}
@@ -234,6 +237,12 @@ const InquiryManagementHub: React.FC = () => {
             <TabsContent value={activeTab} className="mt-4">
               {isLoading ? (
                 <div className="text-center py-20 text-zinc-400">Loading inquiries...</div>
+              ) : isError ? (
+                <div className="text-center py-20">
+                  <AlertTriangle className="w-12 h-12 mx-auto text-red-400 mb-3" />
+                  <p className="text-zinc-600">Could not load inquiries.</p>
+                  <p className="text-xs text-zinc-500 mt-1">{error instanceof Error ? error.message : 'Please try again.'}</p>
+                </div>
               ) : filtered.length === 0 ? (
                 <div className="text-center py-20">
                   <Archive className="w-12 h-12 mx-auto text-zinc-300 mb-3" />
@@ -275,7 +284,7 @@ const InquiryManagementHub: React.FC = () => {
                             </TableCell>
                             <TableCell>
                               <Badge variant="outline" className="capitalize text-xs">
-                                {inq.inquiry_type.replace(/_/g, ' ')}
+                                {(inq.inquiry_type || 'general').replace(/_/g, ' ')}
                               </Badge>
                             </TableCell>
                             <TableCell>
@@ -369,7 +378,7 @@ const InquiryManagementHub: React.FC = () => {
                     <div>
                       <p className="text-xs text-zinc-500 uppercase tracking-wide mb-1">Details</p>
                       <div className="space-y-1 text-sm">
-                        <p><span className="text-zinc-500">Type:</span> <span className="capitalize">{selectedInquiry.inquiry_type.replace(/_/g, ' ')}</span></p>
+                        <p><span className="text-zinc-500">Type:</span> <span className="capitalize">{(selectedInquiry.inquiry_type || 'general').replace(/_/g, ' ')}</span></p>
                         <p><span className="text-zinc-500">Source:</span> {selectedInquiry.source}</p>
                         {selectedInquiry.property_name && (
                           <p className="flex items-center gap-1">
@@ -492,7 +501,6 @@ const InquiryManagementHub: React.FC = () => {
           </DialogContent>
         </Dialog>
       </div>
-    </OwnerGuard>
   );
 };
 

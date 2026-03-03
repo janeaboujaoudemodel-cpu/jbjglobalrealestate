@@ -537,6 +537,7 @@ const App = () => (
                 <Route path="/admin" element={<OwnerGuard><Admin /></OwnerGuard>} />
                 <Route path="/admin/leads" element={<OwnerGuard><AdminLeads /></OwnerGuard>} />
                 <Route path="/admin/inquiries" element={<OwnerGuard><InquiryManagementHub /></OwnerGuard>} />
+                <Route path="/admin-inquiries" element={<Navigate to="/admin/inquiries" replace />} />
                 <Route path="/terms" element={<Terms />} />
                 <Route path="/privacy" element={<Privacy />} />
                 <Route path="/cookies" element={<Cookies />} />
