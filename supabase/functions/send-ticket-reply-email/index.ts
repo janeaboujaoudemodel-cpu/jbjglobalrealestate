@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { emailShell, sharedSections, progressSteps, teamReplyCard, ticketSummaryCard } from "../_shared/email-html.ts";
+import { emailShell, sharedSections, progressSteps, teamReplyCard, ticketSummaryCard, ticketSummaryCardAr, arabicDivider } from "../_shared/email-html.ts";
 
 const RESEND_API_URL = "https://api.resend.com/emails";
 
@@ -44,12 +44,7 @@ const handler = async (req: Request): Promise<Response> => {
     );
 
     const {
-      ticketNumber,
-      customerEmail,
-      customerName,
-      replyMessage,
-      ticketSubject,
-      ticketCategory
+      ticketNumber, customerEmail, customerName, replyMessage, ticketSubject, ticketCategory
     }: ReplyEmailRequest = await req.json();
 
     if (!ticketNumber || !customerEmail || !replyMessage) {
@@ -82,6 +77,9 @@ const handler = async (req: Request): Promise<Response> => {
 
     const reopenHtml = isResolved ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:20px 0;"><tr><td style="background:linear-gradient(135deg,#fff5f5,#fff0f0);border:2px dashed #e74c3c;border-radius:18px;padding:25px;text-align:center;"><p style="color:#c0392b;margin:0 0 10px;font-size:16px;font-weight:bold;">Issue Not Resolved?</p><p style="color:#666;font-size:13px;margin:0 0 15px;">If your issue persists, you can reopen this ticket anytime.</p><a href="${reopenUrl}" style="display:inline-block;background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;text-decoration:none;padding:14px 30px;border-radius:12px;font-weight:bold;font-size:14px;">Reopen This Ticket</a></td></tr></table>` : '';
 
+    const reopenHtmlAr = isResolved ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:20px 0;direction:rtl;"><tr><td style="background:linear-gradient(135deg,#fff5f5,#fff0f0);border:2px dashed #e74c3c;border-radius:18px;padding:25px;text-align:center;"><p style="color:#c0392b;margin:0 0 10px;font-size:16px;font-weight:bold;">المشكلة لم تُحل؟</p><p style="color:#666;font-size:13px;margin:0 0 15px;">إذا استمرت المشكلة، يمكنك إعادة فتح هذه التذكرة في أي وقت.</p><a href="${reopenUrl}" style="display:inline-block;background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;text-decoration:none;padding:14px 30px;border-radius:12px;font-weight:bold;font-size:14px;">إعادة فتح التذكرة</a></td></tr></table>` : '';
+
+    // BILINGUAL: EN → Arabic divider → AR → Gold divider → Locked sections
     const bodyContent = `<tr><td class="content-pad" style="padding:32px;">
 <p style="font-size:15px;color:#333;margin:0 0 16px;">Dear <strong>${customerName}</strong>,</p>
 <p style="font-size:14px;color:#555;margin:0 0 24px;">Our support team has reviewed your ticket and provided a response below.</p>
@@ -94,6 +92,19 @@ ${ticketSummaryCard([
 ])}
 ${teamReplyCard("JBJ Support Team Reply", replyMessage)}
 ${reopenHtml}
+${arabicDivider()}
+</td></tr>
+<tr><td class="content-pad" style="padding:0 32px 32px;direction:rtl;text-align:right;">
+<p style="font-size:15px;color:#333;margin:0 0 16px;">عزيزي/عزيزتي <strong>${customerName}</strong>،</p>
+<p style="font-size:14px;color:#555;margin:0 0 24px;">قام فريق الدعم لدينا بمراجعة تذكرتك وقدم رداً أدناه.</p>
+${ticketSummaryCardAr([
+  { label: 'رقم التذكرة', value: ticketNumber, highlight: true },
+  { label: 'الموضوع', value: subject },
+  { label: 'الفئة', value: category },
+  { label: 'تاريخ الإرسال', value: createdDate },
+])}
+${teamReplyCard("رد فريق دعم JBJ", replyMessage)}
+${reopenHtmlAr}
 ${sharedSections("support ticket", "JBJ Global Real Estate Support Team")}
 </td></tr>`;
 
