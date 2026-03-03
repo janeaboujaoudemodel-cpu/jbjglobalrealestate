@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { emailShell, sharedSections, progressSteps } from "../_shared/email-html.ts";
+import { emailShell, sharedSections, progressSteps, teamReplyCard } from "../_shared/email-html.ts";
 
 const RESEND_API_URL = "https://api.resend.com/emails";
 
@@ -90,17 +90,13 @@ ${progressSteps(['Received', 'In Review', 'Resolved'], [step1, step2, step3], [s
 <tr><td style="padding:20px;">
 <p style="color:#666;font-size:12px;margin:0 0 8px;text-transform:uppercase;letter-spacing:1px;">Ticket Summary</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-<tr><td style="padding:7px 0;color:#666;font-size:13px;width:40%;">Ticket Number</td><td style="padding:7px 0;color:#C8A766;font-weight:700;font-size:14px;font-family:'Courier New',monospace;">${ticketNumber}</td></tr>
-<tr><td style="padding:7px 0;color:#666;font-size:13px;">Subject</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${subject}</td></tr>
-<tr><td style="padding:7px 0;color:#666;font-size:13px;">Category</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${category}</td></tr>
-<tr><td style="padding:7px 0;color:#666;font-size:13px;">Submitted</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${createdDate}</td></tr>
+<tr><td style="padding:7px 0;color:#666;font-size:13px;width:40%;border-right:1px solid #C8A76630;padding-right:12px;">Ticket Number</td><td style="padding:7px 0 7px 12px;color:#C8A766;font-weight:700;font-size:14px;font-family:'Courier New',monospace;">${ticketNumber}</td></tr>
+<tr><td style="padding:7px 0;color:#666;font-size:13px;border-right:1px solid #C8A76630;padding-right:12px;">Subject</td><td style="padding:7px 0 7px 12px;color:#1a1a1a;font-weight:600;font-size:13px;">${subject}</td></tr>
+<tr><td style="padding:7px 0;color:#666;font-size:13px;border-right:1px solid #C8A76630;padding-right:12px;">Category</td><td style="padding:7px 0 7px 12px;color:#1a1a1a;font-weight:600;font-size:13px;">${category}</td></tr>
+<tr><td style="padding:7px 0;color:#666;font-size:13px;border-right:1px solid #C8A76630;padding-right:12px;">Submitted</td><td style="padding:7px 0 7px 12px;color:#1a1a1a;font-weight:600;font-size:13px;">${createdDate}</td></tr>
 </table>
 </td></tr></table>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;">
-<tr><td style="padding:20px;">
-<p style="color:#C8A766;margin:0 0 12px;font-size:12px;text-transform:uppercase;letter-spacing:1.5px;font-weight:bold;">JBJ Support Team Reply</p>
-<div style="color:#333;font-size:14px;line-height:1.8;white-space:pre-wrap;background:#fff;padding:18px;border-radius:12px;border:1px solid #e8e8e8;">${replyMessage}</div>
-</td></tr></table>
+${teamReplyCard("JBJ Support Team Reply", replyMessage)}
 ${reopenHtml}
 ${sharedSections("support ticket", "JBJ Global Real Estate Support Team")}
 </td></tr>`;

@@ -58,9 +58,9 @@ function buildEmailHtml(req: AdminMessageRequest): string {
   const typeLabel = getServiceLabel(req.serviceCategory);
   const departmentLabel = getDepartmentLabel(req.serviceCategory);
 
-  const bodyContent = `<tr><td style="padding:24px 40px 0;">
+  const bodyContent = `<tr><td style="padding:0;">
 <table width="100%" cellpadding="0" cellspacing="0">
-<tr><td style="background:linear-gradient(135deg,#F5EBD7 0%,#FDFBF7 100%);border-left:4px solid #C8A766;border-radius:0 10px 10px 0;padding:14px 20px;">
+<tr><td style="background:linear-gradient(135deg,#F5EBD7 0%,#FDFBF7 100%);padding:16px 32px;">
 <p style="margin:0;font-size:10px;color:#888;text-transform:uppercase;letter-spacing:2px;">Department</p>
 <p style="margin:4px 0 0;font-size:16px;color:#1a1a1a;font-weight:700;">${typeLabel}</p>
 </td></tr></table>
@@ -71,18 +71,18 @@ ${req.referenceLabel ? `
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#FDFBF7;border:1px solid #C8A76633;border-radius:18px;margin:0 0 24px;">
 <tr><td style="padding:16px 20px;">
 <table width="100%" cellpadding="0" cellspacing="0">
-<tr><td style="padding:5px 0;color:#888;font-size:12px;width:100px;">Reference</td><td style="padding:5px 0;color:#333;font-size:13px;font-weight:600;">${req.referenceId ? req.referenceId.substring(0, 8).toUpperCase() : 'N/A'}</td></tr>
-<tr><td style="padding:5px 0;color:#888;font-size:12px;">Regarding</td><td style="padding:5px 0;color:#333;font-size:13px;font-weight:600;">${req.referenceLabel}</td></tr>
-<tr><td style="padding:5px 0;color:#888;font-size:12px;">Type</td><td style="padding:5px 0;color:#333;font-size:13px;">${typeLabel}</td></tr>
+<tr><td style="padding:5px 0;color:#888;font-size:12px;width:100px;border-right:1px solid #C8A76630;padding-right:12px;">Reference</td><td style="padding:5px 0 5px 12px;color:#333;font-size:13px;font-weight:600;">${req.referenceId ? req.referenceId.substring(0, 8).toUpperCase() : 'N/A'}</td></tr>
+<tr><td style="padding:5px 0;color:#888;font-size:12px;border-right:1px solid #C8A76630;padding-right:12px;">Regarding</td><td style="padding:5px 0 5px 12px;color:#333;font-size:13px;font-weight:600;">${req.referenceLabel}</td></tr>
+<tr><td style="padding:5px 0;color:#888;font-size:12px;border-right:1px solid #C8A76630;padding-right:12px;">Type</td><td style="padding:5px 0 5px 12px;color:#333;font-size:13px;">${typeLabel}</td></tr>
 </table></td></tr></table>` : ''}
-<table width="100%" cellpadding="0" cellspacing="0" style="background:linear-gradient(135deg,#F5EBD7 0%,#FDFBF7 100%);border:1px solid #C8A76640;border-radius:18px;margin:0 0 24px;">
-<tr><td style="padding:18px 22px;">
-<p style="margin:0 0 8px;font-size:11px;color:#C8A766;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;">Message from ${departmentLabel}</p>
-<p style="margin:0;color:#333;font-size:14px;line-height:1.8;white-space:pre-wrap;">${req.message}</p>
+<table width="100%" cellpadding="0" cellspacing="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin:0 0 24px;">
+<tr><td style="padding:20px;">
+<p style="margin:0 0 12px;font-size:12px;color:#C8A766;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;">${departmentLabel} Reply</p>
+<div style="color:#333;font-size:14px;line-height:1.8;white-space:pre-wrap;background:#fff;padding:18px;border-radius:14px;border:1px solid #e8e8e8;">${req.message}</div>
 </td></tr></table>
 <table width="100%" cellpadding="0" cellspacing="0">
 <tr><td align="center" style="padding:8px 0 20px;">
-<a href="${SITE_URL}/my-account" style="display:inline-block;background:#000000;color:#C8A766;text-decoration:none;padding:14px 40px;border-radius:10px;font-weight:700;font-size:14px;border:1px solid #C8A76650;">View My Account</a>
+<a href="${SITE_URL}/my-account" style="display:inline-block;background:#000000;color:#C8A766;text-decoration:none;padding:14px 40px;border-radius:12px;font-weight:700;font-size:14px;border:1px solid #C8A76650;">View My Account</a>
 </td></tr></table>
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#FDFBF7;border:1px solid #C8A76630;border-radius:18px;margin:0 0 24px;">
 <tr><td style="padding:14px 20px;">
