@@ -61,7 +61,6 @@ Deno.serve(async (req) => {
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    // STRUCTURE: EN content → Arabic divider → AR content → sharedSections (LTR, ONCE)
     const bodyContent = `<tr><td class="content-pad" style="padding:32px;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:20px;">
 <tr>
@@ -82,7 +81,7 @@ ${monogramBadge(52)}
 <p style="margin:0 0 8px;color:#555;font-size:14px;line-height:1.6;">This code expires in <strong>10 minutes</strong>.</p>
 <p style="margin:0 0 16px;color:#999;font-size:13px;line-height:1.6;">If you didn't request this code, please ignore this email.</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:#f0fdf4;border:1px solid #22c55e40;border-radius:16px;margin-bottom:16px;">
-<tr><td style="padding:16px 20px;text-align:center;line-height:1.7;">
+<tr><td style="padding:16px 20px;text-align:center;line-height:1.7;min-height:76px;">
 <p style="margin:0;font-size:13px;color:#166534;line-height:1.7;">Need help with this code?<br/>Contact us at <a href="mailto:CONTACT@JBJ.AE" style="color:#15803d;font-weight:700;text-decoration:underline;">CONTACT@JBJ.AE</a></p>
 </td></tr>
 </table>
@@ -99,11 +98,12 @@ ${arabicDivider()}
 <p style="margin:0 0 8px;color:#555;font-size:14px;line-height:1.7;">ينتهي هذا الرمز خلال <strong>١٠ دقائق</strong>.</p>
 <p style="margin:0 0 16px;color:#999;font-size:13px;line-height:1.7;">إذا لم تطلب هذا الرمز، يرجى تجاهل هذا البريد الإلكتروني.</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:#f0fdf4;border:1px solid #22c55e40;border-radius:16px;margin-bottom:16px;">
-<tr><td style="padding:16px 20px;text-align:center;line-height:1.7;">
+<tr><td style="padding:16px 20px;text-align:center;line-height:1.7;min-height:76px;">
 <p style="margin:0;font-size:13px;color:#166534;line-height:1.7;">تحتاج مساعدة بخصوص الرمز؟<br/>تواصل معنا على <a href="mailto:CONTACT@JBJ.AE" style="color:#15803d;font-weight:700;text-decoration:underline;">CONTACT@JBJ.AE</a></p>
 </td></tr>
 </table>
-${sharedSections("verification")}`;
+${arabicDivider()}
+${sharedSections("verification")}</td></tr>`;
 
     const emailHtml = emailShell("Email Verification", bodyContent);
 

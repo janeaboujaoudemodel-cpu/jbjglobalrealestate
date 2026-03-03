@@ -86,7 +86,7 @@ ${arabicDivider()}
 <tr><td align="center">
 <a href="${SITE_URL}/my-account" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:14px 32px;border-radius:12px;font-weight:700;font-size:14px;border:1px solid #C8A76650;">عرض حسابي</a>
 </td></tr></table>
-${sharedSections("idea submission")}`;
+${arabicDivider()}${sharedSections("idea submission")}</td></tr>`;
     } else {
       bodyContent = `<tr><td class="content-pad" style="padding:32px;">
 <p style="margin:0 0 8px;font-size:28px;font-weight:800;color:#1a1a1a;">Thank You, ${displayName}!</p>
@@ -109,7 +109,7 @@ ${arabicDivider()}
 <p style="font-size:16px;color:#333;font-style:italic;margin:0;">"${ideaTitle}"</p>
 </td></tr></table>
 <p style="font-size:14px;line-height:1.7;color:#555;margin:0 0 16px;">تم استلام فكرتك وهي الآن قيد المراجعة. إذا تمت الموافقة عليها، ستحصل على <span style="color:#16a34a;font-weight:700;">50 نقطة ولاء</span>!</p>
-${sharedSections("idea submission")}`;
+${arabicDivider()}${sharedSections("idea submission")}</td></tr>`;
     }
 
     const emailHtml = emailShell(isApproved ? "Idea Approved" : "Idea Received", bodyContent);

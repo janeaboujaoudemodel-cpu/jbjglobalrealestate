@@ -88,7 +88,7 @@ ${teamReplyCard(`${departmentLabel} Reply`, req.message)}
 <tr><td style="padding:14px 20px;">
 <p style="margin:0;font-size:13px;color:#555;line-height:1.6;">You have also received a notification in your account. You can access updates from your <strong>Account Notifications</strong>, <strong>Tasks</strong>, or <strong>Inbox</strong>.</p>
 </td></tr></table>
-${sharedSections(typeLabel.toLowerCase())}`;
+${sharedSections(typeLabel.toLowerCase())}</td></tr>`;
 
   return emailShell(`${departmentLabel} — Message`, bodyContent);
 }
