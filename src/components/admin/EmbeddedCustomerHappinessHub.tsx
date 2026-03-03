@@ -211,7 +211,7 @@ export const EmbeddedCustomerHappinessHub = () => {
           status: action === "approve" ? "approved" : "rejected",
           admin_notes: notes,
           reviewed_at: new Date().toISOString(),
-          points_awarded: action === "approve" ? 100 : 0,
+          points_awarded: action === "approve" ? 50 : 0,
           points_awarded_at: action === "approve" ? new Date().toISOString() : null,
         })
         .eq("id", id);
@@ -226,7 +226,7 @@ export const EmbeddedCustomerHappinessHub = () => {
             user_id: userId,
             event_type: "idea_approved",
             event_description: "Idea submission approved",
-            points_delta: 100,
+            points_delta: 50,
             points_balance_after: 0, // This will be recalculated by trigger
             category: "activity",
             source_name: "Customer Happiness",
@@ -240,7 +240,7 @@ export const EmbeddedCustomerHappinessHub = () => {
       }
     },
     onSuccess: (_, { action }) => {
-      toast.success(`Idea ${action === "approve" ? "approved (100 points awarded)" : "rejected"} successfully`);
+      toast.success(`Idea ${action === "approve" ? "approved (50 points awarded)" : "rejected"} successfully`);
       queryClient.invalidateQueries({ queryKey: ["ideas-admin"] });
       setSelectedIdea(null);
       setAdminNotes("");

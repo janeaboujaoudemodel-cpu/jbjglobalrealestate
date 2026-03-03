@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { BrandedLoader } from "@/components/ui/BrandedLoader";
 import { useNavigate } from "react-router-dom";
 import MainLayout from "@/components/MainLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -102,7 +103,10 @@ const BrokerAccount = () => {
   // Check if user is a CRM employee (not just external broker)
   useEffect(() => {
     const checkEmployeeStatus = async () => {
-      if (!user?.id) return;
+      if (!user?.id) {
+        setLoading(false);
+        return;
+      }
       
       const { data } = await supabase
         .from('crm_users_profile')
@@ -185,8 +189,8 @@ const BrokerAccount = () => {
   if (loading || authLoading || roleLoading) {
     return (
       <MainLayout>
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        <div className="min-h-screen bg-black flex items-center justify-center">
+          <BrandedLoader text="Loading..." className="min-h-screen" />
         </div>
       </MainLayout>
     );

@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { emailShell, inquiryBox, recommendedActionsHtml, suggestedActionsHtml, ticketSupportEmbed, feedbackHtml, progressSteps } from "../_shared/email-html.ts";
+import { emailShell, sharedSections, progressSteps, arabicDivider } from "../_shared/email-html.ts";
 
 const RESEND_API_URL = "https://api.resend.com/emails";
 const VERIFIED_SENDER = 'contact@jbj.ae';
@@ -42,19 +42,20 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     const surveyLink = `https://jbj.ae/ticket-survey?ticket=${encodeURIComponent(ticket.ticket_number)}&email=${encodeURIComponent(ticket.email)}`;
+    const createdDate = new Date(ticket.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 
     const statusContent: Record<string, { title: string; subtitle: string; steps: [boolean, boolean, boolean]; checks: [boolean, boolean, boolean]; extraHtml: string }> = {
       in_progress: {
         title: "Your Ticket Is Being Reviewed",
         subtitle: "Our support team is now actively reviewing your ticket. We'll get back to you shortly.",
         steps: [true, true, false], checks: [true, true, false],
-        extraHtml: adminNote ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:12px;margin-bottom:24px;"><tr><td style="padding:20px;"><p style="font-weight:bold;color:#1a1a1a;margin:0 0 8px;">Admin Note:</p><p style="color:#555;margin:0;">${adminNote}</p></td></tr></table>` : '',
+        extraHtml: adminNote ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:16px;margin-bottom:24px;"><tr><td style="padding:20px;"><p style="font-weight:bold;color:#1a1a1a;margin:0 0 8px;">Admin Note:</p><p style="color:#555;margin:0;">${adminNote}</p></td></tr></table>` : '',
       },
       resolved: {
         title: "Your Ticket Has Been Resolved",
-        subtitle: "We're pleased to let you know that your support ticket has been resolved. If you need further assistance, feel free to reach out.",
+        subtitle: "We're pleased to let you know that your support ticket has been resolved.",
         steps: [true, true, true], checks: [true, true, true],
-        extraHtml: `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:12px;margin-bottom:24px;">
+        extraHtml: `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:16px;margin-bottom:24px;">
 <tr><td style="padding:24px;text-align:center;">
 <p style="color:#1a1a1a;font-size:16px;font-weight:bold;margin:0 0 8px;">Rate Your Experience</p>
 <p style="color:#666;font-size:13px;margin:0 0 16px;">Help us improve by sharing your feedback</p>
@@ -78,42 +79,29 @@ const handler = async (req: Request): Promise<Response> => {
 
     const reopenHtml = newStatus === 'resolved' ? `
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:20px 0;">
-<tr><td style="background:linear-gradient(135deg,#fff5f5,#fff0f0);border:2px dashed #e74c3c;border-radius:12px;padding:25px;text-align:center;">
+<tr><td style="background:linear-gradient(135deg,#fff5f5,#fff0f0);border:2px dashed #e74c3c;border-radius:16px;padding:25px;text-align:center;">
 <p style="color:#c0392b;margin:0 0 10px;font-size:16px;font-weight:bold;">Issue Not Resolved?</p>
 <p style="color:#666;font-size:13px;margin:0 0 15px;">If your issue persists, you can reopen this ticket anytime.</p>
 <a href="https://jbj.ae/reopen-ticket?ticket=${encodeURIComponent(ticket.ticket_number)}" style="display:inline-block;background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;text-decoration:none;padding:14px 30px;border-radius:8px;font-weight:bold;font-size:14px;">Reopen This Ticket</a>
 </td></tr></table>` : '';
 
-    const bodyContent = `
-<!-- Content -->
-<tr><td class="content-pad" style="padding:32px;">
+    const bodyContent = `<tr><td class="content-pad" style="padding:32px;">
 <p style="font-size:15px;color:#333;margin:0 0 16px;">Dear <strong>${ticket.full_name}</strong>,</p>
 <p style="font-size:14px;color:#555;margin:0 0 24px;">${content.subtitle}</p>
-
-<!-- Progress -->
 ${progressSteps(['Received', 'In Review', 'Resolved'], content.steps, content.checks)}
-
-<!-- Ticket Info -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:12px;margin-bottom:24px;">
-<tr><td style="padding:20px;text-align:center;">
-<p style="color:#666;font-size:12px;margin:0 0 4px;text-transform:uppercase;letter-spacing:1px;">Ticket Number</p>
-<p style="color:#C8A766;font-size:22px;font-weight:bold;margin:0;letter-spacing:2px;font-family:'Courier New',monospace;">${ticket.ticket_number}</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:16px;margin-bottom:24px;">
+<tr><td style="padding:20px;">
+<p style="color:#666;font-size:12px;margin:0 0 4px;text-transform:uppercase;letter-spacing:1px;">Ticket Summary</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:10px;">
+<tr><td style="padding:7px 0;color:#666;font-size:13px;width:40%;">Ticket Number</td><td style="padding:7px 0;color:#C8A766;font-weight:bold;font-size:14px;font-family:'Courier New',monospace;letter-spacing:2px;">${ticket.ticket_number}</td></tr>
+<tr><td style="padding:7px 0;color:#666;font-size:13px;">Subject</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${ticket.subject}</td></tr>
+<tr><td style="padding:7px 0;color:#666;font-size:13px;">Category</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${ticket.service_category || 'General'}</td></tr>
+<tr><td style="padding:7px 0;color:#666;font-size:13px;">Submitted</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${createdDate}</td></tr>
+</table>
 </td></tr></table>
-
 ${content.extraHtml}
 ${reopenHtml}
-
-${inquiryBox("support ticket")}
-
-${ticketSupportEmbed()}
-
-${recommendedActionsHtml()}
-
-${suggestedActionsHtml()}
-
-${feedbackHtml("ticket")}
-
-<p style="font-size:14px;color:#333;margin-top:24px;">Best regards,<br><span style="color:#C8A766;font-weight:600;">JBJ Global Real Estate Support Team</span></p>
+${sharedSections("support ticket", "JBJ Global Real Estate Support Team")}
 </td></tr>`;
 
     const emailHtml = emailShell("Support Ticket Update", bodyContent);
@@ -133,7 +121,10 @@ ${feedbackHtml("ticket")}
     if (ticket.user_id) {
       const statusLabels: Record<string, string> = { in_progress: "is under review", resolved: "has been resolved" };
       const label = statusLabels[newStatus] || `status changed to ${newStatus}`;
-      await supabaseClient.from("user_notifications").insert({ user_id: ticket.user_id, type: "support_ticket", title: `Ticket ${ticket.ticket_number} Update`, message: `Your ticket "${ticket.subject}" ${label}.`, metadata: { ticket_number: ticket.ticket_number, ticket_id: ticketId, action: newStatus }, is_read: false });
+      await Promise.all([
+        supabaseClient.from("user_notifications").insert({ user_id: ticket.user_id, type: "support_ticket", title: `Ticket ${ticket.ticket_number} Update`, message: `Your ticket "${ticket.subject}" ${label}.`, metadata: { ticket_number: ticket.ticket_number, ticket_id: ticketId, action: newStatus, action_url: "/my-tickets" }, is_read: false }),
+        supabaseClient.from("notifications").insert({ user_id: ticket.user_id, title: `Ticket ${ticket.ticket_number} Update`, body: `Your ticket "${ticket.subject}" ${label}.`, notification_type: "reminder", action_url: "/my-tickets" }),
+      ]);
     }
 
     return new Response(JSON.stringify({ success: true }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });

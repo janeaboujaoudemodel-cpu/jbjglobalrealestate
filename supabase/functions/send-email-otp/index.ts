@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { emailShell, monogramBadge, inquiryBox, recommendedActionsHtml, suggestedActionsHtml, ticketSupportEmbed, feedbackHtml } from "../_shared/email-html.ts";
+import { emailShell, monogramBadge, sharedSections, arabicDivider } from "../_shared/email-html.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -61,13 +61,11 @@ Deno.serve(async (req) => {
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    const bodyContent = `
-<!-- Content -->
-<tr><td class="content-pad" style="padding:32px;">
+    const bodyContent = `<tr><td class="content-pad" style="padding:32px;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:20px;">
 <tr>
-<td width="52" style="vertical-align:top;padding-right:14px;">
-${monogramBadge(48)}
+<td width="56" style="vertical-align:top;padding-right:14px;">
+${monogramBadge(52)}
 </td>
 <td style="vertical-align:middle;">
 <p style="margin:0;font-size:16px;color:#333;">Hello${full_name ? ` <strong>${full_name}</strong>` : ''},</p>
@@ -75,49 +73,31 @@ ${monogramBadge(48)}
 </td>
 </tr>
 </table>
-
-<!-- OTP Code -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;">
 <tr><td style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:12px;padding:28px;text-align:center;">
 <span style="font-size:40px;font-weight:700;letter-spacing:10px;color:#1a1a1a;font-family:'SF Mono',Monaco,Consolas,monospace;">${otpCode}</span>
 </td></tr>
 </table>
-
 <p style="margin:0 0 8px;color:#555;font-size:14px;line-height:1.6;">This code expires in <strong>10 minutes</strong>.</p>
 <p style="margin:0 0 20px;color:#999;font-size:13px;line-height:1.6;">If you didn't request this code, please ignore this email.</p>
-
-${inquiryBox("verification")}
-
-${ticketSupportEmbed()}
-
-${recommendedActionsHtml()}
-
-${suggestedActionsHtml()}
-
-${feedbackHtml("otp")}
-
-<!-- Arabic Divider -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:24px;"><tr><td style="border-top:2px solid #C8A76650;padding-top:16px;"></td></tr></table>
-
-<div style="direction:rtl;text-align:right;">
+${sharedSections("verification")}
+${arabicDivider()}
+</td></tr>
+<tr><td class="content-pad" style="padding:32px;direction:rtl;text-align:right;">
 <p style="margin:0;font-size:16px;color:#333;">مرحباً${full_name ? ` <strong>${full_name}</strong>` : ''}،</p>
 <p style="margin:4px 0 16px;font-size:13px;color:#888;">رمز التحقق الخاص بك من JBJ أدناه</p>
-
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;">
 <tr><td style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:12px;padding:28px;text-align:center;">
 <span style="font-size:40px;font-weight:700;letter-spacing:10px;color:#1a1a1a;font-family:'SF Mono',Monaco,Consolas,monospace;">${otpCode}</span>
 </td></tr>
 </table>
-
 <p style="margin:0 0 8px;color:#555;font-size:14px;">ينتهي هذا الرمز خلال <strong>١٠ دقائق</strong>.</p>
 <p style="margin:0 0 16px;color:#999;font-size:13px;">إذا لم تطلب هذا الرمز، يرجى تجاهل هذا البريد الإلكتروني.</p>
-
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f0fdf4;border:1px solid #22c55e40;border-radius:10px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f0fdf4;border:1px solid #22c55e40;border-radius:16px;">
 <tr><td style="padding:12px 20px;text-align:center;">
 <p style="margin:0;font-size:13px;color:#166534;">تحتاج مساعدة؟ تواصل معنا على <a href="mailto:CONTACT@JBJ.AE" style="color:#15803d;font-weight:700;text-decoration:underline;">CONTACT@JBJ.AE</a></p>
 </td></tr>
 </table>
-</div>
 </td></tr>`;
 
     const emailHtml = emailShell("Email Verification", bodyContent);
