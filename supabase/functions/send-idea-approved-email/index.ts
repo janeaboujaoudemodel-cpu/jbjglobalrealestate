@@ -63,7 +63,7 @@ const handler = async (req: Request): Promise<Response> => {
       bodyContent = `<tr><td class="content-pad" style="padding:32px;">
 <p style="margin:0 0 8px;font-size:28px;font-weight:800;color:#1a1a1a;">Congratulations, ${displayName}!</p>
 ${progressSteps(['Received', 'Under Review', 'Accepted'], [true, true, true], [true, true, true])}
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:12px;margin-bottom:24px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;">
 <tr><td style="padding:24px;text-align:center;">
 <p style="font-size:36px;font-weight:bold;color:#C8A766;margin:0 0 8px;">+50 Points</p>
 <p style="font-size:16px;color:#333;font-style:italic;margin:0;">"${ideaTitle}"</p>
@@ -78,7 +78,7 @@ ${arabicDivider()}
 </td></tr>
 <tr><td class="content-pad" style="padding:32px;direction:rtl;text-align:right;">
 <p style="margin:0;font-size:28px;font-weight:800;color:#1a1a1a;">تهانينا، ${displayNameAr}!</p>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:12px;margin:16px 0 24px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin:16px 0 24px;">
 <tr><td style="padding:24px;text-align:center;">
 <p style="font-size:36px;font-weight:bold;color:#C8A766;margin:0 0 8px;">+50 نقطة</p>
 <p style="font-size:16px;color:#333;font-style:italic;margin:0;">"${ideaTitle}"</p>
@@ -93,7 +93,7 @@ ${arabicDivider()}
       bodyContent = `<tr><td class="content-pad" style="padding:32px;">
 <p style="margin:0 0 8px;font-size:28px;font-weight:800;color:#1a1a1a;">Thank You, ${displayName}!</p>
 ${progressSteps(['Received', 'Under Review', 'Accepted'], [true, false, false], [true, false, false])}
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:12px;margin-bottom:24px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;">
 <tr><td style="padding:24px;text-align:center;">
 <p style="font-size:16px;color:#333;font-style:italic;margin:0;">"${ideaTitle}"</p>
 </td></tr></table>
@@ -107,7 +107,7 @@ ${arabicDivider()}
 </td></tr>
 <tr><td class="content-pad" style="padding:32px;direction:rtl;text-align:right;">
 <p style="margin:0;font-size:28px;font-weight:800;color:#1a1a1a;">شكراً لك، ${displayNameAr}!</p>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:12px;margin:16px 0 24px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin:16px 0 24px;">
 <tr><td style="padding:24px;text-align:center;">
 <p style="font-size:16px;color:#333;font-style:italic;margin:0;">"${ideaTitle}"</p>
 </td></tr></table>
