@@ -84,10 +84,14 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
     if (modeParam === "reset") setMode("reset");
   }, [searchParams]);
 
-  // Test-only: force reactivation dialog preview via /auth?test_reactivation=1 (owner only)
+  // Test-only: force reactivation dialog preview via /auth?test_reactivation=1
+  // Available to owner OR inside preview environment only (never on production domain)
   useEffect(() => {
     if (searchParams.get("test_reactivation") !== "1") return;
-    if (!isOwner) return;
+
+    const hostname = window.location.hostname;
+    const isPreviewEnv = hostname.includes("lovableproject.com") || hostname.includes("id-preview--");
+    if (!isOwner && !isPreviewEnv) return;
 
     setIsReactivationPreview(true);
     setReactivationEmail(searchParams.get("test_email") || email || "preview@jbj.test");

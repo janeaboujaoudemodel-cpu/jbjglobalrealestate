@@ -50,7 +50,7 @@ const SuitesHub = lazy(() => import("./pages/business-suite/SuitesHub"));
 const EducationHub = lazy(() => import("./pages/EducationHub"));
 const AdminChatDashboard = lazy(() => import("./pages/admin/AdminChatDashboard"));
 const AdminIntelligence = lazy(() => import("./pages/admin/AdminIntelligence"));
-import InquiryManagementHub from "./pages/admin/InquiryManagementHub";
+const InquiryManagementHub = lazy(() => import("./pages/admin/InquiryManagementHub"));
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ActiveLeadProvider } from "@/contexts/ActiveLeadContext";
@@ -104,7 +104,7 @@ const AIInsights = lazy(() => import("./pages/market-intelligence/internal/AIIns
 const DataOperations = lazy(() => import("./pages/market-intelligence/internal/DataOperations"));
 const Favorites = lazy(() => import("./pages/Favorites"));
 const Compare = lazy(() => import("./pages/Compare"));
-import Auth from "./pages/Auth";
+const Auth = lazy(() => import("./pages/Auth"));
 const AccessDenied = lazy(() => import("./pages/AccessDenied"));
 const Admin = lazy(() => import("./pages/Admin"));
 const AdminLeads = lazy(() => import("./pages/AdminLeads"));
