@@ -5,6 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { resolveNotificationRoute } from '@/lib/notificationRouting';
 import { useQueryClient } from '@tanstack/react-query';
+import { useUserAlerts } from '@/hooks/useUserAlerts';
 
 interface Notification {
   id: string;
@@ -30,6 +31,7 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
   const { user } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { data: alertCounts } = useUserAlerts();
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
   useEffect(() => {
@@ -74,7 +76,8 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
     setNotifications(all.slice(0, 15));
   };
 
-  const unreadCount = notifications.filter(n => !n.is_read).length;
+  // Use the global alert count for accurate badge (not limited by fetch)
+  const unreadCount = (alertCounts?.unreadTicketNotifications || 0) + (alertCounts?.unreadListingNotifications || 0);
 
   const invalidateCounts = () => {
     queryClient.invalidateQueries({ queryKey: ['user-alert-counts'] });
