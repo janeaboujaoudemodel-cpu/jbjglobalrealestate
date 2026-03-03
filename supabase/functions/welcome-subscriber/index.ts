@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { emailShell, sharedSections, arabicDivider } from "../_shared/email-html.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
@@ -23,53 +24,20 @@ const handler = async (req: Request): Promise<Response> => {
     const { email, name, unsubscribe_token }: WelcomeRequest = await req.json();
     if (!email) throw new Error("Email is required");
 
-    const siteUrl = "https://jbjglobalrealestate.lovable.app";
+    const siteUrl = "https://jbj.ae";
     const firstName = name ? name.split(' ')[0] : 'Valued Member';
     const unsubUrl = `${siteUrl}/unsubscribe?token=${unsubscribe_token || ''}`;
     const prefsUrl = `${siteUrl}/email-preferences?token=${unsubscribe_token || ''}`;
 
-    const emailHtml = `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Welcome to Stay in the Loop</title>
-</head>
-<body style="margin:0;padding:0;background-color:#ffffff;font-family:'Segoe UI',Arial,Helvetica,sans-serif;">
-<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background-color:#ffffff;">
-<tr><td align="center" style="padding:20px 10px;">
-<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="max-width:600px;width:100%;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+    // BILINGUAL: EN → Arabic divider → AR → Gold divider → Locked sections
+    const bodyContent = `<tr><td class="content-pad" style="padding:32px;">
+<p style="font-size:15px;color:#333;margin:0 0 16px;">Dear <strong>${firstName}</strong>,</p>
+<p style="font-size:14px;color:#555;margin:0 0 24px;">Welcome to <strong>Stay in the Loop</strong> — you are now part of an exclusive real estate intelligence network. We are committed to delivering only strategic value — no spam, ever.</p>
 
-<!-- Logo Banner -->
-<tr><td style="background:#ffffff;padding:24px 30px 16px;text-align:center;">
-<img src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/jbj-monogram-dark-on-light.png?v=2" alt="JBJ Global Real Estate" width="120" style="max-width:120px;height:auto;" />
-</td></tr>
-
-<!-- Header -->
-<tr><td style="background:linear-gradient(135deg,#0a0a0a 0%,#1a1a1a 50%,#2a2015 100%);padding:32px 30px;text-align:center;">
-<table role="presentation" cellpadding="0" cellspacing="0" width="100%">
-<tr><td align="center">
-<p style="margin:0;font-size:28px;font-weight:700;color:#D4AF37;letter-spacing:3px;font-family:'Georgia',serif;">JBJ GLOBAL</p>
-<p style="margin:4px 0 0;font-size:12px;color:#B8A070;letter-spacing:6px;text-transform:uppercase;">REAL ESTATE</p>
-</td></tr>
-<tr><td align="center" style="padding-top:24px;">
-<p style="margin:0;font-size:22px;color:#ffffff;font-weight:600;">Welcome to Stay in the Loop</p>
-</td></tr>
-</table>
-</td></tr>
-
-<!-- Greeting -->
-<tr><td style="background-color:#FDFBF7;padding:36px 30px 20px;">
-<p style="margin:0;font-size:18px;color:#1a1a1a;font-weight:600;">Dear ${firstName},</p>
-<p style="margin:14px 0 0;font-size:15px;line-height:1.7;color:#444;">You are now part of an exclusive real estate intelligence network. We are committed to delivering only strategic value — no spam, ever.</p>
-</td></tr>
-
-<!-- Benefits Section -->
-<tr><td style="background-color:#FDFBF7;padding:0 30px 30px;">
-<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background:linear-gradient(135deg,#F5EBD7,#EDE4D3);border-left:4px solid #D4AF37;border-radius:0 8px 8px 0;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:18px;margin-bottom:24px;">
 <tr><td style="padding:20px;">
-<p style="margin:0 0 16px;font-size:15px;font-weight:700;color:#1a1a1a;">You will receive:</p>
-<table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+<p style="color:#C8A766;margin:0 0 12px;font-size:12px;text-transform:uppercase;letter-spacing:1.5px;font-weight:bold;">What You Will Receive</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr><td style="padding:6px 0;font-size:14px;color:#333;">&#10022; New project launches — off-plan &amp; ready</td></tr>
 <tr><td style="padding:6px 0;font-size:14px;color:#333;">&#10022; Market intelligence highlights &amp; reports</td></tr>
 <tr><td style="padding:6px 0;font-size:14px;color:#333;">&#10022; Exclusive early access &amp; priority viewing invitations</td></tr>
@@ -77,64 +45,44 @@ const handler = async (req: Request): Promise<Response> => {
 <tr><td style="padding:6px 0;font-size:14px;color:#333;">&#10022; AI tools hub updates, calculators &amp; comparisons</td></tr>
 <tr><td style="padding:6px 0;font-size:14px;color:#333;">&#10022; Area guides &amp; investment insights</td></tr>
 </table>
-</td></tr>
-</table>
-</td></tr>
+</td></tr></table>
 
-<!-- CTA Buttons -->
-<tr><td style="background-color:#FDFBF7;padding:0 20px 36px;text-align:center;">
-<table role="presentation" cellpadding="0" cellspacing="0" width="100%">
-<tr><td align="center" style="padding-bottom:12px;">
-<a href="${siteUrl}/properties" style="display:inline-block;background:transparent;color:#1a1a1a;text-decoration:none;padding:14px 32px;border-radius:8px;font-weight:700;font-size:15px;letter-spacing:0.5px;border:2px solid #C8A766;">Browse Properties &#8594;</a>
-</td></tr>
-<tr><td align="center">
-<a href="${prefsUrl}" style="display:inline-block;background:transparent;color:#1a1a1a;text-decoration:none;padding:12px 28px;border-radius:8px;font-weight:600;font-size:14px;border:2px solid #C8A766;">Manage Preferences</a>
-</td></tr>
-</table>
-</td></tr>
-
-<!-- Footer -->
-<tr><td style="background:#000000;padding:28px 30px;text-align:center;">
-<!-- JBJ Monogram -->
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:12px;">
-<tr><td style="text-align:center;"><img src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/jbj-monogram-light-on-dark.png?v=2" alt="JBJ" width="80" style="max-width:80px;height:auto;" /></td></tr>
-</table>
-<p style="color:#C8A766;font-size:18px;font-weight:bold;margin:0 0 6px;">JBJ Global Real Estate</p>
-<p style="color:#888;font-size:12px;margin:0 0 4px;font-style:italic;">The Only Global AI-Powered Real Estate Intelligence Platform</p>
-<p style="color:#C8A766;font-size:22px;font-weight:bold;margin:12px 0;letter-spacing:1px;">175+ Countries &bull; 2,400+ Cities &bull; 12,000+ Clients Served</p>
-<p style="color:#C8A766;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin:16px 0 10px;">Follow Us &middot; Stay in the Loop</p>
-<table cellpadding="0" cellspacing="0" align="center" style="margin-bottom:16px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;">
 <tr>
-<td style="padding:0 5px;"><a href="https://www.instagram.com/jbj.ae" style="display:inline-block;padding:7px 14px;border:1px solid #C8A766;border-radius:6px;color:#C8A766;text-decoration:none;font-size:11px;font-weight:600;">Instagram</a></td>
-<td style="padding:0 5px;"><a href="https://www.facebook.com/share/1G7CgSaV2L/" style="display:inline-block;padding:7px 14px;border:1px solid #C8A766;border-radius:6px;color:#C8A766;text-decoration:none;font-size:11px;font-weight:600;">Facebook</a></td>
-<td style="padding:0 5px;"><a href="https://www.linkedin.com/company/jbj-global-real-estate/" style="display:inline-block;padding:7px 14px;border:1px solid #C8A766;border-radius:6px;color:#C8A766;text-decoration:none;font-size:11px;font-weight:600;">LinkedIn</a></td>
-<td style="padding:0 5px;"><a href="https://youtube.com/@jbjglobalrealestate" style="display:inline-block;padding:7px 14px;border:1px solid #C8A766;border-radius:6px;color:#C8A766;text-decoration:none;font-size:11px;font-weight:600;">YouTube</a></td>
-</tr>
-</table>
-<p style="margin:0 0 8px;font-size:13px;color:#888;">You can turn email notifications on/off anytime from your account settings.</p>
-<p style="margin:0 0 8px;font-size:13px;color:#888;">You can unsubscribe or resubscribe anytime.</p>
-<p style="margin:16px 0 0;">
+<td width="50%" style="padding:4px;"><a href="${siteUrl}/properties" style="display:block;text-decoration:none;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;"><tr><td style="padding:14px 8px;background:#000;border:1px solid #C8A766;border-radius:18px;text-align:center;"><span style="font-size:13px;color:#C8A766;font-weight:700;letter-spacing:0.5px;">Browse Properties</span></td></tr></table></a></td>
+<td width="50%" style="padding:4px;"><a href="${prefsUrl}" style="display:block;text-decoration:none;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;"><tr><td style="padding:14px 8px;background:#fff;border:1px solid #C8A766;border-radius:18px;text-align:center;"><span style="font-size:13px;color:#1a1a1a;font-weight:700;letter-spacing:0.5px;">Manage Preferences</span></td></tr></table></a></td>
+</tr></table>
+
+<p style="font-size:12px;color:#888;margin:0 0 4px;text-align:center;">You can turn email notifications on/off anytime from your account settings.</p>
+<p style="margin:8px 0 0;text-align:center;">
 <a href="${unsubUrl}" style="color:#C8A766;font-size:12px;text-decoration:underline;">Unsubscribe</a>
 <span style="color:#555;margin:0 8px;">|</span>
 <a href="${prefsUrl}" style="color:#C8A766;font-size:12px;text-decoration:underline;">Manage Preferences</a>
-<span style="color:#555;margin:0 8px;">|</span>
-<a href="mailto:contact@jbj.ae" style="color:#C8A766;font-size:12px;text-decoration:underline;">Contact Us</a>
 </p>
-<p style="margin:16px 0 0;font-size:10px;white-space:nowrap;color:#888;">
-Developed, Created &amp; Implemented by The Founder &amp; CEO, <span style="color:#C8A766;">Jane Bou Jaoude</span>
-</p>
-<p style="margin:8px 0 0;color:#C8A766;font-size:11px;font-weight:600;">
-&copy; ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
-</p>
-<p style="margin:4px 0 0;font-size:10px;color:#777;">Dubai, United Arab Emirates</p>
-<p style="margin:8px 0 0;font-size:10px;color:#666;">You are receiving this email because you opted in on jbj.ae.</p>
-</td></tr>
 
-</table>
+${arabicDivider()}
 </td></tr>
+<tr><td class="content-pad" style="padding:0 32px 32px;direction:rtl;text-align:right;">
+<p style="font-size:15px;color:#333;margin:0 0 16px;">عزيزي/عزيزتي <strong>${firstName}</strong>،</p>
+<p style="font-size:14px;color:#555;margin:0 0 24px;">مرحباً بك في <strong>ابقَ على اطلاع</strong> — أنت الآن جزء من شبكة استخبارات عقارية حصرية. نحن ملتزمون بتقديم القيمة الاستراتيجية فقط — بدون رسائل مزعجة أبداً.</p>
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:18px;margin-bottom:24px;direction:rtl;">
+<tr><td style="padding:20px;">
+<p style="color:#C8A766;margin:0 0 12px;font-size:12px;text-transform:uppercase;letter-spacing:1.5px;font-weight:bold;">ما ستتلقاه</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr><td style="padding:6px 0;font-size:14px;color:#333;text-align:right;">&#10022; إطلاقات المشاريع الجديدة — على الخارطة والجاهزة</td></tr>
+<tr><td style="padding:6px 0;font-size:14px;color:#333;text-align:right;">&#10022; أبرز تقارير ذكاء السوق</td></tr>
+<tr><td style="padding:6px 0;font-size:14px;color:#333;text-align:right;">&#10022; وصول حصري مبكر ودعوات معاينة ذات أولوية</td></tr>
+<tr><td style="padding:6px 0;font-size:14px;color:#333;text-align:right;">&#10022; تخفيضات أسعار وعروض محدودة وعروض المطورين</td></tr>
+<tr><td style="padding:6px 0;font-size:14px;color:#333;text-align:right;">&#10022; تحديثات أدوات الذكاء الاصطناعي والحاسبات والمقارنات</td></tr>
+<tr><td style="padding:6px 0;font-size:14px;color:#333;text-align:right;">&#10022; أدلة المناطق ورؤى الاستثمار</td></tr>
 </table>
-</body>
-</html>`;
+</td></tr></table>
+
+${sharedSections("newsletter subscription", "JBJ Global Real Estate Team")}
+</td></tr>`;
+
+    const emailHtml = emailShell("Welcome to Stay in the Loop", bodyContent);
 
     const emailRes = await fetch("https://api.resend.com/emails", {
       method: "POST",

@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { emailShell, sharedSections, progressSteps, teamReplyCard, ticketSummaryCard, ticketSummaryCardAr, arabicDivider } from "../_shared/email-html.ts";
+import { emailShell, sharedSections, progressSteps, teamReplyCard, ticketSummaryCard, ticketSummaryCardAr, arabicDivider, rateExperienceCard, rateExperienceCardAr, issueNotResolvedCard, issueNotResolvedCardAr } from "../_shared/email-html.ts";
 
 const RESEND_API_URL = "https://api.resend.com/emails";
 
@@ -22,6 +22,10 @@ const corsHeaders = {
 };
 
 const VERIFIED_SENDER = "contact@jbj.ae";
+
+const priorityLabelsEn: Record<string, string> = { low: "Low", medium: "Medium", high: "High", urgent: "Urgent" };
+const priorityLabelsAr: Record<string, string> = { low: "منخفضة", medium: "متوسطة", high: "عالية", urgent: "عاجلة" };
+const categoryLabelsAr: Record<string, string> = { "General": "عام", "Technical": "تقني", "Billing": "الفوترة", "Account": "الحساب", "Property": "العقار", "Partnership": "الشراكة" };
 
 interface ReplyEmailRequest {
   ticketNumber: string;
@@ -56,28 +60,35 @@ const handler = async (req: Request): Promise<Response> => {
 
     const { data: ticket } = await supabaseClient
       .from("support_tickets")
-      .select("id, reopen_token, subject, service_category, created_at, status")
+      .select("id, reopen_token, subject, service_category, created_at, status, priority")
       .eq("ticket_number", ticketNumber)
       .single();
 
     const reopenToken = ticket?.reopen_token || "";
     const subject = ticketSubject || ticket?.subject || "Your Support Request";
-    const category = ticketCategory || ticket?.service_category || "General";
+    const categoryEn = ticketCategory || ticket?.service_category || "General";
+    const categoryAr = categoryLabelsAr[categoryEn] || categoryEn;
     const ticketStatus = ticket?.status || "in_progress";
     const isResolved = ticketStatus === "resolved";
-    const createdDate = ticket?.created_at
-      ? new Date(ticket.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
-      : new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const priority = ticket?.priority || "medium";
+    const priorityEn = priorityLabelsEn[priority] || "Medium";
+    const priorityAr = priorityLabelsAr[priority] || "متوسطة";
+    const createdAt = ticket?.created_at ? new Date(ticket.created_at) : new Date();
+    const createdDate = createdAt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const createdTime = createdAt.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true });
+    const createdDateTime = `${createdDate}, ${createdTime}`;
 
     const reopenUrl = `https://jbj.ae/reopen-ticket?ticket=${ticketNumber}&token=${reopenToken}`;
+    const surveyLink = `https://jbj.ae/ticket-survey?ticket=${encodeURIComponent(ticketNumber)}&email=${encodeURIComponent(customerEmail)}`;
 
     const step1 = true;
     const step2 = ticketStatus === "in_progress" || isResolved;
     const step3 = isResolved;
 
-    const reopenHtml = isResolved ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:20px 0;"><tr><td style="background:linear-gradient(135deg,#fff5f5,#fff0f0);border:2px dashed #e74c3c;border-radius:18px;padding:25px;text-align:center;"><p style="color:#c0392b;margin:0 0 10px;font-size:16px;font-weight:bold;">Issue Not Resolved?</p><p style="color:#666;font-size:13px;margin:0 0 15px;">If your issue persists, you can reopen this ticket anytime.</p><a href="${reopenUrl}" style="display:inline-block;background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;text-decoration:none;padding:14px 30px;border-radius:12px;font-weight:bold;font-size:14px;">Reopen This Ticket</a></td></tr></table>` : '';
-
-    const reopenHtmlAr = isResolved ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:20px 0;direction:rtl;"><tr><td style="background:linear-gradient(135deg,#fff5f5,#fff0f0);border:2px dashed #e74c3c;border-radius:18px;padding:25px;text-align:center;"><p style="color:#c0392b;margin:0 0 10px;font-size:16px;font-weight:bold;">المشكلة لم تُحل؟</p><p style="color:#666;font-size:13px;margin:0 0 15px;">إذا استمرت المشكلة، يمكنك إعادة فتح هذه التذكرة في أي وقت.</p><a href="${reopenUrl}" style="display:inline-block;background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;text-decoration:none;padding:14px 30px;border-radius:12px;font-weight:bold;font-size:14px;">إعادة فتح التذكرة</a></td></tr></table>` : '';
+    const reopenHtml = isResolved ? issueNotResolvedCard(reopenUrl) : '';
+    const reopenHtmlAr = isResolved ? issueNotResolvedCardAr(reopenUrl) : '';
+    const rateHtml = isResolved ? rateExperienceCard(surveyLink) : '';
+    const rateHtmlAr = isResolved ? rateExperienceCardAr(surveyLink) : '';
 
     // BILINGUAL: EN → Arabic divider → AR → Gold divider → Locked sections
     const bodyContent = `<tr><td class="content-pad" style="padding:32px;">
@@ -87,10 +98,12 @@ ${progressSteps(['Received', 'In Review', 'Resolved'], [step1, step2, step3], [s
 ${ticketSummaryCard([
   { label: 'Ticket Number', value: ticketNumber, highlight: true },
   { label: 'Subject', value: subject },
-  { label: 'Category', value: category },
-  { label: 'Submitted', value: createdDate },
+  { label: 'Category', value: categoryEn },
+  { label: 'Priority', value: priorityEn },
+  { label: 'Submitted', value: createdDateTime },
 ])}
 ${teamReplyCard("JBJ Support Team Reply", replyMessage)}
+${rateHtml}
 ${reopenHtml}
 ${arabicDivider()}
 </td></tr>
@@ -100,10 +113,12 @@ ${arabicDivider()}
 ${ticketSummaryCardAr([
   { label: 'رقم التذكرة', value: ticketNumber, highlight: true },
   { label: 'الموضوع', value: subject },
-  { label: 'الفئة', value: category },
-  { label: 'تاريخ الإرسال', value: createdDate },
+  { label: 'الفئة', value: categoryAr },
+  { label: 'الأولوية', value: priorityAr },
+  { label: 'تاريخ ووقت الإرسال', value: createdDateTime },
 ])}
 ${teamReplyCard("رد فريق دعم JBJ", replyMessage)}
+${rateHtmlAr}
 ${reopenHtmlAr}
 ${sharedSections("support ticket", "JBJ Global Real Estate Support Team")}
 </td></tr>`;

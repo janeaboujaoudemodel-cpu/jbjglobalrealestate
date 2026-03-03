@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { emailShell, sharedSections, progressSteps, ticketSummaryCard, ticketSummaryCardAr, arabicDivider } from "../_shared/email-html.ts";
+import { emailShell, sharedSections, progressSteps, ticketSummaryCard, ticketSummaryCardAr, arabicDivider, rateExperienceCard, rateExperienceCardAr, issueNotResolvedCard, issueNotResolvedCardAr } from "../_shared/email-html.ts";
 
 const RESEND_API_URL = "https://api.resend.com/emails";
 const VERIFIED_SENDER = 'contact@jbj.ae';
@@ -22,6 +22,18 @@ async function sendEmail(payload: { from: string; to: string[]; subject: string;
   return { data };
 }
 
+// Priority label maps
+const priorityLabelsEn: Record<string, string> = { low: "Low", medium: "Medium", high: "High", urgent: "Urgent" };
+const priorityLabelsAr: Record<string, string> = { low: "منخفضة", medium: "متوسطة", high: "عالية", urgent: "عاجلة" };
+const categoryLabelsAr: Record<string, string> = {
+  "General": "عام",
+  "Technical": "تقني",
+  "Billing": "الفوترة",
+  "Account": "الحساب",
+  "Property": "العقار",
+  "Partnership": "الشراكة",
+};
+
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -42,17 +54,24 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     const surveyLink = `https://jbj.ae/ticket-survey?ticket=${encodeURIComponent(ticket.ticket_number)}&email=${encodeURIComponent(ticket.email)}`;
-    const createdDate = new Date(ticket.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const createdAt = new Date(ticket.created_at);
+    const createdDate = createdAt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const createdTime = createdAt.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true });
+    const createdDateTime = `${createdDate}, ${createdTime}`;
+    const priority = ticket.priority || "medium";
+    const priorityEn = priorityLabelsEn[priority] || "Medium";
+    const priorityAr = priorityLabelsAr[priority] || "متوسطة";
+    const categoryEn = ticket.service_category || "General";
+    const categoryAr = categoryLabelsAr[categoryEn] || categoryEn;
+    const reopenUrl = `https://jbj.ae/reopen-ticket?ticket=${encodeURIComponent(ticket.ticket_number)}&token=${ticket.reopen_token || ''}`;
 
-    const statusContent: Record<string, { title: string; titleAr: string; subtitle: string; subtitleAr: string; steps: [boolean, boolean, boolean]; checks: [boolean, boolean, boolean]; extraHtml: string; extraHtmlAr: string }> = {
+    const statusContent: Record<string, { title: string; titleAr: string; subtitle: string; subtitleAr: string; steps: [boolean, boolean, boolean]; checks: [boolean, boolean, boolean]; }> = {
       in_progress: {
         title: "Your Ticket Is Being Reviewed",
         titleAr: "تذكرتك قيد المراجعة",
         subtitle: "Our support team is now actively reviewing your ticket. We'll get back to you shortly.",
         subtitleAr: "فريق الدعم لدينا يراجع تذكرتك الآن. سنعود إليك قريباً.",
         steps: [true, true, false], checks: [true, true, false],
-        extraHtml: adminNote ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;"><tr><td style="padding:20px;"><p style="font-weight:bold;color:#1a1a1a;margin:0 0 8px;">Admin Note:</p><p style="color:#555;margin:0;">${adminNote}</p></td></tr></table>` : '',
-        extraHtmlAr: adminNote ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;direction:rtl;"><tr><td style="padding:20px;"><p style="font-weight:bold;color:#1a1a1a;margin:0 0 8px;">ملاحظة الإدارة:</p><p style="color:#555;margin:0;">${adminNote}</p></td></tr></table>` : '',
       },
       resolved: {
         title: "Your Ticket Has Been Resolved",
@@ -60,34 +79,6 @@ const handler = async (req: Request): Promise<Response> => {
         subtitle: "We're pleased to let you know that your support ticket has been resolved.",
         subtitleAr: "يسعدنا إبلاغك بأن تذكرة الدعم الخاصة بك قد تم حلها.",
         steps: [true, true, true], checks: [true, true, true],
-        extraHtml: `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;">
-<tr><td style="padding:24px;text-align:center;">
-<p style="color:#1a1a1a;font-size:16px;font-weight:bold;margin:0 0 8px;">Rate Your Experience</p>
-<p style="color:#666;font-size:13px;margin:0 0 16px;">Help us improve by sharing your feedback</p>
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center">
-<tr>
-<td style="padding:0 4px;"><a href="${surveyLink}&rating=1" style="font-size:28px;text-decoration:none;color:#C8A766;">&#9733;</a></td>
-<td style="padding:0 4px;"><a href="${surveyLink}&rating=2" style="font-size:28px;text-decoration:none;color:#C8A766;">&#9733;</a></td>
-<td style="padding:0 4px;"><a href="${surveyLink}&rating=3" style="font-size:28px;text-decoration:none;color:#C8A766;">&#9733;</a></td>
-<td style="padding:0 4px;"><a href="${surveyLink}&rating=4" style="font-size:28px;text-decoration:none;color:#C8A766;">&#9733;</a></td>
-<td style="padding:0 4px;"><a href="${surveyLink}&rating=5" style="font-size:28px;text-decoration:none;color:#C8A766;">&#9733;</a></td>
-</tr></table>
-<p style="margin:12px 0 0;"><a href="${surveyLink}" style="display:inline-block;padding:12px 32px;background:linear-gradient(135deg,#C8A766,#B8956E);color:#fff;border-radius:12px;text-decoration:none;font-weight:600;font-size:14px;">Complete Survey &amp; Earn 50 Points</a></p>
-</td></tr></table>`,
-        extraHtmlAr: `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;direction:rtl;">
-<tr><td style="padding:24px;text-align:center;">
-<p style="color:#1a1a1a;font-size:16px;font-weight:bold;margin:0 0 8px;">قيّم تجربتك</p>
-<p style="color:#666;font-size:13px;margin:0 0 16px;">ساعدنا في التحسين من خلال مشاركة ملاحظاتك</p>
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center">
-<tr>
-<td style="padding:0 4px;"><a href="${surveyLink}&rating=1" style="font-size:28px;text-decoration:none;color:#C8A766;">&#9733;</a></td>
-<td style="padding:0 4px;"><a href="${surveyLink}&rating=2" style="font-size:28px;text-decoration:none;color:#C8A766;">&#9733;</a></td>
-<td style="padding:0 4px;"><a href="${surveyLink}&rating=3" style="font-size:28px;text-decoration:none;color:#C8A766;">&#9733;</a></td>
-<td style="padding:0 4px;"><a href="${surveyLink}&rating=4" style="font-size:28px;text-decoration:none;color:#C8A766;">&#9733;</a></td>
-<td style="padding:0 4px;"><a href="${surveyLink}&rating=5" style="font-size:28px;text-decoration:none;color:#C8A766;">&#9733;</a></td>
-</tr></table>
-<p style="margin:12px 0 0;"><a href="${surveyLink}" style="display:inline-block;padding:12px 32px;background:linear-gradient(135deg,#C8A766,#B8956E);color:#fff;border-radius:12px;text-decoration:none;font-weight:600;font-size:14px;">أكمل الاستبيان واحصل على ٥٠ نقطة</a></p>
-</td></tr></table>`,
       },
     };
 
@@ -96,21 +87,14 @@ const handler = async (req: Request): Promise<Response> => {
       return new Response(JSON.stringify({ error: "Unsupported status for email" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    const reopenHtml = newStatus === 'resolved' ? `
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:20px 0;">
-<tr><td style="background:linear-gradient(135deg,#fff5f5,#fff0f0);border:2px dashed #e74c3c;border-radius:18px;padding:25px;text-align:center;">
-<p style="color:#c0392b;margin:0 0 10px;font-size:16px;font-weight:bold;">Issue Not Resolved?</p>
-<p style="color:#666;font-size:13px;margin:0 0 15px;">If your issue persists, you can reopen this ticket anytime.</p>
-<a href="https://jbj.ae/reopen-ticket?ticket=${encodeURIComponent(ticket.ticket_number)}" style="display:inline-block;background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;text-decoration:none;padding:14px 30px;border-radius:12px;font-weight:bold;font-size:14px;">Reopen This Ticket</a>
-</td></tr></table>` : '';
+    const adminNoteHtml = adminNote ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;"><tr><td style="padding:20px;"><p style="font-weight:bold;color:#1a1a1a;margin:0 0 8px;">Admin Note:</p><p style="color:#555;margin:0;">${adminNote}</p></td></tr></table>` : '';
+    const adminNoteHtmlAr = adminNote ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;direction:rtl;"><tr><td style="padding:20px;"><p style="font-weight:bold;color:#1a1a1a;margin:0 0 8px;">ملاحظة الإدارة:</p><p style="color:#555;margin:0;">${adminNote}</p></td></tr></table>` : '';
 
-    const reopenHtmlAr = newStatus === 'resolved' ? `
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:20px 0;direction:rtl;">
-<tr><td style="background:linear-gradient(135deg,#fff5f5,#fff0f0);border:2px dashed #e74c3c;border-radius:18px;padding:25px;text-align:center;">
-<p style="color:#c0392b;margin:0 0 10px;font-size:16px;font-weight:bold;">المشكلة لم تُحل؟</p>
-<p style="color:#666;font-size:13px;margin:0 0 15px;">إذا استمرت المشكلة، يمكنك إعادة فتح هذه التذكرة في أي وقت.</p>
-<a href="https://jbj.ae/reopen-ticket?ticket=${encodeURIComponent(ticket.ticket_number)}" style="display:inline-block;background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;text-decoration:none;padding:14px 30px;border-radius:12px;font-weight:bold;font-size:14px;">إعادة فتح التذكرة</a>
-</td></tr></table>` : '';
+    // Rate + Reopen only for resolved
+    const rateHtml = newStatus === 'resolved' ? rateExperienceCard(surveyLink) : '';
+    const rateHtmlAr = newStatus === 'resolved' ? rateExperienceCardAr(surveyLink) : '';
+    const reopenHtml = newStatus === 'resolved' ? issueNotResolvedCard(reopenUrl) : '';
+    const reopenHtmlAr = newStatus === 'resolved' ? issueNotResolvedCardAr(reopenUrl) : '';
 
     // BILINGUAL: EN → Arabic divider → AR → Gold divider → Locked sections
     const bodyContent = `<tr><td class="content-pad" style="padding:32px;">
@@ -120,10 +104,12 @@ ${progressSteps(['Received', 'In Review', 'Resolved'], content.steps, content.ch
 ${ticketSummaryCard([
   { label: 'Ticket Number', value: ticket.ticket_number, highlight: true },
   { label: 'Subject', value: ticket.subject },
-  { label: 'Category', value: ticket.service_category || 'General' },
-  { label: 'Submitted', value: createdDate },
+  { label: 'Category', value: categoryEn },
+  { label: 'Priority', value: priorityEn },
+  { label: 'Submitted', value: createdDateTime },
 ])}
-${content.extraHtml}
+${adminNoteHtml}
+${rateHtml}
 ${reopenHtml}
 ${arabicDivider()}
 </td></tr>
@@ -133,10 +119,12 @@ ${arabicDivider()}
 ${ticketSummaryCardAr([
   { label: 'رقم التذكرة', value: ticket.ticket_number, highlight: true },
   { label: 'الموضوع', value: ticket.subject },
-  { label: 'الفئة', value: ticket.service_category || 'عام' },
-  { label: 'تاريخ الإرسال', value: createdDate },
+  { label: 'الفئة', value: categoryAr },
+  { label: 'الأولوية', value: priorityAr },
+  { label: 'تاريخ ووقت الإرسال', value: createdDateTime },
 ])}
-${content.extraHtmlAr}
+${adminNoteHtmlAr}
+${rateHtmlAr}
 ${reopenHtmlAr}
 ${sharedSections("support ticket", "JBJ Global Real Estate Support Team")}
 </td></tr>`;

@@ -113,8 +113,21 @@ export function feedbackHtml(context = "general"): string {
   return `<table width="100%" cellpadding="0" cellspacing="0" style="margin-top:20px;"><tr><td align="center"><p style="color:#1a1a1a;font-size:16px;font-weight:700;line-height:1.4;margin:0 0 8px;">We Value Your Feedback</p><p style="color:#888;font-size:13px;margin:0 0 14px;">Help us improve by sharing your experience</p><table cellpadding="0" cellspacing="0" align="center"><tr><td style="padding:0 6px;"><a href="${reviewUrl}" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:12px 24px;border-radius:12px;font-weight:700;font-size:13px;border:1px solid #C8A76650;">${SVG_ICONS.review} Leave a Review</a></td><td style="padding:0 6px;"><a href="${surveyUrl}" style="display:inline-block;background:#FDFBF7;border:1px solid #C8A766;color:#1a1a1a;text-decoration:none;padding:11px 20px;border-radius:12px;font-weight:700;font-size:13px;">${SVG_ICONS.survey} Take Survey</a></td></tr></table></td></tr></table>`;
 }
 
+/**
+ * signOffHtml — Company name on line 1, team name on line 2.
+ * RULE: "JBJ Global Real Estate" always on its own line. The department/team goes on the next line.
+ * e.g. teamName="JBJ Global Real Estate Support Team" → line1: "JBJ GLOBAL REAL ESTATE" line2: "SUPPORT TEAM"
+ */
 export function signOffHtml(teamName = "JBJ Global Real Estate Team"): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:28px;"><tr><td><p style="font-size:18px;color:#333;margin:0 0 6px;font-weight:700;">BEST REGARDS,</p><p style="font-size:19px;color:#C8A766;font-weight:800;margin:0;letter-spacing:0.4px;">${teamName.toUpperCase()}</p></td></tr></table>`;
+  // Extract the team suffix after "JBJ Global Real Estate"
+  const base = "JBJ Global Real Estate";
+  let teamSuffix = "Team";
+  if (teamName.toLowerCase().startsWith(base.toLowerCase())) {
+    teamSuffix = teamName.substring(base.length).trim() || "Team";
+  } else {
+    teamSuffix = teamName;
+  }
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:28px;"><tr><td><p style="font-size:18px;color:#333;margin:0 0 6px;font-weight:700;">BEST REGARDS,</p><p style="font-size:19px;color:#C8A766;font-weight:800;margin:0 0 2px;letter-spacing:0.4px;">JBJ GLOBAL REAL ESTATE</p><p style="font-size:16px;color:#C8A766;font-weight:700;margin:0;letter-spacing:0.4px;">${teamSuffix.toUpperCase()}</p></td></tr></table>`;
 }
 
 export function readyToGetStartedHtml(): string {
@@ -125,8 +138,20 @@ export function doNotReplyNotice(): string {
   return `<tr><td style="padding:10px 0 0;text-align:center;"><p style="margin:0;font-size:11px;color:#8a8a8a;line-height:1.5;">This is an automated message. Please do not reply directly to this email.<br/>For any inquiries, contact us at <a href="mailto:CONTACT@JBJ.AE" style="color:#C8A766;text-decoration:underline;font-weight:600;">CONTACT@JBJ.AE</a></p></td></tr>`;
 }
 
+// Social links for footer: Instagram, Facebook, LinkedIn, YouTube, TikTok — gold on black
+function socialLinksFooter(): string {
+  const links = [
+    { label: "Instagram", url: "https://www.instagram.com/jbj.ae" },
+    { label: "Facebook", url: "https://www.facebook.com/share/1G7CgSaV2L/?mibextid=wwXIfr" },
+    { label: "LinkedIn", url: "https://www.linkedin.com/company/jbj-global-real-estate/" },
+    { label: "YouTube", url: "https://youtube.com/@jbjglobalrealestate" },
+    { label: "TikTok", url: "https://www.tiktok.com/@jbj.ae" },
+  ];
+  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:14px;"><tr>${links.map(l => `<td style="padding:0 5px;"><a href="${l.url}" style="display:inline-block;padding:7px 10px;border:1px solid #C8A766;border-radius:6px;color:#C8A766;text-decoration:none;font-size:11px;font-weight:600;">${l.label}</a></td>`).join("")}</tr></table>`;
+}
+
 export function sharedFooterHtml(): string {
-  return `${doNotReplyNotice()}<tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:#000;overflow:hidden;"><tr><td style="padding:30px 26px 28px;text-align:center;"><img src="${LOGO_URL}" alt="JBJ" width="130" style="width:130px;height:auto;display:block;margin:0 auto 12px;border-radius:130px;" /><p style="color:#C8A766;font-size:16px;margin:0 0 6px;font-weight:700;letter-spacing:1.8px;">JBJ GLOBAL REAL ESTATE</p><p style="color:#9ca3af;font-size:12px;margin:0 0 16px;">Your Trusted Partner in Dubai Real Estate</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:14px;"><tr><td style="border-top:1px solid #2f2f2f;"></td></tr></table><p style="margin:0 0 14px;"><a href="tel:+971565911000" style="color:#fff;text-decoration:none;font-size:14px;font-weight:600;">+971 56 591 1000</a><span style="color:#4b5563;margin:0 12px;">|</span><a href="mailto:CONTACT@JBJ.AE" style="color:#fff;text-decoration:underline;font-size:14px;font-weight:600;">CONTACT@JBJ.AE</a></p><table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:14px;"><tr><td style="padding:0 8px;"><a href="https://www.instagram.com/jbjglobalrealestate/" style="color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">Instagram</a></td><td style="padding:0 8px;"><a href="https://www.linkedin.com/company/jbjglobalrealestate/" style="color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">LinkedIn</a></td><td style="padding:0 8px;"><a href="https://www.facebook.com/jbjglobalrealestate" style="color:#C8A766;text-decoration:none;font-size:12px;font-weight:600;">Facebook</a></td></tr></table><p style="color:#9ca3af;font-size:11px;margin:0 0 8px;">Developed, Created &amp; Implemented by The Founder &amp; CEO, <span style="color:#C8A766;">Jane Bou Jaoude</span></p><p style="color:#C8A766;font-size:11px;margin:0;font-weight:600;">&copy; ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.</p></td></tr></table></td></tr>`;
+  return `${doNotReplyNotice()}<tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:#000;overflow:hidden;"><tr><td style="padding:30px 26px 28px;text-align:center;"><img src="${LOGO_URL}" alt="JBJ" width="130" style="width:130px;height:auto;display:block;margin:0 auto 12px;border-radius:130px;" /><p style="color:#C8A766;font-size:16px;margin:0 0 6px;font-weight:700;letter-spacing:1.8px;">JBJ GLOBAL REAL ESTATE</p><p style="color:#9ca3af;font-size:12px;margin:0 0 16px;">Your Trusted Partner in Dubai Real Estate</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:14px;"><tr><td style="border-top:1px solid #2f2f2f;"></td></tr></table><p style="margin:0 0 14px;"><a href="tel:+971565911000" style="color:#fff;text-decoration:none;font-size:14px;font-weight:600;">+971 56 591 1000</a><span style="color:#4b5563;margin:0 12px;">|</span><a href="mailto:CONTACT@JBJ.AE" style="color:#fff;text-decoration:underline;font-size:14px;font-weight:600;">CONTACT@JBJ.AE</a></p>${socialLinksFooter()}<p style="color:#9ca3af;font-size:11px;margin:0 0 8px;">Developed, Created &amp; Implemented by The Founder &amp; CEO, <span style="color:#C8A766;">Jane Bou Jaoude</span></p><p style="color:#C8A766;font-size:11px;margin:0;font-weight:600;">&copy; ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.</p></td></tr></table></td></tr>`;
 }
 
 export function progressSteps(labels: [string, string, string], active: [boolean, boolean, boolean], checks: [boolean, boolean, boolean] = [false, false, false]): string {
@@ -181,6 +206,66 @@ export function ticketSummaryCardAr(rows: Array<{ label: string; value: string; 
     })
     .join("");
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:18px;margin-bottom:24px;direction:rtl;"><tr><td style="padding:20px;"><p style="color:#666;font-size:12px;margin:0 0 8px;text-transform:uppercase;letter-spacing:1px;">ملخص</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${rowsHtml}</table></td></tr></table>`;
+}
+
+/**
+ * Rate Your Experience card — ROUNDED borders matching summary card style.
+ * Used on resolved tickets and all emails.
+ */
+export function rateExperienceCard(surveyLink: string): string {
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:18px;margin-bottom:24px;">
+<tr><td style="padding:24px;text-align:center;">
+<p style="color:#1a1a1a;font-size:16px;font-weight:bold;margin:0 0 8px;">Rate Your Experience</p>
+<p style="color:#666;font-size:13px;margin:0 0 16px;">Help us improve by sharing your feedback</p>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center">
+<tr>
+<td style="padding:0 4px;"><a href="${surveyLink}&rating=1" style="font-size:28px;text-decoration:none;color:#C8A766;">&#9733;</a></td>
+<td style="padding:0 4px;"><a href="${surveyLink}&rating=2" style="font-size:28px;text-decoration:none;color:#C8A766;">&#9733;</a></td>
+<td style="padding:0 4px;"><a href="${surveyLink}&rating=3" style="font-size:28px;text-decoration:none;color:#C8A766;">&#9733;</a></td>
+<td style="padding:0 4px;"><a href="${surveyLink}&rating=4" style="font-size:28px;text-decoration:none;color:#C8A766;">&#9733;</a></td>
+<td style="padding:0 4px;"><a href="${surveyLink}&rating=5" style="font-size:28px;text-decoration:none;color:#C8A766;">&#9733;</a></td>
+</tr></table>
+<p style="margin:12px 0 0;"><a href="${surveyLink}" style="display:inline-block;padding:12px 32px;background:linear-gradient(135deg,#C8A766,#B8956E);color:#fff;border-radius:12px;text-decoration:none;font-weight:600;font-size:14px;">Complete Survey &amp; Earn 50 Points</a></p>
+</td></tr></table>`;
+}
+
+export function rateExperienceCardAr(surveyLink: string): string {
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:18px;margin-bottom:24px;direction:rtl;">
+<tr><td style="padding:24px;text-align:center;">
+<p style="color:#1a1a1a;font-size:16px;font-weight:bold;margin:0 0 8px;">قيّم تجربتك</p>
+<p style="color:#666;font-size:13px;margin:0 0 16px;">ساعدنا في التحسين من خلال مشاركة ملاحظاتك</p>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center">
+<tr>
+<td style="padding:0 4px;"><a href="${surveyLink}&rating=1" style="font-size:28px;text-decoration:none;color:#C8A766;">&#9733;</a></td>
+<td style="padding:0 4px;"><a href="${surveyLink}&rating=2" style="font-size:28px;text-decoration:none;color:#C8A766;">&#9733;</a></td>
+<td style="padding:0 4px;"><a href="${surveyLink}&rating=3" style="font-size:28px;text-decoration:none;color:#C8A766;">&#9733;</a></td>
+<td style="padding:0 4px;"><a href="${surveyLink}&rating=4" style="font-size:28px;text-decoration:none;color:#C8A766;">&#9733;</a></td>
+<td style="padding:0 4px;"><a href="${surveyLink}&rating=5" style="font-size:28px;text-decoration:none;color:#C8A766;">&#9733;</a></td>
+</tr></table>
+<p style="margin:12px 0 0;"><a href="${surveyLink}" style="display:inline-block;padding:12px 32px;background:linear-gradient(135deg,#C8A766,#B8956E);color:#fff;border-radius:12px;text-decoration:none;font-weight:600;font-size:14px;">أكمل الاستبيان واحصل على ٥٠ نقطة</a></p>
+</td></tr></table>`;
+}
+
+/**
+ * Issue Not Resolved card — ROUNDED borders (18px), matching summary card style.
+ * Red theme but with rounded container, not square/dashed edges.
+ */
+export function issueNotResolvedCard(reopenUrl: string): string {
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:20px 0;">
+<tr><td style="background:linear-gradient(135deg,#fff5f5,#fff0f0);border:1px solid #ef4444;border-radius:18px;padding:25px;text-align:center;">
+<p style="color:#c0392b;margin:0 0 10px;font-size:16px;font-weight:bold;">Issue Not Resolved?</p>
+<p style="color:#666;font-size:13px;margin:0 0 15px;">If your issue persists, you can reopen this ticket anytime.</p>
+<a href="${reopenUrl}" style="display:inline-block;background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;text-decoration:none;padding:14px 30px;border-radius:12px;font-weight:bold;font-size:14px;">Reopen This Ticket</a>
+</td></tr></table>`;
+}
+
+export function issueNotResolvedCardAr(reopenUrl: string): string {
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:20px 0;direction:rtl;">
+<tr><td style="background:linear-gradient(135deg,#fff5f5,#fff0f0);border:1px solid #ef4444;border-radius:18px;padding:25px;text-align:center;">
+<p style="color:#c0392b;margin:0 0 10px;font-size:16px;font-weight:bold;">المشكلة لم تُحل؟</p>
+<p style="color:#666;font-size:13px;margin:0 0 15px;">إذا استمرت المشكلة، يمكنك إعادة فتح هذه التذكرة في أي وقت.</p>
+<a href="${reopenUrl}" style="display:inline-block;background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;text-decoration:none;padding:14px 30px;border-radius:12px;font-weight:bold;font-size:14px;">إعادة فتح التذكرة</a>
+</td></tr></table>`;
 }
 
 /**
