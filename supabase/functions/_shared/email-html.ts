@@ -34,14 +34,25 @@ export function sharedHeader(departmentLabel: string): string {
 </td></tr>`;
 }
 
+/**
+ * Monogram badge — CIRCLE only, thin gold border, no square borders ever.
+ */
 export function monogramBadge(size = 48, ringColor = "#C8A766", bgColor = "#000000"): string {
   const logoSize = Math.round(size * 0.86);
-  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td style="width:${size}px;height:${size}px;background:${bgColor};border:2px solid ${ringColor};border-radius:999px;text-align:center;vertical-align:middle;overflow:hidden;"><img src="${LOGO_URL}" alt="JBJ" width="${logoSize}" style="width:${logoSize}px;height:${logoSize}px;display:block;margin:0 auto;object-fit:cover;" /></td></tr></table>`;
+  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td style="width:${size}px;height:${size}px;background:${bgColor};border:1px solid ${ringColor};border-radius:999px;text-align:center;vertical-align:middle;overflow:hidden;"><img src="${LOGO_URL}" alt="JBJ" width="${logoSize}" style="width:${logoSize}px;height:${logoSize}px;display:block;margin:0 auto;object-fit:cover;border-radius:999px;" /></td></tr></table>`;
+}
+
+/**
+ * Profile photo badge — ALWAYS circle, thin gold border only (1px).
+ * Never square. Never thick borders.
+ */
+export function profilePhotoBadge(photoUrl: string, size = 52): string {
+  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td style="width:${size}px;height:${size}px;border:1px solid #C8A766;border-radius:999px;overflow:hidden;"><img src="${photoUrl}" alt="Profile" width="${size}" height="${size}" style="width:${size}px;height:${size}px;display:block;object-fit:cover;border-radius:999px;" /></td></tr></table>`;
 }
 
 export function lockIconBadge(size = 64): string {
   const iconSize = Math.round(size * 0.44);
-  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td style="width:${size}px;height:${size}px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:999px;text-align:center;vertical-align:middle;"><img src="${ICON_LOCK}" alt="Security" width="${iconSize}" height="${iconSize}" style="width:${iconSize}px;height:${iconSize}px;display:block;margin:0 auto;" /></td></tr></table>`;
+  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td style="width:${size}px;height:${size}px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:999px;text-align:center;vertical-align:middle;"><img src="${ICON_LOCK}" alt="Security" width="${iconSize}" height="${iconSize}" style="width:${iconSize}px;height:${iconSize}px;display:block;margin:0 auto;" /></td></tr></table>`;
 }
 
 export function inquiryBox(contextLabel: string): string {
@@ -53,15 +64,18 @@ export function ticketSupportEmbed(): string {
 }
 
 function recommendedCard(title: string, href: string, iconUrl: string): string {
-  return `<td width="33%" style="text-align:center;padding:4px;vertical-align:top;"><a href="${href}" style="display:block;padding:16px 8px;background:#fff;border:2px solid #C8A766;border-radius:18px;text-decoration:none;"><img src="${iconUrl}" alt="${title}" width="28" height="28" style="display:block;margin:0 auto 10px;" /><p style="margin:0;font-size:12px;color:#1a1a1a;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">${title}</p></a></td>`;
+  return `<td width="33%" style="text-align:center;padding:4px;vertical-align:top;"><a href="${href}" style="display:block;padding:16px 8px;background:#fff;border:2px solid #C8A766;border-radius:18px;text-decoration:none;box-shadow:0 4px 12px rgba(200,167,102,0.15);"><img src="${iconUrl}" alt="${title}" width="28" height="28" style="display:block;margin:0 auto 10px;" /><p style="margin:0;font-size:12px;color:#1a1a1a;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">${title}</p></a></td>`;
 }
 
 export function recommendedActionsHtml(): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:36px 0 28px;"><tr><td style="padding-top:34px;border-top:2px solid #C8A76633;text-align:center;"><p style="color:#1a1a1a;font-size:16px;font-weight:700;margin:0 0 18px;line-height:1.4;">Recommended For You</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${recommendedCard("AI Tools", `${SITE_URL}/ai-tools`, ICON_AI_TOOLS)}${recommendedCard("Guides", `${SITE_URL}/guides`, ICON_GUIDES)}${recommendedCard("Properties", `${SITE_URL}/properties`, ICON_PROPERTIES)}</tr></table></td></tr></table>`;
 }
 
+/**
+ * Books showcase — NO borders around books. 3D shadow style. Side by side.
+ */
 function bookCard(title: string, subtitle: string, href: string, img: string): string {
-  return `<td width="50%" style="text-align:center;padding:4px;vertical-align:top;"><a href="${href}" style="display:block;padding:16px 10px;background:#fff;border:2px solid #C8A766;border-radius:18px;text-decoration:none;"><img src="${img}" alt="${title}" width="120" style="width:120px;max-width:100%;height:auto;display:block;margin:0 auto 10px;border-radius:10px;box-shadow:6px 8px 20px rgba(0,0,0,0.18);" /><p style="margin:0 0 4px;font-size:13px;color:#1a1a1a;font-weight:700;">${title}</p><p style="margin:0;font-size:11px;color:#777;">${subtitle}</p></a></td>`;
+  return `<td width="50%" style="text-align:center;padding:6px;vertical-align:top;"><a href="${href}" style="display:block;text-decoration:none;"><img src="${img}" alt="${title}" width="130" style="width:130px;max-width:100%;height:auto;display:block;margin:0 auto 10px;border-radius:8px;box-shadow:8px 10px 24px rgba(0,0,0,0.22),2px 2px 8px rgba(0,0,0,0.1);transform:perspective(400px) rotateY(-3deg);" /><p style="margin:0 0 3px;font-size:13px;color:#1a1a1a;font-weight:700;">${title}</p><p style="margin:0;font-size:11px;color:#777;">${subtitle}</p></a></td>`;
 }
 
 export function booksShowcaseHtml(): string {
@@ -69,7 +83,7 @@ export function booksShowcaseHtml(): string {
 }
 
 export function suggestedActionsHtml(): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:14px 0;"><tr><td width="50%" style="padding:4px;"><a href="${SITE_URL}/properties" style="display:block;padding:12px 8px;background:#fff;border:1px solid #C8A76650;border-radius:14px;text-decoration:none;text-align:center;"><span style="font-size:13px;color:#1a1a1a;font-weight:600;">Explore Properties</span></a></td><td width="50%" style="padding:4px;"><a href="${SITE_URL}/ai-tools" style="display:block;padding:12px 8px;background:#fff;border:1px solid #C8A76650;border-radius:14px;text-decoration:none;text-align:center;"><span style="font-size:13px;color:#1a1a1a;font-weight:600;">AI Tools</span></a></td></tr></table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:14px 0;"><tr><td width="50%" style="padding:4px;"><a href="${SITE_URL}/properties" style="display:block;padding:12px 8px;background:#fff;border:2px solid #C8A766;border-radius:18px;text-decoration:none;text-align:center;box-shadow:0 4px 12px rgba(200,167,102,0.15);"><span style="font-size:13px;color:#1a1a1a;font-weight:600;">Explore Properties</span></a></td><td width="50%" style="padding:4px;"><a href="${SITE_URL}/ai-tools" style="display:block;padding:12px 8px;background:#fff;border:2px solid #C8A766;border-radius:18px;text-decoration:none;text-align:center;box-shadow:0 4px 12px rgba(200,167,102,0.15);"><span style="font-size:13px;color:#1a1a1a;font-weight:600;">AI Tools</span></a></td></tr></table>`;
 }
 
 export function feedbackHtml(context = "general"): string {
@@ -82,8 +96,27 @@ export function signOffHtml(teamName = "JBJ Global Real Estate Team"): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:44px;"><tr><td><p style="font-size:18px;color:#333;margin:0 0 6px;font-weight:700;">BEST REGARDS,</p><p style="font-size:19px;color:#C8A766;font-weight:800;margin:0;letter-spacing:0.4px;">${teamName.toUpperCase()}</p></td></tr></table>`;
 }
 
+/**
+ * Ready to Get Started — matches website exactly: champagne/pearl/gold background,
+ * 3-column contact (WhatsApp/Call/Email), Stay in the Loop with newsletter link.
+ */
 export function readyToGetStartedHtml(): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:28px 0;background:linear-gradient(135deg,#000,#1a1a1a);border-radius:20px;overflow:hidden;"><tr><td style="padding:28px 22px;text-align:center;"><p style="color:#C8A766;font-size:18px;font-weight:700;margin:0 0 6px;">Ready to Get Started?</p><p style="color:#b9b9b9;font-size:13px;margin:0 0 18px;">Connect with our expert team for personalized guidance.</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td width="33%" style="text-align:center;padding:6px;"><a href="https://wa.me/971565911000" style="display:block;padding:12px 4px;border:1px solid #C8A76640;border-radius:14px;text-decoration:none;"><p style="color:#25d366;font-size:11px;text-transform:uppercase;letter-spacing:1px;margin:0 0 4px;font-weight:600;">WhatsApp</p><p style="color:#fff;font-size:11px;margin:0;">+971 56 591 1000</p></a></td><td width="33%" style="text-align:center;padding:6px;"><a href="tel:+971565911000" style="display:block;padding:12px 4px;border:1px solid #C8A76640;border-radius:14px;text-decoration:none;"><p style="color:#60a5fa;font-size:11px;text-transform:uppercase;letter-spacing:1px;margin:0 0 4px;font-weight:600;">Call Us</p><p style="color:#fff;font-size:11px;margin:0;">+971 56 591 1000</p></a></td><td width="33%" style="text-align:center;padding:6px;"><a href="mailto:CONTACT@JBJ.AE" style="display:block;padding:12px 4px;border:1px solid #C8A76640;border-radius:14px;text-decoration:none;"><p style="color:#C8A766;font-size:11px;text-transform:uppercase;letter-spacing:1px;margin:0 0 4px;font-weight:600;">Email</p><p style="color:#fff;font-size:11px;margin:0;">CONTACT@JBJ.AE</p></a></td></tr></table><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:18px;border-top:1px solid #C8A76644;padding-top:16px;"><tr><td style="text-align:center;"><p style="color:#C8A766;font-size:13px;font-weight:700;letter-spacing:1.5px;margin:0 0 10px;text-transform:uppercase;">Stay in the Loop</p><p style="color:#999;font-size:12px;margin:0 0 12px;">Be the first to access new listings, market updates, and personalized brokerage guidance.</p><a href="${SITE_URL}/market-intelligence" style="display:inline-block;color:#C8A766;text-decoration:none;font-size:12px;border:1px solid #C8A76655;border-radius:999px;padding:8px 20px;font-weight:600;">View Market Updates</a></td></tr></table></td></tr></table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:28px 0;background:linear-gradient(135deg,#FDFBF7,#F5F0E6,#F0EBE0);border:1px solid #C8A76640;border-radius:20px;overflow:hidden;">
+<tr><td style="padding:28px 22px;text-align:center;">
+<p style="font-size:22px;font-weight:800;margin:0 0 6px;letter-spacing:1px;background:linear-gradient(135deg,#1a1a1a 0%,#333 30%,#D4AF37 50%,#333 70%,#1a1a1a 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">READY TO GET STARTED?</p>
+<p style="color:#666;font-size:13px;margin:0 0 20px;">Connect with our expert team for personalized guidance.</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+<td width="33%" style="text-align:center;padding:4px;"><a href="https://wa.me/971565911000" style="display:block;padding:14px 4px;background:#fff;border:2px solid #C8A766;border-radius:16px;text-decoration:none;box-shadow:0 4px 12px rgba(200,167,102,0.15);"><p style="color:#25d366;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;margin:0 0 4px;font-weight:700;">WhatsApp</p><p style="color:#1a1a1a;font-size:11px;margin:0;font-weight:600;">+971 56 591 1000</p></a></td>
+<td width="33%" style="text-align:center;padding:4px;"><a href="tel:+971565911000" style="display:block;padding:14px 4px;background:#fff;border:2px solid #C8A766;border-radius:16px;text-decoration:none;box-shadow:0 4px 12px rgba(200,167,102,0.15);"><p style="color:#3b82f6;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;margin:0 0 4px;font-weight:700;">Call Us</p><p style="color:#1a1a1a;font-size:11px;margin:0;font-weight:600;">+971 56 591 1000</p></a></td>
+<td width="33%" style="text-align:center;padding:4px;"><a href="mailto:CONTACT@JBJ.AE" style="display:block;padding:14px 4px;background:#fff;border:2px solid #C8A766;border-radius:16px;text-decoration:none;box-shadow:0 4px 12px rgba(200,167,102,0.15);"><p style="color:#C8A766;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;margin:0 0 4px;font-weight:700;">Email</p><p style="color:#1a1a1a;font-size:11px;margin:0;font-weight:600;">CONTACT@JBJ.AE</p></a></td>
+</tr></table>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:20px;"><tr><td><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="border-top:1px solid #C8A76640;"></td><td style="width:30px;text-align:center;"><span style="color:#C8A76660;font-size:12px;">✦</span></td><td style="border-top:1px solid #C8A76640;"></td></tr></table></td></tr></table>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:18px;"><tr><td style="text-align:center;">
+<p style="font-size:16px;font-weight:800;letter-spacing:2px;margin:0 0 6px;background:linear-gradient(135deg,#1a1a1a 0%,#333 30%,#D4AF37 50%,#333 70%,#1a1a1a 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">✦ STAY IN THE LOOP ✦</p>
+<p style="color:#666;font-size:12px;margin:0 0 14px;">Be the first to access new listings, market updates, and personalized guidance.</p>
+<a href="${SITE_URL}/#ready-to-get-started" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;font-size:13px;border:1px solid #C8A76650;border-radius:999px;padding:10px 28px;font-weight:700;letter-spacing:0.5px;">Subscribe to Updates</a>
+</td></tr></table>
+</td></tr></table>`;
 }
 
 export function doNotReplyNotice(): string {
@@ -106,6 +139,30 @@ export function progressSteps(labels: [string, string, string], active: [boolean
 
 export function arabicDivider(): string {
   return `<tr><td style="padding:44px 32px 8px;text-align:center;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="border-top:2px solid #C8A76650;"></td></tr></table></td></tr>`;
+}
+
+/**
+ * JBJ Team Reply card — LOCKED premium style. Rounded borders (18px).
+ * Reuse this for ALL team replies: support, HR, partnerships, etc.
+ */
+export function teamReplyCard(teamLabel: string, replyMessage: string): string {
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;">
+<tr><td style="padding:20px;">
+<p style="color:#C8A766;margin:0 0 12px;font-size:12px;text-transform:uppercase;letter-spacing:1.5px;font-weight:bold;">${teamLabel}</p>
+<div style="color:#333;font-size:14px;line-height:1.8;white-space:pre-wrap;background:#fff;padding:18px;border-radius:14px;border:1px solid #e8e8e8;">${replyMessage}</div>
+</td></tr></table>`;
+}
+
+/**
+ * Inquiry stages for user inquiry tracking emails
+ */
+export function inquiryStages(currentStage: 'received' | 'reviewing' | 'responded'): string {
+  const stages: [boolean, boolean, boolean] = [
+    true,
+    currentStage === 'reviewing' || currentStage === 'responded',
+    currentStage === 'responded',
+  ];
+  return progressSteps(['Received', 'Reviewing', 'Responded'], stages, stages);
 }
 
 export function sharedSections(context: string, teamName = "JBJ Global Real Estate Team"): string {
