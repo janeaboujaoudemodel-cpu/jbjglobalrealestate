@@ -600,13 +600,11 @@ const Admin = () => {
               <CardContent className="space-y-4">
                 <p className="text-sm text-black/70">
                   Open the account reactivation test flow and verify the "We Found Your Account" popup behavior.
+                  This opens in a new tab to prevent the overlay from freezing this panel.
                 </p>
                 <div className="flex flex-wrap gap-3">
-                  <Button onClick={() => navigate('/auth?test_reactivation=1')} className="bg-gold text-black hover:bg-gold/90">
+                  <Button onClick={() => window.open('/auth?test_reactivation=1', '_blank')} className="bg-gold text-black hover:bg-gold/90">
                     Open Reactivation Test
-                  </Button>
-                  <Button variant="outline" onClick={() => navigate('/admin/inquiries')}>
-                    Open Inquiries Hub
                   </Button>
                 </div>
               </CardContent>
