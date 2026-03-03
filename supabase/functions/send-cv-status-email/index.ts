@@ -174,7 +174,6 @@ ${config.extraHtml}
 <tr><td style="text-align:center;">
 <a href="${SITE_URL}/my-account" style="display:inline-block;padding:14px 32px;background:#000;color:#C8A766;border-radius:10px;text-decoration:none;font-weight:600;font-size:14px;border:1px solid #C8A76650;">View My Application Status</a>
 </td></tr></table>
-${sharedSections("career application", "JBJ Global Real Estate HR Team")}
 ${arabicDivider()}
 </td></tr>
 <tr><td class="content-pad" style="padding:32px;direction:rtl;text-align:right;">
@@ -187,15 +186,11 @@ ${arabicDivider()}
 <p style="font-size:14px;color:#555;margin:12px 0 24px;">${config.subtitleAr}</p>
 ${progressSteps(['مُستلم', 'قيد المراجعة', 'القرار'], config.steps, config.stepChecks)}
 ${config.extraHtmlAr}
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:20px;">
 <tr><td style="text-align:center;">
 <a href="${SITE_URL}/my-account" style="display:inline-block;padding:14px 32px;background:#000;color:#C8A766;border-radius:10px;text-decoration:none;font-weight:600;font-size:14px;border:1px solid #C8A76650;">عرض حالة طلبي</a>
 </td></tr></table>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f0fdf4;border:1px solid #22c55e40;border-radius:18px;margin-bottom:24px;">
-<tr><td style="padding:14px 20px;text-align:center;">
-<p style="margin:0;font-size:13px;color:#166534;">للاستفسار حول طلبك، تواصل مع <a href="mailto:CONTACT@JBJ.AE" style="color:#15803d;font-weight:700;text-decoration:underline;">CONTACT@JBJ.AE</a></p>
-</td></tr></table>
-<p style="font-size:14px;color:#333;margin-top:24px;text-align:right;">مع أطيب التحيات،<br><span style="color:#C8A766;font-weight:600;">فريق الموارد البشرية - JBJ Global Real Estate</span></p>
+${sharedSections("career application", "JBJ Global Real Estate HR Team")}
 </td></tr>`;
 
   const html = emailShell("Careers & Recruitment", bodyContent);
