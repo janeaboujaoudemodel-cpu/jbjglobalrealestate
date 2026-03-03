@@ -191,7 +191,7 @@ ${config.extraHtmlAr}
 <tr><td style="text-align:center;">
 <a href="${SITE_URL}/my-account" style="display:inline-block;padding:14px 32px;background:#000;color:#C8A766;border-radius:10px;text-decoration:none;font-weight:600;font-size:14px;border:1px solid #C8A76650;">عرض حالة طلبي</a>
 </td></tr></table>
-${sharedSections("career application", "JBJ Global Real Estate HR Team")}`;
+${arabicDivider()}${sharedSections("career application", "JBJ Global Real Estate HR Team")}</td></tr>`;
 
   const html = emailShell("Careers & Recruitment", bodyContent);
   return { html, subject: subjectMap[req.status] || 'CV Application Update | JBJ Global Real Estate' };
