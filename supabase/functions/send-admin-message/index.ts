@@ -109,6 +109,60 @@ async function logToInbox(supabaseClient: any, req: AdminMessageRequest, directi
   } catch (e) { console.error("Inbox logging error:", e); }
 }
 
+async function extractAndCreateTasks(supabaseClient: any, req: AdminMessageRequest) {
+  if (!req.userId || !req.message || req.message.length < 15) return;
+
+  const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+  if (!LOVABLE_API_KEY) { console.warn("No LOVABLE_API_KEY — skipping task extraction"); return; }
+
+  const prompt = `You are a task extraction assistant. Given an admin message sent to a user, extract any actionable tasks the user needs to complete. Return a JSON array of task objects with "title" (short, max 80 chars) and "description" (one sentence). If no actionable tasks exist, return an empty array [].
+
+Message category: ${req.serviceCategory || "general"}
+Subject: ${req.subject}
+Message: ${req.message}
+
+Only extract clear action items like: submit documents, update profile, respond to inquiry, complete application, upload files, review something, etc. Do NOT create tasks for informational/status updates with no action required.
+
+Return ONLY valid JSON array, no markdown.`;
+
+  const aiRes = await fetch("https://api.lovable.dev/v1/chat/completions", {
+    method: "POST",
+    headers: { "Authorization": `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "google/gemini-2.5-flash-lite",
+      messages: [{ role: "user", content: prompt }],
+      temperature: 0.1,
+      max_tokens: 500,
+    }),
+  });
+
+  if (!aiRes.ok) { console.error("AI task extraction failed:", aiRes.status); return; }
+  const aiData = await aiRes.json();
+  const content = aiData.choices?.[0]?.message?.content?.trim() || "[]";
+
+  let tasks: Array<{ title: string; description?: string }> = [];
+  try {
+    const cleaned = content.replace(/```json?\n?/g, "").replace(/```/g, "").trim();
+    tasks = JSON.parse(cleaned);
+  } catch { console.warn("Could not parse AI task response:", content); return; }
+
+  if (!Array.isArray(tasks) || tasks.length === 0) return;
+
+  // Insert up to 3 tasks max per message
+  const inserts = tasks.slice(0, 3).map(t => ({
+    user_id: req.userId!,
+    title: String(t.title).substring(0, 120),
+    description: t.description ? String(t.description).substring(0, 500) : req.message.substring(0, 200),
+    category: req.serviceCategory || "general",
+    priority: "medium",
+    status: "pending",
+  }));
+
+  const { error } = await supabaseClient.from("admin_tasks").insert(inserts);
+  if (error) console.error("Task insert error:", error);
+  else console.log(`Created ${inserts.length} task(s) for user ${req.userId}`);
+}
+
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -131,10 +185,18 @@ const handler = async (req: Request): Promise<Response> => {
     await logToInbox(supabaseClient, body, 'outbound');
 
     if (body.userId) {
+      // Dual-insert notifications
       await Promise.all([
         supabaseClient.from("user_notifications").insert({ user_id: body.userId, type: body.serviceCategory || "general", title: body.subject, message: body.message, metadata: { reference_id: body.referenceId, service: body.serviceCategory, action_url: "/my-account" }, is_read: false }),
         supabaseClient.from("notifications").insert({ user_id: body.userId, title: body.subject, body: body.message, notification_type: "message", action_url: "/my-account" }),
       ]);
+
+      // Auto-extract tasks from message using AI
+      try {
+        await extractAndCreateTasks(supabaseClient, body);
+      } catch (taskErr) {
+        console.error("Task extraction failed (non-blocking):", taskErr);
+      }
     }
 
     return new Response(JSON.stringify({ success: true }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
