@@ -30,6 +30,7 @@ import HeroButton from "@/components/ui/hero-button";
 import PropertiesMapView from "@/components/maps/PropertiesMapView";
 import type { UnifiedProject } from "@/types/unifiedProject";
 import type { ReellyProject } from "@/hooks/useReellyProjects";
+import ContinueSearching from "@/components/ContinueSearching";
 
 // Currency conversion rates - 10 unified currencies
 const CURRENCY_RATES: Record<string, number> = {
@@ -357,6 +358,11 @@ const PropertiesReelly = () => {
           </div>
         </div>
       </div>
+
+      {/* Continue Searching - Recently viewed properties */}
+      {!isMapMode && (
+        <ContinueSearching type="property" className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark" />
+      )}
 
       {/* Standard list mode — edge-to-edge background, 2-col grid, pagination */}
       {!isMapMode && (

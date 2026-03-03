@@ -7,6 +7,7 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useParams, Link, Navigate } from "react-router-dom";
+import { useRecentSearches } from "@/hooks/useRecentSearches";
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
 import { MapPin, ArrowRight, Loader2, Phone, ArrowUpRight, Search, X } from "lucide-react";
@@ -29,6 +30,20 @@ const AreaDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const { data: area, isLoading } = useAreaBySlug(slug);
   const { data: allAreas } = useAreas({ limit: 20 });
+  const { trackView } = useRecentSearches();
+
+  // Track area view
+  useEffect(() => {
+    if (!area) return;
+    trackView({
+      id: area.id,
+      type: "area",
+      name: area.name,
+      slug: area.slug || slug || "",
+      imageUrl: area.image_url || area.hero_image_url || undefined,
+      subtitle: area.emirate,
+    });
+  }, [area]);
 
   // Live project count from database
   const { data: liveProjectCount } = useQuery({

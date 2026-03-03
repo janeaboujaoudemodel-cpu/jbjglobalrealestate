@@ -16,6 +16,7 @@ import { SEOHead } from "@/components/SEOHead";
 import { useAreas, useEmiratesWithAreas, Area } from "@/hooks/useAreas";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 import { optimizeStorageImageUrl } from "@/lib/imageUtils";
+import ContinueSearching from "@/components/ContinueSearching";
 
 const ITEMS_PER_PAGE = 24;
 
@@ -534,6 +535,9 @@ const AreaGuides = () => {
           </Link>
         </div>
       </section>
+
+      {/* Continue Searching - Recently viewed areas */}
+      <ContinueSearching type="area" />
     </div>
   );
 };
