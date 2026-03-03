@@ -70,6 +70,7 @@ function buildWelcomeHtml(
 ): string {
   const arabicGreeting = role === "broker" ? "مرحباً بك في دائرة وسطاء JBJ!" : role === "investor" ? "مرحباً بك في JBJ — رحلتك الاستثمارية تبدأ!" : "مرحباً بك في JBJ Global Real Estate!";
 
+  // BILINGUAL: EN → Arabic divider → AR → Gold divider → Locked sections
   const bodyContent = `<tr><td class="content-pad" style="padding:32px;">
 <p style="margin:0 0 6px;font-size:28px;font-weight:800;color:#1a1a1a;line-height:1.2;">Thank You for Joining Us, ${displayName}</p>
 <p style="margin:0 0 24px;font-size:18px;color:#C8A766;font-weight:600;line-height:1.3;">Your JBJ account is ready — we're thrilled to have you.</p>
@@ -80,7 +81,7 @@ function buildWelcomeHtml(
 <table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:0 0 28px;"><a href="${ctaUrl}" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:14px 40px;border-radius:12px;font-weight:700;font-size:14px;letter-spacing:0.5px;border:1px solid #C8A76650;">${ctaText}</a></td></tr></table>
 ${arabicDivider()}
 </td></tr>
-<tr><td class="content-pad" style="padding:32px;direction:rtl;text-align:right;">
+<tr><td class="content-pad" style="padding:0 32px 32px;direction:rtl;text-align:right;">
 <p style="margin:0;font-size:28px;font-weight:800;color:#1a1a1a;line-height:1.2;">${arabicGreeting}</p>
 <p style="margin:8px 0 0;font-size:18px;color:#C8A766;font-weight:600;">حسابك في JBJ جاهز — يسعدنا انضمامك إلينا.</p>
 <p style="color:#555;font-size:15px;line-height:1.6;margin:16px 0 20px;">لقد قمت بإنشاء حسابك بنجاح مع <strong>JBJ Global Real Estate</strong>. بصفتك عضواً مميزاً، يمكنك الآن الوصول إلى جميع خدماتنا وأدواتنا.</p>
@@ -88,7 +89,6 @@ ${arabicDivider()}
 <p style="color:#555;font-size:15px;line-height:1.6;margin:0 0 24px;">بصفتنا شركة وساطة عقارية مقرها دبي، نحن متخصصون في ربط العملاء بأفضل العقارات في جميع أنحاء الإمارات.</p>
 <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">${benefitsHtmlAr}</table>
 <table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:0 0 20px;"><a href="${ctaUrl}" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:14px 40px;border-radius:12px;font-weight:700;font-size:14px;letter-spacing:0.5px;border:1px solid #C8A76650;">ابدأ التصفح</a></td></tr></table>
-${arabicDivider()}
 ${sharedSections("account")}</td></tr>`;
 
   return emailShell("Welcome to JBJ Global Real Estate", bodyContent);
@@ -136,38 +136,40 @@ serve(async (req) => {
       visitor: { text: "Start Browsing", url: `${SITE_URL}/properties` },
     };
 
+    // TASK 9: Removed "Dedicated Personal Assistant", kept AI Tools, Free Training Academy, Dedicated HR Manager, Support Tickets
     const benefitsByRole: Record<string, string> = {
       broker:
         benefitRow("1", "Free AI Tools", "Unlimited access to property analysis, market reports, and smart recommendations.") +
         benefitRow("2", "Free Training Academy", "Complete courses and videos to boost your real estate career.") +
         benefitRow("3", "Dedicated HR Manager", "Our team provides dedicated support for all your inquiries.") +
-        benefitRow("4", "Support Tickets & Events", "Submit tickets for any query and join exclusive company events and webinars."),
+        benefitRow("4", "Support Tickets", "Submit tickets for any query and get help from our dedicated support team."),
       investor:
         benefitRow("1", "Premium Properties", "Browse exclusive listings across Dubai and the UAE.") +
         benefitRow("2", "AI Property Analysis", "Smart insights and ROI calculations for better investment decisions.") +
-        benefitRow("3", "Support Tickets & Events", "Submit tickets for any query and join exclusive company events."),
+        benefitRow("3", "Support Tickets", "Submit tickets for any query and get help from our dedicated support team."),
       visitor:
         benefitRow("1", "Browse Premium Properties", "Explore our curated selection of UAE properties across all emirates.") +
         benefitRow("2", "Save Your Favorites", "Shortlist properties you love and access them anytime from your dashboard.") +
         benefitRow("3", "Expert Support 24/7", "Our dedicated team is ready to assist with any property inquiry.") +
-        benefitRow("4", "Support Tickets & Events", "Submit tickets, get help, and stay updated on company events."),
+        benefitRow("4", "Support Tickets", "Submit tickets, get help, and stay updated on company events."),
     };
 
+    // TASK 9: Arabic version matching English 1:1
     const benefitsArByRole: Record<string, string> = {
       broker:
         benefitRowAr("1", "أدوات ذكاء اصطناعي مجانية", "وصول غير محدود لتحليل العقارات وتقارير السوق والتوصيات الذكية.") +
         benefitRowAr("2", "أكاديمية تدريب مجانية", "دورات وفيديوهات متكاملة لتعزيز مسيرتك العقارية.") +
         benefitRowAr("3", "مدير موارد بشرية مخصص", "فريقنا يقدم دعماً مباشراً لجميع استفساراتك.") +
-        benefitRowAr("4", "تذاكر الدعم والفعاليات", "قدّم تذكرة لأي استفسار وشارك في فعاليات وندوات الشركة الحصرية."),
+        benefitRowAr("4", "تذاكر الدعم", "قدّم تذكرة لأي استفسار واحصل على المساعدة من فريق الدعم المخصص."),
       investor:
         benefitRowAr("1", "عقارات مميزة", "تصفح عروض حصرية في دبي والإمارات.") +
         benefitRowAr("2", "تحليل عقاري بالذكاء الاصطناعي", "رؤى ذكية وحسابات عائد استثماري لاتخاذ قرارات أفضل.") +
-        benefitRowAr("3", "تذاكر الدعم والفعاليات", "قدّم تذكرة لأي استفسار وشارك في فعاليات الشركة الحصرية."),
+        benefitRowAr("3", "تذاكر الدعم", "قدّم تذكرة لأي استفسار واحصل على المساعدة من فريق الدعم المخصص."),
       visitor:
         benefitRowAr("1", "تصفح عقارات مميزة", "استكشف مجموعتنا المنتقاة من عقارات الإمارات.") +
         benefitRowAr("2", "احفظ المفضلة", "أضف العقارات التي تعجبك وارجع إليها في أي وقت.") +
         benefitRowAr("3", "دعم متخصص 24/7", "فريقنا جاهز لمساعدتك في أي استفسار عقاري.") +
-        benefitRowAr("4", "تذاكر الدعم والفعاليات", "قدّم تذكرة، احصل على المساعدة، وابقَ على اطلاع بفعاليات الشركة."),
+        benefitRowAr("4", "تذاكر الدعم", "قدّم تذكرة، احصل على المساعدة، وابقَ على اطلاع."),
     };
 
     const cta = ctaByRole[role] || ctaByRole.visitor;

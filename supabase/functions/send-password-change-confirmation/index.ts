@@ -1,5 +1,5 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { emailShell, lockIconBadge, sharedSections, ticketSummaryCard, arabicDivider } from "../_shared/email-html.ts";
+import { emailShell, lockIconBadge, sharedSections, ticketSummaryCard, ticketSummaryCardAr, arabicDivider } from "../_shared/email-html.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
@@ -44,6 +44,7 @@ const handler = async (req: Request): Promise<Response> => {
     else if (ua.includes("Firefox")) browserInfo = "Firefox";
     else if (ua.includes("Edge")) browserInfo = "Microsoft Edge";
 
+    // BILINGUAL: EN → Arabic divider → AR → Gold divider → Locked sections
     const bodyContent = `<tr><td class="content-pad" style="padding:32px;">
 <p style="margin:0 0 8px;font-size:26px;font-weight:800;color:#1a1a1a;line-height:1.2;">Password Changed Successfully</p>
 <p style="margin:0 0 20px;font-size:15px;color:#C8A766;font-weight:700;">Your account security has been updated</p>
@@ -67,21 +68,17 @@ ${ticketSummaryCard([
 </td></tr></table>
 ${arabicDivider()}
 </td></tr>
-<tr><td class="content-pad" style="padding:32px;direction:rtl;text-align:right;">
+<tr><td class="content-pad" style="padding:0 32px 32px;direction:rtl;text-align:right;">
 <p style="margin:0 0 8px;font-size:26px;font-weight:800;color:#1a1a1a;line-height:1.2;">تم تغيير كلمة المرور بنجاح</p>
 <p style="margin:0 0 20px;font-size:15px;color:#C8A766;font-weight:700;">تم تحديث أمان حسابك</p>
 <p style="margin:0;font-size:16px;font-weight:600;color:#1a1a1a;">عزيزي/عزيزتي ${recipientName}،</p>
 <p style="margin:8px 0 20px;font-size:14px;line-height:1.6;color:#444;">تم تغيير كلمة المرور الخاصة بك. إذا كنت أنت من قام بذلك، فلا حاجة لأي إجراء إضافي.</p>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:18px;margin-bottom:24px;">
-<tr><td style="padding:20px;">
-<p style="color:#666;font-size:12px;margin:0 0 8px;text-transform:uppercase;letter-spacing:1px;">ملخص الطلب</p>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-<tr><td style="padding:7px 0;color:#666;font-size:13px;width:40%;border-left:1px solid #C8A76630;padding-left:12px;">التاريخ</td><td style="padding:7px 12px 7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${formattedDate}</td></tr>
-<tr><td style="padding:7px 0;color:#666;font-size:13px;border-left:1px solid #C8A76630;padding-left:12px;">الوقت</td><td style="padding:7px 12px 7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${formattedTime} (GMT)</td></tr>
-<tr><td style="padding:7px 0;color:#666;font-size:13px;border-left:1px solid #C8A76630;padding-left:12px;">الجهاز</td><td style="padding:7px 12px 7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${deviceInfo}</td></tr>
-<tr><td style="padding:7px 0;color:#666;font-size:13px;border-left:1px solid #C8A76630;padding-left:12px;">المتصفح</td><td style="padding:7px 12px 7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${browserInfo}</td></tr>
-</table>
-</td></tr></table>
+${ticketSummaryCardAr([
+  { label: 'التاريخ', value: formattedDate },
+  { label: 'الوقت', value: `${formattedTime} (GMT)` },
+  { label: 'الجهاز', value: deviceInfo },
+  { label: 'المتصفح', value: browserInfo },
+])}
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:#fef2f2;border:1px solid #fca5a5;border-radius:18px;margin-bottom:16px;">
 <tr><td style="padding:16px;min-height:84px;">
 <p style="margin:0;font-size:14px;color:#991b1b;line-height:1.6;"><strong>لم تقم بهذا التغيير؟</strong><br/>يرجى التواصل مع فريق الدعم فوراً.</p>
@@ -89,8 +86,8 @@ ${arabicDivider()}
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:8px;"><tr><td align="center">
 <a href="mailto:CONTACT@JBJ.AE?subject=Unauthorized Password Change" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:14px 32px;border-radius:12px;font-weight:700;font-size:14px;border:1px solid #C8A76650;">الإبلاغ عن وصول غير مصرح به</a>
 </td></tr></table>
-${arabicDivider()}
-${sharedSections("account security", "JBJ Global Real Estate Team")}</td></tr>`;
+${sharedSections("account security", "JBJ Global Real Estate Team")}
+</td></tr>`;
 
     const emailHtml = emailShell("Security Notification", bodyContent);
 
