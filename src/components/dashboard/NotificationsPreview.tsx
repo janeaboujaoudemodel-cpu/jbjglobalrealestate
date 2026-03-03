@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatDistanceToNow } from "date-fns";
@@ -28,6 +28,7 @@ const typeIcons: Record<string, React.ReactNode> = {
 
 const NotificationsPreview = () => {
   const { user } = useAuth();
+  const queryClient = useQueryClient();
 
   const { data: notifications, isLoading } = useQuery({
     queryKey: ['notifications-preview', user?.id],
@@ -47,6 +48,26 @@ const NotificationsPreview = () => {
 
   const unreadCount = notifications?.filter(n => !n.is_read).length || 0;
 
+  const markAsRead = async (notificationId: string) => {
+    await supabase
+      .from('notifications')
+      .update({ is_read: true })
+      .eq('id', notificationId);
+    queryClient.invalidateQueries({ queryKey: ['notifications-preview'] });
+    queryClient.invalidateQueries({ queryKey: ['user-alert-counts'] });
+  };
+
+  const markAllRead = async () => {
+    if (!user?.id) return;
+    await supabase
+      .from('notifications')
+      .update({ is_read: true })
+      .eq('user_id', user.id)
+      .eq('is_read', false);
+    queryClient.invalidateQueries({ queryKey: ['notifications-preview'] });
+    queryClient.invalidateQueries({ queryKey: ['user-alert-counts'] });
+  };
+
   return (
     <Card className="border border-border bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))]">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -61,11 +82,18 @@ const NotificationsPreview = () => {
           </div>
           Notifications
         </CardTitle>
-        <Button variant="ghost" size="icon" asChild className="h-8 w-8">
-          <Link to="/profile?tab=settings">
-            <Settings className="w-4 h-4 text-muted-foreground" />
-          </Link>
-        </Button>
+        <div className="flex items-center gap-1">
+          {unreadCount > 0 && (
+            <Button variant="ghost" size="sm" onClick={markAllRead} className="text-xs text-gold h-7 px-2">
+              Mark all read
+            </Button>
+          )}
+          <Button variant="ghost" size="icon" asChild className="h-8 w-8">
+            <Link to="/profile?tab=settings">
+              <Settings className="w-4 h-4 text-muted-foreground" />
+            </Link>
+          </Button>
+        </div>
       </CardHeader>
       <CardContent>
         {isLoading ? (
@@ -86,9 +114,10 @@ const NotificationsPreview = () => {
           <>
             <div className="space-y-3">
               {notifications.map(notification => (
-                <div 
+                <button
                   key={notification.id}
-                  className={`flex items-start gap-3 p-3 rounded-lg border transition-all ${
+                  onClick={() => !notification.is_read && markAsRead(notification.id)}
+                  className={`w-full text-left flex items-start gap-3 p-3 rounded-lg border transition-all cursor-pointer hover:bg-gold/5 ${
                     notification.is_read 
                       ? 'border-border/50 bg-transparent' 
                       : 'border-gold/30 bg-gold/5'
@@ -115,7 +144,7 @@ const NotificationsPreview = () => {
                       {formatDistanceToNow(new Date(notification.created_at), { addSuffix: true })}
                     </p>
                   </div>
-                </div>
+                </button>
               ))}
             </div>
 

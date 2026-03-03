@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Bell, Headphones, CheckCircle, MessageSquare, ArrowRight } from 'lucide-react';
+import { Bell, Headphones, CheckCircle, MessageSquare } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { resolveNotificationRoute } from '@/lib/notificationRouting';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface Notification {
   id: string;
@@ -28,6 +29,7 @@ interface ListingNotificationBellProps {
 const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClose, bellOnly, panelMode, onClose }: ListingNotificationBellProps) => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
   useEffect(() => {
@@ -38,7 +40,6 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
   const fetchNotifications = async () => {
     if (!user) return;
     
-    // Fetch both listing notifications and support ticket notifications
     const [listingResult, ticketResult] = await Promise.all([
       supabase
         .from('user_listing_notifications')
@@ -66,7 +67,6 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
       metadata: n.metadata,
     }));
 
-    // Merge and sort by date
     const all = [...listingNotifs, ...ticketNotifs].sort(
       (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     );
@@ -76,13 +76,20 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
 
   const unreadCount = notifications.filter(n => !n.is_read).length;
 
+  const invalidateCounts = () => {
+    queryClient.invalidateQueries({ queryKey: ['user-alert-counts'] });
+    queryClient.invalidateQueries({ queryKey: ['notifications-preview'] });
+  };
+
   const markAsRead = async (notif: Notification) => {
+    if (notif.is_read) return;
     const table = notif.type === 'listing' ? 'user_listing_notifications' : 'user_notifications';
     await supabase
       .from(table)
       .update({ is_read: true } as any)
       .eq('id', notif.id);
     setNotifications(prev => prev.map(n => n.id === notif.id ? { ...n, is_read: true } : n));
+    invalidateCounts();
   };
 
   const markAllRead = async () => {
@@ -100,6 +107,7 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
         .eq('is_read', false),
     ]);
     setNotifications(prev => prev.map(n => ({ ...n, is_read: true })));
+    invalidateCounts();
   };
 
   const getNotifIcon = (type: string, metadata: any) => {
@@ -133,11 +141,10 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
 
   if (!user) return null;
 
-  // Panel mode: render just the dropdown content (used inside mega menu system)
+  // Panel mode
   if (panelMode) {
     return (
       <div className="w-80 bg-white border-2 border-gold/40 rounded-xl shadow-xl shadow-gold/10 overflow-hidden">
-        {/* Header */}
         <div className="p-3 border-b border-gold/20 bg-gradient-to-r from-[#FDF9F3] to-[#F5EBD7] flex items-center justify-between">
           <h3 className="font-semibold text-sm text-stone-900">Notifications</h3>
           {unreadCount > 0 && (
@@ -147,7 +154,6 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
           )}
         </div>
 
-        {/* List */}
         <div className="max-h-[300px] overflow-y-auto bg-white">
           {notifications.length === 0 ? (
             <div className="p-6 text-center text-stone-400 text-sm">
@@ -187,7 +193,6 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
           )}
         </div>
 
-        {/* Footer */}
         <div className="p-2 border-t border-gold/20 bg-gradient-to-r from-[#FDF9F3] to-[#F5EBD7] flex gap-2">
           <button
             onClick={() => { navigate('/my-tickets'); onClose?.(); }}
@@ -206,7 +211,7 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
     );
   }
 
-  // Bell-only mode: just render the bell icon button (dropdown handled externally by mega menu)
+  // Bell-only mode
   if (bellOnly) {
     return (
       <button
@@ -229,7 +234,6 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
     );
   }
 
-  // Default: standalone bell with its own dropdown (used in mobile/other contexts)
   return null;
 };
 
