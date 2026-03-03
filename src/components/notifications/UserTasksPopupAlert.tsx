@@ -4,24 +4,24 @@ import { useAuth } from "@/contexts/AuthContext";
 import { X, Bell, ArrowRight, CheckCircle, Headphones } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function UserTasksPopupAlert() {
   const { user, isOwner, ownerLoading } = useAuth();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [pendingCount, setPendingCount] = useState(0);
   const [ticketAlerts, setTicketAlerts] = useState<Array<{ id: string; title: string; message: string }>>([]);
   const [dismissed, setDismissed] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    // Wait for owner verification to settle before deciding
     if (!user || ownerLoading) return;
     if (isOwner) {
       setLoaded(true);
       return;
     }
 
-    // Check localStorage for 24h snooze
     const dismissedAt = localStorage.getItem('user_tasks_popup_dismissed_at');
     if (dismissedAt) {
       const elapsed = Date.now() - parseInt(dismissedAt, 10);
@@ -30,12 +30,10 @@ export function UserTasksPopupAlert() {
         setLoaded(true);
         return;
       }
-      // Expired — clear and continue
       localStorage.removeItem('user_tasks_popup_dismissed_at');
     }
 
     const checkAlerts = async () => {
-      // Check pending tasks
       const { count } = await supabase
         .from("admin_tasks")
         .select("id", { count: "exact", head: true })
@@ -44,7 +42,6 @@ export function UserTasksPopupAlert() {
 
       setPendingCount(count || 0);
 
-      // Check unread ticket notifications
       const { data: notifications } = await supabase
         .from("user_notifications")
         .select("id, title, message")
@@ -64,6 +61,9 @@ export function UserTasksPopupAlert() {
   const handleDismiss = () => {
     localStorage.setItem('user_tasks_popup_dismissed_at', Date.now().toString());
     setDismissed(true);
+    // Invalidate alert counts so header badges update
+    queryClient.invalidateQueries({ queryKey: ['user-alert-counts'] });
+    queryClient.invalidateQueries({ queryKey: ['notifications-preview'] });
   };
 
   const totalAlerts = pendingCount + ticketAlerts.length;
@@ -97,7 +97,6 @@ export function UserTasksPopupAlert() {
           </div>
         </div>
 
-        {/* Ticket Alerts */}
         {ticketAlerts.length > 0 && (
           <div className="space-y-2 mb-4">
             {ticketAlerts.map((alert) => (
@@ -112,11 +111,10 @@ export function UserTasksPopupAlert() {
           </div>
         )}
 
-        {/* Pending Tasks */}
         {pendingCount > 0 && (
           <div className="bg-white/60 border border-[#C9A84C]/20 rounded-xl p-4 mb-5">
             <p className="text-black text-sm">
-              You have <span className="font-bold text-[#C9A84C] text-lg">{pendingCount}</span> pending task{pendingCount !== 1 ? "s" : ""} that require your attention. This may include application updates, document requests, or messages from the JBJ support team.
+              You have <span className="font-bold text-[#C9A84C] text-lg">{pendingCount}</span> pending task{pendingCount !== 1 ? "s" : ""} that require your attention.
             </p>
           </div>
         )}

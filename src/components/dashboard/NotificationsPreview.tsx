@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Bell, ChevronRight, Settings, Check, AlertCircle, Info, Headphones, MessageSquare } from "lucide-react";
+import { Bell, ChevronRight, Settings, Check, AlertCircle, Info, Headphones, MessageSquare, Mail, MailOpen } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,6 +9,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatDistanceToNow } from "date-fns";
+import { toast } from "sonner";
 
 interface UnifiedNotification {
   id: string;
@@ -34,6 +36,7 @@ const typeIcons: Record<string, React.ReactNode> = {
 const NotificationsPreview = () => {
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const [activeTab, setActiveTab] = useState<'unread' | 'read'>('unread');
 
   const { data: notifications, isLoading } = useQuery({
     queryKey: ['notifications-preview', user?.id],
@@ -46,19 +49,19 @@ const NotificationsPreview = () => {
           .select('id, title, body, notification_type, is_read, created_at')
           .eq('user_id', user.id)
           .order('created_at', { ascending: false })
-          .limit(5),
+          .limit(20),
         supabase
           .from('user_notifications')
           .select('id, title, message, is_read, created_at, type, metadata')
           .eq('user_id', user.id)
           .order('created_at', { ascending: false })
-          .limit(5),
+          .limit(20),
         supabase
           .from('user_listing_notifications')
           .select('id, title, message, is_read, created_at')
           .eq('user_id', user.id)
           .order('created_at', { ascending: false })
-          .limit(5),
+          .limit(20),
       ]);
 
       const system: UnifiedNotification[] = (systemResult.data || []).map(n => ({
@@ -80,13 +83,21 @@ const NotificationsPreview = () => {
       }));
 
       return [...system, ...tickets, ...listings]
-        .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-        .slice(0, 10);
+        .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
     },
     enabled: !!user?.id,
   });
 
-  const unreadCount = notifications?.filter(n => !n.is_read).length || 0;
+  const invalidateAll = () => {
+    queryClient.invalidateQueries({ queryKey: ['notifications-preview'] });
+    queryClient.invalidateQueries({ queryKey: ['user-alert-counts'] });
+    queryClient.invalidateQueries({ queryKey: ['ticket-notifications'] });
+  };
+
+  const unreadNotifications = notifications?.filter(n => !n.is_read) || [];
+  const readNotifications = notifications?.filter(n => n.is_read) || [];
+  const unreadCount = unreadNotifications.length;
+  const displayedNotifications = activeTab === 'unread' ? unreadNotifications : readNotifications;
 
   const markAsRead = async (notif: UnifiedNotification) => {
     if (notif.is_read) return;
@@ -94,8 +105,18 @@ const NotificationsPreview = () => {
       .from(notif.source_table)
       .update({ is_read: true, read_at: new Date().toISOString() } as any)
       .eq('id', notif.id);
-    queryClient.invalidateQueries({ queryKey: ['notifications-preview'] });
-    queryClient.invalidateQueries({ queryKey: ['user-alert-counts'] });
+    invalidateAll();
+    toast.success("Marked as read");
+  };
+
+  const markAsUnread = async (notif: UnifiedNotification) => {
+    if (!notif.is_read) return;
+    await supabase
+      .from(notif.source_table)
+      .update({ is_read: false, read_at: null } as any)
+      .eq('id', notif.id);
+    invalidateAll();
+    toast.success("Marked as unread");
   };
 
   const markAllRead = async () => {
@@ -106,8 +127,8 @@ const NotificationsPreview = () => {
       supabase.from('user_notifications').update({ is_read: true, read_at: readAt } as any).eq('user_id', user.id).eq('is_read', false),
       supabase.from('user_listing_notifications').update({ is_read: true, read_at: readAt } as any).eq('user_id', user.id).eq('is_read', false),
     ]);
-    queryClient.invalidateQueries({ queryKey: ['notifications-preview'] });
-    queryClient.invalidateQueries({ queryKey: ['user-alert-counts'] });
+    invalidateAll();
+    toast.success("All notifications marked as read");
   };
 
   const getIcon = (notif: UnifiedNotification) => {
@@ -148,34 +169,73 @@ const NotificationsPreview = () => {
         </div>
       </CardHeader>
       <CardContent>
+        {/* Unread / Read Tabs */}
+        <div className="flex gap-1 mb-3 p-1 bg-muted/50 rounded-lg">
+          <button
+            onClick={() => setActiveTab('unread')}
+            className={`flex-1 text-xs font-semibold py-1.5 px-3 rounded-md transition-all flex items-center justify-center gap-1.5 ${
+              activeTab === 'unread'
+                ? 'bg-white text-foreground shadow-sm'
+                : 'text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            <Mail className="w-3.5 h-3.5" />
+            Unread
+            {unreadCount > 0 && (
+              <Badge className="bg-red-500 text-white text-[10px] px-1.5 py-0 ml-0.5">
+                {unreadCount}
+              </Badge>
+            )}
+          </button>
+          <button
+            onClick={() => setActiveTab('read')}
+            className={`flex-1 text-xs font-semibold py-1.5 px-3 rounded-md transition-all flex items-center justify-center gap-1.5 ${
+              activeTab === 'read'
+                ? 'bg-white text-foreground shadow-sm'
+                : 'text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            <MailOpen className="w-3.5 h-3.5" />
+            Read
+            {readNotifications.length > 0 && (
+              <span className="text-[10px] text-muted-foreground ml-0.5">
+                ({readNotifications.length})
+              </span>
+            )}
+          </button>
+        </div>
+
         {isLoading ? (
           <div className="space-y-3">
             {[1, 2, 3].map(i => (
               <Skeleton key={i} className="h-14 w-full" />
             ))}
           </div>
-        ) : !notifications || notifications.length === 0 ? (
+        ) : displayedNotifications.length === 0 ? (
           <div className="text-center py-6">
             <Bell className="w-10 h-10 text-muted-foreground/30 mx-auto mb-2" />
-            <p className="text-sm text-muted-foreground">No notifications yet</p>
+            <p className="text-sm text-muted-foreground">
+              {activeTab === 'unread' ? 'No unread notifications' : 'No read notifications'}
+            </p>
             <p className="text-xs text-muted-foreground mt-1">
-              You'll see updates about your properties here
+              {activeTab === 'unread'
+                ? "You're all caught up!"
+                : 'Notifications you read will appear here'}
             </p>
           </div>
         ) : (
           <>
-            <div className="space-y-3">
-              {notifications.map(notification => (
-                <button
+            <div className="space-y-2 max-h-[400px] overflow-y-auto pr-1">
+              {displayedNotifications.map(notification => (
+                <div
                   key={`${notification.source_table}-${notification.id}`}
-                  onClick={() => markAsRead(notification)}
-                  className={`w-full text-left flex items-start gap-3 p-3 rounded-lg border transition-all cursor-pointer hover:bg-gold/5 ${
+                  className={`w-full text-left flex items-start gap-3 p-3 rounded-lg border transition-all ${
                     notification.is_read 
-                      ? 'border-border/50 bg-transparent' 
-                      : 'border-gold/30 bg-gold/5'
+                      ? 'border-border/50 bg-transparent hover:bg-muted/30' 
+                      : 'border-gold/30 bg-gold/5 hover:bg-gold/10'
                   }`}
                 >
-                  <div className="mt-0.5">
+                  <div className="mt-0.5 flex-shrink-0">
                     {getIcon(notification)}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -196,7 +256,30 @@ const NotificationsPreview = () => {
                       {formatDistanceToNow(new Date(notification.created_at), { addSuffix: true })}
                     </p>
                   </div>
-                </button>
+                  <div className="flex-shrink-0">
+                    {notification.is_read ? (
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-7 w-7 text-muted-foreground hover:text-gold"
+                        title="Mark as Unread"
+                        onClick={() => markAsUnread(notification)}
+                      >
+                        <Mail className="h-3.5 w-3.5" />
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-7 w-7 text-muted-foreground hover:text-gold"
+                        title="Mark as Read"
+                        onClick={() => markAsRead(notification)}
+                      >
+                        <MailOpen className="h-3.5 w-3.5" />
+                      </Button>
+                    )}
+                  </div>
+                </div>
               ))}
             </div>
 

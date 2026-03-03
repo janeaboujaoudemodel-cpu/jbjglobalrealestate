@@ -4,16 +4,25 @@ import { useAuth } from "@/contexts/AuthContext";
 import { X, AlertTriangle, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function OwnerTasksPopupAlert() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [pendingCount, setPendingCount] = useState(0);
   const [dismissed, setDismissed] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     if (!user) return;
+
+    const sessionKey = `owner_tasks_popup_${new Date().toDateString()}`;
+    if (sessionStorage.getItem(sessionKey)) {
+      setDismissed(true);
+      setLoaded(true);
+      return;
+    }
 
     const checkTasks = async () => {
       const [tasksRes, cvsRes] = await Promise.all([
@@ -32,14 +41,6 @@ export function OwnerTasksPopupAlert() {
       setLoaded(true);
     };
 
-    // Check if already dismissed this session
-    const sessionKey = `owner_tasks_popup_${new Date().toDateString()}`;
-    if (sessionStorage.getItem(sessionKey)) {
-      setDismissed(true);
-      setLoaded(true);
-      return;
-    }
-
     checkTasks();
   }, [user]);
 
@@ -47,6 +48,8 @@ export function OwnerTasksPopupAlert() {
     const sessionKey = `owner_tasks_popup_${new Date().toDateString()}`;
     sessionStorage.setItem(sessionKey, "1");
     setDismissed(true);
+    queryClient.invalidateQueries({ queryKey: ['user-alert-counts'] });
+    queryClient.invalidateQueries({ queryKey: ['notifications-preview'] });
   };
 
   if (!loaded || dismissed || pendingCount === 0) return null;
@@ -73,7 +76,7 @@ export function OwnerTasksPopupAlert() {
 
         <div className="bg-white/60 border border-[#C9A84C]/20 rounded-xl p-4 mb-5">
           <p className="text-black text-sm">
-            You have <span className="font-bold text-[#C9A84C] text-lg">{pendingCount}</span> pending item{pendingCount !== 1 ? 's' : ''} that need your review today, including CV applications, leave requests, partnership applications, support tickets, and more.
+            You have <span className="font-bold text-[#C9A84C] text-lg">{pendingCount}</span> pending item{pendingCount !== 1 ? 's' : ''} that need your review today.
           </p>
         </div>
 
