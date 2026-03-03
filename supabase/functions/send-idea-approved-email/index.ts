@@ -42,13 +42,13 @@ const handler = async (req: Request): Promise<Response> => {
 
       await Promise.all([
         supabase.from("user_notifications").insert({
-          user_id: userId, type: "idea_received",
+          user_id: userId, type: isApproved ? "idea_approved" : "idea_received",
           title: notifTitle, message: notifMessage,
           metadata: { ideaId, pointsAwarded, action_url: actionUrl },
         }),
         supabase.from("notifications").insert({
           user_id: userId, title: notifTitle,
-          body: notifMessage, notification_type: "approval",
+          body: notifMessage, notification_type: isApproved ? "approval" : "event",
           action_url: actionUrl,
         }),
       ]);

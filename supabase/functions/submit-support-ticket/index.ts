@@ -154,65 +154,34 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log("Ticket created:", ticket.ticket_number);
 
-    // Send email to support team
-    const supportEmailHtml = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: linear-gradient(135deg, #C8A766, #B8956E); padding: 20px; text-align: center; }
-          .header h1 { color: #fff; margin: 0; }
-          .content { background: #f9f9f9; padding: 20px; }
-          .ticket-info { background: #fff; padding: 15px; border-left: 4px solid #C8A766; margin: 15px 0; }
-          .label { font-weight: bold; color: #666; }
-          .value { color: #333; margin-bottom: 10px; }
-          .footer { text-align: center; padding: 20px; color: #888; font-size: 12px; }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <div class="header">
-            <h1>🎫 New Support Ticket</h1>
-          </div>
-          <div class="content">
-            <div class="ticket-info">
-              <p class="label">Ticket Number:</p>
-              <p class="value" style="font-size: 24px; color: #C8A766; font-weight: bold;">${ticket.ticket_number}</p>
-            </div>
-            <div class="ticket-info">
-              <p class="label">Customer Details:</p>
-              <p class="value">Name: ${fullName}</p>
-              <p class="value">Email: ${email}</p>
-              ${phone ? `<p class="value">Phone: ${phone}</p>` : ""}
-            </div>
-            <div class="ticket-info">
-              <p class="label">Service Category:</p>
-              <p class="value">${serviceCategory}</p>
-            </div>
-            <div class="ticket-info">
-              <p class="label">Subject:</p>
-              <p class="value">${subject}</p>
-            </div>
-            <div class="ticket-info">
-              <p class="label">Description:</p>
-              <p class="value">${description}</p>
-            </div>
-            ${attachmentUrls.length > 0 ? `
-              <div class="ticket-info">
-                <p class="label">Attachments:</p>
-                ${attachmentUrls.map((url: string) => `<p class="value"><a href="${url}">${url}</a></p>`).join("")}
-              </div>
-            ` : ""}
-          </div>
-          <div class="footer">
-            <p>This ticket was submitted via JBJ Global Real Estate Support System</p>
-          </div>
-        </div>
-      </body>
-      </html>
-    `;
+    // Send email to support team using unified shared template
+    const supportEmailHtml = emailShell("Support Team Alert", `<tr><td class="content-pad" style="padding:32px;">
+<p style="font-size:15px;color:#333;margin:0 0 16px;">A new support ticket has been created and needs review.</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;">
+<tr><td style="padding:20px;">
+<p style="color:#666;font-size:12px;margin:0 0 8px;text-transform:uppercase;letter-spacing:1px;">Ticket Summary</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr><td style="padding:7px 0;color:#666;font-size:13px;width:40%;">Ticket Number</td><td style="padding:7px 0;color:#C8A766;font-weight:700;font-size:14px;font-family:'Courier New',monospace;">${ticket.ticket_number}</td></tr>
+<tr><td style="padding:7px 0;color:#666;font-size:13px;">Service Category</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${serviceCategory}</td></tr>
+<tr><td style="padding:7px 0;color:#666;font-size:13px;">Priority</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;text-transform:capitalize;">${aiAnalyzedPriority}</td></tr>
+<tr><td style="padding:7px 0;color:#666;font-size:13px;">Submitted By</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${fullName}</td></tr>
+<tr><td style="padding:7px 0;color:#666;font-size:13px;">Email</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;"><a href="mailto:${email}" style="color:#1a1a1a;text-decoration:underline;">${email}</a></td></tr>
+${phone ? `<tr><td style="padding:7px 0;color:#666;font-size:13px;">Phone</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;"><a href="tel:${phone}" style="color:#1a1a1a;text-decoration:underline;">${phone}</a></td></tr>` : ""}
+</table>
+</td></tr></table>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;">
+<tr><td style="padding:20px;">
+<p style="margin:0 0 8px;font-size:12px;color:#C8A766;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;">Subject</p>
+<p style="margin:0;color:#333;font-size:14px;line-height:1.7;">${subject}</p>
+</td></tr></table>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;">
+<tr><td style="padding:20px;">
+<p style="margin:0 0 8px;font-size:12px;color:#C8A766;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;">Issue Description</p>
+<div style="margin:0;color:#333;font-size:14px;line-height:1.8;white-space:pre-wrap;background:#fff;padding:16px;border-radius:12px;border:1px solid #e8e8e8;">${description}</div>
+</td></tr></table>
+${attachmentUrls.length > 0 ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fdfbf7;border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;"><tr><td style="padding:20px;"><p style="margin:0 0 8px;font-size:12px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Attachments</p>${attachmentUrls.map((url: string) => `<p style="margin:6px 0;"><a href="${url}" style="color:#1a1a1a;text-decoration:underline;font-size:13px;">${url}</a></p>`).join("")}</td></tr></table>` : ""}
+${sharedSections("support ticket", "JBJ Global Real Estate Support Team")}
+</td></tr>`);
 
     // Track email delivery status
     let supportEmailSent = false;

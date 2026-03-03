@@ -136,22 +136,23 @@ const BrokerAccount = () => {
   const fetchData = async () => {
     if (!user) return;
 
+    setLoading(true);
     try {
-      const [modulesRes, progressRes, pointsRes, statsRes, callsRes, chatsRes] = await Promise.all([
+      const [modulesRes, progressRes, pointsRes, statsRes, callsRes, chatsRes] = await Promise.allSettled([
         supabase.from('hr_training_modules').select('id, title, category, duration_minutes').order('display_order'),
         supabase.from('broker_training_progress').select('module_id, is_completed, completed_at').eq('user_id', user.id),
-        supabase.from('broker_points').select('*').eq('user_id', user.id).single(),
+        supabase.from('broker_points').select('*').eq('user_id', user.id).maybeSingle(),
         supabase.from('broker_activity_stats').select('*').eq('user_id', user.id).order('date', { ascending: false }).limit(30),
         supabase.from('broker_call_logs').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(50),
         supabase.from('broker_chat_logs').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(50)
       ]);
 
-      if (modulesRes.data) setModules(modulesRes.data);
-      if (progressRes.data) setProgress(progressRes.data);
-      if (pointsRes.data) setPoints(pointsRes.data);
-      if (statsRes.data) setActivityStats(statsRes.data);
-      if (callsRes.data) setCallLogs(callsRes.data);
-      if (chatsRes.data) setChatLogs(chatsRes.data);
+      if (modulesRes.status === 'fulfilled' && modulesRes.value.data) setModules(modulesRes.value.data);
+      if (progressRes.status === 'fulfilled' && progressRes.value.data) setProgress(progressRes.value.data);
+      if (pointsRes.status === 'fulfilled' && pointsRes.value.data) setPoints(pointsRes.value.data);
+      if (statsRes.status === 'fulfilled' && statsRes.value.data) setActivityStats(statsRes.value.data);
+      if (callsRes.status === 'fulfilled' && callsRes.value.data) setCallLogs(callsRes.value.data);
+      if (chatsRes.status === 'fulfilled' && chatsRes.value.data) setChatLogs(chatsRes.value.data);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {

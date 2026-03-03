@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { emailShell, sharedSections } from "../_shared/email-html.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
@@ -197,7 +198,7 @@ const sendEmail = async (to: string, subject: string, html: string) => {
     body: JSON.stringify({
       from: "JBJ Global Real Estate <contact@jbj.ae>",
       to: [to],
-      replyTo: "CONTACT@JBJ.AE",
+      reply_to: "CONTACT@JBJ.AE",
       subject,
       html,
     }),
@@ -293,90 +294,29 @@ const handler = async (req: Request): Promise<Response> => {
     console.log("Processing inquiry from:", safeEmail);
 
     // Build context section if exists
-    let contextHtml = '';
-    if (context && Object.keys(context).length > 0) {
-      contextHtml = `
-        <div style="margin-top: 20px; padding: 15px; background: #0a0a0a; border-radius: 8px; border: 1px solid #333;">
-          <div style="color: #888; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px;">Search Context</div>
-          ${Object.entries(context).map(([key, value]) => `
-            <div style="color: #aaa; font-size: 14px; margin-bottom: 5px;">
-              <span style="color: #666;">${escapeHtml(key)}:</span> ${escapeHtml(value)}
-            </div>
-          `).join('')}
-        </div>
-      `;
-    }
+    const contextRows = context && Object.keys(context).length > 0
+      ? Object.entries(context).map(([key, value]) => `<tr><td style="padding:6px 0;color:#666;font-size:13px;width:38%;">${escapeHtml(key)}</td><td style="padding:6px 0;color:#1a1a1a;font-size:13px;font-weight:600;">${escapeHtml(value)}</td></tr>`).join("")
+      : "";
 
-    const companyEmailHtml = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <style>
-          body { font-family: Arial, sans-serif; background: #0a0a0a; color: #fff; padding: 40px; }
-          .container { max-width: 600px; margin: 0 auto; background: #1a1a1a; border-radius: 16px; padding: 30px; border: 1px solid #333; }
-          .header { text-align: center; margin-bottom: 30px; border-bottom: 1px solid rgba(168, 146, 90, 0.3); padding-bottom: 20px; }
-          .logo { font-size: 24px; font-weight: 700; letter-spacing: 0.1em; }
-          .logo span { color: #A8925A; }
-          .badge { display: inline-block; padding: 8px 16px; background: rgba(168, 146, 90, 0.2); border-radius: 50px; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: #A8925A; margin-bottom: 20px; }
-          h1 { color: #A8925A; font-size: 22px; margin-bottom: 20px; }
-          .field { margin-bottom: 16px; padding: 15px; background: #0a0a0a; border-radius: 8px; border: 1px solid #333; }
-          .label { color: #888; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 5px; }
-          .value { color: #fff; font-size: 16px; }
-          .message-box { margin-top: 20px; padding: 20px; background: #0a0a0a; border-radius: 8px; border: 1px solid #A8925A; }
-          .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #333; text-align: center; color: #666; font-size: 12px; }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <div class="header">
-            <div class="logo"><span>JBJ</span> GLOBAL REAL ESTATE</div>
-          </div>
-          <div class="badge">${safeSource} Inquiry</div>
-          <h1>${safePropertyName ? `Property Inquiry: ${safePropertyName}` : 'New Website Inquiry'}</h1>
-          <p style="color: #aaa; margin-bottom: 25px;">A potential client has submitted an inquiry through the website.</p>
-          
-          <div class="field">
-            <div class="label">Full Name</div>
-            <div class="value">${safeFullName}</div>
-          </div>
-          
-          <div class="field">
-            <div class="label">Email</div>
-            <div class="value"><a href="mailto:${safeEmail}" style="color: #A8925A;">${safeEmail}</a></div>
-          </div>
-          
-          <div class="field">
-            <div class="label">Phone</div>
-            <div class="value"><a href="tel:${safePhone}" style="color: #A8925A;">${safePhone}</a></div>
-          </div>
-          
-          <div class="field">
-            <div class="label">Nationality</div>
-            <div class="value">${safeNationality}</div>
-          </div>
-          
-          <div class="field">
-            <div class="label">Preferred Language</div>
-            <div class="value">${safeLanguage}</div>
-          </div>
-          
-          ${safeMessage ? `
-          <div class="message-box">
-            <div class="label">Message</div>
-            <div class="value" style="margin-top: 10px; white-space: pre-wrap;">${safeMessage}</div>
-          </div>
-          ` : ''}
-          
-          ${contextHtml}
-          
-          <div class="footer">
-            <p>This inquiry was submitted from the website.</p>
-            <p style="margin-top: 10px;">JBJ Global Real Estate — Real Estate Brokerage</p>
-          </div>
-        </div>
-      </body>
-      </html>
-    `;
+    const companyEmailHtml = emailShell("Inquiries Desk", `<tr><td class="content-pad" style="padding:32px;">
+<p style="font-size:15px;color:#333;margin:0 0 16px;">A new website inquiry has been received.</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;">
+<tr><td style="padding:20px;">
+<p style="color:#666;font-size:12px;margin:0 0 8px;text-transform:uppercase;letter-spacing:1px;">Inquiry Summary</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr><td style="padding:7px 0;color:#666;font-size:13px;width:40%;">Source</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${safeSource}</td></tr>
+<tr><td style="padding:7px 0;color:#666;font-size:13px;">Property</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${safePropertyName || "General Website Inquiry"}</td></tr>
+<tr><td style="padding:7px 0;color:#666;font-size:13px;">Full Name</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${safeFullName}</td></tr>
+<tr><td style="padding:7px 0;color:#666;font-size:13px;">Email</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;"><a href="mailto:${safeEmail}" style="color:#1a1a1a;text-decoration:underline;">${safeEmail}</a></td></tr>
+<tr><td style="padding:7px 0;color:#666;font-size:13px;">Phone</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;"><a href="tel:${safePhone}" style="color:#1a1a1a;text-decoration:underline;">${safePhone}</a></td></tr>
+<tr><td style="padding:7px 0;color:#666;font-size:13px;">Nationality</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${safeNationality}</td></tr>
+<tr><td style="padding:7px 0;color:#666;font-size:13px;">Preferred Language</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${safeLanguage}</td></tr>
+</table>
+</td></tr></table>
+${safeMessage ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;"><tr><td style="padding:20px;"><p style="margin:0 0 8px;font-size:12px;color:#C8A766;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;">Client Message</p><p style="margin:0;color:#333;font-size:14px;line-height:1.8;white-space:pre-wrap;">${safeMessage}</p></td></tr></table>` : ""}
+${contextRows ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fdfbf7;border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;"><tr><td style="padding:20px;"><p style="margin:0 0 8px;font-size:12px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Search Context</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${contextRows}</table></td></tr></table>` : ""}
+${sharedSections("inquiry submission", "JBJ Global Real Estate Inquiries Desk")}
+</td></tr>`);
 
     const subject = safePropertyName 
       ? `Property Inquiry: ${safePropertyName} - ${safeFullName}`
