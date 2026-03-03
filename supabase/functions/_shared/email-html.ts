@@ -1,18 +1,18 @@
-// Unified Email Template Module — JBJ Global Real Estate
+// Premium Email Template Module — JBJ Global Real Estate
 
+const SITE_URL = "https://jbj.ae";
 const ASSET_BASE = "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets";
 const LOGO_URL = `${ASSET_BASE}/jbj-monogram-dark.png?v=3`;
-const SITE_URL = "https://jbj.ae";
 
-// Use direct storage paths for better email-client compatibility
-const ICON_AI_TOOLS = `${ASSET_BASE}/email-icons/ai-tools.svg`;
-const ICON_GUIDES = `${ASSET_BASE}/email-icons/guides.svg`;
-const ICON_PROPERTIES = `${ASSET_BASE}/email-icons/properties.svg`;
-const ICON_LOCK = `${ASSET_BASE}/email-icons/lock.svg`;
-const ICON_HEADPHONES = `${ASSET_BASE}/email-icons/headphones.svg`;
+// Serve email icons/books from website public assets for reliability
+const ICON_AI_TOOLS = `${SITE_URL}/email-icons/ai-tools.svg?v=3`;
+const ICON_GUIDES = `${SITE_URL}/email-icons/guides.svg?v=3`;
+const ICON_PROPERTIES = `${SITE_URL}/email-icons/properties.svg?v=3`;
+const ICON_LOCK = `${SITE_URL}/email-icons/lock.svg?v=3`;
+const ICON_HEADPHONES = `${SITE_URL}/email-icons/headphones.svg?v=3`;
 
-const BOOK_MARKET_REPORT = `${ASSET_BASE}/email-books/market-report-book.jpg`;
-const BOOK_GUIDES_LIBRARY = `${ASSET_BASE}/email-books/guides-library-book.jpg`;
+const BOOK_MARKET_REPORT = `${SITE_URL}/email-books/market-intelligence-cover.jpg?v=1`;
+const BOOK_GUIDES_LIBRARY = `${SITE_URL}/email-books/guides-library-cover.jpg?v=1`;
 
 export { LOGO_URL, SITE_URL };
 
@@ -55,8 +55,8 @@ export function profilePhotoBadge(photoUrl: string, size = 52): string {
 }
 
 export function lockIconBadge(size = 72): string {
-  const iconSize = Math.round(size * 0.44);
-  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td style="padding:6px;border:1px solid #C8A766;border-radius:999px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td style="width:${size}px;height:${size}px;background:#fff;border:1px solid #C8A76666;border-radius:999px;text-align:center;vertical-align:middle;"><img src="${ICON_LOCK}" alt="Security Lock" width="${iconSize}" height="${iconSize}" style="width:${iconSize}px;height:${iconSize}px;display:block;margin:0 auto 2px;" /><div style="font-size:16px;line-height:1;color:#111;">&#128274;</div></td></tr></table></td></tr></table>`;
+  const iconSize = Math.round(size * 0.52);
+  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td style="padding:6px;border:1px solid #C8A766;border-radius:999px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td style="width:${size}px;height:${size}px;background:#fff;border:1px solid #C8A76666;border-radius:999px;text-align:center;vertical-align:middle;"><img src="${ICON_LOCK}" alt="Security Lock" width="${iconSize}" height="${iconSize}" style="width:${iconSize}px;height:${iconSize}px;display:block;margin:0 auto;" /><div style="margin-top:2px;font-size:11px;line-height:1;color:#111;font-weight:700;">LOCK</div></td></tr></table></td></tr></table>`;
 }
 
 export function inquiryBox(contextLabel: string): string {
@@ -84,11 +84,11 @@ function bookCard(title: string, subtitle: string, href: string, img: string): s
 }
 
 export function booksShowcaseHtml(): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:12px 0 24px;"><tr><td style="text-align:center;"><p style="color:#1a1a1a;font-size:14px;font-weight:700;margin:0 0 14px;">Explore Our Library</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${bookCard("Market Report", "Real Estate Intelligence", `${SITE_URL}/market-intelligence/reports`, BOOK_MARKET_REPORT)}${bookCard("Guides Library", "Expert Knowledge Hub", `${SITE_URL}/guides`, BOOK_GUIDES_LIBRARY)}</tr></table></td></tr></table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:12px 0 24px;"><tr><td style="text-align:center;"><p style="color:#1a1a1a;font-size:14px;font-weight:700;margin:0 0 14px;">Explore Our Library</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${bookCard("Market Intelligence Book", "Dubai Market Reports", `${SITE_URL}/market-intelligence/reports`, BOOK_MARKET_REPORT)}${bookCard("Guides Library", "Expert Knowledge Hub", `${SITE_URL}/guides`, BOOK_GUIDES_LIBRARY)}</tr></table></td></tr></table>`;
 }
 
 export function suggestedActionsHtml(): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:14px 0;"><tr><td width="50%" style="padding:4px;"><a href="${SITE_URL}/properties" style="display:block;padding:12px 8px;background:#fff;border:2px solid #C8A766;border-radius:18px;text-decoration:none;text-align:center;box-shadow:0 4px 12px rgba(200,167,102,0.15);"><span style="font-size:13px;color:#1a1a1a;font-weight:600;">Explore Properties</span></a></td><td width="50%" style="padding:4px;"><a href="${SITE_URL}/ai-tools" style="display:block;padding:12px 8px;background:#fff;border:2px solid #C8A766;border-radius:18px;text-decoration:none;text-align:center;box-shadow:0 4px 12px rgba(200,167,102,0.15);"><span style="font-size:13px;color:#1a1a1a;font-weight:600;">AI Tools</span></a></td></tr></table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:14px 0;"><tr><td width="50%" style="padding:4px;"><a href="${SITE_URL}/properties" style="display:block;padding:12px 8px;background:#fff;border:2px solid #C8A766;border-radius:18px;text-decoration:none;text-align:center;box-shadow:0 4px 12px rgba(200,167,102,0.15);"><img src="${ICON_PROPERTIES}" alt="Properties" width="16" height="16" style="display:block;margin:0 auto 6px;width:16px;height:16px;" /><span style="font-size:13px;color:#1a1a1a;font-weight:600;">Explore Properties</span></a></td><td width="50%" style="padding:4px;"><a href="${SITE_URL}/ai-tools" style="display:block;padding:12px 8px;background:#fff;border:2px solid #C8A766;border-radius:18px;text-decoration:none;text-align:center;box-shadow:0 4px 12px rgba(200,167,102,0.15);"><img src="${ICON_AI_TOOLS}" alt="AI Tools" width="16" height="16" style="display:block;margin:0 auto 6px;width:16px;height:16px;" /><span style="font-size:13px;color:#1a1a1a;font-weight:600;">AI Tools</span></a></td></tr></table>`;
 }
 
 export function feedbackHtml(context = "general"): string {
@@ -119,8 +119,8 @@ export function readyToGetStartedHtml(): string {
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:18px;"><tr><td style="text-align:center;">
 <p style="font-size:16px;font-weight:800;letter-spacing:2px;margin:0 0 6px;background:linear-gradient(135deg,#1a1a1a 0%,#333 30%,#D4AF37 50%,#333 70%,#1a1a1a 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">&#10022; STAY IN THE LOOP &#10022;</p>
 <p style="color:#666;font-size:12px;margin:0 0 14px;line-height:1.6;">Be the first to access new listings, market updates, and personalized broker guidance.</p>
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="border:1px solid #D7C29A;border-radius:999px;overflow:hidden;background:#fff;box-shadow:0 5px 14px rgba(200,167,102,0.16);"><tr>
-<td style="padding:5px 8px 5px 12px;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border:1px solid #E7D8BE;border-radius:999px;"><tr><td style="padding:8px 12px;"><span style="font-size:13px;color:#777;">Enter your email</span></td></tr></table></td>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="border:2px solid #D7C29A;border-radius:999px;overflow:hidden;background:#fff;box-shadow:0 5px 14px rgba(200,167,102,0.16);"><tr>
+<td style="padding:5px 8px 5px 12px;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border:1px solid #E7D8BE;border-radius:999px;"><tr><td style="padding:8px 12px;"><span style="font-size:13px;color:#777;">Enter your email here</span></td></tr></table></td>
 <td style="padding:4px 6px 4px 0;"><a href="${SITE_URL}/#ready-to-get-started" style="display:block;background:#000;color:#C8A766;text-decoration:none;padding:11px 18px;border:1px solid #D7C29A;border-radius:999px;font-weight:700;font-size:12px;letter-spacing:0.6px;">Continue &#10140;</a></td>
 </tr></table>
 </td></tr></table>
@@ -212,7 +212,7 @@ export function ticketSummaryCard(rows: Array<{label: string; value: string; hig
 }
 
 export function sharedSections(context: string, teamName = "JBJ Global Real Estate Team"): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:20px 0 0;"><tr><td style="padding:22px;background:linear-gradient(135deg,#fdfbf7,#f6efe2);border:2px solid #C8A76640;border-radius:22px;">${inquiryBox(context)}${ticketSupportEmbed()}${recommendedActionsHtml()}${booksShowcaseHtml()}${suggestedActionsHtml()}${feedbackHtml(context)}${readyToGetStartedHtml()}${signOffHtml(teamName)}</td></tr></table>`;
+  return `${inquiryBox(context)}${ticketSupportEmbed()}${recommendedActionsHtml()}${booksShowcaseHtml()}${suggestedActionsHtml()}${feedbackHtml(context)}${readyToGetStartedHtml()}${signOffHtml(teamName)}`;
 }
 
 /**
