@@ -498,13 +498,13 @@ const ListingPortalSubmit = () => {
 
             {/* Approval Workflow Visual */}
             {!isOwner && (
-              <div className="bg-white/70 border-2 border-gold/20 rounded-xl p-6 mb-8 text-left">
+              <div className="bg-white/70 border-2 border-gold/20 rounded-2xl p-6 mb-8 text-left">
                 <h3 className="text-gold font-semibold mb-4">Approval Stages</h3>
                 <div className="space-y-3">
                   {UNIFIED_APPROVAL_WORKFLOW.map((step) => (
                     <div key={step.step} className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center flex-shrink-0">
-                        <span className="text-gold text-xs font-bold">{step.step}</span>
+                        <Check className="w-4 h-4 text-gold" />
                       </div>
                       <div className="flex-1">
                         <p className="text-black text-sm font-medium">{step.name}</p>
@@ -1230,7 +1230,7 @@ const ListingPortalSubmit = () => {
                                   <p className="text-black text-sm font-medium">{step.name}</p>
                                   <p className="text-zinc-500 text-xs">{step.approverName} — {step.approverTitle}</p>
                                 </div>
-                                <Badge className="bg-gold/10 text-gold border-gold/30 text-xs">Step {step.step}</Badge>
+                                <Badge className="bg-gold/10 text-gold border-gold/30 text-xs flex items-center gap-1"><Check className="w-3 h-3" /> Step {step.step}</Badge>
                               </div>
                             ))}
                           </div>
