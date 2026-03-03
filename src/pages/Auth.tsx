@@ -40,7 +40,7 @@ const RESEND_COOLDOWN_SECONDS = 60;
 const Auth = forwardRef<HTMLDivElement>((_, ref) => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { user, signIn, signUp, updatePassword, signOut, loading } = useAuth();
+  const { user, signIn, signUp, updatePassword, signOut, loading, isOwner } = useAuth();
   const { isAvailable: isBiometricAvailable, authenticate: biometricAuth, hasStoredCredential, isLoading: biometricLoading } = useBiometricAuth();
 
   const [mode, setMode] = useState<AuthMode>("signin");
@@ -84,15 +84,16 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
     if (modeParam === "reset") setMode("reset");
   }, [searchParams]);
 
-  // Test-only: force reactivation dialog preview via /auth?test_reactivation=1
+  // Test-only: force reactivation dialog preview via /auth?test_reactivation=1 (owner only)
   useEffect(() => {
     if (searchParams.get("test_reactivation") !== "1") return;
+    if (!isOwner) return;
 
     setIsReactivationPreview(true);
     setReactivationEmail(searchParams.get("test_email") || email || "preview@jbj.test");
     setReactivationPassword("__preview__");
     setShowReactivationDialog(true);
-  }, [searchParams, email]);
+  }, [searchParams, email, isOwner]);
 
   // ─── Validation ────────────────────────────────────────────
   const validateForm = () => {
@@ -364,7 +365,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
   }
 
   // ─── Already signed in ────────────────────────────────────
-  if (user && mode !== "reset") {
+  if (user && mode !== "reset" && !isReactivationPreview) {
     return (
       <div ref={ref} className="min-h-screen flex items-center justify-center py-12 px-4 bg-gradient-to-br from-white via-gray-50 to-white">
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
