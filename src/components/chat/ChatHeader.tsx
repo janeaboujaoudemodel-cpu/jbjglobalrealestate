@@ -61,7 +61,7 @@ const ChatHeader = React.forwardRef<HTMLDivElement, ChatHeaderProps>(({ step, is
             />
           </div>
         ) : (
-          <div className="w-10 h-10 rounded-lg bg-white border-2 border-gold flex items-center justify-center shadow-lg shadow-gold/20">
+          <div className="w-10 h-10 rounded-full bg-white border-2 border-gold flex items-center justify-center shadow-lg shadow-gold/20">
             <SquareChatIcon className="w-5 h-5 text-gold" size={20} />
           </div>
         )}

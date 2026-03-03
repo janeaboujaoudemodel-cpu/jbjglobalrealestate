@@ -6,8 +6,7 @@ interface SquareChatIconProps {
 }
 
 /**
- * Premium rounded-square chat icon with curved borders.
- * Global standard for all chat features - ultra luxury style.
+ * Rounded chat icon used consistently across collapsed/open chat UI.
  */
 export const SquareChatIcon = ({ className = "", size = 24 }: SquareChatIconProps) => {
   return (
@@ -19,19 +18,16 @@ export const SquareChatIcon = ({ className = "", size = 24 }: SquareChatIconProp
       xmlns="http://www.w3.org/2000/svg"
       className={className}
     >
-      {/* Rounded square message bubble with curved borders and pointed bottom-left */}
       <path
-        d="M4 6C4 4.89543 4.89543 4 6 4H18C19.1046 4 20 4.89543 20 6V14C20 15.1046 19.1046 16 18 16H8.5L5.5 19.5C4.94772 20.1 4 19.7 4 18.9V6Z"
+        d="M12 3.5C7.30558 3.5 3.5 6.85786 3.5 11C3.5 13.1879 4.56443 15.1586 6.25 16.5429V20.25L9.78125 18.3049C10.4837 18.4415 11.2258 18.5 12 18.5C16.6944 18.5 20.5 15.1421 20.5 11C20.5 6.85786 16.6944 3.5 12 3.5Z"
         stroke="currentColor"
         strokeWidth="1.8"
         strokeLinecap="round"
         strokeLinejoin="round"
-        fill="none"
       />
-      {/* Premium dots for message indication */}
-      <circle cx="9" cy="10" r="1.2" fill="currentColor" />
-      <circle cx="12" cy="10" r="1.2" fill="currentColor" />
-      <circle cx="15" cy="10" r="1.2" fill="currentColor" />
+      <circle cx="9" cy="11" r="1.15" fill="currentColor" />
+      <circle cx="12" cy="11" r="1.15" fill="currentColor" />
+      <circle cx="15" cy="11" r="1.15" fill="currentColor" />
     </svg>
   );
 };

@@ -74,7 +74,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   const { t } = useLanguage();
   const isTouchLayout = useIsTouchLayout();
   const { data: alertCounts } = useUserAlerts();
-  const totalUserAlerts = alertCounts?.totalAlerts || 0;
+  const totalUserAlerts = alertCounts?.totalNotificationAlerts || 0;
 
   // Listen for filter-bar-fixed class on body to hide header
   useEffect(() => {

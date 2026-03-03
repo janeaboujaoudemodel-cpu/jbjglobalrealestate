@@ -87,7 +87,7 @@ const CollapsedChatButton = ({ onToggle, onMinimize, showAttentionPulse = false 
             className="relative flex items-center gap-2 sm:gap-3 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-xl px-3 sm:px-5 py-2.5 sm:py-3.5 shadow-2xl shadow-gold/20 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] transition-shadow duration-300 group select-none max-w-[240px] sm:max-w-none"
             aria-label={t('chat.openChat', 'Open chat support')}
           >
-            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold flex items-center justify-center flex-shrink-0 shadow-md shadow-gold/20">
+            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold flex items-center justify-center flex-shrink-0 shadow-md shadow-gold/20">
               <SquareChatIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gold" size={20} />
             </div>
             <div className="flex flex-col items-start min-w-0">
@@ -119,7 +119,7 @@ const CollapsedChatButton = ({ onToggle, onMinimize, showAttentionPulse = false 
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
           aria-label={t('chat.openChat', 'Open chat support')}
-          className="relative flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold shadow-2xl shadow-gold/20 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] transition-shadow duration-300 select-none"
+          className="relative flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold shadow-2xl shadow-gold/20 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] transition-shadow duration-300 select-none"
         >
           <SquareChatIcon className="w-6 h-6 text-gold" size={24} />
         </div>

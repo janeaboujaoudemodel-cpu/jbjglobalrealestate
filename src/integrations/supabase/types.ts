@@ -20142,6 +20142,7 @@ export type Database = {
           is_read: boolean | null
           listing_id: string | null
           message: string | null
+          read_at: string | null
           title: string
           type: string
           user_id: string
@@ -20152,6 +20153,7 @@ export type Database = {
           is_read?: boolean | null
           listing_id?: string | null
           message?: string | null
+          read_at?: string | null
           title: string
           type?: string
           user_id: string
@@ -20162,6 +20164,7 @@ export type Database = {
           is_read?: boolean | null
           listing_id?: string | null
           message?: string | null
+          read_at?: string | null
           title?: string
           type?: string
           user_id?: string
@@ -20183,6 +20186,7 @@ export type Database = {
           is_read: boolean | null
           message: string
           metadata: Json | null
+          read_at: string | null
           title: string
           type: string
           user_id: string
@@ -20193,6 +20197,7 @@ export type Database = {
           is_read?: boolean | null
           message: string
           metadata?: Json | null
+          read_at?: string | null
           title: string
           type: string
           user_id: string
@@ -20203,6 +20208,7 @@ export type Database = {
           is_read?: boolean | null
           message?: string
           metadata?: Json | null
+          read_at?: string | null
           title?: string
           type?: string
           user_id?: string
@@ -23402,6 +23408,7 @@ export type Database = {
       cleanup_expired_vapi_calls: { Args: never; Returns: number }
       cleanup_expired_vapi_recordings: { Args: never; Returns: number }
       cleanup_expired_verifications: { Args: never; Returns: undefined }
+      cleanup_notification_inbox: { Args: never; Returns: undefined }
       cleanup_old_health_logs: { Args: never; Returns: undefined }
       cleanup_rate_limit_records: { Args: never; Returns: number }
       cleanup_temp_video_files: { Args: never; Returns: undefined }
@@ -23495,6 +23502,7 @@ export type Database = {
         Args: { plain_text: string; salt_id: string }
         Returns: string
       }
+      enqueue_pending_cv_task_reminders: { Args: never; Returns: undefined }
       generate_card_number: { Args: never; Returns: string }
       generate_company_id: { Args: never; Returns: string }
       generate_referral_code: { Args: never; Returns: string }
