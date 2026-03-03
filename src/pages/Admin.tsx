@@ -82,6 +82,7 @@ const EmbeddedHRDashboard = lazy(() => import("@/components/admin/EmbeddedHRDash
 const EmbeddedITDepartment = lazy(() => import("@/components/admin/EmbeddedITDepartment").then(m => ({ default: m.EmbeddedITDepartment })));
 const EmbeddedEmployeeHub = lazy(() => import("@/components/admin/EmbeddedEmployeeHub").then(m => ({ default: m.EmbeddedEmployeeHub })));
 const EmbeddedSupportTickets = lazy(() => import("@/components/admin/EmbeddedSupportTickets").then(m => ({ default: m.EmbeddedSupportTickets })));
+const EmbeddedInquiryManagementHub = lazy(() => import("@/pages/admin/InquiryManagementHub"));
 const EmbeddedCustomerHappinessHub = lazy(() => import("@/components/admin/EmbeddedCustomerHappinessHub").then(m => ({ default: m.EmbeddedCustomerHappinessHub })));
 const AdminIntelligence = lazy(() => import("@/pages/admin/AdminIntelligence"));
 const PartnershipsDashboardLazy = lazy(() => import("@/components/admin/PartnershipsDashboard").then(m => ({ default: m.PartnershipsDashboard })));
@@ -495,6 +496,14 @@ const Admin = () => {
                 <Briefcase className="w-4 h-4 mr-2" />
                 Employee Hub
               </TabsTrigger>
+              <TabsTrigger value="inquiries-hub" className="tab-trigger-champagne text-black">
+                <Ticket className="w-4 h-4 mr-2" />
+                Inquiries Hub
+              </TabsTrigger>
+              <TabsTrigger value="auth-test" className="tab-trigger-champagne text-black">
+                <Shield className="w-4 h-4 mr-2" />
+                Authentication Test
+              </TabsTrigger>
               <TabsTrigger value="customer-happiness" className="tab-trigger-champagne text-black">
                 <Heart className="w-4 h-4 mr-2" />
                 Customer Happiness Hub
@@ -575,6 +584,33 @@ const Admin = () => {
             <Suspense fallback={<TabLoadingFallback />}>
               <EmbeddedEmployeeHub />
             </Suspense>
+          </TabsContent>
+
+          <TabsContent value="inquiries-hub" className="space-y-8">
+            <Suspense fallback={<TabLoadingFallback />}>
+              <EmbeddedInquiryManagementHub />
+            </Suspense>
+          </TabsContent>
+
+          <TabsContent value="auth-test" className="space-y-8">
+            <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+              <CardHeader>
+                <CardTitle className="text-black">Authentication Test</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-black/70">
+                  Open the account reactivation test flow and verify the "We Found Your Account" popup behavior.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <Button onClick={() => navigate('/auth?test_reactivation=1')} className="bg-gold text-black hover:bg-gold/90">
+                    Open Reactivation Test
+                  </Button>
+                  <Button variant="outline" onClick={() => navigate('/admin/inquiries')}>
+                    Open Inquiries Hub
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="customer-happiness" className="space-y-8">
