@@ -71,9 +71,9 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
     <div
       className={`bg-zinc-950/90 backdrop-blur-md border border-zinc-800/50 rounded-2xl p-4 md:p-6 ${className}`}
     >
-      <div className="flex flex-wrap items-center gap-3">
+      <div className="flex flex-wrap items-center gap-3 w-full">
         {/* Keyword Search */}
-        <div className="relative flex-1 min-w-[160px]">
+        <div className="relative flex-1 min-w-[140px]">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
           <Input
             placeholder="Keyword"
@@ -102,7 +102,7 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
           </SelectContentDark>
         </Select>
 
-        {/* Developer — always in main bar, premium devs first with logos */}
+        {/* Developer */}
         <Select value={developerId || "all"} onValueChange={(value) => setDeveloperId(value === "all" ? null : value)}>
           <SelectTriggerDark className="w-[160px] h-12 rounded-lg">
             <Building2 className="w-4 h-4 mr-2 text-zinc-500" />
@@ -124,12 +124,15 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
                       {dev.name.charAt(0)}
                     </span>
                   )}
-                  <span className="truncate max-w-[100px]">{dev.name}</span>
+                  <span className="truncate max-w-[120px]">{dev.name}</span>
                 </span>
               </SelectItemDark>
             ))}
           </SelectContentDark>
         </Select>
+
+        {/* Divider between Developer and Beds */}
+        <div className="hidden md:block h-8 w-px bg-gradient-to-b from-transparent via-zinc-600 to-transparent" />
 
         {/* Beds */}
         <Select value={beds || "all"} onValueChange={(value) => setBeds(value === "all" ? null : value)}>
