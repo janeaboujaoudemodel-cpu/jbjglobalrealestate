@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { SITE_URL, emailShell, sharedSections } from "../_shared/email-html.ts";
+import { SITE_URL, emailShell, sharedSections, teamReplyCard, inquiryStages } from "../_shared/email-html.ts";
 
 const RESEND_API_URL = "https://api.resend.com/emails";
 const VERIFIED_SENDER = "contact@jbj.ae";
@@ -35,10 +35,10 @@ function getServiceLabel(category: string): string {
 
 function getDepartmentLabel(category: string): string {
   switch (category?.toLowerCase()) {
-    case "career": case "hr": case "cv": return "HR Department";
-    case "partnership": case "partnerships": return "Partnerships Team";
-    case "listing": case "listings": return "Listings Team";
-    case "support": case "ticket": return "Support Team";
+    case "career": case "hr": case "cv": return "JBJ HR Team";
+    case "partnership": case "partnerships": return "JBJ Partnerships Team";
+    case "listing": case "listings": return "JBJ Listings Team";
+    case "support": case "ticket": return "JBJ Support Team";
     default: return "JBJ Team";
   }
 }
@@ -52,11 +52,13 @@ interface AdminMessageRequest {
   referenceId?: string;
   referenceLabel?: string;
   userId?: string;
+  inquiryStage?: 'received' | 'reviewing' | 'responded';
 }
 
 function buildEmailHtml(req: AdminMessageRequest): string {
   const typeLabel = getServiceLabel(req.serviceCategory);
   const departmentLabel = getDepartmentLabel(req.serviceCategory);
+  const isInquiry = req.serviceCategory?.toLowerCase() === 'inquiry' || req.serviceCategory?.toLowerCase() === 'inquiries';
 
   const bodyContent = `<tr><td style="padding:0;">
 <table width="100%" cellpadding="0" cellspacing="0">
@@ -67,6 +69,7 @@ function buildEmailHtml(req: AdminMessageRequest): string {
 </td></tr>
 <tr><td class="content-pad" style="padding:28px 40px;">
 <p style="color:#333;font-size:15px;line-height:1.6;margin:0 0 20px;">Dear <strong>${req.recipientName}</strong>,</p>
+${isInquiry && req.inquiryStage ? inquiryStages(req.inquiryStage) : ''}
 ${req.referenceLabel ? `
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#FDFBF7;border:1px solid #C8A76633;border-radius:18px;margin:0 0 24px;">
 <tr><td style="padding:16px 20px;">
@@ -75,11 +78,7 @@ ${req.referenceLabel ? `
 <tr><td style="padding:5px 0;color:#888;font-size:12px;border-right:1px solid #C8A76630;padding-right:12px;">Regarding</td><td style="padding:5px 0 5px 12px;color:#333;font-size:13px;font-weight:600;">${req.referenceLabel}</td></tr>
 <tr><td style="padding:5px 0;color:#888;font-size:12px;border-right:1px solid #C8A76630;padding-right:12px;">Type</td><td style="padding:5px 0 5px 12px;color:#333;font-size:13px;">${typeLabel}</td></tr>
 </table></td></tr></table>` : ''}
-<table width="100%" cellpadding="0" cellspacing="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin:0 0 24px;">
-<tr><td style="padding:20px;">
-<p style="margin:0 0 12px;font-size:12px;color:#C8A766;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;">${departmentLabel} Reply</p>
-<div style="color:#333;font-size:14px;line-height:1.8;white-space:pre-wrap;background:#fff;padding:18px;border-radius:14px;border:1px solid #e8e8e8;">${req.message}</div>
-</td></tr></table>
+${teamReplyCard(`${departmentLabel} Reply`, req.message)}
 <table width="100%" cellpadding="0" cellspacing="0">
 <tr><td align="center" style="padding:8px 0 20px;">
 <a href="${SITE_URL}/my-account" style="display:inline-block;background:#000000;color:#C8A766;text-decoration:none;padding:14px 40px;border-radius:12px;font-weight:700;font-size:14px;border:1px solid #C8A76650;">View My Account</a>

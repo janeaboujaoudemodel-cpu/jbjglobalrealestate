@@ -10712,6 +10712,66 @@ export type Database = {
         }
         Relationships: []
       }
+      inquiries: {
+        Row: {
+          admin_notes: string | null
+          created_at: string
+          crm_lead_id: string | null
+          email: string
+          full_name: string
+          id: string
+          inquiry_type: string
+          message: string | null
+          phone: string | null
+          property_name: string | null
+          resolved_at: string | null
+          source: string | null
+          status: string
+          subject: string
+          updated_at: string
+          user_id: string | null
+          whatsapp_clicked_at: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          created_at?: string
+          crm_lead_id?: string | null
+          email: string
+          full_name: string
+          id?: string
+          inquiry_type?: string
+          message?: string | null
+          phone?: string | null
+          property_name?: string | null
+          resolved_at?: string | null
+          source?: string | null
+          status?: string
+          subject: string
+          updated_at?: string
+          user_id?: string | null
+          whatsapp_clicked_at?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          created_at?: string
+          crm_lead_id?: string | null
+          email?: string
+          full_name?: string
+          id?: string
+          inquiry_type?: string
+          message?: string | null
+          phone?: string | null
+          property_name?: string | null
+          resolved_at?: string | null
+          source?: string | null
+          status?: string
+          subject?: string
+          updated_at?: string
+          user_id?: string | null
+          whatsapp_clicked_at?: string | null
+        }
+        Relationships: []
+      }
       instagram_scheduled_posts: {
         Row: {
           access_token: string | null
