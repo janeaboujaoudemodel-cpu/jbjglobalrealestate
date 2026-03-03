@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Bell, ChevronRight, Settings, Check, AlertCircle, Info } from "lucide-react";
+import { Bell, ChevronRight, Settings, Check, AlertCircle, Info, Headphones, MessageSquare } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -9,13 +9,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatDistanceToNow } from "date-fns";
 
-interface Notification {
+interface UnifiedNotification {
   id: string;
   title: string;
   body: string | null;
-  notification_type: string;
+  type: string;
   is_read: boolean;
   created_at: string;
+  source_table: 'notifications' | 'user_notifications' | 'user_listing_notifications';
+  metadata: any;
 }
 
 const typeIcons: Record<string, React.ReactNode> = {
@@ -24,6 +26,9 @@ const typeIcons: Record<string, React.ReactNode> = {
   warning: <AlertCircle className="w-4 h-4 text-gold" />,
   alert: <AlertCircle className="w-4 h-4 text-destructive" />,
   system: <Info className="w-4 h-4 text-muted-foreground" />,
+  support_ticket: <Headphones className="w-4 h-4 text-gold" />,
+  listing: <Bell className="w-4 h-4 text-gold" />,
+  staff_reply: <MessageSquare className="w-4 h-4 text-blue-500" />,
 };
 
 const NotificationsPreview = () => {
@@ -34,38 +39,84 @@ const NotificationsPreview = () => {
     queryKey: ['notifications-preview', user?.id],
     queryFn: async () => {
       if (!user?.id) return [];
-      const { data, error } = await supabase
-        .from('notifications')
-        .select('id, title, body, notification_type, is_read, created_at')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-        .limit(5);
-      if (error) throw error;
-      return (data || []) as Notification[];
+
+      const [systemResult, ticketResult, listingResult] = await Promise.all([
+        supabase
+          .from('notifications')
+          .select('id, title, body, notification_type, is_read, created_at')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(5),
+        supabase
+          .from('user_notifications')
+          .select('id, title, message, is_read, created_at, type, metadata')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(5),
+        supabase
+          .from('user_listing_notifications')
+          .select('id, title, message, is_read, created_at')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(5),
+      ]);
+
+      const system: UnifiedNotification[] = (systemResult.data || []).map(n => ({
+        id: n.id, title: n.title, body: n.body, type: n.notification_type || 'system',
+        is_read: n.is_read, created_at: n.created_at,
+        source_table: 'notifications' as const, metadata: null,
+      }));
+
+      const tickets: UnifiedNotification[] = (ticketResult.data || []).map(n => ({
+        id: n.id, title: n.title, body: n.message, type: n.type || 'support_ticket',
+        is_read: n.is_read, created_at: n.created_at,
+        source_table: 'user_notifications' as const, metadata: n.metadata,
+      }));
+
+      const listings: UnifiedNotification[] = (listingResult.data || []).map(n => ({
+        id: n.id, title: n.title, body: n.message, type: 'listing',
+        is_read: n.is_read, created_at: n.created_at,
+        source_table: 'user_listing_notifications' as const, metadata: null,
+      }));
+
+      return [...system, ...tickets, ...listings]
+        .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+        .slice(0, 10);
     },
     enabled: !!user?.id,
   });
 
   const unreadCount = notifications?.filter(n => !n.is_read).length || 0;
 
-  const markAsRead = async (notificationId: string) => {
+  const markAsRead = async (notif: UnifiedNotification) => {
+    if (notif.is_read) return;
     await supabase
-      .from('notifications')
-      .update({ is_read: true })
-      .eq('id', notificationId);
+      .from(notif.source_table)
+      .update({ is_read: true } as any)
+      .eq('id', notif.id);
     queryClient.invalidateQueries({ queryKey: ['notifications-preview'] });
     queryClient.invalidateQueries({ queryKey: ['user-alert-counts'] });
   };
 
   const markAllRead = async () => {
     if (!user?.id) return;
-    await supabase
-      .from('notifications')
-      .update({ is_read: true })
-      .eq('user_id', user.id)
-      .eq('is_read', false);
+    await Promise.all([
+      supabase.from('notifications').update({ is_read: true } as any).eq('user_id', user.id).eq('is_read', false),
+      supabase.from('user_notifications').update({ is_read: true } as any).eq('user_id', user.id).eq('is_read', false),
+      supabase.from('user_listing_notifications').update({ is_read: true } as any).eq('user_id', user.id).eq('is_read', false),
+    ]);
     queryClient.invalidateQueries({ queryKey: ['notifications-preview'] });
     queryClient.invalidateQueries({ queryKey: ['user-alert-counts'] });
+  };
+
+  const getIcon = (notif: UnifiedNotification) => {
+    if (notif.type === 'support_ticket') {
+      const action = notif.metadata?.action;
+      if (action === 'resolved') return <Check className="w-4 h-4 text-emerald-500" />;
+      if (action === 'staff_reply') return <MessageSquare className="w-4 h-4 text-blue-500" />;
+      return <Headphones className="w-4 h-4 text-gold" />;
+    }
+    return typeIcons[notif.type] || typeIcons.info;
   };
 
   return (
@@ -115,8 +166,8 @@ const NotificationsPreview = () => {
             <div className="space-y-3">
               {notifications.map(notification => (
                 <button
-                  key={notification.id}
-                  onClick={() => !notification.is_read && markAsRead(notification.id)}
+                  key={`${notification.source_table}-${notification.id}`}
+                  onClick={() => markAsRead(notification)}
                   className={`w-full text-left flex items-start gap-3 p-3 rounded-lg border transition-all cursor-pointer hover:bg-gold/5 ${
                     notification.is_read 
                       ? 'border-border/50 bg-transparent' 
@@ -124,7 +175,7 @@ const NotificationsPreview = () => {
                   }`}
                 >
                   <div className="mt-0.5">
-                    {typeIcons[notification.notification_type] || typeIcons.info}
+                    {getIcon(notification)}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
