@@ -22,7 +22,6 @@ async function sendEmail(payload: { from: string; to: string[]; subject: string;
   return { data };
 }
 
-// Priority label maps
 const priorityLabelsEn: Record<string, string> = { low: "Low", medium: "Medium", high: "High", urgent: "Urgent" };
 const priorityLabelsAr: Record<string, string> = { low: "منخفضة", medium: "متوسطة", high: "عالية", urgent: "عاجلة" };
 const categoryLabelsAr: Record<string, string> = {
@@ -33,6 +32,19 @@ const categoryLabelsAr: Record<string, string> = {
   "Property": "العقار",
   "Partnership": "الشراكة",
 };
+
+function formatDetailedDateTime(date: Date, locale: "en-GB" | "ar-AE") {
+  return new Intl.DateTimeFormat(locale, {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+    timeZone: "Asia/Dubai",
+  }).format(date);
+}
 
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
@@ -55,9 +67,8 @@ const handler = async (req: Request): Promise<Response> => {
 
     const surveyLink = `https://jbj.ae/ticket-survey?ticket=${encodeURIComponent(ticket.ticket_number)}&email=${encodeURIComponent(ticket.email)}`;
     const createdAt = new Date(ticket.created_at);
-    const createdDate = createdAt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-    const createdTime = createdAt.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true });
-    const createdDateTime = `${createdDate}, ${createdTime}`;
+    const createdDateTimeEn = formatDetailedDateTime(createdAt, "en-GB");
+    const createdDateTimeAr = formatDetailedDateTime(createdAt, "ar-AE");
     const priority = ticket.priority || "medium";
     const priorityEn = priorityLabelsEn[priority] || "Medium";
     const priorityAr = priorityLabelsAr[priority] || "متوسطة";
@@ -90,13 +101,11 @@ const handler = async (req: Request): Promise<Response> => {
     const adminNoteHtml = adminNote ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;overflow:hidden;margin-bottom:24px;"><tr><td style="padding:20px;"><p style="font-weight:bold;color:#1a1a1a;margin:0 0 8px;">Admin Note:</p><p style="color:#555;margin:0;">${adminNote}</p></td></tr></table>` : '';
     const adminNoteHtmlAr = adminNote ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;overflow:hidden;margin-bottom:24px;direction:rtl;"><tr><td style="padding:20px;"><p style="font-weight:bold;color:#1a1a1a;margin:0 0 8px;">ملاحظة الإدارة:</p><p style="color:#555;margin:0;">${adminNote}</p></td></tr></table>` : '';
 
-    // Rate + Reopen only for resolved
     const rateHtml = newStatus === 'resolved' ? rateExperienceCard(surveyLink) : '';
     const rateHtmlAr = newStatus === 'resolved' ? rateExperienceCardAr(surveyLink) : '';
     const reopenHtml = newStatus === 'resolved' ? issueNotResolvedCard(reopenUrl) : '';
     const reopenHtmlAr = newStatus === 'resolved' ? issueNotResolvedCardAr(reopenUrl) : '';
 
-    // BILINGUAL: EN → Arabic divider → AR → Gold divider → Locked sections
     const bodyContent = `<tr><td class="content-pad" style="padding:32px;">
 <p style="font-size:15px;color:#333;margin:0 0 16px;">Dear <strong>${ticket.full_name}</strong>,</p>
 <p style="font-size:14px;color:#555;margin:0 0 24px;">${content.subtitle}</p>
@@ -106,14 +115,13 @@ ${ticketSummaryCard([
   { label: 'Subject', value: ticket.subject },
   { label: 'Category', value: categoryEn },
   { label: 'Priority', value: priorityEn },
-  { label: 'Submitted', value: createdDateTime },
+  { label: 'Submitted', value: createdDateTimeEn },
 ])}
 ${adminNoteHtml}
 ${rateHtml}
 ${reopenHtml}
 ${arabicDivider()}
-</td></tr>
-<tr><td class="content-pad" style="padding:0 32px 32px;direction:rtl;text-align:right;">
+<div style="direction:rtl;text-align:right;">
 <p style="font-size:15px;color:#333;margin:0 0 16px;">عزيزي/عزيزتي <strong>${ticket.full_name}</strong>،</p>
 <p style="font-size:14px;color:#555;margin:0 0 24px;">${content.subtitleAr}</p>
 ${ticketSummaryCardAr([
@@ -121,11 +129,12 @@ ${ticketSummaryCardAr([
   { label: 'الموضوع', value: ticket.subject },
   { label: 'الفئة', value: categoryAr },
   { label: 'الأولوية', value: priorityAr },
-  { label: 'تاريخ ووقت الإرسال', value: createdDateTime },
+  { label: 'تاريخ ووقت الإرسال', value: createdDateTimeAr },
 ])}
 ${adminNoteHtmlAr}
 ${rateHtmlAr}
 ${reopenHtmlAr}
+</div>
 ${sharedSections("support ticket", "JBJ Global Real Estate Support Team")}
 </td></tr>`;
 
