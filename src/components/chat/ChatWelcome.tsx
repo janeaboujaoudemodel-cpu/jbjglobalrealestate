@@ -11,7 +11,7 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
   const { t } = useLanguage();
   
   return (
-    <div className="flex-1 p-4 flex flex-col items-center justify-start text-center overflow-y-auto">
+    <div className="flex-1 px-4 pt-4 pb-6 flex flex-col items-center text-center overflow-y-auto">
       {/* Logo - at TOP now */}
       <div className="mb-4">
         <img
@@ -37,7 +37,7 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
           className="w-full p-4 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 hover:border-gold rounded-xl transition-all duration-300 group shadow-md shadow-gold/20"
         >
           <div className="flex items-center justify-center gap-3">
-            <div className="w-12 h-12 rounded-lg bg-white border border-gold/30 flex items-center justify-center shadow-sm">
+            <div className="w-12 h-12 rounded-full bg-white border border-gold/30 flex items-center justify-center shadow-sm">
               <MessageCircle className="w-6 h-6 text-gold" />
             </div>
             <div className="text-left">
@@ -57,7 +57,7 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
           className="w-full p-4 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 hover:border-gold rounded-xl transition-all duration-300 group block shadow-md shadow-gold/20"
         >
           <div className="flex items-center justify-center gap-3">
-            <div className="w-12 h-12 rounded-lg bg-white border border-gold/30 flex items-center justify-center shadow-sm">
+            <div className="w-12 h-12 rounded-full bg-white border border-gold/30 flex items-center justify-center shadow-sm">
               <MessageCircle className="w-6 h-6 text-green-500" />
             </div>
             <div className="text-left">
@@ -69,7 +69,7 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
       </div>
 
       {/* Tip at BOTTOM now */}
-      <div className="w-full px-4 py-3 bg-white/80 rounded-lg border border-gold/30">
+      <div className="w-full mt-auto px-4 py-3 bg-white/80 rounded-lg border border-gold/30">
         <p className="text-sm flex flex-wrap items-center justify-center gap-1">
           <span className="text-gold">💡</span>
           <span className="text-black font-bold">{t('chat.tip', 'Tip:')}</span>

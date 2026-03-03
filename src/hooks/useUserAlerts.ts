@@ -7,6 +7,7 @@ export interface UserAlertCounts {
   unreadListingNotifications: number;
   unreadSystemNotifications: number;
   pendingTasks: number;
+  totalNotificationAlerts: number;
   totalAlerts: number;
 }
 
@@ -20,7 +21,16 @@ export function useUserAlerts() {
   return useQuery<UserAlertCounts>({
     queryKey: ["user-alert-counts", user?.id],
     queryFn: async () => {
-      if (!user?.id) return { unreadTicketNotifications: 0, unreadListingNotifications: 0, unreadSystemNotifications: 0, pendingTasks: 0, totalAlerts: 0 };
+      if (!user?.id) {
+        return {
+          unreadTicketNotifications: 0,
+          unreadListingNotifications: 0,
+          unreadSystemNotifications: 0,
+          pendingTasks: 0,
+          totalNotificationAlerts: 0,
+          totalAlerts: 0,
+        };
+      }
 
       const [ticketResult, listingResult, systemResult, taskResult] = await Promise.all([
         supabase
@@ -49,13 +59,15 @@ export function useUserAlerts() {
       const unreadListingNotifications = listingResult.count || 0;
       const unreadSystemNotifications = systemResult.count || 0;
       const pendingTasks = taskResult.count || 0;
+      const totalNotificationAlerts = unreadTicketNotifications + unreadListingNotifications + unreadSystemNotifications;
 
       return {
         unreadTicketNotifications,
         unreadListingNotifications,
         unreadSystemNotifications,
         pendingTasks,
-        totalAlerts: unreadTicketNotifications + unreadListingNotifications + unreadSystemNotifications + pendingTasks,
+        totalNotificationAlerts,
+        totalAlerts: totalNotificationAlerts + pendingTasks,
       };
     },
     enabled: !!user?.id,

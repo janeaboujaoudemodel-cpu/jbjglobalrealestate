@@ -109,7 +109,7 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
     if (notif.is_read) return;
     await supabase
       .from(notif.source_table)
-      .update({ is_read: true } as any)
+      .update({ is_read: true, read_at: new Date().toISOString() } as any)
       .eq('id', notif.id);
     setNotifications(prev => prev.map(n => n.id === notif.id ? { ...n, is_read: true } : n));
     invalidateCounts();
@@ -117,20 +117,21 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
 
   const markAllRead = async () => {
     if (!user) return;
+    const readAt = new Date().toISOString();
     await Promise.all([
       supabase
         .from('user_listing_notifications')
-        .update({ is_read: true } as any)
+        .update({ is_read: true, read_at: readAt } as any)
         .eq('user_id', user.id)
         .eq('is_read', false),
       supabase
         .from('user_notifications')
-        .update({ is_read: true } as any)
+        .update({ is_read: true, read_at: readAt } as any)
         .eq('user_id', user.id)
         .eq('is_read', false),
       supabase
         .from('notifications')
-        .update({ is_read: true } as any)
+        .update({ is_read: true, read_at: readAt } as any)
         .eq('user_id', user.id)
         .eq('is_read', false),
     ]);
