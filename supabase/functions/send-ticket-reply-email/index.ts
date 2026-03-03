@@ -37,7 +37,8 @@ interface ReplyEmailRequest {
 }
 
 function formatDetailedDateTime(date: Date, locale: "en-GB" | "ar-AE") {
-  return new Intl.DateTimeFormat(locale, {
+  const targetLocale = locale === "ar-AE" ? "ar-AE-u-nu-arab" : locale;
+  return new Intl.DateTimeFormat(targetLocale, {
     day: "2-digit",
     month: "long",
     year: "numeric",
@@ -66,6 +67,10 @@ const commonArMap: Record<string, string> = {
   "general": "عام",
   "property": "العقار",
   "partnership": "الشراكة",
+  "login": "تسجيل الدخول",
+  "name": "الاسم",
+  "date": "التاريخ",
+  "time": "الوقت",
 };
 
 function toArabicText(input?: string | null): string {

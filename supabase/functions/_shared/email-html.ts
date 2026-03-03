@@ -88,7 +88,7 @@ export function inquiryBox(contextLabel: string): string {
 // ─── Ticket Support (white headset inside red circle — INLINE SVG) ───
 export function ticketSupportEmbed(): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:16px 0 24px;"><tr><td style="padding:24px 20px;background:linear-gradient(135deg,#fff5f5,#ffe9e9);border:1px solid #ef4444;border-radius:18px;text-align:center;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:#dc2626;border-radius:52px;text-align:center;vertical-align:middle;"><img src="${ICON_HEADSET_WHITE}" alt="Support" width="24" height="24" style="display:block;margin:0 auto;"/></td></tr></table>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:#dc2626;border-radius:52px;text-align:center;vertical-align:middle;">${SVG.headsetWhite}</td></tr></table>
 <p style="margin:0 0 4px;font-size:11px;font-weight:700;color:#dc2626;text-transform:uppercase;letter-spacing:2px;">24/7 SUPPORT</p>
 <p style="margin:0 0 6px;font-size:16px;font-weight:700;color:#7f1d1d;">Need Help? Open a Support Ticket</p>
 <p style="margin:0 0 14px;font-size:13px;color:#991b1b;">Our team typically responds within 24 hours</p>
@@ -98,7 +98,7 @@ export function ticketSupportEmbed(): string {
 
 export function ticketSupportEmbedAr(): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:16px 0 24px;direction:rtl;"><tr><td style="padding:24px 20px;background:linear-gradient(135deg,#fff5f5,#ffe9e9);border:1px solid #ef4444;border-radius:18px;text-align:center;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:#dc2626;border-radius:52px;text-align:center;vertical-align:middle;"><img src="${ICON_HEADSET_WHITE}" alt="الدعم" width="24" height="24" style="display:block;margin:0 auto;"/></td></tr></table>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:#dc2626;border-radius:52px;text-align:center;vertical-align:middle;">${SVG.headsetWhite}</td></tr></table>
 <p style="margin:0 0 4px;font-size:11px;font-weight:700;color:#dc2626;letter-spacing:2px;">دعم على مدار الساعة</p>
 <p style="margin:0 0 6px;font-size:16px;font-weight:700;color:#7f1d1d;">هل تحتاج مساعدة؟ افتح تذكرة دعم</p>
 <p style="margin:0 0 14px;font-size:13px;color:#991b1b;">فريقنا يرد عادةً خلال ٢٤ ساعة</p>
@@ -107,16 +107,16 @@ export function ticketSupportEmbedAr(): string {
 }
 
 // ─── Recommended Actions (INLINE SVGs in circular frames) ───
-function recommendedCard(title: string, href: string, iconUrl: string): string {
+function recommendedCard(title: string, href: string, iconSvg: string): string {
   return `<td width="33%" style="text-align:center;padding:4px;vertical-align:top;"><a href="${href}" style="display:block;text-decoration:none;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;"><tr><td style="padding:18px 8px;text-align:center;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:#ffffff;border:1.5px solid #1a1a1a;border-radius:52px;text-align:center;vertical-align:middle;"><img src="${iconUrl}" alt="${title}" width="24" height="24" style="display:block;margin:0 auto;"/></td></tr></table>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:radial-gradient(circle at 30% 25%,#ffffff,#f2efe8 55%,#e4dccf 100%);border:1.5px solid #C8A766;border-radius:52px;text-align:center;vertical-align:middle;">${iconSvg}</td></tr></table>
 <p style="margin:0;font-size:12px;color:#1a1a1a;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">${title}</p>
 </td></tr></table></a></td>`;
 }
 
 export function recommendedActionsHtml(): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:10px 0 18px;"><tr><td style="text-align:center;"><p style="color:#1a1a1a;font-size:16px;font-weight:700;margin:0 0 14px;">Recommended For You</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${recommendedCard("AI Tools", `${SITE_URL}/ai-tools`, ICON_AI)}${recommendedCard("Guides", `${SITE_URL}/guides`, ICON_GUIDES)}${recommendedCard("Properties", `${SITE_URL}/properties`, ICON_PROPERTIES)}</tr></table></td></tr></table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:10px 0 18px;"><tr><td style="text-align:center;"><p style="color:#1a1a1a;font-size:16px;font-weight:700;margin:0 0 14px;">Recommended For You</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${recommendedCard("AI Tools", `${SITE_URL}/ai-tools`, SVG.aiTools)}${recommendedCard("Guides", `${SITE_URL}/guides`, SVG.guides)}${recommendedCard("Properties", `${SITE_URL}/properties`, SVG.properties)}</tr></table></td></tr></table>`;
 }
 
 // ─── Books (JPG from storage — email clients handle JPGs reliably) ───
@@ -135,7 +135,8 @@ export function booksShowcaseHtml(): string {
 
 // ─── Suggested Actions ───
 export function suggestedActionsHtml(): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:10px 0;"><tr><td width="50%" style="padding:4px;"><a href="${SITE_URL}/properties" style="display:block;text-decoration:none;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;"><tr><td style="padding:14px 8px;background:#fff;border:1px solid #C8A766;border-radius:18px;text-align:center;"><span style="font-size:13px;color:#1a1a1a;font-weight:700;letter-spacing:0.5px;">Explore Properties</span></td></tr></table></a></td><td width="50%" style="padding:4px;"><a href="${SITE_URL}/my-dashboard" style="display:block;text-decoration:none;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;"><tr><td style="padding:14px 8px;background:#fff;border:1px solid #C8A766;border-radius:18px;text-align:center;"><span style="font-size:13px;color:#1a1a1a;font-weight:700;letter-spacing:0.5px;">Discover More</span></td></tr></table></a></td></tr></table>`;
+  const actionCell = (label: string, href: string) => `<td width="50%" style="padding:4px;"><a href="${href}" style="display:block;text-decoration:none;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;"><tr><td style="padding:14px 8px;background:linear-gradient(135deg,#C8A766,#B8956E);border:1px solid #A98956;border-radius:18px;text-align:center;"><span style="font-size:13px;color:#ffffff;font-weight:700;letter-spacing:0.5px;">${label}</span></td></tr></table></a></td>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:10px 0;"><tr>${actionCell("Explore Properties", `${SITE_URL}/properties`)}${actionCell("Discover More", `${SITE_URL}/my-dashboard`)}</tr></table>`;
 }
 
 // ─── Feedback ───
@@ -163,7 +164,7 @@ export function signOffHtml(teamName = "JBJ Global Real Estate Team"): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:28px;margin-bottom:22px;"><tr><td>
 <p style="font-size:18px;color:#333;margin:0 0 6px;font-weight:700;">BEST REGARDS,</p>
 <p style="font-size:19px;color:#C8A766;font-weight:800;margin:0 0 2px;letter-spacing:0.4px;">JBJ GLOBAL REAL ESTATE</p>
-<p style="font-size:18px;color:#F4E7CC;font-weight:900;margin:0;letter-spacing:0.6px;text-shadow:0 1px 0 #8f6e3f,0 2px 4px rgba(200,167,102,0.3);">${teamSuffix.toUpperCase()}</p>
+<p style="font-size:18px;color:#F7E9C9;font-weight:900;margin:0;letter-spacing:0.6px;text-shadow:0 1px 0 #7d5b2b,0 3px 6px rgba(200,167,102,0.55);">${teamSuffix.toUpperCase()}</p>
 </td></tr></table>`;
 }
 
@@ -187,24 +188,24 @@ ${sectionDivider()}
 
 function socialLinksFooter(): string {
   const links: Array<{ icon: string; url: string; alt: string }> = [
-    { icon: ICON_INSTAGRAM, url: "https://www.instagram.com/jbj.ae", alt: "Instagram" },
-    { icon: ICON_FACEBOOK, url: "https://www.facebook.com/share/1G7CgSaV2L/?mibextid=wwXIfr", alt: "Facebook" },
-    { icon: ICON_LINKEDIN, url: "https://www.linkedin.com/company/jbj-global-real-estate/", alt: "LinkedIn" },
-    { icon: ICON_YOUTUBE, url: "https://youtube.com/@jbjglobalrealestate", alt: "YouTube" },
-    { icon: ICON_TIKTOK, url: "https://www.tiktok.com/@jbj.ae", alt: "TikTok" },
+    { icon: SVG.instagram, url: "https://www.instagram.com/jbj.ae", alt: "Instagram" },
+    { icon: SVG.facebook, url: "https://www.facebook.com/share/1G7CgSaV2L/?mibextid=wwXIfr", alt: "Facebook" },
+    { icon: SVG.linkedin, url: "https://www.linkedin.com/company/jbj-global-real-estate/", alt: "LinkedIn" },
+    { icon: SVG.youtube, url: "https://youtube.com/@jbjglobalrealestate", alt: "YouTube" },
+    { icon: SVG.tiktok, url: "https://www.tiktok.com/@jbj.ae", alt: "TikTok" },
   ];
 
   const item = (icon: string, url: string, alt: string) =>
-    `<td style="padding:0 5px 8px;"><a href="${url}" style="display:inline-block;width:38px;height:38px;background:radial-gradient(circle at 30% 25%,#ffffff,#f2efe8 55%,#e4dccf 100%);border:1px solid #E7D7B8;border-radius:38px;text-decoration:none;text-align:center;vertical-align:middle;box-shadow:inset 0 1px 1px rgba(255,255,255,0.9),0 2px 8px rgba(0,0,0,0.2);"><img src="${icon}" alt="${alt}" width="18" height="18" style="display:block;margin:10px auto;"/></a></td>`;
+    `<td style="padding:0 5px 8px;"><a href="${url}" aria-label="${alt}" style="display:inline-block;width:38px;height:38px;background:radial-gradient(circle at 30% 25%,#ffffff,#f2efe8 55%,#e4dccf 100%);border:1px solid #C8A766;border-radius:38px;text-decoration:none;text-align:center;vertical-align:middle;box-shadow:inset 0 1px 1px rgba(255,255,255,0.9),0 2px 8px rgba(0,0,0,0.2);"><span style="display:inline-block;margin-top:10px;">${icon}</span></a></td>`;
 
   return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:12px;"><tr>${links.map((l) => item(l.icon, l.url, l.alt)).join("")}</tr></table>`;
 }
 
 export function sharedFooterHtml(): string {
-  return `<tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:#000;"><tr><td style="padding:40px 26px 30px;text-align:center;">
-<img src="${LOGO_URL}" alt="JBJ" width="190" style="width:190px;height:auto;display:block;margin:-8px auto 12px;border-radius:190px;" />
-<p style="color:#C8A766;font-size:16px;margin:0 0 8px;font-weight:700;letter-spacing:1.8px;">JBJ Global Real Estate</p>
-<table role="presentation" width="220" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto 10px;"><tr><td style="border-top:1px solid #C8A76655;"></td></tr></table>
+  return `<tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:#000;"><tr><td style="padding:34px 18px 34px;text-align:center;">
+<img src="${LOGO_URL}" alt="JBJ" width="190" style="width:190px;height:auto;display:block;margin:-6px auto 12px;border-radius:190px;" />
+<p style="color:#C8A766;font-size:16px;margin:0 0 12px;font-weight:700;letter-spacing:1.8px;text-align:center;">JBJ Global Real Estate</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto 12px;"><tr><td style="border-top:1px solid #C8A76655;"></td></tr></table>
 <p style="color:#d8cfbf;font-size:12px;font-style:italic;margin:0 0 16px;">The Only Global AI-Powered Real Estate Intelligence Platform</p>
 <p style="color:#C8A766;font-size:20px;font-weight:800;margin:0 0 6px;letter-spacing:0.5px;">175+ Countries &bull; 2,400+ Cities</p>
 <p style="color:#C8A766;font-size:20px;font-weight:800;margin:0 0 18px;letter-spacing:0.5px;">&bull; 12,000+ Clients Served</p>
@@ -263,10 +264,13 @@ export function ticketSummaryCardAr(rows: Array<{ label: string; value: string; 
   const rowsHtml = rows
     .map((r) => {
       const hasLatin = /[A-Za-z]/.test(r.value || "");
+      const renderedValue = r.highlight
+        ? `${r.value} <span aria-label="Copy ticket number" style="display:inline-block;margin-inline-start:6px;color:#C8A766;font-size:12px;">📋</span>`
+        : r.value;
       const valueStyle = r.highlight
         ? "padding:7px 12px 7px 0;color:#C8A766;font-weight:700;font-size:14px;font-family:'Courier New',monospace;letter-spacing:2px;direction:ltr;unicode-bidi:plaintext;text-align:left;"
         : `padding:7px 12px 7px 0;color:#1a1a1a;font-weight:600;font-size:13px;direction:${hasLatin ? "ltr" : "rtl"};unicode-bidi:plaintext;text-align:${hasLatin ? "left" : "right"};`;
-      return `<tr><td style="padding:7px 0;color:#666;font-size:13px;width:40%;border-left:1px solid #C8A76630;padding-left:12px;text-align:right;">${r.label}</td><td style="${valueStyle}">${r.value}</td></tr>`;
+      return `<tr><td style="padding:7px 0;color:#666;font-size:13px;width:40%;border-left:1px solid #C8A76630;padding-left:12px;text-align:right;">${r.label}</td><td style="${valueStyle}">${renderedValue}</td></tr>`;
     })
     .join("");
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:18px;margin-bottom:14px;direction:rtl;"><tr><td style="padding:20px;"><p style="color:#666;font-size:12px;margin:0 0 8px;text-transform:uppercase;letter-spacing:1px;">ملخص</p><div style="height:2px;background:linear-gradient(90deg,transparent,#C8A766,#C8A766,transparent);margin:0 0 10px;"></div><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${rowsHtml}</table></td></tr></table>${goldDivider()}`;
@@ -308,23 +312,19 @@ export function rateExperienceCardAr(surveyLink: string): string {
 // ─── Issue Not Resolved (EN + AR) ───
 export function issueNotResolvedCard(reopenUrl: string): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:20px 0;">
-<tr><td style="background:linear-gradient(135deg,#fff5f5,#fff0f0);border:1px solid #ef4444;border-radius:18px;padding:10px;">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border:2px dotted #ef4444;border-radius:14px;"><tr><td style="padding:16px;text-align:center;">
-    <p style="color:#c0392b;margin:0 0 10px;font-size:16px;font-weight:bold;">Issue Not Resolved?</p>
-    <p style="color:#666;font-size:13px;margin:0 0 15px;">If your issue persists, you can reopen this ticket anytime.</p>
-    <a href="${reopenUrl}" style="display:inline-block;background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;text-decoration:none;padding:14px 30px;border-radius:12px;font-weight:bold;font-size:14px;">Reopen This Ticket</a>
-  </td></tr></table>
+<tr><td style="background:linear-gradient(135deg,#fff5f5,#fff0f0);border:1px solid #ef4444;border-radius:18px;padding:16px;text-align:center;">
+  <p style="color:#c0392b;margin:0 0 10px;font-size:16px;font-weight:bold;">Issue Not Resolved?</p>
+  <p style="color:#666;font-size:13px;margin:0 0 15px;">If your issue persists, you can reopen this ticket anytime.</p>
+  <a href="${reopenUrl}" style="display:inline-block;background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;text-decoration:none;padding:14px 30px;border-radius:12px;font-weight:bold;font-size:14px;">Reopen This Ticket</a>
 </td></tr></table>`;
 }
 
 export function issueNotResolvedCardAr(reopenUrl: string): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:20px 0;direction:rtl;">
-<tr><td style="background:linear-gradient(135deg,#fff5f5,#fff0f0);border:1px solid #ef4444;border-radius:18px;padding:10px;">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border:2px dotted #ef4444;border-radius:14px;"><tr><td style="padding:16px;text-align:center;">
-    <p style="color:#c0392b;margin:0 0 10px;font-size:16px;font-weight:bold;">المشكلة لم تُحل؟</p>
-    <p style="color:#666;font-size:13px;margin:0 0 15px;">إذا استمرت المشكلة، يمكنك إعادة فتح هذه التذكرة في أي وقت.</p>
-    <a href="${reopenUrl}" style="display:inline-block;background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;text-decoration:none;padding:14px 30px;border-radius:12px;font-weight:bold;font-size:14px;">إعادة فتح التذكرة</a>
-  </td></tr></table>
+<tr><td style="background:linear-gradient(135deg,#fff5f5,#fff0f0);border:1px solid #ef4444;border-radius:18px;padding:16px;text-align:center;">
+  <p style="color:#c0392b;margin:0 0 10px;font-size:16px;font-weight:bold;">المشكلة لم تُحل؟</p>
+  <p style="color:#666;font-size:13px;margin:0 0 15px;">إذا استمرت المشكلة، يمكنك إعادة فتح هذه التذكرة في أي وقت.</p>
+  <a href="${reopenUrl}" style="display:inline-block;background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;text-decoration:none;padding:14px 30px;border-radius:12px;font-weight:bold;font-size:14px;">إعادة فتح التذكرة</a>
 </td></tr></table>`;
 }
 
