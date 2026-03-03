@@ -50,6 +50,7 @@ const SuitesHub = lazy(() => import("./pages/business-suite/SuitesHub"));
 const EducationHub = lazy(() => import("./pages/EducationHub"));
 const AdminChatDashboard = lazy(() => import("./pages/admin/AdminChatDashboard"));
 const AdminIntelligence = lazy(() => import("./pages/admin/AdminIntelligence"));
+const InquiryManagementHub = lazy(() => import("./pages/admin/InquiryManagementHub"));
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ActiveLeadProvider } from "@/contexts/ActiveLeadContext";
@@ -535,6 +536,7 @@ const App = () => (
                 <Route path="/compare" element={<Compare />} />
                 <Route path="/admin" element={<OwnerGuard><Admin /></OwnerGuard>} />
                 <Route path="/admin/leads" element={<OwnerGuard><AdminLeads /></OwnerGuard>} />
+                <Route path="/admin/inquiries" element={<OwnerGuard><InquiryManagementHub /></OwnerGuard>} />
                 <Route path="/terms" element={<Terms />} />
                 <Route path="/privacy" element={<Privacy />} />
                 <Route path="/cookies" element={<Cookies />} />
