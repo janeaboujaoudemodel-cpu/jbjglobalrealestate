@@ -1,6 +1,8 @@
 const SITE_URL = "https://jbj.ae";
 const ASSET_BASE = "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets";
 const LOGO_URL = `${ASSET_BASE}/jbj-monogram-light-on-dark.png`;
+const BOOK_MARKET = `${ASSET_BASE}/email-books%2Fmarket-report-book.jpg`;
+const BOOK_GUIDES = `${ASSET_BASE}/email-books%2Fguides-library-book.jpg`;
 
 export { LOGO_URL, SITE_URL };
 
@@ -13,7 +15,7 @@ export function minifyHtml(html: string): string {
     .trim();
 }
 
-// ─── Inline SVG Icons (Gmail/iOS compatible — no external URLs) ───
+// ─── Inline SVG Icons (100% inline — no external URLs, guaranteed rendering) ───
 const SVG = {
   lock: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10V7a5 5 0 1 1 10 0v3"/><rect x="5" y="10" width="14" height="11" rx="2"/><circle cx="12" cy="15" r="1.5"/><path d="M12 16.5v2"/></svg>`,
   headsetWhite: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>`,
@@ -22,6 +24,7 @@ const SVG = {
   properties: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V9l9-6 9 6v12"/><path d="M9 21v-6h6v6"/></svg>`,
   review: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8A766" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
   survey: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`,
+  // Social icons (gold champagne stroke)
   instagram: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8A766" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>`,
   facebook: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8A766" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>`,
   linkedin: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8A766" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>`,
@@ -73,10 +76,10 @@ export function inquiryBox(contextLabel: string): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:20px 0 18px;"><tr><td style="padding:18px 20px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:18px;text-align:center;"><p style="margin:0;font-size:14px;color:#1f2937;line-height:1.7;">For inquiries about your ${contextLabel}, contact us at<br/><a href="mailto:CONTACT@JBJ.AE" style="color:#111827;font-weight:700;text-decoration:underline;">CONTACT@JBJ.AE</a></p></td></tr></table>`;
 }
 
-// ─── Ticket Support (white headset inside red circle) ───
+// ─── Ticket Support (white headset inside red circle — INLINE SVG) ───
 export function ticketSupportEmbed(): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:16px 0 24px;"><tr><td style="padding:24px 20px;background:linear-gradient(135deg,#fff5f5,#ffe9e9);border:1px solid #ef4444;border-radius:18px;text-align:center;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:#dc2626;border-radius:52px;text-align:center;vertical-align:middle;line-height:0;"><img src="${ASSET_BASE}/email-icons/headphones-white.svg" alt="Ticket support" width="24" height="24" style="display:inline-block;width:24px;height:24px;" /></td></tr></table>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:#dc2626;border-radius:52px;text-align:center;vertical-align:middle;line-height:0;">${SVG.headsetWhite}</td></tr></table>
 <p style="margin:0 0 4px;font-size:11px;font-weight:700;color:#dc2626;text-transform:uppercase;letter-spacing:2px;">24/7 SUPPORT</p>
 <p style="margin:0 0 6px;font-size:16px;font-weight:700;color:#7f1d1d;">Need Help? Open a Support Ticket</p>
 <p style="margin:0 0 14px;font-size:13px;color:#991b1b;">Our team typically responds within 24 hours</p>
@@ -86,7 +89,7 @@ export function ticketSupportEmbed(): string {
 
 export function ticketSupportEmbedAr(): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:16px 0 24px;direction:rtl;"><tr><td style="padding:24px 20px;background:linear-gradient(135deg,#fff5f5,#ffe9e9);border:1px solid #ef4444;border-radius:18px;text-align:center;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:#dc2626;border-radius:52px;text-align:center;vertical-align:middle;line-height:0;"><img src="${ASSET_BASE}/email-icons/headphones-white.svg" alt="دعم التذاكر" width="24" height="24" style="display:inline-block;width:24px;height:24px;" /></td></tr></table>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:#dc2626;border-radius:52px;text-align:center;vertical-align:middle;line-height:0;">${SVG.headsetWhite}</td></tr></table>
 <p style="margin:0 0 4px;font-size:11px;font-weight:700;color:#dc2626;letter-spacing:2px;">دعم على مدار الساعة</p>
 <p style="margin:0 0 6px;font-size:16px;font-weight:700;color:#7f1d1d;">هل تحتاج مساعدة؟ افتح تذكرة دعم</p>
 <p style="margin:0 0 14px;font-size:13px;color:#991b1b;">فريقنا يرد عادةً خلال ٢٤ ساعة</p>
@@ -94,20 +97,20 @@ export function ticketSupportEmbedAr(): string {
 </td></tr></table>`;
 }
 
-// ─── Recommended Actions (icon images in circular frames) ───
-function recommendedCard(title: string, href: string, iconPath: string): string {
+// ─── Recommended Actions (INLINE SVGs in circular frames) ───
+function recommendedCard(title: string, href: string, iconSvg: string): string {
   return `<td width="33%" style="text-align:center;padding:4px;vertical-align:top;"><a href="${href}" style="display:block;text-decoration:none;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;"><tr><td style="padding:18px 8px;text-align:center;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:#fff;border:1.5px solid #1a1a1a;border-radius:52px;text-align:center;vertical-align:middle;line-height:0;"><img src="${ASSET_BASE}${iconPath}" alt="${title}" width="24" height="24" style="display:inline-block;width:24px;height:24px;" /></td></tr></table>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:#fff;border:1.5px solid #1a1a1a;border-radius:52px;text-align:center;vertical-align:middle;line-height:0;">${iconSvg}</td></tr></table>
 <p style="margin:0;font-size:12px;color:#1a1a1a;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">${title}</p>
 </td></tr></table></a></td>`;
 }
 
 export function recommendedActionsHtml(): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:10px 0 18px;"><tr><td style="text-align:center;"><p style="color:#1a1a1a;font-size:16px;font-weight:700;margin:0 0 14px;">Recommended For You</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${recommendedCard("AI Tools", `${SITE_URL}/ai-tools`, "/email-icons/ai-tools.svg")}${recommendedCard("Guides", `${SITE_URL}/guides`, "/email-icons/guides.svg")}${recommendedCard("Properties", `${SITE_URL}/properties`, "/email-icons/properties.svg")}</tr></table></td></tr></table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:10px 0 18px;"><tr><td style="text-align:center;"><p style="color:#1a1a1a;font-size:16px;font-weight:700;margin:0 0 14px;">Recommended For You</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${recommendedCard("AI Tools", `${SITE_URL}/ai-tools`, SVG.aiTools)}${recommendedCard("Guides", `${SITE_URL}/guides`, SVG.guides)}${recommendedCard("Properties", `${SITE_URL}/properties`, SVG.properties)}</tr></table></td></tr></table>`;
 }
 
-// ─── Books (using website assets) ───
+// ─── Books (JPG from storage — email clients handle JPGs reliably) ───
 function book3dCover(title: string, subtitle: string, href: string, imageUrl: string): string {
   return `<td width="50%" style="vertical-align:top;padding:6px;"><a href="${href}" style="display:block;text-decoration:none;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;"><tr><td style="padding:0;text-align:center;">
@@ -118,7 +121,7 @@ function book3dCover(title: string, subtitle: string, href: string, imageUrl: st
 }
 
 export function booksShowcaseHtml(): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:6px 0 16px;"><tr><td style="text-align:center;"><p style="color:#1a1a1a;font-size:14px;font-weight:700;margin:0 0 12px;">Explore Our Library</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${book3dCover("Market Intelligence Report", "UAE Real Estate", `${SITE_URL}/market-intelligence`, `${ASSET_BASE}/email-books/market-report-book.jpg`)}${book3dCover("Guides Library", "2026 Edition", `${SITE_URL}/guides`, `${ASSET_BASE}/email-books/guides-library-book.jpg`)}</tr></table></td></tr></table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:6px 0 16px;"><tr><td style="text-align:center;"><p style="color:#1a1a1a;font-size:14px;font-weight:700;margin:0 0 12px;">Explore Our Library</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${book3dCover("Market Intelligence Report", "UAE Real Estate", `${SITE_URL}/market-intelligence`, BOOK_MARKET)}${book3dCover("Guides Library", "2026 Edition", `${SITE_URL}/guides`, BOOK_GUIDES)}</tr></table></td></tr></table>`;
 }
 
 // ─── Suggested Actions ───
@@ -134,8 +137,8 @@ export function feedbackHtml(context = "general"): string {
 <p style="color:#1a1a1a;font-size:16px;font-weight:700;line-height:1.4;margin:0 0 8px;">We Value Your Feedback</p>
 <p style="color:#888;font-size:13px;margin:0 0 14px;">Help us improve by sharing your experience</p>
 <table cellpadding="0" cellspacing="0" align="center"><tr>
-<td style="padding:0 6px;"><a href="${reviewUrl}" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:12px 24px;border-radius:12px;font-weight:700;font-size:13px;border:1px solid #C8A76650;">${SVG.review} Leave a Review</a></td>
-<td style="padding:0 6px;"><a href="${surveyUrl}" style="display:inline-block;background:#FDFBF7;border:1px solid #C8A766;color:#1a1a1a;text-decoration:none;padding:11px 20px;border-radius:12px;font-weight:700;font-size:13px;">${SVG.survey} Take Survey</a></td>
+<td style="padding:0 6px;"><a href="${reviewUrl}" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:12px 24px;border-radius:12px;font-weight:700;font-size:13px;border:1px solid #C8A76650;">Leave a Review</a></td>
+<td style="padding:0 6px;"><a href="${surveyUrl}" style="display:inline-block;background:#FDFBF7;border:1px solid #C8A766;color:#1a1a1a;text-decoration:none;padding:11px 20px;border-radius:12px;font-weight:700;font-size:13px;">Take Survey</a></td>
 </tr></table></td></tr></table>`;
 }
 
@@ -173,20 +176,20 @@ ${sectionDivider()}
 </td></tr></table>`;
 }
 
-// ─── Footer ───
+// ─── Footer (inline SVG social icons) ───
 function socialLinksFooter(): string {
-  const links = [
-    { icon: `${ASSET_BASE}/email-icons/social-instagram.svg`, url: "https://www.instagram.com/jbj.ae", alt: "Instagram" },
-    { icon: `${ASSET_BASE}/email-icons/social-facebook.svg`, url: "https://www.facebook.com/share/1G7CgSaV2L/?mibextid=wwXIfr", alt: "Facebook" },
-    { icon: `${ASSET_BASE}/email-icons/social-linkedin.svg`, url: "https://www.linkedin.com/company/jbj-global-real-estate/", alt: "LinkedIn" },
-    { icon: `${ASSET_BASE}/email-icons/social-youtube.svg`, url: "https://youtube.com/@jbjglobalrealestate", alt: "YouTube" },
-    { icon: `${ASSET_BASE}/email-icons/social-tiktok.svg`, url: "https://www.tiktok.com/@jbj.ae", alt: "TikTok" },
+  const links: Array<{svg: string; url: string; alt: string}> = [
+    { svg: SVG.instagram, url: "https://www.instagram.com/jbj.ae", alt: "Instagram" },
+    { svg: SVG.facebook, url: "https://www.facebook.com/share/1G7CgSaV2L/?mibextid=wwXIfr", alt: "Facebook" },
+    { svg: SVG.linkedin, url: "https://www.linkedin.com/company/jbj-global-real-estate/", alt: "LinkedIn" },
+    { svg: SVG.youtube, url: "https://youtube.com/@jbjglobalrealestate", alt: "YouTube" },
+    { svg: SVG.tiktok, url: "https://www.tiktok.com/@jbj.ae", alt: "TikTok" },
   ];
 
-  const item = (icon: string, url: string, alt: string) =>
-    `<td style="padding:0 5px 8px;"><a href="${url}" style="display:inline-block;width:38px;height:38px;background:#000;border:1px solid #C8A766;border-radius:38px;text-decoration:none;line-height:38px;text-align:center;vertical-align:middle;"><img src="${icon}" alt="${alt}" width="18" height="18" style="display:inline-block;width:18px;height:18px;vertical-align:middle;" /></a></td>`;
+  const item = (svg: string, url: string) =>
+    `<td style="padding:0 5px 8px;"><a href="${url}" style="display:inline-block;width:38px;height:38px;background:#000;border:1px solid #C8A766;border-radius:38px;text-decoration:none;line-height:38px;text-align:center;vertical-align:middle;">${svg}</a></td>`;
 
-  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:12px;"><tr>${links.map((l) => item(l.icon, l.url, l.alt)).join("")}</tr></table>`;
+  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:12px;"><tr>${links.map((l) => item(l.svg, l.url)).join("")}</tr></table>`;
 }
 
 export function sharedFooterHtml(): string {
@@ -312,7 +315,7 @@ export function issueNotResolvedCardAr(reopenUrl: string): string {
 }
 
 // ─── Shared Sections (unified global block) ───
-// Layout: Gold divider → Suggested Actions → Gold divider → Feedback → Gold divider → Books → Support → Recommended → Ready to Get Started → Sign Off
+// Layout: Gold divider → Inquiry Box → Ticket Support → Recommended → Books → Divider → Suggested Actions → Divider → Feedback → Divider → Ready to Get Started → Sign Off
 export function sharedSections(context: string, teamName = "JBJ Global Real Estate Team"): string {
   return `${goldDivider()}<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="direction:ltr;text-align:left;"><tr><td>
 ${inquiryBox(context)}
