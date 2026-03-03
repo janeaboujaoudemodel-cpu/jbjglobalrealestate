@@ -71,7 +71,7 @@ const ContinueSearching = ({
 };
 
 function RecentCard({ item, index }: { item: RecentItem; index: number }) {
-  const config = TYPE_CONFIG[item.type];
+  const config = TYPE_CONFIG[item.type] ?? TYPE_CONFIG.property;
   const Icon = config.icon;
   const linkTo = `${config.pathPrefix}/${item.slug}`;
 
