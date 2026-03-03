@@ -200,7 +200,9 @@ const PropertyRecommendationPopup = () => {
                     <img
                       src={project.cover_image_url}
                       alt={project.name}
-                      className="w-14 h-14 rounded-lg object-cover flex-shrink-0"
+                      className="w-14 h-14 rounded-lg object-cover flex-shrink-0 bg-gold/10"
+                      loading="eager"
+                      decoding="async"
                     />
                   ) : (
                     <div className="w-14 h-14 rounded-lg bg-gold/10 flex items-center justify-center flex-shrink-0">
