@@ -21,7 +21,6 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
   const navigate = useNavigate();
   const { data: developers } = useDevelopers();
 
-  // Premium developers first by rank, then rest
   const allDevelopersSorted = useMemo(() => {
     if (!developers) return [];
     return [...developers].sort((a, b) => (a.rank ?? 999) - (b.rank ?? 999));
@@ -69,7 +68,7 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
 
   return (
     <div
-      className={`bg-zinc-950/90 backdrop-blur-md border border-zinc-800/50 rounded-2xl p-4 md:p-6 ${className}`}
+      className={`bg-zinc-950/90 backdrop-blur-md border border-zinc-800/50 rounded-2xl p-4 md:p-6 w-full ${className}`}
     >
       <div className="flex flex-wrap items-center gap-3 w-full">
         {/* Keyword Search */}
@@ -83,6 +82,9 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
             className="pl-10 h-12 bg-zinc-900/80 border-zinc-700/50 text-white placeholder:text-zinc-500 focus:border-gold rounded-lg"
           />
         </div>
+
+        {/* Divider */}
+        <div className="hidden md:block h-8 w-px bg-gradient-to-b from-transparent via-zinc-600 to-transparent" />
 
         {/* Emirates / Location */}
         <Select value={location || "all"} onValueChange={(value) => setLocation(value === "all" ? null : value)}>
@@ -101,6 +103,9 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
             <SelectItemDark value="Umm Al Quwain">Umm Al Quwain</SelectItemDark>
           </SelectContentDark>
         </Select>
+
+        {/* Divider */}
+        <div className="hidden md:block h-8 w-px bg-gradient-to-b from-transparent via-zinc-600 to-transparent" />
 
         {/* Developer */}
         <Select value={developerId || "all"} onValueChange={(value) => setDeveloperId(value === "all" ? null : value)}>
@@ -131,7 +136,7 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
           </SelectContentDark>
         </Select>
 
-        {/* Divider between Developer and Beds */}
+        {/* Divider */}
         <div className="hidden md:block h-8 w-px bg-gradient-to-b from-transparent via-zinc-600 to-transparent" />
 
         {/* Beds */}
@@ -151,6 +156,9 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
           </SelectContentDark>
         </Select>
 
+        {/* Divider */}
+        <div className="hidden md:block h-8 w-px bg-gradient-to-b from-transparent via-zinc-600 to-transparent" />
+
         {/* Price Range */}
         <Select value={priceRange || "all"} onValueChange={(value) => setPriceRange(value === "all" ? null : value)}>
           <SelectTriggerDark className="w-[140px] h-12 rounded-lg">
@@ -167,6 +175,9 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
           </SelectContentDark>
         </Select>
 
+        {/* Divider */}
+        <div className="hidden md:block h-8 w-px bg-gradient-to-b from-transparent via-zinc-600 to-transparent" />
+
         {/* Advanced Filters Link */}
         <Button
           variant="outline"
@@ -175,6 +186,9 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
         >
           <Filter className="w-4 h-4" />
         </Button>
+
+        {/* Divider */}
+        <div className="hidden md:block h-8 w-px bg-gradient-to-b from-transparent via-zinc-600 to-transparent" />
 
         {/* Search Button */}
         <Button

@@ -20,11 +20,17 @@ const SVG_ICONS = {
   // Headset for ticket support: WHITE stroke on red bg
   headsetWhite: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>`,
   // All other icons: outline-only, black stroke, NO fill
-  aiTools: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M7 20h10"/><path d="M9 16v4"/><path d="M15 16v4"/><path d="M8 8h8"/><path d="M8 12h5"/></svg>`,
-  guides: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="M8 7h6"/><path d="M8 11h4"/></svg>`,
-  properties: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V9l9-6 9 6v12"/><path d="M9 21v-6h6v6"/></svg>`,
+  aiTools: `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M7 20h10"/><path d="M9 16v4"/><path d="M15 16v4"/><path d="M8 8h8"/><path d="M8 12h5"/></svg>`,
+  guides: `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="M8 7h6"/><path d="M8 11h4"/></svg>`,
+  properties: `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V9l9-6 9 6v12"/><path d="M9 21v-6h6v6"/></svg>`,
   survey: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`,
   review: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
+  // Social media icons — gold champagne stroke, no fill
+  instagram: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8A766" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>`,
+  facebook: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8A766" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>`,
+  linkedin: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8A766" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>`,
+  youtube: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8A766" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.35 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>`,
+  tiktok: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8A766" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>`,
 };
 
 function sectionDivider(): string {
@@ -59,17 +65,18 @@ export function inquiryBox(contextLabel: string): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:20px 0 16px;"><tr><td style="padding:18px 20px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:18px;text-align:center;"><p style="margin:0;font-size:14px;color:#1f2937;line-height:1.7;">For inquiries about your ${contextLabel}, contact us at<br/><a href="mailto:CONTACT@JBJ.AE" style="color:#111827;font-weight:700;text-decoration:underline;">CONTACT@JBJ.AE</a></p></td></tr></table>`;
 }
 
-// Ticket support: RED filled box with WHITE headset icon
+// Ticket support: RED filled CIRCLE with WHITE headset icon
 export function ticketSupportEmbed(): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:16px 0 22px;"><tr><td style="padding:24px 20px;background:linear-gradient(135deg,#fff5f5,#ffe9e9);border:1px solid #ef4444;border-radius:18px;text-align:center;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;"><tr><td style="width:48px;height:48px;background:#dc2626;border-radius:14px;border:2px solid #b91c1c;text-align:center;vertical-align:middle;line-height:48px;">${SVG_ICONS.headsetWhite}</td></tr></table><p style="margin:0 0 4px;font-size:11px;font-weight:700;color:#dc2626;text-transform:uppercase;letter-spacing:2px;">24/7 SUPPORT</p><p style="margin:0 0 6px;font-size:16px;font-weight:700;color:#7f1d1d;">Need Help? Open a Support Ticket</p><p style="margin:0 0 14px;font-size:13px;color:#991b1b;">Our team typically responds within 24 hours</p><a href="${SITE_URL}/support" style="display:inline-block;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;text-decoration:none;padding:12px 30px;border-radius:12px;font-weight:700;font-size:13px;">Submit a Ticket</a></td></tr></table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:16px 0 22px;"><tr><td style="padding:24px 20px;background:linear-gradient(135deg,#fff5f5,#ffe9e9);border:1px solid #ef4444;border-radius:18px;text-align:center;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;"><tr><td style="width:48px;height:48px;background:#dc2626;border-radius:48px;border:2px solid #b91c1c;text-align:center;vertical-align:middle;line-height:48px;">${SVG_ICONS.headsetWhite}</td></tr></table><p style="margin:0 0 4px;font-size:11px;font-weight:700;color:#dc2626;text-transform:uppercase;letter-spacing:2px;">24/7 SUPPORT</p><p style="margin:0 0 6px;font-size:16px;font-weight:700;color:#7f1d1d;">Need Help? Open a Support Ticket</p><p style="margin:0 0 14px;font-size:13px;color:#991b1b;">Our team typically responds within 24 hours</p><a href="${SITE_URL}/support" style="display:inline-block;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;text-decoration:none;padding:12px 30px;border-radius:12px;font-weight:700;font-size:13px;">Submit a Ticket</a></td></tr></table>`;
 }
 
 export function ticketSupportEmbedAr(): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:16px 0 22px;direction:rtl;"><tr><td style="padding:24px 20px;background:linear-gradient(135deg,#fff5f5,#ffe9e9);border:1px solid #ef4444;border-radius:18px;text-align:center;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;"><tr><td style="width:48px;height:48px;background:#dc2626;border-radius:14px;border:2px solid #b91c1c;text-align:center;vertical-align:middle;line-height:48px;">${SVG_ICONS.headsetWhite}</td></tr></table><p style="margin:0 0 4px;font-size:11px;font-weight:700;color:#dc2626;text-transform:uppercase;letter-spacing:2px;">دعم على مدار الساعة</p><p style="margin:0 0 6px;font-size:16px;font-weight:700;color:#7f1d1d;">هل تحتاج مساعدة؟ افتح تذكرة دعم</p><p style="margin:0 0 14px;font-size:13px;color:#991b1b;">فريقنا يرد عادةً خلال ٢٤ ساعة</p><a href="${SITE_URL}/support" style="display:inline-block;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;text-decoration:none;padding:12px 30px;border-radius:12px;font-weight:700;font-size:13px;">إرسال تذكرة</a></td></tr></table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:16px 0 22px;direction:rtl;"><tr><td style="padding:24px 20px;background:linear-gradient(135deg,#fff5f5,#ffe9e9);border:1px solid #ef4444;border-radius:18px;text-align:center;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;"><tr><td style="width:48px;height:48px;background:#dc2626;border-radius:48px;border:2px solid #b91c1c;text-align:center;vertical-align:middle;line-height:48px;">${SVG_ICONS.headsetWhite}</td></tr></table><p style="margin:0 0 4px;font-size:11px;font-weight:700;color:#dc2626;text-transform:uppercase;letter-spacing:2px;">دعم على مدار الساعة</p><p style="margin:0 0 6px;font-size:16px;font-weight:700;color:#7f1d1d;">هل تحتاج مساعدة؟ افتح تذكرة دعم</p><p style="margin:0 0 14px;font-size:13px;color:#991b1b;">فريقنا يرد عادةً خلال ٢٤ ساعة</p><a href="${SITE_URL}/support" style="display:inline-block;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;text-decoration:none;padding:12px 30px;border-radius:12px;font-weight:700;font-size:13px;">إرسال تذكرة</a></td></tr></table>`;
 }
 
+// Recommended cards: circle icon frame only, NO square border around card
 function recommendedCard(title: string, href: string, iconSvg: string): string {
-  return `<td width="33%" style="text-align:center;padding:4px;vertical-align:top;"><a href="${href}" style="display:block;text-decoration:none;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;"><tr><td style="padding:18px 8px;background:#fff;border:1px solid #1a1a1a;border-radius:18px;text-align:center;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;"><tr><td style="width:52px;height:52px;background:#fff;border:1.5px solid #1a1a1a;border-radius:52px;text-align:center;vertical-align:middle;">${iconSvg}</td></tr></table><p style="margin:0;font-size:12px;color:#1a1a1a;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">${title}</p></td></tr></table></a></td>`;
+  return `<td width="33%" style="text-align:center;padding:4px;vertical-align:top;"><a href="${href}" style="display:block;text-decoration:none;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;"><tr><td style="padding:18px 8px;text-align:center;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:#fff;border:1.5px solid #1a1a1a;border-radius:52px;text-align:center;vertical-align:middle;">${iconSvg}</td></tr></table><p style="margin:0;font-size:12px;color:#1a1a1a;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">${title}</p></td></tr></table></a></td>`;
 }
 
 export function recommendedActionsHtml(): string {
@@ -100,7 +107,7 @@ function book3dCover(title: string, subtitle: string, href: string, accentColor:
 }
 
 export function booksShowcaseHtml(): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:6px 0 16px;"><tr><td style="text-align:center;"><p style="color:#1a1a1a;font-size:14px;font-weight:700;margin:0 0 12px;">Explore Our Library</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${book3dCover("UAE Real Estate", "Market Intelligence", `${SITE_URL}/market-intelligence/reports`, "#C8A766")}${book3dCover("Expert Knowledge", "Guides Library", `${SITE_URL}/guides`, "#C8A766")}</tr></table></td></tr></table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:6px 0 16px;"><tr><td style="text-align:center;"><p style="color:#1a1a1a;font-size:14px;font-weight:700;margin:0 0 12px;">Explore Our Library</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${book3dCover("UAE Real Estate", "Market Intelligence", `${SITE_URL}/market-intelligence/reports`, "#C8A766")}${book3dCover("Guides Library", "2026 Edition", `${SITE_URL}/guides`, "#C8A766")}</tr></table></td></tr></table>`;
 }
 
 export function suggestedActionsHtml(): string {
@@ -116,10 +123,8 @@ export function feedbackHtml(context = "general"): string {
 /**
  * signOffHtml — Company name on line 1, team name on line 2.
  * RULE: "JBJ Global Real Estate" always on its own line. The department/team goes on the next line.
- * e.g. teamName="JBJ Global Real Estate Support Team" → line1: "JBJ GLOBAL REAL ESTATE" line2: "SUPPORT TEAM"
  */
 export function signOffHtml(teamName = "JBJ Global Real Estate Team"): string {
-  // Extract the team suffix after "JBJ Global Real Estate"
   const base = "JBJ Global Real Estate";
   let teamSuffix = "Team";
   if (teamName.toLowerCase().startsWith(base.toLowerCase())) {
@@ -138,20 +143,51 @@ export function doNotReplyNotice(): string {
   return `<tr><td style="padding:10px 0 0;text-align:center;"><p style="margin:0;font-size:11px;color:#8a8a8a;line-height:1.5;">This is an automated message. Please do not reply directly to this email.<br/>For any inquiries, contact us at <a href="mailto:CONTACT@JBJ.AE" style="color:#C8A766;text-decoration:underline;font-weight:600;">CONTACT@JBJ.AE</a></p></td></tr>`;
 }
 
-// Social links for footer: Instagram, Facebook, LinkedIn, YouTube, TikTok — gold on black
+/**
+ * LOCKED FOOTER — Social links with gold champagne SVG icons on black background.
+ * Instagram, Facebook, LinkedIn, YouTube, TikTok — each with its own SVG icon.
+ * Gold borders, gold icons. This footer is LOCKED and must appear on ALL emails.
+ */
 function socialLinksFooter(): string {
   const links = [
-    { label: "Instagram", url: "https://www.instagram.com/jbj.ae" },
-    { label: "Facebook", url: "https://www.facebook.com/share/1G7CgSaV2L/?mibextid=wwXIfr" },
-    { label: "LinkedIn", url: "https://www.linkedin.com/company/jbj-global-real-estate/" },
-    { label: "YouTube", url: "https://youtube.com/@jbjglobalrealestate" },
-    { label: "TikTok", url: "https://www.tiktok.com/@jbj.ae" },
+    { icon: SVG_ICONS.instagram, url: "https://www.instagram.com/jbj.ae" },
+    { icon: SVG_ICONS.facebook, url: "https://www.facebook.com/share/1G7CgSaV2L/?mibextid=wwXIfr" },
+    { icon: SVG_ICONS.linkedin, url: "https://www.linkedin.com/company/jbj-global-real-estate/" },
+    { icon: SVG_ICONS.youtube, url: "https://youtube.com/@jbjglobalrealestate" },
+    { icon: SVG_ICONS.tiktok, url: "https://www.tiktok.com/@jbj.ae" },
   ];
-  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:14px;"><tr>${links.map(l => `<td style="padding:0 5px;"><a href="${l.url}" style="display:inline-block;padding:7px 10px;border:1px solid #C8A766;border-radius:6px;color:#C8A766;text-decoration:none;font-size:11px;font-weight:600;">${l.label}</a></td>`).join("")}</tr></table>`;
+  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:14px;"><tr>${links.map(l => `<td style="padding:0 5px;"><a href="${l.url}" style="display:inline-block;width:36px;height:36px;border:1px solid #C8A766;border-radius:8px;text-align:center;line-height:36px;text-decoration:none;">${l.icon}</a></td>`).join("")}</tr></table>`;
 }
 
+/**
+ * LOCKED FOOTER — This footer MUST appear on every single email sent by the company.
+ * No email is allowed to be sent without this footer.
+ * Contains: monogram, company name, tagline, stats, social icons, legal text.
+ */
 export function sharedFooterHtml(): string {
-  return `${doNotReplyNotice()}<tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:#000;overflow:hidden;"><tr><td style="padding:30px 26px 28px;text-align:center;"><img src="${LOGO_URL}" alt="JBJ" width="130" style="width:130px;height:auto;display:block;margin:0 auto 12px;border-radius:130px;" /><p style="color:#C8A766;font-size:16px;margin:0 0 6px;font-weight:700;letter-spacing:1.8px;">JBJ GLOBAL REAL ESTATE</p><p style="color:#9ca3af;font-size:12px;margin:0 0 16px;">Your Trusted Partner in Dubai Real Estate</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:14px;"><tr><td style="border-top:1px solid #2f2f2f;"></td></tr></table><p style="margin:0 0 14px;"><a href="tel:+971565911000" style="color:#fff;text-decoration:none;font-size:14px;font-weight:600;">+971 56 591 1000</a><span style="color:#4b5563;margin:0 12px;">|</span><a href="mailto:CONTACT@JBJ.AE" style="color:#fff;text-decoration:underline;font-size:14px;font-weight:600;">CONTACT@JBJ.AE</a></p>${socialLinksFooter()}<p style="color:#9ca3af;font-size:11px;margin:0 0 8px;">Developed, Created &amp; Implemented by The Founder &amp; CEO, <span style="color:#C8A766;">Jane Bou Jaoude</span></p><p style="color:#C8A766;font-size:11px;margin:0;font-weight:600;">&copy; ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.</p></td></tr></table></td></tr>`;
+  return `${doNotReplyNotice()}<tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:#000;overflow:hidden;"><tr><td style="padding:30px 26px 28px;text-align:center;">
+<img src="${LOGO_URL}" alt="JBJ" width="130" style="width:130px;height:auto;display:block;margin:0 auto 12px;border-radius:130px;" />
+<p style="color:#C8A766;font-size:16px;margin:0 0 4px;font-weight:700;letter-spacing:1.8px;">JBJ Global Real Estate</p>
+<p style="color:#9ca3af;font-size:12px;font-style:italic;margin:0 0 16px;">The Only Global AI-Powered Real Estate Intelligence Platform</p>
+<p style="color:#C8A766;font-size:20px;font-weight:800;margin:0 0 6px;letter-spacing:0.5px;">175+ Countries &bull; 2,400+ Cities</p>
+<p style="color:#C8A766;font-size:20px;font-weight:800;margin:0 0 18px;letter-spacing:0.5px;">&bull; 12,000+ Clients Served</p>
+<p style="color:#C8A766;font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin:0 0 14px;">FOLLOW US &middot; STAY IN THE LOOP</p>
+${socialLinksFooter()}
+<p style="color:#9ca3af;font-size:12px;margin:0 0 4px;line-height:1.6;">You can turn email notifications on/off anytime from your account settings.</p>
+<p style="color:#9ca3af;font-size:12px;margin:0 0 14px;line-height:1.6;">You can unsubscribe or resubscribe anytime.</p>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:14px;"><tr>
+<td style="padding:0 8px;"><a href="${SITE_URL}/unsubscribe" style="color:#C8A766;font-size:12px;text-decoration:underline;">Unsubscribe</a></td>
+<td style="color:#4b5563;font-size:12px;">|</td>
+<td style="padding:0 8px;"><a href="${SITE_URL}/email-preferences" style="color:#C8A766;font-size:12px;text-decoration:underline;">Manage Preferences</a></td>
+<td style="color:#4b5563;font-size:12px;">|</td>
+<td style="padding:0 8px;"><a href="mailto:CONTACT@JBJ.AE" style="color:#C8A766;font-size:12px;text-decoration:underline;">Contact Us</a></td>
+</tr></table>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:14px;"><tr><td style="border-top:1px solid #2f2f2f;"></td></tr></table>
+<p style="color:#9ca3af;font-size:11px;margin:0 0 4px;">Developed, Created &amp; Implemented by The Founder &amp; CEO, <span style="color:#C8A766;">Jane Bou Jaoude</span></p>
+<p style="color:#C8A766;font-size:11px;margin:0 0 4px;font-weight:600;">&copy; ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.</p>
+<p style="color:#9ca3af;font-size:11px;margin:0 0 4px;">Dubai, United Arab Emirates</p>
+<p style="color:#9ca3af;font-size:10px;margin:0;">You are receiving this email because you opted in on <a href="${SITE_URL}" style="color:#C8A766;text-decoration:underline;">jbj.ae</a>.</p>
+</td></tr></table></td></tr>`;
 }
 
 export function progressSteps(labels: [string, string, string], active: [boolean, boolean, boolean], checks: [boolean, boolean, boolean] = [false, false, false]): string {
@@ -184,6 +220,9 @@ export function inquiryStages(currentStage: "received" | "reviewing" | "responde
   return progressSteps(["Received", "Reviewing", "Responded"], stages, stages);
 }
 
+/**
+ * Ticket summary card with a gold divider after it.
+ */
 export function ticketSummaryCard(rows: Array<{ label: string; value: string; highlight?: boolean }>): string {
   const rowsHtml = rows
     .map((r) => {
@@ -193,7 +232,7 @@ export function ticketSummaryCard(rows: Array<{ label: string; value: string; hi
       return `<tr><td style="padding:7px 0;color:#666;font-size:13px;width:40%;border-right:1px solid #C8A76630;padding-right:12px;">${r.label}</td><td style="${valueStyle}">${r.value}</td></tr>`;
     })
     .join("");
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:18px;margin-bottom:24px;"><tr><td style="padding:20px;"><p style="color:#666;font-size:12px;margin:0 0 8px;text-transform:uppercase;letter-spacing:1px;">Summary</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${rowsHtml}</table></td></tr></table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:18px;margin-bottom:16px;"><tr><td style="padding:20px;"><p style="color:#666;font-size:12px;margin:0 0 8px;text-transform:uppercase;letter-spacing:1px;">Summary</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${rowsHtml}</table></td></tr></table>${goldDivider()}`;
 }
 
 export function ticketSummaryCardAr(rows: Array<{ label: string; value: string; highlight?: boolean }>): string {
@@ -205,12 +244,11 @@ export function ticketSummaryCardAr(rows: Array<{ label: string; value: string; 
       return `<tr><td style="padding:7px 0;color:#666;font-size:13px;width:40%;border-left:1px solid #C8A76630;padding-left:12px;">${r.label}</td><td style="${valueStyle}">${r.value}</td></tr>`;
     })
     .join("");
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:18px;margin-bottom:24px;direction:rtl;"><tr><td style="padding:20px;"><p style="color:#666;font-size:12px;margin:0 0 8px;text-transform:uppercase;letter-spacing:1px;">ملخص</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${rowsHtml}</table></td></tr></table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:18px;margin-bottom:16px;direction:rtl;"><tr><td style="padding:20px;"><p style="color:#666;font-size:12px;margin:0 0 8px;text-transform:uppercase;letter-spacing:1px;">ملخص</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${rowsHtml}</table></td></tr></table>${goldDivider()}`;
 }
 
 /**
  * Rate Your Experience card — ROUNDED borders matching summary card style.
- * Used on resolved tickets and all emails.
  */
 export function rateExperienceCard(surveyLink: string): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:18px;margin-bottom:24px;">
@@ -248,7 +286,6 @@ export function rateExperienceCardAr(surveyLink: string): string {
 
 /**
  * Issue Not Resolved card — ROUNDED borders (18px), matching summary card style.
- * Red theme but with rounded container, not square/dashed edges.
  */
 export function issueNotResolvedCard(reopenUrl: string): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:20px 0;">
@@ -278,9 +315,8 @@ export function sharedSections(context: string, teamName = "JBJ Global Real Esta
 
 /**
  * emailShell — ONE single unified layout.
- * Header + Body + Footer in ONE continuous card with no visual breaks.
- * The entire email sits in a single wrapper table — no splits, no gaps.
- * Footer flows edge-to-edge at the bottom of the same card.
+ * Header + Body + LOCKED Footer in ONE continuous card with no visual breaks.
+ * The LOCKED footer MUST appear on every email. No exceptions.
  */
 export function emailShell(departmentLabel: string, bodyContent: string): string {
   const raw = `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><style>body{margin:0;padding:0;background:#ffffff;font-family:'Segoe UI',Arial,sans-serif;}table{border-collapse:collapse;}img{display:block;border:0;outline:none;text-decoration:none;}@media only screen and (max-width:620px){.wrapper{width:100%!important;}.content-pad{padding:22px 16px!important;}}</style></head><body style="margin:0;padding:0;background:#fff;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fff;"><tr><td align="center" style="padding:22px 12px;"><table role="presentation" class="wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:linear-gradient(180deg,#F5F0E6,#F0EBE0,#EDE4D3);border-radius:18px;overflow:hidden;">${sharedHeader(departmentLabel)}${bodyContent}${sharedFooterHtml()}</table></td></tr></table></body></html>`;
