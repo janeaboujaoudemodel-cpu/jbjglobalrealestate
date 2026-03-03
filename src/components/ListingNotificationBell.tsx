@@ -103,6 +103,7 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
   const invalidateCounts = () => {
     queryClient.invalidateQueries({ queryKey: ['user-alert-counts'] });
     queryClient.invalidateQueries({ queryKey: ['notifications-preview'] });
+    queryClient.invalidateQueries({ queryKey: ['ticket-notifications'] });
   };
 
   const markAsRead = async (notif: Notification) => {
@@ -112,6 +113,16 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
       .update({ is_read: true, read_at: new Date().toISOString() } as any)
       .eq('id', notif.id);
     setNotifications(prev => prev.map(n => n.id === notif.id ? { ...n, is_read: true } : n));
+    invalidateCounts();
+  };
+
+  const markAsUnread = async (notif: Notification) => {
+    if (!notif.is_read) return;
+    await supabase
+      .from(notif.source_table)
+      .update({ is_read: false, read_at: null } as any)
+      .eq('id', notif.id);
+    setNotifications(prev => prev.map(n => n.id === notif.id ? { ...n, is_read: false } : n));
     invalidateCounts();
   };
 
