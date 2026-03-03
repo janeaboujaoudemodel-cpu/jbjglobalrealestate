@@ -70,7 +70,7 @@ function buildEmailHtml(req: CVEmailRequest): { html: string; subject: string } 
       subtitle: "Thank you for your interest in joining JBJ Global Real Estate. We've received your application and our HR team will begin reviewing your profile shortly.",
       subtitleAr: "شكراً لاهتمامك بالانضمام إلى JBJ Global Real Estate. لقد استلمنا طلبك وسيبدأ فريق الموارد البشرية بمراجعة ملفك قريباً.",
       steps: [true, false, false], stepChecks: [true, false, false],
-      extraHtml: `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border-radius:16px;margin-bottom:24px;border:1px solid #C8A766;">
+      extraHtml: `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border-radius:18px;margin-bottom:24px;border:1px solid #C8A766;">
 <tr><td style="padding:24px;">
 <p style="font-weight:bold;color:#1a1a1a;margin:0 0 12px;font-size:15px;">What happens next?</p>
 <table role="presentation" cellpadding="0" cellspacing="0" border="0">
@@ -79,7 +79,7 @@ function buildEmailHtml(req: CVEmailRequest): { html: string; subject: string } 
 <tr><td style="padding:4px 0;font-size:13px;color:#555;">&#8226; You will also receive notifications in your account</td></tr>
 <tr><td style="padding:4px 0;font-size:13px;color:#555;">&#8226; Qualified candidates will be contacted for an interview</td></tr>
 </table></td></tr></table>`,
-      extraHtmlAr: `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border-radius:16px;margin-bottom:24px;border:1px solid #C8A766;">
+      extraHtmlAr: `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border-radius:18px;margin-bottom:24px;border:1px solid #C8A766;">
 <tr><td style="padding:24px;direction:rtl;text-align:right;">
 <p style="font-weight:bold;color:#1a1a1a;margin:0 0 12px;font-size:15px;">ماذا يحدث بعد ذلك؟</p>
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="direction:rtl;">
@@ -94,20 +94,20 @@ function buildEmailHtml(req: CVEmailRequest): { html: string; subject: string } 
       subtitle: "Great news! Our HR team is now actively reviewing your application. We'll be in touch soon with an update.",
       subtitleAr: "أخبار رائعة! يقوم فريق الموارد البشرية الآن بمراجعة طلبك بشكل فعّال.",
       steps: [true, true, false], stepChecks: [true, true, false],
-      extraHtml: adminNote ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:16px;margin-bottom:24px;"><tr><td style="padding:20px;"><p style="font-weight:bold;color:#1a1a1a;margin:0 0 8px;">HR Team Note:</p><p style="color:#555;margin:0;">${adminNote}</p></td></tr></table>` : '',
-      extraHtmlAr: adminNote ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:16px;margin-bottom:24px;"><tr><td style="padding:20px;direction:rtl;text-align:right;"><p style="font-weight:bold;color:#1a1a1a;margin:0 0 8px;">ملاحظة فريق الموارد البشرية:</p><p style="color:#555;margin:0;">${adminNote}</p></td></tr></table>` : '',
+      extraHtml: adminNote ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;"><tr><td style="padding:20px;"><p style="font-weight:bold;color:#1a1a1a;margin:0 0 8px;">HR Team Note:</p><p style="color:#555;margin:0;">${adminNote}</p></td></tr></table>` : '',
+      extraHtmlAr: adminNote ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;"><tr><td style="padding:20px;direction:rtl;text-align:right;"><p style="font-weight:bold;color:#1a1a1a;margin:0 0 8px;">ملاحظة فريق الموارد البشرية:</p><p style="color:#555;margin:0;">${adminNote}</p></td></tr></table>` : '',
     },
     approved: {
       title: "Congratulations! Your Application Has Been Approved", titleAr: "تهانينا! تمت الموافقة على طلبك",
       subtitle: "We're excited to inform you that your application has been approved.",
       subtitleAr: "يسعدنا إبلاغك بأنه تمت الموافقة على طلبك.",
       steps: [true, true, true], stepChecks: [true, true, true],
-      extraHtml: `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:2px solid #22c55e;border-radius:16px;margin-bottom:24px;">
+      extraHtml: `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:2px solid #22c55e;border-radius:18px;margin-bottom:24px;">
 <tr><td style="padding:24px;">
 <p style="color:#166534;font-size:16px;font-weight:bold;margin:0 0 12px;text-align:center;">Welcome Aboard!</p>
 <p style="color:#15803d;font-size:13px;margin:0 0 16px;text-align:center;">Our HR team will contact you within 48 hours.</p>
 </td></tr></table>`,
-      extraHtmlAr: `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:2px solid #22c55e;border-radius:16px;margin-bottom:24px;">
+      extraHtmlAr: `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:2px solid #22c55e;border-radius:18px;margin-bottom:24px;">
 <tr><td style="padding:24px;direction:rtl;text-align:right;">
 <p style="color:#166534;font-size:16px;font-weight:bold;margin:0 0 12px;text-align:center;">مرحباً بك معنا!</p>
 <p style="color:#15803d;font-size:13px;margin:0;text-align:center;">سيتواصل معك فريق الموارد البشرية خلال ٤٨ ساعة.</p>
@@ -118,13 +118,13 @@ function buildEmailHtml(req: CVEmailRequest): { html: string; subject: string } 
       subtitle: "Thank you for your interest. After careful review, we've decided to pursue other candidates at this time.",
       subtitleAr: "شكراً لاهتمامك. بعد مراجعة دقيقة، قررنا متابعة مرشحين آخرين.",
       steps: [true, true, true], stepChecks: [true, true, false],
-      extraHtml: `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border-radius:16px;margin-bottom:24px;border:1px solid #C8A766;">
+      extraHtml: `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border-radius:18px;margin-bottom:24px;border:1px solid #C8A766;">
 <tr><td style="padding:24px;text-align:center;">
 <p style="color:#1a1a1a;font-size:15px;font-weight:bold;margin:0 0 8px;">Don't Give Up!</p>
 <p style="color:#555;font-size:13px;margin:0 0 16px;">New positions open regularly.</p>
 <a href="${SITE_URL}/join" style="display:inline-block;padding:12px 32px;background:linear-gradient(135deg,#C8A766,#B8956E);color:#fff;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;">View Open Positions</a>
 </td></tr></table>`,
-      extraHtmlAr: `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border-radius:16px;margin-bottom:24px;border:1px solid #C8A766;">
+      extraHtmlAr: `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border-radius:18px;margin-bottom:24px;border:1px solid #C8A766;">
 <tr><td style="padding:24px;text-align:center;direction:rtl;">
 <p style="color:#1a1a1a;font-size:15px;font-weight:bold;margin:0 0 8px;">لا تستسلم!</p>
 <p style="color:#555;font-size:13px;margin:0 0 16px;">تُفتح وظائف جديدة بانتظام.</p>
@@ -150,7 +150,7 @@ function buildEmailHtml(req: CVEmailRequest): { html: string; subject: string } 
   };
 
   const bodyContent = `<tr><td class="content-pad" style="padding:32px;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:16px;margin-bottom:24px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;">
 <tr><td style="padding:24px 20px;text-align:center;">
 <p style="margin:0 0 4px;font-size:15px;font-weight:700;color:#1a1a1a;">${config.title}</p>
 <p style="margin:0;font-size:13px;color:#C8A766;font-weight:600;">Position: ${position}</p>
@@ -178,7 +178,7 @@ ${sharedSections("career application", "JBJ Global Real Estate HR Team")}
 ${arabicDivider()}
 </td></tr>
 <tr><td class="content-pad" style="padding:32px;direction:rtl;text-align:right;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:16px;margin-bottom:24px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;">
 <tr><td style="padding:24px 20px;text-align:center;">
 <p style="margin:0 0 4px;font-size:15px;font-weight:700;color:#1a1a1a;">${config.titleAr}</p>
 <p style="margin:0;font-size:13px;color:#C8A766;font-weight:600;">الوظيفة: ${position}</p>
@@ -191,7 +191,7 @@ ${config.extraHtmlAr}
 <tr><td style="text-align:center;">
 <a href="${SITE_URL}/my-account" style="display:inline-block;padding:14px 32px;background:#000;color:#C8A766;border-radius:10px;text-decoration:none;font-weight:600;font-size:14px;border:1px solid #C8A76650;">عرض حالة طلبي</a>
 </td></tr></table>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f0fdf4;border:1px solid #22c55e40;border-radius:16px;margin-bottom:24px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f0fdf4;border:1px solid #22c55e40;border-radius:18px;margin-bottom:24px;">
 <tr><td style="padding:14px 20px;text-align:center;">
 <p style="margin:0;font-size:13px;color:#166534;">للاستفسار حول طلبك، تواصل مع <a href="mailto:CONTACT@JBJ.AE" style="color:#15803d;font-weight:700;text-decoration:underline;">CONTACT@JBJ.AE</a></p>
 </td></tr></table>

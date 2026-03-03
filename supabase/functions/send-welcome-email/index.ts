@@ -1,7 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-import { SITE_URL, emailShell, arabicDivider, inquiryBox, recommendedActionsHtml, suggestedActionsHtml, ticketSupportEmbed, feedbackHtml } from "../_shared/email-html.ts";
+import { SITE_URL, emailShell, arabicDivider, sharedSections } from "../_shared/email-html.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
@@ -31,13 +31,12 @@ const RequestSchema = z.object({
   userRole: z.enum(["broker", "investor", "visitor"]).optional(),
 });
 
-/* ── Benefit row — table-based centering, monogram icon ── */
-function benefitRow(iconChar: string, title: string, desc: string): string {
+function benefitRow(num: string, title: string, desc: string): string {
   return `<tr><td style="padding:8px 0;">
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
 <td style="width:40px;min-width:40px;vertical-align:top;padding-top:2px;">
 <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
-<td style="width:36px;height:36px;border:2px solid #111;border-radius:10px;text-align:center;vertical-align:middle;font-size:18px;line-height:36px;">${iconChar}</td>
+<td style="width:36px;height:36px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:999px;text-align:center;vertical-align:middle;font-size:16px;font-weight:700;line-height:36px;color:#C8A766;">${num}</td>
 </tr></table>
 </td>
 <td style="padding-left:12px;"><strong style="color:#1a1a1a;font-size:14px;">${title}</strong>
@@ -49,87 +48,56 @@ function benefitRow(iconChar: string, title: string, desc: string): string {
 function buildWelcomeHtml(displayName: string, email: string, role: string, ctaText: string, ctaUrl: string, benefitsHtml: string): string {
   const arabicGreeting = role === 'broker' ? 'مرحباً بك في دائرة وسطاء JBJ!' : role === 'investor' ? 'مرحباً بك في JBJ — رحلتك الاستثمارية تبدأ!' : 'مرحباً بك في JBJ Global Real Estate!';
 
-  const bodyContent = `
-<!-- Content -->
-<tr><td class="content-pad" style="padding:32px;">
-
+  const bodyContent = `<tr><td class="content-pad" style="padding:32px;">
 <p style="margin:0 0 6px;font-size:28px;font-weight:800;color:#1a1a1a;line-height:1.2;">Thank You for Joining Us, ${displayName}</p>
 <p style="margin:0 0 24px;font-size:18px;color:#C8A766;font-weight:600;line-height:1.3;">Your JBJ account is ready — we're thrilled to have you.</p>
-
 <p style="color:#555;font-size:15px;line-height:1.6;margin:0 0 20px;">
 You have successfully created your account with <strong>JBJ Global Real Estate</strong>. As a valued member, you now have access to our full suite of services and tools.
 </p>
-
-<!-- Account Details -->
 <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
-<tr><td style="padding:18px 22px;background:linear-gradient(135deg,#F5EBD7 0%,#FDFBF7 100%);border-radius:12px;border:1px solid #C8A766;">
+<tr><td style="padding:18px 22px;background:linear-gradient(135deg,#F5EBD7 0%,#FDFBF7 100%);border-radius:18px;border:1px solid #C8A766;">
 <p style="color:#1a1a1a;font-size:14px;font-weight:700;margin:0 0 10px;">Your Account Details</p>
 <p style="color:#555;font-size:13px;margin:0;"><strong>Registered Email:</strong> ${email}</p>
 </td></tr>
 </table>
-
 <p style="color:#555;font-size:15px;line-height:1.6;margin:0 0 24px;">
 As a Dubai-based real estate brokerage, we specialize in connecting clients with exceptional properties across the UAE.
 </p>
-
-<!-- Benefits -->
 <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
 ${benefitsHtml}
 </table>
-
-<!-- CTA -->
 <table width="100%" cellpadding="0" cellspacing="0">
 <tr><td align="center" style="padding:0 0 28px;">
-<a href="${ctaUrl}" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:14px 40px;border-radius:10px;font-weight:700;font-size:14px;letter-spacing:0.5px;border:1px solid #C8A76650;">
+<a href="${ctaUrl}" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:14px 40px;border-radius:12px;font-weight:700;font-size:14px;letter-spacing:0.5px;border:1px solid #C8A76650;">
 ${ctaText}
 </a>
 </td></tr>
 </table>
-
-${inquiryBox("account")}
-
-${ticketSupportEmbed()}
-
-${recommendedActionsHtml()}
-
-${suggestedActionsHtml()}
-
-${feedbackHtml("welcome")}
-
-<p style="font-size:14px;color:#333;margin-top:24px;">Best regards,<br><span style="color:#C8A766;font-weight:600;">JBJ Global Real Estate Team</span></p>
+${sharedSections("account")}
 </td></tr>
-
-<!-- ═══ Arabic Content ═══ -->
 ${arabicDivider()}
 <tr><td class="content-pad" style="padding:32px;direction:rtl;text-align:right;">
-
 <p style="margin:0;font-size:28px;font-weight:800;color:#1a1a1a;line-height:1.2;">${arabicGreeting}</p>
 <p style="margin:8px 0 0;font-size:18px;color:#C8A766;font-weight:600;">حسابك في JBJ جاهز — يسعدنا انضمامك إلينا.</p>
-
 <p style="color:#555;font-size:15px;line-height:1.6;margin:16px 0 20px;">
 لقد قمت بإنشاء حسابك بنجاح مع <strong>JBJ Global Real Estate</strong>. بصفتك عضواً مميزاً، يمكنك الآن الوصول إلى جميع خدماتنا وأدواتنا.
 </p>
-
-<!-- Arabic Account Details -->
 <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
-<tr><td style="padding:18px 22px;background:linear-gradient(135deg,#F5EBD7 0%,#FDFBF7 100%);border-radius:12px;border:1px solid #C8A766;">
+<tr><td style="padding:18px 22px;background:linear-gradient(135deg,#F5EBD7 0%,#FDFBF7 100%);border-radius:18px;border:1px solid #C8A766;">
 <p style="color:#1a1a1a;font-size:14px;font-weight:700;margin:0 0 10px;">تفاصيل حسابك</p>
 <p style="color:#555;font-size:13px;margin:0;"><strong>البريد الإلكتروني المسجل:</strong> ${email}</p>
 </td></tr>
 </table>
-
 <p style="color:#555;font-size:15px;line-height:1.6;margin:0 0 24px;">
 بصفتنا شركة وساطة عقارية مقرها دبي، نحن متخصصون في ربط العملاء بأفضل العقارات في جميع أنحاء الإمارات.
 </p>
-
 <table width="100%" cellpadding="0" cellspacing="0">
 <tr><td align="center" style="padding:0 0 28px;">
-<a href="${ctaUrl}" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:14px 40px;border-radius:10px;font-weight:700;font-size:14px;letter-spacing:0.5px;border:1px solid #C8A76650;">
+<a href="${ctaUrl}" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:14px 40px;border-radius:12px;font-weight:700;font-size:14px;letter-spacing:0.5px;border:1px solid #C8A76650;">
 ابدأ التصفح
 </a>
 </td></tr>
 </table>
-
 <p style="font-size:14px;color:#333;margin-top:24px;text-align:right;">مع أطيب التحيات،<br><span style="color:#C8A766;font-weight:600;">فريق JBJ Global Real Estate</span></p>
 </td></tr>`;
 

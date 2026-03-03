@@ -68,14 +68,14 @@ function buildEmailHtml(req: AdminMessageRequest): string {
 <tr><td class="content-pad" style="padding:28px 40px;">
 <p style="color:#333;font-size:15px;line-height:1.6;margin:0 0 20px;">Dear <strong>${req.recipientName}</strong>,</p>
 ${req.referenceLabel ? `
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#FDFBF7;border:1px solid #C8A76633;border-radius:16px;margin:0 0 24px;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#FDFBF7;border:1px solid #C8A76633;border-radius:18px;margin:0 0 24px;">
 <tr><td style="padding:16px 20px;">
 <table width="100%" cellpadding="0" cellspacing="0">
 <tr><td style="padding:5px 0;color:#888;font-size:12px;width:100px;">Reference</td><td style="padding:5px 0;color:#333;font-size:13px;font-weight:600;">${req.referenceId ? req.referenceId.substring(0, 8).toUpperCase() : 'N/A'}</td></tr>
 <tr><td style="padding:5px 0;color:#888;font-size:12px;">Regarding</td><td style="padding:5px 0;color:#333;font-size:13px;font-weight:600;">${req.referenceLabel}</td></tr>
 <tr><td style="padding:5px 0;color:#888;font-size:12px;">Type</td><td style="padding:5px 0;color:#333;font-size:13px;">${typeLabel}</td></tr>
 </table></td></tr></table>` : ''}
-<table width="100%" cellpadding="0" cellspacing="0" style="background:linear-gradient(135deg,#F5EBD7 0%,#FDFBF7 100%);border:1px solid #C8A76640;border-radius:16px;margin:0 0 24px;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:linear-gradient(135deg,#F5EBD7 0%,#FDFBF7 100%);border:1px solid #C8A76640;border-radius:18px;margin:0 0 24px;">
 <tr><td style="padding:18px 22px;">
 <p style="margin:0 0 8px;font-size:11px;color:#C8A766;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;">Message from ${departmentLabel}</p>
 <p style="margin:0;color:#333;font-size:14px;line-height:1.8;white-space:pre-wrap;">${req.message}</p>
@@ -84,7 +84,7 @@ ${req.referenceLabel ? `
 <tr><td align="center" style="padding:8px 0 20px;">
 <a href="${SITE_URL}/my-account" style="display:inline-block;background:#000000;color:#C8A766;text-decoration:none;padding:14px 40px;border-radius:10px;font-weight:700;font-size:14px;border:1px solid #C8A76650;">View My Account</a>
 </td></tr></table>
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#FDFBF7;border:1px solid #C8A76630;border-radius:16px;margin:0 0 24px;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#FDFBF7;border:1px solid #C8A76630;border-radius:18px;margin:0 0 24px;">
 <tr><td style="padding:14px 20px;">
 <p style="margin:0;font-size:13px;color:#555;line-height:1.6;">You have also received a notification in your account. You can access updates from your <strong>Account Notifications</strong>, <strong>Tasks</strong>, or <strong>Inbox</strong>.</p>
 </td></tr></table>

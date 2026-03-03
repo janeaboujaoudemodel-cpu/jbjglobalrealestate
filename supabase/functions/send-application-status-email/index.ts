@@ -84,7 +84,7 @@ function buildEmailHtml(req: StatusEmailRequest): string {
 Your <strong>${typeLabel.toLowerCase()}</strong> — <strong>${req.applicationTitle}</strong> — has been updated.
 </p>
 ${progressSteps(['Received', 'Under Review', 'Decision'], steps, [steps[0], steps[1], false])}
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#fdfbf7;border:1px solid #C9A84C33;border-radius:16px;margin:0 0 24px;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#fdfbf7;border:1px solid #C9A84C33;border-radius:18px;margin:0 0 24px;">
 <tr><td style="padding:16px 20px;">
 <table width="100%" cellpadding="0" cellspacing="0">
 <tr><td style="padding:6px 0;color:#888;font-size:13px;width:120px;">Reference:</td><td style="padding:6px 0;color:#333;font-size:13px;font-weight:600;">${req.applicationId.substring(0, 8).toUpperCase()}</td></tr>
@@ -92,8 +92,8 @@ ${progressSteps(['Received', 'Under Review', 'Decision'], steps, [steps[0], step
 <tr><td style="padding:6px 0;color:#888;font-size:13px;">Type:</td><td style="padding:6px 0;color:#333;font-size:13px;">${typeLabel}</td></tr>
 </table>
 </td></tr></table>
-${req.adminMessage ? `<table width="100%" cellpadding="0" cellspacing="0" style="background:#f0f7ff;border:1px solid #3b82f633;border-radius:16px;margin:0 0 24px;"><tr><td style="padding:16px 20px;"><p style="margin:0 0 8px;font-size:12px;color:#3b82f6;font-weight:600;text-transform:uppercase;letter-spacing:1px;">Message from JBJ Team</p><p style="margin:0;color:#333;font-size:14px;line-height:1.6;white-space:pre-wrap;">${req.adminMessage}</p></td></tr></table>` : ""}
-${req.actionRequired ? `<table width="100%" cellpadding="0" cellspacing="0" style="background:#fef3c7;border:1px solid #f59e0b40;border-radius:16px;margin:0 0 24px;"><tr><td style="padding:16px 20px;text-align:center;"><p style="margin:0 0 4px;font-size:14px;color:#92400e;font-weight:700;">Action Required</p><p style="margin:0;font-size:13px;color:#78350f;">${req.actionLabel || "Please review and take action."}</p></td></tr></table>` : ""}
+${req.adminMessage ? `<table width="100%" cellpadding="0" cellspacing="0" style="background:#f0f7ff;border:1px solid #3b82f633;border-radius:18px;margin:0 0 24px;"><tr><td style="padding:16px 20px;"><p style="margin:0 0 8px;font-size:12px;color:#3b82f6;font-weight:600;text-transform:uppercase;letter-spacing:1px;">Message from JBJ Team</p><p style="margin:0;color:#333;font-size:14px;line-height:1.6;white-space:pre-wrap;">${req.adminMessage}</p></td></tr></table>` : ""}
+${req.actionRequired ? `<table width="100%" cellpadding="0" cellspacing="0" style="background:#fef3c7;border:1px solid #f59e0b40;border-radius:18px;margin:0 0 24px;"><tr><td style="padding:16px 20px;text-align:center;"><p style="margin:0 0 4px;font-size:14px;color:#92400e;font-weight:700;">Action Required</p><p style="margin:0;font-size:13px;color:#78350f;">${req.actionLabel || "Please review and take action."}</p></td></tr></table>` : ""}
 <table width="100%" cellpadding="0" cellspacing="0">
 <tr><td align="center" style="padding:8px 0 24px;">
 <a href="https://jbj.ae/my-account" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:14px 36px;border-radius:12px;font-weight:700;font-size:14px;border:1px solid #C8A76650;">View in My Account</a>
