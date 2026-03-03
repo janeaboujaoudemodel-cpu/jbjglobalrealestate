@@ -197,7 +197,7 @@ const InquiryManagementHub: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6]">
+    <div className="min-h-screen bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] pb-24">
         <PremiumBackendHeader
           title="Inquiry Management Hub"
           subtitle={`${counts.all} total inquiries • ${counts.pending || 0} awaiting action`}
