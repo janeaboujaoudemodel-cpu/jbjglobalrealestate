@@ -30,6 +30,17 @@ export function sharedHeader(departmentLabel: string): string {
 </td></tr>`;
 }
 
+/* ── Reusable Monogram Badge (prevents undersized profile/logo circles) ── */
+export function monogramBadge(size = 48, ringColor = "#C8A766", bgColor = "#000000"): string {
+  const logoSize = Math.round(size * 0.76);
+  const offset = Math.round((size - logoSize) / 2);
+  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center">
+<tr><td style="width:${size}px;height:${size}px;background:${bgColor};border:2px solid ${ringColor};border-radius:50%;text-align:center;vertical-align:middle;line-height:${size}px;overflow:hidden;">
+<img src="${LOGO_URL}" alt="JBJ" width="${logoSize}" style="width:${logoSize}px;height:${logoSize}px;display:block;margin:${offset}px auto 0;" />
+</td></tr>
+</table>`;
+}
+
 /* ── Inquiry Contact Box (green border) ── */
 export function inquiryBox(contextLabel: string): string {
   return `
@@ -40,19 +51,15 @@ export function inquiryBox(contextLabel: string): string {
 </table>`;
 }
 
-/* ── Ticket Support Embed ── */
+/* ── Ticket Support Embed (red website style) ── */
 export function ticketSupportEmbed(): string {
   return `
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:20px 0;">
-<tr><td style="padding:22px 24px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:12px;text-align:center;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;">
-<tr><td style="width:48px;height:48px;background:#000;border-radius:50%;text-align:center;vertical-align:middle;">
-<img src="${LOGO_URL}" alt="JBJ" width="32" style="width:32px;height:32px;display:block;margin:8px auto;" />
-</td></tr>
-</table>
-<p style="margin:0 0 6px;font-size:16px;font-weight:700;color:#1a1a1a;">Need Help? Open a Support Ticket</p>
-<p style="margin:0 0 14px;font-size:13px;color:#666;">Our team typically responds within 24 hours</p>
-<a href="${SITE_URL}/support" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:12px 32px;border-radius:8px;font-weight:700;font-size:13px;border:1px solid #C8A76650;">Submit a Ticket</a>
+<tr><td style="padding:22px 24px;background:linear-gradient(135deg,#fff5f5,#ffe8e8);border:2px solid #e74c3c;border-radius:12px;text-align:center;">
+${monogramBadge(50, "#e74c3c", "#111111")}
+<p style="margin:10px 0 6px;font-size:16px;font-weight:700;color:#7f1d1d;">Need Help? Open a Support Ticket</p>
+<p style="margin:0 0 14px;font-size:13px;color:#991b1b;">Our team typically responds within 24 hours</p>
+<a href="${SITE_URL}/support" style="display:inline-block;background:linear-gradient(135deg,#ef4444,#dc2626);color:#ffffff;text-decoration:none;padding:12px 32px;border-radius:8px;font-weight:700;font-size:13px;border:1px solid #b91c1c;">Submit a Ticket</a>
 </td></tr>
 </table>`;
 }
@@ -188,28 +195,24 @@ export function progressSteps(
 export function arabicDivider(): string {
   return `<tr><td style="padding:24px 32px 0;text-align:center;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="border-top:2px solid #C8A76650;"></td></tr></table>
-<p style="margin:16px 0 8px;font-size:12px;color:#C8A766;font-weight:700;letter-spacing:2px;text-transform:uppercase;">النسخة العربية — ARABIC VERSION</p>
 </td></tr>`;
 }
 
-/* ── Email Shell — white background, champagne rounded container ── */
+/* ── Email Shell — white background, single-card container ── */
 export function emailShell(departmentLabel: string, bodyContent: string): string {
   return `<!DOCTYPE html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<style>body{margin:0;padding:0;background-color:#ffffff;font-family:'Segoe UI',Arial,sans-serif;}
-@media only screen and (max-width:620px){.wrapper{width:100%!important;padding:0 8px!important;}.content-pad{padding:24px 16px!important;}.hero-pad{padding:32px 20px!important;}}</style>
+<style>body{margin:0;padding:0;background-color:#ffffff;font-family:'Segoe UI',Arial,sans-serif;}table{border-collapse:collapse;}@media only screen and (max-width:620px){.wrapper{width:100%!important;}.content-pad{padding:24px 16px!important;}}</style>
 </head>
 <body style="margin:0;padding:0;background-color:#ffffff;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#ffffff;">
-<tr><td align="center" style="padding:24px 16px;">
-<table role="presentation" class="wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:#F5F0E6;border-radius:24px;overflow:hidden;">
-<tr><td>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(180deg,#FFFFFF,#FDFBF7,#F5F0E6);border-radius:24px;overflow:hidden;box-shadow:0 8px 32px rgba(200,167,102,0.18);">
+<tr><td align="center" style="padding:24px 12px;">
+<table role="presentation" class="wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:linear-gradient(180deg,#FFFFFF,#FDFBF7,#F5F0E6);border-radius:24px;overflow:hidden;box-shadow:0 8px 32px rgba(200,167,102,0.18);">
 ${sharedHeader(departmentLabel)}
 ${bodyContent}
 ${sharedFooterHtml()}
 </table>
 </td></tr>
-</table></td></tr></table>
+</table>
 </body></html>`;
 }

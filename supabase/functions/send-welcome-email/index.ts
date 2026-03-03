@@ -1,7 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-import { LOGO_URL, SITE_URL, emailShell, inquiryBox, recommendedActionsHtml, suggestedActionsHtml, ticketSupportEmbed, feedbackHtml } from "../_shared/email-html.ts";
+import { SITE_URL, emailShell, arabicDivider, inquiryBox, recommendedActionsHtml, suggestedActionsHtml, ticketSupportEmbed, feedbackHtml } from "../_shared/email-html.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
@@ -100,10 +100,7 @@ ${feedbackHtml("welcome")}
 </td></tr>
 
 <!-- ═══ Arabic Content ═══ -->
-<tr><td style="padding:24px 32px 0;text-align:center;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="border-top:2px solid #C8A76650;"></td></tr></table>
-<p style="margin:16px 0 8px;font-size:12px;color:#C8A766;font-weight:700;letter-spacing:2px;">النسخة العربية — ARABIC VERSION</p>
-</td></tr>
+${arabicDivider()}
 <tr><td class="content-pad" style="padding:32px;direction:rtl;text-align:right;">
 
 <p style="margin:0;font-size:28px;font-weight:800;color:#1a1a1a;line-height:1.2;">${arabicGreeting}</p>

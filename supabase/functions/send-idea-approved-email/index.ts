@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { LOGO_URL, SITE_URL, emailShell, inquiryBox, recommendedActionsHtml, suggestedActionsHtml, ticketSupportEmbed, feedbackHtml, progressSteps, arabicDivider } from "../_shared/email-html.ts";
+import { SITE_URL, emailShell, inquiryBox, recommendedActionsHtml, suggestedActionsHtml, ticketSupportEmbed, feedbackHtml, progressSteps, arabicDivider } from "../_shared/email-html.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
@@ -83,8 +83,7 @@ ${feedbackHtml("idea")}
 <p style="font-size:14px;color:#333;margin-top:24px;">Best regards,<br><span style="color:#C8A766;font-weight:600;">JBJ Global Real Estate Team</span></p>
 
 <!-- ═══ Arabic Content ═══ -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:24px;"><tr><td style="border-top:2px solid #C8A76650;padding-top:16px;"></td></tr></table>
-<p style="text-align:center;margin:0 0 16px;font-size:12px;color:#C8A766;font-weight:700;letter-spacing:2px;">النسخة العربية — ARABIC VERSION</p>
+${arabicDivider()}
 
 <div style="direction:rtl;text-align:right;">
 <p style="margin:0;font-size:28px;font-weight:800;color:#1a1a1a;">تهانينا، ${userName || 'عميلنا الكريم'}!</p>

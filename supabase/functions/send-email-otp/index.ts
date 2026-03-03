@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { LOGO_URL, SITE_URL, emailShell, inquiryBox, recommendedActionsHtml, suggestedActionsHtml, ticketSupportEmbed, feedbackHtml } from "../_shared/email-html.ts";
+import { emailShell, monogramBadge, inquiryBox, recommendedActionsHtml, suggestedActionsHtml, ticketSupportEmbed, feedbackHtml } from "../_shared/email-html.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -67,7 +67,7 @@ Deno.serve(async (req) => {
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:20px;">
 <tr>
 <td width="52" style="vertical-align:top;padding-right:14px;">
-<img src="${LOGO_URL}" alt="JBJ" width="48" style="width:48px;height:48px;border-radius:50%;object-fit:contain;border:2px solid #C8A766;" />
+${monogramBadge(48)}
 </td>
 <td style="vertical-align:middle;">
 <p style="margin:0;font-size:16px;color:#333;">Hello${full_name ? ` <strong>${full_name}</strong>` : ''},</p>
@@ -98,7 +98,6 @@ ${feedbackHtml("otp")}
 
 <!-- Arabic Divider -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:24px;"><tr><td style="border-top:2px solid #C8A76650;padding-top:16px;"></td></tr></table>
-<p style="text-align:center;margin:0 0 16px;font-size:12px;color:#C8A766;font-weight:700;letter-spacing:2px;">النسخة العربية — ARABIC VERSION</p>
 
 <div style="direction:rtl;text-align:right;">
 <p style="margin:0;font-size:16px;color:#333;">مرحباً${full_name ? ` <strong>${full_name}</strong>` : ''}،</p>

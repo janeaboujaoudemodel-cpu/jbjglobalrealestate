@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { LOGO_URL, SITE_URL, emailShell, sharedHeader, sharedFooterHtml, doNotReplyNotice, inquiryBox, recommendedActionsHtml, suggestedActionsHtml, ticketSupportEmbed, feedbackHtml, progressSteps, arabicDivider } from "../_shared/email-html.ts";
+import { SITE_URL, emailShell, monogramBadge, inquiryBox, recommendedActionsHtml, suggestedActionsHtml, ticketSupportEmbed, feedbackHtml, progressSteps, arabicDivider } from "../_shared/email-html.ts";
 
 const RESEND_API_URL = "https://api.resend.com/emails";
 const VERIFIED_SENDER = 'contact@jbj.ae';
@@ -167,7 +167,7 @@ function buildEmailHtml(req: CVEmailRequest): { html: string; subject: string } 
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;">
 <tr>
 <td width="52" style="vertical-align:top;padding-right:14px;">
-<img src="${LOGO_URL}" alt="JBJ" width="48" style="width:48px;height:48px;border-radius:50%;object-fit:contain;border:2px solid #C8A766;" />
+${monogramBadge(48)}
 </td>
 <td style="vertical-align:middle;">
 <p style="margin:0;font-size:15px;color:#333;">Dear <strong>${name}</strong>,</p>
