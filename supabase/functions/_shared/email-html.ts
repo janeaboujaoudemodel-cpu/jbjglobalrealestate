@@ -3,6 +3,15 @@ const ASSET_BASE = "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/p
 const LOGO_URL = `${ASSET_BASE}/jbj-monogram-light-on-dark.png`;
 const BOOK_MARKET = `${ASSET_BASE}/email-books%2Fmarket-intelligence-cover.jpg`;
 const BOOK_GUIDES = `${ASSET_BASE}/email-books%2Fguides-library-cover.jpg`;
+const ICON_HEADSET_WHITE = `${SITE_URL}/email-icons/headphones-white.svg`;
+const ICON_AI = `${SITE_URL}/email-icons/ai-tools.svg`;
+const ICON_GUIDES = `${SITE_URL}/email-icons/guides.svg`;
+const ICON_PROPERTIES = `${SITE_URL}/email-icons/properties.svg`;
+const ICON_INSTAGRAM = `${SITE_URL}/email-icons/social-instagram.svg`;
+const ICON_FACEBOOK = `${SITE_URL}/email-icons/social-facebook.svg`;
+const ICON_LINKEDIN = `${SITE_URL}/email-icons/social-linkedin.svg`;
+const ICON_YOUTUBE = `${SITE_URL}/email-icons/social-youtube.svg`;
+const ICON_TIKTOK = `${SITE_URL}/email-icons/social-tiktok.svg`;
 
 export { LOGO_URL, SITE_URL };
 
@@ -79,7 +88,7 @@ export function inquiryBox(contextLabel: string): string {
 // ─── Ticket Support (white headset inside red circle — INLINE SVG) ───
 export function ticketSupportEmbed(): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:16px 0 24px;"><tr><td style="padding:24px 20px;background:linear-gradient(135deg,#fff5f5,#ffe9e9);border:1px solid #ef4444;border-radius:18px;text-align:center;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:#dc2626;border-radius:52px;text-align:center;vertical-align:middle;line-height:52px;"><span style="color:#ffffff;font-size:26px;font-weight:700;">☎</span></td></tr></table>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:#dc2626;border-radius:52px;text-align:center;vertical-align:middle;"><img src="${ICON_HEADSET_WHITE}" alt="Support" width="24" height="24" style="display:block;margin:0 auto;"/></td></tr></table>
 <p style="margin:0 0 4px;font-size:11px;font-weight:700;color:#dc2626;text-transform:uppercase;letter-spacing:2px;">24/7 SUPPORT</p>
 <p style="margin:0 0 6px;font-size:16px;font-weight:700;color:#7f1d1d;">Need Help? Open a Support Ticket</p>
 <p style="margin:0 0 14px;font-size:13px;color:#991b1b;">Our team typically responds within 24 hours</p>
@@ -89,7 +98,7 @@ export function ticketSupportEmbed(): string {
 
 export function ticketSupportEmbedAr(): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:16px 0 24px;direction:rtl;"><tr><td style="padding:24px 20px;background:linear-gradient(135deg,#fff5f5,#ffe9e9);border:1px solid #ef4444;border-radius:18px;text-align:center;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:#dc2626;border-radius:52px;text-align:center;vertical-align:middle;line-height:52px;"><span style="color:#ffffff;font-size:26px;font-weight:700;">☎</span></td></tr></table>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:#dc2626;border-radius:52px;text-align:center;vertical-align:middle;"><img src="${ICON_HEADSET_WHITE}" alt="الدعم" width="24" height="24" style="display:block;margin:0 auto;"/></td></tr></table>
 <p style="margin:0 0 4px;font-size:11px;font-weight:700;color:#dc2626;letter-spacing:2px;">دعم على مدار الساعة</p>
 <p style="margin:0 0 6px;font-size:16px;font-weight:700;color:#7f1d1d;">هل تحتاج مساعدة؟ افتح تذكرة دعم</p>
 <p style="margin:0 0 14px;font-size:13px;color:#991b1b;">فريقنا يرد عادةً خلال ٢٤ ساعة</p>
@@ -98,16 +107,16 @@ export function ticketSupportEmbedAr(): string {
 }
 
 // ─── Recommended Actions (INLINE SVGs in circular frames) ───
-function recommendedCard(title: string, href: string, iconEmoji: string): string {
+function recommendedCard(title: string, href: string, iconUrl: string): string {
   return `<td width="33%" style="text-align:center;padding:4px;vertical-align:top;"><a href="${href}" style="display:block;text-decoration:none;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;"><tr><td style="padding:18px 8px;text-align:center;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:#fff;border:1.5px solid #1a1a1a;border-radius:52px;text-align:center;vertical-align:middle;line-height:52px;"><span style="font-size:23px;line-height:1;">${iconEmoji}</span></td></tr></table>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:#ffffff;border:1.5px solid #1a1a1a;border-radius:52px;text-align:center;vertical-align:middle;"><img src="${iconUrl}" alt="${title}" width="24" height="24" style="display:block;margin:0 auto;"/></td></tr></table>
 <p style="margin:0;font-size:12px;color:#1a1a1a;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">${title}</p>
 </td></tr></table></a></td>`;
 }
 
 export function recommendedActionsHtml(): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:10px 0 18px;"><tr><td style="text-align:center;"><p style="color:#1a1a1a;font-size:16px;font-weight:700;margin:0 0 14px;">Recommended For You</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${recommendedCard("AI Tools", `${SITE_URL}/ai-tools`, "🤖")}${recommendedCard("Guides", `${SITE_URL}/guides`, "📚")}${recommendedCard("Properties", `${SITE_URL}/properties`, "🏠")}</tr></table></td></tr></table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:10px 0 18px;"><tr><td style="text-align:center;"><p style="color:#1a1a1a;font-size:16px;font-weight:700;margin:0 0 14px;">Recommended For You</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${recommendedCard("AI Tools", `${SITE_URL}/ai-tools`, ICON_AI)}${recommendedCard("Guides", `${SITE_URL}/guides`, ICON_GUIDES)}${recommendedCard("Properties", `${SITE_URL}/properties`, ICON_PROPERTIES)}</tr></table></td></tr></table>`;
 }
 
 // ─── Books (JPG from storage — email clients handle JPGs reliably) ───
@@ -154,19 +163,19 @@ export function signOffHtml(teamName = "JBJ Global Real Estate Team"): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:28px;margin-bottom:22px;"><tr><td>
 <p style="font-size:18px;color:#333;margin:0 0 6px;font-weight:700;">BEST REGARDS,</p>
 <p style="font-size:19px;color:#C8A766;font-weight:800;margin:0 0 2px;letter-spacing:0.4px;">JBJ GLOBAL REAL ESTATE</p>
-<p style="font-size:17px;color:#E7D7B8;font-weight:800;margin:0;letter-spacing:0.6px;text-shadow:0 1px 0 #8f6e3f,0 2px 6px rgba(200,167,102,0.25);">${teamSuffix.toUpperCase()}</p>
+<p style="font-size:18px;color:#F4E7CC;font-weight:900;margin:0;letter-spacing:0.6px;text-shadow:0 1px 0 #8f6e3f,0 2px 4px rgba(200,167,102,0.3);">${teamSuffix.toUpperCase()}</p>
 </td></tr></table>`;
 }
 
 // ─── Ready to Get Started ───
 export function readyToGetStartedHtml(): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:18px 0 0;background:linear-gradient(135deg,#FDFBF7,#F5F0E6,#EDE4D3);border:1px solid #C8A766;border-radius:18px;overflow:hidden;"><tr><td style="padding:24px 18px;text-align:center;">
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:18px 0 0;background:linear-gradient(135deg,#FDFBF7,#F5F0E6,#EDE4D3);border:1px solid #C8A766;border-radius:18px;"><tr><td style="padding:24px 18px;text-align:center;">
 <p style="font-size:22px;font-weight:800;margin:0 0 6px;letter-spacing:1px;color:#1a1a1a;">READY TO GET STARTED?</p>
 <p style="color:#666;font-size:13px;margin:0 0 18px;">Connect with our expert team for personalized guidance.</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
-<td width="50%" style="text-align:center;padding:5px;vertical-align:top;"><a href="https://api.whatsapp.com/send?phone=971565911000&text=Hello%20JBJ%20Global%20Real%20Estate" style="display:block;text-decoration:none;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;"><tr><td style="padding:14px 8px;background:#fff;border:1px solid #C8A766;border-radius:18px;text-align:center;"><p style="color:#25d366;font-size:10px;text-transform:uppercase;letter-spacing:1.4px;margin:0 0 6px;font-weight:700;">WhatsApp</p><p style="color:#1a1a1a;font-size:12px;margin:0;font-weight:600;line-height:1.4;">+971 56 591 1000</p></td></tr></table></a></td>
-<td width="50%" style="text-align:center;padding:5px;vertical-align:top;"><a href="tel:+971565911000" style="display:block;text-decoration:none;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;"><tr><td style="padding:14px 8px;background:#fff;border:1px solid #C8A766;border-radius:18px;text-align:center;"><p style="color:#3b82f6;font-size:10px;text-transform:uppercase;letter-spacing:1.4px;margin:0 0 6px;font-weight:700;">Call Us</p><p style="color:#1a1a1a;font-size:12px;margin:0;font-weight:600;line-height:1.4;">+971 56 591 1000</p></td></tr></table></a></td>
-</tr><tr><td colspan="2" style="text-align:center;padding:5px;"><a href="mailto:CONTACT@JBJ.AE" style="display:block;text-decoration:none;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;"><tr><td style="padding:14px 8px;background:#fff;border:1px solid #C8A766;border-radius:18px;text-align:center;"><p style="color:#C8A766;font-size:10px;text-transform:uppercase;letter-spacing:1.4px;margin:0 0 6px;font-weight:700;">Email</p><p style="color:#1a1a1a;font-size:12px;margin:0;font-weight:600;line-height:1.4;">CONTACT@JBJ.AE</p></td></tr></table></a></td></tr></table>
+<td width="50%" style="text-align:center;padding:5px;vertical-align:top;"><a href="https://api.whatsapp.com/send?phone=971565911000&text=Hello%20JBJ%20Global%20Real%20Estate" style="display:block;text-decoration:none;padding:14px 8px;background:#fff;border:1px solid #C8A766;border-radius:18px;"><p style="color:#25d366;font-size:10px;text-transform:uppercase;letter-spacing:1.4px;margin:0 0 6px;font-weight:700;">WhatsApp</p><p style="color:#1a1a1a;font-size:12px;margin:0;font-weight:700;line-height:1.4;">+971 56 591 1000</p></a></td>
+<td width="50%" style="text-align:center;padding:5px;vertical-align:top;"><a href="tel:+971565911000" style="display:block;text-decoration:none;padding:14px 8px;background:#fff;border:1px solid #C8A766;border-radius:18px;"><p style="color:#3b82f6;font-size:10px;text-transform:uppercase;letter-spacing:1.4px;margin:0 0 6px;font-weight:700;">Call Us</p><p style="color:#1a1a1a;font-size:12px;margin:0;font-weight:700;line-height:1.4;">+971 56 591 1000</p></a></td>
+</tr><tr><td colspan="2" style="text-align:center;padding:5px;"><a href="mailto:CONTACT@JBJ.AE" style="display:block;text-decoration:none;padding:14px 8px;background:#fff;border:1px solid #C8A766;border-radius:18px;"><p style="color:#C8A766;font-size:10px;text-transform:uppercase;letter-spacing:1.4px;margin:0 0 6px;font-weight:700;">Email</p><p style="color:#1a1a1a;font-size:12px;margin:0;font-weight:700;line-height:1.4;">CONTACT@JBJ.AE</p></a></td></tr></table>
 ${sectionDivider()}
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="text-align:center;">
 <p style="font-size:16px;font-weight:800;letter-spacing:2px;margin:0 0 6px;color:#1a1a1a;">STAY IN THE LOOP</p>
@@ -176,24 +185,23 @@ ${sectionDivider()}
 </td></tr></table>`;
 }
 
-// ─── Footer (inline SVG social icons) ───
 function socialLinksFooter(): string {
-  const links: Array<{svg: string; url: string; alt: string}> = [
-    { svg: SVG.instagram, url: "https://www.instagram.com/jbj.ae", alt: "Instagram" },
-    { svg: SVG.facebook, url: "https://www.facebook.com/share/1G7CgSaV2L/?mibextid=wwXIfr", alt: "Facebook" },
-    { svg: SVG.linkedin, url: "https://www.linkedin.com/company/jbj-global-real-estate/", alt: "LinkedIn" },
-    { svg: SVG.youtube, url: "https://youtube.com/@jbjglobalrealestate", alt: "YouTube" },
-    { svg: SVG.tiktok, url: "https://www.tiktok.com/@jbj.ae", alt: "TikTok" },
+  const links: Array<{ icon: string; url: string; alt: string }> = [
+    { icon: ICON_INSTAGRAM, url: "https://www.instagram.com/jbj.ae", alt: "Instagram" },
+    { icon: ICON_FACEBOOK, url: "https://www.facebook.com/share/1G7CgSaV2L/?mibextid=wwXIfr", alt: "Facebook" },
+    { icon: ICON_LINKEDIN, url: "https://www.linkedin.com/company/jbj-global-real-estate/", alt: "LinkedIn" },
+    { icon: ICON_YOUTUBE, url: "https://youtube.com/@jbjglobalrealestate", alt: "YouTube" },
+    { icon: ICON_TIKTOK, url: "https://www.tiktok.com/@jbj.ae", alt: "TikTok" },
   ];
 
-  const item = (svg: string, url: string) =>
-    `<td style="padding:0 5px 8px;"><a href="${url}" style="display:inline-block;width:38px;height:38px;background:radial-gradient(circle at 30% 25%,#ffffff,#f2efe8 55%,#e4dccf 100%);border:1px solid #E7D7B8;border-radius:38px;text-decoration:none;line-height:38px;text-align:center;vertical-align:middle;box-shadow:inset 0 1px 1px rgba(255,255,255,0.9),0 2px 8px rgba(0,0,0,0.2);">${svg}</a></td>`;
+  const item = (icon: string, url: string, alt: string) =>
+    `<td style="padding:0 5px 8px;"><a href="${url}" style="display:inline-block;width:38px;height:38px;background:radial-gradient(circle at 30% 25%,#ffffff,#f2efe8 55%,#e4dccf 100%);border:1px solid #E7D7B8;border-radius:38px;text-decoration:none;text-align:center;vertical-align:middle;box-shadow:inset 0 1px 1px rgba(255,255,255,0.9),0 2px 8px rgba(0,0,0,0.2);"><img src="${icon}" alt="${alt}" width="18" height="18" style="display:block;margin:10px auto;"/></a></td>`;
 
-  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:12px;"><tr>${links.map((l) => item(l.svg, l.url)).join("")}</tr></table>`;
+  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:12px;"><tr>${links.map((l) => item(l.icon, l.url, l.alt)).join("")}</tr></table>`;
 }
 
 export function sharedFooterHtml(): string {
-  return `<tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:#000;overflow:hidden;"><tr><td style="padding:40px 26px 30px;text-align:center;">
+  return `<tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:#000;"><tr><td style="padding:40px 26px 30px;text-align:center;">
 <img src="${LOGO_URL}" alt="JBJ" width="190" style="width:190px;height:auto;display:block;margin:-8px auto 12px;border-radius:190px;" />
 <p style="color:#C8A766;font-size:16px;margin:0 0 8px;font-weight:700;letter-spacing:1.8px;">JBJ Global Real Estate</p>
 <table role="presentation" width="220" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto 10px;"><tr><td style="border-top:1px solid #C8A76655;"></td></tr></table>
@@ -340,6 +348,6 @@ ${signOffHtml(teamName)}
 
 // ─── Email Shell ───
 export function emailShell(departmentLabel: string, bodyContent: string): string {
-  const raw = `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><style>body{margin:0;padding:0;background:#ffffff;font-family:'Segoe UI',Arial,sans-serif;}table{border-collapse:collapse;}img{display:block;border:0;outline:none;text-decoration:none;}@media only screen and (max-width:620px){.wrapper{width:100%!important;}.content-pad{padding:22px 16px!important;}}</style></head><body style="margin:0;padding:0;background:#fff;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fff;"><tr><td align="center" style="padding:22px 12px;"><table role="presentation" class="wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:linear-gradient(180deg,#F5F0E6,#F0EBE0,#EDE4D3);border-radius:18px;overflow:hidden;">${sharedHeader(departmentLabel)}${bodyContent}${sharedFooterHtml()}</table></td></tr></table></body></html>`;
+  const raw = `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><style>body{margin:0;padding:0;background:#ffffff;font-family:'Segoe UI',Arial,sans-serif;}table{border-collapse:collapse;}img{display:block;border:0;outline:none;text-decoration:none;}@media only screen and (max-width:620px){.wrapper{width:100%!important;}.content-pad{padding:22px 16px!important;}}</style></head><body style="margin:0;padding:0;background:#fff;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fff;"><tr><td align="center" style="padding:22px 12px;"><table role="presentation" class="wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:linear-gradient(180deg,#F5F0E6,#F0EBE0,#EDE4D3);border-radius:18px;">${sharedHeader(departmentLabel)}${bodyContent}${sharedFooterHtml()}</table></td></tr></table></body></html>`;
   return minifyHtml(raw);
 }
