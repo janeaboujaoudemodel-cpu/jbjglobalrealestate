@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { emailShell, inquiryBox, recommendedActionsHtml, suggestedActionsHtml, ticketSupportEmbed, feedbackHtml, progressSteps } from "../_shared/email-html.ts";
+import { emailShell, sharedSections, progressSteps } from "../_shared/email-html.ts";
 
 const RESEND_API_URL = "https://api.resend.com/emails";
 const VERIFIED_SENDER = "contact@jbj.ae";
@@ -71,28 +71,20 @@ function buildEmailHtml(req: StatusEmailRequest): string {
     ["offer_sent", "hired", "approved", "accepted", "published", "active", "rejected", "declined", "removed"].includes(normalizedStatus),
   ];
 
-  const bodyContent = `
-<!-- Status Banner -->
-<tr><td style="padding:0;">
+  const bodyContent = `<tr><td style="padding:0;">
 <table width="100%" cellpadding="0" cellspacing="0">
 <tr><td style="background-color:${statusColor}15;border-left:4px solid ${statusColor};padding:20px 40px;">
 <p style="margin:0;font-size:11px;color:#666;text-transform:uppercase;letter-spacing:2px;">${typeLabel} Update</p>
 <h2 style="margin:8px 0 0;font-size:22px;color:${statusColor};font-weight:700;">${req.statusLabel}</h2>
 </td></tr></table>
 </td></tr>
-
-<!-- Body -->
 <tr><td class="content-pad" style="padding:32px 40px;">
 <p style="color:#333;font-size:15px;line-height:1.6;margin:0 0 20px;">Dear <strong>${req.recipientName}</strong>,</p>
 <p style="color:#333;font-size:15px;line-height:1.6;margin:0 0 20px;">
 Your <strong>${typeLabel.toLowerCase()}</strong> — <strong>${req.applicationTitle}</strong> — has been updated.
 </p>
-
-<!-- Progress Tracker -->
 ${progressSteps(['Received', 'Under Review', 'Decision'], steps, [steps[0], steps[1], false])}
-
-<!-- Application Details -->
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#fdfbf7;border:1px solid #C9A84C33;border-radius:12px;margin:0 0 24px;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#fdfbf7;border:1px solid #C9A84C33;border-radius:16px;margin:0 0 24px;">
 <tr><td style="padding:16px 20px;">
 <table width="100%" cellpadding="0" cellspacing="0">
 <tr><td style="padding:6px 0;color:#888;font-size:13px;width:120px;">Reference:</td><td style="padding:6px 0;color:#333;font-size:13px;font-weight:600;">${req.applicationId.substring(0, 8).toUpperCase()}</td></tr>
@@ -100,28 +92,13 @@ ${progressSteps(['Received', 'Under Review', 'Decision'], steps, [steps[0], step
 <tr><td style="padding:6px 0;color:#888;font-size:13px;">Type:</td><td style="padding:6px 0;color:#333;font-size:13px;">${typeLabel}</td></tr>
 </table>
 </td></tr></table>
-
-${req.adminMessage ? `<table width="100%" cellpadding="0" cellspacing="0" style="background:#f0f7ff;border:1px solid #3b82f633;border-radius:12px;margin:0 0 24px;"><tr><td style="padding:16px 20px;"><p style="margin:0 0 8px;font-size:12px;color:#3b82f6;font-weight:600;text-transform:uppercase;letter-spacing:1px;">Message from JBJ Team</p><p style="margin:0;color:#333;font-size:14px;line-height:1.6;white-space:pre-wrap;">${req.adminMessage}</p></td></tr></table>` : ""}
-
-${req.actionRequired ? `<table width="100%" cellpadding="0" cellspacing="0" style="background:#fef3c7;border:1px solid #f59e0b40;border-radius:12px;margin:0 0 24px;"><tr><td style="padding:16px 20px;text-align:center;"><p style="margin:0 0 4px;font-size:14px;color:#92400e;font-weight:700;">Action Required</p><p style="margin:0;font-size:13px;color:#78350f;">${req.actionLabel || "Please review and take action on your application."}</p></td></tr></table>` : ""}
-
-<!-- CTA Button -->
+${req.adminMessage ? `<table width="100%" cellpadding="0" cellspacing="0" style="background:#f0f7ff;border:1px solid #3b82f633;border-radius:16px;margin:0 0 24px;"><tr><td style="padding:16px 20px;"><p style="margin:0 0 8px;font-size:12px;color:#3b82f6;font-weight:600;text-transform:uppercase;letter-spacing:1px;">Message from JBJ Team</p><p style="margin:0;color:#333;font-size:14px;line-height:1.6;white-space:pre-wrap;">${req.adminMessage}</p></td></tr></table>` : ""}
+${req.actionRequired ? `<table width="100%" cellpadding="0" cellspacing="0" style="background:#fef3c7;border:1px solid #f59e0b40;border-radius:16px;margin:0 0 24px;"><tr><td style="padding:16px 20px;text-align:center;"><p style="margin:0 0 4px;font-size:14px;color:#92400e;font-weight:700;">Action Required</p><p style="margin:0;font-size:13px;color:#78350f;">${req.actionLabel || "Please review and take action."}</p></td></tr></table>` : ""}
 <table width="100%" cellpadding="0" cellspacing="0">
 <tr><td align="center" style="padding:8px 0 24px;">
-<a href="https://jbj.ae/my-account" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:14px 36px;border-radius:12px;font-weight:700;font-size:14px;letter-spacing:0.5px;border:1px solid #C8A76650;">View in My Account</a>
+<a href="https://jbj.ae/my-account" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:14px 36px;border-radius:12px;font-weight:700;font-size:14px;border:1px solid #C8A76650;">View in My Account</a>
 </td></tr></table>
-
-${inquiryBox(typeLabel.toLowerCase())}
-
-${ticketSupportEmbed()}
-
-${recommendedActionsHtml()}
-
-${suggestedActionsHtml()}
-
-${feedbackHtml(req.applicationType)}
-
-<p style="font-size:14px;color:#333;margin-top:24px;">Best regards,<br><span style="color:#C8A766;font-weight:600;">JBJ Global Real Estate Team</span></p>
+${sharedSections(typeLabel.toLowerCase())}
 </td></tr>`;
 
   return emailShell(`${typeLabel} Update`, bodyContent);
@@ -147,8 +124,10 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (body.userId) {
       const userActionUrl = getUserActionUrl(body.applicationType);
-      await supabaseClient.from("user_notifications").insert({ user_id: body.userId, type: body.applicationType, title: `${typeLabel}: ${body.statusLabel}`, message: body.adminMessage || `Your ${typeLabel.toLowerCase()} "${body.applicationTitle}" status has been updated to ${body.statusLabel}.`, metadata: { application_id: body.applicationId, status: body.newStatus, action: body.newStatus, action_url: userActionUrl }, is_read: false });
-      await supabaseClient.from("notifications").insert({ user_id: body.userId, title: `${typeLabel}: ${body.statusLabel}`, body: body.adminMessage || `Your ${typeLabel.toLowerCase()} "${body.applicationTitle}" status has been updated to ${body.statusLabel}.`, notification_type: body.actionRequired ? "reminder" : "approval", action_url: userActionUrl });
+      await Promise.all([
+        supabaseClient.from("user_notifications").insert({ user_id: body.userId, type: body.applicationType, title: `${typeLabel}: ${body.statusLabel}`, message: body.adminMessage || `Your ${typeLabel.toLowerCase()} "${body.applicationTitle}" status has been updated to ${body.statusLabel}.`, metadata: { application_id: body.applicationId, status: body.newStatus, action: body.newStatus, action_url: userActionUrl }, is_read: false }),
+        supabaseClient.from("notifications").insert({ user_id: body.userId, title: `${typeLabel}: ${body.statusLabel}`, body: body.adminMessage || `Your ${typeLabel.toLowerCase()} "${body.applicationTitle}" status has been updated to ${body.statusLabel}.`, notification_type: body.actionRequired ? "reminder" : "approval", action_url: userActionUrl }),
+      ]);
       if (body.actionRequired) {
         await supabaseClient.from("admin_tasks").insert({ user_id: body.userId, title: `${body.actionLabel || `Action required on ${typeLabel.toLowerCase()}`}`, description: body.adminMessage || `Your ${typeLabel.toLowerCase()} "${body.applicationTitle}" requires your attention.`, category: body.applicationType, priority: "high", status: "pending" });
       }

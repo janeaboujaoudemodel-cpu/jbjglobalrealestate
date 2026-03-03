@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { SITE_URL, emailShell, inquiryBox, recommendedActionsHtml, suggestedActionsHtml, ticketSupportEmbed, feedbackHtml } from "../_shared/email-html.ts";
+import { SITE_URL, emailShell, sharedSections } from "../_shared/email-html.ts";
 
 const RESEND_API_URL = "https://api.resend.com/emails";
 const VERIFIED_SENDER = "contact@jbj.ae";
@@ -58,59 +58,37 @@ function buildEmailHtml(req: AdminMessageRequest): string {
   const typeLabel = getServiceLabel(req.serviceCategory);
   const departmentLabel = getDepartmentLabel(req.serviceCategory);
 
-  const bodyContent = `
-<!-- Category Label -->
-<tr><td style="padding:24px 40px 0;">
+  const bodyContent = `<tr><td style="padding:24px 40px 0;">
 <table width="100%" cellpadding="0" cellspacing="0">
 <tr><td style="background:linear-gradient(135deg,#F5EBD7 0%,#FDFBF7 100%);border-left:4px solid #C8A766;border-radius:0 10px 10px 0;padding:14px 20px;">
 <p style="margin:0;font-size:10px;color:#888;text-transform:uppercase;letter-spacing:2px;">Department</p>
 <p style="margin:4px 0 0;font-size:16px;color:#1a1a1a;font-weight:700;">${typeLabel}</p>
 </td></tr></table>
 </td></tr>
-
-<!-- Body -->
 <tr><td class="content-pad" style="padding:28px 40px;">
 <p style="color:#333;font-size:15px;line-height:1.6;margin:0 0 20px;">Dear <strong>${req.recipientName}</strong>,</p>
-
 ${req.referenceLabel ? `
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#FDFBF7;border:1px solid #C8A76633;border-radius:12px;margin:0 0 24px;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#FDFBF7;border:1px solid #C8A76633;border-radius:16px;margin:0 0 24px;">
 <tr><td style="padding:16px 20px;">
 <table width="100%" cellpadding="0" cellspacing="0">
 <tr><td style="padding:5px 0;color:#888;font-size:12px;width:100px;">Reference</td><td style="padding:5px 0;color:#333;font-size:13px;font-weight:600;">${req.referenceId ? req.referenceId.substring(0, 8).toUpperCase() : 'N/A'}</td></tr>
 <tr><td style="padding:5px 0;color:#888;font-size:12px;">Regarding</td><td style="padding:5px 0;color:#333;font-size:13px;font-weight:600;">${req.referenceLabel}</td></tr>
 <tr><td style="padding:5px 0;color:#888;font-size:12px;">Type</td><td style="padding:5px 0;color:#333;font-size:13px;">${typeLabel}</td></tr>
 </table></td></tr></table>` : ''}
-
-<!-- Admin Message -->
-<table width="100%" cellpadding="0" cellspacing="0" style="background:linear-gradient(135deg,#F5EBD7 0%,#FDFBF7 100%);border:1px solid #C8A76640;border-radius:12px;margin:0 0 24px;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:linear-gradient(135deg,#F5EBD7 0%,#FDFBF7 100%);border:1px solid #C8A76640;border-radius:16px;margin:0 0 24px;">
 <tr><td style="padding:18px 22px;">
 <p style="margin:0 0 8px;font-size:11px;color:#C8A766;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;">Message from ${departmentLabel}</p>
 <p style="margin:0;color:#333;font-size:14px;line-height:1.8;white-space:pre-wrap;">${req.message}</p>
 </td></tr></table>
-
-<!-- CTA -->
 <table width="100%" cellpadding="0" cellspacing="0">
 <tr><td align="center" style="padding:8px 0 20px;">
-<a href="${SITE_URL}/my-account" style="display:inline-block;background:#000000;color:#C8A766;text-decoration:none;padding:14px 40px;border-radius:10px;font-weight:700;font-size:14px;letter-spacing:0.5px;border:1px solid #C8A76650;">View My Account</a>
+<a href="${SITE_URL}/my-account" style="display:inline-block;background:#000000;color:#C8A766;text-decoration:none;padding:14px 40px;border-radius:10px;font-weight:700;font-size:14px;border:1px solid #C8A76650;">View My Account</a>
 </td></tr></table>
-
-<!-- Notification Guidance -->
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#FDFBF7;border:1px solid #C8A76630;border-radius:10px;margin:0 0 24px;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#FDFBF7;border:1px solid #C8A76630;border-radius:16px;margin:0 0 24px;">
 <tr><td style="padding:14px 20px;">
 <p style="margin:0;font-size:13px;color:#555;line-height:1.6;">You have also received a notification in your account. You can access updates from your <strong>Account Notifications</strong>, <strong>Tasks</strong>, or <strong>Inbox</strong>.</p>
 </td></tr></table>
-
-${inquiryBox(typeLabel.toLowerCase())}
-
-${ticketSupportEmbed()}
-
-${recommendedActionsHtml()}
-
-${suggestedActionsHtml()}
-
-${feedbackHtml(req.serviceCategory)}
-
-<p style="font-size:14px;color:#333;margin-top:24px;">Best regards,<br><span style="color:#C8A766;font-weight:600;">JBJ Global Real Estate Team</span></p>
+${sharedSections(typeLabel.toLowerCase())}
 </td></tr>`;
 
   return emailShell(`${departmentLabel} — Message`, bodyContent);
@@ -154,8 +132,10 @@ const handler = async (req: Request): Promise<Response> => {
     await logToInbox(supabaseClient, body, 'outbound');
 
     if (body.userId) {
-      await supabaseClient.from("user_notifications").insert({ user_id: body.userId, type: body.serviceCategory || "general", title: body.subject, message: body.message, metadata: { reference_id: body.referenceId, service: body.serviceCategory, action_url: "/my-account" }, is_read: false });
-      await supabaseClient.from("notifications").insert({ user_id: body.userId, title: body.subject, body: body.message, notification_type: "message", action_url: "/my-account" });
+      await Promise.all([
+        supabaseClient.from("user_notifications").insert({ user_id: body.userId, type: body.serviceCategory || "general", title: body.subject, message: body.message, metadata: { reference_id: body.referenceId, service: body.serviceCategory, action_url: "/my-account" }, is_read: false }),
+        supabaseClient.from("notifications").insert({ user_id: body.userId, title: body.subject, body: body.message, notification_type: "message", action_url: "/my-account" }),
+      ]);
     }
 
     return new Response(JSON.stringify({ success: true }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });

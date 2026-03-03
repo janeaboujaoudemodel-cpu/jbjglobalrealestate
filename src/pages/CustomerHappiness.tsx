@@ -782,8 +782,8 @@ const IdeaBoxForm = () => {
       toast({
         title: "Idea Submitted! 💡",
         description: formData.enterDraw 
-          ? `Thank you! Your ticket #${drawTicketNumber} has been entered into the monthly draw. You'll receive 100 points if your idea is approved!`
-          : "Thank you for sharing your creativity! You'll receive 100 points if your idea is approved!",
+          ? `Thank you! Your ticket #${drawTicketNumber} has been entered into the monthly draw. You'll receive 50 points if your idea is approved!`
+          : "Thank you for sharing your creativity! You'll receive 50 points if your idea is approved!",
       });
 
       setFormData({
