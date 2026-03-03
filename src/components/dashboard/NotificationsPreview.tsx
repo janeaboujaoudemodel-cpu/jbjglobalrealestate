@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Bell, ChevronRight, Settings, Check, AlertCircle, Info, Headphones, MessageSquare, Mail, MailOpen } from "lucide-react";
+import { Bell, ChevronRight, Settings, Check, AlertCircle, Info, Headphones, MessageSquare, Mail, MailOpen, LucideIcon } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -9,6 +9,12 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatDistanceToNow } from "date-fns";
+
+const NotifIcon = ({ icon: Icon }: { icon: LucideIcon }) => (
+  <div className="w-8 h-8 rounded-full bg-black flex items-center justify-center flex-shrink-0">
+    <Icon className="w-4 h-4 text-gold" />
+  </div>
+);
 import { toast } from "sonner";
 
 interface UnifiedNotification {
@@ -22,15 +28,15 @@ interface UnifiedNotification {
   metadata: any;
 }
 
-const typeIcons: Record<string, React.ReactNode> = {
-  info: <Info className="w-4 h-4 text-primary" />,
-  success: <Check className="w-4 h-4 text-primary" />,
-  warning: <AlertCircle className="w-4 h-4 text-gold" />,
-  alert: <AlertCircle className="w-4 h-4 text-destructive" />,
-  system: <Info className="w-4 h-4 text-muted-foreground" />,
-  support_ticket: <Headphones className="w-4 h-4 text-gold" />,
-  listing: <Bell className="w-4 h-4 text-gold" />,
-  staff_reply: <MessageSquare className="w-4 h-4 text-blue-500" />,
+const typeIconMap: Record<string, LucideIcon> = {
+  info: Info,
+  success: Check,
+  warning: AlertCircle,
+  alert: AlertCircle,
+  system: Info,
+  support_ticket: Headphones,
+  listing: Bell,
+  staff_reply: MessageSquare,
 };
 
 const NotificationsPreview = () => {
@@ -134,11 +140,12 @@ const NotificationsPreview = () => {
   const getIcon = (notif: UnifiedNotification) => {
     if (notif.type === 'support_ticket') {
       const action = notif.metadata?.action;
-      if (action === 'resolved') return <Check className="w-4 h-4 text-emerald-500" />;
-      if (action === 'staff_reply') return <MessageSquare className="w-4 h-4 text-blue-500" />;
-      return <Headphones className="w-4 h-4 text-gold" />;
+      if (action === 'resolved') return <NotifIcon icon={Check} />;
+      if (action === 'staff_reply') return <NotifIcon icon={MessageSquare} />;
+      return <NotifIcon icon={Headphones} />;
     }
-    return typeIcons[notif.type] || typeIcons.info;
+    const IconComp = typeIconMap[notif.type] || Info;
+    return <NotifIcon icon={IconComp} />;
   };
 
   return (
@@ -235,7 +242,7 @@ const NotificationsPreview = () => {
                       : 'border-gold/30 bg-gold/5 hover:bg-gold/10'
                   }`}
                 >
-                  <div className="mt-0.5 flex-shrink-0">
+                  <div className="mt-0.5">
                     {getIcon(notification)}
                   </div>
                   <div className="flex-1 min-w-0">
