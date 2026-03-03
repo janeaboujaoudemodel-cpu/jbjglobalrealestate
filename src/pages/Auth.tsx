@@ -357,8 +357,9 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
               <h1 className="text-black text-2xl font-semibold mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>You're Signed In</h1>
               <p className="text-gray-600 text-sm">Welcome back, <span className="text-gold font-medium">{user.email}</span></p>
             </div>
-            <div className="space-y-4">
+            <div className="space-y-3">
               <Button type="button" onClick={() => navigate("/my-dashboard")} className="w-full h-12 bg-gradient-to-r from-gold to-gold-dark hover:opacity-90 text-black font-semibold rounded-xl shadow-lg shadow-gold/20 transition-all duration-300 hover:shadow-gold/40 hover:scale-[1.02]">Go to My Dashboard</Button>
+              <Button type="button" onClick={() => navigate("/")} className="w-full h-12 bg-white border border-gray-200 hover:border-gold/50 text-black font-semibold rounded-xl transition-all duration-300 hover:bg-gray-50">Go to Home</Button>
               <Button type="button" variant="outline" onClick={async () => { try { await signOut(); toast.success("Signed out."); setEmail(""); setPassword(""); setConfirmPassword(""); setMode("signin"); } catch { toast.error("Could not sign out."); } }} className="w-full h-12 border-gray-300 text-black hover:bg-gray-50 hover:border-gold/50 rounded-xl transition-all duration-300">Sign Out</Button>
             </div>
           </div>
@@ -668,14 +669,14 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                 </p>
                 <div className="bg-white/60 rounded-lg p-4 border border-emerald-200 text-left space-y-2">
                   <p className="font-semibold text-foreground text-sm">Your options:</p>
-                  <ul className="space-y-1.5 text-xs">
+                   <ul className="space-y-1.5 text-xs">
                     <li className="flex items-start gap-2">
                       <Shield className="h-3.5 w-3.5 mt-0.5 text-emerald-600 shrink-0" />
-                      <strong>Reactivate</strong> — Restore your account, profile, and data instantly
+                      <span><strong>Reactivate</strong> — Restore your account, profile, and data instantly</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <Shield className="h-3.5 w-3.5 mt-0.5 text-emerald-600 shrink-0" />
-                      <strong>Create New</strong> — Start fresh with a new account using a different email
+                      <span><strong>Create New</strong> — Start fresh with a new account using a different email</span>
                     </li>
                   </ul>
                 </div>
@@ -689,7 +690,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
             <AlertDialogAction
               onClick={handleReactivateAccount}
               disabled={reactivating}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white"
+              className="bg-emerald-600 hover:bg-emerald-700 text-black font-semibold whitespace-nowrap px-6"
             >
               {reactivating ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <UserCheck className="h-4 w-4 mr-2" />}
               Reactivate My Account
