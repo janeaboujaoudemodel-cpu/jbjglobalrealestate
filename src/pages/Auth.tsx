@@ -683,18 +683,27 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
               </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter className="flex-col sm:flex-row gap-2 pt-2">
-            <AlertDialogCancel disabled={reactivating} className="border-gold/30">
-              Cancel
-            </AlertDialogCancel>
+          <AlertDialogFooter className="flex-col gap-3 pt-4 sm:flex-col">
             <AlertDialogAction
               onClick={handleReactivateAccount}
               disabled={reactivating}
-              className="bg-emerald-600 hover:bg-emerald-700 text-black font-semibold whitespace-nowrap px-6"
+              className="w-full bg-emerald-600 hover:bg-emerald-700 text-black font-semibold whitespace-nowrap px-6 h-12 rounded-xl"
             >
               {reactivating ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <UserCheck className="h-4 w-4 mr-2" />}
               Reactivate My Account
             </AlertDialogAction>
+            <AlertDialogCancel
+              disabled={reactivating}
+              onClick={() => {
+                setShowReactivationDialog(false);
+                setEmail("");
+                setPassword("");
+                setMode("signup");
+              }}
+              className="w-full border-2 border-gold/40 text-black font-semibold hover:bg-gold/10 h-12 rounded-xl mt-0"
+            >
+              Create New Account
+            </AlertDialogCancel>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
