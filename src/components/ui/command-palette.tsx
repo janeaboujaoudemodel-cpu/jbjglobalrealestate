@@ -67,6 +67,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
     { id: 'listing-admin', title: 'Listing Admin', subtitle: 'Property management', icon: <Building2 className="w-4 h-4" />, action: () => { navigate('/listing-admin'); onClose(); }, category: 'Navigation', keywords: ['listings', 'properties', 'real estate'] },
     { id: 'calendar', title: 'Calendar', subtitle: 'Schedule and events', icon: <Calendar className="w-4 h-4" />, action: () => { navigate('/crm/calendar'); onClose(); }, category: 'Navigation', keywords: ['calendar', 'schedule', 'events'] },
     { id: 'notes', title: 'Notes', subtitle: 'View and manage notes', icon: <FileText className="w-4 h-4" />, action: () => { navigate('/crm/notes'); onClose(); }, category: 'Navigation', keywords: ['notes', 'memos', 'documents'] },
+    { id: 'inquiries', title: 'Inquiry Management Hub', subtitle: 'Track property inquiries', icon: <MessageSquare className="w-4 h-4" />, action: () => { navigate('/admin/inquiries'); onClose(); }, category: 'Navigation', keywords: ['inquiries', 'inquiry', 'requests', 'property', 'contact'] },
     
     // AI Tools
     { id: 'ai-hub', title: 'AI Hub', subtitle: 'All AI tools in one place', icon: <Sparkles className="w-4 h-4" />, action: () => { navigate('/ai-hub'); onClose(); }, category: 'AI Tools', keywords: ['ai', 'tools', 'automation'] },
