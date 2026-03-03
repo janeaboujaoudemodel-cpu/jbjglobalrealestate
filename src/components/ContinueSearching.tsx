@@ -32,7 +32,10 @@ const ContinueSearching = ({
 
   if (items.length === 0) return null;
 
-  const displayItems = items.slice(0, limit);
+  const validItems = items.filter((i) => i && i.type && i.slug);
+  if (validItems.length === 0) return null;
+
+  const displayItems = validItems.slice(0, limit);
   const sectionTitle = title || (type
     ? `Continue Searching ${TYPE_CONFIG[type].label}`
     : t("home.continueSearching", "Continue Searching"));
