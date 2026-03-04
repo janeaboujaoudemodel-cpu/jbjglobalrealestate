@@ -1,7 +1,7 @@
 /**
  * BookDownloadDialog - Email capture + download tracking for the Market Intelligence book.
  * Public users provide email; logged-in users auto-fill.
- * Tracks page source, UTM params, device info, and sends admin notification.
+ * Tracks page source, UTM params, device info, and navigates to /market-report for actual book download.
  */
 import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Download, Mail, User, CheckCircle, Loader2, BookOpen } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface BookDownloadDialogProps {
   open: boolean;
@@ -55,6 +56,7 @@ export default function BookDownloadDialog({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [currentUser, setCurrentUser] = useState<{ id: string; email: string } | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
@@ -107,15 +109,16 @@ export default function BookDownloadDialog({
         message: `${name || "Guest"} (${email}) downloaded "${bookTitle}" from ${pageSource}`,
         type: "book_download",
         is_read: false,
-      }).then(() => {});
+      });
 
       setIsSuccess(true);
-      toast.success("Request received!");
+      toast.success("Your book is ready!");
 
-      // Auto-close after showing success
+      // Navigate to the Market Report page with auto-download after a short delay
       setTimeout(() => {
         onOpenChange(false);
-      }, 3000);
+        navigate("/market-report?auto-download=true");
+      }, 1500);
     } catch (err) {
       console.error("Download tracking error:", err);
       toast.error("Something went wrong. Please try again.");
@@ -132,10 +135,14 @@ export default function BookDownloadDialog({
             <div className="w-16 h-16 mx-auto rounded-full bg-green-100 flex items-center justify-center">
               <CheckCircle className="w-8 h-8 text-green-600" />
             </div>
-            <DialogTitle className="text-xl font-bold text-black">Request Received!</DialogTitle>
+            <DialogTitle className="text-xl font-bold text-black">Opening Your Book!</DialogTitle>
             <p className="text-black/60 text-sm">
-              Thank you for your interest in <span className="font-semibold text-black">{bookTitle}</span>. Our team will send it to your email shortly.
+              Your copy of <span className="font-semibold text-black">{bookTitle}</span> is being prepared. Redirecting you now...
             </p>
+            <div className="flex items-center justify-center gap-2 text-zinc-400">
+              <Loader2 className="w-4 h-4 animate-spin" />
+              <span className="text-xs">Preparing book...</span>
+            </div>
           </div>
         ) : (
           <>
