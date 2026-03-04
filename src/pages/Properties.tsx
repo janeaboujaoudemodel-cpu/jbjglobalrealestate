@@ -1238,8 +1238,12 @@ const Properties = () => {
                 ) : (
                   <div className="col-span-2 text-center py-20">
                     <Search className="w-10 h-10 text-gold mx-auto mb-4" />
-                    <h3 className="text-xl font-semibold text-black mb-2">No properties found</h3>
-                    <p className="text-zinc-600">Try adjusting your filters</p>
+                    <h3 className="text-xl font-semibold text-black mb-2">We Couldn't Find an Exact Match</h3>
+                    <p className="text-zinc-600 mb-4">Try adjusting your filters to discover available properties</p>
+                    <Button onClick={clearFilters} variant="outline" className="border-gold/40 text-black hover:bg-gold/10">
+                      <X className="w-4 h-4 mr-2" />
+                      Clear All Filters
+                    </Button>
                   </div>
                 )}
               </div>
@@ -1345,93 +1349,92 @@ const Properties = () => {
                   })}
                 </div>
               ) : (
-                <div className="text-center py-20 px-4">
-                  {appliedFilters.developerId && developers?.find(d => d.id === appliedFilters.developerId) ? (
-                    <>
-                      <div className="w-24 h-24 bg-gradient-to-br from-gold/20 to-gold/5 rounded-full flex items-center justify-center mx-auto mb-6 border border-gold/30">
-                        <Building2 className="w-12 h-12 text-gold" />
-                      </div>
-                      <h3 className="text-2xl font-semibold text-black mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
-                        No Listings Yet for {developers.find(d => d.id === appliedFilters.developerId)?.name}
-                      </h3>
-                      <p className="text-zinc-600 mb-6 max-w-md mx-auto">
-                        We're currently adding properties from this developer to our portfolio. 
-                        Register your interest to be notified when listings become available.
-                      </p>
-                      <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-                        <Button asChild variant="primary" className="h-12 px-8">
-                          <a 
-                            href={getWhatsAppUrl(`Hi, I'm interested in properties from ${developers.find(d => d.id === appliedFilters.developerId)?.name}. Please let me know when listings become available.`)}
-                            target="_blank" 
-                            rel="noopener noreferrer"
+                <div className="py-12 px-4">
+                  {/* Premium No Results UI */}
+                  <div className="text-center mb-10">
+                    {appliedFilters.developerId && developers?.find(d => d.id === appliedFilters.developerId) ? (
+                      <>
+                        <div className="w-24 h-24 bg-gradient-to-br from-gold/20 to-gold/5 rounded-full flex items-center justify-center mx-auto mb-6 border border-gold/30">
+                          <Building2 className="w-12 h-12 text-gold" />
+                        </div>
+                        <h3 className="text-2xl font-semibold text-black mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
+                          No Listings Yet for {developers.find(d => d.id === appliedFilters.developerId)?.name}
+                        </h3>
+                        <p className="text-zinc-600 mb-6 max-w-md mx-auto">
+                          We're currently adding properties from this developer to our portfolio. 
+                          Register your interest to be notified when listings become available.
+                        </p>
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">
+                          <Button asChild variant="primary" className="h-12 px-8">
+                            <a 
+                              href={getWhatsAppUrl(`Hi, I'm interested in properties from ${developers.find(d => d.id === appliedFilters.developerId)?.name}. Please let me know when listings become available.`)}
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                            >
+                              <MessageCircle className="w-4 h-4 mr-2" />
+                              Register Interest via WhatsApp
+                            </a>
+                          </Button>
+                          <Button 
+                            onClick={() => {
+                              clearFilters();
+                              window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }} 
+                            variant="outline" 
+                            className="border-zinc-300 text-black hover:bg-zinc-100 h-12 px-6 cursor-pointer"
                           >
-                            <MessageCircle className="w-4 h-4 mr-2" />
-                            Register Interest via WhatsApp
-                          </a>
-                        </Button>
-                        <Button 
+                            Browse All Properties
+                          </Button>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="w-20 h-20 bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] rounded-full flex items-center justify-center mx-auto mb-6 border border-gold/30 shadow-[0_0_30px_rgba(200,167,102,0.3)]">
+                          <Search className="w-10 h-10 text-gold drop-shadow-[0_0_8px_rgba(200,167,102,0.5)]" />
+                        </div>
+                        <h3 className="text-2xl font-bold text-black mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
+                          We Couldn't Find an Exact Match
+                        </h3>
+                        <p className="text-zinc-600 mb-6 max-w-lg mx-auto">
+                          No properties matched your current filters. Try adjusting your search, or explore our curated selection below.
+                        </p>
+                        <Button
                           onClick={() => {
                             clearFilters();
                             window.scrollTo({ top: 0, behavior: 'smooth' });
-                          }} 
-                          variant="outline" 
-                          className="border-zinc-300 text-black hover:bg-zinc-100 h-12 px-6 cursor-pointer"
+                          }}
+                          variant="outline"
+                          className="border-gold/40 text-black hover:bg-gold/10 h-11 px-6"
                         >
-                          Browse All Properties
+                          <X className="w-4 h-4 mr-2" />
+                          Clear All Filters
                         </Button>
+                      </>
+                    )}
+                  </div>
+
+                  {/* Suggested Properties Section */}
+                  {projects && projects.length > 0 && (
+                    <div className="mt-8">
+                      <div className="flex items-center gap-3 mb-6">
+                        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+                        <div className="flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/30 rounded-full">
+                          <Sparkles className="w-4 h-4 text-gold" />
+                          <span className="text-sm font-semibold text-black">Explore Other Properties</span>
+                        </div>
+                        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
                       </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="w-20 h-20 bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] rounded-full flex items-center justify-center mx-auto mb-6 border border-gold/30 shadow-[0_0_30px_rgba(200,167,102,0.3)]">
-                        <Search className="w-10 h-10 text-gold drop-shadow-[0_0_8px_rgba(200,167,102,0.5)]" />
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
+                        {projects.slice(0, 6).map((project) => (
+                          <ProjectCard 
+                            key={project.id} 
+                            project={project} 
+                            currency={filters.currency}
+                            sizeUnit={filters.sizeUnit}
+                          />
+                        ))}
                       </div>
-                      {appliedFilters.transactionType === 'rent' ? (
-                        <>
-                          <h3 className="text-xl font-semibold text-black mb-2">No Rental Listings Available</h3>
-                          <p className="text-zinc-600 mb-4">We currently do not have rental properties listed. Please check back soon or contact us for assistance.</p>
-                          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
-                            <a href={`tel:${CONTACT_INFO.phoneRaw}`} className="flex items-center gap-2 text-gold hover:text-gold-light transition-colors">
-                              <Phone className="w-4 h-4" />
-                              <span className="font-medium">{CONTACT_INFO.phone}</span>
-                            </a>
-                            <span className="hidden sm:inline text-zinc-400">|</span>
-                            <a href={`mailto:${CONTACT_INFO.email}`} className="flex items-center gap-2 text-gold hover:text-gold-light transition-colors">
-                              <Mail className="w-4 h-4" />
-                              <span className="font-medium">{CONTACT_INFO.email}</span>
-                            </a>
-                          </div>
-                        </>
-                      ) : appliedFilters.transactionType === 'buy' && appliedFilters.completionStatus === 'ready' ? (
-                        <>
-                          <h3 className="text-xl font-semibold text-black mb-2">No Ready Properties Found</h3>
-                          <p className="text-zinc-600 mb-6">Try adjusting your filters or search criteria to find available ready properties.</p>
-                        </>
-                      ) : appliedFilters.transactionType === 'buy' && appliedFilters.completionStatus === 'off-plan' ? (
-                        <>
-                          <h3 className="text-xl font-semibold text-black mb-2">No Off-Plan Properties Found</h3>
-                          <p className="text-zinc-600 mb-6">Try adjusting your filters or search criteria to find available off-plan properties.</p>
-                        </>
-                      ) : appliedFilters.transactionType === 'buy' ? (
-                        <>
-                          <h3 className="text-xl font-semibold text-black mb-2">No Properties for Sale Found</h3>
-                          <p className="text-zinc-600 mb-6">Try adjusting your filters or search criteria to find available properties.</p>
-                        </>
-                      ) : (
-                        <>
-                          <h3 className="text-xl font-semibold text-black mb-2">No properties found</h3>
-                          <p className="text-zinc-600 mb-6">Try adjusting your filters or search criteria</p>
-                        </>
-                      )}
-                      <Button
-                        onClick={clearFilters}
-                        variant="outline"
-                        className="border-border text-foreground hover:bg-muted"
-                      >
-                        <X className="w-4 h-4 mr-2" />
-                        Clear Filters
-                      </Button>
-                    </>
+                    </div>
                   )}
                 </div>
               )}
