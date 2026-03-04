@@ -3,15 +3,7 @@ const ASSET_BASE = "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/p
 const LOGO_URL = `${ASSET_BASE}/jbj-monogram-light-on-dark.png`;
 const BOOK_MARKET = `${ASSET_BASE}/email-books/market-intelligence-cover.jpg`;
 const BOOK_GUIDES = `${ASSET_BASE}/email-books/guides-library-cover.jpg`;
-const ICON_HEADSET_WHITE = `${ASSET_BASE}/icons/headphones-white.svg`;
-const ICON_AI = `${ASSET_BASE}/icons/ai-tools.svg`;
-const ICON_GUIDES = `${ASSET_BASE}/icons/guides.svg`;
-const ICON_PROPERTIES = `${ASSET_BASE}/icons/properties.svg`;
-const ICON_INSTAGRAM = `${ASSET_BASE}/icons/social-instagram.svg`;
-const ICON_FACEBOOK = `${ASSET_BASE}/icons/social-facebook.svg`;
-const ICON_LINKEDIN = `${ASSET_BASE}/icons/social-linkedin.svg`;
-const ICON_YOUTUBE = `${ASSET_BASE}/icons/social-youtube.svg`;
-const ICON_TIKTOK = `${ASSET_BASE}/icons/social-tiktok.svg`;
+// Icon URLs removed — all icons now use text-based labels for maximum email client compatibility
 
 export { LOGO_URL, SITE_URL };
 
