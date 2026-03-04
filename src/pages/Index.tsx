@@ -405,7 +405,7 @@ const Index = () => {
       {/* WHY CHOOSE US - Master Blueprint: Section 5 */}
       <WhyChooseUs />
 
-      {/* DIVIDER removed under Why Choose Us per user request */}
+      <SectionDivider />
 
       {/* AREAS WE COVER - Master Blueprint: Section 6 (12 area links) */}
       <AreasWeCover />
