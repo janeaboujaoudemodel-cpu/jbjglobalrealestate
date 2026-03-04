@@ -143,10 +143,10 @@ const MarketReport = () => {
     // Villa images for visual enhancement
     const villaImages = [
       luxuryVilla1,
-      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80",
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80",
-      "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=1200&q=80",
-      "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=1200&q=80",
+      luxuryVilla1,
+      luxuryVilla1,
+      luxuryVilla1,
+      luxuryVilla1,
     ];
 
     const html = `<!DOCTYPE html>
@@ -622,7 +622,7 @@ const MarketReport = () => {
       border: 4px solid #A8925A;
      margin: 0 auto 24px;
      display: block;
-     background: radial-gradient(circle at top, #F5EBD7 0%, #EFE0C2 100%);
+     background: #ffffff;
      box-shadow: 0 8px 30px rgba(168,146,90,0.3);
    }
    
@@ -2054,13 +2054,22 @@ const MarketReport = () => {
       const { PDFDocument } = await import("pdf-lib");
 
       const container = document.createElement("div");
-      container.style.cssText = "position:fixed;left:-9999px;top:0;width:794px;visibility:hidden;pointer-events:none;";
+      container.style.cssText = "position:fixed;left:-9999px;top:0;width:794px;opacity:0;pointer-events:none;z-index:-1;";
       container.innerHTML = html;
       document.body.appendChild(container);
 
       try {
         const pages = container.querySelectorAll(".page");
         if (!pages.length) throw new Error("No pages found for PDF rendering");
+
+        const allImages = Array.from(container.querySelectorAll("img")) as HTMLImageElement[];
+        await Promise.all(allImages.map((img) => {
+          if (img.complete && img.naturalWidth > 0) return Promise.resolve();
+          return new Promise<void>((resolve) => {
+            img.onload = () => resolve();
+            img.onerror = () => resolve();
+          });
+        }));
 
         const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4", compress: true });
         const pdfWidth = 210;
@@ -2096,17 +2105,17 @@ const MarketReport = () => {
           });
 
           const canvas = await html2canvas(page, {
-            scale: 1.5,
+            scale: 1.2,
             useCORS: true,
-            allowTaint: true,
+            allowTaint: false,
             logging: false,
             width: 794,
             height: 1123,
             windowWidth: 794,
-            backgroundColor: i === 0 || i === pages.length - 1 ? "#09090b" : "#FDFBF7",
+            backgroundColor: null,
           });
 
-          const imgData = canvas.toDataURL("image/jpeg", 0.86);
+          const imgData = canvas.toDataURL("image/jpeg", 0.82);
 
           if (i > 0) pdf.addPage();
           pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight, undefined, "FAST");
@@ -2168,7 +2177,7 @@ const MarketReport = () => {
       }
     };
 
-    toast.info("Generating your PDF...");
+    
 
     try {
       await generatePDF();
@@ -2202,7 +2211,7 @@ const MarketReport = () => {
             toast.error("Couldn't open the book. Please try again.");
           }
         });
-      }, 800);
+      }, 50);
       return () => clearTimeout(timer);
     }
   }, []);
@@ -2551,7 +2560,7 @@ const MarketReport = () => {
               className="max-w-4xl mx-auto text-center"
             >
               {/* GLOBAL FOUNDER IMAGE RULE: Perfect center 40%, no cropping, stretch horizontally to fill */}
-              <div className="w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden border-2 border-gold/50 mx-auto mb-6 bg-zinc-900">
+              <div className="w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden border-2 border-gold/50 mx-auto mb-6 bg-white">
                 <img 
                   src={founderCompanyProfile}
                   alt="Jane Bou Jaoude, Founder & CEO of JBJ GLOBAL REAL ESTATE"
@@ -2605,7 +2614,7 @@ const MarketReport = () => {
                   className="w-full h-14 text-base shadow-[0_10px_30px_rgba(200,167,102,0.4)] hover:shadow-[0_15px_40px_rgba(200,167,102,0.5)] transition-all"
                 >
                   <Download className="w-5 h-5 mr-2" />
-                  {isGeneratingPdf ? "Generating PDF..." : "Download Book Now"}
+                  {isGeneratingPdf ? "Downloading UAE Market Intelligence 2026..." : "Download UAE Market Intelligence 2026"}
                   <ArrowUpRight className="w-5 h-5 ml-2" />
                 </Button>
               </div>
@@ -2699,7 +2708,7 @@ const MarketReport = () => {
                     {isSubmitting || isGeneratingPdf ? (
                       <>
                         <div className="w-5 h-5 mr-2 border-2 border-black/30 border-t-black rounded-full animate-spin" />
-                        {isGeneratingPdf ? "Generating PDF..." : "Processing..."}
+                        {isGeneratingPdf ? "Downloading UAE Market Intelligence 2026..." : "Processing..."}
                       </>
                     ) : (
                       <>
