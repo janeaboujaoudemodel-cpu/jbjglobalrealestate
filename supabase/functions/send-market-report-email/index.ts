@@ -147,13 +147,15 @@ const MarketReportRequestSchema = z.object({
     .trim()
     .regex(/^[\d\s\-+().]+$/, "Phone number contains invalid characters"),
   nationality: z.string()
-    .min(1, "Nationality is required")
     .max(100, "Nationality must be less than 100 characters")
-    .trim(),
+    .trim()
+    .optional()
+    .default("Not specified"),
   language: z.string()
-    .min(1, "Language is required")
     .max(50, "Language must be less than 50 characters")
-    .trim(),
+    .trim()
+    .optional()
+    .default("Not specified"),
 });
 
 // HTML escape function to prevent XSS in email templates
