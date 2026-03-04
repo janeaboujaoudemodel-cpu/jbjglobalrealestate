@@ -16,10 +16,58 @@ const STORAGE_KEY = "jbj_recent_searches";
 const MAX_ITEMS_PER_TYPE = 10;
 const MAX_TOTAL = 30;
 
+const normalizeType = (value: unknown): RecentItemType | null => {
+  if (typeof value !== "string") return null;
+  const v = value.trim().toLowerCase();
+  if (v === "property" || v === "project" || v === "properties" || v === "projects") return "property";
+  if (v === "developer" || v === "developers") return "developer";
+  if (v === "area" || v === "areas" || v === "community" || v === "communities") return "area";
+  return null;
+};
+
+const asString = (value: unknown): string => (typeof value === "string" ? value.trim() : "");
+
+const normalizeItem = (raw: unknown): RecentItem | null => {
+  if (!raw || typeof raw !== "object") return null;
+  const obj = raw as Record<string, unknown>;
+
+  const type = normalizeType(obj.type);
+  if (!type) return null;
+
+  const id =
+    asString(obj.id) ||
+    asString(obj.project_id) ||
+    asString(obj.developer_id) ||
+    asString(obj.area_id);
+
+  const slug =
+    asString(obj.slug) ||
+    asString(obj.project_slug) ||
+    asString(obj.developer_slug) ||
+    asString(obj.area_slug);
+
+  const name = asString(obj.name) || asString(obj.title) || asString(obj.project_name) || asString(obj.developer_name) || asString(obj.area_name);
+
+  if (!id || !slug || !name) return null;
+
+  const viewedAt = typeof obj.viewedAt === "number" && Number.isFinite(obj.viewedAt) ? obj.viewedAt : Date.now();
+  const imageUrl = asString(obj.imageUrl) || undefined;
+  const subtitle = asString(obj.subtitle) || undefined;
+
+  return { id, type, name, slug, imageUrl, subtitle, viewedAt };
+};
+
 function loadItems(): RecentItem[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
+    const parsed = raw ? JSON.parse(raw) : [];
+    if (!Array.isArray(parsed)) return [];
+
+    return parsed
+      .map(normalizeItem)
+      .filter((item): item is RecentItem => item !== null)
+      .sort((a, b) => b.viewedAt - a.viewedAt)
+      .slice(0, MAX_TOTAL);
   } catch {
     return [];
   }
@@ -34,25 +82,40 @@ function saveItems(items: RecentItem[]) {
 export function useRecentSearches(filterType?: RecentItemType) {
   const [items, setItems] = useState<RecentItem[]>(loadItems);
 
-  // Sync across tabs
+  // Sync across tabs + refresh in active tab when visibility changes
   useEffect(() => {
-    const handler = (e: StorageEvent) => {
+    const onStorage = (e: StorageEvent) => {
       if (e.key === STORAGE_KEY) setItems(loadItems());
     };
-    window.addEventListener("storage", handler);
-    return () => window.removeEventListener("storage", handler);
+
+    const onVisibility = () => {
+      if (document.visibilityState === "visible") setItems(loadItems());
+    };
+
+    window.addEventListener("storage", onStorage);
+    document.addEventListener("visibilitychange", onVisibility);
+
+    return () => {
+      window.removeEventListener("storage", onStorage);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
   }, []);
 
   const trackView = useCallback((item: Omit<RecentItem, "viewedAt">) => {
+    const normalized = normalizeItem({ ...item, viewedAt: Date.now() });
+    if (!normalized) return;
+
     setItems((prev) => {
-      const filtered = prev.filter((i) => !(i.id === item.id && i.type === item.type));
-      const updated: RecentItem[] = [{ ...item, viewedAt: Date.now() }, ...filtered];
+      const filtered = prev.filter((i) => !(i.id === normalized.id && i.type === normalized.type));
+      const updated: RecentItem[] = [normalized, ...filtered];
+
       // Cap per type
       const counts: Record<string, number> = {};
       const capped = updated.filter((i) => {
         counts[i.type] = (counts[i.type] || 0) + 1;
         return counts[i.type] <= MAX_ITEMS_PER_TYPE;
       });
+
       saveItems(capped);
       return capped;
     });
