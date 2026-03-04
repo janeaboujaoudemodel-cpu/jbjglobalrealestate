@@ -8,7 +8,7 @@ import { SearchableSelect } from "@/components/ui/searchable-select";
 import { CONTACT_INFO } from "@/constants/stats";
 import { getCountryList, getLanguageList } from "@/constants/localeOptions";
 import { ytd2026, fullYear2025, topAreas2026, topAreas2025, topNationalities } from "@/constants/dldMarketData";
-import founderProfessional from "@/assets/founder-professional.jpeg";
+import founderCompanyProfile from "@/assets/founder-company-profile.jpg";
 import backCoverImage from "@/assets/books/market-intelligence-back-cover.jpg";
 import luxuryVilla1 from "@/assets/luxury-villa-1.jpeg";
 import { motion } from "framer-motion";
@@ -40,6 +40,7 @@ const MarketReport = () => {
   const languages = useMemo(() => getLanguageList(), []);
   const [downloaded, setDownloaded] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const [showThankYou, setShowThankYou] = useState(false);
   const [bookHtml, setBookHtml] = useState<string | null>(null);
   const [showBookPreview, setShowBookPreview] = useState(false);
@@ -594,16 +595,17 @@ const MarketReport = () => {
   
   /* Founder image */
    .founder-image {
-    width: 200px;
-    height: 200px;
+    width: 220px;
+    height: 220px;
     border-radius: 50%;
-    object-fit: cover;
-    object-position: center 20%;
+    object-fit: contain;
+    object-position: center top;
     border: 4px solid #A8925A;
     margin: 0 auto 28px;
     display: block;
-    background: #F5EBD7;
+    background: radial-gradient(circle at top, #F5EBD7 0%, #EFE0C2 100%);
     box-shadow: 0 8px 30px rgba(168,146,90,0.3);
+    padding: 6px;
   }
   
   .founder-section { text-align: center; padding: 36px 0; }
@@ -992,7 +994,7 @@ const MarketReport = () => {
   <div class="page" id="page-3">
     <div class="founder-section">
       <h2 style="text-align: center; border-bottom: none; margin-bottom: 36px;">From the Founder</h2>
-      <img src="${founderProfessional}" alt="Jane Bou Jaoude" class="founder-image" onerror="this.style.display='none'" />
+      <img src="${founderCompanyProfile}" alt="Jane Bou Jaoude" class="founder-image" onerror="this.style.display='none'" />
       <h3 style="text-align: center; margin-bottom: 8px;">Jane Bou Jaoude</h3>
       <p style="color: #6B6459; text-align: center; font-size: 13px; margin-bottom: 4px;">Founder, JBJ Global Real Estate</p>
       <p style="color: #8A8278; text-align: center; font-size: 11px; margin-bottom: 28px;">Real Estate Brokerage • Dubai, UAE</p>
@@ -2002,84 +2004,79 @@ const MarketReport = () => {
 </body>
 </html>`;
 
-    const openInApp = () => {
-      setBookHtml(html);
-      setShowBookPreview(true);
-      setDownloaded(true);
-      return true;
-    };
+    if (isGeneratingPdf) {
+      toast.info("PDF is already being prepared...");
+      return false;
+    }
+
+    setIsGeneratingPdf(true);
 
     // Generate a real PDF so it opens in Preview/Finder natively (not browser)
     const generatePDF = async () => {
       const { default: html2canvas } = await import("html2canvas");
       const { default: jsPDF } = await import("jspdf");
 
-      // Render the HTML into a hidden container
       const container = document.createElement("div");
-      container.style.cssText = "position:fixed;left:-9999px;top:0;width:794px;"; // A4 width in px at 96dpi
+      container.style.cssText = "position:fixed;left:-9999px;top:0;width:794px;visibility:hidden;pointer-events:none;";
       container.innerHTML = html;
       document.body.appendChild(container);
 
-      // Find all pages
-      const pages = container.querySelectorAll(".page");
-      const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
-      const pdfWidth = 210; // A4 mm
-      const pdfHeight = 297;
+      try {
+        const pages = container.querySelectorAll(".page");
+        if (!pages.length) throw new Error("No pages found for PDF rendering");
 
-      for (let i = 0; i < pages.length; i++) {
-        const page = pages[i] as HTMLElement;
-        try {
+        const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4", compress: true });
+        const pdfWidth = 210;
+        const pdfHeight = 297;
+
+        for (let i = 0; i < pages.length; i++) {
+          const page = pages[i] as HTMLElement;
+
           const canvas = await html2canvas(page, {
-            scale: 2,
+            scale: 1.35,
             useCORS: true,
             allowTaint: true,
             logging: false,
             width: 794,
             windowWidth: 794,
+            backgroundColor: "#ffffff",
           });
-          const imgData = canvas.toDataURL("image/jpeg", 0.92);
+
+          const imgData = canvas.toDataURL("image/jpeg", 0.86);
           const imgHeight = (canvas.height * pdfWidth) / canvas.width;
 
           if (i > 0) pdf.addPage();
-          pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, Math.min(imgHeight, pdfHeight));
-        } catch (err) {
-          console.warn("PDF page render error:", err);
-          if (i > 0) pdf.addPage();
+          pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, Math.min(imgHeight, pdfHeight), undefined, "FAST");
+
+          // Release memory aggressively for long books
+          canvas.width = 1;
+          canvas.height = 1;
+          await new Promise((resolve) => requestAnimationFrame(() => resolve(null)));
         }
+
+        pdf.save("UAE-Real-Estate-Market-Intelligence-2026-JBJ-Global.pdf");
+      } finally {
+        document.body.removeChild(container);
       }
-
-      document.body.removeChild(container);
-
-      // Save as real PDF file — opens in Preview/Finder on Mac
-      pdf.save("UAE-Real-Estate-Market-Intelligence-2026-JBJ-Global.pdf");
     };
 
-    toast.info("Generating PDF… this may take a moment");
+    toast.info("Generating your PDF...");
 
     try {
       await generatePDF();
+      setDownloaded(true);
       toast.success("PDF downloaded successfully!");
+      return true;
     } catch (err) {
-      console.error("PDF generation failed, falling back to HTML:", err);
-      // Fallback: download as HTML
-      const blob = new Blob([html], { type: "text/html;charset=utf-8" });
-      const blobUrl = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = blobUrl;
-      a.download = "UAE-Real-Estate-Market-Intelligence-2026-JBJ-Global.html";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(blobUrl);
+      console.error("PDF generation failed:", err);
+      toast.error("Download failed. Please try again.");
+      return false;
+    } finally {
+      if (existingWindow) {
+        try { existingWindow.close(); } catch { /* ignore */ }
+      }
+      setIsGeneratingPdf(false);
     }
-
-    // Close any pre-opened window
-    if (existingWindow) {
-      try { existingWindow.close(); } catch { /* ignore */ }
-    }
-
-    setDownloaded(true);
-    return true;
   };
 
   // Auto-download when navigated from BookDownloadDialog with ?auto-download=true
@@ -2103,9 +2100,7 @@ const MarketReport = () => {
   }, []);
 
   const handleSubmit = async () => {
-    if (!isValid || isSubmitting) return;
-
-    // downloadBook now creates its own Blob URL tab (no more about:blank)
+    if (!isValid || isSubmitting || isGeneratingPdf) return;
 
     setIsSubmitting(true);
     setShowThankYou(true);
@@ -2450,12 +2445,12 @@ const MarketReport = () => {
               {/* GLOBAL FOUNDER IMAGE RULE: Perfect center 40%, no cropping */}
               <div className="w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden border-2 border-gold/50 mx-auto mb-6 bg-zinc-900">
                 <img 
-                  src={founderProfessional} 
+                  src={founderCompanyProfile}
                   alt="Jane Bou Jaoude, Founder & CEO of JBJ GLOBAL REAL ESTATE"
                   className="w-full h-full"
                   style={{
-                    objectFit: 'cover',
-                    objectPosition: 'center 40%',
+                    objectFit: 'contain',
+                    objectPosition: 'center top',
                   }}
                 />
               </div>
@@ -2497,10 +2492,11 @@ const MarketReport = () => {
                   variant="primary"
                   size="lg"
                   onClick={handleDirectDownload}
+                  disabled={isGeneratingPdf}
                   className="w-full h-14 text-base shadow-[0_10px_30px_rgba(200,167,102,0.4)] hover:shadow-[0_15px_40px_rgba(200,167,102,0.5)] transition-all"
                 >
                   <Download className="w-5 h-5 mr-2" />
-                  Download Book Now
+                  {isGeneratingPdf ? "Generating PDF..." : "Download Book Now"}
                   <ArrowUpRight className="w-5 h-5 ml-2" />
                 </Button>
               </div>
@@ -2586,15 +2582,15 @@ const MarketReport = () => {
                 <div className="pt-6">
                   <Button
                     onClick={handleSubmit}
-                    disabled={!isValid || isSubmitting}
+                    disabled={!isValid || isSubmitting || isGeneratingPdf}
                     variant="primary"
                     size="lg"
                     className="w-full h-14"
                   >
-                    {isSubmitting ? (
+                    {isSubmitting || isGeneratingPdf ? (
                       <>
                         <div className="w-5 h-5 mr-2 border-2 border-black/30 border-t-black rounded-full animate-spin" />
-                        Processing...
+                        {isGeneratingPdf ? "Generating PDF..." : "Processing..."}
                       </>
                     ) : (
                       <>
