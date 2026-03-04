@@ -60,14 +60,14 @@ async function callLovableAI(systemPrompt: string, userMessage: string, conversa
     { role: 'user', content: userMessage }
   ];
 
-  const response = await fetch('https://api.lovable.dev/v1/chat/completions', {
+  const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${LOVABLE_API_KEY}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'gpt-5-mini',
+      model: 'openai/gpt-5-mini',
       messages,
       temperature: 0.7,
       max_tokens: 1000
