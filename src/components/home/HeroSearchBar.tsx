@@ -525,7 +525,6 @@ const HeroSearchBar = () => {
 
 
   const handleSearch = () => {
-    setIsSearching(true);
     const params = new URLSearchParams();
 
     params.set('transaction', purpose);
@@ -576,25 +575,8 @@ const HeroSearchBar = () => {
 
     params.set('currency', currency);
 
-    // Track event
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', 'home_search_submit', {
-        purpose,
-        location_search: locationSearch,
-        bedrooms,
-        property_type: propertyType,
-        property_status: propertyStatus,
-        price_range: priceRange,
-        currency,
-        size_range: sizeRange,
-        area_unit: areaUnit,
-        sort_by: sortBy,
-        emirate,
-      });
-    }
-
+    // Navigate immediately without blocking state
     navigate(`/properties?${params.toString()}`);
-    setIsSearching(false);
   };
 
   // Get price ranges for current currency (fallback to AED if not available)
@@ -1076,7 +1058,9 @@ const HeroSearchBar = () => {
                       <SelectItem value="2027">2027</SelectItem>
                       <SelectItem value="2028">2028</SelectItem>
                       <SelectItem value="2029">2029</SelectItem>
-                      <SelectItem value="2030+">2030+</SelectItem>
+                      <SelectItem value="2030">2030</SelectItem>
+                      <SelectItem value="2031">2031</SelectItem>
+                      <SelectItem value="2032">2032</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
