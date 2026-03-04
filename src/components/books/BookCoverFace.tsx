@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import type { BookData } from "@/types/books";
 
-const BRAND_NAME = "JBJ Global Real Estate";
+
 
 type BookCoverFaceSize = "thumb" | "modal" | "hero";
 
@@ -38,15 +38,15 @@ export function BookCoverFace({ book, size = "thumb", className, bare = false }:
       {!isGuidesLibrary && (
         <>
           <div className={cn("absolute inset-0 bg-gradient-to-b", coverToneByCategory[book.category])} />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-black/10" />
 
-          <div className="absolute top-2 left-2 right-2 flex items-center justify-between text-[9px] uppercase tracking-[0.16em] text-white/85">
-            <span className="rounded-full border border-gold/35 bg-black/35 px-2 py-0.5">{book.category}</span>
-          </div>
+          <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-black/45 via-black/20 to-transparent" />
+          <div className="absolute top-0 left-0 right-0 h-10 bg-gradient-to-b from-white/20 to-transparent" />
 
-          <div className="absolute inset-x-0 bottom-0 p-2.5">
-            <p className={cn("text-[9px] uppercase tracking-[0.13em] text-gold/95", size === "hero" && "text-[10px]")}>{BRAND_NAME}</p>
-            <h4 className={cn("mt-1 text-white font-bold leading-tight", size === "hero" ? "text-sm" : size === "modal" ? "text-xs" : "text-[11px]")}>{book.title}</h4>
-          </div>
+          <div className={cn(
+            "absolute right-2 top-2 h-1 rounded-full bg-gradient-to-r from-transparent via-gold/70 to-transparent",
+            size === "hero" ? "w-24" : size === "modal" ? "w-16" : "w-14"
+          )} />
         </>
       )}
     </div>

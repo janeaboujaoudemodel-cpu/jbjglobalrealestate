@@ -523,56 +523,57 @@ const HeroSearchBar = () => {
     try { return JSON.parse(localStorage.getItem(HERO_SAVED_FILTERS_KEY) || '[]'); } catch { return []; }
   };
 
-  // Combine DB developers with static list, removing duplicates
-  const allDevelopers = (() => {
-    const dbDevs = developers || [];
-    const staticDevs = UAE_DEVELOPERS;
-    const combined = [...dbDevs];
-    
-    // Add static developers that aren't already in DB
-    staticDevs.forEach(staticDev => {
-      const exists = dbDevs.some(dbDev => 
-        dbDev.name.toLowerCase().includes(staticDev.name.toLowerCase()) ||
-        staticDev.name.toLowerCase().includes(dbDev.name.toLowerCase())
-      );
-      if (!exists) {
-        combined.push({ id: staticDev.id, name: staticDev.name, rank: 999 } as any);
-      }
-    });
-    
-    return combined.sort((a, b) => (a.rank ?? 999) - (b.rank ?? 999));
-  })();
 
   const handleSearch = () => {
     setIsSearching(true);
     const params = new URLSearchParams();
-    
+
     params.set('transaction', purpose);
-    
-    if (locationSearch.trim()) params.set('search', locationSearch.trim());
+
+    const keyword = locationSearch.trim();
+    if (keyword) {
+      params.set('search', keyword);
+      params.set('q', keyword);
+    }
+
     if (bedrooms !== 'any') params.set('beds', bedrooms);
     if (propertyType !== 'all') params.set('type', propertyType);
     if (propertyStatus !== 'all') params.set('status', propertyStatus);
     if (saleStatus !== 'all') params.set('saleStatus', saleStatus);
     if (sortBy !== 'newest') params.set('sort', sortBy);
+
     if (developerId !== 'all') {
-      const selectedDeveloperName = allDevelopers.find((d: any) => d.id === developerId)?.name || developerId;
-      params.set('developer', selectedDeveloperName);
+      params.set('developer', developerId);
     }
-    if (communityId !== 'all') params.set('community', communityId);
+
+    if (communityId !== 'all') {
+      const selectedCommunity = communities?.find((c) => c.id === communityId);
+      const selectedArea = allAreas?.find((a) => a.id === communityId);
+
+      if (selectedCommunity) {
+        params.set('community', selectedCommunity.id);
+      }
+
+      if (selectedArea) {
+        params.set('area', selectedArea.slug || selectedArea.name);
+      }
+    }
+
     if (emirate !== 'all') params.set('emirate', emirate);
-    
+
     if (priceRange !== 'any') {
       const [min, max] = priceRange.split('-');
       if (min) params.set('priceMin', min.replace('+', ''));
       if (max) params.set('priceMax', max);
     }
+
     if (sizeRange !== 'any') {
       const [min, max] = sizeRange.split('-');
       if (min) params.set('sizeMin', min.replace('+', ''));
       if (max) params.set('sizeMax', max);
       params.set('sizeUnit', areaUnit);
     }
+
     params.set('currency', currency);
 
     // Track event
@@ -592,11 +593,8 @@ const HeroSearchBar = () => {
       });
     }
 
-    // Navigate with slight delay for visual feedback
-    setTimeout(() => {
-      navigate(`/properties?${params.toString()}`);
-      setIsSearching(false);
-    }, 100);
+    navigate(`/properties?${params.toString()}`);
+    setIsSearching(false);
   };
 
   // Get price ranges for current currency (fallback to AED if not available)
@@ -733,17 +731,17 @@ const HeroSearchBar = () => {
       {/* Main Search Bar - Responsive: Stack on mobile, single line on desktop */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-0 w-full">
         {/* Unified connected bar on desktop */}
-        <div className="hidden sm:flex items-center w-full bg-white/[0.07] backdrop-blur-xl border border-white/20 rounded-2xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.1)] min-h-[52px]">
+        <div className="hidden sm:flex items-center w-full bg-white/[0.07] backdrop-blur-xl border border-white/20 rounded-2xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.1)] min-h-[56px]">
           {/* Location Search Input */}
-          <div className="flex items-center flex-[2] min-w-0 px-4">
+          <div className="flex items-center flex-[3] min-w-[320px] px-5">
             <Search className="w-5 h-5 text-gold shrink-0" style={{ filter: 'drop-shadow(0 0 4px rgba(200,167,102,0.5))' }} />
-          <input
+            <input
               type="text"
-              placeholder="Community, area, or project..."
+              placeholder="Community, area, project name, or keyword..."
               value={locationSearch}
               onChange={(e) => setLocationSearch(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-              className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-white px-3 text-sm font-medium min-w-0 w-full"
+              className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-white px-4 text-sm font-medium min-w-0 w-full"
             />
           </div>
           {/* Premium Gradient Divider */}

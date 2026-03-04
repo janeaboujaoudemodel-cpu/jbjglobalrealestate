@@ -147,7 +147,7 @@ const Index = () => {
           animate="visible"
           variants={staggerContainer}
         >
-          <div className="max-w-4xl pt-72 sm:pt-60 md:pt-64 lg:pt-72">
+          <div className="w-full max-w-4xl pt-72 sm:pt-60 md:pt-64 lg:pt-72">
             {/* Buy · Sell · Rent - Smaller headline */}
             <motion.h1 
               variants={fadeInUp} 
@@ -182,16 +182,15 @@ const Index = () => {
             >
               {t('hero.deliveredWith')}
             </motion.span>
-
-            {/* SEARCH BAR - Compact */}
-            <motion.div 
-              variants={fadeInUp}
-              className="w-full max-w-4xl"
-            >
-              <HeroSearchBar />
-            </motion.div>
-
           </div>
+
+          {/* SEARCH BAR - stretched to the right edge space */}
+          <motion.div 
+            variants={fadeInUp}
+            className="w-full max-w-[1380px] pr-0 md:pr-6 lg:pr-10"
+          >
+            <HeroSearchBar />
+          </motion.div>
         </motion.div>
       </div>
 

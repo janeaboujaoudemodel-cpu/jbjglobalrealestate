@@ -269,12 +269,10 @@ const Properties = () => {
 
       if (matchedDeveloper) {
         developerIdFromUrl = matchedDeveloper.id;
-      } else {
-        return;
       }
     }
 
-    // Resolve communityId from param
+    // Resolve communityId from param (accepts id/name; area slugs route to trendingArea)
     let communityIdFromUrl: string | null = null;
     if (communityParam && communities && communities.length > 0) {
       const normalized = communityParam.toLowerCase().trim();
@@ -287,7 +285,14 @@ const Properties = () => {
     const tx: ExtendedFilterState['transactionType'] =
       newTransaction === 'rent' ? 'rent' : 'buy';
 
-    const hasAnyParam = newTransaction || newStatus || developerIdFromUrl || keywordParam || areaParam ||
+    const normalizedAreaParam = areaParam?.toLowerCase().trim() || null;
+    const resolvedAreaName = normalizedAreaParam && areas?.length
+      ? areas.find((a) => a.slug?.toLowerCase() === normalizedAreaParam || a.name?.toLowerCase() === normalizedAreaParam)?.name || areaParam
+      : areaParam;
+
+    const fallbackKeyword = keywordParam || (!developerIdFromUrl && developerParam ? developerParam : "");
+
+    const hasAnyParam = newTransaction || newStatus || developerParam || keywordParam || areaParam ||
       bedsParam || typeParam || priceMinParam || priceMaxParam || sizeMinParam || sizeMaxParam ||
       currencyParam || emirateParam || saleStatusParam || communityIdFromUrl || sortParam;
 
@@ -300,8 +305,8 @@ const Properties = () => {
         transactionType: tx,
         completionStatus: newStatus || null,
         developerId: developerIdFromUrl,
-        search: keywordParam ?? "",
-        trendingArea: areaParam || null,
+        search: fallbackKeyword,
+        trendingArea: resolvedAreaName || null,
         bedroomsMin: bedroomsMin,
         propertyType: typeParam && typeParam !== 'all' ? typeParam : null,
         priceMin: priceMinParam ? Number(priceMinParam) : 0,
@@ -322,7 +327,7 @@ const Properties = () => {
       setFilters(defaultExtendedFilters);
       setAppliedFilters(defaultExtendedFilters);
     }
-  }, [searchParams, developers, communities]);
+  }, [searchParams, developers, communities, areas]);
   
   // Convert extended filters to standard FilterState for useFilteredProjects
   // Use appliedFilters instead of filters for actual filtering
