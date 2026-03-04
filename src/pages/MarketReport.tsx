@@ -196,10 +196,12 @@ const MarketReport = () => {
     background: linear-gradient(90deg, #A8925A, #d4c4a0, #A8925A);
   }
   
-  /* Cover page keeps dark drama */
-  .page.cover {
-    background: radial-gradient(ellipse at center, #1a1814 0%, #0a0a0a 70%);
-  }
+   /* Cover page keeps dark drama */
+   .page.cover {
+     background: radial-gradient(ellipse at center, #1a1814 0%, #0a0a0a 70%);
+     padding: 0 !important;
+   }
+   .page.cover::before { display: none; }
   
   .page-number {
     position: absolute;
@@ -876,23 +878,49 @@ const MarketReport = () => {
     </div>
   </div>
 
-  <!-- COVER PAGE -->
-  <div class="page cover" style="padding-top: 80px;">
-    <div class="cover-image"></div>
-    <div class="cover-content">
-      <div class="logo-large">JBJ | Global Real Estate</div>
-      <h1>UAE Real Estate<br/>Market Intelligence</h1>
-      <div class="subtitle">Property Education & Decision Framework</div>
-      <div class="edition">Latest Edition 2026</div>
-      ${isFounderVisible ? `
-      <div class="author-box">
-        <div class="author-name">Jane Bou Jaoude</div>
-        <div class="author-title">Founder • JBJ Global Real Estate</div>
-        <div style="margin-top: 8px; font-size: 11px; color: #888;">Real Estate Brokerage • Dubai, UAE</div>
-      </div>
-      ` : ''}
-    </div>
-  </div>
+   <!-- COVER PAGE — Matches the website hero book exactly -->
+   <div class="page cover" style="display: flex; flex-direction: column; position: relative; min-height: 100vh; background: linear-gradient(135deg, #18181b 0%, #09090b 50%, #18181b 100%);">
+     <!-- Gold spine accent (left edge) -->
+     <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 24px; background: linear-gradient(to right, rgba(168,146,90,0.4), rgba(168,146,90,0.15), transparent); z-index: 2;"></div>
+     <!-- Villa hero image at partial opacity -->
+     <div style="position: absolute; top: 0; left: 0; right: 0; height: 55%; z-index: 1;">
+       <img src="${luxuryVilla1}" alt="" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.55;" />
+       <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.7) 80%, #09090b 100%);"></div>
+     </div>
+     <!-- Gold accent line top-right -->
+     <div style="position: absolute; right: 20px; top: 20px; width: 80px; height: 3px; border-radius: 2px; background: linear-gradient(to right, transparent, rgba(168,146,90,0.7), transparent); z-index: 3;"></div>
+     <!-- Right page edge -->
+     <div style="position: absolute; right: 0; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, transparent, rgba(168,146,90,0.4), transparent); z-index: 2;"></div>
+
+     <!-- Cover content -->
+     <div style="position: relative; z-index: 5; flex: 1; display: flex; flex-direction: column; padding: 0 48px 48px 48px;">
+       <!-- Spacer to push content below the image -->
+       <div style="flex: 0 0 52%;"></div>
+       <!-- Gold divider -->
+       <div style="width: 64px; height: 4px; background: linear-gradient(to right, #A8925A, #C8A766); margin-bottom: 20px; border-radius: 2px;"></div>
+       <!-- Edition badge -->
+       <div style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 999px; background: rgba(168,146,90,0.1); border: 1px solid rgba(168,146,90,0.3); width: fit-content; margin-bottom: 20px;">
+         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#A8925A" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+         <span style="color: #A8925A; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em;">Latest Edition 2026</span>
+       </div>
+       <!-- Title -->
+       <h1 style="font-family: 'Poppins', sans-serif; font-size: 38px; font-weight: 700; color: #FFFFFF; line-height: 1.2; margin: 0 0 8px 0; background: none; -webkit-text-fill-color: #fff;">
+         UAE Real Estate
+       </h1>
+       <h1 style="font-family: 'Poppins', sans-serif; font-size: 38px; font-weight: 700; color: #A8925A; line-height: 1.2; margin: 0 0 24px 0; background: none; -webkit-text-fill-color: #A8925A;">
+         Market Intelligence
+       </h1>
+       ${isFounderVisible ? `
+       <div style="margin-top: auto; padding-top: 24px;">
+         <p style="color: #71717a; font-size: 12px; margin: 0;">By Founder &amp; CEO Jane Bou Jaoude</p>
+       </div>
+       ` : ''}
+       <!-- Footer -->
+       <div style="margin-top: ${isFounderVisible ? '20px' : 'auto'}; padding-top: 16px; border-top: 1px solid #27272a;">
+         <p style="color: #a1a1aa; font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; margin: 0;">JBJ Global Real Estate</p>
+       </div>
+     </div>
+   </div>
 
   <!-- PAGE 2: COMPANY IDENTITY CARD + TABLE OF CONTENTS -->
   <div class="page" id="page-2">
@@ -1902,10 +1930,64 @@ const MarketReport = () => {
     <span class="page-number">23</span>
   </div>
 
-  <!-- BACK COVER -->
-  <div class="page cover" style="padding: 0; display: flex; align-items: center; justify-content: center;">
-    <img src="${backCoverImage}" alt="JBJ Global Real Estate Back Cover" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;" />
-  </div>
+   <!-- BACK COVER — Premium matching design -->
+   <div class="page cover" style="display: flex; flex-direction: column; position: relative; min-height: 100vh; background: linear-gradient(135deg, #18181b 0%, #09090b 50%, #18181b 100%);">
+     <!-- Gold spine accent (left edge) -->
+     <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 24px; background: linear-gradient(to right, rgba(168,146,90,0.4), rgba(168,146,90,0.15), transparent); z-index: 2;"></div>
+     <!-- Subtle background image -->
+     <div style="position: absolute; inset: 0; z-index: 1;">
+       <img src="${luxuryVilla1}" alt="" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.08;" />
+     </div>
+     <!-- Radial gold glow -->
+     <div style="position: absolute; inset: 0; background: radial-gradient(ellipse at center 40%, rgba(168,146,90,0.08) 0%, transparent 70%); z-index: 2;"></div>
+
+     <!-- Back cover content -->
+     <div style="position: relative; z-index: 5; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 48px;">
+       <!-- JBJ Monogram -->
+       <div style="font-family: 'Playfair Display', serif; font-size: 72px; font-weight: 700; color: #A8925A; line-height: 1; margin-bottom: 16px;">JBJ</div>
+       <div style="width: 80px; height: 2px; background: linear-gradient(to right, transparent, #A8925A, transparent); margin-bottom: 24px;"></div>
+       <div style="font-size: 14px; letter-spacing: 0.3em; text-transform: uppercase; color: #a1a1aa; margin-bottom: 8px;">Global Real Estate</div>
+       <div style="font-size: 11px; color: #71717a; letter-spacing: 0.15em; margin-bottom: 48px;">Real Estate Brokerage · Dubai, UAE</div>
+
+       <!-- Tagline -->
+       <div style="max-width: 380px; margin-bottom: 48px;">
+         <p style="font-family: 'Playfair Display', serif; font-size: 22px; color: #e4e4e7; font-weight: 400; font-style: italic; line-height: 1.5; margin: 0;">"Your trusted partner in UAE real estate investment"</p>
+       </div>
+
+       <!-- Contact grid -->
+       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px 40px; margin-bottom: 48px; text-align: left;">
+         <div>
+           <div style="font-size: 9px; color: #A8925A; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 6px; font-weight: 600;">Phone</div>
+           <div style="font-size: 12px; color: #d4d4d8;">+971 56 591 1000</div>
+         </div>
+         <div>
+           <div style="font-size: 9px; color: #A8925A; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 6px; font-weight: 600;">Email</div>
+           <div style="font-size: 12px; color: #d4d4d8;">CONTACT@JBJ.AE</div>
+         </div>
+         <div>
+           <div style="font-size: 9px; color: #A8925A; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 6px; font-weight: 600;">Location</div>
+           <div style="font-size: 12px; color: #d4d4d8;">Downtown Dubai, UAE</div>
+         </div>
+         <div>
+           <div style="font-size: 9px; color: #A8925A; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 6px; font-weight: 600;">Website</div>
+           <div style="font-size: 12px; color: #d4d4d8;">JBJ.AE</div>
+         </div>
+       </div>
+
+       <!-- QR Code -->
+       <div style="margin-bottom: 40px;">
+         <img src="${qrUrl}" alt="JBJ.AE" style="width: 90px; height: 90px; background: #fff; padding: 6px; border-radius: 8px; border: 1px solid rgba(168,146,90,0.3);" />
+         <div style="font-size: 10px; color: #71717a; margin-top: 10px;">Scan to visit JBJ.AE</div>
+       </div>
+
+       <!-- Copyright -->
+       <div style="margin-top: auto;">
+         <div style="width: 200px; height: 1px; background: linear-gradient(to right, transparent, rgba(168,146,90,0.3), transparent); margin: 0 auto 16px;"></div>
+         <p style="font-size: 9px; color: #52525b; margin: 0;">© 2026 JBJ Global Real Estate L.L.C S.O.C.</p>
+         <p style="font-size: 9px; color: #52525b; margin: 4px 0 0;">All Rights Reserved</p>
+       </div>
+     </div>
+   </div>
 
   <script>
     function downloadPDF() { window.print(); }
