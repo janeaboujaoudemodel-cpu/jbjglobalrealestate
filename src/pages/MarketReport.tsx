@@ -70,6 +70,7 @@ const MarketReport = () => {
     }
   }, [isLeadCaptured, leadData]);
 
+
   // If lead is already captured, allow direct download
   const canDirectDownload = isLeadCaptured && leadData?.email;
 
@@ -1922,6 +1923,27 @@ const MarketReport = () => {
     setDownloaded(true);
     return true;
   };
+
+  // Auto-download when navigated from BookDownloadDialog with ?auto-download=true
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("auto-download") === "true") {
+      const url = new URL(window.location.href);
+      url.searchParams.delete("auto-download");
+      window.history.replaceState({}, "", url.pathname);
+      const timer = setTimeout(() => {
+        const bookWindow = window.open("", "_blank");
+        downloadBook(bookWindow).then((opened) => {
+          if (opened) {
+            toast.success("Your book is ready!");
+          } else {
+            toast.error("Couldn't open the book. Please try again.");
+          }
+        });
+      }, 800);
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   const handleSubmit = async () => {
     if (!isValid || isSubmitting) return;
