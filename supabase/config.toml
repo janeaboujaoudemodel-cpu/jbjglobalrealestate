@@ -7,7 +7,7 @@ verify_jwt = false
 verify_jwt = false
 
 [functions.compare-projects]
-verify_jwt = true
+verify_jwt = false
 
 [functions.send-market-report-email]
 verify_jwt = false
@@ -347,4 +347,184 @@ verify_jwt = false
 verify_jwt = false
 
 [functions.account-lifecycle-reactivate]
+verify_jwt = false
+
+[functions.account-lifecycle]
+verify_jwt = false
+
+[functions.ai-social-media]
+verify_jwt = false
+
+[functions.ai-email-generator]
+verify_jwt = false
+
+[functions.ai-client-matcher]
+verify_jwt = false
+
+[functions.ai-mortgage-advisor]
+verify_jwt = false
+
+[functions.ai-call-summarizer]
+verify_jwt = false
+
+[functions.ai-market-chat]
+verify_jwt = false
+
+[functions.ai-news-collector]
+verify_jwt = false
+
+[functions.ai-listing-extractor]
+verify_jwt = false
+
+[functions.ai-stamp-extract]
+verify_jwt = false
+
+[functions.ai-talking-agent]
+verify_jwt = false
+
+[functions.ai-video-editor]
+verify_jwt = false
+
+[functions.clone-jane-voice]
+verify_jwt = false
+
+[functions.cv-experience-writer]
+verify_jwt = false
+
+[functions.cv-skills-suggest]
+verify_jwt = false
+
+[functions.cv-summary-generator]
+verify_jwt = false
+
+[functions.cover-letter-generator]
+verify_jwt = false
+
+[functions.chat-ai-summarizer]
+verify_jwt = false
+
+[functions.cv-ai-analyzer]
+verify_jwt = false
+
+[functions.voice-studio-clone]
+verify_jwt = false
+
+[functions.voice-studio-tts]
+verify_jwt = false
+
+[functions.owner-ai-reply]
+verify_jwt = false
+
+[functions.owner-voice-generate]
+verify_jwt = false
+
+[functions.send-admin-message]
+verify_jwt = false
+
+[functions.brochure-ai]
+verify_jwt = false
+
+[functions.remove-background]
+verify_jwt = false
+
+[functions.send-application-status-email]
+verify_jwt = false
+
+[functions.send-cv-status-email]
+verify_jwt = false
+
+[functions.send-idea-approved-email]
+verify_jwt = false
+
+[functions.send-password-change-confirmation]
+verify_jwt = false
+
+[functions.elevenlabs-conversation-token]
+verify_jwt = false
+
+[functions.elevenlabs-podcast-tts]
+verify_jwt = false
+
+[functions.elevenlabs-podcast-segment-tts]
+verify_jwt = false
+
+[functions.elevenlabs-podcast-music]
+verify_jwt = false
+
+[functions.elevenlabs-sfx]
+verify_jwt = false
+
+[functions.summarize-user-profiles]
+verify_jwt = false
+
+[functions.create-user-alert]
+verify_jwt = false
+
+[functions.compute-user-scores]
+verify_jwt = false
+
+[functions.listing-score]
+verify_jwt = false
+
+[functions.submit-contact-gating]
+verify_jwt = false
+
+[functions.whatsapp-webhook]
+verify_jwt = false
+
+[functions.newsletter-subscribe]
+verify_jwt = false
+
+[functions.unsubscribe-newsletter]
+verify_jwt = false
+
+[functions.resubscribe-newsletter]
+verify_jwt = false
+
+[functions.welcome-subscriber]
+verify_jwt = false
+
+[functions.update-email-preferences]
+verify_jwt = false
+
+[functions.instagram-get-analytics]
+verify_jwt = false
+
+[functions.instagram-process-scheduled]
+verify_jwt = false
+
+[functions.download-file]
+verify_jwt = false
+
+[functions.resend-inbound-email-webhook]
+verify_jwt = false
+
+[functions.resend-support-ticket-confirmation]
+verify_jwt = false
+
+[functions.send-ticket-status-email]
+verify_jwt = false
+
+[functions.verify-owner]
+verify_jwt = false
+
+[functions.log-security-event]
+verify_jwt = false
+
+[functions.vapi-retention-cleanup]
+verify_jwt = false
+
+[functions.handover-alerts]
+verify_jwt = false
+
+[functions.extract-payment-plans]
+verify_jwt = false
+
+[functions.listing-enrichment-matcher]
+verify_jwt = false
+
+[functions.full-project-extract]
+verify_jwt = false
+
+[functions.scheduled-extraction]
 verify_jwt = false

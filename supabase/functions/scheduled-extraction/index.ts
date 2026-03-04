@@ -207,7 +207,7 @@ async function extractFromProvident(baseUrl: string, firecrawlKey: string): Prom
       return projects;
     }
     
-    const response = await fetch("https://api.lovable.dev/v1/chat/completions", {
+    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${LOVABLE_API_KEY}`,
@@ -298,7 +298,7 @@ async function extractWithFirecrawl(baseUrl: string, sourceName: string, firecra
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) return [];
 
-    const response = await fetch("https://api.lovable.dev/v1/chat/completions", {
+    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${LOVABLE_API_KEY}`,
