@@ -113,9 +113,10 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
       });
   }, [open]);
 
-  // Live count with debounce — reflects current filters
+  // Live count with debounce — reflects current filters (fast 200ms debounce)
   useEffect(() => {
     if (!open) return;
+    setProjectCount(null);
     const timer = setTimeout(async () => {
       try {
         let query = supabase
@@ -141,10 +142,6 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
         if (localFilters.priceMax) {
           query = query.lte('price_from', Number(localFilters.priceMax));
         }
-        if (localFilters.bedrooms.length > 0) {
-          const numBeds = localFilters.bedrooms.filter(b => b !== 'studio' && b !== '7+').map(Number);
-          if (localFilters.bedrooms.includes('studio')) numBeds.push(0);
-        }
         if (localFilters.constructionStatuses.length > 0) {
           query = query.in('construction_status', localFilters.constructionStatuses);
         }
@@ -160,7 +157,7 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
       } catch {
         setProjectCount(null);
       }
-    }, 500);
+    }, 200);
     return () => clearTimeout(timer);
   }, [open, localFilters]);
 
@@ -180,11 +177,11 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
     setLocalFilters({ ...defaultShortcutFilters });
   };
 
-  const togglePillBase = "px-3 py-1.5 rounded-full text-xs font-medium border transition-all cursor-pointer";
-  const togglePillOff = "border-gold/30 text-black/70 bg-white/60 hover:bg-gold/10 hover:border-gold/50 hover:shadow-sm";
-  const togglePillOn = "border-2 border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black font-bold";
-  const sectionTitle = "text-sm font-bold text-black mb-3";
-  const inputClass = "w-full h-10 px-3 bg-white border border-gold/30 rounded-lg text-sm text-black placeholder:text-black/40 focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30";
+  const togglePillBase = "px-3.5 py-2 rounded-full text-xs font-semibold border transition-all cursor-pointer";
+  const togglePillOff = "border-gold/25 text-black/70 bg-white/80 hover:bg-gold/10 hover:border-gold/50 hover:shadow-sm";
+  const togglePillOn = "border-2 border-gold bg-gradient-to-r from-[#C8A766]/20 via-[#D4AF37]/15 to-[#C8A766]/20 text-black font-bold shadow-[0_2px_8px_rgba(200,167,102,0.2)]";
+  const sectionTitle = "text-sm font-bold text-black mb-3 tracking-tight";
+  const inputClass = "w-full h-10 px-3 bg-white/90 border border-gold/25 rounded-xl text-sm text-black placeholder:text-black/35 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition-all";
 
   const filteredEmirates = UAE_EMIRATES.filter(e =>
     !emirateSearch || e.label.toLowerCase().includes(emirateSearch.toLowerCase())
@@ -208,17 +205,19 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="max-w-3xl w-[calc(100vw-3rem)] max-h-[calc(100dvh-4rem)] p-0 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 flex flex-col overflow-hidden"
+        className="max-w-3xl w-[calc(100vw-3rem)] max-h-[calc(100dvh-4rem)] p-0 bg-gradient-to-br from-[#FEFCF9] via-[#FAF6EE] to-[#F3EDD9] border-2 border-gold/50 flex flex-col overflow-hidden shadow-[0_25px_80px_-12px_rgba(0,0,0,0.35),0_0_0_1px_rgba(200,167,102,0.2)]"
       >
         {/* Header */}
-        <div className="px-5 pt-5 pb-4 border-b border-gold/20 flex-shrink-0">
+        <div className="px-6 pt-6 pb-4 border-b border-gold/30 flex-shrink-0 bg-gradient-to-r from-transparent via-gold/[0.04] to-transparent">
           <div className="flex items-center justify-between mb-3">
             <div>
-              <DialogTitle className="text-lg font-bold text-black">New Off Plan Projects</DialogTitle>
-              {projectCount !== null && (
-                <span className="text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#C8A766] to-[#D4AF37]">
+              <DialogTitle className="text-xl font-bold text-black tracking-tight">New Off Plan Projects</DialogTitle>
+              {projectCount !== null ? (
+                <span className="text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#B8964A] to-[#D4AF37]">
                   {projectCount.toLocaleString()} live projects
                 </span>
+              ) : (
+                <span className="text-sm text-black/30">Loading...</span>
               )}
             </div>
           </div>
@@ -618,19 +617,19 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
         </ScrollArea>
 
         {/* Sticky Footer */}
-        <div className="px-5 py-4 border-t border-gold/20 flex-shrink-0 flex items-center gap-3">
+        <div className="px-6 py-4 border-t border-gold/30 flex-shrink-0 flex items-center gap-3 bg-gradient-to-r from-transparent via-gold/[0.04] to-transparent">
           <button
             onClick={handleClearAll}
-            className="px-4 py-2.5 rounded-full border border-gold/40 text-xs font-semibold text-black/70 hover:bg-white/60 transition-colors"
+            className="px-5 py-2.5 rounded-full border border-gold/40 text-xs font-bold text-black/70 hover:bg-gold/10 hover:border-gold/60 transition-all"
           >
             Clear all
           </button>
-          <button className="p-2.5 rounded-full border border-gold/40 hover:bg-white/60 transition-colors">
+          <button className="p-2.5 rounded-full border border-gold/40 hover:bg-gold/10 hover:border-gold/60 transition-all">
             <Heart className="w-4 h-4 text-red-500 fill-red-500" />
           </button>
           <button
             onClick={handleApply}
-            className="flex-1 py-2.5 rounded-full bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold text-black font-bold text-sm shadow-lg hover:brightness-95 transition-all"
+            className="flex-1 py-3 rounded-full bg-gradient-to-r from-[#C8A766] via-[#D4AF37] to-[#C8A766] text-white font-bold text-sm shadow-[0_4px_20px_rgba(200,167,102,0.4)] hover:shadow-[0_6px_28px_rgba(200,167,102,0.55)] hover:brightness-105 transition-all"
           >
             Show {projectCount !== null ? projectCount.toLocaleString() : '...'} projects
           </button>
