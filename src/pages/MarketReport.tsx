@@ -9,6 +9,7 @@ import { CONTACT_INFO } from "@/constants/stats";
 import { getCountryList, getLanguageList } from "@/constants/localeOptions";
 import { ytd2026, fullYear2025, topAreas2026, topAreas2025, topNationalities } from "@/constants/dldMarketData";
 import founderProfessional from "@/assets/founder-professional.jpeg";
+import backCoverImage from "@/assets/books/market-intelligence-back-cover.jpg";
 import luxuryVilla1 from "@/assets/luxury-villa-1.jpeg";
 import { motion } from "framer-motion";
 import {
@@ -138,9 +139,9 @@ const MarketReport = () => {
     const websiteUrl = "https://JBJ.AE";
     const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(websiteUrl + "/quiz")}`;
     
-    // Villa images for visual enhancement (removed banned placeholder photo-1512917774080-9991f1c4c750)
+    // Villa images for visual enhancement
     const villaImages = [
-      "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1200&q=80",
+      luxuryVilla1,
       "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80",
       "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80",
       "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=1200&q=80",
@@ -590,16 +591,17 @@ const MarketReport = () => {
   }
   
   /* Founder image */
-  .founder-image {
-    width: 150px;
-    height: 150px;
+   .founder-image {
+    width: 200px;
+    height: 200px;
     border-radius: 50%;
     object-fit: cover;
-    object-position: center 40%;
+    object-position: center 20%;
     border: 4px solid #A8925A;
     margin: 0 auto 28px;
     display: block;
     background: #F5EBD7;
+    box-shadow: 0 8px 30px rgba(168,146,90,0.3);
   }
   
   .founder-section { text-align: center; padding: 36px 0; }
@@ -642,7 +644,7 @@ const MarketReport = () => {
   
   .bar-fill {
     height: 100%;
-    background: #1a3464;
+    background: linear-gradient(90deg, #A8925A, #d4c4a0);
     border-radius: 4px;
     display: flex;
     align-items: center;
@@ -900,17 +902,17 @@ const MarketReport = () => {
       <div class="identity-card-logo">
         <div class="monogram">JBJ</div>
         <div style="width: 40px; height: 1px; background: rgba(168,146,90,0.5); margin: 10px 0;"></div>
-        <div class="rera">Licensed Broker</div>
-        <div class="rera" style="margin-top: 4px;">Dubai, UAE</div>
+        <div class="rera">Real Estate</div>
+        <div class="rera" style="margin-top: 4px;">Brokerage</div>
       </div>
       <div style="flex: 1;">
         <div class="identity-card-details">
           <div class="company-name">JBJ Global Real Estate L.L.C S.O.C.</div>
           <div style="width: 60px; height: 1px; background: rgba(168,146,90,0.5); margin: 10px 0;"></div>
-          <div class="detail-row"><span class="icon">📞</span><span>+971 56 591 1000</span></div>
-          <div class="detail-row"><span class="icon">✉</span><span>CONTACT@JBJ.AE</span></div>
-          <div class="detail-row"><span class="icon">📍</span><span>Downtown Dubai, UAE</span></div>
-          <div class="detail-row"><span class="icon">🌐</span><span>JBJ.AE</span></div>
+           <div class="detail-row"><span class="icon" style="font-size:14px;">☎</span><span>+971 56 591 1000</span></div>
+          <div class="detail-row"><span class="icon" style="font-size:14px;">✉</span><span>CONTACT@JBJ.AE</span></div>
+          <div class="detail-row"><span class="icon" style="font-size:14px;">⌖</span><span>Downtown Dubai, UAE</span></div>
+          <div class="detail-row"><span class="icon" style="font-size:14px;">⊕</span><span>JBJ.AE</span></div>
         </div>
         <div class="identity-card-bottom">
           <div class="web">JBJ.AE</div>
@@ -989,30 +991,36 @@ const MarketReport = () => {
         <img src="${villaImages[1]}" alt="Luxury Property" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; object-position: center center; border-radius: 16px; border: 1px solid rgba(168,146,90,0.3);" />
       </div>
     </div>
-    <h3>What You Will Learn</h3>
-    <div class="two-col">
+     <h3>What You Will Learn</h3>
+    <div class="two-col" style="margin-bottom: 16px;">
       <div class="info-card">
         <h4 style="margin-top: 0;">Market Intelligence</h4>
-        <ul>
-          <li>Official DLD &amp; RERA data analysis</li>
-          <li>Price trends by community</li>
-          <li>Supply &amp; demand forecasts</li>
-          <li>Top buyer nationalities</li>
+        <ul style="margin: 8px 0;">
+          <li style="padding: 6px 0 6px 28px;">Official DLD &amp; RERA data analysis</li>
+          <li style="padding: 6px 0 6px 28px;">Price trends by community</li>
+          <li style="padding: 6px 0 6px 28px;">Supply &amp; demand forecasts</li>
+          <li style="padding: 6px 0 6px 28px;">Top buyer nationalities</li>
         </ul>
       </div>
       <div class="info-card">
         <h4 style="margin-top: 0;">Decision Frameworks</h4>
-        <ul>
-          <li>Developer comparison matrices</li>
-          <li>Investment checklists</li>
-          <li>Risk assessment tools</li>
-          <li>Payment plan structures</li>
+        <ul style="margin: 8px 0;">
+          <li style="padding: 6px 0 6px 28px;">Developer comparison matrices</li>
+          <li style="padding: 6px 0 6px 28px;">Investment checklists</li>
+          <li style="padding: 6px 0 6px 28px;">Risk assessment tools</li>
+          <li style="padding: 6px 0 6px 28px;">Payment plan structures</li>
         </ul>
       </div>
     </div>
-    <div class="villa-gallery">
-      <img src="${villaImages[2]}" alt="Premium Villa" />
-      <img src="${villaImages[3]}" alt="Luxury Development" />
+    <h3 style="margin-top: 16px;">Top Buyer Nationalities — 2026 YTD</h3>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 10px 0;">
+      ${liveNationalities.slice(0, 10).map((n: any, i: number) => `
+      <div style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; background: #FFFFFF; border-radius: 8px; border: 1px solid rgba(168,146,90,0.18);">
+        <span style="color: #8A8278; font-size: 10px; width: 14px; font-weight: 600;">${i + 1}</span>
+        <span style="font-size: 16px;">${n.flag}</span>
+        <span style="color: #1A1814; font-size: 11px; flex: 1; font-weight: ${i < 3 ? 600 : 400};">${n.country}</span>
+        <span style="color: #A8925A; font-weight: 700; font-size: 12px;">${n.percentage}%</span>
+      </div>`).join('')}
     </div>
     <span class="page-number">4</span>
   </div>
@@ -1088,11 +1096,11 @@ const MarketReport = () => {
     <div class="chart-container">
       <h4 style="margin-top: 0; margin-bottom: 18px; color: #1A1814;">Global Financial Centre Rankings — GFCI 36</h4>
       <div class="bar-chart">
-        <div class="bar-item"><span class="bar-label">New York</span><div class="bar-track"><div class="bar-fill" style="width: 100%; background: #1a3464;"><span class="bar-value" style="color:#fff;">#1</span></div></div></div>
-        <div class="bar-item"><span class="bar-label">London</span><div class="bar-track"><div class="bar-fill" style="width: 90%; background: #2d4a7a;"><span class="bar-value" style="color:#fff;">#2</span></div></div></div>
-        <div class="bar-item"><span class="bar-label">Singapore</span><div class="bar-track"><div class="bar-fill" style="width: 80%; background: #2d6a7a;"><span class="bar-value" style="color:#fff;">#3</span></div></div></div>
-        <div class="bar-item"><span class="bar-label">Hong Kong</span><div class="bar-track"><div class="bar-fill" style="width: 72%; background: #4a4a5a;"><span class="bar-value" style="color:#fff;">#4</span></div></div></div>
-        <div class="bar-item"><span class="bar-label">Dubai</span><div class="bar-track"><div class="bar-fill" style="width: 55%; background: linear-gradient(90deg, #A8925A, #d4c4a0);"><span class="bar-value" style="color:#1A1814; font-weight:700;">#7 Global · #1 MENA</span></div></div></div>
+         <div class="bar-item"><span class="bar-label">New York</span><div class="bar-track"><div class="bar-fill" style="width: 100%; background: linear-gradient(90deg, #C4AA6A, #A8925A);"><span class="bar-value" style="color:#fff;">#1</span></div></div></div>
+         <div class="bar-item"><span class="bar-label">London</span><div class="bar-track"><div class="bar-fill" style="width: 90%; background: linear-gradient(90deg, #B8A06A, #9A8A52);"><span class="bar-value" style="color:#fff;">#2</span></div></div></div>
+         <div class="bar-item"><span class="bar-label">Singapore</span><div class="bar-track"><div class="bar-fill" style="width: 80%; background: linear-gradient(90deg, #A8925A, #8A7648);"><span class="bar-value" style="color:#fff;">#3</span></div></div></div>
+         <div class="bar-item"><span class="bar-label">Hong Kong</span><div class="bar-track"><div class="bar-fill" style="width: 72%; background: linear-gradient(90deg, #9A8A52, #7A6A42);"><span class="bar-value" style="color:#fff;">#4</span></div></div></div>
+         <div class="bar-item"><span class="bar-label">Dubai</span><div class="bar-track"><div class="bar-fill" style="width: 55%; background: linear-gradient(90deg, #D4AF37, #F5E6B8);"><span class="bar-value" style="color:#1A1814; font-weight:700;">#7 Global · #1 MENA</span></div></div></div>
       </div>
     </div>
     <div class="two-col">
@@ -1647,15 +1655,27 @@ const MarketReport = () => {
         <a href="${websiteUrl}/quiz" target="_blank" style="display: inline-block; background: linear-gradient(90deg, #A8925A, #C4AA6A); color: #1A1814; font-weight: 700; font-size: 13px; padding: 11px 24px; border-radius: 8px; text-decoration: none; letter-spacing: 0.03em;">Start AI Property Finder →</a>
       </div>
     </div>
-    <div style="background: #FFFFFF; border: 1px solid rgba(168,146,90,0.25); border-radius: 14px; padding: 22px 26px; margin: 22px 0;">
-      <h4 style="margin-top: 0; margin-bottom: 14px; text-align: center;">Stay in the Loop</h4>
-      <div class="social-links">
-        <a href="https://www.instagram.com/jbj.ae" target="_blank">📸 Instagram</a>
-        <a href="https://www.tiktok.com/@jbj.ae" target="_blank">🎵 TikTok</a>
-        <a href="https://youtube.com/@jbjglobalrealestate" target="_blank">▶ YouTube</a>
-        <a href="https://www.linkedin.com/company/jbj-global-real-estate/" target="_blank">💼 LinkedIn</a>
+     <div style="background: #FFFFFF; border: 1px solid rgba(168,146,90,0.25); border-radius: 14px; padding: 18px 22px; margin: 18px 0;">
+      <h4 style="margin-top: 0; margin-bottom: 10px; text-align: center;">Stay in the Loop</h4>
+      <div style="display: flex; gap: 12px; justify-content: center; align-items: center;">
+        <a href="https://www.instagram.com/jbj.ae" target="_blank" style="display: flex; align-items: center; gap: 6px; color: #A8925A; text-decoration: none; font-size: 12px; padding: 7px 14px; border: 1px solid rgba(168,146,90,0.35); border-radius: 8px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          Instagram
+        </a>
+        <a href="https://www.tiktok.com/@jbj.ae" target="_blank" style="display: flex; align-items: center; gap: 6px; color: #A8925A; text-decoration: none; font-size: 12px; padding: 7px 14px; border: 1px solid rgba(168,146,90,0.35); border-radius: 8px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.46V13a8.28 8.28 0 005.58 2.17v-3.44a4.85 4.85 0 01-4.84-1.08V6.69h4.84z"/></svg>
+          TikTok
+        </a>
+        <a href="https://youtube.com/@jbjglobalrealestate" target="_blank" style="display: flex; align-items: center; gap: 6px; color: #A8925A; text-decoration: none; font-size: 12px; padding: 7px 14px; border: 1px solid rgba(168,146,90,0.35); border-radius: 8px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          YouTube
+        </a>
+        <a href="https://www.linkedin.com/company/jbj-global-real-estate/" target="_blank" style="display: flex; align-items: center; gap: 6px; color: #A8925A; text-decoration: none; font-size: 12px; padding: 7px 14px; border: 1px solid rgba(168,146,90,0.35); border-radius: 8px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          LinkedIn
+        </a>
       </div>
-      <p style="text-align: center; font-size: 11px; color: #8A8278; margin: 12px 0 0 0;">Follow us for daily Dubai market updates, property drops &amp; investment insights.</p>
+      <p style="text-align: center; font-size: 11px; color: #8A8278; margin: 10px 0 0 0;">Follow us for daily Dubai market updates, property drops &amp; investment insights.</p>
     </div>
     <div class="disclaimer">
       <strong>Disclaimer:</strong> This document is for educational purposes only and does not constitute investment, financial, or legal advice. Data sourced from Dubai Land Department (DLD), RERA, Property Monitor, DXB Interact, Bayut, Property Finder, and Khaleej Times. While we strive for accuracy, readers should verify information independently. Real estate investments involve risks, including potential loss of capital. Past performance is not indicative of future results.
@@ -1759,11 +1779,11 @@ const MarketReport = () => {
         const priceStr = p.price_from ? `AED ${(Math.round(Number(p.price_from)) >= 1000000 ? (Math.round(Number(p.price_from)) / 1000000).toFixed(1) + 'M' : Math.round(Number(p.price_from)).toLocaleString())}` : 'Price on request';
         return `
       <a href="https://JBJ.AE/properties/${p.slug || ''}" class="area-card" target="_blank" style="display: block; text-decoration: none;">
-        ${p.cover_image_url ? `<img src="${p.cover_image_url}" alt="${p.name}" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; background: #F5EBD7;" onerror="this.style.display='none'" />` : `<div style="aspect-ratio: 1/1; background: linear-gradient(135deg, #F5EBD7, #E8DCC8); display: flex; align-items: center; justify-content: center;"><span style="font-family: 'Playfair Display', serif; font-size: 20px; color: rgba(168,146,90,0.4);">🏢</span></div>`}
+         ${p.cover_image_url ? `<img src="${p.cover_image_url}" alt="${p.name}" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; background: #F5EBD7;" onerror="this.style.display='none'" />` : `<div style="aspect-ratio: 1/1; background: linear-gradient(135deg, #F5EBD7, #E8DCC8); display: flex; align-items: center; justify-content: center;"><span style="font-family: 'Playfair Display', serif; font-size: 16px; color: rgba(168,146,90,0.5); font-weight: 700;">JBJ</span></div>`}
         <div class="area-card-body">
           <div class="area-name">${p.name}</div>
-          <div class="area-meta">📍 ${p.area_name || p.location || 'Dubai, UAE'}</div>
-          ${p.developer_name ? `<div class="area-meta" style="color: #A8925A;">🏗 ${p.developer_name}</div>` : ''}
+          <div class="area-meta">${p.area_name || p.location || 'Dubai, UAE'}</div>
+          ${p.developer_name ? `<div class="area-meta" style="color: #A8925A;">${p.developer_name}</div>` : ''}
           <div style="color: #A8925A; font-weight: 700; font-size: 12px; margin-top: 5px;">From ${priceStr}</div>
         </div>
       </a>`;
@@ -1781,19 +1801,19 @@ const MarketReport = () => {
     <p style="color: #6B6459; text-align: center; margin-bottom: 28px;">Everything you need in one place — properties, areas, developers, market intelligence, and AI tools.</p>
 
     <!-- Quick Links Grid -->
-    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 32px;">
+     <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 32px;">
       ${[
-        { label: 'Properties', url: '/properties', icon: '🏢' },
-        { label: 'Areas', url: '/areas', icon: '📍' },
-        { label: 'Developers', url: '/developers', icon: '🏗' },
-        { label: 'Market Intelligence', url: '/market-intelligence', icon: '📊' },
-        { label: 'AI Tools', url: '/ai-tools', icon: '🤖' },
-        { label: 'Guides', url: '/guides', icon: '📚' },
-        { label: 'News', url: '/news', icon: '📰' },
-        { label: 'Contact', url: '/contact', icon: '💬' },
+        { label: 'Properties', url: '/properties', svg: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#A8925A" stroke-width="1.5"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22V12h6v10"/><path d="M8 6h.01M16 6h.01M8 10h.01M16 10h.01"/></svg>' },
+        { label: 'Areas', url: '/areas', svg: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#A8925A" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>' },
+        { label: 'Developers', url: '/developers', svg: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#A8925A" stroke-width="1.5"><path d="M2 20h20M5 20V8l7-5 7 5v12"/><path d="M9 20v-4h6v4"/></svg>' },
+        { label: 'Market Intel', url: '/market-intelligence', svg: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#A8925A" stroke-width="1.5"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>' },
+        { label: 'AI Tools', url: '/ai-tools', svg: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#A8925A" stroke-width="1.5"><path d="M12 2a4 4 0 014 4v2a4 4 0 01-8 0V6a4 4 0 014-4z"/><path d="M6 10v1a6 6 0 0012 0v-1"/><path d="M12 17v4M8 21h8"/></svg>' },
+        { label: 'Guides', url: '/guides', svg: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#A8925A" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>' },
+        { label: 'News', url: '/news', svg: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#A8925A" stroke-width="1.5"><path d="M4 22h16a2 2 0 002-2V4a2 2 0 00-2-2H8a2 2 0 00-2 2v16a2 2 0 01-2 2zm0 0a2 2 0 01-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8z"/></svg>' },
+        { label: 'Contact', url: '/contact', svg: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#A8925A" stroke-width="1.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>' },
       ].map(item => `
       <a href="https://JBJ.AE${item.url}" target="_blank" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px 10px; background: #FFFFFF; border: 1px solid rgba(168,146,90,0.3); border-radius: 12px; text-decoration: none; gap: 6px;">
-        <span style="font-size: 22px;">${item.icon}</span>
+        ${item.svg}
         <span style="font-size: 11px; font-weight: 600; color: #1A1814; text-align: center; line-height: 1.3;">${item.label}</span>
         <span style="font-size: 9px; color: #A8925A;">JBJ.AE${item.url}</span>
       </a>`).join('')}
@@ -1804,17 +1824,17 @@ const MarketReport = () => {
       <div class="identity-card-logo">
         <div class="monogram">JBJ</div>
         <div style="width: 40px; height: 1px; background: rgba(168,146,90,0.5); margin: 10px 0;"></div>
-        <div class="rera">Licensed</div>
-        <div class="rera" style="margin-top: 4px;">Broker</div>
+        <div class="rera">Real Estate</div>
+        <div class="rera" style="margin-top: 4px;">Brokerage</div>
       </div>
       <div style="flex: 1;">
         <div class="identity-card-details">
           <div class="company-name">JBJ Global Real Estate L.L.C S.O.C.</div>
           <div style="width: 60px; height: 1px; background: rgba(168,146,90,0.5); margin: 10px 0;"></div>
-          <div class="detail-row"><span class="icon">📞</span><a href="tel:+971565911000" style="color: rgba(212,196,160,0.85); text-decoration: none;">+971 56 591 1000</a></div>
-          <div class="detail-row"><span class="icon">✉</span><a href="mailto:CONTACT@JBJ.AE" style="color: rgba(212,196,160,0.85); text-decoration: none;">CONTACT@JBJ.AE</a></div>
-          <div class="detail-row"><span class="icon">📍</span><span>Downtown Dubai, UAE</span></div>
-          <div class="detail-row"><span class="icon">🌐</span><a href="https://JBJ.AE" style="color: rgba(212,196,160,0.85); text-decoration: none;">JBJ.AE</a></div>
+           <div class="detail-row"><span class="icon" style="font-size:14px;">☎</span><a href="tel:+971565911000" style="color: rgba(212,196,160,0.85); text-decoration: none;">+971 56 591 1000</a></div>
+          <div class="detail-row"><span class="icon" style="font-size:14px;">✉</span><a href="mailto:CONTACT@JBJ.AE" style="color: rgba(212,196,160,0.85); text-decoration: none;">CONTACT@JBJ.AE</a></div>
+          <div class="detail-row"><span class="icon" style="font-size:14px;">⌖</span><span>Downtown Dubai, UAE</span></div>
+          <div class="detail-row"><span class="icon" style="font-size:14px;">⊕</span><a href="https://JBJ.AE" style="color: rgba(212,196,160,0.85); text-decoration: none;">JBJ.AE</a></div>
         </div>
         <div class="identity-card-bottom">
           <div style="display: flex; gap: 10px;">
@@ -1848,10 +1868,10 @@ const MarketReport = () => {
       <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; margin-bottom: 24px; padding: 20px 0; border-top: 1px solid rgba(168,146,90,0.2); border-bottom: 1px solid rgba(168,146,90,0.2);">
         <div>
           <div style="font-size: 10px; font-weight: 700; color: #A8925A; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 10px;">Contact</div>
-          <div style="font-size: 11px; color: #6B6459; line-height: 1.9;">
-            <div>📞 +971 56 591 1000</div>
-            <div>✉ CONTACT@JBJ.AE</div>
-            <div>📍 Downtown Dubai, UAE</div>
+           <div style="font-size: 11px; color: #6B6459; line-height: 1.9;">
+            <div>+971 56 591 1000</div>
+            <div>CONTACT@JBJ.AE</div>
+            <div>Downtown Dubai, UAE</div>
           </div>
         </div>
         <div>
@@ -1865,11 +1885,11 @@ const MarketReport = () => {
         </div>
         <div>
           <div style="font-size: 10px; font-weight: 700; color: #A8925A; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 10px;">Social</div>
-          <div style="font-size: 11px; line-height: 1.9;">
-            <div><a href="https://www.instagram.com/jbj.ae" style="color:#6B6459; text-decoration:none;">📸 Instagram</a></div>
-            <div><a href="https://www.tiktok.com/@jbj.ae" style="color:#6B6459; text-decoration:none;">🎵 TikTok</a></div>
-            <div><a href="https://youtube.com/@jbjglobalrealestate" style="color:#6B6459; text-decoration:none;">▶ YouTube</a></div>
-            <div><a href="https://www.linkedin.com/company/jbj-global-real-estate/" style="color:#6B6459; text-decoration:none;">💼 LinkedIn</a></div>
+           <div style="font-size: 11px; line-height: 1.9;">
+            <div><a href="https://www.instagram.com/jbj.ae" style="color:#6B6459; text-decoration:none;">Instagram</a></div>
+            <div><a href="https://www.tiktok.com/@jbj.ae" style="color:#6B6459; text-decoration:none;">TikTok</a></div>
+            <div><a href="https://youtube.com/@jbjglobalrealestate" style="color:#6B6459; text-decoration:none;">YouTube</a></div>
+            <div><a href="https://www.linkedin.com/company/jbj-global-real-estate/" style="color:#6B6459; text-decoration:none;">LinkedIn</a></div>
           </div>
         </div>
       </div>
@@ -1880,6 +1900,11 @@ const MarketReport = () => {
       <div style="width: 100%; height: 4px; background: linear-gradient(90deg, transparent, #A8925A, transparent);"></div>
     </div>
     <span class="page-number">23</span>
+  </div>
+
+  <!-- BACK COVER -->
+  <div class="page cover" style="padding: 0; display: flex; align-items: center; justify-content: center;">
+    <img src="${backCoverImage}" alt="JBJ Global Real Estate Back Cover" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;" />
   </div>
 
   <script>
