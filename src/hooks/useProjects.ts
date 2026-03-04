@@ -229,6 +229,23 @@ export function useProjectsListing() {
     staleTime: 10 * 60 * 1000,  // 10 minutes — data stays fresh, no refetch on navigation
     gcTime: 30 * 60 * 1000,     // 30 minutes — keep in cache
     queryFn: async () => {
+      // Select only the columns needed for listing cards — much faster than select(*)
+      const LISTING_COLUMNS = `
+        id, name, slug, description, location, price_from, price_to,
+        bedrooms_min, bedrooms_max, size_min, size_max,
+        handover_date, payment_plan, amenities, status,
+        is_featured, is_premium, is_sold_out,
+        property_type_label, status_label, emirate,
+        created_at, updated_at,
+        reelly_id, construction_status, sale_status,
+        area_name, cover_image_url, is_published,
+        developer_name, construction_progress,
+        total_units, available_units, down_payment_percent,
+        roi_estimate, rental_yield_estimate, latitude, longitude,
+        developer:developers(id, name, slug, logo_url),
+        community:communities(id, name, slug)
+      `;
+
       // Supabase limits to 1000 rows per query, so we paginate
       const PAGE_SIZE = 1000;
       let allData: any[] = [];
@@ -238,11 +255,7 @@ export function useProjectsListing() {
       while (hasMore) {
         const { data, error } = await supabase
           .from("projects")
-          .select(`
-            *,
-            developer:developers(id, name, slug, logo_url),
-            community:communities(id, name, slug)
-          `)
+          .select(LISTING_COLUMNS)
           .order("created_at", { ascending: false })
           .range(offset, offset + PAGE_SIZE - 1);
         
