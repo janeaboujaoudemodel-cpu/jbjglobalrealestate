@@ -455,6 +455,10 @@ const HeroSearchBar = () => {
   const [developerId, setDeveloperId] = useState('all');
   const [communityId, setCommunityId] = useState('all');
   const [emirate, setEmirate] = useState('all');
+  const [mainDeveloperSearch, setMainDeveloperSearch] = useState('');
+  const [mainEmirateSearch, setMainEmirateSearch] = useState('');
+  const [advancedDeveloperSearch, setAdvancedDeveloperSearch] = useState('');
+  const [advancedAreaSearch, setAdvancedAreaSearch] = useState('');
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [saveFilterName, setSaveFilterName] = useState('');
@@ -551,7 +555,10 @@ const HeroSearchBar = () => {
     if (propertyStatus !== 'all') params.set('status', propertyStatus);
     if (saleStatus !== 'all') params.set('saleStatus', saleStatus);
     if (sortBy !== 'newest') params.set('sort', sortBy);
-    if (developerId !== 'all') params.set('developer', developerId);
+    if (developerId !== 'all') {
+      const selectedDeveloperName = allDevelopers.find((d: any) => d.id === developerId)?.name || developerId;
+      params.set('developer', selectedDeveloperName);
+    }
     if (communityId !== 'all') params.set('community', communityId);
     if (emirate !== 'all') params.set('emirate', emirate);
     
@@ -826,7 +833,16 @@ const HeroSearchBar = () => {
               sideOffset={4}
             >
               <div className="text-xs font-semibold text-black/60 px-3 py-1.5 uppercase tracking-wider">Emirates</div>
-              {UAE_EMIRATES.map((item) => (
+              <input
+                type="text"
+                value={mainEmirateSearch}
+                onChange={(e) => setMainEmirateSearch(e.target.value)}
+                placeholder="Search emirate..."
+                className="w-full h-9 px-3 mb-2 rounded-lg border border-gold/30 bg-white text-sm text-black placeholder:text-black/40 outline-none focus:border-gold"
+              />
+              {UAE_EMIRATES
+                .filter((item) => !mainEmirateSearch || item.label.toLowerCase().includes(mainEmirateSearch.toLowerCase()))
+                .map((item) => (
                 <button
                   key={item.value}
                   onClick={() => setEmirate(item.value)}
@@ -872,6 +888,13 @@ const HeroSearchBar = () => {
               sideOffset={4}
             >
               <div className="text-xs font-semibold text-black/60 px-3 py-1.5 uppercase tracking-wider">Developer</div>
+              <input
+                type="text"
+                value={mainDeveloperSearch}
+                onChange={(e) => setMainDeveloperSearch(e.target.value)}
+                placeholder="Search developer..."
+                className="w-full h-9 px-3 mb-2 rounded-lg border border-gold/30 bg-white text-sm text-black placeholder:text-black/40 outline-none focus:border-gold"
+              />
               <button
                 onClick={() => setDeveloperId('all')}
                 className={cn(
@@ -882,6 +905,7 @@ const HeroSearchBar = () => {
                 All Developers
               </button>
               {(developers || [])
+                .filter((dev: any) => !mainDeveloperSearch || dev.name?.toLowerCase().includes(mainDeveloperSearch.toLowerCase()))
                 .sort((a: any, b: any) => (a.rank ?? 999) - (b.rank ?? 999))
                 .map((dev: any) => (
                   <button
@@ -1099,6 +1123,13 @@ const HeroSearchBar = () => {
                 {/* Row 4: Developer — with logos */}
                 <div>
                   <label className="text-sm font-semibold text-black/80 mb-2 block">Developer</label>
+                  <input
+                    type="text"
+                    value={advancedDeveloperSearch}
+                    onChange={(e) => setAdvancedDeveloperSearch(e.target.value)}
+                    placeholder="Search developer..."
+                    className="w-full h-10 px-3 mb-2 rounded-xl bg-white border border-gold/30 text-black text-sm placeholder:text-zinc-400 focus:outline-none focus:border-gold/60"
+                  />
                   <div className="max-h-48 overflow-y-auto jj-scrollbar-gold rounded-xl border border-gold/30 bg-white">
                     <button
                       onClick={() => setDeveloperId('all')}
@@ -1106,7 +1137,10 @@ const HeroSearchBar = () => {
                     >
                       All Developers
                     </button>
-                    {(developers || []).sort((a: any, b: any) => (a.rank ?? 999) - (b.rank ?? 999)).map((dev: any) => (
+                    {(developers || [])
+                      .filter((dev: any) => !advancedDeveloperSearch || dev.name?.toLowerCase().includes(advancedDeveloperSearch.toLowerCase()))
+                      .sort((a: any, b: any) => (a.rank ?? 999) - (b.rank ?? 999))
+                      .map((dev: any) => (
                       <button
                         key={dev.id}
                         onClick={() => setDeveloperId(dev.id)}
