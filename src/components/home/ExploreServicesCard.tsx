@@ -31,6 +31,7 @@ import goldenVisaBg from "@/assets/services/golden-visa-bg.jpg";
 import mortgageBg from "@/assets/services/mortgage-bg.jpg";
 import passportVisaBg from "@/assets/services/passport-visa-bg.jpg";
 import generalInquiriesBg from "@/assets/services/general-inquiries-bg.jpg";
+import propertyManagementBg from "@/assets/services/property-management-bg.jpg";
 
 interface ServiceSlide {
   id: string;
@@ -111,7 +112,7 @@ const services: ServiceSlide[] = [
     description: "Professional property maintenance and management services for landlords and investors",
     icon: Building2,
     href: "/services/property-management",
-    bgImage: listRentalBg,
+    bgImage: propertyManagementBg,
     available: true
   },
   {
