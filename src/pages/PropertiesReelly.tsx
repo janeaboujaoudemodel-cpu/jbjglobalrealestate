@@ -179,22 +179,26 @@ const PropertiesReelly = () => {
     const statusParam = searchParams.get('saleStatus') || searchParams.get('status');
     const constructionParam = searchParams.get('constructionStatus');
     const developerParam = searchParams.get('developer');
-    
+
     const areaSearch = areaParam
       ? areaParam.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
       : null;
-    
-    if (keywordParam || emirateParam || statusParam || constructionParam || areaSearch || developerParam) {
+
+    const resolvedDeveloper = developerParam
+      ? (developers?.find((d) => d.id === developerParam)?.name || developerParam)
+      : null;
+
+    if (keywordParam || emirateParam || statusParam || constructionParam || areaSearch || resolvedDeveloper) {
       setShortcutFilters(prev => ({
         ...prev,
         searchQuery: keywordParam ?? areaSearch ?? '',
         emirates: emirateParam ? [emirateParam] : [],
         statuses: statusParam ? [statusParam] : [],
         constructionStatuses: constructionParam ? [constructionParam] : [],
-        developers: developerParam ? [developerParam] : [],
+        developers: resolvedDeveloper ? [resolvedDeveloper] : [],
       }));
     }
-  }, [searchParams]);
+  }, [searchParams, developers]);
 
   // Sort projects — sold-out always at bottom
   const sortedProjects = useMemo(() => {
