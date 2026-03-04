@@ -3,15 +3,15 @@ const ASSET_BASE = "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/p
 const LOGO_URL = `${ASSET_BASE}/jbj-monogram-light-on-dark.png`;
 const BOOK_MARKET = `${ASSET_BASE}/email-books%2Fmarket-intelligence-cover.jpg`;
 const BOOK_GUIDES = `${ASSET_BASE}/email-books%2Fguides-library-cover.jpg`;
-const ICON_HEADSET_WHITE = `${SITE_URL}/email-icons/headphones-white.svg`;
-const ICON_AI = `${SITE_URL}/email-icons/ai-tools.svg`;
-const ICON_GUIDES = `${SITE_URL}/email-icons/guides.svg`;
-const ICON_PROPERTIES = `${SITE_URL}/email-icons/properties.svg`;
-const ICON_INSTAGRAM = `${SITE_URL}/email-icons/social-instagram.svg`;
-const ICON_FACEBOOK = `${SITE_URL}/email-icons/social-facebook.svg`;
-const ICON_LINKEDIN = `${SITE_URL}/email-icons/social-linkedin.svg`;
-const ICON_YOUTUBE = `${SITE_URL}/email-icons/social-youtube.svg`;
-const ICON_TIKTOK = `${SITE_URL}/email-icons/social-tiktok.svg`;
+const ICON_HEADSET_WHITE = `${ASSET_BASE}/icons%2Fheadphones-white.svg`;
+const ICON_AI = `${ASSET_BASE}/icons%2Fai-tools.svg`;
+const ICON_GUIDES = `${ASSET_BASE}/icons%2Fguides.svg`;
+const ICON_PROPERTIES = `${ASSET_BASE}/icons%2Fproperties.svg`;
+const ICON_INSTAGRAM = `${ASSET_BASE}/icons%2Fsocial-instagram.svg`;
+const ICON_FACEBOOK = `${ASSET_BASE}/icons%2Fsocial-facebook.svg`;
+const ICON_LINKEDIN = `${ASSET_BASE}/icons%2Fsocial-linkedin.svg`;
+const ICON_YOUTUBE = `${ASSET_BASE}/icons%2Fsocial-youtube.svg`;
+const ICON_TIKTOK = `${ASSET_BASE}/icons%2Fsocial-tiktok.svg`;
 
 export { LOGO_URL, SITE_URL };
 
@@ -85,10 +85,10 @@ export function inquiryBox(contextLabel: string): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:20px 0 18px;"><tr><td style="padding:18px 20px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:18px;text-align:center;"><p style="margin:0;font-size:14px;color:#1f2937;line-height:1.7;">For inquiries about your ${contextLabel}, contact us at<br/><a href="mailto:CONTACT@JBJ.AE" style="color:#111827;font-weight:700;text-decoration:underline;">CONTACT@JBJ.AE</a></p></td></tr></table>`;
 }
 
-// ─── Ticket Support (white headset inside RED ROUNDED SQUARE — INLINE SVG) ───
+// ─── Ticket Support (white headset inside RED ROUNDED SQUARE — IMG tag) ───
 export function ticketSupportEmbed(): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:16px 0 24px;"><tr><td style="padding:24px 20px;background:linear-gradient(135deg,#fff5f5,#ffe9e9);border:1px solid #ef4444;border-radius:18px;text-align:center;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:#dc2626;border-radius:12px;text-align:center;vertical-align:middle;">${SVG.headsetWhite}</td></tr></table>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:#dc2626;border-radius:12px;text-align:center;vertical-align:middle;padding:12px;"><img src="${ICON_HEADSET_WHITE}" alt="Support" width="28" height="28" style="display:block;margin:0 auto;width:28px;height:28px;" /></td></tr></table>
 <p style="margin:0 0 4px;font-size:11px;font-weight:700;color:#dc2626;text-transform:uppercase;letter-spacing:2px;">24/7 SUPPORT</p>
 <p style="margin:0 0 6px;font-size:16px;font-weight:700;color:#7f1d1d;">Need Help? Open a Support Ticket</p>
 <p style="margin:0 0 14px;font-size:13px;color:#991b1b;">Our team typically responds within 24 hours</p>
@@ -98,7 +98,7 @@ export function ticketSupportEmbed(): string {
 
 export function ticketSupportEmbedAr(): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:16px 0 24px;direction:rtl;"><tr><td style="padding:24px 20px;background:linear-gradient(135deg,#fff5f5,#ffe9e9);border:1px solid #ef4444;border-radius:18px;text-align:center;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:#dc2626;border-radius:12px;text-align:center;vertical-align:middle;">${SVG.headsetWhite}</td></tr></table>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:#dc2626;border-radius:12px;text-align:center;vertical-align:middle;padding:12px;"><img src="${ICON_HEADSET_WHITE}" alt="دعم" width="28" height="28" style="display:block;margin:0 auto;width:28px;height:28px;" /></td></tr></table>
 <p style="margin:0 0 4px;font-size:11px;font-weight:700;color:#dc2626;letter-spacing:2px;">دعم على مدار الساعة</p>
 <p style="margin:0 0 6px;font-size:16px;font-weight:700;color:#7f1d1d;">هل تحتاج مساعدة؟ افتح تذكرة دعم</p>
 <p style="margin:0 0 14px;font-size:13px;color:#991b1b;">فريقنا يرد عادةً خلال ٢٤ ساعة</p>
@@ -106,17 +106,17 @@ export function ticketSupportEmbedAr(): string {
 </td></tr></table>`;
 }
 
-// ─── Recommended Actions (INLINE SVGs in circular frames) ───
-function recommendedCard(title: string, href: string, iconSvg: string): string {
+// ─── Recommended Actions (IMG tags — reliable in all email clients) ───
+function recommendedCard(title: string, href: string, iconUrl: string): string {
   return `<td width="33%" style="text-align:center;padding:4px;vertical-align:top;"><a href="${href}" style="display:block;text-decoration:none;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;"><tr><td style="padding:18px 8px;text-align:center;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:radial-gradient(circle at 30% 25%,#ffffff,#f2efe8 55%,#e4dccf 100%);border:1.5px solid #C8A766;border-radius:52px;text-align:center;vertical-align:middle;">${iconSvg}</td></tr></table>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:radial-gradient(circle at 30% 25%,#ffffff,#f2efe8 55%,#e4dccf 100%);border:1.5px solid #C8A766;border-radius:52px;text-align:center;vertical-align:middle;padding:12px;"><img src="${iconUrl}" alt="${title}" width="28" height="28" style="display:block;margin:0 auto;width:28px;height:28px;" /></td></tr></table>
 <p style="margin:0;font-size:12px;color:#1a1a1a;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">${title}</p>
 </td></tr></table></a></td>`;
 }
 
 export function recommendedActionsHtml(): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:10px 0 18px;"><tr><td style="text-align:center;"><p style="color:#1a1a1a;font-size:16px;font-weight:700;margin:0 0 14px;">Recommended For You</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${recommendedCard("AI Tools", `${SITE_URL}/ai-tools`, SVG.aiTools)}${recommendedCard("Guides", `${SITE_URL}/guides`, SVG.guides)}${recommendedCard("Properties", `${SITE_URL}/properties`, SVG.properties)}</tr></table></td></tr></table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:10px 0 18px;"><tr><td style="text-align:center;"><p style="color:#1a1a1a;font-size:16px;font-weight:700;margin:0 0 14px;">Recommended For You</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${recommendedCard("AI Tools", `${SITE_URL}/ai-tools`, ICON_AI)}${recommendedCard("Guides", `${SITE_URL}/guides`, ICON_GUIDES)}${recommendedCard("Properties", `${SITE_URL}/properties`, ICON_PROPERTIES)}</tr></table></td></tr></table>`;
 }
 
 // ─── Books (JPG from storage — email clients handle JPGs reliably) ───
@@ -163,8 +163,8 @@ export function signOffHtml(teamName = "JBJ Global Real Estate Team"): string {
   }
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:28px;margin-bottom:22px;"><tr><td>
 <p style="font-size:18px;color:#333;margin:0 0 6px;font-weight:700;">BEST REGARDS,</p>
-<p style="font-size:19px;color:#C8A766;font-weight:800;margin:0 0 2px;letter-spacing:0.4px;">JBJ GLOBAL REAL ESTATE</p>
-<p style="font-size:18px;color:#F7E9C9;font-weight:900;margin:0;letter-spacing:0.6px;text-shadow:0 1px 0 #7d5b2b,0 3px 6px rgba(200,167,102,0.55);">${teamSuffix.toUpperCase()}</p>
+<p style="font-size:19px;color:#C8A766;font-weight:800;margin:0 0 4px;letter-spacing:0.4px;">JBJ GLOBAL REAL ESTATE</p>
+<p style="font-size:16px;color:#C8A766;font-weight:700;margin:0;letter-spacing:1.2px;opacity:0.85;">${teamSuffix.toUpperCase()}</p>
 </td></tr></table>`;
 }
 
@@ -191,18 +191,18 @@ export function readyToGetStartedHtml(): string {
 }
 
 function socialLinksFooter(): string {
-  const links: Array<{ icon: string; url: string; alt: string }> = [
-    { icon: SVG.instagram, url: "https://www.instagram.com/jbj.ae", alt: "Instagram" },
-    { icon: SVG.facebook, url: "https://www.facebook.com/share/1G7CgSaV2L/?mibextid=wwXIfr", alt: "Facebook" },
-    { icon: SVG.linkedin, url: "https://www.linkedin.com/company/jbj-global-real-estate/", alt: "LinkedIn" },
-    { icon: SVG.youtube, url: "https://youtube.com/@jbjglobalrealestate", alt: "YouTube" },
-    { icon: SVG.tiktok, url: "https://www.tiktok.com/@jbj.ae", alt: "TikTok" },
+  const links: Array<{ iconUrl: string; url: string; alt: string }> = [
+    { iconUrl: ICON_INSTAGRAM, url: "https://www.instagram.com/jbj.ae", alt: "Instagram" },
+    { iconUrl: ICON_FACEBOOK, url: "https://www.facebook.com/share/1G7CgSaV2L/?mibextid=wwXIfr", alt: "Facebook" },
+    { iconUrl: ICON_LINKEDIN, url: "https://www.linkedin.com/company/jbj-global-real-estate/", alt: "LinkedIn" },
+    { iconUrl: ICON_YOUTUBE, url: "https://youtube.com/@jbjglobalrealestate", alt: "YouTube" },
+    { iconUrl: ICON_TIKTOK, url: "https://www.tiktok.com/@jbj.ae", alt: "TikTok" },
   ];
 
-  const item = (icon: string, url: string, alt: string) =>
-    `<td style="padding:0 5px 8px;"><a href="${url}" aria-label="${alt}" style="display:inline-block;width:38px;height:38px;background:radial-gradient(circle at 30% 25%,#ffffff,#f2efe8 55%,#e4dccf 100%);border:1px solid #C8A766;border-radius:38px;text-decoration:none;text-align:center;vertical-align:middle;box-shadow:inset 0 1px 1px rgba(255,255,255,0.9),0 2px 8px rgba(0,0,0,0.2);"><span style="display:inline-block;margin-top:10px;">${icon}</span></a></td>`;
+  const item = (iconUrl: string, url: string, alt: string) =>
+    `<td style="padding:0 5px 8px;"><a href="${url}" aria-label="${alt}" style="display:inline-block;width:38px;height:38px;background:radial-gradient(circle at 30% 25%,#ffffff,#f2efe8 55%,#e4dccf 100%);border:1px solid #C8A766;border-radius:38px;text-decoration:none;text-align:center;vertical-align:middle;box-shadow:inset 0 1px 1px rgba(255,255,255,0.9),0 2px 8px rgba(0,0,0,0.2);"><img src="${iconUrl}" alt="${alt}" width="18" height="18" style="display:block;margin:10px auto 0;width:18px;height:18px;" /></a></td>`;
 
-  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:12px;"><tr>${links.map((l) => item(l.icon, l.url, l.alt)).join("")}</tr></table>`;
+  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:12px;"><tr>${links.map((l) => item(l.iconUrl, l.url, l.alt)).join("")}</tr></table>`;
 }
 
 export function sharedFooterHtml(): string {
