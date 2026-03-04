@@ -1243,6 +1243,60 @@ export type Database = {
         }
         Relationships: []
       }
+      book_downloads: {
+        Row: {
+          book_slug: string
+          book_title: string
+          browser: string | null
+          created_at: string
+          device_type: string | null
+          downloader_email: string
+          downloader_name: string | null
+          id: string
+          ip_hash: string | null
+          page_source: string | null
+          user_agent: string | null
+          user_id: string | null
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
+        }
+        Insert: {
+          book_slug?: string
+          book_title?: string
+          browser?: string | null
+          created_at?: string
+          device_type?: string | null
+          downloader_email: string
+          downloader_name?: string | null
+          id?: string
+          ip_hash?: string | null
+          page_source?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Update: {
+          book_slug?: string
+          book_title?: string
+          browser?: string | null
+          created_at?: string
+          device_type?: string | null
+          downloader_email?: string
+          downloader_name?: string | null
+          id?: string
+          ip_hash?: string | null
+          page_source?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Relationships: []
+      }
       books_catalog: {
         Row: {
           access_level: string | null

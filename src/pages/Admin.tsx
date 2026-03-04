@@ -70,7 +70,7 @@ import PWAAnalyticsDashboard from "@/components/admin/PWAAnalyticsDashboard";
 import VisitorInsightsDashboard from "@/components/admin/VisitorInsightsDashboard";
 import { AdminOverviewDashboard } from "@/components/admin/AdminOverviewDashboard";
 import { AdminAIAssistant } from "@/components/admin/AdminAIAssistant";
-import { ClipboardList, Users, Briefcase, Megaphone, Smartphone, LayoutDashboard, Bot, Mic, Send, Handshake } from "lucide-react";
+import { ClipboardList, Users, Briefcase, Megaphone, Smartphone, LayoutDashboard, Bot, Mic, Send, Handshake, BookOpen } from "lucide-react";
 import VoiceRecorder from "@/components/admin/VoiceRecorder";
 import { CommandPalette } from "@/components/ui/command-palette";
 import { FloatingActionBar } from "@/components/ui/floating-action-bar";
@@ -86,6 +86,7 @@ const EmbeddedInquiryManagementHub = lazy(() => import("@/pages/admin/InquiryMan
 const EmbeddedCustomerHappinessHub = lazy(() => import("@/components/admin/EmbeddedCustomerHappinessHub").then(m => ({ default: m.EmbeddedCustomerHappinessHub })));
 const AdminIntelligence = lazy(() => import("@/pages/admin/AdminIntelligence"));
 const PartnershipsDashboardLazy = lazy(() => import("@/components/admin/PartnershipsDashboard").then(m => ({ default: m.PartnershipsDashboard })));
+const BookHubDashboardLazy = lazy(() => import("@/components/admin/BookHubDashboard"));
 
 const TabLoadingFallback = () => (
   <div className="space-y-4 p-4">
@@ -524,6 +525,10 @@ const Admin = () => {
                 <Handshake className="w-4 h-4 mr-2" />
                 Partnerships
               </TabsTrigger>
+              <TabsTrigger value="book-hub" className="tab-trigger-champagne text-black">
+                <BookOpen className="w-4 h-4 mr-2" />
+                Book Hub
+              </TabsTrigger>
             </TabsList>
           </div>
 
@@ -640,6 +645,12 @@ const Admin = () => {
           <TabsContent value="partnerships" className="space-y-8">
             <Suspense fallback={<TabLoadingFallback />}>
               <PartnershipsDashboardLazy />
+            </Suspense>
+          </TabsContent>
+
+          <TabsContent value="book-hub" className="space-y-8">
+            <Suspense fallback={<TabLoadingFallback />}>
+              <BookHubDashboardLazy />
             </Suspense>
           </TabsContent>
 
