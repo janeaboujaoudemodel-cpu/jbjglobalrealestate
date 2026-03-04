@@ -1001,24 +1001,38 @@ const HeroSearchBar = () => {
                   </Select>
                 </div>
 
-                {/* Row 3: Emirates Filter */}
+                {/* Row 3: Emirates Filter - with search */}
                 <div>
                   <label className="text-sm font-semibold text-black/80 mb-2 block flex items-center gap-2">
                     <MapPin className="w-4 h-4 text-gold" />
                     Emirate
                   </label>
-                  <Select value={emirate} onValueChange={setEmirate}>
-                    <SelectTrigger className="h-11 bg-white border-gold/30">
-                      <SelectValue placeholder="All Emirates" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {UAE_EMIRATES.map((item) => (
-                        <SelectItem key={item.value} value={item.value}>
-                          {item.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <input
+                    type="text"
+                    value={mainEmirateSearch}
+                    onChange={(e) => setMainEmirateSearch(e.target.value)}
+                    placeholder="Search emirate..."
+                    className="w-full h-10 px-3 mb-2 rounded-xl bg-white border border-gold/30 text-black text-sm placeholder:text-zinc-400 focus:outline-none focus:border-gold/60"
+                  />
+                  <div className="max-h-48 overflow-y-auto jj-scrollbar-gold rounded-xl border border-gold/30 bg-white">
+                    <button
+                      onClick={() => setEmirate('all')}
+                      className={cn("w-full text-left px-3 py-2 text-sm transition-colors", emirate === 'all' ? "bg-gold/20 font-semibold text-black" : "text-black hover:bg-gold/10")}
+                    >
+                      All Emirates
+                    </button>
+                    {UAE_EMIRATES
+                      .filter((item) => !mainEmirateSearch || item.label.toLowerCase().includes(mainEmirateSearch.toLowerCase()))
+                      .map((item) => (
+                      <button
+                        key={item.value}
+                        onClick={() => setEmirate(item.value)}
+                        className={cn("w-full text-left px-3 py-2 text-sm transition-colors", emirate === item.value ? "bg-gold/20 font-semibold text-black" : "text-black hover:bg-gold/10")}
+                      >
+                        {item.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
 
                 {/* Payment Plan Slider */}
@@ -1155,9 +1169,16 @@ const HeroSearchBar = () => {
                   </div>
                 </div>
 
-                {/* Row 5: Community / Area — all areas from DB grouped by emirate */}
+                {/* Row 5: Community / Area — all areas from DB grouped by emirate with search */}
                 <div>
                   <label className="text-sm font-semibold text-black/80 mb-2 block">Community / Area</label>
+                  <input
+                    type="text"
+                    value={advancedAreaSearch}
+                    onChange={(e) => setAdvancedAreaSearch(e.target.value)}
+                    placeholder="Search area or community..."
+                    className="w-full h-10 px-3 mb-2 rounded-xl bg-white border border-gold/30 text-black text-sm placeholder:text-zinc-400 focus:outline-none focus:border-gold/60"
+                  />
                   <div className="max-h-52 overflow-y-auto jj-scrollbar-gold rounded-xl border border-gold/30 bg-white">
                     <button
                       onClick={() => setCommunityId('all')}
@@ -1167,8 +1188,11 @@ const HeroSearchBar = () => {
                     </button>
                     {(() => {
                       const EMIRATE_ORDER = ['Dubai', 'Abu Dhabi', 'Sharjah', 'Ras Al Khaimah', 'Ajman', 'Fujairah', 'Umm Al Quwain'];
+                      const searchLower = advancedAreaSearch.toLowerCase();
                       const grouped: Record<string, typeof allAreas> = {};
                       (allAreas || []).forEach(a => {
+                        // Filter by search
+                        if (advancedAreaSearch && !a.name.toLowerCase().includes(searchLower) && !(a.emirate || '').toLowerCase().includes(searchLower)) return;
                         const em = a.emirate?.replace(' Emirate', '') || 'Other';
                         if (!grouped[em]) grouped[em] = [];
                         grouped[em]!.push(a);
