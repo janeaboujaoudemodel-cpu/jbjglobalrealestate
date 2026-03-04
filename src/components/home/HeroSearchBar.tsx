@@ -733,7 +733,7 @@ const HeroSearchBar = () => {
         {/* Unified connected bar on desktop */}
         <div className="hidden sm:flex items-center w-full bg-white/[0.07] backdrop-blur-xl border border-white/20 rounded-2xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.1)] min-h-[56px]">
           {/* Location Search Input */}
-          <div className="flex items-center flex-[3] min-w-[320px] px-5">
+          <div className="flex items-center flex-[2.6] min-w-[300px] px-4">
             <Search className="w-5 h-5 text-gold shrink-0" style={{ filter: 'drop-shadow(0 0 4px rgba(200,167,102,0.5))' }} />
             <input
               type="text"
@@ -741,7 +741,7 @@ const HeroSearchBar = () => {
               value={locationSearch}
               onChange={(e) => setLocationSearch(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-              className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-white px-4 text-sm font-medium min-w-0 w-full"
+              className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-white px-2.5 text-sm font-medium min-w-0 w-full"
             />
           </div>
           {/* Premium Gradient Divider */}
@@ -750,7 +750,7 @@ const HeroSearchBar = () => {
           {/* Beds Dropdown */}
           <Popover>
             <PopoverTrigger asChild>
-              <button className="flex items-center gap-1.5 px-4 h-12 text-white font-medium text-sm hover:bg-white/10 transition-colors whitespace-nowrap">
+              <button className="flex items-center gap-1.5 px-3 h-12 text-white font-medium text-sm hover:bg-white/10 transition-colors whitespace-nowrap">
                 {getBedsLabel()}
                 <ChevronDown className="w-3.5 h-3.5 text-gold" />
               </button>

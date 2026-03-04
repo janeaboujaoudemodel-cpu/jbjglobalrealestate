@@ -27,9 +27,9 @@ export function SectionDivider({ className, fullWidth = false, bg, variant = "de
         : "container mx-auto px-4"
       }>
         <div className="flex items-center justify-center gap-4 md:gap-6">
-          <div className="h-[2px] min-w-[72px] flex-1 bg-gradient-to-r from-transparent via-gold/80 to-transparent shadow-[0_0_10px_hsl(var(--gold)/0.35)]" />
+          <div className="h-[3px] min-w-[96px] max-w-[440px] flex-1 rounded-full bg-gradient-to-r from-gold/20 via-gold to-gold/20 shadow-[0_0_16px_hsl(var(--gold)/0.55)]" />
           <Sparkles className="w-4 h-4 text-gold" />
-          <div className="h-[2px] min-w-[72px] flex-1 bg-gradient-to-r from-transparent via-gold/80 to-transparent shadow-[0_0_10px_hsl(var(--gold)/0.35)]" />
+          <div className="h-[3px] min-w-[96px] max-w-[440px] flex-1 rounded-full bg-gradient-to-r from-gold/20 via-gold to-gold/20 shadow-[0_0_16px_hsl(var(--gold)/0.55)]" />
         </div>
       </div>
     </div>
