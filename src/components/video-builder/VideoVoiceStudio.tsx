@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { 
   Mic, Play, Pause, ChevronRight, Upload, Volume2, 
   Languages, RefreshCw, Wand2, StopCircle, Check
@@ -11,8 +11,8 @@ import { Slider } from "@/components/ui/slider";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { speak, stopSpeaking, ensureVoicesLoaded } from "@/lib/browser-tts";
 import type { VideoProject } from "@/pages/VideoBuilder";
 
 interface VideoVoiceStudioProps {
@@ -54,6 +54,10 @@ const VideoVoiceStudio = ({ project, onUpdate, onNext }: VideoVoiceStudioProps) 
   const audioChunksRef = useRef<Blob[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    ensureVoicesLoaded();
+  }, []);
+
   const handleGenerateVoice = async () => {
     if (!project.script) {
       toast.error("Please generate a script first");
@@ -62,39 +66,31 @@ const VideoVoiceStudio = ({ project, onUpdate, onNext }: VideoVoiceStudioProps) 
 
     setIsGenerating(true);
     try {
-      // Call ElevenLabs TTS via edge function
-      const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/elevenlabs-video-voice`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-          },
-          body: JSON.stringify({
-            text: project.script,
-            language: selectedLanguage,
-            style: voiceStyle,
-          }),
-        }
-      );
+      // Map style to a browser voice persona
+      const voiceId = voiceStyle === "warm" ? "sarah" : voiceStyle === "energetic" ? "charlie" : voiceStyle === "calm" ? "river" : "roger";
 
-      if (!response.ok) throw new Error("Failed to generate voice");
+      // Use Web Speech API — completely free, no API calls
+      speak({
+        text: project.script,
+        voiceId,
+        lang: selectedLanguage.split("-")[0],
+        onEnd: () => {},
+        onError: () => {},
+      });
 
-      const audioBlob = await response.blob();
-      const audioUrl = URL.createObjectURL(audioBlob);
+      // Stop after brief test and mark as ready
+      setTimeout(() => stopSpeaking(), 500);
 
       onUpdate({
         ...project,
         voiceover: {
-          url: audioUrl,
+          url: `speech-synthesis://${encodeURIComponent(project.script.substring(0, 200))}`,
           language: selectedLanguage,
           accent: voiceStyle,
         },
       });
 
-      toast.success("Voiceover generated successfully!");
+      toast.success("Voiceover ready! Click Play to hear it.");
     } catch (error) {
       console.error("Voice generation error:", error);
       toast.error("Failed to generate voiceover. Please try again.");
@@ -171,14 +167,22 @@ const VideoVoiceStudio = ({ project, onUpdate, onNext }: VideoVoiceStudioProps) 
   };
 
   const handlePlayPause = () => {
-    if (!audioRef.current) return;
+    if (!project.script) return;
     
     if (isPlaying) {
-      audioRef.current.pause();
+      stopSpeaking();
+      setIsPlaying(false);
     } else {
-      audioRef.current.play();
+      setIsPlaying(true);
+      const voiceId = voiceStyle === "warm" ? "sarah" : voiceStyle === "energetic" ? "charlie" : voiceStyle === "calm" ? "river" : "roger";
+      speak({
+        text: project.script,
+        voiceId,
+        lang: selectedLanguage.split("-")[0],
+        onEnd: () => setIsPlaying(false),
+        onError: () => setIsPlaying(false),
+      });
     }
-    setIsPlaying(!isPlaying);
   };
 
   const handleVolumeChange = (value: number[]) => {

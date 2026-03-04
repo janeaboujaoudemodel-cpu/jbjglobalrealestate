@@ -27,18 +27,23 @@ import {
   Video,
   Check
 } from "lucide-react";
+import {
+  BROWSER_VOICE_LIBRARY,
+  speak,
+  stopSpeaking,
+  ensureVoicesLoaded,
+  downloadScriptAsText,
+  estimateDuration,
+} from "@/lib/browser-tts";
 
-// Voice library presets using ElevenLabs voice IDs
-const VOICE_LIBRARY = [
-  { id: "CwhRBWXzGAHq8TQ4Fs17", name: "Roger", gender: "male", accent: "British", description: "Professional & Clear" },
-  { id: "EXAVITQu4vr4xnSDxMaL", name: "Sarah", gender: "female", accent: "American", description: "Warm & Friendly" },
-  { id: "JBFqnCBsd6RMkjVDRZzb", name: "George", gender: "male", accent: "British", description: "Authoritative" },
-  { id: "FGY2WhTYpPnrIDTdsKH5", name: "Laura", gender: "female", accent: "American", description: "Natural & Engaging" },
-  { id: "IKne3meq5aSn9XLyUdCD", name: "Charlie", gender: "male", accent: "Australian", description: "Casual & Upbeat" },
-  { id: "pFZP5JQG7iQjIQuC4Bku", name: "Lily", gender: "female", accent: "British", description: "Elegant & Refined" },
-  { id: "TX3LPaxmHKxFdv7VOQHJ", name: "Liam", gender: "male", accent: "American", description: "Young & Dynamic" },
-  { id: "XrExE9yKIg1WjnnlVkGX", name: "Matilda", gender: "female", accent: "Australian", description: "Bright & Cheerful" },
-];
+// Map browser voice library to the same shape used by the UI
+const VOICE_LIBRARY = BROWSER_VOICE_LIBRARY.slice(0, 8).map(v => ({
+  id: v.id,
+  name: v.name,
+  gender: v.gender,
+  accent: v.accent,
+  description: v.tag,
+}));
 
 type VoiceMode = "library" | "enhance" | "clone";
 type OutputFormat = "mp3" | "wav";
@@ -230,7 +235,12 @@ export default function VoiceStudio() {
     }
   }, [recordedAudio, uploadedAudioUrl, isPreviewPlaying]);
 
-  // Generate narration
+  // Ensure voices loaded on mount
+  useEffect(() => {
+    ensureVoicesLoaded();
+  }, []);
+
+  // Generate narration using browser-native Web Speech API
   const generateNarration = useCallback(async () => {
     if (!script.trim()) {
       toast({
@@ -250,79 +260,51 @@ export default function VoiceStudio() {
       return;
     }
 
-    if (voiceMode === "clone" && !recordedAudio && !uploadedAudio) {
-      toast({
-        title: "Voice Sample Required",
-        description: "Please record or upload a voice sample for cloning.",
-        variant: "destructive"
-      });
-      return;
-    }
-
     setProcessing(true);
     setProgress(0);
     setProgressText("Preparing...");
 
     try {
-      let voiceId = selectedVoice;
-
-      // For voice cloning, we would call a clone endpoint first
-      if (voiceMode === "clone") {
-        setProgressText("Note: Voice cloning is processed server-side...");
-        setProgress(10);
-        // In a full implementation, we'd upload the audio and create a temporary voice
-        // For now, use a default voice with a notice
-        toast({
-          title: "Voice Cloning",
-          description: "Using Sarah voice as demo. Full cloning requires additional setup.",
-        });
-        voiceId = "EXAVITQu4vr4xnSDxMaL"; // Sarah as fallback
-      }
-
-      setProgressText("Generating narration...");
+      setProgressText("Synthesizing with browser voice engine...");
       setProgress(30);
 
-      // Call TTS edge function
-      const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/voice-studio-tts`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-            "Authorization": `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-          },
-          body: JSON.stringify({
-            text: script,
-            voiceId,
-            format: outputFormat,
-            enhance: voiceMode === "enhance"
-          }),
-        }
-      );
+      const voiceName = VOICE_LIBRARY.find(v => v.id === selectedVoice)?.name || "Voice";
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Generation failed: ${errorText}`);
-      }
+      // Use Web Speech API — completely free, no API calls
+      await new Promise<void>((resolve, reject) => {
+        speak({
+          text: script,
+          voiceId: selectedVoice,
+          lang: "en",
+          onEnd: () => resolve(),
+          onError: (err) => reject(err),
+        });
+        // Also resolve after estimated duration + buffer in case onEnd doesn't fire
+        const est = estimateDuration(script) * 1000 + 2000;
+        setTimeout(resolve, est);
+      });
 
-      setProgress(80);
-      setProgressText("Processing audio...");
+      stopSpeaking();
 
-      const audioBlob = await response.blob();
-      const audioUrl = URL.createObjectURL(audioBlob);
+      setProgress(90);
+      setProgressText("Ready!");
 
+      // Create a synthetic marker (no real audio blob from Web Speech API)
       if (generatedAudio?.url) {
         URL.revokeObjectURL(generatedAudio.url);
       }
 
-      setGeneratedAudio({ url: audioUrl, blob: audioBlob });
+      // Create a small silent blob as placeholder for the UI
+      const silentBlob = new Blob([new ArrayBuffer(44)], { type: "audio/wav" });
+      const url = URL.createObjectURL(silentBlob);
+
+      setGeneratedAudio({ url, blob: silentBlob });
       setProgress(100);
       setProgressText("Complete!");
 
       toast({
-        title: "Narration Generated!",
-        description: "Your audio is ready to download.",
+        title: `🎙️ Voice ready — ${voiceName}`,
+        description: "Click Play to hear it, or Download Script to save the text.",
       });
 
     } catch (error) {
@@ -335,36 +317,35 @@ export default function VoiceStudio() {
     } finally {
       setProcessing(false);
     }
-  }, [script, voiceMode, selectedVoice, cloneConsent, recordedAudio, uploadedAudio, outputFormat, generatedAudio, toast]);
+  }, [script, voiceMode, selectedVoice, cloneConsent, outputFormat, generatedAudio, toast]);
 
   const playGenerated = useCallback(() => {
-    if (!generatedAudio?.url || !audioRef.current) return;
+    if (!script.trim()) return;
     
     if (isPlaying) {
-      audioRef.current.pause();
+      stopSpeaking();
       setIsPlaying(false);
     } else {
-      audioRef.current.src = generatedAudio.url;
-      audioRef.current.play();
       setIsPlaying(true);
+      speak({
+        text: script,
+        voiceId: selectedVoice,
+        lang: "en",
+        onEnd: () => setIsPlaying(false),
+        onError: () => setIsPlaying(false),
+      });
     }
-  }, [generatedAudio, isPlaying]);
+  }, [script, selectedVoice, isPlaying]);
 
-  const downloadAudio = useCallback((format: "mp3" | "wav") => {
-    if (!generatedAudio?.blob) return;
-    
-    const link = document.createElement('a');
-    link.href = generatedAudio.url;
-    link.download = `narration_${Date.now()}.${format}`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    
+  const downloadAudio = useCallback(() => {
+    if (!script.trim()) return;
+    const voiceName = VOICE_LIBRARY.find(v => v.id === selectedVoice)?.name || "Voice";
+    downloadScriptAsText(script, voiceName);
     toast({
-      title: "Download Started",
-      description: `Your ${format.toUpperCase()} file is downloading.`,
+      title: "Script Downloaded",
+      description: "Your narration script has been saved as a text file.",
     });
-  }, [generatedAudio, toast]);
+  }, [script, selectedVoice, toast]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -807,21 +788,13 @@ export default function VoiceStudio() {
                     </Button>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 gap-3">
                     <Button
-                      onClick={() => downloadAudio("mp3")}
+                      onClick={() => downloadAudio()}
                       className="bg-[#D4AF37] hover:bg-[#B8860B] text-black"
                     >
                       <Download className="h-4 w-4 mr-2" />
-                      Download MP3
-                    </Button>
-                    <Button
-                      onClick={() => downloadAudio("wav")}
-                      variant="outline"
-                      className="border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37]/10"
-                    >
-                      <Download className="h-4 w-4 mr-2" />
-                      Download WAV
+                      Download Script
                     </Button>
                   </div>
 

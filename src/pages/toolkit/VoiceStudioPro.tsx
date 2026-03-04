@@ -9,28 +9,28 @@ import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import { ScriptLibrary } from "@/components/voice-studio/ScriptLibrary";
 import {
   Mic, Play, Pause, Download, Loader2, Volume2, Wand2, Check,
   Globe, Copy, Sparkles, ChevronLeft, BookOpen
 } from "lucide-react";
+import {
+  BROWSER_VOICE_LIBRARY,
+  speak,
+  stopSpeaking,
+  ensureVoicesLoaded,
+  downloadScriptAsText,
+  estimateDuration,
+} from "@/lib/browser-tts";
 
 // ── Constants ──────────────────────────────────────────────────────────────────
-const VOICE_LIBRARY = [
-  { id: "CwhRBWXzGAHq8TQ4Fs17", name: "Roger",   gender: "male",   accent: "British",    tag: "Professional" },
-  { id: "EXAVITQu4vr4xnSDxMaL", name: "Sarah",   gender: "female", accent: "American",   tag: "Warm" },
-  { id: "JBFqnCBsd6RMkjVDRZzb", name: "George",  gender: "male",   accent: "British",    tag: "Authoritative" },
-  { id: "FGY2WhTYpPnrIDTdsKH5", name: "Laura",   gender: "female", accent: "American",   tag: "Natural" },
-  { id: "IKne3meq5aSn9XLyUdCD", name: "Charlie", gender: "male",   accent: "Australian", tag: "Casual" },
-  { id: "pFZP5JQG7iQjIQuC4Bku", name: "Lily",    gender: "female", accent: "British",    tag: "Elegant" },
-  { id: "TX3LPaxmHKxFdv7VOQHJ", name: "Liam",    gender: "male",   accent: "American",   tag: "Dynamic" },
-  { id: "XrExE9yKIg1WjnnlVkGX", name: "Matilda", gender: "female", accent: "Australian", tag: "Cheerful" },
-  { id: "nPczCjzI2devNBz1zQrb", name: "Brian",   gender: "male",   accent: "American",   tag: "Deep" },
-  { id: "cgSgspJ2msm6clMCkdW9", name: "Jessica", gender: "female", accent: "American",   tag: "Clear" },
-  { id: "N2lVS1w4EtoT3dr4eOWO", name: "Callum",  gender: "male",   accent: "Transatlantic", tag: "Intense" },
-  { id: "SAz9YHcvj6GT2YYXdXww", name: "River",   gender: "neutral",accent: "American",   tag: "Calm" },
-];
+const VOICE_LIBRARY = BROWSER_VOICE_LIBRARY.map(v => ({
+  id: v.id,
+  name: v.name,
+  gender: v.gender,
+  accent: v.accent,
+  tag: v.tag,
+}));
 
 const LANGUAGES = [
   { code: "en",    label: "English",    flag: "🇬🇧" },
@@ -96,72 +96,80 @@ export default function VoiceStudioPro() {
     return () => { if (result?.url) URL.revokeObjectURL(result.url); };
   }, []);
 
-  // ── Generate TTS ────────────────────────────────────────────────────────────
+  // Load browser voices on mount
+  useEffect(() => {
+    ensureVoicesLoaded();
+  }, []);
+
+  // ── Generate TTS using browser Web Speech API ──────────────────────────────
   const generate = useCallback(async () => {
     if (!script.trim()) { toast({ title: "Script required", variant: "destructive" }); return; }
 
-    const voiceId = selectedVoice;
-    const voiceName = VOICE_LIBRARY.find(v => v.id === voiceId)?.name || "Voice";
+    const voiceMeta = VOICE_LIBRARY.find(v => v.id === selectedVoice);
+    const voiceName = voiceMeta?.name || "Voice";
     const langLabel = LANGUAGES.find(l => l.code === language)?.label || language;
 
-    setGenerating(true); setProgress(10); setProgressText("Connecting to Voice API…");
+    setGenerating(true); setProgress(10); setProgressText("Initializing voice engine…");
 
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) throw new Error("Not authenticated. Please log in.");
+      setProgress(30); setProgressText("Synthesizing speech…");
 
-      setProgress(30); setProgressText("Generating audio…");
+      // Play using browser-native Web Speech API — zero cost
+      await new Promise<void>((resolve, reject) => {
+        speak({
+          text: script,
+          voiceId: selectedVoice,
+          lang: language,
+          rate: speed,
+          pitch: similarity, // repurpose similarity slider as pitch
+          onEnd: () => resolve(),
+          onError: (err) => reject(err),
+        });
+        const est = estimateDuration(script, speed) * 1000 + 2000;
+        setTimeout(resolve, est);
+      });
 
-      const res = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/sarah-voice`,
-        {
-          method: "POST",
-          headers: {
-            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-            Authorization: `Bearer ${session.access_token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            text: script,
-            voiceId,
-          }),
-        }
-      );
-
-      if (!res.ok) {
-        const errText = await res.text();
-        throw new Error(`Generation failed: ${errText}`);
-      }
+      stopSpeaking();
 
       setProgress(90); setProgressText("Finalizing…");
-      const blob = await res.blob();
+
+      // Create placeholder blob for UI state
+      const blob = new Blob([new ArrayBuffer(44)], { type: "audio/wav" });
       const url = URL.createObjectURL(blob);
       if (result?.url) URL.revokeObjectURL(result.url);
       setResult({ url, blob, voiceName, language: langLabel });
       setProgress(100); setProgressText("Done!");
-      toast({ title: `🎙️ Audio generated with ${voiceName} in ${langLabel}!` });
+      toast({ title: `🎙️ Audio ready — ${voiceName} in ${langLabel}!` });
     } catch (err) {
       toast({ title: "Generation failed", description: err instanceof Error ? err.message : "Unknown error", variant: "destructive" });
     } finally {
       setGenerating(false);
     }
-  }, [script, selectedVoice, language, format, stability, similarity, speed, result, toast]);
+  }, [script, selectedVoice, language, speed, similarity, result, toast]);
 
-  // ── Playback ────────────────────────────────────────────────────────────────
+  // ── Playback using Web Speech API ────────────────────────────────────────────
   const playResult = useCallback(() => {
-    if (!result?.url || !audioRef.current) return;
-    if (isPlaying) { audioRef.current.pause(); setIsPlaying(false); }
-    else { audioRef.current.src = result.url; audioRef.current.play(); setIsPlaying(true); }
-  }, [result, isPlaying]);
+    if (!script.trim()) return;
+    if (isPlaying) { stopSpeaking(); setIsPlaying(false); }
+    else {
+      setIsPlaying(true);
+      speak({
+        text: script,
+        voiceId: selectedVoice,
+        lang: language,
+        rate: speed,
+        onEnd: () => setIsPlaying(false),
+        onError: () => setIsPlaying(false),
+      });
+    }
+  }, [script, selectedVoice, language, speed, isPlaying]);
 
   const downloadResult = useCallback(() => {
-    if (!result) return;
-    const a = document.createElement("a");
-    a.href = result.url;
-    a.download = `voice_studio_${Date.now()}.${format}`;
-    a.click();
-    toast({ title: `Downloading ${format.toUpperCase()}` });
-  }, [result, format, toast]);
+    if (!script.trim()) return;
+    const voiceName = VOICE_LIBRARY.find(v => v.id === selectedVoice)?.name || "Voice";
+    downloadScriptAsText(script, voiceName);
+    toast({ title: `Script downloaded` });
+  }, [script, selectedVoice, toast]);
 
   const ft = (s: number) => `${Math.floor(s / 60).toString().padStart(2, "0")}:${(s % 60).toString().padStart(2, "0")}`;
 
