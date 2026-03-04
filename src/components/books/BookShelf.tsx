@@ -33,9 +33,37 @@ export function BookShelf({ books, title = 'Books, Guides & Intelligence' }: Boo
               whileHover={{ y: -8 }}
               transition={{ type: 'spring', stiffness: 300 }}
             >
-              <div className="relative w-24 h-36 md:w-32 md:h-44 rounded-md overflow-hidden border border-gold/40 shadow-[4px_4px_20px_rgba(0,0,0,0.25)] group-hover:shadow-[6px_6px_30px_rgba(200,167,102,0.4)] transition-shadow">
-                <BookCoverFace book={book} />
-                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+              {/* 3D Book with spine, pages edge, and perspective */}
+              <div className="relative flex-shrink-0" style={{ perspective: '1200px' }}>
+                <div className="absolute -bottom-2 left-2 right-2 h-4 bg-black/20 blur-lg rounded-full" />
+                <div
+                  className="relative w-24 h-36 md:w-32 md:h-44 transition-transform duration-500 group-hover:[transform:rotateY(-8deg)]"
+                  style={{ transformStyle: 'preserve-3d' }}
+                >
+                  {/* Front cover */}
+                  <div
+                    className="relative rounded-r-lg overflow-hidden ring-1 ring-gold/50 bg-black"
+                    style={{
+                      transform: 'translateZ(1px)',
+                      backfaceVisibility: 'hidden',
+                      boxShadow: '0 8px 25px rgba(200,167,102,0.3), 0 4px 12px rgba(0,0,0,0.2), inset 0 1px 2px rgba(255,255,255,0.2)',
+                    }}
+                  >
+                    <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-black/40 via-black/20 to-transparent z-10" />
+                    <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-white/15 to-transparent z-10" />
+                    <BookCoverFace book={book} bare />
+                  </div>
+                  {/* 3D Spine */}
+                  <div
+                    className="absolute top-0 left-0 w-3 h-full bg-gradient-to-r from-zinc-800 to-zinc-700 origin-left"
+                    style={{ transform: 'rotateY(-90deg) translateX(-6px)' }}
+                  />
+                  {/* 3D Pages edge */}
+                  <div
+                    className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-b from-[#f5f0e0] to-[#e8dcc8]"
+                    style={{ transform: 'rotateX(90deg) translateY(4px)', transformOrigin: 'bottom' }}
+                  />
+                </div>
               </div>
               <p className="text-xs text-black/70 text-center font-medium group-hover:text-gold transition-colors leading-tight">
                 {book.title}

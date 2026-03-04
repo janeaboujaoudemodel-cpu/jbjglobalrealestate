@@ -91,11 +91,11 @@ export function CompanyProfileBrochure({
       {/* Text description — pushed right with gap */}
       {!compact && (
         <div className="text-center">
-          <p className="text-gold text-[10px] uppercase tracking-[0.2em] font-semibold mb-1">Corporate Dossier</p>
-          <h3 className="text-gold text-lg md:text-xl font-bold" style={{ fontFamily: "'Playfair Display', serif" }}>
+          <p className="text-black text-[10px] uppercase tracking-[0.2em] font-semibold mb-1">Corporate Dossier</p>
+          <h3 className="text-black text-lg md:text-xl font-bold" style={{ fontFamily: "'Playfair Display', serif" }}>
             JBJ Global Real Estate
           </h3>
-          <p className="text-white text-sm font-semibold mb-2">Company Profile</p>
+          <p className="text-black text-sm font-semibold mb-2">Company Profile</p>
           <p className="text-black/50 text-xs leading-relaxed mb-3 max-w-xs mx-auto">
             Our comprehensive company profile — vision, leadership, portfolio, awards, and investment track record.
           </p>
