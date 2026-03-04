@@ -1,17 +1,17 @@
 const SITE_URL = "https://jbj.ae";
 const ASSET_BASE = "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets";
 const LOGO_URL = `${ASSET_BASE}/jbj-monogram-light-on-dark.png`;
-const BOOK_MARKET = `${ASSET_BASE}/email-books%2Fmarket-intelligence-cover.jpg`;
-const BOOK_GUIDES = `${ASSET_BASE}/email-books%2Fguides-library-cover.jpg`;
-const ICON_HEADSET_WHITE = `${ASSET_BASE}/icons%2Fheadphones-white.svg`;
-const ICON_AI = `${ASSET_BASE}/icons%2Fai-tools.svg`;
-const ICON_GUIDES = `${ASSET_BASE}/icons%2Fguides.svg`;
-const ICON_PROPERTIES = `${ASSET_BASE}/icons%2Fproperties.svg`;
-const ICON_INSTAGRAM = `${ASSET_BASE}/icons%2Fsocial-instagram.svg`;
-const ICON_FACEBOOK = `${ASSET_BASE}/icons%2Fsocial-facebook.svg`;
-const ICON_LINKEDIN = `${ASSET_BASE}/icons%2Fsocial-linkedin.svg`;
-const ICON_YOUTUBE = `${ASSET_BASE}/icons%2Fsocial-youtube.svg`;
-const ICON_TIKTOK = `${ASSET_BASE}/icons%2Fsocial-tiktok.svg`;
+const BOOK_MARKET = `${ASSET_BASE}/email-books/market-intelligence-cover.jpg`;
+const BOOK_GUIDES = `${ASSET_BASE}/email-books/guides-library-cover.jpg`;
+const ICON_HEADSET_WHITE = `${ASSET_BASE}/icons/headphones-white.svg`;
+const ICON_AI = `${ASSET_BASE}/icons/ai-tools.svg`;
+const ICON_GUIDES = `${ASSET_BASE}/icons/guides.svg`;
+const ICON_PROPERTIES = `${ASSET_BASE}/icons/properties.svg`;
+const ICON_INSTAGRAM = `${ASSET_BASE}/icons/social-instagram.svg`;
+const ICON_FACEBOOK = `${ASSET_BASE}/icons/social-facebook.svg`;
+const ICON_LINKEDIN = `${ASSET_BASE}/icons/social-linkedin.svg`;
+const ICON_YOUTUBE = `${ASSET_BASE}/icons/social-youtube.svg`;
+const ICON_TIKTOK = `${ASSET_BASE}/icons/social-tiktok.svg`;
 
 export { LOGO_URL, SITE_URL };
 
@@ -92,7 +92,7 @@ export function ticketSupportEmbed(): string {
 <p style="margin:0 0 4px;font-size:11px;font-weight:700;color:#dc2626;text-transform:uppercase;letter-spacing:2px;">24/7 SUPPORT</p>
 <p style="margin:0 0 6px;font-size:16px;font-weight:700;color:#7f1d1d;">Need Help? Open a Support Ticket</p>
 <p style="margin:0 0 14px;font-size:13px;color:#991b1b;">Our team typically responds within 24 hours</p>
-<a href="${SITE_URL}/contact-support" style="display:inline-block;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;text-decoration:none;padding:12px 24px;border-radius:12px;font-weight:700;font-size:13px;">Submit a Ticket</a>
+<a href="${SITE_URL}/contact-support" style="display:inline-block;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;text-decoration:none;padding:12px 24px;border-radius:10px;font-weight:700;font-size:13px;">Submit a Ticket</a>
 </td></tr></table>`;
 }
 
@@ -154,17 +154,11 @@ export function feedbackHtml(context = "general"): string {
 
 // ─── Sign Off ───
 export function signOffHtml(teamName = "JBJ Global Real Estate Team"): string {
-  const base = "JBJ Global Real Estate";
-  let teamSuffix = "Team";
-  if (teamName.toLowerCase().startsWith(base.toLowerCase())) {
-    teamSuffix = teamName.substring(base.length).trim() || "Team";
-  } else {
-    teamSuffix = teamName;
-  }
+  const normalized = teamName.trim() || "JBJ Global Real Estate Team";
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:28px;margin-bottom:22px;"><tr><td>
 <p style="font-size:18px;color:#333;margin:0 0 6px;font-weight:700;">BEST REGARDS,</p>
 <p style="font-size:19px;color:#C8A766;font-weight:800;margin:0 0 4px;letter-spacing:0.4px;">JBJ GLOBAL REAL ESTATE</p>
-<p style="font-size:16px;color:#C8A766;font-weight:700;margin:0;letter-spacing:1.2px;opacity:0.85;">${teamSuffix.toUpperCase()}</p>
+<p style="font-size:16px;color:#F2E7D2;font-weight:700;margin:0;letter-spacing:1.1px;">${normalized.toUpperCase()}</p>
 </td></tr></table>`;
 }
 
@@ -207,7 +201,7 @@ function socialLinksFooter(): string {
 
 export function sharedFooterHtml(): string {
   return `<tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:#000;"><tr><td style="padding:34px 18px 34px;text-align:center;">
-<img src="${LOGO_URL}" alt="JBJ" width="190" style="width:190px;height:auto;display:block;margin:-6px auto 12px;border-radius:190px;" />
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto 12px;"><tr><td style="text-align:center;"><img src="${LOGO_URL}" alt="JBJ" width="130" style="width:130px;height:auto;display:block;margin:0 auto;border-radius:130px;" /></td></tr></table>
 <p style="color:#C8A766;font-size:16px;margin:0 0 12px;font-weight:700;letter-spacing:1.8px;text-align:center;">JBJ Global Real Estate</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto 12px;"><tr><td style="border-top:1px solid #C8A76655;"></td></tr></table>
 <p style="color:#d8cfbf;font-size:12px;font-style:italic;margin:0 0 16px;">The Premier Global Real Estate Intelligence &amp; Advisory Platform</p>
@@ -340,11 +334,8 @@ ${inquiryBox(context)}
 ${ticketSupportEmbed()}
 ${recommendedActionsHtml()}
 ${booksShowcaseHtml()}
-${goldDivider()}
 ${suggestedActionsHtml()}
-${goldDivider()}
 ${feedbackHtml(context)}
-${goldDivider()}
 ${readyToGetStartedHtml()}
 ${signOffHtml(teamName)}
 </td></tr></table>`;
