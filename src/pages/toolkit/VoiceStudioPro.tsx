@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import {
   BROWSER_VOICE_LIBRARY,
+  getPersona,
   speak,
   stopSpeaking,
   pauseSpeaking,
@@ -28,54 +29,11 @@ import {
   isPaused,
 } from "@/lib/browser-tts";
 
-// ── Extended Voice Library with accents and age groups ───────────────────────
-const VOICE_LIBRARY = [
-  ...BROWSER_VOICE_LIBRARY.map(v => ({
-    id: v.id, name: v.name, gender: v.gender, accent: v.accent, tag: v.tag,
-    ageGroup: v.ageGroup || "middle",
-  })),
-  // Arabic voices with regional accents
-  { id: "omar",    name: "Omar",    gender: "male" as const,   accent: "Arabic (Gulf)",     tag: "Rich",         ageGroup: "middle" },
-  { id: "ahmed",   name: "Ahmed",   gender: "male" as const,   accent: "Arabic (Egyptian)", tag: "Deep",         ageGroup: "senior" },
-  { id: "fatima",  name: "Fatima",  gender: "female" as const, accent: "Arabic (Gulf)",     tag: "Elegant",      ageGroup: "middle" },
-  { id: "nadia",   name: "Nadia",   gender: "female" as const, accent: "Arabic (Lebanese)", tag: "Smooth",       ageGroup: "young" },
-  { id: "khalid",  name: "Khalid",  gender: "male" as const,   accent: "Arabic (Saudi)",   tag: "Commanding",   ageGroup: "senior" },
-  { id: "layla",   name: "Layla",   gender: "female" as const, accent: "Arabic (Syrian)",  tag: "Gentle",       ageGroup: "young" },
-  { id: "youssef", name: "Youssef", gender: "male" as const,   accent: "Arabic (Kuwaiti)", tag: "Warm",         ageGroup: "middle" },
-  // Indian
-  { id: "aria",    name: "Aria",    gender: "female" as const, accent: "Indian",            tag: "Warm",         ageGroup: "young" },
-  { id: "raj",     name: "Raj",     gender: "male" as const,   accent: "Indian",            tag: "Professional", ageGroup: "middle" },
-  { id: "priya",   name: "Priya",   gender: "female" as const, accent: "Hindi",             tag: "Melodic",      ageGroup: "young" },
-  // European
-  { id: "elena",   name: "Elena",   gender: "female" as const, accent: "Spanish",           tag: "Vibrant",      ageGroup: "middle" },
-  { id: "diego",   name: "Diego",   gender: "male" as const,   accent: "Spanish",           tag: "Energetic",    ageGroup: "young" },
-  { id: "sofia",   name: "Sofia",   gender: "female" as const, accent: "Italian",           tag: "Expressive",   ageGroup: "middle" },
-  { id: "marco",   name: "Marco",   gender: "male" as const,   accent: "Italian",           tag: "Charismatic",  ageGroup: "young" },
-  { id: "pierre",  name: "Pierre",  gender: "male" as const,   accent: "French",            tag: "Refined",      ageGroup: "senior" },
-  { id: "isabelle",name: "Isabelle",gender: "female" as const, accent: "French",            tag: "Chic",         ageGroup: "young" },
-  { id: "hans",    name: "Hans",    gender: "male" as const,   accent: "German",            tag: "Clear",        ageGroup: "middle" },
-  { id: "anna",    name: "Anna",    gender: "female" as const, accent: "German",            tag: "Precise",      ageGroup: "middle" },
-  { id: "anya",    name: "Anya",    gender: "female" as const, accent: "Russian",           tag: "Authoritative",ageGroup: "middle" },
-  { id: "dmitri",  name: "Dmitri",  gender: "male" as const,   accent: "Russian",           tag: "Strong",       ageGroup: "senior" },
-  // Asian
-  { id: "yuki",    name: "Yuki",    gender: "female" as const, accent: "Japanese",          tag: "Soft",         ageGroup: "young" },
-  { id: "kenji",   name: "Kenji",   gender: "male" as const,   accent: "Japanese",          tag: "Focused",      ageGroup: "middle" },
-  { id: "wei",     name: "Wei",     gender: "male" as const,   accent: "Chinese",           tag: "Steady",       ageGroup: "middle" },
-  { id: "mei",     name: "Mei",     gender: "female" as const, accent: "Chinese",           tag: "Bright",       ageGroup: "young" },
-  { id: "jin",     name: "Jin",     gender: "male" as const,   accent: "Korean",            tag: "Calm",         ageGroup: "middle" },
-  { id: "soo",     name: "Soo-Yeon",gender: "female" as const, accent: "Korean",            tag: "Lively",       ageGroup: "young" },
-  // Other
-  { id: "carlos",  name: "Carlos",  gender: "male" as const,   accent: "Portuguese",        tag: "Dynamic",      ageGroup: "middle" },
-  { id: "amira",   name: "Amira",   gender: "female" as const, accent: "Turkish",           tag: "Smooth",       ageGroup: "young" },
-  { id: "noor",    name: "Noor",    gender: "female" as const, accent: "Urdu",              tag: "Gentle",       ageGroup: "middle" },
-  // Senior/Elder voices
-  { id: "harold",  name: "Harold",  gender: "male" as const,   accent: "British",           tag: "Wise",         ageGroup: "senior" },
-  { id: "margaret",name: "Margaret",gender: "female" as const, accent: "British",           tag: "Distinguished",ageGroup: "senior" },
-  { id: "james_sr",name: "James Sr",gender: "male" as const,   accent: "American",          tag: "Gravelly",     ageGroup: "senior" },
-  // Young voices
-  { id: "zoe",     name: "Zoe",     gender: "female" as const, accent: "American",          tag: "Fresh",        ageGroup: "young" },
-  { id: "ethan",   name: "Ethan",   gender: "male" as const,   accent: "American",          tag: "Upbeat",       ageGroup: "young" },
-];
+// ── Use the unified voice library from browser-tts ──────────────────────────
+const VOICE_LIBRARY = BROWSER_VOICE_LIBRARY.map(v => ({
+  id: v.id, name: v.name, gender: v.gender, accent: v.accent, tag: v.tag,
+  ageGroup: v.ageGroup, nativeLang: v.nativeLang,
+}));
 
 const ALL_ACCENTS = [...new Set(VOICE_LIBRARY.map(v => v.accent))].sort();
 const ALL_AGE_GROUPS = ["young", "middle", "senior"];
@@ -183,7 +141,7 @@ export default function VoiceStudioPro() {
 
   useEffect(() => { ensureVoicesLoaded(); }, []);
 
-  // ── Voice Preview with Pause ───────────────────────────────────────────────
+  // ── Voice Preview — uses persona's NATIVE language ─────────────────────────
   const previewVoice = useCallback((voiceId: string) => {
     // If this voice is currently previewing, toggle pause/stop
     if (previewingVoice === voiceId) {
@@ -199,37 +157,40 @@ export default function VoiceStudioPro() {
     stopSpeaking();
     setPreviewingVoice(voiceId);
     
-    const v = VOICE_LIBRARY.find(x => x.id === voiceId);
+    const persona = getPersona(voiceId);
+    const nativeLang = persona.nativeLang || "en";
+    const baseLang = nativeLang.split("-")[0];
     
-    // Get language-appropriate sample text
+    // Sample text in the persona's NATIVE language so voices sound authentic
     const sampleTexts: Record<string, string> = {
-      "ar": `مرحباً، أنا ${v?.name || "الصوت"}. سأساعدك في إنشاء محتوى صوتي احترافي بأعلى جودة.`,
-      "it": `Ciao, mi chiamo ${v?.name || "Voice"}. Sono qui per aiutarti a creare contenuti vocali professionali.`,
-      "fr": `Bonjour, je m'appelle ${v?.name || "Voice"}. Je suis ici pour vous aider à créer du contenu vocal professionnel.`,
-      "de": `Hallo, ich bin ${v?.name || "Voice"}. Ich helfe Ihnen, professionelle Sprachinhalte zu erstellen.`,
-      "es": `Hola, soy ${v?.name || "Voice"}. Estoy aquí para ayudarte a crear contenido de voz profesional.`,
-      "ja": `こんにちは、${v?.name || "Voice"}です。プロフェッショナルな音声コンテンツの作成をお手伝いします。`,
-      "ko": `안녕하세요, ${v?.name || "Voice"}입니다. 전문적인 음성 콘텐츠 제작을 도와드리겠습니다.`,
-      "zh": `你好，我是${v?.name || "Voice"}。我来帮助您创建专业的语音内容。`,
-      "ru": `Здравствуйте, я ${v?.name || "Voice"}. Я помогу вам создать профессиональный голосовой контент.`,
-      "pt": `Olá, eu sou ${v?.name || "Voice"}. Estou aqui para ajudá-lo a criar conteúdo de voz profissional.`,
-      "hi": `नमस्ते, मैं ${v?.name || "Voice"} हूं। मैं आपको पेशेवर वॉइस कंटेंट बनाने में मदद करूंगा।`,
-      "tr": `Merhaba, ben ${v?.name || "Voice"}. Size profesyonel ses içeriği oluşturmanızda yardımcı olacağım.`,
+      "ar": `مرحباً، أنا ${persona.name}. يسعدني مساعدتك في إنشاء محتوى صوتي احترافي عالي الجودة يناسب مشاريعك.`,
+      "it": `Ciao, mi chiamo ${persona.name}. Sono qui per aiutarti a creare contenuti vocali professionali di altissima qualità.`,
+      "fr": `Bonjour, je m'appelle ${persona.name}. Je suis ici pour vous aider à créer du contenu vocal professionnel de haute qualité.`,
+      "de": `Hallo, ich bin ${persona.name}. Ich helfe Ihnen dabei, professionelle und hochwertige Sprachinhalte zu erstellen.`,
+      "es": `Hola, soy ${persona.name}. Estoy aquí para ayudarte a crear contenido de voz profesional de alta calidad.`,
+      "ja": `こんにちは、${persona.name}です。高品質なプロフェッショナル音声コンテンツの作成をお手伝いいたします。`,
+      "ko": `안녕하세요, ${persona.name}입니다. 고품질 전문 음성 콘텐츠 제작을 도와드리겠습니다.`,
+      "zh": `你好，我是${persona.name}。我将帮助您创建高质量的专业语音内容。`,
+      "ru": `Здравствуйте, я ${persona.name}. Я помогу вам создать профессиональный голосовой контент высочайшего качества.`,
+      "pt": `Olá, eu sou ${persona.name}. Estou aqui para ajudá-lo a criar conteúdo de voz profissional de alta qualidade.`,
+      "hi": `नमस्ते, मैं ${persona.name} हूं। मैं आपको उच्च गुणवत्ता वाले पेशेवर वॉइस कंटेंट बनाने में मदद करूंगा।`,
+      "tr": `Merhaba, ben ${persona.name}. Size yüksek kaliteli profesyonel ses içeriği oluşturmanızda yardımcı olacağım.`,
+      "ur": `السلام علیکم، میرا نام ${persona.name} ہے۔ میں آپ کو پیشہ ورانہ وائس مواد بنانے میں مدد کروں گا۔`,
     };
     
-    const baseLang = language.split("-")[0];
     const sampleText = sampleTexts[baseLang] || 
-      `Hello, my name is ${v?.name || "Voice"}. I'm here to help you create professional voiceover content with natural, expressive delivery.`;
+      `Hello, my name is ${persona.name}. I'm here to help you create professional voiceover content with natural, expressive delivery.`;
     
+    // Use the persona's native language for preview — NOT the output language
     speak({
       text: sampleText,
       voiceId,
-      lang: language,
+      lang: nativeLang,
       rate: speed,
       onEnd: () => setPreviewingVoice(null),
       onError: () => setPreviewingVoice(null),
     });
-  }, [previewingVoice, language, speed]);
+  }, [previewingVoice, speed]);
 
   // Pause current preview
   const pausePreview = useCallback(() => {
