@@ -226,10 +226,9 @@ export function useProjects() {
 export function useProjectsListing() {
   return useQuery({
     queryKey: ["projects-listing"],
-    staleTime: 10 * 60 * 1000,  // 10 minutes — data stays fresh, no refetch on navigation
-    gcTime: 30 * 60 * 1000,     // 30 minutes — keep in cache
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
     queryFn: async () => {
-      // Select only the columns needed for listing cards — much faster than select(*)
       const LISTING_COLUMNS = `
         id, name, slug, description, location, price_from, price_to,
         bedrooms_min, bedrooms_max, size_min, size_max,
@@ -246,30 +245,36 @@ export function useProjectsListing() {
         community:communities(id, name, slug)
       `;
 
-      // Supabase limits to 1000 rows per query, so we paginate
       const PAGE_SIZE = 1000;
-      let allData: any[] = [];
-      let offset = 0;
-      let hasMore = true;
-      
-      while (hasMore) {
-        const { data, error } = await supabase
-          .from("projects")
-          .select(LISTING_COLUMNS)
-          .order("created_at", { ascending: false })
-          .range(offset, offset + PAGE_SIZE - 1);
-        
-        if (error) throw error;
-        if (!data || data.length === 0) {
-          hasMore = false;
-        } else {
-          allData = [...allData, ...data];
-          offset += PAGE_SIZE;
-          if (data.length < PAGE_SIZE) hasMore = false;
-        }
-      }
-      
-      return allData as UnifiedProject[];
+
+      const { count, error: countError } = await supabase
+        .from("projects")
+        .select("id", { count: "exact", head: true });
+
+      if (countError) throw countError;
+
+      const totalRows = count ?? 0;
+      if (totalRows === 0) return [] as UnifiedProject[];
+
+      const pageOffsets = Array.from(
+        { length: Math.ceil(totalRows / PAGE_SIZE) },
+        (_, idx) => idx * PAGE_SIZE
+      );
+
+      const pageResults = await Promise.all(
+        pageOffsets.map(async (offset) => {
+          const { data, error } = await supabase
+            .from("projects")
+            .select(LISTING_COLUMNS)
+            .order("created_at", { ascending: false })
+            .range(offset, offset + PAGE_SIZE - 1);
+
+          if (error) throw error;
+          return data ?? [];
+        })
+      );
+
+      return pageResults.flat() as unknown as UnifiedProject[];
     },
   });
 }
