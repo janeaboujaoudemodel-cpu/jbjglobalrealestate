@@ -1927,22 +1927,29 @@ const MarketReport = () => {
       return true;
     };
 
-    // Try a new tab first (best UX for Print → Save as PDF), fallback to in-page viewer if blocked
-    const targetWindow = existingWindow ?? window.open("", "_blank");
-    if (!targetWindow) return openInApp();
+    // Create a Blob URL so the tab shows the book title (not about:blank)
+    const blob = new Blob([html], { type: "text/html;charset=utf-8" });
+    const blobUrl = URL.createObjectURL(blob);
 
-    try {
-      targetWindow.document.open();
-      targetWindow.document.write(html);
-      targetWindow.document.close();
-    } catch (e) {
-      console.error("book render error:", e);
+    // Also trigger a real Chrome download so it appears in the download bar
+    const downloadAnchor = document.createElement("a");
+    downloadAnchor.href = blobUrl;
+    downloadAnchor.download = "UAE-Real-Estate-Market-Intelligence-2026-JBJ-Global.html";
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    document.body.removeChild(downloadAnchor);
+
+    // Open in new tab for immediate viewing / Print-to-PDF
+    if (existingWindow) {
       try {
-        targetWindow.close();
+        existingWindow.location.href = blobUrl;
       } catch {
-        // ignore
+        try { existingWindow.close(); } catch { /* ignore */ }
+        window.open(blobUrl, "_blank");
       }
-      return openInApp();
+    } else {
+      const targetWindow = window.open(blobUrl, "_blank");
+      if (!targetWindow) return openInApp();
     }
 
     setDownloaded(true);
@@ -1957,8 +1964,7 @@ const MarketReport = () => {
       url.searchParams.delete("auto-download");
       window.history.replaceState({}, "", url.pathname);
       const timer = setTimeout(() => {
-        const bookWindow = window.open("", "_blank");
-        downloadBook(bookWindow).then((opened) => {
+        downloadBook().then((opened) => {
           if (opened) {
             toast.success("Your book is ready!");
           } else {
@@ -1973,8 +1979,7 @@ const MarketReport = () => {
   const handleSubmit = async () => {
     if (!isValid || isSubmitting) return;
 
-    // Open immediately on user click to avoid pop-up blockers (fallback handled inside downloadBook)
-    const bookWindow = window.open("", "_blank");
+    // downloadBook now creates its own Blob URL tab (no more about:blank)
 
     setIsSubmitting(true);
     setShowThankYou(true);
@@ -2008,7 +2013,7 @@ const MarketReport = () => {
         })
         .catch(console.error);
 
-      const opened = await downloadBook(bookWindow);
+      const opened = await downloadBook();
       if (opened) {
         trackEvent("book_download", { form_source: "new_lead", page: "/market-report" });
         toast.success("Your book is ready!");
@@ -2022,11 +2027,6 @@ const MarketReport = () => {
     } catch (error) {
       console.error("Error during submission:", error);
       toast.error("Something went wrong. Please try again.");
-      try {
-        bookWindow?.close();
-      } catch {
-        // ignore
-      }
     } finally {
       setShowThankYou(false);
       setIsSubmitting(false);
@@ -2035,8 +2035,7 @@ const MarketReport = () => {
 
   // Direct download for returning users
   const handleDirectDownload = async () => {
-    const bookWindow = window.open("", "_blank");
-    const opened = await downloadBook(bookWindow);
+    const opened = await downloadBook();
     if (opened) {
       trackEvent("book_download", { form_source: "returning_lead", page: "/market-report" });
       // Notify owner of returning user re-download in the background
