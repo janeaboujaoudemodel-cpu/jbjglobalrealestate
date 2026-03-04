@@ -1,0 +1,30 @@
+-- Restore all Sunset Bay Grand floor plan layouts as project_documents
+INSERT INTO project_documents (project_id, document_type, file_url, file_name, display_order, data_source)
+VALUES
+  ('f0483cf4-716d-4d96-9bd9-15b04c61e1fd', 'floor_plan', 'https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/project-media/projects/3003/layout-0.webp', 'Floor Plan 1', 0, 'manual'),
+  ('f0483cf4-716d-4d96-9bd9-15b04c61e1fd', 'floor_plan', 'https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/project-media/projects/3003/layout-1.webp', 'Floor Plan 2', 1, 'manual'),
+  ('f0483cf4-716d-4d96-9bd9-15b04c61e1fd', 'floor_plan', 'https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/project-media/projects/3003/layout-2.webp', 'Floor Plan 3', 2, 'manual'),
+  ('f0483cf4-716d-4d96-9bd9-15b04c61e1fd', 'floor_plan', 'https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/project-media/projects/3003/layout-3.webp', 'Floor Plan 4', 3, 'manual'),
+  ('f0483cf4-716d-4d96-9bd9-15b04c61e1fd', 'floor_plan', 'https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/project-media/projects/3003/layout-4.webp', 'Floor Plan 5', 4, 'manual'),
+  ('f0483cf4-716d-4d96-9bd9-15b04c61e1fd', 'floor_plan', 'https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/project-media/projects/3003/layout-5.webp', 'Floor Plan 6', 5, 'manual'),
+  ('f0483cf4-716d-4d96-9bd9-15b04c61e1fd', 'floor_plan', 'https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/project-media/projects/3003/layout-6.webp', 'Floor Plan 7', 6, 'manual'),
+  ('f0483cf4-716d-4d96-9bd9-15b04c61e1fd', 'floor_plan', 'https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/project-media/projects/3003/layout-7.webp', 'Floor Plan 8', 7, 'manual'),
+  ('f0483cf4-716d-4d96-9bd9-15b04c61e1fd', 'floor_plan', 'https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/project-media/projects/3003/layout-8.webp', 'Floor Plan 9', 8, 'manual'),
+  ('f0483cf4-716d-4d96-9bd9-15b04c61e1fd', 'floor_plan', 'https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/project-media/projects/3003/layout-9.webp', 'Floor Plan 10', 9, 'manual'),
+  ('f0483cf4-716d-4d96-9bd9-15b04c61e1fd', 'floor_plan', 'https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/project-media/projects/3003/layout-10.webp', 'Floor Plan 11', 10, 'manual'),
+  ('f0483cf4-716d-4d96-9bd9-15b04c61e1fd', 'floor_plan', 'https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/project-media/projects/3003/layout-11.webp', 'Floor Plan 12', 11, 'manual'),
+  ('f0483cf4-716d-4d96-9bd9-15b04c61e1fd', 'floor_plan', 'https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/project-media/projects/3003/layout-12.webp', 'Floor Plan 13', 12, 'manual'),
+  ('f0483cf4-716d-4d96-9bd9-15b04c61e1fd', 'floor_plan', 'https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/project-media/projects/3003/layout-13.webp', 'Floor Plan 14', 13, 'manual'),
+  ('f0483cf4-716d-4d96-9bd9-15b04c61e1fd', 'floor_plan', 'https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/project-media/projects/3003/layout-14.webp', 'Floor Plan 15', 14, 'manual'),
+  ('f0483cf4-716d-4d96-9bd9-15b04c61e1fd', 'floor_plan', 'https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/project-media/projects/3003/layout-15.webp', 'Floor Plan 16', 15, 'manual'),
+  ('f0483cf4-716d-4d96-9bd9-15b04c61e1fd', 'floor_plan', 'https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/project-media/projects/3003/layout-16.webp', 'Floor Plan 17', 16, 'manual'),
+  ('f0483cf4-716d-4d96-9bd9-15b04c61e1fd', 'floor_plan', 'https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/project-media/projects/3003/layout-17.webp', 'Floor Plan 18', 17, 'manual'),
+  ('f0483cf4-716d-4d96-9bd9-15b04c61e1fd', 'floor_plan', 'https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/project-media/projects/3003/layout-18.webp', 'Floor Plan 19', 18, 'manual'),
+  ('f0483cf4-716d-4d96-9bd9-15b04c61e1fd', 'floor_plan', 'https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/project-media/projects/3003/layout-19.webp', 'Floor Plan 20', 19, 'manual'),
+  ('f0483cf4-716d-4d96-9bd9-15b04c61e1fd', 'floor_plan', 'https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/project-media/projects/3003/layout-20.webp', 'Floor Plan 21', 20, 'manual'),
+  ('f0483cf4-716d-4d96-9bd9-15b04c61e1fd', 'floor_plan', 'https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/project-media/projects/3003/layout-21.webp', 'Floor Plan 22', 21, 'manual'),
+  ('f0483cf4-716d-4d96-9bd9-15b04c61e1fd', 'floor_plan', 'https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/project-media/projects/3003/layout-22.webp', 'Floor Plan 23', 22, 'manual'),
+  ('f0483cf4-716d-4d96-9bd9-15b04c61e1fd', 'floor_plan', 'https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/project-media/projects/3003/layout-23.webp', 'Floor Plan 24', 23, 'manual'),
+  ('f0483cf4-716d-4d96-9bd9-15b04c61e1fd', 'floor_plan', 'https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/project-media/projects/3003/layout-24.webp', 'Floor Plan 25', 24, 'manual'),
+  ('f0483cf4-716d-4d96-9bd9-15b04c61e1fd', 'floor_plan', 'https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/project-media/projects/3003/layout-25.webp', 'Floor Plan 26', 25, 'manual')
+ON CONFLICT DO NOTHING;
