@@ -2009,29 +2009,73 @@ const MarketReport = () => {
       return true;
     };
 
-    // Create a Blob URL so the tab shows the book title (not about:blank)
-    const blob = new Blob([html], { type: "text/html;charset=utf-8" });
-    const blobUrl = URL.createObjectURL(blob);
+    // Generate a real PDF so it opens in Preview/Finder natively (not browser)
+    const generatePDF = async () => {
+      const { default: html2canvas } = await import("html2canvas");
+      const { default: jsPDF } = await import("jspdf");
 
-    // Also trigger a real Chrome download so it appears in the download bar
-    const downloadAnchor = document.createElement("a");
-    downloadAnchor.href = blobUrl;
-    downloadAnchor.download = "UAE-Real-Estate-Market-Intelligence-2026-JBJ-Global.html";
-    document.body.appendChild(downloadAnchor);
-    downloadAnchor.click();
-    document.body.removeChild(downloadAnchor);
+      // Render the HTML into a hidden container
+      const container = document.createElement("div");
+      container.style.cssText = "position:fixed;left:-9999px;top:0;width:794px;"; // A4 width in px at 96dpi
+      container.innerHTML = html;
+      document.body.appendChild(container);
 
-    // Open in new tab for immediate viewing / Print-to-PDF
-    if (existingWindow) {
-      try {
-        existingWindow.location.href = blobUrl;
-      } catch {
-        try { existingWindow.close(); } catch { /* ignore */ }
-        window.open(blobUrl, "_blank");
+      // Find all pages
+      const pages = container.querySelectorAll(".page");
+      const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+      const pdfWidth = 210; // A4 mm
+      const pdfHeight = 297;
+
+      for (let i = 0; i < pages.length; i++) {
+        const page = pages[i] as HTMLElement;
+        try {
+          const canvas = await html2canvas(page, {
+            scale: 2,
+            useCORS: true,
+            allowTaint: true,
+            logging: false,
+            width: 794,
+            windowWidth: 794,
+          });
+          const imgData = canvas.toDataURL("image/jpeg", 0.92);
+          const imgHeight = (canvas.height * pdfWidth) / canvas.width;
+
+          if (i > 0) pdf.addPage();
+          pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, Math.min(imgHeight, pdfHeight));
+        } catch (err) {
+          console.warn("PDF page render error:", err);
+          if (i > 0) pdf.addPage();
+        }
       }
-    } else {
-      const targetWindow = window.open(blobUrl, "_blank");
-      if (!targetWindow) return openInApp();
+
+      document.body.removeChild(container);
+
+      // Save as real PDF file — opens in Preview/Finder on Mac
+      pdf.save("UAE-Real-Estate-Market-Intelligence-2026-JBJ-Global.pdf");
+    };
+
+    toast.info("Generating PDF… this may take a moment");
+
+    try {
+      await generatePDF();
+      toast.success("PDF downloaded successfully!");
+    } catch (err) {
+      console.error("PDF generation failed, falling back to HTML:", err);
+      // Fallback: download as HTML
+      const blob = new Blob([html], { type: "text/html;charset=utf-8" });
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = "UAE-Real-Estate-Market-Intelligence-2026-JBJ-Global.html";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(blobUrl);
+    }
+
+    // Close any pre-opened window
+    if (existingWindow) {
+      try { existingWindow.close(); } catch { /* ignore */ }
     }
 
     setDownloaded(true);
