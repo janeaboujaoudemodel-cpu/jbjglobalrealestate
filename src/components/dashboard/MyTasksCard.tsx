@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { useNavigate } from "react-router-dom";
 
 interface Task {
   id: string;
@@ -34,6 +35,7 @@ const PRIORITY_STYLES: Record<string, string> = {
 export default function MyTasksCard() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const [showAddForm, setShowAddForm] = useState(false);
   const [newTitle, setNewTitle] = useState("");
   const [filter, setFilter] = useState<"all" | "pending" | "completed">("all");
@@ -196,6 +198,22 @@ export default function MyTasksCard() {
   const exitSelection = () => {
     setSelectionMode(false);
     setSelectedIds(new Set());
+  };
+  const getTaskRoute = (task: Task): string | null => {
+    const cat = (task.category || "").toLowerCase();
+    const titleLower = (task.title || "").toLowerCase();
+    if (cat === "cv" || cat === "career" || cat === "hr" || titleLower.includes("review cv") || titleLower.includes("cv ")) {
+      return "/hr-dashboard?tab=cv-center";
+    }
+    if (cat === "support" || cat === "ticket") return "/my-tickets";
+    if (cat === "listing" || cat === "listings") return "/listing-portal/my-listings";
+    return null;
+  };
+
+  const handleTaskClick = (task: Task) => {
+    if (selectionMode) return;
+    const route = getTaskRoute(task);
+    if (route) navigate(route);
   };
 
 
@@ -380,10 +398,13 @@ export default function MyTasksCard() {
               return (
                 <div
                   key={task.id}
-                  onClick={(e) => { if (selectionMode) toggleSelect(task.id, e); }}
+                  onClick={(e) => { 
+                    if (selectionMode) { toggleSelect(task.id, e); }
+                    else { handleTaskClick(task); }
+                  }}
                   className={cn(
                     "flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all group",
-                    selectionMode && "cursor-pointer",
+                    (selectionMode || getTaskRoute(task)) && "cursor-pointer",
                     isSelected && "bg-gold/10 ring-1 ring-gold/40",
                     isCompleted && !isSelected ? "opacity-60" : "hover:bg-gold/5"
                   )}
@@ -405,7 +426,7 @@ export default function MyTasksCard() {
                   ) : (
                     <button
                       type="button"
-                      onClick={() => toggleComplete.mutate({ id: task.id, completed: !isCompleted })}
+                      onClick={(e) => { e.stopPropagation(); toggleComplete.mutate({ id: task.id, completed: !isCompleted }); }}
                       className={cn(
                         "w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-colors",
                         isCompleted
@@ -446,10 +467,14 @@ export default function MyTasksCard() {
 
                   {/* Actions - only show outside selection mode */}
                   {!selectionMode && (
-                    <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      {getTaskRoute(task) && (
+                        <ChevronRight className="w-4 h-4 text-gold/60 group-hover:text-gold transition-colors" />
+                      )}
+                      <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
                       {isCompleted && (
                         <button
-                          onClick={() => toggleComplete.mutate({ id: task.id, completed: false })}
+                          onClick={(e) => { e.stopPropagation(); toggleComplete.mutate({ id: task.id, completed: false }); }}
                           className="w-8 h-8 rounded-lg flex items-center justify-center bg-gold/10 hover:bg-gold/20 text-gold border border-gold/30 transition-colors"
                           title="Reopen task"
                         >
@@ -457,12 +482,13 @@ export default function MyTasksCard() {
                         </button>
                       )}
                       <button
-                        onClick={() => deleteTask.mutate(task.id)}
+                        onClick={(e) => { e.stopPropagation(); deleteTask.mutate(task.id); }}
                         className="w-8 h-8 rounded-lg flex items-center justify-center bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/30 transition-colors"
                         title="Delete task"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
+                      </div>
                     </div>
                   )}
                 </div>
