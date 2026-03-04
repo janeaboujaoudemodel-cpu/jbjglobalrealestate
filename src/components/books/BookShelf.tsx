@@ -58,11 +58,7 @@ export function BookShelf({ books, title = 'Books, Guides & Intelligence' }: Boo
                     className="absolute top-0 left-0 w-3 h-full bg-gradient-to-r from-zinc-800 to-zinc-700 origin-left"
                     style={{ transform: 'rotateY(-90deg) translateX(-6px)' }}
                   />
-                  {/* 3D Pages edge */}
-                  <div
-                    className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-b from-[#f5f0e0] to-[#e8dcc8]"
-                    style={{ transform: 'rotateX(90deg) translateY(4px)', transformOrigin: 'bottom' }}
-                  />
+                  {/* 3D pages edge removed to prevent white divider cutting the cover art */}
                 </div>
               </div>
               <p className="text-xs text-black/70 text-center font-medium group-hover:text-gold transition-colors leading-tight">

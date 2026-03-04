@@ -110,16 +110,8 @@ export default function MarketReportHeroBook({ className }: MarketReportHeroBook
               </div>
             </div>
 
-            {/* Book Pages Effect */}
-            <div className="absolute right-0 top-0 bottom-0 w-3">
-              <div
-                className="h-full bg-gradient-to-l from-zinc-100/10 via-zinc-200/15 to-transparent"
-                style={{ clipPath: "polygon(100% 0, 100% 100%, 0 95%, 0 5%)" }}
-              />
-              <div className="absolute right-0 top-[5%] bottom-[5%] w-[2px] bg-zinc-300/20" />
-              <div className="absolute right-[3px] top-[6%] bottom-[6%] w-[1px] bg-zinc-300/15" />
-              <div className="absolute right-[5px] top-[7%] bottom-[7%] w-[1px] bg-zinc-300/10" />
-            </div>
+            {/* Page-edge bright divider removed to keep skyline cover clean */}
+            <div className="absolute right-0 top-0 bottom-0 w-[2px] bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
           </div>
 
           {/* Shadow */}

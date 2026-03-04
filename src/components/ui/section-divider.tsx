@@ -26,10 +26,10 @@ export function SectionDivider({ className, fullWidth = false, bg, variant = "de
         ? "w-full max-w-[1600px] mx-auto px-6 md:px-12 lg:px-16" 
         : "container mx-auto px-4"
       }>
-        <div className="flex items-center justify-center gap-6">
-          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
-          <Sparkles className="w-4 h-4 text-gold/50" />
-          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+        <div className="flex items-center justify-center gap-4 md:gap-6">
+          <div className="h-[2px] min-w-[72px] flex-1 bg-gradient-to-r from-transparent via-gold/80 to-transparent shadow-[0_0_10px_hsl(var(--gold)/0.35)]" />
+          <Sparkles className="w-4 h-4 text-gold" />
+          <div className="h-[2px] min-w-[72px] flex-1 bg-gradient-to-r from-transparent via-gold/80 to-transparent shadow-[0_0_10px_hsl(var(--gold)/0.35)]" />
         </div>
       </div>
     </div>

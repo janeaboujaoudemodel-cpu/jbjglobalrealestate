@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Download } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { companyProfileBook } from '@/data/bookCollections';
+import { BookCoverFace } from '@/components/books/BookCoverFace';
 
 interface CompanyProfileBrochureProps {
   /** Show download overlay on hover (for Company Profile page) */
@@ -58,7 +59,7 @@ export function CompanyProfileBrochure({
           >
             <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-black/40 via-black/20 to-transparent z-10" />
             <div className="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-white/15 to-transparent z-10" />
-            <img src={companyProfileBook.cover} alt="Company Profile" className="w-full h-full object-cover" />
+            <BookCoverFace book={companyProfileBook} bare />
           </div>
 
           {/* 3D Spine */}
@@ -66,11 +67,7 @@ export function CompanyProfileBrochure({
             className="absolute top-0 left-0 w-3 h-full bg-gradient-to-r from-zinc-800 to-zinc-700 origin-left"
             style={{ transform: 'rotateY(-90deg) translateX(-6px)' }}
           />
-          {/* 3D Pages edge */}
-          <div
-            className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-b from-[#f5f0e0] to-[#e8dcc8]"
-            style={{ transform: 'rotateX(90deg) translateY(4px)', transformOrigin: 'bottom' }}
-          />
+          {/* 3D pages edge removed to prevent white divider at book bottom */}
         </div>
 
         {/* Download overlay */}
