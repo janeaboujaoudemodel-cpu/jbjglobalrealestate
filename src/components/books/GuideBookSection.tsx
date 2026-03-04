@@ -63,11 +63,7 @@ export function GuideBookSection({ book, sectionIds }: GuideBookSectionProps) {
                   className="absolute top-0 left-0 w-4 h-full bg-gradient-to-r from-zinc-800 to-zinc-700 origin-left"
                   style={{ transform: 'rotateY(-90deg) translateX(-8px)' }}
                 />
-                {/* Book pages (3D bottom edge) */}
-                <div
-                  className="absolute bottom-0 left-0 right-0 h-3 bg-gradient-to-b from-[#f5f0e0] to-[#e8dcc8]"
-                  style={{ transform: 'rotateX(90deg) translateY(6px)', transformOrigin: 'bottom' }}
-                />
+                {/* 3D pages edge removed to avoid white cut line across book art */}
               </div>
             </div>
           </motion.div>
