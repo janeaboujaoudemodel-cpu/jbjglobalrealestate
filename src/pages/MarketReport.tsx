@@ -613,13 +613,13 @@ const MarketReport = () => {
   
    /* Founder image */
     .founder-image {
-     width: 200px;
-     height: 200px;
-     border-radius: 50%;
-     object-fit: cover;
-     object-position: center 20%;
-     transform: scaleX(1.15);
-     border: 4px solid #A8925A;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      object-fit: contain;
+      object-position: center top;
+      transform: scaleX(1.08);
+      border: 4px solid #A8925A;
      margin: 0 auto 24px;
      display: block;
      background: radial-gradient(circle at top, #F5EBD7 0%, #EFE0C2 100%);
@@ -2557,9 +2557,9 @@ const MarketReport = () => {
                   alt="Jane Bou Jaoude, Founder & CEO of JBJ GLOBAL REAL ESTATE"
                   className="w-full h-full"
                   style={{
-                    objectFit: 'cover',
-                    objectPosition: 'center 20%',
-                    transform: 'scaleX(1.15)',
+                    objectFit: 'contain',
+                    objectPosition: 'center top',
+                    transform: 'scaleX(1.08)',
                   }}
                 />
               </div>
