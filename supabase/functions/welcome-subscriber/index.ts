@@ -38,12 +38,12 @@ const handler = async (req: Request): Promise<Response> => {
 <tr><td style="padding:20px;">
 <p style="color:#C8A766;margin:0 0 12px;font-size:12px;text-transform:uppercase;letter-spacing:1.5px;font-weight:bold;">What You Will Receive</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-<tr><td style="padding:6px 0;font-size:14px;color:#333;">&#10022; New project launches — off-plan &amp; ready</td></tr>
-<tr><td style="padding:6px 0;font-size:14px;color:#333;">&#10022; Market intelligence highlights &amp; reports</td></tr>
-<tr><td style="padding:6px 0;font-size:14px;color:#333;">&#10022; Exclusive early access &amp; priority viewing invitations</td></tr>
-<tr><td style="padding:6px 0;font-size:14px;color:#333;">&#10022; Price drops, limited offers &amp; developer promotions</td></tr>
-<tr><td style="padding:6px 0;font-size:14px;color:#333;">&#10022; AI tools hub updates, calculators &amp; comparisons</td></tr>
-<tr><td style="padding:6px 0;font-size:14px;color:#333;">&#10022; Area guides &amp; investment insights</td></tr>
+<tr><td style="padding:6px 0;font-size:14px;color:#333;"><span style="color:#C8A766;font-size:16px;">&#9733;</span> New project launches — off-plan &amp; ready</td></tr>
+<tr><td style="padding:6px 0;font-size:14px;color:#333;"><span style="color:#C8A766;font-size:16px;">&#9733;</span> Market intelligence highlights &amp; reports</td></tr>
+<tr><td style="padding:6px 0;font-size:14px;color:#333;"><span style="color:#C8A766;font-size:16px;">&#9733;</span> Exclusive early access &amp; priority viewing invitations</td></tr>
+<tr><td style="padding:6px 0;font-size:14px;color:#333;"><span style="color:#C8A766;font-size:16px;">&#9733;</span> Price drops, limited offers &amp; developer promotions</td></tr>
+<tr><td style="padding:6px 0;font-size:14px;color:#333;"><span style="color:#C8A766;font-size:16px;">&#9733;</span> AI tools hub updates, calculators &amp; comparisons</td></tr>
+<tr><td style="padding:6px 0;font-size:14px;color:#333;"><span style="color:#C8A766;font-size:16px;">&#9733;</span> Area guides &amp; investment insights</td></tr>
 </table>
 </td></tr></table>
 
@@ -70,12 +70,12 @@ ${arabicDivider()}
 <tr><td style="padding:20px;">
 <p style="color:#C8A766;margin:0 0 12px;font-size:12px;text-transform:uppercase;letter-spacing:1.5px;font-weight:bold;">ما ستتلقاه</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-<tr><td style="padding:6px 0;font-size:14px;color:#333;text-align:right;">&#10022; إطلاقات المشاريع الجديدة — على الخارطة والجاهزة</td></tr>
-<tr><td style="padding:6px 0;font-size:14px;color:#333;text-align:right;">&#10022; أبرز تقارير ذكاء السوق</td></tr>
-<tr><td style="padding:6px 0;font-size:14px;color:#333;text-align:right;">&#10022; وصول حصري مبكر ودعوات معاينة ذات أولوية</td></tr>
-<tr><td style="padding:6px 0;font-size:14px;color:#333;text-align:right;">&#10022; تخفيضات أسعار وعروض محدودة وعروض المطورين</td></tr>
-<tr><td style="padding:6px 0;font-size:14px;color:#333;text-align:right;">&#10022; تحديثات أدوات الذكاء الاصطناعي والحاسبات والمقارنات</td></tr>
-<tr><td style="padding:6px 0;font-size:14px;color:#333;text-align:right;">&#10022; أدلة المناطق ورؤى الاستثمار</td></tr>
+<tr><td style="padding:6px 0;font-size:14px;color:#333;text-align:right;"><span style="color:#C8A766;font-size:16px;">&#9733;</span> إطلاقات المشاريع الجديدة — على الخارطة والجاهزة</td></tr>
+<tr><td style="padding:6px 0;font-size:14px;color:#333;text-align:right;"><span style="color:#C8A766;font-size:16px;">&#9733;</span> أبرز تقارير ذكاء السوق</td></tr>
+<tr><td style="padding:6px 0;font-size:14px;color:#333;text-align:right;"><span style="color:#C8A766;font-size:16px;">&#9733;</span> وصول حصري مبكر ودعوات معاينة ذات أولوية</td></tr>
+<tr><td style="padding:6px 0;font-size:14px;color:#333;text-align:right;"><span style="color:#C8A766;font-size:16px;">&#9733;</span> تخفيضات أسعار وعروض محدودة وعروض المطورين</td></tr>
+<tr><td style="padding:6px 0;font-size:14px;color:#333;text-align:right;"><span style="color:#C8A766;font-size:16px;">&#9733;</span> تحديثات أدوات الذكاء الاصطناعي والحاسبات والمقارنات</td></tr>
+<tr><td style="padding:6px 0;font-size:14px;color:#333;text-align:right;"><span style="color:#C8A766;font-size:16px;">&#9733;</span> أدلة المناطق ورؤى الاستثمار</td></tr>
 </table>
 </td></tr></table>
 

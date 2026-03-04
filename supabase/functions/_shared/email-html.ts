@@ -85,24 +85,24 @@ export function inquiryBox(contextLabel: string): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:20px 0 18px;"><tr><td style="padding:18px 20px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:18px;text-align:center;"><p style="margin:0;font-size:14px;color:#1f2937;line-height:1.7;">For inquiries about your ${contextLabel}, contact us at<br/><a href="mailto:CONTACT@JBJ.AE" style="color:#111827;font-weight:700;text-decoration:underline;">CONTACT@JBJ.AE</a></p></td></tr></table>`;
 }
 
-// ─── Ticket Support (white headset inside red circle — INLINE SVG) ───
+// ─── Ticket Support (white headset inside RED ROUNDED SQUARE — INLINE SVG) ───
 export function ticketSupportEmbed(): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:16px 0 24px;"><tr><td style="padding:24px 20px;background:linear-gradient(135deg,#fff5f5,#ffe9e9);border:1px solid #ef4444;border-radius:18px;text-align:center;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:#dc2626;border-radius:52px;text-align:center;vertical-align:middle;">${SVG.headsetWhite}</td></tr></table>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:#dc2626;border-radius:12px;text-align:center;vertical-align:middle;">${SVG.headsetWhite}</td></tr></table>
 <p style="margin:0 0 4px;font-size:11px;font-weight:700;color:#dc2626;text-transform:uppercase;letter-spacing:2px;">24/7 SUPPORT</p>
 <p style="margin:0 0 6px;font-size:16px;font-weight:700;color:#7f1d1d;">Need Help? Open a Support Ticket</p>
 <p style="margin:0 0 14px;font-size:13px;color:#991b1b;">Our team typically responds within 24 hours</p>
-<a href="${SITE_URL}/contact-support" style="display:inline-block;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;text-decoration:none;padding:12px 30px;border-radius:18px;font-weight:700;font-size:13px;">Submit a Ticket</a>
+<a href="${SITE_URL}/contact-support" style="display:inline-block;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;text-decoration:none;padding:12px 24px;border-radius:12px;font-weight:700;font-size:13px;">Submit a Ticket</a>
 </td></tr></table>`;
 }
 
 export function ticketSupportEmbedAr(): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:16px 0 24px;direction:rtl;"><tr><td style="padding:24px 20px;background:linear-gradient(135deg,#fff5f5,#ffe9e9);border:1px solid #ef4444;border-radius:18px;text-align:center;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:#dc2626;border-radius:52px;text-align:center;vertical-align:middle;">${SVG.headsetWhite}</td></tr></table>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:#dc2626;border-radius:12px;text-align:center;vertical-align:middle;">${SVG.headsetWhite}</td></tr></table>
 <p style="margin:0 0 4px;font-size:11px;font-weight:700;color:#dc2626;letter-spacing:2px;">دعم على مدار الساعة</p>
 <p style="margin:0 0 6px;font-size:16px;font-weight:700;color:#7f1d1d;">هل تحتاج مساعدة؟ افتح تذكرة دعم</p>
 <p style="margin:0 0 14px;font-size:13px;color:#991b1b;">فريقنا يرد عادةً خلال ٢٤ ساعة</p>
-<a href="${SITE_URL}/contact-support" style="display:inline-block;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;text-decoration:none;padding:12px 30px;border-radius:18px;font-weight:700;font-size:13px;">إرسال تذكرة</a>
+<a href="${SITE_URL}/contact-support" style="display:inline-block;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;text-decoration:none;padding:12px 24px;border-radius:12px;font-weight:700;font-size:13px;">إرسال تذكرة</a>
 </td></tr></table>`;
 }
 
@@ -123,7 +123,7 @@ export function recommendedActionsHtml(): string {
 function book3dCover(title: string, subtitle: string, href: string, imageUrl: string): string {
   return `<td width="50%" style="vertical-align:top;padding:6px;"><a href="${href}" style="display:block;text-decoration:none;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;"><tr><td style="padding:0;text-align:center;">
-<img src="${imageUrl}" alt="${title}" width="150" style="width:150px;height:180px;object-fit:cover;display:block;margin:0 auto;border-radius:12px;border:1px solid #C8A766;box-shadow:8px 8px 24px rgba(0,0,0,0.35);" />
+<img src="${imageUrl}" alt="${title}" width="150" style="width:150px;height:220px;object-fit:cover;display:block;margin:0 auto;border-radius:12px;border:1px solid #C8A766;box-shadow:8px 8px 24px rgba(0,0,0,0.35);" />
 <p style="margin:10px 0 2px;color:#1a1a1a;font-size:13px;font-weight:700;">${title}</p>
 <p style="margin:0;color:#8b7355;font-size:11px;letter-spacing:1px;text-transform:uppercase;">${subtitle}</p>
 </td></tr></table></a></td>`;
@@ -173,11 +173,15 @@ export function readyToGetStartedHtml(): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:18px 0 0;background:linear-gradient(135deg,#FDFBF7,#F5F0E6,#EDE4D3);border:1px solid #C8A766;border-radius:18px;"><tr><td style="padding:24px 18px;text-align:center;">
 <p style="font-size:24px;font-weight:800;margin:0 0 8px;letter-spacing:0.08em;text-transform:uppercase;color:#1a1a1a;">Ready to Get Started?</p>
 <p style="color:#666;font-size:14px;line-height:1.6;margin:0 0 18px;">Connect with our expert team for personalized guidance.</p>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 18px;max-width:520px;"><tr>
-<td width="33.33%" style="padding:5px;"><a href="https://api.whatsapp.com/send?phone=971565911000&text=Hello%20JBJ%20Global%20Real%20Estate" style="display:block;text-decoration:none;padding:14px 8px;background:#fff;border:1px solid #C8A766;border-radius:14px;"><p style="color:#25d366;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;margin:0 0 6px;font-weight:700;">WhatsApp</p><p style="color:#1a1a1a;font-size:12px;margin:0;font-weight:700;line-height:1.4;">+971 56 591 1000</p></a></td>
-<td width="33.33%" style="padding:5px;"><a href="tel:+971565911000" style="display:block;text-decoration:none;padding:14px 8px;background:#fff;border:1px solid #C8A766;border-radius:14px;"><p style="color:#3b82f6;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;margin:0 0 6px;font-weight:700;">Call Us</p><p style="color:#1a1a1a;font-size:12px;margin:0;font-weight:700;line-height:1.4;">+971 56 591 1000</p></a></td>
-<td width="33.33%" style="padding:5px;"><a href="mailto:CONTACT@JBJ.AE" style="display:block;text-decoration:none;padding:14px 8px;background:#fff;border:1px solid #C8A766;border-radius:14px;"><p style="color:#C8A766;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;margin:0 0 6px;font-weight:700;">Email</p><p style="color:#1a1a1a;font-size:12px;margin:0;font-weight:700;line-height:1.4;">CONTACT@JBJ.AE</p></a></td>
-</tr></table>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 8px;max-width:520px;">
+<tr>
+<td width="50%" style="padding:5px;"><a href="https://api.whatsapp.com/send?phone=971565911000&text=Hello%20JBJ%20Global%20Real%20Estate" style="display:block;text-decoration:none;padding:14px 8px;background:#fff;border:1px solid #C8A766;border-radius:14px;text-align:center;"><p style="color:#25d366;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;margin:0 0 6px;font-weight:700;">WhatsApp</p><p style="color:#1a1a1a;font-size:12px;margin:0;font-weight:700;line-height:1.4;">+971 56 591 1000</p></a></td>
+<td width="50%" style="padding:5px;"><a href="tel:+971565911000" style="display:block;text-decoration:none;padding:14px 8px;background:#fff;border:1px solid #C8A766;border-radius:14px;text-align:center;"><p style="color:#3b82f6;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;margin:0 0 6px;font-weight:700;">Call Us</p><p style="color:#1a1a1a;font-size:12px;margin:0;font-weight:700;line-height:1.4;">+971 56 591 1000</p></a></td>
+</tr>
+<tr>
+<td colspan="2" style="padding:5px;"><a href="mailto:CONTACT@JBJ.AE" style="display:block;text-decoration:none;padding:14px 8px;background:#fff;border:1px solid #C8A766;border-radius:14px;text-align:center;"><p style="color:#C8A766;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;margin:0 0 6px;font-weight:700;">Email</p><p style="color:#1a1a1a;font-size:12px;margin:0;font-weight:700;line-height:1.4;">CONTACT@JBJ.AE</p></a></td>
+</tr>
+</table>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="text-align:center;padding-top:4px;">
 <p style="font-size:15px;font-weight:800;letter-spacing:0.12em;margin:0 0 8px;color:#1a1a1a;text-transform:uppercase;">Stay in the Loop</p>
 <p style="color:#666;font-size:12px;margin:0 0 12px;line-height:1.6;">Be the first to access new listings, market updates, and personalized broker guidance.</p>
@@ -206,7 +210,7 @@ export function sharedFooterHtml(): string {
 <img src="${LOGO_URL}" alt="JBJ" width="190" style="width:190px;height:auto;display:block;margin:-6px auto 12px;border-radius:190px;" />
 <p style="color:#C8A766;font-size:16px;margin:0 0 12px;font-weight:700;letter-spacing:1.8px;text-align:center;">JBJ Global Real Estate</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto 12px;"><tr><td style="border-top:1px solid #C8A76655;"></td></tr></table>
-<p style="color:#d8cfbf;font-size:12px;font-style:italic;margin:0 0 16px;">The Only Global AI-Powered Real Estate Intelligence Platform</p>
+<p style="color:#d8cfbf;font-size:12px;font-style:italic;margin:0 0 16px;">The Premier Global Real Estate Intelligence &amp; Advisory Platform</p>
 <p style="color:#C8A766;font-size:20px;font-weight:800;margin:0 0 6px;letter-spacing:0.5px;">175+ Countries &bull; 2,400+ Cities</p>
 <p style="color:#C8A766;font-size:20px;font-weight:800;margin:0 0 18px;letter-spacing:0.5px;">&bull; 12,000+ Clients Served</p>
 <p style="color:#C8A766;font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin:0 0 14px;">FOLLOW US &middot; STAY IN THE LOOP</p>
