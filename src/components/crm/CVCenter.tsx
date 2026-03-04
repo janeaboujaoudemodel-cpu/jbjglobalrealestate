@@ -1080,13 +1080,15 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                               >
                                 <CheckCircle className="h-3.5 w-3.5 mr-1" /> Accept
                               </Button>
+                              {cv.status !== 'pending' && (
                               <Button
                                 size="sm"
                                 onClick={() => handleUpdateStatus(cv.id, 'pending')}
-                                className={`flex-1 rounded-xl border font-bold ${cv.status === 'pending' ? 'border-amber-500 bg-amber-100 text-amber-800 ring-2 ring-amber-200' : 'border-amber-500 bg-amber-50 text-amber-700 hover:bg-amber-100'}`}
+                                className="flex-1 rounded-xl border font-bold border-amber-500 bg-amber-50 text-amber-700 hover:bg-amber-100"
                               >
                                 <Clock className="h-3.5 w-3.5 mr-1" /> Pending
                               </Button>
+                              )}
                               <Button
                                 size="sm"
                                 onClick={() => handleUpdateStatus(cv.id, 'rejected')}
