@@ -898,22 +898,20 @@ const MarketReport = () => {
     </div>
   </div>
 
-   <!-- COVER PAGE — Full bleed, no white gaps -->
-   <div class="page cover" style="display: flex; flex-direction: column; position: relative; width: 794px; height: 1123px; background: linear-gradient(135deg, #18181b 0%, #09090b 50%, #18181b 100%);">
+   <!-- COVER PAGE — Full bleed, villa fills entire page -->
+   <div class="page cover" style="display: flex; flex-direction: column; position: relative; width: 794px; height: 1123px; background: #09090b;">
      <!-- Gold spine accent (left edge) -->
      <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 24px; background: linear-gradient(to right, rgba(168,146,90,0.4), rgba(168,146,90,0.15), transparent); z-index: 2;"></div>
-     <!-- Villa hero image — fills top 55% with no gap -->
-     <div style="position: absolute; top: 0; left: 0; right: 0; height: 58%; z-index: 1;">
-       <img src="${luxuryVilla1}" alt="" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.55;" />
-       <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.6) 75%, #09090b 100%);"></div>
+     <!-- Villa hero image — fills ENTIRE page as background -->
+     <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 1;">
+       <img src="${luxuryVilla1}" alt="" style="width: 100%; height: 100%; object-fit: cover; object-position: center center; opacity: 0.45;" />
+       <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0.7) 70%, #09090b 92%);"></div>
      </div>
      <!-- Right page edge -->
      <div style="position: absolute; right: 0; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, transparent, rgba(168,146,90,0.4), transparent); z-index: 2;"></div>
 
-     <!-- Cover content — positioned to fill page -->
-     <div style="position: relative; z-index: 5; flex: 1; display: flex; flex-direction: column; padding: 0 48px 40px 48px;">
-       <!-- Spacer to push content below the image -->
-       <div style="flex: 0 0 50%;"></div>
+     <!-- Cover content — positioned to fill page bottom half -->
+     <div style="position: relative; z-index: 5; flex: 1; display: flex; flex-direction: column; justify-content: flex-end; padding: 0 48px 48px 48px;">
        <!-- Gold divider -->
        <div style="width: 64px; height: 4px; background: linear-gradient(to right, #A8925A, #C8A766); margin-bottom: 18px; border-radius: 2px;"></div>
        <!-- Edition badge -->
@@ -929,12 +927,12 @@ const MarketReport = () => {
          Market Intelligence
        </h1>
        ${isFounderVisible ? `
-       <div style="margin-top: auto; padding-top: 20px;">
+       <div style="margin-top: 28px;">
          <p style="color: #71717a; font-size: 12px; margin: 0;">By Founder &amp; CEO Jane Bou Jaoude</p>
        </div>
        ` : ''}
        <!-- Footer -->
-       <div style="margin-top: ${isFounderVisible ? '16px' : 'auto'}; padding-top: 16px; border-top: 1px solid #27272a;">
+       <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid #27272a;">
          <p style="color: #a1a1aa; font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; margin: 0;">JBJ Global Real Estate</p>
        </div>
      </div>
@@ -2104,6 +2102,11 @@ const MarketReport = () => {
             }
           });
 
+          // Determine background color per page type
+          const isCoverPage = page.classList.contains('cover');
+          const isBackCover = i === pages.length - 1 && page.style.background?.includes('#09090b');
+          const bgColor = (isCoverPage || isBackCover) ? '#09090b' : '#FDFBF7';
+
           const canvas = await html2canvas(page, {
             scale: 1.2,
             useCORS: true,
@@ -2112,7 +2115,7 @@ const MarketReport = () => {
             width: 794,
             height: 1123,
             windowWidth: 794,
-            backgroundColor: null,
+            backgroundColor: bgColor,
           });
 
           const imgData = canvas.toDataURL("image/jpeg", 0.82);
