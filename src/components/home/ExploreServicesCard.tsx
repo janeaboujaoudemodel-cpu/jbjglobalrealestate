@@ -32,6 +32,7 @@ import mortgageBg from "@/assets/services/mortgage-bg.jpg";
 import passportVisaBg from "@/assets/services/passport-visa-bg.jpg";
 import generalInquiriesBg from "@/assets/services/general-inquiries-bg.jpg";
 import propertyManagementBg from "@/assets/services/property-management-bg.jpg";
+import partnerIntroBg from "@/assets/services/partner-introduction-bg.jpg";
 
 interface ServiceSlide {
   id: string;
@@ -167,7 +168,7 @@ const services: ServiceSlide[] = [
     description: "Connect with our network of trusted legal, financial, and service partners",
     icon: Handshake,
     href: "/partners",
-    bgImage: generalInquiriesBg,
+    bgImage: partnerIntroBg,
     available: true
   },
   {

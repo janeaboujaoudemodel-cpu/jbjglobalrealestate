@@ -212,8 +212,8 @@ const Index = () => {
       {/* FEATURED LISTINGS - Master Blueprint: Section 3 (8 cards, Buy/Rent tabs) */}
       <FeaturedListings />
 
-      {/* CONTINUE SEARCHING - Recently viewed properties, developers, areas */}
-      <ContinueSearching className="bg-black" />
+      {/* CONTINUE SEARCHING - Recently viewed properties (primary focus for sales) */}
+      <ContinueSearching type="property" className="bg-black" title="Continue Searching Properties" />
 
       {/* DIVIDER */}
       <SectionDivider />
