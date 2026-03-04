@@ -11,9 +11,14 @@ type SectionDividerProps = {
 };
 
 /**
- * Global premium divider with locked, consistent vertical spacing.
- * Use this anywhere you need the gold-sparkles separator between major sections.
- * Use variant="champagne" for dividers on champagne/light backgrounds.
+ * ⚠️  LOCKED COMPONENT — DO NOT MODIFY ⚠️
+ *
+ * Global premium gold divider used across ALL pages.
+ * This component renders a solid gold line with a sparkle icon in the center.
+ * The gold lines must ALWAYS be visible. Do not reduce opacity, thickness, or width.
+ *
+ * If you need a divider anywhere, import and use this component as-is.
+ * Variant "champagne" adjusts only the background colour for light sections.
  */
 export function SectionDivider({ className, fullWidth = false, bg, variant = "default" }: SectionDividerProps) {
   const bgClass = bg ?? (variant === "champagne" 
@@ -27,9 +32,25 @@ export function SectionDivider({ className, fullWidth = false, bg, variant = "de
         : "container mx-auto px-4"
       }>
         <div className="flex items-center justify-center gap-4 md:gap-6">
-          <div className="h-[3px] min-w-[96px] max-w-[440px] flex-1 rounded-full bg-gradient-to-r from-gold/20 via-gold to-gold/20 shadow-[0_0_16px_hsl(var(--gold)/0.55)]" />
-          <Sparkles className="w-4 h-4 text-gold" />
-          <div className="h-[3px] min-w-[96px] max-w-[440px] flex-1 rounded-full bg-gradient-to-r from-gold/20 via-gold to-gold/20 shadow-[0_0_16px_hsl(var(--gold)/0.55)]" />
+          {/* Gold line — left */}
+          <div
+            className="h-[3px] flex-1 rounded-full"
+            style={{
+              minWidth: 96,
+              background: "linear-gradient(90deg, transparent 0%, hsl(var(--gold)) 30%, hsl(var(--gold)) 70%, transparent 100%)",
+              boxShadow: "0 0 14px hsl(var(--gold) / 0.5), 0 0 4px hsl(var(--gold) / 0.3)",
+            }}
+          />
+          <Sparkles className="w-4 h-4 text-gold shrink-0" />
+          {/* Gold line — right */}
+          <div
+            className="h-[3px] flex-1 rounded-full"
+            style={{
+              minWidth: 96,
+              background: "linear-gradient(90deg, transparent 0%, hsl(var(--gold)) 30%, hsl(var(--gold)) 70%, transparent 100%)",
+              boxShadow: "0 0 14px hsl(var(--gold) / 0.5), 0 0 4px hsl(var(--gold) / 0.3)",
+            }}
+          />
         </div>
       </div>
     </div>

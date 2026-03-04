@@ -101,7 +101,7 @@ const MortgageCalculator = ({
       <div className="max-w-5xl mx-auto">
         {/* Title */}
         <div className="text-center mb-6 md:mb-8">
-          <h3 className="text-zinc-900 text-2xl sm:text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h3 className="text-zinc-900 text-2xl sm:text-3xl md:text-4xl font-bold whitespace-nowrap" style={{ fontFamily: "Poppins, sans-serif" }}>
             Mortgage <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold">Calculator</span>
           </h3>
           <p className="text-zinc-600 mt-2 md:mt-3 max-w-lg mx-auto text-sm md:text-base">
