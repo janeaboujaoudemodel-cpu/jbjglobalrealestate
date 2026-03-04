@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, MapPin, Building2, DollarSign, Filter, BedDouble } from "lucide-react";
+import { Search, MapPin, Building2, DollarSign, Filter, BedDouble, ChevronDown, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -10,7 +10,78 @@ import {
   SelectTriggerDark,
   SelectValue,
 } from "@/components/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useDevelopers } from "@/hooks/useProjects";
+import { cn } from "@/lib/utils";
+
+interface Developer {
+  id: string;
+  name: string;
+  logo_url?: string | null;
+  rank?: number | null;
+}
+
+function DeveloperSearchSelect({ developers, value, onChange }: { developers: Developer[]; value: string | null; onChange: (v: string | null) => void }) {
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const filtered = developers.filter(d => !search || d.name.toLowerCase().includes(search.toLowerCase()));
+  const selectedDev = developers.find(d => d.id === value);
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <button className="flex items-center gap-2 w-[190px] h-12 px-3 bg-zinc-900/80 border border-zinc-700/50 text-white rounded-lg text-sm hover:border-gold transition-colors">
+          <Building2 className="w-4 h-4 text-zinc-500 flex-shrink-0" />
+          <span className="truncate flex-1 text-left text-sm">
+            {selectedDev ? selectedDev.name : "Developer / Project"}
+          </span>
+          <ChevronDown className="w-3.5 h-3.5 text-zinc-500 flex-shrink-0" />
+        </button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[260px] p-0 bg-zinc-900 border border-zinc-700 z-[10200]" side="bottom" align="start" sideOffset={4}>
+        <div className="p-2 border-b border-zinc-800">
+          <div className="relative">
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-zinc-500" />
+            <input
+              type="text"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="Search developer..."
+              className="w-full h-9 pl-8 pr-3 bg-zinc-800 border border-zinc-700 rounded-lg text-sm text-white placeholder:text-zinc-500 outline-none focus:border-gold"
+              autoFocus
+            />
+          </div>
+        </div>
+        <div className="max-h-64 overflow-y-auto p-1">
+          <button
+            onClick={() => { onChange(null); setOpen(false); setSearch(""); }}
+            className={cn("w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors", !value ? "bg-gold/20 text-gold" : "text-zinc-300 hover:bg-zinc-800")}
+          >
+            All Developers
+          </button>
+          {filtered.map(dev => (
+            <button
+              key={dev.id}
+              onClick={() => { onChange(dev.id); setOpen(false); setSearch(""); }}
+              className={cn("w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors", value === dev.id ? "bg-gold/20 text-gold" : "text-zinc-300 hover:bg-zinc-800")}
+            >
+              {dev.logo_url ? (
+                <img src={dev.logo_url} alt={dev.name} className="w-5 h-5 object-contain rounded-sm flex-shrink-0 bg-white" />
+              ) : (
+                <span className="w-5 h-5 rounded-sm bg-gold/20 flex items-center justify-center flex-shrink-0 text-[9px] font-bold text-gold">{dev.name.charAt(0)}</span>
+              )}
+              <span className="truncate">{dev.name}</span>
+              {value === dev.id && <Check className="w-3.5 h-3.5 ml-auto text-gold flex-shrink-0" />}
+            </button>
+          ))}
+          {filtered.length === 0 && (
+            <p className="text-xs text-zinc-500 text-center py-4">No developers found</p>
+          )}
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+}
 
 interface PropertySearchBarProps {
   className?: string;
@@ -107,34 +178,12 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
         {/* Divider */}
         <div className="hidden md:block h-8 w-px bg-gradient-to-b from-transparent via-zinc-500/90 to-transparent" />
 
-        {/* Developer */}
-        <Select value={developerId || "all"} onValueChange={(value) => setDeveloperId(value === "all" ? null : value)}>
-          <SelectTriggerDark className="w-[190px] h-12 rounded-lg">
-            <Building2 className="w-4 h-4 mr-2 text-zinc-500" />
-            <SelectValue placeholder="Developer / Project" />
-          </SelectTriggerDark>
-          <SelectContentDark className="max-h-72">
-            <SelectItemDark value="all">All Developers</SelectItemDark>
-            {allDevelopersSorted.map((dev) => (
-              <SelectItemDark key={dev.id} value={dev.id}>
-                <span className="flex items-center gap-2">
-                  {dev.logo_url ? (
-                    <img
-                      src={dev.logo_url}
-                      alt={dev.name}
-                      className="w-5 h-5 object-contain rounded-sm flex-shrink-0 bg-white"
-                    />
-                  ) : (
-                    <span className="w-5 h-5 rounded-sm bg-gold/20 flex items-center justify-center flex-shrink-0 text-[9px] font-bold text-gold">
-                      {dev.name.charAt(0)}
-                    </span>
-                  )}
-                  <span className="truncate max-w-[132px]">{dev.name}</span>
-                </span>
-              </SelectItemDark>
-            ))}
-          </SelectContentDark>
-        </Select>
+        {/* Developer with search */}
+        <DeveloperSearchSelect
+          developers={allDevelopersSorted}
+          value={developerId}
+          onChange={setDeveloperId}
+        />
 
         {/* Divider */}
         <div className="hidden md:block h-8 w-px bg-gradient-to-b from-transparent via-zinc-500/90 to-transparent" />

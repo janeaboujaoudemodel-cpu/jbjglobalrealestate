@@ -113,15 +113,49 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
       });
   }, [open]);
 
-  // Live count with debounce
+  // Live count with debounce — reflects current filters
   useEffect(() => {
     if (!open) return;
     const timer = setTimeout(async () => {
       try {
-        const { count } = await supabase
+        let query = supabase
           .from('projects')
           .select('*', { count: 'exact', head: true })
           .eq('is_published', true);
+
+        if (localFilters.searchQuery?.trim()) {
+          query = query.or(`name.ilike.%${localFilters.searchQuery.trim()}%,developer_name.ilike.%${localFilters.searchQuery.trim()}%,area_name.ilike.%${localFilters.searchQuery.trim()}%`);
+        }
+        if (localFilters.emirates.length > 0) {
+          query = query.in('emirate', localFilters.emirates);
+        }
+        if (localFilters.developers.length > 0) {
+          query = query.in('developer_name', localFilters.developers);
+        }
+        if (localFilters.areas && localFilters.areas.length > 0) {
+          query = query.in('area_name', localFilters.areas);
+        }
+        if (localFilters.priceMin) {
+          query = query.gte('price_from', Number(localFilters.priceMin));
+        }
+        if (localFilters.priceMax) {
+          query = query.lte('price_from', Number(localFilters.priceMax));
+        }
+        if (localFilters.bedrooms.length > 0) {
+          const numBeds = localFilters.bedrooms.filter(b => b !== 'studio' && b !== '7+').map(Number);
+          if (localFilters.bedrooms.includes('studio')) numBeds.push(0);
+        }
+        if (localFilters.constructionStatuses.length > 0) {
+          query = query.in('construction_status', localFilters.constructionStatuses);
+        }
+        if (localFilters.statuses.length > 0) {
+          query = query.in('status_label', localFilters.statuses);
+        }
+        if (localFilters.propertyTypes.length > 0) {
+          query = query.in('property_type_label', localFilters.propertyTypes);
+        }
+
+        const { count } = await query;
         setProjectCount(count ?? 0);
       } catch {
         setProjectCount(null);
