@@ -3,7 +3,7 @@ const ASSET_BASE = "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/p
 const LOGO_URL = `${ASSET_BASE}/jbj-monogram-light-on-dark.png`;
 const BOOK_MARKET = `${ASSET_BASE}/email-books/market-intelligence-cover.jpg`;
 const BOOK_GUIDES = `${ASSET_BASE}/email-books/guides-library-cover.jpg`;
-// Icon URLs removed — all icons now use text-based labels for maximum email client compatibility
+// Icon URLs removed — all icons now use 100% inline SVGs for maximum email client compatibility
 
 export { LOGO_URL, SITE_URL };
 

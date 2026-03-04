@@ -110,13 +110,12 @@ export default function BookDownloadDialog({
       }).then(() => {});
 
       setIsSuccess(true);
-      toast.success("Download starting...");
+      toast.success("Request received!");
 
-      // Trigger actual download (placeholder - link to a real PDF)
-      // In production, this would be a Supabase storage URL
+      // Auto-close after showing success
       setTimeout(() => {
         onOpenChange(false);
-      }, 2000);
+      }, 3000);
     } catch (err) {
       console.error("Download tracking error:", err);
       toast.error("Something went wrong. Please try again.");
@@ -133,9 +132,9 @@ export default function BookDownloadDialog({
             <div className="w-16 h-16 mx-auto rounded-full bg-green-100 flex items-center justify-center">
               <CheckCircle className="w-8 h-8 text-green-600" />
             </div>
-            <DialogTitle className="text-xl font-bold text-black">Download Ready!</DialogTitle>
+            <DialogTitle className="text-xl font-bold text-black">Request Received!</DialogTitle>
             <p className="text-black/60 text-sm">
-              Your copy of <span className="font-semibold text-black">{bookTitle}</span> is being prepared. Check your email for the download link.
+              Thank you for your interest in <span className="font-semibold text-black">{bookTitle}</span>. Our team will send it to your email shortly.
             </p>
           </div>
         ) : (
