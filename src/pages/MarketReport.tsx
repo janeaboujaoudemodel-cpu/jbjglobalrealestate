@@ -618,6 +618,7 @@ const MarketReport = () => {
      border-radius: 50%;
      object-fit: cover;
      object-position: center 20%;
+     transform: scaleX(1.15);
      border: 4px solid #A8925A;
      margin: 0 auto 24px;
      display: block;
@@ -2046,10 +2047,11 @@ const MarketReport = () => {
 
     setIsGeneratingPdf(true);
 
-    // Generate a real PDF so it opens in Preview/Finder natively (not browser)
+    // Generate a real PDF with clickable links
     const generatePDF = async () => {
       const { default: html2canvas } = await import("html2canvas");
       const { default: jsPDF } = await import("jspdf");
+      const { PDFDocument } = await import("pdf-lib");
 
       const container = document.createElement("div");
       container.style.cssText = "position:fixed;left:-9999px;top:0;width:794px;visibility:hidden;pointer-events:none;";
@@ -2064,8 +2066,34 @@ const MarketReport = () => {
         const pdfWidth = 210;
         const pdfHeight = 297;
 
+        // Collect link positions per page for pdf-lib post-processing
+        const linkAnnotations: Array<{ page: number; x: number; y: number; w: number; h: number; url: string }> = [];
+
         for (let i = 0; i < pages.length; i++) {
           const page = pages[i] as HTMLElement;
+
+          // Collect all <a> elements with href before rendering
+          const anchors = page.querySelectorAll("a[href]");
+          anchors.forEach((a) => {
+            const anchor = a as HTMLAnchorElement;
+            const href = anchor.getAttribute("href");
+            if (!href || href.startsWith("#")) return;
+            
+            const fullUrl = href.startsWith("http") ? href : `https://JBJ.AE${href}`;
+            const rect = anchor.getBoundingClientRect();
+            const pageRect = page.getBoundingClientRect();
+            
+            // Convert pixel positions to mm (794px = 210mm)
+            const scale = pdfWidth / 794;
+            const linkX = (rect.left - pageRect.left) * scale;
+            const linkY = (rect.top - pageRect.top) * scale;
+            const linkW = rect.width * scale;
+            const linkH = rect.height * scale;
+            
+            if (linkW > 0 && linkH > 0) {
+              linkAnnotations.push({ page: i, x: linkX, y: linkY, w: linkW, h: linkH, url: fullUrl });
+            }
+          });
 
           const canvas = await html2canvas(page, {
             scale: 1.5,
@@ -2079,18 +2107,62 @@ const MarketReport = () => {
           });
 
           const imgData = canvas.toDataURL("image/jpeg", 0.86);
-          const imgHeight = (canvas.height * pdfWidth) / canvas.width;
 
           if (i > 0) pdf.addPage();
           pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight, undefined, "FAST");
 
-          // Release memory aggressively for long books
+          // Release memory aggressively
           canvas.width = 1;
           canvas.height = 1;
           await new Promise((resolve) => requestAnimationFrame(() => resolve(null)));
         }
 
-        pdf.save("UAE-Real-Estate-Market-Intelligence-2026-JBJ-Global.pdf");
+        // Post-process with pdf-lib to add clickable link annotations
+        const jspdfBytes = pdf.output("arraybuffer");
+        const pdfDoc = await PDFDocument.load(jspdfBytes);
+        const pdfPages = pdfDoc.getPages();
+
+        for (const link of linkAnnotations) {
+          const pdfPage = pdfPages[link.page];
+          if (!pdfPage) continue;
+          
+          const pageHeight = pdfPage.getHeight();
+          const pageWidth = pdfPage.getWidth();
+          
+          // Convert mm to PDF points (1mm ≈ 2.835 points)
+          const ptScale = pageWidth / pdfWidth;
+          const x = link.x * ptScale;
+          const y = pageHeight - (link.y * ptScale) - (link.h * ptScale); // PDF Y is bottom-up
+          const w = link.w * ptScale;
+          const h = link.h * ptScale;
+
+          pdfPage.node.addAnnot(
+            pdfDoc.context.register(
+              pdfDoc.context.obj({
+                Type: 'Annot',
+                Subtype: 'Link',
+                Rect: [x, y, x + w, y + h],
+                Border: [0, 0, 0],
+                A: {
+                  Type: 'Action',
+                  S: 'URI',
+                  URI: link.url,
+                },
+              })
+            )
+          );
+        }
+
+        const finalBytes = await pdfDoc.save();
+        const blob = new Blob([new Uint8Array(finalBytes) as any], { type: "application/pdf" });
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = blobUrl;
+        a.download = "UAE-Real-Estate-Market-Intelligence-2026-JBJ-Global.pdf";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
       } finally {
         document.body.removeChild(container);
       }
@@ -2478,7 +2550,7 @@ const MarketReport = () => {
               transition={{ duration: 0.6 }}
               className="max-w-4xl mx-auto text-center"
             >
-              {/* GLOBAL FOUNDER IMAGE RULE: Perfect center 40%, no cropping */}
+              {/* GLOBAL FOUNDER IMAGE RULE: Perfect center 40%, no cropping, stretch horizontally to fill */}
               <div className="w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden border-2 border-gold/50 mx-auto mb-6 bg-zinc-900">
                 <img 
                   src={founderCompanyProfile}
@@ -2487,6 +2559,7 @@ const MarketReport = () => {
                   style={{
                     objectFit: 'cover',
                     objectPosition: 'center 20%',
+                    transform: 'scaleX(1.15)',
                   }}
                 />
               </div>
