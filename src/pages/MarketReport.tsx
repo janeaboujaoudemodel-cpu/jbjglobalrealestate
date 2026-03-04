@@ -9,7 +9,7 @@ import { CONTACT_INFO } from "@/constants/stats";
 import { getCountryList, getLanguageList } from "@/constants/localeOptions";
 import { ytd2026, fullYear2025, topAreas2026, topAreas2025, topNationalities } from "@/constants/dldMarketData";
 import founderCompanyProfile from "@/assets/founder-company-profile.jpg";
-import backCoverImage from "@/assets/books/market-intelligence-back-cover.jpg";
+import backCoverImageV2 from "@/assets/books/market-intelligence-back-cover-v2.jpg";
 import luxuryVilla1 from "@/assets/luxury-villa-1.jpeg";
 import { motion } from "framer-motion";
 import {
@@ -176,33 +176,51 @@ const MarketReport = () => {
     print-color-adjust: exact;
   }
   
-  /* Interior pages — champagne pearl */
-  .page {
-    width: 100%;
-    min-height: 100vh;
-    padding: 80px 55px 60px;
-    page-break-after: always;
-    background: linear-gradient(180deg, #FDFBF7 0%, #F5F0E6 100%);
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .page::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #A8925A, #d4c4a0, #A8925A);
-  }
-  
-   /* Cover page keeps dark drama */
-   .page.cover {
+   /* Interior pages — champagne pearl, FIXED A4 height */
+   .page {
+     width: 794px;
+     height: 1123px;
+     padding: 56px 55px 48px;
+     page-break-after: always;
+     background: linear-gradient(180deg, #FDFBF7 0%, #F5F0E6 100%);
+     position: relative;
+     overflow: hidden;
+     display: flex;
+     flex-direction: column;
+   }
+   
+   .page::before {
+     content: '';
+     position: absolute;
+     top: 0;
+     left: 0;
+     right: 0;
+     height: 4px;
+     background: linear-gradient(90deg, #A8925A, #d4c4a0, #A8925A);
+   }
+
+   /* Monogram watermark on interior pages */
+   .page::after {
+     content: 'JBJ';
+     position: absolute;
+     bottom: 30px;
+     left: 55px;
+     font-family: 'Playfair Display', serif;
+     font-size: 18px;
+     font-weight: 700;
+     color: rgba(168,146,90,0.08);
+     letter-spacing: 0.15em;
+   }
+   
+    /* Cover page keeps dark drama */
+    .page.cover {
      background: radial-gradient(ellipse at center, #1a1814 0%, #0a0a0a 70%);
      padding: 0 !important;
-   }
-   .page.cover::before { display: none; }
+     display: flex;
+     flex-direction: column;
+    }
+    .page.cover::before { display: none; }
+    .page.cover::after { display: none; }
   
   .page-number {
     position: absolute;
@@ -436,41 +454,41 @@ const MarketReport = () => {
   
   tr:hover td { background: rgba(168,146,90,0.04); }
   
-  .toc { margin: 32px 0; }
-  
-  .toc-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 13px 0;
-    border-bottom: 1px solid rgba(168,146,90,0.2);
-    cursor: pointer;
-  }
-  
-  .toc-item a {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    text-decoration: none;
-    color: #1A1814;
-    flex: 1;
-    font-size: 15px;
-    font-weight: 500;
-    transition: color 0.15s;
-  }
-  
-  .toc-item a:hover { color: #A8925A; }
-  
-  .toc-item .toc-num {
-    font-size: 11px;
-    color: #A8925A;
-    font-weight: 700;
-    width: 20px;
-    flex-shrink: 0;
-  }
-  
-  .toc-item .toc-arrow { color: #A8925A; font-size: 13px; margin-left: auto; margin-right: 8px; }
-  .toc-item .page-num { color: #A8925A; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+   .toc { margin: 20px 0; }
+   
+   .toc-item {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     padding: 9px 0;
+     border-bottom: 1px solid rgba(168,146,90,0.2);
+     cursor: pointer;
+   }
+   
+   .toc-item a {
+     display: flex;
+     align-items: center;
+     gap: 10px;
+     text-decoration: none;
+     color: #1A1814;
+     flex: 1;
+     font-size: 13px;
+     font-weight: 500;
+     transition: color 0.15s;
+   }
+   
+   .toc-item a:hover { color: #A8925A; }
+   
+   .toc-item .toc-num {
+     font-size: 11px;
+     color: #A8925A;
+     font-weight: 700;
+     width: 20px;
+     flex-shrink: 0;
+   }
+   
+   .toc-item .toc-arrow { color: #A8925A; font-size: 13px; margin-left: auto; margin-right: 8px; }
+   .toc-item .page-num { color: #A8925A; font-weight: 700; font-size: 13px; flex-shrink: 0; }
   
   /* Company Identity Card (dark luxe card on champagne page) */
   .identity-card {
@@ -593,22 +611,21 @@ const MarketReport = () => {
     display: block;
   }
   
-  /* Founder image */
-   .founder-image {
-    width: 220px;
-    height: 220px;
-    border-radius: 50%;
-    object-fit: contain;
-    object-position: center top;
-    border: 4px solid #A8925A;
-    margin: 0 auto 28px;
-    display: block;
-    background: radial-gradient(circle at top, #F5EBD7 0%, #EFE0C2 100%);
-    box-shadow: 0 8px 30px rgba(168,146,90,0.3);
-    padding: 6px;
-  }
-  
-  .founder-section { text-align: center; padding: 36px 0; }
+   /* Founder image */
+    .founder-image {
+     width: 200px;
+     height: 200px;
+     border-radius: 50%;
+     object-fit: cover;
+     object-position: center 20%;
+     border: 4px solid #A8925A;
+     margin: 0 auto 24px;
+     display: block;
+     background: radial-gradient(circle at top, #F5EBD7 0%, #EFE0C2 100%);
+     box-shadow: 0 8px 30px rgba(168,146,90,0.3);
+   }
+   
+   .founder-section { text-align: center; padding: 28px 0; }
   
   /* Disclaimer */
   .disclaimer {
@@ -659,51 +676,51 @@ const MarketReport = () => {
   .bar-value { font-size: 11px; font-weight: 600; color: #FFFFFF; }
   
   /* Area/dev/project cards */
-  .area-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
-    margin: 20px 0;
-  }
-  
-  .area-card {
-    background: #FFFFFF;
-    border: 1px solid rgba(168,146,90,0.3);
-    border-radius: 12px;
-    overflow: hidden;
-    text-decoration: none;
-    display: block;
-  }
-  
-  .area-card img {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    display: block;
-    background: #F5EBD7;
-  }
-  
-  .area-card-body { padding: 12px; }
-  
-  .area-card-body .area-name {
-    font-size: 12px;
-    font-weight: 600;
-    color: #1A1814;
-    margin: 0 0 4px 0;
-    line-height: 1.3;
-  }
-  
-  .area-card-body .area-meta {
-    font-size: 10px;
-    color: #6B6459;
-    margin: 0 0 3px 0;
-  }
-  
-  .area-card-body .area-link {
-    font-size: 10px;
-    color: #A8925A;
-    text-decoration: none;
-  }
+   .area-grid {
+     display: grid;
+     grid-template-columns: repeat(4, 1fr);
+     gap: 12px;
+     margin: 16px 0;
+   }
+   
+   .area-card {
+     background: #FFFFFF;
+     border: 1px solid rgba(168,146,90,0.3);
+     border-radius: 10px;
+     overflow: hidden;
+     text-decoration: none;
+     display: block;
+   }
+   
+   .area-card img {
+     width: 100%;
+     aspect-ratio: 4/3;
+     object-fit: cover;
+     display: block;
+     background: #F5EBD7;
+   }
+   
+   .area-card-body { padding: 10px; }
+   
+   .area-card-body .area-name {
+     font-size: 11px;
+     font-weight: 600;
+     color: #1A1814;
+     margin: 0 0 3px 0;
+     line-height: 1.3;
+   }
+   
+   .area-card-body .area-meta {
+     font-size: 9px;
+     color: #6B6459;
+     margin: 0 0 2px 0;
+   }
+   
+   .area-card-body .area-link {
+     font-size: 9px;
+     color: #A8925A;
+     text-decoration: none;
+   }
   
   .badge-trending {
     display: inline-block;
@@ -880,28 +897,26 @@ const MarketReport = () => {
     </div>
   </div>
 
-   <!-- COVER PAGE — Matches the website hero book exactly -->
-   <div class="page cover" style="display: flex; flex-direction: column; position: relative; min-height: 100vh; background: linear-gradient(135deg, #18181b 0%, #09090b 50%, #18181b 100%);">
+   <!-- COVER PAGE — Full bleed, no white gaps -->
+   <div class="page cover" style="display: flex; flex-direction: column; position: relative; width: 794px; height: 1123px; background: linear-gradient(135deg, #18181b 0%, #09090b 50%, #18181b 100%);">
      <!-- Gold spine accent (left edge) -->
      <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 24px; background: linear-gradient(to right, rgba(168,146,90,0.4), rgba(168,146,90,0.15), transparent); z-index: 2;"></div>
-     <!-- Villa hero image at partial opacity -->
-     <div style="position: absolute; top: 0; left: 0; right: 0; height: 55%; z-index: 1;">
+     <!-- Villa hero image — fills top 55% with no gap -->
+     <div style="position: absolute; top: 0; left: 0; right: 0; height: 58%; z-index: 1;">
        <img src="${luxuryVilla1}" alt="" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.55;" />
-       <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.7) 80%, #09090b 100%);"></div>
+       <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.6) 75%, #09090b 100%);"></div>
      </div>
-     <!-- Gold accent line top-right -->
-     <div style="position: absolute; right: 20px; top: 20px; width: 80px; height: 3px; border-radius: 2px; background: linear-gradient(to right, transparent, rgba(168,146,90,0.7), transparent); z-index: 3;"></div>
      <!-- Right page edge -->
      <div style="position: absolute; right: 0; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, transparent, rgba(168,146,90,0.4), transparent); z-index: 2;"></div>
 
-     <!-- Cover content -->
-     <div style="position: relative; z-index: 5; flex: 1; display: flex; flex-direction: column; padding: 0 48px 48px 48px;">
+     <!-- Cover content — positioned to fill page -->
+     <div style="position: relative; z-index: 5; flex: 1; display: flex; flex-direction: column; padding: 0 48px 40px 48px;">
        <!-- Spacer to push content below the image -->
-       <div style="flex: 0 0 52%;"></div>
+       <div style="flex: 0 0 50%;"></div>
        <!-- Gold divider -->
-       <div style="width: 64px; height: 4px; background: linear-gradient(to right, #A8925A, #C8A766); margin-bottom: 20px; border-radius: 2px;"></div>
+       <div style="width: 64px; height: 4px; background: linear-gradient(to right, #A8925A, #C8A766); margin-bottom: 18px; border-radius: 2px;"></div>
        <!-- Edition badge -->
-       <div style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 999px; background: rgba(168,146,90,0.1); border: 1px solid rgba(168,146,90,0.3); width: fit-content; margin-bottom: 20px;">
+       <div style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 999px; background: rgba(168,146,90,0.1); border: 1px solid rgba(168,146,90,0.3); width: fit-content; margin-bottom: 18px;">
          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#A8925A" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
          <span style="color: #A8925A; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em;">Latest Edition 2026</span>
        </div>
@@ -913,12 +928,12 @@ const MarketReport = () => {
          Market Intelligence
        </h1>
        ${isFounderVisible ? `
-       <div style="margin-top: auto; padding-top: 24px;">
+       <div style="margin-top: auto; padding-top: 20px;">
          <p style="color: #71717a; font-size: 12px; margin: 0;">By Founder &amp; CEO Jane Bou Jaoude</p>
        </div>
        ` : ''}
        <!-- Footer -->
-       <div style="margin-top: ${isFounderVisible ? '20px' : 'auto'}; padding-top: 16px; border-top: 1px solid #27272a;">
+       <div style="margin-top: ${isFounderVisible ? '16px' : 'auto'}; padding-top: 16px; border-top: 1px solid #27272a;">
          <p style="color: #a1a1aa; font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; margin: 0;">JBJ Global Real Estate</p>
        </div>
      </div>
@@ -1747,7 +1762,7 @@ const MarketReport = () => {
     <div class="area-grid">
       ${featuredAreas.map((a: any) => `
       <a href="https://JBJ.AE/area/${a.slug}" class="area-card" target="_blank">
-        ${a.image_url ? `<img src="${a.image_url}" alt="${a.name}" onerror="this.style.background='#F5EBD7'; this.style.aspectRatio='1/1';" />` : `<div style="aspect-ratio: 1/1; background: linear-gradient(135deg, #F5EBD7, #E8DCC8); display: flex; align-items: center; justify-content: center;"><span style="font-family: 'Playfair Display', serif; font-size: 22px; color: rgba(168,146,90,0.3); font-weight: 700;">JBJ</span></div>`}
+        ${a.image_url ? `<img src="${a.image_url}" alt="${a.name}" style="aspect-ratio: 4/3; object-fit: cover;" onerror="this.style.background='#F5EBD7'; this.style.aspectRatio='4/3';" />` : `<div style="aspect-ratio: 4/3; background: linear-gradient(135deg, #F5EBD7, #E8DCC8); display: flex; align-items: center; justify-content: center;"><span style="font-family: 'Playfair Display', serif; font-size: 22px; color: rgba(168,146,90,0.3); font-weight: 700;">JBJ</span></div>`}
         <div class="area-card-body">
           ${a.is_trending ? '<span class="badge-trending">● Trending</span>' : ''}
           ${a.is_high_demand && !a.is_trending ? '<span class="badge-demand">● High Demand</span>' : ''}
@@ -1768,20 +1783,20 @@ const MarketReport = () => {
     <h2>Featured Developers</h2>
     <p style="color: #6B6459;">Top-tier developers shaping Dubai's skyline — each backed by a proven delivery track record.</p>
     ${featuredDevelopers.length > 0 ? `
-    <div class="area-grid" style="gap: 16px;">
+    <div class="area-grid" style="gap: 12px;">
       ${featuredDevelopers.map((d: any) => `
       <a href="https://JBJ.AE/developers/${d.slug}" class="area-card" target="_blank" style="text-align: center;">
-        ${d.logo_url ? `<div style="aspect-ratio: 1/1; background: #FFFFFF; display: flex; align-items: center; justify-content: center; padding: 12px; border-bottom: 1px solid rgba(168,146,90,0.15);"><img src="${d.logo_url}" alt="${d.name}" style="max-height: 66px; max-width: 90%; object-fit: contain;" onerror="this.parentElement.innerHTML='<span style=&quot;font-family: Playfair Display, serif; font-size: 14px; color: #A8925A; font-weight: 700;&quot;>' + '${d.name.split(' ')[0]}' + '</span>'" /></div>` : `<div style="aspect-ratio: 1/1; background: linear-gradient(135deg, #F5EBD7, #E8DCC8); display: flex; align-items: center; justify-content: center;"><span style="font-family: 'Playfair Display', serif; font-size: 14px; color: #A8925A; font-weight: 700;">${d.name.split(' ')[0]}</span></div>`}
+        ${d.logo_url ? `<div style="aspect-ratio: 4/3; background: #FFFFFF; display: flex; align-items: center; justify-content: center; padding: 8px;"><img src="${d.logo_url}" alt="${d.name}" style="max-height: 80%; max-width: 85%; object-fit: contain;" onerror="this.parentElement.innerHTML='<span style=&quot;font-family: Playfair Display, serif; font-size: 14px; color: #A8925A; font-weight: 700;&quot;>' + '${d.name.split(' ')[0]}' + '</span>'" /></div>` : `<div style="aspect-ratio: 4/3; background: linear-gradient(135deg, #F5EBD7, #E8DCC8); display: flex; align-items: center; justify-content: center;"><span style="font-family: 'Playfair Display', serif; font-size: 14px; color: #A8925A; font-weight: 700;">${d.name.split(' ')[0]}</span></div>`}
         <div class="area-card-body" style="text-align: center;">
           <div class="area-name" style="text-align: center;">${d.name}</div>
-          <a href="https://JBJ.AE/developers/${d.slug}" class="area-link" target="_blank" style="display: block; text-align: center; margin-top: 4px;">View Projects →</a>
+          <a href="https://JBJ.AE/developers/${d.slug}" class="area-link" target="_blank" style="display: block; text-align: center; margin-top: 3px;">View Projects →</a>
         </div>
       </a>`).join('')}
     </div>` : `
-    <div class="area-grid">
+    <div class="area-grid" style="gap: 12px;">
       ${["Emaar Properties","DAMAC Properties","Sobha Realty","Nakheel","Aldar Properties","Meraas","Ellington Properties","Binghatti Developers"].map((name) => `
       <div class="area-card" style="text-align: center;">
-        <div style="aspect-ratio: 1/1; background: linear-gradient(135deg, #F5EBD7, #E8DCC8); display: flex; align-items: center; justify-content: center;">
+        <div style="aspect-ratio: 4/3; background: linear-gradient(135deg, #F5EBD7, #E8DCC8); display: flex; align-items: center; justify-content: center;">
           <span style="font-family: 'Playfair Display', serif; font-size: 14px; color: #A8925A; font-weight: 700;">${name.split(' ')[0]}</span>
         </div>
         <div class="area-card-body" style="text-align: center;">
@@ -1795,35 +1810,55 @@ const MarketReport = () => {
     <span class="page-number">21</span>
   </div>
 
-  <!-- PAGE 22: FEATURED PROJECTS (LIVE) -->
+  <!-- PAGE 22: FEATURED PROJECTS (LIVE) - Page 1 -->
   <div class="page" id="page-22">
     <h2>Featured Projects</h2>
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
       <p style="margin: 0; color: #6B6459;">Latest published projects available through JBJ Global Real Estate.</p>
       <span style="background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.35); border-radius: 20px; padding: 5px 14px; font-size: 11px; color: #059669; font-weight: 600;">Updated ${downloadDate}</span>
     </div>
     ${featuredProjects.length > 0 ? `
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-      ${featuredProjects.map((p: any) => {
-        const desc = p.short_description || (p.description ? p.description.substring(0, 100) + '...' : '');
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+      ${featuredProjects.slice(0, 4).map((p: any) => {
         const priceStr = p.price_from ? `AED ${(Math.round(Number(p.price_from)) >= 1000000 ? (Math.round(Number(p.price_from)) / 1000000).toFixed(1) + 'M' : Math.round(Number(p.price_from)).toLocaleString())}` : 'Price on request';
         return `
-      <a href="https://JBJ.AE/properties/${p.slug || ''}" class="area-card" target="_blank" style="display: block; text-decoration: none;">
-         ${p.cover_image_url ? `<img src="${p.cover_image_url}" alt="${p.name}" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; background: #F5EBD7;" onerror="this.style.display='none'" />` : `<div style="aspect-ratio: 1/1; background: linear-gradient(135deg, #F5EBD7, #E8DCC8); display: flex; align-items: center; justify-content: center;"><span style="font-family: 'Playfair Display', serif; font-size: 16px; color: rgba(168,146,90,0.5); font-weight: 700;">JBJ</span></div>`}
+      <a href="https://JBJ.AE/projects/${p.slug || ''}" class="area-card" target="_blank" style="display: block; text-decoration: none;">
+         ${p.cover_image_url ? `<img src="${p.cover_image_url}" alt="${p.name}" style="width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; background: #F5EBD7;" onerror="this.style.display='none'" />` : `<div style="aspect-ratio: 4/3; background: linear-gradient(135deg, #F5EBD7, #E8DCC8); display: flex; align-items: center; justify-content: center;"><span style="font-family: 'Playfair Display', serif; font-size: 16px; color: rgba(168,146,90,0.5); font-weight: 700;">JBJ</span></div>`}
         <div class="area-card-body">
           <div class="area-name">${p.name}</div>
           <div class="area-meta">${p.area_name || p.location || 'Dubai, UAE'}</div>
           ${p.developer_name ? `<div class="area-meta" style="color: #A8925A;">${p.developer_name}</div>` : ''}
-          <div style="color: #A8925A; font-weight: 700; font-size: 12px; margin-top: 5px;">From ${priceStr}</div>
+          <div style="color: #A8925A; font-weight: 700; font-size: 11px; margin-top: 4px;">From ${priceStr}</div>
         </div>
       </a>`;
       }).join('')}
-    </div>` : `<p style="color: #8A8278; text-align: center; padding: 40px;">Visit JBJ.ae/properties to explore our full portfolio.</p>`}
-    <div class="section-footer-link">
-      <p style="margin: 0; font-size: 13px;">Explore All Properties → <a href="https://JBJ.AE/properties">JBJ.AE/properties</a></p>
-    </div>
+    </div>` : `<p style="color: #8A8278; text-align: center; padding: 40px;">Visit JBJ.ae/projects to explore our full portfolio.</p>`}
     <span class="page-number">22</span>
   </div>
+
+  <!-- PAGE 22b: FEATURED PROJECTS (cont.) - Page 2 -->
+  ${featuredProjects.length > 4 ? `
+  <div class="page" id="page-22b">
+    <h2>Featured Projects <span style="font-size: 16px; color: #8A8278; font-weight: 400;">(continued)</span></h2>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px;">
+      ${featuredProjects.slice(4).map((p: any) => {
+        const priceStr = p.price_from ? `AED ${(Math.round(Number(p.price_from)) >= 1000000 ? (Math.round(Number(p.price_from)) / 1000000).toFixed(1) + 'M' : Math.round(Number(p.price_from)).toLocaleString())}` : 'Price on request';
+        return `
+      <a href="https://JBJ.AE/projects/${p.slug || ''}" class="area-card" target="_blank" style="display: block; text-decoration: none;">
+         ${p.cover_image_url ? `<img src="${p.cover_image_url}" alt="${p.name}" style="width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; background: #F5EBD7;" onerror="this.style.display='none'" />` : `<div style="aspect-ratio: 4/3; background: linear-gradient(135deg, #F5EBD7, #E8DCC8); display: flex; align-items: center; justify-content: center;"><span style="font-family: 'Playfair Display', serif; font-size: 16px; color: rgba(168,146,90,0.5); font-weight: 700;">JBJ</span></div>`}
+        <div class="area-card-body">
+          <div class="area-name">${p.name}</div>
+          <div class="area-meta">${p.area_name || p.location || 'Dubai, UAE'}</div>
+          ${p.developer_name ? `<div class="area-meta" style="color: #A8925A;">${p.developer_name}</div>` : ''}
+          <div style="color: #A8925A; font-weight: 700; font-size: 11px; margin-top: 4px;">From ${priceStr}</div>
+        </div>
+      </a>`;
+      }).join('')}
+    </div>
+    <div class="section-footer-link" style="margin-top: auto;">
+      <p style="margin: 0; font-size: 13px;">Explore All Projects → <a href="https://JBJ.AE/projects">JBJ.AE/projects</a></p>
+    </div>
+  </div>` : ''}
 
   <!-- PAGE 23: EXPLORE ALL & CONTACT -->
   <div class="page" id="page-23">
@@ -1932,16 +1967,16 @@ const MarketReport = () => {
     <span class="page-number">23</span>
   </div>
 
-   <!-- BACK COVER — Premium matching design -->
-   <div class="page cover" style="display: flex; flex-direction: column; position: relative; min-height: 100vh; background: linear-gradient(135deg, #18181b 0%, #09090b 50%, #18181b 100%);">
+   <!-- BACK COVER — Premium with different villa image -->
+   <div class="page cover" style="display: flex; flex-direction: column; position: relative; width: 794px; height: 1123px; background: linear-gradient(135deg, #18181b 0%, #09090b 50%, #18181b 100%);">
      <!-- Gold spine accent (left edge) -->
      <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 24px; background: linear-gradient(to right, rgba(168,146,90,0.4), rgba(168,146,90,0.15), transparent); z-index: 2;"></div>
-     <!-- Subtle background image -->
+     <!-- Premium villa background — different from front cover -->
      <div style="position: absolute; inset: 0; z-index: 1;">
-       <img src="${luxuryVilla1}" alt="" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.08;" />
+       <img src="${backCoverImageV2}" alt="" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.12;" />
      </div>
      <!-- Radial gold glow -->
-     <div style="position: absolute; inset: 0; background: radial-gradient(ellipse at center 40%, rgba(168,146,90,0.08) 0%, transparent 70%); z-index: 2;"></div>
+     <div style="position: absolute; inset: 0; background: radial-gradient(ellipse at center 40%, rgba(168,146,90,0.1) 0%, transparent 70%); z-index: 2;"></div>
 
      <!-- Back cover content -->
      <div style="position: relative; z-index: 5; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 48px;">
@@ -1960,11 +1995,11 @@ const MarketReport = () => {
        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px 40px; margin-bottom: 48px; text-align: left;">
          <div>
            <div style="font-size: 9px; color: #A8925A; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 6px; font-weight: 600;">Phone</div>
-           <div style="font-size: 12px; color: #d4d4d8;">+971 56 591 1000</div>
+           <div style="font-size: 12px; color: #d4d4d8;"><a href="tel:+971565911000" style="color: #d4d4d8; text-decoration: none;">+971 56 591 1000</a></div>
          </div>
          <div>
            <div style="font-size: 9px; color: #A8925A; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 6px; font-weight: 600;">Email</div>
-           <div style="font-size: 12px; color: #d4d4d8;">CONTACT@JBJ.AE</div>
+           <div style="font-size: 12px; color: #d4d4d8;"><a href="mailto:CONTACT@JBJ.AE" style="color: #d4d4d8; text-decoration: none;">CONTACT@JBJ.AE</a></div>
          </div>
          <div>
            <div style="font-size: 9px; color: #A8925A; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 6px; font-weight: 600;">Location</div>
@@ -1972,7 +2007,7 @@ const MarketReport = () => {
          </div>
          <div>
            <div style="font-size: 9px; color: #A8925A; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 6px; font-weight: 600;">Website</div>
-           <div style="font-size: 12px; color: #d4d4d8;">JBJ.AE</div>
+           <div style="font-size: 12px; color: #d4d4d8;"><a href="https://JBJ.AE" style="color: #d4d4d8; text-decoration: none;">JBJ.AE</a></div>
          </div>
        </div>
 
@@ -2033,20 +2068,21 @@ const MarketReport = () => {
           const page = pages[i] as HTMLElement;
 
           const canvas = await html2canvas(page, {
-            scale: 1.35,
+            scale: 1.5,
             useCORS: true,
             allowTaint: true,
             logging: false,
             width: 794,
+            height: 1123,
             windowWidth: 794,
-            backgroundColor: "#ffffff",
+            backgroundColor: i === 0 || i === pages.length - 1 ? "#09090b" : "#FDFBF7",
           });
 
           const imgData = canvas.toDataURL("image/jpeg", 0.86);
           const imgHeight = (canvas.height * pdfWidth) / canvas.width;
 
           if (i > 0) pdf.addPage();
-          pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, Math.min(imgHeight, pdfHeight), undefined, "FAST");
+          pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight, undefined, "FAST");
 
           // Release memory aggressively for long books
           canvas.width = 1;
@@ -2449,8 +2485,8 @@ const MarketReport = () => {
                   alt="Jane Bou Jaoude, Founder & CEO of JBJ GLOBAL REAL ESTATE"
                   className="w-full h-full"
                   style={{
-                    objectFit: 'contain',
-                    objectPosition: 'center top',
+                    objectFit: 'cover',
+                    objectPosition: 'center 20%',
                   }}
                 />
               </div>
