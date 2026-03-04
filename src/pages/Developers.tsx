@@ -143,16 +143,21 @@ const Developers = () => {
       );
     }
     
-    // Search filter (local + advanced)
+    // Search filter (local + advanced) - match name only for accuracy
     const qLocal = searchQuery.trim().toLowerCase();
     const qAdvanced = (shortcutFilters.searchQuery || '').trim().toLowerCase();
     const q = qAdvanced || qLocal;
     if (q) {
-      filtered = filtered.filter(dev => 
-        dev.name.toLowerCase().includes(q) ||
-        (dev.description?.toLowerCase().includes(q)) ||
-        (dev.headquarters?.toLowerCase().includes(q))
-      );
+      filtered = filtered.filter(dev => dev.name.toLowerCase().includes(q));
+      // Sort: name-starts-with first, then name-includes
+      filtered.sort((a, b) => {
+        const aName = a.name.toLowerCase();
+        const bName = b.name.toLowerCase();
+        const aStarts = aName.startsWith(q) ? 0 : 1;
+        const bStarts = bName.startsWith(q) ? 0 : 1;
+        if (aStarts !== bStarts) return aStarts - bStarts;
+        return aName.localeCompare(bName);
+      });
     }
     
     // Tier filter
