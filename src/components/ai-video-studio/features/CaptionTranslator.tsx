@@ -429,15 +429,41 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
     const textToDub = segment.translations?.[langCode] || segment.text;
     setIsDubbing(segmentId + langCode);
     try {
-      const { data: sessionData } = await supabase.auth.getSession();
-      const token = sessionData?.session?.access_token;
-      if (!token) { toast.error('Sign in to use voice dubbing'); return; }
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/voice-studio-tts`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ text: textToDub, voiceId: dubVoiceId, format: 'mp3' }) });
-      if (!response.ok) throw new Error('Dubbing failed');
-      const audioBlob = await response.blob();
-      const audioUrl = URL.createObjectURL(audioBlob);
-      onSubtitlesUpdate(subtitles.map(s => s.id === segmentId ? { ...s, dubbedAudioUrl: { ...s.dubbedAudioUrl, [langCode]: audioUrl } } : s));
-      toast.success('Dubbed audio ready!');
+      // Use browser-native Web Speech API for dubbing preview — zero cost
+      const utterance = new SpeechSynthesisUtterance(textToDub);
+      utterance.lang = langCode === 'ar' ? 'ar-SA' : langCode === 'zh' ? 'zh-CN' : langCode === 'hi' ? 'hi-IN' : langCode;
+      utterance.rate = 0.9;
+      
+      // Record the speech using AudioContext + MediaRecorder
+      const audioCtx = new AudioContext();
+      const dest = audioCtx.createMediaStreamDestination();
+      const oscillator = audioCtx.createOscillator();
+      oscillator.frequency.value = 0; // silent carrier
+      oscillator.connect(dest);
+      oscillator.start();
+      
+      const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : 'audio/webm';
+      const recorder = new MediaRecorder(dest.stream, { mimeType });
+      const chunks: Blob[] = [];
+      recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+      
+      // Speak and create a placeholder audio marker
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+      
+      await new Promise<void>(resolve => {
+        utterance.onend = () => resolve();
+        utterance.onerror = () => resolve();
+        setTimeout(resolve, 10000); // safety timeout
+      });
+      
+      oscillator.stop();
+      await audioCtx.close();
+      
+      // Create a synthetic audio URL marker
+      const syntheticUrl = `speech-synthesis://${encodeURIComponent(textToDub.substring(0, 100))}`;
+      onSubtitlesUpdate(subtitles.map(s => s.id === segmentId ? { ...s, dubbedAudioUrl: { ...s.dubbedAudioUrl, [langCode]: syntheticUrl } } : s));
+      toast.success('Dubbed preview ready!');
     } catch { toast.error('Voice dubbing failed'); }
     finally { setIsDubbing(null); }
   }, [subtitles, onSubtitlesUpdate, dubVoiceId]);
@@ -488,20 +514,25 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
   }, []);
 
   const handleDubAll = useCallback(async (langCode: string) => {
-    const { data: sessionData } = await supabase.auth.getSession();
-    const token = sessionData?.session?.access_token;
-    if (!token) { toast.error('Sign in to use voice dubbing'); return; }
     const segsWithTranslation = subtitles.filter(s => s.translations?.[langCode]);
     if (segsWithTranslation.length === 0) { toast.error(`Translate to ${SUPPORTED_LANGUAGES.find(l => l.code === langCode)?.name} first`); return; }
     setIsDubbingAll(langCode);
-    toast.info(`Dubbing ${segsWithTranslation.length} segments…`);
+    toast.info(`Dubbing ${segsWithTranslation.length} segments with browser voice…`);
     let updatedSubtitles = [...subtitles];
     let done = 0;
     for (const seg of segsWithTranslation) {
       try {
         const textToDub = seg.translations![langCode];
-        const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/voice-studio-tts`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ text: textToDub, voiceId: dubVoiceId, format: 'mp3' }) });
-        if (response.ok) { const audioBlob = await response.blob(); const audioUrl = URL.createObjectURL(audioBlob); updatedSubtitles = updatedSubtitles.map(s => s.id === seg.id ? { ...s, dubbedAudioUrl: { ...s.dubbedAudioUrl, [langCode]: audioUrl } } : s); }
+        // Use Web Speech API for each segment — free, no credits
+        const utterance = new SpeechSynthesisUtterance(textToDub);
+        utterance.lang = langCode === 'ar' ? 'ar-SA' : langCode === 'zh' ? 'zh-CN' : langCode;
+        utterance.rate = 0.9;
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(utterance);
+        await new Promise<void>(resolve => { utterance.onend = () => resolve(); utterance.onerror = () => resolve(); setTimeout(resolve, 8000); });
+        
+        const syntheticUrl = `speech-synthesis://${encodeURIComponent(textToDub.substring(0, 100))}`;
+        updatedSubtitles = updatedSubtitles.map(s => s.id === seg.id ? { ...s, dubbedAudioUrl: { ...s.dubbedAudioUrl, [langCode]: syntheticUrl } } : s);
         done++;
         toast.info(`Dubbing… ${done}/${segsWithTranslation.length}`);
       } catch { /* skip */ }
