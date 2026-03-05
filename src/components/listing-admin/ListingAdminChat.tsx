@@ -91,8 +91,11 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
   const [showBulkUpload, setShowBulkUpload] = useState(false);
   const [autoApprove, setAutoApprove] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [isDragOver, setIsDragOver] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const MAX_FILES = 50;
+  const MAX_FILE_SIZE_BYTES = 50 * 1024 * 1024;
 
   // Load existing chat session on mount
   useEffect(() => {
@@ -154,6 +157,20 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, [messages]);
+
+  useEffect(() => {
+    const preventBrowserDropOpen = (event: DragEvent) => {
+      event.preventDefault();
+    };
+
+    window.addEventListener("dragover", preventBrowserDropOpen);
+    window.addEventListener("drop", preventBrowserDropOpen);
+
+    return () => {
+      window.removeEventListener("dragover", preventBrowserDropOpen);
+      window.removeEventListener("drop", preventBrowserDropOpen);
+    };
+  }, []);
 
   const handleClearChat = async () => {
     if (!confirm("Clear chat history?")) return;
@@ -476,16 +493,46 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
     }
   };
 
+  const queueFiles = (incomingFiles: File[]) => {
+    if (incomingFiles.length === 0) return;
+
+    const validSizeFiles = incomingFiles.filter((file) => file.size <= MAX_FILE_SIZE_BYTES);
+    const oversizedCount = incomingFiles.length - validSizeFiles.length;
+
+    if (oversizedCount > 0) {
+      toast.error(`${oversizedCount} file(s) were skipped (max 50MB each).`);
+    }
+
+    setUploadedFiles((prev) => {
+      const existing = new Set(prev.map((f) => `${f.name}-${f.size}-${f.lastModified}`));
+      const deduped = validSizeFiles.filter((f) => !existing.has(`${f.name}-${f.size}-${f.lastModified}`));
+
+      const remainingSlots = Math.max(MAX_FILES - prev.length, 0);
+      const accepted = deduped.slice(0, remainingSlots);
+
+      if (deduped.length > accepted.length) {
+        toast.error(`Only ${MAX_FILES} files can be queued at once.`);
+      }
+
+      return [...prev, ...accepted];
+    });
+  };
+
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      const newFiles = Array.from(e.target.files);
-      setUploadedFiles(prev => {
-        const existingNames = new Set(prev.map(f => f.name + f.size));
-        const deduped = newFiles.filter(f => !existingNames.has(f.name + f.size));
-        return [...prev, ...deduped].slice(0, 50);
-      });
-      // Reset input so the same file can be re-selected if removed
+      queueFiles(Array.from(e.target.files));
       if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
+  const handleDropFiles = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
+
+    if (e.dataTransfer?.files?.length) {
+      queueFiles(Array.from(e.dataTransfer.files));
+      toast.success(`${e.dataTransfer.files.length} file(s) added.`);
     }
   };
 
@@ -508,7 +555,29 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
   };
 
   return (
-    <div className="flex flex-col h-full bg-white overflow-hidden">
+    <div
+      className={`flex flex-col h-full bg-white overflow-hidden transition-all ${isDragOver ? "ring-2 ring-gold ring-inset" : ""}`}
+      onDragOver={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (!isDragOver) setIsDragOver(true);
+      }}
+      onDragEnter={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDragOver(true);
+      }}
+      onDragLeave={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const currentTarget = e.currentTarget;
+        const related = e.relatedTarget as Node | null;
+        if (!related || !currentTarget.contains(related)) {
+          setIsDragOver(false);
+        }
+      }}
+      onDrop={handleDropFiles}
+    >
       {/* Header */}
       <div className="flex items-center gap-3 p-4 border-b border-zinc-200 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
         <Avatar className="w-10 h-10 border-2 border-gold/30">
@@ -687,6 +756,12 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
         onChange={handleFileInputChange}
         className="hidden"
       />
+
+      {isDragOver && (
+        <div className="px-4 py-2 border-t border-gold/30 bg-gold/10 text-center">
+          <p className="text-xs font-medium text-gold">Drop files here to add them to Sarah queue</p>
+        </div>
+      )}
 
       {/* Queued Files Preview */}
       {uploadedFiles.length > 0 && (
