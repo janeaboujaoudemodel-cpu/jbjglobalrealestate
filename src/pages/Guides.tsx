@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import VideoBackground from "@/components/VideoBackground";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { 
   BookOpen, ArrowRight, HelpCircle, FileText, DollarSign, Shield, BarChart3, CheckCircle, Clock, ChevronRight, X
@@ -28,46 +28,79 @@ const staggerContainer = {
   }
 };
 
-// All guide books from the collections (guides + FAQs) — exclude Guides Library itself
 const allGuideBooks = INVESTOR_BOOKS.filter(b => b.title !== 'Guides Library');
 
-// What You'll Learn items
 const learningTopics = [
-  {
-    icon: FileText,
-    title: "Transaction structure and roles",
-    description: "Understand the step-by-step process and who does what"
-  },
-  {
-    icon: CheckCircle,
-    title: "Common documents and checkpoints",
-    description: "Know what paperwork is required and when"
-  },
-  {
-    icon: DollarSign,
-    title: "Fee clarity and what is paid when",
-    description: "Transparent breakdown of all costs involved"
-  },
-  {
-    icon: Shield,
-    title: "Risk controls and readiness checklists",
-    description: "Protect yourself with proper due diligence"
-  },
-  {
-    icon: BarChart3,
-    title: "Market intelligence reading basics",
-    description: "Understand data and trends where relevant"
-  },
-  {
-    icon: CheckCircle,
-    title: "Payment plan structures and milestones",
-    description: "How installment schedules work in off-plan purchases"
-  }
+  { icon: FileText, title: "Transaction structure and roles", description: "Understand the step-by-step process and who does what" },
+  { icon: CheckCircle, title: "Common documents and checkpoints", description: "Know what paperwork is required and when" },
+  { icon: DollarSign, title: "Fee clarity and what is paid when", description: "Transparent breakdown of all costs involved" },
+  { icon: Shield, title: "Risk controls and readiness checklists", description: "Protect yourself with proper due diligence" },
+  { icon: BarChart3, title: "Market intelligence reading basics", description: "Understand data and trends where relevant" },
+  { icon: CheckCircle, title: "Payment plan structures and milestones", description: "How installment schedules work in off-plan purchases" }
 ];
+
+// ─── Auto-scrolling Book Marquee ───
+function BookMarquee({ books }: { books: BookData[] }) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const duplicated = [...books, ...books, ...books];
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    let animId: number;
+    let pos = 0;
+    const speed = 0.5;
+    const singleSetWidth = books.length * 152;
+
+    const tick = () => {
+      pos += speed;
+      if (pos >= singleSetWidth) pos -= singleSetWidth;
+      el.style.transform = `translateX(-${pos}px)`;
+      animId = requestAnimationFrame(tick);
+    };
+    animId = requestAnimationFrame(tick);
+
+    const pause = () => cancelAnimationFrame(animId);
+    const resume = () => { animId = requestAnimationFrame(tick); };
+    el.addEventListener('mouseenter', pause);
+    el.addEventListener('mouseleave', resume);
+
+    return () => {
+      cancelAnimationFrame(animId);
+      el.removeEventListener('mouseenter', pause);
+      el.removeEventListener('mouseleave', resume);
+    };
+  }, [books.length]);
+
+  return (
+    <div className="overflow-hidden w-full py-6">
+      <div ref={scrollRef} className="flex gap-6 will-change-transform" style={{ width: 'max-content' }}>
+        {duplicated.map((book, i) => (
+          <div key={`${book.title}-${i}`} className="flex-shrink-0 w-28 md:w-36">
+            <div className="relative w-24 h-36 md:w-32 md:h-44 mx-auto rounded-md overflow-hidden border border-gold/40 shadow-[4px_4px_20px_rgba(0,0,0,0.25)]">
+              <BookCoverFace book={book} bare />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 const Guides = () => {
   const [selectedBook, setSelectedBook] = useState<BookData | null>(null);
   const navigate = useNavigate();
+
+  const goToChapter = (book: BookData, index: number) => {
+    const directHref = book._chapterHrefs?.[index];
+    const target = directHref || `${book.href}#chapter-${index + 1}`;
+    setSelectedBook(null);
+    if (target.startsWith('/') && !target.includes('#')) {
+      window.location.href = target;
+    } else {
+      navigate(target);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-black">
@@ -78,7 +111,7 @@ const Guides = () => {
         canonicalPath="/guides"
       />
 
-      {/* Hero Section */}
+      {/* Hero */}
       <section className="jj-hero-fullscreen relative flex items-center overflow-hidden">
         <div className="absolute inset-0 bg-black">
           <VideoBackground 
@@ -91,51 +124,25 @@ const Guides = () => {
 
         <motion.div 
           className="relative z-10 container mx-auto px-4 py-32 text-center max-w-4xl"
-          initial="hidden"
-          animate="visible"
-          variants={staggerContainer}
+          initial="hidden" animate="visible" variants={staggerContainer}
         >
-          <motion.div 
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-black/30 backdrop-blur-md"
-            variants={fadeInUp}
-          >
+          <motion.div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-black/30 backdrop-blur-md" variants={fadeInUp}>
             <BookOpen className="w-4 h-4 text-gold" />
-            <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">
-              Guides
-            </span>
+            <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">Guides</span>
           </motion.div>
-
-          <motion.h1 
-            className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-[-0.02em]"
-            style={{ fontFamily: "Poppins, sans-serif" }}
-            variants={fadeInUp}
-          >
+          <motion.h1 className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-[-0.02em]" style={{ fontFamily: "Poppins, sans-serif" }} variants={fadeInUp}>
             Guides Library
           </motion.h1>
-
-          <motion.p 
-            className="text-white/70 text-base md:text-lg max-w-3xl mx-auto mb-10 leading-relaxed"
-            variants={fadeInUp}
-          >
+          <motion.p className="text-white/70 text-base md:text-lg max-w-3xl mx-auto mb-10 leading-relaxed" variants={fadeInUp}>
             Structured guides built to answer real questions—fees, steps, timelines, and best-practice workflows across buying, selling, renting, and investing.
           </motion.p>
-
           <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
-            <PremiumHeroButton href="#guides-library">
-              Browse Guides
-            </PremiumHeroButton>
-            <PremiumHeroButton href="/contact">
-              Ask a Question
-            </PremiumHeroButton>
+            <PremiumHeroButton href="#guides-library">Browse Guides</PremiumHeroButton>
+            <PremiumHeroButton href="/contact">Ask a Question</PremiumHeroButton>
           </motion.div>
         </motion.div>
         
-        <motion.div 
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1, duration: 0.6 }}
-        >
+        <motion.div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1, duration: 0.6 }}>
           <span className="text-gold/60 text-xs tracking-widest uppercase">Explore</span>
           <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
         </motion.div>
@@ -144,18 +151,8 @@ const Guides = () => {
       {/* How This Library Works */}
       <section className="bg-black py-10 md:py-12">
         <div className="jj-layer-2">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-            className="max-w-4xl mx-auto text-center"
-          >
-            <motion.h2
-              variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black mb-6"
-              style={{ fontFamily: "Playfair Display, serif" }}
-            >
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="max-w-4xl mx-auto text-center">
+            <motion.h2 variants={fadeInUp} className="text-3xl md:text-4xl font-bold text-black mb-6" style={{ fontFamily: "Playfair Display, serif" }}>
               How This Library Works
             </motion.h2>
             <motion.div variants={fadeInUp} className="jj-card-inner max-w-3xl mx-auto">
@@ -176,26 +173,29 @@ const Guides = () => {
 
       <SectionDivider />
 
-      {/* Guide Books Grid — Floating books on black, no card background */}
-      <section id="guides-library" className="py-10 md:py-12 bg-black">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-          >
-            <motion.div className="text-center mb-10" variants={fadeInUp}>
-              <h2 className="text-3xl md:text-4xl font-bold mb-3 text-white" style={{ fontFamily: "Playfair Display, serif" }}>
+      {/* Explore Guides — Premium gold/champagne background + auto-scrolling marquee */}
+      <section id="guides-library" className="py-10 md:py-16 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_center,_var(--tw-gradient-stops))] from-gold/15 via-transparent to-transparent" />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}>
+            <motion.div className="text-center mb-6" variants={fadeInUp}>
+              <h2 className="text-3xl md:text-4xl font-bold mb-3 text-black" style={{ fontFamily: "Playfair Display, serif" }}>
                 Explore Guides
               </h2>
-              <p className="text-white/60 max-w-2xl mx-auto text-sm">
+              <p className="text-black/60 max-w-2xl mx-auto text-sm">
                 Select a guide to view the table of contents and open the full page.
               </p>
             </motion.div>
 
-            {/* Books — No card bg, straight, with proper spacing */}
-            <div className="flex flex-wrap justify-center gap-6 md:gap-8 max-w-6xl mx-auto">
+            {/* Auto-scrolling book marquee */}
+            <motion.div variants={fadeInUp}>
+              <BookMarquee books={allGuideBooks} />
+            </motion.div>
+
+            {/* Books Grid */}
+            <div className="flex flex-wrap justify-center gap-6 md:gap-8 max-w-6xl mx-auto mt-4">
               {allGuideBooks.map((book) => (
                 <motion.button
                   key={book.title}
@@ -209,7 +209,7 @@ const Guides = () => {
                     <BookCoverFace book={book} bare />
                     <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
-                  <p className="text-xs text-white/70 text-center font-medium group-hover:text-gold transition-colors leading-tight">
+                  <p className="text-xs text-black/70 text-center font-medium group-hover:text-gold transition-colors leading-tight">
                     {book.title}
                   </p>
                 </motion.button>
@@ -224,17 +224,8 @@ const Guides = () => {
       {/* What You'll Learn */}
       <section className="bg-black py-10 md:py-12">
         <div className="jj-layer-2">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-          >
-            <motion.h2
-              variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-10"
-              style={{ fontFamily: "Playfair Display, serif" }}
-            >
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}>
+            <motion.h2 variants={fadeInUp} className="text-3xl md:text-4xl font-bold text-black text-center mb-10" style={{ fontFamily: "Playfair Display, serif" }}>
               What You'll Learn
             </motion.h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 max-w-5xl mx-auto">
@@ -268,13 +259,7 @@ const Guides = () => {
       {/* CTA Block */}
       <section className="py-10 md:py-12 bg-black">
         <div className="jj-layer-2">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeInUp}
-            className="text-center"
-          >
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="text-center">
             <div className="max-w-5xl mx-auto jj-card-inner border-2 border-gold/30">
               <HelpCircle className="w-12 h-12 text-gold mx-auto mb-6" />
               <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black" style={{ fontFamily: "Playfair Display, serif" }}>
@@ -284,19 +269,15 @@ const Guides = () => {
                 Tell us your goal (buy, sell, rent, invest) and we'll route you to the right guide.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <PremiumHeroButton href="/contact" variant="light-bg">
-                  Ask a Question
-                </PremiumHeroButton>
-                <PremiumHeroButton href="/contact?type=support" variant="light-bg">
-                  Contact Support
-                </PremiumHeroButton>
+                <PremiumHeroButton href="/contact" variant="light-bg">Ask a Question</PremiumHeroButton>
+                <PremiumHeroButton href="/contact?type=support" variant="light-bg">Contact Support</PremiumHeroButton>
               </div>
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* TOC Modal — Gold Champagne Theme, not touching header */}
+      {/* TOC Modal */}
       {selectedBook && (
         <div 
           className="fixed inset-0 z-50 flex items-center justify-center p-4 pt-20"
@@ -308,12 +289,9 @@ const Guides = () => {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden"
-            style={{
-              boxShadow: '0 20px 60px rgba(200,167,102,0.3), 0 10px 30px rgba(0,0,0,0.2)',
-            }}
+            style={{ boxShadow: '0 20px 60px rgba(200,167,102,0.3), 0 10px 30px rgba(0,0,0,0.2)' }}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Header */}
             <div className="flex items-start gap-5 p-6 border-b border-gold/20">
               <div className="relative w-24 h-32 rounded-md overflow-hidden shadow-lg flex-shrink-0 border border-gold/40">
                 <img src={selectedBook.cover} alt={selectedBook.title} className="w-full h-full object-cover" loading="eager" />
@@ -321,16 +299,13 @@ const Guides = () => {
               <div className="flex-1 min-w-0">
                 <h3 className="text-xl font-bold text-black mb-1">{selectedBook.title}</h3>
                 <p className="text-gold text-sm capitalize font-semibold">{selectedBook.category}</p>
-                <p className="text-black/40 text-xs mt-2">
-                  {selectedBook.tableOfContents.length} chapters
-                </p>
+                <p className="text-black/40 text-xs mt-2">{selectedBook.tableOfContents.length} chapters</p>
               </div>
               <button onClick={() => setSelectedBook(null)} className="text-gold hover:text-black transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            {/* Table of Contents — Clickable sections */}
             <div className="p-6 overflow-y-auto max-h-[45vh]">
               <h4 className="text-sm font-semibold text-gold uppercase tracking-wider mb-4">Table of Contents</h4>
               <div className="space-y-1">
@@ -338,11 +313,7 @@ const Guides = () => {
                   <button
                     key={index}
                     className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gold/10 transition-colors group text-left"
-                    onClick={() => {
-                      const directHref = selectedBook._chapterHrefs?.[index];
-                      setSelectedBook(null);
-                      navigate(directHref || `${selectedBook.href}#chapter-${index + 1}`);
-                    }}
+                    onClick={() => goToChapter(selectedBook, index)}
                   >
                     <span className="w-8 h-8 rounded-lg bg-black border border-gold/30 flex items-center justify-center text-gold text-sm font-medium flex-shrink-0">
                       {index + 1}
@@ -360,16 +331,13 @@ const Guides = () => {
               </div>
             </div>
 
-            {/* Footer */}
             <div className="p-6 border-t border-gold/20">
               <Button
                 className="w-full bg-gradient-to-r from-[#C9A84C] to-[#B8973F] hover:from-[#B8973F] hover:to-[#A7862E] text-black font-bold py-3 rounded-xl"
-                style={{
-                  boxShadow: '0 6px 20px rgba(200,167,102,0.3), inset 0 1px 3px rgba(255,255,255,0.5)',
-                }}
+                style={{ boxShadow: '0 6px 20px rgba(200,167,102,0.3), inset 0 1px 3px rgba(255,255,255,0.5)' }}
                 onClick={() => {
                   setSelectedBook(null);
-                  navigate(selectedBook.href);
+                  window.location.href = selectedBook.href;
                 }}
               >
                 Open Full Guide <ArrowRight className="w-4 h-4 ml-2" />
