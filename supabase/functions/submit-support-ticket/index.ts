@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { emailShell, sharedSections, progressSteps } from "../_shared/email-html.ts";
+import { emailShell, sharedSections, progressSteps, ticketSummaryCard, ticketSummaryCardAr, arabicDivider } from "../_shared/email-html.ts";
 
 // Standard Resend API endpoint (Tokyo region is DNS verification location only, API is global)
 const RESEND_API_URL = "https://api.resend.com/emails";
@@ -216,17 +216,26 @@ ${sharedSections("support ticket", "JBJ Global Real Estate Support Team")}
 <p style="font-size:15px;color:#333;margin:0 0 16px;">Dear <strong>${fullName}</strong>,</p>
 <p style="font-size:14px;color:#555;margin:0 0 24px;">Your support ticket has been received and our team is now reviewing it.</p>
 ${progressSteps(['Received', 'In Review', 'Resolved'], [true, false, false], [true, false, false])}
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;">
-<tr><td style="padding:20px;">
-<p style="color:#666;font-size:12px;margin:0 0 8px;text-transform:uppercase;letter-spacing:1px;">Ticket Summary</p>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-<tr><td style="padding:7px 0;color:#666;font-size:13px;width:40%;">Ticket Number</td><td style="padding:7px 0;color:#C8A766;font-weight:700;font-size:14px;font-family:'Courier New',monospace;">${ticket.ticket_number}</td></tr>
-<tr><td style="padding:7px 0;color:#666;font-size:13px;">Subject</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${subject}</td></tr>
-<tr><td style="padding:7px 0;color:#666;font-size:13px;">Category</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${serviceCategory}</td></tr>
-<tr><td style="padding:7px 0;color:#666;font-size:13px;">Submitted</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${formattedDate} ${formattedTime}</td></tr>
-</table>
-</td></tr></table>
-${sharedSections("support ticket", "JBJ Global Real Estate Support Team")}
+${ticketSummaryCard([
+  { label: 'Ticket Number', value: ticket.ticket_number, highlight: true },
+  { label: 'Subject', value: subject },
+  { label: 'Category', value: serviceCategory },
+  { label: 'Priority', value: aiAnalyzedPriority },
+  { label: 'Submitted', value: `${formattedDate} ${formattedTime}` },
+])}
+${arabicDivider()}
+<div style="direction:rtl;text-align:right;">
+<p style="font-size:15px;color:#333;margin:0 0 16px;">عزيزي/عزيزتي <strong>${fullName}</strong>،</p>
+<p style="font-size:14px;color:#555;margin:0 0 24px;">تم استلام تذكرة الدعم الخاصة بك ويقوم فريقنا حالياً بمراجعتها.</p>
+${ticketSummaryCardAr([
+  { label: 'رقم التذكرة', value: ticket.ticket_number, highlight: true },
+  { label: 'الموضوع', value: subject },
+  { label: 'الفئة', value: serviceCategory },
+  { label: 'الأولوية', value: aiAnalyzedPriority },
+  { label: 'تاريخ ووقت الإرسال', value: `${formattedDate} ${formattedTime}` },
+])}
+</div>
+${sharedSections("support ticket", "JBJ Support Team")}
 </td></tr>`);
 
     // Send BOTH emails in parallel for faster response
