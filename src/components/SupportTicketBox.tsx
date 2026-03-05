@@ -436,7 +436,24 @@ const SupportTicketBox = () => {
                 <div>
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center shadow-lg">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="text-white"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z"/><path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/><path d="M12 21a1.5 1.5 0 0 0 1.5-1.5v-1A1.5 1.5 0 0 0 12 17h-1a1 1 0 0 1-1-1"/><circle cx="12" cy="4" r="0" fill="currentColor"><animate attributeName="r" values="0;1;0" dur="2s" repeatCount="indefinite"/></circle></svg>
+                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 64 64" className="text-white">
+                         {/* Headband */}
+                         <path d="M12 30 C12 14, 52 14, 52 30" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round"/>
+                         {/* Headband thickness/cushion */}
+                         <path d="M14 30 C14 16, 50 16, 50 30" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.4"/>
+                         {/* Left slider arm */}
+                         <path d="M12 30 L12 38" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round"/>
+                         {/* Right slider arm */}
+                         <path d="M52 30 L52 38" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round"/>
+                         {/* Left ear cup - rounded rectangle */}
+                         <rect x="4" y="34" width="16" height="20" rx="8" fill="currentColor" opacity="0.15" stroke="currentColor" strokeWidth="2.5"/>
+                         <rect x="7" y="37" width="10" height="14" rx="5" fill="currentColor" opacity="0.1"/>
+                         {/* Right ear cup - rounded rectangle */}
+                         <rect x="44" y="34" width="16" height="20" rx="8" fill="currentColor" opacity="0.15" stroke="currentColor" strokeWidth="2.5"/>
+                         <rect x="47" y="37" width="10" height="14" rx="5" fill="currentColor" opacity="0.1"/>
+                         {/* Crown/top highlight */}
+                         <ellipse cx="32" cy="15" rx="6" ry="1.5" fill="currentColor" opacity="0.15"/>
+                       </svg>
                     </div>
                     <div>
                       <span className="text-xs uppercase tracking-[0.2em] text-red-500 font-semibold">24/7 Support</span>
