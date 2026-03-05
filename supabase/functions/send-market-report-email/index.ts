@@ -178,7 +178,7 @@ const sendEmail = async (to: string, subject: string, html: string) => {
       Authorization: `Bearer ${RESEND_API_KEY}`,
     },
     body: JSON.stringify({
-      from: "JBJ Global Real Estate <contact@jbj.ae>",
+      from: "JBJ Global Real Estate <jbj@jbj.ae>",
       to: [to],
       reply_to: "CONTACT@JBJ.AE",
       subject,

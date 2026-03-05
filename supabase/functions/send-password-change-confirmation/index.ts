@@ -105,7 +105,7 @@ ${sharedSections("account security", "JBJ Global Real Estate Team")}
       method: "POST",
       headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
       body: JSON.stringify({
-        from: "JBJ Security <contact@jbj.ae>",
+        from: "JBJ Security <jbj@jbj.ae>",
         reply_to: "CONTACT@JBJ.AE",
         to: [email],
         subject: "Your Password Was Changed — JBJ Global Real Estate",
