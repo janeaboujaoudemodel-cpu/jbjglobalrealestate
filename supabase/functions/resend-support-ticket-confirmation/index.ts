@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { emailShell, sharedSections, ticketSummaryCard, ticketSummaryCardAr, arabicDivider, userGreetingRow } from "../_shared/email-html.ts";
 
 // Standard Resend API endpoint (Tokyo region is DNS verification location only, API is global)
 const RESEND_API_URL = "https://api.resend.com/emails";
@@ -74,77 +75,36 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    // Build confirmation email
-    const emailHtml = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <style>
-          body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
-          .container { max-width: 600px; margin: 0 auto; background: #fff; }
-          .header { background: linear-gradient(135deg, #000 0%, #1a1a1a 50%, #2d2d2d 100%); padding: 40px 30px; text-align: center; }
-          .header h1 { color: #C8A766; margin: 0 0 10px 0; font-size: 28px; }
-          .header p { color: #fff; margin: 0; font-size: 16px; }
-          .content { padding: 30px; }
-          .ticket-box { background: linear-gradient(135deg, #fdfbf7, #f5f0e6); border: 2px solid #C8A766; border-radius: 12px; padding: 25px; margin: 25px 0; text-align: center; }
-          .ticket-number { font-size: 28px; font-weight: bold; color: #C8A766; letter-spacing: 3px; font-family: monospace; }
-          .summary-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
-          .summary-label { color: #666; }
-          .summary-value { color: #333; font-weight: 600; }
-          .footer { background: #1a1a1a; text-align: center; padding: 25px; color: #888; font-size: 12px; }
-          .footer-brand { color: #C8A766; font-size: 16px; font-weight: bold; margin-bottom: 10px; }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <div class="header">
-            <h1>JBJ Global Real Estate</h1>
-            <p>Support Ticket Confirmation (Resent)</p>
-          </div>
-          
-          <div class="content">
-            <p>Dear <strong>${ticket.full_name}</strong>,</p>
-            <p>This is a resend of your support ticket confirmation. Please save this ticket number for your reference:</p>
-            
-            <div class="ticket-box">
-              <p style="color: #666; margin-bottom: 10px; font-size: 14px;">Your Ticket Number</p>
-              <div class="ticket-number">${ticket.ticket_number}</div>
-            </div>
-            
-            <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0;">
-              <div class="summary-row">
-                <span class="summary-label">Subject:</span>
-                <span class="summary-value">${ticket.subject}</span>
-              </div>
-              <div class="summary-row">
-                <span class="summary-label">Category:</span>
-                <span class="summary-value">${ticket.service_category}</span>
-              </div>
-              <div class="summary-row">
-                <span class="summary-label">Status:</span>
-                <span class="summary-value">${ticket.status}</span>
-              </div>
-            </div>
-            
-            <p>Our team will review your request and respond as soon as possible.</p>
-            
-            <p style="color: #666; font-size: 13px; margin-top: 30px;">
-              For urgent matters, contact us at:<br>
-              📞 +971 56 591 1000<br>
-              ✉️ ${OFFICIAL_EMAILS.support}
-            </p>
-          </div>
-          
-          <div class="footer">
-            <div class="footer-brand">JBJ Global Real Estate</div>
-            <p>Your Trusted Partner in UAE Property</p>
-          </div>
-        </div>
-      </body>
-      </html>
-    `;
+    const submittedAt = new Date(ticket.created_at || Date.now());
+    const submittedEn = submittedAt.toLocaleString("en-GB", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+    const submittedAr = submittedAt.toLocaleString("ar-AE-u-nu-arab", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+
+    const bodyContent = `<tr><td class="content-pad" style="padding:32px;">
+${userGreetingRow(ticket.full_name)}
+<p style="font-size:14px;color:#555;margin:0 0 22px;">This is a resend of your support ticket confirmation. Please keep your ticket details for follow-up.</p>
+${ticketSummaryCard([
+  { label: "Ticket Number", value: ticket.ticket_number, highlight: true },
+  { label: "Subject", value: ticket.subject || "-" },
+  { label: "Category", value: ticket.service_category || "General" },
+  { label: "Status", value: ticket.status || "open" },
+  { label: "Submitted", value: submittedEn },
+])}
+${arabicDivider()}
+<div style="direction:rtl;text-align:right;">
+${userGreetingRow(ticket.full_name, true)}
+<p style="font-size:14px;color:#555;margin:0 0 22px;">هذه إعادة إرسال لتأكيد تذكرة الدعم الخاصة بك. يرجى الاحتفاظ ببيانات التذكرة للمتابعة.</p>
+${ticketSummaryCardAr([
+  { label: "رقم التذكرة", value: ticket.ticket_number, highlight: true },
+  { label: "الموضوع", value: ticket.subject || "-" },
+  { label: "الفئة", value: ticket.service_category || "عام" },
+  { label: "الحالة", value: ticket.status || "مفتوحة" },
+  { label: "تاريخ ووقت الإرسال", value: submittedAr },
+])}
+</div>
+${sharedSections("support ticket", "JBJ Support Team")}
+</td></tr>`;
+
+    const emailHtml = emailShell("Support Ticket Confirmation", bodyContent);
 
     // Send to customer AND admin copy in parallel
     const [customerResult, adminResult] = await Promise.allSettled([

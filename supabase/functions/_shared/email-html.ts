@@ -52,7 +52,7 @@ export function arabicDivider(): string {
 // ─── Header ───
 export function sharedHeader(departmentLabel: string): string {
   return `<tr><td style="background:#000;padding:28px 28px 24px;text-align:center;border-radius:18px 18px 0 0;">
-${monogramSvg(84)}
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto;"><tr><td align="center">${monogramSvg(84)}</td></tr></table>
 <p style="color:#C8A766;margin:10px 0 0;font-size:13px;font-weight:700;letter-spacing:2.6px;text-transform:uppercase;">JBJ GLOBAL REAL ESTATE</p>
 </td></tr>
 <tr><td style="background:linear-gradient(135deg,#C8A766,#B8956E,#A07D4A);padding:20px 26px;text-align:center;border-radius:0;">
@@ -79,7 +79,7 @@ export function userGreetingRow(name: string, arabic = false): string {
 }
 
 export function lockIconBadge(size = 74): string {
-  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="border-collapse:separate;"><tr><td style="width:${size}px;height:${size}px;border-radius:${size}px;border:2px solid #C8A766;background:radial-gradient(circle at 30% 25%,#fff,#f8f2e6 65%,#f0e4ce 100%);text-align:center;vertical-align:middle;">${SVG.lock}</td></tr></table>`;
+  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="border-collapse:separate;"><tr><td style="width:${size}px;height:${size}px;border-radius:${size}px;border:2px solid #C8A766;background:transparent;text-align:center;vertical-align:middle;">${SVG.lock}</td></tr></table>`;
 }
 
 // ─── Inquiry Box ───
@@ -90,7 +90,7 @@ export function inquiryBox(contextLabel: string): string {
 // ─── Ticket Support ───
 export function ticketSupportEmbed(): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:16px 0 24px;"><tr><td style="padding:24px 20px;background:linear-gradient(135deg,#fff5f5,#ffe9e9);border:1px solid #ef4444;border-radius:18px;text-align:center;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:#dc2626;border-radius:12px;text-align:center;vertical-align:middle;">${SVG.headsetWhite}</td></tr></table>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="text-align:center;vertical-align:middle;">${SVG.headsetWhite}</td></tr></table>
 <p style="margin:0 0 4px;font-size:11px;font-weight:700;color:#dc2626;text-transform:uppercase;letter-spacing:2px;">24/7 SUPPORT</p>
 <p style="margin:0 0 6px;font-size:16px;font-weight:700;color:#7f1d1d;">Need Help? Open a Support Ticket</p>
 <p style="margin:0 0 14px;font-size:13px;color:#991b1b;">Our team typically responds within 24 hours</p>
@@ -100,7 +100,7 @@ export function ticketSupportEmbed(): string {
 
 export function ticketSupportEmbedAr(): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:16px 0 24px;direction:rtl;"><tr><td style="padding:24px 20px;background:linear-gradient(135deg,#fff5f5,#ffe9e9);border:1px solid #ef4444;border-radius:18px;text-align:center;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:52px;height:52px;background:#dc2626;border-radius:12px;text-align:center;vertical-align:middle;">${SVG.headsetWhite}</td></tr></table>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="text-align:center;vertical-align:middle;">${SVG.headsetWhite}</td></tr></table>
 <p style="margin:0 0 4px;font-size:11px;font-weight:700;color:#dc2626;letter-spacing:2px;">دعم على مدار الساعة</p>
 <p style="margin:0 0 6px;font-size:16px;font-weight:700;color:#7f1d1d;">هل تحتاج مساعدة؟ افتح تذكرة دعم</p>
 <p style="margin:0 0 14px;font-size:13px;color:#991b1b;">فريقنا يرد عادةً خلال ٢٤ ساعة</p>
@@ -111,12 +111,12 @@ export function ticketSupportEmbedAr(): string {
 // ─── Recommended Actions (clean icon cards) ───
 function recommendedCard(title: string, href: string, iconPath: string, alt: string, withBlackBorder = false): string {
   const frameStyle = withBlackBorder
-    ? "width:52px;height:52px;border:1.5px solid #1a1a1a;border-radius:52px;text-align:center;vertical-align:middle;"
-    : "width:52px;height:52px;text-align:center;vertical-align:middle;";
+    ? "width:58px;height:58px;border:1.5px solid #1a1a1a;border-radius:58px;text-align:center;vertical-align:middle;"
+    : "width:58px;height:58px;text-align:center;vertical-align:middle;";
 
   return `<td width="33%" style="text-align:center;padding:4px;vertical-align:top;"><a href="${href}" style="display:block;text-decoration:none;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;"><tr><td style="padding:18px 8px;text-align:center;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="${frameStyle}">${iconImg(iconPath, alt, 30)}</td></tr></table>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="${frameStyle}">${iconImg(iconPath, alt, 34)}</td></tr></table>
 <p style="margin:0;font-size:12px;color:#1a1a1a;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">${title}</p>
 </td></tr></table></a></td>`;
 }
@@ -199,22 +199,22 @@ export function readyToGetStartedHtml(): string {
 
 function socialLinksFooter(): string {
   const links: Array<{ icon: string; url: string; alt: string }> = [
-    { icon: SVG.instagram, url: "https://www.instagram.com/jbj.ae", alt: "Instagram" },
-    { icon: SVG.facebook, url: "https://www.facebook.com/share/1G7CgSaV2L/?mibextid=wwXIfr", alt: "Facebook" },
-    { icon: SVG.linkedin, url: "https://www.linkedin.com/company/jbjglobalrealestate", alt: "LinkedIn" },
-    { icon: SVG.tiktok, url: "https://www.tiktok.com/@jbj.ae", alt: "TikTok" },
-    { icon: SVG.youtube, url: "https://youtube.com/@jbjglobalrealestate", alt: "YouTube" },
+    { icon: `${ICON_BASE}/social-instagram.svg`, url: "https://www.instagram.com/jbj.ae", alt: "Instagram" },
+    { icon: `${ICON_BASE}/social-facebook.svg`, url: "https://www.facebook.com/share/1G7CgSaV2L/?mibextid=wwXIfr", alt: "Facebook" },
+    { icon: `${ICON_BASE}/social-linkedin.svg`, url: "https://www.linkedin.com/company/jbjglobalrealestate", alt: "LinkedIn" },
+    { icon: `${ICON_BASE}/social-tiktok.svg`, url: "https://www.tiktok.com/@jbj.ae", alt: "TikTok" },
+    { icon: `${ICON_BASE}/social-youtube.svg`, url: "https://youtube.com/@jbjglobalrealestate", alt: "YouTube" },
   ];
 
   const item = (icon: string, url: string, alt: string) =>
-    `<td style="padding:0 5px;text-align:center;"><a href="${url}" aria-label="${alt}" style="display:inline-block;width:38px;height:38px;border:1.5px solid #C8A766;border-radius:38px;text-decoration:none;"><table role="presentation" width="38" height="38" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" valign="middle">${icon}</td></tr></table></a></td>`;
+    `<td style="padding:0 5px;text-align:center;"><a href="${url}" aria-label="${alt}" style="display:inline-block;width:38px;height:38px;border:1.5px solid #C8A766;border-radius:38px;text-decoration:none;"><table role="presentation" width="38" height="38" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" valign="middle">${iconImg(icon, alt, 20)}</td></tr></table></a></td>`;
 
   return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:12px;"><tr>${links.map((l) => item(l.icon, l.url, l.alt)).join("")}</tr></table>`;
 }
 
 export function sharedFooterHtml(): string {
   return `<tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:#000;border-radius:0 0 18px 18px;"><tr><td style="padding:34px 18px 34px;text-align:center;">
-${monogramSvg(72)}
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto;"><tr><td align="center">${monogramSvg(72)}</td></tr></table>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:12px auto 12px;"><tr><td style="border-top:1px solid #C8A76655;"></td></tr></table>
 <p style="color:#C8A766;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin:0 0 14px;">Connect with us on social media</p>
 ${socialLinksFooter()}
