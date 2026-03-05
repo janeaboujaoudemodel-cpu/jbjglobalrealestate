@@ -46,7 +46,7 @@ export const getSessionId = (): string => {
   return sessionId;
 };
 
-// ── Batched event queue for user_events (high-perf) ──
+// ── Batched event queue ──
 interface QueuedUserEvent {
   user_id: string | null;
   session_id: string;
@@ -59,7 +59,7 @@ interface QueuedUserEvent {
 
 const USER_EVENT_QUEUE: QueuedUserEvent[] = [];
 let userEventFlushTimer: ReturnType<typeof setTimeout> | null = null;
-const FLUSH_INTERVAL = 4000;
+const FLUSH_INTERVAL = 8000; // Increased from 4s to 8s
 const MAX_BATCH = 25;
 
 async function flushUserEvents() {
@@ -92,9 +92,8 @@ function throttle<T extends (...args: any[]) => void>(fn: T, ms: number): T {
 }
 
 /**
- * GlobalVisitorTracking — unified tracking component.
- * Writes to BOTH legacy visitor_* tables AND new user_events + user_sessions tables.
- * Points are auto-awarded via DB trigger (award_points_on_event).
+ * GlobalVisitorTracking — DEFERRED tracking component.
+ * All tracking is deferred until after initial paint via requestIdleCallback.
  */
 export const GlobalVisitorTracking = () => {
   const location = useLocation();
@@ -104,7 +103,6 @@ export const GlobalVisitorTracking = () => {
   const scrollDepth = useRef(0);
   const pageEntryTime = useRef(Date.now());
 
-  // ── Queue a user event (batched insert) ──
   const queueUserEvent = useCallback((
     eventName: string,
     metadata: Record<string, unknown> = {},
@@ -126,7 +124,7 @@ export const GlobalVisitorTracking = () => {
     }
   }, [user, location.pathname]);
 
-  // ── Create user_sessions row ──
+  // ── Create user_sessions row (deferred) ──
   const initUserSession = useCallback(async () => {
     if (sessionCreated.current) return;
     sessionCreated.current = true;
@@ -150,7 +148,6 @@ export const GlobalVisitorTracking = () => {
         is_authenticated: !!user,
       } as any);
     } catch {
-      // Session may already exist (page reload) — update instead
       await supabase.from('user_sessions').update({
         user_id: user?.id || null,
         is_authenticated: !!user,
@@ -196,7 +193,6 @@ export const GlobalVisitorTracking = () => {
     pageEntryTime.current = Date.now();
     scrollDepth.current = 0;
 
-    // Queue to new user_events table (points auto-awarded by DB trigger)
     queueUserEvent('page_view', {
       title: document.title,
       referrer: document.referrer,
@@ -204,7 +200,7 @@ export const GlobalVisitorTracking = () => {
       scroll_depth_previous: prevScroll,
     });
 
-    // Legacy visitor_events
+    // Legacy — batched, non-blocking
     try {
       await supabase.from('visitor_events').insert({
         session_id: sessionId,
@@ -223,48 +219,37 @@ export const GlobalVisitorTracking = () => {
       const pagesVisited = parseInt(sessionStorage.getItem('pages_visited') || '0') + 1;
       sessionStorage.setItem('pages_visited', pagesVisited.toString());
 
-      await supabase.from('visitor_sessions')
+      // Single combined update instead of two separate calls
+      void supabase.from('visitor_sessions')
         .update({ pages_visited: pagesVisited, last_activity_at: new Date().toISOString() })
         .eq('session_id', sessionId);
 
-      // Also update new user_sessions pages count
-      await supabase.from('user_sessions')
+      void supabase.from('user_sessions')
         .update({ pages_visited: pagesVisited } as any)
         .eq('session_id', sessionId);
     } catch { /* silent */ }
   }, [location.pathname, queueUserEvent]);
 
-  // ── Track clicks (throttled to max 1/second to avoid spam) ──
+  // ── Track clicks (throttled to max 1/2 seconds) ──
   const handleGlobalClick = useCallback(throttle(async (event: MouseEvent) => {
     const target = event.target as HTMLElement;
     if (!target) return;
 
-    const sessionId = getSessionId();
     const linkEl = target.closest('a');
     const btnEl = target.closest('button');
     
-    let elementType = target.tagName.toLowerCase();
-    let text = target.textContent?.slice(0, 100) || '';
+    // Only track meaningful clicks (links and buttons)
+    if (!linkEl && !btnEl) return;
+
+    let elementType = 'element';
+    let text = '';
     
     if (linkEl) { elementType = 'link'; text = linkEl.textContent?.slice(0, 100) || ''; }
     if (btnEl) { elementType = 'button'; text = btnEl.textContent?.slice(0, 100) || ''; }
 
-    // Queue to user_events
+    // Queue only to new table — skip legacy per-click inserts
     queueUserEvent('click', { element: elementType, text }, target.id || undefined);
-
-    // Legacy visitor_events
-    try {
-      await supabase.from('visitor_events').insert({
-        session_id: sessionId,
-        event_type: 'click',
-        event_name: `Clicked ${elementType}`,
-        page_path: location.pathname,
-        element_id: target.id || null,
-        element_text: text || null,
-        event_data: { element: elementType, text, href: linkEl?.href },
-      } as any);
-    } catch { /* silent */ }
-  }, 1000), [location.pathname, queueUserEvent]);
+  }, 2000), [queueUserEvent]);
 
   // ── Track scroll depth ──
   const handleScroll = useCallback(() => {
@@ -276,26 +261,19 @@ export const GlobalVisitorTracking = () => {
 
   // ── Handle exit / tab close ──
   const handleBeforeUnload = useCallback(() => {
-    // Flush pending events
     flushUserEvents();
 
     const sessionId = getSessionId();
     const sessionStartTime = parseInt(sessionStorage.getItem('session_start_time') || Date.now().toString());
     const totalTimeSpent = Math.floor((Date.now() - sessionStartTime) / 1000);
 
-    // Update user_sessions via sendBeacon with proper auth headers
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
     const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
-    if (navigator.sendBeacon && supabaseUrl && supabaseKey) {
-      const url = `${supabaseUrl}/rest/v1/user_sessions?session_id=eq.${encodeURIComponent(sessionId)}`;
-      const body = JSON.stringify({
-        ended_at: new Date().toISOString(),
-        duration_seconds: totalTimeSpent,
-      });
-      // sendBeacon doesn't support custom headers, so use fetch with keepalive instead
+    if (supabaseUrl && supabaseKey) {
+      // Single keepalive call to update session
       try {
-        fetch(url, {
+        fetch(`${supabaseUrl}/rest/v1/user_sessions?session_id=eq.${encodeURIComponent(sessionId)}`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -303,88 +281,71 @@ export const GlobalVisitorTracking = () => {
             'Authorization': `Bearer ${supabaseKey}`,
             'Prefer': 'return=minimal',
           },
-          body,
+          body: JSON.stringify({
+            ended_at: new Date().toISOString(),
+            duration_seconds: totalTimeSpent,
+          }),
+          keepalive: true,
+        });
+      } catch { /* silent */ }
+
+      // Legacy update
+      try {
+        fetch(`${supabaseUrl}/rest/v1/visitor_sessions?session_id=eq.${encodeURIComponent(sessionId)}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': supabaseKey,
+            'Authorization': `Bearer ${supabaseKey}`,
+            'Prefer': 'return=minimal',
+          },
+          body: JSON.stringify({
+            total_time_spent: totalTimeSpent,
+            last_activity_at: new Date().toISOString(),
+            scroll_depth_max: scrollDepth.current,
+          }),
           keepalive: true,
         });
       } catch { /* silent */ }
     }
-
-    // Legacy update
-    try {
-      fetch(`${supabaseUrl}/rest/v1/visitor_sessions?session_id=eq.${encodeURIComponent(sessionId)}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': supabaseKey || '',
-          'Authorization': `Bearer ${supabaseKey || ''}`,
-          'Prefer': 'return=minimal',
-        },
-        body: JSON.stringify({
-          total_time_spent: totalTimeSpent,
-          last_activity_at: new Date().toISOString(),
-          scroll_depth_max: scrollDepth.current,
-        }),
-        keepalive: true,
-      });
-    } catch { /* silent */ }
   }, []);
 
-  // ── Track visibility change (mobile background) ──
   const handleVisibilityChange = useCallback(() => {
     if (document.visibilityState === 'hidden') {
       flushUserEvents();
-      const sessionId = getSessionId();
-      const sessionStartTime = parseInt(sessionStorage.getItem('session_start_time') || Date.now().toString());
-      const totalTimeSpent = Math.floor((Date.now() - sessionStartTime) / 1000);
-      
-      // Use keepalive fetch for reliability when tab is hidden
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-      if (supabaseUrl && supabaseKey) {
-        try {
-          fetch(`${supabaseUrl}/rest/v1/user_sessions?session_id=eq.${encodeURIComponent(sessionId)}`, {
-            method: 'PATCH',
-            headers: {
-              'Content-Type': 'application/json',
-              'apikey': supabaseKey,
-              'Authorization': `Bearer ${supabaseKey}`,
-              'Prefer': 'return=minimal',
-            },
-            body: JSON.stringify({ duration_seconds: totalTimeSpent }),
-            keepalive: true,
-          });
-        } catch { /* silent */ }
-      }
     }
   }, []);
 
-  // ── Initialize ──
+  // ── DEFERRED Initialize — wait until after first paint ──
   useEffect(() => {
-    initLegacySession();
-    initUserSession();
+    const scheduleInit = typeof requestIdleCallback !== 'undefined'
+      ? requestIdleCallback
+      : (cb: () => void) => setTimeout(cb, 2000);
+
+    scheduleInit(() => {
+      initLegacySession();
+      initUserSession();
+    });
   }, [initLegacySession, initUserSession]);
 
-  // ── When user authenticates mid-session, update session records ──
+  // ── When user authenticates mid-session ──
   useEffect(() => {
     if (!user?.id) return;
     const sessionId = getSessionId();
-    
-    // Update user_sessions with user_id
     void supabase.from('user_sessions')
       .update({ user_id: user.id, is_authenticated: true } as any)
       .eq('session_id', sessionId);
-
-    // Update legacy visitor_sessions
     void supabase.from('visitor_sessions')
       .update({ user_id: user.id })
       .eq('session_id', sessionId);
-
-    // Queue login event
     queueUserEvent('login', { method: 'session_restore' });
   }, [user?.id, queueUserEvent]);
 
-  // Track page views
-  useEffect(() => { trackPageView(); }, [trackPageView]);
+  // Track page views (deferred)
+  useEffect(() => {
+    const timer = setTimeout(() => trackPageView(), 100);
+    return () => clearTimeout(timer);
+  }, [trackPageView]);
 
   // Global event listeners
   useEffect(() => {
@@ -393,7 +354,7 @@ export const GlobalVisitorTracking = () => {
     window.addEventListener('beforeunload', handleBeforeUnload);
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
-    // Heartbeat: update session duration every 30s for accurate tracking
+    // Heartbeat: every 120s instead of 30s
     const heartbeat = setInterval(() => {
       const sessionId = getSessionId();
       const sessionStartTime = parseInt(sessionStorage.getItem('session_start_time') || Date.now().toString());
@@ -401,10 +362,7 @@ export const GlobalVisitorTracking = () => {
       void supabase.from('user_sessions')
         .update({ duration_seconds: totalTimeSpent, ended_at: new Date().toISOString() } as any)
         .eq('session_id', sessionId);
-      void supabase.from('visitor_sessions')
-        .update({ total_time_spent: totalTimeSpent, last_activity_at: new Date().toISOString() })
-        .eq('session_id', sessionId);
-    }, 30000);
+    }, 120000);
 
     return () => {
       window.removeEventListener('click', handleGlobalClick);

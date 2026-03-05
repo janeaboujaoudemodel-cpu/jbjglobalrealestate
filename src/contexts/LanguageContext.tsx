@@ -1,20 +1,45 @@
-import { createContext, useContext, useState, useEffect, ReactNode, useCallback, useMemo } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode, useCallback, useRef } from 'react';
 import { Language, SUPPORTED_LANGUAGES, isRTLLanguage, getLanguageInfo } from '@/translations';
 import { en } from '@/translations/en';
-import { ar } from '@/translations/ar';
-import { es } from '@/translations/es';
-import { fr } from '@/translations/fr';
-import { ru } from '@/translations/ru';
-import { zh } from '@/translations/zh';
-import { hi } from '@/translations/hi';
-import { fa } from '@/translations/fa';
-import { tr } from '@/translations/tr';
-import { de } from '@/translations/de';
-import { it } from '@/translations/it';
-import { nl } from '@/translations/nl';
-import { he } from '@/translations/he';
-import { pl } from '@/translations/pl';
-import { ja } from '@/translations/ja';
+
+// Only English is loaded eagerly — all other languages are lazy-loaded on demand
+const translationLoaders: Record<Language, () => Promise<Record<string, string>>> = {
+  en: () => Promise.resolve(en),
+  ar: () => import('@/translations/ar').then(m => m.ar),
+  es: () => import('@/translations/es').then(m => m.es),
+  fr: () => import('@/translations/fr').then(m => m.fr),
+  ru: () => import('@/translations/ru').then(m => m.ru),
+  zh: () => import('@/translations/zh').then(m => m.zh),
+  hi: () => import('@/translations/hi').then(m => m.hi),
+  fa: () => import('@/translations/fa').then(m => m.fa),
+  tr: () => import('@/translations/tr').then(m => m.tr),
+  de: () => import('@/translations/de').then(m => m.de),
+  it: () => import('@/translations/it').then(m => m.it),
+  nl: () => import('@/translations/nl').then(m => m.nl),
+  he: () => import('@/translations/he').then(m => m.he),
+  pl: () => import('@/translations/pl').then(m => m.pl),
+  ja: () => import('@/translations/ja').then(m => m.ja),
+};
+
+// Cache for loaded translations
+const loadedTranslations: Partial<Record<Language, Record<string, string>>> = { en };
+
+// Cache for reverse maps (built on demand)
+const reverseMapsCache: Partial<Record<Language, Map<string, string>>> = {};
+
+function getOrBuildReverseMap(lang: Language): Map<string, string> | undefined {
+  if (reverseMapsCache[lang]) return reverseMapsCache[lang];
+  const dict = loadedTranslations[lang];
+  if (!dict) return undefined;
+  const map = new Map<string, string>();
+  for (const [key, value] of Object.entries(dict)) {
+    if (value && typeof value === 'string') {
+      map.set(value.trim(), key);
+    }
+  }
+  reverseMapsCache[lang] = map;
+  return map;
+}
 
 interface LanguageContextType {
   language: Language;
@@ -22,69 +47,55 @@ interface LanguageContextType {
   t: (key: string, fallbackText?: string) => string;
   isRTL: boolean;
   translateText: (text: string) => string;
-  /** Legacy: kept for compatibility, no longer used */
   translationVersion: number;
 }
-
-const translations: Record<Language, Record<string, string>> = {
-  en, ar, es, fr, ru, zh, hi, fa, tr, de, it, nl, he, pl, ja
-};
 
 export const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 const LANGUAGE_KEY = 'jj_language';
 const LANGUAGE_MANUAL_KEY = 'jj_language_manual';
 
-// Detect device/browser language
 const detectDeviceLanguage = (): Language => {
   try {
     const browserLang = navigator.language || (navigator as any).userLanguage || 'en';
     const langCode = browserLang.split('-')[0].toLowerCase();
-    
-    // Check if browser language is supported
     const supported = SUPPORTED_LANGUAGES.find(l => l.code === langCode);
-    if (supported) {
-      return supported.code;
-    }
-    
-    // Default to English
+    if (supported) return supported.code;
     return 'en';
   } catch {
     return 'en';
   }
 };
 
-// Pre-build reverse maps for ALL languages: value -> key
-// This allows translateText() to find the key for ANY language's text
-const allReverseMaps: Record<Language, Map<string, string>> = {} as any;
-for (const [langCode, dict] of Object.entries(translations)) {
-  const map = new Map<string, string>();
-  for (const [key, value] of Object.entries(dict)) {
-    if (value && typeof value === 'string') {
-      map.set(value.trim(), key);
-    }
-  }
-  allReverseMaps[langCode as Language] = map;
-}
-
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [language, setLanguageState] = useState<Language>(() => {
     const stored = localStorage.getItem(LANGUAGE_KEY) as Language | null;
     const isManual = localStorage.getItem(LANGUAGE_MANUAL_KEY) === 'true';
-
-    // Use stored language ONLY if the user explicitly selected it.
     if (isManual && stored && SUPPORTED_LANGUAGES.some(l => l.code === stored)) {
       return stored;
     }
-
-    // Otherwise, always follow the device/browser language.
     const detected = detectDeviceLanguage();
     localStorage.setItem(LANGUAGE_KEY, detected);
     localStorage.removeItem(LANGUAGE_MANUAL_KEY);
     return detected;
   });
 
-  // Legacy: kept for compatibility, no longer triggers re-renders
+  // Force re-render when async translation loads
+  const [, setLoadTick] = useState(0);
+  const loadingRef = useRef<Set<Language>>(new Set());
+
+  // Lazy-load translation for current language
+  useEffect(() => {
+    if (loadedTranslations[language] || loadingRef.current.has(language)) return;
+    loadingRef.current.add(language);
+
+    translationLoaders[language]().then(dict => {
+      loadedTranslations[language] = dict;
+      delete reverseMapsCache[language]; // invalidate cache
+      setLoadTick(n => n + 1);
+    });
+  }, [language]);
+
   const translationVersion = 0;
 
   const setLanguage = useCallback((lang: Language) => {
@@ -100,70 +111,52 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     document.documentElement.dir = isRTLLanguage(language) ? 'rtl' : 'ltr';
   }, [language]);
 
-  // INSTANT translation function - NO async calls
   const t = useCallback((key: string, fallbackText?: string): string => {
-    // 1. Check if key exists in current language dictionary
-    const currentDict = translations[language];
-    if (currentDict?.[key]) {
-      return currentDict[key];
-    }
-
-    // 2. Fallback to English value
-    const englishValue = translations.en[key];
-    if (englishValue) {
-      return englishValue;
-    }
-
-    // 3. Return fallback text or key
+    const currentDict = loadedTranslations[language];
+    if (currentDict?.[key]) return currentDict[key];
+    const englishValue = en[key];
+    if (englishValue) return englishValue;
     return fallbackText || key;
   }, [language]);
 
-  // Direct text translation - uses bidirectional reverse maps
-  // Searches ALL languages' reverse maps to find the key, then returns current language value
   const translateText = useCallback((text: string): string => {
+    const trimmed = text.trim();
+    if (!trimmed) return text;
+
     if (language === 'en') {
-      // Even in English, resolve text from other languages back to English
-      const trimmed = text.trim();
-      if (!trimmed) return text;
-      
-      // Check if text is already an English value
-      const enKey = allReverseMaps.en.get(trimmed);
-      if (enKey) return text; // Already English
-      
-      // Check ALL other language reverse maps to find the key
-      for (const [, reverseMap] of Object.entries(allReverseMaps)) {
-        const key = reverseMap.get(trimmed);
-        if (key && translations.en[key]) {
-          return translations.en[key];
-        }
+      const enMap = getOrBuildReverseMap('en');
+      if (enMap?.has(trimmed)) return text;
+      // Check loaded languages only
+      for (const [langCode, dict] of Object.entries(loadedTranslations)) {
+        if (langCode === 'en' || !dict) continue;
+        const rmap = getOrBuildReverseMap(langCode as Language);
+        const key = rmap?.get(trimmed);
+        if (key && en[key]) return en[key];
       }
       return text;
     }
-    
-    const trimmedText = text.trim();
-    if (!trimmedText) return text;
-    
-    // First, check if text is already in the current language
-    const currentKey = allReverseMaps[language]?.get(trimmedText);
-    if (currentKey) {
-      // Text is already in current language, return as-is
-      return translations[language][currentKey] || text;
+
+    const currentMap = getOrBuildReverseMap(language);
+    if (currentMap?.has(trimmed)) {
+      const key = currentMap.get(trimmed)!;
+      return loadedTranslations[language]?.[key] || text;
     }
-    
-    // Search ALL language reverse maps to find the key for this text
-    for (const [, reverseMap] of Object.entries(allReverseMaps)) {
-      const key = reverseMap.get(trimmedText);
+
+    // Search loaded languages
+    for (const [, dict] of Object.entries(loadedTranslations)) {
+      if (!dict) continue;
+    }
+    for (const [langCode] of Object.entries(loadedTranslations)) {
+      const rmap = getOrBuildReverseMap(langCode as Language);
+      const key = rmap?.get(trimmed);
       if (key) {
-        // Found the key - return the current language's value
-        const translated = translations[language][key];
+        const translated = loadedTranslations[language]?.[key];
         if (translated) return translated;
-        // Fallback to English if current language doesn't have this key
-        const englishVal = translations.en[key];
+        const englishVal = en[key];
         if (englishVal) return englishVal;
       }
     }
-    
-    // No match found, return original text (for numbers, proper nouns, etc.)
+
     return text;
   }, [language]);
 
