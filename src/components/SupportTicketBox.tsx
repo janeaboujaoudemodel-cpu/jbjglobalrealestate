@@ -20,7 +20,8 @@ import {
   Loader2,
   RefreshCw,
   AlertTriangle,
-  MailCheck
+  MailCheck,
+  MessageCircle
 } from "lucide-react";
 import { useResendTicketConfirmation } from "@/hooks/useResendTicketConfirmation";
 import { Button } from "@/components/ui/button";
@@ -49,6 +50,7 @@ import VoiceNoteRecorder from "@/components/crm/VoiceNoteRecorder";
 import { CONTACT_INFO } from "@/constants/stats";
 
 const SERVICE_CATEGORIES = [
+  "Inquiry Request",
   "Property Listings",
   "Account & Login Issues",
   "Payment & Transactions",
@@ -299,6 +301,24 @@ const SupportTicketBox = () => {
       setEmailResent(false);
       setIsSubmitted(true);
       setSubmissionStep('idle');
+
+      // If this was an Inquiry Request, also save to inquiries table
+      if (formData.serviceCategory === "Inquiry Request") {
+        try {
+          await supabase.from('inquiries').insert({
+            full_name: formData.fullName,
+            email: formData.email,
+            phone: formData.phone || null,
+            inquiry_type: 'General Inquiry',
+            subject: formData.subject,
+            message: formData.description,
+            source: 'Support Ticket',
+            status: 'pending',
+          });
+        } catch (inquiryErr) {
+          console.warn('Inquiry hub insert from ticket failed:', inquiryErr);
+        }
+      }
       
       // Show success with accurate email status
       if (responseData?.customerEmailSent) {
@@ -878,6 +898,24 @@ const SupportTicketBox = () => {
                                 <p className="text-red-500 text-xs mt-1">{fieldErrors.serviceCategory}</p>
                               )}
                             </div>
+
+                            {/* Inquiry Request Inline Form */}
+                            {formData.serviceCategory === "Inquiry Request" && (
+                              <motion.div
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: "auto" }}
+                                exit={{ opacity: 0, height: 0 }}
+                                className="bg-gradient-to-br from-gold/5 to-gold/10 border border-gold/30 rounded-xl p-4 space-y-3"
+                              >
+                                <p className="text-sm font-semibold text-black flex items-center gap-2">
+                                  <MessageCircle className="w-4 h-4 text-gold" />
+                                  Inquiry Details
+                                </p>
+                                <p className="text-xs text-zinc-500">
+                                  This inquiry will be tracked in the Inquiry Management Hub for follow-up.
+                                </p>
+                              </motion.div>
+                            )}
 
                             {/* Other Category Detail */}
                             {formData.serviceCategory === "Other" && (

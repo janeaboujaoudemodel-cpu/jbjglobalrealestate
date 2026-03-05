@@ -73,7 +73,7 @@ function BookMarquee({ books }: { books: BookData[] }) {
   }, [books.length]);
 
   return (
-    <div className="overflow-hidden w-full py-6">
+    <div className="overflow-hidden w-full py-6 mb-4 border-b border-gold/20 pb-8">
       <div ref={scrollRef} className="flex gap-6 will-change-transform" style={{ width: 'max-content' }}>
         {duplicated.map((book, i) => (
           <div key={`${book.title}-${i}`} className="flex-shrink-0 w-28 md:w-36">
@@ -114,6 +114,18 @@ const Guides = () => {
       {/* Hero */}
       <section className="jj-hero-fullscreen relative flex items-center overflow-hidden">
         <div className="absolute inset-0 bg-black">
+          {/* Drone zoom effect on poster image while video loads */}
+          <div className="absolute inset-0 overflow-hidden">
+            <motion.img
+              src="https://images.unsplash.com/photo-1518684079-3c830dcef090?w=1920&q=80"
+              alt=""
+              className="w-full h-full object-cover"
+              initial={{ scale: 1 }}
+              animate={{ scale: 1.15 }}
+              transition={{ duration: 20, ease: "linear", repeat: Infinity, repeatType: "reverse" }}
+              loading="eager"
+            />
+          </div>
           <VideoBackground 
             src="https://videos.pexels.com/video-files/3629519/3629519-uhd_2560_1440_25fps.mp4"
             poster="https://images.unsplash.com/photo-1518684079-3c830dcef090?w=1920&q=80"
@@ -195,8 +207,8 @@ const Guides = () => {
             </motion.div>
 
             {/* Books Grid */}
-            <div className="flex flex-wrap justify-center gap-6 md:gap-8 max-w-6xl mx-auto mt-4">
-              {allGuideBooks.map((book) => (
+            <div className="flex flex-wrap justify-center gap-6 md:gap-8 max-w-6xl mx-auto mt-6">
+              {allGuideBooks.filter(b => b.title !== 'Company Profile').map((book) => (
                 <motion.button
                   key={book.title}
                   variants={fadeInUp}
@@ -215,6 +227,26 @@ const Guides = () => {
                 </motion.button>
               ))}
             </div>
+
+            {/* Company Profile - Separate row */}
+            {allGuideBooks.filter(b => b.title === 'Company Profile').map((book) => (
+              <motion.div key={book.title} variants={fadeInUp} className="flex justify-center mt-8 pt-6 border-t border-gold/20">
+                <motion.button
+                  onClick={() => setSelectedBook(book)}
+                  className="group flex flex-col items-center gap-3 w-28 md:w-36"
+                  whileHover={{ y: -8 }}
+                  transition={{ type: 'spring', stiffness: 300 }}
+                >
+                  <div className="relative w-24 h-36 md:w-32 md:h-44 rounded-md overflow-hidden border border-gold/40 shadow-[4px_4px_20px_rgba(0,0,0,0.25)] group-hover:shadow-[6px_6px_30px_rgba(200,167,102,0.4)] transition-shadow">
+                    <BookCoverFace book={book} bare />
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+                  <p className="text-xs text-black/70 text-center font-medium group-hover:text-gold transition-colors leading-tight">
+                    {book.title}
+                  </p>
+                </motion.button>
+              </motion.div>
+            ))}
           </motion.div>
         </div>
       </section>
@@ -280,7 +312,7 @@ const Guides = () => {
       {/* TOC Modal */}
       {selectedBook && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 pt-20"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 pt-24 pb-8"
           style={{ backgroundColor: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)' }}
           onClick={() => setSelectedBook(null)}
         >

@@ -228,7 +228,7 @@ const tenantGuideBook: BookData = {
 // ─── FAQ Books ───
 
 const investorFaqBook: BookData = {
-  title: 'Investor FAQ Handbook',
+  title: 'Investor FAQ',
   cover: investorFaqCover,
   href: '/investor-faq',
   category: 'faq',
@@ -246,7 +246,7 @@ const investorFaqBook: BookData = {
 };
 
 const buyerFaqBook: BookData = {
-  title: 'Buyer FAQ Handbook',
+  title: 'Buyer FAQ',
   cover: buyerFaqCover,
   href: '/buyer-faq',
   category: 'faq',
@@ -263,7 +263,7 @@ const buyerFaqBook: BookData = {
 };
 
 const sellerFaqBook: BookData = {
-  title: 'Seller FAQ Handbook',
+  title: 'Seller FAQ',
   cover: sellerFaqCover,
   href: '/seller-faq',
   category: 'faq',
@@ -279,7 +279,7 @@ const sellerFaqBook: BookData = {
 };
 
 const landlordFaqBook: BookData = {
-  title: 'Landlord FAQ Handbook',
+  title: 'Landlord FAQ',
   cover: landlordFaqCover,
   href: '/landlord-faq',
   category: 'faq',
@@ -295,7 +295,7 @@ const landlordFaqBook: BookData = {
 };
 
 const tenantFaqBook: BookData = {
-  title: 'Tenant FAQ Handbook',
+  title: 'Tenant FAQ',
   cover: tenantFaqCover,
   href: '/tenant-faq',
   category: 'faq',
@@ -357,7 +357,7 @@ const brokerCertificationBook: BookData = {
 };
 
 const brokerFaqBook: BookData = {
-  title: 'Broker FAQ Handbook',
+  title: 'Broker FAQ',
   cover: brokerFaqCover,
   href: '/broker-faq',
   category: 'faq',

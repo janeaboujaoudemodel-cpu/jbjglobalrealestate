@@ -177,7 +177,7 @@ const StatsCounter = () => {
           </div>
           
           {/* Stats Grid - Pearl Cards inside Champagne Layer */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 max-w-4xl mx-auto">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 md:gap-8 max-w-4xl mx-auto">
             {stats.map((stat, index) => (
               <StatItem key={index} {...stat} isVisible={isVisible} language={language} t={t} />
             ))}
