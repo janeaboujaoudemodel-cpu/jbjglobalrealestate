@@ -222,7 +222,7 @@ const Guides = () => {
       <SectionDivider />
 
       {/* What You'll Learn */}
-      <section className="bg-black py-10 md:py-12">
+      <section className="bg-black py-10 md:py-16 pb-14 md:pb-20">
         <div className="jj-layer-2">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}>
             <motion.h2 variants={fadeInUp} className="text-3xl md:text-4xl font-bold text-black text-center mb-10" style={{ fontFamily: "Playfair Display, serif" }}>
