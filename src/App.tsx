@@ -7,7 +7,7 @@ import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom
 
 // Toolkit pages (lazy loaded)
 const RoyalToolsHub = lazy(() => import("./pages/toolkit/RoyalToolsHub"));
-const ToolkitLanding = lazy(() => import("./pages/toolkit/ToolkitLanding"));
+// ToolkitLanding removed - no route uses it
 const VideoResizePack = lazy(() => import("./pages/toolkit/VideoResizePack"));
 const PdfFromPhotos = lazy(() => import("./pages/toolkit/PdfFromPhotos"));
 const ImageResize = lazy(() => import("./pages/toolkit/ImageResize"));
@@ -255,8 +255,8 @@ const InvestorFAQ = lazy(() => import("./pages/InvestorFAQ"));
 const InvestorDashboard = lazy(() => import("./pages/InvestorDashboard"));
 const PortfolioViews = lazy(() => import("./pages/investor/PortfolioViews"));
 const ReportAccess = lazy(() => import("./pages/investor/ReportAccess"));
-const OwnerDashboard = lazy(() => import("./pages/OwnerDashboard"));
-const BrokerPartnerDashboard = lazy(() => import("./pages/BrokerPartnerDashboard"));
+// OwnerDashboard and BrokerPartnerDashboard removed - no route uses them
+
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const MyDashboard = lazy(() => import("./pages/MyDashboard"));
 const MyDashboardProgress = lazy(() => import("./pages/MyDashboardProgress"));
@@ -317,7 +317,7 @@ const CustomerHappiness = lazy(() => import("./pages/CustomerHappiness"));
 const Sitemap = lazy(() => import("./pages/Sitemap"));
 const Pricing = lazy(() => import("./pages/Pricing"));
 const SecurityConsole = lazy(() => import("./pages/SecurityConsole"));
-const ITDepartment = lazy(() => import("./pages/ITDepartment"));
+// ITDepartment removed - route uses EmployeeManagementHub instead
 const EmployeeManagementHub = lazy(() => import("./pages/EmployeeManagementHub"));
 const MarketingHub = lazy(() => import("./pages/admin/MarketingHub"));
 const ReellyImportTest = lazy(() => import("./pages/admin/ReellyImportTest"));
