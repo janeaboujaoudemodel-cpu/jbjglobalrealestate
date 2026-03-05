@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { getListingAdmin } from "@/config/team-members";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -19,6 +21,9 @@ import {
   Clock,
   Trash2,
   Copy,
+  Plus,
+  Zap,
+  ListChecks,
 } from "lucide-react";
 import { VoiceInputButton } from "@/components/ui/VoiceInputButton";
 
@@ -39,8 +44,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
   const adminPersona = getListingAdmin();
   const { user } = useAuth();
   const { language, t } = useLanguage();
-  const TOTAL_LISTINGS_ESTIMATE = 1332;
-  
+
   const getWelcomeMessage = (): Message => ({
     id: "welcome",
     role: "assistant",
@@ -48,33 +52,28 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
 
 ---
 
-**🔔 TASK: Full Provident Estate Extraction → Admin Approval**
+**What I can do:**
 
-You can extract all **~${TOTAL_LISTINGS_ESTIMATE} listings** from Provident Estate into the approval queue (nothing goes live until you approve). Here's what gets extracted:
+📎 **Paste any link** — I'll scrape it, extract all project details, photos, floor plans, brochures, amenities, payment plans, and queue it for your approval.
 
-• **Project Details** - Names, descriptions, locations
-• **High-Resolution Images** - All photos from each project  
-• **Developer Information** - Matched to our database
-• **Status Labels** - Future Launch, New Phase, Ready, etc.
-• **Handover Dates** - Displayed on project cards
-• **Payment Plans** - Developer financing options
+📋 **Multiple links** — Paste several URLs at once. I'll process them all and queue each one separately.
 
-**To start the extraction:**
-1. Click the **"Sync Dashboard"** tab above
-2. Review the 70-page extraction status
-3. Click **"Start Full Sync"** to begin
+⚡ **Auto-Approve mode** — Toggle it ON below when you trust the extraction quality. Listings go live instantly.
 
-I'll process each page sequentially (about ~19 listings per page). You can monitor progress, pause/resume, and retry failed pages.
+🔍 **Approval Queue** — Every extraction lands in the "Approvals" tab. Review one-by-one or bulk approve.
+
+📄 **Documents saved** — Brochures, floor plans, and payment plans are downloaded and saved permanently in storage. Users can view AND download them.
 
 ---
 
-**Other things I can help with:**
-• **Off-Plan Listings** - New developer projects
-• **Secondary Market** - Resale properties  
-• **Bulk Uploads** - Share a Google Drive link
-• **Developer Relations** - Documentation
+**Supported links:**
+• Developer websites (Emaar, DAMAC, Sobha, etc.)
+• Property portals (Bayut, PropertyFinder, Dubizzle)
+• Provident Estate project pages
+• Google Drive folders
+• Any URL with property data
 
-What would you like me to do?`,
+**Paste a link below to get started!**`,
     timestamp: new Date(),
   });
 
@@ -82,17 +81,16 @@ What would you like me to do?`,
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [bulkUploadUrl, setBulkUploadUrl] = useState("");
+  const [urlInputs, setUrlInputs] = useState<string[]>([""]);
   const [showBulkUpload, setShowBulkUpload] = useState(false);
+  const [autoApprove, setAutoApprove] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // Load existing chat session on mount
   useEffect(() => {
     const loadChatSession = async () => {
       if (!user) return;
-
       try {
-        // Try to find an active session
         const { data: sessions, error } = await supabase
           .from("listing_admin_chat_sessions")
           .select("*")
@@ -101,26 +99,17 @@ What would you like me to do?`,
           .order("updated_at", { ascending: false })
           .limit(1);
 
-        if (error) {
-          console.error("Error loading chat session:", error);
-          return;
-        }
+        if (error) return;
 
         if (sessions && sessions.length > 0) {
           const session = sessions[0];
           setSessionId(session.id);
-          
-          // Parse messages from JSON
           const savedMessages = (session.messages as any[]).map((m: any) => ({
             ...m,
             timestamp: new Date(m.timestamp),
           }));
-          
-          if (savedMessages.length > 0) {
-            setMessages(savedMessages);
-          }
+          if (savedMessages.length > 0) setMessages(savedMessages);
         } else {
-          // Create new session
           const { data: newSession, error: createError } = await supabase
             .from("listing_admin_chat_sessions")
             .insert({
@@ -130,308 +119,215 @@ What would you like me to do?`,
             } as any)
             .select()
             .single();
-
-          if (!createError && newSession) {
-            setSessionId(newSession.id);
-          }
+          if (!createError && newSession) setSessionId(newSession.id);
         }
       } catch (err) {
         console.error("Error loading chat:", err);
       }
     };
-
     loadChatSession();
   }, [user]);
 
-  // Save messages to database whenever they change
+  // Save messages
   useEffect(() => {
     const saveMessages = async () => {
       if (!sessionId || messages.length <= 1) return;
-
       try {
         await supabase
           .from("listing_admin_chat_sessions")
-          .update({ 
-            messages: messages.map(m => ({
-              ...m,
-              timestamp: m.timestamp.toISOString(),
-            })),
-          })
+          .update({ messages: messages.map(m => ({ ...m, timestamp: m.timestamp.toISOString() })) })
           .eq("id", sessionId);
-      } catch (err) {
-        console.error("Error saving chat:", err);
-      }
+      } catch {}
     };
-
     const debounce = setTimeout(saveMessages, 500);
     return () => clearTimeout(debounce);
   }, [messages, sessionId]);
 
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
+    if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, [messages]);
 
   const handleClearChat = async () => {
-    if (!confirm("Are you sure you want to clear this chat? This cannot be undone.")) {
-      return;
-    }
-
+    if (!confirm("Clear chat history?")) return;
     try {
-      // Delete the current session entirely instead of just marking completed
       if (sessionId) {
-        await supabase
-          .from("listing_admin_chat_sessions")
-          .delete()
-          .eq("id", sessionId);
+        await supabase.from("listing_admin_chat_sessions").delete().eq("id", sessionId);
       }
-
-      // Reset state immediately
       const welcomeMsg = getWelcomeMessage();
       setMessages([welcomeMsg]);
       setSessionId(null);
-
-      // Create new session
       if (user) {
-        const { data: newSession, error } = await supabase
+        const { data: newSession } = await supabase
           .from("listing_admin_chat_sessions")
-          .insert({
-            user_id: user.id,
-            messages: [{ ...welcomeMsg, timestamp: welcomeMsg.timestamp.toISOString() }],
-            status: "active",
-          } as any)
-          .select()
-          .single();
-
-        if (!error && newSession) {
-          setSessionId(newSession.id);
-        }
+          .insert({ user_id: user.id, messages: [{ ...welcomeMsg, timestamp: welcomeMsg.timestamp.toISOString() }], status: "active" } as any)
+          .select().single();
+        if (newSession) setSessionId(newSession.id);
       }
-
-      toast.success("Chat cleared successfully");
-    } catch (err) {
-      console.error("Error clearing chat:", err);
-      toast.error("Failed to clear chat");
-    }
+      toast.success("Chat cleared");
+    } catch {}
   };
 
   const handleSendMessage = async (messageText?: string) => {
     const textToSend = messageText || input.trim();
     if (!textToSend || isLoading) return;
 
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      role: "user",
-      content: textToSend,
-      timestamp: new Date(),
-    };
-
+    const userMessage: Message = { id: Date.now().toString(), role: "user", content: textToSend, timestamp: new Date() };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
 
     try {
-      const conversationHistory = messages.map((m) => ({
-        role: m.role,
-        content: m.content,
-      }));
+      // Check if user pasted URLs in the chat input
+      const urlPattern = /https?:\/\/[^\s]+/g;
+      const detectedUrls = textToSend.match(urlPattern);
 
-      const { data, error } = await supabase.functions.invoke("listing-admin-chat", {
-        body: {
-          message: userMessage.content,
-          conversationHistory,
-          personaName: adminPersona?.name || "Sarah Mitchell",
-          personaRole: adminPersona?.role || "Senior Listing Administrator",
-          language: language,
-        },
+      if (detectedUrls && detectedUrls.length > 0) {
+        // Process as URL extraction
+        await processUrls(detectedUrls);
+      } else {
+        // Regular chat with AI
+        const conversationHistory = messages.map((m) => ({ role: m.role, content: m.content }));
+        const { data, error } = await supabase.functions.invoke("listing-admin-chat", {
+          body: { message: textToSend, conversationHistory, personaName: adminPersona?.name || "Sarah Mitchell", personaRole: adminPersona?.role || "Senior Listing Administrator", language },
+        });
+        if (error) throw error;
+        let responseText = data?.response || "I couldn't process that. Please try again.";
+        responseText = responseText.replace(/[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F000}-\u{1F02F}]|[\u{1F0A0}-\u{1F0FF}]|[\u{1F100}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]|[\u{1F910}-\u{1F96B}]|[\u{1F980}-\u{1F9E0}]/gu, '');
+        setMessages((prev) => [...prev, { id: (Date.now() + 1).toString(), role: "assistant", content: responseText.trim(), timestamp: new Date() }]);
+        if (data?.action === "suggest_listing" && onCreateListing) {
+          toast.success("Ready to create listing");
+        }
+      }
+    } catch (error: any) {
+      setMessages((prev) => [...prev, { id: (Date.now() + 1).toString(), role: "assistant", content: "Error processing request. Please try again.", timestamp: new Date() }]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const processUrls = async (urls: string[]) => {
+    // Show processing message
+    const processingMsg: Message = {
+      id: (Date.now() + 1).toString(),
+      role: "assistant",
+      content: `Processing ${urls.length} link${urls.length > 1 ? "s" : ""}... ${autoApprove ? "⚡ Auto-approve is ON" : "Queuing for your approval"}\n\nThis may take a moment while I scrape, extract, and save all documents.`,
+      timestamp: new Date(),
+      type: "processing",
+    };
+    setMessages((prev) => [...prev, processingMsg]);
+
+    try {
+      const { data, error } = await supabase.functions.invoke("extract-listing-from-link", {
+        body: { urls, userId: user?.id, auto_approve: autoApprove, queue: true },
       });
 
       if (error) throw error;
 
-      // Clean up response - remove emojis and add proper spacing
-      let responseText = data?.response || "I apologize, I couldn't process that request. Please try again.";
-      responseText = responseText.replace(/[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F000}-\u{1F02F}]|[\u{1F0A0}-\u{1F0FF}]|[\u{1F100}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]|[\u{1F910}-\u{1F96B}]|[\u{1F980}-\u{1F9E0}]/gu, '');
-      
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: "assistant",
-        content: responseText.trim(),
-        timestamp: new Date(),
-      };
+      // Build response
+      let response = "";
+      if (data?.results) {
+        const succeeded = data.results.filter((r: any) => r.success);
+        const failed = data.results.filter((r: any) => !r.success);
 
-      setMessages((prev) => [...prev, assistantMessage]);
+        if (succeeded.length > 0) {
+          response += `**${succeeded.length} listing${succeeded.length > 1 ? "s" : ""} extracted successfully!**\n\n`;
+          
+          for (const r of succeeded) {
+            response += `---\n\n`;
+            response += `**${r.projectName}**\n`;
+            if (r.developer) response += `Developer: ${r.developer}\n`;
+            if (r.location) response += `Location: ${r.location}\n`;
+            response += `\n`;
+            response += `Media: ${r.media.images} photos, ${r.media.documents} documents saved, ${r.media.videos} videos\n`;
+            if (r.amenities?.length > 0) response += `Amenities: ${r.amenities.slice(0, 8).join(", ")}${r.amenities.length > 8 ? ` +${r.amenities.length - 8} more` : ""}\n`;
+            if (r.paymentPlan) response += `Payment Plan: ${r.paymentPlan}\n`;
+            if (r.unitTypes?.length > 0) response += `Unit Types: ${r.unitTypes.join(", ")}\n`;
+            if (r.description) response += `\n${r.description}...\n`;
+            response += `\nStatus: **${r.status === "auto-approved" ? "AUTO-APPROVED - Live now" : "Pending your approval"}**\n`;
+            response += `Processing time: ${(r.duration_ms / 1000).toFixed(1)}s\n\n`;
+          }
+        }
 
-      // Check if the response indicates listing creation
-      if (data?.action === "suggest_listing" && onCreateListing) {
-        toast.success("Ready to create listing - fill in the form on the left");
+        if (failed.length > 0) {
+          response += `\n**${failed.length} failed:**\n`;
+          for (const r of failed) {
+            response += `- ${r.url}: ${r.error}\n`;
+          }
+        }
+
+        if (!autoApprove && succeeded.length > 0) {
+          response += `\n---\n\n**Next steps:** Go to the **"Approvals"** tab to review and approve ${succeeded.length > 1 ? "each listing" : "the listing"}.`;
+        }
+      } else {
+        response = data?.message || "Processing complete.";
       }
-    } catch (error: any) {
-      console.error("Chat error:", error);
-      const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: "assistant",
-        content: "I apologize, there was an error processing your request. Please try again or contact support if the issue persists.",
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, errorMessage]);
-    } finally {
-      setIsLoading(false);
+
+      // Remove the processing message and add the result
+      setMessages((prev) => {
+        const without = prev.filter(m => m.id !== processingMsg.id);
+        return [...without, {
+          id: (Date.now() + 2).toString(),
+          role: "assistant" as const,
+          content: response,
+          timestamp: new Date(),
+          type: "success" as const,
+        }];
+      });
+
+      if (data?.succeeded > 0) {
+        toast.success(`${data.succeeded} listing(s) ${autoApprove ? "auto-approved" : "queued for approval"}`);
+      }
+    } catch (err: any) {
+      setMessages((prev) => {
+        const without = prev.filter(m => m.id !== processingMsg.id);
+        return [...without, {
+          id: (Date.now() + 2).toString(),
+          role: "assistant" as const,
+          content: `Error: ${err.message || "Failed to process links"}. Please try again.`,
+          timestamp: new Date(),
+        }];
+      });
+      toast.error("Failed to process links");
     }
   };
 
   const handleBulkUpload = async () => {
-    if (!bulkUploadUrl.trim()) {
-      toast.error("Please enter a valid URL");
+    const validUrls = urlInputs.filter(u => u.trim() && (u.startsWith("http://") || u.startsWith("https://")));
+    if (validUrls.length === 0) {
+      toast.error("Please enter at least one valid URL");
       return;
     }
 
-    // Accept Google URLs, property portals, or any https URL
-    const isValidUrl = bulkUploadUrl.startsWith("http://") || bulkUploadUrl.startsWith("https://");
-    
-    if (!isValidUrl) {
-      toast.error("Please enter a valid URL (Google Drive, property portal, or web link)");
-      return;
-    }
-
-    const isGoogleUrl = bulkUploadUrl.includes("google.com");
-    const isPropertyPortal = bulkUploadUrl.includes("bayut.com") || 
-                             bulkUploadUrl.includes("propertyfinder.ae") || 
-                             bulkUploadUrl.includes("dubizzle.com");
-    const isDeveloperSite = bulkUploadUrl.includes("emaar.com") || 
-                            bulkUploadUrl.includes("damac") ||
-                            bulkUploadUrl.includes("sobha") ||
-                            bulkUploadUrl.includes("azizi");
-
-    onBulkUpload?.(bulkUploadUrl);
-    
-    const uploadMessage: Message = {
+    const userMsg: Message = {
       id: Date.now().toString(),
       role: "user",
-      content: `I'd like to extract listing data from this link: ${bulkUploadUrl}`,
+      content: `Extract listings from ${validUrls.length} link${validUrls.length > 1 ? "s" : ""}:\n${validUrls.map(u => `• ${u}`).join("\n")}${autoApprove ? "\n\n⚡ Auto-approve: ON" : ""}`,
       timestamp: new Date(),
     };
-
-    setMessages((prev) => [...prev, uploadMessage]);
-    const urlToProcess = bulkUploadUrl;
-    setBulkUploadUrl("");
+    setMessages((prev) => [...prev, userMsg]);
+    setUrlInputs([""]);
     setShowBulkUpload(false);
     setIsLoading(true);
 
     try {
-      // Call the new extract-listing-from-link edge function with Firecrawl
-      const { data, error } = await supabase.functions.invoke("extract-listing-from-link", {
-        body: {
-          url: urlToProcess,
-          userId: user?.id,
-          albumName: null, // Will be extracted from URL
-        },
-      });
-
-      if (error) throw error;
-
-      let responseContent = "";
-      
-      if (data?.success && data?.extractedProject) {
-        const p = data.extractedProject;
-        const keyFeatures = data.keyFeatures || [];
-        const mediaCount = data.mediaCount || { images: 0, pdfs: 0 };
-        
-        responseContent = `**Link processed successfully!**
-
----
-
-**Project Name**: ${p.name || "Not detected"}
-**Developer**: ${p.developer || "Not detected"}
-**Location**: ${p.location || "Not specified"}, ${p.emirate || "Dubai"}
-
-**Price Range**: ${p.priceFrom ? `AED ${(p.priceFrom/1000000).toFixed(1)}M` : "TBD"} - ${p.priceTo ? `AED ${(p.priceTo/1000000).toFixed(1)}M` : "TBD"}
-**Bedrooms**: ${p.bedroomsMin || "?"} - ${p.bedroomsMax || "?"} BR
-**Handover**: ${p.handoverDate || "Not specified"}
-**Status**: ${p.projectStatus || "Off-Plan"}
-
-**Description**:
-${p.description || "No description extracted. Please add manually."}
-
-${p.amenities?.length > 0 ? `**Amenities**:\n${p.amenities.map((a: string) => `- ${a}`).join("\n")}` : ""}
-
-${keyFeatures.length > 0 ? `**Key Features**:\n${keyFeatures.map((f: string) => `- ${f}`).join("\n")}` : ""}
-
-${p.paymentPlan ? `**Payment Plan**: ${p.paymentPlan}` : ""}
-
-${p.unitTypes?.length > 0 ? `**Unit Types Available**:\n${p.unitTypes.map((u: string) => `- ${u}`).join("\n")}` : ""}
-
-**Media Extracted**:
-- Images: ${mediaCount.images} photos
-- Brochure: ${p.brochureUrl ? "Yes" : "No"}
-- Floor Plans: ${p.floorPlanUrls?.length || 0}
-- Video: ${p.videoUrl ? "Yes" : "No"}
-
----
-
-**Next Steps:**
-1. Click "Add New Project" on the left panel
-2. Review and fill in any missing details
-3. Upload the extracted images (${mediaCount.images} found)
-4. Save as draft for review
-
-Would you like me to help with any specific details or create another listing from a different album?`;
-      } else {
-        responseContent = `I've received the link and started processing.
-
-**Link**: ${urlToProcess}
-**Status**: Processing...
-
-${data?.error ? `**Note**: ${data.error}` : ""}
-
-The extraction may take a moment. You can:
-1. Click "Add New Project" to start manually
-2. Wait for the extraction to complete
-3. Share additional details about this project
-
-How would you like to proceed?`;
-      }
-
-      const responseMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: "assistant",
-        content: responseContent,
-        timestamp: new Date(),
-        type: data?.success ? "success" : "processing",
-      };
-      setMessages((prev) => [...prev, responseMessage]);
-      
-      if (data?.success) {
-        toast.success("Link processed! Review the extracted data.");
-      } else {
-        toast.info("Processing link...");
-      }
-
-    } catch (error: any) {
-      console.error("Link processing error:", error);
-      const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: "assistant",
-        content: `I encountered an issue processing the link. 
-
-**Error**: ${error.message || "Unknown error"}
-
-Please try:
-1. Checking if the link is accessible
-2. Using a different link format
-3. Manually creating the listing using "Add New Project"
-
-Would you like to try a different approach?`,
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, errorMessage]);
-      toast.error("Failed to process link. Try manually creating the listing.");
+      await processUrls(validUrls);
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Handle voice transcript from VoiceInputButton
+  const addUrlInput = () => {
+    if (urlInputs.length < 20) setUrlInputs(prev => [...prev, ""]);
+  };
+
+  const removeUrlInput = (index: number) => {
+    if (urlInputs.length > 1) setUrlInputs(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const updateUrlInput = (index: number, value: string) => {
+    setUrlInputs(prev => prev.map((u, i) => i === index ? value : u));
+  };
+
   const handleVoiceTranscript = useCallback((text: string) => {
     setInput(text);
     toast.success("Voice transcribed! Review and send.");
@@ -449,29 +345,37 @@ Would you like to try a different approach?`,
           <h3 className="font-semibold text-black text-sm">{adminPersona?.name || "Sarah Mitchell"}</h3>
           <p className="text-xs text-zinc-600">{adminPersona?.role || "Senior Listing Administrator"}</p>
         </div>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleClearChat}
-          className="h-8 w-8 p-0 text-zinc-500 hover:text-red-500 hover:bg-red-50"
-          title="Clear chat"
-        >
+        <Button variant="ghost" size="sm" onClick={handleClearChat} className="h-8 w-8 p-0 text-zinc-500 hover:text-red-500 hover:bg-red-50" title="Clear chat">
           <Trash2 className="w-4 h-4" />
         </Button>
         <div className="flex items-center gap-1.5">
           <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-          <span className="text-xs text-zinc-600">{t('listingAdminChat.online') || 'Online'}</span>
+          <span className="text-xs text-zinc-600">Online</span>
         </div>
+      </div>
+
+      {/* Auto-Approve Toggle */}
+      <div className="flex items-center gap-3 px-4 py-2 border-b border-zinc-100 bg-zinc-50">
+        <Zap className={`w-4 h-4 ${autoApprove ? "text-amber-500" : "text-zinc-400"}`} />
+        <Label htmlFor="auto-approve" className="text-xs font-medium text-zinc-700 cursor-pointer flex-1">
+          Auto-Approve Mode
+        </Label>
+        <Switch
+          id="auto-approve"
+          checked={autoApprove}
+          onCheckedChange={setAutoApprove}
+          className="data-[state=checked]:bg-amber-500"
+        />
+        <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${autoApprove ? "bg-amber-100 text-amber-700" : "bg-zinc-200 text-zinc-500"}`}>
+          {autoApprove ? "LIVE" : "REVIEW"}
+        </span>
       </div>
 
       {/* Messages */}
       <ScrollArea className="flex-1 p-4" ref={scrollRef}>
         <div className="space-y-4">
           {messages.map((message) => (
-            <div
-              key={message.id}
-              className={`flex gap-3 group ${message.role === "user" ? "flex-row-reverse" : ""}`}
-            >
+            <div key={message.id} className={`flex gap-3 group ${message.role === "user" ? "flex-row-reverse" : ""}`}>
               {message.role === "assistant" && (
                 <Avatar className="w-8 h-8 flex-shrink-0">
                   <AvatarImage src={adminPersona?.avatar} alt={adminPersona?.name} />
@@ -479,27 +383,25 @@ Would you like to try a different approach?`,
                 </Avatar>
               )}
               <div className="flex flex-col max-w-[80%]">
-                <div
-                  className={`rounded-xl px-4 py-2.5 select-text cursor-text ${
-                    message.role === "user"
-                      ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-gold/30 shadow-md rounded-tr-sm"
-                      : message.type === "processing"
-                      ? "bg-amber-50 text-black border border-amber-200 rounded-tl-sm"
-                      : message.type === "success"
-                      ? "bg-green-50 text-black border border-green-200 rounded-tl-sm"
-                      : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border border-gold/20 shadow-sm rounded-tl-sm"
-                  }`}
-                >
+                <div className={`rounded-xl px-4 py-2.5 select-text cursor-text ${
+                  message.role === "user"
+                    ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-gold/30 shadow-md rounded-tr-sm"
+                    : message.type === "processing"
+                    ? "bg-amber-50 text-black border border-amber-200 rounded-tl-sm"
+                    : message.type === "success"
+                    ? "bg-green-50 text-black border border-green-200 rounded-tl-sm"
+                    : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border border-gold/20 shadow-sm rounded-tl-sm"
+                }`}>
                   {message.type === "processing" && (
                     <div className="flex items-center gap-2 mb-2 text-amber-600">
-                      <Clock className="w-4 h-4" />
-                      <span className="text-xs font-medium">{t('listingAdminChat.processing') || 'Processing...'}</span>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span className="text-xs font-medium">Processing...</span>
                     </div>
                   )}
                   {message.type === "success" && (
                     <div className="flex items-center gap-2 mb-2 text-green-600">
                       <CheckCircle className="w-4 h-4" />
-                      <span className="text-xs font-medium">{t('listingAdminChat.complete') || 'Complete'}</span>
+                      <span className="text-xs font-medium">Complete</span>
                     </div>
                   )}
                   <p className="text-sm whitespace-pre-wrap leading-relaxed select-text">{message.content}</p>
@@ -507,18 +409,11 @@ Would you like to try a different approach?`,
                     {message.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                   </p>
                 </div>
-                {/* Copy Button */}
                 <button
-                  onClick={async () => {
-                    await navigator.clipboard.writeText(message.content);
-                    toast.success(t('chat.messageCopied') || 'Message copied');
-                  }}
-                  className={`flex items-center gap-1 mt-1 text-[10px] text-zinc-400 hover:text-zinc-700 transition-colors opacity-0 group-hover:opacity-100 ${
-                    message.role === "user" ? "self-end mr-1" : "self-start ml-1"
-                  }`}
+                  onClick={async () => { await navigator.clipboard.writeText(message.content); toast.success("Copied"); }}
+                  className={`flex items-center gap-1 mt-1 text-[10px] text-zinc-400 hover:text-zinc-700 transition-colors opacity-0 group-hover:opacity-100 ${message.role === "user" ? "self-end mr-1" : "self-start ml-1"}`}
                 >
-                  <Copy className="w-3 h-3" />
-                  <span>{t('chat.copy') || 'Copy'}</span>
+                  <Copy className="w-3 h-3" /><span>Copy</span>
                 </button>
               </div>
             </div>
@@ -531,50 +426,58 @@ Would you like to try a different approach?`,
               </Avatar>
               <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl px-4 py-3 flex items-center gap-2 border border-gold/20">
                 <Loader2 className="w-4 h-4 animate-spin text-gold" />
-                <span className="text-sm text-zinc-600">{t('listingAdminChat.typing') || 'Typing...'}</span>
+                <span className="text-sm text-zinc-600">Extracting & processing...</span>
               </div>
             </div>
           )}
         </div>
       </ScrollArea>
 
-      {/* Bulk Upload Section */}
+      {/* Multi-URL Upload Section */}
       {showBulkUpload && (
-        <div className="p-4 border-t border-zinc-200 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+        <div className="p-4 border-t border-zinc-200 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] max-h-[300px] overflow-y-auto">
           <div className="flex items-center gap-2 mb-3">
-            <FolderOpen className="w-5 h-5 text-gold" />
-            <span className="font-medium text-black">{t('listingAdminChat.bulkUploadTitle') || 'Extract Listing from URL'}</span>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowBulkUpload(false)}
-              className="ml-auto h-6 w-6 p-0 text-zinc-600 hover:text-black"
-            >
+            <ListChecks className="w-5 h-5 text-gold" />
+            <span className="font-medium text-black text-sm">Batch URL Extraction</span>
+            <Button variant="ghost" size="sm" onClick={() => setShowBulkUpload(false)} className="ml-auto h-6 w-6 p-0 text-zinc-600 hover:text-black">
               <X className="w-4 h-4" />
             </Button>
           </div>
           <p className="text-xs text-zinc-600 mb-3">
-            {t('listingAdminChat.bulkUploadDesc') || "Paste any link: Google Drive, Bayut, PropertyFinder, Dubizzle, or developer websites. I'll extract the project data automatically."}
+            Add multiple URLs. Each will be scraped, documents saved, and queued {autoApprove ? "with auto-approval" : "for your review"}.
           </p>
+          <div className="space-y-2 mb-3">
+            {urlInputs.map((urlVal, i) => (
+              <div key={i} className="flex gap-2">
+                <Input
+                  value={urlVal}
+                  onChange={(e) => updateUrlInput(i, e.target.value)}
+                  placeholder={`https://example.com/project-${i + 1}`}
+                  className="flex-1 bg-white border-zinc-300 text-black text-sm h-9"
+                />
+                {urlInputs.length > 1 && (
+                  <Button variant="ghost" size="sm" onClick={() => removeUrlInput(i)} className="h-9 w-9 p-0 text-zinc-400 hover:text-red-500">
+                    <X className="w-4 h-4" />
+                  </Button>
+                )}
+              </div>
+            ))}
+          </div>
           <div className="flex gap-2">
-            <Input
-              value={bulkUploadUrl}
-              onChange={(e) => setBulkUploadUrl(e.target.value)}
-              placeholder="https://drive.google.com/... or https://bayut.com/..."
-              className="flex-1 bg-white border-zinc-300 text-black"
-            />
-            <Button 
-              onClick={handleBulkUpload} 
-              variant="primary" 
+            <Button variant="outline" size="sm" onClick={addUrlInput} className="text-xs h-8 border-zinc-300 text-zinc-600" disabled={urlInputs.length >= 20}>
+              <Plus className="w-3 h-3 mr-1" /> Add URL
+            </Button>
+            <Button
+              onClick={handleBulkUpload}
+              variant="primary"
               size="sm"
-              disabled={isLoading || !bulkUploadUrl.trim()}
+              disabled={isLoading || urlInputs.every(u => !u.trim())}
+              className="ml-auto text-xs h-8"
             >
-              {isLoading ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
+              {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : (
                 <>
-                  <Upload className="w-4 h-4 mr-1" />
-                  {t('listingAdminChat.extract') || 'Extract'}
+                  <Upload className="w-3 h-3 mr-1" />
+                  Extract {urlInputs.filter(u => u.trim()).length || 0} URL{urlInputs.filter(u => u.trim()).length !== 1 ? "s" : ""}
                 </>
               )}
             </Button>
@@ -584,6 +487,8 @@ Would you like to try a different approach?`,
             <span className="text-[10px] px-2 py-0.5 bg-blue-100 text-blue-700 rounded">Bayut</span>
             <span className="text-[10px] px-2 py-0.5 bg-purple-100 text-purple-700 rounded">PropertyFinder</span>
             <span className="text-[10px] px-2 py-0.5 bg-orange-100 text-orange-700 rounded">Developer Sites</span>
+            <span className="text-[10px] px-2 py-0.5 bg-red-100 text-red-700 rounded">Provident</span>
+            <span className="text-[10px] px-2 py-0.5 bg-zinc-100 text-zinc-700 rounded">Any URL</span>
           </div>
         </div>
       )}
@@ -596,7 +501,7 @@ Would you like to try a different approach?`,
             size="sm"
             onClick={() => setShowBulkUpload(!showBulkUpload)}
             className={`h-10 w-10 p-0 ${showBulkUpload ? "text-gold bg-gold/10" : "text-zinc-600 hover:text-gold hover:bg-gold/10"}`}
-            title="Bulk Upload from Google Drive"
+            title="Batch URL Extraction"
           >
             <LinkIcon className="w-5 h-5" />
           </Button>
@@ -612,7 +517,7 @@ Would you like to try a different approach?`,
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSendMessage()}
-            placeholder={t('listingAdminChat.askAnything') || "Ask Sarah anything about listings..."}
+            placeholder="Paste a URL or ask Sarah anything..."
             className="flex-1 bg-zinc-50 border-zinc-300 text-black"
             disabled={isLoading}
           />
@@ -621,15 +526,11 @@ Would you like to try a different approach?`,
             disabled={!input.trim() || isLoading}
             className="h-10 w-10 p-0 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 hover:bg-black hover:border-black group transition-all duration-300"
           >
-            {isLoading ? (
-              <Loader2 className="w-5 h-5 animate-spin text-gold group-hover:text-gold" />
-            ) : (
-              <Send className="w-5 h-5 text-gold group-hover:text-white" />
-            )}
+            {isLoading ? <Loader2 className="w-5 h-5 animate-spin text-gold" /> : <Send className="w-5 h-5 text-gold group-hover:text-white" />}
           </Button>
         </div>
         <div className="flex items-center justify-center gap-1 mt-2 text-[10px] text-zinc-400">
-          <span>{t('listingAdminChat.poweredByAI') || 'Powered by AI - Sarah can create listings, process bulk uploads, and answer questions'}</span>
+          <span>Paste any link directly or use the batch tool • Documents are saved permanently • {autoApprove ? "⚡ Auto-approve ON" : "Manual approval mode"}</span>
         </div>
       </div>
     </div>
