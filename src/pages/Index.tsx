@@ -1,37 +1,7 @@
 import { useState, lazy, Suspense, memo } from "react";
-import DeveloperPartnersMarquee from "@/components/DeveloperPartnersMarquee";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-// Footer removed - handled by MainLayout
-import StatsCounter from "@/components/StatsCounter";
-import InquiryFormModal from "@/components/InquiryFormModal";
-import BestIdeaAward from "@/components/BestIdeaAward";
-import SupportTicketBox from "@/components/SupportTicketBox";
-import ExploreServicesCard from "@/components/home/ExploreServicesCard";
-import { ToolkitShowcaseCard } from "@/components/home/ToolkitShowcaseCard";
-import StartingPointSection from "@/components/home/StartingPointSection";
-import OverseasInvestorsBanner from "@/components/home/OverseasInvestorsBanner";
-
-// Master Blueprint Components - Lazy load below-fold heavy sections
-import TrustBar from "@/components/home/TrustBar";
-import FeaturedListings from "@/components/home/FeaturedListings";
-import ServicesGrid from "@/components/home/ServicesGrid";
-import WhyChooseUs from "@/components/home/WhyChooseUs";
-import AreasWeCover from "@/components/home/AreasWeCover";
 import HeroSearchBar from "@/components/home/HeroSearchBar";
-import ContinueSearching from "@/components/ContinueSearching";
-
-// Lazy load heavier below-fold sections for performance
-const WhyDubaiCapitalSection = lazy(() => import("@/components/home/WhyDubaiCapitalSection"));
-const TestimonialsSection = lazy(() => import("@/components/home/TestimonialsSection"));
-const AIComparisonWidget = lazy(() => import("@/components/AIComparisonWidget"));
-const MarketReportCTA = lazy(() => import("@/components/MarketReportCTA"));
-const MortgageCalculator = lazy(() => import("@/components/MortgageCalculator"));
-const BrokerOnboardingBanner = lazy(() => import("@/components/BrokerOnboardingBanner"));
-const JBJPodcastSection = lazy(() => import("@/components/home/JBJPodcastSection"));
-
-import { PodcastVisibilityGate } from "@/components/home/PodcastVisibilityGate";
-import { SectionDivider } from "@/components/ui/section-divider";
 
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -43,6 +13,33 @@ import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
 import jbjFullLogoLight from "@/assets/jbj-fulllogo-light.png";
 import { CONTACT_INFO } from "@/constants/stats";
+
+// ALL below-fold components lazy loaded for fast initial paint
+const DeveloperPartnersMarquee = lazy(() => import("@/components/DeveloperPartnersMarquee"));
+const StatsCounter = lazy(() => import("@/components/StatsCounter"));
+const InquiryFormModal = lazy(() => import("@/components/InquiryFormModal"));
+const BestIdeaAward = lazy(() => import("@/components/BestIdeaAward"));
+const SupportTicketBox = lazy(() => import("@/components/SupportTicketBox"));
+const ExploreServicesCard = lazy(() => import("@/components/home/ExploreServicesCard"));
+const ToolkitShowcaseCard = lazy(() => import("@/components/home/ToolkitShowcaseCard").then(m => ({ default: m.ToolkitShowcaseCard })));
+const StartingPointSection = lazy(() => import("@/components/home/StartingPointSection"));
+const OverseasInvestorsBanner = lazy(() => import("@/components/home/OverseasInvestorsBanner"));
+const TrustBar = lazy(() => import("@/components/home/TrustBar"));
+const FeaturedListings = lazy(() => import("@/components/home/FeaturedListings"));
+const ServicesGrid = lazy(() => import("@/components/home/ServicesGrid"));
+const WhyChooseUs = lazy(() => import("@/components/home/WhyChooseUs"));
+const AreasWeCover = lazy(() => import("@/components/home/AreasWeCover"));
+const ContinueSearching = lazy(() => import("@/components/ContinueSearching"));
+const WhyDubaiCapitalSection = lazy(() => import("@/components/home/WhyDubaiCapitalSection"));
+const TestimonialsSection = lazy(() => import("@/components/home/TestimonialsSection"));
+const AIComparisonWidget = lazy(() => import("@/components/AIComparisonWidget"));
+const MarketReportCTA = lazy(() => import("@/components/MarketReportCTA"));
+const MortgageCalculator = lazy(() => import("@/components/MortgageCalculator"));
+const BrokerOnboardingBanner = lazy(() => import("@/components/BrokerOnboardingBanner"));
+const JBJPodcastSection = lazy(() => import("@/components/home/JBJPodcastSection"));
+
+import { PodcastVisibilityGate } from "@/components/home/PodcastVisibilityGate";
+import { SectionDivider } from "@/components/ui/section-divider";
 
 // Lazy loading fallback component
 const SectionLoader = () => (
