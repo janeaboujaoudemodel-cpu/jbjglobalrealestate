@@ -10,29 +10,65 @@
       #root { min-height: 100vh; }
     </style>
 
-    <!-- Fonts -->
+    <!-- DNS Prefetch & Preconnect for external services -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://mdafrewypkkrildjgtey.supabase.co" crossorigin />
+    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="//fonts.gstatic.com" />
+    <link rel="dns-prefetch" href="//mdafrewypkkrildjgtey.supabase.co" />
+
+    <!-- Fonts - non-render-blocking with preload -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" />
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
     />
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" /></noscript>
+
+    <!-- Preload hero image for instant LCP -->
+    <link rel="preload" as="image" href="/src/assets/luxury-villa-hero.jpeg" fetchpriority="high" />
 
     <!-- Primary SEO (JS will enhance per-page) -->
-    <title>JBJ Global Real Estate | Dubai Property Brokerage</title>
-    <meta name="description" content="JBJ Global Real Estate is Dubai's premier real estate brokerage. Buy, sell, or rent luxury properties in Dubai, UAE." />
+    <title>JBJ Global Real Estate | Dubai Property Brokerage | Buy, Sell, Rent Properties UAE</title>
+    <meta name="description" content="JBJ Global Real Estate is Dubai's premier property brokerage. Buy, sell, or rent luxury apartments, villas, penthouses in Palm Jumeirah, Downtown Dubai, Marina, Business Bay & across UAE. RERA licensed." />
+    <meta name="keywords" content="Dubai real estate, buy property Dubai, sell property Dubai, rent apartment Dubai, UAE property brokerage, luxury apartments Dubai, off-plan properties, Palm Jumeirah, Downtown Dubai, Dubai Marina, Business Bay, JBJ Global Real Estate, Sharjah real estate, Abu Dhabi property, Emirates property" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="geo.region" content="AE-DU" />
+    <meta name="geo.placename" content="Dubai" />
+    <meta name="geo.position" content="25.2048;55.2708" />
+    <meta name="ICBM" content="25.2048, 55.2708" />
     <link rel="canonical" href="https://jbj.ae" />
+    <link rel="alternate" hreflang="en" href="https://jbj.ae" />
+    <link rel="alternate" hreflang="ar" href="https://jbj.ae?lang=ar" />
+    <link rel="alternate" hreflang="x-default" href="https://jbj.ae" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="JBJ Global Real Estate | Dubai Property Brokerage" />
+    <meta property="og:description" content="Dubai's premier real estate brokerage. Buy, sell, or rent luxury properties across UAE." />
+    <meta property="og:image" content="https://jbj.ae/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://jbj.ae" />
+    <meta property="og:site_name" content="JBJ Global Real Estate" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="ar_AE" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="JBJ Global Real Estate | Dubai Property Brokerage" />
+    <meta name="twitter:description" content="Dubai's premier real estate brokerage. Buy, sell, or rent luxury properties across UAE." />
+    <meta name="twitter:image" content="https://jbj.ae/og-image.jpg" />
 
     <!-- Favicon & Icons -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="theme-color" content="#0a0a0a" />
-
-    <!-- DNS Prefetch for external services -->
-    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
-    <link rel="dns-prefetch" href="//fonts.gstatic.com" />
-    <link rel="dns-prefetch" href="//mdafrewypkkrildjgtey.supabase.co" />
   </head>
 
   <body>

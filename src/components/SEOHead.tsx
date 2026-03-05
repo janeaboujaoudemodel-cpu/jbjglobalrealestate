@@ -16,8 +16,8 @@ const DEFAULT_OG_IMAGE = `${BASE_URL}/og-image.jpg`;
 const BRAND_NAME = 'JBJ Global Real Estate';
 
 // Core keywords without founder name - founder name added conditionally
-const CORE_KEYWORDS_BASE = 'JBJ, JBJ Global Real Estate, Dubai real estate, buy property Dubai, sell property Dubai, rent Dubai, UAE property, real estate brokerage Dubai';
-const FOUNDER_KEYWORDS = ', Jane Bou Jaoude';
+const CORE_KEYWORDS_BASE = 'JBJ, JBJ Global Real Estate, Dubai real estate, buy property Dubai, sell property Dubai, rent Dubai, UAE property, real estate brokerage Dubai, apartments Dubai, villas Dubai, off-plan Dubai, Palm Jumeirah, Downtown Dubai, Dubai Marina, Business Bay, Sharjah real estate, Abu Dhabi property, Emirates property, luxury property UAE, RERA licensed broker, Golden Visa Dubai, property investment UAE, Emaar, DAMAC, Nakheel, Sobha, Azizi, Danube, Binghatti';
+const FOUNDER_KEYWORDS = ', Jane Bou Jaoude, Jane Lebanese Dubai';
 
 /**
  * SEO Head Component - Sets document title and meta tags for each page

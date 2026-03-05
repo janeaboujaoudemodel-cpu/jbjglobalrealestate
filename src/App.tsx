@@ -69,7 +69,9 @@ import RouteErrorBoundary from "@/components/RouteErrorBoundary";
 import { RedirectWithParams } from "@/components/RedirectWithParams";
 import AppErrorBoundary from "@/components/AppErrorBoundary";
 import GlobalSEO from "@/components/GlobalSEO";
+import SEOServiceArea from "@/components/SEOServiceArea";
 import GlobalVisitorTracking from "@/components/GlobalVisitorTracking";
+import SEOBreadcrumbs from "@/components/SEOBreadcrumbs";
 
 import PageLoader from "@/components/PageLoader";
 // Homepage - lazy loaded like all other pages for smaller initial bundle
@@ -375,6 +377,7 @@ const App = () => {
       <SafeTooltipProvider>
         <LanguageProvider>
           <GlobalSEO />
+          <SEOServiceArea />
           <Toaster />
           <Sonner />
           <BrowserRouter>
@@ -387,6 +390,7 @@ const App = () => {
                     <ScrollToTopOnMount />
                   <RouteResume />
                   <GlobalVisitorTracking />
+                  <SEOBreadcrumbs />
                   
             {/* Auth route is always accessible for login */}
             <Suspense fallback={<PageLoader />}>
