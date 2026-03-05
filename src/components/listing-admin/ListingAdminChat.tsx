@@ -500,6 +500,13 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
     await handleFileUpload(filesToSend);
   };
 
+  const openMultiFilePicker = () => {
+    if (!fileInputRef.current) return;
+    fileInputRef.current.multiple = true;
+    fileInputRef.current.value = "";
+    fileInputRef.current.click();
+  };
+
   return (
     <div className="flex flex-col h-full bg-white overflow-hidden">
       {/* Header */}
@@ -676,7 +683,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
         ref={fileInputRef}
         type="file"
         multiple
-        accept="image/*,.pdf,.doc,.docx,.xls,.xlsx"
+        accept="*/*"
         onChange={handleFileInputChange}
         className="hidden"
       />
@@ -690,7 +697,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
               <Button variant="ghost" size="sm" onClick={() => setUploadedFiles([])} className="h-6 text-[10px] text-zinc-500 hover:text-red-500 px-2">
                 Clear all
               </Button>
-              <Button variant="ghost" size="sm" onClick={() => fileInputRef.current?.click()} className="h-6 text-[10px] text-gold px-2">
+              <Button variant="ghost" size="sm" onClick={openMultiFilePicker} className="h-6 text-[10px] text-gold px-2">
                 <Plus className="w-3 h-3 mr-1" /> Add more
               </Button>
             </div>
@@ -715,9 +722,9 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => fileInputRef.current?.click()}
+            onClick={openMultiFilePicker}
             className="h-10 w-10 p-0 text-zinc-600 hover:text-gold hover:bg-gold/10"
-            title="Upload files (photos, PDFs, brochures — up to 50)"
+            title="Upload multiple files at once"
             disabled={isLoading}
           >
             <Paperclip className="w-5 h-5" />
