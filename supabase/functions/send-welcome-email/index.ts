@@ -1,7 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-import { SITE_URL, emailShell, arabicDivider, sharedSections } from "../_shared/email-html.ts";
+import { SITE_URL, emailShell, arabicDivider, sharedSections, userGreetingRow } from "../_shared/email-html.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
@@ -72,7 +72,7 @@ function buildWelcomeHtml(
 
   // BILINGUAL: EN → Arabic divider → AR → Gold divider → Locked sections
   const bodyContent = `<tr><td class="content-pad" style="padding:32px;">
-<p style="margin:0 0 6px;font-size:28px;font-weight:800;color:#1a1a1a;line-height:1.2;">Thank You for Joining Us, ${displayName}</p>
+${userGreetingRow(displayName)}
 <p style="margin:0 0 24px;font-size:18px;color:#C8A766;font-weight:600;line-height:1.3;">Your JBJ account is ready — we're thrilled to have you.</p>
 <p style="color:#555;font-size:15px;line-height:1.6;margin:0 0 20px;">You have successfully created your account with <strong>JBJ Global Real Estate</strong>. As a valued member, you now have access to our full suite of services and tools.</p>
 <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate;margin:0 0 24px;"><tr><td style="padding:18px 22px;background:linear-gradient(135deg,#F5EBD7 0%,#FDFBF7 100%);border-radius:18px;border:1px solid #C8A766;"><p style="color:#1a1a1a;font-size:14px;font-weight:700;margin:0 0 10px;">Your Account Details</p><p style="color:#555;font-size:13px;margin:0;"><strong>Registered Email:</strong> ${email}</p></td></tr></table>
@@ -82,7 +82,7 @@ function buildWelcomeHtml(
 ${arabicDivider()}
 </td></tr>
 <tr><td class="content-pad" style="padding:0 32px 32px;direction:rtl;text-align:right;">
-<p style="margin:0;font-size:28px;font-weight:800;color:#1a1a1a;line-height:1.2;">${arabicGreeting}</p>
+${userGreetingRow(displayName, true)}
 <p style="margin:8px 0 0;font-size:18px;color:#C8A766;font-weight:600;">حسابك في JBJ جاهز — يسعدنا انضمامك إلينا.</p>
 <p style="color:#555;font-size:15px;line-height:1.6;margin:16px 0 20px;">لقد قمت بإنشاء حسابك بنجاح مع <strong>JBJ Global Real Estate</strong>. بصفتك عضواً مميزاً، يمكنك الآن الوصول إلى جميع خدماتنا وأدواتنا.</p>
 <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate;margin:0 0 24px;"><tr><td style="padding:18px 22px;background:linear-gradient(135deg,#F5EBD7 0%,#FDFBF7 100%);border-radius:18px;border:1px solid #C8A766;"><p style="color:#1a1a1a;font-size:14px;font-weight:700;margin:0 0 10px;">تفاصيل حسابك</p><p style="color:#555;font-size:13px;margin:0;"><strong>البريد الإلكتروني المسجل:</strong> ${email}</p></td></tr></table>

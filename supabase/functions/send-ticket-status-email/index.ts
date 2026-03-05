@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { emailShell, sharedSections, progressSteps, ticketSummaryCard, ticketSummaryCardAr, arabicDivider, rateExperienceCard, rateExperienceCardAr, issueNotResolvedCard, issueNotResolvedCardAr } from "../_shared/email-html.ts";
+import { emailShell, sharedSections, progressSteps, ticketSummaryCard, ticketSummaryCardAr, arabicDivider, rateExperienceCard, rateExperienceCardAr, issueNotResolvedCard, issueNotResolvedCardAr, userGreetingRow } from "../_shared/email-html.ts";
 
 const RESEND_API_URL = "https://api.resend.com/emails";
 const VERIFIED_SENDER = 'contact@jbj.ae';
@@ -135,8 +135,8 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     const adminNoteArText = toArabicText(adminNote);
-    const adminNoteHtml = adminNote ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;overflow:hidden;margin-bottom:24px;"><tr><td style="padding:20px;"><p style="font-weight:bold;color:#1a1a1a;margin:0 0 8px;">Admin Note:</p><p style="color:#555;margin:0;">${adminNote}</p></td></tr></table>` : '';
-    const adminNoteHtmlAr = adminNote ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;overflow:hidden;margin-bottom:24px;direction:rtl;"><tr><td style="padding:20px;"><p style="font-weight:bold;color:#1a1a1a;margin:0 0 8px;">ملاحظة الإدارة:</p><p style="color:#555;margin:0;">${adminNoteArText}</p></td></tr></table>` : '';
+    const adminNoteHtml = adminNote ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#eff6ff,#dbeafe);border:1px solid #93c5fd;border-radius:18px;overflow:hidden;margin-bottom:24px;"><tr><td style="padding:20px;"><p style="font-weight:700;color:#1d4ed8;margin:0 0 8px;">Admin Note:</p><p style="color:#1e3a8a;margin:0;line-height:1.7;">${adminNote}</p></td></tr></table>` : '';
+    const adminNoteHtmlAr = adminNote ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#eff6ff,#dbeafe);border:1px solid #93c5fd;border-radius:18px;overflow:hidden;margin-bottom:24px;direction:rtl;"><tr><td style="padding:20px;"><p style="font-weight:700;color:#1d4ed8;margin:0 0 8px;">ملاحظة الإدارة:</p><p style="color:#1e3a8a;margin:0;line-height:1.7;">${adminNoteArText}</p></td></tr></table>` : '';
 
     const isResolved = normalizedStatus === 'resolved';
     const rateHtml = isResolved ? rateExperienceCard(surveyLink) : '';
@@ -145,7 +145,7 @@ const handler = async (req: Request): Promise<Response> => {
     const reopenHtmlAr = isResolved ? issueNotResolvedCardAr(reopenUrl) : '';
 
     const bodyContent = `<tr><td class="content-pad" style="padding:32px;">
-<p style="font-size:15px;color:#333;margin:0 0 16px;">Dear <strong>${ticket.full_name}</strong>,</p>
+${userGreetingRow(ticket.full_name)}
 <p style="font-size:14px;color:#555;margin:0 0 24px;">${content.subtitle}</p>
 ${progressSteps(['Received', 'In Review', 'Resolved'], content.steps, content.checks)}
 ${ticketSummaryCard([
@@ -160,7 +160,7 @@ ${rateHtml}
 ${reopenHtml}
 ${arabicDivider()}
 <div style="direction:rtl;text-align:right;">
-<p style="font-size:15px;color:#333;margin:0 0 16px;">عزيزي/عزيزتي <strong>${ticket.full_name}</strong>،</p>
+${userGreetingRow(ticket.full_name, true)}
 <p style="font-size:14px;color:#555;margin:0 0 24px;">${content.subtitleAr}</p>
 ${ticketSummaryCardAr([
   { label: 'رقم التذكرة', value: ticket.ticket_number, highlight: true },

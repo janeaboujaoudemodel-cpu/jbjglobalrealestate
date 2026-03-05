@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { SITE_URL, emailShell, sharedSections, teamReplyCard, inquiryStages } from "../_shared/email-html.ts";
+import { SITE_URL, emailShell, sharedSections, teamReplyCard, inquiryStages, userGreetingRow } from "../_shared/email-html.ts";
 
 const RESEND_API_URL = "https://api.resend.com/emails";
 const VERIFIED_SENDER = "contact@jbj.ae";
@@ -69,7 +69,7 @@ function buildEmailHtml(req: AdminMessageRequest): string {
 </td></tr></table>
 </td></tr>
 <tr><td class="content-pad" style="padding:28px 40px;">
-<p style="color:#333;font-size:15px;line-height:1.6;margin:0 0 20px;">Dear <strong>${req.recipientName}</strong>,</p>
+${userGreetingRow(req.recipientName)}
 ${isInquiry && req.inquiryStage ? inquiryStages(req.inquiryStage) : ''}
 ${req.referenceLabel ? `
 <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate;background:#FDFBF7;border:1px solid #C8A76633;border-radius:18px;margin:0 0 24px;">

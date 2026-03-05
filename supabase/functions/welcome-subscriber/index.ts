@@ -1,5 +1,5 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { emailShell, sharedSections, arabicDivider } from "../_shared/email-html.ts";
+import { emailShell, sharedSections, arabicDivider, userGreetingRow } from "../_shared/email-html.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
@@ -31,7 +31,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // BILINGUAL: EN → Arabic divider → AR → Gold divider → Locked sections
     const bodyContent = `<tr><td class="content-pad" style="padding:32px;">
-<p style="font-size:15px;color:#333;margin:0 0 16px;">Dear <strong>${firstName}</strong>,</p>
+${userGreetingRow(firstName)}
 <p style="font-size:14px;color:#555;margin:0 0 24px;">Welcome to <strong>Stay in the Loop</strong> — you are now part of an exclusive real estate intelligence network. We are committed to delivering only strategic value — no spam, ever.</p>
 
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:18px;margin-bottom:24px;">
@@ -63,7 +63,7 @@ const handler = async (req: Request): Promise<Response> => {
 ${arabicDivider()}
 </td></tr>
 <tr><td class="content-pad" style="padding:0 32px 32px;direction:rtl;text-align:right;">
-<p style="font-size:15px;color:#333;margin:0 0 16px;">عزيزي/عزيزتي <strong>${firstName}</strong>،</p>
+${userGreetingRow(firstName, true)}
 <p style="font-size:14px;color:#555;margin:0 0 24px;">مرحباً بك في <strong>ابقَ على اطلاع</strong> — أنت الآن جزء من شبكة استخبارات عقارية حصرية. نحن ملتزمون بتقديم القيمة الاستراتيجية فقط — بدون رسائل مزعجة أبداً.</p>
 
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:18px;margin-bottom:24px;direction:rtl;">

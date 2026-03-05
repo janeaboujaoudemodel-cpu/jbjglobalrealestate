@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { emailShell, sharedSections, progressSteps, ticketSummaryCard, ticketSummaryCardAr, arabicDivider } from "../_shared/email-html.ts";
+import { emailShell, sharedSections, progressSteps, ticketSummaryCard, ticketSummaryCardAr, arabicDivider, userGreetingRow } from "../_shared/email-html.ts";
 
 // Standard Resend API endpoint (Tokyo region is DNS verification location only, API is global)
 const RESEND_API_URL = "https://api.resend.com/emails";
@@ -213,7 +213,7 @@ ${sharedSections("support ticket", "JBJ Global Real Estate Support Team")}
 
     // Send confirmation email to customer using unified shared template
     const customerEmailHtml = emailShell("Support Ticket Confirmation", `<tr><td class="content-pad" style="padding:32px;">
-<p style="font-size:15px;color:#333;margin:0 0 16px;">Dear <strong>${fullName}</strong>,</p>
+${userGreetingRow(fullName)}
 <p style="font-size:14px;color:#555;margin:0 0 24px;">Your support ticket has been received and our team is now reviewing it.</p>
 ${progressSteps(['Received', 'In Review', 'Resolved'], [true, false, false], [true, false, false])}
 ${ticketSummaryCard([
@@ -225,7 +225,7 @@ ${ticketSummaryCard([
 ])}
 ${arabicDivider()}
 <div style="direction:rtl;text-align:right;">
-<p style="font-size:15px;color:#333;margin:0 0 16px;">عزيزي/عزيزتي <strong>${fullName}</strong>،</p>
+${userGreetingRow(fullName, true)}
 <p style="font-size:14px;color:#555;margin:0 0 24px;">تم استلام تذكرة الدعم الخاصة بك ويقوم فريقنا حالياً بمراجعتها.</p>
 ${ticketSummaryCardAr([
   { label: 'رقم التذكرة', value: ticket.ticket_number, highlight: true },
