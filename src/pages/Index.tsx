@@ -1,4 +1,4 @@
-import { useState, lazy, Suspense, memo } from "react";
+import { useState, lazy, Suspense, memo, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import HeroSearchBar from "@/components/home/HeroSearchBar";
@@ -14,29 +14,55 @@ import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
 import jbjFullLogoLight from "@/assets/jbj-fulllogo-light.png";
 import { CONTACT_INFO } from "@/constants/stats";
 
-// ALL below-fold components lazy loaded for fast initial paint
-const DeveloperPartnersMarquee = lazy(() => import("@/components/DeveloperPartnersMarquee"));
-const StatsCounter = lazy(() => import("@/components/StatsCounter"));
-const InquiryFormModal = lazy(() => import("@/components/InquiryFormModal"));
-const BestIdeaAward = lazy(() => import("@/components/BestIdeaAward"));
-const SupportTicketBox = lazy(() => import("@/components/SupportTicketBox"));
-const ExploreServicesCard = lazy(() => import("@/components/home/ExploreServicesCard"));
-const ToolkitShowcaseCard = lazy(() => import("@/components/home/ToolkitShowcaseCard").then(m => ({ default: m.ToolkitShowcaseCard })));
-const StartingPointSection = lazy(() => import("@/components/home/StartingPointSection"));
-const OverseasInvestorsBanner = lazy(() => import("@/components/home/OverseasInvestorsBanner"));
-const TrustBar = lazy(() => import("@/components/home/TrustBar"));
-const FeaturedListings = lazy(() => import("@/components/home/FeaturedListings"));
-const ServicesGrid = lazy(() => import("@/components/home/ServicesGrid"));
-const WhyChooseUs = lazy(() => import("@/components/home/WhyChooseUs"));
-const AreasWeCover = lazy(() => import("@/components/home/AreasWeCover"));
-const ContinueSearching = lazy(() => import("@/components/ContinueSearching"));
-const WhyDubaiCapitalSection = lazy(() => import("@/components/home/WhyDubaiCapitalSection"));
-const TestimonialsSection = lazy(() => import("@/components/home/TestimonialsSection"));
-const AIComparisonWidget = lazy(() => import("@/components/AIComparisonWidget"));
-const MarketReportCTA = lazy(() => import("@/components/MarketReportCTA"));
-const MortgageCalculator = lazy(() => import("@/components/MortgageCalculator"));
-const BrokerOnboardingBanner = lazy(() => import("@/components/BrokerOnboardingBanner"));
-const JBJPodcastSection = lazy(() => import("@/components/home/JBJPodcastSection"));
+// Chunk imports — stored so we can preload them all after hero renders
+const chunkImports = {
+  DeveloperPartnersMarquee: () => import("@/components/DeveloperPartnersMarquee"),
+  StatsCounter: () => import("@/components/StatsCounter"),
+  InquiryFormModal: () => import("@/components/InquiryFormModal"),
+  BestIdeaAward: () => import("@/components/BestIdeaAward"),
+  SupportTicketBox: () => import("@/components/SupportTicketBox"),
+  ExploreServicesCard: () => import("@/components/home/ExploreServicesCard"),
+  ToolkitShowcaseCard: () => import("@/components/home/ToolkitShowcaseCard").then(m => ({ default: m.ToolkitShowcaseCard })),
+  StartingPointSection: () => import("@/components/home/StartingPointSection"),
+  OverseasInvestorsBanner: () => import("@/components/home/OverseasInvestorsBanner"),
+  TrustBar: () => import("@/components/home/TrustBar"),
+  FeaturedListings: () => import("@/components/home/FeaturedListings"),
+  ServicesGrid: () => import("@/components/home/ServicesGrid"),
+  WhyChooseUs: () => import("@/components/home/WhyChooseUs"),
+  AreasWeCover: () => import("@/components/home/AreasWeCover"),
+  ContinueSearching: () => import("@/components/ContinueSearching"),
+  WhyDubaiCapitalSection: () => import("@/components/home/WhyDubaiCapitalSection"),
+  TestimonialsSection: () => import("@/components/home/TestimonialsSection"),
+  AIComparisonWidget: () => import("@/components/AIComparisonWidget"),
+  MarketReportCTA: () => import("@/components/MarketReportCTA"),
+  MortgageCalculator: () => import("@/components/MortgageCalculator"),
+  BrokerOnboardingBanner: () => import("@/components/BrokerOnboardingBanner"),
+  JBJPodcastSection: () => import("@/components/home/JBJPodcastSection"),
+};
+
+// Lazy components using the same import functions
+const DeveloperPartnersMarquee = lazy(chunkImports.DeveloperPartnersMarquee);
+const StatsCounter = lazy(chunkImports.StatsCounter);
+const InquiryFormModal = lazy(chunkImports.InquiryFormModal);
+const BestIdeaAward = lazy(chunkImports.BestIdeaAward);
+const SupportTicketBox = lazy(chunkImports.SupportTicketBox);
+const ExploreServicesCard = lazy(chunkImports.ExploreServicesCard);
+const ToolkitShowcaseCard = lazy(chunkImports.ToolkitShowcaseCard);
+const StartingPointSection = lazy(chunkImports.StartingPointSection);
+const OverseasInvestorsBanner = lazy(chunkImports.OverseasInvestorsBanner);
+const TrustBar = lazy(chunkImports.TrustBar);
+const FeaturedListings = lazy(chunkImports.FeaturedListings);
+const ServicesGrid = lazy(chunkImports.ServicesGrid);
+const WhyChooseUs = lazy(chunkImports.WhyChooseUs);
+const AreasWeCover = lazy(chunkImports.AreasWeCover);
+const ContinueSearching = lazy(chunkImports.ContinueSearching);
+const WhyDubaiCapitalSection = lazy(chunkImports.WhyDubaiCapitalSection);
+const TestimonialsSection = lazy(chunkImports.TestimonialsSection);
+const AIComparisonWidget = lazy(chunkImports.AIComparisonWidget);
+const MarketReportCTA = lazy(chunkImports.MarketReportCTA);
+const MortgageCalculator = lazy(chunkImports.MortgageCalculator);
+const BrokerOnboardingBanner = lazy(chunkImports.BrokerOnboardingBanner);
+const JBJPodcastSection = lazy(chunkImports.JBJPodcastSection);
 
 import { PodcastVisibilityGate } from "@/components/home/PodcastVisibilityGate";
 import { SectionDivider } from "@/components/ui/section-divider";
@@ -66,6 +92,14 @@ const Index = () => {
   const [isInquiryOpen, setIsInquiryOpen] = useState(false);
   const { t } = useLanguage();
   const { isBroker, hasSelectedRole } = useUserRole();
+
+  // Preload ALL below-fold chunks immediately after mount so sections render instantly when scrolled to
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      Object.values(chunkImports).forEach(importFn => importFn());
+    }, 500); // Small delay to let hero paint first
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <section className="relative w-full min-h-screen bg-black">
