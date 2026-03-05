@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
-import { Check, X, Clock, RefreshCw, Database, Building, MapPin, Eye, ChevronDown, ChevronUp } from "lucide-react";
+import { Check, X, Clock, RefreshCw, Database, Building, MapPin, Eye } from "lucide-react";
 import { format } from "date-fns";
 
 interface PendingUpdate {
@@ -45,7 +45,6 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
   const [updates, setUpdates] = useState<PendingUpdate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [processingIds, setProcessingIds] = useState<Set<string>>(new Set());
-  const [expandedId, setExpandedId] = useState<string | null>(null);
   const [batchProcessing, setBatchProcessing] = useState(false);
   const { toast } = useToast();
 
@@ -249,119 +248,109 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
                   New Project Discoveries
                   <Badge className="bg-gold/20 text-gold border border-gold/30 text-xs">{newProjects.length}</Badge>
                 </h3>
-                <ScrollArea className="h-[500px] pr-2">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <ScrollArea className="h-[600px] pr-2">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {newProjects.map((update) => {
                       const parsed = parseProposedValue(update.proposed_value);
-                      const isExpanded = expandedId === update.id;
                       const isProcessing = processingIds.has(update.id);
 
                       return (
                         <div
                           key={update.id}
-                          className="border border-gold/20 rounded-xl bg-white/70 hover:bg-white/90 transition-all overflow-hidden"
+                          className="border-2 border-gold/30 rounded-xl bg-white overflow-hidden shadow-[0_4px_20px_rgba(200,167,102,0.15)] hover:shadow-[0_12px_40px_rgba(200,167,102,0.3)] hover:scale-[1.01] transition-all duration-300"
                         >
-                          {/* Project Card Header */}
-                          <div className="p-4">
-                            <div className="flex items-start justify-between mb-2">
-                              <div className="flex-1">
-                                <h4 className="font-semibold text-zinc-900 text-sm leading-tight">
-                                  {parsed.project_name || "Unnamed Project"}
-                                </h4>
-                                <div className="flex items-center gap-2 mt-1">
-                                  <MapPin className="h-3 w-3 text-gold" />
-                                  <span className="text-xs text-zinc-600">{parsed.emirate || "Dubai"}</span>
-                                </div>
-                              </div>
-                              <Badge className={`text-[10px] px-2 py-0.5 ${
+                          {/* Image / Placeholder - full card style */}
+                          <div className="relative aspect-[4/3] bg-gradient-to-br from-muted via-muted/80 to-muted/60">
+                            <div className="w-full h-full flex flex-col items-center justify-center gap-2">
+                              <Building className="h-12 w-12 text-muted-foreground/30" />
+                              <span className="text-xs text-muted-foreground/50 font-medium">Will be enriched after approval</span>
+                            </div>
+                            {/* Status badge overlay */}
+                            <div className="absolute top-3 right-3">
+                              <Badge className={`text-xs px-2.5 py-1 ${
                                 parsed.status === "Off-Plan"
-                                  ? "bg-blue-50 text-blue-700 border border-blue-200"
+                                  ? "bg-blue-600 text-white"
                                   : parsed.status === "Ready"
-                                    ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                                    : "bg-zinc-100 text-zinc-600 border border-zinc-200"
+                                    ? "bg-emerald-600 text-white"
+                                    : "bg-foreground/80 text-background"
                               }`}>
                                 {parsed.status || "Off-Plan"}
                               </Badge>
                             </div>
+                            {parsed.property_type && (
+                              <div className="absolute top-3 left-3">
+                                <div className="rounded bg-foreground/80 text-background px-2.5 py-1 text-[11px] font-medium backdrop-blur">
+                                  {parsed.property_type}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Card Content - matches portal card style */}
+                          <div className="p-4 space-y-3">
+                            <h4 className="font-semibold text-foreground text-base line-clamp-2 min-h-[44px]">
+                              {parsed.project_name || "Unnamed Project"}
+                            </h4>
+
+                            {parsed.developer && (
+                              <p className="text-sm text-gold truncate">by {parsed.developer}</p>
+                            )}
+
+                            <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                              <span className="flex items-center gap-1 truncate">
+                                <MapPin className="h-3.5 w-3.5 flex-shrink-0" />
+                                {parsed.area || parsed.emirate || "Dubai"}
+                              </span>
+                              {parsed.bedrooms && (
+                                <span className="flex items-center gap-1 flex-shrink-0">
+                                  {parsed.bedrooms}
+                                </span>
+                              )}
+                            </div>
+
+                            {/* Price */}
+                            <div className="text-sm">
+                              <span className="text-muted-foreground">From </span>
+                              {parsed.price_from ? (
+                                <span className="font-semibold text-foreground">
+                                  AED {parsed.price_from.toLocaleString()}
+                                </span>
+                              ) : (
+                                <span className="font-semibold text-gold">POA</span>
+                              )}
+                            </div>
 
                             {/* Source & Date */}
-                            <div className="flex items-center justify-between mt-2">
-                              <span className="text-[10px] text-zinc-500">
-                                {update.source?.name || "External Source"}
-                              </span>
-                              <div className="flex items-center gap-1 text-[10px] text-zinc-400">
+                            <div className="flex items-center justify-between text-xs text-muted-foreground pt-1 border-t border-border">
+                              <span>{update.source?.name || "External Source"}</span>
+                              <div className="flex items-center gap-1">
                                 <Clock className="h-3 w-3" />
                                 {format(new Date(update.created_at), "MMM d, yyyy")}
                               </div>
                             </div>
 
-                            {/* Preview Toggle */}
-                            <button
-                              onClick={() => setExpandedId(isExpanded ? null : update.id)}
-                              className="flex items-center gap-1 text-[11px] text-gold hover:text-gold/80 mt-2 transition-colors"
-                            >
-                              <Eye className="h-3 w-3" />
-                              {isExpanded ? "Hide" : "Preview"} listing card
-                              {isExpanded ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
-                            </button>
-                          </div>
-
-                          {/* Expanded Preview - How it would look on the portal */}
-                          {isExpanded && (
-                            <div className="border-t border-gold/10 bg-zinc-50 p-3">
-                              <p className="text-[10px] text-zinc-500 mb-2 font-medium">Portal Card Preview:</p>
-                              <div className="rounded-lg border border-zinc-200 bg-white overflow-hidden shadow-sm">
-                                <div className="h-28 bg-gradient-to-br from-zinc-200 to-zinc-300 flex items-center justify-center">
-                                  <Building className="h-8 w-8 text-zinc-400" />
-                                  <span className="text-xs text-zinc-500 ml-2">Image pending enrichment</span>
-                                </div>
-                                <div className="p-3">
-                                  <h5 className="font-semibold text-sm text-zinc-900">{parsed.project_name}</h5>
-                                  <p className="text-xs text-zinc-500 flex items-center gap-1 mt-1">
-                                    <MapPin className="h-3 w-3" /> {parsed.area || parsed.emirate || "Dubai"}
-                                  </p>
-                                  <div className="flex items-center gap-2 mt-2">
-                                    <Badge className="bg-blue-50 text-blue-700 border border-blue-200 text-[10px]">
-                                      {parsed.status || "Off-Plan"}
-                                    </Badge>
-                                    {parsed.property_type && (
-                                      <Badge className="bg-zinc-100 text-zinc-600 text-[10px]">{parsed.property_type}</Badge>
-                                    )}
-                                  </div>
-                                  {parsed.price_from && (
-                                    <p className="text-sm font-semibold text-gold mt-2">
-                                      From AED {parsed.price_from.toLocaleString()}
-                                    </p>
-                                  )}
-                                  <p className="text-[10px] text-zinc-400 mt-2 italic">
-                                    After approval, this project will be enriched with images, floor plans, and details from Reelly API during the next sync cycle.
-                                  </p>
-                                </div>
-                              </div>
+                            {/* Actions */}
+                            <div className="flex items-center gap-2 pt-2">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handleReject(update)}
+                                disabled={isProcessing}
+                                className="flex-1 border-destructive/30 text-destructive hover:bg-destructive/10 h-9 text-xs"
+                              >
+                                <X className="h-3.5 w-3.5 mr-1" />
+                                Reject
+                              </Button>
+                              <Button
+                                size="sm"
+                                onClick={() => handleApprove(update)}
+                                disabled={isProcessing}
+                                className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white h-9 text-xs"
+                              >
+                                <Check className="h-3.5 w-3.5 mr-1" />
+                                Approve
+                              </Button>
                             </div>
-                          )}
-
-                          {/* Actions */}
-                          <div className="flex items-center gap-2 justify-end p-3 pt-0">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleReject(update)}
-                              disabled={isProcessing}
-                              className="border-red-200 text-red-600 hover:bg-red-50 h-7 text-xs"
-                            >
-                              <X className="h-3 w-3 mr-1" />
-                              Reject
-                            </Button>
-                            <Button
-                              size="sm"
-                              onClick={() => handleApprove(update)}
-                              disabled={isProcessing}
-                              className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border border-gold/40 hover:border-gold/60 h-7 text-xs"
-                            >
-                              <Check className="h-3 w-3 mr-1" />
-                              Approve & Enrich
-                            </Button>
                           </div>
                         </div>
                       );
