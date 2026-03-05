@@ -22,6 +22,7 @@ const coverToneByCategory: Record<BookData["category"], string> = {
 
 export function BookCoverFace({ book, size = "thumb", className, bare = false }: BookCoverFaceProps) {
   const isGuidesLibrary = book.title.trim().toLowerCase() === "guides library";
+  const skipOverlays = book.coverLocked || isGuidesLibrary;
 
   return (
     <div className={cn("relative w-full h-full", className)}>
@@ -33,10 +34,9 @@ export function BookCoverFace({ book, size = "thumb", className, bare = false }:
         decoding="async"
       />
 
-      <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/35" />
-
-      {!isGuidesLibrary && (
+      {!skipOverlays && (
         <>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/35" />
           <div className={cn("absolute inset-0 bg-gradient-to-b", coverToneByCategory[book.category])} />
           <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-black/10" />
 
