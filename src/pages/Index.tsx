@@ -6,7 +6,7 @@ import HeroSearchBar from "@/components/home/HeroSearchBar";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserRole } from "@/hooks/useUserRole";
-import { Sparkles, ArrowUpRight, ArrowRight, ChevronDown, User, Scale, Layers, Calculator, FileText, Heart, BarChart3, Wrench, Ruler, Palette, Calendar, Wallet, ShoppingBag, Brain, GraduationCap, Briefcase, Target, Award, PenTool, Users, Table2, Video, Home, Key, Globe, Building2 } from "lucide-react";
+import { Sparkles, ArrowUpRight, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 
@@ -92,13 +92,13 @@ const Index = () => {
             fetchPriority="high"
             decoding="sync"
           />
-          {/* Video overlays the image when it loads/plays - stable single-source */}
+          {/* Video overlays the image when it loads/plays - deferred loading */}
           <video 
             autoPlay 
             loop 
             muted 
             playsInline
-            preload="auto"
+            preload="none"
             poster={luxuryVillaHero}
             webkit-playsinline="true"
             x-webkit-airplay="allow"
@@ -193,7 +193,9 @@ const Index = () => {
 
       {/* DEVELOPER PARTNERS MARQUEE - MOVED UP: Directly under hero */}
       <div id="developer-partners">
-        <DeveloperPartnersMarquee />
+        <Suspense fallback={<SectionLoader />}>
+          <DeveloperPartnersMarquee />
+        </Suspense>
       </div>
 
       {/* DIVIDER between Developer Partners and Trust Bar */}
@@ -201,34 +203,46 @@ const Index = () => {
 
       {/* TRUST BAR (8 Cards) - 4x2 Grid */}
       <div id="trust-bar" className="bg-black py-12 md:py-16">
-        <TrustBar />
+        <Suspense fallback={<SectionLoader />}>
+          <TrustBar />
+        </Suspense>
       </div>
 
       <SectionDivider />
 
       {/* FEATURED LISTINGS - Master Blueprint: Section 3 (8 cards, Buy/Rent tabs) */}
-      <FeaturedListings />
+      <Suspense fallback={<SectionLoader />}>
+        <FeaturedListings />
+      </Suspense>
 
       {/* CONTINUE SEARCHING - Recently viewed properties (primary focus for sales) */}
-      <ContinueSearching type="property" className="bg-black" title="Continue Searching Properties" />
+      <Suspense fallback={<SectionLoader />}>
+        <ContinueSearching type="property" className="bg-black" title="Continue Searching Properties" />
+      </Suspense>
 
       {/* DIVIDER */}
       <SectionDivider />
 
       {/* FIND YOUR STARTING POINT - Tabbed Premium Section */}
-      <StartingPointSection />
+      <Suspense fallback={<SectionLoader />}>
+        <StartingPointSection />
+      </Suspense>
 
       <SectionDivider />
 
       {/* OVERSEAS INVESTORS - Golden Visa & International Investment */}
-      <OverseasInvestorsBanner />
+      <Suspense fallback={<SectionLoader />}>
+        <OverseasInvestorsBanner />
+      </Suspense>
 
       <SectionDivider />
 
       {/* EXPLORE OUR SERVICES SLIDESHOW - Wrapped in container for consistent sizing */}
       <section className="bg-black">
         <div className="jj-layer-2">
-          <ExploreServicesCard />
+          <Suspense fallback={<SectionLoader />}>
+            <ExploreServicesCard />
+          </Suspense>
         </div>
       </section>
 
@@ -236,7 +250,9 @@ const Index = () => {
       <SectionDivider />
 
       {/* TOOLKIT SHOWCASE CARD - Free Professional Tools */}
-      <ToolkitShowcaseCard />
+      <Suspense fallback={<SectionLoader />}>
+        <ToolkitShowcaseCard />
+      </Suspense>
 
       {/* DIVIDER - Between Toolkit Showcase and AI Home Finder */}
       <SectionDivider />
@@ -394,18 +410,24 @@ const Index = () => {
 
 
       {/* BEST IDEA AWARD */}
-      <BestIdeaAward />
+      <Suspense fallback={<SectionLoader />}>
+        <BestIdeaAward />
+      </Suspense>
 
       {/* DIVIDER */}
       <SectionDivider />
 
       {/* WHY CHOOSE US - Master Blueprint: Section 5 */}
-      <WhyChooseUs />
+      <Suspense fallback={<SectionLoader />}>
+        <WhyChooseUs />
+      </Suspense>
 
       <SectionDivider />
 
       {/* AREAS WE COVER - Master Blueprint: Section 6 (12 area links) */}
-      <AreasWeCover />
+      <Suspense fallback={<SectionLoader />}>
+        <AreasWeCover />
+      </Suspense>
 
       {/* DIVIDER between Areas and Testimonials */}
       <SectionDivider />
@@ -419,19 +441,25 @@ const Index = () => {
       <SectionDivider />
 
       {/* Stats Counter Section */}
-      <StatsCounter />
+      <Suspense fallback={<SectionLoader />}>
+        <StatsCounter />
+      </Suspense>
 
       {/* DIVIDER */}
       <SectionDivider />
 
       {/* SUPPORT TICKET BOX - Always visible (last content before global CTA) */}
-      <SupportTicketBox />
+      <Suspense fallback={<SectionLoader />}>
+        <SupportTicketBox />
+      </Suspense>
 
       {/* Inquiry Modal */}
-      <InquiryFormModal 
-        isOpen={isInquiryOpen} 
-        onClose={() => setIsInquiryOpen(false)} 
-      />
+      <Suspense fallback={null}>
+        <InquiryFormModal 
+          isOpen={isInquiryOpen} 
+          onClose={() => setIsInquiryOpen(false)} 
+        />
+      </Suspense>
     </section>
   );
 };

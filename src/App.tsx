@@ -72,8 +72,8 @@ import GlobalSEO from "@/components/GlobalSEO";
 import GlobalVisitorTracking from "@/components/GlobalVisitorTracking";
 
 import PageLoader from "@/components/PageLoader";
-// Homepage - loaded synchronously for fastest initial paint
-import Index from "./pages/Index";
+// Homepage - lazy loaded like all other pages for smaller initial bundle
+const Index = lazy(() => import("./pages/Index"));
 
 // Core pages - lazy loaded for faster initial bundle
 const PropertiesReelly = lazy(() => import("./pages/PropertiesReelly"));
