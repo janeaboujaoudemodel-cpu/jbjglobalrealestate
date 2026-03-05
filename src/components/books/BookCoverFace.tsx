@@ -30,8 +30,9 @@ export function BookCoverFace({ book, size = "thumb", className, bare = false }:
         src={book.cover}
         alt={book.title}
         className={cn("w-full h-full object-cover", bare ? "" : "block", "[image-rendering:auto]")}
-        loading="lazy"
+        loading="eager"
         decoding="async"
+        fetchPriority="low"
       />
 
       {!skipOverlays && (
