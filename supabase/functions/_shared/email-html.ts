@@ -17,19 +17,21 @@ export function minifyHtml(html: string): string {
 }
 
 // ─── Inline SVG Icons (100% inline — no external URLs, guaranteed rendering) ───
+// 🔒 LOCKED: Do NOT modify any SVG icon definitions below unless explicitly instructed by the user.
 const SVG = {
   lock: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10V7a5 5 0 1 1 10 0v3"/><rect x="5" y="10" width="14" height="11" rx="2"/><circle cx="12" cy="15" r="1.5"/><path d="M12 16.5v2"/></svg>`,
   headsetWhite: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>`,
   aiTools: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M7 20h10"/><path d="M9 16v4"/><path d="M15 16v4"/><path d="M8 8h8"/><path d="M8 12h5"/></svg>`,
   guides: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5z"/><path d="M18 6h1a2 2 0 0 1 2 2v9"/><path d="M8 8h6"/><path d="M8 12h6"/><path d="M8 16h4"/></svg>`,
   properties: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V9l9-6 9 6v12"/><path d="M9 21v-6h6v6"/></svg>`,
-  // Social icons
-  instagram: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>`,
-  facebook: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>`,
-  linkedin: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>`,
-  youtube: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.35 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>`,
-  tiktok: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>`,
+  // Social icons — stroke="#111111" (solid black for visibility on light backgrounds)
+  instagram: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>`,
+  facebook: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>`,
+  linkedin: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>`,
+  youtube: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.35 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>`,
+  tiktok: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>`,
 };
+// 🔒 END LOCKED SVG SECTION
 
 
 // ─── Dividers ───
@@ -45,13 +47,13 @@ export function arabicDivider(): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:30px 0 14px;"><tr><td style="border-top:2px solid #C8A76655;"></td></tr></table>`;
 }
 
-// ─── Header ───
+// ─── Header (LOCKED — rounded bottom corners on gold bar) ───
 export function sharedHeader(departmentLabel: string): string {
-  return `<tr><td style="background:#000;padding:28px 28px 24px;text-align:center;">
+  return `<tr><td style="background:#000;padding:28px 28px 24px;text-align:center;border-radius:18px 18px 0 0;">
 <img src="${LOGO_URL}" alt="JBJ Global Real Estate" width="190" style="max-width:190px;height:auto;display:block;margin:0 auto 12px;" />
 <p style="color:#C8A766;margin:0;font-size:13px;font-weight:700;letter-spacing:2.6px;text-transform:uppercase;">JBJ GLOBAL REAL ESTATE</p>
 </td></tr>
-<tr><td style="background:linear-gradient(135deg,#C8A766,#B8956E,#A07D4A);padding:20px 26px;text-align:center;">
+<tr><td style="background:linear-gradient(135deg,#C8A766,#B8956E,#A07D4A);padding:20px 26px;text-align:center;border-radius:0 0 18px 18px;">
 <p style="font-size:20px;font-weight:700;color:#fff;margin:0;letter-spacing:1px;">${departmentLabel}</p>
 </td></tr>`;
 }
@@ -76,6 +78,7 @@ export function inquiryBox(contextLabel: string): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:20px 0 18px;"><tr><td style="padding:18px 20px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:18px;text-align:center;"><p style="margin:0;font-size:14px;color:#1f2937;line-height:1.7;">For inquiries about your ${contextLabel}, contact us at<br/><a href="mailto:CONTACT@JBJ.AE" style="color:#111827;font-weight:700;text-decoration:underline;">CONTACT@JBJ.AE</a></p></td></tr></table>`;
 }
 
+// 🔒 LOCKED: Ticket Support section — do NOT modify icons or layout unless explicitly instructed
 // ─── Ticket Support (inline SVG headset icon in red square) ───
 export function ticketSupportEmbed(): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:16px 0 24px;"><tr><td style="padding:24px 20px;background:linear-gradient(135deg,#fff5f5,#ffe9e9);border:1px solid #ef4444;border-radius:18px;text-align:center;">
@@ -96,6 +99,7 @@ export function ticketSupportEmbedAr(): string {
 <a href="${SITE_URL}/contact-support" style="display:inline-block;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;text-decoration:none;padding:12px 24px;border-radius:10px;font-weight:700;font-size:13px;">إرسال تذكرة</a>
 </td></tr></table>`;
 }
+// 🔒 END LOCKED TICKET SUPPORT
 
 // ─── Recommended Actions (inline SVG icons) ───
 function recommendedCard(title: string, href: string, emoji: string): string {
@@ -143,13 +147,12 @@ export function feedbackHtml(context = "general"): string {
 </tr></table></td></tr></table>`;
 }
 
-// ─── Sign Off ───
-export function signOffHtml(teamName = "JBJ Global Real Estate Team"): string {
-  const normalized = teamName.trim() || "JBJ Global Real Estate Team";
+// 🔒 LOCKED: Sign Off — "Best Regards" + single team name line (no duplication)
+export function signOffHtml(teamName = "JBJ Team"): string {
+  const normalized = teamName.trim() || "JBJ Team";
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:28px;margin-bottom:22px;"><tr><td>
 <p style="font-size:18px;color:#333;margin:0 0 6px;font-weight:700;">BEST REGARDS,</p>
-<p style="font-size:19px;color:#C8A766;font-weight:800;margin:0 0 4px;letter-spacing:0.4px;">JBJ GLOBAL REAL ESTATE</p>
-<p style="font-size:16px;color:#C8A766;font-weight:700;margin:0;letter-spacing:1.1px;opacity:0.85;text-shadow:0 1px 2px rgba(0,0,0,0.08),0 0 4px rgba(200,167,102,0.15);">${normalized.toUpperCase()}</p>
+<p style="font-size:19px;color:#C8A766;font-weight:800;margin:0;letter-spacing:0.4px;text-shadow:0 1px 2px rgba(0,0,0,0.08),0 0 4px rgba(200,167,102,0.15);">${normalized.toUpperCase()}</p>
 </td></tr></table>`;
 }
 
@@ -185,13 +188,14 @@ function socialLinksFooter(): string {
   ];
 
   const item = (svg: string, url: string, alt: string) =>
-    `<td style="padding:0 5px 8px;"><a href="${url}" aria-label="${alt}" style="display:inline-block;width:38px;height:38px;background:radial-gradient(circle at 30% 25%,#ffffff,#f2efe8 55%,#e4dccf 100%);border:1px solid #C8A766;border-radius:38px;text-decoration:none;text-align:center;box-shadow:inset 0 1px 1px rgba(255,255,255,0.9),0 2px 8px rgba(0,0,0,0.2);"><table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="border-collapse:separate;"><tr><td style="width:38px;height:38px;text-align:center;vertical-align:middle;padding:0;">${svg}</td></tr></table></a></td>`;
+    `<td style="padding:0 5px 8px;"><a href="${url}" aria-label="${alt}" style="display:inline-block;width:38px;height:38px;background:#ffffff;border:1.5px solid #C8A766;border-radius:38px;text-decoration:none;text-align:center;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="border-collapse:separate;"><tr><td style="width:38px;height:38px;text-align:center;vertical-align:middle;padding:0;">${svg}</td></tr></table></a></td>`;
 
   return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:12px;"><tr>${links.map((l) => item(l.svg, l.url, l.alt)).join("")}</tr></table>`;
 }
 
+// 🔒 LOCKED: Footer — rounded top corners, social icons with black strokes on white background
 export function sharedFooterHtml(): string {
-  return `<tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:#000;"><tr><td style="padding:34px 18px 34px;text-align:center;">
+  return `<tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:#000;border-radius:18px 18px 18px 18px;"><tr><td style="padding:34px 18px 34px;text-align:center;">
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto 12px;"><tr><td style="text-align:center;"><img src="${LOGO_URL}" alt="JBJ" width="130" style="width:130px;height:auto;display:block;margin:0 auto;border-radius:130px;" /></td></tr></table>
 <p style="color:#C8A766;font-size:16px;margin:0 0 12px;font-weight:700;letter-spacing:1.8px;text-align:center;">JBJ Global Real Estate</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto 12px;"><tr><td style="border-top:1px solid #C8A76655;"></td></tr></table>
@@ -317,8 +321,8 @@ export function issueNotResolvedCardAr(reopenUrl: string): string {
 }
 
 // ─── Shared Sections (unified global block) ───
-// Layout: Gold divider → Inquiry Box → Ticket Support → Recommended → Books → Divider → Suggested Actions → Divider → Feedback → Divider → Ready to Get Started → Sign Off
-export function sharedSections(context: string, teamName = "JBJ Global Real Estate Team"): string {
+// 🔒 LOCKED LAYOUT: Gold divider → Inquiry Box → Ticket Support → Recommended → Books → Divider → Suggested Actions → Divider → Feedback → Divider → Ready to Get Started → Sign Off
+export function sharedSections(context: string, teamName = "JBJ Team"): string {
   return `${goldDivider()}<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="direction:ltr;text-align:left;"><tr><td>
 ${inquiryBox(context)}
 ${ticketSupportEmbed()}
@@ -332,7 +336,8 @@ ${signOffHtml(teamName)}
 }
 
 // ─── Email Shell ───
+// 🔒 LOCKED: Outer shell with rounded wrapper, header rounded top, footer rounded bottom
 export function emailShell(departmentLabel: string, bodyContent: string): string {
-  const raw = `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><style>body{margin:0;padding:0;background:#ffffff;font-family:'Segoe UI',Arial,sans-serif;}table{border-collapse:collapse;}img{display:block;border:0;outline:none;text-decoration:none;}@media only screen and (max-width:620px){.wrapper{width:100%!important;}.content-pad{padding:22px 16px!important;}}</style></head><body style="margin:0;padding:0;background:#fff;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fff;"><tr><td align="center" style="padding:22px 12px;"><table role="presentation" class="wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:linear-gradient(180deg,#F5F0E6,#F0EBE0,#EDE4D3);border-radius:18px;">${sharedHeader(departmentLabel)}${bodyContent}${sharedFooterHtml()}</table></td></tr></table></body></html>`;
+  const raw = `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><style>body{margin:0;padding:0;background:#ffffff;font-family:'Segoe UI',Arial,sans-serif;}table{border-collapse:collapse;}img{display:block;border:0;outline:none;text-decoration:none;}@media only screen and (max-width:620px){.wrapper{width:100%!important;}.content-pad{padding:22px 16px!important;}}</style></head><body style="margin:0;padding:0;background:#fff;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fff;"><tr><td align="center" style="padding:22px 12px;"><table role="presentation" class="wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:linear-gradient(180deg,#F5F0E6,#F0EBE0,#EDE4D3);border-radius:18px;overflow:hidden;">${sharedHeader(departmentLabel)}${bodyContent}${sharedFooterHtml()}</table></td></tr></table></body></html>`;
   return minifyHtml(raw);
 }
