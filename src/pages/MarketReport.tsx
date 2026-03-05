@@ -57,6 +57,8 @@ const MarketReport = () => {
     phone: "",
     nationality: "",
     language: "",
+    preferredContact: "",
+    serviceNeeded: "",
   });
 
   // Pre-fill form with captured lead data
@@ -68,6 +70,8 @@ const MarketReport = () => {
         phone: leadData.phone || "",
         nationality: leadData.nationality || "",
         language: leadData.language || "",
+        preferredContact: "",
+        serviceNeeded: "",
       });
     }
   }, [isLeadCaptured, leadData]);
@@ -81,7 +85,9 @@ const MarketReport = () => {
     form.email.trim().includes("@") &&
     form.phone.trim().length >= 6 &&
     form.nationality.trim().length > 0 &&
-    form.language.trim().length > 0
+    form.language.trim().length > 0 &&
+    form.preferredContact.trim().length > 0 &&
+    form.serviceNeeded.trim().length > 0
   );
 
   const buildInquiryUrl = () => {
@@ -108,6 +114,8 @@ const MarketReport = () => {
         .from("projects")
         .select("name, slug, location, price_from, developer_name, cover_image_url, area_name, short_description, description")
         .eq("is_published", true)
+        .not("price_from", "is", null)
+        .gt("price_from", 0)
         .order("created_at", { ascending: false })
         .limit(8),
       supabase
@@ -304,112 +312,101 @@ const MarketReport = () => {
   /* ─── Interior Typography ─── */
   h2 {
     font-family: 'Playfair Display', serif;
-    font-size: 30px;
+    font-size: 27px;
     font-weight: 600;
     color: #1A1814;
-    margin-bottom: 28px;
-    padding-bottom: 14px;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
     border-bottom: 2px solid #A8925A;
   }
-  
+
   h3 {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
     color: #A8925A;
-    margin: 28px 0 14px 0;
+    margin: 16px 0 10px 0;
   }
-  
+
   h4 {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
     color: #1A1814;
-    margin: 18px 0 10px 0;
+    margin: 10px 0 8px 0;
   }
-  
+
   p {
-    font-size: 14px;
+    font-size: 13px;
     color: #2C2A26;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
   }
-  
-  /* ─── Layout helpers ─── */
+
   .highlight-box {
     background: rgba(168,146,90,0.10);
     border: 1px solid rgba(168,146,90,0.35);
     border-left: 4px solid #A8925A;
     border-radius: 12px;
-    padding: 22px 26px;
-    margin: 22px 0;
+    padding: 16px 18px;
+    margin: 14px 0;
   }
-  
+
   .stat-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
-    margin: 28px 0;
+    gap: 12px;
+    margin: 16px 0;
   }
-  
+
   .stat-box {
     background: #FFFFFF;
     border: 1px solid rgba(168,146,90,0.3);
     border-top: 3px solid #A8925A;
     border-radius: 12px;
-    padding: 22px;
+    padding: 14px;
     text-align: center;
   }
-  
+
   .stat-box .number {
     font-family: 'Playfair Display', serif;
-    font-size: 32px;
+    font-size: 27px;
     font-weight: 700;
     color: #A8925A;
-    margin-bottom: 7px;
+    margin-bottom: 5px;
+    line-height: 1.1;
   }
-  
+
   .stat-box .label {
-    font-size: 11px;
+    font-size: 10px;
     color: #6B6459;
     text-transform: uppercase;
     letter-spacing: 0.1em;
   }
-  
+
   ul {
     list-style: none;
     padding: 0;
-    margin: 18px 0;
+    margin: 10px 0;
   }
-  
+
   li {
-    padding: 11px 0 11px 28px;
+    padding: 7px 0 7px 20px;
     position: relative;
     color: #2C2A26;
-    font-size: 14px;
+    font-size: 12px;
     border-bottom: 1px solid rgba(168,146,90,0.15);
   }
-  
-  li:last-child { border-bottom: none; }
-  
-  li::before {
-    content: '◆';
-    position: absolute;
-    left: 0;
-    color: #A8925A;
-    font-size: 10px;
-    top: 13px;
-  }
-  
+
   .two-col {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    margin: 24px 0;
+    gap: 14px;
+    margin: 14px 0;
   }
-  
+
   .info-card {
     background: #FFFFFF;
     border: 1px solid rgba(168,146,90,0.25);
     border-radius: 12px;
-    padding: 22px;
+    padding: 14px;
   }
   
   .checklist li::before {
@@ -693,15 +690,16 @@ const MarketReport = () => {
      display: block;
    }
    
-   .area-card img {
-     width: 100%;
-     aspect-ratio: 4/3;
-     object-fit: cover;
-     display: block;
-     background: #F5EBD7;
-   }
-   
-   .area-card-body { padding: 10px; }
+    .area-card img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+      background: #F5EBD7;
+    }
+
+    .area-card-body { padding: 12px; min-height: 92px; display: flex; flex-direction: column; justify-content: center; }
    
    .area-card-body .area-name {
      font-size: 11px;
@@ -2108,7 +2106,7 @@ const MarketReport = () => {
           const bgColor = (isCoverPage || isBackCover) ? '#09090b' : '#FDFBF7';
 
           const canvas = await html2canvas(page, {
-            scale: 1.2,
+            scale: 1,
             useCORS: true,
             allowTaint: false,
             logging: false,
@@ -2680,6 +2678,7 @@ const MarketReport = () => {
                           placeholder="Select nationality"
                           searchPlaceholder="Search countries..."
                           priorityItem="United Arab Emirates"
+                          flagType="country"
                         />
                       </div>
                     </div>
@@ -2694,6 +2693,7 @@ const MarketReport = () => {
                           placeholder="Select language"
                           searchPlaceholder="Search languages..."
                           priorityItem="English"
+                          flagType="language"
                         />
                       </div>
                     </div>

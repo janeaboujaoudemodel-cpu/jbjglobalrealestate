@@ -267,6 +267,52 @@ function normalizeCountryName(name: string) {
   return COUNTRY_NAME_ALIASES[name] ?? name;
 }
 
+function countryCodeToFlag(code: string): string {
+  if (!code || code.length !== 2) return "🏳️";
+  const OFFSET = 127397;
+  return code
+    .toUpperCase()
+    .split("")
+    .map((char) => String.fromCodePoint(char.charCodeAt(0) + OFFSET))
+    .join("");
+}
+
+const COUNTRY_CODE_BY_NAME: Map<string, string> = (() => {
+  const map = new Map<string, string>();
+  try {
+    const supportedValuesOf = (Intl as any).supportedValuesOf as undefined | ((key: string) => string[]);
+    const regionCodes = supportedValuesOf?.("region") || [];
+    if (!Array.isArray(regionCodes)) return map;
+
+    const dn = new Intl.DisplayNames(["en"], { type: "region" });
+    for (const code of regionCodes) {
+      const name = dn.of(code);
+      if (typeof name !== "string") continue;
+      map.set(normalizeCountryName(name), code);
+    }
+  } catch {
+    // no-op fallback
+  }
+  return map;
+})();
+
+export function getCountryFlagForName(country: string): string {
+  if (!country) return "";
+  const direct = COUNTRY_FLAGS[country];
+  if (direct) return direct;
+
+  const normalized = normalizeCountryName(country);
+  const code = COUNTRY_CODE_BY_NAME.get(normalized);
+  if (code) return countryCodeToFlag(code);
+
+  return "🏳️";
+}
+
+export function getLanguageFlagForName(language: string): string {
+  if (!language) return "";
+  return LANGUAGE_FLAGS[language] || "🌐";
+}
+
 export function getCountryList(locale: string = "en"): string[] {
   try {
     const supportedValuesOf = (Intl as any).supportedValuesOf as undefined | ((key: string) => string[]);

@@ -34,8 +34,10 @@ const inquirySchema = z.object({
     .min(1, '⚠️ This field is required.'),
   nationality: z.string().min(1, '⚠️ Please select your nationality'),
   language: z.string().min(1, '⚠️ Please select your preferred language'),
+  preferredContact: z.string().min(1, '⚠️ Please choose your preferred contact method'),
   role: z.enum(['buyer', 'broker', 'visitor'], { required_error: '⚠️ Please select your role' }),
   buyerType: z.enum(['homeowner', 'investor']).optional(),
+  buyingService: z.string().optional(),
   message: z.string().max(1000).optional(),
 });
 
@@ -70,6 +72,15 @@ const InquiryFormModal = ({
   
   const countries = getCountryList('en');
   const languages = getLanguageList();
+  const contactMethodOptions = ['WhatsApp', 'Phone Call', 'SMS', 'Email'];
+  const buyingServiceOptions = [
+    'Buy / Sell Brokerage',
+    'Rent Brokerage',
+    'Holiday Homes (Short-Term)',
+    'Partner Introduction: Mortgage',
+    'Partner Introduction: Legal',
+    'Partner Introduction: Concierge',
+  ];
 
   const form = useForm<InquiryFormData>({
     resolver: zodResolver(inquirySchema),
@@ -79,8 +90,10 @@ const InquiryFormModal = ({
       phone: '',
       nationality: '',
       language: '',
+      preferredContact: '',
       role: preselectedRole,
       buyerType: undefined,
+      buyingService: '',
       message: '',
     },
     mode: 'onChange',
@@ -170,6 +183,8 @@ const InquiryFormModal = ({
           pageSource: typeof window !== 'undefined' ? window.location.pathname : null,
           role: data.role,
           buyerType: data.buyerType,
+          preferredContact: data.preferredContact,
+          buyingService: data.buyingService,
           message: data.message,
         },
       });
@@ -186,7 +201,11 @@ const InquiryFormModal = ({
           phone: normalizedPhone,
           inquiry_type: data.role === 'buyer' ? (data.buyerType === 'investor' ? 'Investment Inquiry' : 'Property Inquiry') : 'General Inquiry',
           subject: propertyName ? `Inquiry: ${propertyName}` : `${displaySource} Registration`,
-          message: data.message || null,
+          message: [
+            data.message,
+            `Preferred Contact: ${data.preferredContact}`,
+            data.buyingService ? `Requested Service: ${data.buyingService}` : null,
+          ].filter(Boolean).join('\n\n'),
           property_name: propertyName || null,
           source: displaySource,
           status: 'pending',
@@ -208,6 +227,8 @@ const InquiryFormModal = ({
               ...context,
               role: data.role,
               buyerType: data.buyerType || '',
+              preferredContact: data.preferredContact,
+              buyingService: data.buyingService || '',
               emailVerified: emailVerified ? 'Yes' : 'No',
             },
           },
@@ -259,10 +280,15 @@ const InquiryFormModal = ({
       return;
     }
 
-    // If buyer role but no buyer type selected
-    if (data.role === 'buyer' && !data.buyerType) {
-      form.setError('buyerType', { message: 'Please select if you are a Homeowner or Investor' });
-      return;
+    if (data.role === 'buyer') {
+      if (!data.buyerType) {
+        form.setError('buyerType', { message: 'Please select if you are a Homeowner or Investor' });
+        return;
+      }
+      if (!data.buyingService) {
+        form.setError('buyingService', { message: 'Please select a service' });
+        return;
+      }
     }
 
     // Always require email verification unless explicitly skipped
@@ -564,7 +590,7 @@ const InquiryFormModal = ({
                     )}
                   />
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <FormField
                       control={form.control}
                       name="nationality"
@@ -579,6 +605,7 @@ const InquiryFormModal = ({
                               placeholder="Select nationality"
                               searchPlaceholder="Search countries..."
                               priorityItem="United Arab Emirates"
+                              flagType="country"
                             />
                           </FormControl>
                           <FormMessage className="text-red-400 text-xs" />
@@ -600,12 +627,59 @@ const InquiryFormModal = ({
                               placeholder="Select language"
                               searchPlaceholder="Search languages..."
                               priorityItem="English"
+                              flagType="language"
                             />
                           </FormControl>
                           <FormMessage className="text-red-400 text-xs" />
                         </FormItem>
                       )}
                     />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="preferredContact"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-zinc-700 text-sm">Preferred Contact Method *</FormLabel>
+                          <FormControl>
+                            <SearchableSelect
+                              value={field.value}
+                              onChange={field.onChange}
+                              options={contactMethodOptions}
+                              placeholder="Select contact method"
+                              searchPlaceholder="Search contact methods..."
+                              showFlags={false}
+                            />
+                          </FormControl>
+                          <FormMessage className="text-red-400 text-xs" />
+                        </FormItem>
+                      )}
+                    />
+
+                    {watchRole === 'buyer' && (
+                      <FormField
+                        control={form.control}
+                        name="buyingService"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-zinc-700 text-sm">Service Needed *</FormLabel>
+                            <FormControl>
+                              <SearchableSelect
+                                value={field.value || ''}
+                                onChange={field.onChange}
+                                options={buyingServiceOptions}
+                                placeholder="Select service"
+                                searchPlaceholder="Search services..."
+                                showFlags={false}
+                              />
+                            </FormControl>
+                            <FormMessage className="text-red-400 text-xs" />
+                          </FormItem>
+                        )}
+                      />
+                    )}
                   </div>
 
                   <FormField
