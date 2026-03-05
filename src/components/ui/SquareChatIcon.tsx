@@ -25,9 +25,6 @@ export const SquareChatIcon = ({ className = "", size = 24 }: SquareChatIconProp
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <circle cx="9" cy="11" r="1.15" fill="currentColor" />
-      <circle cx="12" cy="11" r="1.15" fill="currentColor" />
-      <circle cx="15" cy="11" r="1.15" fill="currentColor" />
     </svg>
   );
 };

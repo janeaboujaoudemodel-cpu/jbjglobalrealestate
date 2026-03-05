@@ -128,10 +128,10 @@ const BestIdeaAward = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="max-w-4xl mx-auto"
+          className=""
         >
           {/* Main Card - Champagne style inside active champagne layer */}
-          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 shadow-xl overflow-hidden relative">
+          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl md:rounded-2xl border border-gold/40 md:border-2 md:border-gold shadow-[0_8px_30px_rgba(200,167,102,0.35),0_4px_15px_rgba(0,0,0,0.15)] overflow-hidden relative">
             {/* Decorative glow */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-gold/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-gold/15 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
