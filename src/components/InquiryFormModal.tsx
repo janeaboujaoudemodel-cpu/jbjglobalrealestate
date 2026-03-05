@@ -150,6 +150,13 @@ const InquiryFormModal = ({
       const normalizedPhone = data.phone.replace(/[\s\-\(\)]/g, '');
       const normalizedEmail = data.email.toLowerCase().trim();
 
+      // Determine the display source for inquiry hub tracking
+      const displaySource = propertyName 
+        ? `Property Inquiry - ${propertyName}` 
+        : source === 'general' ? 'Main Page Pop-up'
+        : source === 'popup_main' ? 'Main Page Pop-up'
+        : source.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+
       // Call backend edge function to capture lead with detailed source tracking
       const { data: captureResult, error: captureError } = await supabase.functions.invoke('capture-lead', {
         body: {
@@ -159,7 +166,7 @@ const InquiryFormModal = ({
           nationality: data.nationality,
           language: data.language,
           source: 'website',
-          subSource: propertyName ? `Property Inquiry - ${propertyName}` : source.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+          subSource: displaySource,
           pageSource: typeof window !== 'undefined' ? window.location.pathname : null,
           role: data.role,
           buyerType: data.buyerType,
@@ -169,6 +176,23 @@ const InquiryFormModal = ({
 
       if (captureError || (captureResult as any)?.error) {
         throw new Error((captureResult as any)?.error || captureError?.message || 'Failed to save lead');
+      }
+
+      // Also save to inquiries table for Inquiry Management Hub
+      try {
+        await supabase.from('inquiries').insert({
+          full_name: data.fullName,
+          email: normalizedEmail,
+          phone: normalizedPhone,
+          inquiry_type: data.role === 'buyer' ? (data.buyerType === 'investor' ? 'Investment Inquiry' : 'Property Inquiry') : 'General Inquiry',
+          subject: propertyName ? `Inquiry: ${propertyName}` : `${displaySource} Registration`,
+          message: data.message || null,
+          property_name: propertyName || null,
+          source: displaySource,
+          status: 'pending',
+        });
+      } catch (inquiryErr) {
+        console.warn('Inquiry hub insert failed (lead still saved):', inquiryErr);
       }
 
       // Best-effort admin notification (must NOT block the user submission)

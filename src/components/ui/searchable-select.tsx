@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { COUNTRY_FLAGS, LANGUAGE_FLAGS } from "@/constants/localeOptions";
 
 interface SearchableSelectProps {
   value: string;
@@ -13,10 +14,12 @@ interface SearchableSelectProps {
   options: string[];
   placeholder?: string;
   searchPlaceholder?: string;
-  priorityItem?: string; // Item to show first (e.g., "United Arab Emirates" or "English")
+  priorityItem?: string;
   className?: string;
   triggerClassName?: string;
   disabled?: boolean;
+  showFlags?: boolean;
+  flagType?: 'country' | 'language';
 }
 
 export function SearchableSelect({
@@ -29,12 +32,28 @@ export function SearchableSelect({
   className,
   triggerClassName,
   disabled = false,
+  showFlags = true,
+  flagType,
 }: SearchableSelectProps) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Focus search input when popover opens
+  // Auto-detect flag type from placeholder/options
+  const detectedFlagType = flagType || (
+    searchPlaceholder?.toLowerCase().includes('countr') || placeholder?.toLowerCase().includes('national') 
+      ? 'country' 
+      : searchPlaceholder?.toLowerCase().includes('lang') 
+        ? 'language' 
+        : 'country'
+  );
+
+  const getFlag = (option: string): string => {
+    if (!showFlags) return "";
+    if (detectedFlagType === 'language') return LANGUAGE_FLAGS[option] || "";
+    return COUNTRY_FLAGS[option] || "";
+  };
+
   useEffect(() => {
     if (open && inputRef.current) {
       setTimeout(() => inputRef.current?.focus(), 100);
@@ -44,17 +63,14 @@ export function SearchableSelect({
     }
   }, [open]);
 
-  // Filter and sort options - priority item first, then alphabetical
   const filteredOptions = useMemo(() => {
     const filtered = options.filter((opt) => {
-      if (opt === "Other") return false; // Remove "Other" option
+      if (opt === "Other") return false;
       return opt.toLowerCase().includes(search.toLowerCase());
     });
 
-    // Sort alphabetically first
     filtered.sort((a, b) => a.localeCompare(b));
 
-    // Move priority item to top if it exists and matches search
     if (priorityItem && filtered.includes(priorityItem)) {
       const index = filtered.indexOf(priorityItem);
       filtered.splice(index, 1);
@@ -63,6 +79,8 @@ export function SearchableSelect({
 
     return filtered;
   }, [options, search, priorityItem]);
+
+  const selectedFlag = value ? getFlag(value) : "";
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -78,17 +96,23 @@ export function SearchableSelect({
             triggerClassName
           )}
         >
-          <span className="truncate">{value || placeholder}</span>
+          <span className="truncate flex items-center gap-2">
+            {selectedFlag && <span className="text-base">{selectedFlag}</span>}
+            {value || placeholder}
+          </span>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 text-gold/60" />
         </Button>
       </PopoverTrigger>
       <PopoverContent 
         className={cn(
-          "w-[var(--radix-popover-trigger-width)] p-0 bg-white border-gold/30 shadow-xl shadow-gold/10 z-[100]",
+          "w-[var(--radix-popover-trigger-width)] p-0 bg-white border-gold/30 shadow-xl shadow-gold/10 z-[10060]",
           className
         )}
         align="start"
+        side="bottom"
         sideOffset={4}
+        avoidCollisions={true}
+        collisionPadding={8}
       >
         {/* Search Input */}
         <div className="p-2 border-b border-gold/20">
@@ -112,32 +136,36 @@ export function SearchableSelect({
                 No results found
               </div>
             ) : (
-              filteredOptions.map((option) => (
-                <button
-                  key={option}
-                  onClick={() => {
-                    onChange(option);
-                    setOpen(false);
-                  }}
-                  className={cn(
-                    "w-full flex items-center gap-2 px-3 py-2.5 text-sm rounded-md transition-colors text-left",
-                    value === option
-                      ? "bg-gold/10 text-gold"
-                      : "text-black hover:bg-gold/5"
-                  )}
-                >
-                  <Check
+              filteredOptions.map((option) => {
+                const flag = getFlag(option);
+                return (
+                  <button
+                    key={option}
+                    onClick={() => {
+                      onChange(option);
+                      setOpen(false);
+                    }}
                     className={cn(
-                      "h-4 w-4 shrink-0",
-                      value === option ? "opacity-100 text-gold" : "opacity-0"
+                      "w-full flex items-center gap-2 px-3 py-2.5 text-sm rounded-md transition-colors text-left",
+                      value === option
+                        ? "bg-gold/10 text-gold"
+                        : "text-black hover:bg-gold/5"
                     )}
-                  />
-                  <span className="truncate">{option}</span>
-                  {option === priorityItem && (
-                    <span className="ml-auto text-xs text-gold/60">Default</span>
-                  )}
-                </button>
-              ))
+                  >
+                    <Check
+                      className={cn(
+                        "h-4 w-4 shrink-0",
+                        value === option ? "opacity-100 text-gold" : "opacity-0"
+                      )}
+                    />
+                    {flag && <span className="text-base shrink-0">{flag}</span>}
+                    <span className="truncate">{option}</span>
+                    {option === priorityItem && (
+                      <span className="ml-auto text-xs text-gold/60">Default</span>
+                    )}
+                  </button>
+                );
+              })
             )}
           </div>
         </ScrollArea>
