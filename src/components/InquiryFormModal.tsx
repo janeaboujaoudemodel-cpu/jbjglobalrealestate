@@ -288,11 +288,12 @@ const InquiryFormModal = ({
         }}
       >
         <DialogContent 
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 text-zinc-900 max-w-lg p-0 overflow-hidden max-h-[90vh] overflow-y-auto shadow-2xl shadow-gold/20"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 text-zinc-900 max-w-lg p-0 max-h-[90vh] overflow-y-auto shadow-2xl shadow-gold/20"
           dir={isRTL ? 'rtl' : 'ltr'}
           onInteractOutside={(e) => {
-            // Prevent closing on outside click during submission
-            if (isSubmitting) {
+            // Prevent closing when interacting with popovers (SearchableSelect dropdowns)
+            const target = e.target as HTMLElement;
+            if (target?.closest('[data-radix-popper-content-wrapper]') || target?.closest('[role="listbox"]') || isSubmitting) {
               e.preventDefault();
             }
           }}
