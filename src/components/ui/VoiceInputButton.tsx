@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, forwardRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Mic, Square, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -27,13 +27,8 @@ interface VoiceInputButtonProps {
 /**
  * Unified voice input button for record + transcribe functionality.
  * Supports auto-detection of language, transcription, and translation to English.
- * 
- * States:
- * - Idle: Mic icon (default styling) - "Speak in any language"
- * - Recording: Square icon (red, pulsing) - "Click to stop"
- * - Processing: Loader icon (spinning) - "Transcribing..."
  */
-export function VoiceInputButton({
+export const VoiceInputButton = forwardRef<HTMLButtonElement, VoiceInputButtonProps>(({
   onTranscript,
   onTranscriptResult,
   disabled,
@@ -41,7 +36,7 @@ export function VoiceInputButton({
   className,
   size = "icon",
   variant = "outline"
-}: VoiceInputButtonProps) {
+}, ref) => {
   const [status, setStatus] = useState<"idle" | "recording" | "processing">("idle");
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
@@ -183,6 +178,7 @@ export function VoiceInputButton({
 
   return (
     <Button
+      ref={ref}
       type="button"
       variant={status === "recording" ? "destructive" : variant}
       size={size}
@@ -198,6 +194,8 @@ export function VoiceInputButton({
       {getIcon()}
     </Button>
   );
-}
+});
+
+VoiceInputButton.displayName = "VoiceInputButton";
 
 export default VoiceInputButton;
