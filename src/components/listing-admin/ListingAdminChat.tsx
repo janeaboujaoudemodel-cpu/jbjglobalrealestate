@@ -478,8 +478,26 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      handleFileUpload(e.target.files);
+      const newFiles = Array.from(e.target.files);
+      setUploadedFiles(prev => {
+        const existingNames = new Set(prev.map(f => f.name + f.size));
+        const deduped = newFiles.filter(f => !existingNames.has(f.name + f.size));
+        return [...prev, ...deduped].slice(0, 50);
+      });
+      // Reset input so the same file can be re-selected if removed
+      if (fileInputRef.current) fileInputRef.current.value = "";
     }
+  };
+
+  const removeQueuedFile = (index: number) => {
+    setUploadedFiles(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const sendQueuedFiles = async () => {
+    if (uploadedFiles.length === 0) return;
+    const filesToSend = [...uploadedFiles];
+    setUploadedFiles([]);
+    await handleFileUpload(filesToSend);
   };
 
   return (
@@ -663,6 +681,34 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
         className="hidden"
       />
 
+      {/* Queued Files Preview */}
+      {uploadedFiles.length > 0 && (
+        <div className="px-4 py-2 border-t border-zinc-200 bg-zinc-50">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-medium text-zinc-700">{uploadedFiles.length} file{uploadedFiles.length !== 1 ? "s" : ""} ready</span>
+            <div className="flex gap-2">
+              <Button variant="ghost" size="sm" onClick={() => setUploadedFiles([])} className="h-6 text-[10px] text-zinc-500 hover:text-red-500 px-2">
+                Clear all
+              </Button>
+              <Button variant="ghost" size="sm" onClick={() => fileInputRef.current?.click()} className="h-6 text-[10px] text-gold px-2">
+                <Plus className="w-3 h-3 mr-1" /> Add more
+              </Button>
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-1.5 max-h-[80px] overflow-y-auto">
+            {uploadedFiles.map((file, idx) => (
+              <div key={idx} className="flex items-center gap-1 px-2 py-1 bg-white border border-zinc-200 rounded text-xs text-foreground group/file">
+                {file.type.includes("image") ? <ImageIcon className="w-3 h-3 text-blue-500" /> : <FileText className="w-3 h-3 text-red-500" />}
+                <span className="truncate max-w-[100px]">{file.name}</span>
+                <button onClick={() => removeQueuedFile(idx)} className="ml-0.5 text-zinc-400 hover:text-red-500">
+                  <X className="w-3 h-3" />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Input */}
       <div className="p-4 border-t border-zinc-200 bg-white">
         <div className="flex items-center gap-2">
@@ -696,14 +742,28 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSendMessage()}
-            placeholder="Paste a URL, upload files, or ask Sarah anything..."
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                if (uploadedFiles.length > 0 && !input.trim()) {
+                  sendQueuedFiles();
+                } else {
+                  handleSendMessage();
+                }
+              }
+            }}
+            placeholder={uploadedFiles.length > 0 ? "Add a note or press Enter to send files..." : "Paste a URL, upload files, or ask Sarah anything..."}
             className="flex-1 bg-zinc-50 border-zinc-300 text-black"
             disabled={isLoading}
           />
           <Button
-            onClick={() => handleSendMessage()}
-            disabled={!input.trim() || isLoading}
+            onClick={() => {
+              if (uploadedFiles.length > 0 && !input.trim()) {
+                sendQueuedFiles();
+              } else {
+                handleSendMessage();
+              }
+            }}
+            disabled={(!input.trim() && uploadedFiles.length === 0) || isLoading}
             className="h-10 w-10 p-0 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 hover:bg-black hover:border-black group transition-all duration-300"
           >
             {isLoading ? <Loader2 className="w-5 h-5 animate-spin text-gold" /> : <Send className="w-5 h-5 text-gold group-hover:text-white" />}
