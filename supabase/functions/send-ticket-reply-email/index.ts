@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { emailShell, sharedSections, progressSteps, teamReplyCard, ticketSummaryCard, ticketSummaryCardAr, arabicDivider, rateExperienceCard, rateExperienceCardAr, issueNotResolvedCard, issueNotResolvedCardAr } from "../_shared/email-html.ts";
+import { emailShell, sharedSections, progressSteps, teamReplyCard, ticketSummaryCard, ticketSummaryCardAr, arabicDivider, rateExperienceCard, rateExperienceCardAr, issueNotResolvedCard, issueNotResolvedCardAr, userGreetingRow } from "../_shared/email-html.ts";
 
 const RESEND_API_URL = "https://api.resend.com/emails";
 
@@ -138,7 +138,7 @@ const handler = async (req: Request): Promise<Response> => {
     const rateHtmlAr = isResolved ? rateExperienceCardAr(surveyLink) : '';
 
     const bodyContent = `<tr><td class="content-pad" style="padding:32px;">
-<p style="font-size:15px;color:#333;margin:0 0 16px;">Dear <strong>${customerName}</strong>,</p>
+${userGreetingRow(customerName)}
 <p style="font-size:14px;color:#555;margin:0 0 24px;">Our support team has reviewed your ticket and provided a response below.</p>
 ${progressSteps(['Received', 'In Review', 'Resolved'], [step1, step2, step3], [step1, step2, step3])}
 ${ticketSummaryCard([
@@ -153,7 +153,7 @@ ${rateHtml}
 ${reopenHtml}
 ${arabicDivider()}
 <div style="direction:rtl;text-align:right;">
-<p style="font-size:15px;color:#333;margin:0 0 16px;">عزيزي/عزيزتي <strong>${customerName}</strong>،</p>
+${userGreetingRow(customerName, true)}
 <p style="font-size:14px;color:#555;margin:0 0 24px;">قام فريق الدعم لدينا بمراجعة تذكرتك وقدم رداً أدناه.</p>
 ${ticketSummaryCardAr([
   { label: 'رقم التذكرة', value: ticketNumber, highlight: true },

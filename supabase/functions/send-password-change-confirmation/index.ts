@@ -1,5 +1,5 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { emailShell, lockIconBadge, sharedSections, ticketSummaryCard, ticketSummaryCardAr, arabicDivider } from "../_shared/email-html.ts";
+import { emailShell, lockIconBadge, sharedSections, arabicDivider, userGreetingRow } from "../_shared/email-html.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
@@ -51,14 +51,19 @@ const handler = async (req: Request): Promise<Response> => {
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto 20px;">
 <tr><td style="text-align:center;">${lockIconBadge(74)}</td></tr>
 </table>
-<p style="margin:0;font-size:16px;font-weight:600;color:#1a1a1a;">Dear ${recipientName},</p>
+${userGreetingRow(recipientName)}
 <p style="margin:8px 0 20px;font-size:14px;line-height:1.6;color:#444;">Your password was changed. If this was you, no further action is needed.</p>
-${ticketSummaryCard([
-  { label: 'Date', value: formattedDate },
-  { label: 'Time', value: `${formattedTime} (GMT)` },
-  { label: 'Device', value: deviceInfo },
-  { label: 'Browser', value: browserInfo },
-])}
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:18px;margin-bottom:16px;">
+<tr><td style="padding:20px;">
+<p style="color:#1a1a1a;font-size:18px;margin:0 0 10px;text-transform:uppercase;letter-spacing:1.3px;font-weight:800;text-align:center;">Activity Summary</p>
+<div style="height:2px;background:linear-gradient(90deg,transparent,#C8A766,#C8A766,transparent);margin:0 0 12px;"></div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr><td style="padding:8px 0;color:#555;font-size:13px;width:40%;border-right:1px solid #C8A76655;padding-right:12px;">Date</td><td style="padding:8px 0 8px 12px;color:#1a1a1a;font-weight:600;font-size:13px;">${formattedDate}</td></tr>
+<tr><td style="padding:8px 0;color:#555;font-size:13px;border-right:1px solid #C8A76655;padding-right:12px;">Time</td><td style="padding:8px 0 8px 12px;color:#1a1a1a;font-weight:600;font-size:13px;">${formattedTime} (GMT)</td></tr>
+<tr><td style="padding:8px 0;color:#555;font-size:13px;border-right:1px solid #C8A76655;padding-right:12px;">Device</td><td style="padding:8px 0 8px 12px;color:#1a1a1a;font-weight:600;font-size:13px;">${deviceInfo}</td></tr>
+<tr><td style="padding:8px 0;color:#555;font-size:13px;border-right:1px solid #C8A76655;padding-right:12px;">Browser</td><td style="padding:8px 0 8px 12px;color:#1a1a1a;font-weight:600;font-size:13px;">${browserInfo}</td></tr>
+</table>
+</td></tr></table>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:#fef2f2;border:1px solid #fca5a5;border-radius:18px;margin-bottom:16px;">
 <tr><td style="padding:16px;min-height:84px;">
 <p style="margin:0;font-size:14px;color:#991b1b;line-height:1.6;"><strong>Didn't make this change?</strong><br/>Please contact our support team immediately.</p>
@@ -71,14 +76,19 @@ ${arabicDivider()}
 <tr><td class="content-pad" style="padding:0 32px 32px;direction:rtl;text-align:right;">
 <p style="margin:0 0 8px;font-size:26px;font-weight:800;color:#1a1a1a;line-height:1.2;">تم تغيير كلمة المرور بنجاح</p>
 <p style="margin:0 0 20px;font-size:15px;color:#C8A766;font-weight:700;">تم تحديث أمان حسابك</p>
-<p style="margin:0;font-size:16px;font-weight:600;color:#1a1a1a;">عزيزي/عزيزتي ${recipientName}،</p>
+${userGreetingRow(recipientName, true)}
 <p style="margin:8px 0 20px;font-size:14px;line-height:1.6;color:#444;">تم تغيير كلمة المرور الخاصة بك. إذا كنت أنت من قام بذلك، فلا حاجة لأي إجراء إضافي.</p>
-${ticketSummaryCardAr([
-  { label: 'التاريخ', value: formattedDate },
-  { label: 'الوقت', value: `${formattedTime} (GMT)` },
-  { label: 'الجهاز', value: deviceInfo },
-  { label: 'المتصفح', value: browserInfo },
-])}
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:18px;margin-bottom:16px;direction:rtl;">
+<tr><td style="padding:20px;">
+<p style="color:#1a1a1a;font-size:18px;margin:0 0 10px;letter-spacing:1.3px;font-weight:800;text-align:center;">ملخص النشاط</p>
+<div style="height:2px;background:linear-gradient(90deg,transparent,#C8A766,#C8A766,transparent);margin:0 0 12px;"></div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr><td style="padding:8px 0;color:#555;font-size:13px;width:40%;border-left:1px solid #C8A76655;padding-left:12px;text-align:right;">التاريخ</td><td style="padding:8px 12px 8px 0;color:#1a1a1a;font-weight:600;font-size:13px;text-align:left;direction:ltr;">${formattedDate}</td></tr>
+<tr><td style="padding:8px 0;color:#555;font-size:13px;border-left:1px solid #C8A76655;padding-left:12px;text-align:right;">الوقت</td><td style="padding:8px 12px 8px 0;color:#1a1a1a;font-weight:600;font-size:13px;text-align:left;direction:ltr;">${formattedTime} (GMT)</td></tr>
+<tr><td style="padding:8px 0;color:#555;font-size:13px;border-left:1px solid #C8A76655;padding-left:12px;text-align:right;">الجهاز</td><td style="padding:8px 12px 8px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${deviceInfo}</td></tr>
+<tr><td style="padding:8px 0;color:#555;font-size:13px;border-left:1px solid #C8A76655;padding-left:12px;text-align:right;">المتصفح</td><td style="padding:8px 12px 8px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${browserInfo}</td></tr>
+</table>
+</td></tr></table>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:#fef2f2;border:1px solid #fca5a5;border-radius:18px;margin-bottom:16px;">
 <tr><td style="padding:16px;min-height:84px;">
 <p style="margin:0;font-size:14px;color:#991b1b;line-height:1.6;"><strong>لم تقم بهذا التغيير؟</strong><br/>يرجى التواصل مع فريق الدعم فوراً.</p>

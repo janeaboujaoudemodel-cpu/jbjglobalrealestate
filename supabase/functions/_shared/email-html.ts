@@ -14,7 +14,7 @@ export function minifyHtml(html: string): string {
     .trim();
 }
 
-const MONOGRAM_J = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="100%" height="100%" role="img" aria-label="JBJ Monogram"><defs><linearGradient id="goldGradEmail" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#D4AF37"/><stop offset="35%" style="stop-color:#F5E6C8"/><stop offset="65%" style="stop-color:#E8D5A3"/><stop offset="100%" style="stop-color:#D4AF37"/></linearGradient></defs><circle cx="60" cy="60" r="58" fill="#0A0A0A"/><circle cx="60" cy="60" r="56" fill="none" stroke="#C8A766" stroke-width="1.2"/><text x="60" y="82" text-anchor="middle" font-family="'Segoe UI',Arial,sans-serif" font-size="70" font-weight="700" fill="url(#goldGradEmail)">J</text></svg>`;
+const MONOGRAM_J = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="100%" height="100%" role="img" aria-label="JBJ Monogram"><defs><linearGradient id="goldGradEmail" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#D4AF37"/><stop offset="35%" style="stop-color:#F5E6C8"/><stop offset="65%" style="stop-color:#E8D5A3"/><stop offset="100%" style="stop-color:#D4AF37"/></linearGradient></defs><circle cx="60" cy="60" r="58" fill="#0A0A0A"/><circle cx="60" cy="60" r="55" fill="none" stroke="#C8A766" stroke-width="2"/><path d="M78 30v43c0 17-11 29-28 29-11 0-21-5-27-14l11-8c4 6 9 9 15 9 9 0 15-6 15-16V30h14z" fill="url(#goldGradEmail)"/></svg>`;
 
 function monogramSvg(size: number): string {
   return `<span style="display:inline-block;width:${size}px;height:${size}px;line-height:0;">${MONOGRAM_J}</span>`;
@@ -68,9 +68,16 @@ export function profilePhotoBadge(photoUrl: string, size = 52): string {
   return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="border-collapse:separate;"><tr><td style="width:${size}px;height:${size}px;border:1px solid #C8A766;border-radius:${size}px;overflow:hidden;background:#000;"><img src="${photoUrl}" alt="Profile" width="${size}" height="${size}" style="width:${size}px;height:${size}px;display:block;object-fit:cover;border-radius:${size}px;"/></td></tr></table>`;
 }
 
+export function userGreetingRow(name: string, arabic = false): string {
+  const safeName = (name || "User").trim();
+  if (arabic) {
+    return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 16px;direction:rtl;"><tr><td style="width:62px;vertical-align:top;padding-left:12px;">${monogramBadge(54)}</td><td style="vertical-align:middle;text-align:right;"><p style="margin:0;font-size:16px;font-weight:600;color:#1a1a1a;">مرحباً <strong>${safeName}</strong>،</p></td></tr></table>`;
+  }
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 16px;"><tr><td style="width:62px;vertical-align:top;padding-right:12px;">${monogramBadge(54)}</td><td style="vertical-align:middle;"><p style="margin:0;font-size:16px;font-weight:600;color:#1a1a1a;">Hello <strong>${safeName}</strong>,</p></td></tr></table>`;
+}
+
 export function lockIconBadge(size = 74): string {
-  const innerSize = Math.round(size * 0.86);
-  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="border-collapse:separate;"><tr><td style="padding:7px;border-radius:${size + 16}px;border:1px solid #C8A766;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);"><table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;"><tr><td style="width:${size}px;height:${size}px;border-radius:${size}px;border:1px solid #C8A76699;background:#fff;text-align:center;vertical-align:middle;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="border-collapse:separate;"><tr><td style="width:${innerSize}px;height:${innerSize}px;border-radius:${innerSize}px;border:1px solid #E5D2B0;background:#fff;text-align:center;vertical-align:middle;">${SVG.lock}</td></tr></table></td></tr></table></td></tr></table>`;
+  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="border-collapse:separate;"><tr><td style="width:${size}px;height:${size}px;border-radius:${size}px;border:2px solid #C8A766;background:radial-gradient(circle at 30% 25%,#fff,#f8f2e6 65%,#f0e4ce 100%);text-align:center;vertical-align:middle;">${SVG.lock}</td></tr></table>`;
 }
 
 // ─── Inquiry Box ───
@@ -178,25 +185,24 @@ export function readyToGetStartedHtml(): string {
 </tr>
 </table>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="text-align:center;padding-top:4px;">
-<p style="font-size:15px;font-weight:800;letter-spacing:0.12em;margin:0 0 8px;color:#1a1a1a;text-transform:uppercase;">Stay in the Loop</p>
-<p style="color:#666;font-size:12px;margin:0 0 12px;line-height:1.6;">Be the first to access new listings, market updates, and personalized broker guidance.</p>
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="border-collapse:separate;border:1px solid #D7C29A;border-radius:24px;overflow:hidden;background:#fff;"><tr><td style="padding:0;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;"><tr><td style="padding:10px 14px;"><span style="font-size:13px;color:#777;">Enter your email here</span></td><td style="padding:5px;"><a href="${SITE_URL}/#footer" style="display:block;background:#000;color:#C8A766;text-decoration:none;padding:10px 18px;border-radius:18px;font-weight:700;font-size:12px;letter-spacing:0.5px;">Continue &#10132;</a></td></tr></table></td></tr></table>
+<p style="font-size:15px;font-weight:800;letter-spacing:0.1em;margin:0 0 8px;color:#1a1a1a;text-transform:uppercase;">Connect with JBJ</p>
+<p style="color:#666;font-size:12px;margin:0;line-height:1.6;">Follow our latest market updates and project launches on social media below.</p>
 </td></tr></table>
 </td></tr></table>`;
 }
 
 function socialLinksFooter(): string {
-  const links: Array<{ svg: string; url: string; alt: string }> = [
-    { svg: SVG.instagram, url: "https://www.instagram.com/jbj.ae", alt: "Instagram" },
-    { svg: SVG.facebook, url: "https://www.facebook.com/share/1G7CgSaV2L/?mibextid=wwXIfr", alt: "Facebook" },
-    { svg: SVG.tiktok, url: "https://www.tiktok.com/@jbj.ae", alt: "TikTok" },
-    { svg: SVG.youtube, url: "https://youtube.com/@jbjglobalrealestate", alt: "YouTube" },
+  const links: Array<{ svg: string; url: string; alt: string; counter: string }> = [
+    { svg: SVG.instagram, url: "https://www.instagram.com/jbj.ae", alt: "Instagram", counter: "@jbj.ae" },
+    { svg: SVG.facebook, url: "https://www.facebook.com/share/1G7CgSaV2L/?mibextid=wwXIfr", alt: "Facebook", counter: "JBJ Global" },
+    { svg: SVG.tiktok, url: "https://www.tiktok.com/@jbj.ae", alt: "TikTok", counter: "@jbj.ae" },
+    { svg: SVG.youtube, url: "https://youtube.com/@jbjglobalrealestate", alt: "YouTube", counter: "@jbjglobalrealestate" },
   ];
 
-  const item = (svg: string, url: string, alt: string) =>
-    `<td style="padding:0 6px 8px;"><a href="${url}" aria-label="${alt}" style="display:inline-block;width:38px;height:38px;background:#ffffff;border:1.5px solid #C8A766;border-radius:38px;text-decoration:none;text-align:center;line-height:38px;">${svg}</a></td>`;
+  const item = (svg: string, url: string, alt: string, counter: string) =>
+    `<td style="padding:0 6px 8px;text-align:center;"><a href="${url}" aria-label="${alt}" style="display:inline-block;width:38px;height:38px;background:#ffffff;border:1.5px solid #C8A766;border-radius:38px;text-decoration:none;text-align:center;line-height:38px;">${svg}</a><p style="margin:6px 0 0;color:#b7b7b7;font-size:10px;line-height:1;">${counter}</p></td>`;
 
-  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:12px;"><tr>${links.map((l) => item(l.svg, l.url, l.alt)).join("")}</tr></table>`;
+  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:12px;"><tr>${links.map((l) => item(l.svg, l.url, l.alt, l.counter)).join("")}</tr></table>`;
 }
 
 export function sharedFooterHtml(): string {
@@ -327,6 +333,8 @@ export function sharedSections(context: string, teamName = "JBJ Team"): string {
   return `${goldDivider()}<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="direction:ltr;text-align:left;"><tr><td>
 ${inquiryBox(context)}
 ${ticketSupportEmbed()}
+${recommendedActionsHtml()}
+${booksShowcaseHtml()}
 ${readyToGetStartedHtml()}
 ${signOffHtml(teamName)}
 </td></tr></table>`;
