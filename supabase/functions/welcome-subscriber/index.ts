@@ -91,7 +91,7 @@ ${sharedSections("newsletter subscription", "JBJ Global Real Estate Team")}
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "JBJ Global Real Estate <contact@jbj.ae>",
+        from: "JBJ Global Real Estate <jbj@jbj.ae>",
         reply_to: "contact@jbj.ae",
         to: [email],
         subject: "Welcome to Stay in the Loop — JBJ Global Real Estate",

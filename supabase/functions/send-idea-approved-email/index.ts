@@ -121,7 +121,7 @@ ${arabicDivider()}${sharedSections("idea submission")}</td></tr>`;
       method: "POST",
       headers: { "Authorization": `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
       body: JSON.stringify({
-        from: "JBJ Global Real Estate <contact@jbj.ae>",
+        from: "JBJ Global Real Estate <jbj@jbj.ae>",
         reply_to: "CONTACT@JBJ.AE",
         to: [userEmail],
         subject,

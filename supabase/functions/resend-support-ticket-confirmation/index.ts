@@ -27,7 +27,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const VERIFIED_SENDER = "info@jbj.ae";
+const VERIFIED_SENDER = "jbj@jbj.ae";
 const ADMIN_EMAIL = "SUPPORT@JBJ.AE"; // Admin always receives a copy
 const OFFICIAL_EMAILS = {
   support: "SUPPORT@JBJ.AE",
