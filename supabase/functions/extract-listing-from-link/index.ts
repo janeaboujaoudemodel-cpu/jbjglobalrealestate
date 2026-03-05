@@ -215,7 +215,7 @@ serve(async (req) => {
         name: projectName,
         slug,
         developer_name: devName || null,
-        developer_id: devId || null,
+        developer_id: null,
         location: null,
         emirate: "Dubai",
         description: `Generated from ${fileList.length} uploaded file(s).`,
@@ -242,7 +242,10 @@ serve(async (req) => {
           .from("pending_project_imports")
           .update({ ...importPayload, updated_at: new Date().toISOString() })
           .eq("id", existing.id);
-        if (error) console.error("[extract] File update error:", error.message);
+        if (error) {
+          console.error("[extract] File update error:", error.message);
+          throw new Error(`Failed to update pending import: ${error.message}`);
+        }
         importId = existing.id;
       } else {
         const { data: inserted, error } = await supabase
@@ -250,8 +253,11 @@ serve(async (req) => {
           .insert(importPayload)
           .select("id")
           .single();
-        if (error) console.error("[extract] File insert error:", error.message);
-        importId = inserted?.id || null;
+        if (error || !inserted?.id) {
+          console.error("[extract] File insert error:", error?.message);
+          throw new Error(`Failed to create pending import: ${error?.message || "unknown error"}`);
+        }
+        importId = inserted.id;
       }
 
       if (auto_approve && importId) {
@@ -270,7 +276,7 @@ serve(async (req) => {
       }
 
       if (userId) {
-        await supabase.from("listing_uploads").insert({
+        const { error: uploadLogError } = await supabase.from("listing_uploads").insert({
           user_id: userId,
           drive_url: fileList[0]?.url || "uploaded-files",
           url_type: "upload",
@@ -278,7 +284,10 @@ serve(async (req) => {
           extracted_data: { projectName, files: fileList.length },
           created_at: new Date().toISOString(),
           completed_at: new Date().toISOString(),
-        }).catch(() => {});
+        });
+        if (uploadLogError) {
+          console.error("[extract] Failed to write upload log (files):", uploadLogError.message);
+        }
       }
 
       results.push({
@@ -295,7 +304,7 @@ serve(async (req) => {
           documents: documentsPayload.length,
           videos: 0,
         },
-        view_url: `/project/${slug}`,
+        view_url: auto_approve ? `/project/${slug}` : `/listing-admin/preview/${importId}`,
         duration_ms: Date.now() - startTime,
       });
     }
@@ -550,7 +559,7 @@ Return JSON:
           name: projectName,
           slug,
           developer_name: devName || null,
-          developer_id: devId || null,
+          developer_id: null,
           location: extractedData?.location || null,
           emirate: extractedData?.emirate || "Dubai",
           description: extractedData?.description?.substring(0, 3000) || null,
@@ -598,7 +607,10 @@ Return JSON:
             .from("pending_project_imports")
             .update({ ...importPayload, status: auto_approve ? "approved" : "pending", updated_at: new Date().toISOString() })
             .eq("id", existing.id);
-          if (error) console.error("[extract] Update error:", error.message);
+          if (error) {
+            console.error("[extract] Update error:", error.message);
+            throw new Error(`Failed to update pending import: ${error.message}`);
+          }
           importId = existing.id;
         } else {
           const { data: inserted, error } = await supabase
@@ -606,8 +618,11 @@ Return JSON:
             .insert(importPayload)
             .select("id")
             .single();
-          if (error) console.error("[extract] Insert error:", error.message);
-          importId = inserted?.id || null;
+          if (error || !inserted?.id) {
+            console.error("[extract] Insert error:", error?.message);
+            throw new Error(`Failed to create pending import: ${error?.message || "unknown error"}`);
+          }
+          importId = inserted.id;
         }
 
         // If auto_approve, also call bulk-approve to push to projects table
@@ -630,7 +645,7 @@ Return JSON:
 
         // Log extraction
         if (userId) {
-          await supabase.from("listing_uploads").insert({
+          const { error: uploadLogError } = await supabase.from("listing_uploads").insert({
             user_id: userId,
             drive_url: formattedUrl,
             url_type: "firecrawl",
@@ -638,7 +653,10 @@ Return JSON:
             extracted_data: { ...extractedData, imageCount: imageUrls.length, docCount: savedDocs.length },
             created_at: new Date().toISOString(),
             completed_at: new Date().toISOString(),
-          }).catch(() => {});
+          });
+          if (uploadLogError) {
+            console.error("[extract] Failed to write upload log (url):", uploadLogError.message);
+          }
         }
 
         results.push({
@@ -658,7 +676,7 @@ Return JSON:
           paymentPlan: extractedData?.paymentPlan,
           unitTypes: extractedData?.unitTypes || [],
           description: extractedData?.description?.substring(0, 300),
-          view_url: `/project/${slug}`,
+          view_url: auto_approve ? `/project/${slug}` : `/listing-admin/preview/${importId}`,
           duration_ms: Date.now() - startTime,
         });
 

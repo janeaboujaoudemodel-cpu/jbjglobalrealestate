@@ -266,6 +266,10 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
             if (r.paymentPlan) response += `Payment Plan: ${r.paymentPlan}\n`;
             if (r.unitTypes?.length > 0) response += `Unit Types: ${r.unitTypes.join(", ")}\n`;
             if (r.description) response += `\n${r.description}...\n`;
+            const listingUrl = r.view_url
+              ? (r.view_url.startsWith("http") ? r.view_url : `${window.location.origin}${r.view_url}`)
+              : null;
+            if (listingUrl) response += `Preview: ${listingUrl}\n`;
             response += `\nStatus: **${r.status === "auto-approved" ? "AUTO-APPROVED - Live now" : "Pending your approval"}**\n`;
             response += `Processing time: ${(r.duration_ms / 1000).toFixed(1)}s\n\n`;
           }
@@ -445,7 +449,10 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
             if (r.location) response += `Location: ${r.location}\n`;
             response += `Files: ${r.files_processed || 0} processed\n`;
             response += `Status: **${r.status === "auto-approved" ? "AUTO-APPROVED" : "Pending approval"}**\n`;
-            if (r.view_url) response += `View: ${r.view_url}\n`;
+            const listingUrl = r.view_url
+              ? (r.view_url.startsWith("http") ? r.view_url : `${window.location.origin}${r.view_url}`)
+              : null;
+            if (listingUrl) response += `Preview: ${listingUrl}\n`;
             response += `\n`;
           }
         }
@@ -548,6 +555,38 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
     fileInputRef.current.multiple = true;
     fileInputRef.current.value = "";
     fileInputRef.current.click();
+  };
+
+  const renderMessageContent = (content: string) => {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const lines = content.split("\n");
+
+    return lines.map((line, lineIndex) => {
+      const parts = line.split(urlRegex);
+
+      return (
+        <span key={`line-${lineIndex}`}>
+          {parts.map((part, partIndex) => {
+            if (/^https?:\/\//.test(part)) {
+              return (
+                <a
+                  key={`part-${lineIndex}-${partIndex}`}
+                  href={part}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline underline-offset-2 hover:opacity-80"
+                >
+                  {part}
+                </a>
+              );
+            }
+
+            return <span key={`part-${lineIndex}-${partIndex}`}>{part}</span>;
+          })}
+          {lineIndex < lines.length - 1 && <br />}
+        </span>
+      );
+    });
   };
 
   return (
@@ -654,7 +693,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
                       ))}
                     </div>
                   )}
-                  <p className="text-sm whitespace-pre-wrap leading-relaxed select-text">{message.content}</p>
+                  <div className="text-sm whitespace-pre-wrap leading-relaxed select-text">{renderMessageContent(message.content)}</div>
                   <p className="text-[10px] mt-1 opacity-60 select-none">
                     {message.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                   </p>
