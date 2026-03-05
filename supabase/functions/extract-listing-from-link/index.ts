@@ -45,6 +45,18 @@ function toSlug(val: string): string {
   return val.toLowerCase().replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-").replace(/-+/g, "-").slice(0, 80);
 }
 
+function inferProjectNameFromFiles(files: { name: string; url: string; type: string }[]): string {
+  if (!files.length) return "Uploaded Project";
+  const first = files[0].name || "Uploaded Project";
+  const cleaned = first
+    .replace(/\.[a-z0-9]+$/i, "")
+    .replace(/[_-]+/g, " ")
+    .replace(/\b(brochure|floor\s?plan|payment\s?plan|image|photo|doc|document|final|v\d+)\b/gi, "")
+    .replace(/\s+/g, " ")
+    .trim();
+  return cleaned.length > 2 ? cleaned : "Uploaded Project";
+}
+
 /**
  * Save documents (PDFs, brochures) to Supabase storage and return public URLs.
  */
@@ -112,6 +124,7 @@ serve(async (req) => {
     const {
       url,
       urls, // support batch: array of URLs
+      files, // support direct uploaded files from listing admin
       userId,
       albumName,
       auto_approve = false, // auto-approve mode
@@ -119,9 +132,11 @@ serve(async (req) => {
     } = body;
 
     const urlList: string[] = urls || (url ? [url] : []);
-    if (urlList.length === 0) {
+    const fileList: { name: string; url: string; type: string }[] = Array.isArray(files) ? files : [];
+
+    if (urlList.length === 0 && fileList.length === 0) {
       return new Response(
-        JSON.stringify({ success: false, error: "URL is required" }),
+        JSON.stringify({ success: false, error: "URL or files are required" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -152,6 +167,138 @@ serve(async (req) => {
     }
 
     const results: any[] = [];
+
+    // Process uploaded files directly (no external scraping needed)
+    if (fileList.length > 0) {
+      const startTime = Date.now();
+      const projectName = albumName || inferProjectNameFromFiles(fileList);
+      const slug = toSlug(projectName);
+      const joinedText = fileList.map((f) => `${f.name} ${f.url}`).join(" ");
+      const devName = detectDeveloper(joinedText);
+
+      // Match developer in DB
+      let devId: string | null = null;
+      if (devName) {
+        const norm = devName.toLowerCase().replace(/[^a-z0-9]/g, "");
+        const match = devMap.get(norm);
+        if (match) devId = match.id;
+      }
+
+      const imagesPayload = fileList
+        .filter((f) => f.type === "image")
+        .map((f, i) => ({
+          url: f.url,
+          alt_text: `${projectName} - Image ${i + 1}`,
+          display_order: i,
+        }));
+
+      const documentsPayload = fileList
+        .filter((f) => f.type !== "image")
+        .map((f, i) => {
+          const lower = (f.name || "").toLowerCase();
+          const docType = lower.includes("floor")
+            ? "floor_plan"
+            : lower.includes("payment")
+            ? "payment_plan"
+            : lower.includes("brochure")
+            ? "brochure"
+            : "document";
+          return {
+            url: f.url,
+            original_url: f.url,
+            type: docType,
+            name: f.name || `Document ${i + 1}`,
+          };
+        });
+
+      const importPayload: Record<string, any> = {
+        name: projectName,
+        slug,
+        developer_name: devName || null,
+        developer_id: devId || null,
+        location: null,
+        emirate: "Dubai",
+        description: `Generated from ${fileList.length} uploaded file(s).`,
+        images: imagesPayload,
+        documents: documentsPayload,
+        source_url: fileList[0]?.url || null,
+        is_new_project: true,
+        status: auto_approve ? "approved" : "pending",
+        enrichment_source: "file-upload",
+      };
+
+      const { data: existing } = await supabase
+        .from("pending_project_imports")
+        .select("id, status")
+        .eq("slug", slug)
+        .order("updated_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      let importId: string | null = null;
+
+      if (existing?.id) {
+        const { error } = await supabase
+          .from("pending_project_imports")
+          .update({ ...importPayload, updated_at: new Date().toISOString() })
+          .eq("id", existing.id);
+        if (error) console.error("[extract] File update error:", error.message);
+        importId = existing.id;
+      } else {
+        const { data: inserted, error } = await supabase
+          .from("pending_project_imports")
+          .insert(importPayload)
+          .select("id")
+          .single();
+        if (error) console.error("[extract] File insert error:", error.message);
+        importId = inserted?.id || null;
+      }
+
+      if (auto_approve && importId) {
+        try {
+          await fetch(`${supabaseUrl}/functions/v1/bulk-approve-imports`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${Deno.env.get("SUPABASE_ANON_KEY")}`,
+            },
+            body: JSON.stringify({ import_ids: [importId] }),
+          });
+        } catch (approveErr) {
+          console.error("[extract] File auto-approve error:", approveErr);
+        }
+      }
+
+      if (userId) {
+        await supabase.from("listing_uploads").insert({
+          user_id: userId,
+          drive_url: fileList[0]?.url || "uploaded-files",
+          url_type: "upload",
+          status: "completed",
+          extracted_data: { projectName, files: fileList.length },
+          created_at: new Date().toISOString(),
+          completed_at: new Date().toISOString(),
+        }).catch(() => {});
+      }
+
+      results.push({
+        name: projectName,
+        success: true,
+        importId,
+        projectName,
+        developer: devName,
+        location: null,
+        status: auto_approve ? "auto-approved" : "pending-approval",
+        files_processed: fileList.length,
+        media: {
+          images: imagesPayload.length,
+          documents: documentsPayload.length,
+          videos: 0,
+        },
+        view_url: `/project/${slug}`,
+        duration_ms: Date.now() - startTime,
+      });
+    }
 
     for (const rawUrl of urlList) {
       const startTime = Date.now();
@@ -511,6 +658,7 @@ Return JSON:
           paymentPlan: extractedData?.paymentPlan,
           unitTypes: extractedData?.unitTypes || [],
           description: extractedData?.description?.substring(0, 300),
+          view_url: `/project/${slug}`,
           duration_ms: Date.now() - startTime,
         });
 
@@ -522,14 +670,15 @@ Return JSON:
       }
     }
 
+    const totalInputs = urlList.length + (fileList.length > 0 ? 1 : 0);
     const successCount = results.filter(r => r.success).length;
 
     return new Response(
       JSON.stringify({
         success: successCount > 0,
-        total: urlList.length,
+        total: totalInputs,
         succeeded: successCount,
-        failed: urlList.length - successCount,
+        failed: totalInputs - successCount,
         results,
         auto_approve,
         message: auto_approve

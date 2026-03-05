@@ -188,13 +188,17 @@ const SecurityShield = () => {
 
     // ========== 3. DISABLE TEXT SELECTION ==========
     const handleSelectStart = (e: Event) => {
-      const target = e.target as HTMLElement;
+      const target = e.target;
+      const element = target instanceof Element ? target : null;
+
       // Allow selection in form inputs
       if (
-        target.tagName === 'INPUT' ||
-        target.tagName === 'TEXTAREA' ||
-        target.isContentEditable ||
-        target.closest('[data-allow-select]')
+        element && (
+          element.tagName === 'INPUT' ||
+          element.tagName === 'TEXTAREA' ||
+          (element as HTMLElement).isContentEditable ||
+          element.closest('[data-allow-select]')
+        )
       ) {
         return true;
       }
