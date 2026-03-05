@@ -112,8 +112,9 @@ export function BookShelf({ books, title = 'Books, Guides & Intelligence' }: Boo
                     key={index}
                     className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gold/10 transition-colors group text-left"
                     onClick={() => {
+                      const directHref = selectedBook._chapterHrefs?.[index];
                       setSelectedBook(null);
-                      navigate(`${selectedBook.href}#chapter-${index + 1}`);
+                      navigate(directHref || `${selectedBook.href}#chapter-${index + 1}`);
                     }}
                   >
                     <span className="w-8 h-8 rounded-lg bg-black border border-gold/30 flex items-center justify-center text-gold text-sm font-medium flex-shrink-0">

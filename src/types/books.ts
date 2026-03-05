@@ -30,4 +30,7 @@ export interface BookData {
 
   /** Icon badge shown on the cover overlay (when coverLocked is not true). */
   icon?: BookIconKey;
+
+  /** Maps each TOC chapter to a direct href for cross-page navigation (same order as tableOfContents). */
+  _chapterHrefs?: string[];
 }

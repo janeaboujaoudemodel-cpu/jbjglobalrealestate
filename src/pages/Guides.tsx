@@ -28,8 +28,8 @@ const staggerContainer = {
   }
 };
 
-// All guide books from the collections (guides + FAQs)
-const allGuideBooks = INVESTOR_BOOKS;
+// All guide books from the collections (guides + FAQs) — exclude Guides Library itself
+const allGuideBooks = INVESTOR_BOOKS.filter(b => b.title !== 'Guides Library');
 
 // What You'll Learn items
 const learningTopics = [
@@ -206,7 +206,7 @@ const Guides = () => {
                   transition={{ type: 'spring', stiffness: 300 }}
                 >
                   <div className="relative w-24 h-36 md:w-32 md:h-44 rounded-md overflow-hidden border border-gold/40 shadow-[4px_4px_20px_rgba(0,0,0,0.25)] group-hover:shadow-[6px_6px_30px_rgba(200,167,102,0.4)] transition-shadow">
-                    <BookCoverFace book={book} />
+                    <BookCoverFace book={book} bare />
                     <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
                   <p className="text-xs text-white/70 text-center font-medium group-hover:text-gold transition-colors leading-tight">
@@ -316,7 +316,7 @@ const Guides = () => {
             {/* Header */}
             <div className="flex items-start gap-5 p-6 border-b border-gold/20">
               <div className="relative w-24 h-32 rounded-md overflow-hidden shadow-lg flex-shrink-0 border border-gold/40">
-                <BookCoverFace book={selectedBook} size="modal" />
+                <img src={selectedBook.cover} alt={selectedBook.title} className="w-full h-full object-cover" loading="eager" />
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="text-xl font-bold text-black mb-1">{selectedBook.title}</h3>
@@ -339,8 +339,9 @@ const Guides = () => {
                     key={index}
                     className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gold/10 transition-colors group text-left"
                     onClick={() => {
+                      const directHref = selectedBook._chapterHrefs?.[index];
                       setSelectedBook(null);
-                      navigate(`${selectedBook.href}#chapter-${index + 1}`);
+                      navigate(directHref || `${selectedBook.href}#chapter-${index + 1}`);
                     }}
                   >
                     <span className="w-8 h-8 rounded-lg bg-black border border-gold/30 flex items-center justify-center text-gold text-sm font-medium flex-shrink-0">

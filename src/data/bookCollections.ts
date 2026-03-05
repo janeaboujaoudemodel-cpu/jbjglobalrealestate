@@ -51,6 +51,16 @@ const guidesLibraryBook: BookData = {
     { title: 'Golden Visa & Immigration', duration: '15 min' },
     { title: 'Market Intelligence', duration: '15 min' },
   ],
+  /** Maps each TOC chapter to a direct href for cross-page navigation */
+  _chapterHrefs: [
+    '/guides#guides-library',
+    '/buyer-guide',
+    '/seller-guide',
+    '/landlord-guide',
+    '/rent-guide',
+    '/guides/golden-visa-uae',
+    '/market-intelligence',
+  ],
 };
 
 // ─── Shared Books (used by both investor & broker) ───
