@@ -1,3 +1,4 @@
+import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { CheckCircle, ArrowUpRight, FileText } from "lucide-react";
@@ -8,7 +9,7 @@ const fadeInUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
 };
 
-const MarketReportCTA = () => {
+const MarketReportCTA = React.forwardRef<HTMLDivElement>((_, ref) => {
   const benefits = [
     "Expert market analysis & forecasts",
     "Investment opportunity insights",
@@ -18,6 +19,7 @@ const MarketReportCTA = () => {
 
   return (
     <motion.div
+      ref={ref}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
@@ -87,6 +89,8 @@ const MarketReportCTA = () => {
       </div>
     </motion.div>
   );
-};
+});
+
+MarketReportCTA.displayName = "MarketReportCTA";
 
 export default MarketReportCTA;
