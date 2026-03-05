@@ -292,6 +292,13 @@ const Index = () => {
 
       <SectionDivider />
 
+      {/* EXPLORE OUR GUIDES & REPORTS - Walking Books Marquee */}
+      <Suspense fallback={<SectionLoader />}>
+        <HomepageBookMarquee />
+      </Suspense>
+
+      <SectionDivider />
+
       {/* EXPLORE OUR SERVICES SLIDESHOW - Wrapped in container for consistent sizing */}
       <section className="bg-black">
         <div className="jj-layer-2">
@@ -383,40 +390,6 @@ const Index = () => {
           </Suspense>
         </div>
       </section>
-
-      {/* DIVIDER */}
-      <SectionDivider />
-
-      {/* MARKET REPORT CTA - Active Champagne Layer */}
-      <section className="bg-black">
-        <div className="jj-layer-2">
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 md:border-2 rounded-xl md:rounded-3xl p-4 md:p-10 shadow-xl">
-            <motion.div
-              className="text-center mb-4 md:mb-8"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              <span className="inline-block text-gold text-[10px] md:text-xs uppercase tracking-[0.2em] md:tracking-[0.3em] mb-2 md:mb-3">{t('home.exclusivePublication', 'Exclusive Publication')}</span>
-              <h2 className="text-black text-xl md:text-3xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
-                {t('home.freeMarket', 'Free Market')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">{t('home.intelligenceBook', 'Intelligence Book')}</span>
-              </h2>
-            </motion.div>
-            <Suspense fallback={<SectionLoader />}>
-              <MarketReportCTA />
-            </Suspense>
-          </div>
-        </div>
-      </section>
-
-      {/* DIVIDER */}
-      <SectionDivider />
-
-      {/* EXPLORE OUR GUIDES & REPORTS - Walking Books Marquee */}
-      <Suspense fallback={<SectionLoader />}>
-        <HomepageBookMarquee />
-      </Suspense>
-
 
       {/* DIVIDER */}
       <SectionDivider />
