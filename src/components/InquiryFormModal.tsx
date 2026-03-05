@@ -314,7 +314,8 @@ const InquiryFormModal = ({
         }}
       >
         <DialogContent 
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 text-zinc-900 max-w-lg p-0 max-h-[90vh] overflow-y-auto shadow-2xl shadow-gold/20"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 text-zinc-900 max-w-lg p-0 max-h-[90vh] shadow-2xl shadow-gold/20 overflow-visible"
+          style={{ overflow: 'visible' }}
           dir={isRTL ? 'rtl' : 'ltr'}
           onInteractOutside={(e) => {
             // Prevent closing when interacting with popovers (SearchableSelect dropdowns)
@@ -342,8 +343,7 @@ const InquiryFormModal = ({
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
 
           {isSuccess ? (
-            <div className="relative px-8 py-16 text-center">
-              {/* Close button for success screen */}
+            <div className="relative px-8 py-16 text-center max-h-[90vh] overflow-y-auto">
               <button
                 type="button"
                 onClick={() => {
@@ -381,7 +381,7 @@ const InquiryFormModal = ({
               </Button>
             </div>
           ) : (
-            <div className="relative px-6 pt-8 pb-6">
+            <div className="relative px-6 pt-8 pb-6 max-h-[90vh] overflow-y-auto">
               <DialogHeader className="mb-6">
                 {/* Premium Icon */}
                 <div className="text-center mb-4">

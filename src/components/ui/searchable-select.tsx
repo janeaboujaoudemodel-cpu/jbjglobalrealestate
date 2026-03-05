@@ -37,6 +37,7 @@ export function SearchableSelect({
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
 
   const detectedFlagType = flagType || (
     searchPlaceholder?.toLowerCase().includes('countr') || placeholder?.toLowerCase().includes('national')
@@ -92,7 +93,7 @@ export function SearchableSelect({
           )}
         >
           <span className="truncate flex items-center gap-2">
-            {selectedFlag && <span className="text-lg leading-none">{selectedFlag}</span>}
+            {selectedFlag && <span className="text-xl leading-none">{selectedFlag}</span>}
             {value || placeholder}
           </span>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 text-gold/60" />
@@ -107,6 +108,7 @@ export function SearchableSelect({
         side="bottom"
         sideOffset={6}
         avoidCollisions={false}
+        onOpenAutoFocus={(e) => e.preventDefault()}
       >
         <div className="p-2 border-b border-gold/20">
           <div className="relative">
@@ -121,7 +123,17 @@ export function SearchableSelect({
           </div>
         </div>
 
-        <div className="max-h-[320px] overflow-y-auto p-1" onWheel={(e) => e.stopPropagation()}>
+        <div
+          ref={listRef}
+          className="max-h-[280px] overflow-y-auto p-1 overscroll-contain"
+          onWheel={(e) => {
+            // Prevent parent scroll from hijacking
+            e.stopPropagation();
+          }}
+          onTouchMove={(e) => {
+            e.stopPropagation();
+          }}
+        >
           {filteredOptions.length === 0 ? (
             <div className="py-6 text-center text-sm text-zinc-500">
               No results found
@@ -137,7 +149,7 @@ export function SearchableSelect({
                     setOpen(false);
                   }}
                   className={cn(
-                    "w-full flex items-center gap-3 px-3 py-3 text-base rounded-md transition-colors text-left",
+                    "w-full flex items-center gap-3 px-3 py-3.5 text-base rounded-md transition-colors text-left min-h-[48px]",
                     value === option
                       ? "bg-gold/10 text-gold"
                       : "text-black hover:bg-gold/5"
@@ -149,7 +161,7 @@ export function SearchableSelect({
                       value === option ? "opacity-100 text-gold" : "opacity-0"
                     )}
                   />
-                  {flag && <span className="text-lg leading-none shrink-0">{flag}</span>}
+                  {flag && <span className="text-xl leading-none shrink-0">{flag}</span>}
                   <span className="truncate text-sm sm:text-base">{option}</span>
                   {option === priorityItem && (
                     <span className="ml-auto text-xs text-gold/60">Default</span>

@@ -31,6 +31,7 @@ const chunkImports = {
   WhyChooseUs: () => import("@/components/home/WhyChooseUs"),
   AreasWeCover: () => import("@/components/home/AreasWeCover"),
   ContinueSearching: () => import("@/components/ContinueSearching"),
+  HomepageBookMarquee: () => import("@/components/home/HomepageBookMarquee"),
   WhyDubaiCapitalSection: () => import("@/components/home/WhyDubaiCapitalSection"),
   TestimonialsSection: () => import("@/components/home/TestimonialsSection"),
   AIComparisonWidget: () => import("@/components/AIComparisonWidget"),
@@ -56,6 +57,7 @@ const ServicesGrid = lazy(chunkImports.ServicesGrid);
 const WhyChooseUs = lazy(chunkImports.WhyChooseUs);
 const AreasWeCover = lazy(chunkImports.AreasWeCover);
 const ContinueSearching = lazy(chunkImports.ContinueSearching);
+const HomepageBookMarquee = lazy(chunkImports.HomepageBookMarquee);
 const WhyDubaiCapitalSection = lazy(chunkImports.WhyDubaiCapitalSection);
 const TestimonialsSection = lazy(chunkImports.TestimonialsSection);
 const AIComparisonWidget = lazy(chunkImports.AIComparisonWidget);
@@ -406,6 +408,14 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* DIVIDER */}
+      <SectionDivider />
+
+      {/* EXPLORE OUR GUIDES & REPORTS - Walking Books Marquee */}
+      <Suspense fallback={<SectionLoader />}>
+        <HomepageBookMarquee />
+      </Suspense>
 
 
       {/* DIVIDER */}

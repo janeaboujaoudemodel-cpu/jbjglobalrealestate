@@ -187,12 +187,12 @@ const MarketReport = () => {
    /* Interior pages — champagne pearl, FIXED A4 height */
    .page {
      width: 794px;
-     height: 1123px;
-     padding: 56px 55px 48px;
+     min-height: 1123px;
+     padding: 56px 55px 56px;
      page-break-after: always;
      background: linear-gradient(180deg, #FDFBF7 0%, #F5F0E6 100%);
      position: relative;
-     overflow: hidden;
+     overflow: visible;
      display: flex;
      flex-direction: column;
    }
