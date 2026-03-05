@@ -203,6 +203,8 @@ const JBJPodcastSection = () => {
                     src={selectedEpisode.thumbnail}
                     alt={selectedEpisode.title}
                     className="absolute inset-0 w-full h-full object-cover"
+                    loading="eager"
+                    fetchPriority="high"
                     fallbackSrc="/placeholder.svg"
                   />
                   
@@ -404,7 +406,7 @@ const JBJPodcastSection = () => {
 
                 <ScrollArea className="h-[400px] lg:h-[480px]">
                   <div className="p-2">
-                    {podcastEpisodes.map((episode) => (
+                    {podcastEpisodes.map((episode, index) => (
                       <button
                         key={episode.id}
                         onClick={() => {
@@ -424,6 +426,8 @@ const JBJPodcastSection = () => {
                               src={episode.thumbnail}
                               alt={episode.title}
                               className="w-full h-full object-cover object-center"
+                              loading={index < 6 ? "eager" : "lazy"}
+                              fetchPriority={index < 3 ? "high" : "auto"}
                               fallbackSrc="/placeholder.svg"
                             />
                           </div>

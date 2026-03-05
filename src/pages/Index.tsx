@@ -1,4 +1,4 @@
-import { useState, lazy, Suspense, memo, useEffect } from "react";
+import { useState, lazy, Suspense, memo, useEffect, forwardRef } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import HeroSearchBar from "@/components/home/HeroSearchBar";
@@ -67,12 +67,12 @@ const JBJPodcastSection = lazy(chunkImports.JBJPodcastSection);
 import { PodcastVisibilityGate } from "@/components/home/PodcastVisibilityGate";
 import { SectionDivider } from "@/components/ui/section-divider";
 
-// Lazy loading fallback component
-const SectionLoader = () => (
-  <div className="py-12 flex items-center justify-center">
+const SectionLoader = forwardRef<HTMLDivElement>((_, ref) => (
+  <div ref={ref} className="py-12 flex items-center justify-center">
     <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin" />
   </div>
-);
+));
+SectionLoader.displayName = "SectionLoader";
 
 // Animation variants
 const fadeInUp = {
@@ -93,12 +93,31 @@ const Index = () => {
   const { t } = useLanguage();
   const { isBroker, hasSelectedRole } = useUserRole();
 
-  // Preload ALL below-fold chunks immediately after mount so sections render instantly when scrolled to
+  // Preload only near-the-fold chunks during idle time (avoid loading every section at once)
   useEffect(() => {
-    const timer = setTimeout(() => {
-      Object.values(chunkImports).forEach(importFn => importFn());
-    }, 500); // Small delay to let hero paint first
-    return () => clearTimeout(timer);
+    const preloadNearFold = () => {
+      [
+        chunkImports.DeveloperPartnersMarquee,
+        chunkImports.TrustBar,
+        chunkImports.FeaturedListings,
+        chunkImports.StartingPointSection,
+      ].forEach((importFn) => {
+        void importFn();
+      });
+    };
+
+    if (typeof window !== "undefined" && "requestIdleCallback" in window) {
+      const idleId = (window as Window & { requestIdleCallback: (cb: () => void, options?: { timeout: number }) => number }).requestIdleCallback(
+        preloadNearFold,
+        { timeout: 1800 }
+      );
+      return () => {
+        (window as Window & { cancelIdleCallback?: (id: number) => void }).cancelIdleCallback?.(idleId);
+      };
+    }
+
+    const timer = globalThis.setTimeout(preloadNearFold, 1200);
+    return () => globalThis.clearTimeout(timer);
   }, []);
 
   return (
@@ -124,7 +143,7 @@ const Index = () => {
             className="absolute inset-0 w-full h-full object-cover"
             loading="eager"
             fetchPriority="high"
-            decoding="sync"
+            decoding="async"
           />
           {/* Video overlays the image when it loads/plays - deferred loading */}
           <video 
