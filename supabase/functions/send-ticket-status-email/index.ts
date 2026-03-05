@@ -3,7 +3,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 import { emailShell, sharedSections, progressSteps, ticketSummaryCard, ticketSummaryCardAr, arabicDivider, rateExperienceCard, rateExperienceCardAr, issueNotResolvedCard, issueNotResolvedCardAr, userGreetingRow } from "../_shared/email-html.ts";
 
 const RESEND_API_URL = "https://api.resend.com/emails";
-const VERIFIED_SENDER = 'contact@jbj.ae';
+const VERIFIED_SENDER = 'jbj@jbj.ae';
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",

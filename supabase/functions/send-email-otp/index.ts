@@ -102,7 +102,7 @@ ${sharedSections("verification")}</td></tr>`;
         method: "POST",
         headers: { "Authorization": `Bearer ${resendApiKey}`, "Content-Type": "application/json" },
         body: JSON.stringify({
-          from: "JBJ Global Real Estate <contact@jbj.ae>",
+          from: "JBJ Global Real Estate <jbj@jbj.ae>",
           reply_to: "CONTACT@JBJ.AE",
           to: [email],
           subject: "Your JBJ verification code",
