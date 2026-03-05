@@ -62,7 +62,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
 
 📋 **Multiple links** — Paste several URLs at once. I'll process them all and queue each one separately.
 
-📁 **Upload files** — Drop photos, PDFs, brochures, floor plans (up to 50 files at once). I'll group them by project intelligently.
+📁 **Upload files** — Drop photos, PDFs, brochures, floor plans. I'll group them by project intelligently.
 
 🔍 **Duplicate detection** — If a project already exists on the website, I'll flag it and give you options: **Replace**, **Merge**, or **Skip**.
 
@@ -94,8 +94,6 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
   const [isDragOver, setIsDragOver] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const MAX_FILES = 50;
-  const MAX_FILE_SIZE_BYTES = 50 * 1024 * 1024;
 
   // Load existing chat session on mount
   useEffect(() => {
@@ -382,31 +380,43 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
     setMessages((prev) => [...prev, processingMsg]);
 
     try {
-      // Upload files to storage and get URLs
+      // Upload files to storage and get URLs (parallel for speed)
       const uploadedUrls: { name: string; url: string; type: string }[] = [];
-      
-      for (const file of fileArray) {
-        const ext = file.name.split('.').pop() || 'bin';
-        const path = `sarah-uploads/${user?.id || 'anon'}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
-        
-        const { error: uploadError } = await supabase.storage
-          .from("project-documents")
-          .upload(path, file, { contentType: file.type, upsert: true });
+      const failedUploads: string[] = [];
+      const baseTs = Date.now();
 
-        if (uploadError) {
-          console.error("Upload error:", uploadError);
-          continue;
-        }
+      const uploadResults = await Promise.allSettled(
+        fileArray.map(async (file, index) => {
+          const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+          const path = `sarah-uploads/${user?.id || "anon"}/${baseTs}-${index}-${safeName}`;
 
-        const { data: urlData } = supabase.storage
-          .from("project-documents")
-          .getPublicUrl(path);
+          const { error: uploadError } = await supabase.storage
+            .from("project-documents")
+            .upload(path, file, { contentType: file.type, upsert: true });
 
-        uploadedUrls.push({
-          name: file.name,
-          url: urlData.publicUrl,
-          type: file.type.includes("pdf") ? "pdf" : file.type.includes("image") ? "image" : "document",
-        });
+          if (uploadError) {
+            throw new Error(`${file.name}: ${uploadError.message}`);
+          }
+
+          const { data: urlData } = supabase.storage
+            .from("project-documents")
+            .getPublicUrl(path);
+
+          return {
+            name: file.name,
+            url: urlData.publicUrl,
+            type: file.type.includes("pdf") ? "pdf" : file.type.includes("image") ? "image" : "document",
+          };
+        })
+      );
+
+      for (const result of uploadResults) {
+        if (result.status === "fulfilled") uploadedUrls.push(result.value);
+        else failedUploads.push(result.reason?.message || "Unknown upload failure");
+      }
+
+      if (uploadedUrls.length === 0) {
+        throw new Error("All file uploads failed. Please retry.");
       }
 
       // Send to AI for extraction
@@ -425,8 +435,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
       let response = "";
       if (data?.results) {
         const succeeded = data.results.filter((r: any) => r.success);
-        const duplicates = data.results.filter((r: any) => r.duplicate);
-        const failed = data.results.filter((r: any) => !r.success && !r.duplicate);
+        const failed = data.results.filter((r: any) => !r.success);
 
         if (succeeded.length > 0) {
           response += `**${succeeded.length} listing${succeeded.length > 1 ? "s" : ""} extracted from files!**\n\n`;
@@ -435,16 +444,10 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
             if (r.developer) response += `Developer: ${r.developer}\n`;
             if (r.location) response += `Location: ${r.location}\n`;
             response += `Files: ${r.files_processed || 0} processed\n`;
-            response += `Status: **${r.status === "auto-approved" ? "AUTO-APPROVED" : "Pending approval"}**\n\n`;
+            response += `Status: **${r.status === "auto-approved" ? "AUTO-APPROVED" : "Pending approval"}**\n`;
+            if (r.view_url) response += `View: ${r.view_url}\n`;
+            response += `\n`;
           }
-        }
-
-        if (duplicates.length > 0) {
-          response += `\n**${duplicates.length} duplicate${duplicates.length > 1 ? "s" : ""} found (already live on website):**\n`;
-          for (const r of duplicates) {
-            response += `- **${r.projectName}** — Already exists. Use **Replace**, **Merge**, or **Skip** in the Approvals tab.\n`;
-          }
-          response += `\n`;
         }
 
         if (failed.length > 0) {
@@ -452,6 +455,14 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
           for (const r of failed) {
             response += `- ${r.name || r.url}: ${r.error}\n`;
           }
+        }
+
+        if (failedUploads.length > 0) {
+          response += `\n**${failedUploads.length} upload failure(s):**\n`;
+          for (const uploadError of failedUploads.slice(0, 8)) {
+            response += `- ${uploadError}\n`;
+          }
+          if (failedUploads.length > 8) response += `- +${failedUploads.length - 8} more\n`;
         }
 
         if (!autoApprove && succeeded.length > 0) {
@@ -496,25 +507,10 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
   const queueFiles = (incomingFiles: File[]) => {
     if (incomingFiles.length === 0) return;
 
-    const validSizeFiles = incomingFiles.filter((file) => file.size <= MAX_FILE_SIZE_BYTES);
-    const oversizedCount = incomingFiles.length - validSizeFiles.length;
-
-    if (oversizedCount > 0) {
-      toast.error(`${oversizedCount} file(s) were skipped (max 50MB each).`);
-    }
-
     setUploadedFiles((prev) => {
       const existing = new Set(prev.map((f) => `${f.name}-${f.size}-${f.lastModified}`));
-      const deduped = validSizeFiles.filter((f) => !existing.has(`${f.name}-${f.size}-${f.lastModified}`));
-
-      const remainingSlots = Math.max(MAX_FILES - prev.length, 0);
-      const accepted = deduped.slice(0, remainingSlots);
-
-      if (deduped.length > accepted.length) {
-        toast.error(`Only ${MAX_FILES} files can be queued at once.`);
-      }
-
-      return [...prev, ...accepted];
+      const deduped = incomingFiles.filter((f) => !existing.has(`${f.name}-${f.size}-${f.lastModified}`));
+      return [...prev, ...deduped];
     });
   };
 
