@@ -24,6 +24,9 @@ import {
   Plus,
   Zap,
   ListChecks,
+  Paperclip,
+  Image as ImageIcon,
+  FileText,
 } from "lucide-react";
 import { VoiceInputButton } from "@/components/ui/VoiceInputButton";
 
@@ -33,6 +36,7 @@ interface Message {
   content: string;
   timestamp: Date;
   type?: "text" | "processing" | "success";
+  attachments?: { name: string; type: string; size: number }[];
 }
 
 interface ListingAdminChatProps {
@@ -58,22 +62,24 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
 
 📋 **Multiple links** — Paste several URLs at once. I'll process them all and queue each one separately.
 
+📁 **Upload files** — Drop photos, PDFs, brochures, floor plans (up to 50 files at once). I'll group them by project intelligently.
+
+🔍 **Duplicate detection** — If a project already exists on the website, I'll flag it and give you options: **Replace**, **Merge**, or **Skip**.
+
 ⚡ **Auto-Approve mode** — Toggle it ON below when you trust the extraction quality. Listings go live instantly.
 
-🔍 **Approval Queue** — Every extraction lands in the "Approvals" tab. Review one-by-one or bulk approve.
-
-📄 **Documents saved** — Brochures, floor plans, and payment plans are downloaded and saved permanently in storage. Users can view AND download them.
+📄 **Documents saved** — Brochures, floor plans, and payment plans are downloaded and saved permanently in storage.
 
 ---
 
-**Supported links:**
+**Supported inputs:**
 • Developer websites (Emaar, DAMAC, Sobha, etc.)
 • Property portals (Bayut, PropertyFinder, Dubizzle)
-• Provident Estate project pages
-• Google Drive folders
+• Photos, PDFs, brochures, floor plans (drag & drop or click 📎)
+• Links with multiple projects — I'll separate each one
 • Any URL with property data
 
-**Paste a link below to get started!**`,
+**Paste a link or upload files below to get started!**`,
     timestamp: new Date(),
   });
 
@@ -84,7 +90,9 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
   const [urlInputs, setUrlInputs] = useState<string[]>([""]);
   const [showBulkUpload, setShowBulkUpload] = useState(false);
   const [autoApprove, setAutoApprove] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Load existing chat session on mount
   useEffect(() => {
@@ -333,6 +341,147 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
     toast.success("Voice transcribed! Review and send.");
   }, []);
 
+  const handleFileUpload = async (files: FileList | File[]) => {
+    const fileArray = Array.from(files);
+    if (fileArray.length === 0) return;
+
+    const userMsg: Message = {
+      id: Date.now().toString(),
+      role: "user",
+      content: `Uploading ${fileArray.length} file${fileArray.length > 1 ? "s" : ""} for extraction...`,
+      timestamp: new Date(),
+      attachments: fileArray.map(f => ({ name: f.name, type: f.type, size: f.size })),
+    };
+    setMessages((prev) => [...prev, userMsg]);
+    setIsLoading(true);
+
+    const processingMsg: Message = {
+      id: (Date.now() + 1).toString(),
+      role: "assistant",
+      content: `Analyzing ${fileArray.length} file${fileArray.length > 1 ? "s" : ""}...\n\nI'm grouping documents by project, detecting duplicates with existing listings, and extracting all details. This may take a moment.`,
+      timestamp: new Date(),
+      type: "processing",
+    };
+    setMessages((prev) => [...prev, processingMsg]);
+
+    try {
+      // Upload files to storage and get URLs
+      const uploadedUrls: { name: string; url: string; type: string }[] = [];
+      
+      for (const file of fileArray) {
+        const ext = file.name.split('.').pop() || 'bin';
+        const path = `sarah-uploads/${user?.id || 'anon'}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+        
+        const { error: uploadError } = await supabase.storage
+          .from("project-documents")
+          .upload(path, file, { contentType: file.type, upsert: true });
+
+        if (uploadError) {
+          console.error("Upload error:", uploadError);
+          continue;
+        }
+
+        const { data: urlData } = supabase.storage
+          .from("project-documents")
+          .getPublicUrl(path);
+
+        uploadedUrls.push({
+          name: file.name,
+          url: urlData.publicUrl,
+          type: file.type.includes("pdf") ? "pdf" : file.type.includes("image") ? "image" : "document",
+        });
+      }
+
+      // Send to AI for extraction
+      const { data, error } = await supabase.functions.invoke("extract-listing-from-link", {
+        body: {
+          files: uploadedUrls,
+          userId: user?.id,
+          auto_approve: autoApprove,
+          queue: true,
+          detect_duplicates: true,
+        },
+      });
+
+      if (error) throw error;
+
+      let response = "";
+      if (data?.results) {
+        const succeeded = data.results.filter((r: any) => r.success);
+        const duplicates = data.results.filter((r: any) => r.duplicate);
+        const failed = data.results.filter((r: any) => !r.success && !r.duplicate);
+
+        if (succeeded.length > 0) {
+          response += `**${succeeded.length} listing${succeeded.length > 1 ? "s" : ""} extracted from files!**\n\n`;
+          for (const r of succeeded) {
+            response += `---\n**${r.projectName}**\n`;
+            if (r.developer) response += `Developer: ${r.developer}\n`;
+            if (r.location) response += `Location: ${r.location}\n`;
+            response += `Files: ${r.files_processed || 0} processed\n`;
+            response += `Status: **${r.status === "auto-approved" ? "AUTO-APPROVED" : "Pending approval"}**\n\n`;
+          }
+        }
+
+        if (duplicates.length > 0) {
+          response += `\n**${duplicates.length} duplicate${duplicates.length > 1 ? "s" : ""} found (already live on website):**\n`;
+          for (const r of duplicates) {
+            response += `- **${r.projectName}** — Already exists. Use **Replace**, **Merge**, or **Skip** in the Approvals tab.\n`;
+          }
+          response += `\n`;
+        }
+
+        if (failed.length > 0) {
+          response += `\n**${failed.length} could not be processed:**\n`;
+          for (const r of failed) {
+            response += `- ${r.name || r.url}: ${r.error}\n`;
+          }
+        }
+
+        if (!autoApprove && succeeded.length > 0) {
+          response += `\n---\n\n**Next steps:** Go to the **"Approvals"** tab to review. You can **Replace**, **Merge**, or **Skip** each listing.`;
+        }
+      } else {
+        response = `${uploadedUrls.length} file${uploadedUrls.length > 1 ? "s" : ""} uploaded successfully. Processing complete.\n\nCheck the **"Approvals"** tab to review extracted listings.`;
+      }
+
+      setMessages((prev) => {
+        const without = prev.filter(m => m.id !== processingMsg.id);
+        return [...without, {
+          id: (Date.now() + 2).toString(),
+          role: "assistant" as const,
+          content: response,
+          timestamp: new Date(),
+          type: "success" as const,
+        }];
+      });
+
+      if (uploadedUrls.length > 0) {
+        toast.success(`${uploadedUrls.length} file(s) processed`);
+      }
+    } catch (err: any) {
+      setMessages((prev) => {
+        const without = prev.filter(m => m.id !== processingMsg.id);
+        return [...without, {
+          id: (Date.now() + 2).toString(),
+          role: "assistant" as const,
+          content: `Error processing files: ${err.message || "Unknown error"}. Please try again.`,
+          timestamp: new Date(),
+        }];
+      });
+      toast.error("Failed to process files");
+    } finally {
+      setIsLoading(false);
+      setUploadedFiles([]);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      handleFileUpload(e.target.files);
+    }
+  };
+
   return (
     <div className="flex flex-col h-full bg-white overflow-hidden">
       {/* Header */}
@@ -402,6 +551,17 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
                     <div className="flex items-center gap-2 mb-2 text-green-600">
                       <CheckCircle className="w-4 h-4" />
                       <span className="text-xs font-medium">Complete</span>
+                    </div>
+                  )}
+                  {/* File attachments */}
+                  {message.attachments && message.attachments.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 mb-2">
+                      {message.attachments.map((att, idx) => (
+                        <div key={idx} className="flex items-center gap-1 px-2 py-1 bg-gold/10 rounded text-xs text-foreground">
+                          {att.type.includes("image") ? <ImageIcon className="w-3 h-3" /> : <FileText className="w-3 h-3" />}
+                          <span className="truncate max-w-[120px]">{att.name}</span>
+                        </div>
+                      ))}
                     </div>
                   )}
                   <p className="text-sm whitespace-pre-wrap leading-relaxed select-text">{message.content}</p>
@@ -493,9 +653,29 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
         </div>
       )}
 
+      {/* Hidden file input */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        multiple
+        accept="image/*,.pdf,.doc,.docx,.xls,.xlsx"
+        onChange={handleFileInputChange}
+        className="hidden"
+      />
+
       {/* Input */}
       <div className="p-4 border-t border-zinc-200 bg-white">
         <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => fileInputRef.current?.click()}
+            className="h-10 w-10 p-0 text-zinc-600 hover:text-gold hover:bg-gold/10"
+            title="Upload files (photos, PDFs, brochures — up to 50)"
+            disabled={isLoading}
+          >
+            <Paperclip className="w-5 h-5" />
+          </Button>
           <Button
             variant="ghost"
             size="sm"
@@ -517,7 +697,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSendMessage()}
-            placeholder="Paste a URL or ask Sarah anything..."
+            placeholder="Paste a URL, upload files, or ask Sarah anything..."
             className="flex-1 bg-zinc-50 border-zinc-300 text-black"
             disabled={isLoading}
           />
@@ -530,7 +710,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
           </Button>
         </div>
         <div className="flex items-center justify-center gap-1 mt-2 text-[10px] text-zinc-400">
-          <span>Paste any link directly or use the batch tool • Documents are saved permanently • {autoApprove ? "⚡ Auto-approve ON" : "Manual approval mode"}</span>
+          <span>📎 Files & photos • 🔗 URLs • 🎙 Voice • Duplicates auto-detected • {autoApprove ? "⚡ Auto-approve ON" : "Manual approval mode"}</span>
         </div>
       </div>
     </div>
