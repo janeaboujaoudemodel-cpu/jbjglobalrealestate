@@ -550,16 +550,30 @@ serve(async (req) => {
                 max_tokens: 8000,
                 temperature: 0.05,
                 messages: [
-                  { role: "system", content: `You are a senior UAE real estate data extraction specialist with 15 years experience. Your job is to extract EVERY SINGLE detail from property listings, brochures, and PDFs with 100% accuracy.
+                  { role: "system", content: `You are a senior UAE real estate data extraction specialist with 15 years experience. Your job is to extract EVERY SINGLE piece of information from property listings with 100% completeness and accuracy. You must be EXHAUSTIVE — missing even one amenity, one unit type, or one payment milestone is a failure.
+
+EXTRACTION PRIORITY (extract ALL of these):
+1. PROJECT IDENTITY: Official project name, developer/builder name, RERA number
+2. LOCATION: Area/community, emirate, city, country — ONLY if explicitly stated
+3. PRICING: Starting price, price range, price per sqft for EVERY unit type
+4. UNIT TYPES: Extract EVERY bedroom configuration with size ranges (sqft), price ranges, bathroom count, available units count
+5. PAYMENT PLAN: Full payment plan with EVERY milestone, percentage, timing, and amount
+6. AMENITIES: List ALL amenities mentioned — pools, gyms, parks, retail, restaurants, spas, kids areas, etc. Be thorough.
+7. KEY FEATURES & HIGHLIGHTS: Every selling point, unique feature, and highlight
+8. PROJECT DETAILS: Total units, floors, completion/handover date, construction status, service charges
+9. DESCRIPTION: The FULL project description text as written. Copy it verbatim. Do NOT summarize or shorten it.
+10. NEARBY LANDMARKS: All mentioned distances to landmarks, schools, hospitals, malls, airports, metro stations
+11. FAQs: Any Q&A sections
 
 STRICT RULES — NO HALLUCINATION:
-- ONLY extract information that is EXPLICITLY stated in the content. If a fact is not present, return null for that field.
-- NEVER guess, estimate, or fabricate any data including emirate, location, prices, developer details, or amenities.
-- If the emirate is not explicitly mentioned, set emirate to null.
-- NEVER default to "Dubai" — only set emirate to "Dubai" if the content explicitly says Dubai.
-- If description is not present, return null — NEVER generate a synthetic description.
-- Extract VERBATIM details. Miss NOTHING that is explicitly stated.` },
-                  { role: "user", content: `Extract ALL property/project details from this content. ONLY include facts explicitly stated. Return null for anything not found.
+- ONLY extract information EXPLICITLY stated in the content. If not present → null.
+- NEVER guess emirate, location, prices, developer, or amenities.
+- If emirate not explicitly mentioned → null. NEVER default to "Dubai".
+- Copy description VERBATIM from the page. NEVER generate or synthesize one.
+- For amenities: extract EVERY SINGLE one mentioned, even if listed in image alt text or footer.
+- For unit types: extract ALL configurations with their FULL details (size, price, bathrooms).
+- For payment plans: extract EVERY step/milestone with percentage AND timing.` },
+                  { role: "user", content: `Extract EVERY property/project detail from this content. Be EXHAUSTIVE — capture all amenities, all unit types, all payment milestones, full description. Return null for anything truly not found.
 
 URL: ${formattedUrl}
 Page Title: ${metadata.title || ""}
@@ -762,7 +776,7 @@ ${contentForAI}` },
           developer_name: devName || null,
           developer_id: devId,
           location: validatedLocation,
-          emirate: validatedEmirate || "Dubai", // Fallback for DB constraint but flagged
+          emirate: validatedEmirate || null,
           description: extractedData?.description || null,
           price_from: extractedData?.priceFrom || null,
           price_to: extractedData?.priceTo || null,
