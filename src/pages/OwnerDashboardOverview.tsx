@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, lazy, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/contexts/AuthContext";
@@ -23,9 +23,6 @@ import {
   UserPlus,
   Activity,
   ExternalLink,
-  FileText,
-  Settings,
-  BookOpen,
   Flag,
   Crown,
   Briefcase,
@@ -34,13 +31,15 @@ import {
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 import LeadStatusBadge from "@/components/crm/LeadStatusBadge";
-import QuickActionsGrid from "@/components/owner-dashboard/QuickActionsGrid";
-import DepartmentShortcuts from "@/components/owner-dashboard/DepartmentShortcuts";
-import IntegrationWidgets from "@/components/owner-dashboard/IntegrationWidgets";
-import CRMLeadsTableV2 from "@/components/crm/CRMLeadsTableV2";
-import FlaggedLeadsView from "@/components/crm/FlaggedLeadsView";
-import EmployeesHub from "@/components/crm/EmployeesHub";
-import CRMDashboardCards from "@/components/crm/CRMDashboardCards";
+
+// Lazy-load heavy tab components
+const CRMLeadsTableV2 = lazy(() => import("@/components/crm/CRMLeadsTableV2"));
+const FlaggedLeadsView = lazy(() => import("@/components/crm/FlaggedLeadsView"));
+const EmployeesHub = lazy(() => import("@/components/crm/EmployeesHub"));
+const CRMDashboardCards = lazy(() => import("@/components/crm/CRMDashboardCards"));
+const QuickActionsGrid = lazy(() => import("@/components/owner-dashboard/QuickActionsGrid"));
+const DepartmentShortcuts = lazy(() => import("@/components/owner-dashboard/DepartmentShortcuts"));
+const IntegrationWidgets = lazy(() => import("@/components/owner-dashboard/IntegrationWidgets"));
 
 interface KPICardProps {
   title: string;
