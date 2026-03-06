@@ -506,7 +506,9 @@ export default function OwnerDashboardOverview() {
       </div>
 
       {/* Quick Actions Grid */}
-      <QuickActionsGrid />
+      <Suspense fallback={<Skeleton className="h-32 w-full" />}>
+        <QuickActionsGrid />
+      </Suspense>
 
       {/* Main Tabbed Content */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -557,7 +559,9 @@ export default function OwnerDashboardOverview() {
 
         {/* Overview Tab */}
         <TabsContent value="overview" className="space-y-6">
-          <CRMDashboardCards userId={user?.id || ""} hasOwnerAccess={true} />
+          <Suspense fallback={<Skeleton className="h-40 w-full" />}>
+            <CRMDashboardCards userId={user?.id || ""} hasOwnerAccess={true} />
+          </Suspense>
 
           <div className="grid lg:grid-cols-3 gap-6">
             {/* Newest Leads */}
@@ -684,8 +688,12 @@ export default function OwnerDashboardOverview() {
             </CardContent>
           </Card>
 
-          <IntegrationWidgets />
-          <DepartmentShortcuts />
+          <Suspense fallback={null}>
+            <IntegrationWidgets />
+          </Suspense>
+          <Suspense fallback={null}>
+            <DepartmentShortcuts />
+          </Suspense>
         </TabsContent>
 
         {/* All Leads Tab — lazy rendered */}
@@ -696,14 +704,16 @@ export default function OwnerDashboardOverview() {
                 <CardTitle className="text-lg text-black">All Leads</CardTitle>
                 <CardDescription className="text-zinc-500">Complete lead management</CardDescription>
               </CardHeader>
-              <CardContent>
-                <CRMLeadsTableV2 
-                  key={`leads-${refreshKey}`}
-                  userId={user?.id || ""} 
-                  filterType="all"
-                  onRefresh={handleRefresh}
-                />
-              </CardContent>
+               <CardContent>
+                <Suspense fallback={<Skeleton className="h-64 w-full" />}>
+                  <CRMLeadsTableV2 
+                    key={`leads-${refreshKey}`}
+                    userId={user?.id || ""} 
+                    filterType="all"
+                    onRefresh={handleRefresh}
+                  />
+                </Suspense>
+               </CardContent>
             </Card>
           )}
         </TabsContent>
@@ -720,11 +730,13 @@ export default function OwnerDashboardOverview() {
                 <CardDescription className="text-zinc-500">Leads requiring attention</CardDescription>
               </CardHeader>
               <CardContent>
-                <FlaggedLeadsView 
-                  key={`flagged-${refreshKey}`}
-                  userId={user?.id || ""} 
-                  onRefresh={handleRefresh}
-                />
+                <Suspense fallback={<Skeleton className="h-64 w-full" />}>
+                  <FlaggedLeadsView 
+                    key={`flagged-${refreshKey}`}
+                    userId={user?.id || ""} 
+                    onRefresh={handleRefresh}
+                  />
+                </Suspense>
               </CardContent>
             </Card>
           )}
@@ -742,12 +754,14 @@ export default function OwnerDashboardOverview() {
                 <CardDescription className="text-zinc-500">High-value contacts</CardDescription>
               </CardHeader>
               <CardContent>
-                <CRMLeadsTableV2 
-                  key={`vip-${refreshKey}`}
-                  userId={user?.id || ""} 
-                  filterType="vip"
-                  onRefresh={handleRefresh}
-                />
+                <Suspense fallback={<Skeleton className="h-64 w-full" />}>
+                  <CRMLeadsTableV2 
+                    key={`vip-${refreshKey}`}
+                    userId={user?.id || ""} 
+                    filterType="vip"
+                    onRefresh={handleRefresh}
+                  />
+                </Suspense>
               </CardContent>
             </Card>
           )}
@@ -765,7 +779,9 @@ export default function OwnerDashboardOverview() {
                 <CardDescription className="text-zinc-500">Team management</CardDescription>
               </CardHeader>
               <CardContent>
-                <EmployeesHub userId={user?.id || ""} />
+                <Suspense fallback={<Skeleton className="h-64 w-full" />}>
+                  <EmployeesHub userId={user?.id || ""} />
+                </Suspense>
               </CardContent>
             </Card>
           )}
