@@ -255,6 +255,33 @@ const ListingGenerator = () => {
   const hasFilesOnly = files.length > 0;
   const hasUrlOnly = !hasFilesOnly && url.trim().length > 0;
 
+  // ========== POLL FOR JOB COMPLETION ==========
+  const pollJob = async (jobId: string): Promise<any> => {
+    const maxPolls = 90; // 90 * 2s = 3 min max
+    for (let i = 0; i < maxPolls; i++) {
+      await new Promise((r) => setTimeout(r, 2000));
+
+      const { data, error } = await supabase.functions.invoke("generate-listing", {
+        body: { action: "poll", job_id: jobId },
+      });
+
+      if (error) throw new Error(error.message || "Polling failed");
+
+      // Job still processing
+      if (data?.status === "processing" || data?.status === "queued") {
+        if (i > 15) setProcessingStatus("AI is analyzing your documents — almost done...");
+        continue;
+      }
+
+      // Job failed
+      if (!data?.success) throw new Error(data?.error || "Extraction failed");
+
+      // Job completed — data contains the full result
+      return data;
+    }
+    throw new Error("Extraction timed out after 3 minutes. Please try with fewer documents.");
+  };
+
   // ========== GENERATE ==========
   const handleGenerate = async () => {
     if (!canGenerate) return;
@@ -270,9 +297,7 @@ const ListingGenerator = () => {
     timerRef.current = setInterval(() => {
       const elapsed = Math.floor((Date.now() - startTime) / 1000);
       setElapsedSeconds(elapsed);
-      if (elapsed > 90) {
-        setTimedOut(true);
-      }
+      if (elapsed > 120) setTimedOut(true);
     }, 1000);
 
     try {
@@ -283,17 +308,15 @@ const ListingGenerator = () => {
       }));
 
       if (filePayloads.length > 0) {
-        setProcessingStatus(`Sending ${filePayloads.length} document(s) to AI for analysis...`);
+        setProcessingStatus(`Uploading ${filePayloads.length} document(s) & starting AI extraction...`);
       } else if (url.trim()) {
-        setProcessingStatus("Scraping website & extracting project data...");
+        setProcessingStatus("Scraping website & starting extraction...");
       } else {
         setProcessingStatus("Analyzing description...");
       }
 
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 120000); // 120s hard timeout
-
-      const { data, error } = await supabase.functions.invoke("generate-listing", {
+      // Step 1: Submit job (returns immediately with job_id)
+      const { data: submitData, error: submitErr } = await supabase.functions.invoke("generate-listing", {
         body: {
           action: "extract",
           files: filePayloads,
@@ -302,20 +325,23 @@ const ListingGenerator = () => {
         },
       });
 
-      clearTimeout(timeout);
+      if (submitErr) throw new Error(submitErr.message || "Failed to start extraction");
+      if (!submitData?.job_id) throw new Error(submitData?.error || "No job ID returned");
 
-      if (error) throw new Error(error.message || "Extraction failed");
-      if (!data?.success) throw new Error(data?.error || "Extraction returned no data");
+      setProcessingStatus("AI is extracting project data...");
+
+      // Step 2: Poll for completion
+      const result = await pollJob(submitData.job_id);
 
       // Handle multi-project response
-      const projects: ExtractedData[] = data.projects || (data.extracted ? [data.extracted] : []);
+      const projects: ExtractedData[] = result.projects || (result.extracted ? [result.extracted] : []);
       if (projects.length === 0) throw new Error("No projects extracted");
 
       setExtractedProjects(projects);
       setActiveProjectIndex(0);
-      setDuplicates(data.duplicates || []);
+      setDuplicates(result.duplicates || []);
 
-      if (data.duplicates?.length > 0) {
+      if (result.duplicates?.length > 0) {
         setStep("duplicates");
         setShowDuplicateDialog(true);
         setDuplicateProjectIndex(0);
@@ -326,11 +352,7 @@ const ListingGenerator = () => {
       toast.success(`Extracted ${projects.length} project${projects.length > 1 ? "s" : ""}!`);
     } catch (err: any) {
       console.error("Generation error:", err);
-      if (err.name === "AbortError") {
-        toast.error("Request timed out. Please try again with fewer documents.");
-      } else {
-        toast.error(err.message || "Failed to generate listing");
-      }
+      toast.error(err.message || "Failed to generate listing");
       setStep("input");
     } finally {
       setIsProcessing(false);
