@@ -327,6 +327,8 @@ export default function OwnerDashboardOverview() {
       }
     },
     enabled: !!user,
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   // Fetch active conversations count
@@ -687,79 +689,87 @@ export default function OwnerDashboardOverview() {
           <DepartmentShortcuts />
         </TabsContent>
 
-        {/* All Leads Tab */}
+        {/* All Leads Tab — lazy rendered */}
         <TabsContent value="leads" className="space-y-4">
-          <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-lg text-black">All Leads</CardTitle>
-              <CardDescription className="text-zinc-500">Complete lead management</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <CRMLeadsTableV2 
-                key={`leads-${refreshKey}`}
-                userId={user?.id || ""} 
-                filterType="all"
-                onRefresh={handleRefresh}
-              />
-            </CardContent>
-          </Card>
+          {activeTab === "leads" && (
+            <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
+              <CardHeader>
+                <CardTitle className="text-lg text-black">All Leads</CardTitle>
+                <CardDescription className="text-zinc-500">Complete lead management</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <CRMLeadsTableV2 
+                  key={`leads-${refreshKey}`}
+                  userId={user?.id || ""} 
+                  filterType="all"
+                  onRefresh={handleRefresh}
+                />
+              </CardContent>
+            </Card>
+          )}
         </TabsContent>
 
-        {/* Flagged Leads Tab */}
+        {/* Flagged Leads Tab — lazy rendered */}
         <TabsContent value="flagged" className="space-y-4">
-          <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-lg text-black flex items-center gap-2">
-                <Flag className="h-5 w-5 text-red-500" />
-                Flagged Leads
-              </CardTitle>
-              <CardDescription className="text-zinc-500">Leads requiring attention</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <FlaggedLeadsView 
-                key={`flagged-${refreshKey}`}
-                userId={user?.id || ""} 
-                onRefresh={handleRefresh}
-              />
-            </CardContent>
-          </Card>
+          {activeTab === "flagged" && (
+            <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
+              <CardHeader>
+                <CardTitle className="text-lg text-black flex items-center gap-2">
+                  <Flag className="h-5 w-5 text-red-500" />
+                  Flagged Leads
+                </CardTitle>
+                <CardDescription className="text-zinc-500">Leads requiring attention</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <FlaggedLeadsView 
+                  key={`flagged-${refreshKey}`}
+                  userId={user?.id || ""} 
+                  onRefresh={handleRefresh}
+                />
+              </CardContent>
+            </Card>
+          )}
         </TabsContent>
 
-        {/* VIP Leads Tab */}
+        {/* VIP Leads Tab — lazy rendered */}
         <TabsContent value="vip" className="space-y-4">
-          <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-lg text-black flex items-center gap-2">
-                <Crown className="h-5 w-5 text-[#C9A84C]" />
-                VIP Leads
-              </CardTitle>
-              <CardDescription className="text-zinc-500">High-value contacts</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <CRMLeadsTableV2 
-                key={`vip-${refreshKey}`}
-                userId={user?.id || ""} 
-                filterType="vip"
-                onRefresh={handleRefresh}
-              />
-            </CardContent>
-          </Card>
+          {activeTab === "vip" && (
+            <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
+              <CardHeader>
+                <CardTitle className="text-lg text-black flex items-center gap-2">
+                  <Crown className="h-5 w-5 text-[#C9A84C]" />
+                  VIP Leads
+                </CardTitle>
+                <CardDescription className="text-zinc-500">High-value contacts</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <CRMLeadsTableV2 
+                  key={`vip-${refreshKey}`}
+                  userId={user?.id || ""} 
+                  filterType="vip"
+                  onRefresh={handleRefresh}
+                />
+              </CardContent>
+            </Card>
+          )}
         </TabsContent>
 
-        {/* Employees Hub Tab */}
+        {/* Employees Hub Tab — lazy rendered */}
         <TabsContent value="employees" className="space-y-4">
-          <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-lg text-black flex items-center gap-2">
-                <Briefcase className="h-5 w-5 text-blue-600" />
-                Employees Hub
-              </CardTitle>
-              <CardDescription className="text-zinc-500">Team management</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <EmployeesHub userId={user?.id || ""} />
-            </CardContent>
-          </Card>
+          {activeTab === "employees" && (
+            <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
+              <CardHeader>
+                <CardTitle className="text-lg text-black flex items-center gap-2">
+                  <Briefcase className="h-5 w-5 text-blue-600" />
+                  Employees Hub
+                </CardTitle>
+                <CardDescription className="text-zinc-500">Team management</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <EmployeesHub userId={user?.id || ""} />
+              </CardContent>
+            </Card>
+          )}
         </TabsContent>
 
         {/* Audit Logs Tab */}

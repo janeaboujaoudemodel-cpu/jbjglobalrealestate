@@ -29,6 +29,7 @@ import EmployeesHub from "@/components/crm/EmployeesHub";
 import CRMToolsSidebar from "@/components/crm/CRMToolsSidebar";
 import FlaggedLeadsView from "@/components/crm/FlaggedLeadsView";
 import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
+import RecentlyDeletedLeads from "@/components/crm/RecentlyDeletedLeads";
 import VIPExportButton from "@/components/crm/VIPExportButton";
 import CRMAssistantPanel from "@/components/crm/CRMAssistantPanel";
 import CRMCommunicationPanel from "@/components/crm/CRMCommunicationPanel";
@@ -600,6 +601,13 @@ const CRM = () => {
                   VIP Leads
                 </TabsTrigger>
                 <TabsTrigger 
+                  value="management"
+                  className="tab-trigger-champagne text-black px-5 py-2.5"
+                >
+                  <FileText className="h-4 w-4 mr-2" />
+                  Leads Management
+                </TabsTrigger>
+                <TabsTrigger 
                   value="employees"
                   className="tab-trigger-champagne text-black px-5 py-2.5"
                 >
@@ -609,36 +617,49 @@ const CRM = () => {
               </TabsList>
 
               <TabsContent value="all" className="space-y-4">
-                {/* Leads Display */}
-                <CRMLeadsTableV2 
-                  key={refreshKey}
-                  userId={user?.id || ""} 
-                  filterType="all"
-                  onRefresh={handleRefresh}
-                  isOwner={isCRMOwner}
-                />
+                {activeTab === "all" && (
+                  <CRMLeadsTableV2 
+                    key={refreshKey}
+                    userId={user?.id || ""} 
+                    filterType="all"
+                    onRefresh={handleRefresh}
+                    isOwner={isCRMOwner}
+                  />
+                )}
               </TabsContent>
 
               <TabsContent value="flagged">
-                <FlaggedLeadsView 
-                  key={refreshKey}
-                  userId={user?.id || ""} 
-                  onRefresh={handleRefresh}
-                />
+                {activeTab === "flagged" && (
+                  <FlaggedLeadsView 
+                    key={refreshKey}
+                    userId={user?.id || ""} 
+                    onRefresh={handleRefresh}
+                  />
+                )}
               </TabsContent>
 
               <TabsContent value="vip">
-                <CRMLeadsTableV2 
-                  key={refreshKey}
-                  userId={user?.id || ""} 
-                  filterType="vip"
-                  onRefresh={handleRefresh}
-                  isOwner={isCRMOwner}
-                />
+                {activeTab === "vip" && (
+                  <CRMLeadsTableV2 
+                    key={refreshKey}
+                    userId={user?.id || ""} 
+                    filterType="vip"
+                    onRefresh={handleRefresh}
+                    isOwner={isCRMOwner}
+                  />
+                )}
+              </TabsContent>
+
+              <TabsContent value="management">
+                {activeTab === "management" && (
+                  <RecentlyDeletedLeads userId={user?.id || ""} onRefresh={handleRefresh} />
+                )}
               </TabsContent>
 
               <TabsContent value="employees">
-                <EmployeesHub userId={user?.id || ""} />
+                {activeTab === "employees" && (
+                  <EmployeesHub userId={user?.id || ""} />
+                )}
               </TabsContent>
             </Tabs>
         </main>
