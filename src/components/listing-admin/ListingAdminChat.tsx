@@ -1029,6 +1029,20 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
               </div>
             </div>
           )}
+          {/* Clear Chat — always visible at bottom of messages */}
+          {messages.length > 1 && (
+            <div className="flex justify-center pt-4 pb-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleClearChat}
+                className="h-7 text-[11px] text-zinc-400 hover:text-red-500 hover:bg-red-50/80 gap-1.5 rounded-full px-4 border border-transparent hover:border-red-200 transition-all"
+              >
+                <Trash2 className="w-3 h-3" />
+                Clear Chat
+              </Button>
+            </div>
+          )}
           <div ref={messagesEndRef} />
         </div>
       </ScrollArea>
