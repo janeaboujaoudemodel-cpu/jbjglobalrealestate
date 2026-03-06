@@ -592,7 +592,7 @@ const ListingAdmin = () => {
                 variant={activeView === 'projects' ? 'primary' : 'secondary'}
               >
                 <FolderOpen className="w-4 h-4 mr-2" />
-                {t('listingAdmin.projects')} ({projects?.length || 0})
+                {t('listingAdmin.projects')} ({totalCount ?? 0})
               </Button>
               {/* UNIFIED: Single Data Ops button replaces 3 separate buttons */}
               <Button
@@ -613,11 +613,11 @@ const ListingAdmin = () => {
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] rounded-lg border-2 border-gold/30">
                 <Building2 className="w-4 h-4 text-gold" />
-                <span className="text-sm text-black font-medium">{projects?.length || 0} {t('listingAdmin.projects')}</span>
+                <span className="text-sm text-black font-medium">{totalCount ?? 0} {t('listingAdmin.projects')}</span>
               </div>
               <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] rounded-lg border-2 border-gold/30">
                 <Crown className="w-4 h-4 text-gold" />
-                <span className="text-sm text-black font-medium">{projects?.filter((p) => p.is_premium).length || 0} {t('listingAdmin.premium')}</span>
+                <span className="text-sm text-black font-medium">{paginatedProjects?.filter((p) => p.is_premium).length || 0} {t('listingAdmin.premium')}</span>
               </div>
             </div>
           </div>
