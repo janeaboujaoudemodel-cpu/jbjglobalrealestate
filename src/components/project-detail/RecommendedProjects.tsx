@@ -42,6 +42,8 @@ export default function RecommendedProjects({
     });
     const scored = otherProjects.map((p) => {
       let score = 0;
+      // Phase H: Pin manual uploads first
+      if ((p as any).import_source === 'manual') score += 50;
       if (currentDeveloperId && p.developer?.id === currentDeveloperId) score += 10;
       if (currentLocation && p.location?.toLowerCase().includes(currentLocation.toLowerCase())) score += 5;
       if (currentEmirate && p.emirate === currentEmirate) score += 3;

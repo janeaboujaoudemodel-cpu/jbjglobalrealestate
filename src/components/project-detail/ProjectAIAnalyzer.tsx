@@ -17,6 +17,7 @@ interface ProjectAIAnalyzerProps {
   handoverDate?: string;
   amenities?: string[];
   propertyType?: string;
+  emirate?: string | null;
 }
 
 function extractSection(text: string, sectionName: string): string {
@@ -108,6 +109,7 @@ export const ProjectAIAnalyzer = ({
   handoverDate,
   amenities,
   propertyType = "all",
+  emirate,
 }: ProjectAIAnalyzerProps) => {
   const [analysis, setAnalysis] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -140,6 +142,7 @@ export const ProjectAIAnalyzer = ({
         body: {
           area: `${areaName} — ${contextParts.join('. ')}`,
           propertyType,
+          emirate: emirate || undefined,
         },
       });
       if (error) throw error;
@@ -152,7 +155,7 @@ export const ProjectAIAnalyzer = ({
       setIsAnalyzing(false);
       setHasTimedOut(false);
     }
-  }, [projectName, areaName, developer, priceFrom, handoverDate, amenities, propertyType]);
+  }, [projectName, areaName, developer, priceFrom, handoverDate, amenities, propertyType, emirate]);
 
   const handleRetry = useCallback(() => {
     hasTriggered.current = false;

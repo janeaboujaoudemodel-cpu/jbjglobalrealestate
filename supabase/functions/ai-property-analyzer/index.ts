@@ -14,6 +14,7 @@ interface AnalysisRequest {
   measurementUnit?: 'sqft' | 'sqm' | 'both';
   currency?: 'AED' | 'USD' | 'EUR' | 'GBP';
   language?: 'en' | 'ar' | 'ru' | 'zh' | 'hi';
+  emirate?: string;
 }
 
 serve(async (req) => {
@@ -33,12 +34,14 @@ serve(async (req) => {
       compareWith = [], 
       measurementUnit = 'sqft',
       currency = 'AED',
-      language = 'en'
+      language = 'en',
+      emirate: rawEmirate,
     } = body;
 
     // Sanitize inputs to prevent prompt injection
     const area = sanitizeForPrompt(rawArea, 100);
     const propertyType = sanitizeForPrompt(rawPropertyType, 50);
+    const emirate = rawEmirate ? sanitizeForPrompt(rawEmirate, 50) : null;
     const sanitizedCompareWith = compareWith.map(a => sanitizeForPrompt(a, 100)).filter(Boolean);
 
     if (!area) {
@@ -66,8 +69,9 @@ serve(async (req) => {
     };
 
     const todayDate = new Date().toISOString().split('T')[0];
+    const emirateContext = emirate || "UAE";
     const systemPrompt = `You are JBJ Property Analyzer integrated with smart AI intelligence.
-You provide concise, structured, data-driven real estate market analysis for Dubai.
+You provide concise, structured, data-driven real estate market analysis for the UAE.
 
 STRICT RULES:
 - NEVER use greetings, personal phrases, or religious expressions
@@ -81,6 +85,9 @@ STRICT RULES:
 - Keep each section VERY SHORT: 2-3 bullet points max, one line each
 - Use clean markdown formatting without excessive decoration
 - Prioritize the single most impactful data point per section
+- The project/area is in ${emirateContext}. NEVER mention Dubai unless the project is actually in Dubai.
+- If you do not have confirmed real data for a section, write "Data not available for this area" instead of guessing or fabricating information.
+- NEVER fabricate market statistics, prices, yields, or developer information. Only report facts you are confident about.
 
 DELIVERY TIMELINE RULES:
 - Today's date is ${todayDate}
@@ -92,7 +99,7 @@ DELIVERY TIMELINE RULES:
       ? `\n\nAlso compare with these areas: ${sanitizedCompareWith.join(', ')}`
       : '';
 
-    const userPrompt = `Analyze ${area}, Dubai for ${propertyType} properties.${comparisonText}
+    const userPrompt = `Analyze ${area}, ${emirateContext} for ${propertyType} properties.${comparisonText}
 
 Use EXACTLY these section headers (numbered, bold):
 

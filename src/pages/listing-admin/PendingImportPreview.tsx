@@ -76,6 +76,18 @@ const parseJsonArray = <T,>(json: Json | null, defaultVal: T[] = []): T[] => {
   return defaultVal;
 };
 
+/** Clean document filename into a display title */
+function humanizeDocTitle(rawName: string): string {
+  let t = rawName
+    .replace(/\.[a-z0-9]{2,5}$/i, "")
+    .replace(/\(\d+\)\s*$/g, "")
+    .replace(/[-_]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (!t) return rawName;
+  return t.replace(/\b\w/g, c => c.toUpperCase());
+}
+
 const parseJsonObject = (json: Json | null): Record<string, unknown> | null => {
   if (!json) return null;
   if (typeof json === "object" && !Array.isArray(json)) return json as Record<string, unknown>;
@@ -195,7 +207,7 @@ const PendingImportPreview = () => {
       id: pendingImport.matched_project_id || pendingImport.id,
       name: pendingImport.name,
       slug: pendingImport.slug,
-      description: pendingImport.description,
+      description: pendingImport.description?.startsWith("Generated from") ? null : pendingImport.description,
       location: pendingImport.location,
       developer: pendingImport.developer_name ? { name: pendingImport.developer_name } : null,
       price_from: pendingImport.price_from,
@@ -215,7 +227,7 @@ const PendingImportPreview = () => {
         id: `pending-doc-${idx}`,
         type: d.type,
         url: d.url,
-        name: d.name || d.type,
+        name: humanizeDocTitle(d.name || d.type),
       })),
       usp_headline: pendingImport.usp_headline,
       usp_bullets: uspBullets.length ? uspBullets : null,

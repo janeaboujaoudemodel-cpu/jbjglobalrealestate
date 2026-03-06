@@ -1032,12 +1032,13 @@ export default function ProjectDetailLayout({
           <div ref={aiRef} id="ai" className="mb-12 scroll-mt-40">
             <ProjectAIAnalyzer
               projectName={project.name}
-              areaName={project.area_name || project.location || "Dubai"}
+              areaName={project.area_name || project.location || "UAE"}
               developer={project.developer?.name}
               developerSlug={project.developer?.slug}
               priceFrom={project.price_from ?? undefined}
               handoverDate={project.handover_date ?? undefined}
               amenities={project.amenities ?? undefined}
+              emirate={project.emirate}
             />
           </div>
 
