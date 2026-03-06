@@ -613,7 +613,8 @@ const ListingAdmin = () => {
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] rounded-lg border-2 border-gold/30">
                 <Building2 className="w-4 h-4 text-gold" />
-                <span className="text-sm text-black font-medium">{totalCount ?? 0} {t('listingAdmin.projects')}</span>
+                <span className="text-sm text-black font-medium">{totalCount ?? 0} Published</span>
+                <span className="text-xs text-zinc-400">/ {allProjectsCount ?? 0} Total</span>
               </div>
               <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] rounded-lg border-2 border-gold/30">
                 <Crown className="w-4 h-4 text-gold" />
