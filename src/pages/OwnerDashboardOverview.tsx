@@ -42,7 +42,6 @@ const QuickActionsGrid = lazy(() => import("@/components/owner-dashboard/QuickAc
 const DepartmentShortcuts = lazy(() => import("@/components/owner-dashboard/DepartmentShortcuts"));
 const IntegrationWidgets = lazy(() => import("@/components/owner-dashboard/IntegrationWidgets"));
 const RecentlyDeletedLeads = lazy(() => import("@/components/crm/RecentlyDeletedLeads"));
-const IntegrationWidgets = lazy(() => import("@/components/owner-dashboard/IntegrationWidgets"));
 
 interface KPICardProps {
   title: string;
