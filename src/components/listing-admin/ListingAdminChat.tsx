@@ -571,11 +571,21 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
       if (uploadedUrls.length === 0) throw new Error("All file uploads failed.");
 
       const { data, error } = await supabase.functions.invoke("extract-listing-from-link", {
-        body: { files: uploadedUrls, userId: user?.id, auto_approve: autoApprove, queue: true, detect_duplicates: true },
+        body: { files: uploadedUrls, userId: user?.id, auto_approve: autoApprove, queue: true, async_mode: true, detect_duplicates: true },
       });
 
       if (error) throw error;
-      handleExtractionResults(data, processingMsg.id);
+
+      if (data?.async && data?.jobId) {
+        setMessages(prev => prev.map(m =>
+          m.id === processingMsg.id
+            ? { ...m, content: `Files uploaded! Extracting listing data in background...` }
+            : m
+        ));
+        await pollForResults(data.jobId, processingMsg.id);
+      } else {
+        handleExtractionResults(data, processingMsg.id);
+      }
 
       if (failedUploads.length > 0) {
         toast.error(`${failedUploads.length} file(s) failed to upload`);
