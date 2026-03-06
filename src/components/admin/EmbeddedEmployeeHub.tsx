@@ -1,8 +1,10 @@
 import { useState, useMemo } from "react";
 import { 
   Users, Search, Building2, Trophy, Medal, Star,
-  MessageSquare, Calendar, Sparkles, Phone, Mail
+  MessageSquare, Calendar, Sparkles, Phone, Mail, AtSign
 } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import EmailManagement from "@/components/crm/EmailManagement";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
