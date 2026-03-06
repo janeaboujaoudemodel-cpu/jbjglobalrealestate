@@ -90,6 +90,16 @@ export function isValidImageUrl(url: unknown): url is string {
   
   // Must start with http(s)
   if (!url.startsWith("http://") && !url.startsWith("https://")) return false;
+
+  // Decode Next.js proxy URLs: /_next/image?url=<encoded>&w=...
+  let effectiveUrl = url;
+  if (url.includes("/_next/image")) {
+    try {
+      const parsed = new URL(url);
+      const inner = parsed.searchParams.get("url");
+      if (inner) effectiveUrl = inner;
+    } catch { /* use original */ }
+  }
   
   // Check for placeholder patterns (always reject these)
   for (const pattern of PLACEHOLDER_PATTERNS) {

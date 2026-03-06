@@ -170,21 +170,6 @@ export default function ProjectLocationMap({
     }
   };
 
-  if (!coordinates) {
-    return (
-      <div className={`rounded-xl overflow-hidden border border-gold/30 bg-muted ${className}`} style={{ height: 450 }}>
-        <div className="w-full h-full flex flex-col items-center justify-center gap-4">
-          <p className="text-muted-foreground">Unable to load map</p>
-          <a href={externalMapsUrl} target="_blank" rel="noopener noreferrer">
-            <Button variant="secondary" size="sm">
-              Open in Google Maps
-            </Button>
-          </a>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className={`rounded-2xl overflow-hidden relative ${className}`} style={{ height: 450, border: '3px solid hsl(42 45% 59%)', boxShadow: '0 8px 32px rgba(200,167,102,0.25), 0 4px 16px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.1)' }}>
       <MapContainer
