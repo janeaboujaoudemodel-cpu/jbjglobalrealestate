@@ -416,40 +416,122 @@ serve(async (req) => {
           videoUrls.push(m[0]);
         }
 
-        // AI extraction
+        // AI extraction — use powerful model with expanded context
         let extractedData: any = null;
         if (LOVABLE_API_KEY && markdown.length > 100) {
           try {
+            // Send up to 80K chars for thorough extraction (brochures are long)
+            const contentForAI = markdown.substring(0, 80000);
+
             const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
               method: "POST",
               headers: { "Authorization": `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
               body: JSON.stringify({
-                model: "google/gemini-2.5-flash",
-                max_tokens: 4000,
-                temperature: 0.1,
+                model: "google/gemini-2.5-pro",
+                max_tokens: 8000,
+                temperature: 0.05,
                 messages: [
-                  { role: "system", content: `You are a UAE real estate data extraction expert. Extract EVERY detail. Return ONLY valid JSON.` },
-                  { role: "user", content: `Extract ALL property/project details:\nURL: ${formattedUrl}\nTitle: ${metadata.title || ""}\n\nCONTENT:\n${markdown.substring(0, 25000)}\n\nReturn JSON:\n{"name":"Project Name","developer":"Developer Name","location":"Area","emirate":"Dubai","priceFrom":null,"priceTo":null,"bedroomsMin":null,"bedroomsMax":null,"handoverDate":"Q4 2026","description":"Full description","amenities":["Pool","Gym"],"paymentPlan":"60/40","paymentBreakdown":[{"milestone":"Booking","percentage":10}],"unitTypes":["Studio","1BR"],"projectStatus":"off-plan","keyFeatures":["Waterfront"],"propertyType":"Apartment","serviceCharge":"AED 18/sqft","totalUnits":500,"floors":40,"sizeMin":400,"sizeMax":3500,"highlights":["Near metro"],"faqs":[{"q":"When?","a":"Q4 2026"}]}` },
+                  { role: "system", content: `You are a senior UAE real estate data extraction specialist with 15 years experience. Your job is to extract EVERY SINGLE detail from property listings, brochures, and PDFs with 100% accuracy. You must capture:
+- ALL bedroom configurations with their individual sizes (sqft), starting prices, and unit counts
+- COMPLETE payment plan breakdowns with every milestone and percentage
+- EVERY amenity mentioned anywhere in the content
+- Full developer information, project location, community
+- Construction status, handover dates, completion percentages
+- Service charges, floor counts, total units
+- Property types available (apartment, villa, townhouse, penthouse, duplex)
+- Key distances to landmarks (beach, metro, mall, airport, downtown)
+- ALL floor plan types mentioned
+- Developer track record details if mentioned
+- Registration/RERA numbers if mentioned
+
+CRITICAL: Do NOT summarize or abbreviate. Extract VERBATIM details. If the document mentions "4-bedroom duplex penthouse starting from AED 5.2M, size 4,200 sqft" — capture exactly that. Miss NOTHING.` },
+                  { role: "user", content: `Extract ALL property/project details with maximum accuracy from this content.
+
+URL: ${formattedUrl}
+Page Title: ${metadata.title || ""}
+
+FULL CONTENT:
+${contentForAI}
+
+Extract every bedroom type, every amenity, every payment milestone, every unit configuration. Be thorough and precise.` },
                 ],
                 tools: [{
                   type: "function",
                   function: {
                     name: "extract_project",
-                    description: "Extract structured project data",
+                    description: "Extract comprehensive structured project data with every detail",
                     parameters: {
                       type: "object",
                       properties: {
-                        name: { type: "string" }, developer: { type: "string" }, location: { type: "string" },
-                        emirate: { type: "string" }, priceFrom: { type: "number" }, priceTo: { type: "number" },
-                        bedroomsMin: { type: "number" }, bedroomsMax: { type: "number" }, handoverDate: { type: "string" },
-                        description: { type: "string" }, amenities: { type: "array", items: { type: "string" } },
-                        paymentPlan: { type: "string" },
-                        paymentBreakdown: { type: "array", items: { type: "object", properties: { milestone: { type: "string" }, percentage: { type: "number" } } } },
-                        unitTypes: { type: "array", items: { type: "string" } }, projectStatus: { type: "string" },
-                        keyFeatures: { type: "array", items: { type: "string" } }, propertyType: { type: "string" },
-                        serviceCharge: { type: "string" }, totalUnits: { type: "number" }, floors: { type: "number" },
-                        sizeMin: { type: "number" }, sizeMax: { type: "number" },
+                        name: { type: "string", description: "Official project name" },
+                        developer: { type: "string", description: "Developer/builder name" },
+                        location: { type: "string", description: "Area/community (e.g. Dubai Marina, JVC)" },
+                        emirate: { type: "string" },
+                        priceFrom: { type: "number", description: "Starting price in AED" },
+                        priceTo: { type: "number", description: "Maximum price in AED" },
+                        bedroomsMin: { type: "number" },
+                        bedroomsMax: { type: "number" },
+                        handoverDate: { type: "string", description: "Expected handover e.g. Q4 2026" },
+                        completionPercentage: { type: "number", description: "Construction progress %" },
+                        description: { type: "string", description: "Full project description, multiple paragraphs. Do NOT truncate." },
+                        amenities: { type: "array", items: { type: "string" }, description: "EVERY amenity: pool, gym, spa, kids area, BBQ, etc." },
+                        paymentPlan: { type: "string", description: "Summary like 60/40 or 80/20" },
+                        paymentBreakdown: {
+                          type: "array",
+                          items: {
+                            type: "object",
+                            properties: {
+                              milestone: { type: "string", description: "e.g. Booking, During Construction, On Handover" },
+                              percentage: { type: "number" },
+                              amount: { type: "string", description: "AED amount if specified" },
+                              timing: { type: "string", description: "e.g. Immediately, Monthly, On completion" }
+                            }
+                          },
+                          description: "EVERY payment milestone with percentage and timing"
+                        },
+                        unitTypes: {
+                          type: "array",
+                          items: { type: "string" },
+                          description: "ALL unit types: Studio, 1BR, 2BR, 3BR, 4BR, 5BR, Penthouse, Duplex, Townhouse, Villa"
+                        },
+                        unitDetails: {
+                          type: "array",
+                          items: {
+                            type: "object",
+                            properties: {
+                              type: { type: "string", description: "e.g. Studio, 1 Bedroom, 2 Bedroom, 3 Bedroom, 4 Bedroom, Penthouse" },
+                              sizeMin: { type: "number", description: "Min size in sqft" },
+                              sizeMax: { type: "number", description: "Max size in sqft" },
+                              priceFrom: { type: "number", description: "Starting price AED" },
+                              priceTo: { type: "number", description: "Max price AED" },
+                              bathrooms: { type: "number" },
+                              availableUnits: { type: "number" },
+                              floorPlanTypes: { type: "array", items: { type: "string" }, description: "e.g. Type A, Type B" }
+                            }
+                          },
+                          description: "DETAILED breakdown per bedroom type with sizes and prices"
+                        },
+                        projectStatus: { type: "string", description: "off-plan, under-construction, ready, completed" },
+                        keyFeatures: { type: "array", items: { type: "string" } },
+                        propertyType: { type: "string", description: "Apartment, Villa, Townhouse, Mixed-use" },
+                        serviceCharge: { type: "string", description: "e.g. AED 18/sqft" },
+                        totalUnits: { type: "number" },
+                        floors: { type: "number" },
+                        sizeMin: { type: "number", description: "Overall min size sqft" },
+                        sizeMax: { type: "number", description: "Overall max size sqft" },
                         highlights: { type: "array", items: { type: "string" } },
+                        nearbyLandmarks: {
+                          type: "array",
+                          items: {
+                            type: "object",
+                            properties: {
+                              name: { type: "string" },
+                              distance: { type: "string" },
+                              time: { type: "string" }
+                            }
+                          }
+                        },
+                        reraNumber: { type: "string" },
                         faqs: { type: "array", items: { type: "object", properties: { q: { type: "string" }, a: { type: "string" } } } },
                       },
                       required: ["name"],
@@ -470,6 +552,8 @@ serve(async (req) => {
                 const content = aiData.choices?.[0]?.message?.content || "";
                 try { extractedData = JSON.parse(content.replace(/```json\n?|\n?```/g, "").trim()); } catch {}
               }
+            } else {
+              console.error("[extract] AI response not ok:", aiRes.status, await aiRes.text());
             }
           } catch (aiErr) {
             console.error("[extract] AI error:", aiErr);
@@ -520,7 +604,7 @@ serve(async (req) => {
           developer_id: devId, // correctly matched from developers table, null if not found
           location: extractedData?.location || null,
           emirate: extractedData?.emirate || "Dubai",
-          description: extractedData?.description?.substring(0, 3000) || null,
+          description: extractedData?.description || null,
           price_from: extractedData?.priceFrom || null,
           price_to: extractedData?.priceTo || null,
           bedrooms_min: extractedData?.bedroomsMin || null,
@@ -536,9 +620,13 @@ serve(async (req) => {
           size_min: extractedData?.sizeMin || null,
           size_max: extractedData?.sizeMax || null,
           amenities: extractedData?.amenities || null,
-          unit_types: extractedData?.unitTypes ? extractedData.unitTypes.map((u: string, i: number) => ({ name: u, sort_order: i })) : null,
-          highlights: extractedData?.highlights || extractedData?.keyFeatures || null,
-          faqs: extractedData?.faqs || null,
+           unit_types: extractedData?.unitTypes ? extractedData.unitTypes.map((u: string, i: number) => ({ name: u, sort_order: i })) : null,
+           unit_details: extractedData?.unitDetails || null,
+           nearby_landmarks: extractedData?.nearbyLandmarks || null,
+           completion_percentage: extractedData?.completionPercentage || null,
+           rera_number: extractedData?.reraNumber || null,
+           highlights: extractedData?.highlights || extractedData?.keyFeatures || null,
+           faqs: extractedData?.faqs || null,
           images: imagesPayload,
           documents: documentsPayload,
           video_url: videoUrls[0] || null,
@@ -602,7 +690,18 @@ serve(async (req) => {
           amenities: extractedData?.amenities || [],
           paymentPlan: extractedData?.paymentPlan,
           unitTypes: extractedData?.unitTypes || [],
-          description: extractedData?.description?.substring(0, 300),
+          unitDetails: extractedData?.unitDetails || [],
+          priceFrom: extractedData?.priceFrom,
+          priceTo: extractedData?.priceTo,
+          bedroomsMin: extractedData?.bedroomsMin,
+          bedroomsMax: extractedData?.bedroomsMax,
+          handoverDate: extractedData?.handoverDate,
+          propertyType: extractedData?.propertyType,
+          projectStatus: extractedData?.projectStatus,
+          totalUnits: extractedData?.totalUnits,
+          floors: extractedData?.floors,
+          description: extractedData?.description?.substring(0, 500),
+          heroImage: imageUrls[0] || null,
           view_url: auto_approve ? `/project/${slug}` : `/listing-admin/preview/${importId}`,
           duration_ms: Date.now() - startTime,
         });
