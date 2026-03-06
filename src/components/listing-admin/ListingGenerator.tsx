@@ -465,6 +465,7 @@ const ListingGenerator = () => {
     setProcessingStatus("");
     setTimedOut(false);
     setElapsedSeconds(0);
+    clearPersistedState();
   };
 
   const extracted = extractedProjects[activeProjectIndex] || null;
