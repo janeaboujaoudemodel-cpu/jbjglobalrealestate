@@ -338,7 +338,7 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
           )}
         </div>
 
-        {item.status_label && (
+        {item.status_label && item.status_label !== 'true' && item.status_label !== 'false' && (
           <div className="absolute top-2 right-2 rounded bg-background/90 text-foreground border border-border px-2.5 py-1 text-[11px] font-medium leading-none backdrop-blur">
             {item.status_label}
           </div>
