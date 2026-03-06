@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, lazy, Suspense } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { useProjects, useDevelopers, useCommunities } from "@/hooks/useProjects";
+import { useProjects, useDevelopers, useCommunities, useProjectsTotalCount } from "@/hooks/useProjects";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -52,6 +52,8 @@ import {
   UserCog,
   Monitor,
   Heart,
+  ExternalLink,
+  AlertCircle,
 } from "lucide-react";
 import { Loader2 } from "lucide-react";
 import { SmartDocumentUploader } from "@/components/SmartDocumentUploader";
@@ -122,6 +124,7 @@ const Admin = () => {
   const { data: projects, refetch: refetchProjects } = useProjects();
   const { data: developers } = useDevelopers();
   const { data: communities } = useCommunities();
+  const { data: totalProjectsCount } = useProjectsTotalCount();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedProject, setSelectedProject] = useState<any>(null);
@@ -665,7 +668,7 @@ const Admin = () => {
                     </div>
                     <div>
                       <span className="text-zinc-500 text-sm">Total Projects</span>
-                      <p className="text-black text-2xl font-bold">{projects?.length || 0}</p>
+                      <p className="text-black text-2xl font-bold">{totalProjectsCount ?? projects?.length ?? 0}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -747,55 +750,99 @@ const Admin = () => {
               <CardContent>
                 <ScrollArea className="h-[500px]">
                   <div className="space-y-2">
-                    {filteredProjects?.map((project) => (
-                      <div
-                        key={project.id}
-                        className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-white border border-gold/20 hover:border-gold/40 transition-all"
-                      >
-                        <div className="flex items-center gap-4">
-                          <div className="w-16 h-16 rounded-lg bg-gold/10 flex items-center justify-center overflow-hidden">
-                            {project.images?.[0] ? (
-                              <img
-                                src={typeof project.images[0] === 'string' ? project.images[0] : project.images[0]?.image_url}
-                                alt={project.name}
-                                className="w-full h-full object-cover"
-                              />
-                            ) : (
-                              <Building2 className="w-6 h-6 text-gold" />
+                    {filteredProjects?.map((project) => {
+                      const coverImg = project.cover_image_url
+                        || (project.images?.[0] ? (typeof project.images[0] === 'string' ? project.images[0] : project.images[0]?.image_url) : null);
+                      const isIncomplete = !coverImg || !project.description;
+                      const subtitleParts = [
+                        project.developer?.name,
+                        project.location || project.area_name,
+                      ].filter(Boolean);
+                      const priceDisplay = project.price_from
+                        ? `From AED ${Math.round(project.price_from).toLocaleString()}`
+                        : null;
+
+                      return (
+                        <div
+                          key={project.id}
+                          className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-white border border-gold/20 hover:border-gold/40 transition-all"
+                        >
+                          <div className="flex items-center gap-4 flex-1 min-w-0">
+                            <div className="w-16 h-16 rounded-lg bg-gold/10 flex items-center justify-center overflow-hidden flex-shrink-0">
+                              {coverImg ? (
+                                <img
+                                  src={coverImg}
+                                  alt={project.name}
+                                  className="w-full h-full object-cover"
+                                  loading="lazy"
+                                  referrerPolicy="no-referrer"
+                                />
+                              ) : (
+                                <Building2 className="w-6 h-6 text-gold" />
+                              )}
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center gap-2">
+                                <h3 className="font-semibold text-black truncate">{project.name}</h3>
+                                {isIncomplete && (
+                                  <Badge className="bg-red-50 text-red-600 border-red-200 text-[10px] px-1.5 py-0 flex-shrink-0">
+                                    <AlertCircle className="w-3 h-3 mr-0.5" />
+                                    Incomplete
+                                  </Badge>
+                                )}
+                              </div>
+                              {subtitleParts.length > 0 ? (
+                                <p className="text-sm text-zinc-500 truncate">{subtitleParts.join(' — ')}</p>
+                              ) : (
+                                <p className="text-sm text-zinc-400 italic">No location info</p>
+                              )}
+                              <div className="flex items-center gap-3 mt-0.5 text-xs text-zinc-400">
+                                {priceDisplay && <span>{priceDisplay}</span>}
+                                {project.payment_plan && <span>{project.payment_plan}</span>}
+                                {(project.expected_completion || project.handover_date) && (
+                                  <span>Handover: {project.expected_completion || project.handover_date}</span>
+                                )}
+                              </div>
+                              {!project.description && (
+                                <p className="text-xs text-red-400 mt-0.5 italic">No description available</p>
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2 flex-shrink-0">
+                            {project.is_premium && (
+                              <Badge className="bg-gold/10 text-gold border-gold/30">
+                                <Crown className="w-3 h-3 mr-1" />
+                                Premium
+                              </Badge>
                             )}
-                          </div>
-                          <div>
-                            <h3 className="font-semibold text-black">{project.name}</h3>
-                            <p className="text-sm text-zinc-500">
-                              {project.developer?.name} • {project.location}
-                            </p>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 text-zinc-500 hover:text-gold"
+                              onClick={() => window.open(`/project/${project.slug}`, '_blank')}
+                              title="Preview project"
+                            >
+                              <ExternalLink className="w-4 h-4" />
+                            </Button>
+                            <Button
+                              variant="secondary"
+                              size="sm"
+                              onClick={() => handleToggleFeatured(project.id, project.is_premium)}
+                            >
+                              {project.is_premium ? "Remove Premium" : "Make Premium"}
+                            </Button>
+                            <Button
+                              variant="secondary"
+                              size="sm"
+                              onClick={() => handleEditProject(project)}
+                            >
+                              <Edit2 className="w-4 h-4 mr-1" />
+                              Edit
+                            </Button>
                           </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                          {project.is_premium && (
-                            <Badge className="bg-gold/10 text-gold border-gold/30">
-                              <Crown className="w-3 h-3 mr-1" />
-                              Premium
-                            </Badge>
-                          )}
-                          <Button
-                            variant="secondary"
-                            size="sm"
-                            onClick={() => handleToggleFeatured(project.id, project.is_premium)}
-                          >
-                            {project.is_premium ? "Remove Premium" : "Make Premium"}
-                          </Button>
-                          <Button
-                            variant="secondary"
-                            size="sm"
-                            onClick={() => handleEditProject(project)}
-                          >
-                            <Edit2 className="w-4 h-4 mr-1" />
-                            Edit
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </ScrollArea>
               </CardContent>

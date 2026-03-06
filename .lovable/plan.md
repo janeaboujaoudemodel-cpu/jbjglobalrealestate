@@ -1,38 +1,41 @@
 
 
-## Plan: Fix Admin Properties Tab — Styling, Project Cards, and Data Completeness
+## Plan: Fix All Email Issues Across All Templates
 
-### Issues to Fix
+### Problems Identified
 
-**1. SmartDocumentUploader — Dark theme in champagne admin**
-- Currently uses `bg-zinc-900`, `border-zinc-800`, `text-white`, `bg-zinc-950` throughout
-- The `SelectContent` dropdown is `bg-zinc-900` with `text-white` items
-- The "Select Document" button is `border-zinc-700 text-white hover:bg-zinc-800` (gray)
-- **Fix**: Restyle entire component to champagne gold theme: `bg-gradient-to-r from-[#FDFBF7] to-white`, `border-gold/30`, `text-black` throughout. Dropdown items in black text on champagne background. Button idle state gold-champagne instead of gray.
+1. **Recommended For You icons disappeared** — Inline SVGs are stripped by Gmail and most email clients. Must revert to hosted PNG images (`ai-tools.png`, `guides.png`, `properties.png` already exist in `public/email-icons/`).
 
-**2. Total Projects count capped at 1000**
-- `useProjects()` has no `.limit()` but Supabase defaults to 1000 rows max
-- The stat card shows `projects?.length` which maxes at 1000
-- **Fix**: Use `useProjectsTotalCount()` (already exists, does `count: "exact", head: true`) for the stat card instead of `projects?.length`. This gives the real DB count without the 1000-row limit.
+2. **Social media footer icons not rendering** — Same issue: `socialLinksFooter()` loads external `.svg` files via `<img>` tags, but Gmail blocks SVG images entirely. Must switch to hosted `.png` files. Currently missing `social-facebook.png` — need to confirm or create it.
 
-**3. Project cards show building icon fallback instead of images**
-- Card checks `project.images?.[0]` but many projects have no `project_images` rows — they only have `cover_image_url` on the project itself
-- **Fix**: Check `cover_image_url` first as primary image source, fall back to `project.images?.[0]`, then building icon as last resort.
+3. **Email split into multiple visual cards** — Several sub-sections (`ticketSupportEmbed`, `readyToGetStartedHtml`, `recommendedActionsHtml`) each have their own `border`, `border-radius`, and `background` styles creating distinct visual boxes. These need to be softened so they sit seamlessly inside the single continuous card.
 
-**4. Dot separator in project subtitle**
-- Line 770: `{project.developer?.name} • {project.location}` — the `•` shows even when developer or location is missing, leaving a lone dot
-- **Fix**: Only show dot when both values exist. Replace the subtitle with richer info: description (truncated), payment plan, handover date, price range. Show "No description available" in muted text when missing.
+### Changes (all in `supabase/functions/_shared/email-html.ts`)
 
-**5. Missing preview button on project cards**
-- User wants a square icon with arrow (external link) to preview the project page
-- **Fix**: Add an `ExternalLink` icon button that opens `/project/{slug}` in new tab.
+#### A. Recommended For You — Revert to PNG hosted images
+- Change `recommendedCard()` back to using `iconImg()` with PNG paths
+- Remove the `RECOMMENDED_ICONS` inline SVG object
+- Ensure circular frame clips the PNG with `overflow:hidden` on the `<td>` to prevent square backgrounds
+- Signature: `recommendedCard(title, href, iconPath, alt)` — restore the original parameters
 
-**6. Projects without photos/description should not be published**
-- User wants visual indicator for incomplete projects
-- **Fix**: Add a warning badge on cards missing cover image or description. Don't auto-unpublish (destructive), but show a prominent "Incomplete" warning badge so admin can act.
+#### B. Social Footer — Switch to PNG with white pearl background
+- Replace `socialLinksFooter()` to use the inline `SVG` object icons (instagram, facebook, linkedin, tiktok, youtube) that are already defined at the top of the file — these render as raw HTML inside `<td>` elements, not as `<img>` tags, so they should survive email client processing
+- Actually, since Gmail strips ALL SVG (both inline and `<img>`), switch to using the `.png` files: `social-instagram.png`, `social-linkedin.png`, `social-tiktok.png`, `social-youtube.png`
+- Create `social-facebook.png` if missing
+- Style each icon circle: white/pearl (#FDFBF7) background, gold border, black icon inside
 
-### Files to Modify
+#### C. Single Card Layout — Remove visual fragmentation
+- `ticketSupportEmbed()`: Remove the heavy gradient background and red border; make it blend into the card
+- `readyToGetStartedHtml()`: Remove the outer border and separate background so it flows within the card
+- `inquiryBox()`: Soften its standalone bordered look
+- Keep all content inside the single `emailShell` wrapper card with no sub-borders that create separation
 
-- `src/components/SmartDocumentUploader.tsx` — Restyle to champagne gold theme
-- `src/pages/Admin.tsx` — Use `useProjectsTotalCount()` for stat, fix project card layout (image fallback, subtitle, preview button, incomplete badge)
+#### D. Deploy + Send Test Email
+- Deploy the updated edge function
+- Immediately send a test welcome email to `janeaboujaoudenails@gmail.com`
+- Take a screenshot as proof
+
+### Files Modified
+- `supabase/functions/_shared/email-html.ts` — all icon and layout fixes
+- `public/email-icons/social-facebook.png` — create if missing (or use existing assets)
 
