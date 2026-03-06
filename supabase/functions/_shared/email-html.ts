@@ -109,10 +109,8 @@ export function ticketSupportEmbedAr(): string {
 }
 
 // ─── Recommended Actions (clean icon cards) ───
-function recommendedCard(title: string, href: string, iconPath: string, alt: string, withBlackBorder = false): string {
-  const frameStyle = withBlackBorder
-    ? "width:58px;height:58px;border:1.5px solid #1a1a1a;border-radius:58px;text-align:center;vertical-align:middle;"
-    : "width:58px;height:58px;text-align:center;vertical-align:middle;";
+function recommendedCard(title: string, href: string, iconPath: string, alt: string): string {
+  const frameStyle = "width:58px;height:58px;border:1.5px solid #1a1a1a;border-radius:58px;text-align:center;vertical-align:middle;";
 
   return `<td width="33%" style="text-align:center;padding:4px;vertical-align:top;"><a href="${href}" style="display:block;text-decoration:none;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;"><tr><td style="padding:18px 8px;text-align:center;">
@@ -122,7 +120,7 @@ function recommendedCard(title: string, href: string, iconPath: string, alt: str
 }
 
 export function recommendedActionsHtml(): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:10px 0 18px;"><tr><td style="text-align:center;"><p style="color:#1a1a1a;font-size:16px;font-weight:700;margin:0 0 14px;">Recommended For You</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${recommendedCard("AI Tools", `${SITE_URL}/ai-tools`, `${ICON_BASE}/ai-tools.svg`, "AI Tools")}${recommendedCard("Guides", `${SITE_URL}/guides`, `${ICON_BASE}/guides.svg`, "Guides")}${recommendedCard("Properties", `${SITE_URL}/properties`, `${ICON_BASE}/properties.svg`, "Properties", true)}</tr></table></td></tr></table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:10px 0 18px;"><tr><td style="text-align:center;"><p style="color:#1a1a1a;font-size:16px;font-weight:700;margin:0 0 14px;">Recommended For You</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${recommendedCard("AI Tools", `${SITE_URL}/ai-tools`, `${ICON_BASE}/ai-tools.png`, "AI Tools")}${recommendedCard("Guides", `${SITE_URL}/guides`, `${ICON_BASE}/guides.png`, "Guides")}${recommendedCard("Properties", `${SITE_URL}/properties`, `${ICON_BASE}/properties.png`, "Properties")}</tr></table></td></tr></table>`;
 }
 
 // ─── Books (JPG from storage — email clients handle JPGs reliably) ───
