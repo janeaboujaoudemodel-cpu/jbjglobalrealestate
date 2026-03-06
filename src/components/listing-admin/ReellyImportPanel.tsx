@@ -470,7 +470,7 @@ export function ReellyImportPanel() {
       const { data: prevJob } = await supabase.from("sync_jobs").select("*").eq("job_type", "reelly_backfill").order("created_at", { ascending: false }).limit(1).maybeSingle();
       const prevUpdated = prevJob?.stats_updated || 0;
       const prevFailed = prevJob?.stats_errors || 0;
-      const prevResults = (prevJob?.error_log as Array<{ name: string; slug?: string; status: string; images?: number; docs?: number }>) || [];
+      const prevResults = (Array.isArray(prevJob?.error_log) ? prevJob.error_log : []) as Array<{ name: string; slug?: string; status: string; images?: number; docs?: number }>;
       let aggregated = { processed: prevUpdated + prevFailed, updated: prevUpdated, failed: prevFailed, remaining: 999 };
       let allResults = [...prevResults];
       setBackfillResult({ success: true, ...aggregated, message: `Resuming backfill (${prevUpdated} previously updated)...` });
