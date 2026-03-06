@@ -160,14 +160,12 @@ const ListingGenerator = () => {
     const userId = authData.user?.id;
     if (!userId) return;
 
-    const upsertData = {
+    const upsertData: any = {
       user_id: userId,
       urls: payload.url ? [payload.url] : [],
-      files: payload.filesMeta,
-      results: payload,
+      files: payload.filesMeta as any,
+      results: payload as any,
       status: payload.step === "processing" ? "processing" : "draft",
-      completed_at: null,
-      error_message: null,
     };
 
     if (payload.cloudDraftId) {
