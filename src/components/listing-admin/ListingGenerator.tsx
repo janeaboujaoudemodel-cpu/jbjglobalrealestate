@@ -438,6 +438,7 @@ const ListingGenerator = () => {
         setDescription("");
         setExtractedProjects([]);
         setDuplicates([]);
+        clearPersistedState();
       } else {
         setActiveProjectIndex(0);
       }
