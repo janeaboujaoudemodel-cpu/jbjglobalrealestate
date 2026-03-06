@@ -38,12 +38,17 @@ import {
   RefreshCw,
   Download,
   Calendar,
-  StickyNote
+  StickyNote,
+  Trash2,
+  RotateCcw,
+  ArchiveRestore
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 import { PIPELINE_STATUSES } from "@/components/crm/LeadStatusBadge";
 import InlineStatusSelect from "@/components/crm/InlineStatusSelect";
 import AddNoteDialog from "@/components/crm/AddNoteDialog";
+import DeleteLeadDialog from "@/components/crm/DeleteLeadDialog";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 interface Lead {
   id: string;
@@ -56,22 +61,12 @@ interface Lead {
   updated_at: string;
   last_activity?: string | null;
   tags: string[] | null;
+  deleted_at?: string | null;
 }
 
 const PAGE_SIZE = 25;
 
-// Build grouped status options for proper dropdown display
-const GROUPED_STATUS_OPTIONS = [
-  { value: 'all', label: 'All Statuses', category: null },
-  // Positive (Green)
-  ...PIPELINE_STATUSES.filter(s => s.category === 'positive').map(s => ({ value: s.value, label: s.label, category: 'positive' })),
-  // Neutral (Blue)
-  ...PIPELINE_STATUSES.filter(s => s.category === 'neutral').map(s => ({ value: s.value, label: s.label, category: 'neutral' })),
-  // Negative (Red)
-  ...PIPELINE_STATUSES.filter(s => s.category === 'negative').map(s => ({ value: s.value, label: s.label, category: 'negative' })),
-];
-
-// Complete source options - ALL must be clickable
+// Complete source options
 const SOURCE_OPTIONS = [
   { value: 'all', label: 'All Sources' },
   { value: 'website', label: 'Website' },
@@ -99,6 +94,9 @@ export default function CRMLeadsInbox() {
   const [dateEnd, setDateEnd] = useState(searchParams.get('date_end') || '');
   const [page, setPage] = useState(1);
   const [debouncedSearch, setDebouncedSearch] = useState(search);
+  const [activeView, setActiveView] = useState<'active' | 'deleted'>('active');
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [leadToDelete, setLeadToDelete] = useState<Lead | null>(null);
 
   // Debounce search
   useEffect(() => {
@@ -119,14 +117,20 @@ export default function CRMLeadsInbox() {
 
   // Fetch leads with filters
   const { data: leadsData, isLoading, isFetching } = useQuery({
-    queryKey: ['crm-leads-inbox', debouncedSearch, statusFilter, sourceFilter, dateStart, dateEnd, page],
+    queryKey: ['crm-leads-inbox', debouncedSearch, statusFilter, sourceFilter, dateStart, dateEnd, page, activeView],
     queryFn: async () => {
-      // Try with last_activity column first, fallback without it
-      const selectFields = 'id, full_name, email_lower, phone_e164, source, pipeline_stage, created_at, updated_at, tags';
+      const selectFields = 'id, full_name, email_lower, phone_e164, source, pipeline_stage, created_at, updated_at, tags, deleted_at';
       
       let query = supabase
         .from('crm_leads')
         .select(selectFields, { count: 'exact' });
+
+      // Filter by active/deleted
+      if (activeView === 'deleted') {
+        query = query.not('deleted_at', 'is', null);
+      } else {
+        query = query.is('deleted_at', null);
+      }
 
       // Apply search filter
       if (debouncedSearch) {
@@ -143,17 +147,14 @@ export default function CRMLeadsInbox() {
         query = query.ilike('source', `%${sourceFilter}%`);
       }
 
-      // Apply date range filter (timezone-safe)
+      // Apply date range filter
       if (dateStart) {
-        const startDate = new Date(dateStart + 'T00:00:00');
-        query = query.gte('created_at', startDate.toISOString());
+        query = query.gte('created_at', new Date(dateStart + 'T00:00:00').toISOString());
       }
       if (dateEnd) {
-        const endDate = new Date(dateEnd + 'T23:59:59.999');
-        query = query.lte('created_at', endDate.toISOString());
+        query = query.lte('created_at', new Date(dateEnd + 'T23:59:59.999').toISOString());
       }
 
-      // Pagination
       const from = (page - 1) * PAGE_SIZE;
       const to = from + PAGE_SIZE - 1;
 
@@ -162,7 +163,6 @@ export default function CRMLeadsInbox() {
         .range(from, to);
 
       const { data, count, error } = await query;
-      
       if (error) throw error;
       return { leads: data || [], total: count || 0 };
     },
@@ -193,25 +193,16 @@ export default function CRMLeadsInbox() {
     try {
       let query = supabase
         .from('crm_leads')
-        .select('full_name, email_lower, phone_e164, source, pipeline_stage, created_at, updated_at, tags');
+        .select('full_name, email_lower, phone_e164, source, pipeline_stage, created_at, updated_at, tags')
+        .is('deleted_at', null);
 
       if (debouncedSearch) {
         query = query.or(`full_name.ilike.%${debouncedSearch}%,email_lower.ilike.%${debouncedSearch}%,phone_e164.ilike.%${debouncedSearch}%`);
       }
-      if (statusFilter !== 'all') {
-        query = query.eq('pipeline_stage', statusFilter);
-      }
-      if (sourceFilter !== 'all') {
-        query = query.ilike('source', `%${sourceFilter}%`);
-      }
-      if (dateStart) {
-        const startDate = new Date(dateStart + 'T00:00:00');
-        query = query.gte('created_at', startDate.toISOString());
-      }
-      if (dateEnd) {
-        const endDate = new Date(dateEnd + 'T23:59:59.999');
-        query = query.lte('created_at', endDate.toISOString());
-      }
+      if (statusFilter !== 'all') query = query.eq('pipeline_stage', statusFilter);
+      if (sourceFilter !== 'all') query = query.ilike('source', `%${sourceFilter}%`);
+      if (dateStart) query = query.gte('created_at', new Date(dateStart + 'T00:00:00').toISOString());
+      if (dateEnd) query = query.lte('created_at', new Date(dateEnd + 'T23:59:59.999').toISOString());
 
       const { data } = await query.order('created_at', { ascending: false });
       
@@ -242,7 +233,6 @@ export default function CRMLeadsInbox() {
       a.download = `leads-export-${format(new Date(), 'yyyy-MM-dd')}.csv`;
       a.click();
       URL.revokeObjectURL(url);
-
       toast.success(`Exported ${data.length} leads`);
     } catch (error) {
       console.error('Export error:', error);
@@ -256,12 +246,60 @@ export default function CRMLeadsInbox() {
     window.open(`https://wa.me/${cleanPhone}`, '_blank');
   };
 
-  const openEmail = (email: string, e: React.MouseEvent) => {
+  const openCall = (phone: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    window.open(`mailto:${email}`, '_blank');
+    window.location.href = `tel:${phone}`;
   };
 
-  // Get last activity display value (use last_activity if exists, fallback to updated_at)
+  const openEmail = (email: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    window.location.href = `mailto:${email}`;
+  };
+
+  const handleSoftDelete = async () => {
+    if (!leadToDelete) return;
+    try {
+      const { error } = await supabase.rpc('crm_soft_delete_leads', {
+        p_lead_ids: [leadToDelete.id],
+      });
+      if (error) throw error;
+      toast.success('Lead moved to Recently Deleted');
+      setDeleteDialogOpen(false);
+      setLeadToDelete(null);
+      queryClient.invalidateQueries({ queryKey: ['crm-leads-inbox'] });
+    } catch (err: any) {
+      toast.error(`Delete failed: ${err?.message || 'Unknown error'}`);
+    }
+  };
+
+  const handleRestore = async (leadId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    try {
+      const { error } = await supabase.rpc('crm_restore_leads', {
+        p_lead_ids: [leadId],
+      });
+      if (error) throw error;
+      toast.success('Lead restored');
+      queryClient.invalidateQueries({ queryKey: ['crm-leads-inbox'] });
+    } catch (err: any) {
+      toast.error(`Restore failed: ${err?.message || 'Unknown error'}`);
+    }
+  };
+
+  const handlePermanentDelete = async (leadId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    try {
+      const { error } = await supabase.rpc('crm_hard_delete_leads', {
+        p_lead_ids: [leadId],
+      });
+      if (error) throw error;
+      toast.success('Lead permanently deleted');
+      queryClient.invalidateQueries({ queryKey: ['crm-leads-inbox'] });
+    } catch (err: any) {
+      toast.error(`Delete failed: ${err?.message || 'Unknown error'}`);
+    }
+  };
+
   const getLastActivity = (lead: Lead): string => {
     const activityDate = lead.last_activity || lead.updated_at;
     if (!activityDate) return '—';
@@ -269,13 +307,13 @@ export default function CRMLeadsInbox() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-white">Leads Inbox</h1>
-            <p className="text-zinc-400 text-sm">
+            <h1 className="text-2xl font-bold text-black">Leads Inbox</h1>
+            <p className="text-black/60 text-sm">
               {totalLeads} lead{totalLeads !== 1 ? 's' : ''} total
               {hasActiveFilters && ' (filtered)'}
             </p>
@@ -286,7 +324,7 @@ export default function CRMLeadsInbox() {
               size="sm"
               onClick={handleRefresh}
               disabled={isFetching}
-              className="text-zinc-400 hover:text-white"
+              className="text-black/60 hover:text-black hover:bg-gold/10"
             >
               <RefreshCw className={`h-4 w-4 ${isFetching ? 'animate-spin' : ''}`} />
             </Button>
@@ -308,40 +346,52 @@ export default function CRMLeadsInbox() {
           </div>
         </div>
 
+        {/* Active / Recently Deleted Tabs */}
+        <Tabs value={activeView} onValueChange={(v) => { setActiveView(v as 'active' | 'deleted'); setPage(1); }} className="mb-6">
+          <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-1">
+            <TabsTrigger value="active" className="tab-trigger-champagne text-black data-[state=active]:text-black px-6 py-2">
+              All Leads
+            </TabsTrigger>
+            <TabsTrigger value="deleted" className="tab-trigger-champagne text-black data-[state=active]:text-black px-6 py-2">
+              <Trash2 className="h-4 w-4 mr-2" />
+              Recently Deleted
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+
         {/* Filters */}
-        <Card className="bg-zinc-900/80 border-zinc-800 mb-6">
+        <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] mb-6">
           <CardContent className="p-4">
             <div className="flex flex-col gap-3">
               {/* Row 1: Search + Status + Source */}
               <div className="flex flex-col md:flex-row gap-3">
-                {/* Search */}
                 <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-black/40" />
                   <Input
                     placeholder="Search by name, email, or phone..."
                     value={search}
                     onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-                    className="pl-10 bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500"
+                    className="pl-10 bg-white/80 border-2 border-gold/30 text-black placeholder:text-black/40 focus:border-gold"
                   />
                 </div>
 
-                {/* Status Filter - Grouped by Category */}
+                {/* Status Filter */}
                 <Select value={statusFilter} onValueChange={(v) => { setStatusFilter(v); setPage(1); }}>
-                  <SelectTrigger className="w-full md:w-[200px] bg-zinc-800 border-zinc-700 text-white">
+                  <SelectTrigger className="w-full md:w-[200px] bg-white/80 border-2 border-gold/30 text-black">
                     <SelectValue placeholder="Status" />
                   </SelectTrigger>
-                  <SelectContent className="bg-zinc-800 border-zinc-700 max-h-[400px]">
-                    <SelectItem value="all" className="text-white hover:bg-zinc-700 font-medium">
+                  <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 max-h-[400px]">
+                    <SelectItem value="all" className="text-black hover:bg-gold/10 font-medium focus:bg-gold/15 focus:text-black">
                       All Statuses
                     </SelectItem>
                     
                     {/* POSITIVE - Green */}
-                    <div className="px-2 py-1.5 text-xs font-bold text-emerald-400 uppercase tracking-wide border-t border-zinc-700/50 mt-1 flex items-center gap-2">
+                    <div className="px-2 py-1.5 text-xs font-bold text-emerald-700 uppercase tracking-wide border-t border-gold/20 mt-1 flex items-center gap-2">
                       <span className="w-2 h-2 rounded-full bg-emerald-500" />
                       Positive
                     </div>
                     {PIPELINE_STATUSES.filter(s => s.category === 'positive').map(opt => (
-                      <SelectItem key={opt.value} value={opt.value} className="text-white hover:bg-zinc-700 pl-4">
+                      <SelectItem key={opt.value} value={opt.value} className="text-black hover:bg-gold/10 pl-4 focus:bg-gold/15 focus:text-black">
                         <div className="flex items-center gap-2">
                           <span className="w-2 h-2 rounded-full bg-emerald-500" />
                           {opt.label}
@@ -350,12 +400,12 @@ export default function CRMLeadsInbox() {
                     ))}
                     
                     {/* NEUTRAL - Blue */}
-                    <div className="px-2 py-1.5 text-xs font-bold text-blue-400 uppercase tracking-wide border-t border-zinc-700/50 mt-1 flex items-center gap-2">
+                    <div className="px-2 py-1.5 text-xs font-bold text-blue-700 uppercase tracking-wide border-t border-gold/20 mt-1 flex items-center gap-2">
                       <span className="w-2 h-2 rounded-full bg-blue-500" />
                       Neutral
                     </div>
                     {PIPELINE_STATUSES.filter(s => s.category === 'neutral').map(opt => (
-                      <SelectItem key={opt.value} value={opt.value} className="text-white hover:bg-zinc-700 pl-4">
+                      <SelectItem key={opt.value} value={opt.value} className="text-black hover:bg-gold/10 pl-4 focus:bg-gold/15 focus:text-black">
                         <div className="flex items-center gap-2">
                           <span className="w-2 h-2 rounded-full bg-blue-500" />
                           {opt.label}
@@ -364,12 +414,12 @@ export default function CRMLeadsInbox() {
                     ))}
                     
                     {/* NEGATIVE - Red */}
-                    <div className="px-2 py-1.5 text-xs font-bold text-red-400 uppercase tracking-wide border-t border-zinc-700/50 mt-1 flex items-center gap-2">
+                    <div className="px-2 py-1.5 text-xs font-bold text-red-700 uppercase tracking-wide border-t border-gold/20 mt-1 flex items-center gap-2">
                       <span className="w-2 h-2 rounded-full bg-red-500" />
                       Negative
                     </div>
                     {PIPELINE_STATUSES.filter(s => s.category === 'negative').map(opt => (
-                      <SelectItem key={opt.value} value={opt.value} className="text-white hover:bg-zinc-700 pl-4">
+                      <SelectItem key={opt.value} value={opt.value} className="text-black hover:bg-gold/10 pl-4 focus:bg-gold/15 focus:text-black">
                         <div className="flex items-center gap-2">
                           <span className="w-2 h-2 rounded-full bg-red-500" />
                           {opt.label}
@@ -381,12 +431,12 @@ export default function CRMLeadsInbox() {
 
                 {/* Source Filter */}
                 <Select value={sourceFilter} onValueChange={(v) => { setSourceFilter(v); setPage(1); }}>
-                  <SelectTrigger className="w-full md:w-[180px] bg-zinc-800 border-zinc-700 text-white">
+                  <SelectTrigger className="w-full md:w-[180px] bg-white/80 border-2 border-gold/30 text-black">
                     <SelectValue placeholder="Source" />
                   </SelectTrigger>
-                  <SelectContent className="bg-zinc-800 border-zinc-700">
+                  <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30">
                     {SOURCE_OPTIONS.map(opt => (
-                      <SelectItem key={opt.value} value={opt.value} className="text-white hover:bg-zinc-700">
+                      <SelectItem key={opt.value} value={opt.value} className="text-black hover:bg-gold/10 focus:bg-gold/15 focus:text-black">
                         {opt.label}
                       </SelectItem>
                     ))}
@@ -396,7 +446,7 @@ export default function CRMLeadsInbox() {
 
               {/* Row 2: Date Range */}
               <div className="flex flex-col md:flex-row gap-3 items-center">
-                <div className="flex items-center gap-2 text-sm text-zinc-400">
+                <div className="flex items-center gap-2 text-sm text-black/60">
                   <Calendar className="h-4 w-4" />
                   <span>Date range:</span>
                 </div>
@@ -404,25 +454,22 @@ export default function CRMLeadsInbox() {
                   type="date"
                   value={dateStart}
                   onChange={(e) => { setDateStart(e.target.value); setPage(1); }}
-                  className="w-full md:w-[160px] bg-zinc-800 border-zinc-700 text-white"
-                  placeholder="Start date"
+                  className="w-full md:w-[160px] bg-white/80 border-2 border-gold/30 text-black"
                 />
-                <span className="text-zinc-500">to</span>
+                <span className="text-black/40">to</span>
                 <Input
                   type="date"
                   value={dateEnd}
                   onChange={(e) => { setDateEnd(e.target.value); setPage(1); }}
-                  className="w-full md:w-[160px] bg-zinc-800 border-zinc-700 text-white"
-                  placeholder="End date"
+                  className="w-full md:w-[160px] bg-white/80 border-2 border-gold/30 text-black"
                 />
 
-                {/* Clear Filters */}
                 {hasActiveFilters && (
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={clearFilters}
-                    className="text-zinc-400 hover:text-white ml-auto"
+                    className="text-black/60 hover:text-black hover:bg-gold/10 ml-auto"
                   >
                     <X className="h-4 w-4 mr-1" />
                     Clear
@@ -433,26 +480,34 @@ export default function CRMLeadsInbox() {
           </CardContent>
         </Card>
 
+        {/* Info banner for deleted leads */}
+        {activeView === 'deleted' && (
+          <div className="mb-4 p-3 rounded-xl bg-amber-50 border-2 border-amber-200 text-amber-800 text-sm flex items-center gap-2">
+            <ArchiveRestore className="h-4 w-4 shrink-0" />
+            <span>Leads in this section will be permanently deleted after 30 days. You can restore them anytime before that.</span>
+          </div>
+        )}
+
         {/* Leads Table */}
-        <Card className="bg-zinc-900/80 border-zinc-800">
+        <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
           <CardContent className="p-0">
             {isLoading ? (
               <div className="p-6 space-y-3">
                 {Array.from({ length: 10 }).map((_, i) => (
-                  <Skeleton key={i} className="h-14 bg-zinc-800" />
+                  <Skeleton key={i} className="h-14 bg-gold/10" />
                 ))}
               </div>
             ) : leads.length === 0 ? (
               <div className="text-center py-16">
-                <Filter className="h-12 w-12 text-zinc-600 mx-auto mb-4" />
-                <p className="text-zinc-400 mb-2">
-                  {hasActiveFilters ? 'No leads match your filters' : 'No leads yet'}
+                <Filter className="h-12 w-12 text-black/30 mx-auto mb-4" />
+                <p className="text-black/60 mb-2">
+                  {activeView === 'deleted' ? 'No deleted leads' : (hasActiveFilters ? 'No leads match your filters' : 'No leads yet')}
                 </p>
-                {hasActiveFilters ? (
+                {hasActiveFilters && activeView === 'active' ? (
                   <Button variant="secondary" size="sm" onClick={clearFilters}>
                     Clear Filters
                   </Button>
-                ) : (
+                ) : activeView === 'active' ? (
                   <Button 
                     variant="primary"
                     onClick={() => navigate('/crm?action=new-lead')}
@@ -460,61 +515,65 @@ export default function CRMLeadsInbox() {
                   >
                     Add First Lead
                   </Button>
-                )}
+                ) : null}
               </div>
             ) : (
               <>
                 <div className="overflow-x-auto">
                   <Table>
                     <TableHeader>
-                      <TableRow className="border-zinc-800 hover:bg-transparent">
-                        <TableHead className="text-zinc-400">Name</TableHead>
-                        <TableHead className="text-zinc-400">Phone</TableHead>
-                        <TableHead className="text-zinc-400">Email</TableHead>
-                        <TableHead className="text-zinc-400">Source</TableHead>
-                        <TableHead className="text-zinc-400">Status</TableHead>
-                        <TableHead className="text-zinc-400">Created</TableHead>
-                        <TableHead className="text-zinc-400">Last Activity</TableHead>
-                        <TableHead className="text-zinc-400 text-right">Actions</TableHead>
+                      <TableRow className="border-gold/20 hover:bg-transparent">
+                        <TableHead className="text-black/70 font-bold">Name</TableHead>
+                        <TableHead className="text-black/70 font-bold">Phone</TableHead>
+                        <TableHead className="text-black/70 font-bold">Email</TableHead>
+                        <TableHead className="text-black/70 font-bold">Source</TableHead>
+                        <TableHead className="text-black/70 font-bold">Status</TableHead>
+                        <TableHead className="text-black/70 font-bold">Created</TableHead>
+                        {activeView === 'deleted' ? (
+                          <TableHead className="text-black/70 font-bold">Deleted</TableHead>
+                        ) : (
+                          <TableHead className="text-black/70 font-bold">Last Activity</TableHead>
+                        )}
+                        <TableHead className="text-black/70 font-bold text-right">Actions</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {leads.map((lead) => (
                         <TableRow 
                           key={lead.id}
-                          className="border-zinc-800 hover:bg-zinc-800/50 cursor-pointer"
-                          onClick={() => navigate(`/crm/leads/${lead.id}`)}
+                          className="border-gold/20 hover:bg-gold/5 cursor-pointer"
+                          onClick={() => activeView === 'active' && navigate(`/crm/leads/${lead.id}`)}
                         >
-                          <TableCell className="font-medium text-white">
+                          <TableCell className="font-semibold text-black">
                             <div>
-                              <p className="font-medium">{lead.full_name}</p>
+                              <p className="font-semibold">{lead.full_name}</p>
                               {lead.tags && lead.tags.length > 0 && (
                                 <div className="flex gap-1 mt-1">
                                   {lead.tags.slice(0, 2).map((tag, i) => (
-                                    <Badge key={i} variant="secondary" className="text-xs bg-zinc-700 text-zinc-300">
+                                    <Badge key={i} variant="secondary" className="text-xs bg-gold/10 text-black/70 border-gold/20">
                                       {tag}
                                     </Badge>
                                   ))}
                                   {lead.tags.length > 2 && (
-                                    <span className="text-xs text-zinc-500">+{lead.tags.length - 2}</span>
+                                    <span className="text-xs text-black/40">+{lead.tags.length - 2}</span>
                                   )}
                                 </div>
                               )}
                             </div>
                           </TableCell>
-                          <TableCell className="text-zinc-400 text-sm">
+                          <TableCell className="text-black/70 text-sm font-mono">
                             {lead.phone_e164 || '—'}
                           </TableCell>
-                          <TableCell className="text-zinc-400 text-sm truncate max-w-[180px]">
+                          <TableCell className="text-black/70 text-sm truncate max-w-[180px]">
                             {lead.email_lower || '—'}
                           </TableCell>
                           <TableCell>
                             {lead.source ? (
-                              <Badge variant="secondary" className="bg-zinc-700 text-zinc-300">
+                              <Badge variant="secondary" className="bg-gold/10 text-black/80 border-gold/20">
                                 {lead.source}
                               </Badge>
                             ) : (
-                              <span className="text-zinc-500">—</span>
+                              <span className="text-black/40">—</span>
                             )}
                           </TableCell>
                           <TableCell onClick={(e) => e.stopPropagation()}>
@@ -523,60 +582,109 @@ export default function CRMLeadsInbox() {
                               currentStatus={lead.pipeline_stage || 'new'} 
                             />
                           </TableCell>
-                          <TableCell className="text-zinc-400 text-sm">
+                          <TableCell className="text-black/60 text-sm">
                             {formatDistanceToNow(new Date(lead.created_at), { addSuffix: true })}
                           </TableCell>
-                          <TableCell className="text-zinc-400 text-sm">
-                            {getLastActivity(lead)}
+                          <TableCell className="text-black/60 text-sm">
+                            {activeView === 'deleted' && lead.deleted_at
+                              ? formatDistanceToNow(new Date(lead.deleted_at), { addSuffix: true })
+                              : getLastActivity(lead)}
                           </TableCell>
                           <TableCell className="text-right">
                             <div className="flex items-center justify-end gap-1">
-                              {lead.phone_e164 && (
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  className="h-8 w-8 text-green-500 hover:text-green-400 hover:bg-green-500/10"
-                                  onClick={(e) => openWhatsApp(lead.phone_e164!, e)}
-                                  title="WhatsApp"
-                                >
-                                  <MessageSquare className="h-4 w-4" />
-                                </Button>
-                              )}
-                              {lead.email_lower && (
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  className="h-8 w-8 text-blue-400 hover:text-blue-300 hover:bg-blue-500/10"
-                                  onClick={(e) => openEmail(lead.email_lower!, e)}
-                                  title="Email"
-                                >
-                                  <Mail className="h-4 w-4" />
-                                </Button>
-                              )}
-                              <AddNoteDialog 
-                                leadId={lead.id} 
-                                leadName={lead.full_name}
-                                trigger={
+                              {activeView === 'deleted' ? (
+                                <>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="h-8 px-3 text-emerald-700 hover:text-emerald-800 hover:bg-emerald-100"
+                                    onClick={(e) => handleRestore(lead.id, e)}
+                                    title="Restore"
+                                  >
+                                    <RotateCcw className="h-4 w-4 mr-1" />
+                                    Restore
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="h-8 px-3 text-red-600 hover:text-red-700 hover:bg-red-100"
+                                    onClick={(e) => handlePermanentDelete(lead.id, e)}
+                                    title="Delete Forever"
+                                  >
+                                    <Trash2 className="h-4 w-4 mr-1" />
+                                    Delete Forever
+                                  </Button>
+                                </>
+                              ) : (
+                                <>
+                                  {lead.phone_e164 && (
+                                    <>
+                                      <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="h-8 w-8 text-green-700 hover:text-green-800 hover:bg-green-100"
+                                        onClick={(e) => openWhatsApp(lead.phone_e164!, e)}
+                                        title="WhatsApp"
+                                      >
+                                        <MessageSquare className="h-4 w-4" />
+                                      </Button>
+                                      <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="h-8 w-8 text-blue-700 hover:text-blue-800 hover:bg-blue-100"
+                                        onClick={(e) => openCall(lead.phone_e164!, e)}
+                                        title="Call"
+                                      >
+                                        <Phone className="h-4 w-4" />
+                                      </Button>
+                                    </>
+                                  )}
+                                  {lead.email_lower && (
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      className="h-8 w-8 text-purple-700 hover:text-purple-800 hover:bg-purple-100"
+                                      onClick={(e) => openEmail(lead.email_lower!, e)}
+                                      title="Email"
+                                    >
+                                      <Mail className="h-4 w-4" />
+                                    </Button>
+                                  )}
+                                  <AddNoteDialog 
+                                    leadId={lead.id} 
+                                    leadName={lead.full_name}
+                                    trigger={
+                                      <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="h-8 w-8 text-amber-700 hover:text-amber-800 hover:bg-amber-100"
+                                        title="Add Note"
+                                      >
+                                        <StickyNote className="h-4 w-4" />
+                                      </Button>
+                                    }
+                                  />
                                   <Button
                                     variant="ghost"
                                     size="icon"
-                                    className="h-8 w-8 text-amber-400 hover:text-amber-300 hover:bg-amber-500/10"
-                                    title="Add Note"
+                                    className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-100"
+                                    onClick={(e) => { e.stopPropagation(); setLeadToDelete(lead); setDeleteDialogOpen(true); }}
+                                    title="Delete"
                                   >
-                                    <StickyNote className="h-4 w-4" />
+                                    <Trash2 className="h-4 w-4" />
                                   </Button>
-                                }
-                              />
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="h-8 px-2 text-gold hover:text-gold hover:bg-gold/10"
-                                onClick={(e) => { e.stopPropagation(); navigate(`/crm/leads/${lead.id}`); }}
-                                title="Open"
-                              >
-                                Open
-                                <ExternalLink className="h-3 w-3 ml-1" />
-                              </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="h-8 px-2 text-gold hover:text-black hover:bg-gold/10"
+                                    onClick={(e) => { e.stopPropagation(); navigate(`/crm/leads/${lead.id}`); }}
+                                    title="Open"
+                                  >
+                                    Open
+                                    <ExternalLink className="h-3 w-3 ml-1" />
+                                  </Button>
+                                </>
+                              )}
                             </div>
                           </TableCell>
                         </TableRow>
@@ -587,8 +695,8 @@ export default function CRMLeadsInbox() {
 
                 {/* Pagination */}
                 {totalPages > 1 && (
-                  <div className="flex items-center justify-between px-6 py-4 border-t border-zinc-800">
-                    <p className="text-sm text-zinc-400">
+                  <div className="flex items-center justify-between px-6 py-4 border-t border-gold/20">
+                    <p className="text-sm text-black/60">
                       Page {page} of {totalPages}
                     </p>
                     <div className="flex items-center gap-2">
@@ -597,7 +705,7 @@ export default function CRMLeadsInbox() {
                         size="sm"
                         onClick={() => setPage(p => Math.max(1, p - 1))}
                         disabled={page === 1}
-                        className="text-zinc-400 hover:text-white disabled:opacity-50"
+                        className="text-black/60 hover:text-black hover:bg-gold/10 disabled:opacity-50"
                       >
                         <ChevronLeft className="h-4 w-4 mr-1" />
                         Previous
@@ -607,7 +715,7 @@ export default function CRMLeadsInbox() {
                         size="sm"
                         onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                         disabled={page === totalPages}
-                        className="text-zinc-400 hover:text-white disabled:opacity-50"
+                        className="text-black/60 hover:text-black hover:bg-gold/10 disabled:opacity-50"
                       >
                         Next
                         <ChevronRight className="h-4 w-4 ml-1" />
@@ -620,6 +728,14 @@ export default function CRMLeadsInbox() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Delete Dialog */}
+      <DeleteLeadDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        leadName={leadToDelete?.full_name || 'this lead'}
+        onConfirm={handleSoftDelete}
+      />
     </div>
   );
 }

@@ -574,17 +574,17 @@ const CRM = () => {
 
             {/* Leads Section with Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="bg-white/80 border-2 border-gold/30 p-1 mb-4 w-full flex flex-wrap gap-1">
+              <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-1.5 mb-4 w-full flex flex-wrap gap-1 h-auto">
                 <TabsTrigger 
                   value="all" 
-                  className="tab-trigger-champagne text-black"
+                  className="tab-trigger-champagne text-black px-5 py-2.5"
                 >
                   <Users className="h-4 w-4 mr-2" />
                   All Leads
                 </TabsTrigger>
                 <TabsTrigger 
                   value="flagged"
-                  className="tab-trigger-champagne text-black"
+                  className="tab-trigger-champagne text-black px-5 py-2.5"
                 >
                   <Flag className="h-4 w-4 mr-2" />
                   Flagged
@@ -594,14 +594,14 @@ const CRM = () => {
                 </TabsTrigger>
                 <TabsTrigger 
                   value="vip"
-                  className="tab-trigger-champagne text-black"
+                  className="tab-trigger-champagne text-black px-5 py-2.5"
                 >
                   <Crown className="h-4 w-4 mr-2" />
                   VIP Leads
                 </TabsTrigger>
                 <TabsTrigger 
                   value="employees"
-                  className="tab-trigger-champagne text-black"
+                  className="tab-trigger-champagne text-black px-5 py-2.5"
                 >
                   <Briefcase className="h-4 w-4 mr-2" />
                   Employees Hub
