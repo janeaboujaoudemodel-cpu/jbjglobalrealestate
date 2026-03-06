@@ -131,6 +131,7 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  let parsedJobId: string | null = null;
   try {
     const body = await req.json();
     const {
@@ -141,8 +142,11 @@ serve(async (req) => {
       albumName,
       auto_approve = false,
       queue = true,
-      retryImportId, // NEW: retry a failed/pending import
+      retryImportId,
+      async_mode = false,
+      job_id, // For processing a queued job
     } = body;
+    parsedJobId = job_id || null;
 
     const urlList: string[] = urls || (url ? [url] : []);
     const fileList: { name: string; url: string; type: string }[] = Array.isArray(files) ? files : [];
@@ -150,6 +154,65 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
+
+    // ── ASYNC QUEUE MODE: Insert job and return immediately ──
+    if (async_mode && !job_id && (urlList.length > 0 || fileList.length > 0)) {
+      const { data: job, error: jobErr } = await supabase
+        .from("listing_extraction_queue")
+        .insert({
+          user_id: userId,
+          urls: urlList,
+          files: fileList,
+          auto_approve,
+          status: "pending",
+        })
+        .select("id")
+        .single();
+
+      if (jobErr) {
+        return new Response(
+          JSON.stringify({ success: false, error: `Queue insert failed: ${jobErr.message}` }),
+          { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
+      // Fire-and-forget: call self to process the job
+      const selfUrl = `${supabaseUrl}/functions/v1/extract-listing-from-link`;
+      fetch(selfUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${Deno.env.get("SUPABASE_ANON_KEY")}`,
+        },
+        body: JSON.stringify({
+          job_id: job.id,
+          urls: urlList,
+          files: fileList,
+          userId,
+          auto_approve,
+          albumName,
+        }),
+      }).catch(err => console.error("[extract] Fire-and-forget error:", err));
+
+      return new Response(
+        JSON.stringify({
+          success: true,
+          async: true,
+          jobId: job.id,
+          status: "queued",
+          message: "Extraction queued. Polling for results...",
+        }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // ── PROCESSING A QUEUED JOB: Update status to processing ──
+    if (job_id) {
+      await supabase
+        .from("listing_extraction_queue")
+        .update({ status: "processing" })
+        .eq("id", job_id);
+    }
 
     // Handle retry of existing import
     if (retryImportId) {
@@ -662,8 +725,8 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
           amenities: extractedData?.amenities || null,
           unit_types: extractedData?.unitTypes ? extractedData.unitTypes.map((u: string, i: number) => ({ name: u, sort_order: i })) : null,
           unit_details: extractedData?.unitDetails || null,
-          nearby_landmarks: extractedData?.nearbyLandmarks || null,
-          completion_percentage: extractedData?.completionPercentage || null,
+          location_distances: extractedData?.nearbyLandmarks || extractedData?.locationDistances || null,
+          construction_progress: extractedData?.completionPercentage || extractedData?.constructionProgress || null,
           rera_number: extractedData?.reraNumber || null,
           highlights: extractedData?.highlights || extractedData?.keyFeatures || null,
           faqs: extractedData?.faqs || null,
@@ -766,19 +829,49 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
     const totalInputs = urlList.length + (fileList.length > 0 ? 1 : 0);
     const successCount = results.filter(r => r.success).length;
 
+    const responsePayload = {
+      success: successCount > 0, total: totalInputs, succeeded: successCount,
+      failed: totalInputs - successCount, results, auto_approve,
+      message: auto_approve
+        ? `${successCount} listing(s) extracted and auto-approved`
+        : `${successCount} listing(s) extracted and queued for your approval`,
+    };
+
+    // If processing a queued job, save results back to queue
+    if (job_id) {
+      await supabase
+        .from("listing_extraction_queue")
+        .update({
+          status: successCount > 0 ? "completed" : "failed",
+          results: responsePayload,
+          error_message: successCount === 0 ? "All extractions failed" : null,
+          completed_at: new Date().toISOString(),
+        })
+        .eq("id", job_id);
+    }
+
     return new Response(
-      JSON.stringify({
-        success: successCount > 0, total: totalInputs, succeeded: successCount,
-        failed: totalInputs - successCount, results, auto_approve,
-        message: auto_approve
-          ? `${successCount} listing(s) extracted and auto-approved`
-          : `${successCount} listing(s) extracted and queued for your approval`,
-      }),
+      JSON.stringify(responsePayload),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
 
   } catch (error: unknown) {
     console.error("[extract] Fatal error:", error);
+
+    // If processing a queued job, mark it as failed
+    if (parsedJobId) {
+      try {
+        const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+        const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+        const sb = createClient(supabaseUrl, supabaseKey);
+        await sb.from("listing_extraction_queue").update({
+          status: "failed",
+          error_message: error instanceof Error ? error.message : "Extraction failed",
+          completed_at: new Date().toISOString(),
+        }).eq("id", parsedJobId);
+      } catch {}
+    }
+
     return new Response(
       JSON.stringify({ success: false, error: error instanceof Error ? error.message : "Extraction failed" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }

@@ -1,69 +1,41 @@
 
 
-## Root Cause Found
+## Plan: Fix All Email Issues Across All Templates
 
-The edge function logs reveal the exact error killing ALL extractions:
+### Problems Identified
 
-```
-Error: Insert failed: Could not find the 'completion_percentage' column of 'pending_project_imports' in the schema cache
-```
+1. **Recommended For You icons disappeared** — Inline SVGs are stripped by Gmail and most email clients. Must revert to hosted PNG images (`ai-tools.png`, `guides.png`, `properties.png` already exist in `public/email-icons/`).
 
-The edge function at line 666 writes `completion_percentage` but the actual DB column is `construction_progress`. Additionally, two more fields don't exist in the table: `unit_details` and `nearby_landmarks` (should map to `location_distances`), and `rera_number`.
+2. **Social media footer icons not rendering** — Same issue: `socialLinksFooter()` loads external `.svg` files via `<img>` tags, but Gmail blocks SVG images entirely. Must switch to hosted `.png` files. Currently missing `social-facebook.png` — need to confirm or create it.
 
-Every single extraction attempt fails at the final INSERT step -- after spending 15-20 seconds on scraping and AI. The data is extracted successfully but never saved.
+3. **Email split into multiple visual cards** — Several sub-sections (`ticketSupportEmbed`, `readyToGetStartedHtml`, `recommendedActionsHtml`) each have their own `border`, `border-radius`, and `background` styles creating distinct visual boxes. These need to be softened so they sit seamlessly inside the single continuous card.
 
----
+### Changes (all in `supabase/functions/_shared/email-html.ts`)
 
-## Plan
+#### A. Recommended For You — Revert to PNG hosted images
+- Change `recommendedCard()` back to using `iconImg()` with PNG paths
+- Remove the `RECOMMENDED_ICONS` inline SVG object
+- Ensure circular frame clips the PNG with `overflow:hidden` on the `<td>` to prevent square backgrounds
+- Signature: `recommendedCard(title, href, iconPath, alt)` — restore the original parameters
 
-### Fix 1: Patch column name mismatches in edge function (IMMEDIATE UNBLOCK)
+#### B. Social Footer — Switch to PNG with white pearl background
+- Replace `socialLinksFooter()` to use the inline `SVG` object icons (instagram, facebook, linkedin, tiktok, youtube) that are already defined at the top of the file — these render as raw HTML inside `<td>` elements, not as `<img>` tags, so they should survive email client processing
+- Actually, since Gmail strips ALL SVG (both inline and `<img>`), switch to using the `.png` files: `social-instagram.png`, `social-linkedin.png`, `social-tiktok.png`, `social-youtube.png`
+- Create `social-facebook.png` if missing
+- Style each icon circle: white/pearl (#FDFBF7) background, gold border, black icon inside
 
-**File:** `supabase/functions/extract-listing-from-link/index.ts` (lines 640-678)
+#### C. Single Card Layout — Remove visual fragmentation
+- `ticketSupportEmbed()`: Remove the heavy gradient background and red border; make it blend into the card
+- `readyToGetStartedHtml()`: Remove the outer border and separate background so it flows within the card
+- `inquiryBox()`: Soften its standalone bordered look
+- Keep all content inside the single `emailShell` wrapper card with no sub-borders that create separation
 
-Change the `importPayload` object:
-- `completion_percentage` → `construction_progress`
-- `nearby_landmarks` → `location_distances`
-- Remove `unit_details` (store in `highlights` or add column)
-- Remove `rera_number` (store in `review_notes` or add column)
+#### D. Deploy + Send Test Email
+- Deploy the updated edge function
+- Immediately send a test welcome email to `janeaboujaoudenails@gmail.com`
+- Take a screenshot as proof
 
-This single fix will unblock all extractions immediately.
-
-### Fix 2: Add missing columns via migration
-
-Add `unit_details JSONB DEFAULT NULL` and `rera_number TEXT DEFAULT NULL` to `pending_project_imports` so no data is lost.
-
-### Fix 3: Implement async queue architecture
-
-**New table:** `listing_extraction_queue`
-```sql
-CREATE TABLE listing_extraction_queue (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID REFERENCES auth.users(id),
-  urls TEXT[] DEFAULT '{}',
-  files JSONB DEFAULT '[]',
-  auto_approve BOOLEAN DEFAULT false,
-  status TEXT DEFAULT 'pending', -- pending, processing, completed, failed
-  results JSONB DEFAULT '[]',
-  error_message TEXT,
-  created_at TIMESTAMPTZ DEFAULT now(),
-  completed_at TIMESTAMPTZ
-);
-```
-
-**New edge function:** `process-extraction-queue` -- picks up pending jobs and processes them (called by the existing function or a cron)
-
-**Modified flow in `extract-listing-from-link`:**
-1. Insert job into queue with status `pending`
-2. Return `{ jobId, status: 'queued' }` immediately
-3. Fire-and-forget call to `process-extraction-queue`
-
-**Frontend changes in `ListingAdminChat.tsx`:**
-- On submit: get jobId back instantly, show "Queued" status
-- Poll every 3 seconds for job status updates
-- When `completed`, render the listing cards as before
-
-### Files to change
-- `supabase/functions/extract-listing-from-link/index.ts` -- fix column names + convert to queue-based
-- `src/components/listing-admin/ListingAdminChat.tsx` -- add polling for async jobs
-- DB migration -- add `unit_details`, `rera_number` columns + `listing_extraction_queue` table
+### Files Modified
+- `supabase/functions/_shared/email-html.ts` — all icon and layout fixes
+- `public/email-icons/social-facebook.png` — create if missing (or use existing assets)
 

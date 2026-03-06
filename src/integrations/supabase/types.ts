@@ -12302,6 +12302,45 @@ export type Database = {
           },
         ]
       }
+      listing_extraction_queue: {
+        Row: {
+          auto_approve: boolean | null
+          completed_at: string | null
+          created_at: string | null
+          error_message: string | null
+          files: Json | null
+          id: string
+          results: Json | null
+          status: string | null
+          urls: string[] | null
+          user_id: string
+        }
+        Insert: {
+          auto_approve?: boolean | null
+          completed_at?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          files?: Json | null
+          id?: string
+          results?: Json | null
+          status?: string | null
+          urls?: string[] | null
+          user_id: string
+        }
+        Update: {
+          auto_approve?: boolean | null
+          completed_at?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          files?: Json | null
+          id?: string
+          results?: Json | null
+          status?: string | null
+          urls?: string[] | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       listing_notifications: {
         Row: {
           created_at: string | null
@@ -14770,6 +14809,7 @@ export type Database = {
           price_to: number | null
           property_type_label: string | null
           reelly_id: number | null
+          rera_number: string | null
           review_notes: string | null
           reviewed_at: string | null
           reviewed_by: string | null
@@ -14785,6 +14825,7 @@ export type Database = {
           status: string | null
           status_label: string | null
           total_units: number | null
+          unit_details: Json | null
           unit_types: Json | null
           updated_at: string
           usp_bullets: Json | null
@@ -14840,6 +14881,7 @@ export type Database = {
           price_to?: number | null
           property_type_label?: string | null
           reelly_id?: number | null
+          rera_number?: string | null
           review_notes?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
@@ -14855,6 +14897,7 @@ export type Database = {
           status?: string | null
           status_label?: string | null
           total_units?: number | null
+          unit_details?: Json | null
           unit_types?: Json | null
           updated_at?: string
           usp_bullets?: Json | null
@@ -14910,6 +14953,7 @@ export type Database = {
           price_to?: number | null
           property_type_label?: string | null
           reelly_id?: number | null
+          rera_number?: string | null
           review_notes?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
@@ -14925,6 +14969,7 @@ export type Database = {
           status?: string | null
           status_label?: string | null
           total_units?: number | null
+          unit_details?: Json | null
           unit_types?: Json | null
           updated_at?: string
           usp_bullets?: Json | null
