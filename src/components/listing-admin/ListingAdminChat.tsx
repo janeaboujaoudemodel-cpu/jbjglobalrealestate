@@ -889,7 +889,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
       onDrop={handleDropFiles}
     >
       {/* Header */}
-      <div className="flex items-center gap-3 p-4 border-b border-zinc-200 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+      <div className="flex items-center gap-3 p-4 border-b border-zinc-200 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]" style={{ borderRadius: 0 }}>
         <Avatar className="w-10 h-10 border-2 border-gold/30">
           <AvatarImage src={adminPersona?.avatar} alt={adminPersona?.name} />
           <AvatarFallback className="bg-gold/20 text-gold font-semibold">SM</AvatarFallback>
@@ -1135,7 +1135,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
       )}
 
       {/* Input */}
-      <div className="p-4 border-t border-zinc-200 bg-white">
+      <div className="p-4 border-t border-zinc-200 bg-white" style={{ borderRadius: 0 }}>
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="sm" onClick={openMultiFilePicker} className="h-10 w-10 p-0 text-zinc-600 hover:text-gold hover:bg-gold/10" title="Upload files" disabled={isLoading}>
             <Paperclip className="w-5 h-5" />
