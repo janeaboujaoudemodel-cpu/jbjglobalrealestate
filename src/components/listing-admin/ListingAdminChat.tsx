@@ -408,7 +408,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
       try {
         const { data: job, error } = await supabase
           .from("listing_extraction_queue")
-          .select("status, results, error_message")
+          .select("status, results, error_message, urls")
           .eq("id", jobId)
           .single();
 
