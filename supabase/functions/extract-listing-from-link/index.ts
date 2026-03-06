@@ -146,6 +146,7 @@ serve(async (req) => {
       async_mode = false,
       job_id, // For processing a queued job
     } = body;
+    parsedJobId = job_id || null;
 
     const urlList: string[] = urls || (url ? [url] : []);
     const fileList: { name: string; url: string; type: string }[] = Array.isArray(files) ? files : [];
@@ -858,7 +859,7 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
     console.error("[extract] Fatal error:", error);
 
     // If processing a queued job, mark it as failed
-    if (body?.job_id) {
+    if (parsedJobId) {
       try {
         const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
         const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -867,7 +868,7 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
           status: "failed",
           error_message: error instanceof Error ? error.message : "Extraction failed",
           completed_at: new Date().toISOString(),
-        }).eq("id", body.job_id);
+        }).eq("id", parsedJobId);
       } catch {}
     }
 
