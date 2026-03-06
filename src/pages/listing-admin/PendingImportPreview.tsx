@@ -234,6 +234,8 @@ const PendingImportPreview = () => {
             on_completion: typeof paymentBreakdownObj.on_completion === "string" ? paymentBreakdownObj.on_completion : undefined,
           }
         : null,
+      latitude: pendingImport.latitude,
+      longitude: pendingImport.longitude,
     };
   }, [pendingImport]);
 
