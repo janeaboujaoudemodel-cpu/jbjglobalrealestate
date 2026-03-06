@@ -6845,6 +6845,54 @@ export type Database = {
         }
         Relationships: []
       }
+      employee_emails: {
+        Row: {
+          created_at: string | null
+          created_by: string
+          department: string | null
+          email_address: string
+          email_prefix: string
+          employee_name: string
+          id: string
+          notes: string | null
+          password_hash: string
+          position: string | null
+          quota_mb: number | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by: string
+          department?: string | null
+          email_address: string
+          email_prefix: string
+          employee_name: string
+          id?: string
+          notes?: string | null
+          password_hash: string
+          position?: string | null
+          quota_mb?: number | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string
+          department?: string | null
+          email_address?: string
+          email_prefix?: string
+          employee_name?: string
+          id?: string
+          notes?: string | null
+          password_hash?: string
+          position?: string | null
+          quota_mb?: number | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       employee_journey_logs: {
         Row: {
           created_at: string
@@ -23755,6 +23803,7 @@ export type Database = {
       is_active_crm_member: { Args: { _user_id: string }; Returns: boolean }
       is_authorized_staff: { Args: never; Returns: boolean }
       is_crm_admin: { Args: { _user_id: string }; Returns: boolean }
+      is_crm_owner: { Args: { check_user_id: string }; Returns: boolean }
       is_email_domain_blocked: {
         Args: { email_address: string }
         Returns: boolean
