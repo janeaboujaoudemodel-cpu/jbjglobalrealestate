@@ -317,7 +317,7 @@ const ListingGenerator = () => {
 
   // ========== POLL FOR JOB COMPLETION ==========
   const pollJob = async (jobId: string): Promise<any> => {
-    const maxPolls = 90; // 90 * 2s = 3 min max
+    const maxPolls = 450; // 15 minutes max
     for (let i = 0; i < maxPolls; i++) {
       await new Promise((r) => setTimeout(r, 2000));
 
@@ -325,21 +325,21 @@ const ListingGenerator = () => {
         body: { action: "poll", job_id: jobId },
       });
 
-      if (error) throw new Error(error.message || "Polling failed");
-
-      // Job still processing
-      if (data?.status === "processing" || data?.status === "queued") {
-        if (i > 15) setProcessingStatus("AI is analyzing your documents — almost done...");
+      if (error) {
+        if (i > 5) setProcessingStatus("Still processing in background...");
         continue;
       }
 
-      // Job failed
-      if (!data?.success) throw new Error(data?.error || "Extraction failed");
+      if (data?.status === "processing" || data?.status === "pending" || data?.status === "queued") {
+        if (i > 20) setProcessingStatus("AI is analyzing your documents — still running in background...");
+        continue;
+      }
 
-      // Job completed — data contains the full result
+      if (!data?.success) throw new Error(data?.error || "Extraction failed");
       return data;
     }
-    throw new Error("Extraction timed out after 3 minutes. Please try with fewer documents.");
+
+    throw new Error("Still processing in background. You can leave and come back — your draft is saved.");
   };
 
   // ========== GENERATE ==========
