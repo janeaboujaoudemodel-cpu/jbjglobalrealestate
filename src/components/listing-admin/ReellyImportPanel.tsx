@@ -493,7 +493,7 @@ export function ReellyImportPanel() {
         if (error) throw error;
         if (!data?.success) throw new Error(data?.error || "Backfill failed");
 
-        const batchResults = (data.results || []) as Array<{ name: string; slug?: string; status: string; images?: number; docs?: number }>;
+        const batchResults = (Array.isArray(data.results) ? data.results : []) as Array<{ name: string; slug?: string; status: string; images?: number; docs?: number }>;
         allResults = [...allResults, ...batchResults];
         aggregated = { processed: aggregated.processed + (data.processed || 0), updated: aggregated.updated + (data.updated || 0), failed: aggregated.failed + (data.failed || 0), remaining: data.remaining || 0 };
         setBackfillResult({ success: true, ...aggregated, message: `Processing batch ${batches + 1}...` });

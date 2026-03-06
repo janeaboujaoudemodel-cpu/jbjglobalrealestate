@@ -199,11 +199,31 @@ export function useTrendingAreas() {
 }
 
 /**
- * Lightweight exact count of all projects (head-only query).
+ * Lightweight exact count of published projects (head-only query).
+ * This shows only projects that are actually live on the website.
  */
 export function useProjectsCount() {
   return useQuery({
     queryKey: ["projects-count"],
+    staleTime: 5 * 60 * 1000,
+    gcTime: 15 * 60 * 1000,
+    queryFn: async () => {
+      const { count, error } = await supabase
+        .from("projects")
+        .select("id", { count: "exact", head: true })
+        .eq("is_published", true);
+      if (error) throw error;
+      return count ?? 0;
+    },
+  });
+}
+
+/**
+ * Total count of ALL projects (published + unpublished).
+ */
+export function useProjectsTotalCount() {
+  return useQuery({
+    queryKey: ["projects-total-count"],
     staleTime: 5 * 60 * 1000,
     gcTime: 15 * 60 * 1000,
     queryFn: async () => {
