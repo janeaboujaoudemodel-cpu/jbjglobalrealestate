@@ -132,57 +132,43 @@ export default function ProjectLocationMap({
   className = "",
 }: ProjectLocationMapProps) {
   const [mapView, setMapView] = useState<MapViewType>("satellite");
-  const [coordinates, setCoordinates] = useState<[number, number] | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [scrollZoomEnabled, setScrollZoomEnabled] = useState(false);
+  const [hasRefined, setHasRefined] = useState(false);
+  const [refinedCoords, setRefinedCoords] = useState<[number, number] | null>(null);
 
   const defaultLat = 25.2048;
   const defaultLng = 55.2708;
 
+  // Use real coords if available, otherwise default to Dubai immediately (no blocking geocode)
+  const coordinates: [number, number] = refinedCoords
+    ?? (latitude && longitude ? [latitude, longitude] : [defaultLat, defaultLng]);
+
+  const hasRealCoords = !!(latitude && longitude) || !!refinedCoords;
+
   const mapQuery = `${projectName}${location ? `, ${location}` : ""}, Dubai, UAE`;
   const externalMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`;
 
-  // externalMapsUrl used directly in anchor tags
-
-  useEffect(() => {
-    if (latitude && longitude) {
-      setCoordinates([latitude, longitude]);
-      setIsLoading(false);
-      return;
-    }
-
-    const geocodeLocation = async () => {
-      try {
-        const query = encodeURIComponent(mapQuery);
-        const response = await fetch(
-          `https://nominatim.openstreetmap.org/search?format=json&q=${query}&limit=1`
-        );
-        const data = await response.json();
-        if (data && data.length > 0) {
-          setCoordinates([parseFloat(data[0].lat), parseFloat(data[0].lon)]);
-        } else {
-          setCoordinates([defaultLat, defaultLng]);
-        }
-      } catch (error) {
-        console.error("Geocoding failed:", error);
-        setCoordinates([defaultLat, defaultLng]);
-      } finally {
-        setIsLoading(false);
+  // On-demand geocoding (only when user clicks "Refine location")
+  const handleRefineLocation = async () => {
+    if (hasRefined) return;
+    setHasRefined(true);
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 5000);
+      const query = encodeURIComponent(mapQuery);
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${query}&limit=1`,
+        { signal: controller.signal }
+      );
+      clearTimeout(timeout);
+      const data = await response.json();
+      if (data && data.length > 0) {
+        setRefinedCoords([parseFloat(data[0].lat), parseFloat(data[0].lon)]);
       }
-    };
-
-    geocodeLocation();
-  }, [latitude, longitude, mapQuery, defaultLat, defaultLng]);
-
-  if (isLoading) {
-    return (
-      <div className={`rounded-xl overflow-hidden border border-gold/30 bg-muted ${className}`} style={{ height: 450 }}>
-        <div className="w-full h-full flex items-center justify-center">
-          <div className="animate-pulse text-muted-foreground">Loading map...</div>
-        </div>
-      </div>
-    );
-  }
+    } catch {
+      // Silently fail — keep existing coords
+    }
+  };
 
   if (!coordinates) {
     return (

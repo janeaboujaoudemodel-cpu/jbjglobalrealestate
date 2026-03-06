@@ -27,6 +27,15 @@ const SITE_ASSET_PATTERNS = [
   /avatar/i,
   /spinner/i,
   /favicon/i,
+  /\/flags?\//i,
+  /flag-icon/i,
+  /lang[-_]?selector/i,
+  /sprite/i,
+  /pixel\.(gif|png)/i,
+  /spacer\.(gif|png)/i,
+  /1x1\.(gif|png)/i,
+  /tracking/i,
+  /analytics/i,
 ];
 
 // Document patterns - these are PDFs/docs, not gallery images

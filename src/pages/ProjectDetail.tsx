@@ -231,6 +231,8 @@ const ProjectDetail = () => {
       external_id: project.external_id ?? null,
       cover_image_url: project.cover_image_url ?? null,
       area_name: project.area_name ?? null,
+      latitude: project.latitude ?? null,
+      longitude: project.longitude ?? null,
     };
   }, [project]);
 
