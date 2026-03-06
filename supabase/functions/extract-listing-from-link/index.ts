@@ -140,7 +140,7 @@ serve(async (req) => {
       files,
       userId,
       albumName,
-      auto_approve = false,
+      auto_approve: _auto_approve_raw = false,
       queue = true,
       retryImportId,
       async_mode = false,
@@ -150,6 +150,8 @@ serve(async (req) => {
 
     const urlList: string[] = urls || (url ? [url] : []);
     const fileList: { name: string; url: string; type: string }[] = Array.isArray(files) ? files : [];
+    // ENFORCED: Manual publish only — auto_approve is always false
+    const auto_approve = false;
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -485,10 +487,12 @@ serve(async (req) => {
         }
 
         // AI extraction — use powerful model with expanded context
+        // Use combined markdown+html to handle pages with short markdown but rich HTML
         let extractedData: any = null;
-        if (LOVABLE_API_KEY && markdown.length > 100) {
+        const combinedContent = (markdown + "\n\n" + html).trim();
+        if (LOVABLE_API_KEY && combinedContent.length > 100) {
           try {
-            const contentForAI = markdown.substring(0, 80000);
+            const contentForAI = combinedContent.substring(0, 80000);
 
             const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
               method: "POST",

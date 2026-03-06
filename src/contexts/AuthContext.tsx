@@ -47,6 +47,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return false;
     }
 
+    // Check session-based cache for instant owner verification on reload
+    const cacheKey = `owner_${currentSession.access_token.substring(0, 16)}`;
+    const cached = sessionStorage.getItem(cacheKey);
+    if (cached === 'true') {
+      setIsOwner(true);
+      setOwnerLoading(false);
+      setOwnerError(null);
+      // Still verify in background (fail-closed)
+      (async () => {
+        try {
+          const result = await supabase.functions.invoke("verify-owner", {
+            headers: { Authorization: `Bearer ${currentSession.access_token}` },
+          });
+          if (result.data?.isOwner !== true) {
+            sessionStorage.removeItem(cacheKey);
+            setIsOwner(false);
+          }
+        } catch {
+          sessionStorage.removeItem(cacheKey);
+          setIsOwner(false);
+        }
+      })();
+      return true;
+    }
+
     if (!currentSession?.user) {
       setIsOwner(false);
       setOwnerLoading(false);
@@ -95,6 +120,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // which causes OwnerGuard to redirect to /403.
       setIsOwner(result);
       setOwnerLoading(false);
+      // Cache successful owner verification in sessionStorage
+      if (result && currentSession?.access_token) {
+        const ck = `owner_${currentSession.access_token.substring(0, 16)}`;
+        sessionStorage.setItem(ck, 'true');
+      }
       return result;
     } catch (err: any) {
       console.error("verify-owner failed after retries:", err);

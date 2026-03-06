@@ -114,7 +114,8 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
   const [isLoading, setIsLoading] = useState(false);
   const [urlInputs, setUrlInputs] = useState<string[]>([""]);
   const [showBulkUpload, setShowBulkUpload] = useState(false);
-  const [autoApprove, setAutoApprove] = useState(false);
+  // Auto-approve permanently disabled — manual publish only
+  const autoApprove = false;
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [isDragOver, setIsDragOver] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -907,13 +908,12 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
         </div>
       </div>
 
-      {/* Auto-Approve Toggle */}
+      {/* Manual Review Mode - Auto-approve disabled */}
       <div className="flex items-center gap-3 px-4 py-2 border-b border-zinc-100 bg-zinc-50">
-        <Zap className={`w-4 h-4 ${autoApprove ? "text-amber-500" : "text-zinc-400"}`} />
-        <Label htmlFor="auto-approve" className="text-xs font-medium text-zinc-700 cursor-pointer flex-1">Auto-Approve Mode</Label>
-        <Switch id="auto-approve" checked={autoApprove} onCheckedChange={setAutoApprove} className="data-[state=checked]:bg-amber-500" />
-        <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${autoApprove ? "bg-amber-100 text-amber-700" : "bg-zinc-200 text-zinc-500"}`}>
-          {autoApprove ? "LIVE" : "REVIEW"}
+        <CheckCircle className="w-4 h-4 text-emerald-500" />
+        <span className="text-xs font-medium text-zinc-700 flex-1">Manual Review Mode</span>
+        <span className="text-[10px] px-2 py-0.5 rounded-full font-medium bg-emerald-100 text-emerald-700">
+          REVIEW
         </span>
       </div>
 
