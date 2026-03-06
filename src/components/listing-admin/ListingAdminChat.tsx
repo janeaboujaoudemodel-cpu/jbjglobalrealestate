@@ -122,6 +122,8 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const initialScrollDone = useRef(false);
+  const dragCounter = useRef(0);
+  const queuedFilesRef = useRef<HTMLDivElement>(null);
 
   // Load existing chat session
   useEffect(() => {
@@ -641,10 +643,14 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
   };
 
   const handleDropFiles = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault(); e.stopPropagation(); setIsDragOver(false);
+    e.preventDefault(); e.stopPropagation();
+    dragCounter.current = 0;
+    setIsDragOver(false);
     if (e.dataTransfer?.files?.length) {
       queueFiles(Array.from(e.dataTransfer.files));
-      toast.success(`${e.dataTransfer.files.length} file(s) added.`);
+      toast.success(`${e.dataTransfer.files.length} file(s) added — ready to process!`);
+      // Auto-scroll to queued files after state updates
+      setTimeout(() => queuedFilesRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }), 150);
     }
   };
 
@@ -878,9 +884,12 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
 
   return (
     <div
-      className={`flex flex-col h-full bg-white overflow-hidden transition-all ${isDragOver ? "ring-2 ring-gold ring-inset" : ""}`}
+      className="flex flex-col h-full bg-white overflow-hidden transition-all relative"
       style={{ borderRadius: 0 }}
-      onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); if (!isDragOver) setIsDragOver(true); }}
+      onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
+      onDragEnter={(e) => { e.preventDefault(); e.stopPropagation(); dragCounter.current++; if (!isDragOver) setIsDragOver(true); }}
+      onDragLeave={(e) => { e.preventDefault(); e.stopPropagation(); dragCounter.current--; if (dragCounter.current <= 0) { dragCounter.current = 0; setIsDragOver(false); } }}
+      onDrop={handleDropFiles}
       onDragEnter={(e) => { e.preventDefault(); e.stopPropagation(); setIsDragOver(true); }}
       onDragLeave={(e) => {
         e.preventDefault(); e.stopPropagation();
@@ -1110,40 +1119,56 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
       {/* Hidden file input */}
       <input ref={fileInputRef} type="file" multiple accept="*/*" onChange={handleFileInputChange} className="hidden" />
 
+      {/* WhatsApp-style full-screen drag overlay */}
       {isDragOver && (
-        <div className="px-4 py-2 border-t border-gold/30 bg-gold/10 text-center">
-          <p className="text-xs font-medium text-gold">Drop files here to add them to Sarah's queue</p>
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm pointer-events-none">
+          <div className="flex flex-col items-center gap-4 p-10 border-2 border-dashed border-gold rounded-2xl bg-white/95 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+            <div className="w-16 h-16 rounded-full bg-gold/10 flex items-center justify-center">
+              <Upload className="w-8 h-8 text-gold" />
+            </div>
+            <div className="text-center">
+              <p className="text-lg font-bold text-foreground">Drop files here</p>
+              <p className="text-sm text-muted-foreground mt-1">Photos, PDFs, brochures, floor plans — any format</p>
+            </div>
+          </div>
         </div>
       )}
 
       {/* Queued Files Preview */}
       {uploadedFiles.length > 0 && (
-        <div className="px-4 py-2 border-t border-zinc-200 bg-zinc-50">
+        <div ref={queuedFilesRef} className="px-4 py-3 border-t-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6]">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-medium text-zinc-700">{uploadedFiles.length} file{uploadedFiles.length !== 1 ? "s" : ""} ready</span>
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center">
+                <span className="text-xs font-bold text-gold">{uploadedFiles.length}</span>
+              </div>
+              <span className="text-sm font-semibold text-foreground">
+                {uploadedFiles.length} file{uploadedFiles.length !== 1 ? "s" : ""} ready to process
+              </span>
+            </div>
             <div className="flex gap-2">
-              <Button variant="ghost" size="sm" onClick={() => setUploadedFiles([])} className="h-6 text-[10px] text-zinc-500 hover:text-red-500 px-2">Clear all</Button>
-              <Button variant="ghost" size="sm" onClick={openMultiFilePicker} className="h-6 text-[10px] text-gold px-2"><Plus className="w-3 h-3 mr-1" /> Add more</Button>
+              <Button variant="ghost" size="sm" onClick={() => setUploadedFiles([])} className="h-6 text-[10px] text-zinc-500 hover:text-red-500 px-2 cursor-pointer">Clear all</Button>
+              <Button variant="ghost" size="sm" onClick={openMultiFilePicker} className="h-6 text-[10px] text-gold px-2 cursor-pointer"><Plus className="w-3 h-3 mr-1" /> Add more</Button>
             </div>
           </div>
-          <div className="flex flex-wrap gap-1.5 max-h-[80px] overflow-y-auto">
+          <div className="flex flex-wrap gap-1.5 max-h-[80px] overflow-y-auto mb-3">
             {uploadedFiles.map((file, idx) => (
               <div key={idx} className="flex items-center gap-1 px-2 py-1 bg-white border border-zinc-200 rounded text-xs text-foreground group/file">
                 {file.type.includes("image") ? <ImageIcon className="w-3 h-3 text-blue-500" /> : <FileText className="w-3 h-3 text-red-500" />}
                 <span className="truncate max-w-[100px]">{file.name}</span>
-                <button onClick={() => removeQueuedFile(idx)} className="ml-0.5 text-zinc-400 hover:text-red-500"><X className="w-3 h-3" /></button>
+                <button onClick={() => removeQueuedFile(idx)} className="ml-0.5 text-zinc-400 hover:text-red-500 cursor-pointer"><X className="w-3 h-3" /></button>
               </div>
             ))}
           </div>
-          {/* Send queued files button */}
+          {/* Prominent Send button */}
           <Button
-            size="sm"
-            className="w-full mt-2 h-8 text-xs bg-gradient-to-r from-[#D4A853] to-[#C19A3E] text-white hover:opacity-90"
+            size="lg"
+            className="w-full h-11 text-sm font-bold bg-gradient-to-r from-[#D4A853] to-[#C19A3E] text-white hover:opacity-90 shadow-lg cursor-pointer"
             onClick={sendQueuedFiles}
             disabled={isLoading}
           >
-            {isLoading ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : <Upload className="w-3 h-3 mr-1" />}
-            Process {uploadedFiles.length} file{uploadedFiles.length !== 1 ? "s" : ""}
+            {isLoading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Upload className="w-4 h-4 mr-2" />}
+            Process {uploadedFiles.length} file{uploadedFiles.length !== 1 ? "s" : ""} now
           </Button>
         </div>
       )}
@@ -1151,7 +1176,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
       {/* Input */}
       <div className="p-4 border-t border-zinc-200 bg-white" style={{ borderRadius: 0 }}>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" onClick={openMultiFilePicker} className="h-10 w-10 p-0 text-zinc-600 hover:text-gold hover:bg-gold/10" title="Upload files" disabled={isLoading}>
+          <Button variant="ghost" size="sm" onClick={openMultiFilePicker} className="h-10 w-10 p-0 text-zinc-600 hover:text-gold hover:bg-gold/10 cursor-pointer" title="Upload files" disabled={isLoading}>
             <Paperclip className="w-5 h-5" />
           </Button>
           <Button variant="ghost" size="sm" onClick={() => setShowBulkUpload(!showBulkUpload)}
