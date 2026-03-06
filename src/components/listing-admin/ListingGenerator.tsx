@@ -6,12 +6,12 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Upload, FileText, Globe, Loader2, Check, AlertTriangle,
   X, Trash2, ChevronRight, Sparkles, MapPin, Building2,
-  DollarSign, LayoutGrid, Shield, Landmark, ClipboardList,
+  DollarSign, LayoutGrid, Shield, Landmark, ClipboardList, RefreshCw,
 } from "lucide-react";
 
 interface UploadedFile {
@@ -77,15 +77,20 @@ const ListingGenerator = () => {
   const [description, setDescription] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [processingStatus, setProcessingStatus] = useState("");
-  const [extracted, setExtracted] = useState<ExtractedData | null>(null);
+  const [extractedProjects, setExtractedProjects] = useState<ExtractedData[]>([]);
+  const [activeProjectIndex, setActiveProjectIndex] = useState(0);
   const [duplicates, setDuplicates] = useState<DuplicateMatch[]>([]);
   const [showDuplicateDialog, setShowDuplicateDialog] = useState(false);
+  const [duplicateProjectIndex, setDuplicateProjectIndex] = useState(0);
   const [isSaving, setIsSaving] = useState(false);
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
+  const [timedOut, setTimedOut] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dropRef = useRef<HTMLDivElement>(null);
   const dragCounter = useRef(0);
   const [isDragOver, setIsDragOver] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setInterval>>();
 
   // Drag & drop handlers
   const handleDragEnter = useCallback((e: React.DragEvent) => {
@@ -158,7 +163,6 @@ const ListingGenerator = () => {
     });
   };
 
-  // Cleanup previews on unmount
   useEffect(() => {
     return () => {
       files.forEach((f) => { if (f.preview) URL.revokeObjectURL(f.preview); });
@@ -167,6 +171,8 @@ const ListingGenerator = () => {
   }, []);
 
   const canGenerate = files.length > 0 || url.trim().length > 0 || description.trim().length > 0;
+  const hasFilesOnly = files.length > 0;
+  const hasUrlOnly = !hasFilesOnly && url.trim().length > 0;
 
   // ========== GENERATE ==========
   const handleGenerate = async () => {
@@ -174,17 +180,37 @@ const ListingGenerator = () => {
 
     setStep("processing");
     setIsProcessing(true);
-    setProcessingStatus("Preparing documents...");
+    setTimedOut(false);
+    setElapsedSeconds(0);
+    setProcessingStatus(hasUrlOnly ? "Scraping website..." : "Preparing documents...");
+
+    // Start elapsed timer
+    const startTime = Date.now();
+    timerRef.current = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - startTime) / 1000);
+      setElapsedSeconds(elapsed);
+      if (elapsed > 90) {
+        setTimedOut(true);
+      }
+    }, 1000);
 
     try {
-      // Build file payloads (base64) - for images, send directly; for PDFs, send as-is (Gemini handles them)
       const filePayloads = files.map((f) => ({
         name: f.name,
         base64: f.base64 || "",
         mimeType: f.mimeType,
       }));
 
-      setProcessingStatus(`Sending ${filePayloads.length} document(s) to AI for analysis...`);
+      if (filePayloads.length > 0) {
+        setProcessingStatus(`Sending ${filePayloads.length} document(s) to AI for analysis...`);
+      } else if (url.trim()) {
+        setProcessingStatus("Scraping website & extracting project data...");
+      } else {
+        setProcessingStatus("Analyzing description...");
+      }
+
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 120000); // 120s hard timeout
 
       const { data, error } = await supabase.functions.invoke("generate-listing", {
         body: {
@@ -195,38 +221,52 @@ const ListingGenerator = () => {
         },
       });
 
+      clearTimeout(timeout);
+
       if (error) throw new Error(error.message || "Extraction failed");
       if (!data?.success) throw new Error(data?.error || "Extraction returned no data");
 
-      setExtracted(data.extracted);
+      // Handle multi-project response
+      const projects: ExtractedData[] = data.projects || (data.extracted ? [data.extracted] : []);
+      if (projects.length === 0) throw new Error("No projects extracted");
+
+      setExtractedProjects(projects);
+      setActiveProjectIndex(0);
       setDuplicates(data.duplicates || []);
 
       if (data.duplicates?.length > 0) {
         setStep("duplicates");
         setShowDuplicateDialog(true);
+        setDuplicateProjectIndex(0);
       } else {
         setStep("preview");
       }
 
-      toast.success("Extraction complete!");
+      toast.success(`Extracted ${projects.length} project${projects.length > 1 ? "s" : ""}!`);
     } catch (err: any) {
       console.error("Generation error:", err);
-      toast.error(err.message || "Failed to generate listing");
+      if (err.name === "AbortError") {
+        toast.error("Request timed out. Please try again with fewer documents.");
+      } else {
+        toast.error(err.message || "Failed to generate listing");
+      }
       setStep("input");
     } finally {
       setIsProcessing(false);
       setProcessingStatus("");
+      if (timerRef.current) clearInterval(timerRef.current);
     }
   };
 
   // ========== SAVE ==========
-  const handleSave = async (mode: "new" | "merge" | "replace", existingId?: string) => {
+  const handleSave = async (mode: "new" | "merge" | "replace", existingId?: string, projectIdx?: number) => {
+    const idx = projectIdx ?? activeProjectIndex;
+    const extracted = extractedProjects[idx];
     if (!extracted) return;
     setIsSaving(true);
     setShowDuplicateDialog(false);
 
     try {
-      // Upload files to storage first
       const uploadedDocs: any[] = [];
       for (const f of files) {
         try {
@@ -251,7 +291,6 @@ const ListingGenerator = () => {
         }
       }
 
-      // Build pending_project_imports record
       const record: Record<string, any> = {
         name: extracted.name || "Unnamed Project",
         slug: mode === "new" && existingId ? `${extracted.slug}-${Date.now()}` : extracted.slug,
@@ -305,16 +344,22 @@ const ListingGenerator = () => {
       toast.success(
         mode === "merge" ? "Listing merged successfully!" :
         mode === "replace" ? "Listing replaced successfully!" :
-        "Listing saved to pending!"
+        `"${extracted.name}" saved to pending!`
       );
 
-      // Reset
-      setStep("input");
-      setFiles([]);
-      setUrl("");
-      setDescription("");
-      setExtracted(null);
-      setDuplicates([]);
+      // Remove saved project from list
+      setExtractedProjects(prev => prev.filter((_, i) => i !== idx));
+      if (extractedProjects.length <= 1) {
+        // Reset if last project
+        setStep("input");
+        setFiles([]);
+        setUrl("");
+        setDescription("");
+        setExtractedProjects([]);
+        setDuplicates([]);
+      } else {
+        setActiveProjectIndex(0);
+      }
     } catch (err: any) {
       console.error("Save error:", err);
       toast.error(err.message || "Failed to save listing");
@@ -328,16 +373,20 @@ const ListingGenerator = () => {
       setShowDuplicateDialog(false);
       setStep("preview");
     } else {
-      handleSave(action, dupId);
+      handleSave(action, dupId, duplicateProjectIndex);
     }
   };
 
   const resetToInput = () => {
     setStep("input");
-    setExtracted(null);
+    setExtractedProjects([]);
     setDuplicates([]);
     setProcessingStatus("");
+    setTimedOut(false);
+    setElapsedSeconds(0);
   };
+
+  const extracted = extractedProjects[activeProjectIndex] || null;
 
   // ========== RENDER ==========
   return (
@@ -434,8 +483,11 @@ const ListingGenerator = () => {
             <Input
               value={url}
               onChange={(e) => setUrl(e.target.value)}
-              placeholder="https://developer.com/project-name"
+              placeholder="https://developer.com/project-name or marketing link with multiple projects"
             />
+            <p className="text-xs text-muted-foreground">
+              💡 If the link contains multiple projects, each will be extracted as a separate listing
+            </p>
           </div>
 
           {/* Description */}
@@ -460,7 +512,7 @@ const ListingGenerator = () => {
             className="w-full h-14 text-lg font-semibold"
           >
             <Sparkles className="w-5 h-5 mr-2" />
-            Generate Listing
+            Generate Listing{hasUrlOnly ? " from URL" : ""}
           </Button>
         </div>
       )}
@@ -477,13 +529,30 @@ const ListingGenerator = () => {
             </div>
           </div>
           <div className="text-center space-y-2">
-            <h3 className="text-xl font-semibold text-foreground">Analyzing Documents</h3>
+            <h3 className="text-xl font-semibold text-foreground">
+              {hasUrlOnly ? "Scraping Website" : "Analyzing Documents"}
+            </h3>
             <p className="text-muted-foreground">{processingStatus}</p>
-            <p className="text-xs text-muted-foreground">Using Gemini Pro Vision for complete extraction</p>
+            <p className="text-xs text-muted-foreground">
+              {hasUrlOnly ? "Using Gemini Flash for fast extraction" : "Using Gemini Pro Vision for complete extraction"}
+            </p>
+            <p className="text-sm font-medium text-gold">{elapsedSeconds}s elapsed</p>
           </div>
           <div className="w-64 h-2 bg-zinc-200 rounded-full overflow-hidden">
-            <div className="h-full bg-gold rounded-full animate-pulse" style={{ width: "60%" }} />
+            <div
+              className="h-full bg-gold rounded-full transition-all duration-1000"
+              style={{ width: `${Math.min(95, (elapsedSeconds / 60) * 100)}%` }}
+            />
           </div>
+
+          {timedOut && (
+            <div className="text-center space-y-3">
+              <p className="text-sm text-amber-600">Taking longer than expected...</p>
+              <Button variant="outline" onClick={resetToInput}>
+                <RefreshCw className="w-4 h-4 mr-2" /> Cancel & Retry
+              </Button>
+            </div>
+          )}
         </div>
       )}
 
@@ -551,319 +620,330 @@ const ListingGenerator = () => {
       </Dialog>
 
       {/* ========== STEP 4: PREVIEW ========== */}
-      {step === "preview" && extracted && (
+      {step === "preview" && extractedProjects.length > 0 && (
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
               <Check className="w-5 h-5 text-green-600" />
-              Extracted Listing Preview
+              Extracted {extractedProjects.length} Project{extractedProjects.length > 1 ? "s" : ""}
             </h2>
             <div className="flex gap-2">
               <Button variant="ghost" onClick={resetToInput}>
                 <X className="w-4 h-4 mr-1" /> Start Over
               </Button>
-              <Button
-                variant="primary"
-                onClick={() => handleSave("new")}
-                disabled={isSaving}
-                className="min-w-[160px]"
-              >
-                {isSaving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Check className="w-4 h-4 mr-2" />}
-                Save to Pending
-              </Button>
             </div>
           </div>
 
-          {/* Project Header */}
-          <Card className="border-gold/30 bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3]">
-            <CardContent className="p-6">
-              <div className="flex items-start justify-between">
-                <div>
-                  <h3 className="text-2xl font-bold text-foreground">{extracted.name || "Unnamed"}</h3>
-                  <div className="flex items-center gap-3 mt-2 flex-wrap">
-                    {extracted.developer && (
-                      <Badge className="bg-gold/20 text-foreground border-gold/30">
-                        <Building2 className="w-3 h-3 mr-1" /> {extracted.developer}
-                      </Badge>
-                    )}
-                    {extracted.location && (
-                      <Badge variant="secondary">
-                        <MapPin className="w-3 h-3 mr-1" /> {extracted.location}
-                      </Badge>
-                    )}
-                    {extracted.emirate && (
-                      <Badge variant="outline">{extracted.emirate}</Badge>
-                    )}
-                    {extracted.projectStatus && (
-                      <Badge variant="outline">{extracted.projectStatus}</Badge>
-                    )}
-                  </div>
-                </div>
-                {extracted.priceFrom && (
-                  <div className="text-right">
-                    <p className="text-sm text-muted-foreground">Starting from</p>
-                    <p className="text-xl font-bold text-gold">AED {extracted.priceFrom.toLocaleString()}</p>
-                    {extracted.priceTo && (
-                      <p className="text-sm text-muted-foreground">to AED {extracted.priceTo.toLocaleString()}</p>
-                    )}
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Description */}
-          {extracted.description && (
-            <Card>
-              <CardHeader><CardTitle className="text-sm">Description</CardTitle></CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground whitespace-pre-wrap">{extracted.description}</p>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Key Details Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {extracted.bedroomsMin != null && (
-              <Card className="border-border">
-                <CardContent className="p-3 text-center">
-                  <p className="text-xs text-muted-foreground">Bedrooms</p>
-                  <p className="font-bold text-foreground">{extracted.bedroomsMin}{extracted.bedroomsMax ? ` - ${extracted.bedroomsMax}` : ""}</p>
-                </CardContent>
-              </Card>
-            )}
-            {extracted.totalUnits && (
-              <Card className="border-border">
-                <CardContent className="p-3 text-center">
-                  <p className="text-xs text-muted-foreground">Total Units</p>
-                  <p className="font-bold text-foreground">{extracted.totalUnits}</p>
-                </CardContent>
-              </Card>
-            )}
-            {extracted.floors && (
-              <Card className="border-border">
-                <CardContent className="p-3 text-center">
-                  <p className="text-xs text-muted-foreground">Floors</p>
-                  <p className="font-bold text-foreground">{extracted.floors}</p>
-                </CardContent>
-              </Card>
-            )}
-            {extracted.handoverDate && (
-              <Card className="border-border">
-                <CardContent className="p-3 text-center">
-                  <p className="text-xs text-muted-foreground">Handover</p>
-                  <p className="font-bold text-foreground">{extracted.handoverDate}</p>
-                </CardContent>
-              </Card>
-            )}
-            {extracted.serviceCharge && (
-              <Card className="border-border">
-                <CardContent className="p-3 text-center">
-                  <p className="text-xs text-muted-foreground">Service Charge</p>
-                  <p className="font-bold text-foreground">{extracted.serviceCharge}</p>
-                </CardContent>
-              </Card>
-            )}
-            {extracted.reraNumber && (
-              <Card className="border-border">
-                <CardContent className="p-3 text-center">
-                  <p className="text-xs text-muted-foreground">RERA</p>
-                  <p className="font-bold text-foreground text-xs">{extracted.reraNumber}</p>
-                </CardContent>
-              </Card>
-            )}
-          </div>
-
-          {/* Amenities */}
-          {extracted.amenities.length > 0 && (
-            <Card>
-              <CardHeader><CardTitle className="text-sm flex items-center gap-2"><Shield className="w-4 h-4 text-gold" /> Amenities ({extracted.amenities.length})</CardTitle></CardHeader>
-              <CardContent>
-                <div className="flex flex-wrap gap-2">
-                  {extracted.amenities.map((a, i) => (
-                    <Badge key={i} variant="outline" className="text-xs">{a}</Badge>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Payment Plan */}
-          {extracted.paymentBreakdown.length > 0 && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-sm flex items-center gap-2">
-                  <DollarSign className="w-4 h-4 text-gold" />
-                  Payment Plan {extracted.paymentPlan ? `(${extracted.paymentPlan})` : ""}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  {extracted.paymentBreakdown.map((step, i) => (
-                    <div key={i} className="flex items-center justify-between p-2 rounded bg-background/50 border border-border">
-                      <span className="text-sm text-foreground">{step.milestone}</span>
-                      <div className="flex items-center gap-3">
-                        {step.percentage != null && (
-                          <Badge className="bg-gold/20 text-foreground border-gold/30">{step.percentage}%</Badge>
-                        )}
-                        {step.timing && <span className="text-xs text-muted-foreground">{step.timing}</span>}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Unit Details */}
-          {extracted.unitDetails.length > 0 && (
-            <Card>
-              <CardHeader><CardTitle className="text-sm flex items-center gap-2"><LayoutGrid className="w-4 h-4 text-gold" /> Unit Types ({extracted.unitDetails.length})</CardTitle></CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  {extracted.unitDetails.map((unit, i) => (
-                    <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-background/50 border border-border">
-                      <div>
-                        <p className="font-medium text-foreground text-sm">{unit.type}</p>
-                        {(unit.sizeMin || unit.sizeMax) && (
-                          <p className="text-xs text-muted-foreground">
-                            {unit.sizeMin && `${unit.sizeMin.toLocaleString()} sq.ft`}
-                            {unit.sizeMin && unit.sizeMax && " – "}
-                            {unit.sizeMax && `${unit.sizeMax.toLocaleString()} sq.ft`}
-                          </p>
-                        )}
-                      </div>
-                      <div className="text-right">
-                        {unit.priceFrom && (
-                          <p className="text-sm font-semibold text-gold">
-                            AED {unit.priceFrom.toLocaleString()}
-                            {unit.priceTo ? ` – ${unit.priceTo.toLocaleString()}` : ""}
-                          </p>
-                        )}
-                        {unit.availableUnits && (
-                          <p className="text-xs text-muted-foreground">{unit.availableUnits} units</p>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Key Features */}
-          {extracted.keyFeatures.length > 0 && (
-            <Card>
-              <CardHeader><CardTitle className="text-sm">Key Features</CardTitle></CardHeader>
-              <CardContent>
-                <ul className="grid grid-cols-1 md:grid-cols-2 gap-1">
-                  {extracted.keyFeatures.map((f, i) => (
-                    <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
-                      <Check className="w-3 h-3 text-gold mt-0.5 shrink-0" /> {f}
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Nearby Landmarks */}
-          {extracted.nearbyLandmarks.length > 0 && (
-            <Card>
-              <CardHeader><CardTitle className="text-sm flex items-center gap-2"><Landmark className="w-4 h-4 text-gold" /> Nearby Landmarks</CardTitle></CardHeader>
-              <CardContent>
-                <div className="space-y-1">
-                  {extracted.nearbyLandmarks.map((l, i) => (
-                    <div key={i} className="flex items-center justify-between text-sm">
-                      <span className="text-foreground">{l.name}</span>
-                      <span className="text-muted-foreground">
-                        {l.distance}{l.time ? ` · ${l.time}` : ""}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Comparable Projects (enriched) */}
-          {extracted.comparableProjects && extracted.comparableProjects.length > 0 && (
-            <Card className="border-amber-200">
-              <CardHeader>
-                <CardTitle className="text-sm flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-amber-500" /> Comparable Projects
-                  <Badge variant="outline" className="text-xs text-amber-600 border-amber-300">AI Enriched</Badge>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  {extracted.comparableProjects.map((cp, i) => (
-                    <div key={i} className="p-2 rounded bg-amber-50 border border-amber-200">
-                      <p className="font-medium text-foreground text-sm">{cp.name}</p>
-                      {cp.developer && <p className="text-xs text-muted-foreground">by {cp.developer}</p>}
-                      {cp.reason && <p className="text-xs text-muted-foreground mt-1">{cp.reason}</p>}
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Documents */}
-          {extracted.documents.length > 0 && (
-            <Card>
-              <CardHeader><CardTitle className="text-sm">Documents ({extracted.documents.length})</CardTitle></CardHeader>
-              <CardContent>
-                <div className="space-y-1">
-                  {extracted.documents.map((d, i) => (
-                    <div key={i} className="flex items-center gap-2 text-sm">
-                      <FileText className="w-4 h-4 text-gold" />
-                      <span className="text-foreground">{d.name}</span>
-                      <Badge variant="outline" className="text-xs">{d.type}</Badge>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* FAQs */}
-          {extracted.faqs.length > 0 && (
-            <Card>
-              <CardHeader><CardTitle className="text-sm">FAQs ({extracted.faqs.length})</CardTitle></CardHeader>
-              <CardContent className="space-y-3">
-                {extracted.faqs.map((faq, i) => (
-                  <div key={i}>
-                    <p className="text-sm font-medium text-foreground">{faq.q}</p>
-                    <p className="text-sm text-muted-foreground mt-1">{faq.a}</p>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Bottom Save Bar */}
-          <div className="sticky bottom-4 p-4 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30 shadow-lg flex items-center justify-between">
-            <div>
-              <p className="font-semibold text-foreground">{extracted.name}</p>
-              <p className="text-xs text-muted-foreground">
-                {extracted.amenities.length} amenities · {extracted.unitDetails.length} unit types · {extracted.paymentBreakdown.length} payment steps
-              </p>
-            </div>
-            <Button
-              variant="primary"
-              onClick={() => handleSave("new")}
-              disabled={isSaving}
-              className="min-w-[160px]"
+          {/* Multi-project tabs */}
+          {extractedProjects.length > 1 && (
+            <Tabs
+              value={String(activeProjectIndex)}
+              onValueChange={(v) => setActiveProjectIndex(Number(v))}
             >
-              {isSaving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Check className="w-4 h-4 mr-2" />}
-              Save to Pending
-            </Button>
-          </div>
+              <TabsList className="w-full justify-start flex-wrap h-auto gap-1 p-1">
+                {extractedProjects.map((p, i) => (
+                  <TabsTrigger key={i} value={String(i)} className="text-xs">
+                    {p.name || `Project ${i + 1}`}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
+          )}
+
+          {extracted && <ProjectPreview extracted={extracted} onSave={() => handleSave("new")} isSaving={isSaving} />}
         </div>
       )}
     </div>
   );
 };
+
+function ProjectPreview({ extracted, onSave, isSaving }: { extracted: ExtractedData; onSave: () => void; isSaving: boolean }) {
+  return (
+    <div className="space-y-6">
+      {/* Project Header */}
+      <Card className="border-gold/30 bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3]">
+        <CardContent className="p-6">
+          <div className="flex items-start justify-between">
+            <div>
+              <h3 className="text-2xl font-bold text-foreground">{extracted.name || "Unnamed"}</h3>
+              <div className="flex items-center gap-3 mt-2 flex-wrap">
+                {extracted.developer && (
+                  <Badge className="bg-gold/20 text-foreground border-gold/30">
+                    <Building2 className="w-3 h-3 mr-1" /> {extracted.developer}
+                  </Badge>
+                )}
+                {extracted.location && (
+                  <Badge variant="secondary">
+                    <MapPin className="w-3 h-3 mr-1" /> {extracted.location}
+                  </Badge>
+                )}
+                {extracted.emirate && <Badge variant="outline">{extracted.emirate}</Badge>}
+                {extracted.projectStatus && <Badge variant="outline">{extracted.projectStatus}</Badge>}
+              </div>
+            </div>
+            {extracted.priceFrom && (
+              <div className="text-right">
+                <p className="text-sm text-muted-foreground">Starting from</p>
+                <p className="text-xl font-bold text-gold">AED {extracted.priceFrom.toLocaleString()}</p>
+                {extracted.priceTo && (
+                  <p className="text-sm text-muted-foreground">to AED {extracted.priceTo.toLocaleString()}</p>
+                )}
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Description */}
+      {extracted.description && (
+        <Card>
+          <CardHeader><CardTitle className="text-sm">Description</CardTitle></CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground whitespace-pre-wrap">{extracted.description}</p>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Key Details Grid */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {extracted.bedroomsMin != null && (
+          <Card className="border-border">
+            <CardContent className="p-3 text-center">
+              <p className="text-xs text-muted-foreground">Bedrooms</p>
+              <p className="font-bold text-foreground">{extracted.bedroomsMin}{extracted.bedroomsMax ? ` - ${extracted.bedroomsMax}` : ""}</p>
+            </CardContent>
+          </Card>
+        )}
+        {extracted.totalUnits && (
+          <Card className="border-border">
+            <CardContent className="p-3 text-center">
+              <p className="text-xs text-muted-foreground">Total Units</p>
+              <p className="font-bold text-foreground">{extracted.totalUnits}</p>
+            </CardContent>
+          </Card>
+        )}
+        {extracted.floors && (
+          <Card className="border-border">
+            <CardContent className="p-3 text-center">
+              <p className="text-xs text-muted-foreground">Floors</p>
+              <p className="font-bold text-foreground">{extracted.floors}</p>
+            </CardContent>
+          </Card>
+        )}
+        {extracted.handoverDate && (
+          <Card className="border-border">
+            <CardContent className="p-3 text-center">
+              <p className="text-xs text-muted-foreground">Handover</p>
+              <p className="font-bold text-foreground">{extracted.handoverDate}</p>
+            </CardContent>
+          </Card>
+        )}
+        {extracted.serviceCharge && (
+          <Card className="border-border">
+            <CardContent className="p-3 text-center">
+              <p className="text-xs text-muted-foreground">Service Charge</p>
+              <p className="font-bold text-foreground">{extracted.serviceCharge}</p>
+            </CardContent>
+          </Card>
+        )}
+        {extracted.reraNumber && (
+          <Card className="border-border">
+            <CardContent className="p-3 text-center">
+              <p className="text-xs text-muted-foreground">RERA</p>
+              <p className="font-bold text-foreground text-xs">{extracted.reraNumber}</p>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+
+      {/* Amenities */}
+      {extracted.amenities.length > 0 && (
+        <Card>
+          <CardHeader><CardTitle className="text-sm flex items-center gap-2"><Shield className="w-4 h-4 text-gold" /> Amenities ({extracted.amenities.length})</CardTitle></CardHeader>
+          <CardContent>
+            <div className="flex flex-wrap gap-2">
+              {extracted.amenities.map((a, i) => (
+                <Badge key={i} variant="outline" className="text-xs">{a}</Badge>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Payment Plan */}
+      {extracted.paymentBreakdown.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-sm flex items-center gap-2">
+              <DollarSign className="w-4 h-4 text-gold" />
+              Payment Plan {extracted.paymentPlan ? `(${extracted.paymentPlan})` : ""}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              {extracted.paymentBreakdown.map((s, i) => (
+                <div key={i} className="flex items-center justify-between p-2 rounded bg-background/50 border border-border">
+                  <span className="text-sm text-foreground">{s.milestone}</span>
+                  <div className="flex items-center gap-3">
+                    {s.percentage != null && (
+                      <Badge className="bg-gold/20 text-foreground border-gold/30">{s.percentage}%</Badge>
+                    )}
+                    {s.timing && <span className="text-xs text-muted-foreground">{s.timing}</span>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Unit Details */}
+      {extracted.unitDetails.length > 0 && (
+        <Card>
+          <CardHeader><CardTitle className="text-sm flex items-center gap-2"><LayoutGrid className="w-4 h-4 text-gold" /> Unit Types ({extracted.unitDetails.length})</CardTitle></CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              {extracted.unitDetails.map((unit, i) => (
+                <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-background/50 border border-border">
+                  <div>
+                    <p className="font-medium text-foreground text-sm">{unit.type}</p>
+                    {(unit.sizeMin || unit.sizeMax) && (
+                      <p className="text-xs text-muted-foreground">
+                        {unit.sizeMin && `${unit.sizeMin.toLocaleString()} sq.ft`}
+                        {unit.sizeMin && unit.sizeMax && " – "}
+                        {unit.sizeMax && `${unit.sizeMax.toLocaleString()} sq.ft`}
+                      </p>
+                    )}
+                  </div>
+                  <div className="text-right">
+                    {unit.priceFrom && (
+                      <p className="text-sm font-semibold text-gold">
+                        AED {unit.priceFrom.toLocaleString()}
+                        {unit.priceTo ? ` – ${unit.priceTo.toLocaleString()}` : ""}
+                      </p>
+                    )}
+                    {unit.availableUnits && (
+                      <p className="text-xs text-muted-foreground">{unit.availableUnits} units</p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Key Features */}
+      {extracted.keyFeatures.length > 0 && (
+        <Card>
+          <CardHeader><CardTitle className="text-sm">Key Features</CardTitle></CardHeader>
+          <CardContent>
+            <ul className="grid grid-cols-1 md:grid-cols-2 gap-1">
+              {extracted.keyFeatures.map((f, i) => (
+                <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
+                  <Check className="w-3 h-3 text-gold mt-0.5 shrink-0" /> {f}
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Nearby Landmarks */}
+      {extracted.nearbyLandmarks.length > 0 && (
+        <Card>
+          <CardHeader><CardTitle className="text-sm flex items-center gap-2"><Landmark className="w-4 h-4 text-gold" /> Nearby Landmarks</CardTitle></CardHeader>
+          <CardContent>
+            <div className="space-y-1">
+              {extracted.nearbyLandmarks.map((l, i) => (
+                <div key={i} className="flex items-center justify-between text-sm">
+                  <span className="text-foreground">{l.name}</span>
+                  <span className="text-muted-foreground">
+                    {l.distance}{l.time ? ` · ${l.time}` : ""}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Comparable Projects */}
+      {extracted.comparableProjects && extracted.comparableProjects.length > 0 && (
+        <Card className="border-amber-200">
+          <CardHeader>
+            <CardTitle className="text-sm flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-amber-500" /> Comparable Projects
+              <Badge variant="outline" className="text-xs text-amber-600 border-amber-300">AI Enriched</Badge>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              {extracted.comparableProjects.map((cp, i) => (
+                <div key={i} className="p-2 rounded bg-amber-50 border border-amber-200">
+                  <p className="font-medium text-foreground text-sm">{cp.name}</p>
+                  {cp.developer && <p className="text-xs text-muted-foreground">by {cp.developer}</p>}
+                  {cp.reason && <p className="text-xs text-muted-foreground mt-1">{cp.reason}</p>}
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Documents */}
+      {extracted.documents.length > 0 && (
+        <Card>
+          <CardHeader><CardTitle className="text-sm">Documents ({extracted.documents.length})</CardTitle></CardHeader>
+          <CardContent>
+            <div className="space-y-1">
+              {extracted.documents.map((d, i) => (
+                <div key={i} className="flex items-center gap-2 text-sm">
+                  <FileText className="w-4 h-4 text-gold" />
+                  <span className="text-foreground">{d.name}</span>
+                  <Badge variant="outline" className="text-xs">{d.type}</Badge>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* FAQs */}
+      {extracted.faqs.length > 0 && (
+        <Card>
+          <CardHeader><CardTitle className="text-sm">FAQs ({extracted.faqs.length})</CardTitle></CardHeader>
+          <CardContent className="space-y-3">
+            {extracted.faqs.map((faq, i) => (
+              <div key={i}>
+                <p className="text-sm font-medium text-foreground">{faq.q}</p>
+                <p className="text-sm text-muted-foreground mt-1">{faq.a}</p>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Bottom Save Bar */}
+      <div className="sticky bottom-4 p-4 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30 shadow-lg flex items-center justify-between">
+        <div>
+          <p className="font-semibold text-foreground">{extracted.name}</p>
+          <p className="text-xs text-muted-foreground">
+            {extracted.amenities.length} amenities · {extracted.unitDetails.length} unit types · {extracted.paymentBreakdown.length} payment steps
+          </p>
+        </div>
+        <Button
+          variant="primary"
+          onClick={onSave}
+          disabled={isSaving}
+          className="min-w-[160px]"
+        >
+          {isSaving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Check className="w-4 h-4 mr-2" />}
+          Save to Pending
+        </Button>
+      </div>
+    </div>
+  );
+}
 
 export default ListingGenerator;

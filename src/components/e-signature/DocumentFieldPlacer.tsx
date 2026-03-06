@@ -328,7 +328,7 @@ export default function DocumentFieldPlacer({
   }, {});
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" style={{ overflowX: "hidden", overscrollBehavior: "contain" }}>
       {/* ─── Toolbar ─── */}
       <div className="flex flex-wrap items-center gap-3 p-3 bg-muted/40 rounded-xl border">
         {/* Recipient selector */}
@@ -517,7 +517,7 @@ export default function DocumentFieldPlacer({
                 <div
                   ref={overlayRef}
                   className="relative w-full"
-                  style={{ height: "780px", cursor: "crosshair" }}
+                  style={{ height: "780px", cursor: "crosshair", touchAction: "pan-y", overscrollBehavior: "contain" }}
                   onClick={handleOverlayClick}
                   onDrop={handleDrop}
                   onDragOver={handleDragOver}
