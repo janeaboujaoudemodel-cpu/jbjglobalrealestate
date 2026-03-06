@@ -66,6 +66,8 @@ interface PendingImport {
   is_new_project: boolean;
   source_url: string | null;
   created_at: string;
+  latitude: number | null;
+  longitude: number | null;
 }
 
 const parseJsonArray = <T,>(json: Json | null, defaultVal: T[] = []): T[] => {
@@ -149,6 +151,8 @@ const PendingImportPreview = () => {
             is_new_project: data.is_new_project ?? true,
             source_url: data.source_url,
             created_at: data.created_at,
+            latitude: (data as any).latitude ?? null,
+            longitude: (data as any).longitude ?? null,
           });
         }
       } catch (error) {
