@@ -745,6 +745,43 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
           review_notes: JSON.stringify({ location_confidence: locationConfidence }),
         };
 
+        // ── AI POI ENRICHMENT: If no nearby landmarks were extracted, generate them ──
+        const hasLandmarks = importPayload.location_distances && Array.isArray(importPayload.location_distances) && importPayload.location_distances.length > 0;
+        if (!hasLandmarks && LOVABLE_API_KEY && (validatedLocation || validatedEmirate)) {
+          try {
+            const poiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+              method: "POST",
+              headers: { "Authorization": `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
+              body: JSON.stringify({
+                model: "google/gemini-2.5-flash",
+                max_tokens: 2000,
+                temperature: 0.1,
+                messages: [
+                  { role: "system", content: "You are a UAE geography expert. Return ONLY a JSON array of nearby landmarks." },
+                  { role: "user", content: `List the 8-10 nearest landmarks to "${projectName}" in ${validatedLocation || ""}, ${validatedEmirate}, UAE. Include hospitals, schools, airports, malls, beaches, metro stations, and tourist destinations. Return JSON array: [{"name":"...", "distance":"... km", "time":"... min drive"}]` },
+                ],
+              }),
+            });
+            if (poiRes.ok) {
+              const poiData = await poiRes.json();
+              const poiContent = poiData.choices?.[0]?.message?.content || "";
+              const jsonMatch = poiContent.match(/\[[\s\S]*\]/);
+              if (jsonMatch) {
+                const pois = JSON.parse(jsonMatch[0]);
+                if (Array.isArray(pois) && pois.length > 0) {
+                  importPayload.location_distances = pois.map((p: any) => ({
+                    label: p.name,
+                    time: p.time || p.distance || "N/A",
+                  }));
+                  console.log(`[extract] AI-generated ${pois.length} POIs for ${projectName}`);
+                }
+              }
+            }
+          } catch (poiErr) {
+            console.error("[extract] POI enrichment error:", poiErr);
+          }
+        }
+
         const { data: existing } = await supabase
           .from("pending_project_imports")
           .select("id, status")
