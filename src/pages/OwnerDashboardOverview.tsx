@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, lazy, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/contexts/AuthContext";
@@ -23,9 +23,6 @@ import {
   UserPlus,
   Activity,
   ExternalLink,
-  FileText,
-  Settings,
-  BookOpen,
   Flag,
   Crown,
   Briefcase,
@@ -34,13 +31,15 @@ import {
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 import LeadStatusBadge from "@/components/crm/LeadStatusBadge";
-import QuickActionsGrid from "@/components/owner-dashboard/QuickActionsGrid";
-import DepartmentShortcuts from "@/components/owner-dashboard/DepartmentShortcuts";
-import IntegrationWidgets from "@/components/owner-dashboard/IntegrationWidgets";
-import CRMLeadsTableV2 from "@/components/crm/CRMLeadsTableV2";
-import FlaggedLeadsView from "@/components/crm/FlaggedLeadsView";
-import EmployeesHub from "@/components/crm/EmployeesHub";
-import CRMDashboardCards from "@/components/crm/CRMDashboardCards";
+
+// Lazy-load heavy tab components
+const CRMLeadsTableV2 = lazy(() => import("@/components/crm/CRMLeadsTableV2"));
+const FlaggedLeadsView = lazy(() => import("@/components/crm/FlaggedLeadsView"));
+const EmployeesHub = lazy(() => import("@/components/crm/EmployeesHub"));
+const CRMDashboardCards = lazy(() => import("@/components/crm/CRMDashboardCards"));
+const QuickActionsGrid = lazy(() => import("@/components/owner-dashboard/QuickActionsGrid"));
+const DepartmentShortcuts = lazy(() => import("@/components/owner-dashboard/DepartmentShortcuts"));
+const IntegrationWidgets = lazy(() => import("@/components/owner-dashboard/IntegrationWidgets"));
 
 interface KPICardProps {
   title: string;
@@ -507,7 +506,9 @@ export default function OwnerDashboardOverview() {
       </div>
 
       {/* Quick Actions Grid */}
-      <QuickActionsGrid />
+      <Suspense fallback={<Skeleton className="h-32 w-full" />}>
+        <QuickActionsGrid />
+      </Suspense>
 
       {/* Main Tabbed Content */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -558,7 +559,9 @@ export default function OwnerDashboardOverview() {
 
         {/* Overview Tab */}
         <TabsContent value="overview" className="space-y-6">
-          <CRMDashboardCards userId={user?.id || ""} hasOwnerAccess={true} />
+          <Suspense fallback={<Skeleton className="h-40 w-full" />}>
+            <CRMDashboardCards userId={user?.id || ""} hasOwnerAccess={true} />
+          </Suspense>
 
           <div className="grid lg:grid-cols-3 gap-6">
             {/* Newest Leads */}
@@ -685,8 +688,12 @@ export default function OwnerDashboardOverview() {
             </CardContent>
           </Card>
 
-          <IntegrationWidgets />
-          <DepartmentShortcuts />
+          <Suspense fallback={null}>
+            <IntegrationWidgets />
+          </Suspense>
+          <Suspense fallback={null}>
+            <DepartmentShortcuts />
+          </Suspense>
         </TabsContent>
 
         {/* All Leads Tab — lazy rendered */}
@@ -697,14 +704,16 @@ export default function OwnerDashboardOverview() {
                 <CardTitle className="text-lg text-black">All Leads</CardTitle>
                 <CardDescription className="text-zinc-500">Complete lead management</CardDescription>
               </CardHeader>
-              <CardContent>
-                <CRMLeadsTableV2 
-                  key={`leads-${refreshKey}`}
-                  userId={user?.id || ""} 
-                  filterType="all"
-                  onRefresh={handleRefresh}
-                />
-              </CardContent>
+               <CardContent>
+                <Suspense fallback={<Skeleton className="h-64 w-full" />}>
+                  <CRMLeadsTableV2 
+                    key={`leads-${refreshKey}`}
+                    userId={user?.id || ""} 
+                    filterType="all"
+                    onRefresh={handleRefresh}
+                  />
+                </Suspense>
+               </CardContent>
             </Card>
           )}
         </TabsContent>
@@ -721,11 +730,13 @@ export default function OwnerDashboardOverview() {
                 <CardDescription className="text-zinc-500">Leads requiring attention</CardDescription>
               </CardHeader>
               <CardContent>
-                <FlaggedLeadsView 
-                  key={`flagged-${refreshKey}`}
-                  userId={user?.id || ""} 
-                  onRefresh={handleRefresh}
-                />
+                <Suspense fallback={<Skeleton className="h-64 w-full" />}>
+                  <FlaggedLeadsView 
+                    key={`flagged-${refreshKey}`}
+                    userId={user?.id || ""} 
+                    onRefresh={handleRefresh}
+                  />
+                </Suspense>
               </CardContent>
             </Card>
           )}
@@ -743,12 +754,14 @@ export default function OwnerDashboardOverview() {
                 <CardDescription className="text-zinc-500">High-value contacts</CardDescription>
               </CardHeader>
               <CardContent>
-                <CRMLeadsTableV2 
-                  key={`vip-${refreshKey}`}
-                  userId={user?.id || ""} 
-                  filterType="vip"
-                  onRefresh={handleRefresh}
-                />
+                <Suspense fallback={<Skeleton className="h-64 w-full" />}>
+                  <CRMLeadsTableV2 
+                    key={`vip-${refreshKey}`}
+                    userId={user?.id || ""} 
+                    filterType="vip"
+                    onRefresh={handleRefresh}
+                  />
+                </Suspense>
               </CardContent>
             </Card>
           )}
@@ -766,7 +779,9 @@ export default function OwnerDashboardOverview() {
                 <CardDescription className="text-zinc-500">Team management</CardDescription>
               </CardHeader>
               <CardContent>
-                <EmployeesHub userId={user?.id || ""} />
+                <Suspense fallback={<Skeleton className="h-64 w-full" />}>
+                  <EmployeesHub userId={user?.id || ""} />
+                </Suspense>
               </CardContent>
             </Card>
           )}
