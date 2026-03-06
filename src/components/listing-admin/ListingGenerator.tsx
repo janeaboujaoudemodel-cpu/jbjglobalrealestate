@@ -80,20 +80,16 @@ interface PersistedState {
   activeProjectIndex: number;
   duplicates: DuplicateMatch[];
   filesMeta: { id: string; name: string; mimeType: string; base64: string }[];
+  currentJobId: string | null;
+  cloudDraftId: string | null;
   savedAt: number;
 }
 
 function loadPersistedState(): Partial<PersistedState> | null {
   try {
-    const raw = sessionStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return null;
-    const parsed: PersistedState = JSON.parse(raw);
-    // Expire after 2 hours
-    if (Date.now() - parsed.savedAt > 2 * 60 * 60 * 1000) {
-      sessionStorage.removeItem(STORAGE_KEY);
-      return null;
-    }
-    return parsed;
+    return JSON.parse(raw);
   } catch {
     return null;
   }
@@ -101,14 +97,14 @@ function loadPersistedState(): Partial<PersistedState> | null {
 
 function savePersistedState(state: Omit<PersistedState, "savedAt">) {
   try {
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ ...state, savedAt: Date.now() }));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...state, savedAt: Date.now() }));
   } catch {
-    // sessionStorage full or unavailable
+    // localStorage full or unavailable
   }
 }
 
 function clearPersistedState() {
-  try { sessionStorage.removeItem(STORAGE_KEY); } catch {}
+  try { localStorage.removeItem(STORAGE_KEY); } catch {}
 }
 
 const ListingGenerator = () => {
