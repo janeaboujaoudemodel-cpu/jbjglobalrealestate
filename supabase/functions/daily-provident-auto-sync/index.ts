@@ -76,31 +76,22 @@ Deno.serve(async (req) => {
     errors.push(msg);
   }
 
-  // Step 4: Auto-approve all pending Provident imports
-  try {
-    console.log("[daily-provident-auto-sync] Step 4: Bulk approving pending imports...");
-    const approveResult = await callFunction("bulk-approve-imports", {
-      approve_all: true,
-    });
-    results.bulk_approve = approveResult;
-    console.log("[daily-provident-auto-sync] Step 4 complete:", JSON.stringify(approveResult).slice(0, 200));
-  } catch (err) {
-    const msg = `Step 4 (bulk-approve-imports) failed: ${err.message}`;
-    console.error("[daily-provident-auto-sync]", msg);
-    errors.push(msg);
-  }
+  // Step 4: SKIP auto-approve — leave items in pending queue for manual review
+  // Previously this called bulk-approve-imports with approve_all: true
+  // Now we just log that items are ready for review
+  console.log("[daily-provident-auto-sync] Step 4: Skipped auto-approve — items remain in pending queue for manual review");
+  results.bulk_approve = { skipped: true, reason: "Manual approval workflow active" };
 
   // Log summary to database
   try {
     const supabase = createClient(supabaseUrl, supabaseKey);
     const statsCreated = (results.discover_projects as any)?.created ?? (results.discover_projects as any)?.total_discovered ?? 0;
-    const statsUpdated = (results.bulk_approve as any)?.approved ?? 0;
     await supabase.from("sync_jobs").insert({
       job_type: "daily-provident-auto-sync",
       status: errors.length === 0 ? "completed" : "failed",
       source: "provident",
       stats_created: statsCreated,
-      stats_updated: statsUpdated,
+      stats_updated: 0,
       stats_errors: errors.length,
       error_log: errors.length > 0 ? { steps: results, errors } : null,
       started_at: new Date().toISOString(),

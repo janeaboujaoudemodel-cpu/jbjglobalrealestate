@@ -103,21 +103,21 @@ export function isValidImageUrl(url: unknown): url is string {
   
   // Check for placeholder patterns (always reject these)
   for (const pattern of PLACEHOLDER_PATTERNS) {
-    if (pattern.test(url)) return false;
+    if (pattern.test(effectiveUrl)) return false;
   }
   
   // If from trusted domain, allow it (skip site asset filtering)
-  if (isTrustedImageSource(url)) {
+  if (isTrustedImageSource(effectiveUrl)) {
     // Still filter out explicit document files even from trusted sources
     for (const pattern of DOCUMENT_PATTERNS) {
-      if (pattern.test(url)) return false;
+      if (pattern.test(effectiveUrl)) return false;
     }
     return true;
   }
   
   // Check for site asset patterns (only for untrusted domains)
   for (const pattern of SITE_ASSET_PATTERNS) {
-    if (pattern.test(url)) return false;
+    if (pattern.test(effectiveUrl)) return false;
   }
   
   return true;
