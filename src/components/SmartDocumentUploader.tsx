@@ -109,19 +109,19 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
   const getConfidenceColor = (confidence: "high" | "medium" | "low") => {
     switch (confidence) {
       case "high":
-        return "text-green-500";
+        return "text-green-600";
       case "medium":
-        return "text-yellow-500";
+        return "text-yellow-600";
       case "low":
-        return "text-red-500";
+        return "text-red-600";
     }
   };
 
   return (
-    <div className="space-y-4 p-6 bg-zinc-900 border border-zinc-800 rounded-xl">
+    <div className="space-y-4 p-6 bg-gradient-to-r from-[#FDFBF7] to-white border-2 border-gold/30 rounded-xl shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
       <div className="flex items-center gap-3 mb-4">
         <FileText className="w-5 h-5 text-gold" />
-        <h3 className="text-white font-semibold">Smart Document Upload</h3>
+        <h3 className="text-black font-semibold">Smart Document Upload</h3>
       </div>
 
       {/* File Selection */}
@@ -136,15 +136,15 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
         
         <div className="flex gap-3">
           <Select value={documentType} onValueChange={setDocumentType}>
-            <SelectTrigger className="w-40 bg-zinc-950 border-zinc-700 text-white">
+            <SelectTrigger className="w-40 bg-white border-2 border-gold/30 text-black">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className="bg-zinc-900 border-zinc-700">
+            <SelectContent className="bg-white border-2 border-gold/30">
               {DOCUMENT_TYPES.map((type) => (
                 <SelectItem
                   key={type.value}
                   value={type.value}
-                  className="text-white hover:bg-zinc-800"
+                  className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black"
                 >
                   {type.label}
                 </SelectItem>
@@ -155,9 +155,9 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
           <Button
             onClick={() => fileInputRef.current?.click()}
             variant="outline"
-            className="border-zinc-700 text-white hover:bg-zinc-800 flex-1"
+            className="border-2 border-gold/30 text-black bg-white hover:bg-gold/10 flex-1"
           >
-            <Upload className="w-4 h-4 mr-2" />
+            <Upload className="w-4 h-4 mr-2 text-gold" />
             {selectedFile ? selectedFile.name : "Select Document"}
           </Button>
         </div>
@@ -165,9 +165,9 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
 
       {/* Analysis Results */}
       {isAnalyzing && (
-        <div className="flex items-center gap-3 p-4 bg-zinc-950 rounded-lg">
+        <div className="flex items-center gap-3 p-4 bg-white rounded-lg border border-gold/20">
           <Loader2 className="w-5 h-5 text-gold animate-spin" />
-          <span className="text-gray-400">Analyzing document...</span>
+          <span className="text-zinc-500">Analyzing document...</span>
         </div>
       )}
 
@@ -175,11 +175,11 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
         <div className="space-y-3">
           {/* Duplicate Warning */}
           {duplicateResult?.isDuplicate && (
-            <div className="flex items-start gap-3 p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
+            <div className="flex items-start gap-3 p-4 bg-red-50 border border-red-200 rounded-lg">
               <AlertTriangle className="w-5 h-5 text-red-500 mt-0.5" />
               <div>
-                <p className="text-red-400 font-medium">Duplicate Detected</p>
-                <p className="text-gray-400 text-sm">
+                <p className="text-red-600 font-medium">Duplicate Detected</p>
+                <p className="text-red-500/70 text-sm">
                   "{duplicateResult.existingDocName}" already exists ({duplicateResult.existingDocType})
                 </p>
               </div>
@@ -188,14 +188,14 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
 
           {/* Match Result */}
           {matchResult && !duplicateResult?.isDuplicate && (
-            <div className="p-4 bg-zinc-950 rounded-lg border border-zinc-800">
+            <div className="p-4 bg-white rounded-lg border-2 border-gold/20">
               <div className="flex items-center gap-2 mb-2">
                 {matchResult.confidence === "high" ? (
-                  <CheckCircle2 className="w-5 h-5 text-green-500" />
+                  <CheckCircle2 className="w-5 h-5 text-green-600" />
                 ) : matchResult.confidence === "medium" ? (
-                  <AlertTriangle className="w-5 h-5 text-yellow-500" />
+                  <AlertTriangle className="w-5 h-5 text-yellow-600" />
                 ) : (
-                  <XCircle className="w-5 h-5 text-red-500" />
+                  <XCircle className="w-5 h-5 text-red-600" />
                 )}
                 <span className={`font-medium ${getConfidenceColor(matchResult.confidence)}`}>
                   {matchResult.confidence === "high"
@@ -206,10 +206,10 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
                 </span>
               </div>
               
-              <div className="flex items-center gap-2 text-white">
+              <div className="flex items-center gap-2 text-black">
                 <ArrowRight className="w-4 h-4 text-gold" />
                 <span className="font-medium">{matchResult.projectName}</span>
-                <span className="text-gray-500">by {matchResult.developerName}</span>
+                <span className="text-zinc-500">by {matchResult.developerName}</span>
               </div>
 
               {matchResult.matchedKeywords.length > 0 && (
@@ -217,7 +217,7 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
                   {matchResult.matchedKeywords.map((kw) => (
                     <span
                       key={kw}
-                      className="px-2 py-0.5 bg-zinc-800 text-gray-400 text-xs rounded"
+                      className="px-2 py-0.5 bg-gold/10 text-zinc-600 text-xs rounded border border-gold/20"
                     >
                       {kw}
                     </span>
@@ -230,17 +230,17 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
           {/* Manual Project Selection */}
           {(!matchResult || matchResult.confidence === "low") && (
             <div className="space-y-2">
-              <Label className="text-gray-400">Select Project Manually</Label>
+              <Label className="text-zinc-600">Select Project Manually</Label>
               <Select value={manualProjectId} onValueChange={setManualProjectId}>
-                <SelectTrigger className="bg-zinc-950 border-zinc-700 text-white">
+                <SelectTrigger className="bg-white border-2 border-gold/30 text-black">
                   <SelectValue placeholder="Choose project..." />
                 </SelectTrigger>
-                <SelectContent className="bg-zinc-900 border-zinc-700 max-h-60">
+                <SelectContent className="bg-white border-2 border-gold/30 max-h-60">
                   {projects?.map((project) => (
                     <SelectItem
                       key={project.id}
                       value={project.id}
-                      className="text-white hover:bg-zinc-800"
+                      className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black"
                     >
                       {project.name} ({project.developer?.name || "Unknown"})
                     </SelectItem>
@@ -255,7 +255,7 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
             <Button
               variant="outline"
               onClick={resetState}
-              className="border-zinc-700 text-white hover:bg-zinc-800"
+              className="border-2 border-gold/30 text-black bg-white hover:bg-gold/10"
             >
               Cancel
             </Button>
@@ -286,10 +286,10 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
 
       {/* Empty State */}
       {!selectedFile && (
-        <div className="text-center py-8 text-gray-500">
-          <Upload className="w-12 h-12 mx-auto mb-2 opacity-50" />
-          <p>Select a document to automatically detect the project</p>
-          <p className="text-sm mt-1">Duplicates will be blocked</p>
+        <div className="text-center py-8 text-zinc-400">
+          <Upload className="w-12 h-12 mx-auto mb-2 text-gold/40" />
+          <p className="text-zinc-500">Select a document to automatically detect the project</p>
+          <p className="text-sm mt-1 text-zinc-400">Duplicates will be blocked</p>
         </div>
       )}
     </div>
