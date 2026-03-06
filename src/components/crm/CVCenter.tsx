@@ -524,12 +524,27 @@ const CVCenter = ({ userId }: CVCenterProps) => {
         const ext = (cv.cv_url || '').split('?')[0].split('.').pop()?.toLowerCase();
 
         // Try authenticated blob download first (bypasses CORS/auth issues)
-        const storagePath = cv.cv_url?.replace(/^\/+/, '') || '';
+        let rawPath = cv.cv_url?.replace(/^\/+/, '') || '';
+        // Strip bucket prefix if present (e.g. "hr-documents/cv-uploads/file.pdf" → "cv-uploads/file.pdf")
+        const knownBuckets = ['hr-documents', 'documents', 'public'];
+        for (const b of knownBuckets) {
+          if (rawPath.startsWith(`${b}/`)) {
+            rawPath = rawPath.slice(b.length + 1);
+            break;
+          }
+        }
+        // Also strip full URL prefix if cv_url is a full URL
+        const storageMatch = rawPath.match(/\/storage\/v1\/object\/(?:public|sign|authenticated)\/([^/]+)\/(.+?)(?:\?|$)/i);
+        if (storageMatch) {
+          rawPath = storageMatch[2];
+          try { rawPath = decodeURIComponent(rawPath); } catch {}
+        }
+
         const buckets = ['hr-documents', 'documents', 'public'];
         let blob: Blob | null = null;
 
         for (const bucket of buckets) {
-          const { data, error } = await supabase.storage.from(bucket).download(storagePath);
+          const { data, error } = await supabase.storage.from(bucket).download(rawPath);
           if (!error && data) {
             blob = data;
             break;
@@ -967,6 +982,11 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                                     <Target className="h-3.5 w-3.5" /> {cv.position_applied}
                                   </span>
                                 )}
+                                {DEPARTMENT_CATEGORIES.find(c => c.id === cv.department_category) && cv.department_category !== 'general' && (
+                                  <span className="flex items-center gap-1 text-crm-text bg-zinc-100 border border-zinc-200 rounded-full px-2.5 py-0.5 font-medium">
+                                    <Building2 className="h-3.5 w-3.5 text-crm-text-muted" /> {DEPARTMENT_CATEGORIES.find(c => c.id === cv.department_category)?.label}
+                                  </span>
+                                )}
                                 {cv.nationality && (
                                   <span className="flex items-center gap-1 text-crm-text">
                                     <Globe2 className="h-3.5 w-3.5 text-crm-text-muted" /> {cv.nationality}
@@ -990,6 +1010,17 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                                 <span className="flex items-center gap-1 text-crm-text-muted text-xs">
                                   <Calendar className="h-3 w-3" /> {format(new Date(cv.created_at), 'MMM d, yyyy')}
                                 </span>
+                              </div>
+                              {/* Contact details on surface */}
+                              <div className="flex flex-wrap gap-3 mb-2 text-xs text-crm-text-muted">
+                                <span className="flex items-center gap-1">
+                                  <Mail className="h-3 w-3" /> {cv.email}
+                                </span>
+                                {cv.phone_e164 && (
+                                  <span className="flex items-center gap-1">
+                                    <Phone className="h-3 w-3" /> {cv.phone_e164}
+                                  </span>
+                                )}
                               </div>
 
                               {/* AI Summary - compact */}
@@ -1072,14 +1103,15 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                               <Flag className="h-4 w-4 mr-1.5" /> Add Task
                             </Button>
                             <div className="flex gap-1.5 mt-1 flex-wrap">
+                              {cv.status !== 'approved' && (
                               <Button
                                 size="sm"
                                 onClick={() => handleUpdateStatus(cv.id, 'approved')}
-                                disabled={cv.status === 'approved'}
-                                className={`flex-1 rounded-xl border font-bold ${cv.status === 'approved' ? 'border-emerald-500 bg-emerald-100 text-emerald-800' : 'border-emerald-500 bg-emerald-50 text-emerald-700 hover:bg-emerald-100'} disabled:opacity-90`}
+                                className="flex-1 rounded-xl border font-bold border-emerald-500 bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
                               >
                                 <CheckCircle className="h-3.5 w-3.5 mr-1" /> Accept
                               </Button>
+                              )}
                               {cv.status !== 'pending' && (
                               <Button
                                 size="sm"
@@ -1089,14 +1121,15 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                                 <Clock className="h-3.5 w-3.5 mr-1" /> Pending
                               </Button>
                               )}
+                              {cv.status !== 'rejected' && (
                               <Button
                                 size="sm"
                                 onClick={() => handleUpdateStatus(cv.id, 'rejected')}
-                                disabled={cv.status === 'rejected'}
-                                className={`flex-1 rounded-xl border font-bold ${cv.status === 'rejected' ? 'border-red-500 bg-red-100 text-red-800' : 'border-red-500 bg-red-50 text-red-700 hover:bg-red-100'} disabled:opacity-90`}
+                                className="flex-1 rounded-xl border font-bold border-red-500 bg-red-50 text-red-700 hover:bg-red-100"
                               >
                                 <XCircle className="h-3.5 w-3.5 mr-1" /> Reject
                               </Button>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -1264,7 +1297,11 @@ const CVCenter = ({ userId }: CVCenterProps) => {
               <Button variant="outline" className="gap-2" onClick={async () => {
                 try {
                   const filename = selectedCV ? `CV-${selectedCV.full_name.replace(/\s+/g, '-')}.pdf` : 'CV.pdf';
-                  const res = await fetch(maybeProxyStorageUrl(cvDirectUrl, filename));
+                  const session = (await supabase.auth.getSession()).data.session;
+                  const proxyUrl = maybeProxyStorageUrl(cvDirectUrl, filename);
+                  const res = await fetch(proxyUrl, {
+                    headers: session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {},
+                  });
                   const blob = await res.blob();
                   const url = URL.createObjectURL(blob);
                   const a = document.createElement('a');
