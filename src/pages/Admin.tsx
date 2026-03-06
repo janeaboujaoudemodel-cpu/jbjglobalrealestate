@@ -212,36 +212,44 @@ const Admin = () => {
   };
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file || !selectedProject) return;
+    const files = event.target.files;
+    if (!files || files.length === 0 || !selectedProject) return;
     
     setIsUploadingDocument(true);
+    let successCount = 0;
+    let failCount = 0;
     
     try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${selectedProject.id}/${Date.now()}-${file.name}`;
-      
-      const { error: uploadError } = await supabase.storage
-        .from("project-files")
-        .upload(fileName, file);
-      
-      if (uploadError) throw uploadError;
-      
-      const { data: urlData } = supabase.storage
-        .from("project-files")
-        .getPublicUrl(fileName);
-      
-      const { error: dbError } = await supabase
-        .from("project_documents")
-        .insert({
-          project_id: selectedProject.id,
-          file_name: file.name,
-          file_url: urlData.publicUrl,
-          document_type: selectedDocType,
-          file_size: file.size,
-        });
-      
-      if (dbError) throw dbError;
+      for (const file of Array.from(files)) {
+        try {
+          const fileName = `${selectedProject.id}/${Date.now()}-${file.name}`;
+          
+          const { error: uploadError } = await supabase.storage
+            .from("project-files")
+            .upload(fileName, file);
+          
+          if (uploadError) { failCount++; continue; }
+          
+          const { data: urlData } = supabase.storage
+            .from("project-files")
+            .getPublicUrl(fileName);
+          
+          const { error: dbError } = await supabase
+            .from("project_documents")
+            .insert({
+              project_id: selectedProject.id,
+              file_name: file.name,
+              file_url: urlData.publicUrl,
+              document_type: selectedDocType,
+              file_size: file.size,
+            });
+          
+          if (dbError) { failCount++; continue; }
+          successCount++;
+        } catch {
+          failCount++;
+        }
+      }
       
       // Refresh documents
       const { data: docs } = await supabase
@@ -251,9 +259,11 @@ const Admin = () => {
         .order("created_at", { ascending: false });
       
       setProjectDocuments(docs || []);
-      toast.success("Document uploaded successfully");
+      
+      if (successCount > 0) toast.success(`${successCount} document${successCount > 1 ? 's' : ''} uploaded successfully`);
+      if (failCount > 0) toast.error(`${failCount} document${failCount > 1 ? 's' : ''} failed to upload`);
     } catch (error: any) {
-      toast.error(error.message || "Failed to upload document");
+      toast.error(error.message || "Failed to upload documents");
     } finally {
       setIsUploadingDocument(false);
       if (fileInputRef.current) {
@@ -972,6 +982,7 @@ const Admin = () => {
                 onChange={handleFileUpload}
                 className="hidden"
                 accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png"
+                multiple
               />
               <Button
                 variant="secondary"
