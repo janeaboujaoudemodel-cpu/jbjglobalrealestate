@@ -181,8 +181,29 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
     return () => clearTimeout(debounce);
   }, [messages, sessionId]);
 
+  const isNearBottom = useRef(true);
+  const [showJumpToLatest, setShowJumpToLatest] = useState(false);
+
+  const handleScroll = useCallback(() => {
+    if (!scrollRef.current) return;
+    const el = scrollRef.current;
+    const nearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 120;
+    isNearBottom.current = nearBottom;
+    setShowJumpToLatest(!nearBottom);
+  }, []);
+
   useEffect(() => {
-    if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    const el = scrollRef.current;
+    if (!el) return;
+    el.addEventListener("scroll", handleScroll);
+    return () => el.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
+
+  // Auto-scroll only on initial load or when user is near bottom
+  useEffect(() => {
+    if (scrollRef.current && isNearBottom.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
   }, [messages]);
 
   useEffect(() => {
@@ -802,16 +823,16 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
                 </Avatar>
               )}
               <div className="flex flex-col max-w-[85%]">
-                <div className={`rounded-xl px-4 py-2.5 select-text cursor-text ${
+                <div className={`rounded-2xl px-4 py-2.5 select-text cursor-text ${
                   message.role === "user"
-                    ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-gold/30 shadow-md rounded-tr-sm"
+                    ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-gold/30 shadow-md"
                     : message.type === "processing"
-                    ? "bg-amber-50 text-black border border-amber-200 rounded-tl-sm"
+                    ? "bg-amber-50 text-black border border-amber-200"
                     : message.type === "success"
-                    ? "bg-green-50 text-black border border-green-200 rounded-tl-sm"
+                    ? "bg-green-50 text-black border border-green-200"
                     : message.type === "error"
-                    ? "bg-red-50 text-black border border-red-200 rounded-tl-sm"
-                    : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border border-gold/20 shadow-sm rounded-tl-sm"
+                    ? "bg-red-50 text-black border border-red-200"
+                    : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border border-gold/20 shadow-sm"
                 }`}>
                   {message.type === "processing" && (
                     <div className="flex items-center gap-2 mb-2 text-amber-600">
@@ -904,6 +925,26 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
           )}
         </div>
       </ScrollArea>
+
+      {/* Jump to latest button */}
+      {showJumpToLatest && (
+        <div className="flex justify-center -mt-10 mb-2 relative z-10">
+          <Button
+            size="sm"
+            variant="outline"
+            className="h-7 text-xs bg-white/90 backdrop-blur-sm border-gold/30 shadow-md hover:bg-gold/10"
+            onClick={() => {
+              if (scrollRef.current) {
+                scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+                isNearBottom.current = true;
+                setShowJumpToLatest(false);
+              }
+            }}
+          >
+            ↓ Jump to latest
+          </Button>
+        </div>
+      )}
 
       {/* Multi-URL Upload Section */}
       {showBulkUpload && (

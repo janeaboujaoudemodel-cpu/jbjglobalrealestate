@@ -382,19 +382,26 @@ serve(async (req) => {
         const metadata = scrapeData.data?.metadata || {};
         const allContent = markdown + "\n" + html + "\n" + links.join("\n");
 
-        // Images
+        // Images - filter out icons, flags, sprites, and decode Next.js proxy URLs
         const imageUrls: string[] = [];
         const seenImg = new Set<string>();
         const imgPatterns = [
           /https?:\/\/[^\s"'<>)]+\.(?:jpg|jpeg|png|webp)(?:\?[^\s"'<>)]*)?/gi,
           /https?:\/\/[a-z0-9-]+\.cloudfront\.net\/[^\s"'<>)]+/gi,
         ];
+        const EXCLUDED_IMG_PATTERNS = /logo|icon|avatar|placeholder|spinner|favicon|flags?\/|sprite|badge|arrow|chevron|_next\/static/i;
         for (const pat of imgPatterns) {
           for (const m of allContent.matchAll(pat)) {
-            const u = m[0].split("?")[0];
-            if (!seenImg.has(u) && !/logo|icon|avatar|placeholder|spinner|favicon/i.test(u)) {
+            // Decode Next.js proxy URLs: /_next/image?url=<encoded>&w=...
+            let rawUrl = m[0];
+            const nextProxyMatch = rawUrl.match(/\/_next\/image\?url=([^&]+)/);
+            if (nextProxyMatch) {
+              try { rawUrl = decodeURIComponent(nextProxyMatch[1]); } catch {}
+            }
+            const u = rawUrl.split("?")[0];
+            if (!seenImg.has(u) && !EXCLUDED_IMG_PATTERNS.test(u) && u.length > 20) {
               seenImg.add(u);
-              imageUrls.push(m[0]);
+              imageUrls.push(rawUrl);
             }
           }
         }
@@ -597,13 +604,65 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
           url: d.storage_url, original_url: d.url, type: d.type, name: d.name,
         }));
 
+        // ── LOCATION VALIDATION against canonical areas table ──
+        let validatedEmirate = extractedData?.emirate || "Dubai";
+        let validatedLocation = extractedData?.location || null;
+        let locationConfidence = "ai-extracted";
+        
+        if (validatedLocation) {
+          // Try to match against canonical areas
+          const locationLower = validatedLocation.toLowerCase().trim();
+          const { data: areaMatch } = await supabase
+            .from("areas")
+            .select("name, emirate, latitude, longitude")
+            .eq("is_active", true)
+            .or(`name.ilike.%${locationLower}%,slug.eq.${locationLower.replace(/\s+/g, '-')}`)
+            .limit(1)
+            .maybeSingle();
+
+          if (areaMatch) {
+            validatedLocation = areaMatch.name;
+            validatedEmirate = areaMatch.emirate;
+            locationConfidence = "canonical-match";
+            console.log(`[extract] Location validated: "${extractedData?.location}" → "${areaMatch.name}" (${areaMatch.emirate})`);
+          } else {
+            // Geocode fallback
+            try {
+              const geoQuery = encodeURIComponent(`${projectName}, ${validatedLocation}, ${validatedEmirate}, UAE`);
+              const geoRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${geoQuery}&limit=1&countrycodes=ae`, {
+                headers: { "User-Agent": "JBJGlobalBot/1.0" },
+              });
+              if (geoRes.ok) {
+                const geoData = await geoRes.json();
+                if (geoData.length > 0) {
+                  const display = geoData[0].display_name || "";
+                  // Check if geocoded address mentions a different emirate
+                  const emiratesList = ["Dubai", "Abu Dhabi", "Sharjah", "Ajman", "Ras Al Khaimah", "Fujairah", "Umm Al Quwain"];
+                  for (const em of emiratesList) {
+                    if (display.toLowerCase().includes(em.toLowerCase())) {
+                      if (em.toLowerCase() !== validatedEmirate.toLowerCase()) {
+                        console.log(`[extract] Geocode corrected emirate: "${validatedEmirate}" → "${em}"`);
+                        validatedEmirate = em;
+                        locationConfidence = "geocode-corrected";
+                      }
+                      break;
+                    }
+                  }
+                }
+              }
+            } catch (geoErr) {
+              console.error("[extract] Geocode fallback error:", geoErr);
+            }
+          }
+        }
+
         const importPayload: Record<string, any> = {
           name: projectName,
           slug,
           developer_name: devName || null,
-          developer_id: devId, // correctly matched from developers table, null if not found
-          location: extractedData?.location || null,
-          emirate: extractedData?.emirate || "Dubai",
+          developer_id: devId,
+          location: validatedLocation,
+          emirate: validatedEmirate,
           description: extractedData?.description || null,
           price_from: extractedData?.priceFrom || null,
           price_to: extractedData?.priceTo || null,
@@ -635,6 +694,7 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
           is_new_project: true,
           status: auto_approve ? "approved" : "pending",
           enrichment_source: "url-extraction",
+          review_notes: JSON.stringify({ location_confidence: locationConfidence }),
         };
 
         const { data: existing } = await supabase

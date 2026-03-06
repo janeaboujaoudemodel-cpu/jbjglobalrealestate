@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useListingAdmin } from "@/hooks/useListingAdmin";
-import { useProjectsCount, useProjectsTotalCount, useProjectsPaginated, useDevelopers, useCommunities } from "@/hooks/useProjects";
+import { useProjectsCount, useProjectsTotalCount, useProjectsPaginated, useProjectsFilteredCount, useDevelopers, useCommunities } from "@/hooks/useProjects";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -77,7 +77,10 @@ const ListingAdmin = () => {
   const { data: totalCount } = useProjectsCount(); // published only
   const { data: allProjectsCount } = useProjectsTotalCount(); // all including unpublished
   const [projectsPage, setProjectsPage] = useState(0);
-  const { data: paginatedProjects, refetch: refetchProjects } = useProjectsPaginated(projectsPage, 50);
+  const [projectsTab, setProjectsTab] = useState<"published" | "drafts">("published");
+  const publishedFilter = projectsTab === "published" ? true : false;
+  const { data: paginatedProjects, refetch: refetchProjects } = useProjectsPaginated(projectsPage, 50, { publishedFilter });
+  const { data: filteredTabCount } = useProjectsFilteredCount(publishedFilter);
   const { data: developers } = useDevelopers();
   const { data: communities } = useCommunities();
   
@@ -723,10 +726,28 @@ const ListingAdmin = () => {
         {/* Projects View - Grid */}
         {activeView === 'projects' && (
           <div className="container mx-auto px-4 py-6">
+            {/* Published / Drafts Tabs */}
+            <div className="flex items-center gap-2 mb-4">
+              <Button
+                variant={projectsTab === "published" ? "primary" : "secondary"}
+                size="sm"
+                onClick={() => { setProjectsTab("published"); setProjectsPage(0); }}
+              >
+                Published ({totalCount ?? 0})
+              </Button>
+              <Button
+                variant={projectsTab === "drafts" ? "primary" : "secondary"}
+                size="sm"
+                onClick={() => { setProjectsTab("drafts"); setProjectsPage(0); }}
+              >
+                Drafts ({(allProjectsCount ?? 0) - (totalCount ?? 0)})
+              </Button>
+            </div>
+
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
               {/* Search Filters */}
               <div className="lg:col-span-1">
-                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 sticky top-44">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 sticky top-44 max-h-[calc(100vh-260px)] overflow-auto">
                   <CardContent className="p-4">
                     <ListingSearchFilters
                       developers={developers || []}
@@ -781,6 +802,9 @@ const ListingAdmin = () => {
                             {(project as any).construction_status && (
                               <Badge variant="outline" className="text-[10px] border-gold/30">{(project as any).construction_status}</Badge>
                             )}
+                            {!(project as any).is_published && (
+                              <Badge variant="outline" className="text-[10px] border-amber-300 bg-amber-50 text-amber-700">Draft</Badge>
+                            )}
                           </div>
                         </div>
                       </CardContent>
@@ -794,23 +818,25 @@ const ListingAdmin = () => {
                   )}
                 </div>
                 {/* Pagination */}
-                <div className="flex items-center justify-center gap-4 mt-6">
+                <div className="flex items-center justify-center gap-4 mt-6 px-4 py-3 bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30 rounded-xl">
                   <Button
-                    variant="secondary"
+                    variant="outline"
                     size="sm"
                     disabled={projectsPage === 0}
                     onClick={() => setProjectsPage(p => Math.max(0, p - 1))}
+                    className="bg-white border-gold/30 text-foreground hover:bg-gold/10 disabled:opacity-40"
                   >
                     Previous
                   </Button>
-                  <span className="text-sm text-muted-foreground">
-                    Page {projectsPage + 1} of {Math.ceil((allProjectsCount ?? 0) / 50) || 1}
+                  <span className="text-sm text-foreground font-medium">
+                    Page {projectsPage + 1} of {Math.ceil((filteredTabCount ?? 0) / 50) || 1}
                   </span>
                   <Button
-                    variant="secondary"
+                    variant="outline"
                     size="sm"
-                    disabled={((projectsPage + 1) * 50) >= (allProjectsCount ?? 0)}
+                    disabled={((projectsPage + 1) * 50) >= (filteredTabCount ?? 0)}
                     onClick={() => setProjectsPage(p => p + 1)}
+                    className="bg-white border-gold/30 text-foreground hover:bg-gold/10 disabled:opacity-40"
                   >
                     Next
                   </Button>

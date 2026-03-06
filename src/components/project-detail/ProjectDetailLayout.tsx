@@ -59,6 +59,7 @@ import ReportIssueButton from "@/components/project-detail/ReportIssueButton";
 import AmenitiesWithPhotos from "@/components/project-detail/AmenitiesWithPhotos";
 import PointsOfInterest from "@/components/project-detail/PointsOfInterest";
 import ProjectLocationMap from "@/components/project-detail/ProjectLocationMap";
+import ProjectLocationFlyover from "@/components/project-detail/ProjectLocationFlyover";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 import { SectionDivider } from "@/components/ui/section-divider";
 // Footer is now rendered globally in MainLayout - do not import here
@@ -982,6 +983,19 @@ export default function ProjectDetailLayout({
                     alt={`${project.name} Location`} 
                     className="w-full h-[250px] object-cover"
                     fallbackSrc="/placeholder.svg"
+                  />
+                </div>
+              )}
+
+              {/* Location Flyover Animation */}
+              {project.latitude && project.longitude && (
+                <div className="mb-6">
+                  <h3 className="text-lg font-semibold text-foreground mb-3">Location Flyover</h3>
+                  <ProjectLocationFlyover
+                    projectName={project.name}
+                    latitude={project.latitude}
+                    longitude={project.longitude}
+                    location={project.location}
                   />
                 </div>
               )}
