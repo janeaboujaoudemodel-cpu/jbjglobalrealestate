@@ -528,3 +528,6 @@ verify_jwt = false
 
 [functions.scheduled-extraction]
 verify_jwt = false
+
+[functions.generate-listing]
+verify_jwt = false

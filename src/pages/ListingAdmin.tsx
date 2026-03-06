@@ -43,7 +43,7 @@ import {
   Database,
 } from "lucide-react";
 import ListingSearchFilters from "@/components/listing-admin/ListingSearchFilters";
-import ListingAdminChat from "@/components/listing-admin/ListingAdminChat";
+import ListingGenerator from "@/components/listing-admin/ListingGenerator";
 import { PendingUpdatesQueue } from "@/components/listing-admin/PendingUpdatesQueue";
 import { ProjectApprovalQueue } from "@/components/listing-admin/ProjectApprovalQueue";
 import { ExtractionJobsPanel } from "@/components/listing-admin/ExtractionJobsPanel";
@@ -597,8 +597,8 @@ const ListingAdmin = () => {
                 onClick={() => { setActiveView('chat'); setShowChat(true); }}
                 variant={activeView === 'chat' ? 'primary' : 'secondary'}
               >
-                <MessageCircle className="w-4 h-4 mr-2" />
-                {t('listingAdmin.chatWithSarah')}
+                <Upload className="w-4 h-4 mr-2" />
+                Generate Listing
               </Button>
               <Button
                 onClick={() => { setActiveView('projects'); setShowChat(false); setIsEditing(false); setIsCreating(false); }}
@@ -641,11 +641,8 @@ const ListingAdmin = () => {
       <main className="min-h-[calc(100vh-220px)] overflow-y-auto pb-12">
         {/* Chat View - Full Width Edge to Edge */}
         {activeView === 'chat' && (
-          <div className="h-full" style={{ borderRadius: 0 }}>
-            <ListingAdminChat
-              onBulkUpload={handleBulkUpload}
-              onCreateListing={handleCreateListing}
-            />
+          <div className="h-full">
+            <ListingGenerator />
           </div>
         )}
 
