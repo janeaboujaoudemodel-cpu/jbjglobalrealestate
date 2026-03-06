@@ -26,56 +26,56 @@ const QUICK_FILTERS: QuickFilter[] = [
     id: "all", 
     label: "All Leads", 
     icon: Inbox, 
-    color: "text-zinc-700",
-    bgColor: "bg-zinc-100 hover:bg-zinc-200 border-zinc-300",
+    color: "text-black",
+    bgColor: "bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] hover:from-[#F5F0E6] hover:to-[#E8DCC8] border-gold/30",
     statuses: [] 
   },
   { 
     id: "new", 
     label: "New", 
     icon: Star, 
-    color: "text-blue-600",
-    bgColor: "bg-blue-50 hover:bg-blue-100 border-blue-200",
+    color: "text-black",
+    bgColor: "bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] hover:from-[#F5F0E6] hover:to-[#E8DCC8] border-gold/30",
     statuses: ["new"] 
   },
   { 
     id: "hot", 
     label: "Hot Leads", 
     icon: TrendingUp, 
-    color: "text-emerald-600",
-    bgColor: "bg-emerald-50 hover:bg-emerald-100 border-emerald-200",
+    color: "text-emerald-700",
+    bgColor: "bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] hover:from-[#F5F0E6] hover:to-[#E8DCC8] border-gold/30",
     statuses: ["interested", "qualified", "negotiation"] 
   },
   { 
     id: "followup", 
     label: "Follow-up", 
     icon: Clock, 
-    color: "text-blue-600",
-    bgColor: "bg-blue-50 hover:bg-blue-100 border-blue-200",
+    color: "text-black",
+    bgColor: "bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] hover:from-[#F5F0E6] hover:to-[#E8DCC8] border-gold/30",
     statuses: ["no_answer", "callback", "followup"] 
   },
   { 
     id: "closed_won", 
     label: "Won", 
     icon: CheckCircle, 
-    color: "text-green-600",
-    bgColor: "bg-green-50 hover:bg-green-100 border-green-200",
+    color: "text-emerald-700",
+    bgColor: "bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] hover:from-[#F5F0E6] hover:to-[#E8DCC8] border-gold/30",
     statuses: ["closed_won"] 
   },
   { 
     id: "lost", 
     label: "Lost", 
     icon: XCircle, 
-    color: "text-red-600",
-    bgColor: "bg-red-50 hover:bg-red-100 border-red-200",
+    color: "text-red-700",
+    bgColor: "bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] hover:from-[#F5F0E6] hover:to-[#E8DCC8] border-gold/30",
     statuses: ["not_interested", "closed_lost", "do_not_contact"] 
   },
   { 
     id: "junk", 
     label: "Invalid", 
     icon: Trash2, 
-    color: "text-red-500",
-    bgColor: "bg-red-50 hover:bg-red-100 border-red-200",
+    color: "text-red-700",
+    bgColor: "bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] hover:from-[#F5F0E6] hover:to-[#E8DCC8] border-gold/30",
     statuses: ["junk"] 
   },
 ];
@@ -114,7 +114,7 @@ const LeadQuickFilters = ({ activeFilter, onChange, counts = {} }: LeadQuickFilt
                 variant="secondary" 
                 className={cn(
                   "ml-2 text-xs font-bold",
-                  isActive ? "bg-gold text-black" : "bg-zinc-200 text-zinc-700"
+                  isActive ? "bg-gold text-black" : "bg-gold/20 text-black"
                 )}
               >
                 {count}

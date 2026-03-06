@@ -54,7 +54,7 @@ interface KPICardProps {
 function KPICard({ title, value, icon, trend, loading, onClick }: KPICardProps) {
   return (
     <Card 
-      className={`bg-white/80 border-2 border-[#C9A84C]/30 hover:border-[#C9A84C]/50 transition-all duration-300 shadow-sm hover:shadow-md hover:shadow-[#C9A84C]/10 ${onClick ? 'cursor-pointer' : ''}`}
+      className={`bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 hover:border-gold/50 transition-all duration-300 shadow-sm hover:shadow-md hover:shadow-gold/10 ${onClick ? 'cursor-pointer' : ''}`}
       onClick={onClick}
       role={onClick ? "button" : undefined}
       tabIndex={onClick ? 0 : undefined}
@@ -122,6 +122,11 @@ function LeadRow({ lead, onOpen }: LeadRowProps) {
           <Badge variant="secondary" className="bg-[#C9A84C]/10 text-zinc-700 text-xs border border-[#C9A84C]/20">
             {lead.source}
           </Badge>
+        )}
+        {lead.phone_e164 && (
+          <span className="flex items-center gap-1 text-xs text-zinc-500 truncate">
+            <Phone className="h-3 w-3" /> {lead.phone_e164}
+          </span>
         )}
         {lead.email_lower && (
           <span className="flex items-center gap-1 text-xs text-zinc-500 truncate">
@@ -279,7 +284,8 @@ export default function OwnerDashboardOverview() {
     queryFn: async () => {
       const { count } = await supabase
         .from('crm_leads')
-        .select('*', { count: 'exact', head: true });
+        .select('*', { count: 'exact', head: true })
+        .is('deleted_at', null);
       return count || 0;
     },
     enabled: !!user,
@@ -296,6 +302,7 @@ export default function OwnerDashboardOverview() {
       const { count } = await supabase
         .from('crm_leads')
         .select('*', { count: 'exact', head: true })
+        .is('deleted_at', null)
         .gte('created_at', weekAgo.toISOString());
       return count || 0;
     },
@@ -349,6 +356,7 @@ export default function OwnerDashboardOverview() {
       const { data } = await supabase
         .from('crm_leads')
         .select('id, full_name, email_lower, phone_e164, source, created_at, pipeline_stage')
+        .is('deleted_at', null)
         .order('created_at', { ascending: false })
         .limit(6);
       return data || [];
@@ -501,7 +509,7 @@ export default function OwnerDashboardOverview() {
 
       {/* Main Tabbed Content */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="bg-white/80 border-2 border-[#C9A84C]/30 p-1.5 mb-6 flex-wrap gap-1 rounded-xl shadow-sm">
+        <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-2 mb-6 flex-wrap gap-1 rounded-xl shadow-sm">
           <TabsTrigger 
             value="overview" 
             className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black"

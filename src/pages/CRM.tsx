@@ -574,7 +574,7 @@ const CRM = () => {
 
             {/* Leads Section with Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-1.5 mb-4 w-full flex flex-wrap gap-1 h-auto">
+              <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-2 mb-4 w-full flex flex-wrap gap-1 h-auto">
                 <TabsTrigger 
                   value="all" 
                   className="tab-trigger-champagne text-black px-5 py-2.5"

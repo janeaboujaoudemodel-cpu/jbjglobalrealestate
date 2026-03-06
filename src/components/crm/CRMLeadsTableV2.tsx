@@ -16,6 +16,7 @@ import {
 import { toast } from "sonner";
 import { Mail, MessageSquare, PhoneCall, Trash2 } from "lucide-react";
 import { PIPELINE_STATUSES, STATUS_GROUPS } from "./LeadStatusBadge";
+import InlineStatusSelect from "./InlineStatusSelect";
 import CRMLeadsBulkBar from "./CRMLeadsBulkBar";
 import LeadAssignModal from "./LeadAssignModal";
 import DeleteLeadDialog from "./DeleteLeadDialog";
@@ -431,45 +432,12 @@ export default function CRMLeadsTableV2({
                       )}
                     </TableCell>
                     <TableCell className="text-sm text-black/80 whitespace-nowrap">{renderSource(lead)}</TableCell>
-                    <TableCell>
-                      <select
-                        value={status}
-                        onChange={(e) => handleStatusChange(lead.id, e.target.value)}
-                        className="h-8 w-full min-w-[140px] max-w-[160px] rounded-full border-2 px-3 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-gold/30 appearance-none cursor-pointer"
-                        style={{
-                          backgroundColor: groupedStatuses.positive.some(s => s.value === status) 
-                            ? 'rgba(34, 197, 94, 0.15)' 
-                            : groupedStatuses.neutral.some(s => s.value === status) 
-                              ? 'rgba(59, 130, 246, 0.15)' 
-                              : 'rgba(239, 68, 68, 0.15)',
-                          color: groupedStatuses.positive.some(s => s.value === status) 
-                            ? '#16a34a' 
-                            : groupedStatuses.neutral.some(s => s.value === status) 
-                              ? '#2563eb' 
-                              : '#dc2626',
-                          borderColor: groupedStatuses.positive.some(s => s.value === status) 
-                            ? 'rgba(34, 197, 94, 0.4)' 
-                            : groupedStatuses.neutral.some(s => s.value === status) 
-                              ? 'rgba(59, 130, 246, 0.4)' 
-                              : 'rgba(239, 68, 68, 0.4)',
-                        }}
-                      >
-                        <optgroup label="🟢 POSITIVE">
-                          {groupedStatuses.positive.map((s) => (
-                            <option key={s.value} value={s.value}>{s.label}</option>
-                          ))}
-                        </optgroup>
-                        <optgroup label="🔵 NEUTRAL">
-                          {groupedStatuses.neutral.map((s) => (
-                            <option key={s.value} value={s.value}>{s.label}</option>
-                          ))}
-                        </optgroup>
-                        <optgroup label="🔴 NEGATIVE">
-                          {groupedStatuses.negative.map((s) => (
-                            <option key={s.value} value={s.value}>{s.label}</option>
-                          ))}
-                        </optgroup>
-                      </select>
+                    <TableCell onClick={(e) => e.stopPropagation()}>
+                      <InlineStatusSelect
+                        leadId={lead.id}
+                        currentStatus={status}
+                        onStatusChange={() => fetchLeads()}
+                      />
                     </TableCell>
                     <TableCell className="text-xs text-black/60 whitespace-nowrap">
                       {formatDisplayDate(lead.created_at)}
