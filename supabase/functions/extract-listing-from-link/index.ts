@@ -140,7 +140,7 @@ serve(async (req) => {
       files,
       userId,
       albumName,
-      auto_approve = false,
+      auto_approve: _auto_approve_raw = false,
       queue = true,
       retryImportId,
       async_mode = false,
