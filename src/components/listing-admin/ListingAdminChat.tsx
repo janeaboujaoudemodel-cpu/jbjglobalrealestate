@@ -1028,6 +1028,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
               </div>
             </div>
           )}
+          <div ref={messagesEndRef} />
         </div>
       </ScrollArea>
 
@@ -1039,11 +1040,9 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
             variant="outline"
             className="h-7 text-xs bg-white/90 backdrop-blur-sm border-gold/30 shadow-md hover:bg-gold/10"
             onClick={() => {
-              if (scrollRef.current) {
-                scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-                isNearBottom.current = true;
-                setShowJumpToLatest(false);
-              }
+              messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+              isNearBottom.current = true;
+              setShowJumpToLatest(false);
             }}
           >
             ↓ Jump to latest
