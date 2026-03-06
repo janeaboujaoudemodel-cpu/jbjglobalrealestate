@@ -385,15 +385,94 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
     }
   };
 
+  const pollForResults = useCallback(async (jobId: string, processingMsgId: string) => {
+    const maxAttempts = 60; // 3 minutes max (60 * 3s)
+    let attempts = 0;
+
+    const poll = async () => {
+      attempts++;
+      try {
+        const { data: job, error } = await supabase
+          .from("listing_extraction_queue")
+          .select("status, results, error_message")
+          .eq("id", jobId)
+          .single();
+
+        if (error) throw error;
+
+        if (job.status === "completed" && job.results) {
+          handleExtractionResults(job.results as any, processingMsgId);
+          setIsLoading(false);
+          return;
+        }
+
+        if (job.status === "failed") {
+          setMessages(prev => {
+            const without = prev.filter(m => m.id !== processingMsgId);
+            return [...without, {
+              id: (Date.now() + 2).toString(), role: "assistant" as const,
+              content: `Extraction failed: ${job.error_message || "Unknown error"}`,
+              timestamp: new Date(), type: "error" as const,
+            }];
+          });
+          setIsLoading(false);
+          return;
+        }
+
+        // Update processing message with progress
+        if (attempts % 3 === 0) {
+          setMessages(prev => prev.map(m =>
+            m.id === processingMsgId
+              ? { ...m, content: `Still processing... (${Math.round(attempts * 3)}s elapsed)` }
+              : m
+          ));
+        }
+
+        if (attempts < maxAttempts) {
+          setTimeout(poll, 3000);
+        } else {
+          setMessages(prev => {
+            const without = prev.filter(m => m.id !== processingMsgId);
+            return [...without, {
+              id: (Date.now() + 2).toString(), role: "assistant" as const,
+              content: "Extraction timed out. The job may still be processing in the background. Check back shortly.",
+              timestamp: new Date(), type: "error" as const,
+            }];
+          });
+          setIsLoading(false);
+        }
+      } catch (err) {
+        console.error("Poll error:", err);
+        if (attempts < maxAttempts) {
+          setTimeout(poll, 3000);
+        }
+      }
+    };
+
+    setTimeout(poll, 3000);
+  }, []);
+
   const processUrls = async (urls: string[], processingMsgId?: string) => {
     const msgId = processingMsgId || (Date.now() + 1).toString();
 
     try {
       const { data, error } = await supabase.functions.invoke("extract-listing-from-link", {
-        body: { urls, userId: user?.id, auto_approve: autoApprove, queue: true },
+        body: { urls, userId: user?.id, auto_approve: autoApprove, queue: true, async_mode: true },
       });
       if (error) throw error;
-      handleExtractionResults(data, msgId);
+
+      // If async mode returned a jobId, start polling
+      if (data?.async && data?.jobId) {
+        setMessages(prev => prev.map(m =>
+          m.id === msgId
+            ? { ...m, content: `Queued! Extracting ${urls.length} link${urls.length > 1 ? "s" : ""} in background... ${autoApprove ? "⚡ Auto-approve ON" : ""}` }
+            : m
+        ));
+        await pollForResults(data.jobId, msgId);
+      } else {
+        // Synchronous fallback
+        handleExtractionResults(data, msgId);
+      }
     } catch (err: any) {
       setMessages(prev => {
         const without = prev.filter(m => m.id !== msgId);
