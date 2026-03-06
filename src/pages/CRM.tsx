@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -11,34 +11,44 @@ import { toast } from "sonner";
 import { 
   Users, FileText, Plus, Upload, Download, LogOut, Shuffle, LayoutGrid, List, Zap, Briefcase, PanelLeftOpen, PanelLeftClose, Crown, Flag, CheckSquare, Calendar, Search, Bell, Settings, Brain
 } from "lucide-react";
-import CRMLeadsTableV2 from "@/components/crm/CRMLeadsTableV2";
-import CRMEnhancedDashboard from "@/components/crm/CRMEnhancedDashboard";
-import CRMImportModalV3 from "@/components/crm/CRMImportModalV3";
-import DeleteImportButton from "@/components/crm/DeleteImportButton";
-import CRMLeadModal from "@/components/crm/CRMLeadModal";
-import LeadQuickFilters from "@/components/crm/LeadQuickFilters";
-import LeadSourceFilter from "@/components/crm/LeadSourceFilter";
-import BulkAssignModal from "@/components/crm/BulkAssignModal";
-import SmartReminders from "@/components/crm/SmartReminders";
-import KanbanPipeline from "@/components/crm/KanbanPipeline";
-import ActivityTimeline from "@/components/crm/ActivityTimeline";
-import DealValueTracker from "@/components/crm/DealValueTracker";
-import AutomationRules from "@/components/crm/AutomationRules";
-import EmployeeCenter from "@/components/crm/EmployeeCenter";
-import EmployeesHub from "@/components/crm/EmployeesHub";
-import CRMToolsSidebar from "@/components/crm/CRMToolsSidebar";
-import FlaggedLeadsView from "@/components/crm/FlaggedLeadsView";
 import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
-import RecentlyDeletedLeads from "@/components/crm/RecentlyDeletedLeads";
-import VIPExportButton from "@/components/crm/VIPExportButton";
-import CRMAssistantPanel from "@/components/crm/CRMAssistantPanel";
-import CRMCommunicationPanel from "@/components/crm/CRMCommunicationPanel";
-import { ForcePasswordChange } from "@/components/auth/ForcePasswordChange";
 import { useForcePasswordChange } from "@/hooks/useForcePasswordChange";
+import { ForcePasswordChange } from "@/components/auth/ForcePasswordChange";
 import { CommandPalette } from "@/components/ui/command-palette";
 import { FloatingActionBar } from "@/components/ui/floating-action-bar";
-import AIInsightsPanel from "@/components/ui/ai-insights-panel";
-import { SmartNotifications, NotificationBell } from "@/components/ui/smart-notifications";
+
+// Lazy-load heavy sub-components for performance
+const CRMLeadsTableV2 = lazy(() => import("@/components/crm/CRMLeadsTableV2"));
+const CRMEnhancedDashboard = lazy(() => import("@/components/crm/CRMEnhancedDashboard"));
+const CRMImportModalV3 = lazy(() => import("@/components/crm/CRMImportModalV3"));
+const DeleteImportButton = lazy(() => import("@/components/crm/DeleteImportButton"));
+const CRMLeadModal = lazy(() => import("@/components/crm/CRMLeadModal"));
+const LeadQuickFilters = lazy(() => import("@/components/crm/LeadQuickFilters"));
+const LeadSourceFilter = lazy(() => import("@/components/crm/LeadSourceFilter"));
+const BulkAssignModal = lazy(() => import("@/components/crm/BulkAssignModal"));
+const SmartReminders = lazy(() => import("@/components/crm/SmartReminders"));
+const KanbanPipeline = lazy(() => import("@/components/crm/KanbanPipeline"));
+const ActivityTimeline = lazy(() => import("@/components/crm/ActivityTimeline"));
+const DealValueTracker = lazy(() => import("@/components/crm/DealValueTracker"));
+const AutomationRules = lazy(() => import("@/components/crm/AutomationRules"));
+const EmployeeCenter = lazy(() => import("@/components/crm/EmployeeCenter"));
+const EmployeesHub = lazy(() => import("@/components/crm/EmployeesHub"));
+const CRMToolsSidebar = lazy(() => import("@/components/crm/CRMToolsSidebar"));
+const FlaggedLeadsView = lazy(() => import("@/components/crm/FlaggedLeadsView"));
+const RecentlyDeletedLeads = lazy(() => import("@/components/crm/RecentlyDeletedLeads"));
+const VIPExportButton = lazy(() => import("@/components/crm/VIPExportButton"));
+const CRMAssistantPanel = lazy(() => import("@/components/crm/CRMAssistantPanel"));
+const CRMCommunicationPanel = lazy(() => import("@/components/crm/CRMCommunicationPanel"));
+const AIInsightsPanel = lazy(() => import("@/components/ui/ai-insights-panel"));
+const SmartNotificationsLazy = lazy(() => import("@/components/ui/smart-notifications").then(m => ({ default: m.SmartNotifications })));
+const NotificationBellLazy = lazy(() => import("@/components/ui/smart-notifications").then(m => ({ default: m.NotificationBell })));
+
+const CRMTabFallback = () => (
+  <div className="space-y-4 p-4">
+    <Skeleton className="h-12 w-full" />
+    <Skeleton className="h-64 w-full" />
+  </div>
+);
 
 interface CRMProfile {
   id: string;
