@@ -4558,6 +4558,7 @@ export type Database = {
           created_by_user_id: string | null
           current_location_city: string | null
           current_location_country: string | null
+          deleted_at: string | null
           detection_keywords: string[] | null
           email_lower: string | null
           email_normalized: string | null
@@ -4614,6 +4615,7 @@ export type Database = {
           created_by_user_id?: string | null
           current_location_city?: string | null
           current_location_country?: string | null
+          deleted_at?: string | null
           detection_keywords?: string[] | null
           email_lower?: string | null
           email_normalized?: string | null
@@ -4670,6 +4672,7 @@ export type Database = {
           created_by_user_id?: string | null
           current_location_city?: string | null
           current_location_country?: string | null
+          deleted_at?: string | null
           detection_keywords?: string[] | null
           email_lower?: string | null
           email_normalized?: string | null
@@ -23471,6 +23474,9 @@ export type Database = {
         Returns: Json
       }
       crm_hard_delete_leads: { Args: { p_lead_ids: string[] }; Returns: Json }
+      crm_purge_deleted_leads: { Args: never; Returns: Json }
+      crm_restore_leads: { Args: { p_lead_ids: string[] }; Returns: Json }
+      crm_soft_delete_leads: { Args: { p_lead_ids: string[] }; Returns: Json }
       decrypt_bank_field: {
         Args: { encrypted_data: string; salt_id: string }
         Returns: string

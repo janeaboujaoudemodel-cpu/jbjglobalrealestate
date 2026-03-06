@@ -37,7 +37,6 @@ export default function InlineStatusSelect({
 
       if (error) throw error;
 
-      // Invalidate queries to refresh data
       queryClient.invalidateQueries({ queryKey: ['crm-leads-inbox'] });
       queryClient.invalidateQueries({ queryKey: ['owner-newest-leads'] });
       
@@ -64,11 +63,11 @@ export default function InlineStatusSelect({
         <LeadStatusBadge status={currentStatus} size="sm" />
       </SelectTrigger>
       <SelectContent 
-        className="bg-zinc-800 border-zinc-700 max-h-80"
+        className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 max-h-80"
         onClick={(e) => e.stopPropagation()}
       >
         {/* POSITIVE - Green */}
-        <div className="px-2 py-1.5 text-xs font-bold text-emerald-400 uppercase tracking-wide border-b border-zinc-700/50 flex items-center gap-2">
+        <div className="px-2 py-1.5 text-xs font-bold text-emerald-700 uppercase tracking-wide border-b border-gold/20 flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-emerald-500" />
           Positive
         </div>
@@ -76,7 +75,7 @@ export default function InlineStatusSelect({
           <SelectItem 
             key={status.value} 
             value={status.value} 
-            className="text-white hover:bg-zinc-700 pl-4"
+            className="text-black hover:bg-gold/10 pl-4 focus:bg-gold/15 focus:text-black"
           >
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-500" />
@@ -86,7 +85,7 @@ export default function InlineStatusSelect({
         ))}
         
         {/* NEUTRAL - Blue */}
-        <div className="px-2 py-1.5 text-xs font-bold text-blue-400 uppercase tracking-wide border-b border-zinc-700/50 mt-1 flex items-center gap-2">
+        <div className="px-2 py-1.5 text-xs font-bold text-blue-700 uppercase tracking-wide border-b border-gold/20 mt-1 flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-blue-500" />
           Neutral
         </div>
@@ -94,7 +93,7 @@ export default function InlineStatusSelect({
           <SelectItem 
             key={status.value} 
             value={status.value} 
-            className="text-white hover:bg-zinc-700 pl-4"
+            className="text-black hover:bg-gold/10 pl-4 focus:bg-gold/15 focus:text-black"
           >
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-blue-500" />
@@ -104,7 +103,7 @@ export default function InlineStatusSelect({
         ))}
         
         {/* NEGATIVE - Red */}
-        <div className="px-2 py-1.5 text-xs font-bold text-red-400 uppercase tracking-wide border-b border-zinc-700/50 mt-1 flex items-center gap-2">
+        <div className="px-2 py-1.5 text-xs font-bold text-red-700 uppercase tracking-wide border-b border-gold/20 mt-1 flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-red-500" />
           Negative
         </div>
@@ -112,7 +111,7 @@ export default function InlineStatusSelect({
           <SelectItem 
             key={status.value} 
             value={status.value} 
-            className="text-white hover:bg-zinc-700 pl-4"
+            className="text-black hover:bg-gold/10 pl-4 focus:bg-gold/15 focus:text-black"
           >
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-red-500" />
