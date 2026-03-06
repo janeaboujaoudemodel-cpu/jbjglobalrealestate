@@ -108,19 +108,26 @@ export function ticketSupportEmbedAr(): string {
 </td></tr></table>`;
 }
 
-// ─── Recommended Actions (clean icon cards) ───
-function recommendedCard(title: string, href: string, iconPath: string, alt: string): string {
+// ─── Recommended Actions (inline SVG icon cards) ───
+const RECOMMENDED_ICONS: Record<string, string> = {
+  aitools: `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M7 20h10"/><path d="M9 16v4"/><path d="M15 16v4"/><path d="M8 8h8"/><path d="M8 12h5"/></svg>`,
+  guides: `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5z"/><path d="M18 6h1a2 2 0 0 1 2 2v9"/><path d="M8 8h6"/><path d="M8 12h6"/><path d="M8 16h4"/></svg>`,
+  properties: `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V9l9-6 9 6v12"/><path d="M9 21v-6h6v6"/></svg>`,
+};
+
+function recommendedCard(title: string, href: string, iconKey: string): string {
   const frameStyle = "width:58px;height:58px;border:1.5px solid #1a1a1a;border-radius:58px;text-align:center;vertical-align:middle;";
+  const svgIcon = RECOMMENDED_ICONS[iconKey] || "";
 
   return `<td width="33%" style="text-align:center;padding:4px;vertical-align:top;"><a href="${href}" style="display:block;text-decoration:none;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;"><tr><td style="padding:18px 8px;text-align:center;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="${frameStyle}">${iconImg(iconPath, alt, 34)}</td></tr></table>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="${frameStyle}">${svgIcon}</td></tr></table>
 <p style="margin:0;font-size:12px;color:#1a1a1a;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">${title}</p>
 </td></tr></table></a></td>`;
 }
 
 export function recommendedActionsHtml(): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:10px 0 18px;"><tr><td style="text-align:center;"><p style="color:#1a1a1a;font-size:16px;font-weight:700;margin:0 0 14px;">Recommended For You</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${recommendedCard("AI Tools", `${SITE_URL}/ai-tools`, `${ICON_BASE}/ai-tools.png`, "AI Tools")}${recommendedCard("Guides", `${SITE_URL}/guides`, `${ICON_BASE}/guides.png`, "Guides")}${recommendedCard("Properties", `${SITE_URL}/properties`, `${ICON_BASE}/properties.png`, "Properties")}</tr></table></td></tr></table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:10px 0 18px;"><tr><td style="text-align:center;"><p style="color:#1a1a1a;font-size:16px;font-weight:700;margin:0 0 14px;">Recommended For You</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${recommendedCard("AI Tools", `${SITE_URL}/ai-tools`, "aitools")}${recommendedCard("Guides", `${SITE_URL}/guides`, "guides")}${recommendedCard("Properties", `${SITE_URL}/properties`, "properties")}</tr></table></td></tr></table>`;
 }
 
 // ─── Books (JPG from storage — email clients handle JPGs reliably) ───
