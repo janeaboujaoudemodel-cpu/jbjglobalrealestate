@@ -751,19 +751,17 @@ const ListingAdmin = () => {
                       className={`bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 cursor-pointer transition-all hover:shadow-lg hover:border-gold overflow-hidden ${
                         selectedProject?.id === project.id ? "border-gold ring-2 ring-gold/20" : ""
                       }`}
-                      onClick={() => handleEditProjectWithView(project)}
+                      onClick={() => { setPreviewProject(project); setShowPreviewModal(true); }}
                     >
                       {/* Cover Image */}
-                      {(project.cover_image_url || (project.images && project.images.length > 0)) && (
-                        <div className="aspect-[16/10] overflow-hidden">
-                          <img
-                            src={project.cover_image_url || project.images?.[0]?.image_url}
-                            alt={project.name}
-                            className="w-full h-full object-cover"
-                            loading="lazy"
-                          />
-                        </div>
-                      )}
+                      <div className="aspect-[16/10] overflow-hidden bg-muted">
+                        <SafeImage
+                          src={project.cover_image_url || project.images?.[0]?.image_url}
+                          alt={project.name}
+                          className="w-full h-full object-cover"
+                          fallbackSrc="/placeholder.svg"
+                        />
+                      </div>
                       <CardContent className="p-4">
                         <div className="flex items-start justify-between gap-2">
                           <div className="min-w-0 flex-1">
@@ -794,9 +792,44 @@ const ListingAdmin = () => {
                     </div>
                   )}
                 </div>
+                {/* Pagination */}
+                <div className="flex items-center justify-center gap-4 mt-6">
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    disabled={projectsPage === 0}
+                    onClick={() => setProjectsPage(p => Math.max(0, p - 1))}
+                  >
+                    Previous
+                  </Button>
+                  <span className="text-sm text-muted-foreground">
+                    Page {projectsPage + 1} of {Math.ceil((totalCount ?? 0) / 50) || 1}
+                  </span>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    disabled={((projectsPage + 1) * 50) >= (totalCount ?? 0)}
+                    onClick={() => setProjectsPage(p => p + 1)}
+                  >
+                    Next
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
+          
+          {/* Preview Modal */}
+          <ProjectPreviewModal
+            project={previewProject}
+            open={showPreviewModal}
+            onOpenChange={setShowPreviewModal}
+            onEdit={(p) => handleEditProjectWithView(p)}
+            onSendToSarah={(p) => {
+              setShowPreviewModal(false);
+              setActiveView('chat');
+              setShowChat(true);
+            }}
+          />
         )}
 
         {/* Editor View */}
