@@ -39,6 +39,7 @@ import ConsultationRequestForm from "@/components/ConsultationRequestForm";
 import { ProjectAIAnalyzer } from "@/components/project-detail/ProjectAIAnalyzer";
 import { BrandedLoader } from "@/components/ui/BrandedLoader";
 import PremiumBrochureCard from "@/components/project-detail/PremiumBrochureCard";
+import BookStyleDocuments from "@/components/project-detail/BookStyleDocuments";
 import LeadCaptureModal from "@/components/project-detail/LeadCaptureModal";
 import ProjectBreadcrumb from "@/components/project-detail/ProjectBreadcrumb";
 import CallToActionSection from "@/components/project-detail/CallToActionSection";
@@ -1097,6 +1098,23 @@ export default function ProjectDetailLayout({
               </div>
             </div>
           </div>
+
+          {/* BOOK-STYLE ALL DOCUMENTS STRIP */}
+          {project.documents.length > 0 && (
+            <div className="mb-12">
+              <BookStyleDocuments
+                documents={project.documents.map(d => ({
+                  id: d.id,
+                  type: d.type,
+                  url: d.url,
+                  name: d.name,
+                }))}
+                projectName={project.name}
+                projectImageUrl={project.images?.[0]?.url || undefined}
+                onDownload={(url, filename) => handleDocumentDownload("brochure", url, filename)}
+              />
+            </div>
+          )}
 
            {/* PAYMENT PLAN VISUALIZATION (Reelly-style enhanced) */}
            {(true) && ( /* Always show payment section */
