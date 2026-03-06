@@ -57,27 +57,29 @@ import {
 } from "lucide-react";
 import { Loader2 } from "lucide-react";
 import { SmartDocumentUploader } from "@/components/SmartDocumentUploader";
-import { RateLimitDashboard } from "@/components/admin/RateLimitDashboard";
-import { IPBlocklistDashboard } from "@/components/admin/IPBlocklistDashboard";
-import { SecurityDashboardSummary } from "@/components/admin/SecurityDashboardSummary";
-import { FounderVisibilityToggle } from "@/components/admin/FounderVisibilityToggle";
-import { PodcastVisibilityToggle } from "@/components/admin/PodcastVisibilityToggle";
-import { CompanyProfileDownload } from "@/components/admin/CompanyProfileDownload";
-import AuditLogDashboard from "@/components/admin/AuditLogDashboard";
-import BrokerSubscriptionsDashboard from "@/components/admin/BrokerSubscriptionsDashboard";
-import AIAnalyticsDashboard from "@/components/admin/AIAnalyticsDashboard";
-import { AIBrokersDashboard } from "@/components/admin/ai-brokers/AIBrokersDashboard";
-import MarketingSettingsDashboard from "@/components/admin/MarketingSettingsDashboard";
-import PWAAnalyticsDashboard from "@/components/admin/PWAAnalyticsDashboard";
-import VisitorInsightsDashboard from "@/components/admin/VisitorInsightsDashboard";
-import { AdminOverviewDashboard } from "@/components/admin/AdminOverviewDashboard";
-import { AdminAIAssistant } from "@/components/admin/AdminAIAssistant";
 import { ClipboardList, Users, Briefcase, Megaphone, Smartphone, LayoutDashboard, Bot, Mic, Send, Handshake, BookOpen } from "lucide-react";
-import VoiceRecorder from "@/components/admin/VoiceRecorder";
 import { CommandPalette } from "@/components/ui/command-palette";
 import { FloatingActionBar } from "@/components/ui/floating-action-bar";
 import { Link } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
+
+// Lazy-load ALL tab content components for fast initial render
+const AdminOverviewDashboard = lazy(() => import("@/components/admin/AdminOverviewDashboard").then(m => ({ default: m.AdminOverviewDashboard })));
+const AdminAIAssistant = lazy(() => import("@/components/admin/AdminAIAssistant").then(m => ({ default: m.AdminAIAssistant })));
+const AIBrokersDashboard = lazy(() => import("@/components/admin/ai-brokers/AIBrokersDashboard").then(m => ({ default: m.AIBrokersDashboard })));
+const SecurityDashboardSummary = lazy(() => import("@/components/admin/SecurityDashboardSummary").then(m => ({ default: m.SecurityDashboardSummary })));
+const AuditLogDashboard = lazy(() => import("@/components/admin/AuditLogDashboard"));
+const BrokerSubscriptionsDashboard = lazy(() => import("@/components/admin/BrokerSubscriptionsDashboard"));
+const AIAnalyticsDashboard = lazy(() => import("@/components/admin/AIAnalyticsDashboard"));
+const MarketingSettingsDashboard = lazy(() => import("@/components/admin/MarketingSettingsDashboard"));
+const PWAAnalyticsDashboard = lazy(() => import("@/components/admin/PWAAnalyticsDashboard"));
+const VisitorInsightsDashboard = lazy(() => import("@/components/admin/VisitorInsightsDashboard"));
+const RateLimitDashboard = lazy(() => import("@/components/admin/RateLimitDashboard").then(m => ({ default: m.RateLimitDashboard })));
+const IPBlocklistDashboard = lazy(() => import("@/components/admin/IPBlocklistDashboard").then(m => ({ default: m.IPBlocklistDashboard })));
+const VoiceRecorder = lazy(() => import("@/components/admin/VoiceRecorder"));
+const FounderVisibilityToggle = lazy(() => import("@/components/admin/FounderVisibilityToggle").then(m => ({ default: m.FounderVisibilityToggle })));
+const PodcastVisibilityToggle = lazy(() => import("@/components/admin/PodcastVisibilityToggle").then(m => ({ default: m.PodcastVisibilityToggle })));
+const CompanyProfileDownload = lazy(() => import("@/components/admin/CompanyProfileDownload").then(m => ({ default: m.CompanyProfileDownload })));
 
 // Lazy load embedded department components for performance
 const EmbeddedHRDashboard = lazy(() => import("@/components/admin/EmbeddedHRDashboard").then(m => ({ default: m.EmbeddedHRDashboard })));
@@ -546,44 +548,60 @@ const Admin = () => {
           </div>
 
           <TabsContent value="overview" className="space-y-8">
-            <AdminOverviewDashboard />
+            <Suspense fallback={<TabLoadingFallback />}>
+              <AdminOverviewDashboard />
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="ai-assistant" className="space-y-8">
-            <div className="space-y-6">
-              <AdminAIAssistant />
-              <AIBrokersDashboard />
-            </div>
+            <Suspense fallback={<TabLoadingFallback />}>
+              <div className="space-y-6">
+                <AdminAIAssistant />
+                <AIBrokersDashboard />
+              </div>
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="security" className="space-y-8">
-            {/* Security Dashboard - Full Width */}
-            <SecurityDashboardSummary />
-            
+            <Suspense fallback={<TabLoadingFallback />}>
+              <SecurityDashboardSummary />
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="audit-logs" className="space-y-8">
-            <AuditLogDashboard />
+            <Suspense fallback={<TabLoadingFallback />}>
+              <AuditLogDashboard />
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="brokers" className="space-y-8">
-            <BrokerSubscriptionsDashboard />
+            <Suspense fallback={<TabLoadingFallback />}>
+              <BrokerSubscriptionsDashboard />
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="ai-analytics" className="space-y-8">
-            <AIAnalyticsDashboard />
+            <Suspense fallback={<TabLoadingFallback />}>
+              <AIAnalyticsDashboard />
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="marketing" className="space-y-8">
-            <MarketingSettingsDashboard />
+            <Suspense fallback={<TabLoadingFallback />}>
+              <MarketingSettingsDashboard />
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="pwa-analytics" className="space-y-8">
-            <PWAAnalyticsDashboard />
+            <Suspense fallback={<TabLoadingFallback />}>
+              <PWAAnalyticsDashboard />
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="visitor-insights" className="space-y-8">
-            <VisitorInsightsDashboard />
+            <Suspense fallback={<TabLoadingFallback />}>
+              <VisitorInsightsDashboard />
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="hr-hub" className="space-y-8">
@@ -636,23 +654,27 @@ const Admin = () => {
           </TabsContent>
 
           <TabsContent value="podcast-studio" className="space-y-8">
-            <div className="max-w-3xl mx-auto">
-              <VoiceRecorder />
-            </div>
+            <Suspense fallback={<TabLoadingFallback />}>
+              <div className="max-w-3xl mx-auto">
+                <VoiceRecorder />
+              </div>
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="intelligence" className="space-y-8">
-            <Suspense fallback={<div className="flex items-center justify-center p-12"><Loader2 className="w-6 h-6 animate-spin text-gold" /></div>}>
+            <Suspense fallback={<TabLoadingFallback />}>
               <AdminIntelligence embedded />
             </Suspense>
           </TabsContent>
 
           <TabsContent value="founder" className="space-y-8">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <FounderVisibilityToggle />
-              <PodcastVisibilityToggle />
-              <CompanyProfileDownload />
-            </div>
+            <Suspense fallback={<TabLoadingFallback />}>
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <FounderVisibilityToggle />
+                <PodcastVisibilityToggle />
+                <CompanyProfileDownload />
+              </div>
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="partnerships" className="space-y-8">
@@ -860,11 +882,15 @@ const Admin = () => {
           </TabsContent>
 
           <TabsContent value="rate-limits" className="space-y-8">
-            <RateLimitDashboard />
+            <Suspense fallback={<TabLoadingFallback />}>
+              <RateLimitDashboard />
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="ip-blocklist" className="space-y-8">
-            <IPBlocklistDashboard />
+            <Suspense fallback={<TabLoadingFallback />}>
+              <IPBlocklistDashboard />
+            </Suspense>
           </TabsContent>
         </Tabs>
       </main>
