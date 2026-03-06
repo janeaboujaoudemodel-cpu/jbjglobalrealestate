@@ -43,6 +43,18 @@ interface ListingCard {
   amenities?: string[];
   paymentPlan?: string;
   description?: string;
+  unitTypes?: string[];
+  unitDetails?: { type: string; sizeMin?: number; sizeMax?: number; priceFrom?: number; priceTo?: number; bathrooms?: number }[];
+  priceFrom?: number;
+  priceTo?: number;
+  bedroomsMin?: number;
+  bedroomsMax?: number;
+  handoverDate?: string;
+  propertyType?: string;
+  projectStatus?: string;
+  totalUnits?: number;
+  floors?: number;
+  heroImage?: string;
 }
 
 interface FailedItem {
@@ -266,6 +278,18 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
             amenities: r.amenities,
             paymentPlan: r.paymentPlan,
             description: r.description,
+            unitTypes: r.unitTypes,
+            unitDetails: r.unitDetails,
+            priceFrom: r.priceFrom,
+            priceTo: r.priceTo,
+            bedroomsMin: r.bedroomsMin,
+            bedroomsMax: r.bedroomsMax,
+            handoverDate: r.handoverDate,
+            propertyType: r.propertyType,
+            projectStatus: r.projectStatus,
+            totalUnits: r.totalUnits,
+            floors: r.floors,
+            heroImage: r.heroImage,
           });
         } else {
           failedItems.push({ url: r.url, name: r.name, error: r.error });
@@ -513,80 +537,191 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
     fileInputRef.current.click();
   };
 
-  // ── LISTING CARD COMPONENT ──
+  // ── LISTING CARD COMPONENT (Premium photo-based) ──
   const ListingPreviewCard = ({ listing }: { listing: ListingCard }) => {
     const isApproved = listing.status === "auto-approved";
+    const formatPrice = (price?: number) => {
+      if (!price) return null;
+      if (price >= 1000000) return `AED ${(price / 1000000).toFixed(1)}M`;
+      if (price >= 1000) return `AED ${(price / 1000).toFixed(0)}K`;
+      return `AED ${price.toLocaleString()}`;
+    };
+    const priceDisplay = listing.priceFrom
+      ? listing.priceTo && listing.priceTo !== listing.priceFrom
+        ? `${formatPrice(listing.priceFrom)} - ${formatPrice(listing.priceTo)}`
+        : `From ${formatPrice(listing.priceFrom)}`
+      : null;
+    const bedroomDisplay = listing.bedroomsMin != null
+      ? listing.bedroomsMax && listing.bedroomsMax !== listing.bedroomsMin
+        ? `${listing.bedroomsMin} - ${listing.bedroomsMax} BR`
+        : `${listing.bedroomsMin} BR`
+      : listing.unitTypes?.length ? listing.unitTypes.join(" • ") : null;
+
     return (
-      <div className="bg-white rounded-xl border border-zinc-200 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-        <div className="p-3">
-          <div className="flex items-start justify-between gap-2 mb-2">
-            <div className="flex-1 min-w-0">
-              <h4 className="font-semibold text-sm text-foreground truncate">{listing.projectName}</h4>
-              {listing.developer && (
-                <div className="flex items-center gap-1 mt-0.5">
-                  <Building2 className="w-3 h-3 text-muted-foreground" />
-                  <span className="text-xs text-muted-foreground truncate">{listing.developer}</span>
-                </div>
-              )}
-              {listing.location && (
-                <div className="flex items-center gap-1 mt-0.5">
-                  <MapPin className="w-3 h-3 text-muted-foreground" />
-                  <span className="text-xs text-muted-foreground truncate">{listing.location}</span>
-                </div>
-              )}
+      <div
+        className="bg-white rounded-2xl border border-zinc-200 shadow-md overflow-hidden hover:shadow-xl transition-all cursor-pointer group"
+        onClick={() => {
+          if (listing.viewUrl.startsWith("http")) window.open(listing.viewUrl, "_blank");
+          else navigate(listing.viewUrl);
+        }}
+      >
+        {/* Hero Image */}
+        <div className="relative h-40 bg-gradient-to-br from-zinc-100 to-zinc-200 overflow-hidden">
+          {listing.heroImage ? (
+            <img
+              src={listing.heroImage}
+              alt={listing.projectName}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center">
+              <Building2 className="w-12 h-12 text-zinc-300" />
             </div>
-            <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium whitespace-nowrap ${
-              isApproved ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700"
+          )}
+          {/* Status Badge */}
+          <div className="absolute top-2 left-2">
+            <span className={`text-[10px] px-2.5 py-1 rounded-full font-bold backdrop-blur-sm ${
+              isApproved ? "bg-green-500/90 text-white" : "bg-amber-500/90 text-white"
             }`}>
-              {isApproved ? "LIVE" : "PENDING"}
+              {isApproved ? "● LIVE" : "◎ PENDING REVIEW"}
             </span>
           </div>
+          {/* Photo/Doc Count */}
+          <div className="absolute bottom-2 right-2 flex gap-1.5">
+            <span className="text-[10px] px-2 py-0.5 rounded-full bg-black/60 text-white backdrop-blur-sm flex items-center gap-1">
+              <ImageIcon className="w-3 h-3" />{listing.imageCount}
+            </span>
+            <span className="text-[10px] px-2 py-0.5 rounded-full bg-black/60 text-white backdrop-blur-sm flex items-center gap-1">
+              <FileText className="w-3 h-3" />{listing.docCount}
+            </span>
+          </div>
+          {/* Project Status */}
+          {listing.projectStatus && (
+            <div className="absolute top-2 right-2">
+              <span className="text-[9px] px-2 py-0.5 rounded-full bg-black/50 text-white backdrop-blur-sm uppercase tracking-wider font-medium">
+                {listing.projectStatus}
+              </span>
+            </div>
+          )}
+        </div>
 
-          <div className="flex items-center gap-3 text-[11px] text-muted-foreground mb-2">
-            <span className="flex items-center gap-1"><ImageIcon className="w-3 h-3" />{listing.imageCount} photos</span>
-            <span className="flex items-center gap-1"><FileText className="w-3 h-3" />{listing.docCount} docs</span>
-            {listing.duration && <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{(listing.duration / 1000).toFixed(1)}s</span>}
+        {/* Content */}
+        <div className="p-3.5">
+          <div className="flex items-start justify-between gap-2 mb-1.5">
+            <h4 className="font-bold text-sm text-foreground leading-tight">{listing.projectName}</h4>
           </div>
 
-          {listing.paymentPlan && (
-            <div className="text-[11px] text-muted-foreground mb-2">
-              <span className="font-medium text-foreground">Payment:</span> {listing.paymentPlan}
+          {listing.developer && (
+            <div className="flex items-center gap-1.5 mb-1">
+              <Building2 className="w-3.5 h-3.5 text-[#C8A766]" />
+              <span className="text-xs font-medium text-[#C8A766]">{listing.developer}</span>
+            </div>
+          )}
+          {listing.location && (
+            <div className="flex items-center gap-1.5 mb-2">
+              <MapPin className="w-3.5 h-3.5 text-muted-foreground" />
+              <span className="text-xs text-muted-foreground">{listing.location}</span>
             </div>
           )}
 
-          {listing.amenities && listing.amenities.length > 0 && (
-            <div className="flex flex-wrap gap-1 mb-2">
-              {listing.amenities.slice(0, 4).map((a, i) => (
-                <span key={i} className="text-[10px] px-1.5 py-0.5 bg-zinc-100 text-zinc-600 rounded">{a}</span>
-              ))}
-              {listing.amenities.length > 4 && (
-                <span className="text-[10px] px-1.5 py-0.5 bg-zinc-100 text-zinc-500 rounded">+{listing.amenities.length - 4}</span>
+          {/* Price & Bedrooms Row */}
+          {(priceDisplay || bedroomDisplay) && (
+            <div className="flex items-center justify-between mb-2 pb-2 border-b border-zinc-100">
+              {priceDisplay && (
+                <span className="text-sm font-bold text-foreground">{priceDisplay}</span>
+              )}
+              {bedroomDisplay && (
+                <span className="text-xs px-2 py-0.5 bg-zinc-100 text-zinc-700 rounded-full font-medium">{bedroomDisplay}</span>
               )}
             </div>
           )}
 
+          {/* Key Details Grid */}
+          <div className="grid grid-cols-3 gap-1.5 mb-2">
+            {listing.propertyType && (
+              <div className="text-center px-1.5 py-1 bg-zinc-50 rounded-lg">
+                <p className="text-[9px] text-muted-foreground uppercase tracking-wider">Type</p>
+                <p className="text-[11px] font-semibold text-foreground truncate">{listing.propertyType}</p>
+              </div>
+            )}
+            {listing.handoverDate && (
+              <div className="text-center px-1.5 py-1 bg-zinc-50 rounded-lg">
+                <p className="text-[9px] text-muted-foreground uppercase tracking-wider">Handover</p>
+                <p className="text-[11px] font-semibold text-foreground truncate">{listing.handoverDate}</p>
+              </div>
+            )}
+            {listing.paymentPlan && (
+              <div className="text-center px-1.5 py-1 bg-zinc-50 rounded-lg">
+                <p className="text-[9px] text-muted-foreground uppercase tracking-wider">Payment</p>
+                <p className="text-[11px] font-semibold text-foreground">{listing.paymentPlan}</p>
+              </div>
+            )}
+            {listing.totalUnits && (
+              <div className="text-center px-1.5 py-1 bg-zinc-50 rounded-lg">
+                <p className="text-[9px] text-muted-foreground uppercase tracking-wider">Units</p>
+                <p className="text-[11px] font-semibold text-foreground">{listing.totalUnits}</p>
+              </div>
+            )}
+            {listing.floors && (
+              <div className="text-center px-1.5 py-1 bg-zinc-50 rounded-lg">
+                <p className="text-[9px] text-muted-foreground uppercase tracking-wider">Floors</p>
+                <p className="text-[11px] font-semibold text-foreground">{listing.floors}</p>
+              </div>
+            )}
+          </div>
+
+          {/* Unit Details (per bedroom) */}
+          {listing.unitDetails && listing.unitDetails.length > 0 && (
+            <div className="mb-2 p-2 bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6] rounded-lg border border-[#C8A766]/20">
+              <p className="text-[9px] font-bold text-[#C8A766] uppercase tracking-wider mb-1">Unit Breakdown</p>
+              <div className="space-y-0.5">
+                {listing.unitDetails.slice(0, 6).map((u, i) => (
+                  <div key={i} className="flex items-center justify-between text-[10px]">
+                    <span className="font-medium text-foreground">{u.type}</span>
+                    <span className="text-muted-foreground">
+                      {u.sizeMin ? `${u.sizeMin.toLocaleString()}${u.sizeMax && u.sizeMax !== u.sizeMin ? `-${u.sizeMax.toLocaleString()}` : ""} sqft` : ""}
+                      {u.priceFrom ? ` · ${formatPrice(u.priceFrom)}` : ""}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Amenities */}
+          {listing.amenities && listing.amenities.length > 0 && (
+            <div className="flex flex-wrap gap-1 mb-2">
+              {listing.amenities.slice(0, 5).map((a, i) => (
+                <span key={i} className="text-[9px] px-1.5 py-0.5 bg-zinc-100 text-zinc-600 rounded-full">{a}</span>
+              ))}
+              {listing.amenities.length > 5 && (
+                <span className="text-[9px] px-1.5 py-0.5 bg-zinc-100 text-zinc-500 rounded-full">+{listing.amenities.length - 5}</span>
+              )}
+            </div>
+          )}
+
+          {/* Duration */}
+          {listing.duration && (
+            <p className="text-[9px] text-muted-foreground mb-2 flex items-center gap-1">
+              <Clock className="w-3 h-3" /> Extracted in {(listing.duration / 1000).toFixed(1)}s
+            </p>
+          )}
+
+          {/* Action Buttons */}
           <div className="flex gap-2">
             <Button
               size="sm"
-              className="flex-1 h-7 text-xs bg-gradient-to-r from-[#D4A853] to-[#C19A3E] text-white hover:opacity-90"
-              onClick={() => {
-                const path = listing.viewUrl.startsWith("http") ? listing.viewUrl : listing.viewUrl;
-                if (path.startsWith("http")) window.open(path, "_blank");
-                else navigate(path);
+              className="flex-1 h-8 text-xs bg-gradient-to-r from-[#D4A853] to-[#C19A3E] text-white hover:opacity-90 rounded-lg font-semibold"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (listing.viewUrl.startsWith("http")) window.open(listing.viewUrl, "_blank");
+                else navigate(listing.viewUrl);
               }}
             >
-              <Eye className="w-3 h-3 mr-1" />
-              {isApproved ? "View Live" : "Review & Approve"}
+              <Eye className="w-3.5 h-3.5 mr-1.5" />
+              {isApproved ? "View Live Project" : "Review & Approve"}
             </Button>
-            {!isApproved && (
-              <Button
-                size="sm" variant="outline"
-                className="h-7 text-xs border-zinc-300"
-                onClick={() => navigate("/listing-admin?tab=approvals")}
-              >
-                <ExternalLink className="w-3 h-3" />
-              </Button>
-            )}
           </div>
         </div>
       </div>
