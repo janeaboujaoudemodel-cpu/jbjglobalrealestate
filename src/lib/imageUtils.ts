@@ -142,6 +142,11 @@ export function isValidImageUrl(url: unknown): url is string {
     if (pattern.test(effectiveUrl)) return false;
   }
   
+  // Check for broker-kit / non-photo assets (applies to all domains)
+  for (const pattern of BROKER_KIT_PATTERNS) {
+    if (pattern.test(effectiveUrl)) return false;
+  }
+  
   return true;
 }
 

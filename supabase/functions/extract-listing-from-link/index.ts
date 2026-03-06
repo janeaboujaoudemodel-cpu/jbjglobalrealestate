@@ -453,7 +453,7 @@ serve(async (req) => {
           /https?:\/\/[^\s"'<>)]+\.(?:jpg|jpeg|png|webp)(?:\?[^\s"'<>)]*)?/gi,
           /https?:\/\/[a-z0-9-]+\.cloudfront\.net\/[^\s"'<>)]+/gi,
         ];
-        const EXCLUDED_IMG_PATTERNS = /logo|icon|avatar|placeholder|spinner|favicon|flags?\/|sprite|badge|arrow|chevron|_next\/static/i;
+        const EXCLUDED_IMG_PATTERNS = /logo|icon|avatar|placeholder|spinner|favicon|flags?\/|sprite|badge|arrow|chevron|_next\/static|fact[-_]?sheet|brand[-_]?guideline|broker[-_]?kit|material\.webp|film\.webp|about\.webp|book\.webp|company[-_]?profile|credential|certificate/i;
         for (const pat of imgPatterns) {
           for (const m of allContent.matchAll(pat)) {
             let rawImgUrl = m[0];
