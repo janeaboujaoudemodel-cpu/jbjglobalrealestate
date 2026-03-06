@@ -59,11 +59,12 @@ serve(async (req) => {
   const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
   try {
+    // publish: when true, sets is_published=true on approved projects. Default false.
     // merge_mode: when true, matches existing projects by name and enriches (never overwrites non-null fields)
     // updateExisting: when true with slug match, fully overwrites (Reelly parity mode)
-    const { limit = 200, dryRun = false, minImages = 0, updateExisting = true, merge_mode = true } = await req.json().catch(() => ({}));
+    const { limit = 200, dryRun = false, minImages = 0, updateExisting = true, merge_mode = true, publish = false } = await req.json().catch(() => ({}));
 
-    console.log(`[BulkApprove] Starting (limit=${limit}, dryRun=${dryRun}, minImages=${minImages}, updateExisting=${updateExisting})...`);
+    console.log(`[BulkApprove] Starting (limit=${limit}, dryRun=${dryRun}, minImages=${minImages}, updateExisting=${updateExisting}, publish=${publish})...`);
 
     // Get developers list for matching
     const { data: developersList } = await supabase.from("developers").select("id, name, slug");
@@ -338,7 +339,7 @@ serve(async (req) => {
           is_developer_direct: true,
           is_featured: false,
           is_premium: false,
-          is_published: true,
+          is_published: publish,
           is_sold_out: item.sale_status?.toLowerCase().includes('sold') || item.status_label?.toLowerCase().includes('sold') || false,
         };
 
