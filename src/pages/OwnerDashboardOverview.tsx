@@ -28,6 +28,7 @@ import {
   Briefcase,
   LayoutDashboard,
   Shield,
+  Trash2,
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 import LeadStatusBadge from "@/components/crm/LeadStatusBadge";
@@ -40,6 +41,7 @@ const CRMDashboardCards = lazy(() => import("@/components/crm/CRMDashboardCards"
 const QuickActionsGrid = lazy(() => import("@/components/owner-dashboard/QuickActionsGrid"));
 const DepartmentShortcuts = lazy(() => import("@/components/owner-dashboard/DepartmentShortcuts"));
 const IntegrationWidgets = lazy(() => import("@/components/owner-dashboard/IntegrationWidgets"));
+const RecentlyDeletedLeads = lazy(() => import("@/components/crm/RecentlyDeletedLeads"));
 
 interface KPICardProps {
   title: string;
@@ -542,6 +544,13 @@ export default function OwnerDashboardOverview() {
             VIP Leads
           </TabsTrigger>
           <TabsTrigger 
+            value="leads-management"
+            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black"
+          >
+            <Trash2 className="h-4 w-4 mr-2" />
+            Leads Management
+          </TabsTrigger>
+          <TabsTrigger 
             value="employees"
             className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black"
           >
@@ -764,6 +773,15 @@ export default function OwnerDashboardOverview() {
                 </Suspense>
               </CardContent>
             </Card>
+          )}
+        </TabsContent>
+
+        {/* Leads Management Tab — Recently Deleted */}
+        <TabsContent value="leads-management" className="space-y-4">
+          {activeTab === "leads-management" && (
+            <Suspense fallback={<Skeleton className="h-64 w-full" />}>
+              <RecentlyDeletedLeads userId={user?.id || ""} onRefresh={handleRefresh} />
+            </Suspense>
           )}
         </TabsContent>
 
