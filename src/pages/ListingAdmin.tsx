@@ -817,20 +817,20 @@ const ListingAdmin = () => {
               </div>
             </div>
           </div>
-          
-          {/* Preview Modal */}
-          <ProjectPreviewModal
-            project={previewProject}
-            open={showPreviewModal}
-            onOpenChange={setShowPreviewModal}
-            onEdit={(p) => handleEditProjectWithView(p)}
-            onSendToSarah={(p) => {
-              setShowPreviewModal(false);
-              setActiveView('chat');
-              setShowChat(true);
-            }}
-          />
         )}
+
+        {/* Preview Modal - outside conditional */}
+        <ProjectPreviewModal
+          project={previewProject}
+          open={showPreviewModal}
+          onOpenChange={setShowPreviewModal}
+          onEdit={(p) => handleEditProjectWithView(p)}
+          onSendToSarah={(p) => {
+            setShowPreviewModal(false);
+            setActiveView('chat');
+            setShowChat(true);
+          }}
+        />
 
         {/* Editor View */}
         {activeView === 'editor' && (isEditing || isCreating) && (
