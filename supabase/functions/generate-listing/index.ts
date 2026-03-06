@@ -1,34 +1,9 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "npm:@supabase/supabase-js@2";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.4";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
-
-const DEVELOPER_KEYWORDS: Record<string, string[]> = {
-  "Emaar": ["emaar", "downtown", "dubai hills", "creek harbour", "arabian ranches"],
-  "DAMAC": ["damac", "cavalli", "paramount", "aykon"],
-  "Sobha": ["sobha", "hartland", "creek vistas"],
-  "Nakheel": ["nakheel", "palm", "jumeirah islands"],
-  "Meraas": ["meraas", "city walk", "la mer", "bluewaters"],
-  "Dubai Properties": ["dubai properties", "business bay", "culture village"],
-  "Azizi": ["azizi", "riviera", "aura"],
-  "Danube": ["danube", "elz", "bayz", "viewz"],
-  "Binghatti": ["binghatti", "jacob"],
-  "Select Group": ["select group", "jumeirah living", "peninsula"],
-  "MAG": ["mag", "meydan"],
-  "Ellington": ["ellington", "wilton"],
-  "Omniyat": ["omniyat", "one palm", "alba"],
-  "Deyaar": ["deyaar", "montrose"],
-  "MTS Development": ["mts", "sunset bay"],
-  "Imtiaz": ["imtiaz"],
-  "Reportage": ["reportage"],
-  "Tiger Group": ["tiger"],
-  "Samana": ["samana"],
-  "Object 1": ["object 1"],
-  "Vincitore": ["vincitore"],
-  "Citi Developer": ["citi developer", "citideveloper"],
 };
 
 function toSlug(val: string): string {
@@ -43,7 +18,7 @@ function humanizeDocTitle(rawName: string): string {
     .replace(/\s+/g, " ")
     .trim();
   if (!t) return rawName;
-  return t.replace(/\b\w/g, c => c.toUpperCase());
+  return t.replace(/\b\w/g, (c: string) => c.toUpperCase());
 }
 
 function classifyDocument(name: string): string {
@@ -85,7 +60,6 @@ async function matchDeveloperId(supabase: any, devName: string | null): Promise<
   return null;
 }
 
-// Schema for a single project extraction
 const projectSchema = {
   type: "object",
   properties: {
@@ -178,13 +152,14 @@ const projectSchema = {
   required: ["name"],
 };
 
-serve(async (req) => {
+serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { files, url, description, action, existingId } = await req.json();
+    const body = await req.json();
+    const { files, url, description, action, existingId } = body;
 
     const lovableApiKey = Deno.env.get("LOVABLE_API_KEY");
     const firecrawlApiKey = Deno.env.get("FIRECRAWL_API_KEY");
@@ -263,7 +238,6 @@ serve(async (req) => {
     const hasFiles = files && files.length > 0 && files.some((f: any) => f.base64);
     console.log("[generate-listing] Starting extraction. Files:", files?.length || 0, "URL:", url || "none", "hasFiles:", hasFiles);
 
-    // Build vision content parts
     const contentParts: any[] = [];
     
     contentParts.push({
@@ -337,6 +311,9 @@ ENRICHMENT (mark as enriched):
           const scrapeData = await scrapeRes.json();
           scrapedContent = scrapeData?.data?.markdown || "";
           console.log("[generate-listing] Scraped content length:", scrapedContent.length);
+        } else {
+          const errText = await scrapeRes.text();
+          console.warn("[generate-listing] Scrape failed:", scrapeRes.status, errText);
         }
       } catch (err) {
         console.warn("[generate-listing] URL scrape failed:", err);
@@ -387,7 +364,7 @@ ENRICHMENT (mark as enriched):
             type: "function",
             function: {
               name: "extract_projects",
-              description: "Extract complete structured data for one or more real estate projects. Return each distinct project as a separate entry.",
+              description: "Extract complete structured data for one or more real estate projects.",
               parameters: {
                 type: "object",
                 properties: {
@@ -412,13 +389,13 @@ ENRICHMENT (mark as enriched):
       
       if (aiRes.status === 429) {
         return new Response(
-          JSON.stringify({ success: false, error: "Rate limit exceeded. Please wait a moment and try again." }),
+          JSON.stringify({ success: false, error: "Rate limit exceeded. Please wait and try again." }),
           { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
       if (aiRes.status === 402) {
         return new Response(
-          JSON.stringify({ success: false, error: "AI credits exhausted. Please add credits in Settings." }),
+          JSON.stringify({ success: false, error: "AI credits exhausted." }),
           { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
@@ -451,7 +428,6 @@ ENRICHMENT (mark as enriched):
       );
     }
 
-    // Handle both old single-project and new multi-project format
     const rawProjects: any[] = parsed.projects || (parsed.name ? [parsed] : []);
     console.log("[generate-listing] Extracted", rawProjects.length, "project(s)");
 
@@ -461,7 +437,6 @@ ENRICHMENT (mark as enriched):
       originalName: f.name,
     }));
 
-    // Process each project
     const projects = [];
     const allDuplicates: any[] = [];
 
@@ -498,9 +473,8 @@ ENRICHMENT (mark as enriched):
       });
     }
 
-    // Deduplicate
     const seenDupIds = new Set<string>();
-    const uniqueDuplicates = allDuplicates.filter(d => {
+    const uniqueDuplicates = allDuplicates.filter((d: any) => {
       if (seenDupIds.has(d.id)) return false;
       seenDupIds.add(d.id);
       return true;
@@ -510,14 +484,13 @@ ENRICHMENT (mark as enriched):
       JSON.stringify({
         success: true,
         projects,
-        // Keep backward compat
         extracted: projects[0] || null,
         duplicates: uniqueDuplicates,
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("[generate-listing] Error:", error);
     return new Response(
       JSON.stringify({ success: false, error: error instanceof Error ? error.message : "Unknown error" }),
