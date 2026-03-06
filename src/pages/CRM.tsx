@@ -349,7 +349,9 @@ const CRM = () => {
       </Suspense>
       
       {/* Tools Sidebar */}
-      <CRMToolsSidebar isOpen={showToolsSidebar} onClose={() => setShowToolsSidebar(false)} />
+      <Suspense fallback={null}>
+        <CRMToolsSidebar isOpen={showToolsSidebar} onClose={() => setShowToolsSidebar(false)} />
+      </Suspense>
 
       {/* Premium Header - Champagne with Gold border */}
       <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-20 lg:top-24 z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
