@@ -289,8 +289,9 @@ export default function CreateEnvelope() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted/30 p-6">
-      <div className="max-w-5xl mx-auto space-y-6">
+    <div className="min-h-screen bg-black pt-20 lg:pt-24">
+      <div className="mx-3 md:mx-4 lg:mx-6 my-6 rounded-2xl border border-border bg-[linear-gradient(135deg,hsl(var(--champagne-1)),hsl(var(--champagne-2)),hsl(var(--champagne-3)))]">
+        <div className="max-w-5xl mx-auto p-6 space-y-6">
         {/* Header */}
         <div className="flex items-center gap-4">
           <Button variant="ghost" onClick={() => navigate("/e-signature")}>
@@ -298,9 +299,14 @@ export default function CreateEnvelope() {
             Back
           </Button>
           <div>
-            <h1 className="text-2xl font-bold">Create New Envelope</h1>
-            <p className="text-muted-foreground">
-              Upload a document and add signature fields
+            <h1 className="text-2xl font-bold text-foreground flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-zinc-900">
+                <Upload className="w-5 h-5 text-white" />
+              </div>
+              Upload & Sign
+            </h1>
+            <p className="text-muted-foreground mt-1">
+              Upload a document, place signature fields, and send for signing
             </p>
           </div>
         </div>
@@ -333,7 +339,7 @@ export default function CreateEnvelope() {
         </div>
 
         {/* Step Content */}
-        <Card>
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-[hsl(var(--gold)/.2)]">
           <CardContent className="p-6">
             {/* Step 1: Upload Document */}
             {currentStep === 1 && (
