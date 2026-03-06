@@ -110,7 +110,7 @@ function clearPersistedState() {
 const ListingGenerator = () => {
   const persisted = useRef(loadPersistedState());
 
-  const [step, setStep] = useState<Step>(persisted.current?.step === "processing" ? "input" : persisted.current?.step || "input");
+  const [step, setStep] = useState<Step>(persisted.current?.step || "input");
   const [files, setFiles] = useState<UploadedFile[]>([]);
   const [url, setUrl] = useState(persisted.current?.url || "");
   const [description, setDescription] = useState(persisted.current?.description || "");
@@ -124,6 +124,8 @@ const ListingGenerator = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [timedOut, setTimedOut] = useState(false);
+  const [currentJobId, setCurrentJobId] = useState<string | null>(persisted.current?.currentJobId || null);
+  const [cloudDraftId, setCloudDraftId] = useState<string | null>(persisted.current?.cloudDraftId || null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dropRef = useRef<HTMLDivElement>(null);
@@ -131,34 +133,15 @@ const ListingGenerator = () => {
   const [isDragOver, setIsDragOver] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval>>();
 
-  // Restore files from persisted base64 data on mount
-  useEffect(() => {
-    const p = persisted.current;
-    if (p?.filesMeta?.length) {
-      const restored: UploadedFile[] = p.filesMeta.map((fm) => {
-        // Reconstruct a minimal UploadedFile (no File object, but base64 is preserved for re-submission)
-        return {
-          id: fm.id,
-          file: new File([], fm.name), // placeholder — actual upload uses base64
-          name: fm.name,
-          mimeType: fm.mimeType,
-          base64: fm.base64,
-        };
-      });
-      setFiles(restored);
-    }
-  }, []);
-
-  // Persist state on every meaningful change
-  useEffect(() => {
-    if (step === "processing") return; // don't persist mid-processing
+  const syncDraftToCloud = useCallback(async (override?: Partial<PersistedState>) => {
     const filesMeta = files.map((f) => ({
       id: f.id,
       name: f.name,
       mimeType: f.mimeType,
       base64: f.base64 || "",
     }));
-    savePersistedState({
+
+    const payload = {
       step,
       url,
       description,
@@ -166,8 +149,91 @@ const ListingGenerator = () => {
       activeProjectIndex,
       duplicates,
       filesMeta,
-    });
-  }, [step, url, description, extractedProjects, activeProjectIndex, duplicates, files]);
+      currentJobId,
+      cloudDraftId,
+      ...(override || {}),
+    };
+
+    savePersistedState(payload);
+
+    const { data: authData } = await supabase.auth.getUser();
+    const userId = authData.user?.id;
+    if (!userId) return;
+
+    const upsertData = {
+      user_id: userId,
+      urls: payload.url ? [payload.url] : [],
+      files: payload.filesMeta,
+      results: payload,
+      status: payload.step === "processing" ? "processing" : "draft",
+      completed_at: null,
+      error_message: null,
+    };
+
+    if (payload.cloudDraftId) {
+      const { error } = await supabase.from("listing_extraction_queue").update(upsertData).eq("id", payload.cloudDraftId).eq("user_id", userId);
+      if (error) console.warn("Draft update failed:", error.message);
+      return;
+    }
+
+    const { data, error } = await supabase.from("listing_extraction_queue").insert(upsertData).select("id").single();
+    if (!error && data?.id) {
+      setCloudDraftId(data.id);
+    }
+  }, [files, step, url, description, extractedProjects, activeProjectIndex, duplicates, currentJobId, cloudDraftId]);
+
+  // Restore latest cloud draft if available
+  useEffect(() => {
+    const loadCloudDraft = async () => {
+      const { data: authData } = await supabase.auth.getUser();
+      const userId = authData.user?.id;
+      if (!userId) return;
+
+      const { data: draft } = await supabase
+        .from("listing_extraction_queue")
+        .select("id, status, files, results")
+        .eq("user_id", userId)
+        .in("status", ["draft", "processing"])
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (!draft) return;
+
+      const result = (draft.results || {}) as Partial<PersistedState>;
+      const filesMeta = Array.isArray(draft.files) ? draft.files as PersistedState["filesMeta"] : (result.filesMeta || []);
+
+      if (result.url) setUrl(result.url);
+      if (result.description) setDescription(result.description);
+      if (Array.isArray(result.extractedProjects)) setExtractedProjects(result.extractedProjects);
+      if (typeof result.activeProjectIndex === "number") setActiveProjectIndex(result.activeProjectIndex);
+      if (Array.isArray(result.duplicates)) setDuplicates(result.duplicates);
+      if (result.step) setStep(result.step);
+      if (result.currentJobId) setCurrentJobId(result.currentJobId);
+      setCloudDraftId(draft.id);
+
+      if (filesMeta.length) {
+        setFiles(filesMeta.map((fm) => ({
+          id: fm.id,
+          file: new File([], fm.name),
+          name: fm.name,
+          mimeType: fm.mimeType,
+          base64: fm.base64,
+        })));
+      }
+    };
+
+    loadCloudDraft();
+  }, []);
+
+  // Persist state on every meaningful change (local + cloud)
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      void syncDraftToCloud();
+    }, 700);
+
+    return () => clearTimeout(timeout);
+  }, [syncDraftToCloud]);
 
   // Drag & drop handlers
   const handleDragEnter = useCallback((e: React.DragEvent) => {
