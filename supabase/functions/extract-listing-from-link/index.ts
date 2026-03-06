@@ -153,6 +153,65 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
+    // ── ASYNC QUEUE MODE: Insert job and return immediately ──
+    if (async_mode && !job_id && (urlList.length > 0 || fileList.length > 0)) {
+      const { data: job, error: jobErr } = await supabase
+        .from("listing_extraction_queue")
+        .insert({
+          user_id: userId,
+          urls: urlList,
+          files: fileList,
+          auto_approve,
+          status: "pending",
+        })
+        .select("id")
+        .single();
+
+      if (jobErr) {
+        return new Response(
+          JSON.stringify({ success: false, error: `Queue insert failed: ${jobErr.message}` }),
+          { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
+      // Fire-and-forget: call self to process the job
+      const selfUrl = `${supabaseUrl}/functions/v1/extract-listing-from-link`;
+      fetch(selfUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${Deno.env.get("SUPABASE_ANON_KEY")}`,
+        },
+        body: JSON.stringify({
+          job_id: job.id,
+          urls: urlList,
+          files: fileList,
+          userId,
+          auto_approve,
+          albumName,
+        }),
+      }).catch(err => console.error("[extract] Fire-and-forget error:", err));
+
+      return new Response(
+        JSON.stringify({
+          success: true,
+          async: true,
+          jobId: job.id,
+          status: "queued",
+          message: "Extraction queued. Polling for results...",
+        }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // ── PROCESSING A QUEUED JOB: Update status to processing ──
+    if (job_id) {
+      await supabase
+        .from("listing_extraction_queue")
+        .update({ status: "processing" })
+        .eq("id", job_id);
+    }
+
     // Handle retry of existing import
     if (retryImportId) {
       try {
