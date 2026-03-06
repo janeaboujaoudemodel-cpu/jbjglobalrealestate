@@ -39,6 +39,7 @@ import { Link } from 'react-router-dom';
 import { useCRMActionLog } from '@/hooks/useCRMActionLog';
 import CVCenter from './CVCenter';
 import TrainingManagement from './TrainingManagement';
+import EmailManagement from './EmailManagement';
 
 // Import team members from centralized config
 import { 
