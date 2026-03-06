@@ -878,6 +878,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
   return (
     <div
       className={`flex flex-col h-full bg-white overflow-hidden transition-all ${isDragOver ? "ring-2 ring-gold ring-inset" : ""}`}
+      style={{ borderRadius: 0 }}
       onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); if (!isDragOver) setIsDragOver(true); }}
       onDragEnter={(e) => { e.preventDefault(); e.stopPropagation(); setIsDragOver(true); }}
       onDragLeave={(e) => {

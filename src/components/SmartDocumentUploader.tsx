@@ -132,6 +132,7 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
           onChange={handleFileSelect}
           accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
           className="hidden"
+          multiple
         />
         
         <div className="flex gap-3">
