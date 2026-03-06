@@ -80,20 +80,16 @@ interface PersistedState {
   activeProjectIndex: number;
   duplicates: DuplicateMatch[];
   filesMeta: { id: string; name: string; mimeType: string; base64: string }[];
+  currentJobId: string | null;
+  cloudDraftId: string | null;
   savedAt: number;
 }
 
 function loadPersistedState(): Partial<PersistedState> | null {
   try {
-    const raw = sessionStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return null;
-    const parsed: PersistedState = JSON.parse(raw);
-    // Expire after 2 hours
-    if (Date.now() - parsed.savedAt > 2 * 60 * 60 * 1000) {
-      sessionStorage.removeItem(STORAGE_KEY);
-      return null;
-    }
-    return parsed;
+    return JSON.parse(raw);
   } catch {
     return null;
   }
@@ -101,20 +97,20 @@ function loadPersistedState(): Partial<PersistedState> | null {
 
 function savePersistedState(state: Omit<PersistedState, "savedAt">) {
   try {
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ ...state, savedAt: Date.now() }));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...state, savedAt: Date.now() }));
   } catch {
-    // sessionStorage full or unavailable
+    // localStorage full or unavailable
   }
 }
 
 function clearPersistedState() {
-  try { sessionStorage.removeItem(STORAGE_KEY); } catch {}
+  try { localStorage.removeItem(STORAGE_KEY); } catch {}
 }
 
 const ListingGenerator = () => {
   const persisted = useRef(loadPersistedState());
 
-  const [step, setStep] = useState<Step>(persisted.current?.step === "processing" ? "input" : persisted.current?.step || "input");
+  const [step, setStep] = useState<Step>(persisted.current?.step || "input");
   const [files, setFiles] = useState<UploadedFile[]>([]);
   const [url, setUrl] = useState(persisted.current?.url || "");
   const [description, setDescription] = useState(persisted.current?.description || "");
@@ -128,6 +124,8 @@ const ListingGenerator = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [timedOut, setTimedOut] = useState(false);
+  const [currentJobId, setCurrentJobId] = useState<string | null>(persisted.current?.currentJobId || null);
+  const [cloudDraftId, setCloudDraftId] = useState<string | null>(persisted.current?.cloudDraftId || null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dropRef = useRef<HTMLDivElement>(null);
@@ -135,34 +133,15 @@ const ListingGenerator = () => {
   const [isDragOver, setIsDragOver] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval>>();
 
-  // Restore files from persisted base64 data on mount
-  useEffect(() => {
-    const p = persisted.current;
-    if (p?.filesMeta?.length) {
-      const restored: UploadedFile[] = p.filesMeta.map((fm) => {
-        // Reconstruct a minimal UploadedFile (no File object, but base64 is preserved for re-submission)
-        return {
-          id: fm.id,
-          file: new File([], fm.name), // placeholder — actual upload uses base64
-          name: fm.name,
-          mimeType: fm.mimeType,
-          base64: fm.base64,
-        };
-      });
-      setFiles(restored);
-    }
-  }, []);
-
-  // Persist state on every meaningful change
-  useEffect(() => {
-    if (step === "processing") return; // don't persist mid-processing
+  const syncDraftToCloud = useCallback(async (override?: Partial<PersistedState>) => {
     const filesMeta = files.map((f) => ({
       id: f.id,
       name: f.name,
       mimeType: f.mimeType,
       base64: f.base64 || "",
     }));
-    savePersistedState({
+
+    const payload = {
       step,
       url,
       description,
@@ -170,8 +149,89 @@ const ListingGenerator = () => {
       activeProjectIndex,
       duplicates,
       filesMeta,
-    });
-  }, [step, url, description, extractedProjects, activeProjectIndex, duplicates, files]);
+      currentJobId,
+      cloudDraftId,
+      ...(override || {}),
+    };
+
+    savePersistedState(payload);
+
+    const { data: authData } = await supabase.auth.getUser();
+    const userId = authData.user?.id;
+    if (!userId) return;
+
+    const upsertData: any = {
+      user_id: userId,
+      urls: payload.url ? [payload.url] : [],
+      files: payload.filesMeta as any,
+      results: payload as any,
+      status: payload.step === "processing" ? "processing" : "draft",
+    };
+
+    if (payload.cloudDraftId) {
+      const { error } = await supabase.from("listing_extraction_queue").update(upsertData).eq("id", payload.cloudDraftId).eq("user_id", userId);
+      if (error) console.warn("Draft update failed:", error.message);
+      return;
+    }
+
+    const { data, error } = await supabase.from("listing_extraction_queue").insert(upsertData).select("id").single();
+    if (!error && data?.id) {
+      setCloudDraftId(data.id);
+    }
+  }, [files, step, url, description, extractedProjects, activeProjectIndex, duplicates, currentJobId, cloudDraftId]);
+
+  // Restore latest cloud draft if available
+  useEffect(() => {
+    const loadCloudDraft = async () => {
+      const { data: authData } = await supabase.auth.getUser();
+      const userId = authData.user?.id;
+      if (!userId) return;
+
+      const { data: draft } = await supabase
+        .from("listing_extraction_queue")
+        .select("id, status, files, results")
+        .eq("user_id", userId)
+        .in("status", ["draft", "processing"])
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (!draft) return;
+
+      const result = (draft.results || {}) as Partial<PersistedState>;
+      const filesMeta = Array.isArray(draft.files) ? draft.files as PersistedState["filesMeta"] : (result.filesMeta || []);
+
+      if (result.url) setUrl(result.url);
+      if (result.description) setDescription(result.description);
+      if (Array.isArray(result.extractedProjects)) setExtractedProjects(result.extractedProjects);
+      if (typeof result.activeProjectIndex === "number") setActiveProjectIndex(result.activeProjectIndex);
+      if (Array.isArray(result.duplicates)) setDuplicates(result.duplicates);
+      if (result.step) setStep(result.step);
+      if (result.currentJobId) setCurrentJobId(result.currentJobId);
+      setCloudDraftId(draft.id);
+
+      if (filesMeta.length) {
+        setFiles(filesMeta.map((fm) => ({
+          id: fm.id,
+          file: new File([], fm.name),
+          name: fm.name,
+          mimeType: fm.mimeType,
+          base64: fm.base64,
+        })));
+      }
+    };
+
+    loadCloudDraft();
+  }, []);
+
+  // Persist state on every meaningful change (local + cloud)
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      void syncDraftToCloud();
+    }, 700);
+
+    return () => clearTimeout(timeout);
+  }, [syncDraftToCloud]);
 
   // Drag & drop handlers
   const handleDragEnter = useCallback((e: React.DragEvent) => {
@@ -257,7 +317,7 @@ const ListingGenerator = () => {
 
   // ========== POLL FOR JOB COMPLETION ==========
   const pollJob = async (jobId: string): Promise<any> => {
-    const maxPolls = 90; // 90 * 2s = 3 min max
+    const maxPolls = 450; // 15 minutes max
     for (let i = 0; i < maxPolls; i++) {
       await new Promise((r) => setTimeout(r, 2000));
 
@@ -265,21 +325,21 @@ const ListingGenerator = () => {
         body: { action: "poll", job_id: jobId },
       });
 
-      if (error) throw new Error(error.message || "Polling failed");
-
-      // Job still processing
-      if (data?.status === "processing" || data?.status === "queued") {
-        if (i > 15) setProcessingStatus("AI is analyzing your documents — almost done...");
+      if (error) {
+        if (i > 5) setProcessingStatus("Still processing in background...");
         continue;
       }
 
-      // Job failed
-      if (!data?.success) throw new Error(data?.error || "Extraction failed");
+      if (data?.status === "processing" || data?.status === "pending" || data?.status === "queued") {
+        if (i > 20) setProcessingStatus("AI is analyzing your documents — still running in background...");
+        continue;
+      }
 
-      // Job completed — data contains the full result
+      if (!data?.success) throw new Error(data?.error || "Extraction failed");
       return data;
     }
-    throw new Error("Extraction timed out after 3 minutes. Please try with fewer documents.");
+
+    throw new Error("Still processing in background. You can leave and come back — your draft is saved.");
   };
 
   // ========== GENERATE ==========
@@ -328,18 +388,19 @@ const ListingGenerator = () => {
       if (submitErr) throw new Error(submitErr.message || "Failed to start extraction");
       if (!submitData?.job_id) throw new Error(submitData?.error || "No job ID returned");
 
+      setCurrentJobId(submitData.job_id);
+      await syncDraftToCloud({ step: "processing", currentJobId: submitData.job_id });
       setProcessingStatus("AI is extracting project data...");
 
-      // Step 2: Poll for completion
       const result = await pollJob(submitData.job_id);
 
-      // Handle multi-project response
       const projects: ExtractedData[] = result.projects || (result.extracted ? [result.extracted] : []);
       if (projects.length === 0) throw new Error("No projects extracted");
 
       setExtractedProjects(projects);
       setActiveProjectIndex(0);
       setDuplicates(result.duplicates || []);
+      setCurrentJobId(null);
 
       if (result.duplicates?.length > 0) {
         setStep("duplicates");

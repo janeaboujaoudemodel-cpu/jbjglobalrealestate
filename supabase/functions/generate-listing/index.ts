@@ -34,6 +34,41 @@ function getSupabase() {
   );
 }
 
+async function getAuthenticatedUserId(req: Request): Promise<string | null> {
+  const authHeader = req.headers.get("Authorization") || "";
+  if (!authHeader.startsWith("Bearer ")) return null;
+
+  const token = authHeader.replace("Bearer ", "").trim();
+  if (!token) return null;
+
+  const supabase = getSupabase();
+  const { data, error } = await supabase.auth.getUser(token);
+  if (error || !data?.user?.id) return null;
+  return data.user.id;
+}
+
+async function triggerBackgroundProcessing(jobId: string) {
+  const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+  const serviceRole = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+
+  const endpoint = `${supabaseUrl}/functions/v1/generate-listing`;
+  const body = JSON.stringify({ action: "process", job_id: jobId });
+
+  try {
+    // Fire-and-forget background execution (works even when EdgeRuntime.waitUntil is unavailable)
+    fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${serviceRole}`,
+      },
+      body,
+    }).catch((err) => console.error("[generate-listing] Background trigger failed:", err));
+  } catch (err) {
+    console.error("[generate-listing] triggerBackgroundProcessing error:", err);
+  }
+}
+
 async function matchDeveloperId(supabase: any, devName: string | null): Promise<string | null> {
   if (!devName) return null;
   try {
@@ -91,7 +126,6 @@ const projectSchema = {
   required: ["name"],
 };
 
-// ========== BACKGROUND EXTRACTION LOGIC ==========
 async function runExtraction(jobId: string, files: any[], url: string | null, description: string | null) {
   const supabase = getSupabase();
   const lovableApiKey = Deno.env.get("LOVABLE_API_KEY");
@@ -99,12 +133,10 @@ async function runExtraction(jobId: string, files: any[], url: string | null, de
   const startMs = Date.now();
 
   try {
-    // Update job to processing
     await supabase.from("ai_job_master").update({ status: "processing" }).eq("id", jobId);
 
     const hasFiles = files && files.length > 0 && files.some((f: any) => f.base64);
 
-    // Build content parts
     const contentParts: any[] = [{
       type: "text",
       text: `You are a senior UAE real estate data extraction specialist. Extract COMPLETE listing data.
@@ -132,43 +164,42 @@ MULTI-PROJECT RULE:
       }
     }
 
-    // Scrape URL
     let scrapedContent = "";
     if (url && firecrawlApiKey) {
       try {
         let formattedUrl = url.trim();
         if (!formattedUrl.startsWith("http")) formattedUrl = `https://${formattedUrl}`;
-        console.log("[generate-listing] Scraping:", formattedUrl);
+
         const scrapeRes = await fetch("https://api.firecrawl.dev/v1/scrape", {
           method: "POST",
           headers: { "Authorization": `Bearer ${firecrawlApiKey}`, "Content-Type": "application/json" },
           body: JSON.stringify({ url: formattedUrl, formats: ["markdown", "links"], onlyMainContent: true, waitFor: 5000, timeout: 30000 }),
         });
+
         if (scrapeRes.ok) {
           const d = await scrapeRes.json();
           scrapedContent = d?.data?.markdown || "";
         } else {
-          await scrapeRes.text(); // consume body
+          await scrapeRes.text();
         }
-      } catch (err) { console.warn("[generate-listing] Scrape failed:", err); }
+      } catch (err) {
+        console.warn("[generate-listing] Scrape failed:", err);
+      }
     }
 
-    if (scrapedContent) {
-      contentParts.push({ type: "text", text: `\n\n--- WEBSITE CONTENT ---\n${scrapedContent.substring(0, 50000)}` });
-    }
-    if (description) {
-      contentParts.push({ type: "text", text: `\n\n--- ADDITIONAL DESCRIPTION ---\n${description}` });
-    }
+    if (scrapedContent) contentParts.push({ type: "text", text: `\n\n--- WEBSITE CONTENT ---\n${scrapedContent.substring(0, 50000)}` });
+    if (description) contentParts.push({ type: "text", text: `\n\n--- ADDITIONAL DESCRIPTION ---\n${description}` });
     contentParts.push({ type: "text", text: "\n\nExtract ALL project data now. If MULTIPLE distinct projects, return each separately." });
 
     const model = hasFiles ? "google/gemini-2.5-pro" : "google/gemini-2.5-flash";
-    console.log("[generate-listing] Model:", model, "Parts:", contentParts.length);
 
     const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: { "Authorization": `Bearer ${lovableApiKey}`, "Content-Type": "application/json" },
       body: JSON.stringify({
-        model, max_tokens: 16000, temperature: 0.05,
+        model,
+        max_tokens: 12000,
+        temperature: 0.05,
         messages: [{ role: "user", content: contentParts }],
         tools: [{ type: "function", function: { name: "extract_projects", description: "Extract structured data for real estate projects.", parameters: { type: "object", properties: { projects: { type: "array", items: projectSchema } }, required: ["projects"] } } }],
         tool_choice: { type: "function", function: { name: "extract_projects" } },
@@ -187,7 +218,6 @@ MULTI-PROJECT RULE:
 
     const parsed = JSON.parse(toolCall.function.arguments);
     const rawProjects: any[] = parsed.projects || (parsed.name ? [parsed] : []);
-    console.log("[generate-listing] Extracted", rawProjects.length, "project(s)");
 
     const documentRecords = (files || []).map((f: any) => ({ name: humanizeDocTitle(f.name), type: classifyDocument(f.name), originalName: f.name }));
 
@@ -198,17 +228,33 @@ MULTI-PROJECT RULE:
       const devId = await matchDeveloperId(supabase, extracted.developer);
       const slug = toSlug(extracted.name || "unnamed-project");
 
-      const { data: pendingMatches } = await supabase.from("pending_project_imports").select("id, name, slug, source_url, status, created_at").or(`slug.eq.${slug},name.ilike.%${(extracted.name || "").substring(0, 30)}%`).limit(5);
+      const nameFragment = (extracted.name || "").substring(0, 30).replace(/'/g, "");
+
+      const { data: pendingMatches } = await supabase
+        .from("pending_project_imports")
+        .select("id, name, slug, source_url, status, created_at")
+        .or(`slug.eq.${slug},name.ilike.%${nameFragment}%`)
+        .limit(5);
+
       if (pendingMatches?.length) allDuplicates.push(...pendingMatches.map((m: any) => ({ ...m, source: "pending" })));
 
-      const { data: liveMatches } = await supabase.from("projects").select("id, name, slug, created_at").or(`slug.eq.${slug},name.ilike.%${(extracted.name || "").substring(0, 30)}%`).limit(5);
+      const { data: liveMatches } = await supabase
+        .from("projects")
+        .select("id, name, slug, created_at")
+        .or(`slug.eq.${slug},name.ilike.%${nameFragment}%`)
+        .limit(5);
+
       if (liveMatches?.length) allDuplicates.push(...liveMatches.map((m: any) => ({ ...m, source: "live" })));
 
       projects.push({ ...extracted, slug, developer_id: devId, documents: documentRecords });
     }
 
     const seenIds = new Set<string>();
-    const uniqueDuplicates = allDuplicates.filter((d: any) => { if (seenIds.has(d.id)) return false; seenIds.add(d.id); return true; });
+    const uniqueDuplicates = allDuplicates.filter((d: any) => {
+      if (seenIds.has(d.id)) return false;
+      seenIds.add(d.id);
+      return true;
+    });
 
     const output = { success: true, projects, extracted: projects[0] || null, duplicates: uniqueDuplicates };
 
@@ -218,8 +264,6 @@ MULTI-PROJECT RULE:
       completed_at: new Date().toISOString(),
       processing_time_ms: Date.now() - startMs,
     }).eq("id", jobId);
-
-    console.log("[generate-listing] Job", jobId, "completed in", Date.now() - startMs, "ms");
 
   } catch (error: unknown) {
     console.error("[generate-listing] Background error:", error);
@@ -232,7 +276,6 @@ MULTI-PROJECT RULE:
   }
 }
 
-// ========== MAIN HANDLER ==========
 serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -244,17 +287,17 @@ serve(async (req: Request) => {
 
     const supabase = getSupabase();
 
-    // ========== ACTION: POLL ==========
     if (action === "poll" && job_id) {
       const { data: job, error } = await supabase
         .from("ai_job_master")
-        .select("status, output_payload, error_message, processing_time_ms")
+        .select("status, output_payload, error_message, processing_time_ms, input_payload")
         .eq("id", job_id)
         .single();
 
       if (error || !job) {
         return new Response(JSON.stringify({ success: false, error: "Job not found" }), {
-          status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 404,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
 
@@ -266,17 +309,61 @@ serve(async (req: Request) => {
 
       if (job.status === "failed") {
         return new Response(JSON.stringify({ success: false, error: job.error_message || "Extraction failed" }), {
-          status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 500,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
 
-      // Still processing
-      return new Response(JSON.stringify({ success: true, status: "processing", processing_time_ms: job.processing_time_ms }), {
+      if (job.status === "pending") {
+        await triggerBackgroundProcessing(job_id);
+      }
+
+      return new Response(JSON.stringify({ success: true, status: job.status, processing_time_ms: job.processing_time_ms }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    // ========== ACTION: SAVE ==========
+    if (action === "process" && job_id) {
+      const { data: job, error } = await supabase
+        .from("ai_job_master")
+        .select("status, input_payload")
+        .eq("id", job_id)
+        .single();
+
+      if (error || !job) {
+        return new Response(JSON.stringify({ success: false, error: "Job not found" }), {
+          status: 404,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      if (job.status === "completed") {
+        return new Response(JSON.stringify({ success: true, status: "completed" }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      if (job.status === "processing") {
+        return new Response(JSON.stringify({ success: true, status: "processing" }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      const payload = job.input_payload || {};
+
+      // @ts-ignore
+      if (typeof EdgeRuntime !== "undefined" && EdgeRuntime.waitUntil) {
+        // @ts-ignore
+        EdgeRuntime.waitUntil(runExtraction(job_id, payload.files || [], payload.url || null, payload.description || null));
+      } else {
+        await runExtraction(job_id, payload.files || [], payload.url || null, payload.description || null);
+      }
+
+      return new Response(JSON.stringify({ success: true, status: "processing" }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     if (action === "save") {
       const projectDataObj = files;
       const mode = url;
@@ -310,43 +397,61 @@ serve(async (req: Request) => {
       return new Response(JSON.stringify({ success: true, mode: mode || "new", id: saved.id }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    // ========== ACTION: EXTRACT (default) — returns job_id immediately ==========
     if (!Deno.env.get("LOVABLE_API_KEY")) {
-      return new Response(JSON.stringify({ success: false, error: "AI gateway not configured" }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      return new Response(JSON.stringify({ success: false, error: "AI gateway not configured" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
-    // Create job record
+    const userId = await getAuthenticatedUserId(req);
+    if (!userId) {
+      return new Response(JSON.stringify({ success: false, error: "Authentication required" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const payload = {
+      files: files || [],
+      url: url || null,
+      description: description || null,
+      fileCount: Array.isArray(files) ? files.length : 0,
+      hasDescription: !!description,
+    };
+
     const { data: job, error: jobErr } = await supabase.from("ai_job_master").insert({
       tool_name: "generate-listing",
-      user_id: "00000000-0000-0000-0000-000000000000", // system job
-      input_payload: { fileCount: files?.length || 0, url, hasDescription: !!description },
-      status: "queued",
+      user_id: userId,
+      input_payload: payload,
+      status: "pending",
     }).select("id").single();
 
     if (jobErr || !job) {
       console.error("[generate-listing] Failed to create job:", jobErr);
-      return new Response(JSON.stringify({ success: false, error: "Failed to start extraction" }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      return new Response(JSON.stringify({ success: false, error: "Failed to start extraction" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
-    // Start background processing — this runs AFTER the response is sent
-    // @ts-ignore: EdgeRuntime is available in Supabase Edge Functions
+    // @ts-ignore
     if (typeof EdgeRuntime !== "undefined" && EdgeRuntime.waitUntil) {
       // @ts-ignore
-      EdgeRuntime.waitUntil(runExtraction(job.id, files || [], url || null, description || null));
+      EdgeRuntime.waitUntil(runExtraction(job.id, payload.files || [], payload.url || null, payload.description || null));
     } else {
-      // Fallback: run inline (will be slower but won't crash)
-      runExtraction(job.id, files || [], url || null, description || null).catch(console.error);
+      await triggerBackgroundProcessing(job.id);
     }
 
-    // Return immediately with job_id
-    return new Response(JSON.stringify({ success: true, job_id: job.id, status: "queued" }), {
+    return new Response(JSON.stringify({ success: true, job_id: job.id, status: "pending" }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
 
   } catch (error: unknown) {
     console.error("[generate-listing] Error:", error);
     return new Response(JSON.stringify({ success: false, error: error instanceof Error ? error.message : "Unknown error" }), {
-      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 });
