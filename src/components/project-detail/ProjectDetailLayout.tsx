@@ -987,6 +987,19 @@ export default function ProjectDetailLayout({
                 </div>
               )}
 
+              {/* Location Flyover Animation */}
+              {project.latitude && project.longitude && (
+                <div className="mb-6">
+                  <h3 className="text-lg font-semibold text-foreground mb-3">Location Flyover</h3>
+                  <ProjectLocationFlyover
+                    projectName={project.name}
+                    latitude={project.latitude}
+                    longitude={project.longitude}
+                    location={project.location}
+                  />
+                </div>
+              )}
+
               {/* Leaflet Map with satellite view, navigation, and view toggle */}
               <ProjectLocationMap
                 projectName={project.name}
