@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import type { Json } from "@/integrations/supabase/types";
+import DocumentsManager from "@/components/listing-admin/DocumentsManager";
 
 interface ImageData {
   url: string;
@@ -525,63 +526,90 @@ const PendingImportPreview = () => {
 
   if (!mapped) return null;
 
+  const handleDocumentsUpdate = (updatedDocs: typeof pendingImport.documents extends (infer U)[] ? (U & { is_visible?: boolean; allow_download?: boolean; display_title?: string | null })[] : never[]) => {
+    if (!pendingImport) return;
+    setPendingImport(prev => prev ? { ...prev, documents: updatedDocs as DocumentData[] } : prev);
+  };
+
   return (
     <ProjectDetailLayout
       project={mapped}
       adminBar={
-        <section className="bg-gradient-to-r from-champagne via-champagne-light to-champagne border-b border-gold/30 py-4 sticky top-20 lg:top-24 z-40 shadow-md">
-          <div className="container mx-auto px-4 flex items-center justify-between flex-wrap gap-4">
-            <Button 
-              variant="primary" 
-              onClick={() => navigate("/listing-admin")}
-              className="hover:shadow-lg hover:-translate-y-0.5 transition-all"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Back to Queue
-            </Button>
-
-            <div className="flex items-center gap-3 flex-wrap">
-              <Badge className="border-2 border-gold/60 bg-card text-foreground font-semibold">PENDING REVIEW</Badge>
-              <Badge className="border-2 border-gold/60 bg-card text-foreground font-semibold">
-                {pendingImport.is_new_project ? "New Project" : "Update Existing"}
-              </Badge>
-            </div>
-
-            <div className="flex items-center gap-3">
+        <>
+          <section className="bg-gradient-to-r from-champagne via-champagne-light to-champagne border-b border-gold/30 py-4 sticky top-20 lg:top-24 z-40 shadow-md">
+            <div className="container mx-auto px-4 flex items-center justify-between flex-wrap gap-4">
               <Button 
-                variant="tertiary" 
-                onClick={handleReject} 
-                disabled={isProcessing}
-                className="border-red-500/60 hover:border-red-500 hover:bg-red-50 transition-all"
+                variant="primary" 
+                onClick={() => navigate("/listing-admin")}
+                className="hover:shadow-lg hover:-translate-y-0.5 transition-all"
               >
-                <X className="h-4 w-4 text-red-600" />
-                <span className="text-red-600">Reject</span>
+                <ArrowLeft className="w-4 h-4" />
+                Back to Queue
               </Button>
 
-              {!pendingImport.is_new_project && pendingImport.matched_project_id && (
+              <div className="flex items-center gap-3 flex-wrap">
+                <Badge className="border-2 border-gold/60 bg-card text-foreground font-semibold">PENDING REVIEW</Badge>
+                <Badge className="border-2 border-gold/60 bg-card text-foreground font-semibold">
+                  {pendingImport.is_new_project ? "New Project" : "Update Existing"}
+                </Badge>
+              </div>
+
+              <div className="flex items-center gap-3">
                 <Button 
                   variant="tertiary" 
-                  onClick={handleMerge} 
+                  onClick={handleReject} 
+                  disabled={isProcessing}
+                  className="border-red-500/60 hover:border-red-500 hover:bg-red-50 transition-all"
+                >
+                  <X className="h-4 w-4 text-red-600" />
+                  <span className="text-red-600">Reject</span>
+                </Button>
+
+                {!pendingImport.is_new_project && pendingImport.matched_project_id && (
+                  <Button 
+                    variant="tertiary" 
+                    onClick={handleMerge} 
+                    disabled={isProcessing}
+                    className="hover:shadow-lg hover:-translate-y-0.5 transition-all"
+                  >
+                    <Merge className="h-4 w-4" />
+                    Merge Updates
+                  </Button>
+                )}
+
+                <Button 
+                  variant="primary" 
+                  onClick={() => handleApprove(false)} 
                   disabled={isProcessing}
                   className="hover:shadow-lg hover:-translate-y-0.5 transition-all"
                 >
-                  <Merge className="h-4 w-4" />
-                  Merge Updates
+                  <Check className="h-4 w-4" />
+                  {pendingImport.is_new_project ? "Approve & Create" : "Approve as New"}
                 </Button>
-              )}
-
-              <Button 
-                variant="primary" 
-                onClick={() => handleApprove(false)} 
-                disabled={isProcessing}
-                className="hover:shadow-lg hover:-translate-y-0.5 transition-all"
-              >
-                <Check className="h-4 w-4" />
-                {pendingImport.is_new_project ? "Approve & Create" : "Approve as New"}
-              </Button>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+
+          {/* Documents Manager Panel */}
+          {pendingImport.documents.length > 0 && (
+            <section className="bg-gradient-to-b from-champagne-light/50 to-transparent border-b border-gold/10 py-6">
+              <div className="container mx-auto px-4">
+                <DocumentsManager
+                  documents={pendingImport.documents.map((d, i) => ({
+                    id: `pending-doc-${i}`,
+                    type: d.type,
+                    url: d.url,
+                    name: d.name,
+                    is_visible: (d as any).is_visible ?? true,
+                    allow_download: (d as any).allow_download ?? true,
+                    display_title: (d as any).display_title ?? null,
+                  }))}
+                  onUpdate={handleDocumentsUpdate}
+                />
+              </div>
+            </section>
+          )}
+        </>
       }
     />
   );
