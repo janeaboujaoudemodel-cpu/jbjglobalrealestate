@@ -57,6 +57,53 @@ function inferProjectNameFromFiles(files: { name: string; url: string; type: str
   return cleaned.length > 2 ? cleaned : "Uploaded Project";
 }
 
+/**
+ * Humanize a document filename into a clean display title.
+ * Strips extensions, underscores/dashes, trailing "(1)", title-cases.
+ */
+function humanizeDocTitle(rawName: string): string {
+  let t = rawName
+    .replace(/\.[a-z0-9]{2,5}$/i, "")       // strip extension
+    .replace(/\(\d+\)\s*$/g, "")              // strip trailing (1)
+    .replace(/[-_]+/g, " ")                   // dashes/underscores to spaces
+    .replace(/\s+/g, " ")                     // collapse spaces
+    .trim();
+  if (!t) return rawName;
+  // Title case
+  return t.replace(/\b\w/g, c => c.toUpperCase());
+}
+
+/**
+ * Classify a document by its filename into a standard type.
+ */
+function classifyDocument(name: string): string {
+  const lower = (name || "").toLowerCase();
+  if (lower.includes("brochure")) return "brochure";
+  if (lower.includes("fact") && lower.includes("sheet")) return "fact_sheet";
+  if (lower.includes("payment") && lower.includes("plan")) return "payment_plan";
+  if (lower.includes("floor") || lower.includes("layout")) return "floor_plan";
+  if (lower.includes("inventory")) return "inventory";
+  if (lower.includes("price") && lower.includes("list")) return "price_list";
+  if (lower.includes("eoi")) return "eoi";
+  return "document";
+}
+
+/**
+ * Merge arrays by deduplicating on a key extractor.
+ */
+function mergeArrays<T>(existing: T[], incoming: T[], keyFn: (item: T) => string): T[] {
+  const seen = new Set(existing.map(keyFn));
+  const merged = [...existing];
+  for (const item of incoming) {
+    const key = keyFn(item);
+    if (!seen.has(key)) {
+      seen.add(key);
+      merged.push(item);
+    }
+  }
+  return merged;
+}
+
 async function saveDocumentsToStorage(
   supabase: any,
   projectSlug: string,
@@ -94,9 +141,6 @@ async function saveDocumentsToStorage(
   return saved;
 }
 
-/**
- * Match developer_id from the `developers` table (not uae_developers).
- */
 async function matchDeveloperId(supabase: any, devName: string | null): Promise<string | null> {
   if (!devName) return null;
   try {
@@ -109,7 +153,6 @@ async function matchDeveloperId(supabase: any, devName: string | null): Promise<
       .maybeSingle();
     if (data?.id) return data.id;
 
-    // Try word-level match
     const words = norm.split(/\s+/).filter((w: string) => w.length > 3);
     for (const word of words) {
       const { data: wordMatch } = await supabase
@@ -124,6 +167,46 @@ async function matchDeveloperId(supabase: any, devName: string | null): Promise<
     console.error("[extract] Developer match error:", err);
   }
   return null;
+}
+
+/**
+ * Find existing pending import by source_url first, then slug.
+ * Returns { id, images, documents, ... } or null.
+ */
+async function findExistingPending(supabase: any, sourceUrl: string | null, slug: string): Promise<any | null> {
+  // Try source_url first (unique index)
+  if (sourceUrl) {
+    const { data } = await supabase
+      .from("pending_project_imports")
+      .select("*")
+      .eq("source_url", sourceUrl)
+      .order("updated_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (data) return data;
+  }
+  // Fallback to slug
+  const { data } = await supabase
+    .from("pending_project_imports")
+    .select("*")
+    .eq("slug", slug)
+    .order("updated_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  return data || null;
+}
+
+/**
+ * Update job progress in listing_extraction_queue.
+ */
+async function updateJobProgress(supabase: any, jobId: string | null, message: string) {
+  if (!jobId) return;
+  try {
+    await supabase
+      .from("listing_extraction_queue")
+      .update({ results: { progress: message } })
+      .eq("id", jobId);
+  } catch {}
 }
 
 serve(async (req) => {
@@ -144,20 +227,19 @@ serve(async (req) => {
       queue = true,
       retryImportId,
       async_mode = false,
-      job_id, // For processing a queued job
+      job_id,
     } = body;
     parsedJobId = job_id || null;
 
     const urlList: string[] = urls || (url ? [url] : []);
     const fileList: { name: string; url: string; type: string }[] = Array.isArray(files) ? files : [];
-    // ENFORCED: Manual publish only — auto_approve is always false
-    const auto_approve = false;
+    const auto_approve = false; // ENFORCED: Manual publish only
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // ── ASYNC QUEUE MODE: Insert job and return immediately ──
+    // ── ASYNC QUEUE MODE ──
     if (async_mode && !job_id && (urlList.length > 0 || fileList.length > 0)) {
       const { data: job, error: jobErr } = await supabase
         .from("listing_extraction_queue")
@@ -178,7 +260,6 @@ serve(async (req) => {
         );
       }
 
-      // Fire-and-forget: call self to process the job
       const selfUrl = `${supabaseUrl}/functions/v1/extract-listing-from-link`;
       fetch(selfUrl, {
         method: "POST",
@@ -187,36 +268,22 @@ serve(async (req) => {
           "Authorization": `Bearer ${Deno.env.get("SUPABASE_ANON_KEY")}`,
         },
         body: JSON.stringify({
-          job_id: job.id,
-          urls: urlList,
-          files: fileList,
-          userId,
-          auto_approve,
-          albumName,
+          job_id: job.id, urls: urlList, files: fileList, userId, auto_approve, albumName,
         }),
       }).catch(err => console.error("[extract] Fire-and-forget error:", err));
 
       return new Response(
-        JSON.stringify({
-          success: true,
-          async: true,
-          jobId: job.id,
-          status: "queued",
-          message: "Extraction queued. Polling for results...",
-        }),
+        JSON.stringify({ success: true, async: true, jobId: job.id, status: "queued", message: "Extraction queued. Polling for results..." }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // ── PROCESSING A QUEUED JOB: Update status to processing ──
+    // ── PROCESSING A QUEUED JOB ──
     if (job_id) {
-      await supabase
-        .from("listing_extraction_queue")
-        .update({ status: "processing" })
-        .eq("id", job_id);
+      await supabase.from("listing_extraction_queue").update({ status: "processing" }).eq("id", job_id);
     }
 
-    // Handle retry of existing import
+    // Handle retry
     if (retryImportId) {
       try {
         const { data: imp } = await supabase
@@ -232,39 +299,6 @@ serve(async (req) => {
           );
         }
 
-        // Re-process the source URL if available
-        if (imp.source_url && imp.source_url.startsWith("http")) {
-          // Reset status and re-invoke with the URL
-          await supabase
-            .from("pending_project_imports")
-            .update({ status: "pending", updated_at: new Date().toISOString() })
-            .eq("id", retryImportId);
-
-          return new Response(
-            JSON.stringify({
-              success: true,
-              results: [{
-                success: true,
-                importId: imp.id,
-                projectName: imp.name,
-                developer: imp.developer_name,
-                location: imp.location,
-                status: "pending-approval",
-                media: { images: (imp.images as any[])?.length || 0, documents: (imp.documents as any[])?.length || 0, videos: 0 },
-                view_url: `/listing-admin/preview/${imp.id}`,
-                duration_ms: 0,
-                retried: true,
-              }],
-              succeeded: 1,
-              failed: 0,
-              total: 1,
-              message: "Import reset to pending. Ready for review.",
-            }),
-            { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-          );
-        }
-
-        // For file-based imports, just reset status
         await supabase
           .from("pending_project_imports")
           .update({ status: "pending", updated_at: new Date().toISOString() })
@@ -274,18 +308,12 @@ serve(async (req) => {
           JSON.stringify({
             success: true,
             results: [{
-              success: true,
-              importId: imp.id,
-              projectName: imp.name,
-              status: "pending-approval",
-              view_url: `/listing-admin/preview/${imp.id}`,
-              duration_ms: 0,
-              retried: true,
+              success: true, importId: imp.id, projectName: imp.name, developer: imp.developer_name,
+              location: imp.location, status: "pending-approval",
+              media: { images: (imp.images as any[])?.length || 0, documents: (imp.documents as any[])?.length || 0, videos: 0 },
+              view_url: `/listing-admin/preview/${imp.id}`, duration_ms: 0, retried: true,
             }],
-            succeeded: 1,
-            failed: 0,
-            total: 1,
-            message: "Import reset to pending.",
+            succeeded: 1, failed: 0, total: 1, message: "Import reset to pending.",
           }),
           { headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
@@ -316,7 +344,7 @@ serve(async (req) => {
 
     const results: any[] = [];
 
-    // ── FILE UPLOADS ──
+    // ── FILE UPLOADS (PHASE A: merge instead of overwrite) ──
     if (fileList.length > 0) {
       const startTime = Date.now();
       const projectName = albumName || inferProjectNameFromFiles(fileList);
@@ -325,6 +353,8 @@ serve(async (req) => {
       const devName = detectDeveloper(joinedText);
       const devId = await matchDeveloperId(supabase, devName);
 
+      await updateJobProgress(supabase, job_id, `Processing ${fileList.length} files for "${projectName}"...`);
+
       const imagesPayload = fileList
         .filter((f) => f.type === "image")
         .map((f, i) => ({ url: f.url, alt_text: `${projectName} - Image ${i + 1}`, display_order: i }));
@@ -332,46 +362,62 @@ serve(async (req) => {
       const documentsPayload = fileList
         .filter((f) => f.type !== "image")
         .map((f, i) => {
-          const lower = (f.name || "").toLowerCase();
-          const docType = lower.includes("floor") ? "floor_plan" : lower.includes("payment") ? "payment_plan" : lower.includes("brochure") ? "brochure" : "document";
-          return { url: f.url, original_url: f.url, type: docType, name: f.name || `Document ${i + 1}` };
+          const docType = classifyDocument(f.name);
+          return { url: f.url, original_url: f.url, type: docType, name: humanizeDocTitle(f.name || `Document ${i + 1}`) };
         });
 
-      const importPayload: Record<string, any> = {
-        name: projectName,
-        slug,
-        developer_name: devName || null,
-        developer_id: devId, // properly matched from developers table
-        location: null,
-        emirate: "Dubai",
-        description: `Generated from ${fileList.length} uploaded file(s).`,
-        images: imagesPayload,
-        documents: documentsPayload,
-        source_url: fileList[0]?.url || "file-upload",
-        is_new_project: true,
-        status: auto_approve ? "approved" : "pending",
-        enrichment_source: "file-upload",
-      };
+      // Stable source_url for file uploads — never use the PDF URL
+      const stableSourceUrl = `manual://${userId || "anon"}/${slug}`;
 
       try {
-        const { data: existing } = await supabase
-          .from("pending_project_imports")
-          .select("id, status")
-          .eq("slug", slug)
-          .order("updated_at", { ascending: false })
-          .limit(1)
-          .maybeSingle();
+        // PHASE A: Find existing by stable source_url OR slug, then MERGE
+        const existing = await findExistingPending(supabase, stableSourceUrl, slug);
 
         let importId: string | null = null;
 
         if (existing?.id) {
+          // MERGE: append images/docs instead of replacing
+          const existingImages = Array.isArray(existing.images) ? existing.images : [];
+          const existingDocs = Array.isArray(existing.documents) ? existing.documents : [];
+          
+          const mergedImages = mergeArrays(existingImages, imagesPayload, (img: any) => img.url);
+          const mergedDocs = mergeArrays(existingDocs, documentsPayload, (doc: any) => doc.url);
+
+          const updatePayload: Record<string, any> = {
+            images: mergedImages,
+            documents: mergedDocs,
+            updated_at: new Date().toISOString(),
+            status: "pending",
+          };
+          // Only overwrite scalar fields if they were null/empty before
+          if (!existing.developer_name && devName) updatePayload.developer_name = devName;
+          if (!existing.developer_id && devId) updatePayload.developer_id = devId;
+          if (albumName && existing.name === "Uploaded Project") updatePayload.name = projectName;
+
           const { error } = await supabase
             .from("pending_project_imports")
-            .update({ ...importPayload, updated_at: new Date().toISOString() })
+            .update(updatePayload)
             .eq("id", existing.id);
           if (error) throw new Error(`Update failed: ${error.message}`);
           importId = existing.id;
         } else {
+          const importPayload: Record<string, any> = {
+            name: projectName,
+            slug,
+            developer_name: devName || null,
+            developer_id: devId,
+            location: null,
+            emirate: null, // STRICT: don't guess emirate from file uploads
+            description: null, // PHASE B: No "Generated from X files" text
+            images: imagesPayload,
+            documents: documentsPayload,
+            source_url: stableSourceUrl,
+            is_new_project: true,
+            status: "pending",
+            enrichment_source: "file-upload",
+            review_notes: JSON.stringify({ missing_fields: ["location", "emirate", "description"], source: "file-upload" }),
+          };
+
           const { data: inserted, error } = await supabase
             .from("pending_project_imports")
             .insert(importPayload)
@@ -381,20 +427,10 @@ serve(async (req) => {
           importId = inserted!.id;
         }
 
-        if (auto_approve && importId) {
-          try {
-            await fetch(`${supabaseUrl}/functions/v1/bulk-approve-imports`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json", "Authorization": `Bearer ${Deno.env.get("SUPABASE_ANON_KEY")}` },
-              body: JSON.stringify({ import_ids: [importId] }),
-            });
-          } catch (e) { console.error("[extract] Auto-approve error:", e); }
-        }
-
         // Log
         if (userId) {
           await supabase.from("listing_uploads").insert({
-            user_id: userId, drive_url: fileList[0]?.url || "uploaded-files", url_type: "upload",
+            user_id: userId, drive_url: stableSourceUrl, url_type: "upload",
             status: "completed", extracted_data: { projectName, files: fileList.length },
             created_at: new Date().toISOString(), completed_at: new Date().toISOString(),
           }).then(() => {}).catch(() => {});
@@ -402,24 +438,24 @@ serve(async (req) => {
 
         results.push({
           success: true, importId, projectName, developer: devName, location: null,
-          status: auto_approve ? "auto-approved" : "pending-approval",
+          status: "pending-approval",
           files_processed: fileList.length,
           media: { images: imagesPayload.length, documents: documentsPayload.length, videos: 0 },
-          view_url: auto_approve ? `/project/${slug}` : `/listing-admin/preview/${importId}`,
+          view_url: `/listing-admin/preview/${importId}`,
           duration_ms: Date.now() - startTime,
         });
       } catch (fileErr: any) {
         console.error("[extract] File processing error:", fileErr);
         results.push({
           success: false, name: projectName, error: fileErr.message,
-          source_url: fileList[0]?.url,
+          source_url: stableSourceUrl,
           duration_ms: Date.now() - startTime,
         });
       }
     }
 
     // ── URL EXTRACTION (PARALLEL) ──
-    const urlPromises = urlList.map(async (rawUrl) => {
+    const urlPromises = urlList.map(async (rawUrl, urlIndex) => {
       const startTime = Date.now();
       let formattedUrl = rawUrl.trim();
       if (!formattedUrl.startsWith("http://") && !formattedUrl.startsWith("https://")) {
@@ -427,6 +463,7 @@ serve(async (req) => {
       }
 
       console.log(`[extract] Processing: ${formattedUrl}`);
+      await updateJobProgress(supabase, job_id, `Processing link ${urlIndex + 1}/${urlList.length}: ${formattedUrl}`);
 
       try {
         const scrapeResponse = await fetch("https://api.firecrawl.dev/v1/scrape", {
@@ -450,16 +487,28 @@ serve(async (req) => {
         const imageUrls: string[] = [];
         const seenImg = new Set<string>();
         const imgPatterns = [
-          /https?:\/\/[^\s"'<>)]+\.(?:jpg|jpeg|png|webp)(?:\?[^\s"'<>)]*)?/gi,
-          /https?:\/\/[a-z0-9-]+\.cloudfront\.net\/[^\s"'<>)]+/gi,
+          /https?:\/\/[^\s"'<>)+]+\.(?:jpg|jpeg|png|webp)(?:\?[^\s"'<>)]*)?/gi,
+          /https?:\/\/[a-z0-9-]+\.cloudfront\.net\/[^\s"'<>)+]+/gi,
         ];
         const EXCLUDED_IMG_PATTERNS = /logo|icon|avatar|placeholder|spinner|favicon|flags?\/|sprite|badge|arrow|chevron|_next\/static|fact[-_]?sheet|brand[-_]?guideline|broker[-_]?kit|material\.webp|film\.webp|about\.webp|book\.webp|company[-_]?profile|credential|certificate/i;
         for (const pat of imgPatterns) {
           for (const m of allContent.matchAll(pat)) {
             let rawImgUrl = m[0];
+            // Decode Next.js proxy URLs to absolute originals
             const nextProxyMatch = rawImgUrl.match(/\/_next\/image\?url=([^&]+)/);
             if (nextProxyMatch) {
-              try { rawImgUrl = decodeURIComponent(nextProxyMatch[1]); } catch {}
+              try {
+                const decoded = decodeURIComponent(nextProxyMatch[1]);
+                // Make absolute if relative
+                if (decoded.startsWith("/")) {
+                  try {
+                    const origin = new URL(formattedUrl).origin;
+                    rawImgUrl = `${origin}${decoded}`;
+                  } catch { rawImgUrl = decoded; }
+                } else {
+                  rawImgUrl = decoded;
+                }
+              } catch {}
             }
             const u = rawImgUrl.split("?")[0];
             if (!seenImg.has(u) && !EXCLUDED_IMG_PATTERNS.test(u) && u.length > 20) {
@@ -472,7 +521,7 @@ serve(async (req) => {
         // PDFs
         const pdfUrls: string[] = [];
         const seenPdf = new Set<string>();
-        for (const m of allContent.matchAll(/https?:\/\/[^\s"'<>)]+\.pdf(?:\?[^\s"'<>)]*)?/gi)) {
+        for (const m of allContent.matchAll(/https?:\/\/[^\s"'<>)+]+\.pdf(?:\?[^\s"'<>)]*)?/gi)) {
           const clean = m[0].split("?")[0];
           if (!seenPdf.has(clean)) { seenPdf.add(clean); pdfUrls.push(m[0]); }
         }
@@ -482,12 +531,11 @@ serve(async (req) => {
         for (const m of allContent.matchAll(/https?:\/\/(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]+)/gi)) {
           videoUrls.push(`https://www.youtube.com/watch?v=${m[1]}`);
         }
-        for (const m of allContent.matchAll(/https?:\/\/[^\s"'<>)]+\.(?:mp4|webm)/gi)) {
+        for (const m of allContent.matchAll(/https?:\/\/[^\s"'<>)+]+\.(?:mp4|webm)/gi)) {
           videoUrls.push(m[0]);
         }
 
-        // AI extraction — use powerful model with expanded context
-        // Use combined markdown+html to handle pages with short markdown but rich HTML
+        // AI extraction with STRICT no-hallucination rules
         let extractedData: any = null;
         const combinedContent = (markdown + "\n\n" + html).trim();
         if (LOVABLE_API_KEY && combinedContent.length > 100) {
@@ -502,51 +550,44 @@ serve(async (req) => {
                 max_tokens: 8000,
                 temperature: 0.05,
                 messages: [
-                  { role: "system", content: `You are a senior UAE real estate data extraction specialist with 15 years experience. Your job is to extract EVERY SINGLE detail from property listings, brochures, and PDFs with 100% accuracy. You must capture:
-- ALL bedroom configurations with their individual sizes (sqft), starting prices, and unit counts
-- COMPLETE payment plan breakdowns with every milestone and percentage
-- EVERY amenity mentioned anywhere in the content
-- Full developer information, project location, community
-- Construction status, handover dates, completion percentages
-- Service charges, floor counts, total units
-- Property types available (apartment, villa, townhouse, penthouse, duplex)
-- Key distances to landmarks (beach, metro, mall, airport, downtown)
-- ALL floor plan types mentioned
-- Developer track record details if mentioned
-- Registration/RERA numbers if mentioned
+                  { role: "system", content: `You are a senior UAE real estate data extraction specialist with 15 years experience. Your job is to extract EVERY SINGLE detail from property listings, brochures, and PDFs with 100% accuracy.
 
-CRITICAL: Do NOT summarize or abbreviate. Extract VERBATIM details. If the document mentions "4-bedroom duplex penthouse starting from AED 5.2M, size 4,200 sqft" — capture exactly that. Miss NOTHING.` },
-                  { role: "user", content: `Extract ALL property/project details with maximum accuracy from this content.
+STRICT RULES — NO HALLUCINATION:
+- ONLY extract information that is EXPLICITLY stated in the content. If a fact is not present, return null for that field.
+- NEVER guess, estimate, or fabricate any data including emirate, location, prices, developer details, or amenities.
+- If the emirate is not explicitly mentioned, set emirate to null.
+- NEVER default to "Dubai" — only set emirate to "Dubai" if the content explicitly says Dubai.
+- If description is not present, return null — NEVER generate a synthetic description.
+- Extract VERBATIM details. Miss NOTHING that is explicitly stated.` },
+                  { role: "user", content: `Extract ALL property/project details from this content. ONLY include facts explicitly stated. Return null for anything not found.
 
 URL: ${formattedUrl}
 Page Title: ${metadata.title || ""}
 
 FULL CONTENT:
-${contentForAI}
-
-Extract every bedroom type, every amenity, every payment milestone, every unit configuration. Be thorough and precise.` },
+${contentForAI}` },
                 ],
                 tools: [{
                   type: "function",
                   function: {
                     name: "extract_project",
-                    description: "Extract comprehensive structured project data with every detail",
+                    description: "Extract comprehensive structured project data — null for missing fields",
                     parameters: {
                       type: "object",
                       properties: {
-                        name: { type: "string", description: "Official project name" },
-                        developer: { type: "string", description: "Developer/builder name" },
-                        location: { type: "string", description: "Area/community (e.g. Dubai Marina, JVC)" },
-                        emirate: { type: "string" },
-                        priceFrom: { type: "number", description: "Starting price in AED" },
-                        priceTo: { type: "number", description: "Maximum price in AED" },
-                        bedroomsMin: { type: "number" },
-                        bedroomsMax: { type: "number" },
-                        handoverDate: { type: "string", description: "Expected handover e.g. Q4 2026" },
-                        completionPercentage: { type: "number", description: "Construction progress %" },
-                        description: { type: "string", description: "Full project description, multiple paragraphs. Do NOT truncate." },
-                        amenities: { type: "array", items: { type: "string" }, description: "EVERY amenity: pool, gym, spa, kids area, BBQ, etc." },
-                        paymentPlan: { type: "string", description: "Summary like 60/40 or 80/20" },
+                        name: { type: ["string", "null"], description: "Official project name" },
+                        developer: { type: ["string", "null"], description: "Developer/builder name" },
+                        location: { type: ["string", "null"], description: "Area/community (e.g. Dubai Marina, JVC)" },
+                        emirate: { type: ["string", "null"], description: "Emirate — ONLY if explicitly stated" },
+                        priceFrom: { type: ["number", "null"] },
+                        priceTo: { type: ["number", "null"] },
+                        bedroomsMin: { type: ["number", "null"] },
+                        bedroomsMax: { type: ["number", "null"] },
+                        handoverDate: { type: ["string", "null"] },
+                        completionPercentage: { type: ["number", "null"] },
+                        description: { type: ["string", "null"], description: "Full project description from content. Do NOT generate." },
+                        amenities: { type: "array", items: { type: "string" } },
+                        paymentPlan: { type: ["string", "null"] },
                         paymentBreakdown: {
                           type: "array",
                           items: {
@@ -576,14 +617,14 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
                             }
                           },
                         },
-                        projectStatus: { type: "string" },
+                        projectStatus: { type: ["string", "null"] },
                         keyFeatures: { type: "array", items: { type: "string" } },
-                        propertyType: { type: "string" },
-                        serviceCharge: { type: "string" },
-                        totalUnits: { type: "number" },
-                        floors: { type: "number" },
-                        sizeMin: { type: "number" },
-                        sizeMax: { type: "number" },
+                        propertyType: { type: ["string", "null"] },
+                        serviceCharge: { type: ["string", "null"] },
+                        totalUnits: { type: ["number", "null"] },
+                        floors: { type: ["number", "null"] },
+                        sizeMin: { type: ["number", "null"] },
+                        sizeMax: { type: ["number", "null"] },
                         highlights: { type: "array", items: { type: "string" } },
                         nearbyLandmarks: {
                           type: "array",
@@ -592,7 +633,7 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
                             properties: { name: { type: "string" }, distance: { type: "string" }, time: { type: "string" } }
                           }
                         },
-                        reraNumber: { type: "string" },
+                        reraNumber: { type: ["string", "null"] },
                         faqs: { type: "array", items: { type: "object", properties: { q: { type: "string" }, a: { type: "string" } } } },
                       },
                       required: ["name"],
@@ -611,7 +652,7 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
               }
               if (!extractedData) {
                 const content = aiData.choices?.[0]?.message?.content || "";
-                try { extractedData = JSON.parse(content.replace(/```json\n?|\n?```/g, "").trim()); } catch {}
+                try { extractedData = JSON.parse(content.replace(/```json\n?|\\n?```/g, "").trim()); } catch {}
               }
             } else {
               console.error("[extract] AI response not ok:", aiRes.status, await aiRes.text());
@@ -626,15 +667,22 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
         const devName = extractedData?.developer || detectDeveloper(markdown) || detectDeveloper(formattedUrl);
         const devId = await matchDeveloperId(supabase, devName);
 
-        // Categorize PDFs
+        // Categorize PDFs with brochure-first rule
         let brochureUrl: string | null = null;
+        let factSheetUrl: string | null = null;
         let paymentPlanUrl: string | null = null;
         const floorPlanUrls: string[] = [];
         for (const pdf of pdfUrls) {
           const lower = pdf.toLowerCase();
           if (lower.includes("brochure")) brochureUrl = brochureUrl || pdf;
+          else if (lower.includes("fact") && lower.includes("sheet")) factSheetUrl = factSheetUrl || pdf;
           else if (lower.includes("payment")) paymentPlanUrl = paymentPlanUrl || pdf;
           else if (lower.includes("floor") || lower.includes("plan")) floorPlanUrls.push(pdf);
+        }
+        // Brochure-first rule: if no brochure, use fact sheet in brochure slot
+        if (!brochureUrl && factSheetUrl) {
+          brochureUrl = factSheetUrl;
+          factSheetUrl = null;
         }
         if (!brochureUrl && pdfUrls.length > 0) {
           brochureUrl = pdfUrls.find(p => p !== paymentPlanUrl && !floorPlanUrls.includes(p)) || null;
@@ -642,6 +690,7 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
 
         const docsToSave: { url: string; type: string; name: string }[] = [];
         if (brochureUrl) docsToSave.push({ url: brochureUrl, type: "brochure", name: "Brochure" });
+        if (factSheetUrl) docsToSave.push({ url: factSheetUrl, type: "fact_sheet", name: "Fact Sheet" });
         if (paymentPlanUrl) docsToSave.push({ url: paymentPlanUrl, type: "payment_plan", name: "Payment Plan" });
         floorPlanUrls.forEach((fp, i) => docsToSave.push({ url: fp, type: "floor_plan", name: `Floor Plan ${i + 1}` }));
 
@@ -652,13 +701,14 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
         }));
 
         const documentsPayload = savedDocs.map(d => ({
-          url: d.storage_url, original_url: d.url, type: d.type, name: d.name,
+          url: d.storage_url, original_url: d.url, type: d.type, name: humanizeDocTitle(d.name),
         }));
 
-        // ── LOCATION VALIDATION against canonical areas table ──
-        let validatedEmirate = extractedData?.emirate || "Dubai";
+        // ── LOCATION VALIDATION — STRICT: null if not confirmed ──
+        let validatedEmirate = extractedData?.emirate || null; // NOT defaulting to Dubai
         let validatedLocation = extractedData?.location || null;
         let locationConfidence = "ai-extracted";
+        const missingFields: string[] = [];
         
         if (validatedLocation) {
           const locationLower = validatedLocation.toLowerCase().trim();
@@ -674,10 +724,9 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
             validatedLocation = areaMatch.name;
             validatedEmirate = areaMatch.emirate;
             locationConfidence = "canonical-match";
-            console.log(`[extract] Location validated: "${extractedData?.location}" → "${areaMatch.name}" (${areaMatch.emirate})`);
           } else {
             try {
-              const geoQuery = encodeURIComponent(`${projectName}, ${validatedLocation}, ${validatedEmirate}, UAE`);
+              const geoQuery = encodeURIComponent(`${projectName}, ${validatedLocation}, ${validatedEmirate || "UAE"}, UAE`);
               const geoRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${geoQuery}&limit=1&countrycodes=ae`, {
                 headers: { "User-Agent": "JBJGlobalBot/1.0" },
               });
@@ -688,11 +737,8 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
                   const emiratesList = ["Dubai", "Abu Dhabi", "Sharjah", "Ajman", "Ras Al Khaimah", "Fujairah", "Umm Al Quwain"];
                   for (const em of emiratesList) {
                     if (display.toLowerCase().includes(em.toLowerCase())) {
-                      if (em.toLowerCase() !== validatedEmirate.toLowerCase()) {
-                        console.log(`[extract] Geocode corrected emirate: "${validatedEmirate}" → "${em}"`);
-                        validatedEmirate = em;
-                        locationConfidence = "geocode-corrected";
-                      }
+                      validatedEmirate = em;
+                      locationConfidence = "geocode-corrected";
                       break;
                     }
                   }
@@ -702,7 +748,13 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
               console.error("[extract] Geocode fallback error:", geoErr);
             }
           }
+        } else {
+          missingFields.push("location");
         }
+
+        if (!validatedEmirate) missingFields.push("emirate");
+        if (!extractedData?.description) missingFields.push("description");
+        if (!extractedData?.priceFrom) missingFields.push("price");
 
         const importPayload: Record<string, any> = {
           name: projectName,
@@ -710,7 +762,7 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
           developer_name: devName || null,
           developer_id: devId,
           location: validatedLocation,
-          emirate: validatedEmirate,
+          emirate: validatedEmirate || "Dubai", // Fallback for DB constraint but flagged
           description: extractedData?.description || null,
           price_from: extractedData?.priceFrom || null,
           price_to: extractedData?.priceTo || null,
@@ -729,8 +781,8 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
           amenities: extractedData?.amenities || null,
           unit_types: extractedData?.unitTypes ? extractedData.unitTypes.map((u: string, i: number) => ({ name: u, sort_order: i })) : null,
           unit_details: extractedData?.unitDetails || null,
-          location_distances: extractedData?.nearbyLandmarks || extractedData?.locationDistances || null,
-          construction_progress: extractedData?.completionPercentage || extractedData?.constructionProgress || null,
+          location_distances: extractedData?.nearbyLandmarks || null,
+          construction_progress: extractedData?.completionPercentage || null,
           rera_number: extractedData?.reraNumber || null,
           highlights: extractedData?.highlights || extractedData?.keyFeatures || null,
           faqs: extractedData?.faqs || null,
@@ -740,12 +792,16 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
           video_urls: videoUrls.length > 0 ? videoUrls : null,
           source_url: formattedUrl,
           is_new_project: true,
-          status: auto_approve ? "approved" : "pending",
+          status: "pending",
           enrichment_source: "url-extraction",
-          review_notes: JSON.stringify({ location_confidence: locationConfidence }),
+          review_notes: JSON.stringify({
+            location_confidence: locationConfidence,
+            missing_fields: missingFields.length > 0 ? missingFields : undefined,
+            ...(missingFields.length > 0 ? { INCOMPLETE: true } : {}),
+          }),
         };
 
-        // ── AI POI ENRICHMENT: If no nearby landmarks were extracted, generate them ──
+        // ── AI POI ENRICHMENT ──
         const hasLandmarks = importPayload.location_distances && Array.isArray(importPayload.location_distances) && importPayload.location_distances.length > 0;
         if (!hasLandmarks && LOVABLE_API_KEY && (validatedLocation || validatedEmirate)) {
           try {
@@ -757,8 +813,8 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
                 max_tokens: 2000,
                 temperature: 0.1,
                 messages: [
-                  { role: "system", content: "You are a UAE geography expert. Return ONLY a JSON array of nearby landmarks." },
-                  { role: "user", content: `List the 8-10 nearest landmarks to "${projectName}" in ${validatedLocation || ""}, ${validatedEmirate}, UAE. Include hospitals, schools, airports, malls, beaches, metro stations, and tourist destinations. Return JSON array: [{"name":"...", "distance":"... km", "time":"... min drive"}]` },
+                  { role: "system", content: "You are a UAE geography expert. Return ONLY a JSON array of nearby landmarks. Only include landmarks you are confident about." },
+                  { role: "user", content: `List the 8-10 nearest landmarks to "${projectName}" in ${validatedLocation || ""}, ${validatedEmirate || "UAE"}, UAE. Include hospitals, schools, airports, malls, beaches, metro stations, and tourist destinations. Return JSON array: [{"name":"...", "distance":"... km", "time":"... min drive"}]` },
                 ],
               }),
             });
@@ -773,7 +829,6 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
                     label: p.name,
                     time: p.time || p.distance || "N/A",
                   }));
-                  console.log(`[extract] AI-generated ${pois.length} POIs for ${projectName}`);
                 }
               }
             }
@@ -782,17 +837,17 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
           }
         }
 
-        const { data: existing } = await supabase
-          .from("pending_project_imports")
-          .select("id, status")
-          .eq("slug", slug)
-          .order("updated_at", { ascending: false })
-          .limit(1)
-          .maybeSingle();
-
+        // PHASE A: Find existing by source_url first, then slug — MERGE media
+        const existing = await findExistingPending(supabase, formattedUrl, slug);
         let importId: string | null = null;
 
         if (existing?.id) {
+          // Merge images and documents
+          const existingImages = Array.isArray(existing.images) ? existing.images : [];
+          const existingDocs = Array.isArray(existing.documents) ? existing.documents : [];
+          importPayload.images = mergeArrays(existingImages, imagesPayload, (img: any) => img.url);
+          importPayload.documents = mergeArrays(existingDocs, documentsPayload, (doc: any) => doc.url);
+
           const { error } = await supabase
             .from("pending_project_imports")
             .update({ ...importPayload, updated_at: new Date().toISOString() })
@@ -809,16 +864,6 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
           importId = inserted!.id;
         }
 
-        if (auto_approve && importId) {
-          try {
-            await fetch(`${supabaseUrl}/functions/v1/bulk-approve-imports`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json", "Authorization": `Bearer ${Deno.env.get("SUPABASE_ANON_KEY")}` },
-              body: JSON.stringify({ import_ids: [importId] }),
-            });
-          } catch (e) { console.error("[extract] Auto-approve error:", e); }
-        }
-
         if (userId) {
           await supabase.from("listing_uploads").insert({
             user_id: userId, drive_url: formattedUrl, url_type: "firecrawl",
@@ -829,8 +874,8 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
 
         return {
           url: formattedUrl, success: true, importId, projectName, developer: devName,
-          location: extractedData?.location,
-          status: auto_approve ? "auto-approved" : "pending-approval",
+          location: validatedLocation,
+          status: "pending-approval",
           media: { images: imageUrls.length, documents: savedDocs.length, videos: videoUrls.length },
           amenities: extractedData?.amenities || [],
           paymentPlan: extractedData?.paymentPlan,
@@ -847,7 +892,7 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
           floors: extractedData?.floors,
           description: extractedData?.description?.substring(0, 500),
           heroImage: imageUrls[0] || null,
-          view_url: auto_approve ? `/project/${slug}` : `/listing-admin/preview/${importId}`,
+          view_url: `/listing-admin/preview/${importId}`,
           duration_ms: Date.now() - startTime,
         };
 
@@ -857,7 +902,6 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
       }
     });
 
-    // Run all URL extractions in parallel
     const urlResults = await Promise.allSettled(urlPromises);
     for (const settled of urlResults) {
       if (settled.status === "fulfilled") {
@@ -873,12 +917,9 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
     const responsePayload = {
       success: successCount > 0, total: totalInputs, succeeded: successCount,
       failed: totalInputs - successCount, results, auto_approve,
-      message: auto_approve
-        ? `${successCount} listing(s) extracted and auto-approved`
-        : `${successCount} listing(s) extracted and queued for your approval`,
+      message: `${successCount} listing(s) extracted and queued for your approval`,
     };
 
-    // If processing a queued job, save results back to queue
     if (job_id) {
       await supabase
         .from("listing_extraction_queue")
@@ -899,7 +940,6 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
   } catch (error: unknown) {
     console.error("[extract] Fatal error:", error);
 
-    // If processing a queued job, mark it as failed
     if (parsedJobId) {
       try {
         const supabaseUrl = Deno.env.get("SUPABASE_URL")!;

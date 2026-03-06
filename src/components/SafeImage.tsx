@@ -39,7 +39,7 @@ export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
         src={resolvedSrc}
         loading={props.loading ?? "lazy"}
         decoding={props.decoding ?? "async"}
-        referrerPolicy="no-referrer"
+        referrerPolicy="strict-origin-when-cross-origin"
         onError={(e) => {
           if (resolvedFallback && e.currentTarget.src !== resolvedFallback) {
             e.currentTarget.src = resolvedFallback;

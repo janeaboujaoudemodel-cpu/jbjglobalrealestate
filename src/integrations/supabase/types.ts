@@ -15668,37 +15668,52 @@ export type Database = {
       }
       project_documents: {
         Row: {
+          allow_download: boolean
+          cover_image_url: string | null
           created_at: string
           data_source: string | null
           display_order: number | null
+          display_title: string | null
           document_type: string
           file_name: string
           file_size: number | null
           file_url: string
           id: string
+          is_visible: boolean
           project_id: string
+          storage_path: string | null
         }
         Insert: {
+          allow_download?: boolean
+          cover_image_url?: string | null
           created_at?: string
           data_source?: string | null
           display_order?: number | null
+          display_title?: string | null
           document_type: string
           file_name: string
           file_size?: number | null
           file_url: string
           id?: string
+          is_visible?: boolean
           project_id: string
+          storage_path?: string | null
         }
         Update: {
+          allow_download?: boolean
+          cover_image_url?: string | null
           created_at?: string
           data_source?: string | null
           display_order?: number | null
+          display_title?: string | null
           document_type?: string
           file_name?: string
           file_size?: number | null
           file_url?: string
           id?: string
+          is_visible?: boolean
           project_id?: string
+          storage_path?: string | null
         }
         Relationships: [
           {
