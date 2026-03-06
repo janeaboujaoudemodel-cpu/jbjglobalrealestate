@@ -813,6 +813,20 @@ const App = () => {
                     </Suspense>
                   </OwnerGuard>
                 } />
+                <Route path="/e-signature/signature-studio" element={
+                  <OwnerGuard>
+                    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
+                      <SignatureStudio />
+                    </Suspense>
+                  </OwnerGuard>
+                } />
+                <Route path="/e-signature/contract-review" element={
+                  <OwnerGuard>
+                    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
+                      <ContractReview />
+                    </Suspense>
+                  </OwnerGuard>
+                } />
                 
                 {/* Settings redirect - prevent 404 */}
                 <Route path="/settings" element={<Navigate to="/profile?tab=settings" replace />} />
