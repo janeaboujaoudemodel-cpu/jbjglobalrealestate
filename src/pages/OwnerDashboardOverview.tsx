@@ -28,6 +28,7 @@ import {
   Briefcase,
   LayoutDashboard,
   Shield,
+  Trash2,
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 import LeadStatusBadge from "@/components/crm/LeadStatusBadge";
@@ -39,6 +40,8 @@ const EmployeesHub = lazy(() => import("@/components/crm/EmployeesHub"));
 const CRMDashboardCards = lazy(() => import("@/components/crm/CRMDashboardCards"));
 const QuickActionsGrid = lazy(() => import("@/components/owner-dashboard/QuickActionsGrid"));
 const DepartmentShortcuts = lazy(() => import("@/components/owner-dashboard/DepartmentShortcuts"));
+const IntegrationWidgets = lazy(() => import("@/components/owner-dashboard/IntegrationWidgets"));
+const RecentlyDeletedLeads = lazy(() => import("@/components/crm/RecentlyDeletedLeads"));
 const IntegrationWidgets = lazy(() => import("@/components/owner-dashboard/IntegrationWidgets"));
 
 interface KPICardProps {
@@ -542,7 +545,11 @@ export default function OwnerDashboardOverview() {
             VIP Leads
           </TabsTrigger>
           <TabsTrigger 
-            value="employees"
+            value="leads-management"
+            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black"
+          >
+            <Trash2 className="h-4 w-4 mr-2" />
+            Leads Management
             className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black"
           >
             <Briefcase className="h-4 w-4 mr-2" />
