@@ -97,9 +97,8 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
   const [incompleteCount, setIncompleteCount] = useState(0);
   // Filter: "all" | "complete" | "needs_work"
   const [statusFilter, setStatusFilter] = useState<"all" | "complete" | "needs_work">("all");
-  // Source filter: "all" | "reelly" | "provident"
-  const sourceFromUrl = searchParams.get("source") as "all" | "reelly" | "provident" | null;
-  const [sourceFilter, setSourceFilter] = useState<"all" | "reelly" | "provident">(sourceFromUrl || "all");
+  // Source filter: "all" | "reelly" (provident disabled)
+  const [sourceFilter, setSourceFilter] = useState<"all" | "reelly">("all");
   // Confirmation dialog state
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [confirmDialogMode, setConfirmDialogMode] = useState<"all" | "selected">("all");
@@ -148,10 +147,11 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
       if (sourceFilter === "reelly") {
         totalQuery = totalQuery.ilike("source_url", "%reelly%");
         needsWorkQuery = needsWorkQuery.ilike("source_url", "%reelly%");
-      } else if (sourceFilter === "provident") {
-        totalQuery = totalQuery.ilike("source_url", "%provident%");
-        needsWorkQuery = needsWorkQuery.ilike("source_url", "%provident%");
       }
+      
+      // Exclude provident sources from all views (quarantine)
+      totalQuery = totalQuery.not("source_url", "ilike", "%provident%");
+      needsWorkQuery = needsWorkQuery.not("source_url", "ilike", "%provident%");
 
       const [totalRes, needsWorkRes] = await Promise.all([totalQuery, needsWorkQuery]);
 
@@ -194,9 +194,10 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
       // Apply source filter
       if (sourceFilter === "reelly") {
         query = query.ilike("source_url", "%reelly%");
-      } else if (sourceFilter === "provident") {
-        query = query.ilike("source_url", "%provident%");
       }
+      
+      // Exclude provident sources from all views (quarantine)
+      query = query.not("source_url", "ilike", "%provident%");
 
       // Apply status filter for complete vs needs_work
       // NOTE: Documents are optional (Reelly API doesn't provide them)
@@ -1074,12 +1075,11 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
             <span className="text-sm font-medium text-foreground">Source:</span>
             <select
               value={sourceFilter}
-              onChange={(e) => setSourceFilter(e.target.value as "all" | "reelly" | "provident")}
+              onChange={(e) => setSourceFilter(e.target.value as "all" | "reelly")}
               className="text-sm border border-border rounded px-2 py-1 bg-background text-foreground"
             >
               <option value="all">All Sources</option>
               <option value="reelly">Reelly Only</option>
-              <option value="provident">Provident Only</option>
             </select>
           </div>
 

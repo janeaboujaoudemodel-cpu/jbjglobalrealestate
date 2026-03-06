@@ -19,7 +19,8 @@ import {
   Send,
   MoreVertical,
   Trash2,
-  Bell
+  Bell,
+  Upload
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -27,7 +28,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { format, formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 import { toast } from "sonner";
 
 type EnvelopeStatus = 'draft' | 'sent' | 'viewed' | 'partially_signed' | 'completed' | 'declined' | 'expired' | 'voided';
@@ -52,14 +53,14 @@ interface Envelope {
 }
 
 const statusConfig: Record<EnvelopeStatus, { label: string; color: string; icon: React.ReactNode }> = {
-  draft: { label: "Draft", color: "bg-gray-100 text-gray-700", icon: <FileSignature className="w-3 h-3" /> },
-  sent: { label: "Sent", color: "bg-blue-100 text-blue-700", icon: <Send className="w-3 h-3" /> },
-  viewed: { label: "Viewed", color: "bg-yellow-100 text-yellow-700", icon: <Eye className="w-3 h-3" /> },
-  partially_signed: { label: "Partially Signed", color: "bg-orange-100 text-orange-700", icon: <Clock className="w-3 h-3" /> },
-  completed: { label: "Completed", color: "bg-green-100 text-green-700", icon: <CheckCircle2 className="w-3 h-3" /> },
-  declined: { label: "Declined", color: "bg-red-100 text-red-700", icon: <XCircle className="w-3 h-3" /> },
-  expired: { label: "Expired", color: "bg-gray-100 text-gray-500", icon: <Clock className="w-3 h-3" /> },
-  voided: { label: "Voided", color: "bg-gray-100 text-gray-500", icon: <XCircle className="w-3 h-3" /> },
+  draft: { label: "Draft", color: "bg-amber-50 text-amber-700 border-amber-200", icon: <FileSignature className="w-3 h-3" /> },
+  sent: { label: "Sent", color: "bg-blue-50 text-blue-700 border-blue-200", icon: <Send className="w-3 h-3" /> },
+  viewed: { label: "Viewed", color: "bg-yellow-50 text-yellow-700 border-yellow-200", icon: <Eye className="w-3 h-3" /> },
+  partially_signed: { label: "Partially Signed", color: "bg-orange-50 text-orange-700 border-orange-200", icon: <Clock className="w-3 h-3" /> },
+  completed: { label: "Completed", color: "bg-emerald-50 text-emerald-700 border-emerald-200", icon: <CheckCircle2 className="w-3 h-3" /> },
+  declined: { label: "Declined", color: "bg-red-50 text-red-700 border-red-200", icon: <XCircle className="w-3 h-3" /> },
+  expired: { label: "Expired", color: "bg-zinc-100 text-zinc-500 border-zinc-200", icon: <Clock className="w-3 h-3" /> },
+  voided: { label: "Voided", color: "bg-zinc-100 text-zinc-500 border-zinc-200", icon: <XCircle className="w-3 h-3" /> },
 };
 
 export default function ESignatureDashboard() {
@@ -147,198 +148,202 @@ export default function ESignatureDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted/30 p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-              <FileSignature className="w-8 h-8 text-gold" />
-              E-Signature
-            </h1>
-            <p className="text-muted-foreground mt-1">
-              Create, send, and track documents for electronic signature
-            </p>
+    <div className="min-h-screen bg-black pt-20 lg:pt-24">
+      <div className="mx-3 md:mx-4 lg:mx-6 my-6 rounded-2xl border border-border bg-[linear-gradient(135deg,hsl(var(--champagne-1)),hsl(var(--champagne-2)),hsl(var(--champagne-3)))]">
+        <div className="max-w-7xl mx-auto p-6 space-y-6">
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+              <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-zinc-900">
+                  <FileSignature className="w-6 h-6 text-white" />
+                </div>
+                E-Signature
+              </h1>
+              <p className="text-muted-foreground mt-1">
+                Upload, sign, and track documents for electronic signature
+              </p>
+            </div>
+            <Link to="/e-signature/create">
+              <Button className="bg-gradient-to-r from-gold to-gold/80 hover:from-gold/90 hover:to-gold/70 text-white shadow-lg">
+                <Upload className="w-4 h-4 mr-2" />
+                Upload & Sign
+              </Button>
+            </Link>
           </div>
-          <Link to="/e-signature/create">
-            <Button className="bg-gold hover:bg-gold/90 text-white">
-              <Plus className="w-4 h-4 mr-2" />
-              New Envelope
-            </Button>
-          </Link>
-        </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Card 
-            className={`cursor-pointer transition-all ${statusFilter === "all" ? "ring-2 ring-gold" : ""}`}
-            onClick={() => setStatusFilter("all")}
-          >
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Total</p>
-                  <p className="text-2xl font-bold">{envelopes?.length || 0}</p>
+          {/* Stats Cards */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <Card 
+              className={`cursor-pointer transition-all border-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] ${statusFilter === "all" ? "border-gold ring-2 ring-gold/20" : "border-gold/20 hover:border-gold/40"}`}
+              onClick={() => setStatusFilter("all")}
+            >
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Total</p>
+                    <p className="text-2xl font-bold text-foreground">{envelopes?.length || 0}</p>
+                  </div>
+                  <FileSignature className="w-8 h-8 text-gold/50" />
                 </div>
-                <FileSignature className="w-8 h-8 text-gold/50" />
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card 
-            className={`cursor-pointer transition-all ${statusFilter === "draft" ? "ring-2 ring-gold" : ""}`}
-            onClick={() => setStatusFilter("draft")}
-          >
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Drafts</p>
-                  <p className="text-2xl font-bold">{stats.draft}</p>
+              </CardContent>
+            </Card>
+            
+            <Card 
+              className={`cursor-pointer transition-all border-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] ${statusFilter === "draft" ? "border-gold ring-2 ring-gold/20" : "border-gold/20 hover:border-gold/40"}`}
+              onClick={() => setStatusFilter("draft")}
+            >
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Drafts</p>
+                    <p className="text-2xl font-bold text-foreground">{stats.draft}</p>
+                  </div>
+                  <Clock className="w-8 h-8 text-amber-400" />
                 </div>
-                <Clock className="w-8 h-8 text-gray-400" />
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card 
-            className={`cursor-pointer transition-all ${statusFilter === "sent" ? "ring-2 ring-gold" : ""}`}
-            onClick={() => setStatusFilter("sent")}
-          >
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Pending</p>
-                  <p className="text-2xl font-bold">{stats.pending}</p>
+              </CardContent>
+            </Card>
+            
+            <Card 
+              className={`cursor-pointer transition-all border-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] ${statusFilter === "sent" ? "border-gold ring-2 ring-gold/20" : "border-gold/20 hover:border-gold/40"}`}
+              onClick={() => setStatusFilter("sent")}
+            >
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Pending</p>
+                    <p className="text-2xl font-bold text-foreground">{stats.pending}</p>
+                  </div>
+                  <Send className="w-8 h-8 text-blue-400" />
                 </div>
-                <Send className="w-8 h-8 text-blue-400" />
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card 
-            className={`cursor-pointer transition-all ${statusFilter === "completed" ? "ring-2 ring-gold" : ""}`}
-            onClick={() => setStatusFilter("completed")}
-          >
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Completed</p>
-                  <p className="text-2xl font-bold">{stats.completed}</p>
+              </CardContent>
+            </Card>
+            
+            <Card 
+              className={`cursor-pointer transition-all border-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] ${statusFilter === "completed" ? "border-gold ring-2 ring-gold/20" : "border-gold/20 hover:border-gold/40"}`}
+              onClick={() => setStatusFilter("completed")}
+            >
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Completed</p>
+                    <p className="text-2xl font-bold text-foreground">{stats.completed}</p>
+                  </div>
+                  <CheckCircle2 className="w-8 h-8 text-emerald-400" />
                 </div>
-                <CheckCircle2 className="w-8 h-8 text-green-400" />
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Search and Filter */}
-        <div className="flex gap-4">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input
-              placeholder="Search envelopes or recipients..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
-            />
+              </CardContent>
+            </Card>
           </div>
-        </div>
 
-        {/* Envelopes List */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Envelopes</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="space-y-4">
-                {[1, 2, 3].map((i) => (
-                  <Skeleton key={i} className="h-20 w-full" />
-                ))}
-              </div>
-            ) : filteredEnvelopes?.length === 0 ? (
-              <div className="text-center py-12">
-                <FileSignature className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                <p className="text-muted-foreground">
-                  {searchQuery || statusFilter !== "all" 
-                    ? "No envelopes match your search"
-                    : "No envelopes yet. Create your first one!"}
-                </p>
-                {!searchQuery && statusFilter === "all" && (
-                  <Link to="/e-signature/create">
-                    <Button className="mt-4 bg-gold hover:bg-gold/90">
-                      <Plus className="w-4 h-4 mr-2" />
-                      Create Envelope
-                    </Button>
-                  </Link>
-                )}
-              </div>
-            ) : (
-              <div className="divide-y">
-                {filteredEnvelopes?.map((envelope) => {
-                  const config = statusConfig[envelope.status];
-                  return (
-                    <div key={envelope.id} className="py-4 flex items-center justify-between gap-4">
-                      <div className="flex-1 min-w-0">
-                        <Link 
-                          to={`/e-signature/${envelope.id}`}
-                          className="font-medium hover:text-gold transition-colors"
-                        >
-                          {envelope.name}
-                        </Link>
-                        <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground">
-                          <span>
-                            {envelope.esign_recipients.map(r => r.name).join(", ")}
-                          </span>
-                          <span>•</span>
-                          <span>
-                            {formatDistanceToNow(new Date(envelope.created_at), { addSuffix: true })}
-                          </span>
+          {/* Search */}
+          <div className="flex gap-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search envelopes or recipients..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 bg-white/80 border-gold/20 focus:border-gold"
+              />
+            </div>
+          </div>
+
+          {/* Envelopes List */}
+          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/20">
+            <CardHeader>
+              <CardTitle className="text-foreground">Recent Documents</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {isLoading ? (
+                <div className="space-y-4">
+                  {[1, 2, 3].map((i) => (
+                    <Skeleton key={i} className="h-20 w-full" />
+                  ))}
+                </div>
+              ) : filteredEnvelopes?.length === 0 ? (
+                <div className="text-center py-12">
+                  <FileSignature className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                  <p className="text-muted-foreground">
+                    {searchQuery || statusFilter !== "all" 
+                      ? "No documents match your search"
+                      : "No documents yet. Upload your first one!"}
+                  </p>
+                  {!searchQuery && statusFilter === "all" && (
+                    <Link to="/e-signature/create">
+                      <Button className="mt-4 bg-gradient-to-r from-gold to-gold/80 hover:from-gold/90 hover:to-gold/70 text-white">
+                        <Upload className="w-4 h-4 mr-2" />
+                        Upload & Sign
+                      </Button>
+                    </Link>
+                  )}
+                </div>
+              ) : (
+                <div className="divide-y divide-gold/10">
+                  {filteredEnvelopes?.map((envelope) => {
+                    const config = statusConfig[envelope.status];
+                    return (
+                      <div key={envelope.id} className="py-4 flex items-center justify-between gap-4">
+                        <div className="flex-1 min-w-0">
+                          <Link 
+                            to={`/e-signature/${envelope.id}`}
+                            className="font-medium text-foreground hover:text-gold transition-colors"
+                          >
+                            {envelope.name}
+                          </Link>
+                          <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground">
+                            <span>
+                              {envelope.esign_recipients.map(r => r.name).join(", ")}
+                            </span>
+                            <span>•</span>
+                            <span>
+                              {formatDistanceToNow(new Date(envelope.created_at), { addSuffix: true })}
+                            </span>
+                          </div>
                         </div>
+                        
+                        <Badge className={`${config.color} border flex items-center gap-1`}>
+                          {config.icon}
+                          {config.label}
+                        </Badge>
+                        
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                              <MoreVertical className="w-4 h-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem asChild>
+                              <Link to={`/e-signature/${envelope.id}`}>
+                                <Eye className="w-4 h-4 mr-2" />
+                                View Details
+                              </Link>
+                            </DropdownMenuItem>
+                            {["sent", "viewed", "partially_signed"].includes(envelope.status) && (
+                              <DropdownMenuItem onClick={() => handleSendReminder(envelope.id)}>
+                                <Bell className="w-4 h-4 mr-2" />
+                                Send Reminder
+                              </DropdownMenuItem>
+                            )}
+                            {envelope.status === "draft" && (
+                              <DropdownMenuItem 
+                                onClick={() => handleDelete(envelope.id)}
+                                className="text-red-600"
+                              >
+                                <Trash2 className="w-4 h-4 mr-2" />
+                                Delete
+                              </DropdownMenuItem>
+                            )}
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </div>
-                      
-                      <Badge className={`${config.color} flex items-center gap-1`}>
-                        {config.icon}
-                        {config.label}
-                      </Badge>
-                      
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <MoreVertical className="w-4 h-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem asChild>
-                            <Link to={`/e-signature/${envelope.id}`}>
-                              <Eye className="w-4 h-4 mr-2" />
-                              View Details
-                            </Link>
-                          </DropdownMenuItem>
-                          {["sent", "viewed", "partially_signed"].includes(envelope.status) && (
-                            <DropdownMenuItem onClick={() => handleSendReminder(envelope.id)}>
-                              <Bell className="w-4 h-4 mr-2" />
-                              Send Reminder
-                            </DropdownMenuItem>
-                          )}
-                          {envelope.status === "draft" && (
-                            <DropdownMenuItem 
-                              onClick={() => handleDelete(envelope.id)}
-                              className="text-red-600"
-                            >
-                              <Trash2 className="w-4 h-4 mr-2" />
-                              Delete
-                            </DropdownMenuItem>
-                          )}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </CardContent>
-        </Card>
+                    );
+                  })}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );

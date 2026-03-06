@@ -114,7 +114,8 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
   const [isLoading, setIsLoading] = useState(false);
   const [urlInputs, setUrlInputs] = useState<string[]>([""]);
   const [showBulkUpload, setShowBulkUpload] = useState(false);
-  const [autoApprove, setAutoApprove] = useState(false);
+  // Auto-approve permanently disabled — manual publish only
+  const autoApprove = false;
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [isDragOver, setIsDragOver] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
