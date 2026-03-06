@@ -388,18 +388,19 @@ const ListingGenerator = () => {
       if (submitErr) throw new Error(submitErr.message || "Failed to start extraction");
       if (!submitData?.job_id) throw new Error(submitData?.error || "No job ID returned");
 
+      setCurrentJobId(submitData.job_id);
+      await syncDraftToCloud({ step: "processing", currentJobId: submitData.job_id });
       setProcessingStatus("AI is extracting project data...");
 
-      // Step 2: Poll for completion
       const result = await pollJob(submitData.job_id);
 
-      // Handle multi-project response
       const projects: ExtractedData[] = result.projects || (result.extracted ? [result.extracted] : []);
       if (projects.length === 0) throw new Error("No projects extracted");
 
       setExtractedProjects(projects);
       setActiveProjectIndex(0);
       setDuplicates(result.duplicates || []);
+      setCurrentJobId(null);
 
       if (result.duplicates?.length > 0) {
         setStep("duplicates");
