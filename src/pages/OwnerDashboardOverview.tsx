@@ -780,7 +780,7 @@ export default function OwnerDashboardOverview() {
         <TabsContent value="leads-management" className="space-y-4">
           {activeTab === "leads-management" && (
             <Suspense fallback={<Skeleton className="h-64 w-full" />}>
-              <RecentlyDeletedLeads />
+              <RecentlyDeletedLeads userId={user?.id || ""} onRefresh={handleRefresh} />
             </Suspense>
           )}
         </TabsContent>
