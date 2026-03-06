@@ -339,12 +339,14 @@ const CRM = () => {
       <CommandPalette isOpen={showCommandPalette} onClose={() => setShowCommandPalette(false)} />
 
       {/* Notifications Panel */}
-      <SmartNotifications
-        isOpen={showNotifications}
-        onClose={() => setShowNotifications(false)}
-        notifications={[]}
-        onMarkAllRead={() => {}}
-      />
+      <Suspense fallback={null}>
+        <SmartNotificationsLazy
+          isOpen={showNotifications}
+          onClose={() => setShowNotifications(false)}
+          notifications={[]}
+          onMarkAllRead={() => {}}
+        />
+      </Suspense>
       
       {/* Tools Sidebar */}
       <CRMToolsSidebar isOpen={showToolsSidebar} onClose={() => setShowToolsSidebar(false)} />
@@ -404,11 +406,13 @@ const CRM = () => {
                 <Brain className="h-4 w-4" />
               </Button>
               
-              <NotificationBell
-                count={0}
-                onClick={() => setShowNotifications(true)}
-                className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30"
-              />
+              <Suspense fallback={<div className="h-9 w-9" />}>
+                <NotificationBellLazy
+                  count={0}
+                  onClick={() => setShowNotifications(true)}
+                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30"
+                />
+              </Suspense>
               
               <div className="hidden md:flex items-center gap-1 ml-2">
                 <Button variant="ghost" size="sm" onClick={() => navigate("/crm/tasks")} className="text-black hover:text-gold hover:bg-gold/10 text-xs">
