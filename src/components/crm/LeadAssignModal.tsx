@@ -97,13 +97,16 @@ export default function LeadAssignModal({
 
       // Filter by type
       if (assigneeType === "employees") {
-        // Employees = admins, founders, owner_admin
+        // Employees = admins, founders, owner_admin, sales_director
         filtered = filtered.filter((p) =>
-          ["admin", "founder", "owner_admin"].includes(p.crm_role)
+          ["admin", "founder", "owner_admin", "sales_director"].includes(p.crm_role)
         );
       } else {
-        // Brokers = broker_member
-        filtered = filtered.filter((p) => p.crm_role === "broker_member");
+        // Brokers = broker_member, sales_director, and any other non-admin roles
+        filtered = filtered.filter((p) =>
+          ["broker_member", "sales_director"].includes(p.crm_role) ||
+          !["admin", "founder", "owner_admin"].includes(p.crm_role)
+        );
       }
 
       setPeople(filtered);
@@ -163,6 +166,20 @@ export default function LeadAssignModal({
       toast.success(
         `Assigned ${leadIds.length} lead(s) to ${selectedPerson.display_name || "selected person"}`
       );
+
+      // Send notification to the assigned user
+      try {
+        await supabase.from("user_notifications").insert({
+          user_id: selectedPerson.user_id,
+          title: "New Lead Assignment",
+          message: `You have been assigned ${leadIds.length} new lead(s). Please follow up promptly.`,
+          type: "lead_assignment",
+          is_read: false,
+        });
+      } catch (notifErr) {
+        console.warn("Failed to send assignment notification:", notifErr);
+      }
+
       onSuccess();
       onClose();
     } catch (err: any) {

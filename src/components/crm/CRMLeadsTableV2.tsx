@@ -247,21 +247,24 @@ export default function CRMLeadsTableV2({
   };
 
   const handleWhatsApp = async (lead: Lead) => {
-    if (!lead.phone_e164) { toast.error("No phone number available"); return; }
-    const phone = lead.phone_e164.replace("+", "");
-    window.open(`https://wa.me/${phone}`, '_blank');
+    const phone = lead.phone_e164 || (lead as any).phone;
+    if (!phone) { toast.error("No phone number available"); return; }
+    const cleanPhone = phone.replace(/[^0-9]/g, "");
+    window.open(`https://wa.me/${cleanPhone}`, '_blank');
   };
 
   const handleCall = (lead: Lead) => {
-    if (!lead.phone_e164) { toast.error("No phone number available"); return; }
-    window.location.href = `tel:${lead.phone_e164}`;
+    const phone = lead.phone_e164 || (lead as any).phone;
+    if (!phone) { toast.error("No phone number available"); return; }
+    window.location.href = `tel:${phone}`;
   };
 
   const handleEmail = (lead: Lead) => {
-    if (!lead.email_lower) { toast.error("No email available"); return; }
+    const email = lead.email_lower || (lead as any).email;
+    if (!email) { toast.error("No email available"); return; }
     const subject = encodeURIComponent("Follow-up from JBJ Global Real Estate");
     const body = encodeURIComponent(`Dear ${lead.full_name || "Valued Client"},\n\nThank you for your interest in JBJ Global Real Estate.\n\nBest regards,\nJBJ Global Real Estate`);
-    window.location.href = `mailto:${lead.email_lower}?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
   };
 
   const openDeleteDialog = (lead: Lead) => {
