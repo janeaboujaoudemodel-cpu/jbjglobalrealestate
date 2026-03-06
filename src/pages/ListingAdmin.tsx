@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useListingAdmin } from "@/hooks/useListingAdmin";
-import { useProjects, useProjectsCount, useProjectsPaginated, useDevelopers, useCommunities } from "@/hooks/useProjects";
+import { useProjectsCount, useProjectsTotalCount, useProjectsPaginated, useDevelopers, useCommunities } from "@/hooks/useProjects";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -74,8 +74,8 @@ const ListingAdmin = () => {
   const { t } = useLanguage();
   const { isListingAdmin, adminData, isLoading: checkingAdmin } = useListingAdmin();
 
-  // Owner is now verified via AuthContext - no need for separate role check
-  const { data: totalCount } = useProjectsCount();
+  const { data: totalCount } = useProjectsCount(); // published only
+  const { data: allProjectsCount } = useProjectsTotalCount(); // all including unpublished
   const [projectsPage, setProjectsPage] = useState(0);
   const { data: paginatedProjects, refetch: refetchProjects } = useProjectsPaginated(projectsPage, 50);
   const { data: developers } = useDevelopers();
