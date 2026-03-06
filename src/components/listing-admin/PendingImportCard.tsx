@@ -529,10 +529,10 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
                   size="sm"
                   disabled={isRepairing}
                   onClick={handleRepair}
-                  className="gap-1 px-3 font-medium border border-amber-400 text-amber-700 hover:bg-amber-50"
+                  className="gap-1 px-2 font-medium border border-amber-400 text-amber-700 hover:bg-amber-50 text-xs whitespace-nowrap"
                 >
-                  {isRepairing ? <RefreshCw className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
-                  Repair
+                  {isRepairing ? <RefreshCw className="h-3.5 w-3.5 animate-spin" /> : <RefreshCw className="h-3.5 w-3.5" />}
+                  Fix
                 </Button>
               )}
 
@@ -544,9 +544,9 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
                   e.stopPropagation();
                   onReview();
                 }}
-                className="gap-2 px-4 font-medium"
+                className="gap-1.5 px-3 font-medium text-xs whitespace-nowrap"
               >
-                <ExternalLink className="h-4 w-4" />
+                <Eye className="h-3.5 w-3.5 flex-shrink-0" />
                 Review
               </Button>
             </div>
