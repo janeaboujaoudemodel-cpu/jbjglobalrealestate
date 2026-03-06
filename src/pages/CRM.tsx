@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -11,34 +11,44 @@ import { toast } from "sonner";
 import { 
   Users, FileText, Plus, Upload, Download, LogOut, Shuffle, LayoutGrid, List, Zap, Briefcase, PanelLeftOpen, PanelLeftClose, Crown, Flag, CheckSquare, Calendar, Search, Bell, Settings, Brain
 } from "lucide-react";
-import CRMLeadsTableV2 from "@/components/crm/CRMLeadsTableV2";
-import CRMEnhancedDashboard from "@/components/crm/CRMEnhancedDashboard";
-import CRMImportModalV3 from "@/components/crm/CRMImportModalV3";
-import DeleteImportButton from "@/components/crm/DeleteImportButton";
-import CRMLeadModal from "@/components/crm/CRMLeadModal";
-import LeadQuickFilters from "@/components/crm/LeadQuickFilters";
-import LeadSourceFilter from "@/components/crm/LeadSourceFilter";
-import BulkAssignModal from "@/components/crm/BulkAssignModal";
-import SmartReminders from "@/components/crm/SmartReminders";
-import KanbanPipeline from "@/components/crm/KanbanPipeline";
-import ActivityTimeline from "@/components/crm/ActivityTimeline";
-import DealValueTracker from "@/components/crm/DealValueTracker";
-import AutomationRules from "@/components/crm/AutomationRules";
-import EmployeeCenter from "@/components/crm/EmployeeCenter";
-import EmployeesHub from "@/components/crm/EmployeesHub";
-import CRMToolsSidebar from "@/components/crm/CRMToolsSidebar";
-import FlaggedLeadsView from "@/components/crm/FlaggedLeadsView";
 import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
-import RecentlyDeletedLeads from "@/components/crm/RecentlyDeletedLeads";
-import VIPExportButton from "@/components/crm/VIPExportButton";
-import CRMAssistantPanel from "@/components/crm/CRMAssistantPanel";
-import CRMCommunicationPanel from "@/components/crm/CRMCommunicationPanel";
-import { ForcePasswordChange } from "@/components/auth/ForcePasswordChange";
 import { useForcePasswordChange } from "@/hooks/useForcePasswordChange";
+import { ForcePasswordChange } from "@/components/auth/ForcePasswordChange";
 import { CommandPalette } from "@/components/ui/command-palette";
 import { FloatingActionBar } from "@/components/ui/floating-action-bar";
-import AIInsightsPanel from "@/components/ui/ai-insights-panel";
-import { SmartNotifications, NotificationBell } from "@/components/ui/smart-notifications";
+
+// Lazy-load heavy sub-components for performance
+const CRMLeadsTableV2 = lazy(() => import("@/components/crm/CRMLeadsTableV2"));
+const CRMEnhancedDashboard = lazy(() => import("@/components/crm/CRMEnhancedDashboard"));
+const CRMImportModalV3 = lazy(() => import("@/components/crm/CRMImportModalV3"));
+const DeleteImportButton = lazy(() => import("@/components/crm/DeleteImportButton"));
+const CRMLeadModal = lazy(() => import("@/components/crm/CRMLeadModal"));
+const LeadQuickFilters = lazy(() => import("@/components/crm/LeadQuickFilters"));
+const LeadSourceFilter = lazy(() => import("@/components/crm/LeadSourceFilter"));
+const BulkAssignModal = lazy(() => import("@/components/crm/BulkAssignModal"));
+const SmartReminders = lazy(() => import("@/components/crm/SmartReminders"));
+const KanbanPipeline = lazy(() => import("@/components/crm/KanbanPipeline"));
+const ActivityTimeline = lazy(() => import("@/components/crm/ActivityTimeline"));
+const DealValueTracker = lazy(() => import("@/components/crm/DealValueTracker"));
+const AutomationRules = lazy(() => import("@/components/crm/AutomationRules"));
+const EmployeeCenter = lazy(() => import("@/components/crm/EmployeeCenter"));
+const EmployeesHub = lazy(() => import("@/components/crm/EmployeesHub"));
+const CRMToolsSidebar = lazy(() => import("@/components/crm/CRMToolsSidebar"));
+const FlaggedLeadsView = lazy(() => import("@/components/crm/FlaggedLeadsView"));
+const RecentlyDeletedLeads = lazy(() => import("@/components/crm/RecentlyDeletedLeads"));
+const VIPExportButton = lazy(() => import("@/components/crm/VIPExportButton"));
+const CRMAssistantPanel = lazy(() => import("@/components/crm/CRMAssistantPanel"));
+const CRMCommunicationPanel = lazy(() => import("@/components/crm/CRMCommunicationPanel"));
+const AIInsightsPanel = lazy(() => import("@/components/ui/ai-insights-panel"));
+const SmartNotificationsLazy = lazy(() => import("@/components/ui/smart-notifications").then(m => ({ default: m.SmartNotifications })));
+const NotificationBellLazy = lazy(() => import("@/components/ui/smart-notifications").then(m => ({ default: m.NotificationBell })));
+
+const CRMTabFallback = () => (
+  <div className="space-y-4 p-4">
+    <Skeleton className="h-12 w-full" />
+    <Skeleton className="h-64 w-full" />
+  </div>
+);
 
 interface CRMProfile {
   id: string;
@@ -329,15 +339,19 @@ const CRM = () => {
       <CommandPalette isOpen={showCommandPalette} onClose={() => setShowCommandPalette(false)} />
 
       {/* Notifications Panel */}
-      <SmartNotifications
-        isOpen={showNotifications}
-        onClose={() => setShowNotifications(false)}
-        notifications={[]}
-        onMarkAllRead={() => {}}
-      />
+      <Suspense fallback={null}>
+        <SmartNotificationsLazy
+          isOpen={showNotifications}
+          onClose={() => setShowNotifications(false)}
+          notifications={[]}
+          onMarkAllRead={() => {}}
+        />
+      </Suspense>
       
       {/* Tools Sidebar */}
-      <CRMToolsSidebar isOpen={showToolsSidebar} onClose={() => setShowToolsSidebar(false)} />
+      <Suspense fallback={null}>
+        <CRMToolsSidebar isOpen={showToolsSidebar} onClose={() => setShowToolsSidebar(false)} />
+      </Suspense>
 
       {/* Premium Header - Champagne with Gold border */}
       <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-20 lg:top-24 z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
@@ -394,11 +408,13 @@ const CRM = () => {
                 <Brain className="h-4 w-4" />
               </Button>
               
-              <NotificationBell
-                count={0}
-                onClick={() => setShowNotifications(true)}
-                className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30"
-              />
+              <Suspense fallback={<div className="h-9 w-9" />}>
+                <NotificationBellLazy
+                  count={0}
+                  onClick={() => setShowNotifications(true)}
+                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30"
+                />
+              </Suspense>
               
               <div className="hidden md:flex items-center gap-1 ml-2">
                 <Button variant="ghost" size="sm" onClick={() => navigate("/crm/tasks")} className="text-black hover:text-gold hover:bg-gold/10 text-xs">
@@ -443,6 +459,7 @@ const CRM = () => {
                   <Card className="overflow-hidden border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
                     <CardContent className="p-0">
                       <div className="h-[280px]">
+                        <Suspense fallback={<Skeleton className="h-full w-full" />}>
                         <AIInsightsPanel
                           className="h-full"
                           insights={aiInsights}
@@ -450,13 +467,16 @@ const CRM = () => {
                           onRefresh={() => toast.info("Refreshing AI insights...")}
                           onToggleCollapse={() => setShowAIInsights(false)}
                         />
+                        </Suspense>
                       </div>
                     </CardContent>
                   </Card>
                 )}
                 
                 {/* Smart Reminders */}
+                <Suspense fallback={<Skeleton className="h-16 w-full" />}>
                 <SmartReminders userId={user?.id || ""} limit={3} />
+                </Suspense>
                 
                 {/* Smart Automations */}
                 <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_8px_30px_rgba(200,167,102,0.2)]">
@@ -473,7 +493,9 @@ const CRM = () => {
                   </CardHeader>
                   <CardContent className="p-0">
                     <div className="max-h-[220px] overflow-y-auto">
-                      <AutomationRules userId={user?.id || ""} isOwner={isCRMOwner} />
+                       <Suspense fallback={<Skeleton className="h-16 w-full" />}>
+                       <AutomationRules userId={user?.id || ""} isOwner={isCRMOwner} />
+                       </Suspense>
                     </div>
                   </CardContent>
                 </Card>
@@ -481,11 +503,15 @@ const CRM = () => {
               
               {/* Team Communication - Full Width Edge-to-Edge */}
               <div className="w-full">
+                <Suspense fallback={<Skeleton className="h-24 w-full" />}>
                 <CRMCommunicationPanel />
+                </Suspense>
               </div>
               
               {/* Activity Timeline - Full Width */}
+              <Suspense fallback={<Skeleton className="h-24 w-full" />}>
               <ActivityTimeline userId={user?.id || ""} limit={8} />
+              </Suspense>
               
               {/* Leads Update Section with shortcuts */}
               <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
@@ -543,9 +569,9 @@ const CRM = () => {
                       <Users className="h-4 w-4 mr-1.5" />
                       Assistant
                     </Button>
-                    {isCRMOwner && <VIPExportButton />}
+                    {isCRMOwner && <Suspense fallback={null}><VIPExportButton /></Suspense>}
                     {isCRMOwner && (
-                      <DeleteImportButton userId={user?.id || ""} onSuccess={handleRefresh} hasOwnerAccess={isCRMOwner} />
+                      <Suspense fallback={null}><DeleteImportButton userId={user?.id || ""} onSuccess={handleRefresh} hasOwnerAccess={isCRMOwner} /></Suspense>
                     )}
                   </div>
                 </CardContent>
@@ -618,6 +644,7 @@ const CRM = () => {
 
               <TabsContent value="all" className="space-y-4">
                 {activeTab === "all" && (
+                  <Suspense fallback={<CRMTabFallback />}>
                   <CRMLeadsTableV2 
                     key={refreshKey}
                     userId={user?.id || ""} 
@@ -625,21 +652,25 @@ const CRM = () => {
                     onRefresh={handleRefresh}
                     isOwner={isCRMOwner}
                   />
+                  </Suspense>
                 )}
               </TabsContent>
 
               <TabsContent value="flagged">
                 {activeTab === "flagged" && (
+                  <Suspense fallback={<CRMTabFallback />}>
                   <FlaggedLeadsView 
                     key={refreshKey}
                     userId={user?.id || ""} 
                     onRefresh={handleRefresh}
                   />
+                  </Suspense>
                 )}
               </TabsContent>
 
               <TabsContent value="vip">
                 {activeTab === "vip" && (
+                  <Suspense fallback={<CRMTabFallback />}>
                   <CRMLeadsTableV2 
                     key={refreshKey}
                     userId={user?.id || ""} 
@@ -647,18 +678,23 @@ const CRM = () => {
                     onRefresh={handleRefresh}
                     isOwner={isCRMOwner}
                   />
+                  </Suspense>
                 )}
               </TabsContent>
 
               <TabsContent value="management">
                 {activeTab === "management" && (
+                  <Suspense fallback={<CRMTabFallback />}>
                   <RecentlyDeletedLeads userId={user?.id || ""} onRefresh={handleRefresh} />
+                  </Suspense>
                 )}
               </TabsContent>
 
               <TabsContent value="employees">
                 {activeTab === "employees" && (
+                  <Suspense fallback={<CRMTabFallback />}>
                   <EmployeesHub userId={user?.id || ""} />
+                  </Suspense>
                 )}
               </TabsContent>
             </Tabs>
@@ -668,41 +704,43 @@ const CRM = () => {
         <FloatingActionBar />
 
         {/* Modals */}
-        <CRMImportModalV3
-          open={showImportModal}
-          onClose={() => setShowImportModal(false)}
-          onSuccess={() => {
-            setShowImportModal(false);
-            handleRefresh();
-          }}
-          userId={user?.id || ""}
-        />
+        <Suspense fallback={null}>
+          <CRMImportModalV3
+            open={showImportModal}
+            onClose={() => setShowImportModal(false)}
+            onSuccess={() => {
+              setShowImportModal(false);
+              handleRefresh();
+            }}
+            userId={user?.id || ""}
+          />
 
-        <CRMLeadModal
-          open={showLeadModal}
-          onClose={() => setShowLeadModal(false)}
-          onSuccess={() => {
-            setShowLeadModal(false);
-            handleRefresh();
-          }}
-          userId={user?.id || ""}
-        />
+          <CRMLeadModal
+            open={showLeadModal}
+            onClose={() => setShowLeadModal(false)}
+            onSuccess={() => {
+              setShowLeadModal(false);
+              handleRefresh();
+            }}
+            userId={user?.id || ""}
+          />
 
-        <BulkAssignModal
-          open={showBulkAssignModal}
-          onClose={() => setShowBulkAssignModal(false)}
-          onSuccess={() => {
-            setShowBulkAssignModal(false);
-            handleRefresh();
-          }}
-          selectedLeadIds={[]}
-        />
+          <BulkAssignModal
+            open={showBulkAssignModal}
+            onClose={() => setShowBulkAssignModal(false)}
+            onSuccess={() => {
+              setShowBulkAssignModal(false);
+              handleRefresh();
+            }}
+            selectedLeadIds={[]}
+          />
 
-        <CRMAssistantPanel 
-          userId={user?.id || ""}
-          isOpen={showAssistantPanel}
-          onClose={() => setShowAssistantPanel(false)}
-        />
+          <CRMAssistantPanel 
+            userId={user?.id || ""}
+            isOpen={showAssistantPanel}
+            onClose={() => setShowAssistantPanel(false)}
+          />
+        </Suspense>
       </div>
     </div>
   );
