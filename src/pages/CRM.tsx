@@ -457,6 +457,7 @@ const CRM = () => {
                   <Card className="overflow-hidden border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
                     <CardContent className="p-0">
                       <div className="h-[280px]">
+                        <Suspense fallback={<Skeleton className="h-full w-full" />}>
                         <AIInsightsPanel
                           className="h-full"
                           insights={aiInsights}
@@ -464,13 +465,16 @@ const CRM = () => {
                           onRefresh={() => toast.info("Refreshing AI insights...")}
                           onToggleCollapse={() => setShowAIInsights(false)}
                         />
+                        </Suspense>
                       </div>
                     </CardContent>
                   </Card>
                 )}
                 
                 {/* Smart Reminders */}
+                <Suspense fallback={<Skeleton className="h-16 w-full" />}>
                 <SmartReminders userId={user?.id || ""} limit={3} />
+                </Suspense>
                 
                 {/* Smart Automations */}
                 <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_8px_30px_rgba(200,167,102,0.2)]">
@@ -487,7 +491,9 @@ const CRM = () => {
                   </CardHeader>
                   <CardContent className="p-0">
                     <div className="max-h-[220px] overflow-y-auto">
-                      <AutomationRules userId={user?.id || ""} isOwner={isCRMOwner} />
+                       <Suspense fallback={<Skeleton className="h-16 w-full" />}>
+                       <AutomationRules userId={user?.id || ""} isOwner={isCRMOwner} />
+                       </Suspense>
                     </div>
                   </CardContent>
                 </Card>
@@ -495,11 +501,15 @@ const CRM = () => {
               
               {/* Team Communication - Full Width Edge-to-Edge */}
               <div className="w-full">
+                <Suspense fallback={<Skeleton className="h-24 w-full" />}>
                 <CRMCommunicationPanel />
+                </Suspense>
               </div>
               
               {/* Activity Timeline - Full Width */}
+              <Suspense fallback={<Skeleton className="h-24 w-full" />}>
               <ActivityTimeline userId={user?.id || ""} limit={8} />
+              </Suspense>
               
               {/* Leads Update Section with shortcuts */}
               <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
@@ -557,9 +567,9 @@ const CRM = () => {
                       <Users className="h-4 w-4 mr-1.5" />
                       Assistant
                     </Button>
-                    {isCRMOwner && <VIPExportButton />}
+                    {isCRMOwner && <Suspense fallback={null}><VIPExportButton /></Suspense>}
                     {isCRMOwner && (
-                      <DeleteImportButton userId={user?.id || ""} onSuccess={handleRefresh} hasOwnerAccess={isCRMOwner} />
+                      <Suspense fallback={null}><DeleteImportButton userId={user?.id || ""} onSuccess={handleRefresh} hasOwnerAccess={isCRMOwner} /></Suspense>
                     )}
                   </div>
                 </CardContent>
@@ -632,6 +642,7 @@ const CRM = () => {
 
               <TabsContent value="all" className="space-y-4">
                 {activeTab === "all" && (
+                  <Suspense fallback={<CRMTabFallback />}>
                   <CRMLeadsTableV2 
                     key={refreshKey}
                     userId={user?.id || ""} 
@@ -639,21 +650,25 @@ const CRM = () => {
                     onRefresh={handleRefresh}
                     isOwner={isCRMOwner}
                   />
+                  </Suspense>
                 )}
               </TabsContent>
 
               <TabsContent value="flagged">
                 {activeTab === "flagged" && (
+                  <Suspense fallback={<CRMTabFallback />}>
                   <FlaggedLeadsView 
                     key={refreshKey}
                     userId={user?.id || ""} 
                     onRefresh={handleRefresh}
                   />
+                  </Suspense>
                 )}
               </TabsContent>
 
               <TabsContent value="vip">
                 {activeTab === "vip" && (
+                  <Suspense fallback={<CRMTabFallback />}>
                   <CRMLeadsTableV2 
                     key={refreshKey}
                     userId={user?.id || ""} 
@@ -661,18 +676,23 @@ const CRM = () => {
                     onRefresh={handleRefresh}
                     isOwner={isCRMOwner}
                   />
+                  </Suspense>
                 )}
               </TabsContent>
 
               <TabsContent value="management">
                 {activeTab === "management" && (
+                  <Suspense fallback={<CRMTabFallback />}>
                   <RecentlyDeletedLeads userId={user?.id || ""} onRefresh={handleRefresh} />
+                  </Suspense>
                 )}
               </TabsContent>
 
               <TabsContent value="employees">
                 {activeTab === "employees" && (
+                  <Suspense fallback={<CRMTabFallback />}>
                   <EmployeesHub userId={user?.id || ""} />
+                  </Suspense>
                 )}
               </TabsContent>
             </Tabs>
@@ -682,41 +702,43 @@ const CRM = () => {
         <FloatingActionBar />
 
         {/* Modals */}
-        <CRMImportModalV3
-          open={showImportModal}
-          onClose={() => setShowImportModal(false)}
-          onSuccess={() => {
-            setShowImportModal(false);
-            handleRefresh();
-          }}
-          userId={user?.id || ""}
-        />
+        <Suspense fallback={null}>
+          <CRMImportModalV3
+            open={showImportModal}
+            onClose={() => setShowImportModal(false)}
+            onSuccess={() => {
+              setShowImportModal(false);
+              handleRefresh();
+            }}
+            userId={user?.id || ""}
+          />
 
-        <CRMLeadModal
-          open={showLeadModal}
-          onClose={() => setShowLeadModal(false)}
-          onSuccess={() => {
-            setShowLeadModal(false);
-            handleRefresh();
-          }}
-          userId={user?.id || ""}
-        />
+          <CRMLeadModal
+            open={showLeadModal}
+            onClose={() => setShowLeadModal(false)}
+            onSuccess={() => {
+              setShowLeadModal(false);
+              handleRefresh();
+            }}
+            userId={user?.id || ""}
+          />
 
-        <BulkAssignModal
-          open={showBulkAssignModal}
-          onClose={() => setShowBulkAssignModal(false)}
-          onSuccess={() => {
-            setShowBulkAssignModal(false);
-            handleRefresh();
-          }}
-          selectedLeadIds={[]}
-        />
+          <BulkAssignModal
+            open={showBulkAssignModal}
+            onClose={() => setShowBulkAssignModal(false)}
+            onSuccess={() => {
+              setShowBulkAssignModal(false);
+              handleRefresh();
+            }}
+            selectedLeadIds={[]}
+          />
 
-        <CRMAssistantPanel 
-          userId={user?.id || ""}
-          isOpen={showAssistantPanel}
-          onClose={() => setShowAssistantPanel(false)}
-        />
+          <CRMAssistantPanel 
+            userId={user?.id || ""}
+            isOpen={showAssistantPanel}
+            onClose={() => setShowAssistantPanel(false)}
+          />
+        </Suspense>
       </div>
     </div>
   );
