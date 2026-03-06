@@ -70,16 +70,59 @@ interface DuplicateMatch {
 
 type Step = "input" | "processing" | "duplicates" | "preview";
 
+const STORAGE_KEY = "jbj_listing_generator_state";
+
+interface PersistedState {
+  step: Step;
+  url: string;
+  description: string;
+  extractedProjects: ExtractedData[];
+  activeProjectIndex: number;
+  duplicates: DuplicateMatch[];
+  filesMeta: { id: string; name: string; mimeType: string; base64: string }[];
+  savedAt: number;
+}
+
+function loadPersistedState(): Partial<PersistedState> | null {
+  try {
+    const raw = sessionStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const parsed: PersistedState = JSON.parse(raw);
+    // Expire after 2 hours
+    if (Date.now() - parsed.savedAt > 2 * 60 * 60 * 1000) {
+      sessionStorage.removeItem(STORAGE_KEY);
+      return null;
+    }
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+function savePersistedState(state: Omit<PersistedState, "savedAt">) {
+  try {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ ...state, savedAt: Date.now() }));
+  } catch {
+    // sessionStorage full or unavailable
+  }
+}
+
+function clearPersistedState() {
+  try { sessionStorage.removeItem(STORAGE_KEY); } catch {}
+}
+
 const ListingGenerator = () => {
-  const [step, setStep] = useState<Step>("input");
+  const persisted = useRef(loadPersistedState());
+
+  const [step, setStep] = useState<Step>(persisted.current?.step === "processing" ? "input" : persisted.current?.step || "input");
   const [files, setFiles] = useState<UploadedFile[]>([]);
-  const [url, setUrl] = useState("");
-  const [description, setDescription] = useState("");
+  const [url, setUrl] = useState(persisted.current?.url || "");
+  const [description, setDescription] = useState(persisted.current?.description || "");
   const [isProcessing, setIsProcessing] = useState(false);
   const [processingStatus, setProcessingStatus] = useState("");
-  const [extractedProjects, setExtractedProjects] = useState<ExtractedData[]>([]);
-  const [activeProjectIndex, setActiveProjectIndex] = useState(0);
-  const [duplicates, setDuplicates] = useState<DuplicateMatch[]>([]);
+  const [extractedProjects, setExtractedProjects] = useState<ExtractedData[]>(persisted.current?.extractedProjects || []);
+  const [activeProjectIndex, setActiveProjectIndex] = useState(persisted.current?.activeProjectIndex || 0);
+  const [duplicates, setDuplicates] = useState<DuplicateMatch[]>(persisted.current?.duplicates || []);
   const [showDuplicateDialog, setShowDuplicateDialog] = useState(false);
   const [duplicateProjectIndex, setDuplicateProjectIndex] = useState(0);
   const [isSaving, setIsSaving] = useState(false);
@@ -91,6 +134,44 @@ const ListingGenerator = () => {
   const dragCounter = useRef(0);
   const [isDragOver, setIsDragOver] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval>>();
+
+  // Restore files from persisted base64 data on mount
+  useEffect(() => {
+    const p = persisted.current;
+    if (p?.filesMeta?.length) {
+      const restored: UploadedFile[] = p.filesMeta.map((fm) => {
+        // Reconstruct a minimal UploadedFile (no File object, but base64 is preserved for re-submission)
+        return {
+          id: fm.id,
+          file: new File([], fm.name), // placeholder — actual upload uses base64
+          name: fm.name,
+          mimeType: fm.mimeType,
+          base64: fm.base64,
+        };
+      });
+      setFiles(restored);
+    }
+  }, []);
+
+  // Persist state on every meaningful change
+  useEffect(() => {
+    if (step === "processing") return; // don't persist mid-processing
+    const filesMeta = files.map((f) => ({
+      id: f.id,
+      name: f.name,
+      mimeType: f.mimeType,
+      base64: f.base64 || "",
+    }));
+    savePersistedState({
+      step,
+      url,
+      description,
+      extractedProjects,
+      activeProjectIndex,
+      duplicates,
+      filesMeta,
+    });
+  }, [step, url, description, extractedProjects, activeProjectIndex, duplicates, files]);
 
   // Drag & drop handlers
   const handleDragEnter = useCallback((e: React.DragEvent) => {
