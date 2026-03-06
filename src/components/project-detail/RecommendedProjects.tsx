@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Sparkles, ChevronRight, CreditCard } from "lucide-react";
-import { useProjects } from "@/hooks/useProjects";
+import { useProjectsListing } from "@/hooks/useProjects";
 import { SafeImage } from "@/components/SafeImage";
 import { DeveloperLink } from "@/components/ui/developer-link";
 import { useMemo } from "react";
@@ -20,7 +20,7 @@ export default function RecommendedProjects({
   currentLocation,
   currentEmirate,
 }: RecommendedProjectsProps) {
-  const { data: projects } = useProjects();
+  const { data: projects } = useProjectsListing();
   const { formatPrice } = useCurrency();
 
   const recommendedProjects = useMemo(() => {
@@ -98,9 +98,10 @@ export default function RecommendedProjects({
                 {/* Image */}
                 <div className="aspect-[16/10] overflow-hidden relative flex-shrink-0">
                   <SafeImage
-                    src={project.images?.[0]?.image_url || (project as any).cover_image_url}
+                    src={(project as any).cover_image_url || project.images?.[0]?.image_url}
                     alt={project.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="eager"
                   />
 
                   {/* Top Badges Row — sale status + recommended only */}
