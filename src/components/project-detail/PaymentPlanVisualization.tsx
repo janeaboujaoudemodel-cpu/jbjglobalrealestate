@@ -15,6 +15,7 @@ interface PaymentPlanVisualizationProps {
   downPaymentPercent?: number | null;
   projectName: string;
   postHandoverYears?: number | null;
+  onRegisterInterest?: () => void;
 }
 
 export default function PaymentPlanVisualization({
@@ -24,6 +25,7 @@ export default function PaymentPlanVisualization({
   downPaymentPercent,
   projectName,
   postHandoverYears,
+  onRegisterInterest,
 }: PaymentPlanVisualizationProps) {
   const parsePaymentPlan = (plan?: string | null): { booking: number; construction: number; handover: number } | null => {
     if (!plan) return null;
@@ -247,12 +249,23 @@ export default function PaymentPlanVisualization({
           )}
 
           {milestones.length === 0 && !paymentPlan && (
-            <div className="p-6 rounded-xl border border-gold/30 bg-gradient-to-br from-gold/5 to-gold/10 text-center">
-              <div className="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center mx-auto mb-4 ring-4 ring-gold/10">
-                <CreditCard className="w-8 h-8 text-gold" />
+            <div className="p-8 rounded-xl border-2 border-dashed border-gold/40 bg-gradient-to-br from-gold/5 via-transparent to-gold/10 text-center">
+              <div className="w-20 h-20 rounded-full bg-gold/15 flex items-center justify-center mx-auto mb-5 ring-4 ring-gold/10">
+                <CreditCard className="w-10 h-10 text-gold" />
               </div>
-              <p className="text-lg font-semibold text-foreground mb-2">Payment Plan Available</p>
-              <p className="text-sm text-muted-foreground mb-4">Contact us to receive the full payment plan details for {projectName}</p>
+              <p className="text-xl font-semibold text-foreground mb-2">Payment Plan Details</p>
+              <p className="text-sm text-muted-foreground mb-6 max-w-md mx-auto">
+                Register your interest to receive the exclusive payment plan details for {projectName} directly from our team.
+              </p>
+              {onRegisterInterest && (
+                <button
+                  onClick={onRegisterInterest}
+                  className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-gradient-to-r from-gold to-amber-600 text-white font-semibold text-sm shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
+                >
+                  <CreditCard className="w-4 h-4" />
+                  Register Your Interest
+                </button>
+              )}
             </div>
           )}
 
