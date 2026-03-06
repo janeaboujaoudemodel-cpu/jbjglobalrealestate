@@ -522,8 +522,8 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
             </div>
 
             <div className="flex items-center gap-2">
-              {/* Repair button for incomplete items */}
-              {isIncomplete && (
+              {/* Repair button - only for URL-based imports, not manual uploads */}
+              {isIncomplete && item.source_url && !item.source_url.includes("file-upload") && item.source_url.startsWith("http") && (
                 <Button
                   variant="secondary"
                   size="sm"

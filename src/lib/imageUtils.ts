@@ -38,6 +38,24 @@ const SITE_ASSET_PATTERNS = [
   /analytics/i,
 ];
 
+// Broker-kit / non-photo assets that should NEVER appear in gallery
+const BROKER_KIT_PATTERNS = [
+  /fact[-_]?sheet/i,
+  /brand[-_]?guideline/i,
+  /broker[-_]?kit/i,
+  /about[-_.](?:city|developer|us)/i,
+  /about\.webp$/i,
+  /material\.webp$/i,
+  /film\.webp$/i,
+  /book\.webp$/i,
+  /company[-_]?profile/i,
+  /credential/i,
+  /certificate/i,
+  /award/i,
+  /team[-_]?photo/i,
+  /staff[-_]?photo/i,
+];
+
 // Document patterns - these are PDFs/docs, not gallery images
 const DOCUMENT_PATTERNS = [
   /general_brochure/i,
@@ -121,6 +139,11 @@ export function isValidImageUrl(url: unknown): url is string {
   
   // Check for site asset patterns (only for untrusted domains)
   for (const pattern of SITE_ASSET_PATTERNS) {
+    if (pattern.test(effectiveUrl)) return false;
+  }
+  
+  // Check for broker-kit / non-photo assets (applies to all domains)
+  for (const pattern of BROKER_KIT_PATTERNS) {
     if (pattern.test(effectiveUrl)) return false;
   }
   
