@@ -1,73 +1,41 @@
 
 
-## Issues Identified
+## Plan: Fix All Email Issues Across All Templates
 
-### 1. Sarah extraction is extremely slow (5 links = timeout)
-The edge function `extract-listing-from-link` processes URLs **sequentially** in a `for` loop (line 357). Each URL requires: Firecrawl scrape (~8s), Gemini Pro AI extraction (~5-10s), document download/storage, and geocoding. For 5 URLs, that's 60-90 seconds total -- well beyond edge function timeout limits (typically 60s).
+### Problems Identified
 
-### 2. Developer name missing on project detail pages
-62 published projects have `developer_name` set (e.g., "Dar Global" for Trump International Resort) but `developer_id` is NULL, so the `developer:developers(...)` join returns nothing. The detail page only reads from the join result, ignoring the `developer_name` column entirely.
+1. **Recommended For You icons disappeared** — Inline SVGs are stripped by Gmail and most email clients. Must revert to hosted PNG images (`ai-tools.png`, `guides.png`, `properties.png` already exist in `public/email-icons/`).
 
----
+2. **Social media footer icons not rendering** — Same issue: `socialLinksFooter()` loads external `.svg` files via `<img>` tags, but Gmail blocks SVG images entirely. Must switch to hosted `.png` files. Currently missing `social-facebook.png` — need to confirm or create it.
 
-## Implementation Plan
+3. **Email split into multiple visual cards** — Several sub-sections (`ticketSupportEmbed`, `readyToGetStartedHtml`, `recommendedActionsHtml`) each have their own `border`, `border-radius`, and `background` styles creating distinct visual boxes. These need to be softened so they sit seamlessly inside the single continuous card.
 
-### Fix 1: Parallel URL processing in edge function
-Refactor the URL extraction loop from sequential `for` to parallel `Promise.allSettled`. This cuts 5-URL processing from ~90s to ~20s.
+### Changes (all in `supabase/functions/_shared/email-html.ts`)
 
-**File:** `supabase/functions/extract-listing-from-link/index.ts`
-- Replace `for (const rawUrl of urlList)` (line 357) with `Promise.allSettled(urlList.map(async (rawUrl) => { ... }))`
-- Each URL runs its own scrape + AI + storage pipeline concurrently
-- Collect results from settled promises at the end
+#### A. Recommended For You — Revert to PNG hosted images
+- Change `recommendedCard()` back to using `iconImg()` with PNG paths
+- Remove the `RECOMMENDED_ICONS` inline SVG object
+- Ensure circular frame clips the PNG with `overflow:hidden` on the `<td>` to prevent square backgrounds
+- Signature: `recommendedCard(title, href, iconPath, alt)` — restore the original parameters
 
-### Fix 2: Developer fallback in ProjectDetail
-When `project.developer` (the join) is null but `project.developer_name` exists, create a fallback developer object using the name and a generated slug.
+#### B. Social Footer — Switch to PNG with white pearl background
+- Replace `socialLinksFooter()` to use the inline `SVG` object icons (instagram, facebook, linkedin, tiktok, youtube) that are already defined at the top of the file — these render as raw HTML inside `<td>` elements, not as `<img>` tags, so they should survive email client processing
+- Actually, since Gmail strips ALL SVG (both inline and `<img>`), switch to using the `.png` files: `social-instagram.png`, `social-linkedin.png`, `social-tiktok.png`, `social-youtube.png`
+- Create `social-facebook.png` if missing
+- Style each icon circle: white/pearl (#FDFBF7) background, gold border, black icon inside
 
-**File:** `src/pages/ProjectDetail.tsx` (lines 177-186)
-- Change the developer mapping from:
-  ```
-  developer: project.developer ? { name: project.developer.name, ... } : null
-  ```
-  to:
-  ```
-  developer: project.developer 
-    ? { name: project.developer.name, slug: project.developer.slug, ... } 
-    : project.developer_name 
-      ? { name: project.developer_name, slug: project.developer_name.toLowerCase().replace(/[^a-z0-9]+/g, '-') }
-      : null
-  ```
+#### C. Single Card Layout — Remove visual fragmentation
+- `ticketSupportEmbed()`: Remove the heavy gradient background and red border; make it blend into the card
+- `readyToGetStartedHtml()`: Remove the outer border and separate background so it flows within the card
+- `inquiryBox()`: Soften its standalone bordered look
+- Keep all content inside the single `emailShell` wrapper card with no sub-borders that create separation
 
-### Fix 3: Backfill missing developer_id for 62 published projects
-Run a database migration that matches existing `developer_name` values against the `developers` table and sets `developer_id` where possible.
+#### D. Deploy + Send Test Email
+- Deploy the updated edge function
+- Immediately send a test welcome email to `janeaboujaoudenails@gmail.com`
+- Take a screenshot as proof
 
-**Migration SQL:**
-```sql
-UPDATE projects p
-SET developer_id = d.id
-FROM developers d
-WHERE p.developer_id IS NULL
-  AND p.developer_name IS NOT NULL
-  AND LOWER(TRIM(p.developer_name)) = LOWER(TRIM(d.name));
-```
-
-For developers that don't exist in the `developers` table yet, auto-create them:
-```sql
-INSERT INTO developers (name, slug)
-SELECT DISTINCT p.developer_name, 
-  LOWER(REGEXP_REPLACE(TRIM(p.developer_name), '[^a-zA-Z0-9]+', '-', 'g'))
-FROM projects p
-LEFT JOIN developers d ON LOWER(TRIM(d.name)) = LOWER(TRIM(p.developer_name))
-WHERE p.developer_id IS NULL
-  AND p.developer_name IS NOT NULL
-  AND d.id IS NULL
-ON CONFLICT DO NOTHING;
-```
-Then re-run the UPDATE to link them.
-
----
-
-## Files to change
-- `supabase/functions/extract-listing-from-link/index.ts` -- parallelize URL processing
-- `src/pages/ProjectDetail.tsx` -- developer_name fallback (lines 177-186)
-- Database migration -- backfill developer_id
+### Files Modified
+- `supabase/functions/_shared/email-html.ts` — all icon and layout fixes
+- `public/email-icons/social-facebook.png` — create if missing (or use existing assets)
 

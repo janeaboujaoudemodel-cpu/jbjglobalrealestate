@@ -353,8 +353,8 @@ serve(async (req) => {
       }
     }
 
-    // ── URL EXTRACTION ──
-    for (const rawUrl of urlList) {
+    // ── URL EXTRACTION (PARALLEL) ──
+    const urlPromises = urlList.map(async (rawUrl) => {
       const startTime = Date.now();
       let formattedUrl = rawUrl.trim();
       if (!formattedUrl.startsWith("http://") && !formattedUrl.startsWith("https://")) {
@@ -372,8 +372,7 @@ serve(async (req) => {
 
         const scrapeData = await scrapeResponse.json();
         if (!scrapeResponse.ok || !scrapeData.success) {
-          results.push({ url: formattedUrl, success: false, error: scrapeData.error || "Scrape failed" });
-          continue;
+          return { url: formattedUrl, success: false, error: scrapeData.error || "Scrape failed" };
         }
 
         const markdown = scrapeData.data?.markdown || "";
@@ -392,16 +391,15 @@ serve(async (req) => {
         const EXCLUDED_IMG_PATTERNS = /logo|icon|avatar|placeholder|spinner|favicon|flags?\/|sprite|badge|arrow|chevron|_next\/static/i;
         for (const pat of imgPatterns) {
           for (const m of allContent.matchAll(pat)) {
-            // Decode Next.js proxy URLs: /_next/image?url=<encoded>&w=...
-            let rawUrl = m[0];
-            const nextProxyMatch = rawUrl.match(/\/_next\/image\?url=([^&]+)/);
+            let rawImgUrl = m[0];
+            const nextProxyMatch = rawImgUrl.match(/\/_next\/image\?url=([^&]+)/);
             if (nextProxyMatch) {
-              try { rawUrl = decodeURIComponent(nextProxyMatch[1]); } catch {}
+              try { rawImgUrl = decodeURIComponent(nextProxyMatch[1]); } catch {}
             }
-            const u = rawUrl.split("?")[0];
+            const u = rawImgUrl.split("?")[0];
             if (!seenImg.has(u) && !EXCLUDED_IMG_PATTERNS.test(u) && u.length > 20) {
               seenImg.add(u);
-              imageUrls.push(rawUrl);
+              imageUrls.push(rawImgUrl);
             }
           }
         }
@@ -427,7 +425,6 @@ serve(async (req) => {
         let extractedData: any = null;
         if (LOVABLE_API_KEY && markdown.length > 100) {
           try {
-            // Send up to 80K chars for thorough extraction (brochures are long)
             const contentForAI = markdown.substring(0, 80000);
 
             const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
@@ -488,54 +485,44 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
                           items: {
                             type: "object",
                             properties: {
-                              milestone: { type: "string", description: "e.g. Booking, During Construction, On Handover" },
+                              milestone: { type: "string" },
                               percentage: { type: "number" },
-                              amount: { type: "string", description: "AED amount if specified" },
-                              timing: { type: "string", description: "e.g. Immediately, Monthly, On completion" }
+                              amount: { type: "string" },
+                              timing: { type: "string" }
                             }
                           },
-                          description: "EVERY payment milestone with percentage and timing"
                         },
-                        unitTypes: {
-                          type: "array",
-                          items: { type: "string" },
-                          description: "ALL unit types: Studio, 1BR, 2BR, 3BR, 4BR, 5BR, Penthouse, Duplex, Townhouse, Villa"
-                        },
+                        unitTypes: { type: "array", items: { type: "string" } },
                         unitDetails: {
                           type: "array",
                           items: {
                             type: "object",
                             properties: {
-                              type: { type: "string", description: "e.g. Studio, 1 Bedroom, 2 Bedroom, 3 Bedroom, 4 Bedroom, Penthouse" },
-                              sizeMin: { type: "number", description: "Min size in sqft" },
-                              sizeMax: { type: "number", description: "Max size in sqft" },
-                              priceFrom: { type: "number", description: "Starting price AED" },
-                              priceTo: { type: "number", description: "Max price AED" },
+                              type: { type: "string" },
+                              sizeMin: { type: "number" },
+                              sizeMax: { type: "number" },
+                              priceFrom: { type: "number" },
+                              priceTo: { type: "number" },
                               bathrooms: { type: "number" },
                               availableUnits: { type: "number" },
-                              floorPlanTypes: { type: "array", items: { type: "string" }, description: "e.g. Type A, Type B" }
+                              floorPlanTypes: { type: "array", items: { type: "string" } }
                             }
                           },
-                          description: "DETAILED breakdown per bedroom type with sizes and prices"
                         },
-                        projectStatus: { type: "string", description: "off-plan, under-construction, ready, completed" },
+                        projectStatus: { type: "string" },
                         keyFeatures: { type: "array", items: { type: "string" } },
-                        propertyType: { type: "string", description: "Apartment, Villa, Townhouse, Mixed-use" },
-                        serviceCharge: { type: "string", description: "e.g. AED 18/sqft" },
+                        propertyType: { type: "string" },
+                        serviceCharge: { type: "string" },
                         totalUnits: { type: "number" },
                         floors: { type: "number" },
-                        sizeMin: { type: "number", description: "Overall min size sqft" },
-                        sizeMax: { type: "number", description: "Overall max size sqft" },
+                        sizeMin: { type: "number" },
+                        sizeMax: { type: "number" },
                         highlights: { type: "array", items: { type: "string" } },
                         nearbyLandmarks: {
                           type: "array",
                           items: {
                             type: "object",
-                            properties: {
-                              name: { type: "string" },
-                              distance: { type: "string" },
-                              time: { type: "string" }
-                            }
+                            properties: { name: { type: "string" }, distance: { type: "string" }, time: { type: "string" } }
                           }
                         },
                         reraNumber: { type: "string" },
@@ -570,8 +557,6 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
         const projectName = extractedData?.name || albumName || metadata.title?.split("|")[0]?.trim() || "Draft Project";
         const slug = toSlug(projectName);
         const devName = extractedData?.developer || detectDeveloper(markdown) || detectDeveloper(formattedUrl);
-
-        // Match developer from the correct `developers` table
         const devId = await matchDeveloperId(supabase, devName);
 
         // Categorize PDFs
@@ -588,7 +573,6 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
           brochureUrl = pdfUrls.find(p => p !== paymentPlanUrl && !floorPlanUrls.includes(p)) || null;
         }
 
-        // Save docs
         const docsToSave: { url: string; type: string; name: string }[] = [];
         if (brochureUrl) docsToSave.push({ url: brochureUrl, type: "brochure", name: "Brochure" });
         if (paymentPlanUrl) docsToSave.push({ url: paymentPlanUrl, type: "payment_plan", name: "Payment Plan" });
@@ -610,7 +594,6 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
         let locationConfidence = "ai-extracted";
         
         if (validatedLocation) {
-          // Try to match against canonical areas
           const locationLower = validatedLocation.toLowerCase().trim();
           const { data: areaMatch } = await supabase
             .from("areas")
@@ -626,7 +609,6 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
             locationConfidence = "canonical-match";
             console.log(`[extract] Location validated: "${extractedData?.location}" → "${areaMatch.name}" (${areaMatch.emirate})`);
           } else {
-            // Geocode fallback
             try {
               const geoQuery = encodeURIComponent(`${projectName}, ${validatedLocation}, ${validatedEmirate}, UAE`);
               const geoRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${geoQuery}&limit=1&countrycodes=ae`, {
@@ -636,7 +618,6 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
                 const geoData = await geoRes.json();
                 if (geoData.length > 0) {
                   const display = geoData[0].display_name || "";
-                  // Check if geocoded address mentions a different emirate
                   const emiratesList = ["Dubai", "Abu Dhabi", "Sharjah", "Ajman", "Ras Al Khaimah", "Fujairah", "Umm Al Quwain"];
                   for (const em of emiratesList) {
                     if (display.toLowerCase().includes(em.toLowerCase())) {
@@ -679,13 +660,13 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
           size_min: extractedData?.sizeMin || null,
           size_max: extractedData?.sizeMax || null,
           amenities: extractedData?.amenities || null,
-           unit_types: extractedData?.unitTypes ? extractedData.unitTypes.map((u: string, i: number) => ({ name: u, sort_order: i })) : null,
-           unit_details: extractedData?.unitDetails || null,
-           nearby_landmarks: extractedData?.nearbyLandmarks || null,
-           completion_percentage: extractedData?.completionPercentage || null,
-           rera_number: extractedData?.reraNumber || null,
-           highlights: extractedData?.highlights || extractedData?.keyFeatures || null,
-           faqs: extractedData?.faqs || null,
+          unit_types: extractedData?.unitTypes ? extractedData.unitTypes.map((u: string, i: number) => ({ name: u, sort_order: i })) : null,
+          unit_details: extractedData?.unitDetails || null,
+          nearby_landmarks: extractedData?.nearbyLandmarks || null,
+          completion_percentage: extractedData?.completionPercentage || null,
+          rera_number: extractedData?.reraNumber || null,
+          highlights: extractedData?.highlights || extractedData?.keyFeatures || null,
+          faqs: extractedData?.faqs || null,
           images: imagesPayload,
           documents: documentsPayload,
           video_url: videoUrls[0] || null,
@@ -742,7 +723,7 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
           }).then(() => {}).catch(() => {});
         }
 
-        results.push({
+        return {
           url: formattedUrl, success: true, importId, projectName, developer: devName,
           location: extractedData?.location,
           status: auto_approve ? "auto-approved" : "pending-approval",
@@ -764,11 +745,21 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
           heroImage: imageUrls[0] || null,
           view_url: auto_approve ? `/project/${slug}` : `/listing-admin/preview/${importId}`,
           duration_ms: Date.now() - startTime,
-        });
+        };
 
       } catch (urlErr: any) {
         console.error(`[extract] Error for ${formattedUrl}:`, urlErr);
-        results.push({ url: formattedUrl, success: false, error: urlErr.message });
+        return { url: formattedUrl, success: false, error: urlErr.message };
+      }
+    });
+
+    // Run all URL extractions in parallel
+    const urlResults = await Promise.allSettled(urlPromises);
+    for (const settled of urlResults) {
+      if (settled.status === "fulfilled") {
+        results.push(settled.value);
+      } else {
+        results.push({ success: false, error: settled.reason?.message || "Unknown error" });
       }
     }
 
