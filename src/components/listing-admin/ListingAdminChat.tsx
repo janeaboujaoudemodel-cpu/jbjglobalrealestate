@@ -890,13 +890,6 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
       onDragEnter={(e) => { e.preventDefault(); e.stopPropagation(); dragCounter.current++; if (!isDragOver) setIsDragOver(true); }}
       onDragLeave={(e) => { e.preventDefault(); e.stopPropagation(); dragCounter.current--; if (dragCounter.current <= 0) { dragCounter.current = 0; setIsDragOver(false); } }}
       onDrop={handleDropFiles}
-      onDragEnter={(e) => { e.preventDefault(); e.stopPropagation(); setIsDragOver(true); }}
-      onDragLeave={(e) => {
-        e.preventDefault(); e.stopPropagation();
-        const related = e.relatedTarget as Node | null;
-        if (!related || !e.currentTarget.contains(related)) setIsDragOver(false);
-      }}
-      onDrop={handleDropFiles}
     >
       {/* Header */}
       <div className="flex items-center gap-3 p-4 border-b border-zinc-200 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]" style={{ borderRadius: 0 }}>
