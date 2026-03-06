@@ -97,7 +97,11 @@ export function isValidImageUrl(url: unknown): url is string {
     try {
       const parsed = new URL(url);
       const inner = parsed.searchParams.get("url");
-      if (inner) effectiveUrl = inner;
+      if (inner) {
+        // inner may be a relative path like /images/flags/en.png
+        // or a full URL - use it for pattern matching either way
+        effectiveUrl = decodeURIComponent(inner);
+      }
     } catch { /* use original */ }
   }
   
