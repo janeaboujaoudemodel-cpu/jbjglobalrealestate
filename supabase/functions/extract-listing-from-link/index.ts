@@ -104,6 +104,213 @@ function mergeArrays<T>(existing: T[], incoming: T[], keyFn: (item: T) => string
   return merged;
 }
 
+async function extractTextFromDocumentUrl(docUrl: string, firecrawlApiKey?: string | null): Promise<string> {
+  // 1) Best effort via Firecrawl (works for PDFs + web docs)
+  if (firecrawlApiKey) {
+    try {
+      const scrapeResponse = await fetch("https://api.firecrawl.dev/v1/scrape", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${firecrawlApiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          url: docUrl,
+          formats: ["markdown", "html"],
+          onlyMainContent: false,
+          waitFor: 6000,
+        }),
+      });
+
+      if (scrapeResponse.ok) {
+        const scrapeData = await scrapeResponse.json();
+        const markdown = scrapeData?.data?.markdown || "";
+        const html = scrapeData?.data?.rawHtml || scrapeData?.data?.html || "";
+        const parsed = `${markdown}\n${html}`.replace(/\s+/g, " ").trim();
+        if (parsed.length > 100) return parsed.substring(0, 40000);
+      }
+    } catch (err) {
+      console.warn("[extract] Firecrawl document parsing failed:", err);
+    }
+  }
+
+  // 2) Fallback: direct text read for text-based files
+  try {
+    const res = await fetch(docUrl, { headers: { "User-Agent": "Mozilla/5.0" } });
+    if (!res.ok) return "";
+    const contentType = (res.headers.get("content-type") || "").toLowerCase();
+    if (
+      contentType.includes("text/") ||
+      contentType.includes("json") ||
+      contentType.includes("xml") ||
+      contentType.includes("csv")
+    ) {
+      const text = await res.text();
+      const cleaned = text.replace(/\s+/g, " ").trim();
+      return cleaned.substring(0, 40000);
+    }
+  } catch (err) {
+    console.warn("[extract] Direct document text read failed:", err);
+  }
+
+  return "";
+}
+
+async function extractProjectDataWithAI(
+  lovableApiKey: string | null,
+  sourceLabel: string,
+  sourceUrl: string,
+  content: string,
+  metadataTitle?: string,
+): Promise<any | null> {
+  if (!lovableApiKey || !content || content.trim().length < 120) return null;
+
+  try {
+    const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${lovableApiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "google/gemini-3-flash-preview",
+        max_tokens: 8000,
+        temperature: 0.05,
+        messages: [
+          {
+            role: "system",
+            content: `You are a senior UAE real estate data extraction specialist. Extract COMPLETE listing data from source material with zero hallucination.
+
+RULES:
+- Use ONLY facts explicitly present in the source text.
+- If a field is missing, return null (or [] for arrays).
+- NEVER default emirate to Dubai.
+- Copy long description verbatim from source when available.
+- Extract ALL amenities, ALL unit types, and ALL payment milestones found.`
+          },
+          {
+            role: "user",
+            content: `Extract full project data from this ${sourceLabel} source.
+Source URL: ${sourceUrl}
+Title: ${metadataTitle || ""}
+
+CONTENT:\n${content.substring(0, 80000)}`,
+          },
+        ],
+        tools: [
+          {
+            type: "function",
+            function: {
+              name: "extract_project",
+              description: "Extract complete structured project data",
+              parameters: {
+                type: "object",
+                properties: {
+                  name: { type: ["string", "null"] },
+                  developer: { type: ["string", "null"] },
+                  location: { type: ["string", "null"] },
+                  emirate: { type: ["string", "null"] },
+                  priceFrom: { type: ["number", "null"] },
+                  priceTo: { type: ["number", "null"] },
+                  bedroomsMin: { type: ["number", "null"] },
+                  bedroomsMax: { type: ["number", "null"] },
+                  handoverDate: { type: ["string", "null"] },
+                  completionPercentage: { type: ["number", "null"] },
+                  description: { type: ["string", "null"] },
+                  amenities: { type: "array", items: { type: "string" } },
+                  paymentPlan: { type: ["string", "null"] },
+                  paymentBreakdown: {
+                    type: "array",
+                    items: {
+                      type: "object",
+                      properties: {
+                        milestone: { type: "string" },
+                        percentage: { type: ["number", "null"] },
+                        amount: { type: ["string", "null"] },
+                        timing: { type: ["string", "null"] },
+                      },
+                    },
+                  },
+                  unitTypes: { type: "array", items: { type: "string" } },
+                  unitDetails: {
+                    type: "array",
+                    items: {
+                      type: "object",
+                      properties: {
+                        type: { type: "string" },
+                        sizeMin: { type: ["number", "null"] },
+                        sizeMax: { type: ["number", "null"] },
+                        priceFrom: { type: ["number", "null"] },
+                        priceTo: { type: ["number", "null"] },
+                        bathrooms: { type: ["number", "null"] },
+                        availableUnits: { type: ["number", "null"] },
+                        floorPlanTypes: { type: "array", items: { type: "string" } },
+                      },
+                    },
+                  },
+                  projectStatus: { type: ["string", "null"] },
+                  keyFeatures: { type: "array", items: { type: "string" } },
+                  propertyType: { type: ["string", "null"] },
+                  serviceCharge: { type: ["string", "null"] },
+                  totalUnits: { type: ["number", "null"] },
+                  floors: { type: ["number", "null"] },
+                  sizeMin: { type: ["number", "null"] },
+                  sizeMax: { type: ["number", "null"] },
+                  highlights: { type: "array", items: { type: "string" } },
+                  nearbyLandmarks: {
+                    type: "array",
+                    items: {
+                      type: "object",
+                      properties: {
+                        name: { type: "string" },
+                        distance: { type: ["string", "null"] },
+                        time: { type: ["string", "null"] },
+                      },
+                    },
+                  },
+                  reraNumber: { type: ["string", "null"] },
+                  faqs: {
+                    type: "array",
+                    items: {
+                      type: "object",
+                      properties: {
+                        q: { type: "string" },
+                        a: { type: "string" },
+                      },
+                    },
+                  },
+                },
+                required: ["name"],
+              },
+            },
+          },
+        ],
+        tool_choice: { type: "function", function: { name: "extract_project" } },
+      }),
+    });
+
+    if (!aiRes.ok) {
+      console.error("[extract] AI extraction failed:", aiRes.status, await aiRes.text());
+      return null;
+    }
+
+    const aiData = await aiRes.json();
+    const toolCall = aiData?.choices?.[0]?.message?.tool_calls?.[0];
+    if (toolCall?.function?.arguments) {
+      try {
+        return JSON.parse(toolCall.function.arguments);
+      } catch (err) {
+        console.error("[extract] Failed parsing tool arguments:", err);
+      }
+    }
+
+    return null;
+  } catch (err) {
+    console.error("[extract] AI extraction exception:", err);
+    return null;
+  }
+}
+
 async function saveDocumentsToStorage(
   supabase: any,
   projectSlug: string,
