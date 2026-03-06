@@ -87,7 +87,7 @@ export function CompanyProfileBrochure({
 
       {/* Text description — pushed right with gap */}
       {!compact && (
-        <div className="text-center">
+        <div className="text-center pt-4">
           <h3 className="text-gold text-lg md:text-xl font-bold" style={{ fontFamily: "'Playfair Display', serif" }}>
             JBJ Global Real Estate
           </h3>
