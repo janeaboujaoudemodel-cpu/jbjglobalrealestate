@@ -827,19 +827,49 @@ Extract every bedroom type, every amenity, every payment milestone, every unit c
     const totalInputs = urlList.length + (fileList.length > 0 ? 1 : 0);
     const successCount = results.filter(r => r.success).length;
 
+    const responsePayload = {
+      success: successCount > 0, total: totalInputs, succeeded: successCount,
+      failed: totalInputs - successCount, results, auto_approve,
+      message: auto_approve
+        ? `${successCount} listing(s) extracted and auto-approved`
+        : `${successCount} listing(s) extracted and queued for your approval`,
+    };
+
+    // If processing a queued job, save results back to queue
+    if (job_id) {
+      await supabase
+        .from("listing_extraction_queue")
+        .update({
+          status: successCount > 0 ? "completed" : "failed",
+          results: responsePayload,
+          error_message: successCount === 0 ? "All extractions failed" : null,
+          completed_at: new Date().toISOString(),
+        })
+        .eq("id", job_id);
+    }
+
     return new Response(
-      JSON.stringify({
-        success: successCount > 0, total: totalInputs, succeeded: successCount,
-        failed: totalInputs - successCount, results, auto_approve,
-        message: auto_approve
-          ? `${successCount} listing(s) extracted and auto-approved`
-          : `${successCount} listing(s) extracted and queued for your approval`,
-      }),
+      JSON.stringify(responsePayload),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
 
   } catch (error: unknown) {
     console.error("[extract] Fatal error:", error);
+
+    // If processing a queued job, mark it as failed
+    if (body?.job_id) {
+      try {
+        const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+        const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+        const sb = createClient(supabaseUrl, supabaseKey);
+        await sb.from("listing_extraction_queue").update({
+          status: "failed",
+          error_message: error instanceof Error ? error.message : "Extraction failed",
+          completed_at: new Date().toISOString(),
+        }).eq("id", body.job_id);
+      } catch {}
+    }
+
     return new Response(
       JSON.stringify({ success: false, error: error instanceof Error ? error.message : "Extraction failed" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
