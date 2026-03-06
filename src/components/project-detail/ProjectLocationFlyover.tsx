@@ -21,15 +21,17 @@ L.Marker.prototype.options.icon = DefaultIcon;
 // UAE overview center
 const UAE_CENTER: [number, number] = [24.4, 54.5];
 const UAE_ZOOM = 7;
+const REGIONAL_ZOOM = 11;
 const PROJECT_ZOOM = 16;
 
 interface FlyoverControllerProps {
   target: [number, number];
   playing: boolean;
+  onStepChange: (step: number) => void;
   onComplete: () => void;
 }
 
-function FlyoverController({ target, playing, onComplete }: FlyoverControllerProps) {
+function FlyoverController({ target, playing, onStepChange, onComplete }: FlyoverControllerProps) {
   const map = useMap();
   const hasFlown = useRef(false);
 
@@ -37,21 +39,41 @@ function FlyoverController({ target, playing, onComplete }: FlyoverControllerPro
     if (!playing || hasFlown.current) return;
     hasFlown.current = true;
 
-    // Start zoomed out
+    // Start zoomed out on UAE
     map.setView(UAE_CENTER, UAE_ZOOM, { animate: false });
+    onStepChange(1); // UAE overview
 
-    // Fly to project after short delay
-    const timer = setTimeout(() => {
-      map.flyTo(target, PROJECT_ZOOM, {
-        duration: 3.5,
-        easeLinearity: 0.25,
+    // Step 1: Hold on UAE overview for 2s
+    const t1 = setTimeout(() => {
+      onStepChange(2); // Regional approach
+      // Step 2: Slow fly to regional zoom (4s)
+      map.flyTo(target, REGIONAL_ZOOM, {
+        duration: 5,
+        easeLinearity: 0.1,
       });
-      // Complete after animation
-      setTimeout(onComplete, 4000);
-    }, 800);
+    }, 2000);
 
-    return () => clearTimeout(timer);
-  }, [playing, target, map, onComplete]);
+    // Step 3: After regional fly completes (~5s + 2s hold), fly to project pin
+    const t2 = setTimeout(() => {
+      onStepChange(3); // Neighborhood zoom
+      map.flyTo(target, PROJECT_ZOOM, {
+        duration: 6,
+        easeLinearity: 0.08,
+      });
+    }, 8000);
+
+    // Step 4: Animation complete, show final overlay
+    const t3 = setTimeout(() => {
+      onStepChange(4);
+      onComplete();
+    }, 15000);
+
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+    };
+  }, [playing, target, map, onStepChange, onComplete]);
 
   // Reset when not playing
   useEffect(() => {
@@ -79,33 +101,45 @@ export default function ProjectLocationFlyover({
   className = "",
 }: ProjectLocationFlyoverProps) {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [showOverlay, setShowOverlay] = useState(false);
+  const [currentStep, setCurrentStep] = useState(0);
   const [animationDone, setAnimationDone] = useState(false);
 
   const target: [number, number] = [latitude, longitude];
 
   const handlePlay = useCallback(() => {
     setIsPlaying(true);
-    setShowOverlay(true);
+    setCurrentStep(0);
     setAnimationDone(false);
   }, []);
 
+  const handleStepChange = useCallback((step: number) => {
+    setCurrentStep(step);
+  }, []);
+
   const handleComplete = useCallback(() => {
-    // Show name overlay, then fade out
+    // Show final overlay for 3s then fade
     setTimeout(() => {
-      setShowOverlay(false);
+      setIsPlaying(false);
       setAnimationDone(true);
-    }, 2000);
+    }, 3000);
   }, []);
 
   const handleReplay = useCallback(() => {
     setIsPlaying(false);
     setAnimationDone(false);
-    setTimeout(handlePlay, 100);
+    setCurrentStep(0);
+    setTimeout(handlePlay, 150);
   }, [handlePlay]);
 
+  const stepLabels: Record<number, string> = {
+    1: "United Arab Emirates",
+    2: location ? `Approaching ${location.split(",")[0]}` : "Approaching location",
+    3: `Arriving at ${projectName}`,
+    4: projectName,
+  };
+
   return (
-    <div className={`relative rounded-2xl overflow-hidden ${className}`} style={{ height: 350, border: '3px solid hsl(42 45% 59%)', boxShadow: '0 8px 32px rgba(200,167,102,0.25)' }}>
+    <div className={`relative rounded-2xl overflow-hidden ${className}`} style={{ height: 400, border: '3px solid hsl(42 45% 59%)', boxShadow: '0 8px 32px rgba(200,167,102,0.25)' }}>
       <MapContainer
         center={UAE_CENTER}
         zoom={UAE_ZOOM}
@@ -120,31 +154,52 @@ export default function ProjectLocationFlyover({
           attribution="Tiles &copy; Esri"
           maxZoom={19}
         />
-        <FlyoverController target={target} playing={isPlaying} onComplete={handleComplete} />
-        {isPlaying && (
+        <FlyoverController
+          target={target}
+          playing={isPlaying}
+          onStepChange={handleStepChange}
+          onComplete={handleComplete}
+        />
+        {isPlaying && currentStep >= 3 && (
           <Marker position={target}>
             <Popup>{projectName}</Popup>
           </Marker>
         )}
       </MapContainer>
 
-      {/* Project name overlay during flyover */}
+      {/* Cinematic overlay with step labels */}
       <AnimatePresence>
-        {showOverlay && (
+        {isPlaying && currentStep > 0 && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.1 }}
-            transition={{ duration: 0.6 }}
-            className="absolute inset-0 flex items-center justify-center z-[1000] pointer-events-none"
+            key={currentStep}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.8 }}
+            className="absolute inset-x-0 bottom-0 z-[1000] pointer-events-none"
           >
-            <div className="bg-black/60 backdrop-blur-sm px-8 py-4 rounded-2xl text-center">
-              <h3 className="text-white text-2xl font-bold tracking-wide">{projectName}</h3>
-              {location && <p className="text-white/80 text-sm mt-1">{location}</p>}
+            <div className="bg-gradient-to-t from-black/70 via-black/40 to-transparent px-8 py-6">
+              <p className="text-white/60 text-xs uppercase tracking-[0.2em] mb-1">
+                {currentStep === 1 ? "Overview" : currentStep === 2 ? "Region" : currentStep === 3 ? "Neighborhood" : "Destination"}
+              </p>
+              <h3 className="text-white text-xl font-bold tracking-wide">
+                {stepLabels[currentStep]}
+              </h3>
+              {currentStep === 4 && location && (
+                <p className="text-white/80 text-sm mt-1">{location}</p>
+              )}
             </div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Cinematic letterbox bars for immersion */}
+      {isPlaying && (
+        <>
+          <div className="absolute top-0 inset-x-0 h-8 bg-gradient-to-b from-black/50 to-transparent z-[999] pointer-events-none" />
+          <div className="absolute bottom-0 inset-x-0 h-8 bg-gradient-to-t from-black/50 to-transparent z-[999] pointer-events-none" />
+        </>
+      )}
 
       {/* Play / Replay button */}
       {!isPlaying && (

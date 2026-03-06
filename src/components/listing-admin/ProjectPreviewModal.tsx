@@ -121,10 +121,10 @@ export function ProjectPreviewModal({ project, open, onOpenChange, onEdit, onSen
             <Button
               variant="primary"
               onClick={() => { onOpenChange(false); navigate(`/project/${project.slug}`); }}
-              className="flex-1"
+              className="flex-1 whitespace-nowrap"
             >
               <ExternalLink className="w-4 h-4 mr-2" />
-              Open Full Listing
+              View Listing
             </Button>
             <Button
               variant="secondary"
