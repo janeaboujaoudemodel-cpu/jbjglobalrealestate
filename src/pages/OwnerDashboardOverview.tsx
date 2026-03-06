@@ -550,6 +550,9 @@ export default function OwnerDashboardOverview() {
           >
             <Trash2 className="h-4 w-4 mr-2" />
             Leads Management
+          </TabsTrigger>
+          <TabsTrigger 
+            value="employees"
             className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black"
           >
             <Briefcase className="h-4 w-4 mr-2" />
