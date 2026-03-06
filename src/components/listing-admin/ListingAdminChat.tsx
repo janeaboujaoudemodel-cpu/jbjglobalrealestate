@@ -118,7 +118,9 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [isDragOver, setIsDragOver] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const initialScrollDone = useRef(false);
 
   // Load existing chat session
   useEffect(() => {
@@ -141,6 +143,9 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
           const savedMessages = (session.messages as any[]).map((m: any) => ({
             ...m,
             timestamp: new Date(m.timestamp),
+            listings: m.listings || undefined,
+            failedItems: m.failedItems || undefined,
+            retryPayload: m.retryPayload || undefined,
           }));
           if (savedMessages.length > 0) setMessages(savedMessages);
         } else {
@@ -170,6 +175,9 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
           timestamp: m.timestamp.toISOString(),
           type: m.type,
           attachments: m.attachments,
+          listings: m.listings,
+          failedItems: m.failedItems,
+          retryPayload: m.retryPayload,
         }));
         await supabase
           .from("listing_admin_chat_sessions")
@@ -199,10 +207,16 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
     return () => el.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
 
-  // Auto-scroll only on initial load or when user is near bottom
+  // Auto-scroll: always scroll to bottom on initial load, then only when near bottom
   useEffect(() => {
-    if (scrollRef.current && isNearBottom.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    if (!initialScrollDone.current && messages.length > 1) {
+      // Force scroll to bottom on initial load
+      setTimeout(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
+        initialScrollDone.current = true;
+      }, 100);
+    } else if (isNearBottom.current) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
 
@@ -394,7 +408,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
       try {
         const { data: job, error } = await supabase
           .from("listing_extraction_queue")
-          .select("status, results, error_message")
+          .select("status, results, error_message, urls")
           .eq("id", jobId)
           .single();
 
@@ -411,8 +425,9 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
             const without = prev.filter(m => m.id !== processingMsgId);
             return [...without, {
               id: (Date.now() + 2).toString(), role: "assistant" as const,
-              content: `Extraction failed: ${job.error_message || "Unknown error"}`,
+              content: `Extraction failed: ${job.error_message || "Unknown error"}. Use the retry button below.`,
               timestamp: new Date(), type: "error" as const,
+              retryPayload: { urls: (job as any).urls || [] },
             }];
           });
           setIsLoading(false);
@@ -435,8 +450,9 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
             const without = prev.filter(m => m.id !== processingMsgId);
             return [...without, {
               id: (Date.now() + 2).toString(), role: "assistant" as const,
-              content: "Extraction timed out. The job may still be processing in the background. Check back shortly.",
+              content: "Extraction timed out. The job may still be processing in the background. Use retry to try again.",
               timestamp: new Date(), type: "error" as const,
+              retryPayload: { urls: [] },
             }];
           });
           setIsLoading(false);
@@ -1012,6 +1028,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
               </div>
             </div>
           )}
+          <div ref={messagesEndRef} />
         </div>
       </ScrollArea>
 
@@ -1023,11 +1040,9 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
             variant="outline"
             className="h-7 text-xs bg-white/90 backdrop-blur-sm border-gold/30 shadow-md hover:bg-gold/10"
             onClick={() => {
-              if (scrollRef.current) {
-                scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-                isNearBottom.current = true;
-                setShowJumpToLatest(false);
-              }
+              messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+              isNearBottom.current = true;
+              setShowJumpToLatest(false);
             }}
           >
             ↓ Jump to latest
