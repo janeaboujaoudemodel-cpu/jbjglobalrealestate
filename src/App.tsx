@@ -142,6 +142,8 @@ const ESignatureDashboard = lazy(() => import("./pages/e-signature/ESignatureDas
 const CreateEnvelope = lazy(() => import("./pages/e-signature/CreateEnvelope"));
 const EnvelopeDetail = lazy(() => import("./pages/e-signature/EnvelopeDetail"));
 const SignDocument = lazy(() => import("./pages/e-signature/SignDocument"));
+const SignatureStudio = lazy(() => import("./pages/e-signature/SignatureStudio"));
+const ContractReview = lazy(() => import("./pages/e-signature/ContractReview"));
 // AI Pages - lazy loaded
 const AICalendar = lazy(() => import("./pages/AICalendar"));
 const AIFinancialAdvisor = lazy(() => import("./pages/AIFinancialAdvisor"));
