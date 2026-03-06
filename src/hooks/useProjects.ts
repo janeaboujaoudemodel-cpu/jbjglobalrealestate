@@ -239,13 +239,18 @@ export function useProjectsTotalCount() {
 /**
  * Paginated admin projects listing (50 per page).
  */
-export function useProjectsPaginated(page: number = 0, pageSize: number = 50) {
+export function useProjectsPaginated(
+  page: number = 0,
+  pageSize: number = 50,
+  options?: { publishedFilter?: boolean | "all" }
+) {
+  const publishedFilter = options?.publishedFilter ?? "all";
   return useQuery({
-    queryKey: ["projects-paginated", page, pageSize],
+    queryKey: ["projects-paginated", page, pageSize, publishedFilter],
     queryFn: async () => {
       const from = page * pageSize;
       const to = from + pageSize - 1;
-      const { data, error } = await supabase
+      let query = supabase
         .from("projects")
         .select(`
           *,
@@ -257,8 +262,40 @@ export function useProjectsPaginated(page: number = 0, pageSize: number = 50) {
         .order("created_at", { ascending: false })
         .range(from, to);
       
+      if (publishedFilter === true) {
+        query = query.eq("is_published", true);
+      } else if (publishedFilter === false) {
+        query = query.or("is_published.is.null,is_published.eq.false");
+      }
+
+      const { data, error } = await query;
       if (error) throw error;
       return data as UnifiedProject[];
+    },
+  });
+}
+
+/**
+ * Count of projects filtered by published status.
+ */
+export function useProjectsFilteredCount(publishedFilter: boolean | "all" = "all") {
+  return useQuery({
+    queryKey: ["projects-filtered-count", publishedFilter],
+    staleTime: 5 * 60 * 1000,
+    queryFn: async () => {
+      let query = supabase
+        .from("projects")
+        .select("id", { count: "exact", head: true });
+      
+      if (publishedFilter === true) {
+        query = query.eq("is_published", true);
+      } else if (publishedFilter === false) {
+        query = query.or("is_published.is.null,is_published.eq.false");
+      }
+
+      const { count, error } = await query;
+      if (error) throw error;
+      return count ?? 0;
     },
   });
 }
@@ -314,7 +351,8 @@ export function useProjectsListing() {
 
       const { count, error: countError } = await supabase
         .from("projects")
-        .select("id", { count: "exact", head: true });
+        .select("id", { count: "exact", head: true })
+        .eq("is_published", true);
 
       if (countError) throw countError;
 
@@ -331,6 +369,7 @@ export function useProjectsListing() {
           const { data, error } = await supabase
             .from("projects")
             .select(LISTING_COLUMNS)
+            .eq("is_published", true)
             .order("created_at", { ascending: false })
             .range(offset, offset + PAGE_SIZE - 1);
 
