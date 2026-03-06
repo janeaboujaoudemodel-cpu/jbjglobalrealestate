@@ -551,110 +551,232 @@ serve(async (req) => {
 
     const results: any[] = [];
 
-    // ── FILE UPLOADS (PHASE A: merge instead of overwrite) ──
+    // ── FILE UPLOADS: full document extraction + full section mapping ──
     if (fileList.length > 0) {
       const startTime = Date.now();
-      const projectName = albumName || inferProjectNameFromFiles(fileList);
-      const slug = toSlug(projectName);
+      const projectNameHint = albumName || inferProjectNameFromFiles(fileList);
+      const slug = toSlug(projectNameHint);
       const joinedText = fileList.map((f) => `${f.name} ${f.url}`).join(" ");
-      const devName = detectDeveloper(joinedText);
-      const devId = await matchDeveloperId(supabase, devName);
+      const devNameFromName = detectDeveloper(joinedText);
 
-      await updateJobProgress(supabase, job_id, `Processing ${fileList.length} files for "${projectName}"...`);
+      await updateJobProgress(supabase, job_id, `Processing ${fileList.length} files for "${projectNameHint}"...`);
 
-      const imagesPayload = fileList
-        .filter((f) => f.type === "image")
-        .map((f, i) => ({ url: f.url, alt_text: `${projectName} - Image ${i + 1}`, display_order: i }));
+      const imageFiles = fileList.filter((f) => f.type === "image");
+      const documentFiles = fileList.filter((f) => f.type !== "image");
 
-      const documentsPayload = fileList
-        .filter((f) => f.type !== "image")
-        .map((f, i) => {
-          const docType = classifyDocument(f.name);
-          return { url: f.url, original_url: f.url, type: docType, name: humanizeDocTitle(f.name || `Document ${i + 1}`) };
-        });
+      const imagesPayload = imageFiles.map((f, i) => ({
+        url: f.url,
+        alt_text: `${projectNameHint} - Image ${i + 1}`,
+        display_order: i,
+      }));
 
-      // Stable source_url for file uploads — never use the PDF URL
+      const documentsPayload = documentFiles.map((f, i) => {
+        const docType = classifyDocument(f.name);
+        return {
+          url: f.url,
+          original_url: f.url,
+          type: docType,
+          name: humanizeDocTitle(f.name || `Document ${i + 1}`),
+        };
+      });
+
       const stableSourceUrl = `manual://${userId || "anon"}/${slug}`;
 
       try {
-        // PHASE A: Find existing by stable source_url OR slug, then MERGE
-        const existing = await findExistingPending(supabase, stableSourceUrl, slug);
+        await updateJobProgress(supabase, job_id, `Extracting text from ${documentFiles.length} uploaded document(s)...`);
 
+        const extractedDocTexts = await Promise.all(
+          documentFiles.map(async (doc) => {
+            const text = await extractTextFromDocumentUrl(doc.url, FIRECRAWL_API_KEY || null);
+            return { name: doc.name, type: doc.type, text };
+          })
+        );
+
+        const docCorpus = extractedDocTexts
+          .filter((d) => d.text && d.text.length > 80)
+          .map((d, i) => `--- DOCUMENT ${i + 1}: ${d.name} (${d.type}) ---\n${d.text}`)
+          .join("\n\n");
+
+        const fileHints = fileList.map((f) => `${f.name} (${f.type})`).join("\n");
+        const aiInputCorpus = [
+          `PROJECT NAME HINT: ${projectNameHint}`,
+          `FILES PROVIDED:\n${fileHints}`,
+          docCorpus ? `EXTRACTED DOCUMENT TEXT:\n${docCorpus}` : "",
+        ].filter(Boolean).join("\n\n");
+
+        await updateJobProgress(supabase, job_id, "Running deep listing extraction from uploaded documents...");
+
+        const extractedData = await extractProjectDataWithAI(
+          LOVABLE_API_KEY || null,
+          "file-upload",
+          stableSourceUrl,
+          aiInputCorpus,
+          projectNameHint,
+        );
+
+        const projectName = extractedData?.name || projectNameHint;
+        const finalSlug = toSlug(projectName);
+        const detectedDeveloper = extractedData?.developer || devNameFromName;
+        const devId = await matchDeveloperId(supabase, detectedDeveloper);
+
+        let validatedEmirate = extractedData?.emirate || null;
+        let validatedLocation = extractedData?.location || null;
+        let locationConfidence = "ai-extracted";
+        const missingFields: string[] = [];
+
+        if (validatedLocation) {
+          const locationLower = validatedLocation.toLowerCase().trim();
+          const { data: areaMatch } = await supabase
+            .from("areas")
+            .select("name, emirate")
+            .eq("is_active", true)
+            .or(`name.ilike.%${locationLower}%,slug.eq.${locationLower.replace(/\s+/g, '-')}`)
+            .limit(1)
+            .maybeSingle();
+
+          if (areaMatch) {
+            validatedLocation = areaMatch.name;
+            validatedEmirate = areaMatch.emirate;
+            locationConfidence = "canonical-match";
+          }
+        }
+
+        if (!validatedLocation) missingFields.push("location");
+        if (!validatedEmirate) missingFields.push("emirate");
+        if (!extractedData?.description) missingFields.push("description");
+        if (!extractedData?.priceFrom) missingFields.push("price");
+        if (!extractedData?.unitDetails?.length) missingFields.push("unit_details");
+        if (!extractedData?.paymentBreakdown?.length) missingFields.push("payment_breakdown");
+
+        const fullImportPayload: Record<string, any> = {
+          name: projectName,
+          slug: finalSlug,
+          developer_name: detectedDeveloper || null,
+          developer_id: devId,
+          location: validatedLocation,
+          emirate: validatedEmirate || null,
+          description: extractedData?.description || null,
+          price_from: extractedData?.priceFrom || null,
+          price_to: extractedData?.priceTo || null,
+          bedrooms_min: extractedData?.bedroomsMin || null,
+          bedrooms_max: extractedData?.bedroomsMax || null,
+          handover_date: extractedData?.handoverDate || null,
+          property_type_label: extractedData?.propertyType || null,
+          status_label: extractedData?.projectStatus || null,
+          payment_plan: extractedData?.paymentPlan || null,
+          payment_breakdown: extractedData?.paymentBreakdown || null,
+          service_charge: extractedData?.serviceCharge || null,
+          total_units: extractedData?.totalUnits || null,
+          floors: extractedData?.floors || null,
+          size_min: extractedData?.sizeMin || null,
+          size_max: extractedData?.sizeMax || null,
+          amenities: extractedData?.amenities || null,
+          unit_types: extractedData?.unitTypes ? extractedData.unitTypes.map((u: string, i: number) => ({ name: u, sort_order: i })) : null,
+          unit_details: extractedData?.unitDetails || null,
+          location_distances: extractedData?.nearbyLandmarks || null,
+          construction_progress: extractedData?.completionPercentage || null,
+          rera_number: extractedData?.reraNumber || null,
+          highlights: extractedData?.highlights || extractedData?.keyFeatures || null,
+          faqs: extractedData?.faqs || null,
+          images: imagesPayload,
+          documents: documentsPayload,
+          source_url: stableSourceUrl,
+          is_new_project: true,
+          status: "pending",
+          enrichment_source: "file-upload",
+          review_notes: JSON.stringify({
+            location_confidence: locationConfidence,
+            missing_fields: missingFields.length > 0 ? missingFields : undefined,
+            source_documents_processed: extractedDocTexts.filter((d) => d.text?.length > 80).length,
+            total_uploaded_files: fileList.length,
+            ...(missingFields.length > 0 ? { INCOMPLETE: true } : {}),
+          }),
+        };
+
+        const existing = await findExistingPending(supabase, stableSourceUrl, finalSlug);
         let importId: string | null = null;
 
         if (existing?.id) {
-          // MERGE: append images/docs instead of replacing
           const existingImages = Array.isArray(existing.images) ? existing.images : [];
           const existingDocs = Array.isArray(existing.documents) ? existing.documents : [];
-          
+
           const mergedImages = mergeArrays(existingImages, imagesPayload, (img: any) => img.url);
           const mergedDocs = mergeArrays(existingDocs, documentsPayload, (doc: any) => doc.url);
 
-          const updatePayload: Record<string, any> = {
-            images: mergedImages,
-            documents: mergedDocs,
-            updated_at: new Date().toISOString(),
-            status: "pending",
-          };
-          // Only overwrite scalar fields if they were null/empty before
-          if (!existing.developer_name && devName) updatePayload.developer_name = devName;
-          if (!existing.developer_id && devId) updatePayload.developer_id = devId;
-          if (albumName && existing.name === "Uploaded Project") updatePayload.name = projectName;
-
           const { error } = await supabase
             .from("pending_project_imports")
-            .update(updatePayload)
+            .update({
+              ...fullImportPayload,
+              images: mergedImages,
+              documents: mergedDocs,
+              updated_at: new Date().toISOString(),
+              status: "pending",
+            })
             .eq("id", existing.id);
           if (error) throw new Error(`Update failed: ${error.message}`);
+
           importId = existing.id;
         } else {
-          const importPayload: Record<string, any> = {
-            name: projectName,
-            slug,
-            developer_name: devName || null,
-            developer_id: devId,
-            location: null,
-            emirate: null, // STRICT: don't guess emirate from file uploads
-            description: null, // PHASE B: No "Generated from X files" text
-            images: imagesPayload,
-            documents: documentsPayload,
-            source_url: stableSourceUrl,
-            is_new_project: true,
-            status: "pending",
-            enrichment_source: "file-upload",
-            review_notes: JSON.stringify({ missing_fields: ["location", "emirate", "description"], source: "file-upload" }),
-          };
-
           const { data: inserted, error } = await supabase
             .from("pending_project_imports")
-            .insert(importPayload)
+            .insert(fullImportPayload)
             .select("id")
             .single();
+
           if (error) throw new Error(`Insert failed: ${error.message}`);
           importId = inserted!.id;
         }
 
-        // Log
         if (userId) {
           await supabase.from("listing_uploads").insert({
-            user_id: userId, drive_url: stableSourceUrl, url_type: "upload",
-            status: "completed", extracted_data: { projectName, files: fileList.length },
-            created_at: new Date().toISOString(), completed_at: new Date().toISOString(),
+            user_id: userId,
+            drive_url: stableSourceUrl,
+            url_type: "upload",
+            status: "completed",
+            extracted_data: {
+              projectName,
+              files: fileList.length,
+              docsProcessed: extractedDocTexts.filter((d) => d.text?.length > 80).length,
+              hasFullSections: true,
+            },
+            created_at: new Date().toISOString(),
+            completed_at: new Date().toISOString(),
           }).then(() => {}).catch(() => {});
         }
 
         results.push({
-          success: true, importId, projectName, developer: devName, location: null,
+          success: true,
+          importId,
+          projectName,
+          developer: detectedDeveloper,
+          location: validatedLocation,
           status: "pending-approval",
           files_processed: fileList.length,
           media: { images: imagesPayload.length, documents: documentsPayload.length, videos: 0 },
+          amenities: extractedData?.amenities || [],
+          paymentPlan: extractedData?.paymentPlan,
+          unitTypes: extractedData?.unitTypes || [],
+          unitDetails: extractedData?.unitDetails || [],
+          priceFrom: extractedData?.priceFrom,
+          priceTo: extractedData?.priceTo,
+          bedroomsMin: extractedData?.bedroomsMin,
+          bedroomsMax: extractedData?.bedroomsMax,
+          handoverDate: extractedData?.handoverDate,
+          propertyType: extractedData?.propertyType,
+          projectStatus: extractedData?.projectStatus,
+          totalUnits: extractedData?.totalUnits,
+          floors: extractedData?.floors,
+          description: extractedData?.description?.substring(0, 500),
+          heroImage: imagesPayload[0]?.url || null,
           view_url: `/listing-admin/preview/${importId}`,
           duration_ms: Date.now() - startTime,
         });
       } catch (fileErr: any) {
         console.error("[extract] File processing error:", fileErr);
         results.push({
-          success: false, name: projectName, error: fileErr.message,
+          success: false,
+          name: projectNameHint,
+          error: fileErr.message,
           source_url: stableSourceUrl,
           duration_ms: Date.now() - startTime,
         });
