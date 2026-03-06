@@ -283,7 +283,7 @@ export function ReellyImportPanel() {
     try {
       const { data, error } = await supabase.from("sync_jobs").select("*").eq("job_type", "reelly_backfill").order("created_at", { ascending: false }).limit(1).single();
       if (!error && data) {
-        const results = (data.error_log as Array<{ name: string; status: string; images?: number; docs?: number }>) || [];
+        const results = (Array.isArray(data.error_log) ? data.error_log : []) as Array<{ name: string; status: string; images?: number; docs?: number }>;
         const updated = data.stats_updated || 0;
         const failed = data.stats_errors || 0;
         setBackfillResult({ success: data.status === "completed" || data.status === "running", processed: updated + failed, updated, failed, remaining: data.stats_skipped || 0, message: data.status === "completed" ? `Backfill complete! Updated ${updated} projects.` : `Backfill in progress...` });
@@ -470,7 +470,7 @@ export function ReellyImportPanel() {
       const { data: prevJob } = await supabase.from("sync_jobs").select("*").eq("job_type", "reelly_backfill").order("created_at", { ascending: false }).limit(1).maybeSingle();
       const prevUpdated = prevJob?.stats_updated || 0;
       const prevFailed = prevJob?.stats_errors || 0;
-      const prevResults = (prevJob?.error_log as Array<{ name: string; slug?: string; status: string; images?: number; docs?: number }>) || [];
+      const prevResults = (Array.isArray(prevJob?.error_log) ? prevJob.error_log : []) as Array<{ name: string; slug?: string; status: string; images?: number; docs?: number }>;
       let aggregated = { processed: prevUpdated + prevFailed, updated: prevUpdated, failed: prevFailed, remaining: 999 };
       let allResults = [...prevResults];
       setBackfillResult({ success: true, ...aggregated, message: `Resuming backfill (${prevUpdated} previously updated)...` });
@@ -493,7 +493,7 @@ export function ReellyImportPanel() {
         if (error) throw error;
         if (!data?.success) throw new Error(data?.error || "Backfill failed");
 
-        const batchResults = (data.results || []) as Array<{ name: string; slug?: string; status: string; images?: number; docs?: number }>;
+        const batchResults = (Array.isArray(data.results) ? data.results : []) as Array<{ name: string; slug?: string; status: string; images?: number; docs?: number }>;
         allResults = [...allResults, ...batchResults];
         aggregated = { processed: aggregated.processed + (data.processed || 0), updated: aggregated.updated + (data.updated || 0), failed: aggregated.failed + (data.failed || 0), remaining: data.remaining || 0 };
         setBackfillResult({ success: true, ...aggregated, message: `Processing batch ${batches + 1}...` });

@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useListingAdmin } from "@/hooks/useListingAdmin";
-import { useProjects, useProjectsCount, useProjectsPaginated, useDevelopers, useCommunities } from "@/hooks/useProjects";
+import { useProjectsCount, useProjectsTotalCount, useProjectsPaginated, useDevelopers, useCommunities } from "@/hooks/useProjects";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -74,8 +74,8 @@ const ListingAdmin = () => {
   const { t } = useLanguage();
   const { isListingAdmin, adminData, isLoading: checkingAdmin } = useListingAdmin();
 
-  // Owner is now verified via AuthContext - no need for separate role check
-  const { data: totalCount } = useProjectsCount();
+  const { data: totalCount } = useProjectsCount(); // published only
+  const { data: allProjectsCount } = useProjectsTotalCount(); // all including unpublished
   const [projectsPage, setProjectsPage] = useState(0);
   const { data: paginatedProjects, refetch: refetchProjects } = useProjectsPaginated(projectsPage, 50);
   const { data: developers } = useDevelopers();
@@ -613,7 +613,8 @@ const ListingAdmin = () => {
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] rounded-lg border-2 border-gold/30">
                 <Building2 className="w-4 h-4 text-gold" />
-                <span className="text-sm text-black font-medium">{totalCount ?? 0} {t('listingAdmin.projects')}</span>
+                <span className="text-sm text-black font-medium">{totalCount ?? 0} Published</span>
+                <span className="text-xs text-zinc-400">/ {allProjectsCount ?? 0} Total</span>
               </div>
               <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] rounded-lg border-2 border-gold/30">
                 <Crown className="w-4 h-4 text-gold" />
@@ -803,12 +804,12 @@ const ListingAdmin = () => {
                     Previous
                   </Button>
                   <span className="text-sm text-muted-foreground">
-                    Page {projectsPage + 1} of {Math.ceil((totalCount ?? 0) / 50) || 1}
+                    Page {projectsPage + 1} of {Math.ceil((allProjectsCount ?? 0) / 50) || 1}
                   </span>
                   <Button
                     variant="secondary"
                     size="sm"
-                    disabled={((projectsPage + 1) * 50) >= (totalCount ?? 0)}
+                    disabled={((projectsPage + 1) * 50) >= (allProjectsCount ?? 0)}
                     onClick={() => setProjectsPage(p => p + 1)}
                   >
                     Next
