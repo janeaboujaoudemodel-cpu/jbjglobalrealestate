@@ -14,6 +14,7 @@ import {
   ChevronRight,
   AlignLeft,
   X,
+  CheckSquare,
   FileText,
 } from "lucide-react";
 import {
@@ -36,7 +37,7 @@ interface Recipient {
 interface SignatureField {
   id: string;
   recipientId: string;
-  type: "signature" | "initials" | "date" | "text";
+  type: "signature" | "initials" | "date" | "text" | "checkbox";
   pageNumber: number;
   x: number;
   y: number;
@@ -59,6 +60,7 @@ const fieldTypes = [
   { type: "initials" as const, label: "Initials", icon: AlignLeft, defaultWidth: 90, defaultHeight: 40 },
   { type: "date" as const, label: "Date", icon: Calendar, defaultWidth: 140, defaultHeight: 36 },
   { type: "text" as const, label: "Text", icon: Type, defaultWidth: 160, defaultHeight: 36 },
+  { type: "checkbox" as const, label: "Checkbox", icon: CheckSquare, defaultWidth: 28, defaultHeight: 28 },
 ];
 
 const recipientColorStyles = [
