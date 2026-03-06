@@ -804,12 +804,12 @@ const ListingAdmin = () => {
                     Previous
                   </Button>
                   <span className="text-sm text-muted-foreground">
-                    Page {projectsPage + 1} of {Math.ceil((totalCount ?? 0) / 50) || 1}
+                    Page {projectsPage + 1} of {Math.ceil((allProjectsCount ?? 0) / 50) || 1}
                   </span>
                   <Button
                     variant="secondary"
                     size="sm"
-                    disabled={((projectsPage + 1) * 50) >= (totalCount ?? 0)}
+                    disabled={((projectsPage + 1) * 50) >= (allProjectsCount ?? 0)}
                     onClick={() => setProjectsPage(p => p + 1)}
                   >
                     Next
