@@ -141,7 +141,9 @@ serve(async (req) => {
       albumName,
       auto_approve = false,
       queue = true,
-      retryImportId, // NEW: retry a failed/pending import
+      retryImportId,
+      async_mode = false,
+      job_id, // For processing a queued job
     } = body;
 
     const urlList: string[] = urls || (url ? [url] : []);
