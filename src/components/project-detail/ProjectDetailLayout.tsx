@@ -601,7 +601,7 @@ export default function ProjectDetailLayout({
 
           {/* Hero CTAs - Download Brochure + Register Interest */}
           <div className="flex flex-wrap gap-4">
-            {brochurePrimary && (
+            {brochurePrimary ? (
               <Button 
                 variant="primary" 
                 size="lg"
@@ -610,6 +610,20 @@ export default function ProjectDetailLayout({
               >
                 <Download className="w-5 h-5" />
                 Download Brochure
+              </Button>
+            ) : (
+              <Button 
+                variant="primary" 
+                size="lg"
+                onClick={() => {
+                  setCaptureDocType("brochure");
+                  setCaptureDocUrl(undefined);
+                  setLeadCaptureOpen(true);
+                }}
+                className="hover:shadow-[0_14px_45px_rgba(200,167,102,0.35)] hover:-translate-y-0.5 transition-all"
+              >
+                <FileText className="w-5 h-5" />
+                Request Brochure
               </Button>
             )}
             <Button 
@@ -1119,13 +1133,18 @@ export default function ProjectDetailLayout({
            {/* PAYMENT PLAN VISUALIZATION (Reelly-style enhanced) */}
            {(true) && ( /* Always show payment section */
            <div ref={paymentRef} id="payment" className="mb-16 scroll-mt-40">
-             <PaymentPlanVisualization
-               paymentPlan={project.payment_plan}
-               paymentBreakdown={project.payment_breakdown}
-               handoverDate={project.handover_date}
-               downPaymentPercent={project.down_payment_percent}
-               projectName={project.name}
-             />
+              <PaymentPlanVisualization
+                paymentPlan={project.payment_plan}
+                paymentBreakdown={project.payment_breakdown}
+                handoverDate={project.handover_date}
+                downPaymentPercent={project.down_payment_percent}
+                projectName={project.name}
+                onRegisterInterest={() => {
+                  setCaptureDocType("payment_plan");
+                  setCaptureDocUrl(undefined);
+                  setLeadCaptureOpen(true);
+                }}
+              />
              
              {/* Payment Plan Documents - still show if available */}
              {paymentPlanDocs.length > 0 && (
