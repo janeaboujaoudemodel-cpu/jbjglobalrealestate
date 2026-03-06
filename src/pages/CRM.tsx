@@ -29,6 +29,7 @@ import EmployeesHub from "@/components/crm/EmployeesHub";
 import CRMToolsSidebar from "@/components/crm/CRMToolsSidebar";
 import FlaggedLeadsView from "@/components/crm/FlaggedLeadsView";
 import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
+import RecentlyDeletedLeads from "@/components/crm/RecentlyDeletedLeads";
 import VIPExportButton from "@/components/crm/VIPExportButton";
 import CRMAssistantPanel from "@/components/crm/CRMAssistantPanel";
 import CRMCommunicationPanel from "@/components/crm/CRMCommunicationPanel";
