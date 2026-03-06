@@ -589,6 +589,7 @@ export default function CreateEnvelope() {
             </Button>
           )}
         </div>
+        </div>
       </div>
     </div>
   );
