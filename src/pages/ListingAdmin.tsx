@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useListingAdmin } from "@/hooks/useListingAdmin";
-import { useProjects, useDevelopers, useCommunities } from "@/hooks/useProjects";
+import { useProjects, useProjectsCount, useProjectsPaginated, useDevelopers, useCommunities } from "@/hooks/useProjects";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -52,8 +52,10 @@ import { ReellyImportPanel } from "@/components/listing-admin/ReellyImportPanel"
 import { SourceCountsPanel } from "@/components/listing-admin/SourceCountsPanel";
 import { EmergencyMirrorPanel } from "@/components/listing-admin/EmergencyMirrorPanel";
 import { EnrichmentCenter } from "@/components/listing-admin/EnrichmentCenter";
-// OffPlanInquiryCTA removed from admin per user request
 import { RefreshCw, Globe, Check, AlertTriangle, Zap } from "lucide-react";
+import { ProjectPreviewModal } from "@/components/listing-admin/ProjectPreviewModal";
+import { SafeImage } from "@/components/SafeImage";
+import type { UnifiedProject } from "@/types/unifiedProject";
 
 interface ProjectDocument {
   id: string;
@@ -73,9 +75,15 @@ const ListingAdmin = () => {
   const { isListingAdmin, adminData, isLoading: checkingAdmin } = useListingAdmin();
 
   // Owner is now verified via AuthContext - no need for separate role check
-  const { data: projects, refetch: refetchProjects } = useProjects();
+  const { data: totalCount } = useProjectsCount();
+  const [projectsPage, setProjectsPage] = useState(0);
+  const { data: paginatedProjects, refetch: refetchProjects } = useProjectsPaginated(projectsPage, 50);
   const { data: developers } = useDevelopers();
   const { data: communities } = useCommunities();
+  
+  // Preview modal state
+  const [previewProject, setPreviewProject] = useState<UnifiedProject | null>(null);
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [filterDeveloper, setFilterDeveloper] = useState<string>("all");
@@ -210,10 +218,10 @@ const ListingAdmin = () => {
     );
   }
 
-  const filteredProjects = projects?.filter((project) => {
+  const filteredProjects = paginatedProjects?.filter((project) => {
     const matchesSearch = 
       project.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      project.developer?.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      project.developer?.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       project.location?.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesDeveloper = filterDeveloper === "all" || project.developer?.id === filterDeveloper;
     const matchesEmirate = filterEmirate === "all" || project.emirate === filterEmirate;
@@ -584,7 +592,7 @@ const ListingAdmin = () => {
                 variant={activeView === 'projects' ? 'primary' : 'secondary'}
               >
                 <FolderOpen className="w-4 h-4 mr-2" />
-                {t('listingAdmin.projects')} ({projects?.length || 0})
+                {t('listingAdmin.projects')} ({totalCount ?? 0})
               </Button>
               {/* UNIFIED: Single Data Ops button replaces 3 separate buttons */}
               <Button
@@ -605,11 +613,11 @@ const ListingAdmin = () => {
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] rounded-lg border-2 border-gold/30">
                 <Building2 className="w-4 h-4 text-gold" />
-                <span className="text-sm text-black font-medium">{projects?.length || 0} {t('listingAdmin.projects')}</span>
+                <span className="text-sm text-black font-medium">{totalCount ?? 0} {t('listingAdmin.projects')}</span>
               </div>
               <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] rounded-lg border-2 border-gold/30">
                 <Crown className="w-4 h-4 text-gold" />
-                <span className="text-sm text-black font-medium">{projects?.filter((p) => p.is_premium).length || 0} {t('listingAdmin.premium')}</span>
+                <span className="text-sm text-black font-medium">{paginatedProjects?.filter((p) => p.is_premium).length || 0} {t('listingAdmin.premium')}</span>
               </div>
             </div>
           </div>
@@ -743,19 +751,17 @@ const ListingAdmin = () => {
                       className={`bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 cursor-pointer transition-all hover:shadow-lg hover:border-gold overflow-hidden ${
                         selectedProject?.id === project.id ? "border-gold ring-2 ring-gold/20" : ""
                       }`}
-                      onClick={() => handleEditProjectWithView(project)}
+                      onClick={() => { setPreviewProject(project); setShowPreviewModal(true); }}
                     >
                       {/* Cover Image */}
-                      {(project.cover_image_url || (project.images && project.images.length > 0)) && (
-                        <div className="aspect-[16/10] overflow-hidden">
-                          <img
-                            src={project.cover_image_url || project.images?.[0]?.image_url}
-                            alt={project.name}
-                            className="w-full h-full object-cover"
-                            loading="lazy"
-                          />
-                        </div>
-                      )}
+                      <div className="aspect-[16/10] overflow-hidden bg-muted">
+                        <SafeImage
+                          src={project.cover_image_url || project.images?.[0]?.image_url}
+                          alt={project.name}
+                          className="w-full h-full object-cover"
+                          fallbackSrc="/placeholder.svg"
+                        />
+                      </div>
                       <CardContent className="p-4">
                         <div className="flex items-start justify-between gap-2">
                           <div className="min-w-0 flex-1">
@@ -786,10 +792,45 @@ const ListingAdmin = () => {
                     </div>
                   )}
                 </div>
+                {/* Pagination */}
+                <div className="flex items-center justify-center gap-4 mt-6">
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    disabled={projectsPage === 0}
+                    onClick={() => setProjectsPage(p => Math.max(0, p - 1))}
+                  >
+                    Previous
+                  </Button>
+                  <span className="text-sm text-muted-foreground">
+                    Page {projectsPage + 1} of {Math.ceil((totalCount ?? 0) / 50) || 1}
+                  </span>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    disabled={((projectsPage + 1) * 50) >= (totalCount ?? 0)}
+                    onClick={() => setProjectsPage(p => p + 1)}
+                  >
+                    Next
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
         )}
+
+        {/* Preview Modal - outside conditional */}
+        <ProjectPreviewModal
+          project={previewProject}
+          open={showPreviewModal}
+          onOpenChange={setShowPreviewModal}
+          onEdit={(p) => handleEditProjectWithView(p)}
+          onSendToSarah={(p) => {
+            setShowPreviewModal(false);
+            setActiveView('chat');
+            setShowChat(true);
+          }}
+        />
 
         {/* Editor View */}
         {activeView === 'editor' && (isEditing || isCreating) && (

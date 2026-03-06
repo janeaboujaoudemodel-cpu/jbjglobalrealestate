@@ -155,6 +155,13 @@ export type ProjectDetailData = {
   cover_image_url?: string | null;
   external_id?: string | null;
   area_name?: string | null;
+  // Coordinates
+  latitude?: number | null;
+  longitude?: number | null;
+  // Sale status
+  sale_status?: string | null;
+  emirate?: string | null;
+  construction_status?: string | null;
 };
 
 interface ProjectDetailLayoutProps {
@@ -983,8 +990,8 @@ export default function ProjectDetailLayout({
               <ProjectLocationMap
                 projectName={project.name}
                 location={project.location}
-                latitude={null}
-                longitude={null}
+                latitude={project.latitude ?? null}
+                longitude={project.longitude ?? null}
               />
 
               {/* Nearby Points of Interest - Below Map */}

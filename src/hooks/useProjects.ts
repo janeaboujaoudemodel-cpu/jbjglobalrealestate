@@ -198,6 +198,51 @@ export function useTrendingAreas() {
   });
 }
 
+/**
+ * Lightweight exact count of all projects (head-only query).
+ */
+export function useProjectsCount() {
+  return useQuery({
+    queryKey: ["projects-count"],
+    staleTime: 5 * 60 * 1000,
+    gcTime: 15 * 60 * 1000,
+    queryFn: async () => {
+      const { count, error } = await supabase
+        .from("projects")
+        .select("id", { count: "exact", head: true });
+      if (error) throw error;
+      return count ?? 0;
+    },
+  });
+}
+
+/**
+ * Paginated admin projects listing (50 per page).
+ */
+export function useProjectsPaginated(page: number = 0, pageSize: number = 50) {
+  return useQuery({
+    queryKey: ["projects-paginated", page, pageSize],
+    queryFn: async () => {
+      const from = page * pageSize;
+      const to = from + pageSize - 1;
+      const { data, error } = await supabase
+        .from("projects")
+        .select(`
+          *,
+          developer:developers(id, name, slug),
+          community:communities(id, name, slug),
+          images:project_images(id, image_url, alt_text, display_order),
+          documents:project_documents(id, document_type, file_url, file_name, display_order)
+        `)
+        .order("created_at", { ascending: false })
+        .range(from, to);
+      
+      if (error) throw error;
+      return data as UnifiedProject[];
+    },
+  });
+}
+
 export function useProjects() {
   return useQuery({
     queryKey: ["projects"],

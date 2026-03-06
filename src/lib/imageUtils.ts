@@ -27,6 +27,15 @@ const SITE_ASSET_PATTERNS = [
   /avatar/i,
   /spinner/i,
   /favicon/i,
+  /\/flags?\//i,
+  /flag-icon/i,
+  /lang[-_]?selector/i,
+  /sprite/i,
+  /pixel\.(gif|png)/i,
+  /spacer\.(gif|png)/i,
+  /1x1\.(gif|png)/i,
+  /tracking/i,
+  /analytics/i,
 ];
 
 // Document patterns - these are PDFs/docs, not gallery images
@@ -81,24 +90,34 @@ export function isValidImageUrl(url: unknown): url is string {
   
   // Must start with http(s)
   if (!url.startsWith("http://") && !url.startsWith("https://")) return false;
+
+  // Decode Next.js proxy URLs: /_next/image?url=<encoded>&w=...
+  let effectiveUrl = url;
+  if (url.includes("/_next/image")) {
+    try {
+      const parsed = new URL(url);
+      const inner = parsed.searchParams.get("url");
+      if (inner) effectiveUrl = inner;
+    } catch { /* use original */ }
+  }
   
   // Check for placeholder patterns (always reject these)
   for (const pattern of PLACEHOLDER_PATTERNS) {
-    if (pattern.test(url)) return false;
+    if (pattern.test(effectiveUrl)) return false;
   }
   
   // If from trusted domain, allow it (skip site asset filtering)
-  if (isTrustedImageSource(url)) {
+  if (isTrustedImageSource(effectiveUrl)) {
     // Still filter out explicit document files even from trusted sources
     for (const pattern of DOCUMENT_PATTERNS) {
-      if (pattern.test(url)) return false;
+      if (pattern.test(effectiveUrl)) return false;
     }
     return true;
   }
   
   // Check for site asset patterns (only for untrusted domains)
   for (const pattern of SITE_ASSET_PATTERNS) {
-    if (pattern.test(url)) return false;
+    if (pattern.test(effectiveUrl)) return false;
   }
   
   return true;
