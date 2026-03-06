@@ -126,7 +126,7 @@ function RecentCard({ item, index }: { item: RecentItem; index: number }) {
             </span>
           )}
           <h3 className="text-white font-semibold text-xs md:text-sm leading-tight truncate group-hover:text-gold transition-colors">
-            {item.name}
+            {typeof item.name === 'string' ? item.name : String(item.name || '')}
           </h3>
         </div>
       </Link>

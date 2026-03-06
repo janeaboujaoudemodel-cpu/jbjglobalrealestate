@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -17,7 +17,8 @@ import {
   Send,
   Plus,
   Trash2,
-  Loader2
+  Loader2,
+  Clock
 } from "lucide-react";
 import { toast } from "sonner";
 import DocumentFieldPlacer from "@/components/e-signature/DocumentFieldPlacer";
@@ -39,6 +40,50 @@ interface SignatureField {
   y: number;
   width: number;
   height: number;
+}
+
+interface SavedContact {
+  name: string;
+  email: string;
+  phone: string;
+  lastUsed: number;
+}
+
+const SAVED_CONTACTS_KEY = "esign_saved_contacts";
+
+function loadSavedContacts(): SavedContact[] {
+  try {
+    const raw = localStorage.getItem(SAVED_CONTACTS_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.sort((a: SavedContact, b: SavedContact) => b.lastUsed - a.lastUsed) : [];
+  } catch {
+    return [];
+  }
+}
+
+function persistContacts(recipients: Recipient[]) {
+  try {
+    const existing = loadSavedContacts();
+    const map = new Map(existing.map(c => [c.email.toLowerCase(), c]));
+    
+    for (const r of recipients) {
+      if (r.name.trim() && r.email.trim()) {
+        map.set(r.email.toLowerCase(), {
+          name: r.name.trim(),
+          email: r.email.trim(),
+          phone: r.phone.trim(),
+          lastUsed: Date.now(),
+        });
+      }
+    }
+    
+    const all = Array.from(map.values())
+      .sort((a, b) => b.lastUsed - a.lastUsed)
+      .slice(0, 50);
+    
+    localStorage.setItem(SAVED_CONTACTS_KEY, JSON.stringify(all));
+  } catch {}
 }
 
 const steps = [
@@ -65,12 +110,25 @@ export default function CreateEnvelope() {
     { id: crypto.randomUUID(), name: "", email: "", phone: "", signingOrder: 1 }
   ]);
 
+  // Saved contacts for autocomplete
+  const [savedContacts] = useState<SavedContact[]>(loadSavedContacts);
+  const [activeContactField, setActiveContactField] = useState<string | null>(null);
+  const [contactFilter, setContactFilter] = useState("");
+
   // Step 3: Fields
   const [signatureFields, setSignatureFields] = useState<SignatureField[]>([]);
 
   // Step 4: Email customization
   const [emailSubject, setEmailSubject] = useState("");
   const [emailMessage, setEmailMessage] = useState("");
+
+  const filteredContacts = useMemo(() => {
+    if (!contactFilter || savedContacts.length === 0) return savedContacts.slice(0, 5);
+    const q = contactFilter.toLowerCase();
+    return savedContacts.filter(c => 
+      c.name.toLowerCase().includes(q) || c.email.toLowerCase().includes(q)
+    ).slice(0, 5);
+  }, [contactFilter, savedContacts]);
 
   const handleFileUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -89,7 +147,6 @@ export default function CreateEnvelope() {
     setPdfFile(file);
     setDocumentName(file.name.replace(".pdf", ""));
     
-    // Create preview URL
     const url = URL.createObjectURL(file);
     setPdfUrl(url);
   }, []);
@@ -111,6 +168,20 @@ export default function CreateEnvelope() {
     setRecipients(recipients.map(r => 
       r.id === id ? { ...r, [field]: value } : r
     ));
+    
+    // Track filter for autocomplete
+    if (field === "name" || field === "email") {
+      setContactFilter(String(value));
+      setActiveContactField(`${id}-${field}`);
+    }
+  };
+
+  const selectSavedContact = (recipientId: string, contact: SavedContact) => {
+    setRecipients(recipients.map(r => 
+      r.id === recipientId ? { ...r, name: contact.name, email: contact.email, phone: contact.phone } : r
+    ));
+    setActiveContactField(null);
+    setContactFilter("");
   };
 
   const removeRecipient = (id: string) => {
@@ -119,7 +190,6 @@ export default function CreateEnvelope() {
       return;
     }
     setRecipients(recipients.filter(r => r.id !== id));
-    // Also remove fields assigned to this recipient
     setSignatureFields(signatureFields.filter(f => f.recipientId !== id));
   };
 
@@ -151,13 +221,14 @@ export default function CreateEnvelope() {
           toast.error("Please enter valid email addresses");
           return false;
         }
+        // Save contacts on successful validation
+        persistContacts(recipients);
         return true;
       case 3:
         if (signatureFields.length === 0) {
           toast.error("Please add at least one signature field");
           return false;
         }
-        // Check each recipient has at least one field
         const recipientsWithFields = new Set(signatureFields.map(f => f.recipientId));
         const missingRecipient = recipients.find(r => !recipientsWithFields.has(r.id));
         if (missingRecipient) {
@@ -185,7 +256,6 @@ export default function CreateEnvelope() {
 
     setIsSubmitting(true);
     try {
-      // 1. Upload PDF to storage
       const fileName = `${user.id}/${crypto.randomUUID()}.pdf`;
       const { error: uploadError } = await supabase.storage
         .from("esign-documents")
@@ -197,7 +267,6 @@ export default function CreateEnvelope() {
         .from("esign-documents")
         .getPublicUrl(fileName);
 
-      // 2. Create envelope
       const { data: envelope, error: envelopeError } = await supabase
         .from("esign_envelopes")
         .insert({
@@ -212,14 +281,13 @@ export default function CreateEnvelope() {
           status: "draft",
           email_subject: emailSubject || `Please sign: ${documentName}`,
           email_message: emailMessage || null,
-          expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days
+          expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
         })
         .select()
         .single();
 
       if (envelopeError) throw envelopeError;
 
-      // 3. Create recipients
       const recipientInserts = recipients.map(r => ({
         envelope_id: envelope.id,
         name: r.name,
@@ -236,13 +304,11 @@ export default function CreateEnvelope() {
 
       if (recipientError) throw recipientError;
 
-      // Map local IDs to database IDs
       const recipientIdMap = new Map<string, string>();
       recipients.forEach((r, i) => {
         recipientIdMap.set(r.id, createdRecipients[i].id);
       });
 
-      // 4. Create signature fields
       const fieldInserts = signatureFields.map(f => ({
         envelope_id: envelope.id,
         recipient_id: recipientIdMap.get(f.recipientId)!,
@@ -260,7 +326,9 @@ export default function CreateEnvelope() {
 
       if (fieldError) throw fieldError;
 
-      // 5. Send for signature
+      // Save contacts after successful submission
+      persistContacts(recipients);
+
       const response = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/esign-send-for-signature`,
         {
@@ -432,24 +500,65 @@ export default function CreateEnvelope() {
                       <CardContent className="p-4">
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-4">
-                            <div>
+                            <div className="relative">
                               <Label>Name *</Label>
                               <Input
                                 value={recipient.name}
                                 onChange={(e) => updateRecipient(recipient.id, "name", e.target.value)}
+                                onFocus={() => { setActiveContactField(`${recipient.id}-name`); setContactFilter(recipient.name); }}
+                                onBlur={() => setTimeout(() => setActiveContactField(null), 200)}
                                 placeholder="John Smith"
                                 className="mt-1"
                               />
+                              {/* Saved contacts dropdown */}
+                              {activeContactField === `${recipient.id}-name` && filteredContacts.length > 0 && (
+                                <div className="absolute z-50 top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg max-h-40 overflow-y-auto">
+                                  <div className="px-2 py-1 text-[10px] uppercase tracking-wider text-muted-foreground font-semibold flex items-center gap-1">
+                                    <Clock className="w-3 h-3" /> Recently used
+                                  </div>
+                                  {filteredContacts.map((c, ci) => (
+                                    <button
+                                      key={ci}
+                                      type="button"
+                                      className="w-full text-left px-3 py-2 hover:bg-muted/50 text-sm flex flex-col"
+                                      onMouseDown={(e) => { e.preventDefault(); selectSavedContact(recipient.id, c); }}
+                                    >
+                                      <span className="font-medium text-foreground">{c.name}</span>
+                                      <span className="text-xs text-muted-foreground">{c.email}</span>
+                                    </button>
+                                  ))}
+                                </div>
+                              )}
                             </div>
-                            <div>
+                            <div className="relative">
                               <Label>Email *</Label>
                               <Input
                                 type="email"
                                 value={recipient.email}
                                 onChange={(e) => updateRecipient(recipient.id, "email", e.target.value)}
+                                onFocus={() => { setActiveContactField(`${recipient.id}-email`); setContactFilter(recipient.email); }}
+                                onBlur={() => setTimeout(() => setActiveContactField(null), 200)}
                                 placeholder="john@example.com"
                                 className="mt-1"
                               />
+                              {activeContactField === `${recipient.id}-email` && filteredContacts.length > 0 && (
+                                <div className="absolute z-50 top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg max-h-40 overflow-y-auto">
+                                  <div className="px-2 py-1 text-[10px] uppercase tracking-wider text-muted-foreground font-semibold flex items-center gap-1">
+                                    <Clock className="w-3 h-3" /> Recently used
+                                  </div>
+                                  {filteredContacts.map((c, ci) => (
+                                    <button
+                                      key={ci}
+                                      type="button"
+                                      className="w-full text-left px-3 py-2 hover:bg-muted/50 text-sm flex flex-col"
+                                      onMouseDown={(e) => { e.preventDefault(); selectSavedContact(recipient.id, c); }}
+                                    >
+                                      <span className="font-medium text-foreground">{c.name}</span>
+                                      <span className="text-xs text-muted-foreground">{c.email}</span>
+                                    </button>
+                                  ))}
+                                </div>
+                              )}
                             </div>
                             <div>
                               <Label>Phone (Optional)</Label>

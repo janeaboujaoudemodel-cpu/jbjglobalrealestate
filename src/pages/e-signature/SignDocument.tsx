@@ -64,7 +64,6 @@ export default function SignDocument() {
       }
 
       try {
-        // Fetch recipient by token
         const { data: recipient, error: recipientError } = await supabase
           .from("esign_recipients")
           .select(`
@@ -83,7 +82,6 @@ export default function SignDocument() {
           return;
         }
 
-        // Check if already signed or declined
         if (recipient.status === "signed") {
           setCompleted(true);
           setLoading(false);
@@ -96,7 +94,6 @@ export default function SignDocument() {
           return;
         }
 
-        // Fetch envelope
         const { data: envelope, error: envelopeError } = await supabase
           .from("esign_envelopes")
           .select("id, name, document_url, document_filename, sender_name, sender_email, status")
@@ -109,14 +106,12 @@ export default function SignDocument() {
           return;
         }
 
-        // Check envelope status
         if (["completed", "voided", "expired"].includes(envelope.status)) {
           setError(`This document has been ${envelope.status}`);
           setLoading(false);
           return;
         }
 
-        // Fetch fields for this recipient
         const { data: fields, error: fieldsError } = await supabase
           .from("esign_fields")
           .select("*")
@@ -137,7 +132,6 @@ export default function SignDocument() {
           fields: fields || [],
         });
 
-        // Mark as viewed
         await supabase
           .from("esign_recipients")
           .update({ 
@@ -146,7 +140,6 @@ export default function SignDocument() {
           })
           .eq("id", recipient.id);
 
-        // Log view event
         await supabase.from("esign_audit_log").insert({
           envelope_id: envelope.id,
           recipient_id: recipient.id,
@@ -173,7 +166,6 @@ export default function SignDocument() {
       return;
     }
 
-    // Check if initials are needed
     const hasInitialsField = recipientData.fields.some(f => f.field_type === "initials");
     if (hasInitialsField && !initialsData) {
       toast.error("Please provide your initials");
@@ -319,6 +311,10 @@ export default function SignDocument() {
     );
   }
 
+  const docUrl = recipientData?.envelope.document_url
+    ? maybeProxyStorageUrl(recipientData.envelope.document_url, recipientData.envelope.document_filename)
+    : null;
+
   // Main signing view
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-50 py-8 px-4">
@@ -337,7 +333,7 @@ export default function SignDocument() {
           <CardHeader>
             <CardTitle className="text-lg">{recipientData?.envelope.name}</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">
@@ -351,19 +347,24 @@ export default function SignDocument() {
                 variant="outline" 
                 size="sm"
                 onClick={() => {
-                  if (recipientData) {
-                    const url = maybeProxyStorageUrl(
-                      recipientData.envelope.document_url,
-                      recipientData.envelope.document_filename
-                    );
-                    window.open(url, "_blank");
-                  }
+                  if (docUrl) window.open(docUrl, "_blank");
                 }}
               >
                 <Download className="w-4 h-4 mr-2" />
-                View PDF
+                Download PDF
               </Button>
             </div>
+
+            {/* Inline centered PDF preview */}
+            {docUrl && (
+              <div className="w-full flex justify-center">
+                <iframe
+                  src={`${docUrl}#toolbar=0&navpanes=0`}
+                  className="w-full max-w-3xl h-[60vh] border border-border rounded-xl mx-auto"
+                  title="Document Preview"
+                />
+              </div>
+            )}
           </CardContent>
         </Card>
 
