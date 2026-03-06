@@ -82,52 +82,45 @@ export function lockIconBadge(size = 74): string {
   return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="border-collapse:separate;"><tr><td style="width:${size}px;height:${size}px;border-radius:${size}px;border:2px solid #C8A766;background:transparent;text-align:center;vertical-align:middle;">${SVG.lock}</td></tr></table>`;
 }
 
-// ─── Inquiry Box ───
+// ─── Inquiry Box (flat — no border/background to stay inside single card) ───
 export function inquiryBox(contextLabel: string): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:20px 0 18px;"><tr><td style="padding:18px 20px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:18px;text-align:center;"><p style="margin:0;font-size:14px;color:#1f2937;line-height:1.7;">For inquiries about your ${contextLabel}, contact us at<br/><a href="mailto:CONTACT@JBJ.AE" style="color:#111827;font-weight:700;text-decoration:underline;">CONTACT@JBJ.AE</a></p></td></tr></table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:20px 0 18px;"><tr><td style="padding:18px 20px;text-align:center;"><p style="margin:0;font-size:14px;color:#1f2937;line-height:1.7;">For inquiries about your ${contextLabel}, contact us at<br/><a href="mailto:CONTACT@JBJ.AE" style="color:#111827;font-weight:700;text-decoration:underline;">CONTACT@JBJ.AE</a></p></td></tr></table>`;
 }
 
-// ─── Ticket Support ───
+// ─── Ticket Support (flat — blends into single card, no separate border/bg) ───
 export function ticketSupportEmbed(): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:16px 0 24px;"><tr><td style="padding:24px 20px;background:linear-gradient(135deg,#fff5f5,#ffe9e9);border:1px solid #ef4444;border-radius:18px;text-align:center;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="text-align:center;vertical-align:middle;">${SVG.headsetWhite}</td></tr></table>
-<p style="margin:0 0 4px;font-size:11px;font-weight:700;color:#dc2626;text-transform:uppercase;letter-spacing:2px;">24/7 SUPPORT</p>
-<p style="margin:0 0 6px;font-size:16px;font-weight:700;color:#7f1d1d;">Need Help? Open a Support Ticket</p>
-<p style="margin:0 0 14px;font-size:13px;color:#991b1b;">Our team typically responds within 24 hours</p>
-<a href="${SITE_URL}/contact-support" style="display:inline-block;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;text-decoration:none;padding:12px 24px;border-radius:10px;font-weight:700;font-size:13px;">Submit a Ticket</a>
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:16px 0 24px;"><tr><td style="padding:24px 20px;text-align:center;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:48px;height:48px;border-radius:48px;background:#1a1a1a;text-align:center;vertical-align:middle;">${SVG.headsetWhite}</td></tr></table>
+<p style="margin:0 0 4px;font-size:11px;font-weight:700;color:#C8A766;text-transform:uppercase;letter-spacing:2px;">24/7 SUPPORT</p>
+<p style="margin:0 0 6px;font-size:16px;font-weight:700;color:#1a1a1a;">Need Help? Open a Support Ticket</p>
+<p style="margin:0 0 14px;font-size:13px;color:#666;">Our team typically responds within 24 hours</p>
+<a href="${SITE_URL}/contact-support" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:12px 24px;border-radius:10px;font-weight:700;font-size:13px;border:1px solid #C8A76650;">Submit a Ticket</a>
 </td></tr></table>`;
 }
 
 export function ticketSupportEmbedAr(): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:16px 0 24px;direction:rtl;"><tr><td style="padding:24px 20px;background:linear-gradient(135deg,#fff5f5,#ffe9e9);border:1px solid #ef4444;border-radius:18px;text-align:center;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="text-align:center;vertical-align:middle;">${SVG.headsetWhite}</td></tr></table>
-<p style="margin:0 0 4px;font-size:11px;font-weight:700;color:#dc2626;letter-spacing:2px;">دعم على مدار الساعة</p>
-<p style="margin:0 0 6px;font-size:16px;font-weight:700;color:#7f1d1d;">هل تحتاج مساعدة؟ افتح تذكرة دعم</p>
-<p style="margin:0 0 14px;font-size:13px;color:#991b1b;">فريقنا يرد عادةً خلال ٢٤ ساعة</p>
-<a href="${SITE_URL}/contact-support" style="display:inline-block;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;text-decoration:none;padding:12px 24px;border-radius:10px;font-weight:700;font-size:13px;">إرسال تذكرة</a>
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:16px 0 24px;direction:rtl;"><tr><td style="padding:24px 20px;text-align:center;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="width:48px;height:48px;border-radius:48px;background:#1a1a1a;text-align:center;vertical-align:middle;">${SVG.headsetWhite}</td></tr></table>
+<p style="margin:0 0 4px;font-size:11px;font-weight:700;color:#C8A766;letter-spacing:2px;">دعم على مدار الساعة</p>
+<p style="margin:0 0 6px;font-size:16px;font-weight:700;color:#1a1a1a;">هل تحتاج مساعدة؟ افتح تذكرة دعم</p>
+<p style="margin:0 0 14px;font-size:13px;color:#666;">فريقنا يرد عادةً خلال ٢٤ ساعة</p>
+<a href="${SITE_URL}/contact-support" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:12px 24px;border-radius:10px;font-weight:700;font-size:13px;border:1px solid #C8A76650;">إرسال تذكرة</a>
 </td></tr></table>`;
 }
 
-// ─── Recommended Actions (inline SVG icon cards) ───
-const RECOMMENDED_ICONS: Record<string, string> = {
-  aitools: `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M7 20h10"/><path d="M9 16v4"/><path d="M15 16v4"/><path d="M8 8h8"/><path d="M8 12h5"/></svg>`,
-  guides: `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5z"/><path d="M18 6h1a2 2 0 0 1 2 2v9"/><path d="M8 8h6"/><path d="M8 12h6"/><path d="M8 16h4"/></svg>`,
-  properties: `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V9l9-6 9 6v12"/><path d="M9 21v-6h6v6"/></svg>`,
-};
-
-function recommendedCard(title: string, href: string, iconKey: string): string {
-  const frameStyle = "width:58px;height:58px;border:1.5px solid #1a1a1a;border-radius:58px;text-align:center;vertical-align:middle;";
-  const svgIcon = RECOMMENDED_ICONS[iconKey] || "";
+// ─── Recommended Actions (PNG hosted images — Gmail strips SVG) ───
+function recommendedCard(title: string, href: string, iconPath: string, alt: string): string {
+  const frameStyle = "width:58px;height:58px;border:1.5px solid #1a1a1a;border-radius:58px;text-align:center;vertical-align:middle;overflow:hidden;";
 
   return `<td width="33%" style="text-align:center;padding:4px;vertical-align:top;"><a href="${href}" style="display:block;text-decoration:none;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;"><tr><td style="padding:18px 8px;text-align:center;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="${frameStyle}">${svgIcon}</td></tr></table>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:10px;border-collapse:separate;"><tr><td style="${frameStyle}">${iconImg(iconPath, alt, 34)}</td></tr></table>
 <p style="margin:0;font-size:12px;color:#1a1a1a;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">${title}</p>
 </td></tr></table></a></td>`;
 }
 
 export function recommendedActionsHtml(): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:10px 0 18px;"><tr><td style="text-align:center;"><p style="color:#1a1a1a;font-size:16px;font-weight:700;margin:0 0 14px;">Recommended For You</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${recommendedCard("AI Tools", `${SITE_URL}/ai-tools`, "aitools")}${recommendedCard("Guides", `${SITE_URL}/guides`, "guides")}${recommendedCard("Properties", `${SITE_URL}/properties`, "properties")}</tr></table></td></tr></table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:10px 0 18px;"><tr><td style="text-align:center;"><p style="color:#1a1a1a;font-size:16px;font-weight:700;margin:0 0 14px;">Recommended For You</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${recommendedCard("AI Tools", `${SITE_URL}/ai-tools`, `${ICON_BASE}/ai-tools.png`, "AI Tools")}${recommendedCard("Guides", `${SITE_URL}/guides`, `${ICON_BASE}/guides.png`, "Guides")}${recommendedCard("Properties", `${SITE_URL}/properties`, `${ICON_BASE}/properties.png`, "Properties")}</tr></table></td></tr></table>`;
 }
 
 // ─── Books (JPG from storage — email clients handle JPGs reliably) ───
@@ -181,9 +174,9 @@ export function signOffHtml(teamName = "JBJ Team"): string {
 </td></tr></table>`;
 }
 
-// ─── Ready to Get Started ───
+// ─── Ready to Get Started (flat — no outer border, blends into card) ───
 export function readyToGetStartedHtml(): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:18px 0 0;background:linear-gradient(135deg,#FDFBF7,#F5F0E6,#EDE4D3);border:1px solid #C8A766;border-radius:18px;"><tr><td style="padding:24px 18px;text-align:center;">
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:18px 0 0;"><tr><td style="padding:24px 18px;text-align:center;">
 <p style="font-size:24px;font-weight:800;margin:0 0 8px;letter-spacing:0.08em;text-transform:uppercase;color:#1a1a1a;">Ready to Get Started?</p>
 <p style="color:#666;font-size:14px;line-height:1.6;margin:0 0 18px;">Connect with our expert team for personalized guidance.</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 8px;max-width:520px;">
@@ -204,15 +197,15 @@ export function readyToGetStartedHtml(): string {
 
 function socialLinksFooter(): string {
   const links: Array<{ icon: string; url: string; alt: string }> = [
-    { icon: `${ICON_BASE}/social-instagram.svg`, url: "https://www.instagram.com/jbj.ae", alt: "Instagram" },
-    { icon: `${ICON_BASE}/social-facebook.svg`, url: "https://www.facebook.com/share/1G7CgSaV2L/?mibextid=wwXIfr", alt: "Facebook" },
-    { icon: `${ICON_BASE}/social-linkedin.svg`, url: "https://www.linkedin.com/company/jbjglobalrealestate", alt: "LinkedIn" },
-    { icon: `${ICON_BASE}/social-tiktok.svg`, url: "https://www.tiktok.com/@jbj.ae", alt: "TikTok" },
-    { icon: `${ICON_BASE}/social-youtube.svg`, url: "https://youtube.com/@jbjglobalrealestate", alt: "YouTube" },
+    { icon: `${ICON_BASE}/social-instagram.png`, url: "https://www.instagram.com/jbj.ae", alt: "Instagram" },
+    { icon: `${ICON_BASE}/social-facebook.png`, url: "https://www.facebook.com/share/1G7CgSaV2L/?mibextid=wwXIfr", alt: "Facebook" },
+    { icon: `${ICON_BASE}/social-linkedin.png`, url: "https://www.linkedin.com/company/jbjglobalrealestate", alt: "LinkedIn" },
+    { icon: `${ICON_BASE}/social-tiktok.png`, url: "https://www.tiktok.com/@jbj.ae", alt: "TikTok" },
+    { icon: `${ICON_BASE}/social-youtube.png`, url: "https://youtube.com/@jbjglobalrealestate", alt: "YouTube" },
   ];
 
   const item = (icon: string, url: string, alt: string) =>
-    `<td style="padding:0 5px;text-align:center;"><a href="${url}" aria-label="${alt}" style="display:inline-block;width:38px;height:38px;border:1.5px solid #C8A766;border-radius:38px;text-decoration:none;"><table role="presentation" width="38" height="38" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" valign="middle">${iconImg(icon, alt, 20)}</td></tr></table></a></td>`;
+    `<td style="padding:0 5px;text-align:center;"><a href="${url}" aria-label="${alt}" style="display:inline-block;width:38px;height:38px;background:#FDFBF7;border:1.5px solid #C8A766;border-radius:38px;text-decoration:none;"><table role="presentation" width="38" height="38" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" valign="middle">${iconImg(icon, alt, 20)}</td></tr></table></a></td>`;
 
   return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:12px;"><tr>${links.map((l) => item(l.icon, l.url, l.alt)).join("")}</tr></table>`;
 }
