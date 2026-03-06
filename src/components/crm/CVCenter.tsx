@@ -1297,7 +1297,11 @@ const CVCenter = ({ userId }: CVCenterProps) => {
               <Button variant="outline" className="gap-2" onClick={async () => {
                 try {
                   const filename = selectedCV ? `CV-${selectedCV.full_name.replace(/\s+/g, '-')}.pdf` : 'CV.pdf';
-                  const res = await fetch(maybeProxyStorageUrl(cvDirectUrl, filename));
+                  const session = (await supabase.auth.getSession()).data.session;
+                  const proxyUrl = maybeProxyStorageUrl(cvDirectUrl, filename);
+                  const res = await fetch(proxyUrl, {
+                    headers: session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {},
+                  });
                   const blob = await res.blob();
                   const url = URL.createObjectURL(blob);
                   const a = document.createElement('a');
