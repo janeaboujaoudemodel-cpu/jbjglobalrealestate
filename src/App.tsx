@@ -142,6 +142,8 @@ const ESignatureDashboard = lazy(() => import("./pages/e-signature/ESignatureDas
 const CreateEnvelope = lazy(() => import("./pages/e-signature/CreateEnvelope"));
 const EnvelopeDetail = lazy(() => import("./pages/e-signature/EnvelopeDetail"));
 const SignDocument = lazy(() => import("./pages/e-signature/SignDocument"));
+const SignatureStudio = lazy(() => import("./pages/e-signature/SignatureStudio"));
+const ContractReview = lazy(() => import("./pages/e-signature/ContractReview"));
 // AI Pages - lazy loaded
 const AICalendar = lazy(() => import("./pages/AICalendar"));
 const AIFinancialAdvisor = lazy(() => import("./pages/AIFinancialAdvisor"));
@@ -808,6 +810,20 @@ const App = () => {
                   <OwnerGuard>
                     <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
                       <EnvelopeDetail />
+                    </Suspense>
+                  </OwnerGuard>
+                } />
+                <Route path="/e-signature/signature-studio" element={
+                  <OwnerGuard>
+                    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
+                      <SignatureStudio />
+                    </Suspense>
+                  </OwnerGuard>
+                } />
+                <Route path="/e-signature/contract-review" element={
+                  <OwnerGuard>
+                    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
+                      <ContractReview />
                     </Suspense>
                   </OwnerGuard>
                 } />

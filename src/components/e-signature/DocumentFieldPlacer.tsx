@@ -14,6 +14,7 @@ import {
   ChevronRight,
   AlignLeft,
   X,
+  CheckSquare,
   FileText,
 } from "lucide-react";
 import {
@@ -36,7 +37,7 @@ interface Recipient {
 interface SignatureField {
   id: string;
   recipientId: string;
-  type: "signature" | "initials" | "date" | "text";
+  type: "signature" | "initials" | "date" | "text" | "checkbox";
   pageNumber: number;
   x: number;
   y: number;
@@ -59,6 +60,7 @@ const fieldTypes = [
   { type: "initials" as const, label: "Initials", icon: AlignLeft, defaultWidth: 90, defaultHeight: 40 },
   { type: "date" as const, label: "Date", icon: Calendar, defaultWidth: 140, defaultHeight: 36 },
   { type: "text" as const, label: "Text", icon: Type, defaultWidth: 160, defaultHeight: 36 },
+  { type: "checkbox" as const, label: "Checkbox", icon: CheckSquare, defaultWidth: 28, defaultHeight: 28 },
 ];
 
 const recipientColorStyles = [
@@ -565,7 +567,21 @@ export default function DocumentFieldPlacer({
                         </button>
 
                         {/* Field content */}
-                        {field.type === "text" ? (
+                        {field.type === "checkbox" ? (
+                          <div
+                            className={`flex items-center justify-center h-full cursor-pointer ${style.text}`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              updateFieldValue(field.id, field.value === "checked" ? "" : "checked");
+                            }}
+                          >
+                            {field.value === "checked" ? (
+                              <CheckSquare className="w-5 h-5" />
+                            ) : (
+                              <div className={`w-5 h-5 border-2 rounded ${style.border}`} />
+                            )}
+                          </div>
+                        ) : field.type === "text" ? (
                           <input
                             type="text"
                             value={field.value || ""}

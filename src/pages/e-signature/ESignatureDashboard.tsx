@@ -9,7 +9,6 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { 
-  Plus, 
   FileSignature, 
   Clock, 
   CheckCircle2, 
@@ -20,7 +19,9 @@ import {
   MoreVertical,
   Trash2,
   Bell,
-  Upload
+  Upload,
+  PenTool,
+  Scale,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -164,12 +165,26 @@ export default function ESignatureDashboard() {
                 Upload, sign, and track documents for electronic signature
               </p>
             </div>
-            <Link to="/e-signature/create">
-              <Button className="bg-gradient-to-r from-gold to-gold/80 hover:from-gold/90 hover:to-gold/70 text-white shadow-lg">
-                <Upload className="w-4 h-4 mr-2" />
-                Upload & Sign
-              </Button>
-            </Link>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/e-signature/create">
+                <Button className="bg-gradient-to-r from-gold to-gold/80 hover:from-gold/90 hover:to-gold/70 text-white shadow-lg">
+                  <Upload className="w-4 h-4 mr-2" />
+                  Upload & Sign
+                </Button>
+              </Link>
+              <Link to="/e-signature/signature-studio">
+                <Button variant="outline" className="border-[hsl(var(--gold)/.3)] hover:border-[hsl(var(--gold))]">
+                  <PenTool className="w-4 h-4 mr-2" />
+                  Signature Studio
+                </Button>
+              </Link>
+              <Link to="/e-signature/contract-review">
+                <Button variant="outline" className="border-[hsl(var(--gold)/.3)] hover:border-[hsl(var(--gold))]">
+                  <Scale className="w-4 h-4 mr-2" />
+                  Contract Lawyer AI
+                </Button>
+              </Link>
+            </div>
           </div>
 
           {/* Stats Cards */}
