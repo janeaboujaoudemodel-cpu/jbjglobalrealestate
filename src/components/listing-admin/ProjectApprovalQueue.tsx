@@ -97,8 +97,8 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
   const [incompleteCount, setIncompleteCount] = useState(0);
   // Filter: "all" | "complete" | "needs_work"
   const [statusFilter, setStatusFilter] = useState<"all" | "complete" | "needs_work">("all");
-  // Source filter: "all" | "reelly" (provident disabled)
-  const [sourceFilter, setSourceFilter] = useState<"all" | "reelly">("all");
+  // Source filter: "all" | "reelly" | "manual" (provident disabled)
+  const [sourceFilter, setSourceFilter] = useState<"all" | "reelly" | "manual">("all");
   // Confirmation dialog state
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [confirmDialogMode, setConfirmDialogMode] = useState<"all" | "selected">("all");
@@ -147,6 +147,9 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
       if (sourceFilter === "reelly") {
         totalQuery = totalQuery.ilike("source_url", "%reelly%");
         needsWorkQuery = needsWorkQuery.ilike("source_url", "%reelly%");
+      } else if (sourceFilter === "manual") {
+        totalQuery = totalQuery.not("source_url", "ilike", "%reelly%");
+        needsWorkQuery = needsWorkQuery.not("source_url", "ilike", "%reelly%");
       }
       
       // Exclude provident sources from all views (quarantine)
@@ -194,6 +197,8 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
       // Apply source filter
       if (sourceFilter === "reelly") {
         query = query.ilike("source_url", "%reelly%");
+      } else if (sourceFilter === "manual") {
+        query = query.not("source_url", "ilike", "%reelly%");
       }
       
       // Exclude provident sources from all views (quarantine)
@@ -1075,11 +1080,12 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
             <span className="text-sm font-medium text-foreground">Source:</span>
             <select
               value={sourceFilter}
-              onChange={(e) => setSourceFilter(e.target.value as "all" | "reelly")}
+              onChange={(e) => setSourceFilter(e.target.value as "all" | "reelly" | "manual")}
               className="text-sm border border-border rounded px-2 py-1 bg-background text-foreground"
             >
               <option value="all">All Sources</option>
-              <option value="reelly">Reelly Only</option>
+              <option value="manual">📤 My Uploads</option>
+              <option value="reelly">🔄 Auto-Imported (Reelly)</option>
             </select>
           </div>
 
