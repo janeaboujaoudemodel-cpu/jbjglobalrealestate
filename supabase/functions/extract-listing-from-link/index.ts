@@ -131,6 +131,7 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  let parsedJobId: string | null = null;
   try {
     const body = await req.json();
     const {
