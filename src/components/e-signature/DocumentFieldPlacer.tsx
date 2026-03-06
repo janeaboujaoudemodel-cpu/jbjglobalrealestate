@@ -567,7 +567,21 @@ export default function DocumentFieldPlacer({
                         </button>
 
                         {/* Field content */}
-                        {field.type === "text" ? (
+                        {field.type === "checkbox" ? (
+                          <div
+                            className={`flex items-center justify-center h-full cursor-pointer ${style.text}`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              updateFieldValue(field.id, field.value === "checked" ? "" : "checked");
+                            }}
+                          >
+                            {field.value === "checked" ? (
+                              <CheckSquare className="w-5 h-5" />
+                            ) : (
+                              <div className={`w-5 h-5 border-2 rounded ${style.border}`} />
+                            )}
+                          </div>
+                        ) : field.type === "text" ? (
                           <input
                             type="text"
                             value={field.value || ""}

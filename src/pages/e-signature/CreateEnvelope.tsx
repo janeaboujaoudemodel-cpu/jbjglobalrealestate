@@ -33,7 +33,7 @@ interface Recipient {
 interface SignatureField {
   id: string;
   recipientId: string;
-  type: "signature" | "initials" | "date" | "text";
+  type: "signature" | "initials" | "date" | "text" | "checkbox";
   pageNumber: number;
   x: number;
   y: number;
