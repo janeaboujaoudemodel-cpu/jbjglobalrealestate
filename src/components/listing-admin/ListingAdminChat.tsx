@@ -926,6 +926,26 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
         </div>
       </ScrollArea>
 
+      {/* Jump to latest button */}
+      {showJumpToLatest && (
+        <div className="flex justify-center -mt-10 mb-2 relative z-10">
+          <Button
+            size="sm"
+            variant="outline"
+            className="h-7 text-xs bg-white/90 backdrop-blur-sm border-gold/30 shadow-md hover:bg-gold/10"
+            onClick={() => {
+              if (scrollRef.current) {
+                scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+                isNearBottom.current = true;
+                setShowJumpToLatest(false);
+              }
+            }}
+          >
+            ↓ Jump to latest
+          </Button>
+        </div>
+      )}
+
       {/* Multi-URL Upload Section */}
       {showBulkUpload && (
         <div className="p-4 border-t border-zinc-200 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] max-h-[300px] overflow-y-auto">
