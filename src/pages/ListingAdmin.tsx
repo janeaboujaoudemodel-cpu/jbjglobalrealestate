@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useListingAdmin } from "@/hooks/useListingAdmin";
-import { useProjects, useDevelopers, useCommunities } from "@/hooks/useProjects";
+import { useProjects, useProjectsCount, useProjectsPaginated, useDevelopers, useCommunities } from "@/hooks/useProjects";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -52,8 +52,10 @@ import { ReellyImportPanel } from "@/components/listing-admin/ReellyImportPanel"
 import { SourceCountsPanel } from "@/components/listing-admin/SourceCountsPanel";
 import { EmergencyMirrorPanel } from "@/components/listing-admin/EmergencyMirrorPanel";
 import { EnrichmentCenter } from "@/components/listing-admin/EnrichmentCenter";
-// OffPlanInquiryCTA removed from admin per user request
 import { RefreshCw, Globe, Check, AlertTriangle, Zap } from "lucide-react";
+import { ProjectPreviewModal } from "@/components/listing-admin/ProjectPreviewModal";
+import { SafeImage } from "@/components/SafeImage";
+import type { UnifiedProject } from "@/types/unifiedProject";
 
 interface ProjectDocument {
   id: string;
@@ -73,9 +75,15 @@ const ListingAdmin = () => {
   const { isListingAdmin, adminData, isLoading: checkingAdmin } = useListingAdmin();
 
   // Owner is now verified via AuthContext - no need for separate role check
-  const { data: projects, refetch: refetchProjects } = useProjects();
+  const { data: totalCount } = useProjectsCount();
+  const [projectsPage, setProjectsPage] = useState(0);
+  const { data: paginatedProjects, refetch: refetchProjects } = useProjectsPaginated(projectsPage, 50);
   const { data: developers } = useDevelopers();
   const { data: communities } = useCommunities();
+  
+  // Preview modal state
+  const [previewProject, setPreviewProject] = useState<UnifiedProject | null>(null);
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [filterDeveloper, setFilterDeveloper] = useState<string>("all");
@@ -210,10 +218,10 @@ const ListingAdmin = () => {
     );
   }
 
-  const filteredProjects = projects?.filter((project) => {
+  const filteredProjects = paginatedProjects?.filter((project) => {
     const matchesSearch = 
       project.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      project.developer?.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      project.developer?.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       project.location?.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesDeveloper = filterDeveloper === "all" || project.developer?.id === filterDeveloper;
     const matchesEmirate = filterEmirate === "all" || project.emirate === filterEmirate;
