@@ -1,41 +1,58 @@
 
 
-## Plan: Fix All Email Issues Across All Templates
+## CRM & Admin Backend Deep Audit Fix Plan
 
-### Problems Identified
+### Issues Found
 
-1. **Recommended For You icons disappeared** — Inline SVGs are stripped by Gmail and most email clients. Must revert to hosted PNG images (`ai-tools.png`, `guides.png`, `properties.png` already exist in `public/email-icons/`).
+1. **Lead count mismatch**: Owner dashboard queries (`owner-kpi-total-leads`, `owner-kpi-new-leads-week`, `owner-newest-leads`) do NOT filter `deleted_at IS NULL`, so soft-deleted leads inflate counts and appear in "Newest Leads"
+2. **LeadRow missing phone**: The `LeadRow` component in `OwnerDashboardOverview.tsx` shows email but never renders `phone_e164`
+3. **CRM tabs not centered**: `TabsTrigger` elements use `px-5 py-2.5` but the `TabsList` uses `p-1.5` causing asymmetric padding (more top than bottom)
+4. **Status badge "New" too wide**: `LeadStatusBadge` uses `px-3.5 py-1.5` even for short words like "New", making the pill disproportionately long
+5. **CRMLeadsTableV2 status dropdown is a raw HTML `<select>`** with emoji optgroup labels and browser-default styling -- not matching the champagne theme
+6. **LeadQuickFilters** use white/zinc/blue backgrounds instead of champagne theme
+7. **Owner dashboard cards** use `bg-white/70` instead of champagne gradient
+8. **Owner dashboard tabs** use `bg-white/80` instead of champagne gradient
 
-2. **Social media footer icons not rendering** — Same issue: `socialLinksFooter()` loads external `.svg` files via `<img>` tags, but Gmail blocks SVG images entirely. Must switch to hosted `.png` files. Currently missing `social-facebook.png` — need to confirm or create it.
+### Plan
 
-3. **Email split into multiple visual cards** — Several sub-sections (`ticketSupportEmbed`, `readyToGetStartedHtml`, `recommendedActionsHtml`) each have their own `border`, `border-radius`, and `background` styles creating distinct visual boxes. These need to be softened so they sit seamlessly inside the single continuous card.
+#### 1. Fix lead count synchronization (OwnerDashboardOverview.tsx)
+- Add `.is('deleted_at', null)` to ALL lead queries:
+  - `owner-kpi-total-leads` (line 280)
+  - `owner-kpi-new-leads-week` (line 296)
+  - `owner-newest-leads` (line 349)
 
-### Changes (all in `supabase/functions/_shared/email-html.ts`)
+#### 2. Show phone in LeadRow (OwnerDashboardOverview.tsx)
+- Add phone display between name and source badge in the `LeadRow` component (line 120-131)
+- Show phone icon + number when `lead.phone_e164` exists
 
-#### A. Recommended For You — Revert to PNG hosted images
-- Change `recommendedCard()` back to using `iconImg()` with PNG paths
-- Remove the `RECOMMENDED_ICONS` inline SVG object
-- Ensure circular frame clips the PNG with `overflow:hidden` on the `<td>` to prevent square backgrounds
-- Signature: `recommendedCard(title, href, iconPath, alt)` — restore the original parameters
+#### 3. Fix CRM tab centering (CRM.tsx)
+- Change `TabsList` padding from `p-1.5` to `p-2` for balanced vertical padding
+- Ensure `TabsTrigger` uses equal `py-2.5` on all sides
 
-#### B. Social Footer — Switch to PNG with white pearl background
-- Replace `socialLinksFooter()` to use the inline `SVG` object icons (instagram, facebook, linkedin, tiktok, youtube) that are already defined at the top of the file — these render as raw HTML inside `<td>` elements, not as `<img>` tags, so they should survive email client processing
-- Actually, since Gmail strips ALL SVG (both inline and `<img>`), switch to using the `.png` files: `social-instagram.png`, `social-linkedin.png`, `social-tiktok.png`, `social-youtube.png`
-- Create `social-facebook.png` if missing
-- Style each icon circle: white/pearl (#FDFBF7) background, gold border, black icon inside
+#### 4. Fix "New" status badge width (LeadStatusBadge.tsx)
+- Reduce `sm` size from `px-2.5` to `px-2` and `md` from `px-3.5` to `px-3`
+- Remove `min-w` constraints that cause oversized pills for short labels
 
-#### C. Single Card Layout — Remove visual fragmentation
-- `ticketSupportEmbed()`: Remove the heavy gradient background and red border; make it blend into the card
-- `readyToGetStartedHtml()`: Remove the outer border and separate background so it flows within the card
-- `inquiryBox()`: Soften its standalone bordered look
-- Keep all content inside the single `emailShell` wrapper card with no sub-borders that create separation
+#### 5. Replace raw `<select>` in CRMLeadsTableV2 with InlineStatusSelect
+- Replace the native HTML `<select>` dropdown (lines 436-472) with the existing `InlineStatusSelect` component which already has proper champagne styling
+- This fixes: gray background, blue highlights, emoji optgroups, browser-default styling
 
-#### D. Deploy + Send Test Email
-- Deploy the updated edge function
-- Immediately send a test welcome email to `janeaboujaoudenails@gmail.com`
-- Take a screenshot as proof
+#### 6. Normalize LeadQuickFilters to champagne theme
+- Replace white/zinc/blue color scheme with champagne gradients
+- Active state uses gold ring + champagne gradient background
+- Text stays black for contrast
 
-### Files Modified
-- `supabase/functions/_shared/email-html.ts` — all icon and layout fixes
-- `public/email-icons/social-facebook.png` — create if missing (or use existing assets)
+#### 7. Normalize Owner Dashboard to champagne theme
+- Replace `bg-white/70` and `bg-white/80` with champagne gradient on Cards and TabsList
+- Replace `border-[#C9A84C]/30` with `border-gold/30` for consistency
+
+#### 8. Newsletter phone field already present
+- The newsletter already collects full name and phone -- verified in code. The issue is historical leads captured before these fields were added. No code change needed here.
+
+### Files to change
+- `src/pages/OwnerDashboardOverview.tsx` -- deleted_at filter, phone display, champagne theme
+- `src/components/crm/CRMLeadsTableV2.tsx` -- replace `<select>` with `InlineStatusSelect`
+- `src/components/crm/LeadStatusBadge.tsx` -- reduce padding for compact badges
+- `src/components/crm/LeadQuickFilters.tsx` -- champagne theme
+- `src/pages/CRM.tsx` -- tab centering fix
 
