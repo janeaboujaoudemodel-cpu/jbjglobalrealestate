@@ -776,6 +776,15 @@ export default function OwnerDashboardOverview() {
           )}
         </TabsContent>
 
+        {/* Leads Management Tab — Recently Deleted */}
+        <TabsContent value="leads-management" className="space-y-4">
+          {activeTab === "leads-management" && (
+            <Suspense fallback={<Skeleton className="h-64 w-full" />}>
+              <RecentlyDeletedLeads />
+            </Suspense>
+          )}
+        </TabsContent>
+
         {/* Employees Hub Tab — lazy rendered */}
         <TabsContent value="employees" className="space-y-4">
           {activeTab === "employees" && (
