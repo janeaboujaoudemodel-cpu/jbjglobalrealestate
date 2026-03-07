@@ -289,23 +289,63 @@ MULTI-PROJECT RULE:
         contentParts.push({ type: "text", text: "\n\nExtract ALL project data now. If MULTIPLE distinct projects, return each separately." });
 
         try {
-          const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-            method: "POST",
-            headers: { "Authorization": `Bearer ${lovableApiKey}`, "Content-Type": "application/json" },
-            body: JSON.stringify({
-              model: "google/gemini-2.5-pro",
-              max_tokens: 12000,
-              temperature: 0.05,
-              messages: [{ role: "user", content: contentParts }],
-              tools: [{ type: "function", function: { name: "extract_projects", description: "Extract structured data for real estate projects.", parameters: { type: "object", properties: { projects: { type: "array", items: projectSchema } }, required: ["projects"] } } }],
-              tool_choice: { type: "function", function: { name: "extract_projects" } },
-            }),
+          const aiBody = JSON.stringify({
+            model: "google/gemini-2.5-flash",
+            max_tokens: 12000,
+            temperature: 0.05,
+            messages: [{ role: "user", content: contentParts }],
+            tools: [{ type: "function", function: { name: "extract_projects", description: "Extract structured data for real estate projects.", parameters: { type: "object", properties: { projects: { type: "array", items: projectSchema } }, required: ["projects"] } } }],
+            tool_choice: { type: "function", function: { name: "extract_projects" } },
           });
+          const aiHeaders = { "Authorization": `Bearer ${lovableApiKey}`, "Content-Type": "application/json" };
+
+          let aiRes: Response;
+          try {
+            aiRes = await fetchAIWithTimeout("https://ai.gateway.lovable.dev/v1/chat/completions", {
+              method: "POST", headers: aiHeaders, body: aiBody,
+            });
+          } catch (abortErr) {
+            // Timeout: retry each file individually
+            console.warn(`[generate-listing] Batch ${batchIdx + 1} timed out, retrying files individually`);
+            await updateJobProgress(supabase, jobId, `Batch ${batchIdx + 1} timed out — retrying files one by one...`);
+            for (const file of batch) {
+              try {
+                const { base64, ok } = await fetchFileFromUrl(file.storageUrl);
+                if (!ok || !base64) continue;
+                const singleParts: any[] = [
+                  { type: "text", text: systemPrompt },
+                  { type: "image_url", image_url: { url: `data:${file.mimeType};base64,${base64}` } },
+                  { type: "text", text: `[Document: ${file.name}]` },
+                  { type: "text", text: "\n\nExtract ALL project data now. If MULTIPLE distinct projects, return each separately." },
+                ];
+                const singleRes = await fetchAIWithTimeout("https://ai.gateway.lovable.dev/v1/chat/completions", {
+                  method: "POST", headers: aiHeaders,
+                  body: JSON.stringify({ model: "google/gemini-2.5-flash", max_tokens: 8000, temperature: 0.05,
+                    messages: [{ role: "user", content: singleParts }],
+                    tools: [{ type: "function", function: { name: "extract_projects", description: "Extract structured data for real estate projects.", parameters: { type: "object", properties: { projects: { type: "array", items: projectSchema } }, required: ["projects"] } } }],
+                    tool_choice: { type: "function", function: { name: "extract_projects" } },
+                  }),
+                });
+                if (singleRes.ok) {
+                  const d = await singleRes.json();
+                  const tc = d?.choices?.[0]?.message?.tool_calls?.[0];
+                  if (tc?.function?.arguments) {
+                    const p = JSON.parse(tc.function.arguments);
+                    allBatchResults.push(p.projects || (p.name ? [p] : []));
+                    batchesProcessed++;
+                  }
+                } else {
+                  const t = await singleRes.text();
+                  console.warn(`[generate-listing] Single file ${file.name} failed: ${singleRes.status}`);
+                }
+              } catch (e) { console.warn(`[generate-listing] Single retry ${file.name} failed:`, e); }
+            }
+            continue; // Move to next batch
+          }
 
           if (!aiRes.ok) {
             const errText = await aiRes.text();
             console.error(`[generate-listing] AI batch ${batchIdx + 1} error: ${aiRes.status}`, errText);
-            // Continue with remaining batches on non-fatal errors
             if (aiRes.status !== 429 && aiRes.status !== 402) continue;
             throw new Error(aiRes.status === 429 ? "Rate limit exceeded" : "AI credits exhausted");
           }
@@ -343,8 +383,8 @@ MULTI-PROJECT RULE:
       if (description) contentParts.push({ type: "text", text: `\n\n--- ADDITIONAL DESCRIPTION ---\n${description}` });
       contentParts.push({ type: "text", text: "\n\nExtract ALL project data now. If MULTIPLE distinct projects, return each separately." });
 
-      const model = inlineFiles.length > 0 ? "google/gemini-2.5-pro" : "google/gemini-2.5-flash";
-      const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      const model = "google/gemini-2.5-flash";
+      const aiRes = await fetchAIWithTimeout("https://ai.gateway.lovable.dev/v1/chat/completions", {
         method: "POST",
         headers: { "Authorization": `Bearer ${lovableApiKey}`, "Content-Type": "application/json" },
         body: JSON.stringify({
