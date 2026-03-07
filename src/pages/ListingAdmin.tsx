@@ -56,6 +56,8 @@ import { RefreshCw, Globe, Check, AlertTriangle, Zap } from "lucide-react";
 import { ProjectPreviewModal } from "@/components/listing-admin/ProjectPreviewModal";
 import { SafeImage } from "@/components/SafeImage";
 import type { UnifiedProject } from "@/types/unifiedProject";
+import { logAdminEdit, detectChangedFields, useLatestEditLogs, formatRelativeTime } from "@/hooks/useAdminEditLog";
+import { Clock } from "lucide-react";
 
 interface ProjectDocument {
   id: string;
@@ -87,6 +89,10 @@ const ListingAdmin = () => {
   // Preview modal state
   const [previewProject, setPreviewProject] = useState<UnifiedProject | null>(null);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
+
+  // Audit trail: fetch latest edit logs for visible projects
+  const projectIds = paginatedProjects?.map((p) => p.id) || [];
+  const { data: editLogsMap } = useLatestEditLogs("project", projectIds);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [filterDeveloper, setFilterDeveloper] = useState<string>("all");
@@ -351,7 +357,17 @@ const ListingAdmin = () => {
         .order("created_at", { ascending: false });
 
       setProjectDocuments(docs || []);
-      if (successCount > 0) toast.success(`${successCount} document${successCount > 1 ? 's' : ''} uploaded successfully`);
+      if (successCount > 0) {
+        toast.success(`${successCount} document${successCount > 1 ? 's' : ''} uploaded successfully`);
+        await logAdminEdit({
+          entity_type: "project",
+          entity_id: selectedProject.id,
+          entity_name: selectedProject.name,
+          action: "upload_document",
+          changed_fields: ["documents"],
+          summary: `Uploaded ${successCount} document(s)`,
+        });
+      }
       if (failCount > 0) toast.error(`${failCount} document${failCount > 1 ? 's' : ''} failed to upload`);
     } catch (error: any) {
       toast.error(error.message || "Failed to upload documents");
@@ -398,6 +414,14 @@ const ListingAdmin = () => {
 
     if (successCount > 0) {
       toast.success(`${successCount} image(s) uploaded successfully`);
+      await logAdminEdit({
+        entity_type: "project",
+        entity_id: selectedProject.id,
+        entity_name: selectedProject.name,
+        action: "upload_image",
+        changed_fields: ["images"],
+        summary: `Uploaded ${successCount} image(s)`,
+      });
       refetchProjects();
     }
 
@@ -423,6 +447,14 @@ const ListingAdmin = () => {
       if (error) throw error;
 
       setProjectDocuments((prev) => prev.filter((d) => d.id !== doc.id));
+      await logAdminEdit({
+        entity_type: "project",
+        entity_id: selectedProject!.id,
+        entity_name: selectedProject!.name,
+        action: "delete_document",
+        changed_fields: ["documents"],
+        summary: `Deleted document: ${doc.file_name}`,
+      });
       toast.success("Document deleted");
     } catch (error: any) {
       toast.error(error.message || "Failed to delete document");
@@ -473,17 +505,60 @@ const ListingAdmin = () => {
 
         if (error) throw error;
         
+        await logAdminEdit({
+          entity_type: "project",
+          entity_id: data.id,
+          entity_name: data.name,
+          action: "create",
+          changed_fields: Object.keys(projectData),
+          summary: "Created new project",
+        });
+
         toast.success("Project created successfully!");
         setSelectedProject(data);
         setIsCreating(false);
         setIsEditing(true);
       } else if (selectedProject) {
+        // Detect what changed
+        const oldData: Record<string, any> = {
+          name: selectedProject.name || "",
+          slug: selectedProject.slug || "",
+          description: selectedProject.description || "",
+          location: selectedProject.location || "",
+          price_from: selectedProject.price_from?.toString() || "",
+          price_to: selectedProject.price_to?.toString() || "",
+          bedrooms_min: selectedProject.bedrooms_min?.toString() || "",
+          bedrooms_max: selectedProject.bedrooms_max?.toString() || "",
+          handover_date: selectedProject.handover_date || "",
+          developer_id: selectedProject.developer?.id || "",
+          community_id: selectedProject.community?.id || "",
+          emirate: selectedProject.emirate || "Dubai",
+          is_premium: selectedProject.is_premium || false,
+          is_sold_out: selectedProject.is_sold_out || false,
+          furnished_status: selectedProject.furnished_status || "unfurnished",
+          payment_plan: selectedProject.payment_plan || "",
+          service_charge: selectedProject.service_charge || "",
+        };
+        const { fields, summary } = detectChangedFields(oldData, formData);
+
         const { error } = await supabase
           .from("projects")
           .update(projectData)
           .eq("id", selectedProject.id);
 
         if (error) throw error;
+
+        if (fields.length > 0) {
+          await logAdminEdit({
+            entity_type: "project",
+            entity_id: selectedProject.id,
+            entity_name: selectedProject.name,
+            action: "update",
+            changed_fields: fields,
+            summary,
+          });
+        }
+
         toast.success("Project updated successfully");
       }
 
@@ -802,6 +877,27 @@ const ListingAdmin = () => {
                                 From AED {(project.price_from / 1000000).toFixed(1)}M
                               </p>
                             )}
+                            {/* Last edit info from audit log */}
+                            {(() => {
+                              const log = editLogsMap?.get(project.id);
+                              const updatedAt = (project as any).updated_at;
+                              if (log) {
+                                return (
+                                  <div className="flex items-center gap-1 mt-1.5 text-[10px] text-muted-foreground">
+                                    <Clock className="w-3 h-3 shrink-0" />
+                                    <span className="truncate">Edited {formatRelativeTime(log.created_at)} · {log.summary || log.action}</span>
+                                  </div>
+                                );
+                              } else if (updatedAt) {
+                                return (
+                                  <div className="flex items-center gap-1 mt-1.5 text-[10px] text-muted-foreground">
+                                    <Clock className="w-3 h-3 shrink-0" />
+                                    <span>Updated {formatRelativeTime(updatedAt)}</span>
+                                  </div>
+                                );
+                              }
+                              return null;
+                            })()}
                           </div>
                           <div className="flex flex-col items-end gap-1">
                             {project.is_premium && <Crown className="w-4 h-4 text-gold flex-shrink-0" />}

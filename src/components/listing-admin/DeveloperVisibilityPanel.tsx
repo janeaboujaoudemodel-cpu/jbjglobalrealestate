@@ -7,7 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { Building2, Eye, EyeOff, Search, CheckSquare, EyeIcon, EyeOffIcon } from "lucide-react";
+import { Building2, Eye, EyeOff, Search, CheckSquare, EyeIcon, EyeOffIcon, Clock } from "lucide-react";
+import { logAdminEdit, formatRelativeTime } from "@/hooks/useAdminEditLog";
 
 export function DeveloperVisibilityPanel() {
   const queryClient = useQueryClient();
@@ -19,7 +20,7 @@ export function DeveloperVisibilityPanel() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("developers")
-        .select("id, name, is_hidden")
+        .select("id, name, is_hidden, updated_at")
         .order("name");
       if (error) throw error;
       return data;
@@ -45,6 +46,14 @@ export function DeveloperVisibilityPanel() {
       queryClient.invalidateQueries({ queryKey: ["developers-visibility"] });
       const dev = developers?.find((d) => d.id === id);
       toast.success(`${dev?.name || "Developer"} is now ${is_hidden ? "hidden" : "visible"}`);
+      logAdminEdit({
+        entity_type: "developer",
+        entity_id: id,
+        entity_name: dev?.name,
+        action: "update",
+        changed_fields: ["is_hidden"],
+        summary: `Set visibility to ${is_hidden ? "hidden" : "visible"}`,
+      });
     },
     onError: () => toast.error("Failed to update developer visibility"),
   });
@@ -189,6 +198,11 @@ export function DeveloperVisibilityPanel() {
                   <Eye className="w-4 h-4 text-green-600 shrink-0" />
                 )}
                 <span className="text-sm font-medium truncate">{dev.name}</span>
+                {(dev as any).updated_at && (
+                  <span className="text-[10px] text-muted-foreground ml-1 shrink-0 hidden sm:inline">
+                    <Clock className="w-2.5 h-2.5 inline mr-0.5" />{formatRelativeTime((dev as any).updated_at)}
+                  </span>
+                )}
               </div>
               <div className="flex items-center gap-2 shrink-0 ml-2">
                 <Badge variant={dev.is_hidden ? "secondary" : "default"} className="text-xs">

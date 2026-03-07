@@ -2,9 +2,10 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { SafeImage } from "@/components/SafeImage";
-import { Crown, ExternalLink, Pencil, MessageCircle, MapPin, Bed, Calendar, Building2, Image as ImageIcon, FileText } from "lucide-react";
+import { Crown, ExternalLink, Pencil, MessageCircle, MapPin, Bed, Calendar, Building2, Image as ImageIcon, FileText, Clock } from "lucide-react";
 import type { UnifiedProject } from "@/types/unifiedProject";
 import { useNavigate } from "react-router-dom";
+import { useLatestEditLog, formatRelativeTime } from "@/hooks/useAdminEditLog";
 
 interface ProjectPreviewModalProps {
   project: UnifiedProject | null;
@@ -16,6 +17,8 @@ interface ProjectPreviewModalProps {
 
 export function ProjectPreviewModal({ project, open, onOpenChange, onEdit, onSendToSarah }: ProjectPreviewModalProps) {
   const navigate = useNavigate();
+  const { data: lastEdit } = useLatestEditLog("project", project?.id);
+
   if (!project) return null;
 
   const heroImage = project.cover_image_url || project.images?.[0]?.image_url;
@@ -80,6 +83,17 @@ export function ProjectPreviewModal({ project, open, onOpenChange, onEdit, onSen
             <h2 className="text-xl font-bold text-foreground">{project.name}</h2>
             <p className="text-sm text-muted-foreground">{project.developer?.name || (project as any).developer_name || "Unknown Developer"}</p>
           </div>
+
+          {/* Last Edit Info */}
+          {lastEdit && (
+            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-background/60 border border-gold/20">
+              <Clock className="w-4 h-4 text-muted-foreground shrink-0" />
+              <div className="text-xs text-muted-foreground">
+                <span className="font-medium text-foreground">Last edited {formatRelativeTime(lastEdit.created_at)}</span>
+                {lastEdit.summary && <span className="ml-1.5">· {lastEdit.summary}</span>}
+              </div>
+            </div>
+          )}
 
           {/* Quick facts */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">

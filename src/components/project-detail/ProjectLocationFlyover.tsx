@@ -49,10 +49,14 @@ function FlyoverController({ target, playing, onStepChange, onComplete }: Flyove
   const map = useMap();
   const hasFlown = useRef(false);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
+  // Store callbacks in refs to prevent effect re-runs
+  const onStepChangeRef = useRef(onStepChange);
+  const onCompleteRef = useRef(onComplete);
+  onStepChangeRef.current = onStepChange;
+  onCompleteRef.current = onComplete;
 
   useEffect(() => {
     if (!playing) {
-      // Clear all timers and reset
       timers.current.forEach(clearTimeout);
       timers.current = [];
       hasFlown.current = false;
@@ -62,37 +66,44 @@ function FlyoverController({ target, playing, onStepChange, onComplete }: Flyove
     if (hasFlown.current) return;
     hasFlown.current = true;
 
-    // Ensure map is ready before starting
     const startFlyover = () => {
-      // Start zoomed out on UAE
-      map.setView(UAE_CENTER, UAE_ZOOM, { animate: false });
-      onStepChange(1); // UAE overview
+      // Ensure map container is sized properly
+      map.invalidateSize();
 
-      // Step 1: Hold on UAE overview for 3s
+      // Step 1: UAE overview (instant)
+      map.setView(UAE_CENTER, UAE_ZOOM, { animate: false });
+      onStepChangeRef.current(1);
+
+      // Step 2: After 3s hold, fly to regional
       const t1 = setTimeout(() => {
-        onStepChange(2); // Regional approach
+        onStepChangeRef.current(2);
         map.flyTo(target, REGIONAL_ZOOM, {
           duration: 5,
           easeLinearity: 0.1,
         });
+
+        // Wait for flyTo to finish via moveend
+        const onRegionalEnd = () => {
+          map.off("moveend", onRegionalEnd);
+          // Step 3: fly to project
+          onStepChangeRef.current(3);
+          map.flyTo(target, PROJECT_ZOOM, {
+            duration: 6,
+            easeLinearity: 0.08,
+          });
+
+          const onProjectEnd = () => {
+            map.off("moveend", onProjectEnd);
+            // Step 4: complete
+            onStepChangeRef.current(4);
+            onCompleteRef.current();
+          };
+          map.on("moveend", onProjectEnd);
+        };
+        map.on("moveend", onRegionalEnd);
       }, 3000);
 
-      // Step 3: After regional fly completes, fly to project pin
-      const t2 = setTimeout(() => {
-        onStepChange(3); // Neighborhood zoom
-        map.flyTo(target, PROJECT_ZOOM, {
-          duration: 6,
-          easeLinearity: 0.08,
-        });
-      }, 9000);
-
-      // Step 4: Animation complete
-      const t3 = setTimeout(() => {
-        onStepChange(4);
-        onComplete();
-      }, 16000);
-
-      timers.current = [t1, t2, t3];
+      timers.current = [t1];
     };
 
     if (map.getContainer()) {
@@ -104,8 +115,10 @@ function FlyoverController({ target, playing, onStepChange, onComplete }: Flyove
     return () => {
       timers.current.forEach(clearTimeout);
       timers.current = [];
+      // Clean up any lingering moveend listeners
+      map.off("moveend");
     };
-  }, [playing, target, map, onStepChange, onComplete]);
+  }, [playing, target, map]);
 
   return null;
 }
@@ -145,9 +158,8 @@ export default function ProjectLocationFlyover({
   }, []);
 
   const handleComplete = useCallback(() => {
-    // Show final overlay for 3s, then fade pin and finish
     setTimeout(() => {
-      setShowPin(false); // fade pin out
+      setShowPin(false);
     }, 2000);
     setTimeout(() => {
       setIsPlaying(false);
@@ -172,15 +184,34 @@ export default function ProjectLocationFlyover({
 
   return (
     <div className={`relative rounded-2xl overflow-hidden ${className}`} style={{ height: 400, border: '3px solid hsl(42 45% 59%)', boxShadow: '0 8px 32px rgba(200,167,102,0.25)' }}>
-      {/* Premium pin animation styles */}
+      {/* Premium pin animation styles + artifact fixes */}
       <style>{`
         .premium-location-pin {
           background: none !important;
           border: none !important;
           transition: opacity 1.5s ease-out;
         }
+        .premium-location-pin:hover,
+        .premium-location-pin:focus {
+          outline: none !important;
+          box-shadow: none !important;
+        }
         .premium-location-pin.pin-hidden {
           opacity: 0 !important;
+        }
+        .flyover-map .leaflet-container * {
+          outline: none !important;
+        }
+        .flyover-map .leaflet-tile {
+          border: none !important;
+        }
+        .flyover-map .leaflet-container a {
+          border: none !important;
+          outline: none !important;
+        }
+        .flyover-map .leaflet-marker-icon:focus,
+        .flyover-map .leaflet-marker-shadow:focus {
+          outline: none !important;
         }
         @keyframes pulseRing {
           0% { r: 30; opacity: 0.6; }
@@ -189,64 +220,66 @@ export default function ProjectLocationFlyover({
         }
       `}</style>
 
-      <MapContainer
-        center={UAE_CENTER}
-        zoom={UAE_ZOOM}
-        scrollWheelZoom={false}
-        dragging={false}
-        zoomControl={false}
-        attributionControl={false}
-        style={{ height: "100%", width: "100%" }}
-      >
-        <TileLayer
-          url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-          attribution="Tiles &copy; Esri"
-          maxZoom={19}
-        />
-        <FlyoverController
-          target={target}
-          playing={isPlaying}
-          onStepChange={handleStepChange}
-          onComplete={handleComplete}
-        />
+      <div className="flyover-map h-full w-full">
+        <MapContainer
+          center={UAE_CENTER}
+          zoom={UAE_ZOOM}
+          scrollWheelZoom={false}
+          dragging={false}
+          zoomControl={false}
+          attributionControl={false}
+          style={{ height: "100%", width: "100%" }}
+        >
+          <TileLayer
+            url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+            attribution="Tiles &copy; Esri"
+            maxZoom={19}
+          />
+          <FlyoverController
+            target={target}
+            playing={isPlaying}
+            onStepChange={handleStepChange}
+            onComplete={handleComplete}
+          />
 
-        {/* Pulsing red circle around project */}
-        {isPlaying && currentStep >= 3 && (
-          <>
-            <CircleMarker
-              center={target}
-              radius={25}
-              pathOptions={{
-                color: "#DC2626",
-                weight: 2,
-                opacity: 0.7,
-                fillColor: "#DC2626",
-                fillOpacity: 0.1,
-              }}
-            />
-            <CircleMarker
-              center={target}
-              radius={40}
-              pathOptions={{
-                color: "#DC2626",
-                weight: 1.5,
-                opacity: 0.4,
-                fillColor: "#DC2626",
-                fillOpacity: 0.05,
-              }}
-            />
-          </>
-        )}
+          {/* Pulsing red circle around project */}
+          {isPlaying && currentStep >= 3 && (
+            <>
+              <CircleMarker
+                center={target}
+                radius={25}
+                pathOptions={{
+                  color: "#DC2626",
+                  weight: 2,
+                  opacity: 0.7,
+                  fillColor: "#DC2626",
+                  fillOpacity: 0.1,
+                }}
+              />
+              <CircleMarker
+                center={target}
+                radius={40}
+                pathOptions={{
+                  color: "#DC2626",
+                  weight: 1.5,
+                  opacity: 0.4,
+                  fillColor: "#DC2626",
+                  fillOpacity: 0.05,
+                }}
+              />
+            </>
+          )}
 
-        {/* Premium gold pin */}
-        {showPin && (
-          <Marker position={target} icon={PremiumIcon}>
-            <Popup className="premium-popup">
-              <span className="font-semibold">{projectName}</span>
-            </Popup>
-          </Marker>
-        )}
-      </MapContainer>
+          {/* Premium gold pin */}
+          {showPin && (
+            <Marker position={target} icon={PremiumIcon}>
+              <Popup className="premium-popup">
+                <span className="font-semibold">{projectName}</span>
+              </Popup>
+            </Marker>
+          )}
+        </MapContainer>
+      </div>
 
       {/* Cinematic overlay with step labels */}
       <AnimatePresence>
