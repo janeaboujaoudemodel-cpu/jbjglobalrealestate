@@ -501,42 +501,58 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             <h4 className="text-sm font-bold text-black mb-3">Project handover by</h4>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="text-[10px] font-semibold text-black/50 uppercase mb-1 block">From</label>
-                <div className="flex gap-2">
-                  <select
-                    value={filters.handoverFrom.quarter}
-                    onChange={(e) => update({ handoverFrom: { ...filters.handoverFrom, quarter: e.target.value } })}
-                    className="min-w-[52px] flex-1 h-9 px-2 bg-white border border-gold/30 rounded text-sm text-black font-medium"
-                  >
-                    {QUARTERS.map(q => <option key={q} value={q}>{q}</option>)}
-                  </select>
-                  <select
-                    value={filters.handoverFrom.year}
-                    onChange={(e) => update({ handoverFrom: { ...filters.handoverFrom, year: e.target.value } })}
-                    className="min-w-[80px] flex-1 h-9 px-2 bg-white border border-gold/30 rounded text-sm text-black font-medium"
-                  >
-                    {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
-                  </select>
+                <label className="text-[10px] font-semibold text-black/50 uppercase mb-2 block">From</label>
+                <div className="flex gap-1 mb-2">
+                  {QUARTERS.map(q => (
+                    <button
+                      key={q}
+                      onClick={() => update({ handoverFrom: { ...filters.handoverFrom, quarter: q } })}
+                      className={cn(
+                        "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
+                        filters.handoverFrom.quarter === q
+                          ? "bg-gradient-to-br from-[#C8A766]/25 via-[#D4AF37]/20 to-[#C8A766]/25 border-2 border-gold text-black shadow-sm"
+                          : "bg-white/80 border border-gold/25 text-black/60 hover:bg-gold/10 hover:border-gold/50"
+                      )}
+                    >
+                      {q}
+                    </button>
+                  ))}
                 </div>
+                <select
+                  value={filters.handoverFrom.year}
+                  onChange={(e) => update({ handoverFrom: { ...filters.handoverFrom, year: e.target.value } })}
+                  className="w-full h-9 px-3 bg-white border border-gold/30 rounded-lg text-sm text-black font-medium appearance-none cursor-pointer"
+                  style={{ WebkitAppearance: 'none' }}
+                >
+                  {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
+                </select>
               </div>
               <div>
-                <label className="text-[10px] font-semibold text-black/50 uppercase mb-1 block">To</label>
-                <div className="flex gap-2">
-                  <select
-                    value={filters.handoverTo.quarter}
-                    onChange={(e) => update({ handoverTo: { ...filters.handoverTo, quarter: e.target.value } })}
-                    className="min-w-[52px] flex-1 h-9 px-2 bg-white border border-gold/30 rounded text-sm text-black font-medium"
-                  >
-                    {QUARTERS.map(q => <option key={q} value={q}>{q}</option>)}
-                  </select>
-                  <select
-                    value={filters.handoverTo.year}
-                    onChange={(e) => update({ handoverTo: { ...filters.handoverTo, year: e.target.value } })}
-                    className="min-w-[80px] flex-1 h-9 px-2 bg-white border border-gold/30 rounded text-sm text-black font-medium"
-                  >
-                    {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
-                  </select>
+                <label className="text-[10px] font-semibold text-black/50 uppercase mb-2 block">To</label>
+                <div className="flex gap-1 mb-2">
+                  {QUARTERS.map(q => (
+                    <button
+                      key={q}
+                      onClick={() => update({ handoverTo: { ...filters.handoverTo, quarter: q } })}
+                      className={cn(
+                        "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
+                        filters.handoverTo.quarter === q
+                          ? "bg-gradient-to-br from-[#C8A766]/25 via-[#D4AF37]/20 to-[#C8A766]/25 border-2 border-gold text-black shadow-sm"
+                          : "bg-white/80 border border-gold/25 text-black/60 hover:bg-gold/10 hover:border-gold/50"
+                      )}
+                    >
+                      {q}
+                    </button>
+                  ))}
                 </div>
+                <select
+                  value={filters.handoverTo.year}
+                  onChange={(e) => update({ handoverTo: { ...filters.handoverTo, year: e.target.value } })}
+                  className="w-full h-9 px-3 bg-white border border-gold/30 rounded-lg text-sm text-black font-medium appearance-none cursor-pointer"
+                  style={{ WebkitAppearance: 'none' }}
+                >
+                  {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
+                </select>
               </div>
             </div>
           </PopoverContent>
