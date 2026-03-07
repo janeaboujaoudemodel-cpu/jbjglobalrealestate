@@ -121,6 +121,31 @@ export const DEVELOPMENT_STATUS_OPTIONS = [
   { value: "ready", label: "Ready to Move" },
   { value: "off-plan", label: "Off-Plan" },
   { value: "under-construction", label: "Under Construction" },
+  { value: "resale-offplan", label: "Resale Off-Plan" },
+  { value: "ready-resale", label: "Ready Resale" },
+] as const;
+
+// Property Views options
+export const VIEWS_OPTIONS = [
+  { value: "sea_view", label: "Sea View" },
+  { value: "golf_course", label: "Golf Course" },
+  { value: "marina_view", label: "Marina View" },
+  { value: "city_view", label: "City View" },
+  { value: "downtown_view", label: "Downtown View" },
+  { value: "boulevard", label: "Boulevard" },
+  { value: "street_view", label: "Street View" },
+  { value: "garden_view", label: "Garden View" },
+  { value: "pool_view", label: "Pool View" },
+  { value: "lake_view", label: "Lake View" },
+  { value: "canal_view", label: "Canal View" },
+  { value: "palm_view", label: "Palm View" },
+  { value: "burj_khalifa_view", label: "Burj Khalifa View" },
+  { value: "skyline_view", label: "Skyline View" },
+  { value: "mountain_view", label: "Mountain View" },
+  { value: "creek_view", label: "Creek View" },
+  { value: "lagoon_view", label: "Lagoon View" },
+  { value: "park_view", label: "Park View" },
+  { value: "community_view", label: "Community View" },
 ] as const;
 
 // Display Mode options
