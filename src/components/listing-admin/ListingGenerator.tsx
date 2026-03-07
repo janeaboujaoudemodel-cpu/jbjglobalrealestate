@@ -54,6 +54,9 @@ interface ExtractedData {
   reraNumber: string | null;
   faqs: { q: string; a: string }[];
   comparableProjects?: { name: string; developer?: string | null; reason?: string | null; _enriched?: boolean }[];
+  videoUrl?: string | null;
+  views?: string[];
+  usps?: string[];
   slug: string;
   documents: { name: string; type: string; originalName: string }[];
 }
@@ -632,6 +635,9 @@ const ListingGenerator = () => {
         images: [],
         source_url: url.trim() || null,
         status: "pending",
+        video_url: extracted.videoUrl || null,
+        views: extracted.views?.length ? extracted.views : null,
+        usps: extracted.usps?.length ? extracted.usps : null,
       };
 
       const { data: saveResult, error: saveErr } = await supabase.functions.invoke("generate-listing", {

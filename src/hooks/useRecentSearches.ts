@@ -8,8 +8,8 @@ export interface RecentItem {
   name: string;
   slug: string;
   imageUrl?: string;
-  subtitle?: string; // e.g. developer name, emirate, price
-  developerLogo?: string; // developer logo URL for property cards
+  subtitle?: string;
+  developerLogo?: string;
   viewedAt: number;
 }
 
@@ -123,6 +123,19 @@ export function useRecentSearches(filterType?: RecentItemType) {
     });
   }, []);
 
+  const patchItem = useCallback((id: string, type: RecentItemType, updates: Partial<RecentItem>) => {
+    setItems((prev) => {
+      const updated = prev.map((item) => {
+        if (item.id === id && item.type === type) {
+          return { ...item, ...updates };
+        }
+        return item;
+      });
+      saveItems(updated);
+      return updated;
+    });
+  }, []);
+
   const clearAll = useCallback(() => {
     setItems([]);
     localStorage.removeItem(STORAGE_KEY);
@@ -130,5 +143,5 @@ export function useRecentSearches(filterType?: RecentItemType) {
 
   const filtered = filterType ? items.filter((i) => i.type === filterType) : items;
 
-  return { items: filtered, trackView, clearAll };
+  return { items: filtered, trackView, patchItem, clearAll };
 }

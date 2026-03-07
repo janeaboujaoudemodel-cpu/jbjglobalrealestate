@@ -113,6 +113,9 @@ const projectSchema = {
     reraNumber: { type: ["string", "null"] },
     faqs: { type: "array", items: { type: "object", properties: { q: { type: "string" }, a: { type: "string" } } } },
     comparableProjects: { type: "array", items: { type: "object", properties: { name: { type: "string" }, developer: { type: ["string", "null"] }, reason: { type: ["string", "null"] }, _enriched: { type: "boolean" } } } },
+    videoUrl: { type: ["string", "null"] },
+    views: { type: "array", items: { type: "string" } },
+    usps: { type: "array", items: { type: "string" } },
   },
   required: ["name"],
 };
@@ -169,7 +172,7 @@ function mergeExtractedProjects(allBatchResults: any[][]): any[] {
         const idx = seenNames.get(name)!;
         const existing = allProjects[idx];
         // Merge arrays
-        for (const key of ["amenities", "keyFeatures", "highlights", "unitTypes", "faqs", "nearbyLandmarks", "paymentBreakdown", "unitDetails", "comparableProjects"]) {
+        for (const key of ["amenities", "keyFeatures", "highlights", "unitTypes", "faqs", "nearbyLandmarks", "paymentBreakdown", "unitDetails", "comparableProjects", "views", "usps"]) {
           if (Array.isArray(project[key]) && project[key].length > 0) {
             existing[key] = [...new Set([...(existing[key] || []), ...project[key]])];
           }
@@ -244,6 +247,9 @@ CRITICAL RULES:
 - Copy descriptions VERBATIM from source material.
 - Extract ALL amenities, payment milestones, unit types with full details.
 - Extract RERA number, service charge, total units, floors if present.
+- Extract video URLs (YouTube, Vimeo, mp4 links) into videoUrl field.
+- Extract property views (e.g. Sea View, Golf View, Marina View, City View, Boulevard View) into views array.
+- Extract unique selling propositions / lifestyle highlights into usps array.
 
 MULTI-PROJECT RULE:
 - If content contains MULTIPLE DISTINCT projects (different names/buildings), return EACH as separate entry.
@@ -291,7 +297,7 @@ MULTI-PROJECT RULE:
         try {
           const aiBody = JSON.stringify({
             model: "google/gemini-2.5-flash",
-            max_tokens: 12000,
+            max_tokens: 16000,
             temperature: 0.05,
             messages: [{ role: "user", content: contentParts }],
             tools: [{ type: "function", function: { name: "extract_projects", description: "Extract structured data for real estate projects.", parameters: { type: "object", properties: { projects: { type: "array", items: projectSchema } }, required: ["projects"] } } }],
@@ -389,7 +395,7 @@ MULTI-PROJECT RULE:
         headers: { "Authorization": `Bearer ${lovableApiKey}`, "Content-Type": "application/json" },
         body: JSON.stringify({
           model,
-          max_tokens: 12000,
+          max_tokens: 16000,
           temperature: 0.05,
           messages: [{ role: "user", content: contentParts }],
           tools: [{ type: "function", function: { name: "extract_projects", description: "Extract structured data for real estate projects.", parameters: { type: "object", properties: { projects: { type: "array", items: projectSchema } }, required: ["projects"] } } }],
