@@ -6,12 +6,10 @@ import {
   Mail,
   MessageSquare,
   AtSign,
-  AlertCircle,
   CheckCircle,
   Clock,
   Trash2,
   Check,
-  Filter,
   Zap,
   FileText
 } from 'lucide-react';
@@ -21,7 +19,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
-import { format, formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNow } from 'date-fns';
 
 interface Notification {
   id: string;
@@ -52,11 +50,11 @@ const channelIcons: Record<string, React.ReactNode> = {
 };
 
 const categoryConfig: Record<string, { color: string; bgColor: string; borderColor: string }> = {
-  important: { color: 'text-red-400', bgColor: 'bg-red-500/10', borderColor: 'border-red-500/30' },
-  routine: { color: 'text-green-400', bgColor: 'bg-green-500/10', borderColor: 'border-green-500/30' },
-  recruitment: { color: 'text-blue-400', bgColor: 'bg-blue-500/10', borderColor: 'border-blue-500/30' },
-  flagged: { color: 'text-yellow-400', bgColor: 'bg-yellow-500/10', borderColor: 'border-yellow-500/30' },
-  spam: { color: 'text-gray-400', bgColor: 'bg-gray-500/10', borderColor: 'border-gray-500/30' },
+  important: { color: 'text-red-600', bgColor: 'bg-red-50', borderColor: 'border-red-200' },
+  routine: { color: 'text-green-600', bgColor: 'bg-green-50', borderColor: 'border-green-200' },
+  recruitment: { color: 'text-blue-600', bgColor: 'bg-blue-50', borderColor: 'border-blue-200' },
+  flagged: { color: 'text-amber-600', bgColor: 'bg-amber-50', borderColor: 'border-amber-200' },
+  spam: { color: 'text-zinc-500', bgColor: 'bg-zinc-50', borderColor: 'border-zinc-200' },
 };
 
 const FoundersNotificationCenter: React.FC<FoundersNotificationCenterProps> = ({ 
@@ -169,29 +167,29 @@ const FoundersNotificationCenter: React.FC<FoundersNotificationCenterProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9998]"
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[9998]"
             onClick={onClose}
           />
 
-          {/* Slide-over Panel */}
+          {/* Slide-over Panel - Champagne Gold Theme */}
           <motion.div
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed right-0 top-0 h-full w-full max-w-md bg-[#0A0A0A] border-l border-gold/20 z-[9999] flex flex-col"
+            className="fixed right-0 top-0 h-full w-full max-w-md bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-l-2 border-[#C9A84C]/30 z-[9999] flex flex-col shadow-2xl"
           >
             {/* Header */}
-            <div className="p-4 border-b border-gold/20 flex items-center justify-between bg-gradient-to-r from-[#0A0A0A] to-[#1A1A1A]">
+            <div className="p-4 border-b-2 border-[#C9A84C]/20 flex items-center justify-between bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6]">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-gold/10">
-                  <Bell className="w-5 h-5 text-gold" />
+                <div className="p-2 rounded-lg bg-[#C9A84C]/10 border border-[#C9A84C]/30">
+                  <Bell className="w-5 h-5 text-[#C9A84C]" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-semibold text-white">Notification Inbox</h2>
-                  <p className="text-xs text-gray-400">
+                  <h2 className="text-lg font-semibold text-black">Notification Inbox</h2>
+                  <p className="text-xs text-zinc-500">
                     {unreadCount > 0 ? (
-                      <span className="text-gold">{unreadCount} unread</span>
+                      <span className="text-[#C9A84C] font-medium">{unreadCount} unread</span>
                     ) : (
                       'All caught up!'
                     )}
@@ -204,7 +202,7 @@ const FoundersNotificationCenter: React.FC<FoundersNotificationCenterProps> = ({
                     size="sm"
                     variant="outline"
                     onClick={markAllAsRead}
-                    className="border-gold/20 text-gold hover:bg-gold/10 text-xs"
+                    className="border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C]/10 text-xs"
                   >
                     <Check className="w-3 h-3 mr-1" />
                     Mark all read
@@ -212,23 +210,23 @@ const FoundersNotificationCenter: React.FC<FoundersNotificationCenterProps> = ({
                 )}
                 <button
                   onClick={onClose}
-                  className="w-8 h-8 rounded-full bg-gold/10 hover:bg-gold/20 flex items-center justify-center transition-colors"
+                  className="w-8 h-8 rounded-full bg-[#C9A84C]/10 hover:bg-[#C9A84C]/20 flex items-center justify-center transition-colors border border-[#C9A84C]/30"
                 >
-                  <X className="w-4 h-4 text-gold" />
+                  <X className="w-4 h-4 text-[#C9A84C]" />
                 </button>
               </div>
             </div>
 
-            {/* Tabs */}
-            <div className="p-2 border-b border-gold/20 flex gap-1 bg-[#0E0E0E]">
+            {/* Tabs - Champagne Gold */}
+            <div className="px-3 py-2 border-b border-[#C9A84C]/20 flex gap-1 bg-white/60">
               {(['all', 'mentions', 'alerts', 'tasks'] as const).map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`flex-1 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                  className={`flex-1 px-3 py-2 rounded-lg text-xs font-medium transition-all ${
                     activeTab === tab 
-                      ? 'bg-gold text-black' 
-                      : 'text-gray-400 hover:text-white hover:bg-gold/10'
+                      ? 'bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-white shadow-md' 
+                      : 'text-zinc-600 hover:text-black hover:bg-[#C9A84C]/10'
                   }`}
                 >
                   <div className="flex items-center justify-center gap-1.5">
@@ -238,8 +236,8 @@ const FoundersNotificationCenter: React.FC<FoundersNotificationCenterProps> = ({
                     {tab === 'tasks' && <FileText className="w-3.5 h-3.5" />}
                     <span className="capitalize">{tab}</span>
                     {tabCounts[tab] > 0 && (
-                      <span className={`text-xs px-1.5 py-0.5 rounded-full ${
-                        activeTab === tab ? 'bg-black/20' : 'bg-gold/20 text-gold'
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${
+                        activeTab === tab ? 'bg-white/20' : 'bg-[#C9A84C]/15 text-[#C9A84C]'
                       }`}>
                         {tabCounts[tab]}
                       </span>
@@ -254,13 +252,13 @@ const FoundersNotificationCenter: React.FC<FoundersNotificationCenterProps> = ({
               <div className="p-4 space-y-2">
                 {loading ? (
                   <div className="flex items-center justify-center py-12">
-                    <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin" />
+                    <div className="w-8 h-8 border-2 border-[#C9A84C] border-t-transparent rounded-full animate-spin" />
                   </div>
                 ) : filteredNotifications.length === 0 ? (
                   <div className="text-center py-12">
-                    <Bell className="w-12 h-12 text-gold/20 mx-auto mb-4" />
-                    <p className="text-white font-medium">No notifications</p>
-                    <p className="text-sm text-gray-500 mt-1">You're all caught up!</p>
+                    <CheckCircle className="w-12 h-12 text-green-500/40 mx-auto mb-4" />
+                    <p className="text-black font-medium">No notifications</p>
+                    <p className="text-sm text-zinc-500 mt-1">You're all caught up!</p>
                   </div>
                 ) : (
                   filteredNotifications.map((notification, index) => {
@@ -271,42 +269,43 @@ const FoundersNotificationCenter: React.FC<FoundersNotificationCenterProps> = ({
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.03 }}
-                        className={`p-4 rounded-lg border transition-all cursor-pointer group ${
+                        className={`p-4 rounded-xl border transition-all cursor-pointer group ${
                           notification.is_read 
-                            ? 'bg-[#0E0E0E] border-gold/10 hover:border-gold/20' 
+                            ? 'bg-white/60 border-[#C9A84C]/10 hover:border-[#C9A84C]/30' 
                             : `${config.bgColor} ${config.borderColor}`
                         }`}
                         onClick={() => markAsRead(notification.id)}
                       >
                         <div className="flex items-start gap-3">
                           {/* Channel icon */}
-                          <div className={`p-2 rounded-lg ${notification.is_read ? 'bg-gold/10' : 'bg-gold/20'} ${config.color}`}>
+                          <div className={`p-2 rounded-lg ${notification.is_read ? 'bg-[#C9A84C]/10' : 'bg-[#C9A84C]/15'} ${config.color}`}>
                             {channelIcons[notification.channel] || <Bell className="w-4 h-4" />}
                           </div>
 
                           {/* Content */}
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between gap-2">
-                              <p className={`font-medium truncate ${notification.is_read ? 'text-gray-300' : 'text-white'}`}>
+                              <p className={`font-medium text-sm truncate ${notification.is_read ? 'text-zinc-600' : 'text-black'}`}>
                                 {notification.sender_name || notification.sender_identifier}
                               </p>
-                              <div className="flex items-center gap-2">
+                              <div className="flex items-center gap-2 flex-shrink-0">
                                 {!notification.is_read && (
-                                  <span className="w-2 h-2 rounded-full bg-gold flex-shrink-0 animate-pulse" />
+                                  <span className="w-2 h-2 rounded-full bg-[#C9A84C] flex-shrink-0 animate-pulse" />
                                 )}
-                                <Badge variant="outline" className={`text-[10px] ${config.borderColor} ${config.color}`}>
+                                <Badge variant="outline" className={`text-[10px] whitespace-nowrap ${config.borderColor} ${config.color}`}>
                                   {notification.category}
                                 </Badge>
                               </div>
                             </div>
                             {notification.subject && (
-                              <p className={`text-sm truncate mt-1 ${notification.is_read ? 'text-gray-400' : 'text-gray-200'}`}>
+                              <p className={`text-sm truncate mt-1 ${notification.is_read ? 'text-zinc-500' : 'text-zinc-700'}`}>
                                 {notification.subject}
                               </p>
                             )}
-                            <p className="text-xs text-gray-500 line-clamp-2 mt-1">{notification.content}</p>
+                            <p className="text-xs text-zinc-500 line-clamp-2 mt-1">{notification.content}</p>
                             <div className="flex items-center justify-between mt-3">
-                              <span className="text-xs text-gray-500">
+                              <span className="text-xs text-zinc-400 flex items-center gap-1">
+                                <Clock className="w-3 h-3" />
                                 {formatDistanceToNow(new Date(notification.received_at), { addSuffix: true })}
                               </span>
                               <button
@@ -314,7 +313,7 @@ const FoundersNotificationCenter: React.FC<FoundersNotificationCenterProps> = ({
                                   e.stopPropagation();
                                   deleteNotification(notification.id);
                                 }}
-                                className="p-1.5 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-red-500/20 text-gray-500 hover:text-red-400 transition-all"
+                                className="p-1.5 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-red-50 text-zinc-400 hover:text-red-500 transition-all"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
                               </button>

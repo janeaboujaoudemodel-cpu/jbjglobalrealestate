@@ -8765,6 +8765,83 @@ export type Database = {
         }
         Relationships: []
       }
+      founder_chat_messages: {
+        Row: {
+          attachments: Json | null
+          content: string
+          created_at: string | null
+          id: string
+          mentions: string[] | null
+          role: string
+          session_id: string
+          task_status: string | null
+          user_id: string
+        }
+        Insert: {
+          attachments?: Json | null
+          content: string
+          created_at?: string | null
+          id?: string
+          mentions?: string[] | null
+          role: string
+          session_id: string
+          task_status?: string | null
+          user_id: string
+        }
+        Update: {
+          attachments?: Json | null
+          content?: string
+          created_at?: string | null
+          id?: string
+          mentions?: string[] | null
+          role?: string
+          session_id?: string
+          task_status?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "founder_chat_messages_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "founder_chat_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      founder_chat_sessions: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          message_count: number | null
+          summary: string | null
+          title: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          message_count?: number | null
+          summary?: string | null
+          title?: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          message_count?: number | null
+          summary?: string | null
+          title?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       function_rate_limits: {
         Row: {
           created_at: string
