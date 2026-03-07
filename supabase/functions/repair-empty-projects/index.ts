@@ -114,30 +114,8 @@ Deno.serve(async (req: Request): Promise<Response> => {
           continue;
         }
 
-        // Step 2: Try to find on Reelly API by name search
-        if (!reellyApiKey) {
-          stats.skipped++;
-          details.push({ name: project.name, action: "skipped_no_api_key" });
-          continue;
-        }
-
-        // Extract clean search term from project name (remove developer suffix)
-        const searchName = project.name.split(" ").slice(0, 3).join(" ");
-        const searchUrl = `${REELLY_API_ENDPOINTS.projects}?${REELLY_FILTERS.search}=${encodeURIComponent(searchName)}&${REELLY_FILTERS.limit}=5`;
-
-        const res = await fetchReellyWithRetry(searchUrl, reellyApiKey, 2);
-        if (!res.ok) {
-          console.warn(`[repair-empty] Reelly search failed for ${project.name}: ${res.status}`);
-          stats.skipped++;
-          details.push({ name: project.name, action: "api_search_failed" });
-          await sleep(1000);
-          continue;
-        }
-
-        const apiData = await res.json();
-        const results: ReellyProject[] = apiData?.results || apiData?.data || [];
-
-        if (results.length === 0) {
+        // Step 2: No duplicate found - delete empty shell (no data to salvage)
+        {
           // No Reelly match - delete if it's truly empty
           if (!dryRun) {
             await supabase.from("project_images").delete().eq("project_id", project.id);
