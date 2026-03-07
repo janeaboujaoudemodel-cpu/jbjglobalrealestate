@@ -74,6 +74,8 @@ Deno.serve(async (req: Request): Promise<Response> => {
         await Promise.all([
           supabase.from("project_images").delete().in("project_id", batch),
           supabase.from("project_documents").delete().in("project_id", batch),
+          // Nullify FK references from pending_project_imports
+          supabase.from("pending_project_imports").update({ matched_project_id: null }).in("matched_project_id", batch),
         ]);
 
         const { error: delErr } = await supabase
