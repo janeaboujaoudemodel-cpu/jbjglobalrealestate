@@ -12,10 +12,10 @@ serve(async (req) => {
   }
 
   try {
-    const { pdfUrl, recipientId, recipientName } = await req.json();
+    const { pdfUrl, pdfBase64, recipientId, recipientName } = await req.json();
 
-    if (!pdfUrl) {
-      return new Response(JSON.stringify({ error: "pdfUrl is required" }), {
+    if (!pdfUrl && !pdfBase64) {
+      return new Response(JSON.stringify({ error: "pdfUrl or pdfBase64 is required" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -27,6 +27,16 @@ serve(async (req) => {
     }
 
     const today = new Date().toLocaleDateString("en-AE");
+
+    // If we only have base64 (blob URL case), the AI can't fetch it.
+    // Use smart fallback directly for reliability.
+    if (pdfBase64 && !pdfUrl) {
+      console.log("Received pdfBase64 — using smart fallback layout since AI cannot process binary PDF data directly.");
+      return new Response(
+        JSON.stringify({ fields: getStandardContractLayout(recipientName || "", today) }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     const systemPrompt = `You are a document analysis AI specialized in identifying signature fields in legal contracts and real estate documents.
 Your task is to analyze a document and identify where various form fields should be placed.
@@ -85,10 +95,8 @@ Return ONLY the JSON array, example format:
     const aiData = await response.json();
     const rawContent = aiData.choices?.[0]?.message?.content || "";
 
-    // Parse the JSON array from the AI response
     let fields: any[] = [];
     try {
-      // Strip any markdown code fences if present
       const cleaned = rawContent
         .replace(/```json\s*/gi, "")
         .replace(/```\s*/gi, "")
@@ -99,11 +107,9 @@ Return ONLY the JSON array, example format:
       }
     } catch (parseErr) {
       console.warn("Failed to parse AI response, using fallback layout:", parseErr);
-      // Fallback standard layout
       fields = getStandardContractLayout(recipientName, today);
     }
 
-    // Validate and sanitize fields
     const validTypes = ["signature", "initials", "date", "text"];
     const sanitized = fields
       .filter((f) => validTypes.includes(f.type))
@@ -118,7 +124,6 @@ Return ONLY the JSON array, example format:
         pageNumber: Number(f.pageNumber) || 1,
       }));
 
-    // If AI returned nothing useful, use fallback
     if (sanitized.length === 0) {
       return new Response(
         JSON.stringify({ fields: getStandardContractLayout(recipientName, today) }),

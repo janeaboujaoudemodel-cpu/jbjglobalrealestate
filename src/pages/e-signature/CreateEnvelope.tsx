@@ -452,9 +452,8 @@ export default function CreateEnvelope() {
         <div className="max-w-5xl mx-auto p-6 space-y-6">
         {/* Header */}
         <div className="flex items-center gap-4">
-          <Button variant="ghost" onClick={() => navigate("/e-signature")}>
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back
+          <Button variant="ghost" onClick={() => navigate("/e-signature")} className="h-10 w-10 p-0 rounded-lg">
+            <ArrowLeft className="w-5 h-5" />
           </Button>
           <div>
             <h1 className="text-2xl font-bold text-foreground flex items-center gap-3">
