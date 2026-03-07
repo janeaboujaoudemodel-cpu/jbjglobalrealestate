@@ -126,11 +126,11 @@ export default function RecommendedProjects({
 
                   {/* Developer Logo — Bottom Left */}
                   {devLogo && (
-                    <div className="absolute bottom-3 left-3 w-10 h-10 rounded-lg bg-white border border-gold/30 overflow-hidden shadow-md flex items-center justify-center p-1">
+                    <div className="absolute bottom-3 left-3 w-10 h-10 rounded-xl overflow-hidden shadow-md">
                       <SafeImage
                         src={devLogo}
                         alt={project.developer?.name || "Developer"}
-                        className="w-full h-full object-contain"
+                        className="w-full h-full object-cover"
                       />
                     </div>
                   )}
