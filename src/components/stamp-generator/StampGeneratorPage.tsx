@@ -1054,7 +1054,7 @@ export default function StampGeneratorPage() {
                   {concepts.map(concept => (
                     <ConceptCard key={concept.id} concept={concept} svgOverride={svgOverrides[concept.id]}
                       selectedId={selectedId} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily}
-                      fontBold={fontBold} fontItalic={fontItalic} manualFontSize={manualFontSize}
+                      fontBold={fontBold} fontItalic={fontItalic} manualFontSize={manualFontSize} inkMode={inkMode}
                       togglingFav={togglingFav} onSelect={handleSelectConcept} onToggleFav={toggleFavorite} onEditText={handleEditText}/>
                   ))}
                 </div>
@@ -1244,7 +1244,7 @@ export default function StampGeneratorPage() {
 
 // ─── Concept Card ─────────────────────────────────────────────────────────────
 function ConceptCard({
-  concept, svgOverride, selectedId, tintColor, secondaryColor, accentColor, fontFamily, fontBold, fontItalic, manualFontSize, togglingFav, onSelect, onToggleFav, onEditText
+  concept, svgOverride, selectedId, tintColor, secondaryColor, accentColor, fontFamily, fontBold, fontItalic, manualFontSize, inkMode, togglingFav, onSelect, onToggleFav, onEditText
 }: {
   concept: StampDesignConcept;
   svgOverride?: string;
@@ -1256,6 +1256,7 @@ function ConceptCard({
   fontBold?: boolean;
   fontItalic?: boolean;
   manualFontSize?: number | null;
+  inkMode?: boolean;
   togglingFav: string | null;
   onSelect: (c: StampDesignConcept) => void;
   onToggleFav: (c: StampDesignConcept) => void;
@@ -1282,7 +1283,7 @@ function ConceptCard({
             <Badge className="text-[9px] px-1.5 py-0 bg-amber-50 text-amber-700 border border-amber-200">edited</Badge>
           </div>
         )}
-        <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} fontWeight={fontBold ? 'bold' : 'normal'} fontStyle={fontItalic ? 'italic' : 'normal'} fontSize={manualFontSize} size={160}/>
+        <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} fontWeight={fontBold ? 'bold' : 'normal'} fontStyle={fontItalic ? 'italic' : 'normal'} fontSize={manualFontSize} inkMode={inkMode} size={160}/>
       </div>
       <div className="p-3 space-y-2">
         <p className="font-medium text-sm text-[hsl(var(--foreground))] truncate">{concept.label}</p>
