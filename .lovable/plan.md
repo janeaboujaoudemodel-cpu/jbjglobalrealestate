@@ -1,45 +1,41 @@
 
 
-# Fix: Explore Services Image Loading, Scroll, Mobile Layout, and Headset Icon
+## Plan: Fix All Email Issues Across All Templates
 
-## 3 Issues to Fix
+### Problems Identified
 
-### 1. Explore Services — Slow Image Loading
-**Root cause**: The slideshow uses `AnimatePresence mode="wait"` which unmounts/remounts the `<img>` element on every slide change (every 3 seconds). Each remount forces a fresh image load — the browser can't cache effectively because the DOM element is destroyed. Also, images lack `loading="eager"` and there's no preloading of upcoming slides.
+1. **Recommended For You icons disappeared** — Inline SVGs are stripped by Gmail and most email clients. Must revert to hosted PNG images (`ai-tools.png`, `guides.png`, `properties.png` already exist in `public/email-icons/`).
 
-**Fix in `ExploreServicesCard.tsx`**:
-- Remove `AnimatePresence` pattern. Instead, render ALL slide images in a stack (absolute positioned), and only toggle visibility/opacity via CSS transitions. This keeps all `<img>` elements in the DOM so the browser caches them after first load.
-- Add `loading="eager"` and `fetchPriority="high"` to the first 3 images, `loading="lazy"` for the rest.
-- Preload the next slide's image using a hidden `<link rel="prefetch">` or simply keep all images mounted.
+2. **Social media footer icons not rendering** — Same issue: `socialLinksFooter()` loads external `.svg` files via `<img>` tags, but Gmail blocks SVG images entirely. Must switch to hosted `.png` files. Currently missing `social-facebook.png` — need to confirm or create it.
 
-### 2. Explore Services — Scroll Stuck / Mobile Compatibility
-**Root cause**: The slideshow is a fixed-height card (`h-80 md:h-[420px]`) with `overflow-hidden`. On mobile, the content area buttons + nav arrows may overflow. The "scroll stuck" issue is likely from `AnimatePresence` re-rendering causing layout jank or the `onMouseEnter`/`onMouseLeave` handlers interfering with touch events.
+3. **Email split into multiple visual cards** — Several sub-sections (`ticketSupportEmbed`, `readyToGetStartedHtml`, `recommendedActionsHtml`) each have their own `border`, `border-radius`, and `background` styles creating distinct visual boxes. These need to be softened so they sit seamlessly inside the single continuous card.
 
-**Fix in `ExploreServicesCard.tsx`**:
-- Replace mouse enter/leave auto-play handlers with touch-aware logic (use `onPointerEnter`/`onPointerLeave` or just remove the pause-on-hover for mobile).
-- Ensure the content area uses `overflow-y-auto` on mobile if content exceeds the fixed height, or adjust minimum height.
-- Add touch swipe support using simple touch event handlers for mobile navigation.
+### Changes (all in `supabase/functions/_shared/email-html.ts`)
 
-### 3. Support Headset Icon — Premium Apple AirPods Max Style
-**Current**: The SVG (lines 439-456) is a basic geometric headset with rectangular ear cups and thin lines — looks flat and cheap.
+#### A. Recommended For You — Revert to PNG hosted images
+- Change `recommendedCard()` back to using `iconImg()` with PNG paths
+- Remove the `RECOMMENDED_ICONS` inline SVG object
+- Ensure circular frame clips the PNG with `overflow:hidden` on the `<td>` to prevent square backgrounds
+- Signature: `recommendedCard(title, href, iconPath, alt)` — restore the original parameters
 
-**Fix in `SupportTicketBox.tsx`**:
-- Replace the entire SVG with a premium AirPods Max-inspired design featuring:
-  - Thick, smooth headband arc with mesh-pattern crown detail
-  - Rounded, deep ear cup shapes (oval/capsule) with inner depth shading
-  - Multiple opacity layers for 3D metallic appearance
-  - Subtle highlight strokes on the headband for a polished look
-  - Proper proportions within the 64x64 viewBox at 28px render size
+#### B. Social Footer — Switch to PNG with white pearl background
+- Replace `socialLinksFooter()` to use the inline `SVG` object icons (instagram, facebook, linkedin, tiktok, youtube) that are already defined at the top of the file — these render as raw HTML inside `<td>` elements, not as `<img>` tags, so they should survive email client processing
+- Actually, since Gmail strips ALL SVG (both inline and `<img>`), switch to using the `.png` files: `social-instagram.png`, `social-linkedin.png`, `social-tiktok.png`, `social-youtube.png`
+- Create `social-facebook.png` if missing
+- Style each icon circle: white/pearl (#FDFBF7) background, gold border, black icon inside
 
-## Files to Modify
+#### C. Single Card Layout — Remove visual fragmentation
+- `ticketSupportEmbed()`: Remove the heavy gradient background and red border; make it blend into the card
+- `readyToGetStartedHtml()`: Remove the outer border and separate background so it flows within the card
+- `inquiryBox()`: Soften its standalone bordered look
+- Keep all content inside the single `emailShell` wrapper card with no sub-borders that create separation
 
-### `src/components/home/ExploreServicesCard.tsx`
-- Replace AnimatePresence slide-swap with a persistent image stack (all images mounted, CSS opacity transition for active slide)
-- Add eager loading for first few images
-- Add touch swipe handlers for mobile
-- Remove mouse-based auto-play pause or make it pointer-aware
-- Ensure mobile-friendly button/arrow layout within the fixed-height card
+#### D. Deploy + Send Test Email
+- Deploy the updated edge function
+- Immediately send a test welcome email to `janeaboujaoudenails@gmail.com`
+- Take a screenshot as proof
 
-### `src/components/SupportTicketBox.tsx`
-- Replace SVG at lines 439-456 with a new premium AirPods Max-style headset icon featuring rounded ear cups, mesh crown detail, metallic depth layers, and highlight accents
+### Files Modified
+- `supabase/functions/_shared/email-html.ts` — all icon and layout fixes
+- `public/email-icons/social-facebook.png` — create if missing (or use existing assets)
 

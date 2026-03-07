@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
 import { 
   Home, 
   Tag, 
@@ -60,7 +59,6 @@ const CTA_LABELS: Record<string, string> = {
   facility: "Coming Soon",
 };
 
-// All services combined into one slideshow - removed "More Services" separation
 const services: ServiceSlide[] = [
   {
     id: "buy",
@@ -143,7 +141,6 @@ const services: ServiceSlide[] = [
     bgImage: generalInquiriesBg,
     available: true
   },
-  // Additional services merged into main slideshow
   {
     id: "compare",
     title: "Compare Your Property",
@@ -185,30 +182,42 @@ const services: ServiceSlide[] = [
 const ExploreServicesCard = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
 
   useEffect(() => {
     if (!isAutoPlaying) return;
-    // Faster auto-advance (3 seconds)
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % services.length);
     }, 3000);
     return () => clearInterval(interval);
   }, [isAutoPlaying]);
 
-  const goToSlide = (index: number) => {
-    setCurrentIndex(index);
-    setIsAutoPlaying(false);
-  };
-
-  const goToPrevious = () => {
+  const goToPrevious = useCallback(() => {
     setCurrentIndex((prev) => (prev - 1 + services.length) % services.length);
     setIsAutoPlaying(false);
-  };
+  }, []);
 
-  const goToNext = () => {
+  const goToNext = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % services.length);
     setIsAutoPlaying(false);
-  };
+  }, []);
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  }, []);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    touchEndX.current = e.touches[0].clientX;
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    const diff = touchStartX.current - touchEndX.current;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) goToNext();
+      else goToPrevious();
+    }
+  }, [goToNext, goToPrevious]);
 
   const currentService = services[currentIndex];
 
@@ -222,163 +231,104 @@ const ExploreServicesCard = () => {
         <p className="text-sm md:text-base text-zinc-600 mt-1">Premium real estate solutions tailored to your needs</p>
       </div>
 
-      {/* Slideshow Content - Large height with image background */}
+      {/* Slideshow - Persistent image stack (no AnimatePresence) */}
       <div 
-        className="relative h-80 md:h-[420px] lg:h-[480px]"
-        onMouseEnter={() => setIsAutoPlaying(false)}
-        onMouseLeave={() => setIsAutoPlaying(true)}
+        className="relative h-72 sm:h-80 md:h-[420px] lg:h-[480px]"
+        onPointerEnter={() => { if (window.matchMedia("(hover: hover)").matches) setIsAutoPlaying(false); }}
+        onPointerLeave={() => setIsAutoPlaying(true)}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentService.id}
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -50 }}
-            transition={{ duration: 0.25 }}
-            className="absolute inset-0 flex flex-col justify-end"
+        {/* All images mounted persistently — CSS opacity transition only */}
+        {services.map((service, idx) => (
+          <div
+            key={service.id}
+            className="absolute inset-0 transition-opacity duration-500 ease-in-out"
+            style={{ opacity: idx === currentIndex ? 1 : 0, zIndex: idx === currentIndex ? 1 : 0 }}
+            aria-hidden={idx !== currentIndex}
           >
-            {/* Background Image */}
-            <div className="absolute inset-0">
-              <img 
-                src={currentService.bgImage} 
-                alt={currentService.title}
-                className="w-full h-full object-cover"
-              />
-              {/* Gradient Overlay for text readability */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20" />
-            </div>
+            <img 
+              src={service.bgImage} 
+              alt={service.title}
+              className="w-full h-full object-cover"
+              loading={idx < 3 ? "eager" : "lazy"}
+              fetchPriority={idx < 3 ? "high" : "low"}
+              decoding="async"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20" />
+          </div>
+        ))}
 
-            {/* Content on top of image - NO ICON BOX */}
-            <div className="relative z-10 p-6 md:p-10">
-              {/* Premium Title with gradient */}
-              <h4 
-                className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4" 
-                style={{ 
-                  fontFamily: "Poppins, sans-serif",
-                  background: 'linear-gradient(135deg, #FFFFFF 0%, #F5EBD7 50%, #C8A766 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  textShadow: '0 2px 4px rgba(0,0,0,0.3)',
+        {/* Content overlay — always visible, updates instantly */}
+        <div className="absolute inset-0 z-10 flex flex-col justify-end p-5 sm:p-6 md:p-10">
+          <h4 
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-4 transition-all duration-300" 
+            style={{ 
+              fontFamily: "Poppins, sans-serif",
+              background: 'linear-gradient(135deg, #FFFFFF 0%, #F5EBD7 50%, #C8A766 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+            }}
+          >
+            {currentService.title}
+          </h4>
+          
+          <p className="text-zinc-200 text-xs sm:text-sm md:text-lg max-w-lg mb-4 md:mb-6 leading-relaxed line-clamp-3">
+            {currentService.description}
+          </p>
+
+          <div className="flex items-center justify-between gap-2">
+            {currentService.available ? (
+              <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+                <Link to={currentService.href}>
+                  <Button variant="primary" size="default" className="gap-2 px-4 sm:px-8 py-3 sm:py-4 rounded-lg group text-sm sm:text-base">
+                    <span className="tracking-wide">{CTA_LABELS[currentService.id] ?? "Explore Now"}</span>
+                    <ArrowRight className="w-4 h-4 text-gold group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </Link>
+                {currentService.id === "golden-visa" && (
+                  <Link to="/guides/golden-visa-uae">
+                    <Button variant="outline" size="sm" className="gap-2 px-3 py-2 rounded-lg border-white/40 text-white hover:bg-white/10 text-xs">
+                      Read Guide
+                    </Button>
+                  </Link>
+                )}
+              </div>
+            ) : (
+              <Button variant="primary" size="default" disabled className="gap-2 px-6 py-3 rounded-lg text-sm">
+                {CTA_LABELS[currentService.id] ?? "Coming Soon"}
+              </Button>
+            )}
+
+            {/* Navigation Arrows */}
+            <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+              <button
+                onClick={goToPrevious}
+                className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center transition-all duration-200 group overflow-hidden hover:scale-110 active:scale-95"
+                style={{
+                  background: 'linear-gradient(145deg, #FDFBF7, #E8DCC8)',
+                  border: '2px solid rgba(200, 167, 102, 0.7)',
+                  boxShadow: '0 6px 16px rgba(0,0,0,0.35), inset 0 3px 6px rgba(255,255,255,0.9), 0 0 20px rgba(200,167,102,0.25)',
                 }}
               >
-                {currentService.title}
-              </h4>
-              
-              {/* Premium description */}
-              <p className="text-zinc-200 text-sm md:text-lg max-w-lg mb-5 md:mb-6 leading-relaxed">
-                {currentService.description}
-              </p>
-
-              <div className="flex items-center justify-between">
-                {currentService.available ? (
-                  <div className="flex items-center gap-3 flex-wrap">
-                    <Link to={currentService.href}>
-                      <Button variant="primary" size="lg" className="gap-2 px-8 py-4 rounded-lg group">
-                        <span className="tracking-wide">{CTA_LABELS[currentService.id] ?? "Explore Now"}</span>
-                        <ArrowRight className="w-4 h-4 md:w-5 md:h-5 text-gold group-hover:translate-x-1 transition-transform" />
-                      </Button>
-                    </Link>
-                    {currentService.id === "golden-visa" && (
-                      <Link to="/guides/golden-visa-uae">
-                        <Button variant="outline" size="default" className="gap-2 px-4 py-2 rounded-lg border-white/40 text-white hover:bg-white/10 text-xs md:text-sm">
-                          Read Guide
-                        </Button>
-                      </Link>
-                    )}
-                  </div>
-                ) : (
-                  <Button variant="primary" size="lg" disabled className="gap-2 px-8 py-4 rounded-lg">
-                    {CTA_LABELS[currentService.id] ?? "Coming Soon"}
-                  </Button>
-                )}
-
-                {/* Navigation Arrows - 3D Premium Style */}
-                <div className="flex items-center gap-3">
-                  <button
-                    onClick={goToPrevious}
-                    className="relative w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center transition-all duration-200 group overflow-hidden hover:scale-110 active:scale-90"
-                    style={{
-                      background: 'linear-gradient(145deg, #FDFBF7, #E8DCC8)',
-                      border: '2px solid rgba(200, 167, 102, 0.7)',
-                      boxShadow: `
-                        0 6px 16px rgba(0,0,0,0.35),
-                        0 3px 6px rgba(0,0,0,0.25),
-                        inset 0 3px 6px rgba(255,255,255,0.9),
-                        inset 0 -3px 6px rgba(200,167,102,0.25),
-                        0 0 20px rgba(200,167,102,0.25)
-                      `,
-                      transform: 'translateY(0)',
-                    }}
-                    onMouseDown={(e) => {
-                      const btn = e.currentTarget;
-                      btn.style.transform = 'translateY(3px)';
-                      btn.style.boxShadow = '0 1px 4px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.5), inset 0 -1px 3px rgba(200,167,102,0.3), 0 0 30px rgba(200,167,102,0.7)';
-                    }}
-                    onMouseUp={(e) => {
-                      const btn = e.currentTarget;
-                      btn.style.transform = 'translateY(0)';
-                      btn.style.boxShadow = '0 6px 16px rgba(0,0,0,0.35), 0 3px 6px rgba(0,0,0,0.25), inset 0 3px 6px rgba(255,255,255,0.9), inset 0 -3px 6px rgba(200,167,102,0.25), 0 0 20px rgba(200,167,102,0.25)';
-                    }}
-                    onMouseLeave={(e) => {
-                      const btn = e.currentTarget;
-                      btn.style.transform = 'translateY(0)';
-                      btn.style.boxShadow = '0 6px 16px rgba(0,0,0,0.35), 0 3px 6px rgba(0,0,0,0.25), inset 0 3px 6px rgba(255,255,255,0.9), inset 0 -3px 6px rgba(200,167,102,0.25), 0 0 20px rgba(200,167,102,0.25)';
-                    }}
-                  >
-                    {/* 3D Top highlight */}
-                    <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-full bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                    {/* Bottom shadow for depth */}
-                    <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-full bg-gradient-to-t from-black/10 to-transparent pointer-events-none" />
-                    {/* Hover glow ring */}
-                    <span className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 30px rgba(200,167,102,0.6), inset 0 0 15px rgba(200,167,102,0.15)' }} />
-                    <ChevronLeft className="w-6 h-6 md:w-7 md:h-7 text-gold relative z-10 group-hover:scale-110 transition-transform" />
-                  </button>
-                  <button
-                    onClick={goToNext}
-                    className="relative w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center transition-all duration-200 group overflow-hidden hover:scale-110 active:scale-90"
-                    style={{
-                      background: 'linear-gradient(145deg, #FDFBF7, #E8DCC8)',
-                      border: '2px solid rgba(200, 167, 102, 0.7)',
-                      boxShadow: `
-                        0 6px 16px rgba(0,0,0,0.35),
-                        0 3px 6px rgba(0,0,0,0.25),
-                        inset 0 3px 6px rgba(255,255,255,0.9),
-                        inset 0 -3px 6px rgba(200,167,102,0.25),
-                        0 0 20px rgba(200,167,102,0.25)
-                      `,
-                      transform: 'translateY(0)',
-                    }}
-                    onMouseDown={(e) => {
-                      const btn = e.currentTarget;
-                      btn.style.transform = 'translateY(3px)';
-                      btn.style.boxShadow = '0 1px 4px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.5), inset 0 -1px 3px rgba(200,167,102,0.3), 0 0 30px rgba(200,167,102,0.7)';
-                    }}
-                    onMouseUp={(e) => {
-                      const btn = e.currentTarget;
-                      btn.style.transform = 'translateY(0)';
-                      btn.style.boxShadow = '0 6px 16px rgba(0,0,0,0.35), 0 3px 6px rgba(0,0,0,0.25), inset 0 3px 6px rgba(255,255,255,0.9), inset 0 -3px 6px rgba(200,167,102,0.25), 0 0 20px rgba(200,167,102,0.25)';
-                    }}
-                    onMouseLeave={(e) => {
-                      const btn = e.currentTarget;
-                      btn.style.transform = 'translateY(0)';
-                      btn.style.boxShadow = '0 6px 16px rgba(0,0,0,0.35), 0 3px 6px rgba(0,0,0,0.25), inset 0 3px 6px rgba(255,255,255,0.9), inset 0 -3px 6px rgba(200,167,102,0.25), 0 0 20px rgba(200,167,102,0.25)';
-                    }}
-                  >
-                    {/* 3D Top highlight */}
-                    <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-full bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                    {/* Bottom shadow for depth */}
-                    <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-full bg-gradient-to-t from-black/10 to-transparent pointer-events-none" />
-                    {/* Hover glow ring */}
-                    <span className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 30px rgba(200,167,102,0.6), inset 0 0 15px rgba(200,167,102,0.15)' }} />
-                    <ChevronRight className="w-6 h-6 md:w-7 md:h-7 text-gold relative z-10 group-hover:scale-110 transition-transform" />
-                  </button>
-                </div>
-              </div>
+                <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-gold" />
+              </button>
+              <button
+                onClick={goToNext}
+                className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center transition-all duration-200 group overflow-hidden hover:scale-110 active:scale-95"
+                style={{
+                  background: 'linear-gradient(145deg, #FDFBF7, #E8DCC8)',
+                  border: '2px solid rgba(200, 167, 102, 0.7)',
+                  boxShadow: '0 6px 16px rgba(0,0,0,0.35), inset 0 3px 6px rgba(255,255,255,0.9), 0 0 20px rgba(200,167,102,0.25)',
+                }}
+              >
+                <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-gold" />
+              </button>
             </div>
-          </motion.div>
-        </AnimatePresence>
+          </div>
+        </div>
       </div>
-
     </div>
   );
 };
