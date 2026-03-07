@@ -644,6 +644,11 @@ const OwnerAuditPage = () => {
                 </div>
               </div>
             </TabsContent>
+
+            {/* Delivery Checklist Tab */}
+            <TabsContent value="delivery">
+              <DeliveryChecklistTab />
+            </TabsContent>
           </Tabs>
         </div>
       </div>
