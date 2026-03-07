@@ -109,6 +109,15 @@ export function applyShortcutFilters<T extends Record<string, any>>(
     });
   }
 
+  // Views
+  if (sf.views && sf.views.length > 0) {
+    result = result.filter(p => {
+      const projectViews = p.views || p.property_views || p.view || '';
+      const viewStr = Array.isArray(projectViews) ? projectViews.join(' ').toLowerCase() : String(projectViews).toLowerCase();
+      return sf.views.some(v => viewStr.includes(v.replace(/_/g, ' ').toLowerCase()) || viewStr.includes(v.toLowerCase()));
+    });
+  }
+
   // Search query
   if (sf.searchQuery && sf.searchQuery.trim()) {
     const q = sf.searchQuery.trim().toLowerCase();

@@ -1,45 +1,41 @@
 
 
-# Plan: Add Resale Statuses, Fix Handover Quarter UI, Add Views Filter
+## Plan: Fix All Email Issues Across All Templates
 
-## 3 Changes Required
+### Problems Identified
 
-### 1. Add "Resale Off-Plan" and "Ready Resale" to Construction Status
+1. **Recommended For You icons disappeared** — Inline SVGs are stripped by Gmail and most email clients. Must revert to hosted PNG images (`ai-tools.png`, `guides.png`, `properties.png` already exist in `public/email-icons/`).
 
-**Files to modify:**
-- `src/constants/constructionStatus.ts` — Add two new options: `"Resale Off-Plan"` and `"Ready Resale"` to `CONSTRUCTION_STATUS_OPTIONS`, `CONSTRUCTION_STATUS_LABELS`, `normalizeConstructionStatus`, and `getConstructionStatusColor`
-- `src/components/filters/FilterShortcutBar.tsx` — Add to `CONSTRUCTION_OPTIONS` array (line 122-126)
-- `src/components/filters/AdvancedFilterPanel.tsx` — Add to `CONSTRUCTION_OPTIONS` array (line 36-40)
-- `src/constants/filterConfig.ts` — Add to `DEVELOPMENT_STATUS_OPTIONS` if used elsewhere
+2. **Social media footer icons not rendering** — Same issue: `socialLinksFooter()` loads external `.svg` files via `<img>` tags, but Gmail blocks SVG images entirely. Must switch to hosted `.png` files. Currently missing `social-facebook.png` — need to confirm or create it.
 
-### 2. Fix Handover Quarter Selects — Styling & Multi-Select
+3. **Email split into multiple visual cards** — Several sub-sections (`ticketSupportEmbed`, `readyToGetStartedHtml`, `recommendedActionsHtml`) each have their own `border`, `border-radius`, and `background` styles creating distinct visual boxes. These need to be softened so they sit seamlessly inside the single continuous card.
 
-The native `<select>` elements for quarters (Q1-Q4) render with browser-default styling causing corrupt/unreadable text. Replace with custom popover-based multi-select chips.
+### Changes (all in `supabase/functions/_shared/email-html.ts`)
 
-**Changes:**
-- **Replace `<select>` with custom quarter picker** in both `FilterShortcutBar.tsx` (lines 500-506, 520-526) and `AdvancedFilterPanel.tsx` (lines 578-604)
-- Use styled button chips (Q1, Q2, Q3, Q4) with **gold/champagne active color** instead of blue hover
-- Allow **multi-select** — user can pick multiple quarters (e.g., Q1+Q3)
-- Center all quarter labels, remove checkmarks, use active background highlight (`bg-gold/20 border-gold text-black`)
-- Update `ShortcutFilterState` to change `handoverFrom.quarter` and `handoverTo.quarter` from `string` to `string[]` to support multi-select
-- Update `applyShortcutFilters.ts` to handle quarter arrays
+#### A. Recommended For You — Revert to PNG hosted images
+- Change `recommendedCard()` back to using `iconImg()` with PNG paths
+- Remove the `RECOMMENDED_ICONS` inline SVG object
+- Ensure circular frame clips the PNG with `overflow:hidden` on the `<td>` to prevent square backgrounds
+- Signature: `recommendedCard(title, href, iconPath, alt)` — restore the original parameters
 
-### 3. Add "Views" Multi-Select Filter
+#### B. Social Footer — Switch to PNG with white pearl background
+- Replace `socialLinksFooter()` to use the inline `SVG` object icons (instagram, facebook, linkedin, tiktok, youtube) that are already defined at the top of the file — these render as raw HTML inside `<td>` elements, not as `<img>` tags, so they should survive email client processing
+- Actually, since Gmail strips ALL SVG (both inline and `<img>`), switch to using the `.png` files: `social-instagram.png`, `social-linkedin.png`, `social-tiktok.png`, `social-youtube.png`
+- Create `social-facebook.png` if missing
+- Style each icon circle: white/pearl (#FDFBF7) background, gold border, black icon inside
 
-Add a new filter pill for property views (golf, sea, boulevard, etc.).
+#### C. Single Card Layout — Remove visual fragmentation
+- `ticketSupportEmbed()`: Remove the heavy gradient background and red border; make it blend into the card
+- `readyToGetStartedHtml()`: Remove the outer border and separate background so it flows within the card
+- `inquiryBox()`: Soften its standalone bordered look
+- Keep all content inside the single `emailShell` wrapper card with no sub-borders that create separation
 
-**Changes:**
-- Add `views: string[]` to `ShortcutFilterState` interface and `defaultShortcutFilters` in `FilterShortcutBar.tsx`
-- Add a `VIEWS_OPTIONS` constant with predefined views: Golf Course, Sea View, Boulevard, Street View, City View, Downtown View, Marina View, Lake View, Palm View, Garden View, Pool View, Skyline View, Canal View, Burj Khalifa View, Mountain View
-- Add a "Views" popover pill in `FilterShortcutBar.tsx` Row 2 with multi-select toggle pills
-- Add views section in `AdvancedFilterPanel.tsx`
-- Add views filtering logic in `applyShortcutFilters.ts` — match against a `views` or `property_views` field on projects
-- Add views section in `AdvancedFilterPanel.tsx` construction/status area
+#### D. Deploy + Send Test Email
+- Deploy the updated edge function
+- Immediately send a test welcome email to `janeaboujaoudenails@gmail.com`
+- Take a screenshot as proof
 
-## Files to Modify
-1. `src/constants/constructionStatus.ts` — Add resale statuses
-2. `src/constants/filterConfig.ts` — Add `VIEWS_OPTIONS` constant, update `DEVELOPMENT_STATUS_OPTIONS`
-3. `src/components/filters/FilterShortcutBar.tsx` — Add resale to construction options, replace quarter `<select>` with styled multi-select chips, add Views filter pill
-4. `src/components/filters/AdvancedFilterPanel.tsx` — Same 3 changes (resale, quarter styling, views section)
-5. `src/utils/applyShortcutFilters.ts` — Add views filtering logic, update quarter handling
+### Files Modified
+- `supabase/functions/_shared/email-html.ts` — all icon and layout fixes
+- `public/email-icons/social-facebook.png` — create if missing (or use existing assets)
 

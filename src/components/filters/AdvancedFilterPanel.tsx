@@ -10,7 +10,7 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
-import { EMIRATES_OPTIONS } from "@/constants/filterConfig";
+import { EMIRATES_OPTIONS, VIEWS_OPTIONS } from "@/constants/filterConfig";
 import { SafeImage } from "@/components/SafeImage";
 import type { ShortcutFilterState } from "./FilterShortcutBar";
 import { defaultShortcutFilters } from "./FilterShortcutBar";
@@ -37,6 +37,8 @@ const CONSTRUCTION_OPTIONS = [
   { value: 'Completed', label: 'Completed' },
   { value: 'Under Construction', label: 'Under Construction' },
   { value: 'Presale', label: 'Presale' },
+  { value: 'Resale Off-Plan', label: 'Resale Off-Plan' },
+  { value: 'Ready Resale', label: 'Ready Resale' },
 ];
 
 const UNIT_TYPE_OPTIONS = [
@@ -574,43 +576,75 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
               <h4 className={sectionTitle}>Project Handover By</h4>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-[10px] font-semibold text-black/50 uppercase mb-1 block">From</label>
-                  <div className="flex gap-2">
-                    <select
-                      value={localFilters.handoverFrom.quarter}
-                      onChange={(e) => update({ handoverFrom: { ...localFilters.handoverFrom, quarter: e.target.value } })}
-                      className="flex-1 h-9 px-2 bg-white border border-gold/30 rounded text-sm text-black font-medium"
-                    >
-                      {QUARTERS.map(q => <option key={q} value={q}>{q}</option>)}
-                    </select>
-                    <select
-                      value={localFilters.handoverFrom.year}
-                      onChange={(e) => update({ handoverFrom: { ...localFilters.handoverFrom, year: e.target.value } })}
-                      className="flex-1 h-9 px-2 bg-white border border-gold/30 rounded text-sm text-black font-medium"
-                    >
-                      {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
-                    </select>
+                  <label className="text-[10px] font-semibold text-black/50 uppercase mb-2 block">From</label>
+                  <div className="flex gap-1 mb-2">
+                    {QUARTERS.map(q => (
+                      <button
+                        key={q}
+                        onClick={() => update({ handoverFrom: { ...localFilters.handoverFrom, quarter: q } })}
+                        className={cn(
+                          "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
+                          localFilters.handoverFrom.quarter === q
+                            ? "bg-gradient-to-br from-[#C8A766]/25 via-[#D4AF37]/20 to-[#C8A766]/25 border-2 border-gold text-black shadow-sm"
+                            : "bg-white/80 border border-gold/25 text-black/60 hover:bg-gold/10 hover:border-gold/50"
+                        )}
+                      >
+                        {q}
+                      </button>
+                    ))}
                   </div>
+                  <select
+                    value={localFilters.handoverFrom.year}
+                    onChange={(e) => update({ handoverFrom: { ...localFilters.handoverFrom, year: e.target.value } })}
+                    className="w-full h-9 px-3 bg-white border border-gold/30 rounded-lg text-sm text-black font-medium appearance-none cursor-pointer"
+                    style={{ WebkitAppearance: 'none' }}
+                  >
+                    {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
+                  </select>
                 </div>
                 <div>
-                  <label className="text-[10px] font-semibold text-black/50 uppercase mb-1 block">To</label>
-                  <div className="flex gap-2">
-                    <select
-                      value={localFilters.handoverTo.quarter}
-                      onChange={(e) => update({ handoverTo: { ...localFilters.handoverTo, quarter: e.target.value } })}
-                      className="flex-1 h-9 px-2 bg-white border border-gold/30 rounded text-sm text-black font-medium"
-                    >
-                      {QUARTERS.map(q => <option key={q} value={q}>{q}</option>)}
-                    </select>
-                    <select
-                      value={localFilters.handoverTo.year}
-                      onChange={(e) => update({ handoverTo: { ...localFilters.handoverTo, year: e.target.value } })}
-                      className="flex-1 h-9 px-2 bg-white border border-gold/30 rounded text-sm text-black font-medium"
-                    >
-                      {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
-                    </select>
+                  <label className="text-[10px] font-semibold text-black/50 uppercase mb-2 block">To</label>
+                  <div className="flex gap-1 mb-2">
+                    {QUARTERS.map(q => (
+                      <button
+                        key={q}
+                        onClick={() => update({ handoverTo: { ...localFilters.handoverTo, quarter: q } })}
+                        className={cn(
+                          "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
+                          localFilters.handoverTo.quarter === q
+                            ? "bg-gradient-to-br from-[#C8A766]/25 via-[#D4AF37]/20 to-[#C8A766]/25 border-2 border-gold text-black shadow-sm"
+                            : "bg-white/80 border border-gold/25 text-black/60 hover:bg-gold/10 hover:border-gold/50"
+                        )}
+                      >
+                        {q}
+                      </button>
+                    ))}
                   </div>
+                  <select
+                    value={localFilters.handoverTo.year}
+                    onChange={(e) => update({ handoverTo: { ...localFilters.handoverTo, year: e.target.value } })}
+                    className="w-full h-9 px-3 bg-white border border-gold/30 rounded-lg text-sm text-black font-medium appearance-none cursor-pointer"
+                    style={{ WebkitAppearance: 'none' }}
+                  >
+                    {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
+                  </select>
                 </div>
+              </div>
+            </section>
+
+            {/* Property Views */}
+            <section>
+              <h4 className={sectionTitle}>Property Views</h4>
+              <div className="flex flex-wrap gap-2">
+                {VIEWS_OPTIONS.map((opt) => (
+                  <button
+                    key={opt.value}
+                    onClick={() => update({ views: toggleArray(localFilters.views || [], opt.value) })}
+                    className={cn(togglePillBase, (localFilters.views || []).includes(opt.value) ? togglePillOn : togglePillOff)}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
               </div>
             </section>
           </div>

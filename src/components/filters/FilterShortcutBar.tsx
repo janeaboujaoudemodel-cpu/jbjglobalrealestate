@@ -4,7 +4,7 @@
  * Row 2: Filter popovers + Sort pills + Hide Sold (last)
  */
 import { useState, useCallback, useEffect, useRef } from "react";
-import { ChevronDown, ChevronRight as ChevronRightIcon, X, Heart, Building2, Bed, Calendar, DollarSign, CreditCard, Activity, Map, Users, Trash2, ArrowUpDown, EyeOff, HardHat, Clock, ArrowUp, ArrowDown, SortAsc, SlidersHorizontal, Check, TrendingUp } from "lucide-react";
+import { ChevronDown, ChevronRight as ChevronRightIcon, X, Heart, Building2, Bed, Calendar, DollarSign, CreditCard, Activity, Map, Users, Trash2, ArrowUpDown, EyeOff, HardHat, Clock, ArrowUp, ArrowDown, SortAsc, SlidersHorizontal, Check, TrendingUp, Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { SUPPORTED_CURRENCIES } from "@/components/CurrencySwitcher";
@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SaveFilterModal from "./SaveFilterModal";
 import { CONSTRUCTION_STATUS_OPTIONS } from "@/constants/constructionStatus";
+import { VIEWS_OPTIONS } from "@/constants/filterConfig";
 import AdvancedFilterPanel from "./AdvancedFilterPanel";
 
 export interface ShortcutFilterState {
@@ -40,6 +41,7 @@ export interface ShortcutFilterState {
   areas: string[];
   developers: string[];
   searchQuery: string;
+  views: string[];
 }
 
 export const defaultShortcutFilters: ShortcutFilterState = {
@@ -64,6 +66,7 @@ export const defaultShortcutFilters: ShortcutFilterState = {
   areas: [],
   developers: [],
   searchQuery: '',
+  views: [],
 };
 
 interface FilterShortcutBarProps {
@@ -123,6 +126,8 @@ const CONSTRUCTION_OPTIONS = [
   { value: 'Completed', label: 'Completed' },
   { value: 'Under Construction', label: 'Under Construction' },
   { value: 'Presale', label: 'Presale' },
+  { value: 'Resale Off-Plan', label: 'Resale Off-Plan' },
+  { value: 'Ready Resale', label: 'Ready Resale' },
 ];
 
 const SORT_OPTIONS: { value: ShortcutFilterState['sortBy']; label: string }[] = [
@@ -209,7 +214,8 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
     filters.statuses.length > 0 ||
     filters.sortBy !== null ||
     filters.hideSoldOut ||
-    filters.constructionStatuses.length > 0;
+    filters.constructionStatuses.length > 0 ||
+    filters.views.length > 0;
 
   const resetAll = () => onFilterChange({ ...defaultShortcutFilters });
 
@@ -496,42 +502,58 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             <h4 className="text-sm font-bold text-black mb-3">Project handover by</h4>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="text-[10px] font-semibold text-black/50 uppercase mb-1 block">From</label>
-                <div className="flex gap-2">
-                  <select
-                    value={filters.handoverFrom.quarter}
-                    onChange={(e) => update({ handoverFrom: { ...filters.handoverFrom, quarter: e.target.value } })}
-                    className="min-w-[52px] flex-1 h-9 px-2 bg-white border border-gold/30 rounded text-sm text-black font-medium"
-                  >
-                    {QUARTERS.map(q => <option key={q} value={q}>{q}</option>)}
-                  </select>
-                  <select
-                    value={filters.handoverFrom.year}
-                    onChange={(e) => update({ handoverFrom: { ...filters.handoverFrom, year: e.target.value } })}
-                    className="min-w-[80px] flex-1 h-9 px-2 bg-white border border-gold/30 rounded text-sm text-black font-medium"
-                  >
-                    {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
-                  </select>
+                <label className="text-[10px] font-semibold text-black/50 uppercase mb-2 block">From</label>
+                <div className="flex gap-1 mb-2">
+                  {QUARTERS.map(q => (
+                    <button
+                      key={q}
+                      onClick={() => update({ handoverFrom: { ...filters.handoverFrom, quarter: q } })}
+                      className={cn(
+                        "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
+                        filters.handoverFrom.quarter === q
+                          ? "bg-gradient-to-br from-[#C8A766]/25 via-[#D4AF37]/20 to-[#C8A766]/25 border-2 border-gold text-black shadow-sm"
+                          : "bg-white/80 border border-gold/25 text-black/60 hover:bg-gold/10 hover:border-gold/50"
+                      )}
+                    >
+                      {q}
+                    </button>
+                  ))}
                 </div>
+                <select
+                  value={filters.handoverFrom.year}
+                  onChange={(e) => update({ handoverFrom: { ...filters.handoverFrom, year: e.target.value } })}
+                  className="w-full h-9 px-3 bg-white border border-gold/30 rounded-lg text-sm text-black font-medium appearance-none cursor-pointer"
+                  style={{ WebkitAppearance: 'none' }}
+                >
+                  {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
+                </select>
               </div>
               <div>
-                <label className="text-[10px] font-semibold text-black/50 uppercase mb-1 block">To</label>
-                <div className="flex gap-2">
-                  <select
-                    value={filters.handoverTo.quarter}
-                    onChange={(e) => update({ handoverTo: { ...filters.handoverTo, quarter: e.target.value } })}
-                    className="min-w-[52px] flex-1 h-9 px-2 bg-white border border-gold/30 rounded text-sm text-black font-medium"
-                  >
-                    {QUARTERS.map(q => <option key={q} value={q}>{q}</option>)}
-                  </select>
-                  <select
-                    value={filters.handoverTo.year}
-                    onChange={(e) => update({ handoverTo: { ...filters.handoverTo, year: e.target.value } })}
-                    className="min-w-[80px] flex-1 h-9 px-2 bg-white border border-gold/30 rounded text-sm text-black font-medium"
-                  >
-                    {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
-                  </select>
+                <label className="text-[10px] font-semibold text-black/50 uppercase mb-2 block">To</label>
+                <div className="flex gap-1 mb-2">
+                  {QUARTERS.map(q => (
+                    <button
+                      key={q}
+                      onClick={() => update({ handoverTo: { ...filters.handoverTo, quarter: q } })}
+                      className={cn(
+                        "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
+                        filters.handoverTo.quarter === q
+                          ? "bg-gradient-to-br from-[#C8A766]/25 via-[#D4AF37]/20 to-[#C8A766]/25 border-2 border-gold text-black shadow-sm"
+                          : "bg-white/80 border border-gold/25 text-black/60 hover:bg-gold/10 hover:border-gold/50"
+                      )}
+                    >
+                      {q}
+                    </button>
+                  ))}
                 </div>
+                <select
+                  value={filters.handoverTo.year}
+                  onChange={(e) => update({ handoverTo: { ...filters.handoverTo, year: e.target.value } })}
+                  className="w-full h-9 px-3 bg-white border border-gold/30 rounded-lg text-sm text-black font-medium appearance-none cursor-pointer"
+                  style={{ WebkitAppearance: 'none' }}
+                >
+                  {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
+                </select>
               </div>
             </div>
           </PopoverContent>
@@ -642,6 +664,32 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                   key={opt.value}
                   onClick={() => update({ constructionStatuses: toggleArray(filters.constructionStatuses, opt.value) })}
                   className={cn(togglePillBase, filters.constructionStatuses.includes(opt.value) ? togglePillOn : togglePillOff)}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </PopoverContent>
+        </Popover>
+
+        {/* Views */}
+        <Popover>
+          <PopoverTrigger asChild>
+            <button className={cn(pillBase, filters.views.length > 0 ? pillActive : pillInactive)}>
+              <Eye className="w-3.5 h-3.5" />
+              Views
+              {filters.views.length > 0 && <CountBadge count={filters.views.length} />}
+              <ChevronDown className="w-3 h-3 opacity-60" />
+            </button>
+          </PopoverTrigger>
+          <PopoverContent className={cn("w-80 p-4", popoverClass)} side="bottom" align="start" sideOffset={6}>
+            <h4 className="text-sm font-bold text-black mb-3">Property Views</h4>
+            <div className="flex flex-wrap gap-2 max-h-64 overflow-y-auto">
+              {VIEWS_OPTIONS.map((opt) => (
+                <button
+                  key={opt.value}
+                  onClick={() => update({ views: toggleArray(filters.views, opt.value) })}
+                  className={cn(togglePillBase, filters.views.includes(opt.value) ? togglePillOn : togglePillOff)}
                 >
                   {opt.label}
                 </button>
