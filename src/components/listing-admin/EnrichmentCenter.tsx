@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import {
   Play, Pause, RefreshCw, Loader2, Database, Image,
-  FileText, Layers, CheckCircle2, AlertCircle, Zap, Globe
+  FileText, Layers, CheckCircle2, AlertCircle, Zap, Globe, CloudOff
 } from "lucide-react";
 
 interface EnrichStats {
@@ -19,39 +19,29 @@ interface EnrichStats {
   total_documents: number;
 }
 
-interface BatchResult {
+interface EnrichmentJob {
+  id: string;
+  status: string;
+  total_projects: number;
   processed: number;
-  remaining: number;
   images_added: number;
   docs_added: number;
   fields_updated: number;
   errors: number;
-  elapsed_ms: number;
-  results: Array<{ name: string; status: string; images: number; docs: number; fields: number }>;
+  stop_requested: boolean;
+  started_at: string;
+  completed_at: string | null;
+  log: Array<{ time: string; msg: string }>;
 }
 
-// ========== REELLY ENRICHMENT PANEL ==========
+// ========== REELLY ENRICHMENT PANEL (BACKGROUND MODE) ==========
 const ReellyEnrichmentPanel = () => {
   const [stats, setStats] = useState<EnrichStats | null>(null);
   const [isLoadingStats, setIsLoadingStats] = useState(false);
-  const [isRunning, setIsRunning] = useState(false);
-  const [batchCount, setBatchCount] = useState(0);
-  const [totalProcessed, setTotalProcessed] = useState(0);
-  const [totalImagesAdded, setTotalImagesAdded] = useState(0);
-  const [totalDocsAdded, setTotalDocsAdded] = useState(0);
-  const [totalFieldsUpdated, setTotalFieldsUpdated] = useState(0);
-  const [totalErrors, setTotalErrors] = useState(0);
-  const [log, setLog] = useState<string[]>([]);
-  const stopRef = useRef(false);
-  const logEndRef = useRef<HTMLDivElement>(null);
-
-  const addLog = useCallback((msg: string) => {
-    setLog(prev => [...prev.slice(-100), `[${new Date().toLocaleTimeString()}] ${msg}`]);
-  }, []);
-
-  useEffect(() => {
-    logEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [log]);
+  const [job, setJob] = useState<EnrichmentJob | null>(null);
+  const [isActive, setIsActive] = useState(false);
+  const [isStarting, setIsStarting] = useState(false);
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const fetchStats = async () => {
     setIsLoadingStats(true);
@@ -60,8 +50,13 @@ const ReellyEnrichmentPanel = () => {
         body: { action: "stats" },
       });
       if (error) throw error;
-      setStats(data);
-      addLog(`Stats: ${data.total_projects} total, ${data.enriched} enriched, ${data.remaining} remaining`);
+      setStats({
+        total_projects: data.total_projects,
+        enriched: data.enriched_with_raw_data ?? data.enriched ?? 0,
+        remaining: data.remaining,
+        total_images: data.total_images,
+        total_documents: data.total_documents,
+      });
     } catch (e: any) {
       toast.error("Failed to fetch stats: " + e.message);
     } finally {
@@ -69,71 +64,102 @@ const ReellyEnrichmentPanel = () => {
     }
   };
 
-  useEffect(() => { fetchStats(); }, []);
-
-  const startAutoEnrich = async () => {
-    stopRef.current = false;
-    setIsRunning(true);
-    setBatchCount(0);
-    setTotalProcessed(0);
-    setTotalImagesAdded(0);
-    setTotalDocsAdded(0);
-    setTotalFieldsUpdated(0);
-    setTotalErrors(0);
-    setLog([]);
-    addLog("🚀 Auto-enrichment started. Running successive batches...");
-
-    let batch = 0;
-
-    while (!stopRef.current) {
-      batch++;
-      addLog(`📦 Batch #${batch} starting...`);
-
-      try {
-        const { data: result, error } = await supabase.functions.invoke("reelly-auto-enrich", {
-          body: { action: "run", batch_size: 10 },
-        });
-        if (error) throw error;
-        if (!result) { addLog("⚠️ Empty response"); break; }
-
-        setBatchCount(batch);
-        setTotalProcessed(prev => prev + result.processed);
-        setTotalImagesAdded(prev => prev + result.images_added);
-        setTotalDocsAdded(prev => prev + result.docs_added);
-        setTotalFieldsUpdated(prev => prev + result.fields_updated);
-        setTotalErrors(prev => prev + result.errors);
-
-        for (const r of result.results) {
-          const icon = r.status === "success" ? "✅" : r.status === "no_api_data" ? "⚠️" : "❌";
-          addLog(`  ${icon} ${r.name}: +${r.images} imgs, +${r.docs} docs, +${r.fields} fields`);
-        }
-
-        addLog(`📦 Batch #${batch} done: ${result.processed} processed, ${result.remaining} remaining (${result.elapsed_ms}ms)`);
-
-        if (result.remaining === 0 || result.processed === 0) {
-          addLog("🎉 All projects fully enriched!");
-          toast.success("All projects enriched successfully!");
-          break;
-        }
-
-        addLog("⏳ Waiting 3s before next batch...");
-        await new Promise(r => setTimeout(r, 3000));
-      } catch (err: any) {
-        addLog(`❌ Batch #${batch} error: ${err.message}`);
-        toast.error(`Batch ${batch} failed: ${err.message}`);
-        await new Promise(r => setTimeout(r, 5000));
+  const pollStatus = useCallback(async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke("background-enrichment-runner", {
+        body: { action: "status" },
+      });
+      if (error) throw error;
+      setIsActive(data.active);
+      if (data.job) setJob(data.job);
+      if (!data.active && pollRef.current) {
+        clearInterval(pollRef.current);
+        pollRef.current = null;
+        fetchStats(); // Refresh stats when done
       }
+    } catch {
+      // Non-fatal
     }
+  }, []);
 
-    if (stopRef.current) addLog("⏸️ Enrichment paused by user.");
-    setIsRunning(false);
+  const startPolling = useCallback(() => {
+    if (pollRef.current) clearInterval(pollRef.current);
+    pollRef.current = setInterval(pollStatus, 5000);
+    pollStatus();
+  }, [pollStatus]);
+
+  useEffect(() => {
     fetchStats();
+    // Check if there's already an active job
+    pollStatus().then(() => {
+      // If active, start polling
+    });
+    return () => {
+      if (pollRef.current) clearInterval(pollRef.current);
+    };
+  }, []);
+
+  // Auto-start polling if job is active
+  useEffect(() => {
+    if (isActive && !pollRef.current) {
+      startPolling();
+    }
+  }, [isActive, startPolling]);
+
+  const startBackgroundEnrich = async () => {
+    setIsStarting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("background-enrichment-runner", {
+        body: { action: "start" },
+      });
+      if (error) throw error;
+
+      if (data.already_running) {
+        toast.info("Enrichment already running in background");
+      } else {
+        toast.success("Background enrichment started! Safe to navigate away.");
+      }
+      startPolling();
+    } catch (e: any) {
+      toast.error("Failed to start: " + e.message);
+    } finally {
+      setIsStarting(false);
+    }
   };
 
-  const progress = stats ? Math.round(((stats.enriched) / Math.max(stats.total_projects, 1)) * 100) : 0;
+  const stopEnrichment = async () => {
+    try {
+      await supabase.functions.invoke("background-enrichment-runner", {
+        body: { action: "stop" },
+      });
+      toast.info("Stop requested — will finish current project");
+    } catch {
+      // Non-fatal
+    }
+  };
+
+  const progress = job?.total_projects
+    ? Math.round((job.processed / Math.max(job.total_projects, 1)) * 100)
+    : stats
+      ? Math.round((stats.enriched / Math.max(stats.total_projects, 1)) * 100)
+      : 0;
 
   return (
     <div className="space-y-4">
+      {/* Background mode banner */}
+      {isActive && (
+        <div className="bg-emerald-500/10 border-2 border-emerald-500/30 rounded-lg p-4 flex items-center gap-3">
+          <div className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse" />
+          <div className="flex-1">
+            <p className="text-foreground font-semibold text-sm">Enrichment running in background</p>
+            <p className="text-muted-foreground text-xs">Safe to navigate away — processing continues on the server.</p>
+          </div>
+          <Button onClick={stopEnrichment} variant="destructive" size="sm">
+            <Pause className="w-3 h-3 mr-1" /> Stop
+          </Button>
+        </div>
+      )}
+
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
         <Card className="bg-card border border-gold/20">
@@ -173,26 +199,31 @@ const ReellyEnrichmentPanel = () => {
         </Card>
       </div>
 
-      {stats && (
-        <div className="space-y-2">
-          <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Enrichment Progress</span>
-            <span className="text-foreground font-semibold">{progress}%</span>
-          </div>
-          <Progress value={progress} className="h-3" />
+      {/* Progress bar */}
+      <div className="space-y-2">
+        <div className="flex justify-between text-sm">
+          <span className="text-muted-foreground">
+            {job && isActive ? `Processing: ${job.processed}/${job.total_projects}` : "Enrichment Progress"}
+          </span>
+          <span className="text-foreground font-semibold">{progress}%</span>
         </div>
-      )}
+        <Progress value={progress} className="h-3" />
+      </div>
 
+      {/* Controls */}
       <div className="flex items-center gap-3">
-        {!isRunning ? (
-          <Button onClick={startAutoEnrich} className="bg-gold hover:bg-gold/90 text-foreground font-semibold">
-            <Play className="w-4 h-4 mr-2" />
-            Start Auto-Enrichment
+        {!isActive ? (
+          <Button
+            onClick={startBackgroundEnrich}
+            disabled={isStarting}
+            className="bg-gold hover:bg-gold/90 text-foreground font-semibold"
+          >
+            {isStarting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Play className="w-4 h-4 mr-2" />}
+            Start Background Enrichment
           </Button>
         ) : (
-          <Button onClick={() => { stopRef.current = true; }} variant="destructive">
-            <Pause className="w-4 h-4 mr-2" />
-            Stop After Current Batch
+          <Button onClick={stopEnrichment} variant="destructive">
+            <Pause className="w-4 h-4 mr-2" /> Stop After Current
           </Button>
         )}
         <Button onClick={fetchStats} disabled={isLoadingStats} variant="outline" className="border-gold/30">
@@ -201,25 +232,33 @@ const ReellyEnrichmentPanel = () => {
         </Button>
       </div>
 
-      {(isRunning || batchCount > 0) && (
+      {/* Job progress stats */}
+      {job && (job.status === "running" || job.status === "completed" || job.status === "stopped") && (
         <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/20 rounded-lg p-4">
           <div className="flex items-center gap-2 mb-3">
-            {isRunning && <Loader2 className="w-4 h-4 animate-spin text-gold" />}
+            {isActive && <Loader2 className="w-4 h-4 animate-spin text-gold" />}
+            {job.status === "completed" && <CheckCircle2 className="w-4 h-4 text-emerald-600" />}
+            {job.status === "stopped" && <CloudOff className="w-4 h-4 text-amber-600" />}
             <span className="text-foreground font-semibold text-sm">
-              {isRunning ? "Running..." : "Completed"} — Batch #{batchCount}
+              {job.status === "running" ? "Processing..." : job.status === "completed" ? "Completed" : "Stopped"}
+              {" "}— {job.processed}/{job.total_projects} projects
             </span>
+            <Badge variant={job.status === "completed" ? "default" : "secondary"} className="ml-auto text-xs">
+              {job.status}
+            </Badge>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3 text-center">
-            <div><p className="text-xs text-muted-foreground">Processed</p><p className="text-lg font-bold text-foreground">{totalProcessed}</p></div>
-            <div><p className="text-xs text-muted-foreground">Images Added</p><p className="text-lg font-bold text-blue-600">+{totalImagesAdded}</p></div>
-            <div><p className="text-xs text-muted-foreground">Docs Added</p><p className="text-lg font-bold text-purple-600">+{totalDocsAdded}</p></div>
-            <div><p className="text-xs text-muted-foreground">Fields Updated</p><p className="text-lg font-bold text-emerald-600">+{totalFieldsUpdated}</p></div>
-            <div><p className="text-xs text-muted-foreground">Errors</p><p className={`text-lg font-bold ${totalErrors > 0 ? 'text-red-600' : 'text-muted-foreground'}`}>{totalErrors}</p></div>
+            <div><p className="text-xs text-muted-foreground">Processed</p><p className="text-lg font-bold text-foreground">{job.processed}</p></div>
+            <div><p className="text-xs text-muted-foreground">Images Added</p><p className="text-lg font-bold text-blue-600">+{job.images_added}</p></div>
+            <div><p className="text-xs text-muted-foreground">Docs Added</p><p className="text-lg font-bold text-purple-600">+{job.docs_added}</p></div>
+            <div><p className="text-xs text-muted-foreground">Fields Updated</p><p className="text-lg font-bold text-emerald-600">+{job.fields_updated}</p></div>
+            <div><p className="text-xs text-muted-foreground">Errors</p><p className={`text-lg font-bold ${job.errors > 0 ? 'text-red-600' : 'text-muted-foreground'}`}>{job.errors}</p></div>
           </div>
         </div>
       )}
 
-      {log.length > 0 && (
+      {/* Live log */}
+      {job?.log && job.log.length > 0 && (
         <Card className="bg-zinc-950 border border-zinc-800">
           <CardHeader className="pb-2">
             <CardTitle className="text-zinc-300 text-sm flex items-center gap-2">
@@ -229,17 +268,17 @@ const ReellyEnrichmentPanel = () => {
           </CardHeader>
           <CardContent className="p-0">
             <div className="max-h-72 overflow-y-auto p-4 font-mono text-xs space-y-0.5">
-              {log.map((line, i) => (
+              {job.log.map((entry, i) => (
                 <div key={i} className={`${
-                  line.includes("❌") ? "text-red-400" :
-                  line.includes("✅") ? "text-emerald-400" :
-                  line.includes("🎉") ? "text-yellow-300" :
-                  line.includes("⚠️") ? "text-amber-400" :
-                  line.includes("📦") ? "text-blue-400" :
+                  entry.msg.includes("❌") ? "text-red-400" :
+                  entry.msg.includes("✅") ? "text-emerald-400" :
+                  entry.msg.includes("🎉") ? "text-yellow-300" :
+                  entry.msg.includes("⚠️") ? "text-amber-400" :
                   "text-zinc-400"
-                }`}>{line}</div>
+                }`}>
+                  <span className="text-zinc-600">[{new Date(entry.time).toLocaleTimeString()}]</span> {entry.msg}
+                </div>
               ))}
-              <div ref={logEndRef} />
             </div>
           </CardContent>
         </Card>
@@ -271,7 +310,6 @@ const ProvidentEnrichmentPanel = () => {
     logEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [log]);
 
-  // Fetch gap stats — how many published projects are missing Provident-enrichable fields
   const fetchGapStats = async () => {
     setIsLoadingStats(true);
     try {
@@ -363,7 +401,6 @@ const ProvidentEnrichmentPanel = () => {
 
   return (
     <div className="space-y-4">
-      {/* Gap Stats */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
         <Card className="bg-card border border-gold/20">
           <CardContent className="p-4 text-center">
@@ -400,7 +437,7 @@ const ProvidentEnrichmentPanel = () => {
 
       <p className="text-muted-foreground text-sm">
         Enriches published projects by finding matching Provident pages and filling gaps: amenities, payment plans,
-        FAQs, USPs, floor plans, location distances, images, and documents. Free — uses Provident page-data API (no Firecrawl credits).
+        FAQs, USPs, floor plans, location distances, images, and documents.
       </p>
 
       <div className="flex items-center gap-3">
@@ -472,7 +509,6 @@ const ProvidentEnrichmentPanel = () => {
 export const EnrichmentCenter = () => {
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30 rounded-xl p-5">
         <h2 className="text-foreground font-bold text-lg flex items-center gap-2">
           <Zap className="w-5 h-5 text-gold" />
@@ -480,11 +516,10 @@ export const EnrichmentCenter = () => {
         </h2>
         <p className="text-muted-foreground text-sm mt-1">
           Automatically enrich all projects from multiple sources — images, documents, floor plans, amenities,
-          payment plans, unit types, descriptions, and more. Add-only: never deletes existing data.
+          payment plans, unit types, descriptions, and more. Runs in background — safe to navigate away.
         </p>
       </div>
 
-      {/* Tabbed panels */}
       <Tabs defaultValue="reelly" className="space-y-4">
         <TabsList className="bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30 p-1">
           <TabsTrigger
@@ -508,12 +543,11 @@ export const EnrichmentCenter = () => {
             <CardHeader className="pb-3">
               <CardTitle className="text-foreground text-base flex items-center gap-2">
                 <Globe className="w-5 h-5 text-gold" />
-                Reelly API Auto-Enrichment
+                Reelly API Auto-Enrichment (Background)
               </CardTitle>
               <p className="text-muted-foreground text-sm">
-                Runs successive batches automatically until all projects are enriched. Each batch processes ~10 projects
-                and extracts: gallery images, brochures, floor plans, amenities, unit types, payment plans, FAQs,
-                highlights, videos, location distances, service charges, and ROI estimates.
+                Runs entirely on the server — processes all projects even if you close this page.
+                You'll receive notifications every 50 projects and when complete.
               </p>
             </CardHeader>
             <CardContent>
@@ -531,7 +565,7 @@ export const EnrichmentCenter = () => {
               </CardTitle>
               <p className="text-muted-foreground text-sm">
                 Synchronizes published projects with Provident's page-data API to fill gaps in amenities, payment plans,
-                FAQs, USPs, floor plans, location distances, images, and documents. Free — no Firecrawl credits used.
+                FAQs, USPs, floor plans, location distances, images, and documents.
               </p>
             </CardHeader>
             <CardContent>
