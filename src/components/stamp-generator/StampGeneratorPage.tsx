@@ -96,6 +96,8 @@ export default function StampGeneratorPage() {
   const [secondaryColor, setSecondaryColorRaw] = useState<string | undefined>(() => ssGet(ssKey('secondaryColor'), undefined));
   const [accentColor, setAccentColorRaw] = useState<string | undefined>(() => ssGet(ssKey('accentColor'), undefined));
   const [activeStop, setActiveStop] = useState<ColorStop>('primary');
+  const [inkMode, setInkModeRaw] = useState(() => ssGet(ssKey('inkMode'), false));
+  const setInkMode = (v: boolean) => { setInkModeRaw(v); ssSave(ssKey('inkMode'), v); };
 
   const setPrimaryColor = (v: string) => { setPrimaryColorRaw(v); ssSave(ssKey('primaryColor'), v); };
   const setSecondaryColor = (v: string | undefined) => { setSecondaryColorRaw(v); ssSave(ssKey('secondaryColor'), v ?? null); };
