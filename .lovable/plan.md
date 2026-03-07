@@ -1,43 +1,41 @@
 
 
-# Fix Plan: Continue Searching Title, Shimmer Overlap, Golden Visa Button Layout, and Why Dubai Video
+## Plan: Fix All Email Issues Across All Templates
 
-## Issues Identified
+### Problems Identified
 
-### 1. Continue Searching — Title and Shimmer
-- **Title**: Currently says "Continue Searching for {projectName}" which is too narrow. Change to a more inclusive title like "Continue Your Search" with a "Register Your Interest" CTA button next to it.
-- **Shimmer/fade edges**: The left/right fade gradients (lines 119-120 in `ContinueSearching.tsx`) use `from-background` which doesn't match the black background, causing a visible light overlay that hides part of the cards. Fix by using `from-black` to match the section's actual background.
+1. **Recommended For You icons disappeared** — Inline SVGs are stripped by Gmail and most email clients. Must revert to hosted PNG images (`ai-tools.png`, `guides.png`, `properties.png` already exist in `public/email-icons/`).
 
-### 2. Golden Visa Slide — Button Layout on Mobile
-- **Problem**: In `ExploreServicesCard.tsx`, the Golden Visa slide (line 281-286) has TWO buttons ("Get Your Golden Visa" + "Read Guide") plus nav arrows, all in a `flex-wrap` row. On mobile, the long CTA text causes the buttons to stack vertically and the arrow buttons get pushed down.
-- **Fix**:
-  - Shorten primary CTA to "Golden Visa" or "Get Started"
-  - Make the "Read Guide" secondary button smaller
-  - Ensure the button row uses `flex-wrap` properly with smaller text on mobile
-  - Reduce button `size` from `lg` to `default` on mobile for long-text CTAs
+2. **Social media footer icons not rendering** — Same issue: `socialLinksFooter()` loads external `.svg` files via `<img>` tags, but Gmail blocks SVG images entirely. Must switch to hosted `.png` files. Currently missing `social-facebook.png` — need to confirm or create it.
 
-### 3. Why Dubai Video Not Playing
-- **Problem**: The video element has `preload="metadata"` which is too lazy. Combined with the `AnimatePresence` re-mounting on `currentScene` change (every 6s), the video may never fully load before being swapped out. Since there's only 1 scene, the re-mount is unnecessary but the preload strategy is too conservative.
-- **Fix**:
-  - Change `preload` from `"metadata"` to `"auto"` for immediate loading
-  - Remove the `AnimatePresence`/`motion.div` wrapping since there's only one scene — this prevents unnecessary re-mounts that reset the video element
-  - Add an `onLoadedData` handler to fade out the poster image once the video is ready
+3. **Email split into multiple visual cards** — Several sub-sections (`ticketSupportEmbed`, `readyToGetStartedHtml`, `recommendedActionsHtml`) each have their own `border`, `border-radius`, and `background` styles creating distinct visual boxes. These need to be softened so they sit seamlessly inside the single continuous card.
 
-## Files to Modify
+### Changes (all in `supabase/functions/_shared/email-html.ts`)
 
-### `src/components/ContinueSearching.tsx`
-- Change title from "Continue Searching for {name}" to "Continue Your Search"
-- Add a "Register Your Interest" button/CTA next to the title
-- Fix fade edge gradients: replace `from-background` with `from-black` on both left and right edges
+#### A. Recommended For You — Revert to PNG hosted images
+- Change `recommendedCard()` back to using `iconImg()` with PNG paths
+- Remove the `RECOMMENDED_ICONS` inline SVG object
+- Ensure circular frame clips the PNG with `overflow:hidden` on the `<td>` to prevent square backgrounds
+- Signature: `recommendedCard(title, href, iconPath, alt)` — restore the original parameters
 
-### `src/components/home/ExploreServicesCard.tsx`
-- Shorten the Golden Visa CTA label in `CTA_LABELS` from "Get Your Golden Visa" to "Golden Visa"
-- Make the "Read Guide" button use `size="default"` instead of `lg`
-- Add responsive text sizing to all long CTA buttons (use `text-sm` on mobile)
+#### B. Social Footer — Switch to PNG with white pearl background
+- Replace `socialLinksFooter()` to use the inline `SVG` object icons (instagram, facebook, linkedin, tiktok, youtube) that are already defined at the top of the file — these render as raw HTML inside `<td>` elements, not as `<img>` tags, so they should survive email client processing
+- Actually, since Gmail strips ALL SVG (both inline and `<img>`), switch to using the `.png` files: `social-instagram.png`, `social-linkedin.png`, `social-tiktok.png`, `social-youtube.png`
+- Create `social-facebook.png` if missing
+- Style each icon circle: white/pearl (#FDFBF7) background, gold border, black icon inside
 
-### `src/components/home/WhyDubaiCapitalSection.tsx`
-- Remove `AnimatePresence` and `motion.div` around the video (single scene, no crossfade needed)
-- Change video `preload` from `"metadata"` to `"auto"`
-- Add state to track video loaded, fade out poster `<img>` once video plays
-- Keep `IntersectionObserver` for lazy initialization but ensure video loads aggressively once visible
+#### C. Single Card Layout — Remove visual fragmentation
+- `ticketSupportEmbed()`: Remove the heavy gradient background and red border; make it blend into the card
+- `readyToGetStartedHtml()`: Remove the outer border and separate background so it flows within the card
+- `inquiryBox()`: Soften its standalone bordered look
+- Keep all content inside the single `emailShell` wrapper card with no sub-borders that create separation
+
+#### D. Deploy + Send Test Email
+- Deploy the updated edge function
+- Immediately send a test welcome email to `janeaboujaoudenails@gmail.com`
+- Take a screenshot as proof
+
+### Files Modified
+- `supabase/functions/_shared/email-html.ts` — all icon and layout fixes
+- `public/email-icons/social-facebook.png` — create if missing (or use existing assets)
 

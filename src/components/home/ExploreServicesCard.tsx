@@ -49,7 +49,7 @@ const CTA_LABELS: Record<string, string> = {
   sell: "List Now",
   rent: "Browse Now",
   "list-rent": "List Now",
-  "golden-visa": "Get Your Golden Visa",
+  "golden-visa": "Golden Visa",
   "property-management": "Manage My Property",
   mortgage: "Calculate Now",
   passport: "Request Introduction",
@@ -280,7 +280,7 @@ const ExploreServicesCard = () => {
                     </Link>
                     {currentService.id === "golden-visa" && (
                       <Link to="/guides/golden-visa-uae">
-                        <Button variant="outline" size="lg" className="gap-2 px-6 py-4 rounded-lg border-white/40 text-white hover:bg-white/10">
+                        <Button variant="outline" size="default" className="gap-2 px-4 py-2 rounded-lg border-white/40 text-white hover:bg-white/10 text-xs md:text-sm">
                           Read Guide
                         </Button>
                       </Link>

@@ -61,10 +61,7 @@ const ContinueSearching = ({
 
   const displayItems = validItems.slice(0, limit);
 
-  const mostRecentName = validItems[0]?.name || "";
-  const sectionTitle = title || (mostRecentName
-    ? `${t("home.continueSearchingFor", "Continue Searching for")} ${mostRecentName}`
-    : t("home.continueSearching", "Continue Searching"));
+  const sectionTitle = title || t("home.continueSearching", "Continue Your Search");
 
   return (
     <section className={`py-8 md:py-12 relative overflow-hidden ${className}`}>
@@ -78,7 +75,7 @@ const ContinueSearching = ({
 
       <div className="container mx-auto px-4 relative z-20">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 flex items-center justify-center">
               <History className="w-5 h-5 text-gold" />
@@ -87,13 +84,20 @@ const ContinueSearching = ({
               {sectionTitle}
             </h2>
           </div>
-          <button
-            onClick={clearAll}
-            className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
-          >
-            <X className="w-3 h-3" />
-            Clear
-          </button>
+          <div className="flex items-center gap-3">
+            <Link to="/contact">
+              <button className="px-4 py-2 rounded-lg bg-gradient-to-r from-gold/90 to-gold text-black text-xs font-semibold tracking-wide hover:opacity-90 transition-opacity">
+                Register Your Interest
+              </button>
+            </Link>
+            <button
+              onClick={clearAll}
+              className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
+            >
+              <X className="w-3 h-3" />
+              Clear
+            </button>
+          </div>
         </div>
 
         {/* Walking Strip Carousel */}
@@ -116,8 +120,8 @@ const ContinueSearching = ({
             ))}
           </div>
           {/* Fade edges */}
-          <div className="absolute top-0 left-0 bottom-2 w-8 bg-gradient-to-r from-background to-transparent pointer-events-none z-10" />
-          <div className="absolute top-0 right-0 bottom-2 w-8 bg-gradient-to-l from-background to-transparent pointer-events-none z-10" />
+          <div className="absolute top-0 left-0 bottom-2 w-8 bg-gradient-to-r from-black to-transparent pointer-events-none z-10" />
+          <div className="absolute top-0 right-0 bottom-2 w-8 bg-gradient-to-l from-black to-transparent pointer-events-none z-10" />
         </div>
       </div>
     </section>

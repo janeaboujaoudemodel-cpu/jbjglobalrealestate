@@ -1,15 +1,10 @@
-import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { T } from "@/components/ui/T";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
-// Video served from storage to avoid bundle bloat
+
 const WHY_DUBAI_VIDEO_URL = "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/videos/why-dubai-scenes.mp4";
-
-const SCENE_URLS = [
-  WHY_DUBAI_VIDEO_URL,
-];
-
-const scenes = SCENE_URLS.map(src => ({ src }));
+const POSTER_URL = "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80";
 
 const stats = [
   { value: "0%", label: "Income Tax" },
@@ -19,11 +14,12 @@ const stats = [
 ];
 
 export default function WhyDubaiCapitalSection() {
-  const [currentScene, setCurrentScene] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
+  const [videoReady, setVideoReady] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
-  // IntersectionObserver: only load videos when section is in viewport
+  // IntersectionObserver: only load videos when section is near viewport
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return;
@@ -40,55 +36,59 @@ export default function WhyDubaiCapitalSection() {
     return () => observer.disconnect();
   }, []);
 
+  // Play video once visible
   useEffect(() => {
-    if (!isVisible) return;
-    const interval = setInterval(() => {
-      setCurrentScene((prev) => (prev + 1) % scenes.length);
-    }, 6000);
-    return () => clearInterval(interval);
+    if (isVisible && videoRef.current) {
+      videoRef.current.play().catch(() => {
+        // Autoplay blocked — poster stays visible
+      });
+    }
   }, [isVisible]);
+
+  const handleLoadedData = useCallback(() => {
+    setVideoReady(true);
+  }, []);
 
   return (
     <section ref={sectionRef} className="relative h-screen min-h-[100vh] min-h-[100dvh] bg-black overflow-hidden">
-      {/* Full-frame video background - edge to edge with smooth crossfade */}
-      <AnimatePresence mode="sync">
-        <motion.div
-          key={currentScene}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.6 }}
-          className="absolute inset-0"
-        >
-          {isVisible && (
-            <>
-              <img
-                src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80"
-                alt=""
-                aria-hidden="true"
-                className="absolute inset-0 w-full h-full object-cover"
-                loading="eager"
-              />
-              <video
-                className="absolute inset-0 w-full h-full object-cover"
-                autoPlay
-                loop
-                muted
-                playsInline
-                preload="metadata"
-                style={{ position: 'absolute' }}
-              >
-                <source src={scenes[currentScene].src} type="video/mp4" />
-              </video>
-            </>
-          )}
-          {/* Refined gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/35 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-        </motion.div>
-      </AnimatePresence>
+      {/* Poster image — shown immediately */}
+      <img
+        src={POSTER_URL}
+        alt=""
+        aria-hidden="true"
+        className="absolute inset-0 w-full h-full object-cover"
+        loading="eager"
+        style={{
+          opacity: videoReady ? 0 : 1,
+          transition: "opacity 0.8s ease-in-out",
+        }}
+      />
 
-      {/* Content overlay - compact and premium */}
+      {/* Video — fades in over poster when ready */}
+      {isVisible && (
+        <video
+          ref={videoRef}
+          className="absolute inset-0 w-full h-full object-cover"
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          onLoadedData={handleLoadedData}
+          style={{
+            opacity: videoReady ? 1 : 0,
+            transition: "opacity 0.8s ease-in-out",
+          }}
+        >
+          <source src={WHY_DUBAI_VIDEO_URL} type="video/mp4" />
+        </video>
+      )}
+
+      {/* Gradient overlays */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/35 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+
+      {/* Content overlay */}
       <div className="relative z-10 h-full flex items-center">
         <div className="px-6 md:px-12 lg:px-16 max-w-xl">
           <motion.div
@@ -97,7 +97,6 @@ export default function WhyDubaiCapitalSection() {
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.5 }}
           >
-            {/* Premium badge */}
             <span className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full border border-gold/30 bg-black/50 backdrop-blur-sm text-[9px] uppercase tracking-[0.2em] font-semibold text-gold/90">
               <T>Global Investment Hub</T>
             </span>
@@ -117,7 +116,6 @@ export default function WhyDubaiCapitalSection() {
               <T>Strategic location, world-class infrastructure, and long-term government execution make Dubai the most investable city in the region.</T>
             </p>
 
-            {/* Premium Stats Cards - refined glass morphism */}
             <div className="mt-5 grid grid-cols-4 gap-1.5 max-w-sm">
               {stats.map((s, index) => (
                 <motion.div
@@ -128,12 +126,9 @@ export default function WhyDubaiCapitalSection() {
                   transition={{ delay: index * 0.08 }}
                   className="group relative rounded-lg overflow-hidden"
                 >
-                  {/* Gradient border */}
                   <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-gold/30 via-gold/15 to-gold/30 p-[1px]">
                     <div className="h-full w-full rounded-lg bg-black/70 backdrop-blur-md" />
                   </div>
-                  
-                  {/* Content */}
                   <div className="relative px-2 py-2.5 text-center">
                     <div 
                       className="text-lg md:text-xl font-bold text-gold leading-none"
@@ -145,8 +140,6 @@ export default function WhyDubaiCapitalSection() {
                       <T>{s.label}</T>
                     </div>
                   </div>
-                  
-                  {/* Hover glow */}
                   <div 
                     className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
                     style={{ boxShadow: '0 0 24px rgba(200,167,102,0.3)' }} 
@@ -155,7 +148,6 @@ export default function WhyDubaiCapitalSection() {
               ))}
             </div>
 
-            {/* CTA Button */}
             <div className="mt-5">
               <PremiumHeroButton href="/guides/investment" size="default">
                 <T>Explore Investments</T>
