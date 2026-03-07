@@ -56,12 +56,17 @@ const asLocationDistances = (value: unknown): Array<{ label: string; time: strin
   return out.length ? out : null;
 };
 
-const asPaymentBreakdown = (value: unknown): { down_payment?: string; during_construction?: string; on_completion?: string } | Array<Record<string, unknown>> | null => {
+const asPaymentBreakdown = (value: unknown): { down_payment?: string; during_construction?: string; on_completion?: string } | Array<{ milestone: string; percentage: number; date?: string; amount?: string }> | null => {
   if (!value) return null;
   
-  // If it's already an array (detailed milestones from DB), pass through directly
+  // If it's an array (detailed milestones from DB), map to typed format
   if (Array.isArray(value) && value.length > 0) {
-    return value as Array<Record<string, unknown>>;
+    return value.map((v: Record<string, unknown>) => ({
+      milestone: String(v.milestone || v.label || ""),
+      percentage: Number(v.percentage || v.percent || 0),
+      date: typeof v.date === "string" ? v.date : undefined,
+      amount: typeof v.amount === "string" ? v.amount : undefined,
+    })).filter(m => m.milestone && m.percentage > 0);
   }
   
   if (typeof value !== "object") return null;
