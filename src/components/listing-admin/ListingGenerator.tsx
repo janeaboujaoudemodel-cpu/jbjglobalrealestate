@@ -382,7 +382,7 @@ const ListingGenerator = () => {
   // Total file size calculation
   const totalFileSize = files.reduce((sum, f) => sum + (f.file?.size || 0), 0);
   const totalFileSizeMB = totalFileSize / (1024 * 1024);
-  const isOverSizeLimit = totalFileSizeMB > 50;
+  const isOverSizeLimit = totalFileSizeMB > 200;
 
   // ========== UPLOAD FILES TO STORAGE ==========
   const uploadFilesToStorage = async (): Promise<{ name: string; mimeType: string; storageUrl: string }[]> => {
@@ -487,7 +487,7 @@ const ListingGenerator = () => {
   const handleGenerate = async () => {
     if (!canGenerate) return;
     if (isOverSizeLimit) {
-      toast.error("Total file size exceeds 50MB. Please split into smaller batches.");
+      toast.error("Total file size exceeds 200MB. Please split into smaller batches.");
       return;
     }
 
@@ -827,7 +827,7 @@ const ListingGenerator = () => {
               {isOverSizeLimit && (
                 <Badge variant="destructive" className="text-xs">
                   <AlertTriangle className="w-3 h-3 mr-1" />
-                  Over 50MB limit — split into smaller batches
+                  Over 200MB limit — split into smaller batches
                 </Badge>
               )}
               {!isOverSizeLimit && files.length > 3 && (
@@ -879,13 +879,33 @@ const ListingGenerator = () => {
             />
           </div>
 
+          {/* Cancel Generation Button — always visible */}
+          <Button
+            variant="outline"
+            onClick={async () => {
+              if (currentJobId) {
+                try {
+                  await supabase.functions.invoke("generate-listing", {
+                    body: { action: "cancel", job_id: currentJobId },
+                  });
+                } catch (e) {
+                  console.warn("Cancel request failed:", e);
+                }
+              }
+              if (timerRef.current) clearInterval(timerRef.current);
+              setIsProcessing(false);
+              setProcessingStatus("");
+              setCurrentJobId(null);
+              resetToInput();
+              toast.info("Generation cancelled");
+            }}
+            className="border-destructive/40 text-destructive hover:bg-destructive/10"
+          >
+            <X className="w-4 h-4 mr-2" /> Cancel Generation
+          </Button>
+
           {timedOut && (
-            <div className="text-center space-y-3">
-              <p className="text-sm text-amber-600">Taking longer than expected...</p>
-              <Button variant="outline" onClick={resetToInput}>
-                <RefreshCw className="w-4 h-4 mr-2" /> Cancel & Retry
-              </Button>
-            </div>
+            <p className="text-sm text-amber-600">Taking longer than expected...</p>
           )}
         </div>
       )}

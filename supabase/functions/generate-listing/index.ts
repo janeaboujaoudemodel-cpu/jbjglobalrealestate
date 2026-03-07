@@ -241,15 +241,18 @@ async function runExtraction(jobId: string, fileRefs: any[], url: string | null,
     const systemPrompt = `You are a senior UAE real estate data extraction specialist. Extract COMPLETE listing data.
 
 CRITICAL RULES:
-- Extract ONLY facts explicitly present. NEVER invent or guess.
+- Extract ONLY facts explicitly present in the provided documents or website. NEVER invent, infer, or guess ANY data.
 - If a field is not found, return null (or [] for arrays).
 - NEVER default emirate to Dubai unless explicitly stated.
 - Copy descriptions VERBATIM from source material.
 - Extract ALL amenities, payment milestones, unit types with full details.
 - Extract RERA number, service charge, total units, floors if present.
 - Extract video URLs (YouTube, Vimeo, mp4 links) into videoUrl field.
-- Extract property views (e.g. Sea View, Golf View, Marina View, City View, Boulevard View) into views array.
+- Extract property views (e.g. Sea View, Golf View, Marina View, City View, Boulevard View, Lagoon View, Ras Al Khor View, Wildlife Sanctuary View, Dubai Skyline) into views array.
 - Extract unique selling propositions / lifestyle highlights into usps array.
+- NEVER generate or infer a websiteUrl for the project. Only include if an official developer website link is explicitly present in the source.
+- Payment plan milestones and percentages MUST be extracted VERBATIM from the source document. Do NOT infer, calculate, or generate payment breakdown percentages. If a payment plan is not explicitly provided, set paymentBreakdown to [] and paymentPlan to null.
+- NEVER alter, recalculate, or adjust prices, locations, or amenities. Report EXACTLY as found in the documents.
 
 MULTI-PROJECT RULE:
 - If content contains MULTIPLE DISTINCT projects (different names/buildings), return EACH as separate entry.
@@ -264,6 +267,13 @@ MULTI-PROJECT RULE:
       const totalBatches = Math.ceil(storageFiles.length / BATCH_SIZE);
 
       for (let batchIdx = 0; batchIdx < totalBatches; batchIdx++) {
+        // Check if job was cancelled
+        const { data: jobCheck } = await supabase.from("ai_job_master").select("status").eq("id", jobId).single();
+        if (jobCheck?.status === "cancelled") {
+          console.log(`[generate-listing] Job ${jobId} cancelled by user, aborting.`);
+          return;
+        }
+
         const batch = storageFiles.slice(batchIdx * BATCH_SIZE, (batchIdx + 1) * BATCH_SIZE);
         const batchLabel = `Analyzing batch ${batchIdx + 1} of ${totalBatches} (${batch.length} files)...`;
         await updateJobProgress(supabase, jobId, batchLabel);
@@ -523,8 +533,8 @@ serve(async (req: Request) => {
         });
       }
 
-      if (job.status === "failed") {
-        return new Response(JSON.stringify({ success: false, status: "failed", error: job.error_message || "Extraction failed" }), {
+      if (job.status === "failed" || job.status === "cancelled") {
+        return new Response(JSON.stringify({ success: false, status: job.status, error: job.error_message || "Extraction failed" }), {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
@@ -554,6 +564,18 @@ serve(async (req: Request) => {
       // Return progress info if available
       const progress = (job.output_payload as any)?.progress || null;
       return new Response(JSON.stringify({ success: true, status: job.status, processing_time_ms: job.processing_time_ms, progress }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Cancel a running job
+    if (action === "cancel" && job_id) {
+      await supabase.from("ai_job_master").update({
+        status: "cancelled",
+        error_message: "Cancelled by user",
+        completed_at: new Date().toISOString(),
+      }).eq("id", job_id);
+      return new Response(JSON.stringify({ success: true, status: "cancelled" }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }

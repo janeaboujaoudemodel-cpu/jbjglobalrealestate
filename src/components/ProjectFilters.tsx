@@ -145,6 +145,9 @@ const VIEW_OPTIONS = [
   "Beach View",
   "Desert View",
   "Courtyard View",
+  "Ras Al Khor View",
+  "Wildlife Sanctuary View",
+  "Dubai Skyline",
 ];
 
 const AMENITY_OPTIONS = [

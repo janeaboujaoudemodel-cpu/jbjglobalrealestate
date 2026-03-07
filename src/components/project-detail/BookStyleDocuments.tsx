@@ -174,22 +174,39 @@ export default function BookStyleDocuments({
 
       {/* PDF Viewer Modal */}
       <Dialog open={!!viewerUrl} onOpenChange={(open) => !open && setViewerUrl(null)}>
-        <DialogContent className="max-w-5xl h-[85vh] p-0 bg-black border-gold/30">
+        <DialogContent className="max-w-5xl h-[85vh] p-0 bg-card border-gold/30 rounded-xl overflow-hidden">
           <DialogTitle className="sr-only">{viewerTitle}</DialogTitle>
           <div className="flex flex-col h-full">
             {/* Header bar */}
             <div className="flex items-center justify-between px-4 py-3 bg-card border-b border-gold/20">
               <p className="text-sm font-semibold text-foreground truncate">{viewerTitle}</p>
               <button
-                onClick={() => viewerUrl && onDownload(viewerUrl, viewerFilename)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gold text-black text-sm font-medium hover:bg-gold-light transition-colors"
+                onClick={async () => {
+                  if (!viewerUrl) return;
+                  try {
+                    const res = await fetch(viewerUrl);
+                    const blob = await res.blob();
+                    const blobUrl = URL.createObjectURL(blob);
+                    const link = document.createElement("a");
+                    link.href = blobUrl;
+                    link.download = viewerFilename;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
+                  } catch {
+                    // Fallback to onDownload
+                    onDownload(viewerUrl, viewerFilename);
+                  }
+                }}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-br from-[hsl(var(--gold)/0.9)] to-[hsl(var(--gold)/0.7)] text-black text-sm font-semibold border border-gold/60 hover:border-gold shadow-sm transition-colors"
               >
                 <Download className="w-4 h-4" />
                 Download
               </button>
             </div>
             {/* PDF iframe */}
-            <div className="flex-1">
+            <div className="flex-1 bg-zinc-900 rounded-b-xl overflow-hidden">
               {viewerUrl && (
                 <iframe
                   src={viewerUrl}

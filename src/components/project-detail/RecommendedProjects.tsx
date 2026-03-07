@@ -126,7 +126,7 @@ export default function RecommendedProjects({
 
                   {/* Developer Logo — Bottom Left */}
                   {devLogo && (
-                    <div className="absolute bottom-3 left-3 w-10 h-10 rounded-xl overflow-hidden shadow-md">
+                    <div className="absolute bottom-3 left-3 w-10 h-10 rounded-lg overflow-hidden shadow-md">
                       <SafeImage
                         src={devLogo}
                         alt={project.developer?.name || "Developer"}
