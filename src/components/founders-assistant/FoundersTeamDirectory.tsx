@@ -133,9 +133,9 @@ const FoundersTeamDirectory: React.FC = () => {
             className="pl-10 bg-white border-2 border-gold/30 text-black placeholder:text-zinc-400 shadow-[0_0_10px_rgba(200,167,102,0.1)]"
           />
         </div>
-        <ScrollArea className="w-full md:w-auto">
-          <div className="flex items-center gap-2 pb-2 md:pb-0">
-            {departments.slice(0, 8).map((dept) => (
+        <div className="w-full md:w-auto overflow-x-auto">
+          <div className="flex items-center gap-2 pb-2 md:pb-0 min-w-0">
+            {departments.map((dept) => (
               <Button
                 key={dept}
                 size="sm"
