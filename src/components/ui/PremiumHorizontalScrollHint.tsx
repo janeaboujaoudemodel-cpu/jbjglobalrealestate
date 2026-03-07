@@ -58,8 +58,8 @@ export default function PremiumHorizontalScrollHint({
 
   if (!showRail) return null;
 
-  const btnSize = arrowSize === "sm" ? "w-6 h-6" : "w-7 h-7";
-  const iconSize = arrowSize === "sm" ? "w-3 h-3" : "w-3.5 h-3.5";
+  const btnSize = arrowSize === "sm" ? "w-8 h-8" : "w-9 h-9";
+  const iconSize = arrowSize === "sm" ? "w-4 h-4" : "w-4.5 h-4.5";
 
   return (
     <div className={cn("flex items-center gap-1.5 mt-1", className)}>
@@ -82,7 +82,7 @@ export default function PremiumHorizontalScrollHint({
       {/* Gold Rail */}
       <div
         ref={railRef}
-        className="flex-1 h-[3px] rounded-full bg-gold/15 relative overflow-hidden"
+        className="flex-1 h-[5px] rounded-full relative overflow-hidden"
       >
         <div
           className="absolute top-0 h-full rounded-full bg-gradient-to-r from-gold/60 to-gold/40 transition-[left,width] duration-100"

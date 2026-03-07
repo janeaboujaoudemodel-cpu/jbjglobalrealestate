@@ -146,6 +146,9 @@ export const VIEWS_OPTIONS = [
   { value: "lagoon_view", label: "Lagoon View" },
   { value: "park_view", label: "Park View" },
   { value: "community_view", label: "Community View" },
+  { value: "ras_al_khor_view", label: "Ras Al Khor View" },
+  { value: "wildlife_sanctuary_view", label: "Wildlife Sanctuary View" },
+  { value: "dubai_skyline_view", label: "Dubai Skyline" },
 ] as const;
 
 // Display Mode options
