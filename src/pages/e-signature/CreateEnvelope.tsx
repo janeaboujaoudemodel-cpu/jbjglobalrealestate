@@ -523,45 +523,92 @@ export default function CreateEnvelope() {
                 </div>
 
                 <div>
-                  <Label>Upload PDF Document *</Label>
-                  <div className="mt-2">
-                    {pdfFile ? (
-                      <div className="border-2 border-dashed border-gold/50 rounded-xl p-6 bg-gold/5">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <FileText className="w-10 h-10 text-gold" />
-                            <div>
-                              <p className="font-medium">{pdfFile.name}</p>
-                              <p className="text-sm text-muted-foreground">
-                                {(pdfFile.size / 1024 / 1024).toFixed(2)} MB
-                              </p>
+                  <Label>Upload Documents *</Label>
+                  <p className="text-xs text-muted-foreground mb-2">
+                    Upload PDFs, photos, and other documents. Select all files at once — any mix of types is supported.
+                  </p>
+                  <div className="mt-2 space-y-3">
+                    {/* Drop zone */}
+                    <div
+                      onDragEnter={handleDragEnter}
+                      onDragLeave={handleDragLeave}
+                      onDragOver={handleDragOver}
+                      onDrop={handleDrop}
+                      onClick={() => document.getElementById("esign-file-input")?.click()}
+                      className={`border-2 border-dashed rounded-xl p-10 flex flex-col items-center justify-center cursor-pointer transition-all ${
+                        isDragOver
+                          ? "border-gold bg-gold/10 scale-[1.01]"
+                          : "border-muted-foreground/25 hover:border-gold/50"
+                      }`}
+                    >
+                      <input
+                        id="esign-file-input"
+                        type="file"
+                        multiple
+                        accept=".pdf,.jpg,.jpeg,.png,.webp,.heic,.heif,application/pdf,image/*"
+                        onChange={handleFileUpload}
+                        className="hidden"
+                      />
+                      <Upload className={`w-12 h-12 mb-3 ${isDragOver ? "text-gold animate-bounce" : "text-muted-foreground"}`} />
+                      <p className="text-lg font-medium text-foreground">
+                        {isDragOver ? "Drop files here" : "Drop files or click to upload"}
+                      </p>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        PDFs, JPG, PNG — select multiple files at once (max 50MB each)
+                      </p>
+                    </div>
+
+                    {/* Uploaded files list */}
+                    {uploadedFiles.length > 0 && (
+                      <div className="space-y-2">
+                        <p className="text-sm font-medium text-foreground">
+                          {uploadedFiles.length} file(s) uploaded
+                        </p>
+                        {uploadedFiles.map((file, index) => (
+                          <div key={index} className="flex items-center justify-between border rounded-lg p-3 bg-background">
+                            <div className="flex items-center gap-3 min-w-0">
+                              {file.type.startsWith("image/") ? (
+                                <img
+                                  src={URL.createObjectURL(file)}
+                                  alt={file.name}
+                                  className="w-10 h-10 rounded object-cover flex-shrink-0"
+                                />
+                              ) : (
+                                <FileText className="w-8 h-8 text-gold flex-shrink-0" />
+                              )}
+                              <div className="min-w-0">
+                                <p className="text-sm font-medium truncate">{file.name}</p>
+                                <p className="text-xs text-muted-foreground">
+                                  {(file.size / 1024 / 1024).toFixed(2)} MB
+                                  {file === pdfFile && (
+                                    <span className="ml-2 text-gold font-semibold">• Signing Document</span>
+                                  )}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2 flex-shrink-0">
+                              {(file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf")) && file !== pdfFile && (
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={(e) => { e.stopPropagation(); selectAsPdf(file); }}
+                                  className="text-xs"
+                                >
+                                  Use for signing
+                                </Button>
+                              )}
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={(e) => { e.stopPropagation(); removeUploadedFile(index); }}
+                                className="text-destructive hover:text-destructive h-8 w-8 p-0"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
                             </div>
                           </div>
-                          <Button 
-                            variant="outline" 
-                            onClick={() => {
-                              setPdfFile(null);
-                              setPdfUrl(null);
-                            }}
-                          >
-                            Change
-                          </Button>
-                        </div>
+                        ))}
                       </div>
-                    ) : (
-                      <label className="border-2 border-dashed border-muted-foreground/25 rounded-xl p-12 flex flex-col items-center justify-center cursor-pointer hover:border-gold/50 transition-colors">
-                        <Upload className="w-12 h-12 text-muted-foreground mb-4" />
-                        <p className="text-lg font-medium">Click to upload PDF</p>
-                        <p className="text-sm text-muted-foreground">
-                          Maximum file size: 50MB
-                        </p>
-                        <input
-                          type="file"
-                          accept=".pdf,application/pdf"
-                          onChange={handleFileUpload}
-                          className="hidden"
-                        />
-                      </label>
                     )}
                   </div>
                 </div>
