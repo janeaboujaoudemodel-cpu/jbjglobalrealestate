@@ -56,6 +56,8 @@ import { RefreshCw, Globe, Check, AlertTriangle, Zap } from "lucide-react";
 import { ProjectPreviewModal } from "@/components/listing-admin/ProjectPreviewModal";
 import { SafeImage } from "@/components/SafeImage";
 import type { UnifiedProject } from "@/types/unifiedProject";
+import { logAdminEdit, detectChangedFields, useLatestEditLogs, formatRelativeTime } from "@/hooks/useAdminEditLog";
+import { Clock } from "lucide-react";
 
 interface ProjectDocument {
   id: string;
