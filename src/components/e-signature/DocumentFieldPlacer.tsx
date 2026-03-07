@@ -121,6 +121,7 @@ export default function DocumentFieldPlacer({
   fields,
   onFieldsChange,
 }: DocumentFieldPlacerProps) {
+  const { user } = useAuth();
   const [selectedRecipient, setSelectedRecipient] = useState<string>(recipients[0]?.id || "");
   const [selectedFieldType, setSelectedFieldType] = useState<SignatureField["type"]>("signature");
   const [currentPage, setCurrentPage] = useState(1);
@@ -129,10 +130,30 @@ export default function DocumentFieldPlacer({
   const overlayRef = useRef<HTMLDivElement>(null);
   const stripRef = useRef<HTMLDivElement>(null);
 
+  // Saved stamp SVG from user's stamp generator
+  const [savedStampSvg, setSavedStampSvg] = useState<string | null>(null);
+
   // Thumbnail state: array of canvas data-urls per page
   const [thumbnails, setThumbnails] = useState<string[]>([]);
   const [thumbsLoading, setThumbsLoading] = useState(false);
   const pdfJsDocRef = useRef<any>(null);
+
+  // Load user's saved stamp from stamp_designs
+  useEffect(() => {
+    if (!user?.id) return;
+    async function loadStamp() {
+      const { data } = await supabase
+        .from("stamp_designs")
+        .select("svg_source")
+        .eq("user_id", user!.id)
+        .eq("is_favorite", true)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (data?.svg_source) setSavedStampSvg(data.svg_source);
+    }
+    loadStamp();
+  }, [user?.id]);
 
   // ── Load PDF page count + thumbnails ──────────────────────────────────
   useEffect(() => {
