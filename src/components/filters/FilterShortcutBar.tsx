@@ -214,7 +214,8 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
     filters.statuses.length > 0 ||
     filters.sortBy !== null ||
     filters.hideSoldOut ||
-    filters.constructionStatuses.length > 0;
+    filters.constructionStatuses.length > 0 ||
+    filters.views.length > 0;
 
   const resetAll = () => onFilterChange({ ...defaultShortcutFilters });
 
