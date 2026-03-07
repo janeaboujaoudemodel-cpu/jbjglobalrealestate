@@ -97,16 +97,36 @@ export function StampSVGRenderer({
     });
   }
 
+  // Inject ink texture filter if inkMode is enabled
+  if (inkMode) {
+    // Insert filter defs and wrap content in a filtered group
+    const defsMatch = tinted.match(/<defs[^>]*>/i);
+    if (defsMatch) {
+      tinted = tinted.replace(defsMatch[0], `${defsMatch[0]}${INK_TEXTURE_FILTER}`);
+    } else {
+      tinted = tinted.replace(/<svg([^>]*)>/, `<svg$1><defs>${INK_TEXTURE_FILTER}</defs>`);
+    }
+    // Wrap all SVG content (after opening tag) in a filtered group
+    tinted = tinted.replace(
+      /(<\/defs>)/i,
+      `$1<g filter="url(#inkTexture)" opacity="0.88">`
+    );
+    tinted = tinted.replace(/<\/svg>/, '</g></svg>');
+  }
+
   // Sanitize SVG before rendering — preserve clip-path, direction, unicode-bidi, image href
   // Allow data: URIs for uploaded logos (DOMPurify strips them by default)
   const clean = typeof window !== 'undefined'
     ? DOMPurify.sanitize(tinted, {
         USE_PROFILES: { svg: true, svgFilters: true },
-        ADD_TAGS: ['image'],
+        ADD_TAGS: ['image', 'filter', 'feTurbulence', 'feColorMatrix', 'feComponentTransfer', 'feFuncA', 'feComposite', 'feGaussianBlur', 'feMorphology'],
         ADD_ATTR: [
           'clip-path', 'dominant-baseline', 'unicode-bidi', 'direction', 'bidi-override',
           'letter-spacing', 'text-anchor', 'font-weight', 'font-size', 'font-family', 'font-style',
           'href', 'xlink:href', 'preserveAspectRatio', 'textLength', 'lengthAdjust',
+          'filter', 'flood-color', 'flood-opacity', 'stdDeviation', 'baseFrequency',
+          'numOctaves', 'seed', 'type', 'values', 'operator', 'radius', 'in', 'in2', 'result',
+          'tableValues', 'x', 'y', 'width', 'height',
         ],
         ADD_DATA_URI_TAGS: ['image'],
         ADD_URI_SAFE_ATTR: ['href', 'xlink:href'],
