@@ -830,6 +830,7 @@ export default function StampGeneratorPage() {
                     fontWeight={fontBold ? 'bold' : 'normal'}
                     fontStyle={fontItalic ? 'italic' : 'normal'}
                     fontSize={manualFontSize}
+                    inkMode={inkMode}
                     size={240}
                   />
                 ) : (
