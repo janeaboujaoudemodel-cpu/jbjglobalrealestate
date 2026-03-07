@@ -1,10 +1,10 @@
 /**
  * AreasWeCover Component - Featured Photo Cards
  * 8 areas, 2 rows of 4, with full-bleed photos, trending/high-demand badges, property count
+ * Performance: CSS animations instead of framer-motion whileInView
  */
 
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 import { MapPin, ArrowRight, TrendingUp, Flame } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAreas } from "@/hooks/useAreas";
@@ -48,17 +48,14 @@ const AreasWeCover = () => {
         {/* Featured Photo Cards Grid — 2 rows of 4 */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
           {displayAreas.map((area, index) => (
-            <motion.div
+            <div
               key={area.slug}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.25, delay: index * 0.03 }}
-              whileHover={{ y: -6 }}
+              className="animate-fade-in-up"
+              style={{ animationDelay: `${index * 30}ms` }}
             >
               <Link
                 to={`/area/${area.slug}`}
-                className="group relative block h-[200px] md:h-[220px] rounded-xl overflow-hidden border-[3px] border-transparent hover:border-gold transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.45)]"
+                className="group relative block h-[200px] md:h-[220px] rounded-xl overflow-hidden border-[3px] border-transparent hover:border-gold transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.45)] hover:-translate-y-1.5"
               >
                 {/* Background photo or champagne fallback */}
                 {area.imageUrl ? (
@@ -110,7 +107,7 @@ const AreasWeCover = () => {
                   </h3>
                 </div>
               </Link>
-            </motion.div>
+            </div>
           ))}
         </div>
 

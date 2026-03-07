@@ -1,15 +1,9 @@
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 import { 
   Calculator, Layers, Home, TrendingUp, Palette, 
   Film, Mic, ArrowRight, Sparkles
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] } }
-};
 
 const royalTools = [
   { 
@@ -82,13 +76,7 @@ export function ToolkitShowcaseCard() {
   return (
     <section className="bg-black">
       <div className="jj-layer-2">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={fadeInUp}
-          className="relative"
-        >
+        <div className="relative">
           {/* Main Card */}
           <div 
             className="relative z-10 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl md:rounded-3xl border-2 border-gold/50 overflow-hidden"
@@ -121,12 +109,10 @@ export function ToolkitShowcaseCard() {
             <div className="p-6 md:p-8">
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                 {royalTools.map((tool, index) => (
-                  <motion.div
+                  <div
                     key={tool.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: index * 0.05 }}
+                    className="animate-fade-in-up"
+                    style={{ animationDelay: `${index * 50}ms` }}
                   >
                     <Link to={tool.href} className="group block h-full">
                       <div className="h-full flex flex-col bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-xl border-2 border-gold/30 hover:border-gold p-5 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] hover:-translate-y-1">
@@ -155,12 +141,12 @@ export function ToolkitShowcaseCard() {
                         </Button>
                       </div>
                     </Link>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
