@@ -1,49 +1,41 @@
 
 
-# Fix: Project Card Badge Positioning, Tooltip Direction, Properties Page Scroll/Mode Sizing
+## Plan: Fix All Email Issues Across All Templates
 
-## 4 Issues to Fix
+### Problems Identified
 
-### 1. "On Sale" Badge Overlapping Developer Logo on Project Cards
-**Current**: `badgePosition` is set to `bottom-3 left-3` when a developer logo exists, but both the logo (top-3 left-3) and the sale status badge can overlap visually. The user wants the "On Sale" badge on the **right side** of the image instead of under the logo.
+1. **Recommended For You icons disappeared** — Inline SVGs are stripped by Gmail and most email clients. Must revert to hosted PNG images (`ai-tools.png`, `guides.png`, `properties.png` already exist in `public/email-icons/`).
 
-**Fix in `ProjectCard.tsx`**:
-- Move the sale status badge position to **top-right** when a developer logo is present: change `badgePosition` from `bottom-3 left-3` to `top-3 right-3`.
-- Since the Favorite/Shortlist/Badge buttons are also at `top-3 right-3`, make the "On Sale" badge appear on hover-out (default visible), and **hide it on hover** when the favorite/shortlist buttons appear. Use the existing `group-hover` pattern: sale badge gets `group-hover:opacity-0` and the favorite/shortlist buttons keep their existing `opacity-0 group-hover:opacity-100`.
+2. **Social media footer icons not rendering** — Same issue: `socialLinksFooter()` loads external `.svg` files via `<img>` tags, but Gmail blocks SVG images entirely. Must switch to hosted `.png` files. Currently missing `social-facebook.png` — need to confirm or create it.
 
-### 2. Tooltip on Favorite/Shortlist Opens Upward (Clipped by Image)
-**Current**: `TooltipContent` uses `side="top"` which pushes tooltips above the buttons — into the image area where they get clipped/hidden. The user can't see them.
+3. **Email split into multiple visual cards** — Several sub-sections (`ticketSupportEmbed`, `readyToGetStartedHtml`, `recommendedActionsHtml`) each have their own `border`, `border-radius`, and `background` styles creating distinct visual boxes. These need to be softened so they sit seamlessly inside the single continuous card.
 
-**Fix in `FavoriteButton.tsx`**:
-- Change `side="top"` to `side="bottom"` on both `TooltipContent` elements so tooltips open **downward**, away from the image.
-- Keep `sideOffset={8}` and the dark styling.
+### Changes (all in `supabase/functions/_shared/email-html.ts`)
 
-### 3. Properties Page Row 1 — Remove Scroll Divider and Arrows
-**Current**: `PremiumHorizontalScrollHint` is rendered for Row 1 (line 364 of `FilterShortcutBar.tsx`) even when the content is a single line that doesn't overflow. The component already returns `null` when `showRail` is false (no overflow), but the user reports seeing it. This may be because the row content is slightly wider than viewport on some screens.
+#### A. Recommended For You — Revert to PNG hosted images
+- Change `recommendedCard()` back to using `iconImg()` with PNG paths
+- Remove the `RECOMMENDED_ICONS` inline SVG object
+- Ensure circular frame clips the PNG with `overflow:hidden` on the `<td>` to prevent square backgrounds
+- Signature: `recommendedCard(title, href, iconPath, alt)` — restore the original parameters
 
-**Fix in `FilterShortcutBar.tsx`**:
-- Remove `<PremiumHorizontalScrollHint scrollRef={row1Ref} />` from Row 1 entirely (line 364). Row 1 should never show scroll indicators — if content overflows, it simply scrolls without visual indicators.
-- Keep the `PremiumHorizontalScrollHint` on Row 2 as-is.
+#### B. Social Footer — Switch to PNG with white pearl background
+- Replace `socialLinksFooter()` to use the inline `SVG` object icons (instagram, facebook, linkedin, tiktok, youtube) that are already defined at the top of the file — these render as raw HTML inside `<td>` elements, not as `<img>` tags, so they should survive email client processing
+- Actually, since Gmail strips ALL SVG (both inline and `<img>`), switch to using the `.png` files: `social-instagram.png`, `social-linkedin.png`, `social-tiktok.png`, `social-youtube.png`
+- Create `social-facebook.png` if missing
+- Style each icon circle: white/pearl (#FDFBF7) background, gold border, black icon inside
 
-### 4. Mode Dropdown (Investor/Broker/Both) — Text Too Small
-**Current**: The popover is `w-44` but the button text inside uses `text-xs` (12px) — too small relative to the dropdown width.
+#### C. Single Card Layout — Remove visual fragmentation
+- `ticketSupportEmbed()`: Remove the heavy gradient background and red border; make it blend into the card
+- `readyToGetStartedHtml()`: Remove the outer border and separate background so it flows within the card
+- `inquiryBox()`: Soften its standalone bordered look
+- Keep all content inside the single `emailShell` wrapper card with no sub-borders that create separation
 
-**Fix in `FilterShortcutBar.tsx` (ConnectedModeButton)**:
-- Change button text from `text-xs` to `text-sm` (14px).
-- Add `text-center` to center the labels.
-- Increase vertical padding from `py-2` to `py-2.5`.
+#### D. Deploy + Send Test Email
+- Deploy the updated edge function
+- Immediately send a test welcome email to `janeaboujaoudenails@gmail.com`
+- Take a screenshot as proof
 
-## Files to Modify
-
-### `src/components/ProjectCard.tsx`
-- Change sale status badge position to right side when dev logo is present
-- Add `group-hover:opacity-0` to sale badge so it hides when favorite/shortlist buttons appear on hover
-- Keep favorite/shortlist buttons with `opacity-0 group-hover:opacity-100` (already in place)
-
-### `src/components/FavoriteButton.tsx`
-- Change both `TooltipContent` from `side="top"` to `side="bottom"`
-
-### `src/components/filters/FilterShortcutBar.tsx`
-- Remove `PremiumHorizontalScrollHint` from Row 1 (line 364)
-- In `ConnectedModeButton`: increase option text to `text-sm`, center text, increase padding
+### Files Modified
+- `supabase/functions/_shared/email-html.ts` — all icon and layout fixes
+- `public/email-icons/social-facebook.png` — create if missing (or use existing assets)
 

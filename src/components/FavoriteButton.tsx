@@ -108,7 +108,7 @@ const FavoriteButton = ({
             />
           </button>
         </TooltipTrigger>
-        <TooltipContent side="top" sideOffset={8} className="z-[10100] bg-black/90 text-white border-gold/30 text-xs">
+        <TooltipContent side="bottom" sideOffset={8} className="z-[10100] bg-black/90 text-white border-gold/30 text-xs">
           <p>{isFavorite ? "Remove from favorites" : "Add to favorites"}</p>
         </TooltipContent>
       </Tooltip>
@@ -132,7 +132,7 @@ const FavoriteButton = ({
               )}
             </button>
           </TooltipTrigger>
-        <TooltipContent side="top" sideOffset={8} className="z-[10100] bg-black/90 text-white border-gold/30 text-xs">
+        <TooltipContent side="bottom" sideOffset={8} className="z-[10100] bg-black/90 text-white border-gold/30 text-xs">
             <p>{isShortlisted ? "Remove from shortlist" : "Add to shortlist"}</p>
           </TooltipContent>
         </Tooltip>
