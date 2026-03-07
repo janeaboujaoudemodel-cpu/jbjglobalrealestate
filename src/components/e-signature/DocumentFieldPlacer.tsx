@@ -352,7 +352,7 @@ export default function DocumentFieldPlacer({
   }, {});
 
   return (
-    <div className="space-y-4" style={{ overflowX: "hidden", overscrollBehavior: "contain" }}>
+    <div className="space-y-4" style={{ overflowX: "hidden" }}>
       {/* ─── Toolbar ─── */}
       <div className="flex flex-wrap items-center gap-3 p-3 bg-muted/40 rounded-xl border">
         {/* Recipient selector */}
@@ -540,8 +540,8 @@ export default function DocumentFieldPlacer({
                 {/* Clickable/droppable overlay wrapping the iframe */}
                 <div
                   ref={overlayRef}
-                  className="relative w-full overflow-y-auto"
-                  style={{ height: "780px", cursor: "crosshair", touchAction: "pan-y", overscrollBehavior: "contain", WebkitOverflowScrolling: "touch" }}
+                  className="relative w-full overflow-y-auto mx-auto"
+                  style={{ maxHeight: "calc(100dvh - 220px)", minHeight: "500px", cursor: "crosshair", touchAction: "pan-y", WebkitOverflowScrolling: "touch" }}
                   onClick={handleOverlayClick}
                   onDrop={handleDrop}
                   onDragOver={handleDragOver}

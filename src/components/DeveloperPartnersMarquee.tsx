@@ -126,6 +126,16 @@ const DeveloperPartnersMarquee = () => {
       }
     : { display: "flex" };
 
+  const [isPaused, setIsPaused] = useState(false);
+
+  const marqueeStyleFinal: React.CSSProperties = loopWidth > 0
+    ? {
+        display: "flex",
+        animation: `marquee-scroll ${duration}s linear infinite`,
+        animationPlayState: isPaused ? "paused" : "running",
+      }
+    : { display: "flex" };
+
   return (
     <section className="w-full overflow-hidden bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
       {/* Inject keyframes */}
@@ -145,8 +155,12 @@ const DeveloperPartnersMarquee = () => {
           </p>
         </div>
 
-        <div className="relative w-full overflow-hidden py-6 md:py-8 bg-gradient-to-r from-[#EDE4D3] via-[#F5EBD7] to-[#EDE4D3] border-t border-b border-gold/30">
-          <div style={marqueeStyle} className="items-center">
+        <div
+          className="relative w-full overflow-hidden py-6 md:py-8 bg-gradient-to-r from-[#EDE4D3] via-[#F5EBD7] to-[#EDE4D3] border-t border-b border-gold/30"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          <div style={marqueeStyleFinal} className="items-center">
             {/* Loop A – measured */}
             <div ref={loopRef} className="flex items-center gap-10">
               {FEATURED_DEVELOPERS.map((d, idx) => renderPartner(d, idx, true))}
