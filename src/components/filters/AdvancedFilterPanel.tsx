@@ -10,7 +10,7 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
-import { EMIRATES_OPTIONS } from "@/constants/filterConfig";
+import { EMIRATES_OPTIONS, VIEWS_OPTIONS } from "@/constants/filterConfig";
 import { SafeImage } from "@/components/SafeImage";
 import type { ShortcutFilterState } from "./FilterShortcutBar";
 import { defaultShortcutFilters } from "./FilterShortcutBar";
@@ -37,6 +37,8 @@ const CONSTRUCTION_OPTIONS = [
   { value: 'Completed', label: 'Completed' },
   { value: 'Under Construction', label: 'Under Construction' },
   { value: 'Presale', label: 'Presale' },
+  { value: 'Resale Off-Plan', label: 'Resale Off-Plan' },
+  { value: 'Ready Resale', label: 'Ready Resale' },
 ];
 
 const UNIT_TYPE_OPTIONS = [

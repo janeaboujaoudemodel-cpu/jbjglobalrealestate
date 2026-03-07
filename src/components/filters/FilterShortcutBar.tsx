@@ -671,6 +671,32 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
           </PopoverContent>
         </Popover>
 
+        {/* Views */}
+        <Popover>
+          <PopoverTrigger asChild>
+            <button className={cn(pillBase, filters.views.length > 0 ? pillActive : pillInactive)}>
+              <Eye className="w-3.5 h-3.5" />
+              Views
+              {filters.views.length > 0 && <CountBadge count={filters.views.length} />}
+              <ChevronDown className="w-3 h-3 opacity-60" />
+            </button>
+          </PopoverTrigger>
+          <PopoverContent className={cn("w-80 p-4", popoverClass)} side="bottom" align="start" sideOffset={6}>
+            <h4 className="text-sm font-bold text-black mb-3">Property Views</h4>
+            <div className="flex flex-wrap gap-2 max-h-64 overflow-y-auto">
+              {VIEWS_OPTIONS.map((opt) => (
+                <button
+                  key={opt.value}
+                  onClick={() => update({ views: toggleArray(filters.views, opt.value) })}
+                  className={cn(togglePillBase, filters.views.includes(opt.value) ? togglePillOn : togglePillOff)}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </PopoverContent>
+        </Popover>
+
         {/* Divider */}
         <div className="w-px h-6 bg-gold/30 flex-shrink-0" />
 
