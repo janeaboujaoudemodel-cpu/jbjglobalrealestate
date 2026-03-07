@@ -27,7 +27,7 @@ export async function logAdminEdit(params: {
   const { data: session } = await supabase.auth.getSession();
   const userId = session?.session?.user?.id ?? null;
 
-  await supabase.from("admin_edit_log" as any).insert({
+  await (supabase as any).from("admin_edit_log").insert({
     entity_type: params.entity_type,
     entity_id: params.entity_id,
     entity_name: params.entity_name || null,
