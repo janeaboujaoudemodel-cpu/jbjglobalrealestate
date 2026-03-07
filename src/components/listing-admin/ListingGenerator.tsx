@@ -115,7 +115,7 @@ const ListingGenerator = () => {
 
   const [step, setStep] = useState<Step>(persisted.current?.step || "input");
   const [files, setFiles] = useState<UploadedFile[]>([]);
-  const [url, setUrl] = useState(persisted.current?.url || "");
+  const [url, setUrl] = useState("");
   const [description, setDescription] = useState(persisted.current?.description || "");
   const [isProcessing, setIsProcessing] = useState(false);
   const [processingStatus, setProcessingStatus] = useState("");
@@ -204,7 +204,6 @@ const ListingGenerator = () => {
       const result = (draft.results || {}) as Partial<PersistedState>;
       const filesMeta = Array.isArray(draft.files) ? draft.files as PersistedState["filesMeta"] : (result.filesMeta || []);
 
-      if (result.url) setUrl(result.url);
       if (result.description) setDescription(result.description);
       if (Array.isArray(result.extractedProjects) && result.extractedProjects.length > 0) setExtractedProjects(result.extractedProjects);
       if (typeof result.activeProjectIndex === "number") setActiveProjectIndex(result.activeProjectIndex);
