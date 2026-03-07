@@ -630,7 +630,11 @@ export default function ProjectDetailLayout({
             <Button 
               variant="primary" 
               size="lg"
-              onClick={scrollToInquiry}
+              onClick={() => {
+                setCaptureDocType("brochure");
+                setCaptureDocUrl(undefined);
+                setLeadCaptureOpen(true);
+              }}
             >
               Register Interest
             </Button>
@@ -678,7 +682,11 @@ export default function ProjectDetailLayout({
                 ))}
                 {/* Register Interest - Highlighted Gold CTA */}
                 <button
-                  onClick={scrollToInquiry}
+                  onClick={() => {
+                    setCaptureDocType("brochure");
+                    setCaptureDocUrl(undefined);
+                    setLeadCaptureOpen(true);
+                  }}
                   className="flex items-center gap-1.5 ml-auto px-4 py-1.5 rounded-lg text-xs md:text-sm font-bold whitespace-nowrap min-w-fit transition-all bg-gradient-to-r from-[#F5EBD7] via-[#EDE0C8] to-[#D4C4A8] text-black border-2 border-gold/50 hover:brightness-105"
                   style={{ boxShadow: '0 0 15px rgba(200,167,102,0.3)' }}
                 >

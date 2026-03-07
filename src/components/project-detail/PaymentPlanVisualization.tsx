@@ -361,9 +361,9 @@ export default function PaymentPlanVisualization({
               <div className="w-20 h-20 rounded-full bg-gold/15 flex items-center justify-center mx-auto mb-5 ring-4 ring-gold/10">
                 <CreditCard className="w-10 h-10 text-gold" />
               </div>
-              <p className="text-xl font-semibold text-foreground mb-2">Payment Plan Details</p>
+              <p className="text-xl font-semibold text-foreground mb-2">Interested in {projectName}?</p>
               <p className="text-sm text-muted-foreground mb-6 max-w-md mx-auto">
-                Register your interest to receive the exclusive payment plan details for {projectName} directly from our team.
+                Register your interest to learn more about {projectName}. Our team will provide you with the latest details.
               </p>
               {onRegisterInterest && (
                 <button
