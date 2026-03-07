@@ -368,6 +368,12 @@ serve(async (req: Request) => {
       const projectDataObj = files;
       const mode = url;
 
+      // Clean the data: remove fields that don't exist in pending_project_imports
+      const invalidColumns = ['source', 'completion_percentage', 'key_features', 'project_status', 'nearby_landmarks', 'property_type'];
+      for (const col of invalidColumns) {
+        delete projectDataObj[col];
+      }
+
       if (mode === "replace" && existingId) {
         await supabase.from("pending_project_imports").delete().eq("id", existingId);
       }
@@ -393,7 +399,10 @@ serve(async (req: Request) => {
       }
 
       const { data: saved, error: saveErr } = await supabase.from("pending_project_imports").insert(projectDataObj).select().single();
-      if (saveErr) throw saveErr;
+      if (saveErr) {
+        console.error("[generate-listing] Save error:", saveErr);
+        throw new Error(`Save failed: ${saveErr.message}`);
+      }
       return new Response(JSON.stringify({ success: true, mode: mode || "new", id: saved.id }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
