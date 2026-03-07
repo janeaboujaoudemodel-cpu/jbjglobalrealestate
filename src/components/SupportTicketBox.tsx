@@ -437,22 +437,34 @@ const SupportTicketBox = () => {
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center shadow-lg">
                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 64 64" fill="none" className="text-white">
-                         {/* Headband */}
-                         <path d="M10 32 C10 14, 54 14, 54 32" stroke="currentColor" strokeWidth="4.5" strokeLinecap="round" fill="none"/>
-                         {/* Headband inner highlight */}
-                         <path d="M14 32 C14 18, 50 18, 50 32" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.3" fill="none"/>
-                         {/* Left arm */}
-                         <path d="M10 32 L10 40" stroke="currentColor" strokeWidth="4" strokeLinecap="round"/>
+                         {/* Headband outer — thick premium arc */}
+                         <path d="M8 34 C8 12, 56 12, 56 34" stroke="currentColor" strokeWidth="5" strokeLinecap="round" fill="none"/>
+                         {/* Headband highlight — metallic sheen */}
+                         <path d="M12 34 C12 16, 52 16, 52 34" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.45" fill="none"/>
+                         {/* Crown mesh — AirPods Max style woven band */}
+                         <path d="M22 18 C22 14, 42 14, 42 18" stroke="currentColor" strokeWidth="6" strokeLinecap="round" opacity="0.12" fill="none"/>
+                         <path d="M20 19 L44 19" stroke="currentColor" strokeWidth="0.5" opacity="0.2" strokeDasharray="2 2"/>
+                         <path d="M19 21 L45 21" stroke="currentColor" strokeWidth="0.5" opacity="0.15" strokeDasharray="2 2"/>
+                         {/* Left arm — telescoping connector */}
+                         <path d="M8 34 L8 39" stroke="currentColor" strokeWidth="4.5" strokeLinecap="round"/>
+                         <path d="M8 34 L8 39" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.5"/>
                          {/* Right arm */}
-                         <path d="M54 32 L54 40" stroke="currentColor" strokeWidth="4" strokeLinecap="round"/>
-                         {/* Left ear cup */}
-                         <rect x="2" y="36" width="16" height="22" rx="8" fill="currentColor" opacity="0.2" stroke="currentColor" strokeWidth="2.5"/>
-                         <rect x="5" y="39" width="10" height="16" rx="5" fill="currentColor" opacity="0.12"/>
-                         {/* Right ear cup */}
-                         <rect x="46" y="36" width="16" height="22" rx="8" fill="currentColor" opacity="0.2" stroke="currentColor" strokeWidth="2.5"/>
-                         <rect x="49" y="39" width="10" height="16" rx="5" fill="currentColor" opacity="0.12"/>
-                         {/* Crown highlight */}
-                         <ellipse cx="32" cy="15" rx="7" ry="2" fill="currentColor" opacity="0.18"/>
+                         <path d="M56 34 L56 39" stroke="currentColor" strokeWidth="4.5" strokeLinecap="round"/>
+                         <path d="M56 34 L56 39" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.5"/>
+                         {/* Left ear cup — deep capsule */}
+                         <rect x="1" y="36" width="15" height="24" rx="7.5" fill="currentColor" opacity="0.15" stroke="currentColor" strokeWidth="2.5"/>
+                         <rect x="3" y="38" width="11" height="20" rx="5.5" fill="currentColor" opacity="0.08"/>
+                         <rect x="5" y="42" width="7" height="12" rx="3.5" fill="currentColor" opacity="0.06"/>
+                         {/* Left cup highlight */}
+                         <path d="M4 40 C4 38, 14 38, 14 40" stroke="currentColor" strokeWidth="0.8" opacity="0.3" fill="none"/>
+                         {/* Right ear cup — deep capsule */}
+                         <rect x="48" y="36" width="15" height="24" rx="7.5" fill="currentColor" opacity="0.15" stroke="currentColor" strokeWidth="2.5"/>
+                         <rect x="50" y="38" width="11" height="20" rx="5.5" fill="currentColor" opacity="0.08"/>
+                         <rect x="52" y="42" width="7" height="12" rx="3.5" fill="currentColor" opacity="0.06"/>
+                         {/* Right cup highlight */}
+                         <path d="M50 40 C50 38, 60 38, 60 40" stroke="currentColor" strokeWidth="0.8" opacity="0.3" fill="none"/>
+                         {/* Top crown metallic highlight */}
+                         <ellipse cx="32" cy="13" rx="8" ry="1.5" fill="currentColor" opacity="0.12"/>
                        </svg>
                     </div>
                     <div>
