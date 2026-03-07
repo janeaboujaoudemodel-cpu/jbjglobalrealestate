@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { useState } from "react";
 import { History, ArrowRight, X, Building2, MapPin, Home } from "lucide-react";
 import { useRecentSearches, type RecentItemType, type RecentItem } from "@/hooks/useRecentSearches";
 import FavoriteButton from "@/components/FavoriteButton";
@@ -36,8 +36,11 @@ const ContinueSearching = ({
   if (validItems.length === 0) return null;
 
   const displayItems = validItems.slice(0, limit);
-  const sectionTitle = title || (type
-    ? `Continue Searching ${TYPE_CONFIG[type].label}`
+  
+  // Dynamic title: "Continue Searching for [most recent item name]"
+  const mostRecentName = validItems[0]?.name || "";
+  const sectionTitle = title || (mostRecentName
+    ? `${t("home.continueSearchingFor", "Continue Searching for")} ${mostRecentName}`
     : t("home.continueSearching", "Continue Searching"));
 
   return (
@@ -77,12 +80,17 @@ function RecentCard({ item, index }: { item: RecentItem; index: number }) {
   const config = TYPE_CONFIG[item.type] ?? TYPE_CONFIG.property;
   const Icon = config.icon;
   const linkTo = `${config.pathPrefix}/${item.slug}`;
+  const [logoError, setLogoError] = useState(false);
+
+  // For property cards, show developer logo instead of type badge
+  const showDevLogo = item.type === "property" && item.developerLogo && !logoError;
+  // For developer cards, use imageUrl as the logo
+  const showDevCardLogo = item.type === "developer" && item.imageUrl && !logoError;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.2, delay: index * 0.04 }}
+    <div
+      className="animate-fade-in-up"
+      style={{ animationDelay: `${index * 40}ms` }}
     >
       <Link
         to={linkTo}
@@ -103,12 +111,34 @@ function RecentCard({ item, index }: { item: RecentItem; index: number }) {
         {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
 
-        {/* Type badge */}
+        {/* Top-left: Developer logo (for properties) or type badge */}
         <div className="absolute top-2 left-2">
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-black/50 backdrop-blur-sm text-[9px] font-semibold uppercase tracking-wider text-gold border border-gold/20">
-            <Icon className="w-2.5 h-2.5" />
-            {item.type}
-          </span>
+          {showDevLogo ? (
+            <div className="w-9 h-9 rounded-lg bg-white shadow-md overflow-hidden">
+              <img
+                src={item.developerLogo}
+                alt={item.subtitle || "Developer"}
+                className="w-full h-full object-contain"
+                loading="lazy"
+                onError={() => setLogoError(true)}
+              />
+            </div>
+          ) : showDevCardLogo ? (
+            <div className="w-9 h-9 rounded-lg bg-white shadow-md overflow-hidden">
+              <img
+                src={item.imageUrl}
+                alt={item.name}
+                className="w-full h-full object-contain"
+                loading="lazy"
+                onError={() => setLogoError(true)}
+              />
+            </div>
+          ) : (
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-black/50 backdrop-blur-sm text-[9px] font-semibold uppercase tracking-wider text-gold border border-gold/20">
+              <Icon className="w-2.5 h-2.5" />
+              {item.type}
+            </span>
+          )}
         </div>
 
         {/* Favorite button - top right */}
@@ -130,7 +160,7 @@ function RecentCard({ item, index }: { item: RecentItem; index: number }) {
           </h3>
         </div>
       </Link>
-    </motion.div>
+    </div>
   );
 }
 
