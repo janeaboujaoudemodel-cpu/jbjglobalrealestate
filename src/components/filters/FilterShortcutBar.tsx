@@ -4,7 +4,7 @@
  * Row 2: Filter popovers + Sort pills + Hide Sold (last)
  */
 import { useState, useCallback, useEffect, useRef } from "react";
-import { ChevronDown, ChevronRight as ChevronRightIcon, X, Heart, Building2, Bed, Calendar, DollarSign, CreditCard, Activity, Map, Users, Trash2, ArrowUpDown, EyeOff, HardHat, Clock, ArrowUp, ArrowDown, SortAsc, SlidersHorizontal, Check, TrendingUp } from "lucide-react";
+import { ChevronDown, ChevronRight as ChevronRightIcon, X, Heart, Building2, Bed, Calendar, DollarSign, CreditCard, Activity, Map, Users, Trash2, ArrowUpDown, EyeOff, HardHat, Clock, ArrowUp, ArrowDown, SortAsc, SlidersHorizontal, Check, TrendingUp, Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { SUPPORTED_CURRENCIES } from "@/components/CurrencySwitcher";
@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SaveFilterModal from "./SaveFilterModal";
 import { CONSTRUCTION_STATUS_OPTIONS } from "@/constants/constructionStatus";
+import { VIEWS_OPTIONS } from "@/constants/filterConfig";
 import AdvancedFilterPanel from "./AdvancedFilterPanel";
 
 export interface ShortcutFilterState {
@@ -40,6 +41,7 @@ export interface ShortcutFilterState {
   areas: string[];
   developers: string[];
   searchQuery: string;
+  views: string[];
 }
 
 export const defaultShortcutFilters: ShortcutFilterState = {
@@ -64,6 +66,7 @@ export const defaultShortcutFilters: ShortcutFilterState = {
   areas: [],
   developers: [],
   searchQuery: '',
+  views: [],
 };
 
 interface FilterShortcutBarProps {
@@ -123,6 +126,8 @@ const CONSTRUCTION_OPTIONS = [
   { value: 'Completed', label: 'Completed' },
   { value: 'Under Construction', label: 'Under Construction' },
   { value: 'Presale', label: 'Presale' },
+  { value: 'Resale Off-Plan', label: 'Resale Off-Plan' },
+  { value: 'Ready Resale', label: 'Ready Resale' },
 ];
 
 const SORT_OPTIONS: { value: ShortcutFilterState['sortBy']; label: string }[] = [
