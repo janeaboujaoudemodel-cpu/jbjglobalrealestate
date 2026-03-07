@@ -1,33 +1,41 @@
 
 
-# Fix: AI Rating Logic — Amra-Only Override
+## Plan: Fix All Email Issues Across All Templates
 
-## Problem
-The current code (line 198-200 in `ProjectAIAnalyzer.tsx`) applies a 9.0 rating floor to ALL tier-1 developers. The user only wants Amra to have a hardcoded 9.0 score. All other projects should get genuine AI-evaluated ratings based on amenities, payment plan, location, price/sqft comparisons, appreciation potential, and developer brand.
+### Problems Identified
 
-## Changes
+1. **Recommended For You icons disappeared** — Inline SVGs are stripped by Gmail and most email clients. Must revert to hosted PNG images (`ai-tools.png`, `guides.png`, `properties.png` already exist in `public/email-icons/`).
 
-### File: `src/components/project-detail/ProjectAIAnalyzer.tsx` (lines 198-200)
-- Remove the `TIER1_DEVELOPERS` array and `isTier1` check entirely
-- Replace with a single project-name check: if the project name contains "amra" (case-insensitive), clamp rating to minimum 9.0
-- All other projects get the raw AI-generated rating unchanged
+2. **Social media footer icons not rendering** — Same issue: `socialLinksFooter()` loads external `.svg` files via `<img>` tags, but Gmail blocks SVG images entirely. Must switch to hosted `.png` files. Currently missing `social-facebook.png` — need to confirm or create it.
 
-**Before:**
-```ts
-const TIER1_DEVELOPERS = ["damac", "emaar", ...];
-const isTier1 = developer && TIER1_DEVELOPERS.some(...);
-const ratingScore = rawRating !== null ? (isTier1 && rawRating < 9.0 ? 9.0 : rawRating) : null;
-```
+3. **Email split into multiple visual cards** — Several sub-sections (`ticketSupportEmbed`, `readyToGetStartedHtml`, `recommendedActionsHtml`) each have their own `border`, `border-radius`, and `background` styles creating distinct visual boxes. These need to be softened so they sit seamlessly inside the single continuous card.
 
-**After:**
-```ts
-const isAmra = projectName?.toLowerCase().includes("amra");
-const ratingScore = rawRating !== null ? (isAmra && rawRating < 9.0 ? 9.0 : rawRating) : null;
-```
+### Changes (all in `supabase/functions/_shared/email-html.ts`)
 
-### File: Edge function prompt (no change needed)
-The AI prompt in the edge function should already evaluate based on merit (amenities, payment plan, location, price/sqft vs competitors, appreciation, brand). The current prompt is fine — the problem was purely the client-side override.
+#### A. Recommended For You — Revert to PNG hosted images
+- Change `recommendedCard()` back to using `iconImg()` with PNG paths
+- Remove the `RECOMMENDED_ICONS` inline SVG object
+- Ensure circular frame clips the PNG with `overflow:hidden` on the `<td>` to prevent square backgrounds
+- Signature: `recommendedCard(title, href, iconPath, alt)` — restore the original parameters
 
-## Files to Modify
-1. `src/components/project-detail/ProjectAIAnalyzer.tsx` — 3 lines changed
+#### B. Social Footer — Switch to PNG with white pearl background
+- Replace `socialLinksFooter()` to use the inline `SVG` object icons (instagram, facebook, linkedin, tiktok, youtube) that are already defined at the top of the file — these render as raw HTML inside `<td>` elements, not as `<img>` tags, so they should survive email client processing
+- Actually, since Gmail strips ALL SVG (both inline and `<img>`), switch to using the `.png` files: `social-instagram.png`, `social-linkedin.png`, `social-tiktok.png`, `social-youtube.png`
+- Create `social-facebook.png` if missing
+- Style each icon circle: white/pearl (#FDFBF7) background, gold border, black icon inside
+
+#### C. Single Card Layout — Remove visual fragmentation
+- `ticketSupportEmbed()`: Remove the heavy gradient background and red border; make it blend into the card
+- `readyToGetStartedHtml()`: Remove the outer border and separate background so it flows within the card
+- `inquiryBox()`: Soften its standalone bordered look
+- Keep all content inside the single `emailShell` wrapper card with no sub-borders that create separation
+
+#### D. Deploy + Send Test Email
+- Deploy the updated edge function
+- Immediately send a test welcome email to `janeaboujaoudenails@gmail.com`
+- Take a screenshot as proof
+
+### Files Modified
+- `supabase/functions/_shared/email-html.ts` — all icon and layout fixes
+- `public/email-icons/social-facebook.png` — create if missing (or use existing assets)
 
