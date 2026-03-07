@@ -259,19 +259,14 @@ export const ProjectAIAnalyzer = ({
               </div>
             ) : (
               <div className="flex flex-col items-center gap-5 py-12">
-                <div className="relative">
-                  <div className="absolute inset-0 rounded-full bg-gold/20 blur-2xl animate-pulse scale-[1.8]" />
-                  <img
-                    src={jbjMonogramNobuffer}
-                    alt="JBJ AI analyzing..."
-                    className="relative w-32 h-32 md:w-40 md:h-40 object-contain"
-                    style={{
-                      animation: "jbj-breathe 2s ease-in-out infinite",
-                      filter: "drop-shadow(0 0 16px rgba(184,134,11,0.6))",
-                      mixBlendMode: "multiply",
-                    }}
-                  />
-                </div>
+                <img
+                  src={jbjMonogramNobuffer}
+                  alt="JBJ AI analyzing..."
+                  className="w-28 h-28 md:w-36 md:h-36 object-contain"
+                  style={{
+                    animation: "jbj-breathe 2s ease-in-out infinite",
+                  }}
+                />
                 <div className="text-center space-y-2">
                   <p className="text-sm font-medium text-zinc-600">
                     JBJ AI is analyzing <span className="text-gold font-semibold">{projectName}</span>
