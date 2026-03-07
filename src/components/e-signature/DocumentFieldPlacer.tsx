@@ -596,7 +596,29 @@ export default function DocumentFieldPlacer({
                         </button>
 
                         {/* Field content */}
-                        {field.type === "checkbox" ? (
+                        {field.type === "stamp" ? (
+                          <div className="flex items-center justify-center h-full w-full overflow-hidden">
+                            {savedStampSvg ? (
+                              <div
+                                className="w-full h-full flex items-center justify-center opacity-85"
+                                dangerouslySetInnerHTML={{
+                                  __html: savedStampSvg.replace(
+                                    /width="[^"]*"/,
+                                    `width="${field.width - 4}"`
+                                  ).replace(
+                                    /height="[^"]*"/,
+                                    `height="${field.height - 4}"`
+                                  ),
+                                }}
+                              />
+                            ) : (
+                              <div className={`flex flex-col items-center justify-center gap-0.5 ${style.text}`}>
+                                <Stamp className="w-6 h-6" />
+                                <span className="text-[9px] font-medium">Company Stamp</span>
+                              </div>
+                            )}
+                          </div>
+                        ) : field.type === "checkbox" ? (
                           <div
                             className={`flex items-center justify-center h-full cursor-pointer ${style.text}`}
                             onClick={(e) => {
