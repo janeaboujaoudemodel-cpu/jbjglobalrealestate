@@ -352,7 +352,7 @@ export default function DocumentFieldPlacer({
   }, {});
 
   return (
-    <div className="space-y-4" style={{ overflowX: "hidden", overscrollBehavior: "contain" }}>
+    <div className="space-y-4" style={{ overflowX: "hidden" }}>
       {/* ─── Toolbar ─── */}
       <div className="flex flex-wrap items-center gap-3 p-3 bg-muted/40 rounded-xl border">
         {/* Recipient selector */}

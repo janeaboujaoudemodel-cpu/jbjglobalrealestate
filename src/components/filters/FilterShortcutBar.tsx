@@ -577,8 +577,8 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               }}
             >
               <TabsList className="w-full mb-3 bg-white/60">
-                <TabsTrigger value="residential" className="flex-1 text-xs">Residential</TabsTrigger>
-                <TabsTrigger value="commercial" className="flex-1 text-xs">Commercial</TabsTrigger>
+                <TabsTrigger value="residential" className="flex-1 text-xs data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#FDFBF7] data-[state=active]:via-[#F5F0E6] data-[state=active]:to-[#EDE4D3] data-[state=active]:border-2 data-[state=active]:border-gold data-[state=active]:text-black data-[state=active]:font-bold data-[state=active]:shadow-md">Residential</TabsTrigger>
+                <TabsTrigger value="commercial" className="flex-1 text-xs data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#FDFBF7] data-[state=active]:via-[#F5F0E6] data-[state=active]:to-[#EDE4D3] data-[state=active]:border-2 data-[state=active]:border-gold data-[state=active]:text-black data-[state=active]:font-bold data-[state=active]:shadow-md">Commercial</TabsTrigger>
               </TabsList>
             </Tabs>
             <div className="flex flex-wrap gap-2">
