@@ -122,7 +122,7 @@ const projectSchema = {
 
 // ========== BATCH PROCESSING: Fetch files from storage & process in groups ==========
 
-const BATCH_SIZE = 2;
+const BATCH_SIZE = 4;
 const AI_FETCH_TIMEOUT_MS = 55000; // 55s to stay within edge function limits
 
 async function updateJobProgress(supabase: any, jobId: string, progress: string) {
@@ -160,21 +160,39 @@ async function fetchFileFromUrl(url: string): Promise<{ base64: string; ok: bool
 }
 
 function mergeExtractedProjects(allBatchResults: any[][]): any[] {
-  // Flatten all batch results
   const allProjects: any[] = [];
   const seenNames = new Map<string, number>();
+
+  // Arrays where we should keep the longer/more detailed version instead of Set-merging
+  const preferLongerKeys = new Set(["paymentBreakdown", "unitDetails", "faqs", "nearbyLandmarks", "comparableProjects"]);
+  // Arrays safe to deduplicate by stringifying
+  const dedupeKeys = new Set(["amenities", "keyFeatures", "highlights", "unitTypes", "views", "usps"]);
 
   for (const batchProjects of allBatchResults) {
     for (const project of batchProjects) {
       const name = (project.name || "").toLowerCase().trim();
       if (name && seenNames.has(name)) {
-        // Merge into existing project
         const idx = seenNames.get(name)!;
         const existing = allProjects[idx];
-        // Merge arrays
-        for (const key of ["amenities", "keyFeatures", "highlights", "unitTypes", "faqs", "nearbyLandmarks", "paymentBreakdown", "unitDetails", "comparableProjects", "views", "usps"]) {
+        // Merge arrays intelligently
+        for (const key of [...preferLongerKeys, ...dedupeKeys]) {
           if (Array.isArray(project[key]) && project[key].length > 0) {
-            existing[key] = [...new Set([...(existing[key] || []), ...project[key]])];
+            if (preferLongerKeys.has(key)) {
+              // Keep the longer, more detailed array
+              if (!existing[key] || project[key].length > existing[key].length) {
+                existing[key] = project[key];
+              }
+            } else {
+              // Deduplicate simple string arrays
+              const merged = [...(existing[key] || []), ...project[key]];
+              const seen = new Set<string>();
+              existing[key] = merged.filter((item: any) => {
+                const k = typeof item === "string" ? item : JSON.stringify(item);
+                if (seen.has(k)) return false;
+                seen.add(k);
+                return true;
+              });
+            }
           }
         }
         // Fill in null fields
@@ -252,6 +270,7 @@ CRITICAL RULES:
 - Extract unique selling propositions / lifestyle highlights into usps array.
 - The source_url field is ONLY for internal tracking of where data was scraped from. It is NOT a project website. NEVER output any websiteUrl, projectUrl, or website field in the response JSON. Even if the source contains an official URL, do NOT include it — the admin will add it manually.
 - Payment plan milestones and percentages MUST be extracted VERBATIM from the source document. Do NOT infer, calculate, or generate payment breakdown percentages. If a payment plan is not explicitly provided, set paymentBreakdown to [] and paymentPlan to null.
+- For payment plans, list EVERY individual milestone exactly as shown in the document. Each installment MUST have its own row with the exact percentage. Do NOT group installments (e.g., "Installments 1-5 at 1% each" MUST become 5 separate entries each with percentage=1, named "1st Installment", "2nd Installment", etc.). Copy milestone names and percentages VERBATIM. The total of all percentages MUST equal 100%.
 - NEVER alter, recalculate, or adjust prices, locations, or amenities. Report EXACTLY as found in the documents.
 
 MULTI-PROJECT RULE:
@@ -306,7 +325,7 @@ MULTI-PROJECT RULE:
 
         try {
           const aiBody = JSON.stringify({
-            model: "google/gemini-2.5-flash",
+            model: "google/gemini-2.5-pro",
             max_tokens: 16000,
             temperature: 0.05,
             messages: [{ role: "user", content: contentParts }],
@@ -336,7 +355,7 @@ MULTI-PROJECT RULE:
                 ];
                 const singleRes = await fetchAIWithTimeout("https://ai.gateway.lovable.dev/v1/chat/completions", {
                   method: "POST", headers: aiHeaders,
-                  body: JSON.stringify({ model: "google/gemini-2.5-flash", max_tokens: 8000, temperature: 0.05,
+                  body: JSON.stringify({ model: "google/gemini-2.5-pro", max_tokens: 8000, temperature: 0.05,
                     messages: [{ role: "user", content: singleParts }],
                     tools: [{ type: "function", function: { name: "extract_projects", description: "Extract structured data for real estate projects.", parameters: { type: "object", properties: { projects: { type: "array", items: projectSchema } }, required: ["projects"] } } }],
                     tool_choice: { type: "function", function: { name: "extract_projects" } },
@@ -399,7 +418,7 @@ MULTI-PROJECT RULE:
       if (description) contentParts.push({ type: "text", text: `\n\n--- ADDITIONAL DESCRIPTION ---\n${description}` });
       contentParts.push({ type: "text", text: "\n\nExtract ALL project data now. If MULTIPLE distinct projects, return each separately." });
 
-      const model = "google/gemini-2.5-flash";
+      const model = "google/gemini-2.5-pro";
       const aiRes = await fetchAIWithTimeout("https://ai.gateway.lovable.dev/v1/chat/completions", {
         method: "POST",
         headers: { "Authorization": `Bearer ${lovableApiKey}`, "Content-Type": "application/json" },

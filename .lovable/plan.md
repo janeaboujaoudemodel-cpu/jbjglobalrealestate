@@ -1,55 +1,41 @@
 
 
-# Fix: Tooltip Clipped in Continue Searching Cards, Amra Payment Plan Accuracy, and Listing Generator Robustness
+## Plan: Fix All Email Issues Across All Templates
 
-## Issue 1: Tooltip Hidden Under Card (Continue Searching)
+### Problems Identified
 
-**Root cause**: The card link element at line 190 of `ContinueSearching.tsx` has `overflow-hidden` via `rounded-xl overflow-hidden`. The Radix Tooltip uses a portal by default, but the `FavoriteButton` is positioned inside a container with `z-20` and `translateZ(30px)` — the tooltip renders correctly via portal, but its white background blends with the card's gold shimmer border and gradient, making it nearly invisible against the dark card.
+1. **Recommended For You icons disappeared** — Inline SVGs are stripped by Gmail and most email clients. Must revert to hosted PNG images (`ai-tools.png`, `guides.png`, `properties.png` already exist in `public/email-icons/`).
 
-**Fix in `FavoriteButton.tsx`**:
-- Add explicit styling to the `TooltipContent` for dark-themed contexts: `className="z-[100] bg-black/90 text-white border-gold/30 text-xs"` to ensure visibility against dark cards.
-- Alternatively, add `sideOffset={8}` to push the tooltip further away from the card boundary so it's clearly above.
+2. **Social media footer icons not rendering** — Same issue: `socialLinksFooter()` loads external `.svg` files via `<img>` tags, but Gmail blocks SVG images entirely. Must switch to hosted `.png` files. Currently missing `social-facebook.png` — need to confirm or create it.
 
-## Issue 2: Amra Payment Plan Data Incorrect
+3. **Email split into multiple visual cards** — Several sub-sections (`ticketSupportEmbed`, `readyToGetStartedHtml`, `recommendedActionsHtml`) each have their own `border`, `border-radius`, and `background` styles creating distinct visual boxes. These need to be softened so they sit seamlessly inside the single continuous card.
 
-**Current DB state**: The Amra project has 15 milestones stored in `payment_breakdown`. However, the percentages are wrong — several milestones show `1%` for "Pre-Handover Installments 1-5" as a single entry (should be 5 entries at 1% each = 5%, or one entry at 5%). The total adds up but the milestone labels don't match the granularity correctly. The summary visualization collapses everything into 3 buckets (10% booking, 60% construction, 30% handover) which may not reflect the actual document.
+### Changes (all in `supabase/functions/_shared/email-html.ts`)
 
-**Fix — Two-pronged approach**:
+#### A. Recommended For You — Revert to PNG hosted images
+- Change `recommendedCard()` back to using `iconImg()` with PNG paths
+- Remove the `RECOMMENDED_ICONS` inline SVG object
+- Ensure circular frame clips the PNG with `overflow:hidden` on the `<td>` to prevent square backgrounds
+- Signature: `recommendedCard(title, href, iconPath, alt)` — restore the original parameters
 
-### A. Improve AI extraction prompt (in `generate-listing/index.ts`)
-Strengthen the payment plan extraction instructions in the system prompt (line 241-260):
-- Add explicit instruction: "For payment plans, list EVERY individual milestone exactly as shown in the document. Each installment must have its own row with exact percentage. Do NOT group installments (e.g., 'Installments 1-5 at 1% each' should be 5 separate entries). Copy milestone names, percentages, and timing VERBATIM."
-- Add instruction to calculate and verify the total equals 100%.
+#### B. Social Footer — Switch to PNG with white pearl background
+- Replace `socialLinksFooter()` to use the inline `SVG` object icons (instagram, facebook, linkedin, tiktok, youtube) that are already defined at the top of the file — these render as raw HTML inside `<td>` elements, not as `<img>` tags, so they should survive email client processing
+- Actually, since Gmail strips ALL SVG (both inline and `<img>`), switch to using the `.png` files: `social-instagram.png`, `social-linkedin.png`, `social-tiktok.png`, `social-youtube.png`
+- Create `social-facebook.png` if missing
+- Style each icon circle: white/pearl (#FDFBF7) background, gold border, black icon inside
 
-### B. Fix Amra's data via SQL migration
-Run a migration to update Amra's `payment_breakdown` with corrected milestones that match the actual DAMAC Amra payment plan document. Since we can't re-read the original uploaded document, we'll re-extract by looking at the stored data and correcting the structure to properly represent each installment individually.
+#### C. Single Card Layout — Remove visual fragmentation
+- `ticketSupportEmbed()`: Remove the heavy gradient background and red border; make it blend into the card
+- `readyToGetStartedHtml()`: Remove the outer border and separate background so it flows within the card
+- `inquiryBox()`: Soften its standalone bordered look
+- Keep all content inside the single `emailShell` wrapper card with no sub-borders that create separation
 
-## Issue 3: Listing Generator Speed and Extraction Accuracy
+#### D. Deploy + Send Test Email
+- Deploy the updated edge function
+- Immediately send a test welcome email to `janeaboujaoudenails@gmail.com`
+- Take a screenshot as proof
 
-**Current bottlenecks**:
-- `BATCH_SIZE = 2` means many sequential AI calls for multi-file uploads
-- 55-second timeout per batch with retry logic adds latency
-- The merge logic (line 162-193) uses Set dedup on arrays which loses payment breakdown ordering
-
-**Fixes in `generate-listing/index.ts`**:
-
-1. **Increase batch size**: Change `BATCH_SIZE` from 2 to 4 — reduces total AI calls by half.
-2. **Fix merge logic for payment breakdown**: The `mergeExtractedProjects` function at line 175 uses `new Set()` spread on `paymentBreakdown` array, which breaks because objects aren't deduped by Set correctly. Change to: for `paymentBreakdown`, prefer the longer/more detailed array instead of merging.
-3. **Strengthen extraction prompt**: Add emphasis on verbatim payment plan extraction with percentage verification.
-4. **Use `google/gemini-2.5-pro`** for the primary extraction instead of `flash` — better accuracy for complex document analysis, especially payment plan tables.
-
-## Files to Modify
-
-### `src/components/FavoriteButton.tsx`
-- Update `TooltipContent` styling to use dark background with gold border for visibility on dark cards
-- Add `side="top"` and `sideOffset={8}` to push tooltip above the card boundary
-
-### `supabase/functions/generate-listing/index.ts`
-- Increase `BATCH_SIZE` to 4
-- Fix `mergeExtractedProjects` to preserve payment breakdown ordering (prefer longer array)
-- Strengthen system prompt with explicit per-milestone extraction rules
-- Upgrade model to `google/gemini-2.5-pro` for higher accuracy
-
-### Database Migration
-- Update Amra's `payment_breakdown` JSONB with corrected milestone data
+### Files Modified
+- `supabase/functions/_shared/email-html.ts` — all icon and layout fixes
+- `public/email-icons/social-facebook.png` — create if missing (or use existing assets)
 
