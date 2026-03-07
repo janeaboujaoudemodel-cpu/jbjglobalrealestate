@@ -121,7 +121,7 @@ export type ProjectDetailData = {
   location_image_url?: string | null;
   floor_plan_types?: Array<{ label: string; pdfUrl?: string }> | null;
   faqs?: Array<{ question: string; answer: string }> | null;
-  payment_breakdown?: { down_payment?: string; during_construction?: string; on_completion?: string } | Array<{ milestone: string; percentage: number; date?: string; amount?: string }> | null;
+  payment_breakdown?: { down_payment?: string; during_construction?: string; on_completion?: string } | Array<{ milestone: string; percentage: number; timing?: string; amount?: number | null; stage_type?: string }> | null;
   // Reelly-compatible fields
   unit_types?: Array<{
     type: string;
