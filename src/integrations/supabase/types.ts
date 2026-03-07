@@ -77,6 +77,42 @@ export type Database = {
         }
         Relationships: []
       }
+      admin_edit_log: {
+        Row: {
+          action: string
+          changed_fields: string[] | null
+          created_at: string | null
+          entity_id: string
+          entity_name: string | null
+          entity_type: string
+          id: string
+          summary: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          changed_fields?: string[] | null
+          created_at?: string | null
+          entity_id: string
+          entity_name?: string | null
+          entity_type: string
+          id?: string
+          summary?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          changed_fields?: string[] | null
+          created_at?: string | null
+          entity_id?: string
+          entity_name?: string | null
+          entity_type?: string
+          id?: string
+          summary?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       admin_scanned_cards: {
         Row: {
           card_data: Json
