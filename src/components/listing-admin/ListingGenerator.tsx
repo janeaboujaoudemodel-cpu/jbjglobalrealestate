@@ -551,7 +551,9 @@ const ListingGenerator = () => {
     setProcessingStatus("");
     setTimedOut(false);
     setElapsedSeconds(0);
-    clearPersistedState();
+    // Keep files, url, description — only clear extraction results
+    // clearPersistedState() removed: drafts persist until successful save
+  };
   };
 
   const extracted = extractedProjects[activeProjectIndex] || null;
