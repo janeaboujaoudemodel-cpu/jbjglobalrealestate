@@ -515,6 +515,6 @@ export default function FoundersAssistant() {
           )}
         </AnimatePresence>
       </div>
-    </MainLayout>
+    </div>
   );
 }
