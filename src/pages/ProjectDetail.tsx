@@ -56,8 +56,21 @@ const asLocationDistances = (value: unknown): Array<{ label: string; time: strin
   return out.length ? out : null;
 };
 
-const asPaymentBreakdown = (value: unknown): { down_payment?: string; during_construction?: string; on_completion?: string } | null => {
-  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+const asPaymentBreakdown = (value: unknown): { down_payment?: string; during_construction?: string; on_completion?: string } | Array<{ milestone: string; percentage: number; timing?: string; amount?: number | null; stage_type?: string }> | null => {
+  if (!value) return null;
+  
+  // If it's an array (detailed milestones from DB), map to typed format
+  if (Array.isArray(value) && value.length > 0) {
+    return value.map((v: Record<string, unknown>) => ({
+      milestone: String(v.milestone || v.label || ""),
+      percentage: Number(v.percentage || v.percent || 0),
+      timing: typeof v.timing === "string" ? v.timing : typeof v.date === "string" ? v.date : undefined,
+      amount: typeof v.amount === "number" ? v.amount : null,
+      stage_type: typeof v.stage_type === "string" ? v.stage_type : undefined,
+    })).filter(m => m.milestone && m.percentage > 0);
+  }
+  
+  if (typeof value !== "object") return null;
   const o = value as Record<string, unknown>;
 
   const down_payment = typeof o.down_payment === "string" ? o.down_payment : undefined;

@@ -122,10 +122,10 @@ const PremiumBrochureCard = ({
             `,
           }}
         >
-          {/* Consistent Downtown Dubai Background for All Brochures */}
+          {/* Dynamic project image background - syncs with project's main photo */}
           <div 
             className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${BROCHURE_BG_URL})` }}
+            style={{ backgroundImage: `url(${projectImageUrl || BROCHURE_BG_URL})` }}
           />
           
           {/* Dark overlay for text readability */}

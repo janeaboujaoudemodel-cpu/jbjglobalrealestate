@@ -121,7 +121,7 @@ export type ProjectDetailData = {
   location_image_url?: string | null;
   floor_plan_types?: Array<{ label: string; pdfUrl?: string }> | null;
   faqs?: Array<{ question: string; answer: string }> | null;
-  payment_breakdown?: { down_payment?: string; during_construction?: string; on_completion?: string } | null;
+  payment_breakdown?: { down_payment?: string; during_construction?: string; on_completion?: string } | Array<{ milestone: string; percentage: number; timing?: string; amount?: number | null; stage_type?: string }> | null;
   // Reelly-compatible fields
   unit_types?: Array<{
     type: string;
@@ -1043,11 +1043,28 @@ export default function ProjectDetailLayout({
             </div>
           )}
 
-          {/* BROCHURE - Full width two-column layout - Always visible */}
+           {/* PAYMENT PLAN VISUALIZATION (Order B: Payment first) */}
+           {(true) && (
+           <div ref={paymentRef} id="payment" className="mb-16 scroll-mt-40">
+              <PaymentPlanVisualization
+                paymentPlan={project.payment_plan}
+                paymentBreakdown={project.payment_breakdown}
+                handoverDate={project.handover_date}
+                downPaymentPercent={project.down_payment_percent}
+                projectName={project.name}
+                onRegisterInterest={() => {
+                  setCaptureDocType("payment_plan");
+                  setCaptureDocUrl(undefined);
+                  setLeadCaptureOpen(true);
+                }}
+              />
+            </div>
+            )}
+
+          {/* BROCHURE - Full width two-column layout */}
           <div ref={brochureRef} id="brochure" className="mb-12 scroll-mt-40">
             <div className="jj-card-inner">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                {/* Left: Description */}
                 <div>
                   <h3 className="text-h3-sm font-medium text-foreground mb-4">Project Brochure</h3>
                   <p className="text-muted-foreground mb-4 leading-relaxed">
@@ -1067,9 +1084,7 @@ export default function ProjectDetailLayout({
                       <Star className="w-4 h-4 text-gold" /> Payment plan breakdown
                     </li>
                   </ul>
-                  {/* Request Brochure button removed - only Unlock Brochure on the card */}
                 </div>
-                {/* Right: Brochure card */}
                 <div className="flex justify-center">
                   <PremiumBrochureCard
                     projectName={project.name}
@@ -1104,62 +1119,43 @@ export default function ProjectDetailLayout({
             </div>
           )}
 
-           {/* PAYMENT PLAN VISUALIZATION (Reelly-style enhanced) */}
-           {(true) && ( /* Always show payment section */
-           <div ref={paymentRef} id="payment" className="mb-16 scroll-mt-40">
-              <PaymentPlanVisualization
-                paymentPlan={project.payment_plan}
-                paymentBreakdown={project.payment_breakdown}
-                handoverDate={project.handover_date}
-                downPaymentPercent={project.down_payment_percent}
-                projectName={project.name}
-                onRegisterInterest={() => {
-                  setCaptureDocType("payment_plan");
-                  setCaptureDocUrl(undefined);
-                  setLeadCaptureOpen(true);
-                }}
-              />
-             
-              {/* Payment plan documents are now shown exclusively via BookStyleDocuments */}
-            </div>
-            )}
-
-           {/* DLD MARKET WIDGET + AI ANALYZER (under payment/brochure area) */}
-           <div className="py-6 md:py-8">
-             <div className="flex items-center justify-center gap-6">
-               <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-               <div className="w-2 h-2 rotate-45 bg-gold/40" />
-               <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-             </div>
-           </div>
-           <div className="mb-8">
-             <DLDMarketWidget />
-           </div>
-
-           <div ref={aiRef} id="ai" className="mb-12 scroll-mt-40">
-             <ProjectAIAnalyzer
-               projectName={project.name}
-               areaName={project.area_name || project.location || "UAE"}
-               developer={project.developer?.name}
-               developerSlug={project.developer?.slug}
-               priceFrom={project.price_from ?? undefined}
-               handoverDate={project.handover_date ?? undefined}
-               amenities={project.amenities ?? undefined}
-               emirate={project.emirate}
-             />
-           </div>
-
-           {/* MORTGAGE CALCULATOR */}
+           {/* MORTGAGE CALCULATOR (Order B: after brochure) */}
            <div ref={mortgageRef} className="mb-20 scroll-mt-32">
-             <div className="jj-card-inner p-0 overflow-hidden">
-               <MortgageCalculator
-                 defaultPrice={project.price_from ?? 2000000}
-                 compact={false}
-                 context={{ projectName: project.name, location: project.location || undefined }}
-                 showAssistant
-               />
-             </div>
-           </div>
+              <div className="jj-card-inner p-0 overflow-hidden">
+                <MortgageCalculator
+                  defaultPrice={project.price_from ?? 2000000}
+                  compact={false}
+                  context={{ projectName: project.name, location: project.location || undefined }}
+                  showAssistant
+                />
+              </div>
+            </div>
+
+           {/* JBJ AI ANALYZER (Order B: after mortgage) */}
+           <div ref={aiRef} id="ai" className="mb-12 scroll-mt-40">
+              <ProjectAIAnalyzer
+                projectName={project.name}
+                areaName={project.area_name || project.location || "UAE"}
+                developer={project.developer?.name}
+                developerSlug={project.developer?.slug}
+                priceFrom={project.price_from ?? undefined}
+                handoverDate={project.handover_date ?? undefined}
+                amenities={project.amenities ?? undefined}
+                emirate={project.emirate}
+              />
+            </div>
+
+           {/* DLD MARKET WIDGET (Order B: after AI) */}
+           <div className="py-6 md:py-8">
+              <div className="flex items-center justify-center gap-6">
+                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+                <div className="w-2 h-2 rotate-45 bg-gold/40" />
+                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+              </div>
+            </div>
+            <div className="mb-8">
+              <DLDMarketWidget />
+            </div>
 
            {/* INVESTMENT METRICS SECTION */}
            {(project.roi_estimate || project.rental_yield_estimate) && (
