@@ -56,6 +56,7 @@ interface CRMTask {
 
 interface FoundersTaskDashboardProps {
   onStatsChange?: () => void;
+  initialFilter?: string | null;
 }
 
 const priorityColors: Record<string, string> = {
@@ -98,14 +99,25 @@ const statusConfig: Record<string, { icon: React.ReactNode; color: string; bgCol
   },
 };
 
-const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsChange }) => {
+const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsChange, initialFilter }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [crmTasks, setCrmTasks] = useState<CRMTask[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<'all' | 'pending' | 'in_progress' | 'completed'>('all');
+  const [filter, setFilter] = useState<'all' | 'pending' | 'in_progress' | 'completed'>(
+    (initialFilter === 'completed' || initialFilter === 'pending' || initialFilter === 'in_progress') ? initialFilter : 'all'
+  );
   const [expandedTask, setExpandedTask] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (initialFilter) {
+      const mapped = initialFilter === 'awaiting_approval' ? 'all' : initialFilter;
+      if (mapped === 'completed' || mapped === 'pending' || mapped === 'in_progress' || mapped === 'all') {
+        setFilter(mapped);
+      }
+    }
+  }, [initialFilter]);
 
   useEffect(() => {
     if (user) {
