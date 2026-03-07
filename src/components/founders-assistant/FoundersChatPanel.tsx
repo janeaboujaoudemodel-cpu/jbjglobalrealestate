@@ -418,8 +418,8 @@ Just type naturally or use commands like \`/schedule\`, \`/email\`, or mention t
               )}
               <div className={`max-w-[80%] ${
                 message.role === 'user' 
-                  ? 'bg-gradient-to-r from-gold to-amber-500 text-black' 
-                  : 'bg-white text-black border border-gold/30 shadow-sm'
+                  ? 'bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-white' 
+                  : 'bg-white text-black border border-[#C9A84C]/30 shadow-sm'
               } rounded-2xl px-4 py-3`}>
                 {message.isTyping ? (
                   <div className="flex gap-1.5 py-1 px-2">
@@ -489,8 +489,8 @@ Just type naturally or use commands like \`/schedule\`, \`/email\`, or mention t
                 )}
               </div>
               {message.role === 'user' && (
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gold to-amber-500 flex items-center justify-center ml-2 flex-shrink-0 shadow-sm">
-                  <User className="w-4 h-4 text-black" />
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#C9A84C] to-[#B8973F] flex items-center justify-center ml-2 flex-shrink-0 shadow-sm">
+                  <User className="w-4 h-4 text-white" />
                 </div>
               )}
             </motion.div>
@@ -682,7 +682,7 @@ Just type naturally or use commands like \`/schedule\`, \`/email\`, or mention t
           <Button
             onClick={handleSendMessage}
             disabled={(!input.trim() && pendingFiles.length === 0) || isLoading}
-            className="bg-gradient-to-r from-gold to-amber-500 hover:from-amber-500 hover:to-gold text-black w-11 h-11 p-0"
+            className="bg-gradient-to-r from-[#C9A84C] to-[#B8973F] hover:from-[#B8973F] hover:to-[#C9A84C] text-white w-11 h-11 p-0"
           >
             {isLoading ? (
               <Loader2 className="w-5 h-5 animate-spin" />
