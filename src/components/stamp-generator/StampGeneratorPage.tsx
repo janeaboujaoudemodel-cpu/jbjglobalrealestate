@@ -1024,7 +1024,7 @@ export default function StampGeneratorPage() {
                   {favoriteConcepts.map(c => (
                     <ConceptCard key={c.id} concept={c} svgOverride={svgOverrides[c.id]}
                       selectedId={selectedId} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily}
-                      fontBold={fontBold} fontItalic={fontItalic} manualFontSize={manualFontSize}
+                      fontBold={fontBold} fontItalic={fontItalic} manualFontSize={manualFontSize} inkMode={inkMode}
                       togglingFav={togglingFav} onSelect={handleSelectConcept} onToggleFav={toggleFavorite} onEditText={handleEditText}/>
                   ))}
                 </div>
