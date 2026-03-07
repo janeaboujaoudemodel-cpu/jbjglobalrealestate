@@ -119,12 +119,24 @@ const projectSchema = {
 
 // ========== BATCH PROCESSING: Fetch files from storage & process in groups ==========
 
-const BATCH_SIZE = 3;
+const BATCH_SIZE = 2;
+const AI_FETCH_TIMEOUT_MS = 55000; // 55s to stay within edge function limits
 
 async function updateJobProgress(supabase: any, jobId: string, progress: string) {
   await supabase.from("ai_job_master").update({
-    output_payload: { progress },
+    output_payload: { progress, updated_at: new Date().toISOString() },
   }).eq("id", jobId);
+}
+
+async function fetchAIWithTimeout(url: string, options: RequestInit, timeoutMs = AI_FETCH_TIMEOUT_MS): Promise<Response> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const res = await fetch(url, { ...options, signal: controller.signal });
+    return res;
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 async function fetchFileFromUrl(url: string): Promise<{ base64: string; ok: boolean }> {
