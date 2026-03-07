@@ -1043,32 +1043,6 @@ export default function ProjectDetailLayout({
             </div>
           )}
 
-          {/* AI ANALYZER SECTION */}
-          <div ref={aiRef} id="ai" className="mb-12 scroll-mt-40">
-            <ProjectAIAnalyzer
-              projectName={project.name}
-              areaName={project.area_name || project.location || "UAE"}
-              developer={project.developer?.name}
-              developerSlug={project.developer?.slug}
-              priceFrom={project.price_from ?? undefined}
-              handoverDate={project.handover_date ?? undefined}
-              amenities={project.amenities ?? undefined}
-              emirate={project.emirate}
-            />
-          </div>
-
-          {/* Gold divider before DLD - increased spacing */}
-          <div className="py-6 md:py-8">
-            <div className="flex items-center justify-center gap-6">
-              <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-              <div className="w-2 h-2 rotate-45 bg-gold/40" />
-              <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-            </div>
-          </div>
-          <div className="mb-8">
-            <DLDMarketWidget />
-          </div>
-
           {/* BROCHURE - Full width two-column layout - Always visible */}
           <div ref={brochureRef} id="brochure" className="mb-12 scroll-mt-40">
             <div className="jj-card-inner">

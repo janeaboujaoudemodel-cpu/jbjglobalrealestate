@@ -180,11 +180,30 @@ export function getHighResImageUrl(url: string): string {
 /**
  * Filter and normalize an array of image objects
  */
+/**
+ * Normalize a URL for deduplication (strip query params, trailing slashes, protocol)
+ */
+function normalizeUrlForDedup(url: string): string {
+  try {
+    const u = new URL(url);
+    return (u.host + u.pathname).replace(/\/+$/, "").toLowerCase();
+  } catch {
+    return url.toLowerCase().replace(/\?.*$/, "").replace(/\/+$/, "");
+  }
+}
+
 export function filterValidImages<T extends { url?: string }>(
   images: T[]
 ): T[] {
+  const seen = new Set<string>();
   return images
-    .filter((img) => isValidImageUrl(img?.url))
+    .filter((img) => {
+      if (!isValidImageUrl(img?.url)) return false;
+      const key = normalizeUrlForDedup(img.url!);
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    })
     .map((img) => ({
       ...img,
       url: normalizeProvidentImageUrl(img.url!),
