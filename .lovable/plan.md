@@ -1,41 +1,75 @@
 
 
-## Plan: Fix All Email Issues Across All Templates
+# E-Signature System: Bug Fixes, Email Updates, UI Restyle, and Access Control
 
-### Problems Identified
+## Issues Identified
 
-1. **Recommended For You icons disappeared** — Inline SVGs are stripped by Gmail and most email clients. Must revert to hosted PNG images (`ai-tools.png`, `guides.png`, `properties.png` already exist in `public/email-icons/`).
+### Bug: "Unable to Load Document" on `/sign/:token`
+The `SignDocument.tsx` page queries `esign_envelopes` without authentication (it's a public route). However, the RLS policy on `esign_envelopes` requires `auth.uid() = sender_id` for SELECT. Anonymous users (recipients clicking the signing link) get zero rows back, causing "Document not found". This is the root cause.
 
-2. **Social media footer icons not rendering** — Same issue: `socialLinksFooter()` loads external `.svg` files via `<img>` tags, but Gmail blocks SVG images entirely. Must switch to hosted `.png` files. Currently missing `social-facebook.png` — need to confirm or create it.
+**Fix**: Add an RLS policy allowing anonymous SELECT on `esign_envelopes` when the envelope has a matching recipient with a valid signing token. Alternatively, move the entire data-fetching to the `esign-process-signature` edge function (which uses service role key). The cleanest approach: add a new RLS policy:
+```sql
+CREATE POLICY "Public can view envelope via recipient token"
+  ON public.esign_envelopes FOR SELECT
+  USING (
+    EXISTS (
+      SELECT 1 FROM public.esign_recipients
+      WHERE esign_recipients.envelope_id = esign_envelopes.id
+        AND esign_recipients.signing_token IS NOT NULL
+    )
+  );
+```
+This is safe because it only allows reading envelopes that have recipients with signing tokens, and the actual token validation still happens in code.
 
-3. **Email split into multiple visual cards** — Several sub-sections (`ticketSupportEmbed`, `readyToGetStartedHtml`, `recommendedActionsHtml`) each have their own `border`, `border-radius`, and `background` styles creating distinct visual boxes. These need to be softened so they sit seamlessly inside the single continuous card.
+### Bug: Contact Email Shows Personal Gmail
+In `SignDocument.tsx` line 454, the footer shows `janeaboujaoudenails@gmail.com`. Must be `CONTACT@JBJ.AE`.
 
-### Changes (all in `supabase/functions/_shared/email-html.ts`)
+### Bug: Reminder Email Says "Jane is waiting"
+In `esign-send-reminder/index.ts`, the email says "a friendly reminder that [sender_name] is waiting for your signature". Must say "our team is waiting for your signature".
 
-#### A. Recommended For You — Revert to PNG hosted images
-- Change `recommendedCard()` back to using `iconImg()` with PNG paths
-- Remove the `RECOMMENDED_ICONS` inline SVG object
-- Ensure circular frame clips the PNG with `overflow:hidden` on the `<td>` to prevent square backgrounds
-- Signature: `recommendedCard(title, href, iconPath, alt)` — restore the original parameters
+### Bug: Send-for-signature Email Contact Line
+In `esign-send-for-signature/index.ts` and `esign-complete-envelope/index.ts`, the footer says "contact [sender_email]". Must say "contact CONTACT@JBJ.AE".
 
-#### B. Social Footer — Switch to PNG with white pearl background
-- Replace `socialLinksFooter()` to use the inline `SVG` object icons (instagram, facebook, linkedin, tiktok, youtube) that are already defined at the top of the file — these render as raw HTML inside `<td>` elements, not as `<img>` tags, so they should survive email client processing
-- Actually, since Gmail strips ALL SVG (both inline and `<img>`), switch to using the `.png` files: `social-instagram.png`, `social-linkedin.png`, `social-tiktok.png`, `social-youtube.png`
-- Create `social-facebook.png` if missing
-- Style each icon circle: white/pearl (#FDFBF7) background, gold border, black icon inside
+### UI: EnvelopeDetail.tsx is Gray/White
+The `EnvelopeDetail.tsx` page uses default `bg-gradient-to-br from-background to-muted/30` and plain white cards. Must be updated to Champagne Gold standard.
 
-#### C. Single Card Layout — Remove visual fragmentation
-- `ticketSupportEmbed()`: Remove the heavy gradient background and red border; make it blend into the card
-- `readyToGetStartedHtml()`: Remove the outer border and separate background so it flows within the card
-- `inquiryBox()`: Soften its standalone bordered look
-- Keep all content inside the single `emailShell` wrapper card with no sub-borders that create separation
+---
 
-#### D. Deploy + Send Test Email
-- Deploy the updated edge function
-- Immediately send a test welcome email to `janeaboujaoudenails@gmail.com`
-- Take a screenshot as proof
+## Plan
 
-### Files Modified
-- `supabase/functions/_shared/email-html.ts` — all icon and layout fixes
-- `public/email-icons/social-facebook.png` — create if missing (or use existing assets)
+### 1. Fix RLS — Allow Public Envelope Access via Signing Token
+**Migration SQL**: Add a new SELECT policy on `esign_envelopes` that allows reading when the envelope has a linked recipient with a signing token. This enables the `/sign/:token` page to load the envelope data.
+
+### 2. Fix All Email Templates — Contact & Wording
+**Files**:
+- `supabase/functions/esign-send-reminder/index.ts`: Change "friendly reminder that ${sender_name} is waiting" to "friendly reminder that our team is waiting". Change footer contact to `CONTACT@JBJ.AE`.
+- `supabase/functions/esign-send-for-signature/index.ts`: Change footer contact to `CONTACT@JBJ.AE`.
+- `supabase/functions/esign-complete-envelope/index.ts`: Change footer contact to `CONTACT@JBJ.AE`.
+
+### 3. Fix SignDocument.tsx Footer
+Change the contact email from `janeaboujaoudenails@gmail.com` to `CONTACT@JBJ.AE`.
+
+### 4. Restyle EnvelopeDetail.tsx to Champagne Gold
+Apply the champagne gold gradient background, gold-bordered cards, and consistent styling matching the `ESignatureDashboard.tsx` pattern. Update:
+- Page background: champagne gradient within black outer
+- Cards: `bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/20`
+- Status badges: keep existing colors (they're semantic)
+- Activity log icons: gold accent backgrounds
+- Back button: align size with header icons
+
+### 5. Deploy Edge Functions and Test
+Deploy all modified edge functions: `esign-send-reminder`, `esign-send-for-signature`, `esign-complete-envelope`.
+
+---
+
+## Files to Modify
+1. **Database migration** — Add public SELECT policy on `esign_envelopes`
+2. **`src/pages/e-signature/SignDocument.tsx`** — Fix contact email
+3. **`src/pages/e-signature/EnvelopeDetail.tsx`** — Champagne Gold restyle
+4. **`supabase/functions/esign-send-reminder/index.ts`** — Fix wording and contact
+5. **`supabase/functions/esign-send-for-signature/index.ts`** — Fix contact
+6. **`supabase/functions/esign-complete-envelope/index.ts`** — Fix contact
+
+## Not Touched
+- `DocumentFieldPlacer.tsx`, `AISignatureDesigner.tsx`, `ContinueSearching.tsx`, `ProjectCard.tsx`, `LeadCaptureModal.tsx` — per user instruction, no changes to these files.
 
