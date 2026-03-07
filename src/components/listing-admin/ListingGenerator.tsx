@@ -279,6 +279,20 @@ const ListingGenerator = () => {
     return () => clearTimeout(timeout);
   }, [syncDraftToCloud]);
 
+  // Global window-level drag prevention (stops browser from opening files in new tab)
+  useEffect(() => {
+    const preventDefaults = (e: DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+    };
+    window.addEventListener("dragover", preventDefaults);
+    window.addEventListener("drop", preventDefaults);
+    return () => {
+      window.removeEventListener("dragover", preventDefaults);
+      window.removeEventListener("drop", preventDefaults);
+    };
+  }, []);
+
   // Drag & drop handlers
   const handleDragEnter = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -297,6 +311,7 @@ const ListingGenerator = () => {
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    e.dataTransfer.dropEffect = "copy";
   }, []);
 
   const addFiles = useCallback(async (fileList: FileList | File[]) => {
