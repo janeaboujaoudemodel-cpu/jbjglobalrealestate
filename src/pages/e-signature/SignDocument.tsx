@@ -328,20 +328,16 @@ export default function SignDocument() {
           </p>
         </div>
 
-        {/* Document Info */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">{recipientData?.envelope.name}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">
-                  Signing as: <span className="font-medium text-foreground">{recipientData?.name}</span>
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Email: {recipientData?.email}
-                </p>
+        {/* Signer Info Card */}
+        <Card className="border-[hsl(var(--gold)/.3)] bg-gradient-to-r from-amber-50 to-orange-50">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-full bg-[hsl(var(--gold)/.15)] flex items-center justify-center text-xl font-bold text-[hsl(var(--gold))]">
+                {recipientData?.name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)}
+              </div>
+              <div className="flex-1">
+                <p className="font-semibold text-lg text-foreground">{recipientData?.name}</p>
+                <p className="text-sm text-muted-foreground">{recipientData?.email}</p>
               </div>
               <Button 
                 variant="outline" 
@@ -354,6 +350,18 @@ export default function SignDocument() {
                 Download PDF
               </Button>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Document Info & Preview */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">{recipientData?.envelope.name}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm text-muted-foreground">
+              From: <span className="font-medium text-foreground">{recipientData?.envelope.sender_name || recipientData?.envelope.sender_email}</span>
+            </p>
 
             {/* Inline centered PDF preview */}
             {docUrl && (
@@ -387,8 +395,9 @@ export default function SignDocument() {
             {recipientData?.fields.some(f => f.field_type === "initials") && (
               <div>
                 <label className="block text-sm font-medium mb-2">
-                  Draw your initials below *
+                  Your Initials: <span className="text-[hsl(var(--gold))] font-bold text-lg ml-2">{recipientData?.name?.split(' ').map(n => n[0]).join('').toUpperCase()}</span>
                 </label>
+                <p className="text-xs text-muted-foreground mb-2">Draw your initials below, or use the auto-generated ones above as reference.</p>
                 <ESignaturePad
                   onSignatureChange={setInitialsData}
                   height={100}

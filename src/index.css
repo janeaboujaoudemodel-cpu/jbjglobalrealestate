@@ -1826,3 +1826,12 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
 @media (min-width: 1024px) {
   :root { --responsive-header-height: 128px; }
 }
+
+/* Hide native scrollbar for horizontal scroll containers */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

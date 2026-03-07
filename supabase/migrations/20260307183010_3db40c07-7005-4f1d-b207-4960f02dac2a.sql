@@ -1,0 +1,1 @@
+ALTER TYPE esign_field_type ADD VALUE IF NOT EXISTS 'stamp';

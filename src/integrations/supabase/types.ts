@@ -24122,7 +24122,13 @@ export type Database = {
         | "declined"
         | "expired"
         | "voided"
-      esign_field_type: "signature" | "initials" | "date" | "text" | "checkbox"
+      esign_field_type:
+        | "signature"
+        | "initials"
+        | "date"
+        | "text"
+        | "checkbox"
+        | "stamp"
       esign_recipient_status:
         | "pending"
         | "sent"
@@ -24555,7 +24561,14 @@ export const Constants = {
         "expired",
         "voided",
       ],
-      esign_field_type: ["signature", "initials", "date", "text", "checkbox"],
+      esign_field_type: [
+        "signature",
+        "initials",
+        "date",
+        "text",
+        "checkbox",
+        "stamp",
+      ],
       esign_recipient_status: [
         "pending",
         "sent",

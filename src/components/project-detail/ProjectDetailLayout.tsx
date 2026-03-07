@@ -651,7 +651,7 @@ export default function ProjectDetailLayout({
       >
         {/* Row 1: Filter Shortcut Bar */}
         <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-2 px-2">
-          <div className="max-w-full overflow-x-auto scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch' }}>
+          <div className="max-w-full overflow-x-auto scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
             <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} />
           </div>
         </div>
@@ -659,7 +659,7 @@ export default function ProjectDetailLayout({
         {/* Row 2: Curated Shortcuts */}
         <div className="bg-gradient-to-r from-[#EDE0C8] via-[#E2D4B8] to-[#D4C4A8] border-b border-gold/30 shadow-md">
           <div className="container mx-auto px-4">
-            <div ref={tabNavRef} className="overflow-x-auto scrollbar-hide" style={{ touchAction: 'pan-x', WebkitOverflowScrolling: 'touch', overscrollBehaviorX: 'contain' }}>
+            <div ref={tabNavRef} className="overflow-x-auto scrollbar-hide" style={{ touchAction: 'pan-x', WebkitOverflowScrolling: 'touch', overscrollBehaviorX: 'contain', scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
               <div className="flex items-center gap-1 py-1.5">
                 {visibleTabs.map((tab) => (
                   <button
