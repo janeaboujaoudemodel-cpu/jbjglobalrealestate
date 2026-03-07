@@ -402,7 +402,7 @@ export default function CreateEnvelope() {
       const fieldInserts = signatureFields.map(f => ({
         envelope_id: envelope.id,
         recipient_id: recipientIdMap.get(f.recipientId)!,
-        field_type: f.type,
+        field_type: f.type as any,
         page_number: f.pageNumber,
         x_position: f.x,
         y_position: f.y,
