@@ -102,8 +102,11 @@ export default function CreateEnvelope() {
   // Step 1: Document
   const [documentName, setDocumentName] = useState("");
   const [documentDescription, setDocumentDescription] = useState("");
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+  const [isDragOver, setIsDragOver] = useState(false);
+  const dragCounter = useRef(0);
 
   // Step 2: Recipients
   const [recipients, setRecipients] = useState<Recipient[]>([
@@ -130,26 +133,113 @@ export default function CreateEnvelope() {
     ).slice(0, 5);
   }, [contactFilter, savedContacts]);
 
-  const handleFileUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const ACCEPTED_TYPES = [
+    "application/pdf",
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+    "image/heic",
+    "image/heif",
+  ];
 
-    if (file.type !== "application/pdf") {
-      toast.error("Please upload a PDF file");
-      return;
+  const addDocumentFiles = useCallback((files: FileList | File[]) => {
+    const arr = Array.from(files);
+    const valid: File[] = [];
+
+    for (const file of arr) {
+      if (file.size > 50 * 1024 * 1024) {
+        toast.error(`${file.name} is too large (max 50MB)`);
+        continue;
+      }
+
+      const isAccepted = ACCEPTED_TYPES.includes(file.type) ||
+        file.name.match(/\.(pdf|jpg|jpeg|png|webp|heic|heif)$/i);
+
+      if (!isAccepted) {
+        toast.error(`${file.name}: unsupported format. Use PDF or images.`);
+        continue;
+      }
+      valid.push(file);
     }
 
-    if (file.size > 50 * 1024 * 1024) {
-      toast.error("File size must be less than 50MB");
-      return;
+    if (valid.length === 0) return;
+
+    setUploadedFiles(prev => [...prev, ...valid]);
+
+    // Auto-select first PDF as the signing document
+    const firstPdf = valid.find(f => f.type === "application/pdf" || f.name.toLowerCase().endsWith(".pdf"));
+    if (firstPdf && !pdfFile) {
+      setPdfFile(firstPdf);
+      setDocumentName(firstPdf.name.replace(/\.pdf$/i, ""));
+      setPdfUrl(URL.createObjectURL(firstPdf));
     }
 
+    toast.success(`${valid.length} file(s) added`);
+  }, [pdfFile]);
+
+  const handleFileUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      addDocumentFiles(e.target.files);
+      e.target.value = "";
+    }
+  }, [addDocumentFiles]);
+
+  const removeUploadedFile = useCallback((index: number) => {
+    setUploadedFiles(prev => {
+      const removed = prev[index];
+      const next = prev.filter((_, i) => i !== index);
+      // If removed file was the active PDF, clear it
+      if (removed === pdfFile) {
+        setPdfFile(null);
+        setPdfUrl(null);
+        // Auto-select next PDF if available
+        const nextPdf = next.find(f => f.type === "application/pdf" || f.name.toLowerCase().endsWith(".pdf"));
+        if (nextPdf) {
+          setPdfFile(nextPdf);
+          setDocumentName(nextPdf.name.replace(/\.pdf$/i, ""));
+          setPdfUrl(URL.createObjectURL(nextPdf));
+        }
+      }
+      return next;
+    });
+  }, [pdfFile]);
+
+  const selectAsPdf = useCallback((file: File) => {
+    if (pdfUrl) URL.revokeObjectURL(pdfUrl);
     setPdfFile(file);
-    setDocumentName(file.name.replace(".pdf", ""));
-    
-    const url = URL.createObjectURL(file);
-    setPdfUrl(url);
+    setDocumentName(file.name.replace(/\.pdf$/i, ""));
+    setPdfUrl(URL.createObjectURL(file));
+  }, [pdfUrl]);
+
+  // Drag & drop handlers
+  const handleDragEnter = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dragCounter.current++;
+    if (dragCounter.current === 1) setIsDragOver(true);
   }, []);
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dragCounter.current--;
+    if (dragCounter.current === 0) setIsDragOver(false);
+  }, []);
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  }, []);
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dragCounter.current = 0;
+    setIsDragOver(false);
+    if (e.dataTransfer.files?.length) {
+      addDocumentFiles(e.dataTransfer.files);
+    }
+  }, [addDocumentFiles]);
 
   const addRecipient = () => {
     setRecipients([
