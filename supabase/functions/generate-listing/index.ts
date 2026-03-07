@@ -37,10 +37,8 @@ function getSupabase() {
 async function getAuthenticatedUserId(req: Request): Promise<string | null> {
   const authHeader = req.headers.get("Authorization") || "";
   if (!authHeader.startsWith("Bearer ")) return null;
-
   const token = authHeader.replace("Bearer ", "").trim();
   if (!token) return null;
-
   const supabase = getSupabase();
   const { data, error } = await supabase.auth.getUser(token);
   if (error || !data?.user?.id) return null;
@@ -50,19 +48,12 @@ async function getAuthenticatedUserId(req: Request): Promise<string | null> {
 async function triggerBackgroundProcessing(jobId: string) {
   const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
   const serviceRole = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-
   const endpoint = `${supabaseUrl}/functions/v1/generate-listing`;
-  const body = JSON.stringify({ action: "process", job_id: jobId });
-
   try {
-    // Fire-and-forget background execution (works even when EdgeRuntime.waitUntil is unavailable)
     fetch(endpoint, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${serviceRole}`,
-      },
-      body,
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${serviceRole}` },
+      body: JSON.stringify({ action: "process", job_id: jobId }),
     }).catch((err) => console.error("[generate-listing] Background trigger failed:", err));
   } catch (err) {
     console.error("[generate-listing] triggerBackgroundProcessing error:", err);
@@ -126,7 +117,67 @@ const projectSchema = {
   required: ["name"],
 };
 
-async function runExtraction(jobId: string, files: any[], url: string | null, description: string | null) {
+// ========== BATCH PROCESSING: Fetch files from storage & process in groups ==========
+
+const BATCH_SIZE = 3;
+
+async function updateJobProgress(supabase: any, jobId: string, progress: string) {
+  await supabase.from("ai_job_master").update({
+    output_payload: { progress },
+  }).eq("id", jobId);
+}
+
+async function fetchFileFromUrl(url: string): Promise<{ base64: string; ok: boolean }> {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return { base64: "", ok: false };
+    const buf = await res.arrayBuffer();
+    // Convert to base64
+    const bytes = new Uint8Array(buf);
+    let binary = "";
+    for (let i = 0; i < bytes.length; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return { base64: btoa(binary), ok: true };
+  } catch {
+    return { base64: "", ok: false };
+  }
+}
+
+function mergeExtractedProjects(allBatchResults: any[][]): any[] {
+  // Flatten all batch results
+  const allProjects: any[] = [];
+  const seenNames = new Map<string, number>();
+
+  for (const batchProjects of allBatchResults) {
+    for (const project of batchProjects) {
+      const name = (project.name || "").toLowerCase().trim();
+      if (name && seenNames.has(name)) {
+        // Merge into existing project
+        const idx = seenNames.get(name)!;
+        const existing = allProjects[idx];
+        // Merge arrays
+        for (const key of ["amenities", "keyFeatures", "highlights", "unitTypes", "faqs", "nearbyLandmarks", "paymentBreakdown", "unitDetails", "comparableProjects"]) {
+          if (Array.isArray(project[key]) && project[key].length > 0) {
+            existing[key] = [...new Set([...(existing[key] || []), ...project[key]])];
+          }
+        }
+        // Fill in null fields
+        for (const [k, v] of Object.entries(project)) {
+          if (v !== null && v !== undefined && (existing[k] === null || existing[k] === undefined)) {
+            existing[k] = v;
+          }
+        }
+      } else {
+        seenNames.set(name, allProjects.length);
+        allProjects.push(project);
+      }
+    }
+  }
+  return allProjects;
+}
+
+async function runExtraction(jobId: string, fileRefs: any[], url: string | null, description: string | null) {
   const supabase = getSupabase();
   const lovableApiKey = Deno.env.get("LOVABLE_API_KEY");
   const firecrawlApiKey = Deno.env.get("FIRECRAWL_API_KEY");
@@ -135,11 +186,35 @@ async function runExtraction(jobId: string, files: any[], url: string | null, de
   try {
     await supabase.from("ai_job_master").update({ status: "processing" }).eq("id", jobId);
 
-    const hasFiles = files && files.length > 0 && files.some((f: any) => f.base64);
+    // Files now contain storageUrl instead of base64
+    const storageFiles = (fileRefs || []).filter((f: any) => f.storageUrl);
+    const inlineFiles = (fileRefs || []).filter((f: any) => f.base64 && !f.storageUrl);
+    const totalFiles = storageFiles.length + inlineFiles.length;
 
-    const contentParts: any[] = [{
-      type: "text",
-      text: `You are a senior UAE real estate data extraction specialist. Extract COMPLETE listing data.
+    // Scrape URL if present
+    let scrapedContent = "";
+    if (url && firecrawlApiKey) {
+      await updateJobProgress(supabase, jobId, "Scraping website...");
+      try {
+        let formattedUrl = url.trim();
+        if (!formattedUrl.startsWith("http")) formattedUrl = `https://${formattedUrl}`;
+        const scrapeRes = await fetch("https://api.firecrawl.dev/v1/scrape", {
+          method: "POST",
+          headers: { "Authorization": `Bearer ${firecrawlApiKey}`, "Content-Type": "application/json" },
+          body: JSON.stringify({ url: formattedUrl, formats: ["markdown", "links"], onlyMainContent: true, waitFor: 5000, timeout: 30000 }),
+        });
+        if (scrapeRes.ok) {
+          const d = await scrapeRes.json();
+          scrapedContent = d?.data?.markdown || "";
+        } else {
+          await scrapeRes.text();
+        }
+      } catch (err) {
+        console.warn("[generate-listing] Scrape failed:", err);
+      }
+    }
+
+    const systemPrompt = `You are a senior UAE real estate data extraction specialist. Extract COMPLETE listing data.
 
 CRITICAL RULES:
 - Extract ONLY facts explicitly present. NEVER invent or guess.
@@ -152,74 +227,141 @@ CRITICAL RULES:
 MULTI-PROJECT RULE:
 - If content contains MULTIPLE DISTINCT projects (different names/buildings), return EACH as separate entry.
 - Do NOT merge different projects into one.
-- If all content is about ONE project, return array with one entry.`
-    }];
+- If all content is about ONE project, return array with one entry.`;
 
-    if (hasFiles) {
-      for (const file of files) {
+    const allBatchResults: any[][] = [];
+    let batchesProcessed = 0;
+
+    // Process storage files in batches of BATCH_SIZE
+    if (storageFiles.length > 0) {
+      const totalBatches = Math.ceil(storageFiles.length / BATCH_SIZE);
+
+      for (let batchIdx = 0; batchIdx < totalBatches; batchIdx++) {
+        const batch = storageFiles.slice(batchIdx * BATCH_SIZE, (batchIdx + 1) * BATCH_SIZE);
+        const batchLabel = `Analyzing batch ${batchIdx + 1} of ${totalBatches} (${batch.length} files)...`;
+        await updateJobProgress(supabase, jobId, batchLabel);
+        console.log(`[generate-listing] ${batchLabel}`);
+
+        const contentParts: any[] = [{ type: "text", text: systemPrompt }];
+
+        // Fetch each file from storage and add as base64
+        for (const file of batch) {
+          try {
+            const { base64, ok } = await fetchFileFromUrl(file.storageUrl);
+            if (ok && base64) {
+              contentParts.push({ type: "image_url", image_url: { url: `data:${file.mimeType};base64,${base64}` } });
+              contentParts.push({ type: "text", text: `[Document: ${file.name}]` });
+            } else {
+              console.warn(`[generate-listing] Failed to fetch file: ${file.name}`);
+            }
+          } catch (err) {
+            console.warn(`[generate-listing] Error fetching ${file.name}:`, err);
+          }
+        }
+
+        // Add context from URL/description only in first batch
+        if (batchIdx === 0) {
+          if (scrapedContent) contentParts.push({ type: "text", text: `\n\n--- WEBSITE CONTENT ---\n${scrapedContent.substring(0, 50000)}` });
+          if (description) contentParts.push({ type: "text", text: `\n\n--- ADDITIONAL DESCRIPTION ---\n${description}` });
+        }
+
+        contentParts.push({ type: "text", text: "\n\nExtract ALL project data now. If MULTIPLE distinct projects, return each separately." });
+
+        try {
+          const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+            method: "POST",
+            headers: { "Authorization": `Bearer ${lovableApiKey}`, "Content-Type": "application/json" },
+            body: JSON.stringify({
+              model: "google/gemini-2.5-pro",
+              max_tokens: 12000,
+              temperature: 0.05,
+              messages: [{ role: "user", content: contentParts }],
+              tools: [{ type: "function", function: { name: "extract_projects", description: "Extract structured data for real estate projects.", parameters: { type: "object", properties: { projects: { type: "array", items: projectSchema } }, required: ["projects"] } } }],
+              tool_choice: { type: "function", function: { name: "extract_projects" } },
+            }),
+          });
+
+          if (!aiRes.ok) {
+            const errText = await aiRes.text();
+            console.error(`[generate-listing] AI batch ${batchIdx + 1} error: ${aiRes.status}`, errText);
+            // Continue with remaining batches on non-fatal errors
+            if (aiRes.status !== 429 && aiRes.status !== 402) continue;
+            throw new Error(aiRes.status === 429 ? "Rate limit exceeded" : "AI credits exhausted");
+          }
+
+          const aiData = await aiRes.json();
+          const toolCall = aiData?.choices?.[0]?.message?.tool_calls?.[0];
+          if (toolCall?.function?.arguments) {
+            const parsed = JSON.parse(toolCall.function.arguments);
+            const batchProjects = parsed.projects || (parsed.name ? [parsed] : []);
+            allBatchResults.push(batchProjects);
+            batchesProcessed++;
+          }
+        } catch (err) {
+          if ((err as Error).message?.includes("Rate limit") || (err as Error).message?.includes("credits")) throw err;
+          console.error(`[generate-listing] Batch ${batchIdx + 1} failed, continuing:`, err);
+        }
+      }
+    }
+
+    // Process inline base64 files (legacy / small payloads) as a single batch
+    if (inlineFiles.length > 0 || (storageFiles.length === 0 && (scrapedContent || description))) {
+      const progressMsg = inlineFiles.length > 0 
+        ? `Analyzing ${inlineFiles.length} inline document(s)...`
+        : "Analyzing content...";
+      await updateJobProgress(supabase, jobId, progressMsg);
+
+      const contentParts: any[] = [{ type: "text", text: systemPrompt }];
+      for (const file of inlineFiles) {
         if (file.base64 && file.mimeType) {
           contentParts.push({ type: "image_url", image_url: { url: `data:${file.mimeType};base64,${file.base64}` } });
           contentParts.push({ type: "text", text: `[Document: ${file.name}]` });
         }
       }
-    }
+      if (scrapedContent) contentParts.push({ type: "text", text: `\n\n--- WEBSITE CONTENT ---\n${scrapedContent.substring(0, 50000)}` });
+      if (description) contentParts.push({ type: "text", text: `\n\n--- ADDITIONAL DESCRIPTION ---\n${description}` });
+      contentParts.push({ type: "text", text: "\n\nExtract ALL project data now. If MULTIPLE distinct projects, return each separately." });
 
-    let scrapedContent = "";
-    if (url && firecrawlApiKey) {
-      try {
-        let formattedUrl = url.trim();
-        if (!formattedUrl.startsWith("http")) formattedUrl = `https://${formattedUrl}`;
+      const model = inlineFiles.length > 0 ? "google/gemini-2.5-pro" : "google/gemini-2.5-flash";
+      const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: { "Authorization": `Bearer ${lovableApiKey}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model,
+          max_tokens: 12000,
+          temperature: 0.05,
+          messages: [{ role: "user", content: contentParts }],
+          tools: [{ type: "function", function: { name: "extract_projects", description: "Extract structured data for real estate projects.", parameters: { type: "object", properties: { projects: { type: "array", items: projectSchema } }, required: ["projects"] } } }],
+          tool_choice: { type: "function", function: { name: "extract_projects" } },
+        }),
+      });
 
-        const scrapeRes = await fetch("https://api.firecrawl.dev/v1/scrape", {
-          method: "POST",
-          headers: { "Authorization": `Bearer ${firecrawlApiKey}`, "Content-Type": "application/json" },
-          body: JSON.stringify({ url: formattedUrl, formats: ["markdown", "links"], onlyMainContent: true, waitFor: 5000, timeout: 30000 }),
-        });
+      if (!aiRes.ok) {
+        const errText = await aiRes.text();
+        console.error("[generate-listing] AI error:", aiRes.status, errText);
+        throw new Error(aiRes.status === 429 ? "Rate limit exceeded" : aiRes.status === 402 ? "AI credits exhausted" : "AI extraction failed");
+      }
 
-        if (scrapeRes.ok) {
-          const d = await scrapeRes.json();
-          scrapedContent = d?.data?.markdown || "";
-        } else {
-          await scrapeRes.text();
-        }
-      } catch (err) {
-        console.warn("[generate-listing] Scrape failed:", err);
+      const aiData = await aiRes.json();
+      const toolCall = aiData?.choices?.[0]?.message?.tool_calls?.[0];
+      if (toolCall?.function?.arguments) {
+        const parsed = JSON.parse(toolCall.function.arguments);
+        allBatchResults.push(parsed.projects || (parsed.name ? [parsed] : []));
+        batchesProcessed++;
       }
     }
 
-    if (scrapedContent) contentParts.push({ type: "text", text: `\n\n--- WEBSITE CONTENT ---\n${scrapedContent.substring(0, 50000)}` });
-    if (description) contentParts.push({ type: "text", text: `\n\n--- ADDITIONAL DESCRIPTION ---\n${description}` });
-    contentParts.push({ type: "text", text: "\n\nExtract ALL project data now. If MULTIPLE distinct projects, return each separately." });
-
-    const model = hasFiles ? "google/gemini-2.5-pro" : "google/gemini-2.5-flash";
-
-    const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: { "Authorization": `Bearer ${lovableApiKey}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model,
-        max_tokens: 12000,
-        temperature: 0.05,
-        messages: [{ role: "user", content: contentParts }],
-        tools: [{ type: "function", function: { name: "extract_projects", description: "Extract structured data for real estate projects.", parameters: { type: "object", properties: { projects: { type: "array", items: projectSchema } }, required: ["projects"] } } }],
-        tool_choice: { type: "function", function: { name: "extract_projects" } },
-      }),
-    });
-
-    if (!aiRes.ok) {
-      const errText = await aiRes.text();
-      console.error("[generate-listing] AI error:", aiRes.status, errText);
-      throw new Error(aiRes.status === 429 ? "Rate limit exceeded" : aiRes.status === 402 ? "AI credits exhausted" : "AI extraction failed");
+    if (allBatchResults.length === 0 || allBatchResults.every(b => b.length === 0)) {
+      throw new Error("AI returned no structured data from any batch");
     }
 
-    const aiData = await aiRes.json();
-    const toolCall = aiData?.choices?.[0]?.message?.tool_calls?.[0];
-    if (!toolCall?.function?.arguments) throw new Error("AI did not return structured data");
+    await updateJobProgress(supabase, jobId, "Merging results and checking duplicates...");
 
-    const parsed = JSON.parse(toolCall.function.arguments);
-    const rawProjects: any[] = parsed.projects || (parsed.name ? [parsed] : []);
+    // Merge all batch results
+    const rawProjects = mergeExtractedProjects(allBatchResults);
 
-    const documentRecords = (files || []).map((f: any) => ({ name: humanizeDocTitle(f.name), type: classifyDocument(f.name), originalName: f.name }));
+    const allFileRefs = [...storageFiles, ...inlineFiles];
+    const documentRecords = allFileRefs.map((f: any) => ({ name: humanizeDocTitle(f.name), type: classifyDocument(f.name), originalName: f.name }));
 
     const projects = [];
     const allDuplicates: any[] = [];
@@ -227,7 +369,6 @@ MULTI-PROJECT RULE:
     for (const extracted of rawProjects) {
       const devId = await matchDeveloperId(supabase, extracted.developer);
       const slug = toSlug(extracted.name || "unnamed-project");
-
       const nameFragment = (extracted.name || "").substring(0, 30).replace(/'/g, "");
 
       const { data: pendingMatches } = await supabase
@@ -256,7 +397,16 @@ MULTI-PROJECT RULE:
       return true;
     });
 
-    const output = { success: true, projects, extracted: projects[0] || null, duplicates: uniqueDuplicates };
+    const totalBatchCount = Math.ceil(storageFiles.length / BATCH_SIZE) + (inlineFiles.length > 0 || (storageFiles.length === 0) ? 1 : 0);
+    const output = {
+      success: true,
+      projects,
+      extracted: projects[0] || null,
+      duplicates: uniqueDuplicates,
+      batchesProcessed,
+      totalBatches: totalBatchCount,
+      filesProcessed: totalFiles,
+    };
 
     await supabase.from("ai_job_master").update({
       status: "completed",
@@ -290,14 +440,13 @@ serve(async (req: Request) => {
     if (action === "poll" && job_id) {
       const { data: job, error } = await supabase
         .from("ai_job_master")
-        .select("status, output_payload, error_message, processing_time_ms, input_payload")
+        .select("status, output_payload, error_message, processing_time_ms")
         .eq("id", job_id)
         .single();
 
       if (error || !job) {
         return new Response(JSON.stringify({ success: false, error: "Job not found" }), {
-          status: 404,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
 
@@ -309,8 +458,7 @@ serve(async (req: Request) => {
 
       if (job.status === "failed") {
         return new Response(JSON.stringify({ success: false, error: job.error_message || "Extraction failed" }), {
-          status: 500,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
 
@@ -318,7 +466,9 @@ serve(async (req: Request) => {
         await triggerBackgroundProcessing(job_id);
       }
 
-      return new Response(JSON.stringify({ success: true, status: job.status, processing_time_ms: job.processing_time_ms }), {
+      // Return progress info if available
+      const progress = (job.output_payload as any)?.progress || null;
+      return new Response(JSON.stringify({ success: true, status: job.status, processing_time_ms: job.processing_time_ms, progress }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -332,8 +482,7 @@ serve(async (req: Request) => {
 
       if (error || !job) {
         return new Response(JSON.stringify({ success: false, error: "Job not found" }), {
-          status: 404,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
 
@@ -368,7 +517,6 @@ serve(async (req: Request) => {
       const projectDataObj = files;
       const mode = url;
 
-      // Clean the data: remove fields that don't exist in pending_project_imports
       const invalidColumns = ['source', 'completion_percentage', 'key_features', 'project_status', 'nearby_landmarks', 'property_type'];
       for (const col of invalidColumns) {
         delete projectDataObj[col];
@@ -408,21 +556,25 @@ serve(async (req: Request) => {
 
     if (!Deno.env.get("LOVABLE_API_KEY")) {
       return new Response(JSON.stringify({ success: false, error: "AI gateway not configured" }), {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
     const userId = await getAuthenticatedUserId(req);
     if (!userId) {
       return new Response(JSON.stringify({ success: false, error: "Authentication required" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
+    // Files now contain storageUrl references (not base64), so payload is tiny
     const payload = {
-      files: files || [],
+      files: (files || []).map((f: any) => ({
+        name: f.name,
+        mimeType: f.mimeType,
+        storageUrl: f.storageUrl || null,
+        base64: f.storageUrl ? undefined : (f.base64 || undefined), // Only keep base64 if no storage URL
+      })),
       url: url || null,
       description: description || null,
       fileCount: Array.isArray(files) ? files.length : 0,
@@ -439,8 +591,7 @@ serve(async (req: Request) => {
     if (jobErr || !job) {
       console.error("[generate-listing] Failed to create job:", jobErr);
       return new Response(JSON.stringify({ success: false, error: "Failed to start extraction" }), {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
@@ -459,8 +610,7 @@ serve(async (req: Request) => {
   } catch (error: unknown) {
     console.error("[generate-listing] Error:", error);
     return new Response(JSON.stringify({ success: false, error: error instanceof Error ? error.message : "Unknown error" }), {
-      status: 500,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 });
