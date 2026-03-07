@@ -262,6 +262,10 @@ const OwnerAuditPage = () => {
                 <Brain className="w-4 h-4 mr-2" />
                 AI Tools Audit
               </TabsTrigger>
+              <TabsTrigger value="delivery" className="data-[state=active]:bg-gold/20 data-[state=active]:text-gold">
+                <ClipboardCheck className="w-4 h-4 mr-2" />
+                Delivery Checklist
+              </TabsTrigger>
             </TabsList>
 
             {/* Routes Tab */}
