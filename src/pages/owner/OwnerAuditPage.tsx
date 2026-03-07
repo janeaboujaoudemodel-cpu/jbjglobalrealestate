@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { 
   Shield, ExternalLink, Check, X, AlertTriangle, 
   Eye, EyeOff, Layout, Menu, FileText, Search,
-  Filter, RefreshCw, Brain, Sparkles, Zap, AlertCircle
+  Filter, RefreshCw, Brain, Sparkles, Zap, AlertCircle,
+  ClipboardCheck, Camera
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -27,6 +28,9 @@ import {
   type AIToolStatus,
   type AIToolEntry 
 } from '@/data/ai-tools-verified-inventory';
+
+// Import delivery checklist
+import { DELIVERY_REQUIREMENTS, type DeliveryStatus, type DeliveryRequirement } from '@/config/delivery-checklist';
 
 // Route Inventory - Comprehensive list of all application routes
 const ROUTE_INVENTORY = [
