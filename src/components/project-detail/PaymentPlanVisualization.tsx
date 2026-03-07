@@ -1,16 +1,27 @@
 import { useState } from "react";
-import { CreditCard, Calendar, CheckCircle, Home, Percent, Clock, Wallet } from "lucide-react";
+import { CreditCard, Calendar, CheckCircle, Home, Percent, Clock, Wallet, List } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
 
-interface PaymentBreakdown {
+interface PaymentMilestone {
+  milestone: string;
+  percentage: number;
+  timing?: string;
+  amount?: number | null;
+  stage_type?: string;
+}
+
+interface PaymentBreakdownLegacy {
   down_payment?: string;
   during_construction?: string;
   on_completion?: string;
 }
 
+type PaymentBreakdownData = PaymentMilestone[] | PaymentBreakdownLegacy | null;
+
 interface PaymentPlanVisualizationProps {
   paymentPlan?: string | null;
-  paymentBreakdown?: PaymentBreakdown | null;
+  paymentBreakdown?: PaymentBreakdownData;
   handoverDate?: string | null;
   downPaymentPercent?: number | null;
   projectName: string;
@@ -43,19 +54,24 @@ export default function PaymentPlanVisualization({
   };
 
   const parsed = parsePaymentPlan(paymentPlan);
+
+  // Detect if paymentBreakdown is array (detailed) or legacy object
+  const isDetailedBreakdown = Array.isArray(paymentBreakdown);
+  const detailedMilestones: PaymentMilestone[] = isDetailedBreakdown ? (paymentBreakdown as PaymentMilestone[]) : [];
+  const legacyBreakdown = !isDetailedBreakdown ? (paymentBreakdown as PaymentBreakdownLegacy | null) : null;
   
   const milestones = [];
   
-  if (paymentBreakdown?.down_payment) {
+  if (legacyBreakdown?.down_payment) {
     milestones.push({
       label: "On Booking",
-      value: paymentBreakdown.down_payment,
+      value: legacyBreakdown.down_payment,
       icon: CheckCircle,
       color: "text-emerald-400",
       bgColor: "bg-emerald-500",
       ringColor: "ring-emerald-500/30",
     });
-  } else if (parsed || downPaymentPercent) {
+  } else if (!isDetailedBreakdown && (parsed || downPaymentPercent)) {
     milestones.push({
       label: "On Booking",
       value: `${downPaymentPercent || parsed?.booking || 10}%`,
@@ -64,18 +80,29 @@ export default function PaymentPlanVisualization({
       bgColor: "bg-emerald-500",
       ringColor: "ring-emerald-500/30",
     });
+  } else if (isDetailedBreakdown && detailedMilestones.length > 0) {
+    // Use first milestone as booking
+    const first = detailedMilestones[0];
+    milestones.push({
+      label: first.milestone || "On Booking",
+      value: `${first.percentage}%`,
+      icon: CheckCircle,
+      color: "text-emerald-400",
+      bgColor: "bg-emerald-500",
+      ringColor: "ring-emerald-500/30",
+    });
   }
   
-  if (paymentBreakdown?.during_construction) {
+  if (legacyBreakdown?.during_construction) {
     milestones.push({
       label: "During Construction",
-      value: paymentBreakdown.during_construction,
+      value: legacyBreakdown.during_construction,
       icon: Calendar,
       color: "text-gold",
       bgColor: "bg-gold",
       ringColor: "ring-gold/30",
     });
-  } else if (parsed?.construction) {
+  } else if (!isDetailedBreakdown && parsed?.construction) {
     milestones.push({
       label: "During Construction",
       value: `${parsed.construction}%`,
@@ -84,21 +111,43 @@ export default function PaymentPlanVisualization({
       bgColor: "bg-gold",
       ringColor: "ring-gold/30",
     });
+  } else if (isDetailedBreakdown && detailedMilestones.length > 2) {
+    // Sum middle milestones as construction
+    const middle = detailedMilestones.slice(1, -1);
+    const constructionPct = middle.reduce((s, m) => s + m.percentage, 0);
+    milestones.push({
+      label: "During Construction",
+      value: `${constructionPct}%`,
+      icon: Calendar,
+      color: "text-gold",
+      bgColor: "bg-gold",
+      ringColor: "ring-gold/30",
+    });
   }
   
-  if (paymentBreakdown?.on_completion) {
+  if (legacyBreakdown?.on_completion) {
     milestones.push({
       label: "On Handover",
-      value: paymentBreakdown.on_completion,
+      value: legacyBreakdown.on_completion,
       icon: Home,
       color: "text-champagne-dark",
       bgColor: "bg-champagne-dark",
       ringColor: "ring-champagne-dark/30",
     });
-  } else if (parsed?.handover) {
+  } else if (!isDetailedBreakdown && parsed?.handover) {
     milestones.push({
       label: "On Handover",
       value: `${parsed.handover}%`,
+      icon: Home,
+      color: "text-champagne-dark",
+      bgColor: "bg-champagne-dark",
+      ringColor: "ring-champagne-dark/30",
+    });
+  } else if (isDetailedBreakdown && detailedMilestones.length > 1) {
+    const last = detailedMilestones[detailedMilestones.length - 1];
+    milestones.push({
+      label: last.milestone || "On Handover",
+      value: `${last.percentage}%`,
       icon: Home,
       color: "text-champagne-dark",
       bgColor: "bg-champagne-dark",
@@ -108,8 +157,8 @@ export default function PaymentPlanVisualization({
 
   const getPercentageValue = (str?: string): number => {
     if (!str) return 0;
-    const match = str.match(/(\d+)/);
-    return match ? parseInt(match[1], 10) : 0;
+    const match = str.match(/(\d+(?:\.\d+)?)/);
+    return match ? parseFloat(match[1]) : 0;
   };
 
   const bookingPct = getPercentageValue(milestones[0]?.value);
@@ -245,6 +294,65 @@ export default function PaymentPlanVisualization({
                   <p className="text-sm font-medium text-muted-foreground">{milestone.label}</p>
                 </div>
               ))}
+            </div>
+          )}
+
+          {/* Detailed Payment Structure Card */}
+          {isDetailedBreakdown && detailedMilestones.length > 3 && (
+            <div className="mt-6 p-5 rounded-xl border border-gold/30 bg-gradient-to-br from-gold/5 to-transparent">
+              <div className="flex items-center gap-2 mb-4">
+                <List className="w-5 h-5 text-gold" />
+                <h4 className="font-semibold text-foreground">Detailed Payment Structure</h4>
+              </div>
+              <div className="space-y-0">
+                {detailedMilestones.map((step, idx) => {
+                  const isFirst = idx === 0;
+                  const isLast = idx === detailedMilestones.length - 1;
+                  return (
+                    <div 
+                      key={idx}
+                      className={cn(
+                        "flex items-center gap-3 px-4 py-3 border-b border-gold/10 last:border-b-0",
+                        isFirst && "bg-emerald-500/5",
+                        isLast && "bg-champagne/10",
+                      )}
+                    >
+                      {/* Step number */}
+                      <div className={cn(
+                        "w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold",
+                        isFirst ? "bg-emerald-500/20 text-emerald-400" :
+                        isLast ? "bg-champagne-dark/20 text-champagne-dark" :
+                        "bg-gold/15 text-gold"
+                      )}>
+                        {idx + 1}
+                      </div>
+                      {/* Milestone name */}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-foreground truncate">{step.milestone}</p>
+                        {step.timing && (
+                          <p className="text-xs text-muted-foreground">{step.timing}</p>
+                        )}
+                      </div>
+                      {/* Percentage */}
+                      <div className={cn(
+                        "text-sm font-bold flex-shrink-0",
+                        isFirst ? "text-emerald-400" :
+                        isLast ? "text-champagne-dark" :
+                        "text-gold"
+                      )}>
+                        {step.percentage}%
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              {/* Total */}
+              <div className="mt-3 pt-3 border-t border-gold/30 flex items-center justify-between px-4">
+                <span className="text-sm font-semibold text-foreground">Total</span>
+                <span className="text-sm font-bold text-gold">
+                  {detailedMilestones.reduce((s, m) => s + m.percentage, 0)}%
+                </span>
+              </div>
             </div>
           )}
 

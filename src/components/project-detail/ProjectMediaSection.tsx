@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Play, Video, Eye, ExternalLink, X } from "lucide-react";
+import { Play, Video, Eye, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
@@ -29,6 +29,11 @@ const getVimeoVideoId = (url: string): string | null => {
   return match ? match[1] : null;
 };
 
+// Check if URL is a direct video file
+const isDirectVideoUrl = (url: string): boolean => {
+  return /\.(mp4|webm|ogg|mov)(\?|$)/i.test(url);
+};
+
 export default function ProjectMediaSection({
   videoUrl,
   virtualTourUrl,
@@ -41,11 +46,12 @@ export default function ProjectMediaSection({
 
   const youtubeId = videoUrl ? getYouTubeVideoId(videoUrl) : null;
   const vimeoId = videoUrl ? getVimeoVideoId(videoUrl) : null;
+  const isDirect = videoUrl ? isDirectVideoUrl(videoUrl) : false;
 
   const getEmbedUrl = () => {
     if (youtubeId) return `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1`;
     if (vimeoId) return `https://player.vimeo.com/video/${vimeoId}?autoplay=1`;
-    return videoUrl;
+    return null; // direct videos handled separately
   };
 
   return (
@@ -71,6 +77,14 @@ export default function ProjectMediaSection({
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`;
                 }}
+              />
+            ) : isDirect ? (
+              <video
+                src={videoUrl}
+                className="w-full h-full object-cover"
+                muted
+                preload="metadata"
+                playsInline
               />
             ) : (
               <div className="w-full h-full bg-muted flex items-center justify-center">
@@ -118,7 +132,15 @@ export default function ProjectMediaSection({
         <DialogContent className="max-w-4xl p-0 bg-black border-gold/30">
           <DialogTitle className="sr-only">{projectName} Video</DialogTitle>
           <div className="aspect-video w-full">
-            {videoOpen && getEmbedUrl() && (
+            {videoOpen && isDirect && videoUrl ? (
+              <video
+                src={videoUrl}
+                className="w-full h-full"
+                controls
+                autoPlay
+                playsInline
+              />
+            ) : videoOpen && getEmbedUrl() ? (
               <iframe
                 src={getEmbedUrl() || ""}
                 className="w-full h-full"
@@ -126,7 +148,7 @@ export default function ProjectMediaSection({
                 allowFullScreen
                 title={`${projectName} Video`}
               />
-            )}
+            ) : null}
           </div>
         </DialogContent>
       </Dialog>

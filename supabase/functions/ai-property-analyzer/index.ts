@@ -88,12 +88,8 @@ STRICT RULES:
 - The project/area is in ${emirateContext}. NEVER mention Dubai unless the project is actually in Dubai.
 - If you do not have confirmed real data for a section, write "Data not available for this area" instead of guessing or fabricating information.
 - NEVER fabricate market statistics, prices, yields, or developer information. Only report facts you are confident about.
-
-DELIVERY TIMELINE RULES:
-- Today's date is ${todayDate}
-- ONLY flag "extended delivery timeline" as a risk/con if the handover date is MORE than 4 years from today
-- If handover is within 1-3 years, this is a NORMAL timeline — do NOT mention it as a risk or con
-- If handover is within 1 year or already handed over, mention it as a POSITIVE factor (near-term or ready)`;
+- When rating premium projects from tier-1 developers (Emaar, DAMAC, Sobha, Meraas, Aldar, Nakheel, etc.) in established or high-growth areas, reflect their premium status accurately. Premium locations with strong developer track records, post-handover payment plans, and high rental yields typically warrant ratings of 8-9.5 out of 10.
+- Do NOT default to conservative/middling ratings. Evaluate each project fairly based on location desirability, developer reputation, payment plan flexibility, and capital appreciation potential.`;
 
     const comparisonText = sanitizedCompareWith.length > 0 
       ? `\n\nAlso compare with these areas: ${sanitizedCompareWith.join(', ')}`

@@ -1,9 +1,10 @@
-import { useRef, useMemo } from "react";
-import { Download, FileText, DollarSign, Layers, ClipboardList, Image, ChevronLeft, ChevronRight } from "lucide-react";
+import { useRef, useMemo, useState } from "react";
+import { Download, FileText, DollarSign, Layers, ClipboardList, Image, ChevronLeft, ChevronRight, Eye, X } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { SafeImage } from "@/components/SafeImage";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 interface BookDoc {
   id: string;
@@ -59,6 +60,9 @@ export default function BookStyleDocuments({
   onDownload,
 }: BookStyleDocumentsProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [viewerUrl, setViewerUrl] = useState<string | null>(null);
+  const [viewerTitle, setViewerTitle] = useState("");
+  const [viewerFilename, setViewerFilename] = useState("");
 
   // Only show visible + downloadable docs
   const visibleDocs = useMemo(
@@ -70,6 +74,14 @@ export default function BookStyleDocuments({
 
   const scroll = (dir: "left" | "right") => {
     scrollRef.current?.scrollBy({ left: dir === "left" ? -220 : 220, behavior: "smooth" });
+  };
+
+  const handleBookClick = (doc: BookDoc, title: string, filename: string) => {
+    // Open PDF in-browser viewer
+    const proxiedUrl = maybeProxyStorageUrl(doc.url);
+    setViewerUrl(proxiedUrl);
+    setViewerTitle(title);
+    setViewerFilename(filename);
   };
 
   return (
@@ -98,7 +110,7 @@ export default function BookStyleDocuments({
         className="flex gap-4 overflow-x-auto scrollbar-hide pb-2 snap-x snap-mandatory"
         style={{ scrollbarWidth: "none" }}
       >
-        {visibleDocs.map((doc, idx) => {
+        {visibleDocs.map((doc) => {
           const title = doc.display_title || doc.name || humanizeDocTitle(doc.type);
           const coverUrl = doc.cover_image_url || projectImageUrl;
           const gradient = typeGradient[doc.type] || "from-zinc-700/70 to-zinc-900/80";
@@ -108,7 +120,7 @@ export default function BookStyleDocuments({
           return (
             <motion.button
               key={doc.id}
-              onClick={() => onDownload(doc.url, filename)}
+              onClick={() => handleBookClick(doc, title, filename)}
               className="snap-start flex-shrink-0 group relative rounded-lg overflow-hidden border border-gold/30 hover:border-gold/60 transition-all"
               style={{ width: 160, height: 220 }}
               whileHover={{ y: -4, scale: 1.03 }}
@@ -138,7 +150,7 @@ export default function BookStyleDocuments({
               <div className="absolute inset-0 flex flex-col justify-between p-3">
                 <div className="flex items-start justify-between">
                   <span className="text-white/80">{icon}</span>
-                  <Download className="w-3.5 h-3.5 text-white/50 group-hover:text-white transition-colors" />
+                  <Eye className="w-3.5 h-3.5 text-white/50 group-hover:text-white transition-colors" />
                 </div>
                 <div>
                   <p className="text-white font-semibold text-xs leading-tight line-clamp-3 mb-1">
@@ -159,6 +171,36 @@ export default function BookStyleDocuments({
           );
         })}
       </div>
+
+      {/* PDF Viewer Modal */}
+      <Dialog open={!!viewerUrl} onOpenChange={(open) => !open && setViewerUrl(null)}>
+        <DialogContent className="max-w-5xl h-[85vh] p-0 bg-black border-gold/30">
+          <DialogTitle className="sr-only">{viewerTitle}</DialogTitle>
+          <div className="flex flex-col h-full">
+            {/* Header bar */}
+            <div className="flex items-center justify-between px-4 py-3 bg-card border-b border-gold/20">
+              <p className="text-sm font-semibold text-foreground truncate">{viewerTitle}</p>
+              <button
+                onClick={() => viewerUrl && onDownload(viewerUrl, viewerFilename)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gold text-black text-sm font-medium hover:bg-gold-light transition-colors"
+              >
+                <Download className="w-4 h-4" />
+                Download
+              </button>
+            </div>
+            {/* PDF iframe */}
+            <div className="flex-1">
+              {viewerUrl && (
+                <iframe
+                  src={viewerUrl}
+                  className="w-full h-full"
+                  title={viewerTitle}
+                />
+              )}
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
