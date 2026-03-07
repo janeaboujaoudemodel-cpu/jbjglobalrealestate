@@ -85,13 +85,15 @@ function useFeaturedProjects() {
         return false;
       };
 
-      // Strict order: Amra first, then Emaar, Nakheel, Sobha, Meraas, Binghatti, DAMAC
-      addOne('DAMAC', 'amra');        // Amra by DAMAC first
+      // Strict order: Amra (DAMAC) first, then Emaar, Nakheel, Sobha, Meraas, Binghatti Mercedes, ALDAR, Omniyat
+      addOne('DAMAC', 'amra');
       addOne('Emaar');
       addOne('Nakheel');
       addOne('Sobha', 'pinnacle');
       addOne('Meraas');
       addOne('Binghatti', 'mercedes');
+      addOne('ALDAR');
+      addOne('Omniyat');
       addOne('ALDAR');
 
       // Fill remaining slots ONLY from developers NOT already represented
