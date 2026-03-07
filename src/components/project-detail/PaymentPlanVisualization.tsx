@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CreditCard, Calendar, CheckCircle, Home, Percent, Clock, Wallet, List } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
 
 interface PaymentMilestone {
   milestone: string;
