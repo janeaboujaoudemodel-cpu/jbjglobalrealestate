@@ -3,9 +3,9 @@
  * Real-time alert button for critical escalations in the header
  */
 
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Zap, X, Eye, CheckCircle, Clock } from 'lucide-react';
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Zap, Eye, CheckCircle, Clock, AlertTriangle, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -15,14 +15,24 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { useSmartEscalation } from '@/hooks/useSmartEscalation';
-import { SentimentBadge } from '@/components/ai/SentimentIndicator';
 import { type EscalationEvent } from '@/services/smart-escalation-service';
 import { formatDistanceToNow } from 'date-fns';
-import { getEmotionIcon } from '@/config/emotion-detection-engine';
 
 interface EscalationAlertButtonProps {
   onViewAll?: () => void;
   onEscalationClick?: (event: EscalationEvent) => void;
+}
+
+/** Returns a Lucide icon instead of emojis */
+function getUrgencyIcon(urgency: string) {
+  switch (urgency) {
+    case 'critical':
+      return <AlertCircle className="h-5 w-5 text-red-600" />;
+    case 'high':
+      return <AlertTriangle className="h-5 w-5 text-amber-600" />;
+    default:
+      return <Zap className="h-5 w-5 text-[#C9A84C]" />;
+  }
 }
 
 export function EscalationAlertButton({
@@ -32,38 +42,11 @@ export function EscalationAlertButton({
   const [isOpen, setIsOpen] = useState(false);
   const {
     escalationQueue,
-    criticalCount,
     acknowledgeEscalation,
   } = useSmartEscalation();
 
-  // Demo escalations for showcase
-  const demoEscalations: EscalationEvent[] = [
-    {
-      id: 'demo-001',
-      triggeredAt: new Date(Date.now() - 5 * 60 * 1000),
-      sourceChannel: 'whatsapp',
-      senderId: 'client-001',
-      senderName: 'Ahmed Al-Rashid',
-      senderType: 'client',
-      originalMessage: "This is completely unacceptable! I've been waiting for days!",
-      emotionAnalysis: {
-        emotion: 'angry',
-        confidence: 94,
-        urgency: 'critical',
-        sentiment: -0.85,
-        keywords: ['unacceptable', 'waiting'],
-        suggestedTone: { style: 'empathetic', prefix: '', suffix: '', responseDeadlineMinutes: 10 },
-        shouldEscalate: true,
-        escalationReason: 'Client expressed significant dissatisfaction',
-      },
-      escalatedTo: ['founder', 'hr'],
-      status: 'pending',
-      responseDeadline: new Date(Date.now() + 5 * 60 * 1000),
-    },
-  ];
-
-  const allEscalations = [...demoEscalations, ...escalationQueue];
-  const pendingEscalations = allEscalations.filter(e => e.status === 'pending');
+  // Only use real escalations — no demo data
+  const pendingEscalations = escalationQueue.filter(e => e.status === 'pending');
   const criticalEscalations = pendingEscalations.filter(e => e.emotionAnalysis.urgency === 'critical');
 
   const handleAcknowledge = (eventId: string) => {
@@ -78,15 +61,15 @@ export function EscalationAlertButton({
           size="icon"
           className={`relative p-2 rounded-full transition-all ${
             criticalEscalations.length > 0
-              ? 'bg-red-500/20 border border-red-500/50 animate-pulse hover:bg-red-500/30'
+              ? 'bg-red-100 border border-red-400/50 animate-pulse hover:bg-red-200'
               : pendingEscalations.length > 0
-              ? 'bg-amber-500/20 border border-amber-500/50 hover:bg-amber-500/30'
-              : 'bg-[#1A1A1A] border border-gold/20 hover:bg-gold/10'
+              ? 'bg-amber-100 border border-amber-400/50 hover:bg-amber-200'
+              : 'bg-white border-2 border-[#C9A84C]/30 hover:border-[#C9A84C]/50'
           }`}
         >
           <Zap className={`h-5 w-5 ${
-            criticalEscalations.length > 0 ? 'text-red-500' :
-            pendingEscalations.length > 0 ? 'text-amber-500' : 'text-gold'
+            criticalEscalations.length > 0 ? 'text-red-600' :
+            pendingEscalations.length > 0 ? 'text-amber-600' : 'text-[#C9A84C]'
           }`} />
           {pendingEscalations.length > 0 && (
             <span className={`absolute -top-1 -right-1 w-5 h-5 rounded-full text-white text-xs flex items-center justify-center font-bold ${
@@ -99,19 +82,18 @@ export function EscalationAlertButton({
       </PopoverTrigger>
 
       <PopoverContent 
-        className="w-96 p-0 bg-[#0E0E0E] border-gold/20"
+        className="w-96 p-0 bg-white border-2 border-[#C9A84C]/30 shadow-[0_8px_30px_rgba(200,167,102,0.15)]"
         align="end"
         sideOffset={16}
       >
         {/* Header */}
-        <div className="p-4 border-b border-gold/20 flex items-center justify-between">
+        <div className="p-4 border-b border-[#C9A84C]/20 flex items-center justify-between bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6] rounded-t-md">
           <div className="flex items-center gap-2">
-            <Zap className="h-5 w-5 text-gold" />
-            <span className="font-semibold text-white">AI Escalations</span>
+            <Zap className="h-5 w-5 text-[#C9A84C]" />
+            <span className="font-semibold text-black">Escalations</span>
             {pendingEscalations.length > 0 && (
               <Badge 
-                variant="destructive" 
-                className={criticalEscalations.length > 0 ? 'bg-red-500' : 'bg-amber-500'}
+                className={`${criticalEscalations.length > 0 ? 'bg-red-500 text-white' : 'bg-amber-500 text-white'} border-0`}
               >
                 {pendingEscalations.length} pending
               </Badge>
@@ -123,49 +105,45 @@ export function EscalationAlertButton({
         <ScrollArea className="max-h-[400px]">
           {pendingEscalations.length === 0 ? (
             <div className="p-8 text-center">
-              <CheckCircle className="h-12 w-12 text-green-500/30 mx-auto mb-3" />
-              <p className="text-gray-400">No pending escalations</p>
-              <p className="text-sm text-gray-500">All systems running smoothly!</p>
+              <CheckCircle className="h-12 w-12 text-green-500/40 mx-auto mb-3" />
+              <p className="text-zinc-600 font-medium">No pending escalations</p>
+              <p className="text-sm text-zinc-400">All systems running smoothly</p>
             </div>
           ) : (
-            <div className="divide-y divide-gold/10">
+            <div className="divide-y divide-[#C9A84C]/10">
               {pendingEscalations.slice(0, 5).map((event) => (
                 <motion.div
                   key={event.id}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className={`p-4 hover:bg-gold/5 transition-colors cursor-pointer ${
-                    event.emotionAnalysis.urgency === 'critical' ? 'bg-red-500/5' : ''
+                  className={`p-4 hover:bg-[#C9A84C]/5 transition-colors cursor-pointer ${
+                    event.emotionAnalysis.urgency === 'critical' ? 'bg-red-50' : ''
                   }`}
                   onClick={() => onEscalationClick?.(event)}
                 >
                   <div className="flex items-start gap-3">
-                    {/* Emotion Icon */}
-                    <span className={`text-2xl ${
-                      event.emotionAnalysis.urgency === 'critical' ? 'animate-pulse' : ''
-                    }`}>
-                      {getEmotionIcon(event.emotionAnalysis.emotion)}
-                    </span>
+                    {/* Urgency Icon (no emojis) */}
+                    <div className="mt-0.5">
+                      {getUrgencyIcon(event.emotionAnalysis.urgency)}
+                    </div>
 
                     {/* Content */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="font-medium text-white truncate">
+                        <span className="font-medium text-black truncate">
                           {event.senderName}
                         </span>
-                        <SentimentBadge
-                          emotion={event.emotionAnalysis.emotion}
-                          confidence={event.emotionAnalysis.confidence}
-                          compact
-                        />
+                        <Badge className="bg-[#C9A84C]/10 text-[#C9A84C] border-[#C9A84C]/30 text-[10px]">
+                          {event.emotionAnalysis.emotion}
+                        </Badge>
                       </div>
                       
-                      <p className="text-sm text-gray-400 line-clamp-2 mb-2">
+                      <p className="text-sm text-zinc-500 line-clamp-2 mb-2">
                         "{event.originalMessage}"
                       </p>
 
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-gray-500 flex items-center gap-1">
+                        <span className="text-xs text-zinc-400 flex items-center gap-1">
                           <Clock className="h-3 w-3" />
                           {formatDistanceToNow(event.triggeredAt, { addSuffix: true })}
                         </span>
@@ -177,7 +155,7 @@ export function EscalationAlertButton({
                             e.stopPropagation();
                             handleAcknowledge(event.id);
                           }}
-                          className="h-6 text-xs text-gold hover:bg-gold/10"
+                          className="h-6 text-xs text-[#C9A84C] hover:bg-[#C9A84C]/10"
                         >
                           <Eye className="h-3 w-3 mr-1" />
                           Acknowledge
@@ -193,10 +171,10 @@ export function EscalationAlertButton({
 
         {/* Footer */}
         {pendingEscalations.length > 0 && (
-          <div className="p-3 border-t border-gold/20">
+          <div className="p-3 border-t border-[#C9A84C]/20 bg-[#FDFBF7] rounded-b-md">
             <Button
               variant="ghost"
-              className="w-full text-gold hover:bg-gold/10"
+              className="w-full text-[#C9A84C] hover:bg-[#C9A84C]/10"
               onClick={() => {
                 setIsOpen(false);
                 onViewAll?.();

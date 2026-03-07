@@ -138,8 +138,8 @@ const OwnerDashboardShell = () => {
               </Button>
             )}
             <div className="min-w-0">
-              <h1 className="text-black font-semibold text-sm md:text-base tracking-wide whitespace-nowrap truncate">Owner Command Center</h1>
-              <p className="text-zinc-500 text-xs hidden md:block whitespace-nowrap">Full system access & oversight</p>
+              <h1 className="text-black font-semibold text-sm md:text-base tracking-wide whitespace-nowrap truncate">Founder Assistant</h1>
+              <p className="text-zinc-500 text-xs hidden md:block whitespace-nowrap">Your executive command center</p>
             </div>
           </div>
           
