@@ -1,16 +1,14 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
-import { History, ArrowRight, X, Building2, MapPin, Home } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { History, X, Building2, MapPin, Home } from "lucide-react";
 import { useRecentSearches, type RecentItemType, type RecentItem } from "@/hooks/useRecentSearches";
 import FavoriteButton from "@/components/FavoriteButton";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ContinueSearchingProps {
-  /** Filter to specific type, or show all */
   type?: RecentItemType;
-  /** Max items to display */
   limit?: number;
-  /** Section title override */
   title?: string;
   className?: string;
 }
@@ -23,12 +21,15 @@ const TYPE_CONFIG: Record<RecentItemType, { icon: typeof Home; label: string; pa
 
 const ContinueSearching = ({
   type,
-  limit = 6,
+  limit = 12,
   title,
   className = "",
 }: ContinueSearchingProps) => {
   const { t } = useLanguage();
-  const { items, clearAll } = useRecentSearches(type);
+  const { items, clearAll, patchItem } = useRecentSearches(type);
+  const stripRef = useRef<HTMLDivElement>(null);
+  const [isPaused, setIsPaused] = useState(false);
+  const animationRef = useRef<number>();
 
   if (items.length === 0) return null;
 
@@ -36,16 +37,23 @@ const ContinueSearching = ({
   if (validItems.length === 0) return null;
 
   const displayItems = validItems.slice(0, limit);
-  
-  // Dynamic title: "Continue Searching for [most recent item name]"
+
   const mostRecentName = validItems[0]?.name || "";
   const sectionTitle = title || (mostRecentName
     ? `${t("home.continueSearchingFor", "Continue Searching for")} ${mostRecentName}`
     : t("home.continueSearching", "Continue Searching"));
 
   return (
-    <section className={`py-8 md:py-12 ${className}`}>
-      <div className="container mx-auto px-4">
+    <section className={`py-8 md:py-12 relative overflow-hidden ${className}`}>
+      {/* Premium backdrop */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-black/60 z-10" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(200,167,102,0.06)_0%,_transparent_70%)]" />
+      </div>
+
+      <div className="container mx-auto px-4 relative z-20">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
@@ -65,56 +73,136 @@ const ContinueSearching = ({
           </button>
         </div>
 
-        {/* Cards Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
-          {displayItems.map((item, index) => (
-            <RecentCard key={`${item.type}-${item.id}`} item={item} index={index} />
-          ))}
+        {/* Walking Strip Carousel */}
+        <div
+          className="relative"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          <div
+            ref={stripRef}
+            className="flex gap-4 overflow-x-auto scrollbar-hide pb-2"
+            style={{
+              scrollBehavior: "smooth",
+              WebkitOverflowScrolling: "touch",
+              perspective: "1200px",
+            }}
+          >
+            {displayItems.map((item, index) => (
+              <RecentCard3D key={`${item.type}-${item.id}`} item={item} index={index} patchItem={patchItem} />
+            ))}
+          </div>
+          {/* Fade edges */}
+          <div className="absolute top-0 left-0 bottom-2 w-8 bg-gradient-to-r from-background to-transparent pointer-events-none z-10" />
+          <div className="absolute top-0 right-0 bottom-2 w-8 bg-gradient-to-l from-background to-transparent pointer-events-none z-10" />
         </div>
       </div>
     </section>
   );
 };
 
-function RecentCard({ item, index }: { item: RecentItem; index: number }) {
+function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: number; patchItem: (id: string, type: RecentItemType, updates: Partial<RecentItem>) => void }) {
   const config = TYPE_CONFIG[item.type] ?? TYPE_CONFIG.property;
   const Icon = config.icon;
   const linkTo = `${config.pathPrefix}/${item.slug}`;
   const [logoError, setLogoError] = useState(false);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const cardRef = useRef<HTMLDivElement>(null);
 
-  // For property cards, show developer logo instead of type badge
+  // Self-heal: fetch missing developer logo
+  useEffect(() => {
+    if (item.type === "property" && !item.developerLogo && item.subtitle) {
+      supabase
+        .from("developers")
+        .select("logo_url")
+        .ilike("name", `%${item.subtitle}%`)
+        .limit(1)
+        .maybeSingle()
+        .then(({ data }) => {
+          if (data?.logo_url) {
+            patchItem(item.id, item.type, { developerLogo: data.logo_url });
+          }
+        });
+    }
+  }, [item.id, item.type, item.developerLogo, item.subtitle, patchItem]);
+
   const showDevLogo = item.type === "property" && item.developerLogo && !logoError;
-  // For developer cards, use imageUrl as the logo
   const showDevCardLogo = item.type === "developer" && item.imageUrl && !logoError;
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+    setTilt({
+      x: (y - 0.5) * -12,
+      y: (x - 0.5) * 12,
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setTilt({ x: 0, y: 0 });
+  };
 
   return (
     <div
-      className="animate-fade-in-up"
-      style={{ animationDelay: `${index * 40}ms` }}
+      ref={cardRef}
+      className="flex-shrink-0 animate-fade-in-up"
+      style={{
+        animationDelay: `${index * 50}ms`,
+        transformStyle: "preserve-3d",
+        perspective: "800px",
+      }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
     >
       <Link
         to={linkTo}
-        className="group relative block h-[180px] md:h-[200px] rounded-xl overflow-hidden border border-gold/20 hover:border-gold/50 transition-all duration-300 hover:shadow-[0_6px_24px_rgba(200,167,102,0.3)]"
+        className="group relative block w-[160px] md:w-[200px] h-[220px] md:h-[260px] rounded-xl overflow-hidden transition-all duration-500"
+        style={{
+          transform: `perspective(800px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) scale(${tilt.x || tilt.y ? 1.05 : 1})`,
+          transition: tilt.x || tilt.y ? "transform 0.1s ease-out" : "transform 0.4s ease-out",
+          transformStyle: "preserve-3d",
+        }}
       >
+        {/* Gold shimmer border */}
+        <div className="absolute inset-0 rounded-xl border border-gold/20 group-hover:border-gold/60 transition-all duration-500 z-20 pointer-events-none" />
+        <div className="absolute -inset-[1px] rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-10"
+          style={{
+            background: "linear-gradient(135deg, transparent 30%, rgba(200,167,102,0.3) 50%, transparent 70%)",
+            backgroundSize: "200% 200%",
+            animation: "shimmer 2s ease-in-out infinite",
+          }}
+        />
+
         {/* Image / fallback */}
         {item.imageUrl ? (
           <div
-            className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+            className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
             style={{ backgroundImage: `url(${item.imageUrl})` }}
           />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-[#FDFBF7] via-[#E8DCC8] to-[#D4C4A8] flex items-center justify-center">
-            <Icon className="w-10 h-10 text-gold/30" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] flex items-center justify-center">
+            <Icon className="w-12 h-12 text-gold/20" />
           </div>
         )}
 
         {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10" />
 
-        {/* Top-left: Developer logo (for properties) or type badge */}
-        <div className="absolute top-2 left-2">
+        {/* Elevated glass reflection effect */}
+        <div
+          className="absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-500"
+          style={{
+            background: "linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(200,167,102,0.05) 100%)",
+            transform: "translateZ(20px)",
+          }}
+        />
+
+        {/* Top-left: Developer logo or type badge */}
+        <div className="absolute top-2 left-2 z-20" style={{ transform: "translateZ(30px)" }}>
           {showDevLogo ? (
-            <div className="w-9 h-9 rounded-lg bg-white shadow-md overflow-hidden">
+            <div className="w-9 h-9 rounded-lg bg-white shadow-lg overflow-hidden ring-1 ring-gold/30">
               <img
                 src={item.developerLogo}
                 alt={item.subtitle || "Developer"}
@@ -124,7 +212,7 @@ function RecentCard({ item, index }: { item: RecentItem; index: number }) {
               />
             </div>
           ) : showDevCardLogo ? (
-            <div className="w-9 h-9 rounded-lg bg-white shadow-md overflow-hidden">
+            <div className="w-9 h-9 rounded-lg bg-white shadow-lg overflow-hidden ring-1 ring-gold/30">
               <img
                 src={item.imageUrl}
                 alt={item.name}
@@ -141,21 +229,21 @@ function RecentCard({ item, index }: { item: RecentItem; index: number }) {
           )}
         </div>
 
-        {/* Favorite button - top right */}
+        {/* Favorite button */}
         {item.type === "property" && (
-          <div className="absolute top-2 right-2 z-10">
+          <div className="absolute top-2 right-2 z-20" style={{ transform: "translateZ(30px)" }}>
             <FavoriteButton projectId={item.id} showShortlist={false} size="sm" />
           </div>
         )}
 
-        {/* Bottom content */}
-        <div className="absolute bottom-0 left-0 right-0 p-3">
+        {/* Bottom content - elevated */}
+        <div className="absolute bottom-0 left-0 right-0 p-3 z-20" style={{ transform: "translateZ(25px)" }}>
           {item.subtitle && (
             <span className="inline-block mb-1 text-[10px] text-gold/80 font-medium truncate w-full">
               {item.subtitle}
             </span>
           )}
-          <h3 className="text-white font-semibold text-xs md:text-sm leading-tight truncate group-hover:text-gold transition-colors">
+          <h3 className="text-white font-semibold text-xs md:text-sm leading-tight truncate group-hover:text-gold transition-colors duration-300">
             {typeof item.name === 'string' ? item.name : String(item.name || '')}
           </h3>
         </div>

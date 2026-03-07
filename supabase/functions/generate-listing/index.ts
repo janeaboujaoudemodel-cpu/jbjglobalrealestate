@@ -113,6 +113,9 @@ const projectSchema = {
     reraNumber: { type: ["string", "null"] },
     faqs: { type: "array", items: { type: "object", properties: { q: { type: "string" }, a: { type: "string" } } } },
     comparableProjects: { type: "array", items: { type: "object", properties: { name: { type: "string" }, developer: { type: ["string", "null"] }, reason: { type: ["string", "null"] }, _enriched: { type: "boolean" } } } },
+    videoUrl: { type: ["string", "null"] },
+    views: { type: "array", items: { type: "string" } },
+    usps: { type: "array", items: { type: "string" } },
   },
   required: ["name"],
 };
