@@ -984,7 +984,7 @@ export default function StampGeneratorPage() {
                     svgSource={selectedSvg || allConcepts[0]?.svgSource || ''}
                     tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor}
                     fontFamily={fontFamily} fontWeight={fontBold ? 'bold' : 'normal'} fontStyle={fontItalic ? 'italic' : 'normal'}
-                    fontSize={manualFontSize} size={180}
+                    fontSize={manualFontSize} inkMode={inkMode} size={180}
                   />
                 ) : <Stamp size={40} className="text-[hsl(var(--muted-foreground))] opacity-20"/>}
               </div>
