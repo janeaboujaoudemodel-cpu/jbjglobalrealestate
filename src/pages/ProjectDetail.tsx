@@ -159,9 +159,18 @@ const ProjectDetail = () => {
   const mappedFromDb = useMemo<ProjectDetailData | null>(() => {
     if (!project) return null;
 
+    // Deduplicate images by URL before mapping
+    const seenUrls = new Set<string>();
     const images = (project.images || [])
       .slice()
       .sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0))
+      .filter((img) => {
+        if (!img.image_url) return false;
+        const key = img.image_url.toLowerCase().replace(/\?.*$/, "").replace(/\/+$/, "");
+        if (seenUrls.has(key)) return false;
+        seenUrls.add(key);
+        return true;
+      })
       .map((img) => ({ id: img.id, url: img.image_url, alt: img.alt_text }));
 
     const documents = (project.documents || [])

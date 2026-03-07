@@ -1043,32 +1043,6 @@ export default function ProjectDetailLayout({
             </div>
           )}
 
-          {/* AI ANALYZER SECTION */}
-          <div ref={aiRef} id="ai" className="mb-12 scroll-mt-40">
-            <ProjectAIAnalyzer
-              projectName={project.name}
-              areaName={project.area_name || project.location || "UAE"}
-              developer={project.developer?.name}
-              developerSlug={project.developer?.slug}
-              priceFrom={project.price_from ?? undefined}
-              handoverDate={project.handover_date ?? undefined}
-              amenities={project.amenities ?? undefined}
-              emirate={project.emirate}
-            />
-          </div>
-
-          {/* Gold divider before DLD - increased spacing */}
-          <div className="py-6 md:py-8">
-            <div className="flex items-center justify-center gap-6">
-              <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-              <div className="w-2 h-2 rotate-45 bg-gold/40" />
-              <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-            </div>
-          </div>
-          <div className="mb-8">
-            <DLDMarketWidget />
-          </div>
-
           {/* BROCHURE - Full width two-column layout - Always visible */}
           <div ref={brochureRef} id="brochure" className="mb-12 scroll-mt-40">
             <div className="jj-card-inner">
@@ -1150,16 +1124,44 @@ export default function ProjectDetailLayout({
             </div>
             )}
 
-           {/* REPORT AN ISSUE BANNER */}
-           <div className="mb-12">
-             <ReportIssueButton
+           {/* DLD MARKET WIDGET + AI ANALYZER (under payment/brochure area) */}
+           <div className="py-6 md:py-8">
+             <div className="flex items-center justify-center gap-6">
+               <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+               <div className="w-2 h-2 rotate-45 bg-gold/40" />
+               <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+             </div>
+           </div>
+           <div className="mb-8">
+             <DLDMarketWidget />
+           </div>
+
+           <div ref={aiRef} id="ai" className="mb-12 scroll-mt-40">
+             <ProjectAIAnalyzer
                projectName={project.name}
-               projectId={project.id}
-               projectSlug={project.slug || undefined}
+               areaName={project.area_name || project.location || "UAE"}
+               developer={project.developer?.name}
+               developerSlug={project.developer?.slug}
+               priceFrom={project.price_from ?? undefined}
+               handoverDate={project.handover_date ?? undefined}
+               amenities={project.amenities ?? undefined}
+               emirate={project.emirate}
              />
            </div>
 
-           {/* INVESTMENT METRICS SECTION (Reelly-style) */}
+           {/* MORTGAGE CALCULATOR */}
+           <div ref={mortgageRef} className="mb-20 scroll-mt-32">
+             <div className="jj-card-inner p-0 overflow-hidden">
+               <MortgageCalculator
+                 defaultPrice={project.price_from ?? 2000000}
+                 compact={false}
+                 context={{ projectName: project.name, location: project.location || undefined }}
+                 showAssistant
+               />
+             </div>
+           </div>
+
+           {/* INVESTMENT METRICS SECTION */}
            {(project.roi_estimate || project.rental_yield_estimate) && (
              <div ref={investmentRef} id="investment" className="mb-12 scroll-mt-40">
                <InvestmentMetricsSection
@@ -1196,17 +1198,14 @@ export default function ProjectDetailLayout({
              </div>
            )}
 
-          {/* MORTGAGE CALCULATOR - Full Width with more spacing */}
-          <div ref={mortgageRef} className="mb-20 scroll-mt-32">
-            <div className="jj-card-inner p-0 overflow-hidden">
-              <MortgageCalculator
-                defaultPrice={project.price_from ?? 2000000}
-                compact={false}
-                context={{ projectName: project.name, location: project.location || undefined }}
-                showAssistant
-              />
-            </div>
-          </div>
+           {/* REPORT AN ISSUE BANNER */}
+           <div className="mb-12">
+             <ReportIssueButton
+               projectName={project.name}
+               projectId={project.id}
+               projectSlug={project.slug || undefined}
+             />
+           </div>
 
           {/* INQUIRY FORM - Full Width with premium styling - Uses Contact Page Form */}
           <div ref={inquiryRef} className="scroll-mt-32 mb-8">

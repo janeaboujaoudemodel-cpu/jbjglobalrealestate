@@ -9,6 +9,14 @@ interface ProjectMediaSectionProps {
   projectName: string;
 }
 
+// Validate that a URL is a real video (YouTube, Vimeo, or direct video file)
+const isValidVideoUrl = (url: string): boolean => {
+  if (getYouTubeVideoId(url)) return true;
+  if (getVimeoVideoId(url)) return true;
+  if (isDirectVideoUrl(url)) return true;
+  return false;
+};
+
 // Extract YouTube video ID from various URL formats
 const getYouTubeVideoId = (url: string): string | null => {
   const patterns = [
@@ -41,12 +49,17 @@ export default function ProjectMediaSection({
 }: ProjectMediaSectionProps) {
   const [videoOpen, setVideoOpen] = useState(false);
   const [tourOpen, setTourOpen] = useState(false);
+  const [videoError, setVideoError] = useState(false);
 
-  if (!videoUrl && !virtualTourUrl) return null;
+  // Only treat as valid video if it matches known patterns
+  const hasValidVideo = videoUrl && isValidVideoUrl(videoUrl) && !videoError;
 
-  const youtubeId = videoUrl ? getYouTubeVideoId(videoUrl) : null;
-  const vimeoId = videoUrl ? getVimeoVideoId(videoUrl) : null;
-  const isDirect = videoUrl ? isDirectVideoUrl(videoUrl) : false;
+  if (!hasValidVideo && !virtualTourUrl) return null;
+
+  const youtubeId = hasValidVideo ? getYouTubeVideoId(videoUrl!) : null;
+  const vimeoId = hasValidVideo ? getVimeoVideoId(videoUrl!) : null;
+  const isDirect = hasValidVideo ? isDirectVideoUrl(videoUrl!) : false;
+  const hasOneCard = (hasValidVideo ? 1 : 0) + (virtualTourUrl ? 1 : 0) === 1;
 
   const getEmbedUrl = () => {
     if (youtubeId) return `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1`;
@@ -61,9 +74,9 @@ export default function ProjectMediaSection({
         Project Media
       </h3>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className={`grid gap-4 ${hasOneCard ? 'grid-cols-1 max-w-2xl mx-auto' : 'grid-cols-1 sm:grid-cols-2'}`}>
         {/* Video Card */}
-        {videoUrl && (
+        {hasValidVideo && (
           <button
             onClick={() => setVideoOpen(true)}
             className="group relative rounded-xl border-2 border-gold/30 bg-card overflow-hidden aspect-video hover:border-gold/60 hover:shadow-lg hover:shadow-gold/10 transition-all text-left"
@@ -80,11 +93,12 @@ export default function ProjectMediaSection({
               />
             ) : isDirect ? (
               <video
-                src={videoUrl}
+                src={videoUrl!}
                 className="w-full h-full object-cover"
                 muted
                 preload="metadata"
                 playsInline
+                onError={() => setVideoError(true)}
               />
             ) : (
               <div className="w-full h-full bg-muted flex items-center justify-center">
@@ -131,11 +145,11 @@ export default function ProjectMediaSection({
       <Dialog open={videoOpen} onOpenChange={setVideoOpen}>
         <DialogContent className="max-w-4xl p-0 bg-black border-gold/30">
           <DialogTitle className="sr-only">{projectName} Video</DialogTitle>
-          <div className="aspect-video w-full">
+          <div className="aspect-video w-full flex items-center justify-center">
             {videoOpen && isDirect && videoUrl ? (
               <video
                 src={videoUrl}
-                className="w-full h-full"
+                className="w-full h-full object-contain"
                 controls
                 autoPlay
                 playsInline
