@@ -17,6 +17,7 @@ import {
   CheckSquare,
   FileText,
   Stamp,
+  Pencil,
 } from "lucide-react";
 import {
   Select,
@@ -25,10 +26,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { PDFDocument } from "pdf-lib";
+import ESignaturePad from "./ESignaturePad";
 
 interface Recipient {
   id: string;
@@ -75,7 +83,6 @@ const recipientColorStyles = [
 ];
 
 // ── PDF.js thumbnail renderer ──────────────────────────────────────────────
-// We lazy-load pdf.js via CDN and render each page onto a small canvas.
 declare global {
   interface Window {
     pdfjsLib: any;
@@ -171,6 +178,15 @@ function PdfPageCanvas({ pdfDoc, pageNumber, pdfUrl }: { pdfDoc: any; pageNumber
   );
 }
 
+// ── Helper: get initials from name ─────────────────────────────────────────
+function getInitials(name: string): string {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((w) => w[0].toUpperCase())
+    .join("");
+}
+
 // ── Component ──────────────────────────────────────────────────────────────
 
 export default function DocumentFieldPlacer({
@@ -191,8 +207,16 @@ export default function DocumentFieldPlacer({
 
   // Saved stamp SVG from user's stamp generator
   const [savedStampSvg, setSavedStampSvg] = useState<string | null>(null);
+  // Saved signature image from AI Signature Designer
+  const [savedSignatureUrl, setSavedSignatureUrl] = useState<string | null>(null);
 
-  // Thumbnail state: array of canvas data-urls per page
+  // Draw-in-field dialog
+  const [drawingFieldId, setDrawingFieldId] = useState<string | null>(null);
+
+  // Drag offset ref for precision dragging
+  const dragOffsetRef = useRef({ x: 0, y: 0 });
+
+  // Thumbnail state
   const [thumbnails, setThumbnails] = useState<string[]>([]);
   const [thumbsLoading, setThumbsLoading] = useState(false);
   const pdfJsDocRef = useRef<any>(null);
@@ -214,6 +238,35 @@ export default function DocumentFieldPlacer({
     loadStamp();
   }, [user?.id]);
 
+  // Load user's saved signature from ai_tool_projects (favorite signature)
+  useEffect(() => {
+    if (!user?.id) return;
+    async function loadSignature() {
+      const { data } = await supabase
+        .from("ai_tool_projects")
+        .select("project_data")
+        .eq("user_id", user!.id)
+        .eq("tool_type", "signature_designer")
+        .order("updated_at", { ascending: false })
+        .limit(10);
+      if (!data || data.length === 0) return;
+      // Find a favorite signature
+      for (const row of data) {
+        const pd = row.project_data as any;
+        if (pd?.isFavorite && pd?.signatureDataUrl) {
+          setSavedSignatureUrl(pd.signatureDataUrl);
+          return;
+        }
+      }
+      // Fallback: use the most recent one
+      const first = data[0]?.project_data as any;
+      if (first?.signatureDataUrl) {
+        setSavedSignatureUrl(first.signatureDataUrl);
+      }
+    }
+    loadSignature();
+  }, [user?.id]);
+
   // ── Load PDF page count + thumbnails ──────────────────────────────────
   useEffect(() => {
     let cancelled = false;
@@ -221,7 +274,6 @@ export default function DocumentFieldPlacer({
       if (!pdfUrl) return;
       setThumbsLoading(true);
       try {
-        // 1. Get page count via pdf-lib (fast, works with blob URLs)
         let pageCount = 1;
         try {
           const source = pdfFile
@@ -230,12 +282,11 @@ export default function DocumentFieldPlacer({
           const doc = await PDFDocument.load(source, { ignoreEncryption: true });
           pageCount = doc.getPageCount();
         } catch {
-          // ignore — stay at 1 page
+          // ignore
         }
         if (cancelled) return;
         setTotalPages(pageCount);
 
-        // 2. Render thumbnails via pdf.js
         const pdfjsLib = await loadPdfJs();
         const loadingTask = pdfjsLib.getDocument(pdfUrl);
         const pdfJsDoc = await loadingTask.promise;
@@ -290,7 +341,6 @@ export default function DocumentFieldPlacer({
 
       const fieldConfig = fieldTypes.find((f) => f.type === selectedFieldType)!;
       const today = new Date().toLocaleDateString("en-AE");
-      const recipientName = recipients.find((r) => r.id === selectedRecipient)?.name || "";
 
       const newField: SignatureField = {
         id: crypto.randomUUID(),
@@ -306,13 +356,15 @@ export default function DocumentFieldPlacer({
             ? today
             : selectedFieldType === "text"
             ? ""
+            : selectedFieldType === "signature" && savedSignatureUrl
+            ? savedSignatureUrl
             : undefined,
       };
 
       onFieldsChange([...fields, newField]);
       toast.success(`${fieldConfig.label} field added — drag to reposition`);
     },
-    [selectedRecipient, selectedFieldType, currentPage, fields, onFieldsChange, recipients]
+    [selectedRecipient, selectedFieldType, currentPage, fields, onFieldsChange, recipients, savedSignatureUrl]
   );
 
   const removeField = (fieldId: string) => {
@@ -323,15 +375,15 @@ export default function DocumentFieldPlacer({
     onFieldsChange(fields.map((f) => (f.id === fieldId ? { ...f, value } : f)));
   };
 
-  // ── Drag-to-reposition ──────────────────────────────────────────────────
+  // ── Drag-to-reposition (with offset for precision) ─────────────────────
   const handleDrop = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
       e.preventDefault();
       const fieldId = e.dataTransfer.getData("fieldId");
       if (!fieldId || !overlayRef.current) return;
       const rect = overlayRef.current.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 100;
-      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      const x = ((e.clientX - rect.left - dragOffsetRef.current.x) / rect.width) * 100;
+      const y = ((e.clientY - rect.top - dragOffsetRef.current.y) / rect.height) * 100;
       onFieldsChange(
         fields.map((f) =>
           f.id === fieldId
@@ -346,9 +398,18 @@ export default function DocumentFieldPlacer({
   const handleDragOver = (e: React.DragEvent) => e.preventDefault();
   const handleDragStart = (e: React.DragEvent, fieldId: string) => {
     e.dataTransfer.setData("fieldId", fieldId);
+    // Calculate offset between cursor and field's top-left corner
+    const fieldEl = (e.target as HTMLElement).closest("[data-field]") as HTMLElement;
+    if (fieldEl) {
+      const fieldRect = fieldEl.getBoundingClientRect();
+      dragOffsetRef.current = {
+        x: e.clientX - fieldRect.left,
+        y: e.clientY - fieldRect.top,
+      };
+    }
   };
 
-  // ── Auto-detect ─────────────────────────────────────────────────────────
+  // ── Auto-detect (send base64 if blob URL) ──────────────────────────────
   const handleAutoDetect = async () => {
     if (!selectedRecipient) {
       toast.error("Please select a recipient first");
@@ -356,12 +417,27 @@ export default function DocumentFieldPlacer({
     }
     setIsAutoDetecting(true);
     try {
+      let bodyPayload: any = {
+        recipientId: selectedRecipient,
+        recipientName: recipients.find((r) => r.id === selectedRecipient)?.name || "",
+      };
+
+      // If pdfFile available, send as base64 instead of blob URL
+      if (pdfFile) {
+        const buffer = await pdfFile.arrayBuffer();
+        const bytes = new Uint8Array(buffer);
+        let binary = "";
+        for (let i = 0; i < bytes.length; i++) {
+          binary += String.fromCharCode(bytes[i]);
+        }
+        const base64 = btoa(binary);
+        bodyPayload.pdfBase64 = base64;
+      } else if (pdfUrl && !pdfUrl.startsWith("blob:")) {
+        bodyPayload.pdfUrl = pdfUrl;
+      }
+
       const { data, error } = await supabase.functions.invoke("esign-auto-detect-fields", {
-        body: {
-          pdfUrl,
-          recipientId: selectedRecipient,
-          recipientName: recipients.find((r) => r.id === selectedRecipient)?.name || "",
-        },
+        body: bodyPayload,
       });
 
       if (error) throw error;
@@ -409,6 +485,159 @@ export default function DocumentFieldPlacer({
     acc[f.pageNumber] = (acc[f.pageNumber] || 0) + 1;
     return acc;
   }, {});
+
+  // ── Render field content helper ─────────────────────────────────────────
+  const renderFieldContent = (field: SignatureField, style: ReturnType<typeof getRecipientStyle>) => {
+    const fieldConfig = fieldTypes.find((f) => f.type === field.type)!;
+    const Icon = fieldConfig.icon;
+    const recipient = recipients.find((r) => r.id === field.recipientId);
+
+    if (field.type === "stamp") {
+      return (
+        <div className="flex items-center justify-center h-full w-full overflow-hidden">
+          {savedStampSvg ? (
+            <div
+              className="w-full h-full flex items-center justify-center opacity-85"
+              dangerouslySetInnerHTML={{
+                __html: savedStampSvg.replace(
+                  /width="[^"]*"/,
+                  `width="${field.width - 4}"`
+                ).replace(
+                  /height="[^"]*"/,
+                  `height="${field.height - 4}"`
+                ),
+              }}
+            />
+          ) : (
+            <div className={`flex flex-col items-center justify-center gap-0.5 ${style.text}`}>
+              <Stamp className="w-6 h-6" />
+              <span className="text-[9px] font-medium">Company Stamp</span>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    if (field.type === "checkbox") {
+      return (
+        <div
+          className={`flex items-center justify-center h-full cursor-pointer ${style.text}`}
+          onClick={(e) => {
+            e.stopPropagation();
+            updateFieldValue(field.id, field.value === "checked" ? "" : "checked");
+          }}
+        >
+          {field.value === "checked" ? (
+            <CheckSquare className="w-5 h-5" />
+          ) : (
+            <div className={`w-5 h-5 border-2 rounded ${style.border}`} />
+          )}
+        </div>
+      );
+    }
+
+    if (field.type === "text") {
+      return (
+        <input
+          type="text"
+          value={field.value || ""}
+          onChange={(e) => updateFieldValue(field.id, e.target.value)}
+          onClick={(e) => e.stopPropagation()}
+          placeholder={field.label || "Type here…"}
+          className={`w-full h-full px-2 text-sm bg-transparent border-0 outline-none ${style.text} placeholder:text-muted-foreground/60`}
+          style={{ cursor: "text" }}
+        />
+      );
+    }
+
+    if (field.type === "date") {
+      return (
+        <div className="flex items-center gap-1 px-2 h-full">
+          <Icon className={`w-3.5 h-3.5 shrink-0 ${style.text}`} />
+          <input
+            type="text"
+            value={field.value || ""}
+            onChange={(e) => updateFieldValue(field.id, e.target.value)}
+            onClick={(e) => e.stopPropagation()}
+            placeholder="Date"
+            className={`flex-1 min-w-0 text-xs bg-transparent border-0 outline-none ${style.text}`}
+            style={{ cursor: "text" }}
+          />
+        </div>
+      );
+    }
+
+    // Signature field: show actual signature image or draw prompt
+    if (field.type === "signature") {
+      if (field.value && field.value.startsWith("data:")) {
+        return (
+          <div
+            className="flex items-center justify-center h-full w-full overflow-hidden cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation();
+              setDrawingFieldId(field.id);
+            }}
+          >
+            <img
+              src={field.value}
+              alt="Signature"
+              className="max-w-full max-h-full object-contain"
+              draggable={false}
+            />
+          </div>
+        );
+      }
+      if (savedSignatureUrl) {
+        return (
+          <div
+            className="flex items-center justify-center h-full w-full overflow-hidden cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation();
+              setDrawingFieldId(field.id);
+            }}
+          >
+            <img
+              src={savedSignatureUrl}
+              alt="Signature"
+              className="max-w-full max-h-full object-contain opacity-80"
+              draggable={false}
+            />
+          </div>
+        );
+      }
+      // No signature: show draw prompt
+      return (
+        <div
+          className={`flex items-center justify-center gap-1 h-full px-2 cursor-pointer ${style.text}`}
+          onClick={(e) => {
+            e.stopPropagation();
+            setDrawingFieldId(field.id);
+          }}
+        >
+          <Pencil className="w-4 h-4 shrink-0" />
+          <span className="text-xs font-semibold truncate">Click to sign</span>
+        </div>
+      );
+    }
+
+    // Initials field: show actual initials from recipient name
+    if (field.type === "initials") {
+      const initials = getInitials(recipient?.name || "");
+      return (
+        <div className={`flex items-center justify-center h-full px-2 ${style.text}`}>
+          <span className="text-lg font-bold tracking-wide">{initials || "?"}</span>
+        </div>
+      );
+    }
+
+    // Fallback
+    return (
+      <div className={`flex items-center justify-center gap-1 h-full px-2 ${style.text}`}>
+        <Icon className="w-4 h-4 shrink-0" />
+        <span className="text-xs font-semibold truncate">{fieldConfig.label}</span>
+      </div>
+    );
+  };
 
   return (
     <div className="space-y-4" style={{ overflowX: "hidden" }}>
@@ -507,7 +736,6 @@ export default function DocumentFieldPlacer({
             Pages
           </p>
           {thumbsLoading && thumbnails.length === 0 ? (
-            // skeleton placeholders
             Array.from({ length: Math.min(totalPages, 3) }).map((_, i) => (
               <div
                 key={i}
@@ -536,11 +764,9 @@ export default function DocumentFieldPlacer({
                     className="w-full block object-cover"
                     draggable={false}
                   />
-                  {/* Active overlay tint */}
                   {isActive && (
                     <div className="absolute inset-0 bg-[hsl(var(--gold)/.06)] pointer-events-none" />
                   )}
-                  {/* Page number badge */}
                   <div
                     className={`absolute bottom-0 left-0 right-0 text-center py-0.5 text-[10px] font-semibold ${
                       isActive
@@ -550,7 +776,6 @@ export default function DocumentFieldPlacer({
                   >
                     {pageNum}
                   </div>
-                  {/* Field count dot */}
                   {count > 0 && (
                     <div className="absolute top-1 right-1 bg-[hsl(var(--gold))] text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center shadow">
                       {count}
@@ -560,7 +785,6 @@ export default function DocumentFieldPlacer({
               );
             })
           ) : (
-            // Fallback: plain numbered buttons when thumbnails failed
             Array.from({ length: totalPages }).map((_, i) => {
               const pageNum = i + 1;
               const isActive = pageNum === currentPage;
@@ -596,7 +820,6 @@ export default function DocumentFieldPlacer({
           <div className="lg:col-span-2">
             <Card className="overflow-hidden">
               <CardContent className="p-0">
-                {/* Clickable/droppable overlay wrapping the iframe */}
                 <div
                   ref={overlayRef}
                   className="relative w-full overflow-y-auto mx-auto"
@@ -605,14 +828,11 @@ export default function DocumentFieldPlacer({
                   onDrop={handleDrop}
                   onDragOver={handleDragOver}
                 >
-                  {/* PDF rendered via pdf.js canvas for reliable blob URL support */}
                   <PdfPageCanvas pdfDoc={pdfJsDocRef.current} pageNumber={currentPage} pdfUrl={pdfUrl} />
 
                   {/* Field overlays */}
                   {pageFields.map((field) => {
                     const style = getRecipientStyle(field.recipientId);
-                    const fieldConfig = fieldTypes.find((f) => f.type === field.type)!;
-                    const Icon = fieldConfig.icon;
 
                     return (
                       <div
@@ -642,71 +862,7 @@ export default function DocumentFieldPlacer({
                         </button>
 
                         {/* Field content */}
-                        {field.type === "stamp" ? (
-                          <div className="flex items-center justify-center h-full w-full overflow-hidden">
-                            {savedStampSvg ? (
-                              <div
-                                className="w-full h-full flex items-center justify-center opacity-85"
-                                dangerouslySetInnerHTML={{
-                                  __html: savedStampSvg.replace(
-                                    /width="[^"]*"/,
-                                    `width="${field.width - 4}"`
-                                  ).replace(
-                                    /height="[^"]*"/,
-                                    `height="${field.height - 4}"`
-                                  ),
-                                }}
-                              />
-                            ) : (
-                              <div className={`flex flex-col items-center justify-center gap-0.5 ${style.text}`}>
-                                <Stamp className="w-6 h-6" />
-                                <span className="text-[9px] font-medium">Company Stamp</span>
-                              </div>
-                            )}
-                          </div>
-                        ) : field.type === "checkbox" ? (
-                          <div
-                            className={`flex items-center justify-center h-full cursor-pointer ${style.text}`}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              updateFieldValue(field.id, field.value === "checked" ? "" : "checked");
-                            }}
-                          >
-                            {field.value === "checked" ? (
-                              <CheckSquare className="w-5 h-5" />
-                            ) : (
-                              <div className={`w-5 h-5 border-2 rounded ${style.border}`} />
-                            )}
-                          </div>
-                        ) : field.type === "text" ? (
-                          <input
-                            type="text"
-                            value={field.value || ""}
-                            onChange={(e) => updateFieldValue(field.id, e.target.value)}
-                            onClick={(e) => e.stopPropagation()}
-                            placeholder={field.label || "Type here…"}
-                            className={`w-full h-full px-2 text-sm bg-transparent border-0 outline-none ${style.text} placeholder:text-muted-foreground/60`}
-                            style={{ cursor: "text" }}
-                          />
-                        ) : field.type === "date" ? (
-                          <div className="flex items-center gap-1 px-2 h-full">
-                            <Icon className={`w-3.5 h-3.5 shrink-0 ${style.text}`} />
-                            <input
-                              type="text"
-                              value={field.value || ""}
-                              onChange={(e) => updateFieldValue(field.id, e.target.value)}
-                              onClick={(e) => e.stopPropagation()}
-                              placeholder="Date"
-                              className={`flex-1 min-w-0 text-xs bg-transparent border-0 outline-none ${style.text}`}
-                              style={{ cursor: "text" }}
-                            />
-                          </div>
-                        ) : (
-                          <div className={`flex items-center justify-center gap-1 h-full px-2 ${style.text}`}>
-                            <Icon className="w-4 h-4 shrink-0" />
-                            <span className="text-xs font-semibold truncate">{fieldConfig.label}</span>
-                          </div>
-                        )}
+                        {renderFieldContent(field, style)}
 
                         {/* Recipient color bar */}
                         <div className={`absolute bottom-0 left-0 right-0 h-0.5 rounded-b ${style.bg}`} />
@@ -788,7 +944,8 @@ export default function DocumentFieldPlacer({
                             <div className="min-w-0">
                               <p className="text-xs font-medium truncate">
                                 {field.label || fieldConfig?.label}
-                                {field.value ? ` — ${field.value}` : ""}
+                                {field.type === "initials" ? ` — ${getInitials(recipient?.name || "")}` : ""}
+                                {field.type !== "initials" && field.type !== "signature" && field.value ? ` — ${field.value}` : ""}
                               </p>
                               <p className="text-xs text-muted-foreground truncate">
                                 {recipient?.name} · p{field.pageNumber}
@@ -848,6 +1005,7 @@ export default function DocumentFieldPlacer({
                   <li>Click on a thumbnail to switch pages</li>
                   <li>Click on the document to place a field</li>
                   <li>Drag placed fields to reposition them</li>
+                  <li>Click a signature field to draw directly</li>
                   <li>Or use <strong>Auto Detect</strong> for AI placement</li>
                 </ol>
               </CardContent>
@@ -855,6 +1013,28 @@ export default function DocumentFieldPlacer({
           </div>
         </div>
       </div>
+
+      {/* ─── Draw Signature Dialog ─── */}
+      <Dialog open={!!drawingFieldId} onOpenChange={(open) => !open && setDrawingFieldId(null)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Pencil className="w-5 h-5" />
+              Draw Your Signature
+            </DialogTitle>
+          </DialogHeader>
+          <ESignaturePad
+            onSignatureChange={(dataUrl) => {
+              if (dataUrl && drawingFieldId) {
+                updateFieldValue(drawingFieldId, dataUrl);
+                setDrawingFieldId(null);
+                toast.success("Signature applied to field");
+              }
+            }}
+            height={180}
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
