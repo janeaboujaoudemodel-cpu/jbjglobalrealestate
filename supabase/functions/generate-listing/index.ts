@@ -466,8 +466,8 @@ serve(async (req: Request) => {
       }
 
       if (job.status === "failed") {
-        return new Response(JSON.stringify({ success: false, error: job.error_message || "Extraction failed" }), {
-          status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        return new Response(JSON.stringify({ success: false, status: "failed", error: job.error_message || "Extraction failed" }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
 
