@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { formatDistanceToNow } from "date-fns";
 import { Link } from "react-router-dom";
 import type { Project } from "@/hooks/useProjects";
 import FavoriteButton from "./FavoriteButton";
@@ -360,6 +361,13 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
               ...more
             </span>
           </p>
+
+          {/* Updated date */}
+          {(project as any).updated_at && (
+            <p className="text-[10px] text-muted-foreground mb-2">
+              Updated {formatDistanceToNow(new Date((project as any).updated_at), { addSuffix: true })}
+            </p>
+          )}
 
           {/* Payment Plan Badge - Bottom Right (real data only) */}
           {(() => {

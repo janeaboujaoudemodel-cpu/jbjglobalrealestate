@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
-import { History, X, Building2, MapPin, Home } from "lucide-react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { History, X, Building2, MapPin, Home, ChevronLeft, ChevronRight } from "lucide-react";
 import { useRecentSearches, type RecentItemType, type RecentItem } from "@/hooks/useRecentSearches";
 import FavoriteButton from "@/components/FavoriteButton";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
+import LeadCaptureModal from "@/components/project-detail/LeadCaptureModal";
 
 interface ContinueSearchingProps {
   type?: RecentItemType;
@@ -29,8 +30,16 @@ const ContinueSearching = ({
   const { items, clearAll, patchItem } = useRecentSearches(type);
   const stripRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
+  const [leadCaptureOpen, setLeadCaptureOpen] = useState(false);
   const animationRef = useRef<number>();
   const scrollSpeed = useRef(0.5);
+
+  const scrollByCard = useCallback((direction: 'left' | 'right') => {
+    const el = stripRef.current;
+    if (!el) return;
+    const cardWidth = 216; // card width + gap
+    el.scrollBy({ left: direction === 'right' ? cardWidth : -cardWidth, behavior: 'smooth' });
+  }, []);
 
   // Auto-scroll walking strip
   useEffect(() => {
@@ -87,11 +96,12 @@ const ContinueSearching = ({
             </h2>
           </div>
           <div className="flex items-center gap-3">
-            <Link to="/contact">
-              <button className="px-4 py-2 rounded-lg bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 text-black text-xs font-semibold tracking-wide hover:shadow-lg hover:shadow-gold/20 transition-all duration-300">
+              <button
+                onClick={() => setLeadCaptureOpen(true)}
+                className="px-4 py-2 rounded-lg bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 text-black text-xs font-semibold tracking-wide hover:shadow-lg hover:shadow-gold/20 transition-all duration-300"
+              >
                 Register Your Interest
               </button>
-            </Link>
             <button
               onClick={clearAll}
               className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
@@ -108,9 +118,17 @@ const ContinueSearching = ({
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
+          {/* Left Arrow */}
+          <button
+            onClick={() => scrollByCard('left')}
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full flex items-center justify-center border-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-gold shadow-lg hover:shadow-gold/30 hover:border-gold transition-all duration-300"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+
           <div
             ref={stripRef}
-            className="flex gap-4 overflow-x-auto scrollbar-hide pb-2 pl-2 md:pl-4"
+            className="flex gap-4 overflow-x-auto scrollbar-hide pb-2 px-12 md:px-14"
             style={{
               scrollBehavior: "smooth",
               WebkitOverflowScrolling: "touch",
@@ -121,11 +139,29 @@ const ContinueSearching = ({
               <RecentCard3D key={`${item.type}-${item.id}`} item={item} index={index} patchItem={patchItem} />
             ))}
           </div>
+
+          {/* Right Arrow */}
+          <button
+            onClick={() => scrollByCard('right')}
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full flex items-center justify-center border-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-gold shadow-lg hover:shadow-gold/30 hover:border-gold transition-all duration-300"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+
           {/* Fade edges */}
-          <div className="absolute top-0 left-0 bottom-2 w-4 bg-gradient-to-r from-black to-transparent pointer-events-none z-10" />
-          <div className="absolute top-0 right-0 bottom-2 w-4 bg-gradient-to-l from-black to-transparent pointer-events-none z-10" />
+          <div className="absolute top-0 left-10 bottom-2 w-4 bg-gradient-to-r from-black to-transparent pointer-events-none z-10" />
+          <div className="absolute top-0 right-10 bottom-2 w-4 bg-gradient-to-l from-black to-transparent pointer-events-none z-10" />
         </div>
       </div>
+
+      {/* Lead Capture Modal */}
+      <LeadCaptureModal
+        open={leadCaptureOpen}
+        onOpenChange={setLeadCaptureOpen}
+        projectId="general"
+        projectName="JBJ Global Real Estate"
+        documentType="brochure"
+      />
     </section>
   );
 };

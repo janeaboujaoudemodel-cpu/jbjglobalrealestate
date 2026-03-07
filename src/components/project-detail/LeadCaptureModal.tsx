@@ -103,6 +103,8 @@ const LeadCaptureModal = ({
     }
   };
 
+  const isInterestOnly = !documentUrl;
+
   const documentLabels: Record<string, string> = {
     brochure: "Brochure",
     floor_plan: "Floor Plans",
@@ -118,9 +120,11 @@ const LeadCaptureModal = ({
             <div className="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center mb-4">
               <CheckCircle className="w-8 h-8 text-gold" />
             </div>
-            <h3 className="text-lg font-semibold text-black mb-2">Download Ready!</h3>
+            <h3 className="text-lg font-semibold text-black mb-2">
+              {isInterestOnly ? "Thank You!" : "Download Ready!"}
+            </h3>
             <p className="text-sm text-zinc-600 text-center">
-              Your download will start automatically.
+              {isInterestOnly ? "Our team will contact you shortly." : "Your download will start automatically."}
             </p>
           </div>
         ) : (
@@ -131,7 +135,7 @@ const LeadCaptureModal = ({
                   <FileText className="w-5 h-5 text-gold" />
                 </div>
                 <div>
-                  <DialogTitle className="text-lg">Download {documentLabels[documentType]}</DialogTitle>
+                  <DialogTitle className="text-lg">{isInterestOnly ? "Register Your Interest" : `Download ${documentLabels[documentType]}`}</DialogTitle>
                   <DialogDescription className="text-xs">{projectName}</DialogDescription>
                 </div>
               </div>
@@ -173,7 +177,7 @@ const LeadCaptureModal = ({
                 />
               </div>
 
-              <Button type="submit" variant="primary" className="w-full" disabled={isSubmitting}>
+                <Button type="submit" variant="primary" className="w-full" disabled={isSubmitting}>
                 {isSubmitting ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -181,8 +185,8 @@ const LeadCaptureModal = ({
                   </>
                 ) : (
                   <>
-                    <Download className="w-4 h-4" />
-                    Get {documentLabels[documentType]}
+                    {isInterestOnly ? <FileText className="w-4 h-4" /> : <Download className="w-4 h-4" />}
+                    {isInterestOnly ? "Submit Interest" : `Get ${documentLabels[documentType]}`}
                   </>
                 )}
               </Button>

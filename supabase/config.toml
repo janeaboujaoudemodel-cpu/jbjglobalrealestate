@@ -531,3 +531,6 @@ verify_jwt = false
 
 [functions.generate-listing]
 verify_jwt = false
+
+[functions.ai-signature-generator]
+verify_jwt = false
