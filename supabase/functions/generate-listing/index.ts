@@ -267,6 +267,13 @@ MULTI-PROJECT RULE:
       const totalBatches = Math.ceil(storageFiles.length / BATCH_SIZE);
 
       for (let batchIdx = 0; batchIdx < totalBatches; batchIdx++) {
+        // Check if job was cancelled
+        const { data: jobCheck } = await supabase.from("ai_job_master").select("status").eq("id", jobId).single();
+        if (jobCheck?.status === "cancelled") {
+          console.log(`[generate-listing] Job ${jobId} cancelled by user, aborting.`);
+          return;
+        }
+
         const batch = storageFiles.slice(batchIdx * BATCH_SIZE, (batchIdx + 1) * BATCH_SIZE);
         const batchLabel = `Analyzing batch ${batchIdx + 1} of ${totalBatches} (${batch.length} files)...`;
         await updateJobProgress(supabase, jobId, batchLabel);
