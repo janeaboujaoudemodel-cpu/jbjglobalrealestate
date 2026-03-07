@@ -1,41 +1,24 @@
 
 
-## Plan: Fix All Email Issues Across All Templates
+# Fix: Continue Searching Section — Title, Background, Padding, Button Color
 
-### Problems Identified
+## Changes in `src/components/ContinueSearching.tsx`
 
-1. **Recommended For You icons disappeared** — Inline SVGs are stripped by Gmail and most email clients. Must revert to hosted PNG images (`ai-tools.png`, `guides.png`, `properties.png` already exist in `public/email-icons/`).
+### 1. Title — More Premium Wording
+Change from "Continue Your Search" to "Continue Searching for Your Dream Property" (or similar premium phrasing that includes "Continue Searching for...").
 
-2. **Social media footer icons not rendering** — Same issue: `socialLinksFooter()` loads external `.svg` files via `<img>` tags, but Gmail blocks SVG images entirely. Must switch to hosted `.png` files. Currently missing `social-facebook.png` — need to confirm or create it.
+### 2. "Register Your Interest" Button — Champagne Gold
+Current (line 89): `bg-gradient-to-r from-gold/90 to-gold text-black` — this is the yellow gold.
+Change to champagne gradient: `bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 text-black` — matching the locked champagne gold standard.
 
-3. **Email split into multiple visual cards** — Several sub-sections (`ticketSupportEmbed`, `readyToGetStartedHtml`, `recommendedActionsHtml`) each have their own `border`, `border-radius`, and `background` styles creating distinct visual boxes. These need to be softened so they sit seamlessly inside the single continuous card.
+### 3. Left Card Cropped — Increase Padding
+The left fade edge (line 123) is `w-8` which overlaps the first card. Also the carousel container has no left padding. Fix:
+- Add `pl-2 md:pl-4` to the scrollable strip div (line 111)
+- Reduce fade edge width from `w-8` to `w-4` on both sides
 
-### Changes (all in `supabase/functions/_shared/email-html.ts`)
-
-#### A. Recommended For You — Revert to PNG hosted images
-- Change `recommendedCard()` back to using `iconImg()` with PNG paths
-- Remove the `RECOMMENDED_ICONS` inline SVG object
-- Ensure circular frame clips the PNG with `overflow:hidden` on the `<td>` to prevent square backgrounds
-- Signature: `recommendedCard(title, href, iconPath, alt)` — restore the original parameters
-
-#### B. Social Footer — Switch to PNG with white pearl background
-- Replace `socialLinksFooter()` to use the inline `SVG` object icons (instagram, facebook, linkedin, tiktok, youtube) that are already defined at the top of the file — these render as raw HTML inside `<td>` elements, not as `<img>` tags, so they should survive email client processing
-- Actually, since Gmail strips ALL SVG (both inline and `<img>`), switch to using the `.png` files: `social-instagram.png`, `social-linkedin.png`, `social-tiktok.png`, `social-youtube.png`
-- Create `social-facebook.png` if missing
-- Style each icon circle: white/pearl (#FDFBF7) background, gold border, black icon inside
-
-#### C. Single Card Layout — Remove visual fragmentation
-- `ticketSupportEmbed()`: Remove the heavy gradient background and red border; make it blend into the card
-- `readyToGetStartedHtml()`: Remove the outer border and separate background so it flows within the card
-- `inquiryBox()`: Soften its standalone bordered look
-- Keep all content inside the single `emailShell` wrapper card with no sub-borders that create separation
-
-#### D. Deploy + Send Test Email
-- Deploy the updated edge function
-- Immediately send a test welcome email to `janeaboujaoudenails@gmail.com`
-- Take a screenshot as proof
-
-### Files Modified
-- `supabase/functions/_shared/email-html.ts` — all icon and layout fixes
-- `public/email-icons/social-facebook.png` — create if missing (or use existing assets)
+### 4. Background — More Premium
+Enhance the backdrop (lines 69-74):
+- Add a subtle champagne-tinted radial glow
+- Strengthen the gold line accents at top/bottom
+- Add a very subtle dark gradient base for depth
 
