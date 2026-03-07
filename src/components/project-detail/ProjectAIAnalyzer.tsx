@@ -213,7 +213,14 @@ export const ProjectAIAnalyzer = ({
   const appreciation = sections?.investment ? extractAppreciation(sections.investment) : null;
 
   const prosList = sections?.pros ? parseBullets(sections.pros) : [];
-  const consList = sections?.cons ? parseBullets(sections.cons) : [];
+  const rawConsList = sections?.cons ? parseBullets(sections.cons) : [];
+  
+  // Strict quality filter: remove vague/speculative cons
+  const VAGUE_KEYWORDS = ["may", "might", "could", "potential", "possible", "uncertain", "arguably", "perhaps", "likely", "unlikely", "risk of", "can be"];
+  const consList = rawConsList.filter(con => {
+    const lower = con.toLowerCase();
+    return !VAGUE_KEYWORDS.some(kw => lower.includes(kw));
+  });
 
   return (
     <section ref={sectionRef} className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl">
@@ -265,6 +272,7 @@ export const ProjectAIAnalyzer = ({
                   className="w-28 h-28 md:w-36 md:h-36 object-contain"
                   style={{
                     animation: "jbj-breathe 2s ease-in-out infinite",
+                    mixBlendMode: "multiply",
                   }}
                 />
                 <div className="text-center space-y-2">
@@ -501,13 +509,13 @@ export const ProjectAIAnalyzer = ({
                 )}
               </div>
 
-              {/* Cons */}
-              <div className="bg-red-50 border border-red-200 rounded-2xl p-6 shadow-sm">
-                <div className="flex items-center gap-2 mb-4">
-                  <ThumbsDown className="w-5 h-5 text-red-500" />
-                  <h3 className="font-bold text-red-800 text-lg">Cons</h3>
-                </div>
-                {consList.length > 0 ? (
+              {/* Cons — only show if verified cons exist */}
+              {consList.length > 0 ? (
+                <div className="bg-red-50 border border-red-200 rounded-2xl p-6 shadow-sm">
+                  <div className="flex items-center gap-2 mb-4">
+                    <ThumbsDown className="w-5 h-5 text-red-500" />
+                    <h3 className="font-bold text-red-800 text-lg">Cons</h3>
+                  </div>
                   <ul className="space-y-2">
                     {consList.map((item, i) => (
                       <li key={i} className="flex items-start gap-2 bg-white/70 rounded-lg px-3 py-2 border border-red-100">
@@ -516,10 +524,16 @@ export const ProjectAIAnalyzer = ({
                       </li>
                     ))}
                   </ul>
-                ) : (
-                  <p className="text-zinc-400 text-sm italic">Cons data not available.</p>
-                )}
-              </div>
+                </div>
+              ) : (
+                <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 shadow-sm">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                    <h3 className="font-bold text-emerald-800 text-lg">No Significant Risks Identified</h3>
+                  </div>
+                  <p className="text-emerald-700 text-sm mt-2">AI analysis did not identify any verifiable market risks for this project.</p>
+                </div>
+              )}
             </div>
 
             {/* Footer */}

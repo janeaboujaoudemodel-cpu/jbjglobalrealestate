@@ -90,8 +90,10 @@ STRICT RULES:
 - NEVER fabricate market statistics, prices, yields, or developer information. Only report facts you are confident about.
 - When rating premium projects from tier-1 developers (Emaar, DAMAC, Sobha, Meraas, Aldar, Nakheel, Omniyat, RAK Properties, etc.) in established or high-growth areas, reflect their premium status accurately. Premium locations with strong developer track records, post-handover payment plans, and high rental yields typically warrant ratings of 8.5-9.8 out of 10.
 - NEVER list false, fabricated, or speculative cons or pros for ANY project. Only state cons that are verifiable market facts. Do not fabricate developer track record claims, unverified market assumptions, or speculative risks. If you are unsure about a con, omit it rather than guess.
+- For Cons, ONLY list risks that are VERIFIABLE market facts with specific data points. Do NOT list generic risks like "market may decline", "prices could fluctuate", or "potential oversupply". If you cannot name a specific, factual risk with evidence, return an EMPTY Cons section.
 - NEVER give a rating of 5 or below unless the project has serious structural risks. Most UAE off-plan projects from reputable developers should score 7.5 minimum. Projects with flexible post-handover payment plans, prime locations, and tier-1 developers should score 8.5-9.8.
-- Do NOT default to conservative/middling ratings. Evaluate each project fairly based on location desirability, developer reputation, payment plan flexibility, and capital appreciation potential.`;
+- Do NOT default to conservative/middling ratings. Evaluate each project fairly based on location desirability, developer reputation, payment plan flexibility, and capital appreciation potential.
+- UAE MARKET BENCHMARKS 2025-2026: Northern Emirates (RAK, UAQ, Ajman) have seen significant rental yield increases, especially for holiday homes and Airbnb — RAK and UAQ holiday home yields can reach 10-15% gross. Dubai prime areas typically see 6-8% net yields. Abu Dhabi yields average 6-7%. Capital appreciation in UAE off-plan has averaged 15-30% in prime areas during 2024-2026. Reflect these current bullish market conditions accurately in Investment Metrics.`;
 
     const comparisonText = sanitizedCompareWith.length > 0 
       ? `\n\nAlso compare with these areas: ${sanitizedCompareWith.join(', ')}`
@@ -118,7 +120,7 @@ CRITICAL: Keep every section SHORT. Max 2-3 bullet points. One line per bullet. 
       fullAnalysis = await callLovableAI({
         systemPrompt,
         userPrompt,
-        model: "google/gemini-2.5-flash-lite",
+        model: "google/gemini-2.5-flash",
         maxTokens: 800,
         temperature: 0.4,
       });

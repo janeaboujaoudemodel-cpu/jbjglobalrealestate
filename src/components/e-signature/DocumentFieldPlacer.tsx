@@ -546,21 +546,8 @@ export default function DocumentFieldPlacer({
                   onDrop={handleDrop}
                   onDragOver={handleDragOver}
                 >
-                  {/* Actual PDF — use object tag for better scroll support */}
-                  <object
-                    key={`${pdfUrl}-page-${currentPage}`}
-                    data={`${pdfUrl}#page=${currentPage}&toolbar=0&navpanes=0`}
-                    type="application/pdf"
-                    className="w-full border-0"
-                    style={{ height: "1200px", pointerEvents: "none" }}
-                  >
-                    <iframe
-                      src={`${pdfUrl}#page=${currentPage}&toolbar=0&navpanes=0`}
-                      className="w-full border-0"
-                      style={{ height: "1200px", pointerEvents: "none" }}
-                      title={`Document Preview — Page ${currentPage}`}
-                    />
-                  </object>
+                  {/* PDF rendered via pdf.js canvas for reliable blob URL support */}
+                  <PdfPageCanvas pdfDoc={pdfJsDocRef.current} pageNumber={currentPage} pdfUrl={pdfUrl} />
 
                   {/* Field overlays */}
                   {pageFields.map((field) => {

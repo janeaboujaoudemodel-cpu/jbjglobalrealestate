@@ -34,7 +34,7 @@ interface Recipient {
 interface SignatureField {
   id: string;
   recipientId: string;
-  type: "signature" | "initials" | "date" | "text" | "checkbox";
+  type: "signature" | "initials" | "date" | "text" | "checkbox" | "stamp";
   pageNumber: number;
   x: number;
   y: number;

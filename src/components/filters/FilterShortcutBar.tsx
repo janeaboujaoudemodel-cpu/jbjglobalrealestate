@@ -300,7 +300,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
       <div className="flex flex-col gap-2 w-full">
         {/* Row 1: Connected toolbar - Search + Sort Pills + Map + Saved + Currency + Filter + Mode */}
         <div className="relative">
-          <div ref={row1Ref} className="flex items-center w-full overflow-x-auto scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-x' }}>
+          <div ref={row1Ref} className="flex items-center w-full overflow-x-auto scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-x', scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
             <div className="flex items-center w-full min-w-max border border-gold/30 rounded-lg overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
               {/* Search slot or built-in search */}
               {searchSlot ? (
@@ -366,7 +366,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
 
         {/* Row 2: Filter popovers + Sort pills */}
         <div className="relative">
-          <div ref={row2Ref} className="flex items-center gap-2 md:gap-3 overflow-x-auto scrollbar-hide pb-1 -mb-1 w-full" style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-x' }}>
+          <div ref={row2Ref} className="flex items-center gap-2 md:gap-3 overflow-x-auto scrollbar-hide pb-1 -mb-1 w-full" style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-x', scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
         {/* Price */}
         <Popover>
           <PopoverTrigger asChild>
