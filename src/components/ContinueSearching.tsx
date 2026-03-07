@@ -61,16 +61,18 @@ const ContinueSearching = ({
 
   const displayItems = validItems.slice(0, limit);
 
-  const sectionTitle = title || t("home.continueSearching", "Continue Your Search");
+  const sectionTitle = title || t("home.continueSearching", "Continue Searching for Your Dream Property");
 
   return (
     <section className={`py-8 md:py-12 relative overflow-hidden ${className}`}>
       {/* Premium backdrop */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-black/60 z-10" />
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(200,167,102,0.06)_0%,_transparent_70%)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-[#0a0a0a] to-black/80 z-[1]" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-black/60 z-[2]" />
+        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold/50 to-transparent z-[3]" />
+        <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold/50 to-transparent z-[3]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(200,167,102,0.1)_0%,_transparent_60%)] z-[2]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(253,251,247,0.04)_0%,_transparent_50%)] z-[2]" />
       </div>
 
       <div className="container mx-auto px-4 relative z-20">
@@ -86,7 +88,7 @@ const ContinueSearching = ({
           </div>
           <div className="flex items-center gap-3">
             <Link to="/contact">
-              <button className="px-4 py-2 rounded-lg bg-gradient-to-r from-gold/90 to-gold text-black text-xs font-semibold tracking-wide hover:opacity-90 transition-opacity">
+              <button className="px-4 py-2 rounded-lg bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 text-black text-xs font-semibold tracking-wide hover:shadow-lg hover:shadow-gold/20 transition-all duration-300">
                 Register Your Interest
               </button>
             </Link>
@@ -108,7 +110,7 @@ const ContinueSearching = ({
         >
           <div
             ref={stripRef}
-            className="flex gap-4 overflow-x-auto scrollbar-hide pb-2"
+            className="flex gap-4 overflow-x-auto scrollbar-hide pb-2 pl-2 md:pl-4"
             style={{
               scrollBehavior: "smooth",
               WebkitOverflowScrolling: "touch",
@@ -120,8 +122,8 @@ const ContinueSearching = ({
             ))}
           </div>
           {/* Fade edges */}
-          <div className="absolute top-0 left-0 bottom-2 w-8 bg-gradient-to-r from-black to-transparent pointer-events-none z-10" />
-          <div className="absolute top-0 right-0 bottom-2 w-8 bg-gradient-to-l from-black to-transparent pointer-events-none z-10" />
+          <div className="absolute top-0 left-0 bottom-2 w-4 bg-gradient-to-r from-black to-transparent pointer-events-none z-10" />
+          <div className="absolute top-0 right-0 bottom-2 w-4 bg-gradient-to-l from-black to-transparent pointer-events-none z-10" />
         </div>
       </div>
     </section>
