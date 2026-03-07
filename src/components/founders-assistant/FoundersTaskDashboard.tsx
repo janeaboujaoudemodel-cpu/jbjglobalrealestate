@@ -118,7 +118,6 @@ const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsCh
       }
     }
   }, [initialFilter]);
-  const [expandedTask, setExpandedTask] = useState<string | null>(null);
 
   useEffect(() => {
     if (user) {
