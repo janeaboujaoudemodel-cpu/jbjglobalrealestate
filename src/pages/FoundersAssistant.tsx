@@ -132,21 +132,18 @@ export default function FoundersAssistant() {
 
   if (authLoading) {
     return (
-      <MainLayout>
-        <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-          <Loader2 className="h-8 w-8 animate-spin text-gold" />
-        </div>
-      </MainLayout>
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+        <Loader2 className="h-8 w-8 animate-spin text-gold" />
+      </div>
     );
   }
 
   return (
-    <MainLayout>
-      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-        {/* Command Palette */}
-        <CommandPalette isOpen={showCommandPalette} onClose={() => setShowCommandPalette(false)} />
-        
-        <div className="container mx-auto px-4 py-6 max-w-7xl pb-24">
+    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+      {/* Command Palette */}
+      <CommandPalette isOpen={showCommandPalette} onClose={() => setShowCommandPalette(false)} />
+      
+      <div className="px-4 py-4 max-w-7xl mx-auto pb-24">
           {/* Premium Header */}
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
@@ -256,7 +253,7 @@ export default function FoundersAssistant() {
 
           {/* Main Tabs - Premium White/Gold Theme */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="w-full bg-white/80 border-2 border-gold/30 p-1 rounded-xl mb-6 flex flex-wrap gap-1 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+            <TabsList className="w-full bg-white/80 border-2 border-gold/30 p-1.5 rounded-xl mb-4 flex flex-wrap justify-center gap-1 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
               <TabsTrigger 
                 value="assistant" 
                 className="flex-1 min-w-[100px] data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black"
@@ -518,6 +515,5 @@ export default function FoundersAssistant() {
           )}
         </AnimatePresence>
       </div>
-    </MainLayout>
   );
 }

@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { 
   Shield, ExternalLink, Check, X, AlertTriangle, 
   Eye, EyeOff, Layout, Menu, FileText, Search,
-  Filter, RefreshCw, Brain, Sparkles, Zap, AlertCircle
+  Filter, RefreshCw, Brain, Sparkles, Zap, AlertCircle,
+  ClipboardCheck, Camera
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -27,6 +28,10 @@ import {
   type AIToolStatus,
   type AIToolEntry 
 } from '@/data/ai-tools-verified-inventory';
+
+// Import delivery checklist
+import { DELIVERY_REQUIREMENTS, type DeliveryStatus, type DeliveryRequirement } from '@/config/delivery-checklist';
+import DeliveryChecklistTab from '@/components/owner-dashboard/DeliveryChecklistTab';
 
 // Route Inventory - Comprehensive list of all application routes
 const ROUTE_INVENTORY = [
@@ -257,6 +262,10 @@ const OwnerAuditPage = () => {
               <TabsTrigger value="ai-tools" className="data-[state=active]:bg-gold/20 data-[state=active]:text-gold">
                 <Brain className="w-4 h-4 mr-2" />
                 AI Tools Audit
+              </TabsTrigger>
+              <TabsTrigger value="delivery" className="data-[state=active]:bg-gold/20 data-[state=active]:text-gold">
+                <ClipboardCheck className="w-4 h-4 mr-2" />
+                Delivery Checklist
               </TabsTrigger>
             </TabsList>
 
@@ -635,6 +644,11 @@ const OwnerAuditPage = () => {
                   </div>
                 </div>
               </div>
+            </TabsContent>
+
+            {/* Delivery Checklist Tab */}
+            <TabsContent value="delivery">
+              <DeliveryChecklistTab />
             </TabsContent>
           </Tabs>
         </div>

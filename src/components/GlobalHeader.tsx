@@ -1134,7 +1134,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                             
                             {/* My Assistant */}
                             <Link
-                              to="/founder-assistant"
+                              to="/owner/founder-assistant"
                               onClick={() => setMobileMenuOpen(false)}
                               className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
                             >

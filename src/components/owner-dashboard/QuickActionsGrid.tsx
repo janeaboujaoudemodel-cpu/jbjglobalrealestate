@@ -26,7 +26,7 @@ const QUICK_ACTIONS: QuickAction[] = [
   { label: "+ Add Lead", icon: UserPlus, path: "/crm?action=new-lead", color: "text-emerald-600" },
   { label: "Calendar", icon: Calendar, path: "/crm/calendar", color: "text-blue-600" },
   { label: "Property Map", icon: Map, path: "/map", color: "text-amber-600" },
-  { label: "AI Assistant", icon: Bot, path: "/founder-assistant", color: "text-purple-600" },
+  { label: "AI Assistant", icon: Bot, path: "/owner/founder-assistant", color: "text-purple-600" },
   { label: "Studio", icon: Video, path: "/studio", color: "text-pink-600" },
   { label: "Automations", icon: Zap, path: "/automations", color: "text-yellow-600" },
   { label: "Analytics", icon: BarChart3, path: "/jbj-analytics", color: "text-cyan-600" },

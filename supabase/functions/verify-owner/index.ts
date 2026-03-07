@@ -48,7 +48,11 @@ serve(async (req) => {
     const isOwner = user.email?.toLowerCase() === ownerEmail.toLowerCase();
 
     return new Response(
-      JSON.stringify({ isOwner, email: user.email }),
+      JSON.stringify({ 
+        isOwner, 
+        email: user.email,
+        reason: isOwner ? undefined : 'email_mismatch',
+      }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {

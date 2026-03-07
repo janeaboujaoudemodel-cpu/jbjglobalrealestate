@@ -277,10 +277,15 @@ Just type naturally or use commands like \`/schedule\`, \`/email\`, or mention t
         taskStatus = result.success ? 'completed' : 'failed';
       } else {
         // Regular AI chat
-        const conversationHistory = messages.filter(m => !m.isTyping).map(m => ({
-          role: m.role,
-          content: m.content,
-        }));
+        const conversationHistory = messages
+          .filter(m => !m.isTyping)
+          .slice(-20) // Keep last 20 messages for context
+          .map(m => ({
+            role: m.role,
+            content: m.content,
+          }));
+        // Add the current user message to history
+        conversationHistory.push({ role: 'user', content: userMessage.content });
 
         const { data, error } = await supabase.functions.invoke('executive-assistant', {
           body: {

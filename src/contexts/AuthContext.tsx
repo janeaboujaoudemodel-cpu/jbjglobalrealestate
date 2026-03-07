@@ -80,24 +80,46 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     const attemptVerify = async (): Promise<boolean> => {
-      const timeoutPromise = new Promise<{ data: null; error: Error }>((_, reject) => {
-        setTimeout(() => reject(new Error("Owner verification timeout")), 15000);
-      });
+      const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/verify-owner`;
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 15000);
 
-      const result = await Promise.race([
-        supabase.functions.invoke("verify-owner", {
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
           headers: {
-            Authorization: `Bearer ${currentSession.access_token}`,
+            'Authorization': `Bearer ${currentSession.access_token}`,
+            'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+            'Content-Type': 'application/json',
           },
-        }),
-        timeoutPromise,
-      ]);
+          signal: controller.signal,
+        });
 
-      if (result.error) {
-        throw new Error(result.error.message || "Verification failed");
+        clearTimeout(timeout);
+        
+        // Non-OK status = treat as transient error (triggers retry UI, NOT /403)
+        if (!response.ok) {
+          throw new Error(`Verification HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        // Only treat as "definitively not owner" when reason is email_mismatch
+        // All other non-owner reasons (no_auth, no_user, no_config, error) are transient
+        if (data?.isOwner === true) {
+          return true;
+        }
+        
+        if (data?.reason === 'email_mismatch') {
+          return false; // Real not-owner
+        }
+        
+        // Any other reason = treat as error so OwnerGuard shows retry, not /403
+        throw new Error(data?.reason || 'verification_inconclusive');
+      } catch (err: any) {
+        clearTimeout(timeout);
+        throw err;
       }
-
-      return result.data?.isOwner === true;
     };
 
     try {
