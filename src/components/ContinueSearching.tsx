@@ -30,6 +30,29 @@ const ContinueSearching = ({
   const stripRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
   const animationRef = useRef<number>();
+  const scrollSpeed = useRef(0.5);
+
+  // Auto-scroll walking strip
+  useEffect(() => {
+    const el = stripRef.current;
+    if (!el || isPaused) return;
+
+    let lastTime = 0;
+    const tick = (time: number) => {
+      if (lastTime) {
+        const delta = time - lastTime;
+        el.scrollLeft += scrollSpeed.current * (delta / 16);
+        // Loop: when reaching end, jump back
+        if (el.scrollLeft >= el.scrollWidth - el.clientWidth - 2) {
+          el.scrollLeft = 0;
+        }
+      }
+      lastTime = time;
+      animationRef.current = requestAnimationFrame(tick);
+    };
+    animationRef.current = requestAnimationFrame(tick);
+    return () => { if (animationRef.current) cancelAnimationFrame(animationRef.current); };
+  }, [isPaused]);
 
   if (items.length === 0) return null;
 
