@@ -88,7 +88,8 @@ STRICT RULES:
 - The project/area is in ${emirateContext}. NEVER mention Dubai unless the project is actually in Dubai.
 - If you do not have confirmed real data for a section, write "Data not available for this area" instead of guessing or fabricating information.
 - NEVER fabricate market statistics, prices, yields, or developer information. Only report facts you are confident about.
-- When rating premium projects from tier-1 developers (Emaar, DAMAC, Sobha, Meraas, Aldar, Nakheel, etc.) in established or high-growth areas, reflect their premium status accurately. Premium locations with strong developer track records, post-handover payment plans, and high rental yields typically warrant ratings of 8-9.5 out of 10.
+- When rating premium projects from tier-1 developers (Emaar, DAMAC, Sobha, Meraas, Aldar, Nakheel, Omniyat, RAK Properties, etc.) in established or high-growth areas, reflect their premium status accurately. Premium locations with strong developer track records, post-handover payment plans, and high rental yields typically warrant ratings of 8.5-9.8 out of 10.
+- NEVER give a rating of 5 or below unless the project has serious structural risks. Most UAE off-plan projects from reputable developers should score 7.5 minimum. Projects with flexible post-handover payment plans, prime locations, and tier-1 developers should score 8.5-9.8.
 - Do NOT default to conservative/middling ratings. Evaluate each project fairly based on location desirability, developer reputation, payment plan flexibility, and capital appreciation potential.`;
 
     const comparisonText = sanitizedCompareWith.length > 0 
