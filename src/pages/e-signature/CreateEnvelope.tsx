@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useMemo } from "react";
+import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -102,8 +102,11 @@ export default function CreateEnvelope() {
   // Step 1: Document
   const [documentName, setDocumentName] = useState("");
   const [documentDescription, setDocumentDescription] = useState("");
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+  const [isDragOver, setIsDragOver] = useState(false);
+  const dragCounter = useRef(0);
 
   // Step 2: Recipients
   const [recipients, setRecipients] = useState<Recipient[]>([
@@ -130,26 +133,113 @@ export default function CreateEnvelope() {
     ).slice(0, 5);
   }, [contactFilter, savedContacts]);
 
-  const handleFileUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const ACCEPTED_TYPES = [
+    "application/pdf",
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+    "image/heic",
+    "image/heif",
+  ];
 
-    if (file.type !== "application/pdf") {
-      toast.error("Please upload a PDF file");
-      return;
+  const addDocumentFiles = useCallback((files: FileList | File[]) => {
+    const arr = Array.from(files);
+    const valid: File[] = [];
+
+    for (const file of arr) {
+      if (file.size > 50 * 1024 * 1024) {
+        toast.error(`${file.name} is too large (max 50MB)`);
+        continue;
+      }
+
+      const isAccepted = ACCEPTED_TYPES.includes(file.type) ||
+        file.name.match(/\.(pdf|jpg|jpeg|png|webp|heic|heif)$/i);
+
+      if (!isAccepted) {
+        toast.error(`${file.name}: unsupported format. Use PDF or images.`);
+        continue;
+      }
+      valid.push(file);
     }
 
-    if (file.size > 50 * 1024 * 1024) {
-      toast.error("File size must be less than 50MB");
-      return;
+    if (valid.length === 0) return;
+
+    setUploadedFiles(prev => [...prev, ...valid]);
+
+    // Auto-select first PDF as the signing document
+    const firstPdf = valid.find(f => f.type === "application/pdf" || f.name.toLowerCase().endsWith(".pdf"));
+    if (firstPdf && !pdfFile) {
+      setPdfFile(firstPdf);
+      setDocumentName(firstPdf.name.replace(/\.pdf$/i, ""));
+      setPdfUrl(URL.createObjectURL(firstPdf));
     }
 
+    toast.success(`${valid.length} file(s) added`);
+  }, [pdfFile]);
+
+  const handleFileUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      addDocumentFiles(e.target.files);
+      e.target.value = "";
+    }
+  }, [addDocumentFiles]);
+
+  const removeUploadedFile = useCallback((index: number) => {
+    setUploadedFiles(prev => {
+      const removed = prev[index];
+      const next = prev.filter((_, i) => i !== index);
+      // If removed file was the active PDF, clear it
+      if (removed === pdfFile) {
+        setPdfFile(null);
+        setPdfUrl(null);
+        // Auto-select next PDF if available
+        const nextPdf = next.find(f => f.type === "application/pdf" || f.name.toLowerCase().endsWith(".pdf"));
+        if (nextPdf) {
+          setPdfFile(nextPdf);
+          setDocumentName(nextPdf.name.replace(/\.pdf$/i, ""));
+          setPdfUrl(URL.createObjectURL(nextPdf));
+        }
+      }
+      return next;
+    });
+  }, [pdfFile]);
+
+  const selectAsPdf = useCallback((file: File) => {
+    if (pdfUrl) URL.revokeObjectURL(pdfUrl);
     setPdfFile(file);
-    setDocumentName(file.name.replace(".pdf", ""));
-    
-    const url = URL.createObjectURL(file);
-    setPdfUrl(url);
+    setDocumentName(file.name.replace(/\.pdf$/i, ""));
+    setPdfUrl(URL.createObjectURL(file));
+  }, [pdfUrl]);
+
+  // Drag & drop handlers
+  const handleDragEnter = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dragCounter.current++;
+    if (dragCounter.current === 1) setIsDragOver(true);
   }, []);
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dragCounter.current--;
+    if (dragCounter.current === 0) setIsDragOver(false);
+  }, []);
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  }, []);
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dragCounter.current = 0;
+    setIsDragOver(false);
+    if (e.dataTransfer.files?.length) {
+      addDocumentFiles(e.dataTransfer.files);
+    }
+  }, [addDocumentFiles]);
 
   const addRecipient = () => {
     setRecipients([
@@ -433,45 +523,92 @@ export default function CreateEnvelope() {
                 </div>
 
                 <div>
-                  <Label>Upload PDF Document *</Label>
-                  <div className="mt-2">
-                    {pdfFile ? (
-                      <div className="border-2 border-dashed border-gold/50 rounded-xl p-6 bg-gold/5">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <FileText className="w-10 h-10 text-gold" />
-                            <div>
-                              <p className="font-medium">{pdfFile.name}</p>
-                              <p className="text-sm text-muted-foreground">
-                                {(pdfFile.size / 1024 / 1024).toFixed(2)} MB
-                              </p>
+                  <Label>Upload Documents *</Label>
+                  <p className="text-xs text-muted-foreground mb-2">
+                    Upload PDFs, photos, and other documents. Select all files at once — any mix of types is supported.
+                  </p>
+                  <div className="mt-2 space-y-3">
+                    {/* Drop zone */}
+                    <div
+                      onDragEnter={handleDragEnter}
+                      onDragLeave={handleDragLeave}
+                      onDragOver={handleDragOver}
+                      onDrop={handleDrop}
+                      onClick={() => document.getElementById("esign-file-input")?.click()}
+                      className={`border-2 border-dashed rounded-xl p-10 flex flex-col items-center justify-center cursor-pointer transition-all ${
+                        isDragOver
+                          ? "border-gold bg-gold/10 scale-[1.01]"
+                          : "border-muted-foreground/25 hover:border-gold/50"
+                      }`}
+                    >
+                      <input
+                        id="esign-file-input"
+                        type="file"
+                        multiple
+                        accept=".pdf,.jpg,.jpeg,.png,.webp,.heic,.heif,application/pdf,image/*"
+                        onChange={handleFileUpload}
+                        className="hidden"
+                      />
+                      <Upload className={`w-12 h-12 mb-3 ${isDragOver ? "text-gold animate-bounce" : "text-muted-foreground"}`} />
+                      <p className="text-lg font-medium text-foreground">
+                        {isDragOver ? "Drop files here" : "Drop files or click to upload"}
+                      </p>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        PDFs, JPG, PNG — select multiple files at once (max 50MB each)
+                      </p>
+                    </div>
+
+                    {/* Uploaded files list */}
+                    {uploadedFiles.length > 0 && (
+                      <div className="space-y-2">
+                        <p className="text-sm font-medium text-foreground">
+                          {uploadedFiles.length} file(s) uploaded
+                        </p>
+                        {uploadedFiles.map((file, index) => (
+                          <div key={index} className="flex items-center justify-between border rounded-lg p-3 bg-background">
+                            <div className="flex items-center gap-3 min-w-0">
+                              {file.type.startsWith("image/") ? (
+                                <img
+                                  src={URL.createObjectURL(file)}
+                                  alt={file.name}
+                                  className="w-10 h-10 rounded object-cover flex-shrink-0"
+                                />
+                              ) : (
+                                <FileText className="w-8 h-8 text-gold flex-shrink-0" />
+                              )}
+                              <div className="min-w-0">
+                                <p className="text-sm font-medium truncate">{file.name}</p>
+                                <p className="text-xs text-muted-foreground">
+                                  {(file.size / 1024 / 1024).toFixed(2)} MB
+                                  {file === pdfFile && (
+                                    <span className="ml-2 text-gold font-semibold">• Signing Document</span>
+                                  )}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2 flex-shrink-0">
+                              {(file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf")) && file !== pdfFile && (
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={(e) => { e.stopPropagation(); selectAsPdf(file); }}
+                                  className="text-xs"
+                                >
+                                  Use for signing
+                                </Button>
+                              )}
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={(e) => { e.stopPropagation(); removeUploadedFile(index); }}
+                                className="text-destructive hover:text-destructive h-8 w-8 p-0"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
                             </div>
                           </div>
-                          <Button 
-                            variant="outline" 
-                            onClick={() => {
-                              setPdfFile(null);
-                              setPdfUrl(null);
-                            }}
-                          >
-                            Change
-                          </Button>
-                        </div>
+                        ))}
                       </div>
-                    ) : (
-                      <label className="border-2 border-dashed border-muted-foreground/25 rounded-xl p-12 flex flex-col items-center justify-center cursor-pointer hover:border-gold/50 transition-colors">
-                        <Upload className="w-12 h-12 text-muted-foreground mb-4" />
-                        <p className="text-lg font-medium">Click to upload PDF</p>
-                        <p className="text-sm text-muted-foreground">
-                          Maximum file size: 50MB
-                        </p>
-                        <input
-                          type="file"
-                          accept=".pdf,application/pdf"
-                          onChange={handleFileUpload}
-                          className="hidden"
-                        />
-                      </label>
                     )}
                   </div>
                 </div>
