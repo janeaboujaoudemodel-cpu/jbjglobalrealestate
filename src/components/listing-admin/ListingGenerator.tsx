@@ -414,7 +414,9 @@ const ListingGenerator = () => {
     } catch (err: any) {
       console.error("Generation error:", err);
       toast.error(err.message || "Failed to generate listing");
+      // Go back to input but KEEP all files, url, description intact
       setStep("input");
+      // Do NOT clear files or other state — user should not lose uploaded documents
     } finally {
       setIsProcessing(false);
       setProcessingStatus("");
