@@ -149,7 +149,7 @@ const FoundersTeamDirectory: React.FC = () => {
               </Button>
             ))}
           </div>
-        </ScrollArea>
+        </div>
       </div>
 
       {/* Department Groups */}
