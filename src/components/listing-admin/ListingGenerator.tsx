@@ -1202,6 +1202,48 @@ function ProjectPreview({ extracted, onSave, isSaving }: { extracted: ExtractedD
         </Card>
       )}
 
+      {/* Video URL */}
+      {extracted.videoUrl && (
+        <Card>
+          <CardHeader><CardTitle className="text-sm flex items-center gap-2">🎬 Video</CardTitle></CardHeader>
+          <CardContent>
+            <a href={extracted.videoUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-gold hover:underline break-all">
+              {extracted.videoUrl}
+            </a>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Views */}
+      {extracted.views && extracted.views.length > 0 && (
+        <Card>
+          <CardHeader><CardTitle className="text-sm">🏔️ Views ({extracted.views.length})</CardTitle></CardHeader>
+          <CardContent>
+            <div className="flex flex-wrap gap-2">
+              {extracted.views.map((v, i) => (
+                <Badge key={i} variant="outline" className="text-xs">{v}</Badge>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* USPs */}
+      {extracted.usps && extracted.usps.length > 0 && (
+        <Card>
+          <CardHeader><CardTitle className="text-sm flex items-center gap-2"><Sparkles className="w-4 h-4 text-gold" /> Unique Selling Points ({extracted.usps.length})</CardTitle></CardHeader>
+          <CardContent>
+            <ul className="grid grid-cols-1 md:grid-cols-2 gap-1">
+              {extracted.usps.map((u, i) => (
+                <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
+                  <Check className="w-3 h-3 text-gold mt-0.5 shrink-0" /> {u}
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Comparable Projects */}
       {extracted.comparableProjects && extracted.comparableProjects.length > 0 && (
         <Card className="border-amber-200">
