@@ -33,6 +33,7 @@ type ColorStop = 'primary' | 'secondary' | 'accent';
 
 // Full 3-stop palette presets
 const PALETTE_PRESETS = [
+  { label: 'Ink Blue (Standard)',primary: '#1B3A8C', secondary: '#1a2d6e', accent: '#1B3A8C' },
   { label: 'JBJ Gold',      primary: '#B8860B', secondary: '#2a3a5c', accent: '#856404' },
   { label: 'Royal Navy',    primary: '#1a2744', secondary: '#2a3a5c', accent: '#B8860B' },
   { label: 'Obsidian',      primary: '#0d0d0d', secondary: '#333333', accent: '#B8860B' },
@@ -44,11 +45,12 @@ const PALETTE_PRESETS = [
 
 // Stamp presets matching the example gallery gold + standard black/white
 const PRESET_PALETTE = [
-  { label: 'Gold',    hex: '#B8860B' },   // Standard gold (example gallery)
-  { label: 'Gold Dark', hex: '#856404' }, // Deep gold
-  { label: 'Navy',    hex: '#1a2744' },   // Classic navy
-  { label: 'Black',   hex: '#0d0d0d' },   // Standard black
-  { label: 'White',   hex: '#ffffff' },   // Standard white
+  { label: 'Ink Blue',  hex: '#1B3A8C' },   // Real ink stamp blue (standard)
+  { label: 'Gold',    hex: '#B8860B' },
+  { label: 'Gold Dark', hex: '#856404' },
+  { label: 'Navy',    hex: '#1a2744' },
+  { label: 'Black',   hex: '#0d0d0d' },
+  { label: 'White',   hex: '#ffffff' },
   { label: 'Red',     hex: '#8B0000' },
   { label: 'Purple',  hex: '#4B0082' },
   { label: 'Forest',  hex: '#1B4332' },
