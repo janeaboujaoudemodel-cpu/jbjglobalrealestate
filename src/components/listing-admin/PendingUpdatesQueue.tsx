@@ -322,7 +322,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
         </div>
       </CardHeader>
       <CardContent>
-        {totalPending === 0 ? (
+         {totalPending === 0 && !migrationStats?.pending ? (
           <div className="flex flex-col items-center justify-center py-8 text-muted-foreground">
             <Check className="h-12 w-12 mb-4 text-emerald-500" />
             <p className="text-lg font-medium text-foreground">All caught up!</p>
@@ -330,6 +330,74 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
           </div>
         ) : (
           <div className="space-y-6">
+            {/* ===== MIGRATION PANEL ===== */}
+            {(migrationStats?.pending ?? 0) > 0 && (
+              <div className="bg-gradient-to-r from-amber-50 to-amber-100 border-2 border-amber-300 rounded-xl p-5 space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-amber-900 font-bold text-base flex items-center gap-2">
+                      <Zap className="w-5 h-5 text-amber-600" />
+                      Migrate & Enrich Legacy Queue
+                    </h3>
+                    <p className="text-amber-700 text-sm mt-1">
+                      {migrationStats.pending} unenriched project shells need migration to the approval queue with full Provident data extraction.
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {!isMigrating ? (
+                      <Button
+                        onClick={startMigration}
+                        className="bg-amber-600 hover:bg-amber-700 text-white"
+                      >
+                        <ArrowRight className="w-4 h-4 mr-2" />
+                        Migrate & Enrich All
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={() => { stopMigrationRef.current = true; }}
+                        variant="destructive"
+                      >
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Stop
+                      </Button>
+                    )}
+                  </div>
+                </div>
+                {migrationProgress > 0 && (
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-xs text-amber-700">
+                      <span>Migration Progress</span>
+                      <span>{migrationProgress}%</span>
+                    </div>
+                    <Progress value={migrationProgress} className="h-2" />
+                  </div>
+                )}
+                {migrationStats.migrated > 0 && (
+                  <p className="text-xs text-amber-600">{migrationStats.migrated} already migrated</p>
+                )}
+              </div>
+            )}
+
+            {/* Migration Log */}
+            {migrationLog.length > 0 && (
+              <div className="bg-zinc-950 border border-zinc-800 rounded-xl overflow-hidden">
+                <div className="px-4 py-2 border-b border-zinc-800">
+                  <span className="text-zinc-300 text-xs font-semibold">Migration Log</span>
+                </div>
+                <div className="max-h-48 overflow-y-auto p-3 font-mono text-xs space-y-0.5">
+                  {migrationLog.map((line, i) => (
+                    <div key={i} className={`${
+                      line.includes("❌") ? "text-red-400" :
+                      line.includes("✅") ? "text-emerald-400" :
+                      line.includes("🎉") ? "text-yellow-300" :
+                      line.includes("⚠️") ? "text-amber-400" :
+                      "text-zinc-400"
+                    }`}>{line}</div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* New Project Discoveries */}
             {newProjects.length > 0 && (
               <div>
@@ -353,7 +421,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
                           <div className="relative aspect-[4/3] bg-gradient-to-br from-muted via-muted/80 to-muted/60">
                             <div className="w-full h-full flex flex-col items-center justify-center gap-2">
                               <Building className="h-12 w-12 text-muted-foreground/30" />
-                              <span className="text-xs text-muted-foreground/50 font-medium">Will be enriched after approval</span>
+                              <span className="text-xs text-amber-600 font-medium">⚠️ Needs Migration & Enrichment</span>
                             </div>
                             {/* Status badge overlay */}
                             <div className="absolute top-3 right-3">
