@@ -298,7 +298,7 @@ export default function PaymentPlanVisualization({
           )}
 
           {/* Detailed Payment Structure Card */}
-          {isDetailedBreakdown && detailedMilestones.length > 3 && (
+          {isDetailedBreakdown && detailedMilestones.length >= 2 && (
             <div className="mt-6 p-5 rounded-xl border border-gold/30 bg-gradient-to-br from-gold/5 to-transparent">
               <div className="flex items-center gap-2 mb-4">
                 <List className="w-5 h-5 text-gold" />
