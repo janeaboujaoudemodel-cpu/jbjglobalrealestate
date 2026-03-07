@@ -23,6 +23,9 @@ const ISSUE_TYPES = [
   "Incorrect Price",
   "Incorrect Availability",
   "Incorrect Payment Plan",
+  "Incorrect Information",
+  "Incorrect Details",
+  "Incorrect Location",
   "Updated Project Information",
   "Other",
 ];
@@ -52,12 +55,31 @@ export default function ReportIssueButton({
     }
     setSubmitting(true);
     try {
-      const { error } = await supabase.from("project_reports" as any).insert({
+      // 1. Save to project_reports table
+      const { error: reportError } = await supabase.from("project_reports").insert({
         project_id: projectId || projectSlug || projectName,
         issue_type: issueType,
         description: description || null,
       });
-      if (error) throw error;
+      if (reportError) throw reportError;
+
+      // 2. Also create a support ticket for the Customer Happiness Center
+      const ticketNumber = `ISS-${Date.now().toString(36).toUpperCase()}`;
+      const { error: ticketError } = await supabase.from("support_tickets").insert({
+        ticket_number: ticketNumber,
+        full_name: "Website User",
+        email: "issue-report@system.local",
+        subject: `[Project Issue] ${projectName} — ${issueType}`,
+        description: `Issue Type: ${issueType}\nProject: ${projectName}\nProject ID: ${projectId || projectSlug || 'N/A'}\n\n${description || 'No additional details provided.'}`,
+        service_category: "project_issue",
+        status: "open",
+        priority: "medium",
+      });
+      // Non-critical: don't fail if ticket creation fails
+      if (ticketError) {
+        console.warn("Support ticket creation failed (non-critical):", ticketError);
+      }
+
       toast.success("Thank you! Your report has been submitted.");
       setOpen(false);
       setIssueType("");
