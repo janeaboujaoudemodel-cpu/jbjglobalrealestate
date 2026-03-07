@@ -609,6 +609,28 @@ export default function StampGeneratorPage() {
                         </button>
                       )}
                     </div>
+
+                    {/* Ink Impression Mode Toggle */}
+                    <div className="pt-3 mt-2 border-t border-[hsl(var(--border))]">
+                      <button
+                        onClick={() => setInkMode(!inkMode)}
+                        className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl border-2 transition-all ${
+                          inkMode
+                            ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)]'
+                            : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'
+                        }`}
+                      >
+                        <div className={`w-5 h-5 rounded-md flex items-center justify-center text-[10px] font-bold ${
+                          inkMode ? 'bg-[hsl(var(--gold))] text-white' : 'bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))]'
+                        }`}>
+                          {inkMode ? '✓' : ''}
+                        </div>
+                        <div className="text-left">
+                          <p className="text-[11px] font-semibold text-[hsl(var(--foreground))]">Ink Impression</p>
+                          <p className="text-[9px] text-[hsl(var(--muted-foreground))]">Realistic rubber stamp texture</p>
+                        </div>
+                      </button>
+                    </div>
                   </div>
                 </>
               )}
