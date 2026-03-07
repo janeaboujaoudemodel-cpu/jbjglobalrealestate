@@ -172,7 +172,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
   const statusLabel = getStatusLabel();
   const saleStatusBadge = getSaleStatusBadge(project.status_label);
   const hasDevLogo = !!(project.developer as any)?.logo_url;
-  const badgePosition = hasDevLogo ? 'bottom-3 left-3' : 'top-3 left-3';
+  const badgePosition = hasDevLogo ? 'top-3 right-3' : 'top-3 left-3';
 
   return (
     <div
@@ -274,9 +274,9 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </div>
           )}
           
-          {/* Top-Left: Sale Status Badge (below developer logo if present) */}
+          {/* Sale Status Badge - top-right when dev logo present, hides on hover to show favorite buttons */}
           {saleStatusBadge && !project.is_sold_out && !project.status_label?.toLowerCase().includes('sold') && (
-            <div className={`absolute ${badgePosition} z-10 px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${saleStatusBadge.className}`}>
+            <div className={`absolute ${badgePosition} z-10 px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${saleStatusBadge.className} ${hasDevLogo ? 'transition-opacity group-hover:opacity-0' : ''}`}>
               {saleStatusBadge.label}
             </div>
           )}
