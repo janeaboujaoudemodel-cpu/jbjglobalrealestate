@@ -372,7 +372,7 @@ export default function ProjectDetailLayout({
   const whatsappMessage = `Hi, I'm interested in ${project.name}${project.location ? ` at ${project.location}` : ""}. Please share more details.`;
 
   const scrollToRef = (ref: React.RefObject<HTMLDivElement>) => {
-    ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    ref.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   };
 
   const scrollToInquiry = () => scrollToRef(inquiryRef);
