@@ -97,8 +97,8 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
   const [incompleteCount, setIncompleteCount] = useState(0);
   // Filter: "all" | "complete" | "needs_work"
   const [statusFilter, setStatusFilter] = useState<"all" | "complete" | "needs_work">("all");
-  // Source filter: "all" | "reelly" | "manual" (provident disabled)
-  const [sourceFilter, setSourceFilter] = useState<"all" | "reelly" | "manual">("all");
+  // Source filter: "all" | "reelly" | "manual" | "provident"
+  const [sourceFilter, setSourceFilter] = useState<"all" | "reelly" | "manual" | "provident">("all");
   // Confirmation dialog state
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [confirmDialogMode, setConfirmDialogMode] = useState<"all" | "selected">("all");
@@ -148,13 +148,12 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
         totalQuery = totalQuery.ilike("source_url", "%reelly%");
         needsWorkQuery = needsWorkQuery.ilike("source_url", "%reelly%");
       } else if (sourceFilter === "manual") {
-        totalQuery = totalQuery.not("source_url", "ilike", "%reelly%");
-        needsWorkQuery = needsWorkQuery.not("source_url", "ilike", "%reelly%");
+        totalQuery = totalQuery.not("source_url", "ilike", "%reelly%").not("source_url", "ilike", "%provident%");
+        needsWorkQuery = needsWorkQuery.not("source_url", "ilike", "%reelly%").not("source_url", "ilike", "%provident%");
+      } else if (sourceFilter === "provident") {
+        totalQuery = totalQuery.ilike("source_url", "%provident%");
+        needsWorkQuery = needsWorkQuery.ilike("source_url", "%provident%");
       }
-      
-      // Exclude provident sources from all views (quarantine)
-      totalQuery = totalQuery.not("source_url", "ilike", "%provident%");
-      needsWorkQuery = needsWorkQuery.not("source_url", "ilike", "%provident%");
 
       const [totalRes, needsWorkRes] = await Promise.all([totalQuery, needsWorkQuery]);
 
@@ -198,11 +197,10 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
       if (sourceFilter === "reelly") {
         query = query.ilike("source_url", "%reelly%");
       } else if (sourceFilter === "manual") {
-        query = query.not("source_url", "ilike", "%reelly%");
+        query = query.not("source_url", "ilike", "%reelly%").not("source_url", "ilike", "%provident%");
+      } else if (sourceFilter === "provident") {
+        query = query.ilike("source_url", "%provident%");
       }
-      
-      // Exclude provident sources from all views (quarantine)
-      query = query.not("source_url", "ilike", "%provident%");
 
       // Apply status filter for complete vs needs_work
       // NOTE: Documents are optional (Reelly API doesn't provide them)
@@ -1080,12 +1078,13 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
             <span className="text-sm font-medium text-foreground">Source:</span>
             <select
               value={sourceFilter}
-              onChange={(e) => setSourceFilter(e.target.value as "all" | "reelly" | "manual")}
+              onChange={(e) => setSourceFilter(e.target.value as "all" | "reelly" | "manual" | "provident")}
               className="text-sm border border-border rounded px-2 py-1 bg-background text-foreground"
             >
               <option value="all">All Sources</option>
               <option value="manual">📤 My Uploads</option>
               <option value="reelly">🔄 Auto-Imported (Reelly)</option>
+              <option value="provident">🏢 Provident</option>
             </select>
           </div>
 

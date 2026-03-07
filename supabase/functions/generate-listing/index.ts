@@ -250,7 +250,7 @@ CRITICAL RULES:
 - Extract video URLs (YouTube, Vimeo, mp4 links) into videoUrl field.
 - Extract property views (e.g. Sea View, Golf View, Marina View, City View, Boulevard View, Lagoon View, Ras Al Khor View, Wildlife Sanctuary View, Dubai Skyline) into views array.
 - Extract unique selling propositions / lifestyle highlights into usps array.
-- NEVER generate or infer a websiteUrl for the project. Only include if an official developer website link is explicitly present in the source.
+- The source_url field is ONLY for internal tracking of where data was scraped from. It is NOT a project website. NEVER output any websiteUrl, projectUrl, or website field in the response JSON. Even if the source contains an official URL, do NOT include it — the admin will add it manually.
 - Payment plan milestones and percentages MUST be extracted VERBATIM from the source document. Do NOT infer, calculate, or generate payment breakdown percentages. If a payment plan is not explicitly provided, set paymentBreakdown to [] and paymentPlan to null.
 - NEVER alter, recalculate, or adjust prices, locations, or amenities. Report EXACTLY as found in the documents.
 

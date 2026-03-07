@@ -1,57 +1,41 @@
 
 
-# Plan: Auto-Run Migration & Enrichment, Fix Approval Queue Zero Count, Fix URL Label
+## Plan: Fix All Email Issues Across All Templates
 
-## Summary of Issues Found
+### Problems Identified
 
-1. **1,616 pending updates** in `listing_pending_updates` need migration — user wants these processed automatically without manual intervention
-2. **Project Approval Queue shows 0** because all manual uploads are already approved, and the only pending record is Provident-sourced (quarantined by the `.not("source_url", "ilike", "%provident%")` filter)
-3. **"Project Website URL" label** in the Listing Generator is misleading — it should say "Source URL to scrape" and the AI must NEVER use it as a project website
+1. **Recommended For You icons disappeared** — Inline SVGs are stripped by Gmail and most email clients. Must revert to hosted PNG images (`ai-tools.png`, `guides.png`, `properties.png` already exist in `public/email-icons/`).
 
-## Changes
+2. **Social media footer icons not rendering** — Same issue: `socialLinksFooter()` loads external `.svg` files via `<img>` tags, but Gmail blocks SVG images entirely. Must switch to hosted `.png` files. Currently missing `social-facebook.png` — need to confirm or create it.
 
-### 1. Create Auto-Migration Cron Job
-Schedule `enrich-pending-imports` to run every 15 minutes automatically, processing batches of 20. This drains the 1,616 pending `listing_pending_updates` records into `pending_project_imports` with full Provident enrichment.
+3. **Email split into multiple visual cards** — Several sub-sections (`ticketSupportEmbed`, `readyToGetStartedHtml`, `recommendedActionsHtml`) each have their own `border`, `border-radius`, and `background` styles creating distinct visual boxes. These need to be softened so they sit seamlessly inside the single continuous card.
 
-**Action**: Add a `pg_cron` job via SQL insert:
-```sql
-SELECT cron.schedule(
-  'auto-migrate-enrich-pending',
-  '*/15 * * * *',
-  $$ SELECT net.http_post(
-    url := 'https://mdafrewypkkrildjgtey.supabase.co/functions/v1/enrich-pending-imports',
-    headers := '{"Content-Type":"application/json","Authorization":"Bearer <anon_key>"}'::jsonb,
-    body := '{"action":"migrate","batch_size":20}'::jsonb
-  ) AS request_id; $$
-);
-```
+### Changes (all in `supabase/functions/_shared/email-html.ts`)
 
-### 2. Fix Approval Queue Showing Zero — Remove Provident Quarantine
-**Problem**: Lines 156-157, 204-205 in `ProjectApprovalQueue.tsx` exclude ALL provident-sourced records. Once the migration cron creates fully enriched records from Provident, they need to appear in the approval queue for the user to review.
+#### A. Recommended For You — Revert to PNG hosted images
+- Change `recommendedCard()` back to using `iconImg()` with PNG paths
+- Remove the `RECOMMENDED_ICONS` inline SVG object
+- Ensure circular frame clips the PNG with `overflow:hidden` on the `<td>` to prevent square backgrounds
+- Signature: `recommendedCard(title, href, iconPath, alt)` — restore the original parameters
 
-**File**: `src/components/listing-admin/ProjectApprovalQueue.tsx`
-- Remove the provident quarantine filters (lines 156-157 for stats, line 204-205 for main query)
-- Migrated+enriched Provident records will now appear in "All Sources" and under a new "Auto-Imported" filter
-- Change `sourceFilter` options: `"all" | "reelly" | "manual" | "provident"` — add a "Provident" tab so the user can segment them
-- Also add the source filter UI buttons for this new option
+#### B. Social Footer — Switch to PNG with white pearl background
+- Replace `socialLinksFooter()` to use the inline `SVG` object icons (instagram, facebook, linkedin, tiktok, youtube) that are already defined at the top of the file — these render as raw HTML inside `<td>` elements, not as `<img>` tags, so they should survive email client processing
+- Actually, since Gmail strips ALL SVG (both inline and `<img>`), switch to using the `.png` files: `social-instagram.png`, `social-linkedin.png`, `social-tiktok.png`, `social-youtube.png`
+- Create `social-facebook.png` if missing
+- Style each icon circle: white/pearl (#FDFBF7) background, gold border, black icon inside
 
-### 3. Rename URL Field and Enforce Manual-Only Website URL
-**File**: `src/components/listing-admin/ListingGenerator.tsx` (line 793-796)
-- Change label from "Project Website URL (optional)" to "Source URL to Scrape (optional)"
-- Change placeholder to "Paste a listing URL to scrape project data from"
-- Remove the helper text about "multiple projects" from the URL context
+#### C. Single Card Layout — Remove visual fragmentation
+- `ticketSupportEmbed()`: Remove the heavy gradient background and red border; make it blend into the card
+- `readyToGetStartedHtml()`: Remove the outer border and separate background so it flows within the card
+- `inquiryBox()`: Soften its standalone bordered look
+- Keep all content inside the single `emailShell` wrapper card with no sub-borders that create separation
 
-**File**: `supabase/functions/generate-listing/index.ts` (line 253)
-- Strengthen: "The source_url field is ONLY for internal tracking of where data was scraped from. It is NOT a project website. NEVER output any websiteUrl, projectUrl, or website field."
+#### D. Deploy + Send Test Email
+- Deploy the updated edge function
+- Immediately send a test welcome email to `janeaboujaoudenails@gmail.com`
+- Take a screenshot as proof
 
-### 4. Ensure Strict Manual Approval Gate
-The approval flow already requires manual approval (`approveImportInDb` must be called). No changes needed — the cron only creates records in `pending_project_imports` with `status: "pending"`, which requires explicit user approval via the UI.
-
-## Files to Modify
-1. `src/components/listing-admin/ProjectApprovalQueue.tsx` — remove provident quarantine, add provident source filter tab
-2. `src/components/listing-admin/ListingGenerator.tsx` — rename URL label
-3. `supabase/functions/generate-listing/index.ts` — strengthen no-website-URL rule
-
-## Database Action
-- Insert cron job for auto-migration (SQL insert, not migration)
+### Files Modified
+- `supabase/functions/_shared/email-html.ts` — all icon and layout fixes
+- `public/email-icons/social-facebook.png` — create if missing (or use existing assets)
 
