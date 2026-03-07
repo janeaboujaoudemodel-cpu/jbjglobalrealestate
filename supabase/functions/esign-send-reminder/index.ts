@@ -113,7 +113,7 @@ Deno.serve(async (req) => {
               </p>
               
               <p style="color: #666; line-height: 1.6; margin-bottom: 24px;">
-                This is a friendly reminder that <strong>${envelope.sender_name || envelope.sender_email}</strong> is waiting for your signature on:
+                This is a friendly reminder that <strong>our team</strong> is waiting for your signature on:
               </p>
               
               <div style="background: #fef3c7; border: 1px solid #fcd34d; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
@@ -137,9 +137,9 @@ Deno.serve(async (req) => {
           <!-- Footer -->
           <tr>
             <td style="padding-top: 30px; text-align: center;">
-              <p style="color: #999; font-size: 12px; margin: 0;">
-                If you have questions, contact ${envelope.sender_email}
-              </p>
+               <p style="color: #999; font-size: 12px; margin: 0;">
+                 If you have questions, contact <a href="mailto:contact@jbj.ae" style="color: #b8860b;">contact@jbj.ae</a>
+               </p>
               <p style="color: #999; font-size: 12px; margin: 8px 0 0 0;">
                 © ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
               </p>
@@ -158,7 +158,7 @@ Deno.serve(async (req) => {
             method: "POST",
             headers: { "Authorization": `Bearer ${resendApiKey}`, "Content-Type": "application/json" },
             body: JSON.stringify({
-              from: "JBJ E-Signature <jbj@jbj.ae>",
+              from: "JBJ E-Signature <contact@jbj.ae>",
               to: [recipient.email],
               subject: `Reminder: Please sign ${envelope.name}`,
               html: reminderEmailHtml,

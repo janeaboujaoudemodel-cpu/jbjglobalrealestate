@@ -124,9 +124,9 @@ Deno.serve(async (req) => {
           <!-- Footer -->
           <tr>
             <td style="padding-top: 30px; text-align: center;">
-              <p style="color: #999; font-size: 12px; margin: 0;">
-                If you have questions, contact ${envelope.sender_email}
-              </p>
+               <p style="color: #999; font-size: 12px; margin: 0;">
+                 If you have questions, contact <a href="mailto:contact@jbj.ae" style="color: #b8860b;">contact@jbj.ae</a>
+               </p>
               <p style="color: #999; font-size: 12px; margin: 8px 0 0 0;">
                 © ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
               </p>
