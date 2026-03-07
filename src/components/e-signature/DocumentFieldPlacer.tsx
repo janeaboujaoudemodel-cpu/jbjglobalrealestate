@@ -16,6 +16,7 @@ import {
   X,
   CheckSquare,
   FileText,
+  Stamp,
 } from "lucide-react";
 import {
   Select,
@@ -26,6 +27,7 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 import { PDFDocument } from "pdf-lib";
 
 interface Recipient {
@@ -37,7 +39,7 @@ interface Recipient {
 interface SignatureField {
   id: string;
   recipientId: string;
-  type: "signature" | "initials" | "date" | "text" | "checkbox";
+  type: "signature" | "initials" | "date" | "text" | "checkbox" | "stamp";
   pageNumber: number;
   x: number;
   y: number;
@@ -61,6 +63,7 @@ const fieldTypes = [
   { type: "date" as const, label: "Date", icon: Calendar, defaultWidth: 140, defaultHeight: 36 },
   { type: "text" as const, label: "Text", icon: Type, defaultWidth: 160, defaultHeight: 36 },
   { type: "checkbox" as const, label: "Checkbox", icon: CheckSquare, defaultWidth: 28, defaultHeight: 28 },
+  { type: "stamp" as const, label: "Stamp", icon: Stamp, defaultWidth: 100, defaultHeight: 100 },
 ];
 
 const recipientColorStyles = [
