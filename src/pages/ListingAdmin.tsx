@@ -90,6 +90,10 @@ const ListingAdmin = () => {
   const [previewProject, setPreviewProject] = useState<UnifiedProject | null>(null);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
 
+  // Audit trail: fetch latest edit logs for visible projects
+  const projectIds = paginatedProjects?.map((p) => p.id) || [];
+  const { data: editLogsMap } = useLatestEditLogs("project", projectIds);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [filterDeveloper, setFilterDeveloper] = useState<string>("all");
   const [filterEmirate, setFilterEmirate] = useState<string>("all");
@@ -873,6 +877,27 @@ const ListingAdmin = () => {
                                 From AED {(project.price_from / 1000000).toFixed(1)}M
                               </p>
                             )}
+                            {/* Last edit info from audit log */}
+                            {(() => {
+                              const log = editLogsMap?.get(project.id);
+                              const updatedAt = (project as any).updated_at;
+                              if (log) {
+                                return (
+                                  <div className="flex items-center gap-1 mt-1.5 text-[10px] text-muted-foreground">
+                                    <Clock className="w-3 h-3 shrink-0" />
+                                    <span className="truncate">Edited {formatRelativeTime(log.created_at)} · {log.summary || log.action}</span>
+                                  </div>
+                                );
+                              } else if (updatedAt) {
+                                return (
+                                  <div className="flex items-center gap-1 mt-1.5 text-[10px] text-muted-foreground">
+                                    <Clock className="w-3 h-3 shrink-0" />
+                                    <span>Updated {formatRelativeTime(updatedAt)}</span>
+                                  </div>
+                                );
+                              }
+                              return null;
+                            })()}
                           </div>
                           <div className="flex flex-col items-end gap-1">
                             {project.is_premium && <Crown className="w-4 h-4 text-gold flex-shrink-0" />}
