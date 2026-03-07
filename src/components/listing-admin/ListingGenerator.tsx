@@ -825,7 +825,7 @@ const ListingGenerator = () => {
       )}
     </div>
   );
-};
+}
 
 function ProjectPreview({ extracted, onSave, isSaving }: { extracted: ExtractedData; onSave: () => void; isSaving: boolean }) {
   return (
