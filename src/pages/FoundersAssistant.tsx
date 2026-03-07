@@ -143,12 +143,12 @@ export default function FoundersAssistant() {
       {/* Command Palette */}
       <CommandPalette isOpen={showCommandPalette} onClose={() => setShowCommandPalette(false)} />
       
-      <div className="px-4 py-4 max-w-7xl mx-auto pb-24">
+      <div className="px-4 pt-6 pb-24 max-w-7xl mx-auto">
           {/* Premium Header */}
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-6"
+            className="mb-8"
           >
             <div className="flex items-center justify-between flex-wrap gap-4 bg-white/80 backdrop-blur-sm border-2 border-gold/30 rounded-2xl p-4 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
               <div className="flex items-center gap-4">
@@ -204,7 +204,7 @@ export default function FoundersAssistant() {
           </motion.div>
 
           {/* Task Stats Cards - Premium Champagne Theme */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
             <Card 
               className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)] cursor-pointer hover:border-gold/50 hover:shadow-[0_8px_30px_rgba(200,167,102,0.2)] transition-all"
               onClick={() => setActiveTab('tasks')}
@@ -253,7 +253,7 @@ export default function FoundersAssistant() {
 
           {/* Main Tabs - Premium White/Gold Theme */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="w-full bg-white/80 border-2 border-gold/30 p-1.5 rounded-xl mb-4 flex flex-wrap justify-center gap-1 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+            <TabsList className="w-full bg-white/80 border-2 border-gold/30 p-1.5 rounded-xl mb-8 flex flex-wrap justify-center gap-1 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
               <TabsTrigger 
                 value="assistant" 
                 className="flex-1 min-w-[100px] data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black"
