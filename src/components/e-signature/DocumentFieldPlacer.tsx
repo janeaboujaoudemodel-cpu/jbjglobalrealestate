@@ -516,22 +516,27 @@ export default function DocumentFieldPlacer({
                 {/* Clickable/droppable overlay wrapping the iframe */}
                 <div
                   ref={overlayRef}
-                  className="relative w-full"
-                  style={{ height: "780px", cursor: "crosshair", touchAction: "pan-y", overscrollBehavior: "contain" }}
+                  className="relative w-full overflow-y-auto"
+                  style={{ height: "780px", cursor: "crosshair", touchAction: "pan-y", overscrollBehavior: "contain", WebkitOverflowScrolling: "touch" }}
                   onClick={handleOverlayClick}
                   onDrop={handleDrop}
                   onDragOver={handleDragOver}
                 >
-                  {/* Actual PDF — append page param to jump to correct page */}
-                  <iframe
+                  {/* Actual PDF — use object tag for better scroll support */}
+                  <object
                     key={`${pdfUrl}-page-${currentPage}`}
-                    src={`${pdfUrl}#page=${currentPage}&toolbar=0&navpanes=0`}
-                    className="absolute inset-0 w-full h-full border-0 pointer-events-none"
-                    title={`Document Preview — Page ${currentPage}`}
-                  />
-
-                  {/* Transparent interaction layer */}
-                  <div className="absolute inset-0 z-10" />
+                    data={`${pdfUrl}#page=${currentPage}&toolbar=0&navpanes=0`}
+                    type="application/pdf"
+                    className="w-full border-0"
+                    style={{ height: "1200px", pointerEvents: "none" }}
+                  >
+                    <iframe
+                      src={`${pdfUrl}#page=${currentPage}&toolbar=0&navpanes=0`}
+                      className="w-full border-0"
+                      style={{ height: "1200px", pointerEvents: "none" }}
+                      title={`Document Preview — Page ${currentPage}`}
+                    />
+                  </object>
 
                   {/* Field overlays */}
                   {pageFields.map((field) => {
