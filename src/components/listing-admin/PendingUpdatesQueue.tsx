@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
-import { Check, X, Clock, RefreshCw, Database, Building, MapPin, Eye } from "lucide-react";
+import { Check, X, Clock, RefreshCw, Database, Building, MapPin, Eye, Zap, Loader2, ArrowRight } from "lucide-react";
 import { format } from "date-fns";
 
 interface PendingUpdate {
@@ -46,7 +47,96 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [processingIds, setProcessingIds] = useState<Set<string>>(new Set());
   const [batchProcessing, setBatchProcessing] = useState(false);
+  const [isMigrating, setIsMigrating] = useState(false);
+  const [migrationStats, setMigrationStats] = useState<{ pending: number; migrated: number; total: number } | null>(null);
+  const [migrationLog, setMigrationLog] = useState<string[]>([]);
+  const [migrationProgress, setMigrationProgress] = useState(0);
+  const stopMigrationRef = useRef(false);
   const { toast } = useToast();
+
+  const addMigrationLog = useCallback((msg: string) => {
+    setMigrationLog(prev => [...prev.slice(-50), `[${new Date().toLocaleTimeString()}] ${msg}`]);
+  }, []);
+
+  // Fetch migration stats
+  const fetchMigrationStats = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke("enrich-pending-imports", {
+        body: { action: "stats" },
+      });
+      if (!error && data) {
+        setMigrationStats(data);
+      }
+    } catch {
+      // Non-fatal
+    }
+  };
+
+  useEffect(() => {
+    fetchMigrationStats();
+  }, []);
+
+  // Start migration & enrichment
+  const startMigration = async () => {
+    stopMigrationRef.current = false;
+    setIsMigrating(true);
+    setMigrationLog([]);
+    setMigrationProgress(0);
+    addMigrationLog("🚀 Starting migration & enrichment from Provident...");
+
+    let totalProcessed = 0;
+    let totalEnriched = 0;
+    let batch = 0;
+
+    while (!stopMigrationRef.current) {
+      batch++;
+      addMigrationLog(`📦 Batch #${batch} starting...`);
+
+      try {
+        const { data, error } = await supabase.functions.invoke("enrich-pending-imports", {
+          body: { action: "migrate", batch_size: 10 },
+        });
+
+        if (error) throw error;
+        if (!data) break;
+
+        totalProcessed += data.processed || 0;
+        totalEnriched += data.enriched || 0;
+
+        for (const r of (data.results || [])) {
+          const icon = r.status === "enriched" ? "✅" : "⚠️";
+          addMigrationLog(`  ${icon} ${r.name}: ${r.slug_matched || "no match"} (${r.images} imgs, ${r.docs} docs)`);
+        }
+
+        addMigrationLog(`📦 Batch #${batch} done: ${data.processed} processed, ${data.remaining} remaining`);
+
+        if (data.remaining === 0 || data.processed === 0) {
+          addMigrationLog("🎉 All pending updates migrated!");
+          break;
+        }
+
+        const total = migrationStats?.total || (totalProcessed + data.remaining);
+        setMigrationProgress(Math.round((totalProcessed / total) * 100));
+
+        // Brief pause
+        await new Promise(r => setTimeout(r, 2000));
+      } catch (err: any) {
+        addMigrationLog(`❌ Batch #${batch} error: ${err.message}`);
+        await new Promise(r => setTimeout(r, 5000));
+      }
+    }
+
+    if (stopMigrationRef.current) {
+      addMigrationLog("⏸️ Migration paused.");
+    }
+
+    setIsMigrating(false);
+    setMigrationProgress(100);
+    fetchMigrationStats();
+    fetchPendingUpdates();
+    onRefresh?.();
+    toast({ title: "Migration Complete", description: `${totalProcessed} processed, ${totalEnriched} enriched` });
+  };
 
   const fetchPendingUpdates = async () => {
     setIsLoading(true);
