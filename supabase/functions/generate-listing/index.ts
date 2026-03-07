@@ -314,7 +314,7 @@ MULTI-PROJECT RULE:
     }
 
     // Process inline base64 files (legacy / small payloads) as a single batch
-    if (inlineFiles.length > 0 || (storageFiles.length === 0 && (scrapedContent || description))) {
+    if (inlineFiles.length > 0 || (storageFiles.length === 0 && (scrapedContent || description || hasUrlContext))) {
       const progressMsg = inlineFiles.length > 0 
         ? `Analyzing ${inlineFiles.length} inline document(s)...`
         : "Analyzing content...";
