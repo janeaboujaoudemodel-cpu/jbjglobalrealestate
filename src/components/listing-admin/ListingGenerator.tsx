@@ -361,6 +361,58 @@ const ListingGenerator = () => {
   const hasFilesOnly = files.length > 0;
   const hasUrlOnly = !hasFilesOnly && url.trim().length > 0;
 
+  // Total file size calculation
+  const totalFileSize = files.reduce((sum, f) => sum + (f.file?.size || 0), 0);
+  const totalFileSizeMB = totalFileSize / (1024 * 1024);
+  const isOverSizeLimit = totalFileSizeMB > 50;
+
+  // ========== UPLOAD FILES TO STORAGE ==========
+  const uploadFilesToStorage = async (): Promise<{ name: string; mimeType: string; storageUrl: string }[]> => {
+    const { data: authData } = await supabase.auth.getUser();
+    const userId = authData.user?.id || "anonymous";
+    const timestamp = Date.now();
+    const uploaded: { name: string; mimeType: string; storageUrl: string }[] = [];
+
+    for (let i = 0; i < files.length; i++) {
+      const f = files[i];
+      setProcessingStatus(`Uploading file ${i + 1} of ${files.length}: ${f.name}`);
+
+      const safeName = f.name.replace(/[^a-zA-Z0-9.-]/g, "_");
+      const path = `${userId}/${timestamp}-${safeName}`;
+
+      let blob: Blob;
+      if (f.base64) {
+        const binaryStr = atob(f.base64);
+        const bytes = new Uint8Array(binaryStr.length);
+        for (let j = 0; j < binaryStr.length; j++) {
+          bytes[j] = binaryStr.charCodeAt(j);
+        }
+        blob = new Blob([bytes], { type: f.mimeType });
+      } else {
+        blob = f.file;
+      }
+
+      const { error: uploadErr } = await supabase.storage
+        .from("listing-staging")
+        .upload(path, blob, { contentType: f.mimeType, upsert: true });
+
+      if (uploadErr) {
+        console.error(`[ListingGenerator] Storage upload failed for ${f.name}:`, uploadErr);
+        toast.error(`Failed to upload ${f.name}`);
+        continue;
+      }
+
+      const { data: urlData } = supabase.storage.from("listing-staging").getPublicUrl(path);
+      uploaded.push({
+        name: f.name,
+        mimeType: f.mimeType,
+        storageUrl: urlData?.publicUrl || "",
+      });
+    }
+
+    return uploaded;
+  };
+
   // ========== POLL FOR JOB COMPLETION ==========
   const pollJob = async (jobId: string): Promise<any> => {
     const maxPolls = 450; // 15 minutes max
@@ -377,7 +429,11 @@ const ListingGenerator = () => {
       }
 
       if (data?.status === "processing" || data?.status === "pending" || data?.status === "queued") {
-        if (i > 20) setProcessingStatus("AI is analyzing your documents — still running in background...");
+        if (data?.progress) {
+          setProcessingStatus(data.progress);
+        } else if (i > 20) {
+          setProcessingStatus("AI is analyzing your documents — still running in background...");
+        }
         continue;
       }
 
@@ -391,37 +447,40 @@ const ListingGenerator = () => {
   // ========== GENERATE ==========
   const handleGenerate = async () => {
     if (!canGenerate) return;
+    if (isOverSizeLimit) {
+      toast.error("Total file size exceeds 50MB. Please split into smaller batches.");
+      return;
+    }
 
     setStep("processing");
     setIsProcessing(true);
     setTimedOut(false);
     setElapsedSeconds(0);
-    setProcessingStatus(hasUrlOnly ? "Scraping website..." : "Preparing documents...");
+    setProcessingStatus(hasFilesOnly ? "Preparing to upload files..." : hasUrlOnly ? "Scraping website..." : "Preparing...");
 
-    // Start elapsed timer
     const startTime = Date.now();
     timerRef.current = setInterval(() => {
       const elapsed = Math.floor((Date.now() - startTime) / 1000);
       setElapsedSeconds(elapsed);
-      if (elapsed > 120) setTimedOut(true);
+      if (elapsed > 300) setTimedOut(true);
     }, 1000);
 
     try {
-      const filePayloads = files.map((f) => ({
-        name: f.name,
-        base64: f.base64 || "",
-        mimeType: f.mimeType,
-      }));
-
-      if (filePayloads.length > 0) {
-        setProcessingStatus(`Uploading ${filePayloads.length} document(s) & starting AI extraction...`);
+      // Step 1: Upload files to storage first (if any)
+      let filePayloads: { name: string; mimeType: string; storageUrl: string }[] = [];
+      if (files.length > 0) {
+        filePayloads = await uploadFilesToStorage();
+        if (filePayloads.length === 0 && files.length > 0) {
+          throw new Error("All file uploads failed. Please try again.");
+        }
+        setProcessingStatus(`${filePayloads.length} file(s) uploaded. Starting AI extraction...`);
       } else if (url.trim()) {
         setProcessingStatus("Scraping website & starting extraction...");
       } else {
         setProcessingStatus("Analyzing description...");
       }
 
-      // Step 1: Submit job (returns immediately with job_id)
+      // Step 2: Submit job with storage URLs (tiny payload)
       const { data: submitData, error: submitErr } = await supabase.functions.invoke("generate-listing", {
         body: {
           action: "extract",
@@ -460,9 +519,7 @@ const ListingGenerator = () => {
     } catch (err: any) {
       console.error("[ListingGenerator] Generation error:", err);
       toast.error(err.message || "Failed to generate listing");
-      // Go back to input but KEEP all files, url, description intact
       setStep("input");
-      // Explicitly preserve files in localStorage so they survive page reloads
       const filesMeta = files.map((f) => ({ id: f.id, name: f.name, mimeType: f.mimeType, base64: f.base64 || "" }));
       savePersistedState({ step: "input", url, description, extractedProjects: [], activeProjectIndex: 0, duplicates: [], filesMeta, currentJobId: null, cloudDraftId });
     } finally {
@@ -719,10 +776,30 @@ const ListingGenerator = () => {
             />
           </div>
 
+          {/* File Size Warning */}
+          {files.length > 0 && (
+            <div className="flex items-center gap-2 text-sm">
+              <span className="text-muted-foreground">
+                Total: {totalFileSizeMB.toFixed(1)} MB across {files.length} file{files.length > 1 ? "s" : ""}
+              </span>
+              {isOverSizeLimit && (
+                <Badge variant="destructive" className="text-xs">
+                  <AlertTriangle className="w-3 h-3 mr-1" />
+                  Over 50MB limit — split into smaller batches
+                </Badge>
+              )}
+              {!isOverSizeLimit && files.length > 3 && (
+                <Badge variant="secondary" className="text-xs">
+                  Will process in batches of 3
+                </Badge>
+              )}
+            </div>
+          )}
+
           {/* Generate Button */}
           <Button
             onClick={handleGenerate}
-            disabled={!canGenerate}
+            disabled={!canGenerate || isOverSizeLimit}
             variant="primary"
             className="w-full h-14 text-lg font-semibold"
           >
