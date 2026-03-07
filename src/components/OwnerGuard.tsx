@@ -105,8 +105,30 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
     return <Navigate to={`/auth?redirect=${redirectPath}`} replace />;
   }
 
-  // Owner verification failed with an error - show retry UI instead of redirecting
+  // Owner verification failed — auto-retry up to 3 times silently
   if (ownerError && !isOwner) {
+    // Auto-retry silently
+    if (autoRetryCount.current < 3) {
+      if (!autoRetryTimer.current) {
+        autoRetryTimer.current = setTimeout(() => {
+          autoRetryCount.current += 1;
+          autoRetryTimer.current = null;
+          refreshOwnerVerification();
+        }, 2000);
+      }
+      // Show loading while auto-retrying
+      return (
+        <div className="min-h-screen bg-black flex items-center justify-center">
+          <div className="text-center px-6">
+            <Shield className="w-12 h-12 text-gold animate-pulse mx-auto mb-4" />
+            <p className="text-zinc-200 font-medium">Verifying owner access…</p>
+            <p className="text-zinc-400 text-sm mt-2">Retrying ({autoRetryCount.current + 1}/3)…</p>
+          </div>
+        </div>
+      );
+    }
+
+    // After 3 failed retries, show error UI
     return (
       <div className="min-h-screen bg-black flex items-center justify-center p-6">
         <div className="max-w-md text-center">
@@ -125,7 +147,10 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
           
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button
-              onClick={() => refreshOwnerVerification()}
+              onClick={() => {
+                autoRetryCount.current = 0;
+                refreshOwnerVerification();
+              }}
               className="bg-gold hover:bg-gold/90 text-black font-semibold"
             >
               <RefreshCw className="w-4 h-4 mr-2" />
