@@ -31,6 +31,7 @@ import {
 
 // Import delivery checklist
 import { DELIVERY_REQUIREMENTS, type DeliveryStatus, type DeliveryRequirement } from '@/config/delivery-checklist';
+import DeliveryChecklistTab from '@/components/owner-dashboard/DeliveryChecklistTab';
 
 // Route Inventory - Comprehensive list of all application routes
 const ROUTE_INVENTORY = [
