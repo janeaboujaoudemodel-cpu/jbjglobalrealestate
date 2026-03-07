@@ -7363,6 +7363,54 @@ export type Database = {
         }
         Relationships: []
       }
+      enrichment_jobs: {
+        Row: {
+          completed_at: string | null
+          created_by: string | null
+          docs_added: number | null
+          errors: number | null
+          fields_updated: number | null
+          id: string
+          images_added: number | null
+          log: Json | null
+          processed: number | null
+          started_at: string | null
+          status: string
+          stop_requested: boolean | null
+          total_projects: number | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_by?: string | null
+          docs_added?: number | null
+          errors?: number | null
+          fields_updated?: number | null
+          id?: string
+          images_added?: number | null
+          log?: Json | null
+          processed?: number | null
+          started_at?: string | null
+          status?: string
+          stop_requested?: boolean | null
+          total_projects?: number | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_by?: string | null
+          docs_added?: number | null
+          errors?: number | null
+          fields_updated?: number | null
+          id?: string
+          images_added?: number | null
+          log?: Json | null
+          processed?: number | null
+          started_at?: string | null
+          status?: string
+          stop_requested?: boolean | null
+          total_projects?: number | null
+        }
+        Relationships: []
+      }
       esign_audit_log: {
         Row: {
           action: Database["public"]["Enums"]["esign_audit_action"]
