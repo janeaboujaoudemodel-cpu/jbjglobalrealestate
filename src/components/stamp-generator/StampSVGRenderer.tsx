@@ -21,9 +21,24 @@ interface Props {
   fontStyle?: 'normal' | 'italic';
   /** Font size override in px — skips values < 4px */
   fontSize?: number | null;
+  /** Render with realistic ink impression texture */
+  inkMode?: boolean;
   className?: string;
   size?: number;
 }
+
+// SVG filter that simulates realistic rubber stamp ink impression
+const INK_TEXTURE_FILTER = `
+<filter id="inkTexture" x="-5%" y="-5%" width="110%" height="110%">
+  <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="4" seed="2" result="noise"/>
+  <feColorMatrix type="saturate" values="0" in="noise" result="grayNoise"/>
+  <feComponentTransfer in="grayNoise" result="threshold">
+    <feFuncA type="discrete" tableValues="0 0 0 0 0 0 1 1 1 1"/>
+  </feComponentTransfer>
+  <feComposite in="SourceGraphic" in2="threshold" operator="in" result="textured"/>
+  <feGaussianBlur in="textured" stdDeviation="0.3" result="softened"/>
+  <feMorphology in="softened" operator="erode" radius="0.15"/>
+</filter>`;
 
 export function StampSVGRenderer({
   svgSource,
@@ -34,6 +49,7 @@ export function StampSVGRenderer({
   fontWeight,
   fontStyle,
   fontSize,
+  inkMode = false,
   className = '',
   size = 240,
 }: Props) {
@@ -81,16 +97,36 @@ export function StampSVGRenderer({
     });
   }
 
+  // Inject ink texture filter if inkMode is enabled
+  if (inkMode) {
+    // Insert filter defs and wrap content in a filtered group
+    const defsMatch = tinted.match(/<defs[^>]*>/i);
+    if (defsMatch) {
+      tinted = tinted.replace(defsMatch[0], `${defsMatch[0]}${INK_TEXTURE_FILTER}`);
+    } else {
+      tinted = tinted.replace(/<svg([^>]*)>/, `<svg$1><defs>${INK_TEXTURE_FILTER}</defs>`);
+    }
+    // Wrap all SVG content (after opening tag) in a filtered group
+    tinted = tinted.replace(
+      /(<\/defs>)/i,
+      `$1<g filter="url(#inkTexture)" opacity="0.88">`
+    );
+    tinted = tinted.replace(/<\/svg>/, '</g></svg>');
+  }
+
   // Sanitize SVG before rendering — preserve clip-path, direction, unicode-bidi, image href
   // Allow data: URIs for uploaded logos (DOMPurify strips them by default)
   const clean = typeof window !== 'undefined'
     ? DOMPurify.sanitize(tinted, {
         USE_PROFILES: { svg: true, svgFilters: true },
-        ADD_TAGS: ['image'],
+        ADD_TAGS: ['image', 'filter', 'feTurbulence', 'feColorMatrix', 'feComponentTransfer', 'feFuncA', 'feComposite', 'feGaussianBlur', 'feMorphology'],
         ADD_ATTR: [
           'clip-path', 'dominant-baseline', 'unicode-bidi', 'direction', 'bidi-override',
           'letter-spacing', 'text-anchor', 'font-weight', 'font-size', 'font-family', 'font-style',
           'href', 'xlink:href', 'preserveAspectRatio', 'textLength', 'lengthAdjust',
+          'filter', 'flood-color', 'flood-opacity', 'stdDeviation', 'baseFrequency',
+          'numOctaves', 'seed', 'type', 'values', 'operator', 'radius', 'in', 'in2', 'result',
+          'tableValues', 'x', 'y', 'width', 'height',
         ],
         ADD_DATA_URI_TAGS: ['image'],
         ADD_URI_SAFE_ATTR: ['href', 'xlink:href'],

@@ -16,6 +16,7 @@ import {
   X,
   CheckSquare,
   FileText,
+  Stamp,
 } from "lucide-react";
 import {
   Select,
@@ -26,6 +27,7 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 import { PDFDocument } from "pdf-lib";
 
 interface Recipient {
@@ -37,7 +39,7 @@ interface Recipient {
 interface SignatureField {
   id: string;
   recipientId: string;
-  type: "signature" | "initials" | "date" | "text" | "checkbox";
+  type: "signature" | "initials" | "date" | "text" | "checkbox" | "stamp";
   pageNumber: number;
   x: number;
   y: number;
@@ -61,6 +63,7 @@ const fieldTypes = [
   { type: "date" as const, label: "Date", icon: Calendar, defaultWidth: 140, defaultHeight: 36 },
   { type: "text" as const, label: "Text", icon: Type, defaultWidth: 160, defaultHeight: 36 },
   { type: "checkbox" as const, label: "Checkbox", icon: CheckSquare, defaultWidth: 28, defaultHeight: 28 },
+  { type: "stamp" as const, label: "Stamp", icon: Stamp, defaultWidth: 100, defaultHeight: 100 },
 ];
 
 const recipientColorStyles = [
@@ -118,6 +121,7 @@ export default function DocumentFieldPlacer({
   fields,
   onFieldsChange,
 }: DocumentFieldPlacerProps) {
+  const { user } = useAuth();
   const [selectedRecipient, setSelectedRecipient] = useState<string>(recipients[0]?.id || "");
   const [selectedFieldType, setSelectedFieldType] = useState<SignatureField["type"]>("signature");
   const [currentPage, setCurrentPage] = useState(1);
@@ -126,10 +130,30 @@ export default function DocumentFieldPlacer({
   const overlayRef = useRef<HTMLDivElement>(null);
   const stripRef = useRef<HTMLDivElement>(null);
 
+  // Saved stamp SVG from user's stamp generator
+  const [savedStampSvg, setSavedStampSvg] = useState<string | null>(null);
+
   // Thumbnail state: array of canvas data-urls per page
   const [thumbnails, setThumbnails] = useState<string[]>([]);
   const [thumbsLoading, setThumbsLoading] = useState(false);
   const pdfJsDocRef = useRef<any>(null);
+
+  // Load user's saved stamp from stamp_designs
+  useEffect(() => {
+    if (!user?.id) return;
+    async function loadStamp() {
+      const { data } = await supabase
+        .from("stamp_designs")
+        .select("svg_source")
+        .eq("user_id", user!.id)
+        .eq("is_favorite", true)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (data?.svg_source) setSavedStampSvg(data.svg_source);
+    }
+    loadStamp();
+  }, [user?.id]);
 
   // ── Load PDF page count + thumbnails ──────────────────────────────────
   useEffect(() => {
@@ -572,7 +596,29 @@ export default function DocumentFieldPlacer({
                         </button>
 
                         {/* Field content */}
-                        {field.type === "checkbox" ? (
+                        {field.type === "stamp" ? (
+                          <div className="flex items-center justify-center h-full w-full overflow-hidden">
+                            {savedStampSvg ? (
+                              <div
+                                className="w-full h-full flex items-center justify-center opacity-85"
+                                dangerouslySetInnerHTML={{
+                                  __html: savedStampSvg.replace(
+                                    /width="[^"]*"/,
+                                    `width="${field.width - 4}"`
+                                  ).replace(
+                                    /height="[^"]*"/,
+                                    `height="${field.height - 4}"`
+                                  ),
+                                }}
+                              />
+                            ) : (
+                              <div className={`flex flex-col items-center justify-center gap-0.5 ${style.text}`}>
+                                <Stamp className="w-6 h-6" />
+                                <span className="text-[9px] font-medium">Company Stamp</span>
+                              </div>
+                            )}
+                          </div>
+                        ) : field.type === "checkbox" ? (
                           <div
                             className={`flex items-center justify-center h-full cursor-pointer ${style.text}`}
                             onClick={(e) => {

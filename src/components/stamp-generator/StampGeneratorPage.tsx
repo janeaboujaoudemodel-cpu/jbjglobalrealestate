@@ -33,6 +33,7 @@ type ColorStop = 'primary' | 'secondary' | 'accent';
 
 // Full 3-stop palette presets
 const PALETTE_PRESETS = [
+  { label: 'Ink Blue (Standard)',primary: '#1B3A8C', secondary: '#1a2d6e', accent: '#1B3A8C' },
   { label: 'JBJ Gold',      primary: '#B8860B', secondary: '#2a3a5c', accent: '#856404' },
   { label: 'Royal Navy',    primary: '#1a2744', secondary: '#2a3a5c', accent: '#B8860B' },
   { label: 'Obsidian',      primary: '#0d0d0d', secondary: '#333333', accent: '#B8860B' },
@@ -44,11 +45,12 @@ const PALETTE_PRESETS = [
 
 // Stamp presets matching the example gallery gold + standard black/white
 const PRESET_PALETTE = [
-  { label: 'Gold',    hex: '#B8860B' },   // Standard gold (example gallery)
-  { label: 'Gold Dark', hex: '#856404' }, // Deep gold
-  { label: 'Navy',    hex: '#1a2744' },   // Classic navy
-  { label: 'Black',   hex: '#0d0d0d' },   // Standard black
-  { label: 'White',   hex: '#ffffff' },   // Standard white
+  { label: 'Ink Blue',  hex: '#1B3A8C' },   // Real ink stamp blue (standard)
+  { label: 'Gold',    hex: '#B8860B' },
+  { label: 'Gold Dark', hex: '#856404' },
+  { label: 'Navy',    hex: '#1a2744' },
+  { label: 'Black',   hex: '#0d0d0d' },
+  { label: 'White',   hex: '#ffffff' },
   { label: 'Red',     hex: '#8B0000' },
   { label: 'Purple',  hex: '#4B0082' },
   { label: 'Forest',  hex: '#1B4332' },
@@ -94,6 +96,8 @@ export default function StampGeneratorPage() {
   const [secondaryColor, setSecondaryColorRaw] = useState<string | undefined>(() => ssGet(ssKey('secondaryColor'), undefined));
   const [accentColor, setAccentColorRaw] = useState<string | undefined>(() => ssGet(ssKey('accentColor'), undefined));
   const [activeStop, setActiveStop] = useState<ColorStop>('primary');
+  const [inkMode, setInkModeRaw] = useState(() => ssGet(ssKey('inkMode'), false));
+  const setInkMode = (v: boolean) => { setInkModeRaw(v); ssSave(ssKey('inkMode'), v); };
 
   const setPrimaryColor = (v: string) => { setPrimaryColorRaw(v); ssSave(ssKey('primaryColor'), v); };
   const setSecondaryColor = (v: string | undefined) => { setSecondaryColorRaw(v); ssSave(ssKey('secondaryColor'), v ?? null); };
@@ -605,6 +609,28 @@ export default function StampGeneratorPage() {
                         </button>
                       )}
                     </div>
+
+                    {/* Ink Impression Mode Toggle */}
+                    <div className="pt-3 mt-2 border-t border-[hsl(var(--border))]">
+                      <button
+                        onClick={() => setInkMode(!inkMode)}
+                        className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl border-2 transition-all ${
+                          inkMode
+                            ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)]'
+                            : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'
+                        }`}
+                      >
+                        <div className={`w-5 h-5 rounded-md flex items-center justify-center text-[10px] font-bold ${
+                          inkMode ? 'bg-[hsl(var(--gold))] text-white' : 'bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))]'
+                        }`}>
+                          {inkMode ? '✓' : ''}
+                        </div>
+                        <div className="text-left">
+                          <p className="text-[11px] font-semibold text-[hsl(var(--foreground))]">Ink Impression</p>
+                          <p className="text-[9px] text-[hsl(var(--muted-foreground))]">Realistic rubber stamp texture</p>
+                        </div>
+                      </button>
+                    </div>
                   </div>
                 </>
               )}
@@ -826,6 +852,7 @@ export default function StampGeneratorPage() {
                     fontWeight={fontBold ? 'bold' : 'normal'}
                     fontStyle={fontItalic ? 'italic' : 'normal'}
                     fontSize={manualFontSize}
+                    inkMode={inkMode}
                     size={240}
                   />
                 ) : (
@@ -979,7 +1006,7 @@ export default function StampGeneratorPage() {
                     svgSource={selectedSvg || allConcepts[0]?.svgSource || ''}
                     tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor}
                     fontFamily={fontFamily} fontWeight={fontBold ? 'bold' : 'normal'} fontStyle={fontItalic ? 'italic' : 'normal'}
-                    fontSize={manualFontSize} size={180}
+                    fontSize={manualFontSize} inkMode={inkMode} size={180}
                   />
                 ) : <Stamp size={40} className="text-[hsl(var(--muted-foreground))] opacity-20"/>}
               </div>
@@ -997,7 +1024,7 @@ export default function StampGeneratorPage() {
                   {favoriteConcepts.map(c => (
                     <ConceptCard key={c.id} concept={c} svgOverride={svgOverrides[c.id]}
                       selectedId={selectedId} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily}
-                      fontBold={fontBold} fontItalic={fontItalic} manualFontSize={manualFontSize}
+                      fontBold={fontBold} fontItalic={fontItalic} manualFontSize={manualFontSize} inkMode={inkMode}
                       togglingFav={togglingFav} onSelect={handleSelectConcept} onToggleFav={toggleFavorite} onEditText={handleEditText}/>
                   ))}
                 </div>
@@ -1027,7 +1054,7 @@ export default function StampGeneratorPage() {
                   {concepts.map(concept => (
                     <ConceptCard key={concept.id} concept={concept} svgOverride={svgOverrides[concept.id]}
                       selectedId={selectedId} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily}
-                      fontBold={fontBold} fontItalic={fontItalic} manualFontSize={manualFontSize}
+                      fontBold={fontBold} fontItalic={fontItalic} manualFontSize={manualFontSize} inkMode={inkMode}
                       togglingFav={togglingFav} onSelect={handleSelectConcept} onToggleFav={toggleFavorite} onEditText={handleEditText}/>
                   ))}
                 </div>
@@ -1217,7 +1244,7 @@ export default function StampGeneratorPage() {
 
 // ─── Concept Card ─────────────────────────────────────────────────────────────
 function ConceptCard({
-  concept, svgOverride, selectedId, tintColor, secondaryColor, accentColor, fontFamily, fontBold, fontItalic, manualFontSize, togglingFav, onSelect, onToggleFav, onEditText
+  concept, svgOverride, selectedId, tintColor, secondaryColor, accentColor, fontFamily, fontBold, fontItalic, manualFontSize, inkMode, togglingFav, onSelect, onToggleFav, onEditText
 }: {
   concept: StampDesignConcept;
   svgOverride?: string;
@@ -1229,6 +1256,7 @@ function ConceptCard({
   fontBold?: boolean;
   fontItalic?: boolean;
   manualFontSize?: number | null;
+  inkMode?: boolean;
   togglingFav: string | null;
   onSelect: (c: StampDesignConcept) => void;
   onToggleFav: (c: StampDesignConcept) => void;
@@ -1255,7 +1283,7 @@ function ConceptCard({
             <Badge className="text-[9px] px-1.5 py-0 bg-amber-50 text-amber-700 border border-amber-200">edited</Badge>
           </div>
         )}
-        <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} fontWeight={fontBold ? 'bold' : 'normal'} fontStyle={fontItalic ? 'italic' : 'normal'} fontSize={manualFontSize} size={160}/>
+        <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} fontWeight={fontBold ? 'bold' : 'normal'} fontStyle={fontItalic ? 'italic' : 'normal'} fontSize={manualFontSize} inkMode={inkMode} size={160}/>
       </div>
       <div className="p-3 space-y-2">
         <p className="font-medium text-sm text-[hsl(var(--foreground))] truncate">{concept.label}</p>
