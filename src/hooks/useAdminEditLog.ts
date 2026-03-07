@@ -76,8 +76,8 @@ export function useLatestEditLog(entityType: string, entityId: string | undefine
     queryKey: ["admin-edit-log", entityType, entityId],
     enabled: !!entityId,
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("admin_edit_log" as any)
+      const { data, error } = await (supabase as any)
+        .from("admin_edit_log")
         .select("*")
         .eq("entity_type", entityType)
         .eq("entity_id", entityId!)
@@ -98,8 +98,8 @@ export function useLatestEditLogs(entityType: string, entityIds: string[]) {
     queryKey: ["admin-edit-logs-batch", entityType, entityIds.join(",")],
     enabled: entityIds.length > 0,
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("admin_edit_log" as any)
+      const { data, error } = await (supabase as any)
+        .from("admin_edit_log")
         .select("*")
         .eq("entity_type", entityType)
         .in("entity_id", entityIds)
