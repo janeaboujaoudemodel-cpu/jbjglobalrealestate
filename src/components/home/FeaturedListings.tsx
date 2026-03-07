@@ -85,15 +85,14 @@ function useFeaturedProjects() {
         return false;
       };
 
-      // Strict round-robin: 1 per developer
-      addOne('DAMAC');
-      addOne('Meraas');
-      addOne('ALDAR');
-      addOne('Omniyat');
-      addOne('Sobha', 'pinnacle');
-      addOne('Nakheel');
-      addOne('Binghatti', 'bugatti');
+      // Strict order: Amra first, then Emaar, Nakheel, Sobha, Meraas, Binghatti, DAMAC
+      addOne('DAMAC', 'amra');        // Amra by DAMAC first
       addOne('Emaar');
+      addOne('Nakheel');
+      addOne('Sobha', 'pinnacle');
+      addOne('Meraas');
+      addOne('Binghatti', 'mercedes');
+      addOne('ALDAR');
 
       // Fill remaining slots ONLY from developers NOT already represented
       if (result.length < 8) {
