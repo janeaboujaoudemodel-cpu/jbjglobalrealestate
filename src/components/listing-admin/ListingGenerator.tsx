@@ -776,10 +776,30 @@ const ListingGenerator = () => {
             />
           </div>
 
+          {/* File Size Warning */}
+          {files.length > 0 && (
+            <div className="flex items-center gap-2 text-sm">
+              <span className="text-muted-foreground">
+                Total: {totalFileSizeMB.toFixed(1)} MB across {files.length} file{files.length > 1 ? "s" : ""}
+              </span>
+              {isOverSizeLimit && (
+                <Badge variant="destructive" className="text-xs">
+                  <AlertTriangle className="w-3 h-3 mr-1" />
+                  Over 50MB limit — split into smaller batches
+                </Badge>
+              )}
+              {!isOverSizeLimit && files.length > 3 && (
+                <Badge variant="secondary" className="text-xs">
+                  Will process in batches of 3
+                </Badge>
+              )}
+            </div>
+          )}
+
           {/* Generate Button */}
           <Button
             onClick={handleGenerate}
-            disabled={!canGenerate}
+            disabled={!canGenerate || isOverSizeLimit}
             variant="primary"
             className="w-full h-14 text-lg font-semibold"
           >
