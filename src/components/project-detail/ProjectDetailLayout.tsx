@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import PremiumHorizontalScrollHint from "@/components/ui/PremiumHorizontalScrollHint";
 import { Link } from "react-router-dom";
 import {
   Download,
@@ -658,8 +659,8 @@ export default function ProjectDetailLayout({
         {/* Row 2: Curated Shortcuts */}
         <div className="bg-gradient-to-r from-[#EDE0C8] via-[#E2D4B8] to-[#D4C4A8] border-b border-gold/30 shadow-md">
           <div className="container mx-auto px-4">
-            <div className="overflow-x-auto scrollbar-hide" style={{ touchAction: 'pan-x', WebkitOverflowScrolling: 'touch', overscrollBehaviorX: 'contain' }}>
-             <div ref={tabNavRef} className="flex items-center gap-1 py-1.5">
+            <div ref={tabNavRef} className="overflow-x-auto scrollbar-hide" style={{ touchAction: 'pan-x', WebkitOverflowScrolling: 'touch', overscrollBehaviorX: 'contain' }}>
+              <div className="flex items-center gap-1 py-1.5">
                 {visibleTabs.map((tab) => (
                   <button
                     key={tab.id}
@@ -686,6 +687,7 @@ export default function ProjectDetailLayout({
                 </button>
               </div>
             </div>
+            <PremiumHorizontalScrollHint scrollRef={tabNavRef} className="pb-1" />
           </div>
         </div>
       </div>
