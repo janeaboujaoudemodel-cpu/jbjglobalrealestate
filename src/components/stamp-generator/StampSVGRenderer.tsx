@@ -21,9 +21,24 @@ interface Props {
   fontStyle?: 'normal' | 'italic';
   /** Font size override in px — skips values < 4px */
   fontSize?: number | null;
+  /** Render with realistic ink impression texture */
+  inkMode?: boolean;
   className?: string;
   size?: number;
 }
+
+// SVG filter that simulates realistic rubber stamp ink impression
+const INK_TEXTURE_FILTER = `
+<filter id="inkTexture" x="-5%" y="-5%" width="110%" height="110%">
+  <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="4" seed="2" result="noise"/>
+  <feColorMatrix type="saturate" values="0" in="noise" result="grayNoise"/>
+  <feComponentTransfer in="grayNoise" result="threshold">
+    <feFuncA type="discrete" tableValues="0 0 0 0 0 0 1 1 1 1"/>
+  </feComponentTransfer>
+  <feComposite in="SourceGraphic" in2="threshold" operator="in" result="textured"/>
+  <feGaussianBlur in="textured" stdDeviation="0.3" result="softened"/>
+  <feMorphology in="softened" operator="erode" radius="0.15"/>
+</filter>`;
 
 export function StampSVGRenderer({
   svgSource,
@@ -34,6 +49,7 @@ export function StampSVGRenderer({
   fontWeight,
   fontStyle,
   fontSize,
+  inkMode = false,
   className = '',
   size = 240,
 }: Props) {
