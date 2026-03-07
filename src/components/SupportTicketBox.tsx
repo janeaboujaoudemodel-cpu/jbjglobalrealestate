@@ -436,23 +436,23 @@ const SupportTicketBox = () => {
                 <div>
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center shadow-lg">
-                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 64 64" className="text-white">
+                       <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 64 64" fill="none" className="text-white">
                          {/* Headband */}
-                         <path d="M12 30 C12 14, 52 14, 52 30" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round"/>
-                         {/* Headband thickness/cushion */}
-                         <path d="M14 30 C14 16, 50 16, 50 30" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.4"/>
-                         {/* Left slider arm */}
-                         <path d="M12 30 L12 38" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round"/>
-                         {/* Right slider arm */}
-                         <path d="M52 30 L52 38" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round"/>
-                         {/* Left ear cup - rounded rectangle */}
-                         <rect x="4" y="34" width="16" height="20" rx="8" fill="currentColor" opacity="0.15" stroke="currentColor" strokeWidth="2.5"/>
-                         <rect x="7" y="37" width="10" height="14" rx="5" fill="currentColor" opacity="0.1"/>
-                         {/* Right ear cup - rounded rectangle */}
-                         <rect x="44" y="34" width="16" height="20" rx="8" fill="currentColor" opacity="0.15" stroke="currentColor" strokeWidth="2.5"/>
-                         <rect x="47" y="37" width="10" height="14" rx="5" fill="currentColor" opacity="0.1"/>
-                         {/* Crown/top highlight */}
-                         <ellipse cx="32" cy="15" rx="6" ry="1.5" fill="currentColor" opacity="0.15"/>
+                         <path d="M10 32 C10 14, 54 14, 54 32" stroke="currentColor" strokeWidth="4.5" strokeLinecap="round" fill="none"/>
+                         {/* Headband inner highlight */}
+                         <path d="M14 32 C14 18, 50 18, 50 32" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.3" fill="none"/>
+                         {/* Left arm */}
+                         <path d="M10 32 L10 40" stroke="currentColor" strokeWidth="4" strokeLinecap="round"/>
+                         {/* Right arm */}
+                         <path d="M54 32 L54 40" stroke="currentColor" strokeWidth="4" strokeLinecap="round"/>
+                         {/* Left ear cup */}
+                         <rect x="2" y="36" width="16" height="22" rx="8" fill="currentColor" opacity="0.2" stroke="currentColor" strokeWidth="2.5"/>
+                         <rect x="5" y="39" width="10" height="16" rx="5" fill="currentColor" opacity="0.12"/>
+                         {/* Right ear cup */}
+                         <rect x="46" y="36" width="16" height="22" rx="8" fill="currentColor" opacity="0.2" stroke="currentColor" strokeWidth="2.5"/>
+                         <rect x="49" y="39" width="10" height="16" rx="5" fill="currentColor" opacity="0.12"/>
+                         {/* Crown highlight */}
+                         <ellipse cx="32" cy="15" rx="7" ry="2" fill="currentColor" opacity="0.18"/>
                        </svg>
                     </div>
                     <div>
