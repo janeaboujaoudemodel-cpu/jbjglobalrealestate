@@ -1146,24 +1146,7 @@ export default function ProjectDetailLayout({
                 }}
               />
              
-             {/* Payment Plan Documents - still show if available */}
-             {paymentPlanDocs.length > 0 && (
-               <div className="mt-6 space-y-3">
-                 {paymentPlanDocs.map((doc) => (
-                   <button
-                     key={doc.id}
-                     onClick={() => handleDocumentDownload("payment_plan", doc.url)}
-                     className="flex items-center justify-between gap-3 rounded-xl border border-gold/30 bg-card p-4 hover:border-gold/60 transition-colors w-full text-left"
-                   >
-                     <div className="min-w-0">
-                       <p className="text-sm font-semibold text-foreground truncate">{doc.name || "Payment Plan"}</p>
-                       <p className="text-xs text-muted-foreground truncate">Click to download</p>
-                     </div>
-                     <Download className="w-5 h-5 text-gold flex-shrink-0" />
-                   </button>
-                 ))}
-               </div>
-             )}
+              {/* Payment plan documents are now shown exclusively via BookStyleDocuments */}
             </div>
             )}
 
