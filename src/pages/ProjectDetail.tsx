@@ -151,6 +151,7 @@ const ProjectDetail = () => {
       slug: p.slug || slug || "",
       imageUrl: (project?.cover_image_url || (project?.images?.[0] as any)?.image_url || (reellyProject as any)?.thumbnail) ?? undefined,
       subtitle: project?.developer?.name || (reellyProject as any)?.developer_name || undefined,
+      developerLogo: (project?.developer as any)?.logo_url || undefined,
     });
   }, [project, reellyProject]);
 

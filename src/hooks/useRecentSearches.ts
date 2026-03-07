@@ -9,6 +9,7 @@ export interface RecentItem {
   slug: string;
   imageUrl?: string;
   subtitle?: string; // e.g. developer name, emirate, price
+  developerLogo?: string; // developer logo URL for property cards
   viewedAt: number;
 }
 
@@ -53,8 +54,9 @@ const normalizeItem = (raw: unknown): RecentItem | null => {
   const viewedAt = typeof obj.viewedAt === "number" && Number.isFinite(obj.viewedAt) ? obj.viewedAt : Date.now();
   const imageUrl = asString(obj.imageUrl) || undefined;
   const subtitle = asString(obj.subtitle) || undefined;
+  const developerLogo = asString(obj.developerLogo) || undefined;
 
-  return { id, type, name, slug, imageUrl, subtitle, viewedAt };
+  return { id, type, name, slug, imageUrl, subtitle, developerLogo, viewedAt };
 };
 
 function loadItems(): RecentItem[] {
