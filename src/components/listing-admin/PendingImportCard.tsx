@@ -76,20 +76,23 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
   const activeImage = images[currentImageIndex] || images[0];
   const hasMultipleImages = images.length > 1;
 
-  // Determine if extraction is incomplete
-  // UPDATED COMPLETENESS CRITERIA:
-  // - description is required
-  // - valid developer (not "unknown") is required  
-  // - at least 1 image is required (Reelly only provides cover image - accept 1+)
-  // - documents are NOT required (especially for Reelly API imports)
+  // Determine if extraction is incomplete — BALANCED GATE
+  // Core requirements: description, valid developer (not "unknown"), 2+ images, at least 1 doc (brochure)
   const isIncomplete = Boolean(
     item.review_notes?.includes("INCOMPLETE") ||
     item.review_notes?.includes("PENDING_SCRAPE") ||
     !item.description ||
     (item.developer_name?.toLowerCase() === "unknown") ||
-    images.length === 0
-    // documents.length === 0 - REMOVED: documents no longer mandatory for Reelly imports
+    images.length < 2 ||
+    documents.length === 0
   );
+
+  // What specifically is missing (for tooltip)
+  const missingFields: string[] = [];
+  if (!item.description) missingFields.push("description");
+  if (!item.developer_name || item.developer_name.toLowerCase() === "unknown") missingFields.push("developer");
+  if (images.length < 2) missingFields.push(`images (${images.length}/2)`);
+  if (documents.length === 0) missingFields.push("brochure/documents");
 
   const handleCardClick = () => {
     onReview();
@@ -269,12 +272,12 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
       style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}
       onClick={handleCardClick}
     >
-      {/* Incomplete badge (overlay so it doesn't change card height/alignment) */}
+      {/* Incomplete badge with detail */}
       {isIncomplete && (
         <div className="absolute top-3 left-3 z-20 pointer-events-none">
-          <div className="inline-flex items-center gap-1 rounded bg-amber-500 text-white text-xs font-bold px-2.5 py-1 shadow">
+          <div className="inline-flex items-center gap-1 rounded bg-amber-500 text-white text-xs font-bold px-2.5 py-1 shadow" title={`Missing: ${missingFields.join(", ")}`}>
             <AlertTriangle className="w-3 h-3" />
-            Incomplete
+            Needs Enrichment
           </div>
         </div>
       )}

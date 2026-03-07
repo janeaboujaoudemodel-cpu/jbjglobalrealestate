@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
-import { Check, X, Clock, RefreshCw, Database, Building, MapPin, Eye } from "lucide-react";
+import { Check, X, Clock, RefreshCw, Database, Building, MapPin, Eye, Zap, Loader2, ArrowRight } from "lucide-react";
 import { format } from "date-fns";
 
 interface PendingUpdate {
@@ -46,7 +47,96 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [processingIds, setProcessingIds] = useState<Set<string>>(new Set());
   const [batchProcessing, setBatchProcessing] = useState(false);
+  const [isMigrating, setIsMigrating] = useState(false);
+  const [migrationStats, setMigrationStats] = useState<{ pending: number; migrated: number; total: number } | null>(null);
+  const [migrationLog, setMigrationLog] = useState<string[]>([]);
+  const [migrationProgress, setMigrationProgress] = useState(0);
+  const stopMigrationRef = useRef(false);
   const { toast } = useToast();
+
+  const addMigrationLog = useCallback((msg: string) => {
+    setMigrationLog(prev => [...prev.slice(-50), `[${new Date().toLocaleTimeString()}] ${msg}`]);
+  }, []);
+
+  // Fetch migration stats
+  const fetchMigrationStats = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke("enrich-pending-imports", {
+        body: { action: "stats" },
+      });
+      if (!error && data) {
+        setMigrationStats(data);
+      }
+    } catch {
+      // Non-fatal
+    }
+  };
+
+  useEffect(() => {
+    fetchMigrationStats();
+  }, []);
+
+  // Start migration & enrichment
+  const startMigration = async () => {
+    stopMigrationRef.current = false;
+    setIsMigrating(true);
+    setMigrationLog([]);
+    setMigrationProgress(0);
+    addMigrationLog("🚀 Starting migration & enrichment from Provident...");
+
+    let totalProcessed = 0;
+    let totalEnriched = 0;
+    let batch = 0;
+
+    while (!stopMigrationRef.current) {
+      batch++;
+      addMigrationLog(`📦 Batch #${batch} starting...`);
+
+      try {
+        const { data, error } = await supabase.functions.invoke("enrich-pending-imports", {
+          body: { action: "migrate", batch_size: 10 },
+        });
+
+        if (error) throw error;
+        if (!data) break;
+
+        totalProcessed += data.processed || 0;
+        totalEnriched += data.enriched || 0;
+
+        for (const r of (data.results || [])) {
+          const icon = r.status === "enriched" ? "✅" : "⚠️";
+          addMigrationLog(`  ${icon} ${r.name}: ${r.slug_matched || "no match"} (${r.images} imgs, ${r.docs} docs)`);
+        }
+
+        addMigrationLog(`📦 Batch #${batch} done: ${data.processed} processed, ${data.remaining} remaining`);
+
+        if (data.remaining === 0 || data.processed === 0) {
+          addMigrationLog("🎉 All pending updates migrated!");
+          break;
+        }
+
+        const total = migrationStats?.total || (totalProcessed + data.remaining);
+        setMigrationProgress(Math.round((totalProcessed / total) * 100));
+
+        // Brief pause
+        await new Promise(r => setTimeout(r, 2000));
+      } catch (err: any) {
+        addMigrationLog(`❌ Batch #${batch} error: ${err.message}`);
+        await new Promise(r => setTimeout(r, 5000));
+      }
+    }
+
+    if (stopMigrationRef.current) {
+      addMigrationLog("⏸️ Migration paused.");
+    }
+
+    setIsMigrating(false);
+    setMigrationProgress(100);
+    fetchMigrationStats();
+    fetchPendingUpdates();
+    onRefresh?.();
+    toast({ title: "Migration Complete", description: `${totalProcessed} processed, ${totalEnriched} enriched` });
+  };
 
   const fetchPendingUpdates = async () => {
     setIsLoading(true);
@@ -232,7 +322,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
         </div>
       </CardHeader>
       <CardContent>
-        {totalPending === 0 ? (
+         {totalPending === 0 && !migrationStats?.pending ? (
           <div className="flex flex-col items-center justify-center py-8 text-muted-foreground">
             <Check className="h-12 w-12 mb-4 text-emerald-500" />
             <p className="text-lg font-medium text-foreground">All caught up!</p>
@@ -240,6 +330,74 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
           </div>
         ) : (
           <div className="space-y-6">
+            {/* ===== MIGRATION PANEL ===== */}
+            {(migrationStats?.pending ?? 0) > 0 && (
+              <div className="bg-gradient-to-r from-amber-50 to-amber-100 border-2 border-amber-300 rounded-xl p-5 space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-amber-900 font-bold text-base flex items-center gap-2">
+                      <Zap className="w-5 h-5 text-amber-600" />
+                      Migrate & Enrich Legacy Queue
+                    </h3>
+                    <p className="text-amber-700 text-sm mt-1">
+                      {migrationStats.pending} unenriched project shells need migration to the approval queue with full Provident data extraction.
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {!isMigrating ? (
+                      <Button
+                        onClick={startMigration}
+                        className="bg-amber-600 hover:bg-amber-700 text-white"
+                      >
+                        <ArrowRight className="w-4 h-4 mr-2" />
+                        Migrate & Enrich All
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={() => { stopMigrationRef.current = true; }}
+                        variant="destructive"
+                      >
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Stop
+                      </Button>
+                    )}
+                  </div>
+                </div>
+                {migrationProgress > 0 && (
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-xs text-amber-700">
+                      <span>Migration Progress</span>
+                      <span>{migrationProgress}%</span>
+                    </div>
+                    <Progress value={migrationProgress} className="h-2" />
+                  </div>
+                )}
+                {migrationStats.migrated > 0 && (
+                  <p className="text-xs text-amber-600">{migrationStats.migrated} already migrated</p>
+                )}
+              </div>
+            )}
+
+            {/* Migration Log */}
+            {migrationLog.length > 0 && (
+              <div className="bg-zinc-950 border border-zinc-800 rounded-xl overflow-hidden">
+                <div className="px-4 py-2 border-b border-zinc-800">
+                  <span className="text-zinc-300 text-xs font-semibold">Migration Log</span>
+                </div>
+                <div className="max-h-48 overflow-y-auto p-3 font-mono text-xs space-y-0.5">
+                  {migrationLog.map((line, i) => (
+                    <div key={i} className={`${
+                      line.includes("❌") ? "text-red-400" :
+                      line.includes("✅") ? "text-emerald-400" :
+                      line.includes("🎉") ? "text-yellow-300" :
+                      line.includes("⚠️") ? "text-amber-400" :
+                      "text-zinc-400"
+                    }`}>{line}</div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* New Project Discoveries */}
             {newProjects.length > 0 && (
               <div>
@@ -263,7 +421,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
                           <div className="relative aspect-[4/3] bg-gradient-to-br from-muted via-muted/80 to-muted/60">
                             <div className="w-full h-full flex flex-col items-center justify-center gap-2">
                               <Building className="h-12 w-12 text-muted-foreground/30" />
-                              <span className="text-xs text-muted-foreground/50 font-medium">Will be enriched after approval</span>
+                              <span className="text-xs text-amber-600 font-medium">⚠️ Needs Migration & Enrichment</span>
                             </div>
                             {/* Status badge overlay */}
                             <div className="absolute top-3 right-3">
