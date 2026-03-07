@@ -792,15 +792,15 @@ const ListingGenerator = () => {
           <div className="space-y-2">
             <label className="text-sm font-medium text-foreground flex items-center gap-2">
               <Globe className="w-4 h-4 text-gold" />
-              Project Website URL (optional)
+              Source URL to Scrape (optional)
             </label>
             <Input
               value={url}
               onChange={(e) => setUrl(e.target.value)}
-              placeholder="https://developer.com/project-name or marketing link with multiple projects"
+              placeholder="Paste a listing URL to scrape project data from"
             />
             <p className="text-xs text-muted-foreground">
-              💡 If the link contains multiple projects, each will be extracted as a separate listing
+              💡 This URL is used only for data extraction — it will NOT be saved as the project website
             </p>
           </div>
 
