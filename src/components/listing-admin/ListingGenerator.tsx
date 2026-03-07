@@ -416,6 +416,9 @@ const ListingGenerator = () => {
   // ========== POLL FOR JOB COMPLETION ==========
   const pollJob = async (jobId: string): Promise<any> => {
     const maxPolls = 450; // 15 minutes max
+    let lastProgress = "";
+    let lastProgressTime = Date.now();
+
     for (let i = 0; i < maxPolls; i++) {
       await new Promise((r) => setTimeout(r, 2000));
 
@@ -435,9 +438,22 @@ const ListingGenerator = () => {
 
       if (data?.status === "processing" || data?.status === "pending" || data?.status === "queued") {
         if (data?.progress) {
+          if (data.progress !== lastProgress) {
+            lastProgress = data.progress;
+            lastProgressTime = Date.now();
+          }
           setProcessingStatus(data.progress);
         } else if (i > 20) {
           setProcessingStatus("AI is analyzing your documents — still running in background...");
+        }
+
+        // Stale progress detection: same message for 90+ seconds
+        const staleSec = (Date.now() - lastProgressTime) / 1000;
+        if (staleSec > 90 && lastProgress) {
+          setProcessingStatus(`Extraction may be stuck (${Math.floor(staleSec)}s no update). Waiting...`);
+        }
+        if (staleSec > 180) {
+          throw new Error("Extraction appears stuck. Please try again with fewer files.");
         }
         continue;
       }

@@ -527,6 +527,24 @@ serve(async (req: Request) => {
         await triggerBackgroundProcessing(job_id);
       }
 
+      // Stale job detection: if processing for >5min with no progress change, mark failed
+      if (job.status === "processing") {
+        const progressUpdatedAt = (job.output_payload as any)?.updated_at;
+        if (progressUpdatedAt) {
+          const staleMs = Date.now() - new Date(progressUpdatedAt).getTime();
+          if (staleMs > 5 * 60 * 1000) {
+            await supabase.from("ai_job_master").update({
+              status: "failed",
+              error_message: "Extraction timed out. Please retry with fewer files.",
+              completed_at: new Date().toISOString(),
+            }).eq("id", job_id);
+            return new Response(JSON.stringify({ success: false, status: "failed", error: "Extraction timed out. Please retry with fewer files." }), {
+              headers: { ...corsHeaders, "Content-Type": "application/json" },
+            });
+          }
+        }
+      }
+
       // Return progress info if available
       const progress = (job.output_payload as any)?.progress || null;
       return new Response(JSON.stringify({ success: true, status: job.status, processing_time_ms: job.processing_time_ms, progress }), {
