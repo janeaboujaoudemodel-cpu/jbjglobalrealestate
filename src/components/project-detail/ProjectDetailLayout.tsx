@@ -894,7 +894,7 @@ export default function ProjectDetailLayout({
                       variant="primary" 
                       size="sm" 
                       className="mt-6"
-                      onClick={scrollToInquiry}
+                      onClick={() => { setCaptureDocType("brochure"); setCaptureDocUrl(undefined); setLeadCaptureOpen(true); }}
                     >
                       <ArrowRight className="w-4 h-4" />
                       Find Out More
@@ -1175,7 +1175,7 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
                  rentalYieldEstimate={project.rental_yield_estimate}
                  priceFrom={project.price_from}
                  projectName={project.name}
-                 onContactClick={scrollToInquiry}
+                 onContactClick={() => { setCaptureDocType("brochure"); setCaptureDocUrl(undefined); setLeadCaptureOpen(true); }}
                />
              </div>
            )}
