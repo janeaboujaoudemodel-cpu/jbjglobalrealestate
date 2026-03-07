@@ -180,7 +180,7 @@ const ListingGenerator = () => {
     }
   }, [files, step, url, description, extractedProjects, activeProjectIndex, duplicates, currentJobId, cloudDraftId]);
 
-  // Restore latest cloud draft if available
+  // Restore latest cloud draft if available AND auto-resume pending jobs
   useEffect(() => {
     const loadCloudDraft = async () => {
       const { data: authData } = await supabase.auth.getUser();
@@ -203,11 +203,9 @@ const ListingGenerator = () => {
 
       if (result.url) setUrl(result.url);
       if (result.description) setDescription(result.description);
-      if (Array.isArray(result.extractedProjects)) setExtractedProjects(result.extractedProjects);
+      if (Array.isArray(result.extractedProjects) && result.extractedProjects.length > 0) setExtractedProjects(result.extractedProjects);
       if (typeof result.activeProjectIndex === "number") setActiveProjectIndex(result.activeProjectIndex);
       if (Array.isArray(result.duplicates)) setDuplicates(result.duplicates);
-      if (result.step) setStep(result.step);
-      if (result.currentJobId) setCurrentJobId(result.currentJobId);
       setCloudDraftId(draft.id);
 
       if (filesMeta.length) {
@@ -218,6 +216,54 @@ const ListingGenerator = () => {
           mimeType: fm.mimeType,
           base64: fm.base64,
         })));
+      }
+
+      // Auto-resume: if there's a pending/processing job, resume polling
+      if (result.currentJobId && (result.step === "processing" || draft.status === "processing")) {
+        console.log("[ListingGenerator] Resuming job:", result.currentJobId);
+        setCurrentJobId(result.currentJobId);
+        setStep("processing");
+        setIsProcessing(true);
+        setProcessingStatus("Resuming extraction...");
+
+        // Start polling in background
+        pollJob(result.currentJobId).then((pollResult) => {
+          const projects: ExtractedData[] = pollResult.projects || (pollResult.extracted ? [pollResult.extracted] : []);
+          if (projects.length === 0) {
+            toast.error("Extraction returned no projects");
+            setStep("input");
+          } else {
+            setExtractedProjects(projects);
+            setActiveProjectIndex(0);
+            setDuplicates(pollResult.duplicates || []);
+            setCurrentJobId(null);
+            if (pollResult.duplicates?.length > 0) {
+              setStep("duplicates");
+              setShowDuplicateDialog(true);
+              setDuplicateProjectIndex(0);
+            } else {
+              setStep("preview");
+            }
+            toast.success(`Extracted ${projects.length} project${projects.length > 1 ? "s" : ""}!`);
+          }
+        }).catch((err) => {
+          console.error("[ListingGenerator] Resume poll failed:", err);
+          toast.error(err.message || "Extraction failed");
+          setStep("input");
+        }).finally(() => {
+          setIsProcessing(false);
+          setProcessingStatus("");
+        });
+        return; // Don't set step from draft when resuming
+      }
+
+      // Only restore step if we have extraction results
+      if (result.step === "preview" && Array.isArray(result.extractedProjects) && result.extractedProjects.length > 0) {
+        setStep("preview");
+      } else if (result.step === "duplicates") {
+        setStep("duplicates");
+      } else {
+        setStep("input");
       }
     };
 
@@ -412,11 +458,13 @@ const ListingGenerator = () => {
 
       toast.success(`Extracted ${projects.length} project${projects.length > 1 ? "s" : ""}!`);
     } catch (err: any) {
-      console.error("Generation error:", err);
+      console.error("[ListingGenerator] Generation error:", err);
       toast.error(err.message || "Failed to generate listing");
       // Go back to input but KEEP all files, url, description intact
       setStep("input");
-      // Do NOT clear files or other state — user should not lose uploaded documents
+      // Explicitly preserve files in localStorage so they survive page reloads
+      const filesMeta = files.map((f) => ({ id: f.id, name: f.name, mimeType: f.mimeType, base64: f.base64 || "" }));
+      savePersistedState({ step: "input", url, description, extractedProjects: [], activeProjectIndex: 0, duplicates: [], filesMeta, currentJobId: null, cloudDraftId });
     } finally {
       setIsProcessing(false);
       setProcessingStatus("");
@@ -469,28 +517,26 @@ const ListingGenerator = () => {
         bedrooms_min: extracted.bedroomsMin,
         bedrooms_max: extracted.bedroomsMax,
         handover_date: extracted.handoverDate,
-        completion_percentage: extracted.completionPercentage,
+        construction_progress: extracted.completionPercentage,
         description: extracted.description,
         amenities: extracted.amenities,
         payment_plan: extracted.paymentPlan,
         payment_breakdown: extracted.paymentBreakdown,
         unit_types: extracted.unitTypes,
         unit_details: extracted.unitDetails,
-        project_status: extracted.projectStatus,
-        key_features: extracted.keyFeatures,
-        property_type: extracted.propertyType,
+        status_label: extracted.projectStatus,
+        highlights: extracted.keyFeatures?.length ? extracted.keyFeatures : extracted.highlights,
+        property_type_label: extracted.propertyType,
         service_charge: extracted.serviceCharge,
         total_units: extracted.totalUnits,
         floors: extracted.floors,
         size_min: extracted.sizeMin,
         size_max: extracted.sizeMax,
-        highlights: extracted.highlights,
-        nearby_landmarks: extracted.nearbyLandmarks,
+        location_distances: extracted.nearbyLandmarks?.length ? extracted.nearbyLandmarks : null,
         rera_number: extracted.reraNumber,
         faqs: extracted.faqs,
         documents: uploadedDocs,
         images: [],
-        source: "manual_upload",
         source_url: url.trim() || null,
         status: "pending",
       };
