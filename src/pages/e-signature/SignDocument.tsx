@@ -451,8 +451,8 @@ export default function SignDocument() {
           <p>Powered by JBJ Global Real Estate E-Signature</p>
           <p className="mt-1">
             Questions? Contact{" "}
-            <a href="mailto:janeaboujaoudenails@gmail.com" className="text-gold hover:underline">
-              janeaboujaoudenails@gmail.com
+            <a href="mailto:contact@jbj.ae" className="text-gold hover:underline">
+              contact@jbj.ae
             </a>
           </p>
         </div>
