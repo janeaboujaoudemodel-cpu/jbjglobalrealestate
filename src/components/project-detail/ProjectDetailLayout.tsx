@@ -1091,7 +1091,7 @@ export default function ProjectDetailLayout({
                   <PremiumBrochureCard
                     projectName={project.name}
                     brochureUrl={brochurePrimary?.url}
-                    projectImageUrl={project.images?.[0]?.url || undefined}
+projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefined}
                     onDownloadClick={() => brochurePrimary 
                       ? handleDocumentDownload("brochure", brochurePrimary?.url)
                       : setLeadCaptureOpen(true)
