@@ -1,11 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import {
-  corsHeaders, REELLY_API_ENDPOINTS, REELLY_FILTERS,
-  fetchReellyWithRetry, extractGalleryImages, extractDocuments, extractFloorPlans,
-  extractAmenities, extractUnitTypes, extractVideos,
-  mapConstructionStatus, mapSaleStatus, getEmirateFromRegion, generateSlug,
-  type ReellyProject
-} from "../_shared/reelly-types.ts";
+import { corsHeaders } from "../_shared/reelly-types.ts";
 
 function json(status: number, body: unknown) {
   return new Response(JSON.stringify(body), {
@@ -14,29 +8,23 @@ function json(status: number, body: unknown) {
   });
 }
 
-function sleep(ms: number) {
-  return new Promise(r => setTimeout(r, ms));
-}
-
 /**
  * Repair Empty Projects
  * 
- * Finds projects with no cover_image, no description, no price (bulk-approved shells)
- * and either:
- * 1. Enriches them from Reelly API by searching by name
- * 2. Deletes them if they're duplicates of existing populated projects
+ * Deletes projects that were bulk-approved without any data
+ * (no cover image, no description, no price - completely empty shells).
+ * Also cleans up corresponding pending_project_imports.
  */
 Deno.serve(async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
   const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-  const reellyApiKey = Deno.env.get("REELLY_API_KEY") || "";
   const supabase = createClient(supabaseUrl, supabaseKey);
 
   try {
     const body = await req.json().catch(() => ({}));
-    const { action = "repair", limit = 50, dryRun = false } = body;
+    const { action = "repair", limit = 200, dryRun = false } = body;
 
     // STATS mode
     if (action === "stats") {
@@ -54,176 +42,65 @@ Deno.serve(async (req: Request): Promise<Response> => {
         success: true,
         total_projects: totalProjects || 0,
         empty_shell_projects: totalEmpty || 0,
-        percentage: totalProjects ? ((totalEmpty || 0) / totalProjects * 100).toFixed(1) + "%" : "0%",
       });
     }
 
-    // REPAIR mode: fetch empty projects
+    // REPAIR mode: fetch empty projects in batch
     const { data: emptyProjects, error: fetchErr } = await supabase
       .from("projects")
-      .select("id, name, slug, developer_name")
+      .select("id, name, slug")
       .is("cover_image_url", null)
       .is("description", null)
+      .is("price_from", null)
       .order("name", { ascending: true })
       .limit(limit);
 
     if (fetchErr) return json(500, { error: fetchErr.message });
     if (!emptyProjects || emptyProjects.length === 0) {
-      return json(200, { success: true, message: "No empty projects found", stats: { checked: 0, enriched: 0, deleted: 0, skipped: 0 } });
+      return json(200, { success: true, message: "No empty projects found", deleted: 0 });
     }
 
-    console.log(`[repair-empty] Processing ${emptyProjects.length} empty projects (dryRun=${dryRun})`);
+    console.log(`[repair-empty] Deleting ${emptyProjects.length} empty shell projects (dryRun=${dryRun})`);
 
-    const stats = { checked: 0, enriched: 0, deleted: 0, skipped: 0, errors: 0 };
-    const details: Array<{ name: string; action: string; reelly_id?: number }> = [];
+    const projectIds = emptyProjects.map(p => p.id);
+    let deleted = 0;
 
-    for (const project of emptyProjects) {
-      stats.checked++;
+    if (!dryRun) {
+      // Batch delete related records first
+      const batchSize = 50;
+      for (let i = 0; i < projectIds.length; i += batchSize) {
+        const batch = projectIds.slice(i, i + batchSize);
+        
+        await Promise.all([
+          supabase.from("project_images").delete().in("project_id", batch),
+          supabase.from("project_documents").delete().in("project_id", batch),
+        ]);
 
-      try {
-        // Step 1: Check if there's a populated duplicate
-        const nameParts = project.name.split(" ").slice(0, 2).join(" ");
-        const { data: duplicates } = await supabase
+        const { error: delErr } = await supabase
           .from("projects")
-          .select("id, name, cover_image_url")
-          .neq("id", project.id)
-          .not("cover_image_url", "is", null)
-          .not("description", "is", null)
-          .ilike("name", `%${nameParts}%`)
-          .limit(5);
+          .delete()
+          .in("id", batch);
 
-        // If there's a clear duplicate with data, delete the empty shell
-        const isDuplicate = (duplicates || []).some(d => {
-          const dName = d.name.toLowerCase().replace(/[^a-z0-9]/g, "");
-          const pName = project.name.toLowerCase().replace(/[^a-z0-9]/g, "");
-          // Check if one name is a subset of another (fuzzy match)
-          return dName.includes(pName.slice(0, Math.min(pName.length, 20))) ||
-                 pName.includes(dName.slice(0, Math.min(dName.length, 20)));
-        });
-
-        if (isDuplicate) {
-          if (!dryRun) {
-            // Delete related records first
-            await supabase.from("project_images").delete().eq("project_id", project.id);
-            await supabase.from("project_documents").delete().eq("project_id", project.id);
-            await supabase.from("projects").delete().eq("id", project.id);
-          }
-          stats.deleted++;
-          details.push({ name: project.name, action: "deleted_duplicate" });
-          console.log(`[repair-empty] Deleted duplicate: ${project.name}`);
-          continue;
+        if (delErr) {
+          console.error(`[repair-empty] Batch delete error:`, delErr);
+        } else {
+          deleted += batch.length;
+          console.log(`[repair-empty] Deleted batch of ${batch.length} (total: ${deleted})`);
         }
-
-        // Step 2: No duplicate found - delete empty shell (no data to salvage)
-        {
-          // No Reelly match - delete if it's truly empty
-          if (!dryRun) {
-            await supabase.from("project_images").delete().eq("project_id", project.id);
-            await supabase.from("project_documents").delete().eq("project_id", project.id);
-            await supabase.from("projects").delete().eq("id", project.id);
-          }
-          stats.deleted++;
-          details.push({ name: project.name, action: "deleted_no_match" });
-          console.log(`[repair-empty] Deleted (no Reelly match): ${project.name}`);
-          await sleep(500);
-          continue;
-        }
-
-        // Find best match
-        const match = results.find(r =>
-          r.name.toLowerCase().includes(searchName.toLowerCase()) ||
-          searchName.toLowerCase().includes(r.name.toLowerCase().split(" ").slice(0, 2).join(" "))
-        ) || results[0];
-
-        // Enrich project with Reelly data
-        const gallery = extractGalleryImages(match);
-        const documents = extractDocuments(match);
-        const floorPlans = extractFloorPlans(match);
-        const amenities = extractAmenities(match);
-        const unitTypes = extractUnitTypes(match);
-        const videos = extractVideos(match);
-
-        const updateFields: Record<string, any> = {
-          reelly_id: match.id,
-          description: match.overview || match.short_description || null,
-          short_description: match.short_description || null,
-          price_from: match.min_price || null,
-          price_to: match.max_price || null,
-          price_currency: match.price_currency || "AED",
-          construction_status: mapConstructionStatus(match.construction_status),
-          sale_status: mapSaleStatus(match.sale_status) || null,
-          developer_name: match.developer || project.developer_name,
-          handover_date: match.completion_date || null,
-          cover_image_url: match.cover_image?.url || (gallery.length > 0 ? gallery[0].url : null),
-          total_units: match.units_count || null,
-          building_count: match.building_count || null,
-          size_min: match.min_size || null,
-          size_max: match.max_size || null,
-          area_unit: match.area_unit || null,
-          video_url: videos.video_url,
-          amenities: amenities.length > 0 ? amenities : null,
-          floor_plan_types: floorPlans.length > 0 ? floorPlans : null,
-          unit_types: unitTypes.length > 0 ? unitTypes : null,
-          updated_at: new Date().toISOString(),
-        };
-
-        // Set location from Reelly
-        if (match.location) {
-          updateFields.emirate = getEmirateFromRegion(match.location.region || "");
-          updateFields.location = [match.location.district, match.location.sector].filter(Boolean).join(", ");
-          updateFields.latitude = match.location.latitude;
-          updateFields.longitude = match.location.longitude;
-        }
-
-        if (!dryRun) {
-          // Update project
-          await supabase.from("projects").update(updateFields).eq("id", project.id);
-
-          // Insert images
-          if (gallery.length > 0) {
-            const imageInserts = gallery.map(img => ({
-              project_id: project.id,
-              image_url: img.url,
-              alt_text: img.alt_text,
-              display_order: img.display_order,
-            }));
-            await supabase.from("project_images").insert(imageInserts);
-          }
-
-          // Insert documents
-          if (documents.length > 0) {
-            const docInserts = documents.map((doc, idx) => ({
-              project_id: project.id,
-              file_url: doc.url,
-              file_name: doc.name,
-              document_type: doc.type,
-              display_order: idx,
-            }));
-            await supabase.from("project_documents").insert(docInserts);
-          }
-        }
-
-        stats.enriched++;
-        details.push({ name: project.name, action: "enriched", reelly_id: match.id });
-        console.log(`[repair-empty] Enriched: ${project.name} (reelly_id: ${match.id}, ${gallery.length} images)`);
-
-        // Rate limiting
-        await sleep(800);
-
-      } catch (err) {
-        stats.errors++;
-        details.push({ name: project.name, action: "error" });
-        console.error(`[repair-empty] Error for ${project.name}:`, err);
       }
+    } else {
+      deleted = emptyProjects.length;
     }
 
-    console.log(`[repair-empty] Done:`, stats);
+    const names = emptyProjects.slice(0, 20).map(p => p.name);
+    console.log(`[repair-empty] Done. Deleted ${deleted} empty projects.`);
 
     return json(200, {
       success: true,
       dryRun,
-      stats,
-      details: details.slice(0, 100),
+      deleted,
+      total_found: emptyProjects.length,
+      sample_names: names,
     });
 
   } catch (err) {
