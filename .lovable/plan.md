@@ -1,73 +1,41 @@
 
 
-## Diagnosis: Listing Generator Stuck at "0s Elapsed"
+## Plan: Fix All Email Issues Across All Templates
 
-### Root Cause
+### Problems Identified
 
-The edge function logs reveal the problem: every invocation shows only `booted` → `shutdown` with no actual processing logs in between. The `runExtraction` function is called via `EdgeRuntime.waitUntil()` (line 610), but the edge function is being **killed before the AI call completes**.
+1. **Recommended For You icons disappeared** — Inline SVGs are stripped by Gmail and most email clients. Must revert to hosted PNG images (`ai-tools.png`, `guides.png`, `properties.png` already exist in `public/email-icons/`).
 
-Here is what happens:
-1. User submits files → edge function creates a job, fires `runExtraction` via `waitUntil`, returns job ID
-2. `runExtraction` starts, updates progress to "Analyzing batch 1 of 2...", then calls Gemini 2.5 Pro
-3. **Gemini 2.5 Pro with multiple large base64 images takes 60-120+ seconds** to respond
-4. The edge function runtime kills the process before the AI responds (wall-clock timeout)
-5. Frontend polls, sees "batch 1 of 2" forever, timer shows 0s because the progress text never updates past that point
+2. **Social media footer icons not rendering** — Same issue: `socialLinksFooter()` loads external `.svg` files via `<img>` tags, but Gmail blocks SVG images entirely. Must switch to hosted `.png` files. Currently missing `social-facebook.png` — need to confirm or create it.
 
-The progress IS written to the database ("Analyzing batch 1 of 2"), but the actual AI extraction call hangs until the function is terminated. The job never transitions to "completed" or "failed" -- it stays stuck in "processing" permanently.
+3. **Email split into multiple visual cards** — Several sub-sections (`ticketSupportEmbed`, `readyToGetStartedHtml`, `recommendedActionsHtml`) each have their own `border`, `border-radius`, and `background` styles creating distinct visual boxes. These need to be softened so they sit seamlessly inside the single continuous card.
 
-### Fix Plan
+### Changes (all in `supabase/functions/_shared/email-html.ts`)
 
-**1. Switch from Gemini Pro to Gemini Flash for batch extraction**
+#### A. Recommended For You — Revert to PNG hosted images
+- Change `recommendedCard()` back to using `iconImg()` with PNG paths
+- Remove the `RECOMMENDED_ICONS` inline SVG object
+- Ensure circular frame clips the PNG with `overflow:hidden` on the `<td>` to prevent square backgrounds
+- Signature: `recommendedCard(title, href, iconPath, alt)` — restore the original parameters
 
-In `supabase/functions/generate-listing/index.ts`, line 284:
-- Change `model: "google/gemini-2.5-pro"` to `model: "google/gemini-2.5-flash"` for storage-file batches
-- Gemini Flash responds 3-5x faster, well within edge function timeouts
-- Keep Pro only if explicitly needed for single high-value extractions
+#### B. Social Footer — Switch to PNG with white pearl background
+- Replace `socialLinksFooter()` to use the inline `SVG` object icons (instagram, facebook, linkedin, tiktok, youtube) that are already defined at the top of the file — these render as raw HTML inside `<td>` elements, not as `<img>` tags, so they should survive email client processing
+- Actually, since Gmail strips ALL SVG (both inline and `<img>`), switch to using the `.png` files: `social-instagram.png`, `social-linkedin.png`, `social-tiktok.png`, `social-youtube.png`
+- Create `social-facebook.png` if missing
+- Style each icon circle: white/pearl (#FDFBF7) background, gold border, black icon inside
 
-**2. Add fetch timeout to the AI call**
+#### C. Single Card Layout — Remove visual fragmentation
+- `ticketSupportEmbed()`: Remove the heavy gradient background and red border; make it blend into the card
+- `readyToGetStartedHtml()`: Remove the outer border and separate background so it flows within the card
+- `inquiryBox()`: Soften its standalone bordered look
+- Keep all content inside the single `emailShell` wrapper card with no sub-borders that create separation
 
-Wrap the AI fetch call (line 280) with `AbortController` set to 55 seconds, so the function can catch the timeout, mark the batch as failed, and move to the next batch instead of hanging forever.
+#### D. Deploy + Send Test Email
+- Deploy the updated edge function
+- Immediately send a test welcome email to `janeaboujaoudenails@gmail.com`
+- Take a screenshot as proof
 
-**3. Reduce batch size from 3 to 2**
-
-Change `BATCH_SIZE` (line 122) from 3 to 2. Fewer images per AI call = faster response time and less chance of timeout.
-
-**4. Add a per-batch retry with fallback**
-
-If a batch fails due to timeout, retry once with a single file at a time (batch of 1) before giving up on that batch. This ensures partial results are still returned.
-
-**5. Fix the stuck job detection**
-
-In the `pollJob` function (frontend, line 417), add a "stale progress" detector: if the same progress message is returned for 90+ seconds, mark the job as potentially stuck and show a "Retry" button instead of polling indefinitely.
-
-**6. Mark timed-out jobs as failed in the edge function**
-
-In the `process` action handler (line 504), check if the job has been in "processing" for more than 5 minutes with no progress update. If so, mark it as failed so the frontend can stop polling.
-
-### Files to Modify
-
-- `supabase/functions/generate-listing/index.ts` -- AI model change, fetch timeout, batch size, retry logic, stale job detection
-- `src/components/listing-admin/ListingGenerator.tsx` -- Stale progress detection, retry button
-
-### Technical Details
-
-The key change in the edge function AI call:
-
-```typescript
-const controller = new AbortController();
-const timeout = setTimeout(() => controller.abort(), 55000); // 55s timeout
-
-const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-  method: "POST",
-  headers: { ... },
-  body: JSON.stringify({
-    model: "google/gemini-2.5-flash", // Flash instead of Pro
-    ...
-  }),
-  signal: controller.signal,
-});
-clearTimeout(timeout);
-```
-
-This ensures the function never hangs -- it either gets a response or cleanly times out and moves to the next batch.
+### Files Modified
+- `supabase/functions/_shared/email-html.ts` — all icon and layout fixes
+- `public/email-icons/social-facebook.png` — create if missing (or use existing assets)
 

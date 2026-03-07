@@ -119,12 +119,24 @@ const projectSchema = {
 
 // ========== BATCH PROCESSING: Fetch files from storage & process in groups ==========
 
-const BATCH_SIZE = 3;
+const BATCH_SIZE = 2;
+const AI_FETCH_TIMEOUT_MS = 55000; // 55s to stay within edge function limits
 
 async function updateJobProgress(supabase: any, jobId: string, progress: string) {
   await supabase.from("ai_job_master").update({
-    output_payload: { progress },
+    output_payload: { progress, updated_at: new Date().toISOString() },
   }).eq("id", jobId);
+}
+
+async function fetchAIWithTimeout(url: string, options: RequestInit, timeoutMs = AI_FETCH_TIMEOUT_MS): Promise<Response> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const res = await fetch(url, { ...options, signal: controller.signal });
+    return res;
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 async function fetchFileFromUrl(url: string): Promise<{ base64: string; ok: boolean }> {
@@ -277,23 +289,63 @@ MULTI-PROJECT RULE:
         contentParts.push({ type: "text", text: "\n\nExtract ALL project data now. If MULTIPLE distinct projects, return each separately." });
 
         try {
-          const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-            method: "POST",
-            headers: { "Authorization": `Bearer ${lovableApiKey}`, "Content-Type": "application/json" },
-            body: JSON.stringify({
-              model: "google/gemini-2.5-pro",
-              max_tokens: 12000,
-              temperature: 0.05,
-              messages: [{ role: "user", content: contentParts }],
-              tools: [{ type: "function", function: { name: "extract_projects", description: "Extract structured data for real estate projects.", parameters: { type: "object", properties: { projects: { type: "array", items: projectSchema } }, required: ["projects"] } } }],
-              tool_choice: { type: "function", function: { name: "extract_projects" } },
-            }),
+          const aiBody = JSON.stringify({
+            model: "google/gemini-2.5-flash",
+            max_tokens: 12000,
+            temperature: 0.05,
+            messages: [{ role: "user", content: contentParts }],
+            tools: [{ type: "function", function: { name: "extract_projects", description: "Extract structured data for real estate projects.", parameters: { type: "object", properties: { projects: { type: "array", items: projectSchema } }, required: ["projects"] } } }],
+            tool_choice: { type: "function", function: { name: "extract_projects" } },
           });
+          const aiHeaders = { "Authorization": `Bearer ${lovableApiKey}`, "Content-Type": "application/json" };
+
+          let aiRes: Response;
+          try {
+            aiRes = await fetchAIWithTimeout("https://ai.gateway.lovable.dev/v1/chat/completions", {
+              method: "POST", headers: aiHeaders, body: aiBody,
+            });
+          } catch (abortErr) {
+            // Timeout: retry each file individually
+            console.warn(`[generate-listing] Batch ${batchIdx + 1} timed out, retrying files individually`);
+            await updateJobProgress(supabase, jobId, `Batch ${batchIdx + 1} timed out — retrying files one by one...`);
+            for (const file of batch) {
+              try {
+                const { base64, ok } = await fetchFileFromUrl(file.storageUrl);
+                if (!ok || !base64) continue;
+                const singleParts: any[] = [
+                  { type: "text", text: systemPrompt },
+                  { type: "image_url", image_url: { url: `data:${file.mimeType};base64,${base64}` } },
+                  { type: "text", text: `[Document: ${file.name}]` },
+                  { type: "text", text: "\n\nExtract ALL project data now. If MULTIPLE distinct projects, return each separately." },
+                ];
+                const singleRes = await fetchAIWithTimeout("https://ai.gateway.lovable.dev/v1/chat/completions", {
+                  method: "POST", headers: aiHeaders,
+                  body: JSON.stringify({ model: "google/gemini-2.5-flash", max_tokens: 8000, temperature: 0.05,
+                    messages: [{ role: "user", content: singleParts }],
+                    tools: [{ type: "function", function: { name: "extract_projects", description: "Extract structured data for real estate projects.", parameters: { type: "object", properties: { projects: { type: "array", items: projectSchema } }, required: ["projects"] } } }],
+                    tool_choice: { type: "function", function: { name: "extract_projects" } },
+                  }),
+                });
+                if (singleRes.ok) {
+                  const d = await singleRes.json();
+                  const tc = d?.choices?.[0]?.message?.tool_calls?.[0];
+                  if (tc?.function?.arguments) {
+                    const p = JSON.parse(tc.function.arguments);
+                    allBatchResults.push(p.projects || (p.name ? [p] : []));
+                    batchesProcessed++;
+                  }
+                } else {
+                  const t = await singleRes.text();
+                  console.warn(`[generate-listing] Single file ${file.name} failed: ${singleRes.status}`);
+                }
+              } catch (e) { console.warn(`[generate-listing] Single retry ${file.name} failed:`, e); }
+            }
+            continue; // Move to next batch
+          }
 
           if (!aiRes.ok) {
             const errText = await aiRes.text();
             console.error(`[generate-listing] AI batch ${batchIdx + 1} error: ${aiRes.status}`, errText);
-            // Continue with remaining batches on non-fatal errors
             if (aiRes.status !== 429 && aiRes.status !== 402) continue;
             throw new Error(aiRes.status === 429 ? "Rate limit exceeded" : "AI credits exhausted");
           }
@@ -331,8 +383,8 @@ MULTI-PROJECT RULE:
       if (description) contentParts.push({ type: "text", text: `\n\n--- ADDITIONAL DESCRIPTION ---\n${description}` });
       contentParts.push({ type: "text", text: "\n\nExtract ALL project data now. If MULTIPLE distinct projects, return each separately." });
 
-      const model = inlineFiles.length > 0 ? "google/gemini-2.5-pro" : "google/gemini-2.5-flash";
-      const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      const model = "google/gemini-2.5-flash";
+      const aiRes = await fetchAIWithTimeout("https://ai.gateway.lovable.dev/v1/chat/completions", {
         method: "POST",
         headers: { "Authorization": `Bearer ${lovableApiKey}`, "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -473,6 +525,24 @@ serve(async (req: Request) => {
 
       if (job.status === "pending") {
         await triggerBackgroundProcessing(job_id);
+      }
+
+      // Stale job detection: if processing for >5min with no progress change, mark failed
+      if (job.status === "processing") {
+        const progressUpdatedAt = (job.output_payload as any)?.updated_at;
+        if (progressUpdatedAt) {
+          const staleMs = Date.now() - new Date(progressUpdatedAt).getTime();
+          if (staleMs > 5 * 60 * 1000) {
+            await supabase.from("ai_job_master").update({
+              status: "failed",
+              error_message: "Extraction timed out. Please retry with fewer files.",
+              completed_at: new Date().toISOString(),
+            }).eq("id", job_id);
+            return new Response(JSON.stringify({ success: false, status: "failed", error: "Extraction timed out. Please retry with fewer files." }), {
+              headers: { ...corsHeaders, "Content-Type": "application/json" },
+            });
+          }
+        }
       }
 
       // Return progress info if available
