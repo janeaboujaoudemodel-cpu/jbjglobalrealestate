@@ -52,7 +52,7 @@ const ContinueSearching = ({
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 flex items-center justify-center">
               <History className="w-5 h-5 text-gold" />
             </div>
-            <h2 className="text-lg md:text-xl font-bold text-foreground" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h2 className="text-lg md:text-xl font-bold text-white" style={{ fontFamily: "Poppins, sans-serif" }}>
               {sectionTitle}
             </h2>
           </div>

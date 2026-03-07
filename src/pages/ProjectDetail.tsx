@@ -56,8 +56,15 @@ const asLocationDistances = (value: unknown): Array<{ label: string; time: strin
   return out.length ? out : null;
 };
 
-const asPaymentBreakdown = (value: unknown): { down_payment?: string; during_construction?: string; on_completion?: string } | null => {
-  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+const asPaymentBreakdown = (value: unknown): { down_payment?: string; during_construction?: string; on_completion?: string } | Array<Record<string, unknown>> | null => {
+  if (!value) return null;
+  
+  // If it's already an array (detailed milestones from DB), pass through directly
+  if (Array.isArray(value) && value.length > 0) {
+    return value as Array<Record<string, unknown>>;
+  }
+  
+  if (typeof value !== "object") return null;
   const o = value as Record<string, unknown>;
 
   const down_payment = typeof o.down_payment === "string" ? o.down_payment : undefined;

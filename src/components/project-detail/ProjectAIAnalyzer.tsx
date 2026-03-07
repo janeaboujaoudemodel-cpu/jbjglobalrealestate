@@ -193,7 +193,11 @@ export const ProjectAIAnalyzer = ({
   } : null;
 
   const ratingMatch = sections?.rating?.match(/(\d+(?:\.\d+)?)\s*(?:\/|out of)\s*10/i);
-  const ratingScore = ratingMatch ? parseFloat(ratingMatch[1]) : null;
+  const rawRating = ratingMatch ? parseFloat(ratingMatch[1]) : null;
+  // Tier-1 developers get a minimum rating floor of 9.0
+  const TIER1_DEVELOPERS = ["damac", "emaar", "nakheel", "sobha", "meraas", "aldar", "binghatti", "omniyat", "select group", "ellington"];
+  const isTier1 = developer && TIER1_DEVELOPERS.some(d => developer.toLowerCase().includes(d));
+  const ratingScore = rawRating !== null ? (isTier1 && rawRating < 9.0 ? 9.0 : rawRating) : null;
 
   // Derived visuals
   const areaPriceSqft = sections?.pricePerSqft ? extractPriceSqft(sections.pricePerSqft) : null;

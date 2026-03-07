@@ -186,9 +186,12 @@ export function getHighResImageUrl(url: string): string {
 function normalizeUrlForDedup(url: string): string {
   try {
     const u = new URL(url);
-    return (u.host + u.pathname).replace(/\/+$/, "").toLowerCase();
+    // Strip leading numeric timestamps from Supabase storage filenames
+    // e.g. /1772829717579-123456-/ prefix before the actual filename
+    const cleanedPath = u.pathname.replace(/\/\d{13,}-\d+-/g, "/");
+    return (u.host + cleanedPath).replace(/\/+$/, "").toLowerCase();
   } catch {
-    return url.toLowerCase().replace(/\?.*$/, "").replace(/\/+$/, "");
+    return url.toLowerCase().replace(/\?.*$/, "").replace(/\/+$/, "").replace(/\/\d{13,}-\d+-/g, "/");
   }
 }
 
