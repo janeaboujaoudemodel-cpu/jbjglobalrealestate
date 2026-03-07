@@ -272,7 +272,7 @@ const Index = () => {
 
       {/* CONTINUE SEARCHING - Recently viewed properties (primary focus for sales) */}
       <Suspense fallback={<SectionLoader />}>
-        <ContinueSearching type="property" className="bg-black" title="Continue Searching Properties" />
+        <ContinueSearching type="property" className="bg-black" />
       </Suspense>
 
       {/* DIVIDER */}
