@@ -198,6 +198,7 @@ async function runExtraction(jobId: string, fileRefs: any[], url: string | null,
       try {
         let formattedUrl = url.trim();
         if (!formattedUrl.startsWith("http")) formattedUrl = `https://${formattedUrl}`;
+        console.log(`[generate-listing] Scraping URL: ${formattedUrl}`);
         const scrapeRes = await fetch("https://api.firecrawl.dev/v1/scrape", {
           method: "POST",
           headers: { "Authorization": `Bearer ${firecrawlApiKey}`, "Content-Type": "application/json" },
@@ -206,12 +207,20 @@ async function runExtraction(jobId: string, fileRefs: any[], url: string | null,
         if (scrapeRes.ok) {
           const d = await scrapeRes.json();
           scrapedContent = d?.data?.markdown || "";
+          console.log(`[generate-listing] Scraped ${scrapedContent.length} chars`);
         } else {
-          await scrapeRes.text();
+          const errText = await scrapeRes.text();
+          console.warn(`[generate-listing] Scrape HTTP ${scrapeRes.status}: ${errText.substring(0, 200)}`);
         }
       } catch (err) {
         console.warn("[generate-listing] Scrape failed:", err);
       }
+    }
+    // If we have a URL but scraping failed, use the URL itself as context
+    const hasUrlContext = !!url;
+    if (url && !scrapedContent) {
+      scrapedContent = `Please extract project data from this real estate listing URL: ${url}\nNote: The page could not be scraped directly. Extract what you can from the URL structure and any provided description.`;
+      console.log("[generate-listing] Using URL fallback text since scrape returned empty");
     }
 
     const systemPrompt = `You are a senior UAE real estate data extraction specialist. Extract COMPLETE listing data.
@@ -305,7 +314,7 @@ MULTI-PROJECT RULE:
     }
 
     // Process inline base64 files (legacy / small payloads) as a single batch
-    if (inlineFiles.length > 0 || (storageFiles.length === 0 && (scrapedContent || description))) {
+    if (inlineFiles.length > 0 || (storageFiles.length === 0 && (scrapedContent || description || hasUrlContext))) {
       const progressMsg = inlineFiles.length > 0 
         ? `Analyzing ${inlineFiles.length} inline document(s)...`
         : "Analyzing content...";
@@ -457,8 +466,8 @@ serve(async (req: Request) => {
       }
 
       if (job.status === "failed") {
-        return new Response(JSON.stringify({ success: false, error: job.error_message || "Extraction failed" }), {
-          status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        return new Response(JSON.stringify({ success: false, status: "failed", error: job.error_message || "Extraction failed" }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
 

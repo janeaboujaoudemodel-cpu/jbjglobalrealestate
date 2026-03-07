@@ -428,6 +428,11 @@ const ListingGenerator = () => {
         continue;
       }
 
+      // Check for explicit failure status (returned as 200 so we can read it)
+      if (data?.status === "failed") {
+        throw new Error(data?.error || "Extraction failed");
+      }
+
       if (data?.status === "processing" || data?.status === "pending" || data?.status === "queued") {
         if (data?.progress) {
           setProcessingStatus(data.progress);
