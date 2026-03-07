@@ -268,7 +268,7 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
           </div>
         </div>
       </Link>
-    </motion.div>
+    </div>
   );
 };
 
