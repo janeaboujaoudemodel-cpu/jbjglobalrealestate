@@ -6,7 +6,6 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 import { Home, MapPin, ArrowRight, Building2, ArrowUpRight, CreditCard, Heart, Star } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useQuery } from "@tanstack/react-query";
@@ -39,11 +38,11 @@ function useFeaturedProjects() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("projects")
-        .select("id, name, slug, developer_name, price_from, area_name, location, cover_image_url, bedrooms_min, bedrooms_max, handover_date, payment_breakdown, description, images:project_images(image_url), developer:developers(id, name, slug, logo_url)")
+        .select("id, name, slug, developer_name, price_from, area_name, location, cover_image_url, bedrooms_min, bedrooms_max, handover_date, payment_breakdown, images:project_images(image_url), developer:developers(id, name, slug, logo_url)")
         .in("developer_name", ELITE_DEVELOPERS)
         .eq("is_published", true)
         .order("created_at", { ascending: false })
-        .limit(200);
+        .limit(40);
 
       if (error) throw error;
 
@@ -131,7 +130,8 @@ const prefetchProjectDetail = () => {
   import("../../pages/ProjectDetail");
 };
 
-const ProjectCard = ({ project, formatPrice }: { project: FeaturedProject; formatPrice: (price: number | null | undefined) => string }) => {
+const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedProject; formatPrice: (price: number | null | undefined) => string; index?: number }) => {
+  const isAboveFold = index < 4;
   const imageUrl = project.cover_image_url || project.images?.[0]?.image_url;
   const devName = project.developer_name || '';
   // Binghatti logo is locked to the canonical webp per branding policy
@@ -142,13 +142,7 @@ const ProjectCard = ({ project, formatPrice }: { project: FeaturedProject; forma
   const [logoError, setLogoError] = useState(false);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.4 }}
-      className="group h-full"
-    >
+    <div className="group h-full animate-fade-in-up">
       <Link to={`/project/${project.slug}`} className="block h-full" onMouseEnter={prefetchProjectDetail}>
         <div className="flex flex-col h-full bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl overflow-hidden border-2 border-gold/30 hover:border-gold transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] hover:-translate-y-1">
           {/* Image */}
@@ -158,7 +152,8 @@ const ProjectCard = ({ project, formatPrice }: { project: FeaturedProject; forma
                 src={imageUrl}
                 alt={project.name}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                loading="lazy"
+                loading={isAboveFold ? "eager" : "lazy"}
+                fetchPriority={isAboveFold ? "high" : undefined}
                 onError={(e) => { e.currentTarget.style.display = 'none'; }}
               />
             ) : (
@@ -175,7 +170,7 @@ const ProjectCard = ({ project, formatPrice }: { project: FeaturedProject; forma
                     src={logoUrl}
                     alt={devName}
                     className="w-full h-full object-contain"
-                    loading="lazy"
+                    loading={isAboveFold ? "eager" : "lazy"}
                     onError={() => setLogoError(true)}
                   />
                 </div>
@@ -235,12 +230,6 @@ const ProjectCard = ({ project, formatPrice }: { project: FeaturedProject; forma
             ) : null}
 
             {/* Description - 2 lines with ...more */}
-            {(project as any).description && (
-              <p className="text-zinc-600 text-xs mb-2">
-                {String((project as any).description).replace(/<[^>]*>/g, '').slice(0, 100)}
-                <span className="text-gold font-medium cursor-pointer">...more</span>
-              </p>
-            )}
 
             {/* Spacer to push bottom content down */}
             <div className="flex-grow" />
@@ -272,7 +261,7 @@ const ProjectCard = ({ project, formatPrice }: { project: FeaturedProject; forma
           </div>
         </div>
       </Link>
-    </motion.div>
+    </div>
   );
 };
 
@@ -329,8 +318,8 @@ const FeaturedListings = () => {
                   </div>
                 </div>
               ))
-            : projects?.map((project) => (
-                <ProjectCard key={project.id} project={project} formatPrice={formatPrice} />
+            : projects?.map((project, idx) => (
+                <ProjectCard key={project.id} project={project} formatPrice={formatPrice} index={idx} />
               ))}
           {!isLoading && (!projects || projects.length === 0) && (
             <div className="col-span-full text-center py-12">

@@ -22,17 +22,17 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-// Import service background images
-import buyPropertyBg from "@/assets/services/buy-property-bg.jpg";
-import sellPropertyBg from "@/assets/services/sell-property-bg.jpg";
-import rentPropertyBg from "@/assets/services/rent-property-bg.jpg";
-import listRentalBg from "@/assets/services/list-rental-bg.jpg";
-import goldenVisaBg from "@/assets/services/golden-visa-bg.jpg";
-import mortgageBg from "@/assets/services/mortgage-bg.jpg";
-import passportVisaBg from "@/assets/services/passport-visa-bg.jpg";
-import generalInquiriesBg from "@/assets/services/general-inquiries-bg.jpg";
-import propertyManagementBg from "@/assets/services/property-management-bg.jpg";
-import partnerIntroBg from "@/assets/services/partner-introduction-bg.jpg";
+// Service background images served from public/ to avoid bundle bloat
+const buyPropertyBg = "/services/buy-property-bg.jpg";
+const sellPropertyBg = "/services/sell-property-bg.jpg";
+const rentPropertyBg = "/services/rent-property-bg.jpg";
+const listRentalBg = "/services/list-rental-bg.jpg";
+const goldenVisaBg = "/services/golden-visa-bg.jpg";
+const mortgageBg = "/services/mortgage-bg.jpg";
+const passportVisaBg = "/services/passport-visa-bg.jpg";
+const generalInquiriesBg = "/services/general-inquiries-bg.jpg";
+const propertyManagementBg = "/services/property-management-bg.jpg";
+const partnerIntroBg = "/services/partner-introduction-bg.jpg";
 
 interface ServiceSlide {
   id: string;

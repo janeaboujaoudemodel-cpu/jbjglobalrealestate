@@ -1,9 +1,9 @@
 /**
  * WhyChooseUs Component - Master Blueprint Specification
  * Premium 3x2 grid of value propositions with proper bottom padding
+ * Performance: CSS animations instead of framer-motion whileInView
  */
 
-import { motion } from "framer-motion";
 import { Check, TrendingUp, Camera, MessageSquare, Network, Headphones, Award } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -73,13 +73,10 @@ const WhyChooseUs = () => {
           {/* Value Props Grid - 3x2 with bottom padding */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pb-6">
             {valueProps.map((prop, index) => (
-              <motion.div
+              <div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.08 }}
-                className="group relative p-6 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl border-2 border-gold/20 hover:border-gold/50 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1"
+                className="group relative p-6 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl border-2 border-gold/20 hover:border-gold/50 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1 animate-fade-in-up"
+                style={{ animationDelay: `${index * 80}ms` }}
               >
                 {/* Icon */}
                 <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
@@ -103,7 +100,7 @@ const WhyChooseUs = () => {
                     {t('whyUs.included', 'Included')}
                   </span>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
