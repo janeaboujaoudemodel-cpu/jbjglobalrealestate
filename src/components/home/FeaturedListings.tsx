@@ -6,7 +6,6 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 import { Home, MapPin, ArrowRight, Building2, ArrowUpRight, CreditCard, Heart, Star } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useQuery } from "@tanstack/react-query";
@@ -231,12 +230,6 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
             ) : null}
 
             {/* Description - 2 lines with ...more */}
-            {(project as any).description && (
-              <p className="text-zinc-600 text-xs mb-2">
-                {String((project as any).description).replace(/<[^>]*>/g, '').slice(0, 100)}
-                <span className="text-gold font-medium cursor-pointer">...more</span>
-              </p>
-            )}
 
             {/* Spacer to push bottom content down */}
             <div className="flex-grow" />
