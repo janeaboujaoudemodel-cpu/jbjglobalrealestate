@@ -4,6 +4,7 @@
  * Row 2: Filter popovers + Sort pills + Hide Sold (last)
  */
 import { useState, useCallback, useEffect, useRef } from "react";
+import PremiumHorizontalScrollHint from "@/components/ui/PremiumHorizontalScrollHint";
 import { ChevronDown, ChevronRight as ChevronRightIcon, X, Heart, Building2, Bed, Calendar, DollarSign, CreditCard, Activity, Map, Users, Trash2, ArrowUpDown, EyeOff, HardHat, Clock, ArrowUp, ArrowDown, SortAsc, SlidersHorizontal, Check, TrendingUp, Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useUserModeContext } from "@/contexts/UserModeContext";
@@ -360,17 +361,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               <div className="flex-1 min-w-0" />
             </div>
           </div>
-          {/* Scroll indicator arrow for Row 1 */}
-          {row1CanScroll && (
-            <button 
-              onClick={() => scrollRow(row1Ref)}
-              className="absolute right-0 top-0 bottom-0 w-12 flex items-center justify-center bg-gradient-to-l from-[#EDE4D3] via-[#EDE4D3]/95 to-transparent pointer-events-auto z-10"
-            >
-              <span className="w-7 h-7 rounded-full bg-gold flex items-center justify-center shadow-lg">
-                <ChevronRightIcon className="w-4 h-4 text-black" />
-              </span>
-            </button>
-          )}
+          <PremiumHorizontalScrollHint scrollRef={row1Ref} />
         </div>
 
         {/* Row 2: Filter popovers + Sort pills */}
@@ -729,17 +720,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         )}
 
         </div>
-          {/* Scroll indicator arrow for Row 2 */}
-          {row2CanScroll && (
-            <button 
-              onClick={() => scrollRow(row2Ref)}
-              className="absolute right-0 top-0 bottom-0 w-12 flex items-center justify-center bg-gradient-to-l from-[#EDE4D3] via-[#EDE4D3]/95 to-transparent pointer-events-auto z-10"
-            >
-              <span className="w-7 h-7 rounded-full bg-gold flex items-center justify-center shadow-lg">
-                <ChevronRightIcon className="w-4 h-4 text-black" />
-              </span>
-            </button>
-          )}
+          <PremiumHorizontalScrollHint scrollRef={row2Ref} />
         </div>
       </div>
 
