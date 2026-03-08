@@ -281,9 +281,9 @@ export default function GlobalRecommendationsHub() {
               key={status}
               size="sm"
               onClick={() => setActiveStatus(status)}
-              className={`capitalize ${
+            className={`capitalize ${
                 activeStatus === status
-                  ? "bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-white border-0"
+                  ? "bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-[#C9A84C]/40 shadow-sm"
                   : "bg-white text-zinc-600 border border-gold/20 hover:border-gold/40"
               }`}
             >
@@ -301,16 +301,16 @@ export default function GlobalRecommendationsHub() {
             onClick={() => setActiveSource(section.id)}
             className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-all ${
               activeSource === section.id
-                ? "bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-white shadow-md"
+                ? "bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-[#C9A84C]/40 shadow-sm"
                 : "bg-white border border-gold/20 text-zinc-600 hover:border-gold/40"
             }`}
           >
             <section.icon className="w-4 h-4" />
-            {section.label}
+            <span>{section.label}</span>
             {section.id !== "all" && (
-              <span className="text-xs opacity-80">
-                ({globalRecommendations.filter(r => r.source === section.id || r.category === section.id).length})
-              </span>
+              <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-5 ml-1 border-gold/30 text-[#8B7355] bg-gold/10">
+                {globalRecommendations.filter(r => r.source === section.id || r.category === section.id).length}
+              </Badge>
             )}
           </button>
         ))}

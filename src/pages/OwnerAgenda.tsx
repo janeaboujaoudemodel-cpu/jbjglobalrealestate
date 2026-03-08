@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import MainLayout from "@/components/MainLayout";
+
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -190,7 +190,7 @@ export default function OwnerAgenda() {
   const isLoading = loadingTasks || loadingLeads || loadingThreads;
 
   return (
-    <MainLayout>
+    <>
       <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
         <div className="container mx-auto px-4 py-6 max-w-6xl">
           {/* Header */}
@@ -445,7 +445,7 @@ export default function OwnerAgenda() {
           </Tabs>
         </div>
       </div>
-    </MainLayout>
+    </>
   );
 }
 

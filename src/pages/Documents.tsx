@@ -26,7 +26,7 @@ import {
   Type
 } from "lucide-react";
 import { toast } from "sonner";
-import MainLayout from "@/components/MainLayout";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -198,7 +198,7 @@ ${content}
   };
 
   return (
-    <MainLayout>
+    <>
       <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
         {/* Themed Header — Champagne Gold */}
         <div className="border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
@@ -432,7 +432,7 @@ ${content}
           </div>
         </div>
       </div>
-    </MainLayout>
+    </>
   );
 };
 
