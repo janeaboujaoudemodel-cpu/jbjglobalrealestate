@@ -158,7 +158,14 @@ const PodcastStudio = () => {
           body: JSON.stringify({
             text: script.slice(0, 5000),
             voiceId: selectedVoice,
+            modelId: selectedModel,
             format: "mp3",
+            voiceSettings: {
+              stability: stability[0],
+              similarity_boost: similarity[0],
+              style: style[0],
+              speed: speed[0],
+            },
           }),
         }
       );

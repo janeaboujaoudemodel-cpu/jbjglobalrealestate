@@ -51,7 +51,7 @@ serve(async (req) => {
       throw new Error("ELEVENLABS_API_KEY not configured");
     }
 
-    const { text, voiceId, format = "mp3", enhance = false } = await req.json();
+    const { text, voiceId, format = "mp3", modelId, voiceSettings } = await req.json();
 
     if (!text || typeof text !== "string") {
       return new Response(
@@ -73,7 +73,19 @@ serve(async (req) => {
     // Determine output format
     const outputFormat = format === "wav" ? "pcm_44100" : "mp3_44100_128";
 
-    console.log(`Generating TTS for ${sanitizedText.length} characters with voice ${voiceId} for user ${userId}`);
+    // Use provided model or default
+    const model = modelId || "eleven_multilingual_v2";
+
+    // Use provided voice settings or defaults
+    const settings = {
+      stability: voiceSettings?.stability ?? 0.5,
+      similarity_boost: voiceSettings?.similarity_boost ?? 0.75,
+      style: voiceSettings?.style ?? 0.3,
+      use_speaker_boost: true,
+      speed: voiceSettings?.speed ?? 1.0,
+    };
+
+    console.log(`Generating TTS: ${sanitizedText.length} chars, voice ${voiceId}, model ${model}, user ${userId}`);
 
     // Call ElevenLabs TTS API
     const response = await fetch(
@@ -86,13 +98,8 @@ serve(async (req) => {
         },
         body: JSON.stringify({
           text: sanitizedText,
-          model_id: "eleven_multilingual_v2",
-          voice_settings: {
-            stability: 0.5,
-            similarity_boost: 0.75,
-            style: 0.3,
-            use_speaker_boost: true,
-          },
+          model_id: model,
+          voice_settings: settings,
         }),
       }
     );
