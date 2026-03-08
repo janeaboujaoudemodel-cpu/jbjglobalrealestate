@@ -187,7 +187,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName }) => {
 
   const handleSuggestedPrompt = (prompt: string) => {
     setInput(prompt);
-    setShowSuggestions(false);
+    // Don't hide suggestions - keep them visible for easy re-use
     inputRef.current?.focus();
   };
 
@@ -530,12 +530,12 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName }) => {
             ))}
           </div>
 
-          {/* Suggested prompts */}
-          {localMessages.length <= 1 && showSuggestions && (
+          {/* Suggested prompts — always visible until user has sent multiple messages */}
+          {showSuggestions && (
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-6">
               <div className="flex items-center gap-2 mb-3">
                 <Lightbulb className="w-4 h-4 text-[#C9A84C]" />
-                <span className="text-xs text-zinc-600">Suggested prompts</span>
+                <span className="text-xs text-zinc-600 font-medium">Quick Actions & Suggested Prompts</span>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 {SUGGESTED_AI_PROMPTS.map((prompt, i) => (
