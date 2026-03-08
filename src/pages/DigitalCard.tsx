@@ -47,7 +47,7 @@ const CONTACT_INFO = {
   facebookCompany: "https://www.facebook.com/share/1G7CgSaV2L/?mibextid=wwXIfr",
   tiktokCompany: "https://www.tiktok.com/@jbj.ae",
   // Social links - Personal (same icons as company)
-  linkedinPersonal: "https://www.linkedin.com/in/jane-abou-jaoude-4079201a3?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
+  linkedinPersonal: "https://www.linkedin.com/in/jane-bou-jaoude-4079201a3?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
   instagramPersonal: "https://www.instagram.com/janeboujaoude_?igsh=MWdxNmY4NnFtbnhxZQ==",
   facebookPersonal: "https://www.facebook.com/share/17iiumemGc/?mibextid=wwXIfr",
   tiktokPersonal: "https://www.tiktok.com/@janeboujaoude",
