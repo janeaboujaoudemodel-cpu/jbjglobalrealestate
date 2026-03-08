@@ -933,7 +933,7 @@ const Admin = () => {
                                     {project.updated_at && (
                                       <span className="flex items-center gap-0.5">
                                         <Calendar className="w-3 h-3" />
-                                        Updated {new Date(project.updated_at).toLocaleDateString()}
+                                        Auto-updated {new Date(project.updated_at).toLocaleDateString()}
                                       </span>
                                     )}
                                   </div>
