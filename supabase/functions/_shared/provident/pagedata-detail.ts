@@ -1,12 +1,10 @@
 /**
- * Provident Gatsby Page-Data Detail Extractor
+ * Provident Gatsby Page-Data Detail Extractor v2
  * 
- * Fetches structured project data directly from Provident's Gatsby page-data.json
- * endpoints. This is MORE RELIABLE than parsing Firecrawl markdown for structured
- * fields like USPs, amenities, payment breakdown, FAQs, and location distances.
- * 
- * Endpoint pattern:
- * https://providentestate.com/page-data/new-projects/{slug}/page-data.json
+ * Enhanced to extract bedrooms, handover, and size from real Provident keys:
+ * - min_bedrooms, max_bedrooms, display_bedrooms
+ * - completion_year, completion_date, handover_date, handover
+ * - min_area, max_area, min_size, max_size
  */
 
 const PROVIDENT_BASE = "https://providentestate.com";
@@ -20,6 +18,8 @@ export interface PageDataProjectDetail {
   priceFrom: number | null;
   bedroomsMin: number | null;
   bedroomsMax: number | null;
+  sizeMin: number | null;
+  sizeMax: number | null;
   handover: string | null;
   paymentPlan: string | null;
   propertyType: string | null;
@@ -43,7 +43,6 @@ export interface PageDataProjectDetail {
 
 function normalizeImageUrl(url: string): string {
   if (!url) return "";
-  // Keep safe size variant to avoid 403 errors
   if (url.includes("/x/") && url.includes("cloudfront.net")) {
     return url.replace(/\/x\/\d+x\d+\//, `/x/${SAFE_IMAGE_SIZE}/`);
   }
@@ -52,12 +51,9 @@ function normalizeImageUrl(url: string): string {
 
 function isValidImageUrl(url: string): boolean {
   if (!url) return false;
-  // Exclude placeholders, logos, icons, etc.
   const excludePatterns = /(logo|icon|avatar|placeholder|spinner|favicon|navbar|header|footer|menu|widget|sidebar|banner|thumbnail|thumb_|social|share|button|btn_|grid_\d+|general_brochure|brochure|payment[-_]?plan|floor[-_]?plan)/i;
   if (excludePatterns.test(url)) return false;
-  // Must be a real image URL
   if (!/\.(jpg|jpeg|png|webp)(\?|$)/i.test(url)) return false;
-  // Exclude data URIs
   if (url.startsWith("data:")) return false;
   return true;
 }
@@ -72,24 +68,122 @@ function parsePrice(priceStr: string | number | undefined | null): number | null
   if (match[2]?.toUpperCase() === "K") value *= 1000;
   if (match[2]?.toUpperCase() === "M") value *= 1000000;
   
-  // Convert EUR to AED if needed
-  if (priceStr.toUpperCase().includes("EUR")) {
-    value *= 4;
-  } else if (priceStr.toUpperCase().includes("USD")) {
-    value *= 3.67;
-  }
+  if (priceStr.toUpperCase().includes("EUR")) value *= 4;
+  else if (priceStr.toUpperCase().includes("USD")) value *= 3.67;
   
   return value > 50000 ? Math.round(value) : null;
 }
 
-function parseBedrooms(bedroomsStr: string | undefined | null): { min: number | null; max: number | null } {
-  if (!bedroomsStr) return { min: null, max: null };
-  const nums = bedroomsStr.match(/\d+/g);
-  if (!nums || nums.length === 0) return { min: null, max: null };
-  return {
-    min: parseInt(nums[0]),
-    max: parseInt(nums[nums.length - 1])
-  };
+/**
+ * Enhanced bedrooms parser — handles numeric fields, strings, and display formats
+ */
+function parseBedrooms(data: Record<string, unknown>): { min: number | null; max: number | null } {
+  // Try numeric fields first (Provident API often uses these)
+  const numericKeys = [
+    ["min_bedrooms", "max_bedrooms"],
+    ["bedroom_min", "bedroom_max"],
+    ["bedrooms_min", "bedrooms_max"],
+  ];
+  
+  for (const [minKey, maxKey] of numericKeys) {
+    const minVal = data[minKey];
+    const maxVal = data[maxKey];
+    if (typeof minVal === "number" && minVal > 0) {
+      return { min: minVal, max: typeof maxVal === "number" && maxVal > 0 ? maxVal : minVal };
+    }
+  }
+
+  // Try display_bedrooms or bedrooms string (e.g., "1-4", "Studio, 1, 2, 3")
+  const strKeys = ["display_bedrooms", "bedrooms", "bedroom_types"];
+  for (const key of strKeys) {
+    const val = data[key];
+    if (typeof val === "string" && val.trim()) {
+      const nums = val.match(/\d+/g);
+      if (nums && nums.length > 0) {
+        return {
+          min: parseInt(nums[0]),
+          max: parseInt(nums[nums.length - 1]),
+        };
+      }
+      // "Studio" only
+      if (/studio/i.test(val)) {
+        return { min: 0, max: 0 };
+      }
+    }
+  }
+
+  return { min: null, max: null };
+}
+
+/**
+ * Enhanced handover parser — tries completion_year, completion_date, handover_date, handover
+ */
+function parseHandover(data: Record<string, unknown>): string | null {
+  // Try structured date fields
+  const dateKeys = ["completion_date", "handover_date", "expected_completion", "completion"];
+  for (const key of dateKeys) {
+    const val = data[key];
+    if (typeof val === "string" && val.trim() && val.length >= 4) {
+      return val.trim();
+    }
+  }
+
+  // Try year-based fields
+  const yearKeys = ["completion_year", "handover_year"];
+  for (const key of yearKeys) {
+    const val = data[key];
+    if (typeof val === "number" && val > 2020 && val < 2040) {
+      return `Q4 ${val}`;
+    }
+    if (typeof val === "string") {
+      const yr = parseInt(val);
+      if (yr > 2020 && yr < 2040) return `Q4 ${yr}`;
+    }
+  }
+
+  // Try generic handover string
+  const handover = data["handover"];
+  if (typeof handover === "string" && handover.trim()) {
+    return handover.trim();
+  }
+
+  return null;
+}
+
+/**
+ * Enhanced size parser — tries min_area/max_area, min_size/max_size
+ */
+function parseSize(data: Record<string, unknown>): { min: number | null; max: number | null } {
+  const numericPairs = [
+    ["min_area", "max_area"],
+    ["min_size", "max_size"],
+    ["size_min", "size_max"],
+    ["area_min", "area_max"],
+  ];
+
+  for (const [minKey, maxKey] of numericPairs) {
+    const minVal = data[minKey];
+    const maxVal = data[maxKey];
+    const minNum = typeof minVal === "number" ? minVal : typeof minVal === "string" ? parseFloat(minVal) : NaN;
+    const maxNum = typeof maxVal === "number" ? maxVal : typeof maxVal === "string" ? parseFloat(maxVal) : NaN;
+    
+    if (!isNaN(minNum) && minNum > 0) {
+      return { min: Math.round(minNum), max: !isNaN(maxNum) && maxNum > 0 ? Math.round(maxNum) : Math.round(minNum) };
+    }
+  }
+
+  // Try display_size string (e.g., "500 - 2,000 sqft")
+  const sizeStr = data["display_size"] || data["size"] || data["area"];
+  if (typeof sizeStr === "string") {
+    const nums = sizeStr.match(/[\d,]+/g);
+    if (nums && nums.length >= 1) {
+      const parsed = nums.map(n => parseInt(n.replace(/,/g, ""))).filter(n => n > 50);
+      if (parsed.length >= 2) return { min: parsed[0], max: parsed[parsed.length - 1] };
+      if (parsed.length === 1) return { min: parsed[0], max: parsed[0] };
+    }
+  }
+
+  return { min: null, max: null };
 }
 
 function extractDeepValue(obj: unknown, ...paths: string[]): unknown {
@@ -159,24 +253,25 @@ export async function fetchProvidentPageDataDetail(slug: string): Promise<PageDa
 function parsePageDataDetail(pageData: unknown, slug: string): PageDataProjectDetail | null {
   if (!pageData) return null;
   
-  // Navigate to the project data - Gatsby structure varies
   const serverData = extractDeepValue(pageData, "result.serverData", "serverData") as Record<string, unknown> | null;
   let data = extractDeepValue(pageData, "result.serverData.data", "result.data", "data") as Record<string, unknown> | null;
   const pageContext = extractDeepValue(pageData, "result.pageContext", "pageContext") as Record<string, unknown> | null;
   
-  // Provident API wraps data in {status, message, data: {actual fields}}
   if (data && typeof data === "object" && (data as any).status === true && (data as any).data) {
-    // Check for "No record found"
     if ((data as any).message === "No record found") return null;
-    // Unwrap the inner data object
     data = (data as any).data;
   }
   
-  // Bitrix data often contains the structured fields
   const bitrix = extractDeepValue(data, "bitrix", "project.bitrix") as Record<string, unknown> | null;
   const project = extractDeepValue(data, "project") as Record<string, unknown> | null;
   
-  // Extract basic fields
+  // Build a flat lookup combining all data sources for field extraction
+  const flatData: Record<string, unknown> = {
+    ...(bitrix || {}),
+    ...(project || {}),
+    ...(data || {}),
+  };
+  
   const name = (extractDeepValue(data, "name", "title", "project.name", "project.title") as string) || 
                (bitrix?.name as string) || null;
   
@@ -186,21 +281,21 @@ function parsePageDataDetail(pageData: unknown, slug: string): PageDataProjectDe
   const description = (extractDeepValue(data, "about", "description", "project.about", "project.description") as string) ||
                       (bitrix?.about as string) || null;
   
-  const location = (extractDeepValue(data, "project_location", "location", "project.project_location") as string) ||
+  const location = (extractDeepValue(data, "project_location", "location", "project.project_location", "display_address") as string) ||
                    (bitrix?.project_location as string) || null;
   
   // Price
   const priceStr = extractDeepValue(data, "price", "starting_price", "project.price") as string | number | null;
   const priceFrom = parsePrice(priceStr) || parsePrice(bitrix?.price as string);
   
-  // Bedrooms
-  const bedroomsStr = (extractDeepValue(data, "bedrooms", "project.bedrooms") as string) || 
-                      (bitrix?.bedrooms as string);
-  const { min: bedroomsMin, max: bedroomsMax } = parseBedrooms(bedroomsStr);
+  // Bedrooms — enhanced extraction
+  const { min: bedroomsMin, max: bedroomsMax } = parseBedrooms(flatData);
   
-  // Handover
-  const handover = (extractDeepValue(data, "handover", "project.handover", "completion") as string) ||
-                   (bitrix?.handover as string) || null;
+  // Handover — enhanced extraction
+  const handover = parseHandover(flatData);
+  
+  // Size — NEW extraction
+  const { min: sizeMin, max: sizeMax } = parseSize(flatData);
   
   // Payment plan summary
   const paymentPlan = (extractDeepValue(data, "payment_plan", "project.payment_plan") as string) ||
@@ -314,9 +409,8 @@ function parsePageDataDetail(pageData: unknown, slug: string): PageDataProjectDe
   // ========== Images (with filename-based dedup) ==========
   const images: Array<{ url: string; alt_text: string; display_order: number }> = [];
   const imageUrls = new Set<string>();
-  const imageFilenames = new Set<string>(); // Filename-based dedup
+  const imageFilenames = new Set<string>();
   
-  /** Extract filename from URL for dedup */
   function getImageFilename(url: string): string {
     try {
       const pathname = new URL(url, "https://placeholder.com").pathname;
@@ -327,19 +421,15 @@ function parsePageDataDetail(pageData: unknown, slug: string): PageDataProjectDe
     }
   }
   
-  // Collect all image URLs from the page data
   const allImageUrls: string[] = [];
   collectAllStrings(pageData, /\.(jpg|jpeg|png|webp)(\?|$)/i, allImageUrls);
   
-  // Filter and normalize with filename-based dedup
   for (const imgUrl of allImageUrls) {
     if (!isValidImageUrl(imgUrl)) continue;
-    // Filter out broken URLs (e.g., bare ".jpg")
     if (imgUrl.length < 10) continue;
     const normalized = normalizeImageUrl(imgUrl);
     if (!normalized) continue;
     const filename = getImageFilename(normalized);
-    // Skip if we already have an image with the same filename
     if (filename && filename.length > 4 && imageFilenames.has(filename)) continue;
     if (imageUrls.has(normalized)) continue;
     imageUrls.add(normalized);
@@ -351,7 +441,6 @@ function parsePageDataDetail(pageData: unknown, slug: string): PageDataProjectDe
     });
   }
   
-  // Also check specific image fields
   const specificImageFields = [
     "main_image", "featured_image", "image", "hero_image",
     "project.main_image", "project.featured_image", "project.image",
@@ -365,7 +454,7 @@ function parsePageDataDetail(pageData: unknown, slug: string): PageDataProjectDe
       if (normalized && !imageUrls.has(normalized) && !(filename && filename.length > 4 && imageFilenames.has(filename))) {
         imageUrls.add(normalized);
         if (filename && filename.length > 4) imageFilenames.add(filename);
-        images.unshift({ // Add at start for priority
+        images.unshift({
           url: normalized,
           alt_text: `${name || slug} - Main Image`,
           display_order: 0,
@@ -391,7 +480,6 @@ function parsePageDataDetail(pageData: unknown, slug: string): PageDataProjectDe
     }
   }
   
-  // Re-assign display_order after sorting
   images.forEach((img, idx) => { img.display_order = idx; });
   
   // ========== PDFs ==========
@@ -409,7 +497,6 @@ function parsePageDataDetail(pageData: unknown, slug: string): PageDataProjectDe
     else if (lower.includes("floor")) floorPlanPdfUrls.push(pdfUrl);
   }
   
-  // Fallback: first uncategorized PDF as brochure
   if (!brochureUrl && allPdfUrls.length > 0) {
     const remaining = allPdfUrls.filter(u => u !== paymentPlanPdfUrl && !floorPlanPdfUrls.includes(u));
     if (remaining.length > 0) brochureUrl = remaining[0];
@@ -423,6 +510,8 @@ function parsePageDataDetail(pageData: unknown, slug: string): PageDataProjectDe
     priceFrom,
     bedroomsMin,
     bedroomsMax,
+    sizeMin,
+    sizeMax,
     handover,
     paymentPlan,
     propertyType,

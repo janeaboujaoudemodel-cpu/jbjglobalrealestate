@@ -224,8 +224,8 @@ serve(async (req) => {
         priceFrom: pageDataResult?.priceFrom || firecrawlExtracted.priceFrom,
         bedroomsMin: pageDataResult?.bedroomsMin || firecrawlExtracted.bedroomsMin,
         bedroomsMax: pageDataResult?.bedroomsMax || firecrawlExtracted.bedroomsMax,
-        sizeMin: firecrawlExtracted.sizeMin, // page-data doesn't have size
-        sizeMax: firecrawlExtracted.sizeMax,
+        sizeMin: pageDataResult?.sizeMin || firecrawlExtracted.sizeMin,
+        sizeMax: pageDataResult?.sizeMax || firecrawlExtracted.sizeMax,
         handover: pageDataResult?.handover || firecrawlExtracted.handover,
         paymentPlan: pageDataResult?.paymentPlan || firecrawlExtracted.paymentPlan,
         propertyType: pageDataResult?.propertyType || firecrawlExtracted.propertyType,

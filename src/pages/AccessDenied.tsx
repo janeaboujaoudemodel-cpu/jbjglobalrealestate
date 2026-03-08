@@ -1,23 +1,35 @@
-import { useNavigate } from "react-router-dom";
-import { ShieldX, Home, LogOut, RefreshCw } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { ShieldX, Home, LogOut, RefreshCw, CheckCircle2, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
+import { useState, useEffect } from "react";
 
 /**
  * AccessDenied (/403) - Shown when authenticated user is NOT the Owner
  * 
- * This page is displayed when:
- * - User is logged in but is not verified as Owner via backend
- * 
- * Identity model:
- * - OWNER = verified via verify-owner edge function (full access)
- * - VISITOR = no auth (public pages only)
- * - AUTHENTICATED but NOT OWNER = blocked (this page)
+ * Features:
+ * - Green success / red failure feedback on retry
+ * - Auto-redirect back to intended page on success
  */
 const AccessDenied = () => {
   const navigate = useNavigate();
-  const { user, signOut, refreshOwnerVerification, ownerLoading, ownerError } = useAuth();
+  const location = useLocation();
+  const { user, signOut, refreshOwnerVerification, ownerLoading, ownerError, isOwner } = useAuth();
+  const [retryResult, setRetryResult] = useState<"idle" | "success" | "failed">("idle");
+
+  // Store where user came from (passed via state or fallback to "/")
+  const intendedRoute = (location.state as { from?: string })?.from || "/";
+
+  // Auto-redirect on successful verification
+  useEffect(() => {
+    if (isOwner && retryResult === "success") {
+      const timer = setTimeout(() => {
+        navigate(intendedRoute, { replace: true });
+      }, 800);
+      return () => clearTimeout(timer);
+    }
+  }, [isOwner, retryResult, navigate, intendedRoute]);
 
   const handleSignOut = async () => {
     try {
@@ -30,10 +42,27 @@ const AccessDenied = () => {
   };
 
   const handleRetry = async () => {
+    setRetryResult("idle");
     await refreshOwnerVerification();
-    // If verification succeeds, the user will be able to navigate back
-    toast.info("Verification refreshed. Try navigating again.");
   };
+
+  // Watch for result after retry
+  useEffect(() => {
+    if (ownerLoading) return;
+    if (retryResult !== "idle") return;
+    // Only update after a retry was triggered (not on initial render)
+  }, [ownerLoading]);
+
+  // After refreshOwnerVerification completes
+  useEffect(() => {
+    if (ownerLoading) return;
+    if (isOwner) {
+      setRetryResult("success");
+      toast.success("Verification successful! Redirecting…");
+    } else if (ownerError) {
+      setRetryResult("failed");
+    }
+  }, [ownerLoading, isOwner, ownerError]);
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-6">
@@ -64,8 +93,25 @@ const AccessDenied = () => {
           </div>
         )}
 
-        {/* Error Info */}
-        {ownerError && (
+        {/* Retry Result Feedback */}
+        {retryResult === "success" && (
+          <div className="bg-green-500/10 border border-green-500/40 rounded-xl p-4 mb-6 flex items-center gap-3">
+            <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />
+            <p className="text-green-300 text-sm">Verification successful! Redirecting…</p>
+          </div>
+        )}
+
+        {retryResult === "failed" && (
+          <div className="bg-red-500/10 border border-red-500/40 rounded-xl p-4 mb-6 flex items-center gap-3">
+            <XCircle className="w-5 h-5 text-red-400 flex-shrink-0" />
+            <p className="text-red-300 text-sm">
+              Verification failed{ownerError ? `: ${ownerError}` : ". Please try again."}
+            </p>
+          </div>
+        )}
+
+        {/* Error Info (only show if no retry result) */}
+        {ownerError && retryResult === "idle" && (
           <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 mb-6">
             <p className="text-amber-200 text-sm">
               Verification issue: {ownerError}

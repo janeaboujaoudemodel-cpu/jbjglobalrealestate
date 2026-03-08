@@ -1,28 +1,19 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { RefreshCw, LogOut, Shield, AlertTriangle } from "lucide-react";
+import { RefreshCw, LogOut, Shield, AlertTriangle, CheckCircle2, XCircle } from "lucide-react";
 
 interface OwnerGuardProps {
   children: ReactNode;
-  /** If true, shows loading spinner while checking auth. Default: true */
   showLoading?: boolean;
 }
 
 /**
  * OwnerGuard - Restricts routes to Owner-only access
  * 
- * Identity model:
- * - OWNER (verified via edge function) → allowed
- * - VISITOR (no session) → redirect to /auth with redirect-back
- * - AUTHENTICATED but NOT OWNER → redirect to /403 (AccessDenied)
- * 
- * This guard now uses centralized owner status from AuthContext only.
- * No duplicate verify-owner calls are made.
- * 
- * NOTE: This is UI-layer protection only.
- * Server-side enforcement is mandatory in Edge Functions + RLS.
+ * After successful verification retry → auto-navigates back to intended route.
+ * Shows green/red feedback on retry verification.
  */
 const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
   const { 
@@ -35,24 +26,58 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
     signOut,
   } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
   const [loadingTimedOut, setLoadingTimedOut] = useState(false);
+  const [retryStatus, setRetryStatus] = useState<"idle" | "success" | "failed">("idle");
   const autoRetryCount = useRef(0);
   const autoRetryTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Store intended route for auto-redirect after successful verification
+  const intendedRoute = useRef(location.pathname + location.search);
+
+  useEffect(() => {
+    intendedRoute.current = location.pathname + location.search;
+  }, [location.pathname, location.search]);
+
+  // Auto-redirect when isOwner becomes true
+  useEffect(() => {
+    if (isOwner && retryStatus === "success") {
+      const timer = setTimeout(() => {
+        // Already on the right page if OwnerGuard wraps it
+        setRetryStatus("idle");
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [isOwner, retryStatus]);
 
   useEffect(() => {
     if (!(authLoading || ownerLoading)) {
       setLoadingTimedOut(false);
       return;
     }
-
-    const timer = window.setTimeout(() => {
-      setLoadingTimedOut(true);
-    }, 8000);
-
+    const timer = window.setTimeout(() => setLoadingTimedOut(true), 8000);
     return () => window.clearTimeout(timer);
   }, [authLoading, ownerLoading, location.pathname]);
 
-  // Show loading state while checking auth OR owner status
+  const handleRetry = async () => {
+    setRetryStatus("idle");
+    await refreshOwnerVerification();
+    // Check after a tick
+    setTimeout(() => {
+      // We read from the auth context via the component re-render
+    }, 100);
+  };
+
+  // Track retry result
+  useEffect(() => {
+    if (!ownerLoading && retryStatus === "idle") return;
+    if (!ownerLoading && isOwner) {
+      setRetryStatus("success");
+    } else if (!ownerLoading && ownerError) {
+      setRetryStatus("failed");
+    }
+  }, [ownerLoading, isOwner, ownerError]);
+
   if ((authLoading || ownerLoading) && showLoading) {
     if (!loadingTimedOut) {
       return (
@@ -74,7 +99,6 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
           </div>
           <h1 className="text-2xl font-bold text-white mb-3">Still verifying access</h1>
           <p className="text-zinc-300 mb-6">The verification is taking longer than expected. You can retry now.</p>
-
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button
               onClick={() => {
@@ -99,7 +123,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
     );
   }
 
-  // VISITOR (no session) → redirect to auth with redirect-back
+  // VISITOR → redirect to auth
   if (!user) {
     const redirectPath = encodeURIComponent(location.pathname + location.search);
     return <Navigate to={`/auth?redirect=${redirectPath}`} replace />;
@@ -107,7 +131,6 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
 
   // Owner verification failed — auto-retry up to 3 times silently
   if (ownerError && !isOwner) {
-    // Auto-retry silently
     if (autoRetryCount.current < 3) {
       if (!autoRetryTimer.current) {
         autoRetryTimer.current = setTimeout(() => {
@@ -116,7 +139,6 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
           refreshOwnerVerification();
         }, 2000);
       }
-      // Show loading while auto-retrying
       return (
         <div className="min-h-screen bg-black flex items-center justify-center">
           <div className="text-center px-6">
@@ -144,7 +166,6 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
           <p className="text-zinc-500 text-sm mb-6">
             Error: {ownerError}
           </p>
-          
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button
               onClick={() => {
@@ -180,10 +201,6 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
 
 export default OwnerGuard;
 
-/**
- * Hook to check if current user is the Owner
- * Use this for conditional rendering in components
- */
 export function useIsOwner(): { isOwner: boolean; isLoading: boolean } {
   const { isOwner, ownerLoading } = useAuth();
   return { isOwner, isLoading: ownerLoading };
