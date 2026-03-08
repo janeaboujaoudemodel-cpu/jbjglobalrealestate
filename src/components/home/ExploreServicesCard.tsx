@@ -289,7 +289,7 @@ const ExploreServicesCard = () => {
                 </Link>
                 {currentService.id === "golden-visa" && (
                   <Link to="/guides/golden-visa-uae">
-                    <Button variant="outline" size="sm" className="gap-2 px-3 py-2 rounded-lg border-white/40 text-white hover:bg-white/10 text-xs">
+                    <Button variant="outline" size="default" className="gap-2 px-4 sm:px-8 py-3 sm:py-4 rounded-lg border-gold/60 bg-black/40 backdrop-blur-sm text-white hover:bg-black/60 hover:border-gold text-sm sm:text-base font-medium tracking-wide">
                       Read Guide
                     </Button>
                   </Link>
