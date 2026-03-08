@@ -204,7 +204,7 @@ Deno.serve(async (req) => {
     // Now handle drafts WITHOUT raw data - try Reelly API lookup
     const draftsWithoutRaw = allDrafts.filter(p => !p.reelly_raw_data && (!p.area_name || !p.handover_date || !p.bedrooms_min));
     
-    for (const project of draftsWithoutRaw.slice(0, Math.min(25, batchSize))) {
+    for (const project of draftsWithoutRaw.slice(0, Math.min(120, batchSize))) {
       try {
         // Search Reelly API by project name
         const searchName = project.name.replace(/[^a-zA-Z0-9 ]/g, "").trim();
