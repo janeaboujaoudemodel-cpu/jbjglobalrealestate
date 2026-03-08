@@ -15,7 +15,7 @@
 import sarahMitchellListingAdmin from '@/assets/team/sarah-mitchell-listing-admin.png';
 import davidThorntonMd from '@/assets/team/david-thornton-md-40s-realistic.png';
 import amandaClarkeExecutiveAssistant from '@/assets/team/amanda-clarke-executive-assistant.png';
-import janeAbouJaoudeCeo from '@/assets/ceo/jane-ceo-black-suit-original.jpg';
+import janeBouJaoudeCeo from '@/assets/ceo/jane-ceo-black-suit-original.jpg';
 
 export type ListingType = 'rental' | 'sale';
 
@@ -101,7 +101,7 @@ export const UNIFIED_APPROVAL_WORKFLOW: ApprovalStep[] = [
     approverName: 'Jane Bou Jaoude',
     approverTitle: 'Founder & CEO',
     approverDepartment: 'Executive',
-    approverPhoto: janeAbouJaoudeCeo,
+    approverPhoto: janeBouJaoudeCeo,
     approverEmail: 'janeabujaudenails@gmail.com',
     approverLanguages: ['English', 'Arabic', 'French', 'Spanish'],
     approverNationality: 'Lebanese',

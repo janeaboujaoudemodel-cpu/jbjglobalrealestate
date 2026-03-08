@@ -3,7 +3,7 @@
 
 // Import team portraits - Executive Leadership
 // NOTE: Use real, approved photos for CEO/MD. Do not swap without explicit approval.
-import janeAbouJaoudeCeo from '@/assets/ceo/jane-ceo-private-jet.jpg';
+import janeBouJaoudeCeo from '@/assets/ceo/jane-ceo-private-jet.jpg';
 import davidThorntonCeo from '@/assets/team/david-thornton-md-40s-realistic.png';
 import richardPembertonCoo from '@/assets/team/richard-pemberton-coo-40s-realistic.png';
 import oliviaExecutiveAssistant from '@/assets/team/olivia-executive-assistant.png';
@@ -339,7 +339,7 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     name: 'Jane Bou Jaoude',
     role: 'Founder & CEO JBJ Global Real Estate',
     department: 'Executive',
-    avatar: janeAbouJaoudeCeo, // LOCKED_EXISTING - Do not modify
+    avatar: janeBouJaoudeCeo, // LOCKED_EXISTING - Do not modify
     email: 'jane@JBJ.ae',
     bio: 'Visionary founder leading JBJ\'s international growth and innovation in luxury real estate.',
     languages: ['English', 'Arabic', 'French', 'Spanish'],
