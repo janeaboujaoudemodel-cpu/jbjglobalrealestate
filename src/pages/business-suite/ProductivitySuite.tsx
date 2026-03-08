@@ -174,7 +174,7 @@ const ProductivitySuite = () => {
         <div className="relative max-w-6xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border-2 border-gold/50 bg-white/60 backdrop-blur-sm mb-6 shadow-sm">
             <Sparkles className="w-4 h-4 text-gold" />
-            <span className="text-zinc-800 font-semibold text-sm tracking-wide">JBJ AI Tools Hub</span>
+            <span className="text-zinc-800 font-semibold text-sm tracking-wide">JBJ Royal Tools Hub</span>
           </div>
           
           <h1 className="text-3xl md:text-5xl font-bold text-zinc-900 mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
