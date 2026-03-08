@@ -4,7 +4,8 @@ import {
   FileAudio, Loader2, Copy, Check, Sparkles, 
   ListChecks, Users, Clock, Target, Calendar,
   Home, Calculator, Brain, Send, Plus, Mic, Square,
-  Globe, MessageSquare, Search, UserPlus, X
+  Globe, MessageSquare, Search, UserPlus, X, Pause, Play,
+  Save, Trash2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,14 +30,34 @@ interface LinkedLead {
 const TRANSLATION_LANGUAGES = [
   { value: 'auto', label: 'Auto-detect' },
   { value: 'ar', label: 'Arabic' },
-  { value: 'ru', label: 'Russian' },
+  { value: 'bn', label: 'Bengali' },
   { value: 'zh', label: 'Chinese' },
+  { value: 'cs', label: 'Czech' },
+  { value: 'nl', label: 'Dutch' },
+  { value: 'en', label: 'English' },
+  { value: 'fa', label: 'Farsi/Persian' },
+  { value: 'fil', label: 'Filipino/Tagalog' },
   { value: 'fr', label: 'French' },
   { value: 'de', label: 'German' },
-  { value: 'es', label: 'Spanish' },
+  { value: 'el', label: 'Greek' },
+  { value: 'he', label: 'Hebrew' },
   { value: 'hi', label: 'Hindi' },
+  { value: 'id', label: 'Indonesian' },
+  { value: 'it', label: 'Italian' },
+  { value: 'ja', label: 'Japanese' },
+  { value: 'ko', label: 'Korean' },
+  { value: 'ms', label: 'Malay' },
+  { value: 'pl', label: 'Polish' },
+  { value: 'pt', label: 'Portuguese' },
+  { value: 'ro', label: 'Romanian' },
+  { value: 'ru', label: 'Russian' },
+  { value: 'es', label: 'Spanish' },
+  { value: 'sw', label: 'Swahili' },
+  { value: 'th', label: 'Thai' },
   { value: 'tr', label: 'Turkish' },
-  { value: 'fa', label: 'Farsi/Persian' },
+  { value: 'uk', label: 'Ukrainian' },
+  { value: 'ur', label: 'Urdu' },
+  { value: 'vi', label: 'Vietnamese' },
 ];
 
 const AIMeetingSummarizerPremium = () => {
@@ -70,11 +91,14 @@ const AIMeetingSummarizerPremium = () => {
 
   // Live recording state
   const [isRecording, setIsRecording] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const [recordingElapsed, setRecordingElapsed] = useState(0);
   const [sessionDuration, setSessionDuration] = useState<string | null>(null);
   const [sessionDate, setSessionDate] = useState<string | null>(null);
   const [liveTranscript, setLiveTranscript] = useState<Array<{ original: string; translated?: string; lang?: string }>>([]);
   const [isTranscribing, setIsTranscribing] = useState(false);
+  const [sessionSaved, setSessionSaved] = useState(false);
+  const [sessionDeleted, setSessionDeleted] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const chunksRef = useRef<Blob[]>([]);
@@ -149,6 +173,8 @@ const AIMeetingSummarizerPremium = () => {
       chunksRef.current = [];
       setSessionDuration(null);
       setSessionDate(null);
+      setSessionSaved(false);
+      setSessionDeleted(false);
 
       let chunkBuffer: Blob[] = [];
       let lastTranscribeTime = Date.now();
@@ -158,7 +184,8 @@ const AIMeetingSummarizerPremium = () => {
           chunksRef.current.push(e.data);
           chunkBuffer.push(e.data);
         }
-        if (Date.now() - lastTranscribeTime >= 14000 && chunkBuffer.length > 0) {
+        // Transcribe every ~4 seconds for faster feedback
+        if (Date.now() - lastTranscribeTime >= 4000 && chunkBuffer.length > 0) {
           const audioBlob = new Blob(chunkBuffer, { type: mimeType.split(';')[0] });
           chunkBuffer = [];
           lastTranscribeTime = Date.now();
@@ -176,8 +203,9 @@ const AIMeetingSummarizerPremium = () => {
         streamRef.current = null;
       };
 
-      mediaRecorder.start(5000);
+      mediaRecorder.start(2000); // Smaller chunks for faster processing
       setIsRecording(true);
+      setIsPaused(false);
       setRecordingElapsed(0);
       setLiveTranscript([]);
 
@@ -197,10 +225,34 @@ const AIMeetingSummarizerPremium = () => {
     }
   }, [translationLang]);
 
+  const pauseRecording = useCallback(() => {
+    if (mediaRecorderRef.current && isRecording && !isPaused) {
+      mediaRecorderRef.current.pause();
+      setIsPaused(true);
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+      toast.info("Recording paused");
+    }
+  }, [isRecording, isPaused]);
+
+  const resumeRecording = useCallback(() => {
+    if (mediaRecorderRef.current && isRecording && isPaused) {
+      mediaRecorderRef.current.resume();
+      setIsPaused(false);
+      timerRef.current = setInterval(() => {
+        setRecordingElapsed(prev => prev + 1);
+      }, 1000);
+      toast.success("Recording resumed");
+    }
+  }, [isRecording, isPaused]);
+
   const stopRecording = useCallback(() => {
     if (mediaRecorderRef.current && isRecording) {
       mediaRecorderRef.current.stop();
       setIsRecording(false);
+      setIsPaused(false);
       if (timerRef.current) {
         clearInterval(timerRef.current);
         timerRef.current = null;
@@ -213,7 +265,7 @@ const AIMeetingSummarizerPremium = () => {
       setSessionDuration(durationStr);
       setSessionDate(dateStr);
       handleChange("duration", durationStr);
-      toast.success(`Recording stopped — Session: ${durationStr}`);
+      toast.success(`Recording ended — Session: ${durationStr}`);
     }
   }, [isRecording, recordingElapsed]);
 
@@ -254,6 +306,44 @@ const AIMeetingSummarizerPremium = () => {
     const m = Math.floor(seconds / 60);
     const s = seconds % 60;
     return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+  };
+
+  const handleSaveSession = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { toast.error("Please log in to save"); return; }
+      
+      await supabase.from("ai_job_master").insert({
+        user_id: user.id,
+        tool_name: "ai-meeting-summarizer-draft",
+        status: "draft",
+        input_payload: {
+          meetingTitle: formData.meetingTitle,
+          participants: formData.participants,
+          notes: formData.notes,
+          duration: formData.duration,
+          linkedLeadId: linkedLead?.id,
+          transcript: liveTranscript,
+        },
+        output_payload: response || null,
+      });
+      setSessionSaved(true);
+      toast.success("Session saved successfully!");
+    } catch (e: any) {
+      toast.error("Failed to save: " + e.message);
+    }
+  };
+
+  const handleDeleteSession = () => {
+    setFormData({ meetingTitle: "", participants: "", notes: "", duration: "" });
+    setLiveTranscript([]);
+    setSessionDuration(null);
+    setSessionDate(null);
+    setLinkedLead(null);
+    setSessionDeleted(true);
+    setPropertyResults([]);
+    setMortgageResult(null);
+    toast.info("Session discarded");
   };
 
   const handleSelectLead = (lead: LinkedLead) => {
@@ -318,7 +408,6 @@ const AIMeetingSummarizerPremium = () => {
     });
     if (result.success) {
       toast.success("Meeting summarized successfully!");
-      // Update linked lead if exists
       if (linkedLead?.id) {
         try {
           await supabase.from("crm_leads").update({
@@ -389,9 +478,23 @@ const AIMeetingSummarizerPremium = () => {
     setSearchingProperties(true);
     try {
       const notesLower = formData.notes.toLowerCase();
+      
+      // Only search if notes contain property-related keywords
+      const propertyKeywords = ['property', 'villa', 'apartment', 'flat', 'penthouse', 'townhouse', 'studio', 'bedroom', 'br', 'sqft', 'marina', 'downtown', 'palm', 'creek', 'hills', 'jbr', 'dubailand', 'buy', 'invest', 'rent', 'aed', 'million', 'budget'];
+      const hasPropertyContext = propertyKeywords.some(kw => notesLower.includes(kw));
+      
+      if (!hasPropertyContext) {
+        setPropertyResults([]);
+        toast.info("No property-related topics detected in meeting notes.");
+        setSearchingProperties(false);
+        return;
+      }
+
       let query = supabase
         .from("projects")
         .select("id, name, slug, price_from, area_name, developer_name, property_type_label, bedrooms_min, bedrooms_max, construction_status")
+        .gt("price_from", 0)
+        .not("price_from", "is", null)
         .order("price_from", { ascending: false })
         .limit(6);
 
@@ -438,7 +541,7 @@ const AIMeetingSummarizerPremium = () => {
     try {
       const { data, error } = await supabase.functions.invoke('lovable-ai', {
         body: {
-          model: 'openai/gpt-5-mini',
+          model: 'google/gemini-3-flash-preview',
           messages: [
             { role: 'system', content: 'You are a professional real estate follow-up assistant for JBJ Global Real Estate Dubai. Generate a polished, warm follow-up message based on meeting context. Keep it concise (150-250 words). Include specific references to what was discussed.' },
             { role: 'user', content: `Generate a follow-up message for this meeting:\n\nTitle: ${formData.meetingTitle}\nParticipants: ${formData.participants}\nNotes: ${formData.notes.slice(0, 2000)}\n\nSummary: ${response?.summary || response?.executiveSummary || ''}\nAction Items: ${JSON.stringify(response?.actionItems?.slice(0, 5) || [])}` }
@@ -453,6 +556,9 @@ const AIMeetingSummarizerPremium = () => {
       setGeneratingResponse(false);
     }
   };
+
+  // Check if we should show live tools (during or after recording, when we have notes)
+  const showLiveTools = isRecording || (formData.notes.trim().length > 0);
 
   return (
     <AIToolPremiumLayout
@@ -617,26 +723,47 @@ const AIMeetingSummarizerPremium = () => {
               </div>
 
               <div className="flex items-center gap-3 flex-wrap">
-                <Button
-                  type="button"
-                  onClick={isRecording ? stopRecording : startRecording}
-                  className={isRecording
-                    ? "bg-red-600 hover:bg-red-500 text-white shadow-lg shadow-red-500/25 animate-pulse px-6"
-                    : "bg-black hover:bg-zinc-800 text-gold shadow-lg shadow-black/20 px-6"
-                  }
-                  size="lg"
-                >
-                  {isRecording ? (
-                    <><Square className="h-4 w-4 mr-2 fill-current" /> Stop Recording</>
-                  ) : (
-                    <><Mic className="h-4 w-4 mr-2" /> Start Recording Session</>
-                  )}
-                </Button>
+                {!isRecording ? (
+                  <Button
+                    type="button"
+                    onClick={startRecording}
+                    className="bg-black hover:bg-zinc-800 text-gold shadow-lg shadow-black/20 px-6"
+                    size="lg"
+                  >
+                    <Mic className="h-4 w-4 mr-2" /> Start Recording Session
+                  </Button>
+                ) : (
+                  <>
+                    {/* Pause / Resume */}
+                    <Button
+                      type="button"
+                      onClick={isPaused ? resumeRecording : pauseRecording}
+                      className="bg-amber-600 hover:bg-amber-500 text-white px-4"
+                      size="lg"
+                    >
+                      {isPaused ? (
+                        <><Play className="h-4 w-4 mr-2" /> Resume</>
+                      ) : (
+                        <><Pause className="h-4 w-4 mr-2" /> Pause</>
+                      )}
+                    </Button>
+                    {/* Stop — stable red, no blinking */}
+                    <Button
+                      type="button"
+                      onClick={stopRecording}
+                      className="bg-red-600 hover:bg-red-500 text-white shadow-lg shadow-red-500/25 px-6"
+                      size="lg"
+                    >
+                      <Square className="h-4 w-4 mr-2 fill-current" /> End Session
+                    </Button>
+                  </>
+                )}
                 
                 {isRecording && (
                   <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse" />
+                    <span className={`w-2.5 h-2.5 rounded-full ${isPaused ? 'bg-amber-500' : 'bg-red-500 animate-pulse'}`} />
                     <span className="text-red-600 text-sm font-mono font-bold">{formatTime(recordingElapsed)}</span>
+                    {isPaused && <Badge className="bg-amber-100 text-amber-700 border-amber-300 text-xs">Paused</Badge>}
                   </div>
                 )}
                 
@@ -648,13 +775,41 @@ const AIMeetingSummarizerPremium = () => {
               </div>
 
               {/* Session Info After Recording */}
-              {!isRecording && sessionDuration && (
-                <div className="flex items-center gap-3 p-3 bg-emerald-50 border border-emerald-200 rounded-lg">
-                  <Clock className="h-5 w-5 text-emerald-600" />
-                  <div>
-                    <p className="text-black font-medium text-sm">Session Recorded</p>
-                    <p className="text-zinc-600 text-xs">Duration: {sessionDuration} · {sessionDate}</p>
+              {!isRecording && sessionDuration && !sessionDeleted && (
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3 p-3 bg-emerald-50 border border-emerald-200 rounded-lg">
+                    <Clock className="h-5 w-5 text-emerald-600" />
+                    <div className="flex-1">
+                      <p className="text-black font-medium text-sm">Session Recorded</p>
+                      <p className="text-zinc-600 text-xs">Duration: {sessionDuration} · {sessionDate}</p>
+                    </div>
                   </div>
+                  
+                  {/* Save / Delete buttons */}
+                  {!sessionSaved && (
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={handleSaveSession}
+                        className="bg-emerald-600 hover:bg-emerald-500 text-white flex-1"
+                        size="sm"
+                      >
+                        <Save className="h-4 w-4 mr-1.5" /> Save Session
+                      </Button>
+                      <Button
+                        onClick={handleDeleteSession}
+                        variant="outline"
+                        className="border-red-300 text-red-600 hover:bg-red-50 flex-1"
+                        size="sm"
+                      >
+                        <Trash2 className="h-4 w-4 mr-1.5" /> Discard
+                      </Button>
+                    </div>
+                  )}
+                  {sessionSaved && (
+                    <p className="text-emerald-600 text-xs flex items-center gap-1 font-medium">
+                      <Check className="h-3 w-3" /> Session saved as draft (kept for 30 days)
+                    </p>
+                  )}
                 </div>
               )}
 
@@ -685,10 +840,117 @@ const AIMeetingSummarizerPremium = () => {
               )}
 
               <p className="text-zinc-500 text-xs leading-relaxed">
-                Records audio, transcribes every 15 seconds, and auto-translates non-English speech. 
+                Records audio, transcribes every ~4 seconds, and auto-translates non-English speech. 
                 Works with Zoom, phone calls, live meetings — any audio your mic picks up.
               </p>
             </div>
+
+            {/* AI Response Generator — visible LIVE during recording */}
+            {showLiveTools && (
+              <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/30">
+                <CardContent className="p-5 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-full bg-black flex items-center justify-center">
+                        <MessageSquare className="h-3.5 w-3.5 text-gold" />
+                      </div>
+                      <h4 className="font-semibold text-black">AI Follow-up Response</h4>
+                    </div>
+                    <Button
+                      size="sm"
+                      onClick={handleGenerateResponse}
+                      disabled={generatingResponse}
+                      className="bg-black hover:bg-zinc-800 text-gold text-xs"
+                    >
+                      {generatingResponse ? <><Loader2 className="h-3 w-3 mr-1 animate-spin" /> Generating...</> : <><Send className="h-3 w-3 mr-1" /> Generate Response</>}
+                    </Button>
+                  </div>
+                  {generatedResponse && (
+                    <div className="bg-white border border-gold/15 p-4 rounded-lg space-y-2">
+                      <p className="text-zinc-700 text-sm whitespace-pre-wrap">{generatedResponse}</p>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => copyToClipboard(generatedResponse)}
+                        className="text-xs border-gold/30 text-gold hover:bg-gold/10"
+                      >
+                        <Copy className="h-3 w-3 mr-1" /> Copy Message
+                      </Button>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+
+            {/* CRM Tools — visible LIVE during recording */}
+            {showLiveTools && (
+              <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/30">
+                <CardContent className="p-5">
+                  <Tabs defaultValue="properties">
+                    <TabsList className="bg-white border border-gold/20 w-full">
+                      <TabsTrigger value="properties" className="flex-1 data-[state=active]:bg-black data-[state=active]:text-gold text-zinc-600">
+                        <Home className="h-4 w-4 mr-1" /> Properties
+                      </TabsTrigger>
+                      <TabsTrigger value="mortgage" className="flex-1 data-[state=active]:bg-black data-[state=active]:text-gold text-zinc-600">
+                        <Calculator className="h-4 w-4 mr-1" /> Mortgage
+                      </TabsTrigger>
+                    </TabsList>
+
+                    <TabsContent value="properties" className="mt-4 space-y-3">
+                      <p className="text-zinc-500 text-xs">Auto-detect property preferences from meeting notes:</p>
+                      <Button
+                        onClick={handlePropertySearch}
+                        disabled={searchingProperties}
+                        size="sm"
+                        className="bg-black hover:bg-zinc-800 text-gold"
+                      >
+                        {searchingProperties ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : <Home className="h-4 w-4 mr-1" />}
+                        Find Matching Properties
+                      </Button>
+                      {propertyResults.length > 0 && (
+                        <div className="space-y-2 mt-2">
+                          {propertyResults.map((p) => (
+                            <a key={p.id} href={`/project/${p.slug}`} target="_blank" rel="noopener noreferrer" className="block bg-white border border-gold/15 rounded-lg p-3 hover:border-gold/40 transition-colors">
+                              <div className="flex justify-between items-start">
+                                <div>
+                                  <p className="text-black text-sm font-medium">{p.name}</p>
+                                  <p className="text-zinc-500 text-xs">{p.area_name} · {p.property_type_label} · {p.bedrooms_min}-{p.bedrooms_max} BR</p>
+                                </div>
+                                <Badge className="bg-gold/10 text-gold border border-gold/30 text-xs">AED {(p.price_from || 0).toLocaleString()}</Badge>
+                              </div>
+                            </a>
+                          ))}
+                        </div>
+                      )}
+                    </TabsContent>
+
+                    <TabsContent value="mortgage" className="mt-4 space-y-3">
+                      <div className="flex gap-2">
+                        <Input
+                          placeholder="Property price (AED)"
+                          value={mortgagePrice}
+                          onChange={(e) => setMortgagePrice(e.target.value)}
+                          className="bg-white border-gold/30 text-black focus:border-gold text-sm"
+                        />
+                        <Button onClick={handleMortgageCalc} size="sm" className="bg-black hover:bg-zinc-800 text-gold">
+                          Calculate
+                        </Button>
+                      </div>
+                      {mortgageResult && (
+                        <div className="bg-white border border-gold/15 rounded-lg p-3 space-y-1 text-sm">
+                          <p className="text-black font-medium">Mortgage Estimate</p>
+                          <p className="text-zinc-500">Property: <span className="text-black font-medium">AED {mortgageResult.price.toLocaleString()}</span></p>
+                          <p className="text-zinc-500">Down Payment (20%): <span className="text-black font-medium">AED {mortgageResult.down.toLocaleString()}</span></p>
+                          <p className="text-zinc-500">Loan: <span className="text-black font-medium">AED {mortgageResult.loan.toLocaleString()}</span></p>
+                          <p className="text-zinc-500">Monthly: <span className="text-emerald-600 font-bold">AED {mortgageResult.monthly.toLocaleString()}</span></p>
+                          <p className="text-zinc-400 text-xs mt-1">Rate: {mortgageResult.rate}% · {mortgageResult.years} years · Estimate only</p>
+                        </div>
+                      )}
+                    </TabsContent>
+                  </Tabs>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Notes Textarea */}
             <div className="space-y-1.5">
@@ -822,111 +1084,8 @@ const AIMeetingSummarizerPremium = () => {
                   </div>
                 </CardContent>
               </Card>
-
-              {/* AI Response Generator */}
-              <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/30">
-                <CardContent className="p-5 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full bg-black flex items-center justify-center">
-                        <MessageSquare className="h-3.5 w-3.5 text-gold" />
-                      </div>
-                      <h4 className="font-semibold text-black">AI Follow-up Response</h4>
-                    </div>
-                    <Button
-                      size="sm"
-                      onClick={handleGenerateResponse}
-                      disabled={generatingResponse}
-                      className="bg-black hover:bg-zinc-800 text-gold text-xs"
-                    >
-                      {generatingResponse ? <><Loader2 className="h-3 w-3 mr-1 animate-spin" /> Generating...</> : <><Send className="h-3 w-3 mr-1" /> Generate Response</>}
-                    </Button>
-                  </div>
-                  {generatedResponse && (
-                    <div className="bg-white border border-gold/15 p-4 rounded-lg space-y-2">
-                      <p className="text-zinc-700 text-sm whitespace-pre-wrap">{generatedResponse}</p>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => copyToClipboard(generatedResponse)}
-                        className="text-xs border-gold/30 text-gold hover:bg-gold/10"
-                      >
-                        <Copy className="h-3 w-3 mr-1" /> Copy Message
-                      </Button>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              {/* CRM Tools Tabs */}
-              <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/30">
-                <CardContent className="p-5">
-                  <Tabs defaultValue="properties">
-                    <TabsList className="bg-white border border-gold/20 w-full">
-                      <TabsTrigger value="properties" className="flex-1 data-[state=active]:bg-black data-[state=active]:text-gold text-zinc-600">
-                        <Home className="h-4 w-4 mr-1" /> Properties
-                      </TabsTrigger>
-                      <TabsTrigger value="mortgage" className="flex-1 data-[state=active]:bg-black data-[state=active]:text-gold text-zinc-600">
-                        <Calculator className="h-4 w-4 mr-1" /> Mortgage
-                      </TabsTrigger>
-                    </TabsList>
-
-                    <TabsContent value="properties" className="mt-4 space-y-3">
-                      <p className="text-zinc-500 text-xs">Auto-detect property preferences from meeting notes:</p>
-                      <Button
-                        onClick={handlePropertySearch}
-                        disabled={searchingProperties}
-                        size="sm"
-                        className="bg-black hover:bg-zinc-800 text-gold"
-                      >
-                        {searchingProperties ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : <Home className="h-4 w-4 mr-1" />}
-                        Find Matching Properties
-                      </Button>
-                      {propertyResults.length > 0 && (
-                        <div className="space-y-2 mt-2">
-                          {propertyResults.map((p) => (
-                            <a key={p.id} href={`/project/${p.slug}`} target="_blank" rel="noopener noreferrer" className="block bg-white border border-gold/15 rounded-lg p-3 hover:border-gold/40 transition-colors">
-                              <div className="flex justify-between items-start">
-                                <div>
-                                  <p className="text-black text-sm font-medium">{p.name}</p>
-                                  <p className="text-zinc-500 text-xs">{p.area_name} · {p.property_type_label} · {p.bedrooms_min}-{p.bedrooms_max} BR</p>
-                                </div>
-                                <Badge className="bg-gold/10 text-gold border border-gold/30 text-xs">AED {(p.price_from || 0).toLocaleString()}</Badge>
-                              </div>
-                            </a>
-                          ))}
-                        </div>
-                      )}
-                    </TabsContent>
-
-                    <TabsContent value="mortgage" className="mt-4 space-y-3">
-                      <div className="flex gap-2">
-                        <Input
-                          placeholder="Property price (AED)"
-                          value={mortgagePrice}
-                          onChange={(e) => setMortgagePrice(e.target.value)}
-                          className="bg-white border-gold/30 text-black focus:border-gold text-sm"
-                        />
-                        <Button onClick={handleMortgageCalc} size="sm" className="bg-black hover:bg-zinc-800 text-gold">
-                          Calculate
-                        </Button>
-                      </div>
-                      {mortgageResult && (
-                        <div className="bg-white border border-gold/15 rounded-lg p-3 space-y-1 text-sm">
-                          <p className="text-black font-medium">Mortgage Estimate</p>
-                          <p className="text-zinc-500">Property: <span className="text-black font-medium">AED {mortgageResult.price.toLocaleString()}</span></p>
-                          <p className="text-zinc-500">Down Payment (20%): <span className="text-black font-medium">AED {mortgageResult.down.toLocaleString()}</span></p>
-                          <p className="text-zinc-500">Loan: <span className="text-black font-medium">AED {mortgageResult.loan.toLocaleString()}</span></p>
-                          <p className="text-zinc-500">Monthly: <span className="text-emerald-600 font-bold">AED {mortgageResult.monthly.toLocaleString()}</span></p>
-                          <p className="text-zinc-400 text-xs mt-1">Rate: {mortgageResult.rate}% · {mortgageResult.years} years · Estimate only</p>
-                        </div>
-                      )}
-                    </TabsContent>
-                  </Tabs>
-                </CardContent>
-              </Card>
             </motion.div>
-          ) : (
+          ) : !showLiveTools ? (
             <motion.div key="placeholder" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center justify-center py-16 text-center">
               <div className="p-6 rounded-full bg-gold/10 border border-gold/20 mb-4">
                 <Brain className="h-12 w-12 text-gold" />
@@ -936,7 +1095,7 @@ const AIMeetingSummarizerPremium = () => {
                 Record a live session or paste notes to get AI summaries, action items with follow-up scheduling, property recommendations, and auto-generated client responses
               </p>
             </motion.div>
-          )}
+          ) : null}
         </AnimatePresence>
       </div>
     </AIToolPremiumLayout>
