@@ -475,7 +475,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                             </div>
                             <p className="text-sm text-zinc-600 line-clamp-2">{review.review_text}</p>
                             {review.improve_text && (
-                              <p className="text-xs text-zinc-500 mt-1 italic">💡 {review.improve_text}</p>
+                              <p className="text-xs text-zinc-500 mt-1 italic">Suggestion: {review.improve_text}</p>
                             )}
                             <div className="flex items-center gap-4 mt-2 text-xs text-zinc-500">
                               <span>{review.service_type}</span>
@@ -654,7 +654,7 @@ export const EmbeddedCustomerHappinessHub = () => {
 
               {selectedReview.improve_text && (
                 <div className="p-3 bg-amber-50 rounded-lg border border-amber-200">
-                  <p className="text-xs text-zinc-500 mb-1">💡 Improvement suggestion</p>
+                  <p className="text-xs text-zinc-500 mb-1">Improvement suggestion</p>
                   <p className="text-sm text-black">{selectedReview.improve_text}</p>
                 </div>
               )}

@@ -466,36 +466,45 @@ const MarketingHub: React.FC = () => {
 
             {/* Templates Tab */}
             <TabsContent value="templates" className="m-0">
-              <div className="grid md:grid-cols-3 gap-4">
+              <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {[
-                  { name: 'New Listing Announcement', description: 'Announce new property listings', icon: Building2, type: 'email' },
-                  { name: 'Monthly Newsletter', description: 'Regular updates and insights', icon: FileText, type: 'email' },
-                  { name: 'Price Reduction Alert', description: 'Notify buyers of price drops', icon: TrendingUp, type: 'email' },
-                  { name: 'Open House Invitation', description: 'Invite prospects to viewings', icon: Calendar, type: 'email' },
-                  { name: 'Market Update', description: 'Share market trends and data', icon: BarChart3, type: 'email' },
-                  { name: 'Thank You Follow-up', description: 'Thank clients after meetings', icon: Heart, type: 'email' },
-                  { name: 'Welcome Email', description: 'Onboard new clients warmly', icon: Mail, type: 'email' },
-                  { name: 'Property Inquiry Response', description: 'Auto-reply to property inquiries', icon: MessageSquare, type: 'email' },
-                  { name: 'Event Invitation', description: 'Invite clients to exclusive events', icon: Calendar, type: 'email' },
-                  { name: 'Referral Request', description: 'Ask satisfied clients for referrals', icon: Users, type: 'email' },
-                  { name: 'Holiday Greeting', description: 'Seasonal greetings to your network', icon: Sparkles, type: 'email' },
-                  { name: 'Investment Opportunity', description: 'Present new investment options', icon: Lightbulb, type: 'email' },
-                  { name: 'Broker Onboarding', description: 'Welcome new team members', icon: UserCog, type: 'email' },
-                  { name: 'Anniversary Follow-up', description: 'Mark purchase anniversaries', icon: Heart, type: 'email' },
+                  { name: 'New Listing Announcement', description: 'Announce new property listings to your database', icon: Building2, type: 'email', category: 'Listings' },
+                  { name: 'Monthly Newsletter', description: 'Regular updates and insights for subscribers', icon: FileText, type: 'email', category: 'Newsletter' },
+                  { name: 'Price Reduction Alert', description: 'Notify buyers of price drops on watched properties', icon: TrendingUp, type: 'email', category: 'Listings' },
+                  { name: 'Open House Invitation', description: 'Invite prospects to property viewings', icon: Calendar, type: 'email', category: 'Events' },
+                  { name: 'Market Update', description: 'Share market trends and data with investors', icon: BarChart3, type: 'email', category: 'Newsletter' },
+                  { name: 'Thank You Follow-up', description: 'Thank clients after meetings or viewings', icon: Heart, type: 'email', category: 'Follow-up' },
+                  { name: 'Welcome Email', description: 'Onboard new clients with a warm introduction', icon: Mail, type: 'email', category: 'Onboarding' },
+                  { name: 'Property Inquiry Response', description: 'Auto-reply to property inquiries', icon: MessageSquare, type: 'auto-reply', category: 'Automation' },
+                  { name: 'Event Invitation', description: 'Invite clients to exclusive events', icon: Calendar, type: 'email', category: 'Events' },
+                  { name: 'Referral Request', description: 'Ask satisfied clients for referrals', icon: Users, type: 'email', category: 'Follow-up' },
+                  { name: 'Holiday Greeting', description: 'Seasonal greetings to your network', icon: Sparkles, type: 'email', category: 'Seasonal' },
+                  { name: 'Investment Opportunity', description: 'Present new investment options', icon: Lightbulb, type: 'email', category: 'Listings' },
+                  { name: 'Broker Onboarding', description: 'Welcome new team members', icon: UserCog, type: 'internal', category: 'Onboarding' },
+                  { name: 'Anniversary Follow-up', description: 'Mark purchase anniversaries', icon: Heart, type: 'email', category: 'Follow-up' },
+                  { name: 'Weekly Digest', description: 'Curated weekly property highlights', icon: FileText, type: 'email', category: 'Newsletter' },
+                  { name: 'Exclusive Pre-Launch', description: 'VIP access to upcoming off-plan projects', icon: Sparkles, type: 'email', category: 'Listings' },
+                  { name: 'Client Testimonial Request', description: 'Collect reviews from happy clients', icon: MessageSquare, type: 'email', category: 'Follow-up' },
+                  { name: 'ROI Report', description: 'Personalized investment return summaries', icon: BarChart3, type: 'report', category: 'Analytics' },
+                  { name: 'Payment Reminder', description: 'Friendly installment payment reminders', icon: Calendar, type: 'auto-reply', category: 'Automation' },
+                  { name: 'Community Update', description: 'Area news and development updates', icon: Building2, type: 'email', category: 'Newsletter' },
                 ].map((template, idx) => (
                   <motion.div
                     key={idx}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: idx * 0.05 }}
+                    transition={{ delay: idx * 0.03 }}
                     className="p-4 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F5F0E6] hover:border-gold hover:shadow-lg transition-all cursor-pointer group"
                     onClick={() => setIsCreating(true)}
                   >
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gold/20 to-amber-500/20 flex items-center justify-center border border-gold/30 mb-3">
-                      <template.icon className="w-5 h-5 text-black" />
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gold/20 to-amber-500/20 flex items-center justify-center border border-gold/30">
+                        <template.icon className="w-5 h-5 text-black" />
+                      </div>
+                      <Badge className="text-[10px] bg-zinc-100 text-zinc-600 border-zinc-200">{template.category}</Badge>
                     </div>
                     <h4 className="font-semibold text-black group-hover:text-gold transition-colors">{template.name}</h4>
-                    <p className="text-sm text-black/60 mt-1">{template.description}</p>
+                    <p className="text-sm text-black/60 mt-1 line-clamp-2">{template.description}</p>
                     <Badge className="mt-3 bg-gold/10 text-gold border-gold/30">{template.type}</Badge>
                   </motion.div>
                 ))}

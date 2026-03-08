@@ -1236,7 +1236,7 @@ function ProjectPreview({ extracted, onSave, isSaving }: { extracted: ExtractedD
       {/* Views */}
       {extracted.views && extracted.views.length > 0 && (
         <Card>
-          <CardHeader><CardTitle className="text-sm">🏔️ Views ({extracted.views.length})</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-sm">Views ({extracted.views.length})</CardTitle></CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-2">
               {extracted.views.map((v, i) => (

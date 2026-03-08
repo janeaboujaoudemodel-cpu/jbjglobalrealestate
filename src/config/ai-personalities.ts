@@ -124,7 +124,7 @@ www.jbj.ae | +971 54 717 6710`,
     canUseEmoji: false,
   },
 
-  // 💼 2. Executive Assistant to COO - Victoria Reynolds
+  // 2. Executive Assistant to COO - Victoria Reynolds
   victoria: {
     id: 'victoria',
     name: 'Victoria Reynolds',
@@ -326,7 +326,7 @@ JBJ Global Real Estate`,
     canUseEmoji: false,
   },
 
-  // 👩‍💼 6. HR Manager - Jessica
+  // 6. HR Manager - Jessica
   jessica: {
     id: 'jessica',
     name: 'Jessica',
@@ -813,7 +813,7 @@ Communication rules:
 - Coordinates with Emily Watson (Admin Manager) for escalations`,
     exampleMessage: `Hi Ahmed,
 
-Welcome to the JBJ broker network! 🎉
+Welcome to the JBJ broker network!
 
 I've prepared your onboarding package with all the documentation you'll need:
 • RERA compliance checklist

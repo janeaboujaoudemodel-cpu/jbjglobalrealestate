@@ -299,7 +299,7 @@ export async function generateDailySummary(aiId: string, date: Date): Promise<st
   let summary = `${personality.name} (${personality.role}): ${summaryParts.join(', ')}.`;
   
   if (escalations > 0) {
-    summary += ` ⚠️ ${escalations} escalation(s).`;
+    summary += ` [ALERT] ${escalations} escalation(s).`;
   }
 
   return summary;

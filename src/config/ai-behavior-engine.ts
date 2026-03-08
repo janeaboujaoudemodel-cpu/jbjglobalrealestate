@@ -491,7 +491,7 @@ export function getEscalationTarget(currentRole: string): string {
 
 export function formatEscalationLog(fromRole: string, toRole: string, reason: string): string {
   const fromName = getPersonalityById(fromRole)?.name || fromRole;
-  return `⚠️ Escalated by ${fromName}: ${reason}`;
+  return `[ESCALATION] Escalated by ${fromName}: ${reason}`;
 }
 
 // ============================================

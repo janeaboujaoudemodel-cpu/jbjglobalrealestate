@@ -113,7 +113,7 @@ export function useMarketIntelligence() {
       // Show toast for high priority alerts
       if (alert.priority === 'critical' || alert.priority === 'high') {
         toast({
-          title: `🚨 ${alert.title}`,
+          title: `[ALERT] ${alert.title}`,
           description: alert.message,
           variant: 'destructive',
         });

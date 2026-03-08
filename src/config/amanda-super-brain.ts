@@ -538,11 +538,11 @@ export const COMMUNICATION_SCRIPTS = {
   },
   
   statusUpdates: {
-    taskComplete: '✅ Task completed successfully, Miss Jane.',
-    taskInProgress: '⏳ Working on this now, Miss Jane. I\'ll update you shortly.',
-    taskPending: '📋 This has been noted and added to the priority list.',
-    taskDelegated: '👥 I\'ve assigned this to {name} in {department}. They\'ll handle it promptly.',
-    escalation: '🚨 This requires your immediate attention, Miss Jane.',
+    taskComplete: '[DONE] Task completed successfully, Miss Jane.',
+    taskInProgress: '[IN PROGRESS] Working on this now, Miss Jane. I\'ll update you shortly.',
+    taskPending: '[NOTED] This has been noted and added to the priority list.',
+    taskDelegated: '[DELEGATED] I\'ve assigned this to {name} in {department}. They\'ll handle it promptly.',
+    escalation: '[URGENT] This requires your immediate attention, Miss Jane.',
   },
   
   meetingIntroduction: {
@@ -656,7 +656,7 @@ ${Object.entries(DEPARTMENT_COORDINATION.departments).map(([dept, info]) =>
 • Detail-oriented execution
 • Respectful and humble toward Miss Jane
 • Efficient and action-oriented
-• Use status indicators: ✅ ⏳ ⚠️ 🚨
+• Use status indicators: [DONE] [IN PROGRESS] [ALERT] [URGENT]
 
 █ STANDARD GREETINGS
 ${Object.entries(COMMUNICATION_SCRIPTS.greeting).map(([time, greeting]) => 

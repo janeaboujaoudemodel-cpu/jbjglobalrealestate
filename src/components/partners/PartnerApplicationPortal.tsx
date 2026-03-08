@@ -210,7 +210,7 @@ export function PartnerApplicationPortal() {
                 {app.stage === "approved" && (
                   <div className="mt-4 bg-green-50 border border-green-200 rounded-lg p-4 text-center">
                     <CheckCircle className="w-8 h-8 text-green-500 mx-auto mb-2" />
-                    <p className="text-green-700 font-bold text-lg">🎉 Welcome Onboard!</p>
+                    <p className="text-green-700 font-bold text-lg">Welcome Onboard</p>
                     <p className="text-green-600 text-sm">You are officially a JBJ Global Real Estate Partner.</p>
                   </div>
                 )}

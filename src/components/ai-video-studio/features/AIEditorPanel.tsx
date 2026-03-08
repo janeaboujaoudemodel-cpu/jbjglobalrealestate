@@ -397,7 +397,7 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
                       className="w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-slate-200"
                       onClick={() => setShowTips(v => !v)}
                     >
-                      <span>💡 Editing Tips ({analysisResult.editingTips.length})</span>
+                      <span>Editing Tips ({analysisResult.editingTips.length})</span>
                       {showTips ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
                     </button>
                     {showTips && (

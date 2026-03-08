@@ -761,7 +761,7 @@ export default function StampGeneratorPage() {
                   <p className="text-[10px] text-[hsl(var(--muted-foreground))]">Upload your company logo or set monogram initials for the center of the stamp.</p>
                   <div className="space-y-1.5">
                     {([
-                      { val: 'UPLOADED_LOGO' as const, label: '📷 Upload Logo' },
+                      { val: 'UPLOADED_LOGO' as const, label: 'Upload Logo' },
                       { val: 'MONOGRAM' as const, label: '✦ Gold Monogram' },
                       { val: 'NONE' as const, label: '⊘ No Center Art' },
                     ]).map(opt => (

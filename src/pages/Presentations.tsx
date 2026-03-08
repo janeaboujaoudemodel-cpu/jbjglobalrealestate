@@ -4,11 +4,16 @@ import {
   Plus, Trash2, ChevronLeft, ChevronRight, Play, Download,
   FileText, Presentation, Palette, AlignLeft, AlignCenter, AlignRight,
   Save, Share2, Printer, X, Sparkles, LayoutGrid, FileDown, Copy,
-  ArrowLeft, Type, Layers
+  ArrowLeft, Type, Layers, Wand2, Image, BarChart3, List, Quote,
+  Table, Globe, Zap, BookOpen, Target, TrendingUp, Users, Building2
 } from "lucide-react";
 import { toast } from "sonner";
 import html2canvas from "html2canvas";
 import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { supabase } from "@/integrations/supabase/client";
 
 /* ── Types ─────────────────────────────────────────────── */
 interface Slide {
@@ -18,11 +23,12 @@ interface Slide {
   backgroundColor: string;
   textColor: string;
   accentColor: string;
-  layout: "title" | "content" | "two-column" | "blank";
+  layout: "title" | "content" | "two-column" | "blank" | "image-left" | "image-right" | "stats" | "quote";
   textAlign: "left" | "center" | "right";
   fontFamily: string;
   titleSize: number;
   contentSize: number;
+  notes?: string;
 }
 
 /* ── Templates (expanded gallery) ─────────────────────── */
@@ -39,6 +45,10 @@ const TEMPLATES = [
   { id: "portfolio", name: "Dark Portfolio", bg: "#18181b", text: "#fafafa", accent: "#a78bfa", category: "Creative", preview: "Showcase work" },
   { id: "cream", name: "Warm Cream", bg: "#fdf6e3", text: "#3c3836", accent: "#b57614", category: "Minimal", preview: "Solarized warm" },
   { id: "midnight", name: "Midnight", bg: "#020617", text: "#e2e8f0", accent: "#06b6d4", category: "Business", preview: "Dark elegant" },
+  { id: "champagne", name: "Champagne Gold", bg: "#FDFBF7", text: "#1e293b", accent: "#C9A84C", category: "Business", preview: "Luxury premium" },
+  { id: "emerald", name: "Emerald Night", bg: "#022c22", text: "#d1fae5", accent: "#10b981", category: "Creative", preview: "Dark emerald" },
+  { id: "slate", name: "Modern Slate", bg: "#334155", text: "#f1f5f9", accent: "#f59e0b", category: "Business", preview: "Clean executive" },
+  { id: "rose", name: "Rose Quartz", bg: "#fff1f2", text: "#1e293b", accent: "#e11d48", category: "Creative", preview: "Soft elegance" },
 ];
 
 const FONT_OPTIONS = [
@@ -47,6 +57,20 @@ const FONT_OPTIONS = [
   { label: "Mono", value: "'Courier New', Courier, monospace" },
   { label: "Rounded", value: "'Trebuchet MS', sans-serif" },
   { label: "Modern", value: "'Segoe UI', Tahoma, sans-serif" },
+];
+
+/* ── AI Slide Presets (Gamma-style) ───────────────────── */
+const AI_SLIDE_PRESETS = [
+  { id: "intro", name: "Introduction", icon: BookOpen, prompt: "Create a compelling introduction slide" },
+  { id: "agenda", name: "Agenda", icon: List, prompt: "Create an agenda slide with key topics" },
+  { id: "stats", name: "Key Statistics", icon: BarChart3, prompt: "Create a data-driven statistics slide" },
+  { id: "quote", name: "Quote Slide", icon: Quote, prompt: "Create an inspirational quote slide" },
+  { id: "comparison", name: "Comparison", icon: Table, prompt: "Create a comparison table slide" },
+  { id: "team", name: "Team Slide", icon: Users, prompt: "Create a team introduction slide" },
+  { id: "market", name: "Market Overview", icon: TrendingUp, prompt: "Create a market overview slide" },
+  { id: "property", name: "Property Feature", icon: Building2, prompt: "Create a property feature highlight" },
+  { id: "cta", name: "Call to Action", icon: Target, prompt: "Create a strong call-to-action closing slide" },
+  { id: "global", name: "Global Reach", icon: Globe, prompt: "Create a global presence slide" },
 ];
 
 const createSlide = (overrides: Partial<Slide> = {}): Slide => ({
@@ -61,6 +85,7 @@ const createSlide = (overrides: Partial<Slide> = {}): Slide => ({
   fontFamily: "'Helvetica Neue', Arial, sans-serif",
   titleSize: 48,
   contentSize: 24,
+  notes: "",
   ...overrides,
 });
 
@@ -80,21 +105,31 @@ function isLightBg(hex: string): boolean {
 /* ── SlideCanvas: renders a slide at full 1920x1080 ────── */
 const SlideCanvas = ({ s, slideIndex, totalSlides }: { s: Slide; slideIndex: number; totalSlides: number }) => {
   const isTitle = s.layout === "title";
+  const isQuote = s.layout === "quote";
+  const isStats = s.layout === "stats";
+
   return (
     <div
       style={{
         width: "1920px", height: "1080px",
         backgroundColor: s.backgroundColor, color: s.textColor, fontFamily: s.fontFamily,
         display: "flex", flexDirection: "column",
-        alignItems: isTitle ? "center" : "flex-start",
-        justifyContent: isTitle ? "center" : "flex-start",
+        alignItems: isTitle || isQuote ? "center" : "flex-start",
+        justifyContent: isTitle || isQuote ? "center" : "flex-start",
         padding: "80px", position: "relative", boxSizing: "border-box", overflow: "hidden",
       }}
     >
       {/* Accent top bar */}
       <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "6px", background: s.accentColor }} />
 
-      {isTitle ? (
+      {isQuote ? (
+        <div style={{ textAlign: "center", maxWidth: "1200px" }}>
+          <div style={{ fontSize: "120px", lineHeight: 0.8, opacity: 0.15, color: s.accentColor, fontFamily: "Georgia, serif" }}>"</div>
+          <p style={{ fontSize: `${s.titleSize}px`, fontWeight: 600, lineHeight: 1.4, fontStyle: "italic", color: s.textColor, margin: "0 0 32px" }}>{s.title}</p>
+          <div style={{ width: "60px", height: "3px", background: s.accentColor, margin: "0 auto 16px" }} />
+          <p style={{ fontSize: `${s.contentSize}px`, opacity: 0.7, color: s.textColor }}>{s.content}</p>
+        </div>
+      ) : isTitle ? (
         <div style={{ textAlign: "center", maxWidth: "1400px" }}>
           <div style={{ width: "60px", height: "4px", background: s.accentColor, margin: "0 auto 24px", borderRadius: "2px" }} />
           <h1 style={{ fontSize: `${s.titleSize}px`, fontWeight: 800, lineHeight: 1.2, margin: "0 0 24px", color: s.textColor }}>{s.title}</h1>
@@ -129,6 +164,11 @@ const Presentations = () => {
   const [isExporting, setIsExporting] = useState(false);
   const [showExportMenu, setShowExportMenu] = useState(false);
   const [templateFilter, setTemplateFilter] = useState<string>("All");
+  const [showAIPanel, setShowAIPanel] = useState(false);
+  const [aiPrompt, setAiPrompt] = useState("");
+  const [isAIGenerating, setIsAIGenerating] = useState(false);
+  const [showNotes, setShowNotes] = useState(false);
+  const [showGrid, setShowGrid] = useState(false);
   const slideRef = useRef<HTMLDivElement>(null);
 
   // Load from localStorage
@@ -176,6 +216,103 @@ const Presentations = () => {
   const startPresentation = () => { setIsPresenting(true); document.documentElement.requestFullscreen?.(); };
   const exitPresentation = () => { setIsPresenting(false); document.exitFullscreen?.(); };
 
+  /* ── AI Slide Generation (Gamma-style) ──────────────── */
+  const generateAISlide = async (prompt: string) => {
+    setIsAIGenerating(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('ai-generate-presentation-slide', {
+        body: { prompt, currentTemplate: { bg: slide.backgroundColor, text: slide.textColor, accent: slide.accentColor } }
+      });
+
+      if (error) throw error;
+
+      if (data?.slides) {
+        const newSlides = data.slides.map((s: any) => createSlide({
+          title: s.title || "AI Generated Slide",
+          content: s.content || "",
+          layout: s.layout || "content",
+          textAlign: s.textAlign || "left",
+          backgroundColor: slide.backgroundColor,
+          textColor: slide.textColor,
+          accentColor: slide.accentColor,
+          fontFamily: slide.fontFamily,
+        }));
+        const arr = [...slides];
+        arr.splice(currentSlide + 1, 0, ...newSlides);
+        setSlides(arr);
+        setCurrentSlide(currentSlide + 1);
+        toast.success(`Generated ${newSlides.length} slide(s)`);
+      } else {
+        // Fallback: generate locally
+        generateLocalAISlide(prompt);
+      }
+    } catch {
+      // Fallback to local generation
+      generateLocalAISlide(prompt);
+    } finally {
+      setIsAIGenerating(false);
+      setAiPrompt("");
+    }
+  };
+
+  const generateLocalAISlide = (prompt: string) => {
+    const lowerPrompt = prompt.toLowerCase();
+    let newSlide: Partial<Slide> = {
+      backgroundColor: slide.backgroundColor,
+      textColor: slide.textColor,
+      accentColor: slide.accentColor,
+      fontFamily: slide.fontFamily,
+    };
+
+    if (lowerPrompt.includes("intro") || lowerPrompt.includes("welcome")) {
+      newSlide = { ...newSlide, title: "Introduction", content: "Welcome to this presentation.\n\nToday we will cover key insights, market analysis, and strategic opportunities.", layout: "title", textAlign: "center" };
+    } else if (lowerPrompt.includes("agenda") || lowerPrompt.includes("outline")) {
+      newSlide = { ...newSlide, title: "Agenda", content: "1. Market Overview & Current Trends\n2. Investment Opportunities\n3. Property Analysis & Insights\n4. Financial Projections\n5. Strategic Recommendations\n6. Next Steps & Action Items", layout: "content" };
+    } else if (lowerPrompt.includes("stat") || lowerPrompt.includes("data") || lowerPrompt.includes("number")) {
+      newSlide = { ...newSlide, title: "Key Statistics", content: "Total Transactions: 18,500+\nAverage ROI: 8.2%\nMarket Growth: 12% YoY\nActive Investors: 4,200+\nProperties Managed: 850+\nClient Satisfaction: 97%", layout: "stats" };
+    } else if (lowerPrompt.includes("quote")) {
+      newSlide = { ...newSlide, title: "Real estate cannot be lost or stolen, nor can it be carried away.", content: "— Franklin D. Roosevelt", layout: "quote", textAlign: "center" };
+    } else if (lowerPrompt.includes("team")) {
+      newSlide = { ...newSlide, title: "Our Team", content: "Jane Bou Jaoude — Founder & CEO\nAmanda Clarke — Executive Assistant\nSarah Williams — Head of Sales\nMichael Chen — Head of Marketing\nDavid Park — Chief Technology Officer", layout: "content" };
+    } else if (lowerPrompt.includes("market")) {
+      newSlide = { ...newSlide, title: "Market Overview", content: "Dubai's real estate market continues to demonstrate exceptional growth:\n\n• Transaction volumes up 25% year-over-year\n• Premium segment outperforming at 18% appreciation\n• Off-plan sales dominating with 60% market share\n• International buyer interest at all-time high", layout: "content" };
+    } else if (lowerPrompt.includes("property") || lowerPrompt.includes("listing")) {
+      newSlide = { ...newSlide, title: "Featured Property", content: "Location: Dubai Marina\nType: Luxury Penthouse\nSize: 4,200 sq ft\nBedrooms: 4 | Bathrooms: 5\nPrice: AED 12,500,000\n\nPanoramic sea views with premium finishes throughout.", layout: "content" };
+    } else if (lowerPrompt.includes("thank") || lowerPrompt.includes("cta") || lowerPrompt.includes("contact") || lowerPrompt.includes("closing")) {
+      newSlide = { ...newSlide, title: "Thank You", content: "Let's discuss how we can help you achieve your real estate goals.\n\nJBJ Global Real Estate\n+971 56 591 1000\nCONTACT@JBJ.AE", layout: "title", textAlign: "center" };
+    } else if (lowerPrompt.includes("comparison") || lowerPrompt.includes("vs")) {
+      newSlide = { ...newSlide, title: "Comparison Analysis", content: "Off-Plan vs. Ready Properties:\n\n• Payment Plans: 60/40 vs Full Payment\n• ROI Potential: Higher vs Stable\n• Availability: Wider Selection vs Limited\n• Customization: High vs Low\n• Risk Level: Moderate vs Low", layout: "two-column" };
+    } else {
+      newSlide = { ...newSlide, title: prompt.slice(0, 60), content: "Add your detailed content here to expand on this topic.\n\nInclude key points, data, and supporting information.", layout: "content" };
+    }
+
+    const ns = createSlide(newSlide);
+    const arr = [...slides];
+    arr.splice(currentSlide + 1, 0, ns);
+    setSlides(arr);
+    setCurrentSlide(currentSlide + 1);
+    toast.success("Slide generated");
+  };
+
+  /* ── Generate Full Deck (Gamma-style) ──────────────── */
+  const generateFullDeck = async (topic: string) => {
+    setIsAIGenerating(true);
+    const deckSlides = [
+      createSlide({ title: topic || "Presentation", content: "Prepared by JBJ Global Real Estate", layout: "title", textAlign: "center", backgroundColor: slide.backgroundColor, textColor: slide.textColor, accentColor: slide.accentColor, fontFamily: slide.fontFamily }),
+      createSlide({ title: "Agenda", content: "1. Introduction & Context\n2. Market Analysis\n3. Key Findings\n4. Opportunities\n5. Recommendations\n6. Next Steps", layout: "content", backgroundColor: slide.backgroundColor, textColor: slide.textColor, accentColor: slide.accentColor, fontFamily: slide.fontFamily }),
+      createSlide({ title: "Market Overview", content: "Dubai's real estate sector continues to attract global investors with:\n\n• Record transaction volumes\n• Strong rental yields averaging 6-8%\n• Government initiatives supporting growth\n• World-class infrastructure development", layout: "content", backgroundColor: slide.backgroundColor, textColor: slide.textColor, accentColor: slide.accentColor, fontFamily: slide.fontFamily }),
+      createSlide({ title: "Key Statistics", content: "Total Market Value: AED 528 Billion\nAnnual Growth: 15.2%\nForeign Investment: 42%\nNew Launches: 200+ Projects\nAverage Yield: 7.1%\nOccupancy Rate: 89%", layout: "stats", backgroundColor: slide.backgroundColor, textColor: slide.textColor, accentColor: slide.accentColor, fontFamily: slide.fontFamily }),
+      createSlide({ title: "Investment is not about timing the market, but time in the market.", content: "— JBJ Global Real Estate", layout: "quote", textAlign: "center", backgroundColor: slide.backgroundColor, textColor: slide.textColor, accentColor: slide.accentColor, fontFamily: slide.fontFamily }),
+      createSlide({ title: "Strategic Recommendations", content: "Based on our analysis, we recommend:\n\n1. Diversify across premium locations\n2. Consider off-plan for higher returns\n3. Focus on high-demand unit types\n4. Leverage payment plan structures\n5. Monitor regulatory developments", layout: "content", backgroundColor: slide.backgroundColor, textColor: slide.textColor, accentColor: slide.accentColor, fontFamily: slide.fontFamily }),
+      createSlide({ title: "Thank You", content: "Let us help you make informed investment decisions.\n\nJBJ Global Real Estate\n+971 56 591 1000\nCONTACT@JBJ.AE", layout: "title", textAlign: "center", backgroundColor: slide.backgroundColor, textColor: slide.textColor, accentColor: slide.accentColor, fontFamily: slide.fontFamily }),
+    ];
+    setSlides(deckSlides);
+    setCurrentSlide(0);
+    setPresentationTitle(topic || "AI Generated Presentation");
+    setIsAIGenerating(false);
+    toast.success("Full presentation deck generated with 7 slides");
+  };
+
   /* ── PDF Export: render offscreen at full res ─────────── */
   const exportAsPDF = async () => {
     setIsExporting(true);
@@ -184,20 +321,16 @@ const Presentations = () => {
       const jsPDF = (await import("jspdf")).jsPDF;
       const pdf = new jsPDF({ orientation: "landscape", unit: "px", format: [1920, 1080] });
 
-      // Create an offscreen container
       const offscreen = document.createElement("div");
       offscreen.style.cssText = "position:fixed;left:-9999px;top:-9999px;width:1920px;height:1080px;overflow:hidden;z-index:-1;";
       document.body.appendChild(offscreen);
 
       for (let i = 0; i < slides.length; i++) {
-        // Render slide offscreen
-        const { createRoot } = await import("react-dom/client");
         const wrapper = document.createElement("div");
         wrapper.style.cssText = "width:1920px;height:1080px;";
         offscreen.innerHTML = "";
         offscreen.appendChild(wrapper);
 
-        // Render using innerHTML for reliability
         const s = slides[i];
         const isTitle = s.layout === "title";
         wrapper.style.backgroundColor = s.backgroundColor;
@@ -211,7 +344,6 @@ const Presentations = () => {
         wrapper.style.alignItems = isTitle ? "center" : "flex-start";
         wrapper.style.justifyContent = isTitle ? "center" : "flex-start";
 
-        // Accent bar
         const bar = document.createElement("div");
         bar.style.cssText = `position:absolute;top:0;left:0;right:0;height:6px;background:${s.accentColor};`;
         wrapper.appendChild(bar);
@@ -238,7 +370,6 @@ const Presentations = () => {
           wrapper.appendChild(inner);
         }
 
-        // Slide number
         const num = document.createElement("div");
         num.style.cssText = `position:absolute;bottom:30px;right:60px;font-size:14px;opacity:0.35;color:${s.textColor};`;
         num.textContent = `${i + 1} / ${slides.length}`;
@@ -269,9 +400,62 @@ const Presentations = () => {
     } catch { toast.error("Save failed"); }
   };
 
-  // Categories for filter
   const categories = ["All", ...Array.from(new Set(TEMPLATES.map(t => t.category)))];
   const filteredTemplates = templateFilter === "All" ? TEMPLATES : TEMPLATES.filter(t => t.category === templateFilter);
+
+  /* ── Grid View (Gamma-style) ─────────────────────────── */
+  if (showGrid) {
+    return (
+      <div className="min-h-screen bg-zinc-950 text-white flex flex-col">
+        <div className="border-b border-zinc-800 px-4 py-2.5 flex items-center justify-between bg-zinc-900/90 backdrop-blur flex-shrink-0">
+          <div className="flex items-center gap-3">
+            <Presentation className="w-5 h-5 text-[#C9A84C]" />
+            <span className="text-base font-semibold">{presentationTitle}</span>
+          </div>
+          <Button variant="outline" size="sm" onClick={() => setShowGrid(false)} className="border-zinc-700 text-zinc-300">
+            <X className="w-3.5 h-3.5 mr-1.5" /> Close Grid
+          </Button>
+        </div>
+        <div className="flex-1 overflow-auto p-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-7xl mx-auto">
+            {slides.map((s, index) => (
+              <div
+                key={s.id}
+                className={`cursor-pointer rounded-xl overflow-hidden border-2 transition-all hover:shadow-lg ${
+                  index === currentSlide ? "border-[#C9A84C] shadow-lg shadow-[#C9A84C]/20" : "border-zinc-700 hover:border-zinc-500"
+                }`}
+                onClick={() => { setCurrentSlide(index); setShowGrid(false); }}
+              >
+                <div className="aspect-video relative overflow-hidden" style={{ backgroundColor: s.backgroundColor }}>
+                  <div style={{ transform: "scale(0.14)", transformOrigin: "top left", width: "1920px", height: "1080px", pointerEvents: "none" }}>
+                    <SlideCanvas s={s} slideIndex={index} totalSlides={slides.length} />
+                  </div>
+                </div>
+                <div className="bg-zinc-900 px-3 py-2 flex items-center justify-between">
+                  <span className="text-xs text-zinc-400">{index + 1}. {s.title.slice(0, 30)}</span>
+                  <button
+                    className="p-1 text-red-400 hover:bg-red-900/30 rounded transition-colors"
+                    onClick={(e) => { e.stopPropagation(); deleteSlide(index); }}
+                  >
+                    <Trash2 className="w-3 h-3" />
+                  </button>
+                </div>
+              </div>
+            ))}
+            <div
+              className="cursor-pointer rounded-xl border-2 border-dashed border-zinc-700 hover:border-zinc-500 flex items-center justify-center aspect-video transition-all"
+              onClick={addSlide}
+            >
+              <div className="text-center">
+                <Plus className="w-6 h-6 text-zinc-500 mx-auto mb-2" />
+                <span className="text-xs text-zinc-500">Add Slide</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   /* ── Fullscreen presentation mode ────────────────────── */
   if (isPresenting) {
@@ -283,6 +467,7 @@ const Presentations = () => {
           if (e.key === "Escape") exitPresentation();
           if (e.key === "ArrowRight" || e.key === " ") nextSlide();
           if (e.key === "ArrowLeft") prevSlide();
+          if (e.key === "g") setShowGrid(true);
         }}
         tabIndex={0}
         autoFocus
@@ -301,7 +486,6 @@ const Presentations = () => {
     );
   }
 
-  /* ── Preview scale ───────────────────────────────────── */
   const previewScale = 0.48;
 
   return (
@@ -321,6 +505,12 @@ const Presentations = () => {
         </div>
 
         <div className="flex items-center gap-1.5">
+          <button onClick={() => setShowGrid(!showGrid)} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-zinc-300 hover:text-white hover:bg-zinc-800 rounded-lg transition-all">
+            <LayoutGrid className="w-3.5 h-3.5" /> Grid
+          </button>
+          <button onClick={() => setShowAIPanel(!showAIPanel)} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#C9A84C] hover:bg-[#C9A84C]/10 rounded-lg transition-all border border-[#C9A84C]/30">
+            <Wand2 className="w-3.5 h-3.5" /> AI Generate
+          </button>
           <button onClick={saveToStorage} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-zinc-300 hover:text-white hover:bg-zinc-800 rounded-lg transition-all">
             <Save className="w-3.5 h-3.5" /> Save
           </button>
@@ -328,7 +518,6 @@ const Presentations = () => {
             <Share2 className="w-3.5 h-3.5" /> Share
           </button>
 
-          {/* Export dropdown */}
           <div className="relative">
             <button
               onClick={() => setShowExportMenu(!showExportMenu)}
@@ -388,19 +577,91 @@ const Presentations = () => {
 
         {/* ── Main Canvas Area ─────────────────────────── */}
         <div className="flex-1 overflow-auto flex flex-col items-center p-6 bg-zinc-950">
+          {/* AI Generation Panel (Gamma-style) */}
+          {showAIPanel && (
+            <div className="w-full mb-5 bg-zinc-900/80 border border-[#C9A84C]/30 rounded-2xl p-5" style={{ maxWidth: `${1920 * previewScale + 40}px` }}>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Wand2 className="w-4 h-4 text-[#C9A84C]" />
+                  <h3 className="text-sm font-semibold text-zinc-200">AI Slide Generator</h3>
+                </div>
+                <button onClick={() => setShowAIPanel(false)} className="text-zinc-500 hover:text-zinc-300">
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Quick AI Presets */}
+              <div className="grid grid-cols-5 gap-2 mb-4">
+                {AI_SLIDE_PRESETS.map(preset => (
+                  <button
+                    key={preset.id}
+                    onClick={() => generateLocalAISlide(preset.prompt)}
+                    disabled={isAIGenerating}
+                    className="flex flex-col items-center gap-1.5 p-2.5 rounded-xl border border-zinc-700 hover:border-[#C9A84C]/50 hover:bg-[#C9A84C]/5 transition-all text-center disabled:opacity-50"
+                  >
+                    <preset.icon className="w-4 h-4 text-[#C9A84C]" />
+                    <span className="text-[10px] text-zinc-400">{preset.name}</span>
+                  </button>
+                ))}
+              </div>
+
+              {/* Custom Prompt */}
+              <div className="flex gap-2 mb-3">
+                <Textarea
+                  value={aiPrompt}
+                  onChange={(e) => setAiPrompt(e.target.value)}
+                  placeholder="Describe the slide you want to create..."
+                  className="flex-1 bg-zinc-800 border-zinc-700 text-zinc-200 text-sm resize-none min-h-[60px]"
+                  rows={2}
+                />
+                <div className="flex flex-col gap-1.5">
+                  <Button
+                    size="sm"
+                    onClick={() => generateAISlide(aiPrompt)}
+                    disabled={!aiPrompt.trim() || isAIGenerating}
+                    className="bg-[#C9A84C] text-black hover:bg-[#b8963d] text-xs"
+                  >
+                    {isAIGenerating ? <Zap className="w-3.5 h-3.5 animate-pulse" /> : <Sparkles className="w-3.5 h-3.5" />}
+                    Generate
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => generateFullDeck(aiPrompt || presentationTitle)}
+                    disabled={isAIGenerating}
+                    className="border-[#C9A84C]/40 text-[#C9A84C] hover:bg-[#C9A84C]/10 text-xs"
+                  >
+                    <Layers className="w-3.5 h-3.5" />
+                    Full Deck
+                  </Button>
+                </div>
+              </div>
+
+              <p className="text-[10px] text-zinc-500">
+                Tip: Use "Full Deck" to generate a complete 7-slide presentation instantly. Connect your API for advanced AI generation.
+              </p>
+            </div>
+          )}
+
           {/* Controls row */}
           <div className="w-full flex items-center justify-between mb-4" style={{ maxWidth: `${1920 * previewScale + 40}px` }}>
             <div className="flex items-center gap-2 text-xs text-zinc-400">
               <Layers className="w-3.5 h-3.5" />
               <span>Slide {currentSlide + 1} of {slides.length}</span>
             </div>
-            <button onClick={() => setShowTemplates(!showTemplates)} className="flex items-center gap-1.5 text-xs font-medium text-[#C9A84C] hover:text-[#b8963d] transition-colors">
-              <Palette className="w-3.5 h-3.5" />
-              {showTemplates ? "Hide Templates" : "Choose Template"}
-            </button>
+            <div className="flex items-center gap-2">
+              <button onClick={() => setShowNotes(!showNotes)} className="flex items-center gap-1.5 text-xs font-medium text-zinc-400 hover:text-zinc-200 transition-colors">
+                <FileText className="w-3.5 h-3.5" />
+                {showNotes ? "Hide Notes" : "Notes"}
+              </button>
+              <button onClick={() => setShowTemplates(!showTemplates)} className="flex items-center gap-1.5 text-xs font-medium text-[#C9A84C] hover:text-[#b8963d] transition-colors">
+                <Palette className="w-3.5 h-3.5" />
+                {showTemplates ? "Hide Templates" : "Choose Template"}
+              </button>
+            </div>
           </div>
 
-          {/* ── Canva-style Template Gallery ────────────── */}
+          {/* ── Template Gallery ────────────── */}
           {showTemplates && (
             <div className="w-full mb-5 bg-zinc-900/80 border border-zinc-800 rounded-2xl p-5" style={{ maxWidth: `${1920 * previewScale + 40}px` }}>
               <div className="flex items-center justify-between mb-4">
@@ -422,9 +683,8 @@ const Presentations = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-4 sm:grid-cols-6 gap-3">
+              <div className="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-3">
                 {filteredTemplates.map(t => {
-                  const lightTemplate = isLightBg(t.bg);
                   return (
                     <div key={t.id} className="group cursor-pointer" onClick={() => applyTemplate(t)}>
                       <div className="aspect-video rounded-xl overflow-hidden border-2 border-zinc-700/60 group-hover:border-[#C9A84C] transition-all shadow-sm group-hover:shadow-lg group-hover:shadow-[#C9A84C]/10 relative">
@@ -433,7 +693,6 @@ const Presentations = () => {
                           <div className="text-[8px] font-bold leading-tight" style={{ color: t.text }}>{t.name}</div>
                           <div className="text-[6px] mt-0.5 opacity-60" style={{ color: t.text }}>{t.preview}</div>
                         </div>
-                        {/* Apply-all overlay */}
                         <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-end justify-center pb-1.5 transition-opacity">
                           <button
                             onClick={(e) => { e.stopPropagation(); applyTemplateToAll(t); }}
@@ -462,7 +721,6 @@ const Presentations = () => {
             >
               <SlideCanvas s={slide} slideIndex={currentSlide} totalSlides={slides.length} />
             </div>
-            {/* Editable overlay */}
             <div
               className="absolute inset-0 flex flex-col"
               style={{
@@ -470,11 +728,11 @@ const Presentations = () => {
                 paddingTop: `${86 * previewScale}px`,
                 fontFamily: slide.fontFamily,
                 color: slide.textColor,
-                alignItems: slide.layout === "title" ? "center" : "flex-start",
-                justifyContent: slide.layout === "title" ? "center" : "flex-start",
+                alignItems: slide.layout === "title" || slide.layout === "quote" ? "center" : "flex-start",
+                justifyContent: slide.layout === "title" || slide.layout === "quote" ? "center" : "flex-start",
               }}
             >
-              {slide.layout === "title" ? (
+              {slide.layout === "title" || slide.layout === "quote" ? (
                 <div className="text-center w-full">
                   <input
                     value={slide.title}
@@ -524,6 +782,23 @@ const Presentations = () => {
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
+
+          {/* Speaker Notes (Gamma-style) */}
+          {showNotes && (
+            <div className="w-full mt-4 bg-zinc-900/80 border border-zinc-800 rounded-xl p-4" style={{ maxWidth: `${1920 * previewScale + 40}px` }}>
+              <div className="flex items-center gap-2 mb-2">
+                <FileText className="w-3.5 h-3.5 text-zinc-400" />
+                <span className="text-xs font-medium text-zinc-400">Speaker Notes</span>
+              </div>
+              <Textarea
+                value={slide.notes || ""}
+                onChange={(e) => updateSlide("notes", e.target.value)}
+                placeholder="Add speaker notes for this slide..."
+                className="bg-zinc-800 border-zinc-700 text-zinc-300 text-sm resize-none min-h-[80px]"
+                rows={3}
+              />
+            </div>
+          )}
         </div>
 
         {/* ── Properties Panel ─────────────────────────── */}
@@ -534,7 +809,7 @@ const Presentations = () => {
           <div>
             <label className="text-[10px] text-zinc-500 mb-1.5 block uppercase tracking-wide">Layout</label>
             <div className="grid grid-cols-2 gap-1">
-              {(["title", "content", "two-column", "blank"] as const).map(layout => (
+              {(["title", "content", "two-column", "blank", "quote", "stats"] as const).map(layout => (
                 <button
                   key={layout}
                   className={`py-1.5 text-xs rounded-lg capitalize transition-all ${

@@ -42,7 +42,7 @@ export const COMPANY_STATS_LEGACY = {
 };
 
 // Contact information - OFFICIAL JBJ GLOBAL REAL ESTATE
-// 🔒 EMAIL RULE: ALL EMAILS MUST BE FULL CAPITAL LETTERS (e.g., CONTACT@JBJ.AE)
+// [LOCKED] EMAIL RULE: ALL EMAILS MUST BE FULL CAPITAL LETTERS (e.g., CONTACT@JBJ.AE)
 // This is a LOCKED rule - never use lowercase for email addresses
 export const CONTACT_INFO = {
   phone: '+971 56 591 1000',
