@@ -192,7 +192,7 @@ const ListingAdmin = () => {
 
   if (stillLoading && !cachedOwner) {
     return (
-      <div className="min-h-screen bg-black flex flex-col items-center justify-center pt-28 gap-6">
+      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex flex-col items-center justify-center pt-28 gap-6">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="w-10 h-10 animate-spin text-gold" />
           <p className="text-zinc-400 text-sm">Verifying access permissions...</p>
@@ -208,7 +208,7 @@ const ListingAdmin = () => {
 
   if (!effectiveAccess) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center pt-28">
+      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex items-center justify-center pt-28">
         <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 max-w-md mx-4">
           <CardContent className="p-8 text-center">
             <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -618,9 +618,9 @@ const ListingAdmin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black pt-20 lg:pt-24">
-      {/* Premium Dashboard Shell */}
-      <div className="mx-3 md:mx-4 lg:mx-6 my-6 rounded-2xl border border-border bg-[linear-gradient(135deg,hsl(var(--champagne-1)),hsl(var(--champagne-2)),hsl(var(--champagne-3)))]">
+    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] pt-0">
+      {/* Premium Dashboard Shell — full bleed, no black gaps */}
+      <div className="border-b border-[#C9A84C]/20 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
       {/* Header - Clean neutral style */}
       <header className="border-b border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-20 lg:top-24 z-40 rounded-t-2xl">
         <div className="max-w-[1200px] mx-auto px-4 py-4">
