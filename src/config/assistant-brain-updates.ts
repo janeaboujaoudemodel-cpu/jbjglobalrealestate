@@ -15,7 +15,7 @@ export const AMANDA_CLARKE = {
   name: 'Amanda Clarke',
   role: "Executive Assistant to CEO (Founder's Admin)",
   department: 'Executive',
-  reportsTo: 'jane-abou-jaoude',
+  reportsTo: 'jane-bou-jaoude',
   responsibilities: [
     'Manage Founder schedule and communications',
     'Collect and consolidate all department reports',

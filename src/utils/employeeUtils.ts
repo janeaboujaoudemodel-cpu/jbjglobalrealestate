@@ -131,7 +131,7 @@ export function isAIPersona(member: TeamMember): boolean {
  * Get employee type label
  */
 export function getEmployeeTypeLabel(member: TeamMember): string {
-  if (member.id === 'jane-abou-jaoude') return 'Founder & CEO';
+  if (member.id === 'jane-bou-jaoude') return 'Founder & CEO';
   if (member.isAI === false) return 'Employee';
   return 'Team Member';
 }
