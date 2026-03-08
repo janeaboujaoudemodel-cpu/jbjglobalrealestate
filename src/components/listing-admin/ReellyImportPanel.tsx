@@ -1086,7 +1086,7 @@ export function ReellyImportPanel() {
                     <span className="text-orange-600">Provident: {enrichTestResult.sources.provident.slug_used}</span>
                   )}
                   {enrichTestResult.sources?.firecrawl?.available && (
-                    <Badge variant="outline" className="border-purple-300 text-purple-700 text-[10px]">🔥 Source: Firecrawl</Badge>
+                    <Badge variant="outline" className="border-purple-300 text-purple-700 text-[10px]">Source: Firecrawl</Badge>
                   )}
                 </div>
 

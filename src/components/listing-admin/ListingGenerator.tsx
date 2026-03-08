@@ -799,7 +799,7 @@ const ListingGenerator = () => {
               placeholder="Paste a listing URL to scrape project data from"
             />
             <p className="text-xs text-muted-foreground">
-              💡 This URL is used only for data extraction — it will NOT be saved as the project website
+              Note: This URL is used only for data extraction — it will NOT be saved as the project website
             </p>
           </div>
 
@@ -1224,7 +1224,7 @@ function ProjectPreview({ extracted, onSave, isSaving }: { extracted: ExtractedD
       {/* Video URL */}
       {extracted.videoUrl && (
         <Card>
-          <CardHeader><CardTitle className="text-sm flex items-center gap-2">🎬 Video</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-sm flex items-center gap-2">Video</CardTitle></CardHeader>
           <CardContent>
             <a href={extracted.videoUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-gold hover:underline break-all">
               {extracted.videoUrl}

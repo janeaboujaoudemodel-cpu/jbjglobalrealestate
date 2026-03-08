@@ -139,7 +139,7 @@ export function MeetingAIAssistant({
     return {
       id: Date.now().toString(),
       role: 'assistant',
-      content: `💰 **Mortgage Calculation**
+      content: `**Mortgage Calculation**
 
 Based on a property price of **AED ${propertyPrice.toLocaleString()}**:
 
@@ -167,7 +167,7 @@ This is an estimate. Actual rates may vary based on the bank and client's credit
     return {
       id: Date.now().toString(),
       role: 'assistant',
-      content: `🏠 **Property Recommendations**
+      content: `**Property Recommendations**
 
 Based on budget of **AED ${budgetNum.toLocaleString()}**:
 

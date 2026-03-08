@@ -498,7 +498,7 @@ const ProjectFilters = ({
                   </FilterSection>
 
                   {/* Price Range */}
-                  <FilterSection title="Price Range" icon={<span className="text-lg">💰</span>}>
+                  <FilterSection title="Price Range" icon={<DollarSign className="w-4 h-4" />}>
                     <div className="px-2 pt-2">
                       <div className="grid grid-cols-2 gap-4 mb-4">
                         <div>
