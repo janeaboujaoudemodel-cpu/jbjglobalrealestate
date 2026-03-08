@@ -479,6 +479,60 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_recommendations: {
+        Row: {
+          after_preview: string | null
+          applied_at: string | null
+          before_preview: string | null
+          created_at: string | null
+          description: string
+          id: string
+          impact_level: string | null
+          metadata: Json | null
+          reverted_at: string | null
+          side_effects: string | null
+          source: string
+          status: string | null
+          title: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          after_preview?: string | null
+          applied_at?: string | null
+          before_preview?: string | null
+          created_at?: string | null
+          description: string
+          id?: string
+          impact_level?: string | null
+          metadata?: Json | null
+          reverted_at?: string | null
+          side_effects?: string | null
+          source: string
+          status?: string | null
+          title: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          after_preview?: string | null
+          applied_at?: string | null
+          before_preview?: string | null
+          created_at?: string | null
+          description?: string
+          id?: string
+          impact_level?: string | null
+          metadata?: Json | null
+          reverted_at?: string | null
+          side_effects?: string | null
+          source?: string
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       ai_tool_projects: {
         Row: {
           created_at: string
@@ -8866,6 +8920,48 @@ export type Database = {
           rate_key?: string
           request_count?: number
           window_start?: string
+        }
+        Relationships: []
+      }
+      gmail_tokens: {
+        Row: {
+          access_token: string
+          created_at: string | null
+          email_address: string
+          id: string
+          is_active: boolean | null
+          last_sync_at: string | null
+          refresh_token: string
+          scopes: string[] | null
+          token_expires_at: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          access_token: string
+          created_at?: string | null
+          email_address: string
+          id?: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          refresh_token: string
+          scopes?: string[] | null
+          token_expires_at: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          access_token?: string
+          created_at?: string | null
+          email_address?: string
+          id?: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          refresh_token?: string
+          scopes?: string[] | null
+          token_expires_at?: string
+          updated_at?: string | null
+          user_id?: string
         }
         Relationships: []
       }
