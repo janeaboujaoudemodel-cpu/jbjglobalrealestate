@@ -594,7 +594,7 @@ const AIMeetingSummarizerPremium = () => {
               <span className="font-semibold text-black text-lg">Meeting Details</span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-1.5">
                 <Label className="text-zinc-700 text-sm flex items-center gap-1.5">
                   <Calendar className="h-3.5 w-3.5 text-gold" />
@@ -606,6 +606,24 @@ const AIMeetingSummarizerPremium = () => {
                   onChange={(e) => handleChange("meetingTitle", e.target.value)}
                   className="bg-white border-gold/30 text-black placeholder:text-zinc-400 focus:border-gold focus:ring-gold/20"
                 />
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-zinc-700 text-sm flex items-center gap-1.5">
+                  <Video className="h-3.5 w-3.5 text-gold" />
+                  Session Type
+                </Label>
+                <Select value={sessionType} onValueChange={setSessionType}>
+                  <SelectTrigger className="bg-white border-gold/30 text-black focus:border-gold focus:ring-gold/20">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {SESSION_TYPES.map((st) => (
+                      <SelectItem key={st.value} value={st.value}>
+                        {st.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               <div className="space-y-1.5">
                 <Label className="text-zinc-700 text-sm flex items-center gap-1.5">
