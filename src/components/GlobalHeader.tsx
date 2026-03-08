@@ -122,7 +122,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       const portalStillOpen = document.querySelector('[data-radix-portal]');
       if (portalStillOpen) return;
       setActiveMegaMenu(null);
-    }, 40); // Ultra-fast close for snappy menu switching
+    }, 200); // Stabilized close delay to prevent hover flicker
   };
 
   // Clear any pending close timeout when entering mega menu panels
@@ -1509,7 +1509,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
             >
               {/* Search Icon - triggers mega menu on hover (same as language dropdown) */}
               <button
-                onMouseEnter={() => handleMegaMenuEnter('search')}
+                onPointerEnter={() => handleMegaMenuEnter('search')}
                 onClick={() => handleMegaMenuClick('search')}
                 className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-white/10"
                 aria-label="Search"
@@ -1525,7 +1525,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
               {/* Language Icon - triggers mega menu on hover (desktop only) */}
               <button
-                onMouseEnter={() => handleMegaMenuEnter('language')}
+                onPointerEnter={() => handleMegaMenuEnter('language')}
                 onClick={() => handleMegaMenuClick('language')}
                 className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-white/10"
                 aria-label="Language"
@@ -1553,7 +1553,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
               {/* Account Icon - triggers mega menu on hover (desktop only) */}
               <button
-                onMouseEnter={() => handleMegaMenuEnter('account')}
+                onPointerEnter={() => handleMegaMenuEnter('account')}
                 onClick={() => handleMegaMenuClick('account')}
                 className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-white/10 relative"
                 aria-label={user ? t('nav.myAccount') : t('nav.signIn')}
@@ -1590,10 +1590,10 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   }
                 }}
               />
-              {/* Bridge zone between icons and panel */}
+              {/* Bridge zone between icons and panel — taller to prevent flicker */}
               <div 
-                className="absolute right-0 h-1 z-[9998] pointer-events-auto"
-                style={{ top: '100%' }}
+                className="absolute right-0 h-4 z-[9998] pointer-events-auto"
+                style={{ top: '100%', width: '300px' }}
                 onPointerEnter={handleMegaMenuPanelEnter}
               />
               {/* Panel with real boundaries so pointer leave fires */}
