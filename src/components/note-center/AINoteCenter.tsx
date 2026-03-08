@@ -632,7 +632,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
         </Card>
       )}
 
-      {/* Search and Filter */}
+      {/* Search, Filter, and Recently Deleted Toggle */}
       <div className="flex flex-col md:flex-row gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
@@ -640,11 +640,11 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
             placeholder="Search notes..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 bg-zinc-50 border-[#C9A84C]/20 text-black"
+            className="pl-10 bg-zinc-50 border-gold/20 text-black"
           />
         </div>
         <Select value={selectedProject} onValueChange={setSelectedProject}>
-          <SelectTrigger className="w-full md:w-[200px] bg-zinc-50 border-[#C9A84C]/20 text-black">
+          <SelectTrigger className="w-full md:w-[200px] bg-zinc-50 border-gold/20 text-black">
             <SelectValue placeholder="All Projects" />
           </SelectTrigger>
           <SelectContent>
@@ -659,7 +659,57 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
             ))}
           </SelectContent>
         </Select>
+        <Button
+          variant="outline"
+          size="sm"
+          className={`whitespace-nowrap border-gold/30 ${showArchived ? 'bg-red-50 border-red-200 text-red-700' : ''}`}
+          onClick={() => {
+            setShowArchived(!showArchived);
+            if (!showArchived) fetchArchivedNotes();
+          }}
+        >
+          <Trash2 className="w-4 h-4 mr-2" />
+          Recently Deleted {archivedNotes.length > 0 ? `(${archivedNotes.length})` : ''}
+        </Button>
       </div>
+
+      {/* Recently Deleted Section */}
+      {showArchived && (
+        <Card className="bg-red-50/50 border-2 border-red-200/50">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base flex items-center gap-2 text-red-700">
+              <Trash2 className="h-4 w-4" />
+              Recently Deleted (auto-removed after 30 days)
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {archivedNotes.length === 0 ? (
+              <p className="text-sm text-zinc-500 text-center py-4">No recently deleted notes</p>
+            ) : (
+              <div className="space-y-2">
+                {archivedNotes.map(note => (
+                  <div key={note.id} className="flex items-center justify-between p-3 rounded-lg bg-white border border-red-100">
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-black text-sm truncate">{note.title}</p>
+                      <p className="text-xs text-zinc-500">
+                        Deleted {new Date(note.updated_at).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      <Button size="sm" variant="outline" className="text-xs border-green-300 text-green-700 hover:bg-green-50" onClick={() => restoreNote(note.id)}>
+                        <RefreshCw className="w-3 h-3 mr-1" /> Restore
+                      </Button>
+                      <Button size="sm" variant="outline" className="text-xs border-red-300 text-red-700 hover:bg-red-50" onClick={() => permanentlyDeleteNote(note.id)}>
+                        <X className="w-3 h-3 mr-1" /> Delete Forever
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Notes Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

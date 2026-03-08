@@ -15,24 +15,24 @@ const SummaryCard = ({ item }: SummaryCardProps) => {
       case 'meeting':
         return {
           icon: Video,
-          bgColor: 'bg-violet-500/20',
-          textColor: 'text-violet-400',
-          borderColor: 'border-violet-500/30',
+          bgColor: 'bg-gold/20',
+          textColor: 'text-gold-dark',
+          borderColor: 'border-gold/30',
           label: 'Meeting',
         };
       case 'call':
         return {
           icon: Phone,
-          bgColor: 'bg-orange-500/20',
-          textColor: 'text-orange-400',
-          borderColor: 'border-orange-500/30',
+          bgColor: 'bg-amber-100',
+          textColor: 'text-amber-700',
+          borderColor: 'border-amber-300/50',
           label: 'Call',
         };
       case 'voice-ai':
         return {
           icon: Mic,
           bgColor: 'bg-gold/20',
-          textColor: 'text-gold',
+          textColor: 'text-gold-dark',
           borderColor: 'border-gold/30',
           label: 'Voice AI',
         };
@@ -43,7 +43,7 @@ const SummaryCard = ({ item }: SummaryCardProps) => {
   const Icon = config.icon;
 
   return (
-    <div className={`bg-zinc-900/80 border ${config.borderColor} hover:border-opacity-60 rounded-xl transition-colors`}>
+    <div className={`bg-white/90 border-2 ${config.borderColor} hover:border-opacity-60 rounded-xl transition-colors shadow-sm`}>
       {/* Header - always visible */}
       <div className="p-4 md:p-6">
         <div className="flex items-start justify-between gap-4 mb-3">
@@ -52,11 +52,11 @@ const SummaryCard = ({ item }: SummaryCardProps) => {
               <Icon className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-semibold text-white flex items-center gap-2">
-                <User className="w-4 h-4 text-zinc-400" />
+              <h3 className="font-semibold text-black flex items-center gap-2">
+                <User className="w-4 h-4 text-zinc-500" />
                 {item.clientName}
               </h3>
-              <p className="text-sm text-zinc-400 flex items-center gap-1">
+              <p className="text-sm text-zinc-500 flex items-center gap-1">
                 <Clock className="w-3 h-3" />
                 {new Date(item.date).toLocaleDateString('en-US', { 
                   weekday: 'short', 
@@ -73,11 +73,11 @@ const SummaryCard = ({ item }: SummaryCardProps) => {
           </span>
         </div>
 
-        <p className="text-zinc-200 line-clamp-2">{item.summary}</p>
+        <p className="text-zinc-700 line-clamp-2">{item.summary}</p>
 
         {/* Action Items Preview */}
         {item.actionItems.length > 0 && (
-          <div className="mt-3 flex items-center gap-2 text-sm text-zinc-300">
+          <div className="mt-3 flex items-center gap-2 text-sm text-zinc-600">
             <ArrowRight className="w-3 h-3" />
             <span>{item.actionItems.length} action item{item.actionItems.length !== 1 ? 's' : ''}</span>
           </div>
@@ -87,11 +87,11 @@ const SummaryCard = ({ item }: SummaryCardProps) => {
       {/* Expandable Details */}
       {(item.actionItems.length > 0 || item.rawData) && (
         <>
-          <div className="border-t border-zinc-700">
+          <div className="border-t border-gold/20">
             <Button
               variant="ghost"
               onClick={() => setIsExpanded(!isExpanded)}
-              className="w-full flex items-center justify-center gap-2 py-3 text-sm text-white bg-zinc-800/80 hover:bg-zinc-700 hover:text-white rounded-none font-medium"
+              className="w-full flex items-center justify-center gap-2 py-3 text-sm text-black bg-[#F5EBD7]/50 hover:bg-[#E8DCC8]/60 hover:text-black rounded-none font-medium"
             >
               {isExpanded ? (
                 <>
@@ -108,20 +108,20 @@ const SummaryCard = ({ item }: SummaryCardProps) => {
           </div>
 
           {isExpanded && (
-            <div className="p-4 md:p-6 pt-4 space-y-4 bg-zinc-800/50">
+            <div className="p-4 md:p-6 pt-4 space-y-4 bg-[#FDFBF7]">
               {/* Full Summary */}
               <div>
-                <h4 className="text-sm font-medium text-zinc-300 mb-2">Summary</h4>
-                <p className="text-zinc-200">{item.summary}</p>
+                <h4 className="text-sm font-medium text-zinc-600 mb-2">Summary</h4>
+                <p className="text-zinc-800">{item.summary}</p>
               </div>
 
               {/* Action Items */}
               {item.actionItems.length > 0 && (
                 <div>
-                  <h4 className="text-sm font-medium text-zinc-300 mb-2">Action Items</h4>
+                  <h4 className="text-sm font-medium text-zinc-600 mb-2">Action Items</h4>
                   <ul className="space-y-1">
                     {item.actionItems.map((action, i) => (
-                      <li key={i} className="text-sm text-zinc-200 flex items-start gap-2">
+                      <li key={i} className="text-sm text-zinc-700 flex items-start gap-2">
                         <ArrowRight className={`w-3 h-3 ${config.textColor} mt-1 flex-shrink-0`} />
                         {action}
                       </li>
@@ -133,8 +133,8 @@ const SummaryCard = ({ item }: SummaryCardProps) => {
               {/* Voice AI specific data */}
               {item.type === 'voice-ai' && item.rawData?.duration_seconds && (
                 <div>
-                  <h4 className="text-sm font-medium text-zinc-300 mb-2">Call Duration</h4>
-                  <p className="text-zinc-200">
+                  <h4 className="text-sm font-medium text-zinc-600 mb-2">Call Duration</h4>
+                  <p className="text-zinc-800">
                     {Math.floor(Number(item.rawData.duration_seconds) / 60)} min {Number(item.rawData.duration_seconds) % 60} sec
                   </p>
                 </div>
