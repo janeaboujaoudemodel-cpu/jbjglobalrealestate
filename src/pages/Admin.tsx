@@ -137,6 +137,7 @@ const Admin = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [showCommandPalette, setShowCommandPalette] = useState(false);
+  const [propertiesFilter, setPropertiesFilter] = useState<"all" | "premium" | "developers" | "communities" | "areas">("all");
   
   // Document upload state
   const [projectDocuments, setProjectDocuments] = useState<ProjectDocument[]>([]);
