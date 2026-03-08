@@ -54,6 +54,10 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   const { isRTL } = useLanguage();
   const isMobile = useIsMobile();
   const location = useLocation();
+  const { trackPageVisit } = useActivityTracker();
+
+  // Track page visits on route change
+  useEffect(() => { trackPageVisit(); }, [location.pathname, trackPageVisit]);
   const isBackOfficeRoute = isBackOfficePath(location.pathname);
   const isServiceRoute = location.pathname.startsWith("/services/");
   const isHomePage = location.pathname === "/";
