@@ -2,6 +2,7 @@ import { useEffect, useState, useRef, lazy, Suspense } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProjects, useDevelopers, useCommunities, useProjectsTotalCount } from "@/hooks/useProjects";
+import { useAreas } from "@/hooks/useAreas";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -53,7 +54,9 @@ import {
   Monitor,
   Heart,
   ExternalLink,
-  AlertCircle,
+   AlertCircle,
+   MapPin,
+   Calendar,
 } from "lucide-react";
 import { Loader2 } from "lucide-react";
 import { SmartDocumentUploader } from "@/components/SmartDocumentUploader";
@@ -126,6 +129,7 @@ const Admin = () => {
   const { data: projects, refetch: refetchProjects } = useProjects();
   const { data: developers } = useDevelopers();
   const { data: communities } = useCommunities();
+  const { data: areas } = useAreas();
   const { data: totalProjectsCount } = useProjectsTotalCount();
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -133,6 +137,7 @@ const Admin = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [showCommandPalette, setShowCommandPalette] = useState(false);
+  const [propertiesFilter, setPropertiesFilter] = useState<"all" | "premium" | "developers" | "communities" | "areas">("all");
   
   // Document upload state
   const [projectDocuments, setProjectDocuments] = useState<ProjectDocument[]>([]);
@@ -386,62 +391,63 @@ const Admin = () => {
       <CommandPalette isOpen={showCommandPalette} onClose={() => setShowCommandPalette(false)} />
       
       {/* Premium Header */}
-      <header className="border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-0 z-50 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#C9A84C] to-[#B8973F] flex items-center justify-center shadow-lg shadow-gold/20">
-              <Shield className="w-6 h-6 text-black" />
+       <header className="border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-0 z-50 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+        <div className="container mx-auto px-4 py-3 flex items-center gap-3">
+          <div className="flex items-center gap-3 flex-shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#C9A84C] to-[#B8973F] flex items-center justify-center shadow-lg shadow-gold/20">
+              <Shield className="w-5 h-5 text-black" />
             </div>
-            <div>
-              <h1 className="text-black text-2xl font-bold">
-                Owner Panel
-              </h1>
-              <p className="text-gold text-sm font-medium">{user?.email}</p>
+            <div className="hidden sm:block">
+              <h1 className="text-black text-lg font-bold leading-tight">Owner Panel</h1>
+              <p className="text-gold text-xs font-medium truncate max-w-[180px]">{user?.email}</p>
             </div>
           </div>
           
           {/* Search */}
-          <div className="hidden lg:flex items-center gap-2 flex-1 max-w-md mx-8">
+          <div className="hidden lg:flex items-center flex-1 max-w-sm mx-4">
             <button
               onClick={() => setShowCommandPalette(true)}
-              className="flex items-center gap-2 w-full px-4 py-2 rounded-xl bg-white/80 border-2 border-gold/30 text-zinc-500 hover:border-gold/50 transition-all"
+              className="flex items-center gap-2 w-full px-3 py-2 rounded-xl bg-white/80 border border-gold/30 text-zinc-500 hover:border-gold/50 transition-all"
             >
-              <Search className="h-4 w-4 text-gold" />
+              <Search className="h-4 w-4 text-gold flex-shrink-0" />
               <span className="text-sm">Search...</span>
-              <kbd className="ml-auto px-2 py-0.5 bg-gold/10 text-gold text-xs rounded font-mono">⌘K</kbd>
+              <kbd className="ml-auto px-1.5 py-0.5 bg-gold/10 text-gold text-[10px] rounded font-mono flex-shrink-0">⌘K</kbd>
             </button>
           </div>
           
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 ml-auto flex-shrink-0">
             <Button
               variant="ghost"
-              size="sm"
-              className="text-black hover:text-gold hover:bg-gold/10 relative"
+              size="icon"
+              className="text-black hover:text-gold hover:bg-gold/10 h-9 w-9"
             >
               <Bell className="h-4 w-4" />
-              
             </Button>
             <Link to="/admin/marketing-hub">
               <Button
+                size="sm"
                 className="bg-gradient-to-r from-gold to-amber-600 hover:from-gold/90 hover:to-amber-600/90 text-black font-semibold shadow-lg shadow-gold/20"
               >
-                <Send className="w-4 h-4 mr-2" />
-                Marketing Hub
+                <Send className="w-3.5 h-3.5 mr-1.5" />
+                <span className="hidden xl:inline">Marketing Hub</span>
+                <span className="xl:hidden">Marketing</span>
               </Button>
             </Link>
             <Button
               variant="secondary"
+              size="sm"
               onClick={() => navigate("/")}
             >
-              <Home className="w-4 h-4 mr-2" />
-              View Site
+              <Home className="w-3.5 h-3.5 mr-1.5" />
+              <span className="hidden md:inline">View Site</span>
             </Button>
             <Button
               variant="secondary"
+              size="sm"
               onClick={handleSignOut}
             >
-              <LogOut className="w-4 h-4 mr-2" />
-              Sign Out
+              <LogOut className="w-3.5 h-3.5 mr-1.5" />
+              <span className="hidden md:inline">Sign Out</span>
             </Button>
           </div>
         </div>
@@ -689,196 +695,245 @@ const Admin = () => {
             </Suspense>
           </TabsContent>
 
-          <TabsContent value="properties" className="space-y-8">
-            {/* Stats - Premium Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
-                <CardContent className="pt-6">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
-                      <Building2 className="w-5 h-5 text-gold" />
+          <TabsContent value="properties" className="space-y-6">
+            {/* Stats - Premium Cards - Clickable filters */}
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+              {[
+                { key: "all" as const, label: "Total Projects", value: totalProjectsCount ?? projects?.length ?? 0, icon: <Building2 className="w-5 h-5 text-gold" /> },
+                { key: "premium" as const, label: "Premium", value: projects?.filter((p) => p.is_premium).length || 0, icon: <Crown className="w-5 h-5 text-gold" /> },
+                { key: "developers" as const, label: "Developers", value: developers?.length || 0, icon: <Briefcase className="w-5 h-5 text-gold" /> },
+                { key: "communities" as const, label: "Communities", value: communities?.length || 0, icon: <Users className="w-5 h-5 text-gold" /> },
+                { key: "areas" as const, label: "Areas", value: areas?.length || 0, icon: <MapPin className="w-5 h-5 text-gold" /> },
+              ].map((stat) => (
+                <Card
+                  key={stat.key}
+                  className={`bg-white border-2 shadow-lg cursor-pointer transition-all hover:shadow-xl ${
+                    propertiesFilter === stat.key ? "border-gold ring-2 ring-gold/20" : "border-gold/20 hover:border-gold/40"
+                  }`}
+                  onClick={() => setPropertiesFilter(stat.key)}
+                >
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center flex-shrink-0">
+                        {stat.icon}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-2xl font-bold text-black leading-tight">{stat.value}</p>
+                        <p className="text-xs text-zinc-500 truncate">{stat.label}</p>
+                      </div>
                     </div>
-                    <div>
-                      <span className="text-zinc-500 text-sm">Total Projects</span>
-                      <p className="text-black text-2xl font-bold">{totalProjectsCount ?? projects?.length ?? 0}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
-                <CardContent className="pt-6">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
-                      <Crown className="w-5 h-5 text-gold" />
-                    </div>
-                    <div>
-                      <span className="text-zinc-500 text-sm">Premium Properties</span>
-                      <p className="text-black text-2xl font-bold">
-                        {projects?.filter((p) => p.is_premium).length || 0}
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
-                <CardContent className="pt-6">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
-                      <Building2 className="w-5 h-5 text-gold" />
-                    </div>
-                    <div>
-                      <span className="text-zinc-500 text-sm">Developers</span>
-                      <p className="text-black text-2xl font-bold">{developers?.length || 0}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
-                <CardContent className="pt-6">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
-                      <FileText className="w-5 h-5 text-gold" />
-                    </div>
-                    <div>
-                      <span className="text-zinc-500 text-sm">Communities</span>
-                      <p className="text-black text-2xl font-bold">{communities?.length || 0}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
 
-            {/* Smart Document Uploader */}
-            <SmartDocumentUploader 
-              projects={projects?.map(p => ({
-                id: p.id,
-                name: p.name,
-                slug: p.slug,
-                developer: p.developer ? {
-                  id: p.developer.id,
-                  name: p.developer.name,
-                  slug: p.developer.slug
-                } : null
-              }))}
-              onUploadComplete={() => refetchProjects()}
-            />
 
-            {/* Projects Table */}
-            <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-black">All Projects</CardTitle>
-                  <div className="relative w-64">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gold" />
-                    <Input
-                      placeholder="Search projects..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10 bg-white border-2 border-gold/30 text-black placeholder:text-zinc-400"
-                    />
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <ScrollArea className="h-[500px]">
-                  <div className="space-y-2">
-                    {filteredProjects?.map((project) => {
-                      const coverImg = project.cover_image_url
-                        || (project.images?.[0] ? (typeof project.images[0] === 'string' ? project.images[0] : project.images[0]?.image_url) : null);
-                      const isIncomplete = !coverImg || !project.description;
-                      const subtitleParts = [
-                        project.developer?.name,
-                        project.location || project.area_name,
-                      ].filter(Boolean);
-                      const priceDisplay = project.price_from
-                        ? `From AED ${Math.round(project.price_from).toLocaleString()}`
-                        : null;
 
-                      return (
-                        <div
-                          key={project.id}
-                          className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-white border border-gold/20 hover:border-gold/40 transition-all"
-                        >
-                          <div className="flex items-center gap-4 flex-1 min-w-0">
-                            <div className="w-16 h-16 rounded-lg bg-gold/10 flex items-center justify-center overflow-hidden flex-shrink-0">
-                              {coverImg ? (
-                                <img
-                                  src={coverImg}
-                                  alt={project.name}
-                                  className="w-full h-full object-cover"
-                                  loading="lazy"
-                                  referrerPolicy="no-referrer"
-                                />
-                              ) : (
-                                <Building2 className="w-6 h-6 text-gold" />
-                              )}
+
+            {/* Filtered Content based on card selection */}
+            {propertiesFilter === "developers" ? (
+              <Card className="bg-white border-2 border-gold/20 shadow-lg">
+                <CardHeader>
+                  <CardTitle className="text-black">All Developers ({developers?.length || 0})</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ScrollArea className="h-[500px]">
+                    <div className="space-y-2">
+                      {developers?.map((dev) => (
+                        <div key={dev.id} className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-white border border-gold/20 hover:border-gold/40 transition-all">
+                          <div className="flex items-center gap-3 min-w-0">
+                            <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center overflow-hidden flex-shrink-0">
+                              {dev.logo_url ? <img src={dev.logo_url} alt={dev.name} className="w-full h-full object-contain" /> : <Building2 className="w-5 h-5 text-gold" />}
                             </div>
-                            <div className="min-w-0 flex-1">
-                              <div className="flex items-center gap-2">
-                                <h3 className="font-semibold text-black truncate">{project.name}</h3>
-                                {isIncomplete && (
-                                  <Badge className="bg-red-50 text-red-600 border-red-200 text-[10px] px-1.5 py-0 flex-shrink-0">
-                                    <AlertCircle className="w-3 h-3 mr-0.5" />
-                                    Incomplete
-                                  </Badge>
-                                )}
-                              </div>
-                              {subtitleParts.length > 0 ? (
-                                <p className="text-sm text-zinc-500 truncate">{subtitleParts.join(' — ')}</p>
-                              ) : (
-                                <p className="text-sm text-zinc-400 italic">No location info</p>
-                              )}
-                              <div className="flex items-center gap-3 mt-0.5 text-xs text-zinc-400">
-                                {priceDisplay && <span>{priceDisplay}</span>}
-                                {project.payment_plan && <span>{project.payment_plan}</span>}
-                                {(project.expected_completion || project.handover_date) && (
-                                  <span>Handover: {project.expected_completion || project.handover_date}</span>
-                                )}
-                              </div>
-                              {!project.description && (
-                                <p className="text-xs text-red-400 mt-0.5 italic">No description available</p>
-                              )}
+                            <div className="min-w-0">
+                              <p className="font-semibold text-black truncate">{dev.name}</p>
+                              <p className="text-xs text-zinc-400">{dev.slug}</p>
+                            </div>
+                          </div>
+                          <Button variant="ghost" size="sm" onClick={() => window.open(`/developers/${dev.slug}`, '_blank')}>
+                            <ExternalLink className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  </ScrollArea>
+                </CardContent>
+              </Card>
+            ) : propertiesFilter === "communities" ? (
+              <Card className="bg-white border-2 border-gold/20 shadow-lg">
+                <CardHeader>
+                  <CardTitle className="text-black">All Communities ({communities?.length || 0})</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ScrollArea className="h-[500px]">
+                    <div className="space-y-2">
+                      {communities?.map((comm) => (
+                        <div key={comm.id} className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-white border border-gold/20 hover:border-gold/40 transition-all">
+                          <div className="min-w-0">
+                            <p className="font-semibold text-black truncate">{comm.name}</p>
+                            <p className="text-xs text-zinc-400">{comm.slug}</p>
+                          </div>
+                          <Button variant="ghost" size="sm" onClick={() => window.open(`/communities/${comm.slug}`, '_blank')}>
+                            <ExternalLink className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  </ScrollArea>
+                </CardContent>
+              </Card>
+            ) : propertiesFilter === "areas" ? (
+              <Card className="bg-white border-2 border-gold/20 shadow-lg">
+                <CardHeader>
+                  <CardTitle className="text-black">All Areas ({areas?.length || 0})</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ScrollArea className="h-[500px]">
+                    <div className="space-y-2">
+                      {areas?.map((area) => (
+                        <div key={area.id} className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-white border border-gold/20 hover:border-gold/40 transition-all">
+                          <div className="flex items-center gap-3 min-w-0">
+                            <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center overflow-hidden flex-shrink-0">
+                              {area.image_url ? <img src={area.image_url} alt={area.name} className="w-full h-full object-cover" /> : <MapPin className="w-5 h-5 text-gold" />}
+                            </div>
+                            <div className="min-w-0">
+                              <p className="font-semibold text-black truncate">{area.name}</p>
+                              <p className="text-xs text-zinc-400">{area.emirate} · {area.property_count || 0} projects</p>
                             </div>
                           </div>
                           <div className="flex items-center gap-2 flex-shrink-0">
-                            {project.is_premium && (
-                              <Badge className="bg-gold/10 text-gold border-gold/30">
-                                <Crown className="w-3 h-3 mr-1" />
-                                Premium
-                              </Badge>
-                            )}
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-8 w-8 text-zinc-500 hover:text-gold"
-                              onClick={() => window.open(`/project/${project.slug}`, '_blank')}
-                              title="Preview project"
-                            >
+                            {area.is_trending && <Badge className="bg-gold/10 text-gold border-gold/30 text-[10px]">Trending</Badge>}
+                            <Button variant="ghost" size="sm" onClick={() => window.open(`/areas/${area.slug}`, '_blank')}>
                               <ExternalLink className="w-4 h-4" />
-                            </Button>
-                            <Button
-                              variant="secondary"
-                              size="sm"
-                              onClick={() => handleToggleFeatured(project.id, project.is_premium)}
-                            >
-                              {project.is_premium ? "Remove Premium" : "Make Premium"}
-                            </Button>
-                            <Button
-                              variant="secondary"
-                              size="sm"
-                              onClick={() => handleEditProject(project)}
-                            >
-                              <Edit2 className="w-4 h-4 mr-1" />
-                              Edit
                             </Button>
                           </div>
                         </div>
-                      );
-                    })}
-                  </div>
-                </ScrollArea>
-              </CardContent>
-            </Card>
+                      ))}
+                    </div>
+                  </ScrollArea>
+                </CardContent>
+              </Card>
+            ) : (
+              <>
+                {/* Smart Document Uploader */}
+                <SmartDocumentUploader 
+                  projects={projects?.map(p => ({
+                    id: p.id,
+                    name: p.name,
+                    slug: p.slug,
+                    developer: p.developer ? {
+                      id: p.developer.id,
+                      name: p.developer.name,
+                      slug: p.developer.slug
+                    } : null
+                  }))}
+                  onUploadComplete={() => refetchProjects()}
+                />
+
+                {/* Projects Table */}
+                <Card className="bg-white border-2 border-gold/20 shadow-lg">
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-black">
+                        {propertiesFilter === "premium" ? "Premium Projects" : "All Projects"}
+                      </CardTitle>
+                      <div className="relative w-64">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gold" />
+                        <Input
+                          placeholder="Search projects..."
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          className="pl-10 bg-white border border-gold/30 text-black placeholder:text-zinc-400"
+                        />
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <ScrollArea className="h-[500px]">
+                      <div className="space-y-2">
+                        {(propertiesFilter === "premium"
+                          ? filteredProjects?.filter(p => p.is_premium)
+                          : filteredProjects
+                        )?.map((project) => {
+                          const coverImg = project.cover_image_url
+                            || (project.images?.[0] ? (typeof project.images[0] === 'string' ? project.images[0] : project.images[0]?.image_url) : null);
+                          const isIncomplete = !coverImg || !project.description;
+                          const subtitleParts = [
+                            project.developer?.name,
+                            project.location || project.area_name,
+                          ].filter(Boolean);
+                          const priceDisplay = project.price_from
+                            ? `AED ${Math.round(project.price_from).toLocaleString()}`
+                            : null;
+
+                          return (
+                            <div
+                              key={project.id}
+                              className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-white border border-gold/20 hover:border-gold/40 transition-all"
+                            >
+                              <div className="flex items-center gap-3 flex-1 min-w-0">
+                                <div className="w-14 h-14 rounded-lg bg-gold/10 flex items-center justify-center overflow-hidden flex-shrink-0">
+                                  {coverImg ? (
+                                    <img src={coverImg} alt={project.name} className="w-full h-full object-cover" loading="lazy" referrerPolicy="no-referrer" />
+                                  ) : (
+                                    <Building2 className="w-5 h-5 text-gold" />
+                                  )}
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                  <div className="flex items-center gap-2">
+                                    <h3 className="font-semibold text-black text-sm truncate">{project.name}</h3>
+                                    {isIncomplete && (
+                                      <Badge className="bg-red-50 text-red-600 border-red-200 text-[10px] px-1 py-0 flex-shrink-0">
+                                        <AlertCircle className="w-3 h-3 mr-0.5" />
+                                        Incomplete
+                                      </Badge>
+                                    )}
+                                    {project.is_premium && (
+                                      <Badge className="bg-gold/10 text-gold border-gold/30 text-[10px] px-1 py-0 flex-shrink-0">
+                                        <Crown className="w-3 h-3" />
+                                      </Badge>
+                                    )}
+                                  </div>
+                                  {subtitleParts.length > 0 && (
+                                    <p className="text-xs text-zinc-500 truncate">{subtitleParts.join(' — ')}</p>
+                                  )}
+                                  <div className="flex items-center gap-2 mt-0.5 text-[11px] text-zinc-400">
+                                    {priceDisplay && <span>{priceDisplay}</span>}
+                                    {project.updated_at && (
+                                      <span className="flex items-center gap-0.5">
+                                        <Calendar className="w-3 h-3" />
+                                        Updated {new Date(project.updated_at).toLocaleDateString()}
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-1 flex-shrink-0">
+                                <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-400 hover:text-gold" onClick={() => window.open(`/project/${project.slug}`, '_blank')} title="Preview">
+                                  <ExternalLink className="w-4 h-4" />
+                                </Button>
+                                <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-400 hover:text-gold" onClick={() => handleEditProject(project)} title="Edit & Upload Docs">
+                                  <Edit2 className="w-4 h-4" />
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-8 w-8 text-zinc-400 hover:text-gold"
+                                  onClick={() => handleToggleFeatured(project.id, project.is_premium)}
+                                  title={project.is_premium ? "Remove Premium" : "Make Premium"}
+                                >
+                                  <Crown className="w-4 h-4" />
+                                </Button>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </ScrollArea>
+                  </CardContent>
+                </Card>
+              </>
+            )}
           </TabsContent>
 
           <TabsContent value="rate-limits" className="space-y-8">

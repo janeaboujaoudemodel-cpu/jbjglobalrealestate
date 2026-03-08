@@ -92,19 +92,17 @@ export function AIBrokerCard({
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-black/60">
-                {isActive ? "Active" : "Paused"}
-              </span>
-              <Switch
-                checked={isActive}
-                onCheckedChange={(checked) =>
-                  onStatusChange(broker.id, checked ? "active" : "paused")
-                }
-                className="data-[state=checked]:bg-emerald-500"
-              />
-            </div>
+          <div className="flex flex-row items-center gap-2 flex-shrink-0">
+            <span className="text-sm text-black/60 whitespace-nowrap">
+              {isActive ? "Active" : "Paused"}
+            </span>
+            <Switch
+              checked={isActive}
+              onCheckedChange={(checked) =>
+                onStatusChange(broker.id, checked ? "active" : "paused")
+              }
+              className="data-[state=checked]:bg-emerald-500"
+            />
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
