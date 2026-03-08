@@ -197,24 +197,24 @@ const FoundersInsightsPanel: React.FC = () => {
 
       {/* Main Content Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid grid-cols-5 w-full max-w-2xl bg-white/80 border-2 border-[#C9A84C]/30 p-1 rounded-xl shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
-          <TabsTrigger value="overview" className="flex items-center gap-2 text-zinc-600 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C] data-[state=active]:to-[#B8973F] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
+        <TabsList className="flex w-full max-w-3xl mx-auto bg-white/80 border-2 border-gold/30 p-1 rounded-xl shadow-[0_4px_20px_rgba(200,167,102,0.1)] justify-center gap-1">
+          <TabsTrigger value="overview" className="tab-trigger-champagne text-black flex items-center gap-2 px-4 py-2 rounded-lg transition-all">
             <BarChart3 className="h-4 w-4" />
             <span className="hidden sm:inline">Overview</span>
           </TabsTrigger>
-          <TabsTrigger value="departments" className="flex items-center gap-2 text-zinc-600 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C] data-[state=active]:to-[#B8973F] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
+          <TabsTrigger value="departments" className="tab-trigger-champagne text-black flex items-center gap-2 px-4 py-2 rounded-lg transition-all">
             <Users className="h-4 w-4" />
             <span className="hidden sm:inline">Departments</span>
           </TabsTrigger>
-          <TabsTrigger value="performers" className="flex items-center gap-2 text-zinc-600 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C] data-[state=active]:to-[#B8973F] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
+          <TabsTrigger value="performers" className="tab-trigger-champagne text-black flex items-center gap-2 px-4 py-2 rounded-lg transition-all">
             <Award className="h-4 w-4" />
             <span className="hidden sm:inline">Top Performers</span>
           </TabsTrigger>
-          <TabsTrigger value="insights" className="flex items-center gap-2 text-zinc-600 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C] data-[state=active]:to-[#B8973F] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
+          <TabsTrigger value="insights" className="tab-trigger-champagne text-black flex items-center gap-2 px-4 py-2 rounded-lg transition-all">
             <Lightbulb className="h-4 w-4" />
             <span className="hidden sm:inline">Insights</span>
           </TabsTrigger>
-          <TabsTrigger value="health" className="flex items-center gap-2 text-zinc-600 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C] data-[state=active]:to-[#B8973F] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
+          <TabsTrigger value="health" className="tab-trigger-champagne text-black flex items-center gap-2 px-4 py-2 rounded-lg transition-all">
             <Activity className="h-4 w-4" />
             <span className="hidden sm:inline">Health</span>
           </TabsTrigger>

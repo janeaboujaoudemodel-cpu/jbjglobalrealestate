@@ -444,7 +444,56 @@ export function AINoteCenter() {
 
     if (!error) {
       setNotes(prev => prev.filter(n => n.id !== noteId));
-      toast.success('Note archived');
+      toast.success('Note moved to Recently Deleted (30 days to restore)', {
+        action: {
+          label: 'Undo',
+          onClick: async () => {
+            await supabase.from('ai_notes').update({ is_archived: false }).eq('id', noteId);
+            fetchNotes();
+            toast.success('Note restored');
+          },
+        },
+      });
+    }
+  };
+
+  const restoreNote = async (noteId: string) => {
+    const { error } = await supabase
+      .from('ai_notes')
+      .update({ is_archived: false })
+      .eq('id', noteId);
+
+    if (!error) {
+      toast.success('Note restored');
+      fetchNotes();
+      fetchArchivedNotes();
+    }
+  };
+
+  const permanentlyDeleteNote = async (noteId: string) => {
+    const { error } = await supabase
+      .from('ai_notes')
+      .delete()
+      .eq('id', noteId);
+
+    if (!error) {
+      toast.success('Note permanently deleted');
+      fetchArchivedNotes();
+    }
+  };
+
+  const [archivedNotes, setArchivedNotes] = useState<Note[]>([]);
+  const [showArchived, setShowArchived] = useState(false);
+
+  const fetchArchivedNotes = async () => {
+    const { data, error } = await supabase
+      .from('ai_notes')
+      .select('*')
+      .eq('is_archived', true)
+      .order('updated_at', { ascending: false });
+    
+    if (data && !error) {
+      setArchivedNotes(data as Note[]);
     }
   };
 

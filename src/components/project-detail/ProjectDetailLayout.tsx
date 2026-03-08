@@ -1113,7 +1113,7 @@ export default function ProjectDetailLayout({
             )}
 
           {/* BROCHURE - Full width two-column layout */}
-          <div ref={brochureRef} id="brochure" className="mb-12 scroll-mt-40">
+          <div ref={brochureRef} id="brochure" className="mb-14 scroll-mt-40">
             <div className="jj-card-inner">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                 <div>
@@ -1155,7 +1155,7 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
 
           {/* BOOK-STYLE ALL DOCUMENTS STRIP */}
           {project.documents.length > 0 && (
-            <div className="mb-12">
+           <div className="mb-14">
               <BookStyleDocuments
                 documents={project.documents.map(d => ({
                   id: d.id,
@@ -1171,7 +1171,7 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
           )}
 
            {/* MORTGAGE CALCULATOR (Order B: after brochure) */}
-           <div ref={mortgageRef} className="mb-20 scroll-mt-32">
+           <div ref={mortgageRef} className="mb-14 scroll-mt-32">
               <div className="jj-card-inner p-0 overflow-hidden">
                 <MortgageCalculator
                   defaultPrice={project.price_from ?? 2000000}
@@ -1183,7 +1183,7 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
             </div>
 
            {/* JBJ AI ANALYZER (Order B: after mortgage) */}
-           <div ref={aiRef} id="ai" className="mb-12 scroll-mt-40">
+           <div ref={aiRef} id="ai" className="mb-14 scroll-mt-40">
               <ProjectAIAnalyzer
                 projectName={project.name}
                 areaName={project.area_name || project.location || "UAE"}
@@ -1197,14 +1197,14 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
             </div>
 
            {/* DLD MARKET WIDGET (Order B: after AI) */}
-           <div className="py-6 md:py-8">
+           <div className="py-6">
               <div className="flex items-center justify-center gap-6">
                 <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
                 <div className="w-2 h-2 rotate-45 bg-gold/40" />
                 <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
               </div>
             </div>
-            <div className="mb-8">
+            <div className="mb-14">
               <DLDMarketWidget />
             </div>
 
@@ -1246,7 +1246,7 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
            )}
 
            {/* REPORT AN ISSUE BANNER */}
-           <div className="mb-12">
+           <div className="mb-14">
              <ReportIssueButton
                projectName={project.name}
                projectId={project.id}

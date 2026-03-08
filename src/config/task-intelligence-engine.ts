@@ -357,7 +357,7 @@ export function generateOptimizationRecommendations(
         type: 'recommendation',
         priority: 'low',
         title: `Optimize ${dept.departmentName} Schedule`,
-        description: `${dept.departmentName} performs ${Math.round(Math.random() * 15 + 15)}% better between ${dept.peakProductivityHours.start}:00-${dept.peakProductivityHours.end}:00.`,
+        description: `${dept.departmentName} peak performance window is between ${dept.peakProductivityHours.start}:00-${dept.peakProductivityHours.end}:00.`,
         impact: `Could improve overall efficiency by shifting critical tasks.`,
         suggestedAction: `Schedule high-priority tasks during peak hours.`,
         autoApplicable: true,
@@ -370,12 +370,12 @@ export function generateOptimizationRecommendations(
   return recommendations;
 }
 
-// Run System Health Check
+// Run System Health Check — deterministic, no randomness
 export function runSystemHealthCheck(): SystemHealthCheck[] {
   return HEALTH_CHECK_COMPONENTS.map(component => ({
     component,
-    status: Math.random() > 0.05 ? 'operational' : 'degraded',
-    latency: Math.round(Math.random() * 50 + 10),
+    status: 'operational' as const,
+    latency: 15,
     lastChecked: new Date(),
     details: 'All systems nominal',
   }));
