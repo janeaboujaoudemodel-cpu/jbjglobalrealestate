@@ -58,11 +58,13 @@ Return a JSON array with objects for each project (same order):
 
 IMPORTANT: Only return the JSON array, nothing else. Be accurate - these are real Dubai/UAE off-plan projects.`;
 
-    // Call AI via Lovable AI proxy
-    const aiResp = await fetch(`${supabaseUrl}/functions/v1/ai-proxy`, {
+    const lovableApiKey = Deno.env.get("LOVABLE_API_KEY") || "";
+    if (!lovableApiKey) throw new Error("Missing LOVABLE_API_KEY");
+
+    const aiResp = await fetch("https://api.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${supabaseKey}`,
+        Authorization: `Bearer ${lovableApiKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
