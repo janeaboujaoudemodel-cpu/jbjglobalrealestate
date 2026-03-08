@@ -9,8 +9,9 @@ import {
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { Download, Search, RefreshCw } from "lucide-react";
+import { Download, Search, RefreshCw, Users } from "lucide-react";
 import { toast } from "sonner";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface UserSummary {
   id: string;
@@ -119,7 +120,6 @@ export default function ResearchUsersPanel() {
         ]);
       });
 
-      // Auto-width
       ws.columns.forEach((col) => {
         let max = 12;
         col.eachCell?.({ includeEmpty: false }, (cell) => {
@@ -173,19 +173,25 @@ export default function ResearchUsersPanel() {
 
   return (
     <div className="space-y-6">
+      {/* Header */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-xl font-bold text-white">JBJ Global Research Users</h2>
-          <p className="text-sm text-zinc-400">{filtered.length} users found</p>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 flex items-center justify-center">
+            <Users className="w-5 h-5 text-[#8B7355]" />
+          </div>
+          <div>
+            <h2 className="text-xl font-bold text-black">JBJ Global Research Users</h2>
+            <p className="text-sm text-zinc-600">{filtered.length} users found</p>
+          </div>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" size="sm" onClick={() => refetch()} className="border-zinc-700 text-zinc-300">
+          <Button variant="outline" size="sm" onClick={() => refetch()} className="border-gold/40 text-black hover:bg-gold/10">
             <RefreshCw className="w-4 h-4 mr-1" /> Refresh
           </Button>
-          <Button variant="outline" size="sm" onClick={exportCSV} className="border-zinc-700 text-zinc-300">
+          <Button variant="outline" size="sm" onClick={exportCSV} className="border-gold/40 text-black hover:bg-gold/10">
             <Download className="w-4 h-4 mr-1" /> CSV
           </Button>
-          <Button size="sm" onClick={exportExcel} className="bg-gold text-black hover:bg-gold/90">
+          <Button size="sm" onClick={exportExcel} className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-gold/40 hover:shadow-md">
             <Download className="w-4 h-4 mr-1" /> Excel
           </Button>
         </div>
@@ -199,11 +205,11 @@ export default function ResearchUsersPanel() {
             placeholder="Search by email, name, phone..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-9 bg-zinc-900 border-zinc-700 text-white"
+            className="pl-9 bg-white/80 border-gold/40 text-black placeholder:text-zinc-500"
           />
         </div>
         <Select value={segmentFilter} onValueChange={setSegmentFilter}>
-          <SelectTrigger className="w-[180px] bg-zinc-900 border-zinc-700 text-white">
+          <SelectTrigger className="w-[180px] bg-white/80 border-gold/40 text-black">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -213,7 +219,7 @@ export default function ResearchUsersPanel() {
           </SelectContent>
         </Select>
         <Select value={intentFilter} onValueChange={setIntentFilter}>
-          <SelectTrigger className="w-[140px] bg-zinc-900 border-zinc-700 text-white">
+          <SelectTrigger className="w-[140px] bg-white/80 border-gold/40 text-black">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -225,67 +231,69 @@ export default function ResearchUsersPanel() {
       </div>
 
       {/* Table */}
-      <div className="rounded-lg border border-zinc-800 overflow-hidden">
-        <div className="overflow-x-auto">
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-zinc-900/50 hover:bg-zinc-900/50">
-                <TableHead className="text-zinc-400 whitespace-nowrap">Email</TableHead>
-                <TableHead className="text-zinc-400 whitespace-nowrap">Name</TableHead>
-                <TableHead className="text-zinc-400 whitespace-nowrap">Subscribed</TableHead>
-                <TableHead className="text-zinc-400 whitespace-nowrap">Segment</TableHead>
-                <TableHead className="text-zinc-400 whitespace-nowrap">Intent</TableHead>
-                <TableHead className="text-zinc-400 whitespace-nowrap">Engagement</TableHead>
-                <TableHead className="text-zinc-400 whitespace-nowrap">Sessions</TableHead>
-                <TableHead className="text-zinc-400 whitespace-nowrap">Top Areas</TableHead>
-                <TableHead className="text-zinc-400 whitespace-nowrap">Budget</TableHead>
-                <TableHead className="text-zinc-400 whitespace-nowrap">Last Active</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {isLoading ? (
-                <TableRow>
-                  <TableCell colSpan={10} className="text-center text-zinc-500 py-12">Loading...</TableCell>
+      <div className="rounded-xl border-2 border-gold/30 overflow-hidden bg-white/60">
+        <ScrollArea className="h-[600px]">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] hover:bg-[#F5F0E6]">
+                  <TableHead className="text-black font-semibold whitespace-nowrap">Email</TableHead>
+                  <TableHead className="text-black font-semibold whitespace-nowrap">Name</TableHead>
+                  <TableHead className="text-black font-semibold whitespace-nowrap">Subscribed</TableHead>
+                  <TableHead className="text-black font-semibold whitespace-nowrap">Segment</TableHead>
+                  <TableHead className="text-black font-semibold whitespace-nowrap">Intent</TableHead>
+                  <TableHead className="text-black font-semibold whitespace-nowrap">Engagement</TableHead>
+                  <TableHead className="text-black font-semibold whitespace-nowrap">Sessions</TableHead>
+                  <TableHead className="text-black font-semibold whitespace-nowrap">Top Areas</TableHead>
+                  <TableHead className="text-black font-semibold whitespace-nowrap">Budget</TableHead>
+                  <TableHead className="text-black font-semibold whitespace-nowrap">Last Active</TableHead>
                 </TableRow>
-              ) : filtered.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={10} className="text-center text-zinc-500 py-12">
-                    No user summaries yet. Run the profile summarization job to populate data.
-                  </TableCell>
-                </TableRow>
-              ) : (
-                filtered.map((u) => (
-                  <TableRow key={u.id} className="hover:bg-zinc-800/50">
-                    <TableCell className="text-white text-sm">{u.email}</TableCell>
-                    <TableCell className="text-zinc-300 text-sm">{u.full_name || "—"}</TableCell>
-                    <TableCell>
-                      <span className={`text-xs px-2 py-0.5 rounded-full ${u.subscribed ? "bg-emerald-500/20 text-emerald-400" : "bg-zinc-700 text-zinc-400"}`}>
-                        {u.subscribed ? "Yes" : "No"}
-                      </span>
-                    </TableCell>
-                    <TableCell className="text-zinc-300 text-sm">{u.segment_tag || "—"}</TableCell>
-                    <TableCell>
-                      <span className={`text-xs px-2 py-0.5 rounded-full ${
-                        u.intent_score === "high" ? "bg-gold/20 text-gold" :
-                        u.intent_score === "medium" ? "bg-blue-500/20 text-blue-400" :
-                        "bg-zinc-700 text-zinc-400"
-                      }`}>
-                        {u.intent_score || "—"}
-                      </span>
-                    </TableCell>
-                    <TableCell className="text-zinc-300 text-sm">{u.engagement_score ?? "—"}</TableCell>
-                    <TableCell className="text-zinc-300 text-sm">{u.sessions_count ?? "—"}</TableCell>
-                    <TableCell className="text-zinc-300 text-sm max-w-[150px] truncate">{u.top_areas || "—"}</TableCell>
-                    <TableCell className="text-zinc-300 text-sm">{u.avg_budget_estimate || "—"}</TableCell>
-                    <TableCell className="text-zinc-400 text-xs">
-                      {u.last_active_at ? new Date(u.last_active_at).toLocaleDateString() : "—"}
+              </TableHeader>
+              <TableBody>
+                {isLoading ? (
+                  <TableRow>
+                    <TableCell colSpan={10} className="text-center text-zinc-500 py-12">Loading...</TableCell>
+                  </TableRow>
+                ) : filtered.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={10} className="text-center text-zinc-500 py-12">
+                      No user summaries yet. Run the profile summarization job to populate data.
                     </TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </div>
+                ) : (
+                  filtered.map((u) => (
+                    <TableRow key={u.id} className="hover:bg-gold/5 border-b border-gold/10">
+                      <TableCell className="text-black text-sm">{u.email}</TableCell>
+                      <TableCell className="text-zinc-700 text-sm">{u.full_name || "—"}</TableCell>
+                      <TableCell>
+                        <span className={`text-xs px-2 py-0.5 rounded-full ${u.subscribed ? "bg-emerald-100 text-emerald-700" : "bg-zinc-100 text-zinc-600"}`}>
+                          {u.subscribed ? "Yes" : "No"}
+                        </span>
+                      </TableCell>
+                      <TableCell className="text-zinc-700 text-sm">{u.segment_tag || "—"}</TableCell>
+                      <TableCell>
+                        <span className={`text-xs px-2 py-0.5 rounded-full ${
+                          u.intent_score === "high" ? "bg-amber-100 text-amber-700" :
+                          u.intent_score === "medium" ? "bg-blue-100 text-blue-700" :
+                          "bg-zinc-100 text-zinc-600"
+                        }`}>
+                          {u.intent_score || "—"}
+                        </span>
+                      </TableCell>
+                      <TableCell className="text-zinc-700 text-sm">{u.engagement_score ?? "—"}</TableCell>
+                      <TableCell className="text-zinc-700 text-sm">{u.sessions_count ?? "—"}</TableCell>
+                      <TableCell className="text-zinc-700 text-sm max-w-[150px] truncate">{u.top_areas || "—"}</TableCell>
+                      <TableCell className="text-zinc-700 text-sm">{u.avg_budget_estimate || "—"}</TableCell>
+                      <TableCell className="text-zinc-600 text-xs">
+                        {u.last_active_at ? new Date(u.last_active_at).toLocaleDateString() : "—"}
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </ScrollArea>
       </div>
     </div>
   );

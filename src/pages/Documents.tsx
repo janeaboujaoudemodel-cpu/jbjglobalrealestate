@@ -76,7 +76,6 @@ const Documents = () => {
 
   const handleFontSize = (size: string) => {
     setFontSize(size);
-    // Font size uses 1-7 scale in execCommand, so we map our sizes
     const sizeMap: Record<string, string> = {
       '8': '1', '10': '2', '12': '3', '14': '4', 
       '16': '5', '18': '5', '20': '6', '24': '6',
@@ -181,10 +180,8 @@ ${content}
       const content = event.target?.result as string;
       if (editorRef.current) {
         if (file.name.endsWith('.html')) {
-          // Extract body content from HTML and sanitize to prevent XSS
           const match = content.match(/<body[^>]*>([\s\S]*)<\/body>/i);
           const htmlContent = match ? match[1] : content;
-          // Sanitize HTML to prevent XSS attacks
           editorRef.current.innerHTML = DOMPurify.sanitize(htmlContent, {
             ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u', 'h1', 'h2', 'h3', 'ul', 'ol', 'li', 'a', 'span', 'div', 'table', 'tr', 'td', 'th', 'thead', 'tbody', 'img'],
             ALLOWED_ATTR: ['href', 'class', 'style', 'src', 'alt', 'width', 'height'],
@@ -202,19 +199,19 @@ ${content}
 
   return (
     <MainLayout>
-      <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-950">
-        {/* Themed Header */}
-        <div className="bg-gradient-to-r from-slate-900/40 via-slate-800/30 to-slate-900/40 border-b border-slate-500/30">
-          <div className="container mx-auto px-4 py-8">
+      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+        {/* Themed Header — Champagne Gold */}
+        <div className="border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+          <div className="container mx-auto px-4 py-6">
             <div className="text-center max-w-2xl mx-auto">
-              <div className="inline-flex items-center gap-2 bg-slate-500/20 border border-slate-500/40 rounded-full px-4 py-1 mb-4">
-                <FileText className="w-4 h-4 text-slate-400" />
-                <span className="text-slate-300 text-sm font-medium">Document Editor</span>
+              <div className="inline-flex items-center gap-2 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-full px-4 py-1 mb-4">
+                <FileText className="w-4 h-4 text-[#8B7355]" />
+                <span className="text-black text-sm font-medium">Document Editor</span>
               </div>
-              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-                Documents & <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-400 to-zinc-400">Spreadsheets</span>
+              <h1 className="text-3xl md:text-4xl font-bold text-black mb-2">
+                Documents & Spreadsheets
               </h1>
-              <p className="text-zinc-400">
+              <p className="text-zinc-600">
                 Create, edit, and export professional documents with rich text formatting
               </p>
             </div>
@@ -222,36 +219,36 @@ ${content}
         </div>
 
         {/* Document Title Input */}
-        <div className="bg-slate-900/30 border-b border-slate-500/20 px-4 py-3">
+        <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 px-4 py-3">
           <div className="flex items-center gap-4 max-w-7xl mx-auto">
-            <FileText className="h-6 w-6 text-slate-400" />
+            <FileText className="h-6 w-6 text-[#8B7355]" />
             <Input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="text-xl font-medium border-0 bg-transparent focus-visible:ring-0 max-w-md text-white focus:text-white caret-white placeholder:text-zinc-500"
+              className="text-xl font-medium border-0 bg-transparent focus-visible:ring-0 max-w-md text-black focus:text-black caret-black placeholder:text-zinc-500"
               placeholder="Untitled Document"
             />
           </div>
         </div>
 
         {/* Toolbar */}
-        <div className="bg-slate-900/30 border-b border-slate-500/20 px-4 py-2 flex flex-wrap items-center gap-1">
+        <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 px-4 py-2 flex flex-wrap items-center gap-1">
           {/* Undo/Redo */}
-          <Button variant="dark-ghost" size="sm" onClick={() => execCommand('undo')}>
+          <Button variant="outline" size="sm" className="border-gold/30 text-black hover:bg-gold/10" onClick={() => execCommand('undo')}>
             <Undo className="h-4 w-4" />
           </Button>
-          <Button variant="dark-ghost" size="sm" onClick={() => execCommand('redo')}>
+          <Button variant="outline" size="sm" className="border-gold/30 text-black hover:bg-gold/10" onClick={() => execCommand('redo')}>
             <Redo className="h-4 w-4" />
           </Button>
           
-          <div className="w-px h-6 bg-slate-500/30 mx-1" />
+          <div className="w-px h-6 bg-gold/30 mx-1" />
           
           {/* Font Family */}
           <Select value={fontFamily} onValueChange={handleFontFamily}>
-            <SelectTrigger className="w-[140px] h-8">
+            <SelectTrigger className="w-[140px] h-8 bg-white/80 border-gold/40 text-black">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent side="bottom">
               {FONT_FAMILIES.map((font) => (
                 <SelectItem key={font} value={font} style={{ fontFamily: font }}>
                   {font}
@@ -262,10 +259,10 @@ ${content}
           
           {/* Font Size */}
           <Select value={fontSize} onValueChange={handleFontSize}>
-            <SelectTrigger className="w-[70px] h-8">
+            <SelectTrigger className="w-[70px] h-8 bg-white/80 border-gold/40 text-black">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent side="bottom">
               {FONT_SIZES.map((size) => (
                 <SelectItem key={size} value={size}>
                   {size}
@@ -274,25 +271,40 @@ ${content}
             </SelectContent>
           </Select>
           
-          <div className="w-px h-6 bg-slate-500/30 mx-1" />
+          {/* Custom Size Input */}
+          <Input
+            type="number"
+            min={1}
+            max={200}
+            placeholder="px"
+            className="w-[60px] h-8 bg-white/80 border-gold/40 text-black text-sm"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                const val = (e.target as HTMLInputElement).value;
+                if (val) handleFontSize(val);
+              }
+            }}
+          />
+          
+          <div className="w-px h-6 bg-gold/30 mx-1" />
           
           {/* Text Formatting */}
-          <Button variant="dark-ghost" size="sm" onClick={() => execCommand('bold')}>
+          <Button variant="outline" size="sm" className="border-gold/30 text-black hover:bg-gold/10" onClick={() => execCommand('bold')}>
             <Bold className="h-4 w-4" />
           </Button>
-          <Button variant="dark-ghost" size="sm" onClick={() => execCommand('italic')}>
+          <Button variant="outline" size="sm" className="border-gold/30 text-black hover:bg-gold/10" onClick={() => execCommand('italic')}>
             <Italic className="h-4 w-4" />
           </Button>
-          <Button variant="dark-ghost" size="sm" onClick={() => execCommand('underline')}>
+          <Button variant="outline" size="sm" className="border-gold/30 text-black hover:bg-gold/10" onClick={() => execCommand('underline')}>
             <Underline className="h-4 w-4" />
           </Button>
           
-          <div className="w-px h-6 bg-slate-500/30 mx-1" />
+          <div className="w-px h-6 bg-gold/30 mx-1" />
           
           {/* Headings */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="dark-ghost" size="sm">
+              <Button variant="outline" size="sm" className="border-gold/30 text-black hover:bg-gold/10">
                 <Type className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
@@ -313,38 +325,38 @@ ${content}
             </DropdownMenuContent>
           </DropdownMenu>
           
-          <div className="w-px h-6 bg-slate-500/30 mx-1" />
+          <div className="w-px h-6 bg-gold/30 mx-1" />
           
           {/* Alignment */}
-          <Button variant="dark-ghost" size="sm" onClick={() => execCommand('justifyLeft')}>
+          <Button variant="outline" size="sm" className="border-gold/30 text-black hover:bg-gold/10" onClick={() => execCommand('justifyLeft')}>
             <AlignLeft className="h-4 w-4" />
           </Button>
-          <Button variant="dark-ghost" size="sm" onClick={() => execCommand('justifyCenter')}>
+          <Button variant="outline" size="sm" className="border-gold/30 text-black hover:bg-gold/10" onClick={() => execCommand('justifyCenter')}>
             <AlignCenter className="h-4 w-4" />
           </Button>
-          <Button variant="dark-ghost" size="sm" onClick={() => execCommand('justifyRight')}>
+          <Button variant="outline" size="sm" className="border-gold/30 text-black hover:bg-gold/10" onClick={() => execCommand('justifyRight')}>
             <AlignRight className="h-4 w-4" />
           </Button>
-          <Button variant="dark-ghost" size="sm" onClick={() => execCommand('justifyFull')}>
+          <Button variant="outline" size="sm" className="border-gold/30 text-black hover:bg-gold/10" onClick={() => execCommand('justifyFull')}>
             <AlignJustify className="h-4 w-4" />
           </Button>
           
-          <div className="w-px h-6 bg-slate-500/30 mx-1" />
+          <div className="w-px h-6 bg-gold/30 mx-1" />
           
           {/* Lists */}
-          <Button variant="dark-ghost" size="sm" onClick={() => execCommand('insertUnorderedList')}>
+          <Button variant="outline" size="sm" className="border-gold/30 text-black hover:bg-gold/10" onClick={() => execCommand('insertUnorderedList')}>
             <List className="h-4 w-4" />
           </Button>
-          <Button variant="dark-ghost" size="sm" onClick={() => execCommand('insertOrderedList')}>
+          <Button variant="outline" size="sm" className="border-gold/30 text-black hover:bg-gold/10" onClick={() => execCommand('insertOrderedList')}>
             <ListOrdered className="h-4 w-4" />
           </Button>
           
-          <div className="w-px h-6 bg-slate-500/30 mx-1" />
+          <div className="w-px h-6 bg-gold/30 mx-1" />
           
           {/* Insert */}
           <Dialog open={linkDialogOpen} onOpenChange={setLinkDialogOpen}>
             <DialogTrigger asChild>
-              <Button variant="dark-ghost" size="sm">
+              <Button variant="outline" size="sm" className="border-gold/30 text-black hover:bg-gold/10">
                 <Link className="h-4 w-4" />
               </Button>
             </DialogTrigger>
@@ -363,21 +375,21 @@ ${content}
             </DialogContent>
           </Dialog>
           
-          <Button variant="dark-ghost" size="sm" onClick={insertImage}>
+          <Button variant="outline" size="sm" className="border-gold/30 text-black hover:bg-gold/10" onClick={insertImage}>
             <Image className="h-4 w-4" />
           </Button>
           
           <div className="flex-1" />
           
           {/* Actions */}
-          <Button variant="dark-ghost" size="sm" onClick={handlePrint}>
+          <Button variant="outline" size="sm" className="border-gold/30 text-black hover:bg-gold/10" onClick={handlePrint}>
             <Printer className="h-4 w-4" />
           </Button>
           
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="dark-ghost" size="sm">
-                <Download className="h-4 w-4 mr-1" /> <span className="text-white">Export</span>
+              <Button variant="outline" size="sm" className="border-gold/30 text-black hover:bg-gold/10">
+                <Download className="h-4 w-4 mr-1" /> <span className="text-black">Export</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
@@ -391,9 +403,9 @@ ${content}
           </DropdownMenu>
           
           <label>
-            <Button variant="dark-ghost" size="sm" asChild>
+            <Button variant="outline" size="sm" className="border-gold/30 text-black hover:bg-gold/10" asChild>
               <span>
-                <Upload className="h-4 w-4 mr-1" /> <span className="text-white">Import</span>
+                <Upload className="h-4 w-4 mr-1" /> <span className="text-black">Import</span>
               </span>
             </Button>
             <input 
@@ -406,8 +418,8 @@ ${content}
         </div>
 
         {/* Editor Area */}
-        <div className="flex justify-center p-8 bg-zinc-900/30 min-h-[calc(100vh-280px)]">
-          <div className="bg-white shadow-lg w-full max-w-[816px] min-h-[1056px] p-16">
+        <div className="flex justify-center p-8 min-h-[calc(100vh-280px)]">
+          <div className="bg-white shadow-lg w-full max-w-[816px] min-h-[1056px] p-16 border border-gold/20 rounded-lg">
             <div
               ref={editorRef}
               contentEditable

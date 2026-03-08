@@ -128,22 +128,22 @@ export default function RecommendedProjects({
                     </span>
                   </div>
 
-                  {/* Developer Logo — Bottom Left — eager loaded */}
+                  {/* Developer Logo — Bottom Left — eager loaded, rounded with no white frame */}
                   {devLogo && (
-                    <div className="absolute bottom-3 left-3 w-10 h-10 rounded-lg overflow-hidden shadow-md bg-white">
+                    <div className="absolute bottom-3 left-3 w-10 h-10 rounded-xl overflow-hidden shadow-md border border-gold/40">
                       <SafeImage
                         src={devLogo}
                         alt={project.developer?.name || "Developer"}
-                        className="w-full h-full object-contain p-0.5"
+                        className="w-full h-full object-cover"
                         loading="eager"
                       />
                     </div>
                   )}
 
-                  {/* Handover Date — Bottom Right — ORANGE like price */}
+                  {/* Handover Date — Bottom Right — Orange label style */}
                   {project.handover_date && (
                     <div className="absolute bottom-3 right-3">
-                      <span className="bg-black/70 backdrop-blur-sm text-orange-400 border border-orange-400/40 px-2 py-0.5 rounded text-[11px] font-bold">
+                      <span className="bg-orange-500 text-white px-2.5 py-1 rounded-md text-[11px] font-bold shadow-md">
                         {formatDisplayDate(project.handover_date)}
                       </span>
                     </div>
