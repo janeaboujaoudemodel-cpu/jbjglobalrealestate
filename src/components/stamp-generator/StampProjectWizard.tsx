@@ -158,6 +158,8 @@ interface FormState {
   icon_style: IconStyle;
   monogram_text: string;
   uploaded_logo_url: string;
+  language_reversed: boolean;
+  show_license_number: boolean;
 }
 
 const STEPS = ['Company Details', 'Stamp Style', 'Logo / Monogram'];
@@ -201,6 +203,8 @@ export default function StampProjectWizard() {
       icon_style: 'MONOGRAM' as IconStyle,
       monogram_text: '',
       uploaded_logo_url: '',
+      language_reversed: false,
+      show_license_number: true,
     };
   });
 
@@ -424,7 +428,47 @@ export default function StampProjectWizard() {
                     <Label className="text-xs font-medium mb-1.5 block">City in Arabic</Label>
                     <Input value={form.arabic_city} onChange={e => set('arabic_city', e.target.value)} placeholder="دبي، الإمارات العربية المتحدة" dir="rtl"/>
                   </div>
+                  {form.language_mode === 'BILINGUAL' && (
+                    <button
+                      type="button"
+                      onClick={() => set('language_reversed', !form.language_reversed)}
+                      className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl border-2 transition-all ${
+                        form.language_reversed
+                          ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)]'
+                          : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'
+                      }`}
+                    >
+                      <Globe size={14} className={form.language_reversed ? 'text-[hsl(var(--gold-dark))]' : 'text-[hsl(var(--muted-foreground))]'}/>
+                      <div className="text-left">
+                        <p className="text-[11px] font-semibold text-[hsl(var(--foreground))]">Reverse Languages</p>
+                        <p className="text-[9px] text-[hsl(var(--muted-foreground))]">
+                          {form.language_reversed ? 'Arabic on top · English on bottom' : 'English on top · Arabic on bottom'}
+                        </p>
+                      </div>
+                    </button>
+                  )}
                 </div>
+              )}
+
+              {/* Show/hide license number toggle */}
+              {form.registration_number_optional && (
+                <button
+                  type="button"
+                  onClick={() => set('show_license_number', !form.show_license_number)}
+                  className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl border-2 transition-all ${
+                    form.show_license_number
+                      ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)]'
+                      : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'
+                  }`}
+                >
+                  <FileText size={14} className={form.show_license_number ? 'text-[hsl(var(--gold-dark))]' : 'text-[hsl(var(--muted-foreground))]'}/>
+                  <div className="text-left">
+                    <p className="text-[11px] font-semibold text-[hsl(var(--foreground))]">Show License Number on Stamp</p>
+                    <p className="text-[9px] text-[hsl(var(--muted-foreground))]">
+                      {form.show_license_number ? 'Visible on stamp' : 'Hidden from stamp'}
+                    </p>
+                  </div>
+                </button>
               )}
             </div>
           )}
@@ -739,6 +783,8 @@ export default function StampProjectWizard() {
                 monogramText={form.monogram_text}
                 uploadedLogoUrl={form.uploaded_logo_url}
                 languageMode={form.language_mode}
+                languageReversed={form.language_reversed}
+                showLicenseNumber={form.show_license_number}
                 size={200}
               />
               <p className="text-[10px] text-[hsl(var(--muted-foreground))] text-center leading-relaxed">
@@ -777,6 +823,8 @@ export default function StampProjectWizard() {
               monogramText={form.monogram_text}
               uploadedLogoUrl={form.uploaded_logo_url}
               languageMode={form.language_mode}
+              languageReversed={form.language_reversed}
+              showLicenseNumber={form.show_license_number}
               size={130}
             />
             <p className="text-xs text-[hsl(var(--muted-foreground))] leading-relaxed max-w-[140px]">
