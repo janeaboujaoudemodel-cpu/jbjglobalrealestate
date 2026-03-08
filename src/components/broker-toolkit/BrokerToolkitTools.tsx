@@ -510,7 +510,7 @@ export function BrokerToolkitTools() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-12"
+            className="text-center mb-8"
           >
             <Badge className="bg-purple-500/30 text-purple-200 border-purple-400/50 mb-4">
               <Wrench className="w-3 h-3 mr-1" />
@@ -524,9 +524,36 @@ export function BrokerToolkitTools() {
             </p>
           </motion.div>
 
+          {/* Search Input */}
+          <div className="max-w-md mx-auto mb-8">
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-400" />
+              <Input
+                type="text"
+                placeholder="Search tools (e.g. stamp, calculator, CRM...)"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-12 h-12 bg-slate-700/50 border-slate-500/50 text-white placeholder:text-zinc-400 focus:border-gold focus:ring-gold/30 rounded-xl"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white text-sm"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+            {searchQuery && (
+              <p className="text-zinc-400 text-sm mt-2 text-center">
+                {filteredTools.length} tool{filteredTools.length !== 1 ? 's' : ''} found
+              </p>
+            )}
+          </div>
+
           {/* ALL TOOLS (shortcuts) - glow/border only with per-tool color */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {TOOLS.map((tool, i) => renderBulkToolCard(tool, i))}
+            {filteredTools.map((tool, i) => renderBulkToolCard(tool, i))}
           </div>
         </div>
 
