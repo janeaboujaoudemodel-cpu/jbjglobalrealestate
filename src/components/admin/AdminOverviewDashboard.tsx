@@ -389,26 +389,26 @@ export const AdminOverviewDashboard = () => {
           <CardContent>
             <div className="grid grid-cols-2 gap-3">
               {[
-                { label: "Manage Leads", icon: <Users className="w-4 h-4" />, href: "/admin/leads" },
-                { label: "View Projects", icon: <Building2 className="w-4 h-4" />, href: "/admin" },
-                { label: "Listing Admin", icon: <FileText className="w-4 h-4" />, href: "/listing-admin" },
-                { label: "CRM Dashboard", icon: <MessageSquare className="w-4 h-4" />, href: "/admin/crm" },
-                { label: "Brokers", icon: <Brain className="w-4 h-4" />, href: "/admin", tabValue: "ai-brokers" },
-                { label: "Security Logs", icon: <Shield className="w-4 h-4" />, href: "/admin", tabValue: "security" },
+                { label: "Leads", icon: <Users className="w-4 h-4" />, href: "/admin/leads" },
+                { label: "Projects", icon: <Building2 className="w-4 h-4" />, href: "/admin?tab=properties" },
+                { label: "Listings", icon: <FileText className="w-4 h-4" />, href: "/listing-admin" },
+                { label: "CRM", icon: <MessageSquare className="w-4 h-4" />, href: "/admin/crm" },
+                { label: "Brokers", icon: <Brain className="w-4 h-4" />, href: "/admin?tab=brokers" },
+                { label: "Security", icon: <Shield className="w-4 h-4" />, href: "/admin?tab=security" },
                 { label: "HR Hub", icon: <Users className="w-4 h-4" />, href: "/hr-dashboard" },
-                { label: "IT Department", icon: <Server className="w-4 h-4" />, href: "/it-department" },
+                { label: "IT Dept", icon: <Server className="w-4 h-4" />, href: "/it-department" },
               ].map((action) => (
                 <Button
                   key={action.label}
                   variant="secondary"
-                  className="justify-start h-auto py-3 px-4"
+                  className="justify-start h-auto py-3 px-3 min-w-0 overflow-hidden"
                   onClick={() => navigate(action.href)}
                 >
-                  <span className="p-1.5 rounded bg-gold/10 text-gold mr-3">
+                  <span className="p-1.5 rounded bg-gold/10 text-gold mr-2 flex-shrink-0">
                     {action.icon}
                   </span>
-                  <span className="text-sm font-medium">{action.label}</span>
-                  <ExternalLink className="w-3 h-3 ml-auto opacity-50" />
+                  <span className="text-sm font-medium truncate">{action.label}</span>
+                  <ExternalLink className="w-3 h-3 ml-auto opacity-50 flex-shrink-0" />
                 </Button>
               ))}
             </div>
