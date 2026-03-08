@@ -245,11 +245,36 @@ export function useProjectsPaginated(
   options?: { publishedFilter?: boolean | "all" }
 ) {
   const publishedFilter = options?.publishedFilter ?? "all";
+  // For drafts, use a lightweight query without heavy joins for faster load
+  const isDrafts = publishedFilter === false;
   return useQuery({
     queryKey: ["projects-paginated", page, pageSize, publishedFilter],
     queryFn: async () => {
       const from = page * pageSize;
       const to = from + pageSize - 1;
+
+      if (isDrafts) {
+        // Lightweight query for drafts - no images/documents joins
+        let q = supabase
+          .from("projects")
+          .select(`
+            *,
+            developer:developers(id, name, slug),
+            community:communities(id, name, slug)
+          `)
+          .or("is_published.is.null,is_published.eq.false")
+          .order("created_at", { ascending: false })
+          .range(from, to);
+
+        const { data, error } = await q;
+        if (error) throw error;
+        return (data as unknown as UnifiedProject[]).map(p => ({
+          ...p,
+          images: [],
+          documents: [],
+        }));
+      }
+
       let query = supabase
         .from("projects")
         .select(`
@@ -264,8 +289,6 @@ export function useProjectsPaginated(
       
       if (publishedFilter === true) {
         query = query.eq("is_published", true);
-      } else if (publishedFilter === false) {
-        query = query.or("is_published.is.null,is_published.eq.false");
       }
 
       const { data, error } = await query;

@@ -959,6 +959,11 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
             </CardTitle>
             <p className="text-sm text-muted-foreground mt-1">
               <span className="font-medium">Showing {imports.length.toLocaleString()}</span> of <span className="font-bold text-foreground">{(totalCount ?? imports.length).toLocaleString()}</span> pending
+              {sourceFilter !== "all" && (
+                <Badge variant="outline" className="ml-2 text-xs">
+                  {sourceFilter === "provident" ? "🏢 Provident" : sourceFilter === "reelly" ? "🔄 Reelly" : "📤 My Uploads"}
+                </Badge>
+              )}
               {(totalCount ?? 0) > imports.length && (
                 <span className="text-amber-600 ml-2">• Scroll down for "Load More"</span>
               )}
@@ -1089,11 +1094,13 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
           </div>
 
           {/* Inventory status cards */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
             {/* Total Pending */}
             <div className="rounded-lg border border-primary/30 bg-primary/5 p-3 text-center">
               <div className="text-2xl font-bold text-foreground">{(totalCount ?? 0).toLocaleString()}</div>
-              <div className="text-xs text-muted-foreground">Total Pending</div>
+              <div className="text-xs text-muted-foreground">
+                {sourceFilter === "provident" ? "Provident Queue" : sourceFilter === "reelly" ? "Reelly Queue" : "Total Pending"}
+              </div>
             </div>
             <button
               onClick={() => setStatusFilter("all")}
@@ -1200,7 +1207,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                       }}
                       formatPrice={formatPrice}
                       onReview={() => {
-                        navigate(`/listing-admin/preview/${item.id}`);
+                        navigate(`/listing-admin/preview/${item.id}?from=approvals&statusFilter=${statusFilter}&sourceFilter=${sourceFilter}`);
                       }}
                       onRepaired={() => {
                         fetchPendingImports();
