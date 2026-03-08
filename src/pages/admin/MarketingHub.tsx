@@ -54,22 +54,22 @@ interface Campaign {
 
 // AI Tools sidebar items
 const AI_TOOLS = [
-  { label: 'AI Email Generator', icon: Mail, route: '/ai/email-generator', color: 'text-teal-400' },
-  { label: 'AI Social Media', icon: Share2, route: '/ai/social-media', color: 'text-pink-400' },
-  { label: 'AI Description Writer', icon: PenTool, route: '/ai/description-writer', color: 'text-blue-400' },
-  { label: 'AI Translation Hub', icon: Globe, route: '/ai/translation-hub', color: 'text-purple-400' },
-  { label: 'AI Video Tour Script', icon: Video, route: '/ai/video-tour-script', color: 'text-orange-400' },
-  { label: 'AI Objection Handler', icon: Shield, route: '/ai/objection-handler', color: 'text-red-400' },
-  { label: 'AI Follow-up Scheduler', icon: Calendar, route: '/ai/followup-scheduler', color: 'text-green-400' },
-  { label: 'AI Client Matcher', icon: Target, route: '/ai/client-matcher', color: 'text-cyan-400' },
-  { label: 'AI Lead Qualification', icon: TrendingUp, route: '/ai/lead-qualification', color: 'text-amber-400' },
-  { label: 'AI Meeting Summarizer', icon: ClipboardList, route: '/ai/meeting-summarizer', color: 'text-indigo-400' },
-  { label: 'AI Call Summarizer', icon: Headphones, route: '/ai/call-summarizer', color: 'text-sky-400' },
-  { label: 'AI Document Analyzer', icon: FileText, route: '/ai/document-analyzer', color: 'text-slate-400' },
-  { label: 'AI Property Evaluation', icon: Lightbulb, route: '/ai/property-evaluation', color: 'text-yellow-400' },
-  { label: 'AI Presentation Generator', icon: Palette, route: '/ai/presentation-generator', color: 'text-rose-400' },
-  { label: 'Marketing Creative Suite', icon: Palette, route: '/studio', color: 'text-fuchsia-400' },
-  { label: 'AI Video Studio', icon: Video, route: '/toolkit/ai-video-studio', color: 'text-violet-400' },
+  { label: 'AI Email Generator', icon: Mail, route: '/ai/email-generator', color: 'text-gold' },
+  { label: 'AI Social Media', icon: Share2, route: '/ai/social-media', color: 'text-gold' },
+  { label: 'AI Description Writer', icon: PenTool, route: '/ai/description-writer', color: 'text-gold' },
+  { label: 'AI Translation Hub', icon: Globe, route: '/ai/translation-hub', color: 'text-gold' },
+  { label: 'AI Video Tour Script', icon: Video, route: '/ai/video-tour-script', color: 'text-gold' },
+  { label: 'AI Objection Handler', icon: Shield, route: '/ai/objection-handler', color: 'text-gold' },
+  { label: 'AI Follow-up Scheduler', icon: Calendar, route: '/ai/followup-scheduler', color: 'text-gold' },
+  { label: 'AI Client Matcher', icon: Target, route: '/ai/client-matcher', color: 'text-gold' },
+  { label: 'AI Lead Qualification', icon: TrendingUp, route: '/ai/lead-qualification', color: 'text-gold' },
+  { label: 'AI Meeting Summarizer', icon: ClipboardList, route: '/ai/meeting-summarizer', color: 'text-gold' },
+  { label: 'AI Call Summarizer', icon: Headphones, route: '/ai/call-summarizer', color: 'text-gold' },
+  { label: 'AI Document Analyzer', icon: FileText, route: '/ai/document-analyzer', color: 'text-gold' },
+  { label: 'AI Property Evaluation', icon: Lightbulb, route: '/ai/property-evaluation', color: 'text-gold' },
+  { label: 'AI Presentation Generator', icon: Palette, route: '/ai/presentation-generator', color: 'text-gold' },
+  { label: 'Marketing Creative Suite', icon: Palette, route: '/studio', color: 'text-gold' },
+  { label: 'AI Video Studio', icon: Video, route: '/toolkit/ai-video-studio', color: 'text-gold' },
 ];
 
 const ADMIN_SHORTCUTS = [
@@ -266,10 +266,10 @@ const MarketingHub: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
             {[
               { label: 'Total Campaigns', value: stats.total, icon: BarChart3, iconBg: 'bg-gold/20 border-gold/30', iconColor: 'text-gold' },
-              { label: 'Sent', value: stats.sent, icon: Send, iconBg: 'bg-green-100 border-green-200', iconColor: 'text-green-600' },
-              { label: 'Scheduled', value: stats.scheduled, icon: Calendar, iconBg: 'bg-blue-100 border-blue-200', iconColor: 'text-blue-600' },
-              { label: 'Drafts', value: stats.drafts, icon: Edit2, iconBg: 'bg-amber-100 border-amber-200', iconColor: 'text-amber-600' },
-              { label: 'Subscribers', value: subscriberCount || 0, icon: Users, iconBg: 'bg-purple-100 border-purple-200', iconColor: 'text-purple-600' },
+              { label: 'Sent', value: stats.sent, icon: Send, iconBg: 'bg-gold/10 border-gold/20', iconColor: 'text-gold' },
+              { label: 'Scheduled', value: stats.scheduled, icon: Calendar, iconBg: 'bg-gold/10 border-gold/20', iconColor: 'text-gold' },
+              { label: 'Drafts', value: stats.drafts, icon: Edit2, iconBg: 'bg-gold/10 border-gold/20', iconColor: 'text-gold' },
+              { label: 'Subscribers', value: subscriberCount || 0, icon: Users, iconBg: 'bg-gold/10 border-gold/20', iconColor: 'text-gold' },
             ].map((stat, idx) => (
               <motion.div
                 key={stat.label}
@@ -328,22 +328,22 @@ const MarketingHub: React.FC = () => {
             <TabsContent value="ai-tools" className="m-0">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {[
-                  { label: 'AI Email Generator', desc: 'Generate professional emails with AI', icon: Mail, route: '/ai/email-generator', color: 'from-teal-500 to-teal-600' },
-                  { label: 'AI Suggest Reply', desc: 'Smart reply suggestions for tickets', icon: MessageCircle, route: '/admin/support-tickets', color: 'from-blue-500 to-blue-600' },
-                  { label: 'AI Assistant', desc: 'Your personal AI business assistant', icon: Bot, route: '/founders-assistant', color: 'from-purple-500 to-purple-600' },
-                  { label: 'AI Social Media', desc: 'Create social media content', icon: Share2, route: '/ai/social-media', color: 'from-pink-500 to-pink-600' },
-                  { label: 'AI Description Writer', desc: 'Property descriptions in seconds', icon: PenTool, route: '/ai/description-writer', color: 'from-orange-500 to-orange-600' },
-                  { label: 'AI Translation Hub', desc: 'Translate content to 15+ languages', icon: Globe, route: '/ai/translation-hub', color: 'from-indigo-500 to-indigo-600' },
-                  { label: 'AI Video Tour Script', desc: 'Script video tours for properties', icon: Video, route: '/ai/video-tour-script', color: 'from-red-500 to-red-600' },
-                  { label: 'AI Client Matcher', desc: 'Match clients to properties with AI', icon: Target, route: '/ai/client-matcher', color: 'from-cyan-500 to-cyan-600' },
-                  { label: 'AI Lead Qualification', desc: 'Score and qualify leads automatically', icon: TrendingUp, route: '/ai/lead-qualification', color: 'from-amber-500 to-amber-600' },
-                  { label: 'AI Objection Handler', desc: 'Handle client objections professionally', icon: Shield, route: '/ai/objection-handler', color: 'from-rose-500 to-rose-600' },
-                  { label: 'AI Follow-up Scheduler', desc: 'Smart follow-up timing', icon: Calendar, route: '/ai/followup-scheduler', color: 'from-green-500 to-green-600' },
-                  { label: 'AI Meeting Summarizer', desc: 'Summarize meetings into action items', icon: ClipboardList, route: '/ai/meeting-summarizer', color: 'from-violet-500 to-violet-600' },
-                  { label: 'AI Market Report', desc: 'Generate market intelligence reports', icon: BarChart3, route: '/ai/market-report', color: 'from-emerald-500 to-emerald-600' },
-                  { label: 'AI Contract Reviewer', desc: 'Review contracts for key terms', icon: FileText, route: '/ai/contract-reviewer', color: 'from-slate-500 to-slate-600' },
-                  { label: 'AI Investment Report', desc: 'Investment analysis reports', icon: Lightbulb, route: '/ai/investment-report', color: 'from-yellow-500 to-yellow-600' },
-                  { label: 'All AI Tools', desc: 'Access all 52+ platform tools', icon: Sparkles, route: '/toolkit', color: 'from-gold to-amber-600' },
+              { label: 'AI Email Generator', desc: 'Generate professional emails with AI', icon: Mail, route: '/ai/email-generator', color: 'from-[#C9A84C] to-[#B8973F]' },
+                  { label: 'AI Suggest Reply', desc: 'Smart reply suggestions for tickets', icon: MessageCircle, route: '/admin/support-tickets', color: 'from-[#C9A84C] to-[#A68A3A]' },
+                  { label: 'AI Assistant', desc: 'Your personal AI business assistant', icon: Bot, route: '/founders-assistant', color: 'from-[#C9A84C] to-[#B8973F]' },
+                  { label: 'AI Social Media', desc: 'Create social media content', icon: Share2, route: '/ai/social-media', color: 'from-[#C9A84C] to-[#A68A3A]' },
+                  { label: 'AI Description Writer', desc: 'Property descriptions in seconds', icon: PenTool, route: '/ai/description-writer', color: 'from-[#C9A84C] to-[#B8973F]' },
+                  { label: 'AI Translation Hub', desc: 'Translate content to 15+ languages', icon: Globe, route: '/ai/translation-hub', color: 'from-[#C9A84C] to-[#A68A3A]' },
+                  { label: 'AI Video Tour Script', desc: 'Script video tours for properties', icon: Video, route: '/ai/video-tour-script', color: 'from-[#C9A84C] to-[#B8973F]' },
+                  { label: 'AI Client Matcher', desc: 'Match clients to properties with AI', icon: Target, route: '/ai/client-matcher', color: 'from-[#C9A84C] to-[#A68A3A]' },
+                  { label: 'AI Lead Qualification', desc: 'Score and qualify leads automatically', icon: TrendingUp, route: '/ai/lead-qualification', color: 'from-[#C9A84C] to-[#B8973F]' },
+                  { label: 'AI Objection Handler', desc: 'Handle client objections professionally', icon: Shield, route: '/ai/objection-handler', color: 'from-[#C9A84C] to-[#A68A3A]' },
+                  { label: 'AI Follow-up Scheduler', desc: 'Smart follow-up timing', icon: Calendar, route: '/ai/followup-scheduler', color: 'from-[#C9A84C] to-[#B8973F]' },
+                  { label: 'AI Meeting Summarizer', desc: 'Summarize meetings into action items', icon: ClipboardList, route: '/ai/meeting-summarizer', color: 'from-[#C9A84C] to-[#A68A3A]' },
+                  { label: 'AI Market Report', desc: 'Generate market intelligence reports', icon: BarChart3, route: '/ai/market-report', color: 'from-[#C9A84C] to-[#B8973F]' },
+                  { label: 'AI Contract Reviewer', desc: 'Review contracts for key terms', icon: FileText, route: '/ai/contract-reviewer', color: 'from-[#C9A84C] to-[#A68A3A]' },
+                  { label: 'AI Investment Report', desc: 'Investment analysis reports', icon: Lightbulb, route: '/ai/investment-report', color: 'from-[#C9A84C] to-[#B8973F]' },
+                  { label: 'All AI Tools', desc: 'Access all 52+ platform tools', icon: Sparkles, route: '/toolkit', color: 'from-[#C9A84C] to-[#A68A3A]' },
                 ].map((tool, idx) => (
                   <motion.div
                     key={tool.route}
@@ -355,9 +355,9 @@ const MarketingHub: React.FC = () => {
                       to={tool.route}
                       className="block p-4 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F5F0E6] hover:border-gold hover:shadow-lg transition-all group"
                     >
-                      <div className="flex items-start gap-3">
+          <div className="flex items-start gap-3">
                         <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${tool.color} flex items-center justify-center shadow-lg shrink-0`}>
-                          <tool.icon className="w-5 h-5 text-white" />
+                          <tool.icon className="w-5 h-5 text-black" />
                         </div>
                         <div className="min-w-0">
                           <p className="font-semibold text-black text-sm group-hover:text-gold transition-colors">{tool.label}</p>
@@ -532,17 +532,17 @@ const MarketingHub: React.FC = () => {
             </Button>
             <Link to="/ai/email-generator">
               <Button variant="outline" size="sm" className="border-gold/40 text-black text-xs hover:bg-gold/10">
-                <Mail className="w-3.5 h-3.5 mr-1.5 text-teal-600" /> AI Email
+                <Mail className="w-3.5 h-3.5 mr-1.5 text-gold" /> AI Email
               </Button>
             </Link>
             <Link to="/ai/social-media">
               <Button variant="outline" size="sm" className="border-gold/40 text-black text-xs hover:bg-gold/10">
-                <Share2 className="w-3.5 h-3.5 mr-1.5 text-pink-600" /> Social Post
+                <Share2 className="w-3.5 h-3.5 mr-1.5 text-gold" /> Social Post
               </Button>
             </Link>
             <Link to="/founders-assistant">
               <Button variant="outline" size="sm" className="border-gold/40 text-black text-xs hover:bg-gold/10">
-                <Bot className="w-3.5 h-3.5 mr-1.5 text-purple-600" /> AI Assistant
+                <Bot className="w-3.5 h-3.5 mr-1.5 text-gold" /> AI Assistant
               </Button>
             </Link>
             <Link to="/toolkit">
