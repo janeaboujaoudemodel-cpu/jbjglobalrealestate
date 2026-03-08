@@ -707,7 +707,7 @@ export default function OwnerDashboardOverview() {
         </TabsContent>
 
         {/* All Leads Tab — lazy rendered */}
-        <TabsContent value="leads" className="space-y-4">
+        <TabsContent value="leads" className="space-y-4 mt-0">
           {activeTab === "leads" && (
             <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
               <CardHeader>
@@ -729,7 +729,7 @@ export default function OwnerDashboardOverview() {
         </TabsContent>
 
         {/* Flagged Leads Tab — lazy rendered */}
-        <TabsContent value="flagged" className="space-y-4">
+        <TabsContent value="flagged" className="space-y-4 mt-0">
           {activeTab === "flagged" && (
             <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
               <CardHeader>
@@ -753,7 +753,7 @@ export default function OwnerDashboardOverview() {
         </TabsContent>
 
         {/* VIP Leads Tab — lazy rendered */}
-        <TabsContent value="vip" className="space-y-4">
+        <TabsContent value="vip" className="space-y-4 mt-0">
           {activeTab === "vip" && (
             <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
               <CardHeader>
@@ -778,7 +778,7 @@ export default function OwnerDashboardOverview() {
         </TabsContent>
 
         {/* Leads Management Tab — Recently Deleted */}
-        <TabsContent value="leads-management" className="space-y-4">
+        <TabsContent value="leads-management" className="space-y-4 mt-0">
           {activeTab === "leads-management" && (
             <Suspense fallback={<Skeleton className="h-64 w-full" />}>
               <RecentlyDeletedLeads userId={user?.id || ""} onRefresh={handleRefresh} />
@@ -787,7 +787,7 @@ export default function OwnerDashboardOverview() {
         </TabsContent>
 
         {/* Employees Hub Tab — lazy rendered */}
-        <TabsContent value="employees" className="space-y-4">
+        <TabsContent value="employees" className="space-y-4 mt-0">
           {activeTab === "employees" && (
             <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
               <CardHeader>
@@ -807,7 +807,7 @@ export default function OwnerDashboardOverview() {
         </TabsContent>
 
         {/* Audit Logs Tab */}
-        <TabsContent value="audit" className="space-y-4">
+        <TabsContent value="audit" className="space-y-4 mt-0">
           <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
             <CardHeader>
               <CardTitle className="text-lg text-black flex items-center gap-2">
