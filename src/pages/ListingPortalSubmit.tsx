@@ -697,15 +697,8 @@ const ListingPortalSubmit = () => {
                   animate={{ opacity: 1 }}
                   className="bg-white/70 border-2 border-gold/20 rounded-2xl p-12 text-center"
                 >
-                  <div className="relative w-24 h-24 mx-auto mb-6">
-                    <img
-                      src={jbjMonogram}
-                      alt="Loading"
-                      className="w-full h-full object-contain animate-pulse"
-                      style={{ filter: "drop-shadow(0 0 20px rgba(200,167,102,0.4))" }}
-                    />
-                  </div>
-                  <h2 className="text-black text-xl font-bold mb-2">AI is analyzing your documents...</h2>
+                  <BrandedLoader variant="light" text="AI is analyzing..." className="min-h-0 py-8" />
+                  <h2 className="text-black text-xl font-bold mb-2 mt-4">AI is analyzing your documents...</h2>
                   <p className="text-zinc-600 text-sm mb-6">
                     Extracting property details, images, floor plans, and generating your listing
                   </p>
@@ -1278,15 +1271,8 @@ const ListingPortalSubmit = () => {
                   animate={{ opacity: 1 }}
                   className="bg-white/70 border-2 border-gold/20 rounded-2xl p-12 text-center"
                 >
-                  <div className="relative w-24 h-24 mx-auto mb-6">
-                    <img
-                      src={jbjMonogram}
-                      alt="Loading"
-                      className="w-full h-full object-contain animate-pulse"
-                      style={{ filter: "drop-shadow(0 0 20px rgba(200,167,102,0.4))" }}
-                    />
-                  </div>
-                  <h2 className="text-black text-xl font-bold">
+                  <BrandedLoader variant="light" text={isOwner ? 'Approving...' : 'Submitting...'} className="min-h-0 py-8" />
+                  <h2 className="text-black text-xl font-bold mt-4">
                     {isOwner ? 'Approving & publishing...' : 'Submitting for approval...'}
                   </h2>
                 </motion.div>
