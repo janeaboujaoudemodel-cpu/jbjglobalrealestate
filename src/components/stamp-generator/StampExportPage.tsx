@@ -10,7 +10,7 @@ import { StampColorWheel } from '@/components/stamp-generator/StampColorWheel';
 import JSZip from 'jszip';
 import {
   Download, ArrowLeft, Stamp, CheckCircle2, Loader2,
-  FileImage, FileText, File, Package, Palette, X, Plus, Image
+  FileImage, FileText, File, Package, Palette, X, Plus, Image, PenTool
 } from 'lucide-react';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
