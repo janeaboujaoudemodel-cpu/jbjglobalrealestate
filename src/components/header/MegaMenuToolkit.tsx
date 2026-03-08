@@ -119,7 +119,7 @@ const MegaMenuToolkit = React.forwardRef<HTMLDivElement, MegaMenuToolkitProps>((
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <Sparkles className="w-5 h-5 text-gold" />
-            <h3 className="text-lg font-semibold text-white">JBJ AI Tools Hub</h3>
+            <h3 className="text-lg font-semibold text-white">JBJ Royal Tools Hub</h3>
           </div>
           <a 
             href="/toolkit" 

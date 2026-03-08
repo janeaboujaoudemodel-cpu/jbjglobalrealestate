@@ -89,7 +89,7 @@ export function ToolkitShowcaseCard() {
                 className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-2"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
-                JBJ AI Tools Hub
+                JBJ Royal Tools Hub
               </h2>
               
               <p className="text-zinc-600 text-sm md:text-base max-w-2xl">
