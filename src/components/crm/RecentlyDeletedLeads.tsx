@@ -100,20 +100,17 @@ export default function RecentlyDeletedLeads({ userId, onRefresh }: RecentlyDele
           Recently deleted leads — auto-purged after 30 days. Restore leads before they are permanently removed.
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
-        {/* Search */}
-        <div className="relative max-w-sm">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search deleted leads..."
-            className="pl-10 bg-white border-gold/30"
-          />
-        </div>
-
-        {/* Stats */}
-        <div className="flex items-center gap-4">
+        {/* Search + Stats on one line */}
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="relative flex-1 min-w-[200px] max-w-sm">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search deleted leads..."
+              className="pl-10 bg-white border-gold/30"
+            />
+          </div>
           <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200">
             {leads.length} deleted lead{leads.length !== 1 ? "s" : ""}
           </Badge>
