@@ -82,7 +82,7 @@ export interface CommunicationGroup {
 // FOUNDER ID (Always in all groups)
 // ============================================
 
-const FOUNDER_ID = 'jane-abou-jaoude';
+const FOUNDER_ID = 'jane-bou-jaoude';
 const FOUNDER_ASSISTANT_ID = 'amanda-clarke';
 const COO_ASSISTANT_ID = 'sarah-parker';
 

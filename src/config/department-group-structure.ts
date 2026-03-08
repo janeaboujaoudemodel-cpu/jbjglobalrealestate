@@ -81,7 +81,7 @@ const DEPARTMENT_LEADERS: Record<string, { leaderId: string; leaderName: string;
   'Software Engineering': { leaderId: 'james-woodward', leaderName: 'James Woodward', reportsTo: 'richard-pemberton' },
   'Project Management': { leaderId: 'rachel-campbell', leaderName: 'Rachel Campbell', reportsTo: 'richard-pemberton' },
   'Customer Happiness': { leaderId: 'lisa-henderson', leaderName: 'Lisa Henderson', reportsTo: 'richard-pemberton' },
-  'Legal': { leaderId: 'william-thornton-legal', leaderName: 'William Thornton', reportsTo: 'jane-abou-jaoude' },
+  'Legal': { leaderId: 'william-thornton-legal', leaderName: 'William Thornton', reportsTo: 'jane-bou-jaoude' },
 };
 
 // ============================================
@@ -121,7 +121,7 @@ function generateDepartmentGroups(): DepartmentGroup[] {
       name: `${department} WhatsApp`,
       department,
       type: 'whatsapp',
-      members: ['jane-abou-jaoude', ...members.map(m => m.id)],
+      members: ['jane-bou-jaoude', ...members.map(m => m.id)],
       memberDetails: members,
       leaderId: leader.leaderId,
       leaderName: leader.leaderName,
@@ -136,7 +136,7 @@ function generateDepartmentGroups(): DepartmentGroup[] {
       name: `${department} Team`,
       department,
       type: 'website',
-      members: ['jane-abou-jaoude', ...members.map(m => m.id)],
+      members: ['jane-bou-jaoude', ...members.map(m => m.id)],
       memberDetails: members,
       leaderId: leader.leaderId,
       leaderName: leader.leaderName,
@@ -212,14 +212,14 @@ export function buildReportingHierarchy(): ReportingNode[] {
   // Department heads report to Amanda Clarke (who consolidates for Founder)
   const departmentHeadIds = Object.values(DEPARTMENT_LEADERS)
     .map(l => l.leaderId)
-    .filter(id => id && id !== 'jane-abou-jaoude');
+    .filter(id => id && id !== 'jane-bou-jaoude');
 
   departmentHeadIds.forEach(headId => {
     const head = allTeamMembers.find(m => m.id === headId);
     if (head && head.reportsTo) {
       const reportsToMember = allTeamMembers.find(m => m.id === head.reportsTo);
       // If the head reports to someone who reports to Founder, their senior reports to Amanda
-      if (reportsToMember && reportsToMember.reportsTo === 'jane-abou-jaoude') {
+      if (reportsToMember && reportsToMember.reportsTo === 'jane-bou-jaoude') {
         nodes.push({
           employeeId: reportsToMember.id,
           employeeName: reportsToMember.name,
@@ -239,7 +239,7 @@ export function buildReportingHierarchy(): ReportingNode[] {
     employeeName: 'Amanda Clarke',
     role: "Executive Assistant to CEO (Founder's Admin)",
     department: 'Executive',
-    reportsTo: 'jane-abou-jaoude',
+    reportsTo: 'jane-bou-jaoude',
     reportFrequency: 'daily',
     reportType: 'All Departments Consolidated Report',
   });
@@ -259,7 +259,7 @@ export const COMPANY_LEADERSHIP_GROUP: DepartmentGroup = {
   department: 'Leadership',
   type: 'website',
   members: [
-    'jane-abou-jaoude',
+    'jane-bou-jaoude',
     'david-thornton',
     'richard-pemberton',
     'natasha-daoud',

@@ -98,11 +98,11 @@ const LeadStatusBadge = ({
       onClick={onClick}
       disabled={onClick ? false : undefined}
       className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-full font-bold transition-all shadow-sm",
+        "inline-flex items-center justify-center gap-1.5 rounded-full font-bold transition-all shadow-sm",
         sizeClasses[size],
         isNew 
-          ? "bg-blue-500/20 text-blue-300 border border-blue-400/30" 
-          : cn(statusInfo.bgColor, statusInfo.textColor, "border border-current/20"),
+          ? "bg-blue-500/15 text-blue-700 border border-blue-400/20" 
+          : cn(statusInfo.bgColor, "text-black/80", "border border-current/10"),
         onClick && "hover:scale-105 hover:shadow-md cursor-pointer group",
         !onClick && "cursor-default",
         className
@@ -110,21 +110,17 @@ const LeadStatusBadge = ({
     >
       {showDot && (
         <span 
-          className={cn(
-            "w-2 h-2 rounded-full ring-2",
-            "ring-current/30"
-          )}
+          className="w-2 h-2 rounded-full flex-shrink-0"
           style={{ backgroundColor: statusInfo.dotColor }}
         />
       )}
-      <span className="font-bold tracking-wide uppercase text-center">
+      <span className="font-bold tracking-wide uppercase text-center text-[inherit]">
         {statusInfo.label}
       </span>
       {onClick && (
         <svg 
           className={cn(
-            "w-3 h-3 transition-transform",
-            isNew ? "text-zinc-800" : "text-current/70",
+            "w-3 h-3 transition-transform text-current/50",
             "group-hover:translate-y-0.5"
           )} 
           fill="none" 
