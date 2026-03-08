@@ -576,7 +576,7 @@ const PropertyMap = () => {
                       </span>
                       <Link to={`/project/${project.slug}`}>
                         <Button size="sm" variant="outline" className="h-7 text-xs">
-                          View <ChevronRight className="h-3 w-3 ml-1" />
+                          {t.view} <ChevronRight className="h-3 w-3 ml-1" />
                         </Button>
                       </Link>
                     </div>
@@ -592,7 +592,7 @@ const PropertyMap = () => {
       {showList && (
         <div className="absolute top-14 right-0 bottom-0 w-full sm:w-96 bg-background/95 backdrop-blur-sm border-l z-[999] overflow-hidden flex flex-col">
           <div className="p-4 border-b flex items-center justify-between">
-            <h2 className="font-semibold">{filteredProjects.length} Properties</h2>
+            <h2 className="font-semibold">{filteredProjects.length} {t.properties}</h2>
             <Button variant="ghost" size="sm" onClick={() => setShowList(false)}>
               <X className="h-4 w-4" />
             </Button>
@@ -670,7 +670,7 @@ const PropertyMap = () => {
               <div className="p-4">
                 <h3 className="font-semibold text-lg mb-1">{selectedProject.name}</h3>
                 <p className="text-sm text-muted-foreground mb-3">
-                  by {selectedProject.developer?.name} • {selectedProject.community?.name || selectedProject.location}
+                  {t.by} {selectedProject.developer?.name} • {selectedProject.community?.name || selectedProject.location}
                 </p>
                 
                 <div className="grid grid-cols-3 gap-3 mb-4">
@@ -696,14 +696,14 @@ const PropertyMap = () => {
                 
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs text-muted-foreground">Starting from</p>
+                    <p className="text-xs text-muted-foreground">{t.startingFrom}</p>
                     <p className="text-xl font-bold text-primary">
                       {formatPrice(selectedProject.price_from)}
                     </p>
                   </div>
                   <Link to={`/project/${selectedProject.slug}`}>
                     <Button className="gap-2">
-                      View Details
+                      {t.viewDetails}
                       <ExternalLink className="h-4 w-4" />
                     </Button>
                   </Link>
