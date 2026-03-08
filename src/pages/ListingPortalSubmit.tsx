@@ -143,9 +143,9 @@ const ListingPortalSubmit = () => {
       sessionStorage.removeItem(SESSION_KEY);
       return;
     }
-    const stateToSave = { phase, form, listingCategory, uploadedImageUrls, extractedData, pricePrediction, sellerRole, contactMode };
+    const stateToSave = { phase, form, listingCategory, uploadedImageUrls, extractedData, pricePrediction, sellerRole, contactMode, sourceUrl, sourceText };
     sessionStorage.setItem(SESSION_KEY, JSON.stringify(stateToSave));
-  }, [phase, form, listingCategory, uploadedImageUrls, extractedData, pricePrediction, sellerRole, contactMode]);
+  }, [phase, form, listingCategory, uploadedImageUrls, extractedData, pricePrediction, sellerRole, contactMode, sourceUrl, sourceText]);
 
   // Scroll to creator section on phase changes
   useEffect(() => {
@@ -226,8 +226,8 @@ const ListingPortalSubmit = () => {
   };
 
   const runAIExtraction = async () => {
-    if (uploadedDocs.length === 0) {
-      toast.error('Please upload at least one document');
+    if (uploadedDocs.length === 0 && !sourceUrl.trim() && !sourceText.trim()) {
+      toast.error('Please upload documents, enter a URL, or paste text');
       return;
     }
     
