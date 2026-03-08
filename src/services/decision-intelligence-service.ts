@@ -205,11 +205,8 @@ class DecisionIntelligenceService {
       this.state.riskAlerts = detectRisks(this.state.kpis);
 
       // Load real decision log from ai_job_master
-      const { data: jobHistory } = await supabase
-        .from('ai_job_master')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(10);
+      const jobResult = await (supabase as any).from('ai_job_master').select('*').order('created_at', { ascending: false }).limit(10);
+      const jobHistory = jobResult.data || [];
 
       this.state.decisionLog = (jobHistory || []).map(job => ({
         id: job.id,
