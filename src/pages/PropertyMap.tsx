@@ -321,7 +321,7 @@ const PropertyMap = () => {
       
       return true;
     });
-  }, [allProjects, searchTerm, selectedDeveloper, selectedBedrooms, priceRange]);
+  }, [allProjects, searchTerm, selectedDeveloper, selectedArea, selectedBedrooms, priceRange]);
   
   const clearFilters = () => {
     setSearchTerm("");
