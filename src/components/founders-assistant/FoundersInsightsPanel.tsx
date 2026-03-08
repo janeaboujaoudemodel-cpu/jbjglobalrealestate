@@ -320,8 +320,8 @@ const FoundersInsightsPanel: React.FC = () => {
                     <CardTitle className="text-base">{dept.departmentName}</CardTitle>
                     <Badge variant="outline" className={
                       dept.weekOverWeekChange >= 0 
-                        ? 'bg-primary/10 text-primary border-primary/20' 
-                        : 'bg-destructive/10 text-destructive border-destructive/20'
+                        ? 'bg-[#C9A84C]/15 text-[#8B6914] border-[#C9A84C]/30 font-bold' 
+                        : 'bg-destructive/10 text-destructive border-destructive/20 font-bold'
                     }>
                       {dept.weekOverWeekChange > 0 ? '+' : ''}{dept.weekOverWeekChange}%
                     </Badge>
@@ -380,9 +380,9 @@ const FoundersInsightsPanel: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-base flex items-center gap-2">
-                  <Award className="h-4 w-4 text-amber-500" />
-                  Top Performers This Week
+                <CardTitle className="text-base flex items-center gap-2 truncate">
+                  <Award className="h-4 w-4 text-amber-500 flex-shrink-0" />
+                  <span className="truncate">Top Performers This Week</span>
                 </CardTitle>
               </CardHeader>
               <CardContent>
