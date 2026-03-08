@@ -348,6 +348,7 @@ const OwnerAuditPage = lazy(() => import("./pages/owner/OwnerAuditPage"));
 const OwnerIntegrationsPage = lazy(() => import("./pages/owner/OwnerIntegrationsPage"));
 const OwnerSafetyPage = lazy(() => import("./pages/owner/OwnerSafetyPage"));
 const OwnerFounderSettings = lazy(() => import("./pages/owner/OwnerFounderSettings"));
+const GlobalRecommendationsHub = lazy(() => import("./pages/owner/GlobalRecommendationsHub"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -464,6 +465,7 @@ const App = () => {
                 } />
                 {/* Nested tools routes */}
                 <Route path="founder-assistant" element={<FoundersAssistant />} />
+                <Route path="recommendations" element={<GlobalRecommendationsHub />} />
                 <Route path="toolkit" element={<RoyalToolsHub />} />
                 <Route path="automations" element={<Automations />} />
                 <Route path="studio" element={<Studio />} />
