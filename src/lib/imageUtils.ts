@@ -187,11 +187,19 @@ function normalizeUrlForDedup(url: string): string {
   try {
     const u = new URL(url);
     // Strip leading numeric timestamps from Supabase storage filenames
-    // e.g. /1772829717579-123456-/ prefix before the actual filename
-    const cleanedPath = u.pathname.replace(/\/\d{13,}-\d+-/g, "/");
-    return (u.host + cleanedPath).replace(/\/+$/, "").toLowerCase();
+    let cleanedPath = u.pathname.replace(/\/\d{13,}-\d+-/g, "/");
+    // Normalize Provident/CloudFront CDN size variants (e.g., /x/464x312/ → /x/SIZE/)
+    cleanedPath = cleanedPath.replace(/\/x\/\d+x\d+\//, "/x/SIZE/");
+    // Strip common resizing query params
+    const strippedSearch = u.search
+      .replace(/[?&](w|width|h|height|q|quality|size|resize|format|fit|auto)=[^&]*/gi, "");
+    return (u.host + cleanedPath + strippedSearch).replace(/[?&]+$/, "").replace(/\/+$/, "").toLowerCase();
   } catch {
-    return url.toLowerCase().replace(/\?.*$/, "").replace(/\/+$/, "").replace(/\/\d{13,}-\d+-/g, "/");
+    return url.toLowerCase()
+      .replace(/\?.*$/, "")
+      .replace(/\/+$/, "")
+      .replace(/\/\d{13,}-\d+-/g, "/")
+      .replace(/\/x\/\d+x\d+\//, "/x/SIZE/");
   }
 }
 

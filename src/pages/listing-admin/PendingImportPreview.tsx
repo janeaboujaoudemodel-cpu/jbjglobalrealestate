@@ -183,6 +183,35 @@ const PendingImportPreview = () => {
     fetchImport();
   }, [id, toast]);
 
+  // Look up developer details (logo, description, etc.) from developers table
+  const [developerDetails, setDeveloperDetails] = useState<{
+    slug?: string | null;
+    logo_url?: string | null;
+    description?: string | null;
+    founded_year?: number | null;
+    completed_projects?: number | null;
+    offplan_projects?: number | null;
+    headquarters?: string | null;
+    website_url?: string | null;
+    ceo_name?: string | null;
+    total_units_delivered?: number | null;
+    notable_projects?: string | null;
+    specialization?: string | null;
+  } | null>(null);
+
+  useEffect(() => {
+    const fetchDeveloper = async () => {
+      if (!pendingImport?.developer_name) return;
+      const { data } = await supabase
+        .from("developers")
+        .select("slug, logo_url, description, founded_year, completed_projects, offplan_projects, headquarters, website_url, ceo_name, total_units_delivered, notable_projects, specialization")
+        .ilike("name", pendingImport.developer_name)
+        .maybeSingle();
+      if (data) setDeveloperDetails(data);
+    };
+    fetchDeveloper();
+  }, [pendingImport?.developer_name]);
+
   const mapped = useMemo<ProjectDetailData | null>(() => {
     if (!pendingImport) return null;
 
@@ -210,7 +239,21 @@ const PendingImportPreview = () => {
       slug: pendingImport.slug,
       description: pendingImport.description?.startsWith("Generated from") ? null : pendingImport.description,
       location: pendingImport.location,
-      developer: pendingImport.developer_name ? { name: pendingImport.developer_name } : null,
+      developer: pendingImport.developer_name ? {
+        name: pendingImport.developer_name,
+        slug: developerDetails?.slug ?? null,
+        logo_url: developerDetails?.logo_url ?? null,
+        description: developerDetails?.description ?? null,
+        founded_year: developerDetails?.founded_year ?? null,
+        completed_projects: developerDetails?.completed_projects ?? null,
+        offplan_projects: developerDetails?.offplan_projects ?? null,
+        headquarters: developerDetails?.headquarters ?? null,
+        website_url: developerDetails?.website_url ?? null,
+        ceo_name: developerDetails?.ceo_name ?? null,
+        total_units_delivered: developerDetails?.total_units_delivered ?? null,
+        notable_projects: developerDetails?.notable_projects ?? null,
+        specialization: developerDetails?.specialization ?? null,
+      } : null,
       price_from: pendingImport.price_from,
       price_to: pendingImport.price_to,
       bedrooms_min: pendingImport.bedrooms_min,
@@ -250,7 +293,7 @@ const PendingImportPreview = () => {
       latitude: pendingImport.latitude,
       longitude: pendingImport.longitude,
     };
-  }, [pendingImport]);
+  }, [pendingImport, developerDetails]);
 
   // Duplicate detection – mirrors ProjectApprovalQueue logic
   const checkForDuplicates = useCallback(
@@ -487,12 +530,12 @@ const PendingImportPreview = () => {
 
   if (checkingAdmin || isLoading) {
     return (
-      <section className="relative w-full min-h-screen py-16 md:py-24 bg-black">
+      <section className="relative w-full min-h-screen py-16 md:py-24 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
         <div className="container mx-auto px-4">
-          <Skeleton className="h-8 w-48 bg-zinc-800 mb-8" />
-          <Skeleton className="aspect-[16/9] w-full rounded-lg bg-zinc-800 mb-8" />
-          <Skeleton className="h-12 w-64 bg-zinc-800 mb-4" />
-          <Skeleton className="h-6 w-full max-w-2xl bg-zinc-800" />
+          <Skeleton className="h-8 w-48 bg-gold/20 mb-8" />
+          <Skeleton className="aspect-[16/9] w-full rounded-lg bg-gold/10 mb-8" />
+          <Skeleton className="h-12 w-64 bg-gold/20 mb-4" />
+          <Skeleton className="h-6 w-full max-w-2xl bg-gold/10" />
         </div>
       </section>
     );
@@ -500,10 +543,10 @@ const PendingImportPreview = () => {
 
   if (!hasAccess) {
     return (
-      <section className="relative w-full min-h-screen py-16 md:py-24 flex items-center justify-center bg-black">
+      <section className="relative w-full min-h-screen py-16 md:py-24 flex items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
         <div className="text-center">
-          <h1 className="text-white text-2xl mb-4">Access Denied</h1>
-          <Link to="/" className="text-primary hover:underline">
+          <h1 className="text-black text-2xl mb-4">Access Denied</h1>
+          <Link to="/" className="text-gold hover:underline">
             Go Home
           </Link>
         </div>
@@ -513,10 +556,10 @@ const PendingImportPreview = () => {
 
   if (!pendingImport) {
     return (
-      <section className="relative w-full min-h-screen py-16 md:py-24 flex items-center justify-center bg-black">
+      <section className="relative w-full min-h-screen py-16 md:py-24 flex items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
         <div className="text-center">
-          <h1 className="text-white text-2xl mb-4">Project not found</h1>
-          <Link to="/listing-admin" className="text-primary hover:underline">
+          <h1 className="text-black text-2xl mb-4">Project not found</h1>
+          <Link to="/listing-admin" className="text-gold hover:underline">
             Back to Listing Admin
           </Link>
         </div>
@@ -532,9 +575,9 @@ const PendingImportPreview = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black">
-      {/* Admin Bar - sticky at top */}
-      <section className="bg-gradient-to-r from-champagne via-champagne-light to-champagne border-b border-gold/30 py-4 sticky top-20 lg:top-24 z-40 shadow-md">
+    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+      {/* Admin Bar - sticky at top, no gap */}
+      <section className="bg-gradient-to-r from-champagne via-champagne-light to-champagne border-b-2 border-gold/30 py-3 sticky top-0 z-40 shadow-md">
         <div className="container mx-auto px-4 flex items-center justify-between flex-wrap gap-4">
           <Button 
             variant="primary" 
