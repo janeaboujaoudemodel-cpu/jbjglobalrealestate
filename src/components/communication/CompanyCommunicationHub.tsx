@@ -65,7 +65,7 @@ const CompanyCommunicationHub = () => {
     {
       id: '1',
       senderId: 'jane-bou-jaoude',
-      content: 'Good morning team! Welcome to our new communication hub. Let\'s make today productive! 🚀',
+      content: 'Good morning team! Welcome to our new communication hub. Let\'s make today productive.',
       timestamp: new Date(Date.now() - 3600000),
       channelId: 'general',
     },
@@ -79,7 +79,7 @@ const CompanyCommunicationHub = () => {
     {
       id: '3',
       senderId: 'michael-anderson',
-      content: 'Morning all! Sales team has 3 viewings scheduled today. Let\'s close some deals! 💪',
+      content: 'Morning all! Sales team has 3 viewings scheduled today. Let\'s close some deals.',
       timestamp: new Date(Date.now() - 3400000),
       channelId: 'general',
     },

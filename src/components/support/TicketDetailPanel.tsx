@@ -183,9 +183,9 @@ const SuggestionCard = ({
   };
 
   const typeLabels = {
-    quick_resolution: '✅ Quick Resolution',
-    needs_info: 'ℹ️ Needs Info',
-    acknowledgment: '👋 Acknowledgment',
+    quick_resolution: 'Quick Resolution',
+    needs_info: 'Needs Info',
+    acknowledgment: 'Acknowledgment',
   };
 
   return (
