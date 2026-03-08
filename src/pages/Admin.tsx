@@ -450,7 +450,7 @@ const Admin = () => {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8 pb-24">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <div className="w-full overflow-x-auto scrollbar-gold">
+          <div className="w-full overflow-x-auto jj-scrollbar-gold">
           <TabsList className="w-max min-w-full justify-center bg-white/80 border-2 border-gold/30 p-1">
               <TabsTrigger value="overview" className="tab-trigger-champagne text-black">
                 <LayoutDashboard className="w-4 h-4 mr-2" />
