@@ -348,6 +348,7 @@ const OwnerAuditPage = lazy(() => import("./pages/owner/OwnerAuditPage"));
 const OwnerIntegrationsPage = lazy(() => import("./pages/owner/OwnerIntegrationsPage"));
 const OwnerSafetyPage = lazy(() => import("./pages/owner/OwnerSafetyPage"));
 const OwnerFounderSettings = lazy(() => import("./pages/owner/OwnerFounderSettings"));
+const PodcastStudio = lazy(() => import("./pages/owner/PodcastStudio"));
 const GlobalRecommendationsHub = lazy(() => import("./pages/owner/GlobalRecommendationsHub"));
 
 const queryClient = new QueryClient({
@@ -441,6 +442,7 @@ const App = () => {
                 <Route path="integrations" element={<OwnerIntegrationsPage />} />
                 <Route path="safety" element={<OwnerSafetyPage />} />
                 <Route path="founder-settings" element={<OwnerFounderSettings />} />
+                <Route path="podcast-studio" element={<PodcastStudio />} />
                 <Route path="properties" element={<PropertyManagement />} />
                 <Route path="documents" element={<Documents />} />
                 <Route path="settings" element={<OwnerCommSettings />} />
