@@ -234,6 +234,9 @@ const ReferralAdmin = lazy(() => import("./pages/ReferralAdmin"));
 const RedeemReferral = lazy(() => import("./pages/RedeemReferral"));
 const Spreadsheet = lazy(() => import("./pages/Spreadsheet"));
 const Documents = lazy(() => import("./pages/Documents"));
+const QRCodeGenerator = lazy(() => import("./pages/QRCodeGenerator"));
+const OwnerCreativeSuite = lazy(() => import("./pages/OwnerCreativeSuite"));
+const JobOfferTemplate = lazy(() => import("./pages/JobOfferTemplate"));
 const ContractForms = lazy(() => import("./pages/ContractForms"));
 const VideoMeeting = lazy(() => import("./pages/VideoMeeting"));
 // More admin & utility pages - lazy loaded
@@ -717,6 +720,9 @@ const App = () => {
                 <Route path="/signature-studio" element={<Navigate to="/document-scanner" replace />} />
                 <Route path="/spreadsheet" element={<Spreadsheet />} />
                 <Route path="/documents" element={<Documents />} />
+                <Route path="/qr-generator" element={<QRCodeGenerator />} />
+                <Route path="/owner/creative-suite" element={<OwnerGuard><OwnerCreativeSuite /></OwnerGuard>} />
+                <Route path="/owner/job-offer-template" element={<OwnerGuard><JobOfferTemplate /></OwnerGuard>} />
                 <Route path="/contract-forms" element={<ContractForms />} />
                 <Route path="/video-meeting" element={<VideoMeeting />} />
                 <Route path="/executive-assistant" element={<OwnerGuard><ExecutiveAssistant /></OwnerGuard>} />
