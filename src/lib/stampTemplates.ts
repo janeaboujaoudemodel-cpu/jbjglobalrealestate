@@ -154,7 +154,7 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
   const cityParts = [project.city_optional, project.country_optional].filter(Boolean);
   const city = (cityParts.join(', ') || 'UAE').toUpperCase();
   const arabicCity = (project.arabic_city || '').trim();
-  const regNo = project.registration_number_optional ? `REG: ${project.registration_number_optional}` : '';
+  const regNo = project.registration_number_optional ? project.registration_number_optional : '';
   const mono = (project.monogram_text || name.slice(0, 2)).toUpperCase().slice(0, 3);
   const hasMono = project.icon_style === 'MONOGRAM';
   const isBilingual = project.language_mode === 'BILINGUAL' || project.language_mode === 'AR';

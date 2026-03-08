@@ -563,7 +563,7 @@ export default function StampGeneratorPage() {
                       <div className="flex gap-1.5">
                         {[{ label: 'Black', hex: '#0d0d0d' }, { label: 'Charcoal', hex: '#333333' }, { label: 'White', hex: '#ffffff' }].map(c => (
                           <button key={c.hex} onClick={() => setActiveColor(c.hex)} title={c.label}
-                            className={`w-8 h-8 rounded-full border-2 transition-all hover:scale-110 ${activeColor === c.hex ? 'border-[hsl(var(--gold))] scale-110 shadow-lg' : c.hex === '#ffffff' ? 'border-[hsl(var(--border))]' : 'border-white/60 shadow-sm'}`}
+                            className={`w-8 h-8 rounded-full border-2 transition-all hover:scale-110 ${activeColor === c.hex ? 'border-[hsl(var(--gold))] scale-110 shadow-lg' : c.hex === '#ffffff' ? 'border-[hsl(var(--gold)/0.4)] shadow-[0_0_0_1px_hsl(var(--gold)/0.3)]' : 'border-white/60 shadow-sm'}`}
                             style={{ backgroundColor: c.hex }}/>
                         ))}
                       </div>

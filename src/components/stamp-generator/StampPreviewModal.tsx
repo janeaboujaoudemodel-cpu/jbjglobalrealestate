@@ -350,9 +350,7 @@ export function StampPreviewModal({
                       <div className="h-1.5 w-24 rounded bg-gray-200 mx-auto"/>
                     </div>
                   </div>
-                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 opacity-70">
-                    <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} size={56}/>
-                  </div>
+                  {/* Removed duplicate bottom stamp — only top-right stamp shown */}
                 </div>
               </div>
             )}
