@@ -255,7 +255,7 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
       {/* Brochure Tab */}
       <TabsContent value="brochure" className="mt-6">
         <div className="space-y-4">
-          <h3 className="text-xl font-semibold text-black">Download Brochure</h3>
+          <h3 className="text-xl font-semibold text-black">{brochures.length > 0 ? "Download Brochure" : "Request Brochure"}</h3>
           {brochures.length > 0 ? (
             <div className="space-y-3">
               {brochures.map((doc) => (

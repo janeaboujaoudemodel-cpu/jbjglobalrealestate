@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Download, Layers, ChevronLeft, ChevronRight, AlertCircle, Mail } from "lucide-react";
+import { Download, Layers, ChevronLeft, ChevronRight, AlertCircle, Mail, FileText } from "lucide-react";
 import { SafeImage } from "@/components/SafeImage";
 import { cn } from "@/lib/utils";
 
@@ -69,7 +69,7 @@ export function FloorPlanGallery({
           Floor plans for this project are available upon request.
         </p>
         <div className="flex flex-wrap gap-2 justify-center">
-          {brochureUrl && onDownloadBrochure && (
+          {brochureUrl && onDownloadBrochure ? (
             <Button
               variant="outline"
               size="sm"
@@ -77,6 +77,15 @@ export function FloorPlanGallery({
             >
               <Download className="w-4 h-4 mr-2" />
               Download Brochure
+            </Button>
+          ) : (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => onDownload("floor_plan")}
+            >
+              <FileText className="w-4 h-4 mr-2" />
+              Request Floor Plans
             </Button>
           )}
           {onRequestFloorPlans && (
