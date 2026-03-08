@@ -20123,6 +20123,45 @@ export type Database = {
         }
         Relationships: []
       }
+      user_activity_sessions: {
+        Row: {
+          actions_performed: number | null
+          created_at: string | null
+          duration_minutes: number | null
+          id: string
+          ip_hash: string | null
+          pages_visited: number | null
+          session_end: string | null
+          session_start: string
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          actions_performed?: number | null
+          created_at?: string | null
+          duration_minutes?: number | null
+          id?: string
+          ip_hash?: string | null
+          pages_visited?: number | null
+          session_end?: string | null
+          session_start?: string
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          actions_performed?: number | null
+          created_at?: string | null
+          duration_minutes?: number | null
+          id?: string
+          ip_hash?: string | null
+          pages_visited?: number | null
+          session_end?: string | null
+          session_start?: string
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_behavior_tracking: {
         Row: {
           action_target: string | null
@@ -20765,6 +20804,51 @@ export type Database = {
           push_notifications?: boolean | null
           selected_mode?: string | null
           updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_productivity_scores: {
+        Row: {
+          calls_made: number | null
+          created_at: string | null
+          emails_sent: number | null
+          id: string
+          leads_contacted: number | null
+          login_count: number | null
+          productivity_score: number | null
+          score_date: string
+          tasks_completed: number | null
+          total_hours: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          calls_made?: number | null
+          created_at?: string | null
+          emails_sent?: number | null
+          id?: string
+          leads_contacted?: number | null
+          login_count?: number | null
+          productivity_score?: number | null
+          score_date?: string
+          tasks_completed?: number | null
+          total_hours?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          calls_made?: number | null
+          created_at?: string | null
+          emails_sent?: number | null
+          id?: string
+          leads_contacted?: number | null
+          login_count?: number | null
+          productivity_score?: number | null
+          score_date?: string
+          tasks_completed?: number | null
+          total_hours?: number | null
+          updated_at?: string | null
           user_id?: string
         }
         Relationships: []

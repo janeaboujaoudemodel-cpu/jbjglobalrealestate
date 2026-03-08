@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { 
-  StickyNote, Plus, ArrowLeft, Search, Trash2, Edit2, Save, X, Mic
+  StickyNote, Plus, ArrowLeft, Search, Trash2, Edit2, Save, X, Mic, ListChecks, CheckSquare
 } from "lucide-react";
 import { format } from "date-fns";
 import VoiceNoteRecorder from "@/components/crm/VoiceNoteRecorder";
@@ -96,8 +96,38 @@ const CRMNotes = () => {
   };
 
   const handleVoiceTranscript = (transcript: string) => {
-    addNote(transcript);
+    if (transcript && transcript.trim()) {
+      addNote(transcript);
+      toast.success("Voice note transcribed & saved!");
+    }
     setShowVoiceRecorder(false);
+  };
+
+  // Extract tasks from note content (lines starting with "- [ ]", "TODO:", "task:", "action:")
+  const extractTasks = (noteId: string) => {
+    const note = notes.find(n => n.id === noteId);
+    if (!note) return;
+    const taskPatterns = [
+      /^[-*]\s*\[?\s?\]?\s*(.+)/gm,
+      /(?:TODO|TASK|ACTION|FOLLOW.?UP):\s*(.+)/gim,
+    ];
+    const extracted: string[] = [];
+    taskPatterns.forEach(pattern => {
+      let match;
+      while ((match = pattern.exec(note.content)) !== null) {
+        const task = match[1].trim();
+        if (task.length > 3 && !extracted.includes(task)) extracted.push(task);
+      }
+    });
+    if (extracted.length === 0) {
+      toast.info("No tasks found. Use '- [ ] task' or 'TODO: task' format");
+      return;
+    }
+    // Save extracted tasks to localStorage
+    const existingTasks = JSON.parse(localStorage.getItem(`crm_extracted_tasks_${user?.id}`) || '[]');
+    const newTasks = extracted.map(t => ({ id: `task-${Date.now()}-${Math.random()}`, text: t, done: false, noteId, createdAt: new Date().toISOString() }));
+    localStorage.setItem(`crm_extracted_tasks_${user?.id}`, JSON.stringify([...newTasks, ...existingTasks]));
+    toast.success(`${extracted.length} task(s) extracted from note!`);
   };
 
   const deleteNote = (noteId: string) => {
@@ -276,6 +306,15 @@ const CRMNotes = () => {
                           <div className="flex items-start justify-between mb-2">
                             <h3 className="font-semibold text-black">{note.title}</h3>
                             <div className="flex gap-1">
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                onClick={() => extractTasks(note.id)}
+                                className="h-7 w-7 p-0 text-zinc-600 hover:text-[#C9A84C]"
+                                title="Extract tasks from note"
+                              >
+                                <ListChecks className="h-3 w-3" />
+                              </Button>
                               <Button 
                                 variant="ghost" 
                                 size="sm" 
