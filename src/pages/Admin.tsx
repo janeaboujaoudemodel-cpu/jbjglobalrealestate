@@ -656,8 +656,44 @@ const Admin = () => {
 
           <TabsContent value="podcast-studio" className="space-y-8">
             <Suspense fallback={<TabLoadingFallback />}>
-              <div className="max-w-3xl mx-auto">
-                <VoiceRecorder />
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h2 className="text-xl font-bold text-black">Podcast & Voice Studio</h2>
+                    <p className="text-sm text-black/60">Manage your podcast episodes and voice cloning</p>
+                  </div>
+                  <Button
+                    onClick={() => navigate("/owner/podcast-studio")}
+                    className="bg-gradient-to-r from-[#C9A84C] to-amber-600 hover:from-[#C9A84C]/90 hover:to-amber-600/90 text-black font-semibold shadow-lg shadow-[#C9A84C]/20"
+                  >
+                    <Mic className="w-4 h-4 mr-2" />
+                    Open Full Studio
+                  </Button>
+                </div>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div className="max-w-xl">
+                    <VoiceRecorder />
+                  </div>
+                  <Card className="border-2 border-[#C9A84C]/20 bg-gradient-to-br from-white/80 via-white/60 to-[#F5F0E6]">
+                    <CardHeader>
+                      <CardTitle className="text-base text-black flex items-center gap-2">
+                        <Headphones className="w-4 h-4 text-[#C9A84C]" /> Quick Access
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      {[
+                        { label: "Record New Episode", desc: "Write script & generate with ElevenLabs", action: () => navigate("/owner/podcast-studio") },
+                        { label: "Voice Library", desc: "18+ premium voices with accent controls", action: () => navigate("/owner/podcast-studio") },
+                        { label: "Episode Manager", desc: "View all generated episodes", action: () => navigate("/owner/podcast-studio") },
+                      ].map((item, i) => (
+                        <button key={i} onClick={item.action} className="w-full text-left p-3 rounded-lg border border-[#C9A84C]/20 hover:border-[#C9A84C]/40 hover:bg-[#C9A84C]/5 transition-all">
+                          <p className="font-semibold text-black text-sm">{item.label}</p>
+                          <p className="text-xs text-black/50">{item.desc}</p>
+                        </button>
+                      ))}
+                    </CardContent>
+                  </Card>
+                </div>
               </div>
             </Suspense>
           </TabsContent>
