@@ -727,20 +727,8 @@ const Admin = () => {
               ))}
             </div>
 
-            {/* Smart Document Uploader */}
-            <SmartDocumentUploader 
-              projects={projects?.map(p => ({
-                id: p.id,
-                name: p.name,
-                slug: p.slug,
-                developer: p.developer ? {
-                  id: p.developer.id,
-                  name: p.developer.name,
-                  slug: p.developer.slug
-                } : null
-              }))}
-              onUploadComplete={() => refetchProjects()}
-            />
+
+
 
             {/* Filtered Content based on card selection */}
             {propertiesFilter === "developers" ? (
