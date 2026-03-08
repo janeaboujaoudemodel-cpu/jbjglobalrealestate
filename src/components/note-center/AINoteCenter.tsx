@@ -497,31 +497,31 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {/* Voice Recording Card */}
         <Card 
-          className={`bg-[#0E0E0E] border-gold/20 hover:border-gold/40 transition-all cursor-pointer group ${
-            isRecording ? 'border-red-500 bg-red-500/10' : ''
+          className={`bg-white border-2 border-[#C9A84C]/20 hover:border-[#C9A84C]/40 transition-all cursor-pointer group ${
+            isRecording ? 'border-red-300 bg-red-50' : ''
           }`}
           onClick={isRecording ? stopRecording : startRecording}
         >
           <CardContent className="p-6 flex flex-col items-center justify-center text-center">
             <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-3 transition-transform group-hover:scale-110 ${
-              isRecording ? 'bg-red-500 animate-pulse' : 'bg-gold/10'
+              isRecording ? 'bg-red-500 animate-pulse' : 'bg-[#C9A84C]/10'
             }`}>
               {isRecording ? (
                 <Square className="w-6 h-6 text-white fill-white" />
               ) : (
-                <Mic className="w-6 h-6 text-gold" />
+                <Mic className="w-6 h-6 text-[#C9A84C]" />
               )}
             </div>
             {isRecording ? (
               <>
-                <h3 className="text-red-400 font-semibold">Recording...</h3>
-                <p className="text-lg text-white mt-1">{formatRecordingTime(recordingTime)}</p>
-                <p className="text-xs text-red-300 mt-1">Click to stop</p>
+                <h3 className="text-red-600 font-semibold">Recording...</h3>
+                <p className="text-lg text-black mt-1">{formatRecordingTime(recordingTime)}</p>
+                <p className="text-xs text-red-500 mt-1">Click to stop</p>
               </>
             ) : (
               <>
-                <h3 className="text-white font-semibold">Voice Note</h3>
-                <p className="text-sm text-gray-400 mt-1">Record & transcribe</p>
+                <h3 className="text-black font-semibold">Voice Note</h3>
+                <p className="text-sm text-zinc-500 mt-1">Record & transcribe</p>
               </>
             )}
           </CardContent>
@@ -529,55 +529,55 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
 
         {/* New Note Card */}
         <Card 
-          className="bg-[#0E0E0E] border-gold/20 hover:border-gold/40 transition-all cursor-pointer group"
+          className="bg-white border-2 border-[#C9A84C]/20 hover:border-[#C9A84C]/40 transition-all cursor-pointer group"
           onClick={() => setShowNoteEditor(true)}
         >
           <CardContent className="p-6 flex flex-col items-center justify-center text-center">
-            <div className="w-12 h-12 rounded-full bg-purple-500/10 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-              <Plus className="w-6 h-6 text-purple-400" />
+            <div className="w-12 h-12 rounded-full bg-purple-50 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+              <Plus className="w-6 h-6 text-purple-600" />
             </div>
-            <h3 className="text-white font-semibold">New Note</h3>
-            <p className="text-sm text-gray-400 mt-1">Create manually</p>
+            <h3 className="text-black font-semibold">New Note</h3>
+            <p className="text-sm text-zinc-500 mt-1">Create manually</p>
           </CardContent>
         </Card>
 
         {/* Upload Document Card */}
         <Card 
-          className="bg-[#0E0E0E] border-gold/20 hover:border-gold/40 transition-all cursor-pointer group"
+          className="bg-white border-2 border-[#C9A84C]/20 hover:border-[#C9A84C]/40 transition-all cursor-pointer group"
           onClick={() => setShowUploadDialog(true)}
         >
           <CardContent className="p-6 flex flex-col items-center justify-center text-center">
-            <div className="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-              <Upload className="w-6 h-6 text-blue-400" />
+            <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+              <Upload className="w-6 h-6 text-blue-600" />
             </div>
-            <h3 className="text-white font-semibold">Upload</h3>
-            <p className="text-sm text-gray-400 mt-1">PDF, DOC, TXT</p>
+            <h3 className="text-black font-semibold">Upload</h3>
+            <p className="text-sm text-zinc-500 mt-1">PDF, DOC, TXT</p>
           </CardContent>
         </Card>
 
         {/* New Project Card */}
         <Card 
-          className="bg-[#0E0E0E] border-gold/20 hover:border-gold/40 transition-all cursor-pointer group"
+          className="bg-white border-2 border-[#C9A84C]/20 hover:border-[#C9A84C]/40 transition-all cursor-pointer group"
           onClick={() => setShowProjectDialog(true)}
         >
           <CardContent className="p-6 flex flex-col items-center justify-center text-center">
-            <div className="w-12 h-12 rounded-full bg-green-500/10 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-              <FolderOpen className="w-6 h-6 text-green-400" />
+            <div className="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+              <FolderOpen className="w-6 h-6 text-green-600" />
             </div>
-            <h3 className="text-white font-semibold">New Project</h3>
-            <p className="text-sm text-gray-400 mt-1">Organize notes</p>
+            <h3 className="text-black font-semibold">New Project</h3>
+            <p className="text-sm text-zinc-500 mt-1">Organize notes</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Processing Indicator */}
       {isProcessing && (
-        <Card className="bg-gold/10 border-gold/30">
+        <Card className="bg-[#C9A84C]/10 border border-[#C9A84C]/30">
           <CardContent className="p-4 flex items-center gap-3">
-            <Loader2 className="w-5 h-5 text-gold animate-spin" />
+            <Loader2 className="w-5 h-5 text-[#C9A84C] animate-spin" />
             <div>
-              <p className="text-white font-medium">AI Processing...</p>
-              <p className="text-sm text-gray-400">Extracting key points and action items</p>
+              <p className="text-black font-medium">Processing...</p>
+              <p className="text-sm text-zinc-500">Extracting key points and action items</p>
             </div>
           </CardContent>
         </Card>
@@ -586,22 +586,22 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
       {/* Search and Filter */}
       <div className="flex flex-col md:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
           <Input
             placeholder="Search notes..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 bg-[#1A1A1A] border-gold/20 text-white"
+            className="pl-10 bg-zinc-50 border-[#C9A84C]/20 text-black"
           />
         </div>
         <Select value={selectedProject} onValueChange={setSelectedProject}>
-          <SelectTrigger className="w-full md:w-[200px] bg-[#1A1A1A] border-gold/20 text-white">
+          <SelectTrigger className="w-full md:w-[200px] bg-zinc-50 border-[#C9A84C]/20 text-black">
             <SelectValue placeholder="All Projects" />
           </SelectTrigger>
-          <SelectContent className="bg-[#1A1A1A] border-gold/20">
-            <SelectItem value="all" className="text-white">All Projects</SelectItem>
+          <SelectContent>
+            <SelectItem value="all">All Projects</SelectItem>
             {projects.map(project => (
-              <SelectItem key={project.id} value={project.id} className="text-white">
+              <SelectItem key={project.id} value={project.id}>
                 <span className="flex items-center gap-2">
                   <span className="w-3 h-3 rounded-full" style={{ backgroundColor: project.color }} />
                   {project.name}
@@ -617,35 +617,35 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
         {filteredNotes.map(note => (
           <Card 
             key={note.id} 
-            className="bg-[#0E0E0E] border-gold/20 hover:border-gold/40 transition-all cursor-pointer group"
+            className="bg-white border-2 border-[#C9A84C]/20 hover:border-[#C9A84C]/40 transition-all cursor-pointer group"
             onClick={() => setActiveNote(note)}
           >
             <CardContent className="p-4">
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  {note.source_type === 'voice' && <Mic className="w-4 h-4 text-red-400" />}
-                  {note.source_type === 'pdf_extract' && <FileText className="w-4 h-4 text-blue-400" />}
-                  {note.source_type === 'manual' && <Edit3 className="w-4 h-4 text-purple-400" />}
-                  {note.source_type === 'meeting' && <MessageSquare className="w-4 h-4 text-green-400" />}
-                  <h3 className="text-white font-medium truncate">{note.title}</h3>
+                  {note.source_type === 'voice' && <Mic className="w-4 h-4 text-red-500" />}
+                  {note.source_type === 'pdf_extract' && <FileText className="w-4 h-4 text-blue-600" />}
+                  {note.source_type === 'manual' && <Edit3 className="w-4 h-4 text-purple-600" />}
+                  {note.source_type === 'meeting' && <MessageSquare className="w-4 h-4 text-green-600" />}
+                  <h3 className="text-black font-medium truncate">{note.title}</h3>
                 </div>
-                <Badge variant="outline" className="text-xs border-gold/30 text-gold">
+                <Badge variant="outline" className="text-xs border-[#C9A84C]/30 text-[#C9A84C]">
                   {note.source_type}
                 </Badge>
               </div>
               
-              <p className="text-gray-400 text-sm line-clamp-3 mb-3">
+              <p className="text-zinc-500 text-sm line-clamp-3 mb-3">
                 {note.content?.substring(0, 150)}...
               </p>
 
               {note.ai_action_items && note.ai_action_items.length > 0 && (
                 <div className="flex items-center gap-2 mb-3">
-                  <ListTodo className="w-3 h-3 text-gold" />
-                  <span className="text-xs text-gold">{note.ai_action_items.length} action items</span>
+                  <ListTodo className="w-3 h-3 text-[#C9A84C]" />
+                  <span className="text-xs text-[#C9A84C]">{note.ai_action_items.length} action items</span>
                 </div>
               )}
 
-              <div className="flex items-center justify-between text-xs text-gray-500">
+              <div className="flex items-center justify-between text-xs text-zinc-400">
                 <span className="flex items-center gap-1">
                   <Clock className="w-3 h-3" />
                   {new Date(note.created_at).toLocaleDateString()}
@@ -657,7 +657,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
                     className="h-6 w-6"
                     onClick={(e) => { e.stopPropagation(); generatePDF(note); }}
                   >
-                    <FileDown className="w-3 h-3 text-gold" />
+                    <FileDown className="w-3 h-3 text-[#C9A84C]" />
                   </Button>
                   <Button 
                     size="icon" 
@@ -665,7 +665,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
                     className="h-6 w-6"
                     onClick={(e) => { e.stopPropagation(); deleteNote(note.id); }}
                   >
-                    <Trash2 className="w-3 h-3 text-red-400" />
+                    <Trash2 className="w-3 h-3 text-red-500" />
                   </Button>
                 </div>
               </div>
@@ -675,53 +675,53 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
 
         {filteredNotes.length === 0 && (
           <div className="col-span-full text-center py-12">
-            <BookOpen className="w-12 h-12 text-gold/30 mx-auto mb-4" />
-            <p className="text-gray-400">No notes yet</p>
-            <p className="text-sm text-gray-500 mt-1">Start by recording a voice note or creating a new note</p>
+            <BookOpen className="w-12 h-12 text-[#C9A84C]/30 mx-auto mb-4" />
+            <p className="text-zinc-500">No notes yet</p>
+            <p className="text-sm text-zinc-400 mt-1">Start by recording a voice note or creating a new note</p>
           </div>
         )}
       </div>
 
       {/* Note Viewer Dialog */}
       <Dialog open={!!activeNote} onOpenChange={() => setActiveNote(null)}>
-        <DialogContent className="bg-[#0E0E0E] border-gold/20 max-w-3xl max-h-[80vh] overflow-y-auto">
+        <DialogContent className="bg-white border-2 border-[#C9A84C]/30 max-w-3xl max-h-[80vh] overflow-y-auto">
           {activeNote && (
             <>
               <DialogHeader>
-                <DialogTitle className="text-white flex items-center gap-2">
-                  {activeNote.source_type === 'voice' && <Mic className="w-5 h-5 text-red-400" />}
-                  {activeNote.source_type === 'pdf_extract' && <FileText className="w-5 h-5 text-blue-400" />}
-                  {activeNote.source_type === 'manual' && <Edit3 className="w-5 h-5 text-purple-400" />}
+                <DialogTitle className="text-black flex items-center gap-2">
+                  {activeNote.source_type === 'voice' && <Mic className="w-5 h-5 text-red-500" />}
+                  {activeNote.source_type === 'pdf_extract' && <FileText className="w-5 h-5 text-blue-600" />}
+                  {activeNote.source_type === 'manual' && <Edit3 className="w-5 h-5 text-purple-600" />}
                   {activeNote.title}
                 </DialogTitle>
               </DialogHeader>
               
               <Tabs defaultValue="content" className="mt-4">
-                <TabsList className="bg-[#1A1A1A] border-gold/20">
+                <TabsList className="bg-zinc-50 border border-[#C9A84C]/20">
                   <TabsTrigger value="content">Content</TabsTrigger>
-                  <TabsTrigger value="summary">AI Summary</TabsTrigger>
+                  <TabsTrigger value="summary">Summary</TabsTrigger>
                   <TabsTrigger value="actions">Action Items</TabsTrigger>
                 </TabsList>
                 
                 <TabsContent value="content" className="mt-4">
-                  <div className="prose prose-invert max-w-none">
-                    <p className="text-gray-300 whitespace-pre-wrap">{activeNote.content}</p>
+                  <div className="prose max-w-none">
+                    <p className="text-zinc-700 whitespace-pre-wrap">{activeNote.content}</p>
                   </div>
                 </TabsContent>
                 
                 <TabsContent value="summary" className="mt-4">
                   {activeNote.ai_summary ? (
-                    <div className="prose prose-invert max-w-none">
-                      <div className="p-4 bg-gold/10 rounded-lg border border-gold/20">
+                    <div className="prose max-w-none">
+                      <div className="p-4 bg-[#C9A84C]/10 rounded-lg border border-[#C9A84C]/20">
                         <div className="flex items-center gap-2 mb-3">
-                          <Sparkles className="w-4 h-4 text-gold" />
-                          <span className="text-gold font-medium">AI Generated Summary</span>
+                          <Sparkles className="w-4 h-4 text-[#C9A84C]" />
+                          <span className="text-[#C9A84C] font-medium">Generated Summary</span>
                         </div>
-                        <p className="text-gray-300 whitespace-pre-wrap">{activeNote.ai_summary}</p>
+                        <p className="text-zinc-700 whitespace-pre-wrap">{activeNote.ai_summary}</p>
                       </div>
                     </div>
                   ) : (
-                    <p className="text-gray-400 text-center py-8">No AI summary available</p>
+                    <p className="text-zinc-400 text-center py-8">No summary available</p>
                   )}
                 </TabsContent>
                 
@@ -729,16 +729,16 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
                   {activeNote.ai_action_items && activeNote.ai_action_items.length > 0 ? (
                     <div className="space-y-2">
                       {activeNote.ai_action_items.map((item: any, i: number) => (
-                        <div key={i} className="flex items-start gap-3 p-3 bg-[#1A1A1A] rounded-lg">
-                          <CheckCircle className={`w-5 h-5 mt-0.5 ${item.completed ? 'text-green-400' : 'text-gray-500'}`} />
-                          <span className={`text-gray-300 ${item.completed ? 'line-through opacity-50' : ''}`}>
+                        <div key={i} className="flex items-start gap-3 p-3 bg-zinc-50 rounded-lg border border-zinc-200">
+                          <CheckCircle className={`w-5 h-5 mt-0.5 ${item.completed ? 'text-green-600' : 'text-zinc-400'}`} />
+                          <span className={`text-zinc-700 ${item.completed ? 'line-through opacity-50' : ''}`}>
                             {item.text}
                           </span>
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <p className="text-gray-400 text-center py-8">No action items extracted</p>
+                    <p className="text-zinc-400 text-center py-8">No action items extracted</p>
                   )}
                 </TabsContent>
               </Tabs>
@@ -747,14 +747,14 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
                 <Button 
                   variant="outline" 
                   onClick={() => generatePDF(activeNote)}
-                  className="border-gold/30 text-gold hover:bg-gold/10"
+                  className="border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C]/10"
                 >
                   <FileDown className="w-4 h-4 mr-2" />
                   Download
                 </Button>
                 <Button 
-                  variant="primary"
                   onClick={() => setActiveNote(null)}
+                  className="bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-white"
                 >
                   Close
                 </Button>
@@ -766,49 +766,32 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
 
       {/* New Note Dialog */}
       <Dialog open={showNoteEditor} onOpenChange={setShowNoteEditor}>
-        <DialogContent className="bg-[#0E0E0E] border-gold/20 max-w-2xl">
+        <DialogContent className="bg-white border-2 border-[#C9A84C]/30 max-w-2xl">
           <DialogHeader>
-            <DialogTitle className="text-white flex items-center gap-2">
-              <Plus className="w-5 h-5 text-gold" />
+            <DialogTitle className="text-black flex items-center gap-2">
+              <Plus className="w-5 h-5 text-[#C9A84C]" />
               Create New Note
             </DialogTitle>
           </DialogHeader>
           
           <div className="space-y-4 mt-4">
             <div className="space-y-2">
-              <Label className="text-gray-400">Title</Label>
-              <Input
-                value={newNote.title}
-                onChange={(e) => setNewNote(prev => ({ ...prev, title: e.target.value }))}
-                placeholder="Note title..."
-                className="bg-[#1A1A1A] border-gold/20 text-white"
-              />
+              <Label className="text-zinc-600">Title</Label>
+              <Input value={newNote.title} onChange={(e) => setNewNote(prev => ({ ...prev, title: e.target.value }))} placeholder="Note title..." className="bg-zinc-50 border-[#C9A84C]/20 text-black" />
             </div>
-            
             <div className="space-y-2">
-              <Label className="text-gray-400">Content</Label>
-              <Textarea
-                value={newNote.content}
-                onChange={(e) => setNewNote(prev => ({ ...prev, content: e.target.value }))}
-                placeholder="Write your note here..."
-                className="bg-[#1A1A1A] border-gold/20 text-white min-h-[200px]"
-              />
+              <Label className="text-zinc-600">Content</Label>
+              <Textarea value={newNote.content} onChange={(e) => setNewNote(prev => ({ ...prev, content: e.target.value }))} placeholder="Write your note here..." className="bg-zinc-50 border-[#C9A84C]/20 text-black min-h-[200px]" />
             </div>
-            
             <div className="space-y-2">
-              <Label className="text-gray-400">Project (optional)</Label>
-              <Select 
-                value={newNote.project_id} 
-                onValueChange={(v) => setNewNote(prev => ({ ...prev, project_id: v }))}
-              >
-                <SelectTrigger className="bg-[#1A1A1A] border-gold/20 text-white">
+              <Label className="text-zinc-600">Project (optional)</Label>
+              <Select value={newNote.project_id} onValueChange={(v) => setNewNote(prev => ({ ...prev, project_id: v }))}>
+                <SelectTrigger className="bg-zinc-50 border-[#C9A84C]/20 text-black">
                   <SelectValue placeholder="Select project" />
                 </SelectTrigger>
-                <SelectContent className="bg-[#1A1A1A] border-gold/20">
+                <SelectContent>
                   {projects.map(project => (
-                    <SelectItem key={project.id} value={project.id} className="text-white">
-                      {project.name}
-                    </SelectItem>
+                    <SelectItem key={project.id} value={project.id}>{project.name}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -816,28 +799,9 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
           </div>
 
           <DialogFooter className="mt-6">
-            <Button 
-              variant="secondary"
-              onClick={() => setShowNoteEditor(false)}
-            >
-              Cancel
-            </Button>
-            <Button 
-              variant="primary"
-              onClick={saveNote}
-              disabled={isProcessing}
-            >
-              {isProcessing ? (
-                <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Processing...
-                </>
-              ) : (
-                <>
-                  <Save className="w-4 h-4 mr-2" />
-                  Save Note
-                </>
-              )}
+            <Button variant="outline" onClick={() => setShowNoteEditor(false)} className="border-[#C9A84C]/20">Cancel</Button>
+            <Button onClick={saveNote} disabled={isProcessing} className="bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-white">
+              {isProcessing ? (<><Loader2 className="w-4 h-4 mr-2 animate-spin" />Processing...</>) : (<><Save className="w-4 h-4 mr-2" />Save Note</>)}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -845,109 +809,64 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
 
       {/* New Project Dialog */}
       <Dialog open={showProjectDialog} onOpenChange={setShowProjectDialog}>
-        <DialogContent className="bg-[#0E0E0E] border-gold/20">
+        <DialogContent className="bg-white border-2 border-[#C9A84C]/30">
           <DialogHeader>
-            <DialogTitle className="text-white flex items-center gap-2">
-              <FolderOpen className="w-5 h-5 text-gold" />
+            <DialogTitle className="text-black flex items-center gap-2">
+              <FolderOpen className="w-5 h-5 text-[#C9A84C]" />
               Create New Project
             </DialogTitle>
           </DialogHeader>
-          
           <div className="space-y-4 mt-4">
             <div className="space-y-2">
-              <Label className="text-gray-400">Project Name</Label>
-              <Input
-                value={newProject.name}
-                onChange={(e) => setNewProject(prev => ({ ...prev, name: e.target.value }))}
-                placeholder="e.g., Client Meetings Q1"
-                className="bg-[#1A1A1A] border-gold/20 text-white"
-              />
+              <Label className="text-zinc-600">Project Name</Label>
+              <Input value={newProject.name} onChange={(e) => setNewProject(prev => ({ ...prev, name: e.target.value }))} placeholder="e.g., Client Meetings Q1" className="bg-zinc-50 border-[#C9A84C]/20 text-black" />
             </div>
-            
             <div className="space-y-2">
-              <Label className="text-gray-400">Description (optional)</Label>
-              <Textarea
-                value={newProject.description}
-                onChange={(e) => setNewProject(prev => ({ ...prev, description: e.target.value }))}
-                placeholder="Project description..."
-                className="bg-[#1A1A1A] border-gold/20 text-white"
-              />
+              <Label className="text-zinc-600">Description (optional)</Label>
+              <Textarea value={newProject.description} onChange={(e) => setNewProject(prev => ({ ...prev, description: e.target.value }))} placeholder="Project description..." className="bg-zinc-50 border-[#C9A84C]/20 text-black" />
             </div>
-            
             <div className="space-y-2">
-              <Label className="text-gray-400">Color</Label>
+              <Label className="text-zinc-600">Color</Label>
               <div className="flex gap-2">
                 {['#A8925A', '#EF4444', '#3B82F6', '#10B981', '#8B5CF6', '#F59E0B'].map(color => (
-                  <button
-                    key={color}
-                    onClick={() => setNewProject(prev => ({ ...prev, color }))}
-                    className={`w-8 h-8 rounded-full transition-transform ${
-                      newProject.color === color ? 'ring-2 ring-white ring-offset-2 ring-offset-black scale-110' : ''
-                    }`}
-                    style={{ backgroundColor: color }}
-                  />
+                  <button key={color} onClick={() => setNewProject(prev => ({ ...prev, color }))} className={`w-8 h-8 rounded-full transition-transform ${newProject.color === color ? 'ring-2 ring-[#C9A84C] ring-offset-2 scale-110' : ''}`} style={{ backgroundColor: color }} />
                 ))}
               </div>
             </div>
           </div>
-
           <DialogFooter className="mt-6">
-            <Button 
-              variant="secondary"
-              onClick={() => setShowProjectDialog(false)}
-            >
-              Cancel
-            </Button>
-            <Button 
-              variant="primary"
-              onClick={createProject}
-            >
-              Create Project
-            </Button>
+            <Button variant="outline" onClick={() => setShowProjectDialog(false)} className="border-[#C9A84C]/20">Cancel</Button>
+            <Button onClick={createProject} className="bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-white">Create Project</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       {/* Upload Dialog */}
       <Dialog open={showUploadDialog} onOpenChange={setShowUploadDialog}>
-        <DialogContent className="bg-[#0E0E0E] border-gold/20">
+        <DialogContent className="bg-white border-2 border-[#C9A84C]/30">
           <DialogHeader>
-            <DialogTitle className="text-white flex items-center gap-2">
-              <Upload className="w-5 h-5 text-gold" />
+            <DialogTitle className="text-black flex items-center gap-2">
+              <Upload className="w-5 h-5 text-[#C9A84C]" />
               Upload Document
             </DialogTitle>
           </DialogHeader>
-          
           <div className="mt-4">
-            <div className="border-2 border-dashed border-gold/30 rounded-xl p-8 text-center hover:border-gold/50 transition-colors">
-              <Upload className="w-12 h-12 text-gold/50 mx-auto mb-4" />
-              <p className="text-gray-400 mb-2">Drop your file here or click to upload</p>
-              <p className="text-xs text-gray-500">Supports PDF, DOC, DOCX, TXT, and more</p>
-              <input
-                type="file"
-                accept=".pdf,.doc,.docx,.txt,.md"
-                onChange={handleFileUpload}
-                className="absolute inset-0 opacity-0 cursor-pointer"
-              />
-              <Button variant="primary" className="mt-4 relative">
+            <div className="border-2 border-dashed border-[#C9A84C]/30 rounded-xl p-8 text-center hover:border-[#C9A84C]/50 transition-colors relative">
+              <Upload className="w-12 h-12 text-[#C9A84C]/40 mx-auto mb-4" />
+              <p className="text-zinc-500 mb-2">Drop your file here or click to upload</p>
+              <p className="text-xs text-zinc-400">Supports PDF, DOC, DOCX, TXT, and more</p>
+              <input type="file" accept=".pdf,.doc,.docx,.txt,.md" onChange={handleFileUpload} className="absolute inset-0 opacity-0 cursor-pointer" />
+              <Button className="mt-4 relative bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-white">
                 Choose File
-                <input
-                  type="file"
-                  accept=".pdf,.doc,.docx,.txt,.md"
-                  onChange={handleFileUpload}
-                  className="absolute inset-0 opacity-0 cursor-pointer"
-                />
+                <input type="file" accept=".pdf,.doc,.docx,.txt,.md" onChange={handleFileUpload} className="absolute inset-0 opacity-0 cursor-pointer" />
               </Button>
             </div>
-            
-            <div className="mt-4 p-4 bg-blue-500/10 rounded-lg border border-blue-500/20">
+            <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
               <div className="flex items-start gap-3">
-                <Brain className="w-5 h-5 text-blue-400 mt-0.5" />
+                <Brain className="w-5 h-5 text-blue-600 mt-0.5" />
                 <div>
-                  <p className="text-blue-400 font-medium">AI Extraction</p>
-                  <p className="text-xs text-gray-400 mt-1">
-                    Our AI will automatically extract key points, action items, and create a summary from your document.
-                  </p>
+                  <p className="text-blue-700 font-medium">Extraction</p>
+                  <p className="text-xs text-zinc-500 mt-1">Key points, action items, and a summary will be automatically extracted from your document.</p>
                 </div>
               </div>
             </div>

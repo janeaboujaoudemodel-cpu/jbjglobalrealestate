@@ -124,8 +124,8 @@ export function FoundersDecisionPanel() {
             <Brain className="h-6 w-6 text-gold" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-white">AI Business Intelligence</h2>
-            <p className="text-zinc-400 text-sm">
+            <h2 className="text-2xl font-bold text-black">Business Intelligence</h2>
+            <p className="text-zinc-500 text-sm">
               Real-time insights, predictions & strategic recommendations
             </p>
           </div>
