@@ -144,19 +144,19 @@ const FoundersInsightsPanel: React.FC = () => {
             </CardContent>
           </Card>
           
-          <Card className={weeklySummary.efficiencyChange >= 0 ? 'bg-primary/5 border-primary/20' : 'bg-destructive/5 border-destructive/20'}>
+          <Card className={weeklySummary.efficiencyChange >= 0 ? 'bg-[#C9A84C]/10 border-[#C9A84C]/30' : 'bg-destructive/5 border-destructive/20'}>
             <CardContent className="p-4">
               <div className="flex items-center gap-2 mb-2">
                 {weeklySummary.efficiencyChange >= 0 ? (
-                  <TrendingUp className="h-4 w-4 text-primary" />
+                  <TrendingUp className="h-4 w-4 text-[#C9A84C]" />
                 ) : (
                   <TrendingDown className="h-4 w-4 text-destructive" />
                 )}
-                <span className="text-xs text-muted-foreground">Efficiency</span>
+                <span className="text-xs text-zinc-600 font-medium">Efficiency</span>
               </div>
               <p className={cn(
                 "text-2xl font-bold",
-                weeklySummary.efficiencyChange >= 0 ? "text-primary" : "text-destructive"
+                weeklySummary.efficiencyChange >= 0 ? "text-[#C9A84C]" : "text-destructive"
               )}>
                 {weeklySummary.efficiencyChange > 0 ? '+' : ''}{weeklySummary.efficiencyChange}%
               </p>
@@ -183,13 +183,13 @@ const FoundersInsightsPanel: React.FC = () => {
             </CardContent>
           </Card>
           
-          <Card className="bg-primary/5 border-primary/20">
+          <Card className="bg-[#C9A84C]/10 border-[#C9A84C]/30">
             <CardContent className="p-4">
               <div className="flex items-center gap-2 mb-2">
-                <Zap className="h-4 w-4 text-primary" />
-                <span className="text-xs text-muted-foreground">Optimized</span>
+                <Zap className="h-4 w-4 text-[#C9A84C]" />
+                <span className="text-xs text-zinc-600 font-medium">Optimized</span>
               </div>
-              <p className="text-2xl font-bold text-primary">{weeklySummary.optimizationsApplied}</p>
+              <p className="text-2xl font-bold text-[#C9A84C]">{weeklySummary.optimizationsApplied}</p>
             </CardContent>
           </Card>
         </div>
@@ -197,24 +197,24 @@ const FoundersInsightsPanel: React.FC = () => {
 
       {/* Main Content Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid grid-cols-5 w-full max-w-2xl">
-          <TabsTrigger value="overview" className="flex items-center gap-2">
+        <TabsList className="grid grid-cols-5 w-full max-w-2xl bg-white/80 border-2 border-[#C9A84C]/30 p-1 rounded-xl shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+          <TabsTrigger value="overview" className="flex items-center gap-2 text-zinc-600 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C] data-[state=active]:to-[#B8973F] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
             <BarChart3 className="h-4 w-4" />
             <span className="hidden sm:inline">Overview</span>
           </TabsTrigger>
-          <TabsTrigger value="departments" className="flex items-center gap-2">
+          <TabsTrigger value="departments" className="flex items-center gap-2 text-zinc-600 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C] data-[state=active]:to-[#B8973F] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
             <Users className="h-4 w-4" />
             <span className="hidden sm:inline">Departments</span>
           </TabsTrigger>
-          <TabsTrigger value="performers" className="flex items-center gap-2">
+          <TabsTrigger value="performers" className="flex items-center gap-2 text-zinc-600 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C] data-[state=active]:to-[#B8973F] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
             <Award className="h-4 w-4" />
             <span className="hidden sm:inline">Top Performers</span>
           </TabsTrigger>
-          <TabsTrigger value="insights" className="flex items-center gap-2">
+          <TabsTrigger value="insights" className="flex items-center gap-2 text-zinc-600 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C] data-[state=active]:to-[#B8973F] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
             <Lightbulb className="h-4 w-4" />
             <span className="hidden sm:inline">Insights</span>
           </TabsTrigger>
-          <TabsTrigger value="health" className="flex items-center gap-2">
+          <TabsTrigger value="health" className="flex items-center gap-2 text-zinc-600 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C] data-[state=active]:to-[#B8973F] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
             <Activity className="h-4 w-4" />
             <span className="hidden sm:inline">Health</span>
           </TabsTrigger>
@@ -320,8 +320,8 @@ const FoundersInsightsPanel: React.FC = () => {
                     <CardTitle className="text-base">{dept.departmentName}</CardTitle>
                     <Badge variant="outline" className={
                       dept.weekOverWeekChange >= 0 
-                        ? 'bg-primary/10 text-primary border-primary/20' 
-                        : 'bg-destructive/10 text-destructive border-destructive/20'
+                        ? 'bg-[#C9A84C]/15 text-[#8B6914] border-[#C9A84C]/30 font-bold' 
+                        : 'bg-destructive/10 text-destructive border-destructive/20 font-bold'
                     }>
                       {dept.weekOverWeekChange > 0 ? '+' : ''}{dept.weekOverWeekChange}%
                     </Badge>
@@ -380,9 +380,9 @@ const FoundersInsightsPanel: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-base flex items-center gap-2">
-                  <Award className="h-4 w-4 text-amber-500" />
-                  Top Performers This Week
+                <CardTitle className="text-base flex items-center gap-2 truncate">
+                  <Award className="h-4 w-4 text-amber-500 flex-shrink-0" />
+                  <span className="truncate">Top Performers This Week</span>
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -410,9 +410,9 @@ const FoundersInsightsPanel: React.FC = () => {
                         </div>
                         <p className="text-xs text-muted-foreground">{emp.department}</p>
                       </div>
-                      <div className="text-right">
-                        <p className="font-semibold text-primary">{emp.averageScore}%</p>
-                        <p className="text-xs text-muted-foreground">{emp.tasksCompleted} tasks</p>
+                      <div className="text-right flex-shrink-0">
+                        <p className="font-bold text-[#8B6914]">{emp.averageScore}%</p>
+                        <p className="text-xs text-zinc-600">{emp.tasksCompleted} tasks</p>
                       </div>
                     </div>
                   ))}
