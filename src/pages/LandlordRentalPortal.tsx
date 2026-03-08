@@ -427,14 +427,14 @@ export default function LandlordRentalPortal() {
                                 <div className="flex items-center gap-2 text-sm">
                                   {listing.status !== 'live' && listing.status !== 'rejected' && (
                                     <span className="text-amber-500">
-                                      ⏳ Step {approvalStatus.currentStep} of 3
+                                      Step {approvalStatus.currentStep} of 3 — In Progress
                                     </span>
                                   )}
                                   {listing.status === 'live' && (
-                                    <span className="text-green-500">🎉 Your listing is live!</span>
+                                    <span className="text-green-500">Your listing is live</span>
                                   )}
                                   {listing.status === 'rejected' && (
-                                    <span className="text-red-500">❌ {listing.rejection_reason || 'Listing was rejected'}</span>
+                                    <span className="text-red-500">{listing.rejection_reason || 'Listing was rejected'}</span>
                                   )}
                                 </div>
                               </div>

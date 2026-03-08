@@ -326,7 +326,7 @@ export default function AISocialMediaPage() {
                 )}
 
                 {result.bestTimeToPost && (
-                  <p className="text-zinc-500 text-sm">📅 Best time to post: {result.bestTimeToPost}</p>
+                  <p className="text-zinc-500 text-sm">Best time to post: {result.bestTimeToPost}</p>
                 )}
               </CardContent>
             </Card>

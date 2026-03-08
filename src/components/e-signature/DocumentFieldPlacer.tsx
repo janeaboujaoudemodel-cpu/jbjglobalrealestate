@@ -719,7 +719,7 @@ export default function DocumentFieldPlacer({
       {/* Click-mode hint */}
       <div className="flex items-center gap-2 px-1">
         <Badge variant="outline" className="text-xs text-muted-foreground border-dashed">
-          💡 Click anywhere on the document to place the selected field type
+          Tip: Click anywhere on the document to place the selected field type
         </Badge>
       </div>
 

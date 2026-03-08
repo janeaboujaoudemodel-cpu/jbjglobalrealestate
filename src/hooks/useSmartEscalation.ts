@@ -216,11 +216,11 @@ export function useSmartEscalation(): UseSmartEscalationReturn {
         addNotification({
           id: `second-level-${event.id}`,
           type: 'escalation',
-          title: '⚠️ Second-Level Escalation',
+          title: 'Second-Level Escalation',
           description: `No response for 15+ minutes on escalation from ${event.senderName}. Escalated to CEO.`,
           timestamp: new Date(),
           urgency: 'critical',
-          emotionIcon: '⚠️',
+          emotionIcon: 'alert',
           senderName: event.senderName,
           isRead: false,
           responseDeadline: new Date(Date.now() + 10 * 60 * 1000),

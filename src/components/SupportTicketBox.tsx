@@ -746,20 +746,20 @@ const SupportTicketBox = () => {
                                  transition={{ delay: 0.65 }}
                                  className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-xl p-4 mb-4"
                                >
-                                 <p className="text-sm font-bold text-black mb-3 text-center">⏳ Explore While You Wait</p>
+                                 <p className="text-sm font-bold text-black mb-3 text-center">Explore While You Wait</p>
                                  <div className="grid grid-cols-2 gap-2">
-                                   <a href="/properties" className="flex items-center justify-center gap-1 px-3 py-2.5 bg-white border border-gold/30 rounded-lg text-xs font-semibold text-black hover:border-gold transition-colors">
-                                     🏠 Properties
-                                   </a>
-                                   <a href="/ai-hub" className="flex items-center justify-center gap-1 px-3 py-2.5 bg-white border border-gold/30 rounded-lg text-xs font-semibold text-black hover:border-gold transition-colors">
-                                     🤖 AI Tools
-                                   </a>
-                                   <a href="/buyer-guide" className="flex items-center justify-center gap-1 px-3 py-2.5 bg-white border border-gold/30 rounded-lg text-xs font-semibold text-black hover:border-gold transition-colors">
-                                     📖 Guides
-                                   </a>
-                                   <a href="/careers" className="flex items-center justify-center gap-1 px-3 py-2.5 bg-white border border-gold/30 rounded-lg text-xs font-semibold text-black hover:border-gold transition-colors">
-                                     💼 Careers
-                                   </a>
+                                    <a href="/properties" className="flex items-center justify-center gap-1 px-3 py-2.5 bg-white border border-gold/30 rounded-lg text-xs font-semibold text-black hover:border-gold transition-colors">
+                                      Properties
+                                    </a>
+                                    <a href="/ai-hub" className="flex items-center justify-center gap-1 px-3 py-2.5 bg-white border border-gold/30 rounded-lg text-xs font-semibold text-black hover:border-gold transition-colors">
+                                      AI Tools
+                                    </a>
+                                    <a href="/buyer-guide" className="flex items-center justify-center gap-1 px-3 py-2.5 bg-white border border-gold/30 rounded-lg text-xs font-semibold text-black hover:border-gold transition-colors">
+                                      Guides
+                                    </a>
+                                    <a href="/careers" className="flex items-center justify-center gap-1 px-3 py-2.5 bg-white border border-gold/30 rounded-lg text-xs font-semibold text-black hover:border-gold transition-colors">
+                                      Careers
+                                    </a>
                                  </div>
                                </motion.div>
 
