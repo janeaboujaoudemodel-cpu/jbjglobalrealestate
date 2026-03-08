@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -25,6 +26,7 @@ import {
   FileText,
   StickyNote,
   Scale,
+  Save,
 } from "lucide-react";
 import FoundersChatPanel from "@/components/founders-assistant/FoundersChatPanel";
 import FoundersTaskDashboard from "@/components/founders-assistant/FoundersTaskDashboard";
