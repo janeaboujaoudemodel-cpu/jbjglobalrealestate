@@ -54,7 +54,9 @@ import {
   Monitor,
   Heart,
   ExternalLink,
-  AlertCircle,
+   AlertCircle,
+   MapPin,
+   Calendar,
 } from "lucide-react";
 import { Loader2 } from "lucide-react";
 import { SmartDocumentUploader } from "@/components/SmartDocumentUploader";
