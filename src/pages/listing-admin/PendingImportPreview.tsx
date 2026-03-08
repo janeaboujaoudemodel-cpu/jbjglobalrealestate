@@ -575,9 +575,9 @@ const PendingImportPreview = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black">
-      {/* Admin Bar - sticky at top */}
-      <section className="bg-gradient-to-r from-champagne via-champagne-light to-champagne border-b border-gold/30 py-4 sticky top-20 lg:top-24 z-40 shadow-md">
+    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+      {/* Admin Bar - sticky at top, no gap */}
+      <section className="bg-gradient-to-r from-champagne via-champagne-light to-champagne border-b-2 border-gold/30 py-3 sticky top-0 z-40 shadow-md">
         <div className="container mx-auto px-4 flex items-center justify-between flex-wrap gap-4">
           <Button 
             variant="primary" 
