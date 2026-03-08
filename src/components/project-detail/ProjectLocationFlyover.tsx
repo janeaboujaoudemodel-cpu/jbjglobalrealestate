@@ -82,25 +82,35 @@ function FlyoverController({ target, playing, onStepChange, onComplete }: Flyove
           easeLinearity: 0.1,
         });
 
-        // Wait for flyTo to finish via moveend
+        let regionalDone = false;
         const onRegionalEnd = () => {
+          if (regionalDone) return;
+          regionalDone = true;
           map.off("moveend", onRegionalEnd);
-          // Step 3: fly to project
+          
           onStepChangeRef.current(3);
           map.flyTo(target, PROJECT_ZOOM, {
             duration: 6,
             easeLinearity: 0.08,
           });
 
+          let projectDone = false;
           const onProjectEnd = () => {
+            if (projectDone) return;
+            projectDone = true;
             map.off("moveend", onProjectEnd);
-            // Step 4: complete
             onStepChangeRef.current(4);
             onCompleteRef.current();
           };
           map.on("moveend", onProjectEnd);
+          // Safety timeout in case moveend doesn't fire
+          const t3 = setTimeout(onProjectEnd, 8000);
+          timers.current.push(t3);
         };
         map.on("moveend", onRegionalEnd);
+        // Safety timeout in case moveend doesn't fire
+        const t2 = setTimeout(onRegionalEnd, 7000);
+        timers.current.push(t2);
       }, 3000);
 
       timers.current = [t1];
