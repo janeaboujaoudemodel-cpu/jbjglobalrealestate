@@ -72,7 +72,7 @@ const NAV_SECTIONS: NavSection[] = [
     items: [
       { label: "Founder Assistant", icon: MessageSquare, path: "/owner/founder-assistant" },
       { label: "Recommendations", icon: Sparkles, path: "/owner/recommendations" },
-      { label: "AI Tools Hub", icon: Sparkles, path: "/owner/toolkit" },
+      { label: "Royal Tools Hub", icon: Sparkles, path: "/owner/toolkit" },
       { label: "Workflow Automation", icon: Zap, path: "/owner/automations" },
       { label: "Meeting Hub", icon: Video, path: "/meeting-center" },
       { label: "AI Meeting Summarizer", icon: Brain, path: "/ai-meeting-summarizer" },
