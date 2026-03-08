@@ -742,122 +742,210 @@ const Admin = () => {
               onUploadComplete={() => refetchProjects()}
             />
 
-            {/* Projects Table */}
-            <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-black">All Projects</CardTitle>
-                  <div className="relative w-64">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gold" />
-                    <Input
-                      placeholder="Search projects..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10 bg-white border-2 border-gold/30 text-black placeholder:text-zinc-400"
-                    />
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <ScrollArea className="h-[500px]">
-                  <div className="space-y-2">
-                    {filteredProjects?.map((project) => {
-                      const coverImg = project.cover_image_url
-                        || (project.images?.[0] ? (typeof project.images[0] === 'string' ? project.images[0] : project.images[0]?.image_url) : null);
-                      const isIncomplete = !coverImg || !project.description;
-                      const subtitleParts = [
-                        project.developer?.name,
-                        project.location || project.area_name,
-                      ].filter(Boolean);
-                      const priceDisplay = project.price_from
-                        ? `From AED ${Math.round(project.price_from).toLocaleString()}`
-                        : null;
-
-                      return (
-                        <div
-                          key={project.id}
-                          className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-white border border-gold/20 hover:border-gold/40 transition-all"
-                        >
-                          <div className="flex items-center gap-4 flex-1 min-w-0">
-                            <div className="w-16 h-16 rounded-lg bg-gold/10 flex items-center justify-center overflow-hidden flex-shrink-0">
-                              {coverImg ? (
-                                <img
-                                  src={coverImg}
-                                  alt={project.name}
-                                  className="w-full h-full object-cover"
-                                  loading="lazy"
-                                  referrerPolicy="no-referrer"
-                                />
-                              ) : (
-                                <Building2 className="w-6 h-6 text-gold" />
-                              )}
+            {/* Filtered Content based on card selection */}
+            {propertiesFilter === "developers" ? (
+              <Card className="bg-white border-2 border-gold/20 shadow-lg">
+                <CardHeader>
+                  <CardTitle className="text-black">All Developers ({developers?.length || 0})</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ScrollArea className="h-[500px]">
+                    <div className="space-y-2">
+                      {developers?.map((dev) => (
+                        <div key={dev.id} className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-white border border-gold/20 hover:border-gold/40 transition-all">
+                          <div className="flex items-center gap-3 min-w-0">
+                            <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center overflow-hidden flex-shrink-0">
+                              {dev.logo_url ? <img src={dev.logo_url} alt={dev.name} className="w-full h-full object-contain" /> : <Building2 className="w-5 h-5 text-gold" />}
                             </div>
-                            <div className="min-w-0 flex-1">
-                              <div className="flex items-center gap-2">
-                                <h3 className="font-semibold text-black truncate">{project.name}</h3>
-                                {isIncomplete && (
-                                  <Badge className="bg-red-50 text-red-600 border-red-200 text-[10px] px-1.5 py-0 flex-shrink-0">
-                                    <AlertCircle className="w-3 h-3 mr-0.5" />
-                                    Incomplete
-                                  </Badge>
-                                )}
-                              </div>
-                              {subtitleParts.length > 0 ? (
-                                <p className="text-sm text-zinc-500 truncate">{subtitleParts.join(' — ')}</p>
-                              ) : (
-                                <p className="text-sm text-zinc-400 italic">No location info</p>
-                              )}
-                              <div className="flex items-center gap-3 mt-0.5 text-xs text-zinc-400">
-                                {priceDisplay && <span>{priceDisplay}</span>}
-                                {project.payment_plan && <span>{project.payment_plan}</span>}
-                                {(project.expected_completion || project.handover_date) && (
-                                  <span>Handover: {project.expected_completion || project.handover_date}</span>
-                                )}
-                              </div>
-                              {!project.description && (
-                                <p className="text-xs text-red-400 mt-0.5 italic">No description available</p>
-                              )}
+                            <div className="min-w-0">
+                              <p className="font-semibold text-black truncate">{dev.name}</p>
+                              <p className="text-xs text-zinc-400">{dev.slug}</p>
+                            </div>
+                          </div>
+                          <Button variant="ghost" size="sm" onClick={() => window.open(`/developers/${dev.slug}`, '_blank')}>
+                            <ExternalLink className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  </ScrollArea>
+                </CardContent>
+              </Card>
+            ) : propertiesFilter === "communities" ? (
+              <Card className="bg-white border-2 border-gold/20 shadow-lg">
+                <CardHeader>
+                  <CardTitle className="text-black">All Communities ({communities?.length || 0})</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ScrollArea className="h-[500px]">
+                    <div className="space-y-2">
+                      {communities?.map((comm) => (
+                        <div key={comm.id} className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-white border border-gold/20 hover:border-gold/40 transition-all">
+                          <div className="min-w-0">
+                            <p className="font-semibold text-black truncate">{comm.name}</p>
+                            <p className="text-xs text-zinc-400">{comm.slug}</p>
+                          </div>
+                          <Button variant="ghost" size="sm" onClick={() => window.open(`/communities/${comm.slug}`, '_blank')}>
+                            <ExternalLink className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  </ScrollArea>
+                </CardContent>
+              </Card>
+            ) : propertiesFilter === "areas" ? (
+              <Card className="bg-white border-2 border-gold/20 shadow-lg">
+                <CardHeader>
+                  <CardTitle className="text-black">All Areas ({areas?.length || 0})</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ScrollArea className="h-[500px]">
+                    <div className="space-y-2">
+                      {areas?.map((area) => (
+                        <div key={area.id} className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-white border border-gold/20 hover:border-gold/40 transition-all">
+                          <div className="flex items-center gap-3 min-w-0">
+                            <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center overflow-hidden flex-shrink-0">
+                              {area.image_url ? <img src={area.image_url} alt={area.name} className="w-full h-full object-cover" /> : <MapPin className="w-5 h-5 text-gold" />}
+                            </div>
+                            <div className="min-w-0">
+                              <p className="font-semibold text-black truncate">{area.name}</p>
+                              <p className="text-xs text-zinc-400">{area.emirate} · {area.property_count || 0} projects</p>
                             </div>
                           </div>
                           <div className="flex items-center gap-2 flex-shrink-0">
-                            {project.is_premium && (
-                              <Badge className="bg-gold/10 text-gold border-gold/30">
-                                <Crown className="w-3 h-3 mr-1" />
-                                Premium
-                              </Badge>
-                            )}
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-8 w-8 text-zinc-500 hover:text-gold"
-                              onClick={() => window.open(`/project/${project.slug}`, '_blank')}
-                              title="Preview project"
-                            >
+                            {area.is_trending && <Badge className="bg-gold/10 text-gold border-gold/30 text-[10px]">Trending</Badge>}
+                            <Button variant="ghost" size="sm" onClick={() => window.open(`/areas/${area.slug}`, '_blank')}>
                               <ExternalLink className="w-4 h-4" />
-                            </Button>
-                            <Button
-                              variant="secondary"
-                              size="sm"
-                              onClick={() => handleToggleFeatured(project.id, project.is_premium)}
-                            >
-                              {project.is_premium ? "Remove Premium" : "Make Premium"}
-                            </Button>
-                            <Button
-                              variant="secondary"
-                              size="sm"
-                              onClick={() => handleEditProject(project)}
-                            >
-                              <Edit2 className="w-4 h-4 mr-1" />
-                              Edit
                             </Button>
                           </div>
                         </div>
-                      );
-                    })}
-                  </div>
-                </ScrollArea>
-              </CardContent>
-            </Card>
+                      ))}
+                    </div>
+                  </ScrollArea>
+                </CardContent>
+              </Card>
+            ) : (
+              <>
+                {/* Smart Document Uploader */}
+                <SmartDocumentUploader 
+                  projects={projects?.map(p => ({
+                    id: p.id,
+                    name: p.name,
+                    slug: p.slug,
+                    developer: p.developer ? {
+                      id: p.developer.id,
+                      name: p.developer.name,
+                      slug: p.developer.slug
+                    } : null
+                  }))}
+                  onUploadComplete={() => refetchProjects()}
+                />
+
+                {/* Projects Table */}
+                <Card className="bg-white border-2 border-gold/20 shadow-lg">
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-black">
+                        {propertiesFilter === "premium" ? "Premium Projects" : "All Projects"}
+                      </CardTitle>
+                      <div className="relative w-64">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gold" />
+                        <Input
+                          placeholder="Search projects..."
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          className="pl-10 bg-white border border-gold/30 text-black placeholder:text-zinc-400"
+                        />
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <ScrollArea className="h-[500px]">
+                      <div className="space-y-2">
+                        {(propertiesFilter === "premium"
+                          ? filteredProjects?.filter(p => p.is_premium)
+                          : filteredProjects
+                        )?.map((project) => {
+                          const coverImg = project.cover_image_url
+                            || (project.images?.[0] ? (typeof project.images[0] === 'string' ? project.images[0] : project.images[0]?.image_url) : null);
+                          const isIncomplete = !coverImg || !project.description;
+                          const subtitleParts = [
+                            project.developer?.name,
+                            project.location || project.area_name,
+                          ].filter(Boolean);
+                          const priceDisplay = project.price_from
+                            ? `AED ${Math.round(project.price_from).toLocaleString()}`
+                            : null;
+
+                          return (
+                            <div
+                              key={project.id}
+                              className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-white border border-gold/20 hover:border-gold/40 transition-all"
+                            >
+                              <div className="flex items-center gap-3 flex-1 min-w-0">
+                                <div className="w-14 h-14 rounded-lg bg-gold/10 flex items-center justify-center overflow-hidden flex-shrink-0">
+                                  {coverImg ? (
+                                    <img src={coverImg} alt={project.name} className="w-full h-full object-cover" loading="lazy" referrerPolicy="no-referrer" />
+                                  ) : (
+                                    <Building2 className="w-5 h-5 text-gold" />
+                                  )}
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                  <div className="flex items-center gap-2">
+                                    <h3 className="font-semibold text-black text-sm truncate">{project.name}</h3>
+                                    {isIncomplete && (
+                                      <Badge className="bg-red-50 text-red-600 border-red-200 text-[10px] px-1 py-0 flex-shrink-0">
+                                        <AlertCircle className="w-3 h-3 mr-0.5" />
+                                        Incomplete
+                                      </Badge>
+                                    )}
+                                    {project.is_premium && (
+                                      <Badge className="bg-gold/10 text-gold border-gold/30 text-[10px] px-1 py-0 flex-shrink-0">
+                                        <Crown className="w-3 h-3" />
+                                      </Badge>
+                                    )}
+                                  </div>
+                                  {subtitleParts.length > 0 && (
+                                    <p className="text-xs text-zinc-500 truncate">{subtitleParts.join(' — ')}</p>
+                                  )}
+                                  <div className="flex items-center gap-2 mt-0.5 text-[11px] text-zinc-400">
+                                    {priceDisplay && <span>{priceDisplay}</span>}
+                                    {project.updated_at && (
+                                      <span className="flex items-center gap-0.5">
+                                        <Calendar className="w-3 h-3" />
+                                        Updated {new Date(project.updated_at).toLocaleDateString()}
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-1 flex-shrink-0">
+                                <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-400 hover:text-gold" onClick={() => window.open(`/project/${project.slug}`, '_blank')} title="Preview">
+                                  <ExternalLink className="w-4 h-4" />
+                                </Button>
+                                <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-400 hover:text-gold" onClick={() => handleEditProject(project)} title="Edit & Upload Docs">
+                                  <Edit2 className="w-4 h-4" />
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-8 w-8 text-zinc-400 hover:text-gold"
+                                  onClick={() => handleToggleFeatured(project.id, project.is_premium)}
+                                  title={project.is_premium ? "Remove Premium" : "Make Premium"}
+                                >
+                                  <Crown className="w-4 h-4" />
+                                </Button>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </ScrollArea>
+                  </CardContent>
+                </Card>
+              </>
+            )}
           </TabsContent>
 
           <TabsContent value="rate-limits" className="space-y-8">
