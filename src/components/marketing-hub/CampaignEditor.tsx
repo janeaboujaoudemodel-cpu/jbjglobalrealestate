@@ -78,6 +78,9 @@ const CampaignEditor: React.FC<CampaignEditorProps> = ({ campaign, onClose, onSa
   const [emailBody, setEmailBody] = useState(campaign?.content?.body || '');
   const [attachments, setAttachments] = useState<Attachment[]>([]);
   const [isSaving, setIsSaving] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [sendProgress, setSendProgress] = useState({ sent: 0, total: 0, failed: 0 });
+  const [showSendConfirm, setShowSendConfirm] = useState(false);
   const [activeTab, setActiveTab] = useState('content');
   const [aiPrompt, setAiPrompt] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
@@ -357,6 +360,102 @@ The content should be:
     setShowScheduleDialog(true);
   };
 
+  const getRecipientsForSend = async (): Promise<{ email: string; name: string }[]> => {
+    if (targetAudience === 'custom') {
+      return recipients.filter(r => r.selected).map(r => ({ email: r.email, name: r.name }));
+    }
+    // Fetch from the appropriate database
+    let entries: { email: string; name: string }[] = [];
+    if (targetAudience === 'all' || targetAudience === 'newsletter') {
+      const { data } = await supabase.from('newsletter_subscribers').select('email').eq('is_active', true).limit(500);
+      entries.push(...(data || []).map(s => ({ email: s.email, name: s.email.split('@')[0] })));
+    }
+    if (targetAudience === 'all' || targetAudience === 'leads') {
+      const { data } = await supabase.from('crm_leads').select('email_lower, full_name').limit(500);
+      entries.push(...(data || []).filter(l => l.email_lower).map(l => ({ email: l.email_lower!, name: l.full_name || '' })));
+    }
+    if (targetAudience === 'all' || targetAudience === 'brokers') {
+      const { data } = await supabase.from('profiles').select('email, full_name').limit(500);
+      entries.push(...(data || []).filter(p => p.email).map(p => ({ email: p.email!, name: p.full_name || '' })));
+    }
+    // Deduplicate
+    const unique = new Map<string, { email: string; name: string }>();
+    entries.forEach(e => { if (!unique.has(e.email.toLowerCase())) unique.set(e.email.toLowerCase(), e); });
+    return Array.from(unique.values());
+  };
+
+  const handleSendNow = async () => {
+    if (!name.trim() || !emailBody.trim()) {
+      toast.error('Campaign name and content are required');
+      return;
+    }
+    setShowSendConfirm(false);
+    setIsSending(true);
+
+    try {
+      // Save campaign first
+      await handleSave('draft');
+
+      const recipientList = await getRecipientsForSend();
+      if (recipientList.length === 0) {
+        toast.error('No recipients found for this audience');
+        setIsSending(false);
+        return;
+      }
+
+      setSendProgress({ sent: 0, total: recipientList.length, failed: 0 });
+
+      const edgeFunction = campaignType === 'whatsapp' ? 'ai-whatsapp-composer' : 'ai-email-composer';
+      let sent = 0;
+      let failed = 0;
+
+      // Send in batches of 5
+      const batchSize = 5;
+      for (let i = 0; i < recipientList.length; i += batchSize) {
+        const batch = recipientList.slice(i, i + batchSize);
+        const promises = batch.map(async (recipient) => {
+          try {
+            await supabase.functions.invoke(edgeFunction, {
+              body: {
+                recipientEmail: recipient.email,
+                recipientName: recipient.name,
+                subject: subjectLine || name,
+                body: emailBody,
+                campaignName: name,
+              },
+            });
+            sent++;
+          } catch {
+            failed++;
+          }
+        });
+        await Promise.allSettled(promises);
+        setSendProgress({ sent, total: recipientList.length, failed });
+      }
+
+      // Update campaign status
+      if (campaign?.id) {
+        await supabase.from('marketing_campaigns').update({ 
+          status: 'sent', 
+          content: { 
+            body: emailBody, 
+            sent_count: sent, 
+            failed_count: failed,
+            sent_at: new Date().toISOString() 
+          } 
+        }).eq('id', campaign.id);
+      }
+
+      toast.success(`Campaign sent! ${sent} delivered, ${failed} failed`);
+      onSave();
+    } catch (error) {
+      console.error('Send error:', error);
+      toast.error('Failed to send campaign');
+    } finally {
+      setIsSending(false);
+    }
+  };
+
   const renderEmailPreview = () => {
     const isHTML = emailBody.includes('<') && emailBody.includes('>');
     return (
@@ -448,13 +547,30 @@ The content should be:
           </div>
 
           <div className="flex items-center gap-2">
-            <Button variant="outline" onClick={() => handleSave('draft')} disabled={isSaving} className="border-2 border-gold/40 bg-white/80 text-black hover:bg-gold/10">
+            <Button variant="outline" onClick={() => handleSave('draft')} disabled={isSaving || isSending} className="border-2 border-gold/40 bg-white/80 text-black hover:bg-gold/10">
               <Save className="h-4 w-4 mr-2" />
               Save Draft
             </Button>
-            <Button onClick={openScheduleDialog} disabled={isSaving} className="bg-gradient-to-r from-gold to-amber-600 hover:from-gold/90 hover:to-amber-600/90 text-black font-semibold">
+            <Button onClick={openScheduleDialog} disabled={isSaving || isSending} className="border-2 border-gold/40 bg-white/80 text-black hover:bg-gold/10">
               <Calendar className="h-4 w-4 mr-2" />
               Schedule
+            </Button>
+            <Button 
+              onClick={() => setShowSendConfirm(true)} 
+              disabled={isSaving || isSending || !emailBody.trim()} 
+              className="bg-gradient-to-r from-gold to-amber-600 hover:from-gold/90 hover:to-amber-600/90 text-black font-semibold"
+            >
+              {isSending ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  Sending {sendProgress.sent}/{sendProgress.total}
+                </>
+              ) : (
+                <>
+                  <Send className="h-4 w-4 mr-2" />
+                  Send Now
+                </>
+              )}
             </Button>
           </div>
         </div>
@@ -807,6 +923,39 @@ The content should be:
             <Button variant="outline" onClick={() => setShowScheduleDialog(false)} className="border-gold/40">Cancel</Button>
             <Button onClick={() => handleSave('scheduled')} disabled={isSaving || !scheduleDate} className="bg-gradient-to-r from-gold to-amber-600 text-black">
               {isSaving ? 'Scheduling...' : 'Schedule Campaign'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Send Confirmation Dialog */}
+      <Dialog open={showSendConfirm} onOpenChange={setShowSendConfirm}>
+        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-black">
+              <Send className="w-5 h-5 text-gold" />
+              Send Campaign Now
+            </DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-4 py-4">
+            <div className="p-4 rounded-lg bg-gold/10 border border-gold/30 space-y-2">
+              <p className="text-sm font-semibold text-black">Campaign: {name}</p>
+              <p className="text-sm text-black/70">Channel: {campaignType === 'whatsapp' ? 'WhatsApp' : campaignType === 'email' ? 'Email' : campaignType}</p>
+              <p className="text-sm text-black/70">
+                Audience: {targetAudience === 'custom' ? `${selectedCount} selected recipients` : targetAudience === 'all' ? 'All Contacts' : targetAudience}
+              </p>
+            </div>
+            <p className="text-sm text-black/60">
+              ⚠️ This will immediately send the campaign to all selected recipients. This action cannot be undone.
+            </p>
+          </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowSendConfirm(false)} className="border-gold/40">Cancel</Button>
+            <Button onClick={handleSendNow} className="bg-gradient-to-r from-gold to-amber-600 text-black font-semibold">
+              <Send className="h-4 w-4 mr-2" />
+              Confirm & Send
             </Button>
           </DialogFooter>
         </DialogContent>
