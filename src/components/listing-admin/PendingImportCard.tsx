@@ -87,12 +87,15 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
     documents.length === 0
   );
 
-  // What specifically is missing (for tooltip)
+  // What specifically is missing (for tooltip / display)
   const missingFields: string[] = [];
   if (!item.description) missingFields.push("description");
   if (!item.developer_name || item.developer_name.toLowerCase() === "unknown") missingFields.push("developer");
   if (images.length < 2) missingFields.push(`images (${images.length}/2)`);
-  if (documents.length === 0) missingFields.push("brochure/documents");
+  if (documents.length === 0) missingFields.push("documents");
+  if (!item.handover_date) missingFields.push("handover");
+  if (item.bedrooms_min === null && item.bedrooms_max === null) missingFields.push("bedrooms");
+  if (!item.price_from) missingFields.push("price");
 
   const handleCardClick = () => {
     onReview();
@@ -277,8 +280,18 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
         <div className="absolute top-3 left-3 z-20 pointer-events-none">
           <div className="inline-flex items-center gap-1 rounded bg-amber-500 text-white text-xs font-bold px-2.5 py-1 shadow" title={`Missing: ${missingFields.join(", ")}`}>
             <AlertTriangle className="w-3 h-3" />
-            Needs Enrichment
+            Needs Work ({missingFields.length})
           </div>
+        </div>
+      )}
+      {/* Missing fields breakdown */}
+      {missingFields.length > 0 && (
+        <div className="absolute top-12 left-3 z-20 pointer-events-none flex flex-wrap gap-1 max-w-[80%]">
+          {missingFields.slice(0, 4).map((f) => (
+            <span key={f} className="rounded bg-black/60 text-white text-[9px] px-1.5 py-0.5 backdrop-blur">
+              {f}
+            </span>
+          ))}
         </div>
       )}
 
