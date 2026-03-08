@@ -1,41 +1,69 @@
 
 
-## Plan: Fix All Email Issues Across All Templates
+# Fix Meeting Center & AI Meeting Summarizer — UI, Voice, CRM Lead Integration
 
-### Problems Identified
+## Issues Identified
 
-1. **Recommended For You icons disappeared** — Inline SVGs are stripped by Gmail and most email clients. Must revert to hosted PNG images (`ai-tools.png`, `guides.png`, `properties.png` already exist in `public/email-icons/`).
+### Meeting Center (`MeetingCenter.tsx` + subcomponents)
+1. **"Add Call Summary" hover text** — white text on dark bg with poor contrast on hover
+2. **"View Details" button** — gray `text-zinc-400` blends into `bg-zinc-900` background
+3. **Audio Upload/Record buttons** — `border-orange-500/50 text-orange-400` too faded on dark background
+4. **All sections need champagne gold upgrade** — currently dark/violet theme, inconsistent with platform standard
 
-2. **Social media footer icons not rendering** — Same issue: `socialLinksFooter()` loads external `.svg` files via `<img>` tags, but Gmail blocks SVG images entirely. Must switch to hosted `.png` files. Currently missing `social-facebook.png` — need to confirm or create it.
+### AI Meeting Summarizer (`AIMeetingSummarizerPremium.tsx`)
+1. **Remove session duration presets** — only show duration AFTER session ends (already partially done, but clean up any remnants)
+2. **Remove standalone VoiceInputButton next to textarea** — the Live Session Recorder should auto-populate notes, no separate mic needed
+3. **Live session auto-generates notes** — transcript feeds directly into notes during recording
+4. **Save sessions to backend** — store full transcript + audio reference in `ai_job_master` for Meeting Center history
+5. **Translation toggle during recording** — user selects target language, live translation shown inline
+6. **AI assistant always live during session** — show property suggestions, response drafts, action items in real-time
 
-3. **Email split into multiple visual cards** — Several sub-sections (`ticketSupportEmbed`, `readyToGetStartedHtml`, `recommendedActionsHtml`) each have their own `border`, `border-radius`, and `background` styles creating distinct visual boxes. These need to be softened so they sit seamlessly inside the single continuous card.
+### CRM Lead Integration (NEW)
+1. **Add Lead / Search Lead** — search `crm_leads` by name/phone, link to meeting
+2. **Add New Lead** — if not found, auto-create from entered name/phone with pre-fill
+3. **Auto-update lead** — after meeting, update lead with meeting date, notes, next steps
+4. **Participant linking** — link meeting participants to CRM leads
 
-### Changes (all in `supabase/functions/_shared/email-html.ts`)
+---
 
-#### A. Recommended For You — Revert to PNG hosted images
-- Change `recommendedCard()` back to using `iconImg()` with PNG paths
-- Remove the `RECOMMENDED_ICONS` inline SVG object
-- Ensure circular frame clips the PNG with `overflow:hidden` on the `<td>` to prevent square backgrounds
-- Signature: `recommendedCard(title, href, iconPath, alt)` — restore the original parameters
+## Implementation Plan
 
-#### B. Social Footer — Switch to PNG with white pearl background
-- Replace `socialLinksFooter()` to use the inline `SVG` object icons (instagram, facebook, linkedin, tiktok, youtube) that are already defined at the top of the file — these render as raw HTML inside `<td>` elements, not as `<img>` tags, so they should survive email client processing
-- Actually, since Gmail strips ALL SVG (both inline and `<img>`), switch to using the `.png` files: `social-instagram.png`, `social-linkedin.png`, `social-tiktok.png`, `social-youtube.png`
-- Create `social-facebook.png` if missing
-- Style each icon circle: white/pearl (#FDFBF7) background, gold border, black icon inside
+### 1. Fix Meeting Center UI (MeetingCenter.tsx + SummaryCard.tsx + InlineCallSummarizer.tsx)
 
-#### C. Single Card Layout — Remove visual fragmentation
-- `ticketSupportEmbed()`: Remove the heavy gradient background and red border; make it blend into the card
-- `readyToGetStartedHtml()`: Remove the outer border and separate background so it flows within the card
-- `inquiryBox()`: Soften its standalone bordered look
-- Keep all content inside the single `emailShell` wrapper card with no sub-borders that create separation
+**SummaryCard.tsx:**
+- Change "View Details" button from `text-zinc-400` to `text-white bg-zinc-800 border border-zinc-600` for visibility
+- Ensure all text is readable against dark backgrounds
 
-#### D. Deploy + Send Test Email
-- Deploy the updated edge function
-- Immediately send a test welcome email to `janeaboujaoudenails@gmail.com`
-- Take a screenshot as proof
+**InlineCallSummarizer.tsx:**
+- Change trigger button text/hover to high-contrast (white text, gold accents)
+- Fix Upload/Record buttons: use solid `bg-orange-600 text-white` instead of faded outlines
+- Fix all labels to be `text-zinc-200` not `text-zinc-300`
 
-### Files Modified
-- `supabase/functions/_shared/email-html.ts` — all icon and layout fixes
-- `public/email-icons/social-facebook.png` — create if missing (or use existing assets)
+**MeetingCenter.tsx:**
+- Upgrade all section styling for consistency with champagne gold where applicable on cards
+
+### 2. Fix AI Meeting Summarizer (AIMeetingSummarizerPremium.tsx)
+
+- **Remove VoiceInputButton** from textarea section — Live Session Recorder handles everything
+- **Auto-populate notes from live transcript** (already done, just remove redundant mic)
+- **Only show session duration after recording stops** (already implemented, verify clean)
+- **Add translation language selector** — dropdown to pick target translation language during recording
+- **Save session data** — after summarization, store full transcript in `ai_job_master.output_payload`
+
+### 3. Add CRM Lead Search & Link (AIMeetingSummarizerPremium.tsx)
+
+Add a new section in Meeting Details:
+- **Search Lead** input — queries `crm_leads` by `full_name` or `phone_e164` with debounced search
+- **Select Lead** — shows matching results, click to link as participant
+- **Add New Lead** button — if no results, creates lead in `crm_leads` with name/phone from search input
+- **Auto-update lead after meeting** — insert activity record and update `crm_leads.updated_at` with meeting context
+
+### Files to Modify
+
+| File | Changes |
+|------|---------|
+| `src/components/meeting-center/SummaryCard.tsx` | Fix View Details button contrast |
+| `src/components/meeting-center/InlineCallSummarizer.tsx` | Fix all button/text contrast, upgrade Upload/Record buttons |
+| `src/pages/MeetingCenter.tsx` | Minor contrast fixes on hover states |
+| `src/components/ai-tools/premium/AIMeetingSummarizerPremium.tsx` | Remove redundant VoiceInputButton, add CRM lead search/link, add translation selector, save sessions to backend |
 
