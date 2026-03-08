@@ -13,9 +13,9 @@ import {
   Hotel, Key, FileText, Camera, Loader2, Wand2, X, Eye,
   MapPin, Bed, Bath, Maximize, DollarSign, Calendar, Star,
   CheckCircle2, AlertCircle, Image, File, Trash2, Plus, RefreshCw,
-  TrendingUp, Shield, User, Phone, Mail, CreditCard
+  TrendingUp, Shield, User, Phone, Mail, CreditCard, Link as LinkIcon, FileText as FileTextIcon, Globe
 } from 'lucide-react';
-import jbjMonogram from "@/assets/jbj-monogram-light-transparent.png";
+import { BrandedLoader } from "@/components/ui/BrandedLoader";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
