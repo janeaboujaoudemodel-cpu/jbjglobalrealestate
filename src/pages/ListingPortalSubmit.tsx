@@ -237,6 +237,7 @@ const ListingPortalSubmit = () => {
       const documents = [];
       const imageUrls: string[] = [];
 
+      // Process uploaded files
       for (const doc of uploadedDocs) {
         const base64 = await fileToBase64(doc.file);
         
@@ -255,6 +256,37 @@ const ListingPortalSubmit = () => {
         } else {
           documents.push({ type: 'text', name: doc.name, content: await doc.file.text() });
         }
+      }
+
+      // Add user-pasted text as a document
+      if (sourceText.trim()) {
+        documents.push({ type: 'text', name: 'User-provided description', content: sourceText.trim() });
+      }
+
+      // Scrape URL via Firecrawl if provided
+      let scrapedContent = '';
+      if (sourceUrl.trim()) {
+        try {
+          const { data: scrapeResult, error: scrapeError } = await supabase.functions.invoke('firecrawl-scrape', {
+            body: { url: sourceUrl.trim(), options: { formats: ['markdown'], onlyMainContent: true } }
+          });
+          if (!scrapeError && scrapeResult?.data?.markdown) {
+            scrapedContent = scrapeResult.data.markdown;
+            documents.push({ type: 'text', name: `Scraped: ${sourceUrl}`, content: scrapedContent.substring(0, 15000) });
+          } else if (!scrapeError && scrapeResult?.success && scrapeResult?.data?.markdown) {
+            scrapedContent = scrapeResult.data.markdown;
+            documents.push({ type: 'text', name: `Scraped: ${sourceUrl}`, content: scrapedContent.substring(0, 15000) });
+          }
+        } catch (urlErr) {
+          console.warn('URL scraping failed, continuing with other sources:', urlErr);
+          toast.info('Could not scrape URL, continuing with uploaded files');
+        }
+      }
+
+      if (documents.length === 0) {
+        toast.error('No extractable content found. Please upload files, enter a URL, or paste text.');
+        setPhase('upload');
+        return;
       }
 
       setUploadedImageUrls(imageUrls);
