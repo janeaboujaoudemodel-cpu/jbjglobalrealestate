@@ -1001,20 +1001,20 @@ const ListingAdmin = () => {
               </CardHeader>
               <CardContent className="p-6 max-h-[calc(100vh-300px)] overflow-y-auto">
                 <Tabs defaultValue="details" className="space-y-6">
-                  <TabsList className="bg-zinc-100 border border-zinc-200">
-                    <TabsTrigger value="details" className="data-[state=active]:bg-black data-[state=active]:text-white">
+                  <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-[#C9A84C]/30">
+                    <TabsTrigger value="details" className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black">
                       {t('listingAdmin.details')}
                     </TabsTrigger>
                     <TabsTrigger 
                       value="documents" 
-                      className="data-[state=active]:bg-black data-[state=active]:text-white"
+                      className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black"
                       disabled={isCreating}
                     >
                       {t('listingAdmin.documents')}
                     </TabsTrigger>
                     <TabsTrigger 
                       value="images" 
-                      className="data-[state=active]:bg-black data-[state=active]:text-white"
+                      className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black"
                       disabled={isCreating}
                     >
                       {t('listingAdmin.images')}
