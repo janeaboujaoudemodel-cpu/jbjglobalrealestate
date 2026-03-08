@@ -276,11 +276,11 @@ const FoundersActivityCenter: React.FC = () => {
               : 'bg-white text-gold border-2 border-gold/30 hover:bg-transparent hover:border-gold/50 whitespace-nowrap'
             }
           >
-            {f === 'all' && '📊 All Activities'}
-            {f === 'email' && '📧 Emails'}
-            {f === 'call' && '📞 Calls'}
-            {f === 'task' && '✅ Tasks'}
-            {f === 'lead' && '🎯 Leads'}
+            {f === 'all' && 'All Activities'}
+            {f === 'email' && 'Emails'}
+            {f === 'call' && 'Calls'}
+            {f === 'task' && 'Tasks'}
+            {f === 'lead' && 'Leads'}
           </Button>
         ))}
       </div>
@@ -366,10 +366,10 @@ const FoundersActivityCenter: React.FC = () => {
                                     activity.status === 'in_progress' ? 'bg-blue-50 text-blue-600 border-blue-200' :
                                     'bg-red-50 text-red-600 border-red-200'
                                   }`}>
-                                    {activity.status === 'completed' && '✅'}
-                                    {activity.status === 'pending' && '⏳'}
-                                    {activity.status === 'in_progress' && '🎯'}
-                                    {activity.status === 'failed' && '⚠️'}
+                                    {activity.status === 'completed' && 'Done'}
+                                    {activity.status === 'pending' && 'Pending'}
+                                    {activity.status === 'in_progress' && 'In Progress'}
+                                    {activity.status === 'failed' && 'Failed'}
                                     {activity.status}
                                   </Badge>
                                 )}
