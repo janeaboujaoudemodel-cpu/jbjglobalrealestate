@@ -12,10 +12,76 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Slider } from "@/components/ui/slider";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Link } from "react-router-dom";
-import { MapPin, Building, Bed, Maximize, Calendar, Filter, List, X, ChevronRight, ExternalLink } from "lucide-react";
+import { MapPin, Building, Bed, Maximize, Calendar, Filter, List, X, ChevronRight, ExternalLink, Globe } from "lucide-react";
 import { SafeImage } from "@/components/SafeImage";
 import { MapNavigationControls } from "@/components/maps/MapNavigationControls";
 import "leaflet/dist/leaflet.css";
+
+// Arabic translations for the map interface
+const mapTranslations = {
+  en: {
+    propertyMap: "Property Map",
+    properties: "Properties",
+    searchProjects: "Search by project, developer, or area...",
+    filters: "Filters",
+    list: "List",
+    transactionType: "Transaction Type",
+    all: "All",
+    buy: "Buy",
+    rent: "Rent",
+    search: "Search",
+    developer: "Developer",
+    allDevelopers: "All Developers",
+    area: "Area",
+    allAreas: "All Areas",
+    bedrooms: "Bedrooms",
+    any: "Any",
+    studio: "Studio",
+    bedroom: "Bedroom",
+    bedrooms_label: "Bedrooms",
+    priceRange: "Price Range",
+    clearAll: "Clear All Filters",
+    filterProperties: "Filter Properties",
+    priceOnRequest: "Price on request",
+    startingFrom: "Starting from",
+    viewDetails: "View Details",
+    view: "View",
+    by: "by",
+    loading: "Loading properties...",
+  },
+  ar: {
+    propertyMap: "خريطة العقارات",
+    properties: "عقارات",
+    searchProjects: "ابحث عن مشروع أو مطور أو منطقة...",
+    filters: "تصفية",
+    list: "قائمة",
+    transactionType: "نوع المعاملة",
+    all: "الكل",
+    buy: "شراء",
+    rent: "إيجار",
+    search: "بحث",
+    developer: "المطور",
+    allDevelopers: "جميع المطورين",
+    area: "المنطقة",
+    allAreas: "جميع المناطق",
+    bedrooms: "غرف النوم",
+    any: "أي",
+    studio: "استوديو",
+    bedroom: "غرفة نوم",
+    bedrooms_label: "غرف نوم",
+    priceRange: "نطاق السعر",
+    clearAll: "مسح جميع الفلاتر",
+    filterProperties: "تصفية العقارات",
+    priceOnRequest: "السعر عند الطلب",
+    startingFrom: "يبدأ من",
+    viewDetails: "عرض التفاصيل",
+    view: "عرض",
+    by: "من",
+    loading: "جاري تحميل العقارات...",
+  },
+} as const;
+
+type MapLang = "en" | "ar";
 
 // Hook to fetch areas for filter
 function useAreas() {
@@ -185,6 +251,8 @@ const PropertyMap = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [showList, setShowList] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [mapLang, setMapLang] = useState<MapLang>("en");
+  const t = mapTranslations[mapLang];
   
   // Filters
   const [searchTerm, setSearchTerm] = useState("");
@@ -253,7 +321,7 @@ const PropertyMap = () => {
       
       return true;
     });
-  }, [allProjects, searchTerm, selectedDeveloper, selectedBedrooms, priceRange]);
+  }, [allProjects, searchTerm, selectedDeveloper, selectedArea, selectedBedrooms, priceRange]);
   
   const clearFilters = () => {
     setSearchTerm("");
@@ -271,22 +339,22 @@ const PropertyMap = () => {
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
-          <p className="text-muted-foreground">Loading properties...</p>
+          <p className="text-muted-foreground">{t.loading}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background relative">
+    <div className={`min-h-screen bg-background relative ${mapLang === 'ar' ? 'direction-rtl' : ''}`} dir={mapLang === 'ar' ? 'rtl' : 'ltr'}>
       {/* Header Bar */}
       <div className="absolute top-0 left-0 right-0 z-[1000] bg-background/95 backdrop-blur-sm border-b">
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-4">
-            <h1 className="text-lg font-semibold hidden sm:block">Property Map</h1>
+            <h1 className="text-lg font-semibold hidden sm:block">{t.propertyMap}</h1>
             <Badge variant="secondary" className="gap-1">
               <MapPin className="h-3 w-3" />
-              {filteredProjects.length} Properties
+              {filteredProjects.length} {t.properties}
             </Badge>
           </div>
           
@@ -294,10 +362,10 @@ const PropertyMap = () => {
             {/* Search */}
             <div className="relative hidden md:block">
               <Input
-                placeholder="Search projects..."
+                placeholder={t.searchProjects}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-64 pr-8"
+                className="w-72 pr-8"
               />
               {searchTerm && (
                 <button
@@ -309,12 +377,23 @@ const PropertyMap = () => {
               )}
             </div>
             
+            {/* Language Toggle */}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setMapLang(mapLang === 'en' ? 'ar' : 'en')}
+              className="gap-1.5 shrink-0"
+            >
+              <Globe className="h-4 w-4" />
+              <span className="text-xs font-medium">{mapLang === 'en' ? 'عربي' : 'EN'}</span>
+            </Button>
+            
             {/* Filters Sheet */}
             <Sheet open={filtersOpen} onOpenChange={setFiltersOpen}>
               <SheetTrigger asChild>
                 <Button variant="outline" size="sm" className="gap-2">
                   <Filter className="h-4 w-4" />
-                  Filters
+                  {t.filters}
                   {hasActiveFilters && (
                     <Badge variant="default" className="ml-1 h-5 w-5 p-0 flex items-center justify-center text-xs">
                       !
@@ -324,12 +403,12 @@ const PropertyMap = () => {
               </SheetTrigger>
               <SheetContent>
                 <SheetHeader>
-                  <SheetTitle>Filter Properties</SheetTitle>
+                  <SheetTitle>{t.filterProperties}</SheetTitle>
                 </SheetHeader>
                 <div className="space-y-6 mt-6">
                   {/* Transaction Type */}
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Transaction Type</label>
+                    <label className="text-sm font-medium">{t.transactionType}</label>
                     <div className="flex gap-2">
                       {(['all', 'buy', 'rent'] as const).map((type) => (
                         <Button
@@ -339,7 +418,7 @@ const PropertyMap = () => {
                           onClick={() => setTransactionType(type)}
                           className="flex-1"
                         >
-                          {type === 'all' ? 'All' : type === 'buy' ? 'Buy' : 'Rent'}
+                          {type === 'all' ? t.all : type === 'buy' ? t.buy : t.rent}
                         </Button>
                       ))}
                     </div>
@@ -347,9 +426,9 @@ const PropertyMap = () => {
                   
                   {/* Mobile Search */}
                   <div className="md:hidden space-y-2">
-                    <label className="text-sm font-medium">Search</label>
+                    <label className="text-sm font-medium">{t.search}</label>
                     <Input
-                      placeholder="Search projects..."
+                      placeholder={t.searchProjects}
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />
@@ -357,13 +436,13 @@ const PropertyMap = () => {
                   
                   {/* Developer */}
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Developer</label>
+                    <label className="text-sm font-medium">{t.developer}</label>
                     <Select value={selectedDeveloper} onValueChange={setSelectedDeveloper}>
                       <SelectTrigger>
-                        <SelectValue placeholder="All Developers" />
+                        <SelectValue placeholder={t.allDevelopers} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="all">All Developers</SelectItem>
+                        <SelectItem value="all">{t.allDevelopers}</SelectItem>
                         {developers.map(dev => (
                           <SelectItem key={dev} value={dev}>{dev}</SelectItem>
                         ))}
@@ -373,13 +452,13 @@ const PropertyMap = () => {
                   
                   {/* Area */}
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Area</label>
+                    <label className="text-sm font-medium">{t.area}</label>
                     <Select value={selectedArea} onValueChange={setSelectedArea}>
                       <SelectTrigger>
-                        <SelectValue placeholder="All Areas" />
+                        <SelectValue placeholder={t.allAreas} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="all">All Areas</SelectItem>
+                        <SelectItem value="all">{t.allAreas}</SelectItem>
                         {areas.map(area => (
                           <SelectItem key={area.id} value={area.name}>{area.name}</SelectItem>
                         ))}
@@ -389,25 +468,25 @@ const PropertyMap = () => {
                   
                   {/* Bedrooms */}
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Bedrooms</label>
+                    <label className="text-sm font-medium">{t.bedrooms}</label>
                     <Select value={selectedBedrooms} onValueChange={setSelectedBedrooms}>
                       <SelectTrigger>
-                        <SelectValue placeholder="Any" />
+                        <SelectValue placeholder={t.any} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="all">Any</SelectItem>
-                        <SelectItem value="0">Studio</SelectItem>
-                        <SelectItem value="1">1 Bedroom</SelectItem>
-                        <SelectItem value="2">2 Bedrooms</SelectItem>
-                        <SelectItem value="3">3 Bedrooms</SelectItem>
-                        <SelectItem value="4">4+ Bedrooms</SelectItem>
+                        <SelectItem value="all">{t.any}</SelectItem>
+                        <SelectItem value="0">{t.studio}</SelectItem>
+                        <SelectItem value="1">1 {t.bedroom}</SelectItem>
+                        <SelectItem value="2">2 {t.bedrooms_label}</SelectItem>
+                        <SelectItem value="3">3 {t.bedrooms_label}</SelectItem>
+                        <SelectItem value="4">4+ {t.bedrooms_label}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                   
                   {/* Price Range */}
                   <div className="space-y-4">
-                    <label className="text-sm font-medium">Price Range</label>
+                    <label className="text-sm font-medium">{t.priceRange}</label>
                     <Slider
                       value={priceRange}
                       min={0}
@@ -424,7 +503,7 @@ const PropertyMap = () => {
                   {/* Clear Filters */}
                   {hasActiveFilters && (
                     <Button variant="outline" onClick={clearFilters} className="w-full">
-                      Clear All Filters
+                      {t.clearAll}
                     </Button>
                   )}
                 </div>
@@ -439,7 +518,7 @@ const PropertyMap = () => {
               className="gap-2"
             >
               <List className="h-4 w-4" />
-              <span className="hidden sm:inline">List</span>
+              <span className="hidden sm:inline">{t.list}</span>
             </Button>
           </div>
         </div>
@@ -497,7 +576,7 @@ const PropertyMap = () => {
                       </span>
                       <Link to={`/project/${project.slug}`}>
                         <Button size="sm" variant="outline" className="h-7 text-xs">
-                          View <ChevronRight className="h-3 w-3 ml-1" />
+                          {t.view} <ChevronRight className="h-3 w-3 ml-1" />
                         </Button>
                       </Link>
                     </div>
@@ -513,7 +592,7 @@ const PropertyMap = () => {
       {showList && (
         <div className="absolute top-14 right-0 bottom-0 w-full sm:w-96 bg-background/95 backdrop-blur-sm border-l z-[999] overflow-hidden flex flex-col">
           <div className="p-4 border-b flex items-center justify-between">
-            <h2 className="font-semibold">{filteredProjects.length} Properties</h2>
+            <h2 className="font-semibold">{filteredProjects.length} {t.properties}</h2>
             <Button variant="ghost" size="sm" onClick={() => setShowList(false)}>
               <X className="h-4 w-4" />
             </Button>
@@ -591,7 +670,7 @@ const PropertyMap = () => {
               <div className="p-4">
                 <h3 className="font-semibold text-lg mb-1">{selectedProject.name}</h3>
                 <p className="text-sm text-muted-foreground mb-3">
-                  by {selectedProject.developer?.name} • {selectedProject.community?.name || selectedProject.location}
+                  {t.by} {selectedProject.developer?.name} • {selectedProject.community?.name || selectedProject.location}
                 </p>
                 
                 <div className="grid grid-cols-3 gap-3 mb-4">
@@ -617,14 +696,14 @@ const PropertyMap = () => {
                 
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs text-muted-foreground">Starting from</p>
+                    <p className="text-xs text-muted-foreground">{t.startingFrom}</p>
                     <p className="text-xl font-bold text-primary">
                       {formatPrice(selectedProject.price_from)}
                     </p>
                   </div>
                   <Link to={`/project/${selectedProject.slug}`}>
                     <Button className="gap-2">
-                      View Details
+                      {t.viewDetails}
                       <ExternalLink className="h-4 w-4" />
                     </Button>
                   </Link>
