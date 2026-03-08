@@ -514,52 +514,52 @@ export default function OwnerDashboardOverview() {
 
       {/* Main Tabbed Content */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-2 mb-6 flex-wrap gap-1 rounded-xl shadow-sm">
+        <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-[#C9A84C]/30 p-2 mb-6 flex flex-wrap justify-center gap-1.5 rounded-xl shadow-sm h-auto">
           <TabsTrigger 
             value="overview" 
-            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black"
+            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black data-[state=active]:shadow-sm px-4 py-2"
           >
             <LayoutDashboard className="h-4 w-4 mr-2" />
             Overview
           </TabsTrigger>
           <TabsTrigger 
             value="leads"
-            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black"
+            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black data-[state=active]:shadow-sm px-4 py-2"
           >
             <Users className="h-4 w-4 mr-2" />
             All Leads
           </TabsTrigger>
           <TabsTrigger 
             value="flagged"
-            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black"
+            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black data-[state=active]:shadow-sm px-4 py-2"
           >
             <Flag className="h-4 w-4 mr-2" />
             Flagged
           </TabsTrigger>
           <TabsTrigger 
             value="vip"
-            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black"
+            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black data-[state=active]:shadow-sm px-4 py-2"
           >
             <Crown className="h-4 w-4 mr-2" />
             VIP Leads
           </TabsTrigger>
           <TabsTrigger 
             value="leads-management"
-            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black"
+            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black data-[state=active]:shadow-sm px-4 py-2"
           >
             <Trash2 className="h-4 w-4 mr-2" />
             Leads Management
           </TabsTrigger>
           <TabsTrigger 
             value="employees"
-            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black"
+            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black data-[state=active]:shadow-sm px-4 py-2"
           >
             <Briefcase className="h-4 w-4 mr-2" />
             Employees Hub
           </TabsTrigger>
           <TabsTrigger 
             value="audit"
-            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black"
+            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black data-[state=active]:shadow-sm px-4 py-2"
           >
             <Shield className="h-4 w-4 mr-2" />
             Audit Logs
@@ -567,7 +567,7 @@ export default function OwnerDashboardOverview() {
         </TabsList>
 
         {/* Overview Tab */}
-        <TabsContent value="overview" className="space-y-6">
+        <TabsContent value="overview" className="space-y-6 mt-0">
           <Suspense fallback={<Skeleton className="h-40 w-full" />}>
             <CRMDashboardCards userId={user?.id || ""} hasOwnerAccess={true} />
           </Suspense>
@@ -575,7 +575,7 @@ export default function OwnerDashboardOverview() {
           <div className="grid lg:grid-cols-3 gap-6">
             {/* Newest Leads */}
             <Card className="bg-white/70 border-2 border-[#C9A84C]/30 lg:col-span-2 shadow-sm overflow-hidden min-w-0">
-              <CardHeader className="flex flex-row items-center justify-between">
+              <CardHeader className="flex flex-row items-center justify-between pb-3">
                 <div>
                   <CardTitle className="text-lg text-black">Newest Leads</CardTitle>
                   <CardDescription className="text-zinc-500">Most recent contacts</CardDescription>
@@ -589,15 +589,15 @@ export default function OwnerDashboardOverview() {
                   View All <ChevronRight className="h-4 w-4 ml-1" />
                 </Button>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pt-0">
                 {loadingNewestLeads ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {Array.from({ length: 6 }).map((_, i) => (
                       <Skeleton key={i} className="h-32 bg-[#C9A84C]/10 rounded-lg" />
                     ))}
                   </div>
                 ) : newestLeads && newestLeads.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {newestLeads.map((lead) => (
                       <LeadRow 
                         key={lead.id} 
@@ -625,13 +625,13 @@ export default function OwnerDashboardOverview() {
 
             {/* Needs Follow-up */}
             <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm overflow-hidden min-w-0">
-              <CardHeader className="flex flex-row items-center justify-between">
+              <CardHeader className="flex flex-row items-center justify-between pb-3">
                 <div>
-                  <CardTitle className="text-lg text-black flex items-center gap-2">
+                  <CardTitle className="text-base text-black flex items-center gap-2">
                     <Clock className="h-5 w-5 text-amber-600" />
                     Needs Follow-up
                   </CardTitle>
-                  <CardDescription className="text-zinc-500">Pending items</CardDescription>
+                  <CardDescription className="text-zinc-500 text-xs">Pending items</CardDescription>
                 </div>
                 <Button 
                   variant="ghost" 
@@ -642,7 +642,7 @@ export default function OwnerDashboardOverview() {
                   <ChevronRight className="h-4 w-4" />
                 </Button>
               </CardHeader>
-              <CardContent className="space-y-2">
+              <CardContent className="space-y-2 pt-0 max-h-[400px] overflow-y-auto scrollbar-hide">
                 {loadingFollowUp ? (
                   Array.from({ length: 4 }).map((_, i) => (
                     <Skeleton key={i} className="h-14 bg-[#C9A84C]/10" />
@@ -668,22 +668,22 @@ export default function OwnerDashboardOverview() {
 
           {/* Recent Conversations */}
           <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
-            <CardHeader>
+            <CardHeader className="pb-3">
               <CardTitle className="text-lg text-black flex items-center gap-2">
                 <Activity className="h-5 w-5 text-purple-600" />
                 Recent Conversations
               </CardTitle>
-              <CardDescription className="text-zinc-500">Website chat sessions (last 10)</CardDescription>
+              <CardDescription className="text-zinc-500">Website chat sessions</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="pt-0">
               {loadingRecentConvos ? (
-                <div className="grid md:grid-cols-2 gap-2">
+                <div className="grid md:grid-cols-2 gap-3">
                   {Array.from({ length: 4 }).map((_, i) => (
                     <Skeleton key={i} className="h-16 bg-[#C9A84C]/10" />
                   ))}
                 </div>
               ) : recentConversations && recentConversations.length > 0 ? (
-                <div className="grid md:grid-cols-2 gap-2">
+                <div className="grid md:grid-cols-2 gap-3">
                   {recentConversations.map((convo) => (
                     <ConversationRow key={convo.id} conversation={convo} />
                   ))}
@@ -692,6 +692,7 @@ export default function OwnerDashboardOverview() {
                 <div className="text-center py-8">
                   <MessageSquare className="h-12 w-12 text-[#C9A84C]/40 mx-auto mb-3" />
                   <p className="text-zinc-500">No conversations yet</p>
+                  <p className="text-zinc-400 text-xs mt-1">Conversations from website visitors will appear here</p>
                 </div>
               )}
             </CardContent>
@@ -706,7 +707,7 @@ export default function OwnerDashboardOverview() {
         </TabsContent>
 
         {/* All Leads Tab — lazy rendered */}
-        <TabsContent value="leads" className="space-y-4">
+        <TabsContent value="leads" className="space-y-4 mt-0">
           {activeTab === "leads" && (
             <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
               <CardHeader>
@@ -728,7 +729,7 @@ export default function OwnerDashboardOverview() {
         </TabsContent>
 
         {/* Flagged Leads Tab — lazy rendered */}
-        <TabsContent value="flagged" className="space-y-4">
+        <TabsContent value="flagged" className="space-y-4 mt-0">
           {activeTab === "flagged" && (
             <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
               <CardHeader>
@@ -752,7 +753,7 @@ export default function OwnerDashboardOverview() {
         </TabsContent>
 
         {/* VIP Leads Tab — lazy rendered */}
-        <TabsContent value="vip" className="space-y-4">
+        <TabsContent value="vip" className="space-y-4 mt-0">
           {activeTab === "vip" && (
             <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
               <CardHeader>
@@ -777,7 +778,7 @@ export default function OwnerDashboardOverview() {
         </TabsContent>
 
         {/* Leads Management Tab — Recently Deleted */}
-        <TabsContent value="leads-management" className="space-y-4">
+        <TabsContent value="leads-management" className="space-y-4 mt-0">
           {activeTab === "leads-management" && (
             <Suspense fallback={<Skeleton className="h-64 w-full" />}>
               <RecentlyDeletedLeads userId={user?.id || ""} onRefresh={handleRefresh} />
@@ -786,7 +787,7 @@ export default function OwnerDashboardOverview() {
         </TabsContent>
 
         {/* Employees Hub Tab — lazy rendered */}
-        <TabsContent value="employees" className="space-y-4">
+        <TabsContent value="employees" className="space-y-4 mt-0">
           {activeTab === "employees" && (
             <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
               <CardHeader>
@@ -806,7 +807,7 @@ export default function OwnerDashboardOverview() {
         </TabsContent>
 
         {/* Audit Logs Tab */}
-        <TabsContent value="audit" className="space-y-4">
+        <TabsContent value="audit" className="space-y-4 mt-0">
           <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
             <CardHeader>
               <CardTitle className="text-lg text-black flex items-center gap-2">

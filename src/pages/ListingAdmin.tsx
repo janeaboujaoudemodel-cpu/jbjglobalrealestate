@@ -192,7 +192,7 @@ const ListingAdmin = () => {
 
   if (stillLoading && !cachedOwner) {
     return (
-      <div className="min-h-screen bg-black flex flex-col items-center justify-center pt-28 gap-6">
+      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex flex-col items-center justify-center pt-28 gap-6">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="w-10 h-10 animate-spin text-gold" />
           <p className="text-zinc-400 text-sm">Verifying access permissions...</p>
@@ -208,7 +208,7 @@ const ListingAdmin = () => {
 
   if (!effectiveAccess) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center pt-28">
+      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex items-center justify-center pt-28">
         <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 max-w-md mx-4">
           <CardContent className="p-8 text-center">
             <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -618,11 +618,11 @@ const ListingAdmin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black pt-20 lg:pt-24">
-      {/* Premium Dashboard Shell */}
-      <div className="mx-3 md:mx-4 lg:mx-6 my-6 rounded-2xl border border-border bg-[linear-gradient(135deg,hsl(var(--champagne-1)),hsl(var(--champagne-2)),hsl(var(--champagne-3)))]">
+    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] pt-0">
+      {/* Premium Dashboard Shell — full bleed, no black gaps */}
+      <div className="border-b border-[#C9A84C]/20 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
       {/* Header - Clean neutral style */}
-      <header className="border-b border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-20 lg:top-24 z-40 rounded-t-2xl">
+      <header className="border-b border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-0 z-40">
         <div className="max-w-[1200px] mx-auto px-4 py-4">
           {/* Row 1: Title and actions */}
           <div className="flex items-center justify-between gap-4 mb-4">
@@ -630,7 +630,7 @@ const ListingAdmin = () => {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => navigate("/")}
+                onClick={() => navigate(-1)}
                 className="text-zinc-700 hover:text-zinc-900 hover:bg-zinc-100"
               >
                 <ArrowLeft className="w-5 h-5" />
@@ -1001,20 +1001,20 @@ const ListingAdmin = () => {
               </CardHeader>
               <CardContent className="p-6 max-h-[calc(100vh-300px)] overflow-y-auto">
                 <Tabs defaultValue="details" className="space-y-6">
-                  <TabsList className="bg-zinc-100 border border-zinc-200">
-                    <TabsTrigger value="details" className="data-[state=active]:bg-black data-[state=active]:text-white">
+                  <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-[#C9A84C]/30">
+                    <TabsTrigger value="details" className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black">
                       {t('listingAdmin.details')}
                     </TabsTrigger>
                     <TabsTrigger 
                       value="documents" 
-                      className="data-[state=active]:bg-black data-[state=active]:text-white"
+                      className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black"
                       disabled={isCreating}
                     >
                       {t('listingAdmin.documents')}
                     </TabsTrigger>
                     <TabsTrigger 
                       value="images" 
-                      className="data-[state=active]:bg-black data-[state=active]:text-white"
+                      className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black"
                       disabled={isCreating}
                     >
                       {t('listingAdmin.images')}

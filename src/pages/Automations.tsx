@@ -159,7 +159,7 @@ const Automations = () => {
 
       if (error || !data) {
         toast.error("Access denied. You must be a CRM user to access Automations.");
-        navigate("/crm");
+        navigate(-1);
         return;
       }
 
@@ -169,7 +169,7 @@ const Automations = () => {
 
       if (!userHasAccess) {
         toast.error("Automations are restricted to the Owner.");
-        navigate("/crm");
+        navigate(-1);
         return;
       }
 
@@ -188,7 +188,7 @@ const Automations = () => {
       }
     } catch (err) {
       console.error("Access check failed:", err);
-      navigate("/crm");
+      navigate(-1);
     } finally {
       setLoading(false);
     }
@@ -234,12 +234,10 @@ const Automations = () => {
       <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-0 z-50 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link to="/crm">
-              <Button variant="ghost" size="sm" className="text-black hover:text-gold hover:bg-gold/10">
+            <Button variant="ghost" size="sm" className="text-black hover:text-gold hover:bg-gold/10" onClick={() => navigate(-1)}>
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to CRM
+                Back
               </Button>
-            </Link>
             <div className="h-6 w-px bg-gold/30" />
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-gradient-to-br from-gold/20 to-gold/10 border border-gold/30">
