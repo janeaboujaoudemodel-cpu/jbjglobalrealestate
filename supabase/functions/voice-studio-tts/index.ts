@@ -24,26 +24,24 @@ serve(async (req) => {
       );
     }
 
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!
     
-    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-      global: { headers: { Authorization: authHeader } },
-    });
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     // Verify the JWT and get user
     const token = authHeader.replace("Bearer ", "");
-    const { data: claimsData, error: claimsError } = await supabase.auth.getClaims(token);
+    const { data: { user }, error: userError } = await supabase.auth.getUser(token);
     
-    if (claimsError || !claimsData?.claims?.sub) {
-      console.error("Auth verification failed:", claimsError);
+    if (userError || !user) {
+      console.error("Auth verification failed:", userError);
       return new Response(
         JSON.stringify({ error: "Unauthorized - invalid token" }),
         { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    const userId = claimsData.claims.sub;
+    const userId = user.id;
     console.log(`Voice Studio TTS request from user: ${userId}`);
     // ========================================
 
@@ -52,7 +50,7 @@ serve(async (req) => {
       throw new Error("ELEVENLABS_API_KEY not configured");
     }
 
-    const { text, voiceId, format = "mp3", enhance = false } = await req.json();
+    const { text, voiceId, format = "mp3", modelId, voiceSettings } = await req.json();
 
     if (!text || typeof text !== "string") {
       return new Response(
@@ -74,7 +72,19 @@ serve(async (req) => {
     // Determine output format
     const outputFormat = format === "wav" ? "pcm_44100" : "mp3_44100_128";
 
-    console.log(`Generating TTS for ${sanitizedText.length} characters with voice ${voiceId} for user ${userId}`);
+    // Use provided model or default
+    const model = modelId || "eleven_multilingual_v2";
+
+    // Use provided voice settings or defaults
+    const settings = {
+      stability: voiceSettings?.stability ?? 0.5,
+      similarity_boost: voiceSettings?.similarity_boost ?? 0.75,
+      style: voiceSettings?.style ?? 0.3,
+      use_speaker_boost: true,
+      speed: voiceSettings?.speed ?? 1.0,
+    };
+
+    console.log(`Generating TTS: ${sanitizedText.length} chars, voice ${voiceId}, model ${model}, user ${userId}`);
 
     // Call ElevenLabs TTS API
     const response = await fetch(
@@ -87,13 +97,8 @@ serve(async (req) => {
         },
         body: JSON.stringify({
           text: sanitizedText,
-          model_id: "eleven_multilingual_v2",
-          voice_settings: {
-            stability: 0.5,
-            similarity_boost: 0.75,
-            style: 0.3,
-            use_speaker_boost: true,
-          },
+          model_id: model,
+          voice_settings: settings,
         }),
       }
     );
