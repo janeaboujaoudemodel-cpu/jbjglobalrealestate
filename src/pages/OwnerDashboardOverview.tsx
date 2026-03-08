@@ -514,52 +514,52 @@ export default function OwnerDashboardOverview() {
 
       {/* Main Tabbed Content */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-2 mb-6 flex-wrap gap-1 rounded-xl shadow-sm">
+        <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-[#C9A84C]/30 p-2 mb-6 flex flex-wrap justify-center gap-1.5 rounded-xl shadow-sm h-auto">
           <TabsTrigger 
             value="overview" 
-            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black"
+            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black data-[state=active]:shadow-sm px-4 py-2"
           >
             <LayoutDashboard className="h-4 w-4 mr-2" />
             Overview
           </TabsTrigger>
           <TabsTrigger 
             value="leads"
-            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black"
+            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black data-[state=active]:shadow-sm px-4 py-2"
           >
             <Users className="h-4 w-4 mr-2" />
             All Leads
           </TabsTrigger>
           <TabsTrigger 
             value="flagged"
-            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black"
+            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black data-[state=active]:shadow-sm px-4 py-2"
           >
             <Flag className="h-4 w-4 mr-2" />
             Flagged
           </TabsTrigger>
           <TabsTrigger 
             value="vip"
-            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black"
+            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black data-[state=active]:shadow-sm px-4 py-2"
           >
             <Crown className="h-4 w-4 mr-2" />
             VIP Leads
           </TabsTrigger>
           <TabsTrigger 
             value="leads-management"
-            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black"
+            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black data-[state=active]:shadow-sm px-4 py-2"
           >
             <Trash2 className="h-4 w-4 mr-2" />
             Leads Management
           </TabsTrigger>
           <TabsTrigger 
             value="employees"
-            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black"
+            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black data-[state=active]:shadow-sm px-4 py-2"
           >
             <Briefcase className="h-4 w-4 mr-2" />
             Employees Hub
           </TabsTrigger>
           <TabsTrigger 
             value="audit"
-            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black"
+            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black data-[state=active]:shadow-sm px-4 py-2"
           >
             <Shield className="h-4 w-4 mr-2" />
             Audit Logs
