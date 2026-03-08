@@ -44,11 +44,8 @@ class TaskIntelligenceService {
   // Get department analytics from real task data
   public async getDepartmentAnalytics(): Promise<DepartmentAnalytics[]> {
     try {
-      const { data: tasks } = await supabase
-        .from('admin_tasks')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(500);
+      const result = await (supabase as any).from('admin_tasks').select('*').order('created_at', { ascending: false }).limit(500);
+      const tasks = result.data;
 
       if (!tasks || tasks.length === 0) {
         return [{
@@ -110,10 +107,8 @@ class TaskIntelligenceService {
   // Get employee analytics from real AI broker/profile data
   public async getEmployeeAnalytics(): Promise<EmployeeAnalytics[]> {
     try {
-      const { data: brokers } = await supabase
-        .from('ai_brokers')
-        .select('*')
-        .limit(20);
+      const result = await (supabase as any).from('ai_brokers').select('*').limit(20);
+      const brokers = result.data;
 
       if (!brokers || brokers.length === 0) {
         return [];
