@@ -702,14 +702,51 @@ const ListingPortalSubmit = () => {
                         )}
                       </div>
 
+                      {/* Source URL Input */}
+                      <div className="bg-white/70 border-2 border-gold/20 rounded-2xl p-6">
+                        <h2 className="text-black font-semibold mb-2 flex items-center gap-2">
+                          <Globe className="w-4 h-4 text-gold" />
+                          Source URL (Optional)
+                        </h2>
+                        <p className="text-zinc-500 text-xs mb-3">
+                          Paste a website or listing link — AI will scrape and extract property details
+                        </p>
+                        <Input
+                          value={sourceUrl}
+                          onChange={e => setSourceUrl(e.target.value)}
+                          placeholder="https://www.propertyfinder.ae/..."
+                          className="bg-white border-gold/30 text-black"
+                        />
+                      </div>
+
+                      {/* Paste Text Input */}
+                      <div className="bg-white/70 border-2 border-gold/20 rounded-2xl p-6">
+                        <h2 className="text-black font-semibold mb-2 flex items-center gap-2">
+                          <FileTextIcon className="w-4 h-4 text-gold" />
+                          Paste Text / Description (Optional)
+                        </h2>
+                        <p className="text-zinc-500 text-xs mb-3">
+                          Paste any property description, spec sheet, or text content for AI to analyze
+                        </p>
+                        <Textarea
+                          value={sourceText}
+                          onChange={e => setSourceText(e.target.value)}
+                          placeholder="Paste property description, features, specs, brochure text..."
+                          className="bg-white border-gold/30 text-black min-h-[100px]"
+                        />
+                      </div>
+
                       <div className="flex gap-3">
                         <Button
                           onClick={runAIExtraction}
-                          disabled={uploadedDocs.length === 0}
+                          disabled={uploadedDocs.length === 0 && !sourceUrl.trim() && !sourceText.trim()}
                           className="flex-1 bg-gold hover:bg-gold/90 text-black border-0 h-12 text-base disabled:opacity-50"
                         >
                           <Sparkles className="w-5 h-5 mr-2" />
-                          Extract with AI ({uploadedDocs.length} {uploadedDocs.length === 1 ? 'file' : 'files'})
+                          Extract with AI
+                          {uploadedDocs.length > 0 && ` (${uploadedDocs.length} file${uploadedDocs.length === 1 ? '' : 's'})`}
+                          {sourceUrl.trim() && ' + URL'}
+                          {sourceText.trim() && ' + Text'}
                         </Button>
                         <Button
                           onClick={() => setPhase('pricing_ai')}
