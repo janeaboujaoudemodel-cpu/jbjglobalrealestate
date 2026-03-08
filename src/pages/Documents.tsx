@@ -2,6 +2,8 @@ import { useState, useRef, useCallback } from "react";
 import DOMPurify from "dompurify";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   Bold, 
   Italic, 
@@ -23,7 +25,8 @@ import {
   Redo,
   FileText,
   Printer,
-  Type
+  Type,
+  Loader2
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -98,11 +101,61 @@ const Documents = () => {
     }
   };
 
-  const insertImage = () => {
-    const url = prompt("Enter image URL:");
-    if (url) {
-      execCommand('insertImage', url);
+  const [imageDialogOpen, setImageDialogOpen] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const imageInputRef = useRef<HTMLInputElement>(null);
+
+  const insertImageFromUrl = () => {
+    if (imageUrl) {
+      execCommand('insertImage', imageUrl);
+      setImageUrl("");
+      setImageDialogOpen(false);
       toast.success("Image inserted");
+    }
+  };
+
+  const handleImageFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      toast.error("Please select an image file");
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error("Image must be under 10MB");
+      return;
+    }
+
+    setIsUploadingImage(true);
+    try {
+      const timestamp = Date.now();
+      const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+      const filePath = `document-images/${timestamp}-${safeName}`;
+
+      const { error } = await supabase.storage
+        .from('public-assets')
+        .upload(filePath, file, { cacheControl: '3600', upsert: false });
+
+      if (error) {
+        // Fallback to local blob URL
+        const localUrl = URL.createObjectURL(file);
+        execCommand('insertImage', localUrl);
+        toast.success("Image inserted (local)");
+      } else {
+        const { data: { publicUrl } } = supabase.storage
+          .from('public-assets')
+          .getPublicUrl(filePath);
+        execCommand('insertImage', publicUrl);
+        toast.success("Image uploaded & inserted");
+      }
+      setImageDialogOpen(false);
+    } catch (err) {
+      console.error('Image upload error:', err);
+      toast.error("Failed to upload image");
+    } finally {
+      setIsUploadingImage(false);
+      if (imageInputRef.current) imageInputRef.current.value = '';
     }
   };
 
@@ -375,9 +428,54 @@ ${content}
             </DialogContent>
           </Dialog>
           
-          <Button variant="outline" size="sm" className="border-gold/30 text-black hover:bg-gold/10" onClick={insertImage}>
-            <Image className="h-4 w-4" />
-          </Button>
+          <Dialog open={imageDialogOpen} onOpenChange={setImageDialogOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm" className="border-gold/30 text-black hover:bg-gold/10">
+                <Image className="h-4 w-4" />
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Insert Image</DialogTitle>
+              </DialogHeader>
+              <Tabs defaultValue="upload" className="w-full">
+                <TabsList className="w-full">
+                  <TabsTrigger value="upload" className="flex-1">Upload from Device</TabsTrigger>
+                  <TabsTrigger value="url" className="flex-1">Paste URL</TabsTrigger>
+                </TabsList>
+                <TabsContent value="upload" className="space-y-4 pt-4">
+                  <input
+                    ref={imageInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleImageFileUpload}
+                  />
+                  <Button
+                    onClick={() => imageInputRef.current?.click()}
+                    disabled={isUploadingImage}
+                    className="w-full h-24 border-2 border-dashed border-gold/40 bg-transparent hover:bg-gold/5 text-muted-foreground"
+                    variant="outline"
+                  >
+                    {isUploadingImage ? (
+                      <span className="flex items-center gap-2"><Loader2 className="h-5 w-5 animate-spin" /> Uploading...</span>
+                    ) : (
+                      <span className="flex flex-col items-center gap-1"><Upload className="h-6 w-6" /> Click to select an image</span>
+                    )}
+                  </Button>
+                  <p className="text-xs text-muted-foreground text-center">Max 10MB · JPG, PNG, WebP, GIF</p>
+                </TabsContent>
+                <TabsContent value="url" className="space-y-4 pt-4">
+                  <Input
+                    placeholder="https://example.com/image.jpg"
+                    value={imageUrl}
+                    onChange={(e) => setImageUrl(e.target.value)}
+                  />
+                  <Button onClick={insertImageFromUrl} className="w-full" disabled={!imageUrl}>Insert Image</Button>
+                </TabsContent>
+              </Tabs>
+            </DialogContent>
+          </Dialog>
           
           <div className="flex-1" />
           
