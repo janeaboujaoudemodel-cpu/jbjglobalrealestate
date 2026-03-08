@@ -5,8 +5,9 @@ import {
   ListChecks, Users, Clock, Target, Calendar,
   Home, Calculator, Brain, Send, Plus, Mic, Square,
   Globe, MessageSquare, Search, UserPlus, X, Pause, Play,
-  Save, Trash2
+  Save, Trash2, Video, Phone, MonitorSmartphone
 } from "lucide-react";
+import MeetingConsentSection from "./MeetingConsentSection";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -26,6 +27,17 @@ interface LinkedLead {
   phone_e164: string | null;
   email_lower: string | null;
 }
+
+const SESSION_TYPES = [
+  { value: 'phone_call', label: 'Phone Call', icon: Phone },
+  { value: 'video_meet', label: 'JBJ Video Meet', icon: Video },
+  { value: 'zoom', label: 'Zoom Meeting', icon: MonitorSmartphone },
+  { value: 'google_meet', label: 'Google Meet', icon: Video },
+  { value: 'teams', label: 'Microsoft Teams', icon: MonitorSmartphone },
+  { value: 'live_meeting', label: 'Live / In-Person Meeting', icon: Users },
+  { value: 'site_visit', label: 'Site Visit', icon: Home },
+  { value: 'other', label: 'Other', icon: FileAudio },
+];
 
 const TRANSLATION_LANGUAGES = [
   { value: 'auto', label: 'Auto-detect' },
@@ -68,6 +80,8 @@ const AIMeetingSummarizerPremium = () => {
     notes: "",
     duration: "",
   });
+  const [sessionType, setSessionType] = useState("phone_call");
+  const [consentId, setConsentId] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [creatingTasks, setCreatingTasks] = useState(false);
   const [tasksCreated, setTasksCreated] = useState(false);
@@ -580,7 +594,7 @@ const AIMeetingSummarizerPremium = () => {
               <span className="font-semibold text-black text-lg">Meeting Details</span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-1.5">
                 <Label className="text-zinc-700 text-sm flex items-center gap-1.5">
                   <Calendar className="h-3.5 w-3.5 text-gold" />
@@ -592,6 +606,24 @@ const AIMeetingSummarizerPremium = () => {
                   onChange={(e) => handleChange("meetingTitle", e.target.value)}
                   className="bg-white border-gold/30 text-black placeholder:text-zinc-400 focus:border-gold focus:ring-gold/20"
                 />
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-zinc-700 text-sm flex items-center gap-1.5">
+                  <Video className="h-3.5 w-3.5 text-gold" />
+                  Session Type
+                </Label>
+                <Select value={sessionType} onValueChange={setSessionType}>
+                  <SelectTrigger className="bg-white border-gold/30 text-black focus:border-gold focus:ring-gold/20">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {SESSION_TYPES.map((st) => (
+                      <SelectItem key={st.value} value={st.value}>
+                        {st.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               <div className="space-y-1.5">
                 <Label className="text-zinc-700 text-sm flex items-center gap-1.5">
@@ -693,6 +725,15 @@ const AIMeetingSummarizerPremium = () => {
                 </>
               )}
             </div>
+
+            {/* Client Consent / Recording Authorization */}
+            <MeetingConsentSection
+              meetingTitle={formData.meetingTitle}
+              sessionType={sessionType}
+              participants={formData.participants}
+              linkedLeadName={linkedLead?.full_name}
+              onConsentSaved={(id) => setConsentId(id)}
+            />
 
             {/* Live Recording Section */}
             <div className="bg-white border border-gold/20 rounded-xl p-5 space-y-4 shadow-sm">

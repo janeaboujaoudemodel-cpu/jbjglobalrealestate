@@ -13406,6 +13406,54 @@ export type Database = {
           },
         ]
       }
+      meeting_session_consents: {
+        Row: {
+          broker_user_id: string
+          client_email: string | null
+          client_name: string
+          client_phone: string | null
+          consent_text: string
+          created_at: string
+          id: string
+          id_photo_url: string | null
+          session_id: string | null
+          session_type: string
+          signature_data: string
+          signed_at: string
+          status: string
+        }
+        Insert: {
+          broker_user_id: string
+          client_email?: string | null
+          client_name: string
+          client_phone?: string | null
+          consent_text: string
+          created_at?: string
+          id?: string
+          id_photo_url?: string | null
+          session_id?: string | null
+          session_type?: string
+          signature_data: string
+          signed_at?: string
+          status?: string
+        }
+        Update: {
+          broker_user_id?: string
+          client_email?: string | null
+          client_name?: string
+          client_phone?: string | null
+          consent_text?: string
+          created_at?: string
+          id?: string
+          id_photo_url?: string | null
+          session_id?: string | null
+          session_type?: string
+          signature_data?: string
+          signed_at?: string
+          status?: string
+        }
+        Relationships: []
+      }
       membership_cards: {
         Row: {
           card_number: string
