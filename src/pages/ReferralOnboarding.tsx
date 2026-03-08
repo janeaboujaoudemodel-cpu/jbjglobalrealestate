@@ -592,7 +592,7 @@ export default function ReferralOnboarding() {
               </div>
 
               <h2 className="text-2xl font-bold text-foreground mb-2">
-                Congratulations! 🎉
+                Congratulations!
               </h2>
               <p className="text-muted-foreground mb-6">
                 Welcome to the JBJ Global Real Estate Referral Circle!

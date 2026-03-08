@@ -516,7 +516,7 @@ const OwnerAuditPage = () => {
                 <Card className="bg-zinc-900/50 border-gold/20">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-purple-400">{aiStats.withEdgeFunction}</div>
-                    <div className="text-xs text-zinc-400">⚡ Edge Functions</div>
+                    <div className="text-xs text-zinc-400">Edge Functions</div>
                   </CardContent>
                 </Card>
               </div>

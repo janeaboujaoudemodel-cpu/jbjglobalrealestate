@@ -303,7 +303,7 @@ export default function VoiceStudio() {
       setProgressText("Complete!");
 
       toast({
-        title: `🎙️ Voice ready — ${voiceName}`,
+        title: `Voice ready — ${voiceName}`,
         description: "Click Play to hear it, or Download Script to save the text.",
       });
 

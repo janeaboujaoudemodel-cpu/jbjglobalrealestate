@@ -1526,7 +1526,7 @@ const VideoMeeting = () => {
             </Button>
           </div>
           <p className="text-zinc-500 text-xs text-center">
-            🔒 End-to-end encrypted • No data shared without your permission
+            End-to-end encrypted — No data shared without your permission
           </p>
         </DialogContent>
       </Dialog>

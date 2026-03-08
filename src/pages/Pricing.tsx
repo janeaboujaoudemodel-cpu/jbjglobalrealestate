@@ -259,9 +259,9 @@ export default function Pricing() {
             </p>
             <div className="grid sm:grid-cols-3 gap-4">
               {[
-                { name: "AI Home Finder", description: "Find your perfect property with AI", icon: "🏠" },
-                { name: "Business Card Scanner", description: "Digitize contacts instantly", icon: "📇" },
-                { name: "CRM Access", description: "Manage your leads effectively", icon: "👥" },
+                { name: "AI Home Finder", description: "Find your perfect property with AI", icon: "—" },
+                { name: "Business Card Scanner", description: "Digitize contacts instantly", icon: "—" },
+                { name: "CRM Access", description: "Manage your leads effectively", icon: "—" },
               ].map((tool, idx) => (
                 <Card key={idx} className="bg-background">
                   <CardContent className="p-6 text-center">
