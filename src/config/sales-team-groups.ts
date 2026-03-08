@@ -132,7 +132,7 @@ export const COMMUNICATION_GROUPS: CommunicationGroup[] = [
     name: group.name,
     type: 'sales-team' as const,
     members: [
-      'jane-abou-jaoude', // Founder in all groups
+      'jane-bou-jaoude', // Founder in all groups
       group.managerId,
       ...group.members,
     ],
@@ -147,7 +147,7 @@ export const COMMUNICATION_GROUPS: CommunicationGroup[] = [
     name: 'JBJ Sales Team',
     type: 'all-sales',
     members: [
-      'jane-abou-jaoude', // Founder
+      'jane-bou-jaoude', // Founder
       'alexander-nasser', // VP Sales
       salesDirector?.id || 'michael-anderson',
       ...salesManagers.map(m => m.id),
@@ -164,7 +164,7 @@ export const COMMUNICATION_GROUPS: CommunicationGroup[] = [
     name: 'Sales Leadership',
     type: 'management',
     members: [
-      'jane-abou-jaoude', // Founder
+      'jane-bou-jaoude', // Founder
       'amanda-clarke', // Founder's Assistant - receives reports
       'alexander-nasser',
       salesDirector?.id || 'michael-anderson',
@@ -181,7 +181,7 @@ export const COMMUNICATION_GROUPS: CommunicationGroup[] = [
     name: 'JBJ Leadership Team',
     type: 'company-leadership',
     members: [
-      'jane-abou-jaoude', // Founder & CEO
+      'jane-bou-jaoude', // Founder & CEO
       'david-thornton', // MD
       'richard-pemberton', // COO
       'amanda-clarke', // CEO's Assistant
@@ -197,7 +197,7 @@ export const COMMUNICATION_GROUPS: CommunicationGroup[] = [
       'rachel-campbell', // Project Director
       'charles-ashford', // After Sales Director
     ],
-    managerId: 'jane-abou-jaoude',
+    managerId: 'jane-bou-jaoude',
     description: 'Company leadership team for major decisions',
     founderAccess: true,
   },
@@ -244,7 +244,7 @@ export const SALES_REPORTING_CHAIN: ReportingChain[] = [
   // Amanda compiles and sends to Founder
   {
     from: 'amanda-clarke',
-    to: 'jane-abou-jaoude',
+    to: 'jane-bou-jaoude',
     frequency: 'daily' as const,
     reportType: 'Consolidated Company Report',
   },

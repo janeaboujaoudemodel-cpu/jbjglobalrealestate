@@ -64,7 +64,7 @@ const CompanyCommunicationHub = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      senderId: 'jane-abou-jaoude',
+      senderId: 'jane-bou-jaoude',
       content: 'Good morning team! Welcome to our new communication hub. Let\'s make today productive! 🚀',
       timestamp: new Date(Date.now() - 3600000),
       channelId: 'general',
@@ -109,7 +109,7 @@ const CompanyCommunicationHub = () => {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   // Current user (would come from auth in real app)
-  const currentUser = getTeamMemberById('jane-abou-jaoude') || allTeamMembers[0];
+  const currentUser = getTeamMemberById('jane-bou-jaoude') || allTeamMembers[0];
 
   // Scroll to bottom of messages within the chat container only - never page scroll
   const scrollToBottom = useCallback(() => {
