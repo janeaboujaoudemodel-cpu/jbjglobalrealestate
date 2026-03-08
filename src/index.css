@@ -572,23 +572,51 @@ All colors MUST be HSL.
 }
 
 .jj-scrollbar-gold::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
   display: block !important;
 }
 
 .jj-scrollbar-gold::-webkit-scrollbar-track {
-  background: hsl(42 45% 59% / 0.2);
+  background: hsl(42 45% 59% / 0.1);
   border-radius: 4px;
 }
 
 .jj-scrollbar-gold::-webkit-scrollbar-thumb {
-  background: hsl(42 45% 59% / 0.85);
+  background: hsl(42 45% 59% / 0.7);
   border-radius: 4px;
   min-height: 40px;
 }
 
 .jj-scrollbar-gold::-webkit-scrollbar-thumb:hover {
   background: hsl(42 45% 59%);
+}
+
+/* Horizontal gold scrollbar for admin tab strips */
+.jj-scrollbar-gold-x {
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: hsl(42 45% 59% / 0.6) transparent;
+}
+
+.jj-scrollbar-gold-x::-webkit-scrollbar {
+  height: 3px;
+  display: block !important;
+}
+
+.jj-scrollbar-gold-x::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.jj-scrollbar-gold-x::-webkit-scrollbar-thumb {
+  background: hsl(42 45% 59% / 0.5);
+  border-radius: 4px;
+}
+
+.jj-scrollbar-gold-x::-webkit-scrollbar-thumb:hover {
+  background: hsl(42 45% 59% / 0.8);
 }
 
   /* Title styling: First word gold, rest black (Guides & Market Intelligence) */

@@ -43,6 +43,28 @@ const RATE_LIMIT_CONFIG: RateLimitConfig = {
   "user-registration": { limit: 5, windowMinutes: 15 },
   "ai-chat-support": { limit: 30, windowMinutes: 5 },
   "validate-discount-code": { limit: 10, windowMinutes: 5 },
+  "ai-meeting-summarizer": { limit: 20, windowMinutes: 5 },
+  "ai-followup-scheduler": { limit: 25, windowMinutes: 5 },
+  "ai-lead-qualification": { limit: 20, windowMinutes: 5 },
+  "ai-email-composer": { limit: 25, windowMinutes: 5 },
+  "ai-property-analyzer": { limit: 15, windowMinutes: 5 },
+  "ai-market-analyzer": { limit: 15, windowMinutes: 5 },
+  "ai-client-matcher": { limit: 20, windowMinutes: 5 },
+  "ai-contract-reviewer": { limit: 10, windowMinutes: 5 },
+  "ai-social-media": { limit: 20, windowMinutes: 5 },
+  "ai-whatsapp-composer": { limit: 25, windowMinutes: 5 },
+  "ai-objection-handler": { limit: 25, windowMinutes: 5 },
+  "ai-competitor-analysis": { limit: 10, windowMinutes: 5 },
+  "ai-roi-calculator": { limit: 20, windowMinutes: 5 },
+  "ai-mortgage-advisor": { limit: 20, windowMinutes: 5 },
+  "ai-document-generator": { limit: 15, windowMinutes: 5 },
+  "ai-translation-hub": { limit: 20, windowMinutes: 5 },
+  "ai-logo-generator": { limit: 10, windowMinutes: 10 },
+  "ai-call-summarizer": { limit: 20, windowMinutes: 5 },
+  "ai-listing-extractor": { limit: 15, windowMinutes: 5 },
+  "capture-lead": { limit: 10, windowMinutes: 5 },
+  "submit-support-ticket": { limit: 5, windowMinutes: 10 },
+  "newsletter-subscribe": { limit: 3, windowMinutes: 15 },
 };
 
 export const RateLimitDashboard = () => {
@@ -188,9 +210,9 @@ export const RateLimitDashboard = () => {
 
   const getStatusBadge = (entry: RateLimitEntry) => {
     const config = RATE_LIMIT_CONFIG[entry.function_name];
-    if (!config) return <Badge variant="outline">Unknown</Badge>;
-
-    const percentage = (entry.request_count / config.limit) * 100;
+    // For unrecognized functions, assume a default limit of 20/5min
+    const effectiveLimit = config?.limit || 20;
+    const percentage = (entry.request_count / effectiveLimit) * 100;
     
     if (percentage >= 100) {
       return <Badge variant="destructive" className="gap-1"><Ban className="w-3 h-3" /> Blocked</Badge>;
@@ -235,9 +257,9 @@ export const RateLimitDashboard = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Functions</SelectItem>
-              <SelectItem value="user-registration">User Registration</SelectItem>
-              <SelectItem value="ai-chat-support">AI Chat Support</SelectItem>
-              <SelectItem value="validate-discount-code">Validate Discount</SelectItem>
+              {Object.keys(RATE_LIMIT_CONFIG).map(fn => (
+                <SelectItem key={fn} value={fn}>{fn}</SelectItem>
+              ))}
             </SelectContent>
           </Select>
           <Button
@@ -353,9 +375,9 @@ export const RateLimitDashboard = () => {
               </thead>
               <tbody>
                 {rateLimits.map((entry) => {
-                  const config = RATE_LIMIT_CONFIG[entry.function_name];
-                  const limit = config?.limit || 0;
-                  const percentage = limit > 0 ? Math.min((entry.request_count / limit) * 100, 100) : 0;
+                    const config = RATE_LIMIT_CONFIG[entry.function_name];
+                  const limit = config?.limit || 20;
+                  const percentage = Math.min((entry.request_count / limit) * 100, 100);
                   
                   return (
                     <tr key={entry.id} className="border-t border-gold/10 hover:bg-gold/5">

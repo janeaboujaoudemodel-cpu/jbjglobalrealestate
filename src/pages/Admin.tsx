@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, lazy, Suspense } from "react";
+import { useEffect, useState, useRef, lazy, Suspense, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProjects, useDevelopers, useCommunities, useProjectsTotalCount } from "@/hooks/useProjects";
@@ -65,6 +65,7 @@ import { CommandPalette } from "@/components/ui/command-palette";
 import { FloatingActionBar } from "@/components/ui/floating-action-bar";
 import { Link } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
+import { AdminNotificationBell } from "@/components/admin/AdminNotificationBell";
 
 // Lazy-load ALL tab content components for fast initial render
 const AdminOverviewDashboard = lazy(() => import("@/components/admin/AdminOverviewDashboard").then(m => ({ default: m.AdminOverviewDashboard })));
@@ -416,13 +417,7 @@ const Admin = () => {
           </div>
           
           <div className="flex items-center gap-2 ml-auto flex-shrink-0">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-black hover:text-gold hover:bg-gold/10 h-9 w-9"
-            >
-              <Bell className="h-4 w-4" />
-            </Button>
+            <AdminNotificationBell />
             <Link to="/admin/marketing-hub">
               <Button
                 size="sm"
@@ -456,8 +451,8 @@ const Admin = () => {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8 pb-24">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <div className="w-full overflow-x-auto jj-scrollbar-gold">
-          <TabsList className="w-max min-w-full justify-center bg-white/80 border-2 border-gold/30 p-1">
+          <div className="w-full jj-scrollbar-gold-x">
+          <TabsList className="w-max min-w-full justify-start bg-white/80 border-2 border-gold/30 p-1">
               <TabsTrigger value="overview" className="tab-trigger-champagne text-black">
                 <LayoutDashboard className="w-4 h-4 mr-2" />
                 Overview
