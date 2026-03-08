@@ -28,6 +28,17 @@ interface LinkedLead {
   email_lower: string | null;
 }
 
+const SESSION_TYPES = [
+  { value: 'phone_call', label: 'Phone Call', icon: Phone },
+  { value: 'video_meet', label: 'JBJ Video Meet', icon: Video },
+  { value: 'zoom', label: 'Zoom Meeting', icon: MonitorSmartphone },
+  { value: 'google_meet', label: 'Google Meet', icon: Video },
+  { value: 'teams', label: 'Microsoft Teams', icon: MonitorSmartphone },
+  { value: 'live_meeting', label: 'Live / In-Person Meeting', icon: Users },
+  { value: 'site_visit', label: 'Site Visit', icon: Home },
+  { value: 'other', label: 'Other', icon: FileAudio },
+];
+
 const TRANSLATION_LANGUAGES = [
   { value: 'auto', label: 'Auto-detect' },
   { value: 'ar', label: 'Arabic' },
@@ -69,6 +80,8 @@ const AIMeetingSummarizerPremium = () => {
     notes: "",
     duration: "",
   });
+  const [sessionType, setSessionType] = useState("phone_call");
+  const [consentId, setConsentId] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [creatingTasks, setCreatingTasks] = useState(false);
   const [tasksCreated, setTasksCreated] = useState(false);
