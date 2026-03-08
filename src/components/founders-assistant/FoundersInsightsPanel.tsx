@@ -410,9 +410,9 @@ const FoundersInsightsPanel: React.FC = () => {
                         </div>
                         <p className="text-xs text-muted-foreground">{emp.department}</p>
                       </div>
-                      <div className="text-right">
-                        <p className="font-semibold text-primary">{emp.averageScore}%</p>
-                        <p className="text-xs text-muted-foreground">{emp.tasksCompleted} tasks</p>
+                      <div className="text-right flex-shrink-0">
+                        <p className="font-bold text-[#8B6914]">{emp.averageScore}%</p>
+                        <p className="text-xs text-zinc-600">{emp.tasksCompleted} tasks</p>
                       </div>
                     </div>
                   ))}
