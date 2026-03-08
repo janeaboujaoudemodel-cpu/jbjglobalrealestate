@@ -1072,7 +1072,7 @@ export default function ProjectDetailLayout({
                     areaName={project.area_name}
                   />
                 </div>
-              )
+              )}
 
               {/* Nearby Points of Interest - Below Map */}
               {project.location_distances && project.location_distances.length > 0 && (
