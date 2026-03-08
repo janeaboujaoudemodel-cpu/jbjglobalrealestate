@@ -630,7 +630,7 @@ const ListingAdmin = () => {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => navigate("/")}
+                onClick={() => navigate(-1)}
                 className="text-zinc-700 hover:text-zinc-900 hover:bg-zinc-100"
               >
                 <ArrowLeft className="w-5 h-5" />
