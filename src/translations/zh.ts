@@ -629,7 +629,7 @@ export const zh: Record<string, string> = {
   'chat.yourConversations': '您的对话',
   'chat.whatCanWeHelp': '我们能帮您什么？',
   'chat.connectingYou': '正在为您连接...',
-  'chat.onlineHereToHelp': '🟢 在线 • 随时为您服务',
+  'chat.onlineHereToHelp': '在线 — 随时为您服务',
   'chat.howDidWeDo': '我们做得怎么样？',
   'chat.thankYou': '谢谢！',
 

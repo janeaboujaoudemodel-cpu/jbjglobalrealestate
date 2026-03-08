@@ -629,7 +629,7 @@ export const fa: Record<string, string> = {
   'chat.yourConversations': 'گفتگوهای شما',
   'chat.whatCanWeHelp': 'در چه موردی می‌توانیم کمک کنیم؟',
   'chat.connectingYou': 'در حال اتصال...',
-  'chat.onlineHereToHelp': '🟢 آنلاین • آماده کمک',
+  'chat.onlineHereToHelp': 'آنلاین — آماده کمک',
   'chat.howDidWeDo': 'عملکرد ما چطور بود؟',
   'chat.thankYou': 'متشکریم!',
 

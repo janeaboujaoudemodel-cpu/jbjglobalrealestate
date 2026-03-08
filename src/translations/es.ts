@@ -1027,7 +1027,7 @@ export const es = {
   'chat.yourConversations': 'Tus conversaciones',
   'chat.whatCanWeHelp': '¿En qué podemos ayudarte?',
   'chat.connectingYou': 'Conectándote...',
-  'chat.onlineHereToHelp': '🟢 En línea • Aquí para ayudar',
+  'chat.onlineHereToHelp': 'En linea — Aqui para ayudar',
   'chat.howDidWeDo': '¿Cómo lo hicimos?',
   'chat.thankYou': '¡Gracias!',
   'chat.copy': 'Copiar',

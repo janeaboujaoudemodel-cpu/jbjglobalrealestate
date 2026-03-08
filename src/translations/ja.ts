@@ -636,7 +636,7 @@ export const ja: Record<string, string> = {
   'chat.yourConversations': 'あなたの会話',
   'chat.whatCanWeHelp': '何をお手伝いしましょうか？',
   'chat.connectingYou': '接続中...',
-  'chat.onlineHereToHelp': '🟢 オンライン • お手伝いします',
+  'chat.onlineHereToHelp': 'オンライン — お手伝いします',
   'chat.howDidWeDo': 'いかがでしたか？',
   'chat.thankYou': 'ありがとうございます！',
 

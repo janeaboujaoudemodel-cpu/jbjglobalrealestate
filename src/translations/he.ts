@@ -629,7 +629,7 @@ export const he: Record<string, string> = {
   'chat.yourConversations': 'השיחות שלכם',
   'chat.whatCanWeHelp': 'במה נוכל לעזור?',
   'chat.connectingYou': 'מחבר אתכם...',
-  'chat.onlineHereToHelp': '🟢 מקוון • כאן לעזור',
+  'chat.onlineHereToHelp': 'מקוון — כאן לעזור',
   'chat.howDidWeDo': 'איך הסתדרנו?',
   'chat.thankYou': 'תודה!',
 

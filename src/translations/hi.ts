@@ -629,7 +629,7 @@ export const hi = {
   'chat.yourConversations': 'आपकी बातचीत',
   'chat.whatCanWeHelp': 'हम किसमें मदद कर सकते हैं?',
   'chat.connectingYou': 'कनेक्ट हो रहा है...',
-  'chat.onlineHereToHelp': '🟢 ऑनलाइन • मदद के लिए तैयार',
+  'chat.onlineHereToHelp': 'ऑनलाइन — मदद के लिए तैयार',
   'chat.howDidWeDo': 'हमने कैसा किया?',
   'chat.thankYou': 'धन्यवाद!',
 

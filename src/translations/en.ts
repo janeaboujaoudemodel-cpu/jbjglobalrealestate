@@ -629,7 +629,7 @@ export const en = {
   'chat.yourConversations': 'Your conversations',
   'chat.whatCanWeHelp': 'What can we help with?',
   'chat.connectingYou': 'Connecting you...',
-  'chat.onlineHereToHelp': '🟢 Online • Here to help',
+  'chat.onlineHereToHelp': 'Online — Here to help',
   'chat.howDidWeDo': 'How did we do?',
   'chat.thankYou': 'Thank you!',
   
