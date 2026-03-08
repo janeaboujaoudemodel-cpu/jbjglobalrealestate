@@ -374,7 +374,7 @@ export function LiveStampPreview({
         const imgSize = 24;
         textContent += `<image href="${uploadedLogoUrl}" x="${cx - imgSize / 2}" y="${monoY - imgSize}" width="${imgSize}" height="${imgSize}" preserveAspectRatio="xMidYMid meet"/>`;
       }
-      if (showMonogram && mono && iconStyle !== 'UPLOADED_LOGO') {
+      if (showMonogram && mono && iconStyle !== 'UPLOADED_LOGO' && iconStyle !== 'NONE') {
         const monoSize = mono.length === 1 ? 18 : mono.length === 2 ? 14 : 11;
         textContent += `<text x="${cx}" y="${monoY}" font-family="${fontFamily}" font-size="${monoSize}" fill="${goldInk}" text-anchor="middle" dominant-baseline="central" font-weight="700" opacity="0.85">${mono}</text>`;
         textContent += `<line x1="${cx - 20}" y1="${monoY + 8}" x2="${cx + 20}" y2="${monoY + 8}" stroke="${goldInk}" stroke-width="0.6" opacity="0.5"/>`;
