@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -23,10 +23,13 @@ import {
   Network,
   Brain,
   Search,
-  FileText,
   StickyNote,
   Scale,
   Save,
+  ChevronDown,
+  History,
+  Plus,
+  X,
 } from "lucide-react";
 import FoundersChatPanel from "@/components/founders-assistant/FoundersChatPanel";
 import FoundersTaskDashboard from "@/components/founders-assistant/FoundersTaskDashboard";
@@ -46,21 +49,22 @@ import { FoundersDecisionPanel } from "@/components/founders-assistant/FoundersD
 import { EscalationAlertButton } from "@/components/ai/EscalationAlertButton";
 import { CommandPalette } from "@/components/ui/command-palette";
 import { FloatingActionBar } from "@/components/ui/floating-action-bar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
-// Amanda Clarke - Founder's Executive Assistant portrait
 import amandaPortrait from "@/assets/team/amanda-clarke-executive-assistant.png";
 
-const PRIMARY_TABS = [
-  { value: 'assistant', icon: MessageSquare, label: 'Assistant' },
+const MORE_TOOLS = [
   { value: 'tasks', icon: CheckSquare, label: 'Tasks' },
   { value: 'team', icon: Users, label: 'Team' },
   { value: 'drafts', icon: FileEdit, label: 'Drafts' },
   { value: 'ai-tools', icon: Wrench, label: 'AI Tools' },
   { value: 'hot-leads', icon: Flame, label: 'Hot Leads' },
   { value: 'activity', icon: Activity, label: 'Activity' },
-];
-
-const SECONDARY_TABS = [
   { value: 'video-meet', icon: Video, label: 'Video Meet' },
   { value: 'escalations', icon: Zap, label: 'Escalations' },
   { value: 'analytics', icon: Heart, label: 'Analytics' },
@@ -70,13 +74,10 @@ const SECONDARY_TABS = [
   { value: 'decisions', icon: Scale, label: 'Decisions' },
 ];
 
-const TAB_TRIGGER_CLASS =
-  "tab-trigger-champagne text-black min-w-[90px] px-3 py-2 text-xs font-medium rounded-lg transition-all";
-
 export default function FoundersAssistant() {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("assistant");
+  const [activeView, setActiveView] = useState<'assistant' | string>("assistant");
   const [unreadCount, setUnreadCount] = useState(0);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [showCommandPalette, setShowCommandPalette] = useState(false);
@@ -114,7 +115,6 @@ export default function FoundersAssistant() {
     }
   }, [user]);
 
-  // Keyboard shortcut for command palette
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
@@ -156,7 +156,7 @@ export default function FoundersAssistant() {
 
   const handleStatClick = (filterStatus: string) => {
     setTaskFilterStatus(filterStatus);
-    setActiveTab('tasks');
+    setActiveView('tasks');
   };
 
   if (authLoading) {
@@ -167,255 +167,171 @@ export default function FoundersAssistant() {
     );
   }
 
+  const renderActiveView = () => {
+    switch (activeView) {
+      case 'assistant':
+        return <FoundersChatPanel userName={user?.email?.split('@')[0]} fullScreen />;
+      case 'tasks':
+        return <FoundersTaskDashboard onStatsChange={fetchStats} initialFilter={taskFilterStatus} />;
+      case 'team':
+        return <FoundersTeamDirectory />;
+      case 'drafts':
+        return <FoundersDraftsPanel />;
+      case 'ai-tools':
+        return <FoundersAIToolsPanel />;
+      case 'hot-leads':
+        return <FoundersHotLeadsPanel />;
+      case 'activity':
+        return <FoundersActivityCenter />;
+      case 'video-meet':
+        return <FoundersVideoMeetPanel />;
+      case 'escalations':
+        return <FoundersEscalationsPanel />;
+      case 'analytics':
+        return <FoundersEmotionAnalyticsPanel />;
+      case 'collaboration':
+        return <FoundersCollaborationPanel />;
+      case 'insights':
+        return <FoundersInsightsPanel />;
+      case 'notes':
+        return <FoundersNotesPanel />;
+      case 'decisions':
+        return <FoundersDecisionPanel />;
+      default:
+        return <FoundersChatPanel userName={user?.email?.split('@')[0]} fullScreen />;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-      {/* Command Palette */}
       <CommandPalette isOpen={showCommandPalette} onClose={() => setShowCommandPalette(false)} />
       
-      <div className="px-4 pt-6 pb-24 max-w-7xl mx-auto">
-          {/* Premium Header */}
-          <motion.div 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-8"
-          >
-            <div className="flex items-center justify-between flex-wrap gap-4 bg-white/80 backdrop-blur-sm border-2 border-[#C9A84C]/30 rounded-2xl p-4 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
-              <div className="flex items-center gap-4">
-                <div className="relative">
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#C9A84C]/40 to-[#C9A84C]/10 blur-md animate-pulse" />
-                  <div className="relative w-16 h-16 rounded-full border-2 border-[#C9A84C]/50 overflow-hidden bg-gradient-to-br from-[#C9A84C]/20 to-[#C9A84C]/5">
-                    <img 
-                      src={amandaPortrait} 
-                      alt="Amanda Clarke" 
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <span className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 border-2 border-white rounded-full animate-pulse" />
-                </div>
-                <div>
-                  <h1 className="text-2xl font-bold text-black flex items-center gap-2">
-                    Amanda Clarke
-                    <Badge className="bg-[#C9A84C]/10 text-[#C9A84C] border-[#C9A84C]/30 text-xs">
-                      Founder's Executive Assistant
-                    </Badge>
-                  </h1>
-                  <p className="text-zinc-500 text-sm">Your personal executive assistant &bull; Available 24/7</p>
-                </div>
+      <div className="flex flex-col h-screen">
+        {/* Compact top toolbar */}
+        <div className="flex-shrink-0 bg-white/80 backdrop-blur-sm border-b-2 border-[hsl(var(--gold))]/30 px-4 py-2 flex items-center justify-between gap-3">
+          {/* Left: Amanda identity + New Chat + History */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setActiveView('assistant')}
+              className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+            >
+              <div className="relative w-9 h-9 rounded-full border-2 border-[hsl(var(--gold))]/50 overflow-hidden">
+                <img src={amandaPortrait} alt="Amanda Clarke" className="w-full h-full object-cover" />
+                <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full" />
               </div>
-              
-              <div className="flex items-center gap-3">
-                {/* Save Conversation */}
-                <button
-                  onClick={() => {
-                    toast.success("Conversation saved to your notes");
-                  }}
-                  className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-white hover:from-[#B8973F] hover:to-[#A78636] transition-all shadow-sm text-sm font-medium"
-                >
-                  <Save className="h-4 w-4" />
-                  Save
-                </button>
-                {/* Search */}
-                <button
-                  onClick={() => setShowCommandPalette(true)}
-                  className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-white border-2 border-[#C9A84C]/30 text-zinc-500 hover:border-[#C9A84C]/50 transition-all"
-                >
-                  <Search className="h-4 w-4 text-[#C9A84C]" />
-                  <span className="text-sm">Search...</span>
-                  <kbd className="ml-2 px-2 py-0.5 bg-[#C9A84C]/10 text-[#C9A84C] text-xs rounded font-mono">⌘K</kbd>
-                </button>
-                
-                <EscalationAlertButton 
-                  onViewAll={() => setActiveTab('escalations')}
-                />
-                <button
-                  onClick={() => setIsNotificationOpen(!isNotificationOpen)}
-                  className="relative p-3 rounded-full bg-white border-2 border-[#C9A84C]/30 hover:border-[#C9A84C]/50 transition-all"
-                >
-                  <Bell className="h-5 w-5 text-[#C9A84C]" />
-                  {unreadCount > 0 && (
-                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-white text-xs flex items-center justify-center font-bold">
-                      {unreadCount > 9 ? '9+' : unreadCount}
-                    </span>
-                  )}
-                </button>
+              <div className="hidden sm:block">
+                <h1 className="text-sm font-bold text-black leading-tight">Amanda Clarke</h1>
+                <p className="text-[10px] text-zinc-500">Executive Assistant</p>
               </div>
-            </div>
-          </motion.div>
+            </button>
 
-          {/* Task Stats Cards */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <Card 
-              className="bg-white border-2 border-[#C9A84C]/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)] cursor-pointer hover:border-[#C9A84C]/50 hover:shadow-[0_8px_30px_rgba(200,167,102,0.2)] transition-all"
-              onClick={() => handleStatClick('in_progress')}
-            >
-              <CardContent className="p-4 flex items-center justify-between">
-                <div>
-                  <p className="text-xs text-zinc-500">Active Tasks</p>
-                  <p className="text-2xl font-bold text-[#C9A84C]">{stats.activeTasks}</p>
-                </div>
-              </CardContent>
-            </Card>
-            <Card 
-              className="bg-white border-2 border-green-500/30 shadow-[0_4px_20px_rgba(34,197,94,0.1)] cursor-pointer hover:border-green-500/50 transition-all"
-              onClick={() => handleStatClick('completed')}
-            >
-              <CardContent className="p-4 flex items-center justify-between">
-                <div>
-                  <p className="text-xs text-zinc-500">Completed</p>
-                  <p className="text-2xl font-bold text-green-600">{stats.completedTasks}</p>
-                </div>
-              </CardContent>
-            </Card>
-            <Card 
-              className="bg-white border-2 border-amber-500/30 shadow-[0_4px_20px_rgba(245,158,11,0.1)] cursor-pointer hover:border-amber-500/50 transition-all"
-              onClick={() => handleStatClick('pending')}
-            >
-              <CardContent className="p-4 flex items-center justify-between">
-                <div>
-                  <p className="text-xs text-zinc-500">Pending</p>
-                  <p className="text-2xl font-bold text-amber-600">{stats.pendingTasks}</p>
-                </div>
-              </CardContent>
-            </Card>
-            <Card 
-              className="bg-white border-2 border-orange-500/30 shadow-[0_4px_20px_rgba(249,115,22,0.1)] cursor-pointer hover:border-orange-500/50 transition-all"
-              onClick={() => handleStatClick('awaiting_approval')}
-            >
-              <CardContent className="p-4 flex items-center justify-between">
-                <div>
-                  <p className="text-xs text-zinc-500">Awaiting Approval</p>
-                  <p className="text-2xl font-bold text-orange-600">{stats.awaitingApproval}</p>
-                </div>
-              </CardContent>
-            </Card>
+            <div className="h-6 w-px bg-[hsl(var(--gold))]/30" />
+
+            {/* More Tools dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="text-xs text-zinc-600 hover:text-black hover:bg-[hsl(var(--gold))]/10 h-8 gap-1">
+                  <ChevronDown className="w-3.5 h-3.5" />
+                  Tools
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-52">
+                {MORE_TOOLS.map(({ value, icon: Icon, label }) => (
+                  <DropdownMenuItem
+                    key={value}
+                    onClick={() => { setActiveView(value); if (value !== 'tasks') setTaskFilterStatus(null); }}
+                    className={`text-xs gap-2 ${activeView === value ? 'bg-gradient-to-r from-[#F5EBD7] to-[#D4C4A8] font-semibold' : ''}`}
+                  >
+                    <Icon className="w-3.5 h-3.5" />
+                    {label}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
-          {/* Main Tabs */}
-          <Tabs value={activeTab} onValueChange={(v) => { setActiveTab(v); if (v !== 'tasks') setTaskFilterStatus(null); }} className="w-full">
-            {/* Primary Row */}
-            <TabsList className="w-full h-auto bg-white/80 border-2 border-[#C9A84C]/30 p-1 rounded-xl mb-3 flex flex-wrap justify-center gap-0.5 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
-              {PRIMARY_TABS.map(({ value, icon: Icon, label }) => (
-                <TabsTrigger key={value} value={value} className={TAB_TRIGGER_CLASS}>
-                  <Icon className="h-4 w-4 mr-1.5" />
-                  {label}
-                </TabsTrigger>
-              ))}
-            </TabsList>
+          {/* Center: Task stats (compact) */}
+          <div className="hidden md:flex items-center gap-2">
+            {[
+              { label: 'Active', count: stats.activeTasks, color: 'text-[hsl(var(--gold))]', filter: 'in_progress' },
+              { label: 'Done', count: stats.completedTasks, color: 'text-green-600', filter: 'completed' },
+              { label: 'Pending', count: stats.pendingTasks, color: 'text-amber-600', filter: 'pending' },
+            ].map(s => (
+              <button
+                key={s.label}
+                onClick={() => handleStatClick(s.filter)}
+                className="flex items-center gap-1 px-2 py-1 rounded-md hover:bg-[hsl(var(--gold))]/10 transition-colors"
+              >
+                <span className={`text-sm font-bold ${s.color}`}>{s.count}</span>
+                <span className="text-[10px] text-zinc-500">{s.label}</span>
+              </button>
+            ))}
+          </div>
 
-            {/* Secondary Row */}
-            <TabsList className="w-full h-auto bg-white/60 border-2 border-[#C9A84C]/20 p-1 rounded-xl mb-8 flex flex-wrap justify-center gap-0.5 shadow-[0_2px_10px_rgba(200,167,102,0.05)]">
-              {SECONDARY_TABS.map(({ value, icon: Icon, label }) => (
-                <TabsTrigger key={value} value={value} className={TAB_TRIGGER_CLASS}>
-                  <Icon className="h-4 w-4 mr-1.5" />
-                  {label}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-
-            <AnimatePresence mode="wait">
-              <TabsContent value="assistant" className="mt-4">
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                  <FoundersChatPanel userName={user?.email?.split('@')[0]} />
-                </motion.div>
-              </TabsContent>
-
-              <TabsContent value="tasks" className="mt-0">
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                  <FoundersTaskDashboard onStatsChange={fetchStats} initialFilter={taskFilterStatus} />
-                </motion.div>
-              </TabsContent>
-
-              <TabsContent value="team" className="mt-0">
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                  <FoundersTeamDirectory />
-                </motion.div>
-              </TabsContent>
-
-              <TabsContent value="drafts" className="mt-0">
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                  <FoundersDraftsPanel />
-                </motion.div>
-              </TabsContent>
-
-              <TabsContent value="ai-tools" className="mt-0">
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                  <FoundersAIToolsPanel />
-                </motion.div>
-              </TabsContent>
-
-              <TabsContent value="hot-leads" className="mt-0">
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                  <FoundersHotLeadsPanel />
-                </motion.div>
-              </TabsContent>
-
-              <TabsContent value="activity" className="mt-0">
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                  <FoundersActivityCenter />
-                </motion.div>
-              </TabsContent>
-
-              <TabsContent value="video-meet" className="mt-0">
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                  <FoundersVideoMeetPanel />
-                </motion.div>
-              </TabsContent>
-
-              <TabsContent value="escalations" className="mt-0">
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                  <FoundersEscalationsPanel />
-                </motion.div>
-              </TabsContent>
-
-              <TabsContent value="analytics" className="mt-0">
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                  <FoundersEmotionAnalyticsPanel />
-                </motion.div>
-              </TabsContent>
-
-              <TabsContent value="collaboration" className="mt-0">
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                  <FoundersCollaborationPanel />
-                </motion.div>
-              </TabsContent>
-
-              <TabsContent value="insights" className="mt-0">
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                  <FoundersInsightsPanel />
-                </motion.div>
-              </TabsContent>
-
-              <TabsContent value="notes" className="mt-0">
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                  <FoundersNotesPanel />
-                </motion.div>
-              </TabsContent>
-
-              <TabsContent value="decisions" className="mt-0">
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                  <FoundersDecisionPanel />
-                </motion.div>
-              </TabsContent>
-            </AnimatePresence>
-          </Tabs>
+          {/* Right: Actions */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setShowCommandPalette(true)}
+              className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white border border-[hsl(var(--gold))]/30 text-zinc-500 hover:border-[hsl(var(--gold))]/50 transition-all text-xs"
+            >
+              <Search className="h-3.5 w-3.5 text-[hsl(var(--gold))]" />
+              <kbd className="px-1.5 py-0.5 bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold))] text-[10px] rounded font-mono">⌘K</kbd>
+            </button>
+            
+            <EscalationAlertButton onViewAll={() => setActiveView('escalations')} />
+            
+            <button
+              onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+              className="relative p-2 rounded-full bg-white border border-[hsl(var(--gold))]/30 hover:border-[hsl(var(--gold))]/50 transition-all"
+            >
+              <Bell className="h-4 w-4 text-[hsl(var(--gold))]" />
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-white text-[10px] flex items-center justify-center font-bold">
+                  {unreadCount > 9 ? '9+' : unreadCount}
+                </span>
+              )}
+            </button>
+          </div>
         </div>
 
-        {/* Floating Action Bar */}
-        <FloatingActionBar />
-
-        {/* Notification Panel */}
-        <AnimatePresence>
-          {isNotificationOpen && (
-            <motion.div
-              initial={{ opacity: 0, x: 300 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 300 }}
-              className="fixed right-0 top-0 h-full w-96 bg-white border-l-2 border-[#C9A84C]/30 shadow-xl z-50"
-            >
-              <FoundersNotificationCenter isOpen={isNotificationOpen} onClose={() => setIsNotificationOpen(false)} />
-            </motion.div>
+        {/* Main content area - full remaining height */}
+        <div className="flex-1 overflow-hidden">
+          {activeView === 'assistant' ? (
+            renderActiveView()
+          ) : (
+            <div className="h-full overflow-y-auto p-4 pb-24">
+              <div className="max-w-7xl mx-auto">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setActiveView('assistant')}
+                  className="mb-4 text-xs text-zinc-600 hover:text-black"
+                >
+                  ← Back to Chat
+                </Button>
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                  {renderActiveView()}
+                </motion.div>
+              </div>
+            </div>
           )}
-        </AnimatePresence>
+        </div>
       </div>
+
+      <FloatingActionBar />
+
+      <AnimatePresence>
+        {isNotificationOpen && (
+          <motion.div
+            initial={{ opacity: 0, x: 300 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 300 }}
+            className="fixed right-0 top-0 h-full w-96 bg-white border-l-2 border-[hsl(var(--gold))]/30 shadow-xl z-50"
+          >
+            <FoundersNotificationCenter isOpen={isNotificationOpen} onClose={() => setIsNotificationOpen(false)} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }

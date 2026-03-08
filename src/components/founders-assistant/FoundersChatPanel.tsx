@@ -22,14 +22,20 @@ import {
   Image,
   FileVideo,
   Upload,
-  PanelLeftClose,
-  PanelLeftOpen,
   FileDown,
   RotateCcw,
+  Plus,
+  History,
+  Clock,
+  Trash2,
+  CheckSquare,
+  Eraser,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useAuth } from '@/contexts/AuthContext';
@@ -39,7 +45,7 @@ import { executeCommand, parseCommand } from '@/utils/slash-command-executor';
 import { useFileUpload, formatFileSize, UploadedFile } from '@/hooks/useFileUpload';
 import { VoiceInputButton } from '@/components/ui/VoiceInputButton';
 import { useFounderChatSessions } from '@/hooks/useFounderChatSessions';
-import { ChatSessionSidebar } from './ChatSessionSidebar';
+import { formatDistanceToNow } from 'date-fns';
 
 interface Message {
   id: string;
@@ -54,6 +60,7 @@ interface Message {
 
 interface FoundersChatPanelProps {
   userName?: string;
+  fullScreen?: boolean;
 }
 
 const SUGGESTED_COMMANDS = [
@@ -74,7 +81,7 @@ const SUGGESTED_AI_PROMPTS = [
   "Prepare a property brochure for Downtown project",
 ];
 
-const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName }) => {
+const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScreen }) => {
   const { user } = useAuth();
   const [localMessages, setLocalMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -85,8 +92,10 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName }) => {
   const [showSuggestions, setShowSuggestions] = useState(true);
   const [showScrollButton, setShowScrollButton] = useState(false);
   const [pendingFiles, setPendingFiles] = useState<UploadedFile[]>([]);
-  const [showSidebar, setShowSidebar] = useState(true);
+  const [showHistoryDialog, setShowHistoryDialog] = useState(false);
   const [isSummarizing, setIsSummarizing] = useState(false);
+  const [selectedForDelete, setSelectedForDelete] = useState<Set<string>>(new Set());
+  const [selectMode, setSelectMode] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -110,7 +119,6 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName }) => {
   const displayName = userName || user?.email?.split('@')[0] || 'there';
   const capitalizedName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
 
-  // Convert DB messages to local format when session changes
   useEffect(() => {
     if (dbMessages.length > 0) {
       const converted: Message[] = dbMessages.map(m => ({
@@ -124,7 +132,6 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName }) => {
       setLocalMessages(converted);
       setShowSuggestions(false);
     } else if (!activeSessionId) {
-      // Show welcome message when no session
       const hour = new Date().getHours();
       let greeting = 'Good evening';
       if (hour < 12) greeting = 'Good morning';
@@ -187,7 +194,6 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName }) => {
 
   const handleSuggestedPrompt = (prompt: string) => {
     setInput(prompt);
-    // Don't hide suggestions - keep them visible for easy re-use
     inputRef.current?.focus();
   };
 
@@ -210,12 +216,11 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName }) => {
     removeFile(id);
   };
 
-  // Start a new chat
   const handleNewChat = async () => {
     await createSession();
+    setShowHistoryDialog(false);
   };
 
-  // Summarize & save current chat
   const handleSummarize = useCallback(async () => {
     if (!activeSessionId || localMessages.length < 3) {
       toast.error('Need at least a few messages to summarize');
@@ -243,7 +248,6 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName }) => {
       const summary = data?.response || 'Unable to generate summary';
       await saveSummary(activeSessionId, summary);
       
-      // Auto-title based on first user message
       const firstUserMsg = localMessages.find(m => m.role === 'user');
       if (firstUserMsg) {
         const title = firstUserMsg.content.substring(0, 50) + (firstUserMsg.content.length > 50 ? '...' : '');
@@ -266,7 +270,6 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName }) => {
     const parsedCommand = parseCommand(input.trim());
     const attachments = pendingFiles.map(f => ({ name: f.name, type: f.type, url: f.url }));
 
-    // Ensure we have an active session
     let sessionId = activeSessionId;
     if (!sessionId) {
       sessionId = await createSession(input.trim().substring(0, 50));
@@ -291,10 +294,8 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName }) => {
     setShowMentions(false);
     setShowSuggestions(false);
 
-    // Save user message to DB
     await saveMessage(sessionId, 'user', userMessage.content, mentions, attachments.length > 0 ? attachments : undefined);
 
-    // Typing indicator
     const typingId = 'typing-' + Date.now();
     setLocalMessages(prev => [...prev, {
       id: typingId, role: 'assistant', content: '', timestamp: new Date(), isTyping: true,
@@ -335,10 +336,8 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName }) => {
         }];
       });
 
-      // Save assistant message to DB
       await saveMessage(sessionId, 'assistant', assistantResponse, undefined, undefined, taskStatus);
 
-      // Auto-title on first exchange
       if (localMessages.filter(m => m.role === 'user').length <= 1) {
         const title = userMessage.content.substring(0, 50) + (userMessage.content.length > 50 ? '...' : '');
         await updateSessionTitle(sessionId, title);
@@ -380,289 +379,413 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName }) => {
     return <File className="w-4 h-4" />;
   };
 
+  const toggleSelectForDelete = (id: string) => {
+    setSelectedForDelete(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  };
+
+  const handleBulkDelete = () => {
+    if (selectedForDelete.size > 0) {
+      bulkDeleteSessions(Array.from(selectedForDelete));
+      setSelectedForDelete(new Set());
+      setSelectMode(false);
+    }
+  };
+
+  const containerClass = fullScreen
+    ? "flex flex-col h-full"
+    : "flex flex-col h-[calc(100vh-320px)] min-h-[500px] border-2 border-[hsl(var(--gold))]/30 rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(200,167,102,0.1)]";
+
   return (
-    <div className="flex h-[calc(100vh-320px)] min-h-[500px] border-2 border-[#C9A84C]/30 rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
-      {/* Chat History Sidebar */}
-      {showSidebar && (
-        <ChatSessionSidebar
-          sessions={sessions}
-          activeSessionId={activeSessionId}
-          onSelectSession={setActiveSessionId}
-          onNewChat={handleNewChat}
-          onDeleteSession={deleteSession}
-          onBulkDelete={bulkDeleteSessions}
-          onClearAll={clearAllSessions}
-        />
-      )}
+    <div className={containerClass}>
+      <input type="file" ref={fileInputRef} onChange={handleFileChange} multiple className="hidden" accept="*/*" />
 
-      {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-        <input type="file" ref={fileInputRef} onChange={handleFileChange} multiple className="hidden" accept="*/*" />
-
-        {/* Chat Header */}
-        <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-b-2 border-[#C9A84C]/30 p-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="w-8 h-8 text-zinc-600 hover:text-[#C9A84C] hover:bg-[#C9A84C]/10"
-              onClick={() => setShowSidebar(!showSidebar)}
-            >
-              {showSidebar ? <PanelLeftClose className="w-4 h-4" /> : <PanelLeftOpen className="w-4 h-4" />}
-            </Button>
-            <div className="relative">
-              <div className="relative w-10 h-10 rounded-full overflow-hidden border-2 border-[#C9A84C]/50 shadow-md">
+      {/* Chat Header - with New Chat + History buttons */}
+      <div className="flex-shrink-0 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-b-2 border-[hsl(var(--gold))]/30 p-3 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          {!fullScreen && (
+            <>
+              <div className="relative w-10 h-10 rounded-full overflow-hidden border-2 border-[hsl(var(--gold))]/50 shadow-md">
                 <img src={amandaPortrait} alt="Amanda Clarke" className="w-full h-full object-cover" />
+                <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full" />
               </div>
-              <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full" />
-            </div>
-            <div>
-              <h3 className="text-black font-semibold text-sm flex items-center gap-2">
-                Amanda Clarke
-                <Badge className="bg-[#C9A84C]/10 text-[#C9A84C] border-[#C9A84C]/30 text-[10px]">
-                  <Sparkles className="w-2.5 h-2.5 mr-0.5" />
-                  Online
-                </Badge>
-              </h3>
-              <p className="text-zinc-600 text-xs">Your Personal Executive Assistant</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-1">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-xs text-zinc-600 hover:text-[#C9A84C] hover:bg-[#C9A84C]/10 h-8"
-              onClick={handleSummarize}
-              disabled={isSummarizing || localMessages.length < 3}
-              title="Summarize & save chat"
-            >
-              {isSummarizing ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1" /> : <FileDown className="w-3.5 h-3.5 mr-1" />}
-              Save
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-xs text-zinc-600 hover:text-[#C9A84C] hover:bg-[#C9A84C]/10 h-8"
-              onClick={handleNewChat}
-              title="Start new chat"
-            >
-              <RotateCcw className="w-3.5 h-3.5 mr-1" />
-              New
-            </Button>
-          </div>
-        </div>
-
-        {/* Messages */}
-        <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6]" onScroll={handleScroll}>
-          <div className="space-y-4">
-            {localMessages.map(message => (
-              <motion.div
-                key={message.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
-              >
-                {message.role === 'assistant' && (
-                  <div className="w-8 h-8 rounded-full overflow-hidden mr-2 flex-shrink-0 border-2 border-[#C9A84C]/50 shadow-sm">
-                    <img src={amandaPortrait} alt="Amanda Clarke" className="w-full h-full object-cover" />
-                  </div>
-                )}
-                <div className={`max-w-[80%] ${
-                  message.role === 'user' 
-                    ? 'bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-white' 
-                    : 'bg-white text-black border border-[#C9A84C]/30 shadow-sm'
-                } rounded-2xl px-4 py-3`}>
-                  {message.isTyping ? (
-                    <div className="flex gap-1.5 py-1 px-2">
-                      <span className="w-2 h-2 bg-[#C9A84C] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                      <span className="w-2 h-2 bg-[#C9A84C] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                      <span className="w-2 h-2 bg-[#C9A84C] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-                    </div>
-                  ) : (
-                    <>
-                      <div className="text-sm leading-relaxed whitespace-pre-wrap prose prose-sm max-w-none">
-                        {message.content.split('\n').map((line, i) => {
-                          const escapeHtml = (text: string) => text
-                            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-                            .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
-                          let rendered = escapeHtml(line);
-                          rendered = rendered.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                          rendered = rendered.replace(/\*(.*?)\*/g, '<em>$1</em>');
-                          rendered = rendered.replace(/`(.*?)`/g, '<code class="bg-[#C9A84C]/20 px-1 rounded text-[#C9A84C]">$1</code>');
-                          const sanitized = DOMPurify.sanitize(rendered, {
-                            ALLOWED_TAGS: ['strong', 'em', 'code', 'p', 'br'],
-                            ALLOWED_ATTR: ['class']
-                          });
-                          return (
-                            <p key={i} className={line.startsWith('•') ? 'pl-2' : ''}
-                              dangerouslySetInnerHTML={{ __html: sanitized }} />
-                          );
-                        })}
-                      </div>
-                      {message.mentions && message.mentions.length > 0 && (
-                        <div className="flex flex-wrap gap-1 mt-2">
-                          {message.mentions.map((mention, i) => (
-                            <Badge key={i} className="bg-[#C9A84C]/20 text-[#C9A84C] border-[#C9A84C]/30 text-xs">
-                              @{mention}
-                            </Badge>
-                          ))}
-                        </div>
-                      )}
-                      {message.taskStatus && (
-                        <div className="flex items-center gap-1 mt-2 text-xs">
-                          {message.taskStatus === 'completed' && (
-                            <span className="text-green-600 flex items-center gap-1">Task completed</span>
-                          )}
-                          {message.taskStatus === 'failed' && (
-                            <span className="text-red-600 flex items-center gap-1">Connection issue</span>
-                          )}
-                        </div>
-                      )}
-                    </>
-                  )}
-                </div>
-                {message.role === 'user' && (
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#C9A84C] to-[#B8973F] flex items-center justify-center ml-2 flex-shrink-0 shadow-sm">
-                    <User className="w-4 h-4 text-white" />
-                  </div>
-                )}
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Suggested prompts — always visible until user has sent multiple messages */}
-          {showSuggestions && (
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-6">
-              <div className="flex items-center gap-2 mb-3">
-                <Lightbulb className="w-4 h-4 text-[#C9A84C]" />
-                <span className="text-xs text-zinc-600 font-medium">Quick Actions & Suggested Prompts</span>
+              <div>
+                <h3 className="text-black font-semibold text-sm flex items-center gap-2">
+                  Amanda Clarke
+                  <Badge className="bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold))] border-[hsl(var(--gold))]/30 text-[10px]">
+                    <Sparkles className="w-2.5 h-2.5 mr-0.5" />
+                    Online
+                  </Badge>
+                </h3>
+                <p className="text-zinc-600 text-xs">Your Personal Executive Assistant</p>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                {SUGGESTED_AI_PROMPTS.map((prompt, i) => (
-                  <button key={i} onClick={() => handleSuggestedPrompt(prompt)}
-                    className="text-left px-3 py-2 rounded-lg bg-white border border-[#C9A84C]/30 hover:border-[#C9A84C] text-sm text-black hover:shadow-md transition-all group">
-                    <span className="text-[#C9A84C] group-hover:text-[#B8973F]">→</span> {prompt}
-                  </button>
-                ))}
-              </div>
-            </motion.div>
+            </>
           )}
         </div>
-
-        {/* Scroll button */}
-        <AnimatePresence>
-          {showScrollButton && (
-            <motion.button initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.8 }}
-              onClick={scrollToBottom}
-              className="absolute bottom-24 right-6 w-10 h-10 rounded-full bg-[#C9A84C] text-white flex items-center justify-center shadow-lg hover:bg-[#B8973F] transition-colors">
-              <ArrowDown className="w-5 h-5" />
-            </motion.button>
-          )}
-        </AnimatePresence>
-
-        {/* Commands popup */}
-        <AnimatePresence>
-          {showCommands && (
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}
-              className="border-t-2 border-[#C9A84C]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] p-3">
-              <p className="text-xs text-zinc-600 mb-2 flex items-center gap-2">
-                <Command className="w-3 h-3 text-[#C9A84C]" />
-                Available Commands
-              </p>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                {SUGGESTED_COMMANDS.map((cmd, i) => (
-                  <button key={i} onClick={() => insertCommand(cmd.command)}
-                    className="flex items-start gap-2 px-3 py-2 rounded-lg bg-white border border-[#C9A84C]/30 hover:border-[#C9A84C] hover:shadow-md transition-all text-left group">
-                    <cmd.icon className="w-4 h-4 text-[#C9A84C] mt-0.5" />
-                    <div>
-                      <p className="text-sm text-black group-hover:text-[#C9A84C] transition-colors">{cmd.label}</p>
-                      <p className="text-xs text-zinc-500">{cmd.description}</p>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </motion.div>
-          )}
-
-          {showMentions && filteredMembers.length > 0 && (
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}
-              className="border-t-2 border-[#C9A84C]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] p-3 max-h-48 overflow-y-auto">
-              <p className="text-xs text-zinc-600 mb-2 flex items-center gap-2">
-                <AtSign className="w-3 h-3 text-[#C9A84C]" />
-                Mention Team Member
-              </p>
-              <div className="space-y-1">
-                {filteredMembers.slice(0, 6).map((member) => (
-                  <button key={member.id} onClick={() => insertMention(member)}
-                    className="flex items-center gap-3 w-full px-3 py-2 rounded-lg hover:bg-white hover:shadow-sm transition-colors">
-                    <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-[#C9A84C]/30 bg-white">
-                      <img src={member.avatar} alt={member.name} className="w-full h-full"
-                        style={{ objectFit: "cover", objectPosition: "center 15%" }} />
-                    </div>
-                    <div className="text-left flex-1">
-                      <p className="text-sm text-black">{member.name}</p>
-                      <p className="text-xs text-zinc-500">{member.role}</p>
-                    </div>
-                    {member.isAI && <Sparkles className="w-4 h-4 text-[#C9A84C] flex-shrink-0" />}
-                  </button>
-                ))}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Pending files */}
-        {pendingFiles.length > 0 && (
-          <div className="px-4 py-2 border-t-2 border-[#C9A84C]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-            <p className="text-xs text-zinc-600 mb-2 flex items-center gap-2">
-              <Upload className="w-3 h-3 text-[#C9A84C]" /> Files ready to send ({pendingFiles.length})
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {pendingFiles.map((file) => (
-                <div key={file.id} className="flex items-center gap-2 bg-white border border-[#C9A84C]/30 rounded-lg px-3 py-1.5 text-xs shadow-sm">
-                  {getFileIcon(file.type)}
-                  <span className="text-black truncate max-w-[120px]">{file.name}</span>
-                  <span className="text-zinc-500">{formatFileSize(file.size)}</span>
-                  <button onClick={() => removePendingFile(file.id)} className="text-zinc-500 hover:text-red-500 transition-colors">
-                    <X className="w-3 h-3" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Input */}
-        <div className="p-4 border-t-2 border-[#C9A84C]/30 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
-          <div className="flex items-center gap-2">
-            <VoiceInputButton onTranscript={handleVoiceTranscript} disabled={isLoading} variant="ghost" size="icon"
-              className="w-10 h-10 rounded-full bg-white/80 text-[#C9A84C] hover:bg-white border border-[#C9A84C]/30" />
-            <button onClick={handleFileUpload} disabled={isUploadingFiles}
-              className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
-                isUploadingFiles ? 'bg-[#C9A84C]/30 text-[#C9A84C] animate-pulse' : 'bg-white/80 text-[#C9A84C] hover:bg-white border border-[#C9A84C]/30'
-              }`} title="Attach file">
-              {isUploadingFiles ? <Loader2 className="w-5 h-5 animate-spin" /> : <Paperclip className="w-5 h-5" />}
-            </button>
-            <div className="relative flex-1">
-              <Input ref={inputRef} value={input} onChange={handleInputChange} onKeyPress={handleKeyPress}
-                placeholder="Type your message or command..."
-                className="flex-1 bg-white border-2 border-[#C9A84C]/30 text-black placeholder:text-zinc-400 focus:border-[#C9A84C] pr-10 h-11"
-                disabled={isLoading} />
-              <button onClick={() => setShowCommands(!showCommands)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-[#C9A84C] transition-colors" title="Show commands">
-                <Command className="w-4 h-4" />
-              </button>
-            </div>
-            <Button onClick={handleSendMessage} disabled={(!input.trim() && pendingFiles.length === 0) || isLoading}
-              className="bg-gradient-to-r from-[#C9A84C] to-[#B8973F] hover:from-[#B8973F] hover:to-[#C9A84C] text-white w-11 h-11 p-0">
-              {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
-            </Button>
-          </div>
-          <p className="text-zinc-600 text-xs text-center mt-3 opacity-80">
-            Use <span className="text-[#C9A84C] font-semibold">@name</span> to mention | <span className="text-[#C9A84C] font-semibold">/command</span> for actions | <span className="text-[#C9A84C] font-semibold">Attach files</span> (no size limit)
-          </p>
+        <div className="flex items-center gap-1">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-xs text-zinc-600 hover:text-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))]/10 h-8 gap-1.5"
+            onClick={handleNewChat}
+          >
+            <Plus className="w-3.5 h-3.5" />
+            New Chat
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-xs text-zinc-600 hover:text-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))]/10 h-8 gap-1.5"
+            onClick={() => setShowHistoryDialog(true)}
+          >
+            <History className="w-3.5 h-3.5" />
+            History
+            {sessions.length > 0 && (
+              <Badge variant="secondary" className="ml-1 h-4 px-1 text-[10px] bg-[hsl(var(--gold))]/20 text-[hsl(var(--gold))]">
+                {sessions.length}
+              </Badge>
+            )}
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-xs text-zinc-600 hover:text-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))]/10 h-8"
+            onClick={handleSummarize}
+            disabled={isSummarizing || localMessages.length < 3}
+            title="Summarize & save chat"
+          >
+            {isSummarizing ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1" /> : <FileDown className="w-3.5 h-3.5 mr-1" />}
+            Save
+          </Button>
         </div>
       </div>
+
+      {/* Messages */}
+      <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6]" onScroll={handleScroll}>
+        <div className="space-y-4 max-w-4xl mx-auto">
+          {localMessages.map(message => (
+            <motion.div
+              key={message.id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+            >
+              {message.role === 'assistant' && (
+                <div className="w-8 h-8 rounded-full overflow-hidden mr-2 flex-shrink-0 border-2 border-[hsl(var(--gold))]/50 shadow-sm">
+                  <img src={amandaPortrait} alt="Amanda Clarke" className="w-full h-full object-cover" />
+                </div>
+              )}
+              <div className={`max-w-[80%] ${
+                message.role === 'user' 
+                  ? 'bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-white' 
+                  : 'bg-white text-black border border-[hsl(var(--gold))]/30 shadow-sm'
+              } rounded-2xl px-4 py-3`}>
+                {message.isTyping ? (
+                  <div className="flex gap-1.5 py-1 px-2">
+                    <span className="w-2 h-2 bg-[hsl(var(--gold))] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <span className="w-2 h-2 bg-[hsl(var(--gold))] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <span className="w-2 h-2 bg-[hsl(var(--gold))] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                  </div>
+                ) : (
+                  <>
+                    <div className="text-sm leading-relaxed whitespace-pre-wrap prose prose-sm max-w-none">
+                      {message.content.split('\n').map((line, i) => {
+                        const escapeHtml = (text: string) => text
+                          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                          .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+                        let rendered = escapeHtml(line);
+                        rendered = rendered.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                        rendered = rendered.replace(/\*(.*?)\*/g, '<em>$1</em>');
+                        rendered = rendered.replace(/`(.*?)`/g, '<code class="bg-[#C9A84C]/20 px-1 rounded text-[#C9A84C]">$1</code>');
+                        const sanitized = DOMPurify.sanitize(rendered, {
+                          ALLOWED_TAGS: ['strong', 'em', 'code', 'p', 'br'],
+                          ALLOWED_ATTR: ['class']
+                        });
+                        return (
+                          <p key={i} className={line.startsWith('•') ? 'pl-2' : ''}
+                            dangerouslySetInnerHTML={{ __html: sanitized }} />
+                        );
+                      })}
+                    </div>
+                    {message.mentions && message.mentions.length > 0 && (
+                      <div className="flex flex-wrap gap-1 mt-2">
+                        {message.mentions.map((mention, i) => (
+                          <Badge key={i} className="bg-[hsl(var(--gold))]/20 text-[hsl(var(--gold))] border-[hsl(var(--gold))]/30 text-xs">
+                            @{mention}
+                          </Badge>
+                        ))}
+                      </div>
+                    )}
+                    {message.taskStatus && (
+                      <div className="flex items-center gap-1 mt-2 text-xs">
+                        {message.taskStatus === 'completed' && (
+                          <span className="text-green-600 flex items-center gap-1">Task completed</span>
+                        )}
+                        {message.taskStatus === 'failed' && (
+                          <span className="text-red-600 flex items-center gap-1">Connection issue</span>
+                        )}
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+              {message.role === 'user' && (
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#C9A84C] to-[#B8973F] flex items-center justify-center ml-2 flex-shrink-0 shadow-sm">
+                  <User className="w-4 h-4 text-white" />
+                </div>
+              )}
+            </motion.div>
+          ))}
+        </div>
+
+        {showSuggestions && (
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-6 max-w-4xl mx-auto">
+            <div className="flex items-center gap-2 mb-3">
+              <Lightbulb className="w-4 h-4 text-[hsl(var(--gold))]" />
+              <span className="text-xs text-zinc-600 font-medium">Quick Actions & Suggested Prompts</span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              {SUGGESTED_AI_PROMPTS.map((prompt, i) => (
+                <button key={i} onClick={() => handleSuggestedPrompt(prompt)}
+                  className="text-left px-3 py-2 rounded-lg bg-white border border-[hsl(var(--gold))]/30 hover:border-[hsl(var(--gold))] text-sm text-black hover:shadow-md transition-all group">
+                  <span className="text-[hsl(var(--gold))] group-hover:text-[#B8973F]">→</span> {prompt}
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </div>
+
+      {/* Scroll button */}
+      <AnimatePresence>
+        {showScrollButton && (
+          <motion.button initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.8 }}
+            onClick={scrollToBottom}
+            className="absolute bottom-24 right-6 w-10 h-10 rounded-full bg-[hsl(var(--gold))] text-white flex items-center justify-center shadow-lg hover:opacity-90 transition-colors z-10">
+            <ArrowDown className="w-5 h-5" />
+          </motion.button>
+        )}
+      </AnimatePresence>
+
+      {/* Commands popup */}
+      <AnimatePresence>
+        {showCommands && (
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}
+            className="border-t-2 border-[hsl(var(--gold))]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] p-3">
+            <p className="text-xs text-zinc-600 mb-2 flex items-center gap-2">
+              <Command className="w-3 h-3 text-[hsl(var(--gold))]" />
+              Available Commands
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+              {SUGGESTED_COMMANDS.map((cmd, i) => (
+                <button key={i} onClick={() => insertCommand(cmd.command)}
+                  className="flex items-start gap-2 px-3 py-2 rounded-lg bg-white border border-[hsl(var(--gold))]/30 hover:border-[hsl(var(--gold))] hover:shadow-md transition-all text-left group">
+                  <cmd.icon className="w-4 h-4 text-[hsl(var(--gold))] mt-0.5" />
+                  <div>
+                    <p className="text-sm text-black group-hover:text-[hsl(var(--gold))] transition-colors">{cmd.label}</p>
+                    <p className="text-xs text-zinc-500">{cmd.description}</p>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {showMentions && filteredMembers.length > 0 && (
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}
+            className="border-t-2 border-[hsl(var(--gold))]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] p-3 max-h-48 overflow-y-auto">
+            <p className="text-xs text-zinc-600 mb-2 flex items-center gap-2">
+              <AtSign className="w-3 h-3 text-[hsl(var(--gold))]" />
+              Mention Team Member
+            </p>
+            <div className="space-y-1">
+              {filteredMembers.slice(0, 6).map((member) => (
+                <button key={member.id} onClick={() => insertMention(member)}
+                  className="flex items-center gap-3 w-full px-3 py-2 rounded-lg hover:bg-white hover:shadow-sm transition-colors">
+                  <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-[hsl(var(--gold))]/30 bg-white">
+                    <img src={member.avatar} alt={member.name} className="w-full h-full"
+                      style={{ objectFit: "cover", objectPosition: "center 15%" }} />
+                  </div>
+                  <div className="text-left flex-1">
+                    <p className="text-sm text-black">{member.name}</p>
+                    <p className="text-xs text-zinc-500">{member.role}</p>
+                  </div>
+                  {member.isAI && <Sparkles className="w-4 h-4 text-[hsl(var(--gold))] flex-shrink-0" />}
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Pending files */}
+      {pendingFiles.length > 0 && (
+        <div className="px-4 py-2 border-t-2 border-[hsl(var(--gold))]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+          <p className="text-xs text-zinc-600 mb-2 flex items-center gap-2">
+            <Upload className="w-3 h-3 text-[hsl(var(--gold))]" /> Files ready to send ({pendingFiles.length})
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {pendingFiles.map((file) => (
+              <div key={file.id} className="flex items-center gap-2 bg-white border border-[hsl(var(--gold))]/30 rounded-lg px-3 py-1.5 text-xs shadow-sm">
+                {getFileIcon(file.type)}
+                <span className="text-black truncate max-w-[120px]">{file.name}</span>
+                <span className="text-zinc-500">{formatFileSize(file.size)}</span>
+                <button onClick={() => removePendingFile(file.id)} className="text-zinc-500 hover:text-red-500 transition-colors">
+                  <X className="w-3 h-3" />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Input */}
+      <div className="flex-shrink-0 p-4 border-t-2 border-[hsl(var(--gold))]/30 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+        <div className="flex items-center gap-2 max-w-4xl mx-auto">
+          <VoiceInputButton onTranscript={handleVoiceTranscript} disabled={isLoading} variant="ghost" size="icon"
+            className="w-10 h-10 rounded-full bg-white/80 text-[hsl(var(--gold))] hover:bg-white border border-[hsl(var(--gold))]/30" />
+          <button onClick={handleFileUpload} disabled={isUploadingFiles}
+            className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
+              isUploadingFiles ? 'bg-[hsl(var(--gold))]/30 text-[hsl(var(--gold))] animate-pulse' : 'bg-white/80 text-[hsl(var(--gold))] hover:bg-white border border-[hsl(var(--gold))]/30'
+            }`} title="Attach file">
+            {isUploadingFiles ? <Loader2 className="w-5 h-5 animate-spin" /> : <Paperclip className="w-5 h-5" />}
+          </button>
+          <div className="relative flex-1">
+            <Input ref={inputRef} value={input} onChange={handleInputChange} onKeyPress={handleKeyPress}
+              placeholder="Type your message or command..."
+              className="flex-1 bg-white border-2 border-[hsl(var(--gold))]/30 text-black placeholder:text-zinc-400 focus:border-[hsl(var(--gold))] pr-10 h-11"
+              disabled={isLoading} />
+            <button onClick={() => setShowCommands(!showCommands)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-[hsl(var(--gold))] transition-colors" title="Show commands">
+              <Command className="w-4 h-4" />
+            </button>
+          </div>
+          <Button onClick={handleSendMessage} disabled={(!input.trim() && pendingFiles.length === 0) || isLoading}
+            className="bg-gradient-to-r from-[#C9A84C] to-[#B8973F] hover:from-[#B8973F] hover:to-[#C9A84C] text-white w-11 h-11 p-0">
+            {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
+          </Button>
+        </div>
+        <p className="text-zinc-600 text-xs text-center mt-3 opacity-80">
+          Use <span className="text-[hsl(var(--gold))] font-semibold">@name</span> to mention | <span className="text-[hsl(var(--gold))] font-semibold">/command</span> for actions | <span className="text-[hsl(var(--gold))] font-semibold">Attach files</span> (no size limit)
+        </p>
+      </div>
+
+      {/* History Dialog */}
+      <Dialog open={showHistoryDialog} onOpenChange={setShowHistoryDialog}>
+        <DialogContent className="max-w-lg max-h-[80vh] overflow-hidden flex flex-col">
+          <DialogHeader>
+            <DialogTitle className="flex items-center justify-between">
+              <span className="flex items-center gap-2">
+                <History className="w-5 h-5 text-[hsl(var(--gold))]" />
+                Chat History
+              </span>
+              <div className="flex items-center gap-1">
+                {selectMode ? (
+                  <>
+                    <Button variant="ghost" size="sm" className="h-7 text-xs text-red-500" onClick={handleBulkDelete} disabled={selectedForDelete.size === 0}>
+                      <Trash2 className="w-3 h-3 mr-1" /> Delete ({selectedForDelete.size})
+                    </Button>
+                    <Button variant="ghost" size="sm" className="h-7 text-xs" onClick={() => { setSelectMode(false); setSelectedForDelete(new Set()); }}>
+                      <X className="w-3 h-3" />
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button variant="ghost" size="sm" className="h-7 text-xs text-zinc-500" onClick={() => setSelectMode(true)}>
+                      <CheckSquare className="w-3 h-3 mr-1" /> Select
+                    </Button>
+                    {sessions.length > 0 && (
+                      <Button variant="ghost" size="sm" className="h-7 text-xs text-red-500" onClick={clearAllSessions}>
+                        <Eraser className="w-3 h-3 mr-1" /> Clear All
+                      </Button>
+                    )}
+                  </>
+                )}
+              </div>
+            </DialogTitle>
+          </DialogHeader>
+          
+          <div className="flex-1 overflow-y-auto -mx-4 sm:-mx-6 px-4 sm:px-6">
+            {sessions.length === 0 ? (
+              <div className="text-center py-12">
+                <MessageSquare className="w-10 h-10 text-[hsl(var(--gold))]/30 mx-auto mb-3" />
+                <p className="text-sm text-zinc-500">No chat history yet</p>
+                <p className="text-xs text-zinc-400 mt-1">Start a conversation with Amanda</p>
+              </div>
+            ) : (
+              <div className="space-y-2 pb-4">
+                {sessions.map((session) => (
+                  <div
+                    key={session.id}
+                    className={`flex items-center gap-3 px-3 py-3 rounded-xl cursor-pointer transition-all ${
+                      activeSessionId === session.id
+                        ? 'bg-gradient-to-r from-[#F5EBD7] to-[#D4C4A8] border-2 border-[hsl(var(--gold))]/40'
+                        : 'bg-white/60 border border-[hsl(var(--gold))]/20 hover:border-[hsl(var(--gold))]/40 hover:bg-white'
+                    }`}
+                    onClick={() => {
+                      if (selectMode) {
+                        toggleSelectForDelete(session.id);
+                      } else {
+                        setActiveSessionId(session.id);
+                        setShowHistoryDialog(false);
+                      }
+                    }}
+                  >
+                    {selectMode && (
+                      <div className={`w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 ${
+                        selectedForDelete.has(session.id) ? 'bg-[hsl(var(--gold))] border-[hsl(var(--gold))]' : 'border-zinc-300'
+                      }`}>
+                        {selectedForDelete.has(session.id) && (
+                          <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                          </svg>
+                        )}
+                      </div>
+                    )}
+                    <MessageSquare className={`w-4 h-4 flex-shrink-0 ${
+                      activeSessionId === session.id ? 'text-[hsl(var(--gold))]' : 'text-zinc-400'
+                    }`} />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-black truncate">{session.title}</p>
+                      <p className="text-[10px] text-zinc-400 flex items-center gap-1 mt-0.5">
+                        <Clock className="w-2.5 h-2.5" />
+                        {formatDistanceToNow(new Date(session.updated_at), { addSuffix: true })}
+                        {session.message_count > 0 && (
+                          <span className="ml-1">• {session.message_count} messages</span>
+                        )}
+                      </p>
+                    </div>
+                    {!selectMode && (
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-7 w-7 text-zinc-400 hover:text-red-500 flex-shrink-0"
+                        onClick={(e) => { e.stopPropagation(); deleteSession(session.id); }}
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </Button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="pt-3 border-t border-[hsl(var(--gold))]/20">
+            <Button
+              onClick={handleNewChat}
+              className="w-full bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-white hover:from-[#B8973F] hover:to-[#C9A84C]"
+              size="sm"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              New Chat
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
