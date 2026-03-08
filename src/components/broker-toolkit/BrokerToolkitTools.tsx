@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import {
   Wrench,
   ArrowRight,
@@ -28,6 +30,7 @@ import {
   Ruler,
   Shield,
   LucideIcon,
+  Search,
 } from "lucide-react";
 
 type ToolTier = "free" | "member";
