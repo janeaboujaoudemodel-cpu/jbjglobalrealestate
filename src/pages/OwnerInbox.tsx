@@ -313,7 +313,7 @@ function StatsCard({
   };
 
   return (
-    <Card className={`${variants[variant]} border-2`}>
+    <Card className={`${variants[variant]} border`}>
       <CardContent className="p-3">
         <div className="flex items-center justify-between">
           <div>

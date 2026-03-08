@@ -50,7 +50,7 @@ export default function PhotoSuite() {
               onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"}
               onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.4)"}>
               <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
-              Back to Toolkit
+              Back to Royal Tools Hub
             </Link>
 
             {/* Title row */}
