@@ -3,7 +3,7 @@
 
 // Import team portraits - Executive Leadership
 // NOTE: Use real, approved photos for CEO/MD. Do not swap without explicit approval.
-import janeAbouJaoudeCeo from '@/assets/ceo/jane-ceo-private-jet.jpg';
+import janeBouJaoudeCeo from '@/assets/ceo/jane-ceo-private-jet.jpg';
 import davidThorntonCeo from '@/assets/team/david-thornton-md-40s-realistic.png';
 import richardPembertonCoo from '@/assets/team/richard-pemberton-coo-40s-realistic.png';
 import oliviaExecutiveAssistant from '@/assets/team/olivia-executive-assistant.png';
