@@ -307,14 +307,14 @@ const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsCh
             size="sm"
             onClick={() => setFilter(f as typeof filter)}
             className={filter === f 
-              ? 'bg-black text-white border-2 border-gold/50 shadow-[0_0_15px_rgba(200,167,102,0.3)] hover:bg-zinc-900' 
-              : 'bg-white text-gold border-2 border-gold/30 hover:bg-transparent hover:border-gold/50'
+              ? 'bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-[#C9A84C]/50 shadow-md font-semibold' 
+              : 'bg-white text-zinc-700 border-2 border-[#C9A84C]/30 hover:bg-[#C9A84C]/5 hover:border-[#C9A84C]/50'
             }
           >
-            {f === 'all' && `📋 All Tasks (${stats.total})`}
-            {f === 'pending' && `⏳ Pending (${stats.pending})`}
-            {f === 'in_progress' && `🎯 In Progress (${stats.inProgress})`}
-            {f === 'completed' && `✅ Completed (${stats.completed})`}
+            {f === 'all' && `All Tasks (${stats.total})`}
+            {f === 'pending' && `Pending (${stats.pending})`}
+            {f === 'in_progress' && `In Progress (${stats.inProgress})`}
+            {f === 'completed' && `Completed (${stats.completed})`}
           </Button>
         ))}
         <Button
