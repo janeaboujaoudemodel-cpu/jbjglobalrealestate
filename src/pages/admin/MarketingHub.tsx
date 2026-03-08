@@ -88,7 +88,7 @@ const MarketingHub: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
   const [isCreating, setIsCreating] = useState(false);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  
 
   const { data: campaigns, isLoading: loadingCampaigns, refetch: refetchCampaigns } = useQuery({
     queryKey: ['marketing-campaigns'],
@@ -510,56 +510,51 @@ const MarketingHub: React.FC = () => {
         </main>
       </div>
 
-      {/* Right Sidebar - Quick Actions (desktop only) */}
-      <aside className="w-56 shrink-0 border-l-2 border-gold/30 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] hidden xl:flex flex-col p-4">
-        <h3 className="text-xs font-bold text-black/60 uppercase tracking-widest mb-4">Quick Actions</h3>
-        
-        <div className="space-y-2">
-          <Button
-            onClick={() => setIsCreating(true)}
-            className="w-full justify-start bg-gradient-to-r from-gold to-amber-600 text-black font-semibold text-xs"
-            size="sm"
-          >
-            <Plus className="w-3.5 h-3.5 mr-2" />
-            New Campaign
-          </Button>
-          
-          <Link to="/ai/email-generator" className="block">
-            <Button variant="outline" size="sm" className="w-full justify-start border-gold/40 text-black text-xs hover:bg-gold/10">
-              <Mail className="w-3.5 h-3.5 mr-2 text-teal-500" />
-              Write Email
+      {/* Horizontal Quick Actions Bar (replaces right sidebar) */}
+      <div className="sticky bottom-0 z-40 border-t-2 border-[#C9A84C]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_-4px_20px_rgba(200,167,102,0.1)] px-4 py-3">
+        <div className="flex items-center justify-between gap-4 max-w-7xl mx-auto">
+          <div className="flex items-center gap-3">
+            <Button
+              onClick={() => setIsCreating(true)}
+              className="bg-gradient-to-r from-gold to-amber-600 text-black font-semibold text-xs shadow-lg shadow-gold/20"
+              size="sm"
+            >
+              <Plus className="w-3.5 h-3.5 mr-1.5" /> New Campaign
             </Button>
-          </Link>
-          
-          <Link to="/ai/social-media" className="block">
-            <Button variant="outline" size="sm" className="w-full justify-start border-gold/40 text-black text-xs hover:bg-gold/10">
-              <Share2 className="w-3.5 h-3.5 mr-2 text-pink-500" />
-              Social Post
-            </Button>
-          </Link>
-          
-          <Link to="/founders-assistant" className="block">
-            <Button variant="outline" size="sm" className="w-full justify-start border-gold/40 text-black text-xs hover:bg-gold/10">
-              <Bot className="w-3.5 h-3.5 mr-2 text-purple-500" />
-              AI Assistant
-            </Button>
-          </Link>
-        </div>
-
-        <div className="h-px bg-gold/20 my-4" />
-
-        <h3 className="text-xs font-bold text-black/60 uppercase tracking-widest mb-3">Performance</h3>
-        <div className="space-y-3">
-          <div className="p-3 rounded-lg border border-gold/20 bg-white/50">
-            <p className="text-2xl font-bold text-black">{stats.sent}</p>
-            <p className="text-[10px] text-black/60">Campaigns Sent</p>
+            <Link to="/ai/email-generator">
+              <Button variant="outline" size="sm" className="border-gold/40 text-black text-xs hover:bg-gold/10">
+                <Mail className="w-3.5 h-3.5 mr-1.5 text-teal-600" /> AI Email
+              </Button>
+            </Link>
+            <Link to="/ai/social-media">
+              <Button variant="outline" size="sm" className="border-gold/40 text-black text-xs hover:bg-gold/10">
+                <Share2 className="w-3.5 h-3.5 mr-1.5 text-pink-600" /> Social Post
+              </Button>
+            </Link>
+            <Link to="/founders-assistant">
+              <Button variant="outline" size="sm" className="border-gold/40 text-black text-xs hover:bg-gold/10">
+                <Bot className="w-3.5 h-3.5 mr-1.5 text-purple-600" /> AI Assistant
+              </Button>
+            </Link>
+            <Link to="/toolkit">
+              <Button variant="outline" size="sm" className="border-gold/40 text-black text-xs hover:bg-gold/10">
+                <Sparkles className="w-3.5 h-3.5 mr-1.5 text-gold" /> All Tools
+              </Button>
+            </Link>
           </div>
-          <div className="p-3 rounded-lg border border-gold/20 bg-white/50">
-            <p className="text-2xl font-bold text-black">{subscriberCount || 0}</p>
-            <p className="text-[10px] text-black/60">Total Subscribers</p>
+          <div className="flex items-center gap-4 text-xs">
+            <div className="text-center">
+              <p className="font-bold text-black text-lg">{stats.sent}</p>
+              <p className="text-black/50">Sent</p>
+            </div>
+            <div className="w-px h-8 bg-gold/20" />
+            <div className="text-center">
+              <p className="font-bold text-black text-lg">{subscriberCount || 0}</p>
+              <p className="text-black/50">Subscribers</p>
+            </div>
           </div>
         </div>
-      </aside>
+      </div>
     </div>
   );
 };
