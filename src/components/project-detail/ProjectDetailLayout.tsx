@@ -783,7 +783,7 @@ export default function ProjectDetailLayout({
           )}
 
           {/* DETAILS SECTION */}
-          <div ref={detailsRef} id="details" className="mb-12 scroll-mt-40">
+          <div ref={detailsRef} id="details" className="mb-14 scroll-mt-40">
             <div className="jj-card-inner">
               <h2 className="text-h3 font-medium text-foreground">About {project.name}</h2>
               {project.description ? (
@@ -822,7 +822,7 @@ export default function ProjectDetailLayout({
 
            {/* GALLERY SECTION */}
            {images.length > 0 && (
-             <div ref={galleryRef} id="gallery" className="mb-12 scroll-mt-40">
+             <div ref={galleryRef} id="gallery" className="mb-14 scroll-mt-40">
                <div className="jj-card-inner">
                  <div className="flex items-center justify-between mb-4">
                    <h3 className="text-h3-sm font-medium text-foreground">Project Gallery</h3>
@@ -849,7 +849,7 @@ export default function ProjectDetailLayout({
 
            {/* UNIT TYPES & INVENTORY SECTION (Reelly-style) */}
            {(project.unit_types?.length ?? 0) > 0 && (
-             <div ref={unitsRef} id="units" className="mb-12 scroll-mt-40">
+             <div ref={unitsRef} id="units" className="mb-14 scroll-mt-40">
                <UnitInventorySection
                  unitTypes={project.unit_types || []}
                  totalUnits={project.total_units}
@@ -861,7 +861,7 @@ export default function ProjectDetailLayout({
 
            {/* CONSTRUCTION TIMELINE SECTION (Reelly-style) */}
            {(project.construction_progress !== null && project.construction_progress !== undefined) && (
-             <div ref={constructionRef} id="construction" className="mb-12 scroll-mt-40">
+             <div ref={constructionRef} id="construction" className="mb-14 scroll-mt-40">
                <ConstructionTimelineSection
                  constructionProgress={project.construction_progress}
                  constructionStartDate={project.construction_start_date}
@@ -874,7 +874,7 @@ export default function ProjectDetailLayout({
 
            {/* DEVELOPER INFO SECTION (Reelly-style) */}
            {project.developer && (
-             <div ref={developerRef} id="developer" className="mb-12 scroll-mt-40">
+             <div ref={developerRef} id="developer" className="mb-14 scroll-mt-40">
                <DeveloperInfoCard
                  developer={project.developer}
                  projectName={project.name}
@@ -884,7 +884,7 @@ export default function ProjectDetailLayout({
 
            {/* UNIQUE SELLING POINTS (USP/Highlights) SECTION */}
            {(project.usp_bullets?.length ?? 0) > 0 && (
-             <div ref={uspRef} id="usp" className="mb-12 scroll-mt-40">
+             <div ref={uspRef} id="usp" className="mb-14 scroll-mt-40">
                <div className="jj-card-inner">
                   <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2 mb-6">
                     <Star className="w-5 h-5 text-gold" />
@@ -934,7 +934,7 @@ export default function ProjectDetailLayout({
 
            {/* HOUSE DETAILS SECTION (Reelly-style) */}
            {(project.floors || project.total_units || project.service_charge || project.finishing_standard) && (
-             <div ref={houseDetailsRef} id="house-details" className="mb-12 scroll-mt-40">
+             <div ref={houseDetailsRef} id="house-details" className="mb-14 scroll-mt-40">
                <HouseDetailsSection
                  floors={project.floors}
                  totalUnits={project.total_units}
@@ -949,7 +949,7 @@ export default function ProjectDetailLayout({
 
            {/* FLOOR PLANS SECTION */}
            {(floorPlanDocs.length > 0 || (project.floor_plan_types?.length ?? 0) > 0) && (
-             <div ref={floorPlansRef} id="floor-plans" className="mb-12 scroll-mt-40">
+             <div ref={floorPlansRef} id="floor-plans" className="mb-14 scroll-mt-40">
                <div className="jj-card-inner">
                  <h3 className="text-h3-sm font-medium text-foreground">Floor Plans</h3>
                  <div className="mt-6">
@@ -968,7 +968,7 @@ export default function ProjectDetailLayout({
 
            {/* AMENITIES SECTION - Premium with Icons */}
            {(project.amenities?.length ?? 0) > 0 && (
-              <div ref={amenitiesRef} id="amenities" className="mb-12 scroll-mt-40">
+              <div ref={amenitiesRef} id="amenities" className="mb-14 scroll-mt-40">
                 <div className="jj-card-inner">
                    <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2 mb-6">
                      <Building2 className="w-5 h-5 text-gold" />
@@ -981,7 +981,7 @@ export default function ProjectDetailLayout({
 
            {/* PROJECT MEDIA SECTION (Reelly-style) */}
            {(project.video_url || project.virtual_tour_url) && (
-             <div ref={mediaRef} id="media" className="mb-12 scroll-mt-40">
+             <div ref={mediaRef} id="media" className="mb-14 scroll-mt-40">
                <ProjectMediaSection
                  videoUrl={project.video_url}
                  virtualTourUrl={project.virtual_tour_url}
@@ -991,7 +991,7 @@ export default function ProjectDetailLayout({
            )}
 
           {/* LOCATION MAP - Full Width */}
-          <div ref={locationRef} id="location" className="mb-12 scroll-mt-40">
+          <div ref={locationRef} id="location" className="mb-14 scroll-mt-40">
             <div className="jj-card-inner">
               <div className="flex items-center justify-between gap-4 flex-wrap mb-4">
                 <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2">
@@ -1085,7 +1085,7 @@ export default function ProjectDetailLayout({
 
           {/* MASTER PLAN SECTION (Reelly-style) */}
           {(project.master_plan_image_url || (project.community_highlights?.length ?? 0) > 0) && (
-            <div ref={masterPlanRef} id="master-plan" className="mb-12 scroll-mt-40">
+            <div ref={masterPlanRef} id="master-plan" className="mb-14 scroll-mt-40">
               <MasterPlanSection
                 masterPlanImageUrl={project.master_plan_image_url}
                 communityHighlights={project.community_highlights}
@@ -1096,7 +1096,7 @@ export default function ProjectDetailLayout({
 
            {/* PAYMENT PLAN VISUALIZATION (Order B: Payment first) */}
            {(true) && (
-           <div ref={paymentRef} id="payment" className="mb-16 scroll-mt-40">
+           <div ref={paymentRef} id="payment" className="mb-14 scroll-mt-40">
               <PaymentPlanVisualization
                 paymentPlan={project.payment_plan}
                 paymentBreakdown={project.payment_breakdown}
@@ -1113,7 +1113,7 @@ export default function ProjectDetailLayout({
             )}
 
           {/* BROCHURE - Full width two-column layout */}
-          <div ref={brochureRef} id="brochure" className="mb-12 scroll-mt-40">
+          <div ref={brochureRef} id="brochure" className="mb-14 scroll-mt-40">
             <div className="jj-card-inner">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                 <div>
@@ -1155,7 +1155,7 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
 
           {/* BOOK-STYLE ALL DOCUMENTS STRIP */}
           {project.documents.length > 0 && (
-            <div className="mb-12">
+           <div className="mb-14">
               <BookStyleDocuments
                 documents={project.documents.map(d => ({
                   id: d.id,
@@ -1171,7 +1171,7 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
           )}
 
            {/* MORTGAGE CALCULATOR (Order B: after brochure) */}
-           <div ref={mortgageRef} className="mb-20 scroll-mt-32">
+           <div ref={mortgageRef} className="mb-14 scroll-mt-32">
               <div className="jj-card-inner p-0 overflow-hidden">
                 <MortgageCalculator
                   defaultPrice={project.price_from ?? 2000000}
@@ -1183,7 +1183,7 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
             </div>
 
            {/* JBJ AI ANALYZER (Order B: after mortgage) */}
-           <div ref={aiRef} id="ai" className="mb-12 scroll-mt-40">
+           <div ref={aiRef} id="ai" className="mb-14 scroll-mt-40">
               <ProjectAIAnalyzer
                 projectName={project.name}
                 areaName={project.area_name || project.location || "UAE"}
@@ -1197,20 +1197,20 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
             </div>
 
            {/* DLD MARKET WIDGET (Order B: after AI) */}
-           <div className="py-6 md:py-8">
+           <div className="py-6">
               <div className="flex items-center justify-center gap-6">
                 <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
                 <div className="w-2 h-2 rotate-45 bg-gold/40" />
                 <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
               </div>
             </div>
-            <div className="mb-8">
+            <div className="mb-14">
               <DLDMarketWidget />
             </div>
 
            {/* INVESTMENT METRICS SECTION */}
            {(project.roi_estimate || project.rental_yield_estimate) && (
-             <div ref={investmentRef} id="investment" className="mb-12 scroll-mt-40">
+             <div ref={investmentRef} id="investment" className="mb-14 scroll-mt-40">
                <InvestmentMetricsSection
                  roiEstimate={project.roi_estimate}
                  rentalYieldEstimate={project.rental_yield_estimate}
@@ -1223,7 +1223,7 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
 
            {/* USEFUL INFO SECTION */}
            {(project.faqs?.length ?? 0) > 0 && (
-             <div ref={faqRef} id="faq" className="mb-12 scroll-mt-40">
+             <div ref={faqRef} id="faq" className="mb-14 scroll-mt-40">
                <div className="jj-card-inner">
                  <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2 mb-6">
                    <HelpCircle className="w-5 h-5 text-gold" />
@@ -1246,7 +1246,7 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
            )}
 
            {/* REPORT AN ISSUE BANNER */}
-           <div className="mb-12">
+           <div className="mb-14">
              <ReportIssueButton
                projectName={project.name}
                projectId={project.id}

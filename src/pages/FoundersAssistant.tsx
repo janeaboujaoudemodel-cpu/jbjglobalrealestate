@@ -71,7 +71,7 @@ const SECONDARY_TABS = [
 ];
 
 const TAB_TRIGGER_CLASS =
-  "min-w-[90px] px-3 py-2 text-xs font-medium rounded-lg text-zinc-600 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C] data-[state=active]:to-[#B8973F] data-[state=active]:text-white data-[state=active]:shadow-md transition-all";
+  "tab-trigger-champagne text-black min-w-[90px] px-3 py-2 text-xs font-medium rounded-lg transition-all";
 
 export default function FoundersAssistant() {
   const { user, loading: authLoading } = useAuth();

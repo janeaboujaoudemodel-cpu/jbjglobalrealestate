@@ -26,30 +26,35 @@ const MeetingCenter = () => {
   });
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+      {/* Back Button */}
+      <div className="max-w-6xl mx-auto px-4 pt-6">
+        <Button variant="outline" size="sm" onClick={() => window.history.back()} className="border-gold/30 text-black hover:bg-gold/10">
+          <Calendar className="w-4 h-4 mr-2" />
+          Back
+        </Button>
+      </div>
+
       {/* Hero Section */}
-      <div className="relative py-16 px-4 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-violet-950/40 via-black to-black" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-violet-600/20 via-transparent to-transparent opacity-50" />
-        
+      <div className="relative py-12 px-4 overflow-hidden">
         <div className="relative max-w-6xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-violet-500/10 border border-violet-500/30 rounded-full mb-6">
-            <Calendar className="w-5 h-5 text-violet-400" />
-            <span className="text-violet-400 font-medium text-sm">Communication Hub</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/30 rounded-full mb-6">
+            <Calendar className="w-5 h-5 text-gold" />
+            <span className="text-gold-dark font-medium text-sm">Communication Hub</span>
           </div>
           
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Meeting <span className="text-violet-400">Center</span>
+          <h1 className="text-4xl md:text-5xl font-bold text-black mb-4">
+            Meeting <span className="text-gold">Center</span>
           </h1>
           
-          <p className="text-lg text-zinc-400 max-w-2xl mx-auto mb-8">
+          <p className="text-lg text-zinc-600 max-w-2xl mx-auto mb-8">
             Central hub for all your meeting summaries, call notes, and voice AI interactions. 
             Track action items and client communications in one place.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-4">
             <Link to="/ai-meeting-summarizer">
-              <Button className="bg-violet-600 hover:bg-violet-500 text-white">
+              <Button className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-gold/40 hover:brightness-105">
                 <Video className="w-4 h-4 mr-2" />
                 New Meeting Summary
               </Button>
@@ -68,32 +73,32 @@ const MeetingCenter = () => {
         {/* Search */}
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-400" />
             <Input
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by client name or content..."
-              className="pl-10 bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500"
+              className="pl-10 bg-white border-gold/20 text-black placeholder:text-zinc-400"
             />
           </div>
         </div>
 
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="bg-zinc-900 border border-zinc-800 mb-6 flex-wrap h-auto p-1">
-            <TabsTrigger value="all" className="data-[state=active]:bg-violet-600 data-[state=active]:text-white">
+          <TabsList className="bg-white/80 border-2 border-gold/30 mb-6 flex-wrap h-auto p-1">
+            <TabsTrigger value="all" className="tab-trigger-champagne text-black">
               <Calendar className="w-4 h-4 mr-2" />
               All
             </TabsTrigger>
-            <TabsTrigger value="meeting" className="data-[state=active]:bg-violet-600 data-[state=active]:text-white">
+            <TabsTrigger value="meeting" className="tab-trigger-champagne text-black">
               <Video className="w-4 h-4 mr-2" />
               Meetings
             </TabsTrigger>
-            <TabsTrigger value="call" className="data-[state=active]:bg-orange-600 data-[state=active]:text-white">
+            <TabsTrigger value="call" className="tab-trigger-champagne text-black">
               <Phone className="w-4 h-4 mr-2" />
               Phone Calls
             </TabsTrigger>
-            <TabsTrigger value="voice" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40">
+            <TabsTrigger value="voice" className="tab-trigger-champagne text-black">
               <Mic className="w-4 h-4 mr-2" />
               Voice AI
             </TabsTrigger>
@@ -101,15 +106,15 @@ const MeetingCenter = () => {
 
           <TabsContent value={activeTab}>
             {isLoading ? (
-              <div className="text-center py-16 bg-zinc-900/50 rounded-2xl border border-zinc-800">
-                <Loader2 className="w-8 h-8 text-violet-400 mx-auto mb-4 animate-spin" />
-                <p className="text-zinc-400">Loading summaries...</p>
+              <div className="text-center py-16 bg-white/60 rounded-2xl border border-gold/20">
+                <Loader2 className="w-8 h-8 text-gold mx-auto mb-4 animate-spin" />
+                <p className="text-zinc-500">Loading summaries...</p>
               </div>
             ) : filteredSummaries.length === 0 ? (
-              <div className="text-center py-16 bg-zinc-900/50 rounded-2xl border border-zinc-800">
-                <Calendar className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-white mb-2">No summaries found</h3>
-                <p className="text-zinc-400 mb-6">
+              <div className="text-center py-16 bg-white/60 rounded-2xl border border-gold/20">
+                <Calendar className="w-12 h-12 text-gold/40 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-black mb-2">No summaries yet</h3>
+                <p className="text-zinc-500 mb-6">
                   {activeTab === "all" 
                     ? "Start by summarizing a meeting or call"
                     : `No ${activeTab === "voice" ? "voice AI calls" : activeTab + "s"} recorded yet`
@@ -117,7 +122,7 @@ const MeetingCenter = () => {
                 </p>
                 <div className="flex justify-center gap-4">
                   <Link to="/ai-meeting-summarizer">
-                    <Button className="bg-violet-600 hover:bg-violet-500">
+                    <Button className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-gold/40">
                       <Plus className="w-4 h-4 mr-2" />
                       Add Meeting
                     </Button>
