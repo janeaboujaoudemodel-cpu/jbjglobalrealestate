@@ -304,20 +304,20 @@ const CRMCommunicationPanel = () => {
       </CardHeader>
       <CardContent className="p-0">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="w-full bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] grid grid-cols-4 rounded-none border-b border-gold/30">
-            <TabsTrigger value="chat" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black text-xs">
+          <TabsList className="w-full bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] grid grid-cols-4 rounded-none border-b border-[#C9A84C]/30">
+            <TabsTrigger value="chat" className="tab-trigger-champagne text-black text-xs data-[state=active]:text-black">
               <Hash className="h-3 w-3 mr-1" />
               Channels
             </TabsTrigger>
-            <TabsTrigger value="team" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black text-xs">
+            <TabsTrigger value="team" className="tab-trigger-champagne text-black text-xs data-[state=active]:text-black">
               <Users className="h-3 w-3 mr-1" />
               Team
             </TabsTrigger>
-            <TabsTrigger value="meetings" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black text-xs">
+            <TabsTrigger value="meetings" className="tab-trigger-champagne text-black text-xs data-[state=active]:text-black">
               <Video className="h-3 w-3 mr-1" />
               Meetings
             </TabsTrigger>
-            <TabsTrigger value="files" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black text-xs">
+            <TabsTrigger value="files" className="tab-trigger-champagne text-black text-xs data-[state=active]:text-black">
               <FileText className="h-3 w-3 mr-1" />
               Files
             </TabsTrigger>
@@ -336,8 +336,8 @@ const CRMCommunicationPanel = () => {
                       <button
                         key={channel.id}
                         onClick={() => setSelectedChannel(channel.id)}
-                        className={`w-full flex items-center justify-between px-2 py-1.5 rounded text-xs hover:bg-zinc-100 transition-colors ${
-                          selectedChannel === channel.id ? 'bg-zinc-100 text-zinc-900' : 'text-zinc-600'
+                        className={`w-full flex items-center justify-between px-2 py-1.5 rounded text-xs hover:bg-[#C9A84C]/10 transition-colors ${
+                          selectedChannel === channel.id ? 'bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-[#C9A84C]/40' : 'text-zinc-600'
                         }`}
                       >
                         <span className="flex items-center gap-1.5">

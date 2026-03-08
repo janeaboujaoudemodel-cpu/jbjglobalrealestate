@@ -291,7 +291,7 @@ const FlaggedLeadsView = ({ userId, onRefresh }: FlaggedLeadsViewProps) => {
             <Flag className="h-5 w-5 text-amber-400" />
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-white">Flagged Leads</h2>
+            <h2 className="text-lg font-semibold text-black">Flagged Leads</h2>
             <p className="text-sm text-muted-foreground">
               {leads.length} leads need attention
             </p>
@@ -323,7 +323,7 @@ const FlaggedLeadsView = ({ userId, onRefresh }: FlaggedLeadsViewProps) => {
               <CardContent className="p-3 flex items-center gap-2">
                 <Icon className={cn("h-4 w-4", color)} />
                 <div>
-                  <p className="text-lg font-bold text-white">{count}</p>
+                  <p className="text-lg font-bold text-black">{count}</p>
                   <p className="text-xs text-muted-foreground">{label}</p>
                 </div>
               </CardContent>
@@ -337,12 +337,12 @@ const FlaggedLeadsView = ({ userId, onRefresh }: FlaggedLeadsViewProps) => {
         <Table>
           <TableHeader className="bg-muted/50">
             <TableRow className="border-b border-border">
-              <TableHead className="text-white font-bold w-16">Row</TableHead>
-              <TableHead className="text-white font-bold">Name</TableHead>
-              <TableHead className="text-white font-bold">Contact</TableHead>
-              <TableHead className="text-white font-bold">Issues</TableHead>
-              <TableHead className="text-white font-bold">Source</TableHead>
-              <TableHead className="text-white font-bold w-24">Actions</TableHead>
+              <TableHead className="text-black font-bold w-16">Row</TableHead>
+              <TableHead className="text-black font-bold">Name</TableHead>
+              <TableHead className="text-black font-bold">Contact</TableHead>
+              <TableHead className="text-black font-bold">Issues</TableHead>
+              <TableHead className="text-black font-bold">Source</TableHead>
+              <TableHead className="text-black font-bold w-24">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
