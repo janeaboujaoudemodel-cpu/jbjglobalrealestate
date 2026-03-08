@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, lazy, Suspense } from "react";
+import { useEffect, useState, useRef, lazy, Suspense, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProjects, useDevelopers, useCommunities, useProjectsTotalCount } from "@/hooks/useProjects";
@@ -416,13 +416,7 @@ const Admin = () => {
           </div>
           
           <div className="flex items-center gap-2 ml-auto flex-shrink-0">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-black hover:text-gold hover:bg-gold/10 h-9 w-9"
-            >
-              <Bell className="h-4 w-4" />
-            </Button>
+            <AdminNotificationBell />
             <Link to="/admin/marketing-hub">
               <Button
                 size="sm"
