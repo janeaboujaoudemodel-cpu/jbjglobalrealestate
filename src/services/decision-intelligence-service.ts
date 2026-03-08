@@ -66,33 +66,32 @@ class DecisionIntelligenceService {
 
     try {
       // Fetch real lead data
-      const { data: leads, count: totalLeads } = await supabase
+      const { count: totalLeads } = await supabase
         .from('crm_leads')
-        .select('*', { count: 'exact', head: false })
-        .limit(500);
+        .select('*', { count: 'exact', head: true }) as any;
 
       const { count: convertedLeads } = await supabase
         .from('crm_leads')
         .select('*', { count: 'exact', head: true })
-        .eq('status', 'converted');
+        .eq('status', 'converted') as any;
 
       // Fetch real project data
       const { count: totalProjects } = await supabase
         .from('projects')
         .select('*', { count: 'exact', head: true })
-        .eq('is_published', true);
+        .eq('is_published', true) as any;
 
       // Fetch broker data
       const { count: activeBrokers } = await supabase
         .from('profiles')
-        .select('*', { count: 'exact', head: true });
+        .select('*', { count: 'exact', head: true }) as any;
 
       // Fetch recent tasks
       const { data: recentTasks } = await supabase
         .from('admin_tasks')
         .select('*')
         .order('created_at', { ascending: false })
-        .limit(50);
+        .limit(50) as any;
 
       const completedTasks = recentTasks?.filter(t => t.status === 'completed').length || 0;
       const pendingTasks = recentTasks?.filter(t => t.status === 'pending').length || 0;
