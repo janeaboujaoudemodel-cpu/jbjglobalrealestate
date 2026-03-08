@@ -30,14 +30,14 @@ interface Character {
 }
 
 const CHARACTERS: Character[] = [
-  { id: "sarah",   name: "Sarah",   title: "Luxury Specialist",  avatar: "👩‍💼", gender: "female",  style: "Professional & friendly",   color: "from-rose-500 to-pink-600"     },
-  { id: "george",  name: "George",  title: "Senior Advisor",     avatar: "👨‍💼", gender: "male",    style: "Warm & experienced",         color: "from-blue-500 to-indigo-600"   },
-  { id: "laura",   name: "Laura",   title: "Premium Agent",      avatar: "👩‍🦰", gender: "female",  style: "Luxury & sophisticated",     color: "from-purple-500 to-violet-600" },
-  { id: "alex",    name: "Alex",    title: "Investment Expert",  avatar: "🧑‍💻", gender: "male",    style: "Confident & authoritative",  color: "from-emerald-500 to-teal-600"  },
-  { id: "alice",   name: "Alice",   title: "Modern Broker",      avatar: "👩‍🦱", gender: "female",  style: "Energetic & modern",         color: "from-amber-500 to-orange-600"  },
-  { id: "river",   name: "River",   title: "Prestige Narrator",  avatar: "🧑‍🎤", gender: "neutral", style: "Elegant & premium",          color: "from-slate-400 to-gray-600"    },
-  { id: "brian",   name: "Brian",   title: "Market Analyst",     avatar: "👨‍🦳", gender: "male",    style: "Deep & trustworthy",         color: "from-cyan-500 to-sky-600"      },
-  { id: "matilda", name: "Matilda", title: "Community Expert",   avatar: "👩‍🦳", gender: "female",  style: "Warm & inviting",            color: "from-lime-500 to-green-600"    },
+  { id: "sarah",   name: "Sarah",   title: "Luxury Specialist",  avatar: "S", gender: "female",  style: "Professional & friendly",   color: "from-rose-500 to-pink-600"     },
+  { id: "george",  name: "George",  title: "Senior Advisor",     avatar: "G", gender: "male",    style: "Warm & experienced",         color: "from-blue-500 to-indigo-600"   },
+  { id: "laura",   name: "Laura",   title: "Premium Agent",      avatar: "L", gender: "female",  style: "Luxury & sophisticated",     color: "from-purple-500 to-violet-600" },
+  { id: "alex",    name: "Alex",    title: "Investment Expert",  avatar: "A", gender: "male",    style: "Confident & authoritative",  color: "from-emerald-500 to-teal-600"  },
+  { id: "alice",   name: "Alice",   title: "Modern Broker",      avatar: "A", gender: "female",  style: "Energetic & modern",         color: "from-amber-500 to-orange-600"  },
+  { id: "river",   name: "River",   title: "Prestige Narrator",  avatar: "R", gender: "neutral", style: "Elegant & premium",          color: "from-slate-400 to-gray-600"    },
+  { id: "brian",   name: "Brian",   title: "Market Analyst",     avatar: "B", gender: "male",    style: "Deep & trustworthy",         color: "from-cyan-500 to-sky-600"      },
+  { id: "matilda", name: "Matilda", title: "Community Expert",   avatar: "M", gender: "female",  style: "Warm & inviting",            color: "from-lime-500 to-green-600"    },
 ];
 
 const LANGUAGES = [
@@ -181,7 +181,7 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
     const syntheticUrl = `speech-synthesis://${encodeURIComponent(narration.script)}`;
     onAddToTimeline?.(syntheticUrl, narration.duration, narration.script, narration.character);
     onAIVoiceGenerated?.(syntheticUrl, narration.duration);
-    toast.success(`🎬 ${narration.character}'s narration added to timeline!`);
+    toast.success(`${narration.character}'s narration added to timeline`);
   }, [narration, onAddToTimeline, onAIVoiceGenerated]);
 
   // ── Voice transcript → prompt ──────────────────────────────────────────────

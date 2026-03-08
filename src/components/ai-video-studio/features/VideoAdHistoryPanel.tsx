@@ -564,7 +564,7 @@ export function VideoAdHistoryPanel({ onRestoreToTimeline, onRegenerateAd, onLoa
       projectName: ad.project_data.propertyName ?? ad.project_name,
       transitions: ad.project_data.transitions,
     });
-    toast.success(`🎬 "${ad.project_name}" loaded to timeline!`);
+    toast.success(`"${ad.project_name}" loaded to timeline`);
   };
 
   // ── Load & Export ─────────────────────────────────────────────────────────
@@ -577,7 +577,7 @@ export function VideoAdHistoryPanel({ onRestoreToTimeline, onRegenerateAd, onLoa
     };
     if (onLoadAndExport) {
       onLoadAndExport(payload);
-      toast.success(`⬇️ "${ad.project_name}" loaded — export starting…`);
+      toast.success(`"${ad.project_name}" loaded — export starting`);
     } else {
       // Fallback: just restore
       onRestoreToTimeline(payload);

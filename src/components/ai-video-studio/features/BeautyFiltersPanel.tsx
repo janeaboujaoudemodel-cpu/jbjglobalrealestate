@@ -37,7 +37,7 @@ const LUT_PRESETS: LUTPreset[] = [
   {
     id: 'lut-orange-teal',
     name: 'Cinematic Orange-Teal',
-    emoji: '🎬',
+    emoji: '',
     description: 'Hollywood split-tone — warm shadows, cyan highlights',
     swatchGradient: 'linear-gradient(135deg, #c0521a 0%, #1a7a7a 100%)',
     adjustments: { brightness: -3, contrast: 18, saturation: -15, warmth: 12, blur: 0, vignette: 30 },
@@ -47,7 +47,7 @@ const LUT_PRESETS: LUTPreset[] = [
   {
     id: 'lut-dubai-gold',
     name: 'Dubai Gold',
-    emoji: '🏙️',
+    emoji: '',
     description: 'Luxury golden haze for architecture & lifestyle',
     swatchGradient: 'linear-gradient(135deg, #b8860b 0%, #ffd700 60%, #c0841a 100%)',
     adjustments: { brightness: 8, contrast: 12, saturation: -8, warmth: 35, blur: 0, vignette: 18 },
@@ -57,7 +57,7 @@ const LUT_PRESETS: LUTPreset[] = [
   {
     id: 'lut-sunset-dubai',
     name: 'Sunset Dubai',
-    emoji: '🌅',
+    emoji: '',
     description: 'Golden hour over the Marina — rich magentas & amber',
     swatchGradient: 'linear-gradient(135deg, #ff6a00 0%, #ee0979 50%, #ffcf00 100%)',
     adjustments: { brightness: 5, contrast: 15, saturation: 20, warmth: 28, blur: 0, vignette: 25 },
@@ -67,7 +67,7 @@ const LUT_PRESETS: LUTPreset[] = [
   {
     id: 'lut-matte-film',
     name: 'Matte Film',
-    emoji: '🎞️',
+    emoji: '',
     description: 'Lifted blacks, desaturated mid-tones, editorial matte',
     swatchGradient: 'linear-gradient(135deg, #4a4a4a 0%, #8a8a78 50%, #bfb89e 100%)',
     adjustments: { brightness: 3, contrast: -12, saturation: -22, warmth: 5, blur: 0, vignette: 20 },

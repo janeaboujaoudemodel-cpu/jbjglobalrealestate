@@ -125,11 +125,11 @@ Last checked: ${format(new Date(), 'PPpp')}`;
 
       return `**Ethics Report**
 
-⚠️ ${pendingViolations.length} pending violation(s) detected:
+[ALERT] ${pendingViolations.length} pending violation(s) detected:
 
 ${pendingViolations.slice(0, 5).map(v => `
 • **${v.violation_type}** (${v.severity})
-  ${v.violator_type === 'ai' ? '🤖 AI Agent' : '👤 Human'}: ${v.description}
+  ${v.violator_type === 'ai' ? '[AI Agent]' : '[Human]'}: ${v.description}
   Status: ${v.status}
 `).join('')}
 

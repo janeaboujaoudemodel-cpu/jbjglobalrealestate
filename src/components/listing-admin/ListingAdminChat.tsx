@@ -83,15 +83,15 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
 
 **What I can do:**
 
-📎 **Paste any link** — I'll scrape it, extract all project details, photos, floor plans, brochures, amenities, payment plans, and queue it for your approval.
+**Paste any link** — I'll scrape it, extract all project details, photos, floor plans, brochures, amenities, payment plans, and queue it for your approval.
 
-📋 **Multiple links** — Paste several URLs at once. I'll process them all and queue each one separately.
+**Multiple links** — Paste several URLs at once. I'll process them all and queue each one separately.
 
-📁 **Upload files** — Drop photos, PDFs, brochures, floor plans. I'll group them by project intelligently.
+**Upload files** — Drop photos, PDFs, brochures, floor plans. I'll group them by project intelligently.
 
-🔍 **Duplicate detection** — If a project already exists on the website, I'll flag it and give you options: **Replace**, **Merge**, or **Skip**.
+**Duplicate detection** — If a project already exists on the website, I'll flag it and give you options: **Replace**, **Merge**, or **Skip**.
 
-⚡ **Auto-Approve mode** — Toggle it ON below when you trust the extraction quality. Listings go live instantly.
+**Auto-Approve mode** — Toggle it ON below when you trust the extraction quality. Listings go live instantly.
 
 📄 **Documents saved** — Brochures, floor plans, and payment plans are downloaded and saved permanently in storage.
 
