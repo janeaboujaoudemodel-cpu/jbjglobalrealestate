@@ -86,7 +86,7 @@ const ContinueSearching = ({
   const sectionTitle = title || t("home.continueSearching", "Continue Searching for Your Dream Property");
 
   return (
-    <section className={`py-8 md:py-12 relative overflow-hidden ${className}`}>
+    <section className={`py-8 md:py-12 relative overflow-hidden [body.jj-vertical-nav-active_&]:lg:pl-[200px] ${className}`}>
       {/* Premium backdrop */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-[#0a0a0a] to-black/80 z-[1]" />

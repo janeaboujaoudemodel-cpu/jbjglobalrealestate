@@ -35,6 +35,12 @@ export default function PropertiesVerticalNav() {
   const [activeMegaMenu, setActiveMegaMenu] = useState<MegaMenuKey | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
 
+  // Add body class so other components can detect vertical nav is active
+  useEffect(() => {
+    document.body.classList.add('jj-vertical-nav-active');
+    return () => document.body.classList.remove('jj-vertical-nav-active');
+  }, []);
+
   const handleNavClick = useCallback((megaMenu?: MegaMenuKey, e?: React.MouseEvent) => {
     if (megaMenu) {
       e?.preventDefault();
