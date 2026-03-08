@@ -29,7 +29,6 @@ export default function RecommendedProjects({
       if (p.id === currentProjectId) return false;
       const status = ((p as any).sale_status || "").toLowerCase();
       if (status.includes("sold")) return false;
-      // Exclude projects with expired handover dates (year < 2026)
       const hd = p.handover_date;
       if (hd) {
         const hLower = hd.toLowerCase();
@@ -42,7 +41,6 @@ export default function RecommendedProjects({
     });
     const scored = otherProjects.map((p) => {
       let score = 0;
-      // Phase H: Pin manual uploads first
       if ((p as any).import_source === 'manual') score += 50;
       if (currentDeveloperId && p.developer?.id === currentDeveloperId) score += 10;
       if (currentLocation && p.location?.toLowerCase().includes(currentLocation.toLowerCase())) score += 5;
@@ -83,13 +81,21 @@ export default function RecommendedProjects({
             const paymentLabel = percentages.length > 0 ? percentages.join('/') : null;
             const saleStatus = (project as any).sale_status || "On Sale";
             const devLogo = (project.developer as any)?.logo_url;
+            const description = (project as any).description;
 
-            // Location fallback: location → area_name → emirate
+            // Location fallback
             const displayLocation =
               (project as any).location ||
               (project as any).area_name ||
               (project as any).emirate ||
               null;
+
+            // Truncate description to ~120 chars
+            const shortDescription = description
+              ? description.length > 120
+                ? description.substring(0, 120).replace(/\s+\S*$/, "") + "…"
+                : description
+              : null;
 
             return (
               <Link
@@ -106,10 +112,9 @@ export default function RecommendedProjects({
                     loading="eager"
                   />
 
-                  {/* Top Badges Row — sale status + recommended only */}
+                  {/* Top Badges Row */}
                   <div className="absolute top-3 left-3 right-3 flex items-start justify-between">
                     <div className="flex items-center gap-1.5 flex-wrap">
-                      {/* Sale Status Badge */}
                       <span className={`px-2 py-0.5 rounded text-[11px] font-bold ${
                         saleStatus.toLowerCase().includes("sold")
                           ? "bg-red-500 text-white"
@@ -118,27 +123,27 @@ export default function RecommendedProjects({
                         {saleStatus}
                       </span>
                     </div>
-                    {/* Recommended Badge */}
                     <span className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-[#C8A766]/60 px-2 py-0.5 rounded text-[11px] font-bold">
                       Recommended
                     </span>
                   </div>
 
-                  {/* Developer Logo — Bottom Left */}
+                  {/* Developer Logo — Bottom Left — eager loaded */}
                   {devLogo && (
-                    <div className="absolute bottom-3 left-3 w-10 h-10 rounded-lg overflow-hidden shadow-md">
+                    <div className="absolute bottom-3 left-3 w-10 h-10 rounded-lg overflow-hidden shadow-md bg-white">
                       <SafeImage
                         src={devLogo}
                         alt={project.developer?.name || "Developer"}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain p-0.5"
+                        loading="eager"
                       />
                     </div>
                   )}
 
-                  {/* Handover Date — Bottom Right */}
+                  {/* Handover Date — Bottom Right — ORANGE like price */}
                   {project.handover_date && (
                     <div className="absolute bottom-3 right-3">
-                      <span className="bg-black/70 backdrop-blur-sm text-gold border border-gold/40 px-2 py-0.5 rounded text-[11px] font-bold">
+                      <span className="bg-black/70 backdrop-blur-sm text-orange-400 border border-orange-400/40 px-2 py-0.5 rounded text-[11px] font-bold">
                         {formatDisplayDate(project.handover_date)}
                       </span>
                     </div>
@@ -159,19 +164,27 @@ export default function RecommendedProjects({
                     />
                   )}
 
-                  {/* Location with fallback — flex-1 so it takes up remaining space */}
-                  <div className="flex-1">
-                    {displayLocation && (
-                      <p className="text-muted-foreground text-sm truncate mt-1">
-                        {displayLocation}
-                      </p>
-                    )}
-                  </div>
+                  {/* Location */}
+                  {displayLocation && (
+                    <p className="text-muted-foreground text-sm truncate mt-0.5">
+                      {displayLocation}
+                    </p>
+                  )}
 
-                  {/* Divider + Price — always pinned to bottom via mt-auto */}
-                  <div className="border-t border-gold/20 pt-3 mt-4 flex items-center justify-between">
-                    {/* Price */}
-                    <p className="text-handover font-bold text-sm">
+                  {/* Description */}
+                  {shortDescription && (
+                    <p className="text-zinc-600 text-xs leading-relaxed mt-2 line-clamp-2">
+                      {shortDescription}
+                    </p>
+                  )}
+
+                  {/* Spacer to push price to bottom */}
+                  <div className="flex-1 min-h-[8px]" />
+
+                  {/* Divider + Price + Handover — always pinned to bottom */}
+                  <div className="border-t border-gold/20 pt-3 mt-3 flex items-center justify-between gap-2">
+                    {/* Price — orange */}
+                    <p className="text-orange-500 font-bold text-sm">
                       {project.price_from
                         ? `From ${formatPrice(project.price_from)}`
                         : "Price on request"
