@@ -421,7 +421,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
                           <div className="relative aspect-[4/3] bg-gradient-to-br from-muted via-muted/80 to-muted/60">
                             <div className="w-full h-full flex flex-col items-center justify-center gap-2">
                               <Building className="h-12 w-12 text-muted-foreground/30" />
-                              <span className="text-xs text-amber-600 font-medium">⚠️ Needs Migration & Enrichment</span>
+                              <span className="text-xs text-amber-600 font-medium">Needs Migration & Enrichment</span>
                             </div>
                             {/* Status badge overlay */}
                             <div className="absolute top-3 right-3">

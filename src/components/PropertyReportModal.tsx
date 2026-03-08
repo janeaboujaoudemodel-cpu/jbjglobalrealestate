@@ -128,9 +128,9 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
     const projectUrl = `${window.location.origin}/project/${project.slug}`;
     const message = encodeURIComponent(
       `Hi, I'm interested in *${project.name}*\n\n` +
-      `📍 Location: ${project.location || 'Dubai'}\n` +
-      `💰 Price: From AED ${project.price_from ? (project.price_from / 1000000).toFixed(2) + 'M' : 'Contact for pricing'}\n` +
-      `🏠 Bedrooms: ${project.bedrooms_min || 0} - ${project.bedrooms_max || 0}\n\n` +
+      `Location: ${project.location || 'Dubai'}\n` +
+      `Price: From AED ${project.price_from ? (project.price_from / 1000000).toFixed(2) + 'M' : 'Contact for pricing'}\n` +
+      `Bedrooms: ${project.bedrooms_min || 0} - ${project.bedrooms_max || 0}\n\n` +
       `View full details: ${projectUrl}\n\n` +
       `Please share more information about this property.`
     );

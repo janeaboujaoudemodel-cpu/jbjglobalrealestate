@@ -15,7 +15,7 @@ import {
   Flag, Eye, User, Building2, Camera, Megaphone, Code, Calculator,
   Loader2, ExternalLink, Download, MessageSquare, Brain, Sparkles,
   Target, HelpCircle, ThumbsUp, ThumbsDown, Zap, ChevronDown, ChevronUp,
-  ArrowUpDown,
+  ArrowUpDown, MapPin,
 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
@@ -994,7 +994,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                                 )}
                                 {cv.languages.length > 0 && (
                                   <span className="flex items-center gap-1 text-crm-text">
-                                    💬 {cv.languages.join(', ')}
+                                    <MessageSquare className="h-3.5 w-3.5 text-crm-text-muted" /> {cv.languages.join(', ')}
                                   </span>
                                 )}
                                 {cv.experience_years > 0 && (
@@ -1004,7 +1004,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                                 )}
                                 {cv.current_location_city && (
                                   <span className="flex items-center gap-1 text-crm-text">
-                                    📍 {cv.current_location_city}{cv.current_location_country ? `, ${cv.current_location_country}` : ''}
+                                    <MapPin className="h-3.5 w-3.5 text-crm-text-muted" /> {cv.current_location_city}{cv.current_location_country ? `, ${cv.current_location_country}` : ''}
                                   </span>
                                 )}
                                 <span className="flex items-center gap-1 text-crm-text-muted text-xs">
@@ -1227,7 +1227,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                                     Source: {cv.source}
                                   </Badge>
                                   <Badge variant="outline" className="text-xs border-crm-border text-crm-text-muted">
-                                    CV: {cv.cv_url ? '✅ Uploaded' : '❌ Not uploaded'}
+                                    CV: {cv.cv_url ? 'Uploaded' : 'Not uploaded'}
                                   </Badge>
                                 </div>
 
@@ -1496,7 +1496,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
               </div>
 
               <p className="text-xs text-crm-text-muted">
-                ⭐ Feedback links are appended automatically to the sent email.
+                Feedback links are appended automatically to the sent email.
               </p>
 
               <div className="flex gap-2">

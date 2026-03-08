@@ -156,7 +156,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
   };
 
   return (
-    <Card className="border-2 border-gold/20 bg-white/90 backdrop-blur-sm h-[calc(100vh-320px)] flex flex-col">
+    <Card className="border-2 border-gold/20 bg-white/90 backdrop-blur-sm h-full flex flex-col overflow-hidden">
       {/* Header */}
       <CardHeader className="border-b border-gold/10 py-3 px-4 flex-shrink-0">
         <div className="flex items-center justify-between">

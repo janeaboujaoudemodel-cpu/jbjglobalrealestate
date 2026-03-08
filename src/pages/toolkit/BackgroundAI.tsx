@@ -55,14 +55,14 @@ const BG_PRESETS = [
 
 // ── AI scene prompts ──
 const AI_SCENES = [
-  { id: 'office-luxury', label: 'Luxury Office', prompt: 'A modern luxury real estate office with floor-to-ceiling windows, Dubai skyline view, warm lighting, elegant furniture', emoji: '🏢' },
-  { id: 'office-executive', label: 'Executive Suite', prompt: 'An executive office suite with dark wood paneling, bookshelves, soft ambient lighting and a large mahogany desk', emoji: '💼' },
-  { id: 'city-night', label: 'City Night', prompt: 'A stunning city skyline at night with glittering lights, photographed through glass windows from a high-rise building', emoji: '🌃' },
-  { id: 'hotel-lobby', label: 'Hotel Lobby', prompt: 'A five-star hotel lobby with marble floors, grand chandeliers, and lush tropical plants', emoji: '🏨' },
-  { id: 'studio-white', label: 'Photo Studio', prompt: 'A professional photography studio with seamless white background and soft box lighting', emoji: '📷' },
-  { id: 'garden', label: 'Garden Villa', prompt: 'A beautiful villa garden with manicured hedges, swimming pool, and Mediterranean architecture', emoji: '🌿' },
-  { id: 'rooftop', label: 'Rooftop', prompt: 'A luxury rooftop terrace with panoramic views of a modern city skyline at golden hour', emoji: '🌅' },
-  { id: 'custom', label: 'Custom Scene', prompt: '', emoji: '✨' },
+  { id: 'office-luxury', label: 'Luxury Office', prompt: 'A modern luxury real estate office with floor-to-ceiling windows, Dubai skyline view, warm lighting, elegant furniture', emoji: '' },
+  { id: 'office-executive', label: 'Executive Suite', prompt: 'An executive office suite with dark wood paneling, bookshelves, soft ambient lighting and a large mahogany desk', emoji: '' },
+  { id: 'city-night', label: 'City Night', prompt: 'A stunning city skyline at night with glittering lights, photographed through glass windows from a high-rise building', emoji: '' },
+  { id: 'hotel-lobby', label: 'Hotel Lobby', prompt: 'A five-star hotel lobby with marble floors, grand chandeliers, and lush tropical plants', emoji: '' },
+  { id: 'studio-white', label: 'Photo Studio', prompt: 'A professional photography studio with seamless white background and soft box lighting', emoji: '' },
+  { id: 'garden', label: 'Garden Villa', prompt: 'A beautiful villa garden with manicured hedges, swimming pool, and Mediterranean architecture', emoji: '' },
+  { id: 'rooftop', label: 'Rooftop', prompt: 'A luxury rooftop terrace with panoramic views of a modern city skyline at golden hour', emoji: '' },
+  { id: 'custom', label: 'Custom Scene', prompt: '', emoji: '' },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1128,7 +1128,6 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                         color: selectedScene.id === scene.id ? C.accentText : "rgba(255,255,255,0.88)",
                       }}
                     >
-                      <span className="text-2xl">{scene.emoji}</span>
                       <span className="font-medium text-center text-xs leading-tight">{scene.label}</span>
                     </button>
                   ))}

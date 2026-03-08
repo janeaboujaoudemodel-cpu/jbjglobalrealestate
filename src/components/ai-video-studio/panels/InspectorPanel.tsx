@@ -45,7 +45,7 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
           </p>
         </div>
         <div className="w-full rounded-lg bg-amber-500/10 border border-amber-500/25 p-2.5 text-[10px] text-amber-300 text-left leading-relaxed">
-          💡 <strong>Tip:</strong> Select a transition clip to adjust its easing curve and duration.
+          <strong>Tip:</strong> Select a transition clip to adjust its easing curve and duration.
         </div>
       </div>
     );

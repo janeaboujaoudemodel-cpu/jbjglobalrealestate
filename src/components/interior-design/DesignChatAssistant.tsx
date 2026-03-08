@@ -65,7 +65,7 @@ What would you like to create today?`,
       const resultMessage: Message = {
         id: Date.now().toString(),
         role: 'assistant',
-        content: generatedNotes || '✨ Your design is ready!',
+        content: generatedNotes || 'Your design is ready!',
         image: generatedImage,
         timestamp: new Date(),
       };

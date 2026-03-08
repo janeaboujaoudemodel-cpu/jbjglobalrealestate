@@ -220,17 +220,17 @@ const OwnerAuditPage = () => {
   const getAIStatusBadge = (status: AIToolStatus) => {
     switch (status) {
       case 'working':
-        return <Badge className="bg-green-500/20 text-green-400 border-green-500/30">✅ Working</Badge>;
+        return <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Working</Badge>;
       case 'partial':
-        return <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">⚠️ Partial</Badge>;
+        return <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">Partial</Badge>;
       case '404':
-        return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">❌ 404</Badge>;
+        return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">404</Badge>;
       case 'component_only':
-        return <Badge className="bg-orange-500/20 text-orange-400 border-orange-500/30">📦 Component Only</Badge>;
+        return <Badge className="bg-orange-500/20 text-orange-400 border-orange-500/30">Component Only</Badge>;
       case 'coming_soon':
-        return <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">🕒 Coming Soon</Badge>;
+        return <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">Coming Soon</Badge>;
       case 'api_missing':
-        return <Badge className="bg-pink-500/20 text-pink-400 border-pink-500/30">🔌 API Missing</Badge>;
+        return <Badge className="bg-pink-500/20 text-pink-400 border-pink-500/30">API Missing</Badge>;
     }
   };
 

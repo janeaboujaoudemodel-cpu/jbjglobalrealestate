@@ -449,7 +449,7 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
               </option>
             ))}
           </optgroup>
-          <optgroup label="🔴 Negative" style={{ backgroundColor: '#09090b', color: '#ef4444' }}>
+          <optgroup label="Negative" style={{ backgroundColor: '#09090b', color: '#ef4444' }}>
             {PIPELINE_STATUSES.filter(s => s.category === 'negative').map(status => (
               <option key={status.value} value={status.value} style={{ backgroundColor: '#09090b', color: '#ffffff' }}>
                 {status.label}
@@ -711,7 +711,7 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
                               <span className="text-sm text-foreground">{status.label}</span>
                             </button>
                           ))}
-                          <p className="text-xs font-semibold text-red-400 px-2 py-1 mt-2">🔴 Negative</p>
+                          <p className="text-xs font-semibold text-red-400 px-2 py-1 mt-2">Negative</p>
                           {PIPELINE_STATUSES.filter(s => s.category === 'negative').map(status => (
                             <button
                               key={status.value}

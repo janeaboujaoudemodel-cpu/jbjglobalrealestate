@@ -302,7 +302,7 @@ export default function ScanSignPage() {
       const optimalContrast = Math.min(155, Math.max(95, contrastFactor));
       updatePageAdjustments(page.id, optimalBrightness, optimalContrast);
       await new Promise(r => setTimeout(r, 600));
-      toast.success(`✨ AI Enhanced: Brightness ${optimalBrightness}% · Contrast ${optimalContrast}%`);
+      toast.success(`AI Enhanced: Brightness ${optimalBrightness}% · Contrast ${optimalContrast}%`);
     } catch {
       toast.error('Enhancement failed');
     } finally {

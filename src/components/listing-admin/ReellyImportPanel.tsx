@@ -227,7 +227,7 @@ export function ReellyImportPanel() {
       if (error) throw error;
       if (data?.success) {
         setQuickExtractResult({ success: true, message: data.message || `Extracted data for ${ids.length} project(s)` });
-        toast.success(`✅ Extracted Reelly IDs: ${ids.join(", ")}`);
+        toast.success(`Extracted Reelly IDs: ${ids.join(", ")}`);
       } else {
         throw new Error(data?.error || "Extraction failed");
       }
@@ -621,7 +621,7 @@ export function ReellyImportPanel() {
       setCleanupStep("areas");
       await handleSyncAreas("extract_from_projects");
       setCleanupStep("done");
-      toast.success("✅ Clean & Sync completed!");
+      toast.success("Clean & Sync completed!");
     } catch (err: any) {
       toast.error(err.message || "Clean & Sync failed");
       setCleanupResult({ success: false, error: err.message });
@@ -643,7 +643,7 @@ export function ReellyImportPanel() {
   const handleGlobalRestore = async () => {
     const { data: preview } = await supabase.functions.invoke("restore-to-reelly", { body: { mode: "global", confirm: false } });
     if (!preview?.preview) { toast.error("Failed to preview restore operation"); return; }
-    if (!confirm(`⚠️ RESTORE TO REELLY-ONLY\n\nThis will:\n• Restore ${preview.projects_to_restore} projects\n• Delete ${preview.images_to_delete} Provident images\n• Delete ${preview.documents_to_delete} Provident docs\n• Delete ${preview.pending_to_delete} pending suggestions\n\nContinue?`)) return;
+    if (!confirm(`RESTORE TO REELLY-ONLY\n\nThis will:\n• Restore ${preview.projects_to_restore} projects\n• Delete ${preview.images_to_delete} Provident images\n• Delete ${preview.documents_to_delete} Provident docs\n• Delete ${preview.pending_to_delete} pending suggestions\n\nContinue?`)) return;
     setIsRestoring(true);
     setRestoreResult(null);
     try {
@@ -978,7 +978,7 @@ export function ReellyImportPanel() {
             </div>
             {quickExtractResult && (
               <div className={`mt-3 p-3 rounded-lg border text-sm ${quickExtractResult.success ? "bg-emerald-50 border-emerald-300 text-emerald-800" : "bg-red-50 border-red-300 text-red-700"}`}>
-                {quickExtractResult.success ? `✅ ${quickExtractResult.message}` : `❌ ${quickExtractResult.error}`}
+                {quickExtractResult.success ? `${quickExtractResult.message}` : `${quickExtractResult.error}`}
               </div>
             )}
           </div>
@@ -1336,13 +1336,13 @@ export function ReellyImportPanel() {
               <h4 className="font-medium text-red-900 flex items-center gap-2 mb-2">
                 <AlertTriangle className="w-4 h-4 text-red-500" /> Clean & Sync Fresh
               </h4>
-              <p className="text-sm text-red-700 mb-3">⚠️ Destructive: Deletes non-Reelly data, then full syncs everything fresh from API.</p>
+              <p className="text-sm text-red-700 mb-3">Destructive: Deletes non-Reelly data, then full syncs everything fresh from API.</p>
               <Button onClick={handleCleanAndSyncClick} disabled={isCleaningAndSyncing} className="bg-red-600 hover:bg-red-700 text-white">
                 {isCleaningAndSyncing ? <><RefreshCw className="h-4 w-4 mr-2 animate-spin" />{cleanupStep || "Processing"}...</> : <><Trash2 className="h-4 w-4 mr-2" />Clean & Sync Fresh</>}
               </Button>
               {cleanupResult && cleanupResult.success && (
                 <div className="mt-3 text-sm text-emerald-700">
-                  ✅ Cleaned {cleanupResult.deleted?.non_reelly_areas || 0} areas, {cleanupResult.deleted?.non_reelly_queue_items || 0} queue items
+                  Cleaned {cleanupResult.deleted?.non_reelly_areas || 0} areas, {cleanupResult.deleted?.non_reelly_queue_items || 0} queue items
                 </div>
               )}
             </div>

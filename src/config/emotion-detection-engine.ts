@@ -525,20 +525,20 @@ export function getOffHoursResponse(urgency: UrgencyLevel): string {
 
 export function getEmotionIcon(emotion: EmotionType): string {
   const icons: Record<EmotionType, string> = {
-    angry: '😠',
-    frustrated: '😟',
-    urgent: '⚠️',
-    positive: '😊',
-    excited: '😊',
-    sad: '😟',
-    disappointed: '😟',
-    confused: '😐',
-    neutral: '😐',
-    happy: '😊',
-    satisfied: '😊',
+    angry: '[ANGRY]',
+    frustrated: '[FRUSTRATED]',
+    urgent: '[URGENT]',
+    positive: '[POSITIVE]',
+    excited: '[EXCITED]',
+    sad: '[SAD]',
+    disappointed: '[DISAPPOINTED]',
+    confused: '[CONFUSED]',
+    neutral: '[NEUTRAL]',
+    happy: '[HAPPY]',
+    satisfied: '[SATISFIED]',
   };
   
-  return icons[emotion] || '😐';
+  return icons[emotion] || '[NEUTRAL]';
 }
 
 export function getUrgencyColor(urgency: UrgencyLevel): string {
@@ -554,10 +554,10 @@ export function getUrgencyColor(urgency: UrgencyLevel): string {
 
 export function getUrgencyLabel(urgency: UrgencyLevel): string {
   const labels: Record<UrgencyLevel, string> = {
-    critical: '🔴 Critical',
-    high: '🟠 High',
-    normal: '🟢 Normal',
-    low: '⚪ Low',
+    critical: '[CRITICAL]',
+    high: '[HIGH]',
+    normal: '[NORMAL]',
+    low: '[LOW]',
   };
   
   return labels[urgency];
