@@ -600,7 +600,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
                       )}
                       {proj.is_featured && (
                         <div className="absolute top-1 left-1 bg-amber-500/90 text-black text-[9px] font-bold px-1.5 py-0.5 rounded-sm">
-                          ⭐ Featured
+                          Featured
                         </div>
                       )}
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all flex items-center justify-center">
@@ -654,9 +654,9 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
   // ─────────────────────────────────────────────────────────────────────────────
   if (step === 'wizard' && (selectedProject || externalProperty)) {
     const genPhases = [
-      { id: 'script', label: 'Writing script…', icon: '✍️' },
-      { id: 'tts', label: 'Generating voiceover…', icon: '🎙️' },
-      { id: 'assembly', label: 'Assembling timeline…', icon: '🎬' },
+      { id: 'script', label: 'Writing script…', icon: '—' },
+      { id: 'tts', label: 'Generating voiceover…', icon: '—' },
+      { id: 'assembly', label: 'Assembling timeline…', icon: '—' },
     ];
     const currentPhaseIdx = genPhases.findIndex(p => p.id === genPhase);
 

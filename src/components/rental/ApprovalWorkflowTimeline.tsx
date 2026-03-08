@@ -103,7 +103,7 @@ export function ApprovalWorkflowTimeline({
         </div>
         {isLive && (
           <Badge className="bg-green-500/10 text-green-600 border-green-500/20">
-            🎉 Live
+            Live
           </Badge>
         )}
         {isRejected && (
@@ -265,7 +265,7 @@ export function ApprovalWorkflowTimeline({
             <Card className="flex-1 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20 border-green-200">
               <CardContent className="p-4">
                 <div className="flex items-center gap-2">
-                  <span className="text-2xl">🎉</span>
+                  <Check className="w-6 h-6 text-green-600" />
                   <div>
                     <h4 className="font-semibold text-green-700 dark:text-green-400">Your Listing is Live!</h4>
                     <p className="text-sm text-green-600 dark:text-green-500">

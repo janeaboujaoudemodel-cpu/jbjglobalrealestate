@@ -556,7 +556,7 @@ const IssueReportForm = () => {
     await new Promise(resolve => setTimeout(resolve, 1500));
     
     toast({
-      title: "Issue Reported! 🔧",
+      title: "Issue Reported",
       description: "Thank you for reporting this issue. Our technical team will investigate and follow up with you.",
     });
 
@@ -780,7 +780,7 @@ const IdeaBoxForm = () => {
       if (error) throw error;
 
       toast({
-        title: "Idea Submitted! 💡",
+        title: "Idea Submitted",
         description: formData.enterDraw 
           ? `Thank you! Your ticket #${drawTicketNumber} has been entered into the monthly draw. You'll receive 50 points if your idea is approved!`
           : "Thank you for sharing your creativity! You'll receive 50 points if your idea is approved!",

@@ -23,16 +23,16 @@ import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/component
 
 // Data arrays
 const designStyles = [
-  { id: 'modern', label: 'Modern', emoji: '🏢' },
-  { id: 'classic', label: 'Classic', emoji: '🏛️' },
-  { id: 'minimalist', label: 'Minimalist', emoji: '⬜' },
-  { id: 'luxury', label: 'Luxury', emoji: '✨' },
-  { id: 'industrial', label: 'Industrial', emoji: '🏭' },
-  { id: 'bohemian', label: 'Bohemian', emoji: '🌿' },
-  { id: 'scandinavian', label: 'Scandinavian', emoji: '🪵' },
-  { id: 'art_deco', label: 'Art Deco', emoji: '🎭' },
-  { id: 'corporate', label: 'Corporate', emoji: '💼' },
-  { id: 'premium', label: 'Premium', emoji: '👑' },
+  { id: 'modern', label: 'Modern', emoji: '' },
+  { id: 'classic', label: 'Classic', emoji: '' },
+  { id: 'minimalist', label: 'Minimalist', emoji: '' },
+  { id: 'luxury', label: 'Luxury', emoji: '' },
+  { id: 'industrial', label: 'Industrial', emoji: '' },
+  { id: 'bohemian', label: 'Bohemian', emoji: '' },
+  { id: 'scandinavian', label: 'Scandinavian', emoji: '' },
+  { id: 'art_deco', label: 'Art Deco', emoji: '' },
+  { id: 'corporate', label: 'Corporate', emoji: '' },
+  { id: 'premium', label: 'Premium', emoji: '' },
 ];
 
 const colorPalettes = [
@@ -95,7 +95,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: '1', role: 'assistant',
-      content: `Hello! I'm your AI Interior Design Assistant. 🎨\n\nUpload a photo or describe your dream space, then click Generate. You can also refine results by chatting with me!`,
+      content: `Hello! I'm your AI Interior Design Assistant.\n\nUpload a photo or describe your dream space, then click Generate. You can also refine results by chatting with me.`,
       timestamp: new Date(),
     },
   ]);
@@ -196,7 +196,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
         setMessages(prev => [...prev, {
           id: Date.now().toString(),
           role: 'assistant',
-          content: result.notes || '✨ Your design is ready! You can ask me to modify it.',
+          content: result.notes || 'Your design is ready. You can ask me to modify it.',
           image: result.images[0],
           timestamp: new Date(),
         }]);
@@ -237,7 +237,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
 
     const processingMsg: ChatMessage = {
       id: (Date.now() + 1).toString(), role: 'assistant',
-      content: '🎨 Generating your updated design...',
+      content: 'Generating your updated design...',
       timestamp: new Date(),
     };
     setMessages(prev => [...prev, processingMsg]);

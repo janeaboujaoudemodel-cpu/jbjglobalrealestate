@@ -117,7 +117,7 @@ const PageGuide: React.FC<PageGuideProps> = ({ guide, className }) => {
                 <ul className="space-y-2">
                   {guide.tips.map((tip, idx) => (
                     <li key={idx} className="flex items-start gap-2 text-black/80">
-                      <span className="text-gold">💡</span>
+                      <Lightbulb className="w-3.5 h-3.5 text-gold flex-shrink-0 mt-0.5" />
                       {tip}
                     </li>
                   ))}

@@ -1,6 +1,6 @@
 /**
  * DeveloperLink Component - Clickable Developer Name
- * 🔒 LOCKED: Developer names must ALWAYS be clickable and link to /developer/:slug
+ * LOCKED: Developer names must ALWAYS be clickable and link to /developer/:slug
  * 
  * This is a global rule - use this component everywhere developer names appear.
  */

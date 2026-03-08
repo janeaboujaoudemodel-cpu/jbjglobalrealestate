@@ -82,7 +82,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
     setIsMigrating(true);
     setMigrationLog([]);
     setMigrationProgress(0);
-    addMigrationLog("🚀 Starting migration & enrichment from Provident...");
+    addMigrationLog("[START] Starting migration & enrichment from Provident...");
 
     let totalProcessed = 0;
     let totalEnriched = 0;
@@ -90,7 +90,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
 
     while (!stopMigrationRef.current) {
       batch++;
-      addMigrationLog(`📦 Batch #${batch} starting...`);
+      addMigrationLog(`[BATCH] Batch #${batch} starting...`);
 
       try {
         const { data, error } = await supabase.functions.invoke("enrich-pending-imports", {
@@ -104,14 +104,14 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
         totalEnriched += data.enriched || 0;
 
         for (const r of (data.results || [])) {
-          const icon = r.status === "enriched" ? "✅" : "⚠️";
+          const icon = r.status === "enriched" ? "[OK]" : "[WARN]";
           addMigrationLog(`  ${icon} ${r.name}: ${r.slug_matched || "no match"} (${r.images} imgs, ${r.docs} docs)`);
         }
 
-        addMigrationLog(`📦 Batch #${batch} done: ${data.processed} processed, ${data.remaining} remaining`);
+        addMigrationLog(`[BATCH] Batch #${batch} done: ${data.processed} processed, ${data.remaining} remaining`);
 
         if (data.remaining === 0 || data.processed === 0) {
-          addMigrationLog("🎉 All pending updates migrated!");
+          addMigrationLog("[COMPLETE] All pending updates migrated successfully.");
           break;
         }
 
@@ -121,13 +121,13 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
         // Brief pause
         await new Promise(r => setTimeout(r, 2000));
       } catch (err: any) {
-        addMigrationLog(`❌ Batch #${batch} error: ${err.message}`);
+        addMigrationLog(`[ERROR] Batch #${batch} error: ${err.message}`);
         await new Promise(r => setTimeout(r, 5000));
       }
     }
 
     if (stopMigrationRef.current) {
-      addMigrationLog("⏸️ Migration paused.");
+      addMigrationLog("[PAUSED] Migration paused.");
     }
 
     setIsMigrating(false);
@@ -387,10 +387,10 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
                 <div className="max-h-48 overflow-y-auto p-3 font-mono text-xs space-y-0.5">
                   {migrationLog.map((line, i) => (
                     <div key={i} className={`${
-                      line.includes("❌") ? "text-red-400" :
-                      line.includes("✅") ? "text-emerald-400" :
-                      line.includes("🎉") ? "text-yellow-300" :
-                      line.includes("⚠️") ? "text-amber-400" :
+                      line.includes("[ERROR]") ? "text-red-400" :
+                      line.includes("[OK]") || line.includes("[COMPLETE]") ? "text-emerald-400" :
+                      line.includes("[START]") ? "text-yellow-300" :
+                      line.includes("[WARN]") ? "text-amber-400" :
                       "text-zinc-400"
                     }`}>{line}</div>
                   ))}

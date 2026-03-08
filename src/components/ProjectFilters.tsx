@@ -1,5 +1,5 @@
 import React, { useState, forwardRef } from "react";
-import { Search, SlidersHorizontal, X, ChevronDown, MapPin, Building2, Eye, Sofa, Sparkles, Star, Check } from "lucide-react";
+import { Search, SlidersHorizontal, X, ChevronDown, MapPin, Building2, Eye, Sofa, Sparkles, Star, Check, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -498,7 +498,7 @@ const ProjectFilters = ({
                   </FilterSection>
 
                   {/* Price Range */}
-                  <FilterSection title="Price Range" icon={<span className="text-lg">💰</span>}>
+                  <FilterSection title="Price Range" icon={<DollarSign className="w-4 h-4" />}>
                     <div className="px-2 pt-2">
                       <div className="grid grid-cols-2 gap-4 mb-4">
                         <div>

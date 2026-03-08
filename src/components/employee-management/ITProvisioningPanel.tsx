@@ -90,8 +90,8 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
   <p style="margin: 2px 0; color: #666;">${title}</p>
   <p style="margin: 2px 0; color: #666;">${department} | JBJ Global Real Estate</p>
   <p style="margin: 8px 0 0 0; font-size: 12px; color: #999;">
-    📞 +971 4 XXX XXXX | 📧 ${generateEmail(name)}<br/>
-    🌐 www.jbjglobalrealestate.com
+    Tel: +971 4 XXX XXXX | Email: ${generateEmail(name)}<br/>
+    Web: www.jbjglobalrealestate.com
   </p>
   <img src="https://jbjglobalrealestate.com/logo.png" alt="JBJ Global" style="height: 40px; margin-top: 8px;"/>
 </div>`.trim();

@@ -225,10 +225,10 @@ ${response.script}
                       <SelectValue />
                     </SelectTriggerDark>
                     <SelectContentDark className="border-pink-500/30">
-                      <SelectItemDark value="1">📱 1 min (Social)</SelectItemDark>
-                      <SelectItemDark value="2-3">🎬 2-3 min (Standard)</SelectItemDark>
-                      <SelectItemDark value="5">🎥 5 min (Detailed)</SelectItemDark>
-                      <SelectItemDark value="10">🎞️ 10 min (Full Tour)</SelectItemDark>
+                      <SelectItemDark value="1">1 min — Social</SelectItemDark>
+                      <SelectItemDark value="2-3">2–3 min — Standard</SelectItemDark>
+                      <SelectItemDark value="5">5 min — Detailed</SelectItemDark>
+                      <SelectItemDark value="10">10 min — Full Tour</SelectItemDark>
                     </SelectContentDark>
                   </Select>
                 </div>

@@ -21,12 +21,12 @@ interface PhotoRedesignFormProps {
 }
 
 const designStyles = [
-  { id: 'modern', label: 'Modern Contemporary', emoji: '🏢' },
-  { id: 'classic', label: 'Classic Traditional', emoji: '🏛️' },
-  { id: 'minimalist', label: 'Minimalist', emoji: '⬜' },
-  { id: 'luxury', label: 'Luxury Opulent', emoji: '✨' },
-  { id: 'industrial', label: 'Industrial Chic', emoji: '🏭' },
-  { id: 'bohemian', label: 'Bohemian Eclectic', emoji: '🌿' },
+  { id: 'modern', label: 'Modern Contemporary', emoji: '' },
+  { id: 'classic', label: 'Classic Traditional', emoji: '' },
+  { id: 'minimalist', label: 'Minimalist', emoji: '' },
+  { id: 'luxury', label: 'Luxury Opulent', emoji: '' },
+  { id: 'industrial', label: 'Industrial Chic', emoji: '' },
+  { id: 'bohemian', label: 'Bohemian Eclectic', emoji: '' },
 ];
 
 const colorPalettes = [

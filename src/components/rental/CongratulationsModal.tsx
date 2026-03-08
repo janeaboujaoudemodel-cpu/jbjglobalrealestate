@@ -141,7 +141,7 @@ export function CongratulationsModal({
                 { step: 'Admin', icon: '✓' },
                 { step: 'Executive', icon: '✓' },
                 { step: 'CEO', icon: '✓' },
-                { step: 'Live', icon: '🎉' },
+                { step: 'Live', icon: '✓' },
               ].map((item, index) => (
                 <div key={item.step} className="flex items-center">
                   <div className="flex flex-col items-center">

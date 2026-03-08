@@ -138,11 +138,11 @@ const ChatConversationalCollect = React.memo(({ onComplete, onPreferForm, initia
       <div className="flex-1 p-4 overflow-y-auto">
         {detectedFullName ? (
           renderAgentMessage(
-            `Hi, ${detectedFullName}! 👋 I can see you're already a member. Could you please confirm that your full name is **${detectedFullName}**? If it's not correct, please type your correct full name below.`,
+            `Hi, ${detectedFullName}! I can see you're already a member. Could you please confirm that your full name is **${detectedFullName}**? If it's not correct, please type your correct full name below.`,
             'greeting'
           )
         ) : (
-          renderAgentMessage(`Hi there! 👋 I'm ${agent.name}, and I'll be helping you today. To get started, may I know your full name?`, 'greeting')
+          renderAgentMessage(`Hello! I'm ${agent.name}, and I'll be helping you today. To get started, may I know your full name?`, 'greeting')
         )}
         
         {detectedFullName && nameConfirmed && collectStep !== 'confirm_name' && (

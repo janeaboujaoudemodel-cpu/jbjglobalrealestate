@@ -378,7 +378,7 @@ export default function AISocialMediaPage() {
                   <ul className="space-y-2">
                     {result.engagementTips.map((tip, i) => (
                       <li key={i} className="flex items-start gap-2 text-zinc-300 text-sm">
-                        <span className="text-pink-400">💡</span>
+                        <span className="text-pink-400">•</span>
                         {tip}
                       </li>
                     ))}

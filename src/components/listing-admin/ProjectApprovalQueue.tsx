@@ -1021,7 +1021,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                     className="border-primary/40 text-foreground hover:bg-muted"
                   >
                     <RefreshCw className="h-4 w-4 mr-2" />
-                    ⚡ Fix All Listings
+                    Fix All Listings
                   </Button>
                 )}
                 {selectedIds.size > 0 && (

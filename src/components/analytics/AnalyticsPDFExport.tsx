@@ -113,12 +113,12 @@ export function AnalyticsPDFExport({ className }: AnalyticsPDFExportProps) {
           </style>
         </head>
         <body>
-          <h1>📊 JBJ Analytics Report</h1>
+          <h1>JBJ Analytics Report</h1>
           <p>Report Period: ${data.period}</p>
           <p>Generated: ${format(new Date(), 'PPP p')}</p>
           
           ${config.includeStats ? `
-          <h2>📈 Key Metrics</h2>
+          <h2>Key Metrics</h2>
           <div class="stats-grid">
             <div class="stat-card">
               <div class="stat-value">${data.stats.totalInteractions.toLocaleString()}</div>
@@ -140,7 +140,7 @@ export function AnalyticsPDFExport({ className }: AnalyticsPDFExportProps) {
           ` : ''}
           
           ${config.includeToolUsage ? `
-          <h2>🔧 Top Tools by Usage</h2>
+          <h2>Top Tools by Usage</h2>
           <ul class="tool-list">
             ${data.topTools.map(([name, count], idx) => `
               <li class="tool-item">

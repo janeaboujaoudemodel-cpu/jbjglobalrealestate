@@ -329,7 +329,7 @@ export const ALERT_CATEGORIES = [
 export const AYAAN_AI_PERSONALITY = {
   name: 'Ayaan',
   role: 'Senior Market Analyst',
-  avatar: '📊',
+  avatar: 'A',
   tone: 'Confident, analytical, data-driven',
   specialization: 'Real estate economics & forecasting',
   greeting: "Good day. I'm Ayaan, your Senior Market Analyst. I monitor Dubai's real estate market 24/7, analyzing trends, predicting movements, and identifying opportunities. What would you like to know about the market today?",
@@ -359,19 +359,19 @@ export const SENTIMENT_THRESHOLDS = {
 export const RISK_LEVEL_CONFIG = {
   low: {
     color: 'green',
-    icon: '✅',
+    icon: '+',
     description: 'Favorable conditions, low volatility',
     action: 'Proceed with confidence',
   },
   medium: {
     color: 'yellow',
-    icon: '⚠️',
+    icon: '!',
     description: 'Some uncertainty, monitor closely',
     action: 'Proceed with caution',
   },
   high: {
     color: 'red',
-    icon: '🚨',
+    icon: '!!',
     description: 'High volatility, significant risks',
     action: 'Wait or hedge positions',
   },
@@ -388,10 +388,10 @@ export const PROJECT_SCORING_WEIGHTS = {
 // Helper functions
 export function getTrendIcon(direction: MarketTrendDirection): string {
   switch (direction) {
-    case 'rising': return '📈';
-    case 'falling': return '📉';
-    case 'stable': return '➡️';
-    case 'volatile': return '📊';
+    case 'rising': return 'UP';
+    case 'falling': return 'DOWN';
+    case 'stable': return 'STABLE';
+    case 'volatile': return 'MIXED';
   }
 }
 
@@ -406,15 +406,15 @@ export function getPriorityColor(priority: MarketAlertPriority): string {
 
 export function getSentimentLabel(score: number): { label: string; color: string; icon: string } {
   if (score >= SENTIMENT_THRESHOLDS.very_positive) {
-    return { label: 'Very Positive', color: 'text-green-600', icon: '🚀' };
+    return { label: 'Very Positive', color: 'text-green-600', icon: 'UP' };
   } else if (score >= SENTIMENT_THRESHOLDS.positive) {
-    return { label: 'Positive', color: 'text-green-500', icon: '📈' };
+    return { label: 'Positive', color: 'text-green-500', icon: 'UP' };
   } else if (score >= SENTIMENT_THRESHOLDS.neutral_lower) {
-    return { label: 'Neutral', color: 'text-gray-500', icon: '➡️' };
+    return { label: 'Neutral', color: 'text-gray-500', icon: '--' };
   } else if (score >= SENTIMENT_THRESHOLDS.negative) {
-    return { label: 'Negative', color: 'text-orange-500', icon: '📉' };
+    return { label: 'Negative', color: 'text-orange-500', icon: 'DOWN' };
   } else {
-    return { label: 'Very Negative', color: 'text-red-600', icon: '⚠️' };
+    return { label: 'Very Negative', color: 'text-red-600', icon: 'ALERT' };
   }
 }
 

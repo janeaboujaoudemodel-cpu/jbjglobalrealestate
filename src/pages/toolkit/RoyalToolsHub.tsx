@@ -24,19 +24,7 @@ interface ToolCardProps {
 }
 
 // Category icons for headers
-const getCategoryIcon = (category: ToolCategory) => {
-  const icons: Record<ToolCategory, string> = {
-    media: '🎬',
-    creative: '🎨',
-    'ai-property': '🏠',
-    'ai-sales': '📈',
-    'ai-reports': '📊',
-    'ai-communication': '💬',
-    'ai-content': '✍️',
-    productivity: '⚡',
-  };
-  return icons[category] || '🔧';
-};
+// Category icons removed — Lucide icons used inline in category headers
 
 /**
  * ToolCard Component - LOCKED Champagne Gold Style
@@ -223,7 +211,7 @@ export default function RoyalToolsHub() {
                         <div key={category}>
                           {/* Category Header - Champagne style */}
                           <div className="flex items-center gap-3 mb-6">
-                            <span className="text-2xl">{getCategoryIcon(category)}</span>
+                            <Sparkles className="w-5 h-5 text-[#C9A84C]" />
                             <h2 
                               className="text-xl md:text-2xl font-bold text-black"
                               style={{ fontFamily: "Poppins, sans-serif" }}

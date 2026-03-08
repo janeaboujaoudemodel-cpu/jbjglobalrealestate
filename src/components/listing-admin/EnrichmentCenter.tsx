@@ -270,10 +270,10 @@ const ReellyEnrichmentPanel = () => {
             <div className="max-h-72 overflow-y-auto p-4 font-mono text-xs space-y-0.5">
               {job.log.map((entry, i) => (
                 <div key={i} className={`${
-                  entry.msg.includes("❌") ? "text-red-400" :
-                  entry.msg.includes("✅") ? "text-emerald-400" :
-                  entry.msg.includes("🎉") ? "text-yellow-300" :
-                  entry.msg.includes("⚠️") ? "text-amber-400" :
+                  entry.msg.includes("[ERROR]") ? "text-red-400" :
+                  entry.msg.includes("[OK]") ? "text-emerald-400" :
+                  entry.msg.includes("[COMPLETE]") ? "text-yellow-300" :
+                  entry.msg.includes("[WARN]") ? "text-amber-400" :
                   "text-zinc-400"
                 }`}>
                   <span className="text-zinc-600">[{new Date(entry.time).toLocaleTimeString()}]</span> {entry.msg}
@@ -344,14 +344,14 @@ const ProvidentEnrichmentPanel = () => {
     setTotalDocsAdded(0);
     setTotalFieldsUpdated(0);
     setLog([]);
-    addLog("🚀 Provident enrichment started...");
+    addLog("[START] Provident enrichment started...");
 
     let batch = 0;
     let offset = 0;
 
     while (!stopRef.current) {
       batch++;
-      addLog(`📦 Batch #${batch} starting (offset ${offset})...`);
+      addLog(`[BATCH] Batch #${batch} starting (offset ${offset})...`);
 
       try {
         const { data, error } = await supabase.functions.invoke("provident-enrich-projects", {
@@ -360,7 +360,7 @@ const ProvidentEnrichmentPanel = () => {
 
         if (error) throw error;
         if (!data?.results || data.results.length === 0) {
-          addLog("🎉 No more projects to enrich!");
+          addLog("[COMPLETE] No more projects to enrich.");
           break;
         }
 
@@ -377,22 +377,22 @@ const ProvidentEnrichmentPanel = () => {
         setTotalFieldsUpdated(prev => prev + fields);
 
         for (const r of data.results) {
-          const icon = r.slug_matched ? "✅" : "⚠️";
+          const icon = r.slug_matched ? "[OK]" : "[WARN]";
           addLog(`  ${icon} ${r.project_name}: ${r.slug_matched || "no match"} (+${r.images_added} imgs, +${r.documents_added} docs, ${r.fields_updated.join(",")})`);
         }
 
-        addLog(`📦 Batch #${batch} done: ${data.results.length} processed, ${matched} matched`);
+        addLog(`[BATCH] Batch #${batch} done: ${data.results.length} processed, ${matched} matched`);
         offset += data.results.length;
 
-        addLog("⏳ Waiting 3s...");
+        addLog("Waiting 3s...");
         await new Promise(r => setTimeout(r, 3000));
       } catch (err: any) {
-        addLog(`❌ Batch #${batch} error: ${err.message}`);
+        addLog(`[ERROR] Batch #${batch} error: ${err.message}`);
         await new Promise(r => setTimeout(r, 5000));
       }
     }
 
-    if (stopRef.current) addLog("⏸️ Paused by user.");
+    if (stopRef.current) addLog("[PAUSED] Paused by user.");
     setIsRunning(false);
     fetchGapStats();
   };
@@ -488,11 +488,11 @@ const ProvidentEnrichmentPanel = () => {
             <div className="max-h-72 overflow-y-auto p-4 font-mono text-xs space-y-0.5">
               {log.map((line, i) => (
                 <div key={i} className={`${
-                  line.includes("❌") ? "text-red-400" :
-                  line.includes("✅") ? "text-emerald-400" :
-                  line.includes("🎉") ? "text-yellow-300" :
-                  line.includes("⚠️") ? "text-amber-400" :
-                  line.includes("📦") ? "text-blue-400" :
+                  line.includes("[ERROR]") ? "text-red-400" :
+                  line.includes("[OK]") || line.includes("[COMPLETE]") ? "text-emerald-400" :
+                  line.includes("[START]") ? "text-yellow-300" :
+                  line.includes("[WARN]") ? "text-amber-400" :
+                  line.includes("[BATCH]") ? "text-blue-400" :
                   "text-zinc-400"
                 }`}>{line}</div>
               ))}

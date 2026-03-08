@@ -113,10 +113,10 @@ export default function DeliveryChecklistTab() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Statuses</SelectItem>
-            <SelectItem value="done">✅ Done</SelectItem>
-            <SelectItem value="partial">⚠️ Partial</SelectItem>
-            <SelectItem value="missing">❌ Missing</SelectItem>
-            <SelectItem value="needs_verification">🔍 Needs Verification</SelectItem>
+            <SelectItem value="done">Done</SelectItem>
+            <SelectItem value="partial">Partial</SelectItem>
+            <SelectItem value="missing">Missing</SelectItem>
+            <SelectItem value="needs_verification">Needs Verification</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -144,7 +144,7 @@ export default function DeliveryChecklistTab() {
                     <p className="text-sm text-zinc-400 mb-2">{item.requirement}</p>
                     {item.notes && (
                       <p className="text-xs text-amber-400/80 bg-amber-500/10 border border-amber-500/20 rounded px-2 py-1 mb-2">
-                        📝 {item.notes}
+                        Note: {item.notes}
                       </p>
                     )}
                     {item.evidence && item.evidence.length > 0 && (

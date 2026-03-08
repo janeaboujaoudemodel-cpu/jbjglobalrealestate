@@ -191,7 +191,7 @@ const FoundersDraftsPanel: React.FC = () => {
                             : 'border-gold/30 text-zinc-500 bg-zinc-50'
                         }`}
                       >
-                        {draft.status === 'sent' ? '✅ Sent' : '📝 Draft'}
+                        {draft.status === 'sent' ? 'Sent' : 'Draft'}
                       </Badge>
                     </div>
                     {draft.subject && (

@@ -126,7 +126,7 @@ const AIPersonalShopper = () => {
       // Fallback response
       const fallbackMessage: Message = {
         role: 'assistant',
-        content: `I apologize for the technical difficulty. Let me help you plan your UAE trip!\n\nBased on your request, here's what I can assist with:\n\n**Services Available:**\n- 🏠 Property viewing schedules\n- 🏨 Hotel recommendations & bookings\n- 🚗 Private transfers & chauffeur services\n- 🍽️ Restaurant reservations\n- 🎯 Activity & experience planning\n- 📋 Complete daily itineraries\n\nPlease share more details about your trip:\n- **Duration**: How many days?\n- **Purpose**: Relocation, property purchase, or leisure?\n- **Budget**: Your comfortable range\n- **Interests**: Specific areas or activities?\n\nOur team at JBJ Global Real Estate will ensure your UAE experience is exceptional! 📞 +971 56 591 1000`
+        content: `I apologize for the technical difficulty. Let me help you plan your UAE trip!\n\nBased on your request, here's what I can assist with:\n\n**Services Available:**\n- Property viewing schedules\n- Hotel recommendations & bookings\n- Private transfers & chauffeur services\n- Restaurant reservations\n- Activity & experience planning\n- Complete daily itineraries\n\nPlease share more details about your trip:\n- **Duration**: How many days?\n- **Purpose**: Relocation, property purchase, or leisure?\n- **Budget**: Your comfortable range\n- **Interests**: Specific areas or activities?\n\nOur team at JBJ Global Real Estate will ensure your UAE experience is exceptional. Call +971 56 591 1000`
       };
       setMessages(prev => [...prev, fallbackMessage]);
     }
