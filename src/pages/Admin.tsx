@@ -60,7 +60,7 @@ import {
 } from "lucide-react";
 import { Loader2 } from "lucide-react";
 import { SmartDocumentUploader } from "@/components/SmartDocumentUploader";
-import { ClipboardList, Users, Briefcase, Megaphone, Smartphone, LayoutDashboard, Bot, Mic, Send, Handshake, BookOpen } from "lucide-react";
+import { ClipboardList, Users, Briefcase, Megaphone, Smartphone, LayoutDashboard, Bot, Mic, Send, Handshake, BookOpen, Headphones } from "lucide-react";
 import { CommandPalette } from "@/components/ui/command-palette";
 import { FloatingActionBar } from "@/components/ui/floating-action-bar";
 import { Link } from "react-router-dom";
