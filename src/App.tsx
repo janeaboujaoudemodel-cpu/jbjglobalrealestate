@@ -628,7 +628,7 @@ const App = () => {
                 <Route path="/ai-contract-reviewer" element={<BrokerGuard><AIContractReviewerPage /></BrokerGuard>} />
                 <Route path="/ai-document-generator" element={<AIDocumentGeneratorPage />} />
                 <Route path="/ai-call-summarizer" element={<BrokerGuard><AICallSummarizerPage /></BrokerGuard>} />
-                <Route path="/meeting-center" element={<BrokerGuard><MeetingCenter /></BrokerGuard>} />
+                <Route path="/meeting-center" element={<MeetingCenter />} />
                 <Route path="/voice-settings" element={<VoiceAgentSettings />} />
                 <Route path="/document-scanner" element={<ScanSignDocuments />} />
                 <Route path="/scan-sign" element={<Navigate to="/document-scanner" replace />} />
