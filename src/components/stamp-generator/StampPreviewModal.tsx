@@ -264,6 +264,24 @@ export function StampPreviewModal({
               <Layers size={14}/> Go to Gallery
             </Button>
           )}
+          {/* Use in E-Signature */}
+          <Button
+            variant="outline"
+            onClick={() => {
+              // Save stamp SVG to sessionStorage for e-signature flow
+              try {
+                sessionStorage.setItem('esignature_stamp_svg', displaySvg);
+                sessionStorage.setItem('esignature_stamp_color', tintColor);
+                toast.success('Stamp saved! Redirecting to E-Signature…');
+                navigate('/e-signature/create');
+              } catch {
+                toast.error('Failed to save stamp for E-Signature');
+              }
+            }}
+            className="w-full gap-2 text-sm border-[hsl(var(--gold)/0.3)] hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold)/0.05)]"
+          >
+            <PenTool size={14}/> Use in E-Signature
+          </Button>
           {/* Edit Text toggle */}
           <Button
             variant={showTextEditor ? 'default' : 'outline'}
