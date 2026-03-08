@@ -465,7 +465,7 @@ const BrokerHub = () => {
           <p className="text-zinc-400 text-sm mb-4">Access 30+ free AI tools including creative suites, corporate tools, and productivity apps.</p>
           <div className="flex flex-wrap justify-center gap-3">
             <Button onClick={() => navigate('/ai-hub')} className="bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white font-medium">
-              Go to JBJ Tools Hub
+              Go to JBJ Royal Tools Hub
               <ArrowUpRight className="w-4 h-4 ml-2" />
             </Button>
             <Button onClick={() => navigate('/ai-hub?suite=creative')} className="bg-pink-600 hover:bg-pink-700 text-white font-medium">
@@ -507,7 +507,7 @@ const BrokerHub = () => {
             <h3 className="text-xl font-bold text-white mb-2">Access All AI Tools</h3>
             <p className="text-zinc-400 text-sm mb-4">Browse the complete collection of 30+ AI-powered tools.</p>
             <Button onClick={() => navigate('/ai-hub')} className="bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white border-0 font-medium">
-              Go to JBJ Tools Hub
+              Go to JBJ Royal Tools Hub
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </div>
