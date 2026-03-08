@@ -65,6 +65,8 @@ interface EnrichResult {
   images_added: number;
   documents_added: number;
   fields_updated: string[];
+  before_data?: Record<string, unknown>;
+  after_data?: Record<string, unknown>;
   error?: string;
 }
 
@@ -240,7 +242,7 @@ async function enrichProject(
         const { error: docErr } = await supabase.from("project_documents").insert({
           project_id: project.id,
           document_type: doc.type,
-          document_url: mirrored.publicUrl,
+          file_url: mirrored.publicUrl,
           file_name: `${doc.type}.pdf`,
           data_source: "provident",
         });
@@ -269,22 +271,26 @@ Deno.serve(async (req) => {
     const batchSize = Math.min(body.batch_size || 10, 50);
     const offset = body.offset || 0;
     const dryRun = body.dry_run === true;
+    const mode = (body.mode as "all" | "published" | "drafts") || "all";
 
-    console.log(`[ProvidentEnrich] Starting. project_id=${projectId || "batch"}, batch=${batchSize}, offset=${offset}, dry_run=${dryRun}`);
+    console.log(`[ProvidentEnrich] Starting. project_id=${projectId || "batch"}, mode=${mode}, batch=${batchSize}, offset=${offset}, dry_run=${dryRun}`);
 
-    // Query projects needing enrichment
+    // Query projects needing enrichment (strictly Provident-sourced)
     let query = supabase
       .from("projects")
-      .select("id, name, area_name, developer_name, amenities, payment_plan, payment_breakdown, floor_plan_types, faqs, location_distances, description")
+      .select("id, name, source_url, is_published, area_name, developer_name, amenities, payment_plan, payment_breakdown, floor_plan_types, faqs, location_distances, description")
+      .ilike("source_url", "%providentestate.com%")
       .order("created_at", { ascending: false });
 
     if (projectId) {
       query = query.eq("id", projectId);
     } else {
-      // Find projects missing key data
       query = query
-        .or("amenities.is.null,payment_plan.is.null,payment_breakdown.is.null")
+        .or("amenities.is.null,payment_plan.is.null,payment_breakdown.is.null,description.is.null")
         .range(offset, offset + batchSize - 1);
+
+      if (mode === "published") query = query.eq("is_published", true);
+      if (mode === "drafts") query = query.or("is_published.is.null,is_published.eq.false");
     }
 
     const { data: projects, error: fetchErr } = await query;
