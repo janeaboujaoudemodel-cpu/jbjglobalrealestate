@@ -65,6 +65,7 @@ import { CommandPalette } from "@/components/ui/command-palette";
 import { FloatingActionBar } from "@/components/ui/floating-action-bar";
 import { Link } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
+import { AdminNotificationBell } from "@/components/admin/AdminNotificationBell";
 
 // Lazy-load ALL tab content components for fast initial render
 const AdminOverviewDashboard = lazy(() => import("@/components/admin/AdminOverviewDashboard").then(m => ({ default: m.AdminOverviewDashboard })));
