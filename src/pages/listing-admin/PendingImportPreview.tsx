@@ -183,6 +183,35 @@ const PendingImportPreview = () => {
     fetchImport();
   }, [id, toast]);
 
+  // Look up developer details (logo, description, etc.) from developers table
+  const [developerDetails, setDeveloperDetails] = useState<{
+    slug?: string | null;
+    logo_url?: string | null;
+    description?: string | null;
+    founded_year?: number | null;
+    completed_projects?: number | null;
+    offplan_projects?: number | null;
+    headquarters?: string | null;
+    website_url?: string | null;
+    ceo_name?: string | null;
+    total_units_delivered?: number | null;
+    notable_projects?: string | null;
+    specialization?: string | null;
+  } | null>(null);
+
+  useEffect(() => {
+    const fetchDeveloper = async () => {
+      if (!pendingImport?.developer_name) return;
+      const { data } = await supabase
+        .from("developers")
+        .select("slug, logo_url, description, founded_year, completed_projects, offplan_projects, headquarters, website_url, ceo_name, total_units_delivered, notable_projects, specialization")
+        .ilike("name", pendingImport.developer_name)
+        .maybeSingle();
+      if (data) setDeveloperDetails(data);
+    };
+    fetchDeveloper();
+  }, [pendingImport?.developer_name]);
+
   const mapped = useMemo<ProjectDetailData | null>(() => {
     if (!pendingImport) return null;
 
@@ -210,7 +239,21 @@ const PendingImportPreview = () => {
       slug: pendingImport.slug,
       description: pendingImport.description?.startsWith("Generated from") ? null : pendingImport.description,
       location: pendingImport.location,
-      developer: pendingImport.developer_name ? { name: pendingImport.developer_name } : null,
+      developer: pendingImport.developer_name ? {
+        name: pendingImport.developer_name,
+        slug: developerDetails?.slug ?? null,
+        logo_url: developerDetails?.logo_url ?? null,
+        description: developerDetails?.description ?? null,
+        founded_year: developerDetails?.founded_year ?? null,
+        completed_projects: developerDetails?.completed_projects ?? null,
+        offplan_projects: developerDetails?.offplan_projects ?? null,
+        headquarters: developerDetails?.headquarters ?? null,
+        website_url: developerDetails?.website_url ?? null,
+        ceo_name: developerDetails?.ceo_name ?? null,
+        total_units_delivered: developerDetails?.total_units_delivered ?? null,
+        notable_projects: developerDetails?.notable_projects ?? null,
+        specialization: developerDetails?.specialization ?? null,
+      } : null,
       price_from: pendingImport.price_from,
       price_to: pendingImport.price_to,
       bedrooms_min: pendingImport.bedrooms_min,
@@ -250,7 +293,7 @@ const PendingImportPreview = () => {
       latitude: pendingImport.latitude,
       longitude: pendingImport.longitude,
     };
-  }, [pendingImport]);
+  }, [pendingImport, developerDetails]);
 
   // Duplicate detection – mirrors ProjectApprovalQueue logic
   const checkForDuplicates = useCallback(
