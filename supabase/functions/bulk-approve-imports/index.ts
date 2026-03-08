@@ -331,8 +331,8 @@ serve(async (req) => {
           cover_image_url: coverImageUrl,
           // Reelly fields
           reelly_id: reellyId,
-          source: 'reelly',
-          import_source: 'reelly',
+          source: detectSource(item.source_url),
+          import_source: detectSource(item.source_url),
           source_updated_at: item.source_updated_at || null,
           // Flags
           is_offplan: true,

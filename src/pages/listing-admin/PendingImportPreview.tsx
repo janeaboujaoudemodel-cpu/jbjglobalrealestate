@@ -418,7 +418,7 @@ const PendingImportPreview = () => {
         description: `"${pendingImport.name}" has been added to your listings`,
       });
 
-      navigate("/listing-admin");
+      navigate("/listing-admin?view=data-ops&syncTab=approvals");
     } catch (error) {
       console.error("Error approving import:", error);
       toast({
@@ -484,7 +484,7 @@ const PendingImportPreview = () => {
         description: `Updates merged into existing "${pendingImport.name}"`,
       });
 
-      navigate("/listing-admin");
+      navigate("/listing-admin?view=data-ops&syncTab=approvals");
     } catch (error) {
       console.error("Error merging import:", error);
       toast({
@@ -515,7 +515,7 @@ const PendingImportPreview = () => {
         description: "The import has been rejected",
       });
 
-      navigate("/listing-admin");
+      navigate("/listing-admin?view=data-ops&syncTab=approvals");
     } catch (error) {
       console.error("Error rejecting import:", error);
       toast({
@@ -581,7 +581,7 @@ const PendingImportPreview = () => {
         <div className="container mx-auto px-4 flex items-center justify-between flex-wrap gap-4">
           <Button 
             variant="primary" 
-            onClick={() => navigate("/listing-admin")}
+            onClick={() => navigate("/listing-admin?view=data-ops&syncTab=approvals")}
             className="hover:shadow-lg hover:-translate-y-0.5 transition-all"
           >
             <ArrowLeft className="w-4 h-4" />
