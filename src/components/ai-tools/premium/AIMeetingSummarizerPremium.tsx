@@ -5,8 +5,9 @@ import {
   ListChecks, Users, Clock, Target, Calendar,
   Home, Calculator, Brain, Send, Plus, Mic, Square,
   Globe, MessageSquare, Search, UserPlus, X, Pause, Play,
-  Save, Trash2
+  Save, Trash2, Video, Phone, MonitorSmartphone
 } from "lucide-react";
+import MeetingConsentSection from "./MeetingConsentSection";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
