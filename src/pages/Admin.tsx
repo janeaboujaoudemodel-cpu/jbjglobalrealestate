@@ -2,6 +2,7 @@ import { useEffect, useState, useRef, lazy, Suspense } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProjects, useDevelopers, useCommunities, useProjectsTotalCount } from "@/hooks/useProjects";
+import { useAreas } from "@/hooks/useAreas";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -126,6 +127,7 @@ const Admin = () => {
   const { data: projects, refetch: refetchProjects } = useProjects();
   const { data: developers } = useDevelopers();
   const { data: communities } = useCommunities();
+  const { data: areas } = useAreas();
   const { data: totalProjectsCount } = useProjectsTotalCount();
 
   const [searchQuery, setSearchQuery] = useState("");
