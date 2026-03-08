@@ -61,7 +61,7 @@ IMPORTANT: Only return the JSON array, nothing else. Be accurate - these are rea
     const lovableApiKey = Deno.env.get("LOVABLE_API_KEY") || "";
     if (!lovableApiKey) throw new Error("Missing LOVABLE_API_KEY");
 
-    const aiResp = await fetch("https://api.lovable.dev/v1/chat/completions", {
+    const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${lovableApiKey}`,
