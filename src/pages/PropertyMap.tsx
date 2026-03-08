@@ -12,10 +12,76 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Slider } from "@/components/ui/slider";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Link } from "react-router-dom";
-import { MapPin, Building, Bed, Maximize, Calendar, Filter, List, X, ChevronRight, ExternalLink } from "lucide-react";
+import { MapPin, Building, Bed, Maximize, Calendar, Filter, List, X, ChevronRight, ExternalLink, Globe } from "lucide-react";
 import { SafeImage } from "@/components/SafeImage";
 import { MapNavigationControls } from "@/components/maps/MapNavigationControls";
 import "leaflet/dist/leaflet.css";
+
+// Arabic translations for the map interface
+const mapTranslations = {
+  en: {
+    propertyMap: "Property Map",
+    properties: "Properties",
+    searchProjects: "Search by project, developer, or area...",
+    filters: "Filters",
+    list: "List",
+    transactionType: "Transaction Type",
+    all: "All",
+    buy: "Buy",
+    rent: "Rent",
+    search: "Search",
+    developer: "Developer",
+    allDevelopers: "All Developers",
+    area: "Area",
+    allAreas: "All Areas",
+    bedrooms: "Bedrooms",
+    any: "Any",
+    studio: "Studio",
+    bedroom: "Bedroom",
+    bedrooms_label: "Bedrooms",
+    priceRange: "Price Range",
+    clearAll: "Clear All Filters",
+    filterProperties: "Filter Properties",
+    priceOnRequest: "Price on request",
+    startingFrom: "Starting from",
+    viewDetails: "View Details",
+    view: "View",
+    by: "by",
+    loading: "Loading properties...",
+  },
+  ar: {
+    propertyMap: "خريطة العقارات",
+    properties: "عقارات",
+    searchProjects: "ابحث عن مشروع أو مطور أو منطقة...",
+    filters: "تصفية",
+    list: "قائمة",
+    transactionType: "نوع المعاملة",
+    all: "الكل",
+    buy: "شراء",
+    rent: "إيجار",
+    search: "بحث",
+    developer: "المطور",
+    allDevelopers: "جميع المطورين",
+    area: "المنطقة",
+    allAreas: "جميع المناطق",
+    bedrooms: "غرف النوم",
+    any: "أي",
+    studio: "استوديو",
+    bedroom: "غرفة نوم",
+    bedrooms_label: "غرف نوم",
+    priceRange: "نطاق السعر",
+    clearAll: "مسح جميع الفلاتر",
+    filterProperties: "تصفية العقارات",
+    priceOnRequest: "السعر عند الطلب",
+    startingFrom: "يبدأ من",
+    viewDetails: "عرض التفاصيل",
+    view: "عرض",
+    by: "من",
+    loading: "جاري تحميل العقارات...",
+  },
+} as const;
+
+type MapLang = "en" | "ar";
 
 // Hook to fetch areas for filter
 function useAreas() {
