@@ -776,7 +776,7 @@ export default function StampExportPage() {
                     toast.error('Failed to save stamp');
                   }
                 }}>
-                <Image size={14}/> Use in E-Signature
+                <PenTool size={14}/> Use in E-Signature
               </Button>
             </div>
 
