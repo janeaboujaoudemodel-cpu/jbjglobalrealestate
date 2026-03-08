@@ -144,19 +144,19 @@ const FoundersInsightsPanel: React.FC = () => {
             </CardContent>
           </Card>
           
-          <Card className={weeklySummary.efficiencyChange >= 0 ? 'bg-primary/5 border-primary/20' : 'bg-destructive/5 border-destructive/20'}>
+          <Card className={weeklySummary.efficiencyChange >= 0 ? 'bg-[#C9A84C]/10 border-[#C9A84C]/30' : 'bg-destructive/5 border-destructive/20'}>
             <CardContent className="p-4">
               <div className="flex items-center gap-2 mb-2">
                 {weeklySummary.efficiencyChange >= 0 ? (
-                  <TrendingUp className="h-4 w-4 text-primary" />
+                  <TrendingUp className="h-4 w-4 text-[#C9A84C]" />
                 ) : (
                   <TrendingDown className="h-4 w-4 text-destructive" />
                 )}
-                <span className="text-xs text-muted-foreground">Efficiency</span>
+                <span className="text-xs text-zinc-600 font-medium">Efficiency</span>
               </div>
               <p className={cn(
                 "text-2xl font-bold",
-                weeklySummary.efficiencyChange >= 0 ? "text-primary" : "text-destructive"
+                weeklySummary.efficiencyChange >= 0 ? "text-[#C9A84C]" : "text-destructive"
               )}>
                 {weeklySummary.efficiencyChange > 0 ? '+' : ''}{weeklySummary.efficiencyChange}%
               </p>
@@ -183,13 +183,13 @@ const FoundersInsightsPanel: React.FC = () => {
             </CardContent>
           </Card>
           
-          <Card className="bg-primary/5 border-primary/20">
+          <Card className="bg-[#C9A84C]/10 border-[#C9A84C]/30">
             <CardContent className="p-4">
               <div className="flex items-center gap-2 mb-2">
-                <Zap className="h-4 w-4 text-primary" />
-                <span className="text-xs text-muted-foreground">Optimized</span>
+                <Zap className="h-4 w-4 text-[#C9A84C]" />
+                <span className="text-xs text-zinc-600 font-medium">Optimized</span>
               </div>
-              <p className="text-2xl font-bold text-primary">{weeklySummary.optimizationsApplied}</p>
+              <p className="text-2xl font-bold text-[#C9A84C]">{weeklySummary.optimizationsApplied}</p>
             </CardContent>
           </Card>
         </div>
