@@ -242,7 +242,7 @@ async function enrichProject(
         const { error: docErr } = await supabase.from("project_documents").insert({
           project_id: project.id,
           document_type: doc.type,
-          document_url: mirrored.publicUrl,
+          file_url: mirrored.publicUrl,
           file_name: `${doc.type}.pdf`,
           data_source: "provident",
         });
