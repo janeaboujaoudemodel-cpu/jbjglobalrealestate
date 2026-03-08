@@ -654,7 +654,7 @@ export const EmbeddedCustomerHappinessHub = () => {
 
               {selectedReview.improve_text && (
                 <div className="p-3 bg-amber-50 rounded-lg border border-amber-200">
-                  <p className="text-xs text-zinc-500 mb-1">💡 Improvement suggestion</p>
+                  <p className="text-xs text-zinc-500 mb-1">Improvement suggestion</p>
                   <p className="text-sm text-black">{selectedReview.improve_text}</p>
                 </div>
               )}

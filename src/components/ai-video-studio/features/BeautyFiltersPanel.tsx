@@ -202,7 +202,7 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
     setSelectedPreset('custom');
     setAdjustments(lut.adjustments);
     notifyFilterChange(lut.adjustments);
-    toast.success(`${lut.emoji} ${lut.name} applied`);
+    toast.success(`${lut.name} applied`);
   };
 
   const updateAdjustment = (key: keyof BeautyAdjustments, value: number) => {
