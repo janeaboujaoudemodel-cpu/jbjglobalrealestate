@@ -567,7 +567,7 @@ export default function OwnerDashboardOverview() {
         </TabsList>
 
         {/* Overview Tab */}
-        <TabsContent value="overview" className="space-y-6">
+        <TabsContent value="overview" className="space-y-6 mt-0">
           <Suspense fallback={<Skeleton className="h-40 w-full" />}>
             <CRMDashboardCards userId={user?.id || ""} hasOwnerAccess={true} />
           </Suspense>
@@ -575,7 +575,7 @@ export default function OwnerDashboardOverview() {
           <div className="grid lg:grid-cols-3 gap-6">
             {/* Newest Leads */}
             <Card className="bg-white/70 border-2 border-[#C9A84C]/30 lg:col-span-2 shadow-sm overflow-hidden min-w-0">
-              <CardHeader className="flex flex-row items-center justify-between">
+              <CardHeader className="flex flex-row items-center justify-between pb-3">
                 <div>
                   <CardTitle className="text-lg text-black">Newest Leads</CardTitle>
                   <CardDescription className="text-zinc-500">Most recent contacts</CardDescription>
@@ -589,15 +589,15 @@ export default function OwnerDashboardOverview() {
                   View All <ChevronRight className="h-4 w-4 ml-1" />
                 </Button>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pt-0">
                 {loadingNewestLeads ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {Array.from({ length: 6 }).map((_, i) => (
                       <Skeleton key={i} className="h-32 bg-[#C9A84C]/10 rounded-lg" />
                     ))}
                   </div>
                 ) : newestLeads && newestLeads.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {newestLeads.map((lead) => (
                       <LeadRow 
                         key={lead.id} 
@@ -625,13 +625,13 @@ export default function OwnerDashboardOverview() {
 
             {/* Needs Follow-up */}
             <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm overflow-hidden min-w-0">
-              <CardHeader className="flex flex-row items-center justify-between">
+              <CardHeader className="flex flex-row items-center justify-between pb-3">
                 <div>
-                  <CardTitle className="text-lg text-black flex items-center gap-2">
+                  <CardTitle className="text-base text-black flex items-center gap-2">
                     <Clock className="h-5 w-5 text-amber-600" />
                     Needs Follow-up
                   </CardTitle>
-                  <CardDescription className="text-zinc-500">Pending items</CardDescription>
+                  <CardDescription className="text-zinc-500 text-xs">Pending items</CardDescription>
                 </div>
                 <Button 
                   variant="ghost" 
@@ -642,7 +642,7 @@ export default function OwnerDashboardOverview() {
                   <ChevronRight className="h-4 w-4" />
                 </Button>
               </CardHeader>
-              <CardContent className="space-y-2">
+              <CardContent className="space-y-2 pt-0 max-h-[400px] overflow-y-auto scrollbar-hide">
                 {loadingFollowUp ? (
                   Array.from({ length: 4 }).map((_, i) => (
                     <Skeleton key={i} className="h-14 bg-[#C9A84C]/10" />
@@ -668,22 +668,22 @@ export default function OwnerDashboardOverview() {
 
           {/* Recent Conversations */}
           <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
-            <CardHeader>
+            <CardHeader className="pb-3">
               <CardTitle className="text-lg text-black flex items-center gap-2">
                 <Activity className="h-5 w-5 text-purple-600" />
                 Recent Conversations
               </CardTitle>
-              <CardDescription className="text-zinc-500">Website chat sessions (last 10)</CardDescription>
+              <CardDescription className="text-zinc-500">Website chat sessions</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="pt-0">
               {loadingRecentConvos ? (
-                <div className="grid md:grid-cols-2 gap-2">
+                <div className="grid md:grid-cols-2 gap-3">
                   {Array.from({ length: 4 }).map((_, i) => (
                     <Skeleton key={i} className="h-16 bg-[#C9A84C]/10" />
                   ))}
                 </div>
               ) : recentConversations && recentConversations.length > 0 ? (
-                <div className="grid md:grid-cols-2 gap-2">
+                <div className="grid md:grid-cols-2 gap-3">
                   {recentConversations.map((convo) => (
                     <ConversationRow key={convo.id} conversation={convo} />
                   ))}
@@ -692,6 +692,7 @@ export default function OwnerDashboardOverview() {
                 <div className="text-center py-8">
                   <MessageSquare className="h-12 w-12 text-[#C9A84C]/40 mx-auto mb-3" />
                   <p className="text-zinc-500">No conversations yet</p>
+                  <p className="text-zinc-400 text-xs mt-1">Conversations from website visitors will appear here</p>
                 </div>
               )}
             </CardContent>
