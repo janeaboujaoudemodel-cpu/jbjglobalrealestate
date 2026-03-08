@@ -4,10 +4,11 @@
  */
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 import { StampSVGRenderer } from './StampSVGRenderer';
 import { StampTextEditor } from './StampTextEditor';
 import { Button } from '@/components/ui/button';
-import { X, ArrowLeft, Download, CreditCard, FileText, Mail, Loader2, Maximize2, Type, ZoomIn, ZoomOut, RotateCcw, Scroll, Stamp, BookOpen, Layers, Lock, Unlock } from 'lucide-react';
+import { X, ArrowLeft, Download, CreditCard, FileText, Mail, Loader2, Maximize2, Type, ZoomIn, ZoomOut, RotateCcw, Scroll, Stamp, BookOpen, Layers, Lock, Unlock, PenTool, Book } from 'lucide-react';
 import { StampDesignConcept } from '@/lib/stampTemplates';
 
 interface Props {
@@ -28,7 +29,7 @@ interface Props {
   projectId?: string;
 }
 
-type MockupView = 'business-card' | 'letterhead' | 'envelope' | 'contract' | 'wax-seal' | 'stationery';
+type MockupView = 'business-card' | 'letterhead' | 'envelope' | 'contract' | 'wax-seal' | 'stationery' | 'book-cover';
 
 export function StampPreviewModal({
   concept, project, tintColor, secondaryColor, accentColor, svgOverride, onBack, onSelectAndExport, onSvgChange,
@@ -110,6 +111,7 @@ export function StampPreviewModal({
     { key: 'contract',      label: 'Contract',      icon: Scroll },
     { key: 'wax-seal',      label: 'Wax Seal',      icon: Stamp },
     { key: 'stationery',    label: 'Stationery',    icon: BookOpen },
+    { key: 'book-cover',    label: 'Book Cover',    icon: Book },
   ];
 
   return (
