@@ -251,6 +251,8 @@ const PropertyMap = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [showList, setShowList] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [mapLang, setMapLang] = useState<MapLang>("en");
+  const t = mapTranslations[mapLang];
   
   // Filters
   const [searchTerm, setSearchTerm] = useState("");
