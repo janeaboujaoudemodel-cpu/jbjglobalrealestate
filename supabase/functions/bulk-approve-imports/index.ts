@@ -49,6 +49,14 @@ interface UnitTypeData {
  * This ensures 100% parity with the Reelly API source.
  */
 
+function detectSource(sourceUrl: string | null): string {
+  if (!sourceUrl) return "manual";
+  const lower = sourceUrl.toLowerCase();
+  if (lower.includes("providentestate.com") || lower.includes("provident")) return "provident";
+  if (lower.includes("reelly") || lower.includes("#reelly_")) return "reelly";
+  return "manual";
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });

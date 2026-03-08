@@ -57,7 +57,7 @@ export function FloorPlanGallery({
       pdfUrl: doc.url,
       imageUrl: undefined,
     })),
-  ];
+  ].filter(fp => fp.pdfUrl || fp.imageUrl); // Only keep items that have actual content
 
   // Show fallback if no floor plans at all
   if (floorPlans.length === 0) {
