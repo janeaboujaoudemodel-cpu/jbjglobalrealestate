@@ -125,6 +125,8 @@ const ListingPortalSubmit = () => {
   const [isRunningPredictor, setIsRunningPredictor] = useState(false);
   const [sellerRole, setSellerRole] = useState(savedState?.sellerRole || 'owner');
   const [contactMode, setContactMode] = useState<'direct' | 'commission'>(savedState?.contactMode || 'commission');
+  const [sourceUrl, setSourceUrl] = useState(savedState?.sourceUrl || '');
+  const [sourceText, setSourceText] = useState(savedState?.sourceText || '');
   
   const [form, setForm] = useState(savedState?.form || {
     title: '', description: '', listing_type: initialListingType, listing_category: initialCategory,
