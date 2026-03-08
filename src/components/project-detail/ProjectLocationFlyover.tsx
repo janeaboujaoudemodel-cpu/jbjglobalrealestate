@@ -152,8 +152,33 @@ export default function ProjectLocationFlyover({
   const [currentStep, setCurrentStep] = useState(0);
   const [animationDone, setAnimationDone] = useState(false);
   const [showPin, setShowPin] = useState(false);
+  const autoPlayedRef = useRef(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const target: [number, number] = [latitude, longitude];
+
+  // Auto-play when scrolled into view (once)
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !autoPlayedRef.current) {
+          autoPlayedRef.current = true;
+          // Small delay to let map tiles load
+          setTimeout(() => {
+            setIsPlaying(true);
+            setCurrentStep(0);
+            setAnimationDone(false);
+            setShowPin(false);
+          }, 500);
+        }
+      },
+      { threshold: 0.4 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   const handlePlay = useCallback(() => {
     setIsPlaying(true);
@@ -193,7 +218,7 @@ export default function ProjectLocationFlyover({
   };
 
   return (
-    <div className={`relative rounded-2xl overflow-hidden ${className}`} style={{ height: 400, border: '3px solid hsl(42 45% 59%)', boxShadow: '0 8px 32px rgba(200,167,102,0.25)' }}>
+    <div ref={containerRef} className={`relative rounded-2xl overflow-hidden ${className}`} style={{ height: 400, border: '3px solid hsl(42 45% 59%)', boxShadow: '0 8px 32px rgba(200,167,102,0.25)' }}>
       {/* Premium pin animation styles + artifact fixes */}
       <style>{`
         .premium-location-pin {

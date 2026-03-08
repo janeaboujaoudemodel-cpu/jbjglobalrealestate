@@ -19,6 +19,9 @@ export default function PremiumHorizontalScrollHint({
   const [thumbWidth, setThumbWidth] = useState(0);
   const [showRail, setShowRail] = useState(false);
   const railRef = useRef<HTMLDivElement>(null);
+  const dragging = useRef(false);
+  const dragStartX = useRef(0);
+  const dragStartScrollLeft = useRef(0);
 
   const measure = useCallback(() => {
     const el = scrollRef.current;
@@ -56,6 +59,28 @@ export default function PremiumHorizontalScrollHint({
     scrollRef.current?.scrollBy({ left: dir === "left" ? -180 : 180, behavior: "smooth" });
   };
 
+  // Drag-to-scroll on rail/thumb
+  const handlePointerDown = useCallback((e: React.PointerEvent) => {
+    e.preventDefault();
+    dragging.current = true;
+    dragStartX.current = e.clientX;
+    dragStartScrollLeft.current = scrollRef.current?.scrollLeft ?? 0;
+    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+  }, [scrollRef]);
+
+  const handlePointerMove = useCallback((e: React.PointerEvent) => {
+    if (!dragging.current || !scrollRef.current || !railRef.current) return;
+    const railW = railRef.current.clientWidth;
+    const el = scrollRef.current;
+    const deltaX = e.clientX - dragStartX.current;
+    const scrollRatio = el.scrollWidth / railW;
+    el.scrollLeft = dragStartScrollLeft.current + deltaX * scrollRatio;
+  }, [scrollRef]);
+
+  const handlePointerUp = useCallback(() => {
+    dragging.current = false;
+  }, []);
+
   if (!showRail) return null;
 
   const btnSize = arrowSize === "sm" ? "w-8 h-8" : "w-9 h-9";
@@ -79,13 +104,18 @@ export default function PremiumHorizontalScrollHint({
         <ChevronLeft className={iconSize} />
       </button>
 
-      {/* Gold Rail */}
+      {/* Gold Rail — draggable */}
       <div
         ref={railRef}
-        className="flex-1 h-[5px] rounded-full relative overflow-hidden"
+        className="flex-1 h-[5px] rounded-full relative overflow-hidden cursor-pointer"
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
+        style={{ touchAction: 'none' }}
       >
         <div
-          className="absolute top-0 h-full rounded-full bg-gradient-to-r from-gold/60 to-gold/40 transition-[left,width] duration-100"
+          className="absolute top-0 h-full rounded-full bg-gradient-to-r from-gold/60 to-gold/40 transition-[left,width] duration-100 cursor-grab active:cursor-grabbing"
           style={{ left: thumbLeft, width: thumbWidth }}
         />
       </div>
