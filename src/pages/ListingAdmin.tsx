@@ -622,7 +622,7 @@ const ListingAdmin = () => {
       {/* Premium Dashboard Shell — full bleed, no black gaps */}
       <div className="border-b border-[#C9A84C]/20 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
       {/* Header - Clean neutral style */}
-      <header className="border-b border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-20 lg:top-24 z-40 rounded-t-2xl">
+      <header className="border-b border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-0 z-40">
         <div className="max-w-[1200px] mx-auto px-4 py-4">
           {/* Row 1: Title and actions */}
           <div className="flex items-center justify-between gap-4 mb-4">
