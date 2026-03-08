@@ -660,7 +660,7 @@ const ListingPortalSubmit = () => {
                           <Upload className="w-10 h-10 text-gold mx-auto mb-3" />
                           <p className="text-black font-medium mb-1">Drop files here or click to browse</p>
                           <p className="text-zinc-500 text-xs">
-                            PDF, JPG, PNG, DOCX, XLSX — up to 20MB each
+                            PDF, JPG, PNG, DOCX, XLSX — up to 100MB each
                           </p>
                           <input
                             id="file-input"
