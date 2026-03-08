@@ -598,7 +598,7 @@ export default function VoiceSuite() {
                   style={{ color: '#a1a1aa', backgroundColor: 'transparent' }}
                 >
                   <ArrowLeft className="w-4 h-4 mr-2" style={{ color: '#a1a1aa' }} />
-                  <span style={{ color: '#a1a1aa' }}>Back to Toolkit</span>
+                  <span style={{ color: '#a1a1aa' }}>Back to Royal Tools Hub</span>
                 </Button>
               </Link>
             </div>

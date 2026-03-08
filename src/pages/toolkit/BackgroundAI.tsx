@@ -863,7 +863,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
           <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
             <Link to="/toolkit" className="flex items-center gap-2 px-3 py-2 rounded-lg transition-colors text-white/50 hover:text-white"
               style={{ border: `1px solid ${C.border}` }}>
-              <ArrowLeft className="h-4 w-4" /><span className="text-sm">Back to Toolkit</span>
+              <ArrowLeft className="h-4 w-4" /><span className="text-sm">Back to Royal Tools Hub</span>
             </Link>
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold"
               style={{ background: "rgba(99,102,241,0.12)", border: `1px solid ${C.border}`, color: C.accentText }}>

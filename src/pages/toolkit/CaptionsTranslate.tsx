@@ -239,7 +239,7 @@ export default function CaptionsTranslate({ embedded = false }: CaptionsTranslat
               style={{ color: "rgba(255,255,255,0.45)", border: "1px solid rgba(99,102,241,0.2)" }}
               onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#fff"}
               onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.45)"}>
-              <ArrowLeft className="h-5 w-5" /><span>Back to Toolkit</span>
+              <ArrowLeft className="h-5 w-5" /><span>Back to Royal Tools Hub</span>
             </Link>
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold"
               style={{ background: "rgba(99,102,241,0.12)", border: "1px solid rgba(99,102,241,0.3)", color: "#818CF8" }}>

@@ -765,6 +765,7 @@ const App = () => {
                 
                 {/* Communication & Productivity Tools - Owner-only */}
                 <Route path="/automations" element={<OwnerGuard><Automations /></OwnerGuard>} />
+                <Route path="/owner/automations" element={<OwnerGuard><Automations /></OwnerGuard>} />
                 <Route path="/company-comm" element={<OwnerGuard><CompanyComm /></OwnerGuard>} />
                 <Route path="/email-client" element={<OwnerGuard><EmailClient /></OwnerGuard>} />
                 <Route path="/team-chat" element={<OwnerGuard><TeamChat /></OwnerGuard>} />

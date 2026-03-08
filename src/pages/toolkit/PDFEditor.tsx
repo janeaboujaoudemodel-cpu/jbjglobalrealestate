@@ -345,7 +345,7 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
               onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#fff"}
               onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.45)"}>
               <ArrowLeft className="h-5 w-5" />
-              <span>Back to Toolkit</span>
+              <span>Back to Royal Tools Hub</span>
             </Link>
             <Button variant="outline" size="sm" onClick={() => fileInputRef.current?.click()} disabled={isLoading}
               style={{ borderColor: indigo.border, color: "rgba(255,255,255,0.65)", background: "transparent" }}>
