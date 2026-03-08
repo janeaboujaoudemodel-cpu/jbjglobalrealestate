@@ -76,7 +76,7 @@ const LeadCaptureModal = ({
 
       toast({
         title: "Thank you!",
-        description: "Your download is ready.",
+        description: documentUrl ? "Your download is ready." : "Our team will share the brochure with you shortly.",
       });
 
       // Auto-close and trigger download after short delay
