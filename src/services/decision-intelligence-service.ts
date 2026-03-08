@@ -252,31 +252,23 @@ class DecisionIntelligenceService {
     
     // Query real data
     if (queryLower.includes('lead') || queryLower.includes('broker')) {
-      const { count: totalLeads } = await supabase
-        .from('crm_leads')
-        .select('*', { count: 'exact', head: true });
-
-      const { count: convertedLeads } = await supabase
-        .from('crm_leads')
-        .select('*', { count: 'exact', head: true })
-        .eq('status', 'converted');
+      const r1 = await (supabase as any).from('crm_leads').select('*', { count: 'exact', head: true });
+      const totalLeads = r1.count || 0;
+      const r2 = await (supabase as any).from('crm_leads').select('*', { count: 'exact', head: true }).eq('status', 'converted');
+      const convertedLeads = r2.count || 0;
 
       return {
-        answer: `You currently have ${totalLeads || 0} total leads, with ${convertedLeads || 0} converted. ${totalLeads === 0 ? 'No leads data available yet.' : `Conversion rate: ${((convertedLeads || 0) / (totalLeads || 1) * 100).toFixed(1)}%`}`,
+        answer: `You currently have ${totalLeads} total leads, with ${convertedLeads} converted. ${totalLeads === 0 ? 'No leads data available yet.' : `Conversion rate: ${((convertedLeads) / Math.max(totalLeads, 1) * 100).toFixed(1)}%`}`,
         insights: this.state.insights.filter(i => i.dataSource === 'crm'),
         suggestions: ['View all leads', 'Check pending follow-ups', 'Review conversion funnel']
       };
     }
 
     if (queryLower.includes('task') || queryLower.includes('pending')) {
-      const { data: tasks } = await supabase
-        .from('admin_tasks')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(20);
-
-      const pending = tasks?.filter(t => t.status === 'pending').length || 0;
-      const completed = tasks?.filter(t => t.status === 'completed').length || 0;
+      const r = await (supabase as any).from('admin_tasks').select('*').order('created_at', { ascending: false }).limit(20);
+      const tasks = r.data || [];
+      const pending = tasks.filter((t: any) => t.status === 'pending').length;
+      const completed = tasks.filter((t: any) => t.status === 'completed').length;
 
       return {
         answer: `You have ${pending} pending tasks and ${completed} completed tasks from the last batch. ${pending > 0 ? 'Review your pending tasks for action items.' : 'All caught up!'}`,
@@ -286,18 +278,13 @@ class DecisionIntelligenceService {
     }
 
     if (queryLower.includes('project') || queryLower.includes('listing')) {
-      const { count: published } = await supabase
-        .from('projects')
-        .select('*', { count: 'exact', head: true })
-        .eq('is_published', true);
-
-      const { count: pending } = await supabase
-        .from('pending_project_imports')
-        .select('*', { count: 'exact', head: true })
-        .eq('status', 'pending');
+      const r1 = await (supabase as any).from('projects').select('*', { count: 'exact', head: true }).eq('is_published', true);
+      const published = r1.count || 0;
+      const r2 = await (supabase as any).from('pending_project_imports').select('*', { count: 'exact', head: true }).eq('status', 'pending');
+      const pending = r2.count || 0;
 
       return {
-        answer: `You have ${published || 0} published projects and ${pending || 0} pending imports awaiting review.`,
+        answer: `You have ${published} published projects and ${pending} pending imports awaiting review.`,
         insights: this.state.insights,
         suggestions: ['Review pending imports', 'Check project quality', 'View published listings']
       };
