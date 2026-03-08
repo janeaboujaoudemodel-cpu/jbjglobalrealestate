@@ -100,6 +100,7 @@ export default function RecentlyDeletedLeads({ userId, onRefresh }: RecentlyDele
           Recently deleted leads — auto-purged after 30 days. Restore leads before they are permanently removed.
         </CardDescription>
       </CardHeader>
+      <CardContent className="space-y-4">
         {/* Search + Stats on one line */}
         <div className="flex flex-wrap items-center gap-3">
           <div className="relative flex-1 min-w-[200px] max-w-sm">
