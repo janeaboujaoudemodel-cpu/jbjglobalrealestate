@@ -28,7 +28,7 @@ export function ToolSuiteHeader({
   subtitle,
   icon: Icon,
   backHref = "/toolkit",
-  backText = "Back to Toolkit",
+  backText = "Back to AI Tools Hub",
 }: ToolSuiteHeaderProps) {
   // Split title if titleHighlight is provided
   const titleParts = titleHighlight 

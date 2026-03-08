@@ -460,7 +460,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
   // Mobile menu - Creative Toolkit
   const mobileToolkitLinks = [
-    { href: "/toolkit", label: "Toolkit Hub", icon: Sparkles },
+    { href: "/toolkit", label: "AI Tools Hub", icon: Sparkles },
     { href: "/toolkit/ai-video-studio", label: "AI Video Studio", icon: Building2 },
     { href: "/toolkit/video-resize-pack", label: "Video Resize Pack", icon: Building2 },
     { href: "/toolkit/voice-studio", label: "Voice Studio", icon: Building2 },

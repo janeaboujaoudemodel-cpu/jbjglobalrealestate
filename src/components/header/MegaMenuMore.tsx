@@ -129,7 +129,7 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
           </MegaMenuCard>
 
           {/* Card 3: Toolkit */}
-          <MegaMenuCard icon={Sparkles} title="Toolkit">
+          <MegaMenuCard icon={Sparkles} title="AI Tools Hub">
             {toolkitLinks.map((item) => (
               <MegaMenuIconLink
                 key={item.href}
