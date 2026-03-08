@@ -277,15 +277,15 @@ const AIMeetingSummarizerPremium = () => {
 
       const { data, error } = await supabase
         .from("crm_leads")
-        .insert({
+        .insert([{
           full_name: newLeadName.trim(),
           phone_raw: newLeadPhone.trim() || null,
           phone_e164: newLeadPhone.trim() || null,
           owner_user_id: user.id,
-          owner_type: "broker",
+          owner_type: "broker" as const,
           source: "Meeting Summarizer",
           notes: `Created from meeting: ${formData.meetingTitle || "Untitled"}`,
-        })
+        }])
         .select("id, full_name, phone_e164, email_lower")
         .single();
 
