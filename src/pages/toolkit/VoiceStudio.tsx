@@ -524,6 +524,46 @@ export default function VoiceStudio() {
               </CardContent>
             </Card>
 
+            {/* Step 2.5: Tone & Style */}
+            <Card className="bg-slate-900/50 border-slate-700/50">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-white flex items-center gap-2 text-lg">
+                  <span className="flex items-center justify-center w-6 h-6 rounded-full bg-[#D4AF37]/20 text-[#D4AF37] text-sm font-bold">
+                    <Wand2 className="w-3 h-3" />
+                  </span>
+                  Tone & Style
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    { id: "professional", label: "Professional", icon: "💼" },
+                    { id: "corporate", label: "Corporate", icon: "🏢" },
+                    { id: "warm", label: "Warm & Friendly", icon: "☀️" },
+                    { id: "energetic", label: "Energetic", icon: "⚡" },
+                    { id: "calm", label: "Calm", icon: "🌊" },
+                    { id: "storytelling", label: "Storytelling", icon: "📖" },
+                  ].map(tone => (
+                    <button
+                      key={tone.id}
+                      onClick={() => {
+                        // Tone selection is informational for Web Speech API
+                        // It helps the user mentally frame their content
+                        toast({ title: `Tone: ${tone.label}`, description: "Adjust your script to match this style for best results." });
+                      }}
+                      className="p-2.5 rounded-lg border border-slate-700 bg-slate-800/30 hover:border-[#D4AF37]/50 hover:bg-[#D4AF37]/5 transition-all text-left"
+                    >
+                      <span className="text-lg">{tone.icon}</span>
+                      <p className="text-xs text-white font-medium mt-1">{tone.label}</p>
+                    </button>
+                  ))}
+                </div>
+                <p className="text-xs text-slate-500">
+                  Select a tone to guide your script. The voice engine will read your text as-written — use punctuation and pacing to control delivery.
+                </p>
+              </CardContent>
+            </Card>
+
             {/* Step 3: Voice Selection */}
             <Card className="bg-slate-900/50 border-slate-700/50">
               <CardHeader className="pb-4">
