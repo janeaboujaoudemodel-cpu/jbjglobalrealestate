@@ -339,7 +339,7 @@ export const executiveTeam: TeamMember[] = sortByHierarchy([
     name: 'Jane Bou Jaoude',
     role: 'Founder & CEO JBJ Global Real Estate',
     department: 'Executive',
-    avatar: janeAbouJaoudeCeo, // LOCKED_EXISTING - Do not modify
+    avatar: janeBouJaoudeCeo, // LOCKED_EXISTING - Do not modify
     email: 'jane@JBJ.ae',
     bio: 'Visionary founder leading JBJ\'s international growth and innovation in luxury real estate.',
     languages: ['English', 'Arabic', 'French', 'Spanish'],
