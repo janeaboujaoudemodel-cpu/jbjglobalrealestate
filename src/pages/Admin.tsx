@@ -386,62 +386,63 @@ const Admin = () => {
       <CommandPalette isOpen={showCommandPalette} onClose={() => setShowCommandPalette(false)} />
       
       {/* Premium Header */}
-      <header className="border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-0 z-50 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#C9A84C] to-[#B8973F] flex items-center justify-center shadow-lg shadow-gold/20">
-              <Shield className="w-6 h-6 text-black" />
+       <header className="border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-0 z-50 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+        <div className="container mx-auto px-4 py-3 flex items-center gap-3">
+          <div className="flex items-center gap-3 flex-shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#C9A84C] to-[#B8973F] flex items-center justify-center shadow-lg shadow-gold/20">
+              <Shield className="w-5 h-5 text-black" />
             </div>
-            <div>
-              <h1 className="text-black text-2xl font-bold">
-                Owner Panel
-              </h1>
-              <p className="text-gold text-sm font-medium">{user?.email}</p>
+            <div className="hidden sm:block">
+              <h1 className="text-black text-lg font-bold leading-tight">Owner Panel</h1>
+              <p className="text-gold text-xs font-medium truncate max-w-[180px]">{user?.email}</p>
             </div>
           </div>
           
           {/* Search */}
-          <div className="hidden lg:flex items-center gap-2 flex-1 max-w-md mx-8">
+          <div className="hidden lg:flex items-center flex-1 max-w-sm mx-4">
             <button
               onClick={() => setShowCommandPalette(true)}
-              className="flex items-center gap-2 w-full px-4 py-2 rounded-xl bg-white/80 border-2 border-gold/30 text-zinc-500 hover:border-gold/50 transition-all"
+              className="flex items-center gap-2 w-full px-3 py-2 rounded-xl bg-white/80 border border-gold/30 text-zinc-500 hover:border-gold/50 transition-all"
             >
-              <Search className="h-4 w-4 text-gold" />
+              <Search className="h-4 w-4 text-gold flex-shrink-0" />
               <span className="text-sm">Search...</span>
-              <kbd className="ml-auto px-2 py-0.5 bg-gold/10 text-gold text-xs rounded font-mono">⌘K</kbd>
+              <kbd className="ml-auto px-1.5 py-0.5 bg-gold/10 text-gold text-[10px] rounded font-mono flex-shrink-0">⌘K</kbd>
             </button>
           </div>
           
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 ml-auto flex-shrink-0">
             <Button
               variant="ghost"
-              size="sm"
-              className="text-black hover:text-gold hover:bg-gold/10 relative"
+              size="icon"
+              className="text-black hover:text-gold hover:bg-gold/10 h-9 w-9"
             >
               <Bell className="h-4 w-4" />
-              
             </Button>
             <Link to="/admin/marketing-hub">
               <Button
+                size="sm"
                 className="bg-gradient-to-r from-gold to-amber-600 hover:from-gold/90 hover:to-amber-600/90 text-black font-semibold shadow-lg shadow-gold/20"
               >
-                <Send className="w-4 h-4 mr-2" />
-                Marketing Hub
+                <Send className="w-3.5 h-3.5 mr-1.5" />
+                <span className="hidden xl:inline">Marketing Hub</span>
+                <span className="xl:hidden">Marketing</span>
               </Button>
             </Link>
             <Button
               variant="secondary"
+              size="sm"
               onClick={() => navigate("/")}
             >
-              <Home className="w-4 h-4 mr-2" />
-              View Site
+              <Home className="w-3.5 h-3.5 mr-1.5" />
+              <span className="hidden md:inline">View Site</span>
             </Button>
             <Button
               variant="secondary"
+              size="sm"
               onClick={handleSignOut}
             >
-              <LogOut className="w-4 h-4 mr-2" />
-              Sign Out
+              <LogOut className="w-3.5 h-3.5 mr-1.5" />
+              <span className="hidden md:inline">Sign Out</span>
             </Button>
           </div>
         </div>
