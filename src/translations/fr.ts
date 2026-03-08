@@ -1026,7 +1026,7 @@ export const fr = {
   'chat.yourConversations': 'Vos conversations',
   'chat.whatCanWeHelp': 'En quoi pouvons-nous vous aider ?',
   'chat.connectingYou': 'Connexion en cours...',
-  'chat.onlineHereToHelp': '🟢 En ligne • Ici pour vous aider',
+  'chat.onlineHereToHelp': 'En ligne — Ici pour vous aider',
   'chat.howDidWeDo': 'Comment avons-nous fait ?',
   'chat.thankYou': 'Merci !',
   'chat.copy': 'Copier',

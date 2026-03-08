@@ -629,7 +629,7 @@ export const ru: Record<string, string> = {
   'chat.yourConversations': 'Ваши диалоги',
   'chat.whatCanWeHelp': 'Чем можем помочь?',
   'chat.connectingYou': 'Подключаем вас...',
-  'chat.onlineHereToHelp': '🟢 Онлайн • Готовы помочь',
+  'chat.onlineHereToHelp': 'Онлайн — Готовы помочь',
   'chat.howDidWeDo': 'Как мы справились?',
   'chat.thankYou': 'Спасибо!',
 

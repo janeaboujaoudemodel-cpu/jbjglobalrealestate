@@ -632,7 +632,7 @@ export const ar = {
   'chat.yourConversations': 'محادثاتك',
   'chat.whatCanWeHelp': 'بماذا يمكننا مساعدتك؟',
   'chat.connectingYou': 'جاري توصيلك...',
-  'chat.onlineHereToHelp': '🟢 متصل • جاهز للمساعدة',
+  'chat.onlineHereToHelp': 'متصل — جاهز للمساعدة',
   'chat.howDidWeDo': 'كيف كان أداؤنا؟',
   'chat.thankYou': 'شكراً لك!',
   

@@ -22,6 +22,7 @@ import {
   Kanban,
   Megaphone,
   Eye,
+  Headphones,
   Link,
   ShieldAlert,
 } from "lucide-react";
@@ -78,7 +79,8 @@ const NAV_SECTIONS: NavSection[] = [
     label: "CREATIVE",
     items: [
       { label: "Studio", icon: Video, path: "/owner/studio" },
-      { label: "Founder & Podcast", icon: Users, path: "/owner/founder-settings" },
+      { label: "Founder & Podcast Control", icon: Users, path: "/owner/founder-settings" },
+      { label: "Podcast Studio", icon: Headphones, path: "/owner/podcast-studio" },
       { label: "Kanban Board", icon: Kanban, path: "/owner/kanban" },
       { label: "Marketing Hub", icon: Megaphone, path: "/owner/marketing-hub" },
     ],

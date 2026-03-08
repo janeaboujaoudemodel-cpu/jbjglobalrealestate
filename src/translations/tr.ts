@@ -629,7 +629,7 @@ export const tr: Record<string, string> = {
   'chat.yourConversations': 'Görüşmeleriniz',
   'chat.whatCanWeHelp': 'Ne konuda yardımcı olabiliriz?',
   'chat.connectingYou': 'Sizi bağlıyoruz...',
-  'chat.onlineHereToHelp': '🟢 Çevrimiçi • Yardıma hazırız',
+  'chat.onlineHereToHelp': 'Cevrimici — Yardima haziriz',
   'chat.howDidWeDo': 'Nasıl yaptık?',
   'chat.thankYou': 'Teşekkürler!',
 

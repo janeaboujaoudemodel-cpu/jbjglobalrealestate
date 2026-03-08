@@ -636,7 +636,7 @@ export const pl: Record<string, string> = {
   'chat.yourConversations': 'Twoje rozmowy',
   'chat.whatCanWeHelp': 'W czym możemy pomóc?',
   'chat.connectingYou': 'Łączymy Cię...',
-  'chat.onlineHereToHelp': '🟢 Online • Tutaj, aby pomóc',
+  'chat.onlineHereToHelp': 'Online — Tutaj, aby pomoc',
   'chat.howDidWeDo': 'Jak nam poszło?',
   'chat.thankYou': 'Dziękujemy!',
 
