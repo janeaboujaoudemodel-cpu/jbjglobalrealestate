@@ -14,10 +14,11 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
   const [activeTab, setActiveTab] = useState("details");
   const { formatPrice } = useCurrency();
 
-  // Filter documents by type
-  const brochures = project.documents?.filter(d => d.document_type === 'brochure') || [];
-  const floorPlans = project.documents?.filter(d => d.document_type === 'floor_plan') || [];
-  const paymentPlans = project.documents?.filter(d => d.document_type === 'payment_plan') || [];
+  // Filter documents by type - support both document_type (DB) and type (pending preview)
+  const getDocType = (d: any) => (d.document_type || d.type || '').toLowerCase();
+  const brochures = project.documents?.filter(d => getDocType(d).includes('brochure')) || [];
+  const floorPlans = project.documents?.filter(d => getDocType(d).includes('floor_plan') || getDocType(d) === 'floorplan') || [];
+  const paymentPlans = project.documents?.filter(d => getDocType(d).includes('payment_plan') || getDocType(d) === 'paymentplan') || [];
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
