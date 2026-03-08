@@ -15,7 +15,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import {
   ArrowLeft, Mic, MicOff, Play, Pause, Square, Download,
   Volume2, Settings2, Headphones, Globe, User, Radio,
-  RefreshCw, Loader2, FileAudio, Clock, Waveform,
+  RefreshCw, Loader2, FileAudio, Clock,
   CheckCircle2, AlertCircle, Sparkles
 } from "lucide-react";
 
