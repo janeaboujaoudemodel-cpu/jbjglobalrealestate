@@ -4,7 +4,7 @@ import {
   FileAudio, Loader2, Copy, Check, Sparkles, 
   ListChecks, Users, Clock, Target, Calendar,
   Home, Calculator, Brain, Send, Plus, Mic, Square,
-  Timer, Globe, MessageSquare
+  Globe, MessageSquare
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,16 +18,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import AIToolPremiumLayout from "../AIToolPremiumLayout";
 import { VoiceInputButton } from "@/components/ui/VoiceInputButton";
-
-const DURATION_PRESETS = [
-  { label: "5 min", value: 5 },
-  { label: "10 min", value: 10 },
-  { label: "15 min", value: 15 },
-  { label: "20 min", value: 20 },
-  { label: "30 min", value: 30 },
-  { label: "45 min", value: 45 },
-  { label: "60 min", value: 60 },
-];
 
 const AIMeetingSummarizerPremium = () => {
   const { invokeTool, loading, response } = useAITool();
@@ -48,7 +38,7 @@ const AIMeetingSummarizerPremium = () => {
   // Live recording state
   const [isRecording, setIsRecording] = useState(false);
   const [recordingElapsed, setRecordingElapsed] = useState(0);
-  const [selectedDuration, setSelectedDuration] = useState<number | null>(null);
+  const [sessionDuration, setSessionDuration] = useState<string | null>(null);
   const [liveTranscript, setLiveTranscript] = useState<Array<{ original: string; translated?: string; lang?: string }>>([]);
   const [isTranscribing, setIsTranscribing] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -56,14 +46,6 @@ const AIMeetingSummarizerPremium = () => {
   const chunksRef = useRef<Blob[]>([]);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const transcriptContainerRef = useRef<HTMLDivElement | null>(null);
-
-  // Auto-stop recording when duration reached
-  useEffect(() => {
-    if (isRecording && selectedDuration && recordingElapsed >= selectedDuration * 60) {
-      stopRecording();
-      toast.info("Recording ended — duration limit reached");
-    }
-  }, [recordingElapsed, selectedDuration, isRecording]);
 
   // Auto-scroll transcript
   useEffect(() => {
@@ -86,8 +68,9 @@ const AIMeetingSummarizerPremium = () => {
 
   const startRecording = useCallback(async () => {
     try {
+      // getUserMedia called directly in click handler for browser security
       const stream = await navigator.mediaDevices.getUserMedia({
-        audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
+        audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, sampleRate: 44100 }
       });
       streamRef.current = stream;
       const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
@@ -97,8 +80,8 @@ const AIMeetingSummarizerPremium = () => {
       const mediaRecorder = new MediaRecorder(stream, { mimeType });
       mediaRecorderRef.current = mediaRecorder;
       chunksRef.current = [];
+      setSessionDuration(null);
 
-      // Collect chunks and transcribe every 15 seconds
       let chunkBuffer: Blob[] = [];
       let lastTranscribeTime = Date.now();
 
@@ -107,7 +90,6 @@ const AIMeetingSummarizerPremium = () => {
           chunksRef.current.push(e.data);
           chunkBuffer.push(e.data);
         }
-        // Transcribe every ~15 seconds of audio
         if (Date.now() - lastTranscribeTime >= 14000 && chunkBuffer.length > 0) {
           const audioBlob = new Blob(chunkBuffer, { type: mimeType.split(';')[0] });
           chunkBuffer = [];
@@ -117,7 +99,6 @@ const AIMeetingSummarizerPremium = () => {
       };
 
       mediaRecorder.onstop = async () => {
-        // Transcribe remaining chunks
         if (chunkBuffer.length > 0) {
           const audioBlob = new Blob(chunkBuffer, { type: mimeType.split(';')[0] });
           chunkBuffer = [];
@@ -127,7 +108,7 @@ const AIMeetingSummarizerPremium = () => {
         streamRef.current = null;
       };
 
-      mediaRecorder.start(5000); // Collect data every 5 seconds
+      mediaRecorder.start(5000);
       setIsRecording(true);
       setRecordingElapsed(0);
       setLiveTranscript([]);
@@ -138,9 +119,13 @@ const AIMeetingSummarizerPremium = () => {
 
       toast.success("🎙️ Recording started — speak in any language");
     } catch (err: any) {
-      if (err.name === 'NotAllowedError') toast.error("Microphone access denied");
-      else if (err.name === 'NotFoundError') toast.error("Microphone not found");
-      else toast.error("Could not access microphone");
+      if (err instanceof Error && err.name === 'NotAllowedError') {
+        toast.error("Microphone access denied. Please allow in browser settings.");
+      } else if (err instanceof Error && err.name === 'NotFoundError') {
+        toast.error("Microphone not found. Please check your device.");
+      } else {
+        toast.error("Could not access microphone");
+      }
     }
   }, []);
 
@@ -152,9 +137,12 @@ const AIMeetingSummarizerPremium = () => {
         clearInterval(timerRef.current);
         timerRef.current = null;
       }
-      toast.success("Recording stopped — processing final transcription...");
+      // Set session duration from elapsed time
+      setSessionDuration(formatTime(recordingElapsed));
+      handleChange("duration", formatTime(recordingElapsed));
+      toast.success(`Recording stopped — Session: ${formatTime(recordingElapsed)}`);
     }
-  }, [isRecording]);
+  }, [isRecording, recordingElapsed]);
 
   const transcribeChunk = async (audioBlob: Blob) => {
     setIsTranscribing(true);
@@ -177,7 +165,6 @@ const AIMeetingSummarizerPremium = () => {
           lang: data.language_name || undefined,
         };
         setLiveTranscript(prev => [...prev, entry]);
-        // Append to notes
         const appendText = data.translated_text && !data.is_english
           ? `[${data.language_name || 'Original'}]: ${data.text}\n[English]: ${data.translated_text}\n\n`
           : `${data.text}\n\n`;
@@ -223,8 +210,7 @@ const AIMeetingSummarizerPremium = () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { toast.error("Please log in"); return; }
-      
-      // Create action item tasks + follow-up schedule
+
       const baseTasks = items.map((item: any) => ({
         title: typeof item === "string" ? item : item.task || item.title || String(item),
         description: `From meeting: ${formData.meetingTitle || "Untitled"}\nParticipants: ${formData.participants || "N/A"}`,
@@ -235,7 +221,6 @@ const AIMeetingSummarizerPremium = () => {
         user_id: user.id,
       }));
 
-      // Add follow-up reminders: 3-day, 7-day, 14-day
       const followUpTasks = [
         { days: 3, label: "3-day follow-up" },
         { days: 7, label: "7-day check-in" },
@@ -306,7 +291,6 @@ const AIMeetingSummarizerPremium = () => {
     setMortgageResult({ price, down, loan, monthly: Math.round(monthly), rate: 4.5, years: 25 });
   };
 
-  // Generate AI follow-up response
   const [generatingResponse, setGeneratingResponse] = useState(false);
   const [generatedResponse, setGeneratedResponse] = useState("");
 
@@ -336,93 +320,71 @@ const AIMeetingSummarizerPremium = () => {
     <AIToolPremiumLayout
       title="AI Meeting Summarizer & CRM Assistant"
       subtitle="Record sessions, transcribe any language, extract action items, and sync with CRM"
-      icon={<Brain className="h-8 w-8 text-violet-400" />}
+      icon={<Brain className="h-8 w-8 text-gold" />}
       accentColor="violet"
       gradientFrom="violet"
       badge="Meeting Intelligence + CRM"
     >
-      <div className="space-y-8">
-        {/* Input Section */}
-        <Card className="bg-violet-900/20 border-violet-500/30">
-          <CardContent className="p-6 space-y-6">
-            <div className="flex items-center gap-2 text-violet-400 mb-4">
-              <FileAudio className="h-5 w-5" />
-              <span className="font-semibold">Meeting Details</span>
+      <div className="space-y-6">
+        {/* Meeting Details */}
+        <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/30 shadow-md">
+          <CardContent className="p-6 space-y-5">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-8 h-8 rounded-full bg-black flex items-center justify-center">
+                <FileAudio className="h-4 w-4 text-gold" />
+              </div>
+              <span className="font-semibold text-black text-lg">Meeting Details</span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label className="text-zinc-300 flex items-center gap-2">
-                  <Calendar className="h-4 w-4 text-violet-400" />
+              <div className="space-y-1.5">
+                <Label className="text-zinc-700 text-sm flex items-center gap-1.5">
+                  <Calendar className="h-3.5 w-3.5 text-gold" />
                   Meeting Title
                 </Label>
                 <Input
                   placeholder="Client Discovery Call - Palm Jumeirah"
                   value={formData.meetingTitle}
                   onChange={(e) => handleChange("meetingTitle", e.target.value)}
-                  className="bg-zinc-900/50 border-violet-500/30 text-white hover:border-violet-500/50 focus:border-violet-400 transition-colors"
+                  className="bg-white border-gold/30 text-black placeholder:text-zinc-400 focus:border-gold focus:ring-gold/20"
                 />
               </div>
-              <div className="space-y-2">
-                <Label className="text-zinc-300 flex items-center gap-2">
-                  <Users className="h-4 w-4 text-violet-400" />
+              <div className="space-y-1.5">
+                <Label className="text-zinc-700 text-sm flex items-center gap-1.5">
+                  <Users className="h-3.5 w-3.5 text-gold" />
                   Participants
                 </Label>
                 <Input
                   placeholder="John Smith (Client), Sarah Ahmed (Agent)"
                   value={formData.participants}
                   onChange={(e) => handleChange("participants", e.target.value)}
-                  className="bg-zinc-900/50 border-violet-500/30 text-white hover:border-violet-500/50 focus:border-violet-400 transition-colors"
+                  className="bg-white border-gold/30 text-black placeholder:text-zinc-400 focus:border-gold focus:ring-gold/20"
                 />
               </div>
             </div>
 
-            {/* Duration Presets */}
-            <div className="space-y-2">
-              <Label className="text-zinc-300 flex items-center gap-2">
-                <Timer className="h-4 w-4 text-violet-400" />
-                Session Duration
-              </Label>
-              <div className="flex flex-wrap gap-2">
-                {DURATION_PRESETS.map((preset) => (
-                  <Button
-                    key={preset.value}
-                    type="button"
-                    size="sm"
-                    variant={selectedDuration === preset.value ? "default" : "outline"}
-                    onClick={() => {
-                      setSelectedDuration(selectedDuration === preset.value ? null : preset.value);
-                      handleChange("duration", `${preset.value} minutes`);
-                    }}
-                    className={selectedDuration === preset.value
-                      ? "bg-violet-600 text-white border-violet-500"
-                      : "border-violet-500/30 text-zinc-400 hover:text-white hover:border-violet-500/50"
-                    }
-                  >
-                    {preset.label}
-                  </Button>
-                ))}
-              </div>
-            </div>
-
             {/* Live Recording Section */}
-            <div className="bg-zinc-900/60 border border-violet-500/20 rounded-xl p-4 space-y-4">
+            <div className="bg-white border border-gold/20 rounded-xl p-5 space-y-4 shadow-sm">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Mic className="h-5 w-5 text-violet-400" />
-                  <span className="text-white font-semibold text-sm">Live Session Recorder</span>
-                  <Badge variant="outline" className="border-violet-500/30 text-violet-400 text-[10px]">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-full bg-black flex items-center justify-center">
+                    <Mic className="h-4 w-4 text-gold" />
+                  </div>
+                  <span className="text-black font-semibold">Live Session Recorder</span>
+                  <Badge className="bg-gold/10 text-gold border border-gold/30 text-[10px] font-medium">
                     <Globe className="h-3 w-3 mr-1" /> Any Language
                   </Badge>
                 </div>
                 {isRecording && (
                   <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                    <span className="text-red-400 text-sm font-mono">{formatTime(recordingElapsed)}</span>
-                    {selectedDuration && (
-                      <span className="text-zinc-500 text-sm">/ {formatTime(selectedDuration * 60)}</span>
-                    )}
+                    <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse" />
+                    <span className="text-red-600 text-sm font-mono font-bold">{formatTime(recordingElapsed)}</span>
                   </div>
+                )}
+                {!isRecording && sessionDuration && (
+                  <Badge className="bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs">
+                    <Clock className="h-3 w-3 mr-1" /> Session: {sessionDuration}
+                  </Badge>
                 )}
               </div>
 
@@ -431,10 +393,10 @@ const AIMeetingSummarizerPremium = () => {
                   type="button"
                   onClick={isRecording ? stopRecording : startRecording}
                   className={isRecording
-                    ? "bg-red-600 hover:bg-red-500 text-white animate-pulse"
-                    : "bg-violet-600 hover:bg-violet-500 text-white"
+                    ? "bg-red-600 hover:bg-red-500 text-white shadow-lg shadow-red-500/25 animate-pulse px-6"
+                    : "bg-black hover:bg-zinc-800 text-gold shadow-lg shadow-black/20 px-6"
                   }
-                  size="default"
+                  size="lg"
                 >
                   {isRecording ? (
                     <><Square className="h-4 w-4 mr-2 fill-current" /> Stop Recording</>
@@ -443,7 +405,7 @@ const AIMeetingSummarizerPremium = () => {
                   )}
                 </Button>
                 {isTranscribing && (
-                  <span className="text-violet-400 text-xs flex items-center gap-1">
+                  <span className="text-gold text-xs flex items-center gap-1.5 font-medium">
                     <Loader2 className="h-3 w-3 animate-spin" /> Transcribing...
                   </span>
                 )}
@@ -453,38 +415,38 @@ const AIMeetingSummarizerPremium = () => {
               {liveTranscript.length > 0 && (
                 <div
                   ref={transcriptContainerRef}
-                  className="bg-zinc-800/60 rounded-lg p-3 max-h-[200px] overflow-y-auto space-y-2"
+                  className="bg-[#FDFBF7] border border-gold/15 rounded-lg p-3 max-h-[200px] overflow-y-auto space-y-2"
                 >
-                  <p className="text-zinc-500 text-[10px] uppercase tracking-wider mb-1">Live Transcript</p>
+                  <p className="text-gold text-[10px] uppercase tracking-wider font-semibold mb-1">Live Transcript</p>
                   {liveTranscript.map((entry, i) => (
                     <div key={i} className="text-sm space-y-0.5">
                       {entry.translated ? (
                         <>
-                          <p className="text-zinc-400">
-                            <span className="text-violet-400 text-xs">[{entry.lang || 'Original'}]</span> {entry.original}
+                          <p className="text-zinc-500">
+                            <span className="text-gold text-xs font-medium">[{entry.lang || 'Original'}]</span> {entry.original}
                           </p>
-                          <p className="text-white">
-                            <span className="text-emerald-400 text-xs">[English]</span> {entry.translated}
+                          <p className="text-black font-medium">
+                            <span className="text-emerald-600 text-xs font-medium">[English]</span> {entry.translated}
                           </p>
                         </>
                       ) : (
-                        <p className="text-white">{entry.original}</p>
+                        <p className="text-black">{entry.original}</p>
                       )}
                     </div>
                   ))}
                 </div>
               )}
 
-              <p className="text-zinc-500 text-xs">
+              <p className="text-zinc-500 text-xs leading-relaxed">
                 Records audio, transcribes every 15 seconds, and auto-translates non-English speech. 
                 Works with Zoom, phone calls, live meetings — any audio your mic picks up.
               </p>
             </div>
 
             {/* Notes Textarea with Voice Button */}
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <Label className="text-zinc-300">Meeting Notes / Transcript *</Label>
+                <Label className="text-zinc-700 text-sm">Meeting Notes / Transcript *</Label>
                 <VoiceInputButton
                   onTranscript={(text) => handleChange("notes", formData.notes + (formData.notes ? "\n" : "") + text)}
                   onTranscriptResult={(result) => {
@@ -496,7 +458,7 @@ const AIMeetingSummarizerPremium = () => {
                   }}
                   size="sm"
                   variant="outline"
-                  className="border-violet-500/30 text-violet-400 hover:text-white"
+                  className="border-gold/40 text-gold hover:bg-gold/10 hover:text-gold"
                 />
               </div>
               <Textarea
@@ -504,14 +466,14 @@ const AIMeetingSummarizerPremium = () => {
                 value={formData.notes}
                 onChange={(e) => handleChange("notes", e.target.value)}
                 rows={8}
-                className="bg-zinc-900/50 border-violet-500/30 text-white hover:border-violet-500/50 focus:border-violet-400 transition-colors"
+                className="bg-white border-gold/30 text-black placeholder:text-zinc-400 focus:border-gold focus:ring-gold/20"
               />
             </div>
 
             <Button
               onClick={handleSubmit}
               disabled={loading}
-              className="w-full bg-gradient-to-r from-violet-600 to-violet-500 hover:from-violet-500 hover:to-violet-400 text-white font-semibold py-6"
+              className="w-full bg-black hover:bg-zinc-800 text-gold font-semibold py-6 shadow-lg shadow-black/20 text-base"
             >
               {loading ? (
                 <><Loader2 className="h-5 w-5 mr-2 animate-spin" /> Summarizing Meeting...</>
@@ -525,31 +487,41 @@ const AIMeetingSummarizerPremium = () => {
         {/* Results Section */}
         <AnimatePresence mode="wait">
           {response ? (
-            <motion.div key="results" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4">
-              {/* Action Items with CRM Sync */}
+            <motion.div key="results" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }} className="space-y-4">
+              {/* Action Items */}
               {response.actionItems && response.actionItems.length > 0 && (
-                <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
-                  <Card className="bg-violet-500/10 border-violet-500/30 p-4">
+                <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
+                  <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/30 p-5">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2">
-                        <ListChecks className="h-5 w-5 text-violet-400" />
-                        <h4 className="font-semibold text-white">Action Items</h4>
-                        <Badge className="bg-violet-500/20 text-violet-400 border-0">{response.actionItems.length} items</Badge>
+                        <div className="w-7 h-7 rounded-full bg-black flex items-center justify-center">
+                          <ListChecks className="h-3.5 w-3.5 text-gold" />
+                        </div>
+                        <h4 className="font-semibold text-black">Action Items</h4>
+                        <Badge className="bg-gold/10 text-gold border border-gold/30 text-xs">{response.actionItems.length}</Badge>
                       </div>
-                      <Button size="sm" onClick={handleCreateAllTasks} disabled={creatingTasks || tasksCreated} className="bg-emerald-600 hover:bg-emerald-500 text-white text-xs">
+                      <Button
+                        size="sm"
+                        onClick={handleCreateAllTasks}
+                        disabled={creatingTasks || tasksCreated}
+                        className={tasksCreated
+                          ? "bg-emerald-600 text-white text-xs"
+                          : "bg-black hover:bg-zinc-800 text-gold text-xs"
+                        }
+                      >
                         {tasksCreated ? <><Check className="h-3 w-3 mr-1" /> Synced + Follow-ups</> : creatingTasks ? <><Loader2 className="h-3 w-3 mr-1 animate-spin" /> Creating...</> : <><Plus className="h-3 w-3 mr-1" /> Create Tasks + Follow-ups</>}
                       </Button>
                     </div>
-                    <ul className="space-y-2">
+                    <ul className="space-y-2.5">
                       {response.actionItems.map((item: any, idx: number) => (
                         <li key={idx} className="flex items-start gap-3 text-sm">
-                          <span className="w-6 h-6 rounded-full bg-violet-500/20 flex items-center justify-center flex-shrink-0 text-xs text-violet-400 font-semibold">{idx + 1}</span>
-                          <span className="text-zinc-300">{typeof item === "string" ? item : item.task || JSON.stringify(item)}</span>
+                          <span className="w-6 h-6 rounded-full bg-black flex items-center justify-center flex-shrink-0 text-xs text-gold font-semibold">{idx + 1}</span>
+                          <span className="text-zinc-700">{typeof item === "string" ? item : item.task || JSON.stringify(item)}</span>
                         </li>
                       ))}
                     </ul>
                     {tasksCreated && (
-                      <p className="text-emerald-400 text-xs mt-3 flex items-center gap-1">
+                      <p className="text-emerald-600 text-xs mt-3 flex items-center gap-1 font-medium">
                         <Check className="h-3 w-3" /> Tasks + 3-day, 7-day, 14-day follow-up reminders created
                       </p>
                     )}
@@ -559,16 +531,18 @@ const AIMeetingSummarizerPremium = () => {
 
               {/* Key Decisions */}
               {response.keyDecisions && response.keyDecisions.length > 0 && (
-                <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.1 }}>
-                  <Card className="bg-emerald-500/10 border-emerald-500/30 p-4">
+                <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.1 }}>
+                  <Card className="bg-gradient-to-br from-[#F0FDF4] to-[#ECFDF5] border border-emerald-200 p-5">
                     <div className="flex items-center gap-2 mb-4">
-                      <Target className="h-5 w-5 text-emerald-400" />
-                      <h4 className="font-semibold text-white">Key Decisions</h4>
+                      <div className="w-7 h-7 rounded-full bg-emerald-700 flex items-center justify-center">
+                        <Target className="h-3.5 w-3.5 text-white" />
+                      </div>
+                      <h4 className="font-semibold text-black">Key Decisions</h4>
                     </div>
                     <ul className="space-y-2">
                       {response.keyDecisions.map((decision: any, idx: number) => (
-                        <li key={idx} className="flex items-start gap-2 text-sm text-zinc-300">
-                          <span className="text-emerald-400">✓</span>
+                        <li key={idx} className="flex items-start gap-2 text-sm text-zinc-700">
+                          <span className="text-emerald-600 font-bold">✓</span>
                           {typeof decision === "string" ? decision : decision.decision || JSON.stringify(decision)}
                         </li>
                       ))}
@@ -579,15 +553,17 @@ const AIMeetingSummarizerPremium = () => {
 
               {/* Follow-ups */}
               {response.followUps && response.followUps.length > 0 && (
-                <Card className="bg-violet-900/20 border-violet-500/30 p-4">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/30 p-5">
                   <div className="flex items-center gap-2 mb-3">
-                    <Calendar className="h-5 w-5 text-violet-400" />
-                    <h4 className="font-semibold text-white">Follow-ups Required</h4>
+                    <div className="w-7 h-7 rounded-full bg-black flex items-center justify-center">
+                      <Calendar className="h-3.5 w-3.5 text-gold" />
+                    </div>
+                    <h4 className="font-semibold text-black">Follow-ups Required</h4>
                   </div>
                   <ul className="space-y-2">
                     {response.followUps.map((followUp: string, idx: number) => (
-                      <li key={idx} className="text-sm text-zinc-300 flex items-start gap-2">
-                        <Clock className="h-4 w-4 mt-0.5 text-violet-400 flex-shrink-0" />
+                      <li key={idx} className="text-sm text-zinc-700 flex items-start gap-2">
+                        <Clock className="h-4 w-4 mt-0.5 text-gold flex-shrink-0" />
                         {followUp}
                       </li>
                     ))}
@@ -596,41 +572,53 @@ const AIMeetingSummarizerPremium = () => {
               )}
 
               {/* Full Summary */}
-              <Card className="bg-violet-900/20 border-violet-500/30">
-                <CardContent className="p-4">
+              <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/30">
+                <CardContent className="p-5">
                   <div className="flex items-center justify-between mb-4">
-                    <h4 className="font-semibold text-white">Full Summary</h4>
-                    <Button variant="outline" size="sm" onClick={() => copyToClipboard()}>
+                    <h4 className="font-semibold text-black">Full Summary</h4>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => copyToClipboard()}
+                      className="border-gold/30 text-gold hover:bg-gold/10"
+                    >
                       {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                     </Button>
                   </div>
-                  <div className="bg-zinc-800/50 p-4 rounded-lg text-zinc-300 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
+                  <div className="bg-white border border-gold/15 p-4 rounded-lg text-zinc-700 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
                     {response.summary || response.executiveSummary || "No summary generated."}
                   </div>
                 </CardContent>
               </Card>
 
               {/* AI Response Generator */}
-              <Card className="bg-violet-900/20 border-violet-500/30">
-                <CardContent className="p-4 space-y-3">
+              <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/30">
+                <CardContent className="p-5 space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <MessageSquare className="h-5 w-5 text-violet-400" />
-                      <h4 className="font-semibold text-white">AI Follow-up Response</h4>
+                      <div className="w-7 h-7 rounded-full bg-black flex items-center justify-center">
+                        <MessageSquare className="h-3.5 w-3.5 text-gold" />
+                      </div>
+                      <h4 className="font-semibold text-black">AI Follow-up Response</h4>
                     </div>
                     <Button
                       size="sm"
                       onClick={handleGenerateResponse}
                       disabled={generatingResponse}
-                      className="bg-violet-600 hover:bg-violet-500 text-white text-xs"
+                      className="bg-black hover:bg-zinc-800 text-gold text-xs"
                     >
                       {generatingResponse ? <><Loader2 className="h-3 w-3 mr-1 animate-spin" /> Generating...</> : <><Send className="h-3 w-3 mr-1" /> Generate Response</>}
                     </Button>
                   </div>
                   {generatedResponse && (
-                    <div className="bg-zinc-800/50 p-4 rounded-lg space-y-2">
-                      <p className="text-zinc-300 text-sm whitespace-pre-wrap">{generatedResponse}</p>
-                      <Button variant="outline" size="sm" onClick={() => copyToClipboard(generatedResponse)} className="text-xs">
+                    <div className="bg-white border border-gold/15 p-4 rounded-lg space-y-2">
+                      <p className="text-zinc-700 text-sm whitespace-pre-wrap">{generatedResponse}</p>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => copyToClipboard(generatedResponse)}
+                        className="text-xs border-gold/30 text-gold hover:bg-gold/10"
+                      >
                         <Copy className="h-3 w-3 mr-1" /> Copy Message
                       </Button>
                     </div>
@@ -639,34 +627,39 @@ const AIMeetingSummarizerPremium = () => {
               </Card>
 
               {/* CRM Tools Tabs */}
-              <Card className="bg-zinc-900/50 border-violet-500/20">
-                <CardContent className="p-4">
+              <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/30">
+                <CardContent className="p-5">
                   <Tabs defaultValue="properties">
-                    <TabsList className="bg-zinc-800 border-zinc-700 w-full">
-                      <TabsTrigger value="properties" className="flex-1 data-[state=active]:bg-violet-600 data-[state=active]:text-white">
+                    <TabsList className="bg-white border border-gold/20 w-full">
+                      <TabsTrigger value="properties" className="flex-1 data-[state=active]:bg-black data-[state=active]:text-gold text-zinc-600">
                         <Home className="h-4 w-4 mr-1" /> Properties
                       </TabsTrigger>
-                      <TabsTrigger value="mortgage" className="flex-1 data-[state=active]:bg-violet-600 data-[state=active]:text-white">
+                      <TabsTrigger value="mortgage" className="flex-1 data-[state=active]:bg-black data-[state=active]:text-gold text-zinc-600">
                         <Calculator className="h-4 w-4 mr-1" /> Mortgage
                       </TabsTrigger>
                     </TabsList>
 
                     <TabsContent value="properties" className="mt-4 space-y-3">
-                      <p className="text-zinc-400 text-xs">Auto-detect property preferences from meeting notes:</p>
-                      <Button onClick={handlePropertySearch} disabled={searchingProperties} size="sm" className="bg-violet-600 hover:bg-violet-500 text-white">
+                      <p className="text-zinc-500 text-xs">Auto-detect property preferences from meeting notes:</p>
+                      <Button
+                        onClick={handlePropertySearch}
+                        disabled={searchingProperties}
+                        size="sm"
+                        className="bg-black hover:bg-zinc-800 text-gold"
+                      >
                         {searchingProperties ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : <Home className="h-4 w-4 mr-1" />}
                         Find Matching Properties
                       </Button>
                       {propertyResults.length > 0 && (
                         <div className="space-y-2 mt-2">
                           {propertyResults.map((p) => (
-                            <a key={p.id} href={`/project/${p.slug}`} target="_blank" rel="noopener noreferrer" className="block bg-zinc-800 rounded-lg p-3 hover:bg-zinc-700 transition-colors">
+                            <a key={p.id} href={`/project/${p.slug}`} target="_blank" rel="noopener noreferrer" className="block bg-white border border-gold/15 rounded-lg p-3 hover:border-gold/40 transition-colors">
                               <div className="flex justify-between items-start">
                                 <div>
-                                  <p className="text-white text-sm font-medium">{p.name}</p>
-                                  <p className="text-zinc-400 text-xs">{p.area_name} · {p.property_type_label} · {p.bedrooms_min}-{p.bedrooms_max} BR</p>
+                                  <p className="text-black text-sm font-medium">{p.name}</p>
+                                  <p className="text-zinc-500 text-xs">{p.area_name} · {p.property_type_label} · {p.bedrooms_min}-{p.bedrooms_max} BR</p>
                                 </div>
-                                <Badge className="bg-violet-500/20 text-violet-400 border-0 text-xs">AED {(p.price_from || 0).toLocaleString()}</Badge>
+                                <Badge className="bg-gold/10 text-gold border border-gold/30 text-xs">AED {(p.price_from || 0).toLocaleString()}</Badge>
                               </div>
                             </a>
                           ))}
@@ -676,17 +669,24 @@ const AIMeetingSummarizerPremium = () => {
 
                     <TabsContent value="mortgage" className="mt-4 space-y-3">
                       <div className="flex gap-2">
-                        <Input placeholder="Property price (AED)" value={mortgagePrice} onChange={(e) => setMortgagePrice(e.target.value)} className="bg-zinc-800 border-zinc-700 text-white text-sm" />
-                        <Button onClick={handleMortgageCalc} size="sm" className="bg-violet-600 hover:bg-violet-500 text-white">Calculate</Button>
+                        <Input
+                          placeholder="Property price (AED)"
+                          value={mortgagePrice}
+                          onChange={(e) => setMortgagePrice(e.target.value)}
+                          className="bg-white border-gold/30 text-black focus:border-gold text-sm"
+                        />
+                        <Button onClick={handleMortgageCalc} size="sm" className="bg-black hover:bg-zinc-800 text-gold">
+                          Calculate
+                        </Button>
                       </div>
                       {mortgageResult && (
-                        <div className="bg-zinc-800 rounded-lg p-3 space-y-1 text-sm">
-                          <p className="text-white font-medium">Mortgage Estimate</p>
-                          <p className="text-zinc-400">Property: <span className="text-white">AED {mortgageResult.price.toLocaleString()}</span></p>
-                          <p className="text-zinc-400">Down Payment (20%): <span className="text-white">AED {mortgageResult.down.toLocaleString()}</span></p>
-                          <p className="text-zinc-400">Loan: <span className="text-white">AED {mortgageResult.loan.toLocaleString()}</span></p>
-                          <p className="text-zinc-400">Monthly: <span className="text-emerald-400 font-semibold">AED {mortgageResult.monthly.toLocaleString()}</span></p>
-                          <p className="text-zinc-500 text-xs mt-1">Rate: {mortgageResult.rate}% · {mortgageResult.years} years · Estimate only</p>
+                        <div className="bg-white border border-gold/15 rounded-lg p-3 space-y-1 text-sm">
+                          <p className="text-black font-medium">Mortgage Estimate</p>
+                          <p className="text-zinc-500">Property: <span className="text-black font-medium">AED {mortgageResult.price.toLocaleString()}</span></p>
+                          <p className="text-zinc-500">Down Payment (20%): <span className="text-black font-medium">AED {mortgageResult.down.toLocaleString()}</span></p>
+                          <p className="text-zinc-500">Loan: <span className="text-black font-medium">AED {mortgageResult.loan.toLocaleString()}</span></p>
+                          <p className="text-zinc-500">Monthly: <span className="text-emerald-600 font-bold">AED {mortgageResult.monthly.toLocaleString()}</span></p>
+                          <p className="text-zinc-400 text-xs mt-1">Rate: {mortgageResult.rate}% · {mortgageResult.years} years · Estimate only</p>
                         </div>
                       )}
                     </TabsContent>
@@ -695,11 +695,11 @@ const AIMeetingSummarizerPremium = () => {
               </Card>
             </motion.div>
           ) : (
-            <motion.div key="placeholder" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center justify-center py-12 text-center">
-              <div className="p-6 rounded-full bg-violet-500/10 mb-4">
-                <Brain className="h-12 w-12 text-violet-400/50" />
+            <motion.div key="placeholder" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center justify-center py-16 text-center">
+              <div className="p-6 rounded-full bg-gold/10 border border-gold/20 mb-4">
+                <Brain className="h-12 w-12 text-gold" />
               </div>
-              <h3 className="text-lg font-semibold text-zinc-400">Meeting Intelligence + CRM</h3>
+              <h3 className="text-lg font-semibold text-black">Meeting Intelligence + CRM</h3>
               <p className="text-sm text-zinc-500 mt-2 max-w-sm">
                 Record a live session or paste notes to get AI summaries, action items with follow-up scheduling, property recommendations, and auto-generated client responses
               </p>
