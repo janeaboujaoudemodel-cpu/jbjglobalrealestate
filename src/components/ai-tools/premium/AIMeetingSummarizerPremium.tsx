@@ -4,7 +4,7 @@ import {
   FileAudio, Loader2, Copy, Check, Sparkles, 
   ListChecks, Users, Clock, Target, Calendar,
   Home, Calculator, Brain, Send, Plus, Mic, Square,
-  Globe, MessageSquare
+  Globe, MessageSquare, Search, UserPlus, X
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,11 +13,31 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAITool } from "../AIToolsProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import AIToolPremiumLayout from "../AIToolPremiumLayout";
-import { VoiceInputButton } from "@/components/ui/VoiceInputButton";
+
+interface LinkedLead {
+  id: string;
+  full_name: string;
+  phone_e164: string | null;
+  email_lower: string | null;
+}
+
+const TRANSLATION_LANGUAGES = [
+  { value: 'auto', label: 'Auto-detect' },
+  { value: 'ar', label: 'Arabic' },
+  { value: 'ru', label: 'Russian' },
+  { value: 'zh', label: 'Chinese' },
+  { value: 'fr', label: 'French' },
+  { value: 'de', label: 'German' },
+  { value: 'es', label: 'Spanish' },
+  { value: 'hi', label: 'Hindi' },
+  { value: 'tr', label: 'Turkish' },
+  { value: 'fa', label: 'Farsi/Persian' },
+];
 
 const AIMeetingSummarizerPremium = () => {
   const { invokeTool, loading, response } = useAITool();
@@ -35,10 +55,24 @@ const AIMeetingSummarizerPremium = () => {
   const [mortgageResult, setMortgageResult] = useState<any>(null);
   const [mortgagePrice, setMortgagePrice] = useState("");
 
+  // Translation language
+  const [translationLang, setTranslationLang] = useState("auto");
+
+  // CRM Lead Search
+  const [leadSearch, setLeadSearch] = useState("");
+  const [leadSearchResults, setLeadSearchResults] = useState<LinkedLead[]>([]);
+  const [searchingLeads, setSearchingLeads] = useState(false);
+  const [linkedLead, setLinkedLead] = useState<LinkedLead | null>(null);
+  const [showAddLead, setShowAddLead] = useState(false);
+  const [newLeadName, setNewLeadName] = useState("");
+  const [newLeadPhone, setNewLeadPhone] = useState("");
+  const [creatingLead, setCreatingLead] = useState(false);
+
   // Live recording state
   const [isRecording, setIsRecording] = useState(false);
   const [recordingElapsed, setRecordingElapsed] = useState(0);
   const [sessionDuration, setSessionDuration] = useState<string | null>(null);
+  const [sessionDate, setSessionDate] = useState<string | null>(null);
   const [liveTranscript, setLiveTranscript] = useState<Array<{ original: string; translated?: string; lang?: string }>>([]);
   const [isTranscribing, setIsTranscribing] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -46,6 +80,7 @@ const AIMeetingSummarizerPremium = () => {
   const chunksRef = useRef<Blob[]>([]);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const transcriptContainerRef = useRef<HTMLDivElement | null>(null);
+  const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Auto-scroll transcript
   useEffect(() => {
@@ -59,8 +94,41 @@ const AIMeetingSummarizerPremium = () => {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
       if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop());
+      if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
     };
   }, []);
+
+  // Debounced lead search
+  useEffect(() => {
+    if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
+    if (!leadSearch.trim()) {
+      setLeadSearchResults([]);
+      setShowAddLead(false);
+      return;
+    }
+    searchTimeoutRef.current = setTimeout(async () => {
+      setSearchingLeads(true);
+      try {
+        const { data, error } = await supabase
+          .from("crm_leads")
+          .select("id, full_name, phone_e164, email_lower")
+          .or(`full_name.ilike.%${leadSearch}%,phone_e164.ilike.%${leadSearch}%,phone_raw.ilike.%${leadSearch}%`)
+          .is("deleted_at", null)
+          .limit(5);
+        if (error) throw error;
+        setLeadSearchResults(data || []);
+        setShowAddLead(!data || data.length === 0);
+        if (data && data.length === 0) {
+          setNewLeadName(leadSearch);
+          setNewLeadPhone("");
+        }
+      } catch (e) {
+        console.error("Lead search error:", e);
+      } finally {
+        setSearchingLeads(false);
+      }
+    }, 400);
+  }, [leadSearch]);
 
   const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -68,7 +136,6 @@ const AIMeetingSummarizerPremium = () => {
 
   const startRecording = useCallback(async () => {
     try {
-      // getUserMedia called directly in click handler for browser security
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, sampleRate: 44100 }
       });
@@ -81,6 +148,7 @@ const AIMeetingSummarizerPremium = () => {
       mediaRecorderRef.current = mediaRecorder;
       chunksRef.current = [];
       setSessionDuration(null);
+      setSessionDate(null);
 
       let chunkBuffer: Blob[] = [];
       let lastTranscribeTime = Date.now();
@@ -117,7 +185,7 @@ const AIMeetingSummarizerPremium = () => {
         setRecordingElapsed(prev => prev + 1);
       }, 1000);
 
-      toast.success("🎙️ Recording started — speak in any language");
+      toast.success("Recording started — speak in any language");
     } catch (err: any) {
       if (err instanceof Error && err.name === 'NotAllowedError') {
         toast.error("Microphone access denied. Please allow in browser settings.");
@@ -127,7 +195,7 @@ const AIMeetingSummarizerPremium = () => {
         toast.error("Could not access microphone");
       }
     }
-  }, []);
+  }, [translationLang]);
 
   const stopRecording = useCallback(() => {
     if (mediaRecorderRef.current && isRecording) {
@@ -137,10 +205,15 @@ const AIMeetingSummarizerPremium = () => {
         clearInterval(timerRef.current);
         timerRef.current = null;
       }
-      // Set session duration from elapsed time
-      setSessionDuration(formatTime(recordingElapsed));
-      handleChange("duration", formatTime(recordingElapsed));
-      toast.success(`Recording stopped — Session: ${formatTime(recordingElapsed)}`);
+      const durationStr = formatTime(recordingElapsed);
+      const dateStr = new Date().toLocaleString('en-US', { 
+        weekday: 'short', month: 'short', day: 'numeric', 
+        hour: '2-digit', minute: '2-digit' 
+      });
+      setSessionDuration(durationStr);
+      setSessionDate(dateStr);
+      handleChange("duration", durationStr);
+      toast.success(`Recording stopped — Session: ${durationStr}`);
     }
   }, [isRecording, recordingElapsed]);
 
@@ -154,7 +227,7 @@ const AIMeetingSummarizerPremium = () => {
       });
 
       const { data, error } = await supabase.functions.invoke('voice-to-text', {
-        body: { audio: base64, language: 'auto' }
+        body: { audio: base64, language: translationLang === 'auto' ? 'auto' : translationLang }
       });
 
       if (error) throw error;
@@ -183,14 +256,76 @@ const AIMeetingSummarizerPremium = () => {
     return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   };
 
+  const handleSelectLead = (lead: LinkedLead) => {
+    setLinkedLead(lead);
+    setLeadSearch("");
+    setLeadSearchResults([]);
+    setShowAddLead(false);
+    handleChange("participants", lead.full_name + (formData.participants ? `, ${formData.participants}` : ""));
+    toast.success(`Linked to ${lead.full_name}`);
+  };
+
+  const handleCreateNewLead = async () => {
+    if (!newLeadName.trim()) {
+      toast.error("Please enter a name");
+      return;
+    }
+    setCreatingLead(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { toast.error("Please log in"); return; }
+
+      const { data, error } = await supabase
+        .from("crm_leads")
+        .insert([{
+          full_name: newLeadName.trim(),
+          phone_raw: newLeadPhone.trim() || null,
+          phone_e164: newLeadPhone.trim() || null,
+          owner_user_id: user.id,
+          owner_type: "broker_owned" as const,
+          source: "Meeting Summarizer",
+          notes: `Created from meeting: ${formData.meetingTitle || "Untitled"}`,
+        }])
+        .select("id, full_name, phone_e164, email_lower")
+        .single();
+
+      if (error) throw error;
+      setLinkedLead(data);
+      setLeadSearch("");
+      setShowAddLead(false);
+      handleChange("participants", data.full_name + (formData.participants ? `, ${formData.participants}` : ""));
+      toast.success(`Lead "${data.full_name}" created and linked`);
+    } catch (e: any) {
+      toast.error("Failed to create lead: " + e.message);
+    } finally {
+      setCreatingLead(false);
+    }
+  };
+
   const handleSubmit = async () => {
     if (!formData.notes.trim()) {
       toast.error("Please enter meeting notes or record a session");
       return;
     }
-    const result = await invokeTool("ai-meeting-summarizer", formData);
+    const result = await invokeTool("ai-meeting-summarizer", {
+      ...formData,
+      linkedLeadId: linkedLead?.id,
+      sessionDate,
+      fullTranscript: liveTranscript.map(t => t.original).join(' '),
+    });
     if (result.success) {
       toast.success("Meeting summarized successfully!");
+      // Update linked lead if exists
+      if (linkedLead?.id) {
+        try {
+          await supabase.from("crm_leads").update({
+            notes: `Meeting on ${sessionDate || new Date().toLocaleDateString()}: ${formData.meetingTitle || 'Meeting'}\n${formData.notes.slice(0, 500)}...`,
+            updated_at: new Date().toISOString(),
+          }).eq("id", linkedLead.id);
+        } catch (e) {
+          console.error("Failed to update lead:", e);
+        }
+      }
     }
   };
 
@@ -213,7 +348,7 @@ const AIMeetingSummarizerPremium = () => {
 
       const baseTasks = items.map((item: any) => ({
         title: typeof item === "string" ? item : item.task || item.title || String(item),
-        description: `From meeting: ${formData.meetingTitle || "Untitled"}\nParticipants: ${formData.participants || "N/A"}`,
+        description: `From meeting: ${formData.meetingTitle || "Untitled"}\nParticipants: ${formData.participants || "N/A"}${linkedLead ? `\nLinked Lead: ${linkedLead.full_name}` : ""}`,
         priority: typeof item === "object" ? item.priority || "medium" : "medium",
         due_date: new Date(Date.now() + 3 * 86400000).toISOString().split("T")[0],
         status: "pending",
@@ -227,7 +362,7 @@ const AIMeetingSummarizerPremium = () => {
         { days: 14, label: "14-day deal progress review" },
       ].map(f => ({
         title: `${f.label}: ${formData.meetingTitle || "Meeting follow-up"}`,
-        description: `Scheduled follow-up from meeting with ${formData.participants || "client"}.\n\nReview action items and check progress.`,
+        description: `Scheduled follow-up from meeting with ${formData.participants || "client"}.\n\nReview action items and check progress.${linkedLead ? `\nLinked Lead: ${linkedLead.full_name}` : ""}`,
         priority: f.days <= 3 ? "high" : "medium",
         due_date: new Date(Date.now() + f.days * 86400000).toISOString().split("T")[0],
         status: "pending",
@@ -363,32 +498,122 @@ const AIMeetingSummarizerPremium = () => {
               </div>
             </div>
 
+            {/* CRM Lead Link Section */}
+            <div className="bg-white border border-gold/20 rounded-xl p-4 space-y-3">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-full bg-black flex items-center justify-center">
+                  <Search className="h-3.5 w-3.5 text-gold" />
+                </div>
+                <span className="text-black font-semibold text-sm">Link to CRM Lead</span>
+              </div>
+
+              {linkedLead ? (
+                <div className="flex items-center gap-3 p-3 bg-emerald-50 border border-emerald-200 rounded-lg">
+                  <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center">
+                    <Check className="h-4 w-4 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-black font-medium text-sm">{linkedLead.full_name}</p>
+                    <p className="text-zinc-500 text-xs">{linkedLead.phone_e164 || linkedLead.email_lower || "No contact"}</p>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setLinkedLead(null)}
+                    className="text-zinc-500 hover:text-red-600 hover:bg-red-50"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
+                    <Input
+                      placeholder="Search by name or phone..."
+                      value={leadSearch}
+                      onChange={(e) => setLeadSearch(e.target.value)}
+                      className="pl-10 bg-white border-gold/30 text-black placeholder:text-zinc-400"
+                    />
+                    {searchingLeads && <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gold animate-spin" />}
+                  </div>
+
+                  {leadSearchResults.length > 0 && (
+                    <div className="space-y-1 max-h-[150px] overflow-y-auto">
+                      {leadSearchResults.map((lead) => (
+                        <button
+                          key={lead.id}
+                          onClick={() => handleSelectLead(lead)}
+                          className="w-full text-left p-2 rounded-lg hover:bg-gold/10 border border-transparent hover:border-gold/30 transition-colors"
+                        >
+                          <p className="text-black font-medium text-sm">{lead.full_name}</p>
+                          <p className="text-zinc-500 text-xs">{lead.phone_e164 || lead.email_lower || "No contact"}</p>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
+                  {showAddLead && (
+                    <div className="p-3 bg-zinc-50 border border-zinc-200 rounded-lg space-y-2">
+                      <p className="text-zinc-600 text-xs font-medium">No lead found — Add new lead:</p>
+                      <div className="grid grid-cols-2 gap-2">
+                        <Input
+                          placeholder="Full Name"
+                          value={newLeadName}
+                          onChange={(e) => setNewLeadName(e.target.value)}
+                          className="bg-white border-zinc-300 text-black text-sm"
+                        />
+                        <Input
+                          placeholder="Phone (optional)"
+                          value={newLeadPhone}
+                          onChange={(e) => setNewLeadPhone(e.target.value)}
+                          className="bg-white border-zinc-300 text-black text-sm"
+                        />
+                      </div>
+                      <Button
+                        size="sm"
+                        onClick={handleCreateNewLead}
+                        disabled={creatingLead || !newLeadName.trim()}
+                        className="w-full bg-black hover:bg-zinc-800 text-gold text-xs"
+                      >
+                        {creatingLead ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <UserPlus className="h-3 w-3 mr-1" />}
+                        Create & Link Lead
+                      </Button>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+
             {/* Live Recording Section */}
             <div className="bg-white border border-gold/20 rounded-xl p-5 space-y-4 shadow-sm">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between flex-wrap gap-2">
                 <div className="flex items-center gap-2.5">
                   <div className="w-8 h-8 rounded-full bg-black flex items-center justify-center">
                     <Mic className="h-4 w-4 text-gold" />
                   </div>
                   <span className="text-black font-semibold">Live Session Recorder</span>
-                  <Badge className="bg-gold/10 text-gold border border-gold/30 text-[10px] font-medium">
-                    <Globe className="h-3 w-3 mr-1" /> Any Language
-                  </Badge>
                 </div>
-                {isRecording && (
-                  <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse" />
-                    <span className="text-red-600 text-sm font-mono font-bold">{formatTime(recordingElapsed)}</span>
-                  </div>
-                )}
-                {!isRecording && sessionDuration && (
-                  <Badge className="bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs">
-                    <Clock className="h-3 w-3 mr-1" /> Session: {sessionDuration}
-                  </Badge>
-                )}
+                
+                {/* Translation Language Selector */}
+                <div className="flex items-center gap-2">
+                  <Globe className="h-4 w-4 text-gold" />
+                  <Select value={translationLang} onValueChange={setTranslationLang}>
+                    <SelectTrigger className="w-[140px] h-8 text-xs bg-white border-gold/30 text-black">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {TRANSLATION_LANGUAGES.map((lang) => (
+                        <SelectItem key={lang.value} value={lang.value} className="text-xs">
+                          {lang.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 flex-wrap">
                 <Button
                   type="button"
                   onClick={isRecording ? stopRecording : startRecording}
@@ -404,12 +629,31 @@ const AIMeetingSummarizerPremium = () => {
                     <><Mic className="h-4 w-4 mr-2" /> Start Recording Session</>
                   )}
                 </Button>
+                
+                {isRecording && (
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse" />
+                    <span className="text-red-600 text-sm font-mono font-bold">{formatTime(recordingElapsed)}</span>
+                  </div>
+                )}
+                
                 {isTranscribing && (
                   <span className="text-gold text-xs flex items-center gap-1.5 font-medium">
                     <Loader2 className="h-3 w-3 animate-spin" /> Transcribing...
                   </span>
                 )}
               </div>
+
+              {/* Session Info After Recording */}
+              {!isRecording && sessionDuration && (
+                <div className="flex items-center gap-3 p-3 bg-emerald-50 border border-emerald-200 rounded-lg">
+                  <Clock className="h-5 w-5 text-emerald-600" />
+                  <div>
+                    <p className="text-black font-medium text-sm">Session Recorded</p>
+                    <p className="text-zinc-600 text-xs">Duration: {sessionDuration} · {sessionDate}</p>
+                  </div>
+                </div>
+              )}
 
               {/* Live Transcript Display */}
               {liveTranscript.length > 0 && (
@@ -443,26 +687,11 @@ const AIMeetingSummarizerPremium = () => {
               </p>
             </div>
 
-            {/* Notes Textarea with Voice Button */}
+            {/* Notes Textarea */}
             <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <Label className="text-zinc-700 text-sm">Meeting Notes / Transcript *</Label>
-                <VoiceInputButton
-                  onTranscript={(text) => handleChange("notes", formData.notes + (formData.notes ? "\n" : "") + text)}
-                  onTranscriptResult={(result) => {
-                    if (result.translated && !result.isEnglish) {
-                      handleChange("notes", formData.notes + 
-                        `\n[${result.languageName}]: ${result.original}\n[English]: ${result.translated}\n`
-                      );
-                    }
-                  }}
-                  size="sm"
-                  variant="outline"
-                  className="border-gold/40 text-gold hover:bg-gold/10 hover:text-gold"
-                />
-              </div>
+              <Label className="text-zinc-700 text-sm">Meeting Notes / Transcript *</Label>
               <Textarea
-                placeholder="Paste meeting notes, or use the recorder above / voice button to capture audio..."
+                placeholder="Paste meeting notes, or use the recorder above to capture audio..."
                 value={formData.notes}
                 onChange={(e) => handleChange("notes", e.target.value)}
                 rows={8}
@@ -542,7 +771,7 @@ const AIMeetingSummarizerPremium = () => {
                     <ul className="space-y-2">
                       {response.keyDecisions.map((decision: any, idx: number) => (
                         <li key={idx} className="flex items-start gap-2 text-sm text-zinc-700">
-                          <span className="text-emerald-600 font-bold">✓</span>
+                          <span className="text-emerald-600 font-bold">[OK]</span>
                           {typeof decision === "string" ? decision : decision.decision || JSON.stringify(decision)}
                         </li>
                       ))}

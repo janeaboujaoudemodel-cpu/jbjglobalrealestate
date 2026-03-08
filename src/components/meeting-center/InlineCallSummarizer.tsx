@@ -111,11 +111,11 @@ const InlineCallSummarizer = ({ onSuccess }: InlineCallSummarizerProps) => {
 
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-      <div className="bg-zinc-900/80 border border-orange-500/30 rounded-xl overflow-hidden">
+      <div className="bg-zinc-900/80 border border-orange-500/50 rounded-xl overflow-hidden">
         <CollapsibleTrigger asChild>
           <Button
             variant="ghost"
-            className="w-full flex items-center justify-between p-4 hover:bg-zinc-800/50 rounded-none h-auto"
+            className="w-full flex items-center justify-between p-4 hover:bg-zinc-800/80 rounded-none h-auto"
           >
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-600 to-amber-600 flex items-center justify-center">
@@ -123,43 +123,42 @@ const InlineCallSummarizer = ({ onSuccess }: InlineCallSummarizerProps) => {
               </div>
               <div className="text-left">
                 <h3 className="font-semibold text-white">Add Call Summary</h3>
-                <p className="text-sm text-zinc-400">Summarize a phone call with AI</p>
+                <p className="text-sm text-zinc-300">Summarize a phone call with AI</p>
               </div>
             </div>
             {isOpen ? (
-              <ChevronUp className="w-5 h-5 text-zinc-400" />
+              <ChevronUp className="w-5 h-5 text-white" />
             ) : (
-              <ChevronDown className="w-5 h-5 text-zinc-400" />
+              <ChevronDown className="w-5 h-5 text-white" />
             )}
           </Button>
         </CollapsibleTrigger>
         
         <CollapsibleContent>
-          <div className="p-4 pt-0 space-y-4 border-t border-zinc-800">
+          <div className="p-4 pt-0 space-y-4 border-t border-zinc-700">
             {/* Client Name */}
             <div>
-              <Label className="text-zinc-300 mb-2 block text-sm">Client Name</Label>
+              <Label className="text-zinc-200 mb-2 block text-sm font-medium">Client Name</Label>
               <Input
                 value={clientName}
                 onChange={(e) => setClientName(e.target.value)}
                 placeholder="Enter client name"
-                className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500"
+                className="bg-zinc-800 border-zinc-600 text-white placeholder:text-zinc-400"
               />
             </div>
 
             {/* Audio Upload/Record */}
             <div>
-              <Label className="text-zinc-300 mb-2 block text-sm">Audio (Optional)</Label>
+              <Label className="text-zinc-200 mb-2 block text-sm font-medium">Audio (Optional)</Label>
               <div className="flex flex-wrap gap-2">
                 <Button
                   type="button"
-                  variant="outline"
                   size="sm"
                   onClick={() => fileInputRef.current?.click()}
-                  className="border-orange-500/50 text-orange-400 hover:bg-orange-500/10"
+                  className="bg-orange-600 hover:bg-orange-500 text-white font-medium"
                 >
                   <Upload className="w-4 h-4 mr-2" />
-                  Upload
+                  Upload Audio
                 </Button>
                 <input
                   ref={fileInputRef}
@@ -172,10 +171,9 @@ const InlineCallSummarizer = ({ onSuccess }: InlineCallSummarizerProps) => {
                 {!isRecording ? (
                   <Button
                     type="button"
-                    variant="outline"
                     size="sm"
                     onClick={startRecording}
-                    className="border-orange-500/50 text-orange-400 hover:bg-orange-500/10"
+                    className="bg-orange-600 hover:bg-orange-500 text-white font-medium"
                   >
                     <Mic className="w-4 h-4 mr-2" />
                     Record
@@ -185,16 +183,16 @@ const InlineCallSummarizer = ({ onSuccess }: InlineCallSummarizerProps) => {
                     type="button"
                     size="sm"
                     onClick={stopRecording}
-                    className="bg-red-600 hover:bg-red-500 text-white"
+                    className="bg-red-600 hover:bg-red-500 text-white font-medium animate-pulse"
                   >
-                    <Mic className="w-4 h-4 mr-2 animate-pulse" />
-                    Stop
+                    <Mic className="w-4 h-4 mr-2" />
+                    Stop Recording
                   </Button>
                 )}
               </div>
               
               {audioFile && (
-                <div className="mt-2 flex items-center gap-2 text-sm text-orange-400">
+                <div className="mt-2 flex items-center gap-2 text-sm text-orange-300 font-medium">
                   <FileAudio className="w-4 h-4" />
                   {audioFile.name}
                 </div>
@@ -203,12 +201,12 @@ const InlineCallSummarizer = ({ onSuccess }: InlineCallSummarizerProps) => {
 
             {/* Call Notes */}
             <div>
-              <Label className="text-zinc-300 mb-2 block text-sm">Call Notes</Label>
+              <Label className="text-zinc-200 mb-2 block text-sm font-medium">Call Notes</Label>
               <Textarea
                 value={callNotes}
                 onChange={(e) => setCallNotes(e.target.value)}
                 placeholder="Enter key discussion points..."
-                className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500 min-h-[100px]"
+                className="bg-zinc-800 border-zinc-600 text-white placeholder:text-zinc-400 min-h-[100px]"
               />
             </div>
 
