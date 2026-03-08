@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { T } from "@/components/ui/T";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 
-const WHY_DUBAI_VIDEO_URL = "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/videos/why-dubai-scenes.mp4";
+const WHY_DUBAI_VIDEO_URL = "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/videos/hero-video.mp4";
 const POSTER_URL = "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80";
 
 const stats = [
