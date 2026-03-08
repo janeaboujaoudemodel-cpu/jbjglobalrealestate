@@ -66,32 +66,23 @@ class DecisionIntelligenceService {
 
     try {
       // Fetch real lead data
-      const { count: totalLeads } = await supabase
-        .from('crm_leads')
-        .select('*', { count: 'exact', head: true }) as any;
+      const leadsQuery: any = supabase.from('crm_leads').select('*', { count: 'exact', head: true });
+      const { count: totalLeads } = await leadsQuery;
 
-      const { count: convertedLeads } = await supabase
-        .from('crm_leads')
-        .select('*', { count: 'exact', head: true })
-        .eq('status', 'converted') as any;
+      const convertedQuery: any = supabase.from('crm_leads').select('*', { count: 'exact', head: true }).eq('status', 'converted');
+      const { count: convertedLeads } = await convertedQuery;
 
       // Fetch real project data
-      const { count: totalProjects } = await supabase
-        .from('projects')
-        .select('*', { count: 'exact', head: true })
-        .eq('is_published', true) as any;
+      const projectsQuery: any = supabase.from('projects').select('*', { count: 'exact', head: true }).eq('is_published', true);
+      const { count: totalProjects } = await projectsQuery;
 
       // Fetch broker data
-      const { count: activeBrokers } = await supabase
-        .from('profiles')
-        .select('*', { count: 'exact', head: true }) as any;
+      const brokersQuery: any = supabase.from('profiles').select('*', { count: 'exact', head: true });
+      const { count: activeBrokers } = await brokersQuery;
 
       // Fetch recent tasks
-      const { data: recentTasks } = await supabase
-        .from('admin_tasks')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(50) as any;
+      const tasksQuery: any = supabase.from('admin_tasks').select('*').order('created_at', { ascending: false }).limit(50);
+      const { data: recentTasks } = await tasksQuery;
 
       const completedTasks = recentTasks?.filter(t => t.status === 'completed').length || 0;
       const pendingTasks = recentTasks?.filter(t => t.status === 'pending').length || 0;
