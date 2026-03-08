@@ -695,63 +695,36 @@ const Admin = () => {
             </Suspense>
           </TabsContent>
 
-          <TabsContent value="properties" className="space-y-8">
-            {/* Stats - Premium Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
-                <CardContent className="pt-6">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
-                      <Building2 className="w-5 h-5 text-gold" />
+          <TabsContent value="properties" className="space-y-6">
+            {/* Stats - Premium Cards - Clickable filters */}
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+              {[
+                { key: "all" as const, label: "Total Projects", value: totalProjectsCount ?? projects?.length ?? 0, icon: <Building2 className="w-5 h-5 text-gold" /> },
+                { key: "premium" as const, label: "Premium", value: projects?.filter((p) => p.is_premium).length || 0, icon: <Crown className="w-5 h-5 text-gold" /> },
+                { key: "developers" as const, label: "Developers", value: developers?.length || 0, icon: <Briefcase className="w-5 h-5 text-gold" /> },
+                { key: "communities" as const, label: "Communities", value: communities?.length || 0, icon: <Users className="w-5 h-5 text-gold" /> },
+                { key: "areas" as const, label: "Areas", value: areas?.length || 0, icon: <MapPin className="w-5 h-5 text-gold" /> },
+              ].map((stat) => (
+                <Card
+                  key={stat.key}
+                  className={`bg-white border-2 shadow-lg cursor-pointer transition-all hover:shadow-xl ${
+                    propertiesFilter === stat.key ? "border-gold ring-2 ring-gold/20" : "border-gold/20 hover:border-gold/40"
+                  }`}
+                  onClick={() => setPropertiesFilter(stat.key)}
+                >
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center flex-shrink-0">
+                        {stat.icon}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-2xl font-bold text-black leading-tight">{stat.value}</p>
+                        <p className="text-xs text-zinc-500 truncate">{stat.label}</p>
+                      </div>
                     </div>
-                    <div>
-                      <span className="text-zinc-500 text-sm">Total Projects</span>
-                      <p className="text-black text-2xl font-bold">{totalProjectsCount ?? projects?.length ?? 0}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
-                <CardContent className="pt-6">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
-                      <Crown className="w-5 h-5 text-gold" />
-                    </div>
-                    <div>
-                      <span className="text-zinc-500 text-sm">Premium Properties</span>
-                      <p className="text-black text-2xl font-bold">
-                        {projects?.filter((p) => p.is_premium).length || 0}
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
-                <CardContent className="pt-6">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
-                      <Building2 className="w-5 h-5 text-gold" />
-                    </div>
-                    <div>
-                      <span className="text-zinc-500 text-sm">Developers</span>
-                      <p className="text-black text-2xl font-bold">{developers?.length || 0}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
-                <CardContent className="pt-6">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
-                      <FileText className="w-5 h-5 text-gold" />
-                    </div>
-                    <div>
-                      <span className="text-zinc-500 text-sm">Communities</span>
-                      <p className="text-black text-2xl font-bold">{communities?.length || 0}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
 
             {/* Smart Document Uploader */}
