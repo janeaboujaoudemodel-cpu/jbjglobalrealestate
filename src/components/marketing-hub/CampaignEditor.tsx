@@ -123,13 +123,13 @@ const CampaignEditor: React.FC<CampaignEditorProps> = ({ campaign, onClose, onSa
       } else if (source === 'leads') {
         const { data } = await supabase
           .from('crm_leads')
-          .select('id, email, full_name, status')
+          .select('id, email_lower, full_name, pipeline_stage')
           .limit(500);
-        entries = (data || []).filter(l => l.email).map(l => ({
+        entries = (data || []).filter(l => l.email_lower).map(l => ({
           id: l.id,
-          email: l.email!,
-          name: l.full_name || l.email!.split('@')[0],
-          source: `Lead (${l.status || 'new'})`,
+          email: l.email_lower!,
+          name: l.full_name || l.email_lower!.split('@')[0],
+          source: `Lead (${l.pipeline_stage || 'new'})`,
           selected: false,
         }));
       } else if (source === 'brokers') {
