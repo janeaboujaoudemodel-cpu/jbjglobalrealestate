@@ -282,7 +282,7 @@ const AIMeetingSummarizerPremium = () => {
           phone_raw: newLeadPhone.trim() || null,
           phone_e164: newLeadPhone.trim() || null,
           owner_user_id: user.id,
-          owner_type: "broker" as const,
+          owner_type: "broker_owned" as const,
           source: "Meeting Summarizer",
           notes: `Created from meeting: ${formData.meetingTitle || "Untitled"}`,
         }])
