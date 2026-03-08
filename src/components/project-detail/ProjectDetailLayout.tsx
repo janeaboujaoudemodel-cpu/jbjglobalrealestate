@@ -62,6 +62,7 @@ import AmenitiesWithPhotos from "@/components/project-detail/AmenitiesWithPhotos
 import PointsOfInterest from "@/components/project-detail/PointsOfInterest";
 import ProjectLocationMap from "@/components/project-detail/ProjectLocationMap";
 import ProjectLocationFlyover from "@/components/project-detail/ProjectLocationFlyover";
+import ProjectNearbyPropertiesMap from "@/components/project-detail/ProjectNearbyPropertiesMap";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 import { SectionDivider } from "@/components/ui/section-divider";
 // Footer is now rendered globally in MainLayout - do not import here
