@@ -5,6 +5,7 @@
  * This is a global rule - use this component everywhere developer names appear.
  */
 
+import React from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
@@ -16,13 +17,13 @@ interface DeveloperLinkProps {
   onClick?: (e: React.MouseEvent) => void;
 }
 
-export function DeveloperLink({ 
+export const DeveloperLink = React.forwardRef<HTMLSpanElement, DeveloperLinkProps>(({ 
   name, 
   slug, 
   className = "", 
   showPrefix = true,
   onClick 
-}: DeveloperLinkProps) {
+}, ref) => {
   const handleClick = (e: React.MouseEvent) => {
     // Stop propagation to prevent card clicks
     e.stopPropagation();
@@ -32,7 +33,7 @@ export function DeveloperLink({
   // If no slug, render as styled text (but still gold)
   if (!slug) {
     return (
-      <span className={cn("text-muted-foreground", className)}>
+      <span ref={ref} className={cn("text-muted-foreground", className)}>
         {showPrefix && <span className="text-black">by </span>}
         <span className="font-semibold text-gold">
           {name}
@@ -42,7 +43,7 @@ export function DeveloperLink({
   }
 
   return (
-    <span className={cn("text-muted-foreground", className)}>
+    <span ref={ref} className={cn("text-muted-foreground", className)}>
       {showPrefix && <span className="text-black">by </span>}
       <Link 
         to={`/developer/${slug}`}
@@ -53,6 +54,8 @@ export function DeveloperLink({
       </Link>
     </span>
   );
-}
+});
+
+DeveloperLink.displayName = 'DeveloperLink';
 
 export default DeveloperLink;

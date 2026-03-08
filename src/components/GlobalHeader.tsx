@@ -572,8 +572,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
         <div className={`absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-gold/80 to-transparent transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`} />
       </div>
       
-      {/* Thin white divider when transparent - separates header from hero */}
-      <div className={`absolute bottom-0 left-0 right-0 h-[1px] z-10 bg-gradient-to-r from-transparent via-white/30 to-transparent transition-opacity duration-300 ${isFullyTransparent ? "opacity-100" : "opacity-0"}`} />
+      {/* Gold divider when transparent - separates header from hero */}
+      <div className={`absolute bottom-0 left-0 right-0 h-[1px] z-10 bg-gradient-to-r from-transparent via-gold/40 to-transparent transition-opacity duration-300 ${isFullyTransparent ? "opacity-100" : "opacity-0"}`} />
       
       {/* Inner shadow for depth */}
       <div 

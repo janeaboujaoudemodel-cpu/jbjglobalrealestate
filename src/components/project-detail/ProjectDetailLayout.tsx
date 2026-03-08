@@ -259,7 +259,9 @@ export default function ProjectDetailLayout({
   }, []);
 
   // Scroll-spy: track which section is in view and update activeTab
+  // Uses a deterministic "highest ratio + closest to top" approach to prevent stuck tabs
   const tabNavRef = useRef<HTMLDivElement>(null);
+  const sectionRatios = useRef<Map<string, { ratio: number; top: number }>>(new Map());
   useEffect(() => {
     const refMap: Record<string, React.RefObject<HTMLDivElement>> = {
       details: detailsRef, gallery: galleryRef, usp: uspRef,
@@ -273,19 +275,38 @@ export default function ProjectDetailLayout({
     const entries = Object.entries(refMap);
     const observer = new IntersectionObserver(
       (observed) => {
+        // Update ratios map for every entry change
         for (const entry of observed) {
-          if (entry.isIntersecting) {
-            const match = entries.find(([, ref]) => ref.current === entry.target);
-            if (match) {
-              setActiveTab(match[0]);
-              // Auto-scroll the tab button into view
-              const btn = tabNavRef.current?.querySelector(`[data-tab="${match[0]}"]`) as HTMLElement;
-              btn?.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
+          const match = entries.find(([, ref]) => ref.current === entry.target);
+          if (match) {
+            if (entry.isIntersecting && entry.intersectionRatio > 0) {
+              sectionRatios.current.set(match[0], {
+                ratio: entry.intersectionRatio,
+                top: entry.boundingClientRect.top,
+              });
+            } else {
+              sectionRatios.current.delete(match[0]);
             }
           }
         }
+        // Pick the best: highest ratio, then closest to top of viewport as tiebreaker
+        let bestId: string | null = null;
+        let bestRatio = -1;
+        let bestTop = Infinity;
+        sectionRatios.current.forEach((val, id) => {
+          if (val.ratio > bestRatio || (val.ratio === bestRatio && Math.abs(val.top) < Math.abs(bestTop))) {
+            bestRatio = val.ratio;
+            bestTop = val.top;
+            bestId = id;
+          }
+        });
+        if (bestId) {
+          setActiveTab(bestId);
+          const btn = tabNavRef.current?.querySelector(`[data-tab="${bestId}"]`) as HTMLElement;
+          btn?.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
+        }
       },
-      { rootMargin: '-20% 0px -70% 0px', threshold: 0 }
+      { rootMargin: '-120px 0px -60% 0px', threshold: [0, 0.1, 0.25, 0.4, 0.6, 0.8] }
     );
     entries.forEach(([, ref]) => { if (ref.current) observer.observe(ref.current); });
     return () => observer.disconnect();
@@ -377,7 +398,7 @@ export default function ProjectDetailLayout({
   const whatsappMessage = `Hi, I'm interested in ${project.name}${project.location ? ` at ${project.location}` : ""}. Please share more details.`;
 
   const scrollToRef = (ref: React.RefObject<HTMLDivElement>) => {
-    ref.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   const scrollToInquiry = () => scrollToRef(inquiryRef);
@@ -665,8 +686,8 @@ export default function ProjectDetailLayout({
           </div>
         </div>
 
-        {/* Row 2: Curated Shortcuts */}
-        <div className="bg-gradient-to-r from-[#EDE0C8] via-[#E2D4B8] to-[#D4C4A8] border-b border-gold/30 shadow-md">
+        {/* Row 2: Curated Shortcuts — gold bottom border for visibility */}
+        <div className="bg-gradient-to-r from-[#EDE0C8] via-[#E2D4B8] to-[#D4C4A8] border-b-2 border-gold shadow-[0_4px_12px_rgba(200,167,102,0.25)]">
           <div className="container mx-auto px-4">
             <div ref={tabNavRef} className="overflow-x-auto scrollbar-hide" style={{ touchAction: 'pan-x', WebkitOverflowScrolling: 'touch', overscrollBehaviorX: 'contain', scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
               <div className="flex items-center gap-1 py-1.5">
@@ -675,10 +696,10 @@ export default function ProjectDetailLayout({
                     key={tab.id}
                     data-tab={tab.id}
                     onClick={() => handleTabClick(tab.id)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium whitespace-nowrap min-w-fit transition-all ${
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium whitespace-nowrap min-w-fit transition-all relative ${
                       activeTab === tab.id
-                        ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-[#C8A766]/60 shadow-sm"
-                        : "text-black/70 hover:text-gold hover:bg-gold/10"
+                        ? "bg-gradient-to-br from-[#FDFBF7] via-[#F5EBD7] to-[#E8DCC8] text-black border-2 border-gold font-bold shadow-[0_0_12px_rgba(200,167,102,0.4)]"
+                        : "text-black/70 hover:text-gold hover:bg-gold/10 border border-transparent"
                     }`}
                   >
                     <tab.icon className="w-3.5 h-3.5" />
@@ -1018,7 +1039,7 @@ export default function ProjectDetailLayout({
               )}
 
               {/* Location Flyover Animation */}
-              {project.latitude && project.longitude && (
+              {typeof project.latitude === 'number' && typeof project.longitude === 'number' && !isNaN(project.latitude) && !isNaN(project.longitude) && !(project.latitude === 0 && project.longitude === 0) && (
                 <div className="mb-6">
                   <h3 className="text-lg font-semibold text-foreground mb-3">Location Flyover</h3>
                   <ProjectLocationFlyover

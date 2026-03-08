@@ -124,12 +124,12 @@ export function MegaMenuFeaturedCard({
           preload="auto"
         />
       )}
-      {/* Static image background */}
+      {/* Static image background — always visible until video is ready */}
       {image && (
         <div
           className={cn(
             "absolute inset-0 bg-cover bg-center transition-all duration-700 group-hover:scale-110",
-            video ? "opacity-0" : ""
+            video && videoReady ? "opacity-0" : "opacity-100"
           )}
           style={{ backgroundImage: `url(${image})` }}
         />
