@@ -534,3 +534,6 @@ verify_jwt = false
 
 [functions.ai-signature-generator]
 verify_jwt = false
+
+[functions.lovable-ai]
+verify_jwt = false
