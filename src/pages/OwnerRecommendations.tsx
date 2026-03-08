@@ -163,18 +163,23 @@ const OwnerRecommendations = () => {
 
         {/* Filters */}
         <div className="flex flex-wrap gap-2 mb-6">
-          <div className="flex gap-1 bg-white/60 border border-gold/20 rounded-lg p-1">
-            {["all", ...Object.keys(SOURCE_CONFIG)].map(s => (
-              <button key={s} onClick={() => setFilterSource(s)}
-                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${filterSource === s ? "bg-black text-white" : "text-zinc-600 hover:bg-gold/10"}`}>
-                {s === "all" ? "All Sources" : SOURCE_CONFIG[s]?.label || s}
-              </button>
-            ))}
+          <div className="flex flex-wrap gap-1 bg-white/60 border border-gold/20 rounded-lg p-1">
+            {["all", ...Object.keys(SOURCE_CONFIG)].map(s => {
+              const cfg = SOURCE_CONFIG[s];
+              const SrcIcon = cfg?.icon;
+              return (
+                <button key={s} onClick={() => setFilterSource(s)}
+                  className={`inline-flex items-center gap-1.5 whitespace-nowrap px-4 py-1.5 rounded-md text-xs font-medium transition-all ${filterSource === s ? "bg-gradient-to-r from-[#F5EBD7] to-[#D4C4A8] text-black border border-gold/40 shadow-sm" : "text-zinc-600 hover:bg-gold/10"}`}>
+                  {SrcIcon && <SrcIcon className="w-3 h-3 flex-shrink-0" />}
+                  {s === "all" ? "All Sources" : cfg?.label || s}
+                </button>
+              );
+            })}
           </div>
-          <div className="flex gap-1 bg-white/60 border border-gold/20 rounded-lg p-1">
+          <div className="flex flex-wrap gap-1 bg-white/60 border border-gold/20 rounded-lg p-1">
             {["all", "pending", "applied", "reverted", "dismissed"].map(s => (
               <button key={s} onClick={() => setFilterStatus(s)}
-                className={`px-3 py-1.5 rounded-md text-xs font-medium capitalize transition-all ${filterStatus === s ? "bg-black text-white" : "text-zinc-600 hover:bg-gold/10"}`}>
+                className={`whitespace-nowrap px-4 py-1.5 rounded-md text-xs font-medium capitalize transition-all ${filterStatus === s ? "bg-gradient-to-r from-[#F5EBD7] to-[#D4C4A8] text-black border border-gold/40 shadow-sm" : "text-zinc-600 hover:bg-gold/10"}`}>
                 {s === "all" ? "All Status" : s}
               </button>
             ))}
