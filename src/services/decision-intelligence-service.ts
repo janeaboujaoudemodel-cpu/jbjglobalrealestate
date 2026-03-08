@@ -1,5 +1,6 @@
-// AI Insight & Decision-Making Layer - Service
+// AI Insight & Decision-Making Layer - Service (Real-time data from database)
 
+import { supabase } from '@/integrations/supabase/client';
 import {
   BusinessInsight,
   PredictiveAnalysis,
@@ -43,7 +44,7 @@ class DecisionIntelligenceService {
   private listeners: Set<(state: DecisionIntelligenceState) => void> = new Set();
 
   constructor() {
-    this.initializeMockData();
+    this.loadRealData();
   }
 
   private notifyListeners() {
@@ -59,206 +60,182 @@ class DecisionIntelligenceService {
     return this.state;
   }
 
-  private initializeMockData() {
-    // Initialize KPIs
-    this.state.kpis = [
-      {
-        id: 'kpi_sales_1',
-        name: 'Monthly Revenue',
-        category: 'sales',
-        currentValue: 4250000,
-        previousValue: 3800000,
-        target: 4500000,
-        unit: 'AED',
-        trend: 'up',
-        trendPercentage: 11.8,
-        status: 'on_track',
-        lastUpdated: new Date()
-      },
-      {
-        id: 'kpi_sales_2',
-        name: 'Lead Conversion Rate',
-        category: 'sales',
-        currentValue: 18.5,
-        previousValue: 16.2,
-        target: 20,
-        unit: '%',
-        trend: 'up',
-        trendPercentage: 14.2,
-        status: 'on_track',
-        lastUpdated: new Date()
-      },
-      {
-        id: 'kpi_marketing_1',
-        name: 'Campaign ROI',
-        category: 'marketing',
-        currentValue: 3.2,
-        previousValue: 2.8,
-        target: 3.5,
-        unit: 'x',
-        trend: 'up',
-        trendPercentage: 14.3,
-        status: 'on_track',
-        lastUpdated: new Date()
-      },
-      {
-        id: 'kpi_marketing_2',
-        name: 'Cost Per Lead',
-        category: 'marketing',
-        currentValue: 285,
-        previousValue: 320,
-        target: 250,
-        unit: 'AED',
-        trend: 'down',
-        trendPercentage: 10.9,
-        status: 'on_track',
-        lastUpdated: new Date()
-      },
-      {
-        id: 'kpi_hr_1',
-        name: 'Employee Satisfaction',
-        category: 'hr',
-        currentValue: 78,
-        previousValue: 82,
-        target: 85,
-        unit: '%',
-        trend: 'down',
-        trendPercentage: 4.9,
-        status: 'at_risk',
-        lastUpdated: new Date()
-      },
-      {
-        id: 'kpi_hr_2',
-        name: 'Recruitment Success Rate',
-        category: 'hr',
-        currentValue: 72,
-        previousValue: 68,
-        target: 75,
-        unit: '%',
-        trend: 'up',
-        trendPercentage: 5.9,
-        status: 'on_track',
-        lastUpdated: new Date()
-      },
-      {
-        id: 'kpi_finance_1',
-        name: 'Commission Payout Time',
-        category: 'finance',
-        currentValue: 4.2,
-        previousValue: 3.5,
-        target: 3,
-        unit: 'days',
-        trend: 'up',
-        trendPercentage: 20,
-        status: 'behind',
-        lastUpdated: new Date()
-      },
-      {
-        id: 'kpi_admin_1',
-        name: 'Property Listing Speed',
-        category: 'admin',
-        currentValue: 1.5,
-        previousValue: 2.1,
-        target: 1,
-        unit: 'days',
-        trend: 'down',
-        trendPercentage: 28.6,
-        status: 'on_track',
-        lastUpdated: new Date()
-      }
-    ];
-
-    // Generate initial insights
-    this.state.insights = [
-      generateInsight('crm', 'Lead Conversion Rate', 18.5, 16.2, 20),
-      generateInsight('marketing', 'Campaign ROI', 3.2, 2.8, 3.5),
-      generateInsight('hr', 'Employee Satisfaction', 78, 82, 85),
-      generateInsight('finance', 'Commission Payout Time', 4.2, 3.5, 3),
-      generateInsight('admin', 'Property Listing Speed', 1.5, 2.1, 1)
-    ];
-
-    // Generate predictions
-    this.state.predictions = [
-      generatePrediction('revenue', [3200000, 3400000, 3600000, 3800000, 4000000, 4100000, 4250000], '1 month'),
-      generatePrediction('leads', [120, 135, 142, 158, 165, 172, 180], '1 month'),
-      generatePrediction('conversions', [22, 25, 23, 28, 30, 32, 34], '1 month')
-    ];
-
-    // Generate recommendations
-    this.state.recommendations = this.state.insights.map(insight => generateRecommendation(insight));
-
-    // Detect risks
-    this.state.riskAlerts = detectRisks(this.state.kpis);
-
-    // Add sample decision log entries
-    this.state.decisionLog = [
-      {
-        id: 'dec_1',
-        description: 'Increased lead allocation to Broker Omar based on performance data',
-        type: 'ai_generated',
-        dataSources: ['crm', 'hr'],
-        confidence: 91,
-        authorizedBy: 'Olivia AI',
-        timestamp: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-        status: 'completed',
-        resultTracking: {
-          expectedOutcome: '15% increase in conversion rate',
-          actualOutcome: '17% increase in conversion rate',
-          measuredAt: new Date(),
-          success: true,
-          deviation: 2
-        }
-      },
-      {
-        id: 'dec_2',
-        description: 'Adjusted marketing budget for Downtown properties',
-        type: 'human_approved',
-        dataSources: ['marketing', 'finance'],
-        confidence: 88,
-        authorizedBy: 'Founder',
-        timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
-        status: 'active',
-        resultTracking: {
-          expectedOutcome: '12% increase in leads from Downtown area',
-          success: undefined
-        }
-      }
-    ];
-
-    this.state.lastSync = new Date();
+  private async loadRealData() {
+    this.state.isProcessing = true;
     this.notifyListeners();
+
+    try {
+      // Fetch real lead data using typed-safe approach
+      const leadsResult = await (supabase as any).from('crm_leads').select('*', { count: 'exact', head: true });
+      const totalLeads = leadsResult.count || 0;
+
+      const convertedResult = await (supabase as any).from('crm_leads').select('*', { count: 'exact', head: true }).eq('status', 'converted');
+      const convertedLeads = convertedResult.count || 0;
+
+      // Fetch real project data
+      const projectsResult = await (supabase as any).from('projects').select('*', { count: 'exact', head: true }).eq('is_published', true);
+      const totalProjects = projectsResult.count || 0;
+
+      // Fetch broker data
+      const brokersResult = await (supabase as any).from('profiles').select('*', { count: 'exact', head: true });
+      const activeBrokers = brokersResult.count || 0;
+
+      // Fetch recent tasks
+      const tasksResult = await (supabase as any).from('admin_tasks').select('*').order('created_at', { ascending: false }).limit(50);
+      const recentTasks = tasksResult.data || [];
+
+      const completedTasks = recentTasks?.filter(t => t.status === 'completed').length || 0;
+      const pendingTasks = recentTasks?.filter(t => t.status === 'pending').length || 0;
+      const totalTasks = recentTasks?.length || 0;
+
+      // Build KPIs from real data
+      const conversionRate = totalLeads ? ((convertedLeads || 0) / totalLeads) * 100 : 0;
+      
+      this.state.kpis = [
+        {
+          id: 'kpi_leads_total',
+          name: 'Total Leads',
+          category: 'sales',
+          currentValue: totalLeads || 0,
+          previousValue: 0,
+          target: Math.max((totalLeads || 0) * 1.2, 100),
+          unit: '',
+          trend: (totalLeads || 0) > 0 ? 'up' : 'stable',
+          trendPercentage: 0,
+          status: (totalLeads || 0) > 0 ? 'on_track' : 'behind',
+          lastUpdated: new Date()
+        },
+        {
+          id: 'kpi_conversion',
+          name: 'Lead Conversion Rate',
+          category: 'sales',
+          currentValue: Number(conversionRate.toFixed(1)),
+          previousValue: 0,
+          target: 20,
+          unit: '%',
+          trend: conversionRate > 15 ? 'up' : conversionRate > 5 ? 'stable' : 'down',
+          trendPercentage: 0,
+          status: conversionRate >= 20 ? 'exceeded' : conversionRate >= 10 ? 'on_track' : 'at_risk',
+          lastUpdated: new Date()
+        },
+        {
+          id: 'kpi_published_projects',
+          name: 'Published Projects',
+          category: 'admin',
+          currentValue: totalProjects || 0,
+          previousValue: 0,
+          target: Math.max((totalProjects || 0) * 1.1, 50),
+          unit: '',
+          trend: (totalProjects || 0) > 0 ? 'up' : 'stable',
+          trendPercentage: 0,
+          status: (totalProjects || 0) > 20 ? 'on_track' : 'at_risk',
+          lastUpdated: new Date()
+        },
+        {
+          id: 'kpi_active_brokers',
+          name: 'Active Team Members',
+          category: 'hr',
+          currentValue: activeBrokers || 0,
+          previousValue: 0,
+          target: Math.max((activeBrokers || 0) * 1.2, 10),
+          unit: '',
+          trend: 'stable',
+          trendPercentage: 0,
+          status: (activeBrokers || 0) > 0 ? 'on_track' : 'behind',
+          lastUpdated: new Date()
+        },
+        {
+          id: 'kpi_task_completion',
+          name: 'Task Completion Rate',
+          category: 'admin',
+          currentValue: totalTasks > 0 ? Number(((completedTasks / totalTasks) * 100).toFixed(1)) : 0,
+          previousValue: 0,
+          target: 80,
+          unit: '%',
+          trend: completedTasks > pendingTasks ? 'up' : 'down',
+          trendPercentage: 0,
+          status: totalTasks > 0 && (completedTasks / totalTasks) >= 0.7 ? 'on_track' : 'at_risk',
+          lastUpdated: new Date()
+        },
+        {
+          id: 'kpi_pending_tasks',
+          name: 'Pending Tasks',
+          category: 'admin',
+          currentValue: pendingTasks,
+          previousValue: 0,
+          target: 5,
+          unit: '',
+          trend: pendingTasks > 10 ? 'up' : 'stable',
+          trendPercentage: 0,
+          status: pendingTasks <= 5 ? 'on_track' : pendingTasks <= 15 ? 'at_risk' : 'behind',
+          lastUpdated: new Date()
+        },
+      ];
+
+      // Generate insights from real data
+      this.state.insights = [];
+      if (conversionRate < 10 && (totalLeads || 0) > 0) {
+        this.state.insights.push(
+          generateInsight('crm', 'Lead Conversion Rate', conversionRate, 0, 20)
+        );
+      }
+      if (pendingTasks > 10) {
+        this.state.insights.push(
+          generateInsight('admin', 'Pending Tasks', pendingTasks, 0, 5)
+        );
+      }
+      if ((totalProjects || 0) < 20) {
+        this.state.insights.push(
+          generateInsight('admin', 'Published Projects', totalProjects || 0, 0, 50)
+        );
+      }
+
+      // Generate predictions from real data
+      this.state.predictions = [];
+      if ((totalLeads || 0) > 0) {
+        this.state.predictions.push(
+          generatePrediction('leads', [totalLeads || 0], '1 month')
+        );
+      }
+
+      // Generate recommendations
+      this.state.recommendations = this.state.insights.map(insight => generateRecommendation(insight));
+
+      // Detect risks from KPIs
+      this.state.riskAlerts = detectRisks(this.state.kpis);
+
+      // Load real decision log from ai_job_master
+      const jobResult = await (supabase as any).from('ai_job_master').select('*').order('created_at', { ascending: false }).limit(10);
+      const jobHistory = jobResult.data || [];
+
+      this.state.decisionLog = (jobHistory || []).map(job => ({
+        id: job.id,
+        description: `AI Tool: ${job.tool_name} - ${job.status}`,
+        type: 'auto_executed' as const,
+        dataSources: [job.tool_name],
+        confidence: 90,
+        authorizedBy: 'System',
+        timestamp: new Date(job.created_at || ''),
+        status: job.status === 'completed' ? 'completed' as const : 'active' as const,
+        resultTracking: {
+          expectedOutcome: `Processing via ${job.tool_name}`,
+          actualOutcome: job.status === 'completed' ? 'Completed successfully' : undefined,
+          success: job.status === 'completed' ? true : undefined,
+        }
+      }));
+
+      this.state.lastSync = new Date();
+    } catch (error) {
+      console.error('Failed to load real data:', error);
+    } finally {
+      this.state.isProcessing = false;
+      this.notifyListeners();
+    }
   }
 
   // Refresh all data
   async refreshData(): Promise<void> {
-    this.state.isProcessing = true;
-    this.notifyListeners();
-
-    // Simulate data refresh
-    await new Promise(resolve => setTimeout(resolve, 1500));
-
-    // Regenerate insights with slightly varied data
-    const variationFactor = 0.95 + Math.random() * 0.1;
-    
-    this.state.kpis = this.state.kpis.map(kpi => ({
-      ...kpi,
-      previousValue: kpi.currentValue,
-      currentValue: kpi.currentValue * variationFactor,
-      lastUpdated: new Date()
-    }));
-
-    this.state.insights = [
-      generateInsight('crm', 'Lead Conversion Rate', 18.5 * variationFactor, 18.5, 20),
-      generateInsight('marketing', 'Campaign ROI', 3.2 * variationFactor, 3.2, 3.5),
-      generateInsight('hr', 'Employee Satisfaction', 78 * variationFactor, 78, 85),
-      generateInsight('finance', 'Commission Payout Time', 4.2 * variationFactor, 4.2, 3),
-      generateInsight('admin', 'Property Listing Speed', 1.5 * variationFactor, 1.5, 1)
-    ];
-
-    this.state.riskAlerts = detectRisks(this.state.kpis);
-    this.state.lastSync = new Date();
-    this.state.isProcessing = false;
-    this.notifyListeners();
+    await this.loadRealData();
   }
 
   // Process natural language query
@@ -270,57 +247,51 @@ class DecisionIntelligenceService {
   }> {
     const queryLower = query.toLowerCase();
     
-    // Determine query type and generate response
-    if (queryLower.includes('top') && queryLower.includes('broker')) {
+    // Query real data
+    if (queryLower.includes('lead') || queryLower.includes('broker')) {
+      const r1 = await (supabase as any).from('crm_leads').select('*', { count: 'exact', head: true });
+      const totalLeads = r1.count || 0;
+      const r2 = await (supabase as any).from('crm_leads').select('*', { count: 'exact', head: true }).eq('status', 'converted');
+      const convertedLeads = r2.count || 0;
+
       return {
-        answer: 'Based on current performance data, your top-performing brokers are: Sarah (16 clients, 92% satisfaction), Omar (12 clients, 89% satisfaction), and David (9 clients, 87% satisfaction).',
+        answer: `You currently have ${totalLeads} total leads, with ${convertedLeads} converted. ${totalLeads === 0 ? 'No leads data available yet.' : `Conversion rate: ${((convertedLeads) / Math.max(totalLeads, 1) * 100).toFixed(1)}%`}`,
         insights: this.state.insights.filter(i => i.dataSource === 'crm'),
-        visualData: {
-          labels: ['Sarah', 'Omar', 'David', 'Maya', 'Khalid'],
-          values: [16, 12, 9, 7, 6]
-        },
-        suggestions: ['View detailed broker analytics', 'Compare performance trends', 'Allocate more leads to top performers']
+        suggestions: ['View all leads', 'Check pending follow-ups', 'Review conversion funnel']
       };
     }
 
-    if (queryLower.includes('campaign') || queryLower.includes('marketing')) {
-      return {
-        answer: 'The Downtown Off-Plan campaign generated the highest value leads this month with 45 qualified prospects. Campaign ROI is at 3.2x, up 14% from last month.',
-        insights: this.state.insights.filter(i => i.dataSource === 'marketing'),
-        visualData: {
-          labels: ['Downtown', 'Marina', 'JBR', 'Business Bay', 'Palm'],
-          values: [45, 32, 28, 22, 18]
-        },
-        suggestions: ['Scale Downtown campaign', 'Optimize underperforming areas', 'Review ad spend allocation']
-      };
-    }
+    if (queryLower.includes('task') || queryLower.includes('pending')) {
+      const r = await (supabase as any).from('admin_tasks').select('*').order('created_at', { ascending: false }).limit(20);
+      const tasks = r.data || [];
+      const pending = tasks.filter((t: any) => t.status === 'pending').length;
+      const completed = tasks.filter((t: any) => t.status === 'completed').length;
 
-    if (queryLower.includes('revenue') || queryLower.includes('sales')) {
-      const currentRevenue = this.state.kpis.find(k => k.name === 'Monthly Revenue')?.currentValue || 4250000;
       return {
-        answer: `Current monthly revenue is AED ${currentRevenue.toLocaleString()}, representing an 11.8% increase from last month. Projected revenue for next month: AED 4.8M based on current pipeline.`,
-        insights: this.state.insights.filter(i => i.dataSource === 'crm'),
-        visualData: {
-          labels: ['Oct', 'Nov', 'Dec', 'Jan'],
-          values: [3200000, 3600000, 3800000, currentRevenue]
-        },
-        suggestions: ['Review February targets', 'Analyze top revenue sources', 'Optimize conversion funnel']
-      };
-    }
-
-    if (queryLower.includes('recommend') || queryLower.includes('suggest') || queryLower.includes('improve')) {
-      return {
-        answer: 'Based on comprehensive analysis, I recommend: 1) Increase marketing budget for Downtown by 20% (ROI: 3.2x), 2) Address HR satisfaction decline with team feedback session, 3) Streamline commission payout process to reduce delays.',
+        answer: `You have ${pending} pending tasks and ${completed} completed tasks from the last batch. ${pending > 0 ? 'Review your pending tasks for action items.' : 'All caught up!'}`,
         insights: this.state.insights,
-        suggestions: this.state.recommendations.slice(0, 5).map(r => r.suggestedAction)
+        suggestions: ['View pending tasks', 'Mark tasks complete', 'Create new task']
       };
     }
 
-    // Default response
+    if (queryLower.includes('project') || queryLower.includes('listing')) {
+      const r1 = await (supabase as any).from('projects').select('*', { count: 'exact', head: true }).eq('is_published', true);
+      const published = r1.count || 0;
+      const r2 = await (supabase as any).from('pending_project_imports').select('*', { count: 'exact', head: true }).eq('status', 'pending');
+      const pending = r2.count || 0;
+
+      return {
+        answer: `You have ${published} published projects and ${pending} pending imports awaiting review.`,
+        insights: this.state.insights,
+        suggestions: ['Review pending imports', 'Check project quality', 'View published listings']
+      };
+    }
+
+    // Default
     return {
-      answer: `I've analyzed your query "${query}". Based on current data, all systems are performing within expected parameters. Would you like me to provide specific insights on any department or metric?`,
+      answer: `I've analyzed your query. Based on current data, there are ${this.state.kpis.length} KPIs being tracked and ${this.state.riskAlerts.filter(a => a.status === 'new').length} active alerts. What specific area would you like to explore?`,
       insights: this.state.insights.slice(0, 3),
-      suggestions: ['View KPI dashboard', 'Check recent alerts', 'Generate detailed report']
+      suggestions: ['Show leads summary', 'Check pending tasks', 'Review project listings']
     };
   }
 
@@ -328,17 +299,11 @@ class DecisionIntelligenceService {
   approveRecommendation(recommendationId: string, approvedBy: string): void {
     this.state.recommendations = this.state.recommendations.map(rec => {
       if (rec.id === recommendationId) {
-        return {
-          ...rec,
-          status: 'approved' as const,
-          approvedBy,
-          approvedAt: new Date()
-        };
+        return { ...rec, status: 'approved' as const, approvedBy, approvedAt: new Date() };
       }
       return rec;
     });
 
-    // Add to decision log
     const rec = this.state.recommendations.find(r => r.id === recommendationId);
     if (rec) {
       this.state.decisionLog.unshift({
@@ -355,166 +320,131 @@ class DecisionIntelligenceService {
         }
       });
     }
-
     this.notifyListeners();
   }
 
-  // Reject recommendation
   rejectRecommendation(recommendationId: string): void {
     this.state.recommendations = this.state.recommendations.map(rec => {
-      if (rec.id === recommendationId) {
-        return { ...rec, status: 'rejected' as const };
-      }
+      if (rec.id === recommendationId) return { ...rec, status: 'rejected' as const };
       return rec;
     });
     this.notifyListeners();
   }
 
-  // Snooze recommendation
   snoozeRecommendation(recommendationId: string): void {
     this.state.recommendations = this.state.recommendations.map(rec => {
-      if (rec.id === recommendationId) {
-        return { ...rec, status: 'snoozed' as const };
-      }
+      if (rec.id === recommendationId) return { ...rec, status: 'snoozed' as const };
       return rec;
     });
     this.notifyListeners();
   }
 
-  // Execute recommendation (auto-executable only)
   async executeRecommendation(recommendationId: string): Promise<boolean> {
     const rec = this.state.recommendations.find(r => r.id === recommendationId);
     if (!rec || !rec.autoExecutable) return false;
 
     this.state.recommendations = this.state.recommendations.map(r => {
-      if (r.id === recommendationId) {
-        return { ...r, status: 'executed' as const, executedAt: new Date() };
-      }
+      if (r.id === recommendationId) return { ...r, status: 'executed' as const, executedAt: new Date() };
       return r;
     });
 
-    // Add to decision log
     this.state.decisionLog.unshift({
       id: `dec_${Date.now()}`,
       description: rec.suggestedAction,
       type: 'auto_executed',
       dataSources: rec.dataSource,
       confidence: rec.confidence,
-      authorizedBy: 'Olivia AI (Auto)',
+      authorizedBy: 'System (Auto)',
       timestamp: new Date(),
       status: 'active',
-      resultTracking: {
-        expectedOutcome: 'Automated optimization applied'
-      }
+      resultTracking: { expectedOutcome: 'Automated optimization applied' }
     });
 
     this.notifyListeners();
     return true;
   }
 
-  // Acknowledge risk alert
   acknowledgeRisk(alertId: string): void {
     this.state.riskAlerts = this.state.riskAlerts.map(alert => {
-      if (alert.id === alertId) {
-        return { ...alert, status: 'acknowledged' as const };
-      }
+      if (alert.id === alertId) return { ...alert, status: 'acknowledged' as const };
       return alert;
     });
     this.notifyListeners();
   }
 
-  // Assign risk alert
   assignRisk(alertId: string, assignee: string): void {
     this.state.riskAlerts = this.state.riskAlerts.map(alert => {
-      if (alert.id === alertId) {
-        return { ...alert, status: 'assigned' as const, assignedTo: assignee };
-      }
+      if (alert.id === alertId) return { ...alert, status: 'assigned' as const, assignedTo: assignee };
       return alert;
     });
     this.notifyListeners();
   }
 
-  // Resolve risk alert
   resolveRisk(alertId: string): void {
     this.state.riskAlerts = this.state.riskAlerts.map(alert => {
-      if (alert.id === alertId) {
-        return { ...alert, status: 'resolved' as const };
-      }
+      if (alert.id === alertId) return { ...alert, status: 'resolved' as const };
       return alert;
     });
     this.notifyListeners();
   }
 
-  // Dismiss risk alert
   dismissRisk(alertId: string): void {
     this.state.riskAlerts = this.state.riskAlerts.map(alert => {
-      if (alert.id === alertId) {
-        return { ...alert, status: 'dismissed' as const };
-      }
+      if (alert.id === alertId) return { ...alert, status: 'dismissed' as const };
       return alert;
     });
     this.notifyListeners();
   }
 
-  // Create scenario simulation
-  createScenario(
-    name: string,
-    parameters: ScenarioSimulation['parameters']
-  ): ScenarioSimulation {
+  createScenario(name: string, parameters: ScenarioSimulation['parameters']): ScenarioSimulation {
     const baselineMetrics = this.state.kpis.map(kpi => ({
       name: kpi.name,
       value: kpi.currentValue
     }));
-
     const scenario = simulateScenario(name, parameters, baselineMetrics);
     this.state.scenarios.unshift(scenario);
     this.notifyListeners();
     return scenario;
   }
 
-  // Delete scenario
   deleteScenario(scenarioId: string): void {
     this.state.scenarios = this.state.scenarios.filter(s => s.id !== scenarioId);
     this.notifyListeners();
   }
 
-  // Generate daily summary
   generateDailySummary(): string {
-    const salesKPI = this.state.kpis.find(k => k.name === 'Monthly Revenue');
-    const leadKPI = this.state.kpis.find(k => k.name === 'Lead Conversion Rate');
-    const hrKPI = this.state.kpis.find(k => k.name === 'Employee Satisfaction');
+    const leadsKPI = this.state.kpis.find(k => k.name === 'Total Leads');
+    const convKPI = this.state.kpis.find(k => k.name === 'Lead Conversion Rate');
+    const taskKPI = this.state.kpis.find(k => k.name === 'Task Completion Rate');
+    const pendingKPI = this.state.kpis.find(k => k.name === 'Pending Tasks');
     const activeAlerts = this.state.riskAlerts.filter(a => a.status === 'new' || a.status === 'acknowledged');
     const pendingRecs = this.state.recommendations.filter(r => r.status === 'pending');
 
-    return `📅 Daily AI Intelligence Summary — ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+    return `Daily Intelligence Summary — ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
 
-📊 Key Metrics:
-• Revenue: AED ${salesKPI?.currentValue.toLocaleString() || 'N/A'} (${salesKPI?.trend === 'up' ? '↑' : '↓'}${salesKPI?.trendPercentage.toFixed(1)}%)
-• Lead Conversion: ${leadKPI?.currentValue.toFixed(1)}% (${leadKPI?.trend === 'up' ? '↑' : '↓'}${leadKPI?.trendPercentage.toFixed(1)}%)
-• Team Satisfaction: ${hrKPI?.currentValue.toFixed(0)}% (${hrKPI?.trend === 'up' ? '↑' : '↓'}${hrKPI?.trendPercentage.toFixed(1)}%)
+Key Metrics:
+  Total Leads: ${leadsKPI?.currentValue ?? 'Not yet available'}
+  Conversion Rate: ${convKPI?.currentValue ?? 0}%
+  Task Completion: ${taskKPI?.currentValue ?? 0}%
+  Pending Tasks: ${pendingKPI?.currentValue ?? 0}
 
-⚠️ Active Alerts: ${activeAlerts.length}
-${activeAlerts.slice(0, 3).map(a => `• ${a.title} (${a.severity})`).join('\n')}
+Active Alerts: ${activeAlerts.length}
+${activeAlerts.length > 0 ? activeAlerts.slice(0, 3).map(a => `  - ${a.title} (${a.severity})`).join('\n') : '  No active alerts'}
 
-💡 Pending Recommendations: ${pendingRecs.length}
-${pendingRecs.slice(0, 3).map(r => `• ${r.title}`).join('\n')}
+Pending Recommendations: ${pendingRecs.length}
+${pendingRecs.length > 0 ? pendingRecs.slice(0, 3).map(r => `  - ${r.title}`).join('\n') : '  No pending recommendations'}
 
-🔮 Prediction: Revenue projected to reach AED ${(salesKPI?.currentValue || 4250000 * 1.12).toLocaleString()} next month.
-
-📈 Overall Status: ${activeAlerts.filter(a => a.severity === 'critical').length === 0 ? '✅ Systems operating normally' : '⚠️ Attention required'}`;
+Overall Status: ${activeAlerts.filter(a => a.severity === 'critical').length === 0 ? 'Systems operating normally' : 'Attention required — critical alerts detected'}`;
   }
 
-  // Get insights by category
   getInsightsByCategory(category: BusinessInsight['category']): BusinessInsight[] {
     return this.state.insights.filter(i => i.category === category);
   }
 
-  // Get KPIs by department
   getKPIsByDepartment(department: KPIMetric['category']): KPIMetric[] {
     return this.state.kpis.filter(k => k.category === department);
   }
 
-  // Get critical items count
   getCriticalItemsCount(): number {
     const criticalAlerts = this.state.riskAlerts.filter(a => 
       (a.severity === 'critical' || a.severity === 'high') && 
