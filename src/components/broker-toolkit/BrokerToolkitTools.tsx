@@ -364,6 +364,22 @@ export const SUPPORT_OPERATIONS: ToolItem[] = [
 ];
 
 export function BrokerToolkitTools() {
+  const [searchQuery, setSearchQuery] = useState("");
+  
+  // Filter tools based on search query (matches name, description, or category)
+  const filterTools = (tools: ToolItem[]) => {
+    if (!searchQuery.trim()) return tools;
+    const query = searchQuery.toLowerCase().trim();
+    return tools.filter(
+      (tool) =>
+        tool.name.toLowerCase().includes(query) ||
+        tool.description.toLowerCase().includes(query) ||
+        tool.category.toLowerCase().includes(query)
+    );
+  };
+
+  const filteredTools = filterTools(TOOLS);
+
   // Helper to get color-specific glow (category color on normal, WHITE on hover)
   const getBulkCardGlow = (category: ToolCategory): string => {
     const glowMap: Record<ToolCategory, string> = {
