@@ -65,6 +65,8 @@ interface EnrichResult {
   images_added: number;
   documents_added: number;
   fields_updated: string[];
+  before_data?: Record<string, unknown>;
+  after_data?: Record<string, unknown>;
   error?: string;
 }
 
