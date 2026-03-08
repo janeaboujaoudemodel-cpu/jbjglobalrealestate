@@ -253,36 +253,42 @@ export function useProjectsPaginated(
       const from = page * pageSize;
       const to = from + pageSize - 1;
 
-      const selectColumns = isDrafts
-        ? `
-          id, name, slug, description, location, price_from, price_to,
-          bedrooms_min, bedrooms_max, size_min, size_max,
-          handover_date, payment_plan, status, emirate,
-          is_featured, is_premium, is_sold_out, is_published,
-          property_type_label, status_label, cover_image_url,
-          developer_name, area_name, source, import_source, source_url,
-          created_at, updated_at,
-          developer:developers(id, name, slug),
-          community:communities(id, name, slug)
-        `
-        : `
+      if (isDrafts) {
+        // Lightweight query for drafts - no images/documents joins
+        let q = supabase
+          .from("projects")
+          .select(`
+            *,
+            developer:developers(id, name, slug),
+            community:communities(id, name, slug)
+          `)
+          .or("is_published.is.null,is_published.eq.false")
+          .order("created_at", { ascending: false })
+          .range(from, to);
+
+        const { data, error } = await q;
+        if (error) throw error;
+        return (data as unknown as UnifiedProject[]).map(p => ({
+          ...p,
+          images: [],
+          documents: [],
+        }));
+      }
+
+      let query = supabase
+        .from("projects")
+        .select(`
           *,
           developer:developers(id, name, slug),
           community:communities(id, name, slug),
           images:project_images(id, image_url, alt_text, display_order),
           documents:project_documents(id, document_type, file_url, file_name, display_order)
-        `;
-
-      let query = supabase
-        .from("projects")
-        .select(selectColumns)
+        `)
         .order("created_at", { ascending: false })
         .range(from, to);
       
       if (publishedFilter === true) {
         query = query.eq("is_published", true);
-      } else if (publishedFilter === false) {
-        query = query.or("is_published.is.null,is_published.eq.false");
       }
 
       const { data, error } = await query;
