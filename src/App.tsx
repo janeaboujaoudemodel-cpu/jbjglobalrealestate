@@ -237,6 +237,7 @@ const Documents = lazy(() => import("./pages/Documents"));
 const QRCodeGenerator = lazy(() => import("./pages/QRCodeGenerator"));
 const OwnerCreativeSuite = lazy(() => import("./pages/OwnerCreativeSuite"));
 const JobOfferTemplate = lazy(() => import("./pages/JobOfferTemplate"));
+const OwnerRecommendations = lazy(() => import("./pages/OwnerRecommendations"));
 const ContractForms = lazy(() => import("./pages/ContractForms"));
 const VideoMeeting = lazy(() => import("./pages/VideoMeeting"));
 // More admin & utility pages - lazy loaded
