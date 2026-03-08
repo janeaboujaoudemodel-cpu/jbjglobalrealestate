@@ -174,7 +174,7 @@ export default function ToolkitLanding() {
           
           {/* Title */}
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-            JBJ AI Tools Hub
+            JBJ Royal Tools Hub
             <span className="block text-gold mt-2">(Free)</span>
           </h1>
           
