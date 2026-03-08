@@ -335,7 +335,7 @@ const Footer = () => {
 
   // Creative Toolkit - All toolkit tools
   const creativeToolkitLinks = [
-    { href: "/toolkit", label: "Toolkit Hub" },
+    { href: "/toolkit", label: "AI Tools Hub" },
     { href: "/toolkit/ai-video-studio", label: "AI Video Studio" },
     { href: "/toolkit/video-resize-pack", label: "Video Resize Pack" },
     { href: "/toolkit/voice-studio", label: "Voice Studio" },

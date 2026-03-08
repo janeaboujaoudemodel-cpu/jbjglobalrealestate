@@ -74,16 +74,8 @@ const royalTools = [
 
 export function ToolkitShowcaseCard() {
   return (
-    <section className="bg-black">
-      <div className="jj-layer-2">
-        <div className="relative">
-          {/* Main Card */}
-          <div 
-            className="relative z-10 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl md:rounded-3xl border-2 border-gold/50 overflow-hidden"
-            style={{
-              boxShadow: '0 12px 40px rgba(200,167,102,0.25)'
-            }}
-          >
+    <section className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+      <div className="relative overflow-hidden">
             {/* Header Section */}
             <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] p-6 md:p-8 border-b border-gold/30">
               <div className="flex items-center gap-3 mb-3">
@@ -97,7 +89,7 @@ export function ToolkitShowcaseCard() {
                 className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-2"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
-                JBJ Royal Tools Hub
+                JBJ AI Tools Hub
               </h2>
               
               <p className="text-zinc-600 text-sm md:text-base max-w-2xl">
@@ -106,8 +98,8 @@ export function ToolkitShowcaseCard() {
             </div>
             
             {/* Tools Grid */}
-            <div className="p-6 md:p-8">
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="px-6 md:px-8 lg:px-12 py-6 md:py-8">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 max-w-7xl mx-auto">
                 {royalTools.map((tool, index) => (
                   <div
                     key={tool.id}
@@ -145,8 +137,6 @@ export function ToolkitShowcaseCard() {
                 ))}
               </div>
             </div>
-          </div>
-        </div>
       </div>
     </section>
   );

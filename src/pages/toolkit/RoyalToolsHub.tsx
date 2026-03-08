@@ -109,7 +109,7 @@ export default function RoyalToolsHub() {
   return (
     <>
       <SEOHead 
-        title="JBJ Royal Tools Hub | Professional Real Estate Tools"
+        title="JBJ AI Tools Hub | Professional Real Estate Tools"
         description="Access professional-grade tools for images, videos, documents, and AI-powered analytics. Designed for real estate professionals."
       />
       
@@ -134,7 +134,7 @@ export default function RoyalToolsHub() {
                   className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-2"
                   style={{ fontFamily: "Poppins, sans-serif" }}
                 >
-                  JBJ Royal Tools Hub
+                  JBJ AI Tools Hub
                 </h1>
                 
                 <p className="text-zinc-600 text-sm md:text-base max-w-2xl mb-6">
