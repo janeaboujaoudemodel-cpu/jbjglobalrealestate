@@ -65,24 +65,24 @@ class DecisionIntelligenceService {
     this.notifyListeners();
 
     try {
-      // Fetch real lead data
-      const leadsQuery: any = supabase.from('crm_leads').select('*', { count: 'exact', head: true });
-      const { count: totalLeads } = await leadsQuery;
+      // Fetch real lead data using typed-safe approach
+      const leadsResult = await (supabase as any).from('crm_leads').select('*', { count: 'exact', head: true });
+      const totalLeads = leadsResult.count || 0;
 
-      const convertedQuery: any = supabase.from('crm_leads').select('*', { count: 'exact', head: true }).eq('status', 'converted');
-      const { count: convertedLeads } = await convertedQuery;
+      const convertedResult = await (supabase as any).from('crm_leads').select('*', { count: 'exact', head: true }).eq('status', 'converted');
+      const convertedLeads = convertedResult.count || 0;
 
       // Fetch real project data
-      const projectsQuery: any = supabase.from('projects').select('*', { count: 'exact', head: true }).eq('is_published', true);
-      const { count: totalProjects } = await projectsQuery;
+      const projectsResult = await (supabase as any).from('projects').select('*', { count: 'exact', head: true }).eq('is_published', true);
+      const totalProjects = projectsResult.count || 0;
 
       // Fetch broker data
-      const brokersQuery: any = supabase.from('profiles').select('*', { count: 'exact', head: true });
-      const { count: activeBrokers } = await brokersQuery;
+      const brokersResult = await (supabase as any).from('profiles').select('*', { count: 'exact', head: true });
+      const activeBrokers = brokersResult.count || 0;
 
       // Fetch recent tasks
-      const tasksQuery: any = supabase.from('admin_tasks').select('*').order('created_at', { ascending: false }).limit(50);
-      const { data: recentTasks } = await tasksQuery;
+      const tasksResult = await (supabase as any).from('admin_tasks').select('*').order('created_at', { ascending: false }).limit(50);
+      const recentTasks = tasksResult.data || [];
 
       const completedTasks = recentTasks?.filter(t => t.status === 'completed').length || 0;
       const pendingTasks = recentTasks?.filter(t => t.status === 'pending').length || 0;
