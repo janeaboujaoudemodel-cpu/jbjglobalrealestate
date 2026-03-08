@@ -726,6 +726,15 @@ const AIMeetingSummarizerPremium = () => {
               )}
             </div>
 
+            {/* Client Consent / Recording Authorization */}
+            <MeetingConsentSection
+              meetingTitle={formData.meetingTitle}
+              sessionType={sessionType}
+              participants={formData.participants}
+              linkedLeadName={linkedLead?.full_name}
+              onConsentSaved={(id) => setConsentId(id)}
+            />
+
             {/* Live Recording Section */}
             <div className="bg-white border border-gold/20 rounded-xl p-5 space-y-4 shadow-sm">
               <div className="flex items-center justify-between flex-wrap gap-2">
