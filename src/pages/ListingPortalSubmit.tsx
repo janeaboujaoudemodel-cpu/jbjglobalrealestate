@@ -13,9 +13,9 @@ import {
   Hotel, Key, FileText, Camera, Loader2, Wand2, X, Eye,
   MapPin, Bed, Bath, Maximize, DollarSign, Calendar, Star,
   CheckCircle2, AlertCircle, Image, File, Trash2, Plus, RefreshCw,
-  TrendingUp, Shield, User, Phone, Mail, CreditCard
+  TrendingUp, Shield, User, Phone, Mail, CreditCard, Link as LinkIcon, FileText as FileTextIcon, Globe
 } from 'lucide-react';
-import jbjMonogram from "@/assets/jbj-monogram-light-transparent.png";
+import { BrandedLoader } from "@/components/ui/BrandedLoader";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
@@ -125,6 +125,8 @@ const ListingPortalSubmit = () => {
   const [isRunningPredictor, setIsRunningPredictor] = useState(false);
   const [sellerRole, setSellerRole] = useState(savedState?.sellerRole || 'owner');
   const [contactMode, setContactMode] = useState<'direct' | 'commission'>(savedState?.contactMode || 'commission');
+  const [sourceUrl, setSourceUrl] = useState(savedState?.sourceUrl || '');
+  const [sourceText, setSourceText] = useState(savedState?.sourceText || '');
   
   const [form, setForm] = useState(savedState?.form || {
     title: '', description: '', listing_type: initialListingType, listing_category: initialCategory,
@@ -141,9 +143,9 @@ const ListingPortalSubmit = () => {
       sessionStorage.removeItem(SESSION_KEY);
       return;
     }
-    const stateToSave = { phase, form, listingCategory, uploadedImageUrls, extractedData, pricePrediction, sellerRole, contactMode };
+    const stateToSave = { phase, form, listingCategory, uploadedImageUrls, extractedData, pricePrediction, sellerRole, contactMode, sourceUrl, sourceText };
     sessionStorage.setItem(SESSION_KEY, JSON.stringify(stateToSave));
-  }, [phase, form, listingCategory, uploadedImageUrls, extractedData, pricePrediction, sellerRole, contactMode]);
+  }, [phase, form, listingCategory, uploadedImageUrls, extractedData, pricePrediction, sellerRole, contactMode, sourceUrl, sourceText]);
 
   // Scroll to creator section on phase changes
   useEffect(() => {
@@ -224,8 +226,8 @@ const ListingPortalSubmit = () => {
   };
 
   const runAIExtraction = async () => {
-    if (uploadedDocs.length === 0) {
-      toast.error('Please upload at least one document');
+    if (uploadedDocs.length === 0 && !sourceUrl.trim() && !sourceText.trim()) {
+      toast.error('Please upload documents, enter a URL, or paste text');
       return;
     }
     
@@ -235,6 +237,7 @@ const ListingPortalSubmit = () => {
       const documents = [];
       const imageUrls: string[] = [];
 
+      // Process uploaded files
       for (const doc of uploadedDocs) {
         const base64 = await fileToBase64(doc.file);
         
@@ -253,6 +256,37 @@ const ListingPortalSubmit = () => {
         } else {
           documents.push({ type: 'text', name: doc.name, content: await doc.file.text() });
         }
+      }
+
+      // Add user-pasted text as a document
+      if (sourceText.trim()) {
+        documents.push({ type: 'text', name: 'User-provided description', content: sourceText.trim() });
+      }
+
+      // Scrape URL via Firecrawl if provided
+      let scrapedContent = '';
+      if (sourceUrl.trim()) {
+        try {
+          const { data: scrapeResult, error: scrapeError } = await supabase.functions.invoke('firecrawl-scrape', {
+            body: { url: sourceUrl.trim(), options: { formats: ['markdown'], onlyMainContent: true } }
+          });
+          if (!scrapeError && scrapeResult?.data?.markdown) {
+            scrapedContent = scrapeResult.data.markdown;
+            documents.push({ type: 'text', name: `Scraped: ${sourceUrl}`, content: scrapedContent.substring(0, 15000) });
+          } else if (!scrapeError && scrapeResult?.success && scrapeResult?.data?.markdown) {
+            scrapedContent = scrapeResult.data.markdown;
+            documents.push({ type: 'text', name: `Scraped: ${sourceUrl}`, content: scrapedContent.substring(0, 15000) });
+          }
+        } catch (urlErr) {
+          console.warn('URL scraping failed, continuing with other sources:', urlErr);
+          toast.info('Could not scrape URL, continuing with uploaded files');
+        }
+      }
+
+      if (documents.length === 0) {
+        toast.error('No extractable content found. Please upload files, enter a URL, or paste text.');
+        setPhase('upload');
+        return;
       }
 
       setUploadedImageUrls(imageUrls);
@@ -626,7 +660,7 @@ const ListingPortalSubmit = () => {
                           <Upload className="w-10 h-10 text-gold mx-auto mb-3" />
                           <p className="text-black font-medium mb-1">Drop files here or click to browse</p>
                           <p className="text-zinc-500 text-xs">
-                            PDF, JPG, PNG, DOCX, XLSX — up to 20MB each
+                            PDF, JPG, PNG, DOCX, XLSX — up to 100MB each
                           </p>
                           <input
                             id="file-input"
@@ -668,14 +702,51 @@ const ListingPortalSubmit = () => {
                         )}
                       </div>
 
+                      {/* Source URL Input */}
+                      <div className="bg-white/70 border-2 border-gold/20 rounded-2xl p-6">
+                        <h2 className="text-black font-semibold mb-2 flex items-center gap-2">
+                          <Globe className="w-4 h-4 text-gold" />
+                          Source URL (Optional)
+                        </h2>
+                        <p className="text-zinc-500 text-xs mb-3">
+                          Paste a website or listing link — AI will scrape and extract property details
+                        </p>
+                        <Input
+                          value={sourceUrl}
+                          onChange={e => setSourceUrl(e.target.value)}
+                          placeholder="https://www.propertyfinder.ae/..."
+                          className="bg-white border-gold/30 text-black"
+                        />
+                      </div>
+
+                      {/* Paste Text Input */}
+                      <div className="bg-white/70 border-2 border-gold/20 rounded-2xl p-6">
+                        <h2 className="text-black font-semibold mb-2 flex items-center gap-2">
+                          <FileTextIcon className="w-4 h-4 text-gold" />
+                          Paste Text / Description (Optional)
+                        </h2>
+                        <p className="text-zinc-500 text-xs mb-3">
+                          Paste any property description, spec sheet, or text content for AI to analyze
+                        </p>
+                        <Textarea
+                          value={sourceText}
+                          onChange={e => setSourceText(e.target.value)}
+                          placeholder="Paste property description, features, specs, brochure text..."
+                          className="bg-white border-gold/30 text-black min-h-[100px]"
+                        />
+                      </div>
+
                       <div className="flex gap-3">
                         <Button
                           onClick={runAIExtraction}
-                          disabled={uploadedDocs.length === 0}
+                          disabled={uploadedDocs.length === 0 && !sourceUrl.trim() && !sourceText.trim()}
                           className="flex-1 bg-gold hover:bg-gold/90 text-black border-0 h-12 text-base disabled:opacity-50"
                         >
                           <Sparkles className="w-5 h-5 mr-2" />
-                          Extract with AI ({uploadedDocs.length} {uploadedDocs.length === 1 ? 'file' : 'files'})
+                          Extract with AI
+                          {uploadedDocs.length > 0 && ` (${uploadedDocs.length} file${uploadedDocs.length === 1 ? '' : 's'})`}
+                          {sourceUrl.trim() && ' + URL'}
+                          {sourceText.trim() && ' + Text'}
                         </Button>
                         <Button
                           onClick={() => setPhase('pricing_ai')}
@@ -697,15 +768,8 @@ const ListingPortalSubmit = () => {
                   animate={{ opacity: 1 }}
                   className="bg-white/70 border-2 border-gold/20 rounded-2xl p-12 text-center"
                 >
-                  <div className="relative w-24 h-24 mx-auto mb-6">
-                    <img
-                      src={jbjMonogram}
-                      alt="Loading"
-                      className="w-full h-full object-contain animate-pulse"
-                      style={{ filter: "drop-shadow(0 0 20px rgba(200,167,102,0.4))" }}
-                    />
-                  </div>
-                  <h2 className="text-black text-xl font-bold mb-2">AI is analyzing your documents...</h2>
+                  <BrandedLoader variant="light" text="AI is analyzing..." className="min-h-0 py-8" />
+                  <h2 className="text-black text-xl font-bold mb-2 mt-4">AI is analyzing your documents...</h2>
                   <p className="text-zinc-600 text-sm mb-6">
                     Extracting property details, images, floor plans, and generating your listing
                   </p>
@@ -1278,15 +1342,8 @@ const ListingPortalSubmit = () => {
                   animate={{ opacity: 1 }}
                   className="bg-white/70 border-2 border-gold/20 rounded-2xl p-12 text-center"
                 >
-                  <div className="relative w-24 h-24 mx-auto mb-6">
-                    <img
-                      src={jbjMonogram}
-                      alt="Loading"
-                      className="w-full h-full object-contain animate-pulse"
-                      style={{ filter: "drop-shadow(0 0 20px rgba(200,167,102,0.4))" }}
-                    />
-                  </div>
-                  <h2 className="text-black text-xl font-bold">
+                  <BrandedLoader variant="light" text={isOwner ? 'Approving...' : 'Submitting...'} className="min-h-0 py-8" />
+                  <h2 className="text-black text-xl font-bold mt-4">
                     {isOwner ? 'Approving & publishing...' : 'Submitting for approval...'}
                   </h2>
                 </motion.div>

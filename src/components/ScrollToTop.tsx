@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { ArrowUp } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 export const ScrollToTopOnMount = () => {
   const { pathname } = useLocation();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
   }, [pathname]);
 

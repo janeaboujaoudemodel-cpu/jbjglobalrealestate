@@ -17,7 +17,7 @@ export function BrandedLoader({ text = "Loading...", className = "", variant = "
   
   return (
     <div className={`flex flex-col items-center justify-center min-h-screen gap-6 ${className}`}>
-      <div className="relative w-32 h-32 md:w-44 md:h-44">
+      <div className="relative w-40 h-40 md:w-52 md:h-52">
         {/* Gold fill animation overlay */}
         <div className="absolute inset-0 overflow-hidden rounded-full">
           <img
@@ -32,19 +32,21 @@ export function BrandedLoader({ text = "Loading...", className = "", variant = "
           alt="Loading"
           className="relative w-full h-full object-contain"
           style={{ 
-            filter: "drop-shadow(0 0 24px rgba(200,167,102,0.5))",
+            filter: variant === 'light' 
+              ? 'drop-shadow(0 0 24px rgba(0,0,0,0.3))'
+              : 'drop-shadow(0 0 24px rgba(200,167,102,0.5))',
             animation: "goldFill 2s ease-in-out infinite",
           }}
         />
         <style>{`
           @keyframes goldFill {
-            0%, 100% { opacity: 0.6; filter: drop-shadow(0 0 16px rgba(200,167,102,0.3)); }
-            50% { opacity: 1; filter: drop-shadow(0 0 32px rgba(200,167,102,0.7)); }
+            0%, 100% { opacity: 0.7; filter: ${variant === 'light' ? 'drop-shadow(0 0 16px rgba(0,0,0,0.2))' : 'drop-shadow(0 0 16px rgba(200,167,102,0.3))'}; }
+            50% { opacity: 1; filter: ${variant === 'light' ? 'drop-shadow(0 0 32px rgba(0,0,0,0.4))' : 'drop-shadow(0 0 32px rgba(200,167,102,0.7))'}; }
           }
         `}</style>
       </div>
       <span
-        className="text-gold/60 text-xs tracking-[0.25em] uppercase animate-pulse"
+        className={`text-xs tracking-[0.25em] uppercase animate-pulse ${variant === 'light' ? 'text-black/60' : 'text-gold/60'}`}
         style={{ fontFamily: "Poppins, sans-serif" }}
       >
         {text}
