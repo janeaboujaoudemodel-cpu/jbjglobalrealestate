@@ -15,7 +15,7 @@ import {
   Flag, Eye, User, Building2, Camera, Megaphone, Code, Calculator,
   Loader2, ExternalLink, Download, MessageSquare, Brain, Sparkles,
   Target, HelpCircle, ThumbsUp, ThumbsDown, Zap, ChevronDown, ChevronUp,
-  ArrowUpDown,
+  ArrowUpDown, MapPin,
 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
