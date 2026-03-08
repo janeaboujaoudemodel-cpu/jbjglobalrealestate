@@ -118,7 +118,7 @@ export default function OwnerInbox() {
             animate={{ opacity: 1, y: 0 }}
             className="mb-6"
           >
-            <div className="flex items-center justify-between flex-wrap gap-4 bg-white/80 backdrop-blur-sm border-2 border-gold/30 rounded-2xl p-4 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+            <div className="flex items-center justify-between flex-wrap gap-4 bg-white/80 backdrop-blur-sm border border-gold/20 rounded-2xl p-4 shadow-sm">
               <div className="flex items-center gap-4">
                 <div className="p-3 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border-2 border-gold/30">
                   <MessageSquare className="h-6 w-6 text-gold" />
@@ -220,10 +220,10 @@ export default function OwnerInbox() {
           </div>
 
           {/* Main Content - Split View */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4" style={{ height: 'calc(100vh - 320px)' }}>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4" style={{ height: 'calc(100vh - 340px)', minHeight: '400px' }}>
             {/* Thread List */}
-            <div className="lg:col-span-1 min-h-0">
-              <Card className="border-2 border-gold/20 bg-white/90 backdrop-blur-sm h-full overflow-hidden">
+            <div className="lg:col-span-1 min-h-0 overflow-hidden">
+              <Card className="border border-gold/20 bg-white/90 backdrop-blur-sm h-full overflow-hidden shadow-sm">
                 <ScrollArea className="h-full">
                   {threadsLoading ? (
                     <div className="p-4 space-y-3">
@@ -260,7 +260,7 @@ export default function OwnerInbox() {
             </div>
 
             {/* Thread Detail */}
-            <div className="lg:col-span-2 min-h-0">
+            <div className="lg:col-span-2 min-h-0 overflow-hidden">
               {selectedThread ? (
                 <OwnerInboxThread
                   thread={selectedThread}
@@ -268,7 +268,7 @@ export default function OwnerInbox() {
                   onClose={() => setSelectedThread(null)}
                 />
               ) : (
-                <Card className="border-2 border-gold/20 bg-white/90 backdrop-blur-sm h-full flex items-center justify-center">
+                <Card className="border border-gold/20 bg-white/90 backdrop-blur-sm h-full flex items-center justify-center shadow-sm">
                   <div className="text-center p-8">
                     <MessageSquare className="h-16 w-16 text-gold/30 mx-auto mb-4" />
                     <p className="text-zinc-500 font-medium">Select a conversation</p>
