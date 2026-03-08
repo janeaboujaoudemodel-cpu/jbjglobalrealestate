@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -764,6 +765,19 @@ export default function StampExportPage() {
               </Button>
               <Button variant="outline" className="w-full gap-2" onClick={downloadSVG}>
                 <Download size={14}/> Quick Download SVG (Vector)
+              </Button>
+              <Button variant="outline" className="w-full gap-2 border-[hsl(var(--gold)/0.3)] hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold)/0.05)]"
+                onClick={() => {
+                  try {
+                    sessionStorage.setItem('esignature_stamp_svg', tintedSvg);
+                    sessionStorage.setItem('esignature_stamp_color', primaryColor);
+                    toast.success('Stamp saved! Redirecting to E-Signature…');
+                    navigate('/e-signature/create');
+                  } catch {
+                    toast.error('Failed to save stamp');
+                  }
+                }}>
+                <Image size={14}/> Use in E-Signature
               </Button>
             </div>
 
