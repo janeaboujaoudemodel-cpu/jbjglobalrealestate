@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import { History, X, Building2, MapPin, Home, ChevronLeft, ChevronRight } from "lucide-react";
 import { useRecentSearches, type RecentItemType, type RecentItem } from "@/hooks/useRecentSearches";
 import FavoriteButton from "@/components/FavoriteButton";
@@ -20,6 +20,52 @@ const TYPE_CONFIG: Record<RecentItemType, { icon: typeof Home; label: string; pa
   area: { icon: MapPin, label: "Areas", pathPrefix: "/area" },
 };
 
+// Walking strip that uses translateX transform like book marquee
+function WalkingStrip({ items, patchItem }: { items: RecentItem[]; patchItem: (id: string, type: RecentItemType, updates: Partial<RecentItem>) => void }) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  // Triplicate items for seamless loop
+  const duplicated = [...items, ...items, ...items];
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    let animId: number;
+    let pos = 0;
+    const speed = 0.4;
+    // Card width (200px) + gap (16px) = 216px per card
+    const singleSetWidth = items.length * 216;
+
+    const tick = () => {
+      pos += speed;
+      if (pos >= singleSetWidth) pos -= singleSetWidth;
+      el.style.transform = `translateX(-${pos}px)`;
+      animId = requestAnimationFrame(tick);
+    };
+    animId = requestAnimationFrame(tick);
+
+    const pause = () => cancelAnimationFrame(animId);
+    const resume = () => { animId = requestAnimationFrame(tick); };
+    el.addEventListener('mouseenter', pause);
+    el.addEventListener('mouseleave', resume);
+
+    return () => {
+      cancelAnimationFrame(animId);
+      el.removeEventListener('mouseenter', pause);
+      el.removeEventListener('mouseleave', resume);
+    };
+  }, [items.length]);
+
+  return (
+    <div className="overflow-hidden w-full">
+      <div ref={scrollRef} className="flex gap-4 will-change-transform py-2" style={{ width: 'max-content' }}>
+        {duplicated.map((item, i) => (
+          <RecentCard3D key={`${item.type}-${item.id}-${i}`} item={item} index={i % items.length} patchItem={patchItem} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 const ContinueSearching = ({
   type,
   limit = 12,
@@ -28,40 +74,7 @@ const ContinueSearching = ({
 }: ContinueSearchingProps) => {
   const { t } = useLanguage();
   const { items, clearAll, patchItem } = useRecentSearches(type);
-  const stripRef = useRef<HTMLDivElement>(null);
-  const [isPaused, setIsPaused] = useState(false);
   const [leadCaptureOpen, setLeadCaptureOpen] = useState(false);
-  const animationRef = useRef<number>();
-  const scrollSpeed = useRef(0.5);
-
-  const scrollByCard = useCallback((direction: 'left' | 'right') => {
-    const el = stripRef.current;
-    if (!el) return;
-    const cardWidth = 216; // card width + gap
-    el.scrollBy({ left: direction === 'right' ? cardWidth : -cardWidth, behavior: 'smooth' });
-  }, []);
-
-  // Auto-scroll walking strip
-  useEffect(() => {
-    const el = stripRef.current;
-    if (!el || isPaused) return;
-
-    let lastTime = 0;
-    const tick = (time: number) => {
-      if (lastTime) {
-        const delta = time - lastTime;
-        el.scrollLeft += scrollSpeed.current * (delta / 16);
-        // Loop: when reaching end, jump back
-        if (el.scrollLeft >= el.scrollWidth - el.clientWidth - 2) {
-          el.scrollLeft = 0;
-        }
-      }
-      lastTime = time;
-      animationRef.current = requestAnimationFrame(tick);
-    };
-    animationRef.current = requestAnimationFrame(tick);
-    return () => { if (animationRef.current) cancelAnimationFrame(animationRef.current); };
-  }, [isPaused]);
 
   if (items.length === 0) return null;
 
@@ -112,46 +125,8 @@ const ContinueSearching = ({
           </div>
         </div>
 
-        {/* Walking Strip Carousel */}
-        <div
-          className="relative"
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
-        >
-          {/* Left Arrow */}
-          <button
-            onClick={() => scrollByCard('left')}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full flex items-center justify-center border-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-gold shadow-lg hover:shadow-gold/30 hover:border-gold transition-all duration-300"
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-
-          <div
-            ref={stripRef}
-            className="flex gap-4 overflow-x-auto scrollbar-hide pb-2 px-12 md:px-14"
-            style={{
-              scrollBehavior: "smooth",
-              WebkitOverflowScrolling: "touch",
-              perspective: "1200px",
-            }}
-          >
-            {displayItems.map((item, index) => (
-              <RecentCard3D key={`${item.type}-${item.id}`} item={item} index={index} patchItem={patchItem} />
-            ))}
-          </div>
-
-          {/* Right Arrow */}
-          <button
-            onClick={() => scrollByCard('right')}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full flex items-center justify-center border-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-gold shadow-lg hover:shadow-gold/30 hover:border-gold transition-all duration-300"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
-
-          {/* Fade edges */}
-          <div className="absolute top-0 left-10 bottom-2 w-4 bg-gradient-to-r from-black to-transparent pointer-events-none z-10" />
-          <div className="absolute top-0 right-10 bottom-2 w-4 bg-gradient-to-l from-black to-transparent pointer-events-none z-10" />
-        </div>
+        {/* Walking Strip Carousel - seamless infinite loop */}
+        <WalkingStrip items={displayItems} patchItem={patchItem} />
       </div>
 
       {/* Lead Capture Modal */}
