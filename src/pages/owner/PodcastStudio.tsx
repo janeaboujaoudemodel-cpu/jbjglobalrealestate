@@ -83,18 +83,34 @@ const PodcastStudio = () => {
   // API Status
   const [apiStatus, setApiStatus] = useState<"unknown" | "connected" | "error">("unknown");
 
-  // Check ElevenLabs connection
+  // Check ElevenLabs connection via voice-studio-tts
   useEffect(() => {
     const checkConnection = async () => {
       try {
-        const { data, error } = await supabase.functions.invoke("elevenlabs-podcast-tts", {
-          body: { segments: [{ speaker: "jane", text: "test" }], testMode: true },
-        });
-        if (error) {
+        const { data: sessionData } = await supabase.auth.getSession();
+        const token = sessionData?.session?.access_token;
+        if (!token) {
           setApiStatus("error");
-        } else {
-          setApiStatus("connected");
+          return;
         }
+        // Quick test request with minimal text
+        const response = await fetch(
+          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/voice-studio-tts`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              text: "Connection test.",
+              voiceId: "EXAVITQu4vr4xnSDxMaL",
+              format: "mp3",
+            }),
+          }
+        );
+        setApiStatus(response.ok ? "connected" : "error");
       } catch {
         setApiStatus("error");
       }
