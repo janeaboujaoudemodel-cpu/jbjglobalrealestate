@@ -5,7 +5,7 @@
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import MainLayout from "@/components/MainLayout";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -109,7 +109,7 @@ export default function OwnerInbox() {
   };
 
   return (
-    <MainLayout>
+    <>
       <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
         <div className="container mx-auto px-4 py-6 max-w-7xl">
           {/* Header */}
@@ -280,7 +280,7 @@ export default function OwnerInbox() {
           </div>
         </div>
       </div>
-    </MainLayout>
+    </>
   );
 }
 
