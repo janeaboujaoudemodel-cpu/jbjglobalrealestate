@@ -96,6 +96,11 @@ export type ProjectDetailData = {
     offplan_projects?: number | null;
     description?: string | null;
     headquarters?: string | null;
+    website_url?: string | null;
+    ceo_name?: string | null;
+    total_units_delivered?: number | null;
+    notable_projects?: string | null;
+    specialization?: string | null;
   } | null;
   price_from?: number | null;
   price_to?: number | null;
