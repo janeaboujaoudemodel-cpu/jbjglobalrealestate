@@ -556,6 +556,47 @@ export function StampPreviewModal({
                 </div>
               </div>
             )}
+
+            {/* Book Cover Mockup */}
+            {activeView === 'book-cover' && (
+              <div className="w-full max-w-md flex flex-col items-center gap-4">
+                <p className="text-xs text-[hsl(var(--muted-foreground))] text-center mb-2 uppercase tracking-wide">Book Cover Preview</p>
+                <div
+                  className="w-full rounded-2xl shadow-2xl overflow-hidden relative"
+                  style={{ aspectRatio: '0.67 / 1', background: `linear-gradient(175deg, ${tintColor}f8 0%, ${tintColor}dd 40%, ${tintColor}aa 100%)` }}
+                >
+                  {/* Spine shadow */}
+                  <div className="absolute left-0 top-0 bottom-0 w-3" style={{ background: 'linear-gradient(90deg, rgba(0,0,0,0.35), transparent)' }}/>
+                  {/* Top decorative band */}
+                  <div className="absolute top-0 left-0 right-0 h-16 flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.06)' }}>
+                    <div className="h-px w-3/4 mx-auto" style={{ background: 'rgba(255,255,255,0.2)' }}/>
+                  </div>
+                  {/* Cover content */}
+                  <div className="h-full flex flex-col items-center justify-center gap-6 p-8">
+                    {/* Stamp as emblem */}
+                    <div className="relative flex items-center justify-center p-5 rounded-full" style={{ background: 'rgba(255,255,255,0.06)', boxShadow: 'inset 0 2px 10px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0.15)' }}>
+                      <div style={{ filter: 'brightness(0) invert(1) opacity(0.92)' }}>
+                        <StampSVGRenderer svgSource={displaySvg} tintColor="#ffffff" secondaryColor="#ffffff" accentColor="#ffffff" size={140}/>
+                      </div>
+                    </div>
+                    {/* Title area */}
+                    <div className="text-center space-y-2">
+                      <p className="text-white font-bold text-xl tracking-wider" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.4)', fontFamily: 'Georgia, serif' }}>{companyName}</p>
+                      {arabicName && <p className="text-white/70 text-base" dir="rtl" style={{ fontFamily: 'Georgia, serif' }}>{arabicName}</p>}
+                      <div className="h-px w-28 mx-auto" style={{ background: 'rgba(255,255,255,0.25)' }}/>
+                      <p className="text-white/50 text-xs tracking-[0.2em] uppercase">Company Profile</p>
+                    </div>
+                    {/* Bottom area */}
+                    <div className="mt-auto text-center">
+                      <p className="text-white/40 text-[10px] tracking-widest uppercase">{city} · {new Date().getFullYear()}</p>
+                    </div>
+                  </div>
+                  {/* Bottom decorative band */}
+                  <div className="absolute bottom-0 left-0 right-0 h-3" style={{ background: `linear-gradient(90deg, rgba(255,255,255,0.08), rgba(255,255,255,0.15), rgba(255,255,255,0.08))` }}/>
+                </div>
+                <p className="text-[10px] text-[hsl(var(--muted-foreground))] text-center">A5 book cover — uses your stamp colors and company branding</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
