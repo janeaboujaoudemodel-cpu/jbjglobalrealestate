@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Download, Lock, Loader2 } from "lucide-react";
+import { Download, Lock, Loader2, FileText } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import jbjFullLogoDarkBg from "@/assets/jbj-fulllogo-dark-bg.jpg";
@@ -241,6 +241,11 @@ const PremiumBrochureCard = ({
             <Loader2 className="w-5 h-5 text-foreground animate-spin" />
             <span>Downloading...</span>
           </>
+        ) : !brochureUrl ? (
+          <>
+            <FileText className="w-5 h-5 text-foreground group-hover:text-gold group-hover:scale-110 transition-all" />
+            <span className="group-hover:text-gold transition-colors">Request Brochure</span>
+          </>
         ) : (
           <>
             <Download className="w-5 h-5 text-foreground group-hover:text-gold group-hover:scale-110 transition-all" />
@@ -249,9 +254,9 @@ const PremiumBrochureCard = ({
         )}
       </motion.button>
 
-      {isLocked && (
+      {(isLocked || !brochureUrl) && (
         <p className="text-muted-foreground text-xs text-center max-w-[220px]">
-          Request brochure access
+          {brochureUrl ? "Request brochure access" : "Register your interest to receive the brochure"}
         </p>
       )}
     </div>
