@@ -465,6 +465,7 @@ const App = () => {
                 } />
                 {/* Nested tools routes */}
                 <Route path="founder-assistant" element={<FoundersAssistant />} />
+                <Route path="recommendations" element={<GlobalRecommendationsHub />} />
                 <Route path="toolkit" element={<RoyalToolsHub />} />
                 <Route path="automations" element={<Automations />} />
                 <Route path="studio" element={<Studio />} />
