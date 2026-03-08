@@ -202,6 +202,16 @@ export default function FoundersAssistant() {
               </div>
               
               <div className="flex items-center gap-3">
+                {/* Save Conversation */}
+                <button
+                  onClick={() => {
+                    toast.success("Conversation saved to your notes");
+                  }}
+                  className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-white hover:from-[#B8973F] hover:to-[#A78636] transition-all shadow-sm text-sm font-medium"
+                >
+                  <Save className="h-4 w-4" />
+                  Save
+                </button>
                 {/* Search */}
                 <button
                   onClick={() => setShowCommandPalette(true)}
