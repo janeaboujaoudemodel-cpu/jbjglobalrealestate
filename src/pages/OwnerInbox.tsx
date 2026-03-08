@@ -220,10 +220,10 @@ export default function OwnerInbox() {
           </div>
 
           {/* Main Content - Split View */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4" style={{ height: 'calc(100vh - 320px)' }}>
             {/* Thread List */}
-            <div className="lg:col-span-1">
-              <Card className="border-2 border-gold/20 bg-white/90 backdrop-blur-sm h-[calc(100vh-320px)]">
+            <div className="lg:col-span-1 min-h-0">
+              <Card className="border-2 border-gold/20 bg-white/90 backdrop-blur-sm h-full overflow-hidden">
                 <ScrollArea className="h-full">
                   {threadsLoading ? (
                     <div className="p-4 space-y-3">
@@ -260,7 +260,7 @@ export default function OwnerInbox() {
             </div>
 
             {/* Thread Detail */}
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-2 min-h-0">
               {selectedThread ? (
                 <OwnerInboxThread
                   thread={selectedThread}
@@ -268,7 +268,7 @@ export default function OwnerInbox() {
                   onClose={() => setSelectedThread(null)}
                 />
               ) : (
-                <Card className="border-2 border-gold/20 bg-white/90 backdrop-blur-sm h-[calc(100vh-320px)] flex items-center justify-center">
+                <Card className="border-2 border-gold/20 bg-white/90 backdrop-blur-sm h-full flex items-center justify-center">
                   <div className="text-center p-8">
                     <MessageSquare className="h-16 w-16 text-gold/30 mx-auto mb-4" />
                     <p className="text-zinc-500 font-medium">Select a conversation</p>
