@@ -812,7 +812,7 @@ class ComplianceSecurityService {
 
     const securityScore = await this.refreshSecurityScore();
 
-    const summary = `🔒 Security Update:
+    const summary = `Security Update:
 
 ${metrics?.unauthorized_attempts || 0} unauthorized access attempts.
 ${metrics?.blocked_activities || 0} blocked activities.
@@ -821,7 +821,7 @@ ${metrics?.ethics_flags || 0} ethics flags.
 Encryption compliance: ${metrics?.encryption_compliance_percent || 100}%
 Security Index: ${securityScore}/100.
 
-${(alerts?.length || 0) > 0 ? `⚠️ ${alerts?.length} unresolved high-priority alerts require attention.` : 'All subsystems operational.'}`;
+${(alerts?.length || 0) > 0 ? `ALERT: ${alerts?.length} unresolved high-priority alerts require attention.` : 'All subsystems operational.'}`;
 
     const typedMetrics: Partial<SecurityHealthMetrics> = metrics ? {
       ...metrics,

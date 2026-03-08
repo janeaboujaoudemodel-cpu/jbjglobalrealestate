@@ -24,19 +24,7 @@ interface ToolCardProps {
 }
 
 // Category icons for headers
-const getCategoryIcon = (category: ToolCategory) => {
-  const icons: Record<ToolCategory, string> = {
-    media: '🎬',
-    creative: '🎨',
-    'ai-property': '🏠',
-    'ai-sales': '📈',
-    'ai-reports': '📊',
-    'ai-communication': '💬',
-    'ai-content': '✍️',
-    productivity: '⚡',
-  };
-  return icons[category] || '🔧';
-};
+// Category icons removed — Lucide icons used inline in category headers
 
 /**
  * ToolCard Component - LOCKED Champagne Gold Style
