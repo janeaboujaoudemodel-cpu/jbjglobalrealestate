@@ -7,16 +7,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import {
-  ArrowLeft, Mic, MicOff, Play, Pause, Square, Download,
+  ArrowLeft, Mic, Play, Pause, Square, Download,
   Volume2, Settings2, Headphones, Globe, User, Radio,
-  RefreshCw, Loader2, FileAudio, Clock,
-  CheckCircle2, AlertCircle, Sparkles
+  Loader2, FileAudio, Clock, Video, Upload, Wand2,
+  CheckCircle2, AlertCircle, Sparkles, Film, Layers
 } from "lucide-react";
 
 // ElevenLabs voice catalog
@@ -46,6 +45,15 @@ const MODELS = [
   { id: "eleven_turbo_v2_5", name: "Turbo v2.5", description: "Low latency, ideal for real-time" },
 ];
 
+const TONES = [
+  { id: "professional", label: "Professional", prompt: "Speak in a professional, authoritative tone." },
+  { id: "corporate", label: "Corporate", prompt: "Maintain a corporate, polished delivery." },
+  { id: "warm", label: "Warm & Friendly", prompt: "Use a warm, approachable, and friendly tone." },
+  { id: "energetic", label: "Energetic", prompt: "Be upbeat, energetic, and enthusiastic." },
+  { id: "calm", label: "Calm & Soothing", prompt: "Speak calmly and soothingly." },
+  { id: "storytelling", label: "Storytelling", prompt: "Use a narrative, storytelling cadence." },
+];
+
 interface Episode {
   id: string;
   title: string;
@@ -56,6 +64,7 @@ interface Episode {
   audioUrl?: string;
   duration?: number;
   createdAt: string;
+  tone?: string;
 }
 
 const PodcastStudio = () => {
@@ -66,6 +75,7 @@ const PodcastStudio = () => {
   // Voice settings
   const [selectedVoice, setSelectedVoice] = useState(ELEVENLABS_VOICES[0].id);
   const [selectedModel, setSelectedModel] = useState("eleven_multilingual_v2");
+  const [selectedTone, setSelectedTone] = useState("professional");
   const [stability, setStability] = useState([0.5]);
   const [similarity, setSimilarity] = useState([0.75]);
   const [style, setStyle] = useState([0.3]);
@@ -80,20 +90,22 @@ const PodcastStudio = () => {
   const [currentAudioUrl, setCurrentAudioUrl] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("record");
 
+  // Video state
+  const [videoFile, setVideoFile] = useState<File | null>(null);
+  const [videoPreviewUrl, setVideoPreviewUrl] = useState<string | null>(null);
+  const [videoScript, setVideoScript] = useState("");
+  const [videoProcessing, setVideoProcessing] = useState(false);
+
   // API Status
   const [apiStatus, setApiStatus] = useState<"unknown" | "connected" | "error">("unknown");
 
-  // Check ElevenLabs connection via voice-studio-tts
+  // Check ElevenLabs connection
   useEffect(() => {
     const checkConnection = async () => {
       try {
         const { data: sessionData } = await supabase.auth.getSession();
         const token = sessionData?.session?.access_token;
-        if (!token) {
-          setApiStatus("error");
-          return;
-        }
-        // Quick test request with minimal text
+        if (!token) { setApiStatus("error"); return; }
         const response = await fetch(
           `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/voice-studio-tts`,
           {
@@ -103,11 +115,7 @@ const PodcastStudio = () => {
               apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
               Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify({
-              text: "Connection test.",
-              voiceId: "EXAVITQu4vr4xnSDxMaL",
-              format: "mp3",
-            }),
+            body: JSON.stringify({ text: "Connection test.", voiceId: "EXAVITQu4vr4xnSDxMaL", format: "mp3" }),
           }
         );
         setApiStatus(response.ok ? "connected" : "error");
@@ -121,24 +129,19 @@ const PodcastStudio = () => {
   const selectedVoiceInfo = ELEVENLABS_VOICES.find(v => v.id === selectedVoice);
 
   const generateAudio = useCallback(async () => {
-    if (!script.trim()) {
-      toast.error("Please enter a script before generating");
-      return;
-    }
-    if (!user) {
-      toast.error("Please sign in to generate audio");
-      return;
-    }
+    if (!script.trim()) { toast.error("Please enter a script before generating"); return; }
+    if (!user) { toast.error("Please sign in to generate audio"); return; }
 
     setGenerating(true);
     const newEpisode: Episode = {
       id: Date.now().toString(),
       title: episodeTitle || "Untitled Episode",
-      script: script,
+      script,
       voiceId: selectedVoice,
       voiceName: selectedVoiceInfo?.name || "Unknown",
       status: "generating",
       createdAt: new Date().toISOString(),
+      tone: selectedTone,
     };
     setEpisodes(prev => [newEpisode, ...prev]);
 
@@ -179,9 +182,7 @@ const PodcastStudio = () => {
       const audioUrl = URL.createObjectURL(audioBlob);
 
       setEpisodes(prev => prev.map(ep =>
-        ep.id === newEpisode.id
-          ? { ...ep, status: "ready", audioUrl, duration: 0 }
-          : ep
+        ep.id === newEpisode.id ? { ...ep, status: "ready", audioUrl, duration: 0 } : ep
       ));
       setCurrentAudioUrl(audioUrl);
       toast.success("Episode audio generated successfully");
@@ -194,12 +195,10 @@ const PodcastStudio = () => {
     } finally {
       setGenerating(false);
     }
-  }, [script, selectedVoice, episodeTitle, selectedVoiceInfo, user]);
+  }, [script, selectedVoice, episodeTitle, selectedVoiceInfo, user, selectedModel, stability, similarity, style, speed, selectedTone]);
 
   const playAudio = (url: string) => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-    }
+    if (audioRef.current) audioRef.current.pause();
     const audio = new Audio(url);
     audioRef.current = audio;
     audio.play();
@@ -207,10 +206,7 @@ const PodcastStudio = () => {
     audio.onended = () => setPlaying(false);
   };
 
-  const stopAudio = () => {
-    audioRef.current?.pause();
-    setPlaying(false);
-  };
+  const stopAudio = () => { audioRef.current?.pause(); setPlaying(false); };
 
   const downloadAudio = (url: string, title: string) => {
     const a = document.createElement("a");
@@ -218,6 +214,63 @@ const PodcastStudio = () => {
     a.download = `${title.replace(/\s+/g, '_')}.mp3`;
     a.click();
   };
+
+  const handleVideoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setVideoFile(file);
+      setVideoPreviewUrl(URL.createObjectURL(file));
+    }
+  };
+
+  const generateVideoVoiceover = async () => {
+    if (!videoScript.trim()) { toast.error("Enter a script for the voiceover"); return; }
+    if (!user) return;
+
+    setVideoProcessing(true);
+    try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData?.session?.access_token;
+
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/voice-studio-tts`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            text: videoScript.slice(0, 5000),
+            voiceId: selectedVoice,
+            modelId: selectedModel,
+            format: "mp3",
+            voiceSettings: {
+              stability: stability[0],
+              similarity_boost: similarity[0],
+              style: style[0],
+              speed: speed[0],
+            },
+          }),
+        }
+      );
+
+      if (!response.ok) throw new Error("Failed to generate voiceover");
+      const audioBlob = await response.blob();
+      const audioUrl = URL.createObjectURL(audioBlob);
+      setCurrentAudioUrl(audioUrl);
+      toast.success("Voiceover generated! You can now play it alongside your video.");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to generate voiceover");
+    } finally {
+      setVideoProcessing(false);
+    }
+  };
+
+  const draftEpisodes = episodes.filter(e => e.status === "draft");
+  const readyEpisodes = episodes.filter(e => e.status === "ready");
+  const pendingEpisodes = episodes.filter(e => e.status === "generating");
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
@@ -230,24 +283,30 @@ const PodcastStudio = () => {
             </Button>
             <div className="flex items-center gap-3">
               <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-[#C9A84C] to-amber-600 flex items-center justify-center shadow-lg shadow-[#C9A84C]/20">
-                <Headphones className="h-5 w-5 text-black" />
+                <Headphones className="h-5 w-5 text-white" />
               </div>
               <div>
                 <h1 className="font-bold text-black text-xl">Podcast Recording Studio</h1>
-                <p className="text-xs text-black/60">ElevenLabs Voice Integration</p>
+                <p className="text-xs text-black/60">ElevenLabs Professional Voice Integration</p>
               </div>
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <Badge className={apiStatus === "connected" 
-              ? "bg-green-50 text-green-700 border border-green-200" 
-              : apiStatus === "error" 
+            <div className="flex items-center gap-2 text-xs text-black/50">
+              <span>{readyEpisodes.length} ready</span>
+              <span>•</span>
+              <span>{draftEpisodes.length} drafts</span>
+              {pendingEpisodes.length > 0 && <><span>•</span><span className="text-amber-600">{pendingEpisodes.length} generating</span></>}
+            </div>
+            <Badge className={apiStatus === "connected"
+              ? "bg-green-50 text-green-700 border border-green-200"
+              : apiStatus === "error"
                 ? "bg-red-50 text-red-700 border border-red-200"
                 : "bg-zinc-100 text-zinc-600 border border-zinc-200"}>
               {apiStatus === "connected" ? (
-                <><CheckCircle2 className="w-3 h-3 mr-1" /> ElevenLabs Connected</>
+                <><CheckCircle2 className="w-3 h-3 mr-1" /> Connected</>
               ) : apiStatus === "error" ? (
-                <><AlertCircle className="w-3 h-3 mr-1" /> Connection Issue</>
+                <><AlertCircle className="w-3 h-3 mr-1" /> Disconnected</>
               ) : (
                 <><Loader2 className="w-3 h-3 mr-1 animate-spin" /> Checking...</>
               )}
@@ -259,16 +318,19 @@ const PodcastStudio = () => {
       <div className="p-6">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="bg-white/80 border-2 border-[#C9A84C]/30 mb-6">
-            <TabsTrigger value="record" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black text-black">
+            <TabsTrigger value="record" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C]/30 data-[state=active]:to-amber-600/20 data-[state=active]:text-black data-[state=active]:border-b-2 data-[state=active]:border-[#C9A84C] text-black">
               <Mic className="w-3.5 h-3.5 mr-1.5" /> Record Episode
             </TabsTrigger>
-            <TabsTrigger value="voices" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black text-black">
+            <TabsTrigger value="voices" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C]/30 data-[state=active]:to-amber-600/20 data-[state=active]:text-black data-[state=active]:border-b-2 data-[state=active]:border-[#C9A84C] text-black">
               <Volume2 className="w-3.5 h-3.5 mr-1.5" /> Voice Library
             </TabsTrigger>
-            <TabsTrigger value="episodes" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black text-black">
+            <TabsTrigger value="episodes" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C]/30 data-[state=active]:to-amber-600/20 data-[state=active]:text-black data-[state=active]:border-b-2 data-[state=active]:border-[#C9A84C] text-black">
               <FileAudio className="w-3.5 h-3.5 mr-1.5" /> Episodes ({episodes.length})
             </TabsTrigger>
-            <TabsTrigger value="settings" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black text-black">
+            <TabsTrigger value="video" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C]/30 data-[state=active]:to-amber-600/20 data-[state=active]:text-black data-[state=active]:border-b-2 data-[state=active]:border-[#C9A84C] text-black">
+              <Video className="w-3.5 h-3.5 mr-1.5" /> Video Studio
+            </TabsTrigger>
+            <TabsTrigger value="settings" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C]/30 data-[state=active]:to-amber-600/20 data-[state=active]:text-black data-[state=active]:border-b-2 data-[state=active]:border-[#C9A84C] text-black">
               <Settings2 className="w-3.5 h-3.5 mr-1.5" /> Settings
             </TabsTrigger>
           </TabsList>
@@ -289,6 +351,25 @@ const PodcastStudio = () => {
                       placeholder="Episode title..."
                       className="border-[#C9A84C]/30 text-black text-lg font-semibold"
                     />
+                    {/* Tone selector */}
+                    <div>
+                      <p className="text-xs font-medium text-black/60 mb-2">Tone & Style</p>
+                      <div className="flex flex-wrap gap-2">
+                        {TONES.map(tone => (
+                          <Button
+                            key={tone.id}
+                            size="sm"
+                            variant={selectedTone === tone.id ? "default" : "outline"}
+                            onClick={() => setSelectedTone(tone.id)}
+                            className={selectedTone === tone.id
+                              ? "bg-gradient-to-r from-[#C9A84C] to-amber-600 text-black text-xs"
+                              : "border-[#C9A84C]/30 text-black text-xs hover:bg-[#C9A84C]/10"}
+                          >
+                            {tone.label}
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
                     <Textarea
                       value={script}
                       onChange={(e) => setScript(e.target.value)}
@@ -297,19 +378,17 @@ const PodcastStudio = () => {
                     />
                     <div className="flex items-center justify-between">
                       <p className="text-xs text-black/50">{script.length}/5000 characters</p>
-                      <div className="flex gap-2">
-                        <Button
-                          onClick={generateAudio}
-                          disabled={generating || !script.trim()}
-                          className="bg-gradient-to-r from-[#C9A84C] to-amber-600 hover:from-[#C9A84C]/90 hover:to-amber-600/90 text-black font-semibold shadow-lg shadow-[#C9A84C]/20"
-                        >
-                          {generating ? (
-                            <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Generating...</>
-                          ) : (
-                            <><Mic className="w-4 h-4 mr-2" /> Generate Audio</>
-                          )}
-                        </Button>
-                      </div>
+                      <Button
+                        onClick={generateAudio}
+                        disabled={generating || !script.trim()}
+                        className="bg-gradient-to-r from-[#C9A84C] to-amber-600 hover:from-[#C9A84C]/90 hover:to-amber-600/90 text-black font-semibold shadow-lg shadow-[#C9A84C]/20"
+                      >
+                        {generating ? (
+                          <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Generating...</>
+                        ) : (
+                          <><Sparkles className="w-4 h-4 mr-2" /> Generate Audio</>
+                        )}
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>
@@ -375,7 +454,9 @@ const PodcastStudio = () => {
                         </div>
                         <div className="flex flex-wrap gap-1.5">
                           <Badge className="bg-[#C9A84C]/10 text-[#8B7D3A] border border-[#C9A84C]/20 text-[10px]">{selectedVoiceInfo.gender}</Badge>
-                          <Badge className="bg-[#C9A84C]/10 text-[#8B7D3A] border border-[#C9A84C]/20 text-[10px]">{selectedVoiceInfo.accent}</Badge>
+                          <Badge className="bg-[#C9A84C]/10 text-[#8B7D3A] border border-[#C9A84C]/20 text-[10px]">
+                            <Globe className="w-2.5 h-2.5 mr-0.5" /> {selectedVoiceInfo.accent}
+                          </Badge>
                           <Badge className="bg-[#C9A84C]/10 text-[#8B7D3A] border border-[#C9A84C]/20 text-[10px]">{selectedVoiceInfo.style}</Badge>
                         </div>
                       </div>
@@ -408,30 +489,19 @@ const PodcastStudio = () => {
                         </SelectContent>
                       </Select>
                     </div>
-                    <div>
-                      <div className="flex justify-between text-xs text-black/60 mb-1">
-                        <span>Stability</span><span>{stability[0].toFixed(2)}</span>
+                    {[
+                      { label: "Stability", value: stability, set: setStability, min: 0, max: 1, step: 0.05, fmt: (v: number) => v.toFixed(2) },
+                      { label: "Similarity", value: similarity, set: setSimilarity, min: 0, max: 1, step: 0.05, fmt: (v: number) => v.toFixed(2) },
+                      { label: "Style", value: style, set: setStyle, min: 0, max: 1, step: 0.05, fmt: (v: number) => v.toFixed(2) },
+                      { label: "Speed", value: speed, set: setSpeed, min: 0.7, max: 1.2, step: 0.05, fmt: (v: number) => `${v.toFixed(1)}x` },
+                    ].map(s => (
+                      <div key={s.label}>
+                        <div className="flex justify-between text-xs text-black/60 mb-1">
+                          <span>{s.label}</span><span>{s.fmt(s.value[0])}</span>
+                        </div>
+                        <Slider value={s.value} onValueChange={s.set} min={s.min} max={s.max} step={s.step} />
                       </div>
-                      <Slider value={stability} onValueChange={setStability} min={0} max={1} step={0.05} />
-                    </div>
-                    <div>
-                      <div className="flex justify-between text-xs text-black/60 mb-1">
-                        <span>Similarity</span><span>{similarity[0].toFixed(2)}</span>
-                      </div>
-                      <Slider value={similarity} onValueChange={setSimilarity} min={0} max={1} step={0.05} />
-                    </div>
-                    <div>
-                      <div className="flex justify-between text-xs text-black/60 mb-1">
-                        <span>Style</span><span>{style[0].toFixed(2)}</span>
-                      </div>
-                      <Slider value={style} onValueChange={setStyle} min={0} max={1} step={0.05} />
-                    </div>
-                    <div>
-                      <div className="flex justify-between text-xs text-black/60 mb-1">
-                        <span>Speed</span><span>{speed[0].toFixed(1)}x</span>
-                      </div>
-                      <Slider value={speed} onValueChange={setSpeed} min={0.7} max={1.2} step={0.05} />
-                    </div>
+                    ))}
                   </CardContent>
                 </Card>
               </div>
@@ -442,17 +512,14 @@ const PodcastStudio = () => {
           <TabsContent value="voices" className="m-0">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {ELEVENLABS_VOICES.map(voice => (
-                <Card 
-                  key={voice.id} 
+                <Card
+                  key={voice.id}
                   className={`border-2 cursor-pointer transition-all hover:shadow-lg ${
-                    selectedVoice === voice.id 
-                      ? "border-[#C9A84C] bg-[#C9A84C]/5" 
+                    selectedVoice === voice.id
+                      ? "border-[#C9A84C] bg-[#C9A84C]/5 shadow-lg shadow-[#C9A84C]/10"
                       : "border-[#C9A84C]/20 bg-white/80 hover:border-[#C9A84C]/40"
                   }`}
-                  onClick={() => {
-                    setSelectedVoice(voice.id);
-                    toast.success(`Voice set to ${voice.name}`);
-                  }}
+                  onClick={() => { setSelectedVoice(voice.id); toast.success(`Voice set to ${voice.name}`); }}
                 >
                   <CardContent className="p-4">
                     <div className="flex items-center gap-3 mb-3">
@@ -505,40 +572,27 @@ const PodcastStudio = () => {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
                           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#C9A84C]/20 to-[#C9A84C]/5 border border-[#C9A84C]/30 flex items-center justify-center">
-                            {ep.status === "generating" ? (
-                              <Loader2 className="w-5 h-5 text-[#C9A84C] animate-spin" />
-                            ) : ep.status === "ready" ? (
-                              <CheckCircle2 className="w-5 h-5 text-green-600" />
-                            ) : ep.status === "error" ? (
-                              <AlertCircle className="w-5 h-5 text-red-500" />
-                            ) : (
-                              <FileAudio className="w-5 h-5 text-[#C9A84C]" />
-                            )}
+                            {ep.status === "generating" ? <Loader2 className="w-5 h-5 text-[#C9A84C] animate-spin" />
+                              : ep.status === "ready" ? <CheckCircle2 className="w-5 h-5 text-green-600" />
+                              : ep.status === "error" ? <AlertCircle className="w-5 h-5 text-red-500" />
+                              : <FileAudio className="w-5 h-5 text-[#C9A84C]" />}
                           </div>
                           <div>
                             <p className="font-semibold text-black">{ep.title}</p>
                             <p className="text-xs text-black/50">
-                              Voice: {ep.voiceName} | {new Date(ep.createdAt).toLocaleDateString()}
+                              Voice: {ep.voiceName} {ep.tone && `• ${ep.tone}`} | {new Date(ep.createdAt).toLocaleDateString()}
                             </p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
                           {ep.status === "ready" && ep.audioUrl && (
                             <>
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => playAudio(ep.audioUrl!)}
-                                className="border-[#C9A84C]/30 text-black hover:bg-[#C9A84C]/10"
-                              >
+                              <Button size="sm" variant="outline" onClick={() => playAudio(ep.audioUrl!)}
+                                className="border-[#C9A84C]/30 text-black hover:bg-[#C9A84C]/10">
                                 <Play className="w-3.5 h-3.5 mr-1" /> Play
                               </Button>
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => downloadAudio(ep.audioUrl!, ep.title)}
-                                className="border-[#C9A84C]/30 text-black hover:bg-[#C9A84C]/10"
-                              >
+                              <Button size="sm" variant="outline" onClick={() => downloadAudio(ep.audioUrl!, ep.title)}
+                                className="border-[#C9A84C]/30 text-black hover:bg-[#C9A84C]/10">
                                 <Download className="w-3.5 h-3.5 mr-1" /> Download
                               </Button>
                             </>
@@ -560,6 +614,107 @@ const PodcastStudio = () => {
             )}
           </TabsContent>
 
+          {/* Video Studio Tab */}
+          <TabsContent value="video" className="m-0">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Video Upload */}
+              <Card className="border-2 border-[#C9A84C]/20 bg-white/80">
+                <CardHeader>
+                  <CardTitle className="text-base font-bold text-black flex items-center gap-2">
+                    <Film className="w-4 h-4 text-[#C9A84C]" /> Upload Video
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {videoPreviewUrl ? (
+                    <div className="space-y-3">
+                      <video
+                        src={videoPreviewUrl}
+                        controls
+                        className="w-full rounded-lg border-2 border-[#C9A84C]/20"
+                      />
+                      <div className="flex items-center justify-between">
+                        <p className="text-xs text-black/50">{videoFile?.name}</p>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => { setVideoFile(null); setVideoPreviewUrl(null); }}
+                          className="border-[#C9A84C]/30 text-black text-xs"
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-[#C9A84C]/30 rounded-lg cursor-pointer hover:border-[#C9A84C]/60 hover:bg-[#C9A84C]/5 transition-all">
+                      <Upload className="w-8 h-8 text-[#C9A84C]/60 mb-2" />
+                      <span className="text-sm text-black/60">Upload your video file</span>
+                      <span className="text-xs text-black/40 mt-1">MP4, MOV, WebM supported</span>
+                      <input type="file" accept="video/*" className="hidden" onChange={handleVideoUpload} />
+                    </label>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Video Voiceover */}
+              <Card className="border-2 border-[#C9A84C]/20 bg-white/80">
+                <CardHeader>
+                  <CardTitle className="text-base font-bold text-black flex items-center gap-2">
+                    <Wand2 className="w-4 h-4 text-[#C9A84C]" /> AI Voiceover & Lip Sync
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <Textarea
+                    value={videoScript}
+                    onChange={e => setVideoScript(e.target.value)}
+                    placeholder="Write the voiceover script for this video. The AI will generate audio matching the selected voice..."
+                    className="border-[#C9A84C]/30 min-h-[150px] text-black"
+                  />
+                  <div className="flex items-center gap-2 text-xs text-black/50">
+                    <Volume2 className="w-3 h-3" />
+                    <span>Voice: {selectedVoiceInfo?.name} ({selectedVoiceInfo?.accent})</span>
+                  </div>
+
+                  <div className="space-y-2">
+                    <p className="text-xs font-medium text-black/60">Features</p>
+                    <div className="grid grid-cols-2 gap-2">
+                      {[
+                        { icon: Volume2, label: "AI Voiceover", desc: "Generate speech from script" },
+                        { icon: Layers, label: "Lip Sync", desc: "AI lip synchronization" },
+                        { icon: Radio, label: "Voice Clone", desc: "Use your cloned voice" },
+                        { icon: Sparkles, label: "Auto-Detect", desc: "Detect speech segments" },
+                      ].map((f, i) => (
+                        <div key={i} className="p-2 rounded-lg bg-[#C9A84C]/5 border border-[#C9A84C]/15">
+                          <div className="flex items-center gap-1.5 mb-0.5">
+                            <f.icon className="w-3 h-3 text-[#C9A84C]" />
+                            <span className="text-xs font-semibold text-black">{f.label}</span>
+                          </div>
+                          <p className="text-[10px] text-black/50">{f.desc}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <Button
+                    onClick={generateVideoVoiceover}
+                    disabled={videoProcessing || !videoScript.trim()}
+                    className="w-full bg-gradient-to-r from-[#C9A84C] to-amber-600 hover:from-[#C9A84C]/90 hover:to-amber-600/90 text-black font-semibold"
+                  >
+                    {videoProcessing ? (
+                      <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Processing...</>
+                    ) : (
+                      <><Wand2 className="w-4 h-4 mr-2" /> Generate Voiceover</>
+                    )}
+                  </Button>
+
+                  <p className="text-[10px] text-black/40">
+                    Lip sync processing uses AI to analyze the video and synchronize mouth movements with the generated audio. 
+                    Advanced features require video upload.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
           {/* Settings Tab */}
           <TabsContent value="settings" className="m-0">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -574,12 +729,11 @@ const PodcastStudio = () => {
                       <span className="font-semibold text-black text-sm">API Status</span>
                     </div>
                     <p className="text-xs text-black/60">
-                      {apiStatus === "connected" 
-                        ? "ElevenLabs API is connected and operational. You can generate audio using any available voice."
+                      {apiStatus === "connected"
+                        ? "ElevenLabs API is connected and operational."
                         : apiStatus === "error"
-                          ? "There is an issue connecting to ElevenLabs. Please check your API key configuration."
-                          : "Checking connection status..."
-                      }
+                          ? "Issue connecting. Check API key configuration."
+                          : "Checking connection..."}
                     </p>
                   </div>
                   <div className="space-y-2">
@@ -590,8 +744,10 @@ const PodcastStudio = () => {
                         "Multilingual support (29 languages)",
                         "Voice stability and similarity controls",
                         "Speed adjustment (0.7x to 1.2x)",
-                        "High-quality MP3 output",
+                        "Tone presets (Professional, Corporate, Warm, etc.)",
+                        "Video voiceover with AI lip sync",
                         "Podcast episode management",
+                        "Voice cloning (owner exclusive)",
                       ].map((feature, i) => (
                         <div key={i} className="flex items-center gap-2 text-xs text-black/70">
                           <CheckCircle2 className="w-3.5 h-3.5 text-[#C9A84C]" />
@@ -609,10 +765,11 @@ const PodcastStudio = () => {
                 </CardHeader>
                 <CardContent className="space-y-3">
                   {[
-                    { icon: Mic, title: "Podcast Episodes", desc: "Record full podcast episodes with professional voices" },
-                    { icon: Headphones, title: "Client Meetings", desc: "Use voice synthesis to attend meetings on your behalf" },
-                    { icon: Radio, title: "Phone Calls", desc: "Answer calls or make calls using selected voice profiles" },
-                    { icon: Volume2, title: "Voiceovers", desc: "Generate voiceovers for presentations and tours" },
+                    { icon: Mic, title: "Podcast Episodes", desc: "Record full episodes with professional voices" },
+                    { icon: Video, title: "Video Voiceovers", desc: "Add AI voice to videos with lip sync" },
+                    { icon: Headphones, title: "Client Meetings", desc: "Voice synthesis for presentations" },
+                    { icon: Radio, title: "Phone Calls", desc: "Answer calls with selected voice profiles" },
+                    { icon: Volume2, title: "Narration", desc: "Generate voiceovers for property tours" },
                   ].map((item, i) => (
                     <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-[#C9A84C]/5 border border-[#C9A84C]/15">
                       <div className="w-8 h-8 rounded-lg bg-[#C9A84C]/15 flex items-center justify-center shrink-0">
@@ -624,9 +781,6 @@ const PodcastStudio = () => {
                       </div>
                     </div>
                   ))}
-                  <p className="text-[10px] text-black/40 mt-4">
-                    Note: API key connectivity can be configured in Settings &gt; Integrations. Contact support for custom voice cloning.
-                  </p>
                 </CardContent>
               </Card>
             </div>
