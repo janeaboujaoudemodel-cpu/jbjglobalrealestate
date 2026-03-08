@@ -245,20 +245,37 @@ export function useProjectsPaginated(
   options?: { publishedFilter?: boolean | "all" }
 ) {
   const publishedFilter = options?.publishedFilter ?? "all";
+  // For drafts, use a lightweight query without heavy joins for faster load
+  const isDrafts = publishedFilter === false;
   return useQuery({
     queryKey: ["projects-paginated", page, pageSize, publishedFilter],
     queryFn: async () => {
       const from = page * pageSize;
       const to = from + pageSize - 1;
-      let query = supabase
-        .from("projects")
-        .select(`
+
+      const selectColumns = isDrafts
+        ? `
+          id, name, slug, description, location, price_from, price_to,
+          bedrooms_min, bedrooms_max, size_min, size_max,
+          handover_date, payment_plan, status, emirate,
+          is_featured, is_premium, is_sold_out, is_published,
+          property_type_label, status_label, cover_image_url,
+          developer_name, area_name, source, import_source, source_url,
+          created_at, updated_at,
+          developer:developers(id, name, slug),
+          community:communities(id, name, slug)
+        `
+        : `
           *,
           developer:developers(id, name, slug),
           community:communities(id, name, slug),
           images:project_images(id, image_url, alt_text, display_order),
           documents:project_documents(id, document_type, file_url, file_name, display_order)
-        `)
+        `;
+
+      let query = supabase
+        .from("projects")
+        .select(selectColumns)
         .order("created_at", { ascending: false })
         .range(from, to);
       
