@@ -41,7 +41,15 @@ Extract ALL of the following information that is visible in the document:
 2. Company name in Arabic (exact Arabic characters as printed — if present)
 3. License / registration / commercial number
 4. City (in English) — the city where the COMPANY is registered (e.g. Dubai, Abu Dhabi, Sharjah, Ajman)
-5. City in Arabic — use the format: "[English city name], الإمارات العربية المتحدة" — e.g. "Dubai, الإمارات العربية المتحدة" or "Abu Dhabi, الإمارات العربية المتحدة". Always use the English city name followed by a comma and the Arabic country name.
+5. City in Arabic — write the city name FULLY IN ARABIC followed by the country in Arabic. Examples:
+   - "دبي، الإمارات العربية المتحدة"
+   - "أبوظبي، الإمارات العربية المتحدة"
+   - "الشارقة، الإمارات العربية المتحدة"
+   - "عجمان، الإمارات العربية المتحدة"
+   - "رأس الخيمة، الإمارات العربية المتحدة"
+   - "الفجيرة، الإمارات العربية المتحدة"
+   - "أم القيوين، الإمارات العربية المتحدة"
+   CRITICAL: The city name MUST be in Arabic script, NOT English. Never write "Dubai" in the arabic_city field.
 6. Country (in English) — the country where the COMPANY is registered, NOT the nationality of the owner or director. For UAE documents this is always "United Arab Emirates". Common UAE cities: Dubai, Abu Dhabi, Sharjah, Ajman, Ras Al Khaimah, Fujairah, Umm Al Quwain.
 7. Phone number — format as international: start with + and country code (e.g. +971 for UAE). Convert 04/05 local UAE format to +971 4 / +971 5. Remove all dashes; use spaces as separators: +971 4 123 4567.
 8. Email address (any email found)
@@ -52,6 +60,7 @@ CRITICAL RULES:
 - If the document is a UAE trade license and any city is Dubai / Abu Dhabi / Sharjah etc., set country to "United Arab Emirates".
 - Do NOT put Lebanon, Egypt, India, Pakistan, Jordan, Syria, or any personal nationality in the "country" field.
 - Phone: always use international format starting with +. Remove all dashes.
+- arabic_city: MUST be fully in Arabic script. Never use English characters.
 
 Return ONLY a valid JSON object with these exact keys (omit any key where the information is not found or not legible):
 {
@@ -72,12 +81,10 @@ Rules:
 - If a field is not clearly visible, omit it entirely — do not guess.`;
 
     // Determine the correct MIME to send to the AI gateway.
-    // Gemini 2.5-flash supports application/pdf natively via inline data URL.
-    // For images, use the actual image MIME type.
     const effectiveMime = isPdf ? 'application/pdf' : (mimeType && mimeType.startsWith('image/') ? mimeType : 'image/jpeg');
 
     const requestBody = {
-      model: 'google/gemini-2.5-flash-lite',
+      model: 'google/gemini-2.5-flash',
       messages: [
         {
           role: 'user',
@@ -118,11 +125,9 @@ Rules:
     // Parse JSON from response
     let extracted: Record<string, string> = {};
     try {
-      // Strip markdown code fences if present
       const cleaned = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
       extracted = JSON.parse(cleaned);
     } catch {
-      // Try to extract JSON object from content
       const match = content.match(/\{[\s\S]*\}/);
       if (match) {
         try { extracted = JSON.parse(match[0]); } catch { /* fall through */ }
@@ -137,7 +142,7 @@ Rules:
       }
     }
 
-    // Server-side country correction: if city is UAE but country is a personal nationality, override
+    // Server-side country correction
     const uaeCities = ['dubai', 'abu dhabi', 'sharjah', 'ajman', 'ras al khaimah', 'fujairah', 'umm al quwain'];
     const nonUaeNationalities = ['lebanon', 'egypt', 'india', 'pakistan', 'jordan', 'syria', 'philippines', 'iraq', 'morocco'];
     if (result.city && result.country) {
@@ -148,6 +153,30 @@ Rules:
       if (isUaeCity && isPersonalNationality) {
         result.country = 'United Arab Emirates';
       }
+    }
+
+    // Server-side arabic_city correction: if arabic_city contains English text, replace with Arabic
+    const ARABIC_CITY_MAP: Record<string, string> = {
+      'dubai': 'دبي، الإمارات العربية المتحدة',
+      'abu dhabi': 'أبوظبي، الإمارات العربية المتحدة',
+      'sharjah': 'الشارقة، الإمارات العربية المتحدة',
+      'ajman': 'عجمان، الإمارات العربية المتحدة',
+      'ras al khaimah': 'رأس الخيمة، الإمارات العربية المتحدة',
+      'fujairah': 'الفجيرة، الإمارات العربية المتحدة',
+      'umm al quwain': 'أم القيوين، الإمارات العربية المتحدة',
+    };
+    if (result.arabic_city) {
+      // Check if arabic_city contains English letters — if so, it's wrong
+      const hasEnglish = /[a-zA-Z]/.test(result.arabic_city);
+      if (hasEnglish && result.city) {
+        const mapped = ARABIC_CITY_MAP[result.city.toLowerCase()];
+        if (mapped) result.arabic_city = mapped;
+      }
+    }
+    // If no arabic_city but we have city, generate it
+    if (!result.arabic_city && result.city) {
+      const mapped = ARABIC_CITY_MAP[result.city.toLowerCase()];
+      if (mapped) result.arabic_city = mapped;
     }
 
     return new Response(JSON.stringify(result), {

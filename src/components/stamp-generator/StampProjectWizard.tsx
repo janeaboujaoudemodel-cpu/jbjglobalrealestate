@@ -329,8 +329,16 @@ export default function StampProjectWizard() {
                     'fujairah': 'الفجيرة',
                     'umm al quwain': 'أم القيوين',
                   };
-                  const arabicCityName = (city ? ARABIC_CITY_MAP[city.toLowerCase()] : undefined) || data.arabic_city || city;
-                  const arabicCity = data.arabic_city || (arabicCityName ? `${arabicCityName}، الإمارات العربية المتحدة` : '');
+                  // Always prefer mapped Arabic city name; never let English leak into Arabic field
+                  const mappedArabic = city ? ARABIC_CITY_MAP[city.toLowerCase()] : undefined;
+                  // If AI returned arabic_city, check if it contains English — if so, override with map
+                  let arabicCityValue = data.arabic_city || '';
+                  if (arabicCityValue && /[a-zA-Z]/.test(arabicCityValue) && mappedArabic) {
+                    arabicCityValue = mappedArabic + '، الإمارات العربية المتحدة';
+                  } else if (!arabicCityValue && mappedArabic) {
+                    arabicCityValue = mappedArabic + '، الإمارات العربية المتحدة';
+                  }
+                  const arabicCity = arabicCityValue;
                   if (arabicCity) set('arabic_city', arabicCity);
                   // Smart country correction: don't confuse owner nationality with company country
                   const rawCountry = data.country || '';
@@ -414,7 +422,7 @@ export default function StampProjectWizard() {
                   </div>
                   <div>
                     <Label className="text-xs font-medium mb-1.5 block">City in Arabic</Label>
-                    <Input value={form.arabic_city} onChange={e => set('arabic_city', e.target.value)} placeholder="Dubai, الإمارات العربية المتحدة" dir="rtl"/>
+                    <Input value={form.arabic_city} onChange={e => set('arabic_city', e.target.value)} placeholder="دبي، الإمارات العربية المتحدة" dir="rtl"/>
                   </div>
                 </div>
               )}
@@ -531,7 +539,7 @@ export default function StampProjectWizard() {
                 <div className="grid grid-cols-5 gap-2">
                   {([1, 2, 3, 4, 5] as const).map(d => {
                     const densityLabels: Record<number, string> = {
-                      1: 'Name only', 2: 'Name + City', 3: 'Name + Reg + City', 4: '+ Phone', 5: 'All fields'
+                      1: 'Name only', 2: 'Name + City', 3: 'Name + License + City', 4: '+ Phone', 5: 'All fields'
                     };
                     return (
                       <button
