@@ -308,7 +308,10 @@ const AIMeetingSummarizerPremium = () => {
       return;
     }
     const result = await invokeTool("ai-meeting-summarizer", {
-      ...formData,
+      meetingNotes: formData.notes,
+      meetingType: formData.meetingTitle || "client meeting",
+      participants: formData.participants,
+      propertyContext: linkedLead?.full_name || "",
       linkedLeadId: linkedLead?.id,
       sessionDate,
       fullTranscript: liveTranscript.map(t => t.original).join(' '),
