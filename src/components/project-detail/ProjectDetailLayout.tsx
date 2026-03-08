@@ -1233,13 +1233,15 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
         </div>
       </section>
 
-      {/* Recommended Projects */}
+      {/* Recommended Projects — seamless champagne bg continuation */}
+      <div style={{ background: 'linear-gradient(135deg, #EDE0C8 0%, #E2D4B8 50%, #D4C4A8 100%)' }}>
       <RecommendedProjects
         currentProjectId={project.id}
         currentDeveloperId={(project.developer as any)?.id || null}
         currentLocation={project.location}
         currentEmirate={(project as any).emirate || null}
       />
+      </div>
 
       {/* DirectContactCTA is now rendered globally in MainLayout - removed duplicate */}
 
