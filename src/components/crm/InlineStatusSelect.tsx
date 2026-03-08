@@ -75,28 +75,28 @@ export default function InlineStatusSelect({
           <SelectItem 
             key={status.value} 
             value={status.value} 
-            className="text-black hover:bg-muted/50 pl-4 focus:bg-muted/60 focus:text-black"
+            className="text-black hover:bg-[#C9A84C]/10 pl-4 focus:bg-[#C9A84C]/15 focus:text-black"
           >
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-500" />
+              <span className="w-2 h-2 rounded-full bg-emerald-500 flex-shrink-0" />
               {status.label}
             </div>
           </SelectItem>
         ))}
         
-        {/* NEUTRAL - Blue */}
-        <div className="px-2 py-1.5 text-xs font-bold text-blue-700 uppercase tracking-wide mt-1 flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-blue-500" />
+        {/* NEUTRAL */}
+        <div className="px-2 py-1.5 text-xs font-bold text-zinc-600 uppercase tracking-wide mt-1 flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-zinc-400" />
           Neutral
         </div>
         {PIPELINE_STATUSES.filter(s => s.category === 'neutral').map(status => (
           <SelectItem 
             key={status.value} 
             value={status.value} 
-            className="text-black hover:bg-muted/50 pl-4 focus:bg-muted/60 focus:text-black"
+            className="text-black hover:bg-[#C9A84C]/10 pl-4 focus:bg-[#C9A84C]/15 focus:text-black"
           >
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-blue-500" />
+              <span className="w-2 h-2 rounded-full bg-zinc-400 flex-shrink-0" />
               {status.label}
             </div>
           </SelectItem>
@@ -111,10 +111,10 @@ export default function InlineStatusSelect({
           <SelectItem 
             key={status.value} 
             value={status.value} 
-            className="text-black hover:bg-muted/50 pl-4 focus:bg-muted/60 focus:text-black"
+            className="text-black hover:bg-[#C9A84C]/10 pl-4 focus:bg-[#C9A84C]/15 focus:text-black"
           >
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-red-500" />
+              <span className="w-2 h-2 rounded-full bg-red-500 flex-shrink-0" />
               {status.label}
             </div>
           </SelectItem>
