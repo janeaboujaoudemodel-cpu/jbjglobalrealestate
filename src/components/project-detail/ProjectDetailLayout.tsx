@@ -1058,7 +1058,21 @@ export default function ProjectDetailLayout({
                 location={project.location}
                 latitude={project.latitude ?? null}
                 longitude={project.longitude ?? null}
-              />
+               />
+
+              {/* Nearby Properties Map */}
+              {typeof project.latitude === 'number' && typeof project.longitude === 'number' && (
+                <div className="mt-6">
+                  <h3 className="text-lg font-semibold text-foreground mb-3">Nearby Projects</h3>
+                  <ProjectNearbyPropertiesMap
+                    currentProjectId={project.id}
+                    currentProjectName={project.name}
+                    latitude={project.latitude}
+                    longitude={project.longitude}
+                    areaName={project.area_name}
+                  />
+                </div>
+              )
 
               {/* Nearby Points of Interest - Below Map */}
               {project.location_distances && project.location_distances.length > 0 && (
