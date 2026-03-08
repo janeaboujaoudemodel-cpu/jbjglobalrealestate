@@ -97,7 +97,7 @@ export const DEPARTMENTS: Record<string, Department> = {
     id: 'hr',
     name: 'Human Resources',
     shortName: 'HR',
-    icon: '👥',
+    icon: 'HR',
     color: '#8B5CF6',
     headId: 'jessica',
     headName: 'Jessica',
@@ -118,7 +118,7 @@ export const DEPARTMENTS: Record<string, Department> = {
     id: 'sales',
     name: 'Sales / Brokers',
     shortName: 'Sales',
-    icon: '💼',
+    icon: 'SALES',
     color: '#10B981',
     headId: 'james_morgan',
     headName: 'James Morgan',
@@ -139,7 +139,7 @@ export const DEPARTMENTS: Record<string, Department> = {
     id: 'marketing',
     name: 'Marketing',
     shortName: 'Marketing',
-    icon: '🎨',
+    icon: 'MKT',
     color: '#EC4899',
     headId: 'maya_khalid',
     headName: 'Maya Khalid',
@@ -160,7 +160,7 @@ export const DEPARTMENTS: Record<string, Department> = {
     id: 'finance',
     name: 'Finance',
     shortName: 'Finance',
-    icon: '💰',
+    icon: 'FIN',
     color: '#F59E0B',
     headId: 'layla_ahmed',
     headName: 'Layla Ahmed',
@@ -181,7 +181,7 @@ export const DEPARTMENTS: Record<string, Department> = {
     id: 'admin',
     name: 'Administration',
     shortName: 'Admin',
-    icon: '📋',
+    icon: 'ADM',
     color: '#6B7280',
     headId: 'david_admin',
     headName: 'David',
@@ -202,7 +202,7 @@ export const DEPARTMENTS: Record<string, Department> = {
     id: 'it',
     name: 'IT / Developer',
     shortName: 'IT',
-    icon: '💻',
+    icon: 'IT',
     color: '#3B82F6',
     headId: 'christopher_adams',
     headName: 'Christopher Adams',
@@ -614,21 +614,21 @@ export function formatCompanySummary(summary: CompanyDailySummary): string {
         output += `  • ${highlight}\n`;
       }
       if (dept.blockers.length > 0) {
-        output += `  ⚠️ Blockers: ${dept.blockers.join(', ')}\n`;
+        output += `  [WARN] Blockers: ${dept.blockers.join(', ')}\n`;
       }
       output += '\n';
     }
   }
   
   if (summary.criticalItems.length > 0) {
-    output += `🚨 Critical Items:\n`;
+    output += `[ALERT] Critical Items:\n`;
     for (const item of summary.criticalItems) {
       output += `  • ${item}\n`;
     }
     output += '\n';
   }
   
-  output += `📊 General: System running ${summary.teamMorale === 'high' ? 'excellently' : summary.teamMorale === 'normal' ? 'smoothly' : 'with some concerns'}.`;
+  output += `[STATUS] General: System running ${summary.teamMorale === 'high' ? 'excellently' : summary.teamMorale === 'normal' ? 'smoothly' : 'with some concerns'}.`;
   
   return output;
 }

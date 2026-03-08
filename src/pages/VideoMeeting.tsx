@@ -474,7 +474,7 @@ const VideoMeeting = () => {
     setChatMessages(prev => [...prev, {
       id: Date.now().toString(),
       sender: 'System',
-      message: '🔴 This meeting is now being recorded',
+      message: 'This meeting is now being recorded',
       timestamp: new Date(),
       isSystem: true
     }]);

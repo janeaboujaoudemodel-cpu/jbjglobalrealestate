@@ -243,7 +243,7 @@ const AdminLeads = () => {
           lead.id === leadId ? { ...lead, vip: newVip } : lead
         )
       );
-      toast.success(newVip ? "Marked as VIP ⭐" : "VIP removed");
+      toast.success(newVip ? "Marked as VIP" : "VIP removed");
     } catch (error: any) {
       toast.error(error.message || "Failed to update VIP status");
     }

@@ -203,7 +203,7 @@ const AdminChatDashboard = () => {
       const currentMessages = selectedConversation.messages || [];
       const joinMessage = {
         role: 'assistant',
-        content: '🟢 Sarah has joined the conversation and is now available to assist you directly.',
+        content: 'Sarah has joined the conversation and is now available to assist you directly.',
         timestamp: new Date().toISOString(),
       };
       
@@ -228,7 +228,7 @@ const AdminChatDashboard = () => {
       const currentMessages = selectedConversation.messages || [];
       const ownerMessage = {
         role: 'assistant',
-        content: `👤 Sarah: ${ownerReplyInput.trim()}`,
+        content: `Sarah: ${ownerReplyInput.trim()}`,
         timestamp: new Date().toISOString(),
       };
       
