@@ -713,9 +713,9 @@ const HeroSearchBar = () => {
       {/* Main Search Bar - Responsive: Stack on mobile, single line on desktop */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-0 w-full">
         {/* Unified connected bar on desktop */}
-        <div className="hidden sm:flex items-center w-full bg-gradient-to-r from-white/[0.08] via-white/[0.12] to-white/[0.08] backdrop-blur-2xl border border-gold/25 rounded-2xl overflow-hidden shadow-[0_8px_40px_rgba(0,0,0,0.5),0_2px_8px_rgba(200,167,102,0.15),inset_0_1px_0_rgba(255,255,255,0.15)] min-h-[60px]">
+        <div className="hidden sm:flex items-center w-fit mx-auto bg-gradient-to-r from-white/[0.08] via-white/[0.12] to-white/[0.08] backdrop-blur-2xl border border-gold/25 rounded-2xl overflow-hidden shadow-[0_8px_40px_rgba(0,0,0,0.5),0_2px_8px_rgba(200,167,102,0.15),inset_0_1px_0_rgba(255,255,255,0.15)] min-h-[60px]">
           {/* Location Search Input */}
-          <div className="flex items-center flex-none w-[34%] max-w-[400px] min-w-[180px] pl-4 pr-0">
+          <div className="flex items-center flex-none min-w-[180px] pl-4 pr-0">
             <Search className="w-5 h-5 text-gold shrink-0" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.6))' }} />
             <input
               type="text"
@@ -915,7 +915,7 @@ const HeroSearchBar = () => {
           {/* More Filters Button */}
           <Dialog open={isFiltersOpen} onOpenChange={setIsFiltersOpen}>
             <DialogTrigger asChild>
-              <button className="flex items-center gap-2 px-5 h-[60px] text-white/90 font-medium text-sm hover:bg-white/10 transition-all duration-200">
+              <button className="flex items-center gap-2 px-3 h-[60px] text-white/90 font-medium text-sm hover:bg-white/10 transition-all duration-200">
                 <SlidersHorizontal className="w-3.5 h-3.5 text-gold" />
                 <span className="hidden sm:inline">Filters</span>
               </button>
@@ -1289,7 +1289,7 @@ const HeroSearchBar = () => {
           <Button
             onClick={handleSearch}
             disabled={isSearching}
-            className="ml-auto h-[52px] px-7 bg-gradient-to-r from-gold to-gold-dark hover:brightness-110 text-black font-bold text-sm rounded-2xl transition-all duration-300 shadow-[0_0_20px_rgba(200,167,102,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.5)] disabled:opacity-70 border-0"
+            className="ml-auto h-[52px] px-5 bg-gradient-to-r from-gold to-gold-dark hover:brightness-110 text-black font-bold text-sm rounded-2xl transition-all duration-300 shadow-[0_0_20px_rgba(200,167,102,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.5)] disabled:opacity-70 border-0"
           >
             {isSearching ? (
               <div className="w-4 h-4 border-2 border-black/40 border-t-black rounded-full animate-spin mr-1.5" />
