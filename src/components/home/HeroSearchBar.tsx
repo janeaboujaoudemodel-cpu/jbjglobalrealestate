@@ -715,7 +715,7 @@ const HeroSearchBar = () => {
         {/* Unified connected bar on desktop */}
         <div className="hidden sm:flex items-center w-full bg-gradient-to-r from-white/[0.08] via-white/[0.12] to-white/[0.08] backdrop-blur-2xl border border-gold/25 rounded-2xl overflow-hidden shadow-[0_8px_40px_rgba(0,0,0,0.5),0_2px_8px_rgba(200,167,102,0.15),inset_0_1px_0_rgba(255,255,255,0.15)] min-h-[60px]">
           {/* Location Search Input */}
-          <div className="flex items-center flex-1 min-w-[240px] pl-4 pr-3">
+          <div className="flex items-center flex-1 min-w-[200px] pl-4 pr-1">
             <Search className="w-5 h-5 text-gold shrink-0" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.6))' }} />
             <input
               type="text"
