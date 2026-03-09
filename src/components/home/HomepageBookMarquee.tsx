@@ -9,11 +9,16 @@ const allBooks = INVESTOR_BOOKS.filter(b => b.title !== 'Guides Library');
 
 function BookMarqueeStrip({ books }: { books: BookData[] }) {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const duplicated = [...books, ...books, ...books];
+  // Don't duplicate books if there's only one
+  const duplicated = books.length <= 1 ? books : [...books, ...books, ...books];
 
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
+    
+    // Don't animate if there's only one book
+    if (books.length <= 1) return;
+    
     let animId: number;
     let pos = 0;
     const speed = 0.4;

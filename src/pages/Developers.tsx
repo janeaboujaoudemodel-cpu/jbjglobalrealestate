@@ -27,7 +27,7 @@ import {
 import AdvancedFilterPanel from "@/components/filters/AdvancedFilterPanel";
 import { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 
-import developersHeroVideo from "@/assets/videos/burj-khalifa-day-to-night.mp4";
+import developersHeroVideo from "@/assets/videos/dubai-landmarks-hero.mp4";
 
 // Developer tier classification for filtering
 const TIER_FILTERS = [
@@ -492,7 +492,7 @@ const Developers = () => {
 
         {/* Developer Cards Grid */}
         <section className="py-12 md:py-16">
-          <div className="jj-layer-2">
+          <div className="container mx-auto px-0">{/* Edge-to-edge container */}
             {isLoading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {[...Array(8)].map((_, i) => (
