@@ -800,7 +800,7 @@ const HeroSearchBar = () => {
           {/* Emirates Dropdown — always visible in main bar */}
           <Popover>
             <PopoverTrigger asChild>
-              <button className="flex items-center gap-2 px-5 h-[60px] text-white/90 font-medium text-sm hover:bg-white/10 transition-all duration-200 whitespace-nowrap">
+              <button className="flex items-center gap-2 px-3 h-[60px] text-white/90 font-medium text-sm hover:bg-white/10 transition-all duration-200 whitespace-nowrap">
                 <MapPin className="w-3.5 h-3.5 text-gold" />
                 <span className="hidden md:inline">{emirate === 'all' ? 'Emirates' : emirate}</span>
                 <ChevronDown className="w-3.5 h-3.5 text-gold" />
