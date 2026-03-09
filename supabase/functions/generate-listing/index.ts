@@ -224,29 +224,61 @@ async function runExtraction(jobId: string, fileRefs: any[], url: string | null,
     const inlineFiles = (fileRefs || []).filter((f: any) => f.base64 && !f.storageUrl);
     const totalFiles = storageFiles.length + inlineFiles.length;
 
-    // Scrape URL if present
+    // Scrape URL if present — try universal extractor first for Google Drive & special links
     let scrapedContent = "";
-    if (url && firecrawlApiKey) {
-      await updateJobProgress(supabase, jobId, "Scraping website...");
-      try {
-        let formattedUrl = url.trim();
-        if (!formattedUrl.startsWith("http")) formattedUrl = `https://${formattedUrl}`;
-        console.log(`[generate-listing] Scraping URL: ${formattedUrl}`);
-        const scrapeRes = await fetch("https://api.firecrawl.dev/v1/scrape", {
-          method: "POST",
-          headers: { "Authorization": `Bearer ${firecrawlApiKey}`, "Content-Type": "application/json" },
-          body: JSON.stringify({ url: formattedUrl, formats: ["markdown", "links"], onlyMainContent: true, waitFor: 5000, timeout: 30000 }),
-        });
-        if (scrapeRes.ok) {
-          const d = await scrapeRes.json();
-          scrapedContent = d?.data?.markdown || "";
-          console.log(`[generate-listing] Scraped ${scrapedContent.length} chars`);
-        } else {
-          const errText = await scrapeRes.text();
-          console.warn(`[generate-listing] Scrape HTTP ${scrapeRes.status}: ${errText.substring(0, 200)}`);
+    if (url) {
+      await updateJobProgress(supabase, jobId, "Extracting content from link...");
+      let formattedUrl = url.trim();
+      if (!formattedUrl.startsWith("http")) formattedUrl = `https://${formattedUrl}`;
+
+      const isGoogleDrive = /drive\.google\.com|docs\.google\.com|sheets\.google\.com/i.test(formattedUrl);
+
+      // For Google Drive or non-standard links, use the universal extractor
+      if (isGoogleDrive || !firecrawlApiKey) {
+        try {
+          console.log(`[generate-listing] Using universal-link-extractor for: ${formattedUrl}`);
+          const SUPABASE_URL = Deno.env.get("SUPABASE_URL") || "";
+          const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY") || "";
+          const ulRes = await fetch(`${SUPABASE_URL}/functions/v1/universal-link-extractor`, {
+            method: "POST",
+            headers: { "Authorization": `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json", "apikey": SUPABASE_ANON_KEY },
+            body: JSON.stringify({ url: formattedUrl, extract_mode: "property_listing" }),
+          });
+          if (ulRes.ok) {
+            const ulData = await ulRes.json();
+            if (ulData?.success && ulData?.data) {
+              scrapedContent = JSON.stringify(ulData.data, null, 2);
+              console.log(`[generate-listing] Universal extractor: ${scrapedContent.length} chars, type: ${ulData.url_type}`);
+              await updateJobProgress(supabase, jobId, `Extracted from ${ulData.url_type === 'google_drive' ? 'Google Drive' : 'link'} — analyzing...`);
+            }
+          } else {
+            console.warn(`[generate-listing] Universal extractor failed: ${ulRes.status}`);
+          }
+        } catch (err) {
+          console.warn("[generate-listing] Universal extractor error:", err);
         }
-      } catch (err) {
-        console.warn("[generate-listing] Scrape failed:", err);
+      }
+
+      // Fallback to Firecrawl for standard URLs
+      if (!scrapedContent && firecrawlApiKey) {
+        try {
+          console.log(`[generate-listing] Scraping URL with Firecrawl: ${formattedUrl}`);
+          const scrapeRes = await fetch("https://api.firecrawl.dev/v1/scrape", {
+            method: "POST",
+            headers: { "Authorization": `Bearer ${firecrawlApiKey}`, "Content-Type": "application/json" },
+            body: JSON.stringify({ url: formattedUrl, formats: ["markdown", "links"], onlyMainContent: true, waitFor: 5000, timeout: 30000 }),
+          });
+          if (scrapeRes.ok) {
+            const d = await scrapeRes.json();
+            scrapedContent = d?.data?.markdown || "";
+            console.log(`[generate-listing] Scraped ${scrapedContent.length} chars`);
+          } else {
+            const errText = await scrapeRes.text();
+            console.warn(`[generate-listing] Scrape HTTP ${scrapeRes.status}: ${errText.substring(0, 200)}`);
+          }
+        } catch (err) {
+          console.warn("[generate-listing] Scrape failed:", err);
+        }
       }
     }
     // If we have a URL but scraping failed, use the URL itself as context

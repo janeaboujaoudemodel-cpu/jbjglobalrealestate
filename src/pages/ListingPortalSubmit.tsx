@@ -263,23 +263,52 @@ const ListingPortalSubmit = () => {
         documents.push({ type: 'text', name: 'User-provided description', content: sourceText.trim() });
       }
 
-      // Scrape URL via Firecrawl if provided
+      // Universal Link Extractor — handles Google Drive, property portals, any URL
       let scrapedContent = '';
       if (sourceUrl.trim()) {
         try {
-          const { data: scrapeResult, error: scrapeError } = await supabase.functions.invoke('firecrawl-scrape', {
-            body: { url: sourceUrl.trim(), options: { formats: ['markdown'], onlyMainContent: true } }
+          toast.info('Extracting content from link...', { duration: 3000 });
+          const { data: linkResult, error: linkError } = await supabase.functions.invoke('universal-link-extractor', {
+            body: { url: sourceUrl.trim(), extract_mode: 'property_listing' }
           });
-          if (!scrapeError && scrapeResult?.data?.markdown) {
-            scrapedContent = scrapeResult.data.markdown;
-            documents.push({ type: 'text', name: `Scraped: ${sourceUrl}`, content: scrapedContent.substring(0, 15000) });
-          } else if (!scrapeError && scrapeResult?.success && scrapeResult?.data?.markdown) {
-            scrapedContent = scrapeResult.data.markdown;
-            documents.push({ type: 'text', name: `Scraped: ${sourceUrl}`, content: scrapedContent.substring(0, 15000) });
+          if (!linkError && linkResult?.success) {
+            // If the universal extractor returned structured data, use it directly
+            if (linkResult.data) {
+              const ld = linkResult.data;
+              // Push extracted content as text document for the AI listing extractor
+              const extractedSummary = JSON.stringify(ld, null, 2);
+              documents.push({ type: 'text', name: `Extracted: ${sourceUrl}`, content: extractedSummary.substring(0, 15000) });
+              scrapedContent = extractedSummary;
+
+              // If the extractor found images, add them
+              if (linkResult.images?.length > 0) {
+                imageUrls.push(...linkResult.images.slice(0, 10));
+              }
+
+              // Show what was detected
+              const urlType = linkResult.url_type || 'generic';
+              const typeLabels: Record<string, string> = {
+                google_drive: '📁 Google Drive',
+                property_portal: '🏠 Property Portal',
+                pdf_direct: '📄 PDF',
+                image_direct: '🖼️ Image',
+                generic: '🌐 Website',
+              };
+              toast.success(`${typeLabels[urlType] || 'Link'} content extracted successfully!`);
+            }
+          } else {
+            // Fallback to Firecrawl scrape
+            const { data: scrapeResult, error: scrapeError } = await supabase.functions.invoke('firecrawl-scrape', {
+              body: { url: sourceUrl.trim(), options: { formats: ['markdown'], onlyMainContent: true } }
+            });
+            if (!scrapeError && (scrapeResult?.data?.markdown || scrapeResult?.markdown)) {
+              scrapedContent = scrapeResult?.data?.markdown || scrapeResult?.markdown || '';
+              documents.push({ type: 'text', name: `Scraped: ${sourceUrl}`, content: scrapedContent.substring(0, 15000) });
+            }
           }
         } catch (urlErr) {
-          console.warn('URL scraping failed, continuing with other sources:', urlErr);
-          toast.info('Could not scrape URL, continuing with uploaded files');
+          console.warn('URL extraction failed, continuing with other sources:', urlErr);
+          toast.info('Could not extract from URL, continuing with uploaded files');
         }
       }
 
@@ -702,21 +731,26 @@ const ListingPortalSubmit = () => {
                         )}
                       </div>
 
-                      {/* Source URL Input */}
+                      {/* Universal Link Input */}
                       <div className="bg-white/70 border-2 border-gold/20 rounded-2xl p-6">
                         <h2 className="text-black font-semibold mb-2 flex items-center gap-2">
                           <Globe className="w-4 h-4 text-gold" />
-                          Source URL (Optional)
+                          Paste Any Link
                         </h2>
                         <p className="text-zinc-500 text-xs mb-3">
-                          Paste a website or listing link — AI will scrape and extract property details
+                          Google Drive folders/files, property portals, PDFs, brochures, MOUs — AI extracts everything automatically
                         </p>
                         <Input
                           value={sourceUrl}
                           onChange={e => setSourceUrl(e.target.value)}
-                          placeholder="https://www.propertyfinder.ae/..."
+                          placeholder="https://drive.google.com/... or any property listing URL"
                           className="bg-white border-gold/30 text-black"
                         />
+                        <div className="flex flex-wrap gap-1.5 mt-2">
+                          {['Google Drive', 'Property Finder', 'Bayut', 'Dubizzle', 'Developer Sites', 'Any URL'].map(tag => (
+                            <span key={tag} className="text-[10px] px-2 py-0.5 bg-gold/10 text-gold border border-gold/20 rounded-full">{tag}</span>
+                          ))}
+                        </div>
                       </div>
 
                       {/* Paste Text Input */}
