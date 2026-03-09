@@ -715,7 +715,7 @@ const HeroSearchBar = () => {
         {/* Unified connected bar on desktop */}
         <div className="hidden sm:flex items-center w-full bg-gradient-to-r from-white/[0.08] via-white/[0.12] to-white/[0.08] backdrop-blur-2xl border border-gold/25 rounded-2xl overflow-hidden shadow-[0_8px_40px_rgba(0,0,0,0.5),0_2px_8px_rgba(200,167,102,0.15),inset_0_1px_0_rgba(255,255,255,0.15)] min-h-[60px]">
           {/* Location Search Input */}
-          <div className="flex items-center flex-1 min-w-[240px] pl-4 pr-3">
+          <div className="flex items-center flex-1 min-w-[200px] pl-4 pr-1">
             <Search className="w-5 h-5 text-gold shrink-0" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.6))' }} />
             <input
               type="text"
@@ -732,7 +732,7 @@ const HeroSearchBar = () => {
           {/* Beds Dropdown */}
           <Popover>
             <PopoverTrigger asChild>
-              <button className="flex items-center gap-2 px-4 h-[60px] 3ext-white/90 font-medium text-sm hover:bg-white/10 transition-all duration-200 whitespace-nowrap">
+              <button className="flex items-center gap-2 px-3 h-[60px] text-white/90 font-medium text-sm hover:bg-white/10 transition-all duration-200 whitespace-nowrap">
                 {getBedsLabel()}
                 <ChevronDown className="w-3.5 h-3.5 text-gold" />
               </button>
@@ -748,7 +748,7 @@ const HeroSearchBar = () => {
                   key={option.value}
                   onClick={() => setBedrooms(option.value)}
                   className={cn(
-                    "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors",
+                    "w-full text-center px-3 py-2 rounded-lg text-sm transition-colors",
                     bedrooms === option.value 
                       ? "bg-white/90 text-black font-semibold" 
                       : "text-black hover:bg-white/50"
@@ -782,7 +782,7 @@ const HeroSearchBar = () => {
                   key={option.value}
                   onClick={() => setPriceRange(option.value)}
                   className={cn(
-                    "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors",
+                    "w-full text-center px-3 py-2 rounded-lg text-sm transition-colors",
                     priceRange === option.value 
                       ? "bg-white/90 text-black font-semibold" 
                       : "text-black hover:bg-white/50"
@@ -827,7 +827,7 @@ const HeroSearchBar = () => {
                   key={item.value}
                   onClick={() => setEmirate(item.value)}
                   className={cn(
-                    "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors",
+                    "w-full text-center px-3 py-2 rounded-lg text-sm transition-colors",
                     emirate === item.value
                       ? "bg-gold/20 text-black font-semibold border border-gold/40"
                       : "text-black hover:bg-white/50"
