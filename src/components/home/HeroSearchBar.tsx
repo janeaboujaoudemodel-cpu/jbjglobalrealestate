@@ -782,7 +782,7 @@ const HeroSearchBar = () => {
                   key={option.value}
                   onClick={() => setPriceRange(option.value)}
                   className={cn(
-                    "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors",
+                    "w-full text-center px-3 py-2 rounded-lg text-sm transition-colors",
                     priceRange === option.value 
                       ? "bg-white/90 text-black font-semibold" 
                       : "text-black hover:bg-white/50"
