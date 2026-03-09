@@ -787,19 +787,24 @@ const ListingGenerator = () => {
             </Card>
           )}
 
-          {/* URL Input */}
+          {/* Universal Link Input */}
           <div className="space-y-2">
             <label className="text-sm font-medium text-foreground flex items-center gap-2">
               <Globe className="w-4 h-4 text-gold" />
-              Source URL to Scrape (optional)
+              Paste Any Link (Google Drive, Property Portals, Any URL)
             </label>
             <Input
               value={url}
               onChange={(e) => setUrl(e.target.value)}
-              placeholder="Paste a listing URL to scrape project data from"
+              placeholder="https://drive.google.com/... or any listing/document URL"
             />
+            <div className="flex flex-wrap gap-1.5">
+              {['Google Drive', 'Property Finder', 'Bayut', 'Emaar', 'Damac', 'Sobha', 'Any URL'].map(tag => (
+                <span key={tag} className="text-[10px] px-2 py-0.5 bg-gold/10 text-gold border border-gold/20 rounded-full">{tag}</span>
+              ))}
+            </div>
             <p className="text-xs text-muted-foreground">
-              Note: This URL is used only for data extraction — it will NOT be saved as the project website
+              AI extracts data from Google Drive folders/files, property portals, brochures, MOUs, SPAs — any publicly accessible link
             </p>
           </div>
 
