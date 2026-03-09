@@ -827,7 +827,7 @@ const HeroSearchBar = () => {
                   key={item.value}
                   onClick={() => setEmirate(item.value)}
                   className={cn(
-                    "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors",
+                    "w-full text-center px-3 py-2 rounded-lg text-sm transition-colors",
                     emirate === item.value
                       ? "bg-gold/20 text-black font-semibold border border-gold/40"
                       : "text-black hover:bg-white/50"
