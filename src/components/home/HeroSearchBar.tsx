@@ -1289,7 +1289,7 @@ const HeroSearchBar = () => {
           <Button
             onClick={handleSearch}
             disabled={isSearching}
-            className="ml-auto h-[52px] px-5 bg-gradient-to-r from-gold to-gold-dark hover:brightness-110 text-black font-bold text-sm rounded-2xl transition-all duration-300 shadow-[0_0_20px_rgba(200,167,102,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.5)] disabled:opacity-70 border-0"
+            className="shrink-0 h-[52px] px-5 bg-gradient-to-r from-gold to-gold-dark hover:brightness-110 text-black font-bold text-sm rounded-2xl transition-all duration-300 shadow-[0_0_20px_rgba(200,167,102,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.5)] disabled:opacity-70 border-0"
           >
             {isSearching ? (
               <div className="w-4 h-4 border-2 border-black/40 border-t-black rounded-full animate-spin mr-1.5" />
