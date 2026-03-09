@@ -732,7 +732,7 @@ const HeroSearchBar = () => {
           {/* Beds Dropdown */}
           <Popover>
             <PopoverTrigger asChild>
-              <button className="flex items-center gap-2 px-4 h-[60px] 3ext-white/90 font-medium text-sm hover:bg-white/10 transition-all duration-200 whitespace-nowrap">
+              <button className="flex items-center gap-2 px-3 h-[60px] text-white/90 font-medium text-sm hover:bg-white/10 transition-all duration-200 whitespace-nowrap">
                 {getBedsLabel()}
                 <ChevronDown className="w-3.5 h-3.5 text-gold" />
               </button>
