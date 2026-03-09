@@ -27,7 +27,7 @@ import {
 import AdvancedFilterPanel from "@/components/filters/AdvancedFilterPanel";
 import { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 
-import developersHeroVideo from "@/assets/videos/burj-khalifa-day-to-night.mp4";
+import developersHeroVideo from "@/assets/videos/dubai-landmarks-hero.mp4";
 
 // Developer tier classification for filtering
 const TIER_FILTERS = [
