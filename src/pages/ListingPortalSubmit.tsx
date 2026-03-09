@@ -731,21 +731,26 @@ const ListingPortalSubmit = () => {
                         )}
                       </div>
 
-                      {/* Source URL Input */}
+                      {/* Universal Link Input */}
                       <div className="bg-white/70 border-2 border-gold/20 rounded-2xl p-6">
                         <h2 className="text-black font-semibold mb-2 flex items-center gap-2">
                           <Globe className="w-4 h-4 text-gold" />
-                          Source URL (Optional)
+                          Paste Any Link
                         </h2>
                         <p className="text-zinc-500 text-xs mb-3">
-                          Paste a website or listing link — AI will scrape and extract property details
+                          Google Drive folders/files, property portals, PDFs, brochures, MOUs — AI extracts everything automatically
                         </p>
                         <Input
                           value={sourceUrl}
                           onChange={e => setSourceUrl(e.target.value)}
-                          placeholder="https://www.propertyfinder.ae/..."
+                          placeholder="https://drive.google.com/... or any property listing URL"
                           className="bg-white border-gold/30 text-black"
                         />
+                        <div className="flex flex-wrap gap-1.5 mt-2">
+                          {['Google Drive', 'Property Finder', 'Bayut', 'Dubizzle', 'Developer Sites', 'Any URL'].map(tag => (
+                            <span key={tag} className="text-[10px] px-2 py-0.5 bg-gold/10 text-gold border border-gold/20 rounded-full">{tag}</span>
+                          ))}
+                        </div>
                       </div>
 
                       {/* Paste Text Input */}
