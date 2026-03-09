@@ -727,7 +727,7 @@ const HeroSearchBar = () => {
             />
           </div>
           {/* Premium Gradient Divider */}
-          <div className="h-7 w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
+          <div className="h-8 w-[2px] bg-gradient-to-b from-transparent via-gold/70 to-transparent shrink-0" />
 
           {/* Beds Dropdown */}
           <Popover>
