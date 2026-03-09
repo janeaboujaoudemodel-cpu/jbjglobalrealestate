@@ -845,7 +845,7 @@ const HeroSearchBar = () => {
           {/* Developer Dropdown — always visible in main bar with logos */}
           <Popover>
             <PopoverTrigger asChild>
-              <button className="flex items-center gap-2 px-5 h-[60px] text-white/90 font-medium text-sm hover:bg-white/10 transition-all duration-200 whitespace-nowrap">
+              <button className="flex items-center gap-2 px-3 h-[60px] text-white/90 font-medium text-sm hover:bg-white/10 transition-all duration-200 whitespace-nowrap">
                 {developerId !== 'all' && developers?.find(d => d.id === developerId)?.logo_url ? (
                   <img
                     src={developers.find(d => d.id === developerId)?.logo_url!}
