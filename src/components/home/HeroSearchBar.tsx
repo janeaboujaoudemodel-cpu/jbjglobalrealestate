@@ -720,10 +720,11 @@ const HeroSearchBar = () => {
             <input
               type="text"
               placeholder="Community, Area, Project, Keyword"
+              size={38}
               value={locationSearch}
               onChange={(e) => setLocationSearch(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-              className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-white/50 pl-2 pr-0 text-sm font-medium min-w-0 w-full tracking-wide"
+              className="bg-transparent border-none outline-none text-white placeholder:text-white/50 pl-2 pr-0 text-sm font-medium tracking-wide"
             />
           </div>
           {/* Premium Gradient Divider */}
