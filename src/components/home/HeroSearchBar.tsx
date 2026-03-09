@@ -715,7 +715,7 @@ const HeroSearchBar = () => {
         {/* Unified connected bar on desktop */}
         <div className="hidden sm:flex items-center w-full bg-gradient-to-r from-white/[0.08] via-white/[0.12] to-white/[0.08] backdrop-blur-2xl border border-gold/25 rounded-2xl overflow-hidden shadow-[0_8px_40px_rgba(0,0,0,0.5),0_2px_8px_rgba(200,167,102,0.15),inset_0_1px_0_rgba(255,255,255,0.15)] min-h-[60px]">
           {/* Location Search Input */}
-          <div className="flex items-center w-[380px] lg:w-[420px] shrink-0 pl-4 pr-3">
+          <div className="flex items-center flex-1 min-w-[240px] pl-4 pr-3">
             <Search className="w-5 h-5 text-gold shrink-0" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.6))' }} />
             <input
               type="text"
@@ -732,7 +732,7 @@ const HeroSearchBar = () => {
           {/* Beds Dropdown */}
           <Popover>
             <PopoverTrigger asChild>
-              <button className="flex items-center gap-2 px-4 h-[60px] text-white/90 font-medium text-sm hover:bg-white/10 transition-all duration-200 whitespace-nowrap">
+              <button className="flex items-center gap-2 px-4 h-[60px] 3ext-white/90 font-medium text-sm hover:bg-white/10 transition-all duration-200 whitespace-nowrap">
                 {getBedsLabel()}
                 <ChevronDown className="w-3.5 h-3.5 text-gold" />
               </button>
@@ -766,7 +766,7 @@ const HeroSearchBar = () => {
           {/* Price Range Dropdown */}
           <Popover>
             <PopoverTrigger asChild>
-              <button className="flex items-center gap-2 px-5 h-[60px] text-white/90 font-medium text-sm hover:bg-white/10 transition-all duration-200 whitespace-nowrap">
+              <button className="flex items-center gap-2 px-3 h-[60px] text-white/90 font-medium text-sm hover:bg-white/10 transition-all duration-200 whitespace-nowrap">
                 {getPriceLabel()}
                 <ChevronDown className="w-3.5 h-3.5 text-gold" />
               </button>
@@ -800,7 +800,7 @@ const HeroSearchBar = () => {
           {/* Emirates Dropdown — always visible in main bar */}
           <Popover>
             <PopoverTrigger asChild>
-              <button className="flex items-center gap-2 px-5 h-[60px] text-white/90 font-medium text-sm hover:bg-white/10 transition-all duration-200 whitespace-nowrap">
+              <button className="flex items-center gap-2 px-3 h-[60px] text-white/90 font-medium text-sm hover:bg-white/10 transition-all duration-200 whitespace-nowrap">
                 <MapPin className="w-3.5 h-3.5 text-gold" />
                 <span className="hidden md:inline">{emirate === 'all' ? 'Emirates' : emirate}</span>
                 <ChevronDown className="w-3.5 h-3.5 text-gold" />
@@ -845,7 +845,7 @@ const HeroSearchBar = () => {
           {/* Developer Dropdown — always visible in main bar with logos */}
           <Popover>
             <PopoverTrigger asChild>
-              <button className="flex items-center gap-2 px-5 h-[60px] text-white/90 font-medium text-sm hover:bg-white/10 transition-all duration-200 whitespace-nowrap">
+              <button className="flex items-center gap-2 px-3 h-[60px] text-white/90 font-medium text-sm hover:bg-white/10 transition-all duration-200 whitespace-nowrap">
                 {developerId !== 'all' && developers?.find(d => d.id === developerId)?.logo_url ? (
                   <img
                     src={developers.find(d => d.id === developerId)?.logo_url!}
@@ -1289,7 +1289,7 @@ const HeroSearchBar = () => {
           <Button
             onClick={handleSearch}
             disabled={isSearching}
-            className="shrink-0 h-[52px] px-5 bg-gradient-to-r from-gold to-gold-dark hover:brightness-110 text-black font-bold text-sm rounded-2xl transition-all duration-300 shadow-[0_0_20px_rgba(200,167,102,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.5)] disabled:opacity-70 border-0"
+            className="shrink-0 h-[52px] px-5 bg-gradient-to-r from-gold to-gold-dark hover:brightness-110 text-black font-bold text-sm rounded-none rounded-r-2xl transition-all duration-300 shadow-[0_0_20px_rgba(200,167,102,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.5)] disabled:opacity-70 border-0"
           >
             {isSearching ? (
               <div className="w-4 h-4 border-2 border-black/40 border-t-black rounded-full animate-spin mr-1.5" />
