@@ -715,7 +715,7 @@ const HeroSearchBar = () => {
         {/* Unified connected bar on desktop */}
         <div className="hidden sm:flex items-center w-full bg-gradient-to-r from-white/[0.08] via-white/[0.12] to-white/[0.08] backdrop-blur-2xl border border-gold/25 rounded-2xl overflow-hidden shadow-[0_8px_40px_rgba(0,0,0,0.5),0_2px_8px_rgba(200,167,102,0.15),inset_0_1px_0_rgba(255,255,255,0.15)] min-h-[60px]">
           {/* Location Search Input */}
-          <div className="flex items-center flex-1 min-w-[180px] pl-5 pr-1">
+          <div className="flex items-center flex-none w-[42%] max-w-[460px] min-w-[180px] pl-4 pr-0">
             <Search className="w-5 h-5 text-gold shrink-0" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.6))' }} />
             <input
               type="text"
@@ -723,7 +723,7 @@ const HeroSearchBar = () => {
               value={locationSearch}
               onChange={(e) => setLocationSearch(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-              className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-white/50 pl-3 pr-1 text-sm font-medium min-w-0 w-full tracking-wide"
+              className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-white/50 pl-2 pr-0 text-sm font-medium min-w-0 w-full tracking-wide"
             />
           </div>
           {/* Premium Gradient Divider */}
@@ -732,7 +732,7 @@ const HeroSearchBar = () => {
           {/* Beds Dropdown */}
           <Popover>
             <PopoverTrigger asChild>
-              <button className="flex items-center gap-2 px-5 h-[60px] text-white/90 font-medium text-sm hover:bg-white/10 transition-all duration-200 whitespace-nowrap">
+              <button className="flex items-center gap-2 px-4 h-[60px] text-white/90 font-medium text-sm hover:bg-white/10 transition-all duration-200 whitespace-nowrap">
                 {getBedsLabel()}
                 <ChevronDown className="w-3.5 h-3.5 text-gold" />
               </button>
