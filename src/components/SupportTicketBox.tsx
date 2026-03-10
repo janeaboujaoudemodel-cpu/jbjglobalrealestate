@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Headphones,
   Upload,
   Send,
   User,
@@ -23,6 +22,7 @@ import {
   MailCheck,
   MessageCircle
 } from "lucide-react";
+import { PremiumHeadsetIcon } from "@/components/icons/PremiumHeadsetIcon";
 import { useResendTicketConfirmation } from "@/hooks/useResendTicketConfirmation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
