@@ -275,33 +275,37 @@ const MyDashboard = () => {
       />
       
       <div className="min-h-screen bg-black">
-        <div className="mx-3 md:mx-4 lg:mx-6 my-6 rounded-2xl border border-border bg-[linear-gradient(135deg,hsl(var(--champagne-1)),hsl(var(--champagne-2)),hsl(var(--champagne-3)))]">
-          <div className="container mx-auto px-4 py-8 max-w-7xl">
-            {/* Header */}
-            <div className="mb-8">
-              <div className="flex flex-wrap items-center gap-3 mb-2">
-                <h1 className="text-3xl font-bold text-foreground" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                  My <span className="text-gold">Dashboard</span>
-                </h1>
-                {isCombinedMode ? (
-                  <Badge className="bg-purple-500/20 text-purple-600 border-purple-500/30">
-                    Investor + Broker
-                  </Badge>
-                ) : (
-                  <Badge className={getRoleBadgeColor(role)}>
-                    {getRoleLabel(role)}
-                  </Badge>
-                )}
-              </div>
-              <p className="text-muted-foreground">
-                {isCombinedMode 
-                  ? "Full access to investor tools and broker features."
-                  : isBrokerMode 
-                    ? "Access your broker tools and dashboard."
-                    : "Welcome back! Here's an overview of your activity and saved items."
-                }
-              </p>
+        {/* Premium Page Header — aligned with sidebar logo divider */}
+        <div className="bg-black border-b border-gold/20">
+          <div className="container mx-auto px-6 max-w-7xl flex items-end h-[84px] pb-4">
+            <div className="flex flex-wrap items-center gap-3">
+              <h1 className="text-2xl md:text-3xl font-bold text-white" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                My <span className="text-gold">Dashboard</span>
+              </h1>
+              {isCombinedMode ? (
+                <Badge className="bg-purple-500/20 text-purple-600 border-purple-500/30">
+                  Investor + Broker
+                </Badge>
+              ) : (
+                <Badge className={getRoleBadgeColor(role)}>
+                  {getRoleLabel(role)}
+                </Badge>
+              )}
             </div>
+          </div>
+        </div>
+
+        <div className="mx-3 md:mx-4 lg:mx-6 mb-6 mt-0 rounded-b-2xl rounded-t-none border border-t-0 border-border bg-[linear-gradient(135deg,hsl(var(--champagne-1)),hsl(var(--champagne-2)),hsl(var(--champagne-3)))]">
+          <div className="container mx-auto px-4 py-6 max-w-7xl">
+            {/* Welcome subtitle */}
+            <p className="text-muted-foreground mb-6">
+              {isCombinedMode 
+                ? "Full access to investor tools and broker features."
+                : isBrokerMode 
+                  ? "Access your broker tools and dashboard."
+                  : "Welcome back! Here's an overview of your activity and saved items."
+              }
+            </p>
 
             {/* Main Grid Layout */}
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">

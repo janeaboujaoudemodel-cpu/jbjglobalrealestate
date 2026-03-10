@@ -73,27 +73,28 @@ const MyDashboardProgress = () => {
       />
       
       <div className="min-h-screen bg-black">
-        <div className="mx-3 md:mx-4 lg:mx-6 my-6 rounded-2xl border border-border bg-[linear-gradient(135deg,hsl(var(--champagne-1)),hsl(var(--champagne-2)),hsl(var(--champagne-3)))]">
-          <div className="container mx-auto px-4 py-8 max-w-4xl">
-            {/* Back Button */}
+        {/* Premium Page Header — aligned with sidebar logo divider */}
+        <div className="bg-black border-b border-gold/20">
+          <div className="container mx-auto px-6 max-w-4xl flex items-end h-[84px] pb-4 gap-4">
             <Button 
               variant="ghost" 
               onClick={() => navigate('/my-dashboard')}
-              className="mb-6 text-gold hover:text-gold/80"
+              className="text-gold hover:text-gold/80 hover:bg-gold/10 mb-0.5"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Dashboard
+              Back
             </Button>
+            <h1 className="text-2xl md:text-3xl font-bold text-white" style={{ fontFamily: 'Poppins, sans-serif' }}>
+              My <span className="text-gold">Progress</span>
+            </h1>
+          </div>
+        </div>
 
-            {/* Header */}
-            <div className="mb-8">
-              <h1 className="text-3xl font-bold text-foreground" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                My <span className="text-gold">Progress</span>
-              </h1>
-              <p className="text-muted-foreground mt-2">
-                Track your tier progress, badges, and achievements.
-              </p>
-            </div>
+        <div className="mx-3 md:mx-4 lg:mx-6 mb-6 mt-0 rounded-b-2xl rounded-t-none border border-t-0 border-border bg-[linear-gradient(135deg,hsl(var(--champagne-1)),hsl(var(--champagne-2)),hsl(var(--champagne-3)))]">
+          <div className="container mx-auto px-4 py-6 max-w-4xl">
+            <p className="text-muted-foreground mb-6">
+              Track your tier progress, badges, and achievements.
+            </p>
 
             {/* Total Points Card */}
             <Card className="mb-6 border-gold/30 bg-gradient-to-br from-gold/10 to-gold/5">
