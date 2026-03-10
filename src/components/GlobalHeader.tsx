@@ -394,7 +394,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
   // Mobile menu links - Sell section
   const mobileSellLinks = [
-    { href: "/listing-portal", label: "Listing Portal", icon: ClipboardCheck },
+    { href: "/listing-portal", label: "List Your Property", icon: ClipboardCheck },
     { href: "/seller-guide", label: "Seller's Guide", icon: FileText },
     { href: "/sell/valuation", label: "Property Valuation", icon: BarChart3 },
     { href: "/services/selling-advisory", label: "Selling Advisory", icon: Briefcase },
