@@ -850,30 +850,7 @@ export default function GlobalVerticalNav() {
       )}
       </div>
 
-      {/* Mobile hamburger trigger */}
-      <button
-        onClick={() => setMobileOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-[10050] w-10 h-10 rounded-lg bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border border-gold/40 flex items-center justify-center shadow-lg"
-        aria-label="Open navigation"
-      >
-        <Menu className="w-5 h-5 text-gold" />
-      </button>
-
-      {/* Mobile drawer */}
-      {mobileOpen && (
-        <div className="lg:hidden fixed inset-0 z-[10100]">
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
-          <div className="absolute left-0 top-0 bottom-0 w-[280px] bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex flex-col shadow-2xl animate-in slide-in-from-left duration-300">
-            <button
-              onClick={() => setMobileOpen(false)}
-              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-gold/10 flex items-center justify-center hover:bg-gold/20 transition-colors z-10"
-            >
-              <X className="w-4 h-4 text-gold" />
-            </button>
-            {renderNavContent()}
-          </div>
-        </div>
-      )}
+      {/* Mobile hamburger & drawer REMOVED — GlobalHeader owns mobile navigation */}
 
       {/* Mega Menu Panels (desktop — compact floating) */}
       {renderMegaMenu()}
