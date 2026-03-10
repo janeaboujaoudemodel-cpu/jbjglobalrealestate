@@ -597,33 +597,35 @@ export default function GlobalVerticalNav() {
     const routeActive = isRouteActive(item.href);
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
 
+    // Careers — Rose (distinct from all others)
     if (item.href === '/join') {
       return shouldHighlight
-        ? "bg-teal-500 text-white border border-teal-400 font-bold"
-        : "bg-teal-500/6 text-teal-500 font-semibold hover:bg-teal-500/12 border border-teal-200/15";
+        ? "bg-rose-500 text-white border border-rose-400 font-bold"
+        : "bg-rose-50/80 text-rose-500 font-semibold hover:bg-rose-100/60 border border-rose-300/25";
     }
+    // AI Home Finder — Violet
     if (item.href === '/quiz') {
       return shouldHighlight
         ? "bg-violet-500 text-white border border-violet-400 font-bold"
-        : "bg-violet-500/6 text-violet-400 font-semibold hover:bg-violet-500/12 border border-violet-200/15";
+        : "bg-violet-50/80 text-violet-500 font-semibold hover:bg-violet-100/60 border border-violet-300/25";
     }
-    // AI Tools Hub — Soft Orange
+    // AI Tools Hub — Amber
     if (item.href === '/ai-hub') {
       return shouldHighlight
-        ? "bg-orange-500 text-white border border-orange-400 font-bold"
-        : "bg-orange-500/6 text-orange-500 font-semibold hover:bg-orange-500/12 border border-orange-200/15";
+        ? "bg-amber-500 text-white border border-amber-400 font-bold"
+        : "bg-amber-50/80 text-amber-700 font-semibold hover:bg-amber-100/60 border border-amber-300/30";
     }
-    // List Your Property — Very Light Blue (distinct from Careers teal)
+    // List Your Property — Sky Blue
     if (item.href === '/listing-portal' && item.highlight) {
       return shouldHighlight
-        ? "bg-sky-400 text-white border border-sky-300 font-bold"
-        : "bg-sky-400/6 text-sky-400 font-semibold hover:bg-sky-400/12 border border-sky-200/15";
+        ? "bg-sky-500 text-white border border-sky-400 font-bold"
+        : "bg-sky-50/80 text-sky-500 font-semibold hover:bg-sky-100/60 border border-sky-300/25";
     }
-    // Resale Properties — Emerald (softened)
+    // Resale Properties — Emerald
     if (item.href === '/resale-properties') {
       return shouldHighlight
         ? "bg-emerald-500 text-white border border-emerald-400 font-bold"
-        : "bg-emerald-500/6 text-emerald-500 font-semibold hover:bg-emerald-500/12 border border-emerald-200/15";
+        : "bg-emerald-50/80 text-emerald-600 font-semibold hover:bg-emerald-100/60 border border-emerald-300/25";
     }
     if (sectionKey === 'MY ACCOUNT') {
       return shouldHighlight
