@@ -1,83 +1,41 @@
 
 
-## Plan: Collapsible Nav Sections, Wider Flyout, Color-Coded Shortcuts & Premium Minimizer
+## Plan: Fix All Email Issues Across All Templates
 
-### Problem Summary
-1. **Nav sections show everything at once** — Properties, Tools, Insights, Company should be collapsed by default and expand on click (accordion-style) within the sidebar itself
-2. **"My Shortcuts" flyout crops labels** — "Owner Comm…" is truncated at 360px width; needs to be wider so all labels are readable
-3. **Shortcuts need color-coded categories** — Tasks, CRM, Owner Command Center etc. should each have a distinct color (like the old account dropdown)
-4. **Sidebar text is hard to read** — needs better contrast/visibility
-5. **Collapse/expand toggle needs premium redesign** — the small circle button should be more visible and luxurious
+### Problems Identified
 
----
+1. **Recommended For You icons disappeared** — Inline SVGs are stripped by Gmail and most email clients. Must revert to hosted PNG images (`ai-tools.png`, `guides.png`, `properties.png` already exist in `public/email-icons/`).
 
-### 1. Convert Nav Sections to Collapsible Accordions
+2. **Social media footer icons not rendering** — Same issue: `socialLinksFooter()` loads external `.svg` files via `<img>` tags, but Gmail blocks SVG images entirely. Must switch to hosted `.png` files. Currently missing `social-facebook.png` — need to confirm or create it.
 
-**File**: `GlobalVerticalNav.tsx`
+3. **Email split into multiple visual cards** — Several sub-sections (`ticketSupportEmbed`, `readyToGetStartedHtml`, `recommendedActionsHtml`) each have their own `border`, `border-radius`, and `background` styles creating distinct visual boxes. These need to be softened so they sit seamlessly inside the single continuous card.
 
-Currently all `NAV_ITEMS` render as a flat list with section headers. Change to:
-- Group items by their `section` field into collapsible sections
-- Only the section header is visible by default (e.g., "PROPERTIES ▸")
-- Clicking the header expands/collapses to show child items
-- Use Radix Collapsible or simple state toggle
-- Items without a `megaMenu` navigate directly; items with `megaMenu` still open the flyout panel
-- The highlighted hub items at the top (Buy Properties, AI Tools Hub, etc.) stay always visible above the accordion sections
+### Changes (all in `supabase/functions/_shared/email-html.ts`)
 
-**Behavior**: Multiple sections can be open simultaneously. The section containing the active route auto-opens on mount.
+#### A. Recommended For You — Revert to PNG hosted images
+- Change `recommendedCard()` back to using `iconImg()` with PNG paths
+- Remove the `RECOMMENDED_ICONS` inline SVG object
+- Ensure circular frame clips the PNG with `overflow:hidden` on the `<td>` to prevent square backgrounds
+- Signature: `recommendedCard(title, href, iconPath, alt)` — restore the original parameters
 
----
+#### B. Social Footer — Switch to PNG with white pearl background
+- Replace `socialLinksFooter()` to use the inline `SVG` object icons (instagram, facebook, linkedin, tiktok, youtube) that are already defined at the top of the file — these render as raw HTML inside `<td>` elements, not as `<img>` tags, so they should survive email client processing
+- Actually, since Gmail strips ALL SVG (both inline and `<img>`), switch to using the `.png` files: `social-instagram.png`, `social-linkedin.png`, `social-tiktok.png`, `social-youtube.png`
+- Create `social-facebook.png` if missing
+- Style each icon circle: white/pearl (#FDFBF7) background, gold border, black icon inside
 
-### 2. Widen "My Shortcuts" Flyout & Show Full Labels
+#### C. Single Card Layout — Remove visual fragmentation
+- `ticketSupportEmbed()`: Remove the heavy gradient background and red border; make it blend into the card
+- `readyToGetStartedHtml()`: Remove the outer border and separate background so it flows within the card
+- `inquiryBox()`: Soften its standalone bordered look
+- Keep all content inside the single `emailShell` wrapper card with no sub-borders that create separation
 
-**File**: `GlobalVerticalNav.tsx`
+#### D. Deploy + Send Test Email
+- Deploy the updated edge function
+- Immediately send a test welcome email to `janeaboujaoudenails@gmail.com`
+- Take a screenshot as proof
 
-Change the flyout panel width from `w-[360px]` to `w-[440px]` so labels like "Owner Command Center" are fully readable without truncation.
-
----
-
-### 3. Color-Coded Shortcut Categories
-
-**File**: `GlobalVerticalNav.tsx`
-
-Currently the `shortcuts` mega menu links are a flat list. Group them into colored categories:
-
-| Category | Color | Items |
-|----------|-------|-------|
-| **My Tasks** | Emerald | My Tasks, Notifications |
-| **CRM** | Blue | CRM Dashboard, Customer Happiness |
-| **Owner Command Center** | Gold | Owner Command Center, Admin Panel, Listing Admin |
-| **AI & Tools** | Purple | AI Tools, AI Calendar, My Assistant, AI History |
-| **Dashboards** | Rose | My Dashboard, Broker Dashboard |
-| **Account** | Zinc | My Profile, Settings, Favorites, Support Tickets |
-
-Each group gets a colored left border and tinted header label. Render via a special grouped layout when `activeMegaMenu === 'shortcuts'`.
-
----
-
-### 4. Improve Sidebar Text Visibility
-
-**File**: `GlobalVerticalNav.tsx`
-
-- Increase base text color from `text-black/70` to `text-black/90` for nav items
-- Increase section header opacity from `text-gold/60` to `text-gold/80`
-- Increase font size from `text-[13px]` to `text-[13.5px]` or `text-sm` (14px)
-
----
-
-### 5. Premium Collapse/Expand Toggle
-
-**File**: `GlobalVerticalNav.tsx`
-
-Replace the small 24px circle toggle with a more visible design:
-- **Expanded state**: A 32px pill-shaped button with a gold gradient background, positioned at the right edge of the sidebar with a subtle shadow and the `«` icon
-- **Collapsed state**: The expand button in the 48px strip gets a gold gradient background with the `»` icon and a subtle glow effect
-- Both states use `shadow-lg` and `border border-gold/50` for premium feel
-
----
-
-### Files Changed
-
-| File | Changes |
-|------|---------|
-| `GlobalVerticalNav.tsx` | Collapsible sections, wider flyout, color-coded shortcuts, better text contrast, premium toggle |
+### Files Modified
+- `supabase/functions/_shared/email-html.ts` — all icon and layout fixes
+- `public/email-icons/social-facebook.png` — create if missing (or use existing assets)
 
