@@ -16,6 +16,7 @@ import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUti
 import { DeveloperAIAnalyzer } from "@/components/developer/DeveloperAIAnalyzer";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 import { SectionDivider } from "@/components/ui/section-divider";
+import RecommendedDevelopers from "@/components/developer/RecommendedDevelopers";
 import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
 import { Input } from "@/components/ui/input";
@@ -495,13 +496,19 @@ const DeveloperDetail = () => {
           )}
         </div>
 
-        {/* Divider between projects and DLD Market Widget — gold line only */}
+        {/* Divider between projects and recommendations */}
         <div className="py-10 md:py-14">
           <div className="flex items-center justify-center gap-6">
             <div className="flex-1 h-[2px] bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
             <div className="flex-1 h-[2px] bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
           </div>
         </div>
+
+        {/* Similar Developers */}
+        <RecommendedDevelopers
+          currentDeveloperSlug={slug || ""}
+          currentDeveloperEmirate={developer?.headquarters || null}
+        />
 
         {/* DLD Market Widget - Live transaction data */}
         <DLDMarketWidget />
