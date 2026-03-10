@@ -746,96 +746,135 @@ const Quiz = () => {
               Question {currentStep + 1} of {QUIZ_QUESTIONS.length}
             </div>
           </div>
-          <Progress value={progress} className="h-1.5 bg-[#C9A84C]/20" />
+          {/* Gold gradient progress bar */}
+          <div className="h-2 bg-[#C9A84C]/15 rounded-full overflow-hidden">
+            <div 
+              className="h-full rounded-full bg-gradient-to-r from-[#C9A84C] via-[#D4B85C] to-[#B8973F] transition-all duration-500 ease-out"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
         </div>
       </div>
 
-      {/* Question Content */}
-      <div className="flex-1 flex items-center justify-center px-4 py-8 md:py-12">
-        <div className="w-full max-w-2xl">
-          <h2
-            className="text-stone-900 text-2xl md:text-3xl font-bold mb-8 text-center"
-            style={{ fontFamily: "Poppins, sans-serif" }}
-          >
-            {currentQuestion.question}
-          </h2>
+      {/* Question Content with optional Preferences Sidebar */}
+      <div className="flex-1 flex items-start justify-center px-4 py-8 md:py-12">
+        <div className="w-full max-w-4xl flex gap-8">
+          {/* Main Question Area */}
+          <div className="flex-1 max-w-2xl">
+            <h2
+              className="text-stone-900 text-2xl md:text-3xl font-bold mb-8 text-center"
+              style={{ fontFamily: "Poppins, sans-serif" }}
+            >
+              {currentQuestion.question}
+            </h2>
 
-          {/* Multiple Select Controls */}
-          {currentQuestion.type === "multiple" && currentQuestion.hasSelectAll && (
-            <div className="flex justify-center gap-4 mb-6">
+            {/* Multiple Select Controls */}
+            {currentQuestion.type === "multiple" && currentQuestion.hasSelectAll && (
+              <div className="flex justify-center gap-4 mb-6">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleSelectAll}
+                  disabled={allSelected()}
+                  className="bg-white text-stone-900 hover:bg-[#F5F0E6] border-[#C9A84C]/40 font-semibold disabled:opacity-50"
+                >
+                  Select All
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleClearAll}
+                  disabled={!answers[currentQuestion.id] || (answers[currentQuestion.id] as string[]).length === 0}
+                  className="bg-white text-stone-900 hover:bg-[#F5F0E6] border-[#C9A84C]/40 font-semibold disabled:opacity-50"
+                >
+                  Clear All
+                </Button>
+              </div>
+            )}
+
+            {/* Options Grid */}
+            <div className={`grid gap-3 ${currentQuestion.options.length > 6 ? 'grid-cols-2 md:grid-cols-3' : 'grid-cols-2'}`}>
+              {currentQuestion.options.map((option) => {
+                const isSelected =
+                  currentQuestion.type === "multiple"
+                    ? (answers[currentQuestion.id] as string[] || []).includes(option.value)
+                    : answers[currentQuestion.id] === option.value;
+
+                return (
+                  <button
+                    key={option.value}
+                    onClick={() => handleAnswer(option.value)}
+                    className={`relative p-4 md:p-5 rounded-xl border-2 transition-all text-left group ${
+                      isSelected
+                        ? "border-[#C9A84C] bg-gradient-to-br from-white to-[#FDFBF7] shadow-lg shadow-[#C9A84C]/20"
+                        : "border-stone-200 bg-white hover:border-[#C9A84C]/50 hover:shadow-md"
+                    }`}
+                  >
+                    {currentQuestion.type === "multiple" && (
+                      <div className={`absolute top-3 right-3 w-5 h-5 rounded border-2 flex items-center justify-center ${
+                        isSelected ? "border-[#C9A84C] bg-[#C9A84C]" : "border-stone-300"
+                      }`}>
+                        {isSelected && <CheckCircle2 className="w-3 h-3 text-black" />}
+                      </div>
+                    )}
+                    <span className="text-2xl mb-2 block">{option.icon}</span>
+                    <span className={`font-medium text-sm md:text-base ${isSelected ? "text-[#C9A84C]" : "text-stone-900"}`}>
+                      {option.label}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Navigation - Back & Next */}
+            <div className="flex justify-between mt-10 gap-4">
               <Button
                 variant="outline"
-                size="sm"
-                onClick={handleSelectAll}
-                disabled={allSelected()}
-                className="bg-white text-stone-900 hover:bg-[#F5F0E6] border-[#C9A84C]/40 font-semibold disabled:opacity-50"
+                onClick={() => currentStep > 0 ? setCurrentStep(currentStep - 1) : setStarted(false)}
+                className="border-[#C9A84C]/40 text-stone-700 bg-white hover:bg-[#F5F0E6] hover:text-stone-900 px-8 py-6 text-lg"
               >
-                Select All
+                <ChevronLeft className="w-5 h-5 mr-2" />
+                Back
               </Button>
               <Button
-                variant="outline"
-                size="sm"
-                onClick={handleClearAll}
-                disabled={!answers[currentQuestion.id] || (answers[currentQuestion.id] as string[]).length === 0}
-                className="bg-white text-stone-900 hover:bg-[#F5F0E6] border-[#C9A84C]/40 font-semibold disabled:opacity-50"
+                onClick={handleNext}
+                disabled={!isAnswered()}
+                className="bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-black font-semibold px-10 py-6 text-lg hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-[#C9A84C]/20"
               >
-                Clear All
+                {currentStep === QUIZ_QUESTIONS.length - 1 ? "Continue" : "Next"}
+                <ChevronRight className="w-5 h-5 ml-2" />
               </Button>
             </div>
-          )}
-
-          {/* Options Grid */}
-          <div className={`grid gap-3 ${currentQuestion.options.length > 6 ? 'grid-cols-2 md:grid-cols-3' : 'grid-cols-2'}`}>
-            {currentQuestion.options.map((option) => {
-              const isSelected =
-                currentQuestion.type === "multiple"
-                  ? (answers[currentQuestion.id] as string[] || []).includes(option.value)
-                  : answers[currentQuestion.id] === option.value;
-
-              return (
-                <button
-                  key={option.value}
-                  onClick={() => handleAnswer(option.value)}
-                  className={`relative p-4 md:p-5 rounded-xl border-2 transition-all text-left group ${
-                    isSelected
-                      ? "border-[#C9A84C] bg-white shadow-lg shadow-[#C9A84C]/20"
-                      : "border-stone-200 bg-white hover:border-[#C9A84C]/50 hover:shadow-md"
-                  }`}
-                >
-                  {currentQuestion.type === "multiple" && (
-                    <div className={`absolute top-3 right-3 w-5 h-5 rounded border-2 flex items-center justify-center ${
-                      isSelected ? "border-[#C9A84C] bg-[#C9A84C]" : "border-stone-300"
-                    }`}>
-                      {isSelected && <CheckCircle2 className="w-3 h-3 text-black" />}
-                    </div>
-                  )}
-                  <span className="text-2xl mb-2 block">{option.icon}</span>
-                  <span className={`font-medium text-sm md:text-base ${isSelected ? "text-[#C9A84C]" : "text-stone-900"}`}>
-                    {option.label}
-                  </span>
-                </button>
-              );
-            })}
           </div>
 
-          {/* Navigation - Back & Next */}
-          <div className="flex justify-between mt-10 gap-4">
-            <Button
-              variant="outline"
-              onClick={() => currentStep > 0 ? setCurrentStep(currentStep - 1) : setStarted(false)}
-              className="border-[#C9A84C]/40 text-stone-700 bg-white hover:bg-[#F5F0E6] hover:text-stone-900 px-8 py-6 text-lg"
-            >
-              <ChevronLeft className="w-5 h-5 mr-2" />
-              Back
-            </Button>
-            <Button
-              onClick={handleNext}
-              disabled={!isAnswered()}
-              className="bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-black font-semibold px-10 py-6 text-lg hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-[#C9A84C]/20"
-            >
-              {currentStep === QUIZ_QUESTIONS.length - 1 ? "Continue" : "Next"}
-              <ChevronRight className="w-5 h-5 ml-2" />
-            </Button>
+          {/* Preferences Summary Sidebar (desktop only) */}
+          <div className="hidden lg:block w-64 shrink-0">
+            <div className="sticky top-24 rounded-2xl border border-[#C9A84C]/30 bg-white/80 backdrop-blur-sm p-5">
+              <h3 className="text-sm font-bold text-stone-800 mb-4 flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-[#C9A84C]" />
+                Your Preferences
+              </h3>
+              <div className="space-y-3">
+                {QUIZ_QUESTIONS.slice(0, currentStep + 1).map((q) => {
+                  const answer = answers[q.id];
+                  if (!answer) return null;
+                  const displayValue = Array.isArray(answer)
+                    ? answer.map(v => q.options.find(o => o.value === v)?.label || v).join(", ")
+                    : q.options.find(o => o.value === answer)?.label || String(answer);
+                  return (
+                    <div key={q.id} className="text-xs">
+                      <p className="text-stone-400 uppercase tracking-wider text-[10px] mb-0.5">
+                        {q.id.replace(/_/g, " ")}
+                      </p>
+                      <p className="text-stone-700 font-medium truncate">{displayValue}</p>
+                    </div>
+                  );
+                })}
+                {Object.keys(answers).length === 0 && (
+                  <p className="text-stone-400 text-xs italic">Answer questions to see your preferences here</p>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>
