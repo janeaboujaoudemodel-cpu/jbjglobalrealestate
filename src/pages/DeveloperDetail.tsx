@@ -16,6 +16,7 @@ import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUti
 import { DeveloperAIAnalyzer } from "@/components/developer/DeveloperAIAnalyzer";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 import { SectionDivider } from "@/components/ui/section-divider";
+import RecommendedDevelopers from "@/components/developer/RecommendedDevelopers";
 import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
 import { Input } from "@/components/ui/input";
