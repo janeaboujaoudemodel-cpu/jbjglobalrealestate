@@ -874,10 +874,10 @@ export default function GlobalVerticalNav() {
       {/* Logo — enlarged monogram and wordmark */}
       <div className="p-4 border-b border-gold/20 flex-shrink-0">
         <div className="flex items-center gap-2.5">
-          <Link to="/" onClick={() => setActiveMegaMenu(null)} className="flex-shrink-0">
+         <Link to="/" onClick={() => setActiveMegaMenu(null)} onMouseEnter={() => { import("@/pages/Index"); }} className="flex-shrink-0">
             <img src={jbjMonogramLightBg} alt="JBJ" className="w-14 h-14 object-contain" />
           </Link>
-          <Link to="/" onClick={() => setActiveMegaMenu(null)} className="flex flex-col flex-1 min-w-0 hover:opacity-80 transition-opacity" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <Link to="/" onClick={() => setActiveMegaMenu(null)} onMouseEnter={() => { import("@/pages/Index"); }} className="flex flex-col flex-1 min-w-0 hover:opacity-80 transition-opacity" style={{ fontFamily: "Poppins, sans-serif" }}>
             <span className="text-[13px] font-bold text-black tracking-wide leading-tight">JBJ GLOBAL</span>
             <span className="text-[12px] font-bold text-gold tracking-wide leading-tight">REAL ESTATE</span>
           </Link>
