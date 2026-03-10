@@ -77,7 +77,7 @@ const ResaleProperties = () => {
   }, [areas]);
 
   const { data: listings, isLoading } = useQuery({
-    queryKey: ["resale-listings", areaFilter, typeFilter, bedroomFilter, handoverFilter, priceFilter],
+    queryKey: ["resale-listings", areaFilter, typeFilter, bedroomFilter, handoverFilter, priceFilter, furnishingFilter],
     queryFn: async () => {
       let query = supabase
         .from("resale_listings")
