@@ -29,6 +29,11 @@ export function useIsTouchLayout() {
     if (!mql) return;
 
     const onChange = () => {
+      // Narrow viewport fallback for iPhones that misreport touch points
+      if (window.innerWidth < 1024) {
+        setIsTouch(true);
+        return;
+      }
       const hasTouchPoints = (navigator.maxTouchPoints ?? 0) > 0;
       setIsTouch(mql!.matches && hasTouchPoints);
     };

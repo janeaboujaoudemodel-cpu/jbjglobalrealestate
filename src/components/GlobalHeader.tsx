@@ -622,9 +622,9 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               />
             </div>
             {/* Premium Typography - clean transition, no text-shadow ghosting */}
-            <div className="flex flex-col shrink-0">
+            <div className="flex flex-col shrink-0 overflow-hidden">
               <span 
-                className={`font-bold text-sm xl:text-base tracking-[0.12em] uppercase whitespace-nowrap leading-none transition-colors duration-300`}
+                className={`font-bold text-[11px] sm:text-sm xl:text-base tracking-[0.12em] uppercase leading-none transition-colors duration-300`}
                 style={isFullyTransparent ? {
                   color: '#FFFFFF',
                 } : {
