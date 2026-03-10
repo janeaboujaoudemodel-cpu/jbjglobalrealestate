@@ -29,7 +29,7 @@ interface NavItem {
   icon: any;
   highlight?: boolean;
   megaMenu?: MegaMenuKey;
-  section?: string; // visual group header
+  section?: string;
 }
 
 /* ─── NAV ITEMS ─── */
@@ -250,23 +250,11 @@ export default function GlobalVerticalNav() {
     return () => document.body.classList.remove("jj-vertical-nav-active");
   }, []);
 
-  // Body scroll lock when flyout is open
-  useEffect(() => {
-    if (activeMegaMenu) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => { document.body.style.overflow = ''; };
-  }, [activeMegaMenu]);
-
   const handleNavClick = useCallback((megaMenu?: MegaMenuKey, e?: React.MouseEvent) => {
     if (megaMenu) {
       e?.preventDefault();
-      // Toggle: close if same, open new (closes previous automatically)
       setActiveMegaMenu(prev => prev === megaMenu ? null : megaMenu);
     } else {
-      // Clicking a non-mega item closes any open menu
       setActiveMegaMenu(null);
     }
   }, []);
@@ -282,16 +270,10 @@ export default function GlobalVerticalNav() {
     return location.pathname === href;
   };
 
-  // Determine active styling: suppress route-based active when ANY mega menu is open
-  const getItemStyle = (item: NavItem, index: number) => {
-    const hasMega = !!item.megaMenu;
+  const getItemStyle = (item: NavItem) => {
     const isThisMenuOpen = activeMegaMenu === item.megaMenu;
     const routeActive = isRouteActive(item.href);
-
-    // When any mega menu is open, only the active mega-menu item should be highlighted
-    const shouldHighlight = activeMegaMenu
-      ? isThisMenuOpen
-      : routeActive;
+    const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
 
     if (item.highlight) {
       return shouldHighlight
@@ -310,73 +292,68 @@ export default function GlobalVerticalNav() {
     return shouldHighlight || item.highlight ? "text-gold" : "text-black/50";
   };
 
-  /* ─── FULL-HEIGHT FLYOUT PANEL ─── */
+  /* ─── COMPACT FLOATING FLYOUT PANEL (PropertiesVerticalNav pattern) ─── */
   const renderMegaMenu = () => {
     if (!activeMegaMenu) return null;
     const links = MEGA_MENU_LINKS[activeMegaMenu] || [];
     const title = MEGA_MENU_TITLES[activeMegaMenu] || activeMegaMenu;
+    const isLargeMenu = links.length > 12;
 
     return (
       <>
-        {/* Backdrop - closes on click */}
+        {/* Backdrop — only covers area right of sidebar */}
         <div
           className="fixed inset-0 z-[9999] bg-black/30 backdrop-blur-sm"
+          style={{ left: '200px' }}
           onClick={closeMegaMenu}
         />
-        {/* Full-height flyout panel anchored to right of sidebar */}
+        {/* Floating compact panel */}
         <div
-          className="fixed top-0 bottom-0 z-[10000] w-[420px] bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r-2 border-gold/30 shadow-2xl flex flex-col animate-in slide-in-from-left-4 duration-200"
-          style={{ left: '200px' }}
-          onClick={(e) => e.stopPropagation()}
+          className="fixed z-[10000] flex items-start justify-start pointer-events-none"
+          style={{ left: '200px', top: 0, bottom: 0, right: 0 }}
         >
-          {/* Header */}
-          <div className="flex items-center justify-between px-6 py-5 border-b border-gold/20">
-            <div className="flex items-center gap-3">
-              <Sparkles className="w-5 h-5 text-gold" />
-              <h3 className="text-lg font-bold text-black tracking-tight">{title}</h3>
+          <div
+            className={`pointer-events-auto w-[360px] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] animate-in slide-in-from-left-2 fade-in duration-200 ${isLargeMenu ? 'max-h-[80vh]' : 'max-h-[60vh]'}`}
+            onClick={(e) => e.stopPropagation()}
+            onMouseLeave={closeMegaMenu}
+          >
+            {/* Panel header */}
+            <div className="flex items-center justify-between px-5 py-3.5 border-b border-gold/20 bg-gradient-to-r from-[#E8DCC8]/50 to-transparent">
+              <div className="flex items-center gap-2.5">
+                <Sparkles className="w-4 h-4 text-gold" />
+                <h3 className="text-[13px] font-bold text-black tracking-tight">{title}</h3>
+              </div>
+              <button
+                onClick={closeMegaMenu}
+                className="w-6 h-6 rounded-full bg-gold/10 flex items-center justify-center hover:bg-gold/20 transition-colors"
+              >
+                <X className="w-3 h-3 text-gold" />
+              </button>
             </div>
-            <button
-              onClick={closeMegaMenu}
-              className="w-8 h-8 rounded-full bg-gold/10 flex items-center justify-center hover:bg-gold/20 transition-colors"
-            >
-              <X className="w-4 h-4 text-gold" />
-            </button>
-          </div>
 
-          {/* Scrollable links */}
-          <div className="flex-1 overflow-y-auto jj-scrollbar-gold p-4 space-y-0.5">
-            {links.map((link) => {
-              const Icon = link.icon;
-              const linkActive = isRouteActive(link.href);
-              return (
-                <Link
-                  key={link.href + link.label}
-                  to={link.href}
-                  onClick={closeMegaMenu}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-xl text-[13px] font-medium transition-all ${
-                    linkActive
-                      ? "bg-gradient-to-r from-gold/20 to-gold/10 text-black font-bold border border-gold/40"
-                      : "text-black/80 hover:bg-gold/10 hover:text-black"
-                  }`}
-                >
-                  <Icon className="w-4.5 h-4.5 text-gold flex-shrink-0" />
-                  <span>{link.label}</span>
-                  <ChevronRight className="w-3 h-3 ml-auto text-black/20" />
-                </Link>
-              );
-            })}
-          </div>
-
-          {/* Footer CTA */}
-          <div className="px-6 py-4 border-t border-gold/20">
-            <Link
-              to={links[0]?.href?.split('?')[0] || '/'}
-              onClick={closeMegaMenu}
-              className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-gold to-gold/80 text-black text-sm font-bold rounded-xl hover:shadow-lg transition-all"
-            >
-              <Eye className="w-4 h-4" />
-              View All
-            </Link>
+            {/* Scrollable links */}
+            <div className={`overflow-y-auto jj-scrollbar-gold p-3 ${isLargeMenu ? 'columns-2 gap-1' : 'space-y-0.5'}`}>
+              {links.map((link) => {
+                const Icon = link.icon;
+                const linkActive = isRouteActive(link.href);
+                return (
+                  <Link
+                    key={link.href + link.label}
+                    to={link.href}
+                    onClick={closeMegaMenu}
+                    className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all break-inside-avoid ${
+                      linkActive
+                        ? "bg-gradient-to-r from-gold/20 to-gold/10 text-black font-bold border border-gold/40"
+                        : "text-black/80 hover:bg-gold/10 hover:text-black"
+                    }`}
+                  >
+                    <Icon className="w-4 h-4 text-gold flex-shrink-0" />
+                    <span className="flex-1 truncate">{link.label}</span>
+                    <ChevronRight className="w-3 h-3 text-black/20 flex-shrink-0" />
+                  </Link>
+                );
+              })}
+            </div>
           </div>
         </div>
       </>
@@ -394,7 +371,7 @@ export default function GlobalVerticalNav() {
         </div>
       </Link>
 
-      {/* My Shortcuts - premium flyout trigger */}
+      {/* My Shortcuts — premium flyout trigger */}
       <div className="px-2 pt-3 pb-1">
         <button
           onClick={(e) => handleNavClick('shortcuts', e as any)}
@@ -421,7 +398,6 @@ export default function GlobalVerticalNav() {
           const Icon = item.icon;
           return (
             <React.Fragment key={item.href + item.label + i}>
-              {/* Section header */}
               {item.section && (
                 <p className="text-[9px] uppercase tracking-[0.2em] text-gold/60 font-bold px-3 pt-3 pb-1">
                   {item.section}
@@ -436,7 +412,7 @@ export default function GlobalVerticalNav() {
                     handleNavClick(undefined);
                   }
                 }}
-                className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all ${getItemStyle(item, i)}`}
+                className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all ${getItemStyle(item)}`}
               >
                 <Icon className={`w-4 h-4 flex-shrink-0 ${getIconStyle(item)}`} />
                 <span className="flex-1">{item.label}</span>
@@ -511,7 +487,7 @@ export default function GlobalVerticalNav() {
           <div className="absolute left-0 top-0 bottom-0 w-[280px] bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex flex-col shadow-2xl animate-in slide-in-from-left duration-300">
             <button
               onClick={() => setMobileOpen(false)}
-              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-gold/10 flex items-center justify-center hover:bg-gold/20 transition-colors"
+              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-gold/10 flex items-center justify-center hover:bg-gold/20 transition-colors z-10"
             >
               <X className="w-4 h-4 text-gold" />
             </button>
@@ -520,7 +496,7 @@ export default function GlobalVerticalNav() {
         </div>
       )}
 
-      {/* Mega Menu Panels (desktop) */}
+      {/* Mega Menu Panels (desktop — compact floating) */}
       {renderMegaMenu()}
 
       {/* Search Modal */}
