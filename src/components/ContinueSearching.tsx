@@ -81,12 +81,21 @@ const ContinueSearching = ({
   const validItems = items.filter((i) => i && i.type && i.slug);
   if (validItems.length === 0) return null;
 
-  const displayItems = validItems.slice(0, limit);
+  // Deduplicate by slug — keep only the most recently viewed instance
+  const seenSlugs = new Set<string>();
+  const uniqueItems = validItems.filter((item) => {
+    const key = `${item.type}-${item.slug}`;
+    if (seenSlugs.has(key)) return false;
+    seenSlugs.add(key);
+    return true;
+  });
+
+  const displayItems = uniqueItems.slice(0, limit);
 
   const sectionTitle = title || t("home.continueSearching", "Continue Searching for Your Dream Property");
 
   return (
-    <section className={`py-8 md:py-12 relative overflow-hidden [body.jj-vertical-nav-active_&]:lg:pl-[200px] ${className}`}>
+    <section className={`py-8 md:py-12 relative overflow-hidden ${className}`}>
       {/* Premium backdrop */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-[#0a0a0a] to-black/80 z-[1]" />

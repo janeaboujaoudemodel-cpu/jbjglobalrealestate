@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import {
   Building2, BarChart3, BookOpen, Briefcase, Users, Home, Tag, Key, PlusCircle,
   Building, Layers, Cpu, Heart, GitCompare, Calculator, Headphones, MapPin,
-  Lightbulb, ChevronRight, Search, User, Settings, Castle, FileText,
+  Lightbulb, ChevronRight, ChevronLeft, Search, User, Settings, Castle, FileText,
   DollarSign, TrendingUp, ClipboardCheck, Shield, Sparkles, Bot, Video, Image,
   Mic, Stamp, CreditCard, Palette, Pen, Award, Globe, Brain, MessageSquare,
   Phone, Languages, FileSearch, FilePlus, UserCheck, CalendarClock, Mail,
@@ -244,11 +244,32 @@ export default function GlobalVerticalNav() {
   const [activeMegaMenu, setActiveMegaMenu] = useState<MegaMenuKey | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(() => {
+    try { return localStorage.getItem('jj_nav_collapsed') === '1'; } catch { return false; }
+  });
+
+  const toggleCollapse = useCallback(() => {
+    setCollapsed(prev => {
+      const next = !prev;
+      try { localStorage.setItem('jj_nav_collapsed', next ? '1' : '0'); } catch {}
+      return next;
+    });
+    setActiveMegaMenu(null);
+  }, []);
 
   useEffect(() => {
-    document.body.classList.add("jj-vertical-nav-active");
-    return () => document.body.classList.remove("jj-vertical-nav-active");
-  }, []);
+    if (collapsed) {
+      document.body.classList.remove("jj-vertical-nav-active");
+      document.body.classList.add("jj-vertical-nav-collapsed");
+    } else {
+      document.body.classList.add("jj-vertical-nav-active");
+      document.body.classList.remove("jj-vertical-nav-collapsed");
+    }
+    return () => {
+      document.body.classList.remove("jj-vertical-nav-active");
+      document.body.classList.remove("jj-vertical-nav-collapsed");
+    };
+  }, [collapsed]);
 
   const handleNavClick = useCallback((megaMenu?: MegaMenuKey, e?: React.MouseEvent) => {
     if (megaMenu) {
@@ -294,7 +315,8 @@ export default function GlobalVerticalNav() {
 
   /* ─── COMPACT FLOATING FLYOUT PANEL (PropertiesVerticalNav pattern) ─── */
   const renderMegaMenu = () => {
-    if (!activeMegaMenu) return null;
+    if (!activeMegaMenu || collapsed) return null;
+    const sidebarWidth = '200px';
     const links = MEGA_MENU_LINKS[activeMegaMenu] || [];
     const title = MEGA_MENU_TITLES[activeMegaMenu] || activeMegaMenu;
     const isLargeMenu = links.length > 12;
@@ -304,13 +326,13 @@ export default function GlobalVerticalNav() {
         {/* Backdrop — only covers area right of sidebar */}
         <div
           className="fixed inset-0 z-[9999] bg-black/30 backdrop-blur-sm"
-          style={{ left: '200px' }}
+          style={{ left: sidebarWidth }}
           onClick={closeMegaMenu}
         />
         {/* Floating compact panel */}
         <div
           className="fixed z-[10000] flex items-start justify-start pointer-events-none"
-          style={{ left: '200px', top: 0, bottom: 0, right: 0 }}
+          style={{ left: sidebarWidth, top: 0, bottom: 0, right: 0 }}
         >
           <div
             className={`pointer-events-auto w-[360px] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] animate-in slide-in-from-left-2 fade-in duration-200 ${isLargeMenu ? 'max-h-[80vh]' : 'max-h-[60vh]'}`}
@@ -467,9 +489,36 @@ export default function GlobalVerticalNav() {
   return (
     <>
       {/* Desktop sidebar */}
-      <div className="hidden lg:flex w-[200px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-gold/30 flex-col h-full">
-        {renderNavContent()}
-      </div>
+      {collapsed ? (
+        /* Collapsed: thin strip with expand button */
+        <div className="hidden lg:flex w-[48px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-gold/30 flex-col h-full items-center py-4">
+          <Link to="/" className="mb-4">
+            <img src={jbjMonogramLightBg} alt="JBJ" className="w-9 h-9 object-contain" />
+          </Link>
+          <button
+            onClick={toggleCollapse}
+            className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center hover:bg-gold/20 transition-colors"
+            aria-label="Expand navigation"
+            title="Expand navigation"
+          >
+            <ChevronRight className="w-4 h-4 text-gold" />
+          </button>
+        </div>
+      ) : (
+        /* Full sidebar */
+        <div className="hidden lg:flex w-[200px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-gold/30 flex-col h-full relative">
+          {renderNavContent()}
+          {/* Collapse toggle */}
+          <button
+            onClick={toggleCollapse}
+            className="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border border-gold/40 flex items-center justify-center shadow-md hover:bg-gold/20 transition-colors z-[60]"
+            aria-label="Minimize navigation"
+            title="Minimize navigation"
+          >
+            <ChevronLeft className="w-3.5 h-3.5 text-gold" />
+          </button>
+        </div>
+      )}
 
       {/* Mobile hamburger trigger */}
       <button
