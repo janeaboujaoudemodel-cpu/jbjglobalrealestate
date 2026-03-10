@@ -991,6 +991,7 @@ const App = () => {
               </PodcastVisibilityProvider>
             </FounderVisibilityProvider>
             </UserModeProvider>
+            </BrandPaletteProvider>
             </AuthProvider>
           </BrowserRouter>
         </LanguageProvider>
