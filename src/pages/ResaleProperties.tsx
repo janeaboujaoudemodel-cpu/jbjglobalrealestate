@@ -96,6 +96,7 @@ const ResaleProperties = () => {
         }
       }
       if (handoverFilter !== "all") query = query.eq("handover_status", handoverFilter);
+      if (furnishingFilter !== "all") query = query.eq("furnishing", furnishingFilter);
       if (priceFilter !== "all") {
         const [min, max] = priceFilter.split("-").map(Number);
         query = query.gte("asking_price", min).lte("asking_price", max);
