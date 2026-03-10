@@ -332,6 +332,47 @@ export default function GlobalVerticalNav() {
   // Collapsible sections state
   const [openSections, setOpenSections] = useState<Set<SectionKey>>(new Set());
 
+  // ── Auto-reveal on homepage: hidden initially, show after 3s or scroll ──
+  const isHomepage = location.pathname === "/" || location.pathname === "";
+  const [navRevealed, setNavRevealed] = useState(() => {
+    // If already revealed in this session, stay revealed
+    try { return sessionStorage.getItem('jj_nav_revealed') === '1'; } catch { return false; }
+  });
+
+  useEffect(() => {
+    // On non-homepage routes, always reveal
+    if (!isHomepage) {
+      if (!navRevealed) {
+        setNavRevealed(true);
+        try { sessionStorage.setItem('jj_nav_revealed', '1'); } catch {}
+      }
+      return;
+    }
+
+    // If already revealed, nothing to do
+    if (navRevealed) return;
+
+    // Timer: reveal after 3 seconds
+    const timer = setTimeout(() => {
+      setNavRevealed(true);
+      try { sessionStorage.setItem('jj_nav_revealed', '1'); } catch {}
+    }, 3000);
+
+    // Scroll: reveal on any scroll
+    const handleScroll = () => {
+      if (window.scrollY > 10) {
+        setNavRevealed(true);
+        try { sessionStorage.setItem('jj_nav_revealed', '1'); } catch {}
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [isHomepage, navRevealed]);
+
   const toggleCollapse = useCallback(() => {
     setCollapsed(prev => {
       const next = !prev;
@@ -342,6 +383,11 @@ export default function GlobalVerticalNav() {
   }, []);
 
   useEffect(() => {
+    if (!navRevealed) {
+      document.body.classList.remove("jj-vertical-nav-active");
+      document.body.classList.remove("jj-vertical-nav-collapsed");
+      return;
+    }
     if (collapsed) {
       document.body.classList.remove("jj-vertical-nav-active");
       document.body.classList.add("jj-vertical-nav-collapsed");
@@ -353,7 +399,7 @@ export default function GlobalVerticalNav() {
       document.body.classList.remove("jj-vertical-nav-active");
       document.body.classList.remove("jj-vertical-nav-collapsed");
     };
-  }, [collapsed]);
+  }, [collapsed, navRevealed]);
 
   const handleNavClick = useCallback((megaMenu?: MegaMenuKey, e?: React.MouseEvent) => {
     if (megaMenu) {
