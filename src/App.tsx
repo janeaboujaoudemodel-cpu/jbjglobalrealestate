@@ -726,6 +726,7 @@ const App = () => {
                 <Route path="/documents" element={<Documents />} />
                 <Route path="/qr-generator" element={<QRCodeGenerator />} />
                 <Route path="/owner/creative-suite" element={<OwnerGuard><OwnerCreativeSuite /></OwnerGuard>} />
+                <Route path="/owner/brand-palette" element={<OwnerGuard><BrandPaletteHub /></OwnerGuard>} />
                 <Route path="/owner/job-offer-template" element={<OwnerGuard><JobOfferTemplate /></OwnerGuard>} />
                 <Route path="/owner/recommendations" element={<OwnerGuard><OwnerRecommendations /></OwnerGuard>} />
                 <Route path="/contract-forms" element={<ContractForms />} />
