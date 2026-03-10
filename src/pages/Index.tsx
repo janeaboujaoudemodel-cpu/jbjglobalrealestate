@@ -460,7 +460,7 @@ const Index = () => {
       </PodcastVisibilityGate>
 
       {/* DIVIDER - Before Best Idea Award (always needed) */}
-      <SectionDivider />
+      <SectionDivider fullWidth />
 
 
 
