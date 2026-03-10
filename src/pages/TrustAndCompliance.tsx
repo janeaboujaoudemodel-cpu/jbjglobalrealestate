@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
-import { ChevronLeft } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 import { useEffect, useState } from "react";
-
+import { motion } from "framer-motion";
+import SEOHead from "@/components/SEOHead";
 const GoldDivider = () => (<div className="flex items-center gap-4 my-8"><div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#C8A766]/30 to-transparent" /><div className="w-1.5 h-1.5 rounded-full bg-[#C8A766]/40" /><div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#C8A766]/30 to-transparent" /></div>);
 
 const tocItems = [
