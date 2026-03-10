@@ -815,15 +815,6 @@ export default function GlobalVerticalNav() {
         /* Full sidebar */
         <div className="hidden lg:flex w-[200px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-gold/30 flex-col h-full relative">
           {renderNavContent()}
-          {/* Premium collapse toggle — pill-shaped gold */}
-          <button
-            onClick={toggleCollapse}
-            className="absolute -right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-xl bg-gradient-to-br from-gold/30 via-gold/20 to-[#EDE4D3] border border-gold/50 flex items-center justify-center shadow-lg shadow-gold/20 hover:from-gold/40 hover:to-gold/25 transition-all z-[60]"
-            aria-label="Minimize navigation"
-            title="Minimize navigation"
-          >
-            <ChevronLeft className="w-4 h-4 text-gold" />
-          </button>
         </div>
       )}
       </div>
