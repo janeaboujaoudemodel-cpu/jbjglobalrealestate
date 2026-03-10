@@ -9,7 +9,7 @@ import {
   Share2, PenTool, Megaphone, GraduationCap, Briefcase as BriefcaseIcon,
   LayoutDashboard, FolderOpen, ListChecks, Bell, Zap, Menu, X,
   Scale, Eye, Ticket, Compass, HandCoins, Handshake, Lock, Accessibility,
-  ShieldCheck, Newspaper, BookMarked, Landmark, Camera,
+  ShieldCheck, Newspaper, BookMarked, Landmark, Camera, Ruler,
 } from "lucide-react";
 import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png";
 import React, { useState, useCallback, useEffect, useMemo } from "react";
@@ -18,6 +18,8 @@ import LanguageSwitcher from "@/components/LanguageSwitcher";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
 import { useDevelopers } from "@/hooks/useProjects";
 import { useAreas } from "@/hooks/useAreas";
+import { useLanguage, getLanguageInfo } from "@/contexts/LanguageContext";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 /* ─── CURATED TOP ENTRIES (matching horizontal mega menus) ─── */
 const FEATURED_DEVELOPER_SLUGS = [
