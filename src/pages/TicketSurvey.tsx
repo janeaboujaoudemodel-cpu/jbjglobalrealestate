@@ -177,7 +177,7 @@ const TicketSurvey = () => {
   if (submitted) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#FDFBF7] to-[#F5F0E6] flex items-center justify-center p-4">
-        <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="max-w-md w-full bg-white rounded-2xl shadow-xl border-2 border-[#C8A766] p-8 text-center">
+        <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="max-w-md w-full bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gold/30 p-8 text-center">
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-[#C8A766] to-[#B8956E] flex items-center justify-center">
             <CheckCircle className="w-8 h-8 text-white" />
           </div>
@@ -204,7 +204,7 @@ const TicketSurvey = () => {
           </p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-lg border-2 border-[#C8A766] p-6 space-y-6">
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gold/30 p-6 space-y-6">
           <StarRating value={overallRating} onChange={setOverallRating} label={`1. ${surveyCopy.questions[0]}`} />
           <StarRating value={easeOfSubmission} onChange={setEaseOfSubmission} label={`2. ${surveyCopy.questions[1]}`} />
           <StarRating value={responseSpeed} onChange={setResponseSpeed} label={`3. ${surveyCopy.questions[2]}`} />

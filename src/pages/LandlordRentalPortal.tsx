@@ -159,7 +159,7 @@ export default function LandlordRentalPortal() {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {BENEFITS.map((benefit, index) => (
@@ -169,13 +169,13 @@ export default function LandlordRentalPortal() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
               >
-                <Card className="h-full border-gold/10 hover:border-gold/30 transition-colors hover:shadow-lg">
+                <Card className="h-full bg-white/80 backdrop-blur-sm border border-gold/30 hover:border-gold/60 transition-colors hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] rounded-2xl">
                   <CardContent className="p-6">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gold/20 to-champagne/20 flex items-center justify-center mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center mb-4">
                       <benefit.icon className="h-6 w-6 text-gold" />
                     </div>
-                    <h3 className="font-semibold mb-2">{benefit.title}</h3>
-                    <p className="text-sm text-muted-foreground">{benefit.description}</p>
+                    <h3 className="font-semibold mb-2 text-black">{benefit.title}</h3>
+                    <p className="text-sm text-zinc-600">{benefit.description}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -184,11 +184,11 @@ export default function LandlordRentalPortal() {
         </div>
       </section>
 
-      {/* Main Content - Dark Theme */}
-      <section className="py-16 bg-zinc-950 text-white">
+      {/* Main Content */}
+      <section className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
         <div className="container mx-auto px-4">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="bg-zinc-900 border border-zinc-800 mb-8">
+            <TabsList className="bg-white/60 border border-gold/30 mb-8">
               <TabsTrigger value="overview" className="data-[state=active]:bg-gold data-[state=active]:text-black">
                 Overview
               </TabsTrigger>
@@ -213,10 +213,10 @@ export default function LandlordRentalPortal() {
             {/* Overview Tab */}
             <TabsContent value="overview" className="space-y-8">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <Card className="bg-zinc-900 border-zinc-800">
+                <Card className="bg-white/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
                   <CardHeader>
-                    <CardTitle className="text-white">Why List With Us?</CardTitle>
-                    <CardDescription className="text-zinc-400">
+                    <CardTitle className="text-black">Why List With Us?</CardTitle>
+                    <CardDescription className="text-zinc-600">
                       JBJ Global Real Estate offers unparalleled exposure and service
                     </CardDescription>
                   </CardHeader>
@@ -230,17 +230,17 @@ export default function LandlordRentalPortal() {
                       'Tenant verification and background checks',
                     ].map((item, index) => (
                       <div key={index} className="flex items-center gap-3">
-                        <CheckCircle2 className="h-5 w-5 text-green-500" />
-                        <span className="text-zinc-300">{item}</span>
+                        <CheckCircle2 className="h-5 w-5 text-green-600" />
+                        <span className="text-black">{item}</span>
                       </div>
                     ))}
                   </CardContent>
                 </Card>
 
-                <Card className="bg-zinc-900 border-zinc-800">
+                <Card className="bg-white/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
                   <CardHeader>
-                    <CardTitle className="text-white">Approval Process</CardTitle>
-                    <CardDescription className="text-zinc-400">
+                    <CardTitle className="text-black">Approval Process</CardTitle>
+                    <CardDescription className="text-zinc-600">
                       Our quality assurance workflow
                     </CardDescription>
                   </CardHeader>
@@ -252,8 +252,8 @@ export default function LandlordRentalPortal() {
                             {step.step}
                           </div>
                           <div>
-                            <h4 className="font-medium text-white">{step.title}</h4>
-                            <p className="text-sm text-zinc-400">{step.description}</p>
+                            <h4 className="font-medium text-black">{step.title}</h4>
+                            <p className="text-sm text-zinc-600">{step.description}</p>
                           </div>
                         </div>
                       ))}
@@ -276,10 +276,10 @@ export default function LandlordRentalPortal() {
 
             {/* Guide Tab */}
             <TabsContent value="guide" className="space-y-8">
-              <Card className="bg-zinc-900 border-zinc-800">
+              <Card className="bg-white/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
                 <CardHeader>
-                  <CardTitle className="text-white">Complete Landlord Guide</CardTitle>
-                  <CardDescription className="text-zinc-400">
+                  <CardTitle className="text-black">Complete Landlord Guide</CardTitle>
+                  <CardDescription className="text-zinc-600">
                     Everything you need to know about listing your rental property
                   </CardDescription>
                 </CardHeader>
@@ -293,15 +293,15 @@ export default function LandlordRentalPortal() {
                       className="relative"
                     >
                       {index < LANDLORD_GUIDE_STEPS.length - 1 && (
-                        <div className="absolute left-4 top-12 bottom-0 w-0.5 bg-zinc-700" />
+                        <div className="absolute left-4 top-12 bottom-0 w-0.5 bg-gold/20" />
                       )}
                       <div className="flex gap-6">
                         <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gold to-champagne flex items-center justify-center flex-shrink-0 text-black font-bold z-10">
                           {step.step}
                         </div>
                         <div className="flex-1 pb-8">
-                          <h3 className="text-lg font-semibold text-white mb-2">{step.title}</h3>
-                          <p className="text-zinc-400">{step.description}</p>
+                          <h3 className="text-lg font-semibold text-black mb-2">{step.title}</h3>
+                          <p className="text-zinc-600">{step.description}</p>
                         </div>
                       </div>
                     </motion.div>
@@ -324,13 +324,13 @@ export default function LandlordRentalPortal() {
             {/* List Property Tab */}
             <TabsContent value="list-property">
               {!isAuthenticated ? (
-                <Card className="bg-zinc-900 border-zinc-800">
+              <Card className="bg-white/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
                   <CardContent className="py-12 text-center">
                     <Building2 className="h-16 w-16 text-gold mx-auto mb-4" />
-                    <h3 className="text-xl font-semibold text-white mb-2">
+                    <h3 className="text-xl font-semibold text-black mb-2">
                       Sign In to List Your Property
                     </h3>
-                    <p className="text-zinc-400 mb-6">
+                    <p className="text-zinc-600 mb-6">
                       Create an account or sign in to submit your rental listing
                     </p>
                     <Button
@@ -342,10 +342,10 @@ export default function LandlordRentalPortal() {
                   </CardContent>
                 </Card>
               ) : (
-                <Card className="bg-zinc-900 border-zinc-800">
+                <Card className="bg-white/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
                   <CardHeader>
-                    <CardTitle className="text-white">Submit Your Rental Listing</CardTitle>
-                    <CardDescription className="text-zinc-400">
+                    <CardTitle className="text-black">Submit Your Rental Listing</CardTitle>
+                    <CardDescription className="text-zinc-600">
                       Complete the form below to list your property for rent
                     </CardDescription>
                   </CardHeader>
@@ -362,16 +362,16 @@ export default function LandlordRentalPortal() {
                 {isLoading ? (
                   <div className="text-center py-12">
                     <div className="animate-spin h-8 w-8 border-4 border-gold border-t-transparent rounded-full mx-auto" />
-                    <p className="text-zinc-400 mt-4">Loading your listings...</p>
+                    <p className="text-zinc-600 mt-4">Loading your listings...</p>
                   </div>
                 ) : listings.length === 0 ? (
-                  <Card className="bg-zinc-900 border-zinc-800">
+                  <Card className="bg-white/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
                     <CardContent className="py-12 text-center">
-                      <Home className="h-16 w-16 text-zinc-600 mx-auto mb-4" />
-                      <h3 className="text-xl font-semibold text-white mb-2">
+                      <Home className="h-16 w-16 text-gold/40 mx-auto mb-4" />
+                      <h3 className="text-xl font-semibold text-black mb-2">
                         No Listings Yet
                       </h3>
-                      <p className="text-zinc-400 mb-6">
+                      <p className="text-zinc-600 mb-6">
                         You haven't submitted any rental listings yet
                       </p>
                       <Button
@@ -387,17 +387,17 @@ export default function LandlordRentalPortal() {
                     {listings.map((listing) => {
                       const approvalStatus = getApprovalStatus(listing);
                       return (
-                        <Card key={listing.id} className="bg-zinc-900 border-zinc-800">
+                        <Card key={listing.id} className="bg-white/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
                           <CardContent className="p-6">
                             <div className="flex flex-col lg:flex-row gap-6">
                               {/* Listing Info */}
                               <div className="flex-1">
                                 <div className="flex items-start justify-between mb-4">
                                   <div>
-                                    <h3 className="text-lg font-semibold text-white">
+                                    <h3 className="text-lg font-semibold text-black">
                                       {listing.property_title}
                                     </h3>
-                                    <p className="text-zinc-400 text-sm">
+                                    <p className="text-zinc-600 text-sm">
                                       {listing.community}, {listing.emirate}
                                     </p>
                                   </div>
@@ -407,19 +407,19 @@ export default function LandlordRentalPortal() {
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                                   <div>
                                     <p className="text-xs text-zinc-500">Type</p>
-                                    <p className="text-zinc-300 capitalize">{listing.property_type}</p>
+                                    <p className="text-black capitalize">{listing.property_type}</p>
                                   </div>
                                   <div>
                                     <p className="text-xs text-zinc-500">Bedrooms</p>
-                                    <p className="text-zinc-300">{listing.bedrooms || 'N/A'}</p>
+                                    <p className="text-black">{listing.bedrooms || 'N/A'}</p>
                                   </div>
                                   <div>
                                     <p className="text-xs text-zinc-500">Annual Rent</p>
-                                    <p className="text-zinc-300">AED {listing.annual_rent?.toLocaleString()}</p>
+                                    <p className="text-black">AED {listing.annual_rent?.toLocaleString()}</p>
                                   </div>
                                   <div>
                                     <p className="text-xs text-zinc-500">Submitted</p>
-                                    <p className="text-zinc-300">{format(new Date(listing.created_at), 'PP')}</p>
+                                    <p className="text-black">{format(new Date(listing.created_at), 'PP')}</p>
                                   </div>
                                 </div>
 
@@ -440,7 +440,7 @@ export default function LandlordRentalPortal() {
                               </div>
 
                               {/* Approval Timeline */}
-                              <div className="lg:w-96 lg:border-l lg:border-zinc-800 lg:pl-6">
+                              <div className="lg:w-96 lg:border-l lg:border-gold/20 lg:pl-6">
                                 <ApprovalWorkflowTimeline
                                   steps={approvalStatus.steps}
                                   currentStep={approvalStatus.currentStep}

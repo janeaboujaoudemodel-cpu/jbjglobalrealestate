@@ -1,82 +1,84 @@
 import { useState } from 'react';
-import { User, Briefcase, Users, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { User, Briefcase, Users, ArrowRight, CheckCircle2, Handshake } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { useUserModeContext, UserMode } from '@/contexts/UserModeContext';
 import { usePopupVisibility } from '@/contexts/PopupCoordinatorContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
+type SelectableMode = UserMode | 'visitor';
+
 interface ModeOption {
-  mode: UserMode;
+  mode: SelectableMode;
   label: string;
   description: string;
   icon: typeof User;
-  color: string;
-  bgColor: string;
-  borderColor: string;
 }
 
 const MODE_OPTIONS: ModeOption[] = [
   {
     mode: 'investor',
-    label: 'Investor Mode',
+    label: 'Investor',
     description: 'Browse properties, track investments, and access market insights',
     icon: User,
-    color: 'text-emerald-500',
-    bgColor: 'bg-emerald-500/10',
-    borderColor: 'border-emerald-500/40',
   },
   {
     mode: 'broker',
-    label: 'Broker Mode',
+    label: 'Broker',
     description: 'Access broker tools, CRM dashboard, and professional resources',
     icon: Briefcase,
-    color: 'text-blue-500',
-    bgColor: 'bg-blue-500/10',
-    borderColor: 'border-blue-500/40',
   },
   {
-    mode: 'investor_broker',
-    label: 'Investor + Broker',
-    description: 'Full access to both investor and broker features',
-    icon: Users,
-    color: 'text-purple-500',
-    bgColor: 'bg-purple-500/10',
-    borderColor: 'border-purple-500/40',
+    mode: 'visitor',
+    label: 'Visitor / Partnership',
+    description: 'Explore the platform and discover partnership opportunities',
+    icon: Handshake,
   },
 ];
 
 export const ModeSelectionModal = () => {
   const { setMode, hasMadeInitialSelection } = useUserModeContext();
   const { isVisible, dismiss } = usePopupVisibility('mode-selection-modal');
-  const [selectedMode, setSelectedMode] = useState<UserMode | null>(null);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [selectedMode, setSelectedMode] = useState<SelectableMode | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Don't render if user has already made their initial selection
   if (hasMadeInitialSelection) return null;
+
+  const isLoggedIn = !!user;
 
   const handleSelectMode = async () => {
     if (!selectedMode) return;
     
     setIsSubmitting(true);
     try {
-      await setMode(selectedMode);
-      dismiss();
-      
-      // Show guidance toast with arrow pointing to profile
-      toast.success(
-        <div className="flex flex-col gap-1">
-          <span className="font-semibold">Mode selected!</span>
-          <span className="text-sm text-zinc-600">
-            You can change your mode anytime from your profile menu →
-          </span>
-        </div>,
-        {
-          duration: 5000,
-          icon: <CheckCircle2 className="w-5 h-5 text-emerald-500" />,
-        }
-      );
+      if (isLoggedIn) {
+        // Logged in: set mode directly (visitor maps to investor)
+        const actualMode: UserMode = selectedMode === 'visitor' ? 'investor' : selectedMode;
+        await setMode(actualMode);
+        dismiss();
+        toast.success(
+          <div className="flex flex-col gap-1">
+            <span className="font-semibold">Mode selected!</span>
+            <span className="text-sm text-zinc-600">
+              You can change your mode anytime from your profile menu →
+            </span>
+          </div>,
+          {
+            duration: 5000,
+            icon: <CheckCircle2 className="w-5 h-5 text-gold" />,
+          }
+        );
+      } else {
+        // Not logged in: redirect to auth with mode
+        dismiss();
+        navigate(`/auth?mode_select=${selectedMode}`);
+      }
     } catch (error) {
       console.error('Failed to set mode:', error);
       toast.error('Failed to set mode. Please try again.');
@@ -90,14 +92,16 @@ export const ModeSelectionModal = () => {
       <DialogContent className="w-[calc(100vw-2rem)] max-w-lg sm:max-w-xl p-0 overflow-hidden border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
         <DialogHeader className="p-6 pb-4 border-b border-gold/20">
           <DialogTitle className="text-xl sm:text-2xl font-bold text-center text-black">
-            Welcome! Select Your Mode
+            Welcome to JBJ Global
           </DialogTitle>
           <p className="text-center text-zinc-600 text-sm mt-2">
-            Choose how you want to use the platform. You can change this anytime.
+            {isLoggedIn
+              ? 'Choose how you want to use the platform. You can change this anytime.'
+              : 'Select your role to get started. Register for full access.'}
           </p>
         </DialogHeader>
 
-        <div className="p-6 space-y-4">
+        <div className="p-6 space-y-3">
           {MODE_OPTIONS.map((option) => {
             const Icon = option.icon;
             const isSelected = selectedMode === option.mode;
@@ -110,29 +114,29 @@ export const ModeSelectionModal = () => {
                   "w-full p-4 rounded-xl border-2 transition-all duration-300 text-left",
                   "hover:shadow-lg hover:scale-[1.01]",
                   isSelected
-                    ? `${option.bgColor} ${option.borderColor} shadow-md`
-                    : "bg-white/60 border-zinc-200/60 hover:border-gold/40"
+                    ? "bg-gold/10 border-gold shadow-md"
+                    : "bg-white/80 backdrop-blur-sm border-gold/20 hover:border-gold/50"
                 )}
               >
                 <div className="flex items-start gap-4">
                   <div className={cn(
-                    "w-12 h-12 rounded-xl flex items-center justify-center shrink-0",
-                    option.bgColor,
-                    "border",
-                    option.borderColor
+                    "w-12 h-12 rounded-xl flex items-center justify-center shrink-0 border",
+                    isSelected
+                      ? "bg-gold/20 border-gold"
+                      : "bg-gold/5 border-gold/20"
                   )}>
-                    <Icon className={cn("w-6 h-6", option.color)} />
+                    <Icon className={cn("w-6 h-6", isSelected ? "text-gold" : "text-gold/60")} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       <h3 className={cn(
                         "font-bold text-base",
-                        isSelected ? option.color : "text-black"
+                        isSelected ? "text-gold" : "text-black"
                       )}>
                         {option.label}
                       </h3>
                       {isSelected && (
-                        <CheckCircle2 className={cn("w-5 h-5", option.color)} />
+                        <CheckCircle2 className="w-5 h-5 text-gold" />
                       )}
                     </div>
                     <p className="text-sm text-zinc-600 mt-1">
@@ -153,13 +157,29 @@ export const ModeSelectionModal = () => {
           >
             {isSubmitting ? (
               'Setting up...'
-            ) : (
+            ) : isLoggedIn ? (
               <>
                 Continue
                 <ArrowRight className="w-5 h-5 ml-2" />
               </>
+            ) : (
+              <>
+                Register Now
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </>
             )}
           </Button>
+          {!isLoggedIn && (
+            <p className="text-center text-zinc-500 text-xs mt-3">
+              Already have an account?{' '}
+              <button
+                onClick={() => { dismiss(); navigate('/auth'); }}
+                className="text-gold font-semibold hover:underline"
+              >
+                Sign In
+              </button>
+            </p>
+          )}
         </div>
       </DialogContent>
     </Dialog>

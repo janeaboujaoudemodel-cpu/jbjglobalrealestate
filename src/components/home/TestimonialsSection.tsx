@@ -82,7 +82,7 @@ const TestimonialsSection = () => {
 
         {/* Testimonial Card */}
         <div className="max-w-3xl mx-auto">
-          <div className="relative bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl border-2 border-gold/30 p-8 md:p-12">
+          <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl border border-gold/30 p-8 md:p-12 shadow-sm">
             {/* Quote Icon */}
             <div className="absolute -top-4 left-8">
               <div className="w-10 h-10 rounded-full bg-gold flex items-center justify-center shadow-lg">
