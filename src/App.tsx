@@ -3,54 +3,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { SafeTooltipProvider } from "@/components/ui/SafeTooltipProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-// Toolkit pages (lazy loaded)
-const RoyalToolsHub = lazy(() => import("./pages/toolkit/RoyalToolsHub"));
-// ToolkitLanding removed - no route uses it
-const VideoResizePack = lazy(() => import("./pages/toolkit/VideoResizePack"));
-const PdfFromPhotos = lazy(() => import("./pages/toolkit/PdfFromPhotos"));
-const ImageResize = lazy(() => import("./pages/toolkit/ImageResize"));
-const VoiceStudio = lazy(() => import("./pages/toolkit/VoiceStudio"));
-const VoiceStudioPro = lazy(() => import("./pages/toolkit/VoiceStudioPro"));
-const AIVideoStudioPage = lazy(() => import("./pages/toolkit/AIVideoStudioPage"));
-const StampGeneratorLanding = lazy(() => import("./pages/toolkit/StampGeneratorPage"));
-const ScanSignToolkitPage = lazy(() => import("./pages/toolkit/ScanSignPage"));
-const StampProjectsDashboard = lazy(() => import("./components/stamp-generator/StampProjectsDashboard"));
-const StampProjectWizard = lazy(() => import("./components/stamp-generator/StampProjectWizard"));
-const StampGeneratorMain = lazy(() => import("./components/stamp-generator/StampGeneratorPage"));
-const StampExportPage = lazy(() => import("./components/stamp-generator/StampExportPage"));
-const StampGalleryPage = lazy(() => import("./components/stamp-generator/StampGalleryPage"));
-const StampHistoryDashboard = lazy(() => import("./components/stamp-generator/StampHistoryDashboard"));
-const CaptionsTranslate = lazy(() => import("./pages/toolkit/CaptionsTranslate"));
-const BackgroundAI = lazy(() => import("./pages/toolkit/BackgroundAI"));
-const BeautyFilters = lazy(() => import("./pages/toolkit/BeautyFilters"));
-const PDFEditor = lazy(() => import("./pages/toolkit/PDFEditor"));
-// NEW: Master Suite Pages
-const VideoSuite = lazy(() => import("./pages/toolkit/VideoSuite"));
-const VoiceSuite = lazy(() => import("./pages/toolkit/VoiceSuite"));
-const PhotoSuite = lazy(() => import("./pages/toolkit/PhotoSuite"));
-const PDFSuite = lazy(() => import("./pages/toolkit/PDFSuite"));
-const PropertySuite = lazy(() => import("./pages/toolkit/PropertySuite"));
-// NEW: Corporate Suite Pages
-const CorporateSuite = lazy(() => import("./pages/toolkit/CorporateSuite"));
-const BusinessCardDesigner = lazy(() => import("./components/corporate-suite/BusinessCardDesigner"));
-const CVResumeBuilder = lazy(() => import("./components/corporate-suite/CVResumeBuilder"));
-const CoverLetterGenerator = lazy(() => import("./components/corporate-suite/CoverLetterGenerator"));
-const LandingPageBuilder = lazy(() => import("./components/corporate-suite/LandingPageBuilder"));
-const LogoCreator = lazy(() => import("./components/corporate-suite/LogoCreator"));
-const CompanyProfileBuilder = lazy(() => import("./components/corporate-suite/CompanyProfileBuilder"));
-// NEW: Business Suite Pages
-const AllToolsSuite = lazy(() => import("./pages/business-suite/AllToolsSuite"));
-const RealEstateSuite = lazy(() => import("./pages/business-suite/RealEstateSuite"));
-const BrokerSuite = lazy(() => import("./pages/business-suite/BrokerSuite"));
-const CreativeSuite = lazy(() => import("./pages/business-suite/CreativeSuite"));
-const ProductivitySuite = lazy(() => import("./pages/business-suite/ProductivitySuite"));
-const SuitesHub = lazy(() => import("./pages/business-suite/SuitesHub"));
-const EducationHub = lazy(() => import("./pages/EducationHub"));
-const AdminChatDashboard = lazy(() => import("./pages/admin/AdminChatDashboard"));
-const AdminIntelligence = lazy(() => import("./pages/admin/AdminIntelligence"));
-const InquiryManagementHub = lazy(() => import("./pages/admin/InquiryManagementHub"));
 import { AuthProvider } from "@/contexts/AuthContext";
 import { BrandPaletteProvider } from "@/contexts/BrandPaletteContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
@@ -73,12 +27,15 @@ import GlobalSEO from "@/components/GlobalSEO";
 import SEOServiceArea from "@/components/SEOServiceArea";
 import GlobalVisitorTracking from "@/components/GlobalVisitorTracking";
 import SEOBreadcrumbs from "@/components/SEOBreadcrumbs";
-
 import PageLoader from "@/components/PageLoader";
-// Homepage - lazy loaded like all other pages for smaller initial bundle
-const Index = lazy(() => import("./pages/Index"));
 
-// Core pages - lazy loaded for faster initial bundle
+// ── Route Groups ──
+import { StandaloneRoutes } from "@/routes/StandaloneRoutes";
+import { OwnerRoutes } from "@/routes/OwnerRoutes";
+import { ToolkitRoutes } from "@/routes/ToolkitRoutes";
+
+// ── Lazy Page Imports ──
+const Index = lazy(() => import("./pages/Index"));
 const PropertiesReelly = lazy(() => import("./pages/PropertiesReelly"));
 const ProjectDetail = lazy(() => import("./pages/ProjectDetail"));
 const Communities = lazy(() => import("./pages/Communities"));
@@ -107,8 +64,6 @@ const AIInsights = lazy(() => import("./pages/market-intelligence/internal/AIIns
 const DataOperations = lazy(() => import("./pages/market-intelligence/internal/DataOperations"));
 const Favorites = lazy(() => import("./pages/Favorites"));
 const Compare = lazy(() => import("./pages/Compare"));
-const Auth = lazy(() => import("./pages/Auth"));
-const AccessDenied = lazy(() => import("./pages/AccessDenied"));
 const Admin = lazy(() => import("./pages/Admin"));
 const AdminLeads = lazy(() => import("./pages/AdminLeads"));
 const AdminRoleManagement = lazy(() => import("./pages/AdminRoleManagement"));
@@ -138,15 +93,13 @@ const ScanSignDocuments = lazy(() => import("./pages/ScanSignDocuments"));
 const PropertyMeasurement = lazy(() => import("./pages/PropertyMeasurement"));
 const RentalIndex = lazy(() => import("./pages/RentalIndex"));
 const ResaleProperties = lazy(() => import("./pages/ResaleProperties"));
-
-// E-Signature Pages
 const ESignatureDashboard = lazy(() => import("./pages/e-signature/ESignatureDashboard"));
 const CreateEnvelope = lazy(() => import("./pages/e-signature/CreateEnvelope"));
 const EnvelopeDetail = lazy(() => import("./pages/e-signature/EnvelopeDetail"));
-const SignDocument = lazy(() => import("./pages/e-signature/SignDocument"));
 const SignatureStudio = lazy(() => import("./pages/e-signature/SignatureStudio"));
 const ContractReview = lazy(() => import("./pages/e-signature/ContractReview"));
-// AI Pages - lazy loaded
+
+// AI Pages
 const AICalendar = lazy(() => import("./pages/AICalendar"));
 const AIFinancialAdvisor = lazy(() => import("./pages/AIFinancialAdvisor"));
 const AIPersonalShopper = lazy(() => import("./pages/AIPersonalShopper"));
@@ -175,7 +128,7 @@ const AIInvestmentReportPage = lazy(() => import("./pages/AIInvestmentReportPage
 const AIDescriptionWriterPage = lazy(() => import("./pages/AIDescriptionWriterPage"));
 const IntellectualProperty = lazy(() => import("./pages/IntellectualProperty"));
 
-// Service pages - lazy loaded
+// Service pages
 const Architecture = lazy(() => import("./pages/services/Architecture"));
 const InteriorDesign = lazy(() => import("./pages/services/InteriorDesign"));
 const FitOut = lazy(() => import("./pages/services/FitOut"));
@@ -199,28 +152,12 @@ const CustomerHappinessCenter = lazy(() => import("./pages/services/CustomerHapp
 const TestimonialsPage = lazy(() => import("./pages/services/Testimonials"));
 const ReferralPartner = lazy(() => import("./pages/ReferralPartner"));
 
-// CRM & Admin pages - lazy loaded
+// CRM & Admin
 const CRM = lazy(() => import("./pages/CRM"));
-const CRMLeadDetail = lazy(() => import("./pages/CRMLeadDetail"));
-const Automations = lazy(() => import("./pages/Automations"));
-const SupportTicketHub = lazy(() => import("./pages/SupportTicketHub"));
-const MyTickets = lazy(() => import("./pages/client/MyTickets"));
-const ReopenTicket = lazy(() => import("./pages/ReopenTicket"));
-const CRMTasks = lazy(() => import("./pages/CRMTasks"));
-const CRMCalendar = lazy(() => import("./pages/CRMCalendar"));
-const CRMNotes = lazy(() => import("./pages/CRMNotes"));
-const CRMReminders = lazy(() => import("./pages/CRMReminders"));
-const CRMEmployees = lazy(() => import("./pages/CRMEmployees"));
-const OwnerDashboardOverview = lazy(() => import("./pages/OwnerDashboardOverview"));
-const OwnerDashboardShell = lazy(() => import("./pages/OwnerDashboardShell"));
-const CRMLeadsInbox = lazy(() => import("./pages/CRMLeadsInbox"));
-const OwnerInbox = lazy(() => import("./pages/OwnerInbox"));
-const OwnerTemplates = lazy(() => import("./pages/OwnerTemplates"));
-const OwnerCommSettings = lazy(() => import("./pages/OwnerCommSettings"));
-const OwnerAgenda = lazy(() => import("./pages/OwnerAgenda"));
-const OwnerFeatureRegistry = lazy(() => import("./pages/OwnerFeatureRegistry"));
-
 const AdminCRM = lazy(() => import("./pages/AdminCRM"));
+const AdminChatDashboard = lazy(() => import("./pages/admin/AdminChatDashboard"));
+const AdminIntelligence = lazy(() => import("./pages/admin/AdminIntelligence"));
+const InquiryManagementHub = lazy(() => import("./pages/admin/InquiryManagementHub"));
 const JoinApplication = lazy(() => import("./pages/JoinApplication"));
 const Onboarding = lazy(() => import("./pages/Onboarding"));
 const OnboardingModule = lazy(() => import("./pages/OnboardingModule"));
@@ -243,7 +180,6 @@ const JobOfferTemplate = lazy(() => import("./pages/JobOfferTemplate"));
 const OwnerRecommendations = lazy(() => import("./pages/OwnerRecommendations"));
 const ContractForms = lazy(() => import("./pages/ContractForms"));
 const VideoMeeting = lazy(() => import("./pages/VideoMeeting"));
-// More admin & utility pages - lazy loaded
 const ExecutiveAssistant = lazy(() => import("./pages/ExecutiveAssistant"));
 const CallReview = lazy(() => import("./pages/CallReview"));
 const VapiPrompt = lazy(() => import("./pages/VapiPrompt"));
@@ -266,8 +202,6 @@ const InvestorFAQ = lazy(() => import("./pages/InvestorFAQ"));
 const InvestorDashboard = lazy(() => import("./pages/InvestorDashboard"));
 const PortfolioViews = lazy(() => import("./pages/investor/PortfolioViews"));
 const ReportAccess = lazy(() => import("./pages/investor/ReportAccess"));
-// OwnerDashboard and BrokerPartnerDashboard removed - no route uses them
-
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const MyDashboard = lazy(() => import("./pages/MyDashboard"));
 const MyDashboardProgress = lazy(() => import("./pages/MyDashboardProgress"));
@@ -285,7 +219,6 @@ const JBJBrokerAdmin = lazy(() => import("./pages/JBJBrokerAdmin"));
 const JBJBrokerDashboard = lazy(() => import("./pages/JBJBrokerDashboard"));
 const JBJBrokerMessages = lazy(() => import("./pages/JBJBrokerMessages"));
 const JBJBrokerReports = lazy(() => import("./pages/JBJBrokerReports"));
-const FoundersAssistant = lazy(() => import("./pages/FoundersAssistant"));
 const BrokerAdminAssistant = lazy(() => import("./pages/BrokerAdminAssistant"));
 const ListingAdmin = lazy(() => import("./pages/ListingAdmin"));
 const PendingImportPreview = lazy(() => import("./pages/listing-admin/PendingImportPreview"));
@@ -307,14 +240,7 @@ const PartnerGovernance = lazy(() => import("./pages/governance/PartnerGovernanc
 const AIGovernance = lazy(() => import("./pages/governance/AIGovernance"));
 const InstitutionalLock = lazy(() => import("./pages/governance/InstitutionalLock"));
 const GovernmentMethodology = lazy(() => import("./pages/governance/GovernmentMethodology"));
-
-// Communication & Productivity Tools - lazy loaded
 const CompanyComm = lazy(() => import("./pages/CompanyComm"));
-
-// Creative Suite - lazy loaded
-const Studio = lazy(() => import("./pages/Studio"));
-const StudioEditor = lazy(() => import("./pages/StudioEditor"));
-const StudioSettings = lazy(() => import("./pages/StudioSettings"));
 const EmailClient = lazy(() => import("./pages/EmailClient"));
 const TeamChat = lazy(() => import("./pages/TeamChat"));
 const KanbanBoard = lazy(() => import("./pages/KanbanBoard"));
@@ -322,21 +248,13 @@ const Whiteboard = lazy(() => import("./pages/Whiteboard"));
 const MindMap = lazy(() => import("./pages/MindMap"));
 const Presentations = lazy(() => import("./pages/Presentations"));
 const FormBuilder = lazy(() => import("./pages/FormBuilder"));
-
-// Admin & System Tools - lazy loaded
 const CustomerHappiness = lazy(() => import("./pages/CustomerHappiness"));
 const Sitemap = lazy(() => import("./pages/Sitemap"));
 const Pricing = lazy(() => import("./pages/Pricing"));
 const SecurityConsole = lazy(() => import("./pages/SecurityConsole"));
-// ITDepartment removed - route uses EmployeeManagementHub instead
 const EmployeeManagementHub = lazy(() => import("./pages/EmployeeManagementHub"));
 const MarketingHub = lazy(() => import("./pages/admin/MarketingHub"));
 const ReellyImportTest = lazy(() => import("./pages/admin/ReellyImportTest"));
-
-// Hidden pages (not in navigation, noindex) - lazy loaded
-const DigitalCard = lazy(() => import("./pages/DigitalCard"));
-
-// Blueprint pages - lazy loaded
 const SellWithUs = lazy(() => import("./pages/SellWithUs"));
 const RequestValuation = lazy(() => import("./pages/RequestValuation"));
 const LandlordListForm = lazy(() => import("./pages/LandlordListForm"));
@@ -349,15 +267,13 @@ const TrustAndCompliance = lazy(() => import("./pages/TrustAndCompliance"));
 const RiskDisclosure = lazy(() => import("./pages/RiskDisclosure"));
 const AmlKycPolicy = lazy(() => import("./pages/AmlKycPolicy"));
 const Accessibility = lazy(() => import("./pages/Accessibility"));
+const Automations = lazy(() => import("./pages/Automations"));
+const SupportTicketHub = lazy(() => import("./pages/SupportTicketHub"));
+const MyTickets = lazy(() => import("./pages/client/MyTickets"));
+const ReopenTicket = lazy(() => import("./pages/ReopenTicket"));
+const EducationHub = lazy(() => import("./pages/EducationHub"));
 
-// Owner Pages - lazy loaded
-const OwnerAuditPage = lazy(() => import("./pages/owner/OwnerAuditPage"));
-const OwnerIntegrationsPage = lazy(() => import("./pages/owner/OwnerIntegrationsPage"));
-const OwnerSafetyPage = lazy(() => import("./pages/owner/OwnerSafetyPage"));
-const OwnerFounderSettings = lazy(() => import("./pages/owner/OwnerFounderSettings"));
-const PodcastStudio = lazy(() => import("./pages/owner/PodcastStudio"));
-const GlobalRecommendationsHub = lazy(() => import("./pages/owner/GlobalRecommendationsHub"));
-
+// ── QueryClient ──
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -373,11 +289,9 @@ const queryClient = new QueryClient({
 const App = () => {
   useEffect(() => {
     const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
-      // eslint-disable-next-line no-console
       console.error("Unhandled promise rejection:", event.reason);
       event.preventDefault();
     };
-
     window.addEventListener("unhandledrejection", handleUnhandledRejection);
     return () => window.removeEventListener("unhandledrejection", handleUnhandledRejection);
   }, []);
@@ -404,104 +318,27 @@ const App = () => {
                   <GlobalVisitorTracking />
                   <SEOBreadcrumbs />
                   
-            {/* Auth route is always accessible for login */}
             <Suspense fallback={<PageLoader />}>
             <Routes>
-              <Route path="/auth" element={<RouteErrorBoundary routeName="Auth"><Auth /></RouteErrorBoundary>} />
-              {/* Access Denied page for auth-non-owner */}
-              <Route path="/403" element={<AccessDenied />} />
-              {/* Hidden standalone pages - no header/footer */}
-              <Route path="/card" element={<DigitalCard />} />
-              {/* Public shared business card page — no auth required */}
-              <Route path="/card/:token" element={
-                <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#C8A766]"></div></div>}>
-                  {React.createElement(React.lazy(() => import("./pages/SharedBusinessCard")))}
-                </Suspense>
-              } />
-              
-              {/* Ticket Survey - Standalone, no header/footer for fast load from email links */}
-              <Route path="/ticket-survey" element={
-                <Suspense fallback={<div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#FDFBF7] to-[#F5F0E6] flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#C8A766]"></div></div>}>
-                  {React.createElement(React.lazy(() => import("./pages/TicketSurvey")))}
-                </Suspense>
-              } />
-              <Route path="/survey" element={<Navigate to="/ticket-survey" replace />} />
+              {/* ── Standalone Routes (no shell) ── */}
+              {StandaloneRoutes()}
 
-              {/* Public E-Signature Signing Page - No auth required */}
-              <Route path="/sign/:token" element={
-                <Suspense fallback={<div className="min-h-screen bg-amber-50 flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
-                  <SignDocument />
-                </Suspense>
-              } />
+              {/* ── Owner Command Center ── */}
+              {OwnerRoutes()}
               
-              {/* Owner Command Center - Dedicated shell with sidebar, outside MainLayoutWrapper */}
-              <Route path="/owner" element={
-                <OwnerGuard>
-                  <OwnerDashboardShell />
-                </OwnerGuard>
-              }>
-                <Route index element={<OwnerDashboardOverview />} />
-                <Route path="inbox" element={<OwnerInbox />} />
-                <Route path="templates" element={<OwnerTemplates />} />
-                <Route path="settings/communication" element={<OwnerCommSettings />} />
-                <Route path="agenda" element={<OwnerAgenda />} />
-                <Route path="features" element={<OwnerFeatureRegistry />} />
-                <Route path="audit" element={<OwnerAuditPage />} />
-                <Route path="integrations" element={<OwnerIntegrationsPage />} />
-                <Route path="safety" element={<OwnerSafetyPage />} />
-                <Route path="founder-settings" element={<OwnerFounderSettings />} />
-                <Route path="podcast-studio" element={<PodcastStudio />} />
-                <Route path="properties" element={<PropertyManagement />} />
-                <Route path="documents" element={<Documents />} />
-                <Route path="settings" element={<OwnerCommSettings />} />
-                {/* Nested CRM routes */}
-                <Route path="crm" element={<CRM />} />
-                <Route path="crm/leads/:id" element={<CRMLeadDetail />} />
-                <Route path="crm/leads" element={<CRMLeadsInbox />} />
-                <Route path="crm/tasks" element={<CRMTasks />} />
-                <Route path="crm/calendar" element={<CRMCalendar />} />
-                <Route path="crm/notes" element={<CRMNotes />} />
-                <Route path="crm/reminders" element={<CRMReminders />} />
-                <Route path="crm/employees" element={<CRMEmployees />} />
-                {/* Nested admin routes */}
-                <Route path="admin" element={<Admin />} />
-                <Route path="admin/leads" element={<AdminLeads />} />
-                <Route path="marketing-hub" element={<MarketingHub />} />
-                <Route path="analytics" element={<JBJAnalyticsDashboard />} />
-                <Route path="research-users" element={
-                  <Suspense fallback={<PageLoader />}>
-                    {React.createElement(React.lazy(() => import("./components/admin/ResearchUsersPanel")))}
-                  </Suspense>
-                } />
-                {/* Nested tools routes */}
-                <Route path="founder-assistant" element={<FoundersAssistant />} />
-                <Route path="recommendations" element={<GlobalRecommendationsHub />} />
-                <Route path="toolkit" element={<RoyalToolsHub />} />
-                <Route path="automations" element={<Automations />} />
-                <Route path="studio" element={<Studio />} />
-                <Route path="studio/editor/:projectId" element={<StudioEditor />} />
-                <Route path="studio/settings" element={<StudioSettings />} />
-                <Route path="email-client" element={<EmailClient />} />
-                <Route path="team-chat" element={<TeamChat />} />
-                <Route path="kanban" element={<KanbanBoard />} />
-                <Route path="map" element={<PropertyMap />} />
-                <Route path="listing-admin" element={<ListingAdminGuard><ListingAdmin /></ListingAdminGuard>} />
-              </Route>
-              
+              {/* ── Main Layout Routes ── */}
               <Route element={<AdminBypass><MainLayoutWrapper /></AdminBypass>}>
                 <Route path="/vapi-prompt" element={<VapiPrompt />} />
                 <Route path="/" element={<Index />} />
-                 <Route path="/properties" element={<PropertiesReelly />} />
+                <Route path="/properties" element={<PropertiesReelly />} />
                 <Route path="/project/:slug" element={<ProjectDetail />} />
                 <Route path="/communities" element={<Communities />} />
                 <Route path="/community/:slug" element={<CommunityDetail />} />
                 <Route path="/developers" element={<Developers />} />
                 <Route path="/developer/:slug" element={<DeveloperDetail />} />
-                {/* Redirect plural to singular for developers */}
                 <Route path="/developers/:slug" element={<RedirectWithParams to="/developer" />} />
                 <Route path="/areas" element={<AreaGuides />} />
                 <Route path="/area/:slug" element={<AreaDetail />} />
-                {/* Redirect plural to singular for areas */}
                 <Route path="/areas/:slug" element={<RedirectWithParams to="/area" />} />
                 <Route path="/buyer-guide" element={<BuyerGuide />} />
                 <Route path="/seller-guide" element={<SellerGuide />} />
@@ -535,7 +372,6 @@ const App = () => {
                 <Route path="/investor-dashboard/portfolio" element={<PortfolioViews />} />
                 <Route path="/investor-dashboard/reports" element={<ReportAccess />} />
                 <Route path="/owner-dashboard" element={<Navigate to="/owner" replace />} />
-                {/* Removed duplicate /admin/crm route - using redirect below */}
                 <Route path="/broker-education" element={<BrokerEducation />} />
                 <Route path="/broker-faq" element={<BrokerFAQ />} />
                 <Route path="/quiz" element={<Quiz />} />
@@ -543,7 +379,6 @@ const App = () => {
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/services" element={<Services />} />
-                {/* Alias: older homepage CTA pointed to /mortgage */}
                 <Route path="/mortgage" element={<Navigate to="/mortgage-calculator" replace />} />
                 <Route path="/mortgage-calculator" element={<MortgageCalculator />} />
                 <Route path="/market-report" element={<MarketReport />} />
@@ -578,7 +413,7 @@ const App = () => {
                 <Route path="/aml-kyc" element={<AmlKycPolicy />} />
                 <Route path="/accessibility" element={<Accessibility />} />
                 
-                {/* Blueprint routes - New pages */}
+                {/* Blueprint routes */}
                 <Route path="/sell" element={<SellWithUs />} />
                 <Route path="/sell/valuation" element={<RequestValuation />} />
                 <Route path="/property-management/list" element={<LandlordListForm />} />
@@ -586,8 +421,6 @@ const App = () => {
                 <Route path="/investors/join" element={<JoinInvestorList />} />
                 <Route path="/reviews" element={<Reviews />} />
                 <Route path="/thank-you" element={<ThankYou />} />
-                
-                {/* Blueprint route aliases/redirects */}
                 <Route path="/buy" element={<Navigate to="/properties?transactionType=buy" replace />} />
                 <Route path="/rent" element={<Navigate to="/properties?transactionType=rent" replace />} />
                 <Route path="/property-management" element={<Navigate to="/services/property-management" replace />} />
@@ -605,7 +438,6 @@ const App = () => {
                 <Route path="/news" element={<News />} />
                 <Route path="/news/:id" element={<NewsDetail />} />
                 <Route path="/broker-toolkit" element={<BrokerToolkit />} />
-                {/* Alias: historical Broker Toolkit dashboard URL */}
                 <Route path="/broker-toolkit/dashboard" element={<Navigate to="/broker-dashboard" replace />} />
                 <Route path="/broker-dashboard" element={<BrokerDashboard />} />
                 <Route path="/broker-resources" element={<BrokerResources />} />
@@ -621,6 +453,8 @@ const App = () => {
                 <Route path="/listing-portal/my-listings" element={<ListingPortalMyListings />} />
                 <Route path="/property-evaluator" element={<PropertyEvaluator />} />
                 <Route path="/resale-properties" element={<ResaleProperties />} />
+                
+                {/* AI Tools */}
                 <Route path="/ai-property-analyzer" element={<AIPropertyAnalyzerPage />} />
                 <Route path="/ai-lead-qualification" element={<BrokerGuard><AILeadQualificationPage /></BrokerGuard>} />
                 <Route path="/ai-price-predictor" element={<AIPricePredictorPage />} />
@@ -648,17 +482,17 @@ const App = () => {
                 <Route path="/ai-budget-planner" element={<AIFinancialAdvisor />} />
                 <Route path="/ai-financial-advisor" element={<Navigate to="/ai-budget-planner" replace />} />
                 <Route path="/ai-personal-shopper" element={<AIPersonalShopper />} />
-                {/* Alias: AI Home Finder redirect to quiz */}
                 <Route path="/ai-home-finder" element={<Navigate to="/quiz" replace />} />
                 <Route path="/tools-guide" element={<Navigate to="/ai-hub" replace />} />
                 <Route path="/my-ai-history" element={<MyAIHistory />} />
-                {/* New AI Tools - Recently Developed */}
                 <Route path="/ai-client-matcher" element={<BrokerGuard><AIClientMatcherPage /></BrokerGuard>} />
                 <Route path="/ai-email-generator" element={<AIEmailGeneratorPage />} />
                 <Route path="/ai-social-media" element={<AISocialMediaPage />} />
                 <Route path="/ai-investment-report" element={<AIInvestmentReportPage />} />
                 <Route path="/ai-description-writer" element={<AIDescriptionWriterPage />} />
                 <Route path="/intellectual-property" element={<IntellectualProperty />} />
+                
+                {/* Services */}
                 <Route path="/services/architecture" element={<Architecture />} />
                 <Route path="/services/interior-design" element={<InteriorDesign />} />
                 <Route path="/services/fit-out" element={<FitOut />} />
@@ -683,22 +517,10 @@ const App = () => {
                 <Route path="/services/testimonials" element={<TestimonialsPage />} />
                 <Route path="/referral-partner" element={<ReferralPartner />} />
                 <Route path="/referral" element={<Navigate to="/referral-onboarding" replace />} />
-                {/* Install page removed - PWA disabled */}
-                <Route path="/crm" element={(
-                  <OwnerGuard>
-                    <RouteErrorBoundary routeName="CRM">
-                      <CRM />
-                    </RouteErrorBoundary>
-                  </OwnerGuard>
-                )} />
-                <Route path="/crm/leads/:id" element={<OwnerGuard><CRMLeadDetail /></OwnerGuard>} />
-                <Route path="/crm/leads" element={<OwnerGuard><CRMLeadsInbox /></OwnerGuard>} />
-                {/* Owner routes moved to dedicated shell above - these are now handled by OwnerDashboardShell */}
-                <Route path="/crm/tasks" element={<OwnerGuard><CRMTasks /></OwnerGuard>} />
-                <Route path="/crm/calendar" element={<OwnerGuard><CRMCalendar /></OwnerGuard>} />
-                <Route path="/crm/notes" element={<OwnerGuard><CRMNotes /></OwnerGuard>} />
-                <Route path="/crm/reminders" element={<OwnerGuard><CRMReminders /></OwnerGuard>} />
-                <Route path="/crm/employees" element={<OwnerGuard><CRMEmployees /></OwnerGuard>} />
+                
+                {/* ── CRM: Redirect legacy /crm/* to /owner/crm/* ── */}
+                <Route path="/crm" element={<Navigate to="/owner/crm" replace />} />
+                <Route path="/crm/*" element={<Navigate to="/owner/crm" replace />} />
                 
                 <Route path="/admin/crm" element={<OwnerGuard><AdminCRM /></OwnerGuard>} />
                 <Route path="/admin/chat-conversations" element={<OwnerGuard><AdminChatDashboard /></OwnerGuard>} />
@@ -717,7 +539,6 @@ const App = () => {
                 <Route path="/profile" element={<UserProfile />} />
                 <Route path="/unsubscribe" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("./pages/Unsubscribe")))}</Suspense>} />
                 <Route path="/email-preferences" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("./pages/EmailPreferences")))}</Suspense>} />
-                {/* Alias: older links pointing to /account */}
                 <Route path="/account" element={<Navigate to="/my-account" replace />} />
                 <Route path="/hr-agent" element={<OwnerGuard><HRAgent /></OwnerGuard>} />
                 <Route path="/referral-onboarding" element={<ReferralOnboarding />} />
@@ -757,21 +578,13 @@ const App = () => {
                 <Route path="/governance/ai" element={<OwnerGuard><AIGovernance /></OwnerGuard>} />
                 <Route path="/governance/institutional-lock" element={<OwnerGuard><InstitutionalLock /></OwnerGuard>} />
                 <Route path="/governance/methodology" element={<OwnerGuard><GovernmentMethodology /></OwnerGuard>} />
-                
-                {/* Support Ticket Hub - Owner only */}
                 <Route path="/customer-happiness/tickets" element={<OwnerGuard><SupportTicketHub /></OwnerGuard>} />
-                
-                {/* My Tickets - Public for tracking */}
                 <Route path="/my-tickets" element={<MyTickets />} />
-                
-                {/* Reopen Ticket - Public for email links */}
                 <Route path="/reopen-ticket" element={<ReopenTicket />} />
                 
-                {/* Ticket Survey moved to standalone route above MainLayoutWrapper */}
-                
-                {/* Communication & Productivity Tools - Owner-only */}
+                {/* Communication & Productivity - Owner only */}
                 <Route path="/automations" element={<OwnerGuard><Automations /></OwnerGuard>} />
-                <Route path="/owner/automations" element={<OwnerGuard><Automations /></OwnerGuard>} />
+                <Route path="/owner/automations" element={<Navigate to="/automations" replace />} />
                 <Route path="/company-comm" element={<OwnerGuard><CompanyComm /></OwnerGuard>} />
                 <Route path="/email-client" element={<OwnerGuard><EmailClient /></OwnerGuard>} />
                 <Route path="/team-chat" element={<OwnerGuard><TeamChat /></OwnerGuard>} />
@@ -781,194 +594,19 @@ const App = () => {
                 <Route path="/presentations" element={<Presentations />} />
                 <Route path="/form-builder" element={<OwnerGuard><FormBuilder /></OwnerGuard>} />
 
-                {/* Scan & Sign Toolkit */}
-                <Route path="/toolkit/scan-sign" element={<ScanSignToolkitPage />} />
-
-                {/* E-Sign toolkit alias */}
-                <Route path="/toolkit/e-sign" element={<Navigate to="/e-signature" replace />} />
-
-                {/* AI Stamp Generator */}
-                <Route path="/toolkit/stamp-generator" element={<StampGeneratorLanding />} />
-                <Route path="/toolkit/stamp-generator/projects" element={<StampProjectsDashboard />} />
-                <Route path="/toolkit/stamp-generator/new" element={<StampProjectWizard />} />
-                <Route path="/toolkit/stamp-generator/:projectId/generate" element={<StampGeneratorMain />} />
-                <Route path="/toolkit/stamp-generator/:projectId/export/:designId" element={<StampExportPage />} />
-                <Route path="/toolkit/stamp-generator/:projectId/gallery" element={<StampGalleryPage />} />
-                <Route path="/toolkit/stamp-generator/history" element={<StampHistoryDashboard />} />
-
-                {/* Corporate Document Suite */}
-                <Route path="/toolkit/corporate-suite" element={<CorporateSuite />} />
-                <Route path="/toolkit/corporate-suite/business-card" element={<BusinessCardDesigner />} />
-                <Route path="/toolkit/corporate-suite/cv-resume" element={<CVResumeBuilder />} />
-                <Route path="/toolkit/corporate-suite/cover-letter" element={<CoverLetterGenerator />} />
-                <Route path="/toolkit/corporate-suite/landing-page" element={<LandingPageBuilder />} />
-                <Route path="/toolkit/corporate-suite/logo-creator" element={<LogoCreator />} />
-                <Route path="/toolkit/corporate-suite/company-profile" element={<CompanyProfileBuilder />} />
-
-                {/* Creative Suite - Owner-only */}
-                <Route path="/studio" element={<OwnerGuard><Studio /></OwnerGuard>} />
-                <Route path="/studio/editor/:projectId" element={<OwnerGuard><StudioEditor /></OwnerGuard>} />
-                <Route path="/studio/settings" element={<OwnerGuard><StudioSettings /></OwnerGuard>} />
-                
                 {/* E-Signature Routes */}
-                <Route path="/e-signature" element={
-                  <OwnerGuard>
-                    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
-                      <ESignatureDashboard />
-                    </Suspense>
-                  </OwnerGuard>
-                } />
-                <Route path="/e-signature/create" element={
-                  <OwnerGuard>
-                    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
-                      <CreateEnvelope />
-                    </Suspense>
-                  </OwnerGuard>
-                } />
-                <Route path="/e-signature/:id" element={
-                  <OwnerGuard>
-                    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
-                      <EnvelopeDetail />
-                    </Suspense>
-                  </OwnerGuard>
-                } />
-                <Route path="/e-signature/signature-studio" element={
-                  <OwnerGuard>
-                    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
-                      <SignatureStudio />
-                    </Suspense>
-                  </OwnerGuard>
-                } />
-                <Route path="/e-signature/contract-review" element={
-                  <OwnerGuard>
-                    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
-                      <ContractReview />
-                    </Suspense>
-                  </OwnerGuard>
-                } />
+                <Route path="/e-signature" element={<OwnerGuard><ESignatureDashboard /></OwnerGuard>} />
+                <Route path="/e-signature/create" element={<OwnerGuard><CreateEnvelope /></OwnerGuard>} />
+                <Route path="/e-signature/:id" element={<OwnerGuard><EnvelopeDetail /></OwnerGuard>} />
+                <Route path="/e-signature/signature-studio" element={<OwnerGuard><SignatureStudio /></OwnerGuard>} />
+                <Route path="/e-signature/contract-review" element={<OwnerGuard><ContractReview /></OwnerGuard>} />
                 
-                {/* Settings redirect - prevent 404 */}
                 <Route path="/settings" element={<Navigate to="/profile?tab=settings" replace />} />
-                
-{/* Toolkit Routes */}
-                <Route path="/toolkit" element={<Navigate to="/ai-hub" replace />} />
-                <Route path="/royal-tools" element={<Navigate to="/toolkit" replace />} />
-                
-                {/* Business Suite Routes */}
-                <Route path="/business-suite/all" element={
-                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
-                    <AllToolsSuite />
-                  </Suspense>
-                } />
-                <Route path="/business-suite/real-estate" element={
-                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
-                    <RealEstateSuite />
-                  </Suspense>
-                } />
-                <Route path="/business-suite/broker" element={
-                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
-                    <BrokerGuard><BrokerSuite /></BrokerGuard>
-                  </Suspense>
-                } />
-                <Route path="/business-suite/creative" element={
-                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
-                    <CreativeSuite />
-                  </Suspense>
-                } />
-                <Route path="/business-suite/productivity" element={
-                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
-                    <ProductivitySuite />
-                  </Suspense>
-                } />
-                <Route path="/suites" element={
-                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
-                    <SuitesHub />
-                  </Suspense>
-                } />
 
-                {/* NEW: Master Suite Routes */}
-                <Route path="/toolkit/video-suite" element={
-                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
-                    <VideoSuite />
-                  </Suspense>
-                } />
-                <Route path="/toolkit/voice-suite" element={
-                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
-                    <VoiceSuite />
-                  </Suspense>
-                } />
-                <Route path="/toolkit/photo-suite" element={
-                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
-                    <PhotoSuite />
-                  </Suspense>
-                } />
-                <Route path="/toolkit/pdf-suite" element={
-                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
-                    <PDFSuite />
-                  </Suspense>
-                } />
-                <Route path="/toolkit/property-suite" element={
-                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
-                    <PropertySuite />
-                  </Suspense>
-                } />
-                <Route path="/toolkit/video-resize-pack" element={
-                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
-                    <VideoResizePack />
-                  </Suspense>
-                } />
-                <Route path="/toolkit/smart-reframe" element={
-                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
-                    <VideoResizePack />
-                  </Suspense>
-                } />
-                <Route path="/toolkit/pdf-from-photos" element={
-                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
-                    <PdfFromPhotos />
-                  </Suspense>
-                } />
-                <Route path="/toolkit/pdf-editor" element={
-                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
-                    <PDFEditor />
-                  </Suspense>
-                } />
-                <Route path="/toolkit/image-resize" element={
-                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
-                    <ImageResize />
-                  </Suspense>
-                } />
-                <Route path="/toolkit/voice-studio" element={
-                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
-                    <VoiceStudio />
-                  </Suspense>
-                } />
-                <Route path="/toolkit/voice-studio-pro" element={
-                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
-                    <VoiceStudioPro />
-                  </Suspense>
-                } />
-                <Route path="/toolkit/ai-video-studio" element={
-                  <Suspense fallback={<div className="min-h-screen bg-slate-950 flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
-                    <AIVideoStudioPage />
-                  </Suspense>
-                } />
-                <Route path="/toolkit/captions-translate" element={
-                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
-                    <CaptionsTranslate />
-                  </Suspense>
-                } />
-                <Route path="/toolkit/background-ai" element={
-                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
-                    <BackgroundAI />
-                  </Suspense>
-                } />
-                <Route path="/toolkit/beauty-filters" element={
-                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
-                    <BeautyFilters />
-                  </Suspense>
-                } />
+                {/* ── Toolkit & Creative Routes ── */}
+                {ToolkitRoutes()}
                 
-                {/* Owner-only System Tools */}
+                {/* System Tools */}
                 <Route path="/customer-happiness" element={<OwnerGuard><CustomerHappiness /></OwnerGuard>} />
                 <Route path="/sitemap" element={<Sitemap />} />
                 <Route path="/pricing" element={<Pricing />} />
