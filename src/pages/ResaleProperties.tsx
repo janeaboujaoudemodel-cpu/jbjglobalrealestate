@@ -429,8 +429,6 @@ const ResaleProperties = () => {
                   Clear All
                 </Button>
               )}
-            </div>
-            </div>
           </div>
         </div>
       </section>
