@@ -300,8 +300,8 @@ export default function LandlordRentalPortal() {
                           {step.step}
                         </div>
                         <div className="flex-1 pb-8">
-                          <h3 className="text-lg font-semibold text-white mb-2">{step.title}</h3>
-                          <p className="text-zinc-400">{step.description}</p>
+                          <h3 className="text-lg font-semibold text-black mb-2">{step.title}</h3>
+                          <p className="text-zinc-600">{step.description}</p>
                         </div>
                       </div>
                     </motion.div>
