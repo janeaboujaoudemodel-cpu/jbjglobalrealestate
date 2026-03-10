@@ -90,7 +90,8 @@ const LeadCapturePopup = () => {
       });
 
       toast.success("Welcome! You now have full access to all features.");
-      handleDismiss();
+      setIsOpen(false);
+      markSubmitted();
     } catch {
       toast.error("Something went wrong. Please try again.");
     } finally {
