@@ -583,8 +583,7 @@ const App = () => {
                 <Route path="/reopen-ticket" element={<ReopenTicket />} />
                 
                 {/* Communication & Productivity - Owner only */}
-                <Route path="/automations" element={<OwnerGuard><Automations /></OwnerGuard>} />
-                <Route path="/owner/automations" element={<Navigate to="/automations" replace />} />
+                <Route path="/automations" element={<Navigate to="/owner/automations" replace />} />
                 <Route path="/company-comm" element={<OwnerGuard><CompanyComm /></OwnerGuard>} />
                 <Route path="/email-client" element={<OwnerGuard><EmailClient /></OwnerGuard>} />
                 <Route path="/team-chat" element={<OwnerGuard><TeamChat /></OwnerGuard>} />
