@@ -319,7 +319,7 @@ const Index = () => {
       </section>
 
       {/* DIVIDER - Between Explore Services and Toolkit Showcase */}
-      <SectionDivider />
+      <SectionDivider fullWidth />
 
       {/* TOOLKIT SHOWCASE CARD - Free Professional Tools */}
       <Suspense fallback={<SectionLoader />}>
