@@ -39,13 +39,30 @@ export function useUserBrowsingContext(): UserBrowsingContext {
     const recentAreas = Object.keys(areaCounts);
     const recentProjectIds = propertyItems.map((p) => p.id);
 
-    // Budget from subtitle parsing (e.g., "AED 1,200,000") — simplified
-    // In practice, the price info isn't stored in recent searches
-    // This is a placeholder for future enrichment
+    // Extract budget band from recently viewed projects' stored price data
+    const prices: number[] = [];
+    propertyItems.forEach((p) => {
+      // Try to parse price from subtitle (e.g., "Downtown, Dubai | From AED 1,200,000")
+      const priceMatch = p.subtitle?.match(/(?:AED|USD)\s*([\d,]+)/i);
+      if (priceMatch) {
+        const val = parseInt(priceMatch[1].replace(/,/g, ''), 10);
+        if (val > 0) prices.push(val);
+      }
+    });
+
+    let budgetMin: number | null = null;
+    let budgetMax: number | null = null;
+    if (prices.length > 0) {
+      const sorted = prices.sort((a, b) => a - b);
+      // Create a band: 30% below lowest viewed to 30% above highest viewed
+      budgetMin = Math.round(sorted[0] * 0.7);
+      budgetMax = Math.round(sorted[sorted.length - 1] * 1.3);
+    }
+
     return {
       dominantArea,
-      budgetMin: null,
-      budgetMax: null,
+      budgetMin,
+      budgetMax,
       recentAreas,
       recentProjectIds,
       hasData: true,
