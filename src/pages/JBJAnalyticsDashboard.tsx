@@ -360,8 +360,12 @@ const JBJAnalyticsDashboard: React.FC = () => {
           ))}
         </div>
 
-        <Tabs defaultValue="usage" className="space-y-6">
+        <Tabs defaultValue="visitors" className="space-y-6">
           <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30">
+            <TabsTrigger value="visitors" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border data-[state=active]:border-gold/40 text-black">
+              <Users className="w-4 h-4 mr-2" />
+              Daily Visitors
+            </TabsTrigger>
             <TabsTrigger value="usage" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border data-[state=active]:border-gold/40 text-black">
               <BarChart3 className="w-4 h-4 mr-2" />
               Tool Usage
