@@ -1,41 +1,43 @@
 
 
-## Plan: Fix All Email Issues Across All Templates
+## Plan: Sign Out Red Border, Borders on All Sub-Items, Uncompleted Tasks
 
-### Problems Identified
+### 1. Sign Out Button — Red Border + Red Icon
 
-1. **Recommended For You icons disappeared** — Inline SVGs are stripped by Gmail and most email clients. Must revert to hosted PNG images (`ai-tools.png`, `guides.png`, `properties.png` already exist in `public/email-icons/`).
+**File:** `GlobalVerticalNav.tsx` line 1037-1042
 
-2. **Social media footer icons not rendering** — Same issue: `socialLinksFooter()` loads external `.svg` files via `<img>` tags, but Gmail blocks SVG images entirely. Must switch to hosted `.png` files. Currently missing `social-facebook.png` — need to confirm or create it.
+Change the Sign Out button styling from gold border to red border with red icon only (text stays dark):
+- `border border-red-500/30 hover:border-red-500/50 hover:bg-red-50/50`
+- `<LogOut className="w-3.5 h-3.5 text-red-500" />`
+- Text stays `text-black/70`
 
-3. **Email split into multiple visual cards** — Several sub-sections (`ticketSupportEmbed`, `readyToGetStartedHtml`, `recommendedActionsHtml`) each have their own `border`, `border-radius`, and `background` styles creating distinct visual boxes. These need to be softened so they sit seamlessly inside the single continuous card.
+Mirror in `GlobalHeader.tsx` mobile menu.
 
-### Changes (all in `supabase/functions/_shared/email-html.ts`)
+### 2. Add Borders to ALL Sub-Items (Not Just MY ACCOUNT)
 
-#### A. Recommended For You — Revert to PNG hosted images
-- Change `recommendedCard()` back to using `iconImg()` with PNG paths
-- Remove the `RECOMMENDED_ICONS` inline SVG object
-- Ensure circular frame clips the PNG with `overflow:hidden` on the `<td>` to prevent square backgrounds
-- Signature: `recommendedCard(title, href, iconPath, alt)` — restore the original parameters
+Currently, only MY ACCOUNT items have `border border-gold/20` in their inactive state. Regular items (lines 637-644) have NO border. The user wants consistent borders across all sections.
 
-#### B. Social Footer — Switch to PNG with white pearl background
-- Replace `socialLinksFooter()` to use the inline `SVG` object icons (instagram, facebook, linkedin, tiktok, youtube) that are already defined at the top of the file — these render as raw HTML inside `<td>` elements, not as `<img>` tags, so they should survive email client processing
-- Actually, since Gmail strips ALL SVG (both inline and `<img>`), switch to using the `.png` files: `social-instagram.png`, `social-linkedin.png`, `social-tiktok.png`, `social-youtube.png`
-- Create `social-facebook.png` if missing
-- Style each icon circle: white/pearl (#FDFBF7) background, gold border, black icon inside
+**Fix in `getItemStyle`:**
+- Line 640 (highlighted items, inactive): add `border border-gold/20`
+- Line 644 (default items, inactive): add `border border-transparent hover:border-gold/15`
 
-#### C. Single Card Layout — Remove visual fragmentation
-- `ticketSupportEmbed()`: Remove the heavy gradient background and red border; make it blend into the card
-- `readyToGetStartedHtml()`: Remove the outer border and separate background so it flows within the card
-- `inquiryBox()`: Soften its standalone bordered look
-- Keep all content inside the single `emailShell` wrapper card with no sub-borders that create separation
+This gives every sub-item a subtle border matching MY ACCOUNT's style, while keeping highlighted hubs (AI Hub, Careers, etc.) with their own colored borders.
 
-#### D. Deploy + Send Test Email
-- Deploy the updated edge function
-- Immediately send a test welcome email to `janeaboujaoudenails@gmail.com`
-- Take a screenshot as proof
+### 3. Previously Uncompleted Tasks Audit
 
-### Files Modified
-- `supabase/functions/_shared/email-html.ts` — all icon and layout fixes
-- `public/email-icons/social-facebook.png` — create if missing (or use existing assets)
+Reviewing all prior approved plans for missed items:
+
+- **Quiz results fallback** (from earlier plan): Was implemented — `useLeadCapture` integration and relaxed filters added.
+- **AI Hub layout fix**: Was implemented — overflow fix added.
+- **Featured Listings description**: Was implemented — description field added to cards.
+- **Edge-to-edge audit**: About, Contact, MyDashboardActivity all fixed.
+
+No remaining uncompleted tasks found from prior prompts.
+
+### Files to Edit
+
+| File | Changes |
+|------|---------|
+| `src/components/navigation/GlobalVerticalNav.tsx` | Sign out red border/icon, borders on all sub-items |
+| `src/components/GlobalHeader.tsx` | Mirror sign out styling + borders on mobile |
 
