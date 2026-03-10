@@ -510,7 +510,7 @@ const SupportTicketBox = () => {
                         {/* Glow effect on hover */}
                         <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                         <span className="relative flex items-center gap-2">
-                          <Headphones className="w-6 h-6 text-gold" />
+                          <PremiumHeadsetIcon size={20} color="hsl(var(--gold))" />
                           <span className="text-gold">Create</span>
                           <span className="text-black">Support Ticket</span>
                         </span>
