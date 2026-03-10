@@ -212,7 +212,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'Listing Admin', icon: FolderOpen, href: '/listing-admin' },
     { label: 'Broker Dashboard', icon: BriefcaseIcon, href: '/broker-dashboard' },
     { label: 'My Assistant', icon: Bot, href: '/founder-assistant' },
-    { label: 'Support Tickets', icon: Headphones, href: '/support-tickets' },
+    { label: 'Support Tickets', icon: Headphones, href: '/my-tickets' },
     { label: 'My Profile', icon: User, href: '/profile' },
     { label: 'Settings', icon: Settings, href: '/profile' },
     { label: 'Favorites', icon: Heart, href: '/favorites' },
