@@ -1006,17 +1006,37 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                     )}
                   </Link>
 
+                  {/* My Profile & Settings */}
+                  <Link to="/profile" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 text-sm text-black/80 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors">
+                    <User className="w-4 h-4 text-gold" />My Profile
+                  </Link>
+                  <Link to="/profile?tab=settings" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 text-sm text-black/80 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors">
+                    <Settings className="w-4 h-4 text-gold" />Settings
+                  </Link>
+
                   {/* Gold Divider */}
                   <div className="h-px bg-gold/30 my-3" />
 
-                  {/* Contact Support & Create Ticket — aligned side by side */}
-                  <div className="flex items-center gap-2 px-3">
-                    <a href="mailto:info@jbjglobal.com" className="flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-red-600 rounded-lg border border-red-500/30 hover:bg-red-50/50 transition-colors">
+                  {/* Contact Support & Create Ticket — stacked */}
+                  <div className="space-y-1.5 px-3">
+                    <a href="mailto:info@jbjglobal.com" className="flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-red-600 rounded-lg border border-red-500/30 hover:bg-red-50/50 transition-colors w-full">
                       <Headphones className="w-3.5 h-3.5 text-red-500" />Contact Support
                     </a>
-                    <Link to="/my-tickets" onClick={() => setMobileMenuOpen(false)} className="flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-red-600 rounded-lg border border-red-500/30 hover:bg-red-50/50 transition-colors">
+                    <Link to="/my-tickets" onClick={() => setMobileMenuOpen(false)} className="flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-red-600 rounded-lg border border-red-500/30 hover:bg-red-50/50 transition-colors w-full">
                       <ClipboardCheck className="w-3.5 h-3.5 text-red-500" />Create Ticket
                     </Link>
+                    {user ? (
+                      <button
+                        onClick={async () => { await supabase.auth.signOut(); setMobileMenuOpen(false); }}
+                        className="flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-black/70 rounded-lg border border-gold/30 hover:bg-gold/10 transition-colors w-full"
+                      >
+                        <LogOut className="w-3.5 h-3.5" />Sign Out
+                      </button>
+                    ) : (
+                      <Link to="/auth" onClick={() => setMobileMenuOpen(false)} className="flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-black/70 rounded-lg border border-gold/30 hover:bg-gold/10 transition-colors w-full">
+                        <User className="w-3.5 h-3.5" />Sign In
+                      </Link>
+                    )}
                   </div>
 
                   {/* Gold Divider */}
