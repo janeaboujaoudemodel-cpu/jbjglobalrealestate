@@ -130,12 +130,12 @@ const ResaleProperties = () => {
             <ArrowLeft className="w-4 h-4" />
             Back to Properties
           </Link>
-          <Badge className="bg-gold/20 text-gold border-gold/40 mb-4 block w-fit mx-auto">JBJ Investor Network</Badge>
+          <Badge className="bg-gold/20 text-gold border-gold/40 mb-4 block w-fit mx-auto">Exclusive — JBJ Global Real Estate</Badge>
           <h1 className="text-3xl md:text-5xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-            Resale <span className="text-gold">Properties</span>
+            Exclusive Resale <span className="text-gold">Properties</span>
           </h1>
           <p className="text-lg text-black/60 max-w-2xl mx-auto">
-            Premium properties from our verified investors — ready for immediate purchase at competitive prices.
+            Exclusive investor resale portfolio curated by JBJ Global Real Estate — premium properties from verified investors at competitive prices, available for immediate purchase.
           </p>
         </div>
       </section>
