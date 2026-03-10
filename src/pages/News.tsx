@@ -778,7 +778,7 @@ const News = () => {
                       With over 12 years of experience in financial journalism, she ensures you stay informed of the latest market developments.
                     </p>
                     <div className="flex flex-wrap gap-2">
-                      {["Dubai Media Office", "Dubai Land Dept", "Abu Dhabi Media", "Ministry of Economy", "RERA", "Provident", "Gulf Business"].map((source) => (
+                      {["Dubai Media Office", "Dubai Land Dept", "Abu Dhabi Media", "Ministry of Economy", "RERA", "Knight Frank", "Property Monitor", "Gulf Business"].map((source) => (
                         <Badge key={source} variant="outline" className="text-gold border-gold/30 text-xs">
                           {source}
                         </Badge>

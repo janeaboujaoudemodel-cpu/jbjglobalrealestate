@@ -443,7 +443,7 @@ const NewsDetail = () => {
                   <span className="text-xs font-semibold text-black uppercase tracking-wide">Top Buyer Nationalities</span>
                 </div>
                 <div className="space-y-2">
-                  {topNationalitiesData.slice(0, 5).map((nat, i) => (
+                  {topNationalitiesData.slice(0, 10).map((nat, i) => (
                     <div key={nat.country} className="flex items-center gap-3">
                       <span className="text-lg">{nat.flag}</span>
                       <span className="text-sm font-medium text-black flex-1">{nat.country}</span>

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, ArrowUpRight, TrendingUp, Shield, Building, Globe, Coins, Landmark } from "lucide-react";
+import { ArrowUpRight, TrendingUp, Shield, Building, Globe, Coins, Landmark } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const WhyDubaiSection = () => {
@@ -133,7 +133,7 @@ const WhyDubaiSection = () => {
               <div className="absolute bottom-6 left-6 right-6 grid grid-cols-3 gap-3">
                 {[
                   { value: "16M+", label: "Annual Visitors" },
-                  { value: "8%", label: "Avg. Rental Yield" },
+                  { value: "6–10%", label: "Avg. Rental Yield" },
                   { value: "#1", label: "Safest City" },
                 ].map((stat, i) => (
                   <div key={i} className="bg-black/70 backdrop-blur-sm rounded-lg p-3 text-center border border-zinc-700/50">
@@ -143,6 +143,23 @@ const WhyDubaiSection = () => {
                 ))}
               </div>
             </div>
+          </div>
+
+          {/* Source Citations Bar */}
+          <div className="border-t border-zinc-800 px-8 py-4 flex flex-wrap items-center gap-x-6 gap-y-2">
+            <span className="text-zinc-500 text-xs font-medium uppercase tracking-wider">Sources:</span>
+            {[
+              { label: "#1 Safest City", source: "Numbeo Safety Index 2025" },
+              { label: "#1 Prime Price Growth", source: "Knight Frank Global Cities Index" },
+              { label: "#1 FDI in MENA", source: "fDi Intelligence, Financial Times" },
+              { label: "Top 5 Most Visited", source: "Mastercard Destination Cities Index" },
+            ].map((citation, i) => (
+              <span key={i} className="text-zinc-500 text-xs">
+                <span className="text-gold font-medium">{citation.label}</span>
+                {" — "}
+                <span className="italic">{citation.source}</span>
+              </span>
+            ))}
           </div>
         </div>
       </div>
