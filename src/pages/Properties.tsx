@@ -1199,10 +1199,7 @@ const Properties = () => {
       {isMapMode ? (
         <section className="bg-black">
           <div className="flex" style={{ height: 'calc(100vh - 80px)' }}>
-            {/* Vertical Nav Sidebar - visible when filter is fixed */}
-            {isFilterFixed && (
-              <PropertiesVerticalNav />
-            )}
+            {/* Vertical nav handled globally by MainLayout */}
 
             {/* Left: Scrollable card list */}
             <div ref={cardListRef} className="w-[55%] flex-shrink-0 overflow-y-auto bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
