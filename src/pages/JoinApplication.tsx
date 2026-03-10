@@ -9,7 +9,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Loader2, Upload, CheckCircle, FileText, Bot, MessageCircle, Briefcase, User } from "lucide-react";
+import { Loader2, Upload, CheckCircle, FileText, Bot, MessageCircle, Briefcase, User, Phone, Mail } from "lucide-react";
+import { CONTACT_INFO } from "@/constants/stats";
 import { PhoneInput } from "@/components/ui/phone-input";
 
 const NATIONALITIES = [
