@@ -622,7 +622,7 @@ export default function StampGalleryPage() {
                 >
                   {/* Stamp preview */}
                   <div
-                    className="relative aspect-square bg-gradient-to-br from-[hsl(var(--pearl-1))] to-[hsl(var(--champagne-1)/0.5)] flex items-center justify-center overflow-hidden"
+                    className="relative aspect-square bg-gradient-to-br from-[hsl(var(--pearl-1))] to-[hsl(var(--champagne-1)/0.5)] flex items-center justify-center overflow-hidden rounded-full mx-auto w-[85%]"
                     style={{ cursor: batchMode ? (isMaxed ? 'not-allowed' : 'pointer') : 'zoom-in' }}
                     onClick={() => {
                       if (batchMode) { if (!isMaxed || isSelected) toggleSelect(design.id); }
