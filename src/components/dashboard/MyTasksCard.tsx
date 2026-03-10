@@ -328,38 +328,8 @@ export default function MyTasksCard() {
       </CardHeader>
 
       <CardContent className="pt-0">
-        {/* Add task form */}
-        {showAddForm && (
-          <div className="flex gap-2 mb-3">
-            <Input
-              value={newTitle}
-              onChange={(e) => setNewTitle(e.target.value)}
-              placeholder="What needs to be done?"
-              className="h-8 text-xs border-gold/30 bg-white/60 focus:border-gold"
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && newTitle.trim()) addTask.mutate(newTitle.trim());
-                if (e.key === "Escape") setShowAddForm(false);
-              }}
-              autoFocus
-            />
-            <Button
-              size="sm"
-              onClick={() => newTitle.trim() && addTask.mutate(newTitle.trim())}
-              disabled={!newTitle.trim() || addTask.isPending}
-              className="h-8 px-3 bg-gold hover:bg-gold/90 text-black text-xs"
-            >
-              {addTask.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : "Add"}
-            </Button>
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={() => setShowAddForm(false)}
-              className="h-8 px-2 text-black/50 hover:text-black"
-            >
-              <X className="w-3.5 h-3.5" />
-            </Button>
-          </div>
-        )}
+        {/* Task Creation Modal */}
+        <TaskCreationModal open={showCreationModal} onOpenChange={setShowCreationModal} />
 
         {isLoading ? (
           <div className="flex justify-center py-8">
