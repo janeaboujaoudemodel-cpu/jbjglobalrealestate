@@ -338,8 +338,74 @@ const ResaleProperties = () => {
                 </SelectContent>
               </Select>
 
+              {/* Developer */}
+              <Select value={developerFilter} onValueChange={setDeveloperFilter}>
+                <SelectTrigger className="w-[160px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
+                  <Users className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
+                  <span className="truncate text-left flex-1">{developerFilter === "all" ? "All Developers" : developerFilter}</span>
+                </SelectTrigger>
+                <SelectContent className="max-h-60">
+                  <SelectItem value="all">All Developers</SelectItem>
+                  {(developers || []).map((dev) => (
+                    <SelectItem key={dev} value={dev}>{dev}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              {/* View */}
+              <Select value={viewFilter} onValueChange={setViewFilter}>
+                <SelectTrigger className="w-[140px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
+                  <MapPin className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
+                  <span className="truncate text-left flex-1">{VIEW_OPTIONS.find(v => v.value === viewFilter)?.label || "Any View"}</span>
+                </SelectTrigger>
+                <SelectContent>
+                  {VIEW_OPTIONS.map((v) => (
+                    <SelectItem key={v.value} value={v.value}>{v.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              {/* Sort */}
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="w-[170px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
+                  <ArrowUpDown className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
+                  <span className="truncate text-left flex-1">{SORT_OPTIONS.find(s => s.value === sortBy)?.label || "Sort"}</span>
+                </SelectTrigger>
+                <SelectContent>
+                  {SORT_OPTIONS.map((s) => (
+                    <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Row 2: Emirates + Size Range */}
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-2">
+              {/* Emirates */}
+              <EmiratesMultiSelect value={emiratesFilter} onChange={setEmiratesFilter} variant="light" />
+
+              {/* Size Range */}
+              <div className="flex items-center gap-1.5">
+                <Ruler className="w-4 h-4 text-gold flex-shrink-0" />
+                <Input
+                  type="number"
+                  placeholder={`Min ${unitLabel}`}
+                  value={sizeMin}
+                  onChange={(e) => setSizeMin(e.target.value)}
+                  className="w-[110px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm"
+                />
+                <span className="text-black/40 text-xs">–</span>
+                <Input
+                  type="number"
+                  placeholder={`Max ${unitLabel}`}
+                  value={sizeMax}
+                  onChange={(e) => setSizeMax(e.target.value)}
+                  className="w-[110px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm"
+                />
+              </div>
+
               {/* Clear */}
-              {(areaFilter !== "all" || typeFilter !== "all" || bedroomFilter !== "all" || priceFilter !== "all" || handoverFilter !== "all" || furnishingFilter !== "all" || searchQuery) && (
+              {(areaFilter !== "all" || typeFilter !== "all" || bedroomFilter !== "all" || priceFilter !== "all" || handoverFilter !== "all" || furnishingFilter !== "all" || developerFilter !== "all" || viewFilter !== "all" || emiratesFilter.length > 0 || sizeMin || sizeMax || searchQuery || sortBy !== "newest") && (
                 <Button
                   variant="outline"
                   size="sm"
@@ -350,6 +416,12 @@ const ResaleProperties = () => {
                     setPriceFilter("all");
                     setHandoverFilter("all");
                     setFurnishingFilter("all");
+                    setDeveloperFilter("all");
+                    setViewFilter("all");
+                    setEmiratesFilter([]);
+                    setSizeMin("");
+                    setSizeMax("");
+                    setSortBy("newest");
                     setSearchQuery("");
                   }}
                   className="h-11 px-4 border-gold/40 text-black hover:bg-gold/10 rounded-xl"
@@ -357,6 +429,7 @@ const ResaleProperties = () => {
                   Clear All
                 </Button>
               )}
+            </div>
             </div>
           </div>
         </div>
