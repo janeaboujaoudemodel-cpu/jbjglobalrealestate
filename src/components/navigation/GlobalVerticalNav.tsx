@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import {
   Building2, BarChart3, BookOpen, Briefcase, Users, Home, Tag, Key, PlusCircle,
   Building, Layers, Cpu, Heart, GitCompare, Calculator, Headphones, MapPin,
-  Lightbulb, ChevronRight, ChevronLeft, Search, User, Settings, Castle, FileText,
+  Lightbulb, ChevronRight, ChevronLeft, ChevronDown, Search, User, Settings, Castle, FileText,
   DollarSign, TrendingUp, ClipboardCheck, Shield, Sparkles, Bot, Video, Image,
   Mic, Stamp, CreditCard, Palette, Pen, Award, Globe, Brain, MessageSquare,
   Phone, Languages, FileSearch, FilePlus, UserCheck, CalendarClock, Mail,
@@ -12,7 +12,7 @@ import {
   ShieldCheck, Newspaper, BookMarked, Landmark, Camera,
 } from "lucide-react";
 import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png";
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useMemo } from "react";
 import GlobalSearchModal from "@/components/GlobalSearchModal";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
@@ -238,6 +238,87 @@ const MEGA_MENU_TITLES: Record<MegaMenuKey, string> = {
   guides: 'Guides & Education',
 };
 
+/* ─── COLOR-CODED SHORTCUT GROUPS ─── */
+interface ShortcutGroup {
+  label: string;
+  colorBorder: string;
+  colorText: string;
+  colorBg: string;
+  items: Array<{ label: string; href: string; icon: any }>;
+}
+
+const SHORTCUT_GROUPS: ShortcutGroup[] = [
+  {
+    label: "My Tasks",
+    colorBorder: "border-l-emerald-500",
+    colorText: "text-emerald-700",
+    colorBg: "bg-emerald-50",
+    items: [
+      { label: 'My Tasks', icon: ListChecks, href: '/my-dashboard#tasks' },
+      { label: 'Notifications', icon: Bell, href: '/my-dashboard#notifications' },
+    ],
+  },
+  {
+    label: "CRM",
+    colorBorder: "border-l-blue-500",
+    colorText: "text-blue-700",
+    colorBg: "bg-blue-50",
+    items: [
+      { label: 'CRM Dashboard', icon: Users, href: '/crm' },
+      { label: 'Customer Happiness', icon: Headphones, href: '/admin?tab=customer-happiness' },
+    ],
+  },
+  {
+    label: "Owner Command Center",
+    colorBorder: "border-l-[#C9A84C]",
+    colorText: "text-[#C9A84C]",
+    colorBg: "bg-gold/5",
+    items: [
+      { label: 'Owner Command Center', icon: Shield, href: '/owner' },
+      { label: 'Admin Panel', icon: Shield, href: '/admin' },
+      { label: 'Listing Admin', icon: FolderOpen, href: '/listing-admin' },
+    ],
+  },
+  {
+    label: "AI & Tools",
+    colorBorder: "border-l-purple-500",
+    colorText: "text-purple-700",
+    colorBg: "bg-purple-50",
+    items: [
+      { label: 'AI Tools', icon: Sparkles, href: '/ai-hub' },
+      { label: 'AI Calendar & Notes', icon: CalendarClock, href: '/ai-calendar' },
+      { label: 'My Assistant', icon: Bot, href: '/founder-assistant' },
+      { label: 'AI History', icon: Bot, href: '/my-ai-history' },
+    ],
+  },
+  {
+    label: "Dashboards",
+    colorBorder: "border-l-rose-500",
+    colorText: "text-rose-700",
+    colorBg: "bg-rose-50",
+    items: [
+      { label: 'My Dashboard', icon: LayoutDashboard, href: '/my-dashboard' },
+      { label: 'Broker Dashboard', icon: BriefcaseIcon, href: '/broker-dashboard' },
+    ],
+  },
+  {
+    label: "Account",
+    colorBorder: "border-l-zinc-400",
+    colorText: "text-zinc-600",
+    colorBg: "bg-zinc-50",
+    items: [
+      { label: 'My Profile', icon: User, href: '/profile' },
+      { label: 'Settings', icon: Settings, href: '/profile' },
+      { label: 'Favorites', icon: Heart, href: '/favorites' },
+      { label: 'Support Tickets', icon: Headphones, href: '/my-tickets' },
+    ],
+  },
+];
+
+/* ─── SECTION KEYS ─── */
+const SECTION_KEYS = ["PROPERTIES", "TOOLS", "INSIGHTS", "SERVICES", "COMPANY", "MY ACCOUNT"] as const;
+type SectionKey = typeof SECTION_KEYS[number];
+
 /* ─── COMPONENT ─── */
 export default function GlobalVerticalNav() {
   const location = useLocation();
@@ -247,6 +328,9 @@ export default function GlobalVerticalNav() {
   const [collapsed, setCollapsed] = useState(() => {
     try { return localStorage.getItem('jj_nav_collapsed') === '1'; } catch { return false; }
   });
+
+  // Collapsible sections state
+  const [openSections, setOpenSections] = useState<Set<SectionKey>>(new Set());
 
   const toggleCollapse = useCallback(() => {
     setCollapsed(prev => {
@@ -291,6 +375,48 @@ export default function GlobalVerticalNav() {
     return location.pathname === href;
   };
 
+  // Group nav items by section
+  const { highlightItems, sectionGroups } = useMemo(() => {
+    const highlights: NavItem[] = [];
+    const sections: Record<string, NavItem[]> = {};
+    let currentSection: string | null = null;
+
+    for (const item of NAV_ITEMS) {
+      if (item.highlight) {
+        highlights.push(item);
+        continue;
+      }
+      if (item.section) {
+        currentSection = item.section;
+        if (!sections[currentSection]) sections[currentSection] = [];
+      }
+      if (currentSection) {
+        sections[currentSection].push(item);
+      }
+    }
+    return { highlightItems: highlights, sectionGroups: sections };
+  }, []);
+
+  // Auto-open section containing active route on mount
+  useEffect(() => {
+    for (const [section, items] of Object.entries(sectionGroups)) {
+      if (items.some(item => isRouteActive(item.href))) {
+        setOpenSections(prev => new Set(prev).add(section as SectionKey));
+        break;
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname]);
+
+  const toggleSection = (section: SectionKey) => {
+    setOpenSections(prev => {
+      const next = new Set(prev);
+      if (next.has(section)) next.delete(section);
+      else next.add(section);
+      return next;
+    });
+  };
+
   const getItemStyle = (item: NavItem) => {
     const isThisMenuOpen = activeMegaMenu === item.megaMenu;
     const routeActive = isRouteActive(item.href);
@@ -303,39 +429,109 @@ export default function GlobalVerticalNav() {
     }
     return shouldHighlight
       ? "bg-gradient-to-r from-gold/20 to-gold/10 text-black border border-gold/40 font-bold"
-      : "text-black/70 hover:bg-white/60 hover:text-black";
+      : "text-black/90 hover:bg-white/60 hover:text-black";
   };
 
   const getIconStyle = (item: NavItem) => {
     const isThisMenuOpen = activeMegaMenu === item.megaMenu;
     const routeActive = isRouteActive(item.href);
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
-    return shouldHighlight || item.highlight ? "text-gold" : "text-black/50";
+    return shouldHighlight || item.highlight ? "text-gold" : "text-black/60";
   };
 
-  /* ─── COMPACT FLOATING FLYOUT PANEL (PropertiesVerticalNav pattern) ─── */
+  /* ─── RENDER MEGA MENU ─── */
   const renderMegaMenu = () => {
     if (!activeMegaMenu || collapsed) return null;
     const sidebarWidth = '200px';
-    const links = MEGA_MENU_LINKS[activeMegaMenu] || [];
     const title = MEGA_MENU_TITLES[activeMegaMenu] || activeMegaMenu;
+
+    // Color-coded shortcuts view
+    if (activeMegaMenu === 'shortcuts') {
+      return (
+        <>
+          <div
+            className="fixed inset-0 z-[9999] bg-black/30 backdrop-blur-sm"
+            style={{ left: sidebarWidth }}
+            onClick={closeMegaMenu}
+          />
+          <div
+            className="fixed z-[10000] flex items-start justify-start pointer-events-none"
+            style={{ left: sidebarWidth, top: 0, bottom: 0, right: 0 }}
+          >
+            <div
+              className="pointer-events-auto w-[440px] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[85vh]"
+              onClick={(e) => e.stopPropagation()}
+              onMouseLeave={closeMegaMenu}
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between px-5 py-3.5 border-b border-gold/20 bg-gradient-to-r from-[#E8DCC8]/50 to-transparent">
+                <div className="flex items-center gap-2.5">
+                  <Zap className="w-4 h-4 text-gold" />
+                  <h3 className="text-sm font-bold text-black tracking-tight">{title}</h3>
+                </div>
+                <button
+                  onClick={closeMegaMenu}
+                  className="w-6 h-6 rounded-full bg-gold/10 flex items-center justify-center hover:bg-gold/20 transition-colors"
+                >
+                  <X className="w-3 h-3 text-gold" />
+                </button>
+              </div>
+
+              {/* Color-coded groups */}
+              <div className="overflow-y-auto jj-scrollbar-gold p-3 space-y-3">
+                {SHORTCUT_GROUPS.map((group) => (
+                  <div key={group.label} className={`border-l-4 ${group.colorBorder} rounded-lg ${group.colorBg} p-2`}>
+                    <p className={`text-[10px] uppercase tracking-wider font-bold ${group.colorText} px-2 pb-1.5`}>
+                      {group.label}
+                    </p>
+                    <div className="space-y-0.5">
+                      {group.items.map((link) => {
+                        const Icon = link.icon;
+                        const linkActive = isRouteActive(link.href);
+                        return (
+                          <Link
+                            key={link.href + link.label}
+                            to={link.href}
+                            onClick={closeMegaMenu}
+                            className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                              linkActive
+                                ? "bg-white/80 text-black font-bold border border-gold/40 shadow-sm"
+                                : "text-black/80 hover:bg-white/60 hover:text-black"
+                            }`}
+                          >
+                            <Icon className={`w-4 h-4 flex-shrink-0 ${linkActive ? 'text-gold' : group.colorText}`} />
+                            <span className="flex-1">{link.label}</span>
+                            <ChevronRight className="w-3 h-3 text-black/20 flex-shrink-0" />
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </>
+      );
+    }
+
+    // Default mega menu
+    const links = MEGA_MENU_LINKS[activeMegaMenu] || [];
     const isLargeMenu = links.length > 12;
 
     return (
       <>
-        {/* Backdrop — only covers area right of sidebar */}
         <div
           className="fixed inset-0 z-[9999] bg-black/30 backdrop-blur-sm"
           style={{ left: sidebarWidth }}
           onClick={closeMegaMenu}
         />
-        {/* Floating compact panel */}
         <div
           className="fixed z-[10000] flex items-start justify-start pointer-events-none"
           style={{ left: sidebarWidth, top: 0, bottom: 0, right: 0 }}
         >
           <div
-            className={`pointer-events-auto w-[360px] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] animate-in slide-in-from-left-2 fade-in duration-200 ${isLargeMenu ? 'max-h-[80vh]' : 'max-h-[60vh]'}`}
+            className={`pointer-events-auto w-[440px] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] animate-in slide-in-from-left-2 fade-in duration-200 ${isLargeMenu ? 'max-h-[80vh]' : 'max-h-[60vh]'}`}
             onClick={(e) => e.stopPropagation()}
             onMouseLeave={closeMegaMenu}
           >
@@ -343,7 +539,7 @@ export default function GlobalVerticalNav() {
             <div className="flex items-center justify-between px-5 py-3.5 border-b border-gold/20 bg-gradient-to-r from-[#E8DCC8]/50 to-transparent">
               <div className="flex items-center gap-2.5">
                 <Sparkles className="w-4 h-4 text-gold" />
-                <h3 className="text-[13px] font-bold text-black tracking-tight">{title}</h3>
+                <h3 className="text-sm font-bold text-black tracking-tight">{title}</h3>
               </div>
               <button
                 onClick={closeMegaMenu}
@@ -363,14 +559,14 @@ export default function GlobalVerticalNav() {
                     key={link.href + link.label}
                     to={link.href}
                     onClick={closeMegaMenu}
-                    className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all break-inside-avoid ${
+                    className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all break-inside-avoid ${
                       linkActive
                         ? "bg-gradient-to-r from-gold/20 to-gold/10 text-black font-bold border border-gold/40"
                         : "text-black/80 hover:bg-gold/10 hover:text-black"
                     }`}
                   >
                     <Icon className="w-4 h-4 text-gold flex-shrink-0" />
-                    <span className="flex-1 truncate">{link.label}</span>
+                    <span className="flex-1">{link.label}</span>
                     <ChevronRight className="w-3 h-3 text-black/20 flex-shrink-0" />
                   </Link>
                 );
@@ -397,7 +593,7 @@ export default function GlobalVerticalNav() {
       <div className="px-2 pt-3 pb-1">
         <button
           onClick={(e) => handleNavClick('shortcuts', e as any)}
-          className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-[13px] font-bold w-full transition-all ${
+          className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-bold w-full transition-all ${
             activeMegaMenu === 'shortcuts'
               ? "bg-gradient-to-r from-gold/25 to-gold/15 text-black border border-gold/50"
               : "text-gold hover:bg-gold/10 border border-gold/30"
@@ -409,43 +605,94 @@ export default function GlobalVerticalNav() {
         </button>
       </div>
 
-      {/* Nav Items */}
-      <nav
-        className="flex-1 py-2 px-2 space-y-0.5 overflow-y-auto jj-scrollbar-gold"
-        style={{ scrollbarGutter: "stable" }}
-      >
-        {NAV_ITEMS.map((item, i) => {
+      {/* Highlighted Hubs — always visible */}
+      <div className="px-2 py-1 space-y-0.5">
+        {highlightItems.map((item, i) => {
           const hasMega = !!item.megaMenu;
           const isMenuOpen = activeMegaMenu === item.megaMenu;
           const Icon = item.icon;
           return (
-            <React.Fragment key={item.href + item.label + i}>
-              {item.section && (
-                <p className="text-[9px] uppercase tracking-[0.2em] text-gold/60 font-bold px-3 pt-3 pb-1">
-                  {item.section}
-                </p>
+            <Link
+              key={item.href + item.label + i}
+              to={item.href}
+              onClick={(e) => {
+                if (hasMega) handleNavClick(item.megaMenu, e);
+                else handleNavClick(undefined);
+              }}
+              className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${getItemStyle(item)}`}
+            >
+              <Icon className={`w-4 h-4 flex-shrink-0 ${getIconStyle(item)}`} />
+              <span className="flex-1">{item.label}</span>
+              {hasMega && (
+                <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-black/30"}`} />
               )}
-              <Link
-                to={item.href}
-                onClick={(e) => {
-                  if (hasMega) {
-                    handleNavClick(item.megaMenu, e);
-                  } else {
-                    handleNavClick(undefined);
-                  }
-                }}
-                className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all ${getItemStyle(item)}`}
+              {item.highlight && !isMenuOpen && !activeMegaMenu && !isRouteActive(item.href) && (
+                <Sparkles className="w-3 h-3 text-gold/60" />
+              )}
+            </Link>
+          );
+        })}
+      </div>
+
+      {/* Collapsible Section Nav */}
+      <nav
+        className="flex-1 py-2 px-2 space-y-1 overflow-y-auto jj-scrollbar-gold"
+        style={{ scrollbarGutter: "stable" }}
+      >
+        {SECTION_KEYS.map((sectionKey) => {
+          const items = sectionGroups[sectionKey];
+          if (!items || items.length === 0) return null;
+          const isOpen = openSections.has(sectionKey);
+          const hasActiveChild = items.some(item => isRouteActive(item.href));
+
+          return (
+            <div key={sectionKey}>
+              {/* Section header — click to expand/collapse */}
+              <button
+                onClick={() => toggleSection(sectionKey)}
+                className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-[11px] uppercase tracking-[0.15em] font-bold transition-all ${
+                  hasActiveChild
+                    ? "text-gold bg-gold/5"
+                    : "text-gold/80 hover:text-gold hover:bg-gold/5"
+                }`}
               >
-                <Icon className={`w-4 h-4 flex-shrink-0 ${getIconStyle(item)}`} />
-                <span className="flex-1">{item.label}</span>
-                {hasMega && (
-                  <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-black/30"}`} />
+                <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} />
+                <span className="flex-1 text-left">{sectionKey}</span>
+                {!isOpen && hasActiveChild && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-gold" />
                 )}
-                {item.highlight && !isMenuOpen && !activeMegaMenu && !isRouteActive(item.href) && (
-                  <Sparkles className="w-3 h-3 text-gold/60" />
-                )}
-              </Link>
-            </React.Fragment>
+              </button>
+
+              {/* Collapsible items */}
+              <div
+                className={`overflow-hidden transition-all duration-200 ${isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}
+              >
+                <div className="space-y-0.5 pt-0.5 pb-1">
+                  {items.map((item, i) => {
+                    const hasMega = !!item.megaMenu;
+                    const isMenuOpen = activeMegaMenu === item.megaMenu;
+                    const Icon = item.icon;
+                    return (
+                      <Link
+                        key={item.href + item.label + i}
+                        to={item.href}
+                        onClick={(e) => {
+                          if (hasMega) handleNavClick(item.megaMenu, e);
+                          else handleNavClick(undefined);
+                        }}
+                        className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${getItemStyle(item)}`}
+                      >
+                        <Icon className={`w-4 h-4 flex-shrink-0 ${getIconStyle(item)}`} />
+                        <span className="flex-1">{item.label}</span>
+                        {hasMega && (
+                          <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-black/30"}`} />
+                        )}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
           );
         })}
       </nav>
@@ -454,7 +701,7 @@ export default function GlobalVerticalNav() {
       <div className="px-3 py-2 border-t border-gold/20">
         <button
           onClick={() => setSearchOpen(true)}
-          className="flex items-center gap-2 px-3 py-2 rounded-lg text-[13px] font-semibold text-gold hover:bg-gold/10 transition-all w-full group"
+          className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold text-gold hover:bg-gold/10 transition-all w-full group"
         >
           <Search className="w-4 h-4 text-gold flex-shrink-0" />
           <span className="whitespace-nowrap">Quick Search</span>
@@ -490,32 +737,32 @@ export default function GlobalVerticalNav() {
     <>
       {/* Desktop sidebar */}
       {collapsed ? (
-        /* Collapsed: thin strip with expand button */
+        /* Collapsed: thin strip with premium expand button */
         <div className="hidden lg:flex w-[48px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-gold/30 flex-col h-full items-center py-4">
           <Link to="/" className="mb-4">
             <img src={jbjMonogramLightBg} alt="JBJ" className="w-9 h-9 object-contain" />
           </Link>
           <button
             onClick={toggleCollapse}
-            className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center hover:bg-gold/20 transition-colors"
+            className="w-10 h-10 rounded-xl bg-gradient-to-br from-gold/20 via-gold/10 to-gold/5 border border-gold/50 flex items-center justify-center hover:from-gold/30 hover:to-gold/15 transition-all shadow-lg shadow-gold/15"
             aria-label="Expand navigation"
             title="Expand navigation"
           >
-            <ChevronRight className="w-4 h-4 text-gold" />
+            <ChevronRight className="w-5 h-5 text-gold" />
           </button>
         </div>
       ) : (
         /* Full sidebar */
         <div className="hidden lg:flex w-[200px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-gold/30 flex-col h-full relative">
           {renderNavContent()}
-          {/* Collapse toggle */}
+          {/* Premium collapse toggle — pill-shaped gold */}
           <button
             onClick={toggleCollapse}
-            className="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border border-gold/40 flex items-center justify-center shadow-md hover:bg-gold/20 transition-colors z-[60]"
+            className="absolute -right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-xl bg-gradient-to-br from-gold/30 via-gold/20 to-[#EDE4D3] border border-gold/50 flex items-center justify-center shadow-lg shadow-gold/20 hover:from-gold/40 hover:to-gold/25 transition-all z-[60]"
             aria-label="Minimize navigation"
             title="Minimize navigation"
           >
-            <ChevronLeft className="w-3.5 h-3.5 text-gold" />
+            <ChevronLeft className="w-4 h-4 text-gold" />
           </button>
         </div>
       )}
