@@ -307,7 +307,7 @@ const Index = () => {
         <HomepageBookMarquee />
       </Suspense>
 
-      <SectionDivider />
+      <SectionDivider fullWidth />
 
       {/* EXPLORE OUR SERVICES SLIDESHOW - Wrapped in container for consistent sizing */}
       <section className="bg-black">
