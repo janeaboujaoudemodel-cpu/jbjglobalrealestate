@@ -98,12 +98,8 @@ const ContinueSearching = ({
     <section className={`py-8 md:py-12 relative overflow-hidden ${className}`}>
       {/* Premium backdrop */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-[#0a0a0a] to-black/80 z-[1]" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-black/60 z-[2]" />
-        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold/50 to-transparent z-[3]" />
-        <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold/50 to-transparent z-[3]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(200,167,102,0.1)_0%,_transparent_60%)] z-[2]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(253,251,247,0.04)_0%,_transparent_50%)] z-[2]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-[#0a0a0a] to-black z-[1]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(200,167,102,0.06)_0%,_transparent_60%)] z-[2]" />
       </div>
 
       <div className="container mx-auto px-4 relative z-20">
