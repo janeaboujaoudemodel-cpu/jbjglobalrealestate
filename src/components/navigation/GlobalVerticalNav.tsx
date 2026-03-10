@@ -468,7 +468,7 @@ export default function GlobalVerticalNav() {
     });
   };
 
-  const getItemStyle = (item: NavItem) => {
+  const getItemStyle = (item: NavItem, sectionKey?: string) => {
     const isThisMenuOpen = activeMegaMenu === item.megaMenu;
     const routeActive = isRouteActive(item.href);
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
@@ -478,6 +478,20 @@ export default function GlobalVerticalNav() {
       return shouldHighlight
         ? "bg-emerald-600 text-white border border-emerald-500 font-bold"
         : "bg-emerald-500/15 text-emerald-700 font-semibold hover:bg-emerald-500/25 border border-emerald-500/30";
+    }
+
+    // AI Home Finder gets purple highlight
+    if (item.href === '/quiz') {
+      return shouldHighlight
+        ? "bg-purple-600 text-white border border-purple-500 font-bold"
+        : "bg-purple-500/15 text-purple-700 font-semibold hover:bg-purple-500/25 border border-purple-500/30";
+    }
+
+    // My Account section gets a distinct highlight color (blue)
+    if (sectionKey === 'MY ACCOUNT') {
+      return shouldHighlight
+        ? "bg-blue-600 text-white border border-blue-500 font-bold"
+        : "bg-blue-500/10 text-blue-800 font-semibold hover:bg-blue-500/20 border border-blue-500/20";
     }
 
     if (item.highlight) {
@@ -490,11 +504,13 @@ export default function GlobalVerticalNav() {
       : "text-black/90 hover:bg-white/60 hover:text-black";
   };
 
-  const getIconStyle = (item: NavItem) => {
+  const getIconStyle = (item: NavItem, sectionKey?: string) => {
     const isThisMenuOpen = activeMegaMenu === item.megaMenu;
     const routeActive = isRouteActive(item.href);
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
     if (item.href === '/join') return shouldHighlight ? 'text-white' : 'text-emerald-600';
+    if (item.href === '/quiz') return shouldHighlight ? 'text-white' : 'text-purple-600';
+    if (sectionKey === 'MY ACCOUNT') return shouldHighlight ? 'text-white' : 'text-blue-600';
     return shouldHighlight ? "text-gold" : "text-black/60";
   };
 
@@ -720,9 +736,11 @@ export default function GlobalVerticalNav() {
               <button
                 onClick={() => toggleSection(sectionKey)}
                 className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-[11px] uppercase tracking-[0.15em] font-bold transition-all ${
-                  hasActiveChild
-                    ? "text-gold bg-gold/5"
-                    : "text-gold/80 hover:text-gold hover:bg-gold/5"
+                  sectionKey === 'MY ACCOUNT'
+                    ? (hasActiveChild ? "text-blue-700 bg-blue-500/10" : "text-blue-600/80 hover:text-blue-700 hover:bg-blue-500/10")
+                    : (hasActiveChild
+                      ? "text-gold bg-gold/5"
+                      : "text-gold/80 hover:text-gold hover:bg-gold/5")
                 }`}
               >
                 <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} />
@@ -749,9 +767,9 @@ export default function GlobalVerticalNav() {
                           if (hasMega) handleNavClick(item.megaMenu, e);
                           else handleNavClick(undefined);
                         }}
-                        className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${getItemStyle(item)}`}
+                        className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${getItemStyle(item, sectionKey)}`}
                       >
-                        <Icon className={`w-4 h-4 flex-shrink-0 ${getIconStyle(item)}`} />
+                        <Icon className={`w-4 h-4 flex-shrink-0 ${getIconStyle(item, sectionKey)}`} />
                         <span className="flex-1">{item.label}</span>
                         {hasMega && (
                           <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-black/30"}`} />
