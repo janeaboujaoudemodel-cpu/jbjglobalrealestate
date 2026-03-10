@@ -1040,13 +1040,13 @@ export default function GlobalVerticalNav() {
                 <div>
                   <button
                     onClick={() => toggleSection(sectionKey)}
-                    className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-[11px] uppercase tracking-[0.15em] font-bold transition-all ${
+                    className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-[11px] uppercase tracking-[0.15em] font-bold transition-all border ${
                       sectionHighlighted
-                        ? "text-gold bg-gold/15 border-l-2 border-gold"
-                        : "text-gold/80 hover:text-gold hover:bg-gold/5"
+                        ? "text-gold bg-gold/15 border-gold/40"
+                        : "text-gold/80 hover:text-gold hover:bg-gold/5 border-transparent hover:border-gold/20"
                     }`}
                   >
-                    <SectionIcon className={`w-3.5 h-3.5 flex-shrink-0 ${sectionHighlighted ? 'text-black' : 'text-black/50'}`} />
+                    <SectionIcon className={`w-3.5 h-3.5 flex-shrink-0 ${sectionHighlighted ? 'text-black' : 'text-gold'}`} />
                     <span className="flex-1 text-left">{sectionKey}</span>
                     <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'} ${sectionHighlighted ? 'text-gold' : 'text-black/40'}`} />
                     {!isOpen && hasActiveChild && (
