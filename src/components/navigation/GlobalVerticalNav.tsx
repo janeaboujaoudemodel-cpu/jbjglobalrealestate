@@ -10,9 +10,12 @@ import {
   LayoutDashboard, FolderOpen, ListChecks, Bell, Zap, Menu, X, Star,
   Scale, Eye, Ticket, Compass, HandCoins, Handshake, Lock, Accessibility,
   ShieldCheck, Newspaper, BookMarked, Landmark, Camera, Ruler,
+  LogOut,
 } from "lucide-react";
 import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png";
 import React, { useState, useCallback, useEffect, useMemo } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import GlobalSearchModal from "@/components/GlobalSearchModal";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
@@ -120,6 +123,8 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Compare", href: "/compare", icon: GitCompare },
   { label: "Mortgage Calculator", href: "/mortgage-calculator", icon: Calculator },
   { label: "My Dashboard", href: "/my-dashboard", icon: User },
+  { label: "My Profile", href: "/profile", icon: User },
+  { label: "Settings", href: "/profile?tab=settings", icon: Settings },
 ];
 
 /* ─── MEGA MENU LINK SETS ─── */
@@ -394,6 +399,7 @@ const SECTION_ICONS: Record<SectionKey, any> = {
 
 export default function GlobalVerticalNav() {
   const location = useLocation();
+  const { session } = useAuth();
   const [activeMegaMenu, setActiveMegaMenu] = useState<MegaMenuKey | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -593,33 +599,35 @@ export default function GlobalVerticalNav() {
     const routeActive = isRouteActive(item.href);
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
 
+    // Careers — Rose (distinct from all others)
     if (item.href === '/join') {
       return shouldHighlight
-        ? "bg-teal-500 text-white border border-teal-400 font-bold"
-        : "bg-teal-500/6 text-teal-500 font-semibold hover:bg-teal-500/12 border border-teal-200/15";
+        ? "bg-rose-500 text-white border border-rose-400 font-bold"
+        : "bg-rose-50/80 text-rose-500 font-semibold hover:bg-rose-100/60 border border-rose-300/25";
     }
+    // AI Home Finder — Violet
     if (item.href === '/quiz') {
       return shouldHighlight
         ? "bg-violet-500 text-white border border-violet-400 font-bold"
-        : "bg-violet-500/6 text-violet-400 font-semibold hover:bg-violet-500/12 border border-violet-200/15";
+        : "bg-violet-50/80 text-violet-500 font-semibold hover:bg-violet-100/60 border border-violet-300/25";
     }
-    // AI Tools Hub — Soft Orange
+    // AI Tools Hub — Amber
     if (item.href === '/ai-hub') {
       return shouldHighlight
-        ? "bg-orange-500 text-white border border-orange-400 font-bold"
-        : "bg-orange-500/6 text-orange-500 font-semibold hover:bg-orange-500/12 border border-orange-200/15";
+        ? "bg-amber-500 text-white border border-amber-400 font-bold"
+        : "bg-amber-50/80 text-amber-700 font-semibold hover:bg-amber-100/60 border border-amber-300/30";
     }
-    // List Your Property — Very Light Blue (distinct from Careers teal)
+    // List Your Property — Sky Blue
     if (item.href === '/listing-portal' && item.highlight) {
       return shouldHighlight
-        ? "bg-sky-400 text-white border border-sky-300 font-bold"
-        : "bg-sky-400/6 text-sky-400 font-semibold hover:bg-sky-400/12 border border-sky-200/15";
+        ? "bg-sky-500 text-white border border-sky-400 font-bold"
+        : "bg-sky-50/80 text-sky-500 font-semibold hover:bg-sky-100/60 border border-sky-300/25";
     }
-    // Resale Properties — Emerald (softened)
+    // Resale Properties — Emerald
     if (item.href === '/resale-properties') {
       return shouldHighlight
         ? "bg-emerald-500 text-white border border-emerald-400 font-bold"
-        : "bg-emerald-500/6 text-emerald-500 font-semibold hover:bg-emerald-500/12 border border-emerald-200/15";
+        : "bg-emerald-50/80 text-emerald-600 font-semibold hover:bg-emerald-100/60 border border-emerald-300/25";
     }
     if (sectionKey === 'MY ACCOUNT') {
       return shouldHighlight
@@ -640,11 +648,11 @@ export default function GlobalVerticalNav() {
     const isThisMenuOpen = item.megaMenu ? activeMegaMenu === item.megaMenu : false;
     const routeActive = isRouteActive(item.href);
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
-    if (item.href === '/join') return shouldHighlight ? 'text-white' : 'text-teal-500';
-    if (item.href === '/quiz') return shouldHighlight ? 'text-white' : 'text-violet-400';
-    if (item.href === '/ai-hub') return shouldHighlight ? 'text-white' : 'text-orange-500';
-    if (item.href === '/listing-portal' && item.highlight) return shouldHighlight ? 'text-white' : 'text-sky-400';
-    if (item.href === '/resale-properties') return shouldHighlight ? 'text-white' : 'text-emerald-500';
+    if (item.href === '/join') return shouldHighlight ? 'text-white' : 'text-rose-500';
+    if (item.href === '/quiz') return shouldHighlight ? 'text-white' : 'text-violet-500';
+    if (item.href === '/ai-hub') return shouldHighlight ? 'text-white' : 'text-amber-700';
+    if (item.href === '/listing-portal' && item.highlight) return shouldHighlight ? 'text-white' : 'text-sky-500';
+    if (item.href === '/resale-properties') return shouldHighlight ? 'text-white' : 'text-emerald-600';
     if (sectionKey === 'MY ACCOUNT') return 'text-gold';
     return shouldHighlight ? "text-gold" : "text-black/60";
   };
@@ -1007,25 +1015,40 @@ export default function GlobalVerticalNav() {
         </div>
       </nav>
 
-      {/* Bottom pinned section — SUPPORT hub */}
+      {/* Bottom pinned section — SUPPORT hub + Sign In/Out */}
       <div className="mt-auto flex-shrink-0">
         <div className="px-3 py-4 border-t border-red-500/20 space-y-1.5 bg-gradient-to-b from-[#EDE4D3]/50 to-[#EDE4D3]">
-          <div className="flex items-center gap-1.5">
-            <a
-              href="mailto:info@jbjglobal.com"
-              className="flex-1 flex items-center justify-center gap-2 text-xs font-bold text-red-600 hover:text-red-700 transition-colors px-2 py-2.5 rounded-lg border border-red-500/30 hover:border-red-500/50 hover:bg-red-50/50"
+          <a
+            href="mailto:info@jbjglobal.com"
+            className="flex items-center justify-center gap-2 text-xs font-bold text-red-600 hover:text-red-700 transition-colors px-2 py-2.5 rounded-lg border border-red-500/30 hover:border-red-500/50 hover:bg-red-50/50 w-full"
+          >
+            <Headphones className="w-3.5 h-3.5 text-red-500" />
+            Contact Support
+          </a>
+          <Link
+            to="/my-tickets"
+            className="flex items-center justify-center gap-2 text-xs font-bold text-red-600 hover:text-red-700 transition-colors px-2 py-2.5 rounded-lg border border-red-500/30 hover:border-red-500/50 hover:bg-red-50/50 w-full"
+          >
+            <Ticket className="w-3.5 h-3.5 text-red-500" />
+            Create Ticket
+          </Link>
+          {session ? (
+            <button
+              onClick={() => { supabase.auth.signOut(); }}
+              className="flex items-center justify-center gap-2 text-xs font-bold text-black/70 hover:text-black transition-colors px-2 py-2.5 rounded-lg border border-gold/30 hover:border-gold/50 hover:bg-gold/10 w-full"
             >
-              <Headphones className="w-3.5 h-3.5 text-red-500" />
-              Contact Support
-            </a>
+              <LogOut className="w-3.5 h-3.5" />
+              Sign Out
+            </button>
+          ) : (
             <Link
-              to="/my-tickets"
-              className="flex-1 flex items-center justify-center gap-2 text-xs font-bold text-red-600 hover:text-red-700 transition-colors px-2 py-2.5 rounded-lg border border-red-500/30 hover:border-red-500/50 hover:bg-red-50/50"
+              to="/auth"
+              className="flex items-center justify-center gap-2 text-xs font-bold text-black/70 hover:text-black transition-colors px-2 py-2.5 rounded-lg border border-gold/30 hover:border-gold/50 hover:bg-gold/10 w-full"
             >
-              <Ticket className="w-3.5 h-3.5 text-red-500" />
-              Create Ticket
+              <User className="w-3.5 h-3.5" />
+              Sign In
             </Link>
-          </div>
+          )}
         </div>
       </div>
     </div>

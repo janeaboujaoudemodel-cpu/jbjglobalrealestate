@@ -1,60 +1,41 @@
 
 
-## Plan: Premium Hub Labels, Borders, Support Stack, Sign In/Out, My Account Enhancements
+## Plan: Fix All Email Issues Across All Templates
 
-### 1. Premium Hub Highlight Styling (AI Tools → Resale)
+### Problems Identified
 
-All 5 highlighted hubs need refined, premium pastel styling with visible but subtle borders. Replace current colors:
+1. **Recommended For You icons disappeared** — Inline SVGs are stripped by Gmail and most email clients. Must revert to hosted PNG images (`ai-tools.png`, `guides.png`, `properties.png` already exist in `public/email-icons/`).
 
-| Hub | New Inactive Style |
-|-----|-------------------|
-| AI Tools Hub | `bg-amber-50/80 text-amber-700 border border-amber-300/30` |
-| AI Home Finder | `bg-violet-50/80 text-violet-500 border border-violet-300/25` |
-| List Your Property | `bg-sky-50/80 text-sky-500 border border-sky-300/25` |
-| Careers | `bg-rose-50/80 text-rose-500 border border-rose-300/25` (distinct from all others) |
-| Resale Properties | `bg-emerald-50/80 text-emerald-600 border border-emerald-300/25` |
+2. **Social media footer icons not rendering** — Same issue: `socialLinksFooter()` loads external `.svg` files via `<img>` tags, but Gmail blocks SVG images entirely. Must switch to hosted `.png` files. Currently missing `social-facebook.png` — need to confirm or create it.
 
-Active states use the same hue at full saturation with white text. Each hub keeps its border visible but soft.
+3. **Email split into multiple visual cards** — Several sub-sections (`ticketSupportEmbed`, `readyToGetStartedHtml`, `recommendedActionsHtml`) each have their own `border`, `border-radius`, and `background` styles creating distinct visual boxes. These need to be softened so they sit seamlessly inside the single continuous card.
 
-**File:** `GlobalVerticalNav.tsx` lines 596-633 (`getItemStyle`) and 639-650 (`getIconStyle`)
+### Changes (all in `supabase/functions/_shared/email-html.ts`)
 
-### 2. Support Buttons — Stack Vertically (One After Other)
+#### A. Recommended For You — Revert to PNG hosted images
+- Change `recommendedCard()` back to using `iconImg()` with PNG paths
+- Remove the `RECOMMENDED_ICONS` inline SVG object
+- Ensure circular frame clips the PNG with `overflow:hidden` on the `<td>` to prevent square backgrounds
+- Signature: `recommendedCard(title, href, iconPath, alt)` — restore the original parameters
 
-Change the `flex items-center gap-1.5` wrapper (line 1013) back to `space-y-1.5` vertical stack. Each button stays full-width.
+#### B. Social Footer — Switch to PNG with white pearl background
+- Replace `socialLinksFooter()` to use the inline `SVG` object icons (instagram, facebook, linkedin, tiktok, youtube) that are already defined at the top of the file — these render as raw HTML inside `<td>` elements, not as `<img>` tags, so they should survive email client processing
+- Actually, since Gmail strips ALL SVG (both inline and `<img>`), switch to using the `.png` files: `social-instagram.png`, `social-linkedin.png`, `social-tiktok.png`, `social-youtube.png`
+- Create `social-facebook.png` if missing
+- Style each icon circle: white/pearl (#FDFBF7) background, gold border, black icon inside
 
-**File:** `GlobalVerticalNav.tsx` lines 1011-1028
+#### C. Single Card Layout — Remove visual fragmentation
+- `ticketSupportEmbed()`: Remove the heavy gradient background and red border; make it blend into the card
+- `readyToGetStartedHtml()`: Remove the outer border and separate background so it flows within the card
+- `inquiryBox()`: Soften its standalone bordered look
+- Keep all content inside the single `emailShell` wrapper card with no sub-borders that create separation
 
-### 3. Add Sign In / Sign Out Button
+#### D. Deploy + Send Test Email
+- Deploy the updated edge function
+- Immediately send a test welcome email to `janeaboujaoudenails@gmail.com`
+- Take a screenshot as proof
 
-Add a Sign In or Sign Out button below the support buttons in the bottom pinned section. Use `useAuth` to check session state:
-- If signed in: show "Sign Out" button with `LogOut` icon
-- If not signed in: show "Sign In" button with `User` icon, linking to `/auth`
-
-**File:** `GlobalVerticalNav.tsx` — import `useAuth`, add button after support section
-
-### 4. MY ACCOUNT — Add Profile & Settings Items
-
-Add two new items to the MY ACCOUNT section in `NAV_ITEMS`:
-- `{ label: "My Profile", href: "/profile", icon: User }`
-- `{ label: "Settings", href: "/profile?tab=settings", icon: Settings }`
-
-The Settings page already has account deactivation/reactivation functionality via the existing `ProfileSummaryCard` linking to `/profile?tab=settings`.
-
-**File:** `GlobalVerticalNav.tsx` lines 118-123
-
-### 5. Mirror Changes in Mobile Header
-
-Update `GlobalHeader.tsx` mobile menu to match:
-- Softer premium hub colors with borders
-- Careers uses rose instead of teal
-- Support buttons stacked vertically
-- Sign in/out button
-- My Profile & Settings in account section
-
-### Files to Edit
-
-| File | Changes |
-|------|---------|
-| `src/components/navigation/GlobalVerticalNav.tsx` | Premium hub colors with borders, vertical support stack, sign in/out, My Profile & Settings in MY ACCOUNT |
-| `src/components/GlobalHeader.tsx` | Mirror all changes for mobile |
+### Files Modified
+- `supabase/functions/_shared/email-html.ts` — all icon and layout fixes
+- `public/email-icons/social-facebook.png` — create if missing (or use existing assets)
 

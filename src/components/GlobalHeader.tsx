@@ -732,17 +732,17 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 <div className="px-4 pt-4 pb-2">
                   <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-gold mb-2">My Shortcuts</p>
                   <div className="space-y-0.5">
-                    <Link to="/ai-hub" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-orange-500 hover:text-orange-600 bg-orange-500/6 hover:bg-orange-500/12 rounded-lg transition-colors border border-orange-200/15">
-                      <Cpu className="w-4 h-4 text-orange-500" />AI Tools Hub
+                    <Link to="/ai-hub" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-amber-700 hover:text-amber-800 bg-amber-50/80 hover:bg-amber-100/60 rounded-lg transition-colors border border-amber-300/30">
+                      <Cpu className="w-4 h-4 text-amber-700" />AI Tools Hub
                     </Link>
-                    <Link to="/listing-portal" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-sky-400 hover:text-sky-500 bg-sky-400/6 hover:bg-sky-400/12 rounded-lg transition-colors border border-sky-200/15">
-                      <ClipboardCheck className="w-4 h-4 text-sky-400" />List Your Property
+                    <Link to="/listing-portal" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-sky-500 hover:text-sky-600 bg-sky-50/80 hover:bg-sky-100/60 rounded-lg transition-colors border border-sky-300/25">
+                      <ClipboardCheck className="w-4 h-4 text-sky-500" />List Your Property
                     </Link>
-                    <Link to="/join" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-teal-500 hover:text-teal-600 bg-teal-500/6 hover:bg-teal-500/12 rounded-lg transition-colors border border-teal-200/15">
-                      <GraduationCap className="w-4 h-4 text-teal-500" />Careers
+                    <Link to="/join" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-rose-500 hover:text-rose-600 bg-rose-50/80 hover:bg-rose-100/60 rounded-lg transition-colors border border-rose-300/25">
+                      <GraduationCap className="w-4 h-4 text-rose-500" />Careers
                     </Link>
-                    <Link to="/resale-properties" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-emerald-500 hover:text-emerald-600 bg-emerald-500/6 hover:bg-emerald-500/12 rounded-lg transition-colors border border-emerald-200/15">
-                      <Home className="w-4 h-4 text-emerald-500" />Resale Properties
+                    <Link to="/resale-properties" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-emerald-600 hover:text-emerald-700 bg-emerald-50/80 hover:bg-emerald-100/60 rounded-lg transition-colors border border-emerald-300/25">
+                      <Home className="w-4 h-4 text-emerald-600" />Resale Properties
                     </Link>
                   </div>
                 </div>
@@ -1006,17 +1006,37 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                     )}
                   </Link>
 
+                  {/* My Profile & Settings */}
+                  <Link to="/profile" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 text-sm text-black/80 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors">
+                    <User className="w-4 h-4 text-gold" />My Profile
+                  </Link>
+                  <Link to="/profile?tab=settings" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 text-sm text-black/80 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors">
+                    <Settings className="w-4 h-4 text-gold" />Settings
+                  </Link>
+
                   {/* Gold Divider */}
                   <div className="h-px bg-gold/30 my-3" />
 
-                  {/* Contact Support & Create Ticket — aligned side by side */}
-                  <div className="flex items-center gap-2 px-3">
-                    <a href="mailto:info@jbjglobal.com" className="flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-red-600 rounded-lg border border-red-500/30 hover:bg-red-50/50 transition-colors">
+                  {/* Contact Support & Create Ticket — stacked */}
+                  <div className="space-y-1.5 px-3">
+                    <a href="mailto:info@jbjglobal.com" className="flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-red-600 rounded-lg border border-red-500/30 hover:bg-red-50/50 transition-colors w-full">
                       <Headphones className="w-3.5 h-3.5 text-red-500" />Contact Support
                     </a>
-                    <Link to="/my-tickets" onClick={() => setMobileMenuOpen(false)} className="flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-red-600 rounded-lg border border-red-500/30 hover:bg-red-50/50 transition-colors">
+                    <Link to="/my-tickets" onClick={() => setMobileMenuOpen(false)} className="flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-red-600 rounded-lg border border-red-500/30 hover:bg-red-50/50 transition-colors w-full">
                       <ClipboardCheck className="w-3.5 h-3.5 text-red-500" />Create Ticket
                     </Link>
+                    {user ? (
+                      <button
+                        onClick={async () => { await supabase.auth.signOut(); setMobileMenuOpen(false); }}
+                        className="flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-black/70 rounded-lg border border-gold/30 hover:bg-gold/10 transition-colors w-full"
+                      >
+                        <LogOut className="w-3.5 h-3.5" />Sign Out
+                      </button>
+                    ) : (
+                      <Link to="/auth" onClick={() => setMobileMenuOpen(false)} className="flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-black/70 rounded-lg border border-gold/30 hover:bg-gold/10 transition-colors w-full">
+                        <User className="w-3.5 h-3.5" />Sign In
+                      </Link>
+                    )}
                   </div>
 
                   {/* Gold Divider */}
