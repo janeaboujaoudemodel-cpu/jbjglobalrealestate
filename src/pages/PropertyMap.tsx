@@ -558,11 +558,11 @@ const PropertyMap = () => {
                 <Popup>
                   <div className="w-64 p-0">
                     {project.images?.[0] && (
-                      <div className="relative h-32 -mx-3 -mt-3 mb-2">
+                      <div className="relative h-32">
                         <SafeImage
                           src={project.images[0].image_url}
                           alt={project.name}
-                          className="w-full h-full object-cover rounded-t-lg"
+                          className="w-full h-full object-cover"
                         />
                       </div>
                     )}
