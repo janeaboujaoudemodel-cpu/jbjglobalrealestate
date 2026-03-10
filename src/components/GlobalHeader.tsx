@@ -735,8 +735,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                     <Link to="/ai-hub" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-orange-500 hover:text-orange-600 bg-orange-500/6 hover:bg-orange-500/12 rounded-lg transition-colors border border-orange-200/15">
                       <Cpu className="w-4 h-4 text-orange-500" />AI Tools Hub
                     </Link>
-                    <Link to="/listing-portal" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-sky-500 hover:text-sky-600 bg-sky-500/6 hover:bg-sky-500/12 rounded-lg transition-colors border border-sky-200/15">
-                      <ClipboardCheck className="w-4 h-4 text-sky-500" />List Your Property
+                    <Link to="/listing-portal" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-sky-400 hover:text-sky-500 bg-sky-400/6 hover:bg-sky-400/12 rounded-lg transition-colors border border-sky-200/15">
+                      <ClipboardCheck className="w-4 h-4 text-sky-400" />List Your Property
                     </Link>
                     <Link to="/join" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-teal-500 hover:text-teal-600 bg-teal-500/6 hover:bg-teal-500/12 rounded-lg transition-colors border border-teal-200/15">
                       <GraduationCap className="w-4 h-4 text-teal-500" />Careers
