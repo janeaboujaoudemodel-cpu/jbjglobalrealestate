@@ -456,7 +456,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     { href: "/map", label: "Property Map", icon: MapPin },
     { href: "/compare", label: "Compare Properties", icon: ClipboardCheck },
     { href: "/landlord-portal", label: "Landlord Portal", icon: Building2 },
-    { href: "/listing-portal", label: "Listing Portal", icon: ClipboardCheck },
+    { href: "/listing-portal", label: "List Your Property", icon: ClipboardCheck },
   ];
 
   // Mobile menu - Creative Toolkit
