@@ -212,6 +212,8 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'AI Calendar & Notes', icon: CalendarClock, href: '/ai-calendar' },
     { label: 'Owner Command Center', icon: Shield, href: '/owner' },
     { label: 'Admin Panel', icon: Shield, href: '/admin' },
+    { label: 'CP Center', icon: Compass, href: '/owner' },
+    { label: 'Inbox Inquiries', icon: Mail, href: '/owner/inbox' },
     { label: 'Listing Admin', icon: FolderOpen, href: '/listing-admin' },
     { label: 'Broker Dashboard', icon: BriefcaseIcon, href: '/broker-dashboard' },
     { label: 'My Assistant', icon: Bot, href: '/founder-assistant' },
@@ -277,6 +279,8 @@ const SHORTCUT_GROUPS: ShortcutGroup[] = [
     items: [
       { label: 'Owner Command Center', icon: Shield, href: '/owner' },
       { label: 'Admin Panel', icon: Shield, href: '/admin' },
+      { label: 'CP Center', icon: Compass, href: '/owner' },
+      { label: 'Inbox Inquiries', icon: Mail, href: '/owner/inbox' },
       { label: 'Listing Admin', icon: FolderOpen, href: '/listing-admin' },
     ],
   },
@@ -472,7 +476,7 @@ export default function GlobalVerticalNav() {
     if (item.highlight) {
       return shouldHighlight
         ? "bg-gradient-to-r from-gold/25 to-gold/15 text-black border border-gold/50 font-bold"
-        : "text-gold font-semibold hover:bg-gold/10";
+        : "text-black font-semibold hover:bg-gold/10";
     }
     return shouldHighlight
       ? "bg-gradient-to-r from-gold/20 to-gold/10 text-black border border-gold/40 font-bold"
@@ -483,7 +487,7 @@ export default function GlobalVerticalNav() {
     const isThisMenuOpen = activeMegaMenu === item.megaMenu;
     const routeActive = isRouteActive(item.href);
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
-    return shouldHighlight || item.highlight ? "text-gold" : "text-black/60";
+    return shouldHighlight ? "text-gold" : "text-black/60";
   };
 
   /* ─── RENDER MEGA MENU ─── */
@@ -508,7 +512,6 @@ export default function GlobalVerticalNav() {
             <div
               className="pointer-events-auto w-[440px] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[85vh]"
               onClick={(e) => e.stopPropagation()}
-              onMouseLeave={closeMegaMenu}
             >
               {/* Header */}
               <div className="flex items-center justify-between px-5 py-3.5 border-b border-gold/20 bg-gradient-to-r from-[#E8DCC8]/50 to-transparent">
@@ -525,7 +528,7 @@ export default function GlobalVerticalNav() {
               </div>
 
               {/* Color-coded groups */}
-              <div className="overflow-y-auto jj-scrollbar-gold p-3 space-y-3">
+              <div className="overflow-y-auto jj-scrollbar-gold p-3 pb-6 space-y-3">
                 {SHORTCUT_GROUPS.map((group) => (
                   <div key={group.label} className={`border-l-4 ${group.colorBorder} rounded-lg ${group.colorBg} p-2`}>
                     <p className={`text-[10px] uppercase tracking-wider font-bold ${group.colorText} px-2 pb-1.5`}>
@@ -580,7 +583,6 @@ export default function GlobalVerticalNav() {
           <div
             className={`pointer-events-auto w-[440px] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] animate-in slide-in-from-left-2 fade-in duration-200 ${isLargeMenu ? 'max-h-[80vh]' : 'max-h-[60vh]'}`}
             onClick={(e) => e.stopPropagation()}
-            onMouseLeave={closeMegaMenu}
           >
             {/* Panel header */}
             <div className="flex items-center justify-between px-5 py-3.5 border-b border-gold/20 bg-gradient-to-r from-[#E8DCC8]/50 to-transparent">
@@ -627,23 +629,25 @@ export default function GlobalVerticalNav() {
 
   const renderNavContent = () => (
     <>
-      {/* Logo + Minimize */}
-      <div className="p-4 border-b border-gold/20 flex items-center gap-2 hover:opacity-80 transition-opacity">
-        <Link to="/" onClick={() => setActiveMegaMenu(null)} className="flex items-center gap-3 flex-1 min-w-0">
-          <img src={jbjMonogramLightBg} alt="JBJ" className="w-16 h-16 object-contain flex-shrink-0" />
-          <div className="flex flex-col" style={{ fontFamily: "Poppins, sans-serif" }}>
+      {/* Logo + Minimize — Lovable-style inline toggle */}
+      <div className="p-4 border-b border-gold/20">
+        <div className="flex items-center gap-2">
+          <Link to="/" onClick={() => setActiveMegaMenu(null)} className="flex-shrink-0">
+            <img src={jbjMonogramLightBg} alt="JBJ" className="w-10 h-10 object-contain" />
+          </Link>
+          <Link to="/" onClick={() => setActiveMegaMenu(null)} className="flex flex-col flex-1 min-w-0 hover:opacity-80 transition-opacity" style={{ fontFamily: "Poppins, sans-serif" }}>
             <span className="text-[11px] font-bold text-black tracking-wide leading-tight">JBJ GLOBAL</span>
-            <span className="text-[11px] font-bold text-gold tracking-wide leading-tight">REAL ESTATE</span>
-          </div>
-        </Link>
-        <button
-          onClick={toggleCollapse}
-          className="w-6 h-6 rounded-md bg-gold/10 border border-gold/30 flex items-center justify-center hover:bg-gold/20 transition-colors flex-shrink-0"
-          aria-label="Minimize navigation"
-          title="Minimize navigation"
-        >
-          <X className="w-3 h-3 text-gold" />
-        </button>
+            <span className="text-[10px] font-bold text-gold tracking-wide leading-tight">REAL ESTATE</span>
+          </Link>
+          <button
+            onClick={toggleCollapse}
+            className="w-5 h-5 rounded flex items-center justify-center text-black/40 hover:text-black/70 hover:bg-black/5 transition-colors flex-shrink-0"
+            aria-label="Minimize navigation"
+            title="Minimize navigation"
+          >
+            <ChevronLeft className="w-3.5 h-3.5" />
+          </button>
+        </div>
       </div>
 
       {/* My Shortcuts — premium flyout trigger */}
