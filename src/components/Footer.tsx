@@ -670,7 +670,7 @@ const Footer = () => {
                   border: '1px solid rgba(200,167,102,0.3)',
                 }}
               >
-                <SocialLinks variant="glow" iconClassName="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
+                <SocialLinks variant="glow" iconClassName="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9" />
               </div>
               
               {/* Google My Business - Relocated here */}
