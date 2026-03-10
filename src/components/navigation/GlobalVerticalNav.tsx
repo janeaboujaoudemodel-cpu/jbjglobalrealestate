@@ -1035,9 +1035,9 @@ export default function GlobalVerticalNav() {
           {session ? (
             <button
               onClick={() => { supabase.auth.signOut(); }}
-              className="flex items-center justify-center gap-2 text-xs font-bold text-black/70 hover:text-black transition-colors px-2 py-2.5 rounded-lg border border-gold/30 hover:border-gold/50 hover:bg-gold/10 w-full"
+              className="flex items-center justify-center gap-2 text-xs font-bold text-black/70 hover:text-black transition-colors px-2 py-2.5 rounded-lg border border-red-500/30 hover:border-red-500/50 hover:bg-red-50/50 w-full"
             >
-              <LogOut className="w-3.5 h-3.5" />
+              <LogOut className="w-3.5 h-3.5 text-red-500" />
               Sign Out
             </button>
           ) : (
