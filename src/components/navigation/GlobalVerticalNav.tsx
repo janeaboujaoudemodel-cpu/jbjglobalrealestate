@@ -736,9 +736,11 @@ export default function GlobalVerticalNav() {
               <button
                 onClick={() => toggleSection(sectionKey)}
                 className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-[11px] uppercase tracking-[0.15em] font-bold transition-all ${
-                  hasActiveChild
-                    ? "text-gold bg-gold/5"
-                    : "text-gold/80 hover:text-gold hover:bg-gold/5"
+                  sectionKey === 'MY ACCOUNT'
+                    ? (hasActiveChild ? "text-blue-700 bg-blue-500/10" : "text-blue-600/80 hover:text-blue-700 hover:bg-blue-500/10")
+                    : (hasActiveChild
+                      ? "text-gold bg-gold/5"
+                      : "text-gold/80 hover:text-gold hover:bg-gold/5")
                 }`}
               >
                 <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} />
