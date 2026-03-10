@@ -721,16 +721,16 @@ const SupportTicketBox = () => {
                                >
                                  <p className="text-sm font-bold text-black mb-3 text-center">Explore While You Wait</p>
                                  <div className="grid grid-cols-2 gap-2">
-                                    <a href="/properties" className="flex items-center justify-center gap-1 px-3 py-2.5 bg-white border border-gold/30 rounded-lg text-xs font-semibold text-black hover:border-gold transition-colors">
+                                    <a href="/properties" className="flex items-center justify-center gap-1 px-3 py-2.5 border border-gold/30 rounded-lg text-xs font-semibold text-black hover:border-gold transition-colors">
                                       Properties
                                     </a>
-                                    <a href="/ai-hub" className="flex items-center justify-center gap-1 px-3 py-2.5 bg-white border border-gold/30 rounded-lg text-xs font-semibold text-black hover:border-gold transition-colors">
+                                    <a href="/ai-hub" className="flex items-center justify-center gap-1 px-3 py-2.5 border border-gold/30 rounded-lg text-xs font-semibold text-black hover:border-gold transition-colors">
                                       AI Tools
                                     </a>
-                                    <a href="/buyer-guide" className="flex items-center justify-center gap-1 px-3 py-2.5 bg-white border border-gold/30 rounded-lg text-xs font-semibold text-black hover:border-gold transition-colors">
+                                    <a href="/buyer-guide" className="flex items-center justify-center gap-1 px-3 py-2.5 border border-gold/30 rounded-lg text-xs font-semibold text-black hover:border-gold transition-colors">
                                       Guides
                                     </a>
-                                    <a href="/careers" className="flex items-center justify-center gap-1 px-3 py-2.5 bg-white border border-gold/30 rounded-lg text-xs font-semibold text-black hover:border-gold transition-colors">
+                                    <a href="/careers" className="flex items-center justify-center gap-1 px-3 py-2.5 border border-gold/30 rounded-lg text-xs font-semibold text-black hover:border-gold transition-colors">
                                       Careers
                                     </a>
                                  </div>
