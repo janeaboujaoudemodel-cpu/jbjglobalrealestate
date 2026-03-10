@@ -198,6 +198,16 @@ export function useSmartPopupStrategy(): SmartPopupState & {
     }
   }, []);
 
+  const markSubmitted = useCallback(() => {
+    setShouldShow(false);
+    try {
+      localStorage.setItem(STORAGE_KEYS.submitted, "1");
+      sessionStorage.setItem(STORAGE_KEYS.sessionShown, "1");
+    } catch {
+      // ignore
+    }
+  }, []);
+
   const messages = CONTEXT_MESSAGES[context];
 
   return {
@@ -207,5 +217,6 @@ export function useSmartPopupStrategy(): SmartPopupState & {
     subtitle: messages.subtitle,
     markShown,
     markDismissed,
+    markSubmitted,
   };
 }
