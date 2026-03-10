@@ -196,9 +196,19 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           <CommandPaletteRoot />
         </Suspense>
       )}
-      <GlobalHeader forceSolid={needsHeaderSpacing} />
+      {/* Mobile: horizontal header | Desktop: vertical sidebar */}
+      <div className="lg:hidden">
+        <GlobalHeader forceSolid={needsHeaderSpacing} />
+      </div>
+      {!isBackOfficeRoute && (
+        <div className="hidden lg:block fixed left-0 top-0 h-screen z-[9997]">
+          <Suspense fallback={null}>
+            <GlobalVerticalNav />
+          </Suspense>
+        </div>
+      )}
       <GlobalContactGating>
-        <main className={`w-full max-w-full overflow-x-hidden ${needsHeaderSpacing ? "pt-24 sm:pt-28 lg:pt-32" : "pt-0"}`}>
+        <main className={`w-full max-w-full overflow-x-hidden ${!isBackOfficeRoute ? "lg:pl-[200px]" : ""} ${needsHeaderSpacing ? "pt-24 sm:pt-28 lg:pt-0" : "pt-0"}`}>
           {layoutGuardTriggered && isServiceRoute && (
             <div role="alert" className="mx-auto mt-4 w-full max-w-6xl px-4 sm:px-6 lg:px-8">
               <div className="rounded-lg border border-destructive/30 bg-background/95 px-4 py-3 text-sm text-foreground shadow-sm backdrop-blur">
@@ -209,8 +219,10 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           {children}
         </main>
       </GlobalContactGating>
-      {!isBackOfficeRoute && !isToolkitGeneratorRoute && <CombinedContactNewsletter />}
-      {!isBackOfficeRoute && !isToolkitGeneratorRoute && <Footer />}
+      <div className={!isBackOfficeRoute ? "lg:pl-[200px]" : ""}>
+        {!isBackOfficeRoute && !isToolkitGeneratorRoute && <CombinedContactNewsletter />}
+        {!isBackOfficeRoute && !isToolkitGeneratorRoute && <Footer />}
+      </div>
       {popupsReady && (
         <Suspense fallback={null}>
           <PopupLayer />
