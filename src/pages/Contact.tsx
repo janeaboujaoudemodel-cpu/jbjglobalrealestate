@@ -313,7 +313,7 @@ END:VCARD`;
       {/* Contact Cards - 3-Layer System with thin black contour */}
       <section className="py-10 bg-black">
         {/* Thin black contour + Active Champagne Layer */}
-        <div className="mx-3 md:mx-4 lg:mx-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
+        <div className="mx-0 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
           {/* Inner Champagne Layer */}
           <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6 md:p-10 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
             <div className="mb-6 h-px w-full bg-gradient-to-r from-transparent via-gold/70 to-transparent" />
@@ -343,7 +343,7 @@ END:VCARD`;
       {/* Consultation Form Section - Form IS the 3rd layer (directly on active champagne, no extra pearl wrapper) */}
       <section className="py-16 md:py-20 bg-black">
         {/* Thin black contour + Active Champagne Layer */}
-        <div className="mx-3 md:mx-4 lg:mx-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-4 md:p-6">
+        <div className="mx-0 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-4 md:p-6">
           {/* Form IS the 3rd layer - champagne pearl styling */}
           <div className="max-w-3xl mx-auto">
             {isSuccess ? (
@@ -778,7 +778,7 @@ END:VCARD`;
       {/* Direct Contact Section */}
       <section className="py-12 bg-black">
         {/* Thin black contour + Active Champagne Layer */}
-        <div className="mx-3 md:mx-4 lg:mx-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-6 md:p-8">
+        <div className="mx-0 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-6 md:p-8">
           <h2 className="text-center text-2xl md:text-3xl font-bold mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
             <span className="text-black">Prefer to Reach Us</span>{" "}
             <span className="text-gold">Directly?</span>
@@ -828,7 +828,7 @@ END:VCARD`;
       {/* Important Notice - 3-Layer System */}
       <section className="py-10 bg-black">
         {/* Thin black contour + Active Champagne Layer */}
-        <div className="mx-3 md:mx-4 lg:mx-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
+        <div className="mx-0 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
           {/* Inner Pearl Layer */}
           <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6 md:p-8 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
             <div className="max-w-3xl mx-auto">
@@ -852,7 +852,7 @@ END:VCARD`;
       {/* Appointments Section - 3-Layer System */}
       <section className="py-10 bg-black">
         {/* Thin black contour + Active Champagne Layer */}
-        <div className="mx-3 md:mx-4 lg:mx-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
+        <div className="mx-0 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
           {/* Inner Pearl Layer */}
           <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6 md:p-8 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
             <div className="max-w-3xl mx-auto text-center">
@@ -873,7 +873,7 @@ END:VCARD`;
       {/* Closing Statement - 3-Layer System */}
       <section className="py-10 bg-black">
         {/* Thin black contour + Active Champagne Layer */}
-        <div className="mx-3 md:mx-4 lg:mx-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
+        <div className="mx-0 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
           {/* Inner Pearl Layer */}
           <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6 md:p-8 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
             <div className="max-w-3xl mx-auto text-center">

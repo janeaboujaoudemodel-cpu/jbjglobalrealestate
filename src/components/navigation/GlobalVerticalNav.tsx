@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Building2, BarChart3, BookOpen, Briefcase, Users, Home, Tag, Key, PlusCircle,
   Building, Layers, Cpu, Heart, GitCompare, Calculator, Headphones, MapPin,
@@ -7,7 +7,7 @@ import {
   Mic, Stamp, CreditCard, Palette, Pen, Award, Globe, Brain, MessageSquare,
   Phone, Languages, FileSearch, FilePlus, UserCheck, CalendarClock, Mail,
   Share2, PenTool, Megaphone, GraduationCap, Briefcase as BriefcaseIcon,
-  LayoutDashboard, FolderOpen, ListChecks, Bell, Zap, Menu, X,
+  LayoutDashboard, FolderOpen, ListChecks, Bell, Zap, Menu, X, Star,
   Scale, Eye, Ticket, Compass, HandCoins, Handshake, Lock, Accessibility,
   ShieldCheck, Newspaper, BookMarked, Landmark, Camera, Ruler,
 } from "lucide-react";
@@ -56,7 +56,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "AI Tools Hub", href: "/ai-hub", icon: Cpu, highlight: true, megaMenu: 'ai-tools' },
   { label: "AI Home Finder", href: "/quiz", icon: Home, highlight: true },
   { label: "List Your Property", href: "/listing-portal", icon: ClipboardCheck, highlight: true },
-  { label: "Careers & Join", href: "/join", icon: GraduationCap, highlight: true },
+  { label: "Careers", href: "/join", icon: GraduationCap, highlight: true },
   { label: "Resale Properties", href: "/resale-properties", icon: DollarSign, highlight: true },
 
   // ── Properties ──
@@ -190,7 +190,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'Our Team', icon: Users, href: '/team' },
     { label: 'The Founder', icon: User, href: '/founder' },
     { label: 'Contact Us', icon: Phone, href: '/contact' },
-    { label: 'Careers & Join', icon: GraduationCap, href: '/join' },
+    { label: 'Careers', icon: GraduationCap, href: '/join' },
     { label: 'Career Portal', icon: Briefcase, href: '/career-portal' },
     { label: 'JBJ Email', icon: Mail, href: '/crm/employees' },
     { label: 'Press Kit', icon: Newspaper, href: '/press-kit' },
@@ -253,18 +253,18 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'My Dashboard', icon: LayoutDashboard, href: '/my-dashboard' },
     { label: 'AI Tools', icon: Sparkles, href: '/ai-hub' },
     { label: 'CRM Dashboard', icon: Users, href: '/crm' },
-    { label: 'Customer Happiness', icon: Headphones, href: '/admin?tab=customer-happiness' },
+    { label: 'Customer Happiness', icon: Users, href: '/admin?tab=customer-happiness' },
     { label: 'My Tasks', icon: ListChecks, href: '/my-dashboard#tasks' },
     { label: 'Notifications', icon: Bell, href: '/my-dashboard#notifications' },
     { label: 'AI Calendar & Notes', icon: CalendarClock, href: '/ai-calendar' },
     { label: 'Owner Command Center', icon: Shield, href: '/owner' },
-    { label: 'Admin Panel', icon: Shield, href: '/admin' },
+    { label: 'Admin Panel', icon: Lock, href: '/admin' },
     { label: 'CP Center', icon: Compass, href: '/owner' },
     { label: 'Inbox Inquiries', icon: Mail, href: '/owner/inbox' },
     { label: 'Listing Admin', icon: FolderOpen, href: '/listing-admin' },
     { label: 'Broker Dashboard', icon: BriefcaseIcon, href: '/broker-dashboard' },
     { label: 'My Assistant', icon: Bot, href: '/founder-assistant' },
-    { label: 'Support Tickets', icon: Headphones, href: '/my-tickets' },
+    { label: 'Support Tickets', icon: Ticket, href: '/my-tickets' },
     { label: 'My Profile', icon: User, href: '/profile' },
     { label: 'Settings', icon: Settings, href: '/profile' },
     { label: 'Favorites', icon: Heart, href: '/favorites' },
@@ -306,10 +306,10 @@ const SHORTCUT_GROUPS: ShortcutGroup[] = [
     items: [
       { label: 'My Tasks', icon: ListChecks, href: '/my-dashboard#tasks' },
       { label: 'Notifications', icon: Bell, href: '/my-dashboard#notifications' },
-      { label: 'Alerts', icon: Bell, href: '/my-dashboard#alerts' },
+      { label: 'Alerts', icon: Zap, href: '/my-dashboard#alerts' },
       { label: 'Books', icon: BookMarked, href: '/education-hub' },
       { label: 'Favorites', icon: Heart, href: '/favorites' },
-      { label: 'Shortlisted', icon: ListChecks, href: '/favorites?tab=shortlist' },
+      { label: 'Shortlisted', icon: Star, href: '/favorites?tab=shortlist' },
     ],
   },
   {
@@ -319,7 +319,7 @@ const SHORTCUT_GROUPS: ShortcutGroup[] = [
     colorBg: "bg-blue-50",
     items: [
       { label: 'CRM Dashboard', icon: Users, href: '/crm' },
-      { label: 'Customer Happiness', icon: Headphones, href: '/admin?tab=customer-happiness' },
+      { label: 'Customer Happiness', icon: Users, href: '/admin?tab=customer-happiness' },
     ],
   },
   {
@@ -329,7 +329,7 @@ const SHORTCUT_GROUPS: ShortcutGroup[] = [
     colorBg: "bg-gold/5",
     items: [
       { label: 'Owner Command Center', icon: Shield, href: '/owner' },
-      { label: 'Admin Panel', icon: Shield, href: '/admin' },
+      { label: 'Admin Panel', icon: Lock, href: '/admin' },
       { label: 'CP Center', icon: Compass, href: '/owner' },
       { label: 'Inbox Inquiries', icon: Mail, href: '/owner/inbox' },
       { label: 'Listing Admin', icon: FolderOpen, href: '/listing-admin' },
@@ -366,7 +366,7 @@ const SHORTCUT_GROUPS: ShortcutGroup[] = [
       { label: 'My Profile', icon: User, href: '/profile' },
       { label: 'Settings', icon: Settings, href: '/profile' },
       { label: 'Favorites', icon: Heart, href: '/favorites' },
-      { label: 'Support Tickets', icon: Headphones, href: '/my-tickets' },
+      { label: 'Support Tickets', icon: Ticket, href: '/my-tickets' },
     ],
   },
 ];
@@ -558,16 +558,22 @@ export default function GlobalVerticalNav() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
 
-  // Accordion toggle — only one section open at a time
+  const navigate = useNavigate();
+
+  // Accordion toggle — only one section open at a time + navigate to first item
   const toggleSection = (section: SectionKey) => {
     const opening = openSection !== section;
     setOpenSection(prev => prev === section ? null : section);
-    // Dual-action: also open the first mega menu flyout in this section
     if (opening) {
       const items = sectionGroups[section];
       const firstMega = items?.find(item => item.megaMenu);
       if (firstMega?.megaMenu) {
         setActiveMegaMenu(firstMega.megaMenu);
+      }
+      // Navigate to first item's route
+      const firstItem = items?.[0];
+      if (firstItem) {
+        navigate(firstItem.href);
       }
     }
   };
@@ -588,31 +594,31 @@ export default function GlobalVerticalNav() {
 
     if (item.href === '/join') {
       return shouldHighlight
-        ? "bg-emerald-500 text-white border border-emerald-400 font-bold"
-        : "bg-emerald-400/10 text-emerald-600 font-semibold hover:bg-emerald-400/20 border border-emerald-400/20";
+        ? "bg-teal-500 text-white border border-teal-400 font-bold"
+        : "bg-teal-500/8 text-teal-700 font-semibold hover:bg-teal-500/15 border border-teal-400/20";
     }
     if (item.href === '/quiz') {
       return shouldHighlight
-        ? "bg-purple-600 text-white border border-purple-500 font-bold"
-        : "bg-purple-500/15 text-purple-700 font-semibold hover:bg-purple-500/25 border border-purple-500/30";
+        ? "bg-purple-500 text-white border border-purple-400 font-bold"
+        : "bg-purple-500/8 text-purple-600 font-semibold hover:bg-purple-500/15 border border-purple-400/20";
     }
-    // AI Tools Hub — Orange
+    // AI Tools Hub — Orange (softened)
     if (item.href === '/ai-hub') {
       return shouldHighlight
         ? "bg-orange-500 text-white border border-orange-400 font-bold"
-        : "bg-orange-500/15 text-orange-700 font-semibold hover:bg-orange-500/25 border border-orange-400/30";
+        : "bg-orange-500/8 text-orange-600 font-semibold hover:bg-orange-500/15 border border-orange-300/20";
     }
-    // List Your Property — Blue
+    // List Your Property — Blue (softened)
     if (item.href === '/listing-portal' && item.highlight) {
       return shouldHighlight
-        ? "bg-blue-600 text-white border border-blue-500 font-bold"
-        : "bg-blue-500/15 text-blue-700 font-semibold hover:bg-blue-500/25 border border-blue-400/30";
+        ? "bg-blue-500 text-white border border-blue-400 font-bold"
+        : "bg-blue-500/8 text-blue-600 font-semibold hover:bg-blue-500/15 border border-blue-300/20";
     }
-    // Resale Properties — Emerald
+    // Resale Properties — Emerald (softened)
     if (item.href === '/resale-properties') {
       return shouldHighlight
-        ? "bg-emerald-600 text-white border border-emerald-500 font-bold"
-        : "bg-emerald-500/15 text-emerald-700 font-semibold hover:bg-emerald-500/25 border border-emerald-400/30";
+        ? "bg-emerald-500 text-white border border-emerald-400 font-bold"
+        : "bg-emerald-500/8 text-emerald-600 font-semibold hover:bg-emerald-500/15 border border-emerald-300/20";
     }
     if (sectionKey === 'MY ACCOUNT') {
       return shouldHighlight
@@ -633,11 +639,11 @@ export default function GlobalVerticalNav() {
     const isThisMenuOpen = item.megaMenu ? activeMegaMenu === item.megaMenu : false;
     const routeActive = isRouteActive(item.href);
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
-    if (item.href === '/join') return shouldHighlight ? 'text-white' : 'text-emerald-500';
-    if (item.href === '/quiz') return shouldHighlight ? 'text-white' : 'text-purple-600';
-    if (item.href === '/ai-hub') return shouldHighlight ? 'text-white' : 'text-orange-600';
-    if (item.href === '/listing-portal' && item.highlight) return shouldHighlight ? 'text-white' : 'text-blue-600';
-    if (item.href === '/resale-properties') return shouldHighlight ? 'text-white' : 'text-emerald-600';
+    if (item.href === '/join') return shouldHighlight ? 'text-white' : 'text-teal-600';
+    if (item.href === '/quiz') return shouldHighlight ? 'text-white' : 'text-purple-500';
+    if (item.href === '/ai-hub') return shouldHighlight ? 'text-white' : 'text-orange-500';
+    if (item.href === '/listing-portal' && item.highlight) return shouldHighlight ? 'text-white' : 'text-blue-500';
+    if (item.href === '/resale-properties') return shouldHighlight ? 'text-white' : 'text-emerald-500';
     if (sectionKey === 'MY ACCOUNT') return 'text-gold';
     return shouldHighlight ? "text-gold" : "text-black/60";
   };
@@ -662,7 +668,7 @@ export default function GlobalVerticalNav() {
             style={{ left: sidebarWidth, top: 0, bottom: 0, right: 0 }}
           >
             <div
-              className="pointer-events-auto w-[min(440px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[85vh]"
+              className="pointer-events-auto w-[min(560px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[85vh]"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between px-5 py-3.5 border-b border-gold/20 bg-gradient-to-r from-[#E8DCC8]/50 to-transparent">
@@ -683,7 +689,7 @@ export default function GlobalVerticalNav() {
                     <p className={`text-[10px] uppercase tracking-wider font-bold ${group.colorText} px-2 pb-1.5`}>
                       {group.label}
                     </p>
-                    <div className="space-y-0.5">
+                    <div className="grid grid-cols-2 gap-1">
                       {group.items.map((link) => {
                         const Icon = link.icon;
                         const linkActive = isRouteActive(link.href);
@@ -868,10 +874,10 @@ export default function GlobalVerticalNav() {
       {/* Logo — enlarged monogram and wordmark */}
       <div className="p-4 border-b border-gold/20 flex-shrink-0">
         <div className="flex items-center gap-2.5">
-          <Link to="/" onClick={() => setActiveMegaMenu(null)} className="flex-shrink-0">
+         <Link to="/" onClick={() => setActiveMegaMenu(null)} onMouseEnter={() => { import("@/pages/Index"); }} className="flex-shrink-0">
             <img src={jbjMonogramLightBg} alt="JBJ" className="w-14 h-14 object-contain" />
           </Link>
-          <Link to="/" onClick={() => setActiveMegaMenu(null)} className="flex flex-col flex-1 min-w-0 hover:opacity-80 transition-opacity" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <Link to="/" onClick={() => setActiveMegaMenu(null)} onMouseEnter={() => { import("@/pages/Index"); }} className="flex flex-col flex-1 min-w-0 hover:opacity-80 transition-opacity" style={{ fontFamily: "Poppins, sans-serif" }}>
             <span className="text-[13px] font-bold text-black tracking-wide leading-tight">JBJ GLOBAL</span>
             <span className="text-[12px] font-bold text-gold tracking-wide leading-tight">REAL ESTATE</span>
           </Link>
@@ -948,7 +954,11 @@ export default function GlobalVerticalNav() {
                   <button
                     onClick={() => toggleSection(sectionKey)}
                     className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-[11px] uppercase tracking-[0.15em] font-bold transition-all border ${
-                      sectionHighlighted
+                      sectionKey === 'MY ACCOUNT'
+                        ? sectionHighlighted
+                          ? "text-gold bg-gradient-to-r from-gold/20 to-gold/10 border-gold/50"
+                          : "text-gold/80 hover:text-gold bg-gradient-to-r from-gold/5 to-transparent border-gold/20 hover:border-gold/30"
+                        : sectionHighlighted
                         ? "text-gold bg-gold/15 border-gold/40"
                         : "text-gold/80 hover:text-gold hover:bg-gold/5 border-transparent hover:border-gold/20"
                     }`}

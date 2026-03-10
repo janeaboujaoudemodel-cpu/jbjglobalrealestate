@@ -38,7 +38,7 @@ function useFeaturedProjects() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("projects")
-        .select("id, name, slug, developer_name, price_from, area_name, location, cover_image_url, bedrooms_min, bedrooms_max, handover_date, payment_breakdown, images:project_images(image_url), developer:developers(id, name, slug, logo_url)")
+        .select("id, name, slug, developer_name, description, price_from, area_name, location, cover_image_url, bedrooms_min, bedrooms_max, handover_date, payment_breakdown, images:project_images(image_url), developer:developers(id, name, slug, logo_url)")
         .in("developer_name", ELITE_DEVELOPERS)
         .eq("is_published", true)
         .order("created_at", { ascending: false })
@@ -229,7 +229,13 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
               <span className="text-xs font-medium mb-1 block"><span className="text-black">by </span><span className="text-gold">{project.developer_name}</span></span>
             ) : null}
 
-            {/* Description - 2 lines with ...more */}
+            {/* Description */}
+            {(project as any).description && (
+              <p className="text-stone-500 text-xs line-clamp-2 mb-2">{(project as any).description}</p>
+            )}
+
+            {/* Gold Divider */}
+            <hr className="border-gold/20 my-2" />
 
             {/* Spacer to push bottom content down */}
             <div className="flex-grow" />

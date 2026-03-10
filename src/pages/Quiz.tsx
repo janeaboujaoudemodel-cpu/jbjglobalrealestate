@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLeadCapture } from "@/hooks/useLeadCapture";
 import { 
   ChevronRight, ChevronLeft, Clock, Sparkles, Loader2, CheckCircle2,
   Wand2, ArrowUpRight, Building2, Home, Landmark, TreePine, Gift, Crown
@@ -154,6 +155,7 @@ const NATIONALITIES = getCountryList();
 const Quiz = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { isLeadCaptured, captureLead, checkLead } = useLeadCapture();
   // Quiz is fully free — no usage tracking or membership needed
   const markFreeUsed = () => {};
   
@@ -262,7 +264,8 @@ const Quiz = () => {
     if (currentStep < QUIZ_QUESTIONS.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
-      if (user && isFormValid()) {
+      // Check if lead already captured — skip form if so
+      if (isLeadCaptured || (user && isFormValid())) {
         proceedToResults();
       } else {
         setShowForm(true);
@@ -403,6 +406,14 @@ const Quiz = () => {
 
   const handleSubmitForm = async () => {
     if (!isFormValid()) return;
+    // Capture lead before showing results
+    await captureLead({
+      email: formData.email,
+      fullName: formData.fullName,
+      phone: formData.phone,
+      nationality: formData.nationality,
+      language: formData.preferredLanguage,
+    }, 'ai_home_finder');
     await proceedToResults();
   };
 
@@ -426,7 +437,16 @@ const Quiz = () => {
 
       markFreeUsed();
 
-      const slugs = recommendations.slice(0, 5).map((p) => p.slug).join(",");
+      let slugs = recommendations.slice(0, 3).map((p) => p.slug).join(",");
+      // Fallback: if fewer than 3 results, relax area filter and retry
+      if (recommendations.length < 3 && allProjects?.length) {
+        const relaxed = allProjects
+          .filter(p => !p.is_sold_out && p.cover_image_url)
+          .slice(0, 3);
+        if (relaxed.length > recommendations.length) {
+          slugs = relaxed.slice(0, 3).map(p => p.slug).join(",");
+        }
+      }
       navigate(`/quiz-results?projects=${slugs}&session=${sessionId}&free=true`);
     } catch (error) {
       console.error("Error saving quiz:", error);
@@ -747,10 +767,10 @@ const Quiz = () => {
       </div>
 
       {/* Question Content with optional Preferences Sidebar */}
-      <div className="flex-1 flex items-start justify-center px-4 py-8 md:py-12">
-        <div className="w-full max-w-4xl flex gap-8">
+      <div className="flex-1 flex items-center justify-center px-4 py-8 md:py-12">
+        <div className="w-full max-w-4xl flex gap-8 justify-center">
           {/* Main Question Area */}
-          <div className="flex-1 max-w-2xl">
+          <div className="flex-1 max-w-2xl mx-auto">
             <h2
               className="text-stone-900 text-2xl md:text-3xl font-bold mb-8 text-center"
               style={{ fontFamily: "Poppins, sans-serif" }}

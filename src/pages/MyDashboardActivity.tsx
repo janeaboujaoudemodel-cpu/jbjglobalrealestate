@@ -103,7 +103,7 @@ const MyDashboardActivity = () => {
       />
       
       <div className="min-h-screen bg-gradient-to-b from-[#F5EBD7] via-[#EDE4D3] to-[#E0D5C0]">
-        <div className="mx-3 md:mx-4 lg:mx-6 my-6 rounded-2xl border-2 border-gold/30 overflow-hidden"
+        <div className="mx-0 my-6 rounded-2xl border-2 border-gold/30 overflow-hidden"
           style={{ background: 'linear-gradient(145deg, #FDFBF7 0%, #F5EBD7 50%, #EDE4D3 100%)' }}
         >
           <div className="container mx-auto px-4 py-8 max-w-5xl">
