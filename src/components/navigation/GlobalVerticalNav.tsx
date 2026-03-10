@@ -588,31 +588,31 @@ export default function GlobalVerticalNav() {
 
     if (item.href === '/join') {
       return shouldHighlight
-        ? "bg-emerald-500 text-white border border-emerald-400 font-bold"
-        : "bg-emerald-400/10 text-emerald-600 font-semibold hover:bg-emerald-400/20 border border-emerald-400/20";
+        ? "bg-teal-500 text-white border border-teal-400 font-bold"
+        : "bg-teal-500/8 text-teal-700 font-semibold hover:bg-teal-500/15 border border-teal-400/20";
     }
     if (item.href === '/quiz') {
       return shouldHighlight
-        ? "bg-purple-600 text-white border border-purple-500 font-bold"
-        : "bg-purple-500/15 text-purple-700 font-semibold hover:bg-purple-500/25 border border-purple-500/30";
+        ? "bg-purple-500 text-white border border-purple-400 font-bold"
+        : "bg-purple-500/8 text-purple-600 font-semibold hover:bg-purple-500/15 border border-purple-400/20";
     }
-    // AI Tools Hub — Orange
+    // AI Tools Hub — Orange (softened)
     if (item.href === '/ai-hub') {
       return shouldHighlight
         ? "bg-orange-500 text-white border border-orange-400 font-bold"
-        : "bg-orange-500/15 text-orange-700 font-semibold hover:bg-orange-500/25 border border-orange-400/30";
+        : "bg-orange-500/8 text-orange-600 font-semibold hover:bg-orange-500/15 border border-orange-300/20";
     }
-    // List Your Property — Blue
+    // List Your Property — Blue (softened)
     if (item.href === '/listing-portal' && item.highlight) {
       return shouldHighlight
-        ? "bg-blue-600 text-white border border-blue-500 font-bold"
-        : "bg-blue-500/15 text-blue-700 font-semibold hover:bg-blue-500/25 border border-blue-400/30";
+        ? "bg-blue-500 text-white border border-blue-400 font-bold"
+        : "bg-blue-500/8 text-blue-600 font-semibold hover:bg-blue-500/15 border border-blue-300/20";
     }
-    // Resale Properties — Emerald
+    // Resale Properties — Emerald (softened)
     if (item.href === '/resale-properties') {
       return shouldHighlight
-        ? "bg-emerald-600 text-white border border-emerald-500 font-bold"
-        : "bg-emerald-500/15 text-emerald-700 font-semibold hover:bg-emerald-500/25 border border-emerald-400/30";
+        ? "bg-emerald-500 text-white border border-emerald-400 font-bold"
+        : "bg-emerald-500/8 text-emerald-600 font-semibold hover:bg-emerald-500/15 border border-emerald-300/20";
     }
     if (sectionKey === 'MY ACCOUNT') {
       return shouldHighlight
