@@ -735,8 +735,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                     <Link to="/ai-hub" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-orange-500 hover:text-orange-600 bg-orange-500/6 hover:bg-orange-500/12 rounded-lg transition-colors border border-orange-200/15">
                       <Cpu className="w-4 h-4 text-orange-500" />AI Tools Hub
                     </Link>
-                    <Link to="/listing-portal" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-sky-500 hover:text-sky-600 bg-sky-500/6 hover:bg-sky-500/12 rounded-lg transition-colors border border-sky-200/15">
-                      <ClipboardCheck className="w-4 h-4 text-sky-500" />List Your Property
+                    <Link to="/listing-portal" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-sky-400 hover:text-sky-500 bg-sky-400/6 hover:bg-sky-400/12 rounded-lg transition-colors border border-sky-200/15">
+                      <ClipboardCheck className="w-4 h-4 text-sky-400" />List Your Property
                     </Link>
                     <Link to="/join" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-teal-500 hover:text-teal-600 bg-teal-500/6 hover:bg-teal-500/12 rounded-lg transition-colors border border-teal-200/15">
                       <GraduationCap className="w-4 h-4 text-teal-500" />Careers
@@ -1009,13 +1009,15 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   {/* Gold Divider */}
                   <div className="h-px bg-gold/30 my-3" />
 
-                  {/* Contact Support & Create Ticket */}
-                  <a href="mailto:info@jbjglobal.com" className="flex items-center gap-3 px-3 py-2.5 text-sm font-bold text-gold hover:text-gold-dark transition-colors">
-                    <Headphones className="w-4 h-4" />Contact Support
-                  </a>
-                  <Link to="/support/ticket" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 text-sm font-bold text-gold hover:text-gold-dark transition-colors">
-                    <ClipboardCheck className="w-4 h-4" />Create Support Ticket
-                  </Link>
+                  {/* Contact Support & Create Ticket — aligned side by side */}
+                  <div className="flex items-center gap-2 px-3">
+                    <a href="mailto:info@jbjglobal.com" className="flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-red-600 rounded-lg border border-red-500/30 hover:bg-red-50/50 transition-colors">
+                      <Headphones className="w-3.5 h-3.5 text-red-500" />Contact Support
+                    </a>
+                    <Link to="/my-tickets" onClick={() => setMobileMenuOpen(false)} className="flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-red-600 rounded-lg border border-red-500/30 hover:bg-red-50/50 transition-colors">
+                      <ClipboardCheck className="w-3.5 h-3.5 text-red-500" />Create Ticket
+                    </Link>
+                  </div>
 
                   {/* Gold Divider */}
                   <div className="h-px bg-gold/30 my-3" />

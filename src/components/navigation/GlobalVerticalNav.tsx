@@ -136,7 +136,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: "Seller's Guide", icon: FileText, href: '/seller-guide' },
     { label: 'Property Valuation', icon: DollarSign, href: '/sell/valuation' },
     { label: 'Selling Advisory', icon: TrendingUp, href: '/services/selling-advisory' },
-    { label: 'List Your Property for Sale / Rent', icon: ClipboardCheck, href: '/listing-portal' },
+    { label: 'List Your Property for Sale', icon: ClipboardCheck, href: '/listing-portal?type=sale' },
   ],
   rent: [
     { label: 'Apartments for Rent', icon: Building2, href: '/properties?type=apartment&transaction=rent' },
@@ -145,6 +145,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: "Landlord Guide", icon: FileText, href: '/landlord-guide' },
     { label: 'Property Management', icon: Shield, href: '/services/property-management' },
     { label: 'Rental Index', icon: TrendingUp, href: '/rental-index' },
+    { label: 'List Your Property for Rent', icon: ClipboardCheck, href: '/listing-portal?type=rent' },
   ],
   developers: [
     { label: 'All Developers', icon: Building, href: '/developers' },
@@ -608,11 +609,11 @@ export default function GlobalVerticalNav() {
         ? "bg-orange-500 text-white border border-orange-400 font-bold"
         : "bg-orange-500/6 text-orange-500 font-semibold hover:bg-orange-500/12 border border-orange-200/15";
     }
-    // List Your Property — Light Sky Blue
+    // List Your Property — Very Light Blue (distinct from Careers teal)
     if (item.href === '/listing-portal' && item.highlight) {
       return shouldHighlight
-        ? "bg-sky-500 text-white border border-sky-400 font-bold"
-        : "bg-sky-500/6 text-sky-500 font-semibold hover:bg-sky-500/12 border border-sky-200/15";
+        ? "bg-sky-400 text-white border border-sky-300 font-bold"
+        : "bg-sky-400/6 text-sky-400 font-semibold hover:bg-sky-400/12 border border-sky-200/15";
     }
     // Resale Properties — Emerald (softened)
     if (item.href === '/resale-properties') {
@@ -642,7 +643,7 @@ export default function GlobalVerticalNav() {
     if (item.href === '/join') return shouldHighlight ? 'text-white' : 'text-teal-500';
     if (item.href === '/quiz') return shouldHighlight ? 'text-white' : 'text-violet-400';
     if (item.href === '/ai-hub') return shouldHighlight ? 'text-white' : 'text-orange-500';
-    if (item.href === '/listing-portal' && item.highlight) return shouldHighlight ? 'text-white' : 'text-sky-500';
+    if (item.href === '/listing-portal' && item.highlight) return shouldHighlight ? 'text-white' : 'text-sky-400';
     if (item.href === '/resale-properties') return shouldHighlight ? 'text-white' : 'text-emerald-500';
     if (sectionKey === 'MY ACCOUNT') return 'text-gold';
     return shouldHighlight ? "text-gold" : "text-black/60";
@@ -1008,22 +1009,23 @@ export default function GlobalVerticalNav() {
 
       {/* Bottom pinned section — SUPPORT hub */}
       <div className="mt-auto flex-shrink-0">
-        <div className="px-3 py-4 border-t border-red-500/20 space-y-2 bg-gradient-to-b from-[#EDE4D3]/50 to-[#EDE4D3]">
-          <a
-            href="mailto:info@jbjglobal.com"
-            className="flex items-center gap-2.5 text-xs font-bold text-red-600 hover:text-red-700 transition-colors px-3 py-3 rounded-lg border border-red-500/30 hover:border-red-500/50 hover:bg-red-50/50"
-          >
-            <Headphones className="w-4 h-4 text-red-500" />
-            Contact Support
-          </a>
-          <hr className="border-red-500/15" />
-          <Link
-            to="/my-tickets"
-            className="flex items-center gap-2.5 text-xs font-bold text-red-600 hover:text-red-700 transition-colors px-3 py-3 rounded-lg border border-red-500/30 hover:border-red-500/50 hover:bg-red-50/50"
-          >
-            <Ticket className="w-4 h-4 text-red-500" />
-            Create Ticket Support
-          </Link>
+        <div className="px-3 py-4 border-t border-red-500/20 space-y-1.5 bg-gradient-to-b from-[#EDE4D3]/50 to-[#EDE4D3]">
+          <div className="flex items-center gap-1.5">
+            <a
+              href="mailto:info@jbjglobal.com"
+              className="flex-1 flex items-center justify-center gap-2 text-xs font-bold text-red-600 hover:text-red-700 transition-colors px-2 py-2.5 rounded-lg border border-red-500/30 hover:border-red-500/50 hover:bg-red-50/50"
+            >
+              <Headphones className="w-3.5 h-3.5 text-red-500" />
+              Contact Support
+            </a>
+            <Link
+              to="/my-tickets"
+              className="flex-1 flex items-center justify-center gap-2 text-xs font-bold text-red-600 hover:text-red-700 transition-colors px-2 py-2.5 rounded-lg border border-red-500/30 hover:border-red-500/50 hover:bg-red-50/50"
+            >
+              <Ticket className="w-3.5 h-3.5 text-red-500" />
+              Create Ticket
+            </Link>
+          </div>
         </div>
       </div>
     </div>
