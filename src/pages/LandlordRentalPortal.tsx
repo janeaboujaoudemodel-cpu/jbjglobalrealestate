@@ -252,8 +252,8 @@ export default function LandlordRentalPortal() {
                             {step.step}
                           </div>
                           <div>
-                            <h4 className="font-medium text-white">{step.title}</h4>
-                            <p className="text-sm text-zinc-400">{step.description}</p>
+                            <h4 className="font-medium text-black">{step.title}</h4>
+                            <p className="text-sm text-zinc-600">{step.description}</p>
                           </div>
                         </div>
                       ))}
