@@ -79,7 +79,7 @@ const ResaleProperties = () => {
   const { data: listings, isLoading } = useQuery({
     queryKey: ["resale-listings", areaFilter, typeFilter, bedroomFilter, handoverFilter, priceFilter, furnishingFilter],
     queryFn: async () => {
-      let query = supabase
+      let query: any = supabase
         .from("resale_listings")
         .select("*")
         .eq("status", "active")
@@ -95,8 +95,8 @@ const ResaleProperties = () => {
           query = query.eq("bedrooms", beds);
         }
       }
-      if (handoverFilter !== "all") query = query.eq("handover_status", handoverFilter) as any;
-      if (furnishingFilter !== "all") query = query.eq("furnishing", furnishingFilter) as any;
+      if (handoverFilter !== "all") query = query.eq("handover_status", handoverFilter);
+      if (furnishingFilter !== "all") query = query.eq("furnishing", furnishingFilter);
       if (priceFilter !== "all") {
         const [min, max] = priceFilter.split("-").map(Number);
         query = query.gte("asking_price", min).lte("asking_price", max);
