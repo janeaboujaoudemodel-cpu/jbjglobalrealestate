@@ -548,8 +548,8 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
                         className="w-full text-left px-3 py-2 hover:bg-gold/10 border-b border-gold/10 last:border-0 text-sm"
                       >
                         <span className="font-medium text-black">{lead.full_name || "—"}</span>
-                        {lead.phone && <span className="text-zinc-500 ml-2">{lead.phone}</span>}
-                        {lead.email && <span className="text-zinc-400 ml-2 text-xs">{lead.email}</span>}
+                        {lead.phone_raw && <span className="text-zinc-500 ml-2">{lead.phone_raw}</span>}
+                        {lead.email_normalized && <span className="text-zinc-400 ml-2 text-xs">{lead.email_normalized}</span>}
                       </button>
                     ))}
                   </div>
