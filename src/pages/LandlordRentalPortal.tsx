@@ -394,7 +394,7 @@ export default function LandlordRentalPortal() {
                               <div className="flex-1">
                                 <div className="flex items-start justify-between mb-4">
                                   <div>
-                                    <h3 className="text-lg font-semibold text-white">
+                                    <h3 className="text-lg font-semibold text-black">
                                       {listing.property_title}
                                     </h3>
                                     <p className="text-zinc-400 text-sm">
