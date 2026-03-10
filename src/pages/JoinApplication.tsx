@@ -621,7 +621,7 @@ export default function JoinApplication() {
                     </div>
                     <div className="space-y-2">
                       <Label>Total value of deals closed (AED)</Label>
-                      <Input value={formData.totalDealValue} onChange={(e) => setFormData({ ...formData, totalDealValue: e.target.value })} placeholder="e.g. 50,000,000" disabled={!user || loading} className="bg-background" />
+                      <Input value={formData.totalDealValue} onChange={(e) => setFormData({ ...formData, totalDealValue: e.target.value })} placeholder="e.g. 50,000,000" disabled={loading} className="bg-background" />
                     </div>
                   </div>
                   <div className="space-y-2">
