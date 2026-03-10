@@ -288,11 +288,10 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
           .from("crm_leads")
           .insert({
             full_name: newLeadName.trim(),
-            phone: newLeadPhone.trim() || null,
+            phone_raw: newLeadPhone.trim() || null,
             source: "task",
             lead_source_type: "manual",
-            status: "new",
-            user_id: user.id,
+            owner_user_id: user.id,
           } as any)
           .select("id")
           .single();
