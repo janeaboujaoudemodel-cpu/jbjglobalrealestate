@@ -212,6 +212,8 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'AI Calendar & Notes', icon: CalendarClock, href: '/ai-calendar' },
     { label: 'Owner Command Center', icon: Shield, href: '/owner' },
     { label: 'Admin Panel', icon: Shield, href: '/admin' },
+    { label: 'CP Center', icon: Compass, href: '/owner' },
+    { label: 'Inbox Inquiries', icon: Mail, href: '/owner/inbox' },
     { label: 'Listing Admin', icon: FolderOpen, href: '/listing-admin' },
     { label: 'Broker Dashboard', icon: BriefcaseIcon, href: '/broker-dashboard' },
     { label: 'My Assistant', icon: Bot, href: '/founder-assistant' },
