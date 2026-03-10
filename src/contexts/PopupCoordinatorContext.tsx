@@ -117,7 +117,7 @@ export const PopupCoordinatorProvider: React.FC<PopupCoordinatorProviderProps> =
 
   // Track last dismissal time for delay between popups
   const [lastDismissedAt, setLastDismissedAt] = useState<number>(0);
-  const POPUP_DELAY_MS = 3000; // 3 second delay between popups
+  const POPUP_DELAY_MS = 1500; // 1.5 second delay between popups
 
   // Notify that a popup is dismissed
   const notifyDismissed = useCallback((id: PopupId) => {
