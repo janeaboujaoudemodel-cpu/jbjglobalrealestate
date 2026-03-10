@@ -584,10 +584,7 @@ export default function GlobalVerticalNav() {
   const getItemStyle = (item: NavItem, sectionKey?: string) => {
     const isThisMenuOpen = item.megaMenu ? activeMegaMenu === item.megaMenu : false;
     const routeActive = isRouteActive(item.href);
-    // When a mega menu is open, only the item that owns it should highlight
-    const shouldHighlight = activeMegaMenu
-      ? isThisMenuOpen
-      : routeActive;
+    const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
 
     if (item.href === '/join') {
       return shouldHighlight
@@ -598,6 +595,24 @@ export default function GlobalVerticalNav() {
       return shouldHighlight
         ? "bg-purple-600 text-white border border-purple-500 font-bold"
         : "bg-purple-500/15 text-purple-700 font-semibold hover:bg-purple-500/25 border border-purple-500/30";
+    }
+    // AI Tools Hub — Orange
+    if (item.href === '/ai-hub') {
+      return shouldHighlight
+        ? "bg-orange-500 text-white border border-orange-400 font-bold"
+        : "bg-orange-500/15 text-orange-700 font-semibold hover:bg-orange-500/25 border border-orange-400/30";
+    }
+    // List Your Property — Blue
+    if (item.href === '/listing-portal' && item.highlight) {
+      return shouldHighlight
+        ? "bg-blue-600 text-white border border-blue-500 font-bold"
+        : "bg-blue-500/15 text-blue-700 font-semibold hover:bg-blue-500/25 border border-blue-400/30";
+    }
+    // Resale Properties — Emerald
+    if (item.href === '/resale-properties') {
+      return shouldHighlight
+        ? "bg-emerald-600 text-white border border-emerald-500 font-bold"
+        : "bg-emerald-500/15 text-emerald-700 font-semibold hover:bg-emerald-500/25 border border-emerald-400/30";
     }
     if (sectionKey === 'MY ACCOUNT') {
       return shouldHighlight
@@ -620,7 +635,9 @@ export default function GlobalVerticalNav() {
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
     if (item.href === '/join') return shouldHighlight ? 'text-white' : 'text-emerald-500';
     if (item.href === '/quiz') return shouldHighlight ? 'text-white' : 'text-purple-600';
-    // Sidebar items: icons are black/60 (inactive) or gold (active)
+    if (item.href === '/ai-hub') return shouldHighlight ? 'text-white' : 'text-orange-600';
+    if (item.href === '/listing-portal' && item.highlight) return shouldHighlight ? 'text-white' : 'text-blue-600';
+    if (item.href === '/resale-properties') return shouldHighlight ? 'text-white' : 'text-emerald-600';
     if (sectionKey === 'MY ACCOUNT') return 'text-gold';
     return shouldHighlight ? "text-gold" : "text-black/60";
   };
@@ -981,20 +998,20 @@ export default function GlobalVerticalNav() {
 
       {/* Bottom pinned section — SUPPORT hub */}
       <div className="mt-auto flex-shrink-0">
-        <div className="px-3 py-4 border-t border-gold/20 space-y-2 bg-gradient-to-b from-[#EDE4D3]/50 to-[#EDE4D3]">
+        <div className="px-3 py-4 border-t border-red-500/20 space-y-2 bg-gradient-to-b from-[#EDE4D3]/50 to-[#EDE4D3]">
           <a
             href="mailto:info@jbjglobal.com"
-            className="flex items-center gap-2.5 text-xs font-bold text-gold hover:text-gold/80 transition-colors px-3 py-3 rounded-lg border border-gold/20 hover:border-gold/40 hover:bg-gold/5"
+            className="flex items-center gap-2.5 text-xs font-bold text-red-600 hover:text-red-700 transition-colors px-3 py-3 rounded-lg border border-red-500/30 hover:border-red-500/50 hover:bg-red-50/50"
           >
-            <Headphones className="w-4 h-4" />
+            <Headphones className="w-4 h-4 text-red-500" />
             Contact Support
           </a>
-          <hr className="border-gold/15" />
+          <hr className="border-red-500/15" />
           <Link
             to="/my-tickets"
-            className="flex items-center gap-2.5 text-xs font-bold text-gold hover:text-gold/80 transition-colors px-3 py-3 rounded-lg border border-gold/20 hover:border-gold/40 hover:bg-gold/5"
+            className="flex items-center gap-2.5 text-xs font-bold text-red-600 hover:text-red-700 transition-colors px-3 py-3 rounded-lg border border-red-500/30 hover:border-red-500/50 hover:bg-red-50/50"
           >
-            <Ticket className="w-4 h-4" />
+            <Ticket className="w-4 h-4 text-red-500" />
             Create Ticket Support
           </Link>
         </div>

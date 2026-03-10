@@ -14,9 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { getCountryList, getLanguageList } from "@/constants/localeOptions";
 import { SearchableSelect } from "@/components/ui/searchable-select";
-import { PaymentModal } from "@/components/PaymentModal";
-import { useQuizUsage } from "@/hooks/useQuizUsage";
-import { useMembership } from "@/hooks/useMembership";
+// Payment removed — quiz is fully free, no API/credits consumed
 import { FounderContent } from "@/components/FounderContent";
 
 
@@ -156,14 +154,13 @@ const NATIONALITIES = getCountryList();
 const Quiz = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { hasUsedFreeQuiz, markFreeUsed } = useQuizUsage();
-  const { hasActiveMembership } = useMembership();
+  // Quiz is fully free — no usage tracking or membership needed
+  const markFreeUsed = () => {};
   
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [showPayment, setShowPayment] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -716,14 +713,7 @@ const Quiz = () => {
           </div>
         </div>
 
-        {/* Payment Modal */}
-        <PaymentModal
-          open={showPayment}
-          onOpenChange={setShowPayment}
-          onSuccess={handlePaymentSuccess}
-          userInfo={formData}
-          mode="regenerate"
-        />
+        {/* Payment removed — fully free */}
       </section>
     );
   }

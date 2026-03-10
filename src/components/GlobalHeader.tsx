@@ -732,17 +732,17 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 <div className="px-4 pt-4 pb-2">
                   <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-gold mb-2">My Shortcuts</p>
                   <div className="space-y-0.5">
-                    <Link to="/ai-hub" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-black/90 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors">
-                      <Cpu className="w-4 h-4 text-gold" />AI Tools Hub
+                    <Link to="/ai-hub" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-orange-700 hover:text-orange-800 bg-orange-500/10 hover:bg-orange-500/20 rounded-lg transition-colors border border-orange-400/30">
+                      <Cpu className="w-4 h-4 text-orange-600" />AI Tools Hub
                     </Link>
-                    <Link to="/listing-portal" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-black/90 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors">
-                      <ClipboardCheck className="w-4 h-4 text-gold" />List Your Property
+                    <Link to="/listing-portal" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-blue-700 hover:text-blue-800 bg-blue-500/10 hover:bg-blue-500/20 rounded-lg transition-colors border border-blue-400/30">
+                      <ClipboardCheck className="w-4 h-4 text-blue-600" />List Your Property
                     </Link>
-                    <Link to="/join" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition-colors">
+                    <Link to="/join" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-emerald-600 hover:text-emerald-700 bg-emerald-400/10 hover:bg-emerald-400/20 rounded-lg transition-colors border border-emerald-400/20">
                       <GraduationCap className="w-4 h-4 text-emerald-500" />Careers & Join
                     </Link>
-                    <Link to="/resale-properties" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-black/90 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors">
-                      <Home className="w-4 h-4 text-gold" />Resale Properties
+                    <Link to="/resale-properties" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-emerald-700 hover:text-emerald-800 bg-emerald-500/10 hover:bg-emerald-500/20 rounded-lg transition-colors border border-emerald-400/30">
+                      <Home className="w-4 h-4 text-emerald-600" />Resale Properties
                     </Link>
                   </div>
                 </div>

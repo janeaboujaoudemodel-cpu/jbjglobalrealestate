@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { SEOHead } from "@/components/SEOHead";
 import { useAreas } from "@/hooks/useAreas";
-import { Building2, MapPin, BedDouble, Maximize, DollarSign, Search, Calendar, Crown, Bell, Mail, ArrowLeft } from "lucide-react";
+import { Building2, MapPin, BedDouble, Maximize, DollarSign, Search, Calendar, Crown, Bell, Mail, ArrowLeft, Sofa } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -42,6 +42,13 @@ const HANDOVER_OPTIONS = [
   { value: "under_construction", label: "Under Construction" },
 ];
 
+const FURNISHING_OPTIONS = [
+  { value: "all", label: "Any Furnishing" },
+  { value: "furnished", label: "Furnished" },
+  { value: "unfurnished", label: "Unfurnished" },
+  { value: "semi-furnished", label: "Semi-Furnished" },
+];
+
 const PRICE_RANGES = [
   { value: "all", label: "Any Price" },
   { value: "0-1000000", label: "Under AED 1M" },
@@ -57,6 +64,7 @@ const ResaleProperties = () => {
   const [bedroomFilter, setBedroomFilter] = useState<string>("all");
   const [handoverFilter, setHandoverFilter] = useState<string>("all");
   const [priceFilter, setPriceFilter] = useState<string>("all");
+  const [furnishingFilter, setFurnishingFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [subscribeEmail, setSubscribeEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
@@ -69,9 +77,9 @@ const ResaleProperties = () => {
   }, [areas]);
 
   const { data: listings, isLoading } = useQuery({
-    queryKey: ["resale-listings", areaFilter, typeFilter, bedroomFilter, handoverFilter, priceFilter],
+    queryKey: ["resale-listings", areaFilter, typeFilter, bedroomFilter, handoverFilter, priceFilter, furnishingFilter],
     queryFn: async () => {
-      let query = supabase
+      let query: any = supabase
         .from("resale_listings")
         .select("*")
         .eq("status", "active")
@@ -88,6 +96,7 @@ const ResaleProperties = () => {
         }
       }
       if (handoverFilter !== "all") query = query.eq("handover_status", handoverFilter);
+      if (furnishingFilter !== "all") query = query.eq("furnishing", furnishingFilter);
       if (priceFilter !== "all") {
         const [min, max] = priceFilter.split("-").map(Number);
         query = query.gte("asking_price", min).lte("asking_price", max);
@@ -225,8 +234,21 @@ const ResaleProperties = () => {
                 </SelectContent>
               </Select>
 
+              {/* Furnishing */}
+              <Select value={furnishingFilter} onValueChange={setFurnishingFilter}>
+                <SelectTrigger className="w-[160px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
+                  <Sofa className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
+                  <span className="truncate text-left flex-1">{FURNISHING_OPTIONS.find(f => f.value === furnishingFilter)?.label || "Any Furnishing"}</span>
+                </SelectTrigger>
+                <SelectContent>
+                  {FURNISHING_OPTIONS.map((f) => (
+                    <SelectItem key={f.value} value={f.value}>{f.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
               {/* Clear */}
-              {(areaFilter !== "all" || typeFilter !== "all" || bedroomFilter !== "all" || priceFilter !== "all" || handoverFilter !== "all" || searchQuery) && (
+              {(areaFilter !== "all" || typeFilter !== "all" || bedroomFilter !== "all" || priceFilter !== "all" || handoverFilter !== "all" || furnishingFilter !== "all" || searchQuery) && (
                 <Button
                   variant="outline"
                   size="sm"
@@ -236,6 +258,7 @@ const ResaleProperties = () => {
                     setBedroomFilter("all");
                     setPriceFilter("all");
                     setHandoverFilter("all");
+                    setFurnishingFilter("all");
                     setSearchQuery("");
                   }}
                   className="h-11 px-4 border-gold/40 text-black hover:bg-gold/10 rounded-xl"

@@ -1,4 +1,6 @@
-import { useEffect, useState, lazy, Suspense } from "react";
+import { useEffect, useState, lazy, Suspense, useCallback } from "react";
+import { toast } from "sonner";
+import { Monitor, X } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import {
   hasTransparentHeader,
@@ -201,8 +203,38 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     };
   }, [showLayoutDebug, location.pathname]);
 
+  // Mobile desktop recommendation banner
+  const [showDesktopBanner, setShowDesktopBanner] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return !sessionStorage.getItem('jj_desktop_banner_dismissed');
+  });
+
+  useEffect(() => {
+    if (isMobile && showDesktopBanner) {
+      toast("For the best experience, we recommend using a desktop browser.", {
+        icon: <Monitor className="w-4 h-4 text-gold" />,
+        duration: 6000,
+      });
+    }
+  }, [isMobile, showDesktopBanner]);
+
+  const dismissDesktopBanner = useCallback(() => {
+    setShowDesktopBanner(false);
+    try { sessionStorage.setItem('jj_desktop_banner_dismissed', '1'); } catch {}
+  }, []);
+
   return (
     <div className="min-h-screen bg-black">
+      {/* Mobile Desktop Banner */}
+      {isMobile && showDesktopBanner && (
+        <div className="fixed top-0 left-0 right-0 z-[10001] bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] border-b border-gold/30 px-4 py-2.5 flex items-center gap-3 shadow-md">
+          <Monitor className="w-4 h-4 text-gold flex-shrink-0" />
+          <p className="text-xs text-black/80 flex-1">For the best experience on our full portal, use a desktop browser.</p>
+          <button onClick={dismissDesktopBanner} className="w-5 h-5 rounded-full bg-gold/10 flex items-center justify-center flex-shrink-0">
+            <X className="w-3 h-3 text-gold" />
+          </button>
+        </div>
+      )}
       {/* Defer non-critical shell components */}
       {shellReady && (
         <Suspense fallback={null}>
