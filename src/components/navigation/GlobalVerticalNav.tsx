@@ -306,10 +306,10 @@ const SHORTCUT_GROUPS: ShortcutGroup[] = [
     items: [
       { label: 'My Tasks', icon: ListChecks, href: '/my-dashboard#tasks' },
       { label: 'Notifications', icon: Bell, href: '/my-dashboard#notifications' },
-      { label: 'Alerts', icon: Bell, href: '/my-dashboard#alerts' },
+      { label: 'Alerts', icon: Zap, href: '/my-dashboard#alerts' },
       { label: 'Books', icon: BookMarked, href: '/education-hub' },
       { label: 'Favorites', icon: Heart, href: '/favorites' },
-      { label: 'Shortlisted', icon: ListChecks, href: '/favorites?tab=shortlist' },
+      { label: 'Shortlisted', icon: Star, href: '/favorites?tab=shortlist' },
     ],
   },
   {
