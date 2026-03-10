@@ -476,7 +476,7 @@ export default function GlobalVerticalNav() {
     if (item.highlight) {
       return shouldHighlight
         ? "bg-gradient-to-r from-gold/25 to-gold/15 text-black border border-gold/50 font-bold"
-        : "text-gold font-semibold hover:bg-gold/10";
+        : "text-black font-semibold hover:bg-gold/10";
     }
     return shouldHighlight
       ? "bg-gradient-to-r from-gold/20 to-gold/10 text-black border border-gold/40 font-bold"
