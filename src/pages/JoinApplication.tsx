@@ -395,7 +395,7 @@ export default function JoinApplication() {
   return (
     <div className="min-h-screen bg-black">
       {/* Full-width champagne section */}
-      <section className="jj-section-champagne py-16 px-4">
+      <section className="jj-section-champagne py-16 px-4 pt-20 lg:pt-16">
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-black mb-2">
