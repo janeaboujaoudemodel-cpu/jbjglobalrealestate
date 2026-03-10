@@ -407,19 +407,19 @@ export default function LandlordRentalPortal() {
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                                   <div>
                                     <p className="text-xs text-zinc-500">Type</p>
-                                    <p className="text-zinc-300 capitalize">{listing.property_type}</p>
+                                    <p className="text-black capitalize">{listing.property_type}</p>
                                   </div>
                                   <div>
                                     <p className="text-xs text-zinc-500">Bedrooms</p>
-                                    <p className="text-zinc-300">{listing.bedrooms || 'N/A'}</p>
+                                    <p className="text-black">{listing.bedrooms || 'N/A'}</p>
                                   </div>
                                   <div>
                                     <p className="text-xs text-zinc-500">Annual Rent</p>
-                                    <p className="text-zinc-300">AED {listing.annual_rent?.toLocaleString()}</p>
+                                    <p className="text-black">AED {listing.annual_rent?.toLocaleString()}</p>
                                   </div>
                                   <div>
                                     <p className="text-xs text-zinc-500">Submitted</p>
-                                    <p className="text-zinc-300">{format(new Date(listing.created_at), 'PP')}</p>
+                                    <p className="text-black">{format(new Date(listing.created_at), 'PP')}</p>
                                   </div>
                                 </div>
 
