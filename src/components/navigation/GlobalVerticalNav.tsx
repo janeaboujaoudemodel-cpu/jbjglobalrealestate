@@ -782,36 +782,35 @@ export default function GlobalVerticalNav() {
         })}
       </nav>
 
-      {/* Utility Section */}
+      {/* Utility Section — Search + Language + Currency in one row */}
       <div className="px-3 py-2 border-t border-gold/20">
-        <button
-          onClick={() => setSearchOpen(true)}
-          className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold text-gold hover:bg-gold/10 transition-all w-full group"
-        >
-          <Search className="w-4 h-4 text-gold flex-shrink-0" />
-          <span className="whitespace-nowrap">Quick Search</span>
-          <span className="ml-auto text-[9px] bg-gold/15 text-gold border border-gold/30 rounded-full px-1.5 py-0.5 font-bold whitespace-nowrap">⌘K</span>
-        </button>
-        <div className="flex items-center gap-1 px-1 mt-1">
+        <div className="flex items-center gap-1">
+          <button
+            onClick={() => setSearchOpen(true)}
+            className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg text-sm font-semibold text-gold hover:bg-gold/10 transition-all group flex-1 min-w-0"
+          >
+            <Search className="w-4 h-4 text-gold flex-shrink-0" />
+            <span className="text-[10px] bg-gold/15 text-gold border border-gold/30 rounded px-1 py-0.5 font-bold">⌘K</span>
+          </button>
           <LanguageSwitcher variant="icon-only" />
           <CurrencySwitcher variant="icon-only" />
         </div>
       </div>
 
-      {/* Bottom */}
-      <div className="p-4 border-t border-gold/20 space-y-2">
+      {/* Bottom — always visible, compact */}
+      <div className="px-3 py-2.5 border-t border-gold/20 space-y-1.5 flex-shrink-0">
         <a
           href="mailto:info@jbjglobal.com"
-          className="flex items-center gap-2 text-sm font-bold text-gold hover:text-gold/80 transition-colors"
+          className="flex items-center gap-2 text-xs font-bold text-gold hover:text-gold/80 transition-colors"
         >
-          <Headphones className="w-4 h-4" />
+          <Headphones className="w-3.5 h-3.5" />
           Contact Support
         </a>
         <Link
           to="/my-tickets"
-          className="flex items-center gap-2 text-sm font-bold text-gold hover:text-gold/80 transition-colors"
+          className="flex items-center gap-2 text-xs font-bold text-gold hover:text-gold/80 transition-colors"
         >
-          <Ticket className="w-4 h-4" />
+          <Ticket className="w-3.5 h-3.5" />
           Create Ticket Support
         </Link>
       </div>
