@@ -85,8 +85,8 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
   // Create popup content
   const createPopupContent = useCallback((project: DeveloperProject) => {
     const imageHtml = project.cover_image_url 
-      ? `<div style="height: 112px; margin: -12px -12px 8px -12px; overflow: hidden; border-radius: 8px 8px 0 0;">
-           <img src="${project.cover_image_url}" alt="${project.name}" style="width: 100%; height: 100%; object-fit: cover;" />
+      ? `<div style="height: 128px; overflow: hidden;">
+           <img src="${project.cover_image_url}" alt="${project.name}" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
          </div>`
       : '';
     
@@ -95,15 +95,17 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
       : '';
 
     return `
-      <div style="width: 224px; padding: 0;">
+      <div style="width: 240px; padding: 0;">
         ${imageHtml}
-        <h4 style="font-weight: 600; font-size: 14px; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${project.name}</h4>
-        ${locationHtml}
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-          <span style="font-weight: 700; color: #d4af37; font-size: 14px;">${formatPrice(project.price_from)}</span>
-          <a href="/project/${project.slug}" style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 12px; text-decoration: none; color: #333;">
-            View →
-          </a>
+        <div style="padding: 12px;">
+          <h4 style="font-weight: 600; font-size: 14px; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${project.name}</h4>
+          ${locationHtml}
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <span style="font-weight: 700; color: #d4af37; font-size: 14px;">${formatPrice(project.price_from)}</span>
+            <a href="/project/${project.slug}" style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 12px; text-decoration: none; color: #333;">
+              View →
+            </a>
+          </div>
         </div>
       </div>
     `;

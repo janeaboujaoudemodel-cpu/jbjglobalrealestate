@@ -558,14 +558,15 @@ const PropertyMap = () => {
                 <Popup>
                   <div className="w-64 p-0">
                     {project.images?.[0] && (
-                      <div className="relative h-32 -mx-3 -mt-3 mb-2">
+                      <div className="relative h-32">
                         <SafeImage
                           src={project.images[0].image_url}
                           alt={project.name}
-                          className="w-full h-full object-cover rounded-t-lg"
+                          className="w-full h-full object-cover"
                         />
                       </div>
                     )}
+                    <div className="p-3">
                     <h3 className="font-semibold text-sm mb-1">{project.name}</h3>
                     <p className="text-xs text-muted-foreground mb-2">
                       {project.developer?.name} • {project.community?.name || project.location}
@@ -579,6 +580,7 @@ const PropertyMap = () => {
                           {t.view} <ChevronRight className="h-3 w-3 ml-1" />
                         </Button>
                       </Link>
+                    </div>
                     </div>
                   </div>
                 </Popup>

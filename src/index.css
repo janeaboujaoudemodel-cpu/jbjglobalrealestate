@@ -1841,6 +1841,24 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
   touch-action: manipulation;
 }
 
+/* Leaflet popup edge-to-edge images — remove default padding */
+.leaflet-popup-content {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: auto !important;
+}
+
+.leaflet-popup-content-wrapper {
+  padding: 0 !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+}
+
+/* Ensure popups render above map nav controls */
+.leaflet-popup {
+  z-index: 1000 !important;
+}
+
 /* ============================================================
  * FOLDABLE / FLIP PHONE ADAPTATION
  * Ensures content adapts when a foldable phone opens/closes
