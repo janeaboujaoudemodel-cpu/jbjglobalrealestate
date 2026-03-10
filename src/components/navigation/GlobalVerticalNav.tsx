@@ -510,7 +510,7 @@ export default function GlobalVerticalNav() {
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
     if (item.href === '/join') return shouldHighlight ? 'text-white' : 'text-emerald-600';
     if (item.href === '/quiz') return shouldHighlight ? 'text-white' : 'text-purple-600';
-    if (sectionKey === 'MY ACCOUNT') return shouldHighlight ? 'text-white' : 'text-blue-600';
+    if (sectionKey === 'MY ACCOUNT') return shouldHighlight ? 'text-gold' : 'text-black/60';
     return shouldHighlight ? "text-gold" : "text-black/60";
   };
 
