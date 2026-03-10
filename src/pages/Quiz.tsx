@@ -154,14 +154,13 @@ const NATIONALITIES = getCountryList();
 const Quiz = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { hasUsedFreeQuiz, markFreeUsed } = useQuizUsage();
-  const { hasActiveMembership } = useMembership();
+  // Quiz is fully free — no usage tracking or membership needed
+  const markFreeUsed = () => {};
   
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [showPayment, setShowPayment] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
