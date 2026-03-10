@@ -17,7 +17,7 @@ const SOCIAL_LINKS = {
 
 export const SocialLinks = React.forwardRef<HTMLDivElement, SocialLinksProps>(({
   className = '',
-  iconClassName = 'w-5 h-5',
+  iconClassName = 'w-7 h-7',
   variant = 'default'
 }, ref) => {
   const getColorClasses = () => {
