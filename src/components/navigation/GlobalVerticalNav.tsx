@@ -122,6 +122,8 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Compare", href: "/compare", icon: GitCompare },
   { label: "Mortgage Calculator", href: "/mortgage-calculator", icon: Calculator },
   { label: "My Dashboard", href: "/my-dashboard", icon: User },
+  { label: "My Profile", href: "/profile", icon: User },
+  { label: "Settings", href: "/profile?tab=settings", icon: Settings },
 ];
 
 /* ─── MEGA MENU LINK SETS ─── */
