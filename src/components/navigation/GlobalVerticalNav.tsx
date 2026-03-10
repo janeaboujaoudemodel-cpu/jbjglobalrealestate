@@ -136,7 +136,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: "Seller's Guide", icon: FileText, href: '/seller-guide' },
     { label: 'Property Valuation', icon: DollarSign, href: '/sell/valuation' },
     { label: 'Selling Advisory', icon: TrendingUp, href: '/services/selling-advisory' },
-    { label: 'List Your Property for Sale / Rent', icon: ClipboardCheck, href: '/listing-portal' },
+    { label: 'List Your Property for Sale', icon: ClipboardCheck, href: '/listing-portal?type=sale' },
   ],
   rent: [
     { label: 'Apartments for Rent', icon: Building2, href: '/properties?type=apartment&transaction=rent' },
@@ -145,6 +145,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: "Landlord Guide", icon: FileText, href: '/landlord-guide' },
     { label: 'Property Management', icon: Shield, href: '/services/property-management' },
     { label: 'Rental Index', icon: TrendingUp, href: '/rental-index' },
+    { label: 'List Your Property for Rent', icon: ClipboardCheck, href: '/listing-portal?type=rent' },
   ],
   developers: [
     { label: 'All Developers', icon: Building, href: '/developers' },
