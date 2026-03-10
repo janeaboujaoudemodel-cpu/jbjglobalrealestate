@@ -55,7 +55,7 @@ const NAV_ITEMS: NavItem[] = [
   // ── Highlighted Hubs ──
   { label: "AI Tools Hub", href: "/ai-hub", icon: Cpu, highlight: true, megaMenu: 'ai-tools' },
   { label: "AI Home Finder", href: "/quiz", icon: Home, highlight: true },
-  { label: "Listing Portal", href: "/listing-portal", icon: ClipboardCheck, highlight: true },
+  { label: "List Your Property", href: "/listing-portal", icon: ClipboardCheck, highlight: true },
   { label: "Careers & Join", href: "/join", icon: GraduationCap, highlight: true },
   { label: "Resale Properties", href: "/resale-properties", icon: DollarSign, highlight: true },
 
@@ -63,7 +63,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Buy / Off-Plan", href: "/properties", icon: Building2, section: "PROPERTIES", megaMenu: 'buy' },
   { label: "Sell", href: "/sell", icon: Tag, megaMenu: 'sell' },
   { label: "Rent", href: "/rent", icon: Key, megaMenu: 'rent' },
-  { label: "List Property", href: "/listing-portal", icon: PlusCircle },
+  { label: "List for Sale / Rent", href: "/listing-portal", icon: PlusCircle },
   { label: "Developers", href: "/developers", icon: Building, megaMenu: 'developers' },
   { label: "Areas", href: "/areas", icon: MapPin, megaMenu: 'areas' },
   { label: "Map", href: "/map", icon: MapPin },
@@ -136,7 +136,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: "Seller's Guide", icon: FileText, href: '/seller-guide' },
     { label: 'Property Valuation', icon: DollarSign, href: '/sell/valuation' },
     { label: 'Selling Advisory', icon: TrendingUp, href: '/services/selling-advisory' },
-    { label: 'Listing Portal', icon: ClipboardCheck, href: '/listing-portal' },
+    { label: 'List Your Property for Sale / Rent', icon: ClipboardCheck, href: '/listing-portal' },
   ],
   rent: [
     { label: 'Apartments for Rent', icon: Building2, href: '/properties?type=apartment&transaction=rent' },
@@ -621,7 +621,7 @@ export default function GlobalVerticalNav() {
     if (item.href === '/join') return shouldHighlight ? 'text-white' : 'text-emerald-500';
     if (item.href === '/quiz') return shouldHighlight ? 'text-white' : 'text-purple-600';
     // Sidebar items: icons are black/60 (inactive) or gold (active)
-    if (sectionKey === 'MY ACCOUNT') return shouldHighlight ? 'text-gold' : 'text-black/60';
+    if (sectionKey === 'MY ACCOUNT') return 'text-gold';
     return shouldHighlight ? "text-gold" : "text-black/60";
   };
 

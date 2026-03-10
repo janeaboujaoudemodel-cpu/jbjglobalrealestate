@@ -409,7 +409,7 @@ export default function StampGalleryPage() {
     <div className="min-h-screen bg-[hsl(var(--pearl-1))]">
 
       {/* ── Sticky header ─────────────────────────────────────────────────── */}
-      <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-sm border-b border-[hsl(var(--border))] pt-24 sm:pt-28 lg:pt-32">
+      <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-sm border-b border-[hsl(var(--border))]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3 flex-wrap">
           <div className="flex items-center gap-3 min-w-0">
             <Button variant="ghost" size="sm" onClick={() => navigate(`/toolkit/stamp-generator/${projectId}/generate`)} className="gap-1.5 shrink-0">
@@ -622,7 +622,7 @@ export default function StampGalleryPage() {
                 >
                   {/* Stamp preview */}
                   <div
-                    className="relative aspect-square bg-gradient-to-br from-[hsl(var(--pearl-1))] to-[hsl(var(--champagne-1)/0.5)] flex items-center justify-center overflow-hidden"
+                    className="relative aspect-square bg-gradient-to-br from-[hsl(var(--pearl-1))] to-[hsl(var(--champagne-1)/0.5)] flex items-center justify-center overflow-hidden rounded-full mx-auto w-[85%]"
                     style={{ cursor: batchMode ? (isMaxed ? 'not-allowed' : 'pointer') : 'zoom-in' }}
                     onClick={() => {
                       if (batchMode) { if (!isMaxed || isSelected) toggleSelect(design.id); }

@@ -394,7 +394,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
   // Mobile menu links - Sell section
   const mobileSellLinks = [
-    { href: "/listing-portal", label: "Listing Portal", icon: ClipboardCheck },
+    { href: "/listing-portal", label: "List Your Property", icon: ClipboardCheck },
     { href: "/seller-guide", label: "Seller's Guide", icon: FileText },
     { href: "/sell/valuation", label: "Property Valuation", icon: BarChart3 },
     { href: "/services/selling-advisory", label: "Selling Advisory", icon: Briefcase },
@@ -444,6 +444,21 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     { href: "/faq", label: "FAQ", icon: ClipboardCheck },
   ];
 
+  // Mobile menu - Guides (mirrors desktop GUIDES section)
+  const mobileGuideLinks = [
+    { href: "/guides", label: "Guides Library", icon: BookOpen },
+    { href: "/buyer-guide", label: "Buyer's Guide", icon: FileText },
+    { href: "/seller-guide", label: "Seller's Guide", icon: FileText },
+    { href: "/rent-guide", label: "Rental Guide", icon: FileText },
+    { href: "/tenant-guide", label: "Tenant Guide", icon: FileText },
+    { href: "/landlord-guide", label: "Landlord Guide", icon: FileText },
+    { href: "/investor-education", label: "Investor Education", icon: GraduationCap },
+    { href: "/broker-education", label: "Broker Education", icon: GraduationCap },
+    { href: "/guides/golden-visa-uae", label: "Golden Visa Guide", icon: Award },
+    { href: "/education-hub", label: "Books Library", icon: BookOpen },
+    { href: "/faq", label: "FAQ Hub", icon: HelpCircle },
+  ];
+
   // Mobile menu - Partners & Tools
   const mobilePartnerLinks = [
     { href: "/partners", label: "Partners Hub", icon: Users },
@@ -456,7 +471,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     { href: "/map", label: "Property Map", icon: MapPin },
     { href: "/compare", label: "Compare Properties", icon: ClipboardCheck },
     { href: "/landlord-portal", label: "Landlord Portal", icon: Building2 },
-    { href: "/listing-portal", label: "Listing Portal", icon: ClipboardCheck },
+    { href: "/listing-portal", label: "List Your Property", icon: ClipboardCheck },
   ];
 
   // Mobile menu - Creative Toolkit
@@ -721,7 +736,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                       <Cpu className="w-4 h-4 text-gold" />AI Tools Hub
                     </Link>
                     <Link to="/listing-portal" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-black/90 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors">
-                      <ClipboardCheck className="w-4 h-4 text-gold" />Listing Portal
+                      <ClipboardCheck className="w-4 h-4 text-gold" />List Your Property
                     </Link>
                     <Link to="/join" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition-colors">
                       <GraduationCap className="w-4 h-4 text-emerald-500" />Careers & Join
@@ -738,7 +753,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 <nav className="flex flex-col px-4 py-2">
                   {/* PROPERTIES */}
                   <Collapsible>
-                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-gold hover:bg-gold/5 rounded-lg transition-colors">
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-gold hover:bg-gold/5 rounded-lg transition-colors border border-transparent hover:border-gold/20">
                       <span>Properties</span>
                       <ChevronDown className="w-4 h-4 text-gold transition-transform duration-200" />
                     </CollapsibleTrigger>
@@ -784,7 +799,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                   {/* TOOLS */}
                   <Collapsible>
-                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-gold hover:bg-gold/5 rounded-lg transition-colors">
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-gold hover:bg-gold/5 rounded-lg transition-colors border border-transparent hover:border-gold/20">
                       <span>Tools</span>
                       <ChevronDown className="w-4 h-4 text-gold transition-transform duration-200" />
                     </CollapsibleTrigger>
@@ -803,7 +818,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                   {/* INSIGHTS */}
                   <Collapsible>
-                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-gold hover:bg-gold/5 rounded-lg transition-colors">
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-gold hover:bg-gold/5 rounded-lg transition-colors border border-transparent hover:border-gold/20">
                       <span>Insights</span>
                       <ChevronDown className="w-4 h-4 text-gold transition-transform duration-200" />
                     </CollapsibleTrigger>
@@ -820,9 +835,28 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                   <div className="h-px bg-gold/20 my-1" />
 
+                  {/* GUIDES */}
+                  <Collapsible>
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-gold hover:bg-gold/5 rounded-lg transition-colors border border-transparent hover:border-gold/20">
+                      <span>Guides</span>
+                      <ChevronDown className="w-4 h-4 text-gold transition-transform duration-200" />
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <div className="ml-3 pl-3 border-l-2 border-gold/20 space-y-0.5 pb-1">
+                        {mobileGuideLinks.map((link) => (
+                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors">
+                            <link.icon className="w-4 h-4 text-gold" />{link.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </CollapsibleContent>
+                  </Collapsible>
+
+                  <div className="h-px bg-gold/20 my-1" />
+
                   {/* SERVICES */}
                   <Collapsible>
-                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-gold hover:bg-gold/5 rounded-lg transition-colors">
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-gold hover:bg-gold/5 rounded-lg transition-colors border border-transparent hover:border-gold/20">
                       <span>Services</span>
                       <ChevronDown className="w-4 h-4 text-gold transition-transform duration-200" />
                     </CollapsibleTrigger>
@@ -847,7 +881,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                   {/* COMPANY */}
                   <Collapsible>
-                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-gold hover:bg-gold/5 rounded-lg transition-colors">
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-gold hover:bg-gold/5 rounded-lg transition-colors border border-transparent hover:border-gold/20">
                       <span>Company</span>
                       <ChevronDown className="w-4 h-4 text-gold transition-transform duration-200" />
                     </CollapsibleTrigger>
@@ -866,7 +900,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                   {/* MY ACCOUNT */}
                   <Collapsible>
-                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-gold hover:bg-gold/5 rounded-lg transition-colors">
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-gold hover:bg-gold/5 rounded-lg transition-colors border border-transparent hover:border-gold/20">
                       <span>My Account</span>
                       <ChevronDown className="w-4 h-4 text-gold transition-transform duration-200" />
                     </CollapsibleTrigger>
@@ -917,7 +951,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                   {/* LEGAL & TRUST */}
                   <Collapsible>
-                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-gold hover:bg-gold/5 rounded-lg transition-colors">
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-gold hover:bg-gold/5 rounded-lg transition-colors border border-transparent hover:border-gold/20">
                       <span>Legal & Trust</span>
                       <ChevronDown className="w-4 h-4 text-gold transition-transform duration-200" />
                     </CollapsibleTrigger>

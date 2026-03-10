@@ -24,7 +24,7 @@ export default function SignatureStudio() {
         </div>
       </div>
 
-      <div className="mx-3 md:mx-4 lg:mx-6 mb-6 mt-0 rounded-b-2xl rounded-t-none border border-t-0 border-border bg-[linear-gradient(135deg,hsl(var(--champagne-1)),hsl(var(--champagne-2)),hsl(var(--champagne-3)))]">
+      <div className="mx-0 mb-0 mt-0 rounded-none border-0 bg-[linear-gradient(135deg,hsl(var(--champagne-1)),hsl(var(--champagne-2)),hsl(var(--champagne-3)))]">
         <div className="max-w-4xl mx-auto p-6 space-y-6">
           <p className="text-muted-foreground">Create, save, and reuse your professional signatures</p>
 

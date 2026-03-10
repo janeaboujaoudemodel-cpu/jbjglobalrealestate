@@ -15,7 +15,10 @@ import {
   Clock,
   Zap,
   FileText,
-  Target
+  Target,
+  Globe,
+  Monitor,
+  Smartphone
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -26,7 +29,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import { format, subDays, startOfDay, endOfDay } from 'date-fns';
+import { format, subDays, startOfDay, endOfDay, eachDayOfInterval } from 'date-fns';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import Footer from '@/components/Footer';
 
 interface AnalyticsStat {
@@ -54,12 +58,20 @@ interface ToolUsage {
   unique_users: number;
 }
 
+interface DailyVisitorData {
+  date: string;
+  visitors: number;
+  sessions: number;
+  pageViews: number;
+}
+
 const JBJAnalyticsDashboard: React.FC = () => {
   const { user, isOwner, loading } = useAuth();
   const navigate = useNavigate();
   const [stats, setStats] = useState<AnalyticsStat[]>([]);
   const [issueReports, setIssueReports] = useState<IssueReport[]>([]);
   const [toolUsage, setToolUsage] = useState<ToolUsage[]>([]);
+  const [dailyVisitors, setDailyVisitors] = useState<DailyVisitorData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [dateRange, setDateRange] = useState<'today' | 'week' | 'month'>('week');
 
@@ -191,6 +203,45 @@ const JBJAnalyticsDashboard: React.FC = () => {
         { label: 'Conversion Rate', value: uniqueUsers > 0 ? Math.round((totalInteractions / uniqueUsers) * 10) : 0, change: calculatePercentChange(uniqueUsers > 0 ? (totalInteractions / uniqueUsers) * 10 : 0, prevUniqueUsers > 0 ? (prevTotalInteractions / prevUniqueUsers) * 10 : 0), icon: Target },
       ]);
 
+      // Fetch daily visitor data from visitor_events
+      const days = dateRange === 'today' ? 1 : dateRange === 'week' ? 7 : 30;
+      const interval = eachDayOfInterval({ start: subDays(new Date(), days - 1), end: new Date() });
+      
+      const { data: visitorData } = await supabase
+        .from('visitor_events')
+        .select('created_at, session_id, event_type')
+        .gte('created_at', startOfDay(subDays(new Date(), days - 1)).toISOString())
+        .lte('created_at', endOfDay(new Date()).toISOString());
+
+      const dailyMap = new Map<string, { visitors: Set<string>; sessions: Set<string>; pageViews: number }>();
+      interval.forEach(day => {
+        dailyMap.set(format(day, 'yyyy-MM-dd'), { visitors: new Set(), sessions: new Set(), pageViews: 0 });
+      });
+
+      visitorData?.forEach(ev => {
+        const dayKey = format(new Date(ev.created_at), 'yyyy-MM-dd');
+        const bucket = dailyMap.get(dayKey);
+        if (bucket) {
+          if (ev.session_id) {
+            bucket.sessions.add(ev.session_id);
+            bucket.visitors.add(ev.session_id);
+          }
+          if (ev.event_type === 'page_view') bucket.pageViews++;
+        }
+      });
+
+      const dailyChart: DailyVisitorData[] = interval.map(day => {
+        const key = format(day, 'yyyy-MM-dd');
+        const bucket = dailyMap.get(key)!;
+        return {
+          date: format(day, dateRange === 'month' ? 'MMM d' : 'EEE'),
+          visitors: bucket.visitors.size,
+          sessions: bucket.sessions.size,
+          pageViews: bucket.pageViews,
+        };
+      });
+      setDailyVisitors(dailyChart);
+
     } catch (error) {
       console.error('Failed to fetch analytics:', error);
       toast.error('Failed to load analytics');
@@ -309,8 +360,12 @@ const JBJAnalyticsDashboard: React.FC = () => {
           ))}
         </div>
 
-        <Tabs defaultValue="usage" className="space-y-6">
+        <Tabs defaultValue="visitors" className="space-y-6">
           <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30">
+            <TabsTrigger value="visitors" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border data-[state=active]:border-gold/40 text-black">
+              <Users className="w-4 h-4 mr-2" />
+              Daily Visitors
+            </TabsTrigger>
             <TabsTrigger value="usage" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border data-[state=active]:border-gold/40 text-black">
               <BarChart3 className="w-4 h-4 mr-2" />
               Tool Usage
@@ -320,6 +375,78 @@ const JBJAnalyticsDashboard: React.FC = () => {
               Issue Reports
             </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="visitors">
+            <div className="space-y-6">
+              {/* Daily Visitors Chart */}
+              <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
+                <CardHeader>
+                  <CardTitle className="text-black flex items-center gap-2">
+                    <Users className="w-5 h-5 text-gold" />
+                    Daily Visitors Trend
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {dailyVisitors.length === 0 ? (
+                    <p className="text-zinc-500 text-center py-8">No visitor data for this period</p>
+                  ) : (
+                    <ResponsiveContainer width="100%" height={320}>
+                      <AreaChart data={dailyVisitors}>
+                        <defs>
+                          <linearGradient id="visitorsGradient" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="#C9A84C" stopOpacity={0.3} />
+                            <stop offset="95%" stopColor="#C9A84C" stopOpacity={0} />
+                          </linearGradient>
+                        </defs>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#C9A84C20" />
+                        <XAxis dataKey="date" tick={{ fill: '#666', fontSize: 12 }} />
+                        <YAxis tick={{ fill: '#666', fontSize: 12 }} />
+                        <RechartsTooltip
+                          contentStyle={{ backgroundColor: '#FDFBF7', border: '1px solid #C9A84C40', borderRadius: 12, fontSize: 13 }}
+                          labelStyle={{ fontWeight: 600, color: '#000' }}
+                        />
+                        <Area type="monotone" dataKey="visitors" stroke="#C9A84C" strokeWidth={2} fill="url(#visitorsGradient)" name="Unique Visitors" />
+                        <Area type="monotone" dataKey="pageViews" stroke="#8B7355" strokeWidth={1.5} fill="transparent" name="Page Views" strokeDasharray="4 4" />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Summary Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+                  <CardContent className="p-5 text-center">
+                    <div className="w-10 h-10 rounded-full bg-gold/15 flex items-center justify-center mx-auto mb-2">
+                      <Users className="w-5 h-5 text-gold" />
+                    </div>
+                    <p className="text-2xl font-bold text-black">{dailyVisitors.reduce((s, d) => s + d.visitors, 0)}</p>
+                    <p className="text-xs text-zinc-500">Total Unique Visitors</p>
+                  </CardContent>
+                </Card>
+                <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+                  <CardContent className="p-5 text-center">
+                    <div className="w-10 h-10 rounded-full bg-gold/15 flex items-center justify-center mx-auto mb-2">
+                      <Eye className="w-5 h-5 text-gold" />
+                    </div>
+                    <p className="text-2xl font-bold text-black">{dailyVisitors.reduce((s, d) => s + d.pageViews, 0)}</p>
+                    <p className="text-xs text-zinc-500">Total Page Views</p>
+                  </CardContent>
+                </Card>
+                <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+                  <CardContent className="p-5 text-center">
+                    <div className="w-10 h-10 rounded-full bg-gold/15 flex items-center justify-center mx-auto mb-2">
+                      <Activity className="w-5 h-5 text-gold" />
+                    </div>
+                    <p className="text-2xl font-bold text-black">
+                      {dailyVisitors.length > 0 ? Math.round(dailyVisitors.reduce((s, d) => s + d.visitors, 0) / dailyVisitors.length) : 0}
+                    </p>
+                    <p className="text-xs text-zinc-500">Avg. Daily Visitors</p>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </TabsContent>
 
           <TabsContent value="usage">
             <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
