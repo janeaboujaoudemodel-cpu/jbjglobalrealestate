@@ -861,8 +861,6 @@ export default function GlobalVerticalNav() {
         </div>
       </div>
 
-      {/* Utility Bar — moved under monogram */}
-      <VerticalNavUtilityBar onSearchOpen={() => setSearchOpen(true)} />
 
       {/* Scrollable area: shortcuts + hubs + sections */}
       <nav
