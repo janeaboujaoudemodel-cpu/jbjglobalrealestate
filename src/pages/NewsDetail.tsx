@@ -422,7 +422,7 @@ const NewsDetail = () => {
               <div className="bg-white/60 rounded-xl p-4 border border-gold/10">
                 <div className="flex items-center gap-2 mb-3">
                   <MapPin className="w-4 h-4 text-gold" />
-                  <span className="text-xs font-semibold text-black uppercase tracking-wide">Top 5 Areas by Transaction Volume</span>
+                  <span className="text-xs font-semibold text-black uppercase tracking-wide">Top 10 Areas by Transaction Volume</span>
                 </div>
                 <div className="space-y-2">
                   {topAreas2026Data.slice(0, 5).map((area, i) => (
