@@ -8,15 +8,20 @@ import {
   Phone, Languages, FileSearch, FilePlus, UserCheck, CalendarClock, Mail,
   Share2, PenTool, Megaphone, GraduationCap, Briefcase as BriefcaseIcon,
   LayoutDashboard, FolderOpen, ListChecks, Bell, Zap, Menu, X,
+  Scale, Eye, Ticket, Compass, HandCoins, Handshake, Lock, Accessibility,
+  ShieldCheck, Newspaper, BookMarked, Landmark, Camera,
 } from "lucide-react";
 import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png";
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import GlobalSearchModal from "@/components/GlobalSearchModal";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
 
 /* ─── TYPES ─── */
-type MegaMenuKey = 'buy' | 'sell' | 'rent' | 'developers' | 'areas' | 'insights' | 'ai-tools' | 'creative' | 'shortcuts';
+type MegaMenuKey =
+  | 'buy' | 'sell' | 'rent' | 'developers' | 'areas'
+  | 'insights' | 'ai-tools' | 'creative' | 'shortcuts'
+  | 'services' | 'company' | 'legal' | 'guides';
 
 interface NavItem {
   label: string;
@@ -24,39 +29,47 @@ interface NavItem {
   icon: any;
   highlight?: boolean;
   megaMenu?: MegaMenuKey;
+  section?: string; // visual group header
 }
 
-/* ─── NAV ITEMS (flat, like PropertiesVerticalNav) ─── */
+/* ─── NAV ITEMS ─── */
 const NAV_ITEMS: NavItem[] = [
-  // Highlighted hubs
-  { label: "Buy Properties", href: "/properties", icon: Building2, highlight: true },
+  // ── Highlighted Hubs ──
+  { label: "Buy Properties", href: "/properties", icon: Building2, highlight: true, megaMenu: 'buy' },
   { label: "AI Tools Hub", href: "/ai-hub", icon: Cpu, highlight: true, megaMenu: 'ai-tools' },
   { label: "Listing Portal", href: "/listing-portal", icon: ClipboardCheck, highlight: true },
   { label: "Careers & Join", href: "/join", icon: GraduationCap, highlight: true },
   { label: "Resale Properties", href: "/resale-properties", icon: DollarSign, highlight: true },
-  // Properties
-  { label: "Off-plan", href: "/properties", icon: Building2 },
-  { label: "Buy", href: "/buy", icon: Home, megaMenu: 'buy' },
+
+  // ── Properties ──
+  { label: "Off-plan", href: "/properties", icon: Building2, section: "PROPERTIES" },
   { label: "Sell", href: "/sell", icon: Tag, megaMenu: 'sell' },
   { label: "Rent", href: "/rent", icon: Key, megaMenu: 'rent' },
   { label: "List Property", href: "/list-property", icon: PlusCircle },
   { label: "Developers", href: "/developers", icon: Building, megaMenu: 'developers' },
   { label: "Areas", href: "/areas", icon: MapPin, megaMenu: 'areas' },
   { label: "Map", href: "/map", icon: MapPin },
-  // Creative
-  { label: "Royal Tools Hub", href: "/toolkit", icon: Sparkles, megaMenu: 'creative' },
-  // Insights
-  { label: "Market Intelligence", href: "/market-intelligence", icon: BarChart3 },
+
+  // ── Creative & Tools ──
+  { label: "Royal Tools Hub", href: "/toolkit", icon: Sparkles, megaMenu: 'creative', section: "TOOLS" },
+
+  // ── Insights & Guides ──
+  { label: "Market Intelligence", href: "/market-intelligence", icon: BarChart3, section: "INSIGHTS" },
   { label: "Insights", href: "/insights", icon: Lightbulb, megaMenu: 'insights' },
-  { label: "Guides", href: "/guides", icon: BookOpen },
+  { label: "Guides", href: "/guides", icon: BookOpen, megaMenu: 'guides' },
   { label: "News", href: "/news", icon: Megaphone },
-  // Company
-  { label: "About", href: "/about", icon: Users },
-  { label: "Services", href: "/services", icon: Briefcase },
+
+  // ── Services ──
+  { label: "Services", href: "/services", icon: Briefcase, megaMenu: 'services', section: "SERVICES" },
+
+  // ── Company ──
+  { label: "About", href: "/about", icon: Users, megaMenu: 'company', section: "COMPANY" },
   { label: "Team", href: "/team", icon: Users },
   { label: "Contact", href: "/contact", icon: Phone },
-  // Account
-  { label: "Favorites", href: "/favorites", icon: Heart },
+  { label: "Legal", href: "/terms", icon: Scale, megaMenu: 'legal' },
+
+  // ── Account ──
+  { label: "Favorites", href: "/favorites", icon: Heart, section: "MY ACCOUNT" },
   { label: "Compare", href: "/compare", icon: GitCompare },
   { label: "Mortgage Calculator", href: "/mortgage-calculator", icon: Calculator },
   { label: "My Dashboard", href: "/my-dashboard", icon: User },
@@ -79,10 +92,12 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'Listing Portal', icon: ClipboardCheck, href: '/listing-portal' },
   ],
   rent: [
-    { label: 'Apartments', icon: Building2, href: '/properties?type=apartment&transaction=rent' },
-    { label: 'Villas', icon: Home, href: '/properties?type=villa&transaction=rent' },
+    { label: 'Apartments for Rent', icon: Building2, href: '/properties?type=apartment&transaction=rent' },
+    { label: 'Villas for Rent', icon: Home, href: '/properties?type=villa&transaction=rent' },
     { label: "Tenant's Guide", icon: FileText, href: '/tenant-guide' },
+    { label: "Landlord Guide", icon: FileText, href: '/landlord-guide' },
     { label: 'Property Management', icon: Shield, href: '/services/property-management' },
+    { label: 'Rental Index', icon: TrendingUp, href: '/rental-index' },
   ],
   developers: [
     { label: 'All Developers', icon: Building, href: '/developers' },
@@ -94,22 +109,65 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
   insights: [
     { label: 'Market Intelligence', icon: BarChart3, href: '/market-intelligence' },
     { label: 'Market Report', icon: FileText, href: '/market-report' },
-    { label: 'Guides', icon: BookOpen, href: '/guides' },
+    { label: 'Rental Index', icon: TrendingUp, href: '/rental-index' },
+    { label: 'Investor Education', icon: BookOpen, href: '/investor-education' },
+    { label: 'Broker Education', icon: BookOpen, href: '/broker-education' },
+  ],
+  guides: [
     { label: 'Buyer Guide', icon: FileText, href: '/buyer-guide' },
     { label: 'Seller Guide', icon: FileText, href: '/seller-guide' },
     { label: 'Rent Guide', icon: FileText, href: '/rent-guide' },
+    { label: "Tenant Guide", icon: FileText, href: '/tenant-guide' },
+    { label: "Landlord Guide", icon: FileText, href: '/landlord-guide' },
     { label: 'Investor Education', icon: BookOpen, href: '/investor-education' },
     { label: 'Broker Education', icon: BookOpen, href: '/broker-education' },
+    { label: 'Golden Visa Guide', icon: Award, href: '/golden-visa-guide' },
+    { label: 'Books Library', icon: BookMarked, href: '/books' },
+  ],
+  services: [
+    { label: 'All Services', icon: Briefcase, href: '/services' },
+    { label: 'Property Management', icon: Key, href: '/services/property-management' },
+    { label: 'Golden Visa', icon: Award, href: '/services/golden-visa' },
+    { label: 'Mortgage Advisory', icon: Landmark, href: '/services/mortgage-advisory' },
+    { label: 'Property Valuation', icon: DollarSign, href: '/sell/valuation' },
+    { label: 'Selling Advisory', icon: TrendingUp, href: '/services/selling-advisory' },
+    { label: 'Short-term Rentals', icon: CalendarClock, href: '/services/short-term-rentals' },
+    { label: 'Currency Exchange', icon: HandCoins, href: '/services/currency-exchange' },
+    { label: 'Concierge Services', icon: Handshake, href: '/services/concierge' },
+    { label: 'Company Setup', icon: Building, href: '/services/company-setup' },
+    { label: 'Snagging & Inspection', icon: ClipboardCheck, href: '/services/snagging' },
+    { label: 'Signature Collection', icon: FileText, href: '/services/signature-collection' },
+  ],
+  company: [
+    { label: 'About JBJ', icon: Users, href: '/about' },
+    { label: 'Our Team', icon: Users, href: '/team' },
+    { label: 'The Founder', icon: User, href: '/founder' },
+    { label: 'Contact Us', icon: Phone, href: '/contact' },
+    { label: 'Careers', icon: GraduationCap, href: '/join' },
+    { label: 'Press Kit', icon: Newspaper, href: '/press-kit' },
+    { label: 'Testimonials', icon: Heart, href: '/services/testimonials' },
+  ],
+  legal: [
+    { label: 'Terms of Service', icon: Scale, href: '/terms' },
+    { label: 'Privacy Policy', icon: Lock, href: '/privacy' },
+    { label: 'Cookie Policy', icon: Shield, href: '/cookie-policy' },
+    { label: 'Disclaimers', icon: FileText, href: '/disclaimers' },
+    { label: 'Intellectual Property', icon: ShieldCheck, href: '/ip-notice' },
+    { label: 'AML / KYC', icon: Shield, href: '/aml-kyc' },
+    { label: 'Accessibility', icon: Accessibility, href: '/accessibility' },
+    { label: 'Trust Center', icon: ShieldCheck, href: '/trust-center' },
   ],
   'ai-tools': [
     { label: 'Property Analyzer', icon: Building, href: '/ai-property-analyzer' },
     { label: 'Price Predictor', icon: TrendingUp, href: '/ai-price-predictor' },
     { label: 'Neighborhood Insights', icon: MapPin, href: '/ai-neighborhood-insights' },
     { label: 'Interior Design AI', icon: Palette, href: '/interior-design-ai' },
+    { label: 'Virtual Staging', icon: Camera, href: '/ai-virtual-staging' },
     { label: 'Lead Qualification', icon: UserCheck, href: '/ai-lead-qualification' },
     { label: 'Follow-up Scheduler', icon: CalendarClock, href: '/ai-followup-scheduler' },
     { label: 'Objection Handler', icon: MessageSquare, href: '/ai-objection-handler' },
     { label: 'Client Matcher', icon: Users, href: '/ai-client-matcher' },
+    { label: 'Competitor Analysis', icon: Eye, href: '/ai-competitor-analysis' },
     { label: 'Market Report', icon: FileText, href: '/ai-market-report' },
     { label: 'ROI Calculator', icon: Calculator, href: '/ai-roi-calculator' },
     { label: 'Email Generator', icon: Mail, href: '/ai-email-generator' },
@@ -127,6 +185,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
   ],
   creative: [
     { label: 'Corporate Suite', icon: Building, href: '/toolkit/corporate-suite' },
+    { label: 'Real Estate Suite', icon: Home, href: '/toolkit/property-suite' },
     { label: 'Video Suite', icon: Video, href: '/toolkit/video-suite' },
     { label: 'Photo Suite', icon: Image, href: '/toolkit/photo-suite' },
     { label: 'Voice & Audio', icon: Mic, href: '/toolkit/voice-suite' },
@@ -138,6 +197,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'Cover Letter', icon: Pen, href: '/toolkit/corporate-suite/cover-letter' },
     { label: 'Company Profile', icon: Award, href: '/toolkit/corporate-suite/company-profile' },
     { label: 'E-Sign', icon: Globe, href: '/e-signature' },
+    { label: 'Scan & Sign', icon: FileSearch, href: '/toolkit/scan-sign' },
   ],
   shortcuts: [
     { label: 'My Dashboard', icon: LayoutDashboard, href: '/my-dashboard' },
@@ -160,6 +220,22 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
   ],
 };
 
+const MEGA_MENU_TITLES: Record<MegaMenuKey, string> = {
+  buy: 'Buy Properties',
+  sell: 'Sell Your Property',
+  rent: 'Rent',
+  developers: 'Developers',
+  areas: 'Areas & Locations',
+  insights: 'Market Insights',
+  'ai-tools': 'AI Tools',
+  creative: 'Creative Suites',
+  shortcuts: 'My Shortcuts',
+  services: 'Services',
+  company: 'Company',
+  legal: 'Legal & Compliance',
+  guides: 'Guides & Education',
+};
+
 /* ─── COMPONENT ─── */
 export default function GlobalVerticalNav() {
   const location = useLocation();
@@ -172,64 +248,133 @@ export default function GlobalVerticalNav() {
     return () => document.body.classList.remove("jj-vertical-nav-active");
   }, []);
 
+  // Body scroll lock when flyout is open
+  useEffect(() => {
+    if (activeMegaMenu) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [activeMegaMenu]);
+
   const handleNavClick = useCallback((megaMenu?: MegaMenuKey, e?: React.MouseEvent) => {
     if (megaMenu) {
       e?.preventDefault();
+      // Toggle: close if same, open new (closes previous automatically)
       setActiveMegaMenu(prev => prev === megaMenu ? null : megaMenu);
+    } else {
+      // Clicking a non-mega item closes any open menu
+      setActiveMegaMenu(null);
     }
   }, []);
 
   const closeMegaMenu = useCallback(() => setActiveMegaMenu(null), []);
 
+  // Close on route change
   useEffect(() => { closeMegaMenu(); setMobileOpen(false); }, [location.pathname, closeMegaMenu]);
 
-  const isActive = (href: string) => {
+  const isRouteActive = (href: string) => {
     if (href === "#") return false;
     if (href === "/properties") return location.pathname === "/properties" || location.pathname.startsWith("/properties/");
     return location.pathname === href;
   };
 
+  // Determine active styling: suppress route-based active when ANY mega menu is open
+  const getItemStyle = (item: NavItem, index: number) => {
+    const hasMega = !!item.megaMenu;
+    const isThisMenuOpen = activeMegaMenu === item.megaMenu;
+    const routeActive = isRouteActive(item.href);
+
+    // When any mega menu is open, only the active mega-menu item should be highlighted
+    const shouldHighlight = activeMegaMenu
+      ? isThisMenuOpen
+      : routeActive;
+
+    if (item.highlight) {
+      return shouldHighlight
+        ? "bg-gradient-to-r from-gold/25 to-gold/15 text-black border border-gold/50 font-bold"
+        : "text-gold font-semibold hover:bg-gold/10";
+    }
+    return shouldHighlight
+      ? "bg-gradient-to-r from-gold/20 to-gold/10 text-black border border-gold/40 font-bold"
+      : "text-black/70 hover:bg-white/60 hover:text-black";
+  };
+
+  const getIconStyle = (item: NavItem) => {
+    const isThisMenuOpen = activeMegaMenu === item.megaMenu;
+    const routeActive = isRouteActive(item.href);
+    const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
+    return shouldHighlight || item.highlight ? "text-gold" : "text-black/50";
+  };
+
+  /* ─── FULL-HEIGHT FLYOUT PANEL ─── */
   const renderMegaMenu = () => {
     if (!activeMegaMenu) return null;
     const links = MEGA_MENU_LINKS[activeMegaMenu] || [];
+    const title = MEGA_MENU_TITLES[activeMegaMenu] || activeMegaMenu;
+
     return (
       <>
+        {/* Backdrop - closes on click */}
         <div
           className="fixed inset-0 z-[9999] bg-black/30 backdrop-blur-sm"
-          style={{ left: '200px' }}
           onClick={closeMegaMenu}
         />
+        {/* Full-height flyout panel anchored to right of sidebar */}
         <div
-          className="fixed z-[10000] flex items-start justify-center pointer-events-none"
-          style={{ left: '200px', top: 0, bottom: 0, right: 0 }}
+          className="fixed top-0 bottom-0 z-[10000] w-[420px] bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r-2 border-gold/30 shadow-2xl flex flex-col animate-in slide-in-from-left-4 duration-200"
+          style={{ left: '200px' }}
+          onClick={(e) => e.stopPropagation()}
         >
-          <div
-            className="pointer-events-auto max-w-[400px] w-full max-h-[70vh] overflow-y-auto jj-scrollbar-gold mt-8 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6]"
-            onClick={(e) => e.stopPropagation()}
-            onMouseLeave={closeMegaMenu}
-          >
-            <div className="p-4 space-y-0.5">
-              <p className="text-[10px] uppercase tracking-[0.18em] text-gold font-bold px-3 pb-2 mb-1 border-b border-gold/20">
-                {activeMegaMenu === 'shortcuts' ? 'My Shortcuts' :
-                 activeMegaMenu === 'ai-tools' ? 'AI Tools' :
-                 activeMegaMenu === 'creative' ? 'Creative Suites' :
-                 activeMegaMenu.charAt(0).toUpperCase() + activeMegaMenu.slice(1)}
-              </p>
-              {links.map((link) => {
-                const Icon = link.icon;
-                return (
-                  <Link
-                    key={link.href + link.label}
-                    to={link.href}
-                    onClick={closeMegaMenu}
-                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium text-black/80 hover:bg-gold/10 hover:text-black transition-all"
-                  >
-                    <Icon className="w-4 h-4 text-gold flex-shrink-0" />
-                    <span>{link.label}</span>
-                  </Link>
-                );
-              })}
+          {/* Header */}
+          <div className="flex items-center justify-between px-6 py-5 border-b border-gold/20">
+            <div className="flex items-center gap-3">
+              <Sparkles className="w-5 h-5 text-gold" />
+              <h3 className="text-lg font-bold text-black tracking-tight">{title}</h3>
             </div>
+            <button
+              onClick={closeMegaMenu}
+              className="w-8 h-8 rounded-full bg-gold/10 flex items-center justify-center hover:bg-gold/20 transition-colors"
+            >
+              <X className="w-4 h-4 text-gold" />
+            </button>
+          </div>
+
+          {/* Scrollable links */}
+          <div className="flex-1 overflow-y-auto jj-scrollbar-gold p-4 space-y-0.5">
+            {links.map((link) => {
+              const Icon = link.icon;
+              const linkActive = isRouteActive(link.href);
+              return (
+                <Link
+                  key={link.href + link.label}
+                  to={link.href}
+                  onClick={closeMegaMenu}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl text-[13px] font-medium transition-all ${
+                    linkActive
+                      ? "bg-gradient-to-r from-gold/20 to-gold/10 text-black font-bold border border-gold/40"
+                      : "text-black/80 hover:bg-gold/10 hover:text-black"
+                  }`}
+                >
+                  <Icon className="w-4.5 h-4.5 text-gold flex-shrink-0" />
+                  <span>{link.label}</span>
+                  <ChevronRight className="w-3 h-3 ml-auto text-black/20" />
+                </Link>
+              );
+            })}
+          </div>
+
+          {/* Footer CTA */}
+          <div className="px-6 py-4 border-t border-gold/20">
+            <Link
+              to={links[0]?.href?.split('?')[0] || '/'}
+              onClick={closeMegaMenu}
+              className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-gold to-gold/80 text-black text-sm font-bold rounded-xl hover:shadow-lg transition-all"
+            >
+              <Eye className="w-4 h-4" />
+              View All
+            </Link>
           </div>
         </div>
       </>
@@ -239,7 +384,7 @@ export default function GlobalVerticalNav() {
   const renderNavContent = () => (
     <>
       {/* Logo */}
-      <Link to="/" className="p-4 border-b border-gold/20 flex items-center gap-3 hover:opacity-80 transition-opacity">
+      <Link to="/" onClick={() => setActiveMegaMenu(null)} className="p-4 border-b border-gold/20 flex items-center gap-3 hover:opacity-80 transition-opacity">
         <img src={jbjMonogramLightBg} alt="JBJ" className="w-16 h-16 object-contain" />
         <div className="flex flex-col" style={{ fontFamily: "Poppins, sans-serif" }}>
           <span className="text-[11px] font-bold text-black tracking-wide leading-tight">JBJ GLOBAL</span>
@@ -265,40 +410,42 @@ export default function GlobalVerticalNav() {
 
       {/* Nav Items */}
       <nav
-        className="flex-1 py-2 px-2 space-y-0.5 overflow-y-scroll jj-scrollbar-gold"
+        className="flex-1 py-2 px-2 space-y-0.5 overflow-y-auto jj-scrollbar-gold"
         style={{ scrollbarGutter: "stable" }}
       >
         {NAV_ITEMS.map((item, i) => {
-          const active = isActive(item.href);
-          const Icon = item.icon;
           const hasMega = !!item.megaMenu;
           const isMenuOpen = activeMegaMenu === item.megaMenu;
+          const Icon = item.icon;
           return (
-            <Link
-              key={item.href + item.label + i}
-              to={item.href}
-              onClick={(e) => {
-                if (hasMega) handleNavClick(item.megaMenu, e);
-              }}
-              className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all ${
-                item.highlight
-                  ? active || isMenuOpen
-                    ? "bg-gradient-to-r from-gold/25 to-gold/15 text-black border border-gold/50 font-bold"
-                    : "text-gold font-semibold hover:bg-gold/10"
-                  : active || isMenuOpen
-                    ? "bg-gradient-to-r from-gold/20 to-gold/10 text-black border border-gold/40 font-bold"
-                    : "text-black/70 hover:bg-white/60 hover:text-black"
-              }`}
-            >
-              <Icon className={`w-4 h-4 flex-shrink-0 ${active || isMenuOpen || item.highlight ? "text-gold" : "text-black/50"}`} />
-              <span className="flex-1">{item.label}</span>
-              {hasMega && (
-                <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-black/30"}`} />
+            <React.Fragment key={item.href + item.label + i}>
+              {/* Section header */}
+              {item.section && (
+                <p className="text-[9px] uppercase tracking-[0.2em] text-gold/60 font-bold px-3 pt-3 pb-1">
+                  {item.section}
+                </p>
               )}
-              {item.highlight && !active && !isMenuOpen && (
-                <Sparkles className="w-3 h-3 text-gold/60" />
-              )}
-            </Link>
+              <Link
+                to={item.href}
+                onClick={(e) => {
+                  if (hasMega) {
+                    handleNavClick(item.megaMenu, e);
+                  } else {
+                    handleNavClick(undefined);
+                  }
+                }}
+                className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all ${getItemStyle(item, i)}`}
+              >
+                <Icon className={`w-4 h-4 flex-shrink-0 ${getIconStyle(item)}`} />
+                <span className="flex-1">{item.label}</span>
+                {hasMega && (
+                  <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-black/30"}`} />
+                )}
+                {item.highlight && !isMenuOpen && !activeMegaMenu && !isRouteActive(item.href) && (
+                  <Sparkles className="w-3 h-3 text-gold/60" />
+                )}
+              </Link>
+            </React.Fragment>
           );
         })}
       </nav>
@@ -307,10 +454,11 @@ export default function GlobalVerticalNav() {
       <div className="px-3 py-2 border-t border-gold/20 space-y-1">
         <button
           onClick={() => setSearchOpen(true)}
-          className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium text-black/70 hover:bg-white/60 hover:text-black transition-all w-full"
+          className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-semibold text-gold hover:bg-gold/10 transition-all w-full group"
         >
-          <Search className="w-4 h-4 text-black/50" />
-          Search
+          <Search className="w-4 h-4 text-gold" />
+          <span>Quick Search</span>
+          <span className="ml-auto text-[9px] bg-gold/15 text-gold border border-gold/30 rounded-full px-2 py-0.5 font-bold tracking-wide">⌘K</span>
         </button>
         <div className="flex items-center gap-1 px-1">
           <LanguageSwitcher variant="icon-only" />
@@ -327,6 +475,13 @@ export default function GlobalVerticalNav() {
           <Headphones className="w-4 h-4" />
           Contact Support
         </a>
+        <Link
+          to="/my-tickets"
+          className="flex items-center gap-2 text-sm font-medium text-black/60 hover:text-gold transition-colors"
+        >
+          <Ticket className="w-4 h-4" />
+          Create Ticket
+        </Link>
       </div>
     </>
   );
