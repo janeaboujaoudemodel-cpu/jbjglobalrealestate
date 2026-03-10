@@ -76,8 +76,8 @@ function formatDateDisplay(isoDate: string): string {
 interface CrmLead {
   id: string;
   full_name: string | null;
-  phone: string | null;
-  email: string | null;
+  phone_raw: string | null;
+  email_normalized: string | null;
 }
 
 interface TaskCreationModalProps {
