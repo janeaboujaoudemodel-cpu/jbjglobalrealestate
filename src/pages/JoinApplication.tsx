@@ -512,8 +512,8 @@ export default function JoinApplication() {
                 <Label htmlFor="phone">Phone Number</Label>
                 <PhoneInput
                   value={formData.phone}
-                  onChange={(value) => setFormData({ ...formData, phone: value || "" })}
-                  disabled={!user || loading}
+                   onChange={(value) => setFormData({ ...formData, phone: value || "" })}
+                  disabled={loading}
                   placeholder="+971 56 591 1000"
                 />
               </div>
