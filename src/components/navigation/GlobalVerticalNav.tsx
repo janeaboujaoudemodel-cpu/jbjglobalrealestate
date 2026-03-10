@@ -54,6 +54,7 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   // ── Highlighted Hubs ──
   { label: "AI Tools Hub", href: "/ai-hub", icon: Cpu, highlight: true, megaMenu: 'ai-tools' },
+  { label: "AI Home Finder", href: "/quiz", icon: Home, highlight: true },
   { label: "Listing Portal", href: "/listing-portal", icon: ClipboardCheck, highlight: true },
   { label: "Careers & Join", href: "/join", icon: GraduationCap, highlight: true },
   { label: "Resale Properties", href: "/resale-properties", icon: DollarSign, highlight: true },
@@ -70,11 +71,23 @@ const NAV_ITEMS: NavItem[] = [
   // ── Creative & Tools ──
   { label: "Royal Tools Hub", href: "/toolkit", icon: Sparkles, megaMenu: 'creative', section: "TOOLS" },
 
-  // ── Insights & Guides ──
+  // ── Insights (no more Guides here) ──
   { label: "Market Intelligence", href: "/market-intelligence", icon: BarChart3, section: "INSIGHTS" },
   { label: "Insights", href: "/insights", icon: Lightbulb, megaMenu: 'insights' },
-  { label: "Guides", href: "/guides", icon: BookOpen, megaMenu: 'guides' },
   { label: "News", href: "/news", icon: Megaphone },
+
+  // ── Guides (standalone hub) ──
+  { label: "Guides Library", href: "/guides", icon: BookOpen, megaMenu: 'guides', section: "GUIDES" },
+  { label: "Buyer's Guide", href: "/buyer-guide", icon: FileText },
+  { label: "Seller's Guide", href: "/seller-guide", icon: FileText },
+  { label: "Rental Guide", href: "/rent-guide", icon: FileText },
+  { label: "Tenant Guide", href: "/tenant-guide", icon: FileText },
+  { label: "Landlord Guide", href: "/landlord-guide", icon: FileText },
+  { label: "Investor Education", href: "/investor-education", icon: GraduationCap },
+  { label: "Broker Education", href: "/broker-education", icon: GraduationCap },
+  { label: "Golden Visa Guide", href: "/guides/golden-visa-uae", icon: Award },
+  { label: "Books Library", href: "/education-hub", icon: BookMarked },
+  { label: "FAQ Hub", href: "/faq", icon: Lightbulb },
 
   // ── Services ──
   { label: "All Services", href: "/services", icon: Briefcase, megaMenu: 'services', section: "SERVICES" },
@@ -359,7 +372,7 @@ const SHORTCUT_GROUPS: ShortcutGroup[] = [
 ];
 
 /* ─── SECTION KEYS ─── */
-const SECTION_KEYS = ["PROPERTIES", "TOOLS", "INSIGHTS", "SERVICES", "COMPANY", "LEGAL", "MY ACCOUNT"] as const;
+const SECTION_KEYS = ["PROPERTIES", "TOOLS", "INSIGHTS", "GUIDES", "SERVICES", "COMPANY", "LEGAL", "MY ACCOUNT"] as const;
 type SectionKey = typeof SECTION_KEYS[number];
 
 /* ─── SECTION ICONS ─── */
@@ -367,6 +380,7 @@ const SECTION_ICONS: Record<SectionKey, any> = {
   "PROPERTIES": Building2,
   "TOOLS": Sparkles,
   "INSIGHTS": Lightbulb,
+  "GUIDES": BookOpen,
   "SERVICES": Briefcase,
   "COMPANY": Users,
   "LEGAL": Scale,
@@ -646,7 +660,16 @@ export default function GlobalVerticalNav() {
 
   // Accordion toggle — only one section open at a time
   const toggleSection = (section: SectionKey) => {
+    const opening = openSection !== section;
     setOpenSection(prev => prev === section ? null : section);
+    // Dual-action: also open the first mega menu flyout in this section
+    if (opening) {
+      const items = sectionGroups[section];
+      const firstMega = items?.find(item => item.megaMenu);
+      if (firstMega?.megaMenu) {
+        setActiveMegaMenu(firstMega.megaMenu);
+      }
+    }
   };
 
   // Check if a section contains the active mega menu

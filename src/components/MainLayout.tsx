@@ -15,6 +15,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import Footer from "@/components/Footer";
 
 const GlobalVerticalNav = lazy(() => import("@/components/navigation/GlobalVerticalNav"));
+const HorizontalUtilityBar = lazy(() => import("@/components/navigation/HorizontalUtilityBar"));
 import CombinedContactNewsletter from "@/components/CombinedContactNewsletter";
 import GlobalContactGating from "@/components/GlobalContactGating";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -201,14 +202,19 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         <GlobalHeader forceSolid={needsHeaderSpacing} />
       </div>
       {!isBackOfficeRoute && (
-        <div className="hidden lg:block fixed left-0 top-0 h-screen z-[9997]">
+        <>
+          <div className="hidden lg:block fixed left-0 top-0 h-screen z-[9997]">
+            <Suspense fallback={null}>
+              <GlobalVerticalNav />
+            </Suspense>
+          </div>
           <Suspense fallback={null}>
-            <GlobalVerticalNav />
+            <HorizontalUtilityBar />
           </Suspense>
-        </div>
+        </>
       )}
       <GlobalContactGating>
-        <main className={`w-full max-w-full overflow-x-hidden ${!isBackOfficeRoute ? "[body.jj-vertical-nav-active_&]:lg:pl-[200px] [body.jj-vertical-nav-collapsed_&]:lg:pl-[48px]" : ""} ${needsHeaderSpacing ? "pt-24 sm:pt-28 lg:pt-0" : "pt-0"}`}>
+        <main className={`w-full max-w-full overflow-x-hidden ${!isBackOfficeRoute ? "[body.jj-vertical-nav-active_&]:lg:pl-[200px] [body.jj-vertical-nav-collapsed_&]:lg:pl-[48px]" : ""} ${needsHeaderSpacing ? "pt-24 sm:pt-28 lg:pt-[40px]" : "lg:pt-[40px] pt-0"}`}>
           {layoutGuardTriggered && isServiceRoute && (
             <div role="alert" className="mx-auto mt-4 w-full max-w-6xl px-4 sm:px-6 lg:px-8">
               <div className="rounded-lg border border-destructive/30 bg-background/95 px-4 py-3 text-sm text-foreground shadow-sm backdrop-blur">
