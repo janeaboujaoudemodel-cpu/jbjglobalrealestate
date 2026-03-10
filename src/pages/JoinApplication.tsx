@@ -543,7 +543,7 @@ export default function JoinApplication() {
                 <Select
                   value={formData.preferredLanguage}
                   onValueChange={(value) => setFormData({ ...formData, preferredLanguage: value })}
-                  disabled={!user || loading}
+                  disabled={loading}
                 >
                   <SelectTrigger className="bg-background">
                     <SelectValue placeholder="Select language" />
