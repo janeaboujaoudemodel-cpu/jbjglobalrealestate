@@ -324,10 +324,10 @@ export default function LandlordRentalPortal() {
             {/* List Property Tab */}
             <TabsContent value="list-property">
               {!isAuthenticated ? (
-                <Card className="bg-zinc-900 border-zinc-800">
+              <Card className="bg-white/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
                   <CardContent className="py-12 text-center">
                     <Building2 className="h-16 w-16 text-gold mx-auto mb-4" />
-                    <h3 className="text-xl font-semibold text-white mb-2">
+                    <h3 className="text-xl font-semibold text-black mb-2">
                       Sign In to List Your Property
                     </h3>
                     <p className="text-zinc-400 mb-6">
