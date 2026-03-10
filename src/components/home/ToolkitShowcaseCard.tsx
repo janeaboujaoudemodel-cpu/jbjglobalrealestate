@@ -74,28 +74,29 @@ const royalTools = [
 
 export function ToolkitShowcaseCard() {
   return (
-    <section className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-      <div className="relative overflow-hidden">
-            {/* Header Section */}
-            <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] p-6 md:p-8 border-b border-gold/30">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold/20 border border-gold/40 text-gold text-xs uppercase tracking-[0.2em]">
-                  <Sparkles className="w-3 h-3" />
-                  Free Professional Tools
-                </div>
+    <section className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] py-10 md:py-14">
+      <div className="container mx-auto px-4 max-w-7xl">
+        <div className="rounded-2xl overflow-hidden border border-gold/20">
+          {/* Header Section */}
+          <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] p-6 md:p-8 border-b border-gold/30">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold/20 border border-gold/40 text-gold text-xs uppercase tracking-[0.2em]">
+                <Sparkles className="w-3 h-3" />
+                Free Professional Tools
               </div>
-              
-              <h2 
-                className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-2"
-                style={{ fontFamily: "Poppins, sans-serif" }}
-              >
-                JBJ Royal Tools Hub
-              </h2>
-              
-              <p className="text-zinc-600 text-sm md:text-base max-w-2xl">
-                Powerful real estate tools for property valuation, comparison, mortgage calculation, and AI-powered enhancements — all completely free to use.
-              </p>
             </div>
+            
+            <h2 
+              className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-2"
+              style={{ fontFamily: "Poppins, sans-serif" }}
+            >
+              JBJ Royal Tools Hub
+            </h2>
+            
+            <p className="text-zinc-600 text-sm md:text-base max-w-2xl">
+              Powerful real estate tools for property valuation, comparison, mortgage calculation, and AI-powered enhancements — all completely free to use.
+            </p>
+          </div>
             
             {/* Tools Grid */}
             <div className="px-6 md:px-8 lg:px-12 py-6 md:py-8">
