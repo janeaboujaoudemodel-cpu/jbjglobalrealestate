@@ -637,11 +637,11 @@ export default function GlobalVerticalNav() {
     if (item.highlight) {
       return shouldHighlight
         ? "bg-gradient-to-r from-gold/25 to-gold/15 text-black border border-gold/50 font-bold"
-        : "text-black font-semibold hover:bg-gold/10";
+        : "text-black font-semibold hover:bg-gold/10 border border-gold/20";
     }
     return shouldHighlight
       ? "bg-gradient-to-r from-gold/20 to-gold/10 text-black border border-gold/40 font-bold"
-      : "text-black/90 hover:bg-white/60 hover:text-black";
+      : "text-black/90 hover:bg-white/60 hover:text-black border border-transparent hover:border-gold/15";
   };
 
   const getIconStyle = (item: NavItem, sectionKey?: string) => {
@@ -1035,9 +1035,9 @@ export default function GlobalVerticalNav() {
           {session ? (
             <button
               onClick={() => { supabase.auth.signOut(); }}
-              className="flex items-center justify-center gap-2 text-xs font-bold text-black/70 hover:text-black transition-colors px-2 py-2.5 rounded-lg border border-gold/30 hover:border-gold/50 hover:bg-gold/10 w-full"
+              className="flex items-center justify-center gap-2 text-xs font-bold text-black/70 hover:text-black transition-colors px-2 py-2.5 rounded-lg border border-red-500/30 hover:border-red-500/50 hover:bg-red-50/50 w-full"
             >
-              <LogOut className="w-3.5 h-3.5" />
+              <LogOut className="w-3.5 h-3.5 text-red-500" />
               Sign Out
             </button>
           ) : (
