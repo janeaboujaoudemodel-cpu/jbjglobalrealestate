@@ -315,7 +315,8 @@ export default function GlobalVerticalNav() {
 
   /* ─── COMPACT FLOATING FLYOUT PANEL (PropertiesVerticalNav pattern) ─── */
   const renderMegaMenu = () => {
-    if (!activeMegaMenu) return null;
+    if (!activeMegaMenu || collapsed) return null;
+    const sidebarWidth = '200px';
     const links = MEGA_MENU_LINKS[activeMegaMenu] || [];
     const title = MEGA_MENU_TITLES[activeMegaMenu] || activeMegaMenu;
     const isLargeMenu = links.length > 12;
