@@ -286,7 +286,7 @@ const Index = () => {
       </Suspense>
 
       {/* DIVIDER */}
-      <SectionDivider />
+      <SectionDivider fullWidth />
 
       {/* FIND YOUR STARTING POINT - Tabbed Premium Section */}
       <Suspense fallback={<SectionLoader />}>
