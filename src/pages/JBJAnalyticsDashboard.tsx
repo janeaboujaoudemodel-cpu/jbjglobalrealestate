@@ -58,12 +58,20 @@ interface ToolUsage {
   unique_users: number;
 }
 
+interface DailyVisitorData {
+  date: string;
+  visitors: number;
+  sessions: number;
+  pageViews: number;
+}
+
 const JBJAnalyticsDashboard: React.FC = () => {
   const { user, isOwner, loading } = useAuth();
   const navigate = useNavigate();
   const [stats, setStats] = useState<AnalyticsStat[]>([]);
   const [issueReports, setIssueReports] = useState<IssueReport[]>([]);
   const [toolUsage, setToolUsage] = useState<ToolUsage[]>([]);
+  const [dailyVisitors, setDailyVisitors] = useState<DailyVisitorData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [dateRange, setDateRange] = useState<'today' | 'week' | 'month'>('week');
 
