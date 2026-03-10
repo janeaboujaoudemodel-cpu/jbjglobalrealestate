@@ -371,7 +371,7 @@ export default function LandlordRentalPortal() {
                       <h3 className="text-xl font-semibold text-black mb-2">
                         No Listings Yet
                       </h3>
-                      <p className="text-zinc-400 mb-6">
+                      <p className="text-zinc-600 mb-6">
                         You haven't submitted any rental listings yet
                       </p>
                       <Button
