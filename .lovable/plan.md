@@ -1,41 +1,45 @@
 
 
-## Plan: Fix All Email Issues Across All Templates
+## Plan: Fix Badge Overlap, Hover Text Wrapping & Enhance Horizontal Utility Bar
 
-### Problems Identified
+### 1. Fix Sale Status Badge Overlapping Favorite/Shortlist Buttons
 
-1. **Recommended For You icons disappeared** — Inline SVGs are stripped by Gmail and most email clients. Must revert to hosted PNG images (`ai-tools.png`, `guides.png`, `properties.png` already exist in `public/email-icons/`).
+**File:** `src/components/ProjectCard.tsx`
 
-2. **Social media footer icons not rendering** — Same issue: `socialLinksFooter()` loads external `.svg` files via `<img>` tags, but Gmail blocks SVG images entirely. Must switch to hosted `.png` files. Currently missing `social-facebook.png` — need to confirm or create it.
+**Problem:** Both the sale status badge (line 280) and the favorite/shortlist buttons (line 188) use `top-3 right-3` positioning, causing them to stack on top of each other.
 
-3. **Email split into multiple visual cards** — Several sub-sections (`ticketSupportEmbed`, `readyToGetStartedHtml`, `recommendedActionsHtml`) each have their own `border`, `border-radius`, and `background` styles creating distinct visual boxes. These need to be softened so they sit seamlessly inside the single continuous card.
+**Fix:**
+- Move the favorite/shortlist buttons container down: change `top-3 right-3` to `top-3 right-3` but offset when sale status badge is present
+- Better approach: Move the sale status badge to **top-left** (below dev logo if present, e.g. `top-16 left-3`) or to the **bottom-left** of the image area
+- Simplest fix: Position sale status badge at `top-3 left-3` when dev logo is present (currently it goes to `top-3 right-3` and clashes). When dev logo exists, place badge below it at `top-16 left-3`
 
-### Changes (all in `supabase/functions/_shared/email-html.ts`)
+### 2. Fix ShortlistBadgeButton "Change" Text Wrapping
 
-#### A. Recommended For You — Revert to PNG hosted images
-- Change `recommendedCard()` back to using `iconImg()` with PNG paths
-- Remove the `RECOMMENDED_ICONS` inline SVG object
-- Ensure circular frame clips the PNG with `overflow:hidden` on the `<td>` to prevent square backgrounds
-- Signature: `recommendedCard(title, href, iconPath, alt)` — restore the original parameters
+**File:** `src/components/ShortlistBadgeButton.tsx`
 
-#### B. Social Footer — Switch to PNG with white pearl background
-- Replace `socialLinksFooter()` to use the inline `SVG` object icons (instagram, facebook, linkedin, tiktok, youtube) that are already defined at the top of the file — these render as raw HTML inside `<td>` elements, not as `<img>` tags, so they should survive email client processing
-- Actually, since Gmail strips ALL SVG (both inline and `<img>`), switch to using the `.png` files: `social-instagram.png`, `social-linkedin.png`, `social-tiktok.png`, `social-youtube.png`
-- Create `social-facebook.png` if missing
-- Style each icon circle: white/pearl (#FDFBF7) background, gold border, black icon inside
+The "Change" / "Add Badge" text inside the button (line 109) can wrap to two lines on narrow cards. Fix by adding `whitespace-nowrap` to the button.
 
-#### C. Single Card Layout — Remove visual fragmentation
-- `ticketSupportEmbed()`: Remove the heavy gradient background and red border; make it blend into the card
-- `readyToGetStartedHtml()`: Remove the outer border and separate background so it flows within the card
-- `inquiryBox()`: Soften its standalone bordered look
-- Keep all content inside the single `emailShell` wrapper card with no sub-borders that create separation
+### 3. Enhance Horizontal Utility Bar with Premium Quick Links
 
-#### D. Deploy + Send Test Email
-- Deploy the updated edge function
-- Immediately send a test welcome email to `janeaboujaoudenails@gmail.com`
-- Take a screenshot as proof
+**File:** `src/components/navigation/HorizontalUtilityBar.tsx`
 
-### Files Modified
-- `supabase/functions/_shared/email-html.ts` — all icon and layout fixes
-- `public/email-icons/social-facebook.png` — create if missing (or use existing assets)
+Add premium quick-access links after the Search button, before the spacer. New items:
+
+| Link | Icon | Route | Tooltip |
+|------|------|-------|---------|
+| Buy | `Building2` | `/properties?transaction=buy` | Browse Properties for Sale |
+| Rent | `Key` | `/properties?transaction=rent` | Browse Rentals |
+| Sell | `Tag` | `/listing-portal` | List Your Property |
+
+These go as icon+label compact buttons (like the existing sqft toggle style) between Search and Favorites. Use gold styling consistent with existing items. Each is a small `Link` with icon + short text label visible at wider viewports.
+
+Also add a gold-bordered **"My Account"** dropdown or direct link near the right side (currently just an icon — add a small label).
+
+### Files to Edit
+
+| File | Changes |
+|------|---------|
+| `src/components/ProjectCard.tsx` | Fix badge z-positioning — sale status badge goes to left side below dev logo |
+| `src/components/ShortlistBadgeButton.tsx` | Add `whitespace-nowrap` to prevent text wrapping |
+| `src/components/navigation/HorizontalUtilityBar.tsx` | Add Buy, Rent, Sell quick links with icons |
 
