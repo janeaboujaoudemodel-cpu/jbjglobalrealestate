@@ -19,6 +19,12 @@ const IntellectualProperty = () => {
   const currentYear = new Date().getFullYear();
 
   return (
+    <>
+      <SEOHead
+        title="Intellectual Property | JBJ Global Real Estate"
+        description="Legal protection, copyright notice, and intellectual property rights for JBJ Global Real Estate platform and digital assets."
+        canonicalPath="/intellectual-property"
+      />
     <section className="min-h-screen bg-gradient-to-b from-[#151210] via-[#0F0D0B] to-[#0A0908]">
       {/* Hero */}
       <div className="bg-gradient-to-b from-[#1a1714] to-[#151210] border-b border-[#C8A766]/20">
