@@ -146,10 +146,10 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
       setLeadSearching(true);
       const { data } = await supabase
         .from("crm_leads")
-        .select("id, full_name, phone, email")
-        .or(`full_name.ilike.%${leadSearch}%,phone.ilike.%${leadSearch}%,email.ilike.%${leadSearch}%`)
+        .select("id, full_name, phone_raw, email_normalized")
+        .or(`full_name.ilike.%${leadSearch}%,phone_raw.ilike.%${leadSearch}%,email_normalized.ilike.%${leadSearch}%`)
         .limit(8);
-      setLeadResults((data as CrmLead[]) || []);
+      setLeadResults((data as unknown as CrmLead[]) || []);
       setLeadSearching(false);
     }, 300);
     return () => clearTimeout(timer);
