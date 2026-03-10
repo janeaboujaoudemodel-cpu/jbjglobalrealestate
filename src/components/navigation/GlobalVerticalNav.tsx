@@ -487,7 +487,7 @@ export default function GlobalVerticalNav() {
     const isThisMenuOpen = activeMegaMenu === item.megaMenu;
     const routeActive = isRouteActive(item.href);
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
-    return shouldHighlight || item.highlight ? "text-gold" : "text-black/60";
+    return shouldHighlight ? "text-gold" : "text-black/60";
   };
 
   /* ─── RENDER MEGA MENU ─── */
