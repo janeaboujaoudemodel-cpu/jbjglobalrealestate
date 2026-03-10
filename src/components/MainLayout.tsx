@@ -13,6 +13,9 @@ import {
 import GlobalHeader from "@/components/GlobalHeader";
 import { useLanguage } from "@/contexts/LanguageContext";
 import Footer from "@/components/Footer";
+import { lazy } from "react";
+
+const GlobalVerticalNav = lazy(() => import("@/components/navigation/GlobalVerticalNav"));
 import CombinedContactNewsletter from "@/components/CombinedContactNewsletter";
 import GlobalContactGating from "@/components/GlobalContactGating";
 import { useIsMobile } from "@/hooks/use-mobile";
