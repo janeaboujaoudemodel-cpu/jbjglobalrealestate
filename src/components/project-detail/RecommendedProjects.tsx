@@ -6,6 +6,7 @@ import { DeveloperLink } from "@/components/ui/developer-link";
 import { useMemo } from "react";
 import { formatDisplayDate } from "@/utils/formatDate";
 import { useCurrency } from "@/hooks/useCurrency";
+import { useUserBrowsingContext } from "@/hooks/useUserBrowsingContext";
 
 interface RecommendedProjectsProps {
   currentProjectId: string;
@@ -22,11 +23,16 @@ export default function RecommendedProjects({
 }: RecommendedProjectsProps) {
   const { data: projects } = useProjectsListing();
   const { formatPrice } = useCurrency();
+  const browsingContext = useUserBrowsingContext();
 
   const recommendedProjects = useMemo(() => {
     if (!projects || projects.length === 0) return [];
+    
+    // Filter out current project and sold/expired
     const otherProjects = projects.filter((p) => {
       if (p.id === currentProjectId) return false;
+      // Skip already-viewed projects from recent searches
+      if (browsingContext.recentProjectIds.includes(p.id)) return false;
       const status = ((p as any).sale_status || "").toLowerCase();
       if (status.includes("sold")) return false;
       const hd = p.handover_date;
@@ -39,18 +45,51 @@ export default function RecommendedProjects({
       }
       return true;
     });
+
+    // If user has browsing context, use behavior-aware scoring
+    if (browsingContext.hasData && browsingContext.dominantArea) {
+      const userArea = browsingContext.dominantArea.toLowerCase();
+      
+      // Filter to user's area of interest
+      const areaMatched = otherProjects.filter((p) =>
+        p.location?.toLowerCase().includes(userArea)
+      );
+
+      // If we have enough area-matched results, pick 3 tiers by price
+      if (areaMatched.length >= 3) {
+        const withPrice = areaMatched
+          .filter((p) => p.price_from && p.price_from > 0)
+          .sort((a, b) => (a.price_from || 0) - (b.price_from || 0));
+
+        if (withPrice.length >= 3) {
+          const lowIdx = 0;
+          const midIdx = Math.floor(withPrice.length / 2);
+          const highIdx = withPrice.length - 1;
+          return [withPrice[highIdx], withPrice[midIdx], withPrice[lowIdx]];
+        }
+        // Not enough priced ones, just return top 3 area-matched
+        return areaMatched.slice(0, 3);
+      }
+    }
+
+    // Fallback: original scoring logic
     const scored = otherProjects.map((p) => {
       let score = 0;
       if ((p as any).import_source === 'manual') score += 50;
       if (currentDeveloperId && p.developer?.id === currentDeveloperId) score += 10;
       if (currentLocation && p.location?.toLowerCase().includes(currentLocation.toLowerCase())) score += 5;
       if (currentEmirate && p.emirate === currentEmirate) score += 3;
+      // Boost for user's browsed areas
+      if (browsingContext.hasData && browsingContext.recentAreas.length > 0) {
+        const loc = p.location?.toLowerCase() || "";
+        if (browsingContext.recentAreas.some((a) => loc.includes(a.toLowerCase()))) score += 8;
+      }
       if (p.images && p.images.length > 0) score += 2;
       if (p.price_from) score += 1;
       return { project: p, score };
     });
     return scored.sort((a, b) => b.score - a.score).slice(0, 3).map((s) => s.project);
-  }, [projects, currentProjectId, currentDeveloperId, currentLocation, currentEmirate]);
+  }, [projects, currentProjectId, currentDeveloperId, currentLocation, currentEmirate, browsingContext]);
 
   if (recommendedProjects.length === 0) return null;
 
