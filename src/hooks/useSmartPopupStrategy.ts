@@ -177,7 +177,7 @@ export function useSmartPopupStrategy(): SmartPopupState & {
         window.removeEventListener("scroll", handleScroll);
       };
     }
-  }, [location.pathname]);
+  }, [location.pathname, isAuthenticated]);
 
   const markShown = useCallback(() => {
     try {

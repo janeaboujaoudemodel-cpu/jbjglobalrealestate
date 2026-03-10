@@ -30,7 +30,7 @@ const CommandPaletteRoot = lazy(() => import("@/components/ui/command-palette-ro
 const GuidedTour = lazy(() => import("@/components/GuidedTour"));
 
 const CHAT_DAILY_KEY = "jj_chat_daily_shown";
-const SCROLL_DELAY_MS = 3500;
+const SCROLL_DELAY_MS = 1500;
 
 const hasDailyShown = (): boolean => {
   try {
