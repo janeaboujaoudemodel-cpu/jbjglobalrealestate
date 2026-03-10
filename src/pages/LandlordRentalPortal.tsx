@@ -184,8 +184,8 @@ export default function LandlordRentalPortal() {
         </div>
       </section>
 
-      {/* Main Content - Dark Theme */}
-      <section className="py-16 bg-zinc-950 text-white">
+      {/* Main Content */}
+      <section className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
         <div className="container mx-auto px-4">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="bg-zinc-900 border border-zinc-800 mb-8">
