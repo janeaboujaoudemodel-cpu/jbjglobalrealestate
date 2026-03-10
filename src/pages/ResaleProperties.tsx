@@ -235,7 +235,7 @@ const ResaleProperties = () => {
               </Select>
 
               {/* Clear */}
-              {(areaFilter !== "all" || typeFilter !== "all" || bedroomFilter !== "all" || priceFilter !== "all" || handoverFilter !== "all" || searchQuery) && (
+              {(areaFilter !== "all" || typeFilter !== "all" || bedroomFilter !== "all" || priceFilter !== "all" || handoverFilter !== "all" || furnishingFilter !== "all" || searchQuery) && (
                 <Button
                   variant="outline"
                   size="sm"
@@ -245,6 +245,7 @@ const ResaleProperties = () => {
                     setBedroomFilter("all");
                     setPriceFilter("all");
                     setHandoverFilter("all");
+                    setFurnishingFilter("all");
                     setSearchQuery("");
                   }}
                   className="h-11 px-4 border-gold/40 text-black hover:bg-gold/10 rounded-xl"
