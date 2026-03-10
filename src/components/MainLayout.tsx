@@ -21,6 +21,7 @@ import GlobalContactGating from "@/components/GlobalContactGating";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useOnboardingTour } from "@/hooks/use-onboarding-tour";
 import { useActivityTracker } from "@/hooks/useActivityTracker";
+import { useVisitorTracking } from "@/hooks/useVisitorTracking";
 
 // Lazy-load non-critical components to reduce initial bundle
 const AIChatWidget = lazy(() => import("@/components/AIChatWidget"));
