@@ -102,7 +102,7 @@ const ContinueSearching = ({
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(200,167,102,0.06)_0%,_transparent_60%)] z-[2]" />
       </div>
 
-      <div className="container mx-auto px-4 relative z-20">
+      <div className="px-4 md:px-6 lg:px-8 relative z-20">
         {/* Header */}
         <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
           <div className="flex items-center gap-3">
