@@ -73,7 +73,7 @@ import ConsultationRequestForm from "@/components/ConsultationRequestForm";
 import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
 import PropertiesMapView from "@/components/maps/PropertiesMapView";
-import PropertiesVerticalNav from "@/components/navigation/PropertiesVerticalNav";
+// PropertiesVerticalNav removed — handled globally by MainLayout
 
 // Currency conversion rates - 10 unified currencies
 const CURRENCY_RATES: Record<string, number> = {
