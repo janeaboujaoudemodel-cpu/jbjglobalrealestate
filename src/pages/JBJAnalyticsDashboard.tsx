@@ -376,6 +376,78 @@ const JBJAnalyticsDashboard: React.FC = () => {
             </TabsTrigger>
           </TabsList>
 
+          <TabsContent value="visitors">
+            <div className="space-y-6">
+              {/* Daily Visitors Chart */}
+              <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
+                <CardHeader>
+                  <CardTitle className="text-black flex items-center gap-2">
+                    <Users className="w-5 h-5 text-gold" />
+                    Daily Visitors Trend
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {dailyVisitors.length === 0 ? (
+                    <p className="text-zinc-500 text-center py-8">No visitor data for this period</p>
+                  ) : (
+                    <ResponsiveContainer width="100%" height={320}>
+                      <AreaChart data={dailyVisitors}>
+                        <defs>
+                          <linearGradient id="visitorsGradient" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="#C9A84C" stopOpacity={0.3} />
+                            <stop offset="95%" stopColor="#C9A84C" stopOpacity={0} />
+                          </linearGradient>
+                        </defs>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#C9A84C20" />
+                        <XAxis dataKey="date" tick={{ fill: '#666', fontSize: 12 }} />
+                        <YAxis tick={{ fill: '#666', fontSize: 12 }} />
+                        <RechartsTooltip
+                          contentStyle={{ backgroundColor: '#FDFBF7', border: '1px solid #C9A84C40', borderRadius: 12, fontSize: 13 }}
+                          labelStyle={{ fontWeight: 600, color: '#000' }}
+                        />
+                        <Area type="monotone" dataKey="visitors" stroke="#C9A84C" strokeWidth={2} fill="url(#visitorsGradient)" name="Unique Visitors" />
+                        <Area type="monotone" dataKey="pageViews" stroke="#8B7355" strokeWidth={1.5} fill="transparent" name="Page Views" strokeDasharray="4 4" />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Summary Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+                  <CardContent className="p-5 text-center">
+                    <div className="w-10 h-10 rounded-full bg-gold/15 flex items-center justify-center mx-auto mb-2">
+                      <Users className="w-5 h-5 text-gold" />
+                    </div>
+                    <p className="text-2xl font-bold text-black">{dailyVisitors.reduce((s, d) => s + d.visitors, 0)}</p>
+                    <p className="text-xs text-zinc-500">Total Unique Visitors</p>
+                  </CardContent>
+                </Card>
+                <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+                  <CardContent className="p-5 text-center">
+                    <div className="w-10 h-10 rounded-full bg-gold/15 flex items-center justify-center mx-auto mb-2">
+                      <Eye className="w-5 h-5 text-gold" />
+                    </div>
+                    <p className="text-2xl font-bold text-black">{dailyVisitors.reduce((s, d) => s + d.pageViews, 0)}</p>
+                    <p className="text-xs text-zinc-500">Total Page Views</p>
+                  </CardContent>
+                </Card>
+                <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+                  <CardContent className="p-5 text-center">
+                    <div className="w-10 h-10 rounded-full bg-gold/15 flex items-center justify-center mx-auto mb-2">
+                      <Activity className="w-5 h-5 text-gold" />
+                    </div>
+                    <p className="text-2xl font-bold text-black">
+                      {dailyVisitors.length > 0 ? Math.round(dailyVisitors.reduce((s, d) => s + d.visitors, 0) / dailyVisitors.length) : 0}
+                    </p>
+                    <p className="text-xs text-zinc-500">Avg. Daily Visitors</p>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </TabsContent>
+
           <TabsContent value="usage">
             <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
               <CardHeader>
