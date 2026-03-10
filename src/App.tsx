@@ -52,6 +52,7 @@ const AdminChatDashboard = lazy(() => import("./pages/admin/AdminChatDashboard")
 const AdminIntelligence = lazy(() => import("./pages/admin/AdminIntelligence"));
 const InquiryManagementHub = lazy(() => import("./pages/admin/InquiryManagementHub"));
 import { AuthProvider } from "@/contexts/AuthContext";
+import { BrandPaletteProvider } from "@/contexts/BrandPaletteContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ActiveLeadProvider } from "@/contexts/ActiveLeadContext";
 import { PopupCoordinatorProvider } from "@/contexts/PopupCoordinatorContext";
@@ -237,6 +238,7 @@ const Spreadsheet = lazy(() => import("./pages/Spreadsheet"));
 const Documents = lazy(() => import("./pages/Documents"));
 const QRCodeGenerator = lazy(() => import("./pages/QRCodeGenerator"));
 const OwnerCreativeSuite = lazy(() => import("./pages/OwnerCreativeSuite"));
+const BrandPaletteHub = lazy(() => import("./pages/owner/BrandPaletteHub"));
 const JobOfferTemplate = lazy(() => import("./pages/JobOfferTemplate"));
 const OwnerRecommendations = lazy(() => import("./pages/OwnerRecommendations"));
 const ContractForms = lazy(() => import("./pages/ContractForms"));
@@ -391,6 +393,7 @@ const App = () => {
           <Sonner />
           <BrowserRouter>
             <AuthProvider>
+            <BrandPaletteProvider>
               <UserModeProvider>
               <FounderVisibilityProvider>
                 <PodcastVisibilityProvider>
@@ -725,6 +728,7 @@ const App = () => {
                 <Route path="/documents" element={<Documents />} />
                 <Route path="/qr-generator" element={<QRCodeGenerator />} />
                 <Route path="/owner/creative-suite" element={<OwnerGuard><OwnerCreativeSuite /></OwnerGuard>} />
+                <Route path="/owner/brand-palette" element={<OwnerGuard><BrandPaletteHub /></OwnerGuard>} />
                 <Route path="/owner/job-offer-template" element={<OwnerGuard><JobOfferTemplate /></OwnerGuard>} />
                 <Route path="/owner/recommendations" element={<OwnerGuard><OwnerRecommendations /></OwnerGuard>} />
                 <Route path="/contract-forms" element={<ContractForms />} />
@@ -987,6 +991,7 @@ const App = () => {
               </PodcastVisibilityProvider>
             </FounderVisibilityProvider>
             </UserModeProvider>
+            </BrandPaletteProvider>
             </AuthProvider>
           </BrowserRouter>
         </LanguageProvider>

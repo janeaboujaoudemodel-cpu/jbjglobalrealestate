@@ -248,51 +248,6 @@ const Index = () => {
         </motion.div>
       </div>
 
-      {/* ===== TEST PALETTE CARD — DELETE AFTER APPROVAL ===== */}
-      <section className="bg-black py-12">
-        <div className="max-w-2xl mx-auto px-4">
-          <div className="rounded-2xl border-2 border-gold overflow-hidden shadow-[0_8px_30px_rgba(200,167,102,0.25)]">
-            {/* Header - Pure Black */}
-            <div className="bg-black px-6 py-5 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-gold flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-black" />
-              </div>
-              <div>
-                <h3 className="text-gold font-bold text-lg" style={{ fontFamily: "Poppins, sans-serif" }}>JBJ Color Palette Test</h3>
-                <p className="text-white/60 text-xs">Black · Gold Champagne · White Pearl</p>
-              </div>
-            </div>
-
-            {/* Body - Active Champagne Gradient */}
-            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark px-6 py-6">
-              <p className="text-black font-semibold text-sm mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>Active Champagne Layer</p>
-              <p className="text-black/70 text-sm leading-relaxed mb-4">
-                This is the champagne gradient used across all sections — warm, golden, premium feel.
-              </p>
-
-              {/* Inner Card - Pearl White (Layer 3) */}
-              <div className="rounded-xl border border-gold/30 bg-gradient-to-br from-[hsl(40,38%,96%)] via-[hsl(39,28%,92%)] to-[hsl(38,20%,88%)] p-5">
-                <p className="text-black font-semibold text-sm mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>Pearl White Inner Card</p>
-                <p className="text-black/60 text-sm leading-relaxed">
-                  The lightest layer — used for inner cards, inputs, and content containers.
-                </p>
-              </div>
-            </div>
-
-            {/* Footer - Swatches */}
-            <div className="bg-black px-6 py-4 flex items-center gap-3">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-black border-2 border-gold" title="Black" />
-                <div className="w-8 h-8 rounded-full bg-gold" title="Gold" />
-                <div className="w-8 h-8 rounded-full bg-champagne" title="Champagne" />
-                <div className="w-8 h-8 rounded-full bg-champagne-light" title="Champagne Light" />
-                <div className="w-8 h-8 rounded-full bg-[hsl(40,38%,96%)] border border-gold/20" title="Pearl White" />
-              </div>
-              <span className="text-white/40 text-xs ml-auto">TEST CARD — for approval only</span>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* DEVELOPER PARTNERS MARQUEE - MOVED UP: Directly under hero */}
       <div id="developer-partners">
