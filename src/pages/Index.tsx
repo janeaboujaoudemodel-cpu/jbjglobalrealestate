@@ -257,7 +257,7 @@ const Index = () => {
       </div>
 
       {/* DIVIDER between Developer Partners and Trust Bar */}
-      <SectionDivider />
+      <SectionDivider fullWidth />
 
       {/* TRUST BAR (8 Cards) - 4x2 Grid */}
       <div id="trust-bar" className="bg-black py-12 md:py-16">
