@@ -601,7 +601,7 @@ export default function JoinApplication() {
                     value={formData.city}
                     onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                     required
-                    disabled={!user || loading}
+                    disabled={loading}
                     className="bg-background"
                   />
                 </div>
