@@ -609,11 +609,11 @@ export default function GlobalVerticalNav() {
         ? "bg-orange-500 text-white border border-orange-400 font-bold"
         : "bg-orange-500/6 text-orange-500 font-semibold hover:bg-orange-500/12 border border-orange-200/15";
     }
-    // List Your Property — Light Sky Blue
+    // List Your Property — Very Light Blue (distinct from Careers teal)
     if (item.href === '/listing-portal' && item.highlight) {
       return shouldHighlight
-        ? "bg-sky-500 text-white border border-sky-400 font-bold"
-        : "bg-sky-500/6 text-sky-500 font-semibold hover:bg-sky-500/12 border border-sky-200/15";
+        ? "bg-sky-400 text-white border border-sky-300 font-bold"
+        : "bg-sky-400/6 text-sky-400 font-semibold hover:bg-sky-400/12 border border-sky-200/15";
     }
     // Resale Properties — Emerald (softened)
     if (item.href === '/resale-properties') {
