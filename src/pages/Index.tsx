@@ -278,8 +278,9 @@ const Index = () => {
         <ContinueSearching type="property" className="bg-black" />
       </Suspense>
 
-      {/* RESALE PROPERTIES - Investor Network Listings */}
       <SectionDivider />
+
+      {/* RESALE PROPERTIES - Investor Network Listings */}
       <Suspense fallback={<SectionLoader />}>
         <ResalePropertiesSection />
       </Suspense>

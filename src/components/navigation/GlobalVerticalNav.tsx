@@ -77,13 +77,30 @@ const NAV_ITEMS: NavItem[] = [
   { label: "News", href: "/news", icon: Megaphone },
 
   // ── Services ──
-  { label: "Services", href: "/services", icon: Briefcase, megaMenu: 'services', section: "SERVICES" },
+  { label: "All Services", href: "/services", icon: Briefcase, megaMenu: 'services', section: "SERVICES" },
+  { label: "Property Management", href: "/services/property-management", icon: Key },
+  { label: "Golden Visa", href: "/guides/golden-visa-uae", icon: Award },
+  { label: "Mortgage Advisory", href: "/partners/mortgage", icon: Landmark },
+  { label: "Valuation", href: "/sell/valuation", icon: DollarSign },
+  { label: "Selling Advisory", href: "/services/selling-advisory", icon: TrendingUp },
+  { label: "Short-term Rentals", href: "/services/short-term-rentals", icon: CalendarClock },
+  { label: "Concierge", href: "/services/concierge", icon: Handshake },
+  { label: "Company Setup", href: "/services/company-setup", icon: Building },
 
   // ── Company ──
   { label: "About", href: "/about", icon: Users, megaMenu: 'company', section: "COMPANY" },
   { label: "Team", href: "/team", icon: Users },
   { label: "Contact", href: "/contact", icon: Phone },
-  { label: "Legal", href: "/terms", icon: Scale, megaMenu: 'legal' },
+
+  // ── Legal ──
+  { label: "Terms of Service", href: "/terms", icon: Scale, megaMenu: 'legal', section: "LEGAL" },
+  { label: "Privacy Policy", href: "/privacy", icon: Lock },
+  { label: "Cookie Policy", href: "/cookies", icon: Shield },
+  { label: "Disclaimers", href: "/disclaimers", icon: FileText },
+  { label: "Intellectual Property", href: "/intellectual-property", icon: ShieldCheck },
+  { label: "AML / KYC", href: "/aml-kyc", icon: Shield },
+  { label: "Accessibility", href: "/accessibility", icon: Accessibility },
+  { label: "Trust Center", href: "/trust-and-audit-center", icon: ShieldCheck },
 
   // ── Account ──
   { label: "Favorites", href: "/favorites", icon: Heart, section: "MY ACCOUNT" },
@@ -276,6 +293,10 @@ const SHORTCUT_GROUPS: ShortcutGroup[] = [
     items: [
       { label: 'My Tasks', icon: ListChecks, href: '/my-dashboard#tasks' },
       { label: 'Notifications', icon: Bell, href: '/my-dashboard#notifications' },
+      { label: 'Alerts', icon: Bell, href: '/my-dashboard#alerts' },
+      { label: 'Books', icon: BookMarked, href: '/education-hub' },
+      { label: 'Favorites', icon: Heart, href: '/favorites' },
+      { label: 'Shortlisted', icon: ListChecks, href: '/favorites?tab=shortlist' },
     ],
   },
   {
@@ -338,7 +359,7 @@ const SHORTCUT_GROUPS: ShortcutGroup[] = [
 ];
 
 /* ─── SECTION KEYS ─── */
-const SECTION_KEYS = ["PROPERTIES", "TOOLS", "INSIGHTS", "SERVICES", "COMPANY", "MY ACCOUNT"] as const;
+const SECTION_KEYS = ["PROPERTIES", "TOOLS", "INSIGHTS", "SERVICES", "COMPANY", "LEGAL", "MY ACCOUNT"] as const;
 type SectionKey = typeof SECTION_KEYS[number];
 
 /* ─── SECTION ICONS ─── */
@@ -348,6 +369,7 @@ const SECTION_ICONS: Record<SectionKey, any> = {
   "INSIGHTS": Lightbulb,
   "SERVICES": Briefcase,
   "COMPANY": Users,
+  "LEGAL": Scale,
   "MY ACCOUNT": User,
 };
 
@@ -383,7 +405,7 @@ function VerticalNavUtilityBar({ onSearchOpen }: { onSearchOpen: () => void }) {
   const divider = <div className="w-px h-5 bg-gold/25 flex-shrink-0" />;
 
   return (
-    <div className="px-2 py-2 border-t border-gold/20 bg-gradient-to-b from-transparent to-[#EDE4D3]/50">
+    <div className="px-2 py-2 border-b border-gold/20 bg-gradient-to-b from-transparent to-[#EDE4D3]/30">
       <div className="flex items-center justify-between gap-0.5">
         {/* Search */}
         <Tooltip>
@@ -634,15 +656,20 @@ export default function GlobalVerticalNav() {
     return items.some(item => item.megaMenu === activeMegaMenu);
   };
 
+  /* FIX: When a mega menu is open, ONLY highlight the item whose megaMenu matches.
+     Items without a megaMenu should NOT highlight based on route when a mega menu is open. */
   const getItemStyle = (item: NavItem, sectionKey?: string) => {
-    const isThisMenuOpen = activeMegaMenu === item.megaMenu;
+    const isThisMenuOpen = item.megaMenu ? activeMegaMenu === item.megaMenu : false;
     const routeActive = isRouteActive(item.href);
-    const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
+    // When a mega menu is open, only the item that owns it should highlight
+    const shouldHighlight = activeMegaMenu
+      ? isThisMenuOpen
+      : routeActive;
 
     if (item.href === '/join') {
       return shouldHighlight
-        ? "bg-emerald-600 text-white border border-emerald-500 font-bold"
-        : "bg-emerald-500/15 text-emerald-700 font-semibold hover:bg-emerald-500/25 border border-emerald-500/30";
+        ? "bg-emerald-500 text-white border border-emerald-400 font-bold"
+        : "bg-emerald-400/10 text-emerald-600 font-semibold hover:bg-emerald-400/20 border border-emerald-400/20";
     }
     if (item.href === '/quiz') {
       return shouldHighlight
@@ -665,11 +692,12 @@ export default function GlobalVerticalNav() {
   };
 
   const getIconStyle = (item: NavItem, sectionKey?: string) => {
-    const isThisMenuOpen = activeMegaMenu === item.megaMenu;
+    const isThisMenuOpen = item.megaMenu ? activeMegaMenu === item.megaMenu : false;
     const routeActive = isRouteActive(item.href);
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
-    if (item.href === '/join') return shouldHighlight ? 'text-white' : 'text-emerald-600';
+    if (item.href === '/join') return shouldHighlight ? 'text-white' : 'text-emerald-500';
     if (item.href === '/quiz') return shouldHighlight ? 'text-white' : 'text-purple-600';
+    // Sidebar items: icons are black/60 (inactive) or gold (active)
     if (sectionKey === 'MY ACCOUNT') return shouldHighlight ? 'text-gold' : 'text-black/60';
     return shouldHighlight ? "text-gold" : "text-black/60";
   };
@@ -918,6 +946,9 @@ export default function GlobalVerticalNav() {
         </div>
       </div>
 
+      {/* Utility Bar — moved under monogram */}
+      <VerticalNavUtilityBar onSearchOpen={() => setSearchOpen(true)} />
+
       {/* Scrollable area: shortcuts + hubs + sections */}
       <nav
         className="flex-1 overflow-y-auto jj-scrollbar-gold jj-scrollbar-always-visible overscroll-contain min-h-0"
@@ -929,8 +960,8 @@ export default function GlobalVerticalNav() {
             onClick={(e) => handleNavClick('shortcuts', e as any)}
             className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-bold w-full transition-all ${
               activeMegaMenu === 'shortcuts'
-                ? "bg-gradient-to-r from-gold/25 to-gold/15 text-black border border-gold/50"
-                : "text-gold hover:bg-gold/10 border border-gold/30"
+                ? "bg-gradient-to-r from-gold/30 to-gold/20 text-black border-2 border-gold/60 shadow-md shadow-gold/15"
+                : "text-gold hover:bg-gold/15 border-2 border-gold/50 bg-gold/10"
             }`}
           >
             <Zap className="w-4 h-4 text-gold flex-shrink-0" />
@@ -988,11 +1019,11 @@ export default function GlobalVerticalNav() {
                     onClick={() => toggleSection(sectionKey)}
                     className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-[11px] uppercase tracking-[0.15em] font-bold transition-all ${
                       sectionHighlighted
-                        ? "text-black bg-gold/15 border-l-2 border-gold"
-                        : "text-black hover:text-black hover:bg-gold/5"
+                        ? "text-gold bg-gold/15 border-l-2 border-gold"
+                        : "text-gold/80 hover:text-gold hover:bg-gold/5"
                     }`}
                   >
-                    <SectionIcon className={`w-3.5 h-3.5 flex-shrink-0 ${sectionHighlighted ? 'text-gold' : 'text-black/50'}`} />
+                    <SectionIcon className={`w-3.5 h-3.5 flex-shrink-0 ${sectionHighlighted ? 'text-black' : 'text-black/50'}`} />
                     <span className="flex-1 text-left">{sectionKey}</span>
                     <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'} ${sectionHighlighted ? 'text-gold' : 'text-black/40'}`} />
                     {!isOpen && hasActiveChild && (
@@ -1035,13 +1066,8 @@ export default function GlobalVerticalNav() {
         </div>
       </nav>
 
-      {/* Bottom pinned section — mt-auto fills remaining space */}
+      {/* Bottom pinned section */}
       <div className="mt-auto flex-shrink-0">
-        {/* Utility Bar — Search, Favorites, sqft/sqm, Language, Currency with dividers */}
-        <VerticalNavUtilityBar
-          onSearchOpen={() => setSearchOpen(true)}
-        />
-
         {/* Support — always visible, compact */}
         <div className="px-3 py-3 border-t border-gold/20 space-y-2 bg-gradient-to-b from-[#EDE4D3]/50 to-[#EDE4D3]">
           <a
@@ -1071,10 +1097,44 @@ export default function GlobalVerticalNav() {
         style={{ willChange: 'transform, opacity' }}
       >
       {collapsed ? (
-        <div className="hidden lg:flex w-[48px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-gold/30 flex-col h-full items-center py-4">
-          <Link to="/" className="mb-4">
+        <div className="hidden lg:flex w-[48px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-gold/30 flex-col h-full items-center py-4 gap-3">
+          <Link to="/" className="mb-2">
             <img src={jbjMonogramLightBg} alt="JBJ" className="w-9 h-9 object-contain" />
           </Link>
+
+          {/* Section icons in collapsed state */}
+          {SECTION_KEYS.map((sectionKey) => {
+            const SectionIcon = SECTION_ICONS[sectionKey];
+            const items = sectionGroups[sectionKey];
+            const hasActiveChild = items?.some(item => isRouteActive(item.href)) || false;
+            const hasMegaActive = sectionHasActiveMega(sectionKey);
+            const isActive = hasActiveChild || hasMegaActive;
+
+            return (
+              <Tooltip key={sectionKey}>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={() => {
+                      setCollapsed(false);
+                      try { localStorage.setItem('jj_nav_collapsed', '0'); } catch {}
+                      setOpenSection(sectionKey);
+                    }}
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${
+                      isActive
+                        ? 'bg-gold/15 text-gold'
+                        : 'text-black/60 hover:text-gold hover:bg-gold/10'
+                    }`}
+                  >
+                    <SectionIcon className="w-4 h-4" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="right" className="text-xs">{sectionKey}</TooltipContent>
+              </Tooltip>
+            );
+          })}
+
+          <div className="flex-1" />
+
           <button
             onClick={toggleCollapse}
             className="w-10 h-10 rounded-xl bg-gradient-to-br from-gold/20 via-gold/10 to-gold/5 border border-gold/50 flex items-center justify-center hover:from-gold/30 hover:to-gold/15 transition-all shadow-lg shadow-gold/15"
