@@ -52,6 +52,7 @@ const AdminChatDashboard = lazy(() => import("./pages/admin/AdminChatDashboard")
 const AdminIntelligence = lazy(() => import("./pages/admin/AdminIntelligence"));
 const InquiryManagementHub = lazy(() => import("./pages/admin/InquiryManagementHub"));
 import { AuthProvider } from "@/contexts/AuthContext";
+import { BrandPaletteProvider } from "@/contexts/BrandPaletteContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ActiveLeadProvider } from "@/contexts/ActiveLeadContext";
 import { PopupCoordinatorProvider } from "@/contexts/PopupCoordinatorContext";
