@@ -1,4 +1,5 @@
 import { useEffect, useState, lazy, Suspense } from "react";
+// lazy already imported above
 import { useLocation } from "react-router-dom";
 import {
   hasTransparentHeader,
