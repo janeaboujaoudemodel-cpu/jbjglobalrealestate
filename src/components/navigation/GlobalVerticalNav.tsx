@@ -630,23 +630,25 @@ export default function GlobalVerticalNav() {
 
   const renderNavContent = () => (
     <>
-      {/* Logo + Minimize */}
-      <div className="p-4 border-b border-gold/20 flex items-center gap-2 hover:opacity-80 transition-opacity">
-        <Link to="/" onClick={() => setActiveMegaMenu(null)} className="flex items-center gap-3 flex-1 min-w-0">
-          <img src={jbjMonogramLightBg} alt="JBJ" className="w-16 h-16 object-contain flex-shrink-0" />
-          <div className="flex flex-col" style={{ fontFamily: "Poppins, sans-serif" }}>
+      {/* Logo + Minimize — Lovable-style inline toggle */}
+      <div className="p-4 border-b border-gold/20">
+        <div className="flex items-center gap-2">
+          <Link to="/" onClick={() => setActiveMegaMenu(null)} className="flex-shrink-0">
+            <img src={jbjMonogramLightBg} alt="JBJ" className="w-10 h-10 object-contain" />
+          </Link>
+          <Link to="/" onClick={() => setActiveMegaMenu(null)} className="flex flex-col flex-1 min-w-0 hover:opacity-80 transition-opacity" style={{ fontFamily: "Poppins, sans-serif" }}>
             <span className="text-[11px] font-bold text-black tracking-wide leading-tight">JBJ GLOBAL</span>
-            <span className="text-[11px] font-bold text-gold tracking-wide leading-tight">REAL ESTATE</span>
-          </div>
-        </Link>
-        <button
-          onClick={toggleCollapse}
-          className="w-6 h-6 rounded-md bg-gold/10 border border-gold/30 flex items-center justify-center hover:bg-gold/20 transition-colors flex-shrink-0"
-          aria-label="Minimize navigation"
-          title="Minimize navigation"
-        >
-          <X className="w-3 h-3 text-gold" />
-        </button>
+            <span className="text-[10px] font-bold text-gold tracking-wide leading-tight">REAL ESTATE</span>
+          </Link>
+          <button
+            onClick={toggleCollapse}
+            className="w-5 h-5 rounded flex items-center justify-center text-black/40 hover:text-black/70 hover:bg-black/5 transition-colors flex-shrink-0"
+            aria-label="Minimize navigation"
+            title="Minimize navigation"
+          >
+            <ChevronLeft className="w-3.5 h-3.5" />
+          </button>
+        </div>
       </div>
 
       {/* My Shortcuts — premium flyout trigger */}
