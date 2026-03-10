@@ -265,7 +265,8 @@ const Quiz = () => {
     if (currentStep < QUIZ_QUESTIONS.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
-      if (user && isFormValid()) {
+      // Check if lead already captured — skip form if so
+      if (isLeadCaptured || (user && isFormValid())) {
         proceedToResults();
       } else {
         setShowForm(true);
