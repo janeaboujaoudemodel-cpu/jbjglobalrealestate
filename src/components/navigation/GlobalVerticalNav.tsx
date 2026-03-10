@@ -16,6 +16,22 @@ import React, { useState, useCallback, useEffect, useMemo } from "react";
 import GlobalSearchModal from "@/components/GlobalSearchModal";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
+import { useDevelopers } from "@/hooks/useProjects";
+import { useAreas } from "@/hooks/useAreas";
+
+/* ─── CURATED TOP ENTRIES (matching horizontal mega menus) ─── */
+const FEATURED_DEVELOPER_SLUGS = [
+  'emaar', 'damac', 'nakheel', 'meraas', 'sobha', 'aldar',
+  'omniyat', 'select-group', 'ellington', 'azizi-developments',
+  'dubai-properties', 'danube-properties',
+];
+
+const FEATURED_AREA_SLUGS = [
+  'downtown-dubai', 'palm-jumeirah', 'dubai-marina', 'dubai-hills',
+  'business-bay', 'dubai-islands', 'jvc-jumeirah-village-circle',
+  'dubai-creek-harbour', 'emaar-beachfront', 'al-marjan-island',
+  'meydan-nad-al-sheba-1', 'jumeirah-beach-residence',
+];
 
 /* ─── TYPES ─── */
 type MegaMenuKey =
@@ -229,8 +245,8 @@ const MEGA_MENU_TITLES: Record<MegaMenuKey, string> = {
   buy: 'Buy Properties',
   sell: 'Sell Your Property',
   rent: 'Rent',
-  developers: 'Developers',
-  areas: 'Areas & Locations',
+  developers: 'Top Developers',
+  areas: 'Prime Locations',
   insights: 'Market Insights',
   'ai-tools': 'AI Tools',
   creative: 'Creative Suites',
@@ -324,6 +340,16 @@ const SHORTCUT_GROUPS: ShortcutGroup[] = [
 const SECTION_KEYS = ["PROPERTIES", "TOOLS", "INSIGHTS", "SERVICES", "COMPANY", "MY ACCOUNT"] as const;
 type SectionKey = typeof SECTION_KEYS[number];
 
+/* ─── SECTION ICONS ─── */
+const SECTION_ICONS: Record<SectionKey, any> = {
+  "PROPERTIES": Building2,
+  "TOOLS": Sparkles,
+  "INSIGHTS": Lightbulb,
+  "SERVICES": Briefcase,
+  "COMPANY": Users,
+  "MY ACCOUNT": User,
+};
+
 /* ─── COMPONENT ─── */
 export default function GlobalVerticalNav() {
   const location = useLocation();
@@ -334,18 +360,44 @@ export default function GlobalVerticalNav() {
     try { return localStorage.getItem('jj_nav_collapsed') === '1'; } catch { return false; }
   });
 
-  // Collapsible sections state
-  const [openSections, setOpenSections] = useState<Set<SectionKey>>(new Set());
+  // Collapsible sections state — accordion: only one open at a time
+  const [openSection, setOpenSection] = useState<SectionKey | null>(null);
+
+  // Data hooks for rich flyouts
+  const { data: developers } = useDevelopers(false);
+  const { data: areas } = useAreas();
+
+  // Curated developers for flyout
+  const curatedDevelopers = useMemo(() => {
+    if (!developers || developers.length === 0) return [];
+    const slugMap = new Map(developers.map(d => [d.slug, d]));
+    const ordered: { name: string; slug: string }[] = [];
+    for (const slug of FEATURED_DEVELOPER_SLUGS) {
+      const d = slugMap.get(slug);
+      if (d) ordered.push({ name: d.name, slug: d.slug });
+    }
+    return ordered.slice(0, 12);
+  }, [developers]);
+
+  // Curated areas for flyout
+  const curatedAreas = useMemo(() => {
+    if (!areas || areas.length === 0) return [];
+    const slugMap = new Map(areas.map(a => [a.slug, a]));
+    const ordered: { name: string; slug: string }[] = [];
+    for (const slug of FEATURED_AREA_SLUGS) {
+      const a = slugMap.get(slug);
+      if (a) ordered.push({ name: a.name, slug: a.slug });
+    }
+    return ordered.slice(0, 12);
+  }, [areas]);
 
   // ── Auto-reveal on homepage: hidden initially, show after 3s or scroll ──
   const isHomepage = location.pathname === "/" || location.pathname === "";
   const [navRevealed, setNavRevealed] = useState(() => {
-    // If already revealed in this session, stay revealed
     try { return sessionStorage.getItem('jj_nav_revealed') === '1'; } catch { return false; }
   });
 
   useEffect(() => {
-    // On non-homepage routes, always reveal
     if (!isHomepage) {
       if (!navRevealed) {
         setNavRevealed(true);
@@ -353,17 +405,11 @@ export default function GlobalVerticalNav() {
       }
       return;
     }
-
-    // If already revealed, nothing to do
     if (navRevealed) return;
-
-    // Timer: reveal after 3 seconds
     const timer = setTimeout(() => {
       setNavRevealed(true);
       try { sessionStorage.setItem('jj_nav_revealed', '1'); } catch {}
     }, 3000);
-
-    // Scroll: reveal on any scroll
     const handleScroll = () => {
       if (window.scrollY > 10) {
         setNavRevealed(true);
@@ -371,7 +417,6 @@ export default function GlobalVerticalNav() {
       }
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
-
     return () => {
       clearTimeout(timer);
       window.removeEventListener('scroll', handleScroll);
@@ -452,20 +497,23 @@ export default function GlobalVerticalNav() {
   useEffect(() => {
     for (const [section, items] of Object.entries(sectionGroups)) {
       if (items.some(item => isRouteActive(item.href))) {
-        setOpenSections(prev => new Set(prev).add(section as SectionKey));
+        setOpenSection(section as SectionKey);
         break;
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
 
+  // Accordion toggle — only one section open at a time
   const toggleSection = (section: SectionKey) => {
-    setOpenSections(prev => {
-      const next = new Set(prev);
-      if (next.has(section)) next.delete(section);
-      else next.add(section);
-      return next;
-    });
+    setOpenSection(prev => prev === section ? null : section);
+  };
+
+  // Check if a section contains the active mega menu
+  const sectionHasActiveMega = (sectionKey: string) => {
+    const items = sectionGroups[sectionKey];
+    if (!items || !activeMegaMenu) return false;
+    return items.some(item => item.megaMenu === activeMegaMenu);
   };
 
   const getItemStyle = (item: NavItem, sectionKey?: string) => {
@@ -473,27 +521,21 @@ export default function GlobalVerticalNav() {
     const routeActive = isRouteActive(item.href);
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
 
-    // Careers gets green highlight
     if (item.href === '/join') {
       return shouldHighlight
         ? "bg-emerald-600 text-white border border-emerald-500 font-bold"
         : "bg-emerald-500/15 text-emerald-700 font-semibold hover:bg-emerald-500/25 border border-emerald-500/30";
     }
-
-    // AI Home Finder gets purple highlight
     if (item.href === '/quiz') {
       return shouldHighlight
         ? "bg-purple-600 text-white border border-purple-500 font-bold"
         : "bg-purple-500/15 text-purple-700 font-semibold hover:bg-purple-500/25 border border-purple-500/30";
     }
-
-    // My Account section — premium gold/black border style
     if (sectionKey === 'MY ACCOUNT') {
       return shouldHighlight
         ? "bg-gradient-to-r from-gold/20 to-gold/10 text-black border border-gold/40 font-bold"
         : "text-black/80 font-semibold hover:bg-gold/10 border border-gold/20";
     }
-
     if (item.highlight) {
       return shouldHighlight
         ? "bg-gradient-to-r from-gold/25 to-gold/15 text-black border border-gold/50 font-bold"
@@ -537,7 +579,6 @@ export default function GlobalVerticalNav() {
               className="pointer-events-auto w-[min(440px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[85vh]"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Header */}
               <div className="flex items-center justify-between px-5 py-3.5 border-b border-gold/20 bg-gradient-to-r from-[#E8DCC8]/50 to-transparent">
                 <div className="flex items-center gap-2.5">
                   <Zap className="w-4 h-4 text-gold" />
@@ -550,8 +591,6 @@ export default function GlobalVerticalNav() {
                   <X className="w-3 h-3 text-gold" />
                 </button>
               </div>
-
-              {/* Color-coded groups */}
               <div className="overflow-y-auto jj-scrollbar-gold p-3 pb-6 space-y-3">
                 {SHORTCUT_GROUPS.map((group) => (
                   <div key={group.label} className={`border-l-4 ${group.colorBorder} rounded-lg ${group.colorBg} p-2`}>
@@ -589,6 +628,96 @@ export default function GlobalVerticalNav() {
       );
     }
 
+    // Rich flyouts for developers and areas
+    if (activeMegaMenu === 'developers' || activeMegaMenu === 'areas') {
+      const isDev = activeMegaMenu === 'developers';
+      const curatedItems = isDev ? curatedDevelopers : curatedAreas;
+      const viewAllHref = isDev ? '/developers' : '/areas';
+      const viewAllLabel = isDev ? 'View All Developers' : 'View All Areas';
+      const ItemIcon = isDev ? Building : MapPin;
+
+      return (
+        <>
+          <div
+            className="fixed inset-0 z-[9999] bg-black/30 backdrop-blur-sm"
+            style={{ left: sidebarWidth }}
+            onClick={closeMegaMenu}
+          />
+          <div
+            className="fixed z-[10000] flex items-start justify-start pointer-events-none"
+            style={{ left: sidebarWidth, top: 0, bottom: 0, right: 0 }}
+          >
+            <div
+              className="pointer-events-auto w-[min(440px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[80vh]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between px-5 py-3.5 border-b border-gold/20 bg-gradient-to-r from-[#E8DCC8]/50 to-transparent">
+                <div className="flex items-center gap-2.5">
+                  <ItemIcon className="w-4 h-4 text-gold" />
+                  <h3 className="text-sm font-bold text-black tracking-tight">{title}</h3>
+                  <span className="text-[10px] text-black/40 font-medium">({curatedItems.length})</span>
+                </div>
+                <button
+                  onClick={closeMegaMenu}
+                  className="w-6 h-6 rounded-full bg-gold/10 flex items-center justify-center hover:bg-gold/20 transition-colors"
+                >
+                  <X className="w-3 h-3 text-gold" />
+                </button>
+              </div>
+
+              {/* Curated list */}
+              <div className="overflow-y-auto jj-scrollbar-gold p-3 space-y-0.5">
+                {curatedItems.map((entry) => {
+                  const entryHref = isDev ? `/developer/${entry.slug}` : `/area/${entry.slug}`;
+                  const linkActive = isRouteActive(entryHref);
+                  return (
+                    <Link
+                      key={entry.slug}
+                      to={entryHref}
+                      onClick={closeMegaMenu}
+                      className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
+                        linkActive
+                          ? "bg-gradient-to-r from-gold/20 to-gold/10 text-black font-bold border border-gold/40"
+                          : "text-black/80 hover:bg-gold/10 hover:text-black"
+                      }`}
+                    >
+                      <ItemIcon className="w-4 h-4 text-gold flex-shrink-0" />
+                      <span className="flex-1">{entry.name}</span>
+                      <ChevronRight className="w-3 h-3 text-black/20 flex-shrink-0" />
+                    </Link>
+                  );
+                })}
+
+                {/* Divider + View All CTA */}
+                <hr className="border-gold/20 my-2" />
+                <Link
+                  to={viewAllHref}
+                  onClick={closeMegaMenu}
+                  className="flex items-center gap-2.5 px-3 py-3 rounded-xl text-sm font-bold text-gold hover:bg-gold/10 transition-all border border-gold/30"
+                >
+                  <Eye className="w-4 h-4 text-gold flex-shrink-0" />
+                  <span className="flex-1">{viewAllLabel}</span>
+                  <ChevronRight className="w-3.5 h-3.5 text-gold" />
+                </Link>
+                {!isDev && (
+                  <Link
+                    to="/guides"
+                    onClick={closeMegaMenu}
+                    className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-black/70 hover:bg-gold/10 transition-all"
+                  >
+                    <BookOpen className="w-4 h-4 text-gold/70 flex-shrink-0" />
+                    <span className="flex-1">Read Area Guides</span>
+                    <ChevronRight className="w-3 h-3 text-black/20 flex-shrink-0" />
+                  </Link>
+                )}
+              </div>
+            </div>
+          </div>
+        </>
+      );
+    }
+
     // Default mega menu
     const links = MEGA_MENU_LINKS[activeMegaMenu] || [];
     const isLargeMenu = links.length > 12;
@@ -608,7 +737,6 @@ export default function GlobalVerticalNav() {
             className={`pointer-events-auto w-[min(440px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] animate-in slide-in-from-left-2 fade-in duration-200 ${isLargeMenu ? 'max-h-[80vh]' : 'max-h-[60vh]'}`}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Panel header */}
             <div className="flex items-center justify-between px-5 py-3.5 border-b border-gold/20 bg-gradient-to-r from-[#E8DCC8]/50 to-transparent">
               <div className="flex items-center gap-2.5">
                 <Sparkles className="w-4 h-4 text-gold" />
@@ -621,8 +749,6 @@ export default function GlobalVerticalNav() {
                 <X className="w-3 h-3 text-gold" />
               </button>
             </div>
-
-            {/* Scrollable links */}
             <div className={`overflow-y-auto jj-scrollbar-gold p-3 ${isLargeMenu ? 'columns-2 gap-1' : 'space-y-0.5'}`}>
               {links.map((link) => {
                 const Icon = link.icon;
@@ -652,9 +778,9 @@ export default function GlobalVerticalNav() {
   };
 
   const renderNavContent = () => (
-    <>
-      {/* Logo + Minimize — Lovable-style inline toggle */}
-      <div className="p-4 border-b border-gold/20">
+    <div className="flex flex-col h-full">
+      {/* Logo + Minimize */}
+      <div className="p-4 border-b border-gold/20 flex-shrink-0">
         <div className="flex items-center gap-2">
           <Link to="/" onClick={() => setActiveMegaMenu(null)} className="flex-shrink-0">
             <img src={jbjMonogramLightBg} alt="JBJ" className="w-10 h-10 object-contain" />
@@ -675,7 +801,7 @@ export default function GlobalVerticalNav() {
       </div>
 
       {/* My Shortcuts — premium flyout trigger */}
-      <div className="px-2 pt-3 pb-1">
+      <div className="px-2 pt-3 pb-1 flex-shrink-0">
         <button
           onClick={(e) => handleNavClick('shortcuts', e as any)}
           className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-bold w-full transition-all ${
@@ -691,7 +817,7 @@ export default function GlobalVerticalNav() {
       </div>
 
       {/* Highlighted Hubs — always visible */}
-      <div className="px-2 py-1 space-y-0.5">
+      <div className="px-2 py-1 space-y-0.5 flex-shrink-0">
         {highlightItems.map((item, i) => {
           const hasMega = !!item.megaMenu;
           const isMenuOpen = activeMegaMenu === item.megaMenu;
@@ -719,102 +845,114 @@ export default function GlobalVerticalNav() {
         })}
       </div>
 
-      {/* Collapsible Section Nav */}
+      {/* Collapsible Section Nav — scrollable middle */}
       <nav
-        className="flex-1 py-2 px-2 space-y-1 overflow-y-auto jj-scrollbar-gold jj-scrollbar-always-visible overscroll-contain"
+        className="flex-1 py-2 px-2 space-y-0.5 overflow-y-auto jj-scrollbar-gold jj-scrollbar-always-visible overscroll-contain min-h-0"
         style={{ scrollbarGutter: "stable" }}
       >
-        {SECTION_KEYS.map((sectionKey) => {
+        {SECTION_KEYS.map((sectionKey, sectionIdx) => {
           const items = sectionGroups[sectionKey];
           if (!items || items.length === 0) return null;
-          const isOpen = openSections.has(sectionKey);
+          const isOpen = openSection === sectionKey;
           const hasActiveChild = items.some(item => isRouteActive(item.href));
+          const hasMegaActive = sectionHasActiveMega(sectionKey);
+          const sectionHighlighted = isOpen || hasActiveChild || hasMegaActive;
+          const SectionIcon = SECTION_ICONS[sectionKey];
 
           return (
-            <div key={sectionKey}>
-              {/* Section header — click to expand/collapse */}
-              <button
-                onClick={() => toggleSection(sectionKey)}
-                className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-[11px] uppercase tracking-[0.15em] font-bold transition-all ${
-                  hasActiveChild
-                    ? "text-black bg-gold/10"
-                    : "text-black/70 hover:text-black hover:bg-gold/5"
-                }`}
-              >
-                <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} />
-                <span className="flex-1 text-left">{sectionKey}</span>
-                {!isOpen && hasActiveChild && (
-                  <span className="w-1.5 h-1.5 rounded-full bg-gold" />
-                )}
-              </button>
+            <React.Fragment key={sectionKey}>
+              {/* Section divider */}
+              {sectionIdx > 0 && <hr className="border-gold/15 mx-1 my-1" />}
 
-              {/* Collapsible items */}
-              <div
-                className={`overflow-hidden transition-all duration-200 ${isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}
-              >
-                <div className="space-y-0.5 pt-0.5 pb-1">
-                  {items.map((item, i) => {
-                    const hasMega = !!item.megaMenu;
-                    const isMenuOpen = activeMegaMenu === item.megaMenu;
-                    const Icon = item.icon;
-                    return (
-                      <Link
-                        key={item.href + item.label + i}
-                        to={item.href}
-                        onClick={(e) => {
-                          if (hasMega) handleNavClick(item.megaMenu, e);
-                          else handleNavClick(undefined);
-                        }}
-                        className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${getItemStyle(item, sectionKey)}`}
-                      >
-                        <Icon className={`w-4 h-4 flex-shrink-0 ${getIconStyle(item, sectionKey)}`} />
-                        <span className="flex-1">{item.label}</span>
-                        {hasMega && (
-                          <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-black/30"}`} />
-                        )}
-                      </Link>
-                    );
-                  })}
+              <div>
+                {/* Section header — accordion toggle with gold active state */}
+                <button
+                  onClick={() => toggleSection(sectionKey)}
+                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-[11px] uppercase tracking-[0.15em] font-bold transition-all ${
+                    sectionHighlighted
+                      ? "text-gold bg-gold/15 border-l-2 border-gold"
+                      : "text-black/70 hover:text-black hover:bg-gold/5"
+                  }`}
+                >
+                  <SectionIcon className={`w-3.5 h-3.5 flex-shrink-0 ${sectionHighlighted ? 'text-gold' : 'text-black/40'}`} />
+                  <span className="flex-1 text-left">{sectionKey}</span>
+                  <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} />
+                  {!isOpen && hasActiveChild && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-gold" />
+                  )}
+                </button>
+
+                {/* Collapsible items — indented with tree line */}
+                <div
+                  className={`overflow-hidden transition-all duration-200 ${isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}
+                >
+                  <div className="ml-3 pl-3 border-l-2 border-gold/20 space-y-0.5 pt-0.5 pb-1">
+                    {items.map((item, i) => {
+                      const hasMega = !!item.megaMenu;
+                      const isMenuOpen = activeMegaMenu === item.megaMenu;
+                      const Icon = item.icon;
+                      return (
+                        <Link
+                          key={item.href + item.label + i}
+                          to={item.href}
+                          onClick={(e) => {
+                            if (hasMega) handleNavClick(item.megaMenu, e);
+                            else handleNavClick(undefined);
+                          }}
+                          className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${getItemStyle(item, sectionKey)}`}
+                        >
+                          <Icon className={`w-4 h-4 flex-shrink-0 ${getIconStyle(item, sectionKey)}`} />
+                          <span className="flex-1">{item.label}</span>
+                          {hasMega && (
+                            <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-black/30"}`} />
+                          )}
+                        </Link>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
-            </div>
+            </React.Fragment>
           );
         })}
       </nav>
 
-      {/* Utility Section — Search + Language + Currency in one row */}
-      <div className="px-3 py-2 border-t border-gold/20">
-        <div className="flex items-center gap-1">
-          <button
-            onClick={() => setSearchOpen(true)}
-            className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg text-sm font-semibold text-gold hover:bg-gold/10 transition-all group flex-1 min-w-0"
+      {/* Bottom pinned section — mt-auto ensures it fills remaining space */}
+      <div className="mt-auto flex-shrink-0">
+        {/* Utility Section — Search + Language + Currency */}
+        <div className="px-3 py-2 border-t border-gold/20 bg-gradient-to-b from-transparent to-[#EDE4D3]/50">
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => setSearchOpen(true)}
+              className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg text-sm font-semibold text-gold hover:bg-gold/10 transition-all group flex-1 min-w-0"
+            >
+              <Search className="w-4 h-4 text-gold flex-shrink-0" />
+              <span className="text-[10px] bg-gold/15 text-gold border border-gold/30 rounded px-1 py-0.5 font-bold">⌘K</span>
+            </button>
+            <LanguageSwitcher variant="icon-only" />
+            <CurrencySwitcher variant="icon-only" />
+          </div>
+        </div>
+
+        {/* Support — always visible, compact */}
+        <div className="px-3 py-2.5 border-t border-gold/20 space-y-1.5 bg-gradient-to-b from-[#EDE4D3]/50 to-[#EDE4D3]">
+          <a
+            href="mailto:info@jbjglobal.com"
+            className="flex items-center gap-2 text-xs font-bold text-gold hover:text-gold/80 transition-colors"
           >
-            <Search className="w-4 h-4 text-gold flex-shrink-0" />
-            <span className="text-[10px] bg-gold/15 text-gold border border-gold/30 rounded px-1 py-0.5 font-bold">⌘K</span>
-          </button>
-          <LanguageSwitcher variant="icon-only" />
-          <CurrencySwitcher variant="icon-only" />
+            <Headphones className="w-3.5 h-3.5" />
+            Contact Support
+          </a>
+          <Link
+            to="/my-tickets"
+            className="flex items-center gap-2 text-xs font-bold text-gold hover:text-gold/80 transition-colors"
+          >
+            <Ticket className="w-3.5 h-3.5" />
+            Create Ticket Support
+          </Link>
         </div>
       </div>
-
-      {/* Bottom — always visible, compact */}
-      <div className="px-3 py-2.5 border-t border-gold/20 space-y-1.5 flex-shrink-0">
-        <a
-          href="mailto:info@jbjglobal.com"
-          className="flex items-center gap-2 text-xs font-bold text-gold hover:text-gold/80 transition-colors"
-        >
-          <Headphones className="w-3.5 h-3.5" />
-          Contact Support
-        </a>
-        <Link
-          to="/my-tickets"
-          className="flex items-center gap-2 text-xs font-bold text-gold hover:text-gold/80 transition-colors"
-        >
-          <Ticket className="w-3.5 h-3.5" />
-          Create Ticket Support
-        </Link>
-      </div>
-    </>
+    </div>
   );
 
   return (
@@ -825,7 +963,6 @@ export default function GlobalVerticalNav() {
         style={{ willChange: 'transform, opacity' }}
       >
       {collapsed ? (
-        /* Collapsed: thin strip with premium expand button */
         <div className="hidden lg:flex w-[48px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-gold/30 flex-col h-full items-center py-4">
           <Link to="/" className="mb-4">
             <img src={jbjMonogramLightBg} alt="JBJ" className="w-9 h-9 object-contain" />
@@ -840,14 +977,11 @@ export default function GlobalVerticalNav() {
           </button>
         </div>
       ) : (
-        /* Full sidebar */
-        <div className="hidden lg:flex w-[200px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-gold/30 flex-col h-full relative overscroll-contain">
+        <div className="hidden lg:flex w-[200px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-gold/30 h-full relative overscroll-contain">
           {renderNavContent()}
         </div>
       )}
       </div>
-
-      {/* Mobile hamburger & drawer REMOVED — GlobalHeader owns mobile navigation */}
 
       {/* Mega Menu Panels (desktop — compact floating) */}
       {renderMegaMenu()}
