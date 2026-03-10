@@ -617,6 +617,7 @@ const App = () => {
                 <Route path="/listing-portal/submit" element={<ListingPortalSubmit />} />
                 <Route path="/listing-portal/my-listings" element={<ListingPortalMyListings />} />
                 <Route path="/property-evaluator" element={<PropertyEvaluator />} />
+                <Route path="/resale-properties" element={<ResaleProperties />} />
                 <Route path="/ai-property-analyzer" element={<AIPropertyAnalyzerPage />} />
                 <Route path="/ai-lead-qualification" element={<BrokerGuard><AILeadQualificationPage /></BrokerGuard>} />
                 <Route path="/ai-price-predictor" element={<AIPricePredictorPage />} />
