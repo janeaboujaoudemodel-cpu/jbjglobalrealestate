@@ -23,7 +23,7 @@ import { AreaMapSection } from "@/components/area-detail/AreaMapSection";
 import { MapErrorBoundary } from "@/components/MapErrorBoundary";
 import { AreaAIAnalyzer } from "@/components/area-detail/AreaAIAnalyzer";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
-import PropertiesVerticalNav from "@/components/navigation/PropertiesVerticalNav";
+// PropertiesVerticalNav removed — handled globally by MainLayout
 import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 
 const AreaDetail = () => {
