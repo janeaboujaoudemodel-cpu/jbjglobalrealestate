@@ -71,15 +71,15 @@ export default function HorizontalUtilityBar() {
       <div
         className="fixed top-0 right-0 h-[40px] z-[9996] hidden lg:flex items-center gap-1.5 px-3 border-b border-gold/20 bg-gradient-to-r from-[#F5F0E6] to-[#EDE4D3] [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px]"
       >
-        {/* Sidebar Toggle */}
+        {/* Sidebar Toggle — prominent minimizer */}
         <Tooltip>
           <TooltipTrigger asChild>
             <button
               onClick={toggleSidebar}
-              className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gold/15 transition-all group"
+              className="w-9 h-9 flex items-center justify-center rounded-lg border border-gold/40 hover:bg-gold/15 hover:border-gold/60 transition-all group bg-gold/5"
               aria-label="Toggle sidebar"
             >
-              <Menu className="w-4 h-4 text-gold group-hover:scale-110 transition-transform" />
+              <Menu className="w-5 h-5 text-gold group-hover:scale-110 transition-transform" />
             </button>
           </TooltipTrigger>
           <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Minimize / expand sidebar</TooltipContent>
