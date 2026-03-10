@@ -102,6 +102,18 @@ export function useSmartPopupStrategy(): SmartPopupState & {
   const [context, setContext] = useState<PopupContext>("default");
   const scrollListenerRef = useRef<(() => void) | null>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // Check auth state — skip popup for logged-in users
+  useEffect(() => {
+    try {
+      const sbAccessToken = document.cookie.includes('sb-access-token') ||
+        !!localStorage.getItem('sb-mdafrewypkkrildjgtey-auth-token');
+      setIsAuthenticated(sbAccessToken);
+    } catch {
+      setIsAuthenticated(false);
+    }
+  }, []);
 
   // Track page views per session
   useEffect(() => {
