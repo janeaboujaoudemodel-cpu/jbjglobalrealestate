@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLeadCapture } from "@/hooks/useLeadCapture";
+import { useAuth } from "@/contexts/AuthContext";
 import { 
   ChevronRight, ChevronLeft, Clock, Sparkles, Loader2, CheckCircle2,
   Wand2, ArrowUpRight, Building2, Home, Landmark, TreePine, Gift, Crown
