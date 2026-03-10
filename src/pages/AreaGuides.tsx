@@ -10,7 +10,7 @@ import { MapPin, Building2, TrendingUp, Flame, ArrowRight, Loader2, ChevronLeft,
 import jbjMonogram from "@/assets/jbj-monogram-light-bg.png";
 import { Badge } from "@/components/ui/badge";
 import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
-import PropertiesVerticalNav from "@/components/navigation/PropertiesVerticalNav";
+// PropertiesVerticalNav removed — handled globally by MainLayout
 
 import { SEOHead } from "@/components/SEOHead";
 import { useAreas, useEmiratesWithAreas, Area } from "@/hooks/useAreas";
