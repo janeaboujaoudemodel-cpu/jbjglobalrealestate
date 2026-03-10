@@ -127,8 +127,8 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
   services: [
     { label: 'All Services', icon: Briefcase, href: '/services' },
     { label: 'Property Management', icon: Key, href: '/services/property-management' },
-    { label: 'Golden Visa', icon: Award, href: '/services/golden-visa' },
-    { label: 'Mortgage Advisory', icon: Landmark, href: '/services/mortgage-advisory' },
+    { label: 'Golden Visa', icon: Award, href: '/guides/golden-visa-uae' },
+    { label: 'Mortgage Advisory', icon: Landmark, href: '/partners/mortgage' },
     { label: 'Property Valuation', icon: DollarSign, href: '/sell/valuation' },
     { label: 'Selling Advisory', icon: TrendingUp, href: '/services/selling-advisory' },
     { label: 'Short-term Rentals', icon: CalendarClock, href: '/services/short-term-rentals' },
