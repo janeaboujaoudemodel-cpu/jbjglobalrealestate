@@ -237,6 +237,7 @@ const Spreadsheet = lazy(() => import("./pages/Spreadsheet"));
 const Documents = lazy(() => import("./pages/Documents"));
 const QRCodeGenerator = lazy(() => import("./pages/QRCodeGenerator"));
 const OwnerCreativeSuite = lazy(() => import("./pages/OwnerCreativeSuite"));
+const BrandPaletteHub = lazy(() => import("./pages/owner/BrandPaletteHub"));
 const JobOfferTemplate = lazy(() => import("./pages/JobOfferTemplate"));
 const OwnerRecommendations = lazy(() => import("./pages/OwnerRecommendations"));
 const ContractForms = lazy(() => import("./pages/ContractForms"));
