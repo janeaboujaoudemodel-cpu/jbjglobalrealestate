@@ -24,7 +24,7 @@ import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 import { FeaturedProjectAd, FEATURED_ADS } from "@/components/FeaturedProjectAd";
 import { blueprintPagesSEO } from "@/types/blueprint";
 import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
-import PropertiesVerticalNav from "@/components/navigation/PropertiesVerticalNav";
+// PropertiesVerticalNav removed — handled globally by MainLayout
 import PropertiesHeroVideo from "@/components/PropertiesHeroVideo";
 import HeroButton from "@/components/ui/hero-button";
 import PropertiesMapView from "@/components/maps/PropertiesMapView";
