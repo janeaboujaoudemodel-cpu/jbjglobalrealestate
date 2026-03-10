@@ -643,7 +643,7 @@ export default function GlobalVerticalNav() {
     if (item.href === '/join') return shouldHighlight ? 'text-white' : 'text-teal-500';
     if (item.href === '/quiz') return shouldHighlight ? 'text-white' : 'text-violet-400';
     if (item.href === '/ai-hub') return shouldHighlight ? 'text-white' : 'text-orange-500';
-    if (item.href === '/listing-portal' && item.highlight) return shouldHighlight ? 'text-white' : 'text-sky-500';
+    if (item.href === '/listing-portal' && item.highlight) return shouldHighlight ? 'text-white' : 'text-sky-400';
     if (item.href === '/resale-properties') return shouldHighlight ? 'text-white' : 'text-emerald-500';
     if (sectionKey === 'MY ACCOUNT') return 'text-gold';
     return shouldHighlight ? "text-gold" : "text-black/60";
