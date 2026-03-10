@@ -244,11 +244,32 @@ export default function GlobalVerticalNav() {
   const [activeMegaMenu, setActiveMegaMenu] = useState<MegaMenuKey | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(() => {
+    try { return localStorage.getItem('jj_nav_collapsed') === '1'; } catch { return false; }
+  });
+
+  const toggleCollapse = useCallback(() => {
+    setCollapsed(prev => {
+      const next = !prev;
+      try { localStorage.setItem('jj_nav_collapsed', next ? '1' : '0'); } catch {}
+      return next;
+    });
+    setActiveMegaMenu(null);
+  }, []);
 
   useEffect(() => {
-    document.body.classList.add("jj-vertical-nav-active");
-    return () => document.body.classList.remove("jj-vertical-nav-active");
-  }, []);
+    if (collapsed) {
+      document.body.classList.remove("jj-vertical-nav-active");
+      document.body.classList.add("jj-vertical-nav-collapsed");
+    } else {
+      document.body.classList.add("jj-vertical-nav-active");
+      document.body.classList.remove("jj-vertical-nav-collapsed");
+    }
+    return () => {
+      document.body.classList.remove("jj-vertical-nav-active");
+      document.body.classList.remove("jj-vertical-nav-collapsed");
+    };
+  }, [collapsed]);
 
   const handleNavClick = useCallback((megaMenu?: MegaMenuKey, e?: React.MouseEvent) => {
     if (megaMenu) {
