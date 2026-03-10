@@ -300,7 +300,7 @@ const Index = () => {
         <OverseasInvestorsBanner />
       </Suspense>
 
-      <SectionDivider />
+      <SectionDivider fullWidth />
 
       {/* EXPLORE OUR GUIDES & REPORTS - Walking Books Marquee */}
       <Suspense fallback={<SectionLoader />}>
