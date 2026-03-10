@@ -15,6 +15,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import Footer from "@/components/Footer";
 
 const GlobalVerticalNav = lazy(() => import("@/components/navigation/GlobalVerticalNav"));
+const HorizontalUtilityBar = lazy(() => import("@/components/navigation/HorizontalUtilityBar"));
 import CombinedContactNewsletter from "@/components/CombinedContactNewsletter";
 import GlobalContactGating from "@/components/GlobalContactGating";
 import { useIsMobile } from "@/hooks/use-mobile";
