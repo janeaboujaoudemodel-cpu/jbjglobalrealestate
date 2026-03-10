@@ -487,11 +487,11 @@ export default function GlobalVerticalNav() {
         : "bg-purple-500/15 text-purple-700 font-semibold hover:bg-purple-500/25 border border-purple-500/30";
     }
 
-    // My Account section gets a distinct highlight color (blue)
+    // My Account section — premium gold/black border style
     if (sectionKey === 'MY ACCOUNT') {
       return shouldHighlight
-        ? "bg-blue-600 text-white border border-blue-500 font-bold"
-        : "bg-blue-500/10 text-blue-800 font-semibold hover:bg-blue-500/20 border border-blue-500/20";
+        ? "bg-gradient-to-r from-gold/20 to-gold/10 text-black border border-gold/40 font-bold"
+        : "text-black/80 font-semibold hover:bg-gold/10 border border-gold/20";
     }
 
     if (item.highlight) {
@@ -510,7 +510,7 @@ export default function GlobalVerticalNav() {
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
     if (item.href === '/join') return shouldHighlight ? 'text-white' : 'text-emerald-600';
     if (item.href === '/quiz') return shouldHighlight ? 'text-white' : 'text-purple-600';
-    if (sectionKey === 'MY ACCOUNT') return shouldHighlight ? 'text-white' : 'text-blue-600';
+    if (sectionKey === 'MY ACCOUNT') return shouldHighlight ? 'text-gold' : 'text-black/60';
     return shouldHighlight ? "text-gold" : "text-black/60";
   };
 
@@ -665,11 +665,11 @@ export default function GlobalVerticalNav() {
           </Link>
           <button
             onClick={toggleCollapse}
-            className="w-5 h-5 rounded flex items-center justify-center text-black/40 hover:text-black/70 hover:bg-black/5 transition-colors flex-shrink-0"
+            className="w-7 h-7 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 border border-gold/40 flex items-center justify-center text-gold hover:from-gold/30 hover:to-gold/20 hover:border-gold/60 transition-all flex-shrink-0 shadow-sm shadow-gold/10"
             aria-label="Minimize navigation"
             title="Minimize navigation"
           >
-            <ChevronLeft className="w-3.5 h-3.5" />
+            <ChevronLeft className="w-4 h-4" />
           </button>
         </div>
       </div>
@@ -721,7 +721,7 @@ export default function GlobalVerticalNav() {
 
       {/* Collapsible Section Nav */}
       <nav
-        className="flex-1 py-2 px-2 space-y-1 overflow-y-auto jj-scrollbar-gold jj-scrollbar-always-visible"
+        className="flex-1 py-2 px-2 space-y-1 overflow-y-auto jj-scrollbar-gold jj-scrollbar-always-visible overscroll-contain"
         style={{ scrollbarGutter: "stable" }}
       >
         {SECTION_KEYS.map((sectionKey) => {
@@ -736,11 +736,9 @@ export default function GlobalVerticalNav() {
               <button
                 onClick={() => toggleSection(sectionKey)}
                 className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-[11px] uppercase tracking-[0.15em] font-bold transition-all ${
-                  sectionKey === 'MY ACCOUNT'
-                    ? (hasActiveChild ? "text-blue-700 bg-blue-500/10" : "text-blue-600/80 hover:text-blue-700 hover:bg-blue-500/10")
-                    : (hasActiveChild
-                      ? "text-gold bg-gold/5"
-                      : "text-gold/80 hover:text-gold hover:bg-gold/5")
+                  hasActiveChild
+                    ? "text-black bg-gold/10"
+                    : "text-black/70 hover:text-black hover:bg-gold/5"
                 }`}
               >
                 <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} />
@@ -784,36 +782,35 @@ export default function GlobalVerticalNav() {
         })}
       </nav>
 
-      {/* Utility Section */}
+      {/* Utility Section — Search + Language + Currency in one row */}
       <div className="px-3 py-2 border-t border-gold/20">
-        <button
-          onClick={() => setSearchOpen(true)}
-          className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold text-gold hover:bg-gold/10 transition-all w-full group"
-        >
-          <Search className="w-4 h-4 text-gold flex-shrink-0" />
-          <span className="whitespace-nowrap">Quick Search</span>
-          <span className="ml-auto text-[9px] bg-gold/15 text-gold border border-gold/30 rounded-full px-1.5 py-0.5 font-bold whitespace-nowrap">⌘K</span>
-        </button>
-        <div className="flex items-center gap-1 px-1 mt-1">
+        <div className="flex items-center gap-1">
+          <button
+            onClick={() => setSearchOpen(true)}
+            className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg text-sm font-semibold text-gold hover:bg-gold/10 transition-all group flex-1 min-w-0"
+          >
+            <Search className="w-4 h-4 text-gold flex-shrink-0" />
+            <span className="text-[10px] bg-gold/15 text-gold border border-gold/30 rounded px-1 py-0.5 font-bold">⌘K</span>
+          </button>
           <LanguageSwitcher variant="icon-only" />
           <CurrencySwitcher variant="icon-only" />
         </div>
       </div>
 
-      {/* Bottom */}
-      <div className="p-4 border-t border-gold/20 space-y-2">
+      {/* Bottom — always visible, compact */}
+      <div className="px-3 py-2.5 border-t border-gold/20 space-y-1.5 flex-shrink-0">
         <a
           href="mailto:info@jbjglobal.com"
-          className="flex items-center gap-2 text-sm font-bold text-gold hover:text-gold/80 transition-colors"
+          className="flex items-center gap-2 text-xs font-bold text-gold hover:text-gold/80 transition-colors"
         >
-          <Headphones className="w-4 h-4" />
+          <Headphones className="w-3.5 h-3.5" />
           Contact Support
         </a>
         <Link
           to="/my-tickets"
-          className="flex items-center gap-2 text-sm font-bold text-gold hover:text-gold/80 transition-colors"
+          className="flex items-center gap-2 text-xs font-bold text-gold hover:text-gold/80 transition-colors"
         >
-          <Ticket className="w-4 h-4" />
+          <Ticket className="w-3.5 h-3.5" />
           Create Ticket Support
         </Link>
       </div>
@@ -844,7 +841,7 @@ export default function GlobalVerticalNav() {
         </div>
       ) : (
         /* Full sidebar */
-        <div className="hidden lg:flex w-[200px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-gold/30 flex-col h-full relative">
+        <div className="hidden lg:flex w-[200px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-gold/30 flex-col h-full relative overscroll-contain">
           {renderNavContent()}
         </div>
       )}
