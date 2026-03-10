@@ -66,6 +66,7 @@ const MarketReportCTA = lazy(chunkImports.MarketReportCTA);
 const MortgageCalculator = lazy(chunkImports.MortgageCalculator);
 const BrokerOnboardingBanner = lazy(chunkImports.BrokerOnboardingBanner);
 const JBJPodcastSection = lazy(chunkImports.JBJPodcastSection);
+const ResalePropertiesSection = lazy(chunkImports.ResalePropertiesSection);
 
 import { PodcastVisibilityGate } from "@/components/home/PodcastVisibilityGate";
 import { SectionDivider } from "@/components/ui/section-divider";
