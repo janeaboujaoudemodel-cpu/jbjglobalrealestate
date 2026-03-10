@@ -64,6 +64,7 @@ const ResaleProperties = () => {
   const [bedroomFilter, setBedroomFilter] = useState<string>("all");
   const [handoverFilter, setHandoverFilter] = useState<string>("all");
   const [priceFilter, setPriceFilter] = useState<string>("all");
+  const [furnishingFilter, setFurnishingFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [subscribeEmail, setSubscribeEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
