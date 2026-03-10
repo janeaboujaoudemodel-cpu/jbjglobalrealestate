@@ -584,10 +584,7 @@ export default function GlobalVerticalNav() {
   const getItemStyle = (item: NavItem, sectionKey?: string) => {
     const isThisMenuOpen = item.megaMenu ? activeMegaMenu === item.megaMenu : false;
     const routeActive = isRouteActive(item.href);
-    // When a mega menu is open, only the item that owns it should highlight
-    const shouldHighlight = activeMegaMenu
-      ? isThisMenuOpen
-      : routeActive;
+    const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
 
     if (item.href === '/join') {
       return shouldHighlight
@@ -598,6 +595,24 @@ export default function GlobalVerticalNav() {
       return shouldHighlight
         ? "bg-purple-600 text-white border border-purple-500 font-bold"
         : "bg-purple-500/15 text-purple-700 font-semibold hover:bg-purple-500/25 border border-purple-500/30";
+    }
+    // AI Tools Hub — Orange
+    if (item.href === '/ai-hub') {
+      return shouldHighlight
+        ? "bg-orange-500 text-white border border-orange-400 font-bold"
+        : "bg-orange-500/15 text-orange-700 font-semibold hover:bg-orange-500/25 border border-orange-400/30";
+    }
+    // List Your Property — Blue
+    if (item.href === '/listing-portal' && item.highlight) {
+      return shouldHighlight
+        ? "bg-blue-600 text-white border border-blue-500 font-bold"
+        : "bg-blue-500/15 text-blue-700 font-semibold hover:bg-blue-500/25 border border-blue-400/30";
+    }
+    // Resale Properties — Emerald
+    if (item.href === '/resale-properties') {
+      return shouldHighlight
+        ? "bg-emerald-600 text-white border border-emerald-500 font-bold"
+        : "bg-emerald-500/15 text-emerald-700 font-semibold hover:bg-emerald-500/25 border border-emerald-400/30";
     }
     if (sectionKey === 'MY ACCOUNT') {
       return shouldHighlight
