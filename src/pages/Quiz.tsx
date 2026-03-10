@@ -156,6 +156,7 @@ const NATIONALITIES = getCountryList();
 const Quiz = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { isLeadCaptured, captureLead, checkLead } = useLeadCapture();
   // Quiz is fully free — no usage tracking or membership needed
   const markFreeUsed = () => {};
   
