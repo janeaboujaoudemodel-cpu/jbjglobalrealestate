@@ -488,9 +488,36 @@ export default function GlobalVerticalNav() {
   return (
     <>
       {/* Desktop sidebar */}
-      <div className="hidden lg:flex w-[200px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-gold/30 flex-col h-full">
-        {renderNavContent()}
-      </div>
+      {collapsed ? (
+        /* Collapsed: thin strip with expand button */
+        <div className="hidden lg:flex w-[48px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-gold/30 flex-col h-full items-center py-4">
+          <Link to="/" className="mb-4">
+            <img src={jbjMonogramLightBg} alt="JBJ" className="w-9 h-9 object-contain" />
+          </Link>
+          <button
+            onClick={toggleCollapse}
+            className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center hover:bg-gold/20 transition-colors"
+            aria-label="Expand navigation"
+            title="Expand navigation"
+          >
+            <ChevronRight className="w-4 h-4 text-gold" />
+          </button>
+        </div>
+      ) : (
+        /* Full sidebar */
+        <div className="hidden lg:flex w-[200px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-gold/30 flex-col h-full relative">
+          {renderNavContent()}
+          {/* Collapse toggle */}
+          <button
+            onClick={toggleCollapse}
+            className="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border border-gold/40 flex items-center justify-center shadow-md hover:bg-gold/20 transition-colors z-[60]"
+            aria-label="Minimize navigation"
+            title="Minimize navigation"
+          >
+            <ChevronLeft className="w-3.5 h-3.5 text-gold" />
+          </button>
+        </div>
+      )}
 
       {/* Mobile hamburger trigger */}
       <button
