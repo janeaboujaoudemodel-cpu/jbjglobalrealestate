@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   Search, Heart, Settings, User, LayoutDashboard,
-  Ruler, SlidersHorizontal, Menu,
+  Ruler, SlidersHorizontal, Menu, Building2, Key, Tag,
 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
