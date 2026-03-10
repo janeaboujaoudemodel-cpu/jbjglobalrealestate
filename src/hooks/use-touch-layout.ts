@@ -8,10 +8,10 @@ import * as React from "react";
 export function useIsTouchLayout() {
   const [isTouch, setIsTouch] = React.useState(() => {
     if (typeof window === "undefined") return false;
+    // Fallback: treat narrow viewports as touch regardless of pointer/touchPoints
+    if (window.innerWidth < 1024) return true;
     try {
       const mql = window.matchMedia("(hover: none), (pointer: coarse)");
-      // Some remote/embedded browsers can incorrectly report coarse pointers.
-      // Only treat as touch when the device actually reports touch points.
       const hasTouchPoints = (navigator.maxTouchPoints ?? 0) > 0;
       return mql.matches && hasTouchPoints;
     } catch {
