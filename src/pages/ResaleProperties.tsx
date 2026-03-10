@@ -234,6 +234,19 @@ const ResaleProperties = () => {
                 </SelectContent>
               </Select>
 
+              {/* Furnishing */}
+              <Select value={furnishingFilter} onValueChange={setFurnishingFilter}>
+                <SelectTrigger className="w-[160px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
+                  <Sofa className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
+                  <span className="truncate text-left flex-1">{FURNISHING_OPTIONS.find(f => f.value === furnishingFilter)?.label || "Any Furnishing"}</span>
+                </SelectTrigger>
+                <SelectContent>
+                  {FURNISHING_OPTIONS.map((f) => (
+                    <SelectItem key={f.value} value={f.value}>{f.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
               {/* Clear */}
               {(areaFilter !== "all" || typeFilter !== "all" || bedroomFilter !== "all" || priceFilter !== "all" || handoverFilter !== "all" || furnishingFilter !== "all" || searchQuery) && (
                 <Button
