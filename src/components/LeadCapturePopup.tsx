@@ -42,7 +42,7 @@ const SERVICES = [
 ];
 
 const LeadCapturePopup = () => {
-  const { shouldShow, headline, subtitle, markShown, markDismissed } = useSmartPopupStrategy();
+  const { shouldShow, headline, subtitle, markShown, markDismissed, markSubmitted } = useSmartPopupStrategy();
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
