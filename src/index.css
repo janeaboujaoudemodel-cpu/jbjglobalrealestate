@@ -591,6 +591,27 @@ All colors MUST be HSL.
   background: hsl(42 45% 59%);
 }
 
+/* Force scrollbar always visible (not auto-hide) */
+.jj-scrollbar-always-visible {
+  overflow-y: scroll !important;
+}
+
+.jj-scrollbar-always-visible::-webkit-scrollbar {
+  display: block !important;
+  width: 5px;
+}
+
+.jj-scrollbar-always-visible::-webkit-scrollbar-track {
+  background: hsl(42 45% 59% / 0.15);
+  border-radius: 4px;
+}
+
+.jj-scrollbar-always-visible::-webkit-scrollbar-thumb {
+  background: hsl(42 45% 59% / 0.5);
+  border-radius: 4px;
+  min-height: 30px;
+}
+
 /* Horizontal gold scrollbar for admin tab strips */
 .jj-scrollbar-gold-x {
   overflow-x: auto;
