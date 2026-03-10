@@ -146,7 +146,37 @@ const AreaDetail = () => {
 
   if (!area) return null;
 
-  const relatedAreas = allAreas?.filter(a => a.id !== area.id && a.emirate === area.emirate).slice(0, 4) || [];
+  // Behavior-aware area recommendations
+  const relatedAreas = useMemo(() => {
+    if (!allAreas) return [];
+    const sameEmirate = allAreas.filter(a => a.id !== area.id && a.emirate === area.emirate);
+    
+    if (!browsingContext.hasData || browsingContext.recentAreas.length === 0) {
+      // No browsing data — prioritize trending/high-demand, then by project count
+      return sameEmirate
+        .sort((a, b) => {
+          const aBoost = (a.is_trending ? 10 : 0) + (a.is_high_demand ? 8 : 0) + (a.property_count || 0);
+          const bBoost = (b.is_trending ? 10 : 0) + (b.is_high_demand ? 8 : 0) + (b.property_count || 0);
+          return bBoost - aBoost;
+        })
+        .slice(0, 4);
+    }
+
+    // Score areas using browsing context
+    const scored = sameEmirate.map(a => {
+      let score = 0;
+      // Boost if user previously browsed this area
+      if (browsingContext.recentAreas.some(ra => ra.toLowerCase() === a.name.toLowerCase())) score += 15;
+      if (a.is_trending) score += 5;
+      if (a.is_high_demand) score += 4;
+      score += Math.min(a.property_count || 0, 10);
+      // Boost areas with images (better presentation)
+      if (a.image_url) score += 3;
+      return { area: a, score };
+    });
+
+    return scored.sort((a, b) => b.score - a.score).slice(0, 4).map(s => s.area);
+  }, [allAreas, area, browsingContext]);
 
   const filterBarContent = (
     <>
