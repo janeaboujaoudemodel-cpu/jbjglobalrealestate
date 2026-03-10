@@ -38,7 +38,7 @@ function useFeaturedProjects() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("projects")
-        .select("id, name, slug, developer_name, price_from, area_name, location, cover_image_url, bedrooms_min, bedrooms_max, handover_date, payment_breakdown, images:project_images(image_url), developer:developers(id, name, slug, logo_url)")
+        .select("id, name, slug, developer_name, description, price_from, area_name, location, cover_image_url, bedrooms_min, bedrooms_max, handover_date, payment_breakdown, images:project_images(image_url), developer:developers(id, name, slug, logo_url)")
         .in("developer_name", ELITE_DEVELOPERS)
         .eq("is_published", true)
         .order("created_at", { ascending: false })
