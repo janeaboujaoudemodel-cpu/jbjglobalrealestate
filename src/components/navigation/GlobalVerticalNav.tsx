@@ -473,6 +473,13 @@ export default function GlobalVerticalNav() {
     const routeActive = isRouteActive(item.href);
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
 
+    // Careers gets green highlight
+    if (item.href === '/join') {
+      return shouldHighlight
+        ? "bg-emerald-600 text-white border border-emerald-500 font-bold"
+        : "bg-emerald-500/15 text-emerald-700 font-semibold hover:bg-emerald-500/25 border border-emerald-500/30";
+    }
+
     if (item.highlight) {
       return shouldHighlight
         ? "bg-gradient-to-r from-gold/25 to-gold/15 text-black border border-gold/50 font-bold"
@@ -487,6 +494,7 @@ export default function GlobalVerticalNav() {
     const isThisMenuOpen = activeMegaMenu === item.megaMenu;
     const routeActive = isRouteActive(item.href);
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
+    if (item.href === '/join') return shouldHighlight ? 'text-white' : 'text-emerald-600';
     return shouldHighlight ? "text-gold" : "text-black/60";
   };
 
