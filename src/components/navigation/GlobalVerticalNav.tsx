@@ -53,14 +53,13 @@ interface NavItem {
 /* ─── NAV ITEMS ─── */
 const NAV_ITEMS: NavItem[] = [
   // ── Highlighted Hubs ──
-  { label: "Buy Properties", href: "/properties", icon: Building2, highlight: true, megaMenu: 'buy' },
   { label: "AI Tools Hub", href: "/ai-hub", icon: Cpu, highlight: true, megaMenu: 'ai-tools' },
   { label: "Listing Portal", href: "/listing-portal", icon: ClipboardCheck, highlight: true },
   { label: "Careers & Join", href: "/join", icon: GraduationCap, highlight: true },
   { label: "Resale Properties", href: "/resale-properties", icon: DollarSign, highlight: true },
 
   // ── Properties ──
-  { label: "Off-plan", href: "/properties", icon: Building2, section: "PROPERTIES" },
+  { label: "Buy / Off-Plan", href: "/properties", icon: Building2, section: "PROPERTIES", megaMenu: 'buy' },
   { label: "Sell", href: "/sell", icon: Tag, megaMenu: 'sell' },
   { label: "Rent", href: "/rent", icon: Key, megaMenu: 'rent' },
   { label: "List Property", href: "/listing-portal", icon: PlusCircle },
