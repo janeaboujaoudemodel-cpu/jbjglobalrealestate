@@ -417,6 +417,10 @@ export default function MyTasksCard() {
                           ✓ {new Date(task.completed_at).toLocaleDateString()}
                         </span>
                       )}
+                      {/* Indicator icons for contact/url/attachments */}
+                      {task.client_contact && <Phone className="w-3 h-3 text-gold/50" />}
+                      {task.reference_url && <Link2 className="w-3 h-3 text-gold/50" />}
+                      {task.attachments && Array.isArray(task.attachments) && task.attachments.length > 0 && <Paperclip className="w-3 h-3 text-gold/50" />}
                     </div>
                   </div>
 
