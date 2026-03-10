@@ -11,6 +11,7 @@ const STORAGE_KEYS = {
   lastDismissed: "lead_popup_last_dismissed",
   sessionPages: "lead_popup_session_pages",
   sessionShown: "lead_popup_session_shown",
+  submitted: "lead_popup_submitted",
 };
 
 const MAX_TOTAL_SHOWS = 3;
