@@ -171,7 +171,7 @@ const AreaDetail = () => {
   return (
     <div className={`min-h-screen bg-black flex ${isFixed && !bottomReached ? '' : ''}`}>
       {/* Vertical nav handled globally by MainLayout */}
-      <div className={`flex-1 ${isFixed && !bottomReached ? 'lg:ml-[200px]' : ''} transition-all duration-200`}>
+      <div className="flex-1 transition-all duration-200">
       <SEOHead 
         title={`${area.name} - Real Estate in ${area.emirate} | JBJ`}
         description={area.description || `Explore properties in ${area.name}, ${area.emirate}.`}
