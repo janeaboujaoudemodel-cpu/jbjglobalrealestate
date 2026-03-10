@@ -105,8 +105,23 @@ const ResaleProperties = () => {
     return [...areas].sort((a, b) => a.name.localeCompare(b.name));
   }, [areas]);
 
+  // Fetch distinct developers for the filter
+  const { data: developers } = useQuery({
+    queryKey: ["resale-developers"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("resale_listings")
+        .select("developer_name")
+        .eq("status", "active");
+      if (error) throw error;
+      const names = [...new Set((data || []).map((d: any) => d.developer_name).filter(Boolean))].sort();
+      return names as string[];
+    },
+    staleTime: 10 * 60 * 1000,
+  });
+
   const { data: listings, isLoading } = useQuery({
-    queryKey: ["resale-listings", areaFilter, typeFilter, bedroomFilter, handoverFilter, priceFilter, furnishingFilter],
+    queryKey: ["resale-listings", areaFilter, typeFilter, bedroomFilter, handoverFilter, priceFilter, furnishingFilter, developerFilter],
     queryFn: async () => {
       let query: any = supabase
         .from("resale_listings")
@@ -130,6 +145,7 @@ const ResaleProperties = () => {
         const [min, max] = priceFilter.split("-").map(Number);
         query = query.gte("asking_price", min).lte("asking_price", max);
       }
+      if (developerFilter !== "all") query = query.eq("developer_name", developerFilter);
 
       const { data, error } = await query;
       if (error) throw error;
@@ -139,12 +155,60 @@ const ResaleProperties = () => {
 
   const filteredListings = useMemo(() => {
     if (!listings) return [];
-    if (!searchQuery.trim()) return listings;
-    const q = searchQuery.toLowerCase();
-    return listings.filter((l: any) =>
-      (l.title || "").toLowerCase().includes(q) ||
-      (l.project_name || "").toLowerCase().includes(q) ||
-      (l.area_name || "").toLowerCase().includes(q)
+    let result = [...listings];
+
+    // Search query
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter((l: any) =>
+        (l.title || "").toLowerCase().includes(q) ||
+        (l.project_name || "").toLowerCase().includes(q) ||
+        (l.area_name || "").toLowerCase().includes(q) ||
+        (l.developer_name || "").toLowerCase().includes(q)
+      );
+    }
+
+    // Emirates filter
+    if (emiratesFilter.length > 0) {
+      result = result.filter((l: any) => {
+        const emirate = (l.emirate || l.location_emirate || "").toLowerCase();
+        return emiratesFilter.some(e => emirate.includes(e.toLowerCase()));
+      });
+    }
+
+    // Size filter
+    if (sizeMin) {
+      const min = Number(sizeMin);
+      if (!isNaN(min)) result = result.filter((l: any) => (l.size_sqft || 0) >= min);
+    }
+    if (sizeMax) {
+      const max = Number(sizeMax);
+      if (!isNaN(max)) result = result.filter((l: any) => (l.size_sqft || Infinity) <= max);
+    }
+
+    // View filter
+    if (viewFilter !== "all") {
+      result = result.filter((l: any) => {
+        const views = (l.views || l.view || "").toLowerCase();
+        return views.includes(viewFilter.toLowerCase());
+      });
+    }
+
+    // Sorting
+    if (sortBy === "newest") {
+      result.sort((a: any, b: any) => new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime());
+    } else if (sortBy === "price_asc") {
+      result.sort((a: any, b: any) => (a.asking_price || 0) - (b.asking_price || 0));
+    } else if (sortBy === "price_desc") {
+      result.sort((a: any, b: any) => (b.asking_price || 0) - (a.asking_price || 0));
+    } else if (sortBy === "size_asc") {
+      result.sort((a: any, b: any) => (a.size_sqft || 0) - (b.size_sqft || 0));
+    } else if (sortBy === "size_desc") {
+      result.sort((a: any, b: any) => (b.size_sqft || 0) - (a.size_sqft || 0));
+    }
+
+    return result;
+  }, [listings, searchQuery, emiratesFilter, sizeMin, sizeMax, viewFilter, sortBy]);
     );
   }, [listings, searchQuery]);
 
