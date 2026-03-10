@@ -89,34 +89,55 @@ const TrustAndCompliance = () => {
   ];
 
   return (
-    <section className="min-h-screen bg-gradient-to-b from-[#151210] via-[#0F0D0B] to-[#0A0908]">
-      <div className="bg-gradient-to-b from-[#1a1714] to-[#151210] border-b border-[#C8A766]/20">
-        <div className="max-w-[1200px] mx-auto px-6 pt-8 pb-16">
-          <Link to="/" className="inline-flex items-center gap-2 text-[#C8A766]/70 hover:text-[#C8A766] transition-colors mb-10"><ChevronLeft className="w-4 h-4" /><span className="text-sm">Back to Home</span></Link>
-          <div className="max-w-3xl">
-            <p className="text-[#C8A766] text-sm font-medium tracking-[0.2em] uppercase mb-4">Governance</p>
-            <h1 className="text-white text-4xl md:text-5xl font-bold mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Trust &amp; Compliance</h1>
-            <p className="text-[#C8A766] text-lg md:text-xl mb-6" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Institutional Standards. Transparent Operations. Verified Processes.</p>
-            <p className="text-zinc-400 leading-relaxed max-w-2xl">We operate with full commitment to transparency, regulatory alignment, and professional standards.</p>
-          </div>
-        </div>
-      </div>
+    <>
+      <SEOHead
+        title="Trust & Compliance | JBJ Global Real Estate"
+        description="Institutional standards, transparent operations, and verified compliance processes at JBJ Global Real Estate."
+        canonicalPath="/trust-compliance"
+      />
 
-      <div className="max-w-[1200px] mx-auto px-6 py-12">
-        <div className="lg:hidden mb-10 bg-[#1a1714]/80 backdrop-blur border border-[#C8A766]/20 rounded-xl p-6">
-          <p className="text-[#C8A766] text-xs font-semibold tracking-[0.15em] uppercase mb-4">Table of Contents</p>
-          <nav className="space-y-2">{tocItems.map(({ id, label }) => (<button key={id} onClick={() => scrollTo(id)} className="block w-full text-left text-sm text-zinc-500 hover:text-[#C8A766] transition-colors py-1">{label}</button>))}</nav>
-        </div>
-        <div className="flex gap-12">
-          <aside className="hidden lg:block w-64 flex-shrink-0">
-            <div className="sticky top-8">
-              <p className="text-[#C8A766] text-xs font-semibold tracking-[0.15em] uppercase mb-5">Contents</p>
+      <section className="min-h-screen bg-gradient-to-b from-[#151210] via-[#0F0D0B] to-[#0A0908]">
+        {/* Hero — standardized */}
+        <section className="relative py-28 md:py-36 overflow-hidden bg-gradient-to-b from-[#1a1714] to-[#151210] border-b border-[#C8A766]/20">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#C8A766]/8 via-transparent to-transparent" />
+          <div className="absolute top-20 right-20 w-72 h-72 bg-[#C8A766]/6 rounded-full blur-[100px]" />
+          <div className="max-w-5xl mx-auto px-4 relative z-10">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+              <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full mb-6 border border-[#C8A766]/30 bg-black/30 backdrop-blur-sm">
+                <ShieldCheck className="w-4 h-4 text-[#C8A766]" />
+                <span className="text-[#C8A766] font-semibold text-xs uppercase tracking-[0.2em]">Governance</span>
+              </div>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 tracking-tight" style={{ fontFamily: "Playfair Display, serif" }}>
+                Trust &amp; Compliance
+              </h1>
+              <p className="text-lg md:text-xl text-[#C8A766]/80 font-medium mb-6" style={{ fontFamily: "Playfair Display, serif" }}>
+                Institutional Standards. Transparent Operations. Verified Processes.
+              </p>
+              <p className="text-zinc-300 text-base md:text-lg max-w-3xl leading-relaxed">
+                We operate with full commitment to transparency, regulatory alignment, and professional standards.
+              </p>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Body — standardized layout */}
+        <div className="max-w-6xl mx-auto px-4 py-12 md:py-16 flex gap-8">
+          <aside className="hidden lg:block w-64 shrink-0">
+            <div className="sticky top-24 p-5 rounded-2xl border border-[#C8A766]/20 bg-[#1a1714]/80 backdrop-blur-sm">
+              <p className="text-xs text-[#C8A766] font-semibold uppercase tracking-widest mb-4">Contents</p>
               <nav className="space-y-1 border-l border-[#C8A766]/20">
-                {tocItems.map(({ id, label }) => (<button key={id} onClick={() => scrollTo(id)} className={`block w-full text-left pl-4 py-1.5 text-sm transition-all border-l-2 -ml-px ${activeSection === id ? "border-[#C8A766] text-[#C8A766] font-medium" : "border-transparent text-zinc-500 hover:text-zinc-300"}`}>{label}</button>))}
+                {tocItems.map(({ id, label }) => (
+                  <button key={id} onClick={() => scrollTo(id)} className={`block w-full text-left pl-4 py-1.5 text-sm transition-all border-l-2 -ml-px ${activeSection === id ? "border-[#C8A766] text-[#C8A766] font-medium" : "border-transparent text-zinc-400 hover:text-[#C8A766] hover:bg-[#C8A766]/5"}`}>{label}</button>
+                ))}
               </nav>
             </div>
           </aside>
-          <main className="flex-1 max-w-3xl">
+
+          <main className="flex-1 min-w-0">
+            <div className="lg:hidden mb-10 p-5 rounded-2xl border border-[#C8A766]/20 bg-[#1a1714]/80">
+              <p className="text-xs text-[#C8A766] font-semibold uppercase tracking-widest mb-4">Table of Contents</p>
+              <nav className="space-y-1">{tocItems.map(({ id, label }) => (<button key={id} onClick={() => scrollTo(id)} className="block w-full text-left text-sm text-zinc-400 hover:text-[#C8A766] px-3 py-1.5 rounded-lg transition-colors">{label}</button>))}</nav>
+            </div>
             {sections.map((s, i) => (
               <div key={s.id}>
                 <section id={s.id} className="scroll-mt-8">
