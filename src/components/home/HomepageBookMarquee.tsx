@@ -69,7 +69,7 @@ function BookMarqueeStrip({ books }: { books: BookData[] }) {
 export default function HomepageBookMarquee() {
   return (
     <section className="bg-black py-10 md:py-14">
-      <div className="container mx-auto px-4">
+      <div className="px-4 md:px-6 lg:px-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
