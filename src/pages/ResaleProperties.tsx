@@ -42,6 +42,13 @@ const HANDOVER_OPTIONS = [
   { value: "under_construction", label: "Under Construction" },
 ];
 
+const FURNISHING_OPTIONS = [
+  { value: "all", label: "Any Furnishing" },
+  { value: "furnished", label: "Furnished" },
+  { value: "unfurnished", label: "Unfurnished" },
+  { value: "semi-furnished", label: "Semi-Furnished" },
+];
+
 const PRICE_RANGES = [
   { value: "all", label: "Any Price" },
   { value: "0-1000000", label: "Under AED 1M" },
