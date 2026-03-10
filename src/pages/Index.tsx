@@ -39,6 +39,7 @@ const chunkImports = {
   MortgageCalculator: () => import("@/components/MortgageCalculator"),
   BrokerOnboardingBanner: () => import("@/components/BrokerOnboardingBanner"),
   JBJPodcastSection: () => import("@/components/home/JBJPodcastSection"),
+  ResalePropertiesSection: () => import("@/components/home/ResalePropertiesSection"),
 };
 
 // Lazy components using the same import functions
