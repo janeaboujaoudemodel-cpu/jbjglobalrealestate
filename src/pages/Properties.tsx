@@ -1265,12 +1265,7 @@ const Properties = () => {
         <section className="py-12 bg-black">
           <div className="container mx-auto px-3 sm:px-4">
             <div className="flex">
-              {/* Vertical Nav Sidebar - visible when filter is fixed in list mode too */}
-              {isFilterFixed && (
-                <div className="hidden lg:block">
-                  <PropertiesVerticalNav />
-                </div>
-              )}
+              {/* Vertical nav handled globally by MainLayout */}
             {/* OUTER LAYER - Active Champagne with thin black contour visible at edges */}
             <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 flex-1 min-w-0">
               
