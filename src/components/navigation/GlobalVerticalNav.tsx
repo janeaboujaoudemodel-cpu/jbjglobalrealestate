@@ -781,7 +781,11 @@ export default function GlobalVerticalNav() {
 
   return (
     <>
-      {/* Desktop sidebar */}
+      {/* Desktop sidebar — slides in after reveal */}
+      <div
+        className={`transition-all duration-500 ease-out ${navRevealed ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'}`}
+        style={{ willChange: 'transform, opacity' }}
+      >
       {collapsed ? (
         /* Collapsed: thin strip with premium expand button */
         <div className="hidden lg:flex w-[48px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-gold/30 flex-col h-full items-center py-4">
@@ -812,6 +816,7 @@ export default function GlobalVerticalNav() {
           </button>
         </div>
       )}
+      </div>
 
       {/* Mobile hamburger trigger */}
       <button
