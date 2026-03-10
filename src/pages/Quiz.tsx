@@ -747,10 +747,10 @@ const Quiz = () => {
       </div>
 
       {/* Question Content with optional Preferences Sidebar */}
-      <div className="flex-1 flex items-start justify-center px-4 py-8 md:py-12">
-        <div className="w-full max-w-4xl flex gap-8">
+      <div className="flex-1 flex items-center justify-center px-4 py-8 md:py-12">
+        <div className="w-full max-w-4xl flex gap-8 justify-center">
           {/* Main Question Area */}
-          <div className="flex-1 max-w-2xl">
+          <div className="flex-1 max-w-2xl mx-auto">
             <h2
               className="text-stone-900 text-2xl md:text-3xl font-bold mb-8 text-center"
               style={{ fontFamily: "Poppins, sans-serif" }}

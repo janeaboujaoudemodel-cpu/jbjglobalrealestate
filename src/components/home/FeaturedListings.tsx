@@ -229,7 +229,13 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
               <span className="text-xs font-medium mb-1 block"><span className="text-black">by </span><span className="text-gold">{project.developer_name}</span></span>
             ) : null}
 
-            {/* Description - 2 lines with ...more */}
+            {/* Description */}
+            {(project as any).description && (
+              <p className="text-stone-500 text-xs line-clamp-2 mb-2">{(project as any).description}</p>
+            )}
+
+            {/* Gold Divider */}
+            <hr className="border-gold/20 my-2" />
 
             {/* Spacer to push bottom content down */}
             <div className="flex-grow" />
