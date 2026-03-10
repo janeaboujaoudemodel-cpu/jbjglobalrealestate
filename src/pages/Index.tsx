@@ -277,6 +277,12 @@ const Index = () => {
         <ContinueSearching type="property" className="bg-black" />
       </Suspense>
 
+      {/* RESALE PROPERTIES - Investor Network Listings */}
+      <SectionDivider />
+      <Suspense fallback={<SectionLoader />}>
+        <ResalePropertiesSection />
+      </Suspense>
+
       {/* DIVIDER */}
       <SectionDivider />
 
