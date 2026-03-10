@@ -567,8 +567,8 @@ const App = () => {
                 <Route path="/jbj-broker-reports" element={<OwnerGuard><JBJBrokerReports /></OwnerGuard>} />
                 <Route path="/founder-assistant" element={<Navigate to="/owner/founder-assistant" replace />} />
                 <Route path="/broker-admin-assistant" element={<OwnerGuard><BrokerAdminAssistant /></OwnerGuard>} />
-                <Route path="/listing-admin" element={<OwnerGuard><ListingAdminGuard><ListingAdmin /></ListingAdminGuard></OwnerGuard>} />
-                <Route path="/listing-admin/preview/:id" element={<OwnerGuard><ListingAdminGuard><PendingImportPreview /></ListingAdminGuard></OwnerGuard>} />
+                <Route path="/listing-admin" element={<Navigate to="/owner/listing-admin" replace />} />
+                <Route path="/listing-admin/preview/:id" element={<Navigate to="/owner/listing-admin" replace />} />
                 <Route path="/admin/training-guide" element={<OwnerGuard><AdminTrainingGuide /></OwnerGuard>} />
                 <Route path="/team" element={<MeetTheTeam />} />
                 <Route path="/meet-the-team" element={<Navigate to="/team" replace />} />
@@ -583,8 +583,7 @@ const App = () => {
                 <Route path="/reopen-ticket" element={<ReopenTicket />} />
                 
                 {/* Communication & Productivity - Owner only */}
-                <Route path="/automations" element={<OwnerGuard><Automations /></OwnerGuard>} />
-                <Route path="/owner/automations" element={<Navigate to="/automations" replace />} />
+                <Route path="/automations" element={<Navigate to="/owner/automations" replace />} />
                 <Route path="/company-comm" element={<OwnerGuard><CompanyComm /></OwnerGuard>} />
                 <Route path="/email-client" element={<OwnerGuard><EmailClient /></OwnerGuard>} />
                 <Route path="/team-chat" element={<OwnerGuard><TeamChat /></OwnerGuard>} />
