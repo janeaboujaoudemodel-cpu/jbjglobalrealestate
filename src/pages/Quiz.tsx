@@ -14,9 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { getCountryList, getLanguageList } from "@/constants/localeOptions";
 import { SearchableSelect } from "@/components/ui/searchable-select";
-import { PaymentModal } from "@/components/PaymentModal";
-import { useQuizUsage } from "@/hooks/useQuizUsage";
-import { useMembership } from "@/hooks/useMembership";
+// Payment removed — quiz is fully free, no API/credits consumed
 import { FounderContent } from "@/components/FounderContent";
 
 

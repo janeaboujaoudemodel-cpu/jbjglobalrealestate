@@ -1,4 +1,6 @@
-import { useEffect, useState, lazy, Suspense } from "react";
+import { useEffect, useState, lazy, Suspense, useCallback } from "react";
+import { toast } from "sonner";
+import { Monitor, X } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import {
   hasTransparentHeader,

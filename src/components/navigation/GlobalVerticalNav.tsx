@@ -998,20 +998,20 @@ export default function GlobalVerticalNav() {
 
       {/* Bottom pinned section — SUPPORT hub */}
       <div className="mt-auto flex-shrink-0">
-        <div className="px-3 py-4 border-t border-gold/20 space-y-2 bg-gradient-to-b from-[#EDE4D3]/50 to-[#EDE4D3]">
+        <div className="px-3 py-4 border-t border-red-500/20 space-y-2 bg-gradient-to-b from-[#EDE4D3]/50 to-[#EDE4D3]">
           <a
             href="mailto:info@jbjglobal.com"
-            className="flex items-center gap-2.5 text-xs font-bold text-gold hover:text-gold/80 transition-colors px-3 py-3 rounded-lg border border-gold/20 hover:border-gold/40 hover:bg-gold/5"
+            className="flex items-center gap-2.5 text-xs font-bold text-red-600 hover:text-red-700 transition-colors px-3 py-3 rounded-lg border border-red-500/30 hover:border-red-500/50 hover:bg-red-50/50"
           >
-            <Headphones className="w-4 h-4" />
+            <Headphones className="w-4 h-4 text-red-500" />
             Contact Support
           </a>
-          <hr className="border-gold/15" />
+          <hr className="border-red-500/15" />
           <Link
             to="/my-tickets"
-            className="flex items-center gap-2.5 text-xs font-bold text-gold hover:text-gold/80 transition-colors px-3 py-3 rounded-lg border border-gold/20 hover:border-gold/40 hover:bg-gold/5"
+            className="flex items-center gap-2.5 text-xs font-bold text-red-600 hover:text-red-700 transition-colors px-3 py-3 rounded-lg border border-red-500/30 hover:border-red-500/50 hover:bg-red-50/50"
           >
-            <Ticket className="w-4 h-4" />
+            <Ticket className="w-4 h-4 text-red-500" />
             Create Ticket Support
           </Link>
         </div>

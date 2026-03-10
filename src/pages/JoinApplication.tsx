@@ -323,16 +323,15 @@ export default function JoinApplication() {
   // Redirect returning users directly to onboarding dashboard
   if (existingApplication) {
     return (
-      <div className="min-h-screen bg-black flex flex-col">
-        {/* Full-screen champagne section */}
-        <section className="jj-section-champagne flex-1 flex items-center justify-center px-4">
-          <div className="w-full max-w-2xl mx-auto">
-            <Card className="jj-box-active p-8 md:p-12">
+      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+        <section className="flex-1 flex items-center justify-center px-4 py-16 min-h-screen">
+          <div className="w-full max-w-3xl mx-auto">
+            <Card className="bg-white/80 backdrop-blur-sm border-2 border-gold/30 shadow-2xl p-8 md:p-12 rounded-2xl">
               <CardHeader className="text-center pb-6">
-                <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 border-2 border-emerald-500/40 flex items-center justify-center">
+                <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 border-2 border-emerald-500/40 flex items-center justify-center shadow-lg shadow-emerald-500/10">
                   <CheckCircle className="h-12 w-12 text-emerald-600" />
                 </div>
-                <CardTitle className="text-3xl md:text-4xl text-black mb-4">Welcome Back!</CardTitle>
+                <CardTitle className="text-3xl md:text-4xl text-black mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Welcome Back!</CardTitle>
                 <CardDescription className="text-lg text-black/70">
                   Your application status: <span className="font-semibold text-gold capitalize">{existingApplication.status}</span>
                 </CardDescription>
@@ -387,6 +386,18 @@ export default function JoinApplication() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Contact Info */}
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-black/60">
+              <a href={`tel:${CONTACT_INFO.phoneRaw}`} className="flex items-center gap-2 hover:text-gold transition-colors">
+                <Phone className="w-4 h-4 text-gold" />
+                {CONTACT_INFO.phone}
+              </a>
+              <a href={`mailto:${CONTACT_INFO.email}`} className="flex items-center gap-2 hover:text-gold transition-colors">
+                <Mail className="w-4 h-4 text-gold" />
+                {CONTACT_INFO.email}
+              </a>
+            </div>
           </div>
         </section>
       </div>
