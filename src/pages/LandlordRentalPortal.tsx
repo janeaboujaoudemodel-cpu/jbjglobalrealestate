@@ -362,7 +362,7 @@ export default function LandlordRentalPortal() {
                 {isLoading ? (
                   <div className="text-center py-12">
                     <div className="animate-spin h-8 w-8 border-4 border-gold border-t-transparent rounded-full mx-auto" />
-                    <p className="text-zinc-400 mt-4">Loading your listings...</p>
+                    <p className="text-zinc-600 mt-4">Loading your listings...</p>
                   </div>
                 ) : listings.length === 0 ? (
                   <Card className="bg-zinc-900 border-zinc-800">
