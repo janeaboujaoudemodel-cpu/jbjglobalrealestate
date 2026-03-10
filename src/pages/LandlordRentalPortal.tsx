@@ -342,10 +342,10 @@ export default function LandlordRentalPortal() {
                   </CardContent>
                 </Card>
               ) : (
-                <Card className="bg-zinc-900 border-zinc-800">
+                <Card className="bg-white/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
                   <CardHeader>
-                    <CardTitle className="text-white">Submit Your Rental Listing</CardTitle>
-                    <CardDescription className="text-zinc-400">
+                    <CardTitle className="text-black">Submit Your Rental Listing</CardTitle>
+                    <CardDescription className="text-zinc-600">
                       Complete the form below to list your property for rent
                     </CardDescription>
                   </CardHeader>
