@@ -689,7 +689,7 @@ export default function GlobalVerticalNav() {
                     <p className={`text-[10px] uppercase tracking-wider font-bold ${group.colorText} px-2 pb-1.5`}>
                       {group.label}
                     </p>
-                    <div className="space-y-0.5">
+                    <div className="grid grid-cols-2 gap-1">
                       {group.items.map((link) => {
                         const Icon = link.icon;
                         const linkActive = isRouteActive(link.href);
