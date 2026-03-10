@@ -173,7 +173,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
   const statusLabel = getStatusLabel();
   const saleStatusBadge = getSaleStatusBadge(project.status_label);
   const hasDevLogo = !!(project.developer as any)?.logo_url;
-  const badgePosition = hasDevLogo ? 'top-3 right-3' : 'top-3 left-3';
+  const badgePosition = hasDevLogo ? 'top-14 left-3' : 'top-3 left-3';
 
   return (
     <div

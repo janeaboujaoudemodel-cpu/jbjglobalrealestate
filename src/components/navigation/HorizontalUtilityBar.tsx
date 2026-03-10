@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   Search, Heart, Settings, User, LayoutDashboard,
-  Ruler, SlidersHorizontal, Menu,
+  Ruler, SlidersHorizontal, Menu, Building2, Key, Tag,
 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -99,6 +99,50 @@ export default function HorizontalUtilityBar() {
             </button>
           </TooltipTrigger>
           <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Search ⌘K</TooltipContent>
+        </Tooltip>
+
+        {divider}
+
+        {/* Buy */}
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Link
+              to="/properties?transaction=buy"
+              className="h-8 flex items-center gap-1.5 rounded-lg hover:bg-gold/15 transition-all px-2 group"
+            >
+              <Building2 className="w-4 h-4 text-gold group-hover:scale-110 transition-transform" />
+              <span className="text-xs font-semibold text-black/70 uppercase tracking-wide">Buy</span>
+            </Link>
+          </TooltipTrigger>
+          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Browse Properties for Sale</TooltipContent>
+        </Tooltip>
+
+        {/* Rent */}
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Link
+              to="/properties?transaction=rent"
+              className="h-8 flex items-center gap-1.5 rounded-lg hover:bg-gold/15 transition-all px-2 group"
+            >
+              <Key className="w-4 h-4 text-gold group-hover:scale-110 transition-transform" />
+              <span className="text-xs font-semibold text-black/70 uppercase tracking-wide">Rent</span>
+            </Link>
+          </TooltipTrigger>
+          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Browse Rentals</TooltipContent>
+        </Tooltip>
+
+        {/* Sell */}
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Link
+              to="/listing-portal"
+              className="h-8 flex items-center gap-1.5 rounded-lg hover:bg-gold/15 transition-all px-2 group border border-gold/25"
+            >
+              <Tag className="w-4 h-4 text-gold group-hover:scale-110 transition-transform" />
+              <span className="text-xs font-semibold text-gold uppercase tracking-wide">Sell</span>
+            </Link>
+          </TooltipTrigger>
+          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">List Your Property</TooltipContent>
         </Tooltip>
 
         {divider}
@@ -219,10 +263,11 @@ export default function HorizontalUtilityBar() {
           <TooltipTrigger asChild>
             <Link
               to="/profile"
-              className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gold/15 transition-all group"
+              className="h-8 flex items-center gap-1.5 rounded-lg hover:bg-gold/15 transition-all px-2 group border border-gold/25"
               aria-label="My Account"
             >
               <User className="w-4 h-4 text-gold group-hover:scale-110 transition-transform" />
+              <span className="text-xs font-semibold text-black/70">Account</span>
             </Link>
           </TooltipTrigger>
           <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">My Account</TooltipContent>
