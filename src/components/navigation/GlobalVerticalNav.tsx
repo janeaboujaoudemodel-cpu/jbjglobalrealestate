@@ -162,7 +162,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'Price Predictor', icon: TrendingUp, href: '/ai-price-predictor' },
     { label: 'Neighborhood Insights', icon: MapPin, href: '/ai-neighborhood-insights' },
     { label: 'Interior Design AI', icon: Palette, href: '/interior-design-ai' },
-    { label: 'Virtual Staging', icon: Camera, href: '/ai-virtual-staging' },
+    { label: 'Virtual Staging', icon: Camera, href: '/interior-design-ai' },
     { label: 'Lead Qualification', icon: UserCheck, href: '/ai-lead-qualification' },
     { label: 'Follow-up Scheduler', icon: CalendarClock, href: '/ai-followup-scheduler' },
     { label: 'Objection Handler', icon: MessageSquare, href: '/ai-objection-handler' },
