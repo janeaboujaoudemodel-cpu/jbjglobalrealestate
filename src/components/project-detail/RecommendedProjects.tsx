@@ -51,9 +51,19 @@ export default function RecommendedProjects({
       const userArea = browsingContext.dominantArea.toLowerCase();
       
       // Filter to user's area of interest
-      const areaMatched = otherProjects.filter((p) =>
+      let areaMatched = otherProjects.filter((p) =>
         p.location?.toLowerCase().includes(userArea)
       );
+
+      // If budget context exists, further filter to budget band
+      if (browsingContext.budgetMin && browsingContext.budgetMax && areaMatched.length > 3) {
+        const budgetFiltered = areaMatched.filter((p) => {
+          const price = p.price_from || 0;
+          return price >= browsingContext.budgetMin! && price <= browsingContext.budgetMax!;
+        });
+        // Only use budget filter if it leaves enough results
+        if (budgetFiltered.length >= 3) areaMatched = budgetFiltered;
+      }
 
       // If we have enough area-matched results, pick 3 tiers by price
       if (areaMatched.length >= 3) {
@@ -72,7 +82,7 @@ export default function RecommendedProjects({
       }
     }
 
-    // Fallback: original scoring logic
+    // Fallback: enhanced scoring logic
     const scored = otherProjects.map((p) => {
       let score = 0;
       if ((p as any).import_source === 'manual') score += 50;
@@ -83,6 +93,10 @@ export default function RecommendedProjects({
       if (browsingContext.hasData && browsingContext.recentAreas.length > 0) {
         const loc = p.location?.toLowerCase() || "";
         if (browsingContext.recentAreas.some((a) => loc.includes(a.toLowerCase()))) score += 8;
+      }
+      // Boost for budget-range match
+      if (browsingContext.budgetMin && browsingContext.budgetMax && p.price_from) {
+        if (p.price_from >= browsingContext.budgetMin && p.price_from <= browsingContext.budgetMax) score += 12;
       }
       if (p.images && p.images.length > 0) score += 2;
       if (p.price_from) score += 1;
