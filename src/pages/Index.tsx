@@ -266,7 +266,7 @@ const Index = () => {
         </Suspense>
       </div>
 
-      <SectionDivider />
+      <SectionDivider fullWidth />
 
       {/* FEATURED LISTINGS - Master Blueprint: Section 3 (8 cards, Buy/Rent tabs) */}
       <Suspense fallback={<SectionLoader />}>
