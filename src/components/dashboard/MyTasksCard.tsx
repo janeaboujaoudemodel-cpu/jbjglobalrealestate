@@ -5,14 +5,15 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
 import { 
   ListChecks, Plus, Check, Clock, AlertCircle, ChevronRight, 
-  Loader2, Trash2, RotateCcw, X, CheckCheck, Square, CheckSquare
+  Loader2, Trash2, RotateCcw, X, CheckCheck, Square, CheckSquare,
+  Phone, Link2, Paperclip,
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
+import TaskCreationModal from "./TaskCreationModal";
 
 interface Task {
   id: string;
@@ -24,6 +25,9 @@ interface Task {
   due_date: string | null;
   completed_at: string | null;
   created_at: string;
+  client_contact?: string | null;
+  reference_url?: string | null;
+  attachments?: any[] | null;
 }
 
 const PRIORITY_STYLES: Record<string, string> = {
@@ -37,7 +41,7 @@ export default function MyTasksCard() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [showAddForm, setShowAddForm] = useState(false);
-  const [newTitle, setNewTitle] = useState("");
+  const [showCreationModal, setShowCreationModal] = useState(false);
   const [filter, setFilter] = useState<"all" | "pending" | "completed">("all");
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [selectionMode, setSelectionMode] = useState(false);
@@ -67,26 +71,7 @@ export default function MyTasksCard() {
   const pendingCount = tasks.filter((t) => t.status !== "completed").length;
   const completedCount = tasks.filter((t) => t.status === "completed").length;
 
-  const addTask = useMutation({
-    mutationFn: async (title: string) => {
-      if (!user) throw new Error("Not logged in");
-      const { error } = await supabase.from("admin_tasks").insert({
-        user_id: user.id,
-        title,
-        status: "pending",
-        priority: "medium",
-      });
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["my-tasks"] });
-      queryClient.invalidateQueries({ queryKey: ["user-alert-counts"] });
-      setNewTitle("");
-      setShowAddForm(false);
-      toast.success("Task added");
-    },
-    onError: () => toast.error("Failed to add task"),
-  });
+  // addTask mutation kept for potential quick-add but main flow uses modal now
 
   const toggleComplete = useMutation({
     mutationFn: async ({ id, completed }: { id: string; completed: boolean }) => {
@@ -249,7 +234,7 @@ export default function MyTasksCard() {
             <Button
               size="sm"
               variant="outline"
-              onClick={() => setShowAddForm(!showAddForm)}
+              onClick={() => setShowCreationModal(true)}
               className="h-7 px-2 border-gold/30 text-gold hover:bg-gold/10 hover:text-gold"
             >
               <Plus className="w-3.5 h-3.5" />
@@ -346,38 +331,8 @@ export default function MyTasksCard() {
       </CardHeader>
 
       <CardContent className="pt-0">
-        {/* Add task form */}
-        {showAddForm && (
-          <div className="flex gap-2 mb-3">
-            <Input
-              value={newTitle}
-              onChange={(e) => setNewTitle(e.target.value)}
-              placeholder="What needs to be done?"
-              className="h-8 text-xs border-gold/30 bg-white/60 focus:border-gold"
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && newTitle.trim()) addTask.mutate(newTitle.trim());
-                if (e.key === "Escape") setShowAddForm(false);
-              }}
-              autoFocus
-            />
-            <Button
-              size="sm"
-              onClick={() => newTitle.trim() && addTask.mutate(newTitle.trim())}
-              disabled={!newTitle.trim() || addTask.isPending}
-              className="h-8 px-3 bg-gold hover:bg-gold/90 text-black text-xs"
-            >
-              {addTask.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : "Add"}
-            </Button>
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={() => setShowAddForm(false)}
-              className="h-8 px-2 text-black/50 hover:text-black"
-            >
-              <X className="w-3.5 h-3.5" />
-            </Button>
-          </div>
-        )}
+        {/* Task Creation Modal */}
+        <TaskCreationModal open={showCreationModal} onOpenChange={setShowCreationModal} />
 
         {isLoading ? (
           <div className="flex justify-center py-8">
@@ -462,6 +417,10 @@ export default function MyTasksCard() {
                           ✓ {new Date(task.completed_at).toLocaleDateString()}
                         </span>
                       )}
+                      {/* Indicator icons for contact/url/attachments */}
+                      {task.client_contact && <Phone className="w-3 h-3 text-gold/50" />}
+                      {task.reference_url && <Link2 className="w-3 h-3 text-gold/50" />}
+                      {task.attachments && Array.isArray(task.attachments) && task.attachments.length > 0 && <Paperclip className="w-3 h-3 text-gold/50" />}
                     </div>
                   </div>
 
