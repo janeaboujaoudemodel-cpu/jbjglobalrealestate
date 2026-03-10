@@ -17497,6 +17497,84 @@ export type Database = {
           },
         ]
       }
+      resale_listings: {
+        Row: {
+          area_name: string | null
+          asking_price: number | null
+          bedrooms: number | null
+          created_at: string | null
+          currency: string | null
+          description: string | null
+          developer_name: string | null
+          emirate: string | null
+          handover_status: string | null
+          id: string
+          images: string[] | null
+          investor_email: string | null
+          investor_name: string | null
+          investor_phone: string | null
+          investor_user_id: string | null
+          location: string | null
+          original_purchase_price: number | null
+          project_name: string | null
+          property_type: string | null
+          size_sqft: number | null
+          status: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          area_name?: string | null
+          asking_price?: number | null
+          bedrooms?: number | null
+          created_at?: string | null
+          currency?: string | null
+          description?: string | null
+          developer_name?: string | null
+          emirate?: string | null
+          handover_status?: string | null
+          id?: string
+          images?: string[] | null
+          investor_email?: string | null
+          investor_name?: string | null
+          investor_phone?: string | null
+          investor_user_id?: string | null
+          location?: string | null
+          original_purchase_price?: number | null
+          project_name?: string | null
+          property_type?: string | null
+          size_sqft?: number | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          area_name?: string | null
+          asking_price?: number | null
+          bedrooms?: number | null
+          created_at?: string | null
+          currency?: string | null
+          description?: string | null
+          developer_name?: string | null
+          emirate?: string | null
+          handover_status?: string | null
+          id?: string
+          images?: string[] | null
+          investor_email?: string | null
+          investor_name?: string | null
+          investor_phone?: string | null
+          investor_user_id?: string | null
+          location?: string | null
+          original_purchase_price?: number | null
+          project_name?: string | null
+          property_type?: string | null
+          size_sqft?: number | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       rewards_catalog: {
         Row: {
           created_at: string | null

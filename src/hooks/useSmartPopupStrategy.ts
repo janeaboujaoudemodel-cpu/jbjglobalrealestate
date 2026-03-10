@@ -15,10 +15,10 @@ const STORAGE_KEYS = {
 
 const MAX_TOTAL_SHOWS = 3;
 const COOLDOWN_DAYS = 3;
-const FIRST_VISIT_DELAY_MS = 8000;
-const PROPERTY_PAGE_THRESHOLD = 3;
-const SESSION_PAGE_THRESHOLD = 5;
-const SCROLL_THRESHOLD = 0.7;
+const FIRST_VISIT_DELAY_MS = 3000;
+const PROPERTY_PAGE_THRESHOLD = 2;
+const SESSION_PAGE_THRESHOLD = 3;
+const SCROLL_THRESHOLD = 0.3;
 
 export type PopupContext = "properties" | "ai" | "news" | "default";
 
@@ -102,6 +102,18 @@ export function useSmartPopupStrategy(): SmartPopupState & {
   const [context, setContext] = useState<PopupContext>("default");
   const scrollListenerRef = useRef<(() => void) | null>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // Check auth state — skip popup for logged-in users
+  useEffect(() => {
+    try {
+      const sbAccessToken = document.cookie.includes('sb-access-token') ||
+        !!localStorage.getItem('sb-mdafrewypkkrildjgtey-auth-token');
+      setIsAuthenticated(sbAccessToken);
+    } catch {
+      setIsAuthenticated(false);
+    }
+  }, []);
 
   // Track page views per session
   useEffect(() => {
@@ -120,8 +132,8 @@ export function useSmartPopupStrategy(): SmartPopupState & {
 
   // Main strategy logic
   useEffect(() => {
-    // Gate checks
-    if (hasExceededMaxShows() || isInCooldown() || wasShownThisSession()) return;
+    // Gate checks — skip for authenticated users
+    if (isAuthenticated || hasExceededMaxShows() || isInCooldown() || wasShownThisSession()) return;
 
     const currentContext = detectContext(location.pathname);
     const sessionPages = getStoredNumber(STORAGE_KEYS.sessionPages);
@@ -165,7 +177,7 @@ export function useSmartPopupStrategy(): SmartPopupState & {
         window.removeEventListener("scroll", handleScroll);
       };
     }
-  }, [location.pathname]);
+  }, [location.pathname, isAuthenticated]);
 
   const markShown = useCallback(() => {
     try {

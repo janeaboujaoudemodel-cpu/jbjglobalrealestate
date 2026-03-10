@@ -10,7 +10,7 @@ import { MapPin, Building2, TrendingUp, Flame, ArrowRight, Loader2, ChevronLeft,
 import jbjMonogram from "@/assets/jbj-monogram-light-bg.png";
 import { Badge } from "@/components/ui/badge";
 import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
-import PropertiesVerticalNav from "@/components/navigation/PropertiesVerticalNav";
+// PropertiesVerticalNav removed — handled globally by MainLayout
 
 import { SEOHead } from "@/components/SEOHead";
 import { useAreas, useEmiratesWithAreas, Area } from "@/hooks/useAreas";
@@ -278,12 +278,7 @@ const AreaGuides = () => {
       </section>
 
       {/* ─── POST-HERO LAYOUT ─── */}
-      {/* Vertical Nav — always present when past hero */}
-      {pastHero && (
-        <div className="hidden lg:block fixed left-0 top-0 h-screen z-[9997]">
-          <PropertiesVerticalNav />
-        </div>
-      )}
+      {/* Vertical nav handled globally by MainLayout */}
 
       {/* Filter bar — show inline below hero always, then fixed at top when past hero */}
       <section

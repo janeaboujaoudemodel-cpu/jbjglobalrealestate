@@ -73,7 +73,7 @@ import ConsultationRequestForm from "@/components/ConsultationRequestForm";
 import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
 import PropertiesMapView from "@/components/maps/PropertiesMapView";
-import PropertiesVerticalNav from "@/components/navigation/PropertiesVerticalNav";
+// PropertiesVerticalNav removed — handled globally by MainLayout
 
 // Currency conversion rates - 10 unified currencies
 const CURRENCY_RATES: Record<string, number> = {
@@ -1199,10 +1199,7 @@ const Properties = () => {
       {isMapMode ? (
         <section className="bg-black">
           <div className="flex" style={{ height: 'calc(100vh - 80px)' }}>
-            {/* Vertical Nav Sidebar - visible when filter is fixed */}
-            {isFilterFixed && (
-              <PropertiesVerticalNav />
-            )}
+            {/* Vertical nav handled globally by MainLayout */}
 
             {/* Left: Scrollable card list */}
             <div ref={cardListRef} className="w-[55%] flex-shrink-0 overflow-y-auto bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
@@ -1268,12 +1265,7 @@ const Properties = () => {
         <section className="py-12 bg-black">
           <div className="container mx-auto px-3 sm:px-4">
             <div className="flex">
-              {/* Vertical Nav Sidebar - visible when filter is fixed in list mode too */}
-              {isFilterFixed && (
-                <div className="hidden lg:block">
-                  <PropertiesVerticalNav />
-                </div>
-              )}
+              {/* Vertical nav handled globally by MainLayout */}
             {/* OUTER LAYER - Active Champagne with thin black contour visible at edges */}
             <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 flex-1 min-w-0">
               

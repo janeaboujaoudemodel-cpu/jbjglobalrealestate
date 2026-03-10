@@ -23,7 +23,7 @@ import { AreaMapSection } from "@/components/area-detail/AreaMapSection";
 import { MapErrorBoundary } from "@/components/MapErrorBoundary";
 import { AreaAIAnalyzer } from "@/components/area-detail/AreaAIAnalyzer";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
-import PropertiesVerticalNav from "@/components/navigation/PropertiesVerticalNav";
+// PropertiesVerticalNav removed — handled globally by MainLayout
 import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 
 const AreaDetail = () => {
@@ -170,13 +170,8 @@ const AreaDetail = () => {
 
   return (
     <div className={`min-h-screen bg-black flex ${isFixed && !bottomReached ? '' : ''}`}>
-      {/* Vertical Nav when filter bar replaces header */}
-      {isFixed && !bottomReached && (
-        <div className="hidden lg:block fixed left-0 top-0 h-screen z-[9997]">
-          <PropertiesVerticalNav />
-        </div>
-      )}
-      <div className={`flex-1 ${isFixed && !bottomReached ? 'lg:ml-[200px]' : ''} transition-all duration-200`}>
+      {/* Vertical nav handled globally by MainLayout */}
+      <div className="flex-1 transition-all duration-200">
       <SEOHead 
         title={`${area.name} - Real Estate in ${area.emirate} | JBJ`}
         description={area.description || `Explore properties in ${area.name}, ${area.emirate}.`}

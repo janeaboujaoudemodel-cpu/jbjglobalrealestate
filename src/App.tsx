@@ -136,6 +136,7 @@ const PropertyEvaluator = lazy(() => import("./pages/PropertyEvaluator"));
 const ScanSignDocuments = lazy(() => import("./pages/ScanSignDocuments"));
 const PropertyMeasurement = lazy(() => import("./pages/PropertyMeasurement"));
 const RentalIndex = lazy(() => import("./pages/RentalIndex"));
+const ResaleProperties = lazy(() => import("./pages/ResaleProperties"));
 
 // E-Signature Pages
 const ESignatureDashboard = lazy(() => import("./pages/e-signature/ESignatureDashboard"));
@@ -616,6 +617,7 @@ const App = () => {
                 <Route path="/listing-portal/submit" element={<ListingPortalSubmit />} />
                 <Route path="/listing-portal/my-listings" element={<ListingPortalMyListings />} />
                 <Route path="/property-evaluator" element={<PropertyEvaluator />} />
+                <Route path="/resale-properties" element={<ResaleProperties />} />
                 <Route path="/ai-property-analyzer" element={<AIPropertyAnalyzerPage />} />
                 <Route path="/ai-lead-qualification" element={<BrokerGuard><AILeadQualificationPage /></BrokerGuard>} />
                 <Route path="/ai-price-predictor" element={<AIPricePredictorPage />} />
