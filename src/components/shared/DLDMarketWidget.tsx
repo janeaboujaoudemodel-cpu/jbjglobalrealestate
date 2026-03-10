@@ -191,7 +191,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
 
           {/* Disclaimer */}
           <p className="text-[10px] text-black/40 text-center mt-6">
-            Source: Dubai Land Department (DLD). Year-to-date (YTD) 2026 data. For informational purposes only. Does not constitute financial advice.{" "}
+            Sources: Dubai Land Department (DLD), RERA, DXB Interact, Property Monitor, Knight Frank, Bayut, Property Finder. YTD 2026 data. For informational purposes only. Does not constitute financial advice.{" "}
             <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
           </p>
         </div>
