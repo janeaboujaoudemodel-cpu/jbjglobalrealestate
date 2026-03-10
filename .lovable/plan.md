@@ -1,52 +1,41 @@
 
 
-# Fix Market Data Consistency, Remove Provident References, Upgrade Data Sources
+## Plan: Fix All Email Issues Across All Templates
 
-## Issues Found
+### Problems Identified
 
-1. **NewsDetail.tsx** shows "Top 5 Areas" with `slice(0, 5)` — should be Top 10 to match News.tsx and DLDMarketWidget.tsx
-2. **News.tsx line 781** lists "Provident" as a source badge in the Victoria Hayes reporter section — must be removed
-3. **NewsDetail.tsx** also shows `topNationalitiesData.slice(0, 5)` — should show all 10
-4. **News.tsx** uses hardcoded fallback data directly instead of the `useDLDMarketData()` hook (which fetches live data from the database) — inconsistent with DLDMarketWidget which uses the hook
-5. Multiple backend files reference Provident (edge functions, admin panels) — those are internal/admin only and acceptable, but all **user-facing** Provident references must go
-6. **WhyDubaiSection.tsx** already has "#1 Safest City" but lacks sourcing — needs real source citations (Numbeo, Global Peace Index, Knight Frank Wealth Report)
-7. **open-data-config.ts** and **dldMarketData.ts** data is static — needs to be enriched with real source attributions
+1. **Recommended For You icons disappeared** — Inline SVGs are stripped by Gmail and most email clients. Must revert to hosted PNG images (`ai-tools.png`, `guides.png`, `properties.png` already exist in `public/email-icons/`).
 
-## Changes
+2. **Social media footer icons not rendering** — Same issue: `socialLinksFooter()` loads external `.svg` files via `<img>` tags, but Gmail blocks SVG images entirely. Must switch to hosted `.png` files. Currently missing `social-facebook.png` — need to confirm or create it.
 
-### 1. `src/pages/NewsDetail.tsx` — Fix Top 5 → Top 10
-- Change "Top 5 Areas by Transaction Volume" → "Top 10 Areas by Transaction Volume"
-- Change `topAreas2026Data.slice(0, 5)` → `topAreas2026Data.slice(0, 10)`
-- Change `topNationalitiesData.slice(0, 5)` → `topNationalitiesData.slice(0, 10)`
+3. **Email split into multiple visual cards** — Several sub-sections (`ticketSupportEmbed`, `readyToGetStartedHtml`, `recommendedActionsHtml`) each have their own `border`, `border-radius`, and `background` styles creating distinct visual boxes. These need to be softened so they sit seamlessly inside the single continuous card.
 
-### 2. `src/pages/News.tsx` — Remove Provident, Use Live Data Hook
-- **Line 781**: Remove "Provident" from the source badges array. Replace with "Knight Frank" or "Property Monitor"
-- **Lines 128-131**: Replace hardcoded data with `useDLDMarketData()` hook (same pattern as DLDMarketWidget) so all pages use the same live data source
-- Update source references to include: "Dubai Media Office", "Dubai Land Dept", "Abu Dhabi Media", "Ministry of Economy", "RERA", "Knight Frank", "Property Monitor"
+### Changes (all in `supabase/functions/_shared/email-html.ts`)
 
-### 3. `src/components/shared/DLDMarketWidget.tsx` — Already consistent (Top 10), no changes needed
+#### A. Recommended For You — Revert to PNG hosted images
+- Change `recommendedCard()` back to using `iconImg()` with PNG paths
+- Remove the `RECOMMENDED_ICONS` inline SVG object
+- Ensure circular frame clips the PNG with `overflow:hidden` on the `<td>` to prevent square backgrounds
+- Signature: `recommendedCard(title, href, iconPath, alt)` — restore the original parameters
 
-### 4. `src/constants/dldMarketData.ts` — Add real source attributions
-- Add a `DATA_SOURCES` constant listing official sources: DLD, RERA, Property Monitor, Knight Frank, Bayut Index, Property Finder, DXB Interact
-- Add Dubai city ranking facts: safest city (Numbeo 2025), #1 FDI destination MENA (fDi Intelligence), Knight Frank Prime Global Cities Index ranking
+#### B. Social Footer — Switch to PNG with white pearl background
+- Replace `socialLinksFooter()` to use the inline `SVG` object icons (instagram, facebook, linkedin, tiktok, youtube) that are already defined at the top of the file — these render as raw HTML inside `<td>` elements, not as `<img>` tags, so they should survive email client processing
+- Actually, since Gmail strips ALL SVG (both inline and `<img>`), switch to using the `.png` files: `social-instagram.png`, `social-linkedin.png`, `social-tiktok.png`, `social-youtube.png`
+- Create `social-facebook.png` if missing
+- Style each icon circle: white/pearl (#FDFBF7) background, gold border, black icon inside
 
-### 5. `src/components/WhyDubaiSection.tsx` — Enrich with real sourced rankings
-- Add source citations for "#1 Safest City" (Numbeo Safety Index)
-- Add Knight Frank Wealth Report ranking
-- Add Global Liveability ranking
-- Add source footnotes with attribution
+#### C. Single Card Layout — Remove visual fragmentation
+- `ticketSupportEmbed()`: Remove the heavy gradient background and red border; make it blend into the card
+- `readyToGetStartedHtml()`: Remove the outer border and separate background so it flows within the card
+- `inquiryBox()`: Soften its standalone bordered look
+- Keep all content inside the single `emailShell` wrapper card with no sub-borders that create separation
 
-### 6. `src/config/open-data-config.ts` — Add real portal sources
-- Add Property Monitor, Knight Frank, Bayut, Property Finder, Dubizzle, Airbnb/Holiday Homes data sources to the `OPEN_DATA_SOURCES` array
-- Update `lastUpdated` dates
-- Add real market stats from these sources (avg rental yields by area, price per sqft trends)
+#### D. Deploy + Send Test Email
+- Deploy the updated edge function
+- Immediately send a test welcome email to `janeaboujaoudenails@gmail.com`
+- Take a screenshot as proof
 
-### 7. `src/pages/MarketReport.tsx` — Already references Property Monitor and Knight Frank correctly, no Provident references in user-facing content
-
-## Files to Edit
-- `src/pages/NewsDetail.tsx` — Top 5 → Top 10, nationalities 5 → 10
-- `src/pages/News.tsx` — Remove Provident badge, use `useDLDMarketData()` hook
-- `src/constants/dldMarketData.ts` — Add source attributions and Dubai ranking facts
-- `src/components/WhyDubaiSection.tsx` — Add real sourced rankings with citations
-- `src/config/open-data-config.ts` — Add Property Monitor, Knight Frank, Bayut, Property Finder, Airbnb sources
+### Files Modified
+- `supabase/functions/_shared/email-html.ts` — all icon and layout fixes
+- `public/email-icons/social-facebook.png` — create if missing (or use existing assets)
 

@@ -422,10 +422,10 @@ const NewsDetail = () => {
               <div className="bg-white/60 rounded-xl p-4 border border-gold/10">
                 <div className="flex items-center gap-2 mb-3">
                   <MapPin className="w-4 h-4 text-gold" />
-                  <span className="text-xs font-semibold text-black uppercase tracking-wide">Top 5 Areas by Transaction Volume</span>
+                  <span className="text-xs font-semibold text-black uppercase tracking-wide">Top 10 Areas by Transaction Volume</span>
                 </div>
                 <div className="space-y-2">
-                  {topAreas2026Data.slice(0, 5).map((area, i) => (
+                  {topAreas2026Data.slice(0, 10).map((area, i) => (
                     <div key={area.area} className="flex items-center gap-3">
                       <span className="text-zinc-400 font-medium text-sm w-4 text-right">{i + 1}</span>
                       <span className="text-sm font-medium text-black flex-1">{area.area}</span>
@@ -443,7 +443,7 @@ const NewsDetail = () => {
                   <span className="text-xs font-semibold text-black uppercase tracking-wide">Top Buyer Nationalities</span>
                 </div>
                 <div className="space-y-2">
-                  {topNationalitiesData.slice(0, 5).map((nat, i) => (
+                  {topNationalitiesData.slice(0, 10).map((nat, i) => (
                     <div key={nat.country} className="flex items-center gap-3">
                       <span className="text-lg">{nat.flag}</span>
                       <span className="text-sm font-medium text-black flex-1">{nat.country}</span>
