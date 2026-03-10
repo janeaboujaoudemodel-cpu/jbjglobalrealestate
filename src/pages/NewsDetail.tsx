@@ -425,7 +425,7 @@ const NewsDetail = () => {
                   <span className="text-xs font-semibold text-black uppercase tracking-wide">Top 10 Areas by Transaction Volume</span>
                 </div>
                 <div className="space-y-2">
-                  {topAreas2026Data.slice(0, 5).map((area, i) => (
+                  {topAreas2026Data.slice(0, 10).map((area, i) => (
                     <div key={area.area} className="flex items-center gap-3">
                       <span className="text-zinc-400 font-medium text-sm w-4 text-right">{i + 1}</span>
                       <span className="text-sm font-medium text-black flex-1">{area.area}</span>
