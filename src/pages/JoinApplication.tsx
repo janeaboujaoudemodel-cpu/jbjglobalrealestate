@@ -634,7 +634,7 @@ export default function JoinApplication() {
                   </div>
                   <div className="space-y-2">
                     <Label>Why are you leaving your current position?</Label>
-                    <Input value={formData.reasonForLeaving} onChange={(e) => setFormData({ ...formData, reasonForLeaving: e.target.value })} placeholder="Reason for seeking new opportunity" disabled={!user || loading} className="bg-background" />
+                    <Input value={formData.reasonForLeaving} onChange={(e) => setFormData({ ...formData, reasonForLeaving: e.target.value })} placeholder="Reason for seeking new opportunity" disabled={loading} className="bg-background" />
                   </div>
 
                   <h3 className="text-lg font-semibold text-black mt-4 flex items-center gap-2">
