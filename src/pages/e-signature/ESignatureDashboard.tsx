@@ -149,22 +149,26 @@ export default function ESignatureDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-black pt-20 lg:pt-24">
-      <div className="mx-3 md:mx-4 lg:mx-6 my-6 rounded-2xl border border-border bg-[linear-gradient(135deg,hsl(var(--champagne-1)),hsl(var(--champagne-2)),hsl(var(--champagne-3)))]">
+    <div className="min-h-screen bg-black">
+      {/* Premium Page Header — aligned with sidebar logo divider */}
+      <div className="bg-black border-b border-gold/20">
+        <div className="max-w-7xl mx-auto px-6 flex items-end h-[84px] pb-4">
+          <div className="flex flex-wrap items-center gap-3">
+            <FileSignature className="w-6 h-6 text-gold" />
+            <h1 className="text-2xl md:text-3xl font-bold text-white" style={{ fontFamily: 'Poppins, sans-serif' }}>
+              E-<span className="text-gold">Signature</span>
+            </h1>
+          </div>
+        </div>
+      </div>
+
+      <div className="mx-3 md:mx-4 lg:mx-6 mb-6 mt-0 rounded-b-2xl rounded-t-none border border-t-0 border-border bg-[linear-gradient(135deg,hsl(var(--champagne-1)),hsl(var(--champagne-2)),hsl(var(--champagne-3)))]">
         <div className="max-w-7xl mx-auto p-6 space-y-6">
-          {/* Header */}
+          {/* Actions Bar */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <div>
-              <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-zinc-900">
-                  <FileSignature className="w-6 h-6 text-white" />
-                </div>
-                E-Signature
-              </h1>
-              <p className="text-muted-foreground mt-1">
-                Upload, sign, and track documents for electronic signature
-              </p>
-            </div>
+            <p className="text-muted-foreground">
+              Upload, sign, and track documents for electronic signature
+            </p>
             <div className="flex flex-wrap gap-2">
               <Link to="/e-signature/create">
                 <Button className="bg-gradient-to-r from-gold to-gold/80 hover:from-gold/90 hover:to-gold/70 text-white shadow-lg">

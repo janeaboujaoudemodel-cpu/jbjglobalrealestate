@@ -444,13 +444,19 @@ const UserProfile = () => {
   return (
     <>
       <div className="min-h-screen bg-black">
-        <div className="mx-3 md:mx-4 lg:mx-6 my-6 rounded-2xl border border-border bg-[linear-gradient(135deg,hsl(var(--champagne-1)),hsl(var(--champagne-2)),hsl(var(--champagne-3)))]">
-          <div className="container mx-auto px-4 py-8 max-w-4xl">
-          {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-foreground mb-2">My Profile</h1>
-            <p className="text-muted-foreground">Manage your account settings and preferences</p>
+        {/* Premium Page Header — aligned with sidebar logo divider */}
+        <div className="bg-black border-b border-gold/20">
+          <div className="container mx-auto px-6 max-w-4xl flex items-end h-[84px] pb-4">
+            <h1 className="text-2xl md:text-3xl font-bold text-white" style={{ fontFamily: 'Poppins, sans-serif' }}>
+              My <span className="text-gold">Profile</span>
+            </h1>
           </div>
+        </div>
+
+        <div className="mx-3 md:mx-4 lg:mx-6 mb-6 mt-0 rounded-b-2xl rounded-t-none border border-t-0 border-border bg-[linear-gradient(135deg,hsl(var(--champagne-1)),hsl(var(--champagne-2)),hsl(var(--champagne-3)))]">
+          <div className="container mx-auto px-4 py-6 max-w-4xl">
+          {/* Subtitle */}
+          <p className="text-muted-foreground mb-6">Manage your account settings and preferences</p>
 
           {/* Profile Card */}
           <Card className="mb-8 border border-border shadow-lg bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))]">
