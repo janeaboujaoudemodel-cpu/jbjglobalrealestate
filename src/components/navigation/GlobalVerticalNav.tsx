@@ -954,7 +954,11 @@ export default function GlobalVerticalNav() {
                   <button
                     onClick={() => toggleSection(sectionKey)}
                     className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-[11px] uppercase tracking-[0.15em] font-bold transition-all border ${
-                      sectionHighlighted
+                      sectionKey === 'MY ACCOUNT'
+                        ? sectionHighlighted
+                          ? "text-gold bg-gradient-to-r from-gold/20 to-gold/10 border-gold/50"
+                          : "text-gold/80 hover:text-gold bg-gradient-to-r from-gold/5 to-transparent border-gold/20 hover:border-gold/30"
+                        : sectionHighlighted
                         ? "text-gold bg-gold/15 border-gold/40"
                         : "text-gold/80 hover:text-gold hover:bg-gold/5 border-transparent hover:border-gold/20"
                     }`}
