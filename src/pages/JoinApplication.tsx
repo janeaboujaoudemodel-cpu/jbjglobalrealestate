@@ -708,7 +708,7 @@ export default function JoinApplication() {
                     onCheckedChange={(checked) => 
                       setFormData({ ...formData, consentAccurate: checked as boolean })
                     }
-                    disabled={!user || loading}
+                    disabled={loading}
                   />
                   <Label htmlFor="consentAccurate" className="text-sm leading-relaxed cursor-pointer">
                     I confirm that the information provided is accurate and complete to the best of my knowledge.
