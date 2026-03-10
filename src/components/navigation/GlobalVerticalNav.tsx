@@ -1089,22 +1089,22 @@ export default function GlobalVerticalNav() {
         </div>
       </nav>
 
-      {/* Bottom pinned section */}
+      {/* Bottom pinned section — SUPPORT hub */}
       <div className="mt-auto flex-shrink-0">
-        {/* Support — always visible, compact */}
-        <div className="px-3 py-3 border-t border-gold/20 space-y-2 bg-gradient-to-b from-[#EDE4D3]/50 to-[#EDE4D3]">
+        <div className="px-3 py-4 border-t border-gold/20 space-y-2.5 bg-gradient-to-b from-[#EDE4D3]/50 to-[#EDE4D3]">
           <a
             href="mailto:info@jbjglobal.com"
-            className="flex items-center gap-2 text-xs font-bold text-gold hover:text-gold/80 transition-colors"
+            className="flex items-center gap-2.5 text-xs font-bold text-gold hover:text-gold/80 transition-colors px-2 py-2.5 rounded-lg border border-gold/20 hover:border-gold/40 hover:bg-gold/5"
           >
-            <Headphones className="w-3.5 h-3.5" />
+            <Headphones className="w-4 h-4" />
             Contact Support
           </a>
+          <hr className="border-gold/15" />
           <Link
             to="/my-tickets"
-            className="flex items-center gap-2 text-xs font-bold text-gold hover:text-gold/80 transition-colors"
+            className="flex items-center gap-2.5 text-xs font-bold text-gold hover:text-gold/80 transition-colors px-2 py-2.5 rounded-lg border border-gold/20 hover:border-gold/40 hover:bg-gold/5"
           >
-            <Ticket className="w-3.5 h-3.5" />
+            <Ticket className="w-4 h-4" />
             Create Ticket Support
           </Link>
         </div>
