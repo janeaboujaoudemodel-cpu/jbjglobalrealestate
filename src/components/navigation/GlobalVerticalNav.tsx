@@ -919,25 +919,15 @@ export default function GlobalVerticalNav() {
         })}
       </nav>
 
-      {/* Bottom pinned section — mt-auto ensures it fills remaining space */}
+      {/* Bottom pinned section — mt-auto fills remaining space */}
       <div className="mt-auto flex-shrink-0">
-        {/* Utility Section — Search + Language + Currency */}
-        <div className="px-3 py-2 border-t border-gold/20 bg-gradient-to-b from-transparent to-[#EDE4D3]/50">
-          <div className="flex items-center gap-1">
-            <button
-              onClick={() => setSearchOpen(true)}
-              className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg text-sm font-semibold text-gold hover:bg-gold/10 transition-all group flex-1 min-w-0"
-            >
-              <Search className="w-4 h-4 text-gold flex-shrink-0" />
-              <span className="text-[10px] bg-gold/15 text-gold border border-gold/30 rounded px-1 py-0.5 font-bold">⌘K</span>
-            </button>
-            <LanguageSwitcher variant="icon-only" />
-            <CurrencySwitcher variant="icon-only" />
-          </div>
-        </div>
+        {/* Utility Bar — Search, Favorites, sqft/sqm, Language, Currency with dividers */}
+        <VerticalNavUtilityBar
+          onSearchOpen={() => setSearchOpen(true)}
+        />
 
         {/* Support — always visible, compact */}
-        <div className="px-3 py-2.5 border-t border-gold/20 space-y-1.5 bg-gradient-to-b from-[#EDE4D3]/50 to-[#EDE4D3]">
+        <div className="px-3 py-3 border-t border-gold/20 space-y-2 bg-gradient-to-b from-[#EDE4D3]/50 to-[#EDE4D3]">
           <a
             href="mailto:info@jbjglobal.com"
             className="flex items-center gap-2 text-xs font-bold text-gold hover:text-gold/80 transition-colors"
