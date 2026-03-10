@@ -14,11 +14,11 @@ const STORAGE_KEYS = {
 };
 
 const MAX_TOTAL_SHOWS = 3;
-const COOLDOWN_DAYS = 3;
-const FIRST_VISIT_DELAY_MS = 3000;
-const PROPERTY_PAGE_THRESHOLD = 2;
-const SESSION_PAGE_THRESHOLD = 3;
-const SCROLL_THRESHOLD = 0.3;
+const COOLDOWN_DAYS = 2;
+const FIRST_VISIT_DELAY_MS = 1500;
+const PROPERTY_PAGE_THRESHOLD = 1;
+const SESSION_PAGE_THRESHOLD = 2;
+const SCROLL_THRESHOLD = 0.2;
 
 export type PopupContext = "properties" | "ai" | "news" | "default";
 
