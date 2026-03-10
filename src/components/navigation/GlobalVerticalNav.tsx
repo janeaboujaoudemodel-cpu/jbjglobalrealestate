@@ -918,121 +918,121 @@ export default function GlobalVerticalNav() {
         </div>
       </div>
 
-      {/* My Shortcuts — premium flyout trigger */}
-      <div className="px-2 pt-3 pb-1 flex-shrink-0">
-        <button
-          onClick={(e) => handleNavClick('shortcuts', e as any)}
-          className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-bold w-full transition-all ${
-            activeMegaMenu === 'shortcuts'
-              ? "bg-gradient-to-r from-gold/25 to-gold/15 text-black border border-gold/50"
-              : "text-gold hover:bg-gold/10 border border-gold/30"
-          }`}
-        >
-          <Zap className="w-4 h-4 text-gold flex-shrink-0" />
-          <span className="flex-1 text-left">My Shortcuts</span>
-          <ChevronRight className={`w-3.5 h-3.5 transition-transform ${activeMegaMenu === 'shortcuts' ? "rotate-90 text-gold" : "text-gold/50"}`} />
-        </button>
-      </div>
-
-      {/* Highlighted Hubs — always visible */}
-      <div className="px-2 py-1 space-y-0.5 flex-shrink-0">
-        {highlightItems.map((item, i) => {
-          const hasMega = !!item.megaMenu;
-          const isMenuOpen = activeMegaMenu === item.megaMenu;
-          const Icon = item.icon;
-          return (
-            <Link
-              key={item.href + item.label + i}
-              to={item.href}
-              onClick={(e) => {
-                if (hasMega) handleNavClick(item.megaMenu, e);
-                else handleNavClick(undefined);
-              }}
-              className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${getItemStyle(item)}`}
-            >
-              <Icon className={`w-4 h-4 flex-shrink-0 ${getIconStyle(item)}`} />
-              <span className="flex-1">{item.label}</span>
-              {hasMega && (
-                <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-black/30"}`} />
-              )}
-              {item.highlight && !isMenuOpen && !activeMegaMenu && !isRouteActive(item.href) && (
-                <Sparkles className="w-3 h-3 text-gold/60" />
-              )}
-            </Link>
-          );
-        })}
-      </div>
-
-      {/* Collapsible Section Nav — scrollable middle */}
+      {/* Scrollable area: shortcuts + hubs + sections */}
       <nav
-        className="flex-1 py-2 px-2 space-y-0.5 overflow-y-auto jj-scrollbar-gold jj-scrollbar-always-visible overscroll-contain min-h-0"
+        className="flex-1 overflow-y-auto jj-scrollbar-gold jj-scrollbar-always-visible overscroll-contain min-h-0"
         style={{ scrollbarGutter: "stable" }}
       >
-        {SECTION_KEYS.map((sectionKey, sectionIdx) => {
-          const items = sectionGroups[sectionKey];
-          if (!items || items.length === 0) return null;
-          const isOpen = openSection === sectionKey;
-          const hasActiveChild = items.some(item => isRouteActive(item.href));
-          const hasMegaActive = sectionHasActiveMega(sectionKey);
-          const sectionHighlighted = isOpen || hasActiveChild || hasMegaActive;
-          const SectionIcon = SECTION_ICONS[sectionKey];
+        {/* My Shortcuts — premium flyout trigger */}
+        <div className="px-2 pt-3 pb-1">
+          <button
+            onClick={(e) => handleNavClick('shortcuts', e as any)}
+            className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-bold w-full transition-all ${
+              activeMegaMenu === 'shortcuts'
+                ? "bg-gradient-to-r from-gold/25 to-gold/15 text-black border border-gold/50"
+                : "text-gold hover:bg-gold/10 border border-gold/30"
+            }`}
+          >
+            <Zap className="w-4 h-4 text-gold flex-shrink-0" />
+            <span className="flex-1 text-left">My Shortcuts</span>
+            <ChevronRight className={`w-3.5 h-3.5 transition-transform ${activeMegaMenu === 'shortcuts' ? "rotate-90 text-gold" : "text-gold/50"}`} />
+          </button>
+        </div>
 
-          return (
-            <React.Fragment key={sectionKey}>
-              {/* Section divider */}
-              {sectionIdx > 0 && <hr className="border-gold/15 mx-1 my-1" />}
+        {/* Highlighted Hubs */}
+        <div className="px-2 py-1 space-y-0.5">
+          {highlightItems.map((item, i) => {
+            const hasMega = !!item.megaMenu;
+            const isMenuOpen = activeMegaMenu === item.megaMenu;
+            const Icon = item.icon;
+            return (
+              <Link
+                key={item.href + item.label + i}
+                to={item.href}
+                onClick={(e) => {
+                  if (hasMega) handleNavClick(item.megaMenu, e);
+                  else handleNavClick(undefined);
+                }}
+                className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${getItemStyle(item)}`}
+              >
+                <Icon className={`w-4 h-4 flex-shrink-0 ${getIconStyle(item)}`} />
+                <span className="flex-1">{item.label}</span>
+                {hasMega && (
+                  <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-black/30"}`} />
+                )}
+                {item.highlight && !isMenuOpen && !activeMegaMenu && !isRouteActive(item.href) && (
+                  <Sparkles className="w-3 h-3 text-gold/60" />
+                )}
+              </Link>
+            );
+          })}
+        </div>
 
-              <div>
-                {/* Section header — accordion toggle with gold active state */}
-                <button
-                  onClick={() => toggleSection(sectionKey)}
-                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-[11px] uppercase tracking-[0.15em] font-bold transition-all ${
-                    sectionHighlighted
-                      ? "text-black bg-gold/15 border-l-2 border-gold"
-                      : "text-black hover:text-black hover:bg-gold/5"
-                  }`}
-                >
-                  <SectionIcon className={`w-3.5 h-3.5 flex-shrink-0 ${sectionHighlighted ? 'text-gold' : 'text-black/50'}`} />
-                  <span className="flex-1 text-left">{sectionKey}</span>
-                  <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'} ${sectionHighlighted ? 'text-gold' : 'text-black/40'}`} />
-                  {!isOpen && hasActiveChild && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-gold" />
-                  )}
-                </button>
+        {/* Collapsible Section Nav */}
+        <div className="py-2 px-2 space-y-0.5">
+          {SECTION_KEYS.map((sectionKey, sectionIdx) => {
+            const items = sectionGroups[sectionKey];
+            if (!items || items.length === 0) return null;
+            const isOpen = openSection === sectionKey;
+            const hasActiveChild = items.some(item => isRouteActive(item.href));
+            const hasMegaActive = sectionHasActiveMega(sectionKey);
+            const sectionHighlighted = isOpen || hasActiveChild || hasMegaActive;
+            const SectionIcon = SECTION_ICONS[sectionKey];
 
-                {/* Collapsible items — indented with tree line */}
-                <div
-                  className={`overflow-hidden transition-all duration-200 ${isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}
-                >
-                  <div className="ml-3 pl-3 border-l-2 border-gold/20 space-y-0.5 pt-0.5 pb-1">
-                    {items.map((item, i) => {
-                      const hasMega = !!item.megaMenu;
-                      const isMenuOpen = activeMegaMenu === item.megaMenu;
-                      const Icon = item.icon;
-                      return (
-                        <Link
-                          key={item.href + item.label + i}
-                          to={item.href}
-                          onClick={(e) => {
-                            if (hasMega) handleNavClick(item.megaMenu, e);
-                            else handleNavClick(undefined);
-                          }}
-                          className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${getItemStyle(item, sectionKey)}`}
-                        >
-                          <Icon className={`w-4 h-4 flex-shrink-0 ${getIconStyle(item, sectionKey)}`} />
-                          <span className="flex-1">{item.label}</span>
-                          {hasMega && (
-                            <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-black/30"}`} />
-                          )}
-                        </Link>
-                      );
-                    })}
+            return (
+              <React.Fragment key={sectionKey}>
+                {sectionIdx > 0 && <hr className="border-gold/15 mx-1 my-1" />}
+
+                <div>
+                  <button
+                    onClick={() => toggleSection(sectionKey)}
+                    className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-[11px] uppercase tracking-[0.15em] font-bold transition-all ${
+                      sectionHighlighted
+                        ? "text-black bg-gold/15 border-l-2 border-gold"
+                        : "text-black hover:text-black hover:bg-gold/5"
+                    }`}
+                  >
+                    <SectionIcon className={`w-3.5 h-3.5 flex-shrink-0 ${sectionHighlighted ? 'text-gold' : 'text-black/50'}`} />
+                    <span className="flex-1 text-left">{sectionKey}</span>
+                    <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'} ${sectionHighlighted ? 'text-gold' : 'text-black/40'}`} />
+                    {!isOpen && hasActiveChild && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-gold" />
+                    )}
+                  </button>
+
+                  <div
+                    className={`overflow-hidden transition-all duration-200 ${isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}
+                  >
+                    <div className="ml-3 pl-3 border-l-2 border-gold/20 space-y-0.5 pt-0.5 pb-1">
+                      {items.map((item, i) => {
+                        const hasMega = !!item.megaMenu;
+                        const isMenuOpen = activeMegaMenu === item.megaMenu;
+                        const Icon = item.icon;
+                        return (
+                          <Link
+                            key={item.href + item.label + i}
+                            to={item.href}
+                            onClick={(e) => {
+                              if (hasMega) handleNavClick(item.megaMenu, e);
+                              else handleNavClick(undefined);
+                            }}
+                            className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${getItemStyle(item, sectionKey)}`}
+                          >
+                            <Icon className={`w-4 h-4 flex-shrink-0 ${getIconStyle(item, sectionKey)}`} />
+                            <span className="flex-1">{item.label}</span>
+                            {hasMega && (
+                              <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-black/30"}`} />
+                            )}
+                          </Link>
+                        );
+                      })}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </React.Fragment>
-          );
-        })}
+              </React.Fragment>
+            );
+          })}
+        </div>
       </nav>
 
       {/* Bottom pinned section — mt-auto fills remaining space */}
