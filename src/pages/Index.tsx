@@ -293,7 +293,7 @@ const Index = () => {
         <StartingPointSection />
       </Suspense>
 
-      <SectionDivider />
+      <SectionDivider fullWidth />
 
       {/* OVERSEAS INVESTORS - Golden Visa & International Investment */}
       <Suspense fallback={<SectionLoader />}>
