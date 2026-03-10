@@ -835,6 +835,25 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                   <div className="h-px bg-gold/20 my-1" />
 
+                  {/* GUIDES */}
+                  <Collapsible>
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-gold hover:bg-gold/5 rounded-lg transition-colors border border-transparent hover:border-gold/20">
+                      <span>Guides</span>
+                      <ChevronDown className="w-4 h-4 text-gold transition-transform duration-200" />
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <div className="ml-3 pl-3 border-l-2 border-gold/20 space-y-0.5 pb-1">
+                        {mobileGuideLinks.map((link) => (
+                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors">
+                            <link.icon className="w-4 h-4 text-gold" />{link.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </CollapsibleContent>
+                  </Collapsible>
+
+                  <div className="h-px bg-gold/20 my-1" />
+
                   {/* SERVICES */}
                   <Collapsible>
                     <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-gold hover:bg-gold/5 rounded-lg transition-colors">
