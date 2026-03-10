@@ -39,6 +39,7 @@ const chunkImports = {
   MortgageCalculator: () => import("@/components/MortgageCalculator"),
   BrokerOnboardingBanner: () => import("@/components/BrokerOnboardingBanner"),
   JBJPodcastSection: () => import("@/components/home/JBJPodcastSection"),
+  ResalePropertiesSection: () => import("@/components/home/ResalePropertiesSection"),
 };
 
 // Lazy components using the same import functions
@@ -65,6 +66,7 @@ const MarketReportCTA = lazy(chunkImports.MarketReportCTA);
 const MortgageCalculator = lazy(chunkImports.MortgageCalculator);
 const BrokerOnboardingBanner = lazy(chunkImports.BrokerOnboardingBanner);
 const JBJPodcastSection = lazy(chunkImports.JBJPodcastSection);
+const ResalePropertiesSection = lazy(chunkImports.ResalePropertiesSection);
 
 import { PodcastVisibilityGate } from "@/components/home/PodcastVisibilityGate";
 import { SectionDivider } from "@/components/ui/section-divider";
@@ -273,6 +275,12 @@ const Index = () => {
       {/* CONTINUE SEARCHING - Recently viewed properties (primary focus for sales) */}
       <Suspense fallback={<SectionLoader />}>
         <ContinueSearching type="property" className="bg-black" />
+      </Suspense>
+
+      {/* RESALE PROPERTIES - Investor Network Listings */}
+      <SectionDivider />
+      <Suspense fallback={<SectionLoader />}>
+        <ResalePropertiesSection />
       </Suspense>
 
       {/* DIVIDER */}
