@@ -120,10 +120,19 @@ export function useSmartPopupStrategy(): SmartPopupState & {
     setContext(detectContext(location.pathname));
   }, [location.pathname]);
 
+  // Check if user already submitted the lead form — only gate
+  const hasSubmitted = useCallback(() => {
+    try {
+      return localStorage.getItem(STORAGE_KEYS.submitted) === "1";
+    } catch {
+      return false;
+    }
+  }, []);
+
   // Main strategy logic
   useEffect(() => {
-    // Gate checks — skip for authenticated users
-    if (isAuthenticated || hasExceededMaxShows() || isInCooldown() || wasShownThisSession()) return;
+    // Only stop showing if user has submitted the form
+    if (hasSubmitted() || hasExceededMaxShows() || isInCooldown() || wasShownThisSession()) return;
 
     const currentContext = detectContext(location.pathname);
     const sessionPages = getStoredNumber(STORAGE_KEYS.sessionPages);
