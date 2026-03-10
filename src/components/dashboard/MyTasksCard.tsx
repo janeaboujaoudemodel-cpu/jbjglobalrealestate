@@ -231,7 +231,7 @@ export default function MyTasksCard() {
             <Button
               size="sm"
               variant="outline"
-              onClick={() => setShowAddForm(!showAddForm)}
+              onClick={() => setShowCreationModal(true)}
               className="h-7 px-2 border-gold/30 text-gold hover:bg-gold/10 hover:text-gold"
             >
               <Plus className="w-3.5 h-3.5" />
