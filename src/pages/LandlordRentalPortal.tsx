@@ -213,10 +213,10 @@ export default function LandlordRentalPortal() {
             {/* Overview Tab */}
             <TabsContent value="overview" className="space-y-8">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <Card className="bg-zinc-900 border-zinc-800">
+                <Card className="bg-white/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
                   <CardHeader>
-                    <CardTitle className="text-white">Why List With Us?</CardTitle>
-                    <CardDescription className="text-zinc-400">
+                    <CardTitle className="text-black">Why List With Us?</CardTitle>
+                    <CardDescription className="text-zinc-600">
                       JBJ Global Real Estate offers unparalleled exposure and service
                     </CardDescription>
                   </CardHeader>
