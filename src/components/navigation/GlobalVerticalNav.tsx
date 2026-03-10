@@ -104,7 +104,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
   ],
   areas: [
     { label: 'All Areas', icon: MapPin, href: '/areas' },
-    { label: 'Area Guides', icon: BookOpen, href: '/area-guides' },
+    { label: 'Area Guides', icon: BookOpen, href: '/areas' },
   ],
   insights: [
     { label: 'Market Intelligence', icon: BarChart3, href: '/market-intelligence' },
