@@ -558,16 +558,22 @@ export default function GlobalVerticalNav() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
 
-  // Accordion toggle — only one section open at a time
+  const navigate = useNavigate();
+
+  // Accordion toggle — only one section open at a time + navigate to first item
   const toggleSection = (section: SectionKey) => {
     const opening = openSection !== section;
     setOpenSection(prev => prev === section ? null : section);
-    // Dual-action: also open the first mega menu flyout in this section
     if (opening) {
       const items = sectionGroups[section];
       const firstMega = items?.find(item => item.megaMenu);
       if (firstMega?.megaMenu) {
         setActiveMegaMenu(firstMega.megaMenu);
+      }
+      // Navigate to first item's route
+      const firstItem = items?.[0];
+      if (firstItem) {
+        navigate(firstItem.href);
       }
     }
   };
