@@ -10,9 +10,11 @@ import {
   LayoutDashboard, FolderOpen, ListChecks, Bell, Zap, Menu, X, Star,
   Scale, Eye, Ticket, Compass, HandCoins, Handshake, Lock, Accessibility,
   ShieldCheck, Newspaper, BookMarked, Landmark, Camera, Ruler,
+  LogOut,
 } from "lucide-react";
 import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png";
 import React, { useState, useCallback, useEffect, useMemo } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 import GlobalSearchModal from "@/components/GlobalSearchModal";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
