@@ -96,18 +96,28 @@ const PropertyRecommendationPopup = () => {
 
     const { data } = await query;
     
-    let results = data as RecommendedProject[] | null;
+    let results = (data as RecommendedProject[] | null) || [];
 
-    if (!results || results.length === 0) {
-      if (primaryArea) {
-        const { data: fallback } = await supabase
-          .from("projects")
-          .select("id, name, area_name, developer_name, price_from, cover_image_url, slug")
-          .eq("is_published", true)
-          .not("sale_status", "ilike", "%sold%")
-          .order("created_at", { ascending: false })
-          .limit(3);
-        results = fallback as RecommendedProject[] | null;
+    // Backfill to always get 3 results
+    if (results.length < 3) {
+      const existingIds = results.map(r => r.id);
+      const needed = 3 - results.length;
+      let backfillQuery = supabase
+        .from("projects")
+        .select("id, name, area_name, developer_name, price_from, cover_image_url, slug")
+        .eq("is_published", true)
+        .not("sale_status", "ilike", "%sold%")
+        .order("created_at", { ascending: false })
+        .limit(needed + 5); // fetch extra to filter dupes
+
+      if (existingIds.length > 0) {
+        backfillQuery = backfillQuery.not("id", "in", `(${existingIds.join(",")})`);
+      }
+
+      const { data: fallback } = await backfillQuery;
+      if (fallback) {
+        const extras = (fallback as RecommendedProject[]).slice(0, needed);
+        results = [...results, ...extras];
       }
     }
 

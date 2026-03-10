@@ -477,10 +477,10 @@ export default function GlobalVerticalNav() {
         </a>
         <Link
           to="/my-tickets"
-          className="flex items-center gap-2 text-sm font-medium text-black/60 hover:text-gold transition-colors"
+          className="flex items-center gap-2 text-sm font-bold text-gold hover:text-gold/80 transition-colors"
         >
           <Ticket className="w-4 h-4" />
-          Create Ticket
+          Create Ticket Support
         </Link>
       </div>
     </>
