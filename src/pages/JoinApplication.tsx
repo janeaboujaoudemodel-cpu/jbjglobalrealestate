@@ -430,10 +430,13 @@ export default function JoinApplication() {
           </Card>
 
           {!user && (
-            <Card className="jj-box-active mb-6">
+            <Card className="border-2 border-gold bg-gold/10 backdrop-blur-sm rounded-2xl shadow-md mb-6">
               <CardContent className="pt-6">
-                <p className="text-center text-black/70 mb-4">
-                  You need to sign in or create an account to submit your application.
+                <p className="text-center text-black font-semibold mb-2 text-lg">
+                  📝 Fill the form below — then sign in to submit!
+                </p>
+                <p className="text-center text-black/70 mb-4 text-sm">
+                  You can complete the entire form first. Sign in or create an account when you're ready to submit.
                 </p>
                 <div className="flex justify-center">
                   <Button variant="primary" asChild>
