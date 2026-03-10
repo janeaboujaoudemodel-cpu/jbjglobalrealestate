@@ -753,7 +753,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 <nav className="flex flex-col px-4 py-2">
                   {/* PROPERTIES */}
                   <Collapsible>
-                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-gold hover:bg-gold/5 rounded-lg transition-colors">
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-gold hover:bg-gold/5 rounded-lg transition-colors border border-transparent hover:border-gold/20">
                       <span>Properties</span>
                       <ChevronDown className="w-4 h-4 text-gold transition-transform duration-200" />
                     </CollapsibleTrigger>
