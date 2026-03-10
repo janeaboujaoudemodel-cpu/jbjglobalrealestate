@@ -387,7 +387,7 @@ export default function LandlordRentalPortal() {
                     {listings.map((listing) => {
                       const approvalStatus = getApprovalStatus(listing);
                       return (
-                        <Card key={listing.id} className="bg-zinc-900 border-zinc-800">
+                        <Card key={listing.id} className="bg-white/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
                           <CardContent className="p-6">
                             <div className="flex flex-col lg:flex-row gap-6">
                               {/* Listing Info */}
