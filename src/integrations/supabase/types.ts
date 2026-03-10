@@ -150,6 +150,7 @@ export type Database = {
           description: string | null
           due_date: string | null
           id: string
+          lead_id: string | null
           priority: string | null
           reference_url: string | null
           status: string | null
@@ -166,6 +167,7 @@ export type Database = {
           description?: string | null
           due_date?: string | null
           id?: string
+          lead_id?: string | null
           priority?: string | null
           reference_url?: string | null
           status?: string | null
@@ -182,6 +184,7 @@ export type Database = {
           description?: string | null
           due_date?: string | null
           id?: string
+          lead_id?: string | null
           priority?: string | null
           reference_url?: string | null
           status?: string | null
@@ -189,7 +192,29 @@ export type Database = {
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "admin_tasks_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "admin_tasks_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads_secure"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "admin_tasks_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_vip_leads"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ai_brokers: {
         Row: {
