@@ -121,8 +121,8 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: "Landlord Guide", icon: FileText, href: '/landlord-guide' },
     { label: 'Investor Education', icon: BookOpen, href: '/investor-education' },
     { label: 'Broker Education', icon: BookOpen, href: '/broker-education' },
-    { label: 'Golden Visa Guide', icon: Award, href: '/golden-visa-guide' },
-    { label: 'Books Library', icon: BookMarked, href: '/books' },
+    { label: 'Golden Visa Guide', icon: Award, href: '/guides/golden-visa-uae' },
+    { label: 'Books Library', icon: BookMarked, href: '/education-hub' },
   ],
   services: [
     { label: 'All Services', icon: Briefcase, href: '/services' },
