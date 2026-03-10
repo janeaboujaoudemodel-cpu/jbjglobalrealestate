@@ -841,7 +841,7 @@ export default function GlobalVerticalNav() {
         </div>
       ) : (
         /* Full sidebar */
-        <div className="hidden lg:flex w-[200px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-gold/30 flex-col h-full relative">
+        <div className="hidden lg:flex w-[200px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-gold/30 flex-col h-full relative overscroll-contain">
           {renderNavContent()}
         </div>
       )}
