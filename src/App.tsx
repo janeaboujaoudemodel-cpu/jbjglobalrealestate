@@ -393,6 +393,7 @@ const App = () => {
           <Sonner />
           <BrowserRouter>
             <AuthProvider>
+            <BrandPaletteProvider>
               <UserModeProvider>
               <FounderVisibilityProvider>
                 <PodcastVisibilityProvider>
