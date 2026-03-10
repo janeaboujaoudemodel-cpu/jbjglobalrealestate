@@ -343,7 +343,7 @@ END:VCARD`;
       {/* Consultation Form Section - Form IS the 3rd layer (directly on active champagne, no extra pearl wrapper) */}
       <section className="py-16 md:py-20 bg-black">
         {/* Thin black contour + Active Champagne Layer */}
-        <div className="mx-3 md:mx-4 lg:mx-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-4 md:p-6">
+        <div className="mx-0 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-4 md:p-6">
           {/* Form IS the 3rd layer - champagne pearl styling */}
           <div className="max-w-3xl mx-auto">
             {isSuccess ? (
