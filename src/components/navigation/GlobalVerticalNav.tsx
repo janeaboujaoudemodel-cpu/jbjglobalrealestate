@@ -451,16 +451,16 @@ export default function GlobalVerticalNav() {
       </nav>
 
       {/* Utility Section */}
-      <div className="px-3 py-2 border-t border-gold/20 space-y-1">
+      <div className="px-3 py-2 border-t border-gold/20">
         <button
           onClick={() => setSearchOpen(true)}
-          className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-semibold text-gold hover:bg-gold/10 transition-all w-full group"
+          className="flex items-center gap-2 px-3 py-2 rounded-lg text-[13px] font-semibold text-gold hover:bg-gold/10 transition-all w-full group"
         >
-          <Search className="w-4 h-4 text-gold" />
-          <span>Quick Search</span>
-          <span className="ml-auto text-[9px] bg-gold/15 text-gold border border-gold/30 rounded-full px-2 py-0.5 font-bold tracking-wide">⌘K</span>
+          <Search className="w-4 h-4 text-gold flex-shrink-0" />
+          <span className="whitespace-nowrap">Quick Search</span>
+          <span className="ml-auto text-[9px] bg-gold/15 text-gold border border-gold/30 rounded-full px-1.5 py-0.5 font-bold whitespace-nowrap">⌘K</span>
         </button>
-        <div className="flex items-center gap-1 px-1">
+        <div className="flex items-center gap-1 px-1 mt-1">
           <LanguageSwitcher variant="icon-only" />
           <CurrencySwitcher variant="icon-only" />
         </div>

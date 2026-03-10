@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { SEOHead } from "@/components/SEOHead";
 import { useAreas } from "@/hooks/useAreas";
-import { Building2, MapPin, BedDouble, Maximize, DollarSign, Filter, ArrowLeft, Search, Home, Calendar, Bath, Crown } from "lucide-react";
+import { Building2, MapPin, BedDouble, Maximize, DollarSign, Search, Calendar, Crown, Bell, Mail, ArrowLeft } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -52,6 +52,8 @@ const ResaleProperties = () => {
   const [handoverFilter, setHandoverFilter] = useState<string>("all");
   const [priceFilter, setPriceFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [subscribeEmail, setSubscribeEmail] = useState("");
+  const [subscribed, setSubscribed] = useState(false);
 
   const { data: areas } = useAreas();
 
@@ -102,6 +104,12 @@ const ResaleProperties = () => {
     );
   }, [listings, searchQuery]);
 
+  const handleSubscribe = async () => {
+    if (!subscribeEmail || !subscribeEmail.includes("@")) return;
+    setSubscribed(true);
+    // Could wire to a DB table later
+  };
+
   return (
     <>
       <SEOHead
@@ -126,10 +134,10 @@ const ResaleProperties = () => {
         </div>
       </section>
 
-      {/* Filters - Horizontal matching Properties page style */}
-      <section className="z-40 bg-black py-3 md:py-4 border-b border-gold/30 sticky top-0">
+      {/* Filters - Champagne bar connected to hero (no black gap) */}
+      <section className="z-40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] py-3 md:py-4 border-b border-gold/30 sticky top-0">
         <div className="container mx-auto px-3 sm:px-4">
-          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg">
+          <div className="bg-white/60 border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg backdrop-blur-sm">
             {/* Search Bar */}
             <div className="relative w-full mb-3">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gold" />
@@ -143,7 +151,7 @@ const ResaleProperties = () => {
 
             {/* Filter Row */}
             <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-              {/* Area - All areas from DB */}
+              {/* Area */}
               <Select value={areaFilter} onValueChange={setAreaFilter}>
                 <SelectTrigger className="w-[170px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
                   <MapPin className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
@@ -185,7 +193,7 @@ const ResaleProperties = () => {
                 </SelectContent>
               </Select>
 
-              {/* Price Range */}
+              {/* Price */}
               <Select value={priceFilter} onValueChange={setPriceFilter}>
                 <SelectTrigger className="w-[150px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
                   <DollarSign className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
@@ -198,7 +206,7 @@ const ResaleProperties = () => {
                 </SelectContent>
               </Select>
 
-              {/* Handover Status */}
+              {/* Handover */}
               <Select value={handoverFilter} onValueChange={setHandoverFilter}>
                 <SelectTrigger className="w-[160px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
                   <Calendar className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
@@ -211,7 +219,7 @@ const ResaleProperties = () => {
                 </SelectContent>
               </Select>
 
-              {/* Clear All */}
+              {/* Clear */}
               {(areaFilter !== "all" || typeFilter !== "all" || bedroomFilter !== "all" || priceFilter !== "all" || handoverFilter !== "all" || searchQuery) && (
                 <Button
                   variant="outline"
@@ -235,7 +243,7 @@ const ResaleProperties = () => {
       </section>
 
       {/* Listings Grid */}
-      <section className="bg-[#FDFBF7] py-10 px-4 min-h-[60vh]">
+      <section className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] py-10 px-4 min-h-[60vh]">
         <div className="max-w-6xl mx-auto">
           {/* Results count */}
           <div className="flex items-center justify-between mb-6">
@@ -255,7 +263,7 @@ const ResaleProperties = () => {
               {filteredListings.map((listing: any) => (
                 <div
                   key={listing.id}
-                  className="rounded-2xl border border-gold/30 bg-white overflow-hidden hover:shadow-xl transition-shadow group"
+                  className="rounded-2xl border border-gold/30 bg-white/80 backdrop-blur-sm overflow-hidden hover:shadow-xl transition-shadow group"
                 >
                   <div className="h-48 bg-gradient-to-br from-gold/10 to-gold/5 flex items-center justify-center relative">
                     {listing.images?.[0] ? (
@@ -325,15 +333,68 @@ const ResaleProperties = () => {
               ))}
             </div>
           ) : (
-            <div className="text-center py-20">
-              <Building2 className="w-16 h-16 text-gold/30 mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-black mb-2">No Resale Properties Found</h3>
-              <p className="text-black/50 mb-4">Try adjusting your filters or check back soon.</p>
-              <Link to="/properties">
-                <Button variant="outline" className="border-gold/40 text-gold hover:bg-gold/10">
-                  Browse Off-Plan Properties
-                </Button>
-              </Link>
+            /* Empty State — Premium champagne design */
+            <div className="max-w-xl mx-auto text-center py-16">
+              <div className="w-20 h-20 rounded-2xl bg-gold/15 border border-gold/30 flex items-center justify-center mx-auto mb-6">
+                <Building2 className="w-10 h-10 text-gold" />
+              </div>
+              <h3 className="text-2xl font-bold text-black mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
+                Recently Sold Out
+              </h3>
+              <p className="text-black/60 mb-2">
+                The latest resale properties from our investor network have been snapped up.
+                Our verified investors regularly list new opportunities — don't miss the next one.
+              </p>
+              <p className="text-black/40 text-sm mb-8">
+                Subscribe below to get notified when new resale properties become available.
+              </p>
+
+              {/* Subscribe CTA */}
+              <div className="bg-white/80 border border-gold/30 rounded-2xl p-6 backdrop-blur-sm shadow-sm">
+                <div className="flex items-center gap-2 justify-center mb-4">
+                  <Bell className="w-5 h-5 text-gold" />
+                  <h4 className="font-semibold text-black text-lg">Stay in the Loop</h4>
+                </div>
+                <p className="text-sm text-black/60 mb-4">
+                  Get instant alerts when our investors list new resale properties. Be the first to know.
+                </p>
+                {subscribed ? (
+                  <div className="flex items-center gap-2 justify-center text-emerald-600 font-semibold">
+                    <Mail className="w-5 h-5" />
+                    You're subscribed! We'll notify you of new listings.
+                  </div>
+                ) : (
+                  <div className="flex gap-2 max-w-sm mx-auto">
+                    <Input
+                      type="email"
+                      placeholder="Enter your email"
+                      value={subscribeEmail}
+                      onChange={(e) => setSubscribeEmail(e.target.value)}
+                      className="flex-1 h-11 border-gold/40 bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] text-black"
+                    />
+                    <Button
+                      onClick={handleSubscribe}
+                      className="bg-gold hover:bg-gold/90 text-black font-semibold h-11 px-6"
+                    >
+                      Subscribe
+                    </Button>
+                  </div>
+                )}
+              </div>
+
+              {/* Links */}
+              <div className="mt-8 flex items-center justify-center gap-4 flex-wrap">
+                <Link to="/properties">
+                  <Button variant="outline" className="border-gold/40 text-gold hover:bg-gold/10">
+                    Browse Off-Plan Properties
+                  </Button>
+                </Link>
+                <Link to="/listing-portal">
+                  <Button variant="outline" className="border-gold/40 text-gold hover:bg-gold/10">
+                    List Your Property
+                  </Button>
+                </Link>
+              </div>
             </div>
           )}
         </div>
