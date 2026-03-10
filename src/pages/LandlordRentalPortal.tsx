@@ -397,7 +397,7 @@ export default function LandlordRentalPortal() {
                                     <h3 className="text-lg font-semibold text-black">
                                       {listing.property_title}
                                     </h3>
-                                    <p className="text-zinc-400 text-sm">
+                                    <p className="text-zinc-600 text-sm">
                                       {listing.community}, {listing.emirate}
                                     </p>
                                   </div>
