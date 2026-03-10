@@ -645,10 +645,10 @@ export default function JoinApplication() {
                   <div className="space-y-3 p-3 rounded-lg border border-gold/20 bg-white">
                     <p className="text-sm font-semibold text-black">Reference 1</p>
                     <div className="grid grid-cols-2 gap-3">
-                      <Input value={formData.reference1Name} onChange={(e) => setFormData({ ...formData, reference1Name: e.target.value })} placeholder="Full name (e.g. Director / HR Manager)" disabled={!user || loading} className="bg-background" />
-                      <Input value={formData.reference1Title} onChange={(e) => setFormData({ ...formData, reference1Title: e.target.value })} placeholder="Title & Company" disabled={!user || loading} className="bg-background" />
-                      <Input type="email" value={formData.reference1Email} onChange={(e) => setFormData({ ...formData, reference1Email: e.target.value })} placeholder="Company email" disabled={!user || loading} className="bg-background" />
-                      <Input value={formData.reference1Phone} onChange={(e) => setFormData({ ...formData, reference1Phone: e.target.value })} placeholder="Phone number" disabled={!user || loading} className="bg-background" />
+                      <Input value={formData.reference1Name} onChange={(e) => setFormData({ ...formData, reference1Name: e.target.value })} placeholder="Full name (e.g. Director / HR Manager)" disabled={loading} className="bg-background" />
+                      <Input value={formData.reference1Title} onChange={(e) => setFormData({ ...formData, reference1Title: e.target.value })} placeholder="Title & Company" disabled={loading} className="bg-background" />
+                      <Input type="email" value={formData.reference1Email} onChange={(e) => setFormData({ ...formData, reference1Email: e.target.value })} placeholder="Company email" disabled={loading} className="bg-background" />
+                      <Input value={formData.reference1Phone} onChange={(e) => setFormData({ ...formData, reference1Phone: e.target.value })} placeholder="Phone number" disabled={loading} className="bg-background" />
                     </div>
                   </div>
                   <div className="space-y-3 p-3 rounded-lg border border-gold/20 bg-white">
