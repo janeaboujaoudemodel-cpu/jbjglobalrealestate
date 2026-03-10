@@ -203,6 +203,45 @@ const JBJAnalyticsDashboard: React.FC = () => {
         { label: 'Conversion Rate', value: uniqueUsers > 0 ? Math.round((totalInteractions / uniqueUsers) * 10) : 0, change: calculatePercentChange(uniqueUsers > 0 ? (totalInteractions / uniqueUsers) * 10 : 0, prevUniqueUsers > 0 ? (prevTotalInteractions / prevUniqueUsers) * 10 : 0), icon: Target },
       ]);
 
+      // Fetch daily visitor data from visitor_events
+      const days = dateRange === 'today' ? 1 : dateRange === 'week' ? 7 : 30;
+      const interval = eachDayOfInterval({ start: subDays(new Date(), days - 1), end: new Date() });
+      
+      const { data: visitorData } = await supabase
+        .from('visitor_events')
+        .select('created_at, session_id, event_type')
+        .gte('created_at', startOfDay(subDays(new Date(), days - 1)).toISOString())
+        .lte('created_at', endOfDay(new Date()).toISOString());
+
+      const dailyMap = new Map<string, { visitors: Set<string>; sessions: Set<string>; pageViews: number }>();
+      interval.forEach(day => {
+        dailyMap.set(format(day, 'yyyy-MM-dd'), { visitors: new Set(), sessions: new Set(), pageViews: 0 });
+      });
+
+      visitorData?.forEach(ev => {
+        const dayKey = format(new Date(ev.created_at), 'yyyy-MM-dd');
+        const bucket = dailyMap.get(dayKey);
+        if (bucket) {
+          if (ev.session_id) {
+            bucket.sessions.add(ev.session_id);
+            bucket.visitors.add(ev.session_id);
+          }
+          if (ev.event_type === 'page_view') bucket.pageViews++;
+        }
+      });
+
+      const dailyChart: DailyVisitorData[] = interval.map(day => {
+        const key = format(day, 'yyyy-MM-dd');
+        const bucket = dailyMap.get(key)!;
+        return {
+          date: format(day, dateRange === 'month' ? 'MMM d' : 'EEE'),
+          visitors: bucket.visitors.size,
+          sessions: bucket.sessions.size,
+          pageViews: bucket.pageViews,
+        };
+      });
+      setDailyVisitors(dailyChart);
+
     } catch (error) {
       console.error('Failed to fetch analytics:', error);
       toast.error('Failed to load analytics');
