@@ -948,24 +948,16 @@ export default function GlobalVerticalNav() {
 
   const renderNavContent = () => (
     <div className="flex flex-col h-full">
-      {/* Logo + Minimize */}
+      {/* Logo — larger since minimizer moved to horizontal bar */}
       <div className="p-4 border-b border-gold/20 flex-shrink-0">
         <div className="flex items-center gap-2">
           <Link to="/" onClick={() => setActiveMegaMenu(null)} className="flex-shrink-0">
-            <img src={jbjMonogramLightBg} alt="JBJ" className="w-10 h-10 object-contain" />
+            <img src={jbjMonogramLightBg} alt="JBJ" className="w-11 h-11 object-contain" />
           </Link>
           <Link to="/" onClick={() => setActiveMegaMenu(null)} className="flex flex-col flex-1 min-w-0 hover:opacity-80 transition-opacity" style={{ fontFamily: "Poppins, sans-serif" }}>
-            <span className="text-[11px] font-bold text-black tracking-wide leading-tight">JBJ GLOBAL</span>
-            <span className="text-[10px] font-bold text-gold tracking-wide leading-tight">REAL ESTATE</span>
+            <span className="text-[12px] font-bold text-black tracking-wide leading-tight">JBJ GLOBAL</span>
+            <span className="text-[11px] font-bold text-gold tracking-wide leading-tight">REAL ESTATE</span>
           </Link>
-          <button
-            onClick={toggleCollapse}
-            className="w-8 h-8 rounded-lg bg-gradient-to-br from-gold/30 to-gold/15 border-2 border-gold/60 flex items-center justify-center text-gold hover:from-gold/40 hover:to-gold/25 hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all flex-shrink-0 shadow-md shadow-gold/15"
-            aria-label="Minimize navigation"
-            title="Minimize navigation"
-          >
-            <ChevronLeft className="w-4.5 h-4.5" />
-          </button>
         </div>
       </div>
 
