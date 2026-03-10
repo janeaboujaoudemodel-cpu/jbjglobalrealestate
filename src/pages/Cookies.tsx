@@ -210,8 +210,8 @@ const Cookies = () => {
             </div>
           </main>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 
