@@ -326,13 +326,13 @@ export default function GlobalVerticalNav() {
         {/* Backdrop — only covers area right of sidebar */}
         <div
           className="fixed inset-0 z-[9999] bg-black/30 backdrop-blur-sm"
-          style={{ left: '200px' }}
+          style={{ left: sidebarWidth }}
           onClick={closeMegaMenu}
         />
         {/* Floating compact panel */}
         <div
           className="fixed z-[10000] flex items-start justify-start pointer-events-none"
-          style={{ left: '200px', top: 0, bottom: 0, right: 0 }}
+          style={{ left: sidebarWidth, top: 0, bottom: 0, right: 0 }}
         >
           <div
             className={`pointer-events-auto w-[360px] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] animate-in slide-in-from-left-2 fade-in duration-200 ${isLargeMenu ? 'max-h-[80vh]' : 'max-h-[60vh]'}`}
