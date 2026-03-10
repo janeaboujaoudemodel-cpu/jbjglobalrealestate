@@ -605,6 +605,20 @@ export default function GlobalVerticalNav() {
     };
   }, [collapsed, navRevealed]);
 
+  // Listen for toggle events from horizontal utility bar
+  useEffect(() => {
+    const handler = () => {
+      setCollapsed(prev => {
+        const next = !prev;
+        try { localStorage.setItem('jj_nav_collapsed', next ? '1' : '0'); } catch {}
+        return next;
+      });
+      setActiveMegaMenu(null);
+    };
+    window.addEventListener('jj_nav_toggle', handler);
+    return () => window.removeEventListener('jj_nav_toggle', handler);
+  }, []);
+
   const handleNavClick = useCallback((megaMenu?: MegaMenuKey, e?: React.MouseEvent) => {
     if (megaMenu) {
       e?.preventDefault();
