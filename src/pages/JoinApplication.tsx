@@ -721,7 +721,7 @@ export default function JoinApplication() {
                     onCheckedChange={(checked) => 
                       setFormData({ ...formData, consentTerms: checked as boolean })
                     }
-                    disabled={!user || loading}
+                    disabled={loading}
                   />
                   <Label htmlFor="consentTerms" className="text-sm leading-relaxed cursor-pointer">
                     I agree to the{" "}
