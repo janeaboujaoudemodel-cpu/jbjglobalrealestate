@@ -172,20 +172,19 @@ export default function HorizontalUtilityBar() {
         {/* Gold separator */}
         <div className="w-px h-6 bg-gold/40 mx-1 flex-shrink-0" />
 
-        {/* Advanced Search */}
+        {/* Advanced Filter */}
         <Tooltip>
           <TooltipTrigger asChild>
             <Link
-              to="/properties"
-              className="h-7 flex items-center gap-1.5 rounded-lg px-3 text-xs font-bold text-gold hover:bg-gold/15 transition-all border border-gold/25"
-              aria-label="Advanced Filter Search"
+              to="/properties?advanced=true"
+              className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gold/15 transition-all group border border-gold/25"
+              aria-label="Advanced Filter"
             >
-              <FileSearch className="w-3.5 h-3.5" />
-              <span>Advanced Filter Search</span>
+              <SlidersHorizontal className="w-4 h-4 text-gold group-hover:scale-110 transition-transform" />
             </Link>
           </TooltipTrigger>
-          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100] max-w-[220px] text-center">
-            Open full-screen advanced search with filters for property type, price, area, and more
+          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100] max-w-[240px] text-center">
+            Advanced Filter — Search and filter all properties with full criteria
           </TooltipContent>
         </Tooltip>
 
