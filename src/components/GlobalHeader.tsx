@@ -167,6 +167,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   // Close any open/pinned mega menu on route changes AND reset scroll state to transparent
   useEffect(() => {
     closeMegaMenu();
+    setMobileMenuOpen(false);
     // Reset to transparent on navigation - ensures hero pages show transparent header immediately
     if (!forceSolid) {
       setIsSolid(false);
