@@ -190,7 +190,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'Our Team', icon: Users, href: '/team' },
     { label: 'The Founder', icon: User, href: '/founder' },
     { label: 'Contact Us', icon: Phone, href: '/contact' },
-    { label: 'Careers & Join', icon: GraduationCap, href: '/join' },
+    { label: 'Careers', icon: GraduationCap, href: '/join' },
     { label: 'Career Portal', icon: Briefcase, href: '/career-portal' },
     { label: 'JBJ Email', icon: Mail, href: '/crm/employees' },
     { label: 'Press Kit', icon: Newspaper, href: '/press-kit' },
