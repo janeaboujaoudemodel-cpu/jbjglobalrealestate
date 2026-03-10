@@ -45,7 +45,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Off-plan", href: "/properties", icon: Building2, section: "PROPERTIES" },
   { label: "Sell", href: "/sell", icon: Tag, megaMenu: 'sell' },
   { label: "Rent", href: "/rent", icon: Key, megaMenu: 'rent' },
-  { label: "List Property", href: "/list-property", icon: PlusCircle },
+  { label: "List Property", href: "/listing-portal", icon: PlusCircle },
   { label: "Developers", href: "/developers", icon: Building, megaMenu: 'developers' },
   { label: "Areas", href: "/areas", icon: MapPin, megaMenu: 'areas' },
   { label: "Map", href: "/map", icon: MapPin },
@@ -104,7 +104,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
   ],
   areas: [
     { label: 'All Areas', icon: MapPin, href: '/areas' },
-    { label: 'Area Guides', icon: BookOpen, href: '/area-guides' },
+    { label: 'Area Guides', icon: BookOpen, href: '/areas' },
   ],
   insights: [
     { label: 'Market Intelligence', icon: BarChart3, href: '/market-intelligence' },
@@ -121,14 +121,14 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: "Landlord Guide", icon: FileText, href: '/landlord-guide' },
     { label: 'Investor Education', icon: BookOpen, href: '/investor-education' },
     { label: 'Broker Education', icon: BookOpen, href: '/broker-education' },
-    { label: 'Golden Visa Guide', icon: Award, href: '/golden-visa-guide' },
-    { label: 'Books Library', icon: BookMarked, href: '/books' },
+    { label: 'Golden Visa Guide', icon: Award, href: '/guides/golden-visa-uae' },
+    { label: 'Books Library', icon: BookMarked, href: '/education-hub' },
   ],
   services: [
     { label: 'All Services', icon: Briefcase, href: '/services' },
     { label: 'Property Management', icon: Key, href: '/services/property-management' },
-    { label: 'Golden Visa', icon: Award, href: '/services/golden-visa' },
-    { label: 'Mortgage Advisory', icon: Landmark, href: '/services/mortgage-advisory' },
+    { label: 'Golden Visa', icon: Award, href: '/guides/golden-visa-uae' },
+    { label: 'Mortgage Advisory', icon: Landmark, href: '/partners/mortgage' },
     { label: 'Property Valuation', icon: DollarSign, href: '/sell/valuation' },
     { label: 'Selling Advisory', icon: TrendingUp, href: '/services/selling-advisory' },
     { label: 'Short-term Rentals', icon: CalendarClock, href: '/services/short-term-rentals' },
@@ -150,19 +150,19 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
   legal: [
     { label: 'Terms of Service', icon: Scale, href: '/terms' },
     { label: 'Privacy Policy', icon: Lock, href: '/privacy' },
-    { label: 'Cookie Policy', icon: Shield, href: '/cookie-policy' },
+    { label: 'Cookie Policy', icon: Shield, href: '/cookies' },
     { label: 'Disclaimers', icon: FileText, href: '/disclaimers' },
-    { label: 'Intellectual Property', icon: ShieldCheck, href: '/ip-notice' },
+    { label: 'Intellectual Property', icon: ShieldCheck, href: '/intellectual-property' },
     { label: 'AML / KYC', icon: Shield, href: '/aml-kyc' },
     { label: 'Accessibility', icon: Accessibility, href: '/accessibility' },
-    { label: 'Trust Center', icon: ShieldCheck, href: '/trust-center' },
+    { label: 'Trust Center', icon: ShieldCheck, href: '/trust-and-audit-center' },
   ],
   'ai-tools': [
     { label: 'Property Analyzer', icon: Building, href: '/ai-property-analyzer' },
     { label: 'Price Predictor', icon: TrendingUp, href: '/ai-price-predictor' },
     { label: 'Neighborhood Insights', icon: MapPin, href: '/ai-neighborhood-insights' },
     { label: 'Interior Design AI', icon: Palette, href: '/interior-design-ai' },
-    { label: 'Virtual Staging', icon: Camera, href: '/ai-virtual-staging' },
+    { label: 'Virtual Staging', icon: Camera, href: '/interior-design-ai' },
     { label: 'Lead Qualification', icon: UserCheck, href: '/ai-lead-qualification' },
     { label: 'Follow-up Scheduler', icon: CalendarClock, href: '/ai-followup-scheduler' },
     { label: 'Objection Handler', icon: MessageSquare, href: '/ai-objection-handler' },
@@ -212,7 +212,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'Listing Admin', icon: FolderOpen, href: '/listing-admin' },
     { label: 'Broker Dashboard', icon: BriefcaseIcon, href: '/broker-dashboard' },
     { label: 'My Assistant', icon: Bot, href: '/founder-assistant' },
-    { label: 'Support Tickets', icon: Headphones, href: '/support-tickets' },
+    { label: 'Support Tickets', icon: Headphones, href: '/my-tickets' },
     { label: 'My Profile', icon: User, href: '/profile' },
     { label: 'Settings', icon: Settings, href: '/profile' },
     { label: 'Favorites', icon: Heart, href: '/favorites' },
@@ -451,16 +451,16 @@ export default function GlobalVerticalNav() {
       </nav>
 
       {/* Utility Section */}
-      <div className="px-3 py-2 border-t border-gold/20 space-y-1">
+      <div className="px-3 py-2 border-t border-gold/20">
         <button
           onClick={() => setSearchOpen(true)}
-          className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-semibold text-gold hover:bg-gold/10 transition-all w-full group"
+          className="flex items-center gap-2 px-3 py-2 rounded-lg text-[13px] font-semibold text-gold hover:bg-gold/10 transition-all w-full group"
         >
-          <Search className="w-4 h-4 text-gold" />
-          <span>Quick Search</span>
-          <span className="ml-auto text-[9px] bg-gold/15 text-gold border border-gold/30 rounded-full px-2 py-0.5 font-bold tracking-wide">⌘K</span>
+          <Search className="w-4 h-4 text-gold flex-shrink-0" />
+          <span className="whitespace-nowrap">Quick Search</span>
+          <span className="ml-auto text-[9px] bg-gold/15 text-gold border border-gold/30 rounded-full px-1.5 py-0.5 font-bold whitespace-nowrap">⌘K</span>
         </button>
-        <div className="flex items-center gap-1 px-1">
+        <div className="flex items-center gap-1 px-1 mt-1">
           <LanguageSwitcher variant="icon-only" />
           <CurrencySwitcher variant="icon-only" />
         </div>
