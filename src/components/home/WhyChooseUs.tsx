@@ -1,6 +1,6 @@
 /**
  * WhyChooseUs Component - Master Blueprint Specification
- * Premium 3x2 grid of value propositions with proper bottom padding
+ * Premium 3x2 grid of value propositions with champagne palette
  * Performance: CSS animations instead of framer-motion whileInView
  */
 
@@ -75,7 +75,7 @@ const WhyChooseUs = () => {
             {valueProps.map((prop, index) => (
               <div
                 key={index}
-                className="group relative p-6 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl border-2 border-gold/20 hover:border-gold/50 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1 animate-fade-in-up"
+                className="group relative p-6 bg-white/80 backdrop-blur-sm rounded-xl border border-gold/30 hover:border-gold/60 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1 animate-fade-in-up shadow-sm"
                 style={{ animationDelay: `${index * 80}ms` }}
               >
                 {/* Icon */}

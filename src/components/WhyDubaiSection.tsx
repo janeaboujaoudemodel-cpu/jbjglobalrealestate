@@ -4,28 +4,20 @@ import { Button } from "@/components/ui/button";
 
 const WhyDubaiSection = () => {
   return (
-    <section className="py-20 bg-gradient-to-b from-zinc-950 via-zinc-900 to-zinc-950 relative overflow-hidden">
-      {/* Subtle gold glow */}
-      <div 
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] pointer-events-none"
-        style={{
-          background: "radial-gradient(ellipse at center, hsl(40 32% 51% / 0.08) 0%, transparent 60%)",
-        }}
-      />
-
-      <div className="container mx-auto px-4 relative z-10">
+    <section className="bg-black">
+      <div className="jj-layer-2">
         {/* Section Header */}
         <div className="text-center mb-16">
           <span className="inline-block px-4 py-1.5 bg-gold/10 border border-gold/30 rounded-full text-gold text-sm font-medium mb-4">
             Investment Insights
           </span>
           <h2 
-            className="text-4xl md:text-5xl font-bold text-white mb-4"
+            className="text-4xl md:text-5xl font-bold text-black mb-4"
             style={{ fontFamily: "Poppins, sans-serif" }}
           >
             Why Invest in the <span className="text-gold">UAE</span>?
           </h2>
-          <p className="text-zinc-400 text-lg max-w-2xl mx-auto">
+          <p className="text-zinc-600 text-lg max-w-2xl mx-auto">
             The UAE offers unparalleled opportunities for property investors with world-class infrastructure and tax-free returns
           </p>
         </div>
@@ -66,19 +58,19 @@ const WhyDubaiSection = () => {
           ].map((item, index) => (
             <div 
               key={index}
-              className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-6 hover:border-gold/30 transition-all duration-300 group"
+              className="bg-white/80 backdrop-blur-sm border border-gold/30 rounded-2xl p-6 hover:border-gold/60 transition-all duration-300 group shadow-sm hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1"
             >
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gold/20 to-gold-dark/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
                 <item.icon className="w-6 h-6 text-gold" />
               </div>
-              <h3 className="text-white text-lg font-semibold mb-2">{item.title}</h3>
-              <p className="text-zinc-400 text-sm leading-relaxed">{item.description}</p>
+              <h3 className="text-black text-lg font-semibold mb-2">{item.title}</h3>
+              <p className="text-zinc-600 text-sm leading-relaxed">{item.description}</p>
             </div>
           ))}
         </div>
 
         {/* Why Dubai Section */}
-        <div className="bg-gradient-to-br from-zinc-900 to-black rounded-3xl border border-zinc-800 overflow-hidden">
+        <div className="bg-gradient-to-br from-black via-zinc-900 to-black rounded-3xl border-2 border-gold/30 overflow-hidden shadow-[0_8px_30px_rgba(200,167,102,0.2)]">
           <div className="grid md:grid-cols-2 gap-0">
             {/* Content Side */}
             <div className="p-8 md:p-12 flex flex-col justify-center">
@@ -136,7 +128,7 @@ const WhyDubaiSection = () => {
                   { value: "6–10%", label: "Avg. Rental Yield" },
                   { value: "#1", label: "Safest City" },
                 ].map((stat, i) => (
-                  <div key={i} className="bg-black/70 backdrop-blur-sm rounded-lg p-3 text-center border border-zinc-700/50">
+                  <div key={i} className="bg-black/70 backdrop-blur-sm rounded-lg p-3 text-center border border-gold/30">
                     <div className="text-gold text-xl font-bold">{stat.value}</div>
                     <div className="text-zinc-400 text-xs">{stat.label}</div>
                   </div>
@@ -146,7 +138,7 @@ const WhyDubaiSection = () => {
           </div>
 
           {/* Source Citations Bar */}
-          <div className="border-t border-zinc-800 px-8 py-4 flex flex-wrap items-center gap-x-6 gap-y-2">
+          <div className="border-t border-gold/20 px-8 py-4 flex flex-wrap items-center gap-x-6 gap-y-2 bg-black/50">
             <span className="text-zinc-500 text-xs font-medium uppercase tracking-wider">Sources:</span>
             {[
               { label: "#1 Safest City", source: "Numbeo Safety Index 2025" },

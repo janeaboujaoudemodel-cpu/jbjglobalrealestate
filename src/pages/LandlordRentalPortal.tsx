@@ -440,7 +440,7 @@ export default function LandlordRentalPortal() {
                               </div>
 
                               {/* Approval Timeline */}
-                              <div className="lg:w-96 lg:border-l lg:border-zinc-800 lg:pl-6">
+                              <div className="lg:w-96 lg:border-l lg:border-gold/20 lg:pl-6">
                                 <ApprovalWorkflowTimeline
                                   steps={approvalStatus.steps}
                                   currentStep={approvalStatus.currentStep}

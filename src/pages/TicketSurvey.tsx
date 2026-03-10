@@ -204,7 +204,7 @@ const TicketSurvey = () => {
           </p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-lg border-2 border-[#C8A766] p-6 space-y-6">
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gold/30 p-6 space-y-6">
           <StarRating value={overallRating} onChange={setOverallRating} label={`1. ${surveyCopy.questions[0]}`} />
           <StarRating value={easeOfSubmission} onChange={setEaseOfSubmission} label={`2. ${surveyCopy.questions[1]}`} />
           <StarRating value={responseSpeed} onChange={setResponseSpeed} label={`3. ${surveyCopy.questions[2]}`} />
