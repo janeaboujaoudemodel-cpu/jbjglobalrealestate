@@ -372,7 +372,7 @@ const SHORTCUT_GROUPS: ShortcutGroup[] = [
 ];
 
 /* ─── SECTION KEYS ─── */
-const SECTION_KEYS = ["PROPERTIES", "TOOLS", "INSIGHTS", "SERVICES", "COMPANY", "LEGAL", "MY ACCOUNT"] as const;
+const SECTION_KEYS = ["PROPERTIES", "TOOLS", "INSIGHTS", "GUIDES", "SERVICES", "COMPANY", "LEGAL", "MY ACCOUNT"] as const;
 type SectionKey = typeof SECTION_KEYS[number];
 
 /* ─── SECTION ICONS ─── */
@@ -380,6 +380,7 @@ const SECTION_ICONS: Record<SectionKey, any> = {
   "PROPERTIES": Building2,
   "TOOLS": Sparkles,
   "INSIGHTS": Lightbulb,
+  "GUIDES": BookOpen,
   "SERVICES": Briefcase,
   "COMPANY": Users,
   "LEGAL": Scale,
