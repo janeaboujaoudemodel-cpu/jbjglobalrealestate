@@ -630,7 +630,7 @@ export default function JoinApplication() {
                   </div>
                   <div className="space-y-2">
                     <Label>Which developers have you worked with?</Label>
-                    <Input value={formData.developerWorkedWith} onChange={(e) => setFormData({ ...formData, developerWorkedWith: e.target.value })} placeholder="e.g. DAMAC, Emaar, Meraas" disabled={!user || loading} className="bg-background" />
+                    <Input value={formData.developerWorkedWith} onChange={(e) => setFormData({ ...formData, developerWorkedWith: e.target.value })} placeholder="e.g. DAMAC, Emaar, Meraas" disabled={loading} className="bg-background" />
                   </div>
                   <div className="space-y-2">
                     <Label>Why are you leaving your current position?</Label>
