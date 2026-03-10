@@ -566,6 +566,7 @@ const PropertyMap = () => {
                         />
                       </div>
                     )}
+                    <div className="p-3">
                     <h3 className="font-semibold text-sm mb-1">{project.name}</h3>
                     <p className="text-xs text-muted-foreground mb-2">
                       {project.developer?.name} • {project.community?.name || project.location}
