@@ -371,10 +371,10 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
   // ─── Already signed in ────────────────────────────────────
   if (user && mode !== "reset" && !isReactivationPreview) {
     return (
-      <div ref={ref} className="min-h-screen flex items-center justify-center py-12 px-4 bg-gradient-to-br from-white via-gray-50 to-white">
+      <div ref={ref} className="min-h-screen flex items-center justify-center py-12 px-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
         <div className="relative z-10 w-full max-w-md">
-          <div className="bg-white border border-gray-200 rounded-2xl p-10 shadow-xl">
+          <div className="bg-white/80 backdrop-blur-sm border border-gold/30 rounded-2xl p-10 shadow-sm">
             <div className="flex justify-center mb-8"><JJLogoImage variant="light" size="md" /></div>
             <div className="text-center mb-8">
               <h1 className="text-black text-2xl font-semibold mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>You're Signed In</h1>
