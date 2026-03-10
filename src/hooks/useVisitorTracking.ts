@@ -238,10 +238,26 @@ export const useVisitorTracking = () => {
     initSession();
   }, [initSession]);
 
-  // Track page views on route change
+  // Track page views on route change + per-page time tracking
   useEffect(() => {
+    // Fire time_on_page for previous page
+    if (lastPath.current !== location.pathname) {
+      const durationSec = Math.round((Date.now() - pageStartTime.current) / 1000);
+      if (durationSec > 0) {
+        const sessionId = getSessionId();
+        supabase.from('visitor_events').insert({
+          session_id: sessionId,
+          event_type: 'time_on_page',
+          event_name: `Time on ${lastPath.current}`,
+          page_path: lastPath.current,
+          event_data: { duration_seconds: durationSec },
+        }).then(() => {});
+      }
+      lastPath.current = location.pathname;
+      pageStartTime.current = Date.now();
+    }
     trackPageView();
-  }, [trackPageView]);
+  }, [trackPageView, location.pathname]);
 
   // Update time spent on page unload
   useEffect(() => {
