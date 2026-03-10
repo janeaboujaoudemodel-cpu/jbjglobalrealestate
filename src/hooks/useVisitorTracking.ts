@@ -57,6 +57,8 @@ export const useVisitorTracking = () => {
   const location = useLocation();
   const { user } = useAuth();
   const sessionStartTime = useRef(Date.now());
+  const pageStartTime = useRef(Date.now());
+  const lastPath = useRef(location.pathname);
   const pagesVisitedCount = useRef(0);
   const hasInitialized = useRef(false);
 
@@ -66,9 +68,9 @@ export const useVisitorTracking = () => {
     hasInitialized.current = true;
 
     const sessionId = getSessionId();
+    const connectionInfo = (navigator as any).connection;
     
     try {
-      // Create or update session
       const { error } = await supabase
         .from('visitor_sessions')
         .upsert({
@@ -80,7 +82,11 @@ export const useVisitorTracking = () => {
           landing_page: location.pathname,
           pages_visited: 1,
           user_id: user?.id || null,
-        }, {
+          screen_resolution: `${screen.width}x${screen.height}`,
+          viewport_size: `${window.innerWidth}x${window.innerHeight}`,
+          language: navigator.language || null,
+          network_type: connectionInfo?.effectiveType || null,
+        } as any, {
           onConflict: 'session_id',
         });
 
@@ -232,10 +238,26 @@ export const useVisitorTracking = () => {
     initSession();
   }, [initSession]);
 
-  // Track page views on route change
+  // Track page views on route change + per-page time tracking
   useEffect(() => {
+    // Fire time_on_page for previous page
+    if (lastPath.current !== location.pathname) {
+      const durationSec = Math.round((Date.now() - pageStartTime.current) / 1000);
+      if (durationSec > 0) {
+        const sessionId = getSessionId();
+        supabase.from('visitor_events').insert({
+          session_id: sessionId,
+          event_type: 'time_on_page',
+          event_name: `Time on ${lastPath.current}`,
+          page_path: lastPath.current,
+          event_data: { duration_seconds: durationSec },
+        }).then(() => {});
+      }
+      lastPath.current = location.pathname;
+      pageStartTime.current = Date.now();
+    }
     trackPageView();
-  }, [trackPageView]);
+  }, [trackPageView, location.pathname]);
 
   // Update time spent on page unload
   useEffect(() => {

@@ -275,7 +275,7 @@ const MyDashboard = () => {
       />
       
       <div className="min-h-screen bg-black">
-        <div className="mx-3 md:mx-4 lg:mx-6 my-3 rounded-2xl border border-border bg-[linear-gradient(135deg,hsl(var(--champagne-1)),hsl(var(--champagne-2)),hsl(var(--champagne-3)))]">
+        <div className="mx-0 my-0 rounded-none border-0 bg-[linear-gradient(135deg,hsl(var(--champagne-1)),hsl(var(--champagne-2)),hsl(var(--champagne-3)))]">
           <div className="container mx-auto px-4 py-6 max-w-7xl">
             {/* Dashboard Title + Badge */}
             <div className="flex flex-wrap items-center gap-3 mb-2">

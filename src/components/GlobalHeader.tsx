@@ -587,17 +587,17 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       {/* HEADER CONTENT */}
       <div
         ref={headerContentRef}
-        className="relative z-10 h-full flex items-center justify-between pl-3 lg:pl-4 xl:pl-6 2xl:pl-10 pr-3 lg:pr-4 xl:pr-4 2xl:pr-8"
+        className="relative z-10 h-full flex items-center justify-between pl-2 sm:pl-3 lg:pl-4 xl:pl-6 2xl:pl-10 pr-2 sm:pr-3 lg:pr-4 xl:pr-4 2xl:pr-8"
       >
         {/* LEFT: Premium Brand Logo - LOCKED */}
-        <div className="shrink-0">
+        <div className="shrink-0 min-w-0 flex-1">
           <Link 
             to="/" 
-            className="flex items-center gap-3 xl:gap-4 shrink-0 group transition-all duration-300"
+            className="flex items-center gap-2 sm:gap-3 xl:gap-4 shrink-0 group transition-all duration-300"
             style={{ fontFamily: "Poppins, sans-serif" }}
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
-            <div className="relative shrink-0">
+            <div className="relative shrink-0 ml-0">
               {/* Logo glow backdrop */}
               <div 
                 className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
@@ -610,7 +610,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               <img 
                 src={jbjMonogramLightTransparent}
                 alt="JBJ" 
-                className={`w-24 h-24 md:w-28 md:h-28 xl:w-32 xl:h-32 object-contain relative z-10 transition-transform duration-300 ${
+                className={`w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 xl:w-32 xl:h-32 object-contain relative z-10 transition-transform duration-300 ${
                   isFullyTransparent
                     ? "scale-[1.25] md:scale-[1.3] xl:scale-[1.35]"
                     : "scale-100"
@@ -622,10 +622,10 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 }}
               />
             </div>
-            {/* Premium Typography - clean transition, no text-shadow ghosting */}
-            <div className="flex flex-col shrink-0 overflow-hidden">
+            {/* Premium Typography */}
+            <div className="flex flex-col shrink min-w-0 overflow-hidden">
               <span 
-                className={`font-bold text-[11px] sm:text-sm xl:text-base tracking-[0.12em] uppercase leading-none transition-colors duration-300`}
+                className={`font-bold text-[10px] sm:text-sm xl:text-base tracking-[0.12em] uppercase leading-none transition-colors duration-300 truncate`}
                 style={isFullyTransparent ? {
                   color: '#FFFFFF',
                 } : {
@@ -637,7 +637,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 JBJ Global Real Estate
               </span>
               <span 
-                className="text-[9px] tracking-[0.25em] uppercase mt-1 transition-colors duration-300"
+                className="text-[8px] sm:text-[9px] tracking-[0.25em] uppercase mt-1 transition-colors duration-300 truncate"
                 style={isFullyTransparent ? {
                   color: '#FFFFFF',
                 } : {
@@ -654,11 +654,11 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
           {/* MOBILE HEADER: touch devices OR when desktop can't fit */}
           {shouldUseMobileHeader && (
-            <div className="flex items-center gap-2 ml-auto shrink-0">
+            <div className="flex items-center gap-2 shrink-0">
               {/* Mobile Menu Trigger - Hamburger / X toggle */}
               <button
                 type="button"
-                className="inline-flex h-10 w-10 items-center justify-center bg-transparent border-0 rounded-none appearance-none transition-colors duration-300 focus:outline-none group"
+                className="inline-flex h-10 w-10 items-center justify-center bg-transparent border-0 rounded-none appearance-none transition-colors duration-300 focus:outline-none group shrink-0"
                 aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
                 data-tour-target="mobile-menu"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

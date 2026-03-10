@@ -444,17 +444,12 @@ const UserProfile = () => {
   return (
     <>
       <div className="min-h-screen bg-black">
-        {/* Premium Page Header — aligned with sidebar logo divider */}
-        <div className="bg-black border-b border-gold/20">
-          <div className="container mx-auto px-6 max-w-4xl flex items-end h-[84px] pb-4">
-            <h1 className="text-2xl md:text-3xl font-bold text-white" style={{ fontFamily: 'Poppins, sans-serif' }}>
-              My <span className="text-gold">Profile</span>
-            </h1>
-          </div>
-        </div>
-
-        <div className="mx-3 md:mx-4 lg:mx-6 mb-6 mt-0 rounded-b-2xl rounded-t-none border border-t-0 border-border bg-[linear-gradient(135deg,hsl(var(--champagne-1)),hsl(var(--champagne-2)),hsl(var(--champagne-3)))]">
+        <div className="mx-0 mb-0 mt-0 rounded-none border-0 bg-[linear-gradient(135deg,hsl(var(--champagne-1)),hsl(var(--champagne-2)),hsl(var(--champagne-3)))]">
           <div className="container mx-auto px-4 py-6 max-w-4xl">
+          {/* Page Title */}
+          <h1 className="text-2xl md:text-3xl font-bold text-black mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>
+            My <span className="text-gold">Profile</span>
+          </h1>
           {/* Subtitle */}
           <p className="text-muted-foreground mb-6">Manage your account settings and preferences</p>
 

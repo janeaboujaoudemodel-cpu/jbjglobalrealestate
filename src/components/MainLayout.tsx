@@ -21,6 +21,7 @@ import GlobalContactGating from "@/components/GlobalContactGating";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useOnboardingTour } from "@/hooks/use-onboarding-tour";
 import { useActivityTracker } from "@/hooks/useActivityTracker";
+import { useVisitorTracking } from "@/hooks/useVisitorTracking";
 
 // Lazy-load non-critical components to reduce initial bundle
 const AIChatWidget = lazy(() => import("@/components/AIChatWidget"));
@@ -58,6 +59,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   const isMobile = useIsMobile();
   const location = useLocation();
   const { trackPageVisit } = useActivityTracker();
+  useVisitorTracking();
 
   // Track page visits on route change
   useEffect(() => { trackPageVisit(); }, [location.pathname, trackPageVisit]);
@@ -82,6 +84,18 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   const { showTour, setShowTour, completeTour } = useOnboardingTour();
   const [isChatCollapsed, setIsChatCollapsed] = useState(true);
   const [layoutGuardTriggered, setLayoutGuardTriggered] = useState(false);
+
+  // Mobile: always keep chat minimized. Desktop: auto-minimize after 8s
+  useEffect(() => {
+    if (isMobile) {
+      setIsChatCollapsed(true);
+      return;
+    }
+    if (!isChatCollapsed) {
+      const timer = window.setTimeout(() => setIsChatCollapsed(true), 8000);
+      return () => window.clearTimeout(timer);
+    }
+  }, [isChatCollapsed, isMobile]);
   const [layoutDebugSnapshot, setLayoutDebugSnapshot] = useState<ServiceLayoutSnapshot | null>(null);
   // Defer non-critical shell components by 2s
   const [shellReady, setShellReady] = useState(false);
