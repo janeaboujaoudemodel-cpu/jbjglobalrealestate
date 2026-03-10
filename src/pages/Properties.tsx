@@ -535,6 +535,19 @@ const Properties = () => {
               </Button>
             ))}
 
+            {/* Resale Properties Link */}
+            <div className="w-px h-6 bg-gold/30 mx-1" />
+            <Link to="/resale-properties">
+              <Button
+                variant="secondary"
+                size="sm"
+                className="h-9 px-4 rounded-full flex items-center gap-1.5 border-gold/40 hover:border-gold hover:bg-gold/10"
+              >
+                <ArrowUpRight className="w-3.5 h-3.5 text-gold" />
+                Resale
+              </Button>
+            </Link>
+
             {/* Buy-only Status Shortcuts */}
             {appliedFilters.transactionType === 'buy' && (
               <>
