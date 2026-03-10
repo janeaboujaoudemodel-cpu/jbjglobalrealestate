@@ -42,9 +42,9 @@ const FooterCard = ({ title, links, viewAllHref, viewAllLabel }: {
       }}
     >{title}</h4>
     <div className="relative">
-      {/* Gold vertical divider between columns */}
-      <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-gold/10 via-gold/50 to-gold/10 -translate-x-1/2" />
-      <div className="grid grid-cols-2 gap-x-5 gap-y-2">
+      {/* Gold vertical divider between columns — hidden on single-column */}
+      <div className="hidden min-[375px]:block absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-gold/10 via-gold/50 to-gold/10 -translate-x-1/2" />
+      <div className="grid grid-cols-1 min-[375px]:grid-cols-2 gap-x-5 gap-y-2">
         {links.map((link) => (
           <Link key={link.href} to={link.href} className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1">
             {link.label}
