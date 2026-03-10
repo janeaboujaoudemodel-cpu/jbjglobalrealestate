@@ -18,6 +18,10 @@ const PROPERTY_TYPES = [
   { value: "penthouse", label: "Penthouse" },
   { value: "duplex", label: "Duplex" },
   { value: "studio", label: "Studio" },
+  { value: "commercial", label: "Commercial" },
+  { value: "plot", label: "Plot" },
+  { value: "retail", label: "Retail" },
+  { value: "offices", label: "Offices" },
 ];
 
 const BEDROOM_OPTIONS = [
@@ -27,7 +31,9 @@ const BEDROOM_OPTIONS = [
   { value: "2", label: "2 BR" },
   { value: "3", label: "3 BR" },
   { value: "4", label: "4 BR" },
-  { value: "5", label: "5+ BR" },
+  { value: "5", label: "5 BR" },
+  { value: "6", label: "6 BR" },
+  { value: "7", label: "7+ BR" },
 ];
 
 const HANDOVER_OPTIONS = [
