@@ -150,12 +150,12 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
   legal: [
     { label: 'Terms of Service', icon: Scale, href: '/terms' },
     { label: 'Privacy Policy', icon: Lock, href: '/privacy' },
-    { label: 'Cookie Policy', icon: Shield, href: '/cookie-policy' },
+    { label: 'Cookie Policy', icon: Shield, href: '/cookies' },
     { label: 'Disclaimers', icon: FileText, href: '/disclaimers' },
-    { label: 'Intellectual Property', icon: ShieldCheck, href: '/ip-notice' },
+    { label: 'Intellectual Property', icon: ShieldCheck, href: '/intellectual-property' },
     { label: 'AML / KYC', icon: Shield, href: '/aml-kyc' },
     { label: 'Accessibility', icon: Accessibility, href: '/accessibility' },
-    { label: 'Trust Center', icon: ShieldCheck, href: '/trust-center' },
+    { label: 'Trust Center', icon: ShieldCheck, href: '/trust-and-audit-center' },
   ],
   'ai-tools': [
     { label: 'Property Analyzer', icon: Building, href: '/ai-property-analyzer' },
