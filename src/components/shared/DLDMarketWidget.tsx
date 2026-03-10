@@ -68,7 +68,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
         )}
 
         <p className="text-[9px] text-zinc-600 leading-relaxed">
-          Source: Dubai Land Department. For informational purposes only. Does not constitute financial advice.{" "}
+          Sources: DLD, RERA, DXB Interact, Property Monitor, Knight Frank, Bayut, Property Finder. For informational purposes only.{" "}
           <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
         </p>
       </div>
