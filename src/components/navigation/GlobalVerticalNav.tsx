@@ -635,7 +635,9 @@ export default function GlobalVerticalNav() {
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
     if (item.href === '/join') return shouldHighlight ? 'text-white' : 'text-emerald-500';
     if (item.href === '/quiz') return shouldHighlight ? 'text-white' : 'text-purple-600';
-    // Sidebar items: icons are black/60 (inactive) or gold (active)
+    if (item.href === '/ai-hub') return shouldHighlight ? 'text-white' : 'text-orange-600';
+    if (item.href === '/listing-portal' && item.highlight) return shouldHighlight ? 'text-white' : 'text-blue-600';
+    if (item.href === '/resale-properties') return shouldHighlight ? 'text-white' : 'text-emerald-600';
     if (sectionKey === 'MY ACCOUNT') return 'text-gold';
     return shouldHighlight ? "text-gold" : "text-black/60";
   };
