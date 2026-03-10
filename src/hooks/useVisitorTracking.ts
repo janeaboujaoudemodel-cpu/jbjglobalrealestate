@@ -57,6 +57,8 @@ export const useVisitorTracking = () => {
   const location = useLocation();
   const { user } = useAuth();
   const sessionStartTime = useRef(Date.now());
+  const pageStartTime = useRef(Date.now());
+  const lastPath = useRef(location.pathname);
   const pagesVisitedCount = useRef(0);
   const hasInitialized = useRef(false);
 
@@ -66,9 +68,9 @@ export const useVisitorTracking = () => {
     hasInitialized.current = true;
 
     const sessionId = getSessionId();
+    const connectionInfo = (navigator as any).connection;
     
     try {
-      // Create or update session
       const { error } = await supabase
         .from('visitor_sessions')
         .upsert({
@@ -80,7 +82,11 @@ export const useVisitorTracking = () => {
           landing_page: location.pathname,
           pages_visited: 1,
           user_id: user?.id || null,
-        }, {
+          screen_resolution: `${screen.width}x${screen.height}`,
+          viewport_size: `${window.innerWidth}x${window.innerHeight}`,
+          language: navigator.language || null,
+          network_type: connectionInfo?.effectiveType || null,
+        } as any, {
           onConflict: 'session_id',
         });
 
