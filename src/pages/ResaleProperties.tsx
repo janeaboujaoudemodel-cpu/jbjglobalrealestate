@@ -209,8 +209,6 @@ const ResaleProperties = () => {
 
     return result;
   }, [listings, searchQuery, emiratesFilter, sizeMin, sizeMax, viewFilter, sortBy]);
-    );
-  }, [listings, searchQuery]);
 
   const handleSubscribe = async () => {
     if (!subscribeEmail || !subscribeEmail.includes("@")) return;
