@@ -279,6 +279,8 @@ const SHORTCUT_GROUPS: ShortcutGroup[] = [
     items: [
       { label: 'Owner Command Center', icon: Shield, href: '/owner' },
       { label: 'Admin Panel', icon: Shield, href: '/admin' },
+      { label: 'CP Center', icon: Compass, href: '/owner' },
+      { label: 'Inbox Inquiries', icon: Mail, href: '/owner/inbox' },
       { label: 'Listing Admin', icon: FolderOpen, href: '/listing-admin' },
     ],
   },
