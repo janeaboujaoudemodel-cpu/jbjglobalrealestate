@@ -529,7 +529,7 @@ export default function GlobalVerticalNav() {
               </div>
 
               {/* Color-coded groups */}
-              <div className="overflow-y-auto jj-scrollbar-gold p-3 space-y-3">
+              <div className="overflow-y-auto jj-scrollbar-gold p-3 pb-6 space-y-3">
                 {SHORTCUT_GROUPS.map((group) => (
                   <div key={group.label} className={`border-l-4 ${group.colorBorder} rounded-lg ${group.colorBg} p-2`}>
                     <p className={`text-[10px] uppercase tracking-wider font-bold ${group.colorText} px-2 pb-1.5`}>
