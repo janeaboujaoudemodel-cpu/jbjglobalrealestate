@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Headphones,
   Upload,
   Send,
   User,
@@ -23,6 +22,7 @@ import {
   MailCheck,
   MessageCircle
 } from "lucide-react";
+import { PremiumHeadsetIcon } from "@/components/icons/PremiumHeadsetIcon";
 import { useResendTicketConfirmation } from "@/hooks/useResendTicketConfirmation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -436,36 +436,7 @@ const SupportTicketBox = () => {
                 <div>
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center shadow-lg">
-                       <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 64 64" fill="none" className="text-white">
-                         {/* Headband outer — thick premium arc */}
-                         <path d="M8 34 C8 12, 56 12, 56 34" stroke="currentColor" strokeWidth="5" strokeLinecap="round" fill="none"/>
-                         {/* Headband highlight — metallic sheen */}
-                         <path d="M12 34 C12 16, 52 16, 52 34" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.45" fill="none"/>
-                         {/* Crown mesh — AirPods Max style woven band */}
-                         <path d="M22 18 C22 14, 42 14, 42 18" stroke="currentColor" strokeWidth="6" strokeLinecap="round" opacity="0.12" fill="none"/>
-                         <path d="M20 19 L44 19" stroke="currentColor" strokeWidth="0.5" opacity="0.2" strokeDasharray="2 2"/>
-                         <path d="M19 21 L45 21" stroke="currentColor" strokeWidth="0.5" opacity="0.15" strokeDasharray="2 2"/>
-                         {/* Left arm — telescoping connector */}
-                         <path d="M8 34 L8 39" stroke="currentColor" strokeWidth="4.5" strokeLinecap="round"/>
-                         <path d="M8 34 L8 39" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.5"/>
-                         {/* Right arm */}
-                         <path d="M56 34 L56 39" stroke="currentColor" strokeWidth="4.5" strokeLinecap="round"/>
-                         <path d="M56 34 L56 39" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.5"/>
-                         {/* Left ear cup — deep capsule */}
-                         <rect x="1" y="36" width="15" height="24" rx="7.5" fill="currentColor" opacity="0.15" stroke="currentColor" strokeWidth="2.5"/>
-                         <rect x="3" y="38" width="11" height="20" rx="5.5" fill="currentColor" opacity="0.08"/>
-                         <rect x="5" y="42" width="7" height="12" rx="3.5" fill="currentColor" opacity="0.06"/>
-                         {/* Left cup highlight */}
-                         <path d="M4 40 C4 38, 14 38, 14 40" stroke="currentColor" strokeWidth="0.8" opacity="0.3" fill="none"/>
-                         {/* Right ear cup — deep capsule */}
-                         <rect x="48" y="36" width="15" height="24" rx="7.5" fill="currentColor" opacity="0.15" stroke="currentColor" strokeWidth="2.5"/>
-                         <rect x="50" y="38" width="11" height="20" rx="5.5" fill="currentColor" opacity="0.08"/>
-                         <rect x="52" y="42" width="7" height="12" rx="3.5" fill="currentColor" opacity="0.06"/>
-                         {/* Right cup highlight */}
-                         <path d="M50 40 C50 38, 60 38, 60 40" stroke="currentColor" strokeWidth="0.8" opacity="0.3" fill="none"/>
-                         {/* Top crown metallic highlight */}
-                         <ellipse cx="32" cy="13" rx="8" ry="1.5" fill="currentColor" opacity="0.12"/>
-                       </svg>
+                       <PremiumHeadsetIcon size={28} color="#ffffff" />
                     </div>
                     <div>
                       <span className="text-xs uppercase tracking-[0.2em] text-red-500 font-semibold">24/7 Support</span>
@@ -539,7 +510,7 @@ const SupportTicketBox = () => {
                         {/* Glow effect on hover */}
                         <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                         <span className="relative flex items-center gap-2">
-                          <Headphones className="w-6 h-6 text-gold" />
+                          <PremiumHeadsetIcon size={20} color="hsl(var(--gold))" />
                           <span className="text-gold">Create</span>
                           <span className="text-black">Support Ticket</span>
                         </span>
@@ -549,7 +520,7 @@ const SupportTicketBox = () => {
                       <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold max-w-2xl max-h-[90vh] z-[10050] flex flex-col overflow-hidden shadow-[0_8px_40px_rgba(200,167,102,0.4),0_4px_20px_rgba(0,0,0,0.2)] p-0 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                       <DialogHeader className="flex-shrink-0 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] z-10 pb-4 px-6 pt-6 border-b border-gold/20">
                         <DialogTitle className="text-black text-xl font-bold flex items-center gap-2">
-                          <Headphones className="w-5 h-5 text-red-500" />
+                          <PremiumHeadsetIcon size={20} color="#ef4444" />
                           {isSubmitted ? "Ticket Created!" : "Create Support Ticket"}
                         </DialogTitle>
                       </DialogHeader>
@@ -606,28 +577,30 @@ const SupportTicketBox = () => {
                                 We're sorry you're experiencing issues. Our team is on it!
                               </motion.p>
 
-                               {/* Ticket Number Box */}
+                               {/* Ticket Number Box — single line */}
                                <motion.div 
                                  initial={{ opacity: 0, y: 10 }}
                                  animate={{ opacity: 1, y: 0 }}
                                  transition={{ delay: 0.5 }}
-                                 className="bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 border border-gold/40 rounded-xl p-6 mb-4"
+                                 className="bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 border border-gold/40 rounded-xl px-5 py-4 mb-4"
                                >
-                                 <p className="text-sm text-zinc-600 mb-2">Your Ticket Number</p>
-                                 <div className="flex items-center justify-center gap-3">
-                                   <span className="text-2xl font-bold text-gold tracking-wider">{ticketNumber}</span>
-                                   <Button
-                                     variant="ghost"
-                                     size="icon"
+                                 <div className="flex items-center justify-center gap-3 flex-wrap">
+                                   <span className="text-sm text-zinc-600">Your Ticket Number</span>
+                                   <span className="text-sm text-zinc-400">|</span>
+                                   <span className="text-sm text-zinc-600" dir="rtl">رقم التذكرة</span>
+                                   <span className="text-sm text-zinc-400">—</span>
+                                   <span className="text-xl font-bold text-gold tracking-wider font-mono">{ticketNumber}</span>
+                                   <button
                                      onClick={copyTicketNumber}
-                                     className="hover:bg-gold/10"
+                                     className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gold/10 transition-colors"
+                                     title="Copy ticket number"
                                    >
                                      {copied ? (
-                                       <Check className="w-5 h-5 text-green-500" />
+                                       <Check className="w-4 h-4 text-green-500" />
                                      ) : (
-                                       <Copy className="w-5 h-5 text-gold" />
+                                       <Copy className="w-4 h-4 text-gold" />
                                      )}
-                                   </Button>
+                                   </button>
                                  </div>
                                </motion.div>
 
@@ -748,16 +721,16 @@ const SupportTicketBox = () => {
                                >
                                  <p className="text-sm font-bold text-black mb-3 text-center">Explore While You Wait</p>
                                  <div className="grid grid-cols-2 gap-2">
-                                    <a href="/properties" className="flex items-center justify-center gap-1 px-3 py-2.5 bg-white border border-gold/30 rounded-lg text-xs font-semibold text-black hover:border-gold transition-colors">
+                                    <a href="/properties" className="flex items-center justify-center gap-1 px-3 py-2.5 border border-gold/30 rounded-lg text-xs font-semibold text-black hover:border-gold transition-colors">
                                       Properties
                                     </a>
-                                    <a href="/ai-hub" className="flex items-center justify-center gap-1 px-3 py-2.5 bg-white border border-gold/30 rounded-lg text-xs font-semibold text-black hover:border-gold transition-colors">
+                                    <a href="/ai-hub" className="flex items-center justify-center gap-1 px-3 py-2.5 border border-gold/30 rounded-lg text-xs font-semibold text-black hover:border-gold transition-colors">
                                       AI Tools
                                     </a>
-                                    <a href="/buyer-guide" className="flex items-center justify-center gap-1 px-3 py-2.5 bg-white border border-gold/30 rounded-lg text-xs font-semibold text-black hover:border-gold transition-colors">
+                                    <a href="/buyer-guide" className="flex items-center justify-center gap-1 px-3 py-2.5 border border-gold/30 rounded-lg text-xs font-semibold text-black hover:border-gold transition-colors">
                                       Guides
                                     </a>
-                                    <a href="/careers" className="flex items-center justify-center gap-1 px-3 py-2.5 bg-white border border-gold/30 rounded-lg text-xs font-semibold text-black hover:border-gold transition-colors">
+                                    <a href="/careers" className="flex items-center justify-center gap-1 px-3 py-2.5 border border-gold/30 rounded-lg text-xs font-semibold text-black hover:border-gold transition-colors">
                                       Careers
                                     </a>
                                  </div>

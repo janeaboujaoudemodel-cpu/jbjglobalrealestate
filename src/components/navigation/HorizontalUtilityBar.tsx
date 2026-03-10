@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   Search, Heart, Settings, User, LayoutDashboard,
-  ChevronUp, ChevronDown, Ruler, FileSearch,
+  Ruler, FileSearch, Menu,
 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -10,15 +10,16 @@ import CurrencySwitcher from "@/components/CurrencySwitcher";
 import { DisplayModeIconToggle } from "@/components/filters/DisplayModeToggle";
 import { useUserMode, type UserMode } from "@/hooks/useUserMode";
 import { useLanguage, getLanguageInfo } from "@/contexts/LanguageContext";
+import { useCurrency } from "@/hooks/useCurrency";
 import GlobalSearchModal from "@/components/GlobalSearchModal";
 import type { DisplayMode } from "@/constants/filterConfig";
 
 export default function HorizontalUtilityBar() {
-  const [minimized, setMinimized] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const { mode, setMode } = useUserMode();
   const { language } = useLanguage();
   const currentLang = getLanguageInfo(language);
+  const { currency } = useCurrency();
 
   const [areaUnit, setAreaUnit] = useState<'sqft' | 'sqm'>(() => {
     if (typeof window !== 'undefined') {
@@ -47,37 +48,45 @@ export default function HorizontalUtilityBar() {
     setMode(newMode as UserMode);
   };
 
-  const divider = <div className="w-px h-5 bg-gold/25 flex-shrink-0" />;
+  // Toggle sidebar collapse from horizontal bar
+  const toggleSidebar = () => {
+    const isCollapsed = document.body.classList.contains('jj-vertical-nav-collapsed');
+    if (isCollapsed) {
+      localStorage.setItem('jj_nav_collapsed', '0');
+      document.body.classList.remove('jj-vertical-nav-collapsed');
+      document.body.classList.add('jj-vertical-nav-active');
+    } else {
+      localStorage.setItem('jj_nav_collapsed', '1');
+      document.body.classList.remove('jj-vertical-nav-active');
+      document.body.classList.add('jj-vertical-nav-collapsed');
+    }
+    // Dispatch event so GlobalVerticalNav reacts
+    window.dispatchEvent(new CustomEvent('jj_nav_toggle'));
+  };
 
-  if (minimized) {
-    return (
-      <>
-        <div
-          className="fixed top-0 right-0 h-[28px] z-[9996] hidden lg:flex items-center justify-end pr-2 border-b border-gold/15 bg-gradient-to-r from-[#F5F0E6] to-[#EDE4D3] [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px]"
-        >
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                onClick={() => setMinimized(false)}
-                className="w-6 h-6 flex items-center justify-center rounded hover:bg-gold/15 transition-all"
-                aria-label="Expand toolbar"
-              >
-                <ChevronDown className="w-3 h-3 text-gold" />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent side="bottom" className="text-xs">Expand toolbar</TooltipContent>
-          </Tooltip>
-        </div>
-        <GlobalSearchModal isOpen={searchOpen} initialQuery="" onClose={() => setSearchOpen(false)} />
-      </>
-    );
-  }
+  const divider = <div className="w-px h-5 bg-gold/25 flex-shrink-0" />;
 
   return (
     <>
       <div
         className="fixed top-0 right-0 h-[40px] z-[9996] hidden lg:flex items-center gap-1.5 px-3 border-b border-gold/20 bg-gradient-to-r from-[#F5F0E6] to-[#EDE4D3] [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px]"
       >
+        {/* Sidebar Toggle */}
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              onClick={toggleSidebar}
+              className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gold/15 transition-all group"
+              aria-label="Toggle sidebar"
+            >
+              <Menu className="w-4 h-4 text-gold group-hover:scale-110 transition-transform" />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Minimize / expand sidebar</TooltipContent>
+        </Tooltip>
+
+        {divider}
+
         {/* Search */}
         <Tooltip>
           <TooltipTrigger asChild>
@@ -89,7 +98,7 @@ export default function HorizontalUtilityBar() {
               <Search className="w-4 h-4 text-gold group-hover:scale-110 transition-transform" />
             </button>
           </TooltipTrigger>
-          <TooltipContent side="bottom" className="text-xs">Search ⌘K</TooltipContent>
+          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Search ⌘K</TooltipContent>
         </Tooltip>
 
         {divider}
@@ -105,30 +114,30 @@ export default function HorizontalUtilityBar() {
               <Heart className="w-4 h-4 text-gold group-hover:scale-110 transition-transform" />
             </Link>
           </TooltipTrigger>
-          <TooltipContent side="bottom" className="text-xs">Favorites</TooltipContent>
+          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Favorites</TooltipContent>
         </Tooltip>
 
         {divider}
 
-        {/* Area Unit Toggle */}
+        {/* Area Unit Toggle — larger */}
         <Tooltip>
           <TooltipTrigger asChild>
             <button
               onClick={toggleAreaUnit}
-              className="h-8 flex items-center rounded-lg hover:bg-gold/15 transition-all px-1.5 gap-1"
+              className="h-8 flex items-center rounded-lg hover:bg-gold/15 transition-all px-2 gap-1"
               aria-label="Toggle area unit"
             >
-              <Ruler className="w-3.5 h-3.5 text-gold/60" />
-              <span className={`text-[10px] font-bold px-1 py-0.5 rounded transition-all ${areaUnit === 'sqft' ? 'bg-gold/20 text-gold' : 'text-black/40'}`}>
+              <Ruler className="w-4 h-4 text-gold/60" />
+              <span className={`text-xs font-bold px-1.5 py-0.5 rounded transition-all ${areaUnit === 'sqft' ? 'bg-gold/20 text-gold' : 'text-black/40'}`}>
                 ft²
               </span>
-              <span className={`text-[10px] font-bold px-1 py-0.5 rounded transition-all ${areaUnit === 'sqm' ? 'bg-gold/20 text-gold' : 'text-black/40'}`}>
+              <span className={`text-xs font-bold px-1.5 py-0.5 rounded transition-all ${areaUnit === 'sqm' ? 'bg-gold/20 text-gold' : 'text-black/40'}`}>
                 m²
               </span>
             </button>
           </TooltipTrigger>
-          <TooltipContent side="bottom" className="text-xs">
-            {areaUnit === 'sqft' ? 'Square Feet' : 'Square Meters'}
+          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">
+            {areaUnit === 'sqft' ? 'Square Feet (active) — click to switch' : 'Square Meters (active) — click to switch'}
           </TooltipContent>
         </Tooltip>
 
@@ -141,8 +150,8 @@ export default function HorizontalUtilityBar() {
               <LanguageSwitcher variant="icon-only" />
             </div>
           </TooltipTrigger>
-          <TooltipContent side="bottom" className="text-xs">
-            {currentLang.flag} {currentLang.nativeName}
+          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">
+            Select your language. Current: {currentLang.flag} {currentLang.nativeName}
           </TooltipContent>
         </Tooltip>
 
@@ -155,11 +164,33 @@ export default function HorizontalUtilityBar() {
               <CurrencySwitcher variant="icon-only" />
             </div>
           </TooltipTrigger>
-          <TooltipContent side="bottom" className="text-xs">Currency</TooltipContent>
+          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">
+            Select your currency. Current: {currency}
+          </TooltipContent>
         </Tooltip>
 
         {/* Gold separator */}
         <div className="w-px h-6 bg-gold/40 mx-1 flex-shrink-0" />
+
+        {/* Advanced Search */}
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Link
+              to="/properties"
+              className="h-7 flex items-center gap-1.5 rounded-lg px-3 text-xs font-bold text-gold hover:bg-gold/15 transition-all border border-gold/25"
+              aria-label="Advanced Filter Search"
+            >
+              <FileSearch className="w-3.5 h-3.5" />
+              <span>Advanced Filter Search</span>
+            </Link>
+          </TooltipTrigger>
+          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100] max-w-[220px] text-center">
+            Open full-screen advanced search with filters for property type, price, area, and more
+          </TooltipContent>
+        </Tooltip>
+
+        {/* Spacer pushes right-side items to edge */}
+        <div className="flex-1" />
 
         {/* Mode Selector */}
         <DisplayModeIconToggle
@@ -181,7 +212,7 @@ export default function HorizontalUtilityBar() {
               <LayoutDashboard className="w-4 h-4 text-gold group-hover:scale-110 transition-transform" />
             </Link>
           </TooltipTrigger>
-          <TooltipContent side="bottom" className="text-xs">My Dashboard</TooltipContent>
+          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">My Dashboard</TooltipContent>
         </Tooltip>
 
         {/* Account */}
@@ -195,7 +226,7 @@ export default function HorizontalUtilityBar() {
               <User className="w-4 h-4 text-gold group-hover:scale-110 transition-transform" />
             </Link>
           </TooltipTrigger>
-          <TooltipContent side="bottom" className="text-xs">My Account</TooltipContent>
+          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">My Account</TooltipContent>
         </Tooltip>
 
         {/* Settings */}
@@ -209,41 +240,7 @@ export default function HorizontalUtilityBar() {
               <Settings className="w-4 h-4 text-gold group-hover:scale-110 transition-transform" />
             </Link>
           </TooltipTrigger>
-          <TooltipContent side="bottom" className="text-xs">Settings</TooltipContent>
-        </Tooltip>
-
-        {divider}
-
-        {/* Advanced Search */}
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Link
-              to="/properties"
-              className="h-7 flex items-center gap-1.5 rounded-lg px-2.5 text-[10px] font-bold text-gold hover:bg-gold/15 transition-all border border-gold/25"
-              aria-label="Advanced Search"
-            >
-              <FileSearch className="w-3.5 h-3.5" />
-              <span>Advanced</span>
-            </Link>
-          </TooltipTrigger>
-          <TooltipContent side="bottom" className="text-xs">Advanced Search</TooltipContent>
-        </Tooltip>
-
-        {/* Spacer */}
-        <div className="flex-1" />
-
-        {/* Minimize */}
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button
-              onClick={() => setMinimized(true)}
-              className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-gold/15 transition-all"
-              aria-label="Minimize toolbar"
-            >
-              <ChevronUp className="w-3.5 h-3.5 text-gold" />
-            </button>
-          </TooltipTrigger>
-          <TooltipContent side="bottom" className="text-xs">Minimize</TooltipContent>
+          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Settings & Profile</TooltipContent>
         </Tooltip>
       </div>
 

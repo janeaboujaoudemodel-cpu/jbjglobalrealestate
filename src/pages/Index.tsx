@@ -257,7 +257,7 @@ const Index = () => {
       </div>
 
       {/* DIVIDER between Developer Partners and Trust Bar */}
-      <SectionDivider />
+      <SectionDivider fullWidth />
 
       {/* TRUST BAR (8 Cards) - 4x2 Grid */}
       <div id="trust-bar" className="bg-black py-12 md:py-16">
@@ -266,7 +266,7 @@ const Index = () => {
         </Suspense>
       </div>
 
-      <SectionDivider />
+      <SectionDivider fullWidth />
 
       {/* FEATURED LISTINGS - Master Blueprint: Section 3 (8 cards, Buy/Rent tabs) */}
       <Suspense fallback={<SectionLoader />}>
@@ -278,7 +278,7 @@ const Index = () => {
         <ContinueSearching type="property" className="bg-black" />
       </Suspense>
 
-      <SectionDivider />
+      <SectionDivider fullWidth />
 
       {/* RESALE PROPERTIES - Investor Network Listings */}
       <Suspense fallback={<SectionLoader />}>
@@ -286,28 +286,28 @@ const Index = () => {
       </Suspense>
 
       {/* DIVIDER */}
-      <SectionDivider />
+      <SectionDivider fullWidth />
 
       {/* FIND YOUR STARTING POINT - Tabbed Premium Section */}
       <Suspense fallback={<SectionLoader />}>
         <StartingPointSection />
       </Suspense>
 
-      <SectionDivider />
+      <SectionDivider fullWidth />
 
       {/* OVERSEAS INVESTORS - Golden Visa & International Investment */}
       <Suspense fallback={<SectionLoader />}>
         <OverseasInvestorsBanner />
       </Suspense>
 
-      <SectionDivider />
+      <SectionDivider fullWidth />
 
       {/* EXPLORE OUR GUIDES & REPORTS - Walking Books Marquee */}
       <Suspense fallback={<SectionLoader />}>
         <HomepageBookMarquee />
       </Suspense>
 
-      <SectionDivider />
+      <SectionDivider fullWidth />
 
       {/* EXPLORE OUR SERVICES SLIDESHOW - Wrapped in container for consistent sizing */}
       <section className="bg-black">
@@ -319,7 +319,7 @@ const Index = () => {
       </section>
 
       {/* DIVIDER - Between Explore Services and Toolkit Showcase */}
-      <SectionDivider />
+      <SectionDivider fullWidth />
 
       {/* TOOLKIT SHOWCASE CARD - Free Professional Tools */}
       <Suspense fallback={<SectionLoader />}>
@@ -460,7 +460,7 @@ const Index = () => {
       </PodcastVisibilityGate>
 
       {/* DIVIDER - Before Best Idea Award (always needed) */}
-      <SectionDivider />
+      <SectionDivider fullWidth />
 
 
 
@@ -470,14 +470,14 @@ const Index = () => {
       </Suspense>
 
       {/* DIVIDER */}
-      <SectionDivider />
+      <SectionDivider fullWidth />
 
       {/* WHY CHOOSE US - Master Blueprint: Section 5 */}
       <Suspense fallback={<SectionLoader />}>
         <WhyChooseUs />
       </Suspense>
 
-      <SectionDivider />
+      <SectionDivider fullWidth />
 
       {/* AREAS WE COVER - Master Blueprint: Section 6 (12 area links) */}
       <Suspense fallback={<SectionLoader />}>
@@ -485,7 +485,7 @@ const Index = () => {
       </Suspense>
 
       {/* DIVIDER between Areas and Testimonials */}
-      <SectionDivider />
+      <SectionDivider fullWidth />
 
       {/* TESTIMONIALS - Master Blueprint: Section 7 (3 testimonials) */}
       <Suspense fallback={<SectionLoader />}>
@@ -493,7 +493,7 @@ const Index = () => {
       </Suspense>
 
       {/* DIVIDER */}
-      <SectionDivider />
+      <SectionDivider fullWidth />
 
       {/* Stats Counter Section */}
       <Suspense fallback={<SectionLoader />}>
@@ -501,7 +501,7 @@ const Index = () => {
       </Suspense>
 
       {/* DIVIDER */}
-      <SectionDivider />
+      <SectionDivider fullWidth />
 
       {/* SUPPORT TICKET BOX - Always visible (last content before global CTA) */}
       <Suspense fallback={<SectionLoader />}>

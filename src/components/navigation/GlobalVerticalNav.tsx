@@ -605,6 +605,20 @@ export default function GlobalVerticalNav() {
     };
   }, [collapsed, navRevealed]);
 
+  // Listen for toggle events from horizontal utility bar
+  useEffect(() => {
+    const handler = () => {
+      setCollapsed(prev => {
+        const next = !prev;
+        try { localStorage.setItem('jj_nav_collapsed', next ? '1' : '0'); } catch {}
+        return next;
+      });
+      setActiveMegaMenu(null);
+    };
+    window.addEventListener('jj_nav_toggle', handler);
+    return () => window.removeEventListener('jj_nav_toggle', handler);
+  }, []);
+
   const handleNavClick = useCallback((megaMenu?: MegaMenuKey, e?: React.MouseEvent) => {
     if (megaMenu) {
       e?.preventDefault();
@@ -948,24 +962,16 @@ export default function GlobalVerticalNav() {
 
   const renderNavContent = () => (
     <div className="flex flex-col h-full">
-      {/* Logo + Minimize */}
+      {/* Logo — larger since minimizer moved to horizontal bar */}
       <div className="p-4 border-b border-gold/20 flex-shrink-0">
         <div className="flex items-center gap-2">
           <Link to="/" onClick={() => setActiveMegaMenu(null)} className="flex-shrink-0">
-            <img src={jbjMonogramLightBg} alt="JBJ" className="w-10 h-10 object-contain" />
+            <img src={jbjMonogramLightBg} alt="JBJ" className="w-11 h-11 object-contain" />
           </Link>
           <Link to="/" onClick={() => setActiveMegaMenu(null)} className="flex flex-col flex-1 min-w-0 hover:opacity-80 transition-opacity" style={{ fontFamily: "Poppins, sans-serif" }}>
-            <span className="text-[11px] font-bold text-black tracking-wide leading-tight">JBJ GLOBAL</span>
-            <span className="text-[10px] font-bold text-gold tracking-wide leading-tight">REAL ESTATE</span>
+            <span className="text-[12px] font-bold text-black tracking-wide leading-tight">JBJ GLOBAL</span>
+            <span className="text-[11px] font-bold text-gold tracking-wide leading-tight">REAL ESTATE</span>
           </Link>
-          <button
-            onClick={toggleCollapse}
-            className="w-8 h-8 rounded-lg bg-gradient-to-br from-gold/30 to-gold/15 border-2 border-gold/60 flex items-center justify-center text-gold hover:from-gold/40 hover:to-gold/25 hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all flex-shrink-0 shadow-md shadow-gold/15"
-            aria-label="Minimize navigation"
-            title="Minimize navigation"
-          >
-            <ChevronLeft className="w-4.5 h-4.5" />
-          </button>
         </div>
       </div>
 
@@ -1040,13 +1046,13 @@ export default function GlobalVerticalNav() {
                 <div>
                   <button
                     onClick={() => toggleSection(sectionKey)}
-                    className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-[11px] uppercase tracking-[0.15em] font-bold transition-all ${
+                    className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-[11px] uppercase tracking-[0.15em] font-bold transition-all border ${
                       sectionHighlighted
-                        ? "text-gold bg-gold/15 border-l-2 border-gold"
-                        : "text-gold/80 hover:text-gold hover:bg-gold/5"
+                        ? "text-gold bg-gold/15 border-gold/40"
+                        : "text-gold/80 hover:text-gold hover:bg-gold/5 border-transparent hover:border-gold/20"
                     }`}
                   >
-                    <SectionIcon className={`w-3.5 h-3.5 flex-shrink-0 ${sectionHighlighted ? 'text-black' : 'text-black/50'}`} />
+                    <SectionIcon className={`w-3.5 h-3.5 flex-shrink-0 ${sectionHighlighted ? 'text-black' : 'text-gold'}`} />
                     <span className="flex-1 text-left">{sectionKey}</span>
                     <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'} ${sectionHighlighted ? 'text-gold' : 'text-black/40'}`} />
                     {!isOpen && hasActiveChild && (
@@ -1089,22 +1095,22 @@ export default function GlobalVerticalNav() {
         </div>
       </nav>
 
-      {/* Bottom pinned section */}
+      {/* Bottom pinned section — SUPPORT hub */}
       <div className="mt-auto flex-shrink-0">
-        {/* Support — always visible, compact */}
-        <div className="px-3 py-3 border-t border-gold/20 space-y-2 bg-gradient-to-b from-[#EDE4D3]/50 to-[#EDE4D3]">
+        <div className="px-3 py-4 border-t border-gold/20 space-y-2.5 bg-gradient-to-b from-[#EDE4D3]/50 to-[#EDE4D3]">
           <a
             href="mailto:info@jbjglobal.com"
-            className="flex items-center gap-2 text-xs font-bold text-gold hover:text-gold/80 transition-colors"
+            className="flex items-center gap-2.5 text-xs font-bold text-gold hover:text-gold/80 transition-colors px-2 py-2.5 rounded-lg border border-gold/20 hover:border-gold/40 hover:bg-gold/5"
           >
-            <Headphones className="w-3.5 h-3.5" />
+            <Headphones className="w-4 h-4" />
             Contact Support
           </a>
+          <hr className="border-gold/15" />
           <Link
             to="/my-tickets"
-            className="flex items-center gap-2 text-xs font-bold text-gold hover:text-gold/80 transition-colors"
+            className="flex items-center gap-2.5 text-xs font-bold text-gold hover:text-gold/80 transition-colors px-2 py-2.5 rounded-lg border border-gold/20 hover:border-gold/40 hover:bg-gold/5"
           >
-            <Ticket className="w-3.5 h-3.5" />
+            <Ticket className="w-4 h-4" />
             Create Ticket Support
           </Link>
         </div>
