@@ -664,11 +664,11 @@ export default function JoinApplication() {
               )}
               <div className="space-y-2">
                 <Label>CV / Resume</Label>
-                <div className="border-2 border-dashed border-border rounded-lg p-6 text-center">
+                <div className="border-2 border-dashed border-gold/40 rounded-xl p-6 text-center hover:border-gold/60 transition-colors cursor-pointer">
                   {cvFile ? (
-                    <div className="flex items-center justify-center gap-2 text-green-500">
+                    <div className="flex items-center justify-center gap-2 text-green-600">
                       <FileText className="h-5 w-5" />
-                      <span>{cvFile.name}</span>
+                      <span className="font-medium">{cvFile.name}</span>
                       <Button
                         type="button"
                         variant="ghost"
@@ -680,10 +680,10 @@ export default function JoinApplication() {
                       </Button>
                     </div>
                   ) : (
-                    <label className="cursor-pointer">
-                      <div className="flex flex-col items-center gap-2">
-                        <Upload className="h-8 w-8 text-muted-foreground" />
-                        <span className="text-sm text-muted-foreground">
+                    <label className="cursor-pointer block w-full">
+                      <div className="flex flex-col items-center gap-2 py-2">
+                        <Upload className="h-8 w-8 text-gold/60" />
+                        <span className="text-sm text-black/70">
                           Click to upload CV (PDF or Word, max 10MB)
                         </span>
                       </div>
@@ -692,7 +692,7 @@ export default function JoinApplication() {
                         accept=".pdf,.doc,.docx"
                         onChange={handleFileChange}
                         className="hidden"
-                        disabled={!user || loading}
+                        disabled={loading}
                       />
                     </label>
                   )}
