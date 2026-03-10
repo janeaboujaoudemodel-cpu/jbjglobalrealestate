@@ -201,31 +201,33 @@ export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionPro
                 }}
               >
                 <Popup>
-                  <div className="min-w-[200px] max-w-[240px]">
+                  <div className="min-w-[220px] max-w-[260px]">
                     {project.cover_image_url && (
-                      <img src={project.cover_image_url} alt={project.name} className="w-full h-28 object-cover rounded mb-2" />
+                      <img src={project.cover_image_url} alt={project.name} className="w-full h-32 object-cover" />
                     )}
-                    <div className="flex items-center gap-2 mb-1">
-                      {project.developer_logo && (
-                        <img src={project.developer_logo} alt="" className="w-6 h-6 object-contain rounded" />
+                    <div className="p-3">
+                      <div className="flex items-center gap-2 mb-1">
+                        {project.developer_logo && (
+                          <img src={project.developer_logo} alt="" className="w-6 h-6 object-contain rounded" />
+                        )}
+                        <Link to={`/project/${project.slug}`} className="font-bold text-sm text-blue-600 hover:underline block leading-tight">
+                          {project.name}
+                        </Link>
+                      </div>
+                      {project.developer_name && (
+                        <p className="text-[11px] text-zinc-500">by {project.developer_name}</p>
                       )}
-                      <Link to={`/project/${project.slug}`} className="font-bold text-sm text-blue-600 hover:underline block leading-tight">
-                        {project.name}
-                      </Link>
+                      {project.price_from && (
+                        <p className="text-xs font-semibold text-amber-700 mt-1">
+                          From AED {Math.round(Number(project.price_from)).toLocaleString()}
+                        </p>
+                      )}
+                      {project.handover_date && (
+                        <p className="text-[11px] text-orange-500 mt-0.5">
+                          Handover: {project.handover_date}
+                        </p>
+                      )}
                     </div>
-                    {project.developer_name && (
-                      <p className="text-[11px] text-zinc-500">by {project.developer_name}</p>
-                    )}
-                    {project.price_from && (
-                      <p className="text-xs font-semibold text-amber-700 mt-1">
-                        From AED {Math.round(Number(project.price_from)).toLocaleString()}
-                      </p>
-                    )}
-                    {project.handover_date && (
-                      <p className="text-[11px] text-orange-500 mt-0.5">
-                        Handover: {project.handover_date}
-                      </p>
-                    )}
                   </div>
                 </Popup>
               </Marker>

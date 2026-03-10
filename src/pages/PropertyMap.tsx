@@ -581,6 +581,7 @@ const PropertyMap = () => {
                         </Button>
                       </Link>
                     </div>
+                    </div>
                   </div>
                 </Popup>
               </Marker>

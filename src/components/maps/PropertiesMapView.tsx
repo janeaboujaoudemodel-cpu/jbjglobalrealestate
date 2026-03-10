@@ -168,30 +168,41 @@ export default function PropertiesMapView({ projects, hoveredProjectId, onProjec
               }}
             >
               <Popup>
-                <div className="min-w-[200px] max-w-[240px]">
+                <div className="min-w-[220px] max-w-[260px]">
                   {project.cover_image_url && (
-                    <img src={project.cover_image_url} alt={project.name} className="w-full h-28 object-cover rounded mb-2" loading="lazy" />
+                    <img src={project.cover_image_url} alt={project.name} className="w-full h-32 object-cover" loading="lazy" />
                   )}
-                  <div className="flex items-center gap-2 mb-1">
-                    <Link to={`/project/${project.slug}`} className="font-bold text-sm text-blue-600 hover:underline block leading-tight">
+                  <div className="p-3">
+                    <Link to={`/project/${project.slug}`} className="font-bold text-sm text-blue-600 hover:underline block leading-tight mb-1">
                       {project.name}
                     </Link>
+                    {project.developer_name && (
+                      <p className="text-[11px] text-zinc-500">by {project.developer_name}</p>
+                    )}
+                    {project.price_from ? (
+                      <p className="text-xs font-semibold text-amber-700 mt-1">
+                        From AED {Math.round(Number(project.price_from)).toLocaleString()}
+                      </p>
+                    ) : (
+                      <p className="text-xs font-semibold text-amber-700 mt-1">Price on request</p>
+                    )}
+                    <div className="flex items-center gap-2 mt-1 text-[11px] text-zinc-500">
+                      {(project.bedrooms_min != null || project.bedrooms_max != null) && (
+                        <span>
+                          {project.bedrooms_min === 0 ? 'Studio' : `${project.bedrooms_min ?? '?'}`}
+                          {project.bedrooms_max != null && project.bedrooms_max !== project.bedrooms_min ? ` - ${project.bedrooms_max} BR` : project.bedrooms_min !== 0 ? ' BR' : ''}
+                        </span>
+                      )}
+                      {project.size_min != null && (
+                        <span>{Math.round(Number(project.size_min)).toLocaleString()} sqft</span>
+                      )}
+                    </div>
+                    {project.handover_date && (
+                      <p className="text-[11px] text-orange-500 mt-0.5">
+                        Handover: {project.handover_date}
+                      </p>
+                    )}
                   </div>
-                  {project.developer_name && (
-                    <p className="text-[11px] text-zinc-500">by {project.developer_name}</p>
-                  )}
-                  {project.price_from ? (
-                    <p className="text-xs font-semibold text-amber-700 mt-1">
-                      From AED {Math.round(Number(project.price_from)).toLocaleString()}
-                    </p>
-                  ) : (
-                    <p className="text-xs font-semibold text-amber-700 mt-1">Price on request</p>
-                  )}
-                  {project.handover_date && (
-                    <p className="text-[11px] text-orange-500 mt-0.5">
-                      Handover: {project.handover_date}
-                    </p>
-                  )}
                 </div>
               </Popup>
             </Marker>
