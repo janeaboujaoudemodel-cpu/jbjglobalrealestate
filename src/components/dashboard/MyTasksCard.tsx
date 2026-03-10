@@ -38,7 +38,7 @@ export default function MyTasksCard() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [showAddForm, setShowAddForm] = useState(false);
-  const [newTitle, setNewTitle] = useState("");
+  const [showCreationModal, setShowCreationModal] = useState(false);
   const [filter, setFilter] = useState<"all" | "pending" | "completed">("all");
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [selectionMode, setSelectionMode] = useState(false);
