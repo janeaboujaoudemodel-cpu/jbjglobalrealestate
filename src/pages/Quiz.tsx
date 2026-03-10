@@ -438,7 +438,16 @@ const Quiz = () => {
 
       markFreeUsed();
 
-      const slugs = recommendations.slice(0, 5).map((p) => p.slug).join(",");
+      let slugs = recommendations.slice(0, 3).map((p) => p.slug).join(",");
+      // Fallback: if fewer than 3 results, relax area filter and retry
+      if (recommendations.length < 3 && allProjects?.length) {
+        const relaxed = allProjects
+          .filter(p => !p.is_sold_out && p.cover_image_url)
+          .slice(0, 3);
+        if (relaxed.length > recommendations.length) {
+          slugs = relaxed.slice(0, 3).map(p => p.slug).join(",");
+        }
+      }
       navigate(`/quiz-results?projects=${slugs}&session=${sessionId}&free=true`);
     } catch (error) {
       console.error("Error saving quiz:", error);
