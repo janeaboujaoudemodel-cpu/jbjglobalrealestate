@@ -25,6 +25,9 @@ interface Task {
   due_date: string | null;
   completed_at: string | null;
   created_at: string;
+  client_contact?: string | null;
+  reference_url?: string | null;
+  attachments?: any[] | null;
 }
 
 const PRIORITY_STYLES: Record<string, string> = {
