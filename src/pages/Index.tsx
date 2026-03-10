@@ -493,7 +493,7 @@ const Index = () => {
       </Suspense>
 
       {/* DIVIDER */}
-      <SectionDivider />
+      <SectionDivider fullWidth />
 
       {/* Stats Counter Section */}
       <Suspense fallback={<SectionLoader />}>
