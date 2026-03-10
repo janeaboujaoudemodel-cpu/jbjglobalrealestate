@@ -617,7 +617,7 @@ export default function JoinApplication() {
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label>How many deals have you closed?</Label>
-                      <Input value={formData.dealsClosed} onChange={(e) => setFormData({ ...formData, dealsClosed: e.target.value })} placeholder="e.g. 25" disabled={!user || loading} className="bg-background" />
+                      <Input value={formData.dealsClosed} onChange={(e) => setFormData({ ...formData, dealsClosed: e.target.value })} placeholder="e.g. 25" disabled={loading} className="bg-background" />
                     </div>
                     <div className="space-y-2">
                       <Label>Total value of deals closed (AED)</Label>
