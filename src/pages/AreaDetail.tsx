@@ -8,6 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useParams, Link, Navigate } from "react-router-dom";
 import { useRecentSearches } from "@/hooks/useRecentSearches";
+import { useUserBrowsingContext } from "@/hooks/useUserBrowsingContext";
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
 import { MapPin, ArrowRight, Loader2, Phone, ArrowUpRight, Search, X } from "lucide-react";
