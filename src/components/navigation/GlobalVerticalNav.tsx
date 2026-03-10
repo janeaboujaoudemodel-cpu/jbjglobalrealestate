@@ -665,11 +665,11 @@ export default function GlobalVerticalNav() {
           </Link>
           <button
             onClick={toggleCollapse}
-            className="w-5 h-5 rounded flex items-center justify-center text-black/40 hover:text-black/70 hover:bg-black/5 transition-colors flex-shrink-0"
+            className="w-7 h-7 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 border border-gold/40 flex items-center justify-center text-gold hover:from-gold/30 hover:to-gold/20 hover:border-gold/60 transition-all flex-shrink-0 shadow-sm shadow-gold/10"
             aria-label="Minimize navigation"
             title="Minimize navigation"
           >
-            <ChevronLeft className="w-3.5 h-3.5" />
+            <ChevronLeft className="w-4 h-4" />
           </button>
         </div>
       </div>
