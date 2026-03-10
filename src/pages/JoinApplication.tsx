@@ -742,20 +742,30 @@ export default function JoinApplication() {
                 </div>
               )}
 
-              <Button
-                type="submit"
-                className="w-full bg-gold hover:bg-gold/90 text-black"
-                disabled={!user || loading}
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Submitting...
-                  </>
-                ) : (
-                  "Submit Application"
-                )}
-              </Button>
+              {!user ? (
+                <Button
+                  type="button"
+                  className="w-full bg-gold hover:bg-gold/90 text-black font-bold h-12 text-base"
+                  onClick={() => navigate("/auth?redirect=/join")}
+                >
+                  Sign In to Submit Application
+                </Button>
+              ) : (
+                <Button
+                  type="submit"
+                  className="w-full bg-gold hover:bg-gold/90 text-black font-bold h-12 text-base"
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Submitting...
+                    </>
+                  ) : (
+                    "Submit Application"
+                  )}
+                </Button>
+              )}
             </form>
           </CardContent>
         </Card>
