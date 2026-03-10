@@ -159,7 +159,7 @@ export default function LandlordRentalPortal() {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {BENEFITS.map((benefit, index) => (
@@ -169,13 +169,13 @@ export default function LandlordRentalPortal() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
               >
-                <Card className="h-full border-gold/10 hover:border-gold/30 transition-colors hover:shadow-lg">
+                <Card className="h-full bg-white/80 backdrop-blur-sm border border-gold/30 hover:border-gold/60 transition-colors hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] rounded-2xl">
                   <CardContent className="p-6">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gold/20 to-champagne/20 flex items-center justify-center mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center mb-4">
                       <benefit.icon className="h-6 w-6 text-gold" />
                     </div>
-                    <h3 className="font-semibold mb-2">{benefit.title}</h3>
-                    <p className="text-sm text-muted-foreground">{benefit.description}</p>
+                    <h3 className="font-semibold mb-2 text-black">{benefit.title}</h3>
+                    <p className="text-sm text-zinc-600">{benefit.description}</p>
                   </CardContent>
                 </Card>
               </motion.div>
