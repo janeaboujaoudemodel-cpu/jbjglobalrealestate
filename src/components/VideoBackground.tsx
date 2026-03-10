@@ -78,7 +78,7 @@ const VideoBackground = ({ src, poster, className = "", opacity = 1 }: VideoBack
           loop
           playsInline
           preload="metadata"
-          onCanPlay={handleCanPlay}
+          onCanPlayThrough={handleCanPlay}
           className="absolute inset-0 w-full h-full object-cover"
           style={{
             opacity: videoReady ? opacity : 0,

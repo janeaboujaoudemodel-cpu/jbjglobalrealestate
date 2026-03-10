@@ -605,7 +605,7 @@ export default function GlobalVerticalNav() {
           style={{ left: sidebarWidth, top: 0, bottom: 0, right: 0 }}
         >
           <div
-            className={`pointer-events-auto w-[440px] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] animate-in slide-in-from-left-2 fade-in duration-200 ${isLargeMenu ? 'max-h-[80vh]' : 'max-h-[60vh]'}`}
+            className={`pointer-events-auto w-[min(440px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] animate-in slide-in-from-left-2 fade-in duration-200 ${isLargeMenu ? 'max-h-[80vh]' : 'max-h-[60vh]'}`}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Panel header */}
