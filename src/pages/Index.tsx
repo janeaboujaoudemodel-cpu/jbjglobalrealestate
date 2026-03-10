@@ -328,13 +328,13 @@ const Index = () => {
 
       {/* AI HOME FINDER - Premium CTA Section - No dividers */}
       <section className="bg-black flex items-center justify-center min-h-[340px] relative overflow-hidden">
-        {/* Premium ambient background effects */}
+        {/* Premium ambient background effects — champagne/gold */}
         <div className="absolute inset-0">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-600/8 rounded-full blur-[120px]" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold/8 rounded-full blur-[120px]" />
           <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-gold/5 rounded-full blur-[80px]" />
-          <div className="absolute bottom-0 right-0 w-[300px] h-[300px] bg-purple-500/5 rounded-full blur-[80px]" />
+          <div className="absolute bottom-0 right-0 w-[300px] h-[300px] bg-gold/5 rounded-full blur-[80px]" />
           {/* Subtle grid pattern */}
-          <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'linear-gradient(rgba(147,51,234,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(147,51,234,0.3) 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
+          <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'linear-gradient(hsl(var(--gold) / 0.3) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--gold) / 0.3) 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
         </div>
         
         <div className="container mx-auto px-4 relative z-10">
@@ -346,37 +346,37 @@ const Index = () => {
               transition={{ duration: 0.5 }}
               className="text-center relative"
             >
-              {/* Premium multi-layer glow */}
-              <div className="absolute inset-0 -m-6 md:-m-8 rounded-3xl bg-purple-500/15 blur-3xl" />
-              <div className="absolute inset-0 -m-3 md:-m-4 rounded-3xl bg-purple-400/10 blur-xl" />
+              {/* Premium multi-layer glow — gold */}
+              <div className="absolute inset-0 -m-6 md:-m-8 rounded-3xl bg-gold/10 blur-3xl" />
+              <div className="absolute inset-0 -m-3 md:-m-4 rounded-3xl bg-gold/8 blur-xl" />
               
               {/* Card with premium glassmorphism */}
               <div 
-                className="relative z-10 bg-gradient-to-br from-zinc-900/95 via-black/95 to-zinc-800/95 backdrop-blur-xl rounded-2xl px-8 md:px-14 py-8 md:py-10 border border-purple-400/30"
+                className="relative z-10 bg-gradient-to-br from-zinc-900/95 via-black/95 to-zinc-800/95 backdrop-blur-xl rounded-2xl px-8 md:px-14 py-8 md:py-10 border border-gold/30"
                 style={{
-                  boxShadow: '0 0 50px rgba(147,51,234,0.25), 0 0 100px rgba(147,51,234,0.1), 0 25px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(147,51,234,0.15)'
+                  boxShadow: '0 0 50px hsl(var(--gold) / 0.2), 0 0 100px hsl(var(--gold) / 0.08), 0 25px 60px rgba(0,0,0,0.4), inset 0 1px 0 hsl(var(--gold) / 0.12)'
                 }}
               >
                 {/* Top shine line */}
-                <div className="absolute top-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-purple-400/50 to-transparent" />
+                <div className="absolute top-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
                 
-                {/* Purple label badge */}
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-500/15 border border-purple-400/25 text-purple-400 text-xs uppercase tracking-[0.2em] mb-5">
+                {/* Gold label badge */}
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold/15 border border-gold/30 text-gold text-xs uppercase tracking-[0.2em] mb-5">
                   <Sparkles className="w-3 h-3" />
                   {t('home.aiPowered', 'AI-Powered')}
                 </div>
                 <Link to="/quiz" className="block group">
                   <div className="flex items-center justify-center gap-3 mb-3">
-                    <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-purple-500/20 to-purple-600/10 border border-purple-400/30 flex items-center justify-center shadow-[0_0_30px_rgba(147,51,234,0.3)] group-hover:shadow-[0_0_50px_rgba(147,51,234,0.5)] transition-all duration-500">
-                      <Sparkles className="w-6 h-6 md:w-7 md:h-7 text-purple-400 group-hover:text-purple-300 transition-colors" strokeWidth={1.5} />
+                    <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-gold/20 to-gold/10 border border-gold/30 flex items-center justify-center shadow-[0_0_30px_hsl(var(--gold)_/_0.25)] group-hover:shadow-[0_0_50px_hsl(var(--gold)_/_0.4)] transition-all duration-500">
+                      <Sparkles className="w-6 h-6 md:w-7 md:h-7 text-gold group-hover:text-gold-light transition-colors" strokeWidth={1.5} />
                     </div>
                     <h2 
-                      className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-wide bg-gradient-to-r from-purple-400 via-purple-300 to-purple-500 bg-clip-text text-transparent group-hover:from-purple-300 group-hover:to-purple-400 transition-all duration-500" 
+                      className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-wide bg-gradient-to-r from-gold via-[#E8DCC8] to-gold bg-clip-text text-transparent group-hover:from-gold-light group-hover:to-gold transition-all duration-500" 
                       style={{ fontFamily: "Poppins, sans-serif" }}
                     >
                       {t('hero.aiFinder')}
                     </h2>
-                    <ArrowUpRight className="w-6 h-6 md:w-8 md:h-8 text-purple-400 group-hover:text-purple-300 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
+                    <ArrowUpRight className="w-6 h-6 md:w-8 md:h-8 text-gold group-hover:text-gold-light group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
                   </div>
                   <p className="text-zinc-400 text-sm md:text-base max-w-lg mx-auto">
                     {t('hero.aiFinderDesc')}

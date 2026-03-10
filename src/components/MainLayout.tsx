@@ -59,6 +59,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   const isMobile = useIsMobile();
   const location = useLocation();
   const { trackPageVisit } = useActivityTracker();
+  useVisitorTracking();
 
   // Track page visits on route change
   useEffect(() => { trackPageVisit(); }, [location.pathname, trackPageVisit]);

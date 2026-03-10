@@ -38,10 +38,10 @@ class AppErrorBoundary extends React.Component<
       msg.includes("dynamically imported") ||
       msg.includes("Importing a module");
 
-    // Auto-retry up to 2 times for chunk/module loading failures
-    if (isChunkError && this.state.retryCount < 2) {
+    // Auto-retry up to 3 times for chunk/module loading failures
+    if (isChunkError && this.state.retryCount < 3) {
       this.setState((prev) => ({ hasError: false, retryCount: prev.retryCount + 1 }));
-      setTimeout(() => window.location.reload(), 1500);
+      setTimeout(() => window.location.reload(), 2500);
     }
   }
 
@@ -49,7 +49,6 @@ class AppErrorBoundary extends React.Component<
     this.setState({ isReloading: true });
 
     try {
-      // Clear potentially corrupted client cache/state that can trap users in a crash loop.
       localStorage.removeItem("jbj_recent_searches");
       sessionStorage.removeItem("jbj_recent_searches");
     } catch (e) {
@@ -57,9 +56,8 @@ class AppErrorBoundary extends React.Component<
       console.warn("Failed to clear cached recent search data before reload", e);
     }
 
-    const url = new URL(window.location.href);
-    url.searchParams.set("_retry", Date.now().toString());
-    window.location.assign(url.toString());
+    // Preserve exact current URL on reload
+    window.location.reload();
   };
 
   private handleGoHome = () => {

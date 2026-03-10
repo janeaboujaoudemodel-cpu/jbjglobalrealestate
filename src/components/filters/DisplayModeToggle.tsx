@@ -117,7 +117,7 @@ export function DisplayModeIconToggle({
               ? "text-zinc-400 hover:text-white"
               : "text-black/60 hover:text-black"
         )}
-        title="Investor Mode"
+        title="Investor View — See investment-focused content like ROI, yields & capital growth"
       >
         <TrendingUp className="w-4 h-4" />
       </button>
@@ -131,7 +131,7 @@ export function DisplayModeIconToggle({
               ? "text-zinc-400 hover:text-white"
               : "text-black/60 hover:text-black"
         )}
-        title="Broker Mode"
+        title="Broker View — See broker tools, commissions & deal registration"
       >
         <Briefcase className="w-4 h-4" />
       </button>
