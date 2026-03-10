@@ -103,6 +103,50 @@ export default function HorizontalUtilityBar() {
 
         {divider}
 
+        {/* Buy */}
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Link
+              to="/properties?transaction=buy"
+              className="h-8 flex items-center gap-1.5 rounded-lg hover:bg-gold/15 transition-all px-2 group"
+            >
+              <Building2 className="w-4 h-4 text-gold group-hover:scale-110 transition-transform" />
+              <span className="text-xs font-semibold text-black/70 uppercase tracking-wide">Buy</span>
+            </Link>
+          </TooltipTrigger>
+          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Browse Properties for Sale</TooltipContent>
+        </Tooltip>
+
+        {/* Rent */}
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Link
+              to="/properties?transaction=rent"
+              className="h-8 flex items-center gap-1.5 rounded-lg hover:bg-gold/15 transition-all px-2 group"
+            >
+              <Key className="w-4 h-4 text-gold group-hover:scale-110 transition-transform" />
+              <span className="text-xs font-semibold text-black/70 uppercase tracking-wide">Rent</span>
+            </Link>
+          </TooltipTrigger>
+          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Browse Rentals</TooltipContent>
+        </Tooltip>
+
+        {/* Sell */}
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Link
+              to="/listing-portal"
+              className="h-8 flex items-center gap-1.5 rounded-lg hover:bg-gold/15 transition-all px-2 group border border-gold/25"
+            >
+              <Tag className="w-4 h-4 text-gold group-hover:scale-110 transition-transform" />
+              <span className="text-xs font-semibold text-gold uppercase tracking-wide">Sell</span>
+            </Link>
+          </TooltipTrigger>
+          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">List Your Property</TooltipContent>
+        </Tooltip>
+
+        {divider}
+
         {/* Favorites */}
         <Tooltip>
           <TooltipTrigger asChild>
