@@ -626,7 +626,7 @@ export default function JoinApplication() {
                   </div>
                   <div className="space-y-2">
                     <Label>Which projects/areas have you sold in?</Label>
-                    <Input value={formData.projectsSold} onChange={(e) => setFormData({ ...formData, projectsSold: e.target.value })} placeholder="e.g. Dubai Marina, Downtown, Palm Jumeirah" disabled={!user || loading} className="bg-background" />
+                    <Input value={formData.projectsSold} onChange={(e) => setFormData({ ...formData, projectsSold: e.target.value })} placeholder="e.g. Dubai Marina, Downtown, Palm Jumeirah" disabled={loading} className="bg-background" />
                   </div>
                   <div className="space-y-2">
                     <Label>Which developers have you worked with?</Label>
