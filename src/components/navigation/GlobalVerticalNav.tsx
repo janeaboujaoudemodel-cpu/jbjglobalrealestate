@@ -487,11 +487,11 @@ export default function GlobalVerticalNav() {
         : "bg-purple-500/15 text-purple-700 font-semibold hover:bg-purple-500/25 border border-purple-500/30";
     }
 
-    // My Account section gets a distinct highlight color (blue)
+    // My Account section — premium gold/black border style
     if (sectionKey === 'MY ACCOUNT') {
       return shouldHighlight
-        ? "bg-blue-600 text-white border border-blue-500 font-bold"
-        : "bg-blue-500/10 text-blue-800 font-semibold hover:bg-blue-500/20 border border-blue-500/20";
+        ? "bg-gradient-to-r from-gold/20 to-gold/10 text-black border border-gold/40 font-bold"
+        : "text-black/80 font-semibold hover:bg-gold/10 border border-gold/20";
     }
 
     if (item.highlight) {
