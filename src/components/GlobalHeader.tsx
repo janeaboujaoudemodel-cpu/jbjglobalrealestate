@@ -444,6 +444,21 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     { href: "/faq", label: "FAQ", icon: ClipboardCheck },
   ];
 
+  // Mobile menu - Guides (mirrors desktop GUIDES section)
+  const mobileGuideLinks = [
+    { href: "/guides", label: "Guides Library", icon: BookOpen },
+    { href: "/buyer-guide", label: "Buyer's Guide", icon: FileText },
+    { href: "/seller-guide", label: "Seller's Guide", icon: FileText },
+    { href: "/rent-guide", label: "Rental Guide", icon: FileText },
+    { href: "/tenant-guide", label: "Tenant Guide", icon: FileText },
+    { href: "/landlord-guide", label: "Landlord Guide", icon: FileText },
+    { href: "/investor-education", label: "Investor Education", icon: GraduationCap },
+    { href: "/broker-education", label: "Broker Education", icon: GraduationCap },
+    { href: "/guides/golden-visa-uae", label: "Golden Visa Guide", icon: Award },
+    { href: "/education-hub", label: "Books Library", icon: BookOpen },
+    { href: "/faq", label: "FAQ Hub", icon: HelpCircle },
+  ];
+
   // Mobile menu - Partners & Tools
   const mobilePartnerLinks = [
     { href: "/partners", label: "Partners Hub", icon: Users },
