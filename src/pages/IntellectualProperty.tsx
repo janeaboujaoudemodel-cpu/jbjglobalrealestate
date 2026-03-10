@@ -237,6 +237,7 @@ const IntellectualProperty = () => {
         </div>
       </div>
     </section>
+    </>
   );
 };
 
