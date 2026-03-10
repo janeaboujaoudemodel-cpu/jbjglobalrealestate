@@ -132,8 +132,8 @@ export function useSmartPopupStrategy(): SmartPopupState & {
 
   // Main strategy logic
   useEffect(() => {
-    // Gate checks
-    if (hasExceededMaxShows() || isInCooldown() || wasShownThisSession()) return;
+    // Gate checks — skip for authenticated users
+    if (isAuthenticated || hasExceededMaxShows() || isInCooldown() || wasShownThisSession()) return;
 
     const currentContext = detectContext(location.pathname);
     const sessionPages = getStoredNumber(STORAGE_KEYS.sessionPages);
