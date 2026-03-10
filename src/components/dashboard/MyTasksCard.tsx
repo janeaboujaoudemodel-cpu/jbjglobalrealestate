@@ -5,14 +5,15 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
 import { 
   ListChecks, Plus, Check, Clock, AlertCircle, ChevronRight, 
-  Loader2, Trash2, RotateCcw, X, CheckCheck, Square, CheckSquare
+  Loader2, Trash2, RotateCcw, X, CheckCheck, Square, CheckSquare,
+  Phone, Link2, Paperclip,
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
+import TaskCreationModal from "./TaskCreationModal";
 
 interface Task {
   id: string;
