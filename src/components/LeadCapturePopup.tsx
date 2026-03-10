@@ -42,7 +42,7 @@ const SERVICES = [
 ];
 
 const LeadCapturePopup = () => {
-  const { shouldShow, headline, subtitle, markShown, markDismissed } = useSmartPopupStrategy();
+  const { shouldShow, headline, subtitle, markShown, markDismissed, markSubmitted } = useSmartPopupStrategy();
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -90,7 +90,8 @@ const LeadCapturePopup = () => {
       });
 
       toast.success("Welcome! You now have full access to all features.");
-      handleDismiss();
+      setIsOpen(false);
+      markSubmitted();
     } catch {
       toast.error("Something went wrong. Please try again.");
     } finally {

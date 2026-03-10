@@ -11,6 +11,7 @@ const STORAGE_KEYS = {
   lastDismissed: "lead_popup_last_dismissed",
   sessionPages: "lead_popup_session_pages",
   sessionShown: "lead_popup_session_shown",
+  submitted: "lead_popup_submitted",
 };
 
 const MAX_TOTAL_SHOWS = 3;
@@ -96,24 +97,13 @@ function detectContext(pathname: string): PopupContext {
 export function useSmartPopupStrategy(): SmartPopupState & {
   markShown: () => void;
   markDismissed: () => void;
+  markSubmitted: () => void;
 } {
   const location = useLocation();
   const [shouldShow, setShouldShow] = useState(false);
   const [context, setContext] = useState<PopupContext>("default");
   const scrollListenerRef = useRef<(() => void) | null>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  // Check auth state — skip popup for logged-in users
-  useEffect(() => {
-    try {
-      const sbAccessToken = document.cookie.includes('sb-access-token') ||
-        !!localStorage.getItem('sb-mdafrewypkkrildjgtey-auth-token');
-      setIsAuthenticated(sbAccessToken);
-    } catch {
-      setIsAuthenticated(false);
-    }
-  }, []);
 
   // Track page views per session
   useEffect(() => {
@@ -130,10 +120,19 @@ export function useSmartPopupStrategy(): SmartPopupState & {
     setContext(detectContext(location.pathname));
   }, [location.pathname]);
 
+  // Check if user already submitted the lead form — only gate
+  const hasSubmitted = useCallback(() => {
+    try {
+      return localStorage.getItem(STORAGE_KEYS.submitted) === "1";
+    } catch {
+      return false;
+    }
+  }, []);
+
   // Main strategy logic
   useEffect(() => {
-    // Gate checks — skip for authenticated users
-    if (isAuthenticated || hasExceededMaxShows() || isInCooldown() || wasShownThisSession()) return;
+    // Only stop showing if user has submitted the form
+    if (hasSubmitted() || hasExceededMaxShows() || isInCooldown() || wasShownThisSession()) return;
 
     const currentContext = detectContext(location.pathname);
     const sessionPages = getStoredNumber(STORAGE_KEYS.sessionPages);
@@ -177,7 +176,7 @@ export function useSmartPopupStrategy(): SmartPopupState & {
         window.removeEventListener("scroll", handleScroll);
       };
     }
-  }, [location.pathname, isAuthenticated]);
+  }, [location.pathname, hasSubmitted]);
 
   const markShown = useCallback(() => {
     try {
@@ -199,6 +198,16 @@ export function useSmartPopupStrategy(): SmartPopupState & {
     }
   }, []);
 
+  const markSubmitted = useCallback(() => {
+    setShouldShow(false);
+    try {
+      localStorage.setItem(STORAGE_KEYS.submitted, "1");
+      sessionStorage.setItem(STORAGE_KEYS.sessionShown, "1");
+    } catch {
+      // ignore
+    }
+  }, []);
+
   const messages = CONTEXT_MESSAGES[context];
 
   return {
@@ -208,5 +217,6 @@ export function useSmartPopupStrategy(): SmartPopupState & {
     subtitle: messages.subtitle,
     markShown,
     markDismissed,
+    markSubmitted,
   };
 }
