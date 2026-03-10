@@ -4,11 +4,13 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { SEOHead } from "@/components/SEOHead";
 import { useAreas } from "@/hooks/useAreas";
-import { Building2, MapPin, BedDouble, Maximize, DollarSign, Search, Calendar, Crown, Bell, Mail, ArrowLeft, Sofa } from "lucide-react";
+import { useAreaUnit } from "@/hooks/useAreaUnit";
+import { Building2, MapPin, BedDouble, Maximize, DollarSign, Search, Calendar, Crown, Bell, Mail, ArrowLeft, Sofa, ArrowUpDown, Ruler, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { EmiratesMultiSelect } from "@/components/filters/EmiratesMultiSelect";
 
 const PROPERTY_TYPES = [
   { value: "all", label: "All Types" },
