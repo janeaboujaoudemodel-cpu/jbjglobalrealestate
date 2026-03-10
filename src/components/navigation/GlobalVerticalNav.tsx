@@ -56,7 +56,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "AI Tools Hub", href: "/ai-hub", icon: Cpu, highlight: true, megaMenu: 'ai-tools' },
   { label: "AI Home Finder", href: "/quiz", icon: Home, highlight: true },
   { label: "List Your Property", href: "/listing-portal", icon: ClipboardCheck, highlight: true },
-  { label: "Careers & Join", href: "/join", icon: GraduationCap, highlight: true },
+  { label: "Careers", href: "/join", icon: GraduationCap, highlight: true },
   { label: "Resale Properties", href: "/resale-properties", icon: DollarSign, highlight: true },
 
   // ── Properties ──
