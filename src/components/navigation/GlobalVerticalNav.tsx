@@ -626,14 +626,24 @@ export default function GlobalVerticalNav() {
 
   const renderNavContent = () => (
     <>
-      {/* Logo */}
-      <Link to="/" onClick={() => setActiveMegaMenu(null)} className="p-4 border-b border-gold/20 flex items-center gap-3 hover:opacity-80 transition-opacity">
-        <img src={jbjMonogramLightBg} alt="JBJ" className="w-16 h-16 object-contain" />
-        <div className="flex flex-col" style={{ fontFamily: "Poppins, sans-serif" }}>
-          <span className="text-[11px] font-bold text-black tracking-wide leading-tight">JBJ GLOBAL</span>
-          <span className="text-[11px] font-bold text-gold tracking-wide leading-tight">REAL ESTATE</span>
-        </div>
-      </Link>
+      {/* Logo + Minimize */}
+      <div className="p-4 border-b border-gold/20 flex items-center gap-2 hover:opacity-80 transition-opacity">
+        <Link to="/" onClick={() => setActiveMegaMenu(null)} className="flex items-center gap-3 flex-1 min-w-0">
+          <img src={jbjMonogramLightBg} alt="JBJ" className="w-16 h-16 object-contain flex-shrink-0" />
+          <div className="flex flex-col" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <span className="text-[11px] font-bold text-black tracking-wide leading-tight">JBJ GLOBAL</span>
+            <span className="text-[11px] font-bold text-gold tracking-wide leading-tight">REAL ESTATE</span>
+          </div>
+        </Link>
+        <button
+          onClick={toggleCollapse}
+          className="w-6 h-6 rounded-md bg-gold/10 border border-gold/30 flex items-center justify-center hover:bg-gold/20 transition-colors flex-shrink-0"
+          aria-label="Minimize navigation"
+          title="Minimize navigation"
+        >
+          <X className="w-3 h-3 text-gold" />
+        </button>
+      </div>
 
       {/* My Shortcuts — premium flyout trigger */}
       <div className="px-2 pt-3 pb-1">
@@ -805,15 +815,6 @@ export default function GlobalVerticalNav() {
         /* Full sidebar */
         <div className="hidden lg:flex w-[200px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-gold/30 flex-col h-full relative">
           {renderNavContent()}
-          {/* Premium collapse toggle — pill-shaped gold */}
-          <button
-            onClick={toggleCollapse}
-            className="absolute -right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-xl bg-gradient-to-br from-gold/30 via-gold/20 to-[#EDE4D3] border border-gold/50 flex items-center justify-center shadow-lg shadow-gold/20 hover:from-gold/40 hover:to-gold/25 transition-all z-[60]"
-            aria-label="Minimize navigation"
-            title="Minimize navigation"
-          >
-            <ChevronLeft className="w-4 h-4 text-gold" />
-          </button>
         </div>
       )}
       </div>
