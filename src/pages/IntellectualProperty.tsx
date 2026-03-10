@@ -50,7 +50,7 @@ const IntellectualProperty = () => {
           {/* Copyright Statement */}
           <CCard className="!p-8">
             <div className="flex items-start gap-4">
-              <Copyright className="w-8 h-8 text-[#C8A766] flex-shrink-0 mt-1" />
+              <CopyrightIcon className="w-8 h-8 text-[#C8A766] flex-shrink-0 mt-1" />
               <div>
                 <h2 className="text-2xl font-bold text-black mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>
                   Official Copyright Statement
