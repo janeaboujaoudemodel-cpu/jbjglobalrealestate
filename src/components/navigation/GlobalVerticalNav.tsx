@@ -319,7 +319,7 @@ const SHORTCUT_GROUPS: ShortcutGroup[] = [
     colorBg: "bg-blue-50",
     items: [
       { label: 'CRM Dashboard', icon: Users, href: '/crm' },
-      { label: 'Customer Happiness', icon: Headphones, href: '/admin?tab=customer-happiness' },
+      { label: 'Customer Happiness', icon: Users, href: '/admin?tab=customer-happiness' },
     ],
   },
   {
