@@ -170,12 +170,7 @@ const AreaDetail = () => {
 
   return (
     <div className={`min-h-screen bg-black flex ${isFixed && !bottomReached ? '' : ''}`}>
-      {/* Vertical Nav when filter bar replaces header */}
-      {isFixed && !bottomReached && (
-        <div className="hidden lg:block fixed left-0 top-0 h-screen z-[9997]">
-          <PropertiesVerticalNav />
-        </div>
-      )}
+      {/* Vertical nav handled globally by MainLayout */}
       <div className={`flex-1 ${isFixed && !bottomReached ? 'lg:ml-[200px]' : ''} transition-all duration-200`}>
       <SEOHead 
         title={`${area.name} - Real Estate in ${area.emirate} | JBJ`}

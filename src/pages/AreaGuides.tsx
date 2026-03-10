@@ -278,12 +278,7 @@ const AreaGuides = () => {
       </section>
 
       {/* ─── POST-HERO LAYOUT ─── */}
-      {/* Vertical Nav — always present when past hero */}
-      {pastHero && (
-        <div className="hidden lg:block fixed left-0 top-0 h-screen z-[9997]">
-          <PropertiesVerticalNav />
-        </div>
-      )}
+      {/* Vertical nav handled globally by MainLayout */}
 
       {/* Filter bar — show inline below hero always, then fixed at top when past hero */}
       <section

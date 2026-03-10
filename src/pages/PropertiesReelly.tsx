@@ -264,12 +264,7 @@ const PropertiesReelly = () => {
         </div>
       </PropertiesHeroVideo>
 
-      {/* Vertical Nav — only visible after scrolling past hero */}
-      {showStickyNav && !isMapMode && (
-      <div className="hidden lg:block fixed left-0 top-0 h-screen z-[9999]">
-        <PropertiesVerticalNav />
-      </div>
-      )}
+      {/* Vertical nav handled globally by MainLayout */}
 
       {/* Single Unified FilterShortcutBar — only fixed after scrolling past hero */}
       {showStickyNav && (
