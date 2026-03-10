@@ -583,7 +583,7 @@ export default function GlobalVerticalNav() {
           <div
             className={`pointer-events-auto w-[440px] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] animate-in slide-in-from-left-2 fade-in duration-200 ${isLargeMenu ? 'max-h-[80vh]' : 'max-h-[60vh]'}`}
             onClick={(e) => e.stopPropagation()}
-            onMouseLeave={closeMegaMenu}
+          >
           >
             {/* Panel header */}
             <div className="flex items-center justify-between px-5 py-3.5 border-b border-gold/20 bg-gradient-to-r from-[#E8DCC8]/50 to-transparent">
