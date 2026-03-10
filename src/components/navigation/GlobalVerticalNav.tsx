@@ -45,7 +45,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Off-plan", href: "/properties", icon: Building2, section: "PROPERTIES" },
   { label: "Sell", href: "/sell", icon: Tag, megaMenu: 'sell' },
   { label: "Rent", href: "/rent", icon: Key, megaMenu: 'rent' },
-  { label: "List Property", href: "/list-property", icon: PlusCircle },
+  { label: "List Property", href: "/listing-portal", icon: PlusCircle },
   { label: "Developers", href: "/developers", icon: Building, megaMenu: 'developers' },
   { label: "Areas", href: "/areas", icon: MapPin, megaMenu: 'areas' },
   { label: "Map", href: "/map", icon: MapPin },
