@@ -520,7 +520,7 @@ const SupportTicketBox = () => {
                       <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold max-w-2xl max-h-[90vh] z-[10050] flex flex-col overflow-hidden shadow-[0_8px_40px_rgba(200,167,102,0.4),0_4px_20px_rgba(0,0,0,0.2)] p-0 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                       <DialogHeader className="flex-shrink-0 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] z-10 pb-4 px-6 pt-6 border-b border-gold/20">
                         <DialogTitle className="text-black text-xl font-bold flex items-center gap-2">
-                          <Headphones className="w-5 h-5 text-red-500" />
+                          <PremiumHeadsetIcon size={20} color="#ef4444" />
                           {isSubmitted ? "Ticket Created!" : "Create Support Ticket"}
                         </DialogTitle>
                       </DialogHeader>
