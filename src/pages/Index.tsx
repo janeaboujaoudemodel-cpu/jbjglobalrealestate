@@ -485,7 +485,7 @@ const Index = () => {
       </Suspense>
 
       {/* DIVIDER between Areas and Testimonials */}
-      <SectionDivider />
+      <SectionDivider fullWidth />
 
       {/* TESTIMONIALS - Master Blueprint: Section 7 (3 testimonials) */}
       <Suspense fallback={<SectionLoader />}>
