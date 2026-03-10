@@ -821,7 +821,7 @@ export default function GlobalVerticalNav() {
     <>
       {/* Desktop sidebar — slides in after reveal */}
       <div
-        className={`transition-all duration-500 ease-out ${navRevealed ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'}`}
+        className={`h-full transition-all duration-500 ease-out ${navRevealed ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'}`}
         style={{ willChange: 'transform, opacity' }}
       >
       {collapsed ? (
