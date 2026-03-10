@@ -60,6 +60,25 @@ const PRICE_RANGES = [
   { value: "10000000-999999999", label: "AED 10M+" },
 ];
 
+const SORT_OPTIONS = [
+  { value: "newest", label: "Newest First" },
+  { value: "price_asc", label: "Price: Low → High" },
+  { value: "price_desc", label: "Price: High → Low" },
+  { value: "size_asc", label: "Size: Small → Large" },
+  { value: "size_desc", label: "Size: Large → Small" },
+];
+
+const VIEW_OPTIONS = [
+  { value: "all", label: "Any View" },
+  { value: "sea", label: "Sea View" },
+  { value: "city", label: "City View" },
+  { value: "garden", label: "Garden View" },
+  { value: "canal", label: "Canal View" },
+  { value: "golf", label: "Golf View" },
+  { value: "pool", label: "Pool View" },
+  { value: "landmark", label: "Landmark View" },
+];
+
 const ResaleProperties = () => {
   const [areaFilter, setAreaFilter] = useState<string>("all");
   const [typeFilter, setTypeFilter] = useState<string>("all");
