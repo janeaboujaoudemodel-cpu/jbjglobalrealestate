@@ -142,39 +142,48 @@ export type Database = {
       }
       admin_tasks: {
         Row: {
+          attachments: Json | null
           category: string | null
+          client_contact: string | null
           completed_at: string | null
           created_at: string
           description: string | null
           due_date: string | null
           id: string
           priority: string | null
+          reference_url: string | null
           status: string | null
           title: string
           updated_at: string
           user_id: string
         }
         Insert: {
+          attachments?: Json | null
           category?: string | null
+          client_contact?: string | null
           completed_at?: string | null
           created_at?: string
           description?: string | null
           due_date?: string | null
           id?: string
           priority?: string | null
+          reference_url?: string | null
           status?: string | null
           title: string
           updated_at?: string
           user_id: string
         }
         Update: {
+          attachments?: Json | null
           category?: string | null
+          client_contact?: string | null
           completed_at?: string | null
           created_at?: string
           description?: string | null
           due_date?: string | null
           id?: string
           priority?: string | null
+          reference_url?: string | null
           status?: string | null
           title?: string
           updated_at?: string
