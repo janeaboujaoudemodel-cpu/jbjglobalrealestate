@@ -37,12 +37,11 @@ const LanguageSwitcher = ({ variant = 'default' }: LanguageSwitcherProps) => {
           <button
             type="button"
             className="w-8 h-8 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-gold/10"
-            aria-label={t('header.language')}
+            aria-label={`${t('header.language')}: ${currentLang.nativeName}`}
           >
-            <Globe
-              className="w-4 h-4 text-gold group-hover:text-white group-hover:scale-110 transition-all duration-300"
-              style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' }}
-            />
+            <span className="text-sm leading-none group-hover:scale-110 transition-transform duration-300">
+              {currentLang.flag}
+            </span>
           </button>
         ) : isCompact ? (
           <button
