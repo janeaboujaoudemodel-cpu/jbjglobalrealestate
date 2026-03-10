@@ -562,7 +562,7 @@ export default function JoinApplication() {
                 <Select
                   value={formData.positionApplied}
                   onValueChange={(value) => setFormData({ ...formData, positionApplied: value })}
-                  disabled={!user || loading}
+                  disabled={loading}
                 >
                   <SelectTrigger className="bg-background">
                     <SelectValue placeholder="Select the position you're applying for" />
