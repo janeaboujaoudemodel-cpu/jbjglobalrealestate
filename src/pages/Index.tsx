@@ -501,7 +501,7 @@ const Index = () => {
       </Suspense>
 
       {/* DIVIDER */}
-      <SectionDivider />
+      <SectionDivider fullWidth />
 
       {/* SUPPORT TICKET BOX - Always visible (last content before global CTA) */}
       <Suspense fallback={<SectionLoader />}>
