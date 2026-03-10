@@ -32,6 +32,7 @@ const AreaDetail = () => {
   const { data: area, isLoading } = useAreaBySlug(slug);
   const { data: allAreas } = useAreas({ limit: 20 });
   const { trackView } = useRecentSearches();
+  const browsingContext = useUserBrowsingContext();
 
   // Track area view
   useEffect(() => {
