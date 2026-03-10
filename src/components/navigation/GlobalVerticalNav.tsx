@@ -200,6 +200,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'Company Profile', icon: Award, href: '/toolkit/corporate-suite/company-profile' },
     { label: 'E-Sign', icon: Globe, href: '/e-signature' },
     { label: 'Scan & Sign', icon: FileSearch, href: '/toolkit/scan-sign' },
+    { label: 'Brand Palette', icon: Palette, href: '/owner/brand-palette' },
   ],
   shortcuts: [
     { label: 'My Dashboard', icon: LayoutDashboard, href: '/my-dashboard' },

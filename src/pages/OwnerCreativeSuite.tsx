@@ -72,6 +72,14 @@ const tools = [
   },
   {
     icon: Palette,
+    title: "Brand Color Palette",
+    description: "Manage your 5-color brand identity with live preview. Changes apply across all creative tools.",
+    href: "/owner/brand-palette",
+    color: "from-amber-500 to-yellow-500",
+    badge: "Brand",
+  },
+  {
+    icon: Palette,
     title: "Logo Maker",
     description: "Create unique logos with AI-powered design suggestions and customizable templates.",
     href: "/toolkit/corporate-suite/logo",
