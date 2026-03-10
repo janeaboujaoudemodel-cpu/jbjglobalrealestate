@@ -63,7 +63,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Buy / Off-Plan", href: "/properties", icon: Building2, section: "PROPERTIES", megaMenu: 'buy' },
   { label: "Sell", href: "/sell", icon: Tag, megaMenu: 'sell' },
   { label: "Rent", href: "/rent", icon: Key, megaMenu: 'rent' },
-  { label: "List Property", href: "/listing-portal", icon: PlusCircle },
+  { label: "List for Sale / Rent", href: "/listing-portal", icon: PlusCircle },
   { label: "Developers", href: "/developers", icon: Building, megaMenu: 'developers' },
   { label: "Areas", href: "/areas", icon: MapPin, megaMenu: 'areas' },
   { label: "Map", href: "/map", icon: MapPin },
