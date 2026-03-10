@@ -276,10 +276,10 @@ export default function LandlordRentalPortal() {
 
             {/* Guide Tab */}
             <TabsContent value="guide" className="space-y-8">
-              <Card className="bg-zinc-900 border-zinc-800">
+              <Card className="bg-white/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
                 <CardHeader>
-                  <CardTitle className="text-white">Complete Landlord Guide</CardTitle>
-                  <CardDescription className="text-zinc-400">
+                  <CardTitle className="text-black">Complete Landlord Guide</CardTitle>
+                  <CardDescription className="text-zinc-600">
                     Everything you need to know about listing your rental property
                   </CardDescription>
                 </CardHeader>
