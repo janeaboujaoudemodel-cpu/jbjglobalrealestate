@@ -377,7 +377,7 @@ const SHORTCUT_GROUPS: ShortcutGroup[] = [
       { label: 'My Profile', icon: User, href: '/profile' },
       { label: 'Settings', icon: Settings, href: '/profile' },
       { label: 'Favorites', icon: Heart, href: '/favorites' },
-      { label: 'Support Tickets', icon: Headphones, href: '/my-tickets' },
+      { label: 'Support Tickets', icon: Ticket, href: '/my-tickets' },
     ],
   },
 ];
