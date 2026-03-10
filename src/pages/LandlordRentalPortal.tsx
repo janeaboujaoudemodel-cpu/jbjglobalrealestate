@@ -330,7 +330,7 @@ export default function LandlordRentalPortal() {
                     <h3 className="text-xl font-semibold text-black mb-2">
                       Sign In to List Your Property
                     </h3>
-                    <p className="text-zinc-400 mb-6">
+                    <p className="text-zinc-600 mb-6">
                       Create an account or sign in to submit your rental listing
                     </p>
                     <Button
