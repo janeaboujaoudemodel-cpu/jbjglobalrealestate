@@ -705,7 +705,7 @@ export default function GlobalVerticalNav() {
 
       {/* Collapsible Section Nav */}
       <nav
-        className="flex-1 py-2 px-2 space-y-1 overflow-y-auto jj-scrollbar-gold"
+        className="flex-1 py-2 px-2 space-y-1 overflow-y-auto jj-scrollbar-gold jj-scrollbar-always-visible"
         style={{ scrollbarGutter: "stable" }}
       >
         {SECTION_KEYS.map((sectionKey) => {
