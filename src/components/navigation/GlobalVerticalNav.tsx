@@ -765,9 +765,9 @@ export default function GlobalVerticalNav() {
                           if (hasMega) handleNavClick(item.megaMenu, e);
                           else handleNavClick(undefined);
                         }}
-                        className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${getItemStyle(item)}`}
+                        className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${getItemStyle(item, sectionKey)}`}
                       >
-                        <Icon className={`w-4 h-4 flex-shrink-0 ${getIconStyle(item)}`} />
+                        <Icon className={`w-4 h-4 flex-shrink-0 ${getIconStyle(item, sectionKey)}`} />
                         <span className="flex-1">{item.label}</span>
                         {hasMega && (
                           <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-black/30"}`} />
