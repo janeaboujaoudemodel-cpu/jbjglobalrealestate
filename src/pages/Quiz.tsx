@@ -407,6 +407,14 @@ const Quiz = () => {
 
   const handleSubmitForm = async () => {
     if (!isFormValid()) return;
+    // Capture lead before showing results
+    await captureLead({
+      email: formData.email,
+      fullName: formData.fullName,
+      phone: formData.phone,
+      nationality: formData.nationality,
+      language: formData.preferredLanguage,
+    }, 'ai_home_finder');
     await proceedToResults();
   };
 
