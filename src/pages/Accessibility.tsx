@@ -127,9 +127,9 @@ const Accessibility = () => {
               </CCard>
             </section>
 
-            <div className="mt-16 pt-8 border-t border-[#C8A766]/15">
-              <p className="text-zinc-500 text-xs leading-relaxed text-center mb-6">This Accessibility Statement may be updated periodically.</p>
-              <p className="text-zinc-500 text-sm text-center">&copy; {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.</p>
+            <div className="mt-16 pt-8 border-t border-[#C8A766]/15 text-center">
+              <p className="text-zinc-500 text-xs leading-relaxed mb-6">This Accessibility Statement may be updated periodically.</p>
+              <p className="text-zinc-500 text-sm">&copy; {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.</p>
               <div className="flex justify-center gap-4 mt-3 text-sm">
                 <Link to="/privacy" className="text-[#C8A766] hover:underline">Privacy Policy</Link>
                 <span className="text-zinc-600">|</span>
@@ -138,8 +138,8 @@ const Accessibility = () => {
             </div>
           </main>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 

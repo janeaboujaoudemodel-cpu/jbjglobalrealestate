@@ -159,8 +159,8 @@ const TrustAndCompliance = () => {
             </div>
           </main>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 

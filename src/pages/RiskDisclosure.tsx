@@ -164,8 +164,8 @@ const RiskDisclosure = () => {
             </div>
           </main>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 
