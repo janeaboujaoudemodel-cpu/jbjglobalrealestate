@@ -577,28 +577,30 @@ const SupportTicketBox = () => {
                                 We're sorry you're experiencing issues. Our team is on it!
                               </motion.p>
 
-                               {/* Ticket Number Box */}
+                               {/* Ticket Number Box — single line */}
                                <motion.div 
                                  initial={{ opacity: 0, y: 10 }}
                                  animate={{ opacity: 1, y: 0 }}
                                  transition={{ delay: 0.5 }}
-                                 className="bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 border border-gold/40 rounded-xl p-6 mb-4"
+                                 className="bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 border border-gold/40 rounded-xl px-5 py-4 mb-4"
                                >
-                                 <p className="text-sm text-zinc-600 mb-2">Your Ticket Number</p>
-                                 <div className="flex items-center justify-center gap-3">
-                                   <span className="text-2xl font-bold text-gold tracking-wider">{ticketNumber}</span>
-                                   <Button
-                                     variant="ghost"
-                                     size="icon"
+                                 <div className="flex items-center justify-center gap-3 flex-wrap">
+                                   <span className="text-sm text-zinc-600">Your Ticket Number</span>
+                                   <span className="text-sm text-zinc-400">|</span>
+                                   <span className="text-sm text-zinc-600" dir="rtl">رقم التذكرة</span>
+                                   <span className="text-sm text-zinc-400">—</span>
+                                   <span className="text-xl font-bold text-gold tracking-wider font-mono">{ticketNumber}</span>
+                                   <button
                                      onClick={copyTicketNumber}
-                                     className="hover:bg-gold/10"
+                                     className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gold/10 transition-colors"
+                                     title="Copy ticket number"
                                    >
                                      {copied ? (
-                                       <Check className="w-5 h-5 text-green-500" />
+                                       <Check className="w-4 h-4 text-green-500" />
                                      ) : (
-                                       <Copy className="w-5 h-5 text-gold" />
+                                       <Copy className="w-4 h-4 text-gold" />
                                      )}
-                                   </Button>
+                                   </button>
                                  </div>
                                </motion.div>
 
