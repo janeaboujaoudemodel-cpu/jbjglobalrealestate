@@ -68,26 +68,7 @@ export default function MyTasksCard() {
   const pendingCount = tasks.filter((t) => t.status !== "completed").length;
   const completedCount = tasks.filter((t) => t.status === "completed").length;
 
-  const addTask = useMutation({
-    mutationFn: async (title: string) => {
-      if (!user) throw new Error("Not logged in");
-      const { error } = await supabase.from("admin_tasks").insert({
-        user_id: user.id,
-        title,
-        status: "pending",
-        priority: "medium",
-      });
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["my-tasks"] });
-      queryClient.invalidateQueries({ queryKey: ["user-alert-counts"] });
-      setNewTitle("");
-      setShowAddForm(false);
-      toast.success("Task added");
-    },
-    onError: () => toast.error("Failed to add task"),
-  });
+  // addTask mutation kept for potential quick-add but main flow uses modal now
 
   const toggleComplete = useMutation({
     mutationFn: async ({ id, completed }: { id: string; completed: boolean }) => {
