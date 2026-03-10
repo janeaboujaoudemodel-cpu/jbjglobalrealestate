@@ -89,6 +89,14 @@ const ResaleProperties = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [subscribeEmail, setSubscribeEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+  const [sortBy, setSortBy] = useState<string>("newest");
+  const [emiratesFilter, setEmiratesFilter] = useState<string[]>([]);
+  const [developerFilter, setDeveloperFilter] = useState<string>("all");
+  const [sizeMin, setSizeMin] = useState("");
+  const [sizeMax, setSizeMax] = useState("");
+  const [viewFilter, setViewFilter] = useState<string>("all");
+
+  const { formatSize, unitLabel } = useAreaUnit();
 
   const { data: areas } = useAreas();
 
