@@ -18,6 +18,10 @@ const PROPERTY_TYPES = [
   { value: "penthouse", label: "Penthouse" },
   { value: "duplex", label: "Duplex" },
   { value: "studio", label: "Studio" },
+  { value: "commercial", label: "Commercial" },
+  { value: "plot", label: "Plot" },
+  { value: "retail", label: "Retail" },
+  { value: "offices", label: "Offices" },
 ];
 
 const BEDROOM_OPTIONS = [
@@ -27,7 +31,9 @@ const BEDROOM_OPTIONS = [
   { value: "2", label: "2 BR" },
   { value: "3", label: "3 BR" },
   { value: "4", label: "4 BR" },
-  { value: "5", label: "5+ BR" },
+  { value: "5", label: "5 BR" },
+  { value: "6", label: "6 BR" },
+  { value: "7", label: "7+ BR" },
 ];
 
 const HANDOVER_OPTIONS = [
@@ -124,12 +130,12 @@ const ResaleProperties = () => {
             <ArrowLeft className="w-4 h-4" />
             Back to Properties
           </Link>
-          <Badge className="bg-gold/20 text-gold border-gold/40 mb-4 block w-fit mx-auto">JBJ Investor Network</Badge>
+          <Badge className="bg-gold/20 text-gold border-gold/40 mb-4 block w-fit mx-auto">Exclusive — JBJ Global Real Estate</Badge>
           <h1 className="text-3xl md:text-5xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-            Resale <span className="text-gold">Properties</span>
+            Exclusive Resale <span className="text-gold">Properties</span>
           </h1>
           <p className="text-lg text-black/60 max-w-2xl mx-auto">
-            Premium properties from our verified investors — ready for immediate purchase at competitive prices.
+            Exclusive investor resale portfolio curated by JBJ Global Real Estate — premium properties from verified investors at competitive prices, available for immediate purchase.
           </p>
         </div>
       </section>

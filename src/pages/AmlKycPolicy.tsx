@@ -1,12 +1,16 @@
 import { Link } from "react-router-dom";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Shield } from "lucide-react";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import SEOHead from "@/components/SEOHead";
 
 const GoldDivider = () => (
-  <div className="flex items-center gap-4 my-8">
-    <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#C8A766]/30 to-transparent" />
-    <div className="w-1.5 h-1.5 rounded-full bg-[#C8A766]/40" />
-    <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#C8A766]/30 to-transparent" />
+  <div className="py-6">
+    <div className="flex items-center gap-6">
+      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#C8A766]/30 to-transparent" />
+      <div className="w-1.5 h-1.5 rounded-full bg-[#C8A766]/40" />
+      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#C8A766]/30 to-transparent" />
+    </div>
   </div>
 );
 
@@ -35,36 +39,57 @@ const AmlKycPolicy = () => {
   const scrollTo = (id: string) => { document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" }); };
 
   return (
-    <section className="min-h-screen bg-gradient-to-b from-[#151210] via-[#0F0D0B] to-[#0A0908]">
-      <div className="bg-gradient-to-b from-[#1a1714] to-[#151210] border-b border-[#C8A766]/20">
-        <div className="max-w-[1200px] mx-auto px-6 pt-8 pb-16">
-          <Link to="/" className="inline-flex items-center gap-2 text-[#C8A766]/70 hover:text-[#C8A766] transition-colors mb-10"><ChevronLeft className="w-4 h-4" /><span className="text-sm">Back to Home</span></Link>
-          <div className="max-w-3xl">
-            <p className="text-[#C8A766] text-sm font-medium tracking-[0.2em] uppercase mb-4">Compliance</p>
-            <h1 className="text-white text-3xl md:text-5xl font-bold mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Anti-Money Laundering (AML) &amp; Know Your Customer (KYC) Policy</h1>
-            <p className="text-[#C8A766] text-lg md:text-xl mb-6" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Commitment to Financial Integrity, Transparency, and Regulatory Compliance</p>
-            <p className="text-zinc-400 leading-relaxed max-w-2xl">We are committed to preventing money laundering, terrorist financing, fraud, and illicit financial activity. Our AML and KYC framework aligns with applicable United Arab Emirates regulatory standards and internationally recognised compliance principles.</p>
-            <div className="mt-6 w-24 h-px bg-gradient-to-r from-[#C8A766] to-transparent" />
+    <>
+      <SEOHead
+        title="AML & KYC Policy | JBJ Global Real Estate"
+        description="Anti-Money Laundering and Know Your Customer compliance framework at JBJ Global Real Estate, aligned with UAE regulatory standards."
+        canonicalPath="/aml-kyc-policy"
+      />
+
+      <section className="min-h-screen bg-gradient-to-b from-[#151210] via-[#0F0D0B] to-[#0A0908]">
+        {/* Hero — standardized */}
+        <section className="relative py-28 md:py-36 overflow-hidden bg-gradient-to-b from-[#1a1714] to-[#151210] border-b border-[#C8A766]/20">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#C8A766]/8 via-transparent to-transparent" />
+          <div className="absolute top-20 right-20 w-72 h-72 bg-[#C8A766]/6 rounded-full blur-[100px]" />
+          <div className="max-w-5xl mx-auto px-4 relative z-10">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+              <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full mb-6 border border-[#C8A766]/30 bg-black/30 backdrop-blur-sm">
+                <Shield className="w-4 h-4 text-[#C8A766]" />
+                <span className="text-[#C8A766] font-semibold text-xs uppercase tracking-[0.2em]">Compliance</span>
+              </div>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 tracking-tight" style={{ fontFamily: "Playfair Display, serif" }}>
+                Anti-Money Laundering &amp; KYC Policy
+              </h1>
+              <p className="text-lg md:text-xl text-[#C8A766]/80 font-medium mb-6" style={{ fontFamily: "Playfair Display, serif" }}>
+                Commitment to Financial Integrity, Transparency, and Regulatory Compliance
+              </p>
+              <p className="text-zinc-300 text-base md:text-lg max-w-3xl leading-relaxed">
+                We are committed to preventing money laundering, terrorist financing, fraud, and illicit financial activity. Our AML and KYC framework aligns with applicable UAE regulatory standards.
+              </p>
+            </motion.div>
           </div>
-        </div>
-      </div>
+        </section>
 
-      <div className="max-w-[1200px] mx-auto px-6 py-12">
-        <div className="lg:hidden mb-10 bg-[#1a1714]/80 backdrop-blur border border-[#C8A766]/20 rounded-xl p-6">
-          <p className="text-[#C8A766] text-xs font-semibold tracking-[0.15em] uppercase mb-4">Table of Contents</p>
-          <nav className="space-y-2">{tocItems.map(({ id, label }) => (<button key={id} onClick={() => scrollTo(id)} className="block w-full text-left text-sm text-zinc-500 hover:text-[#C8A766] transition-colors py-1">{label}</button>))}</nav>
-        </div>
-
-        <div className="flex gap-12">
-          <aside className="hidden lg:block w-64 flex-shrink-0">
-            <div className="sticky top-8">
-              <p className="text-[#C8A766] text-xs font-semibold tracking-[0.15em] uppercase mb-5">Contents</p>
+        {/* Body — standardized layout */}
+        <div className="max-w-6xl mx-auto px-4 py-12 md:py-16 flex gap-8">
+          <aside className="hidden lg:block w-64 shrink-0">
+            <div className="sticky top-24 p-5 rounded-2xl border border-[#C8A766]/20 bg-[#1a1714]/80 backdrop-blur-sm">
+              <p className="text-xs text-[#C8A766] font-semibold uppercase tracking-widest mb-4">Contents</p>
               <nav className="space-y-1 border-l border-[#C8A766]/20">
-                {tocItems.map(({ id, label }) => (<button key={id} onClick={() => scrollTo(id)} className={`block w-full text-left pl-4 py-1.5 text-sm transition-all border-l-2 -ml-px ${activeSection === id ? "border-[#C8A766] text-[#C8A766] font-medium" : "border-transparent text-zinc-500 hover:text-zinc-300"}`}>{label}</button>))}</nav>
+                {tocItems.map(({ id, label }) => (
+                  <button key={id} onClick={() => scrollTo(id)} className={`block w-full text-left pl-4 py-1.5 text-sm transition-all border-l-2 -ml-px ${activeSection === id ? "border-[#C8A766] text-[#C8A766] font-medium" : "border-transparent text-zinc-400 hover:text-[#C8A766] hover:bg-[#C8A766]/5"}`}>{label}</button>
+                ))}
+              </nav>
             </div>
           </aside>
 
-          <main className="flex-1 max-w-3xl">
+          <main className="flex-1 min-w-0">
+            <div className="lg:hidden mb-10 p-5 rounded-2xl border border-[#C8A766]/20 bg-[#1a1714]/80">
+              <p className="text-xs text-[#C8A766] font-semibold uppercase tracking-widest mb-4">Table of Contents</p>
+              <nav className="space-y-1">{tocItems.map(({ id, label }) => (<button key={id} onClick={() => scrollTo(id)} className="block w-full text-left text-sm text-zinc-400 hover:text-[#C8A766] px-3 py-1.5 rounded-lg transition-colors">{label}</button>))}</nav>
+            </div>
+
+
             <section id="regulatory-framework" className="scroll-mt-8">
               <h2 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}><span className="text-[#C8A766] mr-3">1.</span>Regulatory Framework</h2>
               <CCard className="space-y-4 text-zinc-700 leading-relaxed">
@@ -140,9 +165,9 @@ const AmlKycPolicy = () => {
               </CCard>
             </section>
 
-            <div className="mt-16 pt-8 border-t border-[#C8A766]/15">
-              <p className="text-zinc-500 text-xs leading-relaxed text-center mb-6">This AML &amp; KYC Policy may be updated periodically to reflect regulatory developments.</p>
-              <p className="text-zinc-500 text-sm text-center">&copy; {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.</p>
+            <div className="mt-16 pt-8 border-t border-[#C8A766]/15 text-center">
+              <p className="text-zinc-500 text-xs leading-relaxed mb-6">This AML &amp; KYC Policy may be updated periodically to reflect regulatory developments.</p>
+              <p className="text-zinc-500 text-sm">&copy; {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.</p>
               <div className="flex justify-center gap-4 mt-3 text-sm">
                 <Link to="/privacy" className="text-[#C8A766] hover:underline">Privacy Policy</Link>
                 <span className="text-zinc-600">|</span>
@@ -153,8 +178,8 @@ const AmlKycPolicy = () => {
             </div>
           </main>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 

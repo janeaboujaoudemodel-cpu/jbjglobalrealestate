@@ -387,122 +387,8 @@ const SECTION_ICONS: Record<SectionKey, any> = {
   "MY ACCOUNT": User,
 };
 
-/* ─── UTILITY BAR SUB-COMPONENT ─── */
-function VerticalNavUtilityBar({ onSearchOpen }: { onSearchOpen: () => void }) {
-  const { language } = useLanguage();
-  const currentLang = getLanguageInfo(language);
-  
-  const [areaUnit, setAreaUnit] = useState<'sqft' | 'sqm'>(() => {
-    if (typeof window !== 'undefined') {
-      return (localStorage.getItem('jj_area_unit') as 'sqft' | 'sqm') || 'sqft';
-    }
-    return 'sqft';
-  });
+/* VerticalNavUtilityBar removed — these controls now live in HorizontalUtilityBar */
 
-  // Listen for area unit changes from other components
-  useEffect(() => {
-    const handler = (e: Event) => {
-      const detail = (e as CustomEvent).detail;
-      if (detail === 'sqft' || detail === 'sqm') setAreaUnit(detail);
-    };
-    window.addEventListener('areaUnitChange', handler);
-    return () => window.removeEventListener('areaUnitChange', handler);
-  }, []);
-
-  const toggleAreaUnit = () => {
-    const next = areaUnit === 'sqft' ? 'sqm' : 'sqft';
-    setAreaUnit(next);
-    localStorage.setItem('jj_area_unit', next);
-    window.dispatchEvent(new CustomEvent('areaUnitChange', { detail: next }));
-  };
-
-  const divider = <div className="w-px h-5 bg-gold/25 flex-shrink-0" />;
-
-  return (
-    <div className="px-2 py-2 border-b border-gold/20 bg-gradient-to-b from-transparent to-[#EDE4D3]/30">
-      <div className="flex items-center justify-between gap-0.5">
-        {/* Search */}
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button
-              onClick={onSearchOpen}
-              className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-gold/15 transition-all group"
-              aria-label="Search ⌘K"
-            >
-              <Search className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-transform" />
-            </button>
-          </TooltipTrigger>
-          <TooltipContent side="top" className="text-xs">Search ⌘K</TooltipContent>
-        </Tooltip>
-
-        {divider}
-
-        {/* Favorites */}
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Link
-              to="/favorites"
-              className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-gold/15 transition-all group"
-              aria-label="Favorites"
-            >
-              <Heart className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-transform" />
-            </Link>
-          </TooltipTrigger>
-          <TooltipContent side="top" className="text-xs">Favorites</TooltipContent>
-        </Tooltip>
-
-        {divider}
-
-        {/* Area Unit Toggle — sqft / sqm */}
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button
-              onClick={toggleAreaUnit}
-              className="h-7 flex items-center rounded-lg hover:bg-gold/15 transition-all px-1 gap-0.5"
-              aria-label="Toggle area unit"
-            >
-              <span className={`text-[9px] font-bold px-1 py-0.5 rounded transition-all ${areaUnit === 'sqft' ? 'bg-gold/20 text-gold' : 'text-black/40'}`}>
-                ft²
-              </span>
-              <span className={`text-[9px] font-bold px-1 py-0.5 rounded transition-all ${areaUnit === 'sqm' ? 'bg-gold/20 text-gold' : 'text-black/40'}`}>
-                m²
-              </span>
-            </button>
-          </TooltipTrigger>
-          <TooltipContent side="top" className="text-xs">
-            {areaUnit === 'sqft' ? 'Square Feet (active)' : 'Square Meters (active)'}
-          </TooltipContent>
-        </Tooltip>
-
-        {divider}
-
-        {/* Language — show active flag */}
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <div>
-              <LanguageSwitcher variant="icon-only" />
-            </div>
-          </TooltipTrigger>
-          <TooltipContent side="top" className="text-xs">
-            Language: {currentLang.flag} {currentLang.nativeName}
-          </TooltipContent>
-        </Tooltip>
-
-        {divider}
-
-        {/* Currency */}
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <div>
-              <CurrencySwitcher variant="icon-only" />
-            </div>
-          </TooltipTrigger>
-          <TooltipContent side="top" className="text-xs">Currency</TooltipContent>
-        </Tooltip>
-      </div>
-    </div>
-  );
-}
 
 
 export default function GlobalVerticalNav() {
@@ -962,21 +848,19 @@ export default function GlobalVerticalNav() {
 
   const renderNavContent = () => (
     <div className="flex flex-col h-full">
-      {/* Logo — larger since minimizer moved to horizontal bar */}
+      {/* Logo — enlarged monogram and wordmark */}
       <div className="p-4 border-b border-gold/20 flex-shrink-0">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
           <Link to="/" onClick={() => setActiveMegaMenu(null)} className="flex-shrink-0">
-            <img src={jbjMonogramLightBg} alt="JBJ" className="w-11 h-11 object-contain" />
+            <img src={jbjMonogramLightBg} alt="JBJ" className="w-14 h-14 object-contain" />
           </Link>
           <Link to="/" onClick={() => setActiveMegaMenu(null)} className="flex flex-col flex-1 min-w-0 hover:opacity-80 transition-opacity" style={{ fontFamily: "Poppins, sans-serif" }}>
-            <span className="text-[12px] font-bold text-black tracking-wide leading-tight">JBJ GLOBAL</span>
-            <span className="text-[11px] font-bold text-gold tracking-wide leading-tight">REAL ESTATE</span>
+            <span className="text-[13px] font-bold text-black tracking-wide leading-tight">JBJ GLOBAL</span>
+            <span className="text-[12px] font-bold text-gold tracking-wide leading-tight">REAL ESTATE</span>
           </Link>
         </div>
       </div>
 
-      {/* Utility Bar — moved under monogram */}
-      <VerticalNavUtilityBar onSearchOpen={() => setSearchOpen(true)} />
 
       {/* Scrollable area: shortcuts + hubs + sections */}
       <nav
@@ -1097,10 +981,10 @@ export default function GlobalVerticalNav() {
 
       {/* Bottom pinned section — SUPPORT hub */}
       <div className="mt-auto flex-shrink-0">
-        <div className="px-3 py-4 border-t border-gold/20 space-y-2.5 bg-gradient-to-b from-[#EDE4D3]/50 to-[#EDE4D3]">
+        <div className="px-3 py-4 border-t border-gold/20 space-y-2 bg-gradient-to-b from-[#EDE4D3]/50 to-[#EDE4D3]">
           <a
             href="mailto:info@jbjglobal.com"
-            className="flex items-center gap-2.5 text-xs font-bold text-gold hover:text-gold/80 transition-colors px-2 py-2.5 rounded-lg border border-gold/20 hover:border-gold/40 hover:bg-gold/5"
+            className="flex items-center gap-2.5 text-xs font-bold text-gold hover:text-gold/80 transition-colors px-3 py-3 rounded-lg border border-gold/20 hover:border-gold/40 hover:bg-gold/5"
           >
             <Headphones className="w-4 h-4" />
             Contact Support
@@ -1108,7 +992,7 @@ export default function GlobalVerticalNav() {
           <hr className="border-gold/15" />
           <Link
             to="/my-tickets"
-            className="flex items-center gap-2.5 text-xs font-bold text-gold hover:text-gold/80 transition-colors px-2 py-2.5 rounded-lg border border-gold/20 hover:border-gold/40 hover:bg-gold/5"
+            className="flex items-center gap-2.5 text-xs font-bold text-gold hover:text-gold/80 transition-colors px-3 py-3 rounded-lg border border-gold/20 hover:border-gold/40 hover:bg-gold/5"
           >
             <Ticket className="w-4 h-4" />
             Create Ticket Support

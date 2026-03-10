@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   Search, Heart, Settings, User, LayoutDashboard,
-  Ruler, FileSearch, Menu,
+  Ruler, SlidersHorizontal, Menu,
 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -71,15 +71,15 @@ export default function HorizontalUtilityBar() {
       <div
         className="fixed top-0 right-0 h-[40px] z-[9996] hidden lg:flex items-center gap-1.5 px-3 border-b border-gold/20 bg-gradient-to-r from-[#F5F0E6] to-[#EDE4D3] [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px]"
       >
-        {/* Sidebar Toggle */}
+        {/* Sidebar Toggle — prominent minimizer */}
         <Tooltip>
           <TooltipTrigger asChild>
             <button
               onClick={toggleSidebar}
-              className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gold/15 transition-all group"
+              className="w-9 h-9 flex items-center justify-center rounded-lg border border-gold/40 hover:bg-gold/15 hover:border-gold/60 transition-all group bg-gold/5"
               aria-label="Toggle sidebar"
             >
-              <Menu className="w-4 h-4 text-gold group-hover:scale-110 transition-transform" />
+              <Menu className="w-5 h-5 text-gold group-hover:scale-110 transition-transform" />
             </button>
           </TooltipTrigger>
           <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Minimize / expand sidebar</TooltipContent>
@@ -172,20 +172,19 @@ export default function HorizontalUtilityBar() {
         {/* Gold separator */}
         <div className="w-px h-6 bg-gold/40 mx-1 flex-shrink-0" />
 
-        {/* Advanced Search */}
+        {/* Advanced Filter */}
         <Tooltip>
           <TooltipTrigger asChild>
             <Link
-              to="/properties"
-              className="h-7 flex items-center gap-1.5 rounded-lg px-3 text-xs font-bold text-gold hover:bg-gold/15 transition-all border border-gold/25"
-              aria-label="Advanced Filter Search"
+              to="/properties?advanced=true"
+              className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gold/15 transition-all group border border-gold/25"
+              aria-label="Advanced Filter"
             >
-              <FileSearch className="w-3.5 h-3.5" />
-              <span>Advanced Filter Search</span>
+              <SlidersHorizontal className="w-4 h-4 text-gold group-hover:scale-110 transition-transform" />
             </Link>
           </TooltipTrigger>
-          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100] max-w-[220px] text-center">
-            Open full-screen advanced search with filters for property type, price, area, and more
+          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100] max-w-[240px] text-center">
+            Advanced Filter — Search and filter all properties with full criteria
           </TooltipContent>
         </Tooltip>
 

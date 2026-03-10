@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
-import { ChevronLeft } from "lucide-react";
-import { Shield, Lock, FileText, Scale, Eye, AlertTriangle, Copyright, Fingerprint } from "lucide-react";
+import { ChevronLeft, Copyright as CopyrightIcon } from "lucide-react";
+import { Shield, Lock, FileText, Scale, Eye, AlertTriangle, Fingerprint } from "lucide-react";
+import SEOHead from "@/components/SEOHead";
 
 const GoldDivider = () => (
   <div className="flex items-center gap-4 my-8">
@@ -18,6 +19,12 @@ const IntellectualProperty = () => {
   const currentYear = new Date().getFullYear();
 
   return (
+    <>
+      <SEOHead
+        title="Intellectual Property | JBJ Global Real Estate"
+        description="Legal protection, copyright notice, and intellectual property rights for JBJ Global Real Estate platform and digital assets."
+        canonicalPath="/intellectual-property"
+      />
     <section className="min-h-screen bg-gradient-to-b from-[#151210] via-[#0F0D0B] to-[#0A0908]">
       {/* Hero */}
       <div className="bg-gradient-to-b from-[#1a1714] to-[#151210] border-b border-[#C8A766]/20">
@@ -43,7 +50,7 @@ const IntellectualProperty = () => {
           {/* Copyright Statement */}
           <CCard className="!p-8">
             <div className="flex items-start gap-4">
-              <Copyright className="w-8 h-8 text-[#C8A766] flex-shrink-0 mt-1" />
+              <CopyrightIcon className="w-8 h-8 text-[#C8A766] flex-shrink-0 mt-1" />
               <div>
                 <h2 className="text-2xl font-bold text-black mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>
                   Official Copyright Statement
@@ -230,6 +237,7 @@ const IntellectualProperty = () => {
         </div>
       </div>
     </section>
+    </>
   );
 };
 
