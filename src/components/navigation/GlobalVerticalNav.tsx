@@ -595,30 +595,30 @@ export default function GlobalVerticalNav() {
     if (item.href === '/join') {
       return shouldHighlight
         ? "bg-teal-500 text-white border border-teal-400 font-bold"
-        : "bg-teal-500/8 text-teal-700 font-semibold hover:bg-teal-500/15 border border-teal-400/20";
+        : "bg-teal-500/6 text-teal-500 font-semibold hover:bg-teal-500/12 border border-teal-200/15";
     }
     if (item.href === '/quiz') {
       return shouldHighlight
-        ? "bg-purple-500 text-white border border-purple-400 font-bold"
-        : "bg-purple-500/8 text-purple-600 font-semibold hover:bg-purple-500/15 border border-purple-400/20";
+        ? "bg-violet-500 text-white border border-violet-400 font-bold"
+        : "bg-violet-500/6 text-violet-400 font-semibold hover:bg-violet-500/12 border border-violet-200/15";
     }
-    // AI Tools Hub — Orange (softened)
+    // AI Tools Hub — Soft Orange
     if (item.href === '/ai-hub') {
       return shouldHighlight
         ? "bg-orange-500 text-white border border-orange-400 font-bold"
-        : "bg-orange-500/8 text-orange-600 font-semibold hover:bg-orange-500/15 border border-orange-300/20";
+        : "bg-orange-500/6 text-orange-500 font-semibold hover:bg-orange-500/12 border border-orange-200/15";
     }
-    // List Your Property — Blue (softened)
+    // List Your Property — Light Sky Blue
     if (item.href === '/listing-portal' && item.highlight) {
       return shouldHighlight
-        ? "bg-blue-500 text-white border border-blue-400 font-bold"
-        : "bg-blue-500/8 text-blue-600 font-semibold hover:bg-blue-500/15 border border-blue-300/20";
+        ? "bg-sky-500 text-white border border-sky-400 font-bold"
+        : "bg-sky-500/6 text-sky-500 font-semibold hover:bg-sky-500/12 border border-sky-200/15";
     }
     // Resale Properties — Emerald (softened)
     if (item.href === '/resale-properties') {
       return shouldHighlight
         ? "bg-emerald-500 text-white border border-emerald-400 font-bold"
-        : "bg-emerald-500/8 text-emerald-600 font-semibold hover:bg-emerald-500/15 border border-emerald-300/20";
+        : "bg-emerald-500/6 text-emerald-500 font-semibold hover:bg-emerald-500/12 border border-emerald-200/15";
     }
     if (sectionKey === 'MY ACCOUNT') {
       return shouldHighlight
@@ -639,10 +639,10 @@ export default function GlobalVerticalNav() {
     const isThisMenuOpen = item.megaMenu ? activeMegaMenu === item.megaMenu : false;
     const routeActive = isRouteActive(item.href);
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
-    if (item.href === '/join') return shouldHighlight ? 'text-white' : 'text-teal-600';
-    if (item.href === '/quiz') return shouldHighlight ? 'text-white' : 'text-purple-500';
+    if (item.href === '/join') return shouldHighlight ? 'text-white' : 'text-teal-500';
+    if (item.href === '/quiz') return shouldHighlight ? 'text-white' : 'text-violet-400';
     if (item.href === '/ai-hub') return shouldHighlight ? 'text-white' : 'text-orange-500';
-    if (item.href === '/listing-portal' && item.highlight) return shouldHighlight ? 'text-white' : 'text-blue-500';
+    if (item.href === '/listing-portal' && item.highlight) return shouldHighlight ? 'text-white' : 'text-sky-500';
     if (item.href === '/resale-properties') return shouldHighlight ? 'text-white' : 'text-emerald-500';
     if (sectionKey === 'MY ACCOUNT') return 'text-gold';
     return shouldHighlight ? "text-gold" : "text-black/60";
