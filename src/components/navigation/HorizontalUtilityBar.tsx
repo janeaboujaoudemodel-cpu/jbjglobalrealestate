@@ -263,10 +263,11 @@ export default function HorizontalUtilityBar() {
           <TooltipTrigger asChild>
             <Link
               to="/profile"
-              className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gold/15 transition-all group"
+              className="h-8 flex items-center gap-1.5 rounded-lg hover:bg-gold/15 transition-all px-2 group border border-gold/25"
               aria-label="My Account"
             >
               <User className="w-4 h-4 text-gold group-hover:scale-110 transition-transform" />
+              <span className="text-xs font-semibold text-black/70">Account</span>
             </Link>
           </TooltipTrigger>
           <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">My Account</TooltipContent>
