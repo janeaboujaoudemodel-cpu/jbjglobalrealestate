@@ -1009,13 +1009,15 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   {/* Gold Divider */}
                   <div className="h-px bg-gold/30 my-3" />
 
-                  {/* Contact Support & Create Ticket */}
-                  <a href="mailto:info@jbjglobal.com" className="flex items-center gap-3 px-3 py-2.5 text-sm font-bold text-gold hover:text-gold-dark transition-colors">
-                    <Headphones className="w-4 h-4" />Contact Support
-                  </a>
-                  <Link to="/support/ticket" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 text-sm font-bold text-gold hover:text-gold-dark transition-colors">
-                    <ClipboardCheck className="w-4 h-4" />Create Support Ticket
-                  </Link>
+                  {/* Contact Support & Create Ticket — aligned side by side */}
+                  <div className="flex items-center gap-2 px-3">
+                    <a href="mailto:info@jbjglobal.com" className="flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-red-600 rounded-lg border border-red-500/30 hover:bg-red-50/50 transition-colors">
+                      <Headphones className="w-3.5 h-3.5 text-red-500" />Contact Support
+                    </a>
+                    <Link to="/my-tickets" onClick={() => setMobileMenuOpen(false)} className="flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-red-600 rounded-lg border border-red-500/30 hover:bg-red-50/50 transition-colors">
+                      <ClipboardCheck className="w-3.5 h-3.5 text-red-500" />Create Ticket
+                    </Link>
+                  </div>
 
                   {/* Gold Divider */}
                   <div className="h-px bg-gold/30 my-3" />
