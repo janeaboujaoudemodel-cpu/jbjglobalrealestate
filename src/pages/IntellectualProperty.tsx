@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
-import { ChevronLeft } from "lucide-react";
-import { Shield, Lock, FileText, Scale, Eye, AlertTriangle, Copyright, Fingerprint } from "lucide-react";
+import { ChevronLeft, Copyright as CopyrightIcon } from "lucide-react";
+import { Shield, Lock, FileText, Scale, Eye, AlertTriangle, Fingerprint } from "lucide-react";
+import SEOHead from "@/components/SEOHead";
 
 const GoldDivider = () => (
   <div className="flex items-center gap-4 my-8">
