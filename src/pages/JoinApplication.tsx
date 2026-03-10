@@ -582,7 +582,7 @@ export default function JoinApplication() {
                   <Select
                     value={formData.country}
                     onValueChange={(value) => setFormData({ ...formData, country: value })}
-                    disabled={!user || loading}
+                    disabled={loading}
                   >
                     <SelectTrigger className="bg-background">
                       <SelectValue placeholder="Select country" />
