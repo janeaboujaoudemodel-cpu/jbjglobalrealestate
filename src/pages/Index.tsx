@@ -477,7 +477,7 @@ const Index = () => {
         <WhyChooseUs />
       </Suspense>
 
-      <SectionDivider />
+      <SectionDivider fullWidth />
 
       {/* AREAS WE COVER - Master Blueprint: Section 6 (12 area links) */}
       <Suspense fallback={<SectionLoader />}>
