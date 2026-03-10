@@ -188,7 +188,7 @@ export default function LandlordRentalPortal() {
       <section className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
         <div className="container mx-auto px-4">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="bg-zinc-900 border border-zinc-800 mb-8">
+            <TabsList className="bg-white/60 border border-gold/30 mb-8">
               <TabsTrigger value="overview" className="data-[state=active]:bg-gold data-[state=active]:text-black">
                 Overview
               </TabsTrigger>
