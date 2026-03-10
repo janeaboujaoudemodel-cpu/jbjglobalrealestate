@@ -395,7 +395,7 @@ export default function JoinApplication() {
   return (
     <div className="min-h-screen bg-black">
       {/* Full-width champagne section */}
-      <section className="jj-section-champagne py-16 px-4">
+      <section className="jj-section-champagne py-16 px-4 pt-20 lg:pt-16">
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-black mb-2">
@@ -430,10 +430,13 @@ export default function JoinApplication() {
           </Card>
 
           {!user && (
-            <Card className="jj-box-active mb-6">
+            <Card className="border-2 border-gold bg-gold/10 backdrop-blur-sm rounded-2xl shadow-md mb-6">
               <CardContent className="pt-6">
-                <p className="text-center text-black/70 mb-4">
-                  You need to sign in or create an account to submit your application.
+                <p className="text-center text-black font-semibold mb-2 text-lg">
+                  📝 Fill the form below — then sign in to submit!
+                </p>
+                <p className="text-center text-black/70 mb-4 text-sm">
+                  You can complete the entire form first. Sign in or create an account when you're ready to submit.
                 </p>
                 <div className="flex justify-center">
                   <Button variant="primary" asChild>
@@ -474,7 +477,7 @@ export default function JoinApplication() {
                     value={formData.firstName}
                     onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                     required
-                    disabled={!user || loading}
+                    disabled={loading}
                     className="bg-background"
                   />
                 </div>
@@ -485,7 +488,7 @@ export default function JoinApplication() {
                     value={formData.lastName}
                     onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                     required
-                    disabled={!user || loading}
+                    disabled={loading}
                     className="bg-background"
                   />
                 </div>
@@ -509,8 +512,8 @@ export default function JoinApplication() {
                 <Label htmlFor="phone">Phone Number</Label>
                 <PhoneInput
                   value={formData.phone}
-                  onChange={(value) => setFormData({ ...formData, phone: value || "" })}
-                  disabled={!user || loading}
+                   onChange={(value) => setFormData({ ...formData, phone: value || "" })}
+                  disabled={loading}
                   placeholder="+971 56 591 1000"
                 />
               </div>
@@ -521,7 +524,7 @@ export default function JoinApplication() {
                 <Select
                   value={formData.nationality}
                   onValueChange={(value) => setFormData({ ...formData, nationality: value })}
-                  disabled={!user || loading}
+                  disabled={loading}
                 >
                   <SelectTrigger className="bg-background">
                     <SelectValue placeholder="Select nationality" />
@@ -540,7 +543,7 @@ export default function JoinApplication() {
                 <Select
                   value={formData.preferredLanguage}
                   onValueChange={(value) => setFormData({ ...formData, preferredLanguage: value })}
-                  disabled={!user || loading}
+                  disabled={loading}
                 >
                   <SelectTrigger className="bg-background">
                     <SelectValue placeholder="Select language" />
@@ -559,7 +562,7 @@ export default function JoinApplication() {
                 <Select
                   value={formData.positionApplied}
                   onValueChange={(value) => setFormData({ ...formData, positionApplied: value })}
-                  disabled={!user || loading}
+                  disabled={loading}
                 >
                   <SelectTrigger className="bg-background">
                     <SelectValue placeholder="Select the position you're applying for" />
@@ -579,7 +582,7 @@ export default function JoinApplication() {
                   <Select
                     value={formData.country}
                     onValueChange={(value) => setFormData({ ...formData, country: value })}
-                    disabled={!user || loading}
+                    disabled={loading}
                   >
                     <SelectTrigger className="bg-background">
                       <SelectValue placeholder="Select country" />
@@ -598,7 +601,7 @@ export default function JoinApplication() {
                     value={formData.city}
                     onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                     required
-                    disabled={!user || loading}
+                    disabled={loading}
                     className="bg-background"
                   />
                 </div>
@@ -614,24 +617,24 @@ export default function JoinApplication() {
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label>How many deals have you closed?</Label>
-                      <Input value={formData.dealsClosed} onChange={(e) => setFormData({ ...formData, dealsClosed: e.target.value })} placeholder="e.g. 25" disabled={!user || loading} className="bg-background" />
+                      <Input value={formData.dealsClosed} onChange={(e) => setFormData({ ...formData, dealsClosed: e.target.value })} placeholder="e.g. 25" disabled={loading} className="bg-background" />
                     </div>
                     <div className="space-y-2">
                       <Label>Total value of deals closed (AED)</Label>
-                      <Input value={formData.totalDealValue} onChange={(e) => setFormData({ ...formData, totalDealValue: e.target.value })} placeholder="e.g. 50,000,000" disabled={!user || loading} className="bg-background" />
+                      <Input value={formData.totalDealValue} onChange={(e) => setFormData({ ...formData, totalDealValue: e.target.value })} placeholder="e.g. 50,000,000" disabled={loading} className="bg-background" />
                     </div>
                   </div>
                   <div className="space-y-2">
                     <Label>Which projects/areas have you sold in?</Label>
-                    <Input value={formData.projectsSold} onChange={(e) => setFormData({ ...formData, projectsSold: e.target.value })} placeholder="e.g. Dubai Marina, Downtown, Palm Jumeirah" disabled={!user || loading} className="bg-background" />
+                    <Input value={formData.projectsSold} onChange={(e) => setFormData({ ...formData, projectsSold: e.target.value })} placeholder="e.g. Dubai Marina, Downtown, Palm Jumeirah" disabled={loading} className="bg-background" />
                   </div>
                   <div className="space-y-2">
                     <Label>Which developers have you worked with?</Label>
-                    <Input value={formData.developerWorkedWith} onChange={(e) => setFormData({ ...formData, developerWorkedWith: e.target.value })} placeholder="e.g. DAMAC, Emaar, Meraas" disabled={!user || loading} className="bg-background" />
+                    <Input value={formData.developerWorkedWith} onChange={(e) => setFormData({ ...formData, developerWorkedWith: e.target.value })} placeholder="e.g. DAMAC, Emaar, Meraas" disabled={loading} className="bg-background" />
                   </div>
                   <div className="space-y-2">
                     <Label>Why are you leaving your current position?</Label>
-                    <Input value={formData.reasonForLeaving} onChange={(e) => setFormData({ ...formData, reasonForLeaving: e.target.value })} placeholder="Reason for seeking new opportunity" disabled={!user || loading} className="bg-background" />
+                    <Input value={formData.reasonForLeaving} onChange={(e) => setFormData({ ...formData, reasonForLeaving: e.target.value })} placeholder="Reason for seeking new opportunity" disabled={loading} className="bg-background" />
                   </div>
 
                   <h3 className="text-lg font-semibold text-black mt-4 flex items-center gap-2">
@@ -642,30 +645,30 @@ export default function JoinApplication() {
                   <div className="space-y-3 p-3 rounded-lg border border-gold/20 bg-white">
                     <p className="text-sm font-semibold text-black">Reference 1</p>
                     <div className="grid grid-cols-2 gap-3">
-                      <Input value={formData.reference1Name} onChange={(e) => setFormData({ ...formData, reference1Name: e.target.value })} placeholder="Full name (e.g. Director / HR Manager)" disabled={!user || loading} className="bg-background" />
-                      <Input value={formData.reference1Title} onChange={(e) => setFormData({ ...formData, reference1Title: e.target.value })} placeholder="Title & Company" disabled={!user || loading} className="bg-background" />
-                      <Input type="email" value={formData.reference1Email} onChange={(e) => setFormData({ ...formData, reference1Email: e.target.value })} placeholder="Company email" disabled={!user || loading} className="bg-background" />
-                      <Input value={formData.reference1Phone} onChange={(e) => setFormData({ ...formData, reference1Phone: e.target.value })} placeholder="Phone number" disabled={!user || loading} className="bg-background" />
+                      <Input value={formData.reference1Name} onChange={(e) => setFormData({ ...formData, reference1Name: e.target.value })} placeholder="Full name (e.g. Director / HR Manager)" disabled={loading} className="bg-background" />
+                      <Input value={formData.reference1Title} onChange={(e) => setFormData({ ...formData, reference1Title: e.target.value })} placeholder="Title & Company" disabled={loading} className="bg-background" />
+                      <Input type="email" value={formData.reference1Email} onChange={(e) => setFormData({ ...formData, reference1Email: e.target.value })} placeholder="Company email" disabled={loading} className="bg-background" />
+                      <Input value={formData.reference1Phone} onChange={(e) => setFormData({ ...formData, reference1Phone: e.target.value })} placeholder="Phone number" disabled={loading} className="bg-background" />
                     </div>
                   </div>
                   <div className="space-y-3 p-3 rounded-lg border border-gold/20 bg-white">
                     <p className="text-sm font-semibold text-black">Reference 2</p>
                     <div className="grid grid-cols-2 gap-3">
-                      <Input value={formData.reference2Name} onChange={(e) => setFormData({ ...formData, reference2Name: e.target.value })} placeholder="Full name (e.g. Director / HR Manager)" disabled={!user || loading} className="bg-background" />
-                      <Input value={formData.reference2Title} onChange={(e) => setFormData({ ...formData, reference2Title: e.target.value })} placeholder="Title & Company" disabled={!user || loading} className="bg-background" />
-                      <Input type="email" value={formData.reference2Email} onChange={(e) => setFormData({ ...formData, reference2Email: e.target.value })} placeholder="Company email" disabled={!user || loading} className="bg-background" />
-                      <Input value={formData.reference2Phone} onChange={(e) => setFormData({ ...formData, reference2Phone: e.target.value })} placeholder="Phone number" disabled={!user || loading} className="bg-background" />
+                      <Input value={formData.reference2Name} onChange={(e) => setFormData({ ...formData, reference2Name: e.target.value })} placeholder="Full name (e.g. Director / HR Manager)" disabled={loading} className="bg-background" />
+                      <Input value={formData.reference2Title} onChange={(e) => setFormData({ ...formData, reference2Title: e.target.value })} placeholder="Title & Company" disabled={loading} className="bg-background" />
+                      <Input type="email" value={formData.reference2Email} onChange={(e) => setFormData({ ...formData, reference2Email: e.target.value })} placeholder="Company email" disabled={loading} className="bg-background" />
+                      <Input value={formData.reference2Phone} onChange={(e) => setFormData({ ...formData, reference2Phone: e.target.value })} placeholder="Phone number" disabled={loading} className="bg-background" />
                     </div>
                   </div>
                 </div>
               )}
               <div className="space-y-2">
                 <Label>CV / Resume</Label>
-                <div className="border-2 border-dashed border-border rounded-lg p-6 text-center">
+                <div className="border-2 border-dashed border-gold/40 rounded-xl p-6 text-center hover:border-gold/60 transition-colors cursor-pointer">
                   {cvFile ? (
-                    <div className="flex items-center justify-center gap-2 text-green-500">
+                    <div className="flex items-center justify-center gap-2 text-green-600">
                       <FileText className="h-5 w-5" />
-                      <span>{cvFile.name}</span>
+                      <span className="font-medium">{cvFile.name}</span>
                       <Button
                         type="button"
                         variant="ghost"
@@ -677,10 +680,10 @@ export default function JoinApplication() {
                       </Button>
                     </div>
                   ) : (
-                    <label className="cursor-pointer">
-                      <div className="flex flex-col items-center gap-2">
-                        <Upload className="h-8 w-8 text-muted-foreground" />
-                        <span className="text-sm text-muted-foreground">
+                    <label className="cursor-pointer block w-full">
+                      <div className="flex flex-col items-center gap-2 py-2">
+                        <Upload className="h-8 w-8 text-gold/60" />
+                        <span className="text-sm text-black/70">
                           Click to upload CV (PDF or Word, max 10MB)
                         </span>
                       </div>
@@ -689,7 +692,7 @@ export default function JoinApplication() {
                         accept=".pdf,.doc,.docx"
                         onChange={handleFileChange}
                         className="hidden"
-                        disabled={!user || loading}
+                        disabled={loading}
                       />
                     </label>
                   )}
@@ -705,7 +708,7 @@ export default function JoinApplication() {
                     onCheckedChange={(checked) => 
                       setFormData({ ...formData, consentAccurate: checked as boolean })
                     }
-                    disabled={!user || loading}
+                    disabled={loading}
                   />
                   <Label htmlFor="consentAccurate" className="text-sm leading-relaxed cursor-pointer">
                     I confirm that the information provided is accurate and complete to the best of my knowledge.
@@ -718,7 +721,7 @@ export default function JoinApplication() {
                     onCheckedChange={(checked) => 
                       setFormData({ ...formData, consentTerms: checked as boolean })
                     }
-                    disabled={!user || loading}
+                    disabled={loading}
                   />
                   <Label htmlFor="consentTerms" className="text-sm leading-relaxed cursor-pointer">
                     I agree to the{" "}
@@ -739,20 +742,30 @@ export default function JoinApplication() {
                 </div>
               )}
 
-              <Button
-                type="submit"
-                className="w-full bg-gold hover:bg-gold/90 text-black"
-                disabled={!user || loading}
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Submitting...
-                  </>
-                ) : (
-                  "Submit Application"
-                )}
-              </Button>
+              {!user ? (
+                <Button
+                  type="button"
+                  className="w-full bg-gold hover:bg-gold/90 text-black font-bold h-12 text-base"
+                  onClick={() => navigate("/auth?redirect=/join")}
+                >
+                  Sign In to Submit Application
+                </Button>
+              ) : (
+                <Button
+                  type="submit"
+                  className="w-full bg-gold hover:bg-gold/90 text-black font-bold h-12 text-base"
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Submitting...
+                    </>
+                  ) : (
+                    "Submit Application"
+                  )}
+                </Button>
+              )}
             </form>
           </CardContent>
         </Card>
