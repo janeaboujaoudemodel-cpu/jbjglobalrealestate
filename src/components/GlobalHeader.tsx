@@ -975,9 +975,9 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   {user ? (
                     <button
                       onClick={() => { signOut(); setMobileMenuOpen(false); }}
-                      className="flex items-center gap-3 px-3 py-2.5 text-sm text-black/80 hover:text-red-600 hover:bg-red-50 transition-colors w-full text-left rounded-lg"
+                      className="flex items-center gap-3 px-3 py-2.5 text-sm text-black/80 hover:text-red-600 hover:bg-red-50 transition-colors w-full text-left rounded-lg border border-red-500/30 hover:border-red-500/50"
                     >
-                      <LogOut className="w-4 h-4 text-gold" />{t('nav.signOut')}
+                      <LogOut className="w-4 h-4 text-red-500" />{t('nav.signOut')}
                     </button>
                   ) : (
                     <Link to="/auth" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 text-sm text-gold font-medium hover:bg-gold/10 rounded-lg transition-colors">
