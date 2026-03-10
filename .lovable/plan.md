@@ -1,41 +1,64 @@
 
 
-## Plan: Fix All Email Issues Across All Templates
+## Plan: Nav Color Softening, Resale Filters Parity, and Mobile Mirror
 
-### Problems Identified
+### 1. AI Tools Hub — Change from Red to Soft Orange
 
-1. **Recommended For You icons disappeared** — Inline SVGs are stripped by Gmail and most email clients. Must revert to hosted PNG images (`ai-tools.png`, `guides.png`, `properties.png` already exist in `public/email-icons/`).
+The `getItemStyle` and `getIconStyle` in `GlobalVerticalNav.tsx` already have orange for `/ai-hub` (lines 606-609). If it's currently rendering red, it's a bug. Verify and ensure the inactive state uses `bg-orange-500/8 text-orange-600 border-orange-300/20` (soft premium orange, not red).
 
-2. **Social media footer icons not rendering** — Same issue: `socialLinksFooter()` loads external `.svg` files via `<img>` tags, but Gmail blocks SVG images entirely. Must switch to hosted `.png` files. Currently missing `social-facebook.png` — need to confirm or create it.
+### 2. Soften All Hub Highlight Border Visibility
 
-3. **Email split into multiple visual cards** — Several sub-sections (`ticketSupportEmbed`, `readyToGetStartedHtml`, `recommendedActionsHtml`) each have their own `border`, `border-radius`, and `background` styles creating distinct visual boxes. These need to be softened so they sit seamlessly inside the single continuous card.
+Make borders more subtle across all highlighted hubs. Change border opacities from `/20` to `/15` for a more refined look:
 
-### Changes (all in `supabase/functions/_shared/email-html.ts`)
+| Hub | Current Border | New Border |
+|-----|---------------|------------|
+| AI Tools Hub | `border-orange-300/20` | `border-orange-200/15` |
+| AI Home Finder | `border-purple-400/20` | `border-purple-200/15` |
+| List Your Property | `border-blue-300/20` | `border-blue-200/15` |
+| Careers | `border-teal-400/20` | `border-teal-200/15` |
+| Resale Properties | `border-emerald-300/20` | `border-emerald-200/15` |
 
-#### A. Recommended For You — Revert to PNG hosted images
-- Change `recommendedCard()` back to using `iconImg()` with PNG paths
-- Remove the `RECOMMENDED_ICONS` inline SVG object
-- Ensure circular frame clips the PNG with `overflow:hidden` on the `<td>` to prevent square backgrounds
-- Signature: `recommendedCard(title, href, iconPath, alt)` — restore the original parameters
+Also soften text colors: use `/500` instead of `/600-700` for a lighter, more premium feel.
 
-#### B. Social Footer — Switch to PNG with white pearl background
-- Replace `socialLinksFooter()` to use the inline `SVG` object icons (instagram, facebook, linkedin, tiktok, youtube) that are already defined at the top of the file — these render as raw HTML inside `<td>` elements, not as `<img>` tags, so they should survive email client processing
-- Actually, since Gmail strips ALL SVG (both inline and `<img>`), switch to using the `.png` files: `social-instagram.png`, `social-linkedin.png`, `social-tiktok.png`, `social-youtube.png`
-- Create `social-facebook.png` if missing
-- Style each icon circle: white/pearl (#FDFBF7) background, gold border, black icon inside
+### 3. List Your Property — Lighter Blue
 
-#### C. Single Card Layout — Remove visual fragmentation
-- `ticketSupportEmbed()`: Remove the heavy gradient background and red border; make it blend into the card
-- `readyToGetStartedHtml()`: Remove the outer border and separate background so it flows within the card
-- `inquiryBox()`: Soften its standalone bordered look
-- Keep all content inside the single `emailShell` wrapper card with no sub-borders that create separation
+Change from `text-blue-600` / `bg-blue-500/8` to `text-sky-500` / `bg-sky-500/8` — sky blue is a much lighter, more premium tone than the current navy-ish blue.
 
-#### D. Deploy + Send Test Email
-- Deploy the updated edge function
-- Immediately send a test welcome email to `janeaboujaoudenails@gmail.com`
-- Take a screenshot as proof
+### 4. AI Home Finder — Lighter Purple
 
-### Files Modified
-- `supabase/functions/_shared/email-html.ts` — all icon and layout fixes
-- `public/email-icons/social-facebook.png` — create if missing (or use existing assets)
+Change from `text-purple-600` / `bg-purple-500/8` to `text-violet-400` / `bg-violet-500/6` — softer violet tone.
+
+### 5. Mirror All Changes on Mobile Header
+
+**File: `GlobalHeader.tsx` (lines 735-746)**
+
+Update the mobile "My Shortcuts" section to match the exact same softened colors from the desktop nav. Currently hardcoded inline styles — update them to match.
+
+Also update mobile support section (lines 1013-1018) to use the same red styling with softened borders.
+
+### 6. Resale Properties — Add Missing Filters (Match Project Page)
+
+**File: `ResaleProperties.tsx`**
+
+The project page `FilterShortcutBar` has these filters that the resale page is missing:
+- **Developer** filter (text search/select)
+- **Emirates** filter (Dubai, Abu Dhabi, etc.)
+- **Size range** (sqft min/max)
+- **Sort** (Newest, Price Asc/Desc, Alphabetical)
+- **Views** filter (Sea view, City view, etc.)
+
+Add these to `ResaleProperties.tsx`:
+- Add `developerFilter`, `sortBy`, `sizeMin`, `sizeMax` state variables
+- Add developer Select dropdown (query `resale_listings` for distinct `developer_name` values)
+- Add Sort dropdown with options: Newest, Price Low→High, Price High→Low
+- Add Size Range inputs (min/max sqft)
+- Apply these filters in the query and client-side filtering
+
+### Files to Edit
+
+| File | Changes |
+|------|---------|
+| `src/components/navigation/GlobalVerticalNav.tsx` | Soften all hub colors/borders, lighter blue/purple |
+| `src/components/GlobalHeader.tsx` | Mirror softened colors on mobile shortcuts + support |
+| `src/pages/ResaleProperties.tsx` | Add developer, sort, size filters to match project page |
 
