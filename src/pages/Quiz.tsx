@@ -713,14 +713,7 @@ const Quiz = () => {
           </div>
         </div>
 
-        {/* Payment Modal */}
-        <PaymentModal
-          open={showPayment}
-          onOpenChange={setShowPayment}
-          onSuccess={handlePaymentSuccess}
-          userInfo={formData}
-          mode="regenerate"
-        />
+        {/* Payment removed — fully free */}
       </section>
     );
   }
