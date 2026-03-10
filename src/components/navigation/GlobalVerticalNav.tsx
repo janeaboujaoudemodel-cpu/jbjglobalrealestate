@@ -660,7 +660,16 @@ export default function GlobalVerticalNav() {
 
   // Accordion toggle — only one section open at a time
   const toggleSection = (section: SectionKey) => {
+    const opening = openSection !== section;
     setOpenSection(prev => prev === section ? null : section);
+    // Dual-action: also open the first mega menu flyout in this section
+    if (opening) {
+      const items = sectionGroups[section];
+      const firstMega = items?.find(item => item.megaMenu);
+      if (firstMega?.megaMenu) {
+        setActiveMegaMenu(firstMega.megaMenu);
+      }
+    }
   };
 
   // Check if a section contains the active mega menu
