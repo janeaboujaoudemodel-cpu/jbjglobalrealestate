@@ -541,7 +541,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
                         type="button"
                         onClick={() => {
                           setSelectedLeadId(lead.id);
-                          setSelectedLeadName(lead.full_name || lead.email || "Lead");
+                          setSelectedLeadName(lead.full_name || lead.email_normalized || "Lead");
                           setLeadSearch("");
                           setLeadResults([]);
                         }}
