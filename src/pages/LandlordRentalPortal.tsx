@@ -230,8 +230,8 @@ export default function LandlordRentalPortal() {
                       'Tenant verification and background checks',
                     ].map((item, index) => (
                       <div key={index} className="flex items-center gap-3">
-                        <CheckCircle2 className="h-5 w-5 text-green-500" />
-                        <span className="text-zinc-300">{item}</span>
+                        <CheckCircle2 className="h-5 w-5 text-green-600" />
+                        <span className="text-black">{item}</span>
                       </div>
                     ))}
                   </CardContent>
