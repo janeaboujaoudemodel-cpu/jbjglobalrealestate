@@ -293,7 +293,7 @@ export default function LandlordRentalPortal() {
                       className="relative"
                     >
                       {index < LANDLORD_GUIDE_STEPS.length - 1 && (
-                        <div className="absolute left-4 top-12 bottom-0 w-0.5 bg-zinc-700" />
+                        <div className="absolute left-4 top-12 bottom-0 w-0.5 bg-gold/20" />
                       )}
                       <div className="flex gap-6">
                         <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gold to-champagne flex items-center justify-center flex-shrink-0 text-black font-bold z-10">
