@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Building2, BarChart3, BookOpen, Briefcase, Users, Home, Tag, Key, PlusCircle,
   Building, Layers, Cpu, Heart, GitCompare, Calculator, Headphones, MapPin,
@@ -7,7 +7,7 @@ import {
   Mic, Stamp, CreditCard, Palette, Pen, Award, Globe, Brain, MessageSquare,
   Phone, Languages, FileSearch, FilePlus, UserCheck, CalendarClock, Mail,
   Share2, PenTool, Megaphone, GraduationCap, Briefcase as BriefcaseIcon,
-  LayoutDashboard, FolderOpen, ListChecks, Bell, Zap, Menu, X,
+  LayoutDashboard, FolderOpen, ListChecks, Bell, Zap, Menu, X, Star,
   Scale, Eye, Ticket, Compass, HandCoins, Handshake, Lock, Accessibility,
   ShieldCheck, Newspaper, BookMarked, Landmark, Camera, Ruler,
 } from "lucide-react";
