@@ -819,7 +819,7 @@ export default function GlobalVerticalNav() {
                       onClick={closeMegaMenu}
                       className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
                         linkActive
-                          ? "bg-gradient-to-r from-gold/20 to-gold/10 text-black font-bold border border-gold/40"
+                          ? "bg-gradient-to-r from-[#F5EBD7] to-[#D4C4A8] text-black font-bold border border-gold/40"
                           : "text-black/80 hover:bg-gold/10 hover:text-black"
                       }`}
                     >
