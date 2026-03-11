@@ -92,7 +92,7 @@ function BrokerProfileCard() {
 
   const displayName = profile?.display_name || user.email?.split("@")[0] || "Broker";
   const firstName = displayName.split(" ")[0];
-  const tier = profile?.current_tier || "Starter";
+  const tier = (profile as any)?.current_tier || "Starter";
   const verificationStatus = (profile as any)?.verification_status || "unverified";
   const probationEnd = (profile as any)?.probation_end;
   const probationMonths = (profile as any)?.probation_months || 3;
