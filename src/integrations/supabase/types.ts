@@ -2526,20 +2526,32 @@ export type Database = {
           broker_type: string | null
           created_at: string
           current_tier: string | null
+          custom_label: string | null
+          custom_title: string | null
           display_name: string
           email: string | null
+          face_verified: boolean | null
           id: string
+          id_document_url: string | null
+          id_expiry_date: string | null
           is_active: boolean | null
           is_public: boolean | null
           languages: string[] | null
           phone: string | null
           photo_url: string | null
+          probation_end: string | null
+          probation_months: number | null
+          probation_start: string | null
+          rera_card_url: string | null
+          rera_expiry_date: string | null
+          show_contact_public: boolean | null
           specializations: string[] | null
           tier_updated_at: string | null
           title: string | null
           total_points: number | null
           updated_at: string
           user_id: string
+          verification_status: string | null
           years_experience: number | null
         }
         Insert: {
@@ -2547,20 +2559,32 @@ export type Database = {
           broker_type?: string | null
           created_at?: string
           current_tier?: string | null
+          custom_label?: string | null
+          custom_title?: string | null
           display_name: string
           email?: string | null
+          face_verified?: boolean | null
           id?: string
+          id_document_url?: string | null
+          id_expiry_date?: string | null
           is_active?: boolean | null
           is_public?: boolean | null
           languages?: string[] | null
           phone?: string | null
           photo_url?: string | null
+          probation_end?: string | null
+          probation_months?: number | null
+          probation_start?: string | null
+          rera_card_url?: string | null
+          rera_expiry_date?: string | null
+          show_contact_public?: boolean | null
           specializations?: string[] | null
           tier_updated_at?: string | null
           title?: string | null
           total_points?: number | null
           updated_at?: string
           user_id: string
+          verification_status?: string | null
           years_experience?: number | null
         }
         Update: {
@@ -2568,20 +2592,32 @@ export type Database = {
           broker_type?: string | null
           created_at?: string
           current_tier?: string | null
+          custom_label?: string | null
+          custom_title?: string | null
           display_name?: string
           email?: string | null
+          face_verified?: boolean | null
           id?: string
+          id_document_url?: string | null
+          id_expiry_date?: string | null
           is_active?: boolean | null
           is_public?: boolean | null
           languages?: string[] | null
           phone?: string | null
           photo_url?: string | null
+          probation_end?: string | null
+          probation_months?: number | null
+          probation_start?: string | null
+          rera_card_url?: string | null
+          rera_expiry_date?: string | null
+          show_contact_public?: boolean | null
           specializations?: string[] | null
           tier_updated_at?: string | null
           title?: string | null
           total_points?: number | null
           updated_at?: string
           user_id?: string
+          verification_status?: string | null
           years_experience?: number | null
         }
         Relationships: []
