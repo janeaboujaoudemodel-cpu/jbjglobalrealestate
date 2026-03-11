@@ -850,15 +850,16 @@ export default function ProjectDetailLayout({
 
            {/* UNIT TYPES & INVENTORY SECTION (Reelly-style) */}
            {(project.unit_types?.length ?? 0) > 0 && (
-             <div ref={unitsRef} id="units" className="mb-14 scroll-mt-40">
-               <UnitInventorySection
-                 unitTypes={project.unit_types || []}
-                 totalUnits={project.total_units}
-                 availableUnits={project.available_units}
-                 projectName={project.name}
-               />
-             </div>
-           )}
+              <div ref={unitsRef} id="units" className="mb-14 scroll-mt-40">
+                <UnitInventorySection
+                  unitTypes={project.unit_types || []}
+                  totalUnits={project.availability_visible ? project.total_units : null}
+                  availableUnits={project.availability_visible ? project.available_units : null}
+                  projectName={project.name}
+                  availabilityVisible={project.availability_visible ?? false}
+                />
+              </div>
+            )}
 
            {/* CONSTRUCTION TIMELINE SECTION (Reelly-style) */}
            {(project.construction_progress !== null && project.construction_progress !== undefined) && (
