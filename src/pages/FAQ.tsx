@@ -135,12 +135,17 @@ const FAQ = () => {
     }
   ];
 
+  // Flatten all FAQ items for JSON-LD structured data
+  const allFaqItems = categories.flatMap(cat => cat.questions);
+
   return (
     <div className="min-h-screen bg-black">
       <SEOHead 
         title="FAQ | Frequently Asked Questions | JBJ Global Real Estate"
         description="Find answers to common questions about buying, selling, and renting property in the UAE. Expert guidance on mortgages, legal requirements, costs, and the property transaction process."
         keywords="UAE property FAQ, Dubai real estate questions, buying property UAE, selling property Dubai, mortgage UAE, property costs Dubai"
+        canonicalPath="/faq"
+        faqItems={allFaqItems}
       />
       
       {/* Hero with Video/Image Background */}
