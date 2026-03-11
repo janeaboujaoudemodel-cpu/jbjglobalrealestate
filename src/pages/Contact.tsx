@@ -778,7 +778,7 @@ END:VCARD`;
       {/* Direct Contact Section */}
       <section className="py-12 bg-black">
         {/* Thin black contour + Active Champagne Layer */}
-        <div className="mx-0 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-6 md:p-8">
+        <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-6 md:p-8">
           <h2 className="text-center text-2xl md:text-3xl font-bold mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
             <span className="text-black">Prefer to Reach Us</span>{" "}
             <span className="text-gold">Directly?</span>
