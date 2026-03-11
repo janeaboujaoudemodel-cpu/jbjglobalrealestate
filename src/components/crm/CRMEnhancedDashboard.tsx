@@ -258,7 +258,7 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
         {/* Activity Trend */}
         <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)]/95 to-[hsl(36,25%,88%)]/80 shadow-[0_8px_30px_rgba(200,167,102,0.12)]">
           <CardHeader>
-            <CardTitle className="text-base font-semibold text-zinc-900 flex items-center gap-2">
+            <CardTitle className="text-base font-semibold text-black flex items-center gap-2">
               <TrendingUp className="h-5 w-5 text-blue-500" />
               Weekly Activity
               <span className="text-xs font-normal text-zinc-500 ml-2">Your weekly activity summary</span>
