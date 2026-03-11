@@ -235,16 +235,16 @@ const DeveloperPortal = () => {
     queryFn: async () => {
       if (!user) return { isBroker: false };
       // Check broker_profiles
-      const { data: bp } = await supabase
-        .from('broker_profiles')
+      const { data: bp } = await (supabase
+        .from('broker_profiles') as any)
         .select('id, verification_status')
         .eq('user_id', user.id)
         .eq('verification_status', 'verified')
         .maybeSingle();
       if (bp) return { isBroker: true };
       // Check hr_employees
-      const { data: emp } = await supabase
-        .from('hr_employees')
+      const { data: emp } = await (supabase
+        .from('hr_employees') as any)
         .select('id, status')
         .eq('user_id', user.id)
         .eq('status', 'active')
