@@ -447,6 +447,7 @@ const Quiz = () => {
           slugs = relaxed.slice(0, 3).map(p => p.slug).join(",");
         }
       }
+      toast.success("✨ Your AI-selected properties are ready!", { duration: 4000, position: 'bottom-center' });
       navigate(`/quiz-results?projects=${slugs}&session=${sessionId}&free=true`);
     } catch (error) {
       console.error("Error saving quiz:", error);
