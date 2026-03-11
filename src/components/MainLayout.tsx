@@ -224,7 +224,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-background">
       {/* Mobile Desktop Banner */}
       {isMobile && showDesktopBanner && (
         <div className="fixed top-0 left-0 right-0 z-[10001] bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] border-b border-gold/30 px-4 py-2.5 flex items-center gap-3 shadow-md">
