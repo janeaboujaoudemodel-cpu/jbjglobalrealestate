@@ -38,6 +38,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { ProvidentSyncButton } from "@/components/admin/ProvidentSyncButton";
+import BriefingManagement from "@/components/admin/BriefingManagement";
 
 interface Developer {
   id: string;
