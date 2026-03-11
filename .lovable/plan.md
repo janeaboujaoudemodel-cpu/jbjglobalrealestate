@@ -1,72 +1,71 @@
 
-## CRM System Upgrade — Implementation Status
 
-### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
+## Plan: Complete Vertical Navigation — All Pages Categorized
 
-#### Task 1: Full System Audit ✅
-- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
-- Identified 10 weaknesses (documented in plan)
+After cross-referencing every route file against the current `NAV_ITEMS` array in `GlobalVerticalNav.tsx`, I found **80+ pages/tools missing** from the sidebar. Here's the full implementation plan.
 
-#### Task 2: Leads Security Hardening ✅
-- CSV export no longer includes email/phone PII
-- Audit logging added to exports with user_agent tracking
-- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
+---
 
-#### Task 3: Encryption Hardening ✅
-- CSV export stripped of `email_lower` and `phone_e164` fields
-- Export audit logged to both `crm_audit_logs` and `audit_logs`
+### Missing Pages by Category
 
-#### Task 4: Lead Lifecycle Upgrade ✅
-- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
-- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
-- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
+**PROPERTIES (missing 8):**
+Communities, Resale Properties (listing submenu), Listing Portal Submit, My Listings, Property Evaluator, Rental Index, Sell With Us, Property Valuation, Property Measurement
 
-#### Task 5: CRM Structure Upgrade ✅
-- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
-- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
-- KanbanPipeline expanded to show all 17 relevant stages
+**GUIDES (missing 8):**
+Investor FAQ, Buyer FAQ, Seller FAQ, Landlord FAQ, Tenant FAQ, Broker FAQ, Seller Listing Guide, Landlord Portal
 
-#### Task 6: Performance Optimization ✅
-- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
-- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
-- `crm_leads_updated_at_trigger` auto-updates `updated_at`
+**INSIGHTS (missing 6):**
+Market Report, Market Overview, Area Intelligence, Market Reports Archive, Methodology, Internal MI Dashboard (owner-only)
 
-#### Task 7: AI Intelligence Integration ✅
-- New edge function `ai-lead-intelligence` using Lovable AI gateway
-- Supports 3 modes: `score`, `summary`, `next_action`
-- Tool-calling for structured scoring output
-- JWT auth + CRM role validation
-- PII sanitized before sending to AI
+**SERVICES (missing 14):**
+Architecture, Interior Design, Fit-Out, Design & Build, Law Firm, Buying Advisory, Rental Advisory, Investment Advisory, Snagging, Broker Certification, Complaint Procedures, Customer Happiness Center, Testimonials, AI Tools Service
 
-#### Task 8: Workflow Automation ✅
-- Created `crm_automation_rules` table with RLS (owner manage, admin view)
-- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
+**PARTNERS (new section, 5):**
+Partners Hub, Mortgage Partner, Legal Partner, Company Setup Partner, Visa Services
 
-#### Task 10: Role & Permission System ✅
-- RLS on automation rules: owner CRUD, admin read-only
-- CSV export restricted to owner_admin/founder roles
+**COMPANY (missing 7):**
+Awards, Press Kit, Company Profile, Philanthropy, Our Brokers, Reviews, Partner Governance
 
-#### Task 12: Backend/Database Upgrade ✅
-- 3 new performance indexes
-- Auto-updated_at trigger on crm_leads
-- Duplicate hash computation trigger
-- Rate-limiting security function
+**LEGAL (missing 2):**
+Trust & Compliance, Risk Disclosure
 
-#### Task 13: Data Cleanliness ✅
-- `duplicate_hash` with auto-compute trigger prevents future duplicates
-- Partial unique index enforces uniqueness at DB level
+**TOOLS (missing 12):**
+Video Resize, PDF from Photos, Image Resize, Voice Studio, Voice Studio Pro, AI Video Studio, Captions & Translate, Background AI, Beauty Filters, PDF Editor, Landing Page Builder
 
-### Files Changed
-| File | Action |
-|------|--------|
-| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
-| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
-| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
-| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
-| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
-| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
-| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
-| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
-| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
+**AI TOOLS (missing 3):**
+AI Personal Shopper, AI Investment Report, Voice Agent Settings
+
+**BROKER & ACADEMY (new section, 10):**
+Broker Portal, Broker Toolkit, Broker Resources, Broker Training, Broker Hub, JBJ Academy, Academy Graduates, AI Broker Workspace, Broker Dashboard, Broker Education
+
+**INVESTOR (new section, 5):**
+Investor Hub, Investor Services, Join Investor List, Investor Dashboard, Portfolio Views
+
+**PRODUCTIVITY (new section, 10):**
+Spreadsheet, Documents, QR Generator, Contract Forms, Video Meeting, Presentations, Sitemap, Pricing, Onboarding, Client Portal
+
+**ADMIN & OWNER (new section, 30+):**
+Admin CRM, Admin Inquiries, Admin Chat, Admin Onboarding, Admin Roles, Admin Intelligence, Admin Developers, Admin Marketing Hub, Admin Training Guide, Admin Legal Center, HR Dashboard, HR Agent, Employee Hub, Employee Chat, Employee Management, Customer Happiness, Security Console, Company Comm, Executive Assistant, Call Review, Video Builder, Business Card Scanner, JBJ Analytics, JBJ Design Studio, JBJ Broker Admin, Broker Messages, Broker Reports, Broker Admin Assistant, Referral Admin, E-Signature suite, Whiteboard, Mind Map, Form Builder, Kanban, Email Client, Team Chat, Automations, Alerts Demo
+
+**BUSINESS SUITES (new section, 5):**
+All Tools Suite, Real Estate Suite, Broker Suite, Creative Suite, Productivity Suite, Suites Hub
+
+---
+
+### Implementation
+
+**Single file modified:** `src/components/navigation/GlobalVerticalNav.tsx`
+
+Changes to the `NAV_ITEMS` array:
+1. Expand existing sections (PROPERTIES, TOOLS, INSIGHTS, GUIDES, SERVICES, COMPANY, LEGAL, MY ACCOUNT) with all missing routes
+2. Add new sections: BROKER & ACADEMY, INVESTOR, PARTNERS, PRODUCTIVITY, BUSINESS SUITES, ADMIN & OWNER
+3. Each section uses appropriate icons from the existing lucide-react imports
+4. Admin/Owner items are conditionally rendered based on `isOwner` role (already available in the component)
+5. Broker items conditionally shown for `isBroker` role
+6. Update `SECTION_KEYS`, `SECTION_ICONS`, and the section rendering logic to support the new sections
+7. Add any missing lucide icon imports at the top
+
+The nav already supports collapsible accordion sections, so adding more sections integrates naturally. No new components needed — just expanding the existing data arrays.
+
+### Estimated items total: ~200 nav items across ~14 sections (up from ~85 across 8 sections)
+
