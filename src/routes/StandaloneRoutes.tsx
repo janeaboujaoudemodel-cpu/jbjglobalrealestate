@@ -8,6 +8,7 @@ import RouteErrorBoundary from "@/components/RouteErrorBoundary";
 import PageLoader from "@/components/PageLoader";
 
 const Auth = lazy(() => import("@/pages/Auth"));
+const Welcome = lazy(() => import("@/pages/Welcome"));
 const AccessDenied = lazy(() => import("@/pages/AccessDenied"));
 const DigitalCard = lazy(() => import("@/pages/DigitalCard"));
 const SignDocument = lazy(() => import("@/pages/e-signature/SignDocument"));
