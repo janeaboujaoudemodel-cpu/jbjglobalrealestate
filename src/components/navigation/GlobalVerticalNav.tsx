@@ -654,7 +654,7 @@ export default function GlobalVerticalNav() {
     if (item.href === '/listing-portal' && item.highlight) return shouldHighlight ? 'text-white' : 'text-sky-500';
     if (item.href === '/resale-properties') return shouldHighlight ? 'text-white' : 'text-emerald-600';
     if (sectionKey === 'MY ACCOUNT') return 'text-gold';
-    return shouldHighlight ? "text-gold" : "text-black/60";
+    return "text-gold";
   };
 
   /* ─── RENDER MEGA MENU ─── */
