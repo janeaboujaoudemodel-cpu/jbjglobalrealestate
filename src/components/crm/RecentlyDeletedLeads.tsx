@@ -94,6 +94,40 @@ export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = fals
     }
   };
 
+  const handlePermanentErase = async (leadId: string, leadName: string) => {
+    if (!isOwner) {
+      toast.error("Only the owner can permanently erase leads");
+      return;
+    }
+    setErasing(leadId);
+    try {
+      const { error } = await supabase
+        .from("crm_leads")
+        .delete()
+        .eq("id", leadId);
+
+      if (error) throw error;
+
+      // Audit log
+      await supabase.from("audit_logs").insert({
+        user_id: userId,
+        action_type: 'delete' as any,
+        resource_type: 'lead' as any,
+        resource_id: leadId,
+        description: `Permanently erased lead: ${leadName}`,
+        details: { action: 'permanent_erase' }
+      });
+
+      toast.success("Lead permanently erased");
+      setLeads(prev => prev.filter(l => l.id !== leadId));
+      onRefresh();
+    } catch (err: any) {
+      toast.error(`Erase failed: ${err?.message || "Unknown error"}`);
+    } finally {
+      setErasing(null);
+    }
+  };
+
   const filtered = search.trim()
     ? leads.filter(l => 
         l.full_name?.toLowerCase().includes(search.toLowerCase()) ||
