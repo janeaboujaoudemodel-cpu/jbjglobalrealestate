@@ -1,99 +1,88 @@
 
 
-## Plan: Brand Palette for All Users, Availability Auto-Hide, Stamp/Tools UI Premium Upgrade, Sitemap Update, and Cross-Tool Integration
+## Plan: Chat Support Upgrade, Legal Center Hub, and Software Protection System
 
-This is a large request spanning 6 distinct areas. To avoid quality issues, I recommend implementing in **3 phases**. This plan covers all phases but Phase 1 will be implemented first.
-
----
-
-### Phase 1: Brand Palette → Public + Per-User Personalization + UI Fixes
-
-**Problem:** Brand Palette is owner-only (`OwnerGuard`), live preview doesn't work properly, color swatches are square inside rounded cards, hex codes are visible to all, no color wheel, no saved palette history, no per-user personalization.
-
-**Changes:**
-
-#### 1A. Database: `user_color_palettes` table
-```sql
-CREATE TABLE public.user_color_palettes (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  name text NOT NULL DEFAULT 'Custom Palette',
-  palette jsonb NOT NULL,
-  is_active boolean DEFAULT false,
-  created_at timestamptz DEFAULT now()
-);
--- RLS: users CRUD their own palettes only
-```
-
-#### 1B. Remove `OwnerGuard` from brand palette route
-Move `/owner/brand-palette` → `/brand-palette` as a public authenticated route. Owner sees full hex codes + corporate palette management. Regular users see:
-- Color wheel pickers (no hex codes visible)
-- Visual labels ("Primary — buttons, links", etc.) with live example previews
-- Apply to "Website" or "Tools only" toggle
-- Save/Revert/History of their personal palettes
-- Palettes saved per-user in `user_color_palettes`
-
-#### 1C. Fix UI issues
-- Match color swatch shape to card container (use `rounded-2xl` on swatches to match card radius)
-- Add a clickable color wheel icon next to each swatch for users who don't know to click the square
-- Fix live preview: make `isPreviewing` default to `true` so changes reflect immediately
-- Show accurate JBJ website palette as defaults: `primary: #C8A766, secondary: #000000, accent: #D4AF37, background: #FDFBF7, text: #1A1A1A`
-
-#### 1D. BrandPaletteContext updates
-- Load user's active personal palette from `user_color_palettes` for non-owners
-- Owner's palette comes from `app_settings` (unchanged)
-- `applyPaletteToDOM()` already works — just needs to trigger on page load for per-user palettes
-
-**Files:**
-| File | Action |
-|------|--------|
-| Database migration | Create `user_color_palettes` |
-| `src/routes/AdminRoutes.tsx` | Move palette route from OwnerGuard to authenticated |
-| `src/pages/owner/BrandPaletteHub.tsx` | Major refactor: dual-mode (owner vs user), color wheels, no hex for users, palette history, shape fixes |
-| `src/contexts/BrandPaletteContext.tsx` | Load per-user palette, add `saveUserPalette`, `getUserPaletteHistory`, `revertToDefault` |
-| `src/components/navigation/GlobalVerticalNav.tsx` | Update nav link path |
+### What You Asked For (3 Areas)
+1. **Chat Support:** Always visible, upgraded AI model, multi-language, "Send Message to JBJ Team" escalation that saves to your notes with full user info, works across all devices
+2. **Legal Center Hub:** Backend admin page showing all user agreements, consents, and legal acceptances — bulk-ready and wired
+3. **Software Protection:** Anti-copy, anti-scrape, anti-replication system with a public API Access page directing users to contact the team
 
 ---
 
-### Phase 2: Availability Auto-Hide + Stamp Generator Premium UI
+## 1. Chat Support Upgrades
 
-**Problem:** Property availability/unit counts are visible to investors (discourages urgency). Stamp generator UI needs premium upgrade.
+**Current state:** The `AIChatWidget` already exists with AI (Gemini 2.5 Flash), "Submit to Team" button, session logging to `chat_history` table, and a `ChatHistoryAdmin` panel. It's always present on non-back-office routes.
 
-#### 2A. Availability auto-hide
-- Add `availability_visible` boolean column to `projects` table (default `false`)
-- All public-facing property pages: hide availability/unit count data when `availability_visible = false`
-- Owner can toggle visibility per-project from Listing Admin
-- Developer Portal uploads auto-set `availability_visible = false`
+**What I will do:**
 
-#### 2B. Stamp Generator premium UI overhaul
-- Apply champagne gradient theme consistently (matching Royal Tools Hub)
-- Default to "Ink Blue" standard with the two canonical company stamp designs
-- Gold-bordered cards, premium typography, centered preview
-- Upgrade security: sanitize all SVG inputs, encrypt stamp data in session storage
+**a) Upgrade AI Model** — Change from `google/gemini-2.5-flash` to `google/gemini-2.5-pro` in both `ai-chat-support` and `ai-chat-stream` edge functions for stronger reasoning and multilingual responses.
 
-**Files:** `projects` migration, Listing Admin toggle, property detail pages, `StampGeneratorPage.tsx`, `StampProjectWizard.tsx`, related stamp components
+**b) Add Multi-Language Support** — Update the chat system prompt to instruct the AI: "Detect the user's language from their first message and respond in that same language throughout the conversation. You are fluent in English, Arabic, French, Russian, Chinese, Hindi, Spanish, Portuguese, and German." This handles multilingual automatically without UI changes.
 
----
+**c) Upgrade "Send to Team" to Save to Owner Notes** — When a user clicks "Submit to Team":
+- Save the full conversation transcript + user info (name, email, phone, nationality, language) as a note in the owner's notes system
+- Format: "SUPPORT ESCALATION — [User Name] ([email], [phone]) — [Service Type] — [Inquiry Summary] — Full Transcript: [messages]"
+- Also suggest an action and any matched property/service
+- Keep the existing email notification as backup
 
-### Phase 3: Sitemap Update, Cross-Tool Integration, Security Hardening
+**d) Add "Send Message to JBJ Team" Simplified Button** — Add a persistent "Need More Help? Send Message to JBJ Team" option visible at all chat steps (not just during active chatting). This opens a simple form: Name, Email, Phone, Message → saves to owner notes + sends notification.
 
-#### 3A. Sitemap
-Add missing tool links: Brand Palette, Scan & Sign, all new features added recently.
-
-#### 3B. Cross-tool integration
-- Scan & Sign: add "Import Stamp", "Import Business Card", "Import QR Code" buttons that pull from session storage
-- E-Signature: already has stamp integration — verify QR code and business card import paths
-- All tools: ensure owner sees their brand palette colors in color pickers; non-owners see generic palette
-
-#### 3C. Global security
-- RLS audit across new tables
-- Edge function JWT hardening review
-- DOM obfuscation layer verification
-
-**Files:** `Sitemap.tsx`, `ScanSignPage.tsx`, `CreateEnvelope.tsx`, tool color pickers, edge functions
+**Files:** `supabase/functions/ai-chat-support/index.ts`, `supabase/functions/ai-chat-stream/index.ts`, `src/components/AIChatWidget.tsx`, `src/components/chat/ChatMessages.tsx`
 
 ---
 
-### Implementation Priority
-**Phase 1 first** (Brand Palette) — directly addresses the page user is currently viewing and the most detailed feedback. Phases 2 and 3 follow in subsequent messages.
+## 2. Legal Center Hub (Backend Admin)
+
+**Current state:** `user_agreements` table exists, `useAgreementSaver` hook saves consents. No admin view exists to see these records.
+
+**What I will build:**
+
+**a) Legal Compliance Center page** (`src/pages/admin/LegalComplianceCenter.tsx`) — Owner-protected route at `/admin/legal-center`:
+- **Dashboard cards:** Total agreements, unique users, today's consents, flagged items
+- **Filterable table:** All `user_agreements` records with columns: User Email, Agreement Type, Version, Accepted At, User Agent, IP
+- **Detail view:** Click to expand and see the full `agreement_snapshot` JSON (the exact text they agreed to)
+- **Bulk export:** Download all records as CSV for legal audits
+- **Search & filter:** By agreement type (cookies, privacy, terms, content license), date range, user email
+
+**b) Wire the route** — Add to `AdminRoutes.tsx` under `OwnerGuard`, add sidebar link.
+
+**Files:** New `src/pages/admin/LegalComplianceCenter.tsx`, `src/routes/AdminRoutes.tsx`
+
+---
+
+## 3. Software Protection & API Access Page
+
+**Current state:** Already have `SecurityShield` (DevTools blocking, right-click prevention, headless browser detection), `ContentProtection` (image watermarking, drag prevention), `ObfuscationLayer` (decoy elements, fake data). These are active in production.
+
+**What I will add:**
+
+**a) Enhanced Source Code Protection:**
+- Add `Content-Security-Policy` meta tag in `index.html` to restrict script sources
+- Add anti-iframe protection (X-Frame-Options equivalent via JS) to prevent embedding/mirroring
+- Obfuscate all `data-*` attributes dynamically to break scraper selectors
+- Disable `view-source:` protocol detection
+
+**b) API Access Page** (`src/pages/ApiAccess.tsx`) — Public page at `/api-access`:
+- Professional landing page explaining that JBJ's platform, data, and APIs are proprietary
+- "All API access requires an approved API key issued by JBJ Global Real Estate"
+- Contact section: "To request API access, contact our team at contact@jbj.ae or call +971 56 591 1000"
+- Legal notice referencing UAE Cybercrime Law, intellectual property protections
+- Terms of API usage summary
+
+**c) Add anti-replication watermark** — Inject invisible copyright comments throughout rendered HTML, embed JBJ ownership metadata in all page `<meta>` tags.
+
+**Files:** `index.html`, new `src/pages/ApiAccess.tsx`, `src/components/security/ContentProtection.tsx`, routing files
+
+---
+
+## Summary
+
+| Area | What Changes | Files |
+|------|-------------|-------|
+| Chat AI upgrade | Gemini 2.5 Pro + multilingual prompts | 2 edge functions |
+| Chat escalation | Save to owner notes with full user info | `AIChatWidget.tsx`, `ChatMessages.tsx` |
+| Chat "Send to Team" | Simplified message form at all steps | `AIChatWidget.tsx` |
+| Legal Center Hub | Admin dashboard for all user agreements | New admin page + route |
+| Source protection | CSP, anti-iframe, anti-embed | `index.html`, `ContentProtection.tsx` |
+| API Access page | Public page directing to contact team | New page + route |
 
