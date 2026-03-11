@@ -46,9 +46,9 @@ export default function StampGeneratorLanding() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)]">
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--champagne-1))] py-20 px-6">
+      <section className="relative overflow-hidden bg-gradient-to-br from-[hsl(var(--pearl-1))] via-[hsl(40,33%,98%)] to-[hsl(var(--champagne-1))] py-20 px-6">
         <div className="max-w-4xl mx-auto text-center space-y-6">
           <Badge className="bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold-dark))] border border-[hsl(var(--gold)/0.3)] px-3 py-1">
             <Stamp size={12} className="mr-1.5"/> AI-Powered Tool
