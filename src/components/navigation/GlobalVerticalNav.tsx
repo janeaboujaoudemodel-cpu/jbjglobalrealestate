@@ -1144,19 +1144,19 @@ export default function GlobalVerticalNav() {
           <div className="flex flex-col items-center gap-1.5 pb-1 border-t border-red-500/20 pt-2">
             <Tooltip>
               <TooltipTrigger asChild>
-                <Link to="/ticket-hub?tab=new" className="w-8 h-8 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-50/50 border border-red-500/20 hover:border-red-500/40 transition-all">
+                <Link to="/contact" className="w-8 h-8 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-50/50 border border-red-500/20 hover:border-red-500/40 transition-all">
                   <Headphones className="w-3.5 h-3.5" />
                 </Link>
               </TooltipTrigger>
-              <TooltipContent side="right" className="text-xs">Contact Support</TooltipContent>
+              <TooltipContent side="right" className="text-xs">Contact Us</TooltipContent>
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Link to="/ticket-hub?tab=new" className="w-8 h-8 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-50/50 border border-red-500/20 hover:border-red-500/40 transition-all">
+                <Link to="/ticket-hub" className="w-8 h-8 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-50/50 border border-red-500/20 hover:border-red-500/40 transition-all">
                   <Ticket className="w-3.5 h-3.5" />
                 </Link>
               </TooltipTrigger>
-              <TooltipContent side="right" className="text-xs">Create Ticket</TooltipContent>
+              <TooltipContent side="right" className="text-xs">Create or Follow Up Ticket</TooltipContent>
             </Tooltip>
             {session ? (
               <Tooltip>

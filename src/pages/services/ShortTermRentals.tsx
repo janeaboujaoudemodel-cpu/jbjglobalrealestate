@@ -188,10 +188,10 @@ const ShortTermRentals = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <PremiumHeroButton href="/contact?service=short-term-rental-evaluation">
+              <PremiumHeroButton href="/contact?service=short-term-rental-evaluation" variant="light-bg">
                 Evaluate My Rental Potential
               </PremiumHeroButton>
-              <PremiumHeroButton href="/contact?service=list-property">
+              <PremiumHeroButton href="/contact?service=list-property" variant="light-bg">
                 List My Property
               </PremiumHeroButton>
             </div>

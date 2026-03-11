@@ -9,7 +9,7 @@ import ModeSwitcher from "@/components/ModeSwitcher";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
-import { DisplayModeIconToggle } from "@/components/filters/DisplayModeToggle";
+
 import { useUserMode, type UserMode } from "@/hooks/useUserMode";
 import { useLanguage, getLanguageInfo } from "@/contexts/LanguageContext";
 import { useCurrency } from "@/hooks/useCurrency";

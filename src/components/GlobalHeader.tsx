@@ -1019,11 +1019,11 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                   {/* Contact Support & Create Ticket — stacked */}
                   <div className="space-y-1.5 px-3">
-                    <a href="mailto:info@jbjglobal.com" className="flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-red-600 rounded-lg border border-red-500/30 hover:bg-red-50/50 transition-colors w-full">
-                      <Headphones className="w-3.5 h-3.5 text-red-500" />Contact Support
-                    </a>
-                    <Link to="/my-tickets" onClick={() => setMobileMenuOpen(false)} className="flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-red-600 rounded-lg border border-red-500/30 hover:bg-red-50/50 transition-colors w-full">
-                      <ClipboardCheck className="w-3.5 h-3.5 text-red-500" />Create Ticket
+                    <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-red-600 rounded-lg border border-red-500/30 hover:bg-red-50/50 transition-colors w-full">
+                      <Headphones className="w-3.5 h-3.5 text-red-500" />Contact Us
+                    </Link>
+                    <Link to="/ticket-hub" onClick={() => setMobileMenuOpen(false)} className="flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-red-600 rounded-lg border border-red-500/30 hover:bg-red-50/50 transition-colors w-full">
+                      <ClipboardCheck className="w-3.5 h-3.5 text-red-500" />Create or Follow Up Ticket
                     </Link>
                     {user ? (
                       <button

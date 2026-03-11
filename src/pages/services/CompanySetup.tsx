@@ -160,7 +160,7 @@ const CompanySetup = () => {
       </section>
 
       {/* WHY THIS MATTERS FOR INVESTORS */}
-      <section className="bg-black py-20">
+      <section className="bg-black py-14">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
