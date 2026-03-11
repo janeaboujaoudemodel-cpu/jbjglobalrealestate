@@ -1,4 +1,4 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.4";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -52,8 +52,8 @@ Deno.serve(async (req) => {
         const vSessions = userSessions || [];
         const sessionIds = vSessions.map((s: any) => s.session_id);
 
-        // Parallel data fetch
-        const [visitorEventsRes, userEventsRes, userSessionsRes, dailyRes, pointsRes, leadsRes, scannedRes, docsRes] = await Promise.all([
+        // Parallel data fetch — now includes user_role_selections and user_sessions for demographics + login history
+        const [visitorEventsRes, userEventsRes, userSessionsRes, dailyRes, pointsRes, leadsRes, scannedRes, docsRes, roleSelRes] = await Promise.all([
           sessionIds.length > 0
             ? supabase.from("visitor_events")
                 .select("event_type, event_name, page_path, created_at, event_data")
@@ -67,9 +67,9 @@ Deno.serve(async (req) => {
             .gte("created_at", thirtyDaysAgo.toISOString())
             .limit(500),
           supabase.from("user_sessions")
-            .select("started_at, duration_seconds, device_type")
+            .select("started_at, ended_at, duration_seconds, device_type, browser, pages_visited")
             .eq("user_id", userId)
-            .gte("started_at", thirtyDaysAgo.toISOString())
+            .order("started_at", { ascending: false })
             .limit(200),
           supabase.from("user_daily_activity")
             .select("day_date, total_events, points_earned")
@@ -78,7 +78,6 @@ Deno.serve(async (req) => {
           supabase.from("user_points_ledger")
             .select("points")
             .eq("user_id", userId),
-          // Leads: use created_by_user_id (correct column)
           supabase.from("crm_leads")
             .select("id, created_at")
             .eq("created_by_user_id", userId),
@@ -90,6 +89,11 @@ Deno.serve(async (req) => {
                 .select("id, action, document_type")
                 .in("session_id", sessionIds.slice(0, 100))
             : Promise.resolve({ data: [] }),
+          // Demographics from user_role_selections
+          supabase.from("user_role_selections")
+            .select("nationality, country, city, preferred_language, age_range, selected_role")
+            .eq("user_id", userId)
+            .maybeSingle(),
         ]);
 
         const visitorEvents = visitorEventsRes.data || [];
@@ -100,6 +104,33 @@ Deno.serve(async (req) => {
         const leads = leadsRes.data || [];
         const scannedCards = scannedRes.data || [];
         const docs = docsRes.data || [];
+        const roleSel = roleSelRes.data;
+
+        // === PER-PAGE TIME BREAKDOWN ===
+        const pageTimeMap: Record<string, number> = {};
+        visitorEvents.forEach((e: any) => {
+          const timeOnPage = e.event_data?.time_on_previous_page_seconds || e.event_data?.duration_seconds;
+          if (timeOnPage && e.page_path) {
+            pageTimeMap[e.page_path] = (pageTimeMap[e.page_path] || 0) + Math.round(Number(timeOnPage));
+          }
+        });
+        // Also aggregate from page_view events with time_on_page in event_data
+        userEvents.forEach((e: any) => {
+          const timeOnPage = e.metadata?.duration_seconds || e.metadata?.time_on_previous_page_seconds;
+          if (timeOnPage && e.page_path) {
+            pageTimeMap[e.page_path] = (pageTimeMap[e.page_path] || 0) + Math.round(Number(timeOnPage));
+          }
+        });
+
+        // === LOGIN HISTORY from user_sessions ===
+        const loginHistory = uSessions.slice(0, 50).map((s: any) => ({
+          started_at: s.started_at,
+          ended_at: s.ended_at || null,
+          duration_seconds: s.duration_seconds || 0,
+          device_type: s.device_type || "unknown",
+          browser: s.browser || "unknown",
+          pages_visited: s.pages_visited || 0,
+        }));
 
         // === METRICS ===
         const totalVisitorSessions = vSessions.length;
@@ -246,7 +277,7 @@ Deno.serve(async (req) => {
 
         const vipTierReason = `Points: ${totalPoints} | Intent: ${intentScore}/100 | Engagement: ${engagementScore}/100 | Sessions: ${totalSessions} | Leads: ${totalLeads} | Cards scanned: ${scannedCards.length} | Docs: ${docs.length} | Last active: ${daysSinceActive}d ago`;
 
-        const profileData = {
+        const profileData: Record<string, any> = {
           user_id: userId,
           intent_score: intentScore,
           engagement_score: engagementScore,
@@ -275,7 +306,20 @@ Deno.serve(async (req) => {
           searches_30d: totalSearches,
           last_active_at: lastActiveDate.toISOString(),
           last_updated_at: now.toISOString(),
+          // NEW: per-page time breakdown
+          page_time_breakdown: pageTimeMap,
+          // NEW: login history
+          login_history: loginHistory,
         };
+
+        // NEW: demographics from user_role_selections
+        if (roleSel) {
+          if (roleSel.nationality) profileData.nationality = roleSel.nationality;
+          if (roleSel.country) profileData.country = roleSel.country;
+          if (roleSel.city) profileData.city = roleSel.city;
+          if (roleSel.preferred_language) profileData.preferred_language = roleSel.preferred_language;
+          if (roleSel.age_range) profileData.age_range = roleSel.age_range;
+        }
 
         const { error } = await supabase.from("user_interest_profile").upsert(profileData, { onConflict: "user_id" });
         if (error) console.error(`Error upserting ${userId}:`, error);
