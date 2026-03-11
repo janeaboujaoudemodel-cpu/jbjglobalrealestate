@@ -185,6 +185,7 @@ export const PublicRoutes = () => (
     {/* ── Home ── */}
     <Route path="/" element={<Index />} />
     <Route path="/developer-portal" element={<DeveloperPortal />} />
+    <Route path="/briefing-attendance/:briefingId" element={<BriefingAttendance />} />
     <Route path="/vapi-prompt" element={<VapiPrompt />} />
 
     {/* ── Properties ── */}
