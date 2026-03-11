@@ -299,14 +299,7 @@ export default function HorizontalUtilityBar() {
           </>
         )}
 
-        {/* Mode Selector */}
-        <DisplayModeIconToggle
-          value={mode === 'investor_broker' ? 'investor' : mode as DisplayMode}
-          onChange={handleModeChange}
-          variant="light"
-        />
-
-        {divider}
+        {/* Mode Selector — handled by ModeSwitcher below */}
 
         {/* Dashboard */}
         <Tooltip>
