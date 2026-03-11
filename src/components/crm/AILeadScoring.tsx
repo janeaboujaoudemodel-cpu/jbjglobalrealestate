@@ -125,6 +125,12 @@ const AILeadScoring = ({ lead, activities = [], onScoreUpdate }: AILeadScoringPr
 
       setScore(newScore);
       onScoreUpdate?.(overall);
+      
+      // Persist AI score to database for analytics
+      supabase.from("crm_leads").update({ 
+        ai_score: overall, 
+        ai_score_updated_at: new Date().toISOString() 
+      } as any).eq("id", lead.id).then(() => {});
     } catch (err) {
       console.error("Failed to calculate score:", err);
     } finally {
@@ -186,7 +192,7 @@ const AILeadScoring = ({ lead, activities = [], onScoreUpdate }: AILeadScoringPr
   }
 
   return (
-    <Card className="border-border bg-card">
+    <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)]/95 to-[hsl(36,25%,88%)]/80 shadow-[0_8px_30px_rgba(200,167,102,0.12)]">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg flex items-center gap-2">

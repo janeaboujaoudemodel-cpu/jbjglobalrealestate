@@ -109,6 +109,8 @@ const CRMLeadDetail = () => {
       return;
     }
     fetchLeadData();
+    // Log lead access for audit trail
+    supabase.rpc('log_crm_lead_access', { p_lead_id: id, p_user_id: user.id, p_access_type: 'view' } as any).then(() => {});
   }, [user, id, navigate]);
 
   useEffect(() => {
@@ -293,7 +295,7 @@ const CRMLeadDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background p-6">
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)] p-6 pt-24">
         <div className="max-w-7xl mx-auto space-y-6">
           <div className="flex items-center gap-4">
             <Skeleton className="h-10 w-10 rounded-full" />
@@ -313,7 +315,7 @@ const CRMLeadDetail = () => {
 
   if (!lead) {
     return (
-      <div className="min-h-screen bg-background p-6 flex flex-col items-center justify-center gap-4">
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)] p-6 pt-24 flex flex-col items-center justify-center gap-4">
         <User className="h-16 w-16 text-muted-foreground" />
         <p className="text-muted-foreground text-lg">Lead not found</p>
         <Button variant="primary" onClick={() => navigate('/crm/leads')}>
@@ -324,16 +326,16 @@ const CRMLeadDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-gold/20 bg-[hsl(222,84%,4.9%)] sticky top-0 z-50">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)]">
+      {/* Header - Premium Champagne Gold */}
+      <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)] sticky top-20 lg:top-24 z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate("/owner")} className="text-gold hover:text-gold hover:bg-gold/10">
+          <Button variant="ghost" size="icon" onClick={() => navigate("/crm")} className="text-black hover:text-gold hover:bg-gold/10">
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div className="flex-1 min-w-0">
-            <h1 className="text-lg font-bold text-white truncate">{lead.full_name}</h1>
-            <p className="text-xs text-gold/70">{lead.nationality} · {lead.preferred_language?.toUpperCase()}</p>
+            <h1 className="text-lg font-bold text-black truncate">{lead.full_name}</h1>
+            <p className="text-xs text-zinc-500">{lead.nationality} · {lead.preferred_language?.toUpperCase()} · Created {new Date(lead.created_at).toLocaleDateString()}</p>
           </div>
           <Select value={currentStatus} onValueChange={handleStatusChange}>
             <SelectTrigger className="w-[160px]">
@@ -372,11 +374,11 @@ const CRMLeadDetail = () => {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-6 space-y-6">
+      <main className="max-w-7xl mx-auto px-4 py-6 pt-8 space-y-6">
         {/* Row 1: Contact Info + Quick Actions + Status side-by-side */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {/* Contact Info */}
-          <Card className="border-gold/20">
+          <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)]/95 to-[hsl(36,25%,88%)]/80 shadow-[0_8px_30px_rgba(200,167,102,0.12)]">
             <CardHeader className="pb-2">
               <CardTitle className="text-base">Contact Info</CardTitle>
             </CardHeader>
@@ -427,7 +429,7 @@ const CRMLeadDetail = () => {
           </Card>
 
           {/* Quick Actions */}
-          <Card className="border-gold/20">
+          <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)]/95 to-[hsl(36,25%,88%)]/80 shadow-[0_8px_30px_rgba(200,167,102,0.12)]">
             <CardHeader className="pb-2">
               <CardTitle className="text-base">Quick Actions</CardTitle>
             </CardHeader>
@@ -445,7 +447,7 @@ const CRMLeadDetail = () => {
           </Card>
 
           {/* Call Tracker */}
-          <Card className="border-gold/20">
+          <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)]/95 to-[hsl(36,25%,88%)]/80 shadow-[0_8px_30px_rgba(200,167,102,0.12)]">
             <CardHeader className="pb-2">
               <CardTitle className="text-base">Log Call</CardTitle>
             </CardHeader>

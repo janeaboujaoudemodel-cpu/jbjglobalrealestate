@@ -222,7 +222,7 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
       {/* Primary Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 overflow-hidden">
         {primaryCards.map((card, index) => (
-          <Card key={index} className="border-zinc-200 bg-white shadow-md overflow-hidden">
+          <Card key={index} className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)]/95 to-[hsl(36,25%,88%)]/80 shadow-[0_8px_30px_rgba(200,167,102,0.12)] overflow-hidden">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-semibold text-zinc-600 truncate">
                 {card.title}
@@ -234,7 +234,7 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
             <CardContent>
               <div className="flex items-end justify-between">
                 <div className="min-w-0 flex-1">
-                  <div className="text-xl md:text-2xl font-bold text-zinc-900 truncate">
+                  <div className="text-xl md:text-2xl font-bold text-black truncate">
                     {loading ? "..." : card.value}
                   </div>
                   <p className="text-xs text-zinc-500 mt-1 truncate">
@@ -256,9 +256,9 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Activity Trend */}
-        <Card className="border-zinc-200 bg-white shadow-md">
+        <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)]/95 to-[hsl(36,25%,88%)]/80 shadow-[0_8px_30px_rgba(200,167,102,0.12)]">
           <CardHeader>
-            <CardTitle className="text-base font-semibold text-zinc-900 flex items-center gap-2">
+            <CardTitle className="text-base font-semibold text-black flex items-center gap-2">
               <TrendingUp className="h-5 w-5 text-blue-500" />
               Weekly Activity
               <span className="text-xs font-normal text-zinc-500 ml-2">Your weekly activity summary</span>
@@ -309,10 +309,10 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
         </Card>
 
         {/* Pipeline Distribution */}
-        <Card className="border-zinc-200 bg-white shadow-md">
+        <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)]/95 to-[hsl(36,25%,88%)]/80 shadow-[0_8px_30px_rgba(200,167,102,0.12)]">
           <CardHeader>
-            <CardTitle className="text-base font-semibold text-zinc-900 flex items-center gap-2">
-              <Zap className="h-5 w-5 text-amber-500" />
+            <CardTitle className="text-base font-semibold text-black flex items-center gap-2">
+              <Zap className="h-5 w-5 text-gold" />
               Pipeline Distribution
             </CardTitle>
           </CardHeader>
@@ -349,7 +349,7 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
 
       {/* Secondary Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="border-zinc-200 bg-white shadow-md">
+        <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)]/95 to-[hsl(36,25%,88%)]/80 shadow-[0_8px_30px_rgba(200,167,102,0.12)]">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-amber-500/10">
@@ -362,40 +362,40 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
             </div>
           </CardContent>
         </Card>
-        <Card className="border-zinc-200 bg-white shadow-md">
+        <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)]/95 to-[hsl(36,25%,88%)]/80 shadow-[0_8px_30px_rgba(200,167,102,0.12)]">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-blue-500/10">
                 <Calendar className="h-5 w-5 text-blue-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-zinc-900">{stats.followupsCreated}</p>
+                <p className="text-2xl font-bold text-black">{stats.followupsCreated}</p>
                 <p className="text-xs text-zinc-500">Follow-ups</p>
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card className="border-zinc-200 bg-white shadow-md">
+        <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)]/95 to-[hsl(36,25%,88%)]/80 shadow-[0_8px_30px_rgba(200,167,102,0.12)]">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-green-500/10">
                 <CheckCircle className="h-5 w-5 text-green-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-zinc-900">{stats.followupsCompleted}</p>
+                <p className="text-2xl font-bold text-black">{stats.followupsCompleted}</p>
                 <p className="text-xs text-zinc-500">Completed</p>
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card className="border-zinc-200 bg-white shadow-md">
+        <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)]/95 to-[hsl(36,25%,88%)]/80 shadow-[0_8px_30px_rgba(200,167,102,0.12)]">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-purple-500/10">
                 <Award className="h-5 w-5 text-purple-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-zinc-900">{stats.pipelineCounts['closed_won'] || 0}</p>
+                <p className="text-2xl font-bold text-black">{stats.pipelineCounts['closed_won'] || 0}</p>
                 <p className="text-xs text-zinc-500">Deals Won</p>
               </div>
             </div>

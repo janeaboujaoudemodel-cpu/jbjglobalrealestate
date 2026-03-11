@@ -192,10 +192,16 @@ const CRM = () => {
   };
 
   const handleExportCSV = async () => {
+    const isOwner = profile?.crm_role === 'owner_admin' || profile?.crm_role === 'founder';
+    if (!isOwner) {
+      toast.error("Only administrators can export leads");
+      return;
+    }
     try {
       const { data: leads } = await supabase
         .from("crm_leads")
-        .select("full_name, email_lower, phone_e164, nationality, preferred_language, current_location_country, source, tags, created_at")
+        .select("full_name, email_lower, phone_e164, nationality, preferred_language, current_location_country, source, tags, created_at, pipeline_stage, ai_score")
+        .is("deleted_at", null)
         .order("created_at", { ascending: false });
       
       if (!leads || leads.length === 0) {
@@ -203,7 +209,16 @@ const CRM = () => {
         return;
       }
       
-      const headers = ["Full Name", "Email", "Phone", "Nationality", "Language", "Country", "Source", "Tags", "Created At"];
+      // Log export action for audit trail
+      await supabase.from("crm_audit_logs").insert({
+        entity_type: 'export',
+        entity_id: 'csv_export',
+        action: 'export',
+        actor_user_id: user?.id,
+        new_values: { count: leads.length, timestamp: new Date().toISOString() }
+      } as any);
+      
+      const headers = ["Full Name", "Email", "Phone", "Nationality", "Language", "Country", "Source", "Pipeline Stage", "AI Score", "Tags", "Created At"];
       const csvRows = [
         headers.join(","),
         ...leads.map(lead => [
@@ -214,6 +229,8 @@ const CRM = () => {
           lead.preferred_language || '',
           lead.current_location_country || '',
           lead.source || '',
+          lead.pipeline_stage || 'new',
+          lead.ai_score || 0,
           `"${(lead.tags || []).join(', ')}"`,
           lead.created_at ? new Date(lead.created_at).toLocaleDateString() : ''
         ].join(","))
