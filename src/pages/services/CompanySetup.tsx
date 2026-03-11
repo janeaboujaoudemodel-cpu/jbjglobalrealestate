@@ -105,11 +105,12 @@ const CompanySetup = () => {
 
       {/* HERO SECTION */}
       <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-black">
-          {/* Video placeholder - Company Setup — Structured, Not Stressful */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/10 via-transparent to-transparent" />
-        </div>
+        <VideoBackground
+          src={companySetupVideo}
+          poster="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/10 via-transparent to-transparent" />
         
         <div className="absolute top-1/4 left-10 w-64 h-64 bg-gold/10 rounded-full blur-[100px] pointer-events-none" />
         <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-gold/15 rounded-full blur-[120px] pointer-events-none" />
