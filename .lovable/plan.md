@@ -1,41 +1,83 @@
 
 
-## Plan: Fix All Email Issues Across All Templates
+## Plan: Fix Filter Overlay, My Account Scroll, Sidebar Borders, Shortcuts Panel, News Tabs & Missing Images
 
-### Problems Identified
+### Issue 1: News Category Filter Overlays Vertical Sidebar
 
-1. **Recommended For You icons disappeared** — Inline SVGs are stripped by Gmail and most email clients. Must revert to hosted PNG images (`ai-tools.png`, `guides.png`, `properties.png` already exist in `public/email-icons/`).
+**Root cause:** The sticky category filter bar on `/news` (line 310) uses `sticky top-16 z-20`. The vertical sidebar is `z-[9997]` but the filter bar renders on top of it because it's within the main content area that overlaps the sidebar's left edge.
 
-2. **Social media footer icons not rendering** — Same issue: `socialLinksFooter()` loads external `.svg` files via `<img>` tags, but Gmail blocks SVG images entirely. Must switch to hosted `.png` files. Currently missing `social-facebook.png` — need to confirm or create it.
+**Fix in `src/pages/News.tsx` line 310:**
+- Change `sticky top-16` to `sticky top-[40px]` (to account for the 40px horizontal utility bar)
+- Add `ml-0` to ensure content doesn't bleed under the sidebar
 
-3. **Email split into multiple visual cards** — Several sub-sections (`ticketSupportEmbed`, `readyToGetStartedHtml`, `recommendedActionsHtml`) each have their own `border`, `border-radius`, and `background` styles creating distinct visual boxes. These need to be softened so they sit seamlessly inside the single continuous card.
+### Issue 2: My Account Section Doesn't Auto-Scroll When Clicked
 
-### Changes (all in `supabase/functions/_shared/email-html.ts`)
+**Root cause:** In `GlobalVerticalNav.tsx` line 571-585, `toggleSection()` opens the accordion and navigates to the first item's route. But the accordion content expands below the visible scroll area, so users can't see the items without manual scrolling.
 
-#### A. Recommended For You — Revert to PNG hosted images
-- Change `recommendedCard()` back to using `iconImg()` with PNG paths
-- Remove the `RECOMMENDED_ICONS` inline SVG object
-- Ensure circular frame clips the PNG with `overflow:hidden` on the `<td>` to prevent square backgrounds
-- Signature: `recommendedCard(title, href, iconPath, alt)` — restore the original parameters
+**Fix in `GlobalVerticalNav.tsx` `toggleSection()`:**
+- After opening a section, use `setTimeout` + `scrollIntoView` on the section's DOM element to scroll it into view within the sidebar's `nav` scroll container.
 
-#### B. Social Footer — Switch to PNG with white pearl background
-- Replace `socialLinksFooter()` to use the inline `SVG` object icons (instagram, facebook, linkedin, tiktok, youtube) that are already defined at the top of the file — these render as raw HTML inside `<td>` elements, not as `<img>` tags, so they should survive email client processing
-- Actually, since Gmail strips ALL SVG (both inline and `<img>`), switch to using the `.png` files: `social-instagram.png`, `social-linkedin.png`, `social-tiktok.png`, `social-youtube.png`
-- Create `social-facebook.png` if missing
-- Style each icon circle: white/pearl (#FDFBF7) background, gold border, black icon inside
+### Issue 3: All Sub-Items Need Full Borders (Not Just MY ACCOUNT)
 
-#### C. Single Card Layout — Remove visual fragmentation
-- `ticketSupportEmbed()`: Remove the heavy gradient background and red border; make it blend into the card
-- `readyToGetStartedHtml()`: Remove the outer border and separate background so it flows within the card
-- `inquiryBox()`: Soften its standalone bordered look
-- Keep all content inside the single `emailShell` wrapper card with no sub-borders that create separation
+**Root cause:** In `getItemStyle()` line 644, default items use `border border-transparent hover:border-gold/15`. The user wants **visible** `border border-gold/20` on ALL items at all times (not just on hover), matching the MY ACCOUNT section style.
 
-#### D. Deploy + Send Test Email
-- Deploy the updated edge function
-- Immediately send a test welcome email to `janeaboujaoudenails@gmail.com`
-- Take a screenshot as proof
+**Fix in `getItemStyle()` line 644:**
+- Change `border border-transparent hover:border-gold/15` to `border border-gold/20 hover:border-gold/30`
 
-### Files Modified
-- `supabase/functions/_shared/email-html.ts` — all icon and layout fixes
-- `public/email-icons/social-facebook.png` — create if missing (or use existing assets)
+### Issue 4: My Shortcuts Panel Content Cropped / Not Readable
+
+**Root cause:** The shortcuts flyout (line 680) uses `max-h-[85vh]` but the inner `overflow-y-auto` container doesn't get enough height because the panel's top margin (`mt-4`) plus the horizontal bar (40px) reduces usable space. Also the `top: 0` doesn't account for the utility bar.
+
+**Fix in `GlobalVerticalNav.tsx` shortcuts mega menu:**
+- Change `style={{ left: sidebarWidth, top: 0, bottom: 0, right: 0 }}` to `top: '40px'`
+- Change `max-h-[85vh]` to `max-h-[calc(100vh-60px)]`
+- Ensure the inner scroll container gets proper `max-h` inheritance
+
+### Issue 5: My Shortcuts Not Clickable on Mobile
+
+**Root cause:** The shortcuts mega menu only renders in the desktop sidebar. The mobile `GlobalHeader.tsx` menu doesn't have the shortcuts panel.
+
+**Fix in `GlobalHeader.tsx`:**
+- Add a "My Shortcuts" expandable section in the mobile menu that mirrors the `SHORTCUT_GROUPS` data, listing all shortcut links as tappable items.
+
+### Issue 6: Tools Section — Show All Tools Listed
+
+The TOOLS section in the sidebar only has "Royal Tools Hub" (line 75). When clicked, it opens the `creative` mega menu. Need to verify all tools are accessible. The AI Tools mega menu (`ai-tools`) is separate and triggered from the highlighted AI Tools Hub item.
+
+**Fix:** No missing tools — the mega menus already list all tools. The issue is the same as Issue 4 (content cropped in flyout). The `max-h` fix will resolve this.
+
+### Issue 7: News Category Tabs Broken/Cropped
+
+**Root cause:** The horizontal scroll container for category filter buttons (line 313) uses `overflow-x-auto scrollbar-hide` with `flex gap-2`. On narrow viewports (especially with sidebar), buttons get cut off.
+
+**Fix in `src/pages/News.tsx`:**
+- Add `flex-nowrap` to prevent wrapping
+- Ensure buttons maintain `whitespace-nowrap` (already present)
+- Add padding-right to the scroll container so the last button isn't clipped: `pr-4`
+
+### Issue 8: News Articles Missing Photos — Re-fetch from Sources
+
+**Root cause:** Some `market_news` rows have NULL `image_url` or broken URLs. The existing `fix-broken-news-images` edge function already handles re-fetching OG images from source URLs.
+
+**Fix:**
+- Invoke the existing `fix-broken-news-images` edge function to audit and repair broken/missing images
+- Add a "Fix Images" admin button on the News page (or trigger automatically)
+- For articles where no OG image can be found, keep the existing gradient placeholder (no stock/fake photos per brand rules)
+
+### Issue 9: Horizontal Header Parity Across Devices
+
+The horizontal utility bar is `hidden lg:flex` (line 91 of `HorizontalUtilityBar.tsx`). On mobile/tablet, it doesn't show.
+
+**Fix in `HorizontalUtilityBar.tsx`:**
+- Show a condensed version on tablet (md breakpoint): key icons only (Search, Buy, Rent, Sell, Account) without labels
+- On mobile (<md), the `GlobalHeader.tsx` already handles navigation — add the shortcuts section there
+
+### Files to Edit
+
+| File | Changes |
+|------|---------|
+| `src/pages/News.tsx` | Fix sticky top offset for category filter, add `flex-nowrap pr-4`, trigger image fix |
+| `src/components/navigation/GlobalVerticalNav.tsx` | Auto-scroll on section open, visible borders on all items, fix shortcuts panel height/top offset |
+| `src/components/GlobalHeader.tsx` | Add My Shortcuts section to mobile menu |
+| `src/components/navigation/HorizontalUtilityBar.tsx` | Show condensed bar on md+ (not just lg+) |
 
