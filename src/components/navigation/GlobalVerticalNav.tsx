@@ -567,7 +567,7 @@ export default function GlobalVerticalNav() {
 
   const navigate = useNavigate();
 
-  // Accordion toggle — only one section open at a time + navigate to first item
+  // Accordion toggle — only one section open at a time (expand only, no navigation)
   const toggleSection = (section: SectionKey) => {
     const opening = openSection !== section;
     setOpenSection(prev => prev === section ? null : section);
@@ -577,15 +577,10 @@ export default function GlobalVerticalNav() {
       if (firstMega?.megaMenu) {
         setActiveMegaMenu(firstMega.megaMenu);
       }
-      // Navigate to first item's route
-      const firstItem = items?.[0];
-      if (firstItem) {
-        navigate(firstItem.href);
-      }
-      // Auto-scroll section into view
+      // Auto-scroll section to top of nav viewport
       setTimeout(() => {
         const el = document.getElementById(`nav-section-${section.replace(/\s+/g, '-').toLowerCase()}`);
-        el?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 150);
     }
   };
@@ -659,7 +654,7 @@ export default function GlobalVerticalNav() {
     if (item.href === '/listing-portal' && item.highlight) return shouldHighlight ? 'text-white' : 'text-sky-500';
     if (item.href === '/resale-properties') return shouldHighlight ? 'text-white' : 'text-emerald-600';
     if (sectionKey === 'MY ACCOUNT') return 'text-gold';
-    return shouldHighlight ? "text-gold" : "text-black/60";
+    return "text-gold";
   };
 
   /* ─── RENDER MEGA MENU ─── */
@@ -886,14 +881,14 @@ export default function GlobalVerticalNav() {
   const renderNavContent = () => (
     <div className="flex flex-col h-full">
       {/* Logo — enlarged monogram and wordmark */}
-      <div className="p-4 border-b border-gold/20 flex-shrink-0">
-        <div className="flex items-center gap-2.5">
+      <div className="p-4 px-5 border-b border-gold/20 flex-shrink-0">
+        <div className="flex items-center gap-3">
          <Link to="/" onClick={() => setActiveMegaMenu(null)} onMouseEnter={() => { import("@/pages/Index"); }} className="flex-shrink-0">
             <img src={jbjMonogramLightBg} alt="JBJ" className="w-14 h-14 object-contain" />
           </Link>
           <Link to="/" onClick={() => setActiveMegaMenu(null)} onMouseEnter={() => { import("@/pages/Index"); }} className="flex flex-col flex-1 min-w-0 hover:opacity-80 transition-opacity" style={{ fontFamily: "Poppins, sans-serif" }}>
             <span className="text-[13px] font-bold text-black tracking-wide leading-tight">JBJ GLOBAL</span>
-            <span className="text-[12px] font-bold text-gold tracking-wide leading-tight">REAL ESTATE</span>
+            <span className="text-[12px] font-bold text-[#D4B896] tracking-wide leading-tight">REAL ESTATE</span>
           </Link>
         </div>
       </div>
@@ -977,7 +972,7 @@ export default function GlobalVerticalNav() {
                         : "text-gold/80 hover:text-gold hover:bg-gold/5 border-transparent hover:border-gold/20"
                     }`}
                   >
-                    <SectionIcon className={`w-3.5 h-3.5 flex-shrink-0 ${sectionHighlighted ? 'text-black' : 'text-gold'}`} />
+                    <SectionIcon className="w-3.5 h-3.5 flex-shrink-0 text-gold" />
                     <span className="flex-1 text-left">{sectionKey}</span>
                     <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'} ${sectionHighlighted ? 'text-gold' : 'text-black/40'}`} />
                     {!isOpen && hasActiveChild && (
@@ -986,7 +981,7 @@ export default function GlobalVerticalNav() {
                   </button>
 
                   <div
-                    className={`overflow-hidden transition-all duration-200 ${isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}
+                    className={`overflow-hidden transition-all duration-200 ${isOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'}`}
                   >
                     <div className="ml-3 pl-3 border-l-2 border-gold/20 space-y-0.5 pt-0.5 pb-1">
                       {items.map((item, i) => {

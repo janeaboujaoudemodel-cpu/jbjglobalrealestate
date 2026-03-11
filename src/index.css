@@ -14,6 +14,8 @@ body {
   padding-bottom: env(safe-area-inset-bottom);
   padding-left: env(safe-area-inset-left);
   padding-right: env(safe-area-inset-right);
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: auto;
 }
 
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
@@ -612,7 +614,7 @@ All colors MUST be HSL.
 
 .jj-scrollbar-always-visible::-webkit-scrollbar {
   display: block !important;
-  width: 5px;
+  width: 7px;
 }
 
 .jj-scrollbar-always-visible::-webkit-scrollbar-track {
@@ -621,7 +623,7 @@ All colors MUST be HSL.
 }
 
 .jj-scrollbar-always-visible::-webkit-scrollbar-thumb {
-  background: hsl(42 45% 59% / 0.5);
+  background: hsl(42 45% 59% / 0.7);
   border-radius: 4px;
   min-height: 30px;
 }
