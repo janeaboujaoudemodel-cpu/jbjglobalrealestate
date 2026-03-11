@@ -286,64 +286,22 @@ const Developers = () => {
         {/* Filters Section - Champagne Layer matching Properties page */}
         <section className="z-40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] py-4 border-b border-gold/30">
           <div className="container mx-auto px-3 sm:px-4">
-            {/* Active Champagne Layer */}
             <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg">
+              <FilterShortcutBar
+                variant="light"
+                filters={shortcutFilters}
+                onFilterChange={(f) => {
+                  setShortcutFilters(f);
+                  setSearchQuery(f.searchQuery || '');
+                  if (f.sortBy === 'alpha') setSortBy('alpha');
+                  else if (f.sortBy === 'most_projects') setSortBy('most_projects');
+                  else if (f.sortBy) setSortBy('default');
+                }}
+                priorityFilter="developers"
+              />
               
-              {/* Search + Sort row */}
-              <div className="flex flex-col sm:flex-row gap-3 mb-4">
-                <div className="relative flex-1">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gold" />
-                  <Input
-                    placeholder="Search developer, project or keyword..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="h-12 pl-12 pr-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-zinc-500 focus:border-gold rounded-lg text-base shadow-sm w-full"
-                  />
-                </div>
-                <div className="flex gap-1.5 flex-shrink-0 items-center">
-                  {([
-                    { key: "default", label: "Newest" },
-                    { key: "alpha", label: "A-Z" },
-                    { key: "most_projects", label: "Most Projects" },
-                  ] as const).map(opt => (
-                    <button
-                      key={opt.key}
-                      onClick={() => {
-                        // Use existing sort - just set tier to trigger different sort
-                        if (opt.key === "alpha") {
-                          setSortBy("alpha" as any);
-                        } else if (opt.key === "most_projects") {
-                          setSortBy("most_projects" as any);
-                        } else {
-                          setSortBy("default" as any);
-                        }
-                      }}
-                      className={`px-3.5 py-2.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${
-                        (sortBy as any) === opt.key || (!sortBy && opt.key === "default")
-                          ? "bg-black text-gold border border-gold shadow-md"
-                          : "bg-white border border-gold/30 text-zinc-600 hover:border-gold"
-                      }`}
-                    >
-                      {opt.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Filter Row */}
-              <div className="flex items-center gap-3 flex-wrap">
-                {/* Developer Dropdown */}
-                <div className="w-full sm:w-[240px]">
-                  <SearchableSelect
-                    value={selectedDeveloper}
-                    onChange={(val) => setSelectedDeveloper(val === selectedDeveloper ? "" : val)}
-                    options={developerNames}
-                    placeholder="All Developers"
-                    searchPlaceholder="Search developer..."
-                    triggerClassName="h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm"
-                  />
-                </div>
-
+              {/* Tier filter row - unique to developers */}
+              <div className="flex items-center gap-3 flex-wrap mt-3 pt-3 border-t border-gold/20">
                 {/* Tier Filter */}
                 <Select value={tierFilter} onValueChange={setTierFilter}>
                   <SelectTrigger className="w-full sm:w-[180px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
@@ -366,22 +324,6 @@ const Developers = () => {
                   {filteredDevelopers.length} developer{filteredDevelopers.length !== 1 ? 's' : ''} found
                   {totalPages > 1 && ` · Page ${currentPage} of ${totalPages}`}
                 </div>
-
-                {/* Advanced Filter button */}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setAdvancedOpen(true)}
-                  className="h-9 px-3 bg-white/80 border-gold/40 text-black hover:bg-white rounded-lg flex items-center gap-1.5 font-semibold"
-                >
-                  <SlidersHorizontal className="w-3.5 h-3.5 text-gold" />
-                  Filter
-                  {(shortcutFilters.developers.length > 0) && (
-                    <span className="ml-1 w-5 h-5 rounded-full bg-gold text-black text-[10px] font-bold flex items-center justify-center">
-                      {shortcutFilters.developers.length}
-                    </span>
-                  )}
-                </Button>
 
                 {/* Clear Filters */}
                 {activeFilterCount > 0 && (
