@@ -382,7 +382,7 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
                 <CheckCircle className="h-5 w-5 text-green-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-zinc-900">{stats.followupsCompleted}</p>
+                <p className="text-2xl font-bold text-black">{stats.followupsCompleted}</p>
                 <p className="text-xs text-zinc-500">Completed</p>
               </div>
             </div>
