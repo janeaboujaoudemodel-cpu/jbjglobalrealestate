@@ -1009,7 +1009,7 @@ export default function GlobalVerticalNav() {
 
                 <div id={`nav-section-${sectionKey.replace(/\s+/g, '-').toLowerCase()}`}>
                   <button
-                    onClick={() => toggleSection(sectionKey)}
+                    onClick={(e) => toggleSection(sectionKey, e)}
                     className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-[11px] uppercase tracking-[0.15em] font-bold transition-all border ${
                       sectionKey === 'MY ACCOUNT'
                         ? sectionHighlighted
