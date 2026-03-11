@@ -4329,6 +4329,45 @@ export type Database = {
         }
         Relationships: []
       }
+      crm_automation_rules: {
+        Row: {
+          action_type: string
+          config: Json | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          trigger_event: string
+          updated_at: string | null
+        }
+        Insert: {
+          action_type: string
+          config?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          trigger_event: string
+          updated_at?: string | null
+        }
+        Update: {
+          action_type?: string
+          config?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          trigger_event?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       crm_brokers: {
         Row: {
           created_at: string
@@ -4957,6 +4996,7 @@ export type Database = {
           current_location_country: string | null
           deleted_at: string | null
           detection_keywords: string[] | null
+          duplicate_hash: string | null
           duplicate_of_id: string | null
           email_lower: string | null
           email_normalized: string | null
@@ -5021,6 +5061,7 @@ export type Database = {
           current_location_country?: string | null
           deleted_at?: string | null
           detection_keywords?: string[] | null
+          duplicate_hash?: string | null
           duplicate_of_id?: string | null
           email_lower?: string | null
           email_normalized?: string | null
@@ -5085,6 +5126,7 @@ export type Database = {
           current_location_country?: string | null
           deleted_at?: string | null
           detection_keywords?: string[] | null
+          duplicate_hash?: string | null
           duplicate_of_id?: string | null
           email_lower?: string | null
           email_normalized?: string | null
@@ -24768,6 +24810,7 @@ export type Database = {
         Args: { p_email: string; p_ip?: string }
         Returns: boolean
       }
+      check_lead_access_rate: { Args: { p_user_id: string }; Returns: boolean }
       check_lead_rate_limit: {
         Args: {
           p_email: string
@@ -24827,6 +24870,7 @@ export type Database = {
       cleanup_old_health_logs: { Args: never; Returns: undefined }
       cleanup_rate_limit_records: { Args: never; Returns: number }
       cleanup_temp_video_files: { Args: never; Returns: undefined }
+      crm_auto_purge_old_deleted: { Args: never; Returns: number }
       crm_detect_stale_leads: { Args: { p_days?: number }; Returns: number }
       crm_find_duplicates: {
         Args: { p_email?: string; p_phone?: string }
