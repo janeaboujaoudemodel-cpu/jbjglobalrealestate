@@ -1,123 +1,99 @@
 
 
-## Plan: Developer Briefing Management System with Broker Attendance & Rep Scoring
+## Plan: Brand Palette for All Users, Availability Auto-Hide, Stamp/Tools UI Premium Upgrade, Sitemap Update, and Cross-Tool Integration
 
-Upgrades the existing Developer Portal, BriefingRequestForm, and AdminDevelopers into a full briefing lifecycle system.
-
----
-
-### Phase 1: Database Migration
-
-Add new tables and columns:
-
-**New table: `briefing_attendance`**
-- `id`, `briefing_request_id` (FK → briefing_requests), `broker_id` (FK → auth.users), `rsvp_status` (attending/not_attending/late), `late_reason`, `expected_arrival_time`, `confirmed_attended` (boolean), `selfie_url`, `gps_latitude`, `gps_longitude`, `gps_address`, `confirmed_at`, `points_earned` (default 10), `created_at`
-
-**New table: `briefing_broker_lists`**
-- `id`, `name`, `description`, `broker_ids` (uuid[]), `created_by`, `is_active`, `created_at`
-
-**Alter `briefing_requests`** — add columns:
-- `location_type` (text, default 'developer_office', options: 'developer_office' | 'our_office')
-- `location_address` (text)
-- `approved_at`, `approved_by` (uuid)
-- `calendar_locked` (boolean default false)
-- `broker_list_id` (FK → briefing_broker_lists, nullable)
-- `developer_logo_url` (text)
-
-**Alter `developer_representatives`** — add columns:
-- `languages` (text[], default '{}')
-- `whatsapp_group_number` (text)
-- `activity_score` (integer, default 0)
-- `response_time_avg_hours` (numeric)
-- `total_briefings_hosted` (integer, default 0)
-- `total_updates_submitted` (integer, default 0)
-- `last_active_at` (timestamptz)
-
-**New table: `rep_activity_log`**
-- `id`, `representative_id` (FK), `activity_type` (briefing_hosted | project_updated | availability_updated | brochure_uploaded | event_submitted | whatsapp_message | whatsapp_response), `description`, `points_earned`, `response_time_minutes`, `created_at`
-
-RLS: Owner can manage all. Reps can view own activity. Brokers can view own attendance.
+This is a large request spanning 6 distinct areas. To avoid quality issues, I recommend implementing in **3 phases**. This plan covers all phases but Phase 1 will be implemented first.
 
 ---
 
-### Phase 2: Upgrade BriefingRequestForm
+### Phase 1: Brand Palette → Public + Per-User Personalization + UI Fixes
 
-File: `src/components/developer-portal/BriefingRequestForm.tsx`
+**Problem:** Brand Palette is owner-only (`OwnerGuard`), live preview doesn't work properly, color swatches are square inside rounded cards, hex codes are visible to all, no color wheel, no saved palette history, no per-user personalization.
 
-- Add **location type** radio: "Developer Sales Office" (enabled) | "Our Sales Office" (disabled, badge: "Under Renovation — Coming Soon")
-- Add **location address** text input when "Developer Sales Office" selected
-- Add **languages spoken** multi-select for the rep (reuse `LanguageMultiSelect` component)
-- Replace date input with a **calendar picker** (DayPicker in a popover) so reps visually pick a day
-- On submit, insert into `briefing_requests` with new fields + create `admin_tasks` entry
+**Changes:**
 
----
+#### 1A. Database: `user_color_palettes` table
+```sql
+CREATE TABLE public.user_color_palettes (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  name text NOT NULL DEFAULT 'Custom Palette',
+  palette jsonb NOT NULL,
+  is_active boolean DEFAULT false,
+  created_at timestamptz DEFAULT now()
+);
+-- RLS: users CRUD their own palettes only
+```
 
-### Phase 3: Owner Briefing Management Dashboard
+#### 1B. Remove `OwnerGuard` from brand palette route
+Move `/owner/brand-palette` → `/brand-palette` as a public authenticated route. Owner sees full hex codes + corporate palette management. Regular users see:
+- Color wheel pickers (no hex codes visible)
+- Visual labels ("Primary — buttons, links", etc.) with live example previews
+- Apply to "Website" or "Tools only" toggle
+- Save/Revert/History of their personal palettes
+- Palettes saved per-user in `user_color_palettes`
 
-New component: `src/components/admin/BriefingManagement.tsx`
+#### 1C. Fix UI issues
+- Match color swatch shape to card container (use `rounded-2xl` on swatches to match card radius)
+- Add a clickable color wheel icon next to each swatch for users who don't know to click the square
+- Fix live preview: make `isPreviewing` default to `true` so changes reflect immediately
+- Show accurate JBJ website palette as defaults: `primary: #C8A766, secondary: #000000, accent: #D4AF37, background: #FDFBF7, text: #1A1A1A`
 
-Integrated as a new tab in `AdminDevelopers.tsx` (tab: "Briefings")
+#### 1D. BrandPaletteContext updates
+- Load user's active personal palette from `user_color_palettes` for non-owners
+- Owner's palette comes from `app_settings` (unchanged)
+- `applyPaletteToDOM()` already works — just needs to trigger on page load for per-user palettes
 
-Features:
-- **Calendar view** showing all briefing requests (pending = yellow, approved = green, rejected = red)
-- **Approval workflow**: Click a briefing → approve/reject. On approve: set `approved_at`, `calendar_locked = true`, trigger notification
-- **Broker list manager**: Create/edit named broker lists (select brokers from profiles). Assign a list to a briefing so all brokers on the list get notified
-- **Attendance dashboard**: For each briefing, show RSVP status, selfie thumbnails, GPS location, confirmation status
-- **Rep activity leaderboard**: Rank all developer reps by `activity_score`. Show total briefings hosted, updates submitted, avg response time. Top rep highlighted with gold badge
-- **Developer search**: Search by developer name → see all associated reps with their languages, activity scores, contact info
-
----
-
-### Phase 4: Broker Attendance Portal
-
-New page: `src/pages/BriefingAttendance.tsx` at route `/briefing-attendance/:briefingId`
-
-Flow (linked from email):
-1. **RSVP section**: Attending / Not Attending / Will Be Late (+ reason + expected time)
-2. **Post-briefing confirmation**: "Confirm Attendance" button appears after briefing time
-3. **Selfie + GPS capture**: Opens device camera (`navigator.mediaDevices.getUserMedia`), captures photo, gets GPS via `navigator.geolocation.getCurrentPosition`, overlays developer logo watermark
-4. Uploads selfie to `documents/briefing-attendance/` bucket, saves GPS + confirmation to `briefing_attendance` table
-5. Awards points to broker's loyalty account
-
-Route added to `PublicRoutes.tsx` (authenticated but not owner-guarded).
-
----
-
-### Phase 5: Rep Activity Scoring & Manual WhatsApp Logging
-
-**Auto-scoring triggers** (in the existing portal code):
-- When rep submits a project upload → +5 points, log to `rep_activity_log`
-- When rep requests a briefing → +3 points
-- When rep submits an event → +3 points
-- When rep updates availability/brochures → +5 points
-
-**Manual WhatsApp activity panel** in AdminDevelopers:
-- Log entries: message sent/received, response time in minutes
-- Calculates `response_time_avg_hours` on the rep profile
-- Shows message count + responsiveness rating (Excellent / Good / Slow)
-
-**Owner calendar integration**: When briefing is approved, auto-insert into `admin_tasks` with calendar date, set notifications. Wire to existing AI Calendar alerts system.
-
----
-
-### Phase 6: Notifications & Sitemap
-
-- When briefing approved → notify all brokers on the assigned broker list (insert into `user_notifications`)
-- When broker RSVPs → notify owner
-- When selfie uploaded → notify owner with GPS confirmation
-- Update `Sitemap.tsx` with `/briefing-attendance`
-
----
-
-### Files Modified/Created
-
+**Files:**
 | File | Action |
 |------|--------|
-| DB migration | New tables + columns |
-| `BriefingRequestForm.tsx` | Add location, calendar picker, languages |
-| `AdminDevelopers.tsx` | Add "Briefings" tab with calendar + approval + attendance + leaderboard |
-| `BriefingAttendance.tsx` | New page — RSVP + selfie + GPS |
-| `DeveloperPortal.tsx` | Activity scoring on submit actions |
-| `PublicRoutes.tsx` | Add briefing attendance route |
-| `Sitemap.tsx` | Add new routes |
+| Database migration | Create `user_color_palettes` |
+| `src/routes/AdminRoutes.tsx` | Move palette route from OwnerGuard to authenticated |
+| `src/pages/owner/BrandPaletteHub.tsx` | Major refactor: dual-mode (owner vs user), color wheels, no hex for users, palette history, shape fixes |
+| `src/contexts/BrandPaletteContext.tsx` | Load per-user palette, add `saveUserPalette`, `getUserPaletteHistory`, `revertToDefault` |
+| `src/components/navigation/GlobalVerticalNav.tsx` | Update nav link path |
+
+---
+
+### Phase 2: Availability Auto-Hide + Stamp Generator Premium UI
+
+**Problem:** Property availability/unit counts are visible to investors (discourages urgency). Stamp generator UI needs premium upgrade.
+
+#### 2A. Availability auto-hide
+- Add `availability_visible` boolean column to `projects` table (default `false`)
+- All public-facing property pages: hide availability/unit count data when `availability_visible = false`
+- Owner can toggle visibility per-project from Listing Admin
+- Developer Portal uploads auto-set `availability_visible = false`
+
+#### 2B. Stamp Generator premium UI overhaul
+- Apply champagne gradient theme consistently (matching Royal Tools Hub)
+- Default to "Ink Blue" standard with the two canonical company stamp designs
+- Gold-bordered cards, premium typography, centered preview
+- Upgrade security: sanitize all SVG inputs, encrypt stamp data in session storage
+
+**Files:** `projects` migration, Listing Admin toggle, property detail pages, `StampGeneratorPage.tsx`, `StampProjectWizard.tsx`, related stamp components
+
+---
+
+### Phase 3: Sitemap Update, Cross-Tool Integration, Security Hardening
+
+#### 3A. Sitemap
+Add missing tool links: Brand Palette, Scan & Sign, all new features added recently.
+
+#### 3B. Cross-tool integration
+- Scan & Sign: add "Import Stamp", "Import Business Card", "Import QR Code" buttons that pull from session storage
+- E-Signature: already has stamp integration — verify QR code and business card import paths
+- All tools: ensure owner sees their brand palette colors in color pickers; non-owners see generic palette
+
+#### 3C. Global security
+- RLS audit across new tables
+- Edge function JWT hardening review
+- DOM obfuscation layer verification
+
+**Files:** `Sitemap.tsx`, `ScanSignPage.tsx`, `CreateEnvelope.tsx`, tool color pickers, edge functions
+
+---
+
+### Implementation Priority
+**Phase 1 first** (Brand Palette) — directly addresses the page user is currently viewing and the most detailed feedback. Phases 2 and 3 follow in subsequent messages.
 

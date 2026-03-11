@@ -38,6 +38,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { ProvidentSyncButton } from "@/components/admin/ProvidentSyncButton";
+import BriefingManagement from "@/components/admin/BriefingManagement";
 
 interface Developer {
   id: string;
@@ -364,6 +365,9 @@ const AdminDevelopers = () => {
             <TabsTrigger value="all" className="data-[state=active]:bg-gold data-[state=active]:text-black">
               All UAE ({filteredDevelopers.length})
             </TabsTrigger>
+            <TabsTrigger value="briefings" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+              📅 Briefings
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="dubai" className="space-y-4">
@@ -410,6 +414,10 @@ const AdminDevelopers = () => {
                 onDeleteRep={handleDeleteRep}
               />
             ))}
+          </TabsContent>
+
+          <TabsContent value="briefings" className="space-y-4">
+            <BriefingManagement />
           </TabsContent>
         </Tabs>
       </div>

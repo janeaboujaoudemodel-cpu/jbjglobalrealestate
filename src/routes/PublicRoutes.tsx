@@ -170,6 +170,7 @@ const PartnerGovernance = lazy(() => import("@/pages/governance/PartnerGovernanc
 
 // ── Developer Portal ──
 const DeveloperPortal = lazy(() => import("@/pages/DeveloperPortal"));
+const BriefingAttendance = lazy(() => import("@/pages/BriefingAttendance"));
 const TicketHub = lazy(() => import("@/pages/TicketHub"));
 const ApiAccess = lazy(() => import("@/pages/ApiAccess"));
 
@@ -184,6 +185,7 @@ export const PublicRoutes = () => (
     {/* ── Home ── */}
     <Route path="/" element={<Index />} />
     <Route path="/developer-portal" element={<DeveloperPortal />} />
+    <Route path="/briefing-attendance/:briefingId" element={<BriefingAttendance />} />
     <Route path="/vapi-prompt" element={<VapiPrompt />} />
 
     {/* ── Properties ── */}
