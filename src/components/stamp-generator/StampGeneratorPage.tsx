@@ -432,7 +432,7 @@ export default function StampGeneratorPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))] pt-24 sm:pt-28 lg:pt-32">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)] pt-24 sm:pt-28 lg:pt-32">
 
       {/* Preview Modal */}
       {previewConcept && (
