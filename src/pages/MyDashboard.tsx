@@ -110,15 +110,23 @@ function UsefulLinksCard() {
 
   return (
     <div>
-      <div className="flex items-center gap-2 mb-4">
-        <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center">
-          <BookOpen className="w-4 h-4 text-gold" />
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center">
+            <BookOpen className="w-4 h-4 text-gold" />
+          </div>
+          <h3 className="text-base font-semibold text-foreground">Explore & Learn</h3>
         </div>
-        <h3 className="text-base font-semibold text-foreground">Explore & Learn</h3>
+        <Button variant="outline" size="sm" asChild className="border-gold/30 text-gold hover:bg-gold/10 hover:text-gold">
+          <Link to="/guides">
+            Explore All Books
+            <ChevronRight className="w-3.5 h-3.5 ml-1" />
+          </Link>
+        </Button>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+      <div className="flex gap-6 overflow-x-auto pb-2 jj-scrollbar-gold-x">
         {books.map((book) => (
-          <Link key={book.href} to={book.href} className="group flex flex-col items-center gap-2">
+          <Link key={book.href} to={book.href} className="group flex flex-col items-center gap-2 flex-shrink-0">
             <motion.div
               whileHover={{ y: -8 }}
               transition={{ type: 'spring', stiffness: 300 }}
