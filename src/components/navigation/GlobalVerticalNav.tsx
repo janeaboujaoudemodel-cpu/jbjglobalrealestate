@@ -540,8 +540,15 @@ export default function GlobalVerticalNav() {
 
   const closeMegaMenu = useCallback(() => setActiveMegaMenu(null), []);
 
-  // Close on route change
-  useEffect(() => { closeMegaMenu(); setMobileOpen(false); }, [location.pathname, closeMegaMenu]);
+  // Close mega menu and My Account section on route change
+  useEffect(() => {
+    closeMegaMenu();
+    setMobileOpen(false);
+    // Auto-close My Account section on any navigation to prevent stuck state
+    if (openSection === 'MY ACCOUNT') {
+      setOpenSection(null);
+    }
+  }, [location.pathname, closeMegaMenu]);
 
   const isRouteActive = (href: string) => {
     if (href === "#") return false;
