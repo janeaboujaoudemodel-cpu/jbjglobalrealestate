@@ -816,6 +816,14 @@ const Footer = () => {
                   { href: "/ai-social-media", label: "Social Media" },
                   { href: "/ai-translation-hub", label: "Translation Hub" },
                   { href: "/ai-document-generator", label: "Doc Generator" },
+                  { href: "/ai-personal-shopper", label: "AI Personal Shopper" },
+                  { href: "/ai-calendar", label: "AI Calendar" },
+                  { href: "/ai-budget-planner", label: "AI Budget Planner" },
+                  { href: "/ai-investment-report", label: "AI Investment Report" },
+                  { href: "/ai-call-summarizer", label: "AI Call Summarizer" },
+                  { href: "/ai-client-matcher", label: "AI Client Matcher" },
+                  { href: "/ai-description-writer", label: "AI Description Writer" },
+                  { href: "/my-ai-history", label: "AI History" },
                 ]} viewAllHref="/ai-hub" viewAllLabel="View All 40+ Tools →" />
 
                 {/* Market Intelligence */}
