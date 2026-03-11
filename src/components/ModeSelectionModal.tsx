@@ -76,8 +76,10 @@ export const ModeSelectionModal = () => {
             </span>
           </div>,
           {
-            duration: 5000,
+            duration: 8000,
             icon: <CheckCircle2 className="w-5 h-5 text-gold" />,
+            position: 'bottom-center',
+            className: 'bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 text-black shadow-xl rounded-xl',
           }
         );
       } else {

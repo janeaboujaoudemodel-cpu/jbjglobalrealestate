@@ -152,7 +152,7 @@ const CURRENCY_RATES: Record<string, number> = {
 const SQFT_TO_SQM = 1 / 10.764;
 const SQM_TO_SQFT = 10.764;
 
-const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapToggle, searchSlot }: FilterShortcutBarProps) => {
+const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapToggle, searchSlot, priorityFilter }: FilterShortcutBarProps) => {
   const [saveModalOpen, setSaveModalOpen] = useState(false);
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const [prevCurrency, setPrevCurrency] = useState<string>('AED');

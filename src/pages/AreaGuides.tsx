@@ -293,6 +293,7 @@ const AreaGuides = () => {
             variant="light"
             filters={shortcutFilters}
             onFilterChange={setShortcutFilters}
+            priorityFilter="areas"
           />
         </div>
       </section>
