@@ -44,6 +44,15 @@ const MODE_CONFIG: Record<UserMode, { label: string; shortLabel: string; icon: t
     bgColor: 'bg-purple-500/10 border-purple-500/30',
     borderColor: 'border-purple-500/40',
     description: 'Full access to both modes'
+  },
+  developer: {
+    label: 'Developer Mode',
+    shortLabel: 'D',
+    icon: Building2,
+    color: 'text-amber-500',
+    bgColor: 'bg-amber-500/10 border-amber-500/30',
+    borderColor: 'border-amber-500/40',
+    description: 'Submit projects & manage launches'
   }
 };
 
