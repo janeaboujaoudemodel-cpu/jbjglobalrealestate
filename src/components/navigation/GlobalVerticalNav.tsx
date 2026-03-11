@@ -761,7 +761,6 @@ export default function GlobalVerticalNav() {
                       })}
                     </div>
                   </div>
-                  </div>
                 ))}
               </div>
             </div>
