@@ -389,9 +389,7 @@ const MyTickets = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-      <GlobalHeader />
-
-      <div className="pt-24 pb-16 px-4">
+      <div className="pt-8 pb-16 px-4">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-10">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-gold/20 rounded-full mb-4">
