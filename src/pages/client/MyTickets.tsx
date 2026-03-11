@@ -613,8 +613,6 @@ const MyTickets = () => {
           )}
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 };
