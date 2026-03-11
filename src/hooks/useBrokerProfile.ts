@@ -17,6 +17,18 @@ export interface BrokerProfile {
   languages: string[];
   years_experience: number;
   broker_type: 'internal' | 'external';
+  current_tier: string;
+  total_points: number;
+  custom_title: string | null;
+  custom_label: string | null;
+  performance_rating: string;
+  verification_status: string;
+  rera_expiry_date: string | null;
+  id_expiry_date: string | null;
+  probation_end: string | null;
+  probation_skipped: boolean;
+  show_contact_public: boolean;
+  show_last_name_public: boolean;
 }
 
 export function useBrokerProfile() {
