@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { User, Briefcase, Users, ArrowRight, CheckCircle2, Handshake } from 'lucide-react';
+import { User, Briefcase, Users, ArrowRight, CheckCircle2, Handshake, Building2 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { useUserModeContext, UserMode } from '@/contexts/UserModeContext';
@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
-type SelectableMode = UserMode | 'visitor';
+type SelectableMode = UserMode | 'visitor' | 'developer';
 
 interface ModeOption {
   mode: SelectableMode;
@@ -30,6 +30,12 @@ const MODE_OPTIONS: ModeOption[] = [
     label: 'Broker',
     description: 'Access broker tools, CRM dashboard, and professional resources',
     icon: Briefcase,
+  },
+  {
+    mode: 'developer',
+    label: 'Developer',
+    description: 'Submit projects, upload marketing materials, and manage launches',
+    icon: Building2,
   },
   {
     mode: 'visitor',
@@ -59,7 +65,7 @@ export const ModeSelectionModal = () => {
     try {
       if (isLoggedIn) {
         // Logged in: set mode directly (visitor maps to investor)
-        const actualMode: UserMode = selectedMode === 'visitor' ? 'investor' : selectedMode;
+        const actualMode: UserMode = selectedMode === 'visitor' ? 'investor' : selectedMode as UserMode;
         await setMode(actualMode);
         dismiss();
         toast.success(

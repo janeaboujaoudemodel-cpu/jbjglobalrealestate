@@ -168,6 +168,7 @@ const PartnerGovernance = lazy(() => import("@/pages/governance/PartnerGovernanc
 
 // ── Developer Portal ──
 const DeveloperPortal = lazy(() => import("@/pages/DeveloperPortal"));
+const TicketHub = lazy(() => import("@/pages/TicketHub"));
 
 // ── Misc ──
 const VapiPrompt = lazy(() => import("@/pages/VapiPrompt"));
@@ -335,6 +336,7 @@ export const PublicRoutes = () => (
     <Route path="/settings" element={<Navigate to="/profile?tab=settings" replace />} />
     <Route path="/client-portal" element={<ClientPortal />} />
     <Route path="/my-tickets" element={<MyTickets />} />
+    <Route path="/ticket-hub" element={<TicketHub />} />
     <Route path="/reopen-ticket" element={<ReopenTicket />} />
     <Route path="/join" element={<JoinApplication />} />
     <Route path="/onboarding" element={<Onboarding />} />

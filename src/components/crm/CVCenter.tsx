@@ -71,6 +71,7 @@ interface CVEntry {
   user_id: string | null;
   record_source: 'hr_applications' | 'hr_cv_submissions';
   position_applied: string | null;
+  is_viewed: boolean;
 }
 
 interface CVCenterProps {
@@ -182,6 +183,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
         reviewed_by: app.reviewed_by, user_id: app.user_id || null,
         record_source: 'hr_applications',
         position_applied: app.position_applied || null,
+        is_viewed: app.is_viewed || false,
       }));
 
       const fromSubs: CVEntry[] = (subsRes.data || []).map((sub: any) => ({
@@ -199,6 +201,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
         reviewed_at: sub.reviewed_at || null, reviewed_by: sub.reviewed_by || null,
         user_id: null, record_source: 'hr_cv_submissions',
         position_applied: sub.position_applied || null,
+        is_viewed: sub.is_viewed || false,
       }));
 
       const allCVs = [...fromApps, ...fromSubs];
@@ -507,6 +510,13 @@ const CVCenter = ({ userId }: CVCenterProps) => {
     setCvPreviewLoading(true);
     setCvDirectUrl(null);
     setCvPreviewUrl(null);
+
+    // Mark as viewed if not already
+    if (!cv.is_viewed) {
+      const table = cv.record_source === 'hr_applications' ? 'hr_applications' : 'hr_cv_submissions';
+      await supabase.from(table).update({ is_viewed: true } as any).eq('id', cv.id);
+      setCvEntries(prev => prev.map(c => c.id === cv.id ? { ...c, is_viewed: true } : c));
+    }
 
     if (previewBlobUrlRef.current) {
       URL.revokeObjectURL(previewBlobUrlRef.current);
@@ -946,7 +956,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                   const hasUnreadableSummary = /unreadable|corrupt|malformed/i.test(cv.ai_summary || '');
 
                   return (
-                    <Card key={cv.id} className="bg-gradient-to-r from-zinc-50 to-white border border-crm-border hover:border-gold/50 hover:shadow-md transition-all">
+                    <Card key={cv.id} className={`bg-gradient-to-r from-zinc-50 to-white border border-crm-border hover:border-gold/50 hover:shadow-md transition-all ${!cv.is_viewed ? 'border-l-4 border-l-amber-500' : ''}`}>
                       <CardContent className="p-5">
                         {/* === QUICK SUMMARY (always visible) === */}
                         <div className="flex items-start justify-between gap-4">
@@ -959,6 +969,9 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                             <div className="flex-1 min-w-0">
                               {/* Name & Score row */}
                               <div className="flex items-center gap-2 flex-wrap mb-1">
+                                {!cv.is_viewed && (
+                                  <Badge className="bg-amber-500/20 text-amber-700 border border-amber-500/30 text-[10px] font-bold px-1.5 py-0.5 animate-pulse">NEW</Badge>
+                                )}
                                 <h4 className="text-lg font-bold text-crm-text">{cv.full_name}</h4>
                                 {isAnalyzing ? (
                                   <Badge className="bg-purple-100 text-purple-700 border-purple-300 animate-pulse">

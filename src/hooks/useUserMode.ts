@@ -5,7 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 const MODE_KEY = "jj_user_mode";
 
 // Expanded to 3 modes: investor, broker, or both
-export type UserMode = 'investor' | 'broker' | 'investor_broker';
+export type UserMode = 'investor' | 'broker' | 'investor_broker' | 'developer';
 
 interface UserModeHook {
   mode: UserMode;
@@ -14,13 +14,14 @@ interface UserModeHook {
   isInvestorMode: boolean;
   isBrokerMode: boolean;
   isCombinedMode: boolean;
+  isDeveloperMode: boolean;
 }
 
 // Map legacy 'client' value to 'investor'
 const normalizeMode = (value: string | null): UserMode => {
   if (value === 'broker') return 'broker';
   if (value === 'investor_broker') return 'investor_broker';
-  // 'client' or anything else defaults to 'investor'
+  if (value === 'developer') return 'developer';
   return 'investor';
 };
 
@@ -111,5 +112,6 @@ export const useUserMode = (): UserModeHook => {
     isInvestorMode: mode === 'investor' || mode === 'investor_broker',
     isBrokerMode: mode === 'broker' || mode === 'investor_broker',
     isCombinedMode: mode === 'investor_broker',
+    isDeveloperMode: mode === 'developer',
   };
 };

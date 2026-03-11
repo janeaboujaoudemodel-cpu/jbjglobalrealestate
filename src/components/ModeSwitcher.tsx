@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Briefcase, User, ChevronDown, Check, Loader2, Users } from "lucide-react";
+import { Briefcase, User, ChevronDown, Check, Loader2, Users, Building2 } from "lucide-react";
 import { useUserModeContext, UserMode } from "@/contexts/UserModeContext";
 import { useUserRole } from "@/hooks/useUserRole";
 import { cn } from "@/lib/utils";
@@ -44,6 +44,15 @@ const MODE_CONFIG: Record<UserMode, { label: string; shortLabel: string; icon: t
     bgColor: 'bg-purple-500/10 border-purple-500/30',
     borderColor: 'border-purple-500/40',
     description: 'Full access to both modes'
+  },
+  developer: {
+    label: 'Developer Mode',
+    shortLabel: 'D',
+    icon: Building2,
+    color: 'text-amber-500',
+    bgColor: 'bg-amber-500/10 border-amber-500/30',
+    borderColor: 'border-amber-500/40',
+    description: 'Submit projects & manage launches'
   }
 };
 

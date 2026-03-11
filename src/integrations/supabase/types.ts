@@ -9238,6 +9238,7 @@ export type Database = {
           flag_reason: string | null
           full_name: string
           id: string
+          is_viewed: boolean
           languages: string[] | null
           nationality: string
           phone_e164: string
@@ -9267,6 +9268,7 @@ export type Database = {
           flag_reason?: string | null
           full_name: string
           id?: string
+          is_viewed?: boolean
           languages?: string[] | null
           nationality: string
           phone_e164: string
@@ -9296,6 +9298,7 @@ export type Database = {
           flag_reason?: string | null
           full_name?: string
           id?: string
+          is_viewed?: boolean
           languages?: string[] | null
           nationality?: string
           phone_e164?: string
@@ -9671,6 +9674,7 @@ export type Database = {
           email: string
           full_name: string
           id: string
+          is_viewed: boolean
           notes: string | null
           phone: string | null
           position_applied: string | null
@@ -9691,6 +9695,7 @@ export type Database = {
           email: string
           full_name: string
           id?: string
+          is_viewed?: boolean
           notes?: string | null
           phone?: string | null
           position_applied?: string | null
@@ -9711,6 +9716,7 @@ export type Database = {
           email?: string
           full_name?: string
           id?: string
+          is_viewed?: boolean
           notes?: string | null
           phone?: string | null
           position_applied?: string | null
