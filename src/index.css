@@ -612,7 +612,7 @@ All colors MUST be HSL.
 
 .jj-scrollbar-always-visible::-webkit-scrollbar {
   display: block !important;
-  width: 5px;
+  width: 7px;
 }
 
 .jj-scrollbar-always-visible::-webkit-scrollbar-track {
