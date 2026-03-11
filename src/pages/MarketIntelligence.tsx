@@ -113,13 +113,12 @@ const MarketIntelligence = () => {
 
       {/* Hero Section */}
       <section className="jj-hero-fullscreen relative flex items-center overflow-hidden">
-        {/* Hero background image */}
-        <img 
-          src={marketIntelligenceHero}
-          alt=""
-          className="absolute inset-0 w-full h-full object-cover"
+        {/* Video background with poster fallback */}
+        <VideoBackground
+          src="https://videos.pexels.com/video-files/3629519/3629519-uhd_2560_1440_25fps.mp4"
+          poster={marketIntelligenceHero}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/80 to-black" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/70 to-black" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/5 via-transparent to-transparent" />
         
         <motion.div 
