@@ -87,7 +87,7 @@ export function QuickActions() {
         <CardTitle className="text-base text-foreground">Quick Actions</CardTitle>
       </CardHeader>
       <CardContent className="pt-0">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[400px] overflow-y-auto jj-scrollbar-gold">
           {actions.map((action, index) => (
             <button
               key={index}
