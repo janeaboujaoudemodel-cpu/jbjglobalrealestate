@@ -21240,11 +21240,14 @@ export type Database = {
       }
       user_interest_profile: {
         Row: {
+          age_range: string | null
           avg_budget_estimate: number | null
+          city: string | null
           compares_count_30d: number | null
           confidence_score: number | null
           contact_clicks_30d: number | null
           conversion_probability: number | null
+          country: string | null
           created_at: string
           current_streak: number | null
           device_mix: Json | null
@@ -21256,9 +21259,13 @@ export type Database = {
           last_active_at: string | null
           last_updated_at: string | null
           lead_count_30d: number | null
+          login_history: Json | null
           longest_streak: number | null
+          nationality: string | null
+          page_time_breakdown: Json | null
           preferred_areas: string[] | null
           preferred_bedrooms: number[] | null
+          preferred_language: string | null
           preferred_property_types: string[] | null
           revenue_potential: number | null
           saves_count_30d: number | null
@@ -21277,11 +21284,14 @@ export type Database = {
           vip_tier_reason: string | null
         }
         Insert: {
+          age_range?: string | null
           avg_budget_estimate?: number | null
+          city?: string | null
           compares_count_30d?: number | null
           confidence_score?: number | null
           contact_clicks_30d?: number | null
           conversion_probability?: number | null
+          country?: string | null
           created_at?: string
           current_streak?: number | null
           device_mix?: Json | null
@@ -21293,9 +21303,13 @@ export type Database = {
           last_active_at?: string | null
           last_updated_at?: string | null
           lead_count_30d?: number | null
+          login_history?: Json | null
           longest_streak?: number | null
+          nationality?: string | null
+          page_time_breakdown?: Json | null
           preferred_areas?: string[] | null
           preferred_bedrooms?: number[] | null
+          preferred_language?: string | null
           preferred_property_types?: string[] | null
           revenue_potential?: number | null
           saves_count_30d?: number | null
@@ -21314,11 +21328,14 @@ export type Database = {
           vip_tier_reason?: string | null
         }
         Update: {
+          age_range?: string | null
           avg_budget_estimate?: number | null
+          city?: string | null
           compares_count_30d?: number | null
           confidence_score?: number | null
           contact_clicks_30d?: number | null
           conversion_probability?: number | null
+          country?: string | null
           created_at?: string
           current_streak?: number | null
           device_mix?: Json | null
@@ -21330,9 +21347,13 @@ export type Database = {
           last_active_at?: string | null
           last_updated_at?: string | null
           lead_count_30d?: number | null
+          login_history?: Json | null
           longest_streak?: number | null
+          nationality?: string | null
+          page_time_breakdown?: Json | null
           preferred_areas?: string[] | null
           preferred_bedrooms?: number[] | null
+          preferred_language?: string | null
           preferred_property_types?: string[] | null
           revenue_potential?: number | null
           saves_count_30d?: number | null
