@@ -582,6 +582,11 @@ export default function GlobalVerticalNav() {
       if (firstItem) {
         navigate(firstItem.href);
       }
+      // Auto-scroll section into view
+      setTimeout(() => {
+        const el = document.getElementById(`nav-section-${section.replace(/\s+/g, '-').toLowerCase()}`);
+        el?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 150);
     }
   };
 
