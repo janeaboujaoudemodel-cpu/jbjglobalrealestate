@@ -305,16 +305,16 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             <div className="flex items-center w-full min-w-max border border-gold/30 rounded-lg overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
               {/* Search slot or built-in search */}
               {searchSlot ? (
-                <div className="min-w-0 max-w-[220px] border-r border-gold/20">
+                <div className="min-w-0 max-w-[220px] border-r border-gold/20" title="Search area, project, keyword">
                   {searchSlot}
                 </div>
               ) : (
-                <div className="min-w-0 max-w-[220px] border-r border-gold/20 flex items-center px-3">
+                <div className="min-w-0 max-w-[220px] border-r border-gold/20 flex items-center px-3" title="Search area, project, keyword">
                   <input
                     type="text"
                     value={filters.searchQuery}
                     onChange={(e) => update({ searchQuery: e.target.value })}
-                    placeholder="Search..."
+                    placeholder="Search area, project, keyword..."
                     className="w-full h-full py-2.5 bg-transparent text-xs text-black placeholder:text-black/40 outline-none"
                   />
                 </div>

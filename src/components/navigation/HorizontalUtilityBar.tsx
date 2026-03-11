@@ -217,13 +217,14 @@ export default function HorizontalUtilityBar() {
           <TooltipTrigger asChild>
             <button
               onClick={() => navigate('/properties?advanced=true')}
-              className="h-7 w-7 flex items-center justify-center rounded-md hover:bg-gold/10 transition-all group border border-gold/20"
+              className="h-7 flex items-center gap-1 rounded-md hover:bg-gold/10 transition-all px-2 group border border-gold/20"
               aria-label="Advanced Property Filter"
             >
               <SlidersHorizontal className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-transform" />
+              <span className="text-[10px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">Filter</span>
             </button>
           </TooltipTrigger>
-          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Advanced Property Filter</TooltipContent>
+          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Open advanced filters</TooltipContent>
         </Tooltip>
 
         {/* ── Spacer ── */}
