@@ -15,6 +15,7 @@ import {
 import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png";
 import React, { useState, useCallback, useEffect, useMemo } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useUserRole } from "@/hooks/useUserRole";
 import { supabase } from "@/integrations/supabase/client";
 import GlobalSearchModal from "@/components/GlobalSearchModal";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
