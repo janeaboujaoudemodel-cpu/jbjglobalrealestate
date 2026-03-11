@@ -420,7 +420,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="fixed left-1/2 -translate-x-1/2 w-full max-w-3xl z-50 px-4 top-4 sm:top-12 md:top-16"
+            className="fixed left-1/2 -translate-x-1/2 w-full max-w-3xl z-[10001] px-4 top-4 sm:top-12 md:top-16"
             style={{ maxHeight: 'calc(100dvh - 2rem)' }}
           >
             <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl shadow-2xl overflow-hidden flex flex-col" style={{ maxHeight: 'calc(100dvh - 3rem)' }}>
