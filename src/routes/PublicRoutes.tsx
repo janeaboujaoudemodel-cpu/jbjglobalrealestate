@@ -169,6 +169,7 @@ const PartnerGovernance = lazy(() => import("@/pages/governance/PartnerGovernanc
 // ── Developer Portal ──
 const DeveloperPortal = lazy(() => import("@/pages/DeveloperPortal"));
 const TicketHub = lazy(() => import("@/pages/TicketHub"));
+const ApiAccess = lazy(() => import("@/pages/ApiAccess"));
 
 // ── Misc ──
 const VapiPrompt = lazy(() => import("@/pages/VapiPrompt"));
@@ -372,6 +373,7 @@ export const PublicRoutes = () => (
     {/* ── Misc ── */}
     <Route path="/sitemap" element={<Sitemap />} />
     <Route path="/pricing" element={<Pricing />} />
+    <Route path="/api-access" element={<ApiAccess />} />
 
     {/* ── 404 ── */}
     <Route path="*" element={<NotFound />} />

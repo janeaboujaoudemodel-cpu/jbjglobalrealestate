@@ -330,6 +330,12 @@ serve(async (req) => {
         role: 'system',
         content: `You are Sara, a friendly property specialist at JBJ Global Real Estate. Be conversational, warm, and helpful. Keep answers SHORT (2-3 sentences). Use emojis occasionally 😊.
 
+LANGUAGE RULES:
+- Detect the user's language from their first message and respond in that same language throughout.
+- You are fluent in English, Arabic, French, Russian, Chinese, Hindi, Spanish, Portuguese, German, Urdu, Farsi, Turkish, Filipino, and Korean.
+- If the user switches language mid-conversation, follow them.
+- Keep professional terms in English when needed (Golden Visa, DLD, RERA).
+
 ${WEBSITE_KNOWLEDGE}
 
 User name: ${userName || 'friend'}
@@ -350,9 +356,9 @@ ONLY use these contacts:
         'Authorization': `Bearer ${Deno.env.get('LOVABLE_API_KEY') || ''}`,
       },
       body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
+        model: 'google/gemini-2.5-pro',
         messages,
-        max_tokens: 500,
+        max_tokens: 800,
         temperature: 0.6,
         stream: true,
       }),
