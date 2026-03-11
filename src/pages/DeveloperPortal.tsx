@@ -11,13 +11,14 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useUserModeContext } from "@/contexts/UserModeContext";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import {
   Calendar, Upload, Building2, PartyPopper, FileText, Loader2,
   CheckCircle, X, Plus, FolderOpen, ExternalLink, AlertCircle,
-  ClipboardList, Send, Eye,
+  ClipboardList, Send, Eye, Info,
 } from "lucide-react";
 
 interface UploadedFile {
