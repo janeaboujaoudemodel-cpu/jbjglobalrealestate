@@ -16523,6 +16523,7 @@ export type Database = {
           area_name: string | null
           area_unit: string | null
           availability_status: string | null
+          availability_visible: boolean | null
           available_units: number | null
           bedroom_types: Json | null
           bedrooms_max: number | null
@@ -16610,6 +16611,7 @@ export type Database = {
           area_name?: string | null
           area_unit?: string | null
           availability_status?: string | null
+          availability_visible?: boolean | null
           available_units?: number | null
           bedroom_types?: Json | null
           bedrooms_max?: number | null
@@ -16697,6 +16699,7 @@ export type Database = {
           area_name?: string | null
           area_unit?: string | null
           availability_status?: string | null
+          availability_visible?: boolean | null
           available_units?: number | null
           bedroom_types?: Json | null
           bedrooms_max?: number | null

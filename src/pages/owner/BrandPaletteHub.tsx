@@ -198,19 +198,27 @@ const BrandPaletteHub = () => {
                 >
                   <div className="flex items-center gap-3 mb-3">
                     {/* Color swatch — rounded to match card */}
-                    <div className="relative group">
-                      <input
-                        type="color"
-                        value={draft[key]}
-                        onChange={(e) => updateColor(key, e.target.value)}
-                        className="w-14 h-14 rounded-2xl cursor-pointer border-2 border-gold/30 shadow-sm"
-                        style={{ padding: 0 }}
-                        title={`Click to change ${label}`}
-                      />
-                      {/* Color wheel indicator */}
-                      <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-card border border-gold/40 flex items-center justify-center pointer-events-none">
-                        <CircleDot className="w-3 h-3 text-gold" />
-                      </div>
+                    <div className="relative group cursor-pointer">
+                      <label className="cursor-pointer block">
+                        <input
+                          type="color"
+                          value={draft[key]}
+                          onChange={(e) => updateColor(key, e.target.value)}
+                          className="w-14 h-14 rounded-2xl cursor-pointer border-2 border-gold/30 shadow-sm"
+                          style={{ padding: 0 }}
+                          title={`Click to change ${label}`}
+                        />
+                      </label>
+                      {/* Prominent color wheel indicator with tooltip */}
+                      <label className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-card border-2 border-gold/40 flex items-center justify-center cursor-pointer shadow-md hover:scale-110 transition-transform" title="Click to change color">
+                        <CircleDot className="w-3.5 h-3.5 text-gold" />
+                        <input
+                          type="color"
+                          value={draft[key]}
+                          onChange={(e) => updateColor(key, e.target.value)}
+                          className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                        />
+                      </label>
                     </div>
                     <div className="flex-1">
                       <Label className="text-foreground font-bold text-sm">{label}</Label>

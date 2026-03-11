@@ -12,7 +12,7 @@ import { PDFDocument } from 'pdf-lib';
 import {
   Camera, Upload, FileText, Pen, Download, Trash2, RotateCw,
   Loader2, CheckCircle2, Plus, Image as ImageIcon, Save, Sparkles, Wand2, X,
-  ScanLine, ZoomIn, ZoomOut, Crop, FolderOpen, RefreshCcw, FlipHorizontal
+  ScanLine, ZoomIn, ZoomOut, Crop, FolderOpen, RefreshCcw, FlipHorizontal, Stamp
 } from 'lucide-react';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -612,6 +612,71 @@ export default function ScanSignPage() {
                       className="hidden"
                       onChange={handleFileUpload}
                     />
+
+                    {/* Cross-tool import buttons */}
+                    <div className="mt-3 space-y-2">
+                      <p className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: G.textMuted }}>Import from Tools</p>
+                      <div className="grid grid-cols-3 gap-2">
+                        <button
+                          onClick={() => {
+                            try {
+                              const svgRaw = sessionStorage.getItem('esignature_stamp_svg');
+                              if (!svgRaw) { toast.error('No stamp found. Generate one in the Stamp Generator first.'); return; }
+                              // Convert SVG string to data URL for image display
+                              const svgBlob = new Blob([svgRaw], { type: 'image/svg+xml' });
+                              const reader = new FileReader();
+                              reader.onload = () => {
+                                const dataUrl = reader.result as string;
+                                setPages(prev => [...prev, { id: `stamp-${Date.now()}`, imageData: dataUrl, rotation: 0, brightness: 100, contrast: 100 }]);
+                                toast.success('Stamp imported');
+                              };
+                              reader.readAsDataURL(svgBlob);
+                            } catch { toast.error('Failed to import stamp'); }
+                          }}
+                          className="flex flex-col items-center gap-1 p-2 rounded-lg text-[10px] font-medium transition-all hover:scale-105"
+                          style={{ border: `1px solid ${G.border}`, background: G.card, color: G.text }}
+                        >
+                          <Stamp className="w-4 h-4" />
+                          Stamp
+                        </button>
+                        <button
+                          onClick={() => {
+                            try {
+                              const raw = sessionStorage.getItem('jbj-business-card-export');
+                              if (!raw) { toast.error('No card found. Design one first.'); return; }
+                              const data = JSON.parse(raw);
+                              const imgData = data?.dataUrl || data?.imageData;
+                              if (!imgData) { toast.error('Invalid card data'); return; }
+                              setPages(prev => [...prev, { id: `card-${Date.now()}`, imageData: imgData, rotation: 0, brightness: 100, contrast: 100 }]);
+                              toast.success('Business card imported');
+                            } catch { toast.error('Failed to import card'); }
+                          }}
+                          className="flex flex-col items-center gap-1 p-2 rounded-lg text-[10px] font-medium transition-all hover:scale-105"
+                          style={{ border: `1px solid ${G.border}`, background: G.card, color: G.text }}
+                        >
+                          <FileText className="w-4 h-4" />
+                          Card
+                        </button>
+                        <button
+                          onClick={() => {
+                            try {
+                              const raw = sessionStorage.getItem('jbj-qr-export');
+                              if (!raw) { toast.error('No QR code found. Generate one first.'); return; }
+                              const data = JSON.parse(raw);
+                              const imgData = data?.dataUrl || data?.imageData;
+                              if (!imgData) { toast.error('Invalid QR data'); return; }
+                              setPages(prev => [...prev, { id: `qr-${Date.now()}`, imageData: imgData, rotation: 0, brightness: 100, contrast: 100 }]);
+                              toast.success('QR code imported');
+                            } catch { toast.error('Failed to import QR'); }
+                          }}
+                          className="flex flex-col items-center gap-1 p-2 rounded-lg text-[10px] font-medium transition-all hover:scale-105"
+                          style={{ border: `1px solid ${G.border}`, background: G.card, color: G.text }}
+                        >
+                          <ScanLine className="w-4 h-4" />
+                          QR
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 )}
               </Panel>

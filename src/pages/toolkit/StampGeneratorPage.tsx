@@ -46,9 +46,9 @@ export default function StampGeneratorLanding() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)]">
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--champagne-1))] py-20 px-6">
+      <section className="relative overflow-hidden bg-gradient-to-br from-[hsl(var(--pearl-1))] via-[hsl(40,33%,98%)] to-[hsl(var(--champagne-1))] py-20 px-6">
         <div className="max-w-4xl mx-auto text-center space-y-6">
           <Badge className="bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold-dark))] border border-[hsl(var(--gold)/0.3)] px-3 py-1">
             <Stamp size={12} className="mr-1.5"/> AI-Powered Tool
@@ -91,7 +91,7 @@ export default function StampGeneratorLanding() {
       </section>
 
       {/* How it works */}
-      <section className="py-16 px-6 bg-white">
+      <section className="py-16 px-6 bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)]">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-2xl font-bold text-[hsl(var(--foreground))] text-center mb-10">How It Works</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -112,7 +112,7 @@ export default function StampGeneratorLanding() {
           <h2 className="text-2xl font-bold text-[hsl(var(--foreground))] text-center mb-10">Everything You Need</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {FEATURES.map(f => (
-              <div key={f.title} className="bg-white rounded-2xl border border-[hsl(var(--border))] p-5 space-y-3">
+              <div key={f.title} className="bg-card/80 rounded-2xl border-2 border-gold/30 p-5 space-y-3 hover:border-gold/50 transition-all">
                 <div className="w-10 h-10 rounded-xl bg-[hsl(var(--gold)/0.1)] flex items-center justify-center">
                   <f.icon size={18} className="text-[hsl(var(--gold))]"/>
                 </div>
@@ -125,7 +125,7 @@ export default function StampGeneratorLanding() {
       </section>
 
       {/* What's included */}
-      <section className="py-16 px-6 bg-white">
+      <section className="py-16 px-6 bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)]">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold text-[hsl(var(--foreground))] text-center mb-2">Export Pack Includes</h2>
           <p className="text-center text-[hsl(var(--muted-foreground))] text-sm mb-8">Every download includes all these formats — ready for print and digital use</p>

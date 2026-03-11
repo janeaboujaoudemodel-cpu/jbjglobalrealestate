@@ -265,6 +265,7 @@ const ProjectDetail = () => {
       area_name: project.area_name ?? null,
       latitude: project.latitude ?? null,
       longitude: project.longitude ?? null,
+      availability_visible: (project as any).availability_visible ?? false,
     };
   }, [project]);
 

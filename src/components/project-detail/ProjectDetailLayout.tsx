@@ -171,6 +171,7 @@ export type ProjectDetailData = {
   sale_status?: string | null;
   emirate?: string | null;
   construction_status?: string | null;
+  availability_visible?: boolean | null;
 };
 
 interface ProjectDetailLayoutProps {
@@ -760,15 +761,15 @@ export default function ProjectDetailLayout({
 
           {/* QUICK FACTS BAR - Reelly-style horizontal bar */}
           <div className="mb-12">
-            <QuickFactsBar
-              propertyType={project.property_type_label}
-              totalUnits={project.total_units}
-              floors={project.floors && project.floors > 3 ? project.floors : undefined}
-              availabilityStatus={project.availability_status}
-              statusLabel={project.status_label}
-              handoverDate={project.handover_date}
-              updatedAt={project.updated_at}
-            />
+             <QuickFactsBar
+               propertyType={project.property_type_label}
+               totalUnits={project.availability_visible ? project.total_units : null}
+               floors={project.floors && project.floors > 3 ? project.floors : undefined}
+               availabilityStatus={project.availability_visible ? project.availability_status : null}
+               statusLabel={project.status_label}
+               handoverDate={project.handover_date}
+               updatedAt={project.updated_at}
+             />
           </div>
 
           {/* DATA FRESHNESS INDICATOR */}
@@ -849,15 +850,16 @@ export default function ProjectDetailLayout({
 
            {/* UNIT TYPES & INVENTORY SECTION (Reelly-style) */}
            {(project.unit_types?.length ?? 0) > 0 && (
-             <div ref={unitsRef} id="units" className="mb-14 scroll-mt-40">
-               <UnitInventorySection
-                 unitTypes={project.unit_types || []}
-                 totalUnits={project.total_units}
-                 availableUnits={project.available_units}
-                 projectName={project.name}
-               />
-             </div>
-           )}
+              <div ref={unitsRef} id="units" className="mb-14 scroll-mt-40">
+                <UnitInventorySection
+                  unitTypes={project.unit_types || []}
+                  totalUnits={project.availability_visible ? project.total_units : null}
+                  availableUnits={project.availability_visible ? project.available_units : null}
+                  projectName={project.name}
+                  availabilityVisible={project.availability_visible ?? false}
+                />
+              </div>
+            )}
 
            {/* CONSTRUCTION TIMELINE SECTION (Reelly-style) */}
            {(project.construction_progress !== null && project.construction_progress !== undefined) && (
@@ -935,10 +937,10 @@ export default function ProjectDetailLayout({
            {/* HOUSE DETAILS SECTION (Reelly-style) */}
            {(project.floors || project.total_units || project.service_charge || project.finishing_standard) && (
              <div ref={houseDetailsRef} id="house-details" className="mb-14 scroll-mt-40">
-               <HouseDetailsSection
-                 floors={project.floors}
-                 totalUnits={project.total_units}
-                 buildingType={project.property_type_label}
+                <HouseDetailsSection
+                  floors={project.floors}
+                  totalUnits={project.availability_visible ? project.total_units : null}
+                  buildingType={project.property_type_label}
                  ceilingHeight={project.ceiling_height}
                  finishingStandard={project.finishing_standard}
                  serviceCharge={project.service_charge}

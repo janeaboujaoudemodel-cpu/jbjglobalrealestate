@@ -92,7 +92,7 @@ export default function StampGeneratorPage() {
   const [blocked, setBlocked] = useState(false);
 
   // Three-color system — persisted
-  const [primaryColor, setPrimaryColorRaw] = useState(() => ssGet(ssKey('primaryColor'), '#B8860B'));
+  const [primaryColor, setPrimaryColorRaw] = useState(() => ssGet(ssKey('primaryColor'), '#1B3A8C'));
   const [secondaryColor, setSecondaryColorRaw] = useState<string | undefined>(() => ssGet(ssKey('secondaryColor'), undefined));
   const [accentColor, setAccentColorRaw] = useState<string | undefined>(() => ssGet(ssKey('accentColor'), undefined));
   const [activeStop, setActiveStop] = useState<ColorStop>('primary');
@@ -432,7 +432,7 @@ export default function StampGeneratorPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))] pt-24 sm:pt-28 lg:pt-32">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)] pt-24 sm:pt-28 lg:pt-32">
 
       {/* Preview Modal */}
       {previewConcept && (
@@ -1267,7 +1267,7 @@ function ConceptCard({
   const displaySvg = svgOverride || concept.svgSource;
 
   return (
-    <div className={`group bg-white rounded-2xl border-2 transition-all shadow-sm hover:shadow-md ${isSelected ? 'border-[hsl(var(--gold))] shadow-[0_0_0_3px_hsl(var(--gold)/0.15)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]'}`}>
+    <div className={`group bg-card/80 rounded-2xl border-2 transition-all shadow-sm hover:shadow-md ${isSelected ? 'border-gold shadow-[0_0_0_3px_hsl(var(--gold)/0.15)]' : 'border-gold/30 hover:border-gold/50'}`}>
       <div className="relative p-4 flex items-center justify-center bg-[hsl(var(--pearl-1))] rounded-t-2xl min-h-[180px]">
         {isSelected && (
           <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[hsl(var(--gold))] flex items-center justify-center z-10">
