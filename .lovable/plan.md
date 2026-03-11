@@ -1,41 +1,52 @@
 
 
-## Plan: Fix All Email Issues Across All Templates
+## Plan: Fix Critical Bugs + Horizontal Bar Enhancement + Global Section Padding
 
-### Problems Identified
+### Issues Identified
 
-1. **Recommended For You icons disappeared** — Inline SVGs are stripped by Gmail and most email clients. Must revert to hosted PNG images (`ai-tools.png`, `guides.png`, `properties.png` already exist in `public/email-icons/`).
+1. **Search modal z-index** — Already fixed in previous session (z-[10000]/z-[10001]). Confirmed.
+2. **Developer Portal "Submit Event Invitation" button blocked** — The event form in the Events tab works but the submit button style may be visually hidden or overlapped. Need to verify the button rendering at line 413-415.
+3. **Contact Us link not redirecting** — The sidebar links to `/contact` correctly (confirmed at lines 1061-1067 in GlobalVerticalNav.tsx). Need to check if something else is broken — possibly a button somewhere that's not wired.
+4. **Horizontal bar too short / cramped** — Currently `h-[40px]`. Needs increase to `h-[48px]` with more breathable spacing.
+5. **Owner shortcuts in horizontal bar need expansion** — Currently shows CRM, Admin, Listings, Properties, Areas, Developers, Assistant. Missing: HR Hub, CV Center, Owner Command Center, Inquiries/Messages, Customer Happiness.
+6. **Global section padding** — The `SupportTicketBox` uses `jj-layer-2` which has `mx-1 sm:mx-2 md:mx-3 lg:mx-4`. The Contact page sections use `mx-0`. Need to standardize ALL sections across ALL pages to use consistent side margins (matching `jj-layer-2` pattern: small black gutters on sides).
+7. **Developer Portal should detect developer mode** — Instead of "Are you a developer?" section, use `useUserMode()` to check if user selected `developer` mode and conditionally show the developer tools.
 
-2. **Social media footer icons not rendering** — Same issue: `socialLinksFooter()` loads external `.svg` files via `<img>` tags, but Gmail blocks SVG images entirely. Must switch to hosted `.png` files. Currently missing `social-facebook.png` — need to confirm or create it.
+### Changes
 
-3. **Email split into multiple visual cards** — Several sub-sections (`ticketSupportEmbed`, `readyToGetStartedHtml`, `recommendedActionsHtml`) each have their own `border`, `border-radius`, and `background` styles creating distinct visual boxes. These need to be softened so they sit seamlessly inside the single continuous card.
+**File 1: `src/components/navigation/HorizontalUtilityBar.tsx`**
+- Increase bar height from `h-[40px]` to `h-[48px]` 
+- Increase icon/text sizes slightly for readability
+- Expand owner shortcuts to include: CRM, Admin Panel, Listing Admin, Owner Command Center, HR Hub, CV Center, Inquiries, Messages, Customer Happiness, Founder Assistant
+- Add missing icon imports (Headphones, FileUser, Crown, MessageSquare, SmilePlus)
 
-### Changes (all in `supabase/functions/_shared/email-html.ts`)
+**File 2: `src/pages/DeveloperPortal.tsx`**
+- Import `useUserMode` and detect developer mode
+- Remove any "Are you a developer?" gating question — the user already selected developer mode in onboarding
+- If user is NOT in developer mode, show a note suggesting they switch modes
 
-#### A. Recommended For You — Revert to PNG hosted images
-- Change `recommendedCard()` back to using `iconImg()` with PNG paths
-- Remove the `RECOMMENDED_ICONS` inline SVG object
-- Ensure circular frame clips the PNG with `overflow:hidden` on the `<td>` to prevent square backgrounds
-- Signature: `recommendedCard(title, href, iconPath, alt)` — restore the original parameters
+**File 3: `src/index.css`**
+- Standardize `jj-layer-2` margins to be the reference padding (currently `mx-1 sm:mx-2 md:mx-3 lg:mx-4`)
+- Create a new utility class `jj-section-gutter` for consistent section-level padding: `px-1 sm:px-2 md:px-3 lg:px-4` applied to section containers
 
-#### B. Social Footer — Switch to PNG with white pearl background
-- Replace `socialLinksFooter()` to use the inline `SVG` object icons (instagram, facebook, linkedin, tiktok, youtube) that are already defined at the top of the file — these render as raw HTML inside `<td>` elements, not as `<img>` tags, so they should survive email client processing
-- Actually, since Gmail strips ALL SVG (both inline and `<img>`), switch to using the `.png` files: `social-instagram.png`, `social-linkedin.png`, `social-tiktok.png`, `social-youtube.png`
-- Create `social-facebook.png` if missing
-- Style each icon circle: white/pearl (#FDFBF7) background, gold border, black icon inside
+**File 4: `src/pages/Contact.tsx`**  
+- Change all section `<div className="mx-0 ...">` to use `mx-1 sm:mx-2 md:mx-3 lg:mx-4` matching `jj-layer-2` gutters
+- This creates the thin black border effect the user wants on all sides
 
-#### C. Single Card Layout — Remove visual fragmentation
-- `ticketSupportEmbed()`: Remove the heavy gradient background and red border; make it blend into the card
-- `readyToGetStartedHtml()`: Remove the outer border and separate background so it flows within the card
-- `inquiryBox()`: Soften its standalone bordered look
-- Keep all content inside the single `emailShell` wrapper card with no sub-borders that create separation
+**File 5: Multiple page files** (global audit)
+- Apply the same `mx-1 sm:mx-2 md:mx-3 lg:mx-4` gutter pattern to all front-end page sections that currently use `mx-0` or have no margin, including: Homepage sections, Services, Guides, Properties page banners, Legal pages, Company pages, Insights/Tools pages
+- Search for all `mx-0` champagne/gradient sections and update them
 
-#### D. Deploy + Send Test Email
-- Deploy the updated edge function
-- Immediately send a test welcome email to `janeaboujaoudenails@gmail.com`
-- Take a screenshot as proof
+**File 6: `src/components/SupportTicketBox.tsx`**  
+- Already uses `jj-layer-2` — confirmed correct. No changes needed.
 
-### Files Modified
-- `supabase/functions/_shared/email-html.ts` — all icon and layout fixes
-- `public/email-icons/social-facebook.png` — create if missing (or use existing assets)
+### Summary Table
+
+| File | Changes |
+|------|---------|
+| `HorizontalUtilityBar.tsx` | Taller bar (48px), more owner shortcuts, more breathable spacing |
+| `DeveloperPortal.tsx` | Auto-detect developer mode, remove "are you a developer" question |
+| `Contact.tsx` | Add consistent side gutters (mx-1 sm:mx-2 md:mx-3 lg:mx-4) to all sections |
+| `src/index.css` | Add `jj-section-gutter` utility class for global reuse |
+| Multiple pages | Apply consistent gutter padding globally |
 
