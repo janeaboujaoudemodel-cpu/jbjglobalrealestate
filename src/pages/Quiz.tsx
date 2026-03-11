@@ -455,6 +455,7 @@ const Quiz = () => {
       const recommendations = getRecommendations();
       const slugs = recommendations.slice(0, 5).map((p) => p.slug).join(",");
       markFreeUsed();
+      toast.success("✨ Your AI-selected properties are ready!", { duration: 4000, position: 'bottom-center' });
       navigate(`/quiz-results?projects=${slugs}&free=true`);
     } finally {
       setIsSubmitting(false);
