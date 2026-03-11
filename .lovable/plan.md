@@ -1,41 +1,41 @@
 
 
-## Plan: Expand TOOLS Section in Vertical Sidebar with All Tools Listed
+## Plan: Fix All Email Issues Across All Templates
 
-### Problem
-The TOOLS section in the vertical sidebar only has one item — "Royal Tools Hub" — which opens a mega menu flyout. The user wants all creative/corporate tools listed directly as sub-items in the sidebar, with "Royal Tools Hub" navigating to `/toolkit` and the section header "TOOLS" opening the discovery screen.
+### Problems Identified
 
-### Changes
+1. **Recommended For You icons disappeared** — Inline SVGs are stripped by Gmail and most email clients. Must revert to hosted PNG images (`ai-tools.png`, `guides.png`, `properties.png` already exist in `public/email-icons/`).
 
-**File: `src/components/navigation/GlobalVerticalNav.tsx`**
+2. **Social media footer icons not rendering** — Same issue: `socialLinksFooter()` loads external `.svg` files via `<img>` tags, but Gmail blocks SVG images entirely. Must switch to hosted `.png` files. Currently missing `social-facebook.png` — need to confirm or create it.
 
-1. **Expand NAV_ITEMS** — Add all tools from the `creative` mega menu as individual sidebar items under the TOOLS section (after line 75):
+3. **Email split into multiple visual cards** — Several sub-sections (`ticketSupportEmbed`, `readyToGetStartedHtml`, `recommendedActionsHtml`) each have their own `border`, `border-radius`, and `background` styles creating distinct visual boxes. These need to be softened so they sit seamlessly inside the single continuous card.
 
-| Tool | Icon | Route |
-|------|------|-------|
-| Corporate Suite | Building | /toolkit/corporate-suite |
-| Real Estate Suite | Home | /toolkit/property-suite |
-| Video Suite | Video | /toolkit/video-suite |
-| Photo Suite | Image | /toolkit/photo-suite |
-| Voice & Audio | Mic | /toolkit/voice-suite |
-| PDF & Documents | FileText | /toolkit/pdf-suite |
-| Stamp Generator | Stamp | /toolkit/stamp-generator |
-| Business Card | CreditCard | /toolkit/corporate-suite/business-card |
-| Logo Maker | Palette | /toolkit/corporate-suite/logo-creator |
-| CV Builder | FileText | /toolkit/corporate-suite/cv-resume |
-| Cover Letter | Pen | /toolkit/corporate-suite/cover-letter |
-| Company Profile | Award | /toolkit/corporate-suite/company-profile |
-| E-Sign | Globe | /e-signature |
-| Scan & Sign | FileSearch | /toolkit/scan-sign |
-| Brand Palette | Palette | /owner/brand-palette |
+### Changes (all in `supabase/functions/_shared/email-html.ts`)
 
-2. **Royal Tools Hub** keeps `megaMenu: 'creative'` removed (or kept for flyout), but clicking it navigates to `/toolkit` directly.
+#### A. Recommended For You — Revert to PNG hosted images
+- Change `recommendedCard()` back to using `iconImg()` with PNG paths
+- Remove the `RECOMMENDED_ICONS` inline SVG object
+- Ensure circular frame clips the PNG with `overflow:hidden` on the `<td>` to prevent square backgrounds
+- Signature: `recommendedCard(title, href, iconPath, alt)` — restore the original parameters
 
-3. **Section header "TOOLS"** — When user clicks the TOOLS section header, it expands the section to show all sub-items (no navigation, matching the fix from the previous plan).
+#### B. Social Footer — Switch to PNG with white pearl background
+- Replace `socialLinksFooter()` to use the inline `SVG` object icons (instagram, facebook, linkedin, tiktok, youtube) that are already defined at the top of the file — these render as raw HTML inside `<td>` elements, not as `<img>` tags, so they should survive email client processing
+- Actually, since Gmail strips ALL SVG (both inline and `<img>`), switch to using the `.png` files: `social-instagram.png`, `social-linkedin.png`, `social-tiktok.png`, `social-youtube.png`
+- Create `social-facebook.png` if missing
+- Style each icon circle: white/pearl (#FDFBF7) background, gold border, black icon inside
 
-### Files to Edit
+#### C. Single Card Layout — Remove visual fragmentation
+- `ticketSupportEmbed()`: Remove the heavy gradient background and red border; make it blend into the card
+- `readyToGetStartedHtml()`: Remove the outer border and separate background so it flows within the card
+- `inquiryBox()`: Soften its standalone bordered look
+- Keep all content inside the single `emailShell` wrapper card with no sub-borders that create separation
 
-| File | Changes |
-|------|---------|
-| `src/components/navigation/GlobalVerticalNav.tsx` | Add 15 tool sub-items under TOOLS section after Royal Tools Hub |
+#### D. Deploy + Send Test Email
+- Deploy the updated edge function
+- Immediately send a test welcome email to `janeaboujaoudenails@gmail.com`
+- Take a screenshot as proof
+
+### Files Modified
+- `supabase/functions/_shared/email-html.ts` — all icon and layout fixes
+- `public/email-icons/social-facebook.png` — create if missing (or use existing assets)
 

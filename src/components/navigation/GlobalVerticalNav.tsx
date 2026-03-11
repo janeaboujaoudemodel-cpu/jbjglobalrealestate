@@ -72,7 +72,22 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Map", href: "/map", icon: MapPin },
 
   // ── Creative & Tools ──
-  { label: "Royal Tools Hub", href: "/toolkit", icon: Sparkles, megaMenu: 'creative', section: "TOOLS" },
+  { label: "Royal Tools Hub", href: "/toolkit", icon: Sparkles, section: "TOOLS" },
+  { label: "Corporate Suite", href: "/toolkit/corporate-suite", icon: Building },
+  { label: "Real Estate Suite", href: "/toolkit/property-suite", icon: Home },
+  { label: "Video Suite", href: "/toolkit/video-suite", icon: Video },
+  { label: "Photo Suite", href: "/toolkit/photo-suite", icon: Image },
+  { label: "Voice & Audio", href: "/toolkit/voice-suite", icon: Mic },
+  { label: "PDF & Documents", href: "/toolkit/pdf-suite", icon: FileText },
+  { label: "Stamp Generator", href: "/toolkit/stamp-generator", icon: Stamp },
+  { label: "Business Card", href: "/toolkit/corporate-suite/business-card", icon: CreditCard },
+  { label: "Logo Maker", href: "/toolkit/corporate-suite/logo-creator", icon: Palette },
+  { label: "CV Builder", href: "/toolkit/corporate-suite/cv-resume", icon: FileSearch },
+  { label: "Cover Letter", href: "/toolkit/corporate-suite/cover-letter", icon: Pen },
+  { label: "Company Profile", href: "/toolkit/corporate-suite/company-profile", icon: Award },
+  { label: "E-Sign", href: "/e-signature", icon: Globe },
+  { label: "Scan & Sign", href: "/toolkit/scan-sign", icon: Camera },
+  { label: "Brand Palette", href: "/owner/brand-palette", icon: Palette },
 
   // ── Insights (no more Guides here) ──
   { label: "Market Intelligence", href: "/market-intelligence", icon: BarChart3, section: "INSIGHTS" },
