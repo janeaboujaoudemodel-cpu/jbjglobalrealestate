@@ -67,8 +67,8 @@ const MortgageCalculatorPage = () => {
             </p>
           </div>
 
-          {/* Calculator */}
-          <MortgageCalculator compact />
+          {/* Calculator — heading hidden since page hero provides it */}
+          <MortgageCalculator compact showHeading={false} />
 
           {/* CTA Button - Centered at bottom of calculator section */}
           <div className="mt-8 lg:mt-12 flex justify-center">
