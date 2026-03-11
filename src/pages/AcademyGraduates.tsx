@@ -19,7 +19,9 @@ import {
   ArrowLeft,
   Loader2,
   Shield,
+  QrCode,
 } from "lucide-react";
+import qrcode from "qrcode-generator";
 
 interface GraduateCertificate {
   id: string;
