@@ -160,10 +160,10 @@ function BrokerProfileCard() {
             )}
 
             {/* Points */}
-            {profile?.total_points !== undefined && (
+            {(profile as any)?.total_points !== undefined && (
               <div className="flex items-center gap-1.5 mt-2 text-xs text-gold">
                 <Star className="w-3.5 h-3.5" />
-                <span>{profile.total_points || 0} loyalty points</span>
+                <span>{(profile as any)?.total_points || 0} loyalty points</span>
               </div>
             )}
           </div>
