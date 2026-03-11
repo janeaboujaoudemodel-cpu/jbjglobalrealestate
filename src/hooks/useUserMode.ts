@@ -5,7 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 const MODE_KEY = "jj_user_mode";
 
 // Expanded to 3 modes: investor, broker, or both
-export type UserMode = 'investor' | 'broker' | 'investor_broker';
+export type UserMode = 'investor' | 'broker' | 'investor_broker' | 'developer';
 
 interface UserModeHook {
   mode: UserMode;
