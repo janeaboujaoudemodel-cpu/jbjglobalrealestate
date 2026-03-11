@@ -1,176 +1,99 @@
 
-## Plan: JBJ Academy Portal, Broker Verification System, Career Portal Upgrade & HR Open Positions
 
-This is a very large scope. I'll break it into 5 phases, each deliverable independently. All work builds on existing systems — no duplication.
+## Plan: Brand Palette for All Users, Availability Auto-Hide, Stamp/Tools UI Premium Upgrade, Sitemap Update, and Cross-Tool Integration
 
----
-
-### Phase 1: JBJ Academy Portal Page (`/jbj-academy`)
-
-**What:** A dedicated hub page that consolidates all broker tools, education, and services into one premium portal.
-
-**New file:** `src/pages/JBJAcademy.tsx`
-
-The page will include:
-- Premium hero with graduation hat icon and video background
-- **Broker Profile Card** — shows the broker's first name, photo, current tier (Probation / Verified / Elite), probation period remaining, loyalty points, title
-- **Navigation Grid** linking to existing pages:
-  - Broker Education (`/broker-education`)
-  - Listing Portal (`/listing-portal`)
-  - CRM (`/crm`)
-  - AI Assistant (`/ai-hub`)
-  - Objection Handler (`/ai-objection-handler`)
-  - Dashboard (`/broker-dashboard`)
-  - Guides & Books (`/guides`)
-  - Broker Resources (`/broker-resources`)
-  - Market Intelligence (`/market-intelligence`)
-- **Certification Status** — reuses `CertificationSection` component
-- **Graduated Brokers Gallery** — queries `hr_certificates` to display certified brokers with certificate numbers + QR codes linking to `/verify-certificate/:token`
-
-**Route:** Add to `PublicRoutes.tsx` at `/jbj-academy`
+This is a large request spanning 6 distinct areas. To avoid quality issues, I recommend implementing in **3 phases**. This plan covers all phases but Phase 1 will be implemented first.
 
 ---
 
-### Phase 2: Broker Verification & Admin Controls
+### Phase 1: Brand Palette → Public + Per-User Personalization + UI Fixes
 
-**Database Migration:**
+**Problem:** Brand Palette is owner-only (`OwnerGuard`), live preview doesn't work properly, color swatches are square inside rounded cards, hex codes are visible to all, no color wheel, no saved palette history, no per-user personalization.
+
+**Changes:**
+
+#### 1A. Database: `user_color_palettes` table
 ```sql
-ALTER TABLE broker_profiles ADD COLUMN IF NOT EXISTS 
-  rera_card_url text,
-  id_document_url text,
-  rera_expiry_date date,
-  id_expiry_date date,
-  verification_status text DEFAULT 'unverified',
-  face_verified boolean DEFAULT false,
-  probation_start date,
-  probation_end date,
-  probation_months integer DEFAULT 3,
-  show_contact_public boolean DEFAULT false,
-  custom_label text,
-  custom_title text;
+CREATE TABLE public.user_color_palettes (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  name text NOT NULL DEFAULT 'Custom Palette',
+  palette jsonb NOT NULL,
+  is_active boolean DEFAULT false,
+  created_at timestamptz DEFAULT now()
+);
+-- RLS: users CRUD their own palettes only
 ```
 
-**Broker-facing UI** (inside JBJ Academy profile card):
-- Upload ID and RERA card
-- Show verification badge when both are valid + name matches + face verified
-- Auto-expire: A visual alert when `rera_expiry_date` or `id_expiry_date` < now()
-- If expired > 24h, verification badge disappears
-- Notification to broker to re-upload
+#### 1B. Remove `OwnerGuard` from brand palette route
+Move `/owner/brand-palette` → `/brand-palette` as a public authenticated route. Owner sees full hex codes + corporate palette management. Regular users see:
+- Color wheel pickers (no hex codes visible)
+- Visual labels ("Primary — buttons, links", etc.) with live example previews
+- Apply to "Website" or "Tools only" toggle
+- Save/Revert/History of their personal palettes
+- Palettes saved per-user in `user_color_palettes`
 
-**Admin controls** — Add to existing `TrainingManagement.tsx` or new tab in JBJ Broker Admin (`/jbj-broker-admin`):
-- Toggle per broker: `show_contact_public`, edit `custom_title`, `custom_label`, `verification_status`
-- Skip probation button (already exists as "Promote to Elite")
-- View/download broker documents
+#### 1C. Fix UI issues
+- Match color swatch shape to card container (use `rounded-2xl` on swatches to match card radius)
+- Add a clickable color wheel icon next to each swatch for users who don't know to click the square
+- Fix live preview: make `isPreviewing` default to `true` so changes reflect immediately
+- Show accurate JBJ website palette as defaults: `primary: #C8A766, secondary: #000000, accent: #D4AF37, background: #FDFBF7, text: #1A1A1A`
 
-**OurBrokers page update:**
-- Show only first name + photo (already mostly this way)
-- Show verification badge if `verification_status = 'verified'`
-- Hide last name, email, phone unless `show_contact_public = true`
+#### 1D. BrandPaletteContext updates
+- Load user's active personal palette from `user_color_palettes` for non-owners
+- Owner's palette comes from `app_settings` (unchanged)
+- `applyPaletteToDOM()` already works — just needs to trigger on page load for per-user palettes
 
----
-
-### Phase 3: Education Books & Testing System — Content Seeding
-
-**Database:** Seed comprehensive education books into `broker_education_books` and modules into `broker_education_modules` using the insert tool. Topics:
-
-1. Objection Handling & Closing Techniques
-2. Market Knowledge — UAE Real Estate
-3. Lead Management & CRM Best Practices
-4. Cold Calling & Follow-Up Strategies
-5. Marketing Yourself as a Broker
-6. How to Sell to Clients
-7. Types of Calls & Communication
-8. Legal Framework & RERA Regulations
-9. Off-Plan vs Secondary Market
-10. Investment Analysis & ROI
-11. Property Valuation Fundamentals
-12. Client Psychology & Negotiation
-13. Dubai Areas & Community Knowledge
-14. Developer Relations & Project Launches
-15. Digital Marketing for Brokers
-
-Each book gets 4-6 modules with test questions (seeded into `broker_education_tests`).
-
-**Certificate Enhancement:**
-- After completing all modules + passing tests, auto-generate certificate
-- Certificate includes QR code linking to `/verify-certificate/:token`
-- Certificate number displayed
-- Owner's stamp + signature auto-applied from sessionStorage stamp data
-- Existing `VerifyCertificate.tsx` already handles QR verification — enhance to also support lookup by certificate number (add search input)
+**Files:**
+| File | Action |
+|------|--------|
+| Database migration | Create `user_color_palettes` |
+| `src/routes/AdminRoutes.tsx` | Move palette route from OwnerGuard to authenticated |
+| `src/pages/owner/BrandPaletteHub.tsx` | Major refactor: dual-mode (owner vs user), color wheels, no hex for users, palette history, shape fixes |
+| `src/contexts/BrandPaletteContext.tsx` | Load per-user palette, add `saveUserPalette`, `getUserPaletteHistory`, `revertToDefault` |
+| `src/components/navigation/GlobalVerticalNav.tsx` | Update nav link path |
 
 ---
 
-### Phase 4: Career Portal & Open Positions
+### Phase 2: Availability Auto-Hide + Stamp Generator Premium UI
 
-**Database:** Seed open positions into `hr_job_offers` using the insert tool. Positions for a global enterprise real estate company:
+**Problem:** Property availability/unit counts are visible to investors (discourages urgency). Stamp generator UI needs premium upgrade.
 
-- Property Consultant (Commission-based, no salary — positioned as "Partnership")
-- Senior Property Consultant
-- Sales Manager / Team Leader
-- Marketing Manager / Digital Marketing Specialist
-- Social Media Manager / Content Creator
-- Graphic Designer / Photographer / Videographer
-- HR Coordinator / Recruitment Specialist
-- Finance & Accounting Officer
-- IT Support / Web Developer / Mobile Developer
-- Data Analyst
-- Legal Advisor / Compliance
-- Office Administrator / Receptionist
-- Executive Assistant / PA
-- Customer Service Representative
-- Property Management Specialist
-- CRM Administrator
-- Business Development Manager
+#### 2A. Availability auto-hide
+- Add `availability_visible` boolean column to `projects` table (default `false`)
+- All public-facing property pages: hide availability/unit count data when `availability_visible = false`
+- Owner can toggle visibility per-project from Listing Admin
+- Developer Portal uploads auto-set `availability_visible = false`
 
-**JoinApplication.tsx updates:**
-- Position dropdown already exists with most of these — verify all are included
-- After submission, email mentions the specific position applied for
-- Backend: `hr_applications` already stores `position_applied` — ensure it's displayed in the admin HR hub
-- AI CV matching: Call AI to score CV relevance vs. position requirements (0-100% accuracy score), store in `hr_applications`
+#### 2B. Stamp Generator premium UI overhaul
+- Apply champagne gradient theme consistently (matching Royal Tools Hub)
+- Default to "Ink Blue" standard with the two canonical company stamp designs
+- Gold-bordered cards, premium typography, centered preview
+- Upgrade security: sanitize all SVG inputs, encrypt stamp data in session storage
 
-**Career page (`/join`) updates:**
-- Query `hr_job_offers` where `is_active = true` 
-- Show open positions as premium cards grouped by department
-- Broker positions highlighted as "Partnership Opportunity — Commission Based"
-- "Open for Promotion" badge on leadership roles
-- Each position has an "Apply Now" button pre-selecting that position
-
-**Notifications:**
-- When new position is added by admin, send notification to all users with broker role
-- Show in alerts sidebar
-
-**HR Hub integration:**
-- Show which position each applicant applied for (already exists)
-- Show AI accuracy score for CV vs. position match
+**Files:** `projects` migration, Listing Admin toggle, property detail pages, `StampGeneratorPage.tsx`, `StampProjectWizard.tsx`, related stamp components
 
 ---
 
-### Phase 5: Graduated Brokers Portal & Sitemap
+### Phase 3: Sitemap Update, Cross-Tool Integration, Security Hardening
 
-**New section in JBJ Academy** or standalone `/academy/graduates`:
-- Grid of graduated brokers showing: first name, photo, certificate number, completion date
-- Each certificate has a QR code
-- Search by certificate number
-- Premium graduation theme (caps, gold borders)
+#### 3A. Sitemap
+Add missing tool links: Brand Palette, Scan & Sign, all new features added recently.
 
-**VerifyCertificate.tsx upgrade:**
-- Add a search form at top: enter certificate number OR scan QR
-- Query by `certificate_number` in addition to `verification_token`
-- Show certificate status: Active / Expired / Revoked
-- Show full details: track completed, scores, issue date
+#### 3B. Cross-tool integration
+- Scan & Sign: add "Import Stamp", "Import Business Card", "Import QR Code" buttons that pull from session storage
+- E-Signature: already has stamp integration — verify QR code and business card import paths
+- All tools: ensure owner sees their brand palette colors in color pickers; non-owners see generic palette
 
-**Sitemap update:** Add `/jbj-academy`, `/academy/graduates`
+#### 3C. Global security
+- RLS audit across new tables
+- Edge function JWT hardening review
+- DOM obfuscation layer verification
+
+**Files:** `Sitemap.tsx`, `ScanSignPage.tsx`, `CreateEnvelope.tsx`, tool color pickers, edge functions
 
 ---
 
-### Summary
+### Implementation Priority
+**Phase 1 first** (Brand Palette) — directly addresses the page user is currently viewing and the most detailed feedback. Phases 2 and 3 follow in subsequent messages.
 
-| Phase | Scope | Key Files |
-|-------|-------|-----------|
-| 1 | JBJ Academy hub page | New `JBJAcademy.tsx`, route in `PublicRoutes.tsx` |
-| 2 | Broker verification + admin toggles | DB migration, `broker_profiles` columns, admin tab, `OurBrokers.tsx` |
-| 3 | Education content seeding + certificates | DB inserts for books/modules/tests, `VerifyCertificate.tsx` |
-| 4 | Career portal + open positions + AI matching | DB inserts for `hr_job_offers`, `JoinApplication.tsx`, notifications |
-| 5 | Graduates portal + sitemap | `JBJAcademy.tsx` graduates section, `VerifyCertificate.tsx`, `Sitemap.tsx` |
-
-I'll implement all 5 phases in sequence, starting with the database migration and the Academy hub page.

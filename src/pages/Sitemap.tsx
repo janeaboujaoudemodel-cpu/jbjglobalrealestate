@@ -168,11 +168,14 @@ const hubSections: HubSection[] = [
     title: "Broker Hub",
     icon: GraduationCap,
     links: [
+      { href: "/jbj-academy", label: "JBJ Academy" },
+      { href: "/academy/graduates", label: "Academy Graduates" },
       { href: "/broker-toolkit", label: "Broker Tools" },
       { href: "/broker-dashboard", label: "Broker Dashboard" },
       { href: "/broker-education", label: "Broker Education" },
       { href: "/broker-resources", label: "Broker Resources" },
       { href: "/broker-faq", label: "Broker FAQ" },
+      { href: "/verify-certificate/lookup", label: "Verify Certificate" },
     ],
   },
   {

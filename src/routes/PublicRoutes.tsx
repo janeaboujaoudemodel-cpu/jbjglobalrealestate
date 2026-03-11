@@ -162,6 +162,8 @@ const AIHub = lazy(() => import("@/pages/AIHub"));
 const InteriorDesignAI = lazy(() => import("@/pages/InteriorDesignAI"));
 const InvestorHub = lazy(() => import("@/pages/InvestorHub"));
 const BrokerHub = lazy(() => import("@/pages/BrokerHub"));
+const JBJAcademy = lazy(() => import("@/pages/JBJAcademy"));
+const AcademyGraduates = lazy(() => import("@/pages/AcademyGraduates"));
 
 // ── Governance ──
 const PartnerGovernance = lazy(() => import("@/pages/governance/PartnerGovernance"));
@@ -343,6 +345,7 @@ export const PublicRoutes = () => (
     <Route path="/onboarding" element={<Onboarding />} />
     <Route path="/onboarding/module/:moduleId" element={<OnboardingModule />} />
     <Route path="/verify-certificate/:token" element={<VerifyCertificate />} />
+    <Route path="/verify-certificate/lookup" element={<VerifyCertificate />} />
     <Route path="/referral-onboarding" element={<ReferralOnboarding />} />
     <Route path="/redeem-referral" element={<RedeemReferral />} />
     <Route path="/spreadsheet" element={<Spreadsheet />} />
@@ -365,6 +368,8 @@ export const PublicRoutes = () => (
     <Route path="/interior-design-studio" element={<Navigate to="/interior-design-ai" replace />} />
     <Route path="/investor-hub" element={<InvestorHub />} />
     <Route path="/broker-hub" element={<BrokerHub />} />
+    <Route path="/jbj-academy" element={<JBJAcademy />} />
+    <Route path="/academy/graduates" element={<AcademyGraduates />} />
     <Route path="/document-scanner" element={<ScanSignDocuments />} />
     <Route path="/scan-sign" element={<Navigate to="/document-scanner" replace />} />
     <Route path="/scan-sign-documents" element={<Navigate to="/document-scanner" replace />} />
