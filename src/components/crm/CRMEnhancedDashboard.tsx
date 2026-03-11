@@ -369,7 +369,7 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
                 <Calendar className="h-5 w-5 text-blue-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-zinc-900">{stats.followupsCreated}</p>
+                <p className="text-2xl font-bold text-black">{stats.followupsCreated}</p>
                 <p className="text-xs text-zinc-500">Follow-ups</p>
               </div>
             </div>
