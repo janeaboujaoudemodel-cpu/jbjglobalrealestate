@@ -260,7 +260,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         </>
       )}
       <GlobalContactGating>
-        <main className={`w-full max-w-full overflow-x-hidden transition-all duration-300 ${!isBackOfficeRoute ? "[body.jj-vertical-nav-active_&]:lg:pl-[200px] [body.jj-vertical-nav-collapsed_&]:lg:pl-[48px]" : ""} ${needsHeaderSpacing ? "pt-24 sm:pt-28 lg:pt-[52px]" : "lg:pt-[52px] pt-0"}`} style={{ paddingLeft: 'env(safe-area-inset-left)', paddingRight: 'env(safe-area-inset-right)' }}>
+        <main className={`w-full max-w-full overflow-x-hidden transition-all duration-300 ${!isBackOfficeRoute ? "[body.jj-vertical-nav-active_&]:lg:pl-[200px] [body.jj-vertical-nav-collapsed_&]:lg:pl-[48px]" : ""} ${needsHeaderSpacing ? "pt-24 sm:pt-28 lg:pt-[52px]" : "lg:pt-[52px] pt-0"}`}>
           {layoutGuardTriggered && isServiceRoute && (
             <div role="alert" className="mx-auto mt-4 w-full max-w-6xl px-4 sm:px-6 lg:px-8">
               <div className="rounded-lg border border-destructive/30 bg-background/95 px-4 py-3 text-sm text-foreground shadow-sm backdrop-blur">
