@@ -4091,6 +4091,9 @@ export type Database = {
           entity_type: string
           id: string
           ip_address: string | null
+          new_values: Json | null
+          old_values: Json | null
+          user_agent: string | null
         }
         Insert: {
           action: string
@@ -4101,6 +4104,9 @@ export type Database = {
           entity_type: string
           id?: string
           ip_address?: string | null
+          new_values?: Json | null
+          old_values?: Json | null
+          user_agent?: string | null
         }
         Update: {
           action?: string
@@ -4111,6 +4117,9 @@ export type Database = {
           entity_type?: string
           id?: string
           ip_address?: string | null
+          new_values?: Json | null
+          old_values?: Json | null
+          user_agent?: string | null
         }
         Relationships: []
       }
@@ -4727,6 +4736,8 @@ export type Database = {
       crm_leads: {
         Row: {
           age_range: string | null
+          ai_score: number | null
+          ai_score_updated_at: string | null
           assigned_ai_employee_id: string | null
           assigned_broker_id: string | null
           assigned_to_user_id: string | null
@@ -4740,6 +4751,7 @@ export type Database = {
           current_location_country: string | null
           deleted_at: string | null
           detection_keywords: string[] | null
+          duplicate_of_id: string | null
           email_lower: string | null
           email_normalized: string | null
           flag_reasons: string[] | null
@@ -4752,6 +4764,8 @@ export type Database = {
             | null
           import_batch_id: string | null
           imported_at: string | null
+          is_duplicate: boolean | null
+          last_contacted_at: string | null
           lead_intent: string | null
           lead_source_type: string | null
           nationality: string | null
@@ -4764,6 +4778,7 @@ export type Database = {
           phone_raw: string | null
           pipeline_stage: string | null
           preferred_language: string | null
+          priority_score: number | null
           raw_import: Json | null
           rental_budget_max: number | null
           rental_budget_min: number | null
@@ -4776,6 +4791,7 @@ export type Database = {
           source_id: string | null
           source_page: string | null
           source_row_index: number | null
+          stale_since: string | null
           tags: string[] | null
           updated_at: string
           vip: boolean | null
@@ -4784,6 +4800,8 @@ export type Database = {
         }
         Insert: {
           age_range?: string | null
+          ai_score?: number | null
+          ai_score_updated_at?: string | null
           assigned_ai_employee_id?: string | null
           assigned_broker_id?: string | null
           assigned_to_user_id?: string | null
@@ -4797,6 +4815,7 @@ export type Database = {
           current_location_country?: string | null
           deleted_at?: string | null
           detection_keywords?: string[] | null
+          duplicate_of_id?: string | null
           email_lower?: string | null
           email_normalized?: string | null
           flag_reasons?: string[] | null
@@ -4809,6 +4828,8 @@ export type Database = {
             | null
           import_batch_id?: string | null
           imported_at?: string | null
+          is_duplicate?: boolean | null
+          last_contacted_at?: string | null
           lead_intent?: string | null
           lead_source_type?: string | null
           nationality?: string | null
@@ -4821,6 +4842,7 @@ export type Database = {
           phone_raw?: string | null
           pipeline_stage?: string | null
           preferred_language?: string | null
+          priority_score?: number | null
           raw_import?: Json | null
           rental_budget_max?: number | null
           rental_budget_min?: number | null
@@ -4833,6 +4855,7 @@ export type Database = {
           source_id?: string | null
           source_page?: string | null
           source_row_index?: number | null
+          stale_since?: string | null
           tags?: string[] | null
           updated_at?: string
           vip?: boolean | null
@@ -4841,6 +4864,8 @@ export type Database = {
         }
         Update: {
           age_range?: string | null
+          ai_score?: number | null
+          ai_score_updated_at?: string | null
           assigned_ai_employee_id?: string | null
           assigned_broker_id?: string | null
           assigned_to_user_id?: string | null
@@ -4854,6 +4879,7 @@ export type Database = {
           current_location_country?: string | null
           deleted_at?: string | null
           detection_keywords?: string[] | null
+          duplicate_of_id?: string | null
           email_lower?: string | null
           email_normalized?: string | null
           flag_reasons?: string[] | null
@@ -4866,6 +4892,8 @@ export type Database = {
             | null
           import_batch_id?: string | null
           imported_at?: string | null
+          is_duplicate?: boolean | null
+          last_contacted_at?: string | null
           lead_intent?: string | null
           lead_source_type?: string | null
           nationality?: string | null
@@ -4878,6 +4906,7 @@ export type Database = {
           phone_raw?: string | null
           pipeline_stage?: string | null
           preferred_language?: string | null
+          priority_score?: number | null
           raw_import?: Json | null
           rental_budget_max?: number | null
           rental_budget_min?: number | null
@@ -4890,6 +4919,7 @@ export type Database = {
           source_id?: string | null
           source_page?: string | null
           source_row_index?: number | null
+          stale_since?: string | null
           tags?: string[] | null
           updated_at?: string
           vip?: boolean | null
@@ -4909,6 +4939,27 @@ export type Database = {
             columns: ["assigned_broker_id"]
             isOneToOne: false
             referencedRelation: "ai_brokers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_leads_duplicate_of_id_fkey"
+            columns: ["duplicate_of_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_leads_duplicate_of_id_fkey"
+            columns: ["duplicate_of_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads_secure"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_leads_duplicate_of_id_fkey"
+            columns: ["duplicate_of_id"]
+            isOneToOne: false
+            referencedRelation: "crm_vip_leads"
             referencedColumns: ["id"]
           },
           {
@@ -24447,6 +24498,17 @@ export type Database = {
       cleanup_old_health_logs: { Args: never; Returns: undefined }
       cleanup_rate_limit_records: { Args: never; Returns: number }
       cleanup_temp_video_files: { Args: never; Returns: undefined }
+      crm_detect_stale_leads: { Args: { p_days?: number }; Returns: number }
+      crm_find_duplicates: {
+        Args: { p_email?: string; p_phone?: string }
+        Returns: {
+          created_at: string
+          email_lower: string
+          full_name: string
+          id: string
+          phone_e164: string
+        }[]
+      }
       crm_hard_delete_import: {
         Args: { p_import_batch_id?: string; p_source_id?: string }
         Returns: Json
@@ -24734,6 +24796,10 @@ export type Database = {
       }
       log_contact_gating_access: {
         Args: { _access_type: string; _submission_id?: string }
+        Returns: undefined
+      }
+      log_crm_lead_access: {
+        Args: { p_access_type?: string; p_lead_id: string; p_user_id: string }
         Returns: undefined
       }
       log_hr_access: {
