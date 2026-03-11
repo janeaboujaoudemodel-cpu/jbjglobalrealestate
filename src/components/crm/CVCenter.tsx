@@ -956,7 +956,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                   const hasUnreadableSummary = /unreadable|corrupt|malformed/i.test(cv.ai_summary || '');
 
                   return (
-                    <Card key={cv.id} className="bg-gradient-to-r from-zinc-50 to-white border border-crm-border hover:border-gold/50 hover:shadow-md transition-all">
+                    <Card key={cv.id} className={cn("bg-gradient-to-r from-zinc-50 to-white border border-crm-border hover:border-gold/50 hover:shadow-md transition-all", !cv.is_viewed && "border-l-4 border-l-amber-500")}>
                       <CardContent className="p-5">
                         {/* === QUICK SUMMARY (always visible) === */}
                         <div className="flex items-start justify-between gap-4">
