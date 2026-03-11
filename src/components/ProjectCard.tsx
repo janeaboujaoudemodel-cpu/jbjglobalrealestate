@@ -184,15 +184,15 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         "hover:shadow-[0_0_26px_hsl(var(--gold)/0.18),0_26px_75px_hsl(0_0%_0%/0.20)]"
       }
     >
-      {/* Top-Right: Favorite + Shortlist Buttons (stacked) */}
+      {/* Top-Right: Favorite + Shortlist Buttons (stacked) — Always visible */}
       <div className="absolute top-3 right-3 z-20 flex flex-col gap-1.5">
         {showFavorite && (
-          <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+          <div>
             <FavoriteButton projectId={project.id} size="sm" />
           </div>
         )}
         {showBadgeButton && (
-          <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+          <div>
             <ShortlistBadgeButton projectId={project.id} size="sm" showBadgeIndicator={true} />
           </div>
         )}
