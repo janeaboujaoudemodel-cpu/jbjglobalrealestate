@@ -85,6 +85,7 @@ export const AdminRoutes = () => (
     <Route path="/admin/developers" element={<OwnerGuard><AdminDevelopers /></OwnerGuard>} />
     <Route path="/admin/marketing-hub" element={<OwnerGuard><MarketingHub /></OwnerGuard>} />
     <Route path="/admin/reelly-import-test" element={<OwnerGuard><ListingAdminGuard><ReellyImportTest /></ListingAdminGuard></OwnerGuard>} />
+    <Route path="/admin/legal-center" element={<OwnerGuard><LegalComplianceCenter /></OwnerGuard>} />
     <Route path="/admin/training-guide" element={<OwnerGuard><AdminTrainingGuide /></OwnerGuard>} />
     <Route path="/admin/hr" element={<Navigate to="/hr-dashboard?tab=cv-center" replace />} />
 
