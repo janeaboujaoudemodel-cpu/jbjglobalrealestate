@@ -4,10 +4,17 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Badge } from '@/components/ui/badge';
+import { LanguageMultiSelect } from '@/components/ui/language-multi-select';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
-import { Calendar, Loader2, Upload, FileText, X, Clock, Send } from 'lucide-react';
+import { format } from 'date-fns';
+import { cn } from '@/lib/utils';
+import { CalendarIcon, Loader2, Upload, FileText, X, Clock, Send, MapPin, Building2, AlertTriangle } from 'lucide-react';
 
 interface BriefingRequestFormProps {
   representativeId: string;
@@ -26,12 +33,15 @@ const BriefingRequestForm = ({ representativeId, developerName }: BriefingReques
   const [submitting, setSubmitting] = useState(false);
   const [uploadingFiles, setUploadingFiles] = useState(false);
   const [files, setFiles] = useState<UploadedFile[]>([]);
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>();
+  const [languages, setLanguages] = useState<string[]>(['English']);
   const [form, setForm] = useState({
     project_name: '',
-    briefing_date: '',
     briefing_time: '',
     duration_minutes: '60',
     notes: '',
+    location_type: 'developer_office',
+    location_address: '',
   });
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,7 +65,7 @@ const BriefingRequestForm = ({ representativeId, developerName }: BriefingReques
 
   const handleSubmit = async () => {
     if (!user) return;
-    if (!form.project_name || !form.briefing_date || !form.briefing_time) {
+    if (!form.project_name || !selectedDate || !form.briefing_time) {
       toast.error('Please fill in project name, date, and time');
       return;
     }
@@ -65,33 +75,58 @@ const BriefingRequestForm = ({ representativeId, developerName }: BriefingReques
     }
     setSubmitting(true);
     try {
+      const briefingDate = format(selectedDate, 'yyyy-MM-dd');
       const { error } = await supabase.from('briefing_requests').insert({
         representative_id: representativeId,
         user_id: user.id,
         developer_name: developerName,
         project_name: form.project_name,
-        briefing_date: form.briefing_date,
+        briefing_date: briefingDate,
         briefing_time: form.briefing_time,
         duration_minutes: parseInt(form.duration_minutes),
         notes: form.notes || null,
         uploaded_files: files,
+        location_type: form.location_type,
+        location_address: form.location_type === 'developer_office' ? form.location_address : null,
       } as any);
       if (error) throw error;
 
+      // Log activity for the rep (+3 points for briefing request)
+      try {
+        await supabase.from('rep_activity_log').insert({
+          representative_id: representativeId,
+          activity_type: 'briefing_hosted',
+          description: `Briefing requested for ${form.project_name}`,
+          points_earned: 3,
+        } as any);
+        // Update rep activity score
+        await supabase.rpc('increment_field' as any, {
+          row_id: representativeId,
+          table_name: 'developer_representatives',
+          field_name: 'activity_score',
+          increment_value: 3,
+        }).then(() => {}).catch(() => {});
+      } catch {}
+
       // Create admin task
       try {
+        const locationLabel = form.location_type === 'developer_office' 
+          ? `at Developer Office${form.location_address ? ` (${form.location_address})` : ''}`
+          : 'at Our Office';
         await supabase.from('admin_tasks').insert({
           user_id: '4944592b-93f1-4e05-ab59-4ebe1fee54f1',
           title: `Briefing Request: ${form.project_name} by ${developerName}`,
-          description: `${developerName} rep requested a briefing for "${form.project_name}" on ${form.briefing_date} at ${form.briefing_time} (${form.duration_minutes} min). ${files.length} documents attached.`,
+          description: `${developerName} rep requested a briefing for "${form.project_name}" on ${briefingDate} at ${form.briefing_time} (${form.duration_minutes} min) ${locationLabel}. Languages: ${languages.join(', ')}. ${files.length} documents attached.`,
           category: 'briefing_request',
           priority: 'high',
           status: 'pending',
         } as any);
       } catch {}
 
-      toast.success('Briefing request submitted! You will receive a confirmation email.');
-      setForm({ project_name: '', briefing_date: '', briefing_time: '', duration_minutes: '60', notes: '' });
+      toast.success('Briefing request submitted! You will receive a confirmation once approved.');
+      setForm({ project_name: '', briefing_time: '', duration_minutes: '60', notes: '', location_type: 'developer_office', location_address: '' });
+      setSelectedDate(undefined);
+      setLanguages(['English']);
       setFiles([]);
     } catch (err: any) {
       toast.error(err.message || 'Failed to submit briefing request');
@@ -104,23 +139,105 @@ const BriefingRequestForm = ({ representativeId, developerName }: BriefingReques
     <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)]">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-foreground">
-          <Calendar className="w-5 h-5 text-gold" />
+          <CalendarIcon className="w-5 h-5 text-gold" />
           Request Briefing Session
         </CardTitle>
         <p className="text-sm text-muted-foreground">
           Schedule a project briefing with our team. Upload all documents before the session.
         </p>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-5">
+        {/* Project Name */}
         <div className="space-y-2">
           <Label>Project Name *</Label>
           <Input value={form.project_name} onChange={(e) => setForm(f => ({ ...f, project_name: e.target.value }))} placeholder="e.g. Damac Lagoons Phase 3" />
         </div>
 
+        {/* Location Type */}
+        <div className="space-y-3">
+          <Label className="flex items-center gap-2">
+            <MapPin className="w-4 h-4 text-gold" /> Briefing Location *
+          </Label>
+          <RadioGroup
+            value={form.location_type}
+            onValueChange={(val) => setForm(f => ({ ...f, location_type: val }))}
+            className="grid grid-cols-1 md:grid-cols-2 gap-3"
+          >
+            {/* Developer Office - Active */}
+            <div className={cn(
+              "flex items-center space-x-3 rounded-xl border-2 p-4 cursor-pointer transition-all",
+              form.location_type === 'developer_office'
+                ? "border-gold bg-gold/10 shadow-md"
+                : "border-gold/20 hover:border-gold/40"
+            )}>
+              <RadioGroupItem value="developer_office" id="loc-dev" />
+              <label htmlFor="loc-dev" className="flex-1 cursor-pointer">
+                <div className="flex items-center gap-2">
+                  <Building2 className="w-4 h-4 text-gold" />
+                  <span className="font-semibold text-foreground">Developer Sales Office</span>
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">Briefing at your sales gallery</p>
+              </label>
+            </div>
+
+            {/* Our Office - Disabled */}
+            <div className="flex items-center space-x-3 rounded-xl border-2 border-muted/40 p-4 opacity-50 cursor-not-allowed bg-muted/10 relative overflow-hidden">
+              <RadioGroupItem value="our_office" id="loc-our" disabled />
+              <label htmlFor="loc-our" className="flex-1">
+                <div className="flex items-center gap-2">
+                  <Building2 className="w-4 h-4 text-muted-foreground" />
+                  <span className="font-semibold text-muted-foreground">Our Sales Office</span>
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">JBJ Global headquarters</p>
+              </label>
+              <Badge className="absolute top-2 right-2 bg-amber-500/20 text-amber-700 border-amber-500/30 text-[10px]">
+                <AlertTriangle className="w-3 h-3 mr-1" />
+                Under Renovation
+              </Badge>
+            </div>
+          </RadioGroup>
+
+          {/* Location Address */}
+          {form.location_type === 'developer_office' && (
+            <div className="space-y-2 pl-1">
+              <Label className="text-sm">Sales Office Address</Label>
+              <Input
+                value={form.location_address}
+                onChange={(e) => setForm(f => ({ ...f, location_address: e.target.value }))}
+                placeholder="e.g. Downtown Dubai, Damac Hills Sales Center"
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Date & Time */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="space-y-2">
             <Label>Briefing Date *</Label>
-            <Input type="date" value={form.briefing_date} onChange={(e) => setForm(f => ({ ...f, briefing_date: e.target.value }))} />
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className={cn(
+                    "w-full justify-start text-left font-normal h-10",
+                    !selectedDate && "text-muted-foreground"
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {selectedDate ? format(selectedDate, "PPP") : <span>Pick a date</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={selectedDate}
+                  onSelect={setSelectedDate}
+                  disabled={(date) => date < new Date()}
+                  initialFocus
+                  className={cn("p-3 pointer-events-auto")}
+                />
+              </PopoverContent>
+            </Popover>
           </div>
           <div className="space-y-2">
             <Label>Briefing Time *</Label>
@@ -141,6 +258,13 @@ const BriefingRequestForm = ({ representativeId, developerName }: BriefingReques
           </div>
         </div>
 
+        {/* Languages */}
+        <div className="space-y-2">
+          <Label>Languages Spoken by Representative</Label>
+          <LanguageMultiSelect value={languages} onChange={setLanguages} />
+        </div>
+
+        {/* Notes */}
         <div className="space-y-2">
           <Label>Additional Notes</Label>
           <Textarea value={form.notes} onChange={(e) => setForm(f => ({ ...f, notes: e.target.value }))} placeholder="Specific topics, attendees, special requirements..." rows={3} />
