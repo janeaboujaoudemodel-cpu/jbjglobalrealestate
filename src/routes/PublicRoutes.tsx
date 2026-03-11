@@ -168,6 +168,7 @@ const PartnerGovernance = lazy(() => import("@/pages/governance/PartnerGovernanc
 
 // ── Developer Portal ──
 const DeveloperPortal = lazy(() => import("@/pages/DeveloperPortal"));
+const TicketHub = lazy(() => import("@/pages/TicketHub"));
 
 // ── Misc ──
 const VapiPrompt = lazy(() => import("@/pages/VapiPrompt"));
