@@ -211,7 +211,13 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
             }
           } else {
             toast.success("Welcome back!");
-            navigate("/");
+            // Check if user has made mode selection — if not, go to welcome page
+            const modeSelected = localStorage.getItem('jj_mode_selected');
+            if (modeSelected === 'true') {
+              navigate("/");
+            } else {
+              navigate("/welcome");
+            }
           }
           break;
         }
