@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Briefcase, User, ChevronDown, Check, Loader2, Users } from "lucide-react";
+import { Briefcase, User, ChevronDown, Check, Loader2, Users, Building2 } from "lucide-react";
 import { useUserModeContext, UserMode } from "@/contexts/UserModeContext";
 import { useUserRole } from "@/hooks/useUserRole";
 import { cn } from "@/lib/utils";
