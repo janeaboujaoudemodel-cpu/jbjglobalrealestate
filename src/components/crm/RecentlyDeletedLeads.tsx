@@ -208,7 +208,7 @@ export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = fals
                         {formatDisplayDate(lead.deleted_at)}
                       </div>
                     </TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className="text-right space-x-2">
                       <Button
                         variant="secondary"
                         size="sm"
@@ -219,6 +219,38 @@ export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = fals
                         <RotateCcw className="h-3.5 w-3.5 mr-1" />
                         {restoring === lead.id ? "Restoring..." : "Restore"}
                       </Button>
+                      {isOwner && (
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              disabled={erasing === lead.id}
+                              className="font-semibold"
+                            >
+                              <AlertTriangle className="h-3.5 w-3.5 mr-1" />
+                              {erasing === lead.id ? "Erasing..." : "Erase"}
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Permanently Erase Lead?</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                This will permanently delete <strong>{lead.full_name}</strong> and all associated data. This action cannot be undone.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction
+                                onClick={() => handlePermanentErase(lead.id, lead.full_name)}
+                                className="bg-red-600 hover:bg-red-700"
+                              >
+                                Permanently Erase
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}
