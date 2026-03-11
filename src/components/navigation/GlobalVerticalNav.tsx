@@ -710,7 +710,30 @@ export default function GlobalVerticalNav() {
                 </button>
               </div>
               <div className="overflow-y-auto jj-scrollbar-gold p-3 pb-6 space-y-3">
-                {SHORTCUT_GROUPS.map((group) => (
+                {SHORTCUT_GROUPS.filter((group) => {
+                  // Role-based filtering
+                  if (isInvestor) {
+                    // Hide broker/owner groups for investors
+                    if (group.label === "CRM" || group.label === "Owner Command Center") return false;
+                  }
+                  if (!isBroker && !isOwner) {
+                    if (group.label === "CRM" || group.label === "Owner Command Center") return false;
+                  }
+                  return true;
+                }).map((group) => {
+                  // Filter items within groups based on role
+                  const filteredItems = group.items.filter((item) => {
+                    if (isInvestor && item.label === "Broker Dashboard") return false;
+                    if (!isBroker && item.label === "Broker Dashboard") return false;
+                    return true;
+                  });
+                  // Add investor dashboard for investors in Dashboards group
+                  const finalItems = group.label === "Dashboards" && isInvestor
+                    ? [{ label: 'My Dashboard', icon: LayoutDashboard, href: '/my-dashboard' }, { label: 'Investor Hub', icon: TrendingUp, href: '/investor-hub' }]
+                    : filteredItems;
+                  if (finalItems.length === 0) return null;
+                  return { ...group, items: finalItems };
+                }).filter(Boolean).map((group) => (
                   <div key={group.label} className={`border-l-4 ${group.colorBorder} rounded-lg ${group.colorBg} p-2`}>
                     <p className={`text-[10px] uppercase tracking-wider font-bold ${group.colorText} px-2 pb-1.5`}>
                       {group.label}
