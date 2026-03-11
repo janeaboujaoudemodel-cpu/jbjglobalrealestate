@@ -8,6 +8,7 @@ import {
   ChevronRight, ChevronLeft, Clock, Sparkles, Loader2, CheckCircle2,
   Wand2, ArrowUpRight, Building2, Home, Landmark, TreePine, Gift, Crown
 } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
@@ -447,12 +448,14 @@ const Quiz = () => {
           slugs = relaxed.slice(0, 3).map(p => p.slug).join(",");
         }
       }
+      toast.success("✨ Your AI-selected properties are ready!", { duration: 4000, position: 'bottom-center' });
       navigate(`/quiz-results?projects=${slugs}&session=${sessionId}&free=true`);
     } catch (error) {
       console.error("Error saving quiz:", error);
       const recommendations = getRecommendations();
       const slugs = recommendations.slice(0, 5).map((p) => p.slug).join(",");
       markFreeUsed();
+      toast.success("✨ Your AI-selected properties are ready!", { duration: 4000, position: 'bottom-center' });
       navigate(`/quiz-results?projects=${slugs}&free=true`);
     } finally {
       setIsSubmitting(false);
