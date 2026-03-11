@@ -27,6 +27,7 @@ import { useVisitorTracking } from "@/hooks/useVisitorTracking";
 
 // Lazy-load non-critical components to reduce initial bundle
 const AIChatWidget = lazy(() => import("@/components/AIChatWidget"));
+import PageNavigation from "@/components/PageNavigation";
 const MarketingScripts = lazy(() => import("@/components/marketing/MarketingScripts"));
 const SecurityShield = lazy(() => import("@/components/SecurityShield"));
 const PopupLayer = lazy(() => import("@/components/PopupLayer"));
