@@ -305,16 +305,16 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             <div className="flex items-center w-full min-w-max border border-gold/30 rounded-lg overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
               {/* Search slot or built-in search */}
               {searchSlot ? (
-                <div className="min-w-0 max-w-[220px] border-r border-gold/20">
+                <div className="min-w-0 max-w-[220px] border-r border-gold/20" title="Search area, project, keyword">
                   {searchSlot}
                 </div>
               ) : (
-                <div className="min-w-0 max-w-[220px] border-r border-gold/20 flex items-center px-3">
+                <div className="min-w-0 max-w-[220px] border-r border-gold/20 flex items-center px-3" title="Search area, project, keyword">
                   <input
                     type="text"
                     value={filters.searchQuery}
                     onChange={(e) => update({ searchQuery: e.target.value })}
-                    placeholder="Search..."
+                    placeholder="Search area, project, keyword..."
                     className="w-full h-full py-2.5 bg-transparent text-xs text-black placeholder:text-black/40 outline-none"
                   />
                 </div>
@@ -339,7 +339,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                   "flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors border-r border-gold/20",
                   isMapMode ? "bg-gold/20 text-black" : "text-black/70 hover:bg-gold/10"
                 )}
-                title="Map View"
+                title="Toggle map view"
               >
                 <Map className="w-3.5 h-3.5" />
                 {isMapMode ? 'List' : 'Map'}
@@ -352,6 +352,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               <button
                 onClick={() => setAdvancedOpen(true)}
                 className="flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors border-r border-gold/20 text-black/70 hover:bg-gold/10"
+                title="Open advanced filters"
               >
                 <SlidersHorizontal className="w-3.5 h-3.5" />
                 Filter
@@ -766,7 +767,7 @@ function ConnectedCurrencyButton() {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <button className="flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors border-r border-gold/20 text-black/70 hover:bg-gold/10">
+        <button className="flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors border-r border-gold/20 text-black/70 hover:bg-gold/10" title="Select your currency">
           <span>{currentCurrency.flag}</span>
           <span>{currentCurrency.code}</span>
           <ChevronDown className="w-3 h-3 opacity-60" />
@@ -844,8 +845,8 @@ function ConnectedSavedButton({ variant, onApplySavedFilter }: { variant: 'light
   return (
     <Popover open={savedOpen} onOpenChange={setSavedOpen}>
       <PopoverTrigger asChild>
-        <button className="flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors border-r border-gold/20 text-black/70 hover:bg-gold/10" title="Saved Filters">
-          <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500" />
+        <button className="flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors border-r border-gold/20 text-black/70 hover:bg-gold/10" title="View saved filters">
+          <Heart className="w-3.5 h-3.5 text-black fill-black" />
           <span className="hidden sm:inline">Saved</span>
         </button>
       </PopoverTrigger>
@@ -906,18 +907,20 @@ function ConnectedSavedButton({ variant, onApplySavedFilter }: { variant: 'light
 function ConnectedModeButton() {
   const { mode, setMode } = useUserModeContext();
   const [modeOpen, setModeOpen] = useState(false);
-  const modeLabel = mode === 'broker' ? 'Broker' : mode === 'investor_broker' ? 'Both' : 'Investor';
+  const modeLabel = mode === 'broker' ? 'Broker' : mode === 'investor_broker' ? 'Both' : mode === 'developer' ? 'Developer' : 'Investor';
 
-  const MODE_OPTIONS: { value: typeof mode; label: string }[] = [
-    { value: 'investor', label: 'Investor' },
-    { value: 'broker', label: 'Broker' },
-    { value: 'investor_broker', label: 'Both' },
+  const MODE_OPTIONS: { value: typeof mode; label: string; color: string; activeBg: string; activeBorder: string }[] = [
+    { value: 'investor', label: 'Investor', color: 'text-emerald-600', activeBg: 'bg-emerald-500/15', activeBorder: 'border-emerald-500/40' },
+    { value: 'broker', label: 'Broker', color: 'text-blue-600', activeBg: 'bg-blue-500/15', activeBorder: 'border-blue-500/40' },
+    { value: 'investor_broker', label: 'Both', color: 'text-purple-600', activeBg: 'bg-purple-500/15', activeBorder: 'border-purple-500/40' },
   ];
+
+  const activeOpt = MODE_OPTIONS.find(o => o.value === mode) || MODE_OPTIONS[0];
 
   return (
     <Popover open={modeOpen} onOpenChange={setModeOpen}>
       <PopoverTrigger asChild>
-        <button className="flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors text-black/70 hover:bg-gold/10 flex-shrink-0 max-w-fit" title="Switch Mode">
+        <button className={cn("flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors flex-shrink-0 max-w-fit", activeOpt.activeBg, activeOpt.color, "hover:brightness-95")} title="Switch your viewing mode">
           <Users className="w-3.5 h-3.5" />
           <span className="hidden sm:inline">Mode: {modeLabel}</span>
         </button>
@@ -935,7 +938,7 @@ function ConnectedModeButton() {
             className={cn(
               "w-full text-center px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors",
               mode === opt.value
-                ? "bg-gold/20 text-gold border border-gold/40"
+                ? cn(opt.activeBg, opt.color, "border", opt.activeBorder)
                 : "text-black/80 hover:bg-white/60"
             )}
           >

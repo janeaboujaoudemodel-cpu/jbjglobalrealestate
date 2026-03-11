@@ -180,35 +180,45 @@ export default function HorizontalUtilityBar() {
 
         {divider}
 
-        {/* ── Area Unit Toggle ── */}
+        {/* ── Area Unit Toggle — segmented block ── */}
         <Tooltip>
           <TooltipTrigger asChild>
             <button
               onClick={toggleAreaUnit}
-              className="h-7 flex items-center rounded-md hover:bg-gold/10 transition-all px-1.5 gap-0.5"
+              className="h-7 flex items-center rounded-md border border-gold/30 overflow-hidden transition-all"
               aria-label="Toggle area unit"
             >
-              <Ruler className="w-3.5 h-3.5 text-gold/50" />
-              <span className={`text-[10px] font-bold px-1 py-0.5 rounded transition-all ${areaUnit === 'sqft' ? 'bg-gold/20 text-gold' : 'text-black/30'}`}>
+              <span className={`text-[10px] font-bold px-2 py-1 transition-all ${areaUnit === 'sqft' ? 'bg-gold/20 text-gold' : 'text-black/30 hover:bg-gold/5'}`}>
                 ft²
               </span>
-              <span className={`text-[10px] font-bold px-1 py-0.5 rounded transition-all ${areaUnit === 'sqm' ? 'bg-gold/20 text-gold' : 'text-black/30'}`}>
+              <span className="w-px h-4 bg-gold/30" />
+              <span className={`text-[10px] font-bold px-2 py-1 transition-all ${areaUnit === 'sqm' ? 'bg-gold/20 text-gold' : 'text-black/30 hover:bg-gold/5'}`}>
                 m²
               </span>
             </button>
           </TooltipTrigger>
           <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">
-            {areaUnit === 'sqft' ? 'Square Feet — click to switch' : 'Square Meters — click to switch'}
+            {areaUnit === 'sqft' ? 'Square Feet — click to switch to m²' : 'Square Meters — click to switch to ft²'}
           </TooltipContent>
         </Tooltip>
 
         {divider}
 
         {/* ── Language ── */}
-        <LanguageSwitcher variant="icon-only" />
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div><LanguageSwitcher variant="icon-only" /></div>
+          </TooltipTrigger>
+          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Select or change your language</TooltipContent>
+        </Tooltip>
 
         {/* ── Currency ── */}
-        <CurrencySwitcher variant="icon-only" />
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div><CurrencySwitcher variant="icon-only" /></div>
+          </TooltipTrigger>
+          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Select your currency</TooltipContent>
+        </Tooltip>
 
         {divider}
 
@@ -217,13 +227,14 @@ export default function HorizontalUtilityBar() {
           <TooltipTrigger asChild>
             <button
               onClick={() => navigate('/properties?advanced=true')}
-              className="h-7 w-7 flex items-center justify-center rounded-md hover:bg-gold/10 transition-all group border border-gold/20"
+              className="h-7 flex items-center gap-1 rounded-md hover:bg-gold/10 transition-all px-2 group border border-gold/20"
               aria-label="Advanced Property Filter"
             >
               <SlidersHorizontal className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-transform" />
+              <span className="text-[10px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">Filter</span>
             </button>
           </TooltipTrigger>
-          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Advanced Property Filter</TooltipContent>
+          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Open advanced filters</TooltipContent>
         </Tooltip>
 
         {/* ── Spacer ── */}

@@ -1,92 +1,99 @@
 
 
-## Plan: FilterShortcutBar & HorizontalUtilityBar UI Refinements
+## Plan: Brand Palette for All Users, Availability Auto-Hide, Stamp/Tools UI Premium Upgrade, Sitemap Update, and Cross-Tool Integration
 
-### What's Being Fixed
-
-The user wants to clean up the 2-row filter bar and the horizontal header to remove duplication, improve visual polish, and ensure consistent behavior across all property-related pages.
+This is a large request spanning 6 distinct areas. To avoid quality issues, I recommend implementing in **3 phases**. This plan covers all phases but Phase 1 will be implemented first.
 
 ---
 
-### 1. Row 1 Visual Improvements (FilterShortcutBar)
+### Phase 1: Brand Palette → Public + Per-User Personalization + UI Fixes
 
-**Heart icon** — Change from `text-red-500 fill-red-500` to `text-black` (Saved button, line 848).
+**Problem:** Brand Palette is owner-only (`OwnerGuard`), live preview doesn't work properly, color swatches are square inside rounded cards, hex codes are visible to all, no color wheel, no saved palette history, no per-user personalization.
 
-**sqft/sqm toggle** — Wrap in a bordered block with a divider between ft² and m², making it look like a single segmented control (similar to how it looks in the horizontal header but more prominent).
+**Changes:**
 
-**Tooltips on hover** — Add `title` attributes or wrap with `Tooltip` for:
-- Language: "Select or change your language"
-- Currency: "Select your currency"
-- Filter: "Open advanced filters"
-- Mode: "Switch your viewing mode"
-- Map: "Toggle map view"
-- Saved: "View saved filters"
-- Search: "Search area, project, keyword"
+#### 1A. Database: `user_color_palettes` table
+```sql
+CREATE TABLE public.user_color_palettes (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  name text NOT NULL DEFAULT 'Custom Palette',
+  palette jsonb NOT NULL,
+  is_active boolean DEFAULT false,
+  created_at timestamptz DEFAULT now()
+);
+-- RLS: users CRUD their own palettes only
+```
 
-**Files:** `src/components/filters/FilterShortcutBar.tsx`
+#### 1B. Remove `OwnerGuard` from brand palette route
+Move `/owner/brand-palette` → `/brand-palette` as a public authenticated route. Owner sees full hex codes + corporate palette management. Regular users see:
+- Color wheel pickers (no hex codes visible)
+- Visual labels ("Primary — buttons, links", etc.) with live example previews
+- Apply to "Website" or "Tools only" toggle
+- Save/Revert/History of their personal palettes
+- Palettes saved per-user in `user_color_palettes`
 
----
+#### 1C. Fix UI issues
+- Match color swatch shape to card container (use `rounded-2xl` on swatches to match card radius)
+- Add a clickable color wheel icon next to each swatch for users who don't know to click the square
+- Fix live preview: make `isPreviewing` default to `true` so changes reflect immediately
+- Show accurate JBJ website palette as defaults: `primary: #C8A766, secondary: #000000, accent: #D4AF37, background: #FDFBF7, text: #1A1A1A`
 
-### 2. Remove Duplicates Between FilterShortcutBar Row 1 & HorizontalUtilityBar
+#### 1D. BrandPaletteContext updates
+- Load user's active personal palette from `user_color_palettes` for non-owners
+- Owner's palette comes from `app_settings` (unchanged)
+- `applyPaletteToDOM()` already works — just needs to trigger on page load for per-user palettes
 
-Currently duplicated in both:
-- **Filter button** (SlidersHorizontal) — exists in both Row 1 and horizontal header
-- **Favorites/Heart** — horizontal header has a heart link, Row 1 has "Saved filters" heart
-
-These are NOT exact duplicates (one is favorites, one is saved filters), so both stay. The sort options (Newest, Low-High, etc.), Map, Currency, and Mode in Row 1 are NOT in the horizontal header, so no removal needed.
-
-**Action:** No items need removing — they serve different purposes. The user's main concern is that when the FilterShortcutBar is NOT visible (not scrolled to it), the horizontal header should show the key controls.
-
----
-
-### 3. Horizontal Header — Show Filter Controls When FilterShortcutBar Is Hidden
-
-When the sticky filter bar is NOT showing (user hasn't scrolled past hero), the horizontal header should display inline: Search, AED currency, Map, Mode Investor, Filter + "Filter" text, Saved, Trending.
-
-**Changes to `HorizontalUtilityBar.tsx`:**
-- The filter/advanced button already exists — add the word "Filter" next to the icon (currently icon-only)
-- Currency already shows via `CurrencySwitcher` — keep as-is
-- Add "Trending" link/button next to the filter controls
-- These controls are already present, just need the "Filter" label added
-
-**Files:** `src/components/navigation/HorizontalUtilityBar.tsx`
-
----
-
-### 4. Mode Investor Colors — Match Row 1 Highlight Style
-
-The `ConnectedModeButton` in FilterShortcutBar Row 1 uses `bg-gold/20 text-gold` for the active mode. The user wants the same color highlighting used in Row 1's other buttons (green/purple/blue section colors).
-
-**Changes:** Update `ConnectedModeButton` active state to use role-aware colors:
-- Investor → emerald highlight
-- Broker → blue highlight  
-- Both → purple highlight
-
-Match the dropdown popover styling to use the same color scheme.
-
-**Files:** `src/components/filters/FilterShortcutBar.tsx` (ConnectedModeButton, lines 906-948)
+**Files:**
+| File | Action |
+|------|--------|
+| Database migration | Create `user_color_palettes` |
+| `src/routes/AdminRoutes.tsx` | Move palette route from OwnerGuard to authenticated |
+| `src/pages/owner/BrandPaletteHub.tsx` | Major refactor: dual-mode (owner vs user), color wheels, no hex for users, palette history, shape fixes |
+| `src/contexts/BrandPaletteContext.tsx` | Load per-user palette, add `saveUserPalette`, `getUserPaletteHistory`, `revertToDefault` |
+| `src/components/navigation/GlobalVerticalNav.tsx` | Update nav link path |
 
 ---
 
-### 5. Global Application
+### Phase 2: Availability Auto-Hide + Stamp Generator Premium UI
 
-All pages using `FilterShortcutBar` already import the same component, so changes apply globally:
-- `Properties.tsx`
-- `PropertiesReelly.tsx`
-- `AreaGuides.tsx`
-- `AreaDetail.tsx`
-- `DeveloperDetail.tsx` (if applicable)
-- `ProjectDetailLayout.tsx`
+**Problem:** Property availability/unit counts are visible to investors (discourages urgency). Stamp generator UI needs premium upgrade.
 
-No per-page changes needed — the component is shared.
+#### 2A. Availability auto-hide
+- Add `availability_visible` boolean column to `projects` table (default `false`)
+- All public-facing property pages: hide availability/unit count data when `availability_visible = false`
+- Owner can toggle visibility per-project from Listing Admin
+- Developer Portal uploads auto-set `availability_visible = false`
+
+#### 2B. Stamp Generator premium UI overhaul
+- Apply champagne gradient theme consistently (matching Royal Tools Hub)
+- Default to "Ink Blue" standard with the two canonical company stamp designs
+- Gold-bordered cards, premium typography, centered preview
+- Upgrade security: sanitize all SVG inputs, encrypt stamp data in session storage
+
+**Files:** `projects` migration, Listing Admin toggle, property detail pages, `StampGeneratorPage.tsx`, `StampProjectWizard.tsx`, related stamp components
 
 ---
 
-### Summary
+### Phase 3: Sitemap Update, Cross-Tool Integration, Security Hardening
 
-| Change | File |
-|--------|------|
-| Heart icon to black, sqft/sqm block styling, tooltips | `FilterShortcutBar.tsx` |
-| Mode button color-coded by role | `FilterShortcutBar.tsx` |
-| Add "Filter" label to horizontal header filter button | `HorizontalUtilityBar.tsx` |
+#### 3A. Sitemap
+Add missing tool links: Brand Palette, Scan & Sign, all new features added recently.
+
+#### 3B. Cross-tool integration
+- Scan & Sign: add "Import Stamp", "Import Business Card", "Import QR Code" buttons that pull from session storage
+- E-Signature: already has stamp integration — verify QR code and business card import paths
+- All tools: ensure owner sees their brand palette colors in color pickers; non-owners see generic palette
+
+#### 3C. Global security
+- RLS audit across new tables
+- Edge function JWT hardening review
+- DOM obfuscation layer verification
+
+**Files:** `Sitemap.tsx`, `ScanSignPage.tsx`, `CreateEnvelope.tsx`, tool color pickers, edge functions
+
+---
+
+### Implementation Priority
+**Phase 1 first** (Brand Palette) — directly addresses the page user is currently viewing and the most detailed feedback. Phases 2 and 3 follow in subsequent messages.
 
