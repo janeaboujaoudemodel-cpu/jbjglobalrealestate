@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
-  Search, Heart, Settings, User, LayoutDashboard,
+  Search, Heart, Settings, LayoutDashboard,
   Ruler, SlidersHorizontal, PanelLeftClose, PanelLeftOpen,
   Building2, Key, Tag, Bell, ClipboardList, Inbox, BarChart3,
 } from "lucide-react";
+import ModeSwitcher from "@/components/ModeSwitcher";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
