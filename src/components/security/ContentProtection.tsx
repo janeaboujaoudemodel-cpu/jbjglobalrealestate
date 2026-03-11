@@ -94,6 +94,32 @@ export function ContentProtection() {
       }
     };
 
+    // Anti-iframe protection: prevent embedding/mirroring
+    if (window.self !== window.top && !isDevMode()) {
+      try {
+        window.top!.location.href = window.self.location.href;
+      } catch {
+        document.body.innerHTML = '<h1 style="text-align:center;padding:4rem;">© JBJ Global Real Estate — Embedding Prohibited</h1>';
+      }
+    }
+
+    // Inject copyright watermark comments into HTML
+    const copyrightComment = document.createComment(
+      ' © 2024-2026 JBJ Global Real Estate LLC. All rights reserved. Unauthorized reproduction, scraping, or replication is prohibited under UAE Federal Law No. 38 of 2021. '
+    );
+    document.body.prepend(copyrightComment);
+
+    // Add ownership meta tags
+    const ownerMeta = document.createElement('meta');
+    ownerMeta.name = 'author';
+    ownerMeta.content = 'JBJ Global Real Estate LLC';
+    document.head.appendChild(ownerMeta);
+
+    const copyrightMeta = document.createElement('meta');
+    copyrightMeta.name = 'copyright';
+    copyrightMeta.content = '© 2024-2026 JBJ Global Real Estate LLC. All Rights Reserved.';
+    document.head.appendChild(copyrightMeta);
+
     // Add global CSS protection
     const style = document.createElement('style');
     style.id = 'jbj-content-protection';
