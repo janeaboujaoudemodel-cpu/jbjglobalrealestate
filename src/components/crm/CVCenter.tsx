@@ -511,6 +511,13 @@ const CVCenter = ({ userId }: CVCenterProps) => {
     setCvDirectUrl(null);
     setCvPreviewUrl(null);
 
+    // Mark as viewed if not already
+    if (!cv.is_viewed) {
+      const table = cv.record_source === 'hr_applications' ? 'hr_applications' : 'hr_cv_submissions';
+      await supabase.from(table).update({ is_viewed: true } as any).eq('id', cv.id);
+      setCvEntries(prev => prev.map(c => c.id === cv.id ? { ...c, is_viewed: true } : c));
+    }
+
     if (previewBlobUrlRef.current) {
       URL.revokeObjectURL(previewBlobUrlRef.current);
       previewBlobUrlRef.current = null;
