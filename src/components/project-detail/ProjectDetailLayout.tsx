@@ -761,15 +761,15 @@ export default function ProjectDetailLayout({
 
           {/* QUICK FACTS BAR - Reelly-style horizontal bar */}
           <div className="mb-12">
-            <QuickFactsBar
-              propertyType={project.property_type_label}
-              totalUnits={project.total_units}
-              floors={project.floors && project.floors > 3 ? project.floors : undefined}
-              availabilityStatus={project.availability_status}
-              statusLabel={project.status_label}
-              handoverDate={project.handover_date}
-              updatedAt={project.updated_at}
-            />
+             <QuickFactsBar
+               propertyType={project.property_type_label}
+               totalUnits={project.availability_visible ? project.total_units : null}
+               floors={project.floors && project.floors > 3 ? project.floors : undefined}
+               availabilityStatus={project.availability_visible ? project.availability_status : null}
+               statusLabel={project.status_label}
+               handoverDate={project.handover_date}
+               updatedAt={project.updated_at}
+             />
           </div>
 
           {/* DATA FRESHNESS INDICATOR */}
