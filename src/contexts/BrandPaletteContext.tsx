@@ -215,9 +215,9 @@ export const BrandPaletteProvider: React.FC<{ children: React.ReactNode }> = ({ 
       .insert({
         user_id: user.id,
         name,
-        palette: p as unknown as Record<string, unknown>,
+        palette: p as any,
         is_active: setActive,
-      });
+      } as any);
     if (error) throw error;
     if (setActive) applyPaletteToDOM(p);
     await loadUserPalettes();
