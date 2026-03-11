@@ -888,7 +888,7 @@ export default function GlobalVerticalNav() {
           </Link>
           <Link to="/" onClick={() => setActiveMegaMenu(null)} onMouseEnter={() => { import("@/pages/Index"); }} className="flex flex-col flex-1 min-w-0 hover:opacity-80 transition-opacity" style={{ fontFamily: "Poppins, sans-serif" }}>
             <span className="text-[13px] font-bold text-black tracking-wide leading-tight">JBJ GLOBAL</span>
-            <span className="text-[12px] font-bold text-gold tracking-wide leading-tight">REAL ESTATE</span>
+            <span className="text-[12px] font-bold text-[#D4B896] tracking-wide leading-tight">REAL ESTATE</span>
           </Link>
         </div>
       </div>
