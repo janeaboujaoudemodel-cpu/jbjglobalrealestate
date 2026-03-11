@@ -46,6 +46,7 @@ const KanbanBoard = lazy(() => import("@/pages/KanbanBoard"));
 const PropertyMap = lazy(() => import("@/pages/PropertyMap"));
 const ListingAdmin = lazy(() => import("@/pages/ListingAdmin"));
 const ModeHub = lazy(() => import("@/pages/ModeHub"));
+const FoundersNotesPanel = lazy(() => import("@/components/founders-assistant/FoundersNotesPanel"));
 
 export const OwnerRoutes = () => (
   <Route path="/owner" element={
@@ -97,5 +98,6 @@ export const OwnerRoutes = () => (
     <Route path="map" element={<PropertyMap />} />
     <Route path="listing-admin" element={<ListingAdminGuard><ListingAdmin /></ListingAdminGuard>} />
     <Route path="mode-hub" element={<ModeHub />} />
+    <Route path="notes" element={<FoundersNotesPanel />} />
   </Route>
 );
