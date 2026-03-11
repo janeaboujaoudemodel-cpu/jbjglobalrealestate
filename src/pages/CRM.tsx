@@ -717,7 +717,7 @@ const CRM = () => {
               <TabsContent value="management">
                 {activeTab === "management" && (
                   <Suspense fallback={<CRMTabFallback />}>
-                  <RecentlyDeletedLeads userId={user?.id || ""} onRefresh={handleRefresh} />
+                  <RecentlyDeletedLeads userId={user?.id || ""} onRefresh={handleRefresh} isOwner={profile?.crm_role === 'owner_admin' || profile?.crm_role === 'founder'} />
                   </Suspense>
                 )}
               </TabsContent>
