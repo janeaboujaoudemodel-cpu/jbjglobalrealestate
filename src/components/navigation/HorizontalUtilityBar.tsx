@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
-  Search, Heart, Settings, User, LayoutDashboard,
+  Search, Heart, Settings, LayoutDashboard,
   Ruler, SlidersHorizontal, PanelLeftClose, PanelLeftOpen,
   Building2, Key, Tag, Bell, ClipboardList, Inbox, BarChart3,
 } from "lucide-react";
+import ModeSwitcher from "@/components/ModeSwitcher";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
@@ -206,18 +207,18 @@ export default function HorizontalUtilityBar() {
 
         {divider}
 
-        {/* ── Advanced Filter ── */}
+        {/* ── Advanced Filter — opens filter on properties page ── */}
         <Tooltip>
           <TooltipTrigger asChild>
-            <Link
-              to="/properties?advanced=true"
+            <button
+              onClick={() => navigate('/properties?advanced=true')}
               className="h-7 w-7 flex items-center justify-center rounded-md hover:bg-gold/10 transition-all group border border-gold/20"
-              aria-label="Advanced Filter"
+              aria-label="Advanced Property Filter"
             >
               <SlidersHorizontal className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-transform" />
-            </Link>
+            </button>
           </TooltipTrigger>
-          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Advanced Filter</TooltipContent>
+          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Advanced Property Filter</TooltipContent>
         </Tooltip>
 
         {/* ── Spacer ── */}
@@ -321,20 +322,8 @@ export default function HorizontalUtilityBar() {
           <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">My Dashboard</TooltipContent>
         </Tooltip>
 
-        {/* Account */}
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Link
-              to="/profile"
-              className="h-7 flex items-center gap-1.5 rounded-md border border-gold/20 hover:border-gold/40 hover:bg-gold/10 transition-all px-2 group"
-              aria-label="My Account"
-            >
-              <User className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-transform" />
-              <span className="text-[10px] font-semibold text-black/60 hidden xl:inline">Account</span>
-            </Link>
-          </TooltipTrigger>
-          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">My Account</TooltipContent>
-        </Tooltip>
+        {/* Account — opens Mode Selector via ModeSwitcher */}
+        <ModeSwitcher variant="header" />
 
         {/* Settings */}
         <Tooltip>

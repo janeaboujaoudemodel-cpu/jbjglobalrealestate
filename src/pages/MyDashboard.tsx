@@ -110,15 +110,23 @@ function UsefulLinksCard() {
 
   return (
     <div>
-      <div className="flex items-center gap-2 mb-4">
-        <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center">
-          <BookOpen className="w-4 h-4 text-gold" />
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center">
+            <BookOpen className="w-4 h-4 text-gold" />
+          </div>
+          <h3 className="text-base font-semibold text-foreground">Explore & Learn</h3>
         </div>
-        <h3 className="text-base font-semibold text-foreground">Explore & Learn</h3>
+        <Button variant="outline" size="sm" asChild className="border-gold/30 text-gold hover:bg-gold/10 hover:text-gold">
+          <Link to="/guides">
+            Explore All Books
+            <ChevronRight className="w-3.5 h-3.5 ml-1" />
+          </Link>
+        </Button>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+      <div className="flex gap-6 overflow-x-auto pb-2 jj-scrollbar-gold-x">
         {books.map((book) => (
-          <Link key={book.href} to={book.href} className="group flex flex-col items-center gap-2">
+          <Link key={book.href} to={book.href} className="group flex flex-col items-center gap-2 flex-shrink-0">
             <motion.div
               whileHover={{ y: -8 }}
               transition={{ type: 'spring', stiffness: 300 }}
@@ -304,7 +312,7 @@ const MyDashboard = () => {
 
             {/* Main Grid Layout — 2 columns */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Left Column - Profile, Badges, Account */}
+              {/* Left Column - Profile, Badges, Account, Tasks */}
               <div className="space-y-6">
                 <div id="profile-section" className={sectionClass('profile-section')}>
                   <DashboardCardErrorBoundary fallbackTitle="Profile unavailable">
@@ -317,6 +325,11 @@ const MyDashboard = () => {
                   </DashboardCardErrorBoundary>
                 </div>
                 <AccountSettingsCard />
+                <div id="tasks-section" className={sectionClass('tasks-section')}>
+                  <DashboardCardErrorBoundary fallbackTitle="Tasks unavailable">
+                    <MyTasksCard />
+                  </DashboardCardErrorBoundary>
+                </div>
               </div>
 
               {/* Right Column - Notifications, Quick Actions, Activity */}
@@ -337,28 +350,23 @@ const MyDashboard = () => {
               </div>
             </div>
 
-            {/* Row 2: Tasks + Useful Links side by side */}
+            {/* Row 2: Favorites & Shortlists — equal height */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-              <div id="tasks-section" className={sectionClass('tasks-section')}>
-                <DashboardCardErrorBoundary fallbackTitle="Tasks unavailable">
-                  <MyTasksCard />
-                </DashboardCardErrorBoundary>
-              </div>
-              <UsefulLinksCard />
-            </div>
-
-            {/* Row 3: Favorites & Shortlists */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-              <div id="favorites-section" className={sectionClass('favorites-section')}>
+              <div id="favorites-section" className={cn(sectionClass('favorites-section'), "min-h-[320px]")}>
                 <DashboardCardErrorBoundary fallbackTitle="Favorites unavailable">
                   <FavoritesCard />
                 </DashboardCardErrorBoundary>
               </div>
-              <div id="shortlist-section" className={sectionClass('shortlist-section')}>
+              <div id="shortlist-section" className={cn(sectionClass('shortlist-section'), "min-h-[320px]")}>
                 <DashboardCardErrorBoundary fallbackTitle="Shortlist unavailable">
                   <ShortlistCard />
                 </DashboardCardErrorBoundary>
               </div>
+            </div>
+
+            {/* Row 3: Explore & Learn — horizontal scroll strip */}
+            <div className="mt-6">
+              <UsefulLinksCard />
             </div>
 
             {/* AI Tools Section with "Explore All Tools" button */}

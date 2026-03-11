@@ -38,6 +38,16 @@ interface DetailItem {
   value: string;
 }
 
+// Validate service charge — suppress if value exceeds 80 AED/sqft (UAE max ceiling)
+function isValidServiceCharge(charge: string | null | undefined): boolean {
+  if (!charge) return false;
+  // Extract all numeric values from the string
+  const numbers = charge.match(/[\d.]+/g);
+  if (!numbers) return false;
+  // If ANY extracted number exceeds 80, it's likely fake data
+  return !numbers.some(n => parseFloat(n) > 80);
+}
+
 export default function HouseDetailsSection({
   floors,
   totalUnits,
@@ -78,8 +88,8 @@ export default function HouseDetailsSection({
   if (parkingSpaces) {
     details.push({ icon: Car, label: "Parking", value: `${parkingSpaces} Space${parkingSpaces > 1 ? 's' : ''}` });
   }
-  if (serviceCharge) {
-    details.push({ icon: Zap, label: "Service Charge", value: serviceCharge });
+  if (isValidServiceCharge(serviceCharge)) {
+    details.push({ icon: Zap, label: "Service Charge", value: serviceCharge! });
   }
 
   // Standard features that most properties have
