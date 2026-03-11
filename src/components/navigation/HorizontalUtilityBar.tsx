@@ -165,66 +165,84 @@ export default function HorizontalUtilityBar() {
               <>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Link to="/owner/crm" className="h-7 flex items-center gap-1 rounded-md hover:bg-gold/10 transition-all px-1.5 group">
-                      <Users className="w-3.5 h-3.5 text-emerald-600 group-hover:scale-110 transition-transform" />
-                      <span className="text-[10px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">CRM</span>
+                    <Link to="/owner/crm" className="h-8 flex items-center gap-1.5 rounded-md hover:bg-gold/10 transition-all px-2 group">
+                      <Users className="w-4 h-4 text-emerald-600 group-hover:scale-110 transition-transform" />
+                      <span className="text-[11px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">CRM</span>
                     </Link>
                   </TooltipTrigger>
                   <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">CRM Dashboard</TooltipContent>
                 </Tooltip>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Link to="/owner/admin" className="h-7 flex items-center gap-1 rounded-md hover:bg-gold/10 transition-all px-1.5 group">
-                      <Shield className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-transform" />
-                      <span className="text-[10px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">Admin</span>
+                    <Link to="/owner/admin" className="h-8 flex items-center gap-1.5 rounded-md hover:bg-gold/10 transition-all px-2 group">
+                      <Shield className="w-4 h-4 text-gold group-hover:scale-110 transition-transform" />
+                      <span className="text-[11px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">Admin</span>
                     </Link>
                   </TooltipTrigger>
                   <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Admin Panel</TooltipContent>
                 </Tooltip>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Link to="/owner/listing-admin" className="h-7 flex items-center gap-1 rounded-md hover:bg-gold/10 transition-all px-1.5 group">
-                      <ClipboardList className="w-3.5 h-3.5 text-amber-600 group-hover:scale-110 transition-transform" />
-                      <span className="text-[10px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">Listings</span>
+                    <Link to="/owner/listing-admin" className="h-8 flex items-center gap-1.5 rounded-md hover:bg-gold/10 transition-all px-2 group">
+                      <ClipboardList className="w-4 h-4 text-amber-600 group-hover:scale-110 transition-transform" />
+                      <span className="text-[11px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">Listings</span>
                     </Link>
                   </TooltipTrigger>
                   <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Listing Admin</TooltipContent>
                 </Tooltip>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Link to="/properties" className="h-7 flex items-center gap-1 rounded-md hover:bg-gold/10 transition-all px-1.5 group">
-                      <Building2 className="w-3.5 h-3.5 text-gold/70 group-hover:text-gold transition-colors" />
-                      <span className="text-[10px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">Properties</span>
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Properties</TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Link to="/areas" className="h-7 flex items-center gap-1 rounded-md hover:bg-gold/10 transition-all px-1.5 group">
-                      <MapPin className="w-3.5 h-3.5 text-gold/70 group-hover:text-gold transition-colors" />
-                      <span className="text-[10px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">Areas</span>
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Areas</TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Link to="/developers" className="h-7 flex items-center gap-1 rounded-md hover:bg-gold/10 transition-all px-1.5 group">
-                      <Sparkles className="w-3.5 h-3.5 text-gold/70 group-hover:text-gold transition-colors" />
-                      <span className="text-[10px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">Developers</span>
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Developers</TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Link to="/founder-assistant" className="h-7 flex items-center gap-1 rounded-md hover:bg-gold/10 transition-all px-1.5 group">
-                      <UserCircle className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-transform" />
-                      <span className="text-[10px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">Assistant</span>
+                    <Link to="/founder-assistant" className="h-8 flex items-center gap-1.5 rounded-md hover:bg-gold/10 transition-all px-2 group">
+                      <UserCircle className="w-4 h-4 text-gold group-hover:scale-110 transition-transform" />
+                      <span className="text-[11px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">Assistant</span>
                     </Link>
                   </TooltipTrigger>
                   <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Founder Assistant</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link to="/owner/command-center" className="h-8 flex items-center gap-1.5 rounded-md hover:bg-gold/10 transition-all px-2 group">
+                      <Crown className="w-4 h-4 text-gold group-hover:scale-110 transition-transform" />
+                      <span className="text-[11px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">Command</span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Owner Command Center</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link to="/owner/hr-hub" className="h-8 flex items-center gap-1.5 rounded-md hover:bg-gold/10 transition-all px-2 group">
+                      <FileUser className="w-4 h-4 text-gold/70 group-hover:text-gold transition-colors" />
+                      <span className="text-[11px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">HR</span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">HR Hub</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link to="/owner/cv-center" className="h-8 flex items-center gap-1.5 rounded-md hover:bg-gold/10 transition-all px-2 group">
+                      <FileUser className="w-4 h-4 text-gold/70 group-hover:text-gold transition-colors" />
+                      <span className="text-[11px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">CV</span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">CV Center</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link to="/owner/crm?tab=inquiries" className="h-8 flex items-center gap-1.5 rounded-md hover:bg-gold/10 transition-all px-2 group">
+                      <MessageSquare className="w-4 h-4 text-gold/70 group-hover:text-gold transition-colors" />
+                      <span className="text-[11px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">Inquiries</span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Inquiries & Messages</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link to="/owner/customer-happiness" className="h-8 flex items-center gap-1.5 rounded-md hover:bg-gold/10 transition-all px-2 group">
+                      <SmilePlus className="w-4 h-4 text-gold/70 group-hover:text-gold transition-colors" />
+                      <span className="text-[11px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">Happiness</span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Customer Happiness Center</TooltipContent>
                 </Tooltip>
               </>
             ) : user ? (
