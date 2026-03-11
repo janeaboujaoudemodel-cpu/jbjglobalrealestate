@@ -1,99 +1,81 @@
 
 
-## Plan: Brand Palette for All Users, Availability Auto-Hide, Stamp/Tools UI Premium Upgrade, Sitemap Update, and Cross-Tool Integration
+## Plan: Developer Portal & Admin Developers — Full UI Upgrade, Workflow Fix & Broker Briefing Access
 
-This is a large request spanning 6 distinct areas. To avoid quality issues, I recommend implementing in **3 phases**. This plan covers all phases but Phase 1 will be implemented first.
+### Problem
+1. **AdminDevelopers** (`/admin/developers`) uses a dark `bg-black` / `bg-zinc-900` theme that violates the champagne-gold admin standard
+2. **BriefingManagement** sub-component also uses dark zinc theme
+3. Developers list doesn't show all integrated developers with expandable sales reps clearly
+4. Brokers (approved employees) can't request briefings from the admin side — only approved developer reps can on the developer portal side
+5. No notification to owner alerts when a broker requests a briefing through the portal
+6. AI integration not wired (no AI-assisted briefing summaries or automation)
 
----
+### Phase 1: AdminDevelopers UI Overhaul → Champagne Gold Standard
 
-### Phase 1: Brand Palette → Public + Per-User Personalization + UI Fixes
+**File:** `src/pages/AdminDevelopers.tsx`
 
-**Problem:** Brand Palette is owner-only (`OwnerGuard`), live preview doesn't work properly, color swatches are square inside rounded cards, hex codes are visible to all, no color wheel, no saved palette history, no per-user personalization.
+- Replace `bg-black`, `bg-zinc-900`, `border-zinc-800`, `text-white` with champagne-gold system:
+  - Page: `bg-gradient-to-b from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)]`
+  - Header: champagne gradient with gold borders
+  - Cards: `bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30`
+  - Stats cards: gold-bordered champagne
+  - Text: `text-foreground` instead of `text-white`
+  - Tabs: champagne gradient tab list with `data-[state=active]:bg-white`
+- DeveloperCard: champagne card with gold border, reps always visible (no toggle), contact buttons styled with gold accents
+- Dialogs: champagne background instead of zinc-900
 
-**Changes:**
+### Phase 2: BriefingManagement UI Overhaul
 
-#### 1A. Database: `user_color_palettes` table
-```sql
-CREATE TABLE public.user_color_palettes (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  name text NOT NULL DEFAULT 'Custom Palette',
-  palette jsonb NOT NULL,
-  is_active boolean DEFAULT false,
-  created_at timestamptz DEFAULT now()
-);
--- RLS: users CRUD their own palettes only
-```
+**File:** `src/components/admin/BriefingManagement.tsx`
 
-#### 1B. Remove `OwnerGuard` from brand palette route
-Move `/owner/brand-palette` → `/brand-palette` as a public authenticated route. Owner sees full hex codes + corporate palette management. Regular users see:
-- Color wheel pickers (no hex codes visible)
-- Visual labels ("Primary — buttons, links", etc.) with live example previews
-- Apply to "Website" or "Tools only" toggle
-- Save/Revert/History of their personal palettes
-- Palettes saved per-user in `user_color_palettes`
+- Same champagne-gold conversion for all cards, stats, tabs, dialogs
+- Stats row: champagne cards with gold text
+- Sub-tabs: champagne background
+- Briefing cards, attendance, leaderboard, WhatsApp logger — all converted
+- WhatsAppLogger sub-component: champagne inputs
 
-#### 1C. Fix UI issues
-- Match color swatch shape to card container (use `rounded-2xl` on swatches to match card radius)
-- Add a clickable color wheel icon next to each swatch for users who don't know to click the square
-- Fix live preview: make `isPreviewing` default to `true` so changes reflect immediately
-- Show accurate JBJ website palette as defaults: `primary: #C8A766, secondary: #000000, accent: #D4AF37, background: #FDFBF7, text: #1A1A1A`
+### Phase 3: Developer Card Expansion — Sales Reps Always Visible
 
-#### 1D. BrandPaletteContext updates
-- Load user's active personal palette from `user_color_palettes` for non-owners
-- Owner's palette comes from `app_settings` (unchanged)
-- `applyPaletteToDOM()` already works — just needs to trigger on page load for per-user palettes
+**File:** `src/pages/AdminDevelopers.tsx` (DeveloperCard component)
 
-**Files:**
-| File | Action |
-|------|--------|
-| Database migration | Create `user_color_palettes` |
-| `src/routes/AdminRoutes.tsx` | Move palette route from OwnerGuard to authenticated |
-| `src/pages/owner/BrandPaletteHub.tsx` | Major refactor: dual-mode (owner vs user), color wheels, no hex for users, palette history, shape fixes |
-| `src/contexts/BrandPaletteContext.tsx` | Load per-user palette, add `saveUserPalette`, `getUserPaletteHistory`, `revertToDefault` |
-| `src/components/navigation/GlobalVerticalNav.tsx` | Update nav link path |
+- Reps expanded by default (remove collapsed state)
+- Each rep shows: name, title, phone (clickable), WhatsApp (clickable), email (clickable), primary badge
+- Add "Request Briefing" button per developer that opens briefing form pre-filled with developer name
+- Show developer website link, description, location prominently
 
----
+### Phase 4: Broker Briefing Access from Developer Portal
 
-### Phase 2: Availability Auto-Hide + Stamp Generator Premium UI
+**File:** `src/pages/DeveloperPortal.tsx`
 
-**Problem:** Property availability/unit counts are visible to investors (discourages urgency). Stamp generator UI needs premium upgrade.
+- Currently only approved developer reps can see the Briefing tab
+- Add a new flow: **approved company brokers** (users with broker_profiles where `verification_status = 'verified'` or employees in `hr_employees`) can also see the Briefing tab
+- They can browse developer sales reps, contact them, and request a briefing
+- On briefing request submission, insert into `user_notifications` for the owner with action_url pointing to `/admin/developers` Briefings tab
 
-#### 2A. Availability auto-hide
-- Add `availability_visible` boolean column to `projects` table (default `false`)
-- All public-facing property pages: hide availability/unit count data when `availability_visible = false`
-- Owner can toggle visibility per-project from Listing Admin
-- Developer Portal uploads auto-set `availability_visible = false`
+### Phase 5: Owner Alert Notifications
 
-#### 2B. Stamp Generator premium UI overhaul
-- Apply champagne gradient theme consistently (matching Royal Tools Hub)
-- Default to "Ink Blue" standard with the two canonical company stamp designs
-- Gold-bordered cards, premium typography, centered preview
-- Upgrade security: sanitize all SVG inputs, encrypt stamp data in session storage
+**Files:** `BriefingRequestForm.tsx`, `DeveloperPortal.tsx`
 
-**Files:** `projects` migration, Listing Admin toggle, property detail pages, `StampGeneratorPage.tsx`, `StampProjectWizard.tsx`, related stamp components
+- When any user (rep or broker) submits a briefing request, insert into `user_notifications` for the owner:
+  - type: `briefing_request`
+  - title: `New Briefing Request: {project_name}`
+  - message with developer name, date, time, location
+- This already creates an `admin_tasks` entry — add the notification as well
+- Wire to existing `useUserAlerts` hook (already queries `user_notifications`)
 
----
+### Phase 6: AI Integration — Briefing Summary
 
-### Phase 3: Sitemap Update, Cross-Tool Integration, Security Hardening
+- After briefing is approved, add an "AI Summary" button in BriefingManagement detail dialog
+- Calls `lovable-ai` edge function with briefing details + notes to generate a summary
+- Summary stored in briefing notes field
+- Uses `google/gemini-3-flash-preview` model
 
-#### 3A. Sitemap
-Add missing tool links: Brand Palette, Scan & Sign, all new features added recently.
+### Files Modified
 
-#### 3B. Cross-tool integration
-- Scan & Sign: add "Import Stamp", "Import Business Card", "Import QR Code" buttons that pull from session storage
-- E-Signature: already has stamp integration — verify QR code and business card import paths
-- All tools: ensure owner sees their brand palette colors in color pickers; non-owners see generic palette
-
-#### 3C. Global security
-- RLS audit across new tables
-- Edge function JWT hardening review
-- DOM obfuscation layer verification
-
-**Files:** `Sitemap.tsx`, `ScanSignPage.tsx`, `CreateEnvelope.tsx`, tool color pickers, edge functions
-
----
-
-### Implementation Priority
-**Phase 1 first** (Brand Palette) — directly addresses the page user is currently viewing and the most detailed feedback. Phases 2 and 3 follow in subsequent messages.
+| File | Changes |
+|------|---------|
+| `AdminDevelopers.tsx` | Full champagne-gold UI, reps always visible, briefing request button |
+| `BriefingManagement.tsx` | Full champagne-gold UI, AI summary button |
+| `BriefingRequestForm.tsx` | Add owner notification on submit |
+| `DeveloperPortal.tsx` | Allow approved brokers to access briefing tab |
 
