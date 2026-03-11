@@ -1144,9 +1144,9 @@ export default function GlobalVerticalNav() {
           <div className="flex flex-col items-center gap-1.5 pb-1 border-t border-red-500/20 pt-2">
             <Tooltip>
               <TooltipTrigger asChild>
-                <a href="mailto:info@jbjglobal.com" className="w-8 h-8 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-50/50 border border-red-500/20 hover:border-red-500/40 transition-all">
+                <Link to="/ticket-hub?tab=new" className="w-8 h-8 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-50/50 border border-red-500/20 hover:border-red-500/40 transition-all">
                   <Headphones className="w-3.5 h-3.5" />
-                </a>
+                </Link>
               </TooltipTrigger>
               <TooltipContent side="right" className="text-xs">Contact Support</TooltipContent>
             </Tooltip>
