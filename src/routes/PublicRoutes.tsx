@@ -166,6 +166,9 @@ const BrokerHub = lazy(() => import("@/pages/BrokerHub"));
 // ── Governance ──
 const PartnerGovernance = lazy(() => import("@/pages/governance/PartnerGovernance"));
 
+// ── Developer Portal ──
+const DeveloperPortal = lazy(() => import("@/pages/DeveloperPortal"));
+
 // ── Misc ──
 const VapiPrompt = lazy(() => import("@/pages/VapiPrompt"));
 const ScanSignDocuments = lazy(() => import("@/pages/ScanSignDocuments"));
