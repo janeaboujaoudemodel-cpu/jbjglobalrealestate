@@ -6,7 +6,7 @@ const MODE_KEY = "jj_user_mode";
 const MODE_SELECTED_KEY = "jj_mode_selected";
 
 // Expanded to 3 modes: investor, broker, or both
-export type UserMode = 'investor' | 'broker' | 'investor_broker';
+export type UserMode = 'investor' | 'broker' | 'investor_broker' | 'developer';
 
 interface UserModeContextType {
   mode: UserMode;
