@@ -313,7 +313,7 @@ export default function HorizontalUtilityBar() {
           <TooltipTrigger asChild>
             <Link
               to="/my-dashboard"
-              className="h-7 w-7 flex items-center justify-center rounded-md hover:bg-gold/10 transition-all group"
+              className="h-7 w-7 flex items-center justify-center rounded-md border border-gold/20 bg-gold/5 hover:bg-gold/15 hover:border-gold/40 transition-all group"
               aria-label="Dashboard"
             >
               <LayoutDashboard className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-transform" />
