@@ -48,7 +48,8 @@ const FEATURED_AREA_SLUGS = [
 type MegaMenuKey =
   | 'buy' | 'sell' | 'rent' | 'developers' | 'areas'
   | 'insights' | 'ai-tools' | 'creative' | 'shortcuts'
-  | 'services' | 'company' | 'legal' | 'guides';
+  | 'services' | 'company' | 'legal' | 'guides'
+  | 'partners' | 'broker' | 'investor' | 'productivity' | 'account' | 'suites';
 
 interface NavItem {
   label: string;
