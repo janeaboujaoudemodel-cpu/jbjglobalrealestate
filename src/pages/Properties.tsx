@@ -1137,7 +1137,7 @@ const Properties = () => {
 
       {/* Fixed portal copy of filters when scrolled past */}
       {isFilterFixed && createPortal(
-        <section className="fixed top-14 sm:top-16 md:top-20 lg:top-[72px] left-0 lg:left-[200px] right-0 z-[9998] bg-black py-3 md:py-4 border-b border-gold/30 shadow-lg" style={{ WebkitOverflowScrolling: 'touch' }}>
+        <section className="fixed top-14 sm:top-16 md:top-20 lg:top-[72px] left-0 lg:left-[200px] right-0 z-[9998] backdrop-blur-md bg-black/90 py-3 md:py-4 border-b border-gold/30 shadow-lg" style={{ WebkitOverflowScrolling: 'touch' }}>
           <div className="container mx-auto px-3 sm:px-4">
             <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg" style={{ overflow: 'visible' }}>
               {/* Transaction Type Tabs - Buy / Rent */}

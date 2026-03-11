@@ -676,7 +676,7 @@ export default function ProjectDetailLayout({
 
       {/* STICKY SUB-NAVIGATION - Two rows: Search + Shortcuts */}
       <div 
-        className={`fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-[9999] backdrop-blur-md transition-all duration-300 ${
           showStickyNav ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 pointer-events-none"
         }`}
       >

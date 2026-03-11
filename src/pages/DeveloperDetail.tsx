@@ -400,7 +400,7 @@ const DeveloperDetail = () => {
 
           {/* Fixed portal filter bar — when scrolled past sentinel */}
           {isFilterFixed && !bottomReached && createPortal(
-            <div className="fixed top-0 left-0 right-0 z-[9998] transition-shadow duration-200">
+            <div className="fixed top-0 left-0 right-0 z-[9998] backdrop-blur-md transition-shadow duration-200">
               <div className="mx-0 pt-0">
                 <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/30 p-2 sm:p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
                    <FilterShortcutBar

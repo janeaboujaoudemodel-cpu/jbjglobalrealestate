@@ -283,9 +283,9 @@ const AreaGuides = () => {
       {/* Filter bar — show inline below hero always, then fixed at top when past hero */}
       <section
         className={`${pastHero
-          ? "fixed top-0 right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)]"
-          : "relative w-full z-[10]"
-        } bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-3`}
+           ? "fixed top-0 right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)] backdrop-blur-md"
+           : "relative w-full z-[10]"
+         } bg-gradient-to-r from-[#FDFBF7]/90 via-[#F5F0E6]/90 to-[#EDE4D3]/90 border-b border-gold/20 py-3`}
         style={pastHero ? { left: "200px" } : {}}
       >
         <div className="px-4 space-y-2">
