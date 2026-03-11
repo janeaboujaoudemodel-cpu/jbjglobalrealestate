@@ -321,20 +321,8 @@ export default function HorizontalUtilityBar() {
           <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">My Dashboard</TooltipContent>
         </Tooltip>
 
-        {/* Account */}
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Link
-              to="/profile"
-              className="h-7 flex items-center gap-1.5 rounded-md border border-gold/20 hover:border-gold/40 hover:bg-gold/10 transition-all px-2 group"
-              aria-label="My Account"
-            >
-              <User className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-transform" />
-              <span className="text-[10px] font-semibold text-black/60 hidden xl:inline">Account</span>
-            </Link>
-          </TooltipTrigger>
-          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">My Account</TooltipContent>
-        </Tooltip>
+        {/* Account — opens Mode Selector via ModeSwitcher */}
+        <ModeSwitcher variant="header" />
 
         {/* Settings */}
         <Tooltip>
