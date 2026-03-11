@@ -31,6 +31,7 @@ import DealPrediction from "@/components/crm/DealPrediction";
 import AIPropertyCoach from "@/components/crm/AIPropertyCoach";
 import SmartEmailComposer from "@/components/crm/SmartEmailComposer";
 import SmartWhatsAppComposer from "@/components/crm/SmartWhatsAppComposer";
+import LeadAuditHistory from "@/components/crm/LeadAuditHistory";
 
 interface Lead {
   id: string;
