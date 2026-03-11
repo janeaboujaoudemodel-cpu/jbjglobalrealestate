@@ -27,6 +27,7 @@ interface UnitInventorySectionProps {
   totalUnits?: number | null;
   availableUnits?: number | null;
   projectName: string;
+  availabilityVisible?: boolean;
 }
 
 export default function UnitInventorySection({
@@ -34,48 +35,17 @@ export default function UnitInventorySection({
   totalUnits,
   availableUnits,
   projectName,
+  availabilityVisible = false,
 }: UnitInventorySectionProps) {
   const { formatPrice: formatPriceUtil } = useCurrency();
   const { formatSize, convertSize, unitLabel } = useAreaUnit();
   // Calculate overall availability
   const overallAvailability = useMemo(() => {
-    if (typeof availableUnits === "number" && typeof totalUnits === "number" && totalUnits > 0) {
+    if (availabilityVisible && typeof availableUnits === "number" && typeof totalUnits === "number" && totalUnits > 0) {
       return Math.round((availableUnits / totalUnits) * 100);
     }
     return null;
-  }, [availableUnits, totalUnits]);
-
-  const getStatusBadge = (unit: UnitType) => {
-    const status = unit.status || (
-      unit.available_units === 0 ? "sold_out" : 
-      unit.available_units && unit.total_units && (unit.available_units / unit.total_units) < 0.2 ? "limited" : 
-      "available"
-    );
-
-    switch (status) {
-      case "sold_out":
-        return (
-          <Badge variant="destructive" className="gap-1">
-            <XCircle className="w-3 h-3" />
-            Sold Out
-          </Badge>
-        );
-      case "limited":
-        return (
-          <Badge variant="secondary" className="gap-1 bg-orange-500/20 text-orange-400 border-orange-500/30">
-            <AlertCircle className="w-3 h-3" />
-            Limited
-          </Badge>
-        );
-      default:
-        return (
-          <Badge variant="secondary" className="gap-1 bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
-            <CheckCircle2 className="w-3 h-3" />
-            Available
-          </Badge>
-        );
-    }
-  };
+  }, [availableUnits, totalUnits, availabilityVisible]);
 
   if (!unitTypes || unitTypes.length === 0) return null;
 
@@ -84,11 +54,11 @@ export default function UnitInventorySection({
       <div className="flex items-center justify-between gap-4 flex-wrap mb-6">
         <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2">
           <Bed className="w-5 h-5 text-gold" />
-          Unit Types & Availability
+          Unit Types{availabilityVisible ? ' & Availability' : ''}
         </h3>
         
-        {/* Overall Stats */}
-        {overallAvailability !== null && (
+        {/* Overall Stats — only when availability is visible */}
+        {availabilityVisible && overallAvailability !== null && (
           <div className="flex items-center gap-4">
             {typeof availableUnits === "number" && (
               <div className="text-right">
@@ -121,7 +91,7 @@ export default function UnitInventorySection({
                 </div>
                 <h4 className="text-lg font-bold text-foreground">{unit.type}</h4>
               </div>
-              {getStatusBadge(unit)}
+              {availabilityVisible && getStatusBadge(unit)}
             </div>
 
             {/* Size */}
@@ -150,8 +120,8 @@ export default function UnitInventorySection({
               </div>
             )}
 
-            {/* Availability Bar */}
-            {typeof unit.available_units === "number" && typeof unit.total_units === "number" && unit.total_units > 0 && (
+            {/* Availability Bar — only when visibility enabled */}
+            {availabilityVisible && typeof unit.available_units === "number" && typeof unit.total_units === "number" && unit.total_units > 0 && (
               <div className="mt-3">
                 <div className="flex items-center justify-between text-xs mb-1">
                   <span className="text-muted-foreground">
@@ -174,4 +144,36 @@ export default function UnitInventorySection({
       </div>
     </div>
   );
+}
+
+function getStatusBadge(unit: UnitType) {
+  const status = unit.status || (
+    unit.available_units === 0 ? "sold_out" : 
+    unit.available_units && unit.total_units && (unit.available_units / unit.total_units) < 0.2 ? "limited" : 
+    "available"
+  );
+
+  switch (status) {
+    case "sold_out":
+      return (
+        <Badge variant="destructive" className="gap-1">
+          <XCircle className="w-3 h-3" />
+          Sold Out
+        </Badge>
+      );
+    case "limited":
+      return (
+        <Badge variant="secondary" className="gap-1 bg-orange-500/20 text-orange-400 border-orange-500/30">
+          <AlertCircle className="w-3 h-3" />
+          Limited
+        </Badge>
+      );
+    default:
+      return (
+        <Badge variant="secondary" className="gap-1 bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
+          <CheckCircle2 className="w-3 h-3" />
+          Available
+        </Badge>
+      );
+  }
 }

@@ -199,6 +199,7 @@ const hubSections: HubSection[] = [
     links: [
       // Hub Entry
       { href: "/ai-hub", label: "AI Hub" },
+      { href: "/broker-toolkit", label: "Royal Tools Hub" },
       
       // Property Intelligence
       { href: "/quiz", label: "AI Home Finder" },
@@ -231,15 +232,33 @@ const hubSections: HubSection[] = [
       { href: "/ai-hub#social-media", label: "AI Social Media" },
       { href: "/ai-hub#description-writer", label: "AI Description Writer" },
       
-      // Documents
-      { href: "/ai-hub#contract-reviewer", label: "AI Contract Reviewer" },
-      { href: "/ai-hub#document-generator", label: "AI Document Generator" },
+      // Documents & Corporate Suite
+      { href: "/ai-contract-reviewer", label: "AI Contract Reviewer" },
+      { href: "/e-signature", label: "E-Signature" },
+      { href: "/toolkit/scan-sign", label: "Scan & Sign" },
+      { href: "/toolkit/stamp-generator", label: "AI Stamp Generator" },
+      { href: "/toolkit/corporate-suite/business-card", label: "Business Card Designer" },
+      { href: "/toolkit/corporate-suite/logo-creator", label: "Logo Creator" },
+      { href: "/toolkit/corporate-suite/cover-letter", label: "Cover Letter Generator" },
+      { href: "/toolkit/corporate-suite/cv-resume", label: "CV & Resume Builder" },
+      { href: "/toolkit/corporate-suite/company-profile", label: "Company Profile Builder" },
+      { href: "/brand-palette", label: "Brand Color Palette" },
+      
+      // Creative & Media Suites
+      { href: "/toolkit/pdf-suite", label: "PDF Suite" },
+      { href: "/toolkit/video-suite", label: "Video Suite" },
+      { href: "/toolkit/voice-suite", label: "Voice Suite" },
+      { href: "/toolkit/photo-suite", label: "Photo Suite" },
+      { href: "/toolkit/background-ai", label: "AI Background Remover" },
+      { href: "/toolkit/beauty-filters", label: "Beauty Filters" },
       
       // Productivity Tools
       { href: "/business-card-scanner", label: "Business Card Scanner" },
       { href: "/documents", label: "Documents & Spreadsheets" },
       { href: "/video-meeting", label: "Video Meet" },
       { href: "/ai-calendar", label: "Calendar & Notes" },
+      { href: "/presentations", label: "Presentations" },
+      { href: "/resale-properties", label: "Resale Properties" },
     ],
   },
   {

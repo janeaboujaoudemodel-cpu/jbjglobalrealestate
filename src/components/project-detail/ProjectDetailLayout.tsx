@@ -937,10 +937,10 @@ export default function ProjectDetailLayout({
            {/* HOUSE DETAILS SECTION (Reelly-style) */}
            {(project.floors || project.total_units || project.service_charge || project.finishing_standard) && (
              <div ref={houseDetailsRef} id="house-details" className="mb-14 scroll-mt-40">
-               <HouseDetailsSection
-                 floors={project.floors}
-                 totalUnits={project.total_units}
-                 buildingType={project.property_type_label}
+                <HouseDetailsSection
+                  floors={project.floors}
+                  totalUnits={project.availability_visible ? project.total_units : null}
+                  buildingType={project.property_type_label}
                  ceilingHeight={project.ceiling_height}
                  finishingStandard={project.finishing_standard}
                  serviceCharge={project.service_charge}
