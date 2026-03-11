@@ -1,41 +1,55 @@
 
 
-## Plan: Fix All Email Issues Across All Templates
+## Plan: Developer-Aware Homepage, Performance Audit & Full Wiring Fix
 
-### Problems Identified
+### Issues Identified
 
-1. **Recommended For You icons disappeared** — Inline SVGs are stripped by Gmail and most email clients. Must revert to hosted PNG images (`ai-tools.png`, `guides.png`, `properties.png` already exist in `public/email-icons/`).
+1. **Homepage shows "Are You a Developer?" CTA to users already registered as developers** — The `DeveloperPortalCTA` component renders unconditionally for everyone, including developers who already selected that mode.
 
-2. **Social media footer icons not rendering** — Same issue: `socialLinksFooter()` loads external `.svg` files via `<img>` tags, but Gmail blocks SVG images entirely. Must switch to hosted `.png` files. Currently missing `social-facebook.png` — need to confirm or create it.
+2. **Contact Support button opens `mailto:` instead of navigating** — The sidebar "Contact Support" is an `<a href="mailto:">` which triggers the OS mail client instead of instant in-app navigation. This feels "slow" because the browser hands off to the mail app.
 
-3. **Email split into multiple visual cards** — Several sub-sections (`ticketSupportEmbed`, `readyToGetStartedHtml`, `recommendedActionsHtml`) each have their own `border`, `border-radius`, and `background` styles creating distinct visual boxes. These need to be softened so they sit seamlessly inside the single continuous card.
+3. **General navigation slowness** — The sidebar has 1200+ lines of complex rendering with mega menus, dynamic data fetching (developers, areas), and heavy re-renders. The `Contact Support` mailto and `Create Ticket` Link both work but the mailto triggers external app launch which feels broken.
 
-### Changes (all in `supabase/functions/_shared/email-html.ts`)
+---
 
-#### A. Recommended For You — Revert to PNG hosted images
-- Change `recommendedCard()` back to using `iconImg()` with PNG paths
-- Remove the `RECOMMENDED_ICONS` inline SVG object
-- Ensure circular frame clips the PNG with `overflow:hidden` on the `<td>` to prevent square backgrounds
-- Signature: `recommendedCard(title, href, iconPath, alt)` — restore the original parameters
+### Fix 1: Conditional Developer CTA on Homepage
 
-#### B. Social Footer — Switch to PNG with white pearl background
-- Replace `socialLinksFooter()` to use the inline `SVG` object icons (instagram, facebook, linkedin, tiktok, youtube) that are already defined at the top of the file — these render as raw HTML inside `<td>` elements, not as `<img>` tags, so they should survive email client processing
-- Actually, since Gmail strips ALL SVG (both inline and `<img>`), switch to using the `.png` files: `social-instagram.png`, `social-linkedin.png`, `social-tiktok.png`, `social-youtube.png`
-- Create `social-facebook.png` if missing
-- Style each icon circle: white/pearl (#FDFBF7) background, gold border, black icon inside
+**In `src/pages/Index.tsx`:**
+- Import `useUserModeContext` 
+- If `isDeveloperMode` is true, replace the generic "Are You a Developer?" CTA with a **Developer Quick Actions** panel showing: "Submit New Project", "Submit Event", "My Projects", "Follow Up Tasks" — direct links into `/developer-portal` tabs
 
-#### C. Single Card Layout — Remove visual fragmentation
-- `ticketSupportEmbed()`: Remove the heavy gradient background and red border; make it blend into the card
-- `readyToGetStartedHtml()`: Remove the outer border and separate background so it flows within the card
-- `inquiryBox()`: Soften its standalone bordered look
-- Keep all content inside the single `emailShell` wrapper card with no sub-borders that create separation
+**In `src/components/home/DeveloperPortalCTA.tsx`:**
+- Accept an `isDeveloper` prop
+- When `isDeveloper === true`: Show "Welcome back, Developer" with quick-action cards (Submit Project, Submit Event, Check Listings, Add Task)
+- When `isDeveloper === false`: Show the existing "Are You a Developer?" CTA
 
-#### D. Deploy + Send Test Email
-- Deploy the updated edge function
-- Immediately send a test welcome email to `janeaboujaoudenails@gmail.com`
-- Take a screenshot as proof
+### Fix 2: Contact Support → In-App Navigation
 
-### Files Modified
-- `supabase/functions/_shared/email-html.ts` — all icon and layout fixes
-- `public/email-icons/social-facebook.png` — create if missing (or use existing assets)
+**In `src/components/navigation/GlobalVerticalNav.tsx`:**
+- Replace the `mailto:` link for "Contact Support" (lines 1061-1067 expanded, lines 1147-1152 collapsed) with a `<Link to="/ticket-hub?tab=new">` or a dedicated `/contact-support` page
+- Both expanded and collapsed states need updating
+- This ensures instant in-app navigation instead of triggering an external mail client
+
+### Fix 3: Performance — Reduce Sidebar Re-renders
+
+**In `src/components/navigation/GlobalVerticalNav.tsx`:**
+- Wrap `renderNavContent` in `useMemo` keyed on `openSection`, `session`, `role`, `pathname`
+- Memoize `SHORTCUT_GROUPS` filtering with `useMemo`
+- Add `React.memo` to mega menu sub-components
+- Ensure `useDevelopers()` and `useAreas()` queries have proper `staleTime` (already set globally to 5min, but verify they aren't re-fetching on every render)
+
+### Fix 4: Full Button/Wiring Audit
+
+Scan all navigation items and CTAs for:
+- **Faded buttons**: Any button using `variant="secondary"` or `variant="ghost"` on dark backgrounds → replace with champagne gradient or `PremiumHeroButton`
+- **Dead links**: Verify all `href` targets in `NAV_ITEMS` and `SHORTCUT_GROUPS` resolve to registered routes
+- **Immediate redirects**: Ensure all `<Link>` components use React Router (no full page reloads), and all click handlers use `navigate()` without unnecessary async delays
+
+### Files to Edit
+
+| File | Changes |
+|------|---------|
+| `src/components/home/DeveloperPortalCTA.tsx` | Add `isDeveloper` prop, show quick-actions for developers |
+| `src/pages/Index.tsx` | Pass `isDeveloperMode` to `DeveloperPortalCTA` |
+| `src/components/navigation/GlobalVerticalNav.tsx` | Replace mailto with in-app Link, memoize heavy renders |
 
