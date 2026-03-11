@@ -248,13 +248,13 @@ const AdminCRM = () => {
     ]);
 
     // Audit log the export
-    supabase.from("audit_logs").insert({
+    supabase.from("audit_logs").insert([{
       action_type: "export" as const,
       resource_type: "crm_lead" as const,
       description: `Admin CSV export of ${allLeads.length} leads (PII stripped)`,
       user_id: user?.id,
       user_agent: navigator.userAgent,
-    }).then(() => {});
+    }]).then(() => {});
 
     const csv = [
       headers.join(","),
