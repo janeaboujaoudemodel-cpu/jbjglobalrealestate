@@ -180,25 +180,25 @@ export default function HorizontalUtilityBar() {
 
         {divider}
 
-        {/* ── Area Unit Toggle ── */}
+        {/* ── Area Unit Toggle — segmented block ── */}
         <Tooltip>
           <TooltipTrigger asChild>
             <button
               onClick={toggleAreaUnit}
-              className="h-7 flex items-center rounded-md hover:bg-gold/10 transition-all px-1.5 gap-0.5"
+              className="h-7 flex items-center rounded-md border border-gold/30 overflow-hidden transition-all"
               aria-label="Toggle area unit"
             >
-              <Ruler className="w-3.5 h-3.5 text-gold/50" />
-              <span className={`text-[10px] font-bold px-1 py-0.5 rounded transition-all ${areaUnit === 'sqft' ? 'bg-gold/20 text-gold' : 'text-black/30'}`}>
+              <span className={`text-[10px] font-bold px-2 py-1 transition-all ${areaUnit === 'sqft' ? 'bg-gold/20 text-gold' : 'text-black/30 hover:bg-gold/5'}`}>
                 ft²
               </span>
-              <span className={`text-[10px] font-bold px-1 py-0.5 rounded transition-all ${areaUnit === 'sqm' ? 'bg-gold/20 text-gold' : 'text-black/30'}`}>
+              <span className="w-px h-4 bg-gold/30" />
+              <span className={`text-[10px] font-bold px-2 py-1 transition-all ${areaUnit === 'sqm' ? 'bg-gold/20 text-gold' : 'text-black/30 hover:bg-gold/5'}`}>
                 m²
               </span>
             </button>
           </TooltipTrigger>
           <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">
-            {areaUnit === 'sqft' ? 'Square Feet — click to switch' : 'Square Meters — click to switch'}
+            {areaUnit === 'sqft' ? 'Square Feet — click to switch to m²' : 'Square Meters — click to switch to ft²'}
           </TooltipContent>
         </Tooltip>
 
