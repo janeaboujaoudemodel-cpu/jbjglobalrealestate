@@ -32,6 +32,7 @@ const MortgageCalculator = ({
   defaultPrice = 2000000,
   compact = false,
   showAssistant = false,
+  showHeading = true,
   context,
 }: MortgageCalculatorProps) => {
   const [propertyPrice, setPropertyPrice] = useState(defaultPrice);
