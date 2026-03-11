@@ -395,7 +395,7 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
                 <Award className="h-5 w-5 text-purple-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-zinc-900">{stats.pipelineCounts['closed_won'] || 0}</p>
+                <p className="text-2xl font-bold text-black">{stats.pipelineCounts['closed_won'] || 0}</p>
                 <p className="text-xs text-zinc-500">Deals Won</p>
               </div>
             </div>
