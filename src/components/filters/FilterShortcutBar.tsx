@@ -767,7 +767,7 @@ function ConnectedCurrencyButton() {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <button className="flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors border-r border-gold/20 text-black/70 hover:bg-gold/10">
+        <button className="flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors border-r border-gold/20 text-black/70 hover:bg-gold/10" title="Select your currency">
           <span>{currentCurrency.flag}</span>
           <span>{currentCurrency.code}</span>
           <ChevronDown className="w-3 h-3 opacity-60" />
