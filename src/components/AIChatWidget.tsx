@@ -559,11 +559,12 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
 
       // 3) Save to owner's AI Notes system (best-effort, non-blocking)
       try {
-        // Find owner user ID from profiles
+        // Find owner user ID from profiles (crm_role = 'owner')
         const { data: ownerProfile } = await supabase
           .from('crm_users_profile')
           .select('user_id')
-          .eq('is_owner', true)
+          .eq('crm_role', 'owner' as any)
+          .limit(1)
           .maybeSingle();
 
         if (ownerProfile?.user_id) {
