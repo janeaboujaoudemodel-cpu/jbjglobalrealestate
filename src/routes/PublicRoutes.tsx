@@ -164,6 +164,7 @@ const InvestorHub = lazy(() => import("@/pages/InvestorHub"));
 const BrokerHub = lazy(() => import("@/pages/BrokerHub"));
 const JBJAcademy = lazy(() => import("@/pages/JBJAcademy"));
 const AcademyGraduates = lazy(() => import("@/pages/AcademyGraduates"));
+const BrokerPortal = lazy(() => import("@/pages/BrokerPortal"));
 
 // ── Governance ──
 const PartnerGovernance = lazy(() => import("@/pages/governance/PartnerGovernance"));
