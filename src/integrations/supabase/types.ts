@@ -1469,14 +1469,110 @@ export type Database = {
         }
         Relationships: []
       }
+      briefing_attendance: {
+        Row: {
+          briefing_request_id: string
+          broker_id: string
+          confirmed_at: string | null
+          confirmed_attended: boolean | null
+          created_at: string | null
+          expected_arrival_time: string | null
+          gps_address: string | null
+          gps_latitude: number | null
+          gps_longitude: number | null
+          id: string
+          late_reason: string | null
+          points_earned: number | null
+          rsvp_status: string | null
+          selfie_url: string | null
+        }
+        Insert: {
+          briefing_request_id: string
+          broker_id: string
+          confirmed_at?: string | null
+          confirmed_attended?: boolean | null
+          created_at?: string | null
+          expected_arrival_time?: string | null
+          gps_address?: string | null
+          gps_latitude?: number | null
+          gps_longitude?: number | null
+          id?: string
+          late_reason?: string | null
+          points_earned?: number | null
+          rsvp_status?: string | null
+          selfie_url?: string | null
+        }
+        Update: {
+          briefing_request_id?: string
+          broker_id?: string
+          confirmed_at?: string | null
+          confirmed_attended?: boolean | null
+          created_at?: string | null
+          expected_arrival_time?: string | null
+          gps_address?: string | null
+          gps_latitude?: number | null
+          gps_longitude?: number | null
+          id?: string
+          late_reason?: string | null
+          points_earned?: number | null
+          rsvp_status?: string | null
+          selfie_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "briefing_attendance_briefing_request_id_fkey"
+            columns: ["briefing_request_id"]
+            isOneToOne: false
+            referencedRelation: "briefing_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      briefing_broker_lists: {
+        Row: {
+          broker_ids: string[] | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+        }
+        Insert: {
+          broker_ids?: string[] | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+        }
+        Update: {
+          broker_ids?: string[] | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+        }
+        Relationships: []
+      }
       briefing_requests: {
         Row: {
+          approved_at: string | null
+          approved_by: string | null
           briefing_date: string
           briefing_time: string
+          broker_list_id: string | null
+          calendar_locked: boolean | null
           created_at: string | null
+          developer_logo_url: string | null
           developer_name: string
           duration_minutes: number
           id: string
+          location_address: string | null
+          location_type: string | null
           notes: string | null
           project_name: string
           representative_id: string
@@ -1486,12 +1582,19 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
           briefing_date: string
           briefing_time: string
+          broker_list_id?: string | null
+          calendar_locked?: boolean | null
           created_at?: string | null
+          developer_logo_url?: string | null
           developer_name: string
           duration_minutes?: number
           id?: string
+          location_address?: string | null
+          location_type?: string | null
           notes?: string | null
           project_name: string
           representative_id: string
@@ -1501,12 +1604,19 @@ export type Database = {
           user_id: string
         }
         Update: {
+          approved_at?: string | null
+          approved_by?: string | null
           briefing_date?: string
           briefing_time?: string
+          broker_list_id?: string | null
+          calendar_locked?: boolean | null
           created_at?: string | null
+          developer_logo_url?: string | null
           developer_name?: string
           duration_minutes?: number
           id?: string
+          location_address?: string | null
+          location_type?: string | null
           notes?: string | null
           project_name?: string
           representative_id?: string
@@ -1516,6 +1626,13 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "briefing_requests_broker_list_id_fkey"
+            columns: ["broker_list_id"]
+            isOneToOne: false
+            referencedRelation: "briefing_broker_lists"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "briefing_requests_representative_id_fkey"
             columns: ["representative_id"]
@@ -6043,6 +6160,7 @@ export type Database = {
       }
       developer_representatives: {
         Row: {
+          activity_score: number | null
           auto_approve_uploads: boolean | null
           created_at: string | null
           date_of_join: string | null
@@ -6050,14 +6168,21 @@ export type Database = {
           email: string
           full_name: string
           id: string
+          languages: string[] | null
+          last_active_at: string | null
           phone: string | null
           position: string | null
+          response_time_avg_hours: number | null
           role: string
           status: string
+          total_briefings_hosted: number | null
+          total_updates_submitted: number | null
           updated_at: string | null
           user_id: string | null
+          whatsapp_group_number: string | null
         }
         Insert: {
+          activity_score?: number | null
           auto_approve_uploads?: boolean | null
           created_at?: string | null
           date_of_join?: string | null
@@ -6065,14 +6190,21 @@ export type Database = {
           email: string
           full_name: string
           id?: string
+          languages?: string[] | null
+          last_active_at?: string | null
           phone?: string | null
           position?: string | null
+          response_time_avg_hours?: number | null
           role?: string
           status?: string
+          total_briefings_hosted?: number | null
+          total_updates_submitted?: number | null
           updated_at?: string | null
           user_id?: string | null
+          whatsapp_group_number?: string | null
         }
         Update: {
+          activity_score?: number | null
           auto_approve_uploads?: boolean | null
           created_at?: string | null
           date_of_join?: string | null
@@ -6080,12 +6212,18 @@ export type Database = {
           email?: string
           full_name?: string
           id?: string
+          languages?: string[] | null
+          last_active_at?: string | null
           phone?: string | null
           position?: string | null
+          response_time_avg_hours?: number | null
           role?: string
           status?: string
+          total_briefings_hosted?: number | null
+          total_updates_submitted?: number | null
           updated_at?: string | null
           user_id?: string | null
+          whatsapp_group_number?: string | null
         }
         Relationships: []
       }
@@ -17879,6 +18017,44 @@ export type Database = {
           went_live_at?: string | null
         }
         Relationships: []
+      }
+      rep_activity_log: {
+        Row: {
+          activity_type: string
+          created_at: string | null
+          description: string | null
+          id: string
+          points_earned: number | null
+          representative_id: string
+          response_time_minutes: number | null
+        }
+        Insert: {
+          activity_type: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          points_earned?: number | null
+          representative_id: string
+          response_time_minutes?: number | null
+        }
+        Update: {
+          activity_type?: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          points_earned?: number | null
+          representative_id?: string
+          response_time_minutes?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rep_activity_log_representative_id_fkey"
+            columns: ["representative_id"]
+            isOneToOne: false
+            referencedRelation: "developer_representatives"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       report_delivery_logs: {
         Row: {
