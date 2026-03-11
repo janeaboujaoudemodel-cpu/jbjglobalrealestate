@@ -205,10 +205,20 @@ export default function HorizontalUtilityBar() {
         {divider}
 
         {/* ── Language ── */}
-        <LanguageSwitcher variant="icon-only" />
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div><LanguageSwitcher variant="icon-only" /></div>
+          </TooltipTrigger>
+          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Select or change your language</TooltipContent>
+        </Tooltip>
 
         {/* ── Currency ── */}
-        <CurrencySwitcher variant="icon-only" />
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div><CurrencySwitcher variant="icon-only" /></div>
+          </TooltipTrigger>
+          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Select your currency</TooltipContent>
+        </Tooltip>
 
         {divider}
 
