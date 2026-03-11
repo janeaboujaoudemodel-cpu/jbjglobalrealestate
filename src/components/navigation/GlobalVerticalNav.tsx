@@ -588,8 +588,9 @@ export default function GlobalVerticalNav() {
 
   const navigate = useNavigate();
 
-  // Accordion toggle — only one section open at a time (expand only, no navigation)
-  const toggleSection = (section: SectionKey) => {
+  // Accordion toggle — only one section open at a time (instant open/close)
+  const toggleSection = (section: SectionKey, e?: React.MouseEvent) => {
+    e?.stopPropagation();
     const opening = openSection !== section;
     setOpenSection(prev => prev === section ? null : section);
     if (opening) {
@@ -598,11 +599,14 @@ export default function GlobalVerticalNav() {
       if (firstMega?.megaMenu) {
         setActiveMegaMenu(firstMega.megaMenu);
       }
-      // Auto-scroll section to top of nav viewport
-      setTimeout(() => {
+      // Only scroll into view when OPENING (not closing)
+      requestAnimationFrame(() => {
         const el = document.getElementById(`nav-section-${section.replace(/\s+/g, '-').toLowerCase()}`);
         el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 150);
+      });
+    } else {
+      // When closing, also close any active mega menu from that section
+      setActiveMegaMenu(null);
     }
   };
 

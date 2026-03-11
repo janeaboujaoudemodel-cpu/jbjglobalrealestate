@@ -67,7 +67,9 @@ Disallow: /onboarding
 Disallow: /auth
 Disallow: /api/
 Disallow: /*.json$
-Disallow: /*?*
+Disallow: /*?utm_*
+Disallow: /*?ref=*
+Disallow: /*?session=*
 
 # Digital Business Card - Private/Unlisted (noindex)
 Disallow: /card

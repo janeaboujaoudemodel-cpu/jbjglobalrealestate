@@ -44,6 +44,12 @@ export default defineConfig(({ mode }) => ({
           'data-vendor': ['@tanstack/react-query', '@supabase/supabase-js'],
           // Charts (heavy, rarely needed on initial load)
           'charts-vendor': ['recharts'],
+          // Maps (only needed on map pages)
+          'maps-vendor': ['leaflet', 'react-leaflet', '@react-leaflet/core'],
+          // Document tools (only needed in toolkit)
+          'docs-vendor': ['exceljs', 'jspdf', 'pdf-lib', 'jszip'],
+          // Voice/audio (only needed in voice suite)
+          'voice-vendor': ['@elevenlabs/react'],
         },
       },
     },
