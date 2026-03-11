@@ -475,11 +475,11 @@ const MyTickets = () => {
           {user && (
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
               <TabsList className="bg-white border-2 border-gold/30 p-1">
-                <TabsTrigger value="tickets" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+              <TabsTrigger value="tickets" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-foreground">
                   <Ticket className="w-4 h-4 mr-2" />
                   Tickets
                 </TabsTrigger>
-                <TabsTrigger value="inbox" className="data-[state=active]:bg-gold data-[state=active]:text-black relative">
+                <TabsTrigger value="inbox" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-foreground relative">
                   <Inbox className="w-4 h-4 mr-2" />
                   Inbox
                   {inboxCount > 0 && (
