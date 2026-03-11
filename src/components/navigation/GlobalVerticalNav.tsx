@@ -203,7 +203,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Referral Partner", href: "/referral-partner", icon: Handshake },
 
   // ── Partners ──
-  { label: "Partners Hub", href: "/partners", icon: Handshake, section: "PARTNERS" },
+  { label: "Partners Hub", href: "/partners", icon: Handshake, section: "PARTNERS", megaMenu: 'partners' },
   { label: "Mortgage Partner", href: "/partners/mortgage", icon: Landmark },
   { label: "Legal Partner", href: "/partners/legal", icon: Gavel },
   { label: "Company Setup Partner", href: "/partners/company-setup", icon: Building },
