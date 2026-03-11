@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
-type SelectableMode = UserMode | 'visitor';
+type SelectableMode = UserMode | 'visitor' | 'developer';
 
 interface ModeOption {
   mode: SelectableMode;
