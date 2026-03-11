@@ -1,99 +1,91 @@
 
 
-## Plan: Brand Palette for All Users, Availability Auto-Hide, Stamp/Tools UI Premium Upgrade, Sitemap Update, and Cross-Tool Integration
+## Plan: User Intelligence Panel — Full Upgrade with Per-Page Timing, Demographics & Edge Function Deployment
 
-This is a large request spanning 6 distinct areas. To avoid quality issues, I recommend implementing in **3 phases**. This plan covers all phases but Phase 1 will be implemented first.
+### What This Delivers
+A fully upgraded Intelligence Panel showing **every detail** about each user: full demographics (country, nationality, language, age), session timelines with login/logout times, per-page time-on-page breakdowns, and a redeployed edge function with the latest AI model.
 
 ---
 
-### Phase 1: Brand Palette → Public + Per-User Personalization + UI Fixes
+### Phase 1: Upgrade `compute-user-scores` Edge Function
 
-**Problem:** Brand Palette is owner-only (`OwnerGuard`), live preview doesn't work properly, color swatches are square inside rounded cards, hex codes are visible to all, no color wheel, no saved palette history, no per-user personalization.
+**File:** `supabase/functions/compute-user-scores/index.ts`
 
-**Changes:**
+Current issues: function has no logs (likely not deployed or stale). Needs:
+- Redeploy with latest infrastructure
+- Add per-page time calculation from `visitor_events` (already tracks `time_on_previous_page_seconds` in `event_data`)
+- Store per-page time breakdown in `user_interest_profile` (new JSONB column `page_time_breakdown`)
+- Pull demographic data from `user_role_selections` (nationality, country, city, language, age_range) and store on the profile for fast reads
+- Upgrade model reference for any AI calls to `google/gemini-3-flash-preview`
 
-#### 1A. Database: `user_color_palettes` table
+**New columns on `user_interest_profile`:**
+- `page_time_breakdown` (jsonb) — `{ "/properties": 245, "/about": 30, ... }` seconds per page
+- `nationality` (text)
+- `country` (text)
+- `city` (text)
+- `preferred_language` (text)
+- `age_range` (text)
+- `login_history` (jsonb) — array of `{ started_at, ended_at, duration_seconds }` from `user_sessions`
+
+---
+
+### Phase 2: Upgrade AdminIntelligence UI — User Detail Dialog
+
+**File:** `src/pages/admin/AdminIntelligence.tsx`
+
+Add new sections to the user detail dialog:
+
+1. **Demographics Card** — Show nationality, country, city, language, age range (from `user_role_selections` data now stored on profile)
+
+2. **Session History Timeline** — Query `user_sessions` for the selected user, display each session as a row:
+   - Login time → Logout time (or "Active")
+   - Duration
+   - Device / Browser / OS
+   - Pages visited count
+
+3. **Per-Page Time Breakdown** — Visual bar chart or ranked list showing:
+   - Page path
+   - Total seconds spent
+   - Number of visits
+   - Derived from `visitor_events` where `event_data->time_on_previous_page_seconds` exists
+
+4. **Add columns to main table**: Country, Category (role)
+
+5. **Upgrade loadUserDetails()**: Also fetch `user_sessions` with `started_at`, `ended_at`, `duration_seconds`, `device_type`, `browser`, `pages_visited` for the session history view
+
+---
+
+### Phase 3: Auth Enforcement Verification
+
+The platform already enforces `AuthGate` on all main routes and requires category selection via `/welcome`. This is confirmed working:
+- `AuthGate` wraps `MainLayoutWrapper` — redirects unauthenticated users to `/auth`
+- After login, users without `jj_mode_selected` go to `/welcome` for category selection
+- Categories: Investor, Broker, Developer (stored in `user_role_selections`)
+
+No changes needed here — just confirming the restriction is already in place.
+
+---
+
+### Database Migration
+
 ```sql
-CREATE TABLE public.user_color_palettes (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  name text NOT NULL DEFAULT 'Custom Palette',
-  palette jsonb NOT NULL,
-  is_active boolean DEFAULT false,
-  created_at timestamptz DEFAULT now()
-);
--- RLS: users CRUD their own palettes only
+ALTER TABLE user_interest_profile 
+  ADD COLUMN IF NOT EXISTS page_time_breakdown jsonb DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS nationality text,
+  ADD COLUMN IF NOT EXISTS country text,
+  ADD COLUMN IF NOT EXISTS city text,
+  ADD COLUMN IF NOT EXISTS preferred_language text,
+  ADD COLUMN IF NOT EXISTS age_range text,
+  ADD COLUMN IF NOT EXISTS login_history jsonb DEFAULT '[]';
 ```
 
-#### 1B. Remove `OwnerGuard` from brand palette route
-Move `/owner/brand-palette` → `/brand-palette` as a public authenticated route. Owner sees full hex codes + corporate palette management. Regular users see:
-- Color wheel pickers (no hex codes visible)
-- Visual labels ("Primary — buttons, links", etc.) with live example previews
-- Apply to "Website" or "Tools only" toggle
-- Save/Revert/History of their personal palettes
-- Palettes saved per-user in `user_color_palettes`
-
-#### 1C. Fix UI issues
-- Match color swatch shape to card container (use `rounded-2xl` on swatches to match card radius)
-- Add a clickable color wheel icon next to each swatch for users who don't know to click the square
-- Fix live preview: make `isPreviewing` default to `true` so changes reflect immediately
-- Show accurate JBJ website palette as defaults: `primary: #C8A766, secondary: #000000, accent: #D4AF37, background: #FDFBF7, text: #1A1A1A`
-
-#### 1D. BrandPaletteContext updates
-- Load user's active personal palette from `user_color_palettes` for non-owners
-- Owner's palette comes from `app_settings` (unchanged)
-- `applyPaletteToDOM()` already works — just needs to trigger on page load for per-user palettes
-
-**Files:**
-| File | Action |
-|------|--------|
-| Database migration | Create `user_color_palettes` |
-| `src/routes/AdminRoutes.tsx` | Move palette route from OwnerGuard to authenticated |
-| `src/pages/owner/BrandPaletteHub.tsx` | Major refactor: dual-mode (owner vs user), color wheels, no hex for users, palette history, shape fixes |
-| `src/contexts/BrandPaletteContext.tsx` | Load per-user palette, add `saveUserPalette`, `getUserPaletteHistory`, `revertToDefault` |
-| `src/components/navigation/GlobalVerticalNav.tsx` | Update nav link path |
-
 ---
 
-### Phase 2: Availability Auto-Hide + Stamp Generator Premium UI
+### Files Modified
 
-**Problem:** Property availability/unit counts are visible to investors (discourages urgency). Stamp generator UI needs premium upgrade.
-
-#### 2A. Availability auto-hide
-- Add `availability_visible` boolean column to `projects` table (default `false`)
-- All public-facing property pages: hide availability/unit count data when `availability_visible = false`
-- Owner can toggle visibility per-project from Listing Admin
-- Developer Portal uploads auto-set `availability_visible = false`
-
-#### 2B. Stamp Generator premium UI overhaul
-- Apply champagne gradient theme consistently (matching Royal Tools Hub)
-- Default to "Ink Blue" standard with the two canonical company stamp designs
-- Gold-bordered cards, premium typography, centered preview
-- Upgrade security: sanitize all SVG inputs, encrypt stamp data in session storage
-
-**Files:** `projects` migration, Listing Admin toggle, property detail pages, `StampGeneratorPage.tsx`, `StampProjectWizard.tsx`, related stamp components
-
----
-
-### Phase 3: Sitemap Update, Cross-Tool Integration, Security Hardening
-
-#### 3A. Sitemap
-Add missing tool links: Brand Palette, Scan & Sign, all new features added recently.
-
-#### 3B. Cross-tool integration
-- Scan & Sign: add "Import Stamp", "Import Business Card", "Import QR Code" buttons that pull from session storage
-- E-Signature: already has stamp integration — verify QR code and business card import paths
-- All tools: ensure owner sees their brand palette colors in color pickers; non-owners see generic palette
-
-#### 3C. Global security
-- RLS audit across new tables
-- Edge function JWT hardening review
-- DOM obfuscation layer verification
-
-**Files:** `Sitemap.tsx`, `ScanSignPage.tsx`, `CreateEnvelope.tsx`, tool color pickers, edge functions
-
----
-
-### Implementation Priority
-**Phase 1 first** (Brand Palette) — directly addresses the page user is currently viewing and the most detailed feedback. Phases 2 and 3 follow in subsequent messages.
+| File | Changes |
+|------|---------|
+| DB migration | Add 7 columns to `user_interest_profile` |
+| `compute-user-scores/index.ts` | Add demographics pull, per-page time calc, login history, redeploy |
+| `AdminIntelligence.tsx` | Demographics card, session timeline, per-page time breakdown, extra table columns |
 
