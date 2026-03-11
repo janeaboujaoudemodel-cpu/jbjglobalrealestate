@@ -239,6 +239,7 @@ export default function JBJAcademy() {
         <section className="relative min-h-[420px] flex items-center overflow-hidden">
           <VideoBackground
             src={brokerEducationHeroVideo}
+            poster=""
           />
           <div className="relative z-10 container mx-auto px-4 py-20 text-center">
             <motion.div initial="hidden" animate="visible" variants={stagger}>
