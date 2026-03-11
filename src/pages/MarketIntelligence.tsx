@@ -159,17 +159,12 @@ const MarketIntelligence = () => {
             className="flex flex-wrap justify-center gap-4"
             variants={fadeInUp}
           >
-            <a href="#overview">
-              <Button variant="media" className="px-8 py-6">
-                Explore Dashboard
-                <ArrowUpRight className="w-5 h-5 ml-2" />
-              </Button>
-            </a>
-            <Link to="/market-report">
-              <Button variant="secondary" className="border-white text-white hover:bg-white hover:text-gold px-8 py-6">
-                Download Reports
-              </Button>
-            </Link>
+            <PremiumHeroButton href="#overview" size="lg">
+              Explore Dashboard
+            </PremiumHeroButton>
+            <PremiumHeroButton href="/market-report" size="lg" icon={ArrowUpRight}>
+              Download Reports
+            </PremiumHeroButton>
           </motion.div>
 
           {/* Trust Badges */}

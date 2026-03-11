@@ -416,6 +416,7 @@ const SECTION_ICONS: Record<SectionKey, any> = {
 export default function GlobalVerticalNav() {
   const location = useLocation();
   const { session } = useAuth();
+  const { role, isBroker, isInvestor, isOwner } = useUserRole();
   const [activeMegaMenu, setActiveMegaMenu] = useState<MegaMenuKey | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);

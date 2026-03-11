@@ -91,6 +91,17 @@ const Guides = () => {
   const [selectedBook, setSelectedBook] = useState<BookData | null>(null);
   const navigate = useNavigate();
 
+  // Auto-scroll to guides grid on mount so the main hub is immediately visible
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const el = document.getElementById('guides-library');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 300);
+    return () => clearTimeout(timer);
+  }, []);
+
   const goToChapter = (book: BookData, index: number) => {
     const directHref = book._chapterHrefs?.[index];
     const target = directHref || `${book.href}#chapter-${index + 1}`;

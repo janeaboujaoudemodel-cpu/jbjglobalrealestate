@@ -65,15 +65,21 @@ export const FounderPhilosophySection = () => {
                 </div>
               </div>
               
-              {/* CTA Button - Blue style matching "By Leading Developer" */}
-              <button 
-                onClick={() => window.location.href = '/founder'}
-                className="relative inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-4 sm:py-5 mt-6 text-sm sm:text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden bg-[#1e3a5f] hover:bg-[#2a4a73] text-white shadow-lg hover:shadow-xl"
+              {/* CTA Button - Champagne Gold matching REAL ESTATE wordmark */}
+              <Link 
+                to="/founder"
+                className="relative inline-flex items-center justify-center gap-3 px-8 sm:px-12 py-5 sm:py-6 mt-6 text-base sm:text-lg font-bold rounded-xl transition-all duration-300 group overflow-hidden shadow-lg hover:shadow-xl hover:-translate-y-1"
+                style={{
+                  background: 'linear-gradient(135deg, #D4B896, #C8A766, #B8975A)',
+                  color: '#1a1a1a',
+                  border: '2px solid rgba(200,167,102,0.6)',
+                  boxShadow: '0 4px 20px rgba(200,167,102,0.3)',
+                }}
               >
-                <User className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-                <span>Learn More About the Founder</span>
-                <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </button>
+                <User className="w-5 h-5 sm:w-6 sm:h-6 text-black/80" />
+                <span className="tracking-wide">Learn More About the Founder</span>
+                <ArrowUpRight className="w-5 h-5 sm:w-6 sm:h-6 text-black/80 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </Link>
             </motion.div>
 
             {/* Right - Content */}
