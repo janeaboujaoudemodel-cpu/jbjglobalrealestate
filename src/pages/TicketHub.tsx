@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { SEOHead } from "@/components/SEOHead";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -36,7 +36,12 @@ import {
   Inbox,
   MessageSquare,
   RotateCcw,
-  Mic,
+  Paperclip,
+  X,
+  Upload,
+  Video,
+  Square,
+  FileImage,
 } from "lucide-react";
 import { VoiceInputButton } from "@/components/ui/VoiceInputButton";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -48,7 +53,32 @@ const SERVICE_CATEGORIES = [
   "Account Access",
   "Technical Support",
   "Complaint",
+  "Website Bug / Glitch",
+  "Incorrect Data / Fake Information",
+  "Property Listing Issue",
+  "Missing Information",
+  "Map / Location Error",
+  "Pricing Discrepancy",
+  "Agent / Broker Complaint",
+  "Mortgage & Finance",
+  "Visa & Immigration",
+  "Company Setup",
+  "Golden Visa",
+  "Short-Term Rental",
+  "Project Report",
+  "Feature Request",
+  "Partnership Inquiry",
+  "Investment Advisory",
+  "Legal Support",
+  "Insurance",
   "Other",
+];
+
+const PRIORITY_OPTIONS = [
+  { value: "low", label: "Low", color: "bg-green-500/20 text-green-700" },
+  { value: "medium", label: "Normal", color: "bg-blue-500/20 text-blue-700" },
+  { value: "high", label: "High", color: "bg-orange-500/20 text-orange-700" },
+  { value: "critical", label: "Critical", color: "bg-red-500/20 text-red-700" },
 ];
 
 const statusConfig: Record<string, { label: string; className: string; icon: typeof CheckCircle }> = {
@@ -56,6 +86,13 @@ const statusConfig: Record<string, { label: string; className: string; icon: typ
   in_progress: { label: "In Review", className: "bg-blue-500/20 text-blue-600", icon: Clock },
   resolved: { label: "Resolved", className: "bg-green-500/20 text-green-600", icon: CheckCircle },
 };
+
+interface AttachmentFile {
+  id: string;
+  file: File;
+  preview?: string;
+  status: 'pending' | 'uploading' | 'done' | 'error';
+}
 
 interface TicketWithMessages {
   id: string;
@@ -78,6 +115,14 @@ interface TicketWithMessages {
   }[];
 }
 
+function formatFileSize(bytes: number): string {
+  if (bytes === 0) return '0 B';
+  const k = 1024;
+  const sizes = ['B', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+}
+
 const TicketHub = () => {
   const [searchParams] = useSearchParams();
   const { user } = useAuth();
@@ -93,8 +138,21 @@ const TicketHub = () => {
     subject: "",
     description: "",
     service_category: "General Inquiry",
+    priority: "medium",
   });
   const [submitting, setSubmitting] = useState(false);
+
+  // Attachments
+  const [attachments, setAttachments] = useState<AttachmentFile[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const dropZoneRef = useRef<HTMLDivElement>(null);
+  const [isDragOver, setIsDragOver] = useState(false);
+
+  // Screen recording
+  const [isRecording, setIsRecording] = useState(false);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const recordedChunksRef = useRef<Blob[]>([]);
+  const streamRef = useRef<MediaStream | null>(null);
 
   // Track tab
   const [selectedTicket, setSelectedTicket] = useState<TicketWithMessages | null>(null);
@@ -178,6 +236,113 @@ const TicketHub = () => {
     onError: () => toast.error("Failed to reopen ticket"),
   });
 
+  // === FILE ATTACHMENT HANDLERS ===
+  const addFiles = useCallback((fileList: FileList | File[]) => {
+    const newFiles = Array.from(fileList);
+    const remaining = 5 - attachments.length;
+    if (remaining <= 0) {
+      toast.error("Maximum 5 attachments allowed");
+      return;
+    }
+    const toAdd = newFiles.slice(0, remaining);
+    if (newFiles.length > remaining) {
+      toast.warning(`Only ${remaining} more file(s) allowed`);
+    }
+    const mapped: AttachmentFile[] = toAdd.map(f => ({
+      id: crypto.randomUUID(),
+      file: f,
+      preview: f.type.startsWith('image/') ? URL.createObjectURL(f) : undefined,
+      status: 'pending',
+    }));
+    setAttachments(prev => [...prev, ...mapped]);
+  }, [attachments.length]);
+
+  const removeAttachment = useCallback((id: string) => {
+    setAttachments(prev => {
+      const item = prev.find(a => a.id === id);
+      if (item?.preview) URL.revokeObjectURL(item.preview);
+      return prev.filter(a => a.id !== id);
+    });
+  }, []);
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    if (e.dataTransfer.files.length) addFiles(e.dataTransfer.files);
+  }, [addFiles]);
+
+  const uploadAttachments = async (): Promise<string[]> => {
+    const urls: string[] = [];
+    for (const att of attachments) {
+      setAttachments(prev => prev.map(a => a.id === att.id ? { ...a, status: 'uploading' } : a));
+      try {
+        const timestamp = Date.now();
+        const safeName = att.file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+        const filePath = `tickets/${user?.id || 'guest'}/${timestamp}-${safeName}`;
+        const { error } = await supabase.storage
+          .from('support-attachments')
+          .upload(filePath, att.file, { cacheControl: '3600', upsert: false });
+        if (error) throw error;
+        const { data: urlData } = supabase.storage
+          .from('support-attachments')
+          .getPublicUrl(filePath);
+        urls.push(urlData.publicUrl);
+        setAttachments(prev => prev.map(a => a.id === att.id ? { ...a, status: 'done' } : a));
+      } catch (err) {
+        console.error('Attachment upload failed:', err);
+        setAttachments(prev => prev.map(a => a.id === att.id ? { ...a, status: 'error' } : a));
+      }
+    }
+    return urls;
+  };
+
+  // === SCREEN RECORDING ===
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getDisplayMedia({
+        video: { mediaSource: 'screen' } as any,
+      });
+      streamRef.current = stream;
+      recordedChunksRef.current = [];
+
+      const mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+      mediaRecorderRef.current = mediaRecorder;
+
+      mediaRecorder.ondataavailable = (e) => {
+        if (e.data.size > 0) recordedChunksRef.current.push(e.data);
+      };
+
+      mediaRecorder.onstop = () => {
+        const blob = new Blob(recordedChunksRef.current, { type: 'video/webm' });
+        const file = new File([blob], `screen-recording-${Date.now()}.webm`, { type: 'video/webm' });
+        addFiles([file]);
+        toast.success("Screen recording added to attachments");
+        streamRef.current?.getTracks().forEach(t => t.stop());
+        streamRef.current = null;
+        setIsRecording(false);
+      };
+
+      // If user stops sharing via browser UI
+      stream.getVideoTracks()[0].onended = () => {
+        if (mediaRecorder.state === 'recording') mediaRecorder.stop();
+      };
+
+      mediaRecorder.start();
+      setIsRecording(true);
+      toast.info("Recording started — click Stop when done");
+    } catch (err) {
+      console.error('Screen recording error:', err);
+      toast.error("Could not start screen recording");
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorderRef.current?.state === 'recording') {
+      mediaRecorderRef.current.stop();
+    }
+  };
+
+  // === SUBMIT ===
   const handleSubmitNewTicket = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newTicket.full_name || !newTicket.email || !newTicket.subject || !newTicket.description) {
@@ -186,21 +351,32 @@ const TicketHub = () => {
     }
     setSubmitting(true);
     try {
+      // Upload attachments first
+      let attachmentUrls: string[] = [];
+      if (attachments.length > 0) {
+        attachmentUrls = await uploadAttachments();
+      }
+
       const ticketNumber = `JBJ-${Date.now()}`;
+      const descriptionWithAttachments = attachmentUrls.length > 0
+        ? `${newTicket.description}\n\n--- Attachments ---\n${attachmentUrls.map((u, i) => `[Attachment ${i + 1}]: ${u}`).join('\n')}`
+        : newTicket.description;
+
       const { error } = await supabase.from("support_tickets").insert({
         ticket_number: ticketNumber,
         full_name: newTicket.full_name,
         email: newTicket.email,
         subject: newTicket.subject,
-        description: newTicket.description,
+        description: descriptionWithAttachments,
         service_category: newTicket.service_category,
         user_id: user?.id || null,
         status: "open",
-        priority: "medium",
+        priority: newTicket.priority,
       } as any);
       if (error) throw error;
       toast.success(`Ticket ${ticketNumber} created successfully!`);
-      setNewTicket({ full_name: "", email: user?.email || "", subject: "", description: "", service_category: "General Inquiry" });
+      setNewTicket({ full_name: "", email: user?.email || "", subject: "", description: "", service_category: "General Inquiry", priority: "medium" });
+      setAttachments([]);
       setActiveTab("track");
       queryClient.invalidateQueries({ queryKey: ["ticket-hub-tickets"] });
     } catch (err: any) {
@@ -311,21 +487,40 @@ const TicketHub = () => {
                           <Input type="email" value={newTicket.email} onChange={(e) => setNewTicket((p) => ({ ...p, email: e.target.value }))} placeholder="your@email.com" required />
                         </div>
                       </div>
+
+                      <div className="space-y-2">
+                        <Label>Subject *</Label>
+                        <Input value={newTicket.subject} onChange={(e) => setNewTicket((p) => ({ ...p, subject: e.target.value }))} placeholder="Brief summary of your issue" required />
+                      </div>
+
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label>Subject *</Label>
-                          <Input value={newTicket.subject} onChange={(e) => setNewTicket((p) => ({ ...p, subject: e.target.value }))} placeholder="Brief summary of your issue" required />
-                        </div>
                         <div className="space-y-2">
                           <Label>Category</Label>
                           <Select value={newTicket.service_category} onValueChange={(v) => setNewTicket((p) => ({ ...p, service_category: v }))}>
                             <SelectTrigger><SelectValue /></SelectTrigger>
-                            <SelectContent>
+                            <SelectContent className="max-h-60">
                               {SERVICE_CATEGORIES.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
                             </SelectContent>
                           </Select>
                         </div>
+                        <div className="space-y-2">
+                          <Label>Priority</Label>
+                          <Select value={newTicket.priority} onValueChange={(v) => setNewTicket((p) => ({ ...p, priority: v }))}>
+                            <SelectTrigger><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                              {PRIORITY_OPTIONS.map((p) => (
+                                <SelectItem key={p.value} value={p.value}>
+                                  <span className="flex items-center gap-2">
+                                    <span className={cn("inline-block w-2 h-2 rounded-full", p.color.split(' ')[0])} />
+                                    {p.label}
+                                  </span>
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
                       </div>
+
                       <div className="space-y-2">
                         <Label className="flex items-center justify-between">
                           Description *
@@ -344,7 +539,110 @@ const TicketHub = () => {
                         </Label>
                         <Textarea value={newTicket.description} onChange={(e) => setNewTicket((p) => ({ ...p, description: e.target.value }))} placeholder="Describe your issue in detail..." rows={5} required />
                       </div>
-                      <Button type="submit" disabled={submitting} className="w-full bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white font-bold h-12">
+
+                      {/* Attachments & Screen Recording */}
+                      <div className="space-y-3">
+                        <Label>Attachments (max 5 files — photos, videos, screenshots)</Label>
+
+                        {/* Drop zone */}
+                        <div
+                          ref={dropZoneRef}
+                          onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }}
+                          onDragLeave={() => setIsDragOver(false)}
+                          onDrop={handleDrop}
+                          className={cn(
+                            "border-2 border-dashed rounded-xl p-5 text-center transition-colors cursor-pointer",
+                            isDragOver
+                              ? "border-gold bg-gold/10"
+                              : "border-gold/30 hover:border-gold/50 bg-[#FDFBF7]"
+                          )}
+                          onClick={() => fileInputRef.current?.click()}
+                        >
+                          <input
+                            ref={fileInputRef}
+                            type="file"
+                            multiple
+                            accept="image/*,video/*,.pdf,.webm"
+                            className="hidden"
+                            onChange={(e) => { if (e.target.files) addFiles(e.target.files); e.target.value = ''; }}
+                          />
+                          <Upload className="w-8 h-8 mx-auto mb-2 text-gold/60" />
+                          <p className="text-sm text-muted-foreground">
+                            Drag & drop files here or <span className="text-gold font-medium underline">browse</span>
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-1">Images, videos, PDFs, screen recordings</p>
+                        </div>
+
+                        {/* Screen Record Button */}
+                        <div className="flex gap-2">
+                          {!isRecording ? (
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={startRecording}
+                              disabled={attachments.length >= 5}
+                              className="border-red-500/40 text-red-600 hover:bg-red-50 hover:border-red-500"
+                            >
+                              <Video className="w-4 h-4 mr-2" />
+                              Screen Record
+                            </Button>
+                          ) : (
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={stopRecording}
+                              className="border-red-500 text-red-600 bg-red-50 hover:bg-red-100 animate-pulse"
+                            >
+                              <Square className="w-4 h-4 mr-2 fill-red-500" />
+                              Stop Recording
+                            </Button>
+                          )}
+                        </div>
+
+                        {/* Attachment Previews */}
+                        {attachments.length > 0 && (
+                          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+                            {attachments.map((att) => (
+                              <div key={att.id} className="relative group rounded-lg border-2 border-gold/20 bg-[#FDFBF7] overflow-hidden">
+                                {att.preview ? (
+                                  <img src={att.preview} alt={att.file.name} className="w-full h-20 object-cover" />
+                                ) : (
+                                  <div className="w-full h-20 flex items-center justify-center bg-gold/5">
+                                    {att.file.type.startsWith('video/') ? (
+                                      <Video className="w-8 h-8 text-gold/50" />
+                                    ) : (
+                                      <FileImage className="w-8 h-8 text-gold/50" />
+                                    )}
+                                  </div>
+                                )}
+                                <div className="p-1.5">
+                                  <p className="text-[10px] text-foreground truncate font-medium">{att.file.name}</p>
+                                  <p className="text-[9px] text-muted-foreground">{formatFileSize(att.file.size)}</p>
+                                  {att.status === 'uploading' && (
+                                    <div className="w-full h-1 bg-gold/20 rounded-full mt-1">
+                                      <div className="h-full bg-gold rounded-full animate-pulse w-2/3" />
+                                    </div>
+                                  )}
+                                  {att.status === 'error' && (
+                                    <p className="text-[9px] text-red-500 font-medium">Upload failed</p>
+                                  )}
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => removeAttachment(att.id)}
+                                  className="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/60 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                                >
+                                  <X className="w-3 h-3" />
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      <Button type="submit" disabled={submitting || isRecording} className="w-full bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white font-bold h-12">
                         {submitting ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Submitting...</> : <><Send className="w-4 h-4 mr-2" /> Submit Ticket</>}
                       </Button>
                     </form>
