@@ -1,41 +1,62 @@
 
 
-## Plan: Fix All Email Issues Across All Templates
+## Plan: Fix Market Intelligence Hero, Guides Page Scroll, Shortcuts Role Filtering & Dashboard Layout
 
-### Problems Identified
+### Issue 1: Market Intelligence Hero — No Video & Faded Buttons
 
-1. **Recommended For You icons disappeared** — Inline SVGs are stripped by Gmail and most email clients. Must revert to hosted PNG images (`ai-tools.png`, `guides.png`, `properties.png` already exist in `public/email-icons/`).
+**Root cause:** The hero uses a static `<img>` tag (line 116-120) instead of a video. The buttons use `variant="media"` and `variant="secondary"` which blend into the dark background.
 
-2. **Social media footer icons not rendering** — Same issue: `socialLinksFooter()` loads external `.svg` files via `<img>` tags, but Gmail blocks SVG images entirely. Must switch to hosted `.png` files. Currently missing `social-facebook.png` — need to confirm or create it.
+**Fix in `src/pages/MarketIntelligence.tsx`:**
+- Replace the `<img>` hero background with a `<video>` element (Dubai skyline/aerial video from Pexels, same pattern as Guides page)
+- Replace `variant="media"` and `variant="secondary"` buttons with `<PremiumHeroButton>` components for consistent visible styling
+- **Founder button:** In `src/components/FounderPhilosophySection.tsx` line 69-76, change the button to use a larger size, bold text, and the nude/champagne gold color (`#D4B896`) matching the "REAL ESTATE" header wordmark
 
-3. **Email split into multiple visual cards** — Several sub-sections (`ticketSupportEmbed`, `readyToGetStartedHtml`, `recommendedActionsHtml`) each have their own `border`, `border-radius`, and `background` styles creating distinct visual boxes. These need to be softened so they sit seamlessly inside the single continuous card.
+### Issue 2: Guides Library — Main Hub Not Visible on Load
 
-### Changes (all in `supabase/functions/_shared/email-html.ts`)
+**Root cause:** The hero is full-screen (`jj-hero-fullscreen`), pushing the actual guides grid below the fold. When navigating from sidebar, the user lands at the top of the hero and must scroll past it.
 
-#### A. Recommended For You — Revert to PNG hosted images
-- Change `recommendedCard()` back to using `iconImg()` with PNG paths
-- Remove the `RECOMMENDED_ICONS` inline SVG object
-- Ensure circular frame clips the PNG with `overflow:hidden` on the `<td>` to prevent square backgrounds
-- Signature: `recommendedCard(title, href, iconPath, alt)` — restore the original parameters
+**Fix in `src/pages/Guides.tsx`:**
+- After the hero, move the "Explore Guides" section (the book grid at `#guides-library`) higher — reduce the "How This Library Works" section padding
+- Add `useEffect` on mount: if navigated from sidebar (no hash), auto-scroll to `#guides-library` after a short delay so users see the guides immediately
+- Keep the hero for SEO/branding but ensure guides are visible quickly
 
-#### B. Social Footer — Switch to PNG with white pearl background
-- Replace `socialLinksFooter()` to use the inline `SVG` object icons (instagram, facebook, linkedin, tiktok, youtube) that are already defined at the top of the file — these render as raw HTML inside `<td>` elements, not as `<img>` tags, so they should survive email client processing
-- Actually, since Gmail strips ALL SVG (both inline and `<img>`), switch to using the `.png` files: `social-instagram.png`, `social-linkedin.png`, `social-tiktok.png`, `social-youtube.png`
-- Create `social-facebook.png` if missing
-- Style each icon circle: white/pearl (#FDFBF7) background, gold border, black icon inside
+### Issue 3: Shortcuts Showing "Broker Dashboard" for Investor Users
 
-#### C. Single Card Layout — Remove visual fragmentation
-- `ticketSupportEmbed()`: Remove the heavy gradient background and red border; make it blend into the card
-- `readyToGetStartedHtml()`: Remove the outer border and separate background so it flows within the card
-- `inquiryBox()`: Soften its standalone bordered look
-- Keep all content inside the single `emailShell` wrapper card with no sub-borders that create separation
+**Root cause:** `SHORTCUT_GROUPS` (line 321-393) is static — it shows all groups including "Dashboards" with "Broker Dashboard" regardless of user role. No role filtering.
 
-#### D. Deploy + Send Test Email
-- Deploy the updated edge function
-- Immediately send a test welcome email to `janeaboujaoudenails@gmail.com`
-- Take a screenshot as proof
+**Fix in `src/components/navigation/GlobalVerticalNav.tsx`:**
+- Import `useUserRole` hook
+- Filter `SHORTCUT_GROUPS` based on user role before rendering:
+  - **Investor role:** Hide "Broker Dashboard", "CRM", "Owner Command Center" items
+  - **Broker role:** Show broker items, hide owner-only items
+  - **No role/visitor:** Show only public shortcuts (My Tasks, AI & Tools, Account)
+- Replace "Broker Dashboard" with "Investor Dashboard" (`/investor-dashboard`) in the Dashboards group when role is investor
 
-### Files Modified
-- `supabase/functions/_shared/email-html.ts` — all icon and layout fixes
-- `public/email-icons/social-facebook.png` — create if missing (or use existing assets)
+### Issue 4: Dashboard Cards Cropped + Layout — Two Per Row
+
+**Root cause:** `MyDashboard.tsx` uses a 3-column grid (`grid-cols-1 md:grid-cols-2 xl:grid-cols-3`). The "My Tasks" section is full-width below. User wants a 2-column grouping.
+
+**Fix in `src/pages/MyDashboard.tsx`:**
+- Change main grid from 3-column to 2-column: `grid-cols-1 lg:grid-cols-2`
+- Group 1 (left): Profile + Badges + Account Settings
+- Group 2 (right): Notifications + Quick Actions
+- Row 2: My Tasks + Activity Overview (side by side, 2-col)
+- Row 3: Favorites + Shortlists (already 2-col)
+- Remove `xl:grid-cols-3` to prevent 3-col layout
+- Ensure all cards have `overflow-visible` or proper `min-h` to prevent cropping
+
+### Issue 5: Market Intelligence Cards Alignment
+
+**Fix in `src/pages/MarketIntelligence.tsx`:**
+- Ensure the `MarketOverviewDashboard` and other card sections use consistent grid alignment with equal card heights via `h-full` on all cards
+
+### Files to Edit
+
+| File | Changes |
+|------|---------|
+| `src/pages/MarketIntelligence.tsx` | Replace img with video, use PremiumHeroButton |
+| `src/components/FounderPhilosophySection.tsx` | Larger founder button with champagne gold color |
+| `src/pages/Guides.tsx` | Auto-scroll to guides grid on mount |
+| `src/components/navigation/GlobalVerticalNav.tsx` | Role-filter SHORTCUT_GROUPS |
+| `src/pages/MyDashboard.tsx` | 2-column layout, fix card cropping |
 
