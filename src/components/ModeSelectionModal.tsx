@@ -32,6 +32,12 @@ const MODE_OPTIONS: ModeOption[] = [
     icon: Briefcase,
   },
   {
+    mode: 'developer',
+    label: 'Developer',
+    description: 'Submit projects, upload marketing materials, and manage launches',
+    icon: Building2,
+  },
+  {
     mode: 'visitor',
     label: 'Visitor / Partnership',
     description: 'Explore the platform and discover partnership opportunities',
