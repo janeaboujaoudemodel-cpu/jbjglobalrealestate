@@ -201,13 +201,25 @@ const DeveloperPortal = () => {
         <div className="relative py-16 md:py-24 bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] text-white overflow-hidden">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMSIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIvPjwvc3ZnPg==')] opacity-50" />
           <div className="container mx-auto px-4 relative z-10 text-center max-w-3xl">
-            <Badge className="mb-4 bg-gold/20 text-gold border-gold/30 text-sm">For Real Estate Developers</Badge>
+            <Badge className="mb-4 bg-gold/20 text-gold border-gold/30 text-sm">
+              {isDeveloperMode ? 'Developer Tools' : 'For Real Estate Developers'}
+            </Badge>
             <h1 className="text-3xl md:text-5xl font-bold mb-4">Developer Portal</h1>
             <p className="text-lg md:text-xl text-white/70">
               Submit projects, upload marketing materials, manage events — all in one place.
             </p>
           </div>
         </div>
+
+        {/* Mode Notice */}
+        {!isDeveloperMode && (
+          <div className="container mx-auto px-4 py-4 max-w-4xl">
+            <div className="flex items-center gap-3 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-sm">
+              <Info className="w-5 h-5 shrink-0" />
+              <p>You're not in Developer mode. Switch to <strong>Developer</strong> mode from the header to access full developer tools.</p>
+            </div>
+          </div>
+        )}
 
         {/* Developer Info */}
         <div className="container mx-auto px-4 py-8 max-w-4xl">
