@@ -373,6 +373,7 @@ export const PublicRoutes = () => (
     {/* ── Misc ── */}
     <Route path="/sitemap" element={<Sitemap />} />
     <Route path="/pricing" element={<Pricing />} />
+    <Route path="/api-access" element={<ApiAccess />} />
 
     {/* ── 404 ── */}
     <Route path="*" element={<NotFound />} />
