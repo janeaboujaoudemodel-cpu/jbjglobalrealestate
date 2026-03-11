@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { SafeTooltipProvider } from "@/components/ui/SafeTooltipProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 
 import { AuthProvider } from "@/contexts/AuthContext";
 import { BrandPaletteProvider } from "@/contexts/BrandPaletteContext";
@@ -23,6 +23,8 @@ import SEOServiceArea from "@/components/SEOServiceArea";
 import GlobalVisitorTracking from "@/components/GlobalVisitorTracking";
 import SEOBreadcrumbs from "@/components/SEOBreadcrumbs";
 import PageLoader from "@/components/PageLoader";
+import { InlinePageLoader } from "@/components/PageLoader";
+import BrandIntroSplash from "@/components/BrandIntroSplash";
 
 // ── Route Groups ──
 import { StandaloneRoutes } from "@/routes/StandaloneRoutes";
@@ -77,30 +79,35 @@ const App = () => {
                   <GlobalVisitorTracking />
                   <SEOBreadcrumbs />
                   
-            <Suspense fallback={<PageLoader />}>
+            <BrandIntroSplash />
             <Routes>
               {/* ── Standalone Routes (no shell) ── */}
-              {StandaloneRoutes()}
+              <Route element={<Suspense fallback={<PageLoader />}><Outlet /></Suspense>}>
+                {StandaloneRoutes()}
+              </Route>
 
               {/* ── Owner Command Center (dedicated shell) ── */}
-              {OwnerRoutes()}
+              <Route element={<Suspense fallback={<PageLoader />}><Outlet /></Suspense>}>
+                {OwnerRoutes()}
+              </Route>
               
               {/* ── Main Layout Routes (header + footer shell) ── */}
               <Route element={<AdminBypass><MainLayoutWrapper /></AdminBypass>}>
-                {/* Public pages: properties, guides, services, company, user */}
-                {PublicRoutes()}
+                <Route element={<Suspense fallback={<InlinePageLoader />}><Outlet /></Suspense>}>
+                  {/* Public pages: properties, guides, services, company, user */}
+                  {PublicRoutes()}
 
-                {/* AI tool pages */}
-                {AIToolRoutes()}
+                  {/* AI tool pages */}
+                  {AIToolRoutes()}
 
-                {/* Admin & owner-guarded pages */}
-                {AdminRoutes()}
+                  {/* Admin & owner-guarded pages */}
+                  {AdminRoutes()}
 
-                {/* Toolkit & creative suite */}
-                {ToolkitRoutes()}
+                  {/* Toolkit & creative suite */}
+                  {ToolkitRoutes()}
+                </Route>
               </Route>
-              </Routes>
-            </Suspense>
+            </Routes>
                   </PopupCoordinatorProvider>
                 </ActiveLeadProvider>
               </PodcastVisibilityProvider>

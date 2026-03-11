@@ -10,4 +10,14 @@ const PageLoader = () => (
   </div>
 );
 
+/**
+ * InlinePageLoader - Layout-safe loader for use inside MainLayout
+ * Does NOT replace the entire screen — keeps header/sidebar stable
+ */
+export const InlinePageLoader = () => (
+  <div className="flex items-center justify-center py-32 min-h-[60vh]">
+    <BrandedLoader text="Loading..." variant="light" className="min-h-0" />
+  </div>
+);
+
 export default PageLoader;
