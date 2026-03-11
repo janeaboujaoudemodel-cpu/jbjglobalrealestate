@@ -176,6 +176,7 @@ const hubSections: HubSection[] = [
       { href: "/broker-resources", label: "Broker Resources" },
       { href: "/broker-faq", label: "Broker FAQ" },
       { href: "/verify-certificate/lookup", label: "Verify Certificate" },
+      { href: "/developer-portal", label: "Developer Portal" },
     ],
   },
   {
