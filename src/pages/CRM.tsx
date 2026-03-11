@@ -192,7 +192,8 @@ const CRM = () => {
   };
 
   const handleExportCSV = async () => {
-    if (!isCRMOwner) {
+    const isOwner = profile?.crm_role === 'owner_admin' || profile?.crm_role === 'founder';
+    if (!isOwner) {
       toast.error("Only administrators can export leads");
       return;
     }
