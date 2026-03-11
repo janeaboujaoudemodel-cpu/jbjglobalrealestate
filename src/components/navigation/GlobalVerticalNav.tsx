@@ -881,8 +881,8 @@ export default function GlobalVerticalNav() {
   const renderNavContent = () => (
     <div className="flex flex-col h-full">
       {/* Logo — enlarged monogram and wordmark */}
-      <div className="p-4 border-b border-gold/20 flex-shrink-0">
-        <div className="flex items-center gap-2.5">
+      <div className="p-4 px-5 border-b border-gold/20 flex-shrink-0">
+        <div className="flex items-center gap-3">
          <Link to="/" onClick={() => setActiveMegaMenu(null)} onMouseEnter={() => { import("@/pages/Index"); }} className="flex-shrink-0">
             <img src={jbjMonogramLightBg} alt="JBJ" className="w-14 h-14 object-contain" />
           </Link>
