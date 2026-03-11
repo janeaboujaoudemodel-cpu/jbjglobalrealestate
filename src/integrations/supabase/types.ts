@@ -20379,6 +20379,45 @@ export type Database = {
         }
         Relationships: []
       }
+      user_agreements: {
+        Row: {
+          accepted_at: string
+          agreement_snapshot: Json
+          agreement_type: string
+          agreement_version: string
+          consent_details: Json | null
+          created_at: string
+          id: string
+          ip_address: string | null
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          accepted_at?: string
+          agreement_snapshot: Json
+          agreement_type: string
+          agreement_version?: string
+          consent_details?: Json | null
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          accepted_at?: string
+          agreement_snapshot?: Json
+          agreement_type?: string
+          agreement_version?: string
+          consent_details?: Json | null
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_behavior_tracking: {
         Row: {
           action_target: string | null
