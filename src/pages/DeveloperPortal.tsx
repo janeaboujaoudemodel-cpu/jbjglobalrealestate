@@ -42,6 +42,7 @@ const emptyProject = (): ProjectSession => ({
 const DeveloperPortal = () => {
   const [searchParams] = useSearchParams();
   const { user } = useAuth();
+  const { isDeveloperMode } = useUserModeContext();
   const queryClient = useQueryClient();
   const initialTab = searchParams.get("tab") || "projects";
   const [activeTab, setActiveTab] = useState(initialTab);
