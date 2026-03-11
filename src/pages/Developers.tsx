@@ -25,7 +25,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import AdvancedFilterPanel from "@/components/filters/AdvancedFilterPanel";
-import { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
+import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 
 import developersHeroVideo from "@/assets/videos/dubai-landmarks-hero.mp4";
 
