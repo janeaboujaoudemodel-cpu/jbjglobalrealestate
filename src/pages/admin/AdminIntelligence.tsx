@@ -14,7 +14,8 @@ import { toast } from "sonner";
 import {
   ArrowLeft, Users, TrendingUp, Brain, Crown, Download, Search,
   Eye, Zap, Loader2, RefreshCw, Smartphone, Monitor, Tablet,
-  FileText, CreditCard, Clock, MapPin, MousePointerClick
+  FileText, CreditCard, Clock, MapPin, MousePointerClick,
+  Globe, User, Languages, CalendarClock, BarChart3, LogIn
 } from "lucide-react";
 import { format } from "date-fns";
 
@@ -32,6 +33,15 @@ const DeviceIcon = ({ device }: { device: string }) => {
   if (device === 'tablet') return <Tablet className="w-3 h-3" />;
   return <Monitor className="w-3 h-3" />;
 };
+
+interface LoginEntry {
+  started_at: string;
+  ended_at: string | null;
+  duration_seconds: number;
+  device_type: string;
+  browser: string;
+  pages_visited: number;
+}
 
 interface UserProfile {
   user_id: string;
@@ -63,6 +73,14 @@ interface UserProfile {
   email?: string;
   phone?: string;
   role?: string;
+  // New fields
+  nationality?: string;
+  country?: string;
+  city?: string;
+  preferred_language?: string;
+  age_range?: string;
+  page_time_breakdown?: Record<string, number>;
+  login_history?: LoginEntry[];
 }
 
 export default function AdminIntelligencePage({ embedded = false }: { embedded?: boolean }) {
@@ -74,6 +92,7 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
   const [userActivities, setUserActivities] = useState<any[] | null>(null);
   const [userDocuments, setUserDocuments] = useState<any[] | null>(null);
   const [userScannedCards, setUserScannedCards] = useState<any[] | null>(null);
+  const [userSessions, setUserSessions] = useState<any[] | null>(null);
   const [activitiesLoading, setActivitiesLoading] = useState(false);
 
   const { data: profiles, isLoading, refetch } = useQuery({
@@ -88,11 +107,10 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
 
       const userIds = (data || []).map((p: any) => p.user_id);
       
-      // Fetch from profiles, crm_users_profile, and user_role_selections in parallel
       const [profilesRes, crmRes, rolesRes] = await Promise.all([
         supabase.from("profiles").select("id, full_name, first_name, last_name, email, phone_number, user_role, user_type").in("id", userIds),
         supabase.from("crm_users_profile").select("user_id, display_name, phone, crm_role, email").in("user_id", userIds),
-        supabase.from("user_role_selections").select("user_id, selected_role, full_name, phone_e164, email").in("user_id", userIds),
+        supabase.from("user_role_selections").select("user_id, selected_role, full_name, phone_e164, email, nationality, country, city, preferred_language, age_range").in("user_id", userIds),
       ]);
 
       const profileMap = new Map((profilesRes.data || []).map((p: any) => [p.id, p]));
@@ -104,18 +122,12 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
         const crm = crmMap.get(p.user_id);
         const roleSelection = roleMap.get(p.user_id);
         
-        // Name: profiles.full_name > role_selections.full_name > crm.display_name > first+last > email prefix
         const fullName = prof?.full_name || roleSelection?.full_name || crm?.display_name || 
           (prof?.first_name && prof?.last_name ? `${prof.first_name} ${prof.last_name}` : null) ||
           prof?.email?.split("@")[0] || crm?.email?.split("@")[0] || "—";
         
-        // Phone: profiles.phone_number > role_selections.phone_e164 > crm.phone
         const phone = prof?.phone_number || roleSelection?.phone_e164 || crm?.phone || "";
-        
-        // Role: role_selections.selected_role > crm.crm_role > profiles.user_role > profiles.user_type
         const role = roleSelection?.selected_role || crm?.crm_role || prof?.user_role || prof?.user_type || "";
-        
-        // Email: profiles.email > role_selections.email > crm.email
         const email = prof?.email || roleSelection?.email || crm?.email || "";
 
         return {
@@ -124,6 +136,14 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
           email,
           phone,
           role,
+          // Demographics from profile or role_selections
+          nationality: p.nationality || roleSelection?.nationality || "",
+          country: p.country || roleSelection?.country || "",
+          city: p.city || roleSelection?.city || "",
+          preferred_language: p.preferred_language || roleSelection?.preferred_language || "",
+          age_range: p.age_range || roleSelection?.age_range || "",
+          page_time_breakdown: p.page_time_breakdown || {},
+          login_history: p.login_history || [],
         };
       }) as UserProfile[];
     },
@@ -133,7 +153,6 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
   const loadUserDetails = async (userId: string) => {
     setActivitiesLoading(true);
     try {
-      // Get session IDs for user
       const { data: sessions } = await supabase
         .from("visitor_sessions")
         .select("session_id")
@@ -141,8 +160,7 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
         .limit(100);
       const sessionIds = (sessions || []).map((s: any) => s.session_id);
 
-      // Fetch visitor events, user events, documents, scanned cards in parallel
-      const [vEventsRes, uEventsRes, docsRes, cardsRes] = await Promise.all([
+      const [vEventsRes, uEventsRes, docsRes, cardsRes, sessionsRes] = await Promise.all([
         sessionIds.length > 0
           ? supabase.from("visitor_events")
               .select("event_type, event_name, page_path, created_at, event_data")
@@ -167,6 +185,12 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
           .eq("user_id", userId)
           .order("scanned_at", { ascending: false })
           .limit(20),
+        // Fetch user_sessions for session history timeline
+        supabase.from("user_sessions")
+          .select("started_at, ended_at, duration_seconds, device_type, browser, pages_visited")
+          .eq("user_id", userId)
+          .order("started_at", { ascending: false })
+          .limit(50),
       ]);
 
       const vEvents = (vEventsRes.data || []).map((e: any) => ({
@@ -180,11 +204,13 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
       setUserActivities(merged);
       setUserDocuments(docsRes.data || []);
       setUserScannedCards(cardsRes.data || []);
+      setUserSessions(sessionsRes.data || []);
     } catch (err) {
       console.error("Error loading details:", err);
       setUserActivities([]);
       setUserDocuments([]);
       setUserScannedCards([]);
+      setUserSessions([]);
     } finally {
       setActivitiesLoading(false);
     }
@@ -205,9 +231,9 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
 
   const exportCSV = () => {
     if (!profiles?.length) return;
-    const headers = ["Name", "Email", "Phone", "Role", "VIP Tier", "Intent", "Engagement", "Conversion %", "Sessions", "Total Time (s)", "Points", "Streak", "Last Active"];
+    const headers = ["Name", "Email", "Phone", "Role", "Country", "Nationality", "VIP Tier", "Intent", "Engagement", "Conversion %", "Sessions", "Total Time (s)", "Points", "Streak", "Last Active"];
     const rows = filteredProfiles.map(p => [
-      p.full_name, p.email, p.phone, p.role, p.vip_tier,
+      p.full_name, p.email, p.phone, p.role, p.country, p.nationality, p.vip_tier,
       p.intent_score, p.engagement_score, p.conversion_probability,
       p.total_sessions, p.total_time_seconds, p.total_points, p.current_streak,
       p.last_active_at ? format(new Date(p.last_active_at), "dd MMM yyyy") : "",
@@ -227,7 +253,9 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
     const matchesSearch = searchQuery === "" ||
       p.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       p.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.phone?.includes(searchQuery);
+      p.phone?.includes(searchQuery) ||
+      p.country?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.nationality?.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesTier = tierFilter === "all" || p.vip_tier === tierFilter;
     return matchesSearch && matchesTier;
   });
@@ -344,14 +372,14 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
           <div className="relative mb-6">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
             <Input
-              placeholder="Search by name, email, or phone..."
+              placeholder="Search by name, email, phone, country, nationality..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               className="pl-10 bg-white/80 border-2 border-gold/30 text-black placeholder:text-stone-400 focus:border-gold"
             />
           </div>
 
-          {/* Users Table */}
+          {/* Users Table — with Country & Category columns */}
           <Card className="bg-white/80 border-2 border-gold/30 shadow-sm">
             <CardContent className="p-0">
               <ScrollArea className="h-[600px]">
@@ -359,7 +387,8 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
                   <thead className="sticky top-0 bg-gradient-to-r from-[#F5EBD7] to-[#EDE4D3] backdrop-blur z-10">
                     <tr className="border-b-2 border-gold/20">
                       <th className="text-left p-3 text-gold font-bold">User</th>
-                      <th className="text-center p-3 text-gold font-bold">Role</th>
+                      <th className="text-center p-3 text-gold font-bold">Category</th>
+                      <th className="text-center p-3 text-gold font-bold hidden lg:table-cell">Country</th>
                       <th className="text-center p-3 text-gold font-bold">VIP</th>
                       <th className="text-center p-3 text-gold font-bold">Intent</th>
                       <th className="text-center p-3 text-gold font-bold">Engagement</th>
@@ -371,7 +400,7 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
                   </thead>
                   <tbody>
                     {filteredProfiles.map(p => (
-                      <tr key={p.user_id} className="border-b border-gold/10 hover:bg-gold/5 transition-colors cursor-pointer" onClick={() => { setSelectedUser(p); setUserActivities(null); setUserDocuments(null); setUserScannedCards(null); }}>
+                      <tr key={p.user_id} className="border-b border-gold/10 hover:bg-gold/5 transition-colors cursor-pointer" onClick={() => { setSelectedUser(p); setUserActivities(null); setUserDocuments(null); setUserScannedCards(null); setUserSessions(null); }}>
                         <td className="p-3">
                           <div className="font-semibold text-black truncate max-w-[180px]">{p.full_name}</div>
                           <div className="text-xs text-stone-500 truncate max-w-[180px]">{p.email}</div>
@@ -379,6 +408,9 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
                         </td>
                         <td className="p-3 text-center">
                           <span className="text-xs font-medium text-stone-700">{getRoleLabel(p.role || "")}</span>
+                        </td>
+                        <td className="p-3 text-center hidden lg:table-cell">
+                          <span className="text-xs text-stone-600">{p.country || "—"}</span>
                         </td>
                         <td className="p-3 text-center">
                           <Badge variant="outline" className={`text-xs font-semibold ${VIP_COLORS[p.vip_tier] || VIP_COLORS['Visitor']}`}>
@@ -397,7 +429,7 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
                           {p.last_active_at ? format(new Date(p.last_active_at), "dd MMM HH:mm") : "—"}
                         </td>
                         <td className="p-3 text-center">
-                          <Button size="sm" variant="outline" onClick={(e) => { e.stopPropagation(); setSelectedUser(p); setUserActivities(null); setUserDocuments(null); setUserScannedCards(null); }} className="text-gold border-gold/30 hover:bg-gold/10 h-7 font-semibold">
+                          <Button size="sm" variant="outline" onClick={(e) => { e.stopPropagation(); setSelectedUser(p); setUserActivities(null); setUserDocuments(null); setUserScannedCards(null); setUserSessions(null); }} className="text-gold border-gold/30 hover:bg-gold/10 h-7 font-semibold">
                             <Eye className="w-3.5 h-3.5" />
                           </Button>
                         </td>
@@ -410,8 +442,8 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
           </Card>
         </div>
 
-        {/* User Detail Dialog - WIDER */}
-        <Dialog open={!!selectedUser} onOpenChange={() => { setSelectedUser(null); setUserActivities(null); setUserDocuments(null); setUserScannedCards(null); }}>
+        {/* User Detail Dialog */}
+        <Dialog open={!!selectedUser} onOpenChange={() => { setSelectedUser(null); setUserActivities(null); setUserDocuments(null); setUserScannedCards(null); setUserSessions(null); }}>
           <DialogContent className="bg-gradient-to-br from-[#FDFBF7] to-[#F5EBD7] border-2 border-gold/40 text-black max-w-5xl max-h-[90vh] overflow-y-auto">
             {selectedUser && (
               <>
@@ -427,7 +459,7 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
                 </DialogHeader>
 
                 <div className="space-y-4 mt-4">
-                  {/* Contact Info - single row */}
+                  {/* Contact Info */}
                   <div className="flex flex-wrap gap-6 text-sm bg-white/60 rounded-lg p-4 border border-gold/20">
                     <div><span className="text-stone-500">Email:</span> <span className="text-black font-medium">{selectedUser.email || "—"}</span></div>
                     <div><span className="text-stone-500">Phone:</span> <span className="text-black font-medium">{selectedUser.phone || "—"}</span></div>
@@ -435,7 +467,36 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
                     <div><span className="text-stone-500">Last Active:</span> <span className="text-black font-medium">{selectedUser.last_active_at ? format(new Date(selectedUser.last_active_at), "dd MMM yyyy HH:mm") : "—"}</span></div>
                   </div>
 
-                  {/* Scores - clear labels */}
+                  {/* NEW: Demographics Card */}
+                  {(selectedUser.nationality || selectedUser.country || selectedUser.city || selectedUser.preferred_language || selectedUser.age_range) && (
+                    <div className="bg-white/60 rounded-lg p-4 border border-gold/20">
+                      <p className="text-gold font-bold mb-3 flex items-center gap-2"><Globe className="w-4 h-4" /> Demographics</p>
+                      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm">
+                        <div>
+                          <p className="text-stone-400 text-xs">Nationality</p>
+                          <p className="text-black font-semibold">{selectedUser.nationality || "—"}</p>
+                        </div>
+                        <div>
+                          <p className="text-stone-400 text-xs">Country</p>
+                          <p className="text-black font-semibold">{selectedUser.country || "—"}</p>
+                        </div>
+                        <div>
+                          <p className="text-stone-400 text-xs">City</p>
+                          <p className="text-black font-semibold">{selectedUser.city || "—"}</p>
+                        </div>
+                        <div>
+                          <p className="text-stone-400 text-xs">Language</p>
+                          <p className="text-black font-semibold">{selectedUser.preferred_language || "—"}</p>
+                        </div>
+                        <div>
+                          <p className="text-stone-400 text-xs">Age Range</p>
+                          <p className="text-black font-semibold">{selectedUser.age_range || "—"}</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Scores */}
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     <div className="bg-white/60 rounded-lg p-3 text-center border border-gold/20">
                       <p className="text-xl font-bold text-purple-700">{selectedUser.intent_score}/100</p>
@@ -459,9 +520,8 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
                     </div>
                   </div>
 
-                  {/* Real Activity Stats - 2 columns */}
+                  {/* Activity Stats + 30-Day Actions — 2 columns */}
                   <div className="grid grid-cols-2 gap-3">
-                    {/* Left: Session & Time Stats */}
                     <div className="bg-white/60 rounded-lg p-4 border border-gold/20">
                       <p className="text-gold font-bold mb-3 flex items-center gap-2"><Clock className="w-4 h-4" /> Activity Stats</p>
                       <div className="space-y-2 text-sm text-stone-700">
@@ -474,7 +534,6 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
                       </div>
                     </div>
 
-                    {/* Right: Behavioral Signals */}
                     <div className="bg-white/60 rounded-lg p-4 border border-gold/20">
                       <p className="text-gold font-bold mb-3 flex items-center gap-2"><MousePointerClick className="w-4 h-4" /> 30-Day Actions</p>
                       <div className="space-y-2 text-sm text-stone-700">
@@ -484,7 +543,6 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
                         <div className="flex justify-between"><span>Searches</span><span className="text-black font-bold">{selectedUser.searches_30d}</span></div>
                       </div>
                       
-                      {/* Device Mix */}
                       <p className="text-gold font-bold mt-4 mb-2 flex items-center gap-2"><Monitor className="w-4 h-4" /> Devices Used</p>
                       {selectedUser.device_mix && Object.entries(selectedUser.device_mix).length > 0 ? (
                         Object.entries(selectedUser.device_mix).map(([d, c]) => (
@@ -500,8 +558,33 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
                     </div>
                   </div>
 
-                  {/* Top Pages */}
-                  {selectedUser.top_pages?.length > 0 && (
+                  {/* NEW: Per-Page Time Breakdown */}
+                  {selectedUser.page_time_breakdown && Object.keys(selectedUser.page_time_breakdown).length > 0 && (
+                    <div className="bg-white/60 rounded-lg p-4 border border-gold/20">
+                      <p className="text-gold font-bold mb-3 flex items-center gap-2"><BarChart3 className="w-4 h-4" /> Time Spent Per Page</p>
+                      <div className="space-y-2">
+                        {Object.entries(selectedUser.page_time_breakdown)
+                          .sort(([, a], [, b]) => (b as number) - (a as number))
+                          .slice(0, 15)
+                          .map(([page, seconds]) => {
+                            const maxSeconds = Math.max(...Object.values(selectedUser.page_time_breakdown!).map(Number));
+                            const widthPercent = maxSeconds > 0 ? ((seconds as number) / maxSeconds) * 100 : 0;
+                            return (
+                              <div key={page} className="flex items-center gap-3 text-xs">
+                                <span className="text-stone-600 truncate w-40 shrink-0" title={page}>{page}</span>
+                                <div className="flex-1 h-4 bg-gold/10 rounded-full overflow-hidden">
+                                  <div className="h-full bg-gradient-to-r from-gold/60 to-gold rounded-full transition-all" style={{ width: `${widthPercent}%` }} />
+                                </div>
+                                <span className="text-black font-bold w-16 text-right shrink-0">{formatDuration(seconds as number)}</span>
+                              </div>
+                            );
+                          })}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Top Pages (fallback if no time breakdown) */}
+                  {(!selectedUser.page_time_breakdown || Object.keys(selectedUser.page_time_breakdown).length === 0) && selectedUser.top_pages?.length > 0 && (
                     <div className="bg-white/60 rounded-lg p-4 border border-gold/20">
                       <p className="text-gold font-bold mb-2 flex items-center gap-2"><MapPin className="w-4 h-4" /> Top Pages Visited</p>
                       <div className="grid grid-cols-2 gap-1">
@@ -534,14 +617,43 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
                         disabled={activitiesLoading}
                         className="text-gold border-2 border-gold/40 hover:bg-gold/10 font-semibold bg-white/80">
                         {activitiesLoading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
-                        Load Activity Timeline, Documents & Scanned Cards
+                        Load Session History, Timeline & Documents
                       </Button>
                     </div>
                   )}
 
                   {activitiesLoading && <div className="flex justify-center py-4"><Loader2 className="w-5 h-5 text-gold animate-spin" /></div>}
 
-                  {/* Activity Timeline - separate section */}
+                  {/* NEW: Session History Timeline */}
+                  {userSessions && userSessions.length > 0 && (
+                    <div className="bg-white/60 rounded-lg p-4 border border-gold/20">
+                      <p className="text-gold font-bold mb-3 flex items-center gap-2"><LogIn className="w-4 h-4" /> Session History ({userSessions.length} sessions)</p>
+                      <ScrollArea className="h-[220px]">
+                        <div className="space-y-1.5">
+                          {userSessions.map((sess: any, i: number) => (
+                            <div key={i} className="flex items-center gap-3 text-xs border-b border-gold/10 pb-1.5 py-1">
+                              <span className="text-stone-400 whitespace-nowrap w-28 shrink-0">
+                                {format(new Date(sess.started_at), "dd MMM HH:mm")}
+                              </span>
+                              <span className="text-stone-500">→</span>
+                              <span className="text-stone-400 whitespace-nowrap w-28 shrink-0">
+                                {sess.ended_at ? format(new Date(sess.ended_at), "dd MMM HH:mm") : <Badge variant="outline" className="text-[10px] h-4 px-1 border-emerald-500/30 bg-emerald-500/10 text-emerald-700">Active</Badge>}
+                              </span>
+                              <span className="text-black font-semibold w-14 text-right">{formatDuration(sess.duration_seconds || 0)}</span>
+                              <div className="flex items-center gap-1 text-stone-500">
+                                <DeviceIcon device={sess.device_type || "desktop"} />
+                                <span className="capitalize">{sess.device_type || "—"}</span>
+                              </div>
+                              {sess.browser && <span className="text-stone-400">{sess.browser}</span>}
+                              <span className="text-stone-400 ml-auto">{sess.pages_visited || 0} pages</span>
+                            </div>
+                          ))}
+                        </div>
+                      </ScrollArea>
+                    </div>
+                  )}
+
+                  {/* Activity Timeline */}
                   {userActivities && userActivities.length > 0 && (
                     <div className="bg-white/60 rounded-lg p-4 border border-gold/20">
                       <p className="text-gold font-bold mb-3 flex items-center gap-2"><Clock className="w-4 h-4" /> Activity Timeline ({userActivities.length} events)</p>
@@ -562,7 +674,7 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
                     </div>
                   )}
 
-                  {/* Documents - separate section */}
+                  {/* Documents */}
                   {userDocuments && userDocuments.length > 0 && (
                     <div className="bg-white/60 rounded-lg p-4 border border-gold/20">
                       <p className="text-gold font-bold mb-3 flex items-center gap-2"><FileText className="w-4 h-4" /> Documents ({userDocuments.length})</p>
@@ -579,7 +691,7 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
                     </div>
                   )}
 
-                  {/* Scanned Business Cards - separate section */}
+                  {/* Scanned Business Cards */}
                   {userScannedCards && userScannedCards.length > 0 && (
                     <div className="bg-white/60 rounded-lg p-4 border border-gold/20">
                       <p className="text-gold font-bold mb-3 flex items-center gap-2"><CreditCard className="w-4 h-4" /> Scanned Business Cards ({userScannedCards.length})</p>
@@ -604,9 +716,9 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
                   )}
 
                   {/* No data message */}
-                  {userActivities && userActivities.length === 0 && !userScannedCards?.length && !userDocuments?.length && (
+                  {userActivities && userActivities.length === 0 && !userScannedCards?.length && !userDocuments?.length && !userSessions?.length && (
                     <div className="bg-white/60 rounded-lg p-4 border border-gold/20 text-center">
-                      <p className="text-xs text-stone-400">No activities, documents, or scanned cards found</p>
+                      <p className="text-xs text-stone-400">No activities, sessions, documents, or scanned cards found</p>
                     </div>
                   )}
 
