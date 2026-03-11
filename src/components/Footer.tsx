@@ -405,6 +405,10 @@ const Footer = () => {
     { href: "/presentations", label: "Presentations" },
     { href: "/e-signature", label: "E-Signature" },
     { href: "/meeting-center", label: "Meeting Center" },
+    { href: "/contract-forms", label: "Contract Forms" },
+    { href: "/pricing", label: "Pricing" },
+    { href: "/onboarding", label: "Onboarding" },
+    { href: "/client-portal", label: "Client Portal" },
   ];
 
   // Professional Tools
