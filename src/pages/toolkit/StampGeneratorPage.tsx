@@ -125,7 +125,7 @@ export default function StampGeneratorLanding() {
       </section>
 
       {/* What's included */}
-      <section className="py-16 px-6 bg-white">
+      <section className="py-16 px-6 bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)]">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold text-[hsl(var(--foreground))] text-center mb-2">Export Pack Includes</h2>
           <p className="text-center text-[hsl(var(--muted-foreground))] text-sm mb-8">Every download includes all these formats — ready for print and digital use</p>
