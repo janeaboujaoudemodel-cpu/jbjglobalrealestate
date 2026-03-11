@@ -222,7 +222,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Broker Education", href: "/broker-education", icon: BookOpen },
 
   // ── Investor ──
-  { label: "Investor Hub", href: "/investor-hub", icon: TrendingUp, section: "INVESTOR" },
+  { label: "Investor Hub", href: "/investor-hub", icon: TrendingUp, section: "INVESTOR", megaMenu: 'investor' },
   { label: "Investor Services", href: "/investors", icon: Briefcase },
   { label: "Join Investor List", href: "/investors/join", icon: UserPlus },
   { label: "Investor Dashboard", href: "/investor-dashboard", icon: LayoutDashboard },
