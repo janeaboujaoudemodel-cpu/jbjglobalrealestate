@@ -1,33 +1,41 @@
 
 
-## Plan: Enrich Mode Descriptions & Upgrade Header Icon Visibility
+## Plan: Fix All Email Issues Across All Templates
 
-### Part 1: Richer Mode Descriptions (`src/components/ModeSwitcher.tsx`)
+### Problems Identified
 
-Update `MODE_CONFIG` descriptions to be more informative and premium:
+1. **Recommended For You icons disappeared** — Inline SVGs are stripped by Gmail and most email clients. Must revert to hosted PNG images (`ai-tools.png`, `guides.png`, `properties.png` already exist in `public/email-icons/`).
 
-- **Investor**: "Browse properties, access ROI tools, upload listings, explore guides & market insights"
-- **Broker**: "CRM dashboard, education hub, sell properties, upload listings, coordinate with clients & close deals"  
-- **Investor + Broker**: "Full access to investor tools, broker dashboard, CRM, listings, guides & market intelligence"
-- **Developer**: "Submit projects, upload terraces & documents, manage launches, marketing materials & event calendar"
+2. **Social media footer icons not rendering** — Same issue: `socialLinksFooter()` loads external `.svg` files via `<img>` tags, but Gmail blocks SVG images entirely. Must switch to hosted `.png` files. Currently missing `social-facebook.png` — need to confirm or create it.
 
-Also widen the dropdown from `w-56` to `w-72` so the longer descriptions breathe properly.
+3. **Email split into multiple visual cards** — Several sub-sections (`ticketSupportEmbed`, `readyToGetStartedHtml`, `recommendedActionsHtml`) each have their own `border`, `border-radius`, and `background` styles creating distinct visual boxes. These need to be softened so they sit seamlessly inside the single continuous card.
 
-### Part 2: Premium Visible Header Icons (`src/components/navigation/HorizontalUtilityBar.tsx`)
+### Changes (all in `supabase/functions/_shared/email-html.ts`)
 
-Currently most icons use `text-gold/70` or `text-gold/60` — they're faded and hard to see. The ModeSwitcher stands out because it has a visible colored background pill.
+#### A. Recommended For You — Revert to PNG hosted images
+- Change `recommendedCard()` back to using `iconImg()` with PNG paths
+- Remove the `RECOMMENDED_ICONS` inline SVG object
+- Ensure circular frame clips the PNG with `overflow:hidden` on the `<td>` to prevent square backgrounds
+- Signature: `recommendedCard(title, href, iconPath, alt)` — restore the original parameters
 
-**Fix**: Give each icon button a subtle bordered pill style matching the ModeSwitcher's premium feel:
-- Change icon buttons (Favorites, Tasks, Notifications, Inbox, Dashboard, Settings, Advanced Filter) from bare `hover:bg-gold/10` to `border border-gold/20 bg-gold/5 hover:bg-gold/15 hover:border-gold/40`
-- Bump icon colors from `text-gold/70` → `text-gold` for full visibility
-- Add `h-7 px-1.5` consistent sizing with subtle gold borders
+#### B. Social Footer — Switch to PNG with white pearl background
+- Replace `socialLinksFooter()` to use the inline `SVG` object icons (instagram, facebook, linkedin, tiktok, youtube) that are already defined at the top of the file — these render as raw HTML inside `<td>` elements, not as `<img>` tags, so they should survive email client processing
+- Actually, since Gmail strips ALL SVG (both inline and `<img>`), switch to using the `.png` files: `social-instagram.png`, `social-linkedin.png`, `social-tiktok.png`, `social-youtube.png`
+- Create `social-facebook.png` if missing
+- Style each icon circle: white/pearl (#FDFBF7) background, gold border, black icon inside
 
-This gives all icons the same breathable, premium pill treatment as the sidebar toggle and mode switcher.
+#### C. Single Card Layout — Remove visual fragmentation
+- `ticketSupportEmbed()`: Remove the heavy gradient background and red border; make it blend into the card
+- `readyToGetStartedHtml()`: Remove the outer border and separate background so it flows within the card
+- `inquiryBox()`: Soften its standalone bordered look
+- Keep all content inside the single `emailShell` wrapper card with no sub-borders that create separation
 
-### Files
+#### D. Deploy + Send Test Email
+- Deploy the updated edge function
+- Immediately send a test welcome email to `janeaboujaoudenails@gmail.com`
+- Take a screenshot as proof
 
-| File | Changes |
-|------|---------|
-| `src/components/ModeSwitcher.tsx` | Richer descriptions, wider dropdown |
-| `src/components/navigation/HorizontalUtilityBar.tsx` | Upgrade all icon buttons to bordered gold pills with full-opacity icons |
+### Files Modified
+- `supabase/functions/_shared/email-html.ts` — all icon and layout fixes
+- `public/email-icons/social-facebook.png` — create if missing (or use existing assets)
 

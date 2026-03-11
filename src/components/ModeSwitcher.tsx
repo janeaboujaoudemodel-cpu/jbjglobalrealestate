@@ -25,7 +25,7 @@ const MODE_CONFIG: Record<UserMode, { label: string; shortLabel: string; icon: t
     color: 'text-emerald-500',
     bgColor: 'bg-emerald-500/10 border-emerald-500/30',
     borderColor: 'border-emerald-500/40',
-    description: 'Browse properties & invest'
+    description: 'Browse properties, access ROI tools, upload listings, explore guides & market insights'
   },
   broker: {
     label: 'Broker Mode',
@@ -34,7 +34,7 @@ const MODE_CONFIG: Record<UserMode, { label: string; shortLabel: string; icon: t
     color: 'text-blue-500',
     bgColor: 'bg-blue-500/10 border-blue-500/30',
     borderColor: 'border-blue-500/40',
-    description: 'Access broker tools & dashboard'
+    description: 'CRM dashboard, education hub, sell properties, upload listings, coordinate with clients & close deals'
   },
   investor_broker: {
     label: 'Investor + Broker',
@@ -43,7 +43,7 @@ const MODE_CONFIG: Record<UserMode, { label: string; shortLabel: string; icon: t
     color: 'text-purple-500',
     bgColor: 'bg-purple-500/10 border-purple-500/30',
     borderColor: 'border-purple-500/40',
-    description: 'Full access to both modes'
+    description: 'Full access to investor tools, broker dashboard, CRM, listings, guides & market intelligence'
   },
   developer: {
     label: 'Developer Mode',
@@ -52,7 +52,7 @@ const MODE_CONFIG: Record<UserMode, { label: string; shortLabel: string; icon: t
     color: 'text-amber-500',
     bgColor: 'bg-amber-500/10 border-amber-500/30',
     borderColor: 'border-amber-500/40',
-    description: 'Submit projects & manage launches'
+    description: 'Submit projects, upload terraces & documents, manage launches, marketing materials & event calendar'
   }
 };
 
@@ -141,7 +141,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
         
         <DropdownMenuContent 
           align="center" 
-          className="w-56 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 shadow-xl rounded-xl p-2 z-[10001]"
+          className="w-72 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 shadow-xl rounded-xl p-2 z-[10001]"
           sideOffset={5}
           onCloseAutoFocus={(e) => e.preventDefault()}
         >

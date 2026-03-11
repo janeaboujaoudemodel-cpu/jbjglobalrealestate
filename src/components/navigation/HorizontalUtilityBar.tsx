@@ -164,10 +164,10 @@ export default function HorizontalUtilityBar() {
           <TooltipTrigger asChild>
             <Link
               to="/favorites"
-              className="h-7 w-7 flex items-center justify-center rounded-md hover:bg-gold/10 transition-all group"
+              className="h-7 w-7 flex items-center justify-center rounded-md border border-gold/20 bg-gold/5 hover:bg-gold/15 hover:border-gold/40 transition-all group"
               aria-label="Favorites"
             >
-              <Heart className="w-3.5 h-3.5 text-gold/70 group-hover:text-gold transition-colors" />
+              <Heart className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-transform" />
             </Link>
           </TooltipTrigger>
           <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Favorites</TooltipContent>
@@ -247,10 +247,10 @@ export default function HorizontalUtilityBar() {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  to="/my-dashboard#tasks"
-                  className="h-7 flex items-center gap-1 rounded-md hover:bg-gold/10 transition-all px-1.5 group relative"
-                >
-                  <ClipboardList className="w-3.5 h-3.5 text-gold/70 group-hover:text-gold transition-colors" />
+                   to="/my-dashboard#tasks"
+                   className="h-7 flex items-center gap-1 rounded-md border border-gold/20 bg-gold/5 hover:bg-gold/15 hover:border-gold/40 transition-all px-1.5 group relative"
+                 >
+                   <ClipboardList className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-transform" />
                   <span className="text-[10px] font-medium text-black/50 hidden xl:inline">Tasks</span>
                   {(alerts?.pendingTasks || 0) > 0 && (
                     <span className="absolute -top-1 -right-0.5 w-4 h-4 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center">
@@ -266,10 +266,10 @@ export default function HorizontalUtilityBar() {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  to="/my-dashboard#notifications"
-                  className="h-7 w-7 flex items-center justify-center rounded-md hover:bg-gold/10 transition-all group relative"
-                >
-                  <Bell className="w-3.5 h-3.5 text-gold/70 group-hover:text-gold transition-colors" />
+                   to="/my-dashboard#notifications"
+                   className="h-7 w-7 flex items-center justify-center rounded-md border border-gold/20 bg-gold/5 hover:bg-gold/15 hover:border-gold/40 transition-all group relative"
+                 >
+                   <Bell className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-transform" />
                   {(alerts?.totalNotificationAlerts || 0) > 0 && (
                     <span className="absolute -top-1 -right-0.5 w-4 h-4 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center">
                       {alerts!.totalNotificationAlerts > 9 ? '9+' : alerts!.totalNotificationAlerts}
@@ -286,10 +286,10 @@ export default function HorizontalUtilityBar() {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  to="/my-dashboard#inbox"
-                  className="h-7 w-7 flex items-center justify-center rounded-md hover:bg-gold/10 transition-all group"
-                >
-                  <Inbox className="w-3.5 h-3.5 text-gold/70 group-hover:text-gold transition-colors" />
+                   to="/my-dashboard#inbox"
+                   className="h-7 w-7 flex items-center justify-center rounded-md border border-gold/20 bg-gold/5 hover:bg-gold/15 hover:border-gold/40 transition-all group"
+                 >
+                   <Inbox className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-transform" />
                 </Link>
               </TooltipTrigger>
               <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Inbox</TooltipContent>
@@ -313,7 +313,7 @@ export default function HorizontalUtilityBar() {
           <TooltipTrigger asChild>
             <Link
               to="/my-dashboard"
-              className="h-7 w-7 flex items-center justify-center rounded-md hover:bg-gold/10 transition-all group"
+              className="h-7 w-7 flex items-center justify-center rounded-md border border-gold/20 bg-gold/5 hover:bg-gold/15 hover:border-gold/40 transition-all group"
               aria-label="Dashboard"
             >
               <LayoutDashboard className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-transform" />
@@ -330,10 +330,10 @@ export default function HorizontalUtilityBar() {
           <TooltipTrigger asChild>
             <Link
               to="/profile"
-              className="h-7 w-7 flex items-center justify-center rounded-md hover:bg-gold/10 transition-all group"
+              className="h-7 w-7 flex items-center justify-center rounded-md border border-gold/20 bg-gold/5 hover:bg-gold/15 hover:border-gold/40 transition-all group"
               aria-label="Settings"
             >
-              <Settings className="w-3.5 h-3.5 text-gold/60 group-hover:text-gold transition-colors" />
+              <Settings className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-transform" />
             </Link>
           </TooltipTrigger>
           <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Settings & Profile</TooltipContent>
