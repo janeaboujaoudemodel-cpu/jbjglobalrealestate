@@ -1,35 +1,41 @@
 
 
-## Plan: Fix Search Modal Z-Index & Audit Global Overlay Stacking
+## Plan: Fix All Email Issues Across All Templates
 
-### Root Cause
+### Problems Identified
 
-The search modal (`GlobalSearchModal.tsx`) uses `z-50` (= `z-index: 50`) for both its backdrop and panel. But the vertical sidebar uses `z-[9999]` and the horizontal bar uses `z-[9996]`. The search modal renders **behind** the entire navigation frame, making it appear cropped/hidden on the right side where the sidebar sits.
+1. **Recommended For You icons disappeared** — Inline SVGs are stripped by Gmail and most email clients. Must revert to hosted PNG images (`ai-tools.png`, `guides.png`, `properties.png` already exist in `public/email-icons/`).
 
-### Fix 1: GlobalSearchModal — Z-Index & Positioning
+2. **Social media footer icons not rendering** — Same issue: `socialLinksFooter()` loads external `.svg` files via `<img>` tags, but Gmail blocks SVG images entirely. Must switch to hosted `.png` files. Currently missing `social-facebook.png` — need to confirm or create it.
 
-**File**: `src/components/GlobalSearchModal.tsx`
+3. **Email split into multiple visual cards** — Several sub-sections (`ticketSupportEmbed`, `readyToGetStartedHtml`, `recommendedActionsHtml`) each have their own `border`, `border-radius`, and `background` styles creating distinct visual boxes. These need to be softened so they sit seamlessly inside the single continuous card.
 
-- **Backdrop** (line 413): Change `z-50` to `z-[10000]` — must sit above the sidebar (`z-[9999]`) and horizontal bar (`z-[9996]`)
-- **Modal panel** (line 423): Change `z-50` to `z-[10001]` — above backdrop
-- The `left-1/2 -translate-x-1/2` centering is fine since it's a fixed overlay that covers the full viewport with its own backdrop
+### Changes (all in `supabase/functions/_shared/email-html.ts`)
 
-### Fix 2: Audit All Other z-50 Overlays
+#### A. Recommended For You — Revert to PNG hosted images
+- Change `recommendedCard()` back to using `iconImg()` with PNG paths
+- Remove the `RECOMMENDED_ICONS` inline SVG object
+- Ensure circular frame clips the PNG with `overflow:hidden` on the `<td>` to prevent square backgrounds
+- Signature: `recommendedCard(title, href, iconPath, alt)` — restore the original parameters
 
-After reviewing the 34 files using `z-50`, most are page-local modals (admin panels, design galleries, digital card shares) that don't conflict with the global nav because they render within their own page context. However, these global-level overlays also need the z-index bump:
+#### B. Social Footer — Switch to PNG with white pearl background
+- Replace `socialLinksFooter()` to use the inline `SVG` object icons (instagram, facebook, linkedin, tiktok, youtube) that are already defined at the top of the file — these render as raw HTML inside `<td>` elements, not as `<img>` tags, so they should survive email client processing
+- Actually, since Gmail strips ALL SVG (both inline and `<img>`), switch to using the `.png` files: `social-instagram.png`, `social-linkedin.png`, `social-tiktok.png`, `social-youtube.png`
+- Create `social-facebook.png` if missing
+- Style each icon circle: white/pearl (#FDFBF7) background, gold border, black icon inside
 
-| Component | Current | Fix To |
-|-----------|---------|--------|
-| `GlobalSearchModal.tsx` backdrop | `z-50` | `z-[10000]` |
-| `GlobalSearchModal.tsx` panel | `z-50` | `z-[10001]` |
-| `CommunitySearchModal.tsx` | Uses Dialog (already `z-[10200]` via popover) | No change needed |
-| `CommandPalette` | Uses Dialog component | Check and fix if needed |
+#### C. Single Card Layout — Remove visual fragmentation
+- `ticketSupportEmbed()`: Remove the heavy gradient background and red border; make it blend into the card
+- `readyToGetStartedHtml()`: Remove the outer border and separate background so it flows within the card
+- `inquiryBox()`: Soften its standalone bordered look
+- Keep all content inside the single `emailShell` wrapper card with no sub-borders that create separation
 
-The page-specific `z-50` modals (admin chat, design gallery, CRM sidebar, etc.) are fine — they don't compete with the navigation frame because they render inside the main content area which is already offset by the sidebar.
+#### D. Deploy + Send Test Email
+- Deploy the updated edge function
+- Immediately send a test welcome email to `janeaboujaoudenails@gmail.com`
+- Take a screenshot as proof
 
-### Files
-
-| File | Changes |
-|------|---------|
-| `src/components/GlobalSearchModal.tsx` | Bump backdrop to `z-[10000]`, panel to `z-[10001]` |
+### Files Modified
+- `supabase/functions/_shared/email-html.ts` — all icon and layout fixes
+- `public/email-icons/social-facebook.png` — create if missing (or use existing assets)
 
