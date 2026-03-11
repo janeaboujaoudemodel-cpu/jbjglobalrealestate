@@ -21,6 +21,7 @@ interface MortgageCalculatorProps {
   defaultPrice?: number;
   compact?: boolean;
   showAssistant?: boolean;
+  showHeading?: boolean;
   context?: {
     projectName?: string;
     location?: string;
