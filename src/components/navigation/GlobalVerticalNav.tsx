@@ -255,7 +255,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Risk Disclosure", href: "/risk-disclosure", icon: FileText },
 
   // ── Productivity ──
-  { label: "Spreadsheet", href: "/spreadsheet", icon: BarChart3, section: "PRODUCTIVITY" },
+  { label: "Spreadsheet", href: "/spreadsheet", icon: BarChart3, section: "PRODUCTIVITY", megaMenu: 'productivity' },
   { label: "Documents", href: "/documents", icon: FileText },
   { label: "QR Generator", href: "/qr-generator", icon: QrCode },
   { label: "Contract Forms", href: "/contract-forms", icon: FileSignature },
