@@ -366,7 +366,7 @@ const PropertiesReelly = () => {
       {/* Standard list mode — edge-to-edge background, 2-col grid, pagination */}
       {!isMapMode && (
         <section className="py-8 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark min-h-screen">
-          <div className={`${showStickyNav ? 'lg:pl-[200px]' : ''} px-4 sm:px-6 lg:px-8`}>
+          <div className="px-4 sm:px-6 lg:px-8 max-w-[1600px] mx-auto">
             
             {/* Results Count */}
             <div className="mb-6 flex items-center justify-between">

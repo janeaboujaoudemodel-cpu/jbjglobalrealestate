@@ -146,7 +146,7 @@ const MortgageCalculatorPage = () => {
         </div>
       </div>
 
-      {/* CTA Section - Premium Champagne */}
+      {/* CTA Section - Full-bleed, square corners, premium beige */}
       <div className="py-16 md:py-24 bg-gradient-to-b from-[#E8DCC8] to-[#F5EBD7]">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
@@ -161,26 +161,26 @@ const MortgageCalculatorPage = () => {
             </p>
             <button 
               onClick={() => setIsInquiryOpen(true)}
-              className="relative inline-flex items-center justify-center gap-2 px-10 py-5 text-lg font-bold rounded-xl transition-all duration-300 bg-black border-2 border-gold/60 hover:scale-[1.02] transform active:scale-95 group"
+              className="relative inline-flex items-center justify-center gap-2 px-10 py-5 text-lg font-bold transition-all duration-300 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/60 hover:scale-[1.02] transform active:scale-95 group text-black"
               style={{
                 boxShadow: `
                   0 10px 30px rgba(200,167,102,0.3),
-                  0 6px 15px rgba(0,0,0,0.3),
+                  0 6px 15px rgba(0,0,0,0.15),
                   0 0 20px rgba(200,167,102,0.2)
                 `,
               }}
             >
-              <span className="text-white group-hover:text-gold transition-colors">{t('mortgage.contactAdvisor')}</span>
+              <span className="font-bold group-hover:text-gold transition-colors">{t('mortgage.contactAdvisor')}</span>
               <ArrowUpRight className="w-5 h-5 text-gold group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
             </button>
           </div>
         </div>
 
-        {/* Financial Disclaimer */}
-        <div className="mt-8 p-4 bg-zinc-900/60 border border-gold/20 rounded-xl max-w-4xl mx-auto">
-          <p className="text-zinc-400 text-sm leading-relaxed">
-            <strong className="text-zinc-300">Disclaimer:</strong> This calculator provides estimates for informational purposes only. Does not constitute financial advice.{" "}
-            <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
+        {/* Financial Disclaimer — premium beige styling */}
+        <div className="mt-8 p-5 bg-gradient-to-r from-[#D4C4A8]/40 to-[#E8DCC8]/40 border border-gold/30 max-w-4xl mx-auto">
+          <p className="text-black/60 text-sm leading-relaxed">
+            <strong className="text-black/80">Disclaimer:</strong> This calculator provides estimates for informational purposes only. Does not constitute financial advice.{" "}
+            <Link to="/contact" className="text-gold hover:underline font-medium">Contact our team</Link> for professional guidance.
           </p>
         </div>
       </div>

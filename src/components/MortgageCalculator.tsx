@@ -101,7 +101,8 @@ const MortgageCalculator = ({
   if (compact) {
     return (
       <div className="max-w-5xl mx-auto">
-        {/* Title */}
+        {/* Title — only shown if showHeading is true */}
+        {showHeading && (
         <div className="text-center mb-6 md:mb-8">
           <h3 className="text-zinc-900 text-2xl sm:text-3xl md:text-4xl font-bold whitespace-nowrap" style={{ fontFamily: "Poppins, sans-serif" }}>
             Mortgage <span className="text-gold">Calculator</span>
@@ -110,6 +111,7 @@ const MortgageCalculator = ({
             Estimate your monthly payments and explore financing options.
           </p>
         </div>
+        )}
 
         {/* Interactive Sliders */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
