@@ -582,6 +582,11 @@ export default function GlobalVerticalNav() {
       if (firstItem) {
         navigate(firstItem.href);
       }
+      // Auto-scroll section into view
+      setTimeout(() => {
+        const el = document.getElementById(`nav-section-${section.replace(/\s+/g, '-').toLowerCase()}`);
+        el?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 150);
     }
   };
 
@@ -641,7 +646,7 @@ export default function GlobalVerticalNav() {
     }
     return shouldHighlight
       ? "bg-gradient-to-r from-gold/20 to-gold/10 text-black border border-gold/40 font-bold"
-      : "text-black/90 hover:bg-white/60 hover:text-black border border-transparent hover:border-gold/15";
+      : "text-black/90 hover:bg-white/60 hover:text-black border border-gold/20 hover:border-gold/30";
   };
 
   const getIconStyle = (item: NavItem, sectionKey?: string) => {
@@ -674,10 +679,10 @@ export default function GlobalVerticalNav() {
           />
           <div
             className="fixed z-[10000] flex items-start justify-start pointer-events-none"
-            style={{ left: sidebarWidth, top: 0, bottom: 0, right: 0 }}
+            style={{ left: sidebarWidth, top: '40px', bottom: 0, right: 0 }}
           >
             <div
-              className="pointer-events-auto w-[min(560px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[85vh]"
+              className="pointer-events-auto w-[min(560px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[calc(100vh-60px)]"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between px-5 py-3.5 border-b border-gold/20 bg-gradient-to-r from-[#E8DCC8]/50 to-transparent">
@@ -746,10 +751,10 @@ export default function GlobalVerticalNav() {
           />
           <div
             className="fixed z-[10000] flex items-start justify-start pointer-events-none"
-            style={{ left: sidebarWidth, top: 0, bottom: 0, right: 0 }}
+            style={{ left: sidebarWidth, top: '40px', bottom: 0, right: 0 }}
           >
             <div
-              className="pointer-events-auto w-[min(440px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[80vh]"
+              className="pointer-events-auto w-[min(440px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[calc(100vh-60px)]"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
@@ -832,10 +837,10 @@ export default function GlobalVerticalNav() {
         />
         <div
           className="fixed z-[10000] flex items-start justify-start pointer-events-none"
-          style={{ left: sidebarWidth, top: 0, bottom: 0, right: 0 }}
+          style={{ left: sidebarWidth, top: '40px', bottom: 0, right: 0 }}
         >
           <div
-            className={`pointer-events-auto w-[min(440px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] animate-in slide-in-from-left-2 fade-in duration-200 ${isLargeMenu ? 'max-h-[80vh]' : 'max-h-[60vh]'}`}
+            className={`pointer-events-auto w-[min(440px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] animate-in slide-in-from-left-2 fade-in duration-200 ${isLargeMenu ? 'max-h-[calc(100vh-60px)]' : 'max-h-[calc(100vh-120px)]'}`}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between px-5 py-3.5 border-b border-gold/20 bg-gradient-to-r from-[#E8DCC8]/50 to-transparent">
@@ -959,7 +964,7 @@ export default function GlobalVerticalNav() {
               <React.Fragment key={sectionKey}>
                 {sectionIdx > 0 && <hr className="border-gold/15 mx-1 my-1" />}
 
-                <div>
+                <div id={`nav-section-${sectionKey.replace(/\s+/g, '-').toLowerCase()}`}>
                   <button
                     onClick={() => toggleSection(sectionKey)}
                     className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-[11px] uppercase tracking-[0.15em] font-bold transition-all border ${
