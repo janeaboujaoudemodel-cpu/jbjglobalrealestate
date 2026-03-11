@@ -257,6 +257,11 @@ const Index = () => {
         </Suspense>
       </div>
 
+      {/* DEVELOPER PORTAL CTA */}
+      <Suspense fallback={<SectionLoader />}>
+        <DeveloperPortalCTA />
+      </Suspense>
+
       {/* DIVIDER between Developer Partners and Trust Bar */}
       <SectionDivider fullWidth />
 
