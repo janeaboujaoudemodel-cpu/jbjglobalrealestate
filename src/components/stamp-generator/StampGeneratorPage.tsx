@@ -1267,7 +1267,7 @@ function ConceptCard({
   const displaySvg = svgOverride || concept.svgSource;
 
   return (
-    <div className={`group bg-white rounded-2xl border-2 transition-all shadow-sm hover:shadow-md ${isSelected ? 'border-[hsl(var(--gold))] shadow-[0_0_0_3px_hsl(var(--gold)/0.15)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]'}`}>
+    <div className={`group bg-card/80 rounded-2xl border-2 transition-all shadow-sm hover:shadow-md ${isSelected ? 'border-gold shadow-[0_0_0_3px_hsl(var(--gold)/0.15)]' : 'border-gold/30 hover:border-gold/50'}`}>
       <div className="relative p-4 flex items-center justify-center bg-[hsl(var(--pearl-1))] rounded-t-2xl min-h-[180px]">
         {isSelected && (
           <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[hsl(var(--gold))] flex items-center justify-center z-10">
