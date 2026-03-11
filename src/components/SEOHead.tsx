@@ -1,6 +1,11 @@
 import { useEffect } from 'react';
 import { useFounderVisibility } from '@/contexts/FounderVisibilityContext';
 
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+
 interface SEOHeadProps {
   title: string;
   description?: string;
@@ -9,6 +14,8 @@ interface SEOHeadProps {
   ogImage?: string;
   ogType?: 'website' | 'article' | 'product';
   noIndex?: boolean;
+  /** Pass FAQ items to inject FAQPage JSON-LD for Google rich snippets */
+  faqItems?: FAQItem[];
 }
 
 const BASE_URL = 'https://jbj.ae';
