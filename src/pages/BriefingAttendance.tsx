@@ -210,13 +210,15 @@ const BriefingAttendance = () => {
       }
 
       // Notify owner with GPS
-      await supabase.from('user_notifications' as any).insert({
-        user_id: '4944592b-93f1-4e05-ab59-4ebe1fee54f1',
-        type: 'briefing_confirmed',
-        title: `Attendance Confirmed: ${briefing?.project_name}`,
-        message: `A broker confirmed attendance at ${briefing?.project_name}. GPS: ${gpsLocation.lat.toFixed(4)}, ${gpsLocation.lng.toFixed(4)}. Selfie uploaded.`,
-        is_read: false,
-      }).catch(() => {});
+      try {
+        await supabase.from('user_notifications' as any).insert({
+          user_id: '4944592b-93f1-4e05-ab59-4ebe1fee54f1',
+          type: 'briefing_confirmed',
+          title: `Attendance Confirmed: ${briefing?.project_name}`,
+          message: `A broker confirmed attendance at ${briefing?.project_name}. GPS: ${gpsLocation.lat.toFixed(4)}, ${gpsLocation.lng.toFixed(4)}. Selfie uploaded.`,
+          is_read: false,
+        });
+      } catch {}
 
       toast.success('Attendance confirmed! Points awarded.');
       loadData();

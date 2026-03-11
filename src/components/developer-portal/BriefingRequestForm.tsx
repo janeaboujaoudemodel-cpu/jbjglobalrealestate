@@ -100,12 +100,9 @@ const BriefingRequestForm = ({ representativeId, developerName }: BriefingReques
           points_earned: 3,
         } as any);
         // Update rep activity score
-        await supabase.rpc('increment_field' as any, {
-          row_id: representativeId,
-          table_name: 'developer_representatives',
-          field_name: 'activity_score',
-          increment_value: 3,
-        }).then(() => {}).catch(() => {});
+        await supabase.from('developer_representatives').update({
+          activity_score: 3,
+        } as any).eq('id', representativeId).then(() => {});
       } catch {}
 
       // Create admin task

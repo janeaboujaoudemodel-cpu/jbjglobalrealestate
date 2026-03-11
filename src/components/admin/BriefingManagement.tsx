@@ -134,13 +134,15 @@ const BriefingManagement = () => {
         const list = brokerLists.find(l => l.id === briefing.broker_list_id);
         if (list) {
           for (const brokerId of list.broker_ids) {
-            await supabase.from('user_notifications' as any).insert({
-              user_id: brokerId,
-              type: 'briefing_approved',
-              title: `Briefing: ${briefing.project_name}`,
-              message: `A briefing for ${briefing.project_name} by ${briefing.developer_name} has been scheduled for ${briefing.briefing_date} at ${briefing.briefing_time}.`,
-              is_read: false,
-            }).catch(() => {});
+            try {
+              await supabase.from('user_notifications' as any).insert({
+                user_id: brokerId,
+                type: 'briefing_approved',
+                title: `Briefing: ${briefing.project_name}`,
+                message: `A briefing for ${briefing.project_name} by ${briefing.developer_name} has been scheduled for ${briefing.briefing_date} at ${briefing.briefing_time}.`,
+                is_read: false,
+              });
+            } catch {}
           }
         }
       }
