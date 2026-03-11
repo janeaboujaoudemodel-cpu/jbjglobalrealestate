@@ -268,7 +268,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Meeting Center", href: "/meeting-center", icon: Users },
 
   // ── Account ──
-  { label: "Favorites", href: "/favorites", icon: Heart, section: "MY ACCOUNT" },
+  { label: "Favorites", href: "/favorites", icon: Heart, section: "MY ACCOUNT", megaMenu: 'account' },
   { label: "Compare", href: "/compare", icon: GitCompare },
   { label: "Mortgage Calculator", href: "/mortgage-calculator", icon: Calculator },
   { label: "My Dashboard", href: "/my-dashboard", icon: User },
