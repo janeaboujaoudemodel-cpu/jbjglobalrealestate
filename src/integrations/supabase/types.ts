@@ -1469,6 +1469,62 @@ export type Database = {
         }
         Relationships: []
       }
+      briefing_requests: {
+        Row: {
+          briefing_date: string
+          briefing_time: string
+          created_at: string | null
+          developer_name: string
+          duration_minutes: number
+          id: string
+          notes: string | null
+          project_name: string
+          representative_id: string
+          status: string
+          updated_at: string | null
+          uploaded_files: Json | null
+          user_id: string
+        }
+        Insert: {
+          briefing_date: string
+          briefing_time: string
+          created_at?: string | null
+          developer_name: string
+          duration_minutes?: number
+          id?: string
+          notes?: string | null
+          project_name: string
+          representative_id: string
+          status?: string
+          updated_at?: string | null
+          uploaded_files?: Json | null
+          user_id: string
+        }
+        Update: {
+          briefing_date?: string
+          briefing_time?: string
+          created_at?: string | null
+          developer_name?: string
+          duration_minutes?: number
+          id?: string
+          notes?: string | null
+          project_name?: string
+          representative_id?: string
+          status?: string
+          updated_at?: string | null
+          uploaded_files?: Json | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "briefing_requests_representative_id_fkey"
+            columns: ["representative_id"]
+            isOneToOne: false
+            referencedRelation: "developer_representatives"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       broker_activity_stats: {
         Row: {
           calls_made: number | null
@@ -5782,6 +5838,56 @@ export type Database = {
         }
         Relationships: []
       }
+      developer_messages: {
+        Row: {
+          attachments: Json | null
+          content: string
+          created_at: string | null
+          developer_name: string
+          id: string
+          is_public: boolean | null
+          message_type: string
+          representative_id: string | null
+          status: string
+          subject: string | null
+          user_id: string
+        }
+        Insert: {
+          attachments?: Json | null
+          content: string
+          created_at?: string | null
+          developer_name: string
+          id?: string
+          is_public?: boolean | null
+          message_type?: string
+          representative_id?: string | null
+          status?: string
+          subject?: string | null
+          user_id: string
+        }
+        Update: {
+          attachments?: Json | null
+          content?: string
+          created_at?: string | null
+          developer_name?: string
+          id?: string
+          is_public?: boolean | null
+          message_type?: string
+          representative_id?: string | null
+          status?: string
+          subject?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "developer_messages_representative_id_fkey"
+            columns: ["representative_id"]
+            isOneToOne: false
+            referencedRelation: "developer_representatives"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       developer_pipeline: {
         Row: {
           ai_score: number | null
@@ -5845,6 +5951,54 @@ export type Database = {
           risk_level?: Database["public"]["Enums"]["risk_level"] | null
           total_units?: number | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      developer_representatives: {
+        Row: {
+          auto_approve_uploads: boolean | null
+          created_at: string | null
+          date_of_join: string | null
+          developer_name: string
+          email: string
+          full_name: string
+          id: string
+          phone: string | null
+          position: string | null
+          role: string
+          status: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          auto_approve_uploads?: boolean | null
+          created_at?: string | null
+          date_of_join?: string | null
+          developer_name: string
+          email: string
+          full_name: string
+          id?: string
+          phone?: string | null
+          position?: string | null
+          role?: string
+          status?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          auto_approve_uploads?: boolean | null
+          created_at?: string | null
+          date_of_join?: string | null
+          developer_name?: string
+          email?: string
+          full_name?: string
+          id?: string
+          phone?: string | null
+          position?: string | null
+          role?: string
+          status?: string
+          updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -12395,6 +12549,47 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      launch_notifications: {
+        Row: {
+          commission_details: string | null
+          created_by: string | null
+          description: string | null
+          developer_name: string
+          id: string
+          message_id: string | null
+          notified_at: string | null
+          project_name: string
+        }
+        Insert: {
+          commission_details?: string | null
+          created_by?: string | null
+          description?: string | null
+          developer_name: string
+          id?: string
+          message_id?: string | null
+          notified_at?: string | null
+          project_name: string
+        }
+        Update: {
+          commission_details?: string | null
+          created_by?: string | null
+          description?: string | null
+          developer_name?: string
+          id?: string
+          message_id?: string | null
+          notified_at?: string | null
+          project_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "launch_notifications_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "developer_messages"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       leads: {
         Row: {
