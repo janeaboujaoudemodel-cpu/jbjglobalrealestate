@@ -374,11 +374,11 @@ const CRMLeadDetail = () => {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-6 space-y-6">
+      <main className="max-w-7xl mx-auto px-4 py-6 pt-8 space-y-6">
         {/* Row 1: Contact Info + Quick Actions + Status side-by-side */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {/* Contact Info */}
-          <Card className="border-gold/20">
+          <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)]/95 to-[hsl(36,25%,88%)]/80 shadow-[0_8px_30px_rgba(200,167,102,0.12)]">
             <CardHeader className="pb-2">
               <CardTitle className="text-base">Contact Info</CardTitle>
             </CardHeader>
