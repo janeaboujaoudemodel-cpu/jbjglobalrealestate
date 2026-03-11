@@ -1,99 +1,72 @@
 
+## CRM System Upgrade — Implementation Status
 
-## Plan: Brand Palette for All Users, Availability Auto-Hide, Stamp/Tools UI Premium Upgrade, Sitemap Update, and Cross-Tool Integration
+### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-This is a large request spanning 6 distinct areas. To avoid quality issues, I recommend implementing in **3 phases**. This plan covers all phases but Phase 1 will be implemented first.
+#### Task 1: Full System Audit ✅
+- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
+- Identified 10 weaknesses (documented in plan)
 
----
+#### Task 2: Leads Security Hardening ✅
+- CSV export no longer includes email/phone PII
+- Audit logging added to exports with user_agent tracking
+- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
 
-### Phase 1: Brand Palette → Public + Per-User Personalization + UI Fixes
+#### Task 3: Encryption Hardening ✅
+- CSV export stripped of `email_lower` and `phone_e164` fields
+- Export audit logged to both `crm_audit_logs` and `audit_logs`
 
-**Problem:** Brand Palette is owner-only (`OwnerGuard`), live preview doesn't work properly, color swatches are square inside rounded cards, hex codes are visible to all, no color wheel, no saved palette history, no per-user personalization.
+#### Task 4: Lead Lifecycle Upgrade ✅
+- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
+- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
+- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
 
-**Changes:**
+#### Task 5: CRM Structure Upgrade ✅
+- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
+- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
+- KanbanPipeline expanded to show all 17 relevant stages
 
-#### 1A. Database: `user_color_palettes` table
-```sql
-CREATE TABLE public.user_color_palettes (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  name text NOT NULL DEFAULT 'Custom Palette',
-  palette jsonb NOT NULL,
-  is_active boolean DEFAULT false,
-  created_at timestamptz DEFAULT now()
-);
--- RLS: users CRUD their own palettes only
-```
+#### Task 6: Performance Optimization ✅
+- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
+- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
+- `crm_leads_updated_at_trigger` auto-updates `updated_at`
 
-#### 1B. Remove `OwnerGuard` from brand palette route
-Move `/owner/brand-palette` → `/brand-palette` as a public authenticated route. Owner sees full hex codes + corporate palette management. Regular users see:
-- Color wheel pickers (no hex codes visible)
-- Visual labels ("Primary — buttons, links", etc.) with live example previews
-- Apply to "Website" or "Tools only" toggle
-- Save/Revert/History of their personal palettes
-- Palettes saved per-user in `user_color_palettes`
+#### Task 7: AI Intelligence Integration ✅
+- New edge function `ai-lead-intelligence` using Lovable AI gateway
+- Supports 3 modes: `score`, `summary`, `next_action`
+- Tool-calling for structured scoring output
+- JWT auth + CRM role validation
+- PII sanitized before sending to AI
 
-#### 1C. Fix UI issues
-- Match color swatch shape to card container (use `rounded-2xl` on swatches to match card radius)
-- Add a clickable color wheel icon next to each swatch for users who don't know to click the square
-- Fix live preview: make `isPreviewing` default to `true` so changes reflect immediately
-- Show accurate JBJ website palette as defaults: `primary: #C8A766, secondary: #000000, accent: #D4AF37, background: #FDFBF7, text: #1A1A1A`
+#### Task 8: Workflow Automation ✅
+- Created `crm_automation_rules` table with RLS (owner manage, admin view)
+- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
 
-#### 1D. BrandPaletteContext updates
-- Load user's active personal palette from `user_color_palettes` for non-owners
-- Owner's palette comes from `app_settings` (unchanged)
-- `applyPaletteToDOM()` already works — just needs to trigger on page load for per-user palettes
+#### Task 10: Role & Permission System ✅
+- RLS on automation rules: owner CRUD, admin read-only
+- CSV export restricted to owner_admin/founder roles
 
-**Files:**
+#### Task 12: Backend/Database Upgrade ✅
+- 3 new performance indexes
+- Auto-updated_at trigger on crm_leads
+- Duplicate hash computation trigger
+- Rate-limiting security function
+
+#### Task 13: Data Cleanliness ✅
+- `duplicate_hash` with auto-compute trigger prevents future duplicates
+- Partial unique index enforces uniqueness at DB level
+
+### Files Changed
 | File | Action |
 |------|--------|
-| Database migration | Create `user_color_palettes` |
-| `src/routes/AdminRoutes.tsx` | Move palette route from OwnerGuard to authenticated |
-| `src/pages/owner/BrandPaletteHub.tsx` | Major refactor: dual-mode (owner vs user), color wheels, no hex for users, palette history, shape fixes |
-| `src/contexts/BrandPaletteContext.tsx` | Load per-user palette, add `saveUserPalette`, `getUserPaletteHistory`, `revertToDefault` |
-| `src/components/navigation/GlobalVerticalNav.tsx` | Update nav link path |
-
----
-
-### Phase 2: Availability Auto-Hide + Stamp Generator Premium UI
-
-**Problem:** Property availability/unit counts are visible to investors (discourages urgency). Stamp generator UI needs premium upgrade.
-
-#### 2A. Availability auto-hide
-- Add `availability_visible` boolean column to `projects` table (default `false`)
-- All public-facing property pages: hide availability/unit count data when `availability_visible = false`
-- Owner can toggle visibility per-project from Listing Admin
-- Developer Portal uploads auto-set `availability_visible = false`
-
-#### 2B. Stamp Generator premium UI overhaul
-- Apply champagne gradient theme consistently (matching Royal Tools Hub)
-- Default to "Ink Blue" standard with the two canonical company stamp designs
-- Gold-bordered cards, premium typography, centered preview
-- Upgrade security: sanitize all SVG inputs, encrypt stamp data in session storage
-
-**Files:** `projects` migration, Listing Admin toggle, property detail pages, `StampGeneratorPage.tsx`, `StampProjectWizard.tsx`, related stamp components
-
----
-
-### Phase 3: Sitemap Update, Cross-Tool Integration, Security Hardening
-
-#### 3A. Sitemap
-Add missing tool links: Brand Palette, Scan & Sign, all new features added recently.
-
-#### 3B. Cross-tool integration
-- Scan & Sign: add "Import Stamp", "Import Business Card", "Import QR Code" buttons that pull from session storage
-- E-Signature: already has stamp integration — verify QR code and business card import paths
-- All tools: ensure owner sees their brand palette colors in color pickers; non-owners see generic palette
-
-#### 3C. Global security
-- RLS audit across new tables
-- Edge function JWT hardening review
-- DOM obfuscation layer verification
-
-**Files:** `Sitemap.tsx`, `ScanSignPage.tsx`, `CreateEnvelope.tsx`, tool color pickers, edge functions
-
----
-
-### Implementation Priority
-**Phase 1 first** (Brand Palette) — directly addresses the page user is currently viewing and the most detailed feedback. Phases 2 and 3 follow in subsequent messages.
-
+| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
+| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
+| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
+| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
+| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
+| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
+| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
+| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
+| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
