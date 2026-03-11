@@ -34,12 +34,22 @@ const investorActions: QuickAction[] = [
 ];
 
 const ownerActions: QuickAction[] = [
-  { label: "My Listings", description: "View your properties", icon: Building2, href: "/owner/properties", color: "text-blue-400" },
-  { label: "Add Property", description: "List a new property", icon: Plus, href: "/listing-portal", color: "text-emerald-400" },
-  { label: "Leads & CRM", description: "Manage your leads", icon: ListChecks, href: "/owner", color: "text-purple-400" },
+  { label: "Command Center", description: "Owner dashboard", icon: Building2, href: "/owner", color: "text-blue-400" },
+  { label: "Listing Admin", description: "Manage all listings", icon: ListChecks, href: "/owner/listing-admin", color: "text-emerald-400" },
+  { label: "CRM Dashboard", description: "Leads & pipeline", icon: BarChart3, href: "/owner/crm", color: "text-purple-400" },
+  { label: "Add Property", description: "List a new property", icon: Plus, href: "/listing-portal", color: "text-amber-400" },
+  { label: "Analytics", description: "Business analytics", icon: FileText, href: "/owner/analytics", color: "text-cyan-400" },
+  { label: "Marketing Hub", description: "Campaigns & ads", icon: MessageSquare, href: "/owner/marketing-hub", color: "text-primary" },
+  { label: "AI Assistant", description: "Founder AI helper", icon: Sparkles, href: "/owner/founder-assistant", color: "text-purple-400" },
+  { label: "Studio", description: "Media & content", icon: FolderOpen, href: "/owner/studio", color: "text-pink-400" },
+  { label: "Ticket Center", description: "Customer happiness", icon: HelpCircle, href: "/ticket-hub", color: "text-amber-400" },
+  { label: "CV Center", description: "Career applications", icon: FileCheck, href: "/owner/cv-center", color: "text-teal-400" },
+  { label: "Calendar", description: "Appointments", icon: Calendar, href: "/owner/crm/calendar", color: "text-blue-400" },
+  { label: "Team Chat", description: "Internal comms", icon: MessageSquare, href: "/owner/team-chat", color: "text-cyan-400" },
+  { label: "My Listings", description: "View your properties", icon: Building2, href: "/owner/properties", color: "text-emerald-400" },
   { label: "Documents", description: "Manage your files", icon: FolderOpen, href: "/owner/documents", color: "text-amber-400" },
-  { label: "Messages", description: "View inquiries", icon: MessageSquare, href: "/owner/inbox", color: "text-cyan-400" },
-  { label: "Request Support", description: "Get assistance", icon: HelpCircle, href: "/contact?type=support", color: "text-primary" },
+  { label: "Admin Panel", description: "System admin", icon: GraduationCap, href: "/owner/admin", color: "text-red-400" },
+  { label: "Employee Hub", description: "Team & HR", icon: MapPin, href: "/employee-hub", color: "text-indigo-400" },
 ];
 
 const defaultActions: QuickAction[] = [
