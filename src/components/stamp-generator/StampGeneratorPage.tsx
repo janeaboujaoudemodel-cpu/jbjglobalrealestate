@@ -92,7 +92,7 @@ export default function StampGeneratorPage() {
   const [blocked, setBlocked] = useState(false);
 
   // Three-color system — persisted
-  const [primaryColor, setPrimaryColorRaw] = useState(() => ssGet(ssKey('primaryColor'), '#B8860B'));
+  const [primaryColor, setPrimaryColorRaw] = useState(() => ssGet(ssKey('primaryColor'), '#1B3A8C'));
   const [secondaryColor, setSecondaryColorRaw] = useState<string | undefined>(() => ssGet(ssKey('secondaryColor'), undefined));
   const [accentColor, setAccentColorRaw] = useState<string | undefined>(() => ssGet(ssKey('accentColor'), undefined));
   const [activeStop, setActiveStop] = useState<ColorStop>('primary');
