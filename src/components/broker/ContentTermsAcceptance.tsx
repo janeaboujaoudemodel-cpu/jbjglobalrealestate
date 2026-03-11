@@ -8,17 +8,33 @@ import {
   FileCheck,
   Lock
 } from "lucide-react";
+import { useAgreementSaver } from "@/hooks/useAgreementSaver";
 
 interface ContentTermsAcceptanceProps {
   onAcceptanceChange: (accepted: boolean) => void;
   isAccepted: boolean;
 }
 
+const CONTENT_LICENSE_SNAPSHOT = {
+  title: "JBJ Global Real Estate - Content License Agreement",
+  version: "1.0",
+  sections: [
+    "PERSONAL LICENSE: Non-transferable, non-exclusive license for personal professional development only.",
+    "PROHIBITED ACTIONS: No sharing credentials, downloading, copying, redistributing, screen recording, or reselling.",
+    "SECURITY MONITORING: Device fingerprinting, session tracking, and watermarking employed.",
+    "LEGAL CONSEQUENCES: Violations subject to UAE Federal Law No. 38 of 2021 and Federal Decree-Law No. 5 of 2012. Fines up to AED 500,000, imprisonment up to 2 years.",
+    "SINGLE DEVICE POLICY: Subscription restricted to a single device at any time.",
+    "INTELLECTUAL PROPERTY: All content is exclusive property of JBJ Global Real Estate.",
+  ],
+  legal_basis: "UAE Federal Law No. 38 of 2021 (Copyright), UAE Federal Decree-Law No. 5 of 2012 (Cybercrimes)",
+};
+
 export default function ContentTermsAcceptance({ 
   onAcceptanceChange, 
   isAccepted 
 }: ContentTermsAcceptanceProps) {
   const [termsExpanded, setTermsExpanded] = useState(false);
+  const { saveAgreement } = useAgreementSaver();
 
   return (
     <div className="space-y-4">
@@ -132,7 +148,17 @@ export default function ContentTermsAcceptance({
       <label className="flex items-start gap-3 cursor-pointer p-4 rounded-xl border-2 transition-all bg-zinc-900/50 border-zinc-700 hover:border-zinc-600">
         <Checkbox
           checked={isAccepted}
-          onCheckedChange={(checked) => onAcceptanceChange(checked === true)}
+          onCheckedChange={async (checked) => {
+            const accepted = checked === true;
+            if (accepted) {
+              await saveAgreement({
+                agreementType: 'content_license',
+                agreementSnapshot: CONTENT_LICENSE_SNAPSHOT,
+                consentDetails: { accepted: true },
+              });
+            }
+            onAcceptanceChange(accepted);
+          }}
           className="mt-0.5"
         />
         <div className="text-sm">

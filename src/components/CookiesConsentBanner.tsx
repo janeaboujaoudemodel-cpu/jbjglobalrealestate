@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePopupVisibility } from "@/contexts/PopupCoordinatorContext";
 import { supabase } from "@/integrations/supabase/client";
+import { useAgreementSaver } from "@/hooks/useAgreementSaver";
 
 const COOKIES_CONSENT_KEY = "jj_cookies_consent";
 
@@ -16,10 +17,23 @@ interface CookiePreferences {
   marketing: boolean;
 }
 
+const COOKIES_POLICY_SNAPSHOT = {
+  title: "JBJ Global Real Estate - Cookies Policy",
+  version: "1.0",
+  sections: [
+    { heading: "Essential Cookies", description: "Required for the website to function properly. Cannot be disabled." },
+    { heading: "Analytics Cookies", description: "Help us understand how visitors interact with our website by collecting and reporting information anonymously." },
+    { heading: "Marketing Cookies", description: "Used to track visitors across websites to display personalized advertising." },
+  ],
+  legal_basis: "By accepting cookies, you consent to the use of cookies as described in our Cookies Policy and Privacy Policy, in compliance with GDPR, CCPA, and UAE data protection regulations.",
+  effective_date: "2025-01-01",
+};
+
 const CookiesConsentBanner = () => {
   const { requestToShow, dismiss, isVisible } = usePopupVisibility('cookies-consent');
   const [showPreferences, setShowPreferences] = useState(false);
   const [shouldShow, setShouldShow] = useState(false);
+  const { saveAgreement } = useAgreementSaver();
   const [preferences, setPreferences] = useState<CookiePreferences>({
     essential: true,
     analytics: false,
@@ -27,10 +41,8 @@ const CookiesConsentBanner = () => {
   });
 
   useEffect(() => {
-    // Check if user has already made a choice
     const consent = localStorage.getItem(COOKIES_CONSENT_KEY);
     if (!consent) {
-      // Small delay before showing banner for better UX
       const timer = setTimeout(() => {
         setShouldShow(true);
         requestToShow();
@@ -51,7 +63,14 @@ const CookiesConsentBanner = () => {
     setShouldShow(false);
     setShowPreferences(false);
 
-    // Persist to backend for audit trail
+    // Save to user_agreements (authenticated, court-ready)
+    await saveAgreement({
+      agreementType: 'cookies_policy',
+      agreementSnapshot: COOKIES_POLICY_SNAPSHOT,
+      consentDetails: { status, preferences: finalPrefs },
+    });
+
+    // Also persist to legacy cookie_consents table for backward compatibility
     try {
       const visitorId = localStorage.getItem('jj_visitor_id') || crypto.randomUUID();
       localStorage.setItem('jj_visitor_id', visitorId);
@@ -62,7 +81,6 @@ const CookiesConsentBanner = () => {
         user_agent: navigator.userAgent,
       });
     } catch (e) {
-      // Silent fail - localStorage is the primary store
       console.error('Failed to persist cookie consent:', e);
     }
   };
