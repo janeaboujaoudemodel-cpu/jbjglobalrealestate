@@ -71,6 +71,7 @@ interface CVEntry {
   user_id: string | null;
   record_source: 'hr_applications' | 'hr_cv_submissions';
   position_applied: string | null;
+  is_viewed: boolean;
 }
 
 interface CVCenterProps {
