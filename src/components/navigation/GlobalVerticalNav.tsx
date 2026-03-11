@@ -646,7 +646,7 @@ export default function GlobalVerticalNav() {
     }
     return shouldHighlight
       ? "bg-gradient-to-r from-gold/20 to-gold/10 text-black border border-gold/40 font-bold"
-      : "text-black/90 hover:bg-white/60 hover:text-black border border-transparent hover:border-gold/15";
+      : "text-black/90 hover:bg-white/60 hover:text-black border border-gold/20 hover:border-gold/30";
   };
 
   const getIconStyle = (item: NavItem, sectionKey?: string) => {
