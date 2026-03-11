@@ -15,6 +15,8 @@ import {
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
+import VideoBackground from "@/components/VideoBackground";
+import companySetupVideo from "@/assets/videos/dubai-landmarks-hero.mp4";
 import {
   Accordion,
   AccordionContent,
