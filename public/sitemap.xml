@@ -556,6 +556,84 @@
     <priority>0.82</priority>
   </url>
 
+  <!-- ====== ADDITIONAL SERVICE PAGES ====== -->
+  <url>
+    <loc>https://jbj.ae/services/broker-certification</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://jbj.ae/services/ai-tools</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.72</priority>
+  </url>
+  <url>
+    <loc>https://jbj.ae/services/testimonials</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.65</priority>
+  </url>
+  <url>
+    <loc>https://jbj.ae/services/complaint-procedures</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.60</priority>
+  </url>
+  <url>
+    <loc>https://jbj.ae/services/signature-collection</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.60</priority>
+  </url>
+
+  <!-- ====== PRICING ====== -->
+  <url>
+    <loc>https://jbj.ae/pricing</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.78</priority>
+  </url>
+
+  <!-- ====== PROPERTY FILTERS BY AREA ====== -->
+  <url>
+    <loc>https://jbj.ae/properties?area=downtown-dubai</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.82</priority>
+  </url>
+  <url>
+    <loc>https://jbj.ae/properties?area=palm-jumeirah</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.82</priority>
+  </url>
+  <url>
+    <loc>https://jbj.ae/properties?area=dubai-marina</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.82</priority>
+  </url>
+  <url>
+    <loc>https://jbj.ae/properties?area=business-bay</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://jbj.ae/properties?area=dubai-hills</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://jbj.ae/properties?area=jvc-jumeirah-village-circle</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.78</priority>
+  </url>
+
   <!-- ====== LEGAL & COMPLIANCE PAGES ====== -->
   <url>
     <loc>https://jbj.ae/privacy</loc>
