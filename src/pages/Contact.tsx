@@ -313,7 +313,7 @@ END:VCARD`;
       {/* Contact Cards - 3-Layer System with thin black contour */}
       <section className="py-10 bg-black">
         {/* Thin black contour + Active Champagne Layer */}
-        <div className="mx-0 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
+        <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
           {/* Inner Champagne Layer */}
           <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6 md:p-10 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
             <div className="mb-6 h-px w-full bg-gradient-to-r from-transparent via-gold/70 to-transparent" />
