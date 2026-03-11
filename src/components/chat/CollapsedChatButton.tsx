@@ -78,7 +78,7 @@ const CollapsedChatButton = ({ onToggle, onMinimize, showAttentionPulse = false 
       className={`fixed bottom-6 ${isRTL ? 'left-4' : 'right-4'} z-[10050]`}
       style={{ transform, transition: isDragging ? 'none' : 'transform 0.2s ease', cursor: isDragging ? 'grabbing' : 'grab' }}
     >
-      {showAttentionPulse ? (
+      {showAttentionPulse && !isMobile ? (
         <div className="relative">
           <div
             onPointerDown={onPointerDown}
