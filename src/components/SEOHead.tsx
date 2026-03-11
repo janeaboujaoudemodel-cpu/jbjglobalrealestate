@@ -38,6 +38,7 @@ export const SEOHead = ({
   ogImage = DEFAULT_OG_IMAGE,
   ogType = 'website',
   noIndex = false,
+  faqItems,
 }: SEOHeadProps) => {
   const { isFounderVisible } = useFounderVisibility();
   
