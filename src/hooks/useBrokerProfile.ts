@@ -17,6 +17,18 @@ export interface BrokerProfile {
   languages: string[];
   years_experience: number;
   broker_type: 'internal' | 'external';
+  current_tier: string;
+  total_points: number;
+  custom_title: string | null;
+  custom_label: string | null;
+  performance_rating: string;
+  verification_status: string;
+  rera_expiry_date: string | null;
+  id_expiry_date: string | null;
+  probation_end: string | null;
+  probation_skipped: boolean;
+  show_contact_public: boolean;
+  show_last_name_public: boolean;
 }
 
 export function useBrokerProfile() {
@@ -51,6 +63,18 @@ export function useBrokerProfile() {
             years_experience: data.years_experience || 0,
             is_public: data.is_public ?? false,
             is_active: data.is_active ?? true,
+            current_tier: data.current_tier || 'Starter',
+            total_points: data.total_points || 0,
+            custom_title: data.custom_title || null,
+            custom_label: data.custom_label || null,
+            performance_rating: data.performance_rating || 'standard',
+            verification_status: data.verification_status || 'unverified',
+            rera_expiry_date: data.rera_expiry_date || null,
+            id_expiry_date: data.id_expiry_date || null,
+            probation_end: data.probation_end || null,
+            probation_skipped: data.probation_skipped ?? false,
+            show_contact_public: data.show_contact_public ?? false,
+            show_last_name_public: data.show_last_name_public ?? false,
           });
         } else {
           setProfile(null);

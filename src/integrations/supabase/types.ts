@@ -2331,6 +2331,47 @@ export type Database = {
           },
         ]
       }
+      broker_education_tests: {
+        Row: {
+          correct_answer: number
+          created_at: string | null
+          explanation: string | null
+          id: string
+          module_id: string
+          options: Json
+          question: string
+          sort_order: number | null
+        }
+        Insert: {
+          correct_answer?: number
+          created_at?: string | null
+          explanation?: string | null
+          id?: string
+          module_id: string
+          options?: Json
+          question: string
+          sort_order?: number | null
+        }
+        Update: {
+          correct_answer?: number
+          created_at?: string | null
+          explanation?: string | null
+          id?: string
+          module_id?: string
+          options?: Json
+          question?: string
+          sort_order?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "broker_education_tests_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "broker_education_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       broker_email_templates: {
         Row: {
           created_at: string | null
@@ -2647,6 +2688,7 @@ export type Database = {
           custom_title: string | null
           display_name: string
           email: string | null
+          face_verification_status: string | null
           face_verified: boolean | null
           id: string
           id_document_url: string | null
@@ -2654,14 +2696,17 @@ export type Database = {
           is_active: boolean | null
           is_public: boolean | null
           languages: string[] | null
+          performance_rating: string | null
           phone: string | null
           photo_url: string | null
           probation_end: string | null
           probation_months: number | null
+          probation_skipped: boolean | null
           probation_start: string | null
           rera_card_url: string | null
           rera_expiry_date: string | null
           show_contact_public: boolean | null
+          show_last_name_public: boolean | null
           specializations: string[] | null
           tier_updated_at: string | null
           title: string | null
@@ -2680,6 +2725,7 @@ export type Database = {
           custom_title?: string | null
           display_name: string
           email?: string | null
+          face_verification_status?: string | null
           face_verified?: boolean | null
           id?: string
           id_document_url?: string | null
@@ -2687,14 +2733,17 @@ export type Database = {
           is_active?: boolean | null
           is_public?: boolean | null
           languages?: string[] | null
+          performance_rating?: string | null
           phone?: string | null
           photo_url?: string | null
           probation_end?: string | null
           probation_months?: number | null
+          probation_skipped?: boolean | null
           probation_start?: string | null
           rera_card_url?: string | null
           rera_expiry_date?: string | null
           show_contact_public?: boolean | null
+          show_last_name_public?: boolean | null
           specializations?: string[] | null
           tier_updated_at?: string | null
           title?: string | null
@@ -2713,6 +2762,7 @@ export type Database = {
           custom_title?: string | null
           display_name?: string
           email?: string | null
+          face_verification_status?: string | null
           face_verified?: boolean | null
           id?: string
           id_document_url?: string | null
@@ -2720,14 +2770,17 @@ export type Database = {
           is_active?: boolean | null
           is_public?: boolean | null
           languages?: string[] | null
+          performance_rating?: string | null
           phone?: string | null
           photo_url?: string | null
           probation_end?: string | null
           probation_months?: number | null
+          probation_skipped?: boolean | null
           probation_start?: string | null
           rera_card_url?: string | null
           rera_expiry_date?: string | null
           show_contact_public?: boolean | null
+          show_last_name_public?: boolean | null
           specializations?: string[] | null
           tier_updated_at?: string | null
           title?: string | null
@@ -14608,6 +14661,48 @@ export type Database = {
         }
         Relationships: []
       }
+      open_positions: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          department: string
+          description: string | null
+          employment_type: string | null
+          id: string
+          is_active: boolean | null
+          is_broker_role: boolean | null
+          location: string | null
+          requirements: Json | null
+          title: string
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          department: string
+          description?: string | null
+          employment_type?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_broker_role?: boolean | null
+          location?: string | null
+          requirements?: Json | null
+          title: string
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          department?: string
+          description?: string | null
+          employment_type?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_broker_role?: boolean | null
+          location?: string | null
+          requirements?: Json | null
+          title?: string
+        }
+        Relationships: []
+      }
       organization_members: {
         Row: {
           id: string
@@ -24648,6 +24743,7 @@ export type Database = {
         Returns: boolean
       }
       can_view_landlord_pii: { Args: { _user_id: string }; Returns: boolean }
+      check_broker_verification_expiry: { Args: never; Returns: undefined }
       check_chat_rate_limit: {
         Args: { p_session_id: string }
         Returns: boolean
