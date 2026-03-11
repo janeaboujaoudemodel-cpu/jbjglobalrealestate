@@ -1,63 +1,41 @@
 
 
-## Plan: Unified FilterShortcutBar Across All Pages + Mode Selection Toast Enhancement
+## Plan: Fix All Email Issues Across All Templates
 
-### Problem
-1. **Developers page** uses its own custom filter UI (search + tier dropdown + developer dropdown) instead of the shared `FilterShortcutBar` component that Projects, Areas, and Resale pages use.
-2. The `FilterShortcutBar` doesn't have a concept of "priority filter" — all filters are shown in the same order regardless of page context.
-3. **Mode selection toast** only lasts 5 seconds and uses default sonner styling — user wants it longer, and on mobile it should appear as a bottom champagne popup (not a horizontal header bar).
+### Problems Identified
 
-### Changes
+1. **Recommended For You icons disappeared** — Inline SVGs are stripped by Gmail and most email clients. Must revert to hosted PNG images (`ai-tools.png`, `guides.png`, `properties.png` already exist in `public/email-icons/`).
 
-#### 1. Add `priorityFilter` prop to `FilterShortcutBar`
+2. **Social media footer icons not rendering** — Same issue: `socialLinksFooter()` loads external `.svg` files via `<img>` tags, but Gmail blocks SVG images entirely. Must switch to hosted `.png` files. Currently missing `social-facebook.png` — need to confirm or create it.
 
-**File**: `src/components/filters/FilterShortcutBar.tsx`
+3. **Email split into multiple visual cards** — Several sub-sections (`ticketSupportEmbed`, `readyToGetStartedHtml`, `recommendedActionsHtml`) each have their own `border`, `border-radius`, and `background` styles creating distinct visual boxes. These need to be softened so they sit seamlessly inside the single continuous card.
 
-- Add new prop `priorityFilter?: 'developers' | 'areas' | 'emirates' | 'projects'` to `FilterShortcutBarProps`
-- In the Row 2 filter popovers rendering, reorder the filter pills so the priority filter appears first (leftmost position)
-- For `developers` priority: Developers popover renders first
-- For `areas` priority: Areas popover renders first
-- For `emirates` priority: Emirates popover renders first
-- Default (projects): Current order unchanged
+### Changes (all in `supabase/functions/_shared/email-html.ts`)
 
-#### 2. Replace Developers page custom filters with `FilterShortcutBar`
+#### A. Recommended For You — Revert to PNG hosted images
+- Change `recommendedCard()` back to using `iconImg()` with PNG paths
+- Remove the `RECOMMENDED_ICONS` inline SVG object
+- Ensure circular frame clips the PNG with `overflow:hidden` on the `<td>` to prevent square backgrounds
+- Signature: `recommendedCard(title, href, iconPath, alt)` — restore the original parameters
 
-**File**: `src/pages/Developers.tsx`
+#### B. Social Footer — Switch to PNG with white pearl background
+- Replace `socialLinksFooter()` to use the inline `SVG` object icons (instagram, facebook, linkedin, tiktok, youtube) that are already defined at the top of the file — these render as raw HTML inside `<td>` elements, not as `<img>` tags, so they should survive email client processing
+- Actually, since Gmail strips ALL SVG (both inline and `<img>`), switch to using the `.png` files: `social-instagram.png`, `social-linkedin.png`, `social-tiktok.png`, `social-youtube.png`
+- Create `social-facebook.png` if missing
+- Style each icon circle: white/pearl (#FDFBF7) background, gold border, black icon inside
 
-- Remove the custom search + tier + developer dropdown filter UI (lines 287-401 and the fixed portal copy at lines 411-491)
-- Replace with the same `FilterShortcutBar` component pattern used on PropertiesReelly/AreaGuides
-- Pass `priorityFilter="developers"` so developers filter is highlighted first
-- Keep the tier filter as an additional row below the FilterShortcutBar (unique to developers page)
-- Wire `shortcutFilters` to the developer filtering logic (already partially done)
+#### C. Single Card Layout — Remove visual fragmentation
+- `ticketSupportEmbed()`: Remove the heavy gradient background and red border; make it blend into the card
+- `readyToGetStartedHtml()`: Remove the outer border and separate background so it flows within the card
+- `inquiryBox()`: Soften its standalone bordered look
+- Keep all content inside the single `emailShell` wrapper card with no sub-borders that create separation
 
-#### 3. Add `priorityFilter` to existing page usages
+#### D. Deploy + Send Test Email
+- Deploy the updated edge function
+- Immediately send a test welcome email to `janeaboujaoudenails@gmail.com`
+- Take a screenshot as proof
 
-| Page | `priorityFilter` value |
-|------|----------------------|
-| `PropertiesReelly.tsx` (Projects) | `undefined` (default order) |
-| `Properties.tsx` | `undefined` (default order) |
-| `AreaGuides.tsx` | `'areas'` |
-| `AreaDetail.tsx` | `'areas'` |
-| `DeveloperDetail.tsx` | `'developers'` |
-| `Developers.tsx` | `'developers'` |
-
-#### 4. Enhance Mode Selection Toast
-
-**File**: `src/components/ModeSelectionModal.tsx`
-
-- Increase toast `duration` from `5000` to `8000` ms (8 seconds) for all modes
-- Add custom toast className with champagne gradient background: `bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 text-black`
-- Use sonner's `position: 'bottom-center'` for the mode confirmation toast so on mobile it renders as a bottom popup
-- Remove the horizontal bar appearance by setting `style` to ensure it's a contained card, not a full-width bar
-
-### Files Summary
-
-| File | Changes |
-|------|---------|
-| `FilterShortcutBar.tsx` | Add `priorityFilter` prop, reorder filter pills based on context |
-| `Developers.tsx` | Replace custom filters with `FilterShortcutBar`, pass `priorityFilter="developers"` |
-| `AreaGuides.tsx` | Add `priorityFilter="areas"` |
-| `AreaDetail.tsx` | Add `priorityFilter="areas"` |
-| `DeveloperDetail.tsx` | Add `priorityFilter="developers"` |
-| `ModeSelectionModal.tsx` | Increase toast duration to 8s, champagne bottom popup styling |
+### Files Modified
+- `supabase/functions/_shared/email-html.ts` — all icon and layout fixes
+- `public/email-icons/social-facebook.png` — create if missing (or use existing assets)
 

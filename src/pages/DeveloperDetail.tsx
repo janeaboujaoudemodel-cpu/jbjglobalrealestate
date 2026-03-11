@@ -380,6 +380,7 @@ const DeveloperDetail = () => {
               variant="light"
               filters={shortcutFilters}
               onFilterChange={setShortcutFilters}
+              priorityFilter="developers"
               searchSlot={
                 <div className="relative">
                   <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground pointer-events-none" />
@@ -402,10 +403,11 @@ const DeveloperDetail = () => {
             <div className="fixed top-0 left-0 right-0 z-[9998] transition-shadow duration-200">
               <div className="mx-0 pt-0">
                 <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/30 p-2 sm:p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
-                  <FilterShortcutBar
+                   <FilterShortcutBar
                     variant="light"
                     filters={shortcutFilters}
                     onFilterChange={setShortcutFilters}
+                    priorityFilter="developers"
                     searchSlot={
                       <div className="relative">
                         <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground pointer-events-none" />
