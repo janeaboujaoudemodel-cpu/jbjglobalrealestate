@@ -20591,6 +20591,33 @@ export type Database = {
         }
         Relationships: []
       }
+      user_color_palettes: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          palette: Json
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          palette: Json
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          palette?: Json
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_daily_activity: {
         Row: {
           created_at: string
