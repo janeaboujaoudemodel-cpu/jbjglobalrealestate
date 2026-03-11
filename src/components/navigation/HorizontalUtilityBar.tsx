@@ -62,9 +62,6 @@ export default function HorizontalUtilityBar() {
     window.dispatchEvent(new CustomEvent('areaUnitChange', { detail: next }));
   };
 
-  const handleModeChange = (newMode: DisplayMode) => {
-    setMode(newMode as UserMode);
-  };
 
   const toggleSidebar = () => {
     const isCollapsed = document.body.classList.contains('jj-vertical-nav-collapsed');
