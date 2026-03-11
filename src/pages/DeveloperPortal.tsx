@@ -281,11 +281,11 @@ const DeveloperPortal = () => {
         {/* Rep Status Banner */}
         {hasRepProfile && !isRepApproved && (
           <div className="container mx-auto px-4 py-4 max-w-4xl">
-            <div className="flex items-center gap-3 p-4 rounded-xl bg-blue-50 border border-blue-200 text-blue-800 text-sm">
-              <UserCheck className="w-5 h-5 shrink-0" />
+            <div className="flex items-center gap-3 p-4 rounded-xl bg-gold/10 border border-gold/30 text-stone-800 text-sm">
+              <UserCheck className="w-5 h-5 shrink-0 text-gold" />
               <div>
                 <strong>Application Status: {repProfile?.status?.replace(/_/g, ' ')}</strong>
-                <p className="text-xs mt-0.5">Your {repProfile?.role?.replace(/_/g, ' ')} registration for <strong>{repProfile?.developer_name}</strong> is being reviewed. You'll receive an email once approved.</p>
+                <p className="text-xs mt-0.5 text-stone-600">Your {repProfile?.role?.replace(/_/g, ' ')} registration for <strong>{repProfile?.developer_name}</strong> is being reviewed. You'll receive an email once approved.</p>
               </div>
               {statusBadge(repProfile?.status || 'pending_review')}
             </div>
