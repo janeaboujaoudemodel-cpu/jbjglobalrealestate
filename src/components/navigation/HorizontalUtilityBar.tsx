@@ -247,10 +247,10 @@ export default function HorizontalUtilityBar() {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  to="/my-dashboard#tasks"
-                  className="h-7 flex items-center gap-1 rounded-md hover:bg-gold/10 transition-all px-1.5 group relative"
-                >
-                  <ClipboardList className="w-3.5 h-3.5 text-gold/70 group-hover:text-gold transition-colors" />
+                   to="/my-dashboard#tasks"
+                   className="h-7 flex items-center gap-1 rounded-md border border-gold/20 bg-gold/5 hover:bg-gold/15 hover:border-gold/40 transition-all px-1.5 group relative"
+                 >
+                   <ClipboardList className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-transform" />
                   <span className="text-[10px] font-medium text-black/50 hidden xl:inline">Tasks</span>
                   {(alerts?.pendingTasks || 0) > 0 && (
                     <span className="absolute -top-1 -right-0.5 w-4 h-4 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center">
