@@ -227,7 +227,7 @@ export default function JoinApplication() {
       const cvPath = await uploadCV(cvFile);
       setUploadProgress(60);
 
-      const positionLabel = JOB_POSITIONS.find(p => p.value === formData.positionApplied)?.label || formData.positionApplied;
+      const positionLabel = openPositions.find(p => p.id === formData.positionApplied)?.title || FALLBACK_POSITIONS.find(p => p.value === formData.positionApplied)?.label || formData.positionApplied;
 
       // Create application
       const { error: appError } = await supabase
