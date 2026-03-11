@@ -1,48 +1,72 @@
 
+## CRM System Upgrade — Implementation Status
 
-## Plan: Fix Layout Cropping + Add All Pages to Footer
+### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-### Problem 1: Content Cropped Behind Headers
+#### Task 1: Full System Audit ✅
+- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
+- Identified 10 weaknesses (documented in plan)
 
-The main content area on desktop has `lg:pt-[40px]` but the HorizontalUtilityBar is 48px tall (`h-[48px]`). Content renders 8px behind the bar. Additionally, the `pl-[200px]` / `pl-[48px]` uses body-class-driven selectors which can be unreliable on initial load.
+#### Task 2: Leads Security Hardening ✅
+- CSV export no longer includes email/phone PII
+- Audit logging added to exports with user_agent tracking
+- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
 
-**Fix in `src/components/MainLayout.tsx` (line 263):**
-- Change `lg:pt-[40px]` to `lg:pt-[52px]` (48px bar + 4px breathing room)
-- Ensure mobile `pt-24 sm:pt-28` remains for GlobalHeader
-- Add `transition-all duration-300` to the `<main>` for smooth sidebar toggles
-- Apply same fix to the footer/contact wrapper on line 274
+#### Task 3: Encryption Hardening ✅
+- CSV export stripped of `email_lower` and `phone_e164` fields
+- Export audit logged to both `crm_audit_logs` and `audit_logs`
 
-### Problem 2: Footer Missing Many Pages
+#### Task 4: Lead Lifecycle Upgrade ✅
+- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
+- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
+- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
 
-The footer currently has ~10 cards covering Properties, Services, Guides, About, Sell, Education, Legal, Business Suites, AI Tools, Creative Suites, Market Intel, and conditional Broker/Investor hubs. But it's missing:
+#### Task 5: CRM Structure Upgrade ✅
+- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
+- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
+- KanbanPipeline expanded to show all 17 relevant stages
 
-**Pages to add to existing footer cards:**
-- **Properties card**: Add Communities, Resale Properties, Map, Property Evaluator, Rental Index, Property Measurement
-- **Services card**: Add Architecture, Interior Design, Fit-Out, Design & Build, Law Firm, Snagging, Broker Certification, Complaint Procedures, Testimonials, Referral Partner, Signature Collection
-- **About & Careers card**: Add Our Brokers, Company Profile, Partner Governance
-- **Guides card**: Add Broker FAQ, Investor FAQ, Broker Education, Books Library
-- **Legal card**: Add Trust & Compliance, Risk Disclosure (already present — verify)
+#### Task 6: Performance Optimization ✅
+- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
+- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
+- `crm_leads_updated_at_trigger` auto-updates `updated_at`
 
-**New footer cards to create:**
-- **Partners**: Partners Hub, Mortgage, Legal, Company Setup, Visa Services
-- **Investor Hub**: Always visible (not just investor mode) — Investor Hub, Investor Services, Join Investor List, Investor Education, Investor FAQ
-- **Broker & Academy**: Broker Portal, JBJ Academy, Academy Graduates, Broker Education, Broker Toolkit, Broker Resources
-- **Productivity**: Spreadsheet, Documents, QR Generator, Video Meeting, Presentations, E-Signature, Meeting Center
-- **Professional Tools card**: Expand with Whiteboard, Mind Map, Form Builder, Kanban, Digital Card, Business Card Scanner
+#### Task 7: AI Intelligence Integration ✅
+- New edge function `ai-lead-intelligence` using Lovable AI gateway
+- Supports 3 modes: `score`, `summary`, `next_action`
+- Tool-calling for structured scoring output
+- JWT auth + CRM role validation
+- PII sanitized before sending to AI
 
-### Problem 3: Device Compatibility
+#### Task 8: Workflow Automation ✅
+- Created `crm_automation_rules` table with RLS (owner manage, admin view)
+- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
 
-- Add `safe-area-inset` padding to the main content area for notched devices
-- Ensure footer grid is `grid-cols-1` on mobile, `sm:grid-cols-2` on tablet, `lg:grid-cols-3` on desktop for better readability with 15+ cards
+#### Task 10: Role & Permission System ✅
+- RLS on automation rules: owner CRUD, admin read-only
+- CSV export restricted to owner_admin/founder roles
 
-### Files to Modify
+#### Task 12: Backend/Database Upgrade ✅
+- 3 new performance indexes
+- Auto-updated_at trigger on crm_leads
+- Duplicate hash computation trigger
+- Rate-limiting security function
 
-| File | Changes |
-|------|---------|
-| `src/components/MainLayout.tsx` | Fix `pt-[40px]` → `pt-[52px]`, add safe-area-inset support |
-| `src/components/Footer.tsx` | Add ~6 new FooterCard sections, expand existing cards with missing pages, update grid to 3-col on desktop |
+#### Task 13: Data Cleanliness ✅
+- `duplicate_hash` with auto-compute trigger prevents future duplicates
+- Partial unique index enforces uniqueness at DB level
 
-### Estimated scope
-- MainLayout: ~5 lines changed
-- Footer: ~80 lines added (new link arrays + new FooterCard instances)
-
+### Files Changed
+| File | Action |
+|------|--------|
+| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
+| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
+| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
+| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
+| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
+| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
+| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
+| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
+| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |

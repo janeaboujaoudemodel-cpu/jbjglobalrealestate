@@ -231,6 +231,12 @@ const Footer = () => {
     { label: "Projects", href: "/properties" },
     { label: "Developers", href: "/developers" },
     { label: t('footer.listYourProperty') || "List Your Property", href: "/listing-portal" },
+    { label: "Communities", href: "/communities" },
+    { label: "Resale Properties", href: "/properties?transaction=resale" },
+    { label: "Property Map", href: "/map" },
+    { label: "Property Evaluator", href: "/property-evaluator" },
+    { label: "Rental Index", href: "/rental-index" },
+    { label: "Property Measurement", href: "/calculator/measurement" },
   ];
 
   // Sell
@@ -256,18 +262,27 @@ const Footer = () => {
     { label: "Company Setup", href: "/services/company-setup" },
     { label: "AI Tools", href: "/services/ai-tools" },
     { label: "Customer Happiness", href: "/services/customer-happiness-center" },
+    { label: "Architecture", href: "/services/architecture" },
+    { label: "Interior Design", href: "/services/interior-design" },
+    { label: "Fit-Out", href: "/services/fit-out" },
+    { label: "Design & Build", href: "/services/design-and-build" },
+    { label: "Law Firm", href: "/services/law-firm" },
+    { label: "Broker Certification", href: "/services/broker-certification" },
+    { label: "Complaint Procedures", href: "/services/complaint-procedures" },
+    { label: "Testimonials", href: "/reviews" },
+    { label: "Referral Partner", href: "/services/referral-partner" },
+    { label: "Signature Collection", href: "/services/signature-collection" },
   ];
 
-  // Investor Hub
+  // Investor Hub - Always visible
   const investorHubLinks = [
+    { label: "Investor Hub", href: "/investor/portfolio-views" },
+    { label: "Investor Services", href: "/services/investment-advisory" },
+    { label: "Join Investor List", href: "/investor/join" },
     { label: t('footer.investorEducation') || "Investor Education", href: "/investor-education" },
     { label: t('footer.investorFaqs') || "Investor FAQs", href: "/investor-faq" },
     { label: t('footer.investorTools') || "Investor Tools", href: "/ai-hub" },
-    { label: "Listing Portal", href: "/listing-portal" },
-    { label: "My Dashboard", href: "/my-dashboard" },
   ];
-
-  // Broker Hub - REMOVED per compliance: Footer must be role-agnostic, no CRM/broker links
 
   // Guides
   const guidesLinks = [
@@ -282,6 +297,10 @@ const Footer = () => {
     { label: "Landlord FAQs", href: "/landlord-faq" },
     { label: "Tenant FAQs", href: "/tenant-faq" },
     { label: t('footer.generalFaqs') || "General FAQs", href: "/faq" },
+    { label: "Broker FAQs", href: "/broker-faq" },
+    { label: "Investor FAQs", href: "/investor-faq" },
+    { label: "Broker Education", href: "/broker-education" },
+    { label: "Books Library", href: "/education-hub" },
   ];
 
   // Market Intelligence
@@ -292,7 +311,7 @@ const Footer = () => {
     { label: t('footer.methodology') || "Methodology & Data Sources", href: "/market-intelligence/methodology" },
   ];
 
-  // About & Careers - Combined section
+  // About & Careers
   const aboutLinks = [
     { label: t('footer.aboutJbj') || "About JBJ", href: "/about" },
     ...(isFounderVisible ? [{ label: t('footer.founderLeadership') || "Founder & Leadership", href: "/founder" }] : []),
@@ -303,21 +322,33 @@ const Footer = () => {
     { label: "Company Profile", href: "/company-profile" },
     { label: "Philanthropy", href: "/philanthropy" },
     { label: "Reviews", href: "/reviews" },
+    { label: "Our Brokers", href: "/our-brokers" },
+    { label: "Partner Governance", href: "/partner-governance" },
   ];
 
-  // Career Links (now part of About section)
+  // Career Links
   const careerLinks = [
     { href: "/join", label: t('footer.applyJoin') || "Apply to Join Our Team" },
     { href: "/hr-agent", label: "Connect with Our HR" },
   ];
 
-  // Broker Tools - Only shown in broker mode (includes Training Portal)
-  const brokerToolsLinks = [
-    { href: "/onboarding", label: t('footer.trainingPortal') || "Training Portal" },
-    { href: "/broker-toolkit", label: "Broker Hub" },
-    { href: "/listing-portal", label: "Listing Portal" },
+  // Broker & Academy
+  const brokerAcademyLinks = [
+    { href: "/broker-toolkit", label: "Broker Portal" },
+    { href: "/onboarding", label: "JBJ Academy" },
+    { href: "/academy-graduates", label: "Academy Graduates" },
     { href: "/broker-education", label: "Broker Education" },
     { href: "/broker-resources", label: "Broker Resources" },
+    { href: "/listing-portal", label: "Listing Portal" },
+  ];
+
+  // Partners
+  const partnersLinks = [
+    { href: "/services/mortgage", label: "Mortgage" },
+    { href: "/services/law-firm", label: "Legal" },
+    { href: "/services/company-setup", label: "Company Setup" },
+    { href: "/services/visa", label: "Visa Services" },
+    { href: "/partner-governance", label: "Partners Hub" },
   ];
 
   // Legal Links
@@ -333,7 +364,7 @@ const Footer = () => {
     { label: "Trust & Audit", href: "/trust-and-audit-center" },
   ];
 
-  // Creative Toolkit - All toolkit tools
+  // Creative Toolkit
   const creativeToolkitLinks = [
     { href: "/toolkit", label: "AI Tools Hub" },
     { href: "/toolkit/ai-video-studio", label: "AI Video Studio" },
@@ -350,7 +381,7 @@ const Footer = () => {
     { href: "/studio", label: "Creative Suite" },
   ];
 
-  // Business Suites - Grouped AI Tools
+  // Business Suites
   const businessSuitesLinks = [
     { href: "/business-suite/all", label: "All Tools Suite" },
     { href: "/business-suite/real-estate", label: "Real Estate Suite" },
@@ -359,68 +390,53 @@ const Footer = () => {
     { href: "/business-suite/productivity", label: "Productivity Suite" },
   ];
 
-  // Professional Tools - Complete list
+  // Productivity Tools
+  const productivityLinks = [
+    { href: "/spreadsheet", label: "Spreadsheet" },
+    { href: "/documents", label: "Documents" },
+    { href: "/toolkit/corporate-suite/qr-generator", label: "QR Generator" },
+    { href: "/video-meeting", label: "Video Meeting" },
+    { href: "/presentations", label: "Presentations" },
+    { href: "/e-signature", label: "E-Signature" },
+    { href: "/meeting-center", label: "Meeting Center" },
+  ];
+
+  // Professional Tools
   const professionalTools = [
-    // Property Tools
     { href: "/compare", label: "Property Comparison" },
     { href: "/property-evaluator", label: "JBJ Property Evaluator" },
     { href: "/rental-index", label: "JBJ Rental Index" },
     { href: "/mortgage-calculator", label: "Mortgage Calculator" },
     { href: "/quiz", label: "AI Home Finder" },
-    // AI Design & Staging
     { href: "/interior-design-ai", label: "AI Interior Design" },
     { href: "/virtual-staging-ai", label: "AI Virtual Staging" },
-    // AI Analytics
     { href: "/ai-price-predictor", label: "AI Price Predictor" },
     { href: "/ai-neighborhood-insights", label: "AI Neighborhood Insights" },
     { href: "/ai-property-analyzer", label: "AI Property Analyzer" },
-    // AI Sales & CRM
     { href: "/ai-lead-qualification", label: "AI Lead Qualification" },
     { href: "/ai-follow-up-scheduler", label: "AI Follow-up Scheduler" },
     { href: "/ai-objection-handler", label: "AI Objection Handler" },
     { href: "/ai-client-matcher", label: "AI Client Matcher" },
-    // AI Reports & Investment
     { href: "/ai-market-report", label: "AI Market Report" },
     { href: "/ai-competitor-analysis", label: "AI Competitor Analysis" },
     { href: "/ai-roi-calculator", label: "AI ROI Calculator" },
     { href: "/ai-investment-report", label: "AI Investment Report" },
-    // AI Communication
     { href: "/ai-meeting-summarizer", label: "AI Meeting Summarizer" },
     { href: "/ai-translation-hub", label: "AI Translation Hub" },
     { href: "/ai-video-tour-script", label: "AI Video Tour Script" },
     { href: "/ai-email-generator", label: "AI Email Generator" },
-    // AI Content
     { href: "/ai-social-media", label: "AI Social Media" },
     { href: "/ai-description-writer", label: "AI Description Writer" },
     { href: "/ai-contract-reviewer", label: "AI Contract Reviewer" },
     { href: "/ai-document-generator", label: "AI Document Generator" },
-    // Productivity Tools
     { href: "/business-card-scanner", label: "Business Card Scanner" },
-    { href: "/documents", label: "Documents & Spreadsheets" },
-    { href: "/video-meeting", label: "Video Meet" },
-    { href: "/ai-calendar", label: "Calendar & Notes" },
-    { href: "/document-scanner", label: "Document Scanner" },
-    { href: "/e-signature", label: "E-Signature" },
-    { href: "/sitemap", label: "Sitemap" },
-    // Missing pages now added
-    { href: "/meeting-center", label: "Meeting Center" },
-    { href: "/ai-call-summarizer", label: "Call Summarizer" },
-    { href: "/presentations", label: "Presentations" },
-    { href: "/form-builder", label: "Form Builder" },
-    { href: "/kanban-board", label: "Kanban Board" },
-    { href: "/spreadsheet", label: "Spreadsheet" },
     { href: "/whiteboard", label: "Whiteboard" },
     { href: "/mind-map", label: "Mind Map" },
-    { href: "/video-builder", label: "Video Builder" },
-    { href: "/ai-hub", label: "AI Hub" },
-    { href: "/ai-personal-shopper", label: "AI Personal Shopper" },
-    { href: "/ai-financial-advisor", label: "AI Financial Advisor" },
-    { href: "/map", label: "Property Map" },
-    { href: "/calculator/roi", label: "ROI Calculator" },
-    { href: "/communities", label: "Communities" },
-    { href: "/pricing", label: "Pricing" },
+    { href: "/form-builder", label: "Form Builder" },
+    { href: "/kanban-board", label: "Kanban Board" },
     { href: "/digital-card", label: "Digital Card" },
-    { href: "/request-valuation", label: "Request Valuation" },
+    { href: "/ai-hub", label: "AI Hub" },
+    { href: "/sitemap", label: "Sitemap" },
   ];
 
   // Education Hub - Link to /guides (contains all books, market reports, guides)
@@ -756,24 +772,28 @@ const Footer = () => {
             {/* Navigation Grid Section - Card-Based 2-Column Layout */}
             <div className="p-4 sm:p-6 md:p-8">
               {/* Merged Navigation Grid: 3 per row desktop, 2 tablet, 1 mobile */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4 auto-rows-auto">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-4 auto-rows-auto">
                 <FooterCard title={t('footer.properties') || 'Properties'} links={propertiesLinks} />
                 <FooterCard title={t('footer.servicesSection') || 'Services'} links={servicesLinks} />
                 <FooterCard title={t('footer.guides') || 'Guides'} links={guidesLinks} />
                 <FooterCard title="About & Careers" links={[...aboutLinks, ...careerLinks]} />
                 <FooterCard title="Sell" links={sellLinks} />
+                <FooterCard title="Investor Hub" links={investorHubLinks} />
+                <FooterCard title="Broker & Academy" links={brokerAcademyLinks} />
+                <FooterCard title="Partners" links={partnersLinks} />
+                <FooterCard title="Legal" links={legalLinks} />
+                <FooterCard title="Business Suites" links={businessSuitesLinks} />
+                <FooterCard title="Productivity" links={productivityLinks} />
                 <FooterCard title="Education Hub" links={[
                   { href: "/broker-education", label: "Books" },
                   { href: "/guides", label: "Guides" },
                   { href: "/market-intelligence/reports", label: "Market Reports" },
                   { href: "/education-hub", label: "Education Hub" },
                 ]} />
-                <FooterCard title="Legal" links={legalLinks} />
-                <FooterCard title="Business Suites" links={businessSuitesLinks} />
               </div>
 
-              {/* ROW 3: AI Tools, Creative Toolkit, Market Intelligence + mode-aware hubs */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 auto-rows-auto">
+              {/* ROW 2: AI Tools, Creative Toolkit, Market Intelligence */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 auto-rows-auto">
                 {/* AI Tools (Top 10 + View All) */}
                 <FooterCard title="AI Tools" links={[
                   { href: "/property-evaluator", label: "Property Evaluator" },
@@ -806,12 +826,6 @@ const Footer = () => {
                   { href: "/e-signature", label: "JBJ E-Sign" },
                   { href: "/toolkit/scan-sign", label: "Scan & Sign" },
                 ]} viewAllHref="/toolkit" viewAllLabel="View All Creative Tools →" />
-
-                {/* Broker Hub - conditional */}
-                {isBrokerMode && <FooterCard title="Broker Hub" links={brokerToolsLinks} />}
-
-                {/* Investor Hub - conditional */}
-                {(isInvestorMode || isCombinedMode) && <FooterCard title="Investor Hub" links={investorHubLinks} />}
               </div>
             </div>
 
