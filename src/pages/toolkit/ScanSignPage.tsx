@@ -612,6 +612,67 @@ export default function ScanSignPage() {
                       className="hidden"
                       onChange={handleFileUpload}
                     />
+
+                    {/* Cross-tool import buttons */}
+                    <div className="mt-3 space-y-2">
+                      <p className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: G.textMuted }}>Import from Tools</p>
+                      <div className="grid grid-cols-3 gap-2">
+                        <button
+                          onClick={() => {
+                            try {
+                              const raw = sessionStorage.getItem('jbj-stamp-export');
+                              if (!raw) { toast.error('No stamp found. Generate one first.'); return; }
+                              const data = JSON.parse(raw);
+                              const imgData = data?.dataUrl || data?.svgDataUrl;
+                              if (!imgData) { toast.error('Invalid stamp data'); return; }
+                              setPages(prev => [...prev, { id: `stamp-${Date.now()}`, imageData: imgData, rotation: 0, brightness: 100, contrast: 100 }]);
+                              toast.success('Stamp imported');
+                            } catch { toast.error('Failed to import stamp'); }
+                          }}
+                          className="flex flex-col items-center gap-1 p-2 rounded-lg text-[10px] font-medium transition-all hover:scale-105"
+                          style={{ border: `1px solid ${G.border}`, background: G.card, color: G.text }}
+                        >
+                          <Stamp className="w-4 h-4" />
+                          Stamp
+                        </button>
+                        <button
+                          onClick={() => {
+                            try {
+                              const raw = sessionStorage.getItem('jbj-business-card-export');
+                              if (!raw) { toast.error('No card found. Design one first.'); return; }
+                              const data = JSON.parse(raw);
+                              const imgData = data?.dataUrl || data?.imageData;
+                              if (!imgData) { toast.error('Invalid card data'); return; }
+                              setPages(prev => [...prev, { id: `card-${Date.now()}`, imageData: imgData, rotation: 0, brightness: 100, contrast: 100 }]);
+                              toast.success('Business card imported');
+                            } catch { toast.error('Failed to import card'); }
+                          }}
+                          className="flex flex-col items-center gap-1 p-2 rounded-lg text-[10px] font-medium transition-all hover:scale-105"
+                          style={{ border: `1px solid ${G.border}`, background: G.card, color: G.text }}
+                        >
+                          <FileText className="w-4 h-4" />
+                          Card
+                        </button>
+                        <button
+                          onClick={() => {
+                            try {
+                              const raw = sessionStorage.getItem('jbj-qr-export');
+                              if (!raw) { toast.error('No QR code found. Generate one first.'); return; }
+                              const data = JSON.parse(raw);
+                              const imgData = data?.dataUrl || data?.imageData;
+                              if (!imgData) { toast.error('Invalid QR data'); return; }
+                              setPages(prev => [...prev, { id: `qr-${Date.now()}`, imageData: imgData, rotation: 0, brightness: 100, contrast: 100 }]);
+                              toast.success('QR code imported');
+                            } catch { toast.error('Failed to import QR'); }
+                          }}
+                          className="flex flex-col items-center gap-1 p-2 rounded-lg text-[10px] font-medium transition-all hover:scale-105"
+                          style={{ border: `1px solid ${G.border}`, background: G.card, color: G.text }}
+                        >
+                          <ScanLine className="w-4 h-4" />
+                          QR
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 )}
               </Panel>
