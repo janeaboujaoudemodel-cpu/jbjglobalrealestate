@@ -228,7 +228,7 @@ const MyDashboard = () => {
     // Scroll after a short delay to ensure DOM is ready
     const timer = setTimeout(() => {
       scrollToId(sectionId, { extraOffset: 16 });
-    }, 400);
+    }, 100);
 
     // Remove highlight after 4 seconds
     const clearTimer = setTimeout(() => {
