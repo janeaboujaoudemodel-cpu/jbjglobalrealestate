@@ -148,7 +148,17 @@ export default function ContentTermsAcceptance({
       <label className="flex items-start gap-3 cursor-pointer p-4 rounded-xl border-2 transition-all bg-zinc-900/50 border-zinc-700 hover:border-zinc-600">
         <Checkbox
           checked={isAccepted}
-          onCheckedChange={(checked) => onAcceptanceChange(checked === true)}
+          onCheckedChange={async (checked) => {
+            const accepted = checked === true;
+            if (accepted) {
+              await saveAgreement({
+                agreementType: 'content_license',
+                agreementSnapshot: CONTENT_LICENSE_SNAPSHOT,
+                consentDetails: { accepted: true },
+              });
+            }
+            onAcceptanceChange(accepted);
+          }}
           className="mt-0.5"
         />
         <div className="text-sm">

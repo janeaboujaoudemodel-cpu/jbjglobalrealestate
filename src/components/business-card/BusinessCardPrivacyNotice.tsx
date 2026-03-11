@@ -119,7 +119,17 @@ const BusinessCardPrivacyNotice = ({ onAccept, onDecline }: BusinessCardPrivacyN
           <Button 
             className="w-full sm:w-auto bg-teal-500 hover:bg-teal-600 text-white"
             disabled={!agreed}
-            onClick={onAccept}
+            onClick={async () => {
+              await saveAgreement({
+                agreementType: 'business_card_privacy',
+                agreementSnapshot: {
+                  title: "AI Business Card Scanner - Privacy & Data Protection",
+                  points: privacyPoints.map(p => ({ title: p.title, description: p.description })),
+                  consent_text: "I understand and agree to the privacy terms.",
+                },
+              });
+              onAccept();
+            }}
           >
             <CheckCircle2 className="h-4 w-4 mr-2" />
             Accept & Continue
