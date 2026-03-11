@@ -77,6 +77,7 @@ interface FilterShortcutBarProps {
   isMapMode?: boolean;
   onMapToggle?: (active: boolean) => void;
   searchSlot?: React.ReactNode;
+  priorityFilter?: 'developers' | 'areas' | 'emirates' | 'projects';
 }
 
 const PRICE_PRESETS = [
