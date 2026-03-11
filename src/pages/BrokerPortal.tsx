@@ -226,9 +226,9 @@ function TrainingProgressSection() {
 
 function DocumentVerificationSection() {
   const { profile } = useBrokerProfile();
-  const verificationStatus = (profile as any)?.verification_status || "unverified";
-  const reraExpiry = (profile as any)?.rera_expiry_date;
-  const idExpiry = (profile as any)?.id_expiry_date;
+  const verificationStatus = profile?.verification_status || "unverified";
+  const reraExpiry = profile?.rera_expiry_date;
+  const idExpiry = profile?.id_expiry_date;
 
   const isExpiringSoon = (date: string | null) => {
     if (!date) return false;
