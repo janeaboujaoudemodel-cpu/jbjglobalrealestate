@@ -580,19 +580,26 @@ const SHORTCUT_GROUPS: ShortcutGroup[] = [
 ];
 
 /* ─── SECTION KEYS ─── */
-const SECTION_KEYS = ["PROPERTIES", "TOOLS", "INSIGHTS", "GUIDES", "SERVICES", "COMPANY", "LEGAL", "MY ACCOUNT"] as const;
+const SECTION_KEYS = ["PROPERTIES", "TOOLS", "AI TOOLS", "INSIGHTS", "GUIDES", "SERVICES", "PARTNERS", "BROKER & ACADEMY", "INVESTOR", "COMPANY", "LEGAL", "PRODUCTIVITY", "MY ACCOUNT", "BUSINESS SUITES", "ADMIN & OWNER"] as const;
 type SectionKey = typeof SECTION_KEYS[number];
 
 /* ─── SECTION ICONS ─── */
 const SECTION_ICONS: Record<SectionKey, any> = {
   "PROPERTIES": Building2,
   "TOOLS": Sparkles,
+  "AI TOOLS": Cpu,
   "INSIGHTS": Lightbulb,
   "GUIDES": BookOpen,
   "SERVICES": Briefcase,
+  "PARTNERS": Handshake,
+  "BROKER & ACADEMY": GraduationCap,
+  "INVESTOR": TrendingUp,
   "COMPANY": Users,
   "LEGAL": Scale,
+  "PRODUCTIVITY": Cog,
   "MY ACCOUNT": User,
+  "BUSINESS SUITES": Boxes,
+  "ADMIN & OWNER": Crown,
 };
 
 /* VerticalNavUtilityBar removed — these controls now live in HorizontalUtilityBar */
