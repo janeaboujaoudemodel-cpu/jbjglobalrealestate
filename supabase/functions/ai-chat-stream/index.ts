@@ -356,9 +356,9 @@ ONLY use these contacts:
         'Authorization': `Bearer ${Deno.env.get('LOVABLE_API_KEY') || ''}`,
       },
       body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
+        model: 'google/gemini-2.5-pro',
         messages,
-        max_tokens: 500,
+        max_tokens: 800,
         temperature: 0.6,
         stream: true,
       }),

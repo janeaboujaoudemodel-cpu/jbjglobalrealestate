@@ -186,6 +186,8 @@ export function ContentProtection() {
       document.removeEventListener('keydown', preventSaveShortcuts);
       document.removeEventListener('contextmenu', preventImageContextMenu);
       document.getElementById('jbj-content-protection')?.remove();
+      ownerMeta.remove();
+      copyrightMeta.remove();
     };
   }, [isDevMode]);
 

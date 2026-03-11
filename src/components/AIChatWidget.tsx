@@ -531,11 +531,14 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
     }
   }, [input, isLoading, messages, selectedService, userInfo.firstName, conversationId]);
 
-  // Submit to team
+  // Submit to team - saves full transcript to owner notes + sends email notification
   const handleSubmitToTeam = useCallback(async (inquirySummary?: string) => {
     if (!conversationId) return;
 
     try {
+      const fullName = `${userInfo.firstName} ${userInfo.lastName}`.trim();
+      const serviceName = SERVICES.find(s => s.id === selectedService)?.label || selectedService || 'General';
+      
       // 1) Update conversation and lead status (CRITICAL)
       await supabase
         .from('chat_conversations')
@@ -547,16 +550,45 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
         .update({ status: 'submitted' })
         .eq('email', userInfo.email);
 
-      // 2) Best-effort admin notification (must NOT block)
+      // 2) Build full transcript for owner notes
+      const transcript = messages.map(m => 
+        `[${m.role === 'user' ? fullName || 'User' : 'Sara AI'}] ${m.content}`
+      ).join('\n\n');
+
+      const noteContent = `🚨 SUPPORT ESCALATION\n\n👤 User: ${fullName}\n📧 Email: ${userInfo.email}\n📞 Phone: ${userInfo.phone || 'Not provided'}\n🌍 Nationality: ${userInfo.nationality || 'Not specified'}\n🗣️ Language: ${userInfo.language || 'English'}\n📍 Location: ${userInfo.currentLocation || 'Not specified'}\n🏠 Service: ${serviceName}\n📄 Page: ${window.location.pathname}\n\n${inquirySummary ? `📝 User Summary: ${inquirySummary}\n\n` : ''}💬 FULL CONVERSATION TRANSCRIPT:\n${'─'.repeat(40)}\n${transcript}\n${'─'.repeat(40)}\n\n✅ SUGGESTED ACTION: Follow up with ${fullName} regarding ${serviceName.toLowerCase()} inquiry. Contact via ${userInfo.phone || userInfo.email}.`;
+
+      // 3) Save to owner's AI Notes system (best-effort, non-blocking)
+      try {
+        // Find owner user ID from profiles
+        const { data: ownerProfile } = await supabase
+          .from('crm_users_profile')
+          .select('user_id')
+          .eq('is_owner', true)
+          .maybeSingle();
+
+        if (ownerProfile?.user_id) {
+          await supabase.from('ai_notes').insert({
+            user_id: ownerProfile.user_id,
+            title: `🚨 Chat Escalation — ${fullName} — ${serviceName}`,
+            content: noteContent,
+            source_type: 'chat_escalation',
+            tags: ['chat-escalation', 'support', serviceName.toLowerCase().replace(/\s+/g, '-')],
+          });
+        }
+      } catch (noteErr) {
+        console.warn('Note save failed (escalation still processed):', noteErr);
+      }
+
+      // 4) Best-effort email notification (must NOT block)
       try {
         await supabase.functions.invoke('send-inquiry-email', {
           body: {
-            fullName: `${userInfo.firstName} ${userInfo.lastName}`,
+            fullName,
             email: userInfo.email,
             phone: userInfo.phone?.replace(/[\s\-\(\)]/g, '') || '+971000000000',
             nationality: userInfo.nationality || 'Not specified',
             language: userInfo.language || 'English',
-            message: `${inquirySummary ? `Inquiry: ${inquirySummary}\n\n` : ''}Chat inquiry from ${userInfo.nationality} - ${userInfo.currentLocation}\nService: ${selectedService}\nLanguage: ${userInfo.language}\n\nConversation transcript attached.`,
+            message: `${inquirySummary ? `Inquiry: ${inquirySummary}\n\n` : ''}Chat inquiry from ${userInfo.nationality || 'Unknown'} - ${userInfo.currentLocation || 'Unknown'}\nService: ${serviceName}\nLanguage: ${userInfo.language || 'English'}\n\nFull transcript saved to your Notes.`,
             source: 'ai_chat_widget',
           },
         });
@@ -570,7 +602,7 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
       console.error('Error submitting to team:', error);
       toast.error('Failed to submit. Please try again.');
     }
-  }, [conversationId, userInfo, selectedService]);
+  }, [conversationId, userInfo, selectedService, messages]);
 
   // Handle rating submission
   const handleSubmitRating = async (rating: number, feedback: string) => {
