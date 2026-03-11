@@ -90,13 +90,15 @@ const BriefingAttendance = () => {
       }
 
       // Notify owner
-      await supabase.from('user_notifications' as any).insert({
-        user_id: '4944592b-93f1-4e05-ab59-4ebe1fee54f1',
-        type: 'briefing_rsvp',
-        title: `Broker RSVP: ${rsvpStatus}`,
-        message: `A broker has RSVP'd "${rsvpStatus}" for briefing ${briefing?.project_name || briefingId}${rsvpStatus === 'late' ? `. Reason: ${lateReason}` : ''}`,
-        is_read: false,
-      }).catch(() => {});
+      try {
+        await supabase.from('user_notifications' as any).insert({
+          user_id: '4944592b-93f1-4e05-ab59-4ebe1fee54f1',
+          type: 'briefing_rsvp',
+          title: `Broker RSVP: ${rsvpStatus}`,
+          message: `A broker has RSVP'd "${rsvpStatus}" for briefing ${briefing?.project_name || briefingId}${rsvpStatus === 'late' ? `. Reason: ${lateReason}` : ''}`,
+          is_read: false,
+        });
+      } catch {}
 
       toast.success('RSVP submitted successfully');
       loadData();
