@@ -567,7 +567,7 @@ export default function GlobalVerticalNav() {
 
   const navigate = useNavigate();
 
-  // Accordion toggle — only one section open at a time + navigate to first item
+  // Accordion toggle — only one section open at a time (expand only, no navigation)
   const toggleSection = (section: SectionKey) => {
     const opening = openSection !== section;
     setOpenSection(prev => prev === section ? null : section);
@@ -577,15 +577,10 @@ export default function GlobalVerticalNav() {
       if (firstMega?.megaMenu) {
         setActiveMegaMenu(firstMega.megaMenu);
       }
-      // Navigate to first item's route
-      const firstItem = items?.[0];
-      if (firstItem) {
-        navigate(firstItem.href);
-      }
-      // Auto-scroll section into view
+      // Auto-scroll section to top of nav viewport
       setTimeout(() => {
         const el = document.getElementById(`nav-section-${section.replace(/\s+/g, '-').toLowerCase()}`);
-        el?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 150);
     }
   };
