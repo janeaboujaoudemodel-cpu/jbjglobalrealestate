@@ -8,6 +8,7 @@ import {
   ChevronRight, ChevronLeft, Clock, Sparkles, Loader2, CheckCircle2,
   Wand2, ArrowUpRight, Building2, Home, Landmark, TreePine, Gift, Crown
 } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
