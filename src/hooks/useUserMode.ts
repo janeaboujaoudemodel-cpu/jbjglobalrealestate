@@ -14,6 +14,7 @@ interface UserModeHook {
   isInvestorMode: boolean;
   isBrokerMode: boolean;
   isCombinedMode: boolean;
+  isDeveloperMode: boolean;
 }
 
 // Map legacy 'client' value to 'investor'
