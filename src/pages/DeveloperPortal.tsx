@@ -520,12 +520,12 @@ const DeveloperPortal = () => {
               </Card>
             </TabsContent>
 
-            {/* REGISTER TAB - Sales Rep / Admin Registration */}
+            {/* REGISTER TAB - Contextual: Developer guidance vs Registration form */}
             <TabsContent value="register" className="mt-6">
               {loadingRep ? (
                 <div className="py-8 text-center"><Loader2 className="w-6 h-6 animate-spin mx-auto text-gold" /></div>
               ) : hasRepProfile ? (
-                <Card className="border-2 border-gold/30">
+                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)]">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-foreground">
                       <UserCheck className="w-5 h-5 text-gold" />
@@ -565,10 +565,69 @@ const DeveloperPortal = () => {
                         </div>
                       </div>
                       {!isRepApproved && (
-                        <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 text-sm text-blue-800">
+                        <div className="bg-gold/10 border border-gold/30 rounded-xl p-3 text-sm text-stone-700">
                           Your registration is under review. Once approved, you'll be able to request briefings and send messages directly.
                         </div>
                       )}
+                    </div>
+                  </CardContent>
+                </Card>
+              ) : isDeveloperMode ? (
+                /* Developer user — show guidance, not "Are you a developer?" */
+                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)]">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-foreground">
+                      <Building2 className="w-5 h-5 text-gold" />
+                      Welcome, Developer
+                    </CardTitle>
+                    <p className="text-sm text-muted-foreground">
+                      Here's how to get the most out of the Developer Portal.
+                    </p>
+                  </CardHeader>
+                  <CardContent className="space-y-5">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="bg-white/60 rounded-xl p-4 border border-gold/20">
+                        <div className="flex items-center gap-2 mb-2">
+                          <FolderOpen className="w-5 h-5 text-gold" />
+                          <h4 className="font-bold text-foreground text-sm">Submit Projects</h4>
+                        </div>
+                        <p className="text-xs text-muted-foreground">Upload brochures, renders, and fact sheets. Our system auto-generates listings for your projects.</p>
+                      </div>
+                      <div className="bg-white/60 rounded-xl p-4 border border-gold/20">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Calendar className="w-5 h-5 text-gold" />
+                          <h4 className="font-bold text-foreground text-sm">Event Invitations</h4>
+                        </div>
+                        <p className="text-xs text-muted-foreground">Invite our brokers to launches, open days, and exclusive previews through the Events tab.</p>
+                      </div>
+                      <div className="bg-white/60 rounded-xl p-4 border border-gold/20">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Briefcase className="w-5 h-5 text-gold" />
+                          <h4 className="font-bold text-foreground text-sm">Request Briefings</h4>
+                        </div>
+                        <p className="text-xs text-muted-foreground">Once registered, schedule project briefings with our broker team at our office or yours.</p>
+                      </div>
+                      <div className="bg-white/60 rounded-xl p-4 border border-gold/20">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Eye className="w-5 h-5 text-gold" />
+                          <h4 className="font-bold text-foreground text-sm">Track Listings</h4>
+                        </div>
+                        <p className="text-xs text-muted-foreground">Monitor your approved projects on our platform and report any corrections needed.</p>
+                      </div>
+                    </div>
+
+                    <div className="bg-gold/10 border-2 border-gold/30 rounded-xl p-4">
+                      <p className="text-sm font-semibold text-foreground mb-1">📋 Register Your Sales Team</p>
+                      <p className="text-xs text-muted-foreground mb-3">
+                        To unlock briefing requests and direct messaging, register yourself or your sales representatives below.
+                      </p>
+                      <SalesRepRegistration
+                        developerName={devName || 'Your Company'}
+                        onRegistered={() => {
+                          refetchRep();
+                          toast.info('Your registration is now under review.');
+                        }}
+                      />
                     </div>
                   </CardContent>
                 </Card>
