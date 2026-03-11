@@ -269,16 +269,16 @@ const TicketHub = () => {
             </div>
 
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-              <TabsList className="grid w-full grid-cols-3 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/30 rounded-xl h-14">
-                <TabsTrigger value="new" className="text-sm font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-foreground data-[state=active]:shadow-md rounded-lg">
+              <TabsList className="grid w-full grid-cols-3 bg-muted/60 border-2 border-gold/30 rounded-xl h-12 p-1 gap-1">
+                <TabsTrigger value="new" className="text-sm font-semibold h-full rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-foreground data-[state=active]:shadow-md">
                   <Plus className="w-4 h-4 mr-2" />
                   New Ticket
                 </TabsTrigger>
-                <TabsTrigger value="track" className="text-sm font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-foreground data-[state=active]:shadow-md rounded-lg">
+                <TabsTrigger value="track" className="text-sm font-semibold h-full rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-foreground data-[state=active]:shadow-md">
                   <Search className="w-4 h-4 mr-2" />
                   My Tickets
                 </TabsTrigger>
-                <TabsTrigger value="inbox" className="text-sm font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-foreground data-[state=active]:shadow-md rounded-lg relative">
+                <TabsTrigger value="inbox" className="text-sm font-semibold h-full rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-foreground data-[state=active]:shadow-md relative">
                   <Inbox className="w-4 h-4 mr-2" />
                   Inbox
                   {(inboxQuery.data?.length || 0) > 0 && (
