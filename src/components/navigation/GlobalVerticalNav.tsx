@@ -547,6 +547,12 @@ const MEGA_MENU_TITLES: Record<MegaMenuKey, string> = {
   company: 'Company',
   legal: 'Legal & Compliance',
   guides: 'Guides & Education',
+  partners: 'Partners',
+  broker: 'Broker & Academy',
+  investor: 'Investor Hub',
+  productivity: 'Productivity',
+  account: 'My Account',
+  suites: 'Business Suites',
 };
 
 /* ─── COLOR-CODED SHORTCUT GROUPS ─── */
