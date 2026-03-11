@@ -118,6 +118,29 @@ export default function JoinApplication() {
 
   // Honeypot field for anti-spam
   const [honeypot, setHoneypot] = useState("");
+  const [openPositions, setOpenPositions] = useState<OpenPosition[]>([]);
+  const [positionsLoading, setPositionsLoading] = useState(true);
+
+  // Fetch open positions from DB
+  useEffect(() => {
+    const fetchPositions = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("open_positions")
+          .select("id, title, department, description, employment_type, is_broker_role, location")
+          .eq("is_active", true)
+          .order("created_at", { ascending: false });
+
+        if (error) throw error;
+        setOpenPositions(data || []);
+      } catch (err) {
+        console.error("Error fetching positions:", err);
+      } finally {
+        setPositionsLoading(false);
+      }
+    };
+    fetchPositions();
+  }, []);
 
   useEffect(() => {
     if (user) {
