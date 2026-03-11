@@ -34,9 +34,9 @@ const KanbanPipeline = ({ userId, onRefresh }: KanbanPipelineProps) => {
   const [loading, setLoading] = useState(true);
   const [draggedLead, setDraggedLead] = useState<Lead | null>(null);
 
-  // Define visible pipeline stages for kanban
+  // Define visible pipeline stages for kanban — grouped by category
   const kanbanStages = PIPELINE_STATUSES.filter(s => 
-    ["new", "contacted", "interested", "qualified", "proposal", "negotiation", "won", "lost"].includes(s.value)
+    ["new", "assigned", "contacted", "interested", "qualified", "viewing", "viewing_done", "negotiation", "offer_sent", "closed_won", "followup", "callback", "no_answer", "on_hold", "not_interested", "closed_lost", "archived"].includes(s.value)
   );
 
   useEffect(() => {

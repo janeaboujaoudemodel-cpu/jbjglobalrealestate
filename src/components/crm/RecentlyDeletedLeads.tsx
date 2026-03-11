@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Trash2, RotateCcw, Search, Clock } from "lucide-react";
+import { Trash2, RotateCcw, Search, Clock, AlertTriangle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { formatDisplayDate } from "@/utils/formatDate";
 import {
@@ -15,6 +15,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface DeletedLead {
   id: string;
@@ -29,13 +40,15 @@ interface DeletedLead {
 interface RecentlyDeletedLeadsProps {
   userId: string;
   onRefresh: () => void;
+  isOwner?: boolean;
 }
 
-export default function RecentlyDeletedLeads({ userId, onRefresh }: RecentlyDeletedLeadsProps) {
+export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = false }: RecentlyDeletedLeadsProps) {
   const [leads, setLeads] = useState<DeletedLead[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [restoring, setRestoring] = useState<string | null>(null);
+  const [erasing, setErasing] = useState<string | null>(null);
 
   useEffect(() => {
     fetchDeletedLeads();
@@ -78,6 +91,40 @@ export default function RecentlyDeletedLeads({ userId, onRefresh }: RecentlyDele
       toast.error(`Restore failed: ${err?.message || "Unknown error"}`);
     } finally {
       setRestoring(null);
+    }
+  };
+
+  const handlePermanentErase = async (leadId: string, leadName: string) => {
+    if (!isOwner) {
+      toast.error("Only the owner can permanently erase leads");
+      return;
+    }
+    setErasing(leadId);
+    try {
+      const { error } = await supabase
+        .from("crm_leads")
+        .delete()
+        .eq("id", leadId);
+
+      if (error) throw error;
+
+      // Audit log
+      await supabase.from("audit_logs").insert({
+        user_id: userId,
+        action_type: 'delete' as any,
+        resource_type: 'lead' as any,
+        resource_id: leadId,
+        description: `Permanently erased lead: ${leadName}`,
+        details: { action: 'permanent_erase' }
+      });
+
+      toast.success("Lead permanently erased");
+      setLeads(prev => prev.filter(l => l.id !== leadId));
+      onRefresh();
+    } catch (err: any) {
+      toast.error(`Erase failed: ${err?.message || "Unknown error"}`);
+    } finally {
+      setErasing(null);
     }
   };
 
@@ -161,7 +208,7 @@ export default function RecentlyDeletedLeads({ userId, onRefresh }: RecentlyDele
                         {formatDisplayDate(lead.deleted_at)}
                       </div>
                     </TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className="text-right space-x-2">
                       <Button
                         variant="secondary"
                         size="sm"
@@ -172,6 +219,38 @@ export default function RecentlyDeletedLeads({ userId, onRefresh }: RecentlyDele
                         <RotateCcw className="h-3.5 w-3.5 mr-1" />
                         {restoring === lead.id ? "Restoring..." : "Restore"}
                       </Button>
+                      {isOwner && (
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              disabled={erasing === lead.id}
+                              className="font-semibold"
+                            >
+                              <AlertTriangle className="h-3.5 w-3.5 mr-1" />
+                              {erasing === lead.id ? "Erasing..." : "Erase"}
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Permanently Erase Lead?</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                This will permanently delete <strong>{lead.full_name}</strong> and all associated data. This action cannot be undone.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction
+                                onClick={() => handlePermanentErase(lead.id, lead.full_name)}
+                                className="bg-red-600 hover:bg-red-700"
+                              >
+                                Permanently Erase
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}

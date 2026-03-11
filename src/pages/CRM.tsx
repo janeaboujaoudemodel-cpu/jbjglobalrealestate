@@ -198,9 +198,10 @@ const CRM = () => {
       return;
     }
     try {
+      // Security: fetch only non-PII fields directly, use masked values for sensitive data
       const { data: leads } = await supabase
         .from("crm_leads")
-        .select("full_name, email_lower, phone_e164, nationality, preferred_language, current_location_country, source, tags, created_at, pipeline_stage, ai_score")
+        .select("id, full_name, nationality, preferred_language, current_location_country, source, tags, created_at, pipeline_stage, ai_score")
         .is("deleted_at", null)
         .order("created_at", { ascending: false });
       
@@ -209,22 +210,36 @@ const CRM = () => {
         return;
       }
       
-      // Log export action for audit trail
+      // Log export action for audit trail with details
       await supabase.from("crm_audit_logs").insert({
         entity_type: 'export',
         entity_id: 'csv_export',
         action: 'export',
         actor_user_id: user?.id,
-        new_values: { count: leads.length, timestamp: new Date().toISOString() }
+        new_values: { 
+          count: leads.length, 
+          timestamp: new Date().toISOString(),
+          export_type: 'csv',
+          user_agent: navigator.userAgent
+        }
       } as any);
+
+      // Log to main audit_logs for compliance
+      await supabase.from("audit_logs").insert({
+        user_id: user?.id,
+        user_email: user?.email,
+        action_type: 'export' as any,
+        resource_type: 'lead' as any,
+        description: `Exported ${leads.length} CRM leads to CSV`,
+        details: { count: leads.length, format: 'csv' }
+      });
       
-      const headers = ["Full Name", "Email", "Phone", "Nationality", "Language", "Country", "Source", "Pipeline Stage", "AI Score", "Tags", "Created At"];
+      // Export WITHOUT raw PII — phone/email excluded from CSV for security
+      const headers = ["Full Name", "Nationality", "Language", "Country", "Source", "Pipeline Stage", "AI Score", "Tags", "Created At"];
       const csvRows = [
         headers.join(","),
         ...leads.map(lead => [
           `"${(lead.full_name || '').replace(/"/g, '""')}"`,
-          lead.email_lower || '',
-          lead.phone_e164 || '',
           lead.nationality || '',
           lead.preferred_language || '',
           lead.current_location_country || '',
@@ -245,7 +260,7 @@ const CRM = () => {
       a.click();
       URL.revokeObjectURL(url);
       
-      toast.success(`Exported ${leads.length} leads to CSV`);
+      toast.success(`Exported ${leads.length} leads to CSV (PII excluded for security)`);
     } catch (err) {
       console.error("Export failed:", err);
       toast.error("Failed to export leads");
@@ -702,7 +717,7 @@ const CRM = () => {
               <TabsContent value="management">
                 {activeTab === "management" && (
                   <Suspense fallback={<CRMTabFallback />}>
-                  <RecentlyDeletedLeads userId={user?.id || ""} onRefresh={handleRefresh} />
+                  <RecentlyDeletedLeads userId={user?.id || ""} onRefresh={handleRefresh} isOwner={profile?.crm_role === 'owner_admin' || profile?.crm_role === 'founder'} />
                   </Suspense>
                 )}
               </TabsContent>

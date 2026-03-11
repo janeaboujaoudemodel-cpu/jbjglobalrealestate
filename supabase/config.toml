@@ -540,3 +540,6 @@ verify_jwt = false
 
 [functions.universal-link-extractor]
 verify_jwt = false
+
+[functions.ai-lead-intelligence]
+verify_jwt = false
