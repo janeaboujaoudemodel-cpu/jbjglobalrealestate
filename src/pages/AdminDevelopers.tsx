@@ -365,6 +365,9 @@ const AdminDevelopers = () => {
             <TabsTrigger value="all" className="data-[state=active]:bg-gold data-[state=active]:text-black">
               All UAE ({filteredDevelopers.length})
             </TabsTrigger>
+            <TabsTrigger value="briefings" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+              📅 Briefings
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="dubai" className="space-y-4">
