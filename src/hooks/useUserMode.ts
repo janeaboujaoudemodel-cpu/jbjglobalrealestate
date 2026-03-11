@@ -20,7 +20,7 @@ interface UserModeHook {
 const normalizeMode = (value: string | null): UserMode => {
   if (value === 'broker') return 'broker';
   if (value === 'investor_broker') return 'investor_broker';
-  // 'client' or anything else defaults to 'investor'
+  if (value === 'developer') return 'developer';
   return 'investor';
 };
 
