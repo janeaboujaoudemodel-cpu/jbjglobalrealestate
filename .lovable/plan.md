@@ -1,99 +1,122 @@
 
 
-## Plan: Brand Palette for All Users, Availability Auto-Hide, Stamp/Tools UI Premium Upgrade, Sitemap Update, and Cross-Tool Integration
+## Plan: Availability Auto-Hide, Stamp UI Premium Upgrade, Sitemap Update, Cross-Tool Integration, Brand Palette Enhancements
 
-This is a large request spanning 6 distinct areas. To avoid quality issues, I recommend implementing in **3 phases**. This plan covers all phases but Phase 1 will be implemented first.
+This plan covers 5 areas across 3 phases. Phase 1 ships first.
 
 ---
 
-### Phase 1: Brand Palette → Public + Per-User Personalization + UI Fixes
+### Phase 1: Availability Auto-Hide + Brand Palette Fixes
 
-**Problem:** Brand Palette is owner-only (`OwnerGuard`), live preview doesn't work properly, color swatches are square inside rounded cards, hex codes are visible to all, no color wheel, no saved palette history, no per-user personalization.
+#### 1A. Availability Auto-Hide (Database + UI)
+
+**Current state:** No `availability_visible` column exists on `projects`. Unit counts are shown on property detail pages.
 
 **Changes:**
+- **Migration:** Add `availability_visible boolean DEFAULT false` to `projects` table
+- **Property detail pages:** Hide availability/unit-count sections when `availability_visible = false`
+- **Listing Admin:** Add a toggle switch per project to set `availability_visible`
+- **Developer Portal uploads:** Auto-set `availability_visible = false` on insert
 
-#### 1A. Database: `user_color_palettes` table
-```sql
-CREATE TABLE public.user_color_palettes (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  name text NOT NULL DEFAULT 'Custom Palette',
-  palette jsonb NOT NULL,
-  is_active boolean DEFAULT false,
-  created_at timestamptz DEFAULT now()
-);
--- RLS: users CRUD their own palettes only
-```
+**Files:** DB migration, `ProjectDetailLayout.tsx`, listing admin components
 
-#### 1B. Remove `OwnerGuard` from brand palette route
-Move `/owner/brand-palette` → `/brand-palette` as a public authenticated route. Owner sees full hex codes + corporate palette management. Regular users see:
-- Color wheel pickers (no hex codes visible)
-- Visual labels ("Primary — buttons, links", etc.) with live example previews
-- Apply to "Website" or "Tools only" toggle
-- Save/Revert/History of their personal palettes
-- Palettes saved per-user in `user_color_palettes`
+#### 1B. Brand Palette — Already Public, Fix UI Details
 
-#### 1C. Fix UI issues
-- Match color swatch shape to card container (use `rounded-2xl` on swatches to match card radius)
-- Add a clickable color wheel icon next to each swatch for users who don't know to click the square
-- Fix live preview: make `isPreviewing` default to `true` so changes reflect immediately
-- Show accurate JBJ website palette as defaults: `primary: #C8A766, secondary: #000000, accent: #D4AF37, background: #FDFBF7, text: #1A1A1A`
+**Current state:** Route is already public at `/brand-palette` (no OwnerGuard). Hex codes already hidden from non-owners (line 235 checks `isOwner`). Color swatch already uses `rounded-2xl` and has a `CircleDot` wheel icon.
 
-#### 1D. BrandPaletteContext updates
-- Load user's active personal palette from `user_color_palettes` for non-owners
-- Owner's palette comes from `app_settings` (unchanged)
-- `applyPaletteToDOM()` already works — just needs to trigger on page load for per-user palettes
+**Remaining fixes:**
+- The `input type="color"` native picker is limited — no actual color wheel UI. Add a visual color wheel icon/button that is more obvious (larger, with tooltip "Click to change color")
+- Ensure the default palette displayed matches the real JBJ website colors (already correct: `#C8A766, #000000, #D4AF37, #FDFBF7, #1A1A1A`)
+- In AI tools (stamp, e-sign, business card), owner sees brand palette colors in color pickers; non-owners see generic palette only — add `isOwner` check in tool color picker sections
 
-**Files:**
-| File | Action |
-|------|--------|
-| Database migration | Create `user_color_palettes` |
-| `src/routes/AdminRoutes.tsx` | Move palette route from OwnerGuard to authenticated |
-| `src/pages/owner/BrandPaletteHub.tsx` | Major refactor: dual-mode (owner vs user), color wheels, no hex for users, palette history, shape fixes |
-| `src/contexts/BrandPaletteContext.tsx` | Load per-user palette, add `saveUserPalette`, `getUserPaletteHistory`, `revertToDefault` |
-| `src/components/navigation/GlobalVerticalNav.tsx` | Update nav link path |
+**Files:** `BrandPaletteHub.tsx` (wheel UX), stamp/e-sign/business card color picker components
 
 ---
 
-### Phase 2: Availability Auto-Hide + Stamp Generator Premium UI
+### Phase 2: Stamp Generator + All Tools Premium UI Upgrade
 
-**Problem:** Property availability/unit counts are visible to investors (discourages urgency). Stamp generator UI needs premium upgrade.
+#### 2A. Stamp Generator Landing Page
 
-#### 2A. Availability auto-hide
-- Add `availability_visible` boolean column to `projects` table (default `false`)
-- All public-facing property pages: hide availability/unit count data when `availability_visible = false`
-- Owner can toggle visibility per-project from Listing Admin
-- Developer Portal uploads auto-set `availability_visible = false`
+**Current state:** `StampGeneratorPage.tsx` (landing) uses `bg-white` — not matching the champagne gradient theme.
 
-#### 2B. Stamp Generator premium UI overhaul
-- Apply champagne gradient theme consistently (matching Royal Tools Hub)
-- Default to "Ink Blue" standard with the two canonical company stamp designs
-- Gold-bordered cards, premium typography, centered preview
-- Upgrade security: sanitize all SVG inputs, encrypt stamp data in session storage
+**Changes:**
+- Replace `bg-white` with champagne gradient (`from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]`)
+- Add gold-bordered cards (`border-2 border-gold/40`)
+- Default to "Ink Blue" standard (already first in `PALETTE_PRESETS` — verify it auto-selects)
+- Premium typography with Poppins font references
 
-**Files:** `projects` migration, Listing Admin toggle, property detail pages, `StampGeneratorPage.tsx`, `StampProjectWizard.tsx`, related stamp components
+#### 2B. Stamp Generator Main + Wizard
+
+**Current state:** `StampGeneratorPage.tsx` (main, 1312 lines) and `StampProjectWizard.tsx` (839 lines) — need champagne gradient backgrounds, gold card borders, centered preview.
+
+**Changes:**
+- Background: champagne gradient on outer container
+- Cards: `border-2 border-gold/40 rounded-xl` with `bg-gradient-to-br from-[#FDFBF7]/95 to-[#EDE4D3]/80`
+- Preview section: centered with `mx-auto` and prominent border
+- SVG sanitization already in place via DOMPurify in `StampSVGRenderer.tsx` — verify encryption of stamp data in sessionStorage (add `btoa()` wrapper)
+
+#### 2C. Other Tools Premium UI Pass
+
+Apply the same champagne gradient + gold border treatment to:
+- Business Card Designer (`/toolkit/corporate-suite/business-card`)
+- Logo Creator (`/toolkit/corporate-suite/logo-creator`)
+- Cover Letter Generator (`/toolkit/corporate-suite/cover-letter`)
+- E-Signature pages (`/e-signature/*`)
+- Contract Reviewer (`/ai-contract-reviewer`)
+- QR Code Generator (if exists as standalone)
+
+**Approach:** Each tool's outer container gets the champagne gradient background and gold-bordered card wrappers. Preview sections stay centered. No layout changes.
+
+#### 2D. Cross-Tool Integration in Scan & Sign
+
+**Current state:** `ScanSignPage.tsx` saves to localStorage. No import buttons for stamps/cards/QR.
+
+**Changes:**
+- Add "Import Stamp" button — reads from `sessionStorage` key used by stamp generator
+- Add "Import Business Card" button — reads from business card session data
+- Add "Import QR Code" button — reads from QR generator session data
+- Each inserts the asset as a new page/overlay in the Scan & Sign workflow
+- Buttons styled as gold-bordered compact actions in the toolbar
+
+**Files:** `src/pages/toolkit/ScanSignPage.tsx`
 
 ---
 
-### Phase 3: Sitemap Update, Cross-Tool Integration, Security Hardening
+### Phase 3: Sitemap Update
 
-#### 3A. Sitemap
-Add missing tool links: Brand Palette, Scan & Sign, all new features added recently.
+Add missing tools/features to the `hubSections` in `Sitemap.tsx`:
 
-#### 3B. Cross-tool integration
-- Scan & Sign: add "Import Stamp", "Import Business Card", "Import QR Code" buttons that pull from session storage
-- E-Signature: already has stamp integration — verify QR code and business card import paths
-- All tools: ensure owner sees their brand palette colors in color pickers; non-owners see generic palette
+**Tools section — add:**
+- `{ href: "/brand-palette", label: "Brand Color Palette" }`
+- `{ href: "/toolkit/scan-sign", label: "Scan & Sign" }`
+- `{ href: "/toolkit/stamp-generator", label: "AI Stamp Generator" }`
+- `{ href: "/toolkit/corporate-suite/business-card", label: "Business Card Designer" }`
+- `{ href: "/toolkit/corporate-suite/logo-creator", label: "Logo Creator" }`
+- `{ href: "/toolkit/corporate-suite/cover-letter", label: "Cover Letter Generator" }`
+- `{ href: "/toolkit/corporate-suite/cv-resume", label: "CV & Resume Builder" }`
+- `{ href: "/toolkit/corporate-suite/company-profile", label: "Company Profile Builder" }`
+- `{ href: "/e-signature", label: "E-Signature" }`
+- `{ href: "/ai-contract-reviewer", label: "AI Contract Reviewer" }`
+- `{ href: "/toolkit/pdf-suite", label: "PDF Suite" }`
+- `{ href: "/toolkit/video-suite", label: "Video Suite" }`
+- `{ href: "/toolkit/voice-suite", label: "Voice Suite" }`
+- `{ href: "/toolkit/photo-suite", label: "Photo Suite" }`
+- `{ href: "/toolkit/background-ai", label: "AI Background Remover" }`
+- `{ href: "/toolkit/beauty-filters", label: "Beauty Filters" }`
+- `{ href: "/resale-properties", label: "Resale Properties" }`
+- `{ href: "/presentations", label: "Presentations" }`
 
-#### 3C. Global security
-- RLS audit across new tables
-- Edge function JWT hardening review
-- DOM obfuscation layer verification
-
-**Files:** `Sitemap.tsx`, `ScanSignPage.tsx`, `CreateEnvelope.tsx`, tool color pickers, edge functions
+**Files:** `src/pages/Sitemap.tsx`
 
 ---
 
-### Implementation Priority
-**Phase 1 first** (Brand Palette) — directly addresses the page user is currently viewing and the most detailed feedback. Phases 2 and 3 follow in subsequent messages.
+### Summary
+
+| # | Area | Key Files |
+|---|------|-----------|
+| 1A | Availability auto-hide | DB migration, `ProjectDetailLayout.tsx`, listing admin |
+| 1B | Brand palette UX polish | `BrandPaletteHub.tsx`, tool color pickers |
+| 2A-C | Premium UI for all tools | Stamp landing/main/wizard, business card, logo, cover letter, e-sign, contract reviewer |
+| 2D | Cross-tool integration | `ScanSignPage.tsx` |
+| 3 | Sitemap update | `Sitemap.tsx` |
 
