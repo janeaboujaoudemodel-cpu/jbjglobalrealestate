@@ -88,7 +88,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Company Profile", href: "/toolkit/corporate-suite/company-profile", icon: Award },
   { label: "E-Sign", href: "/e-signature", icon: Globe },
   { label: "Scan & Sign", href: "/toolkit/scan-sign", icon: Camera },
-  { label: "Brand Palette", href: "/owner/brand-palette", icon: Palette },
+  { label: "Brand Palette", href: "/brand-palette", icon: Palette },
 
   // ── Insights (no more Guides here) ──
   { label: "Market Intelligence", href: "/market-intelligence", icon: BarChart3, section: "INSIGHTS" },

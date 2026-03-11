@@ -101,7 +101,8 @@ export const AdminRoutes = () => (
 
     {/* ── Owner Tools (in main layout) ── */}
     <Route path="/owner/creative-suite" element={<OwnerGuard><OwnerCreativeSuite /></OwnerGuard>} />
-    <Route path="/owner/brand-palette" element={<OwnerGuard><BrandPaletteHub /></OwnerGuard>} />
+    <Route path="/owner/brand-palette" element={<BrandPaletteHub />} />
+    <Route path="/brand-palette" element={<BrandPaletteHub />} />
     <Route path="/owner/job-offer-template" element={<OwnerGuard><JobOfferTemplate /></OwnerGuard>} />
     <Route path="/owner/recommendations" element={<OwnerGuard><OwnerRecommendations /></OwnerGuard>} />
     <Route path="/hr-agent" element={<OwnerGuard><HRAgent /></OwnerGuard>} />
