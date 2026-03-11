@@ -571,8 +571,12 @@ export default function GlobalVerticalNav() {
     return { highlightItems: highlights, sectionGroups: sections };
   }, []);
 
-  // Auto-open section containing active route on mount
+  // Auto-open section containing active route on INITIAL MOUNT only
+  // (not on every pathname change — that overrides the user's manual toggle)
+  const hasAutoOpenedRef = React.useRef(false);
   useEffect(() => {
+    if (hasAutoOpenedRef.current) return;
+    hasAutoOpenedRef.current = true;
     for (const [section, items] of Object.entries(sectionGroups)) {
       if (items.some(item => isRouteActive(item.href))) {
         setOpenSection(section as SectionKey);
@@ -580,12 +584,13 @@ export default function GlobalVerticalNav() {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname]);
+  }, []);
 
   const navigate = useNavigate();
 
-  // Accordion toggle — only one section open at a time (expand only, no navigation)
-  const toggleSection = (section: SectionKey) => {
+  // Accordion toggle — only one section open at a time (instant open/close)
+  const toggleSection = (section: SectionKey, e?: React.MouseEvent) => {
+    e?.stopPropagation();
     const opening = openSection !== section;
     setOpenSection(prev => prev === section ? null : section);
     if (opening) {
@@ -594,11 +599,14 @@ export default function GlobalVerticalNav() {
       if (firstMega?.megaMenu) {
         setActiveMegaMenu(firstMega.megaMenu);
       }
-      // Auto-scroll section to top of nav viewport
-      setTimeout(() => {
+      // Only scroll into view when OPENING (not closing)
+      requestAnimationFrame(() => {
         const el = document.getElementById(`nav-section-${section.replace(/\s+/g, '-').toLowerCase()}`);
         el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 150);
+      });
+    } else {
+      // When closing, also close any active mega menu from that section
+      setActiveMegaMenu(null);
     }
   };
 
@@ -1001,7 +1009,7 @@ export default function GlobalVerticalNav() {
 
                 <div id={`nav-section-${sectionKey.replace(/\s+/g, '-').toLowerCase()}`}>
                   <button
-                    onClick={() => toggleSection(sectionKey)}
+                    onClick={(e) => toggleSection(sectionKey, e)}
                     className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-[11px] uppercase tracking-[0.15em] font-bold transition-all border ${
                       sectionKey === 'MY ACCOUNT'
                         ? sectionHighlighted

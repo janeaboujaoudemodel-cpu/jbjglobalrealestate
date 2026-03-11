@@ -132,6 +132,23 @@ export const GlobalSEO = () => {
         },
         "url": "https://jbj.ae",
         "priceRange": "$$$$"
+      },
+      // SiteNavigationElement Schema - helps Google understand site hierarchy
+      {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "itemListElement": [
+          { "@type": "SiteNavigationElement", "position": 1, "name": "Buy Property", "url": "https://jbj.ae/properties" },
+          { "@type": "SiteNavigationElement", "position": 2, "name": "Sell Property", "url": "https://jbj.ae/sell" },
+          { "@type": "SiteNavigationElement", "position": 3, "name": "Rent Property", "url": "https://jbj.ae/rent" },
+          { "@type": "SiteNavigationElement", "position": 4, "name": "Developers", "url": "https://jbj.ae/developers" },
+          { "@type": "SiteNavigationElement", "position": 5, "name": "Areas", "url": "https://jbj.ae/areas" },
+          { "@type": "SiteNavigationElement", "position": 6, "name": "AI Tools", "url": "https://jbj.ae/ai-hub" },
+          { "@type": "SiteNavigationElement", "position": 7, "name": "Market Intelligence", "url": "https://jbj.ae/market-intelligence" },
+          { "@type": "SiteNavigationElement", "position": 8, "name": "Guides", "url": "https://jbj.ae/guides" },
+          { "@type": "SiteNavigationElement", "position": 9, "name": "About Us", "url": "https://jbj.ae/about" },
+          { "@type": "SiteNavigationElement", "position": 10, "name": "Contact", "url": "https://jbj.ae/contact" }
+        ]
       }
     ];
 
