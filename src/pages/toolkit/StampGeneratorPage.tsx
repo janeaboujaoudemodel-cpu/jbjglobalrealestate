@@ -91,7 +91,7 @@ export default function StampGeneratorLanding() {
       </section>
 
       {/* How it works */}
-      <section className="py-16 px-6 bg-white">
+      <section className="py-16 px-6 bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)]">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-2xl font-bold text-[hsl(var(--foreground))] text-center mb-10">How It Works</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
