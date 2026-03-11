@@ -295,7 +295,7 @@ const CRMLeadDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background p-6">
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)] p-6 pt-24">
         <div className="max-w-7xl mx-auto space-y-6">
           <div className="flex items-center gap-4">
             <Skeleton className="h-10 w-10 rounded-full" />
