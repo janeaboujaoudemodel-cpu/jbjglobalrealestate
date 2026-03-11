@@ -170,6 +170,7 @@ const PartnerGovernance = lazy(() => import("@/pages/governance/PartnerGovernanc
 
 // ── Developer Portal ──
 const DeveloperPortal = lazy(() => import("@/pages/DeveloperPortal"));
+const BriefingAttendance = lazy(() => import("@/pages/BriefingAttendance"));
 const TicketHub = lazy(() => import("@/pages/TicketHub"));
 const ApiAccess = lazy(() => import("@/pages/ApiAccess"));
 
