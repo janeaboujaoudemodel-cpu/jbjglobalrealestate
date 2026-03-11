@@ -8,17 +8,33 @@ import {
   FileCheck,
   Lock
 } from "lucide-react";
+import { useAgreementSaver } from "@/hooks/useAgreementSaver";
 
 interface ContentTermsAcceptanceProps {
   onAcceptanceChange: (accepted: boolean) => void;
   isAccepted: boolean;
 }
 
+const CONTENT_LICENSE_SNAPSHOT = {
+  title: "JBJ Global Real Estate - Content License Agreement",
+  version: "1.0",
+  sections: [
+    "PERSONAL LICENSE: Non-transferable, non-exclusive license for personal professional development only.",
+    "PROHIBITED ACTIONS: No sharing credentials, downloading, copying, redistributing, screen recording, or reselling.",
+    "SECURITY MONITORING: Device fingerprinting, session tracking, and watermarking employed.",
+    "LEGAL CONSEQUENCES: Violations subject to UAE Federal Law No. 38 of 2021 and Federal Decree-Law No. 5 of 2012. Fines up to AED 500,000, imprisonment up to 2 years.",
+    "SINGLE DEVICE POLICY: Subscription restricted to a single device at any time.",
+    "INTELLECTUAL PROPERTY: All content is exclusive property of JBJ Global Real Estate.",
+  ],
+  legal_basis: "UAE Federal Law No. 38 of 2021 (Copyright), UAE Federal Decree-Law No. 5 of 2012 (Cybercrimes)",
+};
+
 export default function ContentTermsAcceptance({ 
   onAcceptanceChange, 
   isAccepted 
 }: ContentTermsAcceptanceProps) {
   const [termsExpanded, setTermsExpanded] = useState(false);
+  const { saveAgreement } = useAgreementSaver();
 
   return (
     <div className="space-y-4">
