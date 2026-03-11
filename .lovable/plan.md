@@ -1,41 +1,25 @@
 
 
-## Plan: Fix All Email Issues Across All Templates
+## Plan: Full-Fit Active Tab Styling in Ticket Hub
 
-### Problems Identified
+### Problem
+The tab triggers (New Ticket, My Tickets, Inbox) in `TicketHub.tsx` appear as small rounded rectangles that don't fill the full height/width of their grid cell when active. The active state needs to stretch edge-to-edge vertically and horizontally within the tab bar.
 
-1. **Recommended For You icons disappeared** — Inline SVGs are stripped by Gmail and most email clients. Must revert to hosted PNG images (`ai-tools.png`, `guides.png`, `properties.png` already exist in `public/email-icons/`).
+### Fix
 
-2. **Social media footer icons not rendering** — Same issue: `socialLinksFooter()` loads external `.svg` files via `<img>` tags, but Gmail blocks SVG images entirely. Must switch to hosted `.png` files. Currently missing `social-facebook.png` — need to confirm or create it.
+**File: `src/pages/TicketHub.tsx` (line 272-289)**
 
-3. **Email split into multiple visual cards** — Several sub-sections (`ticketSupportEmbed`, `readyToGetStartedHtml`, `recommendedActionsHtml`) each have their own `border`, `border-radius`, and `background` styles creating distinct visual boxes. These need to be softened so they sit seamlessly inside the single continuous card.
+Update the `TabsList` and each `TabsTrigger` styling:
 
-### Changes (all in `supabase/functions/_shared/email-html.ts`)
+- **TabsList (line 272):** Change `h-14` to `h-12 p-1` and add `gap-1` so triggers fill the container with minimal padding.
+- **Each TabsTrigger (lines 273, 277, 281):** Replace `rounded-lg` with `rounded-lg h-full` to ensure full vertical fill. Add `data-[state=active]:rounded-lg` for clean active corners. Remove any implicit padding that constrains the trigger size.
 
-#### A. Recommended For You — Revert to PNG hosted images
-- Change `recommendedCard()` back to using `iconImg()` with PNG paths
-- Remove the `RECOMMENDED_ICONS` inline SVG object
-- Ensure circular frame clips the PNG with `overflow:hidden` on the `<td>` to prevent square backgrounds
-- Signature: `recommendedCard(title, href, iconPath, alt)` — restore the original parameters
+The key CSS changes per trigger:
+```
+className="text-sm font-semibold h-full rounded-lg
+  data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:to-[#D4C4A8]
+  data-[state=active]:text-foreground data-[state=active]:shadow-md"
+```
 
-#### B. Social Footer — Switch to PNG with white pearl background
-- Replace `socialLinksFooter()` to use the inline `SVG` object icons (instagram, facebook, linkedin, tiktok, youtube) that are already defined at the top of the file — these render as raw HTML inside `<td>` elements, not as `<img>` tags, so they should survive email client processing
-- Actually, since Gmail strips ALL SVG (both inline and `<img>`), switch to using the `.png` files: `social-instagram.png`, `social-linkedin.png`, `social-tiktok.png`, `social-youtube.png`
-- Create `social-facebook.png` if missing
-- Style each icon circle: white/pearl (#FDFBF7) background, gold border, black icon inside
-
-#### C. Single Card Layout — Remove visual fragmentation
-- `ticketSupportEmbed()`: Remove the heavy gradient background and red border; make it blend into the card
-- `readyToGetStartedHtml()`: Remove the outer border and separate background so it flows within the card
-- `inquiryBox()`: Soften its standalone bordered look
-- Keep all content inside the single `emailShell` wrapper card with no sub-borders that create separation
-
-#### D. Deploy + Send Test Email
-- Deploy the updated edge function
-- Immediately send a test welcome email to `janeaboujaoudenails@gmail.com`
-- Take a screenshot as proof
-
-### Files Modified
-- `supabase/functions/_shared/email-html.ts` — all icon and layout fixes
-- `public/email-icons/social-facebook.png` — create if missing (or use existing assets)
+This ensures the active tab fills its entire grid cell from top to bottom and left to right, matching the full-fit expectation.
 
