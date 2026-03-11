@@ -373,6 +373,7 @@ export const PublicRoutes = () => (
     <Route path="/broker-hub" element={<BrokerHub />} />
     <Route path="/jbj-academy" element={<JBJAcademy />} />
     <Route path="/academy/graduates" element={<AcademyGraduates />} />
+    <Route path="/broker-portal" element={<BrokerPortal />} />
     <Route path="/document-scanner" element={<ScanSignDocuments />} />
     <Route path="/scan-sign" element={<Navigate to="/document-scanner" replace />} />
     <Route path="/scan-sign-documents" element={<Navigate to="/document-scanner" replace />} />
