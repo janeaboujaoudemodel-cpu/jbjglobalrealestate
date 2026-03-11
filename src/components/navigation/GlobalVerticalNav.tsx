@@ -10,7 +10,12 @@ import {
   LayoutDashboard, FolderOpen, ListChecks, Bell, Zap, Menu, X, Star,
   Scale, Eye, Ticket, Compass, HandCoins, Handshake, Lock, Accessibility,
   ShieldCheck, Newspaper, BookMarked, Landmark, Camera, Ruler,
-  LogOut,
+  LogOut, Wrench, Package, Hammer, Gavel, PaintBucket, Scissors, ScanLine,
+  Wallet, Truck, BadgeCheck, SmilePlus, MessageCircle, Monitor,
+  Database, Cog, HardHat, UserPlus, Presentation,
+  QrCode, FileSignature, MailOpen, MessagesSquare,
+  Workflow, BellRing, Crown, Boxes, Store, Gem, Receipt, Banknote,
+  Podcast, NotebookPen, BookText, HelpCircle, ScrollText,
 } from "lucide-react";
 import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png";
 import React, { useState, useCallback, useEffect, useMemo } from "react";
@@ -70,7 +75,15 @@ const NAV_ITEMS: NavItem[] = [
   { label: "List for Sale / Rent", href: "/listing-portal", icon: PlusCircle },
   { label: "Developers", href: "/developers", icon: Building, megaMenu: 'developers' },
   { label: "Areas", href: "/areas", icon: MapPin, megaMenu: 'areas' },
+  { label: "Communities", href: "/communities", icon: Users },
   { label: "Map", href: "/map", icon: MapPin },
+  { label: "Submit Listing", href: "/listing-portal/submit", icon: FilePlus },
+  { label: "My Listings", href: "/listing-portal/my-listings", icon: FolderOpen },
+  { label: "Property Evaluator", href: "/property-evaluator", icon: BarChart3 },
+  { label: "Rental Index", href: "/rental-index", icon: TrendingUp },
+  { label: "Sell With Us", href: "/sell", icon: Tag },
+  { label: "Property Valuation", href: "/sell/valuation", icon: DollarSign },
+  { label: "Property Measurement", href: "/property-measurement", icon: Ruler },
 
   // ── Creative & Tools ──
   { label: "Royal Tools Hub", href: "/toolkit", icon: Sparkles, section: "TOOLS" },
@@ -85,28 +98,80 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Logo Maker", href: "/toolkit/corporate-suite/logo-creator", icon: Palette },
   { label: "CV Builder", href: "/toolkit/corporate-suite/cv-resume", icon: FileSearch },
   { label: "Cover Letter", href: "/toolkit/corporate-suite/cover-letter", icon: Pen },
-  { label: "Company Profile", href: "/toolkit/corporate-suite/company-profile", icon: Award },
-  { label: "E-Sign", href: "/e-signature", icon: Globe },
-  { label: "Scan & Sign", href: "/toolkit/scan-sign", icon: Camera },
+  { label: "Company Profile Builder", href: "/toolkit/corporate-suite/company-profile", icon: Award },
+  { label: "Landing Page Builder", href: "/toolkit/corporate-suite/landing-page", icon: Globe },
+  { label: "E-Sign", href: "/e-signature", icon: FileSignature },
+  { label: "Scan & Sign", href: "/toolkit/scan-sign", icon: ScanLine },
   { label: "Brand Palette", href: "/brand-palette", icon: Palette },
+  { label: "Video Resize Pack", href: "/toolkit/video-resize-pack", icon: Video },
+  { label: "PDF from Photos", href: "/toolkit/pdf-from-photos", icon: FilePlus },
+  { label: "Image Resize", href: "/toolkit/image-resize", icon: Image },
+  { label: "Voice Studio", href: "/toolkit/voice-studio", icon: Mic },
+  { label: "Voice Studio Pro", href: "/toolkit/voice-studio-pro", icon: Mic },
+  { label: "AI Video Studio", href: "/toolkit/ai-video-studio", icon: Video },
+  { label: "Captions & Translate", href: "/toolkit/captions-translate", icon: Languages },
+  { label: "Background AI", href: "/toolkit/background-ai", icon: PaintBucket },
+  { label: "Beauty Filters", href: "/toolkit/beauty-filters", icon: Sparkles },
+  { label: "PDF Editor", href: "/toolkit/pdf-editor", icon: FileText },
 
-  // ── Insights (no more Guides here) ──
+  // ── AI Tools ──
+  { label: "AI Personal Shopper", href: "/ai-personal-shopper", icon: Store, section: "AI TOOLS" },
+  { label: "AI Investment Report", href: "/ai-investment-report", icon: TrendingUp },
+  { label: "Voice Agent Settings", href: "/voice-settings", icon: Mic },
+  { label: "AI Calendar", href: "/ai-calendar", icon: CalendarClock },
+  { label: "AI Budget Planner", href: "/ai-budget-planner", icon: Wallet },
+  { label: "AI Property Analyzer", href: "/ai-property-analyzer", icon: Building },
+  { label: "AI Price Predictor", href: "/ai-price-predictor", icon: TrendingUp },
+  { label: "AI Neighborhood", href: "/ai-neighborhood-insights", icon: MapPin },
+  { label: "Interior Design AI", href: "/interior-design-ai", icon: Palette },
+  { label: "AI Lead Qualification", href: "/ai-lead-qualification", icon: UserCheck },
+  { label: "AI Follow-up Scheduler", href: "/ai-followup-scheduler", icon: CalendarClock },
+  { label: "AI Objection Handler", href: "/ai-objection-handler", icon: MessageSquare },
+  { label: "AI Client Matcher", href: "/ai-client-matcher", icon: Users },
+  { label: "AI Competitor Analysis", href: "/ai-competitor-analysis", icon: Eye },
+  { label: "AI Market Report", href: "/ai-market-report", icon: FileText },
+  { label: "AI ROI Calculator", href: "/ai-roi-calculator", icon: Calculator },
+  { label: "AI Email Generator", href: "/ai-email-generator", icon: Mail },
+  { label: "AI Translation Hub", href: "/ai-translation-hub", icon: Languages },
+  { label: "AI Video Tour Script", href: "/ai-video-tour-script", icon: Video },
+  { label: "AI Social Media", href: "/ai-social-media", icon: Share2 },
+  { label: "AI Description Writer", href: "/ai-description-writer", icon: PenTool },
+  { label: "AI Meeting Summarizer", href: "/ai-meeting-summarizer", icon: Mic },
+  { label: "AI Call Summarizer", href: "/ai-call-summarizer", icon: Phone },
+  { label: "AI Contract Reviewer", href: "/ai-contract-reviewer", icon: FileSearch },
+  { label: "AI Document Generator", href: "/ai-document-generator", icon: FilePlus },
+  { label: "AI History", href: "/my-ai-history", icon: Bot },
+
+  // ── Insights ──
   { label: "Market Intelligence", href: "/market-intelligence", icon: BarChart3, section: "INSIGHTS" },
   { label: "Insights", href: "/insights", icon: Lightbulb, megaMenu: 'insights' },
   { label: "News", href: "/news", icon: Megaphone },
+  { label: "Market Report", href: "/market-report", icon: FileText },
+  { label: "Market Overview", href: "/market-intelligence/overview", icon: BarChart3 },
+  { label: "Area Intelligence", href: "/market-intelligence/areas", icon: MapPin },
+  { label: "Reports Archive", href: "/market-intelligence/reports", icon: FolderOpen },
+  { label: "Methodology", href: "/market-intelligence/methodology", icon: BookOpen },
 
-  // ── Guides (standalone hub) ──
+  // ── Guides ──
   { label: "Guides Library", href: "/guides", icon: BookOpen, megaMenu: 'guides', section: "GUIDES" },
   { label: "Buyer's Guide", href: "/buyer-guide", icon: FileText },
   { label: "Seller's Guide", href: "/seller-guide", icon: FileText },
+  { label: "Seller Listing Guide", href: "/seller-listing", icon: FileText },
   { label: "Rental Guide", href: "/rent-guide", icon: FileText },
   { label: "Tenant Guide", href: "/tenant-guide", icon: FileText },
   { label: "Landlord Guide", href: "/landlord-guide", icon: FileText },
+  { label: "Landlord Portal", href: "/landlord-portal", icon: Key },
   { label: "Investor Education", href: "/investor-education", icon: GraduationCap },
   { label: "Broker Education", href: "/broker-education", icon: GraduationCap },
   { label: "Golden Visa Guide", href: "/guides/golden-visa-uae", icon: Award },
   { label: "Books Library", href: "/education-hub", icon: BookMarked },
-  { label: "FAQ Hub", href: "/faq", icon: Lightbulb },
+  { label: "FAQ Hub", href: "/faq", icon: HelpCircle },
+  { label: "Investor FAQ", href: "/investor-faq", icon: HelpCircle },
+  { label: "Buyer FAQ", href: "/buyer-faq", icon: HelpCircle },
+  { label: "Seller FAQ", href: "/seller-faq", icon: HelpCircle },
+  { label: "Landlord FAQ", href: "/landlord-faq", icon: HelpCircle },
+  { label: "Tenant FAQ", href: "/tenant-faq", icon: HelpCircle },
+  { label: "Broker FAQ", href: "/broker-faq", icon: HelpCircle },
 
   // ── Services ──
   { label: "All Services", href: "/services", icon: Briefcase, megaMenu: 'services', section: "SERVICES" },
@@ -118,11 +183,63 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Short-term Rentals", href: "/services/short-term-rentals", icon: CalendarClock },
   { label: "Concierge", href: "/services/concierge", icon: Handshake },
   { label: "Company Setup", href: "/services/company-setup", icon: Building },
+  { label: "Architecture", href: "/services/architecture", icon: HardHat },
+  { label: "Interior Design", href: "/services/interior-design", icon: PaintBucket },
+  { label: "Fit-Out", href: "/services/fit-out", icon: Hammer },
+  { label: "Design & Build", href: "/services/design-build", icon: Wrench },
+  { label: "Law Firm", href: "/services/law-firm", icon: Gavel },
+  { label: "Buying Advisory", href: "/services/buying-advisory", icon: Briefcase },
+  { label: "Rental Advisory", href: "/services/rental-advisory", icon: Key },
+  { label: "Investment Advisory", href: "/services/investment-advisory", icon: TrendingUp },
+  { label: "Snagging", href: "/services/snagging", icon: ClipboardCheck },
+  { label: "Currency Exchange", href: "/services/currency-exchange", icon: HandCoins },
+  { label: "Signature Collection", href: "/services/signature-collection", icon: FileSignature },
+  { label: "AI Tools Service", href: "/services/ai-tools", icon: Bot },
+  { label: "Broker Certification", href: "/services/broker-certification", icon: BadgeCheck },
+  { label: "Complaint Procedures", href: "/services/complaint-procedures", icon: ScrollText },
+  { label: "Customer Happiness", href: "/services/customer-happiness-center", icon: SmilePlus },
+  { label: "Testimonials", href: "/services/testimonials", icon: Heart },
+  { label: "Referral Partner", href: "/referral-partner", icon: Handshake },
+
+  // ── Partners ──
+  { label: "Partners Hub", href: "/partners", icon: Handshake, section: "PARTNERS" },
+  { label: "Mortgage Partner", href: "/partners/mortgage", icon: Landmark },
+  { label: "Legal Partner", href: "/partners/legal", icon: Gavel },
+  { label: "Company Setup Partner", href: "/partners/company-setup", icon: Building },
+  { label: "Visa Services", href: "/partners/visa-services", icon: Globe },
+
+  // ── Broker & Academy ──
+  { label: "Broker Portal", href: "/broker-portal", icon: BriefcaseIcon, section: "BROKER & ACADEMY" },
+  { label: "Broker Toolkit", href: "/broker-toolkit", icon: Wrench },
+  { label: "Broker Resources", href: "/broker-resources", icon: FolderOpen },
+  { label: "Broker Training", href: "/broker/training", icon: GraduationCap },
+  { label: "Broker Hub", href: "/broker-hub", icon: Compass },
+  { label: "Broker Dashboard", href: "/broker-dashboard", icon: LayoutDashboard },
+  { label: "JBJ Academy", href: "/jbj-academy", icon: GraduationCap },
+  { label: "Academy Graduates", href: "/academy/graduates", icon: Award },
+  { label: "AI Broker Workspace", href: "/ai-broker-workspace", icon: Bot },
+  { label: "Broker Education", href: "/broker-education", icon: BookOpen },
+
+  // ── Investor ──
+  { label: "Investor Hub", href: "/investor-hub", icon: TrendingUp, section: "INVESTOR" },
+  { label: "Investor Services", href: "/investors", icon: Briefcase },
+  { label: "Join Investor List", href: "/investors/join", icon: UserPlus },
+  { label: "Investor Dashboard", href: "/investor-dashboard", icon: LayoutDashboard },
+  { label: "Portfolio Views", href: "/investor-dashboard/portfolio", icon: Gem },
 
   // ── Company ──
   { label: "About", href: "/about", icon: Users, megaMenu: 'company', section: "COMPANY" },
   { label: "Team", href: "/team", icon: Users },
+  { label: "Founder", href: "/founder", icon: Crown },
   { label: "Contact", href: "/contact", icon: Phone },
+  { label: "Awards", href: "/awards", icon: Award },
+  { label: "Press Kit", href: "/press-kit", icon: Newspaper },
+  { label: "Company Profile", href: "/company-profile", icon: Building },
+  { label: "Philanthropy", href: "/philanthropy", icon: Heart },
+  { label: "Our Brokers", href: "/brokers", icon: Users },
+  { label: "Reviews", href: "/reviews", icon: Star },
+  { label: "Career Portal", href: "/join", icon: GraduationCap },
+  { label: "Partner Governance", href: "/governance/partners", icon: Shield },
 
   // ── Legal ──
   { label: "Terms of Service", href: "/terms", icon: Scale, megaMenu: 'legal', section: "LEGAL" },
@@ -133,6 +250,21 @@ const NAV_ITEMS: NavItem[] = [
   { label: "AML / KYC", href: "/aml-kyc", icon: Shield },
   { label: "Accessibility", href: "/accessibility", icon: Accessibility },
   { label: "Trust Center", href: "/trust-and-audit-center", icon: ShieldCheck },
+  { label: "Trust & Compliance", href: "/trust-compliance", icon: ShieldCheck },
+  { label: "Risk Disclosure", href: "/risk-disclosure", icon: FileText },
+
+  // ── Productivity ──
+  { label: "Spreadsheet", href: "/spreadsheet", icon: BarChart3, section: "PRODUCTIVITY" },
+  { label: "Documents", href: "/documents", icon: FileText },
+  { label: "QR Generator", href: "/qr-generator", icon: QrCode },
+  { label: "Contract Forms", href: "/contract-forms", icon: FileSignature },
+  { label: "Video Meeting", href: "/video-meeting", icon: Video },
+  { label: "Presentations", href: "/presentations", icon: Presentation },
+  { label: "Sitemap", href: "/sitemap", icon: MapPin },
+  { label: "Pricing", href: "/pricing", icon: DollarSign },
+  { label: "Onboarding", href: "/onboarding", icon: UserPlus },
+  { label: "Client Portal", href: "/client-portal", icon: Users },
+  { label: "Meeting Center", href: "/meeting-center", icon: Users },
 
   // ── Account ──
   { label: "Favorites", href: "/favorites", icon: Heart, section: "MY ACCOUNT" },
@@ -141,6 +273,60 @@ const NAV_ITEMS: NavItem[] = [
   { label: "My Dashboard", href: "/my-dashboard", icon: User },
   { label: "My Profile", href: "/profile", icon: User },
   { label: "Settings", href: "/profile?tab=settings", icon: Settings },
+  { label: "My Tickets", href: "/my-tickets", icon: Ticket },
+  { label: "Ticket Hub", href: "/ticket-hub", icon: Ticket },
+
+  // ── Business Suites ──
+  { label: "Suites Hub", href: "/suites", icon: Boxes, section: "BUSINESS SUITES" },
+  { label: "All Tools Suite", href: "/business-suite/all", icon: Package },
+  { label: "Real Estate Suite", href: "/business-suite/real-estate", icon: Building2 },
+  { label: "Broker Suite", href: "/business-suite/broker", icon: BriefcaseIcon },
+  { label: "Creative Suite", href: "/business-suite/creative", icon: Palette },
+  { label: "Productivity Suite", href: "/business-suite/productivity", icon: Cog },
+
+  // ── Admin & Owner (shown conditionally) ──
+  { label: "Owner Command Center", href: "/owner", icon: Crown, section: "ADMIN & OWNER" },
+  { label: "Admin Panel", href: "/admin", icon: Lock },
+  { label: "Admin CRM", href: "/admin/crm", icon: Users },
+  { label: "Admin Inquiries", href: "/admin/inquiries", icon: MailOpen },
+  { label: "Admin Chat", href: "/admin/chat-conversations", icon: MessagesSquare },
+  { label: "Admin Onboarding", href: "/admin/onboarding", icon: UserPlus },
+  { label: "Admin Roles", href: "/admin/roles", icon: Shield },
+  { label: "Admin Intelligence", href: "/admin/intelligence", icon: Brain },
+  { label: "Admin Developers", href: "/admin/developers", icon: Building },
+  { label: "Marketing Hub", href: "/admin/marketing-hub", icon: Megaphone },
+  { label: "Admin Training Guide", href: "/admin/training-guide", icon: BookOpen },
+  { label: "Admin Legal Center", href: "/admin/legal-center", icon: Gavel },
+  { label: "HR Dashboard", href: "/hr-dashboard", icon: Users },
+  { label: "HR Agent", href: "/hr-agent", icon: Bot },
+  { label: "Employee Hub", href: "/employee-hub", icon: Users },
+  { label: "Employee Chat", href: "/employee-chat", icon: MessageCircle },
+  { label: "Employee Management", href: "/employee-management", icon: Cog },
+  { label: "Customer Happiness", href: "/customer-happiness", icon: SmilePlus },
+  { label: "Security Console", href: "/security-console", icon: Shield },
+  { label: "Company Comm", href: "/company-comm", icon: Mail },
+  { label: "Executive Assistant", href: "/executive-assistant", icon: Bot },
+  { label: "Call Review", href: "/call-review", icon: Phone },
+  { label: "Video Builder", href: "/video-builder", icon: Video },
+  { label: "Business Card Scanner", href: "/business-card-scanner", icon: ScanLine },
+  { label: "JBJ Analytics", href: "/jbj-analytics", icon: BarChart3 },
+  { label: "JBJ Design Studio", href: "/jbj-design-studio", icon: Palette },
+  { label: "JBJ Broker Admin", href: "/jbj-broker-admin", icon: BriefcaseIcon },
+  { label: "Broker Messages", href: "/jbj-broker-messages", icon: MessageSquare },
+  { label: "Broker Reports", href: "/jbj-broker-reports", icon: FileText },
+  { label: "Broker Admin Assistant", href: "/broker-admin-assistant", icon: Bot },
+  { label: "Referral Admin", href: "/referral-admin", icon: Handshake },
+  { label: "E-Signature Suite", href: "/e-signature", icon: FileSignature },
+  { label: "Whiteboard", href: "/whiteboard", icon: PenTool },
+  { label: "Mind Map", href: "/mindmap", icon: Brain },
+  { label: "Form Builder", href: "/form-builder", icon: ClipboardCheck },
+  { label: "Kanban Board", href: "/kanban", icon: LayoutDashboard },
+  { label: "Email Client", href: "/email-client", icon: Mail },
+  { label: "Team Chat", href: "/team-chat", icon: MessagesSquare },
+  { label: "Automations", href: "/owner/automations", icon: Workflow },
+  { label: "Alerts Demo", href: "/alerts-demo", icon: BellRing },
+  { label: "Internal MI Dashboard", href: "/internal/market-intelligence/dashboard", icon: Database },
+  { label: "AI Governance", href: "/governance/ai", icon: Shield },
 ];
 
 /* ─── MEGA MENU LINK SETS ─── */
@@ -394,19 +580,26 @@ const SHORTCUT_GROUPS: ShortcutGroup[] = [
 ];
 
 /* ─── SECTION KEYS ─── */
-const SECTION_KEYS = ["PROPERTIES", "TOOLS", "INSIGHTS", "GUIDES", "SERVICES", "COMPANY", "LEGAL", "MY ACCOUNT"] as const;
+const SECTION_KEYS = ["PROPERTIES", "TOOLS", "AI TOOLS", "INSIGHTS", "GUIDES", "SERVICES", "PARTNERS", "BROKER & ACADEMY", "INVESTOR", "COMPANY", "LEGAL", "PRODUCTIVITY", "MY ACCOUNT", "BUSINESS SUITES", "ADMIN & OWNER"] as const;
 type SectionKey = typeof SECTION_KEYS[number];
 
 /* ─── SECTION ICONS ─── */
 const SECTION_ICONS: Record<SectionKey, any> = {
   "PROPERTIES": Building2,
   "TOOLS": Sparkles,
+  "AI TOOLS": Cpu,
   "INSIGHTS": Lightbulb,
   "GUIDES": BookOpen,
   "SERVICES": Briefcase,
+  "PARTNERS": Handshake,
+  "BROKER & ACADEMY": GraduationCap,
+  "INVESTOR": TrendingUp,
   "COMPANY": Users,
   "LEGAL": Scale,
+  "PRODUCTIVITY": Cog,
   "MY ACCOUNT": User,
+  "BUSINESS SUITES": Boxes,
+  "ADMIN & OWNER": Crown,
 };
 
 /* VerticalNavUtilityBar removed — these controls now live in HorizontalUtilityBar */
@@ -1002,6 +1195,10 @@ export default function GlobalVerticalNav() {
         {/* Collapsible Section Nav */}
         <div className="py-2 px-2 space-y-0.5">
           {SECTION_KEYS.map((sectionKey, sectionIdx) => {
+            // Role-based visibility
+            if (sectionKey === 'ADMIN & OWNER' && !isOwner) return null;
+            if (sectionKey === 'BROKER & ACADEMY' && !isBroker && !isOwner) return null;
+            if (sectionKey === 'INVESTOR' && !isInvestor && !isOwner) return null;
             const items = sectionGroups[sectionKey];
             if (!items || items.length === 0) return null;
             const isOpen = openSection === sectionKey;
