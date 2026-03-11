@@ -355,32 +355,21 @@ const Developers = () => {
           <section className="fixed top-0 left-0 right-0 z-[9998] bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] py-4 border-b border-gold/30 shadow-lg">
             <div className="container mx-auto px-3 sm:px-4">
               <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg">
-                {/* Keyword Search */}
-                <div className="relative w-full mb-4">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gold" />
-                  <Input
-                    placeholder="Search by developer name..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="h-12 pl-12 pr-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-zinc-500 focus:border-gold rounded-lg text-base shadow-sm w-full"
-                  />
-                </div>
-
-                {/* Filter Row */}
-                <div className="flex items-center gap-3 flex-wrap">
-                  {/* Developer Dropdown */}
-                  <div className="w-full sm:w-[240px]">
-                    <SearchableSelect
-                      value={selectedDeveloper}
-                      onChange={(val) => setSelectedDeveloper(val === selectedDeveloper ? "" : val)}
-                      options={developerNames}
-                      placeholder="All Developers"
-                      searchPlaceholder="Search developer..."
-                      triggerClassName="h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm"
-                    />
-                  </div>
-
-                  {/* Tier Filter */}
+                <FilterShortcutBar
+                  variant="light"
+                  filters={shortcutFilters}
+                  onFilterChange={(f) => {
+                    setShortcutFilters(f);
+                    setSearchQuery(f.searchQuery || '');
+                    if (f.sortBy === 'alpha') setSortBy('alpha');
+                    else if (f.sortBy === 'most_projects') setSortBy('most_projects');
+                    else if (f.sortBy) setSortBy('default');
+                  }}
+                  priorityFilter="developers"
+                />
+                
+                {/* Tier filter row */}
+                <div className="flex items-center gap-3 flex-wrap mt-3 pt-3 border-t border-gold/20">
                   <Select value={tierFilter} onValueChange={setTierFilter}>
                     <SelectTrigger className="w-full sm:w-[180px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
                       <Crown className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
@@ -397,23 +386,10 @@ const Developers = () => {
                     </SelectContent>
                   </Select>
 
-                  {/* Results Count */}
                   <div className="flex-1 text-black/70 text-sm">
                     {filteredDevelopers.length} developer{filteredDevelopers.length !== 1 ? 's' : ''} found
                   </div>
 
-                  {/* Advanced Filter button */}
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setAdvancedOpen(true)}
-                    className="h-9 px-3 bg-white/80 border-gold/40 text-black hover:bg-white rounded-lg flex items-center gap-1.5 font-semibold"
-                  >
-                    <SlidersHorizontal className="w-3.5 h-3.5 text-gold" />
-                    Filter
-                  </Button>
-
-                  {/* Clear Filters */}
                   {activeFilterCount > 0 && (
                     <Button
                       variant="outline"
