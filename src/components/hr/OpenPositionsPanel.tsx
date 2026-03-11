@@ -54,15 +54,28 @@ export function OpenPositionsPanel() {
       return;
     }
 
-    const { error } = await supabase.from("hr_job_offers").insert({
-      position_title: form.position_title,
-      department: form.department,
-      description: form.description || null,
-      salary_range_min: form.salary_range_min ? parseFloat(form.salary_range_min) : null,
-      salary_range_max: form.salary_range_max ? parseFloat(form.salary_range_max) : null,
-      commission_structure: form.commission_structure || null,
-      is_active: true,
-    });
+    // Write to both tables for backward compat
+    const [r1, r2] = await Promise.all([
+      supabase.from("open_positions").insert({
+        title: form.position_title,
+        department: form.department,
+        description: form.description || null,
+        employment_type: form.commission_structure ? "commission_basis" : "full_time",
+        is_broker_role: form.department === "Sales",
+        location: "Dubai, UAE",
+        is_active: true,
+      }),
+      supabase.from("hr_job_offers").insert({
+        position_title: form.position_title,
+        department: form.department,
+        description: form.description || null,
+        salary_range_min: form.salary_range_min ? parseFloat(form.salary_range_min) : null,
+        salary_range_max: form.salary_range_max ? parseFloat(form.salary_range_max) : null,
+        commission_structure: form.commission_structure || null,
+        is_active: true,
+      }),
+    ]);
+    const error = r1.error || r2.error;
 
     if (error) {
       toast.error("Failed to create position");

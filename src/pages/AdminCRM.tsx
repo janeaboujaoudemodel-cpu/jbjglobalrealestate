@@ -29,6 +29,7 @@ import {
 import CRMDashboardCards from "@/components/crm/CRMDashboardCards";
 import { CommandPalette } from "@/components/ui/command-palette";
 import { FloatingActionBar } from "@/components/ui/floating-action-bar";
+import { BrokerManagementPanel } from "@/components/admin/BrokerManagementPanel";
 
 interface Broker {
   id: string;
@@ -229,16 +230,15 @@ const AdminCRM = () => {
       return;
     }
 
+    // SECURITY: Strip PII from CSV export — no email/phone in plaintext
     const headers = [
-      "id", "full_name", "email", "phone", "nationality", "language",
+      "id", "full_name", "nationality", "language",
       "country", "city", "source", "owner_type", "created_at"
     ];
 
     const rows = allLeads.map(lead => [
       lead.id,
       lead.full_name,
-      lead.email_lower || "",
-      lead.phone_e164 || "",
       lead.nationality || "",
       lead.preferred_language || "",
       lead.current_location_country || "",
@@ -247,6 +247,15 @@ const AdminCRM = () => {
       lead.owner_type,
       lead.created_at
     ]);
+
+    // Audit log the export
+    supabase.from("audit_logs").insert([{
+      action_type: "export" as const,
+      resource_type: "lead" as const,
+      description: `Admin CSV export of ${allLeads.length} leads (PII stripped)`,
+      user_id: user?.id,
+      user_agent: navigator.userAgent,
+    }]).then(() => {});
 
     const csv = [
       headers.join(","),
@@ -321,11 +330,15 @@ const AdminCRM = () => {
           </Button>
         </div>
 
-        <Tabs defaultValue="brokers">
+        <Tabs defaultValue="broker-profiles">
           <TabsList className="bg-white/80 border-2 border-gold/30 p-1">
+            <TabsTrigger value="broker-profiles" className="tab-trigger-champagne text-black">
+              <Shield className="h-4 w-4 mr-2" />
+              Broker Profiles
+            </TabsTrigger>
             <TabsTrigger value="brokers" className="tab-trigger-champagne text-black">
               <Users className="h-4 w-4 mr-2" />
-              Brokers
+              CRM Users
             </TabsTrigger>
             <TabsTrigger value="leads" className="tab-trigger-champagne text-black">
               <TrendingUp className="h-4 w-4 mr-2" />
@@ -336,6 +349,15 @@ const AdminCRM = () => {
               Audit Logs
             </TabsTrigger>
           </TabsList>
+
+          {/* Broker Profiles Management Tab */}
+          <TabsContent value="broker-profiles">
+            <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+              <CardContent className="p-6">
+                <BrokerManagementPanel />
+              </CardContent>
+            </Card>
+          </TabsContent>
 
           {/* Brokers Tab */}
           <TabsContent value="brokers">

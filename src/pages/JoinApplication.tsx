@@ -8,10 +8,21 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Loader2, Upload, CheckCircle, FileText, Bot, MessageCircle, Briefcase, User, Phone, Mail } from "lucide-react";
+import { Loader2, Upload, CheckCircle, FileText, Bot, MessageCircle, Briefcase, User, Phone, Mail, MapPin, Star } from "lucide-react";
 import { CONTACT_INFO } from "@/constants/stats";
 import { PhoneInput } from "@/components/ui/phone-input";
+
+interface OpenPosition {
+  id: string;
+  title: string;
+  department: string;
+  description: string | null;
+  employment_type: string;
+  is_broker_role: boolean;
+  location: string | null;
+}
 
 const NATIONALITIES = [
   "Afghan", "Albanian", "Algerian", "American", "Andorran", "Angolan", "Argentine", "Armenian", "Australian", "Austrian",
@@ -42,44 +53,13 @@ const LANGUAGES = [
   { code: "tr", name: "Turkish" },
 ];
 
-const JOB_POSITIONS = [
+// Fallback positions if DB fetch fails
+const FALLBACK_POSITIONS = [
   { value: "property_consultant", label: "Property Consultant / Real Estate Broker" },
   { value: "senior_property_consultant", label: "Senior Property Consultant" },
-  { value: "team_leader", label: "Team Leader – Sales" },
-  { value: "sales_manager", label: "Sales Manager" },
-  { value: "sales_director", label: "Sales Director" },
-  { value: "listing_agent", label: "Listing Agent" },
-  { value: "off_plan_specialist", label: "Off-Plan Sales Specialist" },
-  { value: "secondary_market_agent", label: "Secondary Market Agent" },
-  { value: "luxury_specialist", label: "Luxury Property Specialist" },
-  { value: "commercial_broker", label: "Commercial Real Estate Broker" },
-  { value: "leasing_consultant", label: "Leasing Consultant" },
   { value: "marketing_manager", label: "Marketing Manager" },
-  { value: "digital_marketing_specialist", label: "Digital Marketing Specialist" },
-  { value: "social_media_manager", label: "Social Media Manager" },
-  { value: "content_creator", label: "Content Creator" },
-  { value: "seo_specialist", label: "SEO Specialist" },
-  { value: "graphic_designer", label: "Graphic Designer" },
-  { value: "photographer", label: "Photographer" },
-  { value: "videographer", label: "Videographer" },
-  { value: "video_editor", label: "Video Editor" },
-  { value: "crm_administrator", label: "CRM Administrator" },
-  { value: "business_development_manager", label: "Business Development Manager" },
-  { value: "client_relations_manager", label: "Client Relations Manager" },
   { value: "hr_coordinator", label: "HR Coordinator" },
-  { value: "recruitment_specialist", label: "Recruitment Specialist" },
-  { value: "finance_accountant", label: "Finance & Accounting" },
-  { value: "office_administrator", label: "Office Administrator" },
-  { value: "executive_assistant", label: "Executive Assistant / PA" },
-  { value: "receptionist", label: "Receptionist / Front Desk" },
-  { value: "it_support", label: "IT Support Specialist" },
   { value: "web_developer", label: "Web Developer" },
-  { value: "mobile_developer", label: "Mobile App Developer" },
-  { value: "data_analyst", label: "Data Analyst" },
-  { value: "legal_advisor", label: "Legal Advisor / Compliance" },
-  { value: "property_management", label: "Property Management" },
-  { value: "customer_service", label: "Customer Service Representative" },
-  { value: "internship", label: "Internship / Trainee" },
   { value: "other", label: "Other – General Application" },
 ];
 
@@ -138,6 +118,29 @@ export default function JoinApplication() {
 
   // Honeypot field for anti-spam
   const [honeypot, setHoneypot] = useState("");
+  const [openPositions, setOpenPositions] = useState<OpenPosition[]>([]);
+  const [positionsLoading, setPositionsLoading] = useState(true);
+
+  // Fetch open positions from DB
+  useEffect(() => {
+    const fetchPositions = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("open_positions")
+          .select("id, title, department, description, employment_type, is_broker_role, location")
+          .eq("is_active", true)
+          .order("created_at", { ascending: false });
+
+        if (error) throw error;
+        setOpenPositions(data || []);
+      } catch (err) {
+        console.error("Error fetching positions:", err);
+      } finally {
+        setPositionsLoading(false);
+      }
+    };
+    fetchPositions();
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -224,7 +227,7 @@ export default function JoinApplication() {
       const cvPath = await uploadCV(cvFile);
       setUploadProgress(60);
 
-      const positionLabel = JOB_POSITIONS.find(p => p.value === formData.positionApplied)?.label || formData.positionApplied;
+      const positionLabel = openPositions.find(p => p.id === formData.positionApplied)?.title || FALLBACK_POSITIONS.find(p => p.value === formData.positionApplied)?.label || formData.positionApplied;
 
       // Create application
       const { error: appError } = await supabase
@@ -568,19 +571,58 @@ export default function JoinApplication() {
                 </Select>
               </div>
 
-              {/* Position Applied For */}
+              {/* Open Positions Cards */}
+              {openPositions.length > 0 && (
+                <div className="space-y-3">
+                  <Label className="text-base font-semibold">Open Positions</Label>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {openPositions.map((pos) => (
+                      <div
+                        key={pos.id}
+                        onClick={() => setFormData({ ...formData, positionApplied: pos.id })}
+                        className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
+                          formData.positionApplied === pos.id
+                            ? "border-gold bg-gold/10 shadow-md"
+                            : "border-gold/20 bg-background hover:border-gold/50"
+                        }`}
+                      >
+                        <div className="flex items-start justify-between mb-1">
+                          <h4 className="font-semibold text-sm text-black">{pos.title}</h4>
+                          {pos.is_broker_role && (
+                            <Badge className="bg-gold/20 text-gold border-gold/30 text-[10px] px-1.5 py-0">
+                              <Star className="w-2.5 h-2.5 mr-0.5" /> Partner
+                            </Badge>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-2 text-xs text-black/50">
+                          <Badge variant="outline" className="border-gold/20 text-black/60 text-[10px] px-1.5 py-0">{pos.department}</Badge>
+                          {pos.is_broker_role && <span className="text-gold font-medium">Commission Basis</span>}
+                          {pos.location && <span className="flex items-center gap-0.5"><MapPin className="w-2.5 h-2.5" />{pos.location}</span>}
+                        </div>
+                        {pos.description && (
+                          <p className="text-xs text-black/40 mt-1.5 line-clamp-2">{pos.description}</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Fallback Position Select */}
               <div className="space-y-2">
-                <Label htmlFor="position">Position Applied For <span className="text-red-500">*</span></Label>
+                <Label htmlFor="position">
+                  {openPositions.length > 0 ? "Or select a general category" : "Position Applied For"} <span className="text-red-500">*</span>
+                </Label>
                 <Select
-                  value={formData.positionApplied}
+                  value={openPositions.some(p => p.id === formData.positionApplied) ? "" : formData.positionApplied}
                   onValueChange={(value) => setFormData({ ...formData, positionApplied: value })}
                   disabled={loading}
                 >
                   <SelectTrigger className="bg-background">
-                    <SelectValue placeholder="Select the position you're applying for" />
+                    <SelectValue placeholder="Select position category" />
                   </SelectTrigger>
                   <SelectContent>
-                    {JOB_POSITIONS.map((pos) => (
+                    {FALLBACK_POSITIONS.map((pos) => (
                       <SelectItem key={pos.value} value={pos.value}>{pos.label}</SelectItem>
                     ))}
                   </SelectContent>

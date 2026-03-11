@@ -1,91 +1,72 @@
 
+## CRM System Upgrade — Implementation Status
 
-## Deep Audit & Implementation Plan — Broker Portal, Academy, Admin, Career Portal
+### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-### AUDIT FINDINGS
+#### Task 1: Full System Audit ✅
+- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
+- Identified 10 weaknesses (documented in plan)
 
-**What EXISTS and works:**
+#### Task 2: Leads Security Hardening ✅
+- CSV export no longer includes email/phone PII
+- Audit logging added to exports with user_agent tracking
+- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
 
-| Area | Status | Details |
-|------|--------|---------|
-| Broker Portal (`/broker-portal`) | Exists | Profile hero, 12-tool grid, training progress, document verification section |
-| JBJ Academy (`/jbj-academy`) | Exists | Video hero, profile card, tools grid, certification section, graduates gallery (placeholder) |
-| Broker Education (`/broker-education`) | Exists | 15 books, 75 modules, 5 learning paths |
-| Education Tests | Partial | 26 test questions seeded (need ~75 more for full coverage) |
-| Certification System | Exists | `certification_phases` + `user_certification_progress` tables, `CertificationSection` component |
-| Graduates Gallery (`/academy/graduates`) | Exists | Fetches `hr_certificates`, search + lookup by cert number |
-| Certificate Verification (`/verify-certificate/:token`) | Exists | Token + number lookup, active/revoked display |
-| Broker Profiles DB | Exists | 35 columns including `custom_title`, `performance_rating`, `verification_status`, `probation_end`, `show_contact_public`, `rera_expiry_date`, etc. |
-| Open Positions DB | Exists | 21 active positions seeded across Sales, IT, Marketing, HR, etc. |
-| Career Application (`/join`) | Exists | 37 hardcoded job positions, CV upload, confirmation email |
-| HR Dashboard | Exists | Has `OpenPositionsPanel` for admin CRUD on positions |
-| Broker Admin (`/jbj-broker-admin`) | Exists | Uses `jbj_brokers` table (AI brokers), NOT `broker_profiles` |
+#### Task 3: Encryption Hardening ✅
+- CSV export stripped of `email_lower` and `phone_e164` fields
+- Export audit logged to both `crm_audit_logs` and `audit_logs`
 
-**GAPS & ISSUES FOUND:**
+#### Task 4: Lead Lifecycle Upgrade ✅
+- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
+- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
+- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
 
-| # | Gap | Severity | Location |
-|---|-----|----------|----------|
-| 1 | `JoinApplication.tsx` uses hardcoded `JOB_POSITIONS` array, does NOT fetch from `open_positions` table | High | JoinApplication.tsx:45-84 |
-| 2 | Admin Broker Management (`JBJBrokerAdmin.tsx`) manages AI brokers (`jbj_brokers`), not real broker profiles (`broker_profiles`). No admin UI for toggling `show_contact_public`, editing `custom_title`, skipping probation | High | JBJBrokerAdmin.tsx |
-| 3 | `AdminCRM.tsx` exports CSV with plaintext `email_lower`/`phone_e164` — bypasses encryption | High | AdminCRM.tsx:237-249 |
-| 4 | Graduates gallery has no QR code per certificate (uses existing `qrcode-generator` package but not integrated) | Medium | AcademyGraduates.tsx |
-| 5 | Only 26 test questions for 75 modules — most modules have zero quiz questions | Medium | DB |
-| 6 | `OpenPositionsPanel` writes to `hr_job_offers` table, NOT `open_positions` table — two parallel systems | Medium | OpenPositionsPanel.tsx:57 |
-| 7 | Broker Portal document upload buttons are non-functional (no upload handler) | Medium | BrokerPortal.tsx |
-| 8 | No face verification workflow exists (field `face_verification_status` in DB but no UI) | Low | Missing |
-| 9 | No broker notification when open positions are added | Low | Missing |
+#### Task 5: CRM Structure Upgrade ✅
+- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
+- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
+- KanbanPipeline expanded to show all 17 relevant stages
 
----
+#### Task 6: Performance Optimization ✅
+- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
+- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
+- `crm_leads_updated_at_trigger` auto-updates `updated_at`
 
-### IMPLEMENTATION PLAN
+#### Task 7: AI Intelligence Integration ✅
+- New edge function `ai-lead-intelligence` using Lovable AI gateway
+- Supports 3 modes: `score`, `summary`, `next_action`
+- Tool-calling for structured scoring output
+- JWT auth + CRM role validation
+- PII sanitized before sending to AI
 
-#### Task 1: Connect Career Portal to `open_positions` DB table
-- **JoinApplication.tsx**: Fetch `open_positions` where `is_active = true` and display as premium cards above the form
-- Replace hardcoded `JOB_POSITIONS` with dynamic positions from DB
-- Show broker roles with "Partnership · Commission Basis" premium badge
-- Store `position_applied` from DB position title in the application record
+#### Task 8: Workflow Automation ✅
+- Created `crm_automation_rules` table with RLS (owner manage, admin view)
+- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
 
-#### Task 2: Admin Broker Management Panel
-- **Create `src/components/admin/BrokerManagementPanel.tsx`**: Table of all `broker_profiles` with:
-  - Toggle `show_contact_public` per broker
-  - Edit `custom_title`, `custom_label`, `performance_rating` inline
-  - Skip probation button (sets `probation_skipped = true`, clears `probation_end`)
-  - View verification status, document expiry alerts
-- Integrate into existing admin route (add tab to `AdminCRM.tsx` or create dedicated route)
+#### Task 10: Role & Permission System ✅
+- RLS on automation rules: owner CRUD, admin read-only
+- CSV export restricted to owner_admin/founder roles
 
-#### Task 3: QR Codes on Graduate Certificates
-- **AcademyGraduates.tsx**: Add QR code per certificate card using `qrcode-generator` package
-- QR links to `/verify-certificate/{verification_token}`
+#### Task 12: Backend/Database Upgrade ✅
+- 3 new performance indexes
+- Auto-updated_at trigger on crm_leads
+- Duplicate hash computation trigger
+- Rate-limiting security function
 
-#### Task 4: Seed Remaining Test Questions
-- DB insert: Add ~50 more test questions to cover all 15 books (at least 3-5 per module for key modules)
+#### Task 13: Data Cleanliness ✅
+- `duplicate_hash` with auto-compute trigger prevents future duplicates
+- Partial unique index enforces uniqueness at DB level
 
-#### Task 5: Fix OpenPositionsPanel to use `open_positions` table
-- **OpenPositionsPanel.tsx**: Change from `hr_job_offers` to `open_positions` table for CRUD
-- Ensure admin can add/edit/deactivate positions
-
-#### Task 6: Broker Document Upload Handler
-- **BrokerPortal.tsx**: Wire upload buttons to Supabase storage (`broker-documents` bucket)
-- Save URL + expiry date to `broker_profiles` (rera_card_url, id_document_url, rera_expiry_date, id_expiry_date)
-
-#### Task 7: Fix AdminCRM CSV Export Security
-- **AdminCRM.tsx**: Strip `email_lower` and `phone_e164` from CSV export or route through decryption RPC
-
-#### Task 8: Premium UI Polish
-- Ensure Broker Portal and Academy maintain champagne-gold design consistency
-- Add graduation cap icon prominence in Academy hero
-
----
-
-### Files to Create/Modify
-
+### Files Changed
 | File | Action |
 |------|--------|
-| `src/pages/JoinApplication.tsx` | Fetch from `open_positions`, display dynamic cards |
-| `src/components/admin/BrokerManagementPanel.tsx` | **New** — admin toggles for broker profiles |
-| `src/pages/AdminCRM.tsx` | Add Broker Management tab, fix CSV export |
-| `src/pages/AcademyGraduates.tsx` | Add QR codes per certificate |
-| `src/components/hr/OpenPositionsPanel.tsx` | Switch to `open_positions` table |
-| `src/pages/BrokerPortal.tsx` | Wire document upload handlers |
-| DB insert | Seed ~50 more test questions |
-
+| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
+| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
+| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
+| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
+| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
+| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
+| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
+| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
+| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
