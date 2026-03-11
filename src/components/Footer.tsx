@@ -773,6 +773,7 @@ const Footer = () => {
                 <FooterCard title="Legal" links={legalLinks} />
                 <FooterCard title="Business Suites" links={businessSuitesLinks} />
                 <FooterCard title="Productivity" links={productivityLinks} />
+                <FooterCard title="Professional Tools" links={professionalTools} />
                 <FooterCard title="Education Hub" links={[
                   { href: "/broker-education", label: "Books" },
                   { href: "/guides", label: "Guides" },
