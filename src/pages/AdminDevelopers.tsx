@@ -415,6 +415,10 @@ const AdminDevelopers = () => {
               />
             ))}
           </TabsContent>
+
+          <TabsContent value="briefings" className="space-y-4">
+            <BriefingManagement />
+          </TabsContent>
         </Tabs>
       </div>
 
