@@ -158,8 +158,11 @@ const CRMLeadsTable = ({ userId, filterType, onRefresh, statusFilters = [], sour
     navigate(toolPath);
   };
 
-  // Check if contact details should be hidden (for company-assigned leads)
-  const isCompanyAssigned = filterType === "assigned";
+  // Contact details are visible when:
+  // 1. "assigned" tab = leads assigned TO this broker (they need full access)
+  // 2. "own" tab = broker's own uploaded leads
+  // Masking applies only for other views where broker hasn't been granted access
+  const isCompanyAssigned = false; // Assigned & own leads show full contact info
 
   useEffect(() => {
     fetchLeads();
