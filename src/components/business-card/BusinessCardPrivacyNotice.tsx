@@ -12,6 +12,7 @@ import {
   CheckCircle2,
   XCircle
 } from "lucide-react";
+import { useAgreementSaver } from "@/hooks/useAgreementSaver";
 
 
 interface BusinessCardPrivacyNoticeProps {
@@ -21,6 +22,7 @@ interface BusinessCardPrivacyNoticeProps {
 
 const BusinessCardPrivacyNotice = ({ onAccept, onDecline }: BusinessCardPrivacyNoticeProps) => {
   const [agreed, setAgreed] = useState(false);
+  const { saveAgreement } = useAgreementSaver();
 
   const privacyPoints = [
     {
