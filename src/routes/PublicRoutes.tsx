@@ -166,6 +166,9 @@ const BrokerHub = lazy(() => import("@/pages/BrokerHub"));
 // ── Governance ──
 const PartnerGovernance = lazy(() => import("@/pages/governance/PartnerGovernance"));
 
+// ── Developer Portal ──
+const DeveloperPortal = lazy(() => import("@/pages/DeveloperPortal"));
+
 // ── Misc ──
 const VapiPrompt = lazy(() => import("@/pages/VapiPrompt"));
 const ScanSignDocuments = lazy(() => import("@/pages/ScanSignDocuments"));
@@ -176,6 +179,7 @@ export const PublicRoutes = () => (
   <>
     {/* ── Home ── */}
     <Route path="/" element={<Index />} />
+    <Route path="/developer-portal" element={<DeveloperPortal />} />
     <Route path="/vapi-prompt" element={<VapiPrompt />} />
 
     {/* ── Properties ── */}

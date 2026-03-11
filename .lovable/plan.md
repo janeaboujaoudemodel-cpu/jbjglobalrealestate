@@ -1,101 +1,41 @@
 
 
-## Plan: Developer Portal — Event Submissions, New Launch Uploads & Auto-Approve System
+## Plan: Fix All Email Issues Across All Templates
 
-### Overview
-Create a public-facing **Developer Portal** accessible from the homepage where real estate developers can:
-1. **Submit event invitations** (launches, support events) — auto-creates a task + calendar event for the owner
-2. **Upload new launch marketing materials** (PDFs, renders, brochures) — auto-generates a draft listing ready for owner approval
-3. **Auto-Approve toggle** in the owner panel — when ON, generated listings are published automatically
+### Problems Identified
 
----
+1. **Recommended For You icons disappeared** — Inline SVGs are stripped by Gmail and most email clients. Must revert to hosted PNG images (`ai-tools.png`, `guides.png`, `properties.png` already exist in `public/email-icons/`).
 
-### Database Changes (3 new tables + 1 setting)
+2. **Social media footer icons not rendering** — Same issue: `socialLinksFooter()` loads external `.svg` files via `<img>` tags, but Gmail blocks SVG images entirely. Must switch to hosted `.png` files. Currently missing `social-facebook.png` — need to confirm or create it.
 
-**Table 1: `developer_submissions`** — stores event/invitation submissions
-| Column | Type | Notes |
-|--------|------|-------|
-| id | uuid PK | |
-| developer_name | text | Required |
-| developer_email | text | Required |
-| developer_phone | text | |
-| submission_type | text | 'event_invitation', 'new_launch', 'support_request' |
-| event_title | text | |
-| event_date | timestamptz | |
-| event_location | text | |
-| event_description | text | |
-| attachments | jsonb | Array of file URLs |
-| status | text | 'pending', 'reviewed', 'accepted', 'declined' |
-| created_at | timestamptz | |
-| reviewed_at | timestamptz | |
-| notes | text | Owner notes |
+3. **Email split into multiple visual cards** — Several sub-sections (`ticketSupportEmbed`, `readyToGetStartedHtml`, `recommendedActionsHtml`) each have their own `border`, `border-radius`, and `background` styles creating distinct visual boxes. These need to be softened so they sit seamlessly inside the single continuous card.
 
-RLS: INSERT open to public (anon + authenticated). SELECT/UPDATE/DELETE restricted to owner role only.
+### Changes (all in `supabase/functions/_shared/email-html.ts`)
 
-**Table 2: `developer_launch_uploads`** — stores new launch material submissions
-| Column | Type | Notes |
-|--------|------|-------|
-| id | uuid PK | |
-| developer_name | text | Required |
-| developer_email | text | Required |
-| project_name | text | Required |
-| project_description | text | |
-| location | text | |
-| launch_date | date | |
-| uploaded_files | jsonb | Array of {name, url, type} |
-| extraction_status | text | 'pending', 'processing', 'completed', 'failed' |
-| generated_project_id | uuid | FK to projects (nullable) |
-| auto_approved | boolean | false |
-| status | text | 'pending_review', 'approved', 'rejected' |
-| created_at | timestamptz | |
+#### A. Recommended For You — Revert to PNG hosted images
+- Change `recommendedCard()` back to using `iconImg()` with PNG paths
+- Remove the `RECOMMENDED_ICONS` inline SVG object
+- Ensure circular frame clips the PNG with `overflow:hidden` on the `<td>` to prevent square backgrounds
+- Signature: `recommendedCard(title, href, iconPath, alt)` — restore the original parameters
 
-RLS: INSERT open to public. SELECT/UPDATE/DELETE restricted to owner.
+#### B. Social Footer — Switch to PNG with white pearl background
+- Replace `socialLinksFooter()` to use the inline `SVG` object icons (instagram, facebook, linkedin, tiktok, youtube) that are already defined at the top of the file — these render as raw HTML inside `<td>` elements, not as `<img>` tags, so they should survive email client processing
+- Actually, since Gmail strips ALL SVG (both inline and `<img>`), switch to using the `.png` files: `social-instagram.png`, `social-linkedin.png`, `social-tiktok.png`, `social-youtube.png`
+- Create `social-facebook.png` if missing
+- Style each icon circle: white/pearl (#FDFBF7) background, gold border, black icon inside
 
-**Setting:** Add `auto_approve_developer_listings` key to `app_settings` (value: 'true'/'false').
+#### C. Single Card Layout — Remove visual fragmentation
+- `ticketSupportEmbed()`: Remove the heavy gradient background and red border; make it blend into the card
+- `readyToGetStartedHtml()`: Remove the outer border and separate background so it flows within the card
+- `inquiryBox()`: Soften its standalone bordered look
+- Keep all content inside the single `emailShell` wrapper card with no sub-borders that create separation
 
-**Trigger:** On insert to `developer_submissions` where type = 'event_invitation', auto-insert into `admin_tasks` with category 'developer_event' and the event details.
+#### D. Deploy + Send Test Email
+- Deploy the updated edge function
+- Immediately send a test welcome email to `janeaboujaoudenails@gmail.com`
+- Take a screenshot as proof
 
----
-
-### Frontend Changes
-
-**1. New Page: `src/pages/DeveloperPortal.tsx`**
-- Public page at `/developer-portal`
-- Premium champagne/gold UI matching site branding
-- Two main sections with tabs:
-  - **Submit Event / Invitation**: Form with developer name, email, event title, date, location, description, file attachments
-  - **Submit New Launch**: Form with project name, developer name, location, launch date, multi-file uploader (PDFs, renders, brochures up to 100MB via TUS)
-- On submit (event): Inserts into `developer_submissions` + creates `admin_tasks` entry
-- On submit (launch): Inserts into `developer_launch_uploads`, triggers the existing `universal-link-extractor` edge function to process files and auto-generate a project draft in `projects` table with `is_published = false`
-
-**2. Homepage Section: `src/components/home/DeveloperPortalCTA.tsx`**
-- Placed after the Developer Partners Marquee on the homepage
-- Card with "Are You a Developer?" heading
-- Two CTAs: "Submit Event Invitation" and "Submit New Launch"
-- Links to `/developer-portal`
-
-**3. Owner Panel Addition: Auto-Approve Toggle**
-- In `src/pages/ListingAdmin.tsx`, add an "Auto-Approve" switch at the top of the approval queue
-- Toggle writes `auto_approve_developer_listings` = 'true'/'false' to `app_settings`
-- When ON: New listings generated from developer uploads get `is_published = true` automatically
-
-**4. Route Registration**
-- Add `/developer-portal` to `PublicRoutes.tsx`
-
-**5. Calendar Integration**
-- On event submission, also insert into the owner's calendar events (using the existing `AICalendar` localStorage pattern, or if a calendar_events table exists, insert there)
-
----
-
-### Files to Create/Edit
-
-| File | Action |
-|------|--------|
-| Migration SQL | Create `developer_submissions`, `developer_launch_uploads` tables + RLS |
-| `src/pages/DeveloperPortal.tsx` | **Create** — full portal page with event + launch tabs |
-| `src/components/home/DeveloperPortalCTA.tsx` | **Create** — homepage CTA card |
-| `src/pages/Index.tsx` | **Edit** — add DeveloperPortalCTA after DeveloperPartnersMarquee |
-| `src/routes/PublicRoutes.tsx` | **Edit** — add `/developer-portal` route |
-| `src/pages/ListingAdmin.tsx` | **Edit** — add Auto-Approve toggle |
-| `src/components/navigation/GlobalVerticalNav.tsx` | **Edit** — add Developer Portal link under relevant section |
+### Files Modified
+- `supabase/functions/_shared/email-html.ts` — all icon and layout fixes
+- `public/email-icons/social-facebook.png` — create if missing (or use existing assets)
 

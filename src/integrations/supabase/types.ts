@@ -5734,6 +5734,54 @@ export type Database = {
         }
         Relationships: []
       }
+      developer_launch_uploads: {
+        Row: {
+          auto_approved: boolean
+          created_at: string
+          developer_email: string
+          developer_name: string
+          extraction_status: string
+          generated_project_id: string | null
+          id: string
+          launch_date: string | null
+          location: string | null
+          project_description: string | null
+          project_name: string
+          status: string
+          uploaded_files: Json | null
+        }
+        Insert: {
+          auto_approved?: boolean
+          created_at?: string
+          developer_email: string
+          developer_name: string
+          extraction_status?: string
+          generated_project_id?: string | null
+          id?: string
+          launch_date?: string | null
+          location?: string | null
+          project_description?: string | null
+          project_name: string
+          status?: string
+          uploaded_files?: Json | null
+        }
+        Update: {
+          auto_approved?: boolean
+          created_at?: string
+          developer_email?: string
+          developer_name?: string
+          extraction_status?: string
+          generated_project_id?: string | null
+          id?: string
+          launch_date?: string | null
+          location?: string | null
+          project_description?: string | null
+          project_name?: string
+          status?: string
+          uploaded_files?: Json | null
+        }
+        Relationships: []
+      }
       developer_pipeline: {
         Row: {
           ai_score: number | null
@@ -5903,6 +5951,57 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      developer_submissions: {
+        Row: {
+          attachments: Json | null
+          created_at: string
+          developer_email: string
+          developer_name: string
+          developer_phone: string | null
+          event_date: string | null
+          event_description: string | null
+          event_location: string | null
+          event_title: string | null
+          id: string
+          notes: string | null
+          reviewed_at: string | null
+          status: string
+          submission_type: string
+        }
+        Insert: {
+          attachments?: Json | null
+          created_at?: string
+          developer_email: string
+          developer_name: string
+          developer_phone?: string | null
+          event_date?: string | null
+          event_description?: string | null
+          event_location?: string | null
+          event_title?: string | null
+          id?: string
+          notes?: string | null
+          reviewed_at?: string | null
+          status?: string
+          submission_type?: string
+        }
+        Update: {
+          attachments?: Json | null
+          created_at?: string
+          developer_email?: string
+          developer_name?: string
+          developer_phone?: string | null
+          event_date?: string | null
+          event_description?: string | null
+          event_location?: string | null
+          event_title?: string | null
+          id?: string
+          notes?: string | null
+          reviewed_at?: string | null
+          status?: string
+          submission_type?: string
+        }
+        Relationships: []
       }
       developer_sync_status: {
         Row: {

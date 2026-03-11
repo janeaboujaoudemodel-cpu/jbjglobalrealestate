@@ -69,6 +69,34 @@ interface ProjectDocument {
   created_at: string;
 }
 
+const AutoApproveToggle = () => {
+  const [autoApprove, setAutoApprove] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    supabase.from("app_settings").select("value").eq("key", "auto_approve_developer_listings").maybeSingle()
+      .then(({ data }) => { setAutoApprove(data?.value === "true"); setLoading(false); });
+  }, []);
+
+  const toggle = async (checked: boolean) => {
+    setAutoApprove(checked);
+    await supabase.from("app_settings").update({ value: checked ? "true" : "false" } as any).eq("key", "auto_approve_developer_listings");
+    toast(checked ? "Auto-approve enabled — new developer listings will be published automatically" : "Auto-approve disabled — listings require manual review");
+  };
+
+  if (loading) return null;
+  return (
+    <div className="mb-4 flex items-center gap-3 p-3 rounded-xl border-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6]">
+      <Switch checked={autoApprove} onCheckedChange={toggle} />
+      <div>
+        <p className="text-sm font-semibold text-foreground">Auto-Approve Developer Listings</p>
+        <p className="text-xs text-muted-foreground">When ON, listings from the Developer Portal are published immediately</p>
+      </div>
+      {autoApprove && <Badge className="ml-auto bg-green-100 text-green-800 border-green-300">Active</Badge>}
+    </div>
+  );
+};
+
 const ListingAdmin = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -784,6 +812,7 @@ const ListingAdmin = () => {
                 <ReellyImportPanel />
               </TabsContent>
               <TabsContent value="approvals" className="mt-0">
+                <AutoApproveToggle />
                 <ProjectApprovalQueue onRefresh={refetchProjects} />
               </TabsContent>
               <TabsContent value="updates" className="mt-0">
