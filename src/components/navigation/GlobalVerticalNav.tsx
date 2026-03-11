@@ -964,7 +964,7 @@ export default function GlobalVerticalNav() {
               <React.Fragment key={sectionKey}>
                 {sectionIdx > 0 && <hr className="border-gold/15 mx-1 my-1" />}
 
-                <div>
+                <div id={`nav-section-${sectionKey.replace(/\s+/g, '-').toLowerCase()}`}>
                   <button
                     onClick={() => toggleSection(sectionKey)}
                     className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-[11px] uppercase tracking-[0.15em] font-bold transition-all border ${
