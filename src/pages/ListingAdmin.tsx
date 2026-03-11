@@ -784,6 +784,7 @@ const ListingAdmin = () => {
                 <ReellyImportPanel />
               </TabsContent>
               <TabsContent value="approvals" className="mt-0">
+                <AutoApproveToggle />
                 <ProjectApprovalQueue onRefresh={refetchProjects} />
               </TabsContent>
               <TabsContent value="updates" className="mt-0">
