@@ -164,10 +164,10 @@ export default function HorizontalUtilityBar() {
           <TooltipTrigger asChild>
             <Link
               to="/favorites"
-              className="h-7 w-7 flex items-center justify-center rounded-md hover:bg-gold/10 transition-all group"
+              className="h-7 w-7 flex items-center justify-center rounded-md border border-gold/20 bg-gold/5 hover:bg-gold/15 hover:border-gold/40 transition-all group"
               aria-label="Favorites"
             >
-              <Heart className="w-3.5 h-3.5 text-gold/70 group-hover:text-gold transition-colors" />
+              <Heart className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-transform" />
             </Link>
           </TooltipTrigger>
           <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Favorites</TooltipContent>
