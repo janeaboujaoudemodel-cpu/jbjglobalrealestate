@@ -1102,7 +1102,7 @@ export default function GlobalVerticalNav() {
         style={{ willChange: 'transform, opacity' }}
       >
       {collapsed ? (
-        <div className="hidden lg:flex w-[48px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-gold/30 flex-col h-full items-center py-4 gap-3">
+      <div className="hidden lg:flex w-[48px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-gold/30 flex-col h-full items-center py-4 gap-2">
           <Link to="/" className="mb-2">
             <img src={jbjMonogramLightBg} alt="JBJ" className="w-9 h-9 object-contain" />
           </Link>
@@ -1126,7 +1126,7 @@ export default function GlobalVerticalNav() {
                     }}
                     className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${
                       isActive
-                        ? 'bg-gold/15 text-gold'
+                        ? 'bg-gradient-to-r from-[#F5EBD7] to-[#D4C4A8] text-black border border-gold/40'
                         : 'text-black/60 hover:text-gold hover:bg-gold/10'
                     }`}
                   >
@@ -1140,13 +1140,52 @@ export default function GlobalVerticalNav() {
 
           <div className="flex-1" />
 
+          {/* Bottom pinned: Support, Ticket, Sign Out — vertical like owner command center */}
+          <div className="flex flex-col items-center gap-1.5 pb-1 border-t border-red-500/20 pt-2">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <a href="mailto:info@jbjglobal.com" className="w-8 h-8 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-50/50 border border-red-500/20 hover:border-red-500/40 transition-all">
+                  <Headphones className="w-3.5 h-3.5" />
+                </a>
+              </TooltipTrigger>
+              <TooltipContent side="right" className="text-xs">Contact Support</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link to="/ticket-hub?tab=new" className="w-8 h-8 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-50/50 border border-red-500/20 hover:border-red-500/40 transition-all">
+                  <Ticket className="w-3.5 h-3.5" />
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent side="right" className="text-xs">Create Ticket</TooltipContent>
+            </Tooltip>
+            {session ? (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button onClick={() => { supabase.auth.signOut(); }} className="w-8 h-8 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-50/50 border border-red-500/20 hover:border-red-500/40 transition-all">
+                    <LogOut className="w-3.5 h-3.5" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="right" className="text-xs">Sign Out</TooltipContent>
+              </Tooltip>
+            ) : (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link to="/auth" className="w-8 h-8 rounded-lg flex items-center justify-center text-black/60 hover:text-gold hover:bg-gold/10 border border-gold/20 hover:border-gold/40 transition-all">
+                    <User className="w-3.5 h-3.5" />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent side="right" className="text-xs">Sign In</TooltipContent>
+              </Tooltip>
+            )}
+          </div>
+
           <button
             onClick={toggleCollapse}
-            className="w-10 h-10 rounded-xl bg-gradient-to-br from-gold/20 via-gold/10 to-gold/5 border border-gold/50 flex items-center justify-center hover:from-gold/30 hover:to-gold/15 transition-all shadow-lg shadow-gold/15"
+            className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/50 flex items-center justify-center hover:from-gold/30 hover:to-gold/15 transition-all shadow-lg shadow-gold/15"
             aria-label="Expand navigation"
             title="Expand navigation"
           >
-            <ChevronRight className="w-5 h-5 text-gold" />
+            <ChevronRight className="w-5 h-5 text-black/70" />
           </button>
         </div>
       ) : (
