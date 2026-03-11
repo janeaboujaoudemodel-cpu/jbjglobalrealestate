@@ -352,7 +352,7 @@ const Developers = () => {
 
         {/* Fixed portal copy of filters when scrolled past */}
         {isFilterFixed && createPortal(
-          <section className="fixed top-0 left-0 right-0 z-[9998] bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] py-4 border-b border-gold/30 shadow-lg">
+          <section className="fixed top-0 left-0 right-0 z-[9998] backdrop-blur-md bg-gradient-to-br from-[#FDFBF7]/90 via-[#F5F0E6]/90 to-[#EDE4D3]/90 py-4 border-b border-gold/30 shadow-lg">
             <div className="container mx-auto px-3 sm:px-4">
               <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg">
                 <FilterShortcutBar

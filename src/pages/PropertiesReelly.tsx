@@ -270,7 +270,7 @@ const PropertiesReelly = () => {
       {showStickyNav && (
       <section 
         className={cn(
-          "fixed top-[40px] z-[9998] bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark py-2 border-b border-gold/30 right-0",
+          "fixed top-[40px] z-[9998] backdrop-blur-md bg-gradient-to-br from-champagne-light/90 via-champagne/90 to-champagne-dark/90 py-2 border-b border-gold/30 right-0",
           isMapMode ? "left-0" : "left-0 [body.jj-vertical-nav-active_&]:lg:left-[200px] [body.jj-vertical-nav-collapsed_&]:lg:left-[48px]"
         )}
       >

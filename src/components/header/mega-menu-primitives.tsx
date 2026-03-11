@@ -24,7 +24,7 @@ export const MegaMenuShell = React.forwardRef<HTMLDivElement, MegaMenuShellProps
       <div
         ref={ref}
         className={cn(
-          "fixed z-[9999] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)] rounded-xl overflow-hidden border-2 border-gold/40",
+          "fixed z-[10050] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)] rounded-xl overflow-hidden border-2 border-gold/40",
           className
         )}
         style={{
