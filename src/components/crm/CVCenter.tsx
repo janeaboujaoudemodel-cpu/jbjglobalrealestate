@@ -183,6 +183,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
         reviewed_by: app.reviewed_by, user_id: app.user_id || null,
         record_source: 'hr_applications',
         position_applied: app.position_applied || null,
+        is_viewed: app.is_viewed || false,
       }));
 
       const fromSubs: CVEntry[] = (subsRes.data || []).map((sub: any) => ({
