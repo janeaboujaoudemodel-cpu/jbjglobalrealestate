@@ -29,6 +29,7 @@ import {
 import CRMDashboardCards from "@/components/crm/CRMDashboardCards";
 import { CommandPalette } from "@/components/ui/command-palette";
 import { FloatingActionBar } from "@/components/ui/floating-action-bar";
+import { BrokerManagementPanel } from "@/components/admin/BrokerManagementPanel";
 
 interface Broker {
   id: string;
