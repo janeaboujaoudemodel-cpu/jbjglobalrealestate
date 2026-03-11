@@ -1041,8 +1041,15 @@ export default function GlobalVerticalNav() {
                             key={item.href + item.label + i}
                             to={item.href}
                             onClick={(e) => {
-                              if (hasMega) handleNavClick(item.megaMenu, e);
-                              else handleNavClick(undefined);
+                              if (hasMega) {
+                                handleNavClick(item.megaMenu, e);
+                              } else {
+                                handleNavClick(undefined);
+                                // Auto-close My Account section on selection to prevent stuck states
+                                if (sectionKey === 'MY ACCOUNT') {
+                                  setOpenSection(null);
+                                }
+                              }
                             }}
                             className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${getItemStyle(item, sectionKey)}`}
                           >

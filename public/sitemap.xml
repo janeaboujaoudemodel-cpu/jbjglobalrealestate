@@ -109,6 +109,12 @@
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
+  <url>
+    <loc>https://jbj.ae/broker-education</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.82</priority>
+  </url>
 
   <!-- ====== COMPANY PAGES ====== -->
   <url>
@@ -248,6 +254,12 @@
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://jbj.ae/toolkit/stamp-generator</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.72</priority>
   </url>
 
   <!-- ====== CALCULATORS & TOOLS ====== -->
@@ -437,6 +449,12 @@
     <changefreq>weekly</changefreq>
     <priority>0.70</priority>
   </url>
+  <url>
+    <loc>https://jbj.ae/developer-portal</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.78</priority>
+  </url>
 
   <!-- ====== FAQ PAGES - Rich Snippet Targets ====== -->
   <url>
@@ -475,6 +493,12 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
   </url>
+  <url>
+    <loc>https://jbj.ae/broker-faq</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
 
   <!-- ====== SUPPORT & HAPPINESS ====== -->
   <url>
@@ -490,6 +514,46 @@
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.60</priority>
+  </url>
+
+  <!-- ====== PROPERTY SEARCH WITH FILTERS - Allow Crawling ====== -->
+  <url>
+    <loc>https://jbj.ae/properties?type=apartment</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://jbj.ae/properties?type=villa</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://jbj.ae/properties?type=penthouse</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.82</priority>
+  </url>
+  <url>
+    <loc>https://jbj.ae/properties?type=townhouse</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.82</priority>
+  </url>
+  <url>
+    <loc>https://jbj.ae/properties?type=duplex</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- ====== SELLER LISTING PAGE ====== -->
+  <url>
+    <loc>https://jbj.ae/seller-listing</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.82</priority>
   </url>
 
   <!-- ====== LEGAL & COMPLIANCE PAGES ====== -->
