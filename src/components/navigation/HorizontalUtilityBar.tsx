@@ -18,6 +18,7 @@ import { useCurrency } from "@/hooks/useCurrency";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserAlerts } from "@/hooks/useUserAlerts";
 import GlobalSearchModal from "@/components/GlobalSearchModal";
+import GlobalBackButton from "@/components/navigation/GlobalBackButton";
 
 
 export default function HorizontalUtilityBar() {
