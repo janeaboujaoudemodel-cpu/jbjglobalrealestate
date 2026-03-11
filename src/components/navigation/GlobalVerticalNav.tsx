@@ -10,7 +10,12 @@ import {
   LayoutDashboard, FolderOpen, ListChecks, Bell, Zap, Menu, X, Star,
   Scale, Eye, Ticket, Compass, HandCoins, Handshake, Lock, Accessibility,
   ShieldCheck, Newspaper, BookMarked, Landmark, Camera, Ruler,
-  LogOut,
+  LogOut, Wrench, Package, Hammer, Gavel, PaintBucket, Scissors, ScanLine,
+  Wallet, Truck, BadgeCheck, SmilePlus, MessageCircle, Monitor,
+  Database, Cog, HardHat, UserPlus, Table2, Presentation,
+  QrCode, FileSignature, VideoIcon, Map, MailOpen, MessagesSquare,
+  Workflow, BellRing, Crown, Boxes, Store, Gem, Receipt, Banknote,
+  Podcast, NotebookPen, BookText, HelpCircle, ScrollText,
 } from "lucide-react";
 import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png";
 import React, { useState, useCallback, useEffect, useMemo } from "react";
