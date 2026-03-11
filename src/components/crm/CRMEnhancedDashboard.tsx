@@ -256,7 +256,7 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Activity Trend */}
-        <Card className="border-zinc-200 bg-white shadow-md">
+        <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)]/95 to-[hsl(36,25%,88%)]/80 shadow-[0_8px_30px_rgba(200,167,102,0.12)]">
           <CardHeader>
             <CardTitle className="text-base font-semibold text-zinc-900 flex items-center gap-2">
               <TrendingUp className="h-5 w-5 text-blue-500" />
