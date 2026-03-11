@@ -128,11 +128,39 @@ export const SEOHead = ({
       canonicalElement.setAttribute('href', `${BASE_URL}${canonicalPath}`);
     }
 
+    // FAQ structured data (JSON-LD FAQPage schema for Google rich snippets)
+    const faqScriptId = 'jbj-faq-jsonld';
+    if (faqItems && faqItems.length > 0) {
+      let faqScript = document.getElementById(faqScriptId) as HTMLScriptElement | null;
+      if (!faqScript) {
+        faqScript = document.createElement('script');
+        faqScript.id = faqScriptId;
+        faqScript.type = 'application/ld+json';
+        document.head.appendChild(faqScript);
+      }
+      const faqSchema = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": faqItems.map(item => ({
+          "@type": "Question",
+          "name": item.question,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": item.answer.replace(/\n/g, ' ').replace(/•/g, '- ')
+          }
+        }))
+      };
+      faqScript.textContent = JSON.stringify(faqSchema);
+    }
+
     // Cleanup on unmount - restore defaults
     return () => {
       document.title = `${BRAND_NAME} | Dubai Property Brokerage | Buy, Sell, Rent`;
+      // Remove FAQ schema on unmount
+      const existingFaqScript = document.getElementById(faqScriptId);
+      if (existingFaqScript) existingFaqScript.remove();
     };
-  }, [fullTitle, finalDescription, finalKeywords, coreKeywords, isFounderVisible, canonicalPath, ogImage, ogType, noIndex]);
+  }, [fullTitle, finalDescription, finalKeywords, coreKeywords, isFounderVisible, canonicalPath, ogImage, ogType, noIndex, faqItems]);
 
   return null; // This component doesn't render anything
 };
