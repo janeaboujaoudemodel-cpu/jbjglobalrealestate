@@ -1048,7 +1048,7 @@ export default function CVResumeBuilder() {
     <div className="min-h-screen" style={{ background: "hsl(var(--pearl-1,48 30% 97%))" }}>
 
       {/* ── Sticky Header ──────────────────────────────────────── */}
-      <div className="sticky top-0 z-20 border-b border-[hsl(var(--border))] bg-white/95 backdrop-blur-sm shadow-sm">
+      <div className="sticky top-0 lg:top-[48px] z-20 border-b border-[hsl(var(--border))] bg-white/95 backdrop-blur-sm shadow-sm">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 py-3.5 flex items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="sm" onClick={() => navigate("/toolkit/corporate-suite")}
