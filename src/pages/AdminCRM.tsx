@@ -330,11 +330,15 @@ const AdminCRM = () => {
           </Button>
         </div>
 
-        <Tabs defaultValue="brokers">
+        <Tabs defaultValue="broker-profiles">
           <TabsList className="bg-white/80 border-2 border-gold/30 p-1">
+            <TabsTrigger value="broker-profiles" className="tab-trigger-champagne text-black">
+              <Shield className="h-4 w-4 mr-2" />
+              Broker Profiles
+            </TabsTrigger>
             <TabsTrigger value="brokers" className="tab-trigger-champagne text-black">
               <Users className="h-4 w-4 mr-2" />
-              Brokers
+              CRM Users
             </TabsTrigger>
             <TabsTrigger value="leads" className="tab-trigger-champagne text-black">
               <TrendingUp className="h-4 w-4 mr-2" />
@@ -345,6 +349,15 @@ const AdminCRM = () => {
               Audit Logs
             </TabsTrigger>
           </TabsList>
+
+          {/* Broker Profiles Management Tab */}
+          <TabsContent value="broker-profiles">
+            <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+              <CardContent className="p-6">
+                <BrokerManagementPanel />
+              </CardContent>
+            </Card>
+          </TabsContent>
 
           {/* Brokers Tab */}
           <TabsContent value="brokers">
