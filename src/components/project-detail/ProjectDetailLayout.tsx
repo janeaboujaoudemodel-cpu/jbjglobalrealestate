@@ -171,6 +171,7 @@ export type ProjectDetailData = {
   sale_status?: string | null;
   emirate?: string | null;
   construction_status?: string | null;
+  availability_visible?: boolean | null;
 };
 
 interface ProjectDetailLayoutProps {
