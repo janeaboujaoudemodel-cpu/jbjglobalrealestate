@@ -109,6 +109,8 @@ const CRMLeadDetail = () => {
       return;
     }
     fetchLeadData();
+    // Log lead access for audit trail
+    supabase.rpc('log_crm_lead_access', { p_lead_id: id, p_user_id: user.id, p_access_type: 'view' }).catch(() => {});
   }, [user, id, navigate]);
 
   useEffect(() => {
