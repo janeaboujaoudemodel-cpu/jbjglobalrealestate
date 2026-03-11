@@ -48,7 +48,8 @@ const FEATURED_AREA_SLUGS = [
 type MegaMenuKey =
   | 'buy' | 'sell' | 'rent' | 'developers' | 'areas'
   | 'insights' | 'ai-tools' | 'creative' | 'shortcuts'
-  | 'services' | 'company' | 'legal' | 'guides';
+  | 'services' | 'company' | 'legal' | 'guides'
+  | 'partners' | 'broker' | 'investor' | 'productivity' | 'account' | 'suites';
 
 interface NavItem {
   label: string;
@@ -70,6 +71,7 @@ const NAV_ITEMS: NavItem[] = [
 
   // ── Properties ──
   { label: "Buy / Off-Plan", href: "/properties", icon: Building2, section: "PROPERTIES", megaMenu: 'buy' },
+  { label: "All Projects", href: "/properties", icon: Building },
   { label: "Sell", href: "/sell", icon: Tag, megaMenu: 'sell' },
   { label: "Rent", href: "/rent", icon: Key, megaMenu: 'rent' },
   { label: "List for Sale / Rent", href: "/listing-portal", icon: PlusCircle },
@@ -202,14 +204,14 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Referral Partner", href: "/referral-partner", icon: Handshake },
 
   // ── Partners ──
-  { label: "Partners Hub", href: "/partners", icon: Handshake, section: "PARTNERS" },
+  { label: "Partners Hub", href: "/partners", icon: Handshake, section: "PARTNERS", megaMenu: 'partners' },
   { label: "Mortgage Partner", href: "/partners/mortgage", icon: Landmark },
   { label: "Legal Partner", href: "/partners/legal", icon: Gavel },
   { label: "Company Setup Partner", href: "/partners/company-setup", icon: Building },
   { label: "Visa Services", href: "/partners/visa-services", icon: Globe },
 
   // ── Broker & Academy ──
-  { label: "Broker Portal", href: "/broker-portal", icon: BriefcaseIcon, section: "BROKER & ACADEMY" },
+  { label: "Broker Portal", href: "/broker-portal", icon: BriefcaseIcon, section: "BROKER & ACADEMY", megaMenu: 'broker' },
   { label: "Broker Toolkit", href: "/broker-toolkit", icon: Wrench },
   { label: "Broker Resources", href: "/broker-resources", icon: FolderOpen },
   { label: "Broker Training", href: "/broker/training", icon: GraduationCap },
@@ -221,7 +223,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Broker Education", href: "/broker-education", icon: BookOpen },
 
   // ── Investor ──
-  { label: "Investor Hub", href: "/investor-hub", icon: TrendingUp, section: "INVESTOR" },
+  { label: "Investor Hub", href: "/investor-hub", icon: TrendingUp, section: "INVESTOR", megaMenu: 'investor' },
   { label: "Investor Services", href: "/investors", icon: Briefcase },
   { label: "Join Investor List", href: "/investors/join", icon: UserPlus },
   { label: "Investor Dashboard", href: "/investor-dashboard", icon: LayoutDashboard },
@@ -254,7 +256,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Risk Disclosure", href: "/risk-disclosure", icon: FileText },
 
   // ── Productivity ──
-  { label: "Spreadsheet", href: "/spreadsheet", icon: BarChart3, section: "PRODUCTIVITY" },
+  { label: "Spreadsheet", href: "/spreadsheet", icon: BarChart3, section: "PRODUCTIVITY", megaMenu: 'productivity' },
   { label: "Documents", href: "/documents", icon: FileText },
   { label: "QR Generator", href: "/qr-generator", icon: QrCode },
   { label: "Contract Forms", href: "/contract-forms", icon: FileSignature },
@@ -267,7 +269,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Meeting Center", href: "/meeting-center", icon: Users },
 
   // ── Account ──
-  { label: "Favorites", href: "/favorites", icon: Heart, section: "MY ACCOUNT" },
+  { label: "Favorites", href: "/favorites", icon: Heart, section: "MY ACCOUNT", megaMenu: 'account' },
   { label: "Compare", href: "/compare", icon: GitCompare },
   { label: "Mortgage Calculator", href: "/mortgage-calculator", icon: Calculator },
   { label: "My Dashboard", href: "/my-dashboard", icon: User },
@@ -277,7 +279,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Ticket Hub", href: "/ticket-hub", icon: Ticket },
 
   // ── Business Suites ──
-  { label: "Suites Hub", href: "/suites", icon: Boxes, section: "BUSINESS SUITES" },
+  { label: "Suites Hub", href: "/suites", icon: Boxes, section: "BUSINESS SUITES", megaMenu: 'suites' },
   { label: "All Tools Suite", href: "/business-suite/all", icon: Package },
   { label: "Real Estate Suite", href: "/business-suite/real-estate", icon: Building2 },
   { label: "Broker Suite", href: "/business-suite/broker", icon: BriefcaseIcon },
@@ -478,6 +480,58 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'Favorites', icon: Heart, href: '/favorites' },
     { label: 'AI History', icon: Bot, href: '/my-ai-history' },
   ],
+  partners: [
+    { label: 'Partners Hub', icon: Handshake, href: '/partners' },
+    { label: 'Mortgage Partner', icon: Landmark, href: '/partners/mortgage' },
+    { label: 'Legal Partner', icon: Gavel, href: '/partners/legal' },
+    { label: 'Company Setup', icon: Building, href: '/partners/company-setup' },
+    { label: 'Visa Services', icon: Globe, href: '/partners/visa-services' },
+  ],
+  broker: [
+    { label: 'Broker Portal', icon: BriefcaseIcon, href: '/broker-portal' },
+    { label: 'Broker Toolkit', icon: Wrench, href: '/broker-toolkit' },
+    { label: 'Broker Training', icon: GraduationCap, href: '/broker/training' },
+    { label: 'JBJ Academy', icon: GraduationCap, href: '/jbj-academy' },
+    { label: 'Academy Graduates', icon: Award, href: '/academy/graduates' },
+    { label: 'Broker Dashboard', icon: LayoutDashboard, href: '/broker-dashboard' },
+    { label: 'Broker Resources', icon: FolderOpen, href: '/broker-resources' },
+    { label: 'AI Broker Workspace', icon: Bot, href: '/ai-broker-workspace' },
+    { label: 'Broker Education', icon: BookOpen, href: '/broker-education' },
+  ],
+  investor: [
+    { label: 'Investor Hub', icon: TrendingUp, href: '/investor-hub' },
+    { label: 'Investor Services', icon: Briefcase, href: '/investors' },
+    { label: 'Join Investor List', icon: UserPlus, href: '/investors/join' },
+    { label: 'Investor Dashboard', icon: LayoutDashboard, href: '/investor-dashboard' },
+    { label: 'Portfolio Views', icon: Gem, href: '/investor-dashboard/portfolio' },
+  ],
+  productivity: [
+    { label: 'Spreadsheet', icon: BarChart3, href: '/spreadsheet' },
+    { label: 'Documents', icon: FileText, href: '/documents' },
+    { label: 'QR Generator', icon: QrCode, href: '/qr-generator' },
+    { label: 'Contract Forms', icon: FileSignature, href: '/contract-forms' },
+    { label: 'Video Meeting', icon: Video, href: '/video-meeting' },
+    { label: 'Presentations', icon: Presentation, href: '/presentations' },
+    { label: 'Meeting Center', icon: Users, href: '/meeting-center' },
+    { label: 'Client Portal', icon: Users, href: '/client-portal' },
+  ],
+  account: [
+    { label: 'My Dashboard', icon: LayoutDashboard, href: '/my-dashboard' },
+    { label: 'My Profile', icon: User, href: '/profile' },
+    { label: 'Favorites', icon: Heart, href: '/favorites' },
+    { label: 'Compare', icon: GitCompare, href: '/compare' },
+    { label: 'My Tickets', icon: Ticket, href: '/my-tickets' },
+    { label: 'Ticket Hub', icon: Ticket, href: '/ticket-hub' },
+    { label: 'Settings', icon: Settings, href: '/profile?tab=settings' },
+  ],
+  suites: [
+    { label: 'Suites Hub', icon: Boxes, href: '/suites' },
+    { label: 'All Tools Suite', icon: Package, href: '/business-suite/all' },
+    { label: 'Real Estate Suite', icon: Building2, href: '/business-suite/real-estate' },
+    { label: 'Broker Suite', icon: BriefcaseIcon, href: '/business-suite/broker' },
+    { label: 'Creative Suite', icon: Palette, href: '/business-suite/creative' },
+    { label: 'Productivity Suite', icon: Cog, href: '/business-suite/productivity' },
+  ],
 };
 
 const MEGA_MENU_TITLES: Record<MegaMenuKey, string> = {
@@ -494,6 +548,12 @@ const MEGA_MENU_TITLES: Record<MegaMenuKey, string> = {
   company: 'Company',
   legal: 'Legal & Compliance',
   guides: 'Guides & Education',
+  partners: 'Partners',
+  broker: 'Broker & Academy',
+  investor: 'Investor Hub',
+  productivity: 'Productivity',
+  account: 'My Account',
+  suites: 'Business Suites',
 };
 
 /* ─── COLOR-CODED SHORTCUT GROUPS ─── */

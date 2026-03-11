@@ -282,6 +282,8 @@ const Footer = () => {
     { label: t('footer.investorEducation') || "Investor Education", href: "/investor-education" },
     { label: t('footer.investorFaqs') || "Investor FAQs", href: "/investor-faq" },
     { label: t('footer.investorTools') || "Investor Tools", href: "/ai-hub" },
+    { label: "Investor Dashboard", href: "/investor-dashboard" },
+    { label: "Portfolio Views", href: "/investor-dashboard/portfolio" },
   ];
 
   // Guides
@@ -340,6 +342,10 @@ const Footer = () => {
     { href: "/broker-education", label: "Broker Education" },
     { href: "/broker-resources", label: "Broker Resources" },
     { href: "/listing-portal", label: "Listing Portal" },
+    { href: "/broker/training", label: "Broker Training" },
+    { href: "/broker-hub", label: "Broker Hub" },
+    { href: "/broker-dashboard", label: "Broker Dashboard" },
+    { href: "/ai-broker-workspace", label: "AI Broker Workspace" },
   ];
 
   // Partners
@@ -399,6 +405,10 @@ const Footer = () => {
     { href: "/presentations", label: "Presentations" },
     { href: "/e-signature", label: "E-Signature" },
     { href: "/meeting-center", label: "Meeting Center" },
+    { href: "/contract-forms", label: "Contract Forms" },
+    { href: "/pricing", label: "Pricing" },
+    { href: "/onboarding", label: "Onboarding" },
+    { href: "/client-portal", label: "Client Portal" },
   ];
 
   // Professional Tools
@@ -408,34 +418,13 @@ const Footer = () => {
     { href: "/rental-index", label: "JBJ Rental Index" },
     { href: "/mortgage-calculator", label: "Mortgage Calculator" },
     { href: "/quiz", label: "AI Home Finder" },
-    { href: "/interior-design-ai", label: "AI Interior Design" },
-    { href: "/virtual-staging-ai", label: "AI Virtual Staging" },
-    { href: "/ai-price-predictor", label: "AI Price Predictor" },
-    { href: "/ai-neighborhood-insights", label: "AI Neighborhood Insights" },
-    { href: "/ai-property-analyzer", label: "AI Property Analyzer" },
-    { href: "/ai-lead-qualification", label: "AI Lead Qualification" },
-    { href: "/ai-follow-up-scheduler", label: "AI Follow-up Scheduler" },
-    { href: "/ai-objection-handler", label: "AI Objection Handler" },
-    { href: "/ai-client-matcher", label: "AI Client Matcher" },
-    { href: "/ai-market-report", label: "AI Market Report" },
-    { href: "/ai-competitor-analysis", label: "AI Competitor Analysis" },
-    { href: "/ai-roi-calculator", label: "AI ROI Calculator" },
-    { href: "/ai-investment-report", label: "AI Investment Report" },
-    { href: "/ai-meeting-summarizer", label: "AI Meeting Summarizer" },
-    { href: "/ai-translation-hub", label: "AI Translation Hub" },
-    { href: "/ai-video-tour-script", label: "AI Video Tour Script" },
-    { href: "/ai-email-generator", label: "AI Email Generator" },
-    { href: "/ai-social-media", label: "AI Social Media" },
-    { href: "/ai-description-writer", label: "AI Description Writer" },
-    { href: "/ai-contract-reviewer", label: "AI Contract Reviewer" },
-    { href: "/ai-document-generator", label: "AI Document Generator" },
     { href: "/business-card-scanner", label: "Business Card Scanner" },
     { href: "/whiteboard", label: "Whiteboard" },
-    { href: "/mind-map", label: "Mind Map" },
+    { href: "/mindmap", label: "Mind Map" },
     { href: "/form-builder", label: "Form Builder" },
-    { href: "/kanban-board", label: "Kanban Board" },
-    { href: "/digital-card", label: "Digital Card" },
-    { href: "/ai-hub", label: "AI Hub" },
+    { href: "/kanban", label: "Kanban Board" },
+    { href: "/email-client", label: "Email Client" },
+    { href: "/team-chat", label: "Team Chat" },
     { href: "/sitemap", label: "Sitemap" },
   ];
 
@@ -784,6 +773,7 @@ const Footer = () => {
                 <FooterCard title="Legal" links={legalLinks} />
                 <FooterCard title="Business Suites" links={businessSuitesLinks} />
                 <FooterCard title="Productivity" links={productivityLinks} />
+                <FooterCard title="Professional Tools" links={professionalTools} />
                 <FooterCard title="Education Hub" links={[
                   { href: "/broker-education", label: "Books" },
                   { href: "/guides", label: "Guides" },
@@ -806,6 +796,14 @@ const Footer = () => {
                   { href: "/ai-social-media", label: "Social Media" },
                   { href: "/ai-translation-hub", label: "Translation Hub" },
                   { href: "/ai-document-generator", label: "Doc Generator" },
+                  { href: "/ai-personal-shopper", label: "AI Personal Shopper" },
+                  { href: "/ai-calendar", label: "AI Calendar" },
+                  { href: "/ai-budget-planner", label: "AI Budget Planner" },
+                  { href: "/ai-investment-report", label: "AI Investment Report" },
+                  { href: "/ai-call-summarizer", label: "AI Call Summarizer" },
+                  { href: "/ai-client-matcher", label: "AI Client Matcher" },
+                  { href: "/ai-description-writer", label: "AI Description Writer" },
+                  { href: "/my-ai-history", label: "AI History" },
                 ]} viewAllHref="/ai-hub" viewAllLabel="View All 40+ Tools →" />
 
                 {/* Market Intelligence */}
@@ -821,8 +819,13 @@ const Footer = () => {
                   { href: "/toolkit/pdf-suite", label: "PDF & Documents Suite" },
                   { href: "/toolkit/stamp-generator", label: "AI Stamp Generator" },
                   { href: "/toolkit/corporate-suite/business-card", label: "Business Card" },
-                  { href: "/toolkit/corporate-suite/cv-builder", label: "Resume / CV" },
+                  { href: "/toolkit/corporate-suite/cv-resume", label: "CV Builder" },
                   { href: "/toolkit/corporate-suite/cover-letter", label: "Cover Letter" },
+                  { href: "/toolkit/corporate-suite/company-profile", label: "Company Profile Builder" },
+                  { href: "/toolkit/corporate-suite/landing-page", label: "Landing Page Builder" },
+                  { href: "/toolkit/pdf-editor", label: "PDF Editor" },
+                  { href: "/brand-palette", label: "Brand Palette" },
+                  { href: "/toolkit/voice-studio-pro", label: "Voice Studio Pro" },
                   { href: "/e-signature", label: "JBJ E-Sign" },
                   { href: "/toolkit/scan-sign", label: "Scan & Sign" },
                 ]} viewAllHref="/toolkit" viewAllLabel="View All Creative Tools →" />
