@@ -302,9 +302,9 @@ const MyDashboard = () => {
               }
             </p>
 
-            {/* Main Grid Layout */}
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {/* Left Column - Profile & Level */}
+            {/* Main Grid Layout — 2 columns */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Left Column - Profile, Badges, Account */}
               <div className="space-y-6">
                 <div id="profile-section" className={sectionClass('profile-section')}>
                   <DashboardCardErrorBoundary fallbackTitle="Profile unavailable">
@@ -319,8 +319,13 @@ const MyDashboard = () => {
                 <AccountSettingsCard />
               </div>
 
-              {/* Center Column - Quick Actions & Activity */}
+              {/* Right Column - Notifications, Quick Actions, Activity */}
               <div className="space-y-6">
+                <div id="notifications-section" className={sectionClass('notifications-section')}>
+                  <DashboardCardErrorBoundary fallbackTitle="Notifications unavailable">
+                    <NotificationsPreview />
+                  </DashboardCardErrorBoundary>
+                </div>
                 <DashboardCardErrorBoundary fallbackTitle="Quick Actions unavailable">
                   <QuickActions />
                 </DashboardCardErrorBoundary>
@@ -330,29 +335,20 @@ const MyDashboard = () => {
                   </DashboardCardErrorBoundary>
                 </div>
               </div>
-
-              {/* Right Column - Notifications & Links */}
-              <div className="space-y-6 md:col-span-2 xl:col-span-1">
-                <div id="notifications-section" className={sectionClass('notifications-section')}>
-                  <DashboardCardErrorBoundary fallbackTitle="Notifications unavailable">
-                    <NotificationsPreview />
-                  </DashboardCardErrorBoundary>
-                </div>
-                <UsefulLinksCard />
-              </div>
             </div>
 
-            {/* My Tasks Section - Full Width */}
-            <div className="mt-6" id="tasks-section">
-              <div className={sectionClass('tasks-section')}>
+            {/* Row 2: Tasks + Useful Links side by side */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+              <div id="tasks-section" className={sectionClass('tasks-section')}>
                 <DashboardCardErrorBoundary fallbackTitle="Tasks unavailable">
                   <MyTasksCard />
                 </DashboardCardErrorBoundary>
               </div>
+              <UsefulLinksCard />
             </div>
 
-            {/* Bottom Row - Favorites & Shortlists */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+            {/* Row 3: Favorites & Shortlists */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
               <div id="favorites-section" className={sectionClass('favorites-section')}>
                 <DashboardCardErrorBoundary fallbackTitle="Favorites unavailable">
                   <FavoritesCard />
