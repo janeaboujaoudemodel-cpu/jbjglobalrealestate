@@ -152,12 +152,16 @@ const InvestorFAQ = () => {
     }
   ];
 
+  const allFaqItems = categories.flatMap(cat => cat.questions);
+
   return (
     <div className="min-h-screen bg-black">
       <SEOHead 
         title="Investor FAQ | Investment Questions Answered | JBJ Global Real Estate"
         description="Find answers to common investor questions about UAE real estate investment, returns, off-plan properties, rental performance, and working with JBJ Global Real Estate."
         keywords="investor FAQ, UAE real estate investment, Dubai property investment, off-plan investment, rental yield Dubai, property investment questions"
+        canonicalPath="/investor-faq"
+        faqItems={allFaqItems}
       />
       
       {/* Hero */}

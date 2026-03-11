@@ -149,12 +149,16 @@ const BrokerFAQ = () => {
     }
   ];
 
+  const allFaqItems = categories.flatMap(cat => cat.questions);
+
   return (
     <div className="min-h-screen bg-black">
       <SEOHead 
         title="Broker FAQ | Professional Questions Answered | JBJ Global Real Estate"
         description="Find clear answers to common broker questions about licensing, ethics, client communication, off-plan representation, and professional conduct in UAE real estate."
         keywords="broker FAQ, UAE real estate broker, Dubai broker licensing, RERA broker, professional brokerage, broker ethics, real estate compliance"
+        canonicalPath="/broker-faq"
+        faqItems={allFaqItems}
       />
       
       {/* Hero */}
