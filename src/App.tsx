@@ -77,30 +77,35 @@ const App = () => {
                   <GlobalVisitorTracking />
                   <SEOBreadcrumbs />
                   
-            <Suspense fallback={<PageLoader />}>
+            <BrandIntroSplash />
             <Routes>
               {/* ── Standalone Routes (no shell) ── */}
-              {StandaloneRoutes()}
+              <Route element={<Suspense fallback={<PageLoader />}><Outlet /></Suspense>}>
+                {StandaloneRoutes()}
+              </Route>
 
               {/* ── Owner Command Center (dedicated shell) ── */}
-              {OwnerRoutes()}
+              <Route element={<Suspense fallback={<PageLoader />}><Outlet /></Suspense>}>
+                {OwnerRoutes()}
+              </Route>
               
               {/* ── Main Layout Routes (header + footer shell) ── */}
               <Route element={<AdminBypass><MainLayoutWrapper /></AdminBypass>}>
-                {/* Public pages: properties, guides, services, company, user */}
-                {PublicRoutes()}
+                <Route element={<Suspense fallback={<InlinePageLoader />}><Outlet /></Suspense>}>
+                  {/* Public pages: properties, guides, services, company, user */}
+                  {PublicRoutes()}
 
-                {/* AI tool pages */}
-                {AIToolRoutes()}
+                  {/* AI tool pages */}
+                  {AIToolRoutes()}
 
-                {/* Admin & owner-guarded pages */}
-                {AdminRoutes()}
+                  {/* Admin & owner-guarded pages */}
+                  {AdminRoutes()}
 
-                {/* Toolkit & creative suite */}
-                {ToolkitRoutes()}
+                  {/* Toolkit & creative suite */}
+                  {ToolkitRoutes()}
+                </Route>
               </Route>
-              </Routes>
-            </Suspense>
+            </Routes>
                   </PopupCoordinatorProvider>
                 </ActiveLeadProvider>
               </PodcastVisibilityProvider>
