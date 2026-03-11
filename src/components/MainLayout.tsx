@@ -88,17 +88,12 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   const [isChatCollapsed, setIsChatCollapsed] = useState(true);
   const [layoutGuardTriggered, setLayoutGuardTriggered] = useState(false);
 
-  // Mobile: always keep chat minimized. Desktop: auto-minimize after 8s
+  // Mobile: always keep chat minimized
   useEffect(() => {
     if (isMobile) {
       setIsChatCollapsed(true);
-      return;
     }
-    if (!isChatCollapsed) {
-      const timer = window.setTimeout(() => setIsChatCollapsed(true), 8000);
-      return () => window.clearTimeout(timer);
-    }
-  }, [isChatCollapsed, isMobile]);
+  }, [isMobile]);
   const [layoutDebugSnapshot, setLayoutDebugSnapshot] = useState<ServiceLayoutSnapshot | null>(null);
   // Defer non-critical shell components by 1s (reduced from 2s for faster perceived load)
   const [shellReady, setShellReady] = useState(false);
