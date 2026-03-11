@@ -229,8 +229,36 @@ const DeveloperPortal = () => {
   const isRepApproved = repProfile?.status === 'approved';
   const hasRepProfile = !!repProfile;
 
-  // Determine tab count based on rep status
-  const showRepTabs = hasRepProfile && isRepApproved;
+  // Check if user is an approved broker (verified broker_profile or active HR employee)
+  const { data: brokerAccess } = useQuery({
+    queryKey: ["dev-portal-broker-access", user?.id],
+    queryFn: async () => {
+      if (!user) return { isBroker: false };
+      // Check broker_profiles
+      const { data: bp } = await supabase
+        .from('broker_profiles')
+        .select('id, verification_status')
+        .eq('user_id', user.id)
+        .eq('verification_status', 'verified')
+        .maybeSingle();
+      if (bp) return { isBroker: true };
+      // Check hr_employees
+      const { data: emp } = await supabase
+        .from('hr_employees')
+        .select('id, status')
+        .eq('user_id', user.id)
+        .eq('status', 'active')
+        .maybeSingle();
+      if (emp) return { isBroker: true };
+      return { isBroker: false };
+    },
+    enabled: !!user,
+  });
+
+  const isApprovedBroker = brokerAccess?.isBroker || false;
+
+  // Show briefing/messages tabs if approved rep OR approved broker
+  const showRepTabs = (hasRepProfile && isRepApproved) || isApprovedBroker;
 
   return (
     <>
