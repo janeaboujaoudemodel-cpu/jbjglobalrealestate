@@ -65,9 +65,12 @@ const EnvelopeDetail = lazy(() => import("@/pages/e-signature/EnvelopeDetail"));
 const SignatureStudio = lazy(() => import("@/pages/e-signature/SignatureStudio"));
 const ContractReview = lazy(() => import("@/pages/e-signature/ContractReview"));
 const Automations = lazy(() => import("@/pages/Automations"));
+const AlertsDemo = lazy(() => import("@/pages/AlertsDemo"));
 
 export const AdminRoutes = () => (
   <>
+    {/* ── Alerts Demo (owner preview) ── */}
+    <Route path="/alerts-demo" element={<OwnerGuard><AlertsDemo /></OwnerGuard>} />
     {/* ── Core Admin ── */}
     <Route path="/admin" element={<OwnerGuard><Admin /></OwnerGuard>} />
     <Route path="/admin/leads" element={<OwnerGuard><AdminLeads /></OwnerGuard>} />
