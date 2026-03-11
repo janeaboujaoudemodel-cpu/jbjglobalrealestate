@@ -906,18 +906,20 @@ function ConnectedSavedButton({ variant, onApplySavedFilter }: { variant: 'light
 function ConnectedModeButton() {
   const { mode, setMode } = useUserModeContext();
   const [modeOpen, setModeOpen] = useState(false);
-  const modeLabel = mode === 'broker' ? 'Broker' : mode === 'investor_broker' ? 'Both' : 'Investor';
+  const modeLabel = mode === 'broker' ? 'Broker' : mode === 'investor_broker' ? 'Both' : mode === 'developer' ? 'Developer' : 'Investor';
 
-  const MODE_OPTIONS: { value: typeof mode; label: string }[] = [
-    { value: 'investor', label: 'Investor' },
-    { value: 'broker', label: 'Broker' },
-    { value: 'investor_broker', label: 'Both' },
+  const MODE_OPTIONS: { value: typeof mode; label: string; color: string; activeBg: string; activeBorder: string }[] = [
+    { value: 'investor', label: 'Investor', color: 'text-emerald-600', activeBg: 'bg-emerald-500/15', activeBorder: 'border-emerald-500/40' },
+    { value: 'broker', label: 'Broker', color: 'text-blue-600', activeBg: 'bg-blue-500/15', activeBorder: 'border-blue-500/40' },
+    { value: 'investor_broker', label: 'Both', color: 'text-purple-600', activeBg: 'bg-purple-500/15', activeBorder: 'border-purple-500/40' },
   ];
+
+  const activeOpt = MODE_OPTIONS.find(o => o.value === mode) || MODE_OPTIONS[0];
 
   return (
     <Popover open={modeOpen} onOpenChange={setModeOpen}>
       <PopoverTrigger asChild>
-        <button className="flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors text-black/70 hover:bg-gold/10 flex-shrink-0 max-w-fit" title="Switch Mode">
+        <button className={cn("flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors flex-shrink-0 max-w-fit", activeOpt.activeBg, activeOpt.color, "hover:brightness-95")} title="Switch your viewing mode">
           <Users className="w-3.5 h-3.5" />
           <span className="hidden sm:inline">Mode: {modeLabel}</span>
         </button>
@@ -935,7 +937,7 @@ function ConnectedModeButton() {
             className={cn(
               "w-full text-center px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors",
               mode === opt.value
-                ? "bg-gold/20 text-gold border border-gold/40"
+                ? cn(opt.activeBg, opt.color, "border", opt.activeBorder)
                 : "text-black/80 hover:bg-white/60"
             )}
           >
