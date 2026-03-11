@@ -326,16 +326,16 @@ const CRMLeadDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-gold/20 bg-[hsl(222,84%,4.9%)] sticky top-0 z-50">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)]">
+      {/* Header - Premium Champagne Gold */}
+      <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)] sticky top-20 lg:top-24 z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate("/owner")} className="text-gold hover:text-gold hover:bg-gold/10">
+          <Button variant="ghost" size="icon" onClick={() => navigate("/crm")} className="text-black hover:text-gold hover:bg-gold/10">
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div className="flex-1 min-w-0">
-            <h1 className="text-lg font-bold text-white truncate">{lead.full_name}</h1>
-            <p className="text-xs text-gold/70">{lead.nationality} · {lead.preferred_language?.toUpperCase()}</p>
+            <h1 className="text-lg font-bold text-black truncate">{lead.full_name}</h1>
+            <p className="text-xs text-zinc-500">{lead.nationality} · {lead.preferred_language?.toUpperCase()} · Created {new Date(lead.created_at).toLocaleDateString()}</p>
           </div>
           <Select value={currentStatus} onValueChange={handleStatusChange}>
             <SelectTrigger className="w-[160px]">
