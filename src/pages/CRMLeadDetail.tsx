@@ -497,7 +497,7 @@ const CRMLeadDetail = () => {
         {/* Row 3: AI Property Coach - full width */}
         <AIPropertyCoach lead={lead} activities={activities} />
 
-        {/* Row 4: Tabs - Activity, Notes, Tasks, Email, WhatsApp */}
+        {/* Row 4: Tabs - Activity, Notes, Tasks, Email, WhatsApp, Audit */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="mb-4 flex-wrap h-auto gap-1">
             <TabsTrigger value="activity">Activity</TabsTrigger>
@@ -505,6 +505,7 @@ const CRMLeadDetail = () => {
             <TabsTrigger value="tasks">Tasks</TabsTrigger>
             <TabsTrigger value="email" className="text-blue-500">AI Email</TabsTrigger>
             <TabsTrigger value="whatsapp" className="text-green-500">AI WhatsApp</TabsTrigger>
+            <TabsTrigger value="audit" className="text-amber-500">Audit History</TabsTrigger>
           </TabsList>
 
           <TabsContent value="activity">
@@ -591,6 +592,10 @@ const CRMLeadDetail = () => {
 
           <TabsContent value="whatsapp">
             <SmartWhatsAppComposer lead={lead} />
+          </TabsContent>
+
+          <TabsContent value="audit">
+            <LeadAuditHistory leadId={id!} />
           </TabsContent>
         </Tabs>
       </main>
