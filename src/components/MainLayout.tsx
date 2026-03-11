@@ -99,11 +99,11 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     }
   }, [isChatCollapsed, isMobile]);
   const [layoutDebugSnapshot, setLayoutDebugSnapshot] = useState<ServiceLayoutSnapshot | null>(null);
-  // Defer non-critical shell components by 2s
+  // Defer non-critical shell components by 1s (reduced from 2s for faster perceived load)
   const [shellReady, setShellReady] = useState(false);
 
   useEffect(() => {
-    const t = window.setTimeout(() => setShellReady(true), 2000);
+    const t = window.setTimeout(() => setShellReady(true), 1000);
     return () => window.clearTimeout(t);
   }, []);
 

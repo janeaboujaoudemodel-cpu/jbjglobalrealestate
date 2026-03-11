@@ -67,6 +67,7 @@ Disallow: /onboarding
 Disallow: /auth
 Disallow: /api/
 Disallow: /*.json$
+Allow: /properties?type=*
 Disallow: /*?utm_*
 Disallow: /*?ref=*
 Disallow: /*?session=*
