@@ -345,6 +345,7 @@ export const PublicRoutes = () => (
     <Route path="/onboarding" element={<Onboarding />} />
     <Route path="/onboarding/module/:moduleId" element={<OnboardingModule />} />
     <Route path="/verify-certificate/:token" element={<VerifyCertificate />} />
+    <Route path="/verify-certificate/lookup" element={<VerifyCertificate />} />
     <Route path="/referral-onboarding" element={<ReferralOnboarding />} />
     <Route path="/redeem-referral" element={<RedeemReferral />} />
     <Route path="/spreadsheet" element={<Spreadsheet />} />
