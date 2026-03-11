@@ -1195,6 +1195,10 @@ export default function GlobalVerticalNav() {
         {/* Collapsible Section Nav */}
         <div className="py-2 px-2 space-y-0.5">
           {SECTION_KEYS.map((sectionKey, sectionIdx) => {
+            // Role-based visibility
+            if (sectionKey === 'ADMIN & OWNER' && !isOwner) return null;
+            if (sectionKey === 'BROKER & ACADEMY' && !isBroker && !isOwner) return null;
+            if (sectionKey === 'INVESTOR' && !isInvestor && !isOwner) return null;
             const items = sectionGroups[sectionKey];
             if (!items || items.length === 0) return null;
             const isOpen = openSection === sectionKey;
