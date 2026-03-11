@@ -15,6 +15,7 @@ interface UserModeContextType {
   isInvestorMode: boolean;
   isBrokerMode: boolean;
   isCombinedMode: boolean;
+  isDeveloperMode: boolean;
   hasMadeInitialSelection: boolean;
 }
 

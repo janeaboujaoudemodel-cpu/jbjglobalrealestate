@@ -65,7 +65,7 @@ export const ModeSelectionModal = () => {
     try {
       if (isLoggedIn) {
         // Logged in: set mode directly (visitor maps to investor)
-        const actualMode: UserMode = selectedMode === 'visitor' ? 'investor' : selectedMode;
+        const actualMode: UserMode = selectedMode === 'visitor' ? 'investor' : selectedMode as UserMode;
         await setMode(actualMode);
         dismiss();
         toast.success(
