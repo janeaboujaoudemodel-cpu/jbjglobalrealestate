@@ -125,6 +125,12 @@ const AILeadScoring = ({ lead, activities = [], onScoreUpdate }: AILeadScoringPr
 
       setScore(newScore);
       onScoreUpdate?.(overall);
+      
+      // Persist AI score to database for analytics
+      supabase.from("crm_leads").update({ 
+        ai_score: overall, 
+        ai_score_updated_at: new Date().toISOString() 
+      } as any).eq("id", lead.id).then(() => {});
     } catch (err) {
       console.error("Failed to calculate score:", err);
     } finally {
