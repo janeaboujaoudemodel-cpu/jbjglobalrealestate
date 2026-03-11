@@ -10,6 +10,8 @@ import { TierBadge } from "@/components/tier/TierBadge";
 import { useBrokerProfile } from "@/hooks/useBrokerProfile";
 import { useBrokerEducation } from "@/hooks/useBrokerEducation";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import {
   GraduationCap,
   BookOpen,
