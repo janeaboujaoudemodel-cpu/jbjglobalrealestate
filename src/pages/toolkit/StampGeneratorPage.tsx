@@ -112,7 +112,7 @@ export default function StampGeneratorLanding() {
           <h2 className="text-2xl font-bold text-[hsl(var(--foreground))] text-center mb-10">Everything You Need</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {FEATURES.map(f => (
-              <div key={f.title} className="bg-white rounded-2xl border border-[hsl(var(--border))] p-5 space-y-3">
+              <div key={f.title} className="bg-card/80 rounded-2xl border-2 border-gold/30 p-5 space-y-3 hover:border-gold/50 transition-all">
                 <div className="w-10 h-10 rounded-xl bg-[hsl(var(--gold)/0.1)] flex items-center justify-center">
                   <f.icon size={18} className="text-[hsl(var(--gold))]"/>
                 </div>
