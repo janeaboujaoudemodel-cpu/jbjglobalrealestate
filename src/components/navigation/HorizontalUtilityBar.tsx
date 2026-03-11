@@ -16,7 +16,7 @@ import { useCurrency } from "@/hooks/useCurrency";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserAlerts } from "@/hooks/useUserAlerts";
 import GlobalSearchModal from "@/components/GlobalSearchModal";
-import type { DisplayMode } from "@/constants/filterConfig";
+
 
 export default function HorizontalUtilityBar() {
   const [searchOpen, setSearchOpen] = useState(false);
