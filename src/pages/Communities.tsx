@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 import NavigationTabs from "@/components/NavigationTabs";
 import CommunityGrid from "@/components/CommunityGrid";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
@@ -14,7 +15,10 @@ const Communities = React.forwardRef<HTMLElement>((_, ref) => {
       >
         {/* Layer 2: Active Champagne - using global locked gutter */}
         <div className="jj-layer-2">
-          <h1
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
             className="text-black font-bold mb-4"
             style={{
               fontFamily: "Poppins, sans-serif",
@@ -23,17 +27,28 @@ const Communities = React.forwardRef<HTMLElement>((_, ref) => {
             }}
           >
             <span className="text-gold">UAE</span> Communities
-          </h1>
-          <p className="text-zinc-700 text-lg mb-10 max-w-2xl" style={{ fontFamily: "Poppins, sans-serif" }}>
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.15, ease: "easeOut" }}
+            className="text-zinc-700 text-lg mb-10 max-w-2xl"
+            style={{ fontFamily: "Poppins, sans-serif" }}
+          >
             Explore the UAE's most prestigious communities and find your perfect home
-          </p>
+          </motion.p>
 
           <NavigationTabs />
           
           {/* Layer 3: Locked Champagne for cards container */}
-          <div className="jj-card-inner rounded-xl p-6">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.25 }}
+            className="jj-card-inner rounded-xl p-6"
+          >
             <CommunityGrid />
-          </div>
+          </motion.div>
         </div>
       </section>
     </>
