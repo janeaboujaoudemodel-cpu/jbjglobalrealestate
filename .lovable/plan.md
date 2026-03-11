@@ -1,41 +1,28 @@
 
 
-## Plan: Fix All Email Issues Across All Templates
+## Plan: Enhance Ticket Hub Form — Categories, Priority, Attachments & Screen Recording
 
-### Problems Identified
+### What's Missing in `src/pages/TicketHub.tsx`
 
-1. **Recommended For You icons disappeared** — Inline SVGs are stripped by Gmail and most email clients. Must revert to hosted PNG images (`ai-tools.png`, `guides.png`, `properties.png` already exist in `public/email-icons/`).
+The Ticket Hub's "New Ticket" form currently has only 7 basic categories, no priority selector, no file upload, and no screen recording. Meanwhile `SupportTicketBox.tsx` already has 22 categories, priority levels, and file attachments — but no screen recording anywhere in the codebase.
 
-2. **Social media footer icons not rendering** — Same issue: `socialLinksFooter()` loads external `.svg` files via `<img>` tags, but Gmail blocks SVG images entirely. Must switch to hosted `.png` files. Currently missing `social-facebook.png` — need to confirm or create it.
+### Changes
 
-3. **Email split into multiple visual cards** — Several sub-sections (`ticketSupportEmbed`, `readyToGetStartedHtml`, `recommendedActionsHtml`) each have their own `border`, `border-radius`, and `background` styles creating distinct visual boxes. These need to be softened so they sit seamlessly inside the single continuous card.
+**1. Expand categories** (`src/pages/TicketHub.tsx`)
+Replace the 7-item `SERVICE_CATEGORIES` with the full 22-item list from `SupportTicketBox.tsx`, plus additional ones like "Incorrect Data / Fake Information", "Project Report", "Feature Request", "Partnership Inquiry".
 
-### Changes (all in `supabase/functions/_shared/email-html.ts`)
+**2. Add priority selector** (`src/pages/TicketHub.tsx`)
+Add a priority dropdown (Low, Normal, High, Critical) to the form — same as `SupportTicketBox`. Store `priority` in `newTicket` state and send it on submit instead of hardcoded `"medium"`.
 
-#### A. Recommended For You — Revert to PNG hosted images
-- Change `recommendedCard()` back to using `iconImg()` with PNG paths
-- Remove the `RECOMMENDED_ICONS` inline SVG object
-- Ensure circular frame clips the PNG with `overflow:hidden` on the `<td>` to prevent square backgrounds
-- Signature: `recommendedCard(title, href, iconPath, alt)` — restore the original parameters
+**3. Add file upload section** (`src/pages/TicketHub.tsx`)
+Add an attachment area (max 5 files) with drag-and-drop support for photos, videos, and screenshots. Upload to `support-attachments` bucket on submit, same pattern as `SupportTicketBox`.
 
-#### B. Social Footer — Switch to PNG with white pearl background
-- Replace `socialLinksFooter()` to use the inline `SVG` object icons (instagram, facebook, linkedin, tiktok, youtube) that are already defined at the top of the file — these render as raw HTML inside `<td>` elements, not as `<img>` tags, so they should survive email client processing
-- Actually, since Gmail strips ALL SVG (both inline and `<img>`), switch to using the `.png` files: `social-instagram.png`, `social-linkedin.png`, `social-tiktok.png`, `social-youtube.png`
-- Create `social-facebook.png` if missing
-- Style each icon circle: white/pearl (#FDFBF7) background, gold border, black icon inside
+**4. Add screen recording** (`src/pages/TicketHub.tsx`)
+Add a "Screen Record" button that uses the browser's `navigator.mediaDevices.getDisplayMedia()` + `MediaRecorder` API to capture the screen. When stopped, the `.webm` file is added to attachments automatically. This is a new feature not yet in any file.
 
-#### C. Single Card Layout — Remove visual fragmentation
-- `ticketSupportEmbed()`: Remove the heavy gradient background and red border; make it blend into the card
-- `readyToGetStartedHtml()`: Remove the outer border and separate background so it flows within the card
-- `inquiryBox()`: Soften its standalone bordered look
-- Keep all content inside the single `emailShell` wrapper card with no sub-borders that create separation
+### File Changes
 
-#### D. Deploy + Send Test Email
-- Deploy the updated edge function
-- Immediately send a test welcome email to `janeaboujaoudenails@gmail.com`
-- Take a screenshot as proof
-
-### Files Modified
-- `supabase/functions/_shared/email-html.ts` — all icon and layout fixes
-- `public/email-icons/social-facebook.png` — create if missing (or use existing assets)
+| File | Changes |
+|------|---------|
+| `src/pages/TicketHub.tsx` | Expand categories to 25+, add priority selector, add file upload area with drag-drop, add screen recording button using MediaRecorder API, update submit to upload files and send priority |
 
