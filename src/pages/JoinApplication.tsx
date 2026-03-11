@@ -8,10 +8,21 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Loader2, Upload, CheckCircle, FileText, Bot, MessageCircle, Briefcase, User, Phone, Mail } from "lucide-react";
+import { Loader2, Upload, CheckCircle, FileText, Bot, MessageCircle, Briefcase, User, Phone, Mail, MapPin, Star } from "lucide-react";
 import { CONTACT_INFO } from "@/constants/stats";
 import { PhoneInput } from "@/components/ui/phone-input";
+
+interface OpenPosition {
+  id: string;
+  title: string;
+  department: string;
+  description: string | null;
+  employment_type: string;
+  is_broker_role: boolean;
+  location: string | null;
+}
 
 const NATIONALITIES = [
   "Afghan", "Albanian", "Algerian", "American", "Andorran", "Angolan", "Argentine", "Armenian", "Australian", "Austrian",
