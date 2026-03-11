@@ -12,8 +12,8 @@ import {
   ShieldCheck, Newspaper, BookMarked, Landmark, Camera, Ruler,
   LogOut, Wrench, Package, Hammer, Gavel, PaintBucket, Scissors, ScanLine,
   Wallet, Truck, BadgeCheck, SmilePlus, MessageCircle, Monitor,
-  Database, Cog, HardHat, UserPlus, Table2, Presentation,
-  QrCode, FileSignature, VideoIcon, Map, MailOpen, MessagesSquare,
+  Database, Cog, HardHat, UserPlus, Presentation,
+  QrCode, FileSignature, MailOpen, MessagesSquare,
   Workflow, BellRing, Crown, Boxes, Store, Gem, Receipt, Banknote,
   Podcast, NotebookPen, BookText, HelpCircle, ScrollText,
 } from "lucide-react";
