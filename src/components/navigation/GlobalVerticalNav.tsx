@@ -210,7 +210,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Visa Services", href: "/partners/visa-services", icon: Globe },
 
   // ── Broker & Academy ──
-  { label: "Broker Portal", href: "/broker-portal", icon: BriefcaseIcon, section: "BROKER & ACADEMY" },
+  { label: "Broker Portal", href: "/broker-portal", icon: BriefcaseIcon, section: "BROKER & ACADEMY", megaMenu: 'broker' },
   { label: "Broker Toolkit", href: "/broker-toolkit", icon: Wrench },
   { label: "Broker Resources", href: "/broker-resources", icon: FolderOpen },
   { label: "Broker Training", href: "/broker/training", icon: GraduationCap },
