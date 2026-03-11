@@ -3,7 +3,7 @@ import { ArrowUpRight, BarChart3, Database, Shield, Info } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { SEOHead } from "@/components/SEOHead";
-import { Button } from "@/components/ui/button";
+import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 import { FounderPhilosophySection } from "@/components/FounderPhilosophySection";
 import { PreFooterSeparator } from "@/components/PreFooterSeparator";
 import {
@@ -14,6 +14,7 @@ import {
   DataSourcesPanel,
 } from "@/components/market-intelligence";
 import { MARKET_DISCLAIMER } from "@/config/open-data-config";
+import VideoBackground from "@/components/VideoBackground";
 import marketIntelligenceHero from "@/assets/market-intelligence-hero.jpg";
 
 const fadeInUp = {
@@ -112,13 +113,12 @@ const MarketIntelligence = () => {
 
       {/* Hero Section */}
       <section className="jj-hero-fullscreen relative flex items-center overflow-hidden">
-        {/* Hero background image */}
-        <img 
-          src={marketIntelligenceHero}
-          alt=""
-          className="absolute inset-0 w-full h-full object-cover"
+        {/* Video background with poster fallback */}
+        <VideoBackground
+          src="https://videos.pexels.com/video-files/3629519/3629519-uhd_2560_1440_25fps.mp4"
+          poster={marketIntelligenceHero}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/80 to-black" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/70 to-black" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/5 via-transparent to-transparent" />
         
         <motion.div 
@@ -159,17 +159,12 @@ const MarketIntelligence = () => {
             className="flex flex-wrap justify-center gap-4"
             variants={fadeInUp}
           >
-            <a href="#overview">
-              <Button variant="media" className="px-8 py-6">
-                Explore Dashboard
-                <ArrowUpRight className="w-5 h-5 ml-2" />
-              </Button>
-            </a>
-            <Link to="/market-report">
-              <Button variant="secondary" className="border-white text-white hover:bg-white hover:text-gold px-8 py-6">
-                Download Reports
-              </Button>
-            </Link>
+            <PremiumHeroButton href="#overview" size="lg">
+              Explore Dashboard
+            </PremiumHeroButton>
+            <PremiumHeroButton href="/market-report" size="lg" icon={ArrowUpRight}>
+              Download Reports
+            </PremiumHeroButton>
           </motion.div>
 
           {/* Trust Badges */}
