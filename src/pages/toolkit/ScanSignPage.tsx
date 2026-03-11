@@ -12,7 +12,7 @@ import { PDFDocument } from 'pdf-lib';
 import {
   Camera, Upload, FileText, Pen, Download, Trash2, RotateCw,
   Loader2, CheckCircle2, Plus, Image as ImageIcon, Save, Sparkles, Wand2, X,
-  ScanLine, ZoomIn, ZoomOut, Crop, FolderOpen, RefreshCcw, FlipHorizontal
+  ScanLine, ZoomIn, ZoomOut, Crop, FolderOpen, RefreshCcw, FlipHorizontal, Stamp
 } from 'lucide-react';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
