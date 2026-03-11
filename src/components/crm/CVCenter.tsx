@@ -202,7 +202,6 @@ const CVCenter = ({ userId }: CVCenterProps) => {
         user_id: null, record_source: 'hr_cv_submissions',
         position_applied: sub.position_applied || null,
         is_viewed: sub.is_viewed || false,
-        position_applied: sub.position_applied || null,
       }));
 
       const allCVs = [...fromApps, ...fromSubs];
