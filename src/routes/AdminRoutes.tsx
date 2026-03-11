@@ -70,7 +70,7 @@ const AlertsDemo = lazy(() => import("@/pages/AlertsDemo"));
 export const AdminRoutes = () => (
   <>
     {/* ── Alerts Demo (owner preview) ── */}
-    <Route path="/alerts-demo" element={<OwnerGuard><AlertsDemo /></OwnerGuard>} />
+    <Route path="/alerts-demo" element={<AlertsDemo />} />
     {/* ── Core Admin ── */}
     <Route path="/admin" element={<OwnerGuard><Admin /></OwnerGuard>} />
     <Route path="/admin/leads" element={<OwnerGuard><AdminLeads /></OwnerGuard>} />
