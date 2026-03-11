@@ -223,7 +223,7 @@ const AreaDetail = () => {
             {filterBarContent}
           </div>
           <div className="mt-3">
-            <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} />
+            <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} priorityFilter="areas" />
           </div>
         </div>
       </div>
