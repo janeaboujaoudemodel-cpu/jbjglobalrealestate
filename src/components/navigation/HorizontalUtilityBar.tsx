@@ -4,6 +4,7 @@ import {
   Search, Heart, Settings, LayoutDashboard,
   Ruler, SlidersHorizontal, PanelLeftClose, PanelLeftOpen,
   Building2, Key, Tag, Bell, ClipboardList, Inbox, BarChart3,
+  Shield, MapPin, Users, Sparkles, BookOpen, UserCircle,
 } from "lucide-react";
 import ModeSwitcher from "@/components/ModeSwitcher";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -156,7 +157,174 @@ export default function HorizontalUtilityBar() {
 
         {divider}
 
-        {/* ── Favorites ── */}
+        {/* ── Contextual Shortcuts (visible only when sidebar collapsed) ── */}
+        {sidebarCollapsed && (
+          <div className="flex items-center gap-0.5 border-l border-gold/20 pl-1.5 ml-0.5">
+            {isOwner ? (
+              <>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link to="/owner/crm" className="h-7 flex items-center gap-1 rounded-md hover:bg-gold/10 transition-all px-1.5 group">
+                      <Users className="w-3.5 h-3.5 text-emerald-600 group-hover:scale-110 transition-transform" />
+                      <span className="text-[10px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">CRM</span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">CRM Dashboard</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link to="/owner/admin" className="h-7 flex items-center gap-1 rounded-md hover:bg-gold/10 transition-all px-1.5 group">
+                      <Shield className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-transform" />
+                      <span className="text-[10px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">Admin</span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Admin Panel</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link to="/owner/listing-admin" className="h-7 flex items-center gap-1 rounded-md hover:bg-gold/10 transition-all px-1.5 group">
+                      <ClipboardList className="w-3.5 h-3.5 text-amber-600 group-hover:scale-110 transition-transform" />
+                      <span className="text-[10px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">Listings</span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Listing Admin</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link to="/properties" className="h-7 flex items-center gap-1 rounded-md hover:bg-gold/10 transition-all px-1.5 group">
+                      <Building2 className="w-3.5 h-3.5 text-gold/70 group-hover:text-gold transition-colors" />
+                      <span className="text-[10px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">Properties</span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Properties</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link to="/areas" className="h-7 flex items-center gap-1 rounded-md hover:bg-gold/10 transition-all px-1.5 group">
+                      <MapPin className="w-3.5 h-3.5 text-gold/70 group-hover:text-gold transition-colors" />
+                      <span className="text-[10px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">Areas</span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Areas</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link to="/developers" className="h-7 flex items-center gap-1 rounded-md hover:bg-gold/10 transition-all px-1.5 group">
+                      <Sparkles className="w-3.5 h-3.5 text-gold/70 group-hover:text-gold transition-colors" />
+                      <span className="text-[10px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">Developers</span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Developers</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link to="/founder-assistant" className="h-7 flex items-center gap-1 rounded-md hover:bg-gold/10 transition-all px-1.5 group">
+                      <UserCircle className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-transform" />
+                      <span className="text-[10px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">Assistant</span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Founder Assistant</TooltipContent>
+                </Tooltip>
+              </>
+            ) : user ? (
+              <>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link to="/my-dashboard" className="h-7 flex items-center gap-1 rounded-md hover:bg-gold/10 transition-all px-1.5 group">
+                      <LayoutDashboard className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-transform" />
+                      <span className="text-[10px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">Dashboard</span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">My Dashboard</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link to="/properties" className="h-7 flex items-center gap-1 rounded-md hover:bg-gold/10 transition-all px-1.5 group">
+                      <Building2 className="w-3.5 h-3.5 text-gold/70 group-hover:text-gold transition-colors" />
+                      <span className="text-[10px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">Properties</span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Properties</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link to="/areas" className="h-7 flex items-center gap-1 rounded-md hover:bg-gold/10 transition-all px-1.5 group">
+                      <MapPin className="w-3.5 h-3.5 text-gold/70 group-hover:text-gold transition-colors" />
+                      <span className="text-[10px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">Areas</span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Areas</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link to="/developers" className="h-7 flex items-center gap-1 rounded-md hover:bg-gold/10 transition-all px-1.5 group">
+                      <Sparkles className="w-3.5 h-3.5 text-gold/70 group-hover:text-gold transition-colors" />
+                      <span className="text-[10px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">Developers</span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Developers</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link to="/listing-portal" className="h-7 flex items-center gap-1 rounded-md hover:bg-gold/10 transition-all px-1.5 group">
+                      <Tag className="w-3.5 h-3.5 text-gold/70 group-hover:text-gold transition-colors" />
+                      <span className="text-[10px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">List</span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Listing Portal</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link to="/guides/legal" className="h-7 flex items-center gap-1 rounded-md hover:bg-gold/10 transition-all px-1.5 group">
+                      <BookOpen className="w-3.5 h-3.5 text-gold/70 group-hover:text-gold transition-colors" />
+                      <span className="text-[10px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">Guides</span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Guides</TooltipContent>
+                </Tooltip>
+              </>
+            ) : (
+              <>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link to="/properties" className="h-7 flex items-center gap-1 rounded-md hover:bg-gold/10 transition-all px-1.5 group">
+                      <Building2 className="w-3.5 h-3.5 text-gold/70 group-hover:text-gold transition-colors" />
+                      <span className="text-[10px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">Properties</span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Properties</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link to="/areas" className="h-7 flex items-center gap-1 rounded-md hover:bg-gold/10 transition-all px-1.5 group">
+                      <MapPin className="w-3.5 h-3.5 text-gold/70 group-hover:text-gold transition-colors" />
+                      <span className="text-[10px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">Areas</span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Areas</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link to="/developers" className="h-7 flex items-center gap-1 rounded-md hover:bg-gold/10 transition-all px-1.5 group">
+                      <Sparkles className="w-3.5 h-3.5 text-gold/70 group-hover:text-gold transition-colors" />
+                      <span className="text-[10px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">Developers</span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Developers</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link to="/guides/legal" className="h-7 flex items-center gap-1 rounded-md hover:bg-gold/10 transition-all px-1.5 group">
+                      <BookOpen className="w-3.5 h-3.5 text-gold/70 group-hover:text-gold transition-colors" />
+                      <span className="text-[10px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">Guides</span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Guides</TooltipContent>
+                </Tooltip>
+              </>
+            )}
+          </div>
+        )}
         <Tooltip>
           <TooltipTrigger asChild>
             <Link
