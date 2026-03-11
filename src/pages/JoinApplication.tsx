@@ -571,19 +571,58 @@ export default function JoinApplication() {
                 </Select>
               </div>
 
-              {/* Position Applied For */}
+              {/* Open Positions Cards */}
+              {openPositions.length > 0 && (
+                <div className="space-y-3">
+                  <Label className="text-base font-semibold">Open Positions</Label>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {openPositions.map((pos) => (
+                      <div
+                        key={pos.id}
+                        onClick={() => setFormData({ ...formData, positionApplied: pos.id })}
+                        className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
+                          formData.positionApplied === pos.id
+                            ? "border-gold bg-gold/10 shadow-md"
+                            : "border-gold/20 bg-background hover:border-gold/50"
+                        }`}
+                      >
+                        <div className="flex items-start justify-between mb-1">
+                          <h4 className="font-semibold text-sm text-black">{pos.title}</h4>
+                          {pos.is_broker_role && (
+                            <Badge className="bg-gold/20 text-gold border-gold/30 text-[10px] px-1.5 py-0">
+                              <Star className="w-2.5 h-2.5 mr-0.5" /> Partner
+                            </Badge>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-2 text-xs text-black/50">
+                          <Badge variant="outline" className="border-gold/20 text-black/60 text-[10px] px-1.5 py-0">{pos.department}</Badge>
+                          {pos.is_broker_role && <span className="text-gold font-medium">Commission Basis</span>}
+                          {pos.location && <span className="flex items-center gap-0.5"><MapPin className="w-2.5 h-2.5" />{pos.location}</span>}
+                        </div>
+                        {pos.description && (
+                          <p className="text-xs text-black/40 mt-1.5 line-clamp-2">{pos.description}</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Fallback Position Select */}
               <div className="space-y-2">
-                <Label htmlFor="position">Position Applied For <span className="text-red-500">*</span></Label>
+                <Label htmlFor="position">
+                  {openPositions.length > 0 ? "Or select a general category" : "Position Applied For"} <span className="text-red-500">*</span>
+                </Label>
                 <Select
-                  value={formData.positionApplied}
+                  value={openPositions.some(p => p.id === formData.positionApplied) ? "" : formData.positionApplied}
                   onValueChange={(value) => setFormData({ ...formData, positionApplied: value })}
                   disabled={loading}
                 >
                   <SelectTrigger className="bg-background">
-                    <SelectValue placeholder="Select the position you're applying for" />
+                    <SelectValue placeholder="Select position category" />
                   </SelectTrigger>
                   <SelectContent>
-                    {JOB_POSITIONS.map((pos) => (
+                    {FALLBACK_POSITIONS.map((pos) => (
                       <SelectItem key={pos.value} value={pos.value}>{pos.label}</SelectItem>
                     ))}
                   </SelectContent>

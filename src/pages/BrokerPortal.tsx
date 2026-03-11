@@ -226,6 +226,7 @@ function TrainingProgressSection() {
 
 function DocumentVerificationSection() {
   const { profile } = useBrokerProfile();
+  const { user } = useAuth();
   const verificationStatus = profile?.verification_status || "unverified";
   const reraExpiry = profile?.rera_expiry_date;
   const idExpiry = profile?.id_expiry_date;
@@ -234,6 +235,63 @@ function DocumentVerificationSection() {
     if (!date) return false;
     const diff = new Date(date).getTime() - Date.now();
     return diff > 0 && diff < 30 * 86400000;
+  };
+
+  const handleDocUpload = async (docType: "rera" | "id", file: File) => {
+    if (!user || !profile) return;
+    const ext = file.name.split(".").pop();
+    const path = `broker-docs/${user.id}/${docType}-${Date.now()}.${ext}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from("broker-documents")
+      .upload(path, file, { cacheControl: "3600", upsert: true });
+
+    if (uploadError) {
+      // Bucket may not exist — store as local reference
+      console.warn("Upload failed:", uploadError);
+      toast.error("Upload service unavailable. Please try again later.");
+      return;
+    }
+
+    const { data: urlData } = supabase.storage
+      .from("broker-documents")
+      .getPublicUrl(path);
+
+    const updateData: Record<string, any> = {};
+    if (docType === "rera") {
+      updateData.rera_card_url = urlData.publicUrl;
+    } else {
+      updateData.id_document_url = urlData.publicUrl;
+    }
+
+    const { error: dbError } = await supabase
+      .from("broker_profiles")
+      .update(updateData)
+      .eq("id", profile.id);
+
+    if (dbError) {
+      toast.error("Failed to save document info");
+      return;
+    }
+
+    toast.success(`${docType === "rera" ? "RERA Card" : "Emirates ID"} uploaded successfully`);
+  };
+
+  const triggerUpload = (docType: "rera" | "id") => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".pdf,.jpg,.jpeg,.png";
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        if (file.size > 10 * 1024 * 1024) {
+          toast.error("File must be under 10MB");
+          return;
+        }
+        handleDocUpload(docType, file);
+      }
+    };
+    input.click();
   };
 
   return (
@@ -266,7 +324,7 @@ function DocumentVerificationSection() {
               {isExpiringSoon(reraExpiry) && <AlertTriangle className="w-3 h-3 inline ml-1" />}
             </span>
           ) : (
-            <Button size="sm" variant="ghost" className="text-gold text-xs h-7">
+            <Button size="sm" variant="ghost" className="text-gold text-xs h-7" onClick={() => triggerUpload("rera")}>
               <Upload className="w-3 h-3 mr-1" /> Upload
             </Button>
           )}
@@ -284,7 +342,7 @@ function DocumentVerificationSection() {
               {isExpiringSoon(idExpiry) && <AlertTriangle className="w-3 h-3 inline ml-1" />}
             </span>
           ) : (
-            <Button size="sm" variant="ghost" className="text-gold text-xs h-7">
+            <Button size="sm" variant="ghost" className="text-gold text-xs h-7" onClick={() => triggerUpload("id")}>
               <Upload className="w-3 h-3 mr-1" /> Upload
             </Button>
           )}

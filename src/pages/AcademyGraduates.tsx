@@ -238,6 +238,20 @@ export default function AcademyGraduates() {
                               {new Date(cert.issued_at).toLocaleDateString("en-US", { month: "short", year: "numeric" })}
                             </span>
                           </div>
+                          {/* QR Code */}
+                          <div className="mt-3 flex justify-center">
+                            <div
+                              className="inline-block"
+                              dangerouslySetInnerHTML={{
+                                __html: (() => {
+                                  const qr = qrcode(0, "M");
+                                  qr.addData(`${window.location.origin}/verify-certificate/${cert.verification_token}`);
+                                  qr.make();
+                                  return qr.createSvgTag(2, 0);
+                                })(),
+                              }}
+                            />
+                          </div>
                         </CardContent>
                       </Card>
                     </Link>

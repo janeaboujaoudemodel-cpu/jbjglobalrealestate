@@ -229,16 +229,15 @@ const AdminCRM = () => {
       return;
     }
 
+    // SECURITY: Strip PII from CSV export — no email/phone in plaintext
     const headers = [
-      "id", "full_name", "email", "phone", "nationality", "language",
+      "id", "full_name", "nationality", "language",
       "country", "city", "source", "owner_type", "created_at"
     ];
 
     const rows = allLeads.map(lead => [
       lead.id,
       lead.full_name,
-      lead.email_lower || "",
-      lead.phone_e164 || "",
       lead.nationality || "",
       lead.preferred_language || "",
       lead.current_location_country || "",
@@ -247,6 +246,15 @@ const AdminCRM = () => {
       lead.owner_type,
       lead.created_at
     ]);
+
+    // Audit log the export
+    supabase.from("audit_logs").insert({
+      action_type: "export",
+      resource_type: "crm_lead",
+      description: `Admin CSV export of ${allLeads.length} leads (PII stripped)`,
+      user_id: user?.id,
+      user_agent: navigator.userAgent,
+    }).then(() => {});
 
     const csv = [
       headers.join(","),
