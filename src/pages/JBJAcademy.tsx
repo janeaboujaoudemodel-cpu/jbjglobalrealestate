@@ -238,8 +238,7 @@ export default function JBJAcademy() {
         {/* Hero */}
         <section className="relative min-h-[420px] flex items-center overflow-hidden">
           <VideoBackground
-            videoSrc={brokerEducationHeroVideo}
-            overlayClassName="bg-black/60"
+            src={brokerEducationHeroVideo}
           />
           <div className="relative z-10 container mx-auto px-4 py-20 text-center">
             <motion.div initial="hidden" animate="visible" variants={stagger}>
