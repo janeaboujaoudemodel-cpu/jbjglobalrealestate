@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Trash2, RotateCcw, Search, Clock } from "lucide-react";
+import { Trash2, RotateCcw, Search, Clock, AlertTriangle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { formatDisplayDate } from "@/utils/formatDate";
 import {
@@ -15,6 +15,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface DeletedLead {
   id: string;
@@ -29,6 +40,7 @@ interface DeletedLead {
 interface RecentlyDeletedLeadsProps {
   userId: string;
   onRefresh: () => void;
+  isOwner?: boolean;
 }
 
 export default function RecentlyDeletedLeads({ userId, onRefresh }: RecentlyDeletedLeadsProps) {
