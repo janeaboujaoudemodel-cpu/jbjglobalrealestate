@@ -91,10 +91,10 @@ function BrokerProfileHero() {
 
   const firstName = profile?.display_name?.split(" ")[0] || user.email?.split("@")[0] || "Broker";
   const tier = profile?.current_tier || "Starter";
-  const verificationStatus = (profile as any)?.verification_status || "unverified";
-  const probationEnd = (profile as any)?.probation_end;
+  const verificationStatus = profile?.verification_status || "unverified";
+  const probationEnd = profile?.probation_end;
   const totalPoints = profile?.total_points || 0;
-  const performanceRating = (profile as any)?.performance_rating || "standard";
+  const performanceRating = profile?.performance_rating || "standard";
 
   const isVerified = verificationStatus === "verified";
   const isExpired = verificationStatus === "expired";
