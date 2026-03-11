@@ -969,6 +969,9 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                             <div className="flex-1 min-w-0">
                               {/* Name & Score row */}
                               <div className="flex items-center gap-2 flex-wrap mb-1">
+                                {!cv.is_viewed && (
+                                  <Badge className="bg-amber-500/20 text-amber-700 border border-amber-500/30 text-[10px] font-bold px-1.5 py-0.5 animate-pulse">NEW</Badge>
+                                )}
                                 <h4 className="text-lg font-bold text-crm-text">{cv.full_name}</h4>
                                 {isAnalyzing ? (
                                   <Badge className="bg-purple-100 text-purple-700 border-purple-300 animate-pulse">
