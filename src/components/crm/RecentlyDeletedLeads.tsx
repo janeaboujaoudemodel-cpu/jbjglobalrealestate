@@ -43,11 +43,12 @@ interface RecentlyDeletedLeadsProps {
   isOwner?: boolean;
 }
 
-export default function RecentlyDeletedLeads({ userId, onRefresh }: RecentlyDeletedLeadsProps) {
+export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = false }: RecentlyDeletedLeadsProps) {
   const [leads, setLeads] = useState<DeletedLead[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [restoring, setRestoring] = useState<string | null>(null);
+  const [erasing, setErasing] = useState<string | null>(null);
 
   useEffect(() => {
     fetchDeletedLeads();
