@@ -278,7 +278,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Ticket Hub", href: "/ticket-hub", icon: Ticket },
 
   // ── Business Suites ──
-  { label: "Suites Hub", href: "/suites", icon: Boxes, section: "BUSINESS SUITES" },
+  { label: "Suites Hub", href: "/suites", icon: Boxes, section: "BUSINESS SUITES", megaMenu: 'suites' },
   { label: "All Tools Suite", href: "/business-suite/all", icon: Package },
   { label: "Real Estate Suite", href: "/business-suite/real-estate", icon: Building2 },
   { label: "Broker Suite", href: "/business-suite/broker", icon: BriefcaseIcon },
