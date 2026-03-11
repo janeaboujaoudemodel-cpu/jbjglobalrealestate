@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
   FileCheck, MapPin, GraduationCap, BookOpen, Calendar, Sparkles,
   Home, BarChart3, FileText, MessageSquare, Building2, Plus,
-  ListChecks, FolderOpen, HelpCircle
+  ListChecks, FolderOpen, HelpCircle, Palette as _Palette
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useUserRole, VisitorRole } from "@/hooks/useUserRole";

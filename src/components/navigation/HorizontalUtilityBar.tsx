@@ -207,18 +207,18 @@ export default function HorizontalUtilityBar() {
 
         {divider}
 
-        {/* ── Advanced Filter ── */}
+        {/* ── Advanced Filter — opens filter on properties page ── */}
         <Tooltip>
           <TooltipTrigger asChild>
-            <Link
-              to="/properties?advanced=true"
+            <button
+              onClick={() => navigate('/properties?advanced=true')}
               className="h-7 w-7 flex items-center justify-center rounded-md hover:bg-gold/10 transition-all group border border-gold/20"
-              aria-label="Advanced Filter"
+              aria-label="Advanced Property Filter"
             >
               <SlidersHorizontal className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-transform" />
-            </Link>
+            </button>
           </TooltipTrigger>
-          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Advanced Filter</TooltipContent>
+          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Advanced Property Filter</TooltipContent>
         </Tooltip>
 
         {/* ── Spacer ── */}

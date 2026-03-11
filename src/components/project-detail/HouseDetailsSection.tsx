@@ -88,8 +88,8 @@ export default function HouseDetailsSection({
   if (parkingSpaces) {
     details.push({ icon: Car, label: "Parking", value: `${parkingSpaces} Space${parkingSpaces > 1 ? 's' : ''}` });
   }
-  if (serviceCharge) {
-    details.push({ icon: Zap, label: "Service Charge", value: serviceCharge });
+  if (isValidServiceCharge(serviceCharge)) {
+    details.push({ icon: Zap, label: "Service Charge", value: serviceCharge! });
   }
 
   // Standard features that most properties have

@@ -304,7 +304,7 @@ const MyDashboard = () => {
 
             {/* Main Grid Layout — 2 columns */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Left Column - Profile, Badges, Account */}
+              {/* Left Column - Profile, Badges, Account, Tasks */}
               <div className="space-y-6">
                 <div id="profile-section" className={sectionClass('profile-section')}>
                   <DashboardCardErrorBoundary fallbackTitle="Profile unavailable">
@@ -317,6 +317,11 @@ const MyDashboard = () => {
                   </DashboardCardErrorBoundary>
                 </div>
                 <AccountSettingsCard />
+                <div id="tasks-section" className={sectionClass('tasks-section')}>
+                  <DashboardCardErrorBoundary fallbackTitle="Tasks unavailable">
+                    <MyTasksCard />
+                  </DashboardCardErrorBoundary>
+                </div>
               </div>
 
               {/* Right Column - Notifications, Quick Actions, Activity */}
@@ -337,28 +342,23 @@ const MyDashboard = () => {
               </div>
             </div>
 
-            {/* Row 2: Tasks + Useful Links side by side */}
+            {/* Row 2: Favorites & Shortlists — equal height */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-              <div id="tasks-section" className={sectionClass('tasks-section')}>
-                <DashboardCardErrorBoundary fallbackTitle="Tasks unavailable">
-                  <MyTasksCard />
-                </DashboardCardErrorBoundary>
-              </div>
-              <UsefulLinksCard />
-            </div>
-
-            {/* Row 3: Favorites & Shortlists */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-              <div id="favorites-section" className={sectionClass('favorites-section')}>
+              <div id="favorites-section" className={cn(sectionClass('favorites-section'), "min-h-[320px]")}>
                 <DashboardCardErrorBoundary fallbackTitle="Favorites unavailable">
                   <FavoritesCard />
                 </DashboardCardErrorBoundary>
               </div>
-              <div id="shortlist-section" className={sectionClass('shortlist-section')}>
+              <div id="shortlist-section" className={cn(sectionClass('shortlist-section'), "min-h-[320px]")}>
                 <DashboardCardErrorBoundary fallbackTitle="Shortlist unavailable">
                   <ShortlistCard />
                 </DashboardCardErrorBoundary>
               </div>
+            </div>
+
+            {/* Row 3: Explore & Learn — horizontal scroll strip */}
+            <div className="mt-6">
+              <UsefulLinksCard />
             </div>
 
             {/* AI Tools Section with "Explore All Tools" button */}
