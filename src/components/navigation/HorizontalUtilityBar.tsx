@@ -88,7 +88,7 @@ export default function HorizontalUtilityBar() {
   return (
     <>
       <div
-        className="fixed top-0 right-0 h-[40px] z-[9996] hidden lg:flex items-center gap-1 px-2 border-b border-gold/15 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_1px_3px_hsl(var(--gold)/0.08)] [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px]"
+        className="fixed top-0 right-0 h-[40px] z-[9996] hidden md:flex items-center gap-1 px-2 border-b border-gold/15 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_1px_3px_hsl(var(--gold)/0.08)] [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px]"
       >
         {/* ── Sidebar Toggle — flush left, premium gold pill ── */}
         <Tooltip>
