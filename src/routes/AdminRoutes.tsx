@@ -66,6 +66,7 @@ const SignatureStudio = lazy(() => import("@/pages/e-signature/SignatureStudio")
 const ContractReview = lazy(() => import("@/pages/e-signature/ContractReview"));
 const Automations = lazy(() => import("@/pages/Automations"));
 const AlertsDemo = lazy(() => import("@/pages/AlertsDemo"));
+const LegalComplianceCenter = lazy(() => import("@/pages/admin/LegalComplianceCenter"));
 
 export const AdminRoutes = () => (
   <>
