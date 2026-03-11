@@ -14,14 +14,6 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
@@ -34,7 +26,9 @@ import {
   ArrowLeft,
   Users,
   Search,
-  MessageCircle
+  MessageCircle,
+  ExternalLink,
+  Globe
 } from "lucide-react";
 import { toast } from "sonner";
 import { ProvidentSyncButton } from "@/components/admin/ProvidentSyncButton";
@@ -76,7 +70,6 @@ const AdminDevelopers = () => {
   const [editingDev, setEditingDev] = useState<Developer | null>(null);
   const [editingRep, setEditingRep] = useState<SalesRep | null>(null);
   
-  // Form states
   const [devForm, setDevForm] = useState({
     name: "",
     slug: "",
@@ -114,7 +107,6 @@ const AdminDevelopers = () => {
         supabase.from('uae_developers').select('*').order('name'),
         supabase.from('developer_sales_reps').select('*').order('full_name')
       ]);
-
       if (devRes.data) setDevelopers(devRes.data);
       if (repRes.data) setSalesReps(repRes.data);
     } catch (err) {
@@ -129,25 +121,16 @@ const AdminDevelopers = () => {
       toast.error("Name and slug are required");
       return;
     }
-
     try {
       if (editingDev) {
-        const { error } = await supabase
-          .from('uae_developers')
-          .update(devForm)
-          .eq('id', editingDev.id);
-        
+        const { error } = await supabase.from('uae_developers').update(devForm).eq('id', editingDev.id);
         if (error) throw error;
         toast.success("Developer updated");
       } else {
-        const { error } = await supabase
-          .from('uae_developers')
-          .insert([devForm]);
-        
+        const { error } = await supabase.from('uae_developers').insert([devForm]);
         if (error) throw error;
         toast.success("Developer added");
       }
-
       setIsDevDialogOpen(false);
       setEditingDev(null);
       setDevForm({ name: "", slug: "", location_city: "Dubai", location_emirate: "Dubai", description: "", website_url: "" });
@@ -162,30 +145,17 @@ const AdminDevelopers = () => {
       toast.error("Name and phone are required");
       return;
     }
-
     try {
-      const data = {
-        ...repForm,
-        developer_id: selectedDeveloper.id
-      };
-
+      const data = { ...repForm, developer_id: selectedDeveloper.id };
       if (editingRep) {
-        const { error } = await supabase
-          .from('developer_sales_reps')
-          .update(data)
-          .eq('id', editingRep.id);
-        
+        const { error } = await supabase.from('developer_sales_reps').update(data).eq('id', editingRep.id);
         if (error) throw error;
         toast.success("Sales rep updated");
       } else {
-        const { error } = await supabase
-          .from('developer_sales_reps')
-          .insert([data]);
-        
+        const { error } = await supabase.from('developer_sales_reps').insert([data]);
         if (error) throw error;
         toast.success("Sales rep added");
       }
-
       setIsRepDialogOpen(false);
       setEditingRep(null);
       setRepForm({ full_name: "", title: "Sales Representative", phone_e164: "", email: "", whatsapp_number: "", is_primary: false, notes: "" });
@@ -197,13 +167,8 @@ const AdminDevelopers = () => {
 
   const handleDeleteDeveloper = async (id: string) => {
     if (!confirm("Delete this developer and all their sales reps?")) return;
-    
     try {
-      const { error } = await supabase
-        .from('uae_developers')
-        .delete()
-        .eq('id', id);
-      
+      const { error } = await supabase.from('uae_developers').delete().eq('id', id);
       if (error) throw error;
       toast.success("Developer deleted");
       loadData();
@@ -214,13 +179,8 @@ const AdminDevelopers = () => {
 
   const handleDeleteRep = async (id: string) => {
     if (!confirm("Delete this sales representative?")) return;
-    
     try {
-      const { error } = await supabase
-        .from('developer_sales_reps')
-        .delete()
-        .eq('id', id);
-      
+      const { error } = await supabase.from('developer_sales_reps').delete().eq('id', id);
       if (error) throw error;
       toast.success("Sales rep deleted");
       loadData();
@@ -262,35 +222,33 @@ const AdminDevelopers = () => {
   );
 
   const dubaiDevelopers = filteredDevelopers.filter(d => d.location_emirate === "Dubai");
-  const otherDevelopers = filteredDevelopers.filter(d => d.location_emirate !== "Dubai");
-
   const getDeveloperReps = (devId: string) => salesReps.filter(r => r.developer_id === devId);
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)] flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gold"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-gradient-to-b from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)] text-foreground">
       {/* Header */}
-      <div className="sticky top-0 z-40 bg-black/95 backdrop-blur-md border-b border-zinc-800">
+      <div className="sticky top-0 z-40 bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] backdrop-blur-md border-b-2 border-gold/30">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Button
               variant="ghost"
               size="icon"
               onClick={() => navigate("/admin")}
-              className="text-zinc-400 hover:text-white"
+              className="text-muted-foreground hover:text-foreground"
             >
               <ArrowLeft className="w-5 h-5" />
             </Button>
             <div>
-              <h1 className="text-xl font-bold">UAE Developers</h1>
-              <p className="text-sm text-zinc-500">Manage developers and sales representatives</p>
+              <h1 className="text-xl font-bold text-foreground">UAE Developers</h1>
+              <p className="text-sm text-muted-foreground">Manage developers and sales representatives</p>
             </div>
           </div>
           <Button
@@ -311,42 +269,42 @@ const AdminDevelopers = () => {
         {/* Search */}
         <div className="mb-6">
           <div className="relative max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
               placeholder="Search developers..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 bg-zinc-900 border-zinc-700 text-white"
+              className="pl-10 bg-white border-gold/20"
             />
           </div>
         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <Card className="bg-zinc-900 border-zinc-800">
+          <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30">
             <CardContent className="pt-6">
               <div className="text-2xl font-bold text-gold">{developers.length}</div>
-              <p className="text-sm text-zinc-500">Total Developers</p>
+              <p className="text-sm text-muted-foreground">Total Developers</p>
             </CardContent>
           </Card>
-          <Card className="bg-zinc-900 border-zinc-800">
+          <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30">
             <CardContent className="pt-6">
-              <div className="text-2xl font-bold text-blue-400">{dubaiDevelopers.length}</div>
-              <p className="text-sm text-zinc-500">Dubai Developers</p>
+              <div className="text-2xl font-bold text-blue-600">{dubaiDevelopers.length}</div>
+              <p className="text-sm text-muted-foreground">Dubai Developers</p>
             </CardContent>
           </Card>
-          <Card className="bg-zinc-900 border-zinc-800">
+          <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30">
             <CardContent className="pt-6">
-              <div className="text-2xl font-bold text-purple-400">{salesReps.length}</div>
-              <p className="text-sm text-zinc-500">Sales Reps</p>
+              <div className="text-2xl font-bold text-purple-600">{salesReps.length}</div>
+              <p className="text-sm text-muted-foreground">Sales Reps</p>
             </CardContent>
           </Card>
-          <Card className="bg-zinc-900 border-zinc-800">
+          <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30">
             <CardContent className="pt-6">
-              <div className="text-2xl font-bold text-emerald-400">
+              <div className="text-2xl font-bold text-emerald-600">
                 {salesReps.filter(r => r.is_primary).length}
               </div>
-              <p className="text-sm text-zinc-500">Primary Contacts</p>
+              <p className="text-sm text-muted-foreground">Primary Contacts</p>
             </CardContent>
           </Card>
         </div>
@@ -358,14 +316,14 @@ const AdminDevelopers = () => {
 
         {/* Tabs */}
         <Tabs defaultValue="dubai" className="space-y-6">
-          <TabsList className="bg-zinc-900 border border-zinc-700">
-            <TabsTrigger value="dubai" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+          <TabsList className="bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border-2 border-gold/30">
+            <TabsTrigger value="dubai" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
               Dubai ({dubaiDevelopers.length})
             </TabsTrigger>
-            <TabsTrigger value="all" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+            <TabsTrigger value="all" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
               All UAE ({filteredDevelopers.length})
             </TabsTrigger>
-            <TabsTrigger value="briefings" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+            <TabsTrigger value="briefings" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
               📅 Briefings
             </TabsTrigger>
           </TabsList>
@@ -424,7 +382,7 @@ const AdminDevelopers = () => {
 
       {/* Developer Dialog */}
       <Dialog open={isDevDialogOpen} onOpenChange={setIsDevDialogOpen}>
-        <DialogContent className="bg-zinc-900 border-zinc-700 text-white max-w-lg">
+        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30 text-foreground max-w-lg">
           <DialogHeader>
             <DialogTitle>{editingDev ? "Edit Developer" : "Add Developer"}</DialogTitle>
           </DialogHeader>
@@ -432,67 +390,35 @@ const AdminDevelopers = () => {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label>Developer Name *</Label>
-                <Input
-                  value={devForm.name}
-                  onChange={(e) => setDevForm(f => ({ ...f, name: e.target.value }))}
-                  placeholder="Emaar Properties"
-                  className="bg-zinc-800 border-zinc-700"
-                />
+                <Input value={devForm.name} onChange={(e) => setDevForm(f => ({ ...f, name: e.target.value }))} placeholder="Emaar Properties" className="bg-white border-gold/20" />
               </div>
               <div>
                 <Label>Slug *</Label>
-                <Input
-                  value={devForm.slug}
-                  onChange={(e) => setDevForm(f => ({ ...f, slug: e.target.value.toLowerCase().replace(/\s+/g, '-') }))}
-                  placeholder="emaar"
-                  className="bg-zinc-800 border-zinc-700"
-                />
+                <Input value={devForm.slug} onChange={(e) => setDevForm(f => ({ ...f, slug: e.target.value.toLowerCase().replace(/\s+/g, '-') }))} placeholder="emaar" className="bg-white border-gold/20" />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label>City</Label>
-                <Input
-                  value={devForm.location_city}
-                  onChange={(e) => setDevForm(f => ({ ...f, location_city: e.target.value }))}
-                  placeholder="Dubai"
-                  className="bg-zinc-800 border-zinc-700"
-                />
+                <Input value={devForm.location_city} onChange={(e) => setDevForm(f => ({ ...f, location_city: e.target.value }))} placeholder="Dubai" className="bg-white border-gold/20" />
               </div>
               <div>
                 <Label>Emirate</Label>
-                <Input
-                  value={devForm.location_emirate}
-                  onChange={(e) => setDevForm(f => ({ ...f, location_emirate: e.target.value }))}
-                  placeholder="Dubai"
-                  className="bg-zinc-800 border-zinc-700"
-                />
+                <Input value={devForm.location_emirate} onChange={(e) => setDevForm(f => ({ ...f, location_emirate: e.target.value }))} placeholder="Dubai" className="bg-white border-gold/20" />
               </div>
             </div>
             <div>
               <Label>Website URL</Label>
-              <Input
-                value={devForm.website_url}
-                onChange={(e) => setDevForm(f => ({ ...f, website_url: e.target.value }))}
-                placeholder="https://emaar.com"
-                className="bg-zinc-800 border-zinc-700"
-              />
+              <Input value={devForm.website_url} onChange={(e) => setDevForm(f => ({ ...f, website_url: e.target.value }))} placeholder="https://emaar.com" className="bg-white border-gold/20" />
             </div>
             <div>
               <Label>Description</Label>
-              <Textarea
-                value={devForm.description}
-                onChange={(e) => setDevForm(f => ({ ...f, description: e.target.value }))}
-                placeholder="Brief description..."
-                className="bg-zinc-800 border-zinc-700"
-              />
+              <Textarea value={devForm.description} onChange={(e) => setDevForm(f => ({ ...f, description: e.target.value }))} placeholder="Brief description..." className="bg-white border-gold/20" />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsDevDialogOpen(false)} className="border-zinc-600">
-              Cancel
-            </Button>
-            <Button onClick={handleSaveDeveloper} variant="dark">
+            <Button variant="outline" onClick={() => setIsDevDialogOpen(false)} className="border-gold/30">Cancel</Button>
+            <Button onClick={handleSaveDeveloper} className="bg-gold hover:bg-gold/90 text-black">
               {editingDev ? "Update" : "Add Developer"}
             </Button>
           </DialogFooter>
@@ -501,12 +427,12 @@ const AdminDevelopers = () => {
 
       {/* Sales Rep Dialog */}
       <Dialog open={isRepDialogOpen} onOpenChange={setIsRepDialogOpen}>
-        <DialogContent className="bg-zinc-900 border-zinc-700 text-white max-w-lg">
+        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30 text-foreground max-w-lg">
           <DialogHeader>
             <DialogTitle>
               {editingRep ? "Edit Sales Rep" : "Add Sales Rep"}
               {selectedDeveloper && (
-                <span className="text-sm font-normal text-zinc-400 ml-2">
+                <span className="text-sm font-normal text-muted-foreground ml-2">
                   for {selectedDeveloper.name}
                 </span>
               )}
@@ -516,78 +442,39 @@ const AdminDevelopers = () => {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label>Full Name *</Label>
-                <Input
-                  value={repForm.full_name}
-                  onChange={(e) => setRepForm(f => ({ ...f, full_name: e.target.value }))}
-                  placeholder="Ahmed Khan"
-                  className="bg-zinc-800 border-zinc-700"
-                />
+                <Input value={repForm.full_name} onChange={(e) => setRepForm(f => ({ ...f, full_name: e.target.value }))} placeholder="Ahmed Khan" className="bg-white border-gold/20" />
               </div>
               <div>
                 <Label>Title</Label>
-                <Input
-                  value={repForm.title}
-                  onChange={(e) => setRepForm(f => ({ ...f, title: e.target.value }))}
-                  placeholder="Sales Representative"
-                  className="bg-zinc-800 border-zinc-700"
-                />
+                <Input value={repForm.title} onChange={(e) => setRepForm(f => ({ ...f, title: e.target.value }))} placeholder="Sales Representative" className="bg-white border-gold/20" />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label>Phone Number *</Label>
-                <Input
-                  value={repForm.phone_e164}
-                  onChange={(e) => setRepForm(f => ({ ...f, phone_e164: e.target.value }))}
-                  placeholder="+971 50 123 4567"
-                  className="bg-zinc-800 border-zinc-700"
-                />
+                <Input value={repForm.phone_e164} onChange={(e) => setRepForm(f => ({ ...f, phone_e164: e.target.value }))} placeholder="+971 50 123 4567" className="bg-white border-gold/20" />
               </div>
               <div>
                 <Label>WhatsApp</Label>
-                <Input
-                  value={repForm.whatsapp_number}
-                  onChange={(e) => setRepForm(f => ({ ...f, whatsapp_number: e.target.value }))}
-                  placeholder="+971 50 123 4567"
-                  className="bg-zinc-800 border-zinc-700"
-                />
+                <Input value={repForm.whatsapp_number} onChange={(e) => setRepForm(f => ({ ...f, whatsapp_number: e.target.value }))} placeholder="+971 50 123 4567" className="bg-white border-gold/20" />
               </div>
             </div>
             <div>
               <Label>Email</Label>
-              <Input
-                value={repForm.email}
-                onChange={(e) => setRepForm(f => ({ ...f, email: e.target.value }))}
-                placeholder="ahmed@developer.com"
-                type="email"
-                className="bg-zinc-800 border-zinc-700"
-              />
+              <Input value={repForm.email} onChange={(e) => setRepForm(f => ({ ...f, email: e.target.value }))} placeholder="ahmed@developer.com" type="email" className="bg-white border-gold/20" />
             </div>
             <div>
               <Label>Notes</Label>
-              <Textarea
-                value={repForm.notes}
-                onChange={(e) => setRepForm(f => ({ ...f, notes: e.target.value }))}
-                placeholder="Any additional notes..."
-                className="bg-zinc-800 border-zinc-700"
-              />
+              <Textarea value={repForm.notes} onChange={(e) => setRepForm(f => ({ ...f, notes: e.target.value }))} placeholder="Any additional notes..." className="bg-white border-gold/20" />
             </div>
             <div className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                id="is_primary"
-                checked={repForm.is_primary}
-                onChange={(e) => setRepForm(f => ({ ...f, is_primary: e.target.checked }))}
-                className="rounded border-zinc-600"
-              />
+              <input type="checkbox" id="is_primary" checked={repForm.is_primary} onChange={(e) => setRepForm(f => ({ ...f, is_primary: e.target.checked }))} className="rounded border-gold/30" />
               <Label htmlFor="is_primary" className="cursor-pointer">Primary Contact</Label>
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsRepDialogOpen(false)} className="border-zinc-600">
-              Cancel
-            </Button>
-            <Button onClick={handleSaveRep} variant="dark">
+            <Button variant="outline" onClick={() => setIsRepDialogOpen(false)} className="border-gold/30">Cancel</Button>
+            <Button onClick={handleSaveRep} className="bg-gold hover:bg-gold/90 text-black">
               {editingRep ? "Update" : "Add Sales Rep"}
             </Button>
           </DialogFooter>
@@ -597,7 +484,7 @@ const AdminDevelopers = () => {
   );
 };
 
-// Developer Card Component
+// Developer Card Component — Reps always expanded
 interface DeveloperCardProps {
   developer: Developer;
   reps: SalesRep[];
@@ -609,133 +496,98 @@ interface DeveloperCardProps {
 }
 
 const DeveloperCard = ({ developer, reps, onEdit, onDelete, onAddRep, onEditRep, onDeleteRep }: DeveloperCardProps) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-
   return (
-    <Card className="bg-zinc-900 border-zinc-800">
+    <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gold/20 to-amber-500/10 border border-gold/30 flex items-center justify-center">
-              <Building2 className="w-6 h-6 text-gold" />
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gold/20 to-amber-500/10 border border-gold/30 flex items-center justify-center overflow-hidden">
+              {developer.logo_url ? (
+                <img src={developer.logo_url} alt={developer.name} className="w-full h-full object-contain p-1" />
+              ) : (
+                <Building2 className="w-6 h-6 text-gold" />
+              )}
             </div>
             <div>
-              <CardTitle className="text-white text-lg">{developer.name}</CardTitle>
+              <CardTitle className="text-foreground text-lg">{developer.name}</CardTitle>
               <div className="flex items-center gap-2 mt-1">
-                <Badge variant="secondary" className="bg-zinc-800 text-zinc-300 text-xs">
+                <Badge variant="secondary" className="bg-gold/10 text-gold border border-gold/20 text-xs">
                   {developer.location_emirate}
                 </Badge>
-                <span className="text-xs text-zinc-500">{reps.length} sales reps</span>
+                <span className="text-xs text-muted-foreground">{reps.length} sales reps</span>
+                {developer.website_url && (
+                  <a href={developer.website_url} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline flex items-center gap-0.5">
+                    <Globe className="w-3 h-3" /> Website
+                  </a>
+                )}
               </div>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onAddRep}
-              className="text-gold hover:text-gold hover:bg-gold/10"
-            >
-              <Plus className="w-4 h-4 mr-1" />
-              Add Rep
+            <Button variant="ghost" size="sm" onClick={onAddRep} className="text-gold hover:text-gold hover:bg-gold/10">
+              <Plus className="w-4 h-4 mr-1" /> Add Rep
             </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={onEdit}
-              className="text-zinc-400 hover:text-white"
-            >
+            <Button variant="ghost" size="icon" onClick={onEdit} className="text-muted-foreground hover:text-foreground">
               <Pencil className="w-4 h-4" />
             </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={onDelete}
-              className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
-            >
+            <Button variant="ghost" size="icon" onClick={onDelete} className="text-red-500 hover:text-red-600 hover:bg-red-50">
               <Trash2 className="w-4 h-4" />
             </Button>
           </div>
         </div>
+        {developer.description && (
+          <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{developer.description}</p>
+        )}
       </CardHeader>
       
+      {/* Reps always visible */}
       {reps.length > 0 && (
-        <CardContent>
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="text-sm text-gold hover:text-gold/80 mb-3"
-          >
-            {isExpanded ? 'Hide' : 'Show'} Sales Representatives ({reps.length})
-          </button>
-          
-          {isExpanded && (
-            <div className="space-y-2">
-              {reps.map(rep => (
-                <div
-                  key={rep.id}
-                  className="flex items-center justify-between p-3 bg-zinc-800/50 rounded-lg border border-zinc-700"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-zinc-700 flex items-center justify-center">
-                      <Users className="w-5 h-5 text-zinc-400" />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-white font-medium">{rep.full_name}</span>
-                        {rep.is_primary && (
-                          <Badge className="bg-gold/20 text-gold text-xs">Primary</Badge>
-                        )}
-                      </div>
-                      <p className="text-xs text-zinc-500">{rep.title}</p>
-                    </div>
+        <CardContent className="pt-0">
+          <div className="border-t border-gold/20 pt-3 space-y-2">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Sales Representatives</p>
+            {reps.map(rep => (
+              <div
+                key={rep.id}
+                className="flex items-center justify-between p-3 bg-white/60 rounded-lg border border-gold/15"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center">
+                    <Users className="w-5 h-5 text-gold" />
                   </div>
-                  <div className="flex items-center gap-2">
-                    {/* Quick Contact Buttons */}
-                    <a
-                      href={`tel:${rep.phone_e164}`}
-                      className="p-2 rounded-lg bg-blue-500/20 text-blue-400 hover:bg-blue-500/30"
-                    >
-                      <Phone className="w-4 h-4" />
-                    </a>
-                    {rep.whatsapp_number && (
-                      <a
-                        href={`https://wa.me/${rep.whatsapp_number.replace(/\D/g, '')}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2 rounded-lg bg-green-500/20 text-green-400 hover:bg-green-500/30"
-                      >
-                        <MessageCircle className="w-4 h-4 text-green-400" />
-                      </a>
-                    )}
-                    {rep.email && (
-                      <a
-                        href={`mailto:${rep.email}`}
-                        className="p-2 rounded-lg bg-purple-500/20 text-purple-400 hover:bg-purple-500/30"
-                      >
-                        <Mail className="w-4 h-4" />
-                      </a>
-                    )}
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => onEditRep(rep)}
-                      className="text-zinc-400 hover:text-white"
-                    >
-                      <Pencil className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => onDeleteRep(rep.id)}
-                      className="text-red-400 hover:text-red-300"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-foreground font-medium">{rep.full_name}</span>
+                      {rep.is_primary && (
+                        <Badge className="bg-gold/20 text-gold border border-gold/30 text-[10px]">Primary</Badge>
+                      )}
+                    </div>
+                    <p className="text-xs text-muted-foreground">{rep.title}</p>
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
+                <div className="flex items-center gap-1.5">
+                  <a href={`tel:${rep.phone_e164}`} className="p-2 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors" title={rep.phone_e164}>
+                    <Phone className="w-4 h-4" />
+                  </a>
+                  {rep.whatsapp_number && (
+                    <a href={`https://wa.me/${rep.whatsapp_number.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition-colors" title="WhatsApp">
+                      <MessageCircle className="w-4 h-4" />
+                    </a>
+                  )}
+                  {rep.email && (
+                    <a href={`mailto:${rep.email}`} className="p-2 rounded-lg bg-purple-50 text-purple-600 hover:bg-purple-100 transition-colors" title={rep.email}>
+                      <Mail className="w-4 h-4" />
+                    </a>
+                  )}
+                  <Button variant="ghost" size="icon" onClick={() => onEditRep(rep)} className="text-muted-foreground hover:text-foreground h-8 w-8">
+                    <Pencil className="w-3.5 h-3.5" />
+                  </Button>
+                  <Button variant="ghost" size="icon" onClick={() => onDeleteRep(rep.id)} className="text-red-400 hover:text-red-600 h-8 w-8">
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
         </CardContent>
       )}
     </Card>
