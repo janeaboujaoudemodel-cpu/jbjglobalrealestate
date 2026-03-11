@@ -264,15 +264,15 @@ const DeveloperPortal = () => {
     <>
       <SEOHead title="Developer Portal | JBJ Global Real Estate" description="Submit projects, briefings, and marketing materials to JBJ Global." />
       <div className="min-h-screen bg-gradient-to-b from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)]">
-        {/* Hero */}
-        <div className="relative py-16 md:py-24 bg-gradient-to-br from-[hsl(240,40%,12%)] via-[hsl(220,45%,16%)] to-[hsl(210,60%,20%)] text-white overflow-hidden">
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMSIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIvPjwvc3ZnPg==')] opacity-50" />
+        {/* Hero — champagne-gold theme */}
+        <div className="relative py-16 md:py-24 bg-gradient-to-br from-[hsl(38,35%,18%)] via-[hsl(36,30%,14%)] to-[hsl(34,25%,10%)] overflow-hidden">
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMSIgZmlsbD0icmdiYSgyNTUsMjE1LDE1MCwwLjA1KSIvPjwvc3ZnPg==')] opacity-50" />
           <div className="container mx-auto px-4 relative z-10 text-center max-w-3xl">
             <Badge className="mb-4 bg-gold/20 text-gold border-gold/30 text-sm">
               {isDeveloperMode ? 'Developer Tools' : 'For Real Estate Developers & Sales Teams'}
             </Badge>
-            <h1 className="text-3xl md:text-5xl font-bold mb-4">Developer Portal</h1>
-            <p className="text-lg md:text-xl text-white/70">
+            <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[#F5EBD7]">Developer Portal</h1>
+            <p className="text-lg md:text-xl text-[#D4B896]">
               Submit projects, request briefings, upload documents, and manage launches — all in one place.
             </p>
           </div>
@@ -281,11 +281,11 @@ const DeveloperPortal = () => {
         {/* Rep Status Banner */}
         {hasRepProfile && !isRepApproved && (
           <div className="container mx-auto px-4 py-4 max-w-4xl">
-            <div className="flex items-center gap-3 p-4 rounded-xl bg-blue-50 border border-blue-200 text-blue-800 text-sm">
-              <UserCheck className="w-5 h-5 shrink-0" />
+            <div className="flex items-center gap-3 p-4 rounded-xl bg-gold/10 border border-gold/30 text-stone-800 text-sm">
+              <UserCheck className="w-5 h-5 shrink-0 text-gold" />
               <div>
                 <strong>Application Status: {repProfile?.status?.replace(/_/g, ' ')}</strong>
-                <p className="text-xs mt-0.5">Your {repProfile?.role?.replace(/_/g, ' ')} registration for <strong>{repProfile?.developer_name}</strong> is being reviewed. You'll receive an email once approved.</p>
+                <p className="text-xs mt-0.5 text-stone-600">Your {repProfile?.role?.replace(/_/g, ' ')} registration for <strong>{repProfile?.developer_name}</strong> is being reviewed. You'll receive an email once approved.</p>
               </div>
               {statusBadge(repProfile?.status || 'pending_review')}
             </div>
@@ -520,12 +520,12 @@ const DeveloperPortal = () => {
               </Card>
             </TabsContent>
 
-            {/* REGISTER TAB - Sales Rep / Admin Registration */}
+            {/* REGISTER TAB - Contextual: Developer guidance vs Registration form */}
             <TabsContent value="register" className="mt-6">
               {loadingRep ? (
                 <div className="py-8 text-center"><Loader2 className="w-6 h-6 animate-spin mx-auto text-gold" /></div>
               ) : hasRepProfile ? (
-                <Card className="border-2 border-gold/30">
+                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)]">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-foreground">
                       <UserCheck className="w-5 h-5 text-gold" />
@@ -565,10 +565,69 @@ const DeveloperPortal = () => {
                         </div>
                       </div>
                       {!isRepApproved && (
-                        <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 text-sm text-blue-800">
+                        <div className="bg-gold/10 border border-gold/30 rounded-xl p-3 text-sm text-stone-700">
                           Your registration is under review. Once approved, you'll be able to request briefings and send messages directly.
                         </div>
                       )}
+                    </div>
+                  </CardContent>
+                </Card>
+              ) : isDeveloperMode ? (
+                /* Developer user — show guidance, not "Are you a developer?" */
+                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)]">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-foreground">
+                      <Building2 className="w-5 h-5 text-gold" />
+                      Welcome, Developer
+                    </CardTitle>
+                    <p className="text-sm text-muted-foreground">
+                      Here's how to get the most out of the Developer Portal.
+                    </p>
+                  </CardHeader>
+                  <CardContent className="space-y-5">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="bg-white/60 rounded-xl p-4 border border-gold/20">
+                        <div className="flex items-center gap-2 mb-2">
+                          <FolderOpen className="w-5 h-5 text-gold" />
+                          <h4 className="font-bold text-foreground text-sm">Submit Projects</h4>
+                        </div>
+                        <p className="text-xs text-muted-foreground">Upload brochures, renders, and fact sheets. Our system auto-generates listings for your projects.</p>
+                      </div>
+                      <div className="bg-white/60 rounded-xl p-4 border border-gold/20">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Calendar className="w-5 h-5 text-gold" />
+                          <h4 className="font-bold text-foreground text-sm">Event Invitations</h4>
+                        </div>
+                        <p className="text-xs text-muted-foreground">Invite our brokers to launches, open days, and exclusive previews through the Events tab.</p>
+                      </div>
+                      <div className="bg-white/60 rounded-xl p-4 border border-gold/20">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Briefcase className="w-5 h-5 text-gold" />
+                          <h4 className="font-bold text-foreground text-sm">Request Briefings</h4>
+                        </div>
+                        <p className="text-xs text-muted-foreground">Once registered, schedule project briefings with our broker team at our office or yours.</p>
+                      </div>
+                      <div className="bg-white/60 rounded-xl p-4 border border-gold/20">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Eye className="w-5 h-5 text-gold" />
+                          <h4 className="font-bold text-foreground text-sm">Track Listings</h4>
+                        </div>
+                        <p className="text-xs text-muted-foreground">Monitor your approved projects on our platform and report any corrections needed.</p>
+                      </div>
+                    </div>
+
+                    <div className="bg-gold/10 border-2 border-gold/30 rounded-xl p-4">
+                      <p className="text-sm font-semibold text-foreground mb-1">📋 Register Your Sales Team</p>
+                      <p className="text-xs text-muted-foreground mb-3">
+                        To unlock briefing requests and direct messaging, register yourself or your sales representatives below.
+                      </p>
+                      <SalesRepRegistration
+                        developerName={devName || 'Your Company'}
+                        onRegistered={() => {
+                          refetchRep();
+                          toast.info('Your registration is now under review.');
+                        }}
+                      />
                     </div>
                   </CardContent>
                 </Card>
