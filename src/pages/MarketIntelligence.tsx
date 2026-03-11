@@ -3,7 +3,7 @@ import { ArrowUpRight, BarChart3, Database, Shield, Info } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { SEOHead } from "@/components/SEOHead";
-import { Button } from "@/components/ui/button";
+import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 import { FounderPhilosophySection } from "@/components/FounderPhilosophySection";
 import { PreFooterSeparator } from "@/components/PreFooterSeparator";
 import {
@@ -14,6 +14,7 @@ import {
   DataSourcesPanel,
 } from "@/components/market-intelligence";
 import { MARKET_DISCLAIMER } from "@/config/open-data-config";
+import VideoBackground from "@/components/VideoBackground";
 import marketIntelligenceHero from "@/assets/market-intelligence-hero.jpg";
 
 const fadeInUp = {
