@@ -9,14 +9,14 @@ import ModeSwitcher from "@/components/ModeSwitcher";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
-import { DisplayModeIconToggle } from "@/components/filters/DisplayModeToggle";
+
 import { useUserMode, type UserMode } from "@/hooks/useUserMode";
 import { useLanguage, getLanguageInfo } from "@/contexts/LanguageContext";
 import { useCurrency } from "@/hooks/useCurrency";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserAlerts } from "@/hooks/useUserAlerts";
 import GlobalSearchModal from "@/components/GlobalSearchModal";
-import type { DisplayMode } from "@/constants/filterConfig";
+
 
 export default function HorizontalUtilityBar() {
   const [searchOpen, setSearchOpen] = useState(false);
@@ -62,9 +62,6 @@ export default function HorizontalUtilityBar() {
     window.dispatchEvent(new CustomEvent('areaUnitChange', { detail: next }));
   };
 
-  const handleModeChange = (newMode: DisplayMode) => {
-    setMode(newMode as UserMode);
-  };
 
   const toggleSidebar = () => {
     const isCollapsed = document.body.classList.contains('jj-vertical-nav-collapsed');
@@ -299,14 +296,7 @@ export default function HorizontalUtilityBar() {
           </>
         )}
 
-        {/* Mode Selector */}
-        <DisplayModeIconToggle
-          value={mode === 'investor_broker' ? 'investor' : mode as DisplayMode}
-          onChange={handleModeChange}
-          variant="light"
-        />
-
-        {divider}
+        {/* Mode Selector — handled by ModeSwitcher below */}
 
         {/* Dashboard */}
         <Tooltip>

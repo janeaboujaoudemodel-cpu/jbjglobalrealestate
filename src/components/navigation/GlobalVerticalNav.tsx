@@ -789,7 +789,7 @@ export default function GlobalVerticalNav() {
             style={{ left: sidebarWidth, top: '40px', bottom: 0, right: 0 }}
           >
             <div
-              className="pointer-events-auto w-[min(440px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[calc(100vh-60px)]"
+              className="pointer-events-auto w-[min(600px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[calc(100vh-60px)]"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
@@ -875,7 +875,7 @@ export default function GlobalVerticalNav() {
           style={{ left: sidebarWidth, top: '40px', bottom: 0, right: 0 }}
         >
           <div
-            className={`pointer-events-auto w-[min(440px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] animate-in slide-in-from-left-2 fade-in duration-200 ${isLargeMenu ? 'max-h-[calc(100vh-60px)]' : 'max-h-[calc(100vh-120px)]'}`}
+            className={`pointer-events-auto w-[min(600px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] animate-in slide-in-from-left-2 fade-in duration-200 ${isLargeMenu ? 'max-h-[calc(100vh-60px)]' : 'max-h-[calc(100vh-120px)]'}`}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between px-5 py-3.5 border-b border-gold/20 bg-gradient-to-r from-[#E8DCC8]/50 to-transparent">
@@ -1059,18 +1059,18 @@ export default function GlobalVerticalNav() {
       <div className="mt-auto flex-shrink-0">
         <div className="px-3 py-4 border-t border-red-500/20 space-y-1.5 bg-gradient-to-b from-[#EDE4D3]/50 to-[#EDE4D3]">
           <Link
-            to="/ticket-hub?tab=new"
+            to="/contact"
             className="flex items-center justify-center gap-2 text-xs font-bold text-red-600 hover:text-red-700 transition-colors px-2 py-2.5 rounded-lg border border-red-500/30 hover:border-red-500/50 hover:bg-red-50/50 w-full"
           >
             <Headphones className="w-3.5 h-3.5 text-red-500" />
-            Contact Support
+            Contact Us
           </Link>
           <Link
-            to="/ticket-hub?tab=new"
+            to="/ticket-hub"
             className="flex items-center justify-center gap-2 text-xs font-bold text-red-600 hover:text-red-700 transition-colors px-2 py-2.5 rounded-lg border border-red-500/30 hover:border-red-500/50 hover:bg-red-50/50 w-full"
           >
             <Ticket className="w-3.5 h-3.5 text-red-500" />
-            Create Ticket
+            Create or Follow Up Ticket
           </Link>
           {session ? (
             <button
@@ -1144,19 +1144,19 @@ export default function GlobalVerticalNav() {
           <div className="flex flex-col items-center gap-1.5 pb-1 border-t border-red-500/20 pt-2">
             <Tooltip>
               <TooltipTrigger asChild>
-                <Link to="/ticket-hub?tab=new" className="w-8 h-8 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-50/50 border border-red-500/20 hover:border-red-500/40 transition-all">
+                <Link to="/contact" className="w-8 h-8 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-50/50 border border-red-500/20 hover:border-red-500/40 transition-all">
                   <Headphones className="w-3.5 h-3.5" />
                 </Link>
               </TooltipTrigger>
-              <TooltipContent side="right" className="text-xs">Contact Support</TooltipContent>
+              <TooltipContent side="right" className="text-xs">Contact Us</TooltipContent>
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Link to="/ticket-hub?tab=new" className="w-8 h-8 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-50/50 border border-red-500/20 hover:border-red-500/40 transition-all">
+                <Link to="/ticket-hub" className="w-8 h-8 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-50/50 border border-red-500/20 hover:border-red-500/40 transition-all">
                   <Ticket className="w-3.5 h-3.5" />
                 </Link>
               </TooltipTrigger>
-              <TooltipContent side="right" className="text-xs">Create Ticket</TooltipContent>
+              <TooltipContent side="right" className="text-xs">Create or Follow Up Ticket</TooltipContent>
             </Tooltip>
             {session ? (
               <Tooltip>
