@@ -4,6 +4,7 @@ import {
   Search, Heart, Settings, LayoutDashboard,
   Ruler, SlidersHorizontal, PanelLeftClose, PanelLeftOpen,
   Building2, Key, Tag, Bell, ClipboardList, Inbox, BarChart3,
+  Shield, MapPin, Users, Sparkles, BookOpen, UserCircle,
 } from "lucide-react";
 import ModeSwitcher from "@/components/ModeSwitcher";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
