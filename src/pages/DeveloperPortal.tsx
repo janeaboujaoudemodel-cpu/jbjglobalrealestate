@@ -132,14 +132,16 @@ const DeveloperPortal = () => {
       // Also create an admin task notification
       const ownerIds = ['4944592b-93f1-4e05-ab59-4ebe1fee54f1'];
       for (const ownerId of ownerIds) {
-        await supabase.from("admin_tasks").insert({
-          user_id: ownerId,
-          title: `New Launch Upload: ${currentProject.project_name}`,
-          description: `Developer ${devName} (${devEmail}) has uploaded materials for "${currentProject.project_name}". Review and approve the auto-generated listing.`,
-          category: 'developer_launch',
-          priority: 'high',
-          status: 'pending',
-        } as any).catch(() => {});
+        try {
+          await supabase.from("admin_tasks").insert({
+            user_id: ownerId,
+            title: `New Launch Upload: ${currentProject.project_name}`,
+            description: `Developer ${devName} (${devEmail}) has uploaded materials for "${currentProject.project_name}". Review and approve the auto-generated listing.`,
+            category: 'developer_launch',
+            priority: 'high',
+            status: 'pending',
+          } as any);
+        } catch {}
       }
 
       setSessionProjects(prev => [...prev, currentProject.project_name]);
