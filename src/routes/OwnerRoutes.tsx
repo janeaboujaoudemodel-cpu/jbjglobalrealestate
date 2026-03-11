@@ -45,6 +45,7 @@ const TeamChat = lazy(() => import("@/pages/TeamChat"));
 const KanbanBoard = lazy(() => import("@/pages/KanbanBoard"));
 const PropertyMap = lazy(() => import("@/pages/PropertyMap"));
 const ListingAdmin = lazy(() => import("@/pages/ListingAdmin"));
+const ModeHub = lazy(() => import("@/pages/ModeHub"));
 
 export const OwnerRoutes = () => (
   <Route path="/owner" element={
