@@ -122,7 +122,7 @@ function BrokerProfileHero() {
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-3 flex-wrap">
           <h2 className="text-2xl font-bold text-foreground">{firstName}</h2>
-          <TierBadge tier={tier} />
+          <TierBadge tierName={tier} />
           {performanceRating === "elite" && (
             <Badge className="bg-gradient-to-r from-amber-500 to-yellow-400 text-black border-0">
               <Trophy className="w-3 h-3 mr-1" /> Elite
