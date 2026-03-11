@@ -340,6 +340,10 @@ const Footer = () => {
     { href: "/broker-education", label: "Broker Education" },
     { href: "/broker-resources", label: "Broker Resources" },
     { href: "/listing-portal", label: "Listing Portal" },
+    { href: "/broker/training", label: "Broker Training" },
+    { href: "/broker-hub", label: "Broker Hub" },
+    { href: "/broker-dashboard", label: "Broker Dashboard" },
+    { href: "/ai-broker-workspace", label: "AI Broker Workspace" },
   ];
 
   // Partners
