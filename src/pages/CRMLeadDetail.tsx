@@ -315,7 +315,7 @@ const CRMLeadDetail = () => {
 
   if (!lead) {
     return (
-      <div className="min-h-screen bg-background p-6 flex flex-col items-center justify-center gap-4">
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)] p-6 pt-24 flex flex-col items-center justify-center gap-4">
         <User className="h-16 w-16 text-muted-foreground" />
         <p className="text-muted-foreground text-lg">Lead not found</p>
         <Button variant="primary" onClick={() => navigate('/crm/leads')}>
