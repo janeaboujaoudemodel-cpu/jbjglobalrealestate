@@ -222,7 +222,7 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
       {/* Primary Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 overflow-hidden">
         {primaryCards.map((card, index) => (
-          <Card key={index} className="border-zinc-200 bg-white shadow-md overflow-hidden">
+          <Card key={index} className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)]/95 to-[hsl(36,25%,88%)]/80 shadow-[0_8px_30px_rgba(200,167,102,0.12)] overflow-hidden">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-semibold text-zinc-600 truncate">
                 {card.title}
@@ -234,7 +234,7 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
             <CardContent>
               <div className="flex items-end justify-between">
                 <div className="min-w-0 flex-1">
-                  <div className="text-xl md:text-2xl font-bold text-zinc-900 truncate">
+                  <div className="text-xl md:text-2xl font-bold text-black truncate">
                     {loading ? "..." : card.value}
                   </div>
                   <p className="text-xs text-zinc-500 mt-1 truncate">
