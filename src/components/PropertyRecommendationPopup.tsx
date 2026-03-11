@@ -212,7 +212,8 @@ const PropertyRecommendationPopup = () => {
                       alt={project.name}
                       className="w-14 h-14 rounded-lg object-cover flex-shrink-0 bg-gold/10"
                       loading="eager"
-                      decoding="async"
+                      decoding="sync"
+                      fetchPriority="high"
                     />
                   ) : (
                     <div className="w-14 h-14 rounded-lg bg-gold/10 flex items-center justify-center flex-shrink-0">
