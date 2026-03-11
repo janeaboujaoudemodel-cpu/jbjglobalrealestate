@@ -772,24 +772,28 @@ const Footer = () => {
             {/* Navigation Grid Section - Card-Based 2-Column Layout */}
             <div className="p-4 sm:p-6 md:p-8">
               {/* Merged Navigation Grid: 3 per row desktop, 2 tablet, 1 mobile */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4 auto-rows-auto">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-4 auto-rows-auto">
                 <FooterCard title={t('footer.properties') || 'Properties'} links={propertiesLinks} />
                 <FooterCard title={t('footer.servicesSection') || 'Services'} links={servicesLinks} />
                 <FooterCard title={t('footer.guides') || 'Guides'} links={guidesLinks} />
                 <FooterCard title="About & Careers" links={[...aboutLinks, ...careerLinks]} />
                 <FooterCard title="Sell" links={sellLinks} />
+                <FooterCard title="Investor Hub" links={investorHubLinks} />
+                <FooterCard title="Broker & Academy" links={brokerAcademyLinks} />
+                <FooterCard title="Partners" links={partnersLinks} />
+                <FooterCard title="Legal" links={legalLinks} />
+                <FooterCard title="Business Suites" links={businessSuitesLinks} />
+                <FooterCard title="Productivity" links={productivityLinks} />
                 <FooterCard title="Education Hub" links={[
                   { href: "/broker-education", label: "Books" },
                   { href: "/guides", label: "Guides" },
                   { href: "/market-intelligence/reports", label: "Market Reports" },
                   { href: "/education-hub", label: "Education Hub" },
                 ]} />
-                <FooterCard title="Legal" links={legalLinks} />
-                <FooterCard title="Business Suites" links={businessSuitesLinks} />
               </div>
 
-              {/* ROW 3: AI Tools, Creative Toolkit, Market Intelligence + mode-aware hubs */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 auto-rows-auto">
+              {/* ROW 2: AI Tools, Creative Toolkit, Market Intelligence */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 auto-rows-auto">
                 {/* AI Tools (Top 10 + View All) */}
                 <FooterCard title="AI Tools" links={[
                   { href: "/property-evaluator", label: "Property Evaluator" },
@@ -822,12 +826,6 @@ const Footer = () => {
                   { href: "/e-signature", label: "JBJ E-Sign" },
                   { href: "/toolkit/scan-sign", label: "Scan & Sign" },
                 ]} viewAllHref="/toolkit" viewAllLabel="View All Creative Tools →" />
-
-                {/* Broker Hub - conditional */}
-                {isBrokerMode && <FooterCard title="Broker Hub" links={brokerToolsLinks} />}
-
-                {/* Investor Hub - conditional */}
-                {(isInvestorMode || isCombinedMode) && <FooterCard title="Investor Hub" links={investorHubLinks} />}
               </div>
             </div>
 
