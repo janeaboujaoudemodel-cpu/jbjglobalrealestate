@@ -1,41 +1,50 @@
 
 
-## Plan: Fix All Email Issues Across All Templates
+## Plan: Fix Hunting Dashboard Layout, AI Home Finder Post-Quiz Flow, and Quiz Results Card Styling
 
-### Problems Identified
+### Issues Identified
 
-1. **Recommended For You icons disappeared** — Inline SVGs are stripped by Gmail and most email clients. Must revert to hosted PNG images (`ai-tools.png`, `guides.png`, `properties.png` already exist in `public/email-icons/`).
+1. **Hunting Dashboard broken layout** — Content not centered, colors off, `variant="primary"` on Button may cause issues, needs champagne styling, premium borders, and proper centering within the HR Dashboard parent container.
 
-2. **Social media footer icons not rendering** — Same issue: `socialLinksFooter()` loads external `.svg` files via `<img>` tags, but Gmail blocks SVG images entirely. Must switch to hosted `.png` files. Currently missing `social-facebook.png` — need to confirm or create it.
+2. **AI Home Finder (Quiz) post-completion flow** — After quiz finishes, user sees black screen → monogram loading → then jumps to results page without context. User wants:
+   - A clear "Your results are ready!" popup/transition instead of black screen
+   - Lead capture form shown prominently before seeing results
+   - Download report button actually working (currently generates HTML blob — works but may not be obvious)
+   - Share with consultant showing actual property names in the modal
+   - A prompt to also download the market report book
 
-3. **Email split into multiple visual cards** — Several sub-sections (`ticketSupportEmbed`, `readyToGetStartedHtml`, `recommendedActionsHtml`) each have their own `border`, `border-radius`, and `background` styles creating distinct visual boxes. These need to be softened so they sit seamlessly inside the single continuous card.
+3. **Quiz Results "Want More AI Power?" cards** — Icon frames use old yellow gold (`#C9A84C` → `#B8973F` gradient). Must use champagne active color (`from-[#F5EBD7] to-[#D4C4A8]`). Card content alignment needs fixing. AI Home Finder icon (RefreshCw) is generic — needs a smarter icon.
 
-### Changes (all in `supabase/functions/_shared/email-html.ts`)
+### Changes
 
-#### A. Recommended For You — Revert to PNG hosted images
-- Change `recommendedCard()` back to using `iconImg()` with PNG paths
-- Remove the `RECOMMENDED_ICONS` inline SVG object
-- Ensure circular frame clips the PNG with `overflow:hidden` on the `<td>` to prevent square backgrounds
-- Signature: `recommendedCard(title, href, iconPath, alt)` — restore the original parameters
+**File 1: `src/components/hr/hunting/HuntingDashboard.tsx`**
+- Wrap entire dashboard in a champagne-bordered container (`border-2 border-gold/30 rounded-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] p-6`)
+- Center the header text
+- Fix `variant="primary"` → `variant="default"` on sub-navigation buttons (or use champagne active styling)
+- Apply champagne active state to Campaigns/Prospects/Outreach buttons
+- Stats cards: add gold borders (`border border-gold/20`)
+- TabsList: already has champagne — keep but ensure `max-w-md mx-auto` for centering
 
-#### B. Social Footer — Switch to PNG with white pearl background
-- Replace `socialLinksFooter()` to use the inline `SVG` object icons (instagram, facebook, linkedin, tiktok, youtube) that are already defined at the top of the file — these render as raw HTML inside `<td>` elements, not as `<img>` tags, so they should survive email client processing
-- Actually, since Gmail strips ALL SVG (both inline and `<img>`), switch to using the `.png` files: `social-instagram.png`, `social-linkedin.png`, `social-tiktok.png`, `social-youtube.png`
-- Create `social-facebook.png` if missing
-- Style each icon circle: white/pearl (#FDFBF7) background, gold border, black icon inside
+**File 2: `src/pages/QuizResults.tsx`**
+- **"Want More AI Power?" section (lines 436-511):**
+  - Change icon frame backgrounds from `bg-gradient-to-br from-[#C9A84C] to-[#B8973F]` → `bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]`
+  - Change icon colors from `text-black` → `text-gold` (since background is now light champagne)
+  - Change shadow from `shadow-[#C9A84C]/30` → `shadow-gold/20`
+  - AI Home Finder icon: Replace `RefreshCw` with `Brain` (smarter AI icon)
+  - Align all 3 card contents consistently: icon+title row, description, button — all with equal padding
+- **Results announcement:** Add a welcome banner at the top: "Your AI-Selected Properties Are Ready!" with a prominent message telling user to download/share
+- **Download Report button:** Add `toast.info` feedback so user knows download started
+- **Share modal:** Already shows property names — just needs the properties list to be more visible
 
-#### C. Single Card Layout — Remove visual fragmentation
-- `ticketSupportEmbed()`: Remove the heavy gradient background and red border; make it blend into the card
-- `readyToGetStartedHtml()`: Remove the outer border and separate background so it flows within the card
-- `inquiryBox()`: Soften its standalone bordered look
-- Keep all content inside the single `emailShell` wrapper card with no sub-borders that create separation
+**File 3: `src/pages/Quiz.tsx` (post-quiz transition)**
+- Before navigating to `/quiz-results`, add a brief toast notification: "Your results are ready! Redirecting..."
+- This addresses the "black screen" perception during navigation transition
 
-#### D. Deploy + Send Test Email
-- Deploy the updated edge function
-- Immediately send a test welcome email to `janeaboujaoudenails@gmail.com`
-- Take a screenshot as proof
+### Summary
 
-### Files Modified
-- `supabase/functions/_shared/email-html.ts` — all icon and layout fixes
-- `public/email-icons/social-facebook.png` — create if missing (or use existing assets)
+| File | Changes |
+|------|---------|
+| `HuntingDashboard.tsx` | Champagne container, centered layout, fix button variants, gold borders on cards |
+| `QuizResults.tsx` | Champagne icon frames (not yellow gold), Brain icon for AI Finder, content alignment, welcome banner |
+| `Quiz.tsx` | Add transition toast before navigating to results |
 
