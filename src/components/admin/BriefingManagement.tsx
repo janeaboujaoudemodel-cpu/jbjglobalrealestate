@@ -13,7 +13,7 @@ import { toast } from 'sonner';
 import { format } from 'date-fns';
 import {
   Calendar, CheckCircle, XCircle, Clock, MapPin, Users, Trophy,
-  Search, Eye, Camera, Navigation, Star, MessageCircle, Loader2, Plus, Pencil
+  Search, Eye, Camera, Navigation, Star, MessageCircle, Loader2, Plus, Sparkles
 } from 'lucide-react';
 
 interface BriefingRequest {
@@ -85,6 +85,8 @@ const BriefingManagement = () => {
   const [newListDesc, setNewListDesc] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [subTab, setSubTab] = useState('calendar');
+  const [aiSummaryLoading, setAiSummaryLoading] = useState(false);
+  const [aiSummary, setAiSummary] = useState('');
 
   useEffect(() => { loadAll(); }, []);
 
@@ -118,7 +120,6 @@ const BriefingManagement = () => {
       } as any).eq('id', briefing.id);
       if (error) throw error;
 
-      // Create calendar task
       await supabase.from('admin_tasks').insert({
         user_id: user?.id,
         title: `📅 Briefing: ${briefing.project_name} — ${briefing.developer_name}`,
@@ -129,7 +130,6 @@ const BriefingManagement = () => {
         due_date: briefing.briefing_date,
       } as any);
 
-      // Notify brokers on assigned list
       if (briefing.broker_list_id) {
         const list = brokerLists.find(l => l.id === briefing.broker_list_id);
         if (list) {
@@ -156,9 +156,7 @@ const BriefingManagement = () => {
 
   const handleReject = async (briefing: BriefingRequest) => {
     try {
-      const { error } = await supabase.from('briefing_requests').update({
-        status: 'rejected',
-      } as any).eq('id', briefing.id);
+      const { error } = await supabase.from('briefing_requests').update({ status: 'rejected' } as any).eq('id', briefing.id);
       if (error) throw error;
       toast.success('Briefing rejected');
       loadAll();
@@ -169,9 +167,7 @@ const BriefingManagement = () => {
 
   const handleAssignList = async (briefingId: string, listId: string) => {
     try {
-      const { error } = await supabase.from('briefing_requests').update({
-        broker_list_id: listId,
-      } as any).eq('id', briefingId);
+      const { error } = await supabase.from('briefing_requests').update({ broker_list_id: listId } as any).eq('id', briefingId);
       if (error) throw error;
       toast.success('Broker list assigned');
       loadAll();
@@ -200,11 +196,51 @@ const BriefingManagement = () => {
     }
   };
 
+  const handleAISummary = async (briefing: BriefingRequest) => {
+    setAiSummaryLoading(true);
+    setAiSummary('');
+    try {
+      const att = attendance.filter(a => a.briefing_request_id === briefing.id);
+      const prompt = `Generate a concise executive briefing summary for the following real estate project briefing session:
+Project: ${briefing.project_name}
+Developer: ${briefing.developer_name}
+Date: ${briefing.briefing_date} at ${briefing.briefing_time}
+Duration: ${briefing.duration_minutes} minutes
+Location: ${briefing.location_type === 'developer_office' ? `Developer Office — ${briefing.location_address || 'N/A'}` : 'Our Office'}
+Notes: ${briefing.notes || 'None'}
+Attendance: ${att.length} brokers (${att.filter(a => a.confirmed_attended).length} confirmed)
+Status: ${briefing.status}
+
+Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it professional and concise.`;
+
+      const { data, error } = await supabase.functions.invoke('lovable-ai', {
+        body: {
+          model: 'google/gemini-3-flash-preview',
+          messages: [{ role: 'user', content: prompt }],
+        },
+      });
+
+      if (error) throw error;
+      const content = data?.choices?.[0]?.message?.content || 'No summary generated.';
+      setAiSummary(content);
+
+      // Save to briefing notes
+      await supabase.from('briefing_requests').update({
+        notes: `${briefing.notes || ''}\n\n--- AI Summary ---\n${content}`,
+      } as any).eq('id', briefing.id);
+      toast.success('AI summary generated');
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to generate AI summary');
+    } finally {
+      setAiSummaryLoading(false);
+    }
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'approved': return 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
-      case 'rejected': return 'bg-red-500/20 text-red-400 border-red-500/30';
-      default: return 'bg-amber-500/20 text-amber-400 border-amber-500/30';
+      case 'approved': return 'bg-emerald-100 text-emerald-700 border-emerald-200';
+      case 'rejected': return 'bg-red-100 text-red-700 border-red-200';
+      default: return 'bg-amber-100 text-amber-700 border-amber-200';
     }
   };
 
@@ -212,10 +248,10 @@ const BriefingManagement = () => {
     attendance.filter(a => a.briefing_request_id === briefingId);
 
   const responsiveRating = (hours: number | null) => {
-    if (hours === null) return { label: 'No Data', color: 'text-zinc-500' };
-    if (hours <= 1) return { label: 'Excellent', color: 'text-emerald-400' };
-    if (hours <= 4) return { label: 'Good', color: 'text-blue-400' };
-    return { label: 'Slow', color: 'text-red-400' };
+    if (hours === null) return { label: 'No Data', color: 'text-muted-foreground' };
+    if (hours <= 1) return { label: 'Excellent', color: 'text-emerald-600' };
+    if (hours <= 4) return { label: 'Good', color: 'text-blue-600' };
+    return { label: 'Slow', color: 'text-red-600' };
   };
 
   const filteredBriefings = briefings.filter(b =>
@@ -237,15 +273,15 @@ const BriefingManagement = () => {
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {[
           { label: 'Total Briefings', value: briefings.length, color: 'text-gold' },
-          { label: 'Pending', value: briefings.filter(b => b.status === 'pending').length, color: 'text-amber-400' },
-          { label: 'Approved', value: briefings.filter(b => b.status === 'approved').length, color: 'text-emerald-400' },
-          { label: 'Broker Lists', value: brokerLists.length, color: 'text-blue-400' },
-          { label: 'Active Reps', value: reps.length, color: 'text-purple-400' },
+          { label: 'Pending', value: briefings.filter(b => b.status === 'pending').length, color: 'text-amber-600' },
+          { label: 'Approved', value: briefings.filter(b => b.status === 'approved').length, color: 'text-emerald-600' },
+          { label: 'Broker Lists', value: brokerLists.length, color: 'text-blue-600' },
+          { label: 'Active Reps', value: reps.length, color: 'text-purple-600' },
         ].map((s, i) => (
-          <Card key={i} className="bg-zinc-900 border-zinc-800">
+          <Card key={i} className="bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30">
             <CardContent className="pt-4 pb-3">
               <div className={`text-2xl font-bold ${s.color}`}>{s.value}</div>
-              <p className="text-xs text-zinc-500">{s.label}</p>
+              <p className="text-xs text-muted-foreground">{s.label}</p>
             </CardContent>
           </Card>
         ))}
@@ -253,20 +289,20 @@ const BriefingManagement = () => {
 
       {/* Sub-tabs */}
       <Tabs value={subTab} onValueChange={setSubTab}>
-        <TabsList className="bg-zinc-900 border border-zinc-700">
-          <TabsTrigger value="calendar" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+        <TabsList className="bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border-2 border-gold/30">
+          <TabsTrigger value="calendar" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
             <Calendar className="w-4 h-4 mr-1" /> Briefings
           </TabsTrigger>
-          <TabsTrigger value="attendance" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+          <TabsTrigger value="attendance" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
             <Eye className="w-4 h-4 mr-1" /> Attendance
           </TabsTrigger>
-          <TabsTrigger value="broker-lists" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+          <TabsTrigger value="broker-lists" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
             <Users className="w-4 h-4 mr-1" /> Broker Lists
           </TabsTrigger>
-          <TabsTrigger value="leaderboard" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+          <TabsTrigger value="leaderboard" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
             <Trophy className="w-4 h-4 mr-1" /> Rep Leaderboard
           </TabsTrigger>
-          <TabsTrigger value="whatsapp" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+          <TabsTrigger value="whatsapp" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
             <MessageCircle className="w-4 h-4 mr-1" /> WhatsApp Log
           </TabsTrigger>
         </TabsList>
@@ -275,34 +311,34 @@ const BriefingManagement = () => {
         <TabsContent value="calendar" className="mt-4 space-y-4">
           <div className="flex items-center gap-4">
             <div className="relative flex-1 max-w-sm">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
                 placeholder="Search briefings..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 bg-zinc-900 border-zinc-700 text-white"
+                className="pl-10 bg-white border-gold/20"
               />
             </div>
             <div className="flex gap-2">
-              <Badge className="bg-amber-500/20 text-amber-400">● Pending</Badge>
-              <Badge className="bg-emerald-500/20 text-emerald-400">● Approved</Badge>
-              <Badge className="bg-red-500/20 text-red-400">● Rejected</Badge>
+              <Badge className="bg-amber-100 text-amber-700">● Pending</Badge>
+              <Badge className="bg-emerald-100 text-emerald-700">● Approved</Badge>
+              <Badge className="bg-red-100 text-red-700">● Rejected</Badge>
             </div>
           </div>
 
           <ScrollArea className="h-[500px]">
             <div className="space-y-3">
               {filteredBriefings.map(b => (
-                <Card key={b.id} className="bg-zinc-900 border-zinc-800 hover:border-gold/30 transition-all">
+                <Card key={b.id} className="bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/20 hover:border-gold/40 transition-all">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-1">
-                          <h4 className="text-white font-semibold">{b.project_name}</h4>
+                          <h4 className="text-foreground font-semibold">{b.project_name}</h4>
                           <Badge className={getStatusColor(b.status)}>{b.status}</Badge>
-                          {b.calendar_locked && <Badge className="bg-blue-500/20 text-blue-400 text-[10px]">🔒 Locked</Badge>}
+                          {b.calendar_locked && <Badge className="bg-blue-100 text-blue-700 text-[10px]">🔒 Locked</Badge>}
                         </div>
-                        <div className="flex items-center gap-4 text-xs text-zinc-500">
+                        <div className="flex items-center gap-4 text-xs text-muted-foreground">
                           <span className="flex items-center gap-1"><Calendar className="w-3 h-3" /> {b.briefing_date}</span>
                           <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {b.briefing_time} ({b.duration_minutes}m)</span>
                           <span>{b.developer_name}</span>
@@ -313,7 +349,7 @@ const BriefingManagement = () => {
                             </span>
                           )}
                         </div>
-                        {b.location_address && <p className="text-xs text-zinc-600 mt-1">{b.location_address}</p>}
+                        {b.location_address && <p className="text-xs text-muted-foreground mt-1">{b.location_address}</p>}
                       </div>
                       <div className="flex items-center gap-2">
                         {b.status === 'pending' && (
@@ -326,25 +362,24 @@ const BriefingManagement = () => {
                             </Button>
                           </>
                         )}
-                        <Button size="sm" variant="ghost" onClick={() => { setSelectedBriefing(b); setDetailOpen(true); }} className="text-zinc-400">
+                        <Button size="sm" variant="ghost" onClick={() => { setSelectedBriefing(b); setDetailOpen(true); setAiSummary(''); }} className="text-muted-foreground">
                           <Eye className="w-4 h-4" />
                         </Button>
                       </div>
                     </div>
-                    {/* Attendance summary */}
                     {getBriefingAttendance(b.id).length > 0 && (
-                      <div className="mt-3 pt-3 border-t border-zinc-800 flex items-center gap-3 text-xs">
-                        <span className="text-zinc-500">Attendance:</span>
-                        <Badge className="bg-emerald-500/20 text-emerald-400">{getBriefingAttendance(b.id).filter(a => a.rsvp_status === 'attending').length} Attending</Badge>
-                        <Badge className="bg-amber-500/20 text-amber-400">{getBriefingAttendance(b.id).filter(a => a.rsvp_status === 'late').length} Late</Badge>
-                        <Badge className="bg-blue-500/20 text-blue-400">{getBriefingAttendance(b.id).filter(a => a.confirmed_attended).length} Confirmed</Badge>
+                      <div className="mt-3 pt-3 border-t border-gold/20 flex items-center gap-3 text-xs">
+                        <span className="text-muted-foreground">Attendance:</span>
+                        <Badge className="bg-emerald-100 text-emerald-700">{getBriefingAttendance(b.id).filter(a => a.rsvp_status === 'attending').length} Attending</Badge>
+                        <Badge className="bg-amber-100 text-amber-700">{getBriefingAttendance(b.id).filter(a => a.rsvp_status === 'late').length} Late</Badge>
+                        <Badge className="bg-blue-100 text-blue-700">{getBriefingAttendance(b.id).filter(a => a.confirmed_attended).length} Confirmed</Badge>
                       </div>
                     )}
                   </CardContent>
                 </Card>
               ))}
               {filteredBriefings.length === 0 && (
-                <div className="text-center py-12 text-zinc-500">No briefings found</div>
+                <div className="text-center py-12 text-muted-foreground">No briefings found</div>
               )}
             </div>
           </ScrollArea>
@@ -357,16 +392,16 @@ const BriefingManagement = () => {
               {attendance.map(a => {
                 const briefing = briefings.find(b => b.id === a.briefing_request_id);
                 return (
-                  <Card key={a.id} className="bg-zinc-900 border-zinc-800">
+                  <Card key={a.id} className="bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/20">
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-white font-medium">{briefing?.project_name || 'Unknown'}</p>
-                          <div className="flex items-center gap-3 mt-1 text-xs text-zinc-500">
-                            <Badge className={a.rsvp_status === 'attending' ? 'bg-emerald-500/20 text-emerald-400' : a.rsvp_status === 'late' ? 'bg-amber-500/20 text-amber-400' : 'bg-red-500/20 text-red-400'}>
+                          <p className="text-foreground font-medium">{briefing?.project_name || 'Unknown'}</p>
+                          <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
+                            <Badge className={a.rsvp_status === 'attending' ? 'bg-emerald-100 text-emerald-700' : a.rsvp_status === 'late' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'}>
                               {a.rsvp_status}
                             </Badge>
-                            {a.confirmed_attended && <Badge className="bg-blue-500/20 text-blue-400">✓ Confirmed</Badge>}
+                            {a.confirmed_attended && <Badge className="bg-blue-100 text-blue-700">✓ Confirmed</Badge>}
                             {a.late_reason && <span>Late: {a.late_reason}</span>}
                           </div>
                         </div>
@@ -377,7 +412,7 @@ const BriefingManagement = () => {
                             </a>
                           )}
                           {a.gps_latitude && (
-                            <a href={`https://maps.google.com/?q=${a.gps_latitude},${a.gps_longitude}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-blue-400 text-xs hover:underline">
+                            <a href={`https://maps.google.com/?q=${a.gps_latitude},${a.gps_longitude}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-blue-600 text-xs hover:underline">
                               <Navigation className="w-3 h-3" /> GPS
                             </a>
                           )}
@@ -388,7 +423,7 @@ const BriefingManagement = () => {
                   </Card>
                 );
               })}
-              {attendance.length === 0 && <div className="text-center py-12 text-zinc-500">No attendance records yet</div>}
+              {attendance.length === 0 && <div className="text-center py-12 text-muted-foreground">No attendance records yet</div>}
             </div>
           </ScrollArea>
         </TabsContent>
@@ -396,26 +431,26 @@ const BriefingManagement = () => {
         {/* BROKER LISTS */}
         <TabsContent value="broker-lists" className="mt-4 space-y-4">
           <div className="flex justify-between items-center">
-            <h3 className="text-white font-semibold">Broker Notification Lists</h3>
+            <h3 className="text-foreground font-semibold">Broker Notification Lists</h3>
             <Button onClick={() => setListDialogOpen(true)} className="bg-gold hover:bg-gold/90 text-black">
               <Plus className="w-4 h-4 mr-1" /> New List
             </Button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {brokerLists.map(list => (
-              <Card key={list.id} className="bg-zinc-900 border-zinc-800">
+              <Card key={list.id} className="bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/20">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between mb-2">
-                    <h4 className="text-white font-semibold">{list.name}</h4>
-                    <Badge className="bg-blue-500/20 text-blue-400">{list.broker_ids?.length || 0} brokers</Badge>
+                    <h4 className="text-foreground font-semibold">{list.name}</h4>
+                    <Badge className="bg-blue-100 text-blue-700">{list.broker_ids?.length || 0} brokers</Badge>
                   </div>
-                  {list.description && <p className="text-xs text-zinc-500">{list.description}</p>}
-                  <p className="text-xs text-zinc-600 mt-2">Created {format(new Date(list.created_at), 'MMM d, yyyy')}</p>
+                  {list.description && <p className="text-xs text-muted-foreground">{list.description}</p>}
+                  <p className="text-xs text-muted-foreground mt-2">Created {format(new Date(list.created_at), 'MMM d, yyyy')}</p>
                 </CardContent>
               </Card>
             ))}
             {brokerLists.length === 0 && (
-              <div className="col-span-2 text-center py-8 text-zinc-500">
+              <div className="col-span-2 text-center py-8 text-muted-foreground">
                 No broker lists created yet. Create one to assign to briefings.
               </div>
             )}
@@ -429,25 +464,25 @@ const BriefingManagement = () => {
               {reps.map((rep, idx) => {
                 const rating = responsiveRating(rep.response_time_avg_hours);
                 return (
-                  <Card key={rep.id} className={`bg-zinc-900 border-zinc-800 ${idx === 0 ? 'border-gold/50 ring-1 ring-gold/30' : ''}`}>
+                  <Card key={rep.id} className={`bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 ${idx === 0 ? 'border-gold ring-1 ring-gold/30' : 'border-gold/20'}`}>
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <div className={`w-10 h-10 rounded-full flex items-center justify-center ${idx === 0 ? 'bg-gold/20 text-gold' : 'bg-zinc-800 text-zinc-400'}`}>
+                          <div className={`w-10 h-10 rounded-full flex items-center justify-center ${idx === 0 ? 'bg-gold/20 text-gold' : 'bg-muted text-muted-foreground'}`}>
                             {idx === 0 ? <Trophy className="w-5 h-5" /> : <span className="font-bold">{idx + 1}</span>}
                           </div>
                           <div>
                             <div className="flex items-center gap-2">
-                              <h4 className="text-white font-semibold">{rep.full_name}</h4>
+                              <h4 className="text-foreground font-semibold">{rep.full_name}</h4>
                               {idx === 0 && <Star className="w-4 h-4 text-gold fill-gold" />}
                             </div>
-                            <p className="text-xs text-zinc-500">{rep.developer_name}</p>
+                            <p className="text-xs text-muted-foreground">{rep.developer_name}</p>
                             {rep.languages?.length > 0 && (
                               <div className="flex gap-1 mt-1">
                                 {rep.languages.slice(0, 3).map(l => (
-                                  <Badge key={l} className="bg-zinc-800 text-zinc-400 text-[9px]">{l}</Badge>
+                                  <Badge key={l} className="bg-gold/10 text-gold border border-gold/20 text-[9px]">{l}</Badge>
                                 ))}
-                                {rep.languages.length > 3 && <Badge className="bg-zinc-800 text-zinc-400 text-[9px]">+{rep.languages.length - 3}</Badge>}
+                                {rep.languages.length > 3 && <Badge className="bg-gold/10 text-gold border border-gold/20 text-[9px]">+{rep.languages.length - 3}</Badge>}
                               </div>
                             )}
                           </div>
@@ -455,19 +490,19 @@ const BriefingManagement = () => {
                         <div className="flex items-center gap-6 text-right">
                           <div>
                             <div className="text-gold font-bold text-lg">{rep.activity_score}</div>
-                            <p className="text-[10px] text-zinc-500">Score</p>
+                            <p className="text-[10px] text-muted-foreground">Score</p>
                           </div>
                           <div>
-                            <div className="text-white font-medium">{rep.total_briefings_hosted}</div>
-                            <p className="text-[10px] text-zinc-500">Briefings</p>
+                            <div className="text-foreground font-medium">{rep.total_briefings_hosted}</div>
+                            <p className="text-[10px] text-muted-foreground">Briefings</p>
                           </div>
                           <div>
-                            <div className="text-white font-medium">{rep.total_updates_submitted}</div>
-                            <p className="text-[10px] text-zinc-500">Updates</p>
+                            <div className="text-foreground font-medium">{rep.total_updates_submitted}</div>
+                            <p className="text-[10px] text-muted-foreground">Updates</p>
                           </div>
                           <div>
                             <div className={`font-medium ${rating.color}`}>{rating.label}</div>
-                            <p className="text-[10px] text-zinc-500">Response</p>
+                            <p className="text-[10px] text-muted-foreground">Response</p>
                           </div>
                         </div>
                       </div>
@@ -475,17 +510,17 @@ const BriefingManagement = () => {
                   </Card>
                 );
               })}
-              {reps.length === 0 && <div className="text-center py-12 text-zinc-500">No representatives found</div>}
+              {reps.length === 0 && <div className="text-center py-12 text-muted-foreground">No representatives found</div>}
             </div>
           </ScrollArea>
         </TabsContent>
 
         {/* WHATSAPP LOG */}
         <TabsContent value="whatsapp" className="mt-4">
-          <Card className="bg-zinc-900 border-zinc-800">
+          <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/20">
             <CardHeader>
-              <CardTitle className="text-white flex items-center gap-2">
-                <MessageCircle className="w-5 h-5 text-emerald-400" />
+              <CardTitle className="text-foreground flex items-center gap-2">
+                <MessageCircle className="w-5 h-5 text-emerald-600" />
                 WhatsApp Activity Log (Manual Entry)
               </CardTitle>
             </CardHeader>
@@ -498,27 +533,46 @@ const BriefingManagement = () => {
 
       {/* Briefing Detail Dialog */}
       <Dialog open={detailOpen} onOpenChange={setDetailOpen}>
-        <DialogContent className="bg-zinc-900 border-zinc-700 text-white max-w-2xl max-h-[80vh] overflow-y-auto">
+        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30 text-foreground max-w-2xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Briefing Details</DialogTitle>
           </DialogHeader>
           {selectedBriefing && (
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
-                <div><Label className="text-zinc-500">Project</Label><p className="text-white">{selectedBriefing.project_name}</p></div>
-                <div><Label className="text-zinc-500">Developer</Label><p className="text-white">{selectedBriefing.developer_name}</p></div>
-                <div><Label className="text-zinc-500">Date</Label><p className="text-white">{selectedBriefing.briefing_date}</p></div>
-                <div><Label className="text-zinc-500">Time</Label><p className="text-white">{selectedBriefing.briefing_time} ({selectedBriefing.duration_minutes}m)</p></div>
-                <div><Label className="text-zinc-500">Location</Label><p className="text-white">{selectedBriefing.location_type === 'developer_office' ? `Developer Office — ${selectedBriefing.location_address || 'N/A'}` : 'Our Office'}</p></div>
-                <div><Label className="text-zinc-500">Status</Label><Badge className={getStatusColor(selectedBriefing.status)}>{selectedBriefing.status}</Badge></div>
+                <div><Label className="text-muted-foreground">Project</Label><p className="text-foreground font-medium">{selectedBriefing.project_name}</p></div>
+                <div><Label className="text-muted-foreground">Developer</Label><p className="text-foreground font-medium">{selectedBriefing.developer_name}</p></div>
+                <div><Label className="text-muted-foreground">Date</Label><p className="text-foreground">{selectedBriefing.briefing_date}</p></div>
+                <div><Label className="text-muted-foreground">Time</Label><p className="text-foreground">{selectedBriefing.briefing_time} ({selectedBriefing.duration_minutes}m)</p></div>
+                <div><Label className="text-muted-foreground">Location</Label><p className="text-foreground">{selectedBriefing.location_type === 'developer_office' ? `Developer Office — ${selectedBriefing.location_address || 'N/A'}` : 'Our Office'}</p></div>
+                <div><Label className="text-muted-foreground">Status</Label><Badge className={getStatusColor(selectedBriefing.status)}>{selectedBriefing.status}</Badge></div>
               </div>
               {selectedBriefing.notes && (
-                <div><Label className="text-zinc-500">Notes</Label><p className="text-zinc-300 text-sm">{selectedBriefing.notes}</p></div>
+                <div><Label className="text-muted-foreground">Notes</Label><p className="text-foreground text-sm whitespace-pre-wrap">{selectedBriefing.notes}</p></div>
+              )}
+
+              {/* AI Summary Button */}
+              {selectedBriefing.status === 'approved' && (
+                <div className="pt-4 border-t border-gold/20">
+                  <Button
+                    onClick={() => handleAISummary(selectedBriefing)}
+                    disabled={aiSummaryLoading}
+                    className="bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700"
+                  >
+                    {aiSummaryLoading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Sparkles className="w-4 h-4 mr-2" />}
+                    Generate AI Summary
+                  </Button>
+                  {aiSummary && (
+                    <div className="mt-3 p-4 rounded-xl bg-white/80 border border-gold/20 text-sm whitespace-pre-wrap">
+                      {aiSummary}
+                    </div>
+                  )}
+                </div>
               )}
 
               {/* Assign Broker List */}
-              <div className="pt-4 border-t border-zinc-800">
-                <Label className="text-zinc-500">Assign Broker List</Label>
+              <div className="pt-4 border-t border-gold/20">
+                <Label className="text-muted-foreground">Assign Broker List</Label>
                 <div className="flex gap-2 mt-2 flex-wrap">
                   {brokerLists.map(list => (
                     <Button
@@ -526,7 +580,7 @@ const BriefingManagement = () => {
                       size="sm"
                       variant={selectedBriefing.broker_list_id === list.id ? 'default' : 'outline'}
                       onClick={() => handleAssignList(selectedBriefing.id, list.id)}
-                      className={selectedBriefing.broker_list_id === list.id ? 'bg-gold text-black' : 'border-zinc-600 text-zinc-300'}
+                      className={selectedBriefing.broker_list_id === list.id ? 'bg-gold text-black' : 'border-gold/30 text-foreground'}
                     >
                       {list.name} ({list.broker_ids?.length || 0})
                     </Button>
@@ -534,23 +588,23 @@ const BriefingManagement = () => {
                 </div>
               </div>
 
-              {/* Attendance for this briefing */}
+              {/* Attendance */}
               {getBriefingAttendance(selectedBriefing.id).length > 0 && (
-                <div className="pt-4 border-t border-zinc-800">
-                  <Label className="text-zinc-500 mb-2 block">Attendance ({getBriefingAttendance(selectedBriefing.id).length})</Label>
+                <div className="pt-4 border-t border-gold/20">
+                  <Label className="text-muted-foreground mb-2 block">Attendance ({getBriefingAttendance(selectedBriefing.id).length})</Label>
                   <div className="space-y-2">
                     {getBriefingAttendance(selectedBriefing.id).map(a => (
-                      <div key={a.id} className="flex items-center justify-between p-3 bg-zinc-800 rounded-lg">
+                      <div key={a.id} className="flex items-center justify-between p-3 bg-white/60 rounded-lg border border-gold/15">
                         <div className="flex items-center gap-3">
-                          <Badge className={a.confirmed_attended ? 'bg-emerald-500/20 text-emerald-400' : 'bg-zinc-700 text-zinc-400'}>
+                          <Badge className={a.confirmed_attended ? 'bg-emerald-100 text-emerald-700' : 'bg-muted text-muted-foreground'}>
                             {a.confirmed_attended ? '✓' : '○'}
                           </Badge>
                           <span className="text-sm">{a.rsvp_status}</span>
-                          {a.late_reason && <span className="text-xs text-zinc-500">({a.late_reason})</span>}
+                          {a.late_reason && <span className="text-xs text-muted-foreground">({a.late_reason})</span>}
                         </div>
                         <div className="flex items-center gap-2">
                           {a.selfie_url && <Camera className="w-4 h-4 text-gold" />}
-                          {a.gps_latitude && <Navigation className="w-4 h-4 text-blue-400" />}
+                          {a.gps_latitude && <Navigation className="w-4 h-4 text-blue-600" />}
                           <span className="text-gold text-xs font-bold">+{a.points_earned}</span>
                         </div>
                       </div>
@@ -565,22 +619,22 @@ const BriefingManagement = () => {
 
       {/* Create Broker List Dialog */}
       <Dialog open={listDialogOpen} onOpenChange={setListDialogOpen}>
-        <DialogContent className="bg-zinc-900 border-zinc-700 text-white">
+        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30 text-foreground">
           <DialogHeader>
             <DialogTitle>Create Broker List</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div>
               <Label>List Name *</Label>
-              <Input value={newListName} onChange={(e) => setNewListName(e.target.value)} placeholder="e.g. Core Briefing Team" className="bg-zinc-800 border-zinc-700" />
+              <Input value={newListName} onChange={(e) => setNewListName(e.target.value)} placeholder="e.g. Core Briefing Team" className="bg-white border-gold/20" />
             </div>
             <div>
               <Label>Description</Label>
-              <Input value={newListDesc} onChange={(e) => setNewListDesc(e.target.value)} placeholder="Optional description" className="bg-zinc-800 border-zinc-700" />
+              <Input value={newListDesc} onChange={(e) => setNewListDesc(e.target.value)} placeholder="Optional description" className="bg-white border-gold/20" />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setListDialogOpen(false)} className="border-zinc-600">Cancel</Button>
+            <Button variant="outline" onClick={() => setListDialogOpen(false)} className="border-gold/30">Cancel</Button>
             <Button onClick={handleCreateList} className="bg-gold text-black hover:bg-gold/90">Create List</Button>
           </DialogFooter>
         </DialogContent>
@@ -589,7 +643,7 @@ const BriefingManagement = () => {
   );
 };
 
-// WhatsApp Logger sub-component
+// WhatsApp Logger sub-component — Champagne theme
 const WhatsAppLogger = ({ reps, onLog }: { reps: RepActivity[]; onLog: () => void }) => {
   const [selectedRep, setSelectedRep] = useState('');
   const [activityType, setActivityType] = useState('whatsapp_message');
@@ -610,7 +664,6 @@ const WhatsAppLogger = ({ reps, onLog }: { reps: RepActivity[]; onLog: () => voi
         response_time_minutes: responseMinutes ? parseInt(responseMinutes) : null,
       } as any);
 
-      // Update rep score
       const rep = reps.find(r => r.id === selectedRep);
       if (rep) {
         const updates: any = { activity_score: (rep.activity_score || 0) + points, last_active_at: new Date().toISOString() };
@@ -637,14 +690,14 @@ const WhatsAppLogger = ({ reps, onLog }: { reps: RepActivity[]; onLog: () => voi
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <Label>Representative</Label>
-          <select value={selectedRep} onChange={(e) => setSelectedRep(e.target.value)} className="flex h-10 w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-white">
+          <select value={selectedRep} onChange={(e) => setSelectedRep(e.target.value)} className="flex h-10 w-full rounded-md border border-gold/20 bg-white px-3 py-2 text-sm text-foreground">
             <option value="">Select rep...</option>
             {reps.map(r => <option key={r.id} value={r.id}>{r.full_name} — {r.developer_name}</option>)}
           </select>
         </div>
         <div>
           <Label>Activity Type</Label>
-          <select value={activityType} onChange={(e) => setActivityType(e.target.value)} className="flex h-10 w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-white">
+          <select value={activityType} onChange={(e) => setActivityType(e.target.value)} className="flex h-10 w-full rounded-md border border-gold/20 bg-white px-3 py-2 text-sm text-foreground">
             <option value="whatsapp_message">Message Sent</option>
             <option value="whatsapp_response">Response Received</option>
           </select>
@@ -653,12 +706,12 @@ const WhatsAppLogger = ({ reps, onLog }: { reps: RepActivity[]; onLog: () => voi
       {activityType === 'whatsapp_response' && (
         <div>
           <Label>Response Time (minutes)</Label>
-          <Input type="number" value={responseMinutes} onChange={(e) => setResponseMinutes(e.target.value)} placeholder="e.g. 15" className="bg-zinc-800 border-zinc-700 text-white" />
+          <Input type="number" value={responseMinutes} onChange={(e) => setResponseMinutes(e.target.value)} placeholder="e.g. 15" className="bg-white border-gold/20" />
         </div>
       )}
       <div>
         <Label>Description</Label>
-        <Input value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Brief note about the activity" className="bg-zinc-800 border-zinc-700 text-white" />
+        <Input value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Brief note about the activity" className="bg-white border-gold/20" />
       </div>
       <Button onClick={handleLog} disabled={submitting} className="bg-emerald-600 hover:bg-emerald-700 text-white">
         {submitting ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <MessageCircle className="w-4 h-4 mr-2" />}

@@ -105,19 +105,29 @@ const BriefingRequestForm = ({ representativeId, developerName }: BriefingReques
         } as any).eq('id', representativeId).then(() => {});
       } catch {}
 
-      // Create admin task
+      // Create admin task + owner notification
       try {
+        const ownerId = '4944592b-93f1-4e05-ab59-4ebe1fee54f1';
         const locationLabel = form.location_type === 'developer_office' 
           ? `at Developer Office${form.location_address ? ` (${form.location_address})` : ''}`
           : 'at Our Office';
         await supabase.from('admin_tasks').insert({
-          user_id: '4944592b-93f1-4e05-ab59-4ebe1fee54f1',
+          user_id: ownerId,
           title: `Briefing Request: ${form.project_name} by ${developerName}`,
           description: `${developerName} rep requested a briefing for "${form.project_name}" on ${briefingDate} at ${form.briefing_time} (${form.duration_minutes} min) ${locationLabel}. Languages: ${languages.join(', ')}. ${files.length} documents attached.`,
           category: 'briefing_request',
           priority: 'high',
           status: 'pending',
         } as any);
+        // Owner notification for alerts
+        await supabase.from('user_notifications' as any).insert({
+          user_id: ownerId,
+          type: 'briefing_request',
+          title: `New Briefing Request: ${form.project_name}`,
+          message: `${developerName} has requested a briefing for "${form.project_name}" on ${briefingDate} at ${form.briefing_time} ${locationLabel}.`,
+          is_read: false,
+          action_url: '/admin/developers?tab=briefings',
+        });
       } catch {}
 
       toast.success('Briefing request submitted! You will receive a confirmation once approved.');
