@@ -215,6 +215,14 @@ const LandlordListForm = () => {
               variants={staggerContainer}
               className="max-w-2xl mx-auto"
             >
+              <FormDraftBar
+                hasDraft={hasDraft}
+                onSaveDraft={saveDraft}
+                onReset={clearDraft}
+                onNew={clearDraft}
+                label="Rental Listing"
+                theme="dark"
+              />
               <motion.form
                 variants={fadeInUp}
                 onSubmit={handleSubmit}

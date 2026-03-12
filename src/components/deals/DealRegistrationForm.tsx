@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -11,6 +11,9 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { FileCheck, Loader2 } from "lucide-react";
+import { FormDraftBar } from "@/components/shared/FormDraftBar";
+
+const DEAL_DRAFT_KEY = "jbj_deal_reg_draft";
 
 const dealSchema = z.object({
   unit_number: z.string().min(1, "Unit number is required"),
