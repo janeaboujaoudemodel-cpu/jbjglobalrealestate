@@ -138,7 +138,8 @@ function buildSVG(project: any, templateKey: string): string {
       const r = R - 8, innerPad = 22;
       const nameFontSize = autoFontSize(name, 11, 20);
       return `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${COLOR}" stroke-width="1.5"/>
+        <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${COLOR}" stroke-width="${ba.outerWidth}" stroke-dasharray="${ba.dash}"/>
+        ${ba.innerRing ? `<circle cx="${cx}" cy="${cy}" r="${r - 6}" fill="none" stroke="${COLOR}" stroke-width="${ba.innerWidth}" stroke-dasharray="${ba.innerDash}"/>` : ''}
         <line x1="${cx - r + innerPad}" y1="${cy - 22}" x2="${cx + r - innerPad}" y2="${cy - 22}" stroke="${COLOR}" stroke-width="0.7"/>
         <line x1="${cx - r + innerPad}" y1="${cy + 22}" x2="${cx + r - innerPad}" y2="${cy + 22}" stroke="${COLOR}" stroke-width="0.7"/>
         ${hasMono ? monogram(cx, cy - 50, mono, font, 30, COLOR) : ''}
