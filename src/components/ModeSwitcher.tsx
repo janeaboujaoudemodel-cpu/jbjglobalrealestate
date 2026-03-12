@@ -117,7 +117,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
           <button
             disabled={isLoading}
             className={cn(
-              "flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border transition-all duration-300 hover:shadow-md max-w-[160px] whitespace-nowrap shrink-0",
+              "flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border transition-all duration-300 hover:shadow-md max-w-[220px] whitespace-nowrap shrink-0",
               currentConfig.bgColor,
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/50",
               className
