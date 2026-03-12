@@ -1979,7 +1979,7 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                     Upload your trade license to auto-fill company name, address, and contact details.
                   </p>
                   <DocumentExtractorUpload
-                    extractionType="trade_license"
+                    extractionType="company_profile"
                     onExtracted={handleTradeLicenseExtracted}
                     label="Upload Trade License"
                     hint="PDF or photo of your trade license — extracts company info automatically."
