@@ -575,6 +575,28 @@ export default function CoverLetterGenerator() {
               </Button>
             )}
             <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate("/e-signature/create")}
+              disabled={!letter}
+              className="gap-1.5 h-8 text-xs border-[hsl(var(--border))] disabled:opacity-40"
+            >
+              <FileSignature size={13} />
+              Sign
+            </Button>
+            {isOwner && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => navigate("/e-signature/create")}
+                disabled={!letter}
+                className="gap-1.5 h-8 text-xs border-indigo-300 text-indigo-700 hover:bg-indigo-50 disabled:opacity-40"
+              >
+                <Send size={13} />
+                Send for Signature
+              </Button>
+            )}
+            <Button
               onClick={exportPDF}
               disabled={exporting || !letter}
               className="gap-2 bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 h-8 text-xs disabled:opacity-40"
