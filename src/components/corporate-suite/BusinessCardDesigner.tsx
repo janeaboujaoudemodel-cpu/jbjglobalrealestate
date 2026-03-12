@@ -1660,16 +1660,6 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
               <RotateCcw size={12} /> Reset
             </Button>
 
-            <div className="hidden sm:flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-[hsl(var(--primary))] flex items-center justify-center">
-                <CreditCard size={13} className="text-[hsl(var(--primary-foreground))]" />
-              </div>
-              <div>
-                <p className="text-xs font-semibold text-[hsl(var(--foreground))] leading-none">Business Card Designer</p>
-                <p className="text-[10px] text-[hsl(var(--muted-foreground))]">Shapes · QR · Drag · AI</p>
-              </div>
-            </div>
-
             <div className="flex flex-col items-end gap-1">
               <Button
                 onClick={handleSaveCard}
