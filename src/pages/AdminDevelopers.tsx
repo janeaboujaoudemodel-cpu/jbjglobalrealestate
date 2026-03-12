@@ -97,7 +97,10 @@ const AdminDevelopers = () => {
     email: "",
     whatsapp_number: "",
     is_primary: false,
-    notes: ""
+    notes: "",
+    nationality: "",
+    gender: "",
+    years_in_real_estate: "" as string,
   });
 
   const navigate = useNavigate();
