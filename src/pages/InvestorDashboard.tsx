@@ -342,7 +342,7 @@ export default function InvestorDashboard() {
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="secondary" className="gap-2">
-                        <span className="hidden sm:inline truncate max-w-[160px]">{profile?.full_name || user?.email?.split('@')[0]}</span>
+                        <span className="hidden sm:inline truncate max-w-[220px]">{profile?.full_name || user?.email?.split('@')[0]}</span>
                         <ChevronDown className="w-4 h-4" />
                       </Button>
                     </DropdownMenuTrigger>
