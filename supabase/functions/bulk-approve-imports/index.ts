@@ -70,7 +70,7 @@ serve(async (req) => {
     // publish: when true, sets is_published=true on approved projects. Default false.
     // merge_mode: when true, matches existing projects by name and enriches (never overwrites non-null fields)
     // updateExisting: when true with slug match, fully overwrites (Reelly parity mode)
-    const { limit = 200, dryRun = false, minImages = 0, updateExisting = true, merge_mode = true, publish = false } = await req.json().catch(() => ({}));
+    const { limit = 200, dryRun = false, minImages = 0, updateExisting = true, merge_mode = true, publish = true } = await req.json().catch(() => ({}));
 
     console.log(`[BulkApprove] Starting (limit=${limit}, dryRun=${dryRun}, minImages=${minImages}, updateExisting=${updateExisting}, publish=${publish})...`);
 
