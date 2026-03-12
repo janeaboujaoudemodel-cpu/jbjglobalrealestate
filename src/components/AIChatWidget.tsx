@@ -978,6 +978,8 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
       </motion.div>
     </AnimatePresence>
   );
-};
+});
+
+AIChatWidget.displayName = 'AIChatWidget';
 
 export default AIChatWidget;
