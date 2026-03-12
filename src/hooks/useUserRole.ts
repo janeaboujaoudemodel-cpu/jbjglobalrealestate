@@ -14,15 +14,13 @@ export const useUserRole = () => {
   const loadRole = useCallback(async () => {
     setIsLoading(true);
     
-    // Check localStorage first
+    // Use localStorage as fast initial fallback only
     const storedRole = localStorage.getItem(ROLE_SELECTION_KEY) as VisitorRole;
     if (storedRole) {
       setRole(storedRole);
-      setIsLoading(false);
-      return;
     }
 
-    // Check database if logged in
+    // Always refresh from backend when authenticated (don't exit early)
     if (user) {
       try {
         // First check user_role_selections table
@@ -33,7 +31,8 @@ export const useUserRole = () => {
           .maybeSingle();
 
         if (roleSelection?.selected_role) {
-          setRole(roleSelection.selected_role as VisitorRole);
+          const backendRole = roleSelection.selected_role as VisitorRole;
+          setRole(backendRole);
           localStorage.setItem(ROLE_SELECTION_KEY, roleSelection.selected_role);
           setIsLoading(false);
           return;
@@ -48,7 +47,6 @@ export const useUserRole = () => {
           .maybeSingle();
 
         if (crmProfile) {
-          // Employee - set as broker_jbj
           setRole('broker_jbj');
           localStorage.setItem(ROLE_SELECTION_KEY, 'broker_jbj');
           setIsLoading(false);
