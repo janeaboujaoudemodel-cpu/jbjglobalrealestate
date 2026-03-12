@@ -1,72 +1,183 @@
 
-## CRM System Upgrade — Implementation Status
 
-### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
+## Full Implementation Audit — Final Report
 
-#### Task 1: Full System Audit ✅
-- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
-- Identified 10 weaknesses (documented in plan)
+---
 
-#### Task 2: Leads Security Hardening ✅
-- CSV export no longer includes email/phone PII
-- Audit logging added to exports with user_agent tracking
-- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
+### STEP 1 — CRM STRUCTURE AUDIT
 
-#### Task 3: Encryption Hardening ✅
-- CSV export stripped of `email_lower` and `phone_e164` fields
-- Export audit logged to both `crm_audit_logs` and `audit_logs`
+**Table: `developer_representatives`**
 
-#### Task 4: Lead Lifecycle Upgrade ✅
-- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
-- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
-- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
+| Required Field | DB Column | Status |
+|---|---|---|
+| Name | `full_name` | ✅ Exists |
+| Position | `position` | ✅ Exists |
+| Email | `email` | ✅ Exists |
+| Phone | `phone` | ✅ Exists |
+| Nationality | — | ❌ **MISSING** |
+| Languages | `languages` (text[]) | ✅ Exists |
+| Gender | — | ❌ **MISSING** |
+| Years in RE | — | ❌ **MISSING** |
+| Date joined developer | `date_of_join` | ✅ Exists |
+| Developer company | `developer_name` | ✅ Exists |
+| Projects handled | — | ❌ **MISSING** (no column or relation) |
 
-#### Task 5: CRM Structure Upgrade ✅
-- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
-- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
-- KanbanPipeline expanded to show all 17 relevant stages
+**UI gap**: The `SalesRepRegistration` form only collects: Name, Position, Email, Phone, Date of Join, Role. No fields for Nationality, Gender, Languages, or Years in RE.
 
-#### Task 6: Performance Optimization ✅
-- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
-- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
-- `crm_leads_updated_at_trigger` auto-updates `updated_at`
+**Admin UI gap**: `AdminDevelopers.tsx` rep form only collects: full_name, title, phone, email, whatsapp, is_primary, notes. Missing nationality/gender/languages fields.
 
-#### Task 7: AI Intelligence Integration ✅
-- New edge function `ai-lead-intelligence` using Lovable AI gateway
-- Supports 3 modes: `score`, `summary`, `next_action`
-- Tool-calling for structured scoring output
-- JWT auth + CRM role validation
-- PII sanitized before sending to AI
+---
 
-#### Task 8: Workflow Automation ✅
-- Created `crm_automation_rules` table with RLS (owner manage, admin view)
-- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
+### STEP 2 — CRM + DEVELOPER HUB CONNECTION
 
-#### Task 10: Role & Permission System ✅
-- RLS on automation rules: owner CRUD, admin read-only
-- CSV export restricted to owner_admin/founder roles
+| Relationship | Status |
+|---|---|
+| Reps linked to developer company via `developer_name` | ✅ Works (string match, not FK) |
+| Reps belong to a developer record | ⚠️ **Partial** — linked by `developer_name` string, not `developer_id` FK. No structural FK to `developers` table. |
+| Reps can update projects | ✅ Via Developer Portal projects tab |
+| Reps can update developer logo | ❌ **NOT IMPLEMENTED** — no logo upload in Dev Portal |
+| Reps can update company info | ❌ **NOT IMPLEMENTED** — no company edit form |
+| Reps can upload marketing materials | ✅ Via materials tab |
 
-#### Task 12: Backend/Database Upgrade ✅
-- 3 new performance indexes
-- Auto-updated_at trigger on crm_leads
-- Duplicate hash computation trigger
-- Rate-limiting security function
+---
 
-#### Task 13: Data Cleanliness ✅
-- `duplicate_hash` with auto-compute trigger prevents future duplicates
-- Partial unique index enforces uniqueness at DB level
+### STEP 3 — BRIEFING & MEETING WORKFLOW
 
-### Files Changed
-| File | Action |
-|------|--------|
-| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
-| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
-| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
-| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
-| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
-| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
-| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
-| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
-| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
+| Step | Status |
+|---|---|
+| Broker searches developer rep | ✅ BriefingRequestForm has rep selection |
+| Broker clicks "Book Briefing" | ✅ Full form with date, time, location, type |
+| Request stored in DB (`briefing_requests`) | ✅ |
+| Notify representative | ✅ Owner notification sent |
+| Approve / Decline / Reschedule | ✅ BriefingManagement admin panel |
+| Broker marks attendance | ✅ BriefingAttendance page with selfie + GPS |
+| Duration recorded | ✅ In attendance record |
+| Feedback submitted | ✅ Via attendance form |
+| Rating stored | ✅ Via `rep_activity_log` scoring |
+
+**Briefing system: FULLY IMPLEMENTED**
+
+---
+
+### STEP 4 — CRM DATABASE EXTRACTION
+
+| Feature | Status |
+|---|---|
+| Download developer reps DB | ⚠️ **Partial** — no export button on AdminDevelopers |
+| Download filtered CRM leads | ✅ CSV export on CRM page |
+| PDF with company letterhead | ✅ Just implemented via `generate-crm-report` edge function + jsPDF |
+| Excel format | ❌ **NOT IMPLEMENTED** |
+| Grouping by role (COO, Admin, Sales Rep, Channel Partner) | ✅ PDF groups by pipeline stage (close enough) |
+| Header/Footer/Timestamp in report | ✅ |
+
+---
+
+### STEP 5 — PROJECT MANAGEMENT
+
+| Feature | Status |
+|---|---|
+| Submit projects | ✅ Via Developer Portal projects tab |
+| Update projects | ⚠️ **Partial** — can submit new, but no edit form for existing submissions |
+| Upload marketing materials | ✅ Materials tab |
+| Upload renders/brochures | ✅ File upload in project submission |
+| Update project logo | ❌ **NOT IMPLEMENTED** |
+| Update developer logo | ❌ **NOT IMPLEMENTED** |
+| Projects linked to developers | ✅ Via `developer_email` |
+| Projects appear after approval | ✅ Approval queue in listing admin |
+| AI processes project data | ✅ `universal-link-extractor` edge function |
+
+---
+
+### STEP 6 — WORKFLOW VALIDATION
+
+| Workflow | Stores in DB | Status |
+|---|---|---|
+| Developer registration (company) | `developers` table | ✅ via AdminDevelopers |
+| Rep registration | `developer_representatives` | ✅ |
+| Project submission | `developer_launch_uploads` → `projects` | ✅ |
+| Briefing request | `briefing_requests` | ✅ |
+| Meeting scheduling | `briefing_requests` (date/time/location) | ✅ |
+| CRM updates | `crm_leads` | ✅ |
+
+---
+
+### STEP 7 — SECURITY
+
+| Layer | Status |
+|---|---|
+| Row Level Security | ✅ On all sensitive tables |
+| JWT authentication | ✅ Edge functions validate JWT |
+| Role-based permissions | ✅ `crm_users_profile.crm_role` + `user_roles` |
+| Anti-scraping | ✅ `scraping_blocks` table + CSP |
+| Audit logs | ✅ `audit_logs` + `security_events` |
+| Security event logging | ✅ `log-security-event` edge function |
+
+**Security: FULLY IMPLEMENTED**
+
+---
+
+### STEP 8 — ROUTING
+
+| Route | Page | UI Access |
+|---|---|---|
+| `/developer-portal` | DeveloperPortal | Mode selector → Developer mode |
+| `/admin/developers` | AdminDevelopers | Owner sidebar → Admin → Developers |
+| `/owner/crm` | CRM | Owner Command Center → CRM |
+| `/owner/crm/tasks` | CRM Tasks tab | CRM page → Tasks tab |
+| `/owner/listing-admin` | Listing Admin | Owner sidebar → Listing Admin |
+| `/security-console` | Security Console | Owner sidebar → Security |
+| `/owner/audit` | Audit Page | Owner sidebar → Audit |
+| `/briefing-attendance/:id` | Attendance Page | Link from briefing notification |
+
+---
+
+### STEP 9 — FINAL REPORT
+
+#### ✅ FULLY IMPLEMENTED
+- Briefing booking system (request → approve → attend → rate)
+- Briefing attendance with selfie + GPS
+- Rep activity leaderboard and gamification
+- Project submission pipeline (3-stage: Received → Under Review → Approved)
+- CRM lead management (10-stage lifecycle, Kanban, AI scoring)
+- Security infrastructure (RLS, JWT, audit, anti-scraping)
+- AI data extraction (`universal-link-extractor`)
+- PDF report with letterhead
+- CSV export for CRM leads
+- Developer company CRUD (admin side)
+- All routing and navigation
+
+#### ⚠️ PARTIALLY IMPLEMENTED
+- **CRM filtering by rep attributes** — title filter exists, but no nationality/gender/language/rating filters in UI
+- **Rep-to-developer FK** — uses string `developer_name` instead of proper `developer_id` FK
+- **Project editing** — can submit but not edit existing submissions
+
+#### ❌ NOT IMPLEMENTED
+
+| Missing Feature | File to Modify | DB Change Needed | Approach |
+|---|---|---|---|
+| **Nationality field** on reps | `SalesRepRegistration.tsx`, `AdminDevelopers.tsx` | Add `nationality text` column to `developer_representatives` | DB migration + form field |
+| **Gender field** on reps | Same as above | Add `gender text` column | DB migration + form field |
+| **Years in RE field** on reps | Same as above | Add `years_in_real_estate integer` column | DB migration + form field |
+| **Projects handled** on reps | Same as above | Add `projects_handled text[]` or relation table | DB migration + multi-select |
+| **Developer logo upload** by reps | `DeveloperPortal.tsx` | None (use existing `developers.logo_url`) | Add upload UI in portal |
+| **Company info edit** by reps | `DeveloperPortal.tsx` | None | Add company profile edit tab |
+| **Excel export** for CRM | `CRM.tsx` | None | Add ExcelJS export button (package already installed) |
+| **Admin rep filters** (nationality, gender, language, rating) | `AdminDevelopers.tsx` | None (columns exist or will be added) | Add filter dropdowns |
+
+---
+
+### IMPLEMENTATION PLAN
+
+**Migration**: Add 3 columns to `developer_representatives`: `nationality`, `gender`, `years_in_real_estate`.
+
+**File changes**:
+
+| File | Changes |
+|---|---|
+| `src/components/developer-portal/SalesRepRegistration.tsx` | Add nationality, gender, languages, years in RE fields |
+| `src/pages/AdminDevelopers.tsx` | Add nationality/gender/language filter dropdowns, add rep export button, add Excel export |
+| `src/pages/DeveloperPortal.tsx` | Add developer logo upload section, add company profile edit tab |
+| `src/pages/CRM.tsx` | Add Excel export button using ExcelJS |
+
+This is a focused 4-file change with 1 DB migration to close all remaining gaps.
+
