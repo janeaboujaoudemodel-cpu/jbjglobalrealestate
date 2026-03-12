@@ -493,6 +493,14 @@ export default function StampGeneratorPage() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            {/* Undo/Redo */}
+            <button onClick={handleSvgUndoStudio} disabled={!svgHistory.canUndo}
+              className="w-7 h-7 rounded-lg border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--gold)/0.06)] transition-colors disabled:opacity-30"
+              title="Undo"><Undo2 size={12}/></button>
+            <button onClick={handleSvgRedoStudio} disabled={!svgHistory.canRedo}
+              className="w-7 h-7 rounded-lg border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--gold)/0.06)] transition-colors disabled:opacity-30"
+              title="Redo"><Redo2 size={12}/></button>
+            <div className="w-px h-4 bg-[hsl(var(--border))]"/>
             <Button variant="outline" size="sm" onClick={() => navigate(`/toolkit/stamp-generator/${projectId}/gallery`)} className="gap-1 text-xs">
               <Layers size={12}/> Gallery
             </Button>
