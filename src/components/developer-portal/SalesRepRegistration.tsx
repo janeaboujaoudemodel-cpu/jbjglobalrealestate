@@ -8,6 +8,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { UserCheck, Loader2, Building2, Briefcase } from 'lucide-react';
+import { LanguageMultiSelect } from '@/components/ui/language-multi-select';
 
 interface SalesRepRegistrationProps {
   developerName: string;
@@ -24,6 +25,10 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
     email: user?.email || '',
     phone: '',
     date_of_join: '',
+    nationality: '',
+    gender: '',
+    years_in_real_estate: '',
+    languages: [] as string[],
   });
 
   const handleSubmit = async () => {
@@ -43,6 +48,10 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
         email: form.email,
         phone: form.phone || null,
         date_of_join: form.date_of_join || null,
+        nationality: form.nationality || null,
+        gender: form.gender || null,
+        years_in_real_estate: form.years_in_real_estate ? parseInt(form.years_in_real_estate) : null,
+        languages: form.languages.length > 0 ? form.languages : null,
       } as any);
       if (error) throw error;
       toast.success('Registration submitted! You will receive a confirmation email once reviewed.');
@@ -109,9 +118,40 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
           </div>
         </div>
 
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label>Nationality</Label>
+            <Input value={form.nationality} onChange={(e) => setForm(f => ({ ...f, nationality: e.target.value }))} placeholder="e.g. Indian, British, Lebanese" />
+          </div>
+          <div className="space-y-2">
+            <Label>Gender</Label>
+            <Select value={form.gender} onValueChange={(v) => setForm(f => ({ ...f, gender: v }))}>
+              <SelectTrigger className="border-gold/20">
+                <SelectValue placeholder="Select gender" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="male">Male</SelectItem>
+                <SelectItem value="female">Female</SelectItem>
+                <SelectItem value="other">Other</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label>Years in Real Estate</Label>
+            <Input type="number" min="0" max="50" value={form.years_in_real_estate} onChange={(e) => setForm(f => ({ ...f, years_in_real_estate: e.target.value }))} placeholder="e.g. 5" />
+          </div>
+          <div className="space-y-2">
+            <Label>Date of Joining Company</Label>
+            <Input type="date" value={form.date_of_join} onChange={(e) => setForm(f => ({ ...f, date_of_join: e.target.value }))} />
+          </div>
+        </div>
+
         <div className="space-y-2">
-          <Label>Date of Joining Company</Label>
-          <Input type="date" value={form.date_of_join} onChange={(e) => setForm(f => ({ ...f, date_of_join: e.target.value }))} />
+          <Label>Languages Spoken</Label>
+          <LanguageMultiSelect value={form.languages} onChange={(v) => setForm(f => ({ ...f, languages: v }))} />
         </div>
 
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-800">

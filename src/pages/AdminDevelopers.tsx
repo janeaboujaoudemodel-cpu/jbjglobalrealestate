@@ -61,6 +61,10 @@ interface SalesRep {
   is_primary: boolean;
   is_active: boolean;
   notes: string | null;
+  nationality: string | null;
+  gender: string | null;
+  years_in_real_estate: number | null;
+  languages: string[] | null;
 }
 
 const AdminDevelopers = () => {
@@ -69,6 +73,8 @@ const AdminDevelopers = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [titleFilter, setTitleFilter] = useState("all");
+  const [genderFilter, setGenderFilter] = useState("all");
+  const [nationalityFilter, setNationalityFilter] = useState("");
   const [selectedDeveloper, setSelectedDeveloper] = useState<Developer | null>(null);
   const [isDevDialogOpen, setIsDevDialogOpen] = useState(false);
   const [isRepDialogOpen, setIsRepDialogOpen] = useState(false);
@@ -91,7 +97,10 @@ const AdminDevelopers = () => {
     email: "",
     whatsapp_number: "",
     is_primary: false,
-    notes: ""
+    notes: "",
+    nationality: "",
+    gender: "",
+    years_in_real_estate: "" as string,
   });
 
   const navigate = useNavigate();
@@ -151,7 +160,13 @@ const AdminDevelopers = () => {
       return;
     }
     try {
-      const data = { ...repForm, developer_id: selectedDeveloper.id };
+      const data = { 
+        ...repForm, 
+        developer_id: selectedDeveloper.id,
+        years_in_real_estate: repForm.years_in_real_estate ? parseInt(repForm.years_in_real_estate) : null,
+        nationality: repForm.nationality || null,
+        gender: repForm.gender || null,
+      };
       if (editingRep) {
         const { error } = await supabase.from('developer_sales_reps').update(data).eq('id', editingRep.id);
         if (error) throw error;
@@ -163,7 +178,7 @@ const AdminDevelopers = () => {
       }
       setIsRepDialogOpen(false);
       setEditingRep(null);
-      setRepForm({ full_name: "", title: "Sales Representative", phone_e164: "", email: "", whatsapp_number: "", is_primary: false, notes: "" });
+      setRepForm({ full_name: "", title: "Sales Representative", phone_e164: "", email: "", whatsapp_number: "", is_primary: false, notes: "", nationality: "", gender: "", years_in_real_estate: "" });
       loadData();
     } catch (err: any) {
       toast.error(err.message || "Error saving sales rep");
@@ -216,7 +231,10 @@ const AdminDevelopers = () => {
       email: rep.email || "",
       whatsapp_number: rep.whatsapp_number || "",
       is_primary: rep.is_primary,
-      notes: rep.notes || ""
+      notes: rep.notes || "",
+      nationality: rep.nationality || "",
+      gender: rep.gender || "",
+      years_in_real_estate: rep.years_in_real_estate?.toString() || "",
     });
     setIsRepDialogOpen(true);
   };
@@ -231,6 +249,12 @@ const AdminDevelopers = () => {
     let reps = salesReps.filter(r => r.developer_id === devId);
     if (titleFilter !== 'all') {
       reps = reps.filter(r => r.title === titleFilter);
+    }
+    if (genderFilter !== 'all') {
+      reps = reps.filter(r => r.gender === genderFilter);
+    }
+    if (nationalityFilter) {
+      reps = reps.filter(r => r.nationality?.toLowerCase().includes(nationalityFilter.toLowerCase()));
     }
     return reps;
   };
@@ -303,6 +327,22 @@ const AdminDevelopers = () => {
                 <SelectItem value="Admin">Admin</SelectItem>
               </SelectContent>
             </Select>
+            <Select value={genderFilter} onValueChange={setGenderFilter}>
+              <SelectTrigger className="w-[140px] bg-white border-gold/20">
+                <SelectValue placeholder="Gender" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Genders</SelectItem>
+                <SelectItem value="male">Male</SelectItem>
+                <SelectItem value="female">Female</SelectItem>
+              </SelectContent>
+            </Select>
+            <Input
+              placeholder="Filter nationality..."
+              value={nationalityFilter}
+              onChange={(e) => setNationalityFilter(e.target.value)}
+              className="w-[160px] bg-white border-gold/20"
+            />
           </div>
         </div>
 
@@ -366,7 +406,7 @@ const AdminDevelopers = () => {
                 onAddRep={() => {
                   setSelectedDeveloper(dev);
                   setEditingRep(null);
-                  setRepForm({ full_name: "", title: "Sales Representative", phone_e164: "", email: "", whatsapp_number: "", is_primary: false, notes: "" });
+                  setRepForm({ full_name: "", title: "Sales Representative", phone_e164: "", email: "", whatsapp_number: "", is_primary: false, notes: "", nationality: "", gender: "", years_in_real_estate: "" });
                   setIsRepDialogOpen(true);
                 }}
                 onEditRep={(rep) => {
@@ -389,7 +429,7 @@ const AdminDevelopers = () => {
                 onAddRep={() => {
                   setSelectedDeveloper(dev);
                   setEditingRep(null);
-                  setRepForm({ full_name: "", title: "Sales Representative", phone_e164: "", email: "", whatsapp_number: "", is_primary: false, notes: "" });
+                  setRepForm({ full_name: "", title: "Sales Representative", phone_e164: "", email: "", whatsapp_number: "", is_primary: false, notes: "", nationality: "", gender: "", years_in_real_estate: "" });
                   setIsRepDialogOpen(true);
                 }}
                 onEditRep={(rep) => {
@@ -489,6 +529,29 @@ const AdminDevelopers = () => {
             <div>
               <Label>Email</Label>
               <Input value={repForm.email} onChange={(e) => setRepForm(f => ({ ...f, email: e.target.value }))} placeholder="ahmed@developer.com" type="email" className="bg-white border-gold/20" />
+            </div>
+            <div className="grid grid-cols-3 gap-4">
+              <div>
+                <Label>Nationality</Label>
+                <Input value={repForm.nationality} onChange={(e) => setRepForm(f => ({ ...f, nationality: e.target.value }))} placeholder="e.g. Indian" className="bg-white border-gold/20" />
+              </div>
+              <div>
+                <Label>Gender</Label>
+                <Select value={repForm.gender} onValueChange={(v) => setRepForm(f => ({ ...f, gender: v }))}>
+                  <SelectTrigger className="bg-white border-gold/20">
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="male">Male</SelectItem>
+                    <SelectItem value="female">Female</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label>Years in RE</Label>
+                <Input type="number" min="0" max="50" value={repForm.years_in_real_estate} onChange={(e) => setRepForm(f => ({ ...f, years_in_real_estate: e.target.value }))} placeholder="5" className="bg-white border-gold/20" />
+              </div>
             </div>
             <div>
               <Label>Notes</Label>
