@@ -382,11 +382,11 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
               ) : (
                 <div className="p-8 md:p-12">
                   <div
-                    className="border-2 border-dashed border-fuchsia-500/30 rounded-xl p-8 md:p-16 text-center cursor-pointer hover:border-fuchsia-500/60 hover:bg-fuchsia-500/5 transition-all"
+                    className="border-2 border-dashed border-gold/30 rounded-xl p-8 md:p-16 text-center cursor-pointer hover:border-gold/60 hover:bg-gold/5 transition-all"
                     onClick={() => fileInputRef.current?.click()}
                   >
-                    <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-fuchsia-500/20 flex items-center justify-center">
-                      <Upload className="w-8 h-8 text-fuchsia-400" />
+                    <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gold/15 flex items-center justify-center">
+                      <Upload className="w-8 h-8 text-gold" />
                     </div>
                     <h3 className="text-lg font-semibold text-white mb-2">
                       Upload a Photo
