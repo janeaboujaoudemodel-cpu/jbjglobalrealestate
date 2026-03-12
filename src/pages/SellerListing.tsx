@@ -22,6 +22,7 @@ import {
   Phone, Mail, MessageCircle, Upload, Sparkles, Shield,
   Calculator, Plus, X, Wand2, AlertCircle
 } from "lucide-react";
+import { FormDraftBar } from "@/components/shared/FormDraftBar";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import SellerAssistant from "@/components/seller/SellerAssistant";
 import {
