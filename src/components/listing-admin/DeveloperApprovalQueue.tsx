@@ -114,7 +114,7 @@ export const DeveloperApprovalQueue = () => {
       if (error) throw error;
 
       if (data?.success) {
-        toast.success(`Extracted ${data.count} developers from Provident`);
+        toast.success(`Extracted ${data.count} developers`);
         fetchPendingDevelopers();
       } else {
         throw new Error(data?.error || "Extraction failed");

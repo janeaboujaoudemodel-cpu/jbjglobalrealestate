@@ -376,7 +376,7 @@ const AdminDevelopers = () => {
           </Card>
         </div>
 
-        {/* Provident Sync */}
+        {/* External Source Sync */}
         <div className="mb-8">
           <ProvidentSyncButton />
         </div>

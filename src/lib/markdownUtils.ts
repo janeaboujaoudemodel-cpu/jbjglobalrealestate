@@ -209,6 +209,9 @@ export function renderMarkdownToHtml(markdown: string | null): string {
   
   html = html.replace(/(<li[^>]*>.*?<\/li>(?:<br\/>)?)+/g, '<ul class="list-disc pl-5 space-y-1 my-3">$&</ul>');
   
+  // Final pass: strip any competitor references from generated HTML
+  html = sanitizeHtml(html);
+
   return DOMPurify.sanitize(html, {
     ALLOWED_TAGS: ['h2', 'h3', 'h4', 'h5', 'h6', 'p', 'br', 'strong', 'em', 'ul', 'ol', 'li', 'a', 'div', 'span', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'blockquote'],
     ALLOWED_ATTR: ['href', 'class', 'target', 'rel', 'style'],

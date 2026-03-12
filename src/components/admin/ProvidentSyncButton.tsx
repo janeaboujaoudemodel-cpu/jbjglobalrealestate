@@ -181,7 +181,7 @@ export const ProvidentSyncButton = () => {
 
      let runningTotals = { created: 0, updated: 0, images: 0 };
 
-    toast.info("Starting Provident Estate sync...");
+    toast.info("Starting external source sync...");
 
     for (let page = 1; page <= totalPages; page++) {
       setCurrentPage(page);

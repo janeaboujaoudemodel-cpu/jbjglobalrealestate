@@ -149,7 +149,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
         </CardHeader>
         <CardContent>
           <p className="text-sm text-zinc-600 mb-4">
-            Paste a single Provident project link. Sarah will extract the full listing (images + PDFs) and queue it for your approval.
+            Paste a project URL. Sarah will extract the full listing (images + PDFs) and queue it for your approval.
           </p>
           
           <div className="flex flex-col md:flex-row gap-2 mb-3">

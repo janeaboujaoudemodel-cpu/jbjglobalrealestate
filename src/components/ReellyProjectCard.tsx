@@ -5,9 +5,10 @@
  import ShortlistBadgeButton from "./ShortlistBadgeButton";
  import { ChevronLeft, ChevronRight, MapPin, Mail, Phone, MessageCircle } from "lucide-react";
  import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
- import { VerifiedMedia } from "@/components/ui/verified-media";
- import { Button } from "@/components/ui/button";
- import { DeveloperLink } from "@/components/ui/developer-link";
+import { VerifiedMedia } from "@/components/ui/verified-media";
+import { Button } from "@/components/ui/button";
+import { DeveloperLink } from "@/components/ui/developer-link";
+import { sanitizeForDisplay } from "@/utils/contentSanitizer";
  
 interface ReellyProjectCardProps {
   project: ReellyProject;
