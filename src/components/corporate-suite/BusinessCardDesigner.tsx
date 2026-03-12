@@ -40,6 +40,8 @@ import {
 } from "./businessCardTypes";
 import { DeskMockup, PocketMockup, StationeryMockup, HandMockup, PhoneMockup } from "./BusinessCardMockups";
 import { ColorPickerSection } from "./BusinessCardColorPicker";
+import { CardFace, CardCanvas } from "./BusinessCardPreview";
+import { exportCardAsPDF, exportDigitalCardAsHtml } from "./businessCardExport";
 
 // ─── Card Preview Component ───────────────────────────────────────────────────
 function CardFace({
