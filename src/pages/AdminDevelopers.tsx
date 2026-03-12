@@ -327,6 +327,22 @@ const AdminDevelopers = () => {
                 <SelectItem value="Admin">Admin</SelectItem>
               </SelectContent>
             </Select>
+            <Select value={genderFilter} onValueChange={setGenderFilter}>
+              <SelectTrigger className="w-[140px] bg-white border-gold/20">
+                <SelectValue placeholder="Gender" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Genders</SelectItem>
+                <SelectItem value="male">Male</SelectItem>
+                <SelectItem value="female">Female</SelectItem>
+              </SelectContent>
+            </Select>
+            <Input
+              placeholder="Filter nationality..."
+              value={nationalityFilter}
+              onChange={(e) => setNationalityFilter(e.target.value)}
+              className="w-[160px] bg-white border-gold/20"
+            />
           </div>
         </div>
 
