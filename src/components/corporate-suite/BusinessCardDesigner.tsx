@@ -2774,6 +2774,7 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
             </div>
           </Collapsible>
         </div>
+      </div>
     </div>
 
       {/* NFC Programming Guide Modal */}
