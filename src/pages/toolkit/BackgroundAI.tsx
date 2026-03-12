@@ -1222,7 +1222,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                           ))}
                         </div>
                       </div>
-                      <p className="text-xs rounded-lg px-3 py-2" style={{ background: "rgba(99,102,241,0.06)", color: C.accentText }}>
+                      <p className="text-xs rounded-lg px-3 py-2" style={{ background: "rgba(184,148,62,0.06)", color: C.accentText }}>
                         ℹ️ AI samples the first frame to detect background color, then applies FFmpeg colorkey filter across all frames.
                       </p>
                     </div>
