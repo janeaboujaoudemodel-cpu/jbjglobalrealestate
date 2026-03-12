@@ -47,7 +47,7 @@ export function UserModeProvider({ children }: { children: ReactNode }) {
     const loadMode = async () => {
       setIsLoading(true);
       
-      // First check localStorage
+      // localStorage is the primary source of truth
       const storedMode = localStorage.getItem(MODE_KEY);
       const storedSelection = localStorage.getItem(MODE_SELECTED_KEY);
       
@@ -58,7 +58,7 @@ export function UserModeProvider({ children }: { children: ReactNode }) {
         setHasMadeInitialSelection(true);
       }
 
-      // If logged in, sync with database
+      // If logged in, sync with database — but NEVER overwrite an explicit local selection
       if (user?.id) {
         try {
           const { data, error } = await supabase
@@ -68,12 +68,26 @@ export function UserModeProvider({ children }: { children: ReactNode }) {
             .maybeSingle();
 
           if (data?.selected_mode) {
-            const dbMode = normalizeMode(data.selected_mode);
-            setModeState(dbMode);
-            localStorage.setItem(MODE_KEY, dbMode);
-            // If we have a mode in DB, user has made a selection
-            setHasMadeInitialSelection(true);
-            localStorage.setItem(MODE_SELECTED_KEY, 'true');
+            // Only adopt DB mode if user hasn't explicitly selected one locally
+            if (!storedMode || storedSelection !== 'true') {
+              const dbMode = normalizeMode(data.selected_mode);
+              setModeState(dbMode);
+              localStorage.setItem(MODE_KEY, dbMode);
+              setHasMadeInitialSelection(true);
+              localStorage.setItem(MODE_SELECTED_KEY, 'true');
+            } else {
+              // User has a local selection — push it to DB to keep in sync
+              const localMode = normalizeMode(storedMode);
+              if (data.selected_mode !== localMode) {
+                await supabase
+                  .from('user_preferences')
+                  .upsert({
+                    user_id: user.id,
+                    selected_mode: localMode,
+                    updated_at: new Date().toISOString()
+                  }, { onConflict: 'user_id' });
+              }
+            }
           } else if (!error) {
             // No preferences record yet, create one with current mode
             const currentMode = normalizeMode(storedMode);

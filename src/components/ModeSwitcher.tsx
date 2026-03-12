@@ -19,7 +19,7 @@ interface ModeSwitcherProps {
 
 const MODE_CONFIG: Record<UserMode, { label: string; shortLabel: string; icon: typeof User; color: string; bgColor: string; borderColor: string; description: string }> = {
   investor: {
-    label: 'Investor Mode',
+    label: 'Mode: Investor',
     shortLabel: 'I',
     icon: User,
     color: 'text-emerald-500',
@@ -28,7 +28,7 @@ const MODE_CONFIG: Record<UserMode, { label: string; shortLabel: string; icon: t
     description: 'Browse properties, access ROI tools, upload listings, explore guides & market insights'
   },
   broker: {
-    label: 'Broker Mode',
+    label: 'Mode: Broker',
     shortLabel: 'B',
     icon: Briefcase,
     color: 'text-blue-500',
@@ -37,7 +37,7 @@ const MODE_CONFIG: Record<UserMode, { label: string; shortLabel: string; icon: t
     description: 'CRM dashboard, education hub, sell properties, upload listings, coordinate with clients & close deals'
   },
   investor_broker: {
-    label: 'Investor + Broker',
+    label: 'Mode: Investor + Broker',
     shortLabel: 'I+B',
     icon: Users,
     color: 'text-purple-500',
@@ -46,7 +46,7 @@ const MODE_CONFIG: Record<UserMode, { label: string; shortLabel: string; icon: t
     description: 'Full access to investor tools, broker dashboard, CRM, listings, guides & market intelligence'
   },
   developer: {
-    label: 'Developer Mode',
+    label: 'Mode: Developer',
     shortLabel: 'D',
     icon: Building2,
     color: 'text-amber-500',
