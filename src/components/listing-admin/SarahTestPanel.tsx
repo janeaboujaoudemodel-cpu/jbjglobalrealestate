@@ -68,7 +68,7 @@ interface SarahTestPanelProps {
 }
 
 export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprovals }: SarahTestPanelProps) => {
-  const [testUrl, setTestUrl] = useState("https://providentestate.com/new-projects/sobha-seahaven/");
+  const [testUrl, setTestUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [testResult, setTestResult] = useState<TestResult | null>(null);
   const [retryCount, setRetryCount] = useState(0);
