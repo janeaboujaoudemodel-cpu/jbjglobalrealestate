@@ -21,8 +21,11 @@ import { generateStampConcepts, StampDesignConcept } from '@/lib/stampTemplates'
 import {
   Wand2, Loader2, Check, RefreshCw, Download, Stamp,
   ArrowLeft, ChevronRight, AlertTriangle, Heart, MessageSquare,
-  Send, X, Sparkles, Palette, Layers, Type, Upload, ChevronDown
+  Send, X, Sparkles, Palette, Layers, Type, Upload, ChevronDown,
+  Undo2, Redo2, RotateCw, Save
 } from 'lucide-react';
+import { InteractiveStampCanvas, createDefaultLayers, StampLayer } from '@/components/stamp-generator/InteractiveStampCanvas';
+import { useStampHistory } from '@/hooks/useStampHistory';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
