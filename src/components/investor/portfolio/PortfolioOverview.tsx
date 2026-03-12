@@ -64,7 +64,7 @@ export default function PortfolioOverview({ stats }: PortfolioOverviewProps) {
       
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {statCards.map((stat) => (
-          <Card key={stat.label} className="border border-gold/40 shadow-[0_2px_12px_rgba(200,167,102,0.12)]">
+          <Card key={stat.label} className="border border-stone-200 shadow-sm bg-white">
             <CardContent className="p-4">
               <div className="flex flex-col gap-3">
                 <div className={`w-10 h-10 ${stat.bg} rounded-xl flex items-center justify-center`}>

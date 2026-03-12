@@ -83,7 +83,7 @@ const CombinedContactNewsletter = ({
               href={card.href}
               target={card.label === "WhatsApp" ? "_blank" : undefined}
               rel={card.label === "WhatsApp" ? "noopener noreferrer" : undefined}
-              className={`group flex flex-row sm:flex-col items-center gap-2.5 sm:gap-3 p-3 sm:p-4 rounded-xl border-2 bg-white/50 hover:shadow-lg transition-all duration-300 ${card.borderColor} ${card.shadowColor}`}
+              className={`group flex flex-row sm:flex-col items-center gap-2.5 sm:gap-3 p-3 sm:p-4 rounded-none border-2 bg-white/50 hover:shadow-lg transition-all duration-300 ${card.borderColor} ${card.shadowColor}`}
             >
               <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full ${card.iconBg} flex items-center justify-center flex-shrink-0`}>
                 <card.icon className={`w-5 h-5 sm:w-6 sm:h-6 ${card.iconColor}`} />

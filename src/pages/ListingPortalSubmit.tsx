@@ -617,6 +617,38 @@ const ListingPortalSubmit = () => {
               </p>
             </div>
 
+            {/* Draft Action Bar */}
+            <FormDraftBar
+              hasDraft={phase !== 'upload' || uploadedDocs.length > 0}
+              onSaveDraft={() => {
+                const stateToSave = { phase, form, listingCategory, uploadedImageUrls, extractedData, pricePrediction, sellerRole, contactMode, sourceUrl, sourceText };
+                sessionStorage.setItem(SESSION_KEY, JSON.stringify(stateToSave));
+                toast.success("Draft saved successfully");
+              }}
+              onReset={() => {
+                sessionStorage.removeItem(SESSION_KEY);
+                setPhase('upload');
+                setUploadedDocs([]);
+                setExtractedData(null);
+                setUploadedImageUrls([]);
+                setPricePrediction(null);
+                setForm({ title: '', description: '', listing_type: initialListingType, listing_category: initialCategory, property_type: '', developer_name: '', project_name: '', location: '', emirate: 'Dubai', area: '', bedrooms: '', bathrooms: '', area_sqft: '', price: '', furnishing: '', handover_date: '', payment_plan: '', amenities: [], key_features: [] });
+                toast.info("Form cleared");
+              }}
+              onNew={() => {
+                sessionStorage.removeItem(SESSION_KEY);
+                setPhase('upload');
+                setUploadedDocs([]);
+                setExtractedData(null);
+                setUploadedImageUrls([]);
+                setPricePrediction(null);
+                setForm({ title: '', description: '', listing_type: initialListingType, listing_category: initialCategory, property_type: '', developer_name: '', project_name: '', location: '', emirate: 'Dubai', area: '', bedrooms: '', bathrooms: '', area_sqft: '', price: '', furnishing: '', handover_date: '', payment_plan: '', amenities: [], key_features: [] });
+                toast.info("New listing started");
+              }}
+              label="Listing"
+              theme="gold"
+            />
+
             {/* Progress indicator — 6 steps */}
             <div className="flex gap-1.5 mb-8">
               {PHASES.map((step, i) => {

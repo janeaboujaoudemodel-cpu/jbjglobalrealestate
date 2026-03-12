@@ -796,16 +796,16 @@ export default function InvestorDashboard() {
             </Card>
           </motion.div>
 
-          {/* Footer CTA Strip */}
-          <motion.div variants={fadeInUp}>
-            <div className="border-2 border-gold/40 bg-gradient-to-r from-[#1a1a1a] via-[#222] to-[#1a1a1a] p-6 md:p-8 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
-                <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+          {/* Footer CTA Strip — Edge-to-edge, sharp corners */}
+          <motion.div variants={fadeInUp} className="-mx-4 sm:-mx-6 lg:-mx-8">
+            <div className="bg-gradient-to-r from-[#1a1a1a] via-[#222] to-[#1a1a1a] p-8 md:p-10 border-y border-gold/30">
+                <div className="flex flex-col md:flex-row items-center justify-between gap-6 max-w-5xl mx-auto">
                   <div className="text-center md:text-left">
                     <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2 justify-center md:justify-start uppercase tracking-wider">
                       <HelpCircle className="w-5 h-5 text-gold" />
                       Need Assistance?
                     </h3>
-                    <p className="text-zinc-400 text-sm">
+                    <p className="text-zinc-400 text-sm max-w-md">
                       Our investment advisors are here to help with your portfolio, reports, and strategy.
                     </p>
                   </div>
