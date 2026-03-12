@@ -180,7 +180,9 @@ export function formatReellyDescription(text: string): string {
 export function renderMarkdownToHtml(markdown: string | null): string {
   if (!markdown) return '';
   
-  let cleaned = cleanRawText(markdown);
+  // Strip HTML tags and competitor references from source before processing
+  let cleaned = sanitizeForDisplay(markdown);
+  cleaned = cleanRawText(cleaned);
   
   // Convert markdown tables first
   cleaned = convertMarkdownTables(cleaned);
