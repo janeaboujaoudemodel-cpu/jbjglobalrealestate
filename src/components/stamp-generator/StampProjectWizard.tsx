@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -7,9 +7,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { Stamp, Building2, Palette, Image, Wand2, Check, Type, Upload, X, Globe, FileText, ChevronLeft, ChevronRight, RotateCcw, MapPin } from 'lucide-react';
+import { Stamp, Building2, Palette, Image, Wand2, Check, Type, Upload, X, Globe, FileText, ChevronLeft, ChevronRight, RotateCcw, MapPin, Undo2, Redo2, RotateCw, Save } from 'lucide-react';
 import { StampLicenseUploader } from '@/components/stamp-generator/StampLicenseUploader';
 import { LiveStampPreview } from '@/components/stamp-generator/LiveStampPreview';
+import { InteractiveStampCanvas, createDefaultLayers, StampLayer } from '@/components/stamp-generator/InteractiveStampCanvas';
+import { useStampHistory } from '@/hooks/useStampHistory';
 
 // UAE phone normalization
 function normalizePhone(raw: string): string {
