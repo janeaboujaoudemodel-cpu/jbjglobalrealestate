@@ -342,7 +342,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                       onClick={() => generateDesign()}
                       disabled={isProcessing}
                       variant="outline"
-                      className="border-fuchsia-500/40 text-fuchsia-300 hover:bg-fuchsia-500/20"
+                      className="border-gold/40 text-gold hover:bg-gold/15"
                     >
                       <RefreshCw className="w-4 h-4 mr-2" />
                       Regenerate
