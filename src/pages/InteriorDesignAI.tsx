@@ -304,7 +304,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
             value={projectName}
             onChange={(e) => setProjectName(e.target.value)}
             placeholder="Project name (optional)"
-            className="bg-zinc-900/60 border-fuchsia-500/30 text-white placeholder:text-zinc-500 max-w-xs focus:border-fuchsia-500/50"
+            className="bg-zinc-900/60 border-gold/30 text-white placeholder:text-zinc-500 max-w-xs focus:border-gold/50"
           />
           <div className="flex gap-2">
             {modeConfig.map(m => {
@@ -316,7 +316,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                   onClick={() => setMode(m.id)}
                   className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all border ${
                     active
-                      ? 'bg-fuchsia-500/20 border-fuchsia-500/50 text-fuchsia-300'
+                      ? 'bg-gold/15 border-gold/50 text-gold'
                       : 'bg-zinc-900/60 border-zinc-700 text-zinc-400 hover:border-zinc-600 hover:text-zinc-300'
                   }`}
                 >
