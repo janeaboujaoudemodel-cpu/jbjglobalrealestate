@@ -57,7 +57,7 @@ export default function StampGeneratorLanding() {
             Company Stamp Generator
           </h1>
           <p className="text-lg text-[hsl(var(--muted-foreground))] max-w-xl mx-auto">
-            Design professional company stamps in minutes. AI-curated concepts, multiple styles, bilingual support, and a complete export pack.
+            Design professional company stamps in minutes. Smart-curated concepts, multiple styles, bilingual support, and a complete export pack.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button
