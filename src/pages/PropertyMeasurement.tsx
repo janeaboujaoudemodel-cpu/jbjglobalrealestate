@@ -896,7 +896,7 @@ jbj.ae
                   </Button>
                   <Button 
                     onClick={proceedToInteriorDesign}
-                    className="flex-1 bg-gradient-to-r from-fuchsia-500 to-purple-600 hover:from-fuchsia-600 hover:to-purple-700 text-white"
+                    className="flex-1 bg-gradient-to-r from-gold to-amber-600 hover:from-amber-600 hover:to-gold text-black font-semibold"
                   >
                     Continue to Interior Design AI
                     <ArrowRight className="w-4 h-4 ml-2" />
