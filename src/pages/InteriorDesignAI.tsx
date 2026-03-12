@@ -431,8 +431,8 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
 
             {/* Processing indicator */}
             {isProcessing && (
-              <div className="bg-zinc-900/60 border border-fuchsia-500/30 rounded-2xl p-6 text-center">
-                <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-gradient-to-br from-fuchsia-500 to-purple-500 flex items-center justify-center">
+              <div className="bg-zinc-900/60 border border-gold/30 rounded-2xl p-6 text-center">
+                <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-gradient-to-br from-gold to-amber-600 flex items-center justify-center">
                   <Sparkles className="w-6 h-6 text-white animate-pulse" />
                 </div>
                 <p className="text-white font-medium mb-3">Creating Your Design...</p>
