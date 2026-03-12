@@ -266,6 +266,90 @@ const CRM = () => {
     }
   };
 
+  const handleExportExcel = async () => {
+    const isOwner = profile?.crm_role === 'owner_admin' || profile?.crm_role === 'founder';
+    if (!isOwner) {
+      toast.error("Only administrators can export leads");
+      return;
+    }
+    toast.info("Generating Excel report...");
+    try {
+      const { data: leads } = await supabase
+        .from("crm_leads")
+        .select("id, full_name, email_lower, phone_e164, nationality, preferred_language, current_location_country, source, tags, created_at, pipeline_stage, ai_score")
+        .is("deleted_at", null)
+        .order("created_at", { ascending: false });
+
+      if (!leads || leads.length === 0) {
+        toast.error("No leads to export");
+        return;
+      }
+
+      const ExcelJS = await import('exceljs');
+      const workbook = new ExcelJS.Workbook();
+      workbook.creator = 'JBJ Global Real Estate';
+      const sheet = workbook.addWorksheet('CRM Leads');
+
+      sheet.columns = [
+        { header: 'Full Name', key: 'full_name', width: 25 },
+        { header: 'Email', key: 'email', width: 30 },
+        { header: 'Phone', key: 'phone', width: 18 },
+        { header: 'Nationality', key: 'nationality', width: 15 },
+        { header: 'Language', key: 'language', width: 15 },
+        { header: 'Country', key: 'country', width: 15 },
+        { header: 'Source', key: 'source', width: 15 },
+        { header: 'Pipeline Stage', key: 'stage', width: 18 },
+        { header: 'AI Score', key: 'score', width: 10 },
+        { header: 'Tags', key: 'tags', width: 25 },
+        { header: 'Created', key: 'created', width: 15 },
+      ];
+
+      // Style header row
+      const headerRow = sheet.getRow(1);
+      headerRow.font = { bold: true, color: { argb: 'FF000000' } };
+      headerRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFD4AF37' } };
+
+      for (const lead of leads) {
+        sheet.addRow({
+          full_name: lead.full_name || '',
+          email: lead.email_lower || '',
+          phone: lead.phone_e164 || '',
+          nationality: lead.nationality || '',
+          language: lead.preferred_language || '',
+          country: lead.current_location_country || '',
+          source: lead.source || '',
+          stage: lead.pipeline_stage || 'new',
+          score: lead.ai_score || 0,
+          tags: (lead.tags || []).join(', '),
+          created: lead.created_at ? new Date(lead.created_at).toLocaleDateString() : '',
+        });
+      }
+
+      // Audit log
+      await supabase.from("audit_logs").insert({
+        user_id: user?.id,
+        user_email: user?.email,
+        action_type: 'export' as any,
+        resource_type: 'lead' as any,
+        description: `Exported ${leads.length} CRM leads to Excel`,
+        details: { count: leads.length, format: 'xlsx' }
+      });
+
+      const buffer = await workbook.xlsx.writeBuffer();
+      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `jbj_crm_leads_${new Date().toISOString().split('T')[0]}.xlsx`;
+      a.click();
+      URL.revokeObjectURL(url);
+      toast.success(`Exported ${leads.length} leads to Excel`);
+    } catch (err) {
+      console.error("Excel export failed:", err);
+      toast.error("Failed to export to Excel");
+    }
+  };
+
   const handleExportPDFReport = async () => {
     const isOwner = profile?.crm_role === 'owner_admin' || profile?.crm_role === 'founder';
     if (!isOwner) {
