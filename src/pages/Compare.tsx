@@ -458,6 +458,24 @@ const Compare = () => {
     );
   };
 
+  // Convert 5-star to 10-point score
+  const toScore = (rating: number) => Math.min(10, rating * 2);
+
+  const renderScoreBar = (rating: number, label: string) => {
+    const score = toScore(rating);
+    const pct = (score / 10) * 100;
+    const color = score >= 8 ? '#22C55E' : score >= 6 ? '#F59E0B' : '#EF4444';
+    return (
+      <div className="flex items-center gap-2">
+        <span className="text-[10px] text-zinc-500 w-20 shrink-0 text-right">{label}</span>
+        <div className="flex-1 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+          <div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, background: color }} />
+        </div>
+        <span className="text-xs font-bold w-6 text-right" style={{ color }}>{score.toFixed(0)}</span>
+      </div>
+    );
+  };
+
   if (isLoading) {
     return (
       <section className="min-h-screen bg-zinc-950 flex items-center justify-center">
