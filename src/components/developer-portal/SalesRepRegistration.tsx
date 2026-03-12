@@ -24,6 +24,10 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
     email: user?.email || '',
     phone: '',
     date_of_join: '',
+    nationality: '',
+    gender: '',
+    years_in_real_estate: '',
+    languages: [] as string[],
   });
 
   const handleSubmit = async () => {
