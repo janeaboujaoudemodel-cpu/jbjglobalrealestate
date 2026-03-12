@@ -42,6 +42,8 @@ import { DeskMockup, PocketMockup, StationeryMockup, HandMockup, PhoneMockup } f
 import { ColorPickerSection } from "./BusinessCardColorPicker";
 import { CardFace, CardCanvas } from "./BusinessCardPreview";
 import { exportCardAsPDF, exportDigitalCardAsHtml } from "./businessCardExport";
+import { BusinessCardHeader } from "./BusinessCardHeader";
+import { ShareModal, BatchPrintDialog, NfcGuideDialog } from "./BusinessCardDialogs";
 
 
 
