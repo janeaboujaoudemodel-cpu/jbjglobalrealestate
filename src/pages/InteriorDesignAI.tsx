@@ -456,13 +456,13 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
           <div className="lg:col-span-2 space-y-4">
             {/* Style Presets (Collapsible) */}
             <Collapsible open={styleOpen} onOpenChange={setStyleOpen}>
-              <div className="bg-zinc-900/60 border border-fuchsia-500/30 rounded-2xl overflow-hidden">
+              <div className="bg-zinc-900/60 border border-gold/30 rounded-2xl overflow-hidden">
                 <CollapsibleTrigger className="w-full p-4 flex items-center justify-between text-left hover:bg-zinc-800/30 transition-colors">
                   <div className="flex items-center gap-2">
-                    <Wand2 className="w-4 h-4 text-fuchsia-400" />
+                    <Wand2 className="w-4 h-4 text-gold" />
                     <span className="text-sm font-semibold text-white">Design Style</span>
                     {designStyle && (
-                      <Badge className="bg-fuchsia-500/20 text-fuchsia-300 border-fuchsia-500/30 text-xs">
+                      <Badge className="bg-gold/15 text-gold border-gold/30 text-xs">
                         {designStyles.find(s => s.id === designStyle)?.label}
                       </Badge>
                     )}
@@ -477,7 +477,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                         onClick={() => setDesignStyle(style.id)}
                         className={`p-2.5 rounded-lg border text-left text-xs transition-all ${
                           designStyle === style.id
-                            ? 'bg-fuchsia-500/20 border-fuchsia-500/50 text-white'
+                            ? 'bg-gold/15 border-gold/50 text-white'
                             : 'bg-zinc-800/50 border-zinc-700 text-zinc-400 hover:border-zinc-600'
                         }`}
                       >
@@ -492,13 +492,13 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
 
             {/* Color Palette (Collapsible) */}
             <Collapsible open={paletteOpen} onOpenChange={setPaletteOpen}>
-              <div className="bg-zinc-900/60 border border-fuchsia-500/30 rounded-2xl overflow-hidden">
+              <div className="bg-zinc-900/60 border border-gold/30 rounded-2xl overflow-hidden">
                 <CollapsibleTrigger className="w-full p-4 flex items-center justify-between text-left hover:bg-zinc-800/30 transition-colors">
                   <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 rounded-full bg-gradient-to-r from-fuchsia-500 via-purple-500 to-pink-500" />
+                    <div className="w-4 h-4 rounded-full bg-gradient-to-r from-gold via-amber-500 to-amber-400" />
                     <span className="text-sm font-semibold text-white">Color Palette</span>
                     {colorPalette && (
-                      <Badge className="bg-fuchsia-500/20 text-fuchsia-300 border-fuchsia-500/30 text-xs">
+                      <Badge className="bg-gold/15 text-gold border-gold/30 text-xs">
                         {colorPalettes.find(p => p.id === colorPalette)?.name}
                       </Badge>
                     )}
@@ -513,7 +513,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                         onClick={() => setColorPalette(palette.id)}
                         className={`p-3 rounded-lg border transition-all ${
                           colorPalette === palette.id
-                            ? 'bg-fuchsia-500/20 border-fuchsia-500/50'
+                            ? 'bg-gold/15 border-gold/50'
                             : 'bg-zinc-800/50 border-zinc-700 hover:border-zinc-600'
                         }`}
                       >
@@ -531,11 +531,11 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
             </Collapsible>
 
             {/* Inline AI Chat */}
-            <div className="bg-zinc-900/60 border border-fuchsia-500/30 rounded-2xl overflow-hidden flex flex-col" style={{ minHeight: '400px' }}>
+            <div className="bg-zinc-900/60 border border-gold/30 rounded-2xl overflow-hidden flex flex-col" style={{ minHeight: '400px' }}>
               {/* Chat Header */}
               <div className="p-3 border-b border-zinc-800 flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-fuchsia-500 to-purple-500 flex items-center justify-center">
-                  <Bot className="w-4 h-4 text-white" />
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gold to-amber-600 flex items-center justify-center">
+                  <Bot className="w-4 h-4 text-black" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-white text-sm">Design Assistant</h3>
@@ -548,12 +548,12 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                 {messages.map(msg => (
                   <div key={msg.id} className={`flex gap-2 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
                     <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${
-                      msg.role === 'user' ? 'bg-fuchsia-500/20' : 'bg-gradient-to-br from-fuchsia-500 to-purple-500'
+                      msg.role === 'user' ? 'bg-gold/15' : 'bg-gradient-to-br from-gold to-amber-600'
                     }`}>
-                      {msg.role === 'user' ? <User className="w-3 h-3 text-fuchsia-300" /> : <Bot className="w-3 h-3 text-white" />}
+                      {msg.role === 'user' ? <User className="w-3 h-3 text-gold" /> : <Bot className="w-3 h-3 text-black" />}
                     </div>
                     <div className={`max-w-[85%] rounded-xl p-3 ${
-                      msg.role === 'user' ? 'bg-fuchsia-500/20 text-white' : 'bg-zinc-800/80 text-zinc-200'
+                      msg.role === 'user' ? 'bg-gold/15 text-white' : 'bg-zinc-800/80 text-zinc-200'
                     }`}>
                       {msg.image && (
                         <img src={msg.image} alt="Design" className="rounded-lg mb-2 max-h-[200px] w-auto" />
@@ -573,17 +573,17 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                     onChange={(e) => setChatInput(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder="Describe changes: 'make the sofa white' or 'add gold accents'..."
-                    className="bg-zinc-800/50 border-zinc-600 text-white placeholder:text-zinc-500 min-h-[40px] max-h-[80px] resize-none flex-1 text-xs focus:border-fuchsia-500/50"
+                    className="bg-zinc-800/50 border-zinc-600 text-white placeholder:text-zinc-500 min-h-[40px] max-h-[80px] resize-none flex-1 text-xs focus:border-gold/50"
                     disabled={isProcessing}
                   />
                   <Button
                     onClick={handleChatSend}
                     disabled={isProcessing || !chatInput.trim()}
                     size="icon"
-                    className="bg-gradient-to-r from-fuchsia-600 to-purple-600 hover:from-fuchsia-700 hover:to-purple-700 text-white h-10 w-10"
+                    className="bg-gradient-to-r from-gold to-amber-600 hover:from-amber-600 hover:to-gold text-black h-10 w-10"
                   >
                     {isProcessing ? (
-                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <div className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
                     ) : (
                       <Send className="w-4 h-4" />
                     )}
@@ -593,13 +593,13 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
             </div>
 
             {/* Additional Notes */}
-            <div className="bg-zinc-900/60 border border-fuchsia-500/30 rounded-2xl p-4">
+            <div className="bg-zinc-900/60 border border-gold/30 rounded-2xl p-4">
               <label className="text-xs font-medium text-zinc-400 mb-2 block">Additional Notes (Optional)</label>
               <Textarea
                 value={customNotes}
                 onChange={(e) => setCustomNotes(e.target.value)}
                 placeholder="Floor-to-ceiling windows, marble floors, specific furniture..."
-                className="bg-zinc-800/50 border-zinc-600 text-white placeholder:text-zinc-500 min-h-[60px] text-xs focus:border-fuchsia-500/50"
+                className="bg-zinc-800/50 border-zinc-600 text-white placeholder:text-zinc-500 min-h-[60px] text-xs focus:border-gold/50"
                 maxLength={500}
               />
             </div>
