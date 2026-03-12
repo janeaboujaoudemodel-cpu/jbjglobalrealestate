@@ -109,7 +109,7 @@ export default function HorizontalUtilityBar() {
   return (
     <>
       <div
-        className="fixed top-0 left-0 right-0 h-[48px] z-[9996] hidden lg:flex items-center gap-2.5 px-4 lg:px-5 border-b border-gold/15 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_1px_3px_hsl(var(--gold)/0.08)] overflow-x-auto overflow-y-hidden scrollbar-hide [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px]"
+        className="fixed top-0 left-0 right-0 h-[48px] z-[9996] hidden lg:flex items-center gap-2.5 px-4 lg:px-5 pr-6 lg:pr-8 border-b border-gold/15 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_1px_3px_hsl(var(--gold)/0.08)] overflow-x-auto overflow-y-hidden scrollbar-hide [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px]"
       >
         {/* ── Sidebar Toggle (Arrow only) — FIRST ── */}
         <Tooltip>

@@ -79,7 +79,7 @@ const FavoriteButton = ({
     if (useDb) {
       toggleUserShortlist.mutate({ projectId, isShortlisted, currentCount: shortlistCount });
     } else {
-      const success = toggleGuestShortlist(projectId);
+      const success = toggleGuestShortlist(String(projectId));
       if (success) {
         toast.success(isShortlisted ? "Removed from shortlist" : "Added to shortlist");
       }

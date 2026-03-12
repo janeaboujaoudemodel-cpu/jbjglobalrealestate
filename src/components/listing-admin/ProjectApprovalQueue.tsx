@@ -408,6 +408,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
       status_label: importData.status_label,
       source_url: importData.source_url,
       is_offplan: true,
+      is_published: true,
       status: 'active'
     };
 
