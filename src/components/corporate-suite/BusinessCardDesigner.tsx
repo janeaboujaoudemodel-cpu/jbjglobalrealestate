@@ -2589,42 +2589,45 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                     transition={{ duration: 0.25, ease: "easeOut" }}
                     style={{ perspective: 800 }}
                   >
-                    <CardCanvas
-                      data={data}
-                      template={frontTemplate}
-                      backTemplate={backTemplate}
-                      primary={frontPrimary}
-                      secondary={frontSecondary}
-                      accent={frontAccent}
-                      backPrimary={backPrimary}
-                      backSecondary={backSecondary}
-                      backAccent={backAccent}
-                      side={side}
-                      cardShape={cardShape}
-                      editLayout={editLayout}
-                      fieldPositions={fieldPositions}
-                      onFieldMove={handleFieldMove}
-                      qrEnabled={qrEnabled}
-                      qrData={qrDataStr}
-                      qrSize={qrSize}
-                      qrColor={effectiveQrColor}
-                      qrBgColor={qrBgColor}
-                      qrPosition={qrPosition}
-                      qrSide={qrSide}
-                      logoUrl={logoUrl}
-                      logoSize={logoSize}
-                      logoPos={logoPos}
-                      onLogoMove={setLogoPos}
-                      aiDesignData={aiDesignData}
-                      fontFamily={cardFontFamily}
-                      fontWeight={cardFontBold ? "bold" : undefined}
-                      fontStyle={cardFontItalic ? "italic" : undefined}
-                      nameFontSize={cardFontSize}
-                      bilingualMode={bilingualMode}
-                      bilingualDir={bilingualDir}
-                      secondaryData={secondaryData}
-                      onInlineEdit={(field) => setInlineEditField(field)}
-                    />
+                    <div className="relative">
+                      <CardCanvas
+                        data={data}
+                        template={frontTemplate}
+                        backTemplate={backTemplate}
+                        primary={frontPrimary}
+                        secondary={frontSecondary}
+                        accent={frontAccent}
+                        backPrimary={backPrimary}
+                        backSecondary={backSecondary}
+                        backAccent={backAccent}
+                        side={side}
+                        cardShape={cardShape}
+                        editLayout={editLayout}
+                        fieldPositions={fieldPositions}
+                        onFieldMove={handleFieldMove}
+                        qrEnabled={qrEnabled}
+                        qrData={qrDataStr}
+                        qrSize={qrSize}
+                        qrColor={effectiveQrColor}
+                        qrBgColor={qrBgColor}
+                        qrPosition={qrPosition}
+                        qrSide={qrSide}
+                        logoUrl={logoUrl}
+                        logoSize={logoSize}
+                        logoPos={logoPos}
+                        onLogoMove={setLogoPos}
+                        aiDesignData={aiDesignData}
+                        fontFamily={cardFontFamily}
+                        fontWeight={cardFontBold ? "bold" : undefined}
+                        fontStyle={cardFontItalic ? "italic" : undefined}
+                        nameFontSize={cardFontSize}
+                        bilingualMode={bilingualMode}
+                        bilingualDir={bilingualDir}
+                        secondaryData={secondaryData}
+                        onInlineEdit={(field) => setInlineEditField(field)}
+                      />
+                      {finishEffect !== "none" && <div style={getFinishOverlayStyle(finishEffect)} />}
+                    </div>
                   </motion.div>
                 </AnimatePresence>
               </div>
