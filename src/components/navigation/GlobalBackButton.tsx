@@ -26,7 +26,7 @@ export default function GlobalBackButton({ className = "" }: { className?: strin
           aria-label="Go back"
         >
           <ArrowLeft className="w-4 h-4 text-gold group-hover:scale-110 transition-transform shrink-0" />
-          <span className="text-[11px] font-semibold text-black/55 uppercase tracking-wide hidden xl:inline whitespace-nowrap">
+          <span className="text-[11px] font-semibold text-black/55 uppercase tracking-wide hidden lg:inline whitespace-nowrap">
             Back
           </span>
         </button>
