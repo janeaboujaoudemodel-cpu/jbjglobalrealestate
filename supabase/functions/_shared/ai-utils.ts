@@ -26,7 +26,7 @@ export function getCorsHeaders(req: Request): Record<string, string> {
   );
   return {
     "Access-Control-Allow-Origin": isAllowed ? origin : ALLOWED_ORIGINS[0],
-    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
   };
 }
@@ -394,7 +394,7 @@ export async function callLovableAI(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: options.model || "google/gemini-2.5-flash",
+        model: options.model || "google/gemini-3-flash-preview",
         messages: [
           { role: "system", content: options.systemPrompt },
           { role: "user", content: options.userPrompt },
