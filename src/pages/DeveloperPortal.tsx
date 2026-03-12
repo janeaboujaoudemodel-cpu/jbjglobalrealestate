@@ -590,7 +590,7 @@ const DeveloperPortal = () => {
                   Listings
                 </TabsTrigger>
               </TabsList>
-            </ScrollArea>
+            </div>
 
             {/* MY PROJECTS TAB */}
             <TabsContent value="projects" className="mt-6">
