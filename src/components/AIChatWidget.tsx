@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import React, { useState, useMemo, useEffect, useCallback, forwardRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
@@ -41,7 +41,7 @@ interface AIChatWidgetProps {
   showAttentionPulse?: boolean;
 }
 
-const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttentionPulse = false }: AIChatWidgetProps) => {
+const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapsed, onToggleCollapse, onMinimize, showAttentionPulse = false }, _ref) => {
   const { isRTL } = useLanguage();
   const { user } = useAuth();
   
@@ -978,6 +978,8 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
       </motion.div>
     </AnimatePresence>
   );
-};
+});
+
+AIChatWidget.displayName = 'AIChatWidget';
 
 export default AIChatWidget;
