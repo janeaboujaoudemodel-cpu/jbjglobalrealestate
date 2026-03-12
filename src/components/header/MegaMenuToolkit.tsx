@@ -59,9 +59,9 @@ const MegaMenuToolkit = React.forwardRef<HTMLDivElement, MegaMenuToolkitProps>((
   const corporateTools = [
     {
       icon: Stamp,
-      title: 'AI Stamp Generator',
+      title: 'Stamp Generator',
       href: '/toolkit/stamp-generator',
-      description: 'AI seals · bilingual · SVG/PNG/PDF',
+      description: 'Professional seals · bilingual · SVG/PNG/PDF',
       isNew: true,
     },
     {

@@ -295,8 +295,8 @@ export function LiveStampPreview({
         const monoSize = mono.length === 1 ? 14 : mono.length === 2 ? 11 : 9;
         textContent += `<text x="${cx}" y="${cy + imgSize / 2 + 4}" font-family="${fontFamily}" font-size="${monoSize}" fill="${ink}" text-anchor="middle" dominant-baseline="central" font-weight="700" opacity="0.85">${mono}</text>`;
       } else if (showLogo) {
-        const imgSize = innerRx * 0.6;
-        textContent += `<image href="${uploadedLogoUrl}" x="${cx - imgSize / 2}" y="${cy - imgSize / 2}" width="${imgSize}" height="${imgSize}" preserveAspectRatio="xMidYMid meet"/>`;
+        const imgSize = innerRx * 0.85;
+        textContent += `<image href="${uploadedLogoUrl}" x="${cx - imgSize / 2}" y="${cy - imgSize / 2}" width="${imgSize}" height="${imgSize}" preserveAspectRatio="xMidYMid meet" image-rendering="optimizeQuality"/>`;
       } else if (showMonogram && mono) {
         const monoSize = mono.length === 1 ? 28 : mono.length === 2 ? 22 : 17;
         textContent += `<text x="${cx}" y="${cy}" font-family="${fontFamily}" font-size="${monoSize}" fill="${ink}" text-anchor="middle" dominant-baseline="central" font-weight="700" opacity="0.85">${mono}</text>`;

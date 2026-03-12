@@ -20,7 +20,7 @@ const FEATURES = [
 const STEPS = [
   { n: '01', title: 'Enter Company Details', desc: 'Company name, registration number, city, language mode.' },
   { n: '02', title: 'Choose Your Style', desc: 'Pick shape, theme, border style, typography, and density.' },
-  { n: '03', title: 'Generate Concepts', desc: 'AI generates 7 unique stamp designs for you to choose from.' },
+  { n: '03', title: 'Generate Concepts', desc: 'Smart engine generates 7 unique stamp designs for you to choose from.' },
   { n: '04', title: 'Download Your Pack', desc: 'Export SVG, PNG, JPG, PDF in multiple sizes — ready for print.' },
 ];
 

@@ -164,7 +164,7 @@ export default function StampProjectsDashboard() {
             </div>
             <h2 className="text-xl font-semibold text-[hsl(var(--foreground))]">No stamp projects yet</h2>
             <p className="text-[hsl(var(--muted-foreground))] max-w-sm mx-auto text-sm">
-              Create your first AI-generated company stamp in minutes.
+              Create your first professionally generated company stamp in minutes.
             </p>
             <Button
               onClick={() => navigate('/toolkit/stamp-generator/new')}

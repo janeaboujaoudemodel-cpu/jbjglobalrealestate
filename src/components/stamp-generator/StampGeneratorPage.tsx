@@ -1108,7 +1108,7 @@ export default function StampGeneratorPage() {
           >
             <div className="flex items-center gap-2">
               <Sparkles size={15} className="text-white"/>
-              <span className="font-bold text-sm text-white">AI Stamp Designer</span>
+              <span className="font-bold text-sm text-white">Smart Stamp Designer</span>
               <span className="text-white/60 text-[10px]">drag to move</span>
             </div>
             <div className="flex items-center gap-1.5">
