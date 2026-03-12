@@ -63,7 +63,7 @@ interface NavItem {
 /* ─── NAV ITEMS ─── */
 const NAV_ITEMS: NavItem[] = [
   // ── Highlighted Hubs ──
-  { label: "AI Tools Hub", href: "/ai-hub", icon: Cpu, highlight: true, megaMenu: 'ai-tools' },
+  
   { label: "AI Home Finder", href: "/quiz", icon: Home, highlight: true },
   { label: "List Your Property", href: "/listing-portal", icon: ClipboardCheck, highlight: true },
   { label: "Careers", href: "/join", icon: GraduationCap, highlight: true },
