@@ -230,8 +230,8 @@ const AIToolPremiumLayout = ({
             
             {/* Title with gradient colored word */}
             <h1 
-              className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
-              style={{ fontFamily: "Poppins, sans-serif" }}
+              className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight"
+              style={{ fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif", letterSpacing: "-0.02em" }}
             >
               {beforeGradient}{" "}
               <span className={`text-transparent bg-clip-text bg-gradient-to-r ${colors.gradient}`}>
