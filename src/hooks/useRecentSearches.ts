@@ -116,7 +116,10 @@ export function useRecentSearches(filterType?: RecentItemType) {
     if (!normalized) return;
 
     setItems((prev) => {
-      const filtered = prev.filter((i) => !(i.id === normalized.id && i.type === normalized.type));
+      const filtered = prev.filter((i) => !(
+        (i.id === normalized.id && i.type === normalized.type) ||
+        (i.slug === normalized.slug && i.type === normalized.type)
+      ));
       const updated: RecentItem[] = [normalized, ...filtered];
 
       // Cap per type
