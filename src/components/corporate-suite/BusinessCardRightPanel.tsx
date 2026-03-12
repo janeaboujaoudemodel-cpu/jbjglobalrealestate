@@ -654,7 +654,7 @@ export function BusinessCardRightPanel(props: BusinessCardRightPanelProps) {
                         className="h-8 text-xs flex-1"
                         onKeyDown={e => e.key === "Enter" && handleAiQrStyle()}
                       />
-                      <VoiceInputButton onTranscript={t => setQrAiPrompt(prev => prev ? `${prev} ${t}` : t)} size="sm" />
+                      <VoiceInputButton onTranscript={t => setQrAiPrompt(qrAiPrompt ? `${qrAiPrompt} ${t}` : t)} size="sm" />
                       <Button
                         size="sm"
                         onClick={handleAiQrStyle}
