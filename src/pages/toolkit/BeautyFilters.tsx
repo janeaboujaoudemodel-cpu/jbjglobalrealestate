@@ -782,8 +782,8 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                           <button key={style.id} onClick={() => { setSelectedHairStyle(style.id); simulateAI(`${style.name} hair style`); }}
                             className="flex flex-col items-center gap-1 p-2.5 rounded-xl text-xs transition-all"
                             style={{
-                              background: selectedHairStyle === style.id ? "rgba(99,102,241,0.35)" : "rgba(255,255,255,0.12)",
-                              border: `1px solid ${selectedHairStyle === style.id ? "rgba(99,102,241,0.75)" : "rgba(255,255,255,0.25)"}`,
+                              background: selectedHairStyle === style.id ? "rgba(184,148,62,0.35)" : "rgba(255,255,255,0.12)",
+                              border: `1px solid ${selectedHairStyle === style.id ? "rgba(184,148,62,0.75)" : "rgba(255,255,255,0.25)"}`,
                               color: selectedHairStyle === style.id ? I.text : "rgba(255,255,255,0.9)",
                             }}>
                             <span className="text-xl">{style.emoji}</span>
