@@ -39,7 +39,7 @@ interface BusinessCardCenterPanelProps {
   qrSize: number;
   effectiveQrColor: string;
   qrBgColor: string;
-  qrPosition: string;
+  qrPosition: QrPosition;
   qrSide: string;
   logoUrl: string;
   logoSize: number;
