@@ -593,7 +593,7 @@ export default function InvestorDashboard() {
               Build a simple view of your holdings and target allocations. You control what you add.
             </p>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+              <Card className="border border-stone-200 shadow-sm bg-white">
                 <CardContent className="p-5 text-center">
                   <Building2 className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
                   <p className="font-medium text-foreground">Owned Assets</p>
@@ -601,7 +601,7 @@ export default function InvestorDashboard() {
                 </CardContent>
               </Card>
               
-              <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+              <Card className="border border-stone-200 shadow-sm bg-white">
                 <CardContent className="p-5 text-center">
                   <Heart className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
                   <p className="font-medium text-foreground">Target Assets (Wishlist)</p>
@@ -609,7 +609,7 @@ export default function InvestorDashboard() {
                 </CardContent>
               </Card>
               
-              <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+              <Card className="border border-stone-200 shadow-sm bg-white">
                 <CardContent className="p-5 text-center">
                   <TrendingUp className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
                   <p className="font-medium text-foreground">Rental Performance Notes</p>
@@ -617,7 +617,7 @@ export default function InvestorDashboard() {
                 </CardContent>
               </Card>
               
-              <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+              <Card className="border border-stone-200 shadow-sm bg-white">
                 <CardContent className="p-5 text-center">
                   <Lock className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
                   <p className="font-medium text-foreground">Document Vault</p>
