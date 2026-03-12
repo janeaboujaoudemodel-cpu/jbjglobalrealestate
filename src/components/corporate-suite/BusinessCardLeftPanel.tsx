@@ -13,7 +13,7 @@ import { toast } from "sonner";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
 import { VoiceInputButton } from "@/components/ui/VoiceInputButton";
 import {
-  type CardData, type BilingualMode,
+  type CardData, type BilingualMode, type BilingualLanguage, type CardShape,
   BILINGUAL_LANGUAGES, TEMPLATES, CARD_SHAPES,
 } from "./businessCardTypes";
 import { CardFace } from "./BusinessCardPreview";
