@@ -399,7 +399,7 @@ const Footer = () => {
   // Productivity Tools
   const productivityLinks = [
     { href: "/spreadsheet", label: "Spreadsheet" },
-    { href: "/documents", label: "Documents" },
+    { href: "/documents", label: "Document Designer" },
     { href: "/toolkit/corporate-suite/qr-generator", label: "QR Generator" },
     { href: "/video-meeting", label: "Video Meeting" },
     { href: "/presentations", label: "Presentations" },
