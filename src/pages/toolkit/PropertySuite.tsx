@@ -1,17 +1,13 @@
 /**
- * Property Intelligence Suite - Embeds REAL existing tool pages
- * Tabs: Home Finder (Quiz) | Evaluator | Compare | Rental Index | Mortgage
- * ONLY real tool pages - no placeholders
+ * Property Intelligence Suite — Premium Champagne-Gold Design
  */
 
 import React, { lazy, Suspense } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SEOHead } from '@/components/SEOHead';
-import { Home, Calculator, Layers, BarChart3, DollarSign, ArrowLeft } from 'lucide-react';
+import { Home, Calculator, Layers, BarChart3, DollarSign, ArrowLeft, Loader2, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
 
-// Lazy load REAL existing tool PAGES
 const Quiz = lazy(() => import('@/pages/Quiz'));
 const PropertyEvaluator = lazy(() => import('@/pages/PropertyEvaluator'));
 const Compare = lazy(() => import('@/pages/Compare'));
@@ -19,10 +15,21 @@ const RentalIndex = lazy(() => import('@/pages/RentalIndex'));
 const MortgageCalculatorComponent = lazy(() => import('@/components/MortgageCalculator'));
 
 const LoadingSpinner = () => (
-  <div className="min-h-[60vh] flex items-center justify-center">
-    <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div>
+  <div className="min-h-[50vh] flex items-center justify-center" style={{ background: "linear-gradient(180deg, #FDFBF7 0%, #F5EFE3 100%)" }}>
+    <div className="flex flex-col items-center gap-3">
+      <Loader2 className="h-7 w-7 animate-spin" style={{ color: "#B8943E" }} />
+      <p className="text-xs" style={{ color: "rgba(0,0,0,0.35)" }}>Loading tool...</p>
+    </div>
   </div>
 );
+
+const tabs = [
+  { value: "finder", label: "Home Finder", shortLabel: "Finder", icon: Home },
+  { value: "evaluator", label: "Evaluator", shortLabel: "Eval", icon: Calculator },
+  { value: "compare", label: "Compare", shortLabel: "Compare", icon: Layers },
+  { value: "rental", label: "Rental Index", shortLabel: "Rental", icon: BarChart3 },
+  { value: "mortgage", label: "Mortgage", shortLabel: "Mortgage", icon: DollarSign },
+];
 
 export default function PropertySuite() {
   return (
@@ -32,112 +39,82 @@ export default function PropertySuite() {
         description="AI home finder, property valuations, comparison tools, rental index, and mortgage calculator."
       />
       
-      <div className="min-h-screen bg-black">
-        {/* Header */}
-        <div className="border-b border-gold/20 bg-gradient-to-r from-black via-zinc-900/50 to-black">
-          <div className="max-w-7xl mx-auto px-4 py-6">
-            <div className="flex items-center gap-4 mb-4">
-              <Link to="/toolkit">
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="hover:bg-zinc-800 border border-zinc-700 hover:border-zinc-600"
-                  style={{ color: '#a1a1aa', backgroundColor: 'transparent' }}
-                >
-                  <ArrowLeft className="w-4 h-4 mr-2" style={{ color: '#a1a1aa' }} />
-                  <span style={{ color: '#a1a1aa' }}>Back to Royal Tools Hub</span>
-                </Button>
-              </Link>
-            </div>
-            
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border-2 border-gold/40 flex items-center justify-center">
-                <Home className="w-7 h-7 text-gold" />
+      <div className="min-h-screen" style={{ background: "linear-gradient(180deg, #FDFBF7 0%, #EDE4D3 100%)" }}>
+        {/* ── Suite Header ── */}
+        <div style={{ background: "linear-gradient(180deg, #F5EBD7 0%, #EDE4D3 100%)", borderBottom: "1px solid rgba(184,148,62,0.25)" }}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-0">
+            {/* Back link */}
+            <Link to="/toolkit"
+              className="inline-flex items-center gap-1.5 text-xs mb-4 transition-colors group"
+              style={{ color: "rgba(0,0,0,0.4)" }}
+              onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "rgba(0,0,0,0.75)"}
+              onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "rgba(0,0,0,0.4)"}>
+              <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
+              Back to Royal Tools Hub
+            </Link>
+
+            {/* Title row */}
+            <div className="flex items-center gap-4 mb-5">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center shrink-0"
+                style={{ background: "linear-gradient(135deg, #F5EBD7, #D4C4A8)", border: "1px solid rgba(184,148,62,0.4)", boxShadow: "0 0 30px rgba(184,148,62,0.15)" }}>
+                <Home className="w-5 h-5 sm:w-6 sm:h-6" style={{ color: "#B8943E" }} />
               </div>
               <div>
-                <h1 className="text-2xl md:text-3xl font-bold text-white">
-                  Property Intelligence <span className="text-gold">Suite</span>
-                </h1>
-                <p className="text-zinc-400 text-sm">AI matching, valuations, comparison & market data</p>
+                <div className="flex items-center gap-2 mb-0.5">
+                  <h1 className="text-xl sm:text-2xl md:text-3xl font-bold leading-tight" style={{ color: "#1A1A1A" }}>
+                    Property Intelligence <span style={{ color: "#B8943E" }}>Suite</span>
+                  </h1>
+                  <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold"
+                    style={{ background: "rgba(184,148,62,0.12)", border: "1px solid rgba(184,148,62,0.3)", color: "#B8943E" }}>
+                    <Sparkles className="w-2.5 h-2.5" /> AI Powered
+                  </span>
+                </div>
+                <p className="text-xs sm:text-sm mt-0.5 hidden sm:block" style={{ color: "rgba(0,0,0,0.45)" }}>
+                  AI matching · Valuations · Comparison · Market data
+                </p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Tabs - 5 tabs with REAL tools */}
-        <Tabs defaultValue="finder" className="flex flex-col">
-          <div className="border-b border-gold/20 bg-zinc-900/50">
-            <div className="max-w-7xl mx-auto px-4">
-              <TabsList className="w-full justify-start rounded-none bg-transparent p-0 h-auto gap-0 overflow-x-auto">
-                <TabsTrigger
-                  value="finder"
-                  className="relative px-4 md:px-6 py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold text-zinc-400 hover:text-white transition-colors flex items-center gap-2 whitespace-nowrap"
-                >
-                  <Home className="w-4 h-4" />
-                  <span className="hidden sm:inline">Home Finder</span>
-                </TabsTrigger>
-                <TabsTrigger
-                  value="evaluator"
-                  className="relative px-4 md:px-6 py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold text-zinc-400 hover:text-white transition-colors flex items-center gap-2 whitespace-nowrap"
-                >
-                  <Calculator className="w-4 h-4" />
-                  <span className="hidden sm:inline">Evaluator</span>
-                </TabsTrigger>
-                <TabsTrigger
-                  value="compare"
-                  className="relative px-4 md:px-6 py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold text-zinc-400 hover:text-white transition-colors flex items-center gap-2 whitespace-nowrap"
-                >
-                  <Layers className="w-4 h-4" />
-                  <span className="hidden sm:inline">Compare</span>
-                </TabsTrigger>
-                <TabsTrigger
-                  value="rental"
-                  className="relative px-4 md:px-6 py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold text-zinc-400 hover:text-white transition-colors flex items-center gap-2 whitespace-nowrap"
-                >
-                  <BarChart3 className="w-4 h-4" />
-                  <span className="hidden sm:inline">Rental Index</span>
-                </TabsTrigger>
-                <TabsTrigger
-                  value="mortgage"
-                  className="relative px-4 md:px-6 py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold text-zinc-400 hover:text-white transition-colors flex items-center gap-2 whitespace-nowrap"
-                >
-                  <DollarSign className="w-4 h-4" />
-                  <span className="hidden sm:inline">Mortgage</span>
-                </TabsTrigger>
+        {/* ── Tabs ── */}
+        <Tabs defaultValue="finder" className="w-full">
+          {/* Tab Bar */}
+          <div style={{ background: "rgba(245,235,215,0.5)", borderBottom: "1px solid rgba(184,148,62,0.15)" }}>
+            <div className="max-w-7xl mx-auto px-2 sm:px-6">
+              <TabsList className="w-full justify-start rounded-none bg-transparent p-0 h-auto gap-0 border-0 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
+                {tabs.map(({ value, label, shortLabel, icon: Icon }) => (
+                  <TabsTrigger key={value} value={value}
+                    className="relative flex items-center gap-1.5 px-3 sm:px-5 py-3.5 rounded-none border-0 bg-transparent whitespace-nowrap text-xs sm:text-sm font-medium transition-all outline-none
+                      data-[state=inactive]:text-black/40 data-[state=active]:text-[#B8943E]
+                      after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:rounded-full after:transition-all
+                      data-[state=inactive]:after:bg-transparent data-[state=active]:after:bg-[#B8943E]"
+                  >
+                    <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+                    <span className="sm:hidden">{shortLabel}</span>
+                    <span className="hidden sm:inline">{label}</span>
+                  </TabsTrigger>
+                ))}
               </TabsList>
             </div>
           </div>
 
-          {/* Tab Content - REAL TOOL PAGES embedded */}
+          {/* Tab Content */}
           <div className="flex-1 overflow-auto">
             <TabsContent value="finder" className="mt-0">
-              <Suspense fallback={<LoadingSpinner />}>
-                <Quiz />
-              </Suspense>
+              <Suspense fallback={<LoadingSpinner />}><Quiz /></Suspense>
             </TabsContent>
-
             <TabsContent value="evaluator" className="mt-0">
-              <Suspense fallback={<LoadingSpinner />}>
-                <PropertyEvaluator />
-              </Suspense>
+              <Suspense fallback={<LoadingSpinner />}><PropertyEvaluator /></Suspense>
             </TabsContent>
-
             <TabsContent value="compare" className="mt-0">
-              <Suspense fallback={<LoadingSpinner />}>
-                <Compare />
-              </Suspense>
+              <Suspense fallback={<LoadingSpinner />}><Compare /></Suspense>
             </TabsContent>
-
             <TabsContent value="rental" className="mt-0">
-              <Suspense fallback={<LoadingSpinner />}>
-                <RentalIndex />
-              </Suspense>
+              <Suspense fallback={<LoadingSpinner />}><RentalIndex /></Suspense>
             </TabsContent>
-
             <TabsContent value="mortgage" className="mt-0">
-              <Suspense fallback={<LoadingSpinner />}>
-                <MortgageCalculatorComponent />
-              </Suspense>
+              <Suspense fallback={<LoadingSpinner />}><MortgageCalculatorComponent /></Suspense>
             </TabsContent>
           </div>
         </Tabs>
