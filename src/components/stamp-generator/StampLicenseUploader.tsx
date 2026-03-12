@@ -130,7 +130,7 @@ export function StampLicenseUploader({ onExtracted }: Props) {
           <Sparkles size={15} className="text-[hsl(var(--gold))]"/>
         </div>
         <div>
-          <p className="font-semibold text-sm text-[hsl(var(--foreground))]">AI Auto-Fill from Trade License</p>
+          <p className="font-semibold text-sm text-[hsl(var(--foreground))]">Smart Auto-Fill from Trade License</p>
           <p className="text-xs text-[hsl(var(--muted-foreground))]">Upload a trade license or any business document to auto-extract company details</p>
         </div>
       </div>

@@ -19188,6 +19188,7 @@ export type Database = {
           arabic_city: string | null
           arabic_company_name: string | null
           border_style: string
+          business_type: string | null
           city_optional: string | null
           company_name: string
           country_optional: string | null
@@ -19197,11 +19198,16 @@ export type Database = {
           icon_style: string
           id: string
           language_mode: string
+          language_reversed: boolean | null
+          layout_json: Json | null
+          location_text_mode: string | null
           monogram_text: string | null
           phone_optional: string | null
           project_name: string
           registration_number_optional: string | null
           selected_design_id: string | null
+          show_license_number: boolean | null
+          show_location: boolean | null
           stamp_type: string
           style_theme: string
           trade_name_optional: string | null
@@ -19217,6 +19223,7 @@ export type Database = {
           arabic_city?: string | null
           arabic_company_name?: string | null
           border_style?: string
+          business_type?: string | null
           city_optional?: string | null
           company_name: string
           country_optional?: string | null
@@ -19226,11 +19233,16 @@ export type Database = {
           icon_style?: string
           id?: string
           language_mode?: string
+          language_reversed?: boolean | null
+          layout_json?: Json | null
+          location_text_mode?: string | null
           monogram_text?: string | null
           phone_optional?: string | null
           project_name?: string
           registration_number_optional?: string | null
           selected_design_id?: string | null
+          show_license_number?: boolean | null
+          show_location?: boolean | null
           stamp_type?: string
           style_theme?: string
           trade_name_optional?: string | null
@@ -19246,6 +19258,7 @@ export type Database = {
           arabic_city?: string | null
           arabic_company_name?: string | null
           border_style?: string
+          business_type?: string | null
           city_optional?: string | null
           company_name?: string
           country_optional?: string | null
@@ -19255,11 +19268,16 @@ export type Database = {
           icon_style?: string
           id?: string
           language_mode?: string
+          language_reversed?: boolean | null
+          layout_json?: Json | null
+          location_text_mode?: string | null
           monogram_text?: string | null
           phone_optional?: string | null
           project_name?: string
           registration_number_optional?: string | null
           selected_design_id?: string | null
+          show_license_number?: boolean | null
+          show_location?: boolean | null
           stamp_type?: string
           style_theme?: string
           trade_name_optional?: string | null

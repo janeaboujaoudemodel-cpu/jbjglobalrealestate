@@ -7,8 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { Stamp, Building2, Palette, Image, Wand2, Check, Type, Upload, X, Globe, FileText, ChevronLeft, ChevronRight } from 'lucide-react';
-import { StudioShell, type StudioSection } from '@/components/ui/StudioShell';
+import { Stamp, Building2, Palette, Image, Wand2, Check, Type, Upload, X, Globe, FileText, ChevronLeft, ChevronRight, RotateCcw, MapPin } from 'lucide-react';
 import { StampLicenseUploader } from '@/components/stamp-generator/StampLicenseUploader';
 import { LiveStampPreview } from '@/components/stamp-generator/LiveStampPreview';
 
@@ -47,9 +46,7 @@ function ShapePreview({ type, selected }: { type: StampType; selected: boolean }
   const common = `flex items-center justify-center border-2 text-[7px] font-bold tracking-widest`;
   const style = { borderColor: color, color };
   if (type === 'ROUND')     return <div className={`${common} rounded-full w-12 h-12`} style={style}>JBJ</div>;
-  // True oval: wider than tall, using ellipse border-radius
   if (type === 'OVAL')      return <div className={`${common} w-20 h-12`} style={{ ...style, borderRadius: '50% / 50%' }}>JBJ</div>;
-  // Rectangle: clearly wider than square
   if (type === 'RECTANGLE') return <div className={`${common} rounded-md w-24 h-10`} style={style}>JBJ</div>;
   if (type === 'SQUARE')    return <div className={`${common} rounded-lg w-12 h-12`}  style={style}>JBJ</div>;
   return null;
@@ -65,14 +62,16 @@ function BorderPreview({ type, selected }: { type: BorderStyle; selected: boolea
       <div className="w-7 h-7 rounded-full border" style={{ borderColor: gold }}/>
     </div>;
   if (type === 'RING')
-    return <div className={`${size} rounded-full`} style={{ background: `radial-gradient(circle, transparent 38%, ${gold} 38%, ${gold} 50%, transparent 50%)` }}/>;
+    return <div className={`${size} rounded-full border-[3px] flex items-center justify-center`} style={{ borderColor: gold }}>
+      <div className="w-6 h-6 rounded-full border-[2px]" style={{ borderColor: gold }}/>
+    </div>;
   if (type === 'DOTTED')
     return <div className={`${size} rounded-full border-2 border-dotted`} style={{ borderColor: gold }}/>;
   if (type === 'ROPE')
     return <div className={`${size} rounded-full border-2 border-dashed`} style={{ borderColor: gold }}/>;
   if (type === 'CUSTOM')
     return <div className={`${size} rounded-full border-4 flex items-center justify-center`} style={{ borderColor: gold }}>
-      <div className="w-6 h-6 rounded-full border-2" style={{ borderColor: gold }}/>
+      <div className="w-5 h-5 rounded-full border-2 border-dotted" style={{ borderColor: gold }}/>
     </div>;
   return null;
 }
@@ -118,6 +117,12 @@ function ThemePreview({ type, selected }: { type: StyleTheme; selected: boolean 
   );
 }
 
+// Business type options
+const BUSINESS_TYPES = [
+  'General Trading', 'Real Estate', 'Technology', 'Consulting', 'Construction',
+  'Healthcare', 'Education', 'Food & Beverage', 'Tourism', 'Finance', 'Legal', 'Other'
+];
+
 // ── OptionButton (generic) ─────────────────────────────────────────────────
 const OptionButton = ({ selected, onClick, children, className = '' }: {
   selected: boolean; onClick: () => void; children: React.ReactNode; className?: string;
@@ -160,6 +165,8 @@ interface FormState {
   uploaded_logo_url: string;
   language_reversed: boolean;
   show_license_number: boolean;
+  show_location: boolean;
+  business_type: string;
 }
 
 const STEPS = ['Company Details', 'Stamp Style', 'Logo / Monogram'];
@@ -194,7 +201,7 @@ export default function StampProjectWizard() {
       city_optional: '',
       country_optional: 'UAE',
       arabic_city: '',
-      language_mode: 'EN' as LanguageMode,
+      language_mode: 'BILINGUAL' as LanguageMode,
       stamp_type: 'ROUND' as StampType,
       style_theme: 'CLASSIC' as StyleTheme,
       border_style: 'DOUBLE' as BorderStyle,
@@ -203,8 +210,10 @@ export default function StampProjectWizard() {
       icon_style: 'MONOGRAM' as IconStyle,
       monogram_text: '',
       uploaded_logo_url: '',
-      language_reversed: false,
+      language_reversed: true, // AR top / EN bottom default
       show_license_number: true,
+      show_location: true,
+      business_type: '',
     };
   });
 
@@ -246,11 +255,19 @@ export default function StampProjectWizard() {
         icon_style: form.icon_style,
         monogram_text: form.monogram_text || null,
         uploaded_logo_url: form.uploaded_logo_url || null,
-      })
+        language_reversed: form.language_reversed,
+        show_license_number: form.show_license_number,
+        show_location: form.show_location,
+        business_type: form.business_type || null,
+      } as any)
       .select()
       .single();
     setSaving(false);
-    if (error) { toast.error('Failed to create project'); return; }
+    if (error) { 
+      console.error('Stamp project creation error:', error);
+      toast.error(`Failed to create project: ${error.message}`); 
+      return; 
+    }
     // Clear session persistence after successful creation
     try { sessionStorage.removeItem('stamp-wizard-form'); sessionStorage.removeItem('stamp-wizard-step'); } catch { /* ignore */ }
     toast.success('Project created!');
@@ -312,7 +329,7 @@ export default function StampProjectWizard() {
                 <h2 className="font-semibold text-[hsl(var(--foreground))]">Company Details</h2>
               </div>
 
-              {/* AI Trade License Uploader */}
+              {/* Trade License Uploader */}
               <StampLicenseUploader
                 onExtracted={(data) => {
                   if (data.company_name) set('company_name', data.company_name);
@@ -323,35 +340,26 @@ export default function StampProjectWizard() {
                   if (data.registration_number) set('registration_number_optional', data.registration_number);
                   const city = data.city || '';
                   if (city) set('city_optional', city);
-                  // Map English city names to Arabic — never put English in the Arabic field
                   const ARABIC_CITY_MAP: Record<string, string> = {
-                    'dubai': 'دبي',
-                    'abu dhabi': 'أبوظبي',
-                    'sharjah': 'الشارقة',
-                    'ajman': 'عجمان',
-                    'ras al khaimah': 'رأس الخيمة',
-                    'fujairah': 'الفجيرة',
-                    'umm al quwain': 'أم القيوين',
+                    'dubai': 'دبي', 'abu dhabi': 'أبوظبي', 'sharjah': 'الشارقة',
+                    'ajman': 'عجمان', 'ras al khaimah': 'رأس الخيمة',
+                    'fujairah': 'الفجيرة', 'umm al quwain': 'أم القيوين',
                   };
-                  // Always prefer mapped Arabic city name; never let English leak into Arabic field
                   const mappedArabic = city ? ARABIC_CITY_MAP[city.toLowerCase()] : undefined;
-                  // If AI returned arabic_city, check if it contains English — if so, override with map
                   let arabicCityValue = data.arabic_city || '';
                   if (arabicCityValue && /[a-zA-Z]/.test(arabicCityValue) && mappedArabic) {
                     arabicCityValue = mappedArabic + '، الإمارات العربية المتحدة';
                   } else if (!arabicCityValue && mappedArabic) {
                     arabicCityValue = mappedArabic + '، الإمارات العربية المتحدة';
                   }
-                  const arabicCity = arabicCityValue;
-                  if (arabicCity) set('arabic_city', arabicCity);
-                  // Smart country correction: don't confuse owner nationality with company country
+                  if (arabicCityValue) set('arabic_city', arabicCityValue);
                   const rawCountry = data.country || '';
                   const correctedCountry = correctCountry(rawCountry, city);
                   set('country_optional', correctedCountry || 'UAE');
-                  // Normalize phone to international format with + prefix
                   if (data.phone) set('phone_optional', normalizePhone(data.phone));
-                  // Default email to uppercase
                   if (data.email) set('email_optional', data.email.toUpperCase());
+                  // Auto-detect business type
+                  if ((data as any).business_type) set('business_type', (data as any).business_type);
                 }}
               />
 
@@ -405,6 +413,18 @@ export default function StampProjectWizard() {
                 </div>
               </div>
 
+              {/* Business Type */}
+              <div>
+                <Label className="text-xs font-medium mb-2 block">Business Type</Label>
+                <div className="flex gap-2 flex-wrap">
+                  {BUSINESS_TYPES.map(bt => (
+                    <OptionButton key={bt} selected={form.business_type === bt} onClick={() => set('business_type', bt)}>
+                      {bt}
+                    </OptionButton>
+                  ))}
+                </div>
+              </div>
+
               <div>
                 <Label className="text-xs font-medium mb-2 block">Language Mode</Label>
                 <div className="flex gap-2 flex-wrap">
@@ -438,17 +458,36 @@ export default function StampProjectWizard() {
                           : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'
                       }`}
                     >
-                      <Globe size={14} className={form.language_reversed ? 'text-[hsl(var(--gold-dark))]' : 'text-[hsl(var(--muted-foreground))]'}/>
+                      <RotateCcw size={14} className={form.language_reversed ? 'text-[hsl(var(--gold-dark))]' : 'text-[hsl(var(--muted-foreground))]'}/>
                       <div className="text-left">
-                        <p className="text-[11px] font-semibold text-[hsl(var(--foreground))]">Reverse Languages</p>
+                        <p className="text-[11px] font-semibold text-[hsl(var(--foreground))]">Language Order</p>
                         <p className="text-[9px] text-[hsl(var(--muted-foreground))]">
-                          {form.language_reversed ? 'Arabic on top · English on bottom' : 'English on top · Arabic on bottom'}
+                          {form.language_reversed ? 'Arabic on top · English on bottom (Standard)' : 'English on top · Arabic on bottom'}
                         </p>
                       </div>
                     </button>
                   )}
                 </div>
               )}
+
+              {/* Show/hide location toggle */}
+              <button
+                type="button"
+                onClick={() => set('show_location', !form.show_location)}
+                className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl border-2 transition-all ${
+                  form.show_location
+                    ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)]'
+                    : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'
+                }`}
+              >
+                <MapPin size={14} className={form.show_location ? 'text-[hsl(var(--gold-dark))]' : 'text-[hsl(var(--muted-foreground))]'}/>
+                <div className="text-left">
+                  <p className="text-[11px] font-semibold text-[hsl(var(--foreground))]">Show Location on Stamp</p>
+                  <p className="text-[9px] text-[hsl(var(--muted-foreground))]">
+                    {form.show_location ? `Showing: ${form.city_optional || 'Dubai'}, ${form.country_optional || 'UAE'}` : 'Location hidden from stamp'}
+                  </p>
+                </div>
+              </button>
 
               {/* Show/hide license number toggle */}
               {form.registration_number_optional && (
@@ -667,6 +706,16 @@ export default function StampProjectWizard() {
                     onChange={e => {
                       const file = e.target.files?.[0];
                       if (!file) return;
+                      // Warn about low quality
+                      if (file.type !== 'image/svg+xml') {
+                        const img = new window.Image();
+                        img.onload = () => {
+                          if (img.width < 200 || img.height < 200) {
+                            toast.warning('Low resolution logo detected. For best quality, use an SVG or image at least 512×512px.', { duration: 5000 });
+                          }
+                        };
+                        img.src = URL.createObjectURL(file);
+                      }
                       const reader = new FileReader();
                       reader.onload = ev => {
                         const dataUrl = ev.target?.result as string;
@@ -678,7 +727,7 @@ export default function StampProjectWizard() {
                   />
                   {logoPreview || form.uploaded_logo_url ? (
                     <div className="relative inline-block">
-                      <div className="w-28 h-28 rounded-2xl border-2 border-[hsl(var(--gold)/0.5)] overflow-hidden bg-[hsl(var(--pearl-1))] flex items-center justify-center">
+                      <div className="w-32 h-32 rounded-2xl border-2 border-[hsl(var(--gold)/0.5)] overflow-hidden bg-[hsl(var(--pearl-1))] flex items-center justify-center">
                         <img
                           src={logoPreview || form.uploaded_logo_url}
                           alt="Logo preview"
@@ -709,13 +758,13 @@ export default function StampProjectWizard() {
                       <Upload size={28} className="text-[hsl(var(--gold))]"/>
                       <div className="text-center">
                         <p className="font-medium text-sm text-[hsl(var(--foreground))]">Click to upload logo</p>
-                        <p className="text-xs text-[hsl(var(--muted-foreground))] mt-0.5">PNG, JPG, SVG, WEBP — transparent PNG recommended</p>
+                        <p className="text-xs text-[hsl(var(--muted-foreground))] mt-0.5">PNG, JPG, SVG, WEBP — SVG or 512×512+ PNG recommended for best quality</p>
                       </div>
                     </button>
                   )}
                   <div className="bg-[hsl(var(--gold)/0.06)] border border-[hsl(var(--gold)/0.2)] rounded-xl p-3">
                     <p className="text-xs text-[hsl(var(--muted-foreground))]">
-                      <strong className="text-[hsl(var(--gold-dark))]">Bilingual Stamp Preview:</strong> When Bilingual mode is selected, your logo appears in the center with English text arcing the top half and Arabic text arcing the bottom half of the stamp.
+                      <strong className="text-[hsl(var(--gold-dark))]">Bilingual Stamp Preview:</strong> When Bilingual mode is selected, your logo appears in the center with Arabic text arcing the top half and English text arcing the bottom half of the stamp.
                     </p>
                   </div>
                 </div>
@@ -723,7 +772,7 @@ export default function StampProjectWizard() {
 
               <div className="bg-[hsl(var(--pearl-1))] rounded-xl p-4 border border-[hsl(var(--border))]">
                 <p className="text-xs text-[hsl(var(--muted-foreground))]">
-                  <strong>Ready to generate!</strong> Click "Generate Stamp Concepts" to create 7 unique AI-curated stamp designs based on your settings.
+                  <strong>Ready to generate!</strong> Click "Generate Stamp Concepts" to create unique stamp designs based on your settings.
                 </p>
               </div>
             </div>
@@ -764,7 +813,7 @@ export default function StampProjectWizard() {
         </div>{/* end form column */}
 
         {/* ── Right: Sticky live preview column (desktop only) ── */}
-        <div className="hidden lg:flex flex-col items-center gap-4 w-[240px] flex-shrink-0">
+        <div className="hidden lg:flex flex-col items-center gap-4 w-[260px] flex-shrink-0">
           <div className="sticky top-[calc(8rem+4rem)] flex flex-col items-center gap-4">
             {/* Preview card */}
             <div className="bg-white rounded-2xl border border-[hsl(var(--gold)/0.3)] shadow-[0_8px_32px_hsl(var(--gold)/0.1)] p-5 flex flex-col items-center gap-3 w-full">
@@ -785,7 +834,7 @@ export default function StampProjectWizard() {
                 languageMode={form.language_mode}
                 languageReversed={form.language_reversed}
                 showLicenseNumber={form.show_license_number}
-                size={200}
+                size={220}
               />
               <p className="text-[10px] text-[hsl(var(--muted-foreground))] text-center leading-relaxed">
                 Updates live as you fill in details
@@ -795,7 +844,7 @@ export default function StampProjectWizard() {
             {/* Step tip */}
             <div className="bg-[hsl(var(--gold)/0.06)] border border-[hsl(var(--gold)/0.2)] rounded-xl p-3 w-full">
               <p className="text-[10px] text-[hsl(var(--muted-foreground))] leading-relaxed">
-                {step === 0 && <>Type your company name to see it appear on the stamp. Upload a trade license for instant AI auto-fill.</>}
+                {step === 0 && <>Type your company name to see it appear on the stamp. Upload a trade license for instant auto-fill.</>}
                 {step === 1 && <>Try different shapes, themes and borders — the preview updates instantly.</>}
                 {step === 2 && <>Choose a monogram or upload your logo to see it centered on the stamp.</>}
               </p>

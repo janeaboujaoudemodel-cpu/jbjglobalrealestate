@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 
 const FEATURES = [
-  { icon: Wand2, title: 'AI-Curated Designs', desc: 'Get 7 unique stamp concepts tailored to your brand style, shape, and language preferences.' },
+  { icon: Wand2, title: 'Smart-Curated Designs', desc: 'Get 7 unique stamp concepts tailored to your brand style, shape, and language preferences.' },
   { icon: Globe, title: 'Bilingual Support', desc: 'Full Arabic, English, or bilingual stamp layouts with proper RTL text handling.' },
   { icon: Layers, title: 'Multiple Shapes', desc: 'Round, oval, rectangle, square — with classic, modern, luxury, vintage and more themes.' },
   { icon: Download, title: 'Complete Export Pack', desc: 'Download SVG (vector), PNG (transparent), JPG, and PDF in multiple sizes and DPIs.' },
@@ -51,13 +51,13 @@ export default function StampGeneratorLanding() {
       <section className="relative overflow-hidden bg-gradient-to-br from-[hsl(var(--pearl-1))] via-[hsl(40,33%,98%)] to-[hsl(var(--champagne-1))] py-20 px-6">
         <div className="max-w-4xl mx-auto text-center space-y-6">
           <Badge className="bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold-dark))] border border-[hsl(var(--gold)/0.3)] px-3 py-1">
-            <Stamp size={12} className="mr-1.5"/> AI-Powered Tool
+            <Stamp size={12} className="mr-1.5"/> Professional Tool
           </Badge>
           <h1 className="text-4xl sm:text-5xl font-bold text-[hsl(var(--foreground))] leading-tight">
-            AI Company Stamp Generator
+            Company Stamp Generator
           </h1>
           <p className="text-lg text-[hsl(var(--muted-foreground))] max-w-xl mx-auto">
-            Design professional company stamps in minutes. AI-curated concepts, multiple styles, bilingual support, and a complete export pack.
+            Design professional company stamps in minutes. Smart-curated concepts, multiple styles, bilingual support, and a complete export pack.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button
