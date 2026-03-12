@@ -223,10 +223,10 @@ export default function BrochureGeneratorPage() {
     try {
       const { data } = await supabase
         .from('project_images')
-        .select('id, project_id, image_url, image_type')
+        .select('id, project_id, image_url')
         .eq('project_id', projectId)
         .limit(20);
-      if (data) setProjectImages(data);
+      if (data) setProjectImages(data as any);
     } catch { /* silent */ }
     setLoadingProjectImages(false);
   };
