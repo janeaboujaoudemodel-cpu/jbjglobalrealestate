@@ -612,7 +612,7 @@ export default function DocumentFieldPlacer({
                       const recipient = recipients.find((r) => r.id === field.recipientId);
                       const fieldConfig = fieldTypes.find((f) => f.type === field.type);
                       const Icon = fieldConfig?.icon || PenTool;
-                      const style = getRecipientStyle(field.recipientId);
+                      const style = getRecipientStyle(recipients, field.recipientId);
                       const isOnCurrentPage = field.pageNumber === currentPage;
 
                       return (
