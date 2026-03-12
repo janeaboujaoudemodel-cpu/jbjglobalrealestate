@@ -196,6 +196,16 @@ export default function StampGeneratorPage() {
     setLocalMonogramText(data.monogram_text || data.company_name?.slice(0, 2)?.toUpperCase() || '');
     setLocalLogoUrl((data as any).uploaded_logo_url || '');
 
+    // Update studio layers from project data
+    setStudioLayers(createDefaultLayers({
+      languageMode: data.language_mode || 'BILINGUAL',
+      iconStyle: data.icon_style || 'MONOGRAM',
+      density: data.density || 3,
+      registrationNumber: data.registration_number_optional,
+      showLicenseNumber: data.show_license_number,
+      city: data.city_optional,
+    }));
+
     const isFresh = new URLSearchParams(location.search).get('fresh') === '1';
 
     const { data: existing } = await supabase
