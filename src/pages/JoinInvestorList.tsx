@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, RotateCcw, Save, FilePlus, Clock, Shield, TrendingUp, Building2, Users, CheckCircle2 } from "lucide-react";
+import { ArrowRight, Shield, TrendingUp, Building2, Users, CheckCircle2 } from "lucide-react";
+import { FormDraftBar } from "@/components/shared/FormDraftBar";
 import { useNavigate } from "react-router-dom";
 import SEOHead from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
