@@ -118,6 +118,38 @@ const DeveloperPortal = () => {
     enabled: !!user,
   });
 
+  // Fetch user's tasks (assigned to them)
+  const { data: myTasks } = useQuery({
+    queryKey: ["dev-portal-tasks", user?.id],
+    queryFn: async () => {
+      if (!user) return [];
+      const { data } = await supabase
+        .from('admin_tasks')
+        .select('id, title, description, status, priority, due_date, created_at, category')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(50);
+      return data || [];
+    },
+    enabled: !!user,
+  });
+
+  // Fetch agreements (e-signature envelopes where user is a signer)
+  const { data: myAgreements } = useQuery({
+    queryKey: ["dev-portal-agreements", user?.email],
+    queryFn: async () => {
+      if (!user?.email) return [];
+      const { data } = await (supabase
+        .from('e_signature_envelopes') as any)
+        .select('id, title, status, created_at, updated_at')
+        .or(`sender_id.eq.${user.id},signers.cs.[{"email":"${user.email}"}]`)
+        .order('created_at', { ascending: false })
+        .limit(50);
+      return data || [];
+    },
+    enabled: !!user?.email,
+  });
+
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
