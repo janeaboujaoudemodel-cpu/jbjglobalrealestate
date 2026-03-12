@@ -3879,6 +3879,49 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
       </div>
     </div>
 
+      {/* Batch Print Dialog */}
+      <Dialog open={batchPrintOpen} onOpenChange={setBatchPrintOpen}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Printer size={16} className="text-[hsl(var(--gold))]" />
+              Batch Print Layout
+            </DialogTitle>
+            <DialogDescription>
+              Print multiple cards on a single A4 sheet for professional cutting.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">
+                Cards per page: {batchPrintCount}
+              </Label>
+              <Slider
+                min={2} max={10} step={2}
+                value={[batchPrintCount]}
+                onValueChange={([v]) => setBatchPrintCount(v)}
+              />
+              <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-1">
+                Standard: 8 cards per A4 (2×4 grid)
+              </p>
+            </div>
+            <div className="rounded-xl bg-[hsl(var(--muted))] p-3 text-[10px] text-[hsl(var(--muted-foreground))] space-y-1">
+              <p className="font-semibold text-[hsl(var(--foreground))]">📐 Print Tips</p>
+              <p>• Use thick cardstock (300gsm+) for professional results</p>
+              <p>• Print at 100% scale — do not "Fit to page"</p>
+              <p>• Cut along the borders with a paper trimmer</p>
+            </div>
+            <Button
+              onClick={handleBatchPrint}
+              className="w-full gap-2 font-semibold text-white"
+              style={{ background: "linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-dark)))" }}
+            >
+              <Printer size={14} /> Print {batchPrintCount} Cards
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       {/* NFC Programming Guide Modal */}
       <Dialog open={nfcGuideOpen} onOpenChange={setNfcGuideOpen}>
         <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
