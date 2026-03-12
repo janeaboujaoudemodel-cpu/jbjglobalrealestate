@@ -72,8 +72,11 @@ Return ONLY a valid JSON object with these exact keys (omit any key where the in
   "country": "...",
   "phone": "...",
   "email": "...",
-  "website": "..."
+  "website": "...",
+  "business_type": "..."
 }
+
+For business_type, identify the primary business activity from the license (e.g. "Real Estate", "General Trading", "Technology", "Consulting", "Construction", "Healthcare", "Education", "Food & Beverage", "Tourism", "Finance", "Legal"). If multiple activities, pick the primary one.
 
 Rules:
 - Return ONLY the JSON object. No markdown, no explanation, no code fences.
