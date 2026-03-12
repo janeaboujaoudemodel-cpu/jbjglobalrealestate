@@ -51,10 +51,10 @@ export default function StampGeneratorLanding() {
       <section className="relative overflow-hidden bg-gradient-to-br from-[hsl(var(--pearl-1))] via-[hsl(40,33%,98%)] to-[hsl(var(--champagne-1))] py-20 px-6">
         <div className="max-w-4xl mx-auto text-center space-y-6">
           <Badge className="bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold-dark))] border border-[hsl(var(--gold)/0.3)] px-3 py-1">
-            <Stamp size={12} className="mr-1.5"/> AI-Powered Tool
+            <Stamp size={12} className="mr-1.5"/> Professional Tool
           </Badge>
           <h1 className="text-4xl sm:text-5xl font-bold text-[hsl(var(--foreground))] leading-tight">
-            AI Company Stamp Generator
+            Company Stamp Generator
           </h1>
           <p className="text-lg text-[hsl(var(--muted-foreground))] max-w-xl mx-auto">
             Design professional company stamps in minutes. AI-curated concepts, multiple styles, bilingual support, and a complete export pack.
