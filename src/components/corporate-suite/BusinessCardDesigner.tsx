@@ -1555,6 +1555,20 @@ export default function BusinessCardDesigner() {
   // Trade license auto-fill
   const [tradeLicenseOpen, setTradeLicenseOpen] = useState(false);
 
+  // Load saved designs
+  const [loadSavedOpen, setLoadSavedOpen] = useState(false);
+  const [savedDesigns, setSavedDesigns] = useState<{ id: string; name: string; created_at: string; metadata: any }[]>([]);
+  const [isLoadingSaved, setIsLoadingSaved] = useState(false);
+  const [isDeletingSaved, setIsDeletingSaved] = useState<string | null>(null);
+
+  // PNG export
+  const cardPreviewRef = useRef<HTMLDivElement>(null);
+  const [isExportingPng, setIsExportingPng] = useState(false);
+
+  // Batch print
+  const [batchPrintOpen, setBatchPrintOpen] = useState(false);
+  const [batchPrintCount, setBatchPrintCount] = useState(8);
+
   const [data, setData] = useState<CardData>({
     name: "", title: "", company: "", phone: "", email: "", website: "", address: "",
   });
