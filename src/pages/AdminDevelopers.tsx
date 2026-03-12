@@ -231,7 +231,10 @@ const AdminDevelopers = () => {
       email: rep.email || "",
       whatsapp_number: rep.whatsapp_number || "",
       is_primary: rep.is_primary,
-      notes: rep.notes || ""
+      notes: rep.notes || "",
+      nationality: rep.nationality || "",
+      gender: rep.gender || "",
+      years_in_real_estate: rep.years_in_real_estate?.toString() || "",
     });
     setIsRepDialogOpen(true);
   };
