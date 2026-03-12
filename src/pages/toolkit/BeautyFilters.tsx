@@ -515,7 +515,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             {/* Tab bar */}
             <TabsList className="w-full justify-start rounded-2xl bg-transparent p-0 h-auto gap-1 border-0 overflow-x-auto mb-6 flex-wrap"
-              style={{ scrollbarWidth: "none", background: "rgba(99,102,241,0.04)", border: `1px solid ${I.border}`, padding: "6px" }}>
+              style={{ scrollbarWidth: "none", background: "rgba(184,148,62,0.04)", border: `1px solid ${I.border}`, padding: "6px" }}>
               {[
                 { value: 'edit', label: 'Edit & Filters', icon: Sliders },
                 { value: 'face', label: 'Face & Beauty', icon: Smile },
