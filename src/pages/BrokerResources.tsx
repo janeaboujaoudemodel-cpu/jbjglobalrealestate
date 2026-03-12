@@ -374,15 +374,14 @@ const BrokerResources = () => {
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </Link>
-              <Link to="/contact">
-                <Button 
-                  size="lg"
-                  variant="outline"
-                  className="border-gold/50 text-white hover:bg-gold/10 px-8 py-6 text-base"
-                >
-                  Request Broker Support
-                </Button>
-              </Link>
+              <Button 
+                size="lg"
+                variant="outline"
+                className="border-gold/50 text-white hover:bg-gold/10 px-8 py-6 text-base"
+                asChild
+              >
+                <Link to="/contact">Request Broker Support</Link>
+              </Button>
             </motion.div>
           </motion.div>
         </div>

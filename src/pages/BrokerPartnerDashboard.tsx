@@ -397,11 +397,9 @@ const BrokerPartnerDashboard = () => {
                     <p className="text-sm text-zinc-400 mb-4">
                       Interested in deeper collaboration? Contact our partnership team.
                     </p>
-                    <Link to="/contact?type=partnership">
-                      <Button className="w-full bg-purple-600 hover:bg-purple-700">
-                        Contact Partnerships
-                      </Button>
-                    </Link>
+                    <Button className="w-full bg-purple-600 hover:bg-purple-700" asChild>
+                      <Link to="/contact?type=partnership">Contact Partnerships</Link>
+                    </Button>
                   </CardContent>
                 </Card>
               </motion.div>

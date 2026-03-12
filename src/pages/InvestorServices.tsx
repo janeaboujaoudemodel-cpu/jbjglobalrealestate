@@ -219,12 +219,12 @@ const InvestorServices = () => {
                   <Phone className="w-4 h-4" />
                   Call Now
                 </Button>
-                <Link to="/contact">
-                  <Button variant="outline" className="border-zinc-700 text-zinc-300 hover:bg-zinc-800 px-6 h-11 rounded-lg gap-2">
+                <Button variant="outline" className="border-zinc-700 text-zinc-300 hover:bg-zinc-800 px-6 h-11 rounded-lg gap-2" asChild>
+                  <Link to="/contact">
                     Book Consultation
                     <ArrowRight className="w-4 h-4" />
-                  </Button>
-                </Link>
+                  </Link>
+                </Button>
               </motion.div>
             </motion.div>
           </div>
@@ -345,11 +345,11 @@ const InvestorServices = () => {
                   <Button onClick={handleWhatsAppClick} className="bg-green-600 hover:bg-green-700 text-white gap-2 rounded-lg">
                     <MessageCircle className="w-4 h-4" /> Discuss Services
                   </Button>
-                  <Link to="/contact">
-                    <Button variant="outline" className="border-gold/40 text-black hover:bg-gold/10 gap-2 rounded-lg">
+                  <Button variant="outline" className="border-gold/40 text-black hover:bg-gold/10 gap-2 rounded-lg" asChild>
+                    <Link to="/contact">
                       <Phone className="w-4 h-4" /> Book a Call
-                    </Button>
-                  </Link>
+                    </Link>
+                  </Button>
                 </motion.div>
               </motion.div>
             </div>
