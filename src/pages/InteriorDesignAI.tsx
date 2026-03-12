@@ -406,7 +406,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                       <Button
                         variant="outline"
                         onClick={(e) => { e.stopPropagation(); cameraInputRef.current?.click(); }}
-                        className="border-fuchsia-500/40 text-fuchsia-300 hover:bg-fuchsia-500/20"
+                        className="border-gold/40 text-gold hover:bg-gold/15"
                       >
                         <Camera className="w-4 h-4 mr-2" />
                         Take Photo
