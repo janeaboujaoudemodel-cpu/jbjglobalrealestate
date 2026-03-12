@@ -104,12 +104,12 @@ export default function HorizontalUtilityBar() {
   const pillBtn = "h-8 flex items-center gap-1.5 rounded-lg border border-gold/30 hover:border-gold/50 bg-gold/5 hover:bg-gold/15 transition-all px-2.5 group whitespace-nowrap shrink-0";
   const iconBtn = "h-8 w-8 flex items-center justify-center rounded-lg border border-gold/20 bg-gold/5 hover:bg-gold/15 hover:border-gold/40 transition-all group shrink-0";
   const iconClass = "w-4 h-4 text-gold group-hover:scale-110 transition-transform shrink-0";
-  const labelClass = "text-[11px] font-semibold text-black/55 uppercase tracking-wide hidden xl:inline whitespace-nowrap";
+  const labelClass = "text-[11px] font-semibold text-black/55 uppercase tracking-wide hidden lg:inline whitespace-nowrap";
 
   return (
     <>
       <div
-        className="fixed top-0 right-0 h-[48px] z-[9996] hidden md:flex items-center gap-3 px-4 border-b border-gold/15 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_1px_3px_hsl(var(--gold)/0.08)] overflow-x-auto scrollbar-hide [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px]"
+        className="fixed top-0 left-0 right-0 h-[48px] z-[9996] hidden lg:flex items-center gap-2.5 px-4 lg:px-5 border-b border-gold/15 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_1px_3px_hsl(var(--gold)/0.08)] overflow-x-auto overflow-y-hidden scrollbar-hide [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px]"
       >
         {/* ── Sidebar Toggle (Minimize) — FIRST ── */}
         <Tooltip>
@@ -159,21 +159,21 @@ export default function HorizontalUtilityBar() {
         <div className="flex items-center gap-0.5 shrink-0">
           <Link
             to="/properties?transaction=buy"
-            className="h-8 flex items-center gap-1.5 rounded-lg hover:bg-gold/10 transition-all px-2.5 group whitespace-nowrap"
+            className="h-8 flex items-center gap-1.5 rounded-lg hover:bg-gold/10 transition-all px-2.5 group whitespace-nowrap shrink-0"
           >
             <Building2 className="w-4 h-4 text-gold/70 group-hover:text-gold transition-colors shrink-0" />
             <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Buy</span>
           </Link>
           <Link
             to="/properties?transaction=rent"
-            className="h-8 flex items-center gap-1.5 rounded-lg hover:bg-gold/10 transition-all px-2.5 group whitespace-nowrap"
+            className="h-8 flex items-center gap-1.5 rounded-lg hover:bg-gold/10 transition-all px-2.5 group whitespace-nowrap shrink-0"
           >
             <Key className="w-4 h-4 text-gold/70 group-hover:text-gold transition-colors shrink-0" />
             <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Rent</span>
           </Link>
           <Link
             to="/listing-portal"
-            className="h-8 flex items-center gap-1.5 rounded-lg border border-gold/20 hover:border-gold/40 hover:bg-gold/10 transition-all px-2.5 group whitespace-nowrap"
+            className="h-8 flex items-center gap-1.5 rounded-lg border border-gold/20 hover:border-gold/40 hover:bg-gold/10 transition-all px-2.5 group whitespace-nowrap shrink-0"
           >
             <Tag className="w-4 h-4 text-gold group-hover:scale-105 transition-transform shrink-0" />
             <span className="text-[11px] font-bold text-gold uppercase tracking-wide">Sell</span>
