@@ -219,6 +219,19 @@ export default function StampProjectWizard() {
     };
   });
 
+  // Interactive canvas layers
+  const [layers, setLayers] = useState<StampLayer[]>(() =>
+    createDefaultLayers({
+      languageMode: 'BILINGUAL',
+      iconStyle: 'MONOGRAM',
+      density: 3,
+      showLicenseNumber: true,
+    })
+  );
+
+  // Undo/Redo history
+  const history = useStampHistory<FormState>(form);
+
   // Persist form + step to sessionStorage
   useEffect(() => {
     try { sessionStorage.setItem('stamp-wizard-form', JSON.stringify(form)); } catch { /* ignore */ }
@@ -227,7 +240,49 @@ export default function StampProjectWizard() {
     try { sessionStorage.setItem('stamp-wizard-step', String(step)); } catch { /* ignore */ }
   }, [step]);
 
-  const set = (key: keyof FormState, val: any) => setForm(f => ({ ...f, [key]: val }));
+  // Update layers when form changes relevant fields
+  useEffect(() => {
+    setLayers(createDefaultLayers({
+      languageMode: form.language_mode,
+      iconStyle: form.icon_style,
+      density: form.density,
+      registrationNumber: form.registration_number_optional,
+      showLicenseNumber: form.show_license_number,
+      city: form.city_optional,
+    }));
+  }, [form.language_mode, form.icon_style, form.density, form.registration_number_optional, form.show_license_number, form.city_optional]);
+
+  const set = (key: keyof FormState, val: any) => {
+    setForm(f => {
+      const next = { ...f, [key]: val };
+      history.push(next);
+      return next;
+    });
+  };
+
+  const handleUndo = useCallback(() => {
+    const prev = history.undo();
+    if (prev) setForm(prev);
+  }, [history]);
+
+  const handleRedo = useCallback(() => {
+    const next = history.redo();
+    if (next) setForm(next);
+  }, [history]);
+
+  const handleReset = useCallback(() => {
+    const initial: FormState = {
+      project_name: 'My Stamp Project', company_name: '', arabic_company_name: '', trade_name_optional: '',
+      registration_number_optional: '', address_optional: '', phone_optional: '', email_optional: '',
+      website_optional: '', city_optional: '', country_optional: 'UAE', arabic_city: '',
+      language_mode: 'BILINGUAL', stamp_type: 'ROUND', style_theme: 'CLASSIC', border_style: 'DOUBLE',
+      typography_style: 'SERIF', density: 3, icon_style: 'MONOGRAM', monogram_text: '', uploaded_logo_url: '',
+      language_reversed: true, show_license_number: true, show_location: true, business_type: '',
+    };
+    setForm(initial);
+    history.reset(initial);
+    toast.success('Form reset to defaults');
+  }, [history]);
 
   async function handleCreate() {
     if (!form.company_name.trim()) { toast.error('Company name is required'); return; }
