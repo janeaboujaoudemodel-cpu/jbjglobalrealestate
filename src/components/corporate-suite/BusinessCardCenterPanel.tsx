@@ -60,8 +60,8 @@ interface BusinessCardCenterPanelProps {
   // Template grid
   frontColorIdx: number;
   backColorIdx: number;
-  setFrontTemplate: (v: string) => void;
-  setBackTemplate: (v: string) => void;
+  setFrontTemplate: (v: Template) => void;
+  setBackTemplate: (v: Template) => void;
   // Digital mode
   landingPageData: any;
   setLandingPageData: (v: any) => void;

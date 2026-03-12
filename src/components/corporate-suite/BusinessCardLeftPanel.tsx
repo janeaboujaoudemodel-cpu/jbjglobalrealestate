@@ -431,7 +431,7 @@ export function BusinessCardLeftPanel(props: BusinessCardLeftPanelProps) {
                   className="h-8 text-xs flex-1"
                   onKeyDown={e => e.key === "Enter" && !isGeneratingGallery && handleGenerateGallery()}
                 />
-                <VoiceInputButton onTranscript={t => setGalleryPrompt(prev => prev ? `${prev} ${t}` : t)} size="sm" />
+                <VoiceInputButton onTranscript={t => setGalleryPrompt(galleryPrompt ? `${galleryPrompt} ${t}` : t)} size="sm" />
               </div>
               <Button
                 onClick={() => { setGalleryDesigns([]); setGalleryPage(0); handleGenerateGallery(); }}
