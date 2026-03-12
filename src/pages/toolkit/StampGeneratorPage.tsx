@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 
 const FEATURES = [
-  { icon: Wand2, title: 'AI-Curated Designs', desc: 'Get 7 unique stamp concepts tailored to your brand style, shape, and language preferences.' },
+  { icon: Wand2, title: 'Smart-Curated Designs', desc: 'Get 7 unique stamp concepts tailored to your brand style, shape, and language preferences.' },
   { icon: Globe, title: 'Bilingual Support', desc: 'Full Arabic, English, or bilingual stamp layouts with proper RTL text handling.' },
   { icon: Layers, title: 'Multiple Shapes', desc: 'Round, oval, rectangle, square — with classic, modern, luxury, vintage and more themes.' },
   { icon: Download, title: 'Complete Export Pack', desc: 'Download SVG (vector), PNG (transparent), JPG, and PDF in multiple sizes and DPIs.' },
