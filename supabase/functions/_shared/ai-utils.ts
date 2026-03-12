@@ -458,7 +458,7 @@ export async function trackAIUsage(
       function_name: usage.functionName,
       user_id: usage.userId,
       client_ip_hash: hashIP(usage.clientIp),
-      model: usage.model || "google/gemini-2.5-flash",
+      model: usage.model || "google/gemini-3-flash-preview",
       prompt_tokens: usage.promptTokens,
       completion_tokens: usage.completionTokens,
       success: usage.success,

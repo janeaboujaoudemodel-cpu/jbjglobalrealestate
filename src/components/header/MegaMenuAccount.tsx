@@ -443,18 +443,18 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                         <Link 
                           to="/admin" 
                           onClick={onClose} 
-                          className="flex items-center gap-2.5 py-2 px-2 rounded-xl transition-all duration-300 bg-gradient-to-r from-purple-500/10 to-purple-500/5 border border-purple-500/30 hover:border-purple-500/60 group"
+                          className="flex items-center gap-2.5 py-2 px-2 rounded-xl transition-all duration-300 bg-gradient-to-r from-gold/10 to-gold/5 border border-gold/30 hover:border-gold/60 group"
                         >
-                          <div className="w-8 h-8 rounded-lg bg-purple-500/10 border-2 border-purple-500/40 flex items-center justify-center group-hover:bg-purple-500/20 transition-colors">
-                            <Shield className="w-4 h-4 text-purple-600" />
+                          <div className="w-8 h-8 rounded-lg bg-gold/10 border-2 border-gold/40 flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+                            <Shield className="w-4 h-4 text-gold" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <span className="text-black font-semibold text-xs group-hover:text-purple-600 transition-colors block">
+                            <span className="text-black font-semibold text-xs group-hover:text-gold transition-colors block">
                               {t('account.adminPanel', 'Admin Panel')}
                             </span>
                             <span className="text-black/50 text-[10px]">{t('account.adminPanelDesc', 'HR, IT, Support, All')}</span>
                           </div>
-                          <ChevronRight className="w-3.5 h-3.5 text-purple-500" />
+                          <ChevronRight className="w-3.5 h-3.5 text-gold" />
                         </Link>
                       )}
                       {/* Customer Happiness Hub */}

@@ -438,10 +438,10 @@ const VIPClientManager = () => {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-purple-500/20 to-purple-500/5 border-purple-500/30">
+        <Card className="bg-gradient-to-br from-gold/15 to-gold/5 border-gold/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <Building className="h-8 w-8 text-purple-500" />
+              <Building className="h-8 w-8 text-gold" />
               <div>
                 <p className="text-2xl font-bold">
                   {vipClients.filter(c => c.vip_category === 'government_official').length}
