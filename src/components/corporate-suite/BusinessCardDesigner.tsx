@@ -9,7 +9,7 @@ import {
   Lock, Unlock, RotateCcw, Sparkles, RectangleHorizontal,
   RectangleVertical, Square, Maximize2, Monitor, Ticket,
   Save, Palette, Zap, Star, Cpu, Minus, Type, User,
-  ArrowLeft, ChevronRight, Share2, Copy, ExternalLink, HelpCircle,
+  Share2, Copy, ExternalLink, HelpCircle,
   Smartphone, Wifi,
 } from "lucide-react";
 import {
@@ -1626,20 +1626,14 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
       <div className="sticky top-0 lg:top-[48px] z-20 border-b border-[hsl(var(--border))] bg-white/95 backdrop-blur-sm shadow-sm">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 py-3.5 flex items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <Button
-              variant="ghost" size="sm"
-              onClick={() => navigate("/toolkit/corporate-suite")}
-              className="gap-1.5 h-8 text-xs text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]"
-            >
-              <ArrowLeft size={13} /> Back
-            </Button>
-            <div className="hidden sm:flex items-center gap-1 text-[11px] text-[hsl(var(--muted-foreground))]">
-              <LayoutGrid size={10} />
-              <span>Toolkit</span>
-              <ChevronRight size={9} />
-              <span>Corporate Suite</span>
-              <ChevronRight size={9} />
-              <span className="text-[hsl(var(--foreground))] font-semibold">Business Card</span>
+            <div className="hidden sm:flex items-center gap-2">
+              <div className="w-7 h-7 rounded-lg bg-[hsl(var(--primary))] flex items-center justify-center">
+                <CreditCard size={13} className="text-[hsl(var(--primary-foreground))]" />
+              </div>
+              <div>
+                <p className="text-xs font-semibold text-[hsl(var(--foreground))] leading-none">Business Card Designer</p>
+                <p className="text-[10px] text-[hsl(var(--muted-foreground))]">Shapes · QR · Drag · AI</p>
+              </div>
             </div>
           </div>
 
@@ -1665,16 +1659,6 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
             >
               <RotateCcw size={12} /> Reset
             </Button>
-
-            <div className="hidden sm:flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-[hsl(var(--primary))] flex items-center justify-center">
-                <CreditCard size={13} className="text-[hsl(var(--primary-foreground))]" />
-              </div>
-              <div>
-                <p className="text-xs font-semibold text-[hsl(var(--foreground))] leading-none">Business Card Designer</p>
-                <p className="text-[10px] text-[hsl(var(--muted-foreground))]">Shapes · QR · Drag · AI</p>
-              </div>
-            </div>
 
             <div className="flex flex-col items-end gap-1">
               <Button
@@ -1809,7 +1793,7 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
       )}
 
       {/* ── Main Content ───────────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-8 grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-8">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-4 grid grid-cols-1 lg:grid-cols-[320px_1fr_320px] gap-5">
 
         {/* ── Left panel ──────────────────────────────────────── */}
         <div className="space-y-4">
@@ -1896,577 +1880,6 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
             </div>
           </div>
 
-
-          {/* Per-Side Color System */}
-          <Collapsible open={colorOpen} onOpenChange={setColorOpen}>
-            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
-              <CollapsibleTrigger asChild>
-                <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
-                  <div className="flex items-center gap-2">
-                    <Palette size={13} className="text-[hsl(var(--gold))]" />
-                    <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">Colors</span>
-                    <div className="flex gap-1">
-                      <div className="w-3.5 h-3.5 rounded-full border border-white shadow-sm" style={{ background: frontPrimary }} title="Front" />
-                      <div className="w-3.5 h-3.5 rounded-full border border-white shadow-sm" style={{ background: backPrimary }} title="Back" />
-                    </div>
-                  </div>
-                  <ChevronDown size={13} className={`text-[hsl(var(--muted-foreground))] transition-transform ${colorOpen ? "rotate-180" : ""}`} />
-                </button>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <div className="px-4 pb-4 border-t border-[hsl(var(--border))] space-y-4 pt-3">
-                  <ColorPickerSection
-                    label="Front Color"
-                    colorIdx={frontColorIdx}
-                    customColor={frontCustomColor}
-                    onPresetChange={setFrontColorIdx}
-                    onCustomChange={setFrontCustomColor}
-                  />
-                  <div className="border-t border-[hsl(var(--border))]" />
-                  <ColorPickerSection
-                    label="Back Color"
-                    colorIdx={backColorIdx}
-                    customColor={backCustomColor}
-                    onPresetChange={setBackColorIdx}
-                    onCustomChange={setBackCustomColor}
-                  />
-                </div>
-              </CollapsibleContent>
-            </div>
-          </Collapsible>
-
-          {/* Brand Assets */}
-          <Collapsible open={brandAssetOpen} onOpenChange={setBrandAssetOpen}>
-            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
-              <CollapsibleTrigger asChild>
-                <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
-                  <div className="flex items-center gap-2">
-                    <ImageIcon size={13} className="text-[hsl(var(--gold))]" />
-                    <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">Brand Assets</span>
-                    {logoUrl && <span className="w-2 h-2 rounded-full bg-[hsl(var(--gold))]" />}
-                  </div>
-                  <ChevronDown size={13} className={`text-[hsl(var(--muted-foreground))] transition-transform ${brandAssetOpen ? "rotate-180" : ""}`} />
-                </button>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <div className="px-4 pb-4 border-t border-[hsl(var(--border))]">
-                  <p className="text-[10px] text-[hsl(var(--muted-foreground))] py-2">Upload logos, monograms, signatures — shown on BOTH sides. Drag to reposition (Enable Edit Layout).</p>
-                  <BrandAssetLibrary
-                    assetTypes={["monogram", "logo", "signature"]}
-                    selectedUrl={logoUrl}
-                    onSelect={asset => setLogoUrl(asset.file_url)}
-                    showSizeControl
-                    sizeValue={logoSize}
-                    onSizeChange={setLogoSize}
-                    sizeLabel="Logo Size"
-                    sizeMin={30}
-                    sizeMax={140}
-                  />
-                  {logoUrl && (
-                    <button
-                      onClick={() => setLogoUrl("")}
-                      className="mt-2 text-[10px] text-red-500 hover:underline"
-                    >
-                      Remove logo from card
-                    </button>
-                  )}
-                </div>
-              </CollapsibleContent>
-            </div>
-          </Collapsible>
-
-          {/* Typography panel */}
-          <Collapsible open={typographyOpen} onOpenChange={setTypographyOpen}>
-            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
-              <CollapsibleTrigger asChild>
-                <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
-                  <div className="flex items-center gap-2">
-                    <Type size={13} className="text-[hsl(var(--gold))]" />
-                    <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">Typography</span>
-                    {(cardFontBold || cardFontItalic || cardFontSize != null) && <span className="w-2 h-2 rounded-full bg-[hsl(var(--gold))]" />}
-                  </div>
-                  <ChevronDown size={13} className={`text-[hsl(var(--muted-foreground))] transition-transform ${typographyOpen ? "rotate-180" : ""}`} />
-                </button>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <div className="px-4 pb-4 border-t border-[hsl(var(--border))] space-y-4 pt-3">
-                  {/* Bold / Italic toggles */}
-                  <div>
-                    <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Style</Label>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => setCardFontBold(v => !v)}
-                        className={`w-10 h-10 rounded-lg border-2 font-bold text-sm transition-all ${cardFontBold ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]" : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]"}`}
-                      >
-                        B
-                      </button>
-                      <button
-                        onClick={() => setCardFontItalic(v => !v)}
-                        className={`w-10 h-10 rounded-lg border-2 italic font-semibold text-sm transition-all ${cardFontItalic ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]" : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]"}`}
-                      >
-                        I
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Font size stepper */}
-                  <div>
-                    <div className="flex items-center justify-between mb-2">
-                      <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))]">Font Size</Label>
-                      <div className="flex items-center gap-1.5">
-                        {cardFontSize != null && (
-                          <button onClick={() => setCardFontSize(null)} className="text-[9px] text-[hsl(var(--muted-foreground))] underline hover:text-[hsl(var(--foreground))]">Auto</button>
-                        )}
-                        <span className="text-[10px] font-semibold text-[hsl(var(--foreground))]">{cardFontSize != null ? `${cardFontSize}pt` : "Auto"}</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => setCardFontSize(v => Math.max(8, (v ?? 18) - 0.5))}
-                        className="w-8 h-8 rounded-lg border border-[hsl(var(--border))] flex items-center justify-center hover:border-[hsl(var(--gold)/0.5)] transition-colors"
-                      ><Minus size={12} /></button>
-                      <div className="flex-1">
-                        <Slider
-                          min={8} max={18} step={0.5}
-                          value={[cardFontSize ?? 18]}
-                          onValueChange={([v]) => setCardFontSize(v)}
-                        />
-                      </div>
-                      <button
-                        onClick={() => setCardFontSize(v => Math.min(18, (v ?? 18) + 0.5))}
-                        className="w-8 h-8 rounded-lg border border-[hsl(var(--border))] flex items-center justify-center hover:border-[hsl(var(--gold)/0.5)] transition-colors text-lg leading-none"
-                      >+</button>
-                    </div>
-                  </div>
-
-                  {/* Font family picker */}
-                  <div>
-                    <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Font Family</Label>
-                    <div className="grid grid-cols-2 gap-1.5">
-                      {([
-                        { label: "Helvetica", value: "'Helvetica Neue', Arial, sans-serif" },
-                        { label: "Georgia",   value: "Georgia, 'Times New Roman', serif" },
-                        { label: "Garamond",  value: "Garamond, 'Palatino Linotype', serif" },
-                        { label: "Courier",   value: "'Courier New', Courier, monospace" },
-                        { label: "Futura",    value: "'Century Gothic', 'Trebuchet MS', sans-serif" },
-                      ] as { label: string; value: string }[]).map(f => (
-                        <button
-                          key={f.value}
-                          onClick={() => setCardFontFamily(f.value)}
-                          className={`text-[10px] py-1.5 px-2 rounded-lg border font-semibold transition-all text-left truncate ${
-                            cardFontFamily === f.value
-                              ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
-                              : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
-                          }`}
-                          style={{ fontFamily: f.value }}
-                        >
-                          {f.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </CollapsibleContent>
-            </div>
-          </Collapsible>
-
-          {/* QR Code panel */}
-          <Collapsible open={qrOpen} onOpenChange={setQrOpen}>
-
-            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
-              <CollapsibleTrigger asChild>
-                <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
-                  <div className="flex items-center gap-2">
-                    <QrCode size={13} className="text-[hsl(var(--gold))]" />
-                    <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">QR Code</span>
-                    {qrEnabled && <span className="w-2 h-2 rounded-full bg-green-500" />}
-                  </div>
-                  <ChevronDown size={13} className={`text-[hsl(var(--muted-foreground))] transition-transform ${qrOpen ? "rotate-180" : ""}`} />
-                </button>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <div className="px-4 pb-4 border-t border-[hsl(var(--border))] space-y-4 pt-3">
-                  <div className="flex items-center justify-between">
-                    <Label className="text-[11px] font-semibold text-[hsl(var(--foreground))]">Show QR on Card</Label>
-                    <Switch checked={qrEnabled} onCheckedChange={setQrEnabled} />
-                  </div>
-
-                  {qrEnabled && (
-                    <>
-                      {/* Show QR on: Front / Back / Both */}
-                      <div>
-                        <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Show QR On</Label>
-                        <div className="flex rounded-lg border border-[hsl(var(--border))] overflow-hidden text-xs">
-                          {(["front", "back", "both"] as const).map(s => (
-                            <button
-                              key={s}
-                              onClick={() => setQrSide(s)}
-                              className={`flex-1 py-1.5 font-semibold capitalize transition-colors ${
-                                qrSide === s
-                                  ? "bg-[hsl(var(--foreground))] text-white"
-                                  : "text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))]"
-                              }`}
-                            >
-                              {s}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div>
-                        <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">QR Content Type</Label>
-                        <div className="grid grid-cols-3 gap-1.5">
-                          {([
-                            { id: "url", label: "URL" }, { id: "vcard", label: "vCard" }, { id: "text", label: "Text" },
-                            { id: "email", label: "Email" }, { id: "phone", label: "Phone" },
-                          ] as { id: QrContentType; label: string }[]).map(opt => (
-                            <button
-                              key={opt.id}
-                               onClick={() => {
-                                setQrContentType(opt.id);
-                                setQrCustomContent("");
-                                if (opt.id === "url" && data.website) setQrCustomContent(data.website);
-                                if (opt.id === "email" && data.email) setQrCustomContent(data.email);
-                                if (opt.id === "phone" && data.phone) setQrCustomContent(data.phone);
-                              }}
-                              className={`text-[10px] py-1.5 px-2 rounded-lg border font-semibold transition-all ${
-                                qrContentType === opt.id
-                                  ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
-                                  : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
-                              }`}
-                            >
-                              {opt.label}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-
-                      {(qrContentType === "url" || qrContentType === "text" || qrContentType === "email" || qrContentType === "phone") && (
-                        <div>
-                          <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-1.5 block">
-                            {qrContentType === "url" ? "URL / Link" :
-                             qrContentType === "email" ? "Email Address" :
-                             qrContentType === "phone" ? "Phone Number" :
-                             "Custom Text"}
-                          </Label>
-                          <Input
-                            value={qrCustomContent}
-                            onChange={e => setQrCustomContent(e.target.value)}
-                            placeholder={
-                              qrContentType === "url" ? "https://yourwebsite.com" :
-                              qrContentType === "email" ? data.email || "email@example.com" :
-                              qrContentType === "phone" ? data.phone || "+971 50 123 4567" :
-                              "Custom message..."
-                            }
-                            className="h-8 text-xs"
-                          />
-                          {(qrContentType === "email" || qrContentType === "phone") && !qrCustomContent && (
-                            <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-1">
-                              Using card {qrContentType} · Type above to override
-                            </p>
-                          )}
-                        </div>
-                      )}
-                      {qrContentType === "vcard" && (
-                        <p className="text-[10px] text-[hsl(var(--muted-foreground))] bg-[hsl(var(--muted))] rounded-lg px-3 py-2">
-                          vCard QR uses your card info (name, phone, email, company) automatically.
-                        </p>
-                      )}
-
-                      <div>
-                        <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-1.5 block">QR Color</Label>
-                        <div className="flex items-center gap-2">
-                          <input
-                            type="color"
-                            value={effectiveQrColor}
-                            onChange={e => setQrColor(e.target.value)}
-                            className="w-10 h-8 rounded-lg border border-[hsl(var(--border))] cursor-pointer p-0.5"
-                          />
-                          <div className="flex-1">
-                            <p className="text-[10px] text-[hsl(var(--muted-foreground))]">
-                              {qrColor ? "Custom color" : `Auto-synced to Front color`}
-                            </p>
-                          </div>
-                          {qrColor && (
-                            <button onClick={() => setQrColor("")} className="text-[9px] text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] underline">Reset</button>
-                          )}
-                        </div>
-                      </div>
-
-                      <div>
-                        <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-1.5 block">Background</Label>
-                        <div className="flex gap-2">
-                          {["#ffffff", "#f5f5f5", "#000000"].map(bg => (
-                            <button
-                              key={bg}
-                              onClick={() => setQrBgColor(bg)}
-                              className={`w-8 h-8 rounded-lg border-2 transition-all ${qrBgColor === bg ? "border-[hsl(var(--gold))] scale-105" : "border-[hsl(var(--border))]"}`}
-                              style={{ background: bg }}
-                              title={bg}
-                            />
-                          ))}
-                          <input
-                            type="color"
-                            value={qrBgColor}
-                            onChange={e => setQrBgColor(e.target.value)}
-                            className="w-8 h-8 rounded-lg border border-[hsl(var(--border))] cursor-pointer p-0.5"
-                          />
-                        </div>
-                      </div>
-
-                      <div>
-                        <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Size: {qrSize}px</Label>
-                        <Slider min={40} max={180} step={4} value={[qrSize]} onValueChange={([v]) => setQrSize(v)} />
-                      </div>
-
-                      <div>
-                        <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Placement</Label>
-                        <div className="grid grid-cols-3 gap-1.5">
-                          {([
-                            { id: "top-left", label: "↖ Top Left" }, { id: "top-right", label: "Top Right ↗" },
-                            { id: "center", label: "⊙ Center" },
-                            { id: "bottom-left", label: "↙ Bot Left" }, { id: "bottom-right", label: "Bot Right ↘" },
-                          ] as { id: QrPosition; label: string }[]).map(opt => (
-                            <button
-                              key={opt.id}
-                              onClick={() => setQrPosition(opt.id)}
-                              className={`text-[9px] py-1.5 px-1 rounded-lg border font-semibold transition-all text-center ${
-                                qrPosition === opt.id
-                                  ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
-                                  : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
-                              }`}
-                            >
-                              {opt.label}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div>
-                        <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-1.5 flex items-center gap-1 block">
-                          <Sparkles size={10} /> AI Style QR
-                        </Label>
-                        <div className="flex gap-2">
-                          <Input
-                            value={qrAiPrompt}
-                            onChange={e => setQrAiPrompt(e.target.value)}
-                            placeholder="e.g. dark blue, large, bottom right..."
-                            className="h-8 text-xs flex-1"
-                            onKeyDown={e => e.key === "Enter" && handleAiQrStyle()}
-                          />
-                          <VoiceInputButton onTranscript={t => setQrAiPrompt(prev => prev ? `${prev} ${t}` : t)} size="sm" />
-                          <Button
-                            size="sm"
-                            onClick={handleAiQrStyle}
-                            disabled={isAiStylingQr || !qrAiPrompt.trim()}
-                            className="h-8 text-xs gap-1"
-                            style={{ background: "linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-dark)))", color: "white" }}
-                          >
-                            {isAiStylingQr ? <RefreshCw size={11} className="animate-spin" /> : <Sparkles size={11} />}
-                            {isAiStylingQr ? "..." : "Apply"}
-                          </Button>
-                        </div>
-                      </div>
-
-                      {qrDataStr && (
-                        <div className="flex items-center gap-3 p-3 bg-[hsl(var(--muted))] rounded-xl">
-                          <img
-                            src={buildQrUrl(qrDataStr, effectiveQrColor, qrBgColor, qrSize)}
-                            alt="QR Preview"
-                            className="rounded"
-                            style={{ width: 56, height: 56 }}
-                          />
-                          <div>
-                            <p className="text-[10px] font-semibold text-[hsl(var(--foreground))]">QR Preview</p>
-                             <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-0.5">
-                               {qrContentType.toUpperCase()} · {qrSize}px · {qrPosition}
-                             </p>
-                             <p className="text-[9px] text-green-600 mt-0.5">
-                               Shows on: {qrSide === "both" ? "Front & Back" : qrSide === "front" ? "Front only" : "Back only"}
-                             </p>
-                          </div>
-                        </div>
-                      )}
-                    </>
-                  )}
-                </div>
-              </CollapsibleContent>
-            </div>
-          </Collapsible>
-
-          {/* AI Design panel */}
-          <Collapsible open={aiDesignOpen} onOpenChange={setAiDesignOpen}>
-            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
-              <CollapsibleTrigger asChild>
-                <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
-                  <div className="flex items-center gap-2">
-                    <Sparkles size={13} className="text-[hsl(var(--gold))]" />
-                    <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">AI Design Generator</span>
-                    {aiDesignData && <span className="w-2 h-2 rounded-full bg-[hsl(var(--gold))]" />}
-                    {activeTemplate === "ai-design" && aiDesignData && (
-                      <span className="text-[9px] bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold-dark))] px-1.5 py-0.5 rounded-full font-semibold">Active</span>
-                    )}
-                  </div>
-                  <ChevronDown size={13} className={`text-[hsl(var(--muted-foreground))] transition-transform ${aiDesignOpen ? "rotate-180" : ""}`} />
-                </button>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <div className="px-4 pb-4 border-t border-[hsl(var(--border))] space-y-3 pt-3">
-                  <p className="text-[10px] text-[hsl(var(--muted-foreground))] leading-relaxed">
-                    Generate geometric shapes, triangles, lines, circles and architectural patterns for a unique business card via Gemini AI.
-                  </p>
-
-                  {/* Tone selector */}
-                  <div>
-                    <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Tone</Label>
-                    <div className="grid grid-cols-4 gap-1.5">
-                      {[
-                        { id: "modern",  label: "Modern"  },
-                        { id: "luxe",    label: "Luxe"    },
-                        { id: "tech",    label: "Tech"    },
-                        { id: "minimal", label: "Minimal" },
-                      ].map(opt => (
-                        <button
-                          key={opt.id}
-                          onClick={() => setAiTone(opt.id)}
-                          className={`text-[10px] py-2 px-1 rounded-lg border font-semibold transition-all ${
-                            aiTone === opt.id
-                              ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
-                              : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
-                          }`}
-                        >
-                          {opt.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Industry selector */}
-                  <div>
-                    <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Industry</Label>
-                    <div className="grid grid-cols-2 gap-1.5">
-                      {[
-                        { id: "real-estate",  label: "Real Estate" },
-                        { id: "technology",   label: "Technology" },
-                        { id: "fashion",      label: "Fashion" },
-                        { id: "finance",      label: "Finance" },
-                        { id: "healthcare",   label: "Healthcare" },
-                        { id: "creative",     label: "Creative" },
-                        { id: "law",          label: "Law" },
-                        { id: "hospitality",  label: "Hospitality" },
-                      ].map(opt => (
-                        <button
-                          key={opt.id}
-                          onClick={() => setAiIndustry(opt.id)}
-                          className={`text-[10px] py-1.5 px-2 rounded-lg border font-semibold transition-all text-left ${
-                            aiIndustry === opt.id
-                              ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
-                              : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
-                          }`}
-                        >
-                          {opt.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Style selector */}
-                  <div>
-                    <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Pattern Style</Label>
-                    <div className="grid grid-cols-3 gap-1.5">
-                      {[
-                        { id: "geometric",  label: "Geometric" },
-                        { id: "lines",      label: "Lines" },
-                        { id: "futuristic", label: "Futuristic" },
-                        { id: "organic",    label: "Organic" },
-                        { id: "abstract",   label: "Abstract" },
-                        { id: "waves",      label: "Waves" },
-                      ].map(opt => (
-                        <button
-                          key={opt.id}
-                          onClick={() => setAiStyle(opt.id)}
-                          className={`text-[10px] py-1.5 px-2 rounded-lg border font-semibold transition-all ${
-                            aiStyle === opt.id
-                              ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
-                              : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
-                          }`}
-                        >
-                          {opt.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Generate / Regenerate buttons */}
-                  <div className="flex gap-2">
-                    <Button
-                      onClick={handleGenerateDesign}
-                      disabled={isGeneratingDesign}
-                      className="flex-1 h-9 text-xs gap-2 font-semibold text-white"
-                      style={{ background: "linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-dark)))" }}
-                    >
-                      {isGeneratingDesign ? <RefreshCw size={12} className="animate-spin" /> : <Sparkles size={12} />}
-                      {isGeneratingDesign ? "Generating…" : (aiDesignData ? "Regenerate" : "Generate Design")}
-                    </Button>
-                    {aiDesignData && (
-                      <Button
-                        onClick={() => { setAiDesignData(null); if (activeTemplate === "ai-design") setActiveTemplate("modern"); }}
-                        disabled={isGeneratingDesign}
-                        variant="outline"
-                        className="h-9 text-xs gap-1 text-red-500 border-red-200 hover:bg-red-50"
-                      >
-                        Clear
-                      </Button>
-                    )}
-                  </div>
-
-                  {/* Live mini-preview of AI design */}
-                  {aiDesignData && (
-                    <div className="rounded-xl overflow-hidden border border-[hsl(var(--gold)/0.3)] shadow-sm">
-                      <div className="bg-[hsl(var(--muted))] px-3 py-1.5 flex items-center justify-between">
-                        <p className="text-[9px] font-bold uppercase tracking-widest text-[hsl(var(--muted-foreground))]">Live Preview</p>
-                        <p className="text-[9px] text-[hsl(var(--gold-dark))]">{aiDesignData.industry || aiIndustry} · {aiDesignData.style || aiStyle}</p>
-                      </div>
-                      <CardFace
-                        data={data}
-                        template="ai-design"
-                        primary={frontPrimary}
-                        secondary={frontSecondary}
-                        accent={frontAccent}
-                        side="front"
-                        scale={0.5}
-                        shapeStyle={{ aspectRatio: "3.5 / 2", borderRadius: 0 }}
-                        aiDesignData={aiDesignData}
-                        fontFamily={cardFontFamily}
-                        fontWeight={cardFontBold ? "bold" : undefined}
-                        fontStyle={cardFontItalic ? "italic" : undefined}
-                        nameFontSize={cardFontSize}
-                      />
-                      <div className="bg-[hsl(var(--muted))] px-3 py-1.5 text-center">
-                        <button
-                          onClick={() => setActiveTemplate("ai-design")}
-                          className="text-[9px] font-semibold text-[hsl(var(--gold-dark))] hover:underline"
-                        >
-                          {activeTemplate === "ai-design" ? "✓ Applied to card" : "→ Apply to card"}
-                        </button>
-                      </div>
-                    </div>
-                  )}
-
-                  {isGeneratingDesign && (
-                    <div className="flex items-center gap-2 p-3 bg-[hsl(var(--muted))] rounded-xl">
-                      <RefreshCw size={14} className="animate-spin text-[hsl(var(--gold))]" />
-                      <div>
-                        <p className="text-[10px] font-semibold text-[hsl(var(--foreground))]">Generating AI design…</p>
-                        <p className="text-[9px] text-[hsl(var(--muted-foreground))]">Gemini is creating {aiTone} {aiStyle} patterns for {aiIndustry}</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </CollapsibleContent>
-            </div>
-          </Collapsible>
-
           {/* Scan Existing Card — AI pre-fill */}
           <DocumentExtractorUpload
             extractionType="business_card"
@@ -2503,31 +1916,9 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
               </div>
             ))}
           </div>
-
-          {/* ── Share Analytics ─────────────────────────────────── */}
-          <Collapsible>
-            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
-              <CollapsibleTrigger asChild>
-                <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
-                  <div className="flex items-center gap-2">
-                    <Eye size={13} className="text-[hsl(var(--gold))]" />
-                    <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">Share Analytics</span>
-                  </div>
-                  <ChevronDown size={13} className="text-[hsl(var(--muted-foreground))]" />
-                </button>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <div className="px-4 pb-4 border-t border-[hsl(var(--border))]">
-                  <div className="pt-3">
-                    <CardShareAnalytics />
-                  </div>
-                </div>
-              </CollapsibleContent>
-            </div>
-          </Collapsible>
         </div>
 
-        {/* ── Right panel: Preview ─────────────────────────────── */}
+        {/* ── Center panel: Preview ─────────────────────────────── */}
         <div className="space-y-5">
           <div className="flex items-center justify-between">
             <Label className="text-[10px] font-bold uppercase tracking-[0.15em] text-[hsl(var(--muted-foreground))] flex items-center gap-1.5">
@@ -2798,6 +2189,590 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
             <p><span className="font-medium text-[hsl(var(--foreground))]">QR Code</span> — Enable QR and it shows on both Front and Back automatically.</p>
             <p><span className="font-medium text-[hsl(var(--foreground))]">AI Design</span> — Pick Tone + Industry + Pattern Style, then click Generate. The design appears instantly on the card. Regenerate for variety.</p>
           </div>
+        </div>
+
+        {/* ── Right panel: Style Controls ──────────────────────── */}
+        <div className="space-y-4">
+
+          {/* Per-Side Color System */}
+          <Collapsible open={colorOpen} onOpenChange={setColorOpen}>
+            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+              <CollapsibleTrigger asChild>
+                <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
+                  <div className="flex items-center gap-2">
+                    <Palette size={13} className="text-[hsl(var(--gold))]" />
+                    <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">Colors</span>
+                    <div className="flex gap-1">
+                      <div className="w-3.5 h-3.5 rounded-full border border-white shadow-sm" style={{ background: frontPrimary }} title="Front" />
+                      <div className="w-3.5 h-3.5 rounded-full border border-white shadow-sm" style={{ background: backPrimary }} title="Back" />
+                    </div>
+                  </div>
+                  <ChevronDown size={13} className={`text-[hsl(var(--muted-foreground))] transition-transform ${colorOpen ? "rotate-180" : ""}`} />
+                </button>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="px-4 pb-4 border-t border-[hsl(var(--border))] space-y-4 pt-3">
+                  <ColorPickerSection
+                    label="Front Color"
+                    colorIdx={frontColorIdx}
+                    customColor={frontCustomColor}
+                    onPresetChange={setFrontColorIdx}
+                    onCustomChange={setFrontCustomColor}
+                  />
+                  <div className="border-t border-[hsl(var(--border))]" />
+                  <ColorPickerSection
+                    label="Back Color"
+                    colorIdx={backColorIdx}
+                    customColor={backCustomColor}
+                    onPresetChange={setBackColorIdx}
+                    onCustomChange={setBackCustomColor}
+                  />
+                </div>
+              </CollapsibleContent>
+            </div>
+          </Collapsible>
+
+          {/* Brand Assets */}
+          <Collapsible open={brandAssetOpen} onOpenChange={setBrandAssetOpen}>
+            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+              <CollapsibleTrigger asChild>
+                <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
+                  <div className="flex items-center gap-2">
+                    <ImageIcon size={13} className="text-[hsl(var(--gold))]" />
+                    <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">Brand Assets</span>
+                    {logoUrl && <span className="w-2 h-2 rounded-full bg-[hsl(var(--gold))]" />}
+                  </div>
+                  <ChevronDown size={13} className={`text-[hsl(var(--muted-foreground))] transition-transform ${brandAssetOpen ? "rotate-180" : ""}`} />
+                </button>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="px-4 pb-4 border-t border-[hsl(var(--border))]">
+                  <p className="text-[10px] text-[hsl(var(--muted-foreground))] py-2">Upload logos, monograms, signatures — shown on BOTH sides. Drag to reposition (Enable Edit Layout).</p>
+                  <BrandAssetLibrary
+                    assetTypes={["monogram", "logo", "signature"]}
+                    selectedUrl={logoUrl}
+                    onSelect={asset => setLogoUrl(asset.file_url)}
+                    showSizeControl
+                    sizeValue={logoSize}
+                    onSizeChange={setLogoSize}
+                    sizeLabel="Logo Size"
+                    sizeMin={30}
+                    sizeMax={140}
+                  />
+                  {logoUrl && (
+                    <button
+                      onClick={() => setLogoUrl("")}
+                      className="mt-2 text-[10px] text-red-500 hover:underline"
+                    >
+                      Remove logo from card
+                    </button>
+                  )}
+                </div>
+              </CollapsibleContent>
+            </div>
+          </Collapsible>
+
+          {/* Typography panel */}
+          <Collapsible open={typographyOpen} onOpenChange={setTypographyOpen}>
+            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+              <CollapsibleTrigger asChild>
+                <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
+                  <div className="flex items-center gap-2">
+                    <Type size={13} className="text-[hsl(var(--gold))]" />
+                    <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">Typography</span>
+                    {(cardFontBold || cardFontItalic || cardFontSize != null) && <span className="w-2 h-2 rounded-full bg-[hsl(var(--gold))]" />}
+                  </div>
+                  <ChevronDown size={13} className={`text-[hsl(var(--muted-foreground))] transition-transform ${typographyOpen ? "rotate-180" : ""}`} />
+                </button>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="px-4 pb-4 border-t border-[hsl(var(--border))] space-y-4 pt-3">
+                  <div>
+                    <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Style</Label>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => setCardFontBold(v => !v)}
+                        className={`w-10 h-10 rounded-lg border-2 font-bold text-sm transition-all ${cardFontBold ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]" : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]"}`}
+                      >
+                        B
+                      </button>
+                      <button
+                        onClick={() => setCardFontItalic(v => !v)}
+                        className={`w-10 h-10 rounded-lg border-2 italic font-semibold text-sm transition-all ${cardFontItalic ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]" : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]"}`}
+                      >
+                        I
+                      </button>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))]">Font Size</Label>
+                      <div className="flex items-center gap-1.5">
+                        {cardFontSize != null && (
+                          <button onClick={() => setCardFontSize(null)} className="text-[9px] text-[hsl(var(--muted-foreground))] underline hover:text-[hsl(var(--foreground))]">Auto</button>
+                        )}
+                        <span className="text-[10px] font-semibold text-[hsl(var(--foreground))]">{cardFontSize != null ? `${cardFontSize}pt` : "Auto"}</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => setCardFontSize(v => Math.max(8, (v ?? 18) - 0.5))}
+                        className="w-8 h-8 rounded-lg border border-[hsl(var(--border))] flex items-center justify-center hover:border-[hsl(var(--gold)/0.5)] transition-colors"
+                      ><Minus size={12} /></button>
+                      <div className="flex-1">
+                        <Slider
+                          min={8} max={18} step={0.5}
+                          value={[cardFontSize ?? 18]}
+                          onValueChange={([v]) => setCardFontSize(v)}
+                        />
+                      </div>
+                      <button
+                        onClick={() => setCardFontSize(v => Math.min(18, (v ?? 18) + 0.5))}
+                        className="w-8 h-8 rounded-lg border border-[hsl(var(--border))] flex items-center justify-center hover:border-[hsl(var(--gold)/0.5)] transition-colors text-lg leading-none"
+                      >+</button>
+                    </div>
+                  </div>
+                  <div>
+                    <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Font Family</Label>
+                    <div className="grid grid-cols-2 gap-1.5">
+                      {([
+                        { label: "Helvetica", value: "'Helvetica Neue', Arial, sans-serif" },
+                        { label: "Georgia",   value: "Georgia, 'Times New Roman', serif" },
+                        { label: "Garamond",  value: "Garamond, 'Palatino Linotype', serif" },
+                        { label: "Courier",   value: "'Courier New', Courier, monospace" },
+                        { label: "Futura",    value: "'Century Gothic', 'Trebuchet MS', sans-serif" },
+                      ] as { label: string; value: string }[]).map(f => (
+                        <button
+                          key={f.value}
+                          onClick={() => setCardFontFamily(f.value)}
+                          className={`text-[10px] py-1.5 px-2 rounded-lg border font-semibold transition-all text-left truncate ${
+                            cardFontFamily === f.value
+                              ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
+                              : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
+                          }`}
+                          style={{ fontFamily: f.value }}
+                        >
+                          {f.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </CollapsibleContent>
+            </div>
+          </Collapsible>
+
+          {/* QR Code panel */}
+          <Collapsible open={qrOpen} onOpenChange={setQrOpen}>
+            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+              <CollapsibleTrigger asChild>
+                <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
+                  <div className="flex items-center gap-2">
+                    <QrCode size={13} className="text-[hsl(var(--gold))]" />
+                    <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">QR Code</span>
+                    {qrEnabled && <span className="w-2 h-2 rounded-full bg-green-500" />}
+                  </div>
+                  <ChevronDown size={13} className={`text-[hsl(var(--muted-foreground))] transition-transform ${qrOpen ? "rotate-180" : ""}`} />
+                </button>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="px-4 pb-4 border-t border-[hsl(var(--border))] space-y-4 pt-3">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-[11px] font-semibold text-[hsl(var(--foreground))]">Show QR on Card</Label>
+                    <Switch checked={qrEnabled} onCheckedChange={setQrEnabled} />
+                  </div>
+
+                  {qrEnabled && (
+                    <>
+                      <div>
+                        <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Show QR On</Label>
+                        <div className="flex rounded-lg border border-[hsl(var(--border))] overflow-hidden text-xs">
+                          {(["front", "back", "both"] as const).map(s => (
+                            <button
+                              key={s}
+                              onClick={() => setQrSide(s)}
+                              className={`flex-1 py-1.5 font-semibold capitalize transition-colors ${
+                                qrSide === s
+                                  ? "bg-[hsl(var(--foreground))] text-white"
+                                  : "text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))]"
+                              }`}
+                            >
+                              {s}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div>
+                        <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">QR Content Type</Label>
+                        <div className="grid grid-cols-3 gap-1.5">
+                          {([
+                            { id: "url", label: "URL" }, { id: "vcard", label: "vCard" }, { id: "text", label: "Text" },
+                            { id: "email", label: "Email" }, { id: "phone", label: "Phone" },
+                          ] as { id: QrContentType; label: string }[]).map(opt => (
+                            <button
+                              key={opt.id}
+                              onClick={() => {
+                                setQrContentType(opt.id);
+                                setQrCustomContent("");
+                                if (opt.id === "url" && data.website) setQrCustomContent(data.website);
+                                if (opt.id === "email" && data.email) setQrCustomContent(data.email);
+                                if (opt.id === "phone" && data.phone) setQrCustomContent(data.phone);
+                              }}
+                              className={`text-[10px] py-1.5 px-2 rounded-lg border font-semibold transition-all ${
+                                qrContentType === opt.id
+                                  ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
+                                  : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
+                              }`}
+                            >
+                              {opt.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {(qrContentType === "url" || qrContentType === "text" || qrContentType === "email" || qrContentType === "phone") && (
+                        <div>
+                          <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-1.5 block">
+                            {qrContentType === "url" ? "URL / Link" :
+                             qrContentType === "email" ? "Email Address" :
+                             qrContentType === "phone" ? "Phone Number" :
+                             "Custom Text"}
+                          </Label>
+                          <Input
+                            value={qrCustomContent}
+                            onChange={e => setQrCustomContent(e.target.value)}
+                            placeholder={
+                              qrContentType === "url" ? "https://yourwebsite.com" :
+                              qrContentType === "email" ? data.email || "email@example.com" :
+                              qrContentType === "phone" ? data.phone || "+971 50 123 4567" :
+                              "Custom message..."
+                            }
+                            className="h-8 text-xs"
+                          />
+                          {(qrContentType === "email" || qrContentType === "phone") && !qrCustomContent && (
+                            <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-1">
+                              Using card {qrContentType} · Type above to override
+                            </p>
+                          )}
+                        </div>
+                      )}
+                      {qrContentType === "vcard" && (
+                        <p className="text-[10px] text-[hsl(var(--muted-foreground))] bg-[hsl(var(--muted))] rounded-lg px-3 py-2">
+                          vCard QR uses your card info (name, phone, email, company) automatically.
+                        </p>
+                      )}
+
+                      <div>
+                        <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-1.5 block">QR Color</Label>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="color"
+                            value={effectiveQrColor}
+                            onChange={e => setQrColor(e.target.value)}
+                            className="w-10 h-8 rounded-lg border border-[hsl(var(--border))] cursor-pointer p-0.5"
+                          />
+                          <div className="flex-1">
+                            <p className="text-[10px] text-[hsl(var(--muted-foreground))]">
+                              {qrColor ? "Custom color" : `Auto-synced to Front color`}
+                            </p>
+                          </div>
+                          {qrColor && (
+                            <button onClick={() => setQrColor("")} className="text-[9px] text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] underline">Reset</button>
+                          )}
+                        </div>
+                      </div>
+
+                      <div>
+                        <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-1.5 block">Background</Label>
+                        <div className="flex gap-2">
+                          {["#ffffff", "#f5f5f5", "#000000"].map(bg => (
+                            <button
+                              key={bg}
+                              onClick={() => setQrBgColor(bg)}
+                              className={`w-8 h-8 rounded-lg border-2 transition-all ${qrBgColor === bg ? "border-[hsl(var(--gold))] scale-105" : "border-[hsl(var(--border))]"}`}
+                              style={{ background: bg }}
+                              title={bg}
+                            />
+                          ))}
+                          <input
+                            type="color"
+                            value={qrBgColor}
+                            onChange={e => setQrBgColor(e.target.value)}
+                            className="w-8 h-8 rounded-lg border border-[hsl(var(--border))] cursor-pointer p-0.5"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Size: {qrSize}px</Label>
+                        <Slider min={40} max={180} step={4} value={[qrSize]} onValueChange={([v]) => setQrSize(v)} />
+                      </div>
+
+                      <div>
+                        <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Placement</Label>
+                        <div className="grid grid-cols-3 gap-1.5">
+                          {([
+                            { id: "top-left", label: "↖ Top Left" }, { id: "top-right", label: "Top Right ↗" },
+                            { id: "center", label: "⊙ Center" },
+                            { id: "bottom-left", label: "↙ Bot Left" }, { id: "bottom-right", label: "Bot Right ↘" },
+                          ] as { id: QrPosition; label: string }[]).map(opt => (
+                            <button
+                              key={opt.id}
+                              onClick={() => setQrPosition(opt.id)}
+                              className={`text-[9px] py-1.5 px-1 rounded-lg border font-semibold transition-all text-center ${
+                                qrPosition === opt.id
+                                  ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
+                                  : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
+                              }`}
+                            >
+                              {opt.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div>
+                        <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-1.5 flex items-center gap-1 block">
+                          <Sparkles size={10} /> Smart Style QR
+                        </Label>
+                        <div className="flex gap-2">
+                          <Input
+                            value={qrAiPrompt}
+                            onChange={e => setQrAiPrompt(e.target.value)}
+                            placeholder="e.g. dark blue, large, bottom right..."
+                            className="h-8 text-xs flex-1"
+                            onKeyDown={e => e.key === "Enter" && handleAiQrStyle()}
+                          />
+                          <VoiceInputButton onTranscript={t => setQrAiPrompt(prev => prev ? `${prev} ${t}` : t)} size="sm" />
+                          <Button
+                            size="sm"
+                            onClick={handleAiQrStyle}
+                            disabled={isAiStylingQr || !qrAiPrompt.trim()}
+                            className="h-8 text-xs gap-1"
+                            style={{ background: "linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-dark)))", color: "white" }}
+                          >
+                            {isAiStylingQr ? <RefreshCw size={11} className="animate-spin" /> : <Sparkles size={11} />}
+                            {isAiStylingQr ? "..." : "Apply"}
+                          </Button>
+                        </div>
+                      </div>
+
+                      {qrDataStr && (
+                        <div className="flex items-center gap-3 p-3 bg-[hsl(var(--muted))] rounded-xl">
+                          <img
+                            src={buildQrUrl(qrDataStr, effectiveQrColor, qrBgColor, qrSize)}
+                            alt="QR Preview"
+                            className="rounded"
+                            style={{ width: 56, height: 56 }}
+                          />
+                          <div>
+                            <p className="text-[10px] font-semibold text-[hsl(var(--foreground))]">QR Preview</p>
+                            <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-0.5">
+                              {qrContentType.toUpperCase()} · {qrSize}px · {qrPosition}
+                            </p>
+                            <p className="text-[9px] text-green-600 mt-0.5">
+                              Shows on: {qrSide === "both" ? "Front & Back" : qrSide === "front" ? "Front only" : "Back only"}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              </CollapsibleContent>
+            </div>
+          </Collapsible>
+
+          {/* Smart Design Generator */}
+          <Collapsible open={aiDesignOpen} onOpenChange={setAiDesignOpen}>
+            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+              <CollapsibleTrigger asChild>
+                <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
+                  <div className="flex items-center gap-2">
+                    <Sparkles size={13} className="text-[hsl(var(--gold))]" />
+                    <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">Smart Design Generator</span>
+                    {aiDesignData && <span className="w-2 h-2 rounded-full bg-[hsl(var(--gold))]" />}
+                    {activeTemplate === "ai-design" && aiDesignData && (
+                      <span className="text-[9px] bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold-dark))] px-1.5 py-0.5 rounded-full font-semibold">Active</span>
+                    )}
+                  </div>
+                  <ChevronDown size={13} className={`text-[hsl(var(--muted-foreground))] transition-transform ${aiDesignOpen ? "rotate-180" : ""}`} />
+                </button>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="px-4 pb-4 border-t border-[hsl(var(--border))] space-y-3 pt-3">
+                  <p className="text-[10px] text-[hsl(var(--muted-foreground))] leading-relaxed">
+                    Generate geometric shapes, triangles, lines, circles and architectural patterns for a unique business card.
+                  </p>
+
+                  <div>
+                    <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Tone</Label>
+                    <div className="grid grid-cols-4 gap-1.5">
+                      {[
+                        { id: "modern",  label: "Modern"  },
+                        { id: "luxe",    label: "Luxe"    },
+                        { id: "tech",    label: "Tech"    },
+                        { id: "minimal", label: "Minimal" },
+                      ].map(opt => (
+                        <button
+                          key={opt.id}
+                          onClick={() => setAiTone(opt.id)}
+                          className={`text-[10px] py-2 px-1 rounded-lg border font-semibold transition-all ${
+                            aiTone === opt.id
+                              ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
+                              : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
+                          }`}
+                        >
+                          {opt.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Industry</Label>
+                    <div className="grid grid-cols-2 gap-1.5">
+                      {[
+                        { id: "real-estate",  label: "Real Estate" },
+                        { id: "technology",   label: "Technology" },
+                        { id: "fashion",      label: "Fashion" },
+                        { id: "finance",      label: "Finance" },
+                        { id: "healthcare",   label: "Healthcare" },
+                        { id: "creative",     label: "Creative" },
+                        { id: "law",          label: "Law" },
+                        { id: "hospitality",  label: "Hospitality" },
+                      ].map(opt => (
+                        <button
+                          key={opt.id}
+                          onClick={() => setAiIndustry(opt.id)}
+                          className={`text-[10px] py-1.5 px-2 rounded-lg border font-semibold transition-all text-left ${
+                            aiIndustry === opt.id
+                              ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
+                              : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
+                          }`}
+                        >
+                          {opt.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Pattern Style</Label>
+                    <div className="grid grid-cols-3 gap-1.5">
+                      {[
+                        { id: "geometric",  label: "Geometric" },
+                        { id: "lines",      label: "Lines" },
+                        { id: "futuristic", label: "Futuristic" },
+                        { id: "organic",    label: "Organic" },
+                        { id: "abstract",   label: "Abstract" },
+                        { id: "waves",      label: "Waves" },
+                      ].map(opt => (
+                        <button
+                          key={opt.id}
+                          onClick={() => setAiStyle(opt.id)}
+                          className={`text-[10px] py-1.5 px-2 rounded-lg border font-semibold transition-all ${
+                            aiStyle === opt.id
+                              ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
+                              : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
+                          }`}
+                        >
+                          {opt.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={handleGenerateDesign}
+                      disabled={isGeneratingDesign}
+                      className="flex-1 h-9 text-xs gap-2 font-semibold text-white"
+                      style={{ background: "linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-dark)))" }}
+                    >
+                      {isGeneratingDesign ? <RefreshCw size={12} className="animate-spin" /> : <Sparkles size={12} />}
+                      {isGeneratingDesign ? "Generating…" : (aiDesignData ? "Regenerate" : "Generate Design")}
+                    </Button>
+                    {aiDesignData && (
+                      <Button
+                        onClick={() => { setAiDesignData(null); if (activeTemplate === "ai-design") setActiveTemplate("modern"); }}
+                        disabled={isGeneratingDesign}
+                        variant="outline"
+                        className="h-9 text-xs gap-1 text-red-500 border-red-200 hover:bg-red-50"
+                      >
+                        Clear
+                      </Button>
+                    )}
+                  </div>
+
+                  {aiDesignData && (
+                    <div className="rounded-xl overflow-hidden border border-[hsl(var(--gold)/0.3)] shadow-sm">
+                      <div className="bg-[hsl(var(--muted))] px-3 py-1.5 flex items-center justify-between">
+                        <p className="text-[9px] font-bold uppercase tracking-widest text-[hsl(var(--muted-foreground))]">Live Preview</p>
+                        <p className="text-[9px] text-[hsl(var(--gold-dark))]">{aiDesignData.industry || aiIndustry} · {aiDesignData.style || aiStyle}</p>
+                      </div>
+                      <CardFace
+                        data={data}
+                        template="ai-design"
+                        primary={frontPrimary}
+                        secondary={frontSecondary}
+                        accent={frontAccent}
+                        side="front"
+                        scale={0.5}
+                        shapeStyle={{ aspectRatio: "3.5 / 2", borderRadius: 0 }}
+                        aiDesignData={aiDesignData}
+                        fontFamily={cardFontFamily}
+                        fontWeight={cardFontBold ? "bold" : undefined}
+                        fontStyle={cardFontItalic ? "italic" : undefined}
+                        nameFontSize={cardFontSize}
+                      />
+                      <div className="bg-[hsl(var(--muted))] px-3 py-1.5 text-center">
+                        <button
+                          onClick={() => setActiveTemplate("ai-design")}
+                          className="text-[9px] font-semibold text-[hsl(var(--gold-dark))] hover:underline"
+                        >
+                          {activeTemplate === "ai-design" ? "✓ Applied to card" : "→ Apply to card"}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {isGeneratingDesign && (
+                    <div className="flex items-center gap-2 p-3 bg-[hsl(var(--muted))] rounded-xl">
+                      <RefreshCw size={14} className="animate-spin text-[hsl(var(--gold))]" />
+                      <div>
+                        <p className="text-[10px] font-semibold text-[hsl(var(--foreground))]">Generating design…</p>
+                        <p className="text-[9px] text-[hsl(var(--muted-foreground))]">Creating {aiTone} {aiStyle} patterns for {aiIndustry}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </CollapsibleContent>
+            </div>
+          </Collapsible>
+
+          {/* Share Analytics */}
+          <Collapsible>
+            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+              <CollapsibleTrigger asChild>
+                <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
+                  <div className="flex items-center gap-2">
+                    <Eye size={13} className="text-[hsl(var(--gold))]" />
+                    <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">Share Analytics</span>
+                  </div>
+                  <ChevronDown size={13} className="text-[hsl(var(--muted-foreground))]" />
+                </button>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="px-4 pb-4 border-t border-[hsl(var(--border))]">
+                  <div className="pt-3">
+                    <CardShareAnalytics />
+                  </div>
+                </div>
+              </CollapsibleContent>
+            </div>
+          </Collapsible>
         </div>
       </div>
     </div>
