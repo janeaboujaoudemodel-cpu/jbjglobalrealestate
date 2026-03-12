@@ -1355,6 +1355,18 @@ export default function BusinessCardDesigner() {
   const [gradientEnd, setGradientEnd] = useState("#C8A766");
   const [gradientDirection, setGradientDirection] = useState<GradientDirection>("135deg");
 
+  // Gallery state
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [galleryPrompt, setGalleryPrompt] = useState("");
+  const [galleryDesigns, setGalleryDesigns] = useState<(AiDesignData & { id: string; name: string; category?: string })[]>([]);
+  const [galleryFavorites, setGalleryFavorites] = useState<string[]>([]);
+  const [isGeneratingGallery, setIsGeneratingGallery] = useState(false);
+  const [galleryPage, setGalleryPage] = useState(0);
+  const GALLERY_PER_PAGE = 12;
+
+  // Trade license auto-fill
+  const [tradeLicenseOpen, setTradeLicenseOpen] = useState(false);
+
   const [data, setData] = useState<CardData>({
     name: "", title: "", company: "", phone: "", email: "", website: "", address: "",
   });

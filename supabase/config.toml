@@ -549,3 +549,6 @@ verify_jwt = false
 
 [functions.document-extractor]
 verify_jwt = false
+
+[functions.ai-card-gallery-generator]
+verify_jwt = false
