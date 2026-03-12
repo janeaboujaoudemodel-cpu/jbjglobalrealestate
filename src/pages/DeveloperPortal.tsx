@@ -98,7 +98,6 @@ const DeveloperPortal = () => {
       const { data } = await (supabase as any)
         .from('developers')
         .select('id, name')
-        .eq('is_active', true)
         .order('name');
       return data || [];
     },
