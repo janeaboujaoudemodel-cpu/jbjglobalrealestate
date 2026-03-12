@@ -2439,6 +2439,7 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                   secondaryData={secondaryData}
                   onInlineEdit={(field) => setInlineEditField(field)}
                 />
+              </PhoneMockup>
             ) : (
               <div className="w-full max-w-[400px]">
                 <AnimatePresence mode="wait">
