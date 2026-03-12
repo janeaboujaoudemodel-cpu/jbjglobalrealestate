@@ -419,7 +419,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                     <Button
                       onClick={() => generateDesign()}
                       disabled={isProcessing || !designStyle}
-                      className="bg-gradient-to-r from-fuchsia-600 to-purple-600 hover:from-fuchsia-700 hover:to-purple-700 text-white"
+                      className="bg-gradient-to-r from-gold to-amber-600 hover:from-amber-600 hover:to-gold text-black font-semibold"
                     >
                       <Sparkles className="w-4 h-4 mr-2" />
                       Generate Concept
