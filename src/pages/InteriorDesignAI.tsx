@@ -265,12 +265,12 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
   ];
 
   return (
-    <section className="relative w-full min-h-screen bg-black">
+    <section className="relative w-full min-h-screen" style={{ background: "#0D0C08" }}>
       {/* Hero — suppressed when embedded inside a Suite tab */}
       {!embedded && (
         <div className="relative py-12 md:py-16 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-900/30 via-black to-purple-900/20" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(192,38,211,0.15),transparent_50%)]" />
+          <div className="absolute inset-0 bg-gradient-to-br from-gold/15 via-[#0D0C08] to-amber-900/10" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(184,148,62,0.12),transparent_50%)]" />
           <div className="container mx-auto px-4 relative z-10">
             <motion.div
               className="text-center max-w-3xl mx-auto"
@@ -278,13 +278,13 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <Badge className="mb-4 bg-fuchsia-500/20 text-fuchsia-300 border-fuchsia-500/30 px-4 py-2">
+              <Badge className="mb-4 bg-gold/15 text-gold border-gold/30 px-4 py-2">
                 <Palette className="w-4 h-4 mr-2" />
                 AI-Powered Design
               </Badge>
               <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
                 AI Interior{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 to-purple-400">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-amber-400">
                   Design Studio
                 </span>
               </h1>
