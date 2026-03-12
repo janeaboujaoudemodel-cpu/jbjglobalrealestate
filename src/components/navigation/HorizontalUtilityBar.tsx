@@ -19,10 +19,14 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useUserAlerts } from "@/hooks/useUserAlerts";
 import GlobalSearchModal from "@/components/GlobalSearchModal";
 import GlobalBackButton from "@/components/navigation/GlobalBackButton";
+import AdvancedFilterPanel from "@/components/filters/AdvancedFilterPanel";
+import { defaultShortcutFilters, type ShortcutFilterState } from "@/components/filters/FilterShortcutBar";
 
 
 export default function HorizontalUtilityBar() {
   const [searchOpen, setSearchOpen] = useState(false);
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [filterState, setFilterState] = useState<ShortcutFilterState>(defaultShortcutFilters);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const { mode, setMode } = useUserMode();
   const { language } = useLanguage();
@@ -65,7 +69,6 @@ export default function HorizontalUtilityBar() {
     window.dispatchEvent(new CustomEvent('areaUnitChange', { detail: next }));
   };
 
-
   const toggleSidebar = () => {
     const isCollapsed = document.body.classList.contains('jj-vertical-nav-collapsed');
     if (isCollapsed) {
@@ -80,35 +83,47 @@ export default function HorizontalUtilityBar() {
     window.dispatchEvent(new CustomEvent('jj_nav_toggle'));
   };
 
-  const divider = <div className="w-px h-5 bg-gold/20 flex-shrink-0" />;
+  // When filters are applied from the panel, navigate to properties with those filters
+  const handleFilterChange = (newFilters: ShortcutFilterState) => {
+    setFilterState(newFilters);
+    // Build query params from filters and navigate
+    const params = new URLSearchParams();
+    if (newFilters.searchQuery) params.set('q', newFilters.searchQuery);
+    if (newFilters.propertyTypes?.length) params.set('type', newFilters.propertyTypes.join(','));
+    if (newFilters.emirates?.length) params.set('emirate', newFilters.emirates.join(','));
+    navigate(`/properties?${params.toString()}`);
+  };
+
+  const divider = <div className="w-px h-6 bg-gold/20 flex-shrink-0" />;
   const totalAlerts = alerts?.totalAlerts || 0;
 
   // Determine if user has CRM access (owner or broker)
   const showCRM = !!user && isOwner;
 
+  /* ─── Shared button classes for premium consistency ─── */
+  const pillBtn = "h-8 flex items-center gap-1.5 rounded-lg border border-gold/30 hover:border-gold/50 bg-gold/5 hover:bg-gold/15 transition-all px-2.5 group";
+  const iconBtn = "h-8 w-8 flex items-center justify-center rounded-lg border border-gold/20 bg-gold/5 hover:bg-gold/15 hover:border-gold/40 transition-all group";
+  const iconClass = "w-4 h-4 text-gold group-hover:scale-110 transition-transform";
+  const labelClass = "text-[11px] font-semibold text-black/55 uppercase tracking-wide hidden xl:inline";
+
   return (
     <>
       <div
-        className="fixed top-0 right-0 h-[48px] z-[9996] hidden md:flex items-center gap-1.5 px-3 border-b border-gold/15 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_1px_3px_hsl(var(--gold)/0.08)] [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px]"
+        className="fixed top-0 right-0 h-[48px] z-[9996] hidden md:flex items-center gap-2 px-3 border-b border-gold/15 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_1px_3px_hsl(var(--gold)/0.08)] [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px]"
       >
-        {/* ── Back Button ── */}
-        <GlobalBackButton />
-
-        {divider}
-
-        {/* ── Sidebar Toggle — flush left, premium gold pill ── */}
+        {/* ── Sidebar Toggle (Minimize) — FIRST ── */}
         <Tooltip>
           <TooltipTrigger asChild>
             <button
               onClick={toggleSidebar}
-              className="h-7 flex items-center gap-1.5 rounded-md border border-gold/30 hover:border-gold/60 bg-gold/5 hover:bg-gold/15 transition-all px-2 group mr-1"
+              className={pillBtn}
               aria-label="Toggle sidebar"
             >
               {sidebarCollapsed
-                ? <PanelLeftOpen className="w-4 h-4 text-gold group-hover:scale-110 transition-transform" />
-                : <PanelLeftClose className="w-4 h-4 text-gold group-hover:scale-110 transition-transform" />
+                ? <PanelLeftOpen className={iconClass} />
+                : <PanelLeftClose className={iconClass} />
               }
-              <span className="text-[10px] font-semibold text-black/50 uppercase tracking-wider hidden xl:inline">
+              <span className={labelClass}>
                 {sidebarCollapsed ? 'Expand' : 'Minimize'}
               </span>
             </button>
@@ -118,6 +133,9 @@ export default function HorizontalUtilityBar() {
           </TooltipContent>
         </Tooltip>
 
+        {/* ── Back Button — SECOND ── */}
+        <GlobalBackButton />
+
         {divider}
 
         {/* ── Search ── */}
@@ -125,11 +143,11 @@ export default function HorizontalUtilityBar() {
           <TooltipTrigger asChild>
             <button
               onClick={() => setSearchOpen(true)}
-              className="h-7 flex items-center gap-1.5 rounded-md hover:bg-gold/10 transition-all px-2 group"
+              className={pillBtn}
               aria-label="Search ⌘K"
             >
-              <Search className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-transform" />
-              <span className="text-[10px] text-black/40 font-medium hidden xl:inline">⌘K</span>
+              <Search className={iconClass} />
+              <span className="text-[11px] text-black/40 font-medium hidden xl:inline">⌘K</span>
             </button>
           </TooltipTrigger>
           <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Search ⌘K</TooltipContent>
@@ -141,38 +159,38 @@ export default function HorizontalUtilityBar() {
         <div className="flex items-center gap-0.5">
           <Link
             to="/properties?transaction=buy"
-            className="h-7 flex items-center gap-1 rounded-md hover:bg-gold/10 transition-all px-2 group"
+            className="h-8 flex items-center gap-1.5 rounded-lg hover:bg-gold/10 transition-all px-2.5 group"
           >
-            <Building2 className="w-3.5 h-3.5 text-gold/70 group-hover:text-gold transition-colors" />
+            <Building2 className="w-4 h-4 text-gold/70 group-hover:text-gold transition-colors" />
             <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Buy</span>
           </Link>
           <Link
             to="/properties?transaction=rent"
-            className="h-7 flex items-center gap-1 rounded-md hover:bg-gold/10 transition-all px-2 group"
+            className="h-8 flex items-center gap-1.5 rounded-lg hover:bg-gold/10 transition-all px-2.5 group"
           >
-            <Key className="w-3.5 h-3.5 text-gold/70 group-hover:text-gold transition-colors" />
+            <Key className="w-4 h-4 text-gold/70 group-hover:text-gold transition-colors" />
             <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Rent</span>
           </Link>
           <Link
             to="/listing-portal"
-            className="h-7 flex items-center gap-1 rounded-md border border-gold/20 hover:border-gold/40 hover:bg-gold/10 transition-all px-2 group"
+            className="h-8 flex items-center gap-1.5 rounded-lg border border-gold/20 hover:border-gold/40 hover:bg-gold/10 transition-all px-2.5 group"
           >
-            <Tag className="w-3.5 h-3.5 text-gold group-hover:scale-105 transition-transform" />
+            <Tag className="w-4 h-4 text-gold group-hover:scale-105 transition-transform" />
             <span className="text-[11px] font-bold text-gold uppercase tracking-wide">Sell</span>
           </Link>
         </div>
 
         {divider}
 
-        {/* Owner shortcuts removed — they stay in the vertical sidebar even when collapsed */}
+        {/* Favorites */}
         <Tooltip>
           <TooltipTrigger asChild>
             <Link
               to="/favorites"
-              className="h-7 w-7 flex items-center justify-center rounded-md border border-gold/20 bg-gold/5 hover:bg-gold/15 hover:border-gold/40 transition-all group"
+              className={iconBtn}
               aria-label="Favorites"
             >
-              <Heart className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-transform" />
+              <Heart className={iconClass} />
             </Link>
           </TooltipTrigger>
           <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Favorites</TooltipContent>
@@ -185,14 +203,14 @@ export default function HorizontalUtilityBar() {
           <TooltipTrigger asChild>
             <button
               onClick={toggleAreaUnit}
-              className="h-7 flex items-center rounded-md border border-gold/30 overflow-hidden transition-all"
+              className="h-8 flex items-center rounded-lg border border-gold/30 overflow-hidden transition-all"
               aria-label="Toggle area unit"
             >
-              <span className={`text-[10px] font-bold px-2 py-1 transition-all ${areaUnit === 'sqft' ? 'bg-gold/20 text-gold' : 'text-black/30 hover:bg-gold/5'}`}>
+              <span className={`text-[11px] font-bold px-3 py-1.5 transition-all ${areaUnit === 'sqft' ? 'bg-gold/20 text-gold' : 'text-black/30 hover:bg-gold/5'}`}>
                 ft²
               </span>
-              <span className="w-px h-4 bg-gold/30" />
-              <span className={`text-[10px] font-bold px-2 py-1 transition-all ${areaUnit === 'sqm' ? 'bg-gold/20 text-gold' : 'text-black/30 hover:bg-gold/5'}`}>
+              <span className="w-px h-5 bg-gold/30" />
+              <span className={`text-[11px] font-bold px-3 py-1.5 transition-all ${areaUnit === 'sqm' ? 'bg-gold/20 text-gold' : 'text-black/30 hover:bg-gold/5'}`}>
                 m²
               </span>
             </button>
@@ -222,16 +240,16 @@ export default function HorizontalUtilityBar() {
 
         {divider}
 
-        {/* ── Advanced Filter — opens filter on properties page ── */}
+        {/* ── Advanced Filter — opens AdvancedFilterPanel dialog ── */}
         <Tooltip>
           <TooltipTrigger asChild>
             <button
-              onClick={() => navigate('/properties?advanced=true')}
-              className="h-7 flex items-center gap-1 rounded-md hover:bg-gold/10 transition-all px-2 group border border-gold/20"
+              onClick={() => setFilterOpen(true)}
+              className={pillBtn}
               aria-label="Advanced Property Filter"
             >
-              <SlidersHorizontal className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-transform" />
-              <span className="text-[10px] font-semibold text-black/60 uppercase tracking-wide hidden xl:inline">Filter</span>
+              <SlidersHorizontal className={iconClass} />
+              <span className={labelClass}>Filter</span>
             </button>
           </TooltipTrigger>
           <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Open advanced filters</TooltipContent>
@@ -249,10 +267,10 @@ export default function HorizontalUtilityBar() {
                 <TooltipTrigger asChild>
                   <Link
                     to="/owner/crm"
-                    className="h-7 flex items-center gap-1 rounded-md hover:bg-emerald-500/10 transition-all px-2 group"
+                    className="h-8 flex items-center gap-1.5 rounded-lg hover:bg-emerald-500/10 transition-all px-2.5 group"
                   >
-                    <BarChart3 className="w-3.5 h-3.5 text-emerald-600 group-hover:scale-110 transition-transform" />
-                    <span className="text-[10px] font-semibold text-emerald-700 uppercase tracking-wide hidden xl:inline">CRM</span>
+                    <BarChart3 className="w-4 h-4 text-emerald-600 group-hover:scale-110 transition-transform" />
+                    <span className="text-[11px] font-semibold text-emerald-700 uppercase tracking-wide hidden xl:inline">CRM</span>
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">CRM Dashboard</TooltipContent>
@@ -264,12 +282,12 @@ export default function HorizontalUtilityBar() {
               <TooltipTrigger asChild>
                 <Link
                    to="/my-dashboard#tasks"
-                   className="h-7 flex items-center gap-1 rounded-md border border-gold/20 bg-gold/5 hover:bg-gold/15 hover:border-gold/40 transition-all px-1.5 group relative"
+                   className="h-8 flex items-center gap-1.5 rounded-lg border border-gold/20 bg-gold/5 hover:bg-gold/15 hover:border-gold/40 transition-all px-2 group relative"
                  >
-                   <ClipboardList className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-transform" />
-                  <span className="text-[10px] font-medium text-black/50 hidden xl:inline">Tasks</span>
+                   <ClipboardList className={iconClass} />
+                  <span className="text-[11px] font-medium text-black/50 hidden xl:inline">Tasks</span>
                   {(alerts?.pendingTasks || 0) > 0 && (
-                    <span className="absolute -top-1 -right-0.5 w-4 h-4 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center">
+                    <span className="absolute -top-1.5 -right-1 w-4.5 h-4.5 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center">
                       {alerts!.pendingTasks > 9 ? '9+' : alerts!.pendingTasks}
                     </span>
                   )}
@@ -283,11 +301,11 @@ export default function HorizontalUtilityBar() {
               <TooltipTrigger asChild>
                 <Link
                    to="/my-dashboard#notifications"
-                   className="h-7 w-7 flex items-center justify-center rounded-md border border-gold/20 bg-gold/5 hover:bg-gold/15 hover:border-gold/40 transition-all group relative"
+                   className={`${iconBtn} relative`}
                  >
-                   <Bell className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-transform" />
+                   <Bell className={iconClass} />
                   {(alerts?.totalNotificationAlerts || 0) > 0 && (
-                    <span className="absolute -top-1 -right-0.5 w-4 h-4 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center">
+                    <span className="absolute -top-1.5 -right-1 w-4.5 h-4.5 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center">
                       {alerts!.totalNotificationAlerts > 9 ? '9+' : alerts!.totalNotificationAlerts}
                     </span>
                   )}
@@ -303,9 +321,9 @@ export default function HorizontalUtilityBar() {
               <TooltipTrigger asChild>
                 <Link
                    to="/my-dashboard#inbox"
-                   className="h-7 w-7 flex items-center justify-center rounded-md border border-gold/20 bg-gold/5 hover:bg-gold/15 hover:border-gold/40 transition-all group"
+                   className={iconBtn}
                  >
-                   <Inbox className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-transform" />
+                   <Inbox className={iconClass} />
                 </Link>
               </TooltipTrigger>
               <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Inbox</TooltipContent>
@@ -315,17 +333,15 @@ export default function HorizontalUtilityBar() {
           </>
         )}
 
-        {/* Mode Selector — handled by ModeSwitcher below */}
-
         {/* Dashboard */}
         <Tooltip>
           <TooltipTrigger asChild>
             <Link
               to="/my-dashboard"
-              className="h-7 w-7 flex items-center justify-center rounded-md border border-gold/20 bg-gold/5 hover:bg-gold/15 hover:border-gold/40 transition-all group"
+              className={iconBtn}
               aria-label="Dashboard"
             >
-              <LayoutDashboard className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-transform" />
+              <LayoutDashboard className={iconClass} />
             </Link>
           </TooltipTrigger>
           <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">My Dashboard</TooltipContent>
@@ -339,10 +355,10 @@ export default function HorizontalUtilityBar() {
           <TooltipTrigger asChild>
             <Link
               to="/profile"
-              className="h-7 w-7 flex items-center justify-center rounded-md border border-gold/20 bg-gold/5 hover:bg-gold/15 hover:border-gold/40 transition-all group"
+              className={iconBtn}
               aria-label="Settings"
             >
-              <Settings className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-transform" />
+              <Settings className={iconClass} />
             </Link>
           </TooltipTrigger>
           <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Settings & Profile</TooltipContent>
@@ -350,6 +366,14 @@ export default function HorizontalUtilityBar() {
       </div>
 
       <GlobalSearchModal isOpen={searchOpen} initialQuery="" onClose={() => setSearchOpen(false)} />
+
+      {/* Advanced Filter Panel — same dialog used in hero/properties */}
+      <AdvancedFilterPanel
+        open={filterOpen}
+        onOpenChange={setFilterOpen}
+        filters={filterState}
+        onFilterChange={handleFilterChange}
+      />
     </>
   );
 }
