@@ -1626,20 +1626,14 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
       <div className="sticky top-0 lg:top-[48px] z-20 border-b border-[hsl(var(--border))] bg-white/95 backdrop-blur-sm shadow-sm">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 py-3.5 flex items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <Button
-              variant="ghost" size="sm"
-              onClick={() => navigate("/toolkit/corporate-suite")}
-              className="gap-1.5 h-8 text-xs text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]"
-            >
-              <ArrowLeft size={13} /> Back
-            </Button>
-            <div className="hidden sm:flex items-center gap-1 text-[11px] text-[hsl(var(--muted-foreground))]">
-              <LayoutGrid size={10} />
-              <span>Toolkit</span>
-              <ChevronRight size={9} />
-              <span>Corporate Suite</span>
-              <ChevronRight size={9} />
-              <span className="text-[hsl(var(--foreground))] font-semibold">Business Card</span>
+            <div className="hidden sm:flex items-center gap-2">
+              <div className="w-7 h-7 rounded-lg bg-[hsl(var(--primary))] flex items-center justify-center">
+                <CreditCard size={13} className="text-[hsl(var(--primary-foreground))]" />
+              </div>
+              <div>
+                <p className="text-xs font-semibold text-[hsl(var(--foreground))] leading-none">Business Card Designer</p>
+                <p className="text-[10px] text-[hsl(var(--muted-foreground))]">Shapes · QR · Drag · AI</p>
+              </div>
             </div>
           </div>
 
