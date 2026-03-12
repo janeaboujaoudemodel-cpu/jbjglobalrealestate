@@ -196,8 +196,8 @@ function buildSVG(project: any, templateKey: string): string {
       const enFontSize = autoFontSize(name, 9.5, 22);
       const arFontSize = autoFontSize(displayArabic, 11, 16);
       return `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${COLOR}" stroke-width="2.2"/>
-        <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${COLOR}" stroke-width="0.7"/>
+        <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${COLOR}" stroke-width="${ba.outerWidth}" stroke-dasharray="${ba.dash}"/>
+        ${ba.innerRing ? `<circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${COLOR}" stroke-width="${ba.innerWidth}" stroke-dasharray="${ba.innerDash}"/>` : ''}
         <line x1="${cx - 55}" y1="${cy}" x2="${cx + 55}" y2="${cy}" stroke="${COLOR}" stroke-width="1"/>
         <text x="${cx}" y="${cy - 28}" text-anchor="middle" font-family="${font}" font-size="${enFontSize}" font-weight="bold" fill="${COLOR}">${name}</text>
         <text x="${cx}" y="${cy - 14}" text-anchor="middle" font-family="${font}" font-size="7.5" fill="${COLOR}" letter-spacing="2">${city}</text>
