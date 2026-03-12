@@ -6,11 +6,11 @@ import {
   Download, CreditCard, Phone, Mail, Globe,
   MapPin, Building2, RefreshCw, Eye, Layers,
   LayoutGrid, Check, ImageIcon, ChevronDown, QrCode, Move,
-  Lock, Unlock, RotateCcw, Sparkles, RectangleHorizontal,
-  Save, Palette, Zap, Star, Cpu, Minus, Type, User,
-  Share2, Copy, ExternalLink, HelpCircle, AlignLeft, AlignCenter, AlignRight, Underline,
-  Smartphone, Wifi, Droplets, Sun, Diamond, Stamp,
-  FolderOpen, Image, Printer, Trash2, Clock,
+  Sparkles, RectangleHorizontal,
+  Palette, Star, Minus, Type, User,
+  Share2, HelpCircle, AlignLeft, AlignCenter, AlignRight, Underline,
+  Droplets, Sun, Diamond, Stamp,
+  FolderOpen, Trash2, Clock,
 } from "lucide-react";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
@@ -42,6 +42,8 @@ import { DeskMockup, PocketMockup, StationeryMockup, HandMockup, PhoneMockup } f
 import { ColorPickerSection } from "./BusinessCardColorPicker";
 import { CardFace, CardCanvas } from "./BusinessCardPreview";
 import { exportCardAsPDF, exportDigitalCardAsHtml } from "./businessCardExport";
+import { BusinessCardHeader } from "./BusinessCardHeader";
+import { ShareModal, BatchPrintDialog, NfcGuideDialog } from "./BusinessCardDialogs";
 
 
 
@@ -615,193 +617,37 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
   return (
     <>
     <div className="min-h-screen" style={{ background: "hsl(var(--pearl-1,48 30% 97%))" }}>
-      {/* ── Sticky Header ──────────────────────────────────────── */}
-      <div className="sticky top-0 lg:top-[48px] z-20 border-b border-[hsl(var(--border))] bg-white/95 backdrop-blur-sm shadow-sm">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-3.5 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <div className="hidden sm:flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-[hsl(var(--primary))] flex items-center justify-center">
-                <CreditCard size={13} className="text-[hsl(var(--primary-foreground))]" />
-              </div>
-              <div>
-                <p className="text-xs font-semibold text-[hsl(var(--foreground))] leading-none">Business Card Designer</p>
-                <p className="text-[10px] text-[hsl(var(--muted-foreground))]">Shapes · QR · Drag · AI</p>
-              </div>
-            </div>
-          </div>
+      <BusinessCardHeader
+        editLayout={editLayout}
+        setEditLayout={setEditLayout}
+        onResetLayout={() => {
+          setFieldPositions({ ...DEFAULT_FIELD_POSITIONS });
+          setLogoPos({ ...DEFAULT_LOGO_POS });
+          if (!editLayout) setEditLayout(true);
+          toast.success("Layout reset to defaults");
+        }}
+        isSaving={isSaving}
+        onSave={handleSaveCard}
+        cardLicenseCode={cardLicenseCode}
+        isSharing={isSharing}
+        onShare={handleShareCard}
+        cardShape={cardShape}
+        isExportingHtml={isExportingHtml}
+        onExportHtml={handleExportHtml}
+        isExportingPng={isExportingPng}
+        onExportPng={handleExportPng}
+        onBatchPrint={() => setBatchPrintOpen(true)}
+        isExporting={isExporting}
+        onExportPdf={handleExport}
+      />
 
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline" size="sm"
-              onClick={() => setEditLayout(v => !v)}
-              className={`gap-1.5 h-8 text-xs ${editLayout ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)] text-[hsl(var(--gold-dark))]" : ""}`}
-            >
-              {editLayout ? <Lock size={12} /> : <Unlock size={12} />}
-              {editLayout ? "Lock Layout" : "Edit Layout"}
-            </Button>
-            <Button
-              variant="outline" size="sm"
-              onClick={() => {
-                setFieldPositions({ ...DEFAULT_FIELD_POSITIONS });
-                setLogoPos({ ...DEFAULT_LOGO_POS });
-                if (!editLayout) setEditLayout(true);
-                toast.success("Layout reset to defaults");
-              }}
-              className="h-8 text-xs gap-1.5 border-[hsl(var(--border))] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]"
-              title="Reset field & logo positions to defaults"
-            >
-              <RotateCcw size={12} /> Reset
-            </Button>
-
-            <div className="flex flex-col items-end gap-1">
-              <Button
-                onClick={handleSaveCard}
-                disabled={isSaving}
-                variant="outline"
-                className="gap-1.5 h-8 text-xs font-semibold border-[#C9A84C]/60 text-[#C9A84C] hover:bg-[#C9A84C]/10"
-              >
-                {isSaving ? <RefreshCw size={12} className="animate-spin" /> : <Save size={12} />}
-                {isSaving ? "Saving…" : "Save Card"}
-              </Button>
-              {cardLicenseCode && (
-                <span className="text-[9px] font-mono font-bold text-green-700 bg-green-50 border border-green-200 rounded px-1.5 py-0.5">
-                  {cardLicenseCode}
-                </span>
-              )}
-            </div>
-
-            <Button
-              onClick={handleShareCard}
-              disabled={isSharing}
-              variant="outline"
-              className="gap-1.5 h-8 text-xs font-semibold border-[hsl(var(--border))] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]"
-            >
-              {isSharing ? <RefreshCw size={12} className="animate-spin" /> : <Share2 size={12} />}
-              {isSharing ? "Generating…" : "Share"}
-            </Button>
-
-            {cardShape === "digital" && (
-              <Button
-                onClick={handleExportHtml}
-                disabled={isExportingHtml}
-                variant="outline"
-                className="gap-1.5 h-8 text-xs font-semibold border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] hover:bg-[hsl(var(--gold)/0.06)]"
-              >
-                {isExportingHtml ? <RefreshCw size={12} className="animate-spin" /> : <Download size={12} />}
-                {isExportingHtml ? "Exporting…" : "Export HTML"}
-              </Button>
-            )}
-
-            <Button
-              onClick={handleExportPng}
-              disabled={isExportingPng}
-              variant="outline"
-              className="gap-1.5 h-8 text-xs font-semibold border-[hsl(var(--border))] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]"
-            >
-              {isExportingPng ? <RefreshCw size={12} className="animate-spin" /> : <Image size={12} />}
-              {isExportingPng ? "…" : "PNG"}
-            </Button>
-
-            <Button
-              onClick={() => setBatchPrintOpen(true)}
-              variant="outline"
-              className="gap-1.5 h-8 text-xs font-semibold border-[hsl(var(--border))] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]"
-            >
-              <Printer size={12} />
-              Print
-            </Button>
-
-            <Button
-              onClick={handleExport}
-              disabled={isExporting}
-              className="gap-2 h-8 text-xs font-semibold text-white hover:opacity-90 transition-opacity"
-              style={{ background: "linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-dark)))" }}
-            >
-              {isExporting ? <RefreshCw size={12} className="animate-spin" /> : <Download size={12} />}
-              {isExporting ? "Exporting…" : "Export PDF"}
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Share Modal ─────────────────────────────────────────── */}
       {shareToken && (
-        <Dialog open={shareModalOpen} onOpenChange={setShareModalOpen}>
-          <DialogContent className="max-w-sm">
-            <DialogHeader>
-              <DialogTitle className="flex items-center gap-2">
-                <Share2 size={16} className="text-[hsl(var(--gold))]" />
-                Share Your Card
-              </DialogTitle>
-              <DialogDescription>
-                Anyone with this link can view your card and save your contact
-              </DialogDescription>
-            </DialogHeader>
-
-            {(() => {
-              const shareUrl = `${window.location.origin}/card/${shareToken}`;
-              const qrUrl = buildQrUrl(shareUrl, frontPrimary, "#ffffff", 160);
-              return (
-                <div className="space-y-4">
-                  {/* QR Code */}
-                  <div className="flex justify-center">
-                    <div className="p-3 bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm">
-                      <img src={qrUrl} alt="Share QR Code" className="w-40 h-40 rounded-lg" />
-                    </div>
-                  </div>
-
-                  {/* URL input + copy */}
-                  <div className="flex gap-2">
-                    <input
-                      readOnly
-                      value={shareUrl}
-                      className="flex-1 h-9 px-3 text-xs rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--muted))] text-[hsl(var(--foreground))] select-all focus:outline-none"
-                      onClick={e => (e.target as HTMLInputElement).select()}
-                    />
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="h-9 gap-1.5 text-xs"
-                      onClick={() => {
-                        navigator.clipboard.writeText(shareUrl);
-                        toast.success("Link copied!");
-                      }}
-                    >
-                      <Copy size={12} /> Copy
-                    </Button>
-                  </div>
-
-                  {/* Action buttons */}
-                  <div className="grid grid-cols-2 gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="h-9 gap-1.5 text-xs border-[hsl(var(--border))] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]"
-                      onClick={() => {
-                        const msg = encodeURIComponent(`Here's my digital business card: ${shareUrl}`);
-                        window.open(`https://wa.me/?text=${msg}`, "_blank");
-                      }}
-                    >
-                      💬 WhatsApp
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="h-9 gap-1.5 text-xs"
-                      onClick={() => window.open(shareUrl, "_blank")}
-                    >
-                      <ExternalLink size={12} /> Preview
-                    </Button>
-                  </div>
-
-                  <p className="text-[10px] text-center text-[hsl(var(--muted-foreground))]">
-                    Scan QR or share the link — recipients can tap "Save Contact" to add you instantly
-                  </p>
-                </div>
-              );
-            })()}
-          </DialogContent>
-        </Dialog>
+        <ShareModal
+          open={shareModalOpen}
+          onOpenChange={setShareModalOpen}
+          shareToken={shareToken}
+          frontPrimary={frontPrimary}
+        />
       )}
 
       {/* ── Main Content ───────────────────────────────────────── */}
@@ -2456,141 +2302,15 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
       </div>
     </div>
 
-      {/* Batch Print Dialog */}
-      <Dialog open={batchPrintOpen} onOpenChange={setBatchPrintOpen}>
-        <DialogContent className="max-w-sm">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Printer size={16} className="text-[hsl(var(--gold))]" />
-              Batch Print Layout
-            </DialogTitle>
-            <DialogDescription>
-              Print multiple cards on a single A4 sheet for professional cutting.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div>
-              <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">
-                Cards per page: {batchPrintCount}
-              </Label>
-              <Slider
-                min={2} max={10} step={2}
-                value={[batchPrintCount]}
-                onValueChange={([v]) => setBatchPrintCount(v)}
-              />
-              <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-1">
-                Standard: 8 cards per A4 (2×4 grid)
-              </p>
-            </div>
-            <div className="rounded-xl bg-[hsl(var(--muted))] p-3 text-[10px] text-[hsl(var(--muted-foreground))] space-y-1">
-              <p className="font-semibold text-[hsl(var(--foreground))]">📐 Print Tips</p>
-              <p>• Use thick cardstock (300gsm+) for professional results</p>
-              <p>• Print at 100% scale — do not "Fit to page"</p>
-              <p>• Cut along the borders with a paper trimmer</p>
-            </div>
-            <Button
-              onClick={handleBatchPrint}
-              className="w-full gap-2 font-semibold text-white"
-              style={{ background: "linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-dark)))" }}
-            >
-              <Printer size={14} /> Print {batchPrintCount} Cards
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <BatchPrintDialog
+        open={batchPrintOpen}
+        onOpenChange={setBatchPrintOpen}
+        count={batchPrintCount}
+        setCount={setBatchPrintCount}
+        onPrint={handleBatchPrint}
+      />
 
-      {/* NFC Programming Guide Modal */}
-      <Dialog open={nfcGuideOpen} onOpenChange={setNfcGuideOpen}>
-        <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-lg">
-              <Wifi size={20} className="text-[hsl(var(--gold))]" />
-              NFC Tag Programming Guide
-            </DialogTitle>
-            <DialogDescription>
-              Write your digital card URL to an NFC sticker so anyone can tap and view your card instantly.
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-5 mt-2">
-            {/* What you need */}
-            <div className="rounded-xl border border-[hsl(var(--border))] p-4 bg-[hsl(var(--muted))]">
-              <h4 className="text-sm font-bold text-[hsl(var(--foreground))] mb-2 flex items-center gap-2">
-                <CreditCard size={14} className="text-[hsl(var(--gold))]" />
-                What You Need
-              </h4>
-              <ul className="text-xs text-[hsl(var(--muted-foreground))] space-y-1.5 list-disc pl-4">
-                <li>An NFC sticker/card (NTAG213 or NTAG215 — available on Amazon for ~$1 each)</li>
-                <li>A smartphone with NFC capability (most modern phones have it)</li>
-                <li>A free NFC writer app (see below)</li>
-                <li>Your shared card URL (from the Share button after saving)</li>
-              </ul>
-            </div>
-
-            {/* Step-by-step */}
-            <div className="space-y-3">
-              <h4 className="text-sm font-bold text-[hsl(var(--foreground))] flex items-center gap-2">
-                <Sparkles size={14} className="text-[hsl(var(--gold))]" />
-                Step-by-Step Instructions
-              </h4>
-
-              {[
-                { step: 1, title: "Download a Free NFC App", desc: "Install \"NFC Tools\" (free on both iOS and Android) from the App Store or Google Play.", icon: <Smartphone size={16} /> },
-                { step: 2, title: "Get Your Card URL", desc: "Save your digital card, click \"Share\", and copy the public link (e.g., yoursite.com/card/abc123).", icon: <Copy size={16} /> },
-                { step: 3, title: "Open NFC Tools → Write", desc: "Open the app, tap the \"Write\" tab, then tap \"Add a record\" → select \"URL/URI\".", icon: <Type size={16} /> },
-                { step: 4, title: "Paste Your Card URL", desc: "Paste your shared card URL into the URL field. Make sure it starts with https://.", icon: <Globe size={16} /> },
-                { step: 5, title: "Hold Phone to NFC Tag", desc: "Tap \"Write\", then hold the back of your phone against the NFC sticker until you see a success confirmation.", icon: <Wifi size={16} /> },
-                { step: 6, title: "Test It!", desc: "Have someone tap their phone on the sticker — your digital card page opens instantly in their browser.", icon: <Check size={16} /> },
-              ].map(({ step, title, desc, icon }) => (
-                <div key={step} className="flex gap-3 items-start">
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold))] flex items-center justify-center text-xs font-bold">
-                    {step}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-1.5">
-                      {icon} {title}
-                    </p>
-                    <p className="text-xs text-[hsl(var(--muted-foreground))] mt-0.5">{desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Recommended apps */}
-            <div className="rounded-xl border border-[hsl(var(--gold)/0.3)] p-4 bg-[hsl(var(--gold)/0.05)]">
-              <h4 className="text-sm font-bold text-[hsl(var(--foreground))] mb-2">Recommended Free Apps</h4>
-              <div className="grid grid-cols-2 gap-2">
-                {[
-                  { name: "NFC Tools", platform: "iOS & Android", note: "Most popular, clean UI" },
-                  { name: "NFC TagWriter", platform: "Android", note: "By NXP (chip maker)" },
-                  { name: "Simply NFC", platform: "iOS", note: "Minimal & fast" },
-                  { name: "TagInfo", platform: "Android", note: "Read & diagnose tags" },
-                ].map(app => (
-                  <div key={app.name} className="p-2.5 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))]">
-                    <p className="text-xs font-semibold text-[hsl(var(--foreground))]">{app.name}</p>
-                    <p className="text-[10px] text-[hsl(var(--muted-foreground))]">{app.platform}</p>
-                    <p className="text-[10px] text-[hsl(var(--gold-dark))]">{app.note}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Pro tips */}
-            <div className="rounded-xl border border-[hsl(var(--border))] p-4 bg-[hsl(var(--muted))]">
-              <h4 className="text-sm font-bold text-[hsl(var(--foreground))] mb-2 flex items-center gap-2">
-                <Star size={14} className="text-[hsl(var(--gold))]" />
-                Pro Tips
-              </h4>
-              <ul className="text-xs text-[hsl(var(--muted-foreground))] space-y-1.5 list-disc pl-4">
-                <li>Stick NFC tags on the back of your physical business card, phone case, or portfolio</li>
-                <li>NTAG215 tags hold more data and are more reliable than NTAG213</li>
-                <li>Lock the tag after writing to prevent accidental overwrites</li>
-                <li>Test with both iPhone (top edge) and Android (center back) — NFC antenna position varies</li>
-              </ul>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <NfcGuideDialog open={nfcGuideOpen} onOpenChange={setNfcGuideOpen} />
     </>
   );
 }
