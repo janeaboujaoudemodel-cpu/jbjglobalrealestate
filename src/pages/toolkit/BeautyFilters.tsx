@@ -576,8 +576,8 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                           <button key={p.id} onClick={() => applyPreset(p.id)}
                             className="px-3 py-1.5 rounded-xl text-xs transition-all font-medium"
                             style={{
-                              background: selectedPreset === p.id ? "rgba(99,102,241,0.35)" : "rgba(255,255,255,0.10)",
-                              border: `1px solid ${selectedPreset === p.id ? "rgba(99,102,241,0.75)" : "rgba(255,255,255,0.22)"}`,
+                              background: selectedPreset === p.id ? "rgba(184,148,62,0.35)" : "rgba(255,255,255,0.10)",
+                              border: `1px solid ${selectedPreset === p.id ? "rgba(184,148,62,0.75)" : "rgba(255,255,255,0.22)"}`,
                               color: selectedPreset === p.id ? I.text : "rgba(255,255,255,0.88)",
                             }}>{p.name}</button>
                         ))}
