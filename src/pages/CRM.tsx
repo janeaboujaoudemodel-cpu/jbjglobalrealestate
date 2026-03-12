@@ -358,6 +358,8 @@ const CRM = () => {
       a.download = `jbj_crm_leads_${new Date().toISOString().split('T')[0]}.xlsx`;
       a.click();
       URL.revokeObjectURL(url);
+      // Update last download timestamp
+      localStorage.setItem('crm_last_download_ts', new Date().toISOString());
       toast.success(`Exported ${leads.length} leads to Excel`);
     } catch (err) {
       console.error("Excel export failed:", err);
