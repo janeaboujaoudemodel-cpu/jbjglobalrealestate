@@ -44,7 +44,7 @@ import { CardFace, CardCanvas } from "./BusinessCardPreview";
 import { exportCardAsPDF, exportDigitalCardAsHtml } from "./businessCardExport";
 import { BusinessCardHeader } from "./BusinessCardHeader";
 import { ShareModal, BatchPrintDialog, NfcGuideDialog } from "./BusinessCardDialogs";
-
+import { BusinessCardRightPanel } from "./BusinessCardRightPanel";
 
 
 
