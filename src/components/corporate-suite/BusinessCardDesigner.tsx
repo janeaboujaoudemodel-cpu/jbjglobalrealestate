@@ -47,6 +47,24 @@ interface CardData {
   address: string;
 }
 
+type BilingualMode = "off" | "dual-side" | "single-card";
+type BilingualLanguage = "ar" | "zh" | "hi" | "fr" | "de" | "es" | "ru" | "ja" | "ko" | "ur" | "fa" | "custom";
+
+const BILINGUAL_LANGUAGES: { id: BilingualLanguage; label: string; dir: "rtl" | "ltr" }[] = [
+  { id: "ar", label: "العربية (Arabic)", dir: "rtl" },
+  { id: "ur", label: "اردو (Urdu)", dir: "rtl" },
+  { id: "fa", label: "فارسی (Persian)", dir: "rtl" },
+  { id: "zh", label: "中文 (Chinese)", dir: "ltr" },
+  { id: "hi", label: "हिन्दी (Hindi)", dir: "ltr" },
+  { id: "ja", label: "日本語 (Japanese)", dir: "ltr" },
+  { id: "ko", label: "한국어 (Korean)", dir: "ltr" },
+  { id: "fr", label: "Français (French)", dir: "ltr" },
+  { id: "de", label: "Deutsch (German)", dir: "ltr" },
+  { id: "es", label: "Español (Spanish)", dir: "ltr" },
+  { id: "ru", label: "Русский (Russian)", dir: "ltr" },
+  { id: "custom", label: "Other", dir: "ltr" },
+];
+
 interface FieldPos { x: number; y: number; }
 
 interface AiSvgElement {
