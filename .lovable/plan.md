@@ -1,72 +1,49 @@
 
-## CRM System Upgrade — Implementation Status
 
-### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
+## Fix Plan: Collapsed Nav Direct Navigation + Header Mode & Spacing
 
-#### Task 1: Full System Audit ✅
-- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
-- Identified 10 weaknesses (documented in plan)
+### Issues Found
 
-#### Task 2: Leads Security Hardening ✅
-- CSV export no longer includes email/phone PII
-- Audit logging added to exports with user_agent tracking
-- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
+1. **Collapsed sidebar click** (lines 1400-1404): Clicking a section icon when minimized expands the sidebar and opens the section, but does NOT navigate anywhere. User wants immediate redirect to the first page of that section.
 
-#### Task 3: Encryption Hardening ✅
-- CSV export stripped of `email_lower` and `phone_e164` fields
-- Export audit logged to both `crm_audit_logs` and `audit_logs`
+2. **Mode switcher unreadable** (`ModeSwitcher.tsx` line 131-132): Currently shows only `shortLabel` (single letter "I", "B", "D") instead of the full label like "Mode: Investor". The `max-w-[160px]` constraint + `hidden sm:block` makes it too compact.
 
-#### Task 4: Lead Lifecycle Upgrade ✅
-- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
-- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
-- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
+3. **Header spacing/gaps**: Badge sizing uses non-standard `w-4.5 h-4.5` classes (not valid Tailwind). Need to use `w-[18px] h-[18px]` or `min-w-4 h-4` for proper rendering.
 
-#### Task 5: CRM Structure Upgrade ✅
-- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
-- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
-- KanbanPipeline expanded to show all 17 relevant stages
+### Changes
 
-#### Task 6: Performance Optimization ✅
-- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
-- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
-- `crm_leads_updated_at_trigger` auto-updates `updated_at`
+#### 1. `GlobalVerticalNav.tsx` — Collapsed icon click navigates directly
 
-#### Task 7: AI Intelligence Integration ✅
-- New edge function `ai-lead-intelligence` using Lovable AI gateway
-- Supports 3 modes: `score`, `summary`, `next_action`
-- Tool-calling for structured scoring output
-- JWT auth + CRM role validation
-- PII sanitized before sending to AI
+**Current** (lines 1400-1404): Expands sidebar + opens section, no navigation.
 
-#### Task 8: Workflow Automation ✅
-- Created `crm_automation_rules` table with RLS (owner manage, admin view)
-- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
+**Fix**: When collapsed and user clicks a section icon, navigate to the first item's `href` in that section instead of expanding. Keep sidebar collapsed.
 
-#### Task 10: Role & Permission System ✅
-- RLS on automation rules: owner CRUD, admin read-only
-- CSV export restricted to owner_admin/founder roles
+```tsx
+onClick={() => {
+  const firstItem = sectionGroups[sectionKey]?.[0];
+  if (firstItem?.href && firstItem.href !== '#') {
+    navigate(firstItem.href);
+  }
+}}
+```
 
-#### Task 12: Backend/Database Upgrade ✅
-- 3 new performance indexes
-- Auto-updated_at trigger on crm_leads
-- Duplicate hash computation trigger
-- Rate-limiting security function
+#### 2. `ModeSwitcher.tsx` — Restore full readable label
 
-#### Task 13: Data Cleanliness ✅
-- `duplicate_hash` with auto-compute trigger prevents future duplicates
-- Partial unique index enforces uniqueness at DB level
+**Current** (line 131): Shows `currentConfig.shortLabel` with `max-w-[160px]`.
 
-### Files Changed
-| File | Action |
+**Fix**: Show `currentConfig.label` (e.g., "Mode: Investor"), increase `max-w` to `max-w-[200px]`, restore `text-[11px]` to `text-xs`.
+
+#### 3. `HorizontalUtilityBar.tsx` — Fix badge sizing
+
+**Current** (lines 287, 305): Uses `w-4.5 h-4.5` which is not a valid Tailwind class.
+
+**Fix**: Replace with `min-w-[18px] h-[18px]` for proper badge rendering. Remove any unnecessary gaps between right-side items.
+
+### Files to modify
+
+| File | Change |
 |------|--------|
-| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
-| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
-| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
-| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
-| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
-| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
-| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
-| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
-| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
+| `src/components/navigation/GlobalVerticalNav.tsx` | Collapsed icon click → navigate to first page in section |
+| `src/components/ModeSwitcher.tsx` | Restore full "Mode: Investor" label, widen container |
+| `src/components/navigation/HorizontalUtilityBar.tsx` | Fix badge classes, tighten right-side spacing |
+
