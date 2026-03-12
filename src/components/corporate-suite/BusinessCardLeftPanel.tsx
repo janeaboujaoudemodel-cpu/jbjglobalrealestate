@@ -20,8 +20,8 @@ import { CardFace } from "./BusinessCardPreview";
 
 interface BusinessCardLeftPanelProps {
   // Card Shape
-  cardShape: string;
-  setCardShape: (v: string) => void;
+  cardShape: CardShape;
+  setCardShape: (v: CardShape) => void;
   shapeOpen: boolean;
   setShapeOpen: (v: boolean) => void;
   setNfcGuideOpen: (v: boolean) => void;
