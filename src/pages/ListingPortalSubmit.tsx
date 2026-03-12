@@ -15,6 +15,7 @@ import {
   CheckCircle2, AlertCircle, Image, File, Trash2, Plus, RefreshCw,
   TrendingUp, Shield, User, Phone, Mail, CreditCard, Link as LinkIcon, FileText as FileTextIcon, Globe
 } from 'lucide-react';
+import { FormDraftBar } from "@/components/shared/FormDraftBar";
 import { BrandedLoader } from "@/components/ui/BrandedLoader";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
