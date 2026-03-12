@@ -11,6 +11,7 @@ import {
   Save, Palette, Zap, Star, Cpu, Minus, Type, User,
   Share2, Copy, ExternalLink, HelpCircle, AlignLeft, AlignCenter, AlignRight, Underline,
   Smartphone, Wifi, Droplets, Sun, Diamond, Stamp,
+  FolderOpen, Image, Printer, Trash2, Clock,
 } from "lucide-react";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
@@ -1554,6 +1555,20 @@ export default function BusinessCardDesigner() {
   // Trade license auto-fill
   const [tradeLicenseOpen, setTradeLicenseOpen] = useState(false);
 
+  // Load saved designs
+  const [loadSavedOpen, setLoadSavedOpen] = useState(false);
+  const [savedDesigns, setSavedDesigns] = useState<{ id: string; name: string; created_at: string; metadata: any }[]>([]);
+  const [isLoadingSaved, setIsLoadingSaved] = useState(false);
+  const [isDeletingSaved, setIsDeletingSaved] = useState<string | null>(null);
+
+  // PNG export
+  const cardPreviewRef = useRef<HTMLDivElement>(null);
+  const [isExportingPng, setIsExportingPng] = useState(false);
+
+  // Batch print
+  const [batchPrintOpen, setBatchPrintOpen] = useState(false);
+  const [batchPrintCount, setBatchPrintCount] = useState(8);
+
   const [data, setData] = useState<CardData>({
     name: "", title: "", company: "", phone: "", email: "", website: "", address: "",
   });
@@ -1731,6 +1746,128 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
       title:   extracted.position ? String(extracted.position) : (extracted.title ? String(extracted.title) : prev.title),
     }));
     toast.success("Trade license data extracted & applied!");
+  };
+
+  // ── Load saved designs ──────────────────────────────────────
+  const handleLoadSavedDesigns = async () => {
+    setIsLoadingSaved(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { toast.error("Please sign in to view saved cards."); return; }
+      const { data: assets, error } = await supabase
+        .from("design_assets")
+        .select("id, name, created_at, metadata")
+        .eq("user_id", user.id)
+        .eq("asset_type", "business_card")
+        .order("created_at", { ascending: false })
+        .limit(20);
+      if (error) throw error;
+      setSavedDesigns(assets || []);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to load saved designs.");
+    } finally {
+      setIsLoadingSaved(false);
+    }
+  };
+
+  const handleRestoreSaved = (metadata: any) => {
+    if (!metadata) return;
+    if (metadata.data) setData(metadata.data);
+    if (metadata.frontTemplate) setFrontTemplate(metadata.frontTemplate);
+    if (metadata.backTemplate) setBackTemplate(metadata.backTemplate);
+    if (metadata.frontColorIdx != null) setFrontColorIdx(metadata.frontColorIdx);
+    if (metadata.backColorIdx != null) setBackColorIdx(metadata.backColorIdx);
+    if (metadata.frontCustomColor != null) setFrontCustomColor(metadata.frontCustomColor);
+    if (metadata.backCustomColor != null) setBackCustomColor(metadata.backCustomColor);
+    if (metadata.cardShape) setCardShape(metadata.cardShape);
+    if (metadata.qrEnabled != null) setQrEnabled(metadata.qrEnabled);
+    if (metadata.qrContentType) setQrContentType(metadata.qrContentType);
+    if (metadata.qrCustomContent != null) setQrCustomContent(metadata.qrCustomContent);
+    if (metadata.qrSize) setQrSize(metadata.qrSize);
+    if (metadata.qrColor != null) setQrColor(metadata.qrColor);
+    if (metadata.qrBgColor) setQrBgColor(metadata.qrBgColor);
+    if (metadata.qrPosition) setQrPosition(metadata.qrPosition);
+    if (metadata.logoUrl != null) setLogoUrl(metadata.logoUrl);
+    if (metadata.logoSize) setLogoSize(metadata.logoSize);
+    if (metadata.logoPos) setLogoPos(metadata.logoPos);
+    if (metadata.aiDesignData !== undefined) setAiDesignData(metadata.aiDesignData);
+    toast.success("Card design restored!");
+    setLoadSavedOpen(false);
+  };
+
+  const handleDeleteSaved = async (id: string) => {
+    setIsDeletingSaved(id);
+    try {
+      const { error } = await supabase.from("design_assets").delete().eq("id", id);
+      if (error) throw error;
+      setSavedDesigns(prev => prev.filter(d => d.id !== id));
+      toast.success("Design deleted.");
+    } catch (err) {
+      console.error(err);
+      toast.error("Delete failed.");
+    } finally {
+      setIsDeletingSaved(null);
+    }
+  };
+
+  // ── PNG export ──────────────────────────────────────────────
+  const handleExportPng = async () => {
+    if (!cardPreviewRef.current) { toast.error("Preview not ready."); return; }
+    setIsExportingPng(true);
+    try {
+      const html2canvas = (await import("html2canvas")).default;
+      const canvas = await html2canvas(cardPreviewRef.current, {
+        scale: 3,
+        useCORS: true,
+        backgroundColor: null,
+        logging: false,
+      });
+      const url = canvas.toDataURL("image/png");
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `business-card-${(data.name || "card").toLowerCase().replace(/\s+/g, "-")}.png`;
+      a.click();
+      toast.success("PNG exported at high resolution!");
+    } catch (err) {
+      console.error(err);
+      toast.error("PNG export failed. Please try again.");
+    } finally {
+      setIsExportingPng(false);
+    }
+  };
+
+  // ── Batch print ─────────────────────────────────────────────
+  const handleBatchPrint = () => {
+    const printWindow = window.open("", "_blank");
+    if (!printWindow) { toast.error("Pop-up blocked. Please allow pop-ups."); return; }
+    const cardHtml = cardPreviewRef.current?.innerHTML || "";
+    const cardStyle = cardPreviewRef.current ? window.getComputedStyle(cardPreviewRef.current) : null;
+
+    const cols = 2;
+    const rows = Math.ceil(batchPrintCount / cols);
+    const cards = Array.from({ length: batchPrintCount }, () => `
+      <div style="width:3.5in;height:2in;overflow:hidden;border:0.5px solid #ddd;border-radius:4px;box-sizing:border-box;flex-shrink:0;">
+        ${cardHtml}
+      </div>
+    `).join("");
+
+    printWindow.document.write(`<!DOCTYPE html>
+<html><head><title>Print Business Cards</title>
+<style>
+  @page { size: A4; margin: 0.5in; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: Arial, sans-serif; }
+  .grid { display: flex; flex-wrap: wrap; gap: 0.15in; justify-content: center; }
+  .grid > div { page-break-inside: avoid; }
+  @media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+</style></head>
+<body>
+  <div class="grid">${cards}</div>
+  <script>window.onload = () => { window.print(); }</script>
+</body></html>`);
+    printWindow.document.close();
+    toast.success(`Print layout ready — ${batchPrintCount} cards on A4`);
   };
 
   // Save Card
@@ -1979,6 +2116,25 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
             )}
 
             <Button
+              onClick={handleExportPng}
+              disabled={isExportingPng}
+              variant="outline"
+              className="gap-1.5 h-8 text-xs font-semibold border-[hsl(var(--border))] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]"
+            >
+              {isExportingPng ? <RefreshCw size={12} className="animate-spin" /> : <Image size={12} />}
+              {isExportingPng ? "…" : "PNG"}
+            </Button>
+
+            <Button
+              onClick={() => setBatchPrintOpen(true)}
+              variant="outline"
+              className="gap-1.5 h-8 text-xs font-semibold border-[hsl(var(--border))] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]"
+            >
+              <Printer size={12} />
+              Print
+            </Button>
+
+            <Button
               onClick={handleExport}
               disabled={isExporting}
               className="gap-2 h-8 text-xs font-semibold text-white hover:opacity-90 transition-opacity"
@@ -2196,7 +2352,73 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
             </div>
           </Collapsible>
 
-          {/* Bilingual Card */}
+          {/* Load Saved Designs */}
+          <Collapsible open={loadSavedOpen} onOpenChange={(open) => { setLoadSavedOpen(open); if (open) handleLoadSavedDesigns(); }}>
+            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+              <CollapsibleTrigger asChild>
+                <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
+                  <div className="flex items-center gap-2">
+                    <FolderOpen size={13} className="text-[hsl(var(--gold))]" />
+                    <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">Load Saved</span>
+                    {savedDesigns.length > 0 && (
+                      <span className="text-[8px] bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold-dark))] px-1.5 py-0.5 rounded-full font-semibold">
+                        {savedDesigns.length}
+                      </span>
+                    )}
+                  </div>
+                  <ChevronDown size={13} className={`text-[hsl(var(--muted-foreground))] transition-transform ${loadSavedOpen ? "rotate-180" : ""}`} />
+                </button>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="px-4 pb-4 border-t border-[hsl(var(--border))] space-y-2 pt-3">
+                  {isLoadingSaved ? (
+                    <div className="flex items-center gap-2 py-4 justify-center">
+                      <RefreshCw size={14} className="animate-spin text-[hsl(var(--gold))]" />
+                      <span className="text-[10px] text-[hsl(var(--muted-foreground))]">Loading saved designs…</span>
+                    </div>
+                  ) : savedDesigns.length === 0 ? (
+                    <p className="text-[10px] text-[hsl(var(--muted-foreground))] text-center py-4">No saved designs yet. Save a card to see it here.</p>
+                  ) : (
+                    <div className="space-y-1.5 max-h-[280px] overflow-y-auto">
+                      {savedDesigns.map(design => (
+                        <div
+                          key={design.id}
+                          className="flex items-center gap-2 p-2.5 rounded-xl border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] hover:bg-[hsl(var(--muted)/0.5)] transition-all cursor-pointer group"
+                          onClick={() => handleRestoreSaved(design.metadata)}
+                        >
+                          <div className="w-8 h-8 rounded-lg bg-[hsl(var(--gold)/0.1)] flex items-center justify-center flex-shrink-0">
+                            <CreditCard size={12} className="text-[hsl(var(--gold))]" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-[10px] font-semibold text-[hsl(var(--foreground))] truncate">{design.name}</p>
+                            <p className="text-[9px] text-[hsl(var(--muted-foreground))] flex items-center gap-1">
+                              <Clock size={8} />
+                              {new Date(design.created_at).toLocaleDateString()}
+                            </p>
+                          </div>
+                          <button
+                            onClick={(e) => { e.stopPropagation(); handleDeleteSaved(design.id); }}
+                            disabled={isDeletingSaved === design.id}
+                            className="opacity-0 group-hover:opacity-100 w-6 h-6 rounded-md flex items-center justify-center text-red-400 hover:text-red-600 hover:bg-red-50 transition-all"
+                          >
+                            {isDeletingSaved === design.id ? <RefreshCw size={10} className="animate-spin" /> : <Trash2 size={10} />}
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <Button
+                    onClick={handleLoadSavedDesigns}
+                    disabled={isLoadingSaved}
+                    variant="outline"
+                    className="w-full h-7 text-[9px] gap-1.5"
+                  >
+                    <RefreshCw size={9} className={isLoadingSaved ? "animate-spin" : ""} /> Refresh
+                  </Button>
+                </div>
+              </CollapsibleContent>
+            </div>
+          </Collapsible>
           <Collapsible open={bilingualOpen} onOpenChange={setBilingualOpen}>
             <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
               <CollapsibleTrigger asChild>
@@ -2579,7 +2801,7 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                 />
               </PhoneMockup>
             ) : (
-              <div className="w-full max-w-[400px]">
+              <div className="w-full max-w-[400px]" ref={cardPreviewRef}>
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={`${frontTemplate}-${backTemplate}-${frontColorIdx}-${backColorIdx}-${side}-${cardShape}`}
@@ -3656,6 +3878,49 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
         </div>
       </div>
     </div>
+
+      {/* Batch Print Dialog */}
+      <Dialog open={batchPrintOpen} onOpenChange={setBatchPrintOpen}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Printer size={16} className="text-[hsl(var(--gold))]" />
+              Batch Print Layout
+            </DialogTitle>
+            <DialogDescription>
+              Print multiple cards on a single A4 sheet for professional cutting.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">
+                Cards per page: {batchPrintCount}
+              </Label>
+              <Slider
+                min={2} max={10} step={2}
+                value={[batchPrintCount]}
+                onValueChange={([v]) => setBatchPrintCount(v)}
+              />
+              <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-1">
+                Standard: 8 cards per A4 (2×4 grid)
+              </p>
+            </div>
+            <div className="rounded-xl bg-[hsl(var(--muted))] p-3 text-[10px] text-[hsl(var(--muted-foreground))] space-y-1">
+              <p className="font-semibold text-[hsl(var(--foreground))]">📐 Print Tips</p>
+              <p>• Use thick cardstock (300gsm+) for professional results</p>
+              <p>• Print at 100% scale — do not "Fit to page"</p>
+              <p>• Cut along the borders with a paper trimmer</p>
+            </div>
+            <Button
+              onClick={handleBatchPrint}
+              className="w-full gap-2 font-semibold text-white"
+              style={{ background: "linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-dark)))" }}
+            >
+              <Printer size={14} /> Print {batchPrintCount} Cards
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* NFC Programming Guide Modal */}
       <Dialog open={nfcGuideOpen} onOpenChange={setNfcGuideOpen}>
