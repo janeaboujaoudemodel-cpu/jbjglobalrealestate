@@ -161,8 +161,8 @@ const DeveloperPortal = () => {
       if (editForm.email !== repProfile.email) changedFields.push('email');
       if (editForm.phone !== ((repProfile as any).phone || '')) changedFields.push('phone');
       if (editForm.position !== ((repProfile as any).position || '')) changedFields.push('position');
-      if (editForm.developer_name !== repProfile.developer_name) changedFields.push('developer_name');
       if (editForm.nationality !== ((repProfile as any).nationality || '')) changedFields.push('nationality');
+      // developer_name is LOCKED — never update it
 
       const { error } = await supabase
         .from('developer_representatives')
@@ -171,7 +171,7 @@ const DeveloperPortal = () => {
           position: editForm.position || null,
           email: editForm.email,
           phone: editForm.phone || null,
-          developer_name: editForm.developer_name,
+          // developer_name is LOCKED after registration — not updatable
           nationality: editForm.nationality || null,
         } as any)
         .eq('id', repProfile.id);
