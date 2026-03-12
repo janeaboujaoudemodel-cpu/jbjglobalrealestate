@@ -2801,7 +2801,7 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                 />
               </PhoneMockup>
             ) : (
-              <div className="w-full max-w-[400px]">
+              <div className="w-full max-w-[400px]" ref={cardPreviewRef}>
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={`${frontTemplate}-${backTemplate}-${frontColorIdx}-${backColorIdx}-${side}-${cardShape}`}
