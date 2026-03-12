@@ -6384,42 +6384,54 @@ export type Database = {
           developer_id: string
           email: string | null
           full_name: string
+          gender: string | null
           id: string
           is_active: boolean | null
           is_primary: boolean | null
+          languages: string[] | null
+          nationality: string | null
           notes: string | null
           phone_e164: string
           title: string | null
           updated_at: string
           whatsapp_number: string | null
+          years_in_real_estate: number | null
         }
         Insert: {
           created_at?: string
           developer_id: string
           email?: string | null
           full_name: string
+          gender?: string | null
           id?: string
           is_active?: boolean | null
           is_primary?: boolean | null
+          languages?: string[] | null
+          nationality?: string | null
           notes?: string | null
           phone_e164: string
           title?: string | null
           updated_at?: string
           whatsapp_number?: string | null
+          years_in_real_estate?: number | null
         }
         Update: {
           created_at?: string
           developer_id?: string
           email?: string | null
           full_name?: string
+          gender?: string | null
           id?: string
           is_active?: boolean | null
           is_primary?: boolean | null
+          languages?: string[] | null
+          nationality?: string | null
           notes?: string | null
           phone_e164?: string
           title?: string | null
           updated_at?: string
           whatsapp_number?: string | null
+          years_in_real_estate?: number | null
         }
         Relationships: [
           {
