@@ -733,7 +733,8 @@ const DeveloperPortal = () => {
         </div>
       )}
     </div>
-  );
+    );
+  };
 
   return (
     <>
