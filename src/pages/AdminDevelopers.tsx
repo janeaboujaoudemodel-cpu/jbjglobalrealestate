@@ -530,6 +530,29 @@ const AdminDevelopers = () => {
               <Label>Email</Label>
               <Input value={repForm.email} onChange={(e) => setRepForm(f => ({ ...f, email: e.target.value }))} placeholder="ahmed@developer.com" type="email" className="bg-white border-gold/20" />
             </div>
+            <div className="grid grid-cols-3 gap-4">
+              <div>
+                <Label>Nationality</Label>
+                <Input value={repForm.nationality} onChange={(e) => setRepForm(f => ({ ...f, nationality: e.target.value }))} placeholder="e.g. Indian" className="bg-white border-gold/20" />
+              </div>
+              <div>
+                <Label>Gender</Label>
+                <Select value={repForm.gender} onValueChange={(v) => setRepForm(f => ({ ...f, gender: v }))}>
+                  <SelectTrigger className="bg-white border-gold/20">
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="male">Male</SelectItem>
+                    <SelectItem value="female">Female</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label>Years in RE</Label>
+                <Input type="number" min="0" max="50" value={repForm.years_in_real_estate} onChange={(e) => setRepForm(f => ({ ...f, years_in_real_estate: e.target.value }))} placeholder="5" className="bg-white border-gold/20" />
+              </div>
+            </div>
             <div>
               <Label>Notes</Label>
               <Textarea value={repForm.notes} onChange={(e) => setRepForm(f => ({ ...f, notes: e.target.value }))} placeholder="Any additional notes..." className="bg-white border-gold/20" />
