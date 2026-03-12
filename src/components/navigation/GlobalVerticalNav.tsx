@@ -843,20 +843,7 @@ export default function GlobalVerticalNav() {
     return { highlightItems: highlights, sectionGroups: sections };
   }, []);
 
-  // Auto-open section containing active route on INITIAL MOUNT only
-  // (not on every pathname change — that overrides the user's manual toggle)
-  const hasAutoOpenedRef = React.useRef(false);
-  useEffect(() => {
-    if (hasAutoOpenedRef.current) return;
-    hasAutoOpenedRef.current = true;
-    for (const [section, items] of Object.entries(sectionGroups)) {
-      if (items.some(item => isRouteActive(item.href))) {
-        setOpenSection(section as SectionKey);
-        break;
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // Auto-open is now handled by the route-change effect above
 
   const navigate = useNavigate();
 
