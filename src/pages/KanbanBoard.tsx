@@ -178,7 +178,7 @@ const KanbanBoard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
       {/* Header */}
-      <header className="sticky top-0 z-50 border-b-2 border-[#C9A84C]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+      <header className="sticky top-0 lg:top-[48px] z-50 border-b-2 border-[#C9A84C]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
         <div className="flex h-16 items-center justify-between px-6">
           <div className="flex items-center gap-4">
             <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="text-black hover:bg-[#C9A84C]/10">

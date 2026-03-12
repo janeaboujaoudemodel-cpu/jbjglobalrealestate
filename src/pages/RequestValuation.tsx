@@ -151,7 +151,7 @@ const RequestValuation = () => {
         </section>
 
         {/* ─── ANCHOR NAV ─── */}
-        <nav className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-[#C8A766]/15 shadow-sm">
+        <nav className="sticky top-0 lg:top-[48px] z-30 bg-white/90 backdrop-blur-md border-b border-[#C8A766]/15 shadow-sm">
           <div className="max-w-5xl mx-auto px-6 overflow-x-auto scrollbar-hide">
             <div className="flex gap-6 py-3 min-w-max">
               {anchors.map(a => (

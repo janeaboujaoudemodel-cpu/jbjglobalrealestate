@@ -190,7 +190,7 @@ const RealEstateSuite = () => {
         />
 
         {/* Section Tabs - Horizontal Pills */}
-        <div className="sticky top-0 z-40 bg-zinc-900/95 backdrop-blur-sm border-b border-gold/20">
+        <div className="sticky top-0 lg:top-[48px] z-40 bg-zinc-900/95 backdrop-blur-sm border-b border-gold/20">
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex gap-1 py-3 overflow-x-auto scrollbar-hide">
               {SECTIONS.map((section) => {

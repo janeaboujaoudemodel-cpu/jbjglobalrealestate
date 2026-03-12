@@ -274,7 +274,7 @@ const CRMTasks = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
       {/* Header */}
-      <header className="border-b border-gold/20 bg-white/80 backdrop-blur-md sticky top-0 z-50">
+      <header className="border-b border-gold/20 bg-white/80 backdrop-blur-md sticky top-0 lg:top-[48px] z-50">
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link to="/crm">
