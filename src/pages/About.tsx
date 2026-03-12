@@ -193,19 +193,18 @@ const About = () => {
                   <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
                 </button>
               </Link>
-              <Link to="/contact" className="relative z-20">
-                <button 
-                  className="group inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent"
-                  style={{
-                    border: '2px solid rgba(255,255,255,0.8)',
-                    boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
-                  }}
-                >
-                  <span className="text-white group-hover:text-black transition-colors">Contact Our Team</span>
-                  <ArrowUpRight className="w-4 h-4 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
-                  {/* Hover fill overlay */}
-                  <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
-                </button>
+              <Link 
+                to="/contact" 
+                className="relative z-20 group inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent"
+                style={{
+                  border: '2px solid rgba(255,255,255,0.8)',
+                  boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
+                }}
+              >
+                <span className="text-white group-hover:text-black transition-colors">Contact Our Team</span>
+                <ArrowUpRight className="w-4 h-4 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+                {/* Hover fill overlay */}
+                <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
               </Link>
             </motion.div>
           </motion.div>
