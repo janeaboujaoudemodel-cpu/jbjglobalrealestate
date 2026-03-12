@@ -56,7 +56,7 @@ interface BusinessCardCenterPanelProps {
   setInlineEditField: (v: keyof CardData | null) => void;
   inlineEditField: keyof CardData | null;
   setData: React.Dispatch<React.SetStateAction<CardData>>;
-  finishEffect: string;
+  finishEffect: FinishEffect;
   // Template grid
   frontColorIdx: number;
   backColorIdx: number;
