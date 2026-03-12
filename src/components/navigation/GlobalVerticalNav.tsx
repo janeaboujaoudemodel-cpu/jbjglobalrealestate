@@ -793,13 +793,25 @@ export default function GlobalVerticalNav() {
 
   const closeMegaMenu = useCallback(() => setActiveMegaMenu(null), []);
 
-  // Close mega menu and My Account section on route change
+  // Close mega menu and auto-expand active section on route change
   useEffect(() => {
     closeMegaMenu();
     setMobileOpen(false);
     // Auto-close My Account section on any navigation to prevent stuck state
     if (openSection === 'MY ACCOUNT') {
       setOpenSection(null);
+    }
+    // Auto-expand the section containing the active route
+    for (const [section, items] of Object.entries(sectionGroups)) {
+      if (items.some(item => isRouteActive(item.href))) {
+        setOpenSection(section as SectionKey);
+        // Scroll the section into view
+        requestAnimationFrame(() => {
+          const el = document.getElementById(`nav-section-${section.replace(/\s+/g, '-').toLowerCase()}`);
+          el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+        break;
+      }
     }
   }, [location.pathname, closeMegaMenu]);
 
