@@ -343,40 +343,50 @@ const DeveloperPortal = () => {
           </Card>
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className={`grid w-full bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border-2 border-gold/30 rounded-xl h-14 ${showRepTabs ? 'grid-cols-7' : 'grid-cols-5'}`}>
-              <TabsTrigger value="projects" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
-                <FolderOpen className="w-3.5 h-3.5 mr-1 hidden md:block" />
-                Projects
-              </TabsTrigger>
-              <TabsTrigger value="submit" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
-                <Plus className="w-3.5 h-3.5 mr-1 hidden md:block" />
-                New Project
-              </TabsTrigger>
-              <TabsTrigger value="events" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
-                <Calendar className="w-3.5 h-3.5 mr-1 hidden md:block" />
-                Events
-              </TabsTrigger>
-              <TabsTrigger value="register" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
-                <UserCheck className="w-3.5 h-3.5 mr-1 hidden md:block" />
-                Register
-              </TabsTrigger>
-              {showRepTabs && (
-                <>
-                  <TabsTrigger value="briefing" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
-                    <Briefcase className="w-3.5 h-3.5 mr-1 hidden md:block" />
-                    Briefing
-                  </TabsTrigger>
-                  <TabsTrigger value="messages" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
-                    <MessageSquare className="w-3.5 h-3.5 mr-1 hidden md:block" />
-                    Messages
-                  </TabsTrigger>
-                </>
-              )}
-              <TabsTrigger value="listings" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
-                <Eye className="w-3.5 h-3.5 mr-1 hidden md:block" />
-                Listings
-              </TabsTrigger>
-            </TabsList>
+            <ScrollArea className="w-full">
+              <TabsList className="inline-flex w-auto min-w-full bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border-2 border-gold/30 rounded-xl h-14 gap-0.5 px-1">
+                <TabsTrigger value="projects" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
+                  <FolderOpen className="w-3.5 h-3.5 mr-1 hidden md:block" />
+                  Projects
+                </TabsTrigger>
+                <TabsTrigger value="submit" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
+                  <Plus className="w-3.5 h-3.5 mr-1 hidden md:block" />
+                  New Project
+                </TabsTrigger>
+                <TabsTrigger value="events" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
+                  <Calendar className="w-3.5 h-3.5 mr-1 hidden md:block" />
+                  Events
+                </TabsTrigger>
+                <TabsTrigger value="register" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
+                  <UserCheck className="w-3.5 h-3.5 mr-1 hidden md:block" />
+                  Register
+                </TabsTrigger>
+                <TabsTrigger value="agreements" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
+                  <FileSignature className="w-3.5 h-3.5 mr-1 hidden md:block" />
+                  Agreements
+                </TabsTrigger>
+                <TabsTrigger value="tasks" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
+                  <ListTodo className="w-3.5 h-3.5 mr-1 hidden md:block" />
+                  Tasks
+                </TabsTrigger>
+                {showRepTabs && (
+                  <>
+                    <TabsTrigger value="briefing" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
+                      <Briefcase className="w-3.5 h-3.5 mr-1 hidden md:block" />
+                      Briefing
+                    </TabsTrigger>
+                    <TabsTrigger value="messages" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
+                      <MessageSquare className="w-3.5 h-3.5 mr-1 hidden md:block" />
+                      Messages
+                    </TabsTrigger>
+                  </>
+                )}
+                <TabsTrigger value="listings" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
+                  <Eye className="w-3.5 h-3.5 mr-1 hidden md:block" />
+                  Listings
+                </TabsTrigger>
+              </TabsList>
+            </ScrollArea>
 
             {/* MY PROJECTS TAB */}
             <TabsContent value="projects" className="mt-6">
