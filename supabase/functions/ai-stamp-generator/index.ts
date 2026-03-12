@@ -23,6 +23,8 @@ const fontMap: Record<string, string> = {
   SANS: 'Arial, Helvetica, sans-serif',
   MONOSPACE: '"Courier New", monospace',
   CALLIGRAPHY: '"Palatino Linotype", "Book Antiqua", serif',
+  GOTHIC: '"Copperplate Gothic", Copperplate, "Small Caps", serif',
+  ARABIC_MODERN: '"Arabic Typesetting", "Noto Naskh Arabic", serif',
 };
 
 const arabicFont = 'Arial, "Noto Naskh Arabic", sans-serif';
