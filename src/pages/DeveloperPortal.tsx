@@ -999,14 +999,23 @@ const DeveloperPortal = () => {
                   <div className="space-y-3">
                     <Label>Marketing Materials *</Label>
                     <div
-                      className="border-2 border-dashed border-gold/40 rounded-xl p-8 text-center hover:border-gold/70 transition-colors cursor-pointer bg-card/50"
+                      className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors cursor-pointer bg-card/50 ${mainDragOver ? 'border-primary bg-primary/5' : 'border-gold/40 hover:border-gold/70'}`}
                       onClick={() => fileInputRef.current?.click()}
+                      onDragOver={(e) => { e.preventDefault(); setMainDragOver(true); }}
+                      onDragLeave={(e) => { e.preventDefault(); setMainDragOver(false); }}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        setMainDragOver(false);
+                        if (e.dataTransfer.files.length > 0) {
+                          handleFileUpload({ target: { files: e.dataTransfer.files } } as React.ChangeEvent<HTMLInputElement>);
+                        }
+                      }}
                     >
                       <Upload className="w-10 h-10 mx-auto text-gold/60 mb-3" />
-                      <p className="text-sm font-medium text-foreground">Click to upload or drag & drop</p>
+                      <p className="text-sm font-medium text-foreground">{mainDragOver ? 'Drop files here' : 'Click to upload or drag & drop'}</p>
                       <p className="text-xs text-muted-foreground mt-1">PDFs, images, brochures, renders, videos (up to 100MB each)</p>
                       <input ref={fileInputRef} type="file" className="hidden" multiple
-                        accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx,.pptx,.mp4,.mov"
+                        accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx,.pptx,.mp4,.mov,.avi,.heic,.mp3,.wav"
                         onChange={handleFileUpload} />
                     </div>
                     {uploadingFiles && (
