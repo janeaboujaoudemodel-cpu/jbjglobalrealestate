@@ -120,8 +120,8 @@ function buildSVG(project: any, templateKey: string): string {
       const innerR = R - 10, ringR = R - 5;
       const nameFontSize = autoFontSize(name, 10, 20);
       return `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${COLOR}" stroke-width="2.2"/>
-        <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${COLOR}" stroke-width="0.8"/>
+        <circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${COLOR}" stroke-width="${ba.outerWidth}" stroke-dasharray="${ba.dash}"/>
+        ${ba.innerRing ? `<circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${COLOR}" stroke-width="${ba.innerWidth}" stroke-dasharray="${ba.innerDash}"/>` : ''}
         ${ringText('cp1t', cx, cy, ringR, `✦  ${name}  ✦`, font, 8.5, COLOR, '25%')}
         ${bottomArcText('cp1b', cx, cy, ringR, city, font, 8, COLOR)}
         ${hasMono ? monogram(cx, cy - 8, mono, font, 44, COLOR) : ''}
