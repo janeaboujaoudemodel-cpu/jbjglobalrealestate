@@ -47,6 +47,10 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
         email: form.email,
         phone: form.phone || null,
         date_of_join: form.date_of_join || null,
+        nationality: form.nationality || null,
+        gender: form.gender || null,
+        years_in_real_estate: form.years_in_real_estate ? parseInt(form.years_in_real_estate) : null,
+        languages: form.languages.length > 0 ? form.languages : null,
       } as any);
       if (error) throw error;
       toast.success('Registration submitted! You will receive a confirmation email once reviewed.');
