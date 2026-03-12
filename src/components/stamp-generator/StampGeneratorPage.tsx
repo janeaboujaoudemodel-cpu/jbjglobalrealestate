@@ -21,8 +21,11 @@ import { generateStampConcepts, StampDesignConcept } from '@/lib/stampTemplates'
 import {
   Wand2, Loader2, Check, RefreshCw, Download, Stamp,
   ArrowLeft, ChevronRight, AlertTriangle, Heart, MessageSquare,
-  Send, X, Sparkles, Palette, Layers, Type, Upload, ChevronDown
+  Send, X, Sparkles, Palette, Layers, Type, Upload, ChevronDown,
+  Undo2, Redo2, RotateCw, Save
 } from 'lucide-react';
+import { InteractiveStampCanvas, createDefaultLayers, StampLayer } from '@/components/stamp-generator/InteractiveStampCanvas';
+import { useStampHistory } from '@/hooks/useStampHistory';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -151,6 +154,24 @@ export default function StampGeneratorPage() {
   const [togglingFav, setTogglingFav] = useState<string | null>(null);
   const [svgOverrides, setSvgOverrides] = useState<Record<string, string>>({});
 
+  // Interactive canvas layers for center preview
+  const [studioLayers, setStudioLayers] = useState<StampLayer[]>(() =>
+    createDefaultLayers({ languageMode: 'BILINGUAL', iconStyle: 'MONOGRAM', density: 3, showLicenseNumber: true })
+  );
+
+  // Undo/redo for svg overrides
+  const svgHistory = useStampHistory<Record<string, string>>({});
+
+  const handleSvgUndoStudio = useCallback(() => {
+    const prev = svgHistory.undo();
+    if (prev) setSvgOverrides(prev);
+  }, [svgHistory]);
+
+  const handleSvgRedoStudio = useCallback(() => {
+    const next = svgHistory.redo();
+    if (next) setSvgOverrides(next);
+  }, [svgHistory]);
+
   useEffect(() => {
     if (!user || !projectId) return;
     loadProject();
@@ -174,6 +195,16 @@ export default function StampGeneratorPage() {
     setLocalIconStyle((data.icon_style as any) || 'MONOGRAM');
     setLocalMonogramText(data.monogram_text || data.company_name?.slice(0, 2)?.toUpperCase() || '');
     setLocalLogoUrl((data as any).uploaded_logo_url || '');
+
+    // Update studio layers from project data
+    setStudioLayers(createDefaultLayers({
+      languageMode: data.language_mode || 'BILINGUAL',
+      iconStyle: data.icon_style || 'MONOGRAM',
+      density: data.density || 3,
+      registrationNumber: data.registration_number_optional,
+      showLicenseNumber: data.show_license_number,
+      city: data.city_optional,
+    }));
 
     const isFresh = new URLSearchParams(location.search).get('fresh') === '1';
 
@@ -472,6 +503,14 @@ export default function StampGeneratorPage() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            {/* Undo/Redo */}
+            <button onClick={handleSvgUndoStudio} disabled={!svgHistory.canUndo}
+              className="w-7 h-7 rounded-lg border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--gold)/0.06)] transition-colors disabled:opacity-30"
+              title="Undo"><Undo2 size={12}/></button>
+            <button onClick={handleSvgRedoStudio} disabled={!svgHistory.canRedo}
+              className="w-7 h-7 rounded-lg border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--gold)/0.06)] transition-colors disabled:opacity-30"
+              title="Redo"><Redo2 size={12}/></button>
+            <div className="w-px h-4 bg-[hsl(var(--border))]"/>
             <Button variant="outline" size="sm" onClick={() => navigate(`/toolkit/stamp-generator/${projectId}/gallery`)} className="gap-1 text-xs">
               <Layers size={12}/> Gallery
             </Button>
@@ -835,26 +874,37 @@ export default function StampGeneratorPage() {
                 )}
               </div>
 
-              {/* Large stamp preview — always centered */}
-              <div className="flex items-center justify-center py-8 px-6 min-h-[300px] bg-[radial-gradient(circle_at_center,_hsl(var(--pearl-1))_0%,_white_70%)]">
+              {/* Large stamp preview — interactive canvas */}
+              <div className="flex items-center justify-center py-6 px-4 min-h-[320px] bg-[radial-gradient(circle_at_center,_hsl(var(--pearl-1))_0%,_white_70%)]">
                 {generating ? (
                   <div className="flex flex-col items-center gap-3 text-[hsl(var(--muted-foreground))]">
                     <Loader2 size={32} className="animate-spin text-[hsl(var(--gold))]"/>
                     <p className="text-xs font-medium">Generating designs…</p>
                   </div>
                 ) : (selectedSvg || allConcepts[0]?.svgSource) ? (
-                  <StampSVGRenderer
-                    svgSource={selectedSvg || (svgOverrides[allConcepts[0]?.id] || allConcepts[0]?.svgSource) || ''}
-                    tintColor={primaryColor}
-                    secondaryColor={secondaryColor}
-                    accentColor={accentColor}
-                    fontFamily={fontFamily}
-                    fontWeight={fontBold ? 'bold' : 'normal'}
-                    fontStyle={fontItalic ? 'italic' : 'normal'}
-                    fontSize={manualFontSize}
-                    inkMode={inkMode}
-                    size={240}
-                  />
+                  <InteractiveStampCanvas
+                    size={260}
+                    layers={studioLayers}
+                    onLayersChange={setStudioLayers}
+                    onDeleteLayer={(id) => {
+                      setStudioLayers(prev => prev.map(l => l.id === id ? { ...l, visible: false } : l));
+                      toast('Layer hidden');
+                    }}
+                    interactive={true}
+                  >
+                    <StampSVGRenderer
+                      svgSource={selectedSvg || (svgOverrides[allConcepts[0]?.id] || allConcepts[0]?.svgSource) || ''}
+                      tintColor={primaryColor}
+                      secondaryColor={secondaryColor}
+                      accentColor={accentColor}
+                      fontFamily={fontFamily}
+                      fontWeight={fontBold ? 'bold' : 'normal'}
+                      fontStyle={fontItalic ? 'italic' : 'normal'}
+                      fontSize={manualFontSize}
+                      inkMode={inkMode}
+                      size={260}
+                    />
+                  </InteractiveStampCanvas>
                 ) : (
                   <div className="flex flex-col items-center gap-3 text-[hsl(var(--muted-foreground))]">
                     <Stamp size={40} className="opacity-20"/>

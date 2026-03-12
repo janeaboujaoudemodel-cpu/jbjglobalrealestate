@@ -1,0 +1,314 @@
+/**
+ * InteractiveStampCanvas — overlay for on-canvas editing of stamp elements.
+ * Supports: click-to-select, drag-to-move, resize handles, delete, lock per layer.
+ * Works as a wrapper around LiveStampPreview or StampSVGRenderer.
+ */
+import React, { useState, useRef, useCallback, useEffect } from 'react';
+import { Move, Trash2, Lock, Unlock, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
+
+export interface StampLayer {
+  id: string;
+  type: 'text-top' | 'text-bottom' | 'monogram' | 'logo' | 'divider' | 'reg-number' | 'city-line';
+  label: string;
+  /** Offset from default position (0,0 = default) */
+  offsetX: number;
+  offsetY: number;
+  /** Scale factor (1 = default) */
+  scale: number;
+  /** Whether this layer is locked from editing */
+  locked: boolean;
+  /** Whether this layer is visible */
+  visible: boolean;
+}
+
+interface InteractiveStampCanvasProps {
+  /** The rendered stamp SVG/component to overlay */
+  children: React.ReactNode;
+  /** Canvas size in px */
+  size: number;
+  /** Layers representing editable stamp elements */
+  layers: StampLayer[];
+  /** Called when layers change */
+  onLayersChange: (layers: StampLayer[]) => void;
+  /** Called when a layer is deleted */
+  onDeleteLayer?: (layerId: string) => void;
+  /** Whether interactive editing is enabled */
+  interactive?: boolean;
+}
+
+export function InteractiveStampCanvas({
+  children,
+  size,
+  layers,
+  onLayersChange,
+  onDeleteLayer,
+  interactive = true,
+}: InteractiveStampCanvasProps) {
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [dragging, setDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ mx: 0, my: 0, ox: 0, oy: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const selectedLayer = layers.find(l => l.id === selectedId);
+
+  const updateLayer = useCallback((id: string, updates: Partial<StampLayer>) => {
+    onLayersChange(layers.map(l => l.id === id ? { ...l, ...updates } : l));
+  }, [layers, onLayersChange]);
+
+  // Drag handlers
+  const handlePointerDown = useCallback((e: React.PointerEvent, layerId: string) => {
+    if (!interactive) return;
+    const layer = layers.find(l => l.id === layerId);
+    if (layer?.locked) return;
+    
+    e.preventDefault();
+    e.stopPropagation();
+    setSelectedId(layerId);
+    setDragging(true);
+    setDragStart({
+      mx: e.clientX,
+      my: e.clientY,
+      ox: layer?.offsetX || 0,
+      oy: layer?.offsetY || 0,
+    });
+    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+  }, [interactive, layers]);
+
+  const handlePointerMove = useCallback((e: React.PointerEvent) => {
+    if (!dragging || !selectedId) return;
+    const dx = e.clientX - dragStart.mx;
+    const dy = e.clientY - dragStart.my;
+    updateLayer(selectedId, {
+      offsetX: dragStart.ox + dx,
+      offsetY: dragStart.oy + dy,
+    });
+  }, [dragging, selectedId, dragStart, updateLayer]);
+
+  const handlePointerUp = useCallback(() => {
+    setDragging(false);
+  }, []);
+
+  // Click outside to deselect
+  const handleCanvasClick = useCallback((e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).closest('[data-layer-id]')) return;
+    setSelectedId(null);
+  }, []);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    if (!interactive) return;
+    const handler = (e: KeyboardEvent) => {
+      if (!selectedId) return;
+      const layer = layers.find(l => l.id === selectedId);
+      if (!layer || layer.locked) return;
+
+      if (e.key === 'Delete' || e.key === 'Backspace') {
+        e.preventDefault();
+        onDeleteLayer?.(selectedId);
+        setSelectedId(null);
+      }
+      if (e.key === 'Escape') {
+        setSelectedId(null);
+      }
+      // Arrow keys for fine movement
+      const step = e.shiftKey ? 5 : 1;
+      if (e.key === 'ArrowLeft') { e.preventDefault(); updateLayer(selectedId, { offsetX: layer.offsetX - step }); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); updateLayer(selectedId, { offsetX: layer.offsetX + step }); }
+      if (e.key === 'ArrowUp') { e.preventDefault(); updateLayer(selectedId, { offsetY: layer.offsetY - step }); }
+      if (e.key === 'ArrowDown') { e.preventDefault(); updateLayer(selectedId, { offsetY: layer.offsetY + step }); }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [interactive, selectedId, layers, updateLayer, onDeleteLayer]);
+
+  // Generate layer hit-targets positioned around the stamp
+  const layerPositions: Record<string, { top: string; left: string; width: string; height: string }> = {
+    'text-top':    { top: '8%', left: '10%', width: '80%', height: '18%' },
+    'text-bottom': { top: '74%', left: '10%', width: '80%', height: '18%' },
+    'monogram':    { top: '35%', left: '30%', width: '40%', height: '30%' },
+    'logo':        { top: '30%', left: '25%', width: '50%', height: '40%' },
+    'divider':     { top: '33%', left: '20%', width: '60%', height: '4%' },
+    'reg-number':  { top: '62%', left: '25%', width: '50%', height: '10%' },
+    'city-line':   { top: '74%', left: '15%', width: '70%', height: '14%' },
+  };
+
+  return (
+    <div className="relative flex flex-col items-center gap-2">
+      {/* Canvas with overlays */}
+      <div
+        ref={containerRef}
+        className="relative"
+        style={{ width: size, height: size }}
+        onClick={handleCanvasClick}
+        tabIndex={0}
+      >
+        {/* Rendered stamp underneath */}
+        <div className="absolute inset-0 pointer-events-none">
+          {children}
+        </div>
+
+        {/* Interactive layer overlays */}
+        {interactive && layers.filter(l => l.visible).map(layer => {
+          const pos = layerPositions[layer.type] || layerPositions['monogram'];
+          const isSelected = selectedId === layer.id;
+          
+          return (
+            <div
+              key={layer.id}
+              data-layer-id={layer.id}
+              className={`absolute cursor-pointer transition-all ${
+                isSelected
+                  ? 'ring-2 ring-[hsl(var(--gold))] ring-offset-1 bg-[hsl(var(--gold)/0.08)] rounded-lg'
+                  : 'hover:bg-[hsl(var(--gold)/0.04)] hover:ring-1 hover:ring-[hsl(var(--gold)/0.3)] rounded-lg'
+              } ${layer.locked ? 'cursor-not-allowed opacity-60' : ''}`}
+              style={{
+                top: pos.top,
+                left: pos.left,
+                width: pos.width,
+                height: pos.height,
+                transform: `translate(${layer.offsetX}px, ${layer.offsetY}px) scale(${layer.scale})`,
+                zIndex: isSelected ? 10 : 1,
+              }}
+              onPointerDown={(e) => handlePointerDown(e, layer.id)}
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerUp}
+              onClick={(e) => {
+                e.stopPropagation();
+                if (!layer.locked) setSelectedId(layer.id);
+              }}
+            >
+              {/* Layer label on hover */}
+              {isSelected && (
+                <div className="absolute -top-6 left-1/2 -translate-x-1/2 whitespace-nowrap bg-[hsl(var(--foreground))] text-white text-[9px] font-medium px-2 py-0.5 rounded-md shadow-md z-20">
+                  {layer.label}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Layer controls toolbar — shown when a layer is selected */}
+      {interactive && selectedLayer && (
+        <div className="flex items-center gap-1.5 bg-white rounded-xl border border-[hsl(var(--border))] shadow-lg px-3 py-2">
+          <span className="text-[10px] font-semibold text-[hsl(var(--foreground))] mr-1">{selectedLayer.label}</span>
+          
+          {/* Scale controls */}
+          <button
+            onClick={() => updateLayer(selectedLayer.id, { scale: Math.max(0.5, selectedLayer.scale - 0.1) })}
+            className="w-6 h-6 rounded-lg border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--gold)/0.06)] transition-colors"
+            title="Decrease size"
+          >
+            <ZoomOut size={10}/>
+          </button>
+          <span className="text-[9px] text-[hsl(var(--muted-foreground))] min-w-[30px] text-center">
+            {Math.round(selectedLayer.scale * 100)}%
+          </span>
+          <button
+            onClick={() => updateLayer(selectedLayer.id, { scale: Math.min(2, selectedLayer.scale + 0.1) })}
+            className="w-6 h-6 rounded-lg border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--gold)/0.06)] transition-colors"
+            title="Increase size"
+          >
+            <ZoomIn size={10}/>
+          </button>
+
+          <div className="w-px h-4 bg-[hsl(var(--border))] mx-1"/>
+
+          {/* Move indicator */}
+          <div className="flex items-center gap-1 text-[9px] text-[hsl(var(--muted-foreground))]">
+            <Move size={9}/> drag
+          </div>
+
+          <div className="w-px h-4 bg-[hsl(var(--border))] mx-1"/>
+
+          {/* Reset position */}
+          <button
+            onClick={() => updateLayer(selectedLayer.id, { offsetX: 0, offsetY: 0, scale: 1 })}
+            className="w-6 h-6 rounded-lg border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--gold)/0.06)] transition-colors"
+            title="Reset position"
+          >
+            <RotateCcw size={10}/>
+          </button>
+
+          {/* Lock/Unlock */}
+          <button
+            onClick={() => updateLayer(selectedLayer.id, { locked: !selectedLayer.locked })}
+            className={`w-6 h-6 rounded-lg border flex items-center justify-center transition-colors ${
+              selectedLayer.locked
+                ? 'border-amber-300 bg-amber-50 text-amber-600'
+                : 'border-[hsl(var(--border))] hover:bg-[hsl(var(--gold)/0.06)]'
+            }`}
+            title={selectedLayer.locked ? 'Unlock' : 'Lock'}
+          >
+            {selectedLayer.locked ? <Lock size={10}/> : <Unlock size={10}/>}
+          </button>
+
+          {/* Delete */}
+          <button
+            onClick={() => {
+              onDeleteLayer?.(selectedLayer.id);
+              setSelectedId(null);
+            }}
+            className="w-6 h-6 rounded-lg border border-destructive/30 text-destructive flex items-center justify-center hover:bg-destructive/10 transition-colors"
+            title="Delete layer"
+          >
+            <Trash2 size={10}/>
+          </button>
+        </div>
+      )}
+
+      {/* Tip */}
+      {interactive && !selectedId && (
+        <p className="text-[9px] text-[hsl(var(--muted-foreground))] text-center">
+          Click on stamp elements to select · Drag to move · Arrow keys for fine adjustment
+        </p>
+      )}
+    </div>
+  );
+}
+
+/** Generate default layers from stamp form state */
+export function createDefaultLayers(form: {
+  languageMode: string;
+  iconStyle: string;
+  density: number;
+  registrationNumber?: string;
+  showLicenseNumber?: boolean;
+  city?: string;
+}): StampLayer[] {
+  const layers: StampLayer[] = [];
+
+  // Top text arc
+  if (form.languageMode === 'BILINGUAL' || form.languageMode === 'AR') {
+    layers.push({ id: 'text-top', type: 'text-top', label: 'Top Arc Text', offsetX: 0, offsetY: 0, scale: 1, locked: false, visible: true });
+  } else {
+    layers.push({ id: 'text-top', type: 'text-top', label: 'Company Name (Top)', offsetX: 0, offsetY: 0, scale: 1, locked: false, visible: true });
+  }
+
+  // Bottom text arc
+  if (form.languageMode === 'BILINGUAL') {
+    layers.push({ id: 'text-bottom', type: 'text-bottom', label: 'Bottom Arc Text', offsetX: 0, offsetY: 0, scale: 1, locked: false, visible: true });
+  } else if (form.density >= 2 && form.city) {
+    layers.push({ id: 'city-line', type: 'city-line', label: 'City / Location', offsetX: 0, offsetY: 0, scale: 1, locked: false, visible: true });
+  }
+
+  // Center element
+  if (form.iconStyle === 'MONOGRAM' || form.iconStyle === 'BOTH') {
+    layers.push({ id: 'monogram', type: 'monogram', label: 'Monogram', offsetX: 0, offsetY: 0, scale: 1, locked: false, visible: true });
+  }
+  if (form.iconStyle === 'UPLOADED_LOGO' || form.iconStyle === 'BOTH') {
+    layers.push({ id: 'logo', type: 'logo', label: 'Logo', offsetX: 0, offsetY: 0, scale: 1, locked: false, visible: true });
+  }
+
+  // Dividers
+  if (form.density >= 2) {
+    layers.push({ id: 'divider-top', type: 'divider', label: 'Top Divider', offsetX: 0, offsetY: 0, scale: 1, locked: false, visible: true });
+  }
+
+  // Registration number
+  if (form.showLicenseNumber && form.density >= 3 && form.registrationNumber) {
+    layers.push({ id: 'reg-number', type: 'reg-number', label: 'License Number', offsetX: 0, offsetY: 0, scale: 1, locked: false, visible: true });
+  }
+
+  return layers;
+}
