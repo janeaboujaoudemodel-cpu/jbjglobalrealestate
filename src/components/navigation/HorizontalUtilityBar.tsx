@@ -284,7 +284,7 @@ export default function HorizontalUtilityBar() {
                    <ClipboardList className={iconClass} />
                   <span className="text-[11px] font-medium text-black/50 hidden xl:inline whitespace-nowrap">Tasks</span>
                   {(alerts?.pendingTasks || 0) > 0 && (
-                    <span className="absolute -top-1.5 -right-1 w-4.5 h-4.5 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center">
+                    <span className="absolute -top-1.5 -right-1 min-w-[18px] h-[18px] rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center px-1">
                       {alerts!.pendingTasks > 9 ? '9+' : alerts!.pendingTasks}
                     </span>
                   )}
