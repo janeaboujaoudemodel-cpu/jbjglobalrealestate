@@ -6452,6 +6452,7 @@ export type Database = {
       }
       developer_submissions: {
         Row: {
+          assigned_broker_id: string | null
           attachments: Json | null
           created_at: string
           developer_email: string
@@ -6459,15 +6460,19 @@ export type Database = {
           developer_phone: string | null
           event_date: string | null
           event_description: string | null
+          event_files: Json | null
           event_location: string | null
           event_title: string | null
           id: string
+          is_hidden: boolean | null
           notes: string | null
           reviewed_at: string | null
           status: string
+          submission_subtype: string | null
           submission_type: string
         }
         Insert: {
+          assigned_broker_id?: string | null
           attachments?: Json | null
           created_at?: string
           developer_email: string
@@ -6475,15 +6480,19 @@ export type Database = {
           developer_phone?: string | null
           event_date?: string | null
           event_description?: string | null
+          event_files?: Json | null
           event_location?: string | null
           event_title?: string | null
           id?: string
+          is_hidden?: boolean | null
           notes?: string | null
           reviewed_at?: string | null
           status?: string
+          submission_subtype?: string | null
           submission_type?: string
         }
         Update: {
+          assigned_broker_id?: string | null
           attachments?: Json | null
           created_at?: string
           developer_email?: string
@@ -6491,12 +6500,15 @@ export type Database = {
           developer_phone?: string | null
           event_date?: string | null
           event_description?: string | null
+          event_files?: Json | null
           event_location?: string | null
           event_title?: string | null
           id?: string
+          is_hidden?: boolean | null
           notes?: string | null
           reviewed_at?: string | null
           status?: string
+          submission_subtype?: string | null
           submission_type?: string
         }
         Relationships: []
