@@ -24,7 +24,8 @@ import GlobalVisitorTracking from "@/components/GlobalVisitorTracking";
 import SEOBreadcrumbs from "@/components/SEOBreadcrumbs";
 import PageLoader from "@/components/PageLoader";
 import { InlinePageLoader } from "@/components/PageLoader";
-import BrandIntroSplash from "@/components/BrandIntroSplash";
+// BrandIntroSplash disabled until further notice
+// import BrandIntroSplash from "@/components/BrandIntroSplash";
 
 // ── Route Groups ──
 import { StandaloneRoutes } from "@/routes/StandaloneRoutes";
@@ -79,7 +80,7 @@ const App = () => {
                   <GlobalVisitorTracking />
                   <SEOBreadcrumbs />
                   
-            <BrandIntroSplash />
+            {/* BrandIntroSplash disabled until further notice */}
             <Routes>
               {/* ── Standalone Routes (no shell) ── */}
               <Route element={<Suspense fallback={<PageLoader />}><Outlet /></Suspense>}>
