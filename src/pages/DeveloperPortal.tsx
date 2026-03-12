@@ -495,9 +495,25 @@ const DeveloperPortal = () => {
           </div>
         )}
 
-        {/* Developer Info Card — hidden in owner skip mode */}
+        {/* Developer Info Card — hidden when rep profile exists */}
         <div className="container mx-auto px-4 py-8 max-w-4xl">
-          {ownerSkipMode ? (
+          {hasRepProfile && !isOwner ? (
+            /* Profile summary bar — auto-linked submissions */
+            <div className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)] border-2 border-gold/30 mb-6">
+              <div className="flex items-center gap-3 min-w-0">
+                <UserCheck className="w-5 h-5 text-gold shrink-0" />
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-foreground truncate">
+                    Submitting as: {repProfile?.full_name} · {repProfile?.developer_name}
+                  </p>
+                  <p className="text-xs text-muted-foreground truncate">{repProfile?.email}{repProfile?.phone ? ` · ${repProfile.phone}` : ''}</p>
+                </div>
+              </div>
+              <Button size="sm" variant="outline" className="border-gold/30 shrink-0" onClick={() => setActiveTab('register')}>
+                Edit Profile
+              </Button>
+            </div>
+          ) : ownerSkipMode ? (
             <Card className="border-2 border-gold/30 bg-gradient-to-r from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)] mb-6">
               <CardContent className="p-4">
                 <div className="space-y-1">
