@@ -1302,7 +1302,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
               {activeTab === 'generate' && (
                 <button onClick={handleAIGenerate} disabled={!consent || isLoading}
                   className="flex-1 flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl text-white font-semibold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                  style={{ background: "linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%)", boxShadow: "0 4px 20px rgba(139,92,246,0.4)" }}>
+                  style={{ background: "linear-gradient(135deg, #B8943E 0%, #9A7B2F 100%)", boxShadow: "0 4px 20px rgba(184,148,62,0.4)" }}>
                   {isGenerating ? <><Loader2 className="h-5 w-5 animate-spin" /> {progressLabel || `Generating ${Math.round(progress)}%`}</> : <><Sparkles className="h-5 w-5" /> Generate AI Scene</>}
                 </button>
               )}
