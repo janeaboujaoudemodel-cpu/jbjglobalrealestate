@@ -40,7 +40,7 @@ interface BusinessCardCenterPanelProps {
   effectiveQrColor: string;
   qrBgColor: string;
   qrPosition: QrPosition;
-  qrSide: string;
+  qrSide: "front" | "back" | "both";
   logoUrl: string;
   logoSize: number;
   logoPos: { x: number; y: number };
