@@ -114,18 +114,18 @@ const ReellyProjectCard = ({
      return `${min}-${max} ${sizeUnit}`;
    };
  
-    // Truncate description - strip markdown/headers
-    const getTruncatedDescription = () => {
-      if (!project.description) return null;
-      let clean = project.description
-        .replace(/#{1,6}\s*/g, '')
-        .replace(/\*{1,3}/g, '')
-        .replace(/project\s*general\s*facts/gi, '')
-        .trim();
-      const maxLength = 80;
-      if (clean.length <= maxLength) return clean;
-      return clean.substring(0, maxLength).trim();
-    };
+   // Truncate description - strip markdown/headers + HTML + competitor refs
+     const getTruncatedDescription = () => {
+       if (!project.description) return null;
+       let clean = sanitizeForDisplay(project.description)
+         .replace(/#{1,6}\s*/g, '')
+         .replace(/\*{1,3}/g, '')
+         .replace(/project\s*general\s*facts/gi, '')
+         .trim();
+       const maxLength = 80;
+       if (clean.length <= maxLength) return clean;
+       return clean.substring(0, maxLength).trim();
+     };
  
    const saleStatusBadge = getSaleStatusBadge(project.sale_status);
  
