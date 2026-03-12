@@ -22,6 +22,7 @@ import {
   Phone, Mail, MessageCircle, Upload, Sparkles, Shield,
   Calculator, Plus, X, Wand2, AlertCircle
 } from "lucide-react";
+import { FormDraftBar } from "@/components/shared/FormDraftBar";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import SellerAssistant from "@/components/seller/SellerAssistant";
 import {
@@ -551,12 +552,14 @@ Requirements:
               <p className="text-zinc-600 mb-6">
                 Complete the form below to submit your property listing. Our team will contact you within 24-48 hours.
               </p>
-              {hasDraft && (
-                <div className="p-3 bg-gold/10 border border-gold/30 rounded-lg text-sm text-gold inline-flex items-center gap-2">
-                  <Sparkles className="w-4 h-4" />
-                  Draft restored from your previous session
-                </div>
-              )}
+              <FormDraftBar
+                hasDraft={hasDraft}
+                onSaveDraft={() => { /* auto-save handles this */ toast.success("Draft auto-saved"); }}
+                onReset={() => { clearDraft(); form.reset(); setHighlights([]); setPhotoFiles([]); setVideoFiles([]); setFloorPlanFiles([]); setTitleDeedFile(null); setPassportFile(null); setPoaFile(null); setAdditionalDocs([]); setCurrentStep(1); }}
+                onNew={() => { clearDraft(); form.reset(); setHighlights([]); setPhotoFiles([]); setVideoFiles([]); setFloorPlanFiles([]); setTitleDeedFile(null); setPassportFile(null); setPoaFile(null); setAdditionalDocs([]); setCurrentStep(1); }}
+                label="Seller Listing"
+                theme="gold"
+              />
               
               {/* Seller Assistant CTA - Premium 3D Primary Button - Scrolls to section */}
               <div className="mt-6">

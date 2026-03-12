@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +11,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
 import { toast } from "sonner";
+import { FormDraftBar } from "@/components/shared/FormDraftBar";
+
+const DRAFT_KEY = "jbj_landlord_list_draft";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -25,11 +28,7 @@ const staggerContainer = {
   }
 };
 
-const LandlordListForm = () => {
-  const navigate = useNavigate();
-  const { captureLead } = useLeadCapture();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
+const emptyLandlordForm = {
     fullName: "",
     phone: "",
     email: "",
@@ -44,7 +43,39 @@ const LandlordListForm = () => {
     availabilityDate: "",
     notes: "",
     consentToPrivacy: false
-  });
+  };
+
+const LandlordListForm = () => {
+  const navigate = useNavigate();
+  const { captureLead } = useLeadCapture();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const loadDraft = () => {
+    try {
+      const saved = localStorage.getItem(DRAFT_KEY);
+      if (saved) return { ...emptyLandlordForm, ...JSON.parse(saved) };
+    } catch {}
+    return emptyLandlordForm;
+  };
+
+  const [formData, setFormData] = useState(loadDraft);
+
+  const saveDraft = useCallback(() => {
+    try {
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(formData));
+      toast.success("Draft saved successfully");
+    } catch { toast.error("Failed to save draft"); }
+  }, [formData]);
+
+  const clearDraft = useCallback(() => {
+    localStorage.removeItem(DRAFT_KEY);
+    setFormData(emptyLandlordForm);
+    toast.info("Form cleared");
+  }, []);
+
+  const hasDraft = (() => {
+    try { return !!localStorage.getItem(DRAFT_KEY); } catch { return false; }
+  })();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,6 +103,7 @@ const LandlordListForm = () => {
       );
 
       if (success) {
+        localStorage.removeItem(DRAFT_KEY);
         navigate("/thank-you?type=landlord");
       } else {
         toast.error("Something went wrong. Please try again.");
@@ -184,6 +216,14 @@ const LandlordListForm = () => {
               variants={staggerContainer}
               className="max-w-2xl mx-auto"
             >
+              <FormDraftBar
+                hasDraft={hasDraft}
+                onSaveDraft={saveDraft}
+                onReset={clearDraft}
+                onNew={clearDraft}
+                label="Rental Listing"
+                theme="dark"
+              />
               <motion.form
                 variants={fadeInUp}
                 onSubmit={handleSubmit}

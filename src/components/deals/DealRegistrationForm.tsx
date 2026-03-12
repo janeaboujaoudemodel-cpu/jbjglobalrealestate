@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -11,6 +11,9 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { FileCheck, Loader2 } from "lucide-react";
+import { FormDraftBar } from "@/components/shared/FormDraftBar";
+
+const DEAL_DRAFT_KEY = "jbj_deal_reg_draft";
 
 const dealSchema = z.object({
   unit_number: z.string().min(1, "Unit number is required"),
@@ -33,9 +36,35 @@ export function DealRegistrationForm({ onSuccess, onCancel }: DealRegistrationFo
   const { user } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<DealFormData>({
+  // Load draft
+  const loadDraft = () => {
+    try {
+      const saved = localStorage.getItem(DEAL_DRAFT_KEY);
+      return saved ? JSON.parse(saved) : undefined;
+    } catch { return undefined; }
+  };
+
+  const { register, handleSubmit, reset, getValues, formState: { errors } } = useForm<DealFormData>({
     resolver: zodResolver(dealSchema),
+    defaultValues: loadDraft(),
   });
+
+  const saveDraft = useCallback(() => {
+    try {
+      localStorage.setItem(DEAL_DRAFT_KEY, JSON.stringify(getValues()));
+      toast.success("Draft saved");
+    } catch { toast.error("Failed to save draft"); }
+  }, [getValues]);
+
+  const clearDraft = useCallback(() => {
+    localStorage.removeItem(DEAL_DRAFT_KEY);
+    reset();
+    toast.info("Form cleared");
+  }, [reset]);
+
+  const hasDraft = (() => {
+    try { return !!localStorage.getItem(DEAL_DRAFT_KEY); } catch { return false; }
+  })();
 
   const onSubmit = async (data: DealFormData) => {
     if (!user) {
@@ -62,6 +91,7 @@ export function DealRegistrationForm({ onSuccess, onCancel }: DealRegistrationFo
       if (error) throw error;
 
       toast.success("Deal submitted successfully! Awaiting verification.");
+      localStorage.removeItem(DEAL_DRAFT_KEY);
       reset();
       onSuccess?.();
     } catch (error) {
@@ -84,6 +114,14 @@ export function DealRegistrationForm({ onSuccess, onCancel }: DealRegistrationFo
         </CardDescription>
       </CardHeader>
       <CardContent>
+        <FormDraftBar
+          hasDraft={hasDraft}
+          onSaveDraft={saveDraft}
+          onReset={clearDraft}
+          onNew={clearDraft}
+          label="Deal Registration"
+          theme="dark"
+        />
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
