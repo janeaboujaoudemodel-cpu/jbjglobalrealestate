@@ -1336,7 +1336,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
           </div>
         )}
 
-        <div className="mt-8 p-4 rounded-xl text-center" style={{ background: "rgba(99,102,241,0.03)", border: "1px solid rgba(99,102,241,0.08)" }}>
+        <div className="mt-8 p-4 rounded-xl text-center" style={{ background: "rgba(184,148,62,0.03)", border: "1px solid rgba(184,148,62,0.08)" }}>
           <p className="text-xs" style={{ color: C.dimText }}>
             Smart edge-detection removal · AI scene generation uses cloud processing · Background switching is instant after first removal · Max 10MB per image
           </p>
