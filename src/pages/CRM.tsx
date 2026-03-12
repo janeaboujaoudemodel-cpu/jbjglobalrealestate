@@ -266,6 +266,48 @@ const CRM = () => {
     }
   };
 
+  const handleExportPDFReport = async () => {
+    const isOwner = profile?.crm_role === 'owner_admin' || profile?.crm_role === 'founder';
+    if (!isOwner) {
+      toast.error("Only administrators can export reports");
+      return;
+    }
+    toast.info("Generating PDF report...");
+    try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData?.session?.access_token;
+      if (!token) throw new Error("Not authenticated");
+      
+      const res = await supabase.functions.invoke('generate-crm-report', {
+        body: { format: 'pdf' },
+      });
+      
+      if (res.error) throw res.error;
+      
+      // The function returns base64 PDF
+      const pdfData = res.data?.pdf;
+      if (!pdfData) throw new Error("No PDF data returned");
+      
+      const byteCharacters = atob(pdfData);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `JBJ_CRM_Report_${new Date().toISOString().split('T')[0]}.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
+      toast.success("PDF report downloaded");
+    } catch (err: any) {
+      console.error("PDF export failed:", err);
+      toast.error("Failed to generate PDF report");
+    }
+  };
+
   const handleSignOut = async () => {
     await signOut();
     navigate("/auth");
