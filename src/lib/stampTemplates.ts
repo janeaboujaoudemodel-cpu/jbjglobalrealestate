@@ -19,7 +19,7 @@ export interface StampProject {
   icon_style: 'NONE' | 'MONOGRAM' | 'SIMPLE_ICON' | 'UPLOADED_LOGO';
   monogram_text?: string;
   border_style: 'SINGLE' | 'DOUBLE' | 'RING' | 'DOTTED' | 'ROPE' | 'CUSTOM';
-  typography_style: 'SERIF' | 'SANS' | 'MONOSPACE' | 'CALLIGRAPHY';
+  typography_style: 'SERIF' | 'SANS' | 'MONOSPACE' | 'CALLIGRAPHY' | 'GOTHIC' | 'ARABIC_MODERN';
   density: number;
 }
 
