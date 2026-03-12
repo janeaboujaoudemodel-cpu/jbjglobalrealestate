@@ -21,16 +21,16 @@ import {
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 
-// ── Design tokens (Champagne-Gold) ──
+// ── Design tokens (Champagne-Gold on dark canvas) ──
 const I = {
-  bg: "#FDFBF7",
+  bg: "#0D0C08",
   surface: "rgba(184,148,62,0.06)",
   border: "rgba(184,148,62,0.2)",
   borderHover: "rgba(184,148,62,0.55)",
   accent: "#B8943E",
-  text: "#9A7B2F",
-  muted: "rgba(0,0,0,0.45)",
-  dim: "rgba(0,0,0,0.28)",
+  text: "#D4AF37",
+  muted: "rgba(255,255,255,0.45)",
+  dim: "rgba(255,255,255,0.28)",
   btnGrad: "linear-gradient(135deg, #B8943E 0%, #9A7B2F 100%)",
   btnShadow: "0 4px 20px rgba(184,148,62,0.3)",
 };

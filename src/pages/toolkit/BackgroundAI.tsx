@@ -26,20 +26,20 @@ import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 
-// ── Design tokens (Champagne-Gold) ──
+// ── Design tokens (Champagne-Gold on dark canvas) ──
 const C = {
-  bg: "#FDFBF7",
+  bg: "#0D0C08",
   surface: "rgba(184,148,62,0.06)",
   border: "rgba(184,148,62,0.2)",
   borderHover: "rgba(184,148,62,0.55)",
   accent: "#B8943E",
-  accentText: "#9A7B2F",
-  mutedText: "rgba(0,0,0,0.45)",
-  dimText: "rgba(0,0,0,0.3)",
+  accentText: "#D4AF37",
+  mutedText: "rgba(255,255,255,0.45)",
+  dimText: "rgba(255,255,255,0.3)",
   btnPrimary: "linear-gradient(135deg, #B8943E 0%, #9A7B2F 100%)",
   btnShadow: "0 4px 20px rgba(184,148,62,0.3)",
   btnDanger: "rgba(239,68,68,0.15)",
-  btnDangerText: "#dc2626",
+  btnDangerText: "#f87171",
   btnDangerBorder: "rgba(239,68,68,0.35)",
 };
 
