@@ -5,6 +5,7 @@ import {
   ArrowLeft, FileEdit, Sparkles, Download, RefreshCw,
   ImageIcon, ChevronDown, Copy, Check, Pencil,
   Calendar, PenTool, Stamp, Plus, Minus, GripVertical,
+  FileSignature, Send,
 } from "lucide-react";
 import { DocumentExtractorUpload } from "@/components/corporate-suite/DocumentExtractorUpload";
 import { Button } from "@/components/ui/button";
@@ -13,12 +14,14 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 import { BrandAssetLibrary } from "@/components/corporate-suite/BrandAssetLibrary";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
 import DocumentColorWheel, { type DocumentColors } from "./DocumentColorWheel";
 import DocumentTypographyControls, { type TypographySettings } from "./DocumentTypographyControls";
 import DocumentStampIntegration, { type StampSignatureData } from "./DocumentStampIntegration";
 import DocumentHeaderFooterBuilder, { type HeaderFooterSettings } from "./DocumentHeaderFooterBuilder";
+import DocumentESignIntegration from "./DocumentESignIntegration";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Tone = "professional" | "confident" | "casual" | "enthusiastic" | "executive";
@@ -259,6 +262,7 @@ function LetterPreview({
 // ─── Main Component ───────────────────────────────────────────────────────────
 export default function CoverLetterGenerator() {
   const navigate = useNavigate();
+  const { isOwner } = useAuth();
   const previewRef = useRef<HTMLDivElement>(null);
 
   const [generating, setGenerating] = useState(false);
@@ -571,6 +575,28 @@ export default function CoverLetterGenerator() {
               </Button>
             )}
             <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate("/e-signature/create")}
+              disabled={!letter}
+              className="gap-1.5 h-8 text-xs border-[hsl(var(--border))] disabled:opacity-40"
+            >
+              <FileSignature size={13} />
+              Sign
+            </Button>
+            {isOwner && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => navigate("/e-signature/create")}
+                disabled={!letter}
+                className="gap-1.5 h-8 text-xs border-indigo-300 text-indigo-700 hover:bg-indigo-50 disabled:opacity-40"
+              >
+                <Send size={13} />
+                Send for Signature
+              </Button>
+            )}
+            <Button
               onClick={exportPDF}
               disabled={exporting || !letter}
               className="gap-2 bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 h-8 text-xs disabled:opacity-40"
@@ -673,7 +699,12 @@ export default function CoverLetterGenerator() {
           {/* Header/Footer */}
           <DocumentHeaderFooterBuilder settings={headerFooter} onChange={setHeaderFooter} />
 
-          {/* Template Picker */}
+          {/* E-Signature Integration */}
+          <DocumentESignIntegration
+            documentReady={!!letter}
+            onSignDocument={() => navigate("/e-signature/create")}
+          />
+
           <div>
             <Label className="text-[10px] font-bold uppercase tracking-[0.15em] text-[hsl(var(--muted-foreground))] mb-2 block">
               Template Style
