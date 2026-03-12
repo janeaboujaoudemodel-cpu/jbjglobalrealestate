@@ -101,10 +101,10 @@ export default function HorizontalUtilityBar() {
   const showCRM = !!user && isOwner;
 
   /* ─── Shared button classes for premium consistency ─── */
-  const pillBtn = "h-8 flex items-center gap-1.5 rounded-lg border border-gold/30 hover:border-gold/50 bg-gold/5 hover:bg-gold/15 transition-all px-2.5 group";
-  const iconBtn = "h-8 w-8 flex items-center justify-center rounded-lg border border-gold/20 bg-gold/5 hover:bg-gold/15 hover:border-gold/40 transition-all group";
-  const iconClass = "w-4 h-4 text-gold group-hover:scale-110 transition-transform";
-  const labelClass = "text-[11px] font-semibold text-black/55 uppercase tracking-wide hidden xl:inline";
+  const pillBtn = "h-8 flex items-center gap-1.5 rounded-lg border border-gold/30 hover:border-gold/50 bg-gold/5 hover:bg-gold/15 transition-all px-2.5 group whitespace-nowrap shrink-0";
+  const iconBtn = "h-8 w-8 flex items-center justify-center rounded-lg border border-gold/20 bg-gold/5 hover:bg-gold/15 hover:border-gold/40 transition-all group shrink-0";
+  const iconClass = "w-4 h-4 text-gold group-hover:scale-110 transition-transform shrink-0";
+  const labelClass = "text-[11px] font-semibold text-black/55 uppercase tracking-wide hidden xl:inline whitespace-nowrap";
 
   return (
     <>
