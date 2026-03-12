@@ -10,6 +10,7 @@ import { SafeImage } from "@/components/SafeImage";
 import { VerifiedMedia } from "@/components/ui/verified-media";
 import { Button } from "@/components/ui/button";
 import { DeveloperLink } from "@/components/ui/developer-link";
+import { sanitizeForDisplay } from "@/utils/contentSanitizer";
 
 interface ProjectCardProps {
   project: Project & { is_sold_out?: boolean | null };
