@@ -2019,7 +2019,112 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
             </div>
           </Collapsible>
 
-          {/* Smart Gallery — AI batch generation */}
+          {/* Bilingual Card */}
+          <Collapsible open={bilingualOpen} onOpenChange={setBilingualOpen}>
+            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+              <CollapsibleTrigger asChild>
+                <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
+                  <div className="flex items-center gap-2">
+                    <Globe size={13} className="text-[hsl(var(--gold))]" />
+                    <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">Bilingual</span>
+                    {bilingualMode !== "off" && (
+                      <span className="text-[8px] bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold-dark))] px-1.5 py-0.5 rounded-full font-semibold">
+                        {BILINGUAL_LANGUAGES.find(l => l.id === bilingualLang)?.label?.split(" ")[0]}
+                      </span>
+                    )}
+                  </div>
+                  <ChevronDown size={13} className={`text-[hsl(var(--muted-foreground))] transition-transform ${bilingualOpen ? "rotate-180" : ""}`} />
+                </button>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="px-4 pb-4 border-t border-[hsl(var(--border))] space-y-3 pt-3">
+                  <p className="text-[10px] text-[hsl(var(--muted-foreground))] leading-relaxed">
+                    Add a second language to your card. Choose between showing both languages on one card or separate front/back sides.
+                  </p>
+
+                  {/* Mode selector */}
+                  <div>
+                    <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Mode</Label>
+                    <div className="grid grid-cols-3 gap-1.5">
+                      {([
+                        { id: "off" as BilingualMode, label: "Off" },
+                        { id: "dual-side" as BilingualMode, label: "Front/Back" },
+                        { id: "single-card" as BilingualMode, label: "Both Sides" },
+                      ]).map(opt => (
+                        <button
+                          key={opt.id}
+                          onClick={() => setBilingualMode(opt.id)}
+                          className={`text-[10px] py-2 px-1 rounded-lg border font-semibold transition-all ${
+                            bilingualMode === opt.id
+                              ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
+                              : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
+                          }`}
+                        >
+                          {opt.label}
+                        </button>
+                      ))}
+                    </div>
+                    <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-1">
+                      {bilingualMode === "dual-side" ? "English on front, second language on back" : bilingualMode === "single-card" ? "Both languages shown together on each side" : "Single-language card"}
+                    </p>
+                  </div>
+
+                  {bilingualMode !== "off" && (
+                    <>
+                      {/* Language picker */}
+                      <div>
+                        <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Second Language</Label>
+                        <div className="grid grid-cols-3 gap-1.5">
+                          {BILINGUAL_LANGUAGES.map(lang => (
+                            <button
+                              key={lang.id}
+                              onClick={() => setBilingualLang(lang.id)}
+                              className={`text-[10px] py-1.5 px-1 rounded-lg border font-semibold transition-all truncate ${
+                                bilingualLang === lang.id
+                                  ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
+                                  : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
+                              }`}
+                            >
+                              {lang.label.split(" ")[0]}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Secondary language fields */}
+                      <div className="space-y-2.5">
+                        <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] block">
+                          {BILINGUAL_LANGUAGES.find(l => l.id === bilingualLang)?.label?.split("(")[1]?.replace(")", "") || "Secondary"} Text
+                        </Label>
+                        {(["name", "title", "company"] as (keyof CardData)[]).map(key => (
+                          <div key={key}>
+                            <Label className="text-[9px] text-[hsl(var(--muted-foreground))] mb-0.5 block capitalize">{key}</Label>
+                            <div className="flex gap-1.5">
+                              <Input
+                                value={secondaryData[key]}
+                                onChange={e => setSecondaryData(prev => ({ ...prev, [key]: e.target.value }))}
+                                placeholder={`${key} in ${BILINGUAL_LANGUAGES.find(l => l.id === bilingualLang)?.label?.split("(")[1]?.replace(")", "") || "other language"}...`}
+                                className="h-8 text-xs flex-1"
+                                dir={bilingualDir}
+                              />
+                              <VoiceInputButton
+                                onTranscript={t => setSecondaryData(prev => ({ ...prev, [key]: t }))}
+                                size="sm"
+                              />
+                            </div>
+                          </div>
+                        ))}
+                        <p className="text-[9px] text-[hsl(var(--muted-foreground))] bg-[hsl(var(--muted))] rounded-lg px-2 py-1.5">
+                          💡 Use voice input to speak in {BILINGUAL_LANGUAGES.find(l => l.id === bilingualLang)?.label?.split("(")[1]?.replace(")", "") || "the second language"} — it auto-transcribes.
+                        </p>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </CollapsibleContent>
+            </div>
+          </Collapsible>
+
           <Collapsible open={galleryOpen} onOpenChange={setGalleryOpen}>
             <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
               <CollapsibleTrigger asChild>
