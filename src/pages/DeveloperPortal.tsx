@@ -688,15 +688,27 @@ const DeveloperPortal = () => {
     uploading: boolean;
     inputRef: React.RefObject<HTMLInputElement>;
     onUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  }) => (
+  }) => {
+    const [isDragging, setIsDragging] = useState(false);
+    return (
     <div className="space-y-3">
       <Label>Photos, Videos & Documents</Label>
       <div
-        className="border-2 border-dashed border-gold/40 rounded-xl p-6 text-center hover:border-gold/70 transition-colors cursor-pointer bg-card/50"
+        className={`border-2 border-dashed rounded-xl p-6 text-center transition-colors cursor-pointer bg-card/50 ${isDragging ? 'border-primary bg-primary/5' : 'border-gold/40 hover:border-gold/70'}`}
         onClick={() => inputRef.current?.click()}
+        onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+        onDragLeave={(e) => { e.preventDefault(); setIsDragging(false); }}
+        onDrop={(e) => {
+          e.preventDefault();
+          setIsDragging(false);
+          if (e.dataTransfer.files.length > 0) {
+            const syntheticEvent = { target: { files: e.dataTransfer.files } } as React.ChangeEvent<HTMLInputElement>;
+            onUpload(syntheticEvent);
+          }
+        }}
       >
         <Upload className="w-8 h-8 mx-auto text-gold/60 mb-2" />
-        <p className="text-sm font-medium text-foreground">Click to upload files</p>
+        <p className="text-sm font-medium text-foreground">{isDragging ? 'Drop files here' : 'Click to upload or drag & drop'}</p>
         <p className="text-xs text-muted-foreground mt-1">Photos, videos, PDFs, brochures — any format</p>
         <input ref={inputRef} type="file" className="hidden" multiple
           accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx,.pptx,.mp4,.mov,.avi,.heic"
