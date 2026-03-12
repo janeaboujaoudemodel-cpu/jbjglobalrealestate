@@ -656,7 +656,7 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
       setStep('cv_submission');
     } else {
       // Map shortcut to service type and proceed to agent
-      const serviceMap: Record<ShortcutType, string> = {
+      const serviceMap: Partial<Record<ShortcutType, string>> = {
         'submit_cv': 'cv_submission',
         'buy_property': 'real_estate',
         'sell_property': 'sell_property',
@@ -667,6 +667,27 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
         'guides': 'guides',
         'ai_tools': 'ai_tools',
         'general_inquiry': 'general',
+        'owner_command': 'general',
+        'crm_dashboard': 'general',
+        'admin_panel': 'general',
+        'listing_admin': 'general',
+        'inbox': 'general',
+        'cv_center': 'general',
+        'email_client': 'general',
+        'team_chat': 'general',
+        'automations': 'general',
+        'customer_happiness': 'general',
+        'broker_dashboard': 'general',
+        'broker_toolkit': 'general',
+        'my_tasks': 'general',
+        'notifications': 'general',
+        'investor_hub': 'general',
+        'investor_dashboard': 'general',
+        'portfolio': 'general',
+        'dashboard': 'general',
+        'favorites': 'general',
+        'shortlists': 'general',
+        'books': 'general',
       };
       
       setSelectedService(serviceMap[shortcut] || 'general');

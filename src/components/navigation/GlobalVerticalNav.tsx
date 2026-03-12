@@ -793,13 +793,25 @@ export default function GlobalVerticalNav() {
 
   const closeMegaMenu = useCallback(() => setActiveMegaMenu(null), []);
 
-  // Close mega menu and My Account section on route change
+  // Close mega menu and auto-expand active section on route change
   useEffect(() => {
     closeMegaMenu();
     setMobileOpen(false);
     // Auto-close My Account section on any navigation to prevent stuck state
     if (openSection === 'MY ACCOUNT') {
       setOpenSection(null);
+    }
+    // Auto-expand the section containing the active route
+    for (const [section, items] of Object.entries(sectionGroups)) {
+      if (items.some(item => isRouteActive(item.href))) {
+        setOpenSection(section as SectionKey);
+        // Scroll the section into view
+        requestAnimationFrame(() => {
+          const el = document.getElementById(`nav-section-${section.replace(/\s+/g, '-').toLowerCase()}`);
+          el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+        break;
+      }
     }
   }, [location.pathname, closeMegaMenu]);
 
@@ -831,20 +843,7 @@ export default function GlobalVerticalNav() {
     return { highlightItems: highlights, sectionGroups: sections };
   }, []);
 
-  // Auto-open section containing active route on INITIAL MOUNT only
-  // (not on every pathname change — that overrides the user's manual toggle)
-  const hasAutoOpenedRef = React.useRef(false);
-  useEffect(() => {
-    if (hasAutoOpenedRef.current) return;
-    hasAutoOpenedRef.current = true;
-    for (const [section, items] of Object.entries(sectionGroups)) {
-      if (items.some(item => isRouteActive(item.href))) {
-        setOpenSection(section as SectionKey);
-        break;
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // Auto-open is now handled by the route-change effect above
 
   const navigate = useNavigate();
 
