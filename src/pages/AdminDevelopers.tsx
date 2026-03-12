@@ -73,6 +73,8 @@ const AdminDevelopers = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [titleFilter, setTitleFilter] = useState("all");
+  const [genderFilter, setGenderFilter] = useState("all");
+  const [nationalityFilter, setNationalityFilter] = useState("");
   const [selectedDeveloper, setSelectedDeveloper] = useState<Developer | null>(null);
   const [isDevDialogOpen, setIsDevDialogOpen] = useState(false);
   const [isRepDialogOpen, setIsRepDialogOpen] = useState(false);
