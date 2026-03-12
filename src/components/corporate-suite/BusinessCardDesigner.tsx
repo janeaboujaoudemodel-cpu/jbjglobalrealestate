@@ -1916,9 +1916,9 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
               </div>
             ))}
           </div>
-        
+        </div>
 
-        {/* ── Right panel: Preview ─────────────────────────────── */}
+        {/* ── Center panel: Preview ─────────────────────────────── */}
         <div className="space-y-5">
           <div className="flex items-center justify-between">
             <Label className="text-[10px] font-bold uppercase tracking-[0.15em] text-[hsl(var(--muted-foreground))] flex items-center gap-1.5">
