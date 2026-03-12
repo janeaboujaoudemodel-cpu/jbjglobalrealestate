@@ -178,7 +178,7 @@ const AdminDevelopers = () => {
       }
       setIsRepDialogOpen(false);
       setEditingRep(null);
-      setRepForm({ full_name: "", title: "Sales Representative", phone_e164: "", email: "", whatsapp_number: "", is_primary: false, notes: "" });
+      setRepForm({ full_name: "", title: "Sales Representative", phone_e164: "", email: "", whatsapp_number: "", is_primary: false, notes: "", nationality: "", gender: "", years_in_real_estate: "" });
       loadData();
     } catch (err: any) {
       toast.error(err.message || "Error saving sales rep");
