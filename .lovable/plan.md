@@ -1,55 +1,72 @@
 
+## CRM System Upgrade — Implementation Status
 
-## Plan: Fix Developer View Toggle, Separate Launch/Event Tabs, File Uploads, Owner Management
+### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-### Issues to Fix
+#### Task 1: Full System Audit ✅
+- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
+- Identified 10 weaknesses (documented in plan)
 
-**1. Developer View toggle not working**
-Currently at line 549, clicking "Developer View" sets `ownerSkipMode(false)` but the view still shows the owner-adapted UI because `hasRepProfile` check at line 583 gates the dev info card. For owner, when `ownerSkipMode === false`, the portal should render exactly as a developer rep would see it — showing the dev name/email card and the full registration flow.
+#### Task 2: Leads Security Hardening ✅
+- CSV export no longer includes email/phone PII
+- Audit logging added to exports with user_agent tracking
+- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
 
-**Fix in `DeveloperPortal.tsx`**: Change the condition at line 583 from `hasRepProfile && !isOwner` to `hasRepProfile && !isOwner` → when owner has `ownerSkipMode === false`, show the standard developer card (lines 622-636) regardless of `hasRepProfile`. The logic becomes: `hasRepProfile && !isOwner && !ownerSkipMode`.
+#### Task 3: Encryption Hardening ✅
+- CSV export stripped of `email_lower` and `phone_e164` fields
+- Export audit logged to both `crm_audit_logs` and `audit_logs`
 
-**2. Separate Launch and Event submission tabs**
-Replace the current single "Events" tab (line 830) with two distinct tabs:
-- **Events tab** — for event invitations (open days, networking, exhibitions). Includes file upload.
-- **Launches tab** — for new project launches. Includes file upload. Auto-creates an owner task with reminder.
+#### Task 4: Lead Lifecycle Upgrade ✅
+- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
+- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
+- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
 
-Each gets its own form state, file upload area, and submission handler that inserts into `developer_submissions` with `submission_type = 'event_invitation'` or `submission_type = 'launch_announcement'`.
+#### Task 5: CRM Structure Upgrade ✅
+- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
+- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
+- KanbanPipeline expanded to show all 17 relevant stages
 
-**3. Add file uploads to event and launch forms**
-Add a file upload section (reuse the same pattern from project submission) to both event and launch forms. Files go to `documents/developer-events/{timestamp}-{filename}`. Store file URLs in the `developer_submissions` row (use the existing `uploaded_files` column or add via migration if missing).
+#### Task 6: Performance Optimization ✅
+- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
+- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
+- `crm_leads_updated_at_trigger` auto-updates `updated_at`
 
-**4. Auto-create owner tasks/reminders**
-When an event is submitted → create `admin_tasks` entry: "Event to attend: {title}" with `due_date = event_date`, category `event_attendance`.
-When a launch is submitted → create `admin_tasks` entry: "New Launch: {title} — prepare marketing" with `due_date = launch_date`, category `launch_preparation`, with notes.
+#### Task 7: AI Intelligence Integration ✅
+- New edge function `ai-lead-intelligence` using Lovable AI gateway
+- Supports 3 modes: `score`, `summary`, `next_action`
+- Tool-calling for structured scoring output
+- JWT auth + CRM role validation
+- PII sanitized before sending to AI
 
-**5. Owner backend: Launches & Events management section**
-Add a new owner-only tab "Manage" that shows:
-- All launches and events from `developer_submissions`, sorted newest first
-- Search bar (by developer name, title, or day of week)
-- Calendar-style date filter
-- Each item has: Hide/Show toggle, Assign Broker button
-- Uses `developer_submissions` table with an `is_hidden` column and `assigned_broker_id` column (migration needed)
+#### Task 8: Workflow Automation ✅
+- Created `crm_automation_rules` table with RLS (owner manage, admin view)
+- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
 
-### Database Migration
-Add columns to `developer_submissions`:
-```sql
-ALTER TABLE developer_submissions ADD COLUMN IF NOT EXISTS event_files jsonb DEFAULT '[]';
-ALTER TABLE developer_submissions ADD COLUMN IF NOT EXISTS is_hidden boolean DEFAULT false;
-ALTER TABLE developer_submissions ADD COLUMN IF NOT EXISTS assigned_broker_id uuid;
-ALTER TABLE developer_submissions ADD COLUMN IF NOT EXISTS submission_subtype text; -- 'launch' or 'event'
-```
+#### Task 10: Role & Permission System ✅
+- RLS on automation rules: owner CRUD, admin read-only
+- CSV export restricted to owner_admin/founder roles
+
+#### Task 12: Backend/Database Upgrade ✅
+- 3 new performance indexes
+- Auto-updated_at trigger on crm_leads
+- Duplicate hash computation trigger
+- Rate-limiting security function
+
+#### Task 13: Data Cleanliness ✅
+- `duplicate_hash` with auto-compute trigger prevents future duplicates
+- Partial unique index enforces uniqueness at DB level
 
 ### Files Changed
-
-| File | Changes |
-|---|---|
-| `src/pages/DeveloperPortal.tsx` | Fix Developer View toggle logic, split Events into separate Launch + Event tabs with file uploads, add owner "Manage" tab with search/hide/assign, auto-create reminder tasks on submission |
-| New migration | Add `event_files`, `is_hidden`, `assigned_broker_id` columns to `developer_submissions` |
-
-### Technical Details
-- Developer View fix: condition becomes `if (isOwner && !ownerSkipMode)` → render the normal dev card (lines 622-636)
-- File upload for events/launches reuses the same `supabase.storage.from("documents").upload()` pattern
-- Owner Manage tab queries `developer_submissions` with search filter, shows hide toggle via update, broker assign via dropdown from `broker_profiles`
-- Reminder tasks use `admin_tasks` insert with `due_date` set to event/launch date
-
+| File | Action |
+|------|--------|
+| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
+| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
+| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
+| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
+| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
+| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
+| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
+| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
+| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
