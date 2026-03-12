@@ -28,7 +28,7 @@ interface BusinessCardRightPanelProps {
   // Color state
   colorOpen: boolean;
   setColorOpen: (v: boolean) => void;
-  cardShape: string;
+  cardShape: CardShape;
   frontColorIdx: number;
   setFrontColorIdx: (v: number) => void;
   frontCustomColor: string;
