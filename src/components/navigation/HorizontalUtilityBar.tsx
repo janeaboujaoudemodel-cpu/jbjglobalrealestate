@@ -267,10 +267,10 @@ export default function HorizontalUtilityBar() {
                 <TooltipTrigger asChild>
                   <Link
                     to="/owner/crm"
-                    className="h-8 flex items-center gap-1.5 rounded-lg hover:bg-emerald-500/10 transition-all px-2.5 group"
+                    className="h-8 flex items-center gap-1.5 rounded-lg hover:bg-emerald-500/10 transition-all px-2.5 group whitespace-nowrap shrink-0"
                   >
-                    <BarChart3 className="w-4 h-4 text-emerald-600 group-hover:scale-110 transition-transform" />
-                    <span className="text-[11px] font-semibold text-emerald-700 uppercase tracking-wide hidden xl:inline">CRM</span>
+                    <BarChart3 className="w-4 h-4 text-emerald-600 group-hover:scale-110 transition-transform shrink-0" />
+                    <span className="text-[11px] font-semibold text-emerald-700 uppercase tracking-wide hidden xl:inline whitespace-nowrap">CRM</span>
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">CRM Dashboard</TooltipContent>
