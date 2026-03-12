@@ -918,10 +918,10 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
             onClick={() => fileInputRef.current?.click()}
             className="rounded-2xl p-14 text-center cursor-pointer transition-all duration-300 group"
             style={{ border: `2px dashed ${C.border}`, background: C.surface }}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = C.borderHover; (e.currentTarget as HTMLElement).style.background = "rgba(99,102,241,0.1)"; }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = C.borderHover; (e.currentTarget as HTMLElement).style.background = "rgba(184,148,62,0.1)"; }}
             onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = C.border; (e.currentTarget as HTMLElement).style.background = C.surface; }}
           >
-            <Upload className="h-14 w-14 mx-auto mb-4" style={{ color: "rgba(99,102,241,0.5)" }} />
+            <Upload className="h-14 w-14 mx-auto mb-4" style={{ color: "rgba(184,148,62,0.5)" }} />
             <p className="text-white font-semibold text-xl mb-2">Drop your photo here</p>
             <p className="text-sm mb-6" style={{ color: C.dimText }}>JPG, PNG, WebP · Max 10MB</p>
             <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white"
