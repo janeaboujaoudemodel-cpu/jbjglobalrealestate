@@ -181,7 +181,7 @@ function buildSVG(project: any, templateKey: string): string {
       const r = R, innerR = R - 18, ringR = R - 5;
       const nameFontSize = autoFontSize(name, 9.5, 18);
       return `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${COLOR}" stroke-width="2"/>
+        <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${COLOR}" stroke-width="${ba.outerWidth}" stroke-dasharray="${ba.dash}"/>
         <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${COLOR}" stroke-width="0.6" stroke-dasharray="3,2.5"/>
         ${ringText('cp5', cx, cy, ringR, `⬥  ${name}  ⬥  ${city}  ⬥`, font, 8, COLOR, '50%')}
         ${hasMono ? monogram(cx, cy - 6, mono, font, 40, COLOR) : wrapText(name, cx, cy - 6, font, nameFontSize, COLOR, 1.5)}
