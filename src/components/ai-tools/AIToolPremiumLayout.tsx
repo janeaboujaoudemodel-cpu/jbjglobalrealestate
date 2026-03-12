@@ -254,7 +254,7 @@ const AIToolPremiumLayout = ({
       </section>
 
       {/* Content Section - Full border wrapper */}
-      <section className="py-12 bg-black">
+      <section className="py-12" style={{ background: "#0D0C08" }}>
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
