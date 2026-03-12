@@ -1793,7 +1793,7 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
       )}
 
       {/* ── Main Content ───────────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-8 grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-8">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-4 grid grid-cols-1 lg:grid-cols-[320px_1fr_320px] gap-5">
 
         {/* ── Left panel ──────────────────────────────────────── */}
         <div className="space-y-4">
