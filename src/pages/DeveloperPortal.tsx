@@ -1773,7 +1773,8 @@ const DeveloperPortal = () => {
               </Card>
             </TabsContent>
           </Tabs>
-        </div>
+          </div>
+        )}
       </div>
 
       {/* Register Interest Modal */}
