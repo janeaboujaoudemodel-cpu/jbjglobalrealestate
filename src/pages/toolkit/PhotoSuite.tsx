@@ -5,7 +5,7 @@
 import React, { lazy, Suspense } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SEOHead } from '@/components/SEOHead';
-import { Wand2, Sparkles, Palette, Home, ArrowLeft, Loader2, Image } from 'lucide-react';
+import { Wand2, Sparkles, Palette, Home, ArrowLeft, Loader2, Image, ScanLine, FileImage, LayoutGrid, Film } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const BackgroundAI = lazy(() => import('@/pages/toolkit/BackgroundAI'));
@@ -13,6 +13,10 @@ const BeautyFilters = lazy(() => import('@/pages/toolkit/BeautyFilters'));
 const ImageResize = lazy(() => import('@/pages/toolkit/ImageResize'));
 const InteriorDesignAI = lazy(() => import('@/pages/InteriorDesignAI'));
 const VirtualStagingPage = lazy(() => import('@/pages/toolkit/VirtualStagingPage'));
+const ScanSignPage = lazy(() => import('@/pages/toolkit/ScanSignPage'));
+const PdfFromPhotos = lazy(() => import('@/pages/toolkit/PdfFromPhotos'));
+const PhotoCollageBuilder = lazy(() => import('@/components/toolkit/PhotoCollageBuilder'));
+const AISlideshowCreator = lazy(() => import('@/components/toolkit/AISlideshowCreator'));
 
 const LoadingSpinner = () => (
   <div className="min-h-[50vh] flex items-center justify-center" style={{ background: "linear-gradient(180deg, #FDFBF7 0%, #F5EFE3 100%)" }}>
@@ -29,6 +33,10 @@ const tabs = [
   { value: "resize", label: "Image Resize", shortLabel: "Resize", icon: Image },
   { value: "interior", label: "Interior Design", shortLabel: "Interior", icon: Palette },
   { value: "staging", label: "Virtual Staging", shortLabel: "Staging", icon: Home },
+  { value: "scan-sign", label: "Scan & Sign", shortLabel: "Scan", icon: ScanLine },
+  { value: "photo-pdf", label: "Photo → PDF", shortLabel: "PDF", icon: FileImage },
+  { value: "collage", label: "Photo Collage", shortLabel: "Collage", icon: LayoutGrid },
+  { value: "slideshow", label: "AI Slideshow", shortLabel: "Slides", icon: Film },
 ];
 
 export default function PhotoSuite() {
@@ -36,7 +44,7 @@ export default function PhotoSuite() {
     <>
       <SEOHead
         title="Photo & Image Suite | JBJ Creative Tools"
-        description="AI background removal, beauty filters, image resizing, interior design, and virtual staging tools."
+        description="AI background removal, beauty filters, image resizing, interior design, virtual staging, scan & sign, photo collage, and slideshow tools."
       />
 
       <div className="min-h-screen" style={{ background: "linear-gradient(180deg, #FDFBF7 0%, #EDE4D3 100%)" }}>
@@ -70,7 +78,7 @@ export default function PhotoSuite() {
                   </span>
                 </div>
                 <p className="text-xs sm:text-sm mt-0.5 hidden sm:block" style={{ color: "rgba(0,0,0,0.45)" }}>
-                  Background removal · Beauty filters · Resize · AI design · Staging
+                  Background removal · Beauty · Resize · Design · Staging · Scan · PDF · Collage · Slideshow
                 </p>
               </div>
             </div>
@@ -85,7 +93,7 @@ export default function PhotoSuite() {
               <TabsList className="w-full justify-start rounded-none bg-transparent p-0 h-auto gap-0 border-0 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
                 {tabs.map(({ value, label, shortLabel, icon: Icon }) => (
                   <TabsTrigger key={value} value={value}
-                    className="relative flex items-center gap-1.5 px-3 sm:px-5 py-3.5 rounded-none border-0 bg-transparent whitespace-nowrap text-xs sm:text-sm font-medium transition-all outline-none
+                    className="relative flex items-center gap-1.5 px-3 sm:px-4 py-3.5 rounded-none border-0 bg-transparent whitespace-nowrap text-xs sm:text-sm font-medium transition-all outline-none
                       data-[state=inactive]:text-black/40 data-[state=active]:text-[#B8943E]
                       after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:rounded-full after:transition-all
                       data-[state=inactive]:after:bg-transparent data-[state=active]:after:bg-[#B8943E]"
@@ -115,6 +123,18 @@ export default function PhotoSuite() {
             </TabsContent>
             <TabsContent value="staging" className="mt-0">
               <Suspense fallback={<LoadingSpinner />}><VirtualStagingPage embedded /></Suspense>
+            </TabsContent>
+            <TabsContent value="scan-sign" className="mt-0">
+              <Suspense fallback={<LoadingSpinner />}><ScanSignPage /></Suspense>
+            </TabsContent>
+            <TabsContent value="photo-pdf" className="mt-0">
+              <Suspense fallback={<LoadingSpinner />}><PdfFromPhotos embedded /></Suspense>
+            </TabsContent>
+            <TabsContent value="collage" className="mt-0">
+              <Suspense fallback={<LoadingSpinner />}><PhotoCollageBuilder embedded /></Suspense>
+            </TabsContent>
+            <TabsContent value="slideshow" className="mt-0">
+              <Suspense fallback={<LoadingSpinner />}><AISlideshowCreator embedded /></Suspense>
             </TabsContent>
           </div>
         </Tabs>
