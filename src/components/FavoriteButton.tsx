@@ -67,7 +67,7 @@ const FavoriteButton = ({
     if (useDb) {
       toggleUserFavorite.mutate({ projectId, isFavorite });
     } else {
-      toggleGuestFavorite(projectId);
+      toggleGuestFavorite(String(projectId));
       toast.success(isFavorite ? "Removed from favorites" : "Added to favorites");
     }
   };
