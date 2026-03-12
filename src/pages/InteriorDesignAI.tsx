@@ -332,7 +332,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
           {/* LEFT PANEL: Upload + Preview (60%) */}
           <div className="lg:col-span-3 space-y-4">
             {/* Upload / Generated Image Area */}
-            <div className="bg-zinc-900/60 border border-fuchsia-500/30 rounded-2xl overflow-hidden">
+            <div className="bg-zinc-900/60 border border-gold/30 rounded-2xl overflow-hidden">
               {generatedImage ? (
                 <div className="relative">
                   <Design3DViewer imageUrl={generatedImage} projectName={projectName} />
