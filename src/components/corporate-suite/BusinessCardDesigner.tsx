@@ -3,8 +3,8 @@ import CardShareAnalytics from "@/components/corporate-suite/CardShareAnalytics"
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  CreditCard, Phone, Mail, Globe,
-  MapPin, Building2, RefreshCw, Eye, Layers,
+  CreditCard, Phone, Mail, Globe, Download,
+  MapPin, Building2, RefreshCw, Eye, Layers, LayoutGrid,
   Check, ChevronDown, Move,
   Sparkles, RectangleHorizontal,
   Star, User,
