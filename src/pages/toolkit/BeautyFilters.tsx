@@ -440,7 +440,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
         onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = I.borderHover; }}
         onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = I.border; }}>
         <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4"
-          style={{ background: "rgba(99,102,241,0.12)", border: `1px solid ${I.border}` }}>
+          style={{ background: "rgba(184,148,62,0.12)", border: `1px solid ${I.border}` }}>
           <Camera className="h-8 w-8" style={{ color: I.text }} />
         </div>
         <p className="text-white font-semibold text-lg mb-2">Drop your photo here</p>
