@@ -2491,12 +2491,41 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                 </AnimatePresence>
               </div>
             )}
+
+            {/* Inline edit input — appears when clicking a field on the card */}
+            {inlineEditField && (
+              <div className="w-full max-w-[400px] mx-auto mt-2">
+                <div className="flex gap-2 items-center bg-[hsl(var(--muted))] rounded-xl p-2 border border-[hsl(var(--gold)/0.3)]">
+                  <Label className="text-[10px] font-bold uppercase tracking-widest text-[hsl(var(--muted-foreground))] whitespace-nowrap min-w-[60px]">
+                    {inlineEditField}
+                  </Label>
+                  <Input
+                    autoFocus
+                    value={data[inlineEditField]}
+                    onChange={e => setData(prev => ({ ...prev, [inlineEditField]: e.target.value }))}
+                    onKeyDown={e => { if (e.key === "Enter" || e.key === "Escape") setInlineEditField(null); }}
+                    className="h-8 text-xs flex-1"
+                    placeholder={`Edit ${inlineEditField}...`}
+                  />
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setInlineEditField(null)}
+                    className="h-8 text-xs"
+                  >
+                    Done
+                  </Button>
+                </div>
+              </div>
+            )}
+
             <div className={`flex items-center gap-3 text-[10px] ${cardShape === "digital" ? "text-white/40" : "text-[hsl(var(--muted-foreground))]"}`}>
               <span>{CARD_SHAPES.find(s => s.id === cardShape)?.label} · {CARD_SHAPES.find(s => s.id === cardShape)?.ratio}</span>
               <span>·</span>
               <span>F: {TEMPLATES.find(t => t.id === frontTemplate)?.label} · B: {TEMPLATES.find(t => t.id === backTemplate)?.label}</span>
               {qrEnabled && <span>· QR on both sides</span>}
               {logoUrl && <span>· Logo on both sides</span>}
+              {bilingualMode !== "off" && <span>· Bilingual ({BILINGUAL_LANGUAGES.find(l => l.id === bilingualLang)?.label?.split(" ")[0]})</span>}
             </div>
 
             {/* Digital mode tabs + landing page editor + export */}
