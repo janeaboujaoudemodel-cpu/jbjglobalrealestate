@@ -20,7 +20,7 @@ import DigitalLandingPageEditor from "@/components/corporate-suite/DigitalLandin
 
 // ─── Extracted modules ────────────────────────────────────────────────────────
 import {
-  type CardData,
+  type CardData, type BilingualMode,
   BILINGUAL_LANGUAGES, TEMPLATES, COLOR_PRESETS, CARD_SHAPES,
   getShapeStyle, DEFAULT_FIELD_POSITIONS, DEFAULT_LOGO_POS,
   getFinishOverlayStyle,
