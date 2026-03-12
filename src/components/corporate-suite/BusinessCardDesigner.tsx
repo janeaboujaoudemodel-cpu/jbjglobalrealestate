@@ -1748,6 +1748,128 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
     toast.success("Trade license data extracted & applied!");
   };
 
+  // ── Load saved designs ──────────────────────────────────────
+  const handleLoadSavedDesigns = async () => {
+    setIsLoadingSaved(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { toast.error("Please sign in to view saved cards."); return; }
+      const { data: assets, error } = await supabase
+        .from("design_assets")
+        .select("id, name, created_at, metadata")
+        .eq("user_id", user.id)
+        .eq("asset_type", "business_card")
+        .order("created_at", { ascending: false })
+        .limit(20);
+      if (error) throw error;
+      setSavedDesigns(assets || []);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to load saved designs.");
+    } finally {
+      setIsLoadingSaved(false);
+    }
+  };
+
+  const handleRestoreSaved = (metadata: any) => {
+    if (!metadata) return;
+    if (metadata.data) setData(metadata.data);
+    if (metadata.frontTemplate) setFrontTemplate(metadata.frontTemplate);
+    if (metadata.backTemplate) setBackTemplate(metadata.backTemplate);
+    if (metadata.frontColorIdx != null) setFrontColorIdx(metadata.frontColorIdx);
+    if (metadata.backColorIdx != null) setBackColorIdx(metadata.backColorIdx);
+    if (metadata.frontCustomColor != null) setFrontCustomColor(metadata.frontCustomColor);
+    if (metadata.backCustomColor != null) setBackCustomColor(metadata.backCustomColor);
+    if (metadata.cardShape) setCardShape(metadata.cardShape);
+    if (metadata.qrEnabled != null) setQrEnabled(metadata.qrEnabled);
+    if (metadata.qrContentType) setQrContentType(metadata.qrContentType);
+    if (metadata.qrCustomContent != null) setQrCustomContent(metadata.qrCustomContent);
+    if (metadata.qrSize) setQrSize(metadata.qrSize);
+    if (metadata.qrColor != null) setQrColor(metadata.qrColor);
+    if (metadata.qrBgColor) setQrBgColor(metadata.qrBgColor);
+    if (metadata.qrPosition) setQrPosition(metadata.qrPosition);
+    if (metadata.logoUrl != null) setLogoUrl(metadata.logoUrl);
+    if (metadata.logoSize) setLogoSize(metadata.logoSize);
+    if (metadata.logoPos) setLogoPos(metadata.logoPos);
+    if (metadata.aiDesignData !== undefined) setAiDesignData(metadata.aiDesignData);
+    toast.success("Card design restored!");
+    setLoadSavedOpen(false);
+  };
+
+  const handleDeleteSaved = async (id: string) => {
+    setIsDeletingSaved(id);
+    try {
+      const { error } = await supabase.from("design_assets").delete().eq("id", id);
+      if (error) throw error;
+      setSavedDesigns(prev => prev.filter(d => d.id !== id));
+      toast.success("Design deleted.");
+    } catch (err) {
+      console.error(err);
+      toast.error("Delete failed.");
+    } finally {
+      setIsDeletingSaved(null);
+    }
+  };
+
+  // ── PNG export ──────────────────────────────────────────────
+  const handleExportPng = async () => {
+    if (!cardPreviewRef.current) { toast.error("Preview not ready."); return; }
+    setIsExportingPng(true);
+    try {
+      const html2canvas = (await import("html2canvas")).default;
+      const canvas = await html2canvas(cardPreviewRef.current, {
+        scale: 3,
+        useCORS: true,
+        backgroundColor: null,
+        logging: false,
+      });
+      const url = canvas.toDataURL("image/png");
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `business-card-${(data.name || "card").toLowerCase().replace(/\s+/g, "-")}.png`;
+      a.click();
+      toast.success("PNG exported at high resolution!");
+    } catch (err) {
+      console.error(err);
+      toast.error("PNG export failed. Please try again.");
+    } finally {
+      setIsExportingPng(false);
+    }
+  };
+
+  // ── Batch print ─────────────────────────────────────────────
+  const handleBatchPrint = () => {
+    const printWindow = window.open("", "_blank");
+    if (!printWindow) { toast.error("Pop-up blocked. Please allow pop-ups."); return; }
+    const cardHtml = cardPreviewRef.current?.innerHTML || "";
+    const cardStyle = cardPreviewRef.current ? window.getComputedStyle(cardPreviewRef.current) : null;
+
+    const cols = 2;
+    const rows = Math.ceil(batchPrintCount / cols);
+    const cards = Array.from({ length: batchPrintCount }, () => `
+      <div style="width:3.5in;height:2in;overflow:hidden;border:0.5px solid #ddd;border-radius:4px;box-sizing:border-box;flex-shrink:0;">
+        ${cardHtml}
+      </div>
+    `).join("");
+
+    printWindow.document.write(`<!DOCTYPE html>
+<html><head><title>Print Business Cards</title>
+<style>
+  @page { size: A4; margin: 0.5in; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: Arial, sans-serif; }
+  .grid { display: flex; flex-wrap: wrap; gap: 0.15in; justify-content: center; }
+  .grid > div { page-break-inside: avoid; }
+  @media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+</style></head>
+<body>
+  <div class="grid">${cards}</div>
+  <script>window.onload = () => { window.print(); }</script>
+</body></html>`);
+    printWindow.document.close();
+    toast.success(`Print layout ready — ${batchPrintCount} cards on A4`);
+  };
+
   // Save Card
   const handleSaveCard = async () => {
     setIsSaving(true);
