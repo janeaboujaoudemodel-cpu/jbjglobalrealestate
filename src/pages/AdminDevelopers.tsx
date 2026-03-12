@@ -271,9 +271,9 @@ const AdminDevelopers = () => {
       </div>
 
       <div className="container mx-auto px-4 py-8">
-        {/* Search */}
-        <div className="mb-6">
-          <div className="relative max-w-md">
+        {/* Search & Filters */}
+        <div className="mb-6 flex flex-wrap items-end gap-4">
+          <div className="relative flex-1 min-w-[200px] max-w-md">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
               placeholder="Search developers..."
@@ -281,6 +281,22 @@ const AdminDevelopers = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10 bg-white border-gold/20"
             />
+          </div>
+          <div className="flex items-center gap-2">
+            <Filter className="w-4 h-4 text-muted-foreground" />
+            <Select value={titleFilter} onValueChange={setTitleFilter}>
+              <SelectTrigger className="w-[180px] bg-white border-gold/20">
+                <SelectValue placeholder="Filter by role" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Roles</SelectItem>
+                <SelectItem value="COO">COO</SelectItem>
+                <SelectItem value="Sales Manager">Sales Manager</SelectItem>
+                <SelectItem value="Sales Representative">Sales Representative</SelectItem>
+                <SelectItem value="Channel Partner">Channel Partner</SelectItem>
+                <SelectItem value="Admin">Admin</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
