@@ -20,7 +20,7 @@ interface BusinessCardCenterPanelProps {
   setEditLayout: (v: boolean | ((prev: boolean) => boolean)) => void;
   isSharing: boolean;
   handleShareCard: () => void;
-  cardShape: string;
+  cardShape: CardShape;
   cardPreviewRef: React.RefObject<HTMLDivElement | null>;
   // Card canvas props
   data: CardData;
