@@ -282,10 +282,10 @@ export default function HorizontalUtilityBar() {
               <TooltipTrigger asChild>
                 <Link
                    to="/my-dashboard#tasks"
-                   className="h-8 flex items-center gap-1.5 rounded-lg border border-gold/20 bg-gold/5 hover:bg-gold/15 hover:border-gold/40 transition-all px-2 group relative"
+                   className="h-8 flex items-center gap-1.5 rounded-lg border border-gold/20 bg-gold/5 hover:bg-gold/15 hover:border-gold/40 transition-all px-2 group relative shrink-0 whitespace-nowrap"
                  >
                    <ClipboardList className={iconClass} />
-                  <span className="text-[11px] font-medium text-black/50 hidden xl:inline">Tasks</span>
+                  <span className="text-[11px] font-medium text-black/50 hidden xl:inline whitespace-nowrap">Tasks</span>
                   {(alerts?.pendingTasks || 0) > 0 && (
                     <span className="absolute -top-1.5 -right-1 w-4.5 h-4.5 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center">
                       {alerts!.pendingTasks > 9 ? '9+' : alerts!.pendingTasks}
