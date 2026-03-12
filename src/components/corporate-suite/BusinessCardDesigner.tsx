@@ -3,27 +3,19 @@ import CardShareAnalytics from "@/components/corporate-suite/CardShareAnalytics"
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Download, CreditCard, Phone, Mail, Globe,
+  CreditCard, Phone, Mail, Globe,
   MapPin, Building2, RefreshCw, Eye, Layers,
-  LayoutGrid, Check, ImageIcon, ChevronDown, QrCode, Move,
+  Check, ChevronDown, Move,
   Sparkles, RectangleHorizontal,
-  Palette, Star, Minus, Type, User,
-  Share2, HelpCircle, AlignLeft, AlignCenter, AlignRight, Underline,
-  Droplets, Sun, Diamond, Stamp,
+  Star, User,
+  Share2, HelpCircle,
   FolderOpen, Trash2, Clock,
 } from "lucide-react";
-import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
-} from "@/components/ui/dialog";
-import { StudioShell, type StudioSection } from "@/components/ui/StudioShell";
 import { DocumentExtractorUpload } from "@/components/corporate-suite/DocumentExtractorUpload";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Slider } from "@/components/ui/slider";
-import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
-import { BrandAssetLibrary } from "@/components/corporate-suite/BrandAssetLibrary";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
 import { VoiceInputButton } from "@/components/ui/VoiceInputButton";
 import { supabase } from "@/integrations/supabase/client";
@@ -38,8 +30,7 @@ import {
   getShapeStyle, DEFAULT_FIELD_POSITIONS, DEFAULT_LOGO_POS, SNAP_THRESHOLD,
   buildQrData, buildQrUrl, QR_POSITION_STYLE, getFinishOverlayStyle,
 } from "./businessCardTypes";
-import { DeskMockup, PocketMockup, StationeryMockup, HandMockup, PhoneMockup } from "./BusinessCardMockups";
-import { ColorPickerSection } from "./BusinessCardColorPicker";
+import { PhoneMockup } from "./BusinessCardMockups";
 import { CardFace, CardCanvas } from "./BusinessCardPreview";
 import { exportCardAsPDF, exportDigitalCardAsHtml } from "./businessCardExport";
 import { BusinessCardHeader } from "./BusinessCardHeader";
