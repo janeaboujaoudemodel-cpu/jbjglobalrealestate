@@ -2377,23 +2377,59 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <div className="px-4 pb-4 border-t border-[hsl(var(--border))] space-y-4 pt-3">
+                  {/* Style toggles */}
                   <div>
                     <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Style</Label>
                     <div className="flex gap-2">
                       <button
                         onClick={() => setCardFontBold(v => !v)}
                         className={`w-10 h-10 rounded-lg border-2 font-bold text-sm transition-all ${cardFontBold ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]" : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]"}`}
+                        title="Bold"
                       >
                         B
                       </button>
                       <button
                         onClick={() => setCardFontItalic(v => !v)}
                         className={`w-10 h-10 rounded-lg border-2 italic font-semibold text-sm transition-all ${cardFontItalic ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]" : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]"}`}
+                        title="Italic"
                       >
                         I
                       </button>
+                      <button
+                        onClick={() => setCardUnderline(v => !v)}
+                        className={`w-10 h-10 rounded-lg border-2 text-sm transition-all flex items-center justify-center ${cardUnderline ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]" : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]"}`}
+                        title="Underline"
+                      >
+                        <Underline size={14} />
+                      </button>
                     </div>
                   </div>
+
+                  {/* Text Alignment */}
+                  <div>
+                    <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Alignment</Label>
+                    <div className="flex gap-1.5">
+                      {([
+                        { id: "left" as TextAlign, icon: <AlignLeft size={13} /> },
+                        { id: "center" as TextAlign, icon: <AlignCenter size={13} /> },
+                        { id: "right" as TextAlign, icon: <AlignRight size={13} /> },
+                      ]).map(opt => (
+                        <button
+                          key={opt.id}
+                          onClick={() => setCardTextAlign(opt.id)}
+                          className={`w-10 h-10 rounded-lg border-2 flex items-center justify-center transition-all ${
+                            cardTextAlign === opt.id
+                              ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
+                              : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]"
+                          }`}
+                        >
+                          {opt.icon}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Font Size */}
                   <div>
                     <div className="flex items-center justify-between mb-2">
                       <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))]">Font Size</Label>
@@ -2422,6 +2458,34 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                       >+</button>
                     </div>
                   </div>
+
+                  {/* Letter Spacing */}
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))]">Letter Spacing</Label>
+                      <span className="text-[10px] font-semibold text-[hsl(var(--foreground))]">{cardLetterSpacing}px</span>
+                    </div>
+                    <Slider
+                      min={-2} max={8} step={0.5}
+                      value={[cardLetterSpacing]}
+                      onValueChange={([v]) => setCardLetterSpacing(v)}
+                    />
+                  </div>
+
+                  {/* Line Height */}
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))]">Line Height</Label>
+                      <span className="text-[10px] font-semibold text-[hsl(var(--foreground))]">{cardLineHeight}</span>
+                    </div>
+                    <Slider
+                      min={0.8} max={2.0} step={0.1}
+                      value={[cardLineHeight]}
+                      onValueChange={([v]) => setCardLineHeight(v)}
+                    />
+                  </div>
+
+                  {/* Font Family */}
                   <div>
                     <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Font Family</Label>
                     <div className="grid grid-cols-2 gap-1.5">
@@ -2431,6 +2495,11 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                         { label: "Garamond",  value: "Garamond, 'Palatino Linotype', serif" },
                         { label: "Courier",   value: "'Courier New', Courier, monospace" },
                         { label: "Futura",    value: "'Century Gothic', 'Trebuchet MS', sans-serif" },
+                        { label: "Verdana",   value: "Verdana, Geneva, sans-serif" },
+                        { label: "Cambria",   value: "Cambria, 'Hoefler Text', serif" },
+                        { label: "Impact",    value: "Impact, 'Arial Black', sans-serif" },
+                        { label: "Segoe",     value: "'Segoe UI', Tahoma, sans-serif" },
+                        { label: "Lucida",    value: "'Lucida Console', Monaco, monospace" },
                       ] as { label: string; value: string }[]).map(f => (
                         <button
                           key={f.value}
