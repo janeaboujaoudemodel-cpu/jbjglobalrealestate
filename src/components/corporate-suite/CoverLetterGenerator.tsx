@@ -699,7 +699,12 @@ export default function CoverLetterGenerator() {
           {/* Header/Footer */}
           <DocumentHeaderFooterBuilder settings={headerFooter} onChange={setHeaderFooter} />
 
-          {/* Template Picker */}
+          {/* E-Signature Integration */}
+          <DocumentESignIntegration
+            documentReady={!!letter}
+            onSignDocument={() => navigate("/e-signature/create")}
+          />
+
           <div>
             <Label className="text-[10px] font-bold uppercase tracking-[0.15em] text-[hsl(var(--muted-foreground))] mb-2 block">
               Template Style
