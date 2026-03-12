@@ -1,72 +1,87 @@
 
-## CRM System Upgrade — Implementation Status
 
-### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
+## Plan: Cover Letter → Full Document Designer & Signing Platform
 
-#### Task 1: Full System Audit ✅
-- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
-- Identified 10 weaknesses (documented in plan)
+This is a very large scope. I will break it into **3 implementation phases** within this plan, focusing on Phase 1 for immediate execution.
 
-#### Task 2: Leads Security Hardening ✅
-- CSV export no longer includes email/phone PII
-- Audit logging added to exports with user_agent tracking
-- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
+---
 
-#### Task 3: Encryption Hardening ✅
-- CSV export stripped of `email_lower` and `phone_e164` fields
-- Export audit logged to both `crm_audit_logs` and `audit_logs`
+### Phase 1: Core Designer Upgrade (This Message)
 
-#### Task 4: Lead Lifecycle Upgrade ✅
-- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
-- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
-- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
+#### 1. Deploy `cover-letter-generator` edge function
+- Already exists at `supabase/functions/cover-letter-generator/index.ts` — will trigger deployment
+- Verify it's listed in `supabase/config.toml` with `verify_jwt = false`
 
-#### Task 5: CRM Structure Upgrade ✅
-- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
-- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
-- KanbanPipeline expanded to show all 17 relevant stages
+#### 2. Upgrade `CoverLetterGenerator.tsx` → Full Document Designer
+**Rename scope**: Keep route at `/toolkit/corporate-suite/cover-letter` but rebrand to **"AI Document Designer"** — generates cover letters, offer letters, company letters, contracts, NDAs, HR docs, etc.
 
-#### Task 6: Performance Optimization ✅
-- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
-- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
-- `crm_leads_updated_at_trigger` auto-updates `updated_at`
+**UI Fixes & Additions:**
+- Fix padding between header and Brand Assets collapsible (currently too tight)
+- Add **Color Wheel** section using HSL picker for accent color, header bg, text color, divider color
+  - **Owner**: Loads locked company palette from brand settings, shows preview, allows override
+  - **Regular users**: Shows general color wheel with presets
+- Add **Typography Controls**: Font family dropdown (10+ fonts: Georgia, Inter, Poppins, Playfair, Merriweather, Lora, etc.), font size slider, bold/italic/underline toggles
+- Add **Text Alignment**: Left, center, justify buttons for letter body
+- Add **Divider Controls**: Style (solid, dashed, double, gold), thickness, color
+- Keep **preview centered** on the right panel with all changes reflecting live
 
-#### Task 7: AI Intelligence Integration ✅
-- New edge function `ai-lead-intelligence` using Lovable AI gateway
-- Supports 3 modes: `score`, `summary`, `next_action`
-- Tool-calling for structured scoring output
-- JWT auth + CRM role validation
-- PII sanitized before sending to AI
+#### 3. Signature & Stamp Integration
+- Add "Signature" section: Type your name → AI generates styled signature (founder, corporate, HR, etc.) via `ai-signature-generator` edge function
+- Add "Upload Signature" option alongside generated ones
+- Add "Stamp" section: Upload stamp image, or load from saved stamps (session storage from Stamp Generator)
+- Add "Trade License Upload" → Extract company details to auto-fill letter header
+- One-click: Click signature field → auto-signs, click stamp field → auto-stamps, click date → auto-dates
 
-#### Task 8: Workflow Automation ✅
-- Created `crm_automation_rules` table with RLS (owner manage, admin view)
-- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
+#### 4. Header/Footer Builder
+- Editable header: Logo, company name, contact, QR code placement
+- Editable footer: Copyright text, links, page numbers
+- Business card mini-embed option in footer
+- Email signature card integration (load from saved e-signature designs)
 
-#### Task 10: Role & Permission System ✅
-- RLS on automation rules: owner CRUD, admin read-only
-- CSV export restricted to owner_admin/founder roles
+#### 5. Template System Upgrade
+- Expand from 4 templates to 8+ (add: Legal, Corporate Gold, Minimalist Dark, Creative, Royal)
+- Each template shows color-customizable preview thumbnails
+- Ombre/gradient option for header band via dual color picker
 
-#### Task 12: Backend/Database Upgrade ✅
-- 3 new performance indexes
-- Auto-updated_at trigger on crm_leads
-- Duplicate hash computation trigger
-- Rate-limiting security function
+#### 6. Content Editability
+- Click any field in preview to edit inline
+- Right-click context: Delete, Duplicate, Move Up/Down
+- Drag-to-reorder content blocks
+- "Add Field" button: Date, Signature, Stamp, Divider, Text Block, QR Code
 
-#### Task 13: Data Cleanliness ✅
-- `duplicate_hash` with auto-compute trigger prevents future duplicates
-- Partial unique index enforces uniqueness at DB level
+---
 
-### Files Changed
-| File | Action |
+### Phase 2: E-Signature Integration (Next Message)
+
+- Any user can upload a document and sign it or add stamp (free feature)
+- Integration with existing `/e-signature` system
+- "Sign This Document" button in the designer that opens the signing pad
+- Save signed documents to user's account
+
+### Phase 3: Owner-Only DocuSign Features (Following Message)
+
+- Owner can send documents for signature via email
+- Email notification to signer with secure link
+- Follow-up reminders (manual + scheduled)
+- Signature status tracking (pending, viewed, signed)
+- This uses existing `esign-send-for-signature` and `esign-send-reminder` edge functions
+
+---
+
+### Files Modified in Phase 1
+
+| File | Change |
 |------|--------|
-| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
-| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
-| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
-| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
-| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
-| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
-| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
-| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
-| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
+| `src/components/corporate-suite/CoverLetterGenerator.tsx` | Major upgrade: color wheel, typography, stamps, signatures, header/footer, more templates, inline editing |
+| `supabase/functions/cover-letter-generator/index.ts` | Expand prompt to support multiple document types (not just cover letters) |
+| `supabase/config.toml` | Ensure cover-letter-generator is registered |
+
+### New Components (Phase 1)
+
+| File | Purpose |
+|------|---------|
+| `src/components/corporate-suite/DocumentColorWheel.tsx` | HSL color picker with gradient/ombre support, owner palette lock |
+| `src/components/corporate-suite/DocumentTypographyControls.tsx` | Font family, size, weight, alignment, underline controls |
+| `src/components/corporate-suite/DocumentStampIntegration.tsx` | Stamp upload/load/place controls |
+| `src/components/corporate-suite/DocumentHeaderFooterBuilder.tsx` | Header/footer editor with QR, links, copyright |
+
