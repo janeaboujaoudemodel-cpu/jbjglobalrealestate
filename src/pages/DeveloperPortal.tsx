@@ -279,7 +279,7 @@ const DeveloperPortal = () => {
     queryFn: async () => {
       if (!user?.email) return [];
       const { data } = await (supabase as any)
-        .from('e_signature_envelopes')
+        .from('esign_envelopes')
         .select('id, title, status, created_at, updated_at')
         .or(`sender_id.eq.${user.id},signers.cs.[{"email":"${user.email}"}]`)
         .order('created_at', { ascending: false })
