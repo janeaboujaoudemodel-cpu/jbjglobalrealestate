@@ -212,8 +212,8 @@ function buildSVG(project: any, templateKey: string): string {
       const nameFontSize = autoFontSize(name, 10, 20);
       return `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
         <!-- Border style applied -->
-        <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${COLOR}" stroke-width="1.8"/>
-        <circle cx="${cx}" cy="${cy}" r="${r - 6}" fill="none" stroke="${COLOR}" stroke-width="0.5"/>
+        <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${COLOR}" stroke-width="${ba.outerWidth}" stroke-dasharray="${ba.dash}"/>
+        ${ba.innerRing ? `<circle cx="${cx}" cy="${cy}" r="${r - 6}" fill="none" stroke="${COLOR}" stroke-width="${ba.innerWidth}" stroke-dasharray="${ba.innerDash}"/>` : `<circle cx="${cx}" cy="${cy}" r="${r - 6}" fill="none" stroke="${COLOR}" stroke-width="0.5"/>`}
         ${hasMono
           ? `<rect x="${cx - 36}" y="${cy - 36}" width="72" height="72" fill="none" stroke="${COLOR}" stroke-width="1" transform="rotate(45, ${cx}, ${cy})"/>
              ${monogram(cx, cy - 2, mono, font, 28, COLOR)}`
