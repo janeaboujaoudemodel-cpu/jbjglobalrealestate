@@ -1215,7 +1215,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                           {BG_PRESETS.map(p => (
                             <button key={p.id} onClick={() => setVideoBackground(p.id)}
                               className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
-                              style={{ background: videoBackground === p.id ? "rgba(99,102,241,0.3)" : "rgba(255,255,255,0.08)", border: `1px solid ${videoBackground === p.id ? "rgba(99,102,241,0.7)" : "rgba(255,255,255,0.15)"}`, color: 'white' }}>
+                              style={{ background: videoBackground === p.id ? "rgba(184,148,62,0.3)" : "rgba(255,255,255,0.08)", border: `1px solid ${videoBackground === p.id ? "rgba(184,148,62,0.7)" : "rgba(255,255,255,0.15)"}`, color: 'white' }}>
                               {p.color ? <span className="inline-block w-3 h-3 rounded-sm mr-1 align-middle" style={{ background: p.color }} /> : p.icon + ' '}
                               {p.label}
                             </button>
