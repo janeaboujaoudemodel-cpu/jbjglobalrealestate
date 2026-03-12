@@ -41,7 +41,7 @@ interface AIChatWidgetProps {
   showAttentionPulse?: boolean;
 }
 
-const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttentionPulse = false }: AIChatWidgetProps) => {
+const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapsed, onToggleCollapse, onMinimize, showAttentionPulse = false }, _ref) => {
   const { isRTL } = useLanguage();
   const { user } = useAuth();
   
