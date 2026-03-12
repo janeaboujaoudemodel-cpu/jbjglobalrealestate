@@ -203,6 +203,7 @@ const DeveloperPortal = () => {
   // Session-based multi-project
   const [currentProject, setCurrentProject] = useState<ProjectSession>(emptyProject());
   const [uploadingFiles, setUploadingFiles] = useState(false);
+  const [mainDragOver, setMainDragOver] = useState(false);
   const [submittingProject, setSubmittingProject] = useState(false);
   const [sessionProjects, setSessionProjects] = useState<string[]>([]);
 

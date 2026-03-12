@@ -533,8 +533,7 @@ const ListingPortalSubmit = () => {
 
     } catch (err: any) {
       console.error('Submit error:', err);
-      toast.error('Failed to submit listing. Please try again.');
-      setPhase('pricing_role');
+      toast.error(err?.message || 'Failed to submit listing. Please try again.');
     }
   };
 
