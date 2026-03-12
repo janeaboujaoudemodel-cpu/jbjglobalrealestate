@@ -864,26 +864,37 @@ export default function StampGeneratorPage() {
                 )}
               </div>
 
-              {/* Large stamp preview — always centered */}
-              <div className="flex items-center justify-center py-8 px-6 min-h-[300px] bg-[radial-gradient(circle_at_center,_hsl(var(--pearl-1))_0%,_white_70%)]">
+              {/* Large stamp preview — interactive canvas */}
+              <div className="flex items-center justify-center py-6 px-4 min-h-[320px] bg-[radial-gradient(circle_at_center,_hsl(var(--pearl-1))_0%,_white_70%)]">
                 {generating ? (
                   <div className="flex flex-col items-center gap-3 text-[hsl(var(--muted-foreground))]">
                     <Loader2 size={32} className="animate-spin text-[hsl(var(--gold))]"/>
                     <p className="text-xs font-medium">Generating designs…</p>
                   </div>
                 ) : (selectedSvg || allConcepts[0]?.svgSource) ? (
-                  <StampSVGRenderer
-                    svgSource={selectedSvg || (svgOverrides[allConcepts[0]?.id] || allConcepts[0]?.svgSource) || ''}
-                    tintColor={primaryColor}
-                    secondaryColor={secondaryColor}
-                    accentColor={accentColor}
-                    fontFamily={fontFamily}
-                    fontWeight={fontBold ? 'bold' : 'normal'}
-                    fontStyle={fontItalic ? 'italic' : 'normal'}
-                    fontSize={manualFontSize}
-                    inkMode={inkMode}
-                    size={240}
-                  />
+                  <InteractiveStampCanvas
+                    size={260}
+                    layers={studioLayers}
+                    onLayersChange={setStudioLayers}
+                    onDeleteLayer={(id) => {
+                      setStudioLayers(prev => prev.map(l => l.id === id ? { ...l, visible: false } : l));
+                      toast('Layer hidden');
+                    }}
+                    interactive={true}
+                  >
+                    <StampSVGRenderer
+                      svgSource={selectedSvg || (svgOverrides[allConcepts[0]?.id] || allConcepts[0]?.svgSource) || ''}
+                      tintColor={primaryColor}
+                      secondaryColor={secondaryColor}
+                      accentColor={accentColor}
+                      fontFamily={fontFamily}
+                      fontWeight={fontBold ? 'bold' : 'normal'}
+                      fontStyle={fontItalic ? 'italic' : 'normal'}
+                      fontSize={manualFontSize}
+                      inkMode={inkMode}
+                      size={260}
+                    />
+                  </InteractiveStampCanvas>
                 ) : (
                   <div className="flex flex-col items-center gap-3 text-[hsl(var(--muted-foreground))]">
                     <Stamp size={40} className="opacity-20"/>
