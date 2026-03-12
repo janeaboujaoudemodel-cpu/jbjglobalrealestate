@@ -1166,9 +1166,9 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                     <div
                       onClick={() => videoInputRef.current?.click()}
                       className="rounded-xl p-10 text-center cursor-pointer transition-all"
-                      style={{ border: `2px dashed ${C.border}`, background: "rgba(99,102,241,0.03)" }}
+                      style={{ border: `2px dashed ${C.border}`, background: "rgba(184,148,62,0.03)" }}
                     >
-                      <Video className="h-10 w-10 mx-auto mb-3" style={{ color: "rgba(99,102,241,0.5)" }} />
+                      <Video className="h-10 w-10 mx-auto mb-3" style={{ color: "rgba(184,148,62,0.5)" }} />
                       <p className="text-white font-medium mb-1">Drop your video here</p>
                       <p className="text-xs mb-4" style={{ color: C.dimText }}>MP4, MOV, WebM · Max 200MB</p>
                       <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-white"
