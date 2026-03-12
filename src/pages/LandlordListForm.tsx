@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +11,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
 import { toast } from "sonner";
+import { FormDraftBar } from "@/components/shared/FormDraftBar";
+
+const DRAFT_KEY = "jbj_landlord_list_draft";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
