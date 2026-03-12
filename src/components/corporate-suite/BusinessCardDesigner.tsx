@@ -36,6 +36,8 @@ type QrPosition = "bottom-right" | "bottom-left" | "top-right" | "top-left" | "c
 type QrContentType = "url" | "vcard" | "text" | "email" | "phone";
 type TextAlign = "left" | "center" | "right";
 type GradientDirection = "to right" | "to left" | "to bottom" | "to top" | "135deg" | "45deg";
+type FinishEffect = "none" | "matte" | "glossy" | "spot-uv" | "embossed";
+type MockupScene = "none" | "desk" | "pocket" | "stationery" | "hand";
 
 interface CardData {
   name: string;
