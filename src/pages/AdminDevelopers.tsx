@@ -390,7 +390,7 @@ const AdminDevelopers = () => {
                 onAddRep={() => {
                   setSelectedDeveloper(dev);
                   setEditingRep(null);
-                  setRepForm({ full_name: "", title: "Sales Representative", phone_e164: "", email: "", whatsapp_number: "", is_primary: false, notes: "" });
+                  setRepForm({ full_name: "", title: "Sales Representative", phone_e164: "", email: "", whatsapp_number: "", is_primary: false, notes: "", nationality: "", gender: "", years_in_real_estate: "" });
                   setIsRepDialogOpen(true);
                 }}
                 onEditRep={(rep) => {
