@@ -545,7 +545,15 @@ export default function DocumentFieldPlacer({
                         </button>
 
                         {/* Field content */}
-                        {renderFieldContent(field, style)}
+                        <FieldContentRenderer
+                          field={field}
+                          style={style}
+                          recipients={recipients}
+                          savedStampSvg={savedStampSvg}
+                          savedSignatureUrl={savedSignatureUrl}
+                          onUpdateValue={updateFieldValue}
+                          onOpenDraw={(id) => setDrawingFieldId(id)}
+                        />
 
                         {/* Recipient color bar */}
                         <div className={`absolute bottom-0 left-0 right-0 h-0.5 rounded-b ${style.bg}`} />
