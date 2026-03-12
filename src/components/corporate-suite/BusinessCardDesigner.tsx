@@ -190,12 +190,16 @@ const QR_POSITION_STYLE: Record<QrPosition, React.CSSProperties> = {
 function CardFace({
   data, template, primary, secondary, accent, side = "front", scale = 1, shapeStyle, aiDesignData, cardShape,
   fontFamily, fontWeight, fontStyle, nameFontSize,
+  bilingualMode, bilingualDir, secondaryData,
+  onInlineEdit,
 }: {
   data: CardData; template: Template; primary: string;
   secondary: string; accent: string; side?: "front" | "back"; scale?: number;
   shapeStyle?: React.CSSProperties; aiDesignData?: AiDesignData | null;
   cardShape?: CardShape;
   fontFamily?: string; fontWeight?: string; fontStyle?: string; nameFontSize?: number | null;
+  bilingualMode?: BilingualMode; bilingualDir?: "rtl" | "ltr"; secondaryData?: CardData;
+  onInlineEdit?: (field: keyof CardData) => void;
 }) {
   const name    = data.name    || "Your Name";
   const title   = data.title   || "Job Title";
