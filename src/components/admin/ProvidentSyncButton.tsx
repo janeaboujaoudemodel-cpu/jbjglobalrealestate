@@ -231,7 +231,7 @@ export const ProvidentSyncButton = () => {
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-lg">
           <RefreshCw className="w-5 h-5 text-gold" />
-          Provident Estate Sync
+          External Source Sync
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
