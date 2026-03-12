@@ -301,7 +301,7 @@ export default function InvestorDashboard() {
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
-          className="space-y-8"
+          className="space-y-6"
         >
           {/* HERO / HEADER BLOCK */}
           <motion.div variants={fadeInUp}>
