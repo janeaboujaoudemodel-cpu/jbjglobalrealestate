@@ -1,84 +1,72 @@
 
+## CRM System Upgrade — Implementation Status
 
-## Plan: Fix Chat/Arrow Overlap, Layout Alignment, Chat Auto-Close Bug & Deploy All Edge Functions
+### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
----
+#### Task 1: Full System Audit ✅
+- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
+- Identified 10 weaknesses (documented in plan)
 
-### Issue 1: Chat Widget Overlapping Navigation Arrow
+#### Task 2: Leads Security Hardening ✅
+- CSV export no longer includes email/phone PII
+- Audit logging added to exports with user_agent tracking
+- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
 
-**Root cause**: Both `CollapsedChatButton` (`bottom-20 right-6 z-[10050]`) and `PageNavigation` (`bottom-24 right-4 z-[9990]`) occupy the same bottom-right corner. The chat button sits on top of the arrow due to higher z-index.
+#### Task 3: Encryption Hardening ✅
+- CSV export stripped of `email_lower` and `phone_e164` fields
+- Export audit logged to both `crm_audit_logs` and `audit_logs`
 
-**Fix**: Hide `PageNavigation` arrows whenever the chat widget is open (not collapsed).
+#### Task 4: Lead Lifecycle Upgrade ✅
+- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
+- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
+- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
 
-**Changes**:
-- `src/components/MainLayoutWrapper.tsx`: Pass a `chatOpen` prop or use a shared state
-- Better approach — `src/components/MainLayout.tsx` (lines 283-292): The chat widget and PageNavigation are both rendered here. Pass `isChatCollapsed` state to PageNavigation to conditionally hide it.
-- `src/components/MainLayoutWrapper.tsx` (line 13): Remove standalone `<PageNavigation />` — it's redundant since MainLayout already controls layout
-- Actually, PageNavigation is in MainLayoutWrapper, not MainLayout. Move the logic: when chat is open (`effectiveCollapsed === false`), don't render PageNavigation.
-- Add a CSS class or React context to communicate chat open state to PageNavigation, OR simply move PageNavigation rendering into MainLayout where `effectiveCollapsed` is already available, and conditionally render it.
+#### Task 5: CRM Structure Upgrade ✅
+- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
+- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
+- KanbanPipeline expanded to show all 17 relevant stages
 
-**Simplest approach**: Move `<PageNavigation />` from `MainLayoutWrapper.tsx` into `MainLayout.tsx` right before the chat widget, and wrap it with `{effectiveCollapsed && <PageNavigation />}` so arrows hide when chat opens.
+#### Task 6: Performance Optimization ✅
+- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
+- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
+- `crm_leads_updated_at_trigger` auto-updates `updated_at`
 
-**Files**: `src/components/MainLayout.tsx`, `src/components/MainLayoutWrapper.tsx`
+#### Task 7: AI Intelligence Integration ✅
+- New edge function `ai-lead-intelligence` using Lovable AI gateway
+- Supports 3 modes: `score`, `summary`, `next_action`
+- Tool-calling for structured scoring output
+- JWT auth + CRM role validation
+- PII sanitized before sending to AI
 
----
+#### Task 8: Workflow Automation ✅
+- Created `crm_automation_rules` table with RLS (owner manage, admin view)
+- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
 
-### Issue 2: Chat Auto-Closes (Bug)
+#### Task 10: Role & Permission System ✅
+- RLS on automation rules: owner CRUD, admin read-only
+- CSV export restricted to owner_admin/founder roles
 
-**Root cause** (line 91-100 in MainLayout): There's an auto-minimize timer that collapses chat after 8 seconds on desktop:
-```typescript
-if (!isChatCollapsed) {
-  const timer = window.setTimeout(() => setIsChatCollapsed(true), 8000);
-  return () => window.clearTimeout(timer);
-}
-```
-This fires every time the chat opens, closing it after 8s. This was designed for the initial attention pulse, not for active chat sessions.
+#### Task 12: Backend/Database Upgrade ✅
+- 3 new performance indexes
+- Auto-updated_at trigger on crm_leads
+- Duplicate hash computation trigger
+- Rate-limiting security function
 
-**Fix**: Remove the 8-second auto-collapse timer entirely. The user should control when to minimize via the minimize button. The attention pulse already has its own dismiss logic via `handleMinimizeChat`.
+#### Task 13: Data Cleanliness ✅
+- `duplicate_hash` with auto-compute trigger prevents future duplicates
+- Partial unique index enforces uniqueness at DB level
 
-**File**: `src/components/MainLayout.tsx` (lines 91-100)
-
----
-
-### Issue 3: Content Behind Header (Sticky Headers at `top-0`)
-
-**Root cause**: Multiple tool pages (BusinessCardDesigner, LandingPageBuilder, CVResumeBuilder, CoverLetterGenerator, CompanyProfileBuilder) have `sticky top-0` headers. Since these pages render inside MainLayout's `<main>` which already has `pt-[52px]`, the sticky header sticks at `top: 0` which is behind the HorizontalUtilityBar (which is `fixed top-0 h-[48px]`).
-
-**Fix**: Change `sticky top-0` to `sticky top-[48px] lg:top-[48px]` on all corporate suite tool headers so they stick below the utility bar on desktop. On mobile, keep `top-0` since the GlobalHeader handles spacing differently.
-
-**Files** (5 files):
-- `src/components/corporate-suite/BusinessCardDesigner.tsx` (line 1626)
-- `src/components/corporate-suite/LandingPageBuilder.tsx` (line 155)
-- `src/components/corporate-suite/CVResumeBuilder.tsx` (line 1051)
-- `src/components/corporate-suite/CoverLetterGenerator.tsx` (line 508)
-- `src/components/corporate-suite/CompanyProfileBuilder.tsx` (line 1005)
-
----
-
-### Issue 4: ChatConfirmDetails `forwardRef` Warning
-
-**Root cause** (console error): `AIChatWidget` renders `ChatConfirmDetails` inside `AnimatePresence > motion.div`, and React warns about refs on function components. `ChatConfirmDetails` is a plain function component but receives a ref via AnimatePresence's children detection.
-
-**Fix**: This is a non-blocking warning. The component doesn't need a ref. No action required — it's cosmetic.
-
----
-
-### Issue 5: Deploy All Edge Functions
-
-There are 200+ edge functions. The deployment tool will handle this. I'll deploy them all in a single batch after the code fixes are applied.
-
----
-
-### Summary of Changes
-
-| File | Change |
+### Files Changed
+| File | Action |
 |------|--------|
-| `src/components/MainLayout.tsx` | Remove 8s auto-collapse timer; add `<PageNavigation />` conditionally (hidden when chat open) |
-| `src/components/MainLayoutWrapper.tsx` | Remove `<PageNavigation />` (moved to MainLayout) |
-| `src/components/corporate-suite/BusinessCardDesigner.tsx` | `sticky top-0` → `sticky top-0 lg:top-[48px]` |
-| `src/components/corporate-suite/LandingPageBuilder.tsx` | Same sticky fix |
-| `src/components/corporate-suite/CVResumeBuilder.tsx` | Same sticky fix |
-| `src/components/corporate-suite/CoverLetterGenerator.tsx` | Same sticky fix |
-| `src/components/corporate-suite/CompanyProfileBuilder.tsx` | Same sticky fix |
-| Edge functions | Deploy all functions |
-
+| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
+| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
+| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
+| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
+| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
+| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
+| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
+| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
+| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
