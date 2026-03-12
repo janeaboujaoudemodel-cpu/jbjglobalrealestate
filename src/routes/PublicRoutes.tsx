@@ -286,6 +286,8 @@ export const PublicRoutes = () => (
     <Route path="/referral" element={<Navigate to="/referral-onboarding" replace />} />
     <Route path="/investors" element={<InvestorServices />} />
     <Route path="/investors/join" element={<JoinInvestorList />} />
+    <Route path="/brokers/join" element={<JoinBrokerList />} />
+    <Route path="/developers/join" element={<JoinDeveloperList />} />
     <Route path="/partners" element={<Partners />} />
     <Route path="/partners/mortgage" element={<PartnerMortgage />} />
     <Route path="/partners/legal" element={<PartnerLegal />} />
