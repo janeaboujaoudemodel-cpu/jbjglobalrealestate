@@ -10,7 +10,7 @@ import {
   RectangleVertical, Square, Maximize2, Monitor, Ticket,
   Save, Palette, Zap, Star, Cpu, Minus, Type, User,
   Share2, Copy, ExternalLink, HelpCircle, AlignLeft, AlignCenter, AlignRight, Underline,
-  Smartphone, Wifi,
+  Smartphone, Wifi, Droplets, Sun, Diamond, Stamp,
 } from "lucide-react";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
