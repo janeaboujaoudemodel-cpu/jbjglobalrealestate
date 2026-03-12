@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import DigitalLandingPageEditor from "@/components/corporate-suite/DigitalLandingPageEditor";
 import {
-  type CardData, type BilingualMode, type Template, type FinishEffect, type CardShape,
+  type CardData, type BilingualMode, type Template, type FinishEffect, type CardShape, type QrPosition,
   BILINGUAL_LANGUAGES, TEMPLATES, CARD_SHAPES,
   getFinishOverlayStyle,
 } from "./businessCardTypes";
