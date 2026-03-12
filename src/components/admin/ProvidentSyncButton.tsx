@@ -162,7 +162,7 @@ export const ProvidentSyncButton = () => {
     if (isSyncing) return;
     
     const confirmed = window.confirm(
-      "This will sync all 1,334 listings from Provident Estate.\n\n" +
+      "This will sync all 1,334 listings from the external source.\n\n" +
       "This process will:\n" +
       "• Extract projects from 89 pages\n" +
       "• Take approximately 60-90 minutes\n" +
