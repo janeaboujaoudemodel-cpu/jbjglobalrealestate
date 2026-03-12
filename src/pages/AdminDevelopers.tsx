@@ -227,7 +227,13 @@ const AdminDevelopers = () => {
   );
 
   const dubaiDevelopers = filteredDevelopers.filter(d => d.location_emirate === "Dubai");
-  const getDeveloperReps = (devId: string) => salesReps.filter(r => r.developer_id === devId);
+  const getDeveloperReps = (devId: string) => {
+    let reps = salesReps.filter(r => r.developer_id === devId);
+    if (titleFilter !== 'all') {
+      reps = reps.filter(r => r.title === titleFilter);
+    }
+    return reps;
+  };
 
   if (isLoading) {
     return (
