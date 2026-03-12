@@ -747,7 +747,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                         <SliderRow key={k} label={l} value={bodyAdj[k]} min={mn} max={mx} onChange={v => updateBodyAdj(k,v)} />
                       ))}
                     </div>
-                    <div className="rounded-2xl p-4" style={{ background: "rgba(99,102,241,0.04)", border: `1px solid rgba(99,102,241,0.15)` }}>
+                    <div className="rounded-2xl p-4" style={{ background: "rgba(184,148,62,0.04)", border: `1px solid rgba(184,148,62,0.15)` }}>
                       <p className="text-xs" style={{ color: I.dim }}>
                         Body reshape AI adjustments preview the effect. Final rendering uses AI cloud processing for realistic warping.
                       </p>
