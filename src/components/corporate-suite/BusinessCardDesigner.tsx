@@ -1477,6 +1477,55 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
     }
   };
 
+  // Gallery generation — batch card designs
+  const handleGenerateGallery = async () => {
+    setIsGeneratingGallery(true);
+    try {
+      const { data: result, error } = await supabase.functions.invoke("ai-card-gallery-generator", {
+        body: { prompt: galleryPrompt, industry: aiIndustry, tone: aiTone, count: GALLERY_PER_PAGE },
+      });
+      if (error) throw error;
+      if (!result?.designs) throw new Error("No designs returned");
+      setGalleryDesigns(prev => [...prev, ...result.designs]);
+      setGalleryPage(prev => prev + 1);
+      toast.success(`${result.designs.length} designs generated!`);
+    } catch (err: any) {
+      console.error(err);
+      if (err?.message?.includes("Rate limit")) toast.error("Rate limit exceeded. Please wait a moment.");
+      else if (err?.message?.includes("credits")) toast.error("AI credits required.");
+      else toast.error("Gallery generation failed. Please try again.");
+    } finally {
+      setIsGeneratingGallery(false);
+    }
+  };
+
+  const toggleGalleryFavorite = (id: string) => {
+    setGalleryFavorites(prev =>
+      prev.includes(id) ? prev.filter(f => f !== id) : prev.length < 5 ? [...prev, id] : prev
+    );
+  };
+
+  const applyGalleryDesign = (design: AiDesignData & { id: string; name: string }) => {
+    setAiDesignData(design);
+    setActiveTemplate("ai-design");
+    toast.success(`Applied: ${design.name}`);
+  };
+
+  // Trade license extraction handler
+  const handleTradeLicenseExtracted = (extracted: Record<string, unknown>) => {
+    setData(prev => ({
+      ...prev,
+      name:    extracted.owner_name ? String(extracted.owner_name) : (extracted.name ? String(extracted.name) : prev.name),
+      company: extracted.company_name ? String(extracted.company_name) : (extracted.company ? String(extracted.company) : prev.company),
+      phone:   extracted.phone   ? String(extracted.phone)   : prev.phone,
+      email:   extracted.email   ? String(extracted.email)   : prev.email,
+      website: extracted.website ? String(extracted.website) : prev.website,
+      address: extracted.address ? String(extracted.address) : prev.address,
+      title:   extracted.position ? String(extracted.position) : (extracted.title ? String(extracted.title) : prev.title),
+    }));
+    toast.success("Trade license data extracted & applied!");
+  };
+
   // Save Card
   const handleSaveCard = async () => {
     setIsSaving(true);
