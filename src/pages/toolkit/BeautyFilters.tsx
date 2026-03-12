@@ -21,18 +21,18 @@ import {
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 
-// ── Design tokens ──
+// ── Design tokens (Champagne-Gold on dark canvas) ──
 const I = {
-  bg: "#0C0E14",
-  surface: "rgba(99,102,241,0.06)",
-  border: "rgba(99,102,241,0.2)",
-  borderHover: "rgba(99,102,241,0.55)",
-  accent: "#6366F1",
-  text: "#818CF8",
+  bg: "#0D0C08",
+  surface: "rgba(184,148,62,0.06)",
+  border: "rgba(184,148,62,0.2)",
+  borderHover: "rgba(184,148,62,0.55)",
+  accent: "#B8943E",
+  text: "#D4AF37",
   muted: "rgba(255,255,255,0.45)",
   dim: "rgba(255,255,255,0.28)",
-  btnGrad: "linear-gradient(135deg, #6366F1 0%, #4F46E5 100%)",
-  btnShadow: "0 4px 20px rgba(99,102,241,0.4)",
+  btnGrad: "linear-gradient(135deg, #B8943E 0%, #9A7B2F 100%)",
+  btnShadow: "0 4px 20px rgba(184,148,62,0.3)",
 };
 
 // ── Types ──
@@ -440,7 +440,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
         onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = I.borderHover; }}
         onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = I.border; }}>
         <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4"
-          style={{ background: "rgba(99,102,241,0.12)", border: `1px solid ${I.border}` }}>
+          style={{ background: "rgba(184,148,62,0.12)", border: `1px solid ${I.border}` }}>
           <Camera className="h-8 w-8" style={{ color: I.text }} />
         </div>
         <p className="text-white font-semibold text-lg mb-2">Drop your photo here</p>
@@ -466,7 +466,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
               <ArrowLeft className="h-4 w-4" /><span className="text-sm">Back</span>
             </Link>
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold"
-              style={{ background: "rgba(99,102,241,0.12)", border: `1px solid ${I.border}`, color: I.text }}>
+              style={{ background: "rgba(184,148,62,0.12)", border: `1px solid ${I.border}`, color: I.text }}>
               <Sparkles className="w-3 h-3" /> Photo Studio Pro
             </div>
           </div>
@@ -477,10 +477,10 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
         {/* Title */}
         <div className="text-center mb-6">
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-4"
-            style={{ background: "rgba(99,102,241,0.12)", border: `1px solid ${I.border}`, boxShadow: "0 0 32px rgba(99,102,241,0.2)" }}>
+            style={{ background: "rgba(184,148,62,0.12)", border: `1px solid ${I.border}`, boxShadow: "0 0 32px rgba(184,148,62,0.2)" }}>
             <Wand2 className="h-7 w-7" style={{ color: I.text }} />
           </div>
-          <h1 className="text-2xl md:text-3xl font-bold text-white mb-1">Photo Studio <span style={{ color: "#818CF8" }}>Pro</span></h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-white mb-1">Photo Studio <span style={{ color: "#D4AF37" }}>Pro</span></h1>
           <p className="text-sm max-w-2xl mx-auto" style={{ color: I.muted }}>
             Lightroom · FaceApp · BeautyPlus · Outfit Changer · Instagram Grid Planner — all in one
           </p>
@@ -515,7 +515,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             {/* Tab bar */}
             <TabsList className="w-full justify-start rounded-2xl bg-transparent p-0 h-auto gap-1 border-0 overflow-x-auto mb-6 flex-wrap"
-              style={{ scrollbarWidth: "none", background: "rgba(99,102,241,0.04)", border: `1px solid ${I.border}`, padding: "6px" }}>
+              style={{ scrollbarWidth: "none", background: "rgba(184,148,62,0.04)", border: `1px solid ${I.border}`, padding: "6px" }}>
               {[
                 { value: 'edit', label: 'Edit & Filters', icon: Sliders },
                 { value: 'face', label: 'Face & Beauty', icon: Smile },
@@ -546,12 +546,12 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                   <div className="lg:col-span-2 space-y-4">
                     {/* Canvas */}
                     <div className="rounded-2xl overflow-hidden" style={{ background: "rgba(0,0,0,0.5)", border: `1px solid ${I.border}` }}>
-                      <div className="px-4 py-2.5 flex items-center justify-between" style={{ borderBottom: `1px solid rgba(99,102,241,0.1)` }}>
+                      <div className="px-4 py-2.5 flex items-center justify-between" style={{ borderBottom: `1px solid rgba(184,148,62,0.1)` }}>
                         <span className="text-sm font-medium text-white truncate max-w-[200px]">{image.name}</span>
                         <div className="flex items-center gap-2">
                           <button onClick={() => setShowBefore(v => !v)}
                             className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-all"
-                            style={{ background: showBefore ? "rgba(99,102,241,0.2)" : "rgba(255,255,255,0.05)", border: `1px solid ${showBefore ? "rgba(99,102,241,0.5)" : "rgba(255,255,255,0.1)"}`, color: showBefore ? I.text : I.muted }}>
+                            style={{ background: showBefore ? "rgba(184,148,62,0.2)" : "rgba(255,255,255,0.05)", border: `1px solid ${showBefore ? "rgba(184,148,62,0.5)" : "rgba(255,255,255,0.1)"}`, color: showBefore ? I.text : I.muted }}>
                             <SplitSquareHorizontal className="h-3 w-3" />{showBefore ? 'Original' : 'B/A'}
                           </button>
                           <button onClick={() => { setImage(null); setImagePreview(null); setAdjustments({ ...DEFAULT_ADJ }); setSelectedPreset('none'); }}
@@ -576,8 +576,8 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                           <button key={p.id} onClick={() => applyPreset(p.id)}
                             className="px-3 py-1.5 rounded-xl text-xs transition-all font-medium"
                             style={{
-                              background: selectedPreset === p.id ? "rgba(99,102,241,0.35)" : "rgba(255,255,255,0.10)",
-                              border: `1px solid ${selectedPreset === p.id ? "rgba(99,102,241,0.75)" : "rgba(255,255,255,0.22)"}`,
+                              background: selectedPreset === p.id ? "rgba(184,148,62,0.35)" : "rgba(255,255,255,0.10)",
+                              border: `1px solid ${selectedPreset === p.id ? "rgba(184,148,62,0.75)" : "rgba(255,255,255,0.22)"}`,
                               color: selectedPreset === p.id ? I.text : "rgba(255,255,255,0.88)",
                             }}>{p.name}</button>
                         ))}
@@ -678,8 +678,8 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                           <button key={look.id} onClick={() => { setSelectedMakeup(look.id); simulateAI(look.name); }}
                             className="flex flex-col items-center gap-1 p-2 rounded-xl text-xs transition-all"
                             style={{
-                              background: selectedMakeup === look.id ? "rgba(99,102,241,0.35)" : "rgba(255,255,255,0.12)",
-                              border: `1px solid ${selectedMakeup === look.id ? "rgba(99,102,241,0.75)" : "rgba(255,255,255,0.25)"}`,
+                              background: selectedMakeup === look.id ? "rgba(184,148,62,0.35)" : "rgba(255,255,255,0.12)",
+                              border: `1px solid ${selectedMakeup === look.id ? "rgba(184,148,62,0.75)" : "rgba(255,255,255,0.25)"}`,
                               color: selectedMakeup === look.id ? I.text : "rgba(255,255,255,0.9)",
                             }}>
                             <span className="text-lg">{look.emoji}</span>
@@ -747,7 +747,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                         <SliderRow key={k} label={l} value={bodyAdj[k]} min={mn} max={mx} onChange={v => updateBodyAdj(k,v)} />
                       ))}
                     </div>
-                    <div className="rounded-2xl p-4" style={{ background: "rgba(99,102,241,0.04)", border: `1px solid rgba(99,102,241,0.15)` }}>
+                    <div className="rounded-2xl p-4" style={{ background: "rgba(184,148,62,0.04)", border: `1px solid rgba(184,148,62,0.15)` }}>
                       <p className="text-xs" style={{ color: I.dim }}>
                         Body reshape AI adjustments preview the effect. Final rendering uses AI cloud processing for realistic warping.
                       </p>
@@ -782,8 +782,8 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                           <button key={style.id} onClick={() => { setSelectedHairStyle(style.id); simulateAI(`${style.name} hair style`); }}
                             className="flex flex-col items-center gap-1 p-2.5 rounded-xl text-xs transition-all"
                             style={{
-                              background: selectedHairStyle === style.id ? "rgba(99,102,241,0.35)" : "rgba(255,255,255,0.12)",
-                              border: `1px solid ${selectedHairStyle === style.id ? "rgba(99,102,241,0.75)" : "rgba(255,255,255,0.25)"}`,
+                              background: selectedHairStyle === style.id ? "rgba(184,148,62,0.35)" : "rgba(255,255,255,0.12)",
+                              border: `1px solid ${selectedHairStyle === style.id ? "rgba(184,148,62,0.75)" : "rgba(255,255,255,0.25)"}`,
                               color: selectedHairStyle === style.id ? I.text : "rgba(255,255,255,0.9)",
                             }}>
                             <span className="text-xl">{style.emoji}</span>
@@ -804,7 +804,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                           <button key={hc.id} onClick={() => { setSelectedHairColor(hc.id); simulateAI(`${hc.name} hair color`); }}
                             className="flex flex-col items-center gap-1.5 p-2 rounded-xl text-xs transition-all"
                             style={{
-                              background: selectedHairColor === hc.id ? "rgba(99,102,241,0.30)" : "rgba(255,255,255,0.12)",
+                              background: selectedHairColor === hc.id ? "rgba(184,148,62,0.30)" : "rgba(255,255,255,0.12)",
                               border: `2px solid ${selectedHairColor === hc.id ? I.accent : "rgba(255,255,255,0.28)"}`,
                               color: selectedHairColor === hc.id ? I.text : "rgba(255,255,255,0.9)",
                               minWidth: '52px',
@@ -817,7 +817,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                     </div>
 
                     {isProcessingAI && (
-                      <div className="flex items-center gap-3 p-4 rounded-xl" style={{ background: "rgba(99,102,241,0.06)", border: `1px solid ${I.border}` }}>
+                      <div className="flex items-center gap-3 p-4 rounded-xl" style={{ background: "rgba(184,148,62,0.06)", border: `1px solid ${I.border}` }}>
                         <Loader2 className="h-5 w-5 animate-spin" style={{ color: I.text }} />
                         <p className="text-sm text-white">Applying AI transformation…</p>
                       </div>
