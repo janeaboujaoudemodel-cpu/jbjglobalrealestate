@@ -6262,11 +6262,14 @@ export type Database = {
           developer_name: string
           email: string
           full_name: string
+          gender: string | null
           id: string
           languages: string[] | null
           last_active_at: string | null
+          nationality: string | null
           phone: string | null
           position: string | null
+          projects_handled: string[] | null
           response_time_avg_hours: number | null
           role: string
           status: string
@@ -6275,6 +6278,7 @@ export type Database = {
           updated_at: string | null
           user_id: string | null
           whatsapp_group_number: string | null
+          years_in_real_estate: number | null
         }
         Insert: {
           activity_score?: number | null
@@ -6284,11 +6288,14 @@ export type Database = {
           developer_name: string
           email: string
           full_name: string
+          gender?: string | null
           id?: string
           languages?: string[] | null
           last_active_at?: string | null
+          nationality?: string | null
           phone?: string | null
           position?: string | null
+          projects_handled?: string[] | null
           response_time_avg_hours?: number | null
           role?: string
           status?: string
@@ -6297,6 +6304,7 @@ export type Database = {
           updated_at?: string | null
           user_id?: string | null
           whatsapp_group_number?: string | null
+          years_in_real_estate?: number | null
         }
         Update: {
           activity_score?: number | null
@@ -6306,11 +6314,14 @@ export type Database = {
           developer_name?: string
           email?: string
           full_name?: string
+          gender?: string | null
           id?: string
           languages?: string[] | null
           last_active_at?: string | null
+          nationality?: string | null
           phone?: string | null
           position?: string | null
+          projects_handled?: string[] | null
           response_time_avg_hours?: number | null
           role?: string
           status?: string
@@ -6319,6 +6330,7 @@ export type Database = {
           updated_at?: string | null
           user_id?: string | null
           whatsapp_group_number?: string | null
+          years_in_real_estate?: number | null
         }
         Relationships: []
       }
