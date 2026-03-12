@@ -154,6 +154,24 @@ export default function StampGeneratorPage() {
   const [togglingFav, setTogglingFav] = useState<string | null>(null);
   const [svgOverrides, setSvgOverrides] = useState<Record<string, string>>({});
 
+  // Interactive canvas layers for center preview
+  const [studioLayers, setStudioLayers] = useState<StampLayer[]>(() =>
+    createDefaultLayers({ languageMode: 'BILINGUAL', iconStyle: 'MONOGRAM', density: 3, showLicenseNumber: true })
+  );
+
+  // Undo/redo for svg overrides
+  const svgHistory = useStampHistory<Record<string, string>>({});
+
+  const handleSvgUndoStudio = useCallback(() => {
+    const prev = svgHistory.undo();
+    if (prev) setSvgOverrides(prev);
+  }, [svgHistory]);
+
+  const handleSvgRedoStudio = useCallback(() => {
+    const next = svgHistory.redo();
+    if (next) setSvgOverrides(next);
+  }, [svgHistory]);
+
   useEffect(() => {
     if (!user || !projectId) return;
     loadProject();
