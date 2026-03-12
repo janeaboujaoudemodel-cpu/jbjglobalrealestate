@@ -282,7 +282,7 @@ function VoiceStudioPanel() {
                   {playing ? <Pause className="w-3.5 h-3.5 mr-1" /> : <Play className="w-3.5 h-3.5 mr-1" />}
                   {playing ? 'Stop' : 'Preview'}
                 </Button>
-                <Button onClick={() => downloadScriptAsText(script)} variant="ghost" size="sm" className="text-zinc-400 hover:text-white">
+                <Button onClick={() => downloadScriptAsText(script, 'Voice Studio')} variant="ghost" size="sm" className="text-zinc-400 hover:text-white">
                   <Copy className="w-3.5 h-3.5 mr-1" /> Copy Script
                 </Button>
               </div>
