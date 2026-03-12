@@ -893,47 +893,97 @@ const DeveloperPortal = () => {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-foreground">
                       <UserCheck className="w-5 h-5 text-gold" />
-                      Your Registration
+                      Your Profile
                     </CardTitle>
+                    <p className="text-xs text-muted-foreground">Your details are linked to all submissions. Edit anytime — we'll be notified of changes.</p>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <p className="text-xs text-muted-foreground">Full Name</p>
-                          <p className="font-semibold text-foreground">{repProfile?.full_name}</p>
-                        </div>
-                        <div>
-                          <p className="text-xs text-muted-foreground">Role</p>
-                          <p className="font-semibold text-foreground capitalize">{repProfile?.role?.replace(/_/g, ' ')}</p>
-                        </div>
-                        <div>
-                          <p className="text-xs text-muted-foreground">Company</p>
-                          <p className="font-semibold text-foreground">{repProfile?.developer_name}</p>
-                        </div>
-                        <div>
-                          <p className="text-xs text-muted-foreground">Status</p>
-                          {statusBadge(repProfile?.status || 'pending_review')}
-                        </div>
-                        {repProfile?.position && (
-                          <div>
-                            <p className="text-xs text-muted-foreground">Position</p>
-                            <p className="font-semibold text-foreground">{repProfile.position}</p>
+                    {editingProfile ? (
+                      <div className="space-y-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label>Full Name *</Label>
+                            <Input value={editForm.full_name} onChange={(e) => setEditForm(f => ({ ...f, full_name: e.target.value }))} />
                           </div>
-                        )}
-                        <div>
-                          <p className="text-xs text-muted-foreground">Auto-Approve Uploads</p>
-                          <Badge className={repProfile?.auto_approve_uploads ? 'bg-emerald-500/20 text-emerald-700' : 'bg-muted text-muted-foreground'}>
-                            {repProfile?.auto_approve_uploads ? 'Enabled' : 'Disabled'}
-                          </Badge>
+                          <div className="space-y-2">
+                            <Label>Position / Title</Label>
+                            <Input value={editForm.position} onChange={(e) => setEditForm(f => ({ ...f, position: e.target.value }))} />
+                          </div>
+                          <div className="space-y-2">
+                            <Label>Company Email *</Label>
+                            <Input type="email" value={editForm.email} onChange={(e) => setEditForm(f => ({ ...f, email: e.target.value }))} />
+                          </div>
+                          <div className="space-y-2">
+                            <Label>Phone</Label>
+                            <Input type="tel" value={editForm.phone} onChange={(e) => setEditForm(f => ({ ...f, phone: e.target.value }))} />
+                          </div>
+                          <div className="space-y-2">
+                            <Label>Developer / Company</Label>
+                            <Input value={editForm.developer_name} onChange={(e) => setEditForm(f => ({ ...f, developer_name: e.target.value }))} />
+                          </div>
+                          <div className="space-y-2">
+                            <Label>Nationality</Label>
+                            <Input value={editForm.nationality} onChange={(e) => setEditForm(f => ({ ...f, nationality: e.target.value }))} />
+                          </div>
+                        </div>
+                        <div className="flex gap-3">
+                          <Button onClick={handleSaveProfile} disabled={savingProfile}
+                            className="flex-1 bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border border-gold/40 text-foreground font-bold">
+                            {savingProfile ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Saving...</> : 'Save Changes'}
+                          </Button>
+                          <Button variant="outline" onClick={() => setEditingProfile(false)} className="border-gold/30">Cancel</Button>
                         </div>
                       </div>
-                      {!isRepApproved && (
-                        <div className="bg-gold/10 border border-gold/30 rounded-xl p-3 text-sm text-stone-700">
-                          Your registration is under review. Once approved, you'll be able to request briefings and send messages directly.
+                    ) : (
+                      <div className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <p className="text-xs text-muted-foreground">Full Name</p>
+                            <p className="font-semibold text-foreground">{repProfile?.full_name}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-muted-foreground">Role</p>
+                            <p className="font-semibold text-foreground capitalize">{repProfile?.role?.replace(/_/g, ' ')}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-muted-foreground">Company</p>
+                            <p className="font-semibold text-foreground">{repProfile?.developer_name}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-muted-foreground">Email</p>
+                            <p className="font-semibold text-foreground">{repProfile?.email}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-muted-foreground">Phone</p>
+                            <p className="font-semibold text-foreground">{repProfile?.phone || '—'}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-muted-foreground">Status</p>
+                            {statusBadge(repProfile?.status || 'pending_review')}
+                          </div>
+                          {repProfile?.position && (
+                            <div>
+                              <p className="text-xs text-muted-foreground">Position</p>
+                              <p className="font-semibold text-foreground">{repProfile.position}</p>
+                            </div>
+                          )}
+                          <div>
+                            <p className="text-xs text-muted-foreground">Auto-Approve Uploads</p>
+                            <Badge className={repProfile?.auto_approve_uploads ? 'bg-emerald-500/20 text-emerald-700' : 'bg-muted text-muted-foreground'}>
+                              {repProfile?.auto_approve_uploads ? 'Enabled' : 'Disabled'}
+                            </Badge>
+                          </div>
                         </div>
-                      )}
-                    </div>
+                        <Button variant="outline" onClick={handleStartEditProfile} className="border-gold/30">
+                          Edit Profile
+                        </Button>
+                        {!isRepApproved && (
+                          <div className="bg-gold/10 border border-gold/30 rounded-xl p-3 text-sm text-stone-700">
+                            Your registration is under review. Once approved, you'll be able to request briefings and send messages directly.
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
               ) : isDeveloperMode ? (
