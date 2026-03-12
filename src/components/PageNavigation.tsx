@@ -53,7 +53,7 @@ const PageNavigation = forwardRef<HTMLDivElement, Record<string, never>>((_, ref
     <div 
       ref={ref}
       className={cn(
-        "fixed bottom-24 z-[9990] flex flex-col gap-2",
+        "fixed bottom-24 z-[9995] flex flex-col gap-2",
         "pointer-events-auto",
         isRTL ? "right-4" : "right-4"
       )}
