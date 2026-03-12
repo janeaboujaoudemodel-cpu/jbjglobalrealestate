@@ -515,7 +515,7 @@ export default function DocumentFieldPlacer({
 
                   {/* Field overlays */}
                   {pageFields.map((field) => {
-                    const style = getRecipientStyle(field.recipientId);
+                    const style = getRecipientStyle(recipients, field.recipientId);
 
                     return (
                       <div
