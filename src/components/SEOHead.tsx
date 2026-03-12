@@ -94,8 +94,8 @@ export const SEOHead = ({
     
     // Additional SEO tags
     setMetaTag('robots', noIndex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1');
-    setMetaTag('googlebot', 'index, follow');
-    setMetaTag('bingbot', 'index, follow');
+    setMetaTag('googlebot', noIndex ? 'noindex, nofollow' : 'index, follow');
+    setMetaTag('bingbot', noIndex ? 'noindex, nofollow' : 'index, follow');
     setMetaTag('revisit-after', '3 days');
     setMetaTag('rating', 'general');
     setMetaTag('distribution', 'global');

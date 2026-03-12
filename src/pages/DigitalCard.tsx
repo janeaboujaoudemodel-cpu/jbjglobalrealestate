@@ -167,7 +167,14 @@ const DigitalCard = () => {
       document.head.appendChild(metaRobots);
       createdRobots = true;
     }
-    metaRobots.setAttribute("content", "noindex, nofollow, noarchive, nosnippet");
+    metaRobots.setAttribute("content", "noindex, nofollow, noarchive, nosnippet, noimageindex");
+
+    // Remove any canonical link that might leak this page URL
+    const existingCanonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+    const previousCanonicalHref = existingCanonical?.getAttribute("href") || null;
+    if (existingCanonical) {
+      existingCanonical.remove();
+    }
 
     // Handle googlebot meta tag
     let metaGooglebot = document.querySelector('meta[name="googlebot"]') as HTMLMetaElement | null;
