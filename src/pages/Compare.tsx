@@ -458,6 +458,24 @@ const Compare = () => {
     );
   };
 
+  // Convert 5-star to 10-point score
+  const toScore = (rating: number) => Math.min(10, rating * 2);
+
+  const renderScoreBar = (rating: number, label: string) => {
+    const score = toScore(rating);
+    const pct = (score / 10) * 100;
+    const color = score >= 8 ? '#22C55E' : score >= 6 ? '#F59E0B' : '#EF4444';
+    return (
+      <div className="flex items-center gap-2">
+        <span className="text-[10px] text-zinc-500 w-20 shrink-0 text-right">{label}</span>
+        <div className="flex-1 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+          <div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, background: color }} />
+        </div>
+        <span className="text-xs font-bold w-6 text-right" style={{ color }}>{score.toFixed(0)}</span>
+      </div>
+    );
+  };
+
   if (isLoading) {
     return (
       <section className="min-h-screen bg-zinc-950 flex items-center justify-center">
@@ -727,21 +745,31 @@ const Compare = () => {
                   </th>
                     {projects.map((project) => {
                       const badge = getBadge(project.id);
+                      const isFav = shortlistIds.includes(project.id);
                       return (
                         <th
                           key={project.id}
-                          className="text-left py-4 px-4 border-b border-zinc-800 min-w-[250px]"
+                          className="text-left py-4 px-4 border-b border-zinc-800"
+                          style={{ width: `${100 / (projects.length + 1)}%`, minWidth: '220px' }}
                         >
                           <div className="flex flex-col gap-2">
-                            {badge && (
-                              <span className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-bold w-fit ${
-                                badge === 'top1' ? 'bg-gold/20 text-gold' :
-                                badge === 'top2' ? 'bg-gold/15 text-gold/80' :
-                                'bg-gold/10 text-gold/60'
+                            <div className="flex items-center justify-between gap-2">
+                              {badge && (
+                                <span className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-bold w-fit ${
+                                  badge === 'top1' ? 'bg-gold/20 text-gold' :
+                                  badge === 'top2' ? 'bg-gold/15 text-gold/80' :
+                                  'bg-gold/10 text-gold/60'
+                                }`}>
+                                  {badge === 'top1' ? 'Top 1' : badge === 'top2' ? 'Top 2' : 'Top 3'}
+                                </span>
+                              )}
+                              <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold ${
+                                isFav ? 'bg-red-500/15 text-red-400' : 'bg-zinc-800 text-zinc-500'
                               }`}>
-                                {badge === 'top1' ? 'Top 1' : badge === 'top2' ? 'Top 2' : 'Top 3'}
+                                <Heart className="w-2.5 h-2.5" fill={isFav ? "currentColor" : "none"} />
+                                {isFav ? 'In Favorites' : 'Not Saved'}
                               </span>
-                            )}
+                            </div>
                             <div className="aspect-[16/9] h-40 overflow-hidden rounded-lg">
                               <img
                                 src={project.images?.[0]?.image_url || "/placeholder.svg"}
@@ -839,32 +867,23 @@ const Compare = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {aiAnalysis.ratings.map((rating, index) => (
                     <div key={index} className="bg-zinc-900 rounded-xl border border-zinc-800 p-5">
-                      <div className="flex justify-between items-start mb-4">
+                      <div className="flex justify-between items-start mb-3">
                         <h4 className="text-white font-semibold">{rating.projectName}</h4>
-                        <div className="text-2xl">{renderStars(rating.overallRating)}</div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-2xl font-bold" style={{ color: '#B8943E' }}>{toScore(rating.overallRating)}</span>
+                          <span className="text-zinc-500 text-xs">/10</span>
+                        </div>
                       </div>
                       
-                      <div className="grid grid-cols-5 gap-2 mb-4">
-                        <div className="text-center">
-                          <div className="text-xs text-zinc-500 mb-1">Location</div>
-                          <div className="text-gold text-sm">{renderStars(rating.locationRating)}</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="text-xs text-zinc-500 mb-1">Value</div>
-                          <div className="text-gold text-sm">{renderStars(rating.valueRating)}</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="text-xs text-zinc-500 mb-1">Amenities</div>
-                          <div className="text-gold text-sm">{renderStars(rating.amenitiesRating)}</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="text-xs text-zinc-500 mb-1">Invest</div>
-                          <div className="text-gold text-sm">{renderStars(rating.investmentRating)}</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="text-xs text-zinc-500 mb-1">Developer</div>
-                          <div className="text-gold text-sm">{renderStars(rating.developerRating)}</div>
-                        </div>
+                      <div className="text-sm mb-3">{renderStars(rating.overallRating)}</div>
+
+                      {/* Score bars */}
+                      <div className="space-y-1.5 mb-4">
+                        {renderScoreBar(rating.locationRating, 'Location')}
+                        {renderScoreBar(rating.valueRating, 'Value')}
+                        {renderScoreBar(rating.amenitiesRating, 'Amenities')}
+                        {renderScoreBar(rating.investmentRating, 'Investment')}
+                        {renderScoreBar(rating.developerRating, 'Developer')}
                       </div>
 
                       <div className="grid grid-cols-2 gap-3">

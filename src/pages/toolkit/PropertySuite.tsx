@@ -1,8 +1,8 @@
 /**
- * Property Intelligence Suite — Premium Champagne-Gold Design
+ * Property Intelligence Suite — Premium Champagne-Gold with Color-Coded Tabs
  */
 
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SEOHead } from '@/components/SEOHead';
 import { Home, Calculator, Layers, BarChart3, DollarSign, ArrowLeft, Loader2, Sparkles } from 'lucide-react';
@@ -24,14 +24,17 @@ const LoadingSpinner = () => (
 );
 
 const tabs = [
-  { value: "finder", label: "Home Finder", shortLabel: "Finder", icon: Home },
-  { value: "evaluator", label: "Evaluator", shortLabel: "Eval", icon: Calculator },
-  { value: "compare", label: "Compare", shortLabel: "Compare", icon: Layers },
-  { value: "rental", label: "Rental Index", shortLabel: "Rental", icon: BarChart3 },
-  { value: "mortgage", label: "Mortgage", shortLabel: "Mortgage", icon: DollarSign },
+  { value: "finder", label: "AI Home Finder", shortLabel: "Finder", icon: Home, color: "#8B5CF6" },
+  { value: "evaluator", label: "Evaluator", shortLabel: "Eval", icon: Calculator, color: "#3B82F6" },
+  { value: "compare", label: "Compare", shortLabel: "Compare", icon: Layers, color: "#EF4444" },
+  { value: "rental", label: "Rental Index", shortLabel: "Rental", icon: BarChart3, color: "#22C55E" },
+  { value: "mortgage", label: "Mortgage", shortLabel: "Mortgage", icon: DollarSign, color: "#F59E0B" },
 ];
 
 export default function PropertySuite() {
+  const [activeTab, setActiveTab] = useState("finder");
+  const activeColor = tabs.find(t => t.value === activeTab)?.color || "#B8943E";
+
   return (
     <>
       <SEOHead 
@@ -78,23 +81,39 @@ export default function PropertySuite() {
         </div>
 
         {/* ── Tabs ── */}
-        <Tabs defaultValue="finder" className="w-full">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           {/* Tab Bar */}
           <div style={{ background: "rgba(245,235,215,0.5)", borderBottom: "1px solid rgba(184,148,62,0.15)" }}>
             <div className="max-w-7xl mx-auto px-2 sm:px-6">
               <TabsList className="w-full justify-start rounded-none bg-transparent p-0 h-auto gap-0 border-0 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
-                {tabs.map(({ value, label, shortLabel, icon: Icon }) => (
-                  <TabsTrigger key={value} value={value}
-                    className="relative flex items-center gap-1.5 px-3 sm:px-5 py-3.5 rounded-none border-0 bg-transparent whitespace-nowrap text-xs sm:text-sm font-medium transition-all outline-none
-                      data-[state=inactive]:text-black/40 data-[state=active]:text-[#B8943E]
-                      after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:rounded-full after:transition-all
-                      data-[state=inactive]:after:bg-transparent data-[state=active]:after:bg-[#B8943E]"
-                  >
-                    <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
-                    <span className="sm:hidden">{shortLabel}</span>
-                    <span className="hidden sm:inline">{label}</span>
-                  </TabsTrigger>
-                ))}
+                {tabs.map(({ value, label, shortLabel, icon: Icon, color }) => {
+                  const isActive = activeTab === value;
+                  return (
+                    <TabsTrigger key={value} value={value}
+                      className="relative flex items-center gap-1.5 px-3 sm:px-5 py-3.5 rounded-none border-0 bg-transparent whitespace-nowrap text-xs sm:text-sm font-medium transition-all outline-none"
+                      style={{
+                        color: isActive ? color : "rgba(0,0,0,0.4)",
+                      }}
+                    >
+                      <div
+                        className="w-5 h-5 sm:w-6 sm:h-6 rounded-md flex items-center justify-center shrink-0 transition-all"
+                        style={{
+                          background: isActive ? `${color}18` : "transparent",
+                          border: isActive ? `1px solid ${color}30` : "1px solid transparent",
+                        }}
+                      >
+                        <Icon className="w-3 h-3 sm:w-3.5 sm:h-3.5" style={{ color: isActive ? color : "rgba(0,0,0,0.35)" }} />
+                      </div>
+                      <span className="sm:hidden">{shortLabel}</span>
+                      <span className="hidden sm:inline">{label}</span>
+                      {/* Active indicator */}
+                      <div
+                        className="absolute bottom-0 left-0 right-0 h-[2px] rounded-full transition-all"
+                        style={{ background: isActive ? color : "transparent" }}
+                      />
+                    </TabsTrigger>
+                  );
+                })}
               </TabsList>
             </div>
           </div>
