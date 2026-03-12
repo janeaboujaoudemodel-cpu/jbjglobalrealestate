@@ -2458,141 +2458,15 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
       </div>
     </div>
 
-      {/* Batch Print Dialog */}
-      <Dialog open={batchPrintOpen} onOpenChange={setBatchPrintOpen}>
-        <DialogContent className="max-w-sm">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Printer size={16} className="text-[hsl(var(--gold))]" />
-              Batch Print Layout
-            </DialogTitle>
-            <DialogDescription>
-              Print multiple cards on a single A4 sheet for professional cutting.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div>
-              <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">
-                Cards per page: {batchPrintCount}
-              </Label>
-              <Slider
-                min={2} max={10} step={2}
-                value={[batchPrintCount]}
-                onValueChange={([v]) => setBatchPrintCount(v)}
-              />
-              <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-1">
-                Standard: 8 cards per A4 (2×4 grid)
-              </p>
-            </div>
-            <div className="rounded-xl bg-[hsl(var(--muted))] p-3 text-[10px] text-[hsl(var(--muted-foreground))] space-y-1">
-              <p className="font-semibold text-[hsl(var(--foreground))]">📐 Print Tips</p>
-              <p>• Use thick cardstock (300gsm+) for professional results</p>
-              <p>• Print at 100% scale — do not "Fit to page"</p>
-              <p>• Cut along the borders with a paper trimmer</p>
-            </div>
-            <Button
-              onClick={handleBatchPrint}
-              className="w-full gap-2 font-semibold text-white"
-              style={{ background: "linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-dark)))" }}
-            >
-              <Printer size={14} /> Print {batchPrintCount} Cards
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <BatchPrintDialog
+        open={batchPrintOpen}
+        onOpenChange={setBatchPrintOpen}
+        count={batchPrintCount}
+        setCount={setBatchPrintCount}
+        onPrint={handleBatchPrint}
+      />
 
-      {/* NFC Programming Guide Modal */}
-      <Dialog open={nfcGuideOpen} onOpenChange={setNfcGuideOpen}>
-        <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-lg">
-              <Wifi size={20} className="text-[hsl(var(--gold))]" />
-              NFC Tag Programming Guide
-            </DialogTitle>
-            <DialogDescription>
-              Write your digital card URL to an NFC sticker so anyone can tap and view your card instantly.
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-5 mt-2">
-            {/* What you need */}
-            <div className="rounded-xl border border-[hsl(var(--border))] p-4 bg-[hsl(var(--muted))]">
-              <h4 className="text-sm font-bold text-[hsl(var(--foreground))] mb-2 flex items-center gap-2">
-                <CreditCard size={14} className="text-[hsl(var(--gold))]" />
-                What You Need
-              </h4>
-              <ul className="text-xs text-[hsl(var(--muted-foreground))] space-y-1.5 list-disc pl-4">
-                <li>An NFC sticker/card (NTAG213 or NTAG215 — available on Amazon for ~$1 each)</li>
-                <li>A smartphone with NFC capability (most modern phones have it)</li>
-                <li>A free NFC writer app (see below)</li>
-                <li>Your shared card URL (from the Share button after saving)</li>
-              </ul>
-            </div>
-
-            {/* Step-by-step */}
-            <div className="space-y-3">
-              <h4 className="text-sm font-bold text-[hsl(var(--foreground))] flex items-center gap-2">
-                <Sparkles size={14} className="text-[hsl(var(--gold))]" />
-                Step-by-Step Instructions
-              </h4>
-
-              {[
-                { step: 1, title: "Download a Free NFC App", desc: "Install \"NFC Tools\" (free on both iOS and Android) from the App Store or Google Play.", icon: <Smartphone size={16} /> },
-                { step: 2, title: "Get Your Card URL", desc: "Save your digital card, click \"Share\", and copy the public link (e.g., yoursite.com/card/abc123).", icon: <Copy size={16} /> },
-                { step: 3, title: "Open NFC Tools → Write", desc: "Open the app, tap the \"Write\" tab, then tap \"Add a record\" → select \"URL/URI\".", icon: <Type size={16} /> },
-                { step: 4, title: "Paste Your Card URL", desc: "Paste your shared card URL into the URL field. Make sure it starts with https://.", icon: <Globe size={16} /> },
-                { step: 5, title: "Hold Phone to NFC Tag", desc: "Tap \"Write\", then hold the back of your phone against the NFC sticker until you see a success confirmation.", icon: <Wifi size={16} /> },
-                { step: 6, title: "Test It!", desc: "Have someone tap their phone on the sticker — your digital card page opens instantly in their browser.", icon: <Check size={16} /> },
-              ].map(({ step, title, desc, icon }) => (
-                <div key={step} className="flex gap-3 items-start">
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold))] flex items-center justify-center text-xs font-bold">
-                    {step}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-1.5">
-                      {icon} {title}
-                    </p>
-                    <p className="text-xs text-[hsl(var(--muted-foreground))] mt-0.5">{desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Recommended apps */}
-            <div className="rounded-xl border border-[hsl(var(--gold)/0.3)] p-4 bg-[hsl(var(--gold)/0.05)]">
-              <h4 className="text-sm font-bold text-[hsl(var(--foreground))] mb-2">Recommended Free Apps</h4>
-              <div className="grid grid-cols-2 gap-2">
-                {[
-                  { name: "NFC Tools", platform: "iOS & Android", note: "Most popular, clean UI" },
-                  { name: "NFC TagWriter", platform: "Android", note: "By NXP (chip maker)" },
-                  { name: "Simply NFC", platform: "iOS", note: "Minimal & fast" },
-                  { name: "TagInfo", platform: "Android", note: "Read & diagnose tags" },
-                ].map(app => (
-                  <div key={app.name} className="p-2.5 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))]">
-                    <p className="text-xs font-semibold text-[hsl(var(--foreground))]">{app.name}</p>
-                    <p className="text-[10px] text-[hsl(var(--muted-foreground))]">{app.platform}</p>
-                    <p className="text-[10px] text-[hsl(var(--gold-dark))]">{app.note}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Pro tips */}
-            <div className="rounded-xl border border-[hsl(var(--border))] p-4 bg-[hsl(var(--muted))]">
-              <h4 className="text-sm font-bold text-[hsl(var(--foreground))] mb-2 flex items-center gap-2">
-                <Star size={14} className="text-[hsl(var(--gold))]" />
-                Pro Tips
-              </h4>
-              <ul className="text-xs text-[hsl(var(--muted-foreground))] space-y-1.5 list-disc pl-4">
-                <li>Stick NFC tags on the back of your physical business card, phone case, or portfolio</li>
-                <li>NTAG215 tags hold more data and are more reliable than NTAG213</li>
-                <li>Lock the tag after writing to prevent accidental overwrites</li>
-                <li>Test with both iPhone (top edge) and Android (center back) — NFC antenna position varies</li>
-              </ul>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <NfcGuideDialog open={nfcGuideOpen} onOpenChange={setNfcGuideOpen} />
     </>
   );
 }
