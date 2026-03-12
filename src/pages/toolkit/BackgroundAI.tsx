@@ -980,9 +980,9 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
             <div className="grid md:grid-cols-2 gap-5">
               {/* Original */}
               <div className="rounded-2xl overflow-hidden"
-                style={{ background: "rgba(99,102,241,0.04)", border: `1px solid ${C.border}` }}>
+                style={{ background: "rgba(184,148,62,0.04)", border: `1px solid ${C.border}` }}>
                 <div className="px-4 py-2.5 flex items-center justify-between"
-                  style={{ borderBottom: "1px solid rgba(99,102,241,0.1)" }}>
+                  style={{ borderBottom: "1px solid rgba(184,148,62,0.1)" }}>
                   <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: C.mutedText }}>Original</span>
                 </div>
                 <div className="aspect-square flex items-center justify-center p-2" style={{ background: checkerboard }}>
