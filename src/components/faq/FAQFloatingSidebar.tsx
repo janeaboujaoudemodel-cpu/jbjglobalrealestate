@@ -196,16 +196,17 @@ export const FAQFloatingSidebar = ({
               
               {/* CTA Actions - Compact */}
               <div className="pt-3 mt-2 border-t border-gold/20 space-y-2">
-                <Link to="/contact" className="block">
-                  <Button 
-                    size="sm"
-                    variant="primary"
-                    className="w-full py-2 text-xs"
-                  >
+                <Button 
+                  size="sm"
+                  variant="primary"
+                  className="w-full py-2 text-xs"
+                  asChild
+                >
+                  <Link to="/contact">
                     <Phone className="w-3 h-3 mr-1.5" />
                     Ask Our Team
-                  </Button>
-                </Link>
+                  </Link>
+                </Button>
                 <Link to="/buyer-guide" className="block">
                   <Button 
                     size="sm"
