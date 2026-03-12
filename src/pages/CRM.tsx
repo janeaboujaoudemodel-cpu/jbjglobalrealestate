@@ -625,6 +625,16 @@ const CRM = () => {
                       Export CSV
                     </Button>
                     {isCRMOwner && (
+                      <Button 
+                        variant="secondary" 
+                        onClick={handleExportPDFReport}
+                        className="text-sm"
+                      >
+                        <FileText className="h-4 w-4 mr-1.5" />
+                        PDF Report
+                      </Button>
+                    )}
+                    {isCRMOwner && (
                       <Button
                         variant="secondary"
                         onClick={() => setShowBulkAssignModal(true)}
