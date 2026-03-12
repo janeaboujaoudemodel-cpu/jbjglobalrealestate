@@ -117,7 +117,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
           <button
             disabled={isLoading}
             className={cn(
-              "flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border transition-all duration-300 hover:shadow-md max-w-[160px] whitespace-nowrap shrink-0",
+              "flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border transition-all duration-300 hover:shadow-md max-w-[220px] whitespace-nowrap shrink-0",
               currentConfig.bgColor,
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/50",
               className
@@ -128,8 +128,8 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
             ) : (
               <CurrentIcon className={cn("w-4 h-4 shrink-0", currentConfig.color)} />
             )}
-            <span className={cn("text-[11px] font-semibold truncate hidden sm:block", currentConfig.color)}>
-              {currentConfig.shortLabel}
+            <span className={cn("text-xs font-semibold truncate hidden sm:block", currentConfig.color)}>
+              {currentConfig.label}
             </span>
             <ChevronDown className={cn(
               "w-3 h-3 shrink-0 transition-transform duration-200",
