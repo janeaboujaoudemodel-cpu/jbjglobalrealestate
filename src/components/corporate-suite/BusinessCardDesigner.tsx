@@ -1446,6 +1446,14 @@ export default function BusinessCardDesigner() {
   const [landingPageData, setLandingPageData] = useState<LandingPageData>({ ...EMPTY_LANDING_PAGE });
   const [digitalTab, setDigitalTab] = useState<"card" | "landing">("card");
 
+  // Finishing effects
+  const [finishEffect, setFinishEffect] = useState<FinishEffect>("none");
+  const [finishOpen, setFinishOpen] = useState(false);
+
+  // Mockup previews
+  const [mockupScene, setMockupScene] = useState<MockupScene>("none");
+  const [mockupOpen, setMockupOpen] = useState(false);
+
   const frontPreset = COLOR_PRESETS[frontColorIdx];
   const backPreset  = COLOR_PRESETS[backColorIdx];
   const frontPrimary   = frontCustomColor || frontPreset.primary;
