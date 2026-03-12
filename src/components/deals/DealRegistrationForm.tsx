@@ -91,6 +91,7 @@ export function DealRegistrationForm({ onSuccess, onCancel }: DealRegistrationFo
       if (error) throw error;
 
       toast.success("Deal submitted successfully! Awaiting verification.");
+      localStorage.removeItem(DEAL_DRAFT_KEY);
       reset();
       onSuccess?.();
     } catch (error) {
