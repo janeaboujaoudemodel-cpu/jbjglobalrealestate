@@ -476,7 +476,7 @@ export default function StampGeneratorPage() {
               <Layers size={12}/> Gallery
             </Button>
             <Button variant="outline" size="sm" onClick={() => setChatOpen(v => !v)} className="gap-1 text-xs">
-              <MessageSquare size={12}/> AI Designer
+              <MessageSquare size={12}/> Smart Designer
             </Button>
             <Button variant="outline" size="sm" onClick={() => generateConcepts()} disabled={generating} className="gap-1 text-xs">
               <RefreshCw size={12} className={generating ? 'animate-spin' : ''}/>
