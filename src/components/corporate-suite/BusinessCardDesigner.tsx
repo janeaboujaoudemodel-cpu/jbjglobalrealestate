@@ -47,6 +47,24 @@ interface CardData {
   address: string;
 }
 
+type BilingualMode = "off" | "dual-side" | "single-card";
+type BilingualLanguage = "ar" | "zh" | "hi" | "fr" | "de" | "es" | "ru" | "ja" | "ko" | "ur" | "fa" | "custom";
+
+const BILINGUAL_LANGUAGES: { id: BilingualLanguage; label: string; dir: "rtl" | "ltr" }[] = [
+  { id: "ar", label: "العربية (Arabic)", dir: "rtl" },
+  { id: "ur", label: "اردو (Urdu)", dir: "rtl" },
+  { id: "fa", label: "فارسی (Persian)", dir: "rtl" },
+  { id: "zh", label: "中文 (Chinese)", dir: "ltr" },
+  { id: "hi", label: "हिन्दी (Hindi)", dir: "ltr" },
+  { id: "ja", label: "日本語 (Japanese)", dir: "ltr" },
+  { id: "ko", label: "한국어 (Korean)", dir: "ltr" },
+  { id: "fr", label: "Français (French)", dir: "ltr" },
+  { id: "de", label: "Deutsch (German)", dir: "ltr" },
+  { id: "es", label: "Español (Spanish)", dir: "ltr" },
+  { id: "ru", label: "Русский (Russian)", dir: "ltr" },
+  { id: "custom", label: "Other", dir: "ltr" },
+];
+
 interface FieldPos { x: number; y: number; }
 
 interface AiSvgElement {
@@ -172,21 +190,46 @@ const QR_POSITION_STYLE: Record<QrPosition, React.CSSProperties> = {
 function CardFace({
   data, template, primary, secondary, accent, side = "front", scale = 1, shapeStyle, aiDesignData, cardShape,
   fontFamily, fontWeight, fontStyle, nameFontSize,
+  bilingualMode, bilingualDir, secondaryData,
+  onInlineEdit,
 }: {
   data: CardData; template: Template; primary: string;
   secondary: string; accent: string; side?: "front" | "back"; scale?: number;
   shapeStyle?: React.CSSProperties; aiDesignData?: AiDesignData | null;
   cardShape?: CardShape;
   fontFamily?: string; fontWeight?: string; fontStyle?: string; nameFontSize?: number | null;
+  bilingualMode?: BilingualMode; bilingualDir?: "rtl" | "ltr"; secondaryData?: CardData;
+  onInlineEdit?: (field: keyof CardData) => void;
 }) {
-  const name    = data.name    || "Your Name";
-  const title   = data.title   || "Job Title";
-  const company = data.company || "Company Name";
+  // Determine if bilingual back side should show secondary data
+  const showSecondary = bilingualMode === "dual-side" && side === "back" && secondaryData;
+  const displayData = showSecondary ? secondaryData : data;
+  const displayDir = showSecondary ? (bilingualDir || "ltr") : "ltr";
+
+  const name    = displayData.name    || "Your Name";
+  const title   = displayData.title   || "Job Title";
+  const company = displayData.company || "Company Name";
   const initial = name.charAt(0).toUpperCase();
+
+  // For single-card bilingual, show secondary text below primary
+  const showBilingualInline = bilingualMode === "single-card" && side === "front" && secondaryData;
+  const secName    = secondaryData?.name    || "";
+  const secTitle   = secondaryData?.title   || "";
+  const secCompany = secondaryData?.company || "";
 
   const resolvedFontWeight = fontWeight || "800";
   const resolvedFontStyle  = fontStyle  || "normal";
   const resolvedNameSize   = nameFontSize != null ? nameFontSize * scale : 18 * scale;
+
+  // Inline edit click handler
+  const editClick = (field: keyof CardData) => (e: React.MouseEvent) => {
+    if (onInlineEdit) {
+      e.stopPropagation();
+      onInlineEdit(field);
+    }
+  };
+  const editStyle: React.CSSProperties = onInlineEdit ? { cursor: "text", borderBottom: "1px dashed transparent" } : {};
+  const editHoverClass = onInlineEdit ? "hover:border-b hover:border-dashed hover:border-current" : "";
 
   const baseStyle: React.CSSProperties = {
     width: "100%",
@@ -376,19 +419,25 @@ function CardFace({
   // ── MODERN ──────────────────────────────────────────────────
   if (template === "modern") {
     return (
-      <div style={{ ...baseStyle, background: `linear-gradient(135deg, ${primary} 0%, ${primary}bb 100%)` }}>
+      <div style={{ ...baseStyle, background: `linear-gradient(135deg, ${primary} 0%, ${primary}bb 100%)`, direction: displayDir }}>
         <div style={{ position: "absolute", top: -20, right: -20, width: 80, height: 80, borderRadius: "50%", background: `${secondary}15` }} />
         <div style={{ position: "absolute", bottom: -30, left: -10, width: 100, height: 100, borderRadius: "50%", background: `${secondary}10` }} />
         <div style={{ position: "relative", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: `${20 * scale}px ${24 * scale}px` }}>
           <div>
-            <p style={{ fontSize: 9 * scale, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: secondary, opacity: 0.65, margin: 0 }}>{company}</p>
-            <h2 style={{ fontSize: resolvedNameSize, fontWeight: resolvedFontWeight, fontStyle: resolvedFontStyle, color: secondary, margin: `${4 * scale}px 0 ${2 * scale}px` }}>{name}</h2>
-            <p style={{ fontSize: 10 * scale, color: secondary, opacity: 0.8, margin: 0 }}>{title}</p>
+            <p onClick={editClick("company")} style={{ ...editStyle, fontSize: 9 * scale, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: secondary, opacity: 0.65, margin: 0 }}>{company}</p>
+            <h2 onClick={editClick("name")} style={{ ...editStyle, fontSize: resolvedNameSize, fontWeight: resolvedFontWeight, fontStyle: resolvedFontStyle, color: secondary, margin: `${4 * scale}px 0 ${2 * scale}px` }}>{name}</h2>
+            {showBilingualInline && secName && (
+              <p style={{ fontSize: resolvedNameSize * 0.7, fontWeight: resolvedFontWeight, color: secondary, opacity: 0.6, margin: `0 0 ${2 * scale}px`, direction: bilingualDir || "ltr" }}>{secName}</p>
+            )}
+            <p onClick={editClick("title")} style={{ ...editStyle, fontSize: 10 * scale, color: secondary, opacity: 0.8, margin: 0 }}>{title}</p>
+            {showBilingualInline && secTitle && (
+              <p style={{ fontSize: 8.5 * scale, color: secondary, opacity: 0.5, margin: `${1 * scale}px 0 0`, direction: bilingualDir || "ltr" }}>{secTitle}</p>
+            )}
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 3 * scale }}>
-            {data.phone   && <p style={{ fontSize: 8.5 * scale, color: secondary, opacity: 0.8, margin: 0 }}>☎ {data.phone}</p>}
-            {data.email   && <p style={{ fontSize: 8.5 * scale, color: secondary, opacity: 0.8, margin: 0 }}>@ {data.email}</p>}
-            {data.website && <p style={{ fontSize: 8.5 * scale, color: secondary, opacity: 0.8, margin: 0 }}>⬡ {data.website}</p>}
+            {displayData.phone   && <p onClick={editClick("phone")} style={{ ...editStyle, fontSize: 8.5 * scale, color: secondary, opacity: 0.8, margin: 0 }}>☎ {displayData.phone}</p>}
+            {displayData.email   && <p onClick={editClick("email")} style={{ ...editStyle, fontSize: 8.5 * scale, color: secondary, opacity: 0.8, margin: 0 }}>@ {displayData.email}</p>}
+            {displayData.website && <p onClick={editClick("website")} style={{ ...editStyle, fontSize: 8.5 * scale, color: secondary, opacity: 0.8, margin: 0 }}>⬡ {displayData.website}</p>}
           </div>
         </div>
       </div>
@@ -514,6 +563,8 @@ function CardCanvas({
   qrEnabled, qrData, qrSize, qrColor, qrBgColor, qrPosition, qrSide,
   logoUrl, logoSize, logoPos, onLogoMove, aiDesignData,
   fontFamily, fontWeight, fontStyle, nameFontSize,
+  bilingualMode, bilingualDir, secondaryData,
+  onInlineEdit,
 }: {
   data: CardData; template: Template; backTemplate: Template; primary: string; secondary: string; accent: string;
   backPrimary: string; backSecondary: string; backAccent: string;
@@ -526,6 +577,8 @@ function CardCanvas({
   onLogoMove: (pos: { x: number; y: number }) => void;
   aiDesignData: AiDesignData | null;
   fontFamily?: string; fontWeight?: string; fontStyle?: string; nameFontSize?: number | null;
+  bilingualMode?: BilingualMode; bilingualDir?: "rtl" | "ltr"; secondaryData?: CardData;
+  onInlineEdit?: (field: keyof CardData) => void;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const dragging = useRef<{
@@ -686,6 +739,10 @@ function CardCanvas({
         fontWeight={fontWeight}
         fontStyle={fontStyle}
         nameFontSize={nameFontSize}
+        bilingualMode={bilingualMode}
+        bilingualDir={bilingualDir}
+        secondaryData={secondaryData}
+        onInlineEdit={onInlineEdit}
       />
 
       {/* Logo overlay — shows on BOTH front and back */}
@@ -1371,6 +1428,18 @@ export default function BusinessCardDesigner() {
     name: "", title: "", company: "", phone: "", email: "", website: "", address: "",
   });
 
+  // Bilingual
+  const [bilingualMode, setBilingualMode] = useState<BilingualMode>("off");
+  const [bilingualLang, setBilingualLang] = useState<BilingualLanguage>("ar");
+  const [bilingualOpen, setBilingualOpen] = useState(false);
+  const [secondaryData, setSecondaryData] = useState<CardData>({
+    name: "", title: "", company: "", phone: "", email: "", website: "", address: "",
+  });
+  const bilingualDir = BILINGUAL_LANGUAGES.find(l => l.id === bilingualLang)?.dir || "ltr";
+
+  // Inline editing
+  const [inlineEditField, setInlineEditField] = useState<keyof CardData | null>(null);
+
   // Landing page data (Digital mode)
   const [landingPageData, setLandingPageData] = useState<LandingPageData>({ ...EMPTY_LANDING_PAGE });
   const [digitalTab, setDigitalTab] = useState<"card" | "landing">("card");
@@ -1989,7 +2058,112 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
             </div>
           </Collapsible>
 
-          {/* Smart Gallery — AI batch generation */}
+          {/* Bilingual Card */}
+          <Collapsible open={bilingualOpen} onOpenChange={setBilingualOpen}>
+            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+              <CollapsibleTrigger asChild>
+                <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
+                  <div className="flex items-center gap-2">
+                    <Globe size={13} className="text-[hsl(var(--gold))]" />
+                    <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">Bilingual</span>
+                    {bilingualMode !== "off" && (
+                      <span className="text-[8px] bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold-dark))] px-1.5 py-0.5 rounded-full font-semibold">
+                        {BILINGUAL_LANGUAGES.find(l => l.id === bilingualLang)?.label?.split(" ")[0]}
+                      </span>
+                    )}
+                  </div>
+                  <ChevronDown size={13} className={`text-[hsl(var(--muted-foreground))] transition-transform ${bilingualOpen ? "rotate-180" : ""}`} />
+                </button>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="px-4 pb-4 border-t border-[hsl(var(--border))] space-y-3 pt-3">
+                  <p className="text-[10px] text-[hsl(var(--muted-foreground))] leading-relaxed">
+                    Add a second language to your card. Choose between showing both languages on one card or separate front/back sides.
+                  </p>
+
+                  {/* Mode selector */}
+                  <div>
+                    <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Mode</Label>
+                    <div className="grid grid-cols-3 gap-1.5">
+                      {([
+                        { id: "off" as BilingualMode, label: "Off" },
+                        { id: "dual-side" as BilingualMode, label: "Front/Back" },
+                        { id: "single-card" as BilingualMode, label: "Both Sides" },
+                      ]).map(opt => (
+                        <button
+                          key={opt.id}
+                          onClick={() => setBilingualMode(opt.id)}
+                          className={`text-[10px] py-2 px-1 rounded-lg border font-semibold transition-all ${
+                            bilingualMode === opt.id
+                              ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
+                              : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
+                          }`}
+                        >
+                          {opt.label}
+                        </button>
+                      ))}
+                    </div>
+                    <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-1">
+                      {bilingualMode === "dual-side" ? "English on front, second language on back" : bilingualMode === "single-card" ? "Both languages shown together on each side" : "Single-language card"}
+                    </p>
+                  </div>
+
+                  {bilingualMode !== "off" && (
+                    <>
+                      {/* Language picker */}
+                      <div>
+                        <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Second Language</Label>
+                        <div className="grid grid-cols-3 gap-1.5">
+                          {BILINGUAL_LANGUAGES.map(lang => (
+                            <button
+                              key={lang.id}
+                              onClick={() => setBilingualLang(lang.id)}
+                              className={`text-[10px] py-1.5 px-1 rounded-lg border font-semibold transition-all truncate ${
+                                bilingualLang === lang.id
+                                  ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
+                                  : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
+                              }`}
+                            >
+                              {lang.label.split(" ")[0]}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Secondary language fields */}
+                      <div className="space-y-2.5">
+                        <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] block">
+                          {BILINGUAL_LANGUAGES.find(l => l.id === bilingualLang)?.label?.split("(")[1]?.replace(")", "") || "Secondary"} Text
+                        </Label>
+                        {(["name", "title", "company"] as (keyof CardData)[]).map(key => (
+                          <div key={key}>
+                            <Label className="text-[9px] text-[hsl(var(--muted-foreground))] mb-0.5 block capitalize">{key}</Label>
+                            <div className="flex gap-1.5">
+                              <Input
+                                value={secondaryData[key]}
+                                onChange={e => setSecondaryData(prev => ({ ...prev, [key]: e.target.value }))}
+                                placeholder={`${key} in ${BILINGUAL_LANGUAGES.find(l => l.id === bilingualLang)?.label?.split("(")[1]?.replace(")", "") || "other language"}...`}
+                                className="h-8 text-xs flex-1"
+                                dir={bilingualDir}
+                              />
+                              <VoiceInputButton
+                                onTranscript={t => setSecondaryData(prev => ({ ...prev, [key]: t }))}
+                                size="sm"
+                              />
+                            </div>
+                          </div>
+                        ))}
+                        <p className="text-[9px] text-[hsl(var(--muted-foreground))] bg-[hsl(var(--muted))] rounded-lg px-2 py-1.5">
+                          💡 Use voice input to speak in {BILINGUAL_LANGUAGES.find(l => l.id === bilingualLang)?.label?.split("(")[1]?.replace(")", "") || "the second language"} — it auto-transcribes.
+                        </p>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </CollapsibleContent>
+            </div>
+          </Collapsible>
+
           <Collapsible open={galleryOpen} onOpenChange={setGalleryOpen}>
             <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
               <CollapsibleTrigger asChild>
@@ -2260,6 +2434,10 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                   fontWeight={cardFontBold ? "bold" : undefined}
                   fontStyle={cardFontItalic ? "italic" : undefined}
                   nameFontSize={cardFontSize}
+                  bilingualMode={bilingualMode}
+                  bilingualDir={bilingualDir}
+                  secondaryData={secondaryData}
+                  onInlineEdit={(field) => setInlineEditField(field)}
                 />
               </PhoneMockup>
             ) : (
@@ -2304,17 +2482,50 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                       fontWeight={cardFontBold ? "bold" : undefined}
                       fontStyle={cardFontItalic ? "italic" : undefined}
                       nameFontSize={cardFontSize}
+                      bilingualMode={bilingualMode}
+                      bilingualDir={bilingualDir}
+                      secondaryData={secondaryData}
+                      onInlineEdit={(field) => setInlineEditField(field)}
                     />
                   </motion.div>
                 </AnimatePresence>
               </div>
             )}
+
+            {/* Inline edit input — appears when clicking a field on the card */}
+            {inlineEditField && (
+              <div className="w-full max-w-[400px] mx-auto mt-2">
+                <div className="flex gap-2 items-center bg-[hsl(var(--muted))] rounded-xl p-2 border border-[hsl(var(--gold)/0.3)]">
+                  <Label className="text-[10px] font-bold uppercase tracking-widest text-[hsl(var(--muted-foreground))] whitespace-nowrap min-w-[60px]">
+                    {inlineEditField}
+                  </Label>
+                  <Input
+                    autoFocus
+                    value={data[inlineEditField]}
+                    onChange={e => setData(prev => ({ ...prev, [inlineEditField]: e.target.value }))}
+                    onKeyDown={e => { if (e.key === "Enter" || e.key === "Escape") setInlineEditField(null); }}
+                    className="h-8 text-xs flex-1"
+                    placeholder={`Edit ${inlineEditField}...`}
+                  />
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setInlineEditField(null)}
+                    className="h-8 text-xs"
+                  >
+                    Done
+                  </Button>
+                </div>
+              </div>
+            )}
+
             <div className={`flex items-center gap-3 text-[10px] ${cardShape === "digital" ? "text-white/40" : "text-[hsl(var(--muted-foreground))]"}`}>
               <span>{CARD_SHAPES.find(s => s.id === cardShape)?.label} · {CARD_SHAPES.find(s => s.id === cardShape)?.ratio}</span>
               <span>·</span>
               <span>F: {TEMPLATES.find(t => t.id === frontTemplate)?.label} · B: {TEMPLATES.find(t => t.id === backTemplate)?.label}</span>
               {qrEnabled && <span>· QR on both sides</span>}
               {logoUrl && <span>· Logo on both sides</span>}
+              {bilingualMode !== "off" && <span>· Bilingual ({BILINGUAL_LANGUAGES.find(l => l.id === bilingualLang)?.label?.split(" ")[0]})</span>}
             </div>
 
             {/* Digital mode tabs + landing page editor + export */}
