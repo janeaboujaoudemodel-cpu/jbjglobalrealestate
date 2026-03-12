@@ -186,7 +186,7 @@ const AIToolPremiumLayout = ({
   const gradientWord = gradientWordIndex >= 0 ? titleWords.slice(gradientWordIndex).join(" ") : titleWords.slice(1).join(" ");
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen" style={{ background: "#0D0C08" }}>
       {/* Hero Section - Colored Gradient Theme */}
       <section className={`pt-32 pb-16 bg-gradient-to-b ${gradient}`}>
         <div className="container mx-auto px-4">
