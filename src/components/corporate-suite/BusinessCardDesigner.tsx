@@ -617,193 +617,37 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
   return (
     <>
     <div className="min-h-screen" style={{ background: "hsl(var(--pearl-1,48 30% 97%))" }}>
-      {/* ── Sticky Header ──────────────────────────────────────── */}
-      <div className="sticky top-0 lg:top-[48px] z-20 border-b border-[hsl(var(--border))] bg-white/95 backdrop-blur-sm shadow-sm">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-3.5 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <div className="hidden sm:flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-[hsl(var(--primary))] flex items-center justify-center">
-                <CreditCard size={13} className="text-[hsl(var(--primary-foreground))]" />
-              </div>
-              <div>
-                <p className="text-xs font-semibold text-[hsl(var(--foreground))] leading-none">Business Card Designer</p>
-                <p className="text-[10px] text-[hsl(var(--muted-foreground))]">Shapes · QR · Drag · AI</p>
-              </div>
-            </div>
-          </div>
+      <BusinessCardHeader
+        editLayout={editLayout}
+        setEditLayout={setEditLayout}
+        onResetLayout={() => {
+          setFieldPositions({ ...DEFAULT_FIELD_POSITIONS });
+          setLogoPos({ ...DEFAULT_LOGO_POS });
+          if (!editLayout) setEditLayout(true);
+          toast.success("Layout reset to defaults");
+        }}
+        isSaving={isSaving}
+        onSave={handleSaveCard}
+        cardLicenseCode={cardLicenseCode}
+        isSharing={isSharing}
+        onShare={handleShareCard}
+        cardShape={cardShape}
+        isExportingHtml={isExportingHtml}
+        onExportHtml={handleExportHtml}
+        isExportingPng={isExportingPng}
+        onExportPng={handleExportPng}
+        onBatchPrint={() => setBatchPrintOpen(true)}
+        isExporting={isExporting}
+        onExportPdf={handleExport}
+      />
 
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline" size="sm"
-              onClick={() => setEditLayout(v => !v)}
-              className={`gap-1.5 h-8 text-xs ${editLayout ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)] text-[hsl(var(--gold-dark))]" : ""}`}
-            >
-              {editLayout ? <Lock size={12} /> : <Unlock size={12} />}
-              {editLayout ? "Lock Layout" : "Edit Layout"}
-            </Button>
-            <Button
-              variant="outline" size="sm"
-              onClick={() => {
-                setFieldPositions({ ...DEFAULT_FIELD_POSITIONS });
-                setLogoPos({ ...DEFAULT_LOGO_POS });
-                if (!editLayout) setEditLayout(true);
-                toast.success("Layout reset to defaults");
-              }}
-              className="h-8 text-xs gap-1.5 border-[hsl(var(--border))] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]"
-              title="Reset field & logo positions to defaults"
-            >
-              <RotateCcw size={12} /> Reset
-            </Button>
-
-            <div className="flex flex-col items-end gap-1">
-              <Button
-                onClick={handleSaveCard}
-                disabled={isSaving}
-                variant="outline"
-                className="gap-1.5 h-8 text-xs font-semibold border-[#C9A84C]/60 text-[#C9A84C] hover:bg-[#C9A84C]/10"
-              >
-                {isSaving ? <RefreshCw size={12} className="animate-spin" /> : <Save size={12} />}
-                {isSaving ? "Saving…" : "Save Card"}
-              </Button>
-              {cardLicenseCode && (
-                <span className="text-[9px] font-mono font-bold text-green-700 bg-green-50 border border-green-200 rounded px-1.5 py-0.5">
-                  {cardLicenseCode}
-                </span>
-              )}
-            </div>
-
-            <Button
-              onClick={handleShareCard}
-              disabled={isSharing}
-              variant="outline"
-              className="gap-1.5 h-8 text-xs font-semibold border-[hsl(var(--border))] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]"
-            >
-              {isSharing ? <RefreshCw size={12} className="animate-spin" /> : <Share2 size={12} />}
-              {isSharing ? "Generating…" : "Share"}
-            </Button>
-
-            {cardShape === "digital" && (
-              <Button
-                onClick={handleExportHtml}
-                disabled={isExportingHtml}
-                variant="outline"
-                className="gap-1.5 h-8 text-xs font-semibold border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] hover:bg-[hsl(var(--gold)/0.06)]"
-              >
-                {isExportingHtml ? <RefreshCw size={12} className="animate-spin" /> : <Download size={12} />}
-                {isExportingHtml ? "Exporting…" : "Export HTML"}
-              </Button>
-            )}
-
-            <Button
-              onClick={handleExportPng}
-              disabled={isExportingPng}
-              variant="outline"
-              className="gap-1.5 h-8 text-xs font-semibold border-[hsl(var(--border))] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]"
-            >
-              {isExportingPng ? <RefreshCw size={12} className="animate-spin" /> : <Image size={12} />}
-              {isExportingPng ? "…" : "PNG"}
-            </Button>
-
-            <Button
-              onClick={() => setBatchPrintOpen(true)}
-              variant="outline"
-              className="gap-1.5 h-8 text-xs font-semibold border-[hsl(var(--border))] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]"
-            >
-              <Printer size={12} />
-              Print
-            </Button>
-
-            <Button
-              onClick={handleExport}
-              disabled={isExporting}
-              className="gap-2 h-8 text-xs font-semibold text-white hover:opacity-90 transition-opacity"
-              style={{ background: "linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-dark)))" }}
-            >
-              {isExporting ? <RefreshCw size={12} className="animate-spin" /> : <Download size={12} />}
-              {isExporting ? "Exporting…" : "Export PDF"}
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Share Modal ─────────────────────────────────────────── */}
       {shareToken && (
-        <Dialog open={shareModalOpen} onOpenChange={setShareModalOpen}>
-          <DialogContent className="max-w-sm">
-            <DialogHeader>
-              <DialogTitle className="flex items-center gap-2">
-                <Share2 size={16} className="text-[hsl(var(--gold))]" />
-                Share Your Card
-              </DialogTitle>
-              <DialogDescription>
-                Anyone with this link can view your card and save your contact
-              </DialogDescription>
-            </DialogHeader>
-
-            {(() => {
-              const shareUrl = `${window.location.origin}/card/${shareToken}`;
-              const qrUrl = buildQrUrl(shareUrl, frontPrimary, "#ffffff", 160);
-              return (
-                <div className="space-y-4">
-                  {/* QR Code */}
-                  <div className="flex justify-center">
-                    <div className="p-3 bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm">
-                      <img src={qrUrl} alt="Share QR Code" className="w-40 h-40 rounded-lg" />
-                    </div>
-                  </div>
-
-                  {/* URL input + copy */}
-                  <div className="flex gap-2">
-                    <input
-                      readOnly
-                      value={shareUrl}
-                      className="flex-1 h-9 px-3 text-xs rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--muted))] text-[hsl(var(--foreground))] select-all focus:outline-none"
-                      onClick={e => (e.target as HTMLInputElement).select()}
-                    />
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="h-9 gap-1.5 text-xs"
-                      onClick={() => {
-                        navigator.clipboard.writeText(shareUrl);
-                        toast.success("Link copied!");
-                      }}
-                    >
-                      <Copy size={12} /> Copy
-                    </Button>
-                  </div>
-
-                  {/* Action buttons */}
-                  <div className="grid grid-cols-2 gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="h-9 gap-1.5 text-xs border-[hsl(var(--border))] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]"
-                      onClick={() => {
-                        const msg = encodeURIComponent(`Here's my digital business card: ${shareUrl}`);
-                        window.open(`https://wa.me/?text=${msg}`, "_blank");
-                      }}
-                    >
-                      💬 WhatsApp
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="h-9 gap-1.5 text-xs"
-                      onClick={() => window.open(shareUrl, "_blank")}
-                    >
-                      <ExternalLink size={12} /> Preview
-                    </Button>
-                  </div>
-
-                  <p className="text-[10px] text-center text-[hsl(var(--muted-foreground))]">
-                    Scan QR or share the link — recipients can tap "Save Contact" to add you instantly
-                  </p>
-                </div>
-              );
-            })()}
-          </DialogContent>
-        </Dialog>
+        <ShareModal
+          open={shareModalOpen}
+          onOpenChange={setShareModalOpen}
+          shareToken={shareToken}
+          frontPrimary={frontPrimary}
+        />
       )}
 
       {/* ── Main Content ───────────────────────────────────────── */}
