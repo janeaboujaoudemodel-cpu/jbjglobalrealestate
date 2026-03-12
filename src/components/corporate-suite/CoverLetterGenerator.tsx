@@ -5,6 +5,7 @@ import {
   ArrowLeft, FileEdit, Sparkles, Download, RefreshCw,
   ImageIcon, ChevronDown, Copy, Check, Pencil,
   Calendar, PenTool, Stamp, Plus, Minus, GripVertical,
+  FileSignature, Send,
 } from "lucide-react";
 import { DocumentExtractorUpload } from "@/components/corporate-suite/DocumentExtractorUpload";
 import { Button } from "@/components/ui/button";
@@ -13,12 +14,14 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 import { BrandAssetLibrary } from "@/components/corporate-suite/BrandAssetLibrary";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
 import DocumentColorWheel, { type DocumentColors } from "./DocumentColorWheel";
 import DocumentTypographyControls, { type TypographySettings } from "./DocumentTypographyControls";
 import DocumentStampIntegration, { type StampSignatureData } from "./DocumentStampIntegration";
 import DocumentHeaderFooterBuilder, { type HeaderFooterSettings } from "./DocumentHeaderFooterBuilder";
+import DocumentESignIntegration from "./DocumentESignIntegration";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Tone = "professional" | "confident" | "casual" | "enthusiastic" | "executive";
