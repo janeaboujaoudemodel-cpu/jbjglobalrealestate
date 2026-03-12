@@ -9,7 +9,7 @@ import {
   Lock, Unlock, RotateCcw, Sparkles, RectangleHorizontal,
   RectangleVertical, Square, Maximize2, Monitor, Ticket,
   Save, Palette, Zap, Star, Cpu, Minus, Type, User,
-  Share2, Copy, ExternalLink, HelpCircle,
+  Share2, Copy, ExternalLink, HelpCircle, AlignLeft, AlignCenter, AlignRight, Underline,
   Smartphone, Wifi,
 } from "lucide-react";
 import {
