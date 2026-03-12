@@ -24,8 +24,8 @@ interface BusinessCardCenterPanelProps {
   cardPreviewRef: React.RefObject<HTMLDivElement | null>;
   // Card canvas props
   data: CardData;
-  frontTemplate: string;
-  backTemplate: string;
+  frontTemplate: Template;
+  backTemplate: Template;
   frontPrimary: string;
   frontSecondary: string;
   frontAccent: string;
