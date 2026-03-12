@@ -240,7 +240,7 @@ const AIToolPremiumLayout = ({
             </h1>
             
             {/* Subtitle/Description */}
-            <p className="text-zinc-400 text-lg md:text-xl mb-4">
+            <p className="text-zinc-400 text-base sm:text-lg md:text-xl mb-4 max-w-2xl mx-auto">
               {subtitle}
             </p>
             
