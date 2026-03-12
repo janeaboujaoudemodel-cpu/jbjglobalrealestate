@@ -250,6 +250,12 @@ const AdminDevelopers = () => {
     if (titleFilter !== 'all') {
       reps = reps.filter(r => r.title === titleFilter);
     }
+    if (genderFilter !== 'all') {
+      reps = reps.filter(r => r.gender === genderFilter);
+    }
+    if (nationalityFilter) {
+      reps = reps.filter(r => r.nationality?.toLowerCase().includes(nationalityFilter.toLowerCase()));
+    }
     return reps;
   };
 
