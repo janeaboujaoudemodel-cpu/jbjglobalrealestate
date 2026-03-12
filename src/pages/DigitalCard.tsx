@@ -201,6 +201,14 @@ const DigitalCard = () => {
       } else if (metaGooglebot && previousGooglebotContent !== null) {
         metaGooglebot.setAttribute("content", previousGooglebotContent);
       }
+
+      // Restore canonical if it was removed
+      if (previousCanonicalHref) {
+        const restoredCanonical = document.createElement("link");
+        restoredCanonical.setAttribute("rel", "canonical");
+        restoredCanonical.setAttribute("href", previousCanonicalHref);
+        document.head.appendChild(restoredCanonical);
+      }
     };
   }, []);
 
