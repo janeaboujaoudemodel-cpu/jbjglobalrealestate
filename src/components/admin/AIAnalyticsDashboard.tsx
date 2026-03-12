@@ -173,8 +173,8 @@ const AIAnalyticsDashboard = () => {
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center border-2 border-purple-400/30">
-            <Brain className="w-6 h-6 text-purple-500" />
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gold/15 to-amber-500/10 flex items-center justify-center border-2 border-gold/30">
+            <Brain className="w-6 h-6 text-gold" />
           </div>
           <div>
             <h2 className="text-black text-xl font-semibold">AI Analytics</h2>
