@@ -111,21 +111,18 @@ export default function HorizontalUtilityBar() {
       <div
         className="fixed top-0 left-0 right-0 h-[48px] z-[9996] hidden lg:flex items-center gap-2.5 px-4 lg:px-5 border-b border-gold/15 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_1px_3px_hsl(var(--gold)/0.08)] overflow-x-auto overflow-y-hidden scrollbar-hide [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px]"
       >
-        {/* ── Sidebar Toggle (Minimize) — FIRST ── */}
+        {/* ── Sidebar Toggle (Arrow only) — FIRST ── */}
         <Tooltip>
           <TooltipTrigger asChild>
             <button
               onClick={toggleSidebar}
-              className={pillBtn}
+              className={iconBtn}
               aria-label="Toggle sidebar"
             >
               {sidebarCollapsed
                 ? <PanelLeftOpen className={iconClass} />
                 : <PanelLeftClose className={iconClass} />
               }
-              <span className={labelClass}>
-                {sidebarCollapsed ? 'Expand' : 'Minimize'}
-              </span>
             </button>
           </TooltipTrigger>
           <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">

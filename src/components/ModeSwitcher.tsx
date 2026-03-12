@@ -117,22 +117,22 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
           <button
             disabled={isLoading}
             className={cn(
-              "flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all duration-300 hover:shadow-md min-w-[140px] xl:min-w-[180px] justify-center whitespace-nowrap shrink-0",
+              "flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border transition-all duration-300 hover:shadow-md max-w-[160px] whitespace-nowrap shrink-0",
               currentConfig.bgColor,
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/50",
               className
             )}
           >
             {isLoading ? (
-              <Loader2 className="w-4 h-4 animate-spin text-zinc-400" />
+              <Loader2 className="w-4 h-4 animate-spin text-zinc-400 shrink-0" />
             ) : (
-              <CurrentIcon className={cn("w-4 h-4", currentConfig.color)} />
+              <CurrentIcon className={cn("w-4 h-4 shrink-0", currentConfig.color)} />
             )}
-            <span className={cn("text-sm font-medium hidden sm:block", currentConfig.color)}>
-              {currentConfig.label}
+            <span className={cn("text-[11px] font-semibold truncate hidden sm:block", currentConfig.color)}>
+              {currentConfig.shortLabel}
             </span>
             <ChevronDown className={cn(
-              "w-3.5 h-3.5 transition-transform duration-200",
+              "w-3 h-3 shrink-0 transition-transform duration-200",
               currentConfig.color,
               isOpen && "rotate-180"
             )} />
