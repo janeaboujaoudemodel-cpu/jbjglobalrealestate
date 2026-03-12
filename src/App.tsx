@@ -80,7 +80,7 @@ const App = () => {
                   <GlobalVisitorTracking />
                   <SEOBreadcrumbs />
                   
-            <BrandIntroSplash />
+            {/* BrandIntroSplash disabled until further notice */}
             <Routes>
               {/* ── Standalone Routes (no shell) ── */}
               <Route element={<Suspense fallback={<PageLoader />}><Outlet /></Suspense>}>
