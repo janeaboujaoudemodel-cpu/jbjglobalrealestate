@@ -262,6 +262,7 @@ function LetterPreview({
 // ─── Main Component ───────────────────────────────────────────────────────────
 export default function CoverLetterGenerator() {
   const navigate = useNavigate();
+  const { isOwner } = useAuth();
   const previewRef = useRef<HTMLDivElement>(null);
 
   const [generating, setGenerating] = useState(false);
