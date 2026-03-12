@@ -156,26 +156,26 @@ export default function HorizontalUtilityBar() {
         {divider}
 
         {/* ── Quick Nav: Buy / Rent / Sell ── */}
-        <div className="flex items-center gap-0.5">
+        <div className="flex items-center gap-0.5 shrink-0">
           <Link
             to="/properties?transaction=buy"
-            className="h-8 flex items-center gap-1.5 rounded-lg hover:bg-gold/10 transition-all px-2.5 group"
+            className="h-8 flex items-center gap-1.5 rounded-lg hover:bg-gold/10 transition-all px-2.5 group whitespace-nowrap"
           >
-            <Building2 className="w-4 h-4 text-gold/70 group-hover:text-gold transition-colors" />
+            <Building2 className="w-4 h-4 text-gold/70 group-hover:text-gold transition-colors shrink-0" />
             <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Buy</span>
           </Link>
           <Link
             to="/properties?transaction=rent"
-            className="h-8 flex items-center gap-1.5 rounded-lg hover:bg-gold/10 transition-all px-2.5 group"
+            className="h-8 flex items-center gap-1.5 rounded-lg hover:bg-gold/10 transition-all px-2.5 group whitespace-nowrap"
           >
-            <Key className="w-4 h-4 text-gold/70 group-hover:text-gold transition-colors" />
+            <Key className="w-4 h-4 text-gold/70 group-hover:text-gold transition-colors shrink-0" />
             <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Rent</span>
           </Link>
           <Link
             to="/listing-portal"
-            className="h-8 flex items-center gap-1.5 rounded-lg border border-gold/20 hover:border-gold/40 hover:bg-gold/10 transition-all px-2.5 group"
+            className="h-8 flex items-center gap-1.5 rounded-lg border border-gold/20 hover:border-gold/40 hover:bg-gold/10 transition-all px-2.5 group whitespace-nowrap"
           >
-            <Tag className="w-4 h-4 text-gold group-hover:scale-105 transition-transform" />
+            <Tag className="w-4 h-4 text-gold group-hover:scale-105 transition-transform shrink-0" />
             <span className="text-[11px] font-bold text-gold uppercase tracking-wide">Sell</span>
           </Link>
         </div>
