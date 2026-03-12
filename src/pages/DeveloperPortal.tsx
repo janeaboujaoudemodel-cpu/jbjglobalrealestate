@@ -90,7 +90,7 @@ const DeveloperPortal = () => {
   const { data: developersList } = useQuery({
     queryKey: ["developers-list-autocomplete"],
     queryFn: async () => {
-      const { data } = await supabase
+      const { data } = await (supabase as any)
         .from('developers')
         .select('id, name')
         .eq('is_active', true)
