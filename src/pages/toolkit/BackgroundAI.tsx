@@ -1309,7 +1309,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
               {activeTab === 'video' && videoFile && (
                 <button onClick={handleVideoRemoveBackground} disabled={!consent || isVideoProcessing}
                   className="flex-1 flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl text-white font-semibold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                  style={{ background: "linear-gradient(135deg, #0EA5E9 0%, #6366F1 100%)", boxShadow: "0 4px 20px rgba(14,165,233,0.4)" }}>
+                  style={{ background: "linear-gradient(135deg, #B8943E 0%, #9A7B2F 100%)", boxShadow: "0 4px 20px rgba(184,148,62,0.4)" }}>
                   {isVideoProcessing ? <><Loader2 className="h-5 w-5 animate-spin" /> {videoProgressLabel || `Processing ${videoProgress}%`}</> : <><Video className="h-5 w-5" /> Remove Video Background</>}
                 </button>
               )}
