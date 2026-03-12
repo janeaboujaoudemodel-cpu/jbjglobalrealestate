@@ -167,8 +167,8 @@ function buildSVG(project: any, templateKey: string): string {
       const x1 = cx - rw, y1 = cy - rh;
       const nameFontSize = autoFontSize(name, 11, 22);
       return `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
-        <rect x="${x1}" y="${y1}" width="${rw * 2}" height="${rh * 2}" rx="4" fill="none" stroke="${COLOR}" stroke-width="3"/>
-        <rect x="${x1 + 5}" y="${y1 + 5}" width="${rw * 2 - 10}" height="${rh * 2 - 10}" rx="2" fill="none" stroke="${COLOR}" stroke-width="0.8"/>
+        <rect x="${x1}" y="${y1}" width="${rw * 2}" height="${rh * 2}" rx="4" fill="none" stroke="${COLOR}" stroke-width="${ba.outerWidth}" stroke-dasharray="${ba.dash}"/>
+        ${ba.innerRing ? `<rect x="${x1 + 5}" y="${y1 + 5}" width="${rw * 2 - 10}" height="${rh * 2 - 10}" rx="2" fill="none" stroke="${COLOR}" stroke-width="${ba.innerWidth}" stroke-dasharray="${ba.innerDash}"/>` : ''}
         <text x="${cx}" y="${y1 + 26}" text-anchor="middle" font-family="${font}" font-size="8.5" fill="${COLOR}" letter-spacing="4">${city}</text>
         <line x1="${x1 + 14}" y1="${y1 + 34}" x2="${x1 + rw * 2 - 14}" y2="${y1 + 34}" stroke="${COLOR}" stroke-width="0.7"/>
         ${wrapText(name, cx, cy, font, nameFontSize, COLOR, 2)}
