@@ -63,7 +63,7 @@ export default function BusinessCardDesigner() {
     useGradient, setUseGradient, gradientEnd, setGradientEnd,
     gradientDirection, setGradientDirection,
     galleryOpen, setGalleryOpen, galleryPrompt, setGalleryPrompt,
-    galleryDesigns, galleryFavorites, isGeneratingGallery, galleryPage, GALLERY_PER_PAGE,
+    galleryDesigns, setGalleryDesigns, galleryFavorites, setGalleryFavorites, isGeneratingGallery, galleryPage, setGalleryPage, GALLERY_PER_PAGE,
     tradeLicenseOpen, setTradeLicenseOpen,
     loadSavedOpen, setLoadSavedOpen, savedDesigns, isLoadingSaved, isDeletingSaved,
     cardPreviewRef, isExportingPng,
