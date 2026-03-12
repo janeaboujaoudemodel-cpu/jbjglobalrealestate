@@ -271,7 +271,7 @@ export default function PortfolioViews() {
             initial="hidden"
             animate="visible"
             variants={staggerContainer}
-            className="space-y-12"
+            className="space-y-8"
           >
           {/* Section 1: Portfolio Overview */}
           <motion.div variants={fadeInUp}>
