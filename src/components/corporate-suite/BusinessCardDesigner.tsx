@@ -1389,6 +1389,18 @@ export default function BusinessCardDesigner() {
     name: "", title: "", company: "", phone: "", email: "", website: "", address: "",
   });
 
+  // Bilingual
+  const [bilingualMode, setBilingualMode] = useState<BilingualMode>("off");
+  const [bilingualLang, setBilingualLang] = useState<BilingualLanguage>("ar");
+  const [bilingualOpen, setBilingualOpen] = useState(false);
+  const [secondaryData, setSecondaryData] = useState<CardData>({
+    name: "", title: "", company: "", phone: "", email: "", website: "", address: "",
+  });
+  const bilingualDir = BILINGUAL_LANGUAGES.find(l => l.id === bilingualLang)?.dir || "ltr";
+
+  // Inline editing
+  const [inlineEditField, setInlineEditField] = useState<keyof CardData | null>(null);
+
   // Landing page data (Digital mode)
   const [landingPageData, setLandingPageData] = useState<LandingPageData>({ ...EMPTY_LANDING_PAGE });
   const [digitalTab, setDigitalTab] = useState<"card" | "landing">("card");
