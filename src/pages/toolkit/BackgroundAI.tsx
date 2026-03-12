@@ -1184,7 +1184,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                           <video src={videoPreviewUrl!} controls className="w-full" style={{ maxHeight: 200 }} />
                         </div>
                         <div className="rounded-xl overflow-hidden" style={{ border: `1px solid ${C.border}` }}>
-                          <div className="px-3 py-2 text-xs font-semibold uppercase tracking-wider" style={{ color: C.mutedText, borderBottom: `1px solid rgba(99,102,241,0.1)` }}>Result</div>
+                          <div className="px-3 py-2 text-xs font-semibold uppercase tracking-wider" style={{ color: C.mutedText, borderBottom: `1px solid rgba(184,148,62,0.1)` }}>Result</div>
                           {videoResult ? (
                             <video src={videoResult} controls className="w-full" style={{ maxHeight: 200 }} />
                           ) : (
