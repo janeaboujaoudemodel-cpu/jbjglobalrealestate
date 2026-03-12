@@ -1078,8 +1078,8 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                       onClick={() => setSelectedBackground(preset.id)}
                       className="flex items-center gap-3 p-3 rounded-xl text-sm text-left transition-all"
                       style={{
-                        background: selectedBackground === preset.id ? "rgba(99,102,241,0.28)" : "rgba(255,255,255,0.10)",
-                        border: `1px solid ${selectedBackground === preset.id ? "rgba(99,102,241,0.7)" : "rgba(255,255,255,0.22)"}`,
+                        background: selectedBackground === preset.id ? "rgba(184,148,62,0.28)" : "rgba(255,255,255,0.10)",
+                        border: `1px solid ${selectedBackground === preset.id ? "rgba(184,148,62,0.7)" : "rgba(255,255,255,0.22)"}`,
                         color: selectedBackground === preset.id ? C.accentText : "rgba(255,255,255,0.88)",
                       }}
                     >
