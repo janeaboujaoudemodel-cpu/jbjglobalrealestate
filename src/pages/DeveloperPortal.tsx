@@ -71,9 +71,15 @@ const DeveloperPortal = () => {
   const [interestPhone, setInterestPhone] = useState("");
   const [submittingInterest, setSubmittingInterest] = useState(false);
 
+  // Auto-fill from rep profile if exists
   useEffect(() => {
-    if (user?.email) setDevEmail(user.email);
-  }, [user?.email]);
+    if (repProfile) {
+      setDevName(repProfile.developer_name || '');
+      setDevEmail(repProfile.email || user?.email || '');
+    } else if (user?.email) {
+      setDevEmail(user.email);
+    }
+  }, [user?.email, repProfile]);
 
   useEffect(() => {
     if (isOwner && ownerSkipMode) {
