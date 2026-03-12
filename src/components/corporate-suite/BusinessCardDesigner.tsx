@@ -2352,7 +2352,73 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
             </div>
           </Collapsible>
 
-          {/* Bilingual Card */}
+          {/* Load Saved Designs */}
+          <Collapsible open={loadSavedOpen} onOpenChange={(open) => { setLoadSavedOpen(open); if (open) handleLoadSavedDesigns(); }}>
+            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+              <CollapsibleTrigger asChild>
+                <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
+                  <div className="flex items-center gap-2">
+                    <FolderOpen size={13} className="text-[hsl(var(--gold))]" />
+                    <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">Load Saved</span>
+                    {savedDesigns.length > 0 && (
+                      <span className="text-[8px] bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold-dark))] px-1.5 py-0.5 rounded-full font-semibold">
+                        {savedDesigns.length}
+                      </span>
+                    )}
+                  </div>
+                  <ChevronDown size={13} className={`text-[hsl(var(--muted-foreground))] transition-transform ${loadSavedOpen ? "rotate-180" : ""}`} />
+                </button>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="px-4 pb-4 border-t border-[hsl(var(--border))] space-y-2 pt-3">
+                  {isLoadingSaved ? (
+                    <div className="flex items-center gap-2 py-4 justify-center">
+                      <RefreshCw size={14} className="animate-spin text-[hsl(var(--gold))]" />
+                      <span className="text-[10px] text-[hsl(var(--muted-foreground))]">Loading saved designs…</span>
+                    </div>
+                  ) : savedDesigns.length === 0 ? (
+                    <p className="text-[10px] text-[hsl(var(--muted-foreground))] text-center py-4">No saved designs yet. Save a card to see it here.</p>
+                  ) : (
+                    <div className="space-y-1.5 max-h-[280px] overflow-y-auto">
+                      {savedDesigns.map(design => (
+                        <div
+                          key={design.id}
+                          className="flex items-center gap-2 p-2.5 rounded-xl border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] hover:bg-[hsl(var(--muted)/0.5)] transition-all cursor-pointer group"
+                          onClick={() => handleRestoreSaved(design.metadata)}
+                        >
+                          <div className="w-8 h-8 rounded-lg bg-[hsl(var(--gold)/0.1)] flex items-center justify-center flex-shrink-0">
+                            <CreditCard size={12} className="text-[hsl(var(--gold))]" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-[10px] font-semibold text-[hsl(var(--foreground))] truncate">{design.name}</p>
+                            <p className="text-[9px] text-[hsl(var(--muted-foreground))] flex items-center gap-1">
+                              <Clock size={8} />
+                              {new Date(design.created_at).toLocaleDateString()}
+                            </p>
+                          </div>
+                          <button
+                            onClick={(e) => { e.stopPropagation(); handleDeleteSaved(design.id); }}
+                            disabled={isDeletingSaved === design.id}
+                            className="opacity-0 group-hover:opacity-100 w-6 h-6 rounded-md flex items-center justify-center text-red-400 hover:text-red-600 hover:bg-red-50 transition-all"
+                          >
+                            {isDeletingSaved === design.id ? <RefreshCw size={10} className="animate-spin" /> : <Trash2 size={10} />}
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <Button
+                    onClick={handleLoadSavedDesigns}
+                    disabled={isLoadingSaved}
+                    variant="outline"
+                    className="w-full h-7 text-[9px] gap-1.5"
+                  >
+                    <RefreshCw size={9} className={isLoadingSaved ? "animate-spin" : ""} /> Refresh
+                  </Button>
+                </div>
+              </CollapsibleContent>
+            </div>
+          </Collapsible>
           <Collapsible open={bilingualOpen} onOpenChange={setBilingualOpen}>
             <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
               <CollapsibleTrigger asChild>
