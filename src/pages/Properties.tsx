@@ -1135,14 +1135,29 @@ const Properties = () => {
         </div>
       </section>
 
-      {/* Fixed portal copy of filters when scrolled past */}
+      {/* Fixed filter bar on scroll — simplified to avoid duplication with HorizontalUtilityBar */}
       {isFilterFixed && createPortal(
-        <section className="fixed top-14 sm:top-16 md:top-20 lg:top-[72px] left-0 lg:left-[200px] right-0 z-[9998] backdrop-blur-md bg-black/90 py-3 md:py-4 border-b border-gold/30 shadow-lg" style={{ WebkitOverflowScrolling: 'touch' }}>
+        <section className="fixed top-[48px] left-0 lg:left-[200px] [body.jj-vertical-nav-collapsed_&]:lg:left-[48px] right-0 z-[9995] backdrop-blur-md bg-gradient-to-r from-[#FDFBF7]/95 via-[#F5F0E6]/95 to-[#EDE4D3]/95 py-2 md:py-3 border-b border-gold/30 shadow-lg" style={{ WebkitOverflowScrolling: 'touch' }}>
           <div className="container mx-auto px-3 sm:px-4">
-            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg" style={{ overflow: 'visible' }}>
-              {/* Transaction Type Tabs - Buy / Rent */}
-              <div className="flex items-center gap-1.5 sm:gap-2 mb-3 md:mb-4 flex-wrap">
-                <span className="text-black/70 text-sm mr-2 font-medium">I want to:</span>
+            {/* Single compact search + filter row */}
+            <div className="flex items-center gap-2">
+              {/* Compact search */}
+              <div className="relative flex-1 max-w-md">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gold" />
+                <Input
+                  placeholder="Search project, developer, area..."
+                  value={filters.search}
+                  onChange={(e) => {
+                    const next = e.target.value;
+                    updateFilter("search", next);
+                    setAppliedFilters((prev) => ({ ...prev, search: next }));
+                  }}
+                  onKeyDown={(e) => { if (e.key === "Enter") handleSearch(); }}
+                  className="h-10 pl-10 pr-4 bg-white/80 border border-gold/30 text-black placeholder:text-zinc-500 focus:border-gold rounded-lg text-sm shadow-sm w-full"
+                />
+              </div>
+              {/* Transaction type pills */}
+              <div className="flex items-center gap-1">
                 {[
                   { value: 'buy', label: 'Buy' },
                   { value: 'rent', label: 'Rent' },
@@ -1160,45 +1175,19 @@ const Properties = () => {
                         completionStatus: null,
                       }));
                     }}
-                    className="h-9 px-4 rounded-full"
+                    className="h-9 px-3 rounded-full text-xs"
                   >
                     {option.label}
                   </Button>
                 ))}
               </div>
-
-              {/* Keyword Search - Full Width */}
-              <div className="relative w-full">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gold" />
-                <Input
-                  placeholder="Search by project name, developer, location..."
-                  value={filters.search}
-                  onChange={(e) => {
-                    const next = e.target.value;
-                    updateFilter("search", next);
-                    setAppliedFilters((prev) => ({ ...prev, search: next }));
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") handleSearch();
-                  }}
-                  className="h-12 pl-12 pr-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-zinc-500 focus:border-gold rounded-lg text-base shadow-sm w-full"
-                />
-              </div>
-
-              {/* SEARCH Button */}
-              <div className="flex items-center justify-end mt-3">
-                <button 
-                  onClick={handleSearch}
-                  className="relative h-10 px-6 rounded-lg text-sm flex-shrink-0 font-bold transition-all duration-300 group overflow-hidden"
-                  style={{
-                    background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
-                    boxShadow: '0 6px 20px rgba(200,167,102,0.4), 0 4px 10px rgba(0,0,0,0.15), inset 0 2px 3px rgba(255,255,255,0.9), inset 0 -2px 3px rgba(200,167,102,0.2), 0 0 15px rgba(200,167,102,0.3)',
-                  }}
-                >
-                  <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-lg bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                  <span className="relative text-gold font-semibold">SEARCH</span>
-                </button>
-              </div>
+              {/* Search button */}
+              <button 
+                onClick={handleSearch}
+                className="h-9 px-4 rounded-lg text-xs font-bold bg-gradient-to-r from-[#F5F0E6] to-[#C8A766] text-black hover:brightness-110 transition-all shadow-sm shrink-0"
+              >
+                SEARCH
+              </button>
             </div>
           </div>
         </section>,

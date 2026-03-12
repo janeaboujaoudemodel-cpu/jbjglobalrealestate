@@ -744,6 +744,21 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                     <Link to="/resale-properties" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-emerald-600 hover:text-emerald-700 bg-emerald-50/80 hover:bg-emerald-100/60 rounded-lg transition-colors border border-emerald-300/25">
                       <Home className="w-4 h-4 text-emerald-600" />Resale Properties
                     </Link>
+                    <Link to="/favorites" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-pink-500 hover:text-pink-600 bg-pink-50/80 hover:bg-pink-100/60 rounded-lg transition-colors border border-pink-300/25">
+                      <Heart className="w-4 h-4 text-pink-500" />My Favorites
+                    </Link>
+                    <Link to="/my-dashboard" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 bg-blue-50/80 hover:bg-blue-100/60 rounded-lg transition-colors border border-blue-300/25">
+                      <LayoutDashboard className="w-4 h-4 text-blue-600" />My Dashboard
+                    </Link>
+                    <Link to="/ai-calendar" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-cyan-600 hover:text-cyan-700 bg-cyan-50/80 hover:bg-cyan-100/60 rounded-lg transition-colors border border-cyan-300/25">
+                      <CalendarClock className="w-4 h-4 text-cyan-600" />AI Calendar
+                    </Link>
+                    <Link to="/quiz" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-violet-600 hover:text-violet-700 bg-violet-50/80 hover:bg-violet-100/60 rounded-lg transition-colors border border-violet-300/25">
+                      <Sparkles className="w-4 h-4 text-violet-600" />AI Home Finder
+                    </Link>
+                    <Link to="/property-evaluator" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-indigo-600 hover:text-indigo-700 bg-indigo-50/80 hover:bg-indigo-100/60 rounded-lg transition-colors border border-indigo-300/25">
+                      <Calculator className="w-4 h-4 text-indigo-600" />Property Evaluator
+                    </Link>
                   </div>
                 </div>
 
