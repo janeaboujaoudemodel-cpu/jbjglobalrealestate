@@ -870,31 +870,67 @@ export default function StampProjectWizard() {
         </div>{/* end form column */}
 
         {/* ── Right: Sticky live preview column (desktop only) ── */}
-        <div className="hidden lg:flex flex-col items-center gap-4 w-[260px] flex-shrink-0">
-          <div className="sticky top-[calc(8rem+4rem)] flex flex-col items-center gap-4">
-            {/* Preview card */}
+        <div className="hidden lg:flex flex-col items-center gap-4 w-[280px] flex-shrink-0">
+          <div className="sticky top-[calc(8rem+4rem)] flex flex-col items-center gap-3">
+            {/* Undo/Redo/Reset toolbar */}
+            <div className="flex items-center gap-1.5 bg-white rounded-xl border border-[hsl(var(--border))] shadow-sm px-3 py-1.5">
+              <button onClick={handleUndo} disabled={!history.canUndo}
+                className="w-7 h-7 rounded-lg border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--gold)/0.06)] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                title="Undo (Ctrl+Z)">
+                <Undo2 size={12}/>
+              </button>
+              <button onClick={handleRedo} disabled={!history.canRedo}
+                className="w-7 h-7 rounded-lg border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--gold)/0.06)] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                title="Redo (Ctrl+Y)">
+                <Redo2 size={12}/>
+              </button>
+              <div className="w-px h-4 bg-[hsl(var(--border))]"/>
+              <button onClick={handleReset}
+                className="w-7 h-7 rounded-lg border border-[hsl(var(--border))] flex items-center justify-center hover:bg-destructive/10 hover:border-destructive/30 hover:text-destructive transition-colors"
+                title="Reset to defaults">
+                <RotateCw size={12}/>
+              </button>
+              <button onClick={() => { try { sessionStorage.setItem('stamp-wizard-form', JSON.stringify(form)); toast.success('Draft saved'); } catch {} }}
+                className="w-7 h-7 rounded-lg border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--gold)/0.06)] transition-colors"
+                title="Save draft">
+                <Save size={12}/>
+              </button>
+            </div>
+
+            {/* Interactive preview card */}
             <div className="bg-white rounded-2xl border border-[hsl(var(--gold)/0.3)] shadow-[0_8px_32px_hsl(var(--gold)/0.1)] p-5 flex flex-col items-center gap-3 w-full">
-              <LiveStampPreview
-                companyName={form.company_name}
-                arabicCompanyName={form.arabic_company_name}
-                city={form.city_optional}
-                country={form.country_optional}
-                registrationNumber={form.registration_number_optional}
-                stampType={form.stamp_type}
-                styleTheme={form.style_theme}
-                borderStyle={form.border_style}
-                typographyStyle={form.typography_style}
-                density={form.density}
-                iconStyle={form.icon_style}
-                monogramText={form.monogram_text}
-                uploadedLogoUrl={form.uploaded_logo_url}
-                languageMode={form.language_mode}
-                languageReversed={form.language_reversed}
-                showLicenseNumber={form.show_license_number}
-                size={220}
-              />
+              <InteractiveStampCanvas
+                size={240}
+                layers={layers}
+                onLayersChange={setLayers}
+                onDeleteLayer={(id) => {
+                  setLayers(prev => prev.map(l => l.id === id ? { ...l, visible: false } : l));
+                  toast('Layer hidden');
+                }}
+                interactive={true}
+              >
+                <LiveStampPreview
+                  companyName={form.company_name}
+                  arabicCompanyName={form.arabic_company_name}
+                  city={form.city_optional}
+                  country={form.country_optional}
+                  registrationNumber={form.registration_number_optional}
+                  stampType={form.stamp_type}
+                  styleTheme={form.style_theme}
+                  borderStyle={form.border_style}
+                  typographyStyle={form.typography_style}
+                  density={form.density}
+                  iconStyle={form.icon_style}
+                  monogramText={form.monogram_text}
+                  uploadedLogoUrl={form.uploaded_logo_url}
+                  languageMode={form.language_mode}
+                  languageReversed={form.language_reversed}
+                  showLicenseNumber={form.show_license_number}
+                  size={240}
+                />
+              </InteractiveStampCanvas>
               <p className="text-[10px] text-[hsl(var(--muted-foreground))] text-center leading-relaxed">
-                Updates live as you fill in details
+                Click elements to select · Drag to move · Arrow keys for fine control
               </p>
             </div>
 
