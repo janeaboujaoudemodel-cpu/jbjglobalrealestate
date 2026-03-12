@@ -11,6 +11,7 @@ import {
   Save, Palette, Zap, Star, Cpu, Minus, Type, User,
   Share2, Copy, ExternalLink, HelpCircle, AlignLeft, AlignCenter, AlignRight, Underline,
   Smartphone, Wifi, Droplets, Sun, Diamond, Stamp,
+  FolderOpen, Image, Printer, Trash2, Clock,
 } from "lucide-react";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
