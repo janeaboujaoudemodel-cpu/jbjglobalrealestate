@@ -19,6 +19,7 @@ import {
   Calendar, Upload, Building2, PartyPopper, FileText, Loader2,
   CheckCircle, X, Plus, FolderOpen, ExternalLink, AlertCircle,
   ClipboardList, Send, Eye, Info, UserCheck, Briefcase, MessageSquare,
+  FileSignature, ListTodo,
 } from "lucide-react";
 import SalesRepRegistration from "@/components/developer-portal/SalesRepRegistration";
 import BriefingRequestForm from "@/components/developer-portal/BriefingRequestForm";
