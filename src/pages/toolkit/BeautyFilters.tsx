@@ -551,7 +551,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                         <div className="flex items-center gap-2">
                           <button onClick={() => setShowBefore(v => !v)}
                             className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-all"
-                            style={{ background: showBefore ? "rgba(99,102,241,0.2)" : "rgba(255,255,255,0.05)", border: `1px solid ${showBefore ? "rgba(99,102,241,0.5)" : "rgba(255,255,255,0.1)"}`, color: showBefore ? I.text : I.muted }}>
+                            style={{ background: showBefore ? "rgba(184,148,62,0.2)" : "rgba(255,255,255,0.05)", border: `1px solid ${showBefore ? "rgba(184,148,62,0.5)" : "rgba(255,255,255,0.1)"}`, color: showBefore ? I.text : I.muted }}>
                             <SplitSquareHorizontal className="h-3 w-3" />{showBefore ? 'Original' : 'B/A'}
                           </button>
                           <button onClick={() => { setImage(null); setImagePreview(null); setAdjustments({ ...DEFAULT_ADJ }); setSelectedPreset('none'); }}
