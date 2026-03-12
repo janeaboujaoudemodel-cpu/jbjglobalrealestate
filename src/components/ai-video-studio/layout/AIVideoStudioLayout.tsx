@@ -169,7 +169,7 @@ function AIVideoStudioLayout({
     return (
       <div className="flex flex-col min-h-screen" style={{ background: C.bgPrimary, color: C.textPrimary }}>
         {/* TopBar sticky */}
-        <div className="flex-shrink-0 sticky top-0 z-30" style={{ borderBottom: `1px solid ${C.borderSubtle}` }}>
+        <div className="flex-shrink-0 sticky top-0 lg:top-[48px] z-30" style={{ borderBottom: `1px solid ${C.borderSubtle}` }}>
           {topBar}
         </div>
 
@@ -218,7 +218,7 @@ function AIVideoStudioLayout({
     <div className="flex flex-col min-h-screen" style={{ background: C.bgPrimary, color: C.textPrimary }}>
 
       {/* Top Bar — sticky */}
-      <div className="flex-shrink-0 sticky top-0 z-30" style={{ borderBottom: `1px solid ${C.borderSubtle}` }}>
+      <div className="flex-shrink-0 sticky top-0 lg:top-[48px] z-30" style={{ borderBottom: `1px solid ${C.borderSubtle}` }}>
         {topBar}
       </div>
 

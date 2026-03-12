@@ -119,7 +119,7 @@ const CRMCalendar = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-zinc-200 bg-white sticky top-0 z-50">
+      <header className="border-b border-zinc-200 bg-white sticky top-0 lg:top-[48px] z-50">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link to="/crm">

@@ -194,7 +194,7 @@ export default function AIBrokerWorkspace() {
   return (
     <div className="min-h-screen bg-black">
       {/* Header */}
-      <header className="bg-black border-b border-zinc-800 sticky top-0 z-50">
+      <header className="bg-black border-b border-zinc-800 sticky top-0 lg:top-[48px] z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">

@@ -360,7 +360,7 @@ export default function VoiceStudioPro() {
       <audio ref={audioRef} onEnded={() => setIsPlaying(false)} onPause={() => setIsPlaying(false)} />
 
       {/* ── Header ── */}
-      <div className="border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6] backdrop-blur-sm sticky top-0 z-10">
+      <div className="border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6] backdrop-blur-sm sticky top-0 lg:top-[48px] z-10">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center gap-4">
           <Link to="/toolkit" className="text-black/60 hover:text-black transition-colors">
             <ChevronLeft className="h-5 w-5" />

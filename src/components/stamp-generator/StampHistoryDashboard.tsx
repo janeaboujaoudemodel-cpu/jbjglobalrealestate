@@ -171,7 +171,7 @@ export default function StampHistoryDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))]">
       {/* ── Header ── */}
-      <div className="sticky top-0 z-20 border-b border-[hsl(var(--border))] bg-white/90 backdrop-blur-sm">
+      <div className="sticky top-0 lg:top-[48px] z-20 border-b border-[hsl(var(--border))] bg-white/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center gap-3 flex-wrap">
           <Button variant="ghost" size="sm" className="gap-1.5 text-[hsl(var(--muted-foreground))]"
             onClick={() => navigate('/toolkit/stamp-generator/projects')}>

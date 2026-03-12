@@ -306,7 +306,7 @@ export default function StudioEditor() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-background/90 backdrop-blur-xl border-b border-gold/20">
+      <header className="sticky top-0 lg:top-[48px] z-50 bg-background/90 backdrop-blur-xl border-b border-gold/20">
         <div className="flex items-center justify-between px-6 py-4">
           <div className="flex items-center gap-4">
             <Link to="/studio" className="flex items-center gap-3">
