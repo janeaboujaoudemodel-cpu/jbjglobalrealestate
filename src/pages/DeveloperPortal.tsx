@@ -537,8 +537,8 @@ const DeveloperPortal = () => {
           )}
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <ScrollArea className="w-full">
-              <TabsList className="inline-flex w-auto min-w-full bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border-2 border-gold/30 rounded-xl h-14 gap-0.5 px-1">
+            <div className="w-full overflow-x-auto pb-1">
+              <TabsList className="inline-flex w-auto bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border-2 border-gold/30 rounded-xl h-14 gap-0.5 px-1.5 py-1.5">
                 <TabsTrigger value="projects" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
                   <FolderOpen className="w-3.5 h-3.5 mr-1 hidden md:block" />
                   Projects
