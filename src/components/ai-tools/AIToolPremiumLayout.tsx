@@ -126,21 +126,21 @@ const colorClasses: Record<string, { bg: string; border: string; text: string; g
 };
 
 const gradientClasses: Record<string, string> = {
-  emerald: "from-emerald-950/60 via-emerald-950/30 to-black",
-  purple: "from-purple-950/60 via-purple-950/30 to-black",
-  blue: "from-blue-950/60 via-blue-950/30 to-black",
-  teal: "from-teal-950/60 via-teal-950/30 to-black",
-  orange: "from-orange-950/60 via-orange-950/30 to-black",
-  indigo: "from-indigo-950/60 via-indigo-950/30 to-black",
-  rose: "from-rose-950/60 via-rose-950/30 to-black",
-  cyan: "from-cyan-950/60 via-cyan-950/30 to-black",
-  violet: "from-violet-950/60 via-violet-950/30 to-black",
-  amber: "from-amber-950/60 via-amber-950/30 to-black",
-  pink: "from-pink-950/60 via-pink-950/30 to-black",
-  red: "from-red-950/60 via-red-950/30 to-black",
-  lime: "from-lime-950/60 via-lime-950/30 to-black",
-  sky: "from-sky-950/60 via-sky-950/30 to-black",
-  gold: "from-gold/20 via-zinc-950 to-black",
+  emerald: "from-emerald-950/60 via-[#0D0C08] to-[#0D0C08]",
+  purple: "from-purple-950/60 via-[#0D0C08] to-[#0D0C08]",
+  blue: "from-blue-950/60 via-[#0D0C08] to-[#0D0C08]",
+  teal: "from-teal-950/60 via-[#0D0C08] to-[#0D0C08]",
+  orange: "from-orange-950/60 via-[#0D0C08] to-[#0D0C08]",
+  indigo: "from-indigo-950/60 via-[#0D0C08] to-[#0D0C08]",
+  rose: "from-rose-950/60 via-[#0D0C08] to-[#0D0C08]",
+  cyan: "from-cyan-950/60 via-[#0D0C08] to-[#0D0C08]",
+  violet: "from-violet-950/60 via-[#0D0C08] to-[#0D0C08]",
+  amber: "from-amber-950/60 via-[#0D0C08] to-[#0D0C08]",
+  pink: "from-pink-950/60 via-[#0D0C08] to-[#0D0C08]",
+  red: "from-red-950/60 via-[#0D0C08] to-[#0D0C08]",
+  lime: "from-lime-950/60 via-[#0D0C08] to-[#0D0C08]",
+  sky: "from-sky-950/60 via-[#0D0C08] to-[#0D0C08]",
+  gold: "from-gold/20 via-[#0D0C08] to-[#0D0C08]",
 };
 
 const fadeInUp = {
