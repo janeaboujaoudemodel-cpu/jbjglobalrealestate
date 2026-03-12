@@ -61,6 +61,10 @@ interface SalesRep {
   is_primary: boolean;
   is_active: boolean;
   notes: string | null;
+  nationality: string | null;
+  gender: string | null;
+  years_in_real_estate: number | null;
+  languages: string[] | null;
 }
 
 const AdminDevelopers = () => {
