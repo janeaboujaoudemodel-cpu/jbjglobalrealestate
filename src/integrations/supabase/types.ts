@@ -12894,6 +12894,48 @@ export type Database = {
         }
         Relationships: []
       }
+      launch_interest_registrations: {
+        Row: {
+          created_at: string
+          developer_name: string | null
+          event_id: string | null
+          event_title: string | null
+          id: string
+          interest_type: string
+          notes: string | null
+          user_email: string
+          user_id: string
+          user_name: string | null
+          user_phone: string | null
+        }
+        Insert: {
+          created_at?: string
+          developer_name?: string | null
+          event_id?: string | null
+          event_title?: string | null
+          id?: string
+          interest_type?: string
+          notes?: string | null
+          user_email: string
+          user_id: string
+          user_name?: string | null
+          user_phone?: string | null
+        }
+        Update: {
+          created_at?: string
+          developer_name?: string | null
+          event_id?: string | null
+          event_title?: string | null
+          id?: string
+          interest_type?: string
+          notes?: string | null
+          user_email?: string
+          user_id?: string
+          user_name?: string | null
+          user_phone?: string | null
+        }
+        Relationships: []
+      }
       launch_notifications: {
         Row: {
           commission_details: string | null
