@@ -130,12 +130,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
     runTest(true);
   };
 
-  const suggestedUrls = [
-    "https://providentestate.com/new-projects/sobha-seahaven/",
-    "https://providentestate.com/new-projects/emaar-the-oasis/",
-    "https://providentestate.com/new-projects/damac-lagoons/",
-    "https://providentestate.com/new-projects/sobha-hartland-ii/",
-  ];
+  const suggestedUrls: string[] = [];
 
   const formatPrice = (price: number | null) => {
     if (!price) return "N/A";
