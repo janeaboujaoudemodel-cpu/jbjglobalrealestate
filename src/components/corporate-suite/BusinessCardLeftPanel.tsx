@@ -49,8 +49,8 @@ interface BusinessCardLeftPanelProps {
   setBilingualOpen: (v: boolean) => void;
   bilingualMode: BilingualMode;
   setBilingualMode: (v: BilingualMode) => void;
-  bilingualLang: string;
-  setBilingualLang: (v: string) => void;
+  bilingualLang: BilingualLanguage;
+  setBilingualLang: (v: BilingualLanguage) => void;
   bilingualDir: "ltr" | "rtl";
   secondaryData: CardData;
   setSecondaryData: React.Dispatch<React.SetStateAction<CardData>>;
