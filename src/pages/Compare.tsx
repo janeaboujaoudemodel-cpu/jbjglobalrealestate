@@ -867,32 +867,23 @@ const Compare = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {aiAnalysis.ratings.map((rating, index) => (
                     <div key={index} className="bg-zinc-900 rounded-xl border border-zinc-800 p-5">
-                      <div className="flex justify-between items-start mb-4">
+                      <div className="flex justify-between items-start mb-3">
                         <h4 className="text-white font-semibold">{rating.projectName}</h4>
-                        <div className="text-2xl">{renderStars(rating.overallRating)}</div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-2xl font-bold" style={{ color: '#B8943E' }}>{toScore(rating.overallRating)}</span>
+                          <span className="text-zinc-500 text-xs">/10</span>
+                        </div>
                       </div>
                       
-                      <div className="grid grid-cols-5 gap-2 mb-4">
-                        <div className="text-center">
-                          <div className="text-xs text-zinc-500 mb-1">Location</div>
-                          <div className="text-gold text-sm">{renderStars(rating.locationRating)}</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="text-xs text-zinc-500 mb-1">Value</div>
-                          <div className="text-gold text-sm">{renderStars(rating.valueRating)}</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="text-xs text-zinc-500 mb-1">Amenities</div>
-                          <div className="text-gold text-sm">{renderStars(rating.amenitiesRating)}</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="text-xs text-zinc-500 mb-1">Invest</div>
-                          <div className="text-gold text-sm">{renderStars(rating.investmentRating)}</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="text-xs text-zinc-500 mb-1">Developer</div>
-                          <div className="text-gold text-sm">{renderStars(rating.developerRating)}</div>
-                        </div>
+                      <div className="text-sm mb-3">{renderStars(rating.overallRating)}</div>
+
+                      {/* Score bars */}
+                      <div className="space-y-1.5 mb-4">
+                        {renderScoreBar(rating.locationRating, 'Location')}
+                        {renderScoreBar(rating.valueRating, 'Value')}
+                        {renderScoreBar(rating.amenitiesRating, 'Amenities')}
+                        {renderScoreBar(rating.investmentRating, 'Investment')}
+                        {renderScoreBar(rating.developerRating, 'Developer')}
                       </div>
 
                       <div className="grid grid-cols-2 gap-3">
