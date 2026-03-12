@@ -635,9 +635,8 @@ const DeveloperPortal = () => {
         .maybeSingle();
       if (bp) return { isBroker: true };
       const { data: emp } = await (supabase.from('hr_employees') as any)
-        .select('id, status')
+        .select('id')
         .eq('user_id', user.id)
-        .eq('status', 'active')
         .maybeSingle();
       if (emp) return { isBroker: true };
       return { isBroker: false };
