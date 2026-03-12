@@ -121,6 +121,81 @@ const DeveloperPortal = () => {
     enabled: !!user,
   });
 
+  // Profile editing
+  const [editingProfile, setEditingProfile] = useState(false);
+  const [savingProfile, setSavingProfile] = useState(false);
+  const [editForm, setEditForm] = useState({
+    full_name: '', position: '', email: '', phone: '', developer_name: '', nationality: '',
+  });
+
+  const handleStartEditProfile = () => {
+    if (repProfile) {
+      setEditForm({
+        full_name: repProfile.full_name || '',
+        position: (repProfile as any).position || '',
+        email: repProfile.email || '',
+        phone: (repProfile as any).phone || '',
+        developer_name: repProfile.developer_name || '',
+        nationality: (repProfile as any).nationality || '',
+      });
+      setEditingProfile(true);
+    }
+  };
+
+  const handleSaveProfile = async () => {
+    if (!user || !repProfile) return;
+    if (!editForm.full_name || !editForm.email) {
+      toast.error('Name and email are required');
+      return;
+    }
+    setSavingProfile(true);
+    try {
+      // Detect changed fields
+      const changedFields: string[] = [];
+      if (editForm.full_name !== repProfile.full_name) changedFields.push('full_name');
+      if (editForm.email !== repProfile.email) changedFields.push('email');
+      if (editForm.phone !== ((repProfile as any).phone || '')) changedFields.push('phone');
+      if (editForm.position !== ((repProfile as any).position || '')) changedFields.push('position');
+      if (editForm.developer_name !== repProfile.developer_name) changedFields.push('developer_name');
+      if (editForm.nationality !== ((repProfile as any).nationality || '')) changedFields.push('nationality');
+
+      const { error } = await supabase
+        .from('developer_representatives')
+        .update({
+          full_name: editForm.full_name,
+          position: editForm.position || null,
+          email: editForm.email,
+          phone: editForm.phone || null,
+          developer_name: editForm.developer_name,
+          nationality: editForm.nationality || null,
+        } as any)
+        .eq('id', repProfile.id);
+      if (error) throw error;
+
+      // Notify owner about profile update
+      if (changedFields.length > 0) {
+        try {
+          await supabase.from('admin_tasks').insert({
+            user_id: '4944592b-93f1-4e05-ab59-4ebe1fee54f1',
+            title: `Profile Update: ${editForm.full_name}`,
+            description: `Rep "${editForm.full_name}" (${editForm.developer_name}) updated their profile. Changed fields: ${changedFields.join(', ')}.`,
+            category: 'rep_profile_update',
+            priority: 'medium',
+            status: 'pending',
+          } as any);
+        } catch {}
+      }
+
+      toast.success('Profile updated successfully');
+      setEditingProfile(false);
+      refetchRep();
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to update profile');
+    } finally {
+      setSavingProfile(false);
+    }
+  };
+
   // Session-based multi-project
   const [currentProject, setCurrentProject] = useState<ProjectSession>(emptyProject());
   const [uploadingFiles, setUploadingFiles] = useState(false);
