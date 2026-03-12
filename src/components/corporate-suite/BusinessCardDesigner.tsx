@@ -2482,6 +2482,10 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                       fontWeight={cardFontBold ? "bold" : undefined}
                       fontStyle={cardFontItalic ? "italic" : undefined}
                       nameFontSize={cardFontSize}
+                      bilingualMode={bilingualMode}
+                      bilingualDir={bilingualDir}
+                      secondaryData={secondaryData}
+                      onInlineEdit={(field) => setInlineEditField(field)}
                     />
                   </motion.div>
                 </AnimatePresence>
