@@ -259,7 +259,7 @@ export default function StampProjectWizard() {
         show_license_number: form.show_license_number,
         show_location: form.show_location,
         business_type: form.business_type || null,
-      } as any)
+      })
       .select()
       .single();
     setSaving(false);

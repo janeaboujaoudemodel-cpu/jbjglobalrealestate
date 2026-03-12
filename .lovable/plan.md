@@ -1,94 +1,72 @@
 
+## CRM System Upgrade — Implementation Status
 
-## Plan: Stamp Generator Full Upgrade — Deploy, Fix, Interactive Edit
+### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-### Confirmed Choices
-- Deploy scope: All functions
-- Live editing: Wizard + Generate Studio
-- Default preset: Corporate Official Blue
+#### Task 1: Full System Audit ✅
+- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
+- Identified 10 weaknesses (documented in plan)
 
----
+#### Task 2: Leads Security Hardening ✅
+- CSV export no longer includes email/phone PII
+- Audit logging added to exports with user_agent tracking
+- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
 
-### Phase 1: Deploy All Edge Functions
+#### Task 3: Encryption Hardening ✅
+- CSV export stripped of `email_lower` and `phone_e164` fields
+- Export audit logged to both `crm_audit_logs` and `audit_logs`
 
-Deploy `ai-stamp-generator`, `ai-stamp-extract`, and `document-ocr` (plus all others). Update `ai-stamp-extract` to also extract `business_type` from trade licenses. Update `ai-stamp-generator` to use `border_style` in SVG generation.
+#### Task 4: Lead Lifecycle Upgrade ✅
+- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
+- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
+- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
 
-### Phase 2: Fix Core Bugs
+#### Task 5: CRM Structure Upgrade ✅
+- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
+- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
+- KanbanPipeline expanded to show all 17 relevant stages
 
-**Border style not reflecting**: Both `stampTemplates.ts` (client) and `ai-stamp-generator` edge function generate SVGs that **ignore** `project.border_style`. Every template uses hardcoded circle strokes. Fix: pass `border_style` into each template and apply correct stroke-dasharray and ring count:
-- SINGLE: one solid ring
-- DOUBLE: two solid rings
-- RING: thick outer + inner ring  
-- DOTTED: dotted stroke-dasharray
-- ROPE: dashed stroke-dasharray
-- CUSTOM: solid outer + dotted inner
+#### Task 6: Performance Optimization ✅
+- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
+- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
+- `crm_leads_updated_at_trigger` auto-updates `updated_at`
 
-The `LiveStampPreview.tsx` already handles border_style correctly — the issue is only in the generated concept templates.
+#### Task 7: AI Intelligence Integration ✅
+- New edge function `ai-lead-intelligence` using Lovable AI gateway
+- Supports 3 modes: `score`, `summary`, `next_action`
+- Tool-calling for structured scoring output
+- JWT auth + CRM role validation
+- PII sanitized before sending to AI
 
-**Typography not reflecting**: The `stampTemplates.ts` hardcodes `fontMap` with only 4 entries (SERIF/SANS/MONOSPACE/CALLIGRAPHY). Add GOTHIC and ARABIC_MODERN entries. The edge function `buildSVG` has the same 4-entry fontMap — expand it.
+#### Task 8: Workflow Automation ✅
+- Created `crm_automation_rules` table with RLS (owner manage, admin view)
+- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
 
-**"Failed to create project"**: The DB constraint is already expanded (migration ran). The remaining issue is the `as any` cast in the insert. Remove it since the types now include the new columns.
+#### Task 10: Role & Permission System ✅
+- RLS on automation rules: owner CRUD, admin read-only
+- CSV export restricted to owner_admin/founder roles
 
-**Low-quality logo**: The `LiveStampPreview` renders logos at `innerRx * 0.6` (≈60px). Increase to `innerRx * 0.85` and use `image-rendering: optimizeQuality`. In the wizard, render at full data URL resolution.
+#### Task 12: Backend/Database Upgrade ✅
+- 3 new performance indexes
+- Auto-updated_at trigger on crm_leads
+- Duplicate hash computation trigger
+- Rate-limiting security function
 
-### Phase 3: Interactive On-Canvas Editing (Wizard + Generate)
+#### Task 13: Data Cleanliness ✅
+- `duplicate_hash` with auto-compute trigger prevents future duplicates
+- Partial unique index enforces uniqueness at DB level
 
-**Wizard LiveStampPreview**: Add click-to-select layers. When a text arc or monogram is clicked, highlight it and show inline controls (resize slider, delete, move toggle). Use SVG pointer events on each `<text>` and `<image>` element.
-
-Implementation approach:
-- Wrap `LiveStampPreview` SVG output in an interactive container
-- Create `InteractiveStampCanvas` component that:
-  - Renders the SVG with unique IDs per element
-  - Overlays transparent hit-target rects on each text/image element
-  - On click: selects layer, shows resize handles
-  - On drag: moves selected element (updates form state)
-  - Resize handles for logo/monogram (updates size in form)
-  - Delete button removes layer
-  - Lock/unlock toggle per layer
-- Add undo/redo history stack (array of form snapshots)
-- Add toolbar: undo, redo, reset, save draft
-
-**Generate Studio (StampGeneratorPage)**: The generated SVGs from templates already go through `StampSVGRenderer`. Add the same interactive canvas overlay on the selected concept. Allow clicking text arcs to edit inline, dragging monogram to reposition, resizing logo.
-
-### Phase 4: Remove "AI" from Labels
-
-Scan and replace in:
-- `StampProjectsDashboard.tsx`: "AI-generated" → "professionally generated"
-- `StampGeneratorPage.tsx`: "AI Designer" button → "Smart Designer", "AI Stamp Designer" → "Stamp Designer"
-- `StampLicenseUploader.tsx`: Already uses "Smart Auto-Fill" (done in previous edit)
-- `StampGeneratorLanding` (pages/toolkit): Remove "AI" from step descriptions
-- Navigation labels: "AI Stamp Generator" → "Stamp Generator" in mega menu, corporate suite, registry
-
-### Phase 5: Corporate Blue Default + Business Type
-
-- Default `primaryColor` to `#1B3A8C` (already done in LiveStampPreview)
-- In `StampGeneratorPage`, default palette preset to "Ink Blue (Standard)" 
-- Update `ai-stamp-extract` prompt to also extract `business_type` (Real Estate, General Trading, etc.)
-- Auto-apply business_type to form when extracted
-- Show business type badge on stamp preview
-
-### Files to Modify
-
-| File | Changes |
-|---|---|
-| `src/lib/stampTemplates.ts` | Add GOTHIC+ARABIC_MODERN to fontMap, pass border_style into each template SVG, increase logo render size |
-| `src/components/stamp-generator/LiveStampPreview.tsx` | Add interactive layer selection, drag, resize, delete, lock. Increase logo quality. Add undo/redo. |
-| `src/components/stamp-generator/StampProjectWizard.tsx` | Wire interactive canvas, add undo/redo/reset toolbar, remove `as any` cast |
-| `src/components/stamp-generator/StampGeneratorPage.tsx` | Remove "AI" labels, add interactive editing on selected concept, wire undo/redo |
-| `src/components/stamp-generator/StampProjectsDashboard.tsx` | Remove "AI" wording |
-| `src/pages/toolkit/StampGeneratorPage.tsx` | Remove "AI" from landing page text |
-| `src/components/header/MegaMenuToolkit.tsx` | "AI Stamp Generator" → "Stamp Generator" |
-| `src/config/royalToolsRegistry.ts` | Remove "AI" from stamp tool name |
-| `supabase/functions/ai-stamp-generator/index.ts` | Expand fontMap, apply border_style in buildSVG, improve bilingual template |
-| `supabase/functions/ai-stamp-extract/index.ts` | Add business_type extraction to prompt |
-
-### Technical Details
-
-**Interactive canvas architecture**: Rather than rebuilding SVG rendering, overlay transparent hit-target elements positioned via the same coordinate math as the SVG. Each layer gets a CSS pointer-events overlay. Selected layer gets a dashed highlight border. Drag uses pointer events (same pattern as `CollapsedChatButton.tsx`). Position deltas stored in `layout_json` column.
-
-**Border style in templates**: Each template's `buildSVG` switch case currently hardcodes stroke attributes. Add a `borderAttrs` helper that returns `{ strokeDasharray, outerWidth, innerRing }` based on the border_style value, then apply those to each template's outer/inner rings.
-
-**Undo/redo**: Store form state snapshots in a ref array. Push on each meaningful change (debounced 300ms). Max 50 entries.
-
-**Edge function deployment**: All functions deployed automatically on save. No manual steps needed.
-
+### Files Changed
+| File | Action |
+|------|--------|
+| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
+| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
+| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
+| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
+| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
+| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
+| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
+| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
+| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |

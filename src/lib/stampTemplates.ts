@@ -19,7 +19,7 @@ export interface StampProject {
   icon_style: 'NONE' | 'MONOGRAM' | 'SIMPLE_ICON' | 'UPLOADED_LOGO';
   monogram_text?: string;
   border_style: 'SINGLE' | 'DOUBLE' | 'RING' | 'DOTTED' | 'ROPE' | 'CUSTOM';
-  typography_style: 'SERIF' | 'SANS' | 'MONOSPACE' | 'CALLIGRAPHY';
+  typography_style: 'SERIF' | 'SANS' | 'MONOSPACE' | 'CALLIGRAPHY' | 'GOTHIC' | 'ARABIC_MODERN';
   density: number;
 }
 
@@ -32,11 +32,13 @@ export interface StampDesignConcept {
   isFavorite?: boolean;
 }
 
-const fontMap = {
+const fontMap: Record<string, string> = {
   SERIF: 'Georgia, "Times New Roman", serif',
   SANS: 'Arial, Helvetica, sans-serif',
   MONOSPACE: '"Courier New", monospace',
   CALLIGRAPHY: '"Palatino Linotype", "Book Antiqua", Palatino, serif',
+  GOTHIC: '"Copperplate Gothic", Copperplate, "Small Caps", serif',
+  ARABIC_MODERN: '"Arabic Typesetting", "Noto Naskh Arabic", serif',
 };
 
 const arabicFont = '"Noto Naskh Arabic", "Arabic Typesetting", Arial, sans-serif';
@@ -147,7 +149,7 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
   const W = 320, H = 320;
   const cx = W / 2, cy = H / 2;
   const R = 116;
-  const font = fontMap[project.typography_style];
+  const font = fontMap[project.typography_style] || fontMap.SERIF;
 
   const name = project.company_name.toUpperCase().trim();
   const arabicName = (project.arabic_company_name || '').trim();

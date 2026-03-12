@@ -476,7 +476,7 @@ export default function StampGeneratorPage() {
               <Layers size={12}/> Gallery
             </Button>
             <Button variant="outline" size="sm" onClick={() => setChatOpen(v => !v)} className="gap-1 text-xs">
-              <MessageSquare size={12}/> AI Designer
+              <MessageSquare size={12}/> Smart Designer
             </Button>
             <Button variant="outline" size="sm" onClick={() => generateConcepts()} disabled={generating} className="gap-1 text-xs">
               <RefreshCw size={12} className={generating ? 'animate-spin' : ''}/>
@@ -898,8 +898,8 @@ export default function StampGeneratorPage() {
               >
                 <div className="flex items-center gap-2">
                   <Upload size={13} className="text-[hsl(var(--gold))]"/>
-                  <span className="text-xs font-medium text-[hsl(var(--foreground))]">AI Auto-Fill from License</span>
-                  <Badge className="text-[9px] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))] border border-[hsl(var(--gold)/0.3)]">Fast AI</Badge>
+                   <span className="text-xs font-medium text-[hsl(var(--foreground))]">Smart Auto-Fill from License</span>
+                   <Badge className="text-[9px] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))] border border-[hsl(var(--gold)/0.3)]">Smart</Badge>
                 </div>
                 <ChevronDown size={13} className={`text-[hsl(var(--muted-foreground))] transition-transform ${licenseOpen ? 'rotate-180' : ''}`}/>
               </button>
@@ -947,7 +947,7 @@ export default function StampGeneratorPage() {
               >
                 <div className="flex items-center gap-2">
                   <Upload size={14} className="text-[hsl(var(--gold))]"/>
-                  <span className="text-sm font-medium text-[hsl(var(--foreground))]">AI Auto-Fill from Trade License</span>
+                  <span className="text-sm font-medium text-[hsl(var(--foreground))]">Smart Auto-Fill from Trade License</span>
                 </div>
                 <ChevronDown size={14} className={`text-[hsl(var(--muted-foreground))] transition-transform ${licenseOpen ? 'rotate-180' : ''}`}/>
               </button>
@@ -1108,7 +1108,7 @@ export default function StampGeneratorPage() {
           >
             <div className="flex items-center gap-2">
               <Sparkles size={15} className="text-white"/>
-              <span className="font-bold text-sm text-white">AI Stamp Designer</span>
+              <span className="font-bold text-sm text-white">Smart Stamp Designer</span>
               <span className="text-white/60 text-[10px]">drag to move</span>
             </div>
             <div className="flex items-center gap-1.5">

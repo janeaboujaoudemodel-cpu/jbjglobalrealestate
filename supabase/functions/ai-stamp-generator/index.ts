@@ -23,6 +23,8 @@ const fontMap: Record<string, string> = {
   SANS: 'Arial, Helvetica, sans-serif',
   MONOSPACE: '"Courier New", monospace',
   CALLIGRAPHY: '"Palatino Linotype", "Book Antiqua", serif',
+  GOTHIC: '"Copperplate Gothic", Copperplate, "Small Caps", serif',
+  ARABIC_MODERN: '"Arabic Typesetting", "Noto Naskh Arabic", serif',
 };
 
 const arabicFont = 'Arial, "Noto Naskh Arabic", sans-serif';
@@ -81,6 +83,19 @@ function monogram(cx: number, cy: number, text: string, font: string, size: numb
   return `<text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" font-family="${font}" font-size="${size}" font-weight="bold" fill="${color}">${text.toUpperCase().slice(0, 3)}</text>`;
 }
 
+/** Get border stroke attributes based on border_style */
+function borderAttrs(borderStyle: string): { dash: string; outerWidth: number; innerRing: boolean; innerDash: string; innerWidth: number } {
+  switch (borderStyle) {
+    case 'SINGLE': return { dash: 'none', outerWidth: 2.2, innerRing: false, innerDash: 'none', innerWidth: 0 };
+    case 'DOUBLE': return { dash: 'none', outerWidth: 2.2, innerRing: true, innerDash: 'none', innerWidth: 0.8 };
+    case 'RING': return { dash: 'none', outerWidth: 3.5, innerRing: true, innerDash: 'none', innerWidth: 2 };
+    case 'DOTTED': return { dash: '2,2', outerWidth: 2, innerRing: false, innerDash: 'none', innerWidth: 0 };
+    case 'ROPE': return { dash: '5,3', outerWidth: 2.5, innerRing: false, innerDash: 'none', innerWidth: 0 };
+    case 'CUSTOM': return { dash: 'none', outerWidth: 2.2, innerRing: true, innerDash: '2,4', innerWidth: 0.6 };
+    default: return { dash: 'none', outerWidth: 2.2, innerRing: true, innerDash: 'none', innerWidth: 0.8 };
+  }
+}
+
 function buildSVG(project: any, templateKey: string): string {
   const COLOR = "#1a2744";
   const cx = 150, cy = 150;
@@ -98,14 +113,15 @@ function buildSVG(project: any, templateKey: string): string {
   const regNo = project.registration_number_optional ? `REG: ${project.registration_number_optional}` : "";
   const hasMono = project.icon_style === 'MONOGRAM';
   const isBilingual = project.language_mode === 'BILINGUAL' || project.language_mode === 'AR';
+  const ba = borderAttrs(project.border_style || 'DOUBLE');
 
   switch (templateKey) {
     case "classic-double": {
       const innerR = R - 10, ringR = R - 5;
       const nameFontSize = autoFontSize(name, 10, 20);
       return `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${COLOR}" stroke-width="2.2"/>
-        <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${COLOR}" stroke-width="0.8"/>
+        <circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${COLOR}" stroke-width="${ba.outerWidth}" stroke-dasharray="${ba.dash}"/>
+        ${ba.innerRing ? `<circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${COLOR}" stroke-width="${ba.innerWidth}" stroke-dasharray="${ba.innerDash}"/>` : ''}
         ${ringText('cp1t', cx, cy, ringR, `✦  ${name}  ✦`, font, 8.5, COLOR, '25%')}
         ${bottomArcText('cp1b', cx, cy, ringR, city, font, 8, COLOR)}
         ${hasMono ? monogram(cx, cy - 8, mono, font, 44, COLOR) : ''}
@@ -122,7 +138,8 @@ function buildSVG(project: any, templateKey: string): string {
       const r = R - 8, innerPad = 22;
       const nameFontSize = autoFontSize(name, 11, 20);
       return `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${COLOR}" stroke-width="1.5"/>
+        <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${COLOR}" stroke-width="${ba.outerWidth}" stroke-dasharray="${ba.dash}"/>
+        ${ba.innerRing ? `<circle cx="${cx}" cy="${cy}" r="${r - 6}" fill="none" stroke="${COLOR}" stroke-width="${ba.innerWidth}" stroke-dasharray="${ba.innerDash}"/>` : ''}
         <line x1="${cx - r + innerPad}" y1="${cy - 22}" x2="${cx + r - innerPad}" y2="${cy - 22}" stroke="${COLOR}" stroke-width="0.7"/>
         <line x1="${cx - r + innerPad}" y1="${cy + 22}" x2="${cx + r - innerPad}" y2="${cy + 22}" stroke="${COLOR}" stroke-width="0.7"/>
         ${hasMono ? monogram(cx, cy - 50, mono, font, 30, COLOR) : ''}
@@ -135,7 +152,7 @@ function buildSVG(project: any, templateKey: string): string {
       const r1 = R, r2 = R - 13, r3 = R - 18, ringR = R - 7;
       const nameFontSize = autoFontSize(name, 10, 18);
       return `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="${cx}" cy="${cy}" r="${r1}" fill="none" stroke="${COLOR}" stroke-width="2.8"/>
+        <circle cx="${cx}" cy="${cy}" r="${r1}" fill="none" stroke="${COLOR}" stroke-width="${ba.outerWidth}" stroke-dasharray="${ba.dash}"/>
         <circle cx="${cx}" cy="${cy}" r="${r2}" fill="none" stroke="${COLOR}" stroke-width="0.5"/>
         <circle cx="${cx}" cy="${cy}" r="${r3}" fill="none" stroke="${COLOR}" stroke-width="1.2"/>
         ${ringText('cp3', cx, cy, ringR, `★  ${name}  ★  ${city}  ★`, font, 7.5, COLOR, '50%')}
@@ -150,8 +167,8 @@ function buildSVG(project: any, templateKey: string): string {
       const x1 = cx - rw, y1 = cy - rh;
       const nameFontSize = autoFontSize(name, 11, 22);
       return `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
-        <rect x="${x1}" y="${y1}" width="${rw * 2}" height="${rh * 2}" rx="4" fill="none" stroke="${COLOR}" stroke-width="3"/>
-        <rect x="${x1 + 5}" y="${y1 + 5}" width="${rw * 2 - 10}" height="${rh * 2 - 10}" rx="2" fill="none" stroke="${COLOR}" stroke-width="0.8"/>
+        <rect x="${x1}" y="${y1}" width="${rw * 2}" height="${rh * 2}" rx="4" fill="none" stroke="${COLOR}" stroke-width="${ba.outerWidth}" stroke-dasharray="${ba.dash}"/>
+        ${ba.innerRing ? `<rect x="${x1 + 5}" y="${y1 + 5}" width="${rw * 2 - 10}" height="${rh * 2 - 10}" rx="2" fill="none" stroke="${COLOR}" stroke-width="${ba.innerWidth}" stroke-dasharray="${ba.innerDash}"/>` : ''}
         <text x="${cx}" y="${y1 + 26}" text-anchor="middle" font-family="${font}" font-size="8.5" fill="${COLOR}" letter-spacing="4">${city}</text>
         <line x1="${x1 + 14}" y1="${y1 + 34}" x2="${x1 + rw * 2 - 14}" y2="${y1 + 34}" stroke="${COLOR}" stroke-width="0.7"/>
         ${wrapText(name, cx, cy, font, nameFontSize, COLOR, 2)}
@@ -164,7 +181,7 @@ function buildSVG(project: any, templateKey: string): string {
       const r = R, innerR = R - 18, ringR = R - 5;
       const nameFontSize = autoFontSize(name, 9.5, 18);
       return `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${COLOR}" stroke-width="2"/>
+        <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${COLOR}" stroke-width="${ba.outerWidth}" stroke-dasharray="${ba.dash}"/>
         <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${COLOR}" stroke-width="0.6" stroke-dasharray="3,2.5"/>
         ${ringText('cp5', cx, cy, ringR, `⬥  ${name}  ⬥  ${city}  ⬥`, font, 8, COLOR, '50%')}
         ${hasMono ? monogram(cx, cy - 6, mono, font, 40, COLOR) : wrapText(name, cx, cy - 6, font, nameFontSize, COLOR, 1.5)}
@@ -179,8 +196,8 @@ function buildSVG(project: any, templateKey: string): string {
       const enFontSize = autoFontSize(name, 9.5, 22);
       const arFontSize = autoFontSize(displayArabic, 11, 16);
       return `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${COLOR}" stroke-width="2.2"/>
-        <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${COLOR}" stroke-width="0.7"/>
+        <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${COLOR}" stroke-width="${ba.outerWidth}" stroke-dasharray="${ba.dash}"/>
+        ${ba.innerRing ? `<circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${COLOR}" stroke-width="${ba.innerWidth}" stroke-dasharray="${ba.innerDash}"/>` : ''}
         <line x1="${cx - 55}" y1="${cy}" x2="${cx + 55}" y2="${cy}" stroke="${COLOR}" stroke-width="1"/>
         <text x="${cx}" y="${cy - 28}" text-anchor="middle" font-family="${font}" font-size="${enFontSize}" font-weight="bold" fill="${COLOR}">${name}</text>
         <text x="${cx}" y="${cy - 14}" text-anchor="middle" font-family="${font}" font-size="7.5" fill="${COLOR}" letter-spacing="2">${city}</text>
@@ -194,8 +211,9 @@ function buildSVG(project: any, templateKey: string): string {
       const r = R - 6;
       const nameFontSize = autoFontSize(name, 10, 20);
       return `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${COLOR}" stroke-width="1.8"/>
-        <circle cx="${cx}" cy="${cy}" r="${r - 6}" fill="none" stroke="${COLOR}" stroke-width="0.5"/>
+        <!-- Border style applied -->
+        <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${COLOR}" stroke-width="${ba.outerWidth}" stroke-dasharray="${ba.dash}"/>
+        ${ba.innerRing ? `<circle cx="${cx}" cy="${cy}" r="${r - 6}" fill="none" stroke="${COLOR}" stroke-width="${ba.innerWidth}" stroke-dasharray="${ba.innerDash}"/>` : `<circle cx="${cx}" cy="${cy}" r="${r - 6}" fill="none" stroke="${COLOR}" stroke-width="0.5"/>`}
         ${hasMono
           ? `<rect x="${cx - 36}" y="${cy - 36}" width="72" height="72" fill="none" stroke="${COLOR}" stroke-width="1" transform="rotate(45, ${cx}, ${cy})"/>
              ${monogram(cx, cy - 2, mono, font, 28, COLOR)}`
@@ -209,8 +227,8 @@ function buildSVG(project: any, templateKey: string): string {
       const s = 100;
       const nameFontSize = autoFontSize(name, 10, 20);
       return `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
-        <rect x="${cx - s}" y="${cy - s}" width="${s * 2}" height="${s * 2}" rx="3" fill="none" stroke="${COLOR}" stroke-width="2.5"/>
-        <rect x="${cx - s + 6}" y="${cy - s + 6}" width="${s * 2 - 12}" height="${s * 2 - 12}" rx="2" fill="none" stroke="${COLOR}" stroke-width="0.8"/>
+        <rect x="${cx - s}" y="${cy - s}" width="${s * 2}" height="${s * 2}" rx="3" fill="none" stroke="${COLOR}" stroke-width="${ba.outerWidth}" stroke-dasharray="${ba.dash}"/>
+        ${ba.innerRing ? `<rect x="${cx - s + 6}" y="${cy - s + 6}" width="${s * 2 - 12}" height="${s * 2 - 12}" rx="2" fill="none" stroke="${COLOR}" stroke-width="${ba.innerWidth}" stroke-dasharray="${ba.innerDash}"/>` : ''}
         ${hasMono ? monogram(cx, cy - 22, mono, font, 42, COLOR) : ''}
         ${wrapText(name, cx, cy + (hasMono ? 18 : 0), font, nameFontSize, COLOR, 1.5)}
         <text x="${cx}" y="${cy + (hasMono ? 38 : 18)}" text-anchor="middle" font-family="${font}" font-size="7.5" fill="${COLOR}" letter-spacing="3">${city}</text>

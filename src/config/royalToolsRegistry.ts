@@ -380,13 +380,13 @@ export const aiContentTools: ToolDefinition[] = [
 export const productivityTools: ToolDefinition[] = [
   {
     id: 'stamp-generator',
-    name: 'AI Company Stamp Generator',
-    description: 'Create professional company seals and office stamps with AI. Export SVG, PNG, JPG & PDF in multiple sizes.',
+    name: 'Company Stamp Generator',
+    description: 'Create professional company seals and office stamps. Export SVG, PNG, JPG & PDF in multiple sizes.',
     href: '/toolkit/stamp-generator',
     icon: Shield,
     category: 'productivity',
     status: 'active',
-    tags: ['Stamp', 'AI', 'Branding', 'Export'],
+    tags: ['Stamp', 'Branding', 'Export'],
     isNew: true,
   },
   {
