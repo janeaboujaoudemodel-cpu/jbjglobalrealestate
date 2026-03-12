@@ -103,6 +103,7 @@ const LandlordListForm = () => {
       );
 
       if (success) {
+        localStorage.removeItem(DRAFT_KEY);
         navigate("/thank-you?type=landlord");
       } else {
         toast.error("Something went wrong. Please try again.");
