@@ -65,11 +65,19 @@ function loadItems(): RecentItem[] {
     const parsed = raw ? JSON.parse(raw) : [];
     if (!Array.isArray(parsed)) return [];
 
-    return parsed
+    const normalized = parsed
       .map(normalizeItem)
       .filter((item): item is RecentItem => item !== null)
-      .sort((a, b) => b.viewedAt - a.viewedAt)
-      .slice(0, MAX_TOTAL);
+      .sort((a, b) => b.viewedAt - a.viewedAt);
+
+    // Deduplicate by type+slug (keep most recent)
+    const seen = new Set<string>();
+    return normalized.filter((item) => {
+      const key = `${item.type}-${item.slug}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    }).slice(0, MAX_TOTAL);
   } catch {
     return [];
   }
@@ -108,7 +116,10 @@ export function useRecentSearches(filterType?: RecentItemType) {
     if (!normalized) return;
 
     setItems((prev) => {
-      const filtered = prev.filter((i) => !(i.id === normalized.id && i.type === normalized.type));
+      const filtered = prev.filter((i) => !(
+        (i.id === normalized.id && i.type === normalized.type) ||
+        (i.slug === normalized.slug && i.type === normalized.type)
+      ));
       const updated: RecentItem[] = [normalized, ...filtered];
 
       // Cap per type
