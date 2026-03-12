@@ -1,4 +1,5 @@
 import DOMPurify from 'dompurify';
+import { sanitizeForDisplay, sanitizeHtml } from '@/utils/contentSanitizer';
 
 /**
  * Strip social media hashtags from text
