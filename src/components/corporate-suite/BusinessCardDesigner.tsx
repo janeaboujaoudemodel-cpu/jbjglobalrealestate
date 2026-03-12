@@ -2667,6 +2667,7 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
               {qrEnabled && <span>· QR on both sides</span>}
               {logoUrl && <span>· Logo on both sides</span>}
               {bilingualMode !== "off" && <span>· Bilingual ({BILINGUAL_LANGUAGES.find(l => l.id === bilingualLang)?.label?.split(" ")[0]})</span>}
+              {finishEffect !== "none" && <span>· {finishEffect.charAt(0).toUpperCase() + finishEffect.slice(1)} finish</span>}
             </div>
 
             {/* Digital mode tabs + landing page editor + export */}
