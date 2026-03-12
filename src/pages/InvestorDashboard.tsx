@@ -301,7 +301,7 @@ export default function InvestorDashboard() {
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
-          className="space-y-8"
+          className="space-y-6"
         >
           {/* HERO / HEADER BLOCK */}
           <motion.div variants={fadeInUp}>
@@ -342,7 +342,7 @@ export default function InvestorDashboard() {
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="secondary" className="gap-2">
-                        <span className="hidden sm:inline">{profile?.full_name || user?.email?.split('@')[0]}</span>
+                        <span className="hidden sm:inline truncate max-w-[160px]">{profile?.full_name || user?.email?.split('@')[0]}</span>
                         <ChevronDown className="w-4 h-4" />
                       </Button>
                     </DropdownMenuTrigger>
@@ -798,16 +798,15 @@ export default function InvestorDashboard() {
 
           {/* Footer CTA Strip */}
           <motion.div variants={fadeInUp}>
-            <Card className="border-2 border-gold/30 bg-gradient-to-br from-zinc-900/95 via-zinc-900/90 to-black">
-              <CardContent className="p-6 md:p-8">
+            <div className="border-2 border-gold/40 bg-gradient-to-r from-[#1a1a1a] via-[#222] to-[#1a1a1a] p-6 md:p-8 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
                 <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                   <div className="text-center md:text-left">
-                    <h3 className="text-xl font-semibold text-white mb-2 flex items-center gap-2 justify-center md:justify-start">
+                    <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2 justify-center md:justify-start uppercase tracking-wider">
                       <HelpCircle className="w-5 h-5 text-gold" />
                       Need Assistance?
                     </h3>
-                    <p className="text-zinc-400">
-                      Our investment advisors are here to help with your portfolio.
+                    <p className="text-zinc-400 text-sm">
+                      Our investment advisors are here to help with your portfolio, reports, and strategy.
                     </p>
                   </div>
                   <div className="flex flex-wrap gap-3">
@@ -824,8 +823,7 @@ export default function InvestorDashboard() {
                     </a>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+            </div>
           </motion.div>
 
         </motion.div>

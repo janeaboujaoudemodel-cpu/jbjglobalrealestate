@@ -257,7 +257,7 @@ export default function PortfolioViews() {
 
       {/* Main Content - Layer 2 Champagne Background */}
       <section className="py-16">
-        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12">
+        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-none p-8 md:p-12">
           {/* Back Link */}
           <Link
             to="/investor-dashboard"
@@ -271,7 +271,7 @@ export default function PortfolioViews() {
             initial="hidden"
             animate="visible"
             variants={staggerContainer}
-            className="space-y-12"
+            className="space-y-8"
           >
           {/* Section 1: Portfolio Overview */}
           <motion.div variants={fadeInUp}>

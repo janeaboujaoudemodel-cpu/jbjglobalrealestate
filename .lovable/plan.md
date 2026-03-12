@@ -1,63 +1,72 @@
 
+## CRM System Upgrade — Implementation Status
 
-## Upgrade Plan: Investor Pages, Join Pages, CTA Sections, and Form Draft System
+### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-This is a large scope request. I recommend breaking it into **3 phases** to ensure quality and avoid errors. Here is the full plan for **Phase 1** (the most impactful changes), with Phase 2 and 3 outlined.
+#### Task 1: Full System Audit ✅
+- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
+- Identified 10 weaknesses (documented in plan)
 
----
+#### Task 2: Leads Security Hardening ✅
+- CSV export no longer includes email/phone PII
+- Audit logging added to exports with user_agent tracking
+- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
 
-### Phase 1: Join Investor List Premium Upgrade + CTA Sections Edge-to-Edge + Form Draft/Reset Pattern
+#### Task 3: Encryption Hardening ✅
+- CSV export stripped of `email_lower` and `phone_e164` fields
+- Export audit logged to both `crm_audit_logs` and `audit_logs`
 
-#### 1. `JoinInvestorList.tsx` — Full Premium UI Overhaul
-- Replace the plain black page with a champagne-gold premium layout matching the investor dashboard aesthetic
-- Add a proper hero header with gold gradient text, institutional typography
-- Restructure the form into a 2-column champagne card layout with gold borders
-- Reduce padding between sections (current `py-12`, `py-16` down to `py-6`, `py-8`)
-- Add **Save Draft / Reset / New Application** action bar at top of form using the existing `SaveProjectBar` pattern:
-  - "Save Draft" saves form state to localStorage (via `useFormAutoSave` pattern)
-  - "Reset" clears the form
-  - "New Application" clears draft and resets
-- Fix color consistency: replace `text-zinc-400` with proper champagne foreground colors
-- Make section borders sharp (not rounded) for edge-to-edge effect per user request
+#### Task 4: Lead Lifecycle Upgrade ✅
+- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
+- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
+- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
 
-#### 2. `CombinedContactNewsletter.tsx` — Sharp Edges, Edge-to-Edge
-- Change `rounded-xl sm:rounded-2xl` to `rounded-none` on the inner container for sharp borders
-- This affects all "Ready to Get Started?" sections site-wide (used in MainLayout globally)
+#### Task 5: CRM Structure Upgrade ✅
+- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
+- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
+- KanbanPipeline expanded to show all 17 relevant stages
 
-#### 3. `InvestorDashboard.tsx` — Fix Email Cropping + Need Assistance Layout
-- Fix email display in profile/header area — ensure `break-all` or `truncate` with tooltip on email text
-- Upgrade the "Need Assistance?" footer card (lines 799-829): make it edge-to-edge with sharp corners, better spacing, and gold accent
-- Reduce spacing between all sections (`space-y-8` to `space-y-6`)
+#### Task 6: Performance Optimization ✅
+- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
+- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
+- `crm_leads_updated_at_trigger` auto-updates `updated_at`
 
-#### 4. `PortfolioViews.tsx` — Premium Border Upgrade
-- Replace `border-2 border-gold/30` with a more premium `border border-gold/40` + subtle gold shadow
-- Update the `PortfolioOverview` component cards similarly
-- Change `rounded-2xl` on main container to `rounded-none` for sharp edge-to-edge look
+#### Task 7: AI Intelligence Integration ✅
+- New edge function `ai-lead-intelligence` using Lovable AI gateway
+- Supports 3 modes: `score`, `summary`, `next_action`
+- Tool-calling for structured scoring output
+- JWT auth + CRM role validation
+- PII sanitized before sending to AI
 
----
+#### Task 8: Workflow Automation ✅
+- Created `crm_automation_rules` table with RLS (owner manage, admin view)
+- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
 
-### Phase 2 (Next Message): Join Broker List + Join Developer Page
-- Create `JoinBrokerList.tsx` — similar premium form page for broker applications (budget fields replaced with experience, RERA license, specialization)
-- Create `JoinDeveloperList.tsx` — developer partner registration page (company info, project portfolio, partnership type)
-- Wire into routes and navigation
+#### Task 10: Role & Permission System ✅
+- RLS on automation rules: owner CRUD, admin read-only
+- CSV export restricted to owner_admin/founder roles
 
-### Phase 3 (Following Message): Global Form Draft/Reset Pattern
-- Add Save Draft / Reset / New Application bar to:
-  - `SellerListing.tsx`
-  - `LandlordListForm.tsx`
-  - `ListingPortalSubmit.tsx`
-  - `DealRegistrationForm.tsx`
-- Standardize using a shared `FormDraftBar` component
+#### Task 12: Backend/Database Upgrade ✅
+- 3 new performance indexes
+- Auto-updated_at trigger on crm_leads
+- Duplicate hash computation trigger
+- Rate-limiting security function
 
----
+#### Task 13: Data Cleanliness ✅
+- `duplicate_hash` with auto-compute trigger prevents future duplicates
+- Partial unique index enforces uniqueness at DB level
 
-### Files Modified in Phase 1
-
-| File | Change |
+### Files Changed
+| File | Action |
 |------|--------|
-| `src/pages/JoinInvestorList.tsx` | Full premium redesign + draft/reset bar |
-| `src/components/CombinedContactNewsletter.tsx` | Sharp edges (`rounded-none`) |
-| `src/pages/InvestorDashboard.tsx` | Fix email cropping, upgrade Need Assistance section, reduce gaps |
-| `src/pages/investor/PortfolioViews.tsx` | Premium borders, sharp edges |
-| `src/components/investor/portfolio/PortfolioOverview.tsx` | Premium border upgrade on stat cards |
-
+| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
+| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
+| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
+| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
+| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
+| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
+| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
+| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
+| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
