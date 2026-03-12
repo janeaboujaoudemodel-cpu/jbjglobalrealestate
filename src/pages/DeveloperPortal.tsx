@@ -98,7 +98,6 @@ const DeveloperPortal = () => {
       const { data } = await (supabase as any)
         .from('developers')
         .select('id, name')
-        .eq('is_active', true)
         .order('name');
       return data || [];
     },
@@ -204,6 +203,7 @@ const DeveloperPortal = () => {
   // Session-based multi-project
   const [currentProject, setCurrentProject] = useState<ProjectSession>(emptyProject());
   const [uploadingFiles, setUploadingFiles] = useState(false);
+  const [mainDragOver, setMainDragOver] = useState(false);
   const [submittingProject, setSubmittingProject] = useState(false);
   const [sessionProjects, setSessionProjects] = useState<string[]>([]);
 
@@ -280,7 +280,7 @@ const DeveloperPortal = () => {
     queryFn: async () => {
       if (!user?.email) return [];
       const { data } = await (supabase as any)
-        .from('e_signature_envelopes')
+        .from('esign_envelopes')
         .select('id, title, status, created_at, updated_at')
         .or(`sender_id.eq.${user.id},signers.cs.[{"email":"${user.email}"}]`)
         .order('created_at', { ascending: false })
@@ -636,9 +636,8 @@ const DeveloperPortal = () => {
         .maybeSingle();
       if (bp) return { isBroker: true };
       const { data: emp } = await (supabase.from('hr_employees') as any)
-        .select('id, status')
+        .select('id')
         .eq('user_id', user.id)
-        .eq('status', 'active')
         .maybeSingle();
       if (emp) return { isBroker: true };
       return { isBroker: false };
@@ -690,15 +689,27 @@ const DeveloperPortal = () => {
     uploading: boolean;
     inputRef: React.RefObject<HTMLInputElement>;
     onUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  }) => (
+  }) => {
+    const [isDragging, setIsDragging] = useState(false);
+    return (
     <div className="space-y-3">
       <Label>Photos, Videos & Documents</Label>
       <div
-        className="border-2 border-dashed border-gold/40 rounded-xl p-6 text-center hover:border-gold/70 transition-colors cursor-pointer bg-card/50"
+        className={`border-2 border-dashed rounded-xl p-6 text-center transition-colors cursor-pointer bg-card/50 ${isDragging ? 'border-primary bg-primary/5' : 'border-gold/40 hover:border-gold/70'}`}
         onClick={() => inputRef.current?.click()}
+        onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+        onDragLeave={(e) => { e.preventDefault(); setIsDragging(false); }}
+        onDrop={(e) => {
+          e.preventDefault();
+          setIsDragging(false);
+          if (e.dataTransfer.files.length > 0) {
+            const syntheticEvent = { target: { files: e.dataTransfer.files } } as React.ChangeEvent<HTMLInputElement>;
+            onUpload(syntheticEvent);
+          }
+        }}
       >
         <Upload className="w-8 h-8 mx-auto text-gold/60 mb-2" />
-        <p className="text-sm font-medium text-foreground">Click to upload files</p>
+        <p className="text-sm font-medium text-foreground">{isDragging ? 'Drop files here' : 'Click to upload or drag & drop'}</p>
         <p className="text-xs text-muted-foreground mt-1">Photos, videos, PDFs, brochures — any format</p>
         <input ref={inputRef} type="file" className="hidden" multiple
           accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx,.pptx,.mp4,.mov,.avi,.heic"
@@ -723,7 +734,8 @@ const DeveloperPortal = () => {
         </div>
       )}
     </div>
-  );
+    );
+  };
 
   return (
     <>
@@ -987,14 +999,23 @@ const DeveloperPortal = () => {
                   <div className="space-y-3">
                     <Label>Marketing Materials *</Label>
                     <div
-                      className="border-2 border-dashed border-gold/40 rounded-xl p-8 text-center hover:border-gold/70 transition-colors cursor-pointer bg-card/50"
+                      className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors cursor-pointer bg-card/50 ${mainDragOver ? 'border-primary bg-primary/5' : 'border-gold/40 hover:border-gold/70'}`}
                       onClick={() => fileInputRef.current?.click()}
+                      onDragOver={(e) => { e.preventDefault(); setMainDragOver(true); }}
+                      onDragLeave={(e) => { e.preventDefault(); setMainDragOver(false); }}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        setMainDragOver(false);
+                        if (e.dataTransfer.files.length > 0) {
+                          handleFileUpload({ target: { files: e.dataTransfer.files } } as React.ChangeEvent<HTMLInputElement>);
+                        }
+                      }}
                     >
                       <Upload className="w-10 h-10 mx-auto text-gold/60 mb-3" />
-                      <p className="text-sm font-medium text-foreground">Click to upload or drag & drop</p>
+                      <p className="text-sm font-medium text-foreground">{mainDragOver ? 'Drop files here' : 'Click to upload or drag & drop'}</p>
                       <p className="text-xs text-muted-foreground mt-1">PDFs, images, brochures, renders, videos (up to 100MB each)</p>
                       <input ref={fileInputRef} type="file" className="hidden" multiple
-                        accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx,.pptx,.mp4,.mov"
+                        accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx,.pptx,.mp4,.mov,.avi,.heic,.mp3,.wav"
                         onChange={handleFileUpload} />
                     </div>
                     {uploadingFiles && (
