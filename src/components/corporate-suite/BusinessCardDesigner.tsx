@@ -739,6 +739,10 @@ function CardCanvas({
         fontWeight={fontWeight}
         fontStyle={fontStyle}
         nameFontSize={nameFontSize}
+        bilingualMode={bilingualMode}
+        bilingualDir={bilingualDir}
+        secondaryData={secondaryData}
+        onInlineEdit={onInlineEdit}
       />
 
       {/* Logo overlay — shows on BOTH front and back */}
