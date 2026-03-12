@@ -543,3 +543,9 @@ verify_jwt = false
 
 [functions.ai-lead-intelligence]
 verify_jwt = false
+
+[functions.document-ocr]
+verify_jwt = false
+
+[functions.document-extractor]
+verify_jwt = false
