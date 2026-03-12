@@ -195,7 +195,7 @@ function VoiceStudioPanel() {
     if (!script.trim()) { toast.error('Enter a script first'); return; }
     if (playing) { stopSpeaking(); setPlaying(false); return; }
     setPlaying(true);
-    speak(script, selectedVoice, speed[0], pitch[0], volume[0], () => setPlaying(false));
+    speak({ text: script, voiceId: selectedVoice, rate: speed[0], pitch: pitch[0], onEnd: () => setPlaying(false) });
   }, [script, selectedVoice, speed, pitch, volume, playing]);
 
   const generateWithElevenLabs = useCallback(async () => {
