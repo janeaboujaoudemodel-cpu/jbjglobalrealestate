@@ -947,7 +947,7 @@ export default function StampGeneratorPage() {
               >
                 <div className="flex items-center gap-2">
                   <Upload size={14} className="text-[hsl(var(--gold))]"/>
-                  <span className="text-sm font-medium text-[hsl(var(--foreground))]">AI Auto-Fill from Trade License</span>
+                  <span className="text-sm font-medium text-[hsl(var(--foreground))]">Smart Auto-Fill from Trade License</span>
                 </div>
                 <ChevronDown size={14} className={`text-[hsl(var(--muted-foreground))] transition-transform ${licenseOpen ? 'rotate-180' : ''}`}/>
               </button>
