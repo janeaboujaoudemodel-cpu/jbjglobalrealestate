@@ -563,6 +563,8 @@ function CardCanvas({
   qrEnabled, qrData, qrSize, qrColor, qrBgColor, qrPosition, qrSide,
   logoUrl, logoSize, logoPos, onLogoMove, aiDesignData,
   fontFamily, fontWeight, fontStyle, nameFontSize,
+  bilingualMode, bilingualDir, secondaryData,
+  onInlineEdit,
 }: {
   data: CardData; template: Template; backTemplate: Template; primary: string; secondary: string; accent: string;
   backPrimary: string; backSecondary: string; backAccent: string;
@@ -575,6 +577,8 @@ function CardCanvas({
   onLogoMove: (pos: { x: number; y: number }) => void;
   aiDesignData: AiDesignData | null;
   fontFamily?: string; fontWeight?: string; fontStyle?: string; nameFontSize?: number | null;
+  bilingualMode?: BilingualMode; bilingualDir?: "rtl" | "ltr"; secondaryData?: CardData;
+  onInlineEdit?: (field: keyof CardData) => void;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const dragging = useRef<{
