@@ -115,6 +115,89 @@ const DeveloperPortal = () => {
     enabled: !!user,
   });
 
+  // Auto-fill from rep profile
+  useEffect(() => {
+    if (repProfile) {
+      setDevName(repProfile.developer_name || '');
+      setDevEmail(repProfile.email || '');
+    }
+  }, [repProfile]);
+
+  // Profile editing
+  const [editingProfile, setEditingProfile] = useState(false);
+  const [savingProfile, setSavingProfile] = useState(false);
+  const [editForm, setEditForm] = useState({
+    full_name: '', position: '', email: '', phone: '', developer_name: '', nationality: '',
+  });
+
+  const handleStartEditProfile = () => {
+    if (repProfile) {
+      setEditForm({
+        full_name: repProfile.full_name || '',
+        position: (repProfile as any).position || '',
+        email: repProfile.email || '',
+        phone: (repProfile as any).phone || '',
+        developer_name: repProfile.developer_name || '',
+        nationality: (repProfile as any).nationality || '',
+      });
+      setEditingProfile(true);
+    }
+  };
+
+  const handleSaveProfile = async () => {
+    if (!user || !repProfile) return;
+    if (!editForm.full_name || !editForm.email) {
+      toast.error('Name and email are required');
+      return;
+    }
+    setSavingProfile(true);
+    try {
+      // Detect changed fields
+      const changedFields: string[] = [];
+      if (editForm.full_name !== repProfile.full_name) changedFields.push('full_name');
+      if (editForm.email !== repProfile.email) changedFields.push('email');
+      if (editForm.phone !== ((repProfile as any).phone || '')) changedFields.push('phone');
+      if (editForm.position !== ((repProfile as any).position || '')) changedFields.push('position');
+      if (editForm.developer_name !== repProfile.developer_name) changedFields.push('developer_name');
+      if (editForm.nationality !== ((repProfile as any).nationality || '')) changedFields.push('nationality');
+
+      const { error } = await supabase
+        .from('developer_representatives')
+        .update({
+          full_name: editForm.full_name,
+          position: editForm.position || null,
+          email: editForm.email,
+          phone: editForm.phone || null,
+          developer_name: editForm.developer_name,
+          nationality: editForm.nationality || null,
+        } as any)
+        .eq('id', repProfile.id);
+      if (error) throw error;
+
+      // Notify owner about profile update
+      if (changedFields.length > 0) {
+        try {
+          await supabase.from('admin_tasks').insert({
+            user_id: '4944592b-93f1-4e05-ab59-4ebe1fee54f1',
+            title: `Profile Update: ${editForm.full_name}`,
+            description: `Rep "${editForm.full_name}" (${editForm.developer_name}) updated their profile. Changed fields: ${changedFields.join(', ')}.`,
+            category: 'rep_profile_update',
+            priority: 'medium',
+            status: 'pending',
+          } as any);
+        } catch {}
+      }
+
+      toast.success('Profile updated successfully');
+      setEditingProfile(false);
+      refetchRep();
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to update profile');
+    } finally {
+      setSavingProfile(false);
+    }
+  };
+
   // Session-based multi-project
   const [currentProject, setCurrentProject] = useState<ProjectSession>(emptyProject());
   const [uploadingFiles, setUploadingFiles] = useState(false);
@@ -495,9 +578,25 @@ const DeveloperPortal = () => {
           </div>
         )}
 
-        {/* Developer Info Card — hidden in owner skip mode */}
+        {/* Developer Info Card — hidden when rep profile exists */}
         <div className="container mx-auto px-4 py-8 max-w-4xl">
-          {ownerSkipMode ? (
+          {hasRepProfile && !isOwner ? (
+            /* Profile summary bar — auto-linked submissions */
+            <div className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)] border-2 border-gold/30 mb-6">
+              <div className="flex items-center gap-3 min-w-0">
+                <UserCheck className="w-5 h-5 text-gold shrink-0" />
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-foreground truncate">
+                    Submitting as: {repProfile?.full_name} · {repProfile?.developer_name}
+                  </p>
+                  <p className="text-xs text-muted-foreground truncate">{repProfile?.email}{repProfile?.phone ? ` · ${repProfile.phone}` : ''}</p>
+                </div>
+              </div>
+              <Button size="sm" variant="outline" className="border-gold/30 shrink-0" onClick={() => setActiveTab('register')}>
+                Edit Profile
+              </Button>
+            </div>
+          ) : ownerSkipMode ? (
             <Card className="border-2 border-gold/30 bg-gradient-to-r from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)] mb-6">
               <CardContent className="p-4">
                 <div className="space-y-1">
@@ -537,8 +636,8 @@ const DeveloperPortal = () => {
           )}
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <ScrollArea className="w-full">
-              <TabsList className="inline-flex w-auto min-w-full bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border-2 border-gold/30 rounded-xl h-14 gap-0.5 px-1">
+            <div className="w-full overflow-x-auto pb-1">
+              <TabsList className="inline-flex w-auto bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border-2 border-gold/30 rounded-xl h-14 gap-0.5 px-1.5 py-1.5">
                 <TabsTrigger value="projects" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
                   <FolderOpen className="w-3.5 h-3.5 mr-1 hidden md:block" />
                   Projects
@@ -590,7 +689,7 @@ const DeveloperPortal = () => {
                   Listings
                 </TabsTrigger>
               </TabsList>
-            </ScrollArea>
+            </div>
 
             {/* MY PROJECTS TAB */}
             <TabsContent value="projects" className="mt-6">
@@ -871,47 +970,97 @@ const DeveloperPortal = () => {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-foreground">
                       <UserCheck className="w-5 h-5 text-gold" />
-                      Your Registration
+                      Your Profile
                     </CardTitle>
+                    <p className="text-xs text-muted-foreground">Your details are linked to all submissions. Edit anytime — we'll be notified of changes.</p>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <p className="text-xs text-muted-foreground">Full Name</p>
-                          <p className="font-semibold text-foreground">{repProfile?.full_name}</p>
-                        </div>
-                        <div>
-                          <p className="text-xs text-muted-foreground">Role</p>
-                          <p className="font-semibold text-foreground capitalize">{repProfile?.role?.replace(/_/g, ' ')}</p>
-                        </div>
-                        <div>
-                          <p className="text-xs text-muted-foreground">Company</p>
-                          <p className="font-semibold text-foreground">{repProfile?.developer_name}</p>
-                        </div>
-                        <div>
-                          <p className="text-xs text-muted-foreground">Status</p>
-                          {statusBadge(repProfile?.status || 'pending_review')}
-                        </div>
-                        {repProfile?.position && (
-                          <div>
-                            <p className="text-xs text-muted-foreground">Position</p>
-                            <p className="font-semibold text-foreground">{repProfile.position}</p>
+                    {editingProfile ? (
+                      <div className="space-y-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label>Full Name *</Label>
+                            <Input value={editForm.full_name} onChange={(e) => setEditForm(f => ({ ...f, full_name: e.target.value }))} />
                           </div>
-                        )}
-                        <div>
-                          <p className="text-xs text-muted-foreground">Auto-Approve Uploads</p>
-                          <Badge className={repProfile?.auto_approve_uploads ? 'bg-emerald-500/20 text-emerald-700' : 'bg-muted text-muted-foreground'}>
-                            {repProfile?.auto_approve_uploads ? 'Enabled' : 'Disabled'}
-                          </Badge>
+                          <div className="space-y-2">
+                            <Label>Position / Title</Label>
+                            <Input value={editForm.position} onChange={(e) => setEditForm(f => ({ ...f, position: e.target.value }))} />
+                          </div>
+                          <div className="space-y-2">
+                            <Label>Company Email *</Label>
+                            <Input type="email" value={editForm.email} onChange={(e) => setEditForm(f => ({ ...f, email: e.target.value }))} />
+                          </div>
+                          <div className="space-y-2">
+                            <Label>Phone</Label>
+                            <Input type="tel" value={editForm.phone} onChange={(e) => setEditForm(f => ({ ...f, phone: e.target.value }))} />
+                          </div>
+                          <div className="space-y-2">
+                            <Label>Developer / Company</Label>
+                            <Input value={editForm.developer_name} onChange={(e) => setEditForm(f => ({ ...f, developer_name: e.target.value }))} />
+                          </div>
+                          <div className="space-y-2">
+                            <Label>Nationality</Label>
+                            <Input value={editForm.nationality} onChange={(e) => setEditForm(f => ({ ...f, nationality: e.target.value }))} />
+                          </div>
+                        </div>
+                        <div className="flex gap-3">
+                          <Button onClick={handleSaveProfile} disabled={savingProfile}
+                            className="flex-1 bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border border-gold/40 text-foreground font-bold">
+                            {savingProfile ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Saving...</> : 'Save Changes'}
+                          </Button>
+                          <Button variant="outline" onClick={() => setEditingProfile(false)} className="border-gold/30">Cancel</Button>
                         </div>
                       </div>
-                      {!isRepApproved && (
-                        <div className="bg-gold/10 border border-gold/30 rounded-xl p-3 text-sm text-stone-700">
-                          Your registration is under review. Once approved, you'll be able to request briefings and send messages directly.
+                    ) : (
+                      <div className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <p className="text-xs text-muted-foreground">Full Name</p>
+                            <p className="font-semibold text-foreground">{repProfile?.full_name}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-muted-foreground">Role</p>
+                            <p className="font-semibold text-foreground capitalize">{repProfile?.role?.replace(/_/g, ' ')}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-muted-foreground">Company</p>
+                            <p className="font-semibold text-foreground">{repProfile?.developer_name}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-muted-foreground">Email</p>
+                            <p className="font-semibold text-foreground">{repProfile?.email}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-muted-foreground">Phone</p>
+                            <p className="font-semibold text-foreground">{repProfile?.phone || '—'}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-muted-foreground">Status</p>
+                            {statusBadge(repProfile?.status || 'pending_review')}
+                          </div>
+                          {repProfile?.position && (
+                            <div>
+                              <p className="text-xs text-muted-foreground">Position</p>
+                              <p className="font-semibold text-foreground">{repProfile.position}</p>
+                            </div>
+                          )}
+                          <div>
+                            <p className="text-xs text-muted-foreground">Auto-Approve Uploads</p>
+                            <Badge className={repProfile?.auto_approve_uploads ? 'bg-emerald-500/20 text-emerald-700' : 'bg-muted text-muted-foreground'}>
+                              {repProfile?.auto_approve_uploads ? 'Enabled' : 'Disabled'}
+                            </Badge>
+                          </div>
                         </div>
-                      )}
-                    </div>
+                        <Button variant="outline" onClick={handleStartEditProfile} className="border-gold/30">
+                          Edit Profile
+                        </Button>
+                        {!isRepApproved && (
+                          <div className="bg-gold/10 border border-gold/30 rounded-xl p-3 text-sm text-stone-700">
+                            Your registration is under review. Once approved, you'll be able to request briefings and send messages directly.
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
               ) : isDeveloperMode ? (
