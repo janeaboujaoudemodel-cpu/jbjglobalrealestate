@@ -898,8 +898,8 @@ export default function StampGeneratorPage() {
               >
                 <div className="flex items-center gap-2">
                   <Upload size={13} className="text-[hsl(var(--gold))]"/>
-                  <span className="text-xs font-medium text-[hsl(var(--foreground))]">AI Auto-Fill from License</span>
-                  <Badge className="text-[9px] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))] border border-[hsl(var(--gold)/0.3)]">Fast AI</Badge>
+                   <span className="text-xs font-medium text-[hsl(var(--foreground))]">Smart Auto-Fill from License</span>
+                   <Badge className="text-[9px] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))] border border-[hsl(var(--gold)/0.3)]">Smart</Badge>
                 </div>
                 <ChevronDown size={13} className={`text-[hsl(var(--muted-foreground))] transition-transform ${licenseOpen ? 'rotate-180' : ''}`}/>
               </button>
