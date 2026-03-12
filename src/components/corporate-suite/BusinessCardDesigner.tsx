@@ -1345,6 +1345,15 @@ export default function BusinessCardDesigner() {
   const [cardFontBold, setCardFontBold] = useState(false);
   const [cardFontItalic, setCardFontItalic] = useState(false);
   const [cardFontSize, setCardFontSize] = useState<number | null>(null);
+  const [cardTextAlign, setCardTextAlign] = useState<TextAlign>("left");
+  const [cardUnderline, setCardUnderline] = useState(false);
+  const [cardLetterSpacing, setCardLetterSpacing] = useState(0);
+  const [cardLineHeight, setCardLineHeight] = useState(1.2);
+
+  // Gradient colors
+  const [useGradient, setUseGradient] = useState(false);
+  const [gradientEnd, setGradientEnd] = useState("#C8A766");
+  const [gradientDirection, setGradientDirection] = useState<GradientDirection>("135deg");
 
   const [data, setData] = useState<CardData>({
     name: "", title: "", company: "", phone: "", email: "", website: "", address: "",
