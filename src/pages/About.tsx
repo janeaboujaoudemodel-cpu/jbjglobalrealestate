@@ -614,13 +614,12 @@ const About = () => {
                     </Link>
 
                     {/* Secondary Button - Browse Properties */}
-                    <Link to="/services" className="w-full sm:w-auto">
-                      <button 
-                        className="group inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 sm:px-10 py-4 sm:py-5 text-sm sm:text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white"
-                      >
-                        Explore Our Services
-                        <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                      </button>
+                    <Link 
+                      to="/services" 
+                      className="group inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 sm:px-10 py-4 sm:py-5 text-sm sm:text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white"
+                    >
+                      Explore Our Services
+                      <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                     </Link>
                   </motion.div>
                 </motion.div>
