@@ -103,12 +103,7 @@ export default function BusinessCardDesigner() {
       <BusinessCardHeader
         editLayout={editLayout}
         setEditLayout={setEditLayout}
-        onResetLayout={() => {
-          setFieldPositions({ ...DEFAULT_FIELD_POSITIONS });
-          setLogoPos({ ...DEFAULT_LOGO_POS });
-          if (!editLayout) setEditLayout(true);
-          toast.success("Layout reset to defaults");
-        }}
+        onResetLayout={handleResetLayout}
         isSaving={isSaving}
         onSave={handleSaveCard}
         cardLicenseCode={cardLicenseCode}
