@@ -342,7 +342,7 @@ export default function InvestorDashboard() {
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="secondary" className="gap-2">
-                        <span className="hidden sm:inline truncate max-w-[160px]">{profile?.full_name || user?.email?.split('@')[0]}</span>
+                        <span className="hidden sm:inline truncate max-w-[220px]">{profile?.full_name || user?.email?.split('@')[0]}</span>
                         <ChevronDown className="w-4 h-4" />
                       </Button>
                     </DropdownMenuTrigger>
@@ -593,7 +593,7 @@ export default function InvestorDashboard() {
               Build a simple view of your holdings and target allocations. You control what you add.
             </p>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+              <Card className="border border-stone-200 shadow-sm bg-white">
                 <CardContent className="p-5 text-center">
                   <Building2 className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
                   <p className="font-medium text-foreground">Owned Assets</p>
@@ -601,7 +601,7 @@ export default function InvestorDashboard() {
                 </CardContent>
               </Card>
               
-              <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+              <Card className="border border-stone-200 shadow-sm bg-white">
                 <CardContent className="p-5 text-center">
                   <Heart className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
                   <p className="font-medium text-foreground">Target Assets (Wishlist)</p>
@@ -609,7 +609,7 @@ export default function InvestorDashboard() {
                 </CardContent>
               </Card>
               
-              <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+              <Card className="border border-stone-200 shadow-sm bg-white">
                 <CardContent className="p-5 text-center">
                   <TrendingUp className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
                   <p className="font-medium text-foreground">Rental Performance Notes</p>
@@ -617,7 +617,7 @@ export default function InvestorDashboard() {
                 </CardContent>
               </Card>
               
-              <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+              <Card className="border border-stone-200 shadow-sm bg-white">
                 <CardContent className="p-5 text-center">
                   <Lock className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
                   <p className="font-medium text-foreground">Document Vault</p>
@@ -796,16 +796,16 @@ export default function InvestorDashboard() {
             </Card>
           </motion.div>
 
-          {/* Footer CTA Strip */}
-          <motion.div variants={fadeInUp}>
-            <div className="border-2 border-gold/40 bg-gradient-to-r from-[#1a1a1a] via-[#222] to-[#1a1a1a] p-6 md:p-8 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
-                <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+          {/* Footer CTA Strip — Edge-to-edge, sharp corners */}
+          <motion.div variants={fadeInUp} className="-mx-4 sm:-mx-6 lg:-mx-8">
+            <div className="bg-gradient-to-r from-[#1a1a1a] via-[#222] to-[#1a1a1a] p-8 md:p-10 border-y border-gold/30">
+                <div className="flex flex-col md:flex-row items-center justify-between gap-6 max-w-5xl mx-auto">
                   <div className="text-center md:text-left">
                     <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2 justify-center md:justify-start uppercase tracking-wider">
                       <HelpCircle className="w-5 h-5 text-gold" />
                       Need Assistance?
                     </h3>
-                    <p className="text-zinc-400 text-sm">
+                    <p className="text-zinc-400 text-sm max-w-md">
                       Our investment advisors are here to help with your portfolio, reports, and strategy.
                     </p>
                   </div>

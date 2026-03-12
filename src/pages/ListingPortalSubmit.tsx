@@ -15,6 +15,7 @@ import {
   CheckCircle2, AlertCircle, Image, File, Trash2, Plus, RefreshCw,
   TrendingUp, Shield, User, Phone, Mail, CreditCard, Link as LinkIcon, FileText as FileTextIcon, Globe
 } from 'lucide-react';
+import { FormDraftBar } from "@/components/shared/FormDraftBar";
 import { BrandedLoader } from "@/components/ui/BrandedLoader";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -615,6 +616,38 @@ const ListingPortalSubmit = () => {
                 Upload your documents and let AI create a professional listing for you
               </p>
             </div>
+
+            {/* Draft Action Bar */}
+            <FormDraftBar
+              hasDraft={phase !== 'upload' || uploadedDocs.length > 0}
+              onSaveDraft={() => {
+                const stateToSave = { phase, form, listingCategory, uploadedImageUrls, extractedData, pricePrediction, sellerRole, contactMode, sourceUrl, sourceText };
+                sessionStorage.setItem(SESSION_KEY, JSON.stringify(stateToSave));
+                toast.success("Draft saved successfully");
+              }}
+              onReset={() => {
+                sessionStorage.removeItem(SESSION_KEY);
+                setPhase('upload');
+                setUploadedDocs([]);
+                setExtractedData(null);
+                setUploadedImageUrls([]);
+                setPricePrediction(null);
+                setForm({ title: '', description: '', listing_type: initialListingType, listing_category: initialCategory, property_type: '', developer_name: '', project_name: '', location: '', emirate: 'Dubai', area: '', bedrooms: '', bathrooms: '', area_sqft: '', price: '', furnishing: '', handover_date: '', payment_plan: '', amenities: [], key_features: [] });
+                toast.info("Form cleared");
+              }}
+              onNew={() => {
+                sessionStorage.removeItem(SESSION_KEY);
+                setPhase('upload');
+                setUploadedDocs([]);
+                setExtractedData(null);
+                setUploadedImageUrls([]);
+                setPricePrediction(null);
+                setForm({ title: '', description: '', listing_type: initialListingType, listing_category: initialCategory, property_type: '', developer_name: '', project_name: '', location: '', emirate: 'Dubai', area: '', bedrooms: '', bathrooms: '', area_sqft: '', price: '', furnishing: '', handover_date: '', payment_plan: '', amenities: [], key_features: [] });
+                toast.info("New listing started");
+              }}
+              label="Listing"
+              theme="gold"
+            />
 
             {/* Progress indicator — 6 steps */}
             <div className="flex gap-1.5 mb-8">
