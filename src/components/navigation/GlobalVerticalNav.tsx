@@ -1398,9 +1398,10 @@ export default function GlobalVerticalNav() {
                 <TooltipTrigger asChild>
                   <button
                     onClick={() => {
-                      setCollapsed(false);
-                      try { localStorage.setItem('jj_nav_collapsed', '0'); } catch {}
-                      setOpenSection(sectionKey);
+                      const firstItem = items?.[0];
+                      if (firstItem?.href && firstItem.href !== '#') {
+                        navigate(firstItem.href);
+                      }
                     }}
                     className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${
                       isActive

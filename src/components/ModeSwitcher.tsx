@@ -128,8 +128,8 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
             ) : (
               <CurrentIcon className={cn("w-4 h-4 shrink-0", currentConfig.color)} />
             )}
-            <span className={cn("text-[11px] font-semibold truncate hidden sm:block", currentConfig.color)}>
-              {currentConfig.shortLabel}
+            <span className={cn("text-xs font-semibold truncate hidden sm:block", currentConfig.color)}>
+              {currentConfig.label}
             </span>
             <ChevronDown className={cn(
               "w-3 h-3 shrink-0 transition-transform duration-200",

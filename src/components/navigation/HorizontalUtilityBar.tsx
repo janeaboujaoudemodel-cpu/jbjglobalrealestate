@@ -302,7 +302,7 @@ export default function HorizontalUtilityBar() {
                  >
                    <Bell className={iconClass} />
                   {(alerts?.totalNotificationAlerts || 0) > 0 && (
-                    <span className="absolute -top-1.5 -right-1 w-4.5 h-4.5 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center">
+                    <span className="absolute -top-1.5 -right-1 min-w-[18px] h-[18px] rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center px-1">
                       {alerts!.totalNotificationAlerts > 9 ? '9+' : alerts!.totalNotificationAlerts}
                     </span>
                   )}
