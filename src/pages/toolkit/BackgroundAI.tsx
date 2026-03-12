@@ -1233,7 +1233,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
 
             {/* Consent */}
             <div className="flex items-start gap-3 p-4 rounded-xl"
-              style={{ background: "rgba(99,102,241,0.04)", border: "1px solid rgba(99,102,241,0.15)" }}>
+              style={{ background: "rgba(184,148,62,0.04)", border: "1px solid rgba(184,148,62,0.15)" }}>
               <Checkbox id="consent" checked={consent} onCheckedChange={(v) => setConsent(v === true)} className="mt-0.5" />
               <label htmlFor="consent" className="text-sm cursor-pointer" style={{ color: C.mutedText }}>
                 I own this content or have the rights to edit it.
