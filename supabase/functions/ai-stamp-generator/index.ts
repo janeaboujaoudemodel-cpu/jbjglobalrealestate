@@ -152,7 +152,7 @@ function buildSVG(project: any, templateKey: string): string {
       const r1 = R, r2 = R - 13, r3 = R - 18, ringR = R - 7;
       const nameFontSize = autoFontSize(name, 10, 18);
       return `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="${cx}" cy="${cy}" r="${r1}" fill="none" stroke="${COLOR}" stroke-width="2.8"/>
+        <circle cx="${cx}" cy="${cy}" r="${r1}" fill="none" stroke="${COLOR}" stroke-width="${ba.outerWidth}" stroke-dasharray="${ba.dash}"/>
         <circle cx="${cx}" cy="${cy}" r="${r2}" fill="none" stroke="${COLOR}" stroke-width="0.5"/>
         <circle cx="${cx}" cy="${cy}" r="${r3}" fill="none" stroke="${COLOR}" stroke-width="1.2"/>
         ${ringText('cp3', cx, cy, ringR, `★  ${name}  ★  ${city}  ★`, font, 7.5, COLOR, '50%')}
