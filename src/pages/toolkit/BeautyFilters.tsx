@@ -678,8 +678,8 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                           <button key={look.id} onClick={() => { setSelectedMakeup(look.id); simulateAI(look.name); }}
                             className="flex flex-col items-center gap-1 p-2 rounded-xl text-xs transition-all"
                             style={{
-                              background: selectedMakeup === look.id ? "rgba(99,102,241,0.35)" : "rgba(255,255,255,0.12)",
-                              border: `1px solid ${selectedMakeup === look.id ? "rgba(99,102,241,0.75)" : "rgba(255,255,255,0.25)"}`,
+                              background: selectedMakeup === look.id ? "rgba(184,148,62,0.35)" : "rgba(255,255,255,0.12)",
+                              border: `1px solid ${selectedMakeup === look.id ? "rgba(184,148,62,0.75)" : "rgba(255,255,255,0.25)"}`,
                               color: selectedMakeup === look.id ? I.text : "rgba(255,255,255,0.9)",
                             }}>
                             <span className="text-lg">{look.emoji}</span>
