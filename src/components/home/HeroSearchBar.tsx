@@ -1200,20 +1200,20 @@ const HeroSearchBar = () => {
                   </div>
                 </div>
 
-                {/* AI Home Finder Link - Strong purple visibility */}
+                {/* AI Home Finder Link */}
                 <Link
                   to="/ai-hub"
-                  className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-r from-purple-700/60 to-purple-900/70 border-2 border-purple-500/80 hover:border-purple-400 transition-all group shadow-[0_4px_24px_rgba(109,40,217,0.5)] hover:shadow-[0_6px_36px_rgba(109,40,217,0.7)] hover:-translate-y-0.5"
+                  className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-r from-gold/20 to-amber-900/30 border-2 border-gold/60 hover:border-gold transition-all group shadow-[0_4px_24px_rgba(184,148,62,0.3)] hover:shadow-[0_6px_36px_rgba(184,148,62,0.5)] hover:-translate-y-0.5"
                   onClick={() => setIsFiltersOpen(false)}
                 >
-                  <div className="w-11 h-11 rounded-full bg-purple-600 border-2 border-purple-400 flex items-center justify-center shadow-[0_0_20px_rgba(147,51,234,0.6)] group-hover:shadow-[0_0_30px_rgba(147,51,234,0.9)] transition-all">
-                    <Sparkles className="w-5 h-5 text-white" />
+                  <div className="w-11 h-11 rounded-full bg-gradient-to-br from-gold to-amber-600 border-2 border-gold/80 flex items-center justify-center shadow-[0_0_20px_rgba(184,148,62,0.4)] group-hover:shadow-[0_0_30px_rgba(184,148,62,0.7)] transition-all">
+                    <Sparkles className="w-5 h-5 text-black" />
                   </div>
                   <div className="flex-1">
                     <p className="text-white font-bold text-sm">Not sure what you're looking for?</p>
-                    <p className="text-purple-200 text-xs">Try our AI Home Matchmaker for personalized recommendations</p>
+                    <p className="text-gold/80 text-xs">Try our AI Home Matchmaker for personalized recommendations</p>
                   </div>
-                  <ChevronDown className="w-5 h-5 text-purple-300 -rotate-90 group-hover:translate-x-1 transition-transform" />
+                  <ChevronDown className="w-5 h-5 text-gold -rotate-90 group-hover:translate-x-1 transition-transform" />
                 </Link>
 
                 {/* Save & Load Filters */}
