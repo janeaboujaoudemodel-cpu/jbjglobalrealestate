@@ -86,6 +86,8 @@ const TestimonialsPage = lazy(() => import("@/pages/services/Testimonials"));
 const ReferralPartner = lazy(() => import("@/pages/ReferralPartner"));
 const InvestorServices = lazy(() => import("@/pages/InvestorServices"));
 const JoinInvestorList = lazy(() => import("@/pages/JoinInvestorList"));
+const JoinBrokerList = lazy(() => import("@/pages/JoinBrokerList"));
+const JoinDeveloperList = lazy(() => import("@/pages/JoinDeveloperList"));
 const Partners = lazy(() => import("@/pages/Partners"));
 const PartnerMortgage = lazy(() => import("@/pages/partners/PartnerMortgage"));
 const PartnerLegal = lazy(() => import("@/pages/partners/PartnerLegal"));
@@ -284,6 +286,8 @@ export const PublicRoutes = () => (
     <Route path="/referral" element={<Navigate to="/referral-onboarding" replace />} />
     <Route path="/investors" element={<InvestorServices />} />
     <Route path="/investors/join" element={<JoinInvestorList />} />
+    <Route path="/brokers/join" element={<JoinBrokerList />} />
+    <Route path="/developers/join" element={<JoinDeveloperList />} />
     <Route path="/partners" element={<Partners />} />
     <Route path="/partners/mortgage" element={<PartnerMortgage />} />
     <Route path="/partners/legal" element={<PartnerLegal />} />
