@@ -877,10 +877,16 @@ export default function GlobalVerticalNav() {
     for (const [section, items] of Object.entries(sectionGroups)) {
       if (items.some(item => isRouteActive(item.href))) {
         setOpenSection(section as SectionKey);
-        // Scroll the section into view
+        // Only scroll into view if completely off-screen
         requestAnimationFrame(() => {
           const el = document.getElementById(`nav-section-${section.replace(/\s+/g, '-').toLowerCase()}`);
-          el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          if (el) {
+            const rect = el.getBoundingClientRect();
+            const isOffScreen = rect.top < 0 || rect.bottom > window.innerHeight;
+            if (isOffScreen) {
+              el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+          }
         });
         break;
       }
