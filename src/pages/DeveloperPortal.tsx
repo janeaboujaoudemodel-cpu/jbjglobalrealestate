@@ -19,6 +19,7 @@ import {
   Calendar, Upload, Building2, PartyPopper, FileText, Loader2,
   CheckCircle, X, Plus, FolderOpen, ExternalLink, AlertCircle,
   ClipboardList, Send, Eye, Info, UserCheck, Briefcase, MessageSquare,
+  FileSignature, ListTodo,
 } from "lucide-react";
 import SalesRepRegistration from "@/components/developer-portal/SalesRepRegistration";
 import BriefingRequestForm from "@/components/developer-portal/BriefingRequestForm";
@@ -115,6 +116,38 @@ const DeveloperPortal = () => {
       return data || [];
     },
     enabled: !!user,
+  });
+
+  // Fetch user's tasks (assigned to them)
+  const { data: myTasks } = useQuery({
+    queryKey: ["dev-portal-tasks", user?.id],
+    queryFn: async () => {
+      if (!user) return [];
+      const { data } = await supabase
+        .from('admin_tasks')
+        .select('id, title, description, status, priority, due_date, created_at, category')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(50);
+      return data || [];
+    },
+    enabled: !!user,
+  });
+
+  // Fetch agreements (e-signature envelopes where user is a signer)
+  const { data: myAgreements } = useQuery({
+    queryKey: ["dev-portal-agreements", user?.email],
+    queryFn: async () => {
+      if (!user?.email) return [];
+      const { data } = await (supabase as any)
+        .from('e_signature_envelopes')
+        .select('id, title, status, created_at, updated_at')
+        .or(`sender_id.eq.${user.id},signers.cs.[{"email":"${user.email}"}]`)
+        .order('created_at', { ascending: false })
+        .limit(50);
+      return data || [];
+    },
+    enabled: !!user?.email,
   });
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -310,40 +343,50 @@ const DeveloperPortal = () => {
           </Card>
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className={`grid w-full bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border-2 border-gold/30 rounded-xl h-14 ${showRepTabs ? 'grid-cols-7' : 'grid-cols-5'}`}>
-              <TabsTrigger value="projects" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
-                <FolderOpen className="w-3.5 h-3.5 mr-1 hidden md:block" />
-                Projects
-              </TabsTrigger>
-              <TabsTrigger value="submit" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
-                <Plus className="w-3.5 h-3.5 mr-1 hidden md:block" />
-                New Project
-              </TabsTrigger>
-              <TabsTrigger value="events" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
-                <Calendar className="w-3.5 h-3.5 mr-1 hidden md:block" />
-                Events
-              </TabsTrigger>
-              <TabsTrigger value="register" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
-                <UserCheck className="w-3.5 h-3.5 mr-1 hidden md:block" />
-                Register
-              </TabsTrigger>
-              {showRepTabs && (
-                <>
-                  <TabsTrigger value="briefing" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
-                    <Briefcase className="w-3.5 h-3.5 mr-1 hidden md:block" />
-                    Briefing
-                  </TabsTrigger>
-                  <TabsTrigger value="messages" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
-                    <MessageSquare className="w-3.5 h-3.5 mr-1 hidden md:block" />
-                    Messages
-                  </TabsTrigger>
-                </>
-              )}
-              <TabsTrigger value="listings" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
-                <Eye className="w-3.5 h-3.5 mr-1 hidden md:block" />
-                Listings
-              </TabsTrigger>
-            </TabsList>
+            <ScrollArea className="w-full">
+              <TabsList className="inline-flex w-auto min-w-full bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border-2 border-gold/30 rounded-xl h-14 gap-0.5 px-1">
+                <TabsTrigger value="projects" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
+                  <FolderOpen className="w-3.5 h-3.5 mr-1 hidden md:block" />
+                  Projects
+                </TabsTrigger>
+                <TabsTrigger value="submit" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
+                  <Plus className="w-3.5 h-3.5 mr-1 hidden md:block" />
+                  New Project
+                </TabsTrigger>
+                <TabsTrigger value="events" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
+                  <Calendar className="w-3.5 h-3.5 mr-1 hidden md:block" />
+                  Events
+                </TabsTrigger>
+                <TabsTrigger value="register" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
+                  <UserCheck className="w-3.5 h-3.5 mr-1 hidden md:block" />
+                  Register
+                </TabsTrigger>
+                <TabsTrigger value="agreements" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
+                  <FileSignature className="w-3.5 h-3.5 mr-1 hidden md:block" />
+                  Agreements
+                </TabsTrigger>
+                <TabsTrigger value="tasks" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
+                  <ListTodo className="w-3.5 h-3.5 mr-1 hidden md:block" />
+                  Tasks
+                </TabsTrigger>
+                {showRepTabs && (
+                  <>
+                    <TabsTrigger value="briefing" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
+                      <Briefcase className="w-3.5 h-3.5 mr-1 hidden md:block" />
+                      Briefing
+                    </TabsTrigger>
+                    <TabsTrigger value="messages" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
+                      <MessageSquare className="w-3.5 h-3.5 mr-1 hidden md:block" />
+                      Messages
+                    </TabsTrigger>
+                  </>
+                )}
+                <TabsTrigger value="listings" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
+                  <Eye className="w-3.5 h-3.5 mr-1 hidden md:block" />
+                  Listings
+                </TabsTrigger>
+              </TabsList>
+            </ScrollArea>
 
             {/* MY PROJECTS TAB */}
             <TabsContent value="projects" className="mt-6">
@@ -690,7 +733,97 @@ const DeveloperPortal = () => {
               </TabsContent>
             )}
 
-            {/* CHECK LISTINGS TAB */}
+            {/* AGREEMENTS TAB */}
+            <TabsContent value="agreements" className="mt-6">
+              <Card className="border-2 border-gold/30">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-foreground">
+                    <FileSignature className="w-5 h-5 text-gold" />
+                    Your Agreements & Documents
+                  </CardTitle>
+                  <p className="text-sm text-muted-foreground">Documents assigned to you for review or signature.</p>
+                </CardHeader>
+                <CardContent>
+                  {myAgreements && myAgreements.length > 0 ? (
+                    <ScrollArea className="h-[400px]">
+                      <div className="space-y-3">
+                        {myAgreements.map((a: any) => (
+                          <div key={a.id} className="flex items-center justify-between p-4 rounded-xl border border-gold/20 bg-card">
+                            <div>
+                              <h4 className="font-semibold text-foreground">{a.title}</h4>
+                              <p className="text-xs text-muted-foreground">{format(new Date(a.created_at), "MMM d, yyyy")}</p>
+                            </div>
+                            <Badge className={
+                              a.status === 'completed' ? 'bg-emerald-500/20 text-emerald-700' :
+                              a.status === 'pending' ? 'bg-amber-500/20 text-amber-700' :
+                              a.status === 'voided' ? 'bg-red-500/20 text-red-700' :
+                              'bg-muted text-muted-foreground'
+                            }>{a.status}</Badge>
+                          </div>
+                        ))}
+                      </div>
+                    </ScrollArea>
+                  ) : (
+                    <div className="py-12 text-center text-muted-foreground">
+                      <FileSignature className="w-10 h-10 mx-auto mb-3 opacity-40" />
+                      <p>No agreements found</p>
+                      <p className="text-xs mt-1">Documents requiring your signature will appear here.</p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* TASKS TAB */}
+            <TabsContent value="tasks" className="mt-6">
+              <Card className="border-2 border-gold/30">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-foreground">
+                    <ListTodo className="w-5 h-5 text-gold" />
+                    Your Tasks
+                  </CardTitle>
+                  <p className="text-sm text-muted-foreground">Tasks assigned to you by the team.</p>
+                </CardHeader>
+                <CardContent>
+                  {myTasks && myTasks.length > 0 ? (
+                    <ScrollArea className="h-[400px]">
+                      <div className="space-y-3">
+                        {myTasks.map((t: any) => (
+                          <div key={t.id} className="flex items-center justify-between p-4 rounded-xl border border-gold/20 bg-card">
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2">
+                                <h4 className="font-semibold text-foreground truncate">{t.title}</h4>
+                                {t.priority === 'high' && <Badge className="bg-red-500/20 text-red-700 text-[10px]">High</Badge>}
+                                {t.priority === 'urgent' && <Badge className="bg-red-600/20 text-red-800 text-[10px]">Urgent</Badge>}
+                              </div>
+                              {t.description && <p className="text-xs text-muted-foreground mt-1 line-clamp-1">{t.description}</p>}
+                              <p className="text-[10px] text-muted-foreground mt-1">
+                                {format(new Date(t.created_at), "MMM d, yyyy")}
+                                {t.due_date && ` · Due: ${format(new Date(t.due_date), "MMM d")}`}
+                              </p>
+                            </div>
+                            <Badge className={
+                              t.status === 'completed' ? 'bg-emerald-500/20 text-emerald-700' :
+                              t.status === 'in_progress' ? 'bg-blue-500/20 text-blue-700' :
+                              t.status === 'pending' ? 'bg-amber-500/20 text-amber-700' :
+                              'bg-muted text-muted-foreground'
+                            }>{t.status?.replace(/_/g, ' ') || 'Pending'}</Badge>
+                          </div>
+                        ))}
+                      </div>
+                    </ScrollArea>
+                  ) : (
+                    <div className="py-12 text-center text-muted-foreground">
+                      <ListTodo className="w-10 h-10 mx-auto mb-3 opacity-40" />
+                      <p>No tasks assigned</p>
+                      <p className="text-xs mt-1">Tasks from the team will appear here.</p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+
             <TabsContent value="listings" className="mt-6">
               <Card className="border-2 border-gold/30">
                 <CardHeader>

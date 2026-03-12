@@ -1,147 +1,72 @@
 
+## CRM System Upgrade — Implementation Status
 
-## Master System Architecture — Audit & Gap Analysis
+### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-This is not a greenfield build. The platform already has ~90% of the requested modules implemented. Below is the full architecture map, what exists, and the gaps that need to be filled.
+#### Task 1: Full System Audit ✅
+- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
+- Identified 10 weaknesses (documented in plan)
 
----
+#### Task 2: Leads Security Hardening ✅
+- CSV export no longer includes email/phone PII
+- Audit logging added to exports with user_agent tracking
+- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
 
-### EXISTING SYSTEM STRUCTURE
+#### Task 3: Encryption Hardening ✅
+- CSV export stripped of `email_lower` and `phone_e164` fields
+- Export audit logged to both `crm_audit_logs` and `audit_logs`
 
-```text
-┌─────────────────────────────────────────────────────────────────┐
-│                        FRONTEND (React/Vite)                     │
-│  ┌──────────┐ ┌──────────┐ ┌───────────┐ ┌───────────────────┐  │
-│  │ AuthGate │ │OwnerGuard│ │MainLayout │ │OwnerDashboardShell│  │
-│  └──────────┘ └──────────┘ └───────────┘ └───────────────────┘  │
-│       Routes: PublicRoutes | AdminRoutes | OwnerRoutes           │
-│               AIToolRoutes | ToolkitRoutes | StandaloneRoutes    │
-├─────────────────────────────────────────────────────────────────┤
-│                    BACKEND (Lovable Cloud)                        │
-│  ┌───────────────┐ ┌──────────────┐ ┌─────────────────────────┐ │
-│  │ Edge Functions │ │  Storage     │ │  Realtime Subscriptions │ │
-│  │ (30+ deployed) │ │  (documents) │ │  (notifications/chat)   │ │
-│  └───────────────┘ └──────────────┘ └─────────────────────────┘ │
-│  ┌───────────────┐ ┌──────────────┐ ┌─────────────────────────┐ │
-│  │ AI Gateway    │ │  RLS Policies│ │  Auth (Email+Google)    │ │
-│  │ (Lovable AI)  │ │  (per table) │ │  (JWT + verify-owner)   │ │
-│  └───────────────┘ └──────────────┘ └─────────────────────────┘ │
-├─────────────────────────────────────────────────────────────────┤
-│                     DATABASE (PostgreSQL)                         │
-│  projects | developers | developer_representatives               │
-│  briefing_requests | briefing_attendance | rep_activity_log      │
-│  crm_leads | crm_users_profile | admin_tasks | security_events  │
-│  user_roles | user_agreements | user_notifications               │
-│  hr_employees | broker_verifications | market_opportunities      │
-└─────────────────────────────────────────────────────────────────┘
-```
+#### Task 4: Lead Lifecycle Upgrade ✅
+- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
+- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
+- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
 
----
+#### Task 5: CRM Structure Upgrade ✅
+- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
+- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
+- KanbanPipeline expanded to show all 17 relevant stages
 
-### STEP-BY-STEP GAP ANALYSIS
+#### Task 6: Performance Optimization ✅
+- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
+- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
+- `crm_leads_updated_at_trigger` auto-updates `updated_at`
 
-#### Step 1 — System Structure: COMPLETE
-All layers exist: Frontend (React), Backend (Edge Functions), Auth (JWT + Owner verification), AI (Lovable AI gateway), Database (PostgreSQL + RLS), Storage (documents bucket), Security (CSP, WAF-like blocking, scraping_blocks), Monitoring (security_events, audit triggers).
+#### Task 7: AI Intelligence Integration ✅
+- New edge function `ai-lead-intelligence` using Lovable AI gateway
+- Supports 3 modes: `score`, `summary`, `next_action`
+- Tool-calling for structured scoring output
+- JWT auth + CRM role validation
+- PII sanitized before sending to AI
 
-#### Step 2 — Routing Map: COMPLETE
-Every requested route already exists:
+#### Task 8: Workflow Automation ✅
+- Created `crm_automation_rules` table with RLS (owner manage, admin view)
+- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
 
-| Requested Route | Existing Route | Location in UI |
-|---|---|---|
-| `/dashboard` | `/dashboard` → redirects by role | Main entry after login |
-| `/developer-hub` | `/developer-portal` | Public route, accessible via mode selector |
-| `/developer-hub/company-registration` | `/developer-portal?tab=submit` | Tab inside Developer Portal |
-| `/developer-hub/projects` | `/developer-portal?tab=projects` | Tab inside Developer Portal |
-| `/developer-hub/marketing-materials` | `/developer-portal?tab=materials` | Tab inside Developer Portal |
-| `/developer-hub/events` | `/developer-portal?tab=events` | Tab inside Developer Portal |
-| `/developer-hub/agreements` | `/e-signature` | Owner route, E-Signature module |
-| `/developer-hub/tasks` | `/owner/crm/tasks` | Owner Command Center |
-| `/developer-hub/crm` | `/owner/crm` | Owner Command Center |
-| `/developer-hub/database` | `/admin/developers` | Admin route |
-| `/developer-hub/reports` | `/jbj-broker-reports` | Owner route |
-| `/admin` | `/admin` or `/owner/admin` | Owner-guarded |
-| `/admin/developers` | `/admin/developers` | AdminDevelopers page with briefing mgmt |
-| `/admin/projects` | `/owner/listing-admin` | Listing admin panel |
-| `/admin/approvals` | `/owner/listing-admin` | Project approval queue |
-| `/admin/tasks` | `/owner/crm/tasks` | CRM Tasks |
-| `/admin/security` | `/security-console` | Security Console |
-| `/admin/system-logs` | `/owner/audit` | Owner Audit Page |
+#### Task 10: Role & Permission System ✅
+- RLS on automation rules: owner CRUD, admin read-only
+- CSV export restricted to owner_admin/founder roles
 
-#### Step 3 — Dashboard Structure: COMPLETE
-- **Owner Dashboard**: `/owner` — OwnerDashboardOverview with pending approvals, tasks, system alerts
-- **Admin Dashboard**: `/admin` — Admin panel with developer registrations, leads, roles
-- **Developer Dashboard**: `/developer-portal` — Shows projects submitted, briefing requests, rep profile
-- **Investor Dashboard**: `/investor-dashboard` — Portfolio views, KPIs, market alerts
+#### Task 12: Backend/Database Upgrade ✅
+- 3 new performance indexes
+- Auto-updated_at trigger on crm_leads
+- Duplicate hash computation trigger
+- Rate-limiting security function
 
-#### Step 4 — Developer Hub: MOSTLY COMPLETE
-Existing in `/developer-portal` with tabs: Projects, Events, Materials, Listings, Briefings, Messages, Rep Registration.
+#### Task 13: Data Cleanliness ✅
+- `duplicate_hash` with auto-compute trigger prevents future duplicates
+- Partial unique index enforces uniqueness at DB level
 
-**Gaps to fill:**
-- No dedicated "Agreements" tab inside Developer Portal (currently lives in E-Signature module)
-- No "Tasks" tab for developer reps to see their assigned tasks
-- Marketing materials upload exists but no approval workflow status panel for reps
-
-#### Step 5 — CRM Database: COMPLETE
-`developer_representatives` table stores: full_name, title, phone, email, whatsapp, developer_id, activity_score, is_primary, is_active, notes, languages, nationality, gender.
-`crm_leads` stores contacts with full filtering.
-AdminDevelopers page has rep management with search/filter.
-
-**Gap:** No UI filter by gender, nationality, languages, years in RE, or rating in the AdminDevelopers rep list.
-
-#### Step 6 — Report Download: PARTIAL
-Compare page has PDF download. CRM has CSV export. 
-
-**Gap:** No company-letterhead PDF export with header/footer/timestamp for CRM data. No grouping by role (COO, Admin, Sales Rep, Channel Partner).
-
-#### Step 7 — Briefing System: COMPLETE
-`BriefingRequestForm` → `briefing_requests` table → Admin approval in `BriefingManagement` → `BriefingAttendance` page with selfie+GPS → `rep_activity_log` points system → Feedback/rating.
-
-#### Step 8 — AI Processing: COMPLETE
-`universal-link-extractor` edge function auto-structures project data from URLs/PDFs. AI gateway processes property descriptions, market analysis, and listing generation.
-
-#### Step 9 & 10 — Security & Database Security: COMPLETE
-RLS on all sensitive tables. `verify-owner` edge function. `security_events` + `scraping_blocks` tables. CSP headers. Anti-scraping protection. Encrypted HR data.
-
-#### Step 11 — Monitoring: COMPLETE
-`security_events` table logs all violations. `log-security-event` edge function. Owner audit page. Login activity tracked.
-
----
-
-### IMPLEMENTATION PLAN — Fill Remaining Gaps
-
-**Gap 1: Developer Portal — Add "Agreements" & "Tasks" tabs**
-- File: `src/pages/DeveloperPortal.tsx`
-- Add a new `agreements` tab showing documents assigned to the rep from `e_signature_envelopes` where the rep's email matches a signer
-- Add a `tasks` tab querying `admin_tasks` filtered by the rep's user_id
-
-**Gap 2: AdminDevelopers — Enhanced CRM Filtering**
-- File: `src/pages/AdminDevelopers.tsx`
-- Add filter dropdowns for: Language, Nationality, Gender, Rating (from rep_activity_log score)
-- Add a "Years in RE" computed filter
-
-**Gap 3: CRM PDF Export with Letterhead**
-- Create edge function `generate-crm-report` that produces a PDF with:
-  - Company letterhead (logo + "JBJ Global Real Estate")
-  - Header with report title, date, filtered criteria
-  - Footer with page numbers and timestamp
-  - Grouping by role (COO, Admin, Sales Rep, Channel Partner)
-- Add "Export PDF Report" button to AdminDevelopers and CRM pages
-
-**Gap 4: Developer Portal — Marketing Materials Approval Status**
-- File: `src/pages/DeveloperPortal.tsx` (materials tab)
-- Show approval status badges (Pending/Approved/Rejected) on uploaded materials
-- Query `developer_project_submissions` for status tracking
-
----
-
-### FILES TO CHANGE
-
-| File | Changes |
-|---|---|
-| `src/pages/DeveloperPortal.tsx` | Add Agreements tab, Tasks tab, materials approval status |
-| `src/pages/AdminDevelopers.tsx` | Add language/nationality/gender/rating filters |
-| New: `supabase/functions/generate-crm-report/index.ts` | PDF report generation with letterhead |
-| `src/pages/CRM.tsx` or `src/pages/AdminCRM.tsx` | Add "Export PDF Report" button |
-
-This is a focused plan addressing only the gaps. The platform already covers ~95% of the requested enterprise architecture.
-
+### Files Changed
+| File | Action |
+|------|--------|
+| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
+| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
+| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
+| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
+| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
+| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
+| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
+| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
+| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |

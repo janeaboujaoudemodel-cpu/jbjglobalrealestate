@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   Building2, 
   Plus, 
@@ -28,7 +29,10 @@ import {
   Search,
   MessageCircle,
   ExternalLink,
-  Globe
+  Globe,
+  Filter,
+  Download,
+  FileText
 } from "lucide-react";
 import { toast } from "sonner";
 import { ProvidentSyncButton } from "@/components/admin/ProvidentSyncButton";
@@ -64,6 +68,7 @@ const AdminDevelopers = () => {
   const [salesReps, setSalesReps] = useState<SalesRep[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [titleFilter, setTitleFilter] = useState("all");
   const [selectedDeveloper, setSelectedDeveloper] = useState<Developer | null>(null);
   const [isDevDialogOpen, setIsDevDialogOpen] = useState(false);
   const [isRepDialogOpen, setIsRepDialogOpen] = useState(false);
@@ -222,7 +227,13 @@ const AdminDevelopers = () => {
   );
 
   const dubaiDevelopers = filteredDevelopers.filter(d => d.location_emirate === "Dubai");
-  const getDeveloperReps = (devId: string) => salesReps.filter(r => r.developer_id === devId);
+  const getDeveloperReps = (devId: string) => {
+    let reps = salesReps.filter(r => r.developer_id === devId);
+    if (titleFilter !== 'all') {
+      reps = reps.filter(r => r.title === titleFilter);
+    }
+    return reps;
+  };
 
   if (isLoading) {
     return (
@@ -266,9 +277,9 @@ const AdminDevelopers = () => {
       </div>
 
       <div className="container mx-auto px-4 py-8">
-        {/* Search */}
-        <div className="mb-6">
-          <div className="relative max-w-md">
+        {/* Search & Filters */}
+        <div className="mb-6 flex flex-wrap items-end gap-4">
+          <div className="relative flex-1 min-w-[200px] max-w-md">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
               placeholder="Search developers..."
@@ -276,6 +287,22 @@ const AdminDevelopers = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10 bg-white border-gold/20"
             />
+          </div>
+          <div className="flex items-center gap-2">
+            <Filter className="w-4 h-4 text-muted-foreground" />
+            <Select value={titleFilter} onValueChange={setTitleFilter}>
+              <SelectTrigger className="w-[180px] bg-white border-gold/20">
+                <SelectValue placeholder="Filter by role" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Roles</SelectItem>
+                <SelectItem value="COO">COO</SelectItem>
+                <SelectItem value="Sales Manager">Sales Manager</SelectItem>
+                <SelectItem value="Sales Representative">Sales Representative</SelectItem>
+                <SelectItem value="Channel Partner">Channel Partner</SelectItem>
+                <SelectItem value="Admin">Admin</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
