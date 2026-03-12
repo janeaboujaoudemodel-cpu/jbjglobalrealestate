@@ -2223,21 +2223,100 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <div className="px-4 pb-4 border-t border-[hsl(var(--border))] space-y-4 pt-3">
+                  {/* Context-aware label */}
+                  {cardShape === "email-signature" && (
+                    <p className="text-[9px] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))] px-2 py-1.5 rounded-lg font-semibold">
+                      ✨ Colors apply to your Email Signature border & accents
+                    </p>
+                  )}
+                  {cardShape === "ticket" && (
+                    <p className="text-[9px] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))] px-2 py-1.5 rounded-lg font-semibold">
+                      🎫 Colors apply to your Ticket stub & accents
+                    </p>
+                  )}
                   <ColorPickerSection
-                    label="Front Color"
+                    label={cardShape === "email-signature" ? "Signature Color" : cardShape === "ticket" ? "Ticket Color" : "Front Color"}
                     colorIdx={frontColorIdx}
                     customColor={frontCustomColor}
                     onPresetChange={setFrontColorIdx}
                     onCustomChange={setFrontCustomColor}
                   />
-                  <div className="border-t border-[hsl(var(--border))]" />
-                  <ColorPickerSection
-                    label="Back Color"
-                    colorIdx={backColorIdx}
-                    customColor={backCustomColor}
-                    onPresetChange={setBackColorIdx}
-                    onCustomChange={setBackCustomColor}
-                  />
+
+                  {/* Gradient / Ombre option */}
+                  <div className="border-t border-[hsl(var(--border))] pt-3">
+                    <div className="flex items-center justify-between mb-2">
+                      <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] flex items-center gap-1.5">
+                        <Palette size={10} /> Gradient / Ombré
+                      </Label>
+                      <Switch checked={useGradient} onCheckedChange={setUseGradient} />
+                    </div>
+                    {useGradient && (
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <div className="flex-1">
+                            <Label className="text-[9px] text-[hsl(var(--muted-foreground))] mb-1 block">Start</Label>
+                            <div className="flex items-center gap-1.5">
+                              <div className="w-6 h-6 rounded-md border border-[hsl(var(--border))]" style={{ background: frontPrimary }} />
+                              <span className="text-[9px] text-[hsl(var(--muted-foreground))]">Primary</span>
+                            </div>
+                          </div>
+                          <span className="text-[10px] text-[hsl(var(--muted-foreground))] mt-3">→</span>
+                          <div className="flex-1">
+                            <Label className="text-[9px] text-[hsl(var(--muted-foreground))] mb-1 block">End</Label>
+                            <div className="flex items-center gap-1.5">
+                              <input
+                                type="color"
+                                value={gradientEnd}
+                                onChange={e => setGradientEnd(e.target.value)}
+                                className="w-6 h-6 rounded-md border border-[hsl(var(--border))] cursor-pointer p-0"
+                              />
+                              <span className="text-[9px] text-[hsl(var(--muted-foreground))]">{gradientEnd}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-3 gap-1">
+                          {([
+                            { id: "135deg" as GradientDirection, label: "↘ Diagonal" },
+                            { id: "45deg" as GradientDirection, label: "↗ Reverse" },
+                            { id: "to right" as GradientDirection, label: "→ Horizontal" },
+                            { id: "to bottom" as GradientDirection, label: "↓ Vertical" },
+                            { id: "to left" as GradientDirection, label: "← Left" },
+                            { id: "to top" as GradientDirection, label: "↑ Up" },
+                          ]).map(opt => (
+                            <button
+                              key={opt.id}
+                              onClick={() => setGradientDirection(opt.id)}
+                              className={`text-[9px] py-1 px-1 rounded-lg border font-semibold transition-all text-center ${
+                                gradientDirection === opt.id
+                                  ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
+                                  : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
+                              }`}
+                            >
+                              {opt.label}
+                            </button>
+                          ))}
+                        </div>
+                        {/* Gradient preview bar */}
+                        <div
+                          className="h-6 rounded-lg border border-[hsl(var(--border))]"
+                          style={{ background: `linear-gradient(${gradientDirection}, ${frontPrimary}, ${gradientEnd})` }}
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  {cardShape !== "email-signature" && (
+                    <>
+                      <div className="border-t border-[hsl(var(--border))]" />
+                      <ColorPickerSection
+                        label="Back Color"
+                        colorIdx={backColorIdx}
+                        customColor={backCustomColor}
+                        onPresetChange={setBackColorIdx}
+                        onCustomChange={setBackCustomColor}
+                      />
+                    </>
+                  )}
                 </div>
               </CollapsibleContent>
             </div>
