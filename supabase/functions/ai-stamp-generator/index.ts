@@ -83,6 +83,19 @@ function monogram(cx: number, cy: number, text: string, font: string, size: numb
   return `<text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" font-family="${font}" font-size="${size}" font-weight="bold" fill="${color}">${text.toUpperCase().slice(0, 3)}</text>`;
 }
 
+/** Get border stroke attributes based on border_style */
+function borderAttrs(borderStyle: string): { dash: string; outerWidth: number; innerRing: boolean; innerDash: string; innerWidth: number } {
+  switch (borderStyle) {
+    case 'SINGLE': return { dash: 'none', outerWidth: 2.2, innerRing: false, innerDash: 'none', innerWidth: 0 };
+    case 'DOUBLE': return { dash: 'none', outerWidth: 2.2, innerRing: true, innerDash: 'none', innerWidth: 0.8 };
+    case 'RING': return { dash: 'none', outerWidth: 3.5, innerRing: true, innerDash: 'none', innerWidth: 2 };
+    case 'DOTTED': return { dash: '2,2', outerWidth: 2, innerRing: false, innerDash: 'none', innerWidth: 0 };
+    case 'ROPE': return { dash: '5,3', outerWidth: 2.5, innerRing: false, innerDash: 'none', innerWidth: 0 };
+    case 'CUSTOM': return { dash: 'none', outerWidth: 2.2, innerRing: true, innerDash: '2,4', innerWidth: 0.6 };
+    default: return { dash: 'none', outerWidth: 2.2, innerRing: true, innerDash: 'none', innerWidth: 0.8 };
+  }
+}
+
 function buildSVG(project: any, templateKey: string): string {
   const COLOR = "#1a2744";
   const cx = 150, cy = 150;
@@ -100,6 +113,7 @@ function buildSVG(project: any, templateKey: string): string {
   const regNo = project.registration_number_optional ? `REG: ${project.registration_number_optional}` : "";
   const hasMono = project.icon_style === 'MONOGRAM';
   const isBilingual = project.language_mode === 'BILINGUAL' || project.language_mode === 'AR';
+  const ba = borderAttrs(project.border_style || 'DOUBLE');
 
   switch (templateKey) {
     case "classic-double": {
