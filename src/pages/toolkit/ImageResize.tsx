@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 import { 
   Upload, Image as ImageIcon, Download, Trash2, FileArchive,
   Loader2, Check, Crop, Square, Plus, Type, Stamp, CalendarDays,
-  BorderAll, Palette, Grid3X3, Eraser, LayoutGrid, ChevronLeft, ChevronRight,
+  Palette, Grid3X3, Eraser, LayoutGrid, ChevronLeft, ChevronRight,
   Maximize, ZoomIn, ZoomOut, RotateCcw, FlipHorizontal, FlipVertical,
   Layers, Scissors, PaintBucket, SlidersHorizontal
 } from "lucide-react";
