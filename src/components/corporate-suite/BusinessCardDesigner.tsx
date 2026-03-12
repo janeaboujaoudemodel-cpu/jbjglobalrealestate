@@ -6,11 +6,11 @@ import {
   Download, CreditCard, Phone, Mail, Globe,
   MapPin, Building2, RefreshCw, Eye, Layers,
   LayoutGrid, Check, ImageIcon, ChevronDown, QrCode, Move,
-  Lock, Unlock, RotateCcw, Sparkles, RectangleHorizontal,
-  Save, Palette, Zap, Star, Cpu, Minus, Type, User,
-  Share2, Copy, ExternalLink, HelpCircle, AlignLeft, AlignCenter, AlignRight, Underline,
-  Smartphone, Wifi, Droplets, Sun, Diamond, Stamp,
-  FolderOpen, Image, Printer, Trash2, Clock,
+  Sparkles, RectangleHorizontal,
+  Palette, Star, Minus, Type, User,
+  Share2, HelpCircle, AlignLeft, AlignCenter, AlignRight, Underline,
+  Droplets, Sun, Diamond, Stamp,
+  FolderOpen, Trash2, Clock,
 } from "lucide-react";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
