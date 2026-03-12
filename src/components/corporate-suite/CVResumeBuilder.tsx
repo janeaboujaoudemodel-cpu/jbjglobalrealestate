@@ -818,7 +818,7 @@ const SECTIONS = [
 
 type SectionId = typeof SECTIONS[number]["id"];
 
-const TEMPLATE_CATEGORIES = ["All", "Classic", "Professional", "Creative", "Minimal", "Academic", "International"];
+// TEMPLATE_CATEGORIES imported from cvResumeTypes
 
 export default function CVResumeBuilder() {
   const navigate = useNavigate();
