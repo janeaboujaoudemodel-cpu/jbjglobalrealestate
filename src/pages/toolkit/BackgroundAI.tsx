@@ -1142,7 +1142,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                   />
                 )}
                 {selectedScene.id !== 'custom' && (
-                  <p className="text-xs rounded-lg p-2" style={{ background: "rgba(99,102,241,0.08)", color: C.accentText }}>
+                  <p className="text-xs rounded-lg p-2" style={{ background: "rgba(184,148,62,0.08)", color: C.accentText }}>
                     <span className="font-medium">Scene:</span> {selectedScene.prompt}
                   </p>
                 )}
