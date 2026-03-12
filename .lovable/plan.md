@@ -1,82 +1,72 @@
 
+## CRM System Upgrade — Implementation Status
 
-## Plan: Upgrade Photo & Image Suite + Document Designer
+### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-This is a substantial upgrade touching two major tools. I'll split it into two parts to keep changes manageable and testable.
+#### Task 1: Full System Audit ✅
+- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
+- Identified 10 weaknesses (documented in plan)
 
----
+#### Task 2: Leads Security Hardening ✅
+- CSV export no longer includes email/phone PII
+- Audit logging added to exports with user_agent tracking
+- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
 
-### Part 1: Photo & Image Suite Expansion
+#### Task 3: Encryption Hardening ✅
+- CSV export stripped of `email_lower` and `phone_e164` fields
+- Export audit logged to both `crm_audit_logs` and `audit_logs`
 
-**Current state**: 5 tabs (Background AI, Beauty Filters, Image Resize, Interior Design, Virtual Staging).
+#### Task 4: Lead Lifecycle Upgrade ✅
+- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
+- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
+- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
 
-**New tabs to add**:
-- **Scan & Sign** — reuse existing `ScanSignPage` component
-- **Photo → PDF** — reuse existing `PdfFromPhotos` component  
-- **Photo Collage** — new tool: upload multiple photos, arrange in grid/frame layouts, merge into single image
-- **AI Slideshow** — new tool: select photos (or pull from project gallery), generate animated slideshow/promo video with text overlays and transitions
-- **Color Palette** — wire to brand palette: owner sees company palette, regular users see customizable random palette
+#### Task 5: CRM Structure Upgrade ✅
+- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
+- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
+- KanbanPipeline expanded to show all 17 relevant stages
 
-**File**: `src/pages/toolkit/PhotoSuite.tsx`
-- Add 4 new lazy-loaded tab entries
-- Create `src/components/toolkit/PhotoCollageBuilder.tsx` — grid layout builder with frame templates (2x2, 3x3, filmstrip, mosaic), drag-to-reorder, merge/export as single image via canvas
-- Create `src/components/toolkit/AISlideshowCreator.tsx` — upload photos or search project images, add text/music selection, generate slideshow preview with CSS animations, export as video (or animated frames)
-- Wire color palette: owner palette from `brand_palettes` table, user palette with color wheel picker
+#### Task 6: Performance Optimization ✅
+- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
+- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
+- `crm_leads_updated_at_trigger` auto-updates `updated_at`
 
-### Part 2: Document Designer Overhaul
+#### Task 7: AI Intelligence Integration ✅
+- New edge function `ai-lead-intelligence` using Lovable AI gateway
+- Supports 3 modes: `score`, `summary`, `next_action`
+- Tool-calling for structured scoring output
+- JWT auth + CRM role validation
+- PII sanitized before sending to AI
 
-**Current issues identified**:
-1. Preview is left-aligned inside a `flex justify-center` container but toolbars span full width creating visual imbalance
-2. Stamp button shows error "No stamp found" instead of offering upload/generate options
-3. Color controls are basic — only 2 color pickers, no wheel, no gradient direction
-4. Formatting buttons are in toolbar rows above, requiring scroll — need to frame around preview
-5. Font dropdown only has 8 families — needs expansion
-6. Dropdown styling doesn't match premium theme
+#### Task 8: Workflow Automation ✅
+- Created `crm_automation_rules` table with RLS (owner manage, admin view)
+- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
 
-**Layout restructure** (`src/pages/Documents.tsx`):
-- Change to a **3-panel layout**: left sidebar (tools/AI), center (preview document), right sidebar (formatting/properties)
-- Formatting buttons (bold, italic, underline, alignment) move to a **floating toolbar** above the centered preview
-- AI tools (scan, find/replace, AI edit) move to left sidebar
-- Insert tools (stamp, signature, QR, image) move to left sidebar
-- Color palette + font controls move to right sidebar
-- Preview stays centered and always visible
+#### Task 10: Role & Permission System ✅
+- RLS on automation rules: owner CRUD, admin read-only
+- CSV export restricted to owner_admin/founder roles
 
-**Stamp integration**:
-- Replace the current "No stamp found" error with a dialog offering: (a) Upload existing stamp image, (b) Upload trade license → AI extracts company info → generates stamp using same logic as Stamp Generator, (c) Use saved stamp from session storage
+#### Task 12: Backend/Database Upgrade ✅
+- 3 new performance indexes
+- Auto-updated_at trigger on crm_leads
+- Duplicate hash computation trigger
+- Rate-limiting security function
 
-**Color palette upgrade**:
-- Add HSL color wheel component (canvas-based)
-- Support 3 or 5 color selection
-- Gradient direction: radial, vertical, horizontal, diagonal
-- Ombré preview strip
+#### Task 13: Data Cleanliness ✅
+- `duplicate_hash` with auto-compute trigger prevents future duplicates
+- Partial unique index enforces uniqueness at DB level
 
-**Font expansion**:
-- Add 30+ font families including Google Fonts (Playfair Display, Montserrat, Roboto, Lora, Merriweather, Raleway, etc.)
-- Premium dropdown styling with font preview in each option
-
-**More document templates**:
-- When user clicks "Offer Letter" → load the offer letter template format into the editor
-- Add real estate templates: Tenancy Contract, MOU, NOC Letter, Broker Agreement, Commission Invoice, Property Handover Checklist
-
-### Navigation sync
-- Update vertical sidebar and footer labels for the Document Designer page name change
-
-### Files to create/modify
-
+### Files Changed
 | File | Action |
-|---|---|
-| `src/pages/toolkit/PhotoSuite.tsx` | Add 4 new tabs (Scan & Sign, Photo→PDF, Collage, Slideshow) |
-| `src/components/toolkit/PhotoCollageBuilder.tsx` | **New** — grid/frame photo merger with canvas export |
-| `src/components/toolkit/AISlideshowCreator.tsx` | **New** — photo slideshow generator with text overlays |
-| `src/pages/Documents.tsx` | Full layout restructure: 3-panel frame layout, floating toolbar, stamp upload/generate dialog, HSL color wheel, expanded fonts, template loader |
-| `src/components/Footer.tsx` | Update document page label |
-| `src/components/GlobalHeader.tsx` | Update document page label in navigation |
-
-### Technical Details
-- Photo Collage uses HTML Canvas to composite images into grid layouts, then `canvas.toBlob()` for export
-- Slideshow uses CSS keyframe animations for preview, with option to export frames
-- HSL color wheel: canvas-based hue ring + saturation/brightness square, outputs hex values
-- Stamp from trade license: sends image to `document-ocr` edge function for text extraction, then generates stamp SVG client-side using same logic as stamp generator
-- Font loading: use `@import` from Google Fonts for expanded family list
-- Document templates: stored as HTML string constants, inserted into contentEditable on selection
-
+|------|--------|
+| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
+| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
+| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
+| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
+| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
+| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
+| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
+| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
+| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
