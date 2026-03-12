@@ -546,7 +546,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                   <div className="lg:col-span-2 space-y-4">
                     {/* Canvas */}
                     <div className="rounded-2xl overflow-hidden" style={{ background: "rgba(0,0,0,0.5)", border: `1px solid ${I.border}` }}>
-                      <div className="px-4 py-2.5 flex items-center justify-between" style={{ borderBottom: `1px solid rgba(99,102,241,0.1)` }}>
+                      <div className="px-4 py-2.5 flex items-center justify-between" style={{ borderBottom: `1px solid rgba(184,148,62,0.1)` }}>
                         <span className="text-sm font-medium text-white truncate max-w-[200px]">{image.name}</span>
                         <div className="flex items-center gap-2">
                           <button onClick={() => setShowBefore(v => !v)}
