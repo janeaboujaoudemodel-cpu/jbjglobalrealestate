@@ -2116,6 +2116,25 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
             )}
 
             <Button
+              onClick={handleExportPng}
+              disabled={isExportingPng}
+              variant="outline"
+              className="gap-1.5 h-8 text-xs font-semibold border-[hsl(var(--border))] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]"
+            >
+              {isExportingPng ? <RefreshCw size={12} className="animate-spin" /> : <Image size={12} />}
+              {isExportingPng ? "…" : "PNG"}
+            </Button>
+
+            <Button
+              onClick={() => setBatchPrintOpen(true)}
+              variant="outline"
+              className="gap-1.5 h-8 text-xs font-semibold border-[hsl(var(--border))] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]"
+            >
+              <Printer size={12} />
+              Print
+            </Button>
+
+            <Button
               onClick={handleExport}
               disabled={isExporting}
               className="gap-2 h-8 text-xs font-semibold text-white hover:opacity-90 transition-opacity"
