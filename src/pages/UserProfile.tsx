@@ -443,8 +443,8 @@ const UserProfile = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-black">
-        <div className="mx-0 mb-0 mt-0 rounded-none border-0 bg-[linear-gradient(135deg,hsl(var(--champagne-1)),hsl(var(--champagne-2)),hsl(var(--champagne-3)))]">
+      <div className="min-h-screen bg-[linear-gradient(135deg,hsl(var(--champagne-1)),hsl(var(--champagne-2)),hsl(var(--champagne-3)))]">
+        <div className="mx-0 mb-0 mt-0 rounded-none border-0">
           <div className="container mx-auto px-4 py-6 max-w-4xl">
           {/* Page Title */}
           <h1 className="text-2xl md:text-3xl font-bold text-black mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>

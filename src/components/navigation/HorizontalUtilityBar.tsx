@@ -101,15 +101,15 @@ export default function HorizontalUtilityBar() {
   const showCRM = !!user && isOwner;
 
   /* ─── Shared button classes for premium consistency ─── */
-  const pillBtn = "h-8 flex items-center gap-1.5 rounded-lg border border-gold/30 hover:border-gold/50 bg-gold/5 hover:bg-gold/15 transition-all px-2.5 group";
-  const iconBtn = "h-8 w-8 flex items-center justify-center rounded-lg border border-gold/20 bg-gold/5 hover:bg-gold/15 hover:border-gold/40 transition-all group";
-  const iconClass = "w-4 h-4 text-gold group-hover:scale-110 transition-transform";
-  const labelClass = "text-[11px] font-semibold text-black/55 uppercase tracking-wide hidden xl:inline";
+  const pillBtn = "h-8 flex items-center gap-1.5 rounded-lg border border-gold/30 hover:border-gold/50 bg-gold/5 hover:bg-gold/15 transition-all px-2.5 group whitespace-nowrap shrink-0";
+  const iconBtn = "h-8 w-8 flex items-center justify-center rounded-lg border border-gold/20 bg-gold/5 hover:bg-gold/15 hover:border-gold/40 transition-all group shrink-0";
+  const iconClass = "w-4 h-4 text-gold group-hover:scale-110 transition-transform shrink-0";
+  const labelClass = "text-[11px] font-semibold text-black/55 uppercase tracking-wide hidden xl:inline whitespace-nowrap";
 
   return (
     <>
       <div
-        className="fixed top-0 right-0 h-[48px] z-[9996] hidden md:flex items-center gap-2 px-3 border-b border-gold/15 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_1px_3px_hsl(var(--gold)/0.08)] [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px]"
+        className="fixed top-0 right-0 h-[48px] z-[9996] hidden md:flex items-center gap-3 px-4 border-b border-gold/15 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_1px_3px_hsl(var(--gold)/0.08)] overflow-x-auto scrollbar-hide [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px]"
       >
         {/* ── Sidebar Toggle (Minimize) — FIRST ── */}
         <Tooltip>
@@ -156,26 +156,26 @@ export default function HorizontalUtilityBar() {
         {divider}
 
         {/* ── Quick Nav: Buy / Rent / Sell ── */}
-        <div className="flex items-center gap-0.5">
+        <div className="flex items-center gap-0.5 shrink-0">
           <Link
             to="/properties?transaction=buy"
-            className="h-8 flex items-center gap-1.5 rounded-lg hover:bg-gold/10 transition-all px-2.5 group"
+            className="h-8 flex items-center gap-1.5 rounded-lg hover:bg-gold/10 transition-all px-2.5 group whitespace-nowrap"
           >
-            <Building2 className="w-4 h-4 text-gold/70 group-hover:text-gold transition-colors" />
+            <Building2 className="w-4 h-4 text-gold/70 group-hover:text-gold transition-colors shrink-0" />
             <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Buy</span>
           </Link>
           <Link
             to="/properties?transaction=rent"
-            className="h-8 flex items-center gap-1.5 rounded-lg hover:bg-gold/10 transition-all px-2.5 group"
+            className="h-8 flex items-center gap-1.5 rounded-lg hover:bg-gold/10 transition-all px-2.5 group whitespace-nowrap"
           >
-            <Key className="w-4 h-4 text-gold/70 group-hover:text-gold transition-colors" />
+            <Key className="w-4 h-4 text-gold/70 group-hover:text-gold transition-colors shrink-0" />
             <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Rent</span>
           </Link>
           <Link
             to="/listing-portal"
-            className="h-8 flex items-center gap-1.5 rounded-lg border border-gold/20 hover:border-gold/40 hover:bg-gold/10 transition-all px-2.5 group"
+            className="h-8 flex items-center gap-1.5 rounded-lg border border-gold/20 hover:border-gold/40 hover:bg-gold/10 transition-all px-2.5 group whitespace-nowrap"
           >
-            <Tag className="w-4 h-4 text-gold group-hover:scale-105 transition-transform" />
+            <Tag className="w-4 h-4 text-gold group-hover:scale-105 transition-transform shrink-0" />
             <span className="text-[11px] font-bold text-gold uppercase tracking-wide">Sell</span>
           </Link>
         </div>
@@ -267,10 +267,10 @@ export default function HorizontalUtilityBar() {
                 <TooltipTrigger asChild>
                   <Link
                     to="/owner/crm"
-                    className="h-8 flex items-center gap-1.5 rounded-lg hover:bg-emerald-500/10 transition-all px-2.5 group"
+                    className="h-8 flex items-center gap-1.5 rounded-lg hover:bg-emerald-500/10 transition-all px-2.5 group whitespace-nowrap shrink-0"
                   >
-                    <BarChart3 className="w-4 h-4 text-emerald-600 group-hover:scale-110 transition-transform" />
-                    <span className="text-[11px] font-semibold text-emerald-700 uppercase tracking-wide hidden xl:inline">CRM</span>
+                    <BarChart3 className="w-4 h-4 text-emerald-600 group-hover:scale-110 transition-transform shrink-0" />
+                    <span className="text-[11px] font-semibold text-emerald-700 uppercase tracking-wide hidden xl:inline whitespace-nowrap">CRM</span>
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">CRM Dashboard</TooltipContent>
@@ -282,10 +282,10 @@ export default function HorizontalUtilityBar() {
               <TooltipTrigger asChild>
                 <Link
                    to="/my-dashboard#tasks"
-                   className="h-8 flex items-center gap-1.5 rounded-lg border border-gold/20 bg-gold/5 hover:bg-gold/15 hover:border-gold/40 transition-all px-2 group relative"
+                   className="h-8 flex items-center gap-1.5 rounded-lg border border-gold/20 bg-gold/5 hover:bg-gold/15 hover:border-gold/40 transition-all px-2 group relative shrink-0 whitespace-nowrap"
                  >
                    <ClipboardList className={iconClass} />
-                  <span className="text-[11px] font-medium text-black/50 hidden xl:inline">Tasks</span>
+                  <span className="text-[11px] font-medium text-black/50 hidden xl:inline whitespace-nowrap">Tasks</span>
                   {(alerts?.pendingTasks || 0) > 0 && (
                     <span className="absolute -top-1.5 -right-1 w-4.5 h-4.5 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center">
                       {alerts!.pendingTasks > 9 ? '9+' : alerts!.pendingTasks}
