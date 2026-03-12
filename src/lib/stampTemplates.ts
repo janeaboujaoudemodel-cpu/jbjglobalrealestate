@@ -32,11 +32,13 @@ export interface StampDesignConcept {
   isFavorite?: boolean;
 }
 
-const fontMap = {
+const fontMap: Record<string, string> = {
   SERIF: 'Georgia, "Times New Roman", serif',
   SANS: 'Arial, Helvetica, sans-serif',
   MONOSPACE: '"Courier New", monospace',
   CALLIGRAPHY: '"Palatino Linotype", "Book Antiqua", Palatino, serif',
+  GOTHIC: '"Copperplate Gothic", Copperplate, "Small Caps", serif',
+  ARABIC_MODERN: '"Arabic Typesetting", "Noto Naskh Arabic", serif',
 };
 
 const arabicFont = '"Noto Naskh Arabic", "Arabic Typesetting", Arial, sans-serif';
