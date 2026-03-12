@@ -1,4 +1,5 @@
 import DOMPurify from 'dompurify';
+import { sanitizeForDisplay, sanitizeHtml } from '@/utils/contentSanitizer';
 
 /**
  * Strip social media hashtags from text
@@ -179,7 +180,9 @@ export function formatReellyDescription(text: string): string {
 export function renderMarkdownToHtml(markdown: string | null): string {
   if (!markdown) return '';
   
-  let cleaned = cleanRawText(markdown);
+  // Strip HTML tags and competitor references from source before processing
+  let cleaned = sanitizeForDisplay(markdown);
+  cleaned = cleanRawText(cleaned);
   
   // Convert markdown tables first
   cleaned = convertMarkdownTables(cleaned);
@@ -206,6 +209,9 @@ export function renderMarkdownToHtml(markdown: string | null): string {
   
   html = html.replace(/(<li[^>]*>.*?<\/li>(?:<br\/>)?)+/g, '<ul class="list-disc pl-5 space-y-1 my-3">$&</ul>');
   
+  // Final pass: strip any competitor references from generated HTML
+  html = sanitizeHtml(html);
+
   return DOMPurify.sanitize(html, {
     ALLOWED_TAGS: ['h2', 'h3', 'h4', 'h5', 'h6', 'p', 'br', 'strong', 'em', 'ul', 'ol', 'li', 'a', 'div', 'span', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'blockquote'],
     ALLOWED_ATTR: ['href', 'class', 'target', 'rel', 'style'],

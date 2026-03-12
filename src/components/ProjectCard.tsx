@@ -10,6 +10,7 @@ import { SafeImage } from "@/components/SafeImage";
 import { VerifiedMedia } from "@/components/ui/verified-media";
 import { Button } from "@/components/ui/button";
 import { DeveloperLink } from "@/components/ui/developer-link";
+import { sanitizeForDisplay } from "@/utils/contentSanitizer";
 
 interface ProjectCardProps {
   project: Project & { is_sold_out?: boolean | null };
@@ -143,11 +144,10 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
     return `${min}-${max} ${sizeUnit}`;
   };
 
-  // Truncate description for card preview - shorter for landscape card
+  // Truncate description for card preview - strip HTML + competitor refs
   const getTruncatedDescription = () => {
     if (!project.description) return null;
-    // Strip "Project general facts" and markdown headers
-    let clean = project.description
+    let clean = sanitizeForDisplay(project.description)
       .replace(/#{1,6}\s*/g, '')
       .replace(/\*{1,3}/g, '')
       .replace(/project\s*general\s*facts/gi, '')

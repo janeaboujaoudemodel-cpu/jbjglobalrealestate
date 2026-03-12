@@ -1,65 +1,72 @@
 
+## CRM System Upgrade — Implementation Status
 
-# Competitor Source Sanitization & HTML Stripping Plan
+### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-## Problem
-Project descriptions from external sources contain raw HTML with competitor URLs (e.g., `<a href="https://providentestate.com/...">`) that leak onto frontend cards and detail pages as visible markup text.
+#### Task 1: Full System Audit ✅
+- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
+- Identified 10 weaknesses (documented in plan)
 
-Two distinct issues:
-1. **Raw HTML in descriptions** — card components strip markdown but not HTML tags, so `<p>`, `<a>` tags render as visible text
-2. **Competitor references** — competitor names/URLs appear in descriptions, admin UI text, and data fields
+#### Task 2: Leads Security Hardening ✅
+- CSV export no longer includes email/phone PII
+- Audit logging added to exports with user_agent tracking
+- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
 
-## Solution
+#### Task 3: Encryption Hardening ✅
+- CSV export stripped of `email_lower` and `phone_e164` fields
+- Export audit logged to both `crm_audit_logs` and `audit_logs`
 
-### 1. Create a centralized sanitization utility (`src/utils/contentSanitizer.ts`)
+#### Task 4: Lead Lifecycle Upgrade ✅
+- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
+- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
+- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
 
-A single utility that:
-- Strips all HTML tags from text, preserving inner text content
-- Removes competitor URLs and domains (providentestate.com, reelly.io, etc.)
-- Removes competitor name mentions (Provident, Reelly)
-- Strips source attribution patterns ("Source:", "Extracted from", "via")
-- Can be called as `sanitizeForDisplay(text)` for plain-text contexts (cards) and `sanitizeHtml(html)` for rich HTML contexts (detail pages)
+#### Task 5: CRM Structure Upgrade ✅
+- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
+- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
+- KanbanPipeline expanded to show all 17 relevant stages
 
-### 2. Fix card description rendering
+#### Task 6: Performance Optimization ✅
+- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
+- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
+- `crm_leads_updated_at_trigger` auto-updates `updated_at`
 
-**`ReellyProjectCard.tsx`** and **`ProjectCard.tsx`** — update `getTruncatedDescription()` to call `sanitizeForDisplay()` which strips HTML tags and competitor references before truncation.
+#### Task 7: AI Intelligence Integration ✅
+- New edge function `ai-lead-intelligence` using Lovable AI gateway
+- Supports 3 modes: `score`, `summary`, `next_action`
+- Tool-calling for structured scoring output
+- JWT auth + CRM role validation
+- PII sanitized before sending to AI
 
-### 3. Fix rich HTML rendering pipeline
+#### Task 8: Workflow Automation ✅
+- Created `crm_automation_rules` table with RLS (owner manage, admin view)
+- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
 
-**`markdownUtils.ts`**:
-- In `formatReellyDescription()`: strip embedded HTML tags and competitor references from source text before markdown processing
-- In `renderMarkdownToHtml()`: filter out `<a>` tags pointing to blocked domains, converting them to plain text
+#### Task 10: Role & Permission System ✅
+- RLS on automation rules: owner CRUD, admin read-only
+- CSV export restricted to owner_admin/founder roles
 
-### 4. Clean admin-facing UI text
+#### Task 12: Backend/Database Upgrade ✅
+- 3 new performance indexes
+- Auto-updated_at trigger on crm_leads
+- Duplicate hash computation trigger
+- Rate-limiting security function
 
-Remove visible "Provident" references from:
-- `DeveloperApprovalQueue.tsx` — button text "Extract from Provident"
-- `SarahTestPanel.tsx` — suggested URLs and description text
-- `ProvidentSyncButton.tsx` — component name stays but visible labels change
-- `AdminDevelopers.tsx` — section label
+#### Task 13: Data Cleanliness ✅
+- `duplicate_hash` with auto-compute trigger prevents future duplicates
+- Partial unique index enforces uniqueness at DB level
 
-These are admin-only pages (owner-locked), but per policy they should still not show competitor names. Labels will be changed to generic terms like "External Source" or "Import Source".
-
-### 5. Clean type definitions
-
-Remove "Provident" mentions from code comments in:
-- `unifiedProject.ts` — comment references
-- `ApprovalConfirmDialog.tsx` — comment references
-
-These are non-functional but maintain code hygiene.
-
-### Files to create
-- `src/utils/contentSanitizer.ts`
-
-### Files to modify
-- `src/components/ReellyProjectCard.tsx` — use sanitizer in `getTruncatedDescription()`
-- `src/components/ProjectCard.tsx` — use sanitizer in `getTruncatedDescription()`
-- `src/lib/markdownUtils.ts` — add HTML stripping and competitor URL filtering
-- `src/components/listing-admin/DeveloperApprovalQueue.tsx` — rename visible labels
-- `src/components/listing-admin/SarahTestPanel.tsx` — rename visible labels
-- `src/components/admin/ProvidentSyncButton.tsx` — rename visible labels
-- `src/pages/AdminDevelopers.tsx` — rename visible label
-- `src/types/unifiedProject.ts` — clean comments
-- `src/components/project-detail/ProjectDetailTabs.tsx` — use sanitizer
-- `src/components/area-detail/AreaAboutSection.tsx` — benefits from markdownUtils fix
-
+### Files Changed
+| File | Action |
+|------|--------|
+| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
+| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
+| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
+| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
+| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
+| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
+| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
+| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
+| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |

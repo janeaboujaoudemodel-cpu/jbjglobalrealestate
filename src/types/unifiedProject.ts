@@ -2,11 +2,9 @@
  * Unified Project Data Model
  * 
  * This is the master data structure that ALL project sources must follow:
- * - Reelly API imports
- * - Provident extractions
+ * - External API imports
+ * - Extracted listings
  * - Manual admin additions
- * 
- * Based on Reelly API structure for consistency across the platform.
  */
 
 import type { Json } from "@/integrations/supabase/types";

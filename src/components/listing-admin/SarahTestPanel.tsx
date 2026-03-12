@@ -68,7 +68,7 @@ interface SarahTestPanelProps {
 }
 
 export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprovals }: SarahTestPanelProps) => {
-  const [testUrl, setTestUrl] = useState("https://providentestate.com/new-projects/sobha-seahaven/");
+  const [testUrl, setTestUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [testResult, setTestResult] = useState<TestResult | null>(null);
   const [retryCount, setRetryCount] = useState(0);
@@ -130,12 +130,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
     runTest(true);
   };
 
-  const suggestedUrls = [
-    "https://providentestate.com/new-projects/sobha-seahaven/",
-    "https://providentestate.com/new-projects/emaar-the-oasis/",
-    "https://providentestate.com/new-projects/damac-lagoons/",
-    "https://providentestate.com/new-projects/sobha-hartland-ii/",
-  ];
+  const suggestedUrls: string[] = [];
 
   const formatPrice = (price: number | null) => {
     if (!price) return "N/A";
@@ -154,7 +149,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
         </CardHeader>
         <CardContent>
           <p className="text-sm text-zinc-600 mb-4">
-            Paste a single Provident project link. Sarah will extract the full listing (images + PDFs) and queue it for your approval.
+            Paste a project URL. Sarah will extract the full listing (images + PDFs) and queue it for your approval.
           </p>
           
           <div className="flex flex-col md:flex-row gap-2 mb-3">
