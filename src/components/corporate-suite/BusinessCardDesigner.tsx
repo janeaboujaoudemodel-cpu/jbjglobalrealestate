@@ -10,7 +10,7 @@ import {
   RectangleVertical, Square, Maximize2, Monitor, Ticket,
   Save, Palette, Zap, Star, Cpu, Minus, Type, User,
   Share2, Copy, ExternalLink, HelpCircle, AlignLeft, AlignCenter, AlignRight, Underline,
-  Smartphone, Wifi,
+  Smartphone, Wifi, Droplets, Sun, Diamond, Stamp,
 } from "lucide-react";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
@@ -36,6 +36,8 @@ type QrPosition = "bottom-right" | "bottom-left" | "top-right" | "top-left" | "c
 type QrContentType = "url" | "vcard" | "text" | "email" | "phone";
 type TextAlign = "left" | "center" | "right";
 type GradientDirection = "to right" | "to left" | "to bottom" | "to top" | "135deg" | "45deg";
+type FinishEffect = "none" | "matte" | "glossy" | "spot-uv" | "embossed";
+type MockupScene = "none" | "desk" | "pocket" | "stationery" | "hand";
 
 interface CardData {
   name: string;
@@ -1043,6 +1045,134 @@ async function exportCardAsPDF(
   URL.revokeObjectURL(url);
 }
 
+// ─── Finishing Effect Overlay ──────────────────────────────────────────────────
+function getFinishOverlayStyle(finish: FinishEffect): React.CSSProperties {
+  switch (finish) {
+    case "glossy":
+      return {
+        position: "absolute", inset: 0, zIndex: 25, pointerEvents: "none", borderRadius: "inherit",
+        background: "linear-gradient(135deg, transparent 30%, rgba(255,255,255,0.35) 45%, rgba(255,255,255,0.1) 50%, transparent 55%, transparent 100%)",
+        mixBlendMode: "overlay",
+      };
+    case "matte":
+      return {
+        position: "absolute", inset: 0, zIndex: 25, pointerEvents: "none", borderRadius: "inherit",
+        background: "rgba(0,0,0,0.06)",
+        backdropFilter: "saturate(0.9) contrast(0.97)",
+      };
+    case "spot-uv":
+      return {
+        position: "absolute", inset: 0, zIndex: 25, pointerEvents: "none", borderRadius: "inherit",
+        background: "linear-gradient(135deg, transparent 20%, rgba(255,255,255,0.4) 25%, transparent 30%, transparent 60%, rgba(255,255,255,0.3) 65%, transparent 70%)",
+        mixBlendMode: "overlay",
+      };
+    case "embossed":
+      return {
+        position: "absolute", inset: 0, zIndex: 25, pointerEvents: "none", borderRadius: "inherit",
+        boxShadow: "inset 2px 2px 6px rgba(255,255,255,0.15), inset -2px -2px 6px rgba(0,0,0,0.12)",
+      };
+    default:
+      return {};
+  }
+}
+
+// ─── Mockup Scene Components ──────────────────────────────────────────────────
+function DeskMockup({ children, finishEffect }: { children: React.ReactNode; finishEffect: FinishEffect }) {
+  return (
+    <div className="relative w-full rounded-2xl overflow-hidden" style={{ background: "linear-gradient(160deg, #f5efe6 0%, #e8dfd3 50%, #d4cbbe 100%)", padding: "40px 32px 48px", minHeight: 280 }}>
+      {/* Desk texture lines */}
+      <div style={{ position: "absolute", inset: 0, opacity: 0.04, backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 18px, #8b7355 18px, #8b7355 19px)", pointerEvents: "none" }} />
+      {/* Shadow under card */}
+      <div className="relative mx-auto" style={{ maxWidth: 320 }}>
+        <div style={{ position: "absolute", bottom: -12, left: "8%", right: "8%", height: 20, background: "rgba(0,0,0,0.15)", filter: "blur(12px)", borderRadius: "50%" }} />
+        <div className="relative" style={{ transform: "perspective(600px) rotateX(2deg)", transformOrigin: "center bottom" }}>
+          {children}
+          {finishEffect !== "none" && <div style={getFinishOverlayStyle(finishEffect)} />}
+        </div>
+      </div>
+      {/* Desk accessories */}
+      <div style={{ position: "absolute", top: 20, right: 24 }}>
+        <div style={{ width: 8, height: 80, background: "linear-gradient(to bottom, #2a2a2a, #444)", borderRadius: 4, transform: "rotate(-15deg)" }} />
+      </div>
+      <div style={{ position: "absolute", bottom: 16, left: 24 }}>
+        <div style={{ width: 48, height: 5, background: "#C8A766", borderRadius: 3, opacity: 0.6 }} />
+      </div>
+      <p className="absolute bottom-3 left-0 right-0 text-center text-[9px] font-semibold text-[#a09080] tracking-[0.2em] uppercase">Desk Preview</p>
+    </div>
+  );
+}
+
+function PocketMockup({ children, finishEffect }: { children: React.ReactNode; finishEffect: FinishEffect }) {
+  return (
+    <div className="relative w-full rounded-2xl overflow-hidden" style={{ background: "linear-gradient(180deg, #2c3e50 0%, #1a252f 100%)", padding: "48px 32px 40px", minHeight: 280 }}>
+      {/* Fabric texture */}
+      <div style={{ position: "absolute", inset: 0, opacity: 0.06, backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 2px, #fff 2px, #fff 3px)", pointerEvents: "none" }} />
+      {/* Pocket shape */}
+      <div style={{ position: "absolute", bottom: 0, left: "15%", right: "15%", height: "55%", borderTop: "2px solid rgba(255,255,255,0.08)", borderRadius: "12px 12px 0 0", background: "linear-gradient(180deg, rgba(255,255,255,0.03) 0%, transparent 100%)" }} />
+      {/* Card peeking from pocket */}
+      <div className="relative mx-auto" style={{ maxWidth: 260 }}>
+        <div style={{ transform: "rotate(-3deg) translateY(20px)", transformOrigin: "center top" }}>
+          <div className="relative" style={{ clipPath: "inset(0 0 25% 0)" }}>
+            {children}
+            {finishEffect !== "none" && <div style={getFinishOverlayStyle(finishEffect)} />}
+          </div>
+        </div>
+      </div>
+      <p className="absolute bottom-3 left-0 right-0 text-center text-[9px] font-semibold text-white/30 tracking-[0.2em] uppercase">Pocket Preview</p>
+    </div>
+  );
+}
+
+function StationeryMockup({ children, data, primary, finishEffect }: { children: React.ReactNode; data: CardData; primary: string; finishEffect: FinishEffect }) {
+  return (
+    <div className="relative w-full rounded-2xl overflow-hidden" style={{ background: "linear-gradient(160deg, #faf8f5 0%, #f0ece5 100%)", padding: "32px 24px 40px", minHeight: 340 }}>
+      {/* Letterhead behind */}
+      <div className="mx-auto mb-3" style={{ maxWidth: 240, background: "#fff", border: "1px solid #e5e0d8", borderRadius: 8, padding: "16px 14px", boxShadow: "0 4px 16px rgba(0,0,0,0.06)", transform: "rotate(-1deg)" }}>
+        <div style={{ borderTop: `3px solid ${primary}`, width: 40, marginBottom: 8 }} />
+        <p style={{ fontSize: 9, fontWeight: 700, color: primary, letterSpacing: 1.5, textTransform: "uppercase" }}>{data.company || "COMPANY"}</p>
+        <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 4 }}>
+          {[1, 2, 3].map(i => (
+            <div key={i} style={{ height: 3, background: "#eee", borderRadius: 2, width: `${85 - i * 15}%` }} />
+          ))}
+        </div>
+      </div>
+      {/* Business card */}
+      <div className="relative mx-auto" style={{ maxWidth: 280, transform: "rotate(2deg)" }}>
+        <div style={{ position: "absolute", bottom: -8, left: "10%", right: "10%", height: 16, background: "rgba(0,0,0,0.1)", filter: "blur(8px)", borderRadius: "50%" }} />
+        <div className="relative">
+          {children}
+          {finishEffect !== "none" && <div style={getFinishOverlayStyle(finishEffect)} />}
+        </div>
+      </div>
+      {/* Envelope peek */}
+      <div className="mx-auto mt-4" style={{ maxWidth: 200 }}>
+        <div style={{ background: "#fff", border: "1px solid #e5e0d8", borderRadius: "6px 6px 0 0", height: 28, display: "flex", alignItems: "center", paddingLeft: 12, boxShadow: "0 -2px 8px rgba(0,0,0,0.04)" }}>
+          <div style={{ width: 20, height: 2, background: primary, borderRadius: 1, opacity: 0.5 }} />
+        </div>
+      </div>
+      <p className="absolute bottom-3 left-0 right-0 text-center text-[9px] font-semibold text-[#a09080] tracking-[0.2em] uppercase">Stationery Kit</p>
+    </div>
+  );
+}
+
+function HandMockup({ children, finishEffect }: { children: React.ReactNode; finishEffect: FinishEffect }) {
+  return (
+    <div className="relative w-full rounded-2xl overflow-hidden" style={{ background: "linear-gradient(160deg, #f0f0f0 0%, #e0e0e0 100%)", padding: "40px 32px 48px", minHeight: 280 }}>
+      {/* Hand silhouette */}
+      <div style={{ position: "absolute", bottom: 0, left: "50%", transform: "translateX(-50%)", width: 180, height: 100, background: "linear-gradient(to top, #d4b896 0%, #d4b896cc 60%, transparent 100%)", borderRadius: "40% 40% 0 0", opacity: 0.3 }} />
+      {/* Card held at angle */}
+      <div className="relative mx-auto" style={{ maxWidth: 300 }}>
+        <div style={{ position: "absolute", bottom: -10, left: "10%", right: "10%", height: 18, background: "rgba(0,0,0,0.12)", filter: "blur(10px)", borderRadius: "50%" }} />
+        <div className="relative" style={{ transform: "perspective(500px) rotateY(-5deg) rotateX(3deg)", transformOrigin: "center bottom" }}>
+          {children}
+          {finishEffect !== "none" && <div style={getFinishOverlayStyle(finishEffect)} />}
+        </div>
+      </div>
+      <p className="absolute bottom-3 left-0 right-0 text-center text-[9px] font-semibold text-[#888] tracking-[0.2em] uppercase">Hand Preview</p>
+    </div>
+  );
+}
+
 // ─── Phone Mockup ─────────────────────────────────────────────────────────────
 function PhoneMockup({ children }: { children: React.ReactNode }) {
   const now = new Date();
@@ -1443,6 +1573,14 @@ export default function BusinessCardDesigner() {
   // Landing page data (Digital mode)
   const [landingPageData, setLandingPageData] = useState<LandingPageData>({ ...EMPTY_LANDING_PAGE });
   const [digitalTab, setDigitalTab] = useState<"card" | "landing">("card");
+
+  // Finishing effects
+  const [finishEffect, setFinishEffect] = useState<FinishEffect>("none");
+  const [finishOpen, setFinishOpen] = useState(false);
+
+  // Mockup previews
+  const [mockupScene, setMockupScene] = useState<MockupScene>("none");
+  const [mockupOpen, setMockupOpen] = useState(false);
 
   const frontPreset = COLOR_PRESETS[frontColorIdx];
   const backPreset  = COLOR_PRESETS[backColorIdx];
@@ -2451,42 +2589,45 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                     transition={{ duration: 0.25, ease: "easeOut" }}
                     style={{ perspective: 800 }}
                   >
-                    <CardCanvas
-                      data={data}
-                      template={frontTemplate}
-                      backTemplate={backTemplate}
-                      primary={frontPrimary}
-                      secondary={frontSecondary}
-                      accent={frontAccent}
-                      backPrimary={backPrimary}
-                      backSecondary={backSecondary}
-                      backAccent={backAccent}
-                      side={side}
-                      cardShape={cardShape}
-                      editLayout={editLayout}
-                      fieldPositions={fieldPositions}
-                      onFieldMove={handleFieldMove}
-                      qrEnabled={qrEnabled}
-                      qrData={qrDataStr}
-                      qrSize={qrSize}
-                      qrColor={effectiveQrColor}
-                      qrBgColor={qrBgColor}
-                      qrPosition={qrPosition}
-                      qrSide={qrSide}
-                      logoUrl={logoUrl}
-                      logoSize={logoSize}
-                      logoPos={logoPos}
-                      onLogoMove={setLogoPos}
-                      aiDesignData={aiDesignData}
-                      fontFamily={cardFontFamily}
-                      fontWeight={cardFontBold ? "bold" : undefined}
-                      fontStyle={cardFontItalic ? "italic" : undefined}
-                      nameFontSize={cardFontSize}
-                      bilingualMode={bilingualMode}
-                      bilingualDir={bilingualDir}
-                      secondaryData={secondaryData}
-                      onInlineEdit={(field) => setInlineEditField(field)}
-                    />
+                    <div className="relative">
+                      <CardCanvas
+                        data={data}
+                        template={frontTemplate}
+                        backTemplate={backTemplate}
+                        primary={frontPrimary}
+                        secondary={frontSecondary}
+                        accent={frontAccent}
+                        backPrimary={backPrimary}
+                        backSecondary={backSecondary}
+                        backAccent={backAccent}
+                        side={side}
+                        cardShape={cardShape}
+                        editLayout={editLayout}
+                        fieldPositions={fieldPositions}
+                        onFieldMove={handleFieldMove}
+                        qrEnabled={qrEnabled}
+                        qrData={qrDataStr}
+                        qrSize={qrSize}
+                        qrColor={effectiveQrColor}
+                        qrBgColor={qrBgColor}
+                        qrPosition={qrPosition}
+                        qrSide={qrSide}
+                        logoUrl={logoUrl}
+                        logoSize={logoSize}
+                        logoPos={logoPos}
+                        onLogoMove={setLogoPos}
+                        aiDesignData={aiDesignData}
+                        fontFamily={cardFontFamily}
+                        fontWeight={cardFontBold ? "bold" : undefined}
+                        fontStyle={cardFontItalic ? "italic" : undefined}
+                        nameFontSize={cardFontSize}
+                        bilingualMode={bilingualMode}
+                        bilingualDir={bilingualDir}
+                        secondaryData={secondaryData}
+                        onInlineEdit={(field) => setInlineEditField(field)}
+                      />
+                      {finishEffect !== "none" && <div style={getFinishOverlayStyle(finishEffect)} />}
+                    </div>
                   </motion.div>
                 </AnimatePresence>
               </div>
@@ -2526,6 +2667,7 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
               {qrEnabled && <span>· QR on both sides</span>}
               {logoUrl && <span>· Logo on both sides</span>}
               {bilingualMode !== "off" && <span>· Bilingual ({BILINGUAL_LANGUAGES.find(l => l.id === bilingualLang)?.label?.split(" ")[0]})</span>}
+              {finishEffect !== "none" && <span>· {finishEffect.charAt(0).toUpperCase() + finishEffect.slice(1)} finish</span>}
             </div>
 
             {/* Digital mode tabs + landing page editor + export */}
@@ -3356,6 +3498,133 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                         <p className="text-[10px] font-semibold text-[hsl(var(--foreground))]">Generating design…</p>
                         <p className="text-[9px] text-[hsl(var(--muted-foreground))]">Creating {aiTone} {aiStyle} patterns for {aiIndustry}</p>
                       </div>
+                    </div>
+                  )}
+                </div>
+              </CollapsibleContent>
+            </div>
+          </Collapsible>
+
+          {/* Finishing Effects */}
+          <Collapsible open={finishOpen} onOpenChange={setFinishOpen}>
+            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+              <CollapsibleTrigger asChild>
+                <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
+                  <div className="flex items-center gap-2">
+                    <Droplets size={13} className="text-[hsl(var(--gold))]" />
+                    <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">Finishing Effects</span>
+                    {finishEffect !== "none" && (
+                      <span className="text-[8px] bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold-dark))] px-1.5 py-0.5 rounded-full font-semibold capitalize">{finishEffect}</span>
+                    )}
+                  </div>
+                  <ChevronDown size={13} className={`text-[hsl(var(--muted-foreground))] transition-transform ${finishOpen ? "rotate-180" : ""}`} />
+                </button>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="px-4 pb-4 border-t border-[hsl(var(--border))] space-y-3 pt-3">
+                  <p className="text-[10px] text-[hsl(var(--muted-foreground))] leading-relaxed">
+                    Simulate print finishing effects on your card preview to visualise the final product.
+                  </p>
+                  <div className="grid grid-cols-5 gap-1.5">
+                    {([
+                      { id: "none" as FinishEffect, label: "None", icon: <Minus size={12} /> },
+                      { id: "matte" as FinishEffect, label: "Matte", icon: <Sun size={12} /> },
+                      { id: "glossy" as FinishEffect, label: "Glossy", icon: <Droplets size={12} /> },
+                      { id: "spot-uv" as FinishEffect, label: "Spot UV", icon: <Diamond size={12} /> },
+                      { id: "embossed" as FinishEffect, label: "Emboss", icon: <Stamp size={12} /> },
+                    ]).map(opt => (
+                      <button
+                        key={opt.id}
+                        onClick={() => setFinishEffect(opt.id)}
+                        className={`flex flex-col items-center gap-1 py-2 px-1 rounded-xl border transition-all ${
+                          finishEffect === opt.id
+                            ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)] text-[hsl(var(--gold-dark))]"
+                            : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
+                        }`}
+                      >
+                        {opt.icon}
+                        <span className="text-[8px] font-semibold leading-none">{opt.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                  {finishEffect !== "none" && (
+                    <div className="rounded-xl bg-[hsl(var(--muted))] p-3 text-[10px] text-[hsl(var(--muted-foreground))]">
+                      {finishEffect === "matte" && "🖨️ Matte — Soft, non-reflective finish. Elegant and smudge-resistant."}
+                      {finishEffect === "glossy" && "✨ Glossy — High-shine reflective coating. Vibrant colors pop."}
+                      {finishEffect === "spot-uv" && "💎 Spot UV — Selective gloss areas create depth and contrast."}
+                      {finishEffect === "embossed" && "🔳 Embossed — Raised texture for a tactile, premium feel."}
+                    </div>
+                  )}
+                </div>
+              </CollapsibleContent>
+            </div>
+          </Collapsible>
+
+          {/* Mockup Previews */}
+          <Collapsible open={mockupOpen} onOpenChange={setMockupOpen}>
+            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+              <CollapsibleTrigger asChild>
+                <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
+                  <div className="flex items-center gap-2">
+                    <ImageIcon size={13} className="text-[hsl(var(--gold))]" />
+                    <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">Mockup Preview</span>
+                    {mockupScene !== "none" && (
+                      <span className="text-[8px] bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold-dark))] px-1.5 py-0.5 rounded-full font-semibold capitalize">{mockupScene}</span>
+                    )}
+                  </div>
+                  <ChevronDown size={13} className={`text-[hsl(var(--muted-foreground))] transition-transform ${mockupOpen ? "rotate-180" : ""}`} />
+                </button>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="px-4 pb-4 border-t border-[hsl(var(--border))] space-y-3 pt-3">
+                  <p className="text-[10px] text-[hsl(var(--muted-foreground))] leading-relaxed">
+                    Preview your card in realistic scenes to see how it looks in real life.
+                  </p>
+                  <div className="grid grid-cols-5 gap-1.5">
+                    {([
+                      { id: "none" as MockupScene, label: "None" },
+                      { id: "desk" as MockupScene, label: "Desk" },
+                      { id: "pocket" as MockupScene, label: "Pocket" },
+                      { id: "stationery" as MockupScene, label: "Kit" },
+                      { id: "hand" as MockupScene, label: "Hand" },
+                    ]).map(opt => (
+                      <button
+                        key={opt.id}
+                        onClick={() => setMockupScene(opt.id)}
+                        className={`text-[9px] py-2 px-1 rounded-xl border font-semibold transition-all ${
+                          mockupScene === opt.id
+                            ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)] text-[hsl(var(--gold-dark))]"
+                            : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
+                        }`}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Inline mockup preview */}
+                  {mockupScene !== "none" && (
+                    <div className="rounded-xl overflow-hidden border border-[hsl(var(--border))] shadow-sm">
+                      {mockupScene === "desk" && (
+                        <DeskMockup finishEffect={finishEffect}>
+                          <CardFace data={data} template={frontTemplate} primary={frontPrimary} secondary={frontSecondary} accent={frontAccent} side="front" scale={0.7} shapeStyle={getShapeStyle(cardShape)} aiDesignData={aiDesignData} cardShape={cardShape} fontFamily={cardFontFamily} fontWeight={cardFontBold ? "bold" : undefined} fontStyle={cardFontItalic ? "italic" : undefined} nameFontSize={cardFontSize} />
+                        </DeskMockup>
+                      )}
+                      {mockupScene === "pocket" && (
+                        <PocketMockup finishEffect={finishEffect}>
+                          <CardFace data={data} template={frontTemplate} primary={frontPrimary} secondary={frontSecondary} accent={frontAccent} side="front" scale={0.6} shapeStyle={getShapeStyle(cardShape)} aiDesignData={aiDesignData} cardShape={cardShape} fontFamily={cardFontFamily} fontWeight={cardFontBold ? "bold" : undefined} fontStyle={cardFontItalic ? "italic" : undefined} nameFontSize={cardFontSize} />
+                        </PocketMockup>
+                      )}
+                      {mockupScene === "stationery" && (
+                        <StationeryMockup data={data} primary={frontPrimary} finishEffect={finishEffect}>
+                          <CardFace data={data} template={frontTemplate} primary={frontPrimary} secondary={frontSecondary} accent={frontAccent} side="front" scale={0.6} shapeStyle={getShapeStyle(cardShape)} aiDesignData={aiDesignData} cardShape={cardShape} fontFamily={cardFontFamily} fontWeight={cardFontBold ? "bold" : undefined} fontStyle={cardFontItalic ? "italic" : undefined} nameFontSize={cardFontSize} />
+                        </StationeryMockup>
+                      )}
+                      {mockupScene === "hand" && (
+                        <HandMockup finishEffect={finishEffect}>
+                          <CardFace data={data} template={frontTemplate} primary={frontPrimary} secondary={frontSecondary} accent={frontAccent} side="front" scale={0.7} shapeStyle={getShapeStyle(cardShape)} aiDesignData={aiDesignData} cardShape={cardShape} fontFamily={cardFontFamily} fontWeight={cardFontBold ? "bold" : undefined} fontStyle={cardFontItalic ? "italic" : undefined} nameFontSize={cardFontSize} />
+                        </HandMockup>
+                      )}
                     </div>
                   )}
                 </div>
