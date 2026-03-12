@@ -34,6 +34,8 @@ type Template = "modern" | "classic" | "minimal" | "bold" | "creative" | "corpor
 type CardShape = "horizontal" | "vertical" | "square" | "rounded-square" | "wide" | "digital" | "ticket" | "email-signature";
 type QrPosition = "bottom-right" | "bottom-left" | "top-right" | "top-left" | "center";
 type QrContentType = "url" | "vcard" | "text" | "email" | "phone";
+type TextAlign = "left" | "center" | "right";
+type GradientDirection = "to right" | "to left" | "to bottom" | "to top" | "135deg" | "45deg";
 
 interface CardData {
   name: string;
