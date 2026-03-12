@@ -9,7 +9,7 @@ import {
   Lock, Unlock, RotateCcw, Sparkles, RectangleHorizontal,
   RectangleVertical, Square, Maximize2, Monitor, Ticket,
   Save, Palette, Zap, Star, Cpu, Minus, Type, User,
-  Share2, Copy, ExternalLink, HelpCircle,
+  Share2, Copy, ExternalLink, HelpCircle, AlignLeft, AlignCenter, AlignRight, Underline,
   Smartphone, Wifi,
 } from "lucide-react";
 import {
@@ -34,6 +34,8 @@ type Template = "modern" | "classic" | "minimal" | "bold" | "creative" | "corpor
 type CardShape = "horizontal" | "vertical" | "square" | "rounded-square" | "wide" | "digital" | "ticket" | "email-signature";
 type QrPosition = "bottom-right" | "bottom-left" | "top-right" | "top-left" | "center";
 type QrContentType = "url" | "vcard" | "text" | "email" | "phone";
+type TextAlign = "left" | "center" | "right";
+type GradientDirection = "to right" | "to left" | "to bottom" | "to top" | "135deg" | "45deg";
 
 interface CardData {
   name: string;
@@ -1343,6 +1345,15 @@ export default function BusinessCardDesigner() {
   const [cardFontBold, setCardFontBold] = useState(false);
   const [cardFontItalic, setCardFontItalic] = useState(false);
   const [cardFontSize, setCardFontSize] = useState<number | null>(null);
+  const [cardTextAlign, setCardTextAlign] = useState<TextAlign>("left");
+  const [cardUnderline, setCardUnderline] = useState(false);
+  const [cardLetterSpacing, setCardLetterSpacing] = useState(0);
+  const [cardLineHeight, setCardLineHeight] = useState(1.2);
+
+  // Gradient colors
+  const [useGradient, setUseGradient] = useState(false);
+  const [gradientEnd, setGradientEnd] = useState("#C8A766");
+  const [gradientDirection, setGradientDirection] = useState<GradientDirection>("135deg");
 
   const [data, setData] = useState<CardData>({
     name: "", title: "", company: "", phone: "", email: "", website: "", address: "",
@@ -2212,21 +2223,100 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <div className="px-4 pb-4 border-t border-[hsl(var(--border))] space-y-4 pt-3">
+                  {/* Context-aware label */}
+                  {cardShape === "email-signature" && (
+                    <p className="text-[9px] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))] px-2 py-1.5 rounded-lg font-semibold">
+                      ✨ Colors apply to your Email Signature border & accents
+                    </p>
+                  )}
+                  {cardShape === "ticket" && (
+                    <p className="text-[9px] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))] px-2 py-1.5 rounded-lg font-semibold">
+                      🎫 Colors apply to your Ticket stub & accents
+                    </p>
+                  )}
                   <ColorPickerSection
-                    label="Front Color"
+                    label={cardShape === "email-signature" ? "Signature Color" : cardShape === "ticket" ? "Ticket Color" : "Front Color"}
                     colorIdx={frontColorIdx}
                     customColor={frontCustomColor}
                     onPresetChange={setFrontColorIdx}
                     onCustomChange={setFrontCustomColor}
                   />
-                  <div className="border-t border-[hsl(var(--border))]" />
-                  <ColorPickerSection
-                    label="Back Color"
-                    colorIdx={backColorIdx}
-                    customColor={backCustomColor}
-                    onPresetChange={setBackColorIdx}
-                    onCustomChange={setBackCustomColor}
-                  />
+
+                  {/* Gradient / Ombre option */}
+                  <div className="border-t border-[hsl(var(--border))] pt-3">
+                    <div className="flex items-center justify-between mb-2">
+                      <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] flex items-center gap-1.5">
+                        <Palette size={10} /> Gradient / Ombré
+                      </Label>
+                      <Switch checked={useGradient} onCheckedChange={setUseGradient} />
+                    </div>
+                    {useGradient && (
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <div className="flex-1">
+                            <Label className="text-[9px] text-[hsl(var(--muted-foreground))] mb-1 block">Start</Label>
+                            <div className="flex items-center gap-1.5">
+                              <div className="w-6 h-6 rounded-md border border-[hsl(var(--border))]" style={{ background: frontPrimary }} />
+                              <span className="text-[9px] text-[hsl(var(--muted-foreground))]">Primary</span>
+                            </div>
+                          </div>
+                          <span className="text-[10px] text-[hsl(var(--muted-foreground))] mt-3">→</span>
+                          <div className="flex-1">
+                            <Label className="text-[9px] text-[hsl(var(--muted-foreground))] mb-1 block">End</Label>
+                            <div className="flex items-center gap-1.5">
+                              <input
+                                type="color"
+                                value={gradientEnd}
+                                onChange={e => setGradientEnd(e.target.value)}
+                                className="w-6 h-6 rounded-md border border-[hsl(var(--border))] cursor-pointer p-0"
+                              />
+                              <span className="text-[9px] text-[hsl(var(--muted-foreground))]">{gradientEnd}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-3 gap-1">
+                          {([
+                            { id: "135deg" as GradientDirection, label: "↘ Diagonal" },
+                            { id: "45deg" as GradientDirection, label: "↗ Reverse" },
+                            { id: "to right" as GradientDirection, label: "→ Horizontal" },
+                            { id: "to bottom" as GradientDirection, label: "↓ Vertical" },
+                            { id: "to left" as GradientDirection, label: "← Left" },
+                            { id: "to top" as GradientDirection, label: "↑ Up" },
+                          ]).map(opt => (
+                            <button
+                              key={opt.id}
+                              onClick={() => setGradientDirection(opt.id)}
+                              className={`text-[9px] py-1 px-1 rounded-lg border font-semibold transition-all text-center ${
+                                gradientDirection === opt.id
+                                  ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
+                                  : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
+                              }`}
+                            >
+                              {opt.label}
+                            </button>
+                          ))}
+                        </div>
+                        {/* Gradient preview bar */}
+                        <div
+                          className="h-6 rounded-lg border border-[hsl(var(--border))]"
+                          style={{ background: `linear-gradient(${gradientDirection}, ${frontPrimary}, ${gradientEnd})` }}
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  {cardShape !== "email-signature" && (
+                    <>
+                      <div className="border-t border-[hsl(var(--border))]" />
+                      <ColorPickerSection
+                        label="Back Color"
+                        colorIdx={backColorIdx}
+                        customColor={backCustomColor}
+                        onPresetChange={setBackColorIdx}
+                        onCustomChange={setBackCustomColor}
+                      />
+                    </>
+                  )}
                 </div>
               </CollapsibleContent>
             </div>
@@ -2287,23 +2377,59 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <div className="px-4 pb-4 border-t border-[hsl(var(--border))] space-y-4 pt-3">
+                  {/* Style toggles */}
                   <div>
                     <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Style</Label>
                     <div className="flex gap-2">
                       <button
                         onClick={() => setCardFontBold(v => !v)}
                         className={`w-10 h-10 rounded-lg border-2 font-bold text-sm transition-all ${cardFontBold ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]" : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]"}`}
+                        title="Bold"
                       >
                         B
                       </button>
                       <button
                         onClick={() => setCardFontItalic(v => !v)}
                         className={`w-10 h-10 rounded-lg border-2 italic font-semibold text-sm transition-all ${cardFontItalic ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]" : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]"}`}
+                        title="Italic"
                       >
                         I
                       </button>
+                      <button
+                        onClick={() => setCardUnderline(v => !v)}
+                        className={`w-10 h-10 rounded-lg border-2 text-sm transition-all flex items-center justify-center ${cardUnderline ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]" : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]"}`}
+                        title="Underline"
+                      >
+                        <Underline size={14} />
+                      </button>
                     </div>
                   </div>
+
+                  {/* Text Alignment */}
+                  <div>
+                    <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Alignment</Label>
+                    <div className="flex gap-1.5">
+                      {([
+                        { id: "left" as TextAlign, icon: <AlignLeft size={13} /> },
+                        { id: "center" as TextAlign, icon: <AlignCenter size={13} /> },
+                        { id: "right" as TextAlign, icon: <AlignRight size={13} /> },
+                      ]).map(opt => (
+                        <button
+                          key={opt.id}
+                          onClick={() => setCardTextAlign(opt.id)}
+                          className={`w-10 h-10 rounded-lg border-2 flex items-center justify-center transition-all ${
+                            cardTextAlign === opt.id
+                              ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
+                              : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]"
+                          }`}
+                        >
+                          {opt.icon}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Font Size */}
                   <div>
                     <div className="flex items-center justify-between mb-2">
                       <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))]">Font Size</Label>
@@ -2332,6 +2458,34 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                       >+</button>
                     </div>
                   </div>
+
+                  {/* Letter Spacing */}
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))]">Letter Spacing</Label>
+                      <span className="text-[10px] font-semibold text-[hsl(var(--foreground))]">{cardLetterSpacing}px</span>
+                    </div>
+                    <Slider
+                      min={-2} max={8} step={0.5}
+                      value={[cardLetterSpacing]}
+                      onValueChange={([v]) => setCardLetterSpacing(v)}
+                    />
+                  </div>
+
+                  {/* Line Height */}
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))]">Line Height</Label>
+                      <span className="text-[10px] font-semibold text-[hsl(var(--foreground))]">{cardLineHeight}</span>
+                    </div>
+                    <Slider
+                      min={0.8} max={2.0} step={0.1}
+                      value={[cardLineHeight]}
+                      onValueChange={([v]) => setCardLineHeight(v)}
+                    />
+                  </div>
+
+                  {/* Font Family */}
                   <div>
                     <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Font Family</Label>
                     <div className="grid grid-cols-2 gap-1.5">
@@ -2341,6 +2495,11 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                         { label: "Garamond",  value: "Garamond, 'Palatino Linotype', serif" },
                         { label: "Courier",   value: "'Courier New', Courier, monospace" },
                         { label: "Futura",    value: "'Century Gothic', 'Trebuchet MS', sans-serif" },
+                        { label: "Verdana",   value: "Verdana, Geneva, sans-serif" },
+                        { label: "Cambria",   value: "Cambria, 'Hoefler Text', serif" },
+                        { label: "Impact",    value: "Impact, 'Arial Black', sans-serif" },
+                        { label: "Segoe",     value: "'Segoe UI', Tahoma, sans-serif" },
+                        { label: "Lucida",    value: "'Lucida Console', Monaco, monospace" },
                       ] as { label: string; value: string }[]).map(f => (
                         <button
                           key={f.value}
