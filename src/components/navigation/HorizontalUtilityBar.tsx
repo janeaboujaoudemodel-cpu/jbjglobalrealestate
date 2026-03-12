@@ -89,8 +89,8 @@ export default function HorizontalUtilityBar() {
     // Build query params from filters and navigate
     const params = new URLSearchParams();
     if (newFilters.searchQuery) params.set('q', newFilters.searchQuery);
-    if (newFilters.propertyType) params.set('type', newFilters.propertyType);
-    if (newFilters.emirate) params.set('emirate', newFilters.emirate);
+    if (newFilters.propertyTypes?.length) params.set('type', newFilters.propertyTypes.join(','));
+    if (newFilters.emirates?.length) params.set('emirate', newFilters.emirates.join(','));
     navigate(`/properties?${params.toString()}`);
   };
 
