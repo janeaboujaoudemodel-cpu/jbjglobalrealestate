@@ -160,7 +160,13 @@ const AdminDevelopers = () => {
       return;
     }
     try {
-      const data = { ...repForm, developer_id: selectedDeveloper.id };
+      const data = { 
+        ...repForm, 
+        developer_id: selectedDeveloper.id,
+        years_in_real_estate: repForm.years_in_real_estate ? parseInt(repForm.years_in_real_estate) : null,
+        nationality: repForm.nationality || null,
+        gender: repForm.gender || null,
+      };
       if (editingRep) {
         const { error } = await supabase.from('developer_sales_reps').update(data).eq('id', editingRep.id);
         if (error) throw error;
