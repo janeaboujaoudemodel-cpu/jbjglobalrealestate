@@ -1031,7 +1031,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
             )}
 
             {/* Mode Tabs */}
-            <div className="flex gap-1 p-1 rounded-xl" style={{ background: "rgba(99,102,241,0.06)", border: `1px solid ${C.border}` }}>
+            <div className="flex gap-1 p-1 rounded-xl" style={{ background: "rgba(184,148,62,0.06)", border: `1px solid ${C.border}` }}>
               {[
                 { id: 'remove', label: 'Remove BG', icon: Wand2 },
                 { id: 'generate', label: 'AI Scene', icon: Sparkles },
