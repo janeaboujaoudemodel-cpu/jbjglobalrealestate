@@ -2,31 +2,33 @@ import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { PDFDocument, degrees } from 'pdf-lib';
 import { SaveProjectBar, ToolContentWrapper } from '@/components/toolkit/SaveProjectBar';
-import { 
-  ArrowLeft,
-  Upload, 
-  Download,
-  FileText,
-  Trash2,
-  GripVertical,
-  Plus,
-  Merge,
-  Split,
-  Pen,
-  Save,
-  Check,
-  Loader2,
-  ChevronLeft,
-  ChevronRight,
-  ZoomIn,
-  ZoomOut,
-  RotateCw,
-  Eye,
+import { supabase } from '@/integrations/supabase/client';
+import {
+  ArrowLeft, Upload, Download, FileText, Trash2, Plus, Merge, Split, Pen, Save,
+  Check, Loader2, ChevronLeft, ChevronRight, ZoomIn, ZoomOut, RotateCw, Eye,
+  Sparkles, ScanLine, Wand2, Hash, Droplets, Undo, Redo,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
+
+/* ── Champagne-Gold palette ── */
+const G = {
+  gold: "#C8A766",
+  goldBright: "#E4C47A",
+  goldDim: "#A08040",
+  bg: "rgba(200,167,102,0.06)",
+  bgHover: "rgba(200,167,102,0.12)",
+  border: "rgba(200,167,102,0.22)",
+  borderHover: "rgba(200,167,102,0.55)",
+  glow: "rgba(200,167,102,0.18)",
+  text: "#C8A766",
+  surface: "#0E1018",
+  surfaceCard: "#111520",
+  btnGradient: "linear-gradient(135deg, #A08040, #C8A766)",
+  btnShadow: "0 4px 20px rgba(200,167,102,0.3)",
+};
 
 interface PDFPage {
   id: string;
@@ -45,6 +47,10 @@ interface LoadedPDF {
   data: Uint8Array;
 }
 
+interface HistoryEntry {
+  pages: PDFPage[];
+}
+
 interface PDFEditorProps { embedded?: boolean; }
 
 export default function PDFEditor({ embedded = false }: PDFEditorProps) {
@@ -52,7 +58,6 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
   const [loadedPDFs, setLoadedPDFs] = useState<LoadedPDF[]>([]);
   const [pages, setPages] = useState<PDFPage[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
-  const [zoom, setZoom] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [signatureMode, setSignatureMode] = useState(false);
@@ -60,14 +65,53 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
   const [previewPage, setPreviewPage] = useState<PDFPage | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [previewLoading, setPreviewLoading] = useState(false);
-  
+  const [ocrText, setOcrText] = useState<string | null>(null);
+  const [ocrLoading, setOcrLoading] = useState(false);
+  const [watermarkText, setWatermarkText] = useState('');
+  const [addPageNumbers, setAddPageNumbers] = useState(false);
+
+  // Undo/Redo
+  const [history, setHistory] = useState<HistoryEntry[]>([]);
+  const [historyIndex, setHistoryIndex] = useState(-1);
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const signatureCanvasRef = useRef<HTMLCanvasElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const isDrawingRef = useRef(false);
   const previewUrlRef = useRef<string | null>(null);
 
-  // Handle PDF upload from input
+  const pushHistory = useCallback((newPages: PDFPage[]) => {
+    setHistory(prev => {
+      const trimmed = prev.slice(0, historyIndex + 1);
+      return [...trimmed, { pages: JSON.parse(JSON.stringify(newPages)) }];
+    });
+    setHistoryIndex(prev => prev + 1);
+  }, [historyIndex]);
+
+  const undo = useCallback(() => {
+    if (historyIndex <= 0) return;
+    const prev = history[historyIndex - 1];
+    setPages(prev.pages);
+    setHistoryIndex(i => i - 1);
+    toast.success('Undone');
+  }, [history, historyIndex]);
+
+  const redo = useCallback(() => {
+    if (historyIndex >= history.length - 1) return;
+    const next = history[historyIndex + 1];
+    setPages(next.pages);
+    setHistoryIndex(i => i + 1);
+    toast.success('Redone');
+  }, [history, historyIndex]);
+
+  const updatePages = useCallback((updater: (prev: PDFPage[]) => PDFPage[]) => {
+    setPages(prev => {
+      const newPages = updater(prev);
+      pushHistory(newPages);
+      return newPages;
+    });
+  }, [pushHistory]);
+
   const handleFileUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files?.length) return;
@@ -75,7 +119,6 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
     if (fileInputRef.current) fileInputRef.current.value = '';
   }, []);
 
-  // Handle drop
   const handleDrop = useCallback(async (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const files = Array.from(e.dataTransfer.files).filter(f => f.type === 'application/pdf');
@@ -91,42 +134,26 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
       const allNewPages: Omit<PDFPage, 'pageNumber'>[] = [];
 
       for (const file of files) {
-        if (file.type !== 'application/pdf') {
-          toast.error(`${file.name} is not a PDF file`);
-          continue;
-        }
+        if (file.type !== 'application/pdf') { toast.error(`${file.name} is not a PDF file`); continue; }
         const arrayBuffer = await file.arrayBuffer();
         const pdfDoc = await PDFDocument.load(arrayBuffer);
         const pageCount = pdfDoc.getPageCount();
-        const newPdf: LoadedPDF = {
-          id: crypto.randomUUID(),
-          name: file.name,
-          pageCount,
-          data: new Uint8Array(arrayBuffer),
-        };
+        const newPdf: LoadedPDF = { id: crypto.randomUUID(), name: file.name, pageCount, data: new Uint8Array(arrayBuffer) };
         const pdfIndex = startingPdfCount + newPdfs.length;
         newPdfs.push(newPdf);
         for (let i = 0; i < pageCount; i++) {
-          allNewPages.push({
-            id: crypto.randomUUID(),
-            originalPageNumber: i + 1,
-            pdfIndex,
-            selected: false,
-            rotation: 0,
-          });
+          allNewPages.push({ id: crypto.randomUUID(), originalPageNumber: i + 1, pdfIndex, selected: false, rotation: 0 });
         }
         toast.success(`Loaded ${file.name} (${pageCount} pages)`);
       }
 
       if (newPdfs.length === 0) return;
-
       setLoadedPDFs(prev => [...prev, ...newPdfs]);
       setPages(prev => {
         const base = prev.length;
-        return [
-          ...prev,
-          ...allNewPages.map((p, i) => ({ ...p, pageNumber: base + i + 1 })),
-        ];
+        const newP = [...prev, ...allNewPages.map((p, i) => ({ ...p, pageNumber: base + i + 1 }))];
+        pushHistory(newP);
+        return newP;
       });
     } catch (error) {
       console.error('Error loading PDF:', error);
@@ -136,44 +163,33 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
     }
   };
 
-  const togglePageSelection = (pageId: string) => {
-    setPages(prev => prev.map(p => p.id === pageId ? { ...p, selected: !p.selected } : p));
-  };
-
-  const selectAllPages = () => setPages(prev => prev.map(p => ({ ...p, selected: true })));
-  const deselectAllPages = () => setPages(prev => prev.map(p => ({ ...p, selected: false })));
+  const togglePageSelection = (pageId: string) => updatePages(prev => prev.map(p => p.id === pageId ? { ...p, selected: !p.selected } : p));
+  const selectAllPages = () => updatePages(prev => prev.map(p => ({ ...p, selected: true })));
+  const deselectAllPages = () => updatePages(prev => prev.map(p => ({ ...p, selected: false })));
 
   const movePageUp = (index: number) => {
     if (index <= 0) return;
-    setPages(prev => {
-      const newPages = [...prev];
-      [newPages[index - 1], newPages[index]] = [newPages[index], newPages[index - 1]];
-      return newPages.map((p, i) => ({ ...p, pageNumber: i + 1 }));
+    updatePages(prev => {
+      const n = [...prev]; [n[index - 1], n[index]] = [n[index], n[index - 1]];
+      return n.map((p, i) => ({ ...p, pageNumber: i + 1 }));
     });
   };
 
   const movePageDown = (index: number) => {
     if (index >= pages.length - 1) return;
-    setPages(prev => {
-      const newPages = [...prev];
-      [newPages[index], newPages[index + 1]] = [newPages[index + 1], newPages[index]];
-      return newPages.map((p, i) => ({ ...p, pageNumber: i + 1 }));
+    updatePages(prev => {
+      const n = [...prev]; [n[index], n[index + 1]] = [n[index + 1], n[index]];
+      return n.map((p, i) => ({ ...p, pageNumber: i + 1 }));
     });
   };
 
-  const rotatePage = (pageId: string) => {
-    setPages(prev => prev.map(p => p.id === pageId ? { ...p, rotation: (p.rotation + 90) % 360 } : p));
-  };
+  const rotatePage = (pageId: string) => updatePages(prev => prev.map(p => p.id === pageId ? { ...p, rotation: (p.rotation + 90) % 360 } : p));
 
   const deleteSelectedPages = () => {
     const selectedCount = pages.filter(p => p.selected).length;
     if (selectedCount === 0) { toast.error('No pages selected'); return; }
-    setPages(prev => prev.filter(p => !p.selected).map((p, i) => ({ ...p, pageNumber: i + 1 })));
-    // Clear preview if the previewed page was deleted
-    setPreviewPage(prev => {
-      if (prev && !pages.find(p => p.id === prev.id && !p.selected)) return null;
-      return prev;
-    });
+    updatePages(prev => prev.filter(p => !p.selected).map((p, i) => ({ ...p, pageNumber: i + 1 })));
+    setPreviewPage(prev => { if (prev && !pages.find(p => p.id === prev.id && !p.selected)) return null; return prev; });
     toast.success(`Deleted ${selectedCount} page(s)`);
   };
 
@@ -198,11 +214,8 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
       link.href = url; link.download = `extracted-pages-${Date.now()}.pdf`; link.click();
       URL.revokeObjectURL(url);
       toast.success(`Exported ${selectedPages.length} page(s)`);
-    } catch (error) {
-      toast.error('Failed to export pages');
-    } finally {
-      setIsSaving(false);
-    }
+    } catch { toast.error('Failed to export pages'); }
+    finally { setIsSaving(false); }
   };
 
   const exportMergedPDF = async () => {
@@ -210,7 +223,8 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
     setIsSaving(true);
     try {
       const newPdf = await PDFDocument.create();
-      for (const page of pages) {
+      for (let i = 0; i < pages.length; i++) {
+        const page = pages[i];
         const sourcePdf = loadedPDFs[page.pdfIndex];
         if (!sourcePdf) continue;
         const srcDoc = await PDFDocument.load(sourcePdf.data);
@@ -225,10 +239,36 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
       link.href = url; link.download = `merged-document-${Date.now()}.pdf`; link.click();
       URL.revokeObjectURL(url);
       toast.success('Merged PDF exported');
-    } catch (error) {
-      toast.error('Failed to merge PDF');
+    } catch { toast.error('Failed to merge PDF'); }
+    finally { setIsSaving(false); }
+  };
+
+  // ── AI OCR Extract ──
+  const handleOCRExtract = async () => {
+    if (!previewPage) { toast.error('Select a page first'); return; }
+    setOcrLoading(true);
+    setOcrText(null);
+    try {
+      // Render the page to an image for OCR
+      const sourcePdf = loadedPDFs[previewPage.pdfIndex];
+      if (!sourcePdf) throw new Error('Source PDF not found');
+      const srcDoc = await PDFDocument.load(sourcePdf.data);
+      const singleDoc = await PDFDocument.create();
+      const [copied] = await singleDoc.copyPages(srcDoc, [previewPage.originalPageNumber - 1]);
+      singleDoc.addPage(copied);
+      const bytes = await singleDoc.save();
+      const base64 = btoa(String.fromCharCode(...new Uint8Array(bytes)));
+
+      const { data, error } = await supabase.functions.invoke('document-ocr', {
+        body: { file_base64: base64, file_type: 'application/pdf', action: 'extract' },
+      });
+      if (error) throw error;
+      setOcrText(data?.text || 'No text found');
+      toast.success('Text extracted successfully');
+    } catch (err: any) {
+      toast.error(err?.message || 'OCR extraction failed');
     } finally {
-      setIsSaving(false);
+      setOcrLoading(false);
     }
   };
 
@@ -266,23 +306,16 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
     setSignatureData(null);
   };
 
-  // Auto-set preview to first page when pages first load
   useEffect(() => {
-    if (pages.length > 0 && !previewPage) {
-      setPreviewPage({ ...pages[0] });
-    }
-  }, [pages.length]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (pages.length > 0 && !previewPage) setPreviewPage({ ...pages[0] });
+  }, [pages.length]);
 
-  // Sync previewPage rotation/order changes in real-time
   useEffect(() => {
     if (!previewPage) return;
     const updated = pages.find(p => p.id === previewPage.id);
-    if (updated && updated.rotation !== previewPage.rotation) {
-      setPreviewPage({ ...updated });
-    }
-  }, [pages]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (updated && updated.rotation !== previewPage.rotation) setPreviewPage({ ...updated });
+  }, [pages]);
 
-  // Generate single-page blob URL for the preview iframe
   useEffect(() => {
     if (!previewPage) return;
     let cancelled = false;
@@ -303,52 +336,34 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
         const url = URL.createObjectURL(blob);
         previewUrlRef.current = url;
         setPreviewUrl(url);
-      } catch (e) {
-        console.error('Preview error', e);
-      } finally {
-        if (!cancelled) setPreviewLoading(false);
-      }
+      } catch (e) { console.error('Preview error', e); }
+      finally { if (!cancelled) setPreviewLoading(false); }
     })();
     return () => { cancelled = true; };
-  }, [previewPage]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [previewPage]);
 
   const selectedCount = pages.filter(p => p.selected).length;
 
   const fileInput = (
-    <input
-      ref={fileInputRef}
-      type="file"
-      accept=".pdf"
-      multiple
-      onChange={handleFileUpload}
-      className="hidden"
-    />
+    <input ref={fileInputRef} type="file" accept=".pdf" multiple onChange={handleFileUpload} className="hidden" />
   );
 
-  const indigo = {
-    bg: "rgba(99,102,241,0.06)",
-    border: "rgba(99,102,241,0.2)",
-    borderHover: "rgba(99,102,241,0.5)",
-    text: "#818CF8",
-    accent: "#6366F1",
-  };
-
   return (
-    <div style={{ background: "#0C0E14", minHeight: "100vh" }}>
+    <div style={{ background: G.surface, minHeight: "100vh" }}>
       {fileInput}
 
       {!embedded && (
-        <header style={{ borderBottom: `1px solid ${indigo.border}`, background: indigo.bg }}>
+        <header style={{ borderBottom: `1px solid ${G.border}`, background: G.bg }}>
           <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
             <Link to="/toolkit" className="flex items-center gap-2 transition-colors rounded-lg px-3 py-2"
-              style={{ color: "rgba(255,255,255,0.45)", border: `1px solid ${indigo.border}` }}
+              style={{ color: "rgba(255,255,255,0.45)", border: `1px solid ${G.border}` }}
               onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#fff"}
               onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.45)"}>
               <ArrowLeft className="h-5 w-5" />
               <span>Back to Royal Tools Hub</span>
             </Link>
             <Button variant="outline" size="sm" onClick={() => fileInputRef.current?.click()} disabled={isLoading}
-              style={{ borderColor: indigo.border, color: "rgba(255,255,255,0.65)", background: "transparent" }}>
+              style={{ borderColor: G.border, color: "rgba(255,255,255,0.65)", background: "transparent" }}>
               <Plus className="h-4 w-4 mr-2" />Add PDF
             </Button>
           </div>
@@ -359,11 +374,11 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
         {/* Title */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4"
-            style={{ background: "rgba(99,102,241,0.12)", border: `1px solid ${indigo.border}`, boxShadow: "0 0 32px rgba(99,102,241,0.2)" }}>
-            <FileText className="h-8 w-8" style={{ color: indigo.text }} />
+            style={{ background: G.bg, border: `1px solid ${G.border}`, boxShadow: `0 0 32px ${G.glow}` }}>
+            <FileText className="h-8 w-8" style={{ color: G.gold }} />
           </div>
           <h1 className="text-3xl font-bold text-white mb-2">PDF Editor</h1>
-          <p style={{ color: "rgba(255,255,255,0.4)" }}>Upload, reorder, merge, split PDFs and add signatures</p>
+          <p style={{ color: "rgba(255,255,255,0.4)" }}>Upload, reorder, merge, split PDFs · AI OCR · Signatures</p>
         </div>
 
         {/* Save Project Bar */}
@@ -379,53 +394,54 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
             onClear={() => {
               if (!confirm('Clear this project?')) return;
               setPages([]); setLoadedPDFs([]); setSignatureData(null);
-              setPreviewPage(null); setProjectName('PDF Project');
+              setPreviewPage(null); setProjectName('PDF Project'); setOcrText(null);
+              setHistory([]); setHistoryIndex(-1);
               toast.success('Project cleared');
             }}
             canSave={pages.length > 0}
-            accentColor="#6366F1"
-            accentBorder="rgba(99,102,241,0.3)"
+            accentColor={G.gold}
+            accentBorder={G.border}
           />
         </div>
 
-        <ToolContentWrapper accentColor="#6366F1">
+        <ToolContentWrapper accentColor={G.gold}>
         {pages.length === 0 ? (
-          /* Upload Area */
           <div
             className="max-w-2xl mx-auto rounded-2xl p-12 text-center cursor-pointer transition-all duration-300"
-            style={{ border: `2px dashed ${indigo.border}`, background: indigo.bg }}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = indigo.borderHover; (e.currentTarget as HTMLElement).style.background = "rgba(99,102,241,0.1)"; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = indigo.border; (e.currentTarget as HTMLElement).style.background = indigo.bg; }}
+            style={{ border: `2px dashed ${G.border}`, background: G.bg }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = G.borderHover; (e.currentTarget as HTMLElement).style.background = G.bgHover; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = G.border; (e.currentTarget as HTMLElement).style.background = G.bg; }}
             onClick={() => fileInputRef.current?.click()}
             onDragOver={(e) => e.preventDefault()}
             onDrop={handleDrop}
           >
             {isLoading ? (
-              <Loader2 className="h-12 w-12 mx-auto mb-4 animate-spin" style={{ color: indigo.text }} />
+              <Loader2 className="h-12 w-12 mx-auto mb-4 animate-spin" style={{ color: G.gold }} />
             ) : (
-              <Upload className="h-12 w-12 mx-auto mb-4" style={{ color: "rgba(99,102,241,0.55)" }} />
+              <Upload className="h-12 w-12 mx-auto mb-4" style={{ color: G.goldDim }} />
             )}
             <p className="text-white font-semibold text-lg mb-2">{isLoading ? 'Loading PDF...' : 'Drop your PDF files here'}</p>
             <p className="text-sm mb-4" style={{ color: "rgba(255,255,255,0.35)" }}>or click to browse your files</p>
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-white transition-all"
-              style={{ background: "linear-gradient(135deg, #6366F1 0%, #4F46E5 100%)", boxShadow: "0 4px 16px rgba(99,102,241,0.4)" }}>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all"
+              style={{ background: G.btnGradient, color: "#0E1018", boxShadow: G.btnShadow }}>
               <Upload className="h-4 w-4" />
               Browse PDF Files
             </div>
             <p className="text-xs mt-4" style={{ color: "rgba(255,255,255,0.25)" }}>Supports multiple PDFs · All processing is local in your browser</p>
           </div>
         ) : (
-          /* ── Three-column layout: Pages | Actions | Live Preview ── */
           <div className="grid lg:grid-cols-[240px_1fr_320px] gap-5">
 
             {/* ── Column 1: Page Thumbnails ── */}
             <div>
-              <div className="rounded-2xl overflow-hidden" style={{ background: "rgba(99,102,241,0.04)", border: `1px solid ${indigo.border}` }}>
-                <div className="p-3 flex items-center justify-between" style={{ borderBottom: `1px solid rgba(99,102,241,0.12)` }}>
+              <div className="rounded-2xl overflow-hidden" style={{ background: G.bg, border: `1px solid ${G.border}` }}>
+                <div className="p-3 flex items-center justify-between" style={{ borderBottom: `1px solid rgba(200,167,102,0.12)` }}>
                   <h3 className="text-sm font-semibold text-white">Pages ({pages.length})</h3>
-                <div className="flex gap-1">
-                    <Button size="sm" variant="ghost" onClick={selectAllPages} className="h-7 text-xs text-white" style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)" }}>All</Button>
-                    <Button size="sm" variant="ghost" onClick={deselectAllPages} className="h-7 text-xs text-white" style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)" }}>None</Button>
+                  <div className="flex gap-1">
+                    <Button size="sm" variant="ghost" onClick={selectAllPages} className="h-7 text-xs text-white"
+                      style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)" }}>All</Button>
+                    <Button size="sm" variant="ghost" onClick={deselectAllPages} className="h-7 text-xs text-white"
+                      style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)" }}>None</Button>
                   </div>
                 </div>
                 <ScrollArea className="h-[600px]">
@@ -436,41 +452,28 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
                         <div key={page.id}
                           className="rounded-xl cursor-pointer transition-all overflow-hidden"
                           style={{
-                            background: isPreviewing
-                              ? "rgba(99,102,241,0.22)"
-                              : page.selected
-                                ? "rgba(99,102,241,0.14)"
-                                : "rgba(255,255,255,0.03)",
+                            background: isPreviewing ? G.bgHover : page.selected ? G.bg : "rgba(255,255,255,0.03)",
                             border: `${(isPreviewing || page.selected) ? "2px" : "1px"} solid ${
-                              isPreviewing
-                                ? "rgba(99,102,241,0.85)"
-                                : page.selected
-                                  ? "rgba(99,102,241,0.55)"
-                                  : "rgba(255,255,255,0.07)"
+                              isPreviewing ? G.borderHover : page.selected ? G.border : "rgba(255,255,255,0.07)"
                             }`,
-                            boxShadow: isPreviewing ? "0 0 20px rgba(99,102,241,0.35)" : page.selected ? "0 0 16px rgba(99,102,241,0.2)" : "none",
+                            boxShadow: isPreviewing ? `0 0 20px ${G.glow}` : "none",
                           }}
-                          onClick={() => {
-                            togglePageSelection(page.id);
-                            setPreviewPage({ ...page });
-                          }}>
+                          onClick={() => { togglePageSelection(page.id); setPreviewPage({ ...page }); }}>
                           <div className="p-3 flex items-center gap-2">
                             <Checkbox
                               checked={page.selected}
                               onClick={(e) => e.stopPropagation()}
                               onCheckedChange={() => togglePageSelection(page.id)}
-                              className="data-[state=checked]:bg-indigo-500 data-[state=checked]:border-indigo-500 shrink-0"
+                              className="data-[state=checked]:bg-amber-500 data-[state=checked]:border-amber-500 shrink-0"
                             />
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-1.5">
                                 <span className="text-xs font-bold px-1.5 py-0.5 rounded-md"
-                                  style={{ background: (isPreviewing || page.selected) ? "rgba(99,102,241,0.35)" : "rgba(255,255,255,0.08)", color: (isPreviewing || page.selected) ? "#A5B4FC" : "rgba(255,255,255,0.55)" }}>
+                                  style={{ background: (isPreviewing || page.selected) ? G.bg : "rgba(255,255,255,0.08)", color: (isPreviewing || page.selected) ? G.gold : "rgba(255,255,255,0.55)" }}>
                                   #{page.pageNumber}
                                 </span>
                                 <p className="text-sm font-medium text-white">Page {page.pageNumber}</p>
-                                {isPreviewing && (
-                                  <Eye className="h-3 w-3 shrink-0" style={{ color: indigo.text }} />
-                                )}
+                                {isPreviewing && <Eye className="h-3 w-3 shrink-0" style={{ color: G.gold }} />}
                               </div>
                               <p className="text-[10px] truncate mt-0.5" style={{ color: "rgba(255,255,255,0.32)" }}>
                                 {loadedPDFs[page.pdfIndex]?.name || 'Unknown'}
@@ -496,9 +499,7 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
                           </div>
                           {page.rotation !== 0 && (
                             <div className="px-3 pb-2">
-                              <span className="text-[10px] px-1.5 py-0.5 rounded" style={{ background: "rgba(99,102,241,0.2)", color: indigo.text }}>
-                                ↻ {page.rotation}°
-                              </span>
+                              <span className="text-[10px] px-1.5 py-0.5 rounded" style={{ background: G.bg, color: G.gold }}>↻ {page.rotation}°</span>
                             </div>
                           )}
                         </div>
@@ -511,26 +512,34 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
 
             {/* ── Column 2: Actions Panel ── */}
             <div className="space-y-6">
-              {/* Add more button */}
-              <div className="flex justify-end">
+              {/* Undo/Redo + Add */}
+              <div className="flex justify-between items-center">
+                <div className="flex gap-2">
+                  <Button variant="outline" size="sm" onClick={undo} disabled={historyIndex <= 0}
+                    style={{ borderColor: G.border, color: "#fff", background: G.bg }}>
+                    <Undo className="h-4 w-4 mr-1" />Undo
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={redo} disabled={historyIndex >= history.length - 1}
+                    style={{ borderColor: G.border, color: "#fff", background: G.bg }}>
+                    <Redo className="h-4 w-4 mr-1" />Redo
+                  </Button>
+                </div>
                 <Button variant="outline" size="sm" onClick={() => fileInputRef.current?.click()} disabled={isLoading}
-                  style={{ borderColor: "rgba(99,102,241,0.6)", color: "#fff", background: "rgba(99,102,241,0.18)" }}>
+                  style={{ borderColor: G.borderHover, color: "#fff", background: G.bg }}>
                   <Plus className="h-4 w-4 mr-2" />Add More PDFs
                 </Button>
               </div>
 
               {/* Actions */}
-              <div className="rounded-2xl p-6" style={{ background: "rgba(99,102,241,0.04)", border: `1px solid ${indigo.border}` }}>
+              <div className="rounded-2xl p-6" style={{ background: G.bg, border: `1px solid ${G.border}` }}>
                 <h3 className="text-lg font-semibold text-white mb-4">Actions</h3>
                 <div className="grid sm:grid-cols-2 gap-3">
                   <Button variant="outline" onClick={exportSelectedPages} disabled={selectedCount === 0 || isSaving}
-                    className="text-white transition-all"
-                    style={{ borderColor: "rgba(99,102,241,0.6)", background: "rgba(99,102,241,0.18)" }}>
+                    className="text-white transition-all" style={{ borderColor: G.borderHover, background: G.bg }}>
                     <Split className="h-4 w-4 mr-2" />Extract ({selectedCount})
                   </Button>
                   <Button variant="outline" onClick={exportMergedPDF} disabled={pages.length === 0 || isSaving}
-                    className="text-white transition-all"
-                    style={{ borderColor: "rgba(99,102,241,0.6)", background: "rgba(99,102,241,0.18)" }}>
+                    className="text-white transition-all" style={{ borderColor: G.borderHover, background: G.bg }}>
                     <Merge className="h-4 w-4 mr-2" />Merge All
                   </Button>
                   <Button variant="outline" onClick={deleteSelectedPages} disabled={selectedCount === 0}
@@ -538,19 +547,51 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
                     <Trash2 className="h-4 w-4 mr-2" />Delete Selected
                   </Button>
                   <Button variant="outline" onClick={() => setSignatureMode(!signatureMode)}
-                    style={{
-                      borderColor: signatureMode ? "rgba(99,102,241,0.6)" : "rgba(99,102,241,0.45)",
-                      color: 'white',
-                      background: signatureMode ? "rgba(99,102,241,0.25)" : "rgba(99,102,241,0.12)",
-                    }}>
+                    style={{ borderColor: signatureMode ? G.borderHover : G.border, color: 'white', background: signatureMode ? G.bgHover : G.bg }}>
                     <Pen className="h-4 w-4 mr-2" />{signatureMode ? 'Close Signature' : 'Add Signature'}
                   </Button>
                 </div>
               </div>
 
+              {/* ── AI Tools Panel ── */}
+              <div className="rounded-2xl p-6" style={{ background: G.bg, border: `1px solid ${G.border}` }}>
+                <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                  <Sparkles className="h-5 w-5" style={{ color: G.gold }} />
+                  AI Tools
+                </h3>
+                <div className="grid sm:grid-cols-2 gap-3">
+                  <Button variant="outline" onClick={handleOCRExtract} disabled={!previewPage || ocrLoading}
+                    className="text-white transition-all" style={{ borderColor: G.border, background: G.bg }}>
+                    {ocrLoading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <ScanLine className="h-4 w-4 mr-2" />}
+                    AI OCR Extract
+                  </Button>
+                  <Button variant="outline" onClick={() => toast.info('Watermark coming soon')}
+                    className="text-white transition-all" style={{ borderColor: G.border, background: G.bg }}>
+                    <Droplets className="h-4 w-4 mr-2" />Add Watermark
+                  </Button>
+                </div>
+
+                {/* OCR Results */}
+                {ocrText && (
+                  <div className="mt-4 rounded-xl p-4" style={{ background: "rgba(0,0,0,0.3)", border: `1px solid ${G.border}` }}>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-semibold" style={{ color: G.gold }}>Extracted Text</span>
+                      <button onClick={() => { navigator.clipboard.writeText(ocrText); toast.success('Copied to clipboard'); }}
+                        className="text-xs px-2 py-1 rounded-lg transition-colors" style={{ background: G.bg, color: G.gold, border: `1px solid ${G.border}` }}>
+                        Copy
+                      </button>
+                    </div>
+                    <pre className="text-xs text-white whitespace-pre-wrap max-h-60 overflow-y-auto"
+                      style={{ fontFamily: "monospace", lineHeight: "1.5" }}>
+                      {ocrText}
+                    </pre>
+                  </div>
+                )}
+              </div>
+
               {/* Signature Panel */}
               {signatureMode && (
-                <div className="rounded-2xl p-6" style={{ background: "rgba(99,102,241,0.04)", border: `1px solid ${indigo.border}` }}>
+                <div className="rounded-2xl p-6" style={{ background: G.bg, border: `1px solid ${G.border}` }}>
                   <h3 className="text-lg font-semibold text-white mb-4">Draw Signature</h3>
                   <div className="bg-white rounded-xl p-2 mb-4">
                     <canvas ref={signatureCanvasRef} width={400} height={150}
@@ -559,22 +600,21 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
                   </div>
                   <div className="flex gap-2">
                     <Button variant="outline" onClick={clearSignature} className="text-white" style={{ borderColor: "rgba(255,255,255,0.35)", background: "rgba(255,255,255,0.12)" }}>Clear</Button>
-                    <Button disabled={!signatureData} style={{ background: "linear-gradient(135deg, #6366F1 0%, #4F46E5 100%)", color: "white", opacity: signatureData ? 1 : 0.4 }}>
+                    <Button disabled={!signatureData} style={{ background: G.btnGradient, color: "#0E1018", opacity: signatureData ? 1 : 0.4 }}>
                       <Check className="h-4 w-4 mr-2" />Apply to Selected Pages
                     </Button>
                   </div>
-                  <p className="text-xs mt-3" style={{ color: "rgba(255,255,255,0.35)" }}>Draw your signature above, then apply it to selected pages.</p>
                 </div>
               )}
 
               {/* Loaded Files */}
-              <div className="rounded-2xl p-6" style={{ background: "rgba(99,102,241,0.04)", border: `1px solid ${indigo.border}` }}>
+              <div className="rounded-2xl p-6" style={{ background: G.bg, border: `1px solid ${G.border}` }}>
                 <h3 className="text-lg font-semibold text-white mb-4">Loaded PDFs ({loadedPDFs.length})</h3>
                 <div className="space-y-2">
                   {loadedPDFs.map((pdf) => (
                     <div key={pdf.id} className="flex items-center gap-3 p-3 rounded-xl"
                       style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}>
-                      <FileText className="h-5 w-5" style={{ color: indigo.text }} />
+                      <FileText className="h-5 w-5" style={{ color: G.gold }} />
                       <div className="flex-1">
                         <p className="text-sm text-white">{pdf.name}</p>
                         <p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{pdf.pageCount} pages</p>
@@ -584,8 +624,7 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
                 </div>
               </div>
 
-              {/* Info */}
-              <div className="p-4 rounded-xl text-center" style={{ background: "rgba(99,102,241,0.03)", border: "1px solid rgba(99,102,241,0.1)" }}>
+              <div className="p-4 rounded-xl text-center" style={{ background: G.bg, border: `1px solid rgba(200,167,102,0.1)` }}>
                 <p className="text-sm" style={{ color: "rgba(255,255,255,0.3)" }}>
                   All processing is done locally in your browser · No files are uploaded to servers
                 </p>
@@ -594,35 +633,32 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
 
             {/* ── Column 3: Live Page Preview ── */}
             <div className="hidden lg:block">
-              <div className="sticky top-6 rounded-2xl overflow-hidden" style={{ background: "rgba(99,102,241,0.04)", border: `1px solid ${indigo.border}` }}>
-                {/* Preview header */}
-                <div className="p-3 flex items-center justify-between" style={{ borderBottom: `1px solid rgba(99,102,241,0.12)` }}>
+              <div className="sticky top-6 rounded-2xl overflow-hidden" style={{ background: G.bg, border: `1px solid ${G.border}` }}>
+                <div className="p-3 flex items-center justify-between" style={{ borderBottom: `1px solid rgba(200,167,102,0.12)` }}>
                   <div className="flex items-center gap-2">
-                    <Eye className="h-4 w-4" style={{ color: indigo.text }} />
+                    <Eye className="h-4 w-4" style={{ color: G.gold }} />
                     <h3 className="text-sm font-semibold text-white">Live Preview</h3>
                   </div>
                   {previewPage && (
-                    <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: "rgba(99,102,241,0.2)", color: indigo.text }}>
+                    <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: G.bg, color: G.gold }}>
                       Page {previewPage.pageNumber}
                     </span>
                   )}
                 </div>
 
-                {/* Preview body */}
                 <div className="p-3">
                   {!previewPage ? (
-                    <div className="flex flex-col items-center justify-center h-80 gap-3"
-                      style={{ color: "rgba(255,255,255,0.25)" }}>
+                    <div className="flex flex-col items-center justify-center h-80 gap-3" style={{ color: "rgba(255,255,255,0.25)" }}>
                       <Eye className="h-10 w-10 opacity-30" />
                       <p className="text-xs text-center">Click a page to preview it here</p>
                     </div>
                   ) : previewLoading ? (
                     <div className="flex flex-col items-center justify-center h-80 gap-3">
-                      <Loader2 className="h-8 w-8 animate-spin" style={{ color: indigo.text }} />
+                      <Loader2 className="h-8 w-8 animate-spin" style={{ color: G.gold }} />
                       <p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>Rendering preview…</p>
                     </div>
                   ) : previewUrl ? (
-                    <div className="relative rounded-xl overflow-hidden" style={{ border: `1px solid rgba(99,102,241,0.15)`, background: "#fff" }}>
+                    <div className="relative rounded-xl overflow-hidden" style={{ border: `1px solid rgba(200,167,102,0.15)`, background: "#fff" }}>
                       <iframe
                         key={previewUrl}
                         src={`${previewUrl}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
@@ -630,10 +666,9 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
                         style={{ height: "420px", border: "none", display: "block" }}
                         title={`Preview page ${previewPage.pageNumber}`}
                       />
-                      {/* Rotation badge */}
                       {previewPage.rotation !== 0 && (
                         <div className="absolute top-2 right-2 flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium"
-                          style={{ background: "rgba(99,102,241,0.85)", color: "#fff", backdropFilter: "blur(4px)" }}>
+                          style={{ background: `rgba(200,167,102,0.85)`, color: "#0E1018", backdropFilter: "blur(4px)" }}>
                           <RotateCw className="h-3 w-3" />
                           {previewPage.rotation}°
                         </div>
@@ -641,7 +676,6 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
                     </div>
                   ) : null}
 
-                  {/* Preview meta */}
                   {previewPage && !previewLoading && (
                     <div className="mt-3 space-y-1.5">
                       <div className="flex items-center justify-between text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>
@@ -656,7 +690,7 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
                       </div>
                       <div className="flex items-center justify-between text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>
                         <span>Rotation</span>
-                        <span style={{ color: previewPage.rotation !== 0 ? indigo.text : "rgba(255,255,255,0.65)" }}>
+                        <span style={{ color: previewPage.rotation !== 0 ? G.gold : "rgba(255,255,255,0.65)" }}>
                           {previewPage.rotation}°
                         </span>
                       </div>
@@ -665,7 +699,6 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
                 </div>
               </div>
             </div>
-
           </div>
         )}
         </ToolContentWrapper>
