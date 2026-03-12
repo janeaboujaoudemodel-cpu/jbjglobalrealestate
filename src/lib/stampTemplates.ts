@@ -149,7 +149,7 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
   const W = 320, H = 320;
   const cx = W / 2, cy = H / 2;
   const R = 116;
-  const font = fontMap[project.typography_style];
+  const font = fontMap[project.typography_style] || fontMap.SERIF;
 
   const name = project.company_name.toUpperCase().trim();
   const arabicName = (project.arabic_company_name || '').trim();

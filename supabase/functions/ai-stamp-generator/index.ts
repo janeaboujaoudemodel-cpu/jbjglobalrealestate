@@ -227,8 +227,8 @@ function buildSVG(project: any, templateKey: string): string {
       const s = 100;
       const nameFontSize = autoFontSize(name, 10, 20);
       return `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
-        <rect x="${cx - s}" y="${cy - s}" width="${s * 2}" height="${s * 2}" rx="3" fill="none" stroke="${COLOR}" stroke-width="2.5"/>
-        <rect x="${cx - s + 6}" y="${cy - s + 6}" width="${s * 2 - 12}" height="${s * 2 - 12}" rx="2" fill="none" stroke="${COLOR}" stroke-width="0.8"/>
+        <rect x="${cx - s}" y="${cy - s}" width="${s * 2}" height="${s * 2}" rx="3" fill="none" stroke="${COLOR}" stroke-width="${ba.outerWidth}" stroke-dasharray="${ba.dash}"/>
+        ${ba.innerRing ? `<rect x="${cx - s + 6}" y="${cy - s + 6}" width="${s * 2 - 12}" height="${s * 2 - 12}" rx="2" fill="none" stroke="${COLOR}" stroke-width="${ba.innerWidth}" stroke-dasharray="${ba.innerDash}"/>` : ''}
         ${hasMono ? monogram(cx, cy - 22, mono, font, 42, COLOR) : ''}
         ${wrapText(name, cx, cy + (hasMono ? 18 : 0), font, nameFontSize, COLOR, 1.5)}
         <text x="${cx}" y="${cy + (hasMono ? 38 : 18)}" text-anchor="middle" font-family="${font}" font-size="7.5" fill="${COLOR}" letter-spacing="3">${city}</text>
