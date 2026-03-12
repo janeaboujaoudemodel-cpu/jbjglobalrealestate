@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useUserRole, VisitorRole } from "@/hooks/useUserRole";
+import { useOwnerVerification } from "@/hooks/useOwnerVerification";
 
 interface QuickAction {
   label: string;
@@ -43,7 +44,7 @@ const ownerActions: QuickAction[] = [
   { label: "AI Assistant", description: "Founder AI helper", icon: Sparkles, href: "/owner/founder-assistant", color: "text-purple-400" },
   { label: "Studio", description: "Media & content", icon: FolderOpen, href: "/owner/studio", color: "text-pink-400" },
   { label: "Ticket Center", description: "Customer happiness", icon: HelpCircle, href: "/ticket-hub", color: "text-amber-400" },
-  { label: "CV Center", description: "Career applications", icon: FileCheck, href: "/owner/cv-center", color: "text-teal-400" },
+  { label: "CV Center", description: "Career applications", icon: FileCheck, href: "/hr-dashboard?tab=cv-center", color: "text-teal-400" },
   { label: "Calendar", description: "Appointments", icon: Calendar, href: "/owner/crm/calendar", color: "text-blue-400" },
   { label: "Team Chat", description: "Internal comms", icon: MessageSquare, href: "/owner/team-chat", color: "text-cyan-400" },
   { label: "My Listings", description: "View your properties", icon: Building2, href: "/owner/properties", color: "text-emerald-400" },
@@ -61,7 +62,10 @@ const defaultActions: QuickAction[] = [
   { label: "Resources", description: "Guides & tools", icon: BookOpen, href: "/guides", color: "text-primary" },
 ];
 
-function getActionsForRole(role: VisitorRole): QuickAction[] {
+function getActionsForRole(role: VisitorRole, isOwnerVerified: boolean): QuickAction[] {
+  // Server-verified owner always gets owner actions
+  if (isOwnerVerified) return ownerActions;
+  
   switch (role) {
     case 'broker':
     case 'broker_jbj':
@@ -79,7 +83,8 @@ function getActionsForRole(role: VisitorRole): QuickAction[] {
 export function QuickActions() {
   const navigate = useNavigate();
   const { role } = useUserRole();
-  const actions = getActionsForRole(role);
+  const { isOwner: isOwnerVerified } = useOwnerVerification();
+  const actions = getActionsForRole(role, isOwnerVerified);
 
   return (
     <Card className="border border-border bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))]">

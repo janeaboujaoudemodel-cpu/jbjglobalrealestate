@@ -238,18 +238,30 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
 
   // Filter admin links based on actual access - consolidated shortcuts
   const adminLinks = useMemo(() => {
-    const links = [
-      { href: '/founder-assistant', label: t('account.myAssistant', 'My Assistant'), icon: Sparkles, requiresAdmin: true },
+    const ownerLinks = [
+      { href: '/owner', label: 'Command Center', icon: Shield, requiresOwner: true },
+      { href: '/owner/crm', label: 'CRM Dashboard', icon: Users, requiresOwner: true },
+      { href: '/owner/admin', label: 'Admin Panel', icon: LayoutDashboard, requiresOwner: true },
+      { href: '/owner/listing-admin', label: 'Listing Admin', icon: FolderOpen, requiresOwner: true },
+      { href: '/ticket-hub', label: 'Customer Happiness', icon: Headphones, requiresOwner: true },
+      { href: '/hr-dashboard?tab=cv-center', label: 'CV Center', icon: ListChecks, requiresOwner: true },
+      { href: '/owner/team-chat', label: 'Team Chat', icon: Bell, requiresOwner: true },
+      { href: '/founder-assistant', label: 'My Assistant', icon: Sparkles, requiresAdmin: true },
+    ];
+
+    const sharedLinks = [
       { href: '/listing-admin', label: t('account.listingAdmin', 'Listing Admin'), icon: FolderOpen, requiresListingAdmin: true },
     ];
     
-    return links.filter(link => {
-      if (link.requiresListingAdmin) {
-        return hasListingAdminAccess;
-      }
-      return isOwner || hasCRMAccess;
+    const all = [...ownerLinks, ...sharedLinks];
+    
+    return all.filter(link => {
+      if ((link as any).requiresOwner) return isOwner;
+      if ((link as any).requiresListingAdmin) return hasListingAdminAccess && !isOwner;
+      if ((link as any).requiresAdmin) return isOwner || hasCRMAccess;
+      return false;
     });
-  }, [isOwner, hasCRMAccess, hasListingAdminAccess]);
+  }, [isOwner, hasCRMAccess, hasListingAdminAccess, t]);
 
   // Get mode label for display
   const getModeLabel = () => {

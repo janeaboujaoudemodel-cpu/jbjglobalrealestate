@@ -652,12 +652,42 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
   const handleSelectShortcut = (shortcut: ShortcutType) => {
     setSelectedShortcut(shortcut);
     
+    // Navigation shortcuts - open page directly instead of chat
+    const navigationMap: Partial<Record<ShortcutType, string>> = {
+      'owner_command': '/owner',
+      'crm_dashboard': '/owner/crm',
+      'admin_panel': '/owner/admin',
+      'listing_admin': '/owner/listing-admin',
+      'inbox': '/owner/crm?tab=inbox',
+      'cv_center': '/hr-dashboard?tab=cv-center',
+      'email_client': '/owner/crm?tab=email',
+      'team_chat': '/owner/team-chat',
+      'automations': '/automations',
+      'customer_happiness': '/ticket-hub',
+      'broker_dashboard': '/broker-dashboard',
+      'broker_toolkit': '/broker-resources',
+      'my_tasks': '/my-dashboard#tasks',
+      'notifications': '/my-dashboard#notifications',
+      'investor_hub': '/investors',
+      'investor_dashboard': '/investor-dashboard',
+      'portfolio': '/investor-dashboard?tab=portfolio',
+      'dashboard': '/my-dashboard',
+      'favorites': '/favorites',
+      'shortlists': '/favorites?tab=shortlist',
+      'books': '/books',
+    };
+
+    if (navigationMap[shortcut]) {
+      // Navigate directly - close chat widget
+      window.location.href = navigationMap[shortcut]!;
+      return;
+    }
+    
     if (shortcut === 'submit_cv') {
       setStep('cv_submission');
     } else {
-      // Map shortcut to service type and proceed to agent
+      // Chat intent shortcuts - proceed to agent
       const serviceMap: Partial<Record<ShortcutType, string>> = {
-        'submit_cv': 'cv_submission',
         'buy_property': 'real_estate',
         'sell_property': 'sell_property',
         'rent_property': 'holiday_homes',
@@ -667,27 +697,6 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
         'guides': 'guides',
         'ai_tools': 'ai_tools',
         'general_inquiry': 'general',
-        'owner_command': 'general',
-        'crm_dashboard': 'general',
-        'admin_panel': 'general',
-        'listing_admin': 'general',
-        'inbox': 'general',
-        'cv_center': 'general',
-        'email_client': 'general',
-        'team_chat': 'general',
-        'automations': 'general',
-        'customer_happiness': 'general',
-        'broker_dashboard': 'general',
-        'broker_toolkit': 'general',
-        'my_tasks': 'general',
-        'notifications': 'general',
-        'investor_hub': 'general',
-        'investor_dashboard': 'general',
-        'portfolio': 'general',
-        'dashboard': 'general',
-        'favorites': 'general',
-        'shortlists': 'general',
-        'books': 'general',
       };
       
       setSelectedService(serviceMap[shortcut] || 'general');

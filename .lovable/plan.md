@@ -1,58 +1,72 @@
 
-Goal: fix “My Shortcuts” so they actually show the right hubs by role, open the correct pages when clicked, and provide visual proof with screenshots.
+## CRM System Upgrade — Implementation Status
 
-1) Root-cause fixes (from current code)
-- `AIChatWidget.tsx`: many new shortcut IDs (`owner_command`, `crm_dashboard`, `admin_panel`, etc.) are mapped to `"general"` chat service, so clicking does not open those hubs.
-- `useUserRole.ts`: role loading exits early from `localStorage`, so role/permission changes in backend can stay stale.
-- `QuickActions.tsx`: owner shortcut visibility depends only on selected role, not server-verified owner status; one route is invalid (`/owner/cv-center` does not exist).
-- `MegaMenuAccount.tsx`: owner shortcut column is still incomplete vs your requested main hubs.
+### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-2) Implementation plan
-- Update role/access resolution in `useUserRole.ts`
-  - Keep localStorage only as fast initial fallback.
-  - Always refresh from backend when authenticated.
-  - Expose explicit flags for shortcut eligibility (owner-verified + CRM-assigned access).
-- Upgrade all shortcut surfaces (not just one)
-  - `ChatShortcuts.tsx`: enforce full role-based shortcut sets:
-    - Owner: Owner Command Center, CRM, Admin Panel, Listing Admin, Inbox/Enquiries, Customer Happiness, CV Center, Email Client, Team Chat, Automations.
-    - JBJ broker with CRM assigned: CRM + broker shortcuts.
-    - JBJ broker without CRM assignment: only normal user shortcuts (tasks/favorites/shortlist/books/notifications/dashboard).
-    - Non-owner users: no owner hubs.
-  - `QuickActions.tsx`: align with same access rules; fix invalid CV link to existing route (`/hr-dashboard?tab=cv-center`).
-  - `MegaMenuAccount.tsx`: expand Owner Shortcuts column to include all requested main hubs consistently.
-- Make shortcuts open actual hubs
-  - `AIChatWidget.tsx`: split shortcut behavior into:
-    - Navigation shortcuts -> route immediately.
-    - Chat intent shortcuts (buy/rent/sell/etc.) -> continue chat flow.
-  - Ensure owner/admin hub shortcuts navigate directly to their pages.
-- Responsive/layout hardening
-  - Ensure shortcut cards remain readable (no clipping/compression) on phone/iPad/laptop by tightening spacing rules and overflow behavior where needed.
+#### Task 1: Full System Audit ✅
+- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
+- Identified 10 weaknesses (documented in plan)
 
-3) Files to update
-- `src/hooks/useUserRole.ts`
-- `src/components/chat/ChatShortcuts.tsx`
-- `src/components/AIChatWidget.tsx`
-- `src/components/dashboard/QuickActions.tsx`
-- `src/components/header/MegaMenuAccount.tsx`
+#### Task 2: Leads Security Hardening ✅
+- CSV export no longer includes email/phone PII
+- Audit logging added to exports with user_agent tracking
+- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
 
-4) Proof plan (screenshots after implementation)
-I will capture and send screenshots for:
-- Desktop (current viewport): Owner shortcuts showing all requested hubs.
-- iPad viewport: same shortcuts visible and readable.
-- Mobile viewport: same shortcuts visible and usable.
-- Click proof: at least these opens confirmed from shortcut taps:
-  - Owner Command Center
-  - CRM Dashboard
-  - Admin Panel
-  - Listing Admin
-  - Inbox/Enquiries
-  - Customer Happiness
-  - CV Center
-  - Email Client
+#### Task 3: Encryption Hardening ✅
+- CSV export stripped of `email_lower` and `phone_e164` fields
+- Export audit logged to both `crm_audit_logs` and `audit_logs`
 
-5) Success criteria
-- Owner sees all requested hubs in shortcuts.
-- Non-owner never sees owner-only hubs.
-- JBJ broker only sees CRM shortcut after CRM assignment.
-- Shortcut clicks open the intended page (not generic chat).
-- Screenshots provided across devices as proof.
+#### Task 4: Lead Lifecycle Upgrade ✅
+- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
+- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
+- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
+
+#### Task 5: CRM Structure Upgrade ✅
+- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
+- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
+- KanbanPipeline expanded to show all 17 relevant stages
+
+#### Task 6: Performance Optimization ✅
+- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
+- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
+- `crm_leads_updated_at_trigger` auto-updates `updated_at`
+
+#### Task 7: AI Intelligence Integration ✅
+- New edge function `ai-lead-intelligence` using Lovable AI gateway
+- Supports 3 modes: `score`, `summary`, `next_action`
+- Tool-calling for structured scoring output
+- JWT auth + CRM role validation
+- PII sanitized before sending to AI
+
+#### Task 8: Workflow Automation ✅
+- Created `crm_automation_rules` table with RLS (owner manage, admin view)
+- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
+
+#### Task 10: Role & Permission System ✅
+- RLS on automation rules: owner CRUD, admin read-only
+- CSV export restricted to owner_admin/founder roles
+
+#### Task 12: Backend/Database Upgrade ✅
+- 3 new performance indexes
+- Auto-updated_at trigger on crm_leads
+- Duplicate hash computation trigger
+- Rate-limiting security function
+
+#### Task 13: Data Cleanliness ✅
+- `duplicate_hash` with auto-compute trigger prevents future duplicates
+- Partial unique index enforces uniqueness at DB level
+
+### Files Changed
+| File | Action |
+|------|--------|
+| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
+| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
+| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
+| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
+| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
+| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
+| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
+| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
+| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
