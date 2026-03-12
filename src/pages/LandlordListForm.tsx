@@ -28,11 +28,7 @@ const staggerContainer = {
   }
 };
 
-const LandlordListForm = () => {
-  const navigate = useNavigate();
-  const { captureLead } = useLeadCapture();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
+const emptyLandlordForm = {
     fullName: "",
     phone: "",
     email: "",
@@ -47,7 +43,39 @@ const LandlordListForm = () => {
     availabilityDate: "",
     notes: "",
     consentToPrivacy: false
-  });
+  };
+
+const LandlordListForm = () => {
+  const navigate = useNavigate();
+  const { captureLead } = useLeadCapture();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const loadDraft = () => {
+    try {
+      const saved = localStorage.getItem(DRAFT_KEY);
+      if (saved) return { ...emptyLandlordForm, ...JSON.parse(saved) };
+    } catch {}
+    return emptyLandlordForm;
+  };
+
+  const [formData, setFormData] = useState(loadDraft);
+
+  const saveDraft = useCallback(() => {
+    try {
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(formData));
+      toast.success("Draft saved successfully");
+    } catch { toast.error("Failed to save draft"); }
+  }, [formData]);
+
+  const clearDraft = useCallback(() => {
+    localStorage.removeItem(DRAFT_KEY);
+    setFormData(emptyLandlordForm);
+    toast.info("Form cleared");
+  }, []);
+
+  const hasDraft = (() => {
+    try { return !!localStorage.getItem(DRAFT_KEY); } catch { return false; }
+  })();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
