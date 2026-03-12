@@ -3501,6 +3501,133 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
             </div>
           </Collapsible>
 
+          {/* Finishing Effects */}
+          <Collapsible open={finishOpen} onOpenChange={setFinishOpen}>
+            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+              <CollapsibleTrigger asChild>
+                <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
+                  <div className="flex items-center gap-2">
+                    <Droplets size={13} className="text-[hsl(var(--gold))]" />
+                    <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">Finishing Effects</span>
+                    {finishEffect !== "none" && (
+                      <span className="text-[8px] bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold-dark))] px-1.5 py-0.5 rounded-full font-semibold capitalize">{finishEffect}</span>
+                    )}
+                  </div>
+                  <ChevronDown size={13} className={`text-[hsl(var(--muted-foreground))] transition-transform ${finishOpen ? "rotate-180" : ""}`} />
+                </button>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="px-4 pb-4 border-t border-[hsl(var(--border))] space-y-3 pt-3">
+                  <p className="text-[10px] text-[hsl(var(--muted-foreground))] leading-relaxed">
+                    Simulate print finishing effects on your card preview to visualise the final product.
+                  </p>
+                  <div className="grid grid-cols-5 gap-1.5">
+                    {([
+                      { id: "none" as FinishEffect, label: "None", icon: <Minus size={12} /> },
+                      { id: "matte" as FinishEffect, label: "Matte", icon: <Sun size={12} /> },
+                      { id: "glossy" as FinishEffect, label: "Glossy", icon: <Droplets size={12} /> },
+                      { id: "spot-uv" as FinishEffect, label: "Spot UV", icon: <Diamond size={12} /> },
+                      { id: "embossed" as FinishEffect, label: "Emboss", icon: <Stamp size={12} /> },
+                    ]).map(opt => (
+                      <button
+                        key={opt.id}
+                        onClick={() => setFinishEffect(opt.id)}
+                        className={`flex flex-col items-center gap-1 py-2 px-1 rounded-xl border transition-all ${
+                          finishEffect === opt.id
+                            ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)] text-[hsl(var(--gold-dark))]"
+                            : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
+                        }`}
+                      >
+                        {opt.icon}
+                        <span className="text-[8px] font-semibold leading-none">{opt.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                  {finishEffect !== "none" && (
+                    <div className="rounded-xl bg-[hsl(var(--muted))] p-3 text-[10px] text-[hsl(var(--muted-foreground))]">
+                      {finishEffect === "matte" && "🖨️ Matte — Soft, non-reflective finish. Elegant and smudge-resistant."}
+                      {finishEffect === "glossy" && "✨ Glossy — High-shine reflective coating. Vibrant colors pop."}
+                      {finishEffect === "spot-uv" && "💎 Spot UV — Selective gloss areas create depth and contrast."}
+                      {finishEffect === "embossed" && "🔳 Embossed — Raised texture for a tactile, premium feel."}
+                    </div>
+                  )}
+                </div>
+              </CollapsibleContent>
+            </div>
+          </Collapsible>
+
+          {/* Mockup Previews */}
+          <Collapsible open={mockupOpen} onOpenChange={setMockupOpen}>
+            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+              <CollapsibleTrigger asChild>
+                <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
+                  <div className="flex items-center gap-2">
+                    <ImageIcon size={13} className="text-[hsl(var(--gold))]" />
+                    <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">Mockup Preview</span>
+                    {mockupScene !== "none" && (
+                      <span className="text-[8px] bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold-dark))] px-1.5 py-0.5 rounded-full font-semibold capitalize">{mockupScene}</span>
+                    )}
+                  </div>
+                  <ChevronDown size={13} className={`text-[hsl(var(--muted-foreground))] transition-transform ${mockupOpen ? "rotate-180" : ""}`} />
+                </button>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="px-4 pb-4 border-t border-[hsl(var(--border))] space-y-3 pt-3">
+                  <p className="text-[10px] text-[hsl(var(--muted-foreground))] leading-relaxed">
+                    Preview your card in realistic scenes to see how it looks in real life.
+                  </p>
+                  <div className="grid grid-cols-5 gap-1.5">
+                    {([
+                      { id: "none" as MockupScene, label: "None" },
+                      { id: "desk" as MockupScene, label: "Desk" },
+                      { id: "pocket" as MockupScene, label: "Pocket" },
+                      { id: "stationery" as MockupScene, label: "Kit" },
+                      { id: "hand" as MockupScene, label: "Hand" },
+                    ]).map(opt => (
+                      <button
+                        key={opt.id}
+                        onClick={() => setMockupScene(opt.id)}
+                        className={`text-[9px] py-2 px-1 rounded-xl border font-semibold transition-all ${
+                          mockupScene === opt.id
+                            ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)] text-[hsl(var(--gold-dark))]"
+                            : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
+                        }`}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Inline mockup preview */}
+                  {mockupScene !== "none" && (
+                    <div className="rounded-xl overflow-hidden border border-[hsl(var(--border))] shadow-sm">
+                      {mockupScene === "desk" && (
+                        <DeskMockup finishEffect={finishEffect}>
+                          <CardFace data={data} template={frontTemplate} primary={frontPrimary} secondary={frontSecondary} accent={frontAccent} side="front" scale={0.7} shapeStyle={getShapeStyle(cardShape)} aiDesignData={aiDesignData} cardShape={cardShape} fontFamily={cardFontFamily} fontWeight={cardFontBold ? "bold" : undefined} fontStyle={cardFontItalic ? "italic" : undefined} nameFontSize={cardFontSize} />
+                        </DeskMockup>
+                      )}
+                      {mockupScene === "pocket" && (
+                        <PocketMockup finishEffect={finishEffect}>
+                          <CardFace data={data} template={frontTemplate} primary={frontPrimary} secondary={frontSecondary} accent={frontAccent} side="front" scale={0.6} shapeStyle={getShapeStyle(cardShape)} aiDesignData={aiDesignData} cardShape={cardShape} fontFamily={cardFontFamily} fontWeight={cardFontBold ? "bold" : undefined} fontStyle={cardFontItalic ? "italic" : undefined} nameFontSize={cardFontSize} />
+                        </PocketMockup>
+                      )}
+                      {mockupScene === "stationery" && (
+                        <StationeryMockup data={data} primary={frontPrimary} finishEffect={finishEffect}>
+                          <CardFace data={data} template={frontTemplate} primary={frontPrimary} secondary={frontSecondary} accent={frontAccent} side="front" scale={0.6} shapeStyle={getShapeStyle(cardShape)} aiDesignData={aiDesignData} cardShape={cardShape} fontFamily={cardFontFamily} fontWeight={cardFontBold ? "bold" : undefined} fontStyle={cardFontItalic ? "italic" : undefined} nameFontSize={cardFontSize} />
+                        </StationeryMockup>
+                      )}
+                      {mockupScene === "hand" && (
+                        <HandMockup finishEffect={finishEffect}>
+                          <CardFace data={data} template={frontTemplate} primary={frontPrimary} secondary={frontSecondary} accent={frontAccent} side="front" scale={0.7} shapeStyle={getShapeStyle(cardShape)} aiDesignData={aiDesignData} cardShape={cardShape} fontFamily={cardFontFamily} fontWeight={cardFontBold ? "bold" : undefined} fontStyle={cardFontItalic ? "italic" : undefined} nameFontSize={cardFontSize} />
+                        </HandMockup>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </CollapsibleContent>
+            </div>
+          </Collapsible>
+
           {/* Share Analytics */}
           <Collapsible>
             <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
