@@ -693,6 +693,16 @@ const CRM = () => {
                       </Button>
                     )}
                     {isCRMOwner && (
+                      <Button 
+                        variant="secondary" 
+                        onClick={handleExportExcel}
+                        className="text-sm"
+                      >
+                        <Download className="h-4 w-4 mr-1.5" />
+                        Excel
+                      </Button>
+                    )}
+                    {isCRMOwner && (
                       <Button
                         variant="secondary"
                         onClick={() => setShowBulkAssignModal(true)}

@@ -8,6 +8,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { UserCheck, Loader2, Building2, Briefcase } from 'lucide-react';
+import { LanguageMultiSelect } from '@/components/ui/language-multi-select';
 
 interface SalesRepRegistrationProps {
   developerName: string;
