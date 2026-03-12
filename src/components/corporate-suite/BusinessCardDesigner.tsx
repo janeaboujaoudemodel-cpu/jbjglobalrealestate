@@ -201,14 +201,35 @@ function CardFace({
   bilingualMode?: BilingualMode; bilingualDir?: "rtl" | "ltr"; secondaryData?: CardData;
   onInlineEdit?: (field: keyof CardData) => void;
 }) {
-  const name    = data.name    || "Your Name";
-  const title   = data.title   || "Job Title";
-  const company = data.company || "Company Name";
+  // Determine if bilingual back side should show secondary data
+  const showSecondary = bilingualMode === "dual-side" && side === "back" && secondaryData;
+  const displayData = showSecondary ? secondaryData : data;
+  const displayDir = showSecondary ? (bilingualDir || "ltr") : "ltr";
+
+  const name    = displayData.name    || "Your Name";
+  const title   = displayData.title   || "Job Title";
+  const company = displayData.company || "Company Name";
   const initial = name.charAt(0).toUpperCase();
+
+  // For single-card bilingual, show secondary text below primary
+  const showBilingualInline = bilingualMode === "single-card" && side === "front" && secondaryData;
+  const secName    = secondaryData?.name    || "";
+  const secTitle   = secondaryData?.title   || "";
+  const secCompany = secondaryData?.company || "";
 
   const resolvedFontWeight = fontWeight || "800";
   const resolvedFontStyle  = fontStyle  || "normal";
   const resolvedNameSize   = nameFontSize != null ? nameFontSize * scale : 18 * scale;
+
+  // Inline edit click handler
+  const editClick = (field: keyof CardData) => (e: React.MouseEvent) => {
+    if (onInlineEdit) {
+      e.stopPropagation();
+      onInlineEdit(field);
+    }
+  };
+  const editStyle: React.CSSProperties = onInlineEdit ? { cursor: "text", borderBottom: "1px dashed transparent" } : {};
+  const editHoverClass = onInlineEdit ? "hover:border-b hover:border-dashed hover:border-current" : "";
 
   const baseStyle: React.CSSProperties = {
     width: "100%",
