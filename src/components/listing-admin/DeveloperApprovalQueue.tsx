@@ -352,7 +352,7 @@ export const DeveloperApprovalQueue = () => {
           <div className="text-center py-12 text-zinc-500">
             <CheckCircle2 className="w-12 h-12 mx-auto mb-4 text-green-500/50" />
             <p>No pending developers to review</p>
-            <p className="text-sm mt-2">Click "Extract from Provident" to fetch new developers</p>
+            <p className="text-sm mt-2">Click "Extract from Source" to fetch new developers</p>
           </div>
         ) : (
           <>
