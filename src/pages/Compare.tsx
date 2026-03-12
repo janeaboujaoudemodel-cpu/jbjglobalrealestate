@@ -745,21 +745,31 @@ const Compare = () => {
                   </th>
                     {projects.map((project) => {
                       const badge = getBadge(project.id);
+                      const isFav = shortlistIds.includes(project.id);
                       return (
                         <th
                           key={project.id}
-                          className="text-left py-4 px-4 border-b border-zinc-800 min-w-[250px]"
+                          className="text-left py-4 px-4 border-b border-zinc-800"
+                          style={{ width: `${100 / (projects.length + 1)}%`, minWidth: '220px' }}
                         >
                           <div className="flex flex-col gap-2">
-                            {badge && (
-                              <span className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-bold w-fit ${
-                                badge === 'top1' ? 'bg-gold/20 text-gold' :
-                                badge === 'top2' ? 'bg-gold/15 text-gold/80' :
-                                'bg-gold/10 text-gold/60'
+                            <div className="flex items-center justify-between gap-2">
+                              {badge && (
+                                <span className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-bold w-fit ${
+                                  badge === 'top1' ? 'bg-gold/20 text-gold' :
+                                  badge === 'top2' ? 'bg-gold/15 text-gold/80' :
+                                  'bg-gold/10 text-gold/60'
+                                }`}>
+                                  {badge === 'top1' ? 'Top 1' : badge === 'top2' ? 'Top 2' : 'Top 3'}
+                                </span>
+                              )}
+                              <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold ${
+                                isFav ? 'bg-red-500/15 text-red-400' : 'bg-zinc-800 text-zinc-500'
                               }`}>
-                                {badge === 'top1' ? 'Top 1' : badge === 'top2' ? 'Top 2' : 'Top 3'}
+                                <Heart className="w-2.5 h-2.5" fill={isFav ? "currentColor" : "none"} />
+                                {isFav ? 'In Favorites' : 'Not Saved'}
                               </span>
-                            )}
+                            </div>
                             <div className="aspect-[16/9] h-40 overflow-hidden rounded-lg">
                               <img
                                 src={project.images?.[0]?.image_url || "/placeholder.svg"}
