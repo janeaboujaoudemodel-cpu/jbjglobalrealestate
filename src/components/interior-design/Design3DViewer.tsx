@@ -106,7 +106,7 @@ const Design3DViewer = ({ imageUrl, projectName }: Design3DViewerProps) => {
           }}
         />
         {is3D && (
-          <div className="absolute bottom-3 left-3 bg-black/70 text-fuchsia-300 text-xs px-3 py-1.5 rounded-full backdrop-blur-sm">
+          <div className="absolute bottom-3 left-3 bg-black/70 text-gold text-xs px-3 py-1.5 rounded-full backdrop-blur-sm">
             🎮 Drag to rotate • {rotateX.toFixed(0)}° × {rotateY.toFixed(0)}°
           </div>
         )}
