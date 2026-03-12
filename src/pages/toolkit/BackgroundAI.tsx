@@ -1159,7 +1159,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                   <h3 className="text-white font-semibold flex items-center gap-2">
                     <Video className="h-4 w-4" style={{ color: C.accentText }} />
                     Video Background Removal
-                    <span className="ml-auto text-xs px-2 py-0.5 rounded-full" style={{ background: "rgba(99,102,241,0.15)", color: C.accentText }}>FFmpeg + AI</span>
+                    <span className="ml-auto text-xs px-2 py-0.5 rounded-full" style={{ background: "rgba(184,148,62,0.15)", color: C.accentText }}>FFmpeg + AI</span>
                   </h3>
                   {/* Video Upload */}
                   {!videoFile ? (
