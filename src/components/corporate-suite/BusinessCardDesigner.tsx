@@ -419,19 +419,25 @@ function CardFace({
   // ── MODERN ──────────────────────────────────────────────────
   if (template === "modern") {
     return (
-      <div style={{ ...baseStyle, background: `linear-gradient(135deg, ${primary} 0%, ${primary}bb 100%)` }}>
+      <div style={{ ...baseStyle, background: `linear-gradient(135deg, ${primary} 0%, ${primary}bb 100%)`, direction: displayDir }}>
         <div style={{ position: "absolute", top: -20, right: -20, width: 80, height: 80, borderRadius: "50%", background: `${secondary}15` }} />
         <div style={{ position: "absolute", bottom: -30, left: -10, width: 100, height: 100, borderRadius: "50%", background: `${secondary}10` }} />
         <div style={{ position: "relative", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: `${20 * scale}px ${24 * scale}px` }}>
           <div>
-            <p style={{ fontSize: 9 * scale, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: secondary, opacity: 0.65, margin: 0 }}>{company}</p>
-            <h2 style={{ fontSize: resolvedNameSize, fontWeight: resolvedFontWeight, fontStyle: resolvedFontStyle, color: secondary, margin: `${4 * scale}px 0 ${2 * scale}px` }}>{name}</h2>
-            <p style={{ fontSize: 10 * scale, color: secondary, opacity: 0.8, margin: 0 }}>{title}</p>
+            <p onClick={editClick("company")} style={{ ...editStyle, fontSize: 9 * scale, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: secondary, opacity: 0.65, margin: 0 }}>{company}</p>
+            <h2 onClick={editClick("name")} style={{ ...editStyle, fontSize: resolvedNameSize, fontWeight: resolvedFontWeight, fontStyle: resolvedFontStyle, color: secondary, margin: `${4 * scale}px 0 ${2 * scale}px` }}>{name}</h2>
+            {showBilingualInline && secName && (
+              <p style={{ fontSize: resolvedNameSize * 0.7, fontWeight: resolvedFontWeight, color: secondary, opacity: 0.6, margin: `0 0 ${2 * scale}px`, direction: bilingualDir || "ltr" }}>{secName}</p>
+            )}
+            <p onClick={editClick("title")} style={{ ...editStyle, fontSize: 10 * scale, color: secondary, opacity: 0.8, margin: 0 }}>{title}</p>
+            {showBilingualInline && secTitle && (
+              <p style={{ fontSize: 8.5 * scale, color: secondary, opacity: 0.5, margin: `${1 * scale}px 0 0`, direction: bilingualDir || "ltr" }}>{secTitle}</p>
+            )}
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 3 * scale }}>
-            {data.phone   && <p style={{ fontSize: 8.5 * scale, color: secondary, opacity: 0.8, margin: 0 }}>☎ {data.phone}</p>}
-            {data.email   && <p style={{ fontSize: 8.5 * scale, color: secondary, opacity: 0.8, margin: 0 }}>@ {data.email}</p>}
-            {data.website && <p style={{ fontSize: 8.5 * scale, color: secondary, opacity: 0.8, margin: 0 }}>⬡ {data.website}</p>}
+            {displayData.phone   && <p onClick={editClick("phone")} style={{ ...editStyle, fontSize: 8.5 * scale, color: secondary, opacity: 0.8, margin: 0 }}>☎ {displayData.phone}</p>}
+            {displayData.email   && <p onClick={editClick("email")} style={{ ...editStyle, fontSize: 8.5 * scale, color: secondary, opacity: 0.8, margin: 0 }}>@ {displayData.email}</p>}
+            {displayData.website && <p onClick={editClick("website")} style={{ ...editStyle, fontSize: 8.5 * scale, color: secondary, opacity: 0.8, margin: 0 }}>⬡ {displayData.website}</p>}
           </div>
         </div>
       </div>
