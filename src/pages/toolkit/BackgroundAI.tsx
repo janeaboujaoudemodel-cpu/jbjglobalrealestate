@@ -937,7 +937,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
             {/* Image Info Bar */}
             {imageInfo && (
               <div className="flex flex-wrap items-center gap-3 p-3 rounded-xl"
-                style={{ background: "rgba(99,102,241,0.04)", border: `1px solid ${C.border}` }}>
+                style={{ background: "rgba(184,148,62,0.04)", border: `1px solid ${C.border}` }}>
                 <div className="flex items-center gap-1.5">
                   <ZoomIn className="h-3.5 w-3.5" style={{ color: C.accentText }} />
                   <span className="text-xs text-white/60">{imageInfo.width} × {imageInfo.height} px</span>
