@@ -64,6 +64,7 @@ const AdminDevelopers = () => {
   const [salesReps, setSalesReps] = useState<SalesRep[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [titleFilter, setTitleFilter] = useState("all");
   const [selectedDeveloper, setSelectedDeveloper] = useState<Developer | null>(null);
   const [isDevDialogOpen, setIsDevDialogOpen] = useState(false);
   const [isRepDialogOpen, setIsRepDialogOpen] = useState(false);
