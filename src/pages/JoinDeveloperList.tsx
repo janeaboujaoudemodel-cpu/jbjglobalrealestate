@@ -165,24 +165,15 @@ const JoinDeveloperList = () => {
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}>
 
               {/* Draft Action Bar */}
-              <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row sm:items-center gap-3 px-4 py-3 mb-6 bg-white/40 border border-purple-300/30">
-                <div className="flex items-center gap-2 flex-1 min-w-0">
-                  <Clock className="w-4 h-4 text-purple-600 flex-shrink-0" />
-                  <span className="text-sm font-medium text-foreground truncate">
-                    {hasDraft ? "Draft saved — continue where you left off" : "New Developer Application"}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 flex-shrink-0">
-                  <button type="button" onClick={saveDraft} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-purple-600 text-white hover:bg-purple-700 transition-colors">
-                    <Save className="w-3.5 h-3.5" /> Save Draft
-                  </button>
-                  <button type="button" onClick={clearDraft} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-red-500/90 text-white hover:bg-red-600 transition-colors">
-                    <RotateCcw className="w-3.5 h-3.5" /> Reset
-                  </button>
-                  <button type="button" onClick={() => clearDraft()} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium border border-purple-400/40 text-foreground hover:bg-purple-50 transition-colors">
-                    <FilePlus className="w-3.5 h-3.5" /> New
-                  </button>
-                </div>
+              <motion.div variants={fadeInUp}>
+                <FormDraftBar
+                  hasDraft={hasDraft}
+                  onSaveDraft={saveDraft}
+                  onReset={clearDraft}
+                  onNew={clearDraft}
+                  label="Developer Application"
+                  theme="purple"
+                />
               </motion.div>
 
               {/* Form Card */}
