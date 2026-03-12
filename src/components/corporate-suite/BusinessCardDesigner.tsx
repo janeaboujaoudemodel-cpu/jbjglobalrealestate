@@ -1355,6 +1355,18 @@ export default function BusinessCardDesigner() {
   const [gradientEnd, setGradientEnd] = useState("#C8A766");
   const [gradientDirection, setGradientDirection] = useState<GradientDirection>("135deg");
 
+  // Gallery state
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [galleryPrompt, setGalleryPrompt] = useState("");
+  const [galleryDesigns, setGalleryDesigns] = useState<(AiDesignData & { id: string; name: string; category?: string })[]>([]);
+  const [galleryFavorites, setGalleryFavorites] = useState<string[]>([]);
+  const [isGeneratingGallery, setIsGeneratingGallery] = useState(false);
+  const [galleryPage, setGalleryPage] = useState(0);
+  const GALLERY_PER_PAGE = 12;
+
+  // Trade license auto-fill
+  const [tradeLicenseOpen, setTradeLicenseOpen] = useState(false);
+
   const [data, setData] = useState<CardData>({
     name: "", title: "", company: "", phone: "", email: "", website: "", address: "",
   });
@@ -1463,6 +1475,55 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
     } finally {
       setIsGeneratingDesign(false);
     }
+  };
+
+  // Gallery generation — batch card designs
+  const handleGenerateGallery = async () => {
+    setIsGeneratingGallery(true);
+    try {
+      const { data: result, error } = await supabase.functions.invoke("ai-card-gallery-generator", {
+        body: { prompt: galleryPrompt, industry: aiIndustry, tone: aiTone, count: GALLERY_PER_PAGE },
+      });
+      if (error) throw error;
+      if (!result?.designs) throw new Error("No designs returned");
+      setGalleryDesigns(prev => [...prev, ...result.designs]);
+      setGalleryPage(prev => prev + 1);
+      toast.success(`${result.designs.length} designs generated!`);
+    } catch (err: any) {
+      console.error(err);
+      if (err?.message?.includes("Rate limit")) toast.error("Rate limit exceeded. Please wait a moment.");
+      else if (err?.message?.includes("credits")) toast.error("AI credits required.");
+      else toast.error("Gallery generation failed. Please try again.");
+    } finally {
+      setIsGeneratingGallery(false);
+    }
+  };
+
+  const toggleGalleryFavorite = (id: string) => {
+    setGalleryFavorites(prev =>
+      prev.includes(id) ? prev.filter(f => f !== id) : prev.length < 5 ? [...prev, id] : prev
+    );
+  };
+
+  const applyGalleryDesign = (design: AiDesignData & { id: string; name: string }) => {
+    setAiDesignData(design);
+    setActiveTemplate("ai-design");
+    toast.success(`Applied: ${design.name}`);
+  };
+
+  // Trade license extraction handler
+  const handleTradeLicenseExtracted = (extracted: Record<string, unknown>) => {
+    setData(prev => ({
+      ...prev,
+      name:    extracted.owner_name ? String(extracted.owner_name) : (extracted.name ? String(extracted.name) : prev.name),
+      company: extracted.company_name ? String(extracted.company_name) : (extracted.company ? String(extracted.company) : prev.company),
+      phone:   extracted.phone   ? String(extracted.phone)   : prev.phone,
+      email:   extracted.email   ? String(extracted.email)   : prev.email,
+      website: extracted.website ? String(extracted.website) : prev.website,
+      address: extracted.address ? String(extracted.address) : prev.address,
+      title:   extracted.position ? String(extracted.position) : (extracted.title ? String(extracted.title) : prev.title),
+    }));
+    toast.success("Trade license data extracted & applied!");
   };
 
   // Save Card
@@ -1898,6 +1959,186 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
             label="Scan Existing Card"
             hint="Upload a photo or PDF of a business card to pre-fill all fields instantly."
           />
+
+          {/* Trade License Auto-Fill */}
+          <Collapsible open={tradeLicenseOpen} onOpenChange={setTradeLicenseOpen}>
+            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+              <CollapsibleTrigger asChild>
+                <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
+                  <div className="flex items-center gap-2">
+                    <Building2 size={13} className="text-[hsl(var(--gold))]" />
+                    <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">Trade License</span>
+                    <span className="text-[8px] bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold-dark))] px-1.5 py-0.5 rounded-full font-semibold">Auto-Fill</span>
+                  </div>
+                  <ChevronDown size={13} className={`text-[hsl(var(--muted-foreground))] transition-transform ${tradeLicenseOpen ? "rotate-180" : ""}`} />
+                </button>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="px-4 pb-4 border-t border-[hsl(var(--border))]">
+                  <p className="text-[10px] text-[hsl(var(--muted-foreground))] py-2">
+                    Upload your trade license to auto-fill company name, address, and contact details.
+                  </p>
+                  <DocumentExtractorUpload
+                    extractionType="company_profile"
+                    onExtracted={handleTradeLicenseExtracted}
+                    label="Upload Trade License"
+                    hint="PDF or photo of your trade license — extracts company info automatically."
+                  />
+                </div>
+              </CollapsibleContent>
+            </div>
+          </Collapsible>
+
+          {/* Smart Gallery — AI batch generation */}
+          <Collapsible open={galleryOpen} onOpenChange={setGalleryOpen}>
+            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+              <CollapsibleTrigger asChild>
+                <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
+                  <div className="flex items-center gap-2">
+                    <LayoutGrid size={13} className="text-[hsl(var(--gold))]" />
+                    <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">Smart Gallery</span>
+                    <span className="text-[8px] bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold-dark))] px-1.5 py-0.5 rounded-full font-semibold">AI</span>
+                    {galleryFavorites.length > 0 && (
+                      <span className="text-[8px] bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full font-semibold">
+                        {galleryFavorites.length}/5 ★
+                      </span>
+                    )}
+                  </div>
+                  <ChevronDown size={13} className={`text-[hsl(var(--muted-foreground))] transition-transform ${galleryOpen ? "rotate-180" : ""}`} />
+                </button>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="px-4 pb-4 border-t border-[hsl(var(--border))] space-y-3 pt-3">
+                  <p className="text-[10px] text-[hsl(var(--muted-foreground))] leading-relaxed">
+                    Describe your ideal business card or company style. AI generates multiple designs — favorite up to 5, then apply or merge.
+                  </p>
+
+                  {/* Prompt input */}
+                  <div className="flex gap-1.5">
+                    <Input
+                      value={galleryPrompt}
+                      onChange={e => setGalleryPrompt(e.target.value)}
+                      placeholder="e.g. Luxury gold real estate card with geometric patterns..."
+                      className="h-8 text-xs flex-1"
+                      onKeyDown={e => e.key === "Enter" && !isGeneratingGallery && handleGenerateGallery()}
+                    />
+                    <VoiceInputButton onTranscript={t => setGalleryPrompt(prev => prev ? `${prev} ${t}` : t)} size="sm" />
+                  </div>
+
+                  <Button
+                    onClick={() => { setGalleryDesigns([]); setGalleryPage(0); handleGenerateGallery(); }}
+                    disabled={isGeneratingGallery}
+                    className="w-full h-9 text-xs gap-2 font-semibold text-white"
+                    style={{ background: "linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-dark)))" }}
+                  >
+                    {isGeneratingGallery ? <RefreshCw size={12} className="animate-spin" /> : <Sparkles size={12} />}
+                    {isGeneratingGallery ? "Generating Designs…" : galleryDesigns.length > 0 ? "Regenerate Gallery" : "Generate Gallery"}
+                  </Button>
+
+                  {/* Gallery grid */}
+                  {galleryDesigns.length > 0 && (
+                    <div className="space-y-2">
+                      <div className="grid grid-cols-2 gap-2">
+                        {galleryDesigns.map((design) => {
+                          const isFav = galleryFavorites.includes(design.id);
+                          return (
+                            <div key={design.id} className="relative group">
+                              <div
+                                className={`rounded-xl overflow-hidden border-2 cursor-pointer transition-all ${
+                                  isFav ? "border-amber-400 shadow-md" : "border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.5)]"
+                                }`}
+                                onClick={() => applyGalleryDesign(design)}
+                              >
+                                {/* Mini card preview */}
+                                <CardFace
+                                  data={data}
+                                  template="ai-design"
+                                  primary={design.bgColor}
+                                  secondary={design.textColor}
+                                  accent={design.accentColor || design.colors?.[0] || "#C8A766"}
+                                  side="front"
+                                  scale={0.35}
+                                  shapeStyle={{ aspectRatio: "3.5 / 2", borderRadius: 0 }}
+                                  aiDesignData={design}
+                                  fontFamily={cardFontFamily}
+                                  fontWeight={cardFontBold ? "bold" : undefined}
+                                  fontStyle={cardFontItalic ? "italic" : undefined}
+                                  nameFontSize={cardFontSize}
+                                />
+                                <p className="text-[8px] font-semibold text-center py-1 bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] truncate px-1">
+                                  {design.name}
+                                </p>
+                              </div>
+                              {/* Favorite button */}
+                              <button
+                                onClick={(e) => { e.stopPropagation(); toggleGalleryFavorite(design.id); }}
+                                className={`absolute top-1 right-1 w-5 h-5 rounded-full flex items-center justify-center shadow-sm transition-all ${
+                                  isFav ? "bg-amber-400 text-white" : "bg-white/80 text-[hsl(var(--muted-foreground))] hover:bg-amber-100"
+                                }`}
+                              >
+                                <Star size={10} fill={isFav ? "currentColor" : "none"} />
+                              </button>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* Load more */}
+                      <Button
+                        onClick={handleGenerateGallery}
+                        disabled={isGeneratingGallery}
+                        variant="outline"
+                        className="w-full h-8 text-[10px] gap-1.5"
+                      >
+                        {isGeneratingGallery ? <RefreshCw size={10} className="animate-spin" /> : <Sparkles size={10} />}
+                        Generate More Designs
+                      </Button>
+
+                      {/* Favorites summary */}
+                      {galleryFavorites.length > 0 && (
+                        <div className="rounded-xl border border-amber-200 bg-amber-50 p-3 space-y-2">
+                          <p className="text-[10px] font-bold text-amber-800 flex items-center gap-1.5">
+                            <Star size={10} fill="currentColor" /> {galleryFavorites.length} Favorited
+                          </p>
+                          <div className="flex gap-1 flex-wrap">
+                            {galleryFavorites.map(fId => {
+                              const d = galleryDesigns.find(g => g.id === fId);
+                              return d ? (
+                                <button
+                                  key={fId}
+                                  onClick={() => applyGalleryDesign(d)}
+                                  className="text-[8px] bg-white border border-amber-300 rounded-lg px-2 py-1 font-semibold text-amber-700 hover:bg-amber-100 transition-colors truncate max-w-[120px]"
+                                >
+                                  {d.name}
+                                </button>
+                              ) : null;
+                            })}
+                          </div>
+                          <Button
+                            onClick={() => { setGalleryFavorites([]); toast.success("Favorites cleared"); }}
+                            variant="outline"
+                            className="w-full h-7 text-[9px] border-amber-300 text-amber-700 hover:bg-amber-100"
+                          >
+                            Clear Favorites
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {isGeneratingGallery && galleryDesigns.length === 0 && (
+                    <div className="flex items-center gap-2 p-3 bg-[hsl(var(--muted))] rounded-xl">
+                      <RefreshCw size={14} className="animate-spin text-[hsl(var(--gold))]" />
+                      <div>
+                        <p className="text-[10px] font-semibold text-[hsl(var(--foreground))]">Generating gallery…</p>
+                        <p className="text-[9px] text-[hsl(var(--muted-foreground))]">Creating {GALLERY_PER_PAGE} unique card designs</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </CollapsibleContent>
+            </div>
+          </Collapsible>
 
           {/* Card info fields */}
           <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-5 shadow-sm space-y-3.5">
