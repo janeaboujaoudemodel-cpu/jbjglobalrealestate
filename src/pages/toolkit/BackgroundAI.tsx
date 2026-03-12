@@ -1123,8 +1123,8 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                       onClick={() => setSelectedScene(scene)}
                       className="flex flex-col items-center gap-2 p-3 rounded-xl text-sm transition-all"
                       style={{
-                        background: selectedScene.id === scene.id ? "rgba(99,102,241,0.28)" : "rgba(255,255,255,0.10)",
-                        border: `1px solid ${selectedScene.id === scene.id ? "rgba(99,102,241,0.7)" : "rgba(255,255,255,0.22)"}`,
+                        background: selectedScene.id === scene.id ? "rgba(184,148,62,0.28)" : "rgba(255,255,255,0.10)",
+                        border: `1px solid ${selectedScene.id === scene.id ? "rgba(184,148,62,0.7)" : "rgba(255,255,255,0.22)"}`,
                         color: selectedScene.id === scene.id ? C.accentText : "rgba(255,255,255,0.88)",
                       }}
                     >
