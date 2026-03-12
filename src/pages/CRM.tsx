@@ -198,6 +198,17 @@ const CRM = () => {
       return;
     }
     try {
+      // Check for updates since last download
+      const lastDownloadTs = localStorage.getItem('crm_last_download_ts');
+      let updatedCount = 0;
+      if (lastDownloadTs) {
+        const { count } = await supabase
+          .from('developer_representatives')
+          .select('*', { count: 'exact', head: true })
+          .gt('updated_at', lastDownloadTs);
+        updatedCount = count || 0;
+      }
+
       const { data: leads } = await supabase
         .from("crm_leads")
         .select("id, full_name, email_lower, phone_e164, nationality, preferred_language, current_location_country, source, tags, created_at, pipeline_stage, ai_score")
@@ -259,7 +270,11 @@ const CRM = () => {
       a.click();
       URL.revokeObjectURL(url);
       
-      toast.success(`Exported ${leads.length} leads to CSV`);
+      // Update last download timestamp
+      localStorage.setItem('crm_last_download_ts', new Date().toISOString());
+      
+      const updateMsg = updatedCount > 0 ? ` (${updatedCount} rep profiles updated since last download)` : '';
+      toast.success(`Exported ${leads.length} leads to CSV${updateMsg}`);
     } catch (err) {
       console.error("Export failed:", err);
       toast.error("Failed to export leads");

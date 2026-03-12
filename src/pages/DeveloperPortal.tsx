@@ -115,6 +115,14 @@ const DeveloperPortal = () => {
     enabled: !!user,
   });
 
+  // Auto-fill from rep profile
+  useEffect(() => {
+    if (repProfile) {
+      setDevName(repProfile.developer_name || '');
+      setDevEmail(repProfile.email || '');
+    }
+  }, [repProfile]);
+
   // Profile editing
   const [editingProfile, setEditingProfile] = useState(false);
   const [savingProfile, setSavingProfile] = useState(false);
