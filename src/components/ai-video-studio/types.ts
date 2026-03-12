@@ -7,8 +7,6 @@ export interface VideoStudioProject {
   tracks: Track[];
   settings: ProjectSettings;
   createdAt: Date;
-  // NOTE: autoDeleteAt removed - zero auto-deletion policy per user requirement
-  // All projects are saved permanently until user explicitly deletes
 }
 
 export interface ProjectSettings {
@@ -238,12 +236,12 @@ export const SUPPORTED_LANGUAGES = [
   { code: 'sw', name: 'Swahili', rtl: false },
 ] as const;
 
-// Export presets
+// Export presets — proper SVG-ready labels (no emoji)
 export const EXPORT_PRESETS: ExportPreset[] = [
-  { id: 'reels', name: 'Reels/TikTok', width: 1080, height: 1920, aspectRatio: '9:16', platform: 'tiktok', icon: '📱' },
-  { id: 'youtube', name: 'YouTube', width: 1920, height: 1080, aspectRatio: '16:9', platform: 'youtube', icon: '▶️' },
-  { id: 'instagram', name: 'Instagram Feed', width: 1080, height: 1080, aspectRatio: '1:1', platform: 'instagram', icon: '📷' },
-  { id: 'portrait', name: 'Portrait', width: 1080, height: 1350, aspectRatio: '4:5', platform: 'instagram', icon: '🖼️' },
+  { id: 'reels', name: 'Reels / TikTok', width: 1080, height: 1920, aspectRatio: '9:16', platform: 'tiktok', icon: 'reels' },
+  { id: 'youtube', name: 'YouTube', width: 1920, height: 1080, aspectRatio: '16:9', platform: 'youtube', icon: 'youtube' },
+  { id: 'instagram', name: 'Instagram Feed', width: 1080, height: 1080, aspectRatio: '1:1', platform: 'instagram', icon: 'instagram' },
+  { id: 'portrait', name: 'Portrait', width: 1080, height: 1350, aspectRatio: '4:5', platform: 'instagram', icon: 'portrait' },
 ];
 
 // Subtitle styles

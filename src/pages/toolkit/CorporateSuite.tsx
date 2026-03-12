@@ -15,12 +15,7 @@ const tools = [
     icon: Stamp,
     href: "/toolkit/stamp-generator",
     badge: "AI",
-    badgeColor: "bg-amber-500/20 text-amber-300 border border-amber-500/30",
-    gradient: "from-amber-400/20 via-yellow-500/10 to-amber-600/5",
-    topBorder: "from-amber-400 to-yellow-500",
-    iconBg: "from-amber-400/30 to-yellow-600/20 border border-amber-500/30",
-    iconColor: "text-amber-300",
-    glow: "hover:shadow-[0_0_30px_rgba(251,191,36,0.15)]",
+    accentColor: "#B8943E",
   },
   {
     id: "business-card",
@@ -30,12 +25,7 @@ const tools = [
     icon: CreditCard,
     href: "/toolkit/corporate-suite/business-card",
     badge: "AI",
-    badgeColor: "bg-blue-500/20 text-blue-300 border border-blue-500/30",
-    gradient: "from-blue-500/20 via-indigo-500/10 to-blue-600/5",
-    topBorder: "from-blue-400 to-indigo-500",
-    iconBg: "from-blue-500/30 to-indigo-600/20 border border-blue-500/30",
-    iconColor: "text-blue-300",
-    glow: "hover:shadow-[0_0_30px_rgba(99,102,241,0.15)]",
+    accentColor: "#5B8DEF",
   },
   {
     id: "cv-resume",
@@ -45,12 +35,7 @@ const tools = [
     icon: FileText,
     href: "/toolkit/corporate-suite/cv-resume",
     badge: "AI",
-    badgeColor: "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30",
-    gradient: "from-emerald-500/20 via-teal-500/10 to-emerald-600/5",
-    topBorder: "from-emerald-400 to-teal-500",
-    iconBg: "from-emerald-500/30 to-teal-600/20 border border-emerald-500/30",
-    iconColor: "text-emerald-300",
-    glow: "hover:shadow-[0_0_30px_rgba(16,185,129,0.15)]",
+    accentColor: "#34D399",
   },
   {
     id: "cover-letter",
@@ -60,12 +45,7 @@ const tools = [
     icon: FileEdit,
     href: "/toolkit/corporate-suite/cover-letter",
     badge: "AI",
-    badgeColor: "bg-purple-500/20 text-purple-300 border border-purple-500/30",
-    gradient: "from-purple-500/20 via-violet-500/10 to-purple-600/5",
-    topBorder: "from-purple-400 to-violet-500",
-    iconBg: "from-purple-500/30 to-violet-600/20 border border-purple-500/30",
-    iconColor: "text-purple-300",
-    glow: "hover:shadow-[0_0_30px_rgba(139,92,246,0.15)]",
+    accentColor: "#A78BFA",
   },
   {
     id: "logo-creator",
@@ -75,12 +55,7 @@ const tools = [
     icon: ImageIcon,
     href: "/toolkit/corporate-suite/logo-creator",
     badge: "AI",
-    badgeColor: "bg-orange-500/20 text-orange-300 border border-orange-500/30",
-    gradient: "from-orange-400/20 via-red-500/10 to-orange-600/5",
-    topBorder: "from-orange-400 to-red-500",
-    iconBg: "from-orange-400/30 to-red-500/20 border border-orange-500/30",
-    iconColor: "text-orange-300",
-    glow: "hover:shadow-[0_0_30px_rgba(249,115,22,0.15)]",
+    accentColor: "#F97316",
   },
   {
     id: "company-profile",
@@ -90,12 +65,7 @@ const tools = [
     icon: Building2,
     href: "/toolkit/corporate-suite/company-profile",
     badge: "AI",
-    badgeColor: "bg-teal-500/20 text-teal-300 border border-teal-500/30",
-    gradient: "from-teal-500/20 via-cyan-500/10 to-teal-600/5",
-    topBorder: "from-teal-400 to-cyan-500",
-    iconBg: "from-teal-500/30 to-cyan-600/20 border border-teal-500/30",
-    iconColor: "text-teal-300",
-    glow: "hover:shadow-[0_0_30px_rgba(20,184,166,0.15)]",
+    accentColor: "#14B8A6",
   },
   {
     id: "presentation",
@@ -105,12 +75,7 @@ const tools = [
     icon: Presentation,
     href: "/presentations",
     badge: "Pro",
-    badgeColor: "bg-rose-500/20 text-rose-300 border border-rose-500/30",
-    gradient: "from-rose-500/20 via-pink-500/10 to-rose-600/5",
-    topBorder: "from-rose-400 to-pink-500",
-    iconBg: "from-rose-500/30 to-pink-600/20 border border-rose-500/30",
-    iconColor: "text-rose-300",
-    glow: "hover:shadow-[0_0_30px_rgba(244,63,94,0.15)]",
+    accentColor: "#F43F5E",
   },
   {
     id: "landing-page",
@@ -120,12 +85,7 @@ const tools = [
     icon: Globe,
     href: "/toolkit/corporate-suite/landing-page",
     badge: "New",
-    badgeColor: "bg-cyan-500/20 text-cyan-300 border border-cyan-500/30",
-    gradient: "from-cyan-500/20 via-sky-500/10 to-cyan-600/5",
-    topBorder: "from-cyan-400 to-sky-500",
-    iconBg: "from-cyan-500/30 to-sky-600/20 border border-cyan-500/30",
-    iconColor: "text-cyan-300",
-    glow: "hover:shadow-[0_0_30px_rgba(6,182,212,0.15)]",
+    accentColor: "#06B6D4",
   },
   {
     id: "e-sign",
@@ -135,12 +95,7 @@ const tools = [
     icon: PenLine,
     href: "/e-signature",
     badge: "Pro",
-    badgeColor: "bg-indigo-500/20 text-indigo-300 border border-indigo-500/30",
-    gradient: "from-indigo-500/20 via-blue-500/10 to-indigo-600/5",
-    topBorder: "from-indigo-400 to-blue-500",
-    iconBg: "from-indigo-500/30 to-blue-600/20 border border-indigo-500/30",
-    iconColor: "text-indigo-300",
-    glow: "hover:shadow-[0_0_30px_rgba(99,102,241,0.15)]",
+    accentColor: "#6366F1",
   },
   {
     id: "scan-sign",
@@ -150,12 +105,7 @@ const tools = [
     icon: ScanLine,
     href: "/document-scanner",
     badge: "AI",
-    badgeColor: "bg-slate-500/20 text-slate-300 border border-slate-500/30",
-    gradient: "from-slate-500/20 via-gray-500/10 to-slate-600/5",
-    topBorder: "from-slate-400 to-gray-500",
-    iconBg: "from-slate-500/30 to-gray-600/20 border border-slate-500/30",
-    iconColor: "text-slate-300",
-    glow: "hover:shadow-[0_0_30px_rgba(100,116,139,0.15)]",
+    accentColor: "#64748B",
   },
   {
     id: "spreadsheet",
@@ -165,12 +115,7 @@ const tools = [
     icon: Table2,
     href: "/spreadsheet",
     badge: "Pro",
-    badgeColor: "bg-green-500/20 text-green-300 border border-green-500/30",
-    gradient: "from-green-500/20 via-emerald-500/10 to-green-600/5",
-    topBorder: "from-green-400 to-emerald-500",
-    iconBg: "from-green-500/30 to-emerald-600/20 border border-green-500/30",
-    iconColor: "text-green-300",
-    glow: "hover:shadow-[0_0_30px_rgba(34,197,94,0.15)]",
+    accentColor: "#22C55E",
   },
   {
     id: "documents",
@@ -180,12 +125,7 @@ const tools = [
     icon: FolderOpen,
     href: "/documents",
     badge: "Pro",
-    badgeColor: "bg-yellow-500/20 text-yellow-300 border border-yellow-500/30",
-    gradient: "from-yellow-400/20 via-orange-500/10 to-yellow-600/5",
-    topBorder: "from-yellow-400 to-orange-400",
-    iconBg: "from-yellow-400/30 to-orange-500/20 border border-yellow-500/30",
-    iconColor: "text-yellow-300",
-    glow: "hover:shadow-[0_0_30px_rgba(234,179,8,0.15)]",
+    accentColor: "#C9A84C",
   },
 ];
 
@@ -193,26 +133,22 @@ export default function CorporateSuite() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen" style={{ background: "linear-gradient(135deg, #F5EBD7 0%, #EDE0C8 50%, #F5EBD7 100%)" }}>
-      {/* ── Hero Header ──────────────────────────────────────── */}
-      <div className="relative overflow-hidden border-b border-[#C9A84C]/30">
-        {/* Champagne shimmer */}
+    <div className="min-h-screen" style={{ background: "linear-gradient(180deg, #FDFBF7 0%, #F5EFE3 50%, #EDE4D3 100%)" }}>
+      {/* ── Hero Header ── */}
+      <div className="relative overflow-hidden" style={{ borderBottom: "1px solid rgba(184,148,62,0.25)" }}>
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse 80% 60% at 10% 50%, rgba(201,168,76,0.12) 0%, transparent 70%)",
-          }}
+          style={{ background: "radial-gradient(ellipse 80% 60% at 10% 50%, rgba(184,148,62,0.08) 0%, transparent 70%)" }}
         />
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C9A84C]/60 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(184,148,62,0.4), transparent)" }} />
 
         <div className="relative max-w-6xl mx-auto px-5 sm:px-8 py-8 pt-28 sm:pt-32">
           {/* Breadcrumb */}
-          <div className="flex items-center gap-1.5 text-[11px] text-[#6B5B3E]/70 mb-6 select-none">
+          <div className="flex items-center gap-1.5 text-[11px] mb-6 select-none" style={{ color: "rgba(0,0,0,0.4)" }}>
             <LayoutGrid size={11} />
             <span>Toolkit</span>
             <ChevronRight size={10} />
-            <span className="text-[#3D2B1F] font-medium">Corporate Suite</span>
+            <span className="font-medium" style={{ color: "#1A1A1A" }}>Corporate Premium Suite</span>
           </div>
 
           <div className="flex items-start gap-5">
@@ -220,8 +156,8 @@ export default function CorporateSuite() {
             <div
               className="w-16 h-16 rounded-2xl flex-shrink-0 flex items-center justify-center shadow-xl"
               style={{
-                background: "linear-gradient(135deg, #C9A84C, #8B6914)",
-                boxShadow: "0 0 40px rgba(201,168,76,0.3)",
+                background: "linear-gradient(135deg, #D4C4A8, #B8943E)",
+                boxShadow: "0 0 40px rgba(184,148,62,0.25)",
               }}
             >
               <Sparkles size={28} className="text-white" />
@@ -229,13 +165,21 @@ export default function CorporateSuite() {
 
             {/* Text */}
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] mb-1" style={{ color: "#8B6914" }}>
-                JBJ Toolkit · Document Suite
-              </p>
-              <h1 className="text-2xl sm:text-3xl font-bold text-[#1A120B] leading-tight">
-                Corporate Document Suite
+              <div className="flex items-center gap-2.5 mb-1">
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: "#B8943E" }}>
+                  JBJ Toolkit
+                </p>
+                <span
+                  className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold"
+                  style={{ background: "rgba(184,148,62,0.12)", border: "1px solid rgba(184,148,62,0.3)", color: "#B8943E" }}
+                >
+                  Premium
+                </span>
+              </div>
+              <h1 className="text-2xl sm:text-3xl font-bold leading-tight" style={{ color: "#1A1A1A" }}>
+                Corporate Premium <span style={{ color: "#B8943E" }}>Suite</span>
               </h1>
-              <p className="text-[#4A3728]/70 mt-2 text-sm max-w-2xl leading-relaxed">
+              <p className="mt-2 text-sm max-w-2xl leading-relaxed" style={{ color: "rgba(0,0,0,0.5)" }}>
                 12 professional tools — stamps, business cards, CVs, logos, company profiles, e-signatures,
                 spreadsheets and more. All AI-powered, all in one place.
               </p>
@@ -250,15 +194,15 @@ export default function CorporateSuite() {
               { label: "Export formats", value: "PDF, PNG, SVG, HTML" },
             ].map(s => (
               <div key={s.label} className="flex items-baseline gap-2">
-                <span className="text-xl font-bold text-[#1A120B]">{s.value}</span>
-                <span className="text-xs text-[#6B5B3E]/70">{s.label}</span>
+                <span className="text-xl font-bold" style={{ color: "#1A1A1A" }}>{s.value}</span>
+                <span className="text-xs" style={{ color: "rgba(0,0,0,0.4)" }}>{s.label}</span>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      {/* ── Tools Grid ───────────────────────────────────────── */}
+      {/* ── Tools Grid ── */}
       <div className="max-w-6xl mx-auto px-5 sm:px-8 py-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {tools.map((tool, i) => {
@@ -270,46 +214,67 @@ export default function CorporateSuite() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05, duration: 0.3, ease: "easeOut" }}
                 onClick={() => navigate(tool.href)}
-                className={`group text-left rounded-2xl border border-[#C9A84C]/20 shadow-md transition-all duration-300 overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C9A84C] hover:shadow-[0_4px_20px_rgba(201,168,76,0.2)] hover:-translate-y-0.5`}
+                className="group text-left rounded-2xl shadow-md transition-all duration-300 overflow-hidden focus:outline-none hover:-translate-y-0.5 h-full flex flex-col"
                 style={{
-                  background: "rgba(255,255,255,0.70)",
+                  background: "rgba(255,255,255,0.75)",
                   backdropFilter: "blur(10px)",
+                  border: "1px solid rgba(184,148,62,0.18)",
+                  boxShadow: "0 2px 12px rgba(184,148,62,0.06)",
+                }}
+                onMouseEnter={e => {
+                  (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 24px rgba(184,148,62,0.18)";
+                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(184,148,62,0.4)";
+                }}
+                onMouseLeave={e => {
+                  (e.currentTarget as HTMLElement).style.boxShadow = "0 2px 12px rgba(184,148,62,0.06)";
+                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(184,148,62,0.18)";
                 }}
               >
-                {/* Champagne-gold gradient top border */}
-                <div className={`h-[2px] w-full bg-gradient-to-r ${tool.topBorder}`} />
+                {/* Top accent bar */}
+                <div className="h-[2px] w-full" style={{ background: `linear-gradient(90deg, ${tool.accentColor}, ${tool.accentColor}80)` }} />
 
-                <div className="p-6">
+                <div className="p-6 flex flex-col flex-1">
                   {/* Icon + Badge row */}
                   <div className="flex items-start justify-between gap-3 mb-5">
                     <div
-                      className={`w-12 h-12 rounded-xl bg-gradient-to-br ${tool.iconBg} flex items-center justify-center shadow-md flex-shrink-0 group-hover:scale-105 transition-transform duration-300`}
+                      className="w-12 h-12 rounded-xl flex items-center justify-center shadow-md flex-shrink-0 group-hover:scale-105 transition-transform duration-300"
+                      style={{
+                        background: `linear-gradient(135deg, ${tool.accentColor}20, ${tool.accentColor}08)`,
+                        border: `1px solid ${tool.accentColor}30`,
+                      }}
                     >
-                      <Icon size={22} className={tool.iconColor} />
+                      <Icon size={22} style={{ color: tool.accentColor }} />
                     </div>
-                    <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full ${tool.badgeColor}`}>
+                    <span
+                      className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full"
+                      style={{
+                        background: `${tool.accentColor}15`,
+                        border: `1px solid ${tool.accentColor}30`,
+                        color: tool.accentColor,
+                      }}
+                    >
                       {tool.badge}
                     </span>
                   </div>
 
                   {/* Title */}
-                  <h3 className="font-bold text-[#1A120B] text-[15px] leading-tight">
+                  <h3 className="font-bold text-[15px] leading-tight" style={{ color: "#1A1A1A" }}>
                     {tool.title}
                   </h3>
-                  <p className="text-xs font-semibold mt-0.5 mb-3" style={{ color: "#8B6914" }}>
+                  <p className="text-xs font-semibold mt-0.5 mb-3" style={{ color: "#B8943E" }}>
                     {tool.subtitle}
                   </p>
-                  <p className="text-xs text-[#4A3728]/70 leading-relaxed">
+                  <p className="text-xs leading-relaxed flex-1" style={{ color: "rgba(0,0,0,0.5)" }}>
                     {tool.description}
                   </p>
 
-                  {/* CTA */}
-                  <div className="mt-5 flex items-center gap-1.5 text-xs font-semibold text-[#8B6914]/70 group-hover:text-[#C9A84C] transition-colors">
+                  {/* CTA — pinned to bottom */}
+                  <div
+                    className="mt-5 flex items-center gap-1.5 text-xs font-semibold transition-colors group-hover:text-[#B8943E]"
+                    style={{ color: "rgba(184,148,62,0.6)" }}
+                  >
                     Open Tool
-                    <ArrowRight
-                      size={13}
-                      className="group-hover:translate-x-1 transition-transform duration-200"
-                    />
+                    <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform duration-200" />
                   </div>
                 </div>
               </motion.button>
@@ -319,8 +284,8 @@ export default function CorporateSuite() {
 
         {/* Footer note */}
         <div className="flex items-center justify-center gap-2 mt-10">
-          <Zap size={12} className="text-[#8B6914]/40" />
-          <p className="text-center text-[11px] text-[#6B5B3E]/50">
+          <Zap size={12} style={{ color: "rgba(184,148,62,0.35)" }} />
+          <p className="text-center text-[11px]" style={{ color: "rgba(0,0,0,0.35)" }}>
             All tools run securely in your browser. Files are exported locally — nothing leaves your device.
           </p>
         </div>
