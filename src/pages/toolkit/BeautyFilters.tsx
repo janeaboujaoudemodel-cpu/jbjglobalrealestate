@@ -817,7 +817,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                     </div>
 
                     {isProcessingAI && (
-                      <div className="flex items-center gap-3 p-4 rounded-xl" style={{ background: "rgba(99,102,241,0.06)", border: `1px solid ${I.border}` }}>
+                      <div className="flex items-center gap-3 p-4 rounded-xl" style={{ background: "rgba(184,148,62,0.06)", border: `1px solid ${I.border}` }}>
                         <Loader2 className="h-5 w-5 animate-spin" style={{ color: I.text }} />
                         <p className="text-sm text-white">Applying AI transformation…</p>
                       </div>
