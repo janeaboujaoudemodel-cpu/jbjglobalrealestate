@@ -318,7 +318,7 @@ export const DeveloperApprovalQueue = () => {
               className="bg-gold text-black hover:bg-gold/90"
             >
               {isExtracting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Download className="w-4 h-4 mr-2" />}
-              Extract from Provident
+              Extract from Source
             </Button>
           </div>
         </div>
