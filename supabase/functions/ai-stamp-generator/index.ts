@@ -211,6 +211,7 @@ function buildSVG(project: any, templateKey: string): string {
       const r = R - 6;
       const nameFontSize = autoFontSize(name, 10, 20);
       return `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+        <!-- Border style applied -->
         <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${COLOR}" stroke-width="1.8"/>
         <circle cx="${cx}" cy="${cy}" r="${r - 6}" fill="none" stroke="${COLOR}" stroke-width="0.5"/>
         ${hasMono
