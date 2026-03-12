@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { SEOHead } from "@/components/SEOHead";
@@ -9,6 +10,8 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserModeContext } from "@/contexts/UserModeContext";
@@ -19,7 +22,7 @@ import {
   Calendar, Upload, Building2, PartyPopper, FileText, Loader2,
   CheckCircle, X, Plus, FolderOpen, ExternalLink, AlertCircle,
   ClipboardList, Send, Eye, Info, UserCheck, Briefcase, MessageSquare,
-  FileSignature, ListTodo,
+  FileSignature, ListTodo, Crown, SkipForward, Star, Users,
 } from "lucide-react";
 import SalesRepRegistration from "@/components/developer-portal/SalesRepRegistration";
 import BriefingRequestForm from "@/components/developer-portal/BriefingRequestForm";
@@ -45,20 +48,57 @@ const emptyProject = (): ProjectSession => ({
 
 const DeveloperPortal = () => {
   const [searchParams] = useSearchParams();
-  const { user } = useAuth();
+  const { user, isOwner } = useAuth();
   const { isDeveloperMode } = useUserModeContext();
   const queryClient = useQueryClient();
   const initialTab = searchParams.get("tab") || "projects";
   const [activeTab, setActiveTab] = useState(initialTab);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Owner mode
+  const initialOwnerMode = searchParams.get("mode") === "owner" && isOwner;
+  const [ownerSkipMode, setOwnerSkipMode] = useState(initialOwnerMode);
+
   // Developer info
   const [devName, setDevName] = useState("");
   const [devEmail, setDevEmail] = useState("");
 
+  // Interest registration modal
+  const [interestModalOpen, setInterestModalOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<any>(null);
+  const [interestType, setInterestType] = useState("general");
+  const [interestNotes, setInterestNotes] = useState("");
+  const [interestPhone, setInterestPhone] = useState("");
+  const [submittingInterest, setSubmittingInterest] = useState(false);
+
   useEffect(() => {
     if (user?.email) setDevEmail(user.email);
   }, [user?.email]);
+
+  useEffect(() => {
+    if (isOwner && ownerSkipMode) {
+      setDevEmail(user?.email || "");
+    }
+  }, [isOwner, ownerSkipMode, user?.email]);
+
+  const displayName = user?.user_metadata?.full_name
+    || user?.user_metadata?.name
+    || user?.email?.split('@')[0]
+    || 'Developer';
+
+  // Fetch developer names for autocomplete (owner mode)
+  const { data: developersList } = useQuery({
+    queryKey: ["developers-list-autocomplete"],
+    queryFn: async () => {
+      const { data } = await (supabase as any)
+        .from('developers')
+        .select('id, name')
+        .eq('is_active', true)
+        .order('name');
+      return data || [];
+    },
+    enabled: isOwner,
+  });
 
   // Check if user has a registered rep profile
   const { data: repProfile, isLoading: loadingRep, refetch: refetchRep } = useQuery({
@@ -118,7 +158,7 @@ const DeveloperPortal = () => {
     enabled: !!user,
   });
 
-  // Fetch user's tasks (assigned to them)
+  // Fetch user's tasks
   const { data: myTasks } = useQuery({
     queryKey: ["dev-portal-tasks", user?.id],
     queryFn: async () => {
@@ -134,7 +174,7 @@ const DeveloperPortal = () => {
     enabled: !!user,
   });
 
-  // Fetch agreements (e-signature envelopes where user is a signer)
+  // Fetch agreements
   const { data: myAgreements } = useQuery({
     queryKey: ["dev-portal-agreements", user?.email],
     queryFn: async () => {
@@ -148,6 +188,48 @@ const DeveloperPortal = () => {
       return data || [];
     },
     enabled: !!user?.email,
+  });
+
+  // Fetch upcoming events/launches for Register Interest
+  const { data: upcomingEvents } = useQuery({
+    queryKey: ["upcoming-launches"],
+    queryFn: async () => {
+      const { data } = await (supabase as any)
+        .from('developer_submissions')
+        .select('id, developer_name, event_title, event_date, event_location, event_description, created_at')
+        .eq('submission_type', 'event_invitation')
+        .order('event_date', { ascending: true })
+        .limit(50);
+      return data || [];
+    },
+  });
+
+  // Fetch user's interest registrations
+  const { data: myInterests } = useQuery({
+    queryKey: ["my-launch-interests", user?.id],
+    queryFn: async () => {
+      if (!user) return [];
+      const { data } = await (supabase as any)
+        .from('launch_interest_registrations')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+      return data || [];
+    },
+    enabled: !!user,
+  });
+
+  // Owner: fetch ALL interest registrations
+  const { data: allInterests } = useQuery({
+    queryKey: ["all-launch-interests"],
+    queryFn: async () => {
+      const { data } = await (supabase as any)
+        .from('launch_interest_registrations')
+        .select('*')
+        .order('created_at', { ascending: false });
+      return data || [];
+    },
+    enabled: isOwner,
   });
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -175,7 +257,10 @@ const DeveloperPortal = () => {
   };
 
   const handleSubmitProject = async () => {
-    if (!devName || !devEmail || !currentProject.project_name) {
+    const effectiveDevName = ownerSkipMode ? devName : devName;
+    const effectiveDevEmail = ownerSkipMode ? (user?.email || devEmail) : devEmail;
+
+    if (!effectiveDevName || !effectiveDevEmail || !currentProject.project_name) {
       toast.error("Please fill in developer name, email, and project name");
       return;
     }
@@ -186,8 +271,8 @@ const DeveloperPortal = () => {
     setSubmittingProject(true);
     try {
       const { error } = await supabase.from("developer_launch_uploads").insert({
-        developer_name: devName,
-        developer_email: devEmail,
+        developer_name: effectiveDevName,
+        developer_email: effectiveDevEmail,
         project_name: currentProject.project_name,
         project_description: currentProject.project_description || null,
         location: currentProject.location || null,
@@ -202,7 +287,7 @@ const DeveloperPortal = () => {
           await supabase.from("admin_tasks").insert({
             user_id: ownerId,
             title: `New Launch Upload: ${currentProject.project_name}`,
-            description: `Developer ${devName} (${devEmail}) has uploaded materials for "${currentProject.project_name}". Review and approve the auto-generated listing.`,
+            description: `Developer ${effectiveDevName} (${effectiveDevEmail}) has uploaded materials for "${currentProject.project_name}". Review and approve the auto-generated listing.`,
             category: 'developer_launch',
             priority: 'high',
             status: 'pending',
@@ -223,15 +308,17 @@ const DeveloperPortal = () => {
 
   const handleSubmitEvent = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!devName || !devEmail || !eventForm.event_title) {
+    const effectiveDevName = ownerSkipMode ? devName : devName;
+    const effectiveDevEmail = ownerSkipMode ? (user?.email || devEmail) : devEmail;
+    if (!effectiveDevName || !effectiveDevEmail || !eventForm.event_title) {
       toast.error("Please fill in developer name, email, and event title");
       return;
     }
     setEventSubmitting(true);
     try {
       const { error } = await supabase.from("developer_submissions").insert({
-        developer_name: devName,
-        developer_email: devEmail,
+        developer_name: effectiveDevName,
+        developer_email: effectiveDevEmail,
         submission_type: "event_invitation",
         event_title: eventForm.event_title,
         event_date: eventForm.event_date ? new Date(eventForm.event_date).toISOString() : null,
@@ -245,6 +332,51 @@ const DeveloperPortal = () => {
       toast.error(err.message || "Failed to submit");
     } finally {
       setEventSubmitting(false);
+    }
+  };
+
+  const handleRegisterInterest = async () => {
+    if (!user || !selectedEvent) return;
+    setSubmittingInterest(true);
+    try {
+      const { error } = await (supabase as any)
+        .from('launch_interest_registrations')
+        .insert({
+          user_id: user.id,
+          event_id: selectedEvent.id,
+          developer_name: selectedEvent.developer_name,
+          event_title: selectedEvent.event_title,
+          user_email: user.email,
+          user_name: displayName,
+          user_phone: interestPhone || null,
+          interest_type: interestType,
+          notes: interestNotes || null,
+        });
+      if (error) throw error;
+
+      // Notify owner
+      try {
+        await supabase.from("admin_tasks").insert({
+          user_id: '4944592b-93f1-4e05-ab59-4ebe1fee54f1',
+          title: `Launch Interest: ${selectedEvent.event_title}`,
+          description: `${displayName} (${user.email}) registered ${interestType} interest for "${selectedEvent.event_title}" by ${selectedEvent.developer_name}.${interestNotes ? ` Notes: ${interestNotes}` : ''}`,
+          category: 'launch_interest',
+          priority: interestType === 'eoi' ? 'high' : 'medium',
+          status: 'pending',
+        } as any);
+      } catch {}
+
+      toast.success(`Interest registered for "${selectedEvent.event_title}"!`);
+      setInterestModalOpen(false);
+      setInterestType("general");
+      setInterestNotes("");
+      setInterestPhone("");
+      setSelectedEvent(null);
+      queryClient.invalidateQueries({ queryKey: ["my-launch-interests"] });
+    } catch (err: any) {
+      toast.error(err.message || "Failed to register interest");
+    } finally {
+      setSubmittingInterest(false);
     }
   };
 
@@ -262,22 +394,18 @@ const DeveloperPortal = () => {
   const isRepApproved = repProfile?.status === 'approved';
   const hasRepProfile = !!repProfile;
 
-  // Check if user is an approved broker (verified broker_profile or active HR employee)
+  // Check if user is an approved broker
   const { data: brokerAccess } = useQuery({
     queryKey: ["dev-portal-broker-access", user?.id],
     queryFn: async () => {
       if (!user) return { isBroker: false };
-      // Check broker_profiles
-      const { data: bp } = await (supabase
-        .from('broker_profiles') as any)
+      const { data: bp } = await (supabase.from('broker_profiles') as any)
         .select('id, verification_status')
         .eq('user_id', user.id)
         .eq('verification_status', 'verified')
         .maybeSingle();
       if (bp) return { isBroker: true };
-      // Check hr_employees
-      const { data: emp } = await (supabase
-        .from('hr_employees') as any)
+      const { data: emp } = await (supabase.from('hr_employees') as any)
         .select('id, status')
         .eq('user_id', user.id)
         .eq('status', 'active')
@@ -289,27 +417,69 @@ const DeveloperPortal = () => {
   });
 
   const isApprovedBroker = brokerAccess?.isBroker || false;
-
-  // Show briefing/messages tabs if approved rep OR approved broker
   const showRepTabs = (hasRepProfile && isRepApproved) || isApprovedBroker;
+
+  // Already registered interest for a given event?
+  const hasInterestFor = (eventId: string) => {
+    return myInterests?.some((i: any) => i.event_id === eventId);
+  };
 
   return (
     <>
       <SEOHead title="Developer Portal | JBJ Global Real Estate" description="Submit projects, briefings, and marketing materials to JBJ Global." />
       <div className="min-h-screen bg-gradient-to-b from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)]">
-        {/* Hero — champagne-gold theme */}
+        {/* Hero — personalized */}
         <div className="relative py-16 md:py-24 bg-gradient-to-br from-[hsl(38,35%,18%)] via-[hsl(36,30%,14%)] to-[hsl(34,25%,10%)] overflow-hidden">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMSIgZmlsbD0icmdiYSgyNTUsMjE1LDE1MCwwLjA1KSIvPjwvc3ZnPg==')] opacity-50" />
           <div className="container mx-auto px-4 relative z-10 text-center max-w-3xl">
             <Badge className="mb-4 bg-gold/20 text-gold border-gold/30 text-sm">
-              {isDeveloperMode ? 'Developer Tools' : 'For Real Estate Developers & Sales Teams'}
+              {isOwner ? 'Owner Access' : isDeveloperMode ? 'Developer Tools' : 'For Real Estate Developers & Sales Teams'}
             </Badge>
-            <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[#F5EBD7]">Developer Portal</h1>
+            <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[#F5EBD7]">
+              {isOwner ? `Welcome back, Jane` : `Here's your portal, ${displayName}`}
+            </h1>
             <p className="text-lg md:text-xl text-[#D4B896]">
-              Submit projects, request briefings, upload documents, and manage launches — all in one place.
+              {isOwner
+                ? 'Upload projects, manage launches, and review interest registrations — all from here.'
+                : 'Submit projects, request briefings, upload documents, and manage launches — all in one place.'}
             </p>
           </div>
         </div>
+
+        {/* Owner Mode Banner */}
+        {isOwner && (
+          <div className="container mx-auto px-4 py-4 max-w-4xl">
+            <div className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-gold/10 to-gold/5 border-2 border-gold/30">
+              <div className="flex items-center gap-3">
+                <Crown className="w-5 h-5 text-gold" />
+                <div>
+                  <p className="text-sm font-semibold text-foreground">Owner Mode</p>
+                  <p className="text-xs text-muted-foreground">
+                    {ownerSkipMode ? 'Fast-track: skip registration, upload directly.' : 'Viewing as developer — toggle to skip registration fields.'}
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  size="sm"
+                  variant={ownerSkipMode ? "outline" : "default"}
+                  onClick={() => setOwnerSkipMode(false)}
+                  className={!ownerSkipMode ? "bg-gold text-black hover:bg-gold/90" : "border-gold/30"}
+                >
+                  <Eye className="w-3.5 h-3.5 mr-1.5" /> Developer View
+                </Button>
+                <Button
+                  size="sm"
+                  variant={ownerSkipMode ? "default" : "outline"}
+                  onClick={() => setOwnerSkipMode(true)}
+                  className={ownerSkipMode ? "bg-gold text-black hover:bg-gold/90" : "border-gold/30"}
+                >
+                  <SkipForward className="w-3.5 h-3.5 mr-1.5" /> Quick Upload
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Rep Status Banner */}
         {hasRepProfile && !isRepApproved && (
@@ -318,29 +488,53 @@ const DeveloperPortal = () => {
               <UserCheck className="w-5 h-5 shrink-0 text-gold" />
               <div>
                 <strong>Application Status: {repProfile?.status?.replace(/_/g, ' ')}</strong>
-                <p className="text-xs mt-0.5 text-stone-600">Your {repProfile?.role?.replace(/_/g, ' ')} registration for <strong>{repProfile?.developer_name}</strong> is being reviewed. You'll receive an email once approved.</p>
+                <p className="text-xs mt-0.5 text-stone-600">Your {repProfile?.role?.replace(/_/g, ' ')} registration for <strong>{repProfile?.developer_name}</strong> is being reviewed.</p>
               </div>
               {statusBadge(repProfile?.status || 'pending_review')}
             </div>
           </div>
         )}
 
-        {/* Developer Info */}
+        {/* Developer Info Card — hidden in owner skip mode */}
         <div className="container mx-auto px-4 py-8 max-w-4xl">
-          <Card className="border-2 border-gold/30 bg-gradient-to-r from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)] mb-6">
-            <CardContent className="p-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {ownerSkipMode ? (
+            <Card className="border-2 border-gold/30 bg-gradient-to-r from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)] mb-6">
+              <CardContent className="p-4">
                 <div className="space-y-1">
                   <Label className="text-xs text-muted-foreground">Developer / Company Name *</Label>
-                  <Input value={devName} onChange={(e) => setDevName(e.target.value)} placeholder="e.g. Emaar Properties" />
+                  <div className="relative">
+                    <Input
+                      value={devName}
+                      onChange={(e) => setDevName(e.target.value)}
+                      placeholder="Start typing developer name..."
+                      list="developer-autocomplete"
+                    />
+                    <datalist id="developer-autocomplete">
+                      {developersList?.map((d: any) => (
+                        <option key={d.id} value={d.name} />
+                      ))}
+                    </datalist>
+                  </div>
+                  <p className="text-[10px] text-muted-foreground">Email auto-set to your owner account. Just enter the developer name and upload.</p>
                 </div>
-                <div className="space-y-1">
-                  <Label className="text-xs text-muted-foreground">Email Address *</Label>
-                  <Input type="email" value={devEmail} onChange={(e) => setDevEmail(e.target.value)} placeholder="contact@developer.com" />
+              </CardContent>
+            </Card>
+          ) : (
+            <Card className="border-2 border-gold/30 bg-gradient-to-r from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)] mb-6">
+              <CardContent className="p-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <Label className="text-xs text-muted-foreground">Developer / Company Name *</Label>
+                    <Input value={devName} onChange={(e) => setDevName(e.target.value)} placeholder="e.g. Emaar Properties" />
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-xs text-muted-foreground">Email Address *</Label>
+                    <Input type="email" value={devEmail} onChange={(e) => setDevEmail(e.target.value)} placeholder="contact@developer.com" />
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          )}
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <ScrollArea className="w-full">
@@ -356,6 +550,10 @@ const DeveloperPortal = () => {
                 <TabsTrigger value="events" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
                   <Calendar className="w-3.5 h-3.5 mr-1 hidden md:block" />
                   Events
+                </TabsTrigger>
+                <TabsTrigger value="launches" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
+                  <Star className="w-3.5 h-3.5 mr-1 hidden md:block" />
+                  Launches
                 </TabsTrigger>
                 <TabsTrigger value="register" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
                   <UserCheck className="w-3.5 h-3.5 mr-1 hidden md:block" />
@@ -380,6 +578,12 @@ const DeveloperPortal = () => {
                       Messages
                     </TabsTrigger>
                   </>
+                )}
+                {isOwner && (
+                  <TabsTrigger value="interest" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
+                    <Users className="w-3.5 h-3.5 mr-1 hidden md:block" />
+                    Interest
+                  </TabsTrigger>
                 )}
                 <TabsTrigger value="listings" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
                   <Eye className="w-3.5 h-3.5 mr-1 hidden md:block" />
@@ -443,7 +647,7 @@ const DeveloperPortal = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-foreground">
                     <Building2 className="w-5 h-5 text-gold" />
-                    Submit New Project
+                    {ownerSkipMode ? 'Quick Upload — Owner Mode' : 'Submit New Project'}
                   </CardTitle>
                   <p className="text-sm text-muted-foreground">
                     Upload PDFs, renders, brochures, and fact sheets. Our system will automatically generate a listing.
@@ -524,20 +728,20 @@ const DeveloperPortal = () => {
               </Card>
             </TabsContent>
 
-            {/* EVENTS & TASKS TAB */}
+            {/* EVENTS TAB */}
             <TabsContent value="events" className="mt-6">
               <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)]">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-foreground">
                     <Calendar className="w-5 h-5 text-gold" />
-                    Submit Event / Request
+                    Submit Event / Launch
                   </CardTitle>
-                  <p className="text-sm text-muted-foreground">Invite us to events, request documents, signatures, or create tasks for our team.</p>
+                  <p className="text-sm text-muted-foreground">Invite us to events, request documents, or announce upcoming launches.</p>
                 </CardHeader>
                 <CardContent>
                   <form onSubmit={handleSubmitEvent} className="space-y-4">
                     <div className="space-y-2">
-                      <Label>Event / Request Title *</Label>
+                      <Label>Event / Launch Title *</Label>
                       <Input value={eventForm.event_title} onChange={(e) => setEventForm(p => ({ ...p, event_title: e.target.value }))} placeholder="Grand Launch: Marina Heights" required />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -556,14 +760,109 @@ const DeveloperPortal = () => {
                     </div>
                     <Button type="submit" disabled={eventSubmitting}
                       className="w-full bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border border-gold/40 text-foreground font-bold h-12">
-                      {eventSubmitting ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Submitting...</> : "Submit Request"}
+                      {eventSubmitting ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Submitting...</> : "Submit Event"}
                     </Button>
                   </form>
                 </CardContent>
               </Card>
             </TabsContent>
 
-            {/* REGISTER TAB - Contextual: Developer guidance vs Registration form */}
+            {/* LAUNCHES — Register Interest Tab */}
+            <TabsContent value="launches" className="mt-6 space-y-6">
+              <Card className="border-2 border-gold/30">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-foreground">
+                    <Star className="w-5 h-5 text-gold" />
+                    Upcoming Launches & Events
+                  </CardTitle>
+                  <p className="text-sm text-muted-foreground">Browse upcoming launches and register your interest — get invited to events, private tours, or submit an EOI.</p>
+                </CardHeader>
+                <CardContent>
+                  {upcomingEvents && upcomingEvents.length > 0 ? (
+                    <div className="space-y-4">
+                      {upcomingEvents.map((event: any) => {
+                        const registered = hasInterestFor(event.id);
+                        return (
+                          <div key={event.id} className="p-4 rounded-xl border border-gold/20 bg-card hover:border-gold/40 transition-colors">
+                            <div className="flex items-start justify-between gap-4">
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <h4 className="font-semibold text-foreground">{event.event_title}</h4>
+                                  {registered && <Badge className="bg-emerald-500/20 text-emerald-700 text-[10px]">Registered</Badge>}
+                                </div>
+                                <p className="text-xs text-gold font-medium">{event.developer_name}</p>
+                                {event.event_date && (
+                                  <p className="text-xs text-muted-foreground mt-1">
+                                    📅 {format(new Date(event.event_date), "EEEE, MMM d, yyyy 'at' h:mm a")}
+                                  </p>
+                                )}
+                                {event.event_location && (
+                                  <p className="text-xs text-muted-foreground">📍 {event.event_location}</p>
+                                )}
+                                {event.event_description && (
+                                  <p className="text-xs text-muted-foreground mt-2 line-clamp-2">{event.event_description}</p>
+                                )}
+                              </div>
+                              <Button
+                                size="sm"
+                                disabled={registered}
+                                onClick={() => {
+                                  setSelectedEvent(event);
+                                  setInterestModalOpen(true);
+                                }}
+                                className={registered
+                                  ? "bg-emerald-500/20 text-emerald-700 border-emerald-300"
+                                  : "bg-gold text-black hover:bg-gold/90"
+                                }
+                              >
+                                {registered ? <><CheckCircle className="w-3.5 h-3.5 mr-1" /> Done</> : <><Star className="w-3.5 h-3.5 mr-1" /> Register Interest</>}
+                              </Button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <div className="py-12 text-center text-muted-foreground">
+                      <Calendar className="w-10 h-10 mx-auto mb-3 opacity-40" />
+                      <p>No upcoming launches at the moment</p>
+                      <p className="text-xs mt-1">New launches and events will appear here as developers submit them.</p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* My Registrations */}
+              {myInterests && myInterests.length > 0 && (
+                <Card className="border-2 border-gold/30">
+                  <CardHeader>
+                    <CardTitle className="text-sm flex items-center gap-2 text-foreground">
+                      <CheckCircle className="w-4 h-4 text-gold" />
+                      Your Interest Registrations
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-2">
+                      {myInterests.map((i: any) => (
+                        <div key={i.id} className="flex items-center justify-between p-3 rounded-xl border border-gold/20 bg-card">
+                          <div>
+                            <h4 className="font-semibold text-sm text-foreground">{i.event_title}</h4>
+                            <p className="text-xs text-muted-foreground">{i.developer_name} · {format(new Date(i.created_at), "MMM d, yyyy")}</p>
+                          </div>
+                          <Badge className={
+                            i.interest_type === 'eoi' ? 'bg-emerald-500/20 text-emerald-700' :
+                            i.interest_type === 'private_tour' ? 'bg-blue-500/20 text-blue-700' :
+                            'bg-gold/20 text-gold'
+                          }>{i.interest_type === 'eoi' ? 'EOI' : i.interest_type === 'private_tour' ? 'Private Tour' : 'General'}</Badge>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+            </TabsContent>
+
+            {/* REGISTER TAB */}
             <TabsContent value="register" className="mt-6">
               {loadingRep ? (
                 <div className="py-8 text-center"><Loader2 className="w-6 h-6 animate-spin mx-auto text-gold" /></div>
@@ -616,12 +915,11 @@ const DeveloperPortal = () => {
                   </CardContent>
                 </Card>
               ) : isDeveloperMode ? (
-                /* Developer user — show guidance, not "Are you a developer?" */
                 <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)]">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-foreground">
                       <Building2 className="w-5 h-5 text-gold" />
-                      Welcome, Developer
+                      Welcome, {displayName}
                     </CardTitle>
                     <p className="text-sm text-muted-foreground">
                       Here's how to get the most out of the Developer Portal.
@@ -634,28 +932,28 @@ const DeveloperPortal = () => {
                           <FolderOpen className="w-5 h-5 text-gold" />
                           <h4 className="font-bold text-foreground text-sm">Submit Projects</h4>
                         </div>
-                        <p className="text-xs text-muted-foreground">Upload brochures, renders, and fact sheets. Our system auto-generates listings for your projects.</p>
+                        <p className="text-xs text-muted-foreground">Upload brochures, renders, and fact sheets. Our system auto-generates listings.</p>
                       </div>
                       <div className="bg-white/60 rounded-xl p-4 border border-gold/20">
                         <div className="flex items-center gap-2 mb-2">
                           <Calendar className="w-5 h-5 text-gold" />
                           <h4 className="font-bold text-foreground text-sm">Event Invitations</h4>
                         </div>
-                        <p className="text-xs text-muted-foreground">Invite our brokers to launches, open days, and exclusive previews through the Events tab.</p>
+                        <p className="text-xs text-muted-foreground">Invite our brokers to launches, open days, and exclusive previews.</p>
                       </div>
                       <div className="bg-white/60 rounded-xl p-4 border border-gold/20">
                         <div className="flex items-center gap-2 mb-2">
                           <Briefcase className="w-5 h-5 text-gold" />
                           <h4 className="font-bold text-foreground text-sm">Request Briefings</h4>
                         </div>
-                        <p className="text-xs text-muted-foreground">Once registered, schedule project briefings with our broker team at our office or yours.</p>
+                        <p className="text-xs text-muted-foreground">Once registered, schedule project briefings with our broker team.</p>
                       </div>
                       <div className="bg-white/60 rounded-xl p-4 border border-gold/20">
                         <div className="flex items-center gap-2 mb-2">
                           <Eye className="w-5 h-5 text-gold" />
                           <h4 className="font-bold text-foreground text-sm">Track Listings</h4>
                         </div>
-                        <p className="text-xs text-muted-foreground">Monitor your approved projects on our platform and report any corrections needed.</p>
+                        <p className="text-xs text-muted-foreground">Monitor your approved projects on our platform and report corrections.</p>
                       </div>
                     </div>
 
@@ -685,15 +983,13 @@ const DeveloperPortal = () => {
               )}
             </TabsContent>
 
-            {/* BRIEFING TAB - Only for approved reps */}
+            {/* BRIEFING TAB */}
             {showRepTabs && (
               <TabsContent value="briefing" className="mt-6 space-y-6">
                 <BriefingRequestForm
                   representativeId={repProfile!.id}
                   developerName={repProfile!.developer_name}
                 />
-
-                {/* Past briefing requests */}
                 {myBriefings && myBriefings.length > 0 && (
                   <Card className="border-2 border-gold/30">
                     <CardHeader>
@@ -722,7 +1018,7 @@ const DeveloperPortal = () => {
               </TabsContent>
             )}
 
-            {/* MESSAGES TAB - Only for approved reps */}
+            {/* MESSAGES TAB */}
             {showRepTabs && (
               <TabsContent value="messages" className="mt-6">
                 <DeveloperMessageForm
@@ -823,6 +1119,54 @@ const DeveloperPortal = () => {
               </Card>
             </TabsContent>
 
+            {/* OWNER: ALL INTEREST REGISTRATIONS */}
+            {isOwner && (
+              <TabsContent value="interest" className="mt-6">
+                <Card className="border-2 border-gold/30">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-foreground">
+                      <Users className="w-5 h-5 text-gold" />
+                      All Interest Registrations
+                    </CardTitle>
+                    <p className="text-sm text-muted-foreground">Everyone who expressed interest in upcoming launches.</p>
+                  </CardHeader>
+                  <CardContent>
+                    {allInterests && allInterests.length > 0 ? (
+                      <ScrollArea className="h-[500px]">
+                        <div className="space-y-3">
+                          {allInterests.map((i: any) => (
+                            <div key={i.id} className="p-4 rounded-xl border border-gold/20 bg-card">
+                              <div className="flex items-start justify-between gap-3">
+                                <div>
+                                  <h4 className="font-semibold text-foreground text-sm">{i.event_title}</h4>
+                                  <p className="text-xs text-gold">{i.developer_name}</p>
+                                  <p className="text-xs text-muted-foreground mt-1">
+                                    {i.user_name} · {i.user_email}
+                                    {i.user_phone && ` · ${i.user_phone}`}
+                                  </p>
+                                  {i.notes && <p className="text-xs text-muted-foreground mt-1 italic">"{i.notes}"</p>}
+                                  <p className="text-[10px] text-muted-foreground mt-1">{format(new Date(i.created_at), "MMM d, yyyy 'at' h:mm a")}</p>
+                                </div>
+                                <Badge className={
+                                  i.interest_type === 'eoi' ? 'bg-emerald-500/20 text-emerald-700' :
+                                  i.interest_type === 'private_tour' ? 'bg-blue-500/20 text-blue-700' :
+                                  'bg-gold/20 text-gold'
+                                }>{i.interest_type === 'eoi' ? 'EOI' : i.interest_type === 'private_tour' ? 'Private Tour' : 'General'}</Badge>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </ScrollArea>
+                    ) : (
+                      <div className="py-12 text-center text-muted-foreground">
+                        <Users className="w-10 h-10 mx-auto mb-3 opacity-40" />
+                        <p>No interest registrations yet</p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            )}
 
             <TabsContent value="listings" className="mt-6">
               <Card className="border-2 border-gold/30">
@@ -873,6 +1217,67 @@ const DeveloperPortal = () => {
           </Tabs>
         </div>
       </div>
+
+      {/* Register Interest Modal */}
+      <Dialog open={interestModalOpen} onOpenChange={setInterestModalOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Star className="w-5 h-5 text-gold" />
+              Register Interest
+            </DialogTitle>
+            <DialogDescription>
+              {selectedEvent?.event_title} by {selectedEvent?.developer_name}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 pt-2">
+            <div className="space-y-3">
+              <Label className="text-sm font-semibold text-foreground">What type of interest?</Label>
+              <RadioGroup value={interestType} onValueChange={setInterestType} className="space-y-2">
+                <div className="flex items-center space-x-3 p-3 rounded-lg border border-gold/20 hover:border-gold/40 transition-colors">
+                  <RadioGroupItem value="general" id="interest-general" />
+                  <label htmlFor="interest-general" className="flex-1 cursor-pointer">
+                    <p className="text-sm font-medium text-foreground">General Interest</p>
+                    <p className="text-xs text-muted-foreground">Keep me updated about this launch</p>
+                  </label>
+                </div>
+                <div className="flex items-center space-x-3 p-3 rounded-lg border border-gold/20 hover:border-gold/40 transition-colors">
+                  <RadioGroupItem value="private_tour" id="interest-tour" />
+                  <label htmlFor="interest-tour" className="flex-1 cursor-pointer">
+                    <p className="text-sm font-medium text-foreground">Private Tour</p>
+                    <p className="text-xs text-muted-foreground">I'd like a private viewing or tour</p>
+                  </label>
+                </div>
+                <div className="flex items-center space-x-3 p-3 rounded-lg border border-gold/20 hover:border-gold/40 transition-colors">
+                  <RadioGroupItem value="eoi" id="interest-eoi" />
+                  <label htmlFor="interest-eoi" className="flex-1 cursor-pointer">
+                    <p className="text-sm font-medium text-foreground">Expression of Interest (EOI)</p>
+                    <p className="text-xs text-muted-foreground">I'm ready to commit — reserve me a unit</p>
+                  </label>
+                </div>
+              </RadioGroup>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-xs text-muted-foreground">Phone Number (optional)</Label>
+              <Input value={interestPhone} onChange={(e) => setInterestPhone(e.target.value)} placeholder="+971 5X XXX XXXX" />
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-xs text-muted-foreground">Notes (optional)</Label>
+              <Textarea value={interestNotes} onChange={(e) => setInterestNotes(e.target.value)} placeholder="Budget, unit preference, timeline..." rows={2} />
+            </div>
+
+            <Button
+              onClick={handleRegisterInterest}
+              disabled={submittingInterest}
+              className="w-full bg-gold text-black hover:bg-gold/90 font-bold h-11"
+            >
+              {submittingInterest ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Registering...</> : 'Register My Interest'}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };
