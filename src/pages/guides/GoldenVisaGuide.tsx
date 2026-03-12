@@ -170,18 +170,18 @@ const GoldenVisaGuide = () => {
                 <BadgeCheck className="w-4 h-4 mr-2" />
                 Check My Eligibility
               </Button>
-              <Link to="/contact?type=golden-visa-consultation">
-                <Button variant="outline" className="border-[#C8A766]/40 text-[#8B7340] hover:bg-[#C8A766]/10 px-8 py-3 rounded-xl">
+              <Button variant="outline" className="border-[#C8A766]/40 text-[#8B7340] hover:bg-[#C8A766]/10 px-8 py-3 rounded-xl" asChild>
+                <Link to="/contact?type=golden-visa-consultation">
                   <Phone className="w-4 h-4 mr-2" />
                   Book Consultation
-                </Button>
-              </Link>
-              <Link to="/contact?type=golden-visa">
-                <Button variant="outline" className="border-[#C8A766]/40 text-[#8B7340] hover:bg-[#C8A766]/10 px-8 py-3 rounded-xl">
+                </Link>
+              </Button>
+              <Button variant="outline" className="border-[#C8A766]/40 text-[#8B7340] hover:bg-[#C8A766]/10 px-8 py-3 rounded-xl" asChild>
+                <Link to="/contact?type=golden-visa">
                   <MessageCircle className="w-4 h-4 mr-2" />
                   Speak to Advisor
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             </div>
           </motion.div>
         </div>

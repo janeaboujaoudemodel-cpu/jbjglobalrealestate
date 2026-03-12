@@ -219,12 +219,12 @@ const InvestorServices = () => {
                   <Phone className="w-4 h-4" />
                   Call Now
                 </Button>
-                <Link to="/contact">
-                  <Button variant="outline" className="border-zinc-700 text-zinc-300 hover:bg-zinc-800 px-6 h-11 rounded-lg gap-2">
+                <Button variant="outline" className="border-zinc-700 text-zinc-300 hover:bg-zinc-800 px-6 h-11 rounded-lg gap-2" asChild>
+                  <Link to="/contact">
                     Book Consultation
                     <ArrowRight className="w-4 h-4" />
-                  </Button>
-                </Link>
+                  </Link>
+                </Button>
               </motion.div>
             </motion.div>
           </div>
