@@ -161,8 +161,8 @@ const DeveloperPortal = () => {
       if (editForm.email !== repProfile.email) changedFields.push('email');
       if (editForm.phone !== ((repProfile as any).phone || '')) changedFields.push('phone');
       if (editForm.position !== ((repProfile as any).position || '')) changedFields.push('position');
-      if (editForm.developer_name !== repProfile.developer_name) changedFields.push('developer_name');
       if (editForm.nationality !== ((repProfile as any).nationality || '')) changedFields.push('nationality');
+      // developer_name is LOCKED — never update it
 
       const { error } = await supabase
         .from('developer_representatives')
@@ -171,7 +171,7 @@ const DeveloperPortal = () => {
           position: editForm.position || null,
           email: editForm.email,
           phone: editForm.phone || null,
-          developer_name: editForm.developer_name,
+          // developer_name is LOCKED after registration — not updatable
           nationality: editForm.nationality || null,
         } as any)
         .eq('id', repProfile.id);
@@ -808,62 +808,88 @@ const DeveloperPortal = () => {
           </div>
         )}
 
-        {/* Developer Info Card */}
-        <div className="container mx-auto px-4 py-8 max-w-4xl">
-          {hasRepProfile && !isOwner ? (
-            /* Profile summary bar */
-            <div className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)] border-2 border-gold/30 mb-6">
-              <div className="flex items-center gap-3 min-w-0">
-                <UserCheck className="w-5 h-5 text-gold shrink-0" />
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold text-foreground truncate">
-                    Submitting as: {repProfile?.full_name} · {repProfile?.developer_name}
-                  </p>
-                  <p className="text-xs text-muted-foreground truncate">{repProfile?.email}{repProfile?.phone ? ` · ${repProfile.phone}` : ''}</p>
-                </div>
-              </div>
-              <Button size="sm" variant="outline" className="border-gold/30 shrink-0" onClick={() => setActiveTab('register')}>
-                Edit Profile
-              </Button>
-            </div>
-          ) : ownerSkipMode ? (
+        {/* Registration Gate — unregistered non-owner users see ONLY the registration form */}
+        {!hasRepProfile && !isOwner && !loadingRep ? (
+          <div className="container mx-auto px-4 py-8 max-w-4xl">
+            {/* Developer name selection before registration */}
             <Card className="border-2 border-gold/30 bg-gradient-to-r from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)] mb-6">
               <CardContent className="p-4">
                 <div className="space-y-1">
-                  <Label className="text-xs text-muted-foreground">Developer / Company Name *</Label>
-                  <div className="relative">
-                    <Input
-                      value={devName}
-                      onChange={(e) => setDevName(e.target.value)}
-                      placeholder="Start typing developer name..."
-                      list="developer-autocomplete"
-                    />
-                    <datalist id="developer-autocomplete">
-                      {developersList?.map((d: any) => (
-                        <option key={d.id} value={d.name} />
-                      ))}
-                    </datalist>
-                  </div>
-                  <p className="text-[10px] text-muted-foreground">Email auto-set to your owner account. Just enter the developer name and upload.</p>
+                  <Label className="text-xs text-muted-foreground">Developer / Company You Represent *</Label>
+                  <Input
+                    value={devName}
+                    onChange={(e) => setDevName(e.target.value)}
+                    placeholder="Start typing developer name (e.g. Emaar, DAMAC, Sobha)..."
+                    list="developer-autocomplete"
+                  />
+                  <datalist id="developer-autocomplete">
+                    {developersList?.map((d: any) => (
+                      <option key={d.id} value={d.name} />
+                    ))}
+                  </datalist>
+                  <p className="text-[10px] text-muted-foreground">Select your developer first, then complete the registration below.</p>
                 </div>
               </CardContent>
             </Card>
-          ) : (
-            <Card className="border-2 border-gold/30 bg-gradient-to-r from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)] mb-6">
-              <CardContent className="p-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <SalesRepRegistration developerName={devName} onRegistered={() => { refetchRep(); }} />
+          </div>
+        ) : (
+          /* Registered users / Owner — show full portal */
+          <div className="container mx-auto px-4 py-8 max-w-4xl">
+            {hasRepProfile && !isOwner ? (
+              /* Profile summary bar */
+              <div className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)] border-2 border-gold/30 mb-6">
+                <div className="flex items-center gap-3 min-w-0">
+                  <UserCheck className="w-5 h-5 text-gold shrink-0" />
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-foreground truncate">
+                      Submitting as: {repProfile?.full_name} · {repProfile?.developer_name}
+                    </p>
+                    <p className="text-xs text-muted-foreground truncate">{repProfile?.email}{repProfile?.phone ? ` · ${repProfile.phone}` : ''}</p>
+                  </div>
+                </div>
+                <Button size="sm" variant="outline" className="border-gold/30 shrink-0" onClick={() => setActiveTab('register')}>
+                  Edit Profile
+                </Button>
+              </div>
+            ) : ownerSkipMode ? (
+              <Card className="border-2 border-gold/30 bg-gradient-to-r from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)] mb-6">
+                <CardContent className="p-4">
                   <div className="space-y-1">
                     <Label className="text-xs text-muted-foreground">Developer / Company Name *</Label>
-                    <Input value={devName} onChange={(e) => setDevName(e.target.value)} placeholder="e.g. Emaar Properties" />
+                    <div className="relative">
+                      <Input
+                        value={devName}
+                        onChange={(e) => setDevName(e.target.value)}
+                        placeholder="Start typing developer name..."
+                        list="developer-autocomplete"
+                      />
+                      <datalist id="developer-autocomplete">
+                        {developersList?.map((d: any) => (
+                          <option key={d.id} value={d.name} />
+                        ))}
+                      </datalist>
+                    </div>
+                    <p className="text-[10px] text-muted-foreground">Email auto-set to your owner account. Just enter the developer name and upload.</p>
                   </div>
-                  <div className="space-y-1">
-                    <Label className="text-xs text-muted-foreground">Email Address *</Label>
-                    <Input type="email" value={devEmail} onChange={(e) => setDevEmail(e.target.value)} placeholder="contact@developer.com" />
+                </CardContent>
+              </Card>
+            ) : (
+              <Card className="border-2 border-gold/30 bg-gradient-to-r from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)] mb-6">
+                <CardContent className="p-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                      <Label className="text-xs text-muted-foreground">Developer / Company Name *</Label>
+                      <Input value={devName} onChange={(e) => setDevName(e.target.value)} placeholder="e.g. Emaar Properties" />
+                    </div>
+                    <div className="space-y-1">
+                      <Label className="text-xs text-muted-foreground">Email Address *</Label>
+                      <Input type="email" value={devEmail} onChange={(e) => setDevEmail(e.target.value)} placeholder="contact@developer.com" />
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
+                </CardContent>
+              </Card>
+            )}
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <div className="w-full overflow-x-auto pb-1">
@@ -1747,7 +1773,8 @@ const DeveloperPortal = () => {
               </Card>
             </TabsContent>
           </Tabs>
-        </div>
+          </div>
+        )}
       </div>
 
       {/* Register Interest Modal */}
