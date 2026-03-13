@@ -489,7 +489,7 @@ const Documents = () => {
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="bg-[hsl(var(--popover))] border-[hsl(var(--border))]">
-                  <DialogHeader><DialogTitle className="text-[hsl(var(--popover-foreground))]">📄 Scan & Extract Text</DialogTitle><DialogDescription>Upload any document or image — AI will extract all text.</DialogDescription></DialogHeader>
+                  <DialogHeader><DialogTitle className="text-[hsl(var(--popover-foreground))]">Scan & Extract Text</DialogTitle><DialogDescription>Upload any document or image — AI will extract all text.</DialogDescription></DialogHeader>
                   <input ref={ocrInputRef} type="file" accept="image/*,.pdf" className="hidden" onChange={handleOcrUpload} />
                   <Button onClick={() => ocrInputRef.current?.click()} disabled={ocrLoading} className="w-full h-20 border-2 border-dashed border-amber-400/50 bg-amber-50/30 hover:bg-amber-50/60 text-amber-800" variant="outline">
                     {ocrLoading ? <span className="flex items-center gap-2"><Loader2 className="h-5 w-5 animate-spin" /> Scanning...</span> : <span className="flex flex-col items-center gap-1"><ScanLine className="h-5 w-5" /> Upload document or image</span>}
