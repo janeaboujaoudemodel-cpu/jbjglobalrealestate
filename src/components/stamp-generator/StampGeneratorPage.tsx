@@ -819,8 +819,8 @@ export default function StampGeneratorPage() {
           </div>
         </div>
 
-        {/* ── Center: Live Preview (always visible, 280px) ─────── */}
-        <div className="w-[280px] flex-shrink-0 border-r border-[hsl(var(--border))] bg-white/60 flex flex-col overflow-y-auto">
+        {/* ── Center: Live Preview (dominant, flex-1) ─────── */}
+        <div className="flex-1 min-w-[300px] border-r border-[hsl(var(--border))] bg-white/60 flex flex-col overflow-y-auto">
           {/* Preview */}
           <div className="flex-shrink-0 p-3">
             <div className="bg-white rounded-xl border-2 border-[hsl(var(--gold)/0.25)] shadow-lg overflow-hidden">
