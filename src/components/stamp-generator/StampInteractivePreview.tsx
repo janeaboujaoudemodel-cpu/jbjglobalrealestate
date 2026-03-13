@@ -1,0 +1,463 @@
+/**
+ * StampInteractivePreview — Click-to-edit overlay for stamp SVG preview.
+ * Scans rendered SVG for [data-stamp-element] nodes and overlays clickable hit zones.
+ * Shows a floating toolbar with element-specific actions on selection.
+ */
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { StampSVGRenderer } from './StampSVGRenderer';
+import { mutateTextElement } from './StampTextEditor';
+import {
+  Pencil, Trash2, Check, X, Move, Eye, EyeOff, Palette,
+  ChevronUp, ChevronDown, ChevronLeft, ChevronRight,
+  Type, Maximize2, Minimize2, Replace, LayoutGrid,
+} from 'lucide-react';
+import { ALL_SEPARATOR_STYLES, separatorLabel, type SeparatorStyle, type CenterContentMode, type CenterIconType } from '@/lib/stampOfficialTemplate';
+import { Slider } from '@/components/ui/slider';
+import { Input } from '@/components/ui/input';
+
+interface HitZone {
+  id: string;
+  rect: DOMRect;
+  label: string;
+  type: 'arc-text' | 'separator' | 'center' | 'registration' | 'location';
+}
+
+const ELEMENT_LABELS: Record<string, { label: string; type: HitZone['type'] }> = {
+  'top-arc': { label: 'Arabic Company Name (Top)', type: 'arc-text' },
+  'bottom-arc': { label: 'English Company Name (Bottom)', type: 'arc-text' },
+  'separator-left': { label: 'Left Separator', type: 'separator' },
+  'separator-right': { label: 'Right Separator', type: 'separator' },
+  'loc-top': { label: 'Arabic Location (Top)', type: 'location' },
+  'loc-bottom': { label: 'English Location (Bottom)', type: 'location' },
+  'loc-separator-left': { label: 'Location Separator Left', type: 'separator' },
+  'loc-separator-right': { label: 'Location Separator Right', type: 'separator' },
+  'center': { label: 'Center Content', type: 'center' },
+  'registration': { label: 'Registration Number', type: 'registration' },
+};
+
+const CENTER_MODES: { value: CenterContentMode; label: string }[] = [
+  { value: 'monogram', label: 'Monogram' },
+  { value: 'initials', label: 'Initials' },
+  { value: 'logo', label: 'Logo' },
+  { value: 'icon', label: 'Icon' },
+  { value: 'license', label: 'License' },
+  { value: 'none', label: 'Empty' },
+];
+
+const CENTER_ICONS: { value: CenterIconType; label: string }[] = [
+  { value: 'shield', label: '🛡 Shield' },
+  { value: 'crown', label: '👑 Crown' },
+  { value: 'building', label: '🏢 Building' },
+  { value: 'globe', label: '🌐 Globe' },
+];
+
+interface Props {
+  svgSource: string;
+  tintColor: string;
+  secondaryColor?: string;
+  accentColor?: string;
+  fontFamily?: string;
+  fontWeight?: 'normal' | 'bold';
+  fontStyle?: 'normal' | 'italic';
+  fontSize?: number | null;
+  inkMode?: boolean;
+  size: number;
+  onSvgChange: (newSvg: string) => void;
+  onSeparatorChange?: (style: SeparatorStyle) => void;
+  onCenterModeChange?: (mode: CenterContentMode, options?: { monogramText?: string; icon?: CenterIconType }) => void;
+  currentSeparatorStyle?: SeparatorStyle;
+  currentCenterMode?: CenterContentMode;
+}
+
+export function StampInteractivePreview({
+  svgSource,
+  tintColor,
+  secondaryColor,
+  accentColor,
+  fontFamily,
+  fontWeight,
+  fontStyle,
+  fontSize,
+  inkMode,
+  size,
+  onSvgChange,
+  onSeparatorChange,
+  onCenterModeChange,
+  currentSeparatorStyle,
+  currentCenterMode,
+}: Props) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [hitZones, setHitZones] = useState<HitZone[]>([]);
+  const [selected, setSelected] = useState<string | null>(null);
+  const [editingText, setEditingText] = useState<string | null>(null);
+  const [editValue, setEditValue] = useState('');
+  const [toolbarPos, setToolbarPos] = useState({ x: 0, y: 0 });
+
+  // Scan DOM for data-stamp-element nodes
+  const scanElements = useCallback(() => {
+    if (!containerRef.current) return;
+    const container = containerRef.current;
+    const containerRect = container.getBoundingClientRect();
+    const elements = container.querySelectorAll('[data-stamp-element]');
+    const zones: HitZone[] = [];
+
+    elements.forEach((el) => {
+      const id = el.getAttribute('data-stamp-element') || '';
+      const meta = ELEMENT_LABELS[id];
+      if (!meta) return;
+      const rect = el.getBoundingClientRect();
+      // For arc text (textPath), the bbox can be tiny — expand hit zone
+      const isArc = meta.type === 'arc-text' || meta.type === 'location';
+      const padding = isArc ? 12 : 6;
+      const adjustedRect = new DOMRect(
+        rect.x - containerRect.x - padding,
+        rect.y - containerRect.y - padding,
+        Math.max(rect.width + padding * 2, 24),
+        Math.max(rect.height + padding * 2, 18)
+      );
+      zones.push({ id, rect: adjustedRect, label: meta.label, type: meta.type });
+    });
+
+    setHitZones(zones);
+  }, []);
+
+  useEffect(() => {
+    // Scan after render + a small delay for SVG to paint
+    const timer = setTimeout(scanElements, 150);
+    return () => clearTimeout(timer);
+  }, [svgSource, tintColor, secondaryColor, accentColor, fontFamily, fontSize, scanElements]);
+
+  const handleZoneClick = (zone: HitZone) => {
+    setSelected(zone.id);
+    setEditingText(null);
+    // Position toolbar above the element
+    setToolbarPos({
+      x: Math.max(0, Math.min(zone.rect.x + zone.rect.width / 2, size - 120)),
+      y: Math.max(0, zone.rect.y - 8),
+    });
+  };
+
+  const handleClickOutside = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement;
+    if (!target.closest('[data-hit-zone]') && !target.closest('[data-toolbar]')) {
+      setSelected(null);
+      setEditingText(null);
+    }
+  };
+
+  // Find the text element index for a given data-stamp-element id
+  const findTextIndex = useCallback((elementId: string): number => {
+    if (!containerRef.current) return -1;
+    const allTextEls = containerRef.current.querySelectorAll('text');
+    const targetEl = containerRef.current.querySelector(`[data-stamp-element="${elementId}"]`);
+    if (!targetEl) return -1;
+    // Find the matching text element among all texts in original SVG order
+    // We need to match by the data attribute in the original SVG
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(svgSource, 'image/svg+xml');
+    const originalTexts = Array.from(doc.querySelectorAll('text'));
+    for (let i = 0; i < originalTexts.length; i++) {
+      if (originalTexts[i].getAttribute('data-stamp-element') === elementId) {
+        return i;
+      }
+    }
+    return -1;
+  }, [svgSource]);
+
+  // Edit text content
+  const startTextEdit = (elementId: string) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(svgSource, 'image/svg+xml');
+    const el = doc.querySelector(`[data-stamp-element="${elementId}"]`);
+    if (el) {
+      const tp = el.querySelector('textPath');
+      setEditValue(tp?.textContent || el.textContent || '');
+      setEditingText(elementId);
+    }
+  };
+
+  const commitTextEdit = () => {
+    if (!editingText) return;
+    const idx = findTextIndex(editingText);
+    if (idx >= 0 && editValue.trim()) {
+      const newSvg = mutateTextElement(svgSource, idx, editValue.trim());
+      onSvgChange(newSvg);
+    }
+    setEditingText(null);
+  };
+
+  // Delete element
+  const deleteElement = (elementId: string) => {
+    const idx = findTextIndex(elementId);
+    if (idx >= 0) {
+      const newSvg = mutateTextElement(svgSource, idx, null);
+      onSvgChange(newSvg);
+      setSelected(null);
+    }
+  };
+
+  // Nudge element position
+  const nudgeElement = (elementId: string, dx: number, dy: number) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(svgSource, 'image/svg+xml');
+    const el = doc.querySelector(`[data-stamp-element="${elementId}"]`);
+    if (!el) return;
+
+    // For text elements with x/y attributes
+    const x = parseFloat(el.getAttribute('x') || '0');
+    const y = parseFloat(el.getAttribute('y') || '0');
+    // Clamp nudge to safe zone (±15px max from original)
+    el.setAttribute('x', String(x + dx));
+    el.setAttribute('y', String(y + dy));
+
+    const newSvg = new XMLSerializer().serializeToString(doc.documentElement);
+    onSvgChange(newSvg);
+  };
+
+  // Adjust letter spacing
+  const adjustSpacing = (elementId: string, delta: number) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(svgSource, 'image/svg+xml');
+    const el = doc.querySelector(`[data-stamp-element="${elementId}"]`);
+    if (!el) return;
+    const current = parseFloat(el.getAttribute('letter-spacing') || '2');
+    const next = Math.max(0, Math.min(12, current + delta));
+    el.setAttribute('letter-spacing', String(next));
+    const newSvg = new XMLSerializer().serializeToString(doc.documentElement);
+    onSvgChange(newSvg);
+  };
+
+  // Adjust font size
+  const adjustFontSize = (elementId: string, delta: number) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(svgSource, 'image/svg+xml');
+    const el = doc.querySelector(`[data-stamp-element="${elementId}"]`);
+    if (!el) return;
+    const current = parseFloat(el.getAttribute('font-size') || '14');
+    const next = Math.max(5, Math.min(28, current + delta));
+    el.setAttribute('font-size', String(next));
+    const newSvg = new XMLSerializer().serializeToString(doc.documentElement);
+    onSvgChange(newSvg);
+  };
+
+  const selectedZone = hitZones.find(z => z.id === selected);
+  const selectedMeta = selected ? ELEMENT_LABELS[selected] : null;
+
+  return (
+    <div
+      ref={containerRef}
+      className="relative cursor-crosshair"
+      style={{ width: size, height: size }}
+      onClick={handleClickOutside}
+    >
+      {/* Render the SVG */}
+      <StampSVGRenderer
+        svgSource={svgSource}
+        tintColor={tintColor}
+        secondaryColor={secondaryColor}
+        accentColor={accentColor}
+        fontFamily={fontFamily}
+        fontWeight={fontWeight}
+        fontStyle={fontStyle}
+        fontSize={fontSize}
+        inkMode={inkMode}
+        size={size}
+      />
+
+      {/* Hit zone overlays */}
+      {hitZones.map((zone) => (
+        <div
+          key={zone.id}
+          data-hit-zone={zone.id}
+          onClick={(e) => { e.stopPropagation(); handleZoneClick(zone); }}
+          className={`absolute rounded cursor-pointer transition-all duration-150 ${
+            selected === zone.id
+              ? 'ring-2 ring-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.12)]'
+              : 'hover:bg-[hsl(var(--gold)/0.06)] hover:ring-1 hover:ring-[hsl(var(--gold)/0.3)]'
+          }`}
+          style={{
+            left: zone.rect.x,
+            top: zone.rect.y,
+            width: zone.rect.width,
+            height: zone.rect.height,
+          }}
+          title={zone.label}
+        />
+      ))}
+
+      {/* Floating Toolbar */}
+      {selected && selectedZone && selectedMeta && (
+        <div
+          data-toolbar
+          className="absolute z-50 bg-white rounded-lg shadow-xl border border-[hsl(var(--gold)/0.3)] p-2 min-w-[200px] max-w-[280px]"
+          style={{
+            left: Math.max(4, Math.min(toolbarPos.x - 100, size - 210)),
+            top: Math.max(4, toolbarPos.y < 100 ? toolbarPos.y + selectedZone.rect.height + 12 : toolbarPos.y - 160),
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[hsl(var(--border))]">
+            <span className="text-[9px] font-bold text-[hsl(var(--foreground))] uppercase tracking-wider truncate">
+              {selectedZone.label}
+            </span>
+            <button onClick={() => setSelected(null)} className="p-0.5 rounded hover:bg-[hsl(var(--muted))]">
+              <X size={10} className="text-[hsl(var(--muted-foreground))]" />
+            </button>
+          </div>
+
+          {/* Inline text edit */}
+          {editingText === selected ? (
+            <div className="flex items-center gap-1 mb-2">
+              <input
+                value={editValue}
+                onChange={(e) => setEditValue(e.target.value)}
+                onKeyDown={(e) => { if (e.key === 'Enter') commitTextEdit(); if (e.key === 'Escape') setEditingText(null); }}
+                autoFocus
+                className="flex-1 text-[10px] px-2 py-1 border border-[hsl(var(--gold)/0.5)] rounded bg-white text-black font-mono"
+              />
+              <button onClick={commitTextEdit} className="p-1 rounded hover:bg-green-50 text-green-600"><Check size={11} /></button>
+              <button onClick={() => setEditingText(null)} className="p-1 rounded hover:bg-[hsl(var(--muted))]"><X size={11} /></button>
+            </div>
+          ) : null}
+
+          {/* Actions based on element type */}
+          <div className="flex flex-wrap gap-1">
+            {/* Text elements — edit, spacing, size, delete */}
+            {(selectedMeta.type === 'arc-text' || selectedMeta.type === 'location' || selectedMeta.type === 'registration') && (
+              <>
+                <ToolBtn icon={<Pencil size={10} />} label="Edit" onClick={() => startTextEdit(selected)} />
+                <ToolBtn icon={<Type size={10} />} label="Size +" onClick={() => adjustFontSize(selected, 1)} />
+                <ToolBtn icon={<Minimize2 size={10} />} label="Size −" onClick={() => adjustFontSize(selected, -1)} />
+                <ToolBtn icon={<Maximize2 size={10} />} label="Space +" onClick={() => adjustSpacing(selected, 0.5)} />
+                <ToolBtn icon={<LayoutGrid size={10} />} label="Space −" onClick={() => adjustSpacing(selected, -0.5)} />
+                <ToolBtn icon={<Trash2 size={10} />} label="Delete" onClick={() => deleteElement(selected)} danger />
+              </>
+            )}
+
+            {/* Separators — replace, nudge, resize, delete */}
+            {selectedMeta.type === 'separator' && (
+              <>
+                <ToolBtn icon={<Move size={10} />} label="↑" onClick={() => nudgeElement(selected, 0, -1)} />
+                <ToolBtn icon={<Move size={10} />} label="↓" onClick={() => nudgeElement(selected, 0, 1)} />
+                <ToolBtn icon={<Move size={10} />} label="←" onClick={() => nudgeElement(selected, -1, 0)} />
+                <ToolBtn icon={<Move size={10} />} label="→" onClick={() => nudgeElement(selected, 1, 0)} />
+                <ToolBtn icon={<Type size={10} />} label="Size +" onClick={() => adjustFontSize(selected, 1)} />
+                <ToolBtn icon={<Minimize2 size={10} />} label="Size −" onClick={() => adjustFontSize(selected, -1)} />
+                <ToolBtn icon={<Trash2 size={10} />} label="Delete" onClick={() => deleteElement(selected)} danger />
+              </>
+            )}
+
+            {/* Center content — switch mode */}
+            {selectedMeta.type === 'center' && (
+              <>
+                <ToolBtn icon={<Pencil size={10} />} label="Edit" onClick={() => startTextEdit(selected)} />
+                <ToolBtn icon={<Trash2 size={10} />} label="Clear" onClick={() => deleteElement(selected)} danger />
+              </>
+            )}
+          </div>
+
+          {/* Separator style picker */}
+          {selectedMeta.type === 'separator' && onSeparatorChange && (
+            <div className="mt-2 pt-1.5 border-t border-[hsl(var(--border))]">
+              <p className="text-[8px] font-semibold text-[hsl(var(--muted-foreground))] uppercase mb-1">Replace Style</p>
+              <div className="grid grid-cols-5 gap-1">
+                {ALL_SEPARATOR_STYLES.map((style) => (
+                  <button
+                    key={style}
+                    onClick={() => onSeparatorChange(style)}
+                    className={`text-[10px] px-1 py-0.5 rounded border transition-all ${
+                      currentSeparatorStyle === style
+                        ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))] font-bold'
+                        : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.5)] text-[hsl(var(--foreground))]'
+                    }`}
+                    title={separatorLabel(style)}
+                  >
+                    {separatorLabel(style).slice(0, 4)}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Center mode picker */}
+          {selectedMeta.type === 'center' && onCenterModeChange && (
+            <div className="mt-2 pt-1.5 border-t border-[hsl(var(--border))]">
+              <p className="text-[8px] font-semibold text-[hsl(var(--muted-foreground))] uppercase mb-1">Center Content</p>
+              <div className="grid grid-cols-3 gap-1">
+                {CENTER_MODES.map((mode) => (
+                  <button
+                    key={mode.value}
+                    onClick={() => onCenterModeChange(mode.value)}
+                    className={`text-[9px] px-1.5 py-1 rounded border transition-all ${
+                      currentCenterMode === mode.value
+                        ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))] font-bold'
+                        : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.5)] text-[hsl(var(--foreground))]'
+                    }`}
+                  >
+                    {mode.label}
+                  </button>
+                ))}
+              </div>
+              {currentCenterMode === 'icon' && (
+                <div className="grid grid-cols-4 gap-1 mt-1.5">
+                  {CENTER_ICONS.map((icon) => (
+                    <button
+                      key={icon.value}
+                      onClick={() => onCenterModeChange('icon', { icon: icon.value })}
+                      className="text-[9px] px-1 py-0.5 rounded border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.5)] text-center"
+                    >
+                      {icon.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Nudge arrows for center */}
+          {selectedMeta.type === 'center' && (
+            <div className="mt-2 pt-1.5 border-t border-[hsl(var(--border))]">
+              <p className="text-[8px] font-semibold text-[hsl(var(--muted-foreground))] uppercase mb-1">Position</p>
+              <div className="flex items-center justify-center gap-0.5">
+                <div className="flex flex-col items-center gap-0.5">
+                  <button onClick={() => nudgeElement(selected, 0, -1)} className="p-1 rounded hover:bg-[hsl(var(--muted))] border border-[hsl(var(--border))]"><ChevronUp size={10} /></button>
+                  <div className="flex gap-0.5">
+                    <button onClick={() => nudgeElement(selected, -1, 0)} className="p-1 rounded hover:bg-[hsl(var(--muted))] border border-[hsl(var(--border))]"><ChevronLeft size={10} /></button>
+                    <button onClick={() => nudgeElement(selected, 1, 0)} className="p-1 rounded hover:bg-[hsl(var(--muted))] border border-[hsl(var(--border))]"><ChevronRight size={10} /></button>
+                  </div>
+                  <button onClick={() => nudgeElement(selected, 0, 1)} className="p-1 rounded hover:bg-[hsl(var(--muted))] border border-[hsl(var(--border))]"><ChevronDown size={10} /></button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Hint text */}
+      {!selected && hitZones.length > 0 && (
+        <div className="absolute bottom-1 left-1/2 -translate-x-1/2 text-[8px] text-[hsl(var(--muted-foreground))] bg-white/80 px-2 py-0.5 rounded-full backdrop-blur-sm pointer-events-none">
+          Click any element to edit
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** Small action button for the floating toolbar */
+function ToolBtn({ icon, label, onClick, danger }: { icon: React.ReactNode; label: string; onClick: () => void; danger?: boolean }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`flex items-center gap-0.5 px-1.5 py-1 rounded text-[9px] border transition-all ${
+        danger
+          ? 'border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300'
+          : 'border-[hsl(var(--border))] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--gold)/0.06)] hover:border-[hsl(var(--gold)/0.4)]'
+      }`}
+      title={label}
+    >
+      {icon}
+      <span>{label}</span>
+    </button>
+  );
+}
