@@ -73,9 +73,9 @@ const C_SEC = '#2a3a5c';
 const C_ACC = '#8b6914';
 
 // ── Ring geometry constants (as % of stamp radius) ──
-const OUTER_R_PCT = 0.46;     // outer ring radius
-const MIDDLE_R_PCT = 0.33;    // middle ring — 13% gap from outer
-const INNER_R_PCT = 0.25;     // inner ring — 8% gap from middle
+const OUTER_R_PCT = 0.47;     // outer ring radius (widened)
+const MIDDLE_R_PCT = 0.35;    // middle ring — wider premium gap from outer
+const INNER_R_PCT = 0.24;     // inner ring — refined gap from middle
 
 // ── Stroke widths (tapering hierarchy) ──
 const OUTER_STROKE = 6;       // boldest
