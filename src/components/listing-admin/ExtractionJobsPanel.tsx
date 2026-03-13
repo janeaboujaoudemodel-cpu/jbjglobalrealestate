@@ -187,6 +187,11 @@ export function ExtractionJobsPanel() {
                       <Badge variant={source.is_active ? "default" : "secondary"}>
                         {source.is_active ? "Active" : "Inactive"}
                       </Badge>
+                      {reellyDisabled && source.name.toLowerCase().includes("reelly") && (
+                        <Badge variant="outline" className="text-[10px] border-muted-foreground/30 text-muted-foreground">
+                          Disabled by admin
+                        </Badge>
+                      )}
                     </div>
                     <div className="text-sm text-muted-foreground mt-1">
                       <span>{parseSchedule(source.extraction_schedule)}</span>
