@@ -116,8 +116,8 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
     const locFontSize = fitFontSize(locEn, 8, locArcLen, 0.55);
     const locArFontSize = fitFontSize(locAr, 9, locArcLen, 0.48);
 
-    // Location bottom arc: same fix — left to right through bottom
-    const locBotArc = `M ${cx - locationTextR} ${cy} A ${locationTextR} ${locationTextR} 0 0 1 ${cx + locationTextR} ${cy}`;
+    // Location bottom arc: RIGHT to LEFT through bottom so English text is right-side up
+    const locBotArc = `M ${cx + locationTextR} ${cy} A ${locationTextR} ${locationTextR} 0 0 0 ${cx - locationTextR} ${cy}`;
     const locTopArc = `M ${cx - locationTextR} ${cy} A ${locationTextR} ${locationTextR} 0 1 1 ${cx + locationTextR} ${cy}`;
 
     locationContent = `
