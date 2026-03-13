@@ -74,6 +74,49 @@ export default function StampProjectsDashboard() {
     setDeleting(null);
   }
 
+  function toggleSelect(id: string) {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  }
+
+  function toggleSelectAll() {
+    if (selectedIds.size === projects.length) setSelectedIds(new Set());
+    else setSelectedIds(new Set(projects.map(p => p.id)));
+  }
+
+  async function bulkDelete() {
+    if (selectedIds.size === 0) return;
+    setBulkDeleting(true);
+    const ids = [...selectedIds];
+    const { error } = await supabase.from('stamp_projects').delete().in('id', ids);
+    if (error) toast.error('Failed to delete some projects');
+    else {
+      toast.success(`${ids.length} project${ids.length > 1 ? 's' : ''} deleted`);
+      setProjects(prev => prev.filter(p => !selectedIds.has(p.id)));
+      setSelectedIds(new Set());
+    }
+    setBulkDeleting(false);
+  }
+
+  async function bulkDuplicate() {
+    if (selectedIds.size === 0) return;
+    const toDup = projects.filter(p => selectedIds.has(p.id));
+    let count = 0;
+    for (const project of toDup) {
+      const { data } = await supabase.from('stamp_projects').insert({
+        user_id: user!.id, project_name: `${project.project_name} (Copy)`,
+        company_name: project.company_name, stamp_type: project.stamp_type,
+        style_theme: project.style_theme, language_mode: project.language_mode,
+      }).select().single();
+      if (data) { setProjects(prev => [data, ...prev]); count++; }
+    }
+    toast.success(`${count} project${count > 1 ? 's' : ''} duplicated`);
+    setSelectedIds(new Set());
+  }
+
   async function duplicateProject(project: StampProject) {
     const { data, error } = await supabase
       .from('stamp_projects')
