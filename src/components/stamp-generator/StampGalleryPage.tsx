@@ -693,7 +693,17 @@ export default function StampGalleryPage() {
 
                   {/* Card footer */}
                   <div className="px-3 py-2.5 space-y-2">
-                    <p className="text-[11px] font-medium text-[hsl(var(--foreground))] leading-tight line-clamp-1">{label}</p>
+                    <div className="flex items-center justify-between">
+                      <p className="text-[11px] font-medium text-[hsl(var(--foreground))] leading-tight line-clamp-1">{label}</p>
+                      <DesignFavoriteButton
+                        itemType="stamp"
+                        itemId={design.id}
+                        itemName={label}
+                        thumbnailSvg={tinted.slice(0, 50000)}
+                        size="sm"
+                        showShortlist={false}
+                      />
+                    </div>
 
                     {/* Quick export + edit row (hidden in batch mode) */}
                     {!batchMode && (
