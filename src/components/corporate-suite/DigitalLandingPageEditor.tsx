@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2, GripVertical } from "lucide-react";
+import { Plus, Trash2, GripVertical, Sparkles, Link2, Building2, Star, Linkedin, Instagram, Twitter, Facebook, Youtube, Music, MessageCircle, Send } from "lucide-react";
 
 export interface SocialLink {
   platform: string;
@@ -31,14 +31,14 @@ export interface LandingPageData {
 }
 
 const DEFAULT_SOCIAL_PLATFORMS = [
-  { platform: "LinkedIn", icon: "🔗" },
-  { platform: "Instagram", icon: "📸" },
-  { platform: "Twitter / X", icon: "𝕏" },
-  { platform: "Facebook", icon: "📘" },
-  { platform: "YouTube", icon: "▶️" },
-  { platform: "TikTok", icon: "🎵" },
-  { platform: "WhatsApp", icon: "💬" },
-  { platform: "Telegram", icon: "✈️" },
+  { platform: "LinkedIn", icon: "Li" },
+  { platform: "Instagram", icon: "Ig" },
+  { platform: "Twitter / X", icon: "X" },
+  { platform: "Facebook", icon: "Fb" },
+  { platform: "YouTube", icon: "Yt" },
+  { platform: "TikTok", icon: "Tt" },
+  { platform: "WhatsApp", icon: "Wa" },
+  { platform: "Telegram", icon: "Tg" },
 ];
 
 export const EMPTY_LANDING_PAGE: LandingPageData = {
@@ -66,7 +66,7 @@ export default function DigitalLandingPageEditor({ data, onChange, primaryColor 
     update({
       socialLinks: [
         ...data.socialLinks,
-        { platform: unused?.platform || "Other", url: "", icon: unused?.icon || "🔗" },
+        { platform: unused?.platform || "Other", url: "", icon: unused?.icon || "Li" },
       ],
     });
   };
@@ -141,7 +141,7 @@ export default function DigitalLandingPageEditor({ data, onChange, primaryColor 
       </p>
 
       {/* Hero Bio */}
-      {sectionBtn("bio", "✨ Hero Bio")}
+      {sectionBtn("bio", "Hero Bio")}
       {openSection === "bio" && (
         <div className="space-y-2 pl-1">
           <Label className="text-[10px] text-[hsl(var(--muted-foreground))]">Short biography / tagline (displayed below the card)</Label>
@@ -156,7 +156,7 @@ export default function DigitalLandingPageEditor({ data, onChange, primaryColor 
       )}
 
       {/* Social Links */}
-      {sectionBtn("social", "🔗 Social Links", data.socialLinks.length)}
+      {sectionBtn("social", "Social Links", data.socialLinks.length)}
       {openSection === "social" && (
         <div className="space-y-2 pl-1">
           {data.socialLinks.map((link, idx) => (
@@ -165,14 +165,14 @@ export default function DigitalLandingPageEditor({ data, onChange, primaryColor 
                 value={link.platform}
                 onChange={e => {
                   const match = DEFAULT_SOCIAL_PLATFORMS.find(p => p.platform === e.target.value);
-                  updateSocial(idx, { platform: e.target.value, icon: match?.icon || "🔗" });
+                  updateSocial(idx, { platform: e.target.value, icon: match?.icon || "Li" });
                 }}
                 className="w-28 shrink-0 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-2 py-1.5 text-[11px] text-[hsl(var(--foreground))]"
               >
                 {DEFAULT_SOCIAL_PLATFORMS.map(p => (
                   <option key={p.platform} value={p.platform}>{p.icon} {p.platform}</option>
                 ))}
-                <option value="Other">🔗 Other</option>
+                <option value="Other">Other</option>
               </select>
               <Input
                 value={link.url}
@@ -194,7 +194,7 @@ export default function DigitalLandingPageEditor({ data, onChange, primaryColor 
       )}
 
       {/* Featured Cards */}
-      {sectionBtn("featured", "🏢 Featured Projects / Listings", data.featuredCards.length)}
+      {sectionBtn("featured", "Featured Projects / Listings", data.featuredCards.length)}
       {openSection === "featured" && (
         <div className="space-y-3 pl-1">
           {data.featuredCards.map((card, idx) => (
@@ -240,7 +240,7 @@ export default function DigitalLandingPageEditor({ data, onChange, primaryColor 
       )}
 
       {/* Testimonials */}
-      {sectionBtn("testimonials", "⭐ Testimonials", data.testimonials.length)}
+      {sectionBtn("testimonials", "Testimonials", data.testimonials.length)}
       {openSection === "testimonials" && (
         <div className="space-y-3 pl-1">
           {data.testimonials.map((t, idx) => (

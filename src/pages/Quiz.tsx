@@ -28,12 +28,12 @@ const QUIZ_QUESTIONS = [
     question: "What type of property are you looking for?",
     type: "single" as const,
     options: [
-      { value: "apartment", label: "Apartment / Flat", icon: "🏢" },
-      { value: "villa", label: "Villa", icon: "🏠" },
-      { value: "townhouse", label: "Townhouse", icon: "🏘️" },
-      { value: "penthouse", label: "Penthouse", icon: "🌆" },
-      { value: "plot", label: "Plot / Land", icon: "📐" },
-      { value: "retail", label: "Retail / Commercial", icon: "🏪" },
+      { value: "apartment", label: "Apartment / Flat", icon: "" },
+      { value: "villa", label: "Villa", icon: "" },
+      { value: "townhouse", label: "Townhouse", icon: "" },
+      { value: "penthouse", label: "Penthouse", icon: "" },
+      { value: "plot", label: "Plot / Land", icon: "" },
+      { value: "retail", label: "Retail / Commercial", icon: "" },
     ],
   },
   {
@@ -448,7 +448,7 @@ const Quiz = () => {
           slugs = relaxed.slice(0, 3).map(p => p.slug).join(",");
         }
       }
-      toast.success("✨ Your AI-selected properties are ready!", { duration: 4000, position: 'bottom-center' });
+      toast.success("Your AI-selected properties are ready!", { duration: 4000, position: 'bottom-center' });
       navigate(`/quiz-results?projects=${slugs}&session=${sessionId}&free=true`);
     } catch (error) {
       console.error("Error saving quiz:", error);

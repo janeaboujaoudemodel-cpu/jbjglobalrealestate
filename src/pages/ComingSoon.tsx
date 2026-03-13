@@ -1,17 +1,46 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import { Crown, Sparkles, Lock, Mail, Phone } from "lucide-react";
+import { Link, useSearchParams } from "react-router-dom";
+import { Crown, Sparkles, Lock, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import InquiryFormModal from "@/components/InquiryFormModal";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useLanguage } from "@/contexts/LanguageContext";
 import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
 
+type PageMode = 'coming-soon' | 'maintenance' | 'opening-soon' | 'welcome-back';
+
+const MODE_CONFIG: Record<PageMode, { title: string; subtitle: string; tagline: string }> = {
+  'coming-soon': {
+    title: 'Coming Soon',
+    subtitle: "We're crafting something extraordinary for you.",
+    tagline: 'UAE Real Estate Brokerage',
+  },
+  'maintenance': {
+    title: 'Under Maintenance',
+    subtitle: "We're upgrading our systems. We'll be back shortly.",
+    tagline: 'Scheduled Maintenance',
+  },
+  'opening-soon': {
+    title: 'Opening Soon',
+    subtitle: "Something extraordinary is on its way.",
+    tagline: 'A New Chapter Begins',
+  },
+  'welcome-back': {
+    title: 'Welcome Back',
+    subtitle: "We missed you. Great things await.",
+    tagline: 'Your Luxury Real Estate Partner',
+  },
+};
+
 const ComingSoon = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState<'buyer' | 'broker' | 'visitor' | undefined>(undefined);
   const { t, isRTL } = useLanguage();
+  const [searchParams] = useSearchParams();
+
+  const mode = (searchParams.get('mode') as PageMode) || 'coming-soon';
+  const config = MODE_CONFIG[mode] || MODE_CONFIG['coming-soon'];
 
   const openForm = (role?: 'buyer' | 'broker' | 'visitor') => {
     setSelectedRole(role);
@@ -46,14 +75,14 @@ const ComingSoon = () => {
             />
           </motion.div>
 
-          {/* Coming Soon Text */}
+          {/* Title */}
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.6 }}
             className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 tracking-tight"
           >
-            {t('comingSoon.title', 'Coming Soon')}
+            {t('comingSoon.title', config.title)}
           </motion.h1>
 
           {/* Company Name */}
@@ -73,10 +102,10 @@ const ComingSoon = () => {
             className="space-y-4"
           >
             <p className="text-lg md:text-xl text-white/60 font-light">
-              {t('comingSoon.subtitle', "We're crafting something extraordinary for you.")}
+              {t('comingSoon.subtitle', config.subtitle)}
             </p>
             <p className="text-sm md:text-base text-white/40 tracking-[0.2em] uppercase">
-              {t('comingSoon.tagline', 'UAE Real Estate Brokerage')}
+              {t('comingSoon.tagline', config.tagline)}
             </p>
           </motion.div>
 

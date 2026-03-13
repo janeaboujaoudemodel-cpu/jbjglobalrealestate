@@ -11,6 +11,7 @@ const Auth = lazy(() => import("@/pages/Auth"));
 const Welcome = lazy(() => import("@/pages/Welcome"));
 const AccessDenied = lazy(() => import("@/pages/AccessDenied"));
 const DigitalCard = lazy(() => import("@/pages/DigitalCard"));
+const ComingSoon = lazy(() => import("@/pages/ComingSoon"));
 const SignDocument = lazy(() => import("@/pages/e-signature/SignDocument"));
 
 export const StandaloneRoutes = () => (
@@ -18,6 +19,8 @@ export const StandaloneRoutes = () => (
     <Route path="/auth" element={<RouteErrorBoundary routeName="Auth"><Auth /></RouteErrorBoundary>} />
     <Route path="/welcome" element={<RouteErrorBoundary routeName="Welcome"><Welcome /></RouteErrorBoundary>} />
     <Route path="/403" element={<AccessDenied />} />
+    <Route path="/coming-soon" element={<RouteErrorBoundary routeName="ComingSoon"><ComingSoon /></RouteErrorBoundary>} />
+    <Route path="/maintenance" element={<RouteErrorBoundary routeName="Maintenance"><ComingSoon /></RouteErrorBoundary>} />
     <Route path="/card" element={<DigitalCard />} />
     <Route path="/card/:token" element={
       <Suspense fallback={<PageLoader />}>

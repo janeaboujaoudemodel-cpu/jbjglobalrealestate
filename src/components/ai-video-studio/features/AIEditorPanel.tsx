@@ -64,31 +64,31 @@ interface AIEditorPanelProps {
 const SMART_TEMPLATES = [
   {
     id: 'property-tour',
-    label: '🏡 Property Tour',
+    label: 'Property Tour',
     desc: '30-60s walkthrough with music',
     targetDuration: '30-60s',
-    icon: '🏡',
+    icon: 'PT',
   },
   {
     id: 'social-reel',
-    label: '📱 Social Reel',
+    label: 'Social Reel',
     desc: '15s fast-cut for Reels/TikTok',
     targetDuration: '15s',
-    icon: '📱',
+    icon: 'SR',
   },
   {
     id: 'youtube-intro',
-    label: '▶️ YouTube Intro',
+    label: 'YouTube Intro',
     desc: 'Hook + content structure',
     targetDuration: '45-60s',
-    icon: '▶️',
+    icon: 'YT',
   },
   {
     id: 'luxury-ad',
-    label: '✨ Luxury Ad',
+    label: 'Luxury Ad',
     desc: 'Cinematic 30s property ad',
     targetDuration: '30s',
-    icon: '✨',
+    icon: 'LA',
   },
 ];
 
@@ -221,7 +221,7 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
       setAssembleResult(result);
       setAppliedTemplate(templateId);
       onApplyTemplate?.(templateId, result.editPlan);
-      toast.success(`✨ "${SMART_TEMPLATES.find(t => t.id === templateId)?.label}" assembled!`);
+      toast.success(`"${SMART_TEMPLATES.find(t => t.id === templateId)?.label}" assembled!`);
     } catch {
       // Fallback
       setAppliedTemplate(templateId);
@@ -473,7 +473,7 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
               </div>
               <p className="text-xs text-slate-300 leading-relaxed">{assembleResult.summary}</p>
               {assembleResult.musicSuggestion && (
-                <p className="text-xs text-slate-500">🎵 {assembleResult.musicSuggestion}</p>
+                <p className="text-xs text-slate-500">Music: {assembleResult.musicSuggestion}</p>
               )}
               <div className="space-y-1">
                 {assembleResult.editPlan.map((step, i) => (

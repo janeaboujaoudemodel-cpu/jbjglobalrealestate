@@ -272,7 +272,7 @@ export function VideoPreviewCanvas({
       setInternalAspectRatio(ratio);
     }
     // Show badge
-    const labels: Record<string, string> = { '16:9': '▶️ YouTube 16:9', '9:16': '📱 Reels 9:16', '1:1': '⬜ Square 1:1', '4:5': '📷 Portrait 4:5' };
+    const labels: Record<string, string> = { '16:9': 'YouTube 16:9', '9:16': 'Reels 9:16', '1:1': 'Square 1:1', '4:5': 'Portrait 4:5' };
     setFormatBadge(labels[ratio] ?? ratio);
     if (formatBadgeTimer.current) clearTimeout(formatBadgeTimer.current);
     formatBadgeTimer.current = setTimeout(() => setFormatBadge(null), 2000);
@@ -417,8 +417,8 @@ export function VideoPreviewCanvas({
 
   const ASPECT_PILLS = [
     { ratio: '16:9' as const, label: '16:9', icon: '▶' },
-    { ratio: '9:16' as const, label: '9:16', icon: '📱' },
-    { ratio: '1:1' as const,  label: '1:1',  icon: '⬜' },
+    { ratio: '9:16' as const, label: '9:16', icon: '9' },
+    { ratio: '1:1' as const,  label: '1:1',  icon: '□' },
   ];
 
   return (
@@ -609,7 +609,7 @@ export function VideoPreviewCanvas({
                   className="absolute top-3 left-3 flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold bg-amber-500/90 text-black hover:bg-amber-400 transition-colors shadow-lg"
                   title="Click to clear beauty filter"
                 >
-                  ✨ Beauty: ON
+                  Beauty: ON
                 </button>
               )}
               {beautyFilter && beautyComparisonMode && (
