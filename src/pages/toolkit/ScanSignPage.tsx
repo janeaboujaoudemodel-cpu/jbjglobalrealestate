@@ -109,7 +109,7 @@ const Panel = ({ children, className = "" }: { children: React.ReactNode; classN
 const PanelTitle = ({ icon: Icon, children }: { icon: React.ElementType; children: React.ReactNode }) => (
   <div className="flex items-center gap-2 mb-4">
     <Icon className="h-5 w-5" style={{ color: G.text }} />
-    <h3 className="text-white font-semibold text-base">{children}</h3>
+    <h3 className="text-stone-900 font-semibold text-base">{children}</h3>
   </div>
 );
 
