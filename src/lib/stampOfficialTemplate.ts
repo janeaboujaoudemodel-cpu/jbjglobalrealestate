@@ -425,7 +425,7 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   if (config.showRegistration && config.registrationNumber && centerMode !== 'license') {
     const regY = cy + innerR * 0.55;
     regContent = `
-      <text x="${cx}" y="${regY}" text-anchor="middle" font-family="${enFont}" 
+      <text data-stamp-element="registration" x="${cx}" y="${regY}" text-anchor="middle" font-family="${enFont}" 
         font-size="6.5" fill="${accColor}" letter-spacing="0.8" opacity="0.7">${config.registrationNumber}</text>
     `;
   }
