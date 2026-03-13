@@ -522,7 +522,7 @@ export const EnrichmentCenter = ({ activeSource = "provident" }: EnrichmentCente
           Project Enrichment & Extraction
         </h2>
         <p className="text-muted-foreground text-sm mt-1">
-          Enrich all projects from Provident Portal — images, documents, floor plans, amenities,
+          Enrich all projects from external sources — images, documents, floor plans, amenities,
           payment plans, unit types, and more. Runs in background — safe to navigate away.
         </p>
       </div>
@@ -534,7 +534,14 @@ export const EnrichmentCenter = ({ activeSource = "provident" }: EnrichmentCente
             className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
           >
             <Database className="w-4 h-4 mr-2" />
-            Provident Website Enrichment
+            Source Enrichment
+          </TabsTrigger>
+          <TabsTrigger
+            value="audit"
+            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
+          >
+            <Eye className="w-4 h-4 mr-2" />
+            Audit & Diff Viewer
           </TabsTrigger>
           {activeSource === "reelly" && (
             <TabsTrigger
@@ -542,7 +549,7 @@ export const EnrichmentCenter = ({ activeSource = "provident" }: EnrichmentCente
               className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
             >
               <Globe className="w-4 h-4 mr-2" />
-              Reelly API Enrichment
+              External API Enrichment
             </TabsTrigger>
           )}
         </TabsList>
@@ -552,15 +559,32 @@ export const EnrichmentCenter = ({ activeSource = "provident" }: EnrichmentCente
             <CardHeader className="pb-3">
               <CardTitle className="text-foreground text-base flex items-center gap-2">
                 <Database className="w-5 h-5 text-gold" />
-                Provident Website Enrichment
+                External Source Enrichment
               </CardTitle>
               <p className="text-muted-foreground text-sm">
-                Synchronizes published projects with Provident's page-data to fill gaps in amenities, payment plans,
+                Synchronizes published projects with external page-data to fill gaps in amenities, payment plans,
                 FAQs, USPs, floor plans, location distances, images, and documents.
               </p>
             </CardHeader>
             <CardContent>
               <ProvidentEnrichmentPanel />
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="audit" className="mt-0">
+          <Card className="bg-card border-2 border-gold/30">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-foreground text-base flex items-center gap-2">
+                <Eye className="w-5 h-5 text-gold" />
+                Enrichment Audit & Evidence
+              </CardTitle>
+              <p className="text-muted-foreground text-sm">
+                Review before/after diffs for every enrichment suggestion. Approve, reject, or inspect field-level changes.
+              </p>
+            </CardHeader>
+            <CardContent>
+              <EnrichmentAuditPanel />
             </CardContent>
           </Card>
         </TabsContent>
@@ -571,7 +595,7 @@ export const EnrichmentCenter = ({ activeSource = "provident" }: EnrichmentCente
               <CardHeader className="pb-3">
                 <CardTitle className="text-foreground text-base flex items-center gap-2">
                   <Globe className="w-5 h-5 text-gold" />
-                  Reelly API Auto-Enrichment (Background)
+                  External API Auto-Enrichment (Background)
                 </CardTitle>
                 <p className="text-muted-foreground text-sm">
                   Runs entirely on the server — processes all projects even if you close this page.
