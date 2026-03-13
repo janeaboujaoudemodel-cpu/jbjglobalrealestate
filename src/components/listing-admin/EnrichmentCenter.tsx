@@ -316,12 +316,12 @@ const ProvidentEnrichmentPanel = () => {
       const { count: total } = await supabase
         .from("projects")
         .select("id", { count: "exact", head: true })
-        .eq("status", "active");
+        .eq("is_published", true);
 
       const { count: gaps } = await supabase
         .from("projects")
         .select("id", { count: "exact", head: true })
-        .eq("status", "active")
+        .eq("is_published", true)
         .or("amenities.is.null,payment_plan.is.null,payment_breakdown.is.null,faqs.is.null,location_distances.is.null");
 
       setGapStats({ total: total ?? 0, gaps: gaps ?? 0 });
