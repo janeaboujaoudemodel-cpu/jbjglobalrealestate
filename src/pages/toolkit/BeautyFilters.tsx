@@ -130,14 +130,14 @@ const HAIR_COLORS = [
 ];
 
 const MAKEUP_LOOKS = [
-  { id: 'natural', name: 'Natural', emoji: '🌿' },
-  { id: 'glam', name: 'Glam', emoji: '✨' },
-  { id: 'smoky', name: 'Smoky Eye', emoji: '👁️' },
-  { id: 'bold_lip', name: 'Bold Lip', emoji: '💋' },
-  { id: 'fresh', name: 'Fresh Glow', emoji: '💧' },
-  { id: 'editorial', name: 'Editorial', emoji: '📸' },
-  { id: 'contour', name: 'Contoured', emoji: '💎' },
-  { id: 'no_makeup', name: 'No Makeup', emoji: '🧖' },
+  { id: 'natural', name: 'Natural', emoji: '●' },
+  { id: 'glam', name: 'Glam', emoji: '◆' },
+  { id: 'smoky', name: 'Smoky Eye', emoji: '◑' },
+  { id: 'bold_lip', name: 'Bold Lip', emoji: '◈' },
+  { id: 'fresh', name: 'Fresh Glow', emoji: '○' },
+  { id: 'editorial', name: 'Editorial', emoji: '◇' },
+  { id: 'contour', name: 'Contoured', emoji: '◆' },
+  { id: 'no_makeup', name: 'No Makeup', emoji: '◯' },
 ];
 
 function whitenClothing(canvas: HTMLCanvasElement): void {
