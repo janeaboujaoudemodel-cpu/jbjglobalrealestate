@@ -1210,7 +1210,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                             <button key={p.id} onClick={() => setVideoBackground(p.id)}
                               className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
                               style={{ background: videoBackground === p.id ? "rgba(184,148,62,0.3)" : "rgba(255,255,255,0.08)", border: `1px solid ${videoBackground === p.id ? "rgba(184,148,62,0.7)" : "rgba(255,255,255,0.15)"}`, color: 'white' }}>
-                              {p.color ? <span className="inline-block w-3 h-3 rounded-sm mr-1 align-middle" style={{ background: p.color }} /> : p.icon + ' '}
+                              <span className="inline-block w-3 h-3 rounded-sm mr-1 align-middle" style={{ background: p.color === 'transparent' ? 'repeating-conic-gradient(rgba(255,255,255,0.15) 0% 25%, transparent 0% 50%) 50% / 6px 6px' : p.color.startsWith('linear') ? p.color : p.color, backgroundColor: (!p.color.startsWith('linear') && p.color !== 'transparent') ? p.color : undefined }} />
                               {p.label}
                             </button>
                           ))}
