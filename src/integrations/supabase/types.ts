@@ -7173,6 +7173,48 @@ export type Database = {
         }
         Relationships: []
       }
+      email_signatures: {
+        Row: {
+          created_at: string
+          id: string
+          identity_id: string
+          identity_name: string
+          is_active: boolean | null
+          logo_url: string | null
+          signature_html: string | null
+          signature_text: string | null
+          stamp_url: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          identity_id: string
+          identity_name: string
+          is_active?: boolean | null
+          logo_url?: string | null
+          signature_html?: string | null
+          signature_text?: string | null
+          stamp_url?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          identity_id?: string
+          identity_name?: string
+          is_active?: boolean | null
+          logo_url?: string | null
+          signature_html?: string | null
+          signature_text?: string | null
+          stamp_url?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       email_verifications: {
         Row: {
           attempts: number | null
@@ -14269,6 +14311,90 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      meeting_requests: {
+        Row: {
+          calendar_event_id: string | null
+          cancellation_reason: string | null
+          cancelled_at: string | null
+          cancelled_by: string | null
+          completed_at: string | null
+          confirmation_sent_at: string | null
+          created_at: string
+          duration_minutes: number | null
+          id: string
+          meeting_summary: string | null
+          notes: string | null
+          owner_notes: string | null
+          preferred_date: string
+          preferred_time: string
+          purpose: string
+          reminder_sent_at: string | null
+          requester_email: string
+          requester_name: string
+          requester_phone: string | null
+          rescheduled_date: string | null
+          rescheduled_time: string | null
+          status: string
+          updated_at: string
+          user_id: string | null
+          video_meet_link: string | null
+        }
+        Insert: {
+          calendar_event_id?: string | null
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          cancelled_by?: string | null
+          completed_at?: string | null
+          confirmation_sent_at?: string | null
+          created_at?: string
+          duration_minutes?: number | null
+          id?: string
+          meeting_summary?: string | null
+          notes?: string | null
+          owner_notes?: string | null
+          preferred_date: string
+          preferred_time: string
+          purpose: string
+          reminder_sent_at?: string | null
+          requester_email: string
+          requester_name: string
+          requester_phone?: string | null
+          rescheduled_date?: string | null
+          rescheduled_time?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+          video_meet_link?: string | null
+        }
+        Update: {
+          calendar_event_id?: string | null
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          cancelled_by?: string | null
+          completed_at?: string | null
+          confirmation_sent_at?: string | null
+          created_at?: string
+          duration_minutes?: number | null
+          id?: string
+          meeting_summary?: string | null
+          notes?: string | null
+          owner_notes?: string | null
+          preferred_date?: string
+          preferred_time?: string
+          purpose?: string
+          reminder_sent_at?: string | null
+          requester_email?: string
+          requester_name?: string
+          requester_phone?: string | null
+          rescheduled_date?: string | null
+          rescheduled_time?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+          video_meet_link?: string | null
+        }
+        Relationships: []
       }
       meeting_session_consents: {
         Row: {

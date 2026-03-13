@@ -7,6 +7,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -18,10 +20,33 @@ import {
   Inbox, Send, FileText, Trash2, Star, Archive, Tag, Search,
   Pencil, Reply, ReplyAll, Forward, MoreVertical, Paperclip,
   RefreshCw, Mail, Building2, User, Sparkles, CheckCheck,
-  MailOpen, ChevronLeft, ChevronRight
+  MailOpen, ChevronLeft, ChevronRight, Shield, UserCircle,
+  Headphones, Phone, Megaphone, Stamp, Signature, Zap
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+
+// ─── Sender Identities ───
+interface SenderIdentity {
+  id: string;
+  label: string;
+  name: string;
+  email: string;
+  title: string;
+  icon: React.ReactNode;
+  account: "company" | "personal";
+}
+
+const SENDER_IDENTITIES: SenderIdentity[] = [
+  { id: "owner", label: "Owner — Jane Bou Jaoude", name: "Jane Bou Jaoude", email: "ceo@jbj.ae", title: "Founder & CEO", icon: <Shield className="w-3 h-3" />, account: "company" },
+  { id: "amanda", label: "Amanda Clarke — Assistant", name: "Amanda Clarke", email: "amanda@jbj.ae", title: "Executive Assistant to CEO", icon: <Sparkles className="w-3 h-3" />, account: "company" },
+  { id: "hr", label: "HR Team", name: "HR Department", email: "hr@jbj.ae", title: "Human Resources", icon: <UserCircle className="w-3 h-3" />, account: "company" },
+  { id: "admin", label: "Admin", name: "Admin Team", email: "admin@jbj.ae", title: "Administration", icon: <Building2 className="w-3 h-3" />, account: "company" },
+  { id: "frontdesk", label: "Front Desk", name: "Front Desk", email: "frontdesk@jbj.ae", title: "Reception", icon: <Phone className="w-3 h-3" />, account: "company" },
+  { id: "helpdesk", label: "Help Desk", name: "Help Desk", email: "support@jbj.ae", title: "IT Support", icon: <Headphones className="w-3 h-3" />, account: "company" },
+  { id: "marketing", label: "Marketing Department", name: "Marketing Team", email: "marketing@jbj.ae", title: "Marketing & Communications", icon: <Megaphone className="w-3 h-3" />, account: "company" },
+  { id: "personal", label: "Personal Email", name: "Jane Bou Jaoude", email: "jane@personal.com", title: "Personal", icon: <User className="w-3 h-3" />, account: "personal" },
+];
 
 interface Email {
   id: string;
@@ -42,64 +67,28 @@ interface Email {
 
 const DEMO_EMAILS: Email[] = [
   {
-    id: "1",
-    from: "Property Alert",
-    fromEmail: "alerts@jbj.ae",
-    to: "ceo@jbj.ae",
+    id: "1", from: "Property Alert", fromEmail: "alerts@jbj.ae", to: "ceo@jbj.ae",
     subject: "New Property Listings in Dubai Marina",
     body: "Dear CEO,\n\nWe have exciting new property listings available in Dubai Marina that match your preferences.\n\n• 2BR Apartment - AED 2.5M\n• 3BR Penthouse - AED 5.8M\n• 1BR Studio - AED 1.2M\n\nContact us to schedule a viewing.\n\nBest,\nProperty Team",
-    date: new Date(Date.now() - 3600000).toISOString(),
-    read: false,
-    starred: true,
-    folder: "inbox",
-    labels: ["properties"],
-    hasAttachment: true,
-    account: "company",
+    date: new Date(Date.now() - 3600000).toISOString(), read: false, starred: true, folder: "inbox", labels: ["properties"], hasAttachment: true, account: "company",
   },
   {
-    id: "2",
-    from: "Developer Relations",
-    fromEmail: "dev@emaar.com",
-    to: "ceo@jbj.ae",
+    id: "2", from: "Developer Relations", fromEmail: "dev@emaar.com", to: "ceo@jbj.ae",
     subject: "Emaar Partnership — Q2 Briefing Schedule",
-    body: "Dear Team,\n\nPlease find attached the Q2 briefing schedule for Emaar projects. We'd like to arrange a meeting to discuss the upcoming launches in Downtown Dubai.\n\nAvailability:\n- March 18, 10:00 AM\n- March 20, 2:00 PM\n\nPlease confirm at your earliest.\n\nRegards,\nEmaar Developer Relations",
-    date: new Date(Date.now() - 7200000).toISOString(),
-    read: true,
-    starred: false,
-    folder: "inbox",
-    labels: ["work"],
-    hasAttachment: true,
-    account: "company",
+    body: "Dear Team,\n\nPlease find attached the Q2 briefing schedule for Emaar projects.\n\nAvailability:\n- March 18, 10:00 AM\n- March 20, 2:00 PM\n\nRegards,\nEmaar Developer Relations",
+    date: new Date(Date.now() - 7200000).toISOString(), read: true, starred: false, folder: "inbox", labels: ["work"], hasAttachment: true, account: "company",
   },
   {
-    id: "3",
-    from: "Travel Concierge",
-    fromEmail: "concierge@emirates.com",
-    to: "personal@ceo.com",
+    id: "3", from: "Travel Concierge", fromEmail: "concierge@emirates.com", to: "personal@ceo.com",
     subject: "Your upcoming flight confirmation — EK203",
     body: "Dear Valued Customer,\n\nYour flight EK203 from Dubai to London Heathrow on March 25 has been confirmed.\n\nFlight Details:\n- Departure: 08:15 DXB\n- Arrival: 12:30 LHR\n- Class: Business\n- Seat: 4A\n\nSafe travels!",
-    date: new Date(Date.now() - 86400000).toISOString(),
-    read: false,
-    starred: false,
-    folder: "inbox",
-    labels: ["personal"],
-    hasAttachment: false,
-    account: "personal",
+    date: new Date(Date.now() - 86400000).toISOString(), read: false, starred: false, folder: "inbox", labels: ["personal"], hasAttachment: false, account: "personal",
   },
   {
-    id: "4",
-    from: "Amanda Clarke",
-    fromEmail: "amanda@jbj.ae",
-    to: "ceo@jbj.ae",
+    id: "4", from: "Amanda Clarke", fromEmail: "amanda@jbj.ae", to: "ceo@jbj.ae",
     subject: "Daily Summary — 5 pending approvals",
-    body: "Good morning,\n\nHere's your daily summary:\n\n✅ 3 new developer submissions\n⏳ 5 pending project approvals\n📊 CRM: 12 hot leads requiring follow-up\n📅 2 meetings scheduled today\n\nI've prepared draft responses for the top 3 leads. Review them in the CRM.\n\nBest,\nAmanda",
-    date: new Date(Date.now() - 1800000).toISOString(),
-    read: false,
-    starred: true,
-    folder: "inbox",
-    labels: ["important"],
-    hasAttachment: false,
-    account: "company",
+    body: "Good morning,\n\nHere's your daily summary:\n\n✅ 3 new developer submissions\n⏳ 5 pending project approvals\n📊 CRM: 12 hot leads requiring follow-up\n📅 2 meetings scheduled today\n\nBest,\nAmanda",
+    date: new Date(Date.now() - 1800000).toISOString(), read: false, starred: true, folder: "inbox", labels: ["important"], hasAttachment: false, account: "company",
   },
 ];
 
@@ -110,7 +99,8 @@ const EmailClient = () => {
   const [activeAccount, setActiveAccount] = useState<"all" | "personal" | "company">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [composeOpen, setComposeOpen] = useState(false);
-  const [composeSender, setComposeSender] = useState<"company" | "personal">("company");
+  const [composeSender, setComposeSender] = useState("owner");
+  const [sendViaResend, setSendViaResend] = useState(true);
   const [newEmail, setNewEmail] = useState({ to: "", subject: "", body: "" });
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [currentPage, setCurrentPage] = useState(1);
@@ -143,40 +133,29 @@ const EmailClient = () => {
   const totalPages = Math.ceil(filteredEmails.length / emailsPerPage);
   const paginatedEmails = filteredEmails.slice((currentPage - 1) * emailsPerPage, currentPage * emailsPerPage);
 
-  const markAsRead = (id: string) => {
-    setEmails(emails.map(e => e.id === id ? { ...e, read: true } : e));
-  };
-
-  const toggleStar = (id: string) => {
-    setEmails(emails.map(e => e.id === id ? { ...e, starred: !e.starred } : e));
-  };
-
+  const markAsRead = (id: string) => setEmails(emails.map(e => e.id === id ? { ...e, read: true } : e));
+  const toggleStar = (id: string) => setEmails(emails.map(e => e.id === id ? { ...e, starred: !e.starred } : e));
+  
   const moveToTrash = (ids: string[]) => {
     setEmails(emails.map(e => ids.includes(e.id) ? { ...e, folder: "trash" } : e));
-    setSelectedEmail(null);
-    setSelectedIds(new Set());
+    setSelectedEmail(null); setSelectedIds(new Set());
     toast.success(`${ids.length} email(s) moved to trash`);
   };
 
   const moveToArchive = (ids: string[]) => {
     setEmails(emails.map(e => ids.includes(e.id) ? { ...e, folder: "archive" } : e));
-    setSelectedEmail(null);
-    setSelectedIds(new Set());
+    setSelectedEmail(null); setSelectedIds(new Set());
     toast.success(`${ids.length} email(s) archived`);
   };
 
   const markSelectedRead = () => {
     setEmails(emails.map(e => selectedIds.has(e.id) ? { ...e, read: true } : e));
-    setSelectedIds(new Set());
-    toast.success("Marked as read");
+    setSelectedIds(new Set()); toast.success("Marked as read");
   };
 
   const toggleSelectAll = () => {
-    if (selectedIds.size === paginatedEmails.length) {
-      setSelectedIds(new Set());
-    } else {
-      setSelectedIds(new Set(paginatedEmails.map(e => e.id)));
-    }
+    if (selectedIds.size === paginatedEmails.length) setSelectedIds(new Set());
+    else setSelectedIds(new Set(paginatedEmails.map(e => e.id)));
   };
 
   const toggleSelect = (id: string) => {
@@ -185,32 +164,28 @@ const EmailClient = () => {
     setSelectedIds(next);
   };
 
+  const currentSender = SENDER_IDENTITIES.find(s => s.id === composeSender) || SENDER_IDENTITIES[0];
+
   const sendEmail = () => {
     if (!newEmail.to || !newEmail.subject) {
       toast.error("Please fill in recipient and subject");
       return;
     }
-
     const email: Email = {
       id: Date.now().toString(),
-      from: composeSender === "company" ? "JBJ Global Real Estate" : "Personal",
-      fromEmail: composeSender === "company" ? "ceo@jbj.ae" : "personal@ceo.com",
+      from: currentSender.name,
+      fromEmail: currentSender.email,
       to: newEmail.to,
       subject: newEmail.subject,
       body: newEmail.body,
       date: new Date().toISOString(),
-      read: true,
-      starred: false,
-      folder: "sent",
-      labels: [],
-      hasAttachment: false,
-      account: composeSender,
+      read: true, starred: false, folder: "sent", labels: [], hasAttachment: false,
+      account: currentSender.account,
     };
-
     setEmails([...emails, email]);
     setNewEmail({ to: "", subject: "", body: "" });
     setComposeOpen(false);
-    toast.success("Email sent!");
+    toast.success(sendViaResend ? "Email sent via Resend API" : "Email sent normally");
   };
 
   const formatDate = (dateString: string) => {
@@ -225,40 +200,67 @@ const EmailClient = () => {
   const unreadCount = emails.filter(e => e.folder === "inbox" && !e.read).length;
 
   return (
-    <div className="h-[calc(100vh-60px)] bg-background text-foreground flex">
+    <div className="h-[calc(100vh-11rem)] bg-background text-foreground flex rounded-xl border-2 border-[#C9A84C]/20 overflow-hidden shadow-sm">
       {/* Sidebar */}
-      <div className="w-56 border-r border-border flex flex-col bg-card">
-        {/* Compose + Search area with proper padding */}
-        <div className="p-4 space-y-3 border-b border-border">
+      <div className="w-56 border-r border-[#C9A84C]/15 flex flex-col bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6]">
+        {/* Compose + Search */}
+        <div className="p-4 space-y-3 border-b border-[#C9A84C]/15">
           <Dialog open={composeOpen} onOpenChange={setComposeOpen}>
             <DialogTrigger asChild>
-              <Button variant="primary" className="w-full">
+              <Button className="w-full bg-gradient-to-r from-[#C9A84C] to-[#B8973F] hover:from-[#B8973F] hover:to-[#A78636] text-white">
                 <Pencil className="w-4 h-4 mr-2" />
                 Compose
               </Button>
             </DialogTrigger>
-            <DialogContent className="bg-card border-border max-w-2xl">
+            <DialogContent className="bg-white border-2 border-[#C9A84C]/30 max-w-2xl">
               <DialogHeader>
-                <DialogTitle className="text-foreground">New Message</DialogTitle>
+                <DialogTitle className="text-black flex items-center gap-2">
+                  <Mail className="w-5 h-5 text-[#C9A84C]" />
+                  New Message
+                </DialogTitle>
               </DialogHeader>
               <div className="space-y-4">
-                {/* Sender Selector */}
+                {/* Sender Identity Selector */}
                 <div className="flex items-center gap-3">
-                  <span className="text-sm text-muted-foreground whitespace-nowrap">From:</span>
-                  <Select value={composeSender} onValueChange={(v) => setComposeSender(v as any)}>
-                    <SelectTrigger className="flex-1">
+                  <span className="text-sm text-black/60 whitespace-nowrap w-12">From:</span>
+                  <Select value={composeSender} onValueChange={setComposeSender}>
+                    <SelectTrigger className="flex-1 border-[#C9A84C]/30 bg-[#FDFBF7]">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="company">
-                        <span className="flex items-center gap-2"><Building2 className="w-3 h-3" /> ceo@jbj.ae</span>
-                      </SelectItem>
-                      <SelectItem value="personal">
-                        <span className="flex items-center gap-2"><User className="w-3 h-3" /> personal@ceo.com</span>
-                      </SelectItem>
+                    <SelectContent className="bg-white border-[#C9A84C]/30">
+                      <div className="px-2 py-1.5 text-[10px] font-semibold text-black/40 uppercase tracking-wider">Company Email</div>
+                      {SENDER_IDENTITIES.filter(s => s.account === 'company').map(s => (
+                        <SelectItem key={s.id} value={s.id}>
+                          <span className="flex items-center gap-2">
+                            {s.icon}
+                            <span className="text-black">{s.label}</span>
+                            <span className="text-black/40 text-xs">({s.email})</span>
+                          </span>
+                        </SelectItem>
+                      ))}
+                      <div className="px-2 py-1.5 text-[10px] font-semibold text-black/40 uppercase tracking-wider border-t border-[#C9A84C]/10 mt-1">Personal Email</div>
+                      {SENDER_IDENTITIES.filter(s => s.account === 'personal').map(s => (
+                        <SelectItem key={s.id} value={s.id}>
+                          <span className="flex items-center gap-2">
+                            {s.icon}
+                            <span className="text-black">{s.label}</span>
+                            <span className="text-black/40 text-xs">({s.email})</span>
+                          </span>
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
+
+                {/* Send Method Toggle */}
+                <div className="flex items-center justify-between bg-[#FDFBF7] border border-[#C9A84C]/20 rounded-lg px-3 py-2">
+                  <div className="flex items-center gap-2">
+                    <Zap className="w-4 h-4 text-[#C9A84C]" />
+                    <span className="text-sm text-black">Send via Resend API</span>
+                  </div>
+                  <Switch checked={sendViaResend} onCheckedChange={setSendViaResend} />
+                </div>
+
                 <Input
                   placeholder="To"
                   value={newEmail.to}
@@ -275,14 +277,30 @@ const EmailClient = () => {
                   onChange={(e) => setNewEmail({ ...newEmail, body: e.target.value })}
                   className="min-h-[200px]"
                 />
+
+                {/* Signature info */}
+                <div className="bg-[#FDFBF7] border border-[#C9A84C]/20 rounded-lg p-3">
+                  <p className="text-xs text-black/60 mb-1">Sending as: <strong className="text-black">{currentSender.name}</strong></p>
+                  <p className="text-[10px] text-black/40">{currentSender.title} · {currentSender.email}</p>
+                </div>
+
                 <div className="flex justify-between">
                   <div className="flex gap-2">
-                    <Button variant="ghost" size="sm"><Paperclip className="w-4 h-4 mr-1" /> Attach</Button>
-                    <Button variant="ghost" size="sm"><Sparkles className="w-4 h-4 mr-1" /> Draft with Amanda</Button>
+                    <Button variant="ghost" size="sm" className="text-black/60 hover:bg-[#C9A84C]/10">
+                      <Paperclip className="w-4 h-4 mr-1" /> Attach
+                    </Button>
+                    <Button variant="ghost" size="sm" className="text-[#C9A84C] hover:bg-[#C9A84C]/10">
+                      <Stamp className="w-4 h-4 mr-1" /> Stamp
+                    </Button>
+                    <Button variant="ghost" size="sm" className="text-[#C9A84C] hover:bg-[#C9A84C]/10">
+                      <Sparkles className="w-4 h-4 mr-1" /> Draft with Amanda
+                    </Button>
                   </div>
                   <div className="flex gap-2">
-                    <Button variant="outline" onClick={() => setComposeOpen(false)}>Cancel</Button>
-                    <Button onClick={sendEmail} variant="primary"><Send className="w-4 h-4 mr-2" /> Send</Button>
+                    <Button variant="outline" onClick={() => setComposeOpen(false)} className="border-[#C9A84C]/30">Cancel</Button>
+                    <Button onClick={sendEmail} className="bg-gradient-to-r from-[#C9A84C] to-[#B8973F] hover:from-[#B8973F] hover:to-[#A78636] text-white">
+                      <Send className="w-4 h-4 mr-2" /> Send
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -290,25 +308,25 @@ const EmailClient = () => {
           </Dialog>
 
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/30" />
             <Input
               placeholder="Search emails..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 h-9 text-sm"
+              className="pl-9 h-9 text-sm bg-white border-[#C9A84C]/20 focus-visible:ring-[#C9A84C]/30"
             />
           </div>
         </div>
 
-        {/* Account Tabs */}
+        {/* Account Section Tabs */}
         <div className="px-2 pt-3 pb-1">
           <Tabs value={activeAccount} onValueChange={(v) => { setActiveAccount(v as any); setCurrentPage(1); }}>
-            <TabsList className="w-full h-8 bg-muted">
-              <TabsTrigger value="all" className="text-[10px] flex-1 h-6 data-[state=active]:bg-gold data-[state=active]:text-black">All</TabsTrigger>
-              <TabsTrigger value="company" className="text-[10px] flex-1 h-6 data-[state=active]:bg-gold data-[state=active]:text-black">
+            <TabsList className="w-full h-9 bg-[#F5F0E6]">
+              <TabsTrigger value="all" className="text-[10px] flex-1 h-7 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C] data-[state=active]:to-[#B8973F] data-[state=active]:text-white">All</TabsTrigger>
+              <TabsTrigger value="company" className="text-[10px] flex-1 h-7 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C] data-[state=active]:to-[#B8973F] data-[state=active]:text-white">
                 <Building2 className="w-3 h-3 mr-1" />Company
               </TabsTrigger>
-              <TabsTrigger value="personal" className="text-[10px] flex-1 h-6 data-[state=active]:bg-gold data-[state=active]:text-black">
+              <TabsTrigger value="personal" className="text-[10px] flex-1 h-7 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C] data-[state=active]:to-[#B8973F] data-[state=active]:text-white">
                 <User className="w-3 h-3 mr-1" />Personal
               </TabsTrigger>
             </TabsList>
@@ -323,8 +341,8 @@ const EmailClient = () => {
               className={cn(
                 "w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm mb-0.5 transition-colors",
                 activeFolder === folder.id
-                  ? "bg-gold/15 text-foreground font-medium"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  ? "bg-[#C9A84C]/15 text-black font-medium"
+                  : "text-black/60 hover:bg-[#C9A84C]/5 hover:text-black"
               )}
               onClick={() => { setActiveFolder(folder.id); setSelectedEmail(null); setCurrentPage(1); }}
             >
@@ -333,18 +351,18 @@ const EmailClient = () => {
                 {folder.label}
               </span>
               {folder.count > 0 && (
-                <Badge className="bg-gold text-black text-[10px] px-1.5 h-5 font-bold">{folder.count}</Badge>
+                <Badge className="bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-white text-[10px] px-1.5 h-5 font-bold border-0">{folder.count}</Badge>
               )}
             </button>
           ))}
 
           <div className="mt-4 mb-2 px-3">
-            <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Labels</span>
+            <span className="text-[10px] font-semibold text-black/40 uppercase tracking-wider">Labels</span>
           </div>
           {labels.map((label) => (
             <button
               key={label.name}
-              className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
+              className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-sm text-black/60 hover:bg-[#C9A84C]/5 hover:text-black"
             >
               <div className={cn("w-2.5 h-2.5 rounded-full", label.color)} />
               <span className="capitalize">{label.name}</span>
@@ -354,43 +372,27 @@ const EmailClient = () => {
       </div>
 
       {/* Email List */}
-      <div className="w-[340px] border-r border-border flex flex-col bg-background">
+      <div className="w-[340px] border-r border-[#C9A84C]/15 flex flex-col bg-[#FDFBF7]">
         {/* Toolbar */}
-        <div className="px-3 py-2 border-b border-border flex items-center justify-between gap-2">
+        <div className="px-3 py-2 border-b border-[#C9A84C]/15 flex items-center justify-between gap-2 bg-white/80">
           <div className="flex items-center gap-2">
-            <Checkbox
-              checked={selectedIds.size > 0 && selectedIds.size === paginatedEmails.length}
-              onCheckedChange={toggleSelectAll}
-              className="border-border"
-            />
+            <Checkbox checked={selectedIds.size > 0 && selectedIds.size === paginatedEmails.length} onCheckedChange={toggleSelectAll} className="border-[#C9A84C]/30" />
             {selectedIds.size > 0 && (
               <>
-                <Button variant="ghost" size="icon" className="h-7 w-7" onClick={markSelectedRead} title="Mark read">
-                  <MailOpen className="w-3.5 h-3.5" />
-                </Button>
-                <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => moveToArchive(Array.from(selectedIds))} title="Archive">
-                  <Archive className="w-3.5 h-3.5" />
-                </Button>
-                <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => moveToTrash(Array.from(selectedIds))} title="Trash">
-                  <Trash2 className="w-3.5 h-3.5" />
-                </Button>
-                <span className="text-[10px] text-muted-foreground">{selectedIds.size} selected</span>
+                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#C9A84C]/10" onClick={markSelectedRead}><MailOpen className="w-3.5 h-3.5 text-black/60" /></Button>
+                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#C9A84C]/10" onClick={() => moveToArchive(Array.from(selectedIds))}><Archive className="w-3.5 h-3.5 text-black/60" /></Button>
+                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#C9A84C]/10" onClick={() => moveToTrash(Array.from(selectedIds))}><Trash2 className="w-3.5 h-3.5 text-black/60" /></Button>
+                <span className="text-[10px] text-black/40">{selectedIds.size} selected</span>
               </>
             )}
           </div>
           <div className="flex items-center gap-1">
-            <Button variant="ghost" size="icon" className="h-7 w-7" title="Refresh">
-              <RefreshCw className="w-3.5 h-3.5" />
-            </Button>
+            <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#C9A84C]/10"><RefreshCw className="w-3.5 h-3.5 text-black/60" /></Button>
             {totalPages > 1 && (
               <>
-                <Button variant="ghost" size="icon" className="h-7 w-7" disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)}>
-                  <ChevronLeft className="w-3.5 h-3.5" />
-                </Button>
-                <span className="text-[10px] text-muted-foreground">{currentPage}/{totalPages}</span>
-                <Button variant="ghost" size="icon" className="h-7 w-7" disabled={currentPage === totalPages} onClick={() => setCurrentPage(p => p + 1)}>
-                  <ChevronRight className="w-3.5 h-3.5" />
-                </Button>
+                <Button variant="ghost" size="icon" className="h-7 w-7" disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)}><ChevronLeft className="w-3.5 h-3.5" /></Button>
+                <span className="text-[10px] text-black/40">{currentPage}/{totalPages}</span>
+                <Button variant="ghost" size="icon" className="h-7 w-7" disabled={currentPage === totalPages} onClick={() => setCurrentPage(p => p + 1)}><ChevronRight className="w-3.5 h-3.5" /></Button>
               </>
             )}
           </div>
@@ -399,7 +401,7 @@ const EmailClient = () => {
         {/* Emails */}
         <ScrollArea className="flex-1">
           {paginatedEmails.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-48 text-muted-foreground">
+            <div className="flex flex-col items-center justify-center h-48 text-black/40">
               <Mail className="w-10 h-10 mb-2 opacity-40" />
               <p className="text-sm">No emails</p>
             </div>
@@ -408,9 +410,9 @@ const EmailClient = () => {
               <div
                 key={email.id}
                 className={cn(
-                  "flex items-start gap-2 px-3 py-3 border-b border-border/50 cursor-pointer transition-colors",
-                  selectedEmail?.id === email.id ? "bg-gold/10" : "hover:bg-muted/50",
-                  !email.read && "bg-primary/5"
+                  "flex items-start gap-2 px-3 py-3 border-b border-[#C9A84C]/10 cursor-pointer transition-colors",
+                  selectedEmail?.id === email.id ? "bg-[#C9A84C]/10" : "hover:bg-[#C9A84C]/5",
+                  !email.read && "bg-[#C9A84C]/[0.03]"
                 )}
                 onClick={() => { setSelectedEmail(email); markAsRead(email.id); }}
               >
@@ -418,30 +420,30 @@ const EmailClient = () => {
                   checked={selectedIds.has(email.id)}
                   onCheckedChange={() => toggleSelect(email.id)}
                   onClick={(e) => e.stopPropagation()}
-                  className="mt-1 border-border"
+                  className="mt-1 border-[#C9A84C]/30"
                 />
                 <button
                   onClick={(e) => { e.stopPropagation(); toggleStar(email.id); }}
-                  className={cn("mt-1 flex-shrink-0", email.starred ? "text-gold" : "text-muted-foreground/40 hover:text-muted-foreground")}
+                  className={cn("mt-1 flex-shrink-0", email.starred ? "text-[#C9A84C]" : "text-black/20 hover:text-black/40")}
                 >
                   <Star className="w-3.5 h-3.5" fill={email.starred ? "currentColor" : "none"} />
                 </button>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between mb-0.5">
-                    <span className={cn("text-sm truncate", !email.read && "font-semibold")}>{email.from}</span>
-                    <span className="text-[10px] text-muted-foreground flex-shrink-0 ml-2">{formatDate(email.date)}</span>
+                    <span className={cn("text-sm truncate text-black", !email.read && "font-semibold")}>{email.from}</span>
+                    <span className="text-[10px] text-black/40 flex-shrink-0 ml-2">{formatDate(email.date)}</span>
                   </div>
-                  <p className={cn("text-sm truncate", !email.read ? "text-foreground" : "text-muted-foreground")}>{email.subject}</p>
-                  <p className="text-[11px] text-muted-foreground truncate mt-0.5">{email.body.substring(0, 80)}…</p>
+                  <p className={cn("text-sm truncate", !email.read ? "text-black" : "text-black/60")}>{email.subject}</p>
+                  <p className="text-[11px] text-black/40 truncate mt-0.5">{email.body.substring(0, 80)}…</p>
                   <div className="flex items-center gap-1.5 mt-1.5">
                     {email.account === "company" ? (
-                      <Badge variant="outline" className="text-[9px] h-4 px-1 border-gold/30"><Building2 className="w-2.5 h-2.5 mr-0.5" />Company</Badge>
+                      <Badge variant="outline" className="text-[9px] h-4 px-1 border-[#C9A84C]/30 text-[#C9A84C]"><Building2 className="w-2.5 h-2.5 mr-0.5" />Company</Badge>
                     ) : (
-                      <Badge variant="outline" className="text-[9px] h-4 px-1 border-emerald-300"><User className="w-2.5 h-2.5 mr-0.5" />Personal</Badge>
+                      <Badge variant="outline" className="text-[9px] h-4 px-1 border-emerald-300 text-emerald-600"><User className="w-2.5 h-2.5 mr-0.5" />Personal</Badge>
                     )}
-                    {email.hasAttachment && <Paperclip className="w-3 h-3 text-muted-foreground" />}
+                    {email.hasAttachment && <Paperclip className="w-3 h-3 text-black/40" />}
                     {email.labels.map((l) => (
-                      <Badge key={l} variant="outline" className="text-[9px] h-4 px-1 capitalize">{l}</Badge>
+                      <Badge key={l} variant="outline" className="text-[9px] h-4 px-1 capitalize border-[#C9A84C]/20 text-black/50">{l}</Badge>
                     ))}
                   </div>
                 </div>
@@ -452,82 +454,79 @@ const EmailClient = () => {
       </div>
 
       {/* Email View */}
-      <div className="flex-1 flex flex-col bg-background">
+      <div className="flex-1 flex flex-col bg-white">
         {selectedEmail ? (
           <>
             {/* Email Header */}
-            <div className="p-5 border-b border-border">
+            <div className="p-5 border-b border-[#C9A84C]/15">
               <div className="flex items-center justify-between mb-3">
-                <h2 className="text-lg font-semibold text-foreground">{selectedEmail.subject}</h2>
+                <h2 className="text-lg font-semibold text-black">{selectedEmail.subject}</h2>
                 <div className="flex items-center gap-1">
-                  <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => moveToArchive([selectedEmail.id])} title="Archive">
-                    <Archive className="w-4 h-4" />
-                  </Button>
-                  <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => moveToTrash([selectedEmail.id])} title="Delete">
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                  <Button variant="ghost" size="icon" className="h-8 w-8">
-                    <MoreVertical className="w-4 h-4" />
-                  </Button>
+                  <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#C9A84C]/10" onClick={() => moveToArchive([selectedEmail.id])}><Archive className="w-4 h-4 text-black/60" /></Button>
+                  <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#C9A84C]/10" onClick={() => moveToTrash([selectedEmail.id])}><Trash2 className="w-4 h-4 text-black/60" /></Button>
+                  <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#C9A84C]/10"><MoreVertical className="w-4 h-4 text-black/60" /></Button>
                 </div>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className={cn(
                     "w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold",
-                    selectedEmail.account === "company" ? "bg-gold" : "bg-emerald-500"
+                    selectedEmail.account === "company" ? "bg-gradient-to-br from-[#C9A84C] to-[#B8973F]" : "bg-emerald-500"
                   )}>
                     {selectedEmail.from[0]}
                   </div>
                   <div>
-                    <p className="font-medium text-foreground">{selectedEmail.from}</p>
-                    <p className="text-sm text-muted-foreground">{selectedEmail.fromEmail}</p>
+                    <p className="font-medium text-black">{selectedEmail.from}</p>
+                    <p className="text-sm text-black/50">{selectedEmail.fromEmail}</p>
                   </div>
                 </div>
-                <span className="text-sm text-muted-foreground">{new Date(selectedEmail.date).toLocaleString()}</span>
+                <span className="text-sm text-black/40">{new Date(selectedEmail.date).toLocaleString()}</span>
               </div>
             </div>
 
             {/* Email Body */}
             <ScrollArea className="flex-1 p-6">
-              <div className="whitespace-pre-wrap text-foreground leading-relaxed max-w-3xl">
+              <div className="whitespace-pre-wrap text-black leading-relaxed max-w-3xl">
                 {selectedEmail.body}
               </div>
 
-              {/* AI Assistance Panel */}
-              <div className="mt-8 p-4 rounded-xl border-2 border-gold/20 bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6]">
+              {/* Amanda Suggestions Panel */}
+              <div className="mt-8 p-4 rounded-xl border-2 border-[#C9A84C]/20 bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6]">
                 <div className="flex items-center gap-2 mb-3">
-                  <Sparkles className="w-4 h-4 text-gold" />
-                  <span className="text-sm font-semibold text-foreground">Amanda's Suggestions</span>
+                  <Sparkles className="w-4 h-4 text-[#C9A84C]" />
+                  <span className="text-sm font-semibold text-black">Amanda's Suggestions</span>
                 </div>
                 <div className="space-y-2">
-                  <button className="w-full text-left text-sm px-3 py-2 rounded-lg bg-background/60 border border-gold/20 hover:border-gold/40 transition-colors text-foreground">
-                    💬 "Thanks for reaching out. I've reviewed the listings and would like to schedule a viewing for the penthouse…"
+                  <button className="w-full text-left text-sm px-3 py-2 rounded-lg bg-white/60 border border-[#C9A84C]/20 hover:border-[#C9A84C]/40 transition-colors text-black">
+                    Reply: "Thanks for reaching out. I've reviewed the details and would like to schedule a follow-up…"
                   </button>
-                  <button className="w-full text-left text-sm px-3 py-2 rounded-lg bg-background/60 border border-gold/20 hover:border-gold/40 transition-colors text-foreground">
-                    📋 Summarize this thread
+                  <button className="w-full text-left text-sm px-3 py-2 rounded-lg bg-white/60 border border-[#C9A84C]/20 hover:border-[#C9A84C]/40 transition-colors text-black">
+                    Summarize this thread
                   </button>
-                  <button className="w-full text-left text-sm px-3 py-2 rounded-lg bg-background/60 border border-gold/20 hover:border-gold/40 transition-colors text-foreground">
-                    📅 Create task from this email
+                  <button className="w-full text-left text-sm px-3 py-2 rounded-lg bg-white/60 border border-[#C9A84C]/20 hover:border-[#C9A84C]/40 transition-colors text-black">
+                    Create task from this email
+                  </button>
+                  <button className="w-full text-left text-sm px-3 py-2 rounded-lg bg-white/60 border border-[#C9A84C]/20 hover:border-[#C9A84C]/40 transition-colors text-black">
+                    Add to calendar
                   </button>
                 </div>
               </div>
             </ScrollArea>
 
             {/* Actions */}
-            <div className="p-4 border-t border-border flex gap-2">
-              <Button variant="outline" size="sm"><Reply className="w-4 h-4 mr-1.5" /> Reply</Button>
-              <Button variant="outline" size="sm"><ReplyAll className="w-4 h-4 mr-1.5" /> Reply All</Button>
-              <Button variant="outline" size="sm"><Forward className="w-4 h-4 mr-1.5" /> Forward</Button>
-              <Button variant="outline" size="sm" className="ml-auto border-gold/30 text-gold hover:bg-gold/10">
+            <div className="p-4 border-t border-[#C9A84C]/15 flex gap-2">
+              <Button variant="outline" size="sm" className="border-[#C9A84C]/30 text-black hover:bg-[#C9A84C]/10"><Reply className="w-4 h-4 mr-1.5" /> Reply</Button>
+              <Button variant="outline" size="sm" className="border-[#C9A84C]/30 text-black hover:bg-[#C9A84C]/10"><ReplyAll className="w-4 h-4 mr-1.5" /> Reply All</Button>
+              <Button variant="outline" size="sm" className="border-[#C9A84C]/30 text-black hover:bg-[#C9A84C]/10"><Forward className="w-4 h-4 mr-1.5" /> Forward</Button>
+              <Button variant="outline" size="sm" className="ml-auto border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C]/10">
                 <Sparkles className="w-4 h-4 mr-1.5" /> Draft with Amanda
               </Button>
             </div>
           </>
         ) : (
-          <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground">
+          <div className="flex-1 flex flex-col items-center justify-center text-black/40">
             <Mail className="w-16 h-16 mb-4 opacity-30" />
-            <p className="text-lg font-medium">Select an email to read</p>
+            <p className="text-lg font-medium text-black/60">Select an email to read</p>
             <p className="text-sm mt-1">
               {unreadCount > 0 ? `${unreadCount} unread message${unreadCount > 1 ? 's' : ''}` : "All caught up"}
             </p>
