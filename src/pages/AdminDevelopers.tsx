@@ -386,8 +386,9 @@ const AdminDevelopers = () => {
         {/* Tabs */}
         <Tabs defaultValue="overview" className="space-y-6">
           <TabsList className="bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border-2 border-gold/30">
-            <TabsTrigger value="overview" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
-              📊 Overview
+            <TabsTrigger value="overview" className="data-[state=active]:bg-white data-[state=active]:shadow-md flex items-center gap-1.5">
+              <BarChart3 className="w-4 h-4" />
+              Overview
             </TabsTrigger>
             <TabsTrigger value="dubai" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
               Dubai ({dubaiDevelopers.length})
