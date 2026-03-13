@@ -19,20 +19,16 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
   const ed = usePDFEditor();
 
   return (
-    <div style={{ background: G.surface, minHeight: "100vh" }}>
+    <div className="min-h-screen bg-white">
       <input ref={ed.fileInputRef} type="file" accept=".pdf" multiple onChange={ed.handleFileUpload} className="hidden" />
 
       {!embedded && (
-        <header style={{ borderBottom: `1px solid ${G.border}`, background: G.bg }}>
+        <header className="border-b border-stone-200 bg-slate-50">
           <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-            <Link to="/toolkit" className="flex items-center gap-2 transition-colors rounded-lg px-3 py-2"
-              style={{ color: "rgba(255,255,255,0.45)", border: `1px solid ${G.border}` }}
-              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "#fff")}
-              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.45)")}>
-              <ArrowLeft className="h-5 w-5" /><span>Back to Royal Tools Hub</span>
+            <Link to="/toolkit" className="flex items-center gap-2 transition-colors rounded-lg px-3 py-2 text-stone-500 hover:text-stone-800 border border-stone-200">
+              <ArrowLeft className="h-5 w-5" /><span>Back to Tools Hub</span>
             </Link>
-            <Button variant="outline" size="sm" onClick={() => ed.fileInputRef.current?.click()} disabled={ed.isLoading}
-              style={{ borderColor: G.border, color: "rgba(255,255,255,0.65)", background: "transparent" }}>
+            <Button variant="outline" size="sm" onClick={() => ed.fileInputRef.current?.click()} disabled={ed.isLoading}>
               <Plus className="h-4 w-4 mr-2" />Add PDF
             </Button>
           </div>
@@ -41,12 +37,11 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
 
       <main className="max-w-7xl mx-auto px-4 py-8">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4"
-            style={{ background: G.bg, border: `1px solid ${G.border}`, boxShadow: `0 0 32px ${G.glow}` }}>
-            <FileText className="h-8 w-8" style={{ color: G.gold }} />
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/20">
+            <FileText className="h-8 w-8 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">PDF Editor</h1>
-          <p style={{ color: "rgba(255,255,255,0.4)" }}>Upload, reorder, merge, split PDFs · AI OCR · Signatures</p>
+          <h1 className="text-3xl font-bold text-stone-900 mb-2">PDF Editor</h1>
+          <p className="text-stone-500">Upload, reorder, merge, split PDFs · AI OCR · Signatures</p>
         </div>
 
         <div className="mb-5">
