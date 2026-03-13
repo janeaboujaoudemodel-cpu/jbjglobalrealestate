@@ -244,6 +244,13 @@ const Favorites = () => {
               <ListPlus className="w-4 h-4 mr-2" />
               Shortlist ({shortlistCount})
             </TabsTrigger>
+            <TabsTrigger
+              value="designs"
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border data-[state=active]:border-gold/30 text-black/50"
+            >
+              <PenTool className="w-4 h-4 mr-2" />
+              My Designs ({designFavCount + designShortCount})
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="favorites">
