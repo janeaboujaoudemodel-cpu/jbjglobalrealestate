@@ -56,7 +56,7 @@ function renderSeparators(cx: number, cy: number, r: number, style: SeparatorSty
   if (style === 'none') return '';
   const glyph = separatorGlyph(style);
   const sepR = r;
-  const fontSize = style === 'dash' ? 12 : 9;
+  const fontSize = style === 'dash' ? 14 : 11;
   return `
     <text x="${cx + sepR}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
           font-size="${fontSize}" fill="${ink}" font-weight="bold">${glyph}</text>

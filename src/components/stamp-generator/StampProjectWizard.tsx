@@ -304,7 +304,7 @@ export default function StampProjectWizard() {
     inkColor: form.ink_color, arabicCity: form.arabic_city,
   };
 
-  const previewSize = 280;
+  const previewSize = 340;
 
   return (
     <div className="h-[calc(100vh-52px)] flex flex-col bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))] overflow-hidden">

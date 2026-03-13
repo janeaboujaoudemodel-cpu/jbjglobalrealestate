@@ -333,21 +333,10 @@ export function LiveStampPreview({
   ]);
 
   return (
-    <div className="flex flex-col items-center gap-2">
-      <div className="flex items-center gap-1.5 text-xs font-medium text-[hsl(var(--muted-foreground))]">
-        <Eye size={11} className="text-[hsl(var(--gold))]"/>
-        Live Preview
-      </div>
-
-      <div
-        className="rounded-2xl border-2 border-[hsl(var(--gold)/0.25)] bg-white shadow-[0_4px_24px_hsl(var(--gold)/0.12)] flex items-center justify-center overflow-hidden"
-        style={{ width: size, height: size }}
-        dangerouslySetInnerHTML={{ __html: svg }}
-      />
-
-      <p className="text-[10px] text-[hsl(var(--muted-foreground))] text-center max-w-[200px] truncate">
-        {companyName || <span className="italic">Enter company name above</span>}
-      </p>
-    </div>
+    <div
+      className="flex items-center justify-center"
+      style={{ width: size, height: size }}
+      dangerouslySetInnerHTML={{ __html: svg }}
+    />
   );
 }
