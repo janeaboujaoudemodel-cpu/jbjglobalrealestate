@@ -77,25 +77,26 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
   const hasMultipleImages = images.length > 1;
 
   // Determine if extraction is incomplete — BALANCED GATE
-  // Core requirements: description, valid developer (not "unknown"), 2+ images, at least 1 doc (brochure)
+  // Core requirements: description, valid developer (not "unknown"), 2+ images
+  const coreMissing: string[] = [];
+  if (!item.description) coreMissing.push("Description");
+  if (!item.developer_name || item.developer_name.toLowerCase() === "unknown") coreMissing.push("Developer");
+  if (images.length < 2) coreMissing.push(`Images (${images.length}/2)`);
+  if (!item.price_from) coreMissing.push("Price");
+
+  // Optional missing fields
+  const optionalMissing: string[] = [];
+  if (documents.length === 0) optionalMissing.push("Documents");
+  if (!item.handover_date) optionalMissing.push("Handover");
+  if (item.bedrooms_min === null && item.bedrooms_max === null) optionalMissing.push("Bedrooms");
+
   const isIncomplete = Boolean(
     item.review_notes?.includes("INCOMPLETE") ||
     item.review_notes?.includes("PENDING_SCRAPE") ||
-    !item.description ||
-    (item.developer_name?.toLowerCase() === "unknown") ||
-    images.length < 2 ||
-    documents.length === 0
+    coreMissing.length > 0
   );
 
-  // What specifically is missing (for tooltip / display)
-  const missingFields: string[] = [];
-  if (!item.description) missingFields.push("description");
-  if (!item.developer_name || item.developer_name.toLowerCase() === "unknown") missingFields.push("developer");
-  if (images.length < 2) missingFields.push(`images (${images.length}/2)`);
-  if (documents.length === 0) missingFields.push("documents");
-  if (!item.handover_date) missingFields.push("handover");
-  if (item.bedrooms_min === null && item.bedrooms_max === null) missingFields.push("bedrooms");
-  if (!item.price_from) missingFields.push("price");
+  const missingFields = [...coreMissing, ...optionalMissing];
 
   const handleCardClick = () => {
     onReview();
