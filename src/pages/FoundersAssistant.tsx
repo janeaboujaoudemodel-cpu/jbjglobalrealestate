@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -25,11 +24,10 @@ import {
   Search,
   StickyNote,
   Scale,
-  Save,
   ChevronDown,
   History,
   Plus,
-  X,
+  Save,
 } from "lucide-react";
 import FoundersChatPanel from "@/components/founders-assistant/FoundersChatPanel";
 import FoundersTaskDashboard from "@/components/founders-assistant/FoundersTaskDashboard";
@@ -53,25 +51,48 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
 
 import amandaPortrait from "@/assets/team/amanda-clarke-executive-assistant.png";
 
-const MORE_TOOLS = [
-  { value: 'tasks', icon: CheckSquare, label: 'Tasks' },
-  { value: 'team', icon: Users, label: 'Team' },
-  { value: 'drafts', icon: FileEdit, label: 'Drafts' },
-  { value: 'ai-tools', icon: Wrench, label: 'AI Tools' },
-  { value: 'hot-leads', icon: Flame, label: 'Hot Leads' },
-  { value: 'activity', icon: Activity, label: 'Activity' },
-  { value: 'video-meet', icon: Video, label: 'Video Meet' },
-  { value: 'escalations', icon: Zap, label: 'Escalations' },
-  { value: 'analytics', icon: Heart, label: 'Analytics' },
-  { value: 'collaboration', icon: Network, label: 'Collaboration' },
-  { value: 'insights', icon: Brain, label: 'AI Insights' },
-  { value: 'notes', icon: StickyNote, label: 'Notes' },
-  { value: 'decisions', icon: Scale, label: 'Decisions' },
+// Tools organized by category
+const TOOL_CATEGORIES = [
+  {
+    label: "AI Tools",
+    items: [
+      { value: 'ai-tools', icon: Wrench, label: 'AI Tools Hub' },
+      { value: 'insights', icon: Brain, label: 'AI Insights' },
+      { value: 'analytics', icon: Heart, label: 'Emotion Analytics' },
+      { value: 'decisions', icon: Scale, label: 'Decision Engine' },
+    ],
+  },
+  {
+    label: "Workflow",
+    items: [
+      { value: 'tasks', icon: CheckSquare, label: 'Tasks' },
+      { value: 'drafts', icon: FileEdit, label: 'Drafts' },
+      { value: 'notes', icon: StickyNote, label: 'Notes' },
+    ],
+  },
+  {
+    label: "Communication",
+    items: [
+      { value: 'team', icon: Users, label: 'Team Directory' },
+      { value: 'video-meet', icon: Video, label: 'Video Meet' },
+      { value: 'collaboration', icon: Network, label: 'Collaboration' },
+    ],
+  },
+  {
+    label: "Activity & CRM",
+    items: [
+      { value: 'hot-leads', icon: Flame, label: 'Hot Leads' },
+      { value: 'activity', icon: Activity, label: 'Activity Center' },
+      { value: 'escalations', icon: Zap, label: 'Escalations' },
+    ],
+  },
 ];
 
 export default function FoundersAssistant() {
@@ -82,6 +103,7 @@ export default function FoundersAssistant() {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [showCommandPalette, setShowCommandPalette] = useState(false);
   const [taskFilterStatus, setTaskFilterStatus] = useState<string | null>(null);
+  const [chatSessionCount, setChatSessionCount] = useState(3);
   const [stats, setStats] = useState({
     activeTasks: 0,
     pendingTasks: 0,
@@ -162,7 +184,7 @@ export default function FoundersAssistant() {
   if (authLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-        <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--gold))]" />
+        <Loader2 className="h-8 w-8 animate-spin text-gold" />
       </div>
     );
   }
@@ -202,99 +224,157 @@ export default function FoundersAssistant() {
     }
   };
 
+  const statCards = [
+    { label: 'Active', count: stats.activeTasks, colorClass: 'bg-gold/15 text-gold border-gold/30', filter: 'in_progress' },
+    { label: 'Done', count: stats.completedTasks, colorClass: 'bg-emerald-50 text-emerald-700 border-emerald-200', filter: 'completed' },
+    { label: 'Pending', count: stats.pendingTasks, colorClass: 'bg-amber-50 text-amber-700 border-amber-200', filter: 'pending' },
+    { label: 'Escalations', count: unreadCount, colorClass: 'bg-red-50 text-red-700 border-red-200', filter: 'escalations' },
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
       <CommandPalette isOpen={showCommandPalette} onClose={() => setShowCommandPalette(false)} />
       
       <div className="flex flex-col h-screen">
-        {/* Compact top toolbar */}
-        <div className="flex-shrink-0 bg-white/80 backdrop-blur-sm border-b-2 border-[hsl(var(--gold))]/30 px-4 py-2 flex items-center justify-between gap-3">
-          {/* Left: Amanda identity + New Chat + History */}
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setActiveView('assistant')}
-              className="flex items-center gap-2 hover:opacity-80 transition-opacity"
-            >
-              <div className="relative w-9 h-9 rounded-full border-2 border-[hsl(var(--gold))]/50 overflow-hidden">
-                <img src={amandaPortrait} alt="Amanda Clarke" className="w-full h-full object-cover" />
-                <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full" />
-              </div>
-              <div className="hidden sm:block">
-                <h1 className="text-sm font-bold text-black leading-tight">Amanda Clarke</h1>
-                <p className="text-[10px] text-zinc-500">Executive Assistant</p>
-              </div>
-            </button>
-
-            <div className="h-6 w-px bg-[hsl(var(--gold))]/30" />
-
-            {/* More Tools dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="text-xs text-zinc-600 hover:text-black hover:bg-[hsl(var(--gold))]/10 h-8 gap-1">
-                  <ChevronDown className="w-3.5 h-3.5" />
-                  Tools
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-52">
-                {MORE_TOOLS.map(({ value, icon: Icon, label }) => (
-                  <DropdownMenuItem
-                    key={value}
-                    onClick={() => { setActiveView(value); if (value !== 'tasks') setTaskFilterStatus(null); }}
-                    className={`text-xs gap-2 ${activeView === value ? 'bg-gradient-to-r from-[#F5EBD7] to-[#D4C4A8] font-semibold' : ''}`}
-                  >
-                    <Icon className="w-3.5 h-3.5" />
-                    {label}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-
-          {/* Center: Task stats (compact) */}
-          <div className="hidden md:flex items-center gap-2">
-            {[
-              { label: 'Active', count: stats.activeTasks, color: 'text-[hsl(var(--gold))]', filter: 'in_progress' },
-              { label: 'Done', count: stats.completedTasks, color: 'text-green-600', filter: 'completed' },
-              { label: 'Pending', count: stats.pendingTasks, color: 'text-amber-600', filter: 'pending' },
-            ].map(s => (
+        {/* Amanda header bar — with proper padding from parent shell */}
+        <div className="flex-shrink-0 bg-white/80 backdrop-blur-sm border-b-2 border-gold/30 px-4 py-3 mt-1">
+          <div className="flex items-center justify-between gap-3">
+            {/* Left: Amanda identity */}
+            <div className="flex items-center gap-3">
               <button
-                key={s.label}
-                onClick={() => handleStatClick(s.filter)}
-                className="flex items-center gap-1 px-2 py-1 rounded-md hover:bg-[hsl(var(--gold))]/10 transition-colors"
+                onClick={() => setActiveView('assistant')}
+                className="flex items-center gap-2.5 hover:opacity-80 transition-opacity"
               >
-                <span className={`text-sm font-bold ${s.color}`}>{s.count}</span>
-                <span className="text-[10px] text-zinc-500">{s.label}</span>
+                <div className="relative w-10 h-10 rounded-full border-2 border-gold/50 overflow-hidden">
+                  <img src={amandaPortrait} alt="Amanda Clarke" className="w-full h-full object-cover" />
+                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-white rounded-full" />
+                </div>
+                <div className="hidden sm:block">
+                  <h1 className="text-sm font-bold text-foreground leading-tight">Amanda Clarke</h1>
+                  <p className="text-[10px] text-muted-foreground">Executive Assistant • Online</p>
+                </div>
               </button>
-            ))}
-          </div>
+            </div>
 
-          {/* Right: Actions */}
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setShowCommandPalette(true)}
-              className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white border border-[hsl(var(--gold))]/30 text-zinc-500 hover:border-[hsl(var(--gold))]/50 transition-all text-xs"
-            >
-              <Search className="h-3.5 w-3.5 text-[hsl(var(--gold))]" />
-              <kbd className="px-1.5 py-0.5 bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold))] text-[10px] rounded font-mono">⌘K</kbd>
-            </button>
-            
-            <EscalationAlertButton onViewAll={() => setActiveView('escalations')} />
-            
-            <button
-              onClick={() => setIsNotificationOpen(!isNotificationOpen)}
-              className="relative p-2 rounded-full bg-white border border-[hsl(var(--gold))]/30 hover:border-[hsl(var(--gold))]/50 transition-all"
-            >
-              <Bell className="h-4 w-4 text-[hsl(var(--gold))]" />
-              {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-white text-[10px] flex items-center justify-center font-bold">
-                  {unreadCount > 9 ? '9+' : unreadCount}
-                </span>
-              )}
-            </button>
+            {/* Center: Action buttons row — New Chat, History, Save, Tools */}
+            <div className="flex items-center gap-1.5">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setActiveView('assistant')}
+                className="text-xs h-8 gap-1.5 text-muted-foreground hover:text-foreground hover:bg-gold/10"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">New Chat</span>
+              </Button>
+
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-xs h-8 gap-1.5 text-muted-foreground hover:text-foreground hover:bg-gold/10 relative"
+              >
+                <History className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">History</span>
+                {chatSessionCount > 0 && (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-white text-[9px] flex items-center justify-center font-bold">
+                    {chatSessionCount}
+                  </span>
+                )}
+              </Button>
+
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-xs h-8 gap-1.5 text-muted-foreground hover:text-foreground hover:bg-gold/10"
+              >
+                <Save className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Save</span>
+              </Button>
+
+              <div className="h-5 w-px bg-border mx-1" />
+
+              {/* Tools dropdown — organized by category */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="text-xs h-8 gap-1 text-muted-foreground hover:text-foreground hover:bg-gold/10">
+                    <Wrench className="w-3.5 h-3.5" />
+                    Tools
+                    <ChevronDown className="w-3 h-3" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="center" className="w-56 max-h-80 overflow-y-auto">
+                  {TOOL_CATEGORIES.map((cat, catIdx) => (
+                    <div key={cat.label}>
+                      {catIdx > 0 && <DropdownMenuSeparator />}
+                      <div className="px-2 py-1.5">
+                        <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">{cat.label}</span>
+                      </div>
+                      {cat.items.map(({ value, icon: Icon, label }) => (
+                        <DropdownMenuItem
+                          key={value}
+                          onClick={() => { setActiveView(value); if (value !== 'tasks') setTaskFilterStatus(null); }}
+                          className={cn(
+                            "text-xs gap-2 cursor-pointer",
+                            activeView === value && "bg-gold/10 font-semibold"
+                          )}
+                        >
+                          <Icon className="w-3.5 h-3.5" />
+                          {label}
+                        </DropdownMenuItem>
+                      ))}
+                    </div>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <EscalationAlertButton onViewAll={() => setActiveView('escalations')} />
+            </div>
+
+            {/* Right: Search + Notifications */}
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setShowCommandPalette(true)}
+                className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-background border border-gold/30 text-muted-foreground hover:border-gold/50 transition-all text-xs"
+              >
+                <Search className="h-3.5 w-3.5 text-gold" />
+                <kbd className="px-1.5 py-0.5 bg-gold/10 text-gold text-[10px] rounded font-mono">⌘K</kbd>
+              </button>
+              
+              <button
+                onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+                className="relative p-2 rounded-full bg-background border border-gold/30 hover:border-gold/50 transition-all"
+              >
+                <Bell className="h-4 w-4 text-gold" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-white text-[10px] flex items-center justify-center font-bold">
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </span>
+                )}
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Main content area - full remaining height */}
+        {/* Status cards row — between header and chat */}
+        <div className="flex-shrink-0 px-4 py-2 bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6] border-b border-gold/20">
+          <div className="flex items-center gap-2 overflow-x-auto">
+            {statCards.map((s) => (
+              <button
+                key={s.label}
+                onClick={() => s.filter === 'escalations' ? setActiveView('escalations') : handleStatClick(s.filter)}
+                className={cn(
+                  "flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all hover:shadow-sm flex-shrink-0",
+                  s.colorClass
+                )}
+              >
+                <span className="text-base font-bold">{s.count}</span>
+                <span className="text-[11px] font-medium">{s.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Main content area */}
         <div className="flex-1 overflow-hidden">
           {activeView === 'assistant' ? (
             renderActiveView()
@@ -305,7 +385,7 @@ export default function FoundersAssistant() {
                   variant="ghost"
                   size="sm"
                   onClick={() => setActiveView('assistant')}
-                  className="mb-4 text-xs text-zinc-600 hover:text-black"
+                  className="mb-4 text-xs text-muted-foreground hover:text-foreground"
                 >
                   ← Back to Chat
                 </Button>
@@ -326,7 +406,7 @@ export default function FoundersAssistant() {
             initial={{ opacity: 0, x: 300 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 300 }}
-            className="fixed right-0 top-0 h-full w-96 bg-white border-l-2 border-[hsl(var(--gold))]/30 shadow-xl z-50"
+            className="fixed right-0 top-0 h-full w-96 bg-card border-l-2 border-gold/30 shadow-xl z-50"
           >
             <FoundersNotificationCenter isOpen={isNotificationOpen} onClose={() => setIsNotificationOpen(false)} />
           </motion.div>
