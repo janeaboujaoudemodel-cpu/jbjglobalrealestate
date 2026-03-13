@@ -406,9 +406,9 @@ export default function StampGalleryPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[hsl(var(--pearl-1))]">
+    <div className="h-[calc(100vh-52px)] flex flex-col bg-[hsl(var(--pearl-1))] overflow-hidden">
 
-      {/* ── Sticky header ─────────────────────────────────────────────────── */}
+      {/* ── Header ────────────────────────────────────────────────────────── */}
       <div className="sticky top-0 lg:top-[48px] z-30 bg-white/95 backdrop-blur-sm border-b border-[hsl(var(--border))]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3 flex-wrap">
           <div className="flex items-center gap-3 min-w-0">
