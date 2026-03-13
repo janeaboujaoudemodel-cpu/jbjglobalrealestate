@@ -65,6 +65,7 @@ const ListingSearchFilters = ({
   developerValue,
   emirateValue,
   locationValue,
+  horizontal,
 }: ListingSearchFiltersProps) => {
   const { t } = useLanguage();
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
