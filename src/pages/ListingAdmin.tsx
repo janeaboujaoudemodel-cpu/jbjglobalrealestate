@@ -1423,7 +1423,7 @@ const ListingAdmin = () => {
                       />
                     ) : (
                       <div className="text-center py-12 text-muted-foreground">
-                        <ImageIcon className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                        <Image className="w-12 h-12 mx-auto mb-4 opacity-50" />
                         <p>Save the project first to manage images</p>
                       </div>
                     )}
