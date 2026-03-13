@@ -756,6 +756,32 @@ export default function StampExportPage() {
               </div>
             )}
 
+            {/* Quick Download in Any Color */}
+            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-5 space-y-3">
+              <p className="text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-1.5">
+                <Image size={14} className="text-[hsl(var(--gold))]"/> Quick Download in Color
+              </p>
+              <p className="text-[10px] text-[hsl(var(--muted-foreground))]">Click any color to instantly download a PNG in that ink color.</p>
+              <div className="flex flex-wrap gap-2">
+                {PACK_COLORS.map(c => (
+                  <button key={c.hex} title={`Download in ${c.label}`}
+                    onClick={async () => {
+                      try {
+                        toast.info(`Generating ${c.label}…`);
+                        const colored = tintSvgFull(design.svg_source, c.hex);
+                        const blob = await svgToPng(colored, 1024, true);
+                        triggerDownload(blob, `${companySlug}_stamp_${c.label.toLowerCase().replace(/\s+/g, '_')}_1024px.png`);
+                        toast.success(`${c.label} downloaded!`);
+                      } catch { toast.error('Download failed'); }
+                    }}
+                    className={`flex flex-col items-center gap-1 p-2 rounded-xl border transition-all hover:border-[hsl(var(--gold))] hover:scale-105 border-[hsl(var(--border))] ${c.hex === '#ffffff' ? 'bg-[hsl(var(--muted))]' : ''}`}>
+                    <div className={`w-8 h-8 rounded-full shadow-sm ${c.hex === '#ffffff' ? 'border-2 border-[hsl(var(--border))]' : 'border border-white'}`} style={{ backgroundColor: c.hex }}/>
+                    <span className="text-[9px] text-[hsl(var(--muted-foreground))] font-medium">{c.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {/* Download buttons */}
             <div className="space-y-2.5">
               <Button className="w-full bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 gap-2 h-11"
