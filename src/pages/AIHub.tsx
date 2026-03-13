@@ -647,9 +647,9 @@ const AIHub = () => {
   return (
     <>
       <SEOHead 
-        title="JBJ Tools Hub | Free AI Tools for Investors & Brokers"
-        description="Access free AI tools for property investment, comparison, mortgage calculation, and more. Your complete investor toolkit at JBJ Global Real Estate."
-        keywords="JBJ Tools Hub, property tools, Real Estate AI, investment tools Dubai, property analysis, JBJ Global Real Estate"
+        title="JBJ Royal Tools Hub | Free Tools for Investors & Brokers"
+        description="Access free tools for property investment, comparison, mortgage calculation, and more. Your complete investor toolkit at JBJ Global Real Estate."
+        keywords="JBJ Royal Tools Hub, property tools, investment tools Dubai, property analysis, JBJ Global Real Estate"
         canonicalPath="/ai-hub"
       />
       
