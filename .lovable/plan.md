@@ -1,116 +1,72 @@
 
+## CRM System Upgrade — Implementation Status
 
-## Plan: Listing Admin — Critical Fixes (Tabs, Descriptions, Navigation, Source Panel, Emojis, Generator)
+### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-### Issues Identified
+#### Task 1: Full System Audit ✅
+- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
+- Identified 10 weaknesses (documented in plan)
 
-**1. Data Ops tabs overflow — Enrichment Center, Emergency Mirror, Developer Visibility break out of the tab bar**
-- `ListingAdmin.tsx` lines 758-809: 7 `TabsTrigger` items in a single `TabsList` with no overflow handling
-- Scrolling the tab bar triggers browser back navigation (overscroll-behavior not set)
+#### Task 2: Leads Security Hardening ✅
+- CSV export no longer includes email/phone PII
+- Audit logging added to exports with user_agent tracking
+- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
 
-**2. Project Approval shows broken HTML in descriptions**
-- `PendingImportCard.tsx` line 261: `truncate(item.description, 120)` shows raw HTML tags
-- Must sanitize using `sanitizeForDisplay()` from `contentSanitizer.ts` before displaying
+#### Task 3: Encryption Hardening ✅
+- CSV export stripped of `email_lower` and `phone_e164` fields
+- Export audit logged to both `crm_audit_logs` and `audit_logs`
 
-**3. Clicking a project card navigates to wrong tab (Reelly Sync)**
-- `ProjectApprovalQueue.tsx` line 1232: `navigate(/listing-admin/preview/${item.id})` but route in `AdminRoutes.tsx` line 102 redirects `/listing-admin/preview/:id` to `/owner/listing-admin` — which defaults to `data-ops` view with `reelly` tab (line 140)
-- Fix: Navigate using search params to stay in the approvals tab, or open a preview modal instead
+#### Task 4: Lead Lifecycle Upgrade ✅
+- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
+- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
+- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
 
-**4. Auto-Approve Developer Listing toggle is in Project Approvals — should be in Developer Hub**
-- `ListingAdmin.tsx` line 815: `<AutoApproveToggle />` rendered inside `approvals` tab content
-- Move to Developer Hub / AdminDevelopers page
+#### Task 5: CRM Structure Upgrade ✅
+- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
+- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
+- KanbanPipeline expanded to show all 17 relevant stages
 
-**5. SourceCountsPanel shows only Reelly — must show both Reelly and Provident as selectable categories**
-- `SourceCountsPanel.tsx`: Hardcoded "Reelly-Only Mode Active" banner
-- Must add a selector between Reelly and Provident sources, defaulting to neither (user chooses)
+#### Task 6: Performance Optimization ✅
+- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
+- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
+- `crm_leads_updated_at_trigger` auto-updates `updated_at`
 
-**6. Published count (2,778) is incorrect / publishing without permission**
-- The extraction pipeline sets `is_published: true` on approve. Need to remove auto-publish from extraction upserts; only publish on explicit admin approval
+#### Task 7: AI Intelligence Integration ✅
+- New edge function `ai-lead-intelligence` using Lovable AI gateway
+- Supports 3 modes: `score`, `summary`, `next_action`
+- Tool-calling for structured scoring output
+- JWT auth + CRM role validation
+- PII sanitized before sending to AI
 
-**7. "Data OPS" label is confusing**
-- Rename to something clearer like "Admin Panel" or "Sync & Sources"
+#### Task 8: Workflow Automation ✅
+- Created `crm_automation_rules` table with RLS (owner manage, admin view)
+- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
 
-**8. ListingGenerator state lost on page refresh**
-- Already has `localStorage` persistence (`STORAGE_KEY`) and cloud draft sync, but the `files` state (actual File objects) cannot survive refresh — need to persist file data as base64 and restore
+#### Task 10: Role & Permission System ✅
+- RLS on automation rules: owner CRUD, admin read-only
+- CSV export restricted to owner_admin/founder roles
 
-**9. Duplicate file/text detection missing in ListingGenerator**
-- No check for duplicate uploads or duplicate description text
+#### Task 12: Backend/Database Upgrade ✅
+- 3 new performance indexes
+- Auto-updated_at trigger on crm_leads
+- Duplicate hash computation trigger
+- Rate-limiting security function
 
-**10. Generate listing too slow / times out**
-- Model upgrade already done in previous step; verify deployment. Increase batch size further if needed.
+#### Task 13: Data Cleanliness ✅
+- `duplicate_hash` with auto-compute trigger prevents future duplicates
+- Partial unique index enforces uniqueness at DB level
 
-**11. Emoji usage in AdminDevelopers tabs**
-- `AdminDevelopers.tsx` line 390: `📊 Overview`, line 399: `📅 Briefings` — must replace with Lucide icons
-
-**12. Extraction jobs show "Found 1616, matched 0" — enrichment center broken**
-- This is a backend data issue with the extraction pipeline returning zero matches
-
----
-
-### Implementation
-
-#### 1. Fix Tab Overflow in ListingAdmin Data Ops
-**File: `src/pages/ListingAdmin.tsx`**
-- Add `flex-wrap` or horizontal scroll with `overscroll-behavior-x: contain` to the `TabsList`
-- Use `overflow-x-auto` with `scrollbar-hide` class and `overscroll-behavior: contain` to prevent back-navigation
-- Reduce tab text sizes for compactness
-
-#### 2. Sanitize Descriptions in PendingImportCard
-**File: `src/components/listing-admin/PendingImportCard.tsx`**
-- Import `sanitizeForDisplay` from `@/utils/contentSanitizer`
-- Apply to description before truncation: `truncate(sanitizeForDisplay(item.description), 120)`
-- Also apply in `ProjectApprovalQueue.tsx` detail modal (line 1350+)
-
-#### 3. Fix Project Review Navigation
-**File: `src/components/listing-admin/ProjectApprovalQueue.tsx`**
-- Change `onReview` to open the detail modal (`setSelectedImport(item)`) instead of navigating away
-- Remove the broken `navigate(/listing-admin/preview/...)` call
-
-#### 4. Move AutoApproveToggle to Developer Hub
-**File: `src/pages/ListingAdmin.tsx`**
-- Remove `<AutoApproveToggle />` from `approvals` tab content (line 815)
-- Add an auto-approve toggle for extraction projects instead (optional)
-
-**File: `src/pages/AdminDevelopers.tsx`**
-- Import and render `AutoApproveToggle` component in the Developer Hub header area
-
-#### 5. Rewrite SourceCountsPanel — Dual Source Selector
-**File: `src/components/listing-admin/SourceCountsPanel.tsx`**
-- Remove "Reelly-Only Mode" banner
-- Add two selectable source cards: "External Source A" and "External Source B" (Reelly / Provident internally)
-- Show counts for the selected source only
-- Wire card clicks to navigate to approvals with correct source filter
-
-#### 6. Rename "Data Ops" to "Sync & Sources"
-**File: `src/pages/ListingAdmin.tsx`**
-- Change button label from "Data Ops" to "Sync & Sources" (line 719)
-- Update URL param handling to keep backward compat
-
-#### 7. Fix ListingGenerator State Persistence
-**File: `src/components/listing-admin/ListingGenerator.tsx`**
-- Already persists to localStorage + cloud. The issue is `File` objects can't serialize. Files are already converted to base64 (line 140-144). On restore, reconstruct `UploadedFile[]` from `filesMeta` base64 data.
-- Add duplicate file detection: compare file name + size before adding
-- Add duplicate text detection: compare description text before submitting
-
-#### 8. Replace Emojis with Lucide Icons in AdminDevelopers
-**File: `src/pages/AdminDevelopers.tsx`**
-- Line 390: Replace `📊 Overview` with `<BarChart3 className="w-4 h-4 mr-1" /> Overview`
-- Line 399: Replace `📅 Briefings` with `<Calendar className="w-4 h-4 mr-1" /> Briefings`
-
-#### 9. Fix Description Sanitization in ProjectApprovalQueue Detail Modal
-**File: `src/components/listing-admin/ProjectApprovalQueue.tsx`**
-- Apply `sanitizeForDisplay()` to description rendering in the detail modal section (around line 1350+)
-
----
-
-### Files to Modify
-
-| File | Change |
+### Files Changed
+| File | Action |
 |------|--------|
-| `src/pages/ListingAdmin.tsx` | Fix tab overflow with scroll + contain, rename "Data Ops", move AutoApproveToggle out |
-| `src/components/listing-admin/PendingImportCard.tsx` | Sanitize descriptions before display |
-| `src/components/listing-admin/ProjectApprovalQueue.tsx` | Fix review click to open modal not navigate away, sanitize descriptions |
-| `src/components/listing-admin/SourceCountsPanel.tsx` | Rewrite as dual-source selector panel |
-| `src/pages/AdminDevelopers.tsx` | Replace emoji with Lucide icons, add AutoApproveToggle |
-| `src/components/listing-admin/ListingGenerator.tsx` | Add duplicate file/text detection, fix file restoration |
-
+| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
+| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
+| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
+| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
+| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
+| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
+| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
+| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
+| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |

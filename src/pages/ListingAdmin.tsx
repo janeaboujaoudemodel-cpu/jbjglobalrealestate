@@ -716,7 +716,7 @@ const ListingAdmin = () => {
                 variant={activeView === 'data-ops' ? 'primary' : 'secondary'}
               >
                 <Database className="w-4 h-4 mr-2" />
-                Data Ops
+                Sync & Sources
               </Button>
               <Button
                 onClick={() => { handleCreateNew(); setActiveView('editor'); }}
@@ -756,55 +756,55 @@ const ListingAdmin = () => {
             <SourceCountsPanel />
             
             <Tabs value={dataOpsTab} onValueChange={setDataOpsTab} className="space-y-6">
-              <TabsList className="bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30 p-1">
+              <TabsList className="w-full flex flex-nowrap overflow-x-auto scrollbar-hide bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30 p-1" style={{ overscrollBehaviorX: 'contain' }}>
                 <TabsTrigger 
                   value="reelly" 
-                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
+                  className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
                 >
-                  <Globe className="w-4 h-4 mr-2" />
-                  Reelly Sync
+                  <Globe className="w-3.5 h-3.5 mr-1.5" />
+                  Source Sync
                 </TabsTrigger>
                 <TabsTrigger 
                   value="approvals"
-                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
+                  className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
                 >
-                  <Check className="w-4 h-4 mr-2" />
-                  Project Approvals
+                  <Check className="w-3.5 h-3.5 mr-1.5" />
+                  Approvals
                 </TabsTrigger>
                 <TabsTrigger 
                   value="updates"
-                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
+                  className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
                 >
-                  <RefreshCw className="w-4 h-4 mr-2" />
-                  Pending Updates
+                  <RefreshCw className="w-3.5 h-3.5 mr-1.5" />
+                  Updates
                 </TabsTrigger>
                 <TabsTrigger 
                   value="external"
-                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
+                  className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
                 >
-                  <Database className="w-4 h-4 mr-2" />
-                  External Sources
+                  <Database className="w-3.5 h-3.5 mr-1.5" />
+                  Sources
                 </TabsTrigger>
                 <TabsTrigger 
                   value="enrichment"
-                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
+                  className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
                 >
-                  <Zap className="w-4 h-4 mr-2" />
-                  Enrichment Center
+                  <Zap className="w-3.5 h-3.5 mr-1.5" />
+                  Enrichment
                 </TabsTrigger>
                 <TabsTrigger 
                   value="emergency"
-                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
+                  className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
                 >
-                  <AlertTriangle className="w-4 h-4 mr-2" />
-                  Emergency Mirror
+                  <AlertTriangle className="w-3.5 h-3.5 mr-1.5" />
+                  Mirror
                 </TabsTrigger>
                 <TabsTrigger 
                   value="dev-visibility"
-                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
+                  className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
                 >
-                  <Building2 className="w-4 h-4 mr-2" />
-                  Developer Visibility
+                  <Building2 className="w-3.5 h-3.5 mr-1.5" />
+                  Visibility
                 </TabsTrigger>
               </TabsList>
               
@@ -812,7 +812,6 @@ const ListingAdmin = () => {
                 <ReellyImportPanel />
               </TabsContent>
               <TabsContent value="approvals" className="mt-0">
-                <AutoApproveToggle />
                 <ProjectApprovalQueue onRefresh={refetchProjects} />
               </TabsContent>
               <TabsContent value="updates" className="mt-0">

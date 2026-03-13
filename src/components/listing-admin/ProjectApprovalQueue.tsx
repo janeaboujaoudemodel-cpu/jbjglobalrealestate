@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import type { Json } from "@/integrations/supabase/types";
+import { sanitizeForDisplay } from "@/utils/contentSanitizer";
 import { PendingImportCard } from "@/components/listing-admin/PendingImportCard";
 import { ApprovalConfirmDialog } from "@/components/listing-admin/ApprovalConfirmDialog";
 import { NewProjectDetector } from "@/components/listing-admin/NewProjectDetector";
@@ -1229,7 +1230,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                       }}
                       formatPrice={formatPrice}
                       onReview={() => {
-                        navigate(`/listing-admin/preview/${item.id}?from=approvals&statusFilter=${statusFilter}&sourceFilter=${sourceFilter}`);
+                        setSelectedImport(item);
                       }}
                       onRepaired={() => {
                         fetchPendingImports();
@@ -1469,7 +1470,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                 <div>
                   <h4 className="font-medium mb-2">Description</h4>
                   <p className="text-sm text-zinc-600 line-clamp-4">
-                    {selectedImport.description}
+                    {sanitizeForDisplay(selectedImport.description)}
                   </p>
                 </div>
               )}

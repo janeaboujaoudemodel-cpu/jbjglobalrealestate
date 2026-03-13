@@ -53,9 +53,12 @@ interface PendingImportCardProps {
   onRejected?: () => void;
 }
 
+import { sanitizeForDisplay } from "@/utils/contentSanitizer";
+
 const truncate = (text: string, max = 120) => {
-  if (text.length <= max) return text;
-  return text.slice(0, max).trim();
+  const clean = sanitizeForDisplay(text);
+  if (clean.length <= max) return clean;
+  return clean.slice(0, max).trim();
 };
 
 export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onApproved, onRejected }: PendingImportCardProps) {
