@@ -141,7 +141,7 @@ export default function DigitalLandingPageEditor({ data, onChange, primaryColor 
       </p>
 
       {/* Hero Bio */}
-      {sectionBtn("bio", "✨ Hero Bio")}
+      {sectionBtn("bio", "Hero Bio")}
       {openSection === "bio" && (
         <div className="space-y-2 pl-1">
           <Label className="text-[10px] text-[hsl(var(--muted-foreground))]">Short biography / tagline (displayed below the card)</Label>
