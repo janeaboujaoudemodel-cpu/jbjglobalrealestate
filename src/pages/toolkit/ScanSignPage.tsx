@@ -62,8 +62,8 @@ const PrimaryBtn = ({ onClick, disabled, children, className = "" }: {
   <button
     onClick={onClick}
     disabled={disabled}
-    className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed ${className}`}
-    style={{ background: G.btnPrimary, boxShadow: G.btnPrimaryShadow, color: "#0E1018" }}
+    className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed text-white ${className}`}
+    style={{ background: G.btnPrimary, boxShadow: G.btnPrimaryShadow }}
   >
     {children}
   </button>
