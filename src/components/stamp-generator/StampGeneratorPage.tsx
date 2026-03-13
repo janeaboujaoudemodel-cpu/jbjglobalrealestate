@@ -500,7 +500,89 @@ export default function StampGeneratorPage() {
     }
   }
 
-  function onAiPanelDragStart(e: React.MouseEvent) {
+  // ─── Variations ─────────────────────────────────────────────
+  async function generateVariations() {
+    if (!project || !session?.access_token) return;
+    setVariationsLoading(true);
+    setShowVariations(true);
+    try {
+      const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-stamp-generator`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+        body: JSON.stringify({ action: 'variations', project, projectId }),
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.concepts) setVariations(prev => [...prev, ...json.concepts]);
+      }
+    } catch { toast.error('Failed to generate variations'); }
+    setVariationsLoading(false);
+  }
+
+  // ─── Soft Delete ────────────────────────────────────────────
+  async function softDeleteConcept(conceptId: string) {
+    const isDbId = conceptId.length === 36;
+    if (isDbId) {
+      await supabase.from('stamp_designs').update({ deleted_at: new Date().toISOString() } as any).eq('id', conceptId);
+      const deleted = concepts.find(c => c.id === conceptId) || favoriteConcepts.find(c => c.id === conceptId);
+      if (deleted) {
+        setDeletedStamps(prev => [...prev, { id: conceptId, svg_source: svgOverrides[conceptId] || deleted.svgSource, template_key: deleted.templateKey, deleted_at: new Date().toISOString(), label: deleted.label }]);
+      }
+    }
+    setConcepts(prev => prev.filter(c => c.id !== conceptId));
+    setFavoriteConcepts(prev => prev.filter(c => c.id !== conceptId));
+    if (selectedId === conceptId) setSelectedId(null);
+    toast.success('Moved to recently deleted');
+  }
+
+  async function recoverDeletedStamp(id: string) {
+    await supabase.from('stamp_designs').update({ deleted_at: null } as any).eq('id', id);
+    const item = deletedStamps.find(d => d.id === id);
+    if (item) {
+      setConcepts(prev => [...prev, { id: item.id, templateKey: item.template_key, label: item.label, tags: [], svgSource: item.svg_source }]);
+    }
+    setDeletedStamps(prev => prev.filter(d => d.id !== id));
+    toast.success('Design recovered');
+  }
+
+  async function permanentDeleteStamp(id: string) {
+    await supabase.from('stamp_designs').delete().eq('id', id);
+    setDeletedStamps(prev => prev.filter(d => d.id !== id));
+    toast.success('Permanently deleted');
+  }
+
+  async function adaptAndSaveAsAsset(item: DeletedStamp) {
+    await saveBrandAsset({ assetType: 'stamp', name: item.label || 'Stamp Design', svgContent: item.svg_source, sourceId: item.id });
+    setDeletedStamps(prev => prev.filter(d => d.id !== item.id));
+  }
+
+  // ─── Brand Asset Save ──────────────────────────────────────
+  async function saveCurrentAsBrandAsset() {
+    const concept = allConcepts.find(c => c.id === selectedId) || allConcepts[0];
+    if (!concept) return;
+    const svg = svgOverrides[concept.id] || concept.svgSource;
+    await saveBrandAsset({ assetType: 'stamp', name: concept.label || project?.company_name || 'Stamp', svgContent: svg, sourceId: concept.id });
+  }
+
+  // ─── Duplicate Concept ─────────────────────────────────────
+  function duplicateConcept(concept: StampDesignConcept) {
+    const dup: StampDesignConcept = { ...concept, id: crypto.randomUUID(), label: `${concept.label} (copy)` };
+    setConcepts(prev => [dup, ...prev]);
+    toast.success('Concept duplicated');
+  }
+
+  // ─── Load deleted stamps ───────────────────────────────────
+  useEffect(() => {
+    if (!user || !projectId) return;
+    supabase.from('stamp_designs').select('id, svg_source, template_key, deleted_at').eq('project_id', projectId).not('deleted_at', 'is', null).order('deleted_at', { ascending: false }).limit(20)
+      .then(({ data }) => {
+        if (data) setDeletedStamps(data.map((d: any) => ({
+          id: d.id, svg_source: d.svg_source || '', template_key: d.template_key || '', deleted_at: d.deleted_at,
+          label: (d.template_key || '').replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase()),
+        })));
+      });
+  }, [user, projectId]);
+
     e.preventDefault();
     setAiDragging(true);
     setAiDragStart({ mx: e.clientX, my: e.clientY, px: aiPanelPos.x, py: aiPanelPos.y });
