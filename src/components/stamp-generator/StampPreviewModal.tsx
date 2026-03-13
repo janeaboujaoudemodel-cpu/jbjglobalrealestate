@@ -572,7 +572,7 @@ export function StampPreviewModal({
                   <div className="ml-8 h-full flex flex-col items-center justify-center gap-5 p-6">
                     <div className="relative flex items-center justify-center p-4 rounded-full" style={{ background: 'rgba(255,255,255,0.08)', boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.2)' }}>
                       <div style={{ filter: 'brightness(0) invert(1) opacity(0.9)' }}>
-                        <StampSVGRenderer svgSource={displaySvg} tintColor="#ffffff" secondaryColor="#ffffff" accentColor="#ffffff" size={130}/>
+                        <StampSVGRenderer svgSource={displaySvg} tintColor="#ffffff" secondaryColor="#ffffff" accentColor="#ffffff" fontFamily={fontFamily} fontWeight={fontWeight} fontStyle={fontStyle} fontSize={fontSize} size={130}/>
                       </div>
                     </div>
                     <div className="text-center space-y-1.5">
