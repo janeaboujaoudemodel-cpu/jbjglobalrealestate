@@ -371,29 +371,46 @@ export default function StampProjectWizard() {
             <TabsContent value="company" className="flex-1 min-h-0 m-0">
               <ScrollArea className="h-full">
                 <div className="p-4 space-y-3">
-                  <StampLicenseUploader
-                    onExtracted={(data) => {
-                      if (data.company_name) set('company_name', data.company_name);
-                      if (data.arabic_company_name) { set('arabic_company_name', data.arabic_company_name); set('language_mode', 'BILINGUAL'); }
-                      if (data.registration_number) set('registration_number_optional', data.registration_number);
-                      const city = data.city || '';
-                      if (city) set('city_optional', city);
-                      const ARABIC_CITY_MAP: Record<string, string> = {
-                        'dubai': 'دبي', 'abu dhabi': 'أبوظبي', 'sharjah': 'الشارقة',
-                        'ajman': 'عجمان', 'ras al khaimah': 'رأس الخيمة', 'fujairah': 'الفجيرة', 'umm al quwain': 'أم القيوين',
-                      };
-                      const mappedArabic = city ? ARABIC_CITY_MAP[city.toLowerCase()] : undefined;
-                      let arabicCityValue = (data as any).arabic_city || '';
-                      if (arabicCityValue && /[a-zA-Z]/.test(arabicCityValue) && mappedArabic) arabicCityValue = mappedArabic + '، الإمارات';
-                      else if (!arabicCityValue && mappedArabic) arabicCityValue = mappedArabic + '، الإمارات';
-                      if (arabicCityValue) set('arabic_city', arabicCityValue);
-                      const rawCountry = data.country || '';
-                      set('country_optional', correctCountry(rawCountry, city) || 'UAE');
-                      if (data.phone) set('phone_optional', normalizePhone(data.phone));
-                      if (data.email) set('email_optional', data.email.toUpperCase());
-                      if ((data as any).business_type) set('business_type', (data as any).business_type);
-                    }}
-                  />
+                  {/* Collapsible Smart Auto-Fill */}
+                  <div className="border border-dashed border-gold/30 rounded-lg">
+                    <button
+                      type="button"
+                      onClick={() => setLicenseOpen(!licenseOpen)}
+                      className="w-full flex items-center gap-2 px-3 py-2 text-[11px] font-medium text-[hsl(var(--gold-dark))] hover:bg-[hsl(var(--gold)/0.05)] rounded-lg transition-colors"
+                    >
+                      <FileText size={13} className="text-[hsl(var(--gold))]" />
+                      Smart Auto-Fill from Trade License
+                      <ChevronDown size={12} className={`ml-auto transition-transform ${licenseOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                    {licenseOpen && (
+                      <div className="px-3 pb-3 pt-2">
+                        <StampLicenseUploader
+                          onExtracted={(data) => {
+                            if (data.company_name) set('company_name', data.company_name);
+                            if (data.arabic_company_name) { set('arabic_company_name', data.arabic_company_name); set('language_mode', 'BILINGUAL'); }
+                            if (data.registration_number) set('registration_number_optional', data.registration_number);
+                            const city = data.city || '';
+                            if (city) set('city_optional', city);
+                            const ARABIC_CITY_MAP: Record<string, string> = {
+                              'dubai': 'دبي', 'abu dhabi': 'أبوظبي', 'sharjah': 'الشارقة',
+                              'ajman': 'عجمان', 'ras al khaimah': 'رأس الخيمة', 'fujairah': 'الفجيرة', 'umm al quwain': 'أم القيوين',
+                            };
+                            const mappedArabic = city ? ARABIC_CITY_MAP[city.toLowerCase()] : undefined;
+                            let arabicCityValue = (data as any).arabic_city || '';
+                            if (arabicCityValue && /[a-zA-Z]/.test(arabicCityValue) && mappedArabic) arabicCityValue = mappedArabic + '، الإمارات';
+                            else if (!arabicCityValue && mappedArabic) arabicCityValue = mappedArabic + '، الإمارات';
+                            if (arabicCityValue) set('arabic_city', arabicCityValue);
+                            const rawCountry = data.country || '';
+                            set('country_optional', correctCountry(rawCountry, city) || 'UAE');
+                            if (data.phone) set('phone_optional', normalizePhone(data.phone));
+                            if (data.email) set('email_optional', data.email.toUpperCase());
+                            if ((data as any).business_type) set('business_type', (data as any).business_type);
+                            setLicenseOpen(false);
+                          }}
+                        />
+                      </div>
+                    )}
+                  </div>
 
                   <div className="grid grid-cols-2 gap-2">
                     <div className="col-span-2">
