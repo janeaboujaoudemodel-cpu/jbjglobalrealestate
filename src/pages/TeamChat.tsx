@@ -533,7 +533,19 @@ const TeamChat = () => {
               <Send className="w-4 h-4" />
             </Button>
           </div>
-          <p className="text-[10px] text-black/25 mt-1.5 px-1">Press Enter to send · Secured by JBJ Global</p>
+          <div className="flex items-center justify-between mt-1.5 px-1">
+            <p className="text-[10px] text-black/25">Press Enter to send · Secured by JBJ Global</p>
+            {/* Since chat is internal, all recipients are registered users → offer email notify */}
+            <div className="flex items-center gap-1.5">
+              <Mail className="w-3 h-3 text-black/25" />
+              <span className="text-[10px] text-black/30">Also email</span>
+              <Switch
+                checked={alsoSendByEmail}
+                onCheckedChange={setAlsoSendByEmail}
+                className="h-4 w-7 data-[state=checked]:bg-[#C9A84C]"
+              />
+            </div>
+          </div>
         </div>
       </div>
 
