@@ -413,7 +413,7 @@ export function StampPreviewModal({
                         <div className="h-1.5 w-20 rounded bg-gray-200 mt-1"/>
                       </div>
                       <div className="opacity-60">
-                        <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} size={60}/>
+                        <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} fontWeight={fontWeight} fontStyle={fontStyle} fontSize={fontSize} size={60}/>
                       </div>
                     </div>
                   </div>
