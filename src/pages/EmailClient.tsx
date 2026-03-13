@@ -22,11 +22,12 @@ import {
   RefreshCw, Mail, Building2, User, Sparkles, CheckCheck,
   MailOpen, ChevronLeft, ChevronRight, Shield, UserCircle,
   Headphones, Phone, Megaphone, Stamp, Signature, Zap, MessageSquare,
-  Calendar
+  Calendar, Settings
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
+import EmailSettingsPanel from "@/components/email/EmailSettingsPanel";
 
 // ─── Sender Identities ───
 interface SenderIdentity {
