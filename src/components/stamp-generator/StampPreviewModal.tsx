@@ -115,7 +115,7 @@ export function StampPreviewModal({
   ];
 
   return (
-    <div className="fixed inset-0 z-[9000] bg-black/80 backdrop-blur-sm flex flex-col">
+    <div className="fixed inset-0 z-[10050] bg-black/80 backdrop-blur-sm flex flex-col">
       {/* Header */}
       <div className="flex-shrink-0 bg-white border-b border-[hsl(var(--border))] px-6 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
