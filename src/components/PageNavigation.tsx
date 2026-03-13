@@ -16,14 +16,15 @@ const PageNavigation = forwardRef<HTMLDivElement, Record<string, never>>((_, ref
     const isScrollable = scrollHeight > clientHeight + 50;
     
     setShowScrollTop(scrollTop > 200);
-    // Show down arrow only if page is actually scrollable and not at bottom
     setShowScrollBottom(isScrollable && scrollTop + clientHeight < scrollHeight - 100);
   }, []);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
+    // Re-check after layout settles (dynamic content)
+    const timer = setTimeout(handleScroll, 500);
+    return () => { window.removeEventListener("scroll", handleScroll); clearTimeout(timer); };
   }, [handleScroll]);
 
   const scrollToTop = () => {
@@ -45,11 +46,9 @@ const PageNavigation = forwardRef<HTMLDivElement, Record<string, never>>((_, ref
     "pointer-events-auto select-none touch-manipulation cursor-pointer"
   );
 
-  // Show only one arrow at a time: up when scrolled down, down when at top
   const showUp = showScrollTop;
   const showDown = !showScrollTop && showScrollBottom;
 
-  // Always render the container (even if hidden) so it stays mounted
   if (!showUp && !showDown) return null;
 
   return (
