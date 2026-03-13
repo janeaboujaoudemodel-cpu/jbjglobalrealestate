@@ -983,7 +983,10 @@ const DeveloperPortal = () => {
             </TabsContent>
 
             {/* SUBMIT NEW PROJECT TAB */}
-            <TabsContent value="submit" className="mt-6">
+            <TabsContent value="submit" className="mt-6 space-y-6">
+              {/* Existing published projects for this developer */}
+              {devName && <ExistingProjectsReview developerName={devName} />}
+              
               {sessionProjects.length > 0 && (
                 <div className="mb-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center gap-2 text-sm text-emerald-800">
                   <CheckCircle className="w-4 h-4" />
