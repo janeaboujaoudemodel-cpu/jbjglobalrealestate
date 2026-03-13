@@ -80,6 +80,7 @@ function renderSeparators(cx: number, cy: number, r: number, style: SeparatorSty
 /**
  * Render text along the BOTTOM half of a circle, per-character,
  * so each character is right-side up (tops pointing outward).
+ * Bottom arc centers around 90° (6 o'clock in SVG coords).
  */
 function renderBottomArcText(
   text: string, cx: number, cy: number, r: number,
@@ -91,17 +92,19 @@ function renderBottomArcText(
   const n = chars.length;
   if (n === 0) return '';
 
+  // Center spread around 90° (bottom of circle in SVG coordinates)
   const spreadDeg = Math.min(150, n * 10);
-  const startDeg = 270 - spreadDeg / 2;
+  const startDeg = 90 - spreadDeg / 2;
   const stepDeg = n > 1 ? spreadDeg / (n - 1) : 0;
 
   let result = '';
   for (let i = 0; i < n; i++) {
-    const deg = n === 1 ? 270 : startDeg + i * stepDeg;
+    const deg = n === 1 ? 90 : startDeg + i * stepDeg;
     const rad = (deg * Math.PI) / 180;
     const x = cx + r * Math.cos(rad);
     const y = cy + r * Math.sin(rad);
-    const rotation = deg + 90;
+    // Rotation: deg - 90 makes text upright with tops pointing outward (away from center)
+    const rotation = deg - 90;
     result += `<text x="${x.toFixed(2)}" y="${y.toFixed(2)}" text-anchor="middle" dominant-baseline="central"
       font-family="${font}" font-size="${fontSize}" fill="${ink}" font-weight="${fontWeight}"
       letter-spacing="${letterSpacing}"
