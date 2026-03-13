@@ -48,7 +48,19 @@ import {
   Newspaper,
   TrendingUp,
   MapPin,
-  UserCheck
+  UserCheck,
+  Play,
+  Mic,
+  FileImage,
+  Languages,
+  Wand2,
+  MessageSquare,
+  ClipboardList,
+  Scale,
+  PenTool,
+  Mail,
+  Building2,
+  ScanLine,
 } from "lucide-react";
 
 
