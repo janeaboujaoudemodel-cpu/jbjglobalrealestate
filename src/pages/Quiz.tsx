@@ -28,12 +28,12 @@ const QUIZ_QUESTIONS = [
     question: "What type of property are you looking for?",
     type: "single" as const,
     options: [
-      { value: "apartment", label: "Apartment / Flat", icon: "🏢" },
-      { value: "villa", label: "Villa", icon: "🏠" },
-      { value: "townhouse", label: "Townhouse", icon: "🏘️" },
-      { value: "penthouse", label: "Penthouse", icon: "🌆" },
-      { value: "plot", label: "Plot / Land", icon: "📐" },
-      { value: "retail", label: "Retail / Commercial", icon: "🏪" },
+      { value: "apartment", label: "Apartment / Flat", icon: "" },
+      { value: "villa", label: "Villa", icon: "" },
+      { value: "townhouse", label: "Townhouse", icon: "" },
+      { value: "penthouse", label: "Penthouse", icon: "" },
+      { value: "plot", label: "Plot / Land", icon: "" },
+      { value: "retail", label: "Retail / Commercial", icon: "" },
     ],
   },
   {
