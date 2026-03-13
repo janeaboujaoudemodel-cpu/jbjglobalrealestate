@@ -184,13 +184,13 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
 
     <!-- Top arc text -->
     <text font-family="${topFont}" font-size="${topFontSize}" fill="${ink}" 
-      letter-spacing="${topIsArabic ? '0.5' : '2'}" font-weight="700">
+      letter-spacing="${topIsArabic ? '1' : '2.5'}" font-weight="800">
       <textPath href="#top-arc" startOffset="50%" text-anchor="middle">${topText || 'COMPANY NAME'}</textPath>
     </text>
 
     <!-- Bottom arc text -->
     <text font-family="${bottomFont}" font-size="${bottomFontSize}" fill="${ink}" 
-      letter-spacing="${bottomIsArabic ? '0.5' : '2'}" font-weight="700">
+      letter-spacing="${bottomIsArabic ? '1' : '2.5'}" font-weight="800">
       <textPath href="#bot-arc" startOffset="50%" text-anchor="middle">${bottomText || 'اسم الشركة'}</textPath>
     </text>
 
