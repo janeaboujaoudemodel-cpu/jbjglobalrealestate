@@ -49,6 +49,15 @@ const Favorites = () => {
   const { shortlist: guestShortlist, toggleShortlist: toggleGuestShortlist } = useGuestShortlist();
   const { setBadge, getBadge } = useShortlistBadges();
   const toggleShortlistMutation = useToggleShortlist();
+  const { data: designFavs } = useDesignFavorites();
+  const { data: designShorts } = useDesignShortlist();
+  const toggleDesign = useToggleDesignFavorite();
+  const designFavCount = designFavs?.length || 0;
+  const designShortCount = designShorts?.length || 0;
+  const designFavGroups = designFavs ? groupByType(designFavs) : {};
+  const designShortGroups = designShorts ? groupByType(designShorts) : {};
+
+  const toggleSection = (key: string) => setExpandedSections(prev => ({ ...prev, [key]: !prev[key] }));
 
   const favoriteIds = user 
     ? (userFavorites?.map(f => f.project_id) || [])
