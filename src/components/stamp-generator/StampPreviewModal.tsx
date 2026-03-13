@@ -327,7 +327,25 @@ export function StampPreviewModal({
           </div>
 
           {/* Mockup area */}
-          <div data-mockup-area className="flex-1 flex items-center justify-center p-10 bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))] min-h-full">
+          <div data-mockup-area className="flex-1 flex flex-col items-center justify-center p-10 bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))] min-h-full overflow-y-auto jj-scrollbar-gold">
+            {/* Alignment controls */}
+            <div className="flex items-center gap-1.5 mb-4">
+              <span className="text-[9px] font-semibold text-[hsl(var(--muted-foreground))] uppercase mr-2">Stamp Position</span>
+              {([
+                { key: 'left' as const, icon: AlignLeft, label: 'Left' },
+                { key: 'center' as const, icon: AlignCenter, label: 'Center' },
+                { key: 'right' as const, icon: AlignRight, label: 'Right' },
+              ]).map(a => (
+                <button key={a.key} onClick={() => setStampAlign(a.key)}
+                  className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[10px] font-medium transition-all border ${
+                    stampAlign === a.key
+                      ? 'bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))] border-[hsl(var(--gold)/0.4)]'
+                      : 'text-[hsl(var(--muted-foreground))] border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'
+                  }`}>
+                  <a.icon size={11}/> {a.label}
+                </button>
+              ))}
+            </div>
 
             {/* Business Card Mockup */}
             {activeView === 'business-card' && (
