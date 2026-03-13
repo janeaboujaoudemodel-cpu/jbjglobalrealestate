@@ -35,6 +35,7 @@ export function ExtractionJobsPanel() {
   const [recentJobs, setRecentJobs] = useState<JobLog[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [runningSource, setRunningSource] = useState<string | null>(null);
+  const [reellyDisabled, setReellyDisabled] = useState(false);
   const { toast } = useToast();
 
   const fetchData = async () => {
