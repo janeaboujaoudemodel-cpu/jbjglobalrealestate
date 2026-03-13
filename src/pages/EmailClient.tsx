@@ -406,9 +406,11 @@ const EmailClient = () => {
                   <Button variant="outline" onClick={() => setApprovePreviewOpen(false)} className="border-[#C9A84C]/30">Back to Edit</Button>
                   <Button
                     onClick={() => { setApprovePreviewOpen(false); sendEmail(); }}
+                    disabled={isSending}
                     className="bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white px-6"
                   >
-                    <Send className="w-4 h-4 mr-2" /> Approve & Send
+                    {isSending ? <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> : <Send className="w-4 h-4 mr-2" />}
+                    {isSending ? "Sending…" : "Approve & Send"}
                   </Button>
                 </div>
               </div>
