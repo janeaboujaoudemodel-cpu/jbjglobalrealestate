@@ -87,7 +87,7 @@ export const OwnerRoutes = () => (
     } />
     <Route path="founder-assistant" element={<FoundersAssistant />} />
     <Route path="recommendations" element={<GlobalRecommendationsHub />} />
-    <Route path="toolkit" element={<RoyalToolsHub />} />
+    <Route path="toolkit" element={<Navigate to="/ai-hub" replace />} />
     <Route path="automations" element={<Automations />} />
     <Route path="studio" element={<Studio />} />
     <Route path="studio/editor/:projectId" element={<StudioEditor />} />
