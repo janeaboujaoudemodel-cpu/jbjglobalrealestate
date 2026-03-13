@@ -609,6 +609,11 @@ export default function StampGeneratorPage() {
             {/* ── Colors tab ── */}
             {leftTab === 'color' && (
               <>
+                {/* Reset to Standard button */}
+                <button onClick={() => { setPrimaryColor('#1B3A8C'); setSecondaryColor('#1a2d6e'); setAccentColor('#1B3A8C'); toast.success('Colors reset to Corporate Official Blue'); }}
+                  className="w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg border-2 border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] text-[10px] font-semibold hover:bg-[hsl(var(--gold)/0.06)] transition-all">
+                  <RotateCw size={10}/> Reset to Standard (Ink Blue)
+                </button>
                 <div className="flex gap-1">
                   {stopDefs.map(s => (
                     <button key={s.key} onClick={() => setActiveStop(s.key)} title={s.label}
