@@ -1,22 +1,19 @@
 /**
- * Photo & Image Suite — Premium Champagne-Gold Design
+ * Photo & Image Suite — Simplified entry point
+ * Now primarily routes to the unified Photo Studio Pro hub
  */
 
 import React, { lazy, Suspense } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SEOHead } from '@/components/SEOHead';
-import { Wand2, Sparkles, Palette, Home, ArrowLeft, Loader2, Image, ScanLine, FileImage, LayoutGrid, Film } from 'lucide-react';
+import { Wand2, Sparkles, Home, ArrowLeft, Loader2, Image, ScanLine, FileImage } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const BackgroundAI = lazy(() => import('@/pages/toolkit/BackgroundAI'));
 const BeautyFilters = lazy(() => import('@/pages/toolkit/BeautyFilters'));
-const ImageResize = lazy(() => import('@/pages/toolkit/ImageResize'));
 const InteriorDesignAI = lazy(() => import('@/pages/InteriorDesignAI'));
 const VirtualStagingPage = lazy(() => import('@/pages/toolkit/VirtualStagingPage'));
 const ScanSignPage = lazy(() => import('@/pages/toolkit/ScanSignPage'));
 const PdfFromPhotos = lazy(() => import('@/pages/toolkit/PdfFromPhotos'));
-const PhotoCollageBuilder = lazy(() => import('@/components/toolkit/PhotoCollageBuilder'));
-const AISlideshowCreator = lazy(() => import('@/components/toolkit/AISlideshowCreator'));
 
 const LoadingSpinner = () => (
   <div className="min-h-[50vh] flex items-center justify-center" style={{ background: "linear-gradient(180deg, #FDFBF7 0%, #F5EFE3 100%)" }}>
@@ -28,15 +25,11 @@ const LoadingSpinner = () => (
 );
 
 const tabs = [
-  { value: "background", label: "Background AI", shortLabel: "BG AI", icon: Wand2 },
-  { value: "beauty", label: "Beauty Filters", shortLabel: "Beauty", icon: Sparkles },
-  { value: "resize", label: "Image Resize", shortLabel: "Resize", icon: Image },
-  { value: "interior", label: "Interior Design", shortLabel: "Interior", icon: Palette },
-  { value: "staging", label: "Virtual Staging", shortLabel: "Staging", icon: Home },
+  { value: "studio", label: "Photo Studio Pro", shortLabel: "Studio", icon: Wand2 },
+  { value: "interior", label: "Interior Design", shortLabel: "Interior", icon: Home },
+  { value: "staging", label: "Virtual Staging", shortLabel: "Staging", icon: Image },
   { value: "scan-sign", label: "Scan & Sign", shortLabel: "Scan", icon: ScanLine },
-  { value: "photo-pdf", label: "Photo → PDF", shortLabel: "PDF", icon: FileImage },
-  { value: "collage", label: "Photo Collage", shortLabel: "Collage", icon: LayoutGrid },
-  { value: "slideshow", label: "AI Slideshow", shortLabel: "Slides", icon: Film },
+  { value: "photo-pdf", label: "Photo to PDF", shortLabel: "PDF", icon: FileImage },
 ];
 
 export default function PhotoSuite() {
@@ -44,14 +37,13 @@ export default function PhotoSuite() {
     <>
       <SEOHead
         title="Photo & Image Suite | JBJ Creative Tools"
-        description="AI background removal, beauty filters, image resizing, interior design, virtual staging, scan & sign, photo collage, and slideshow tools."
+        description="AI photo studio, interior design, virtual staging, scan & sign, and photo-to-PDF tools."
       />
 
       <div className="min-h-screen" style={{ background: "linear-gradient(180deg, #FDFBF7 0%, #EDE4D3 100%)" }}>
         {/* ── Suite Header ── */}
         <div style={{ background: "linear-gradient(180deg, #F5EBD7 0%, #EDE4D3 100%)", borderBottom: "1px solid rgba(184,148,62,0.25)" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-0">
-            {/* Back link */}
             <Link to="/toolkit"
               className="inline-flex items-center gap-1.5 text-xs mb-4 transition-colors group"
               style={{ color: "rgba(0,0,0,0.4)" }}
@@ -61,7 +53,6 @@ export default function PhotoSuite() {
               Back to Royal Tools Hub
             </Link>
 
-            {/* Title row */}
             <div className="flex items-center gap-4 mb-5">
               <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center shrink-0"
                 style={{ background: "linear-gradient(135deg, #F5EBD7, #D4C4A8)", border: "1px solid rgba(184,148,62,0.4)", boxShadow: "0 0 30px rgba(184,148,62,0.15)" }}>
@@ -78,7 +69,7 @@ export default function PhotoSuite() {
                   </span>
                 </div>
                 <p className="text-xs sm:text-sm mt-0.5 hidden sm:block" style={{ color: "rgba(0,0,0,0.45)" }}>
-                  Background removal · Beauty · Resize · Design · Staging · Scan · PDF · Collage · Slideshow
+                  Photo Studio Pro · Interior Design · Virtual Staging · Scan & Sign · PDF
                 </p>
               </div>
             </div>
@@ -86,8 +77,7 @@ export default function PhotoSuite() {
         </div>
 
         {/* ── Tabs ── */}
-        <Tabs defaultValue="background" className="w-full">
-          {/* Tab Bar */}
+        <Tabs defaultValue="studio" className="w-full">
           <div style={{ background: "rgba(245,235,215,0.5)", borderBottom: "1px solid rgba(184,148,62,0.15)" }}>
             <div className="max-w-7xl mx-auto px-2 sm:px-6">
               <TabsList className="w-full justify-start rounded-none bg-transparent p-0 h-auto gap-0 border-0 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
@@ -107,16 +97,9 @@ export default function PhotoSuite() {
             </div>
           </div>
 
-          {/* Tab Content */}
           <div>
-            <TabsContent value="background" className="mt-0">
-              <Suspense fallback={<LoadingSpinner />}><BackgroundAI embedded /></Suspense>
-            </TabsContent>
-            <TabsContent value="beauty" className="mt-0">
+            <TabsContent value="studio" className="mt-0">
               <Suspense fallback={<LoadingSpinner />}><BeautyFilters embedded /></Suspense>
-            </TabsContent>
-            <TabsContent value="resize" className="mt-0">
-              <Suspense fallback={<LoadingSpinner />}><ImageResize embedded /></Suspense>
             </TabsContent>
             <TabsContent value="interior" className="mt-0">
               <Suspense fallback={<LoadingSpinner />}><InteriorDesignAI embedded /></Suspense>
@@ -129,12 +112,6 @@ export default function PhotoSuite() {
             </TabsContent>
             <TabsContent value="photo-pdf" className="mt-0">
               <Suspense fallback={<LoadingSpinner />}><PdfFromPhotos embedded /></Suspense>
-            </TabsContent>
-            <TabsContent value="collage" className="mt-0">
-              <Suspense fallback={<LoadingSpinner />}><PhotoCollageBuilder embedded /></Suspense>
-            </TabsContent>
-            <TabsContent value="slideshow" className="mt-0">
-              <Suspense fallback={<LoadingSpinner />}><AISlideshowCreator embedded /></Suspense>
             </TabsContent>
           </div>
         </Tabs>

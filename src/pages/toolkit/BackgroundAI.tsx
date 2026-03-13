@@ -45,12 +45,12 @@ const C = {
 
 // ── Background presets ──
 const BG_PRESETS = [
-  { id: 'transparent', label: 'Transparent', icon: '⬜', desc: 'Remove background completely' },
+  { id: 'transparent', label: 'Transparent', color: 'transparent', desc: 'Remove background completely' },
   { id: 'white', label: 'White', color: '#FFFFFF', desc: 'Clean white background' },
   { id: 'black', label: 'Black', color: '#000000', desc: 'Dramatic black background' },
   { id: 'navy', label: 'Navy', color: '#1E3A5F', desc: 'Professional navy blue' },
   { id: 'gray', label: 'Gray', color: '#6B7280', desc: 'Neutral gray background' },
-  { id: 'gradient-blue', label: 'Blue Grad', icon: '🔵', desc: 'Blue to indigo gradient' },
+  { id: 'gradient-blue', label: 'Blue Grad', color: 'linear-gradient(135deg, #3B82F6, #4F46E5)', desc: 'Blue to indigo gradient' },
 ];
 
 // ── AI scene prompts ──
@@ -1083,14 +1083,8 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                         color: selectedBackground === preset.id ? C.accentText : "rgba(255,255,255,0.88)",
                       }}
                     >
-                      {preset.color ? (
-                        <span className="w-7 h-7 rounded-lg flex-shrink-0 border border-white/10" style={{ backgroundColor: preset.color }} />
-                      ) : (
-                        <span className="w-7 h-7 rounded-lg flex-shrink-0 flex items-center justify-center text-base"
-                          style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}>
-                          {preset.icon}
-                        </span>
-                      )}
+                      <span className="w-7 h-7 rounded-lg flex-shrink-0 border border-white/10"
+                        style={{ background: preset.color === 'transparent' ? 'repeating-conic-gradient(rgba(255,255,255,0.15) 0% 25%, transparent 0% 50%) 50% / 10px 10px' : preset.color.startsWith('linear') ? preset.color : preset.color, backgroundColor: (!preset.color.startsWith('linear') && preset.color !== 'transparent') ? preset.color : undefined }} />
                       <div>
                         <div className="font-medium">{preset.label}</div>
                         <div className="text-xs opacity-60">{preset.desc}</div>
@@ -1216,7 +1210,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                             <button key={p.id} onClick={() => setVideoBackground(p.id)}
                               className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
                               style={{ background: videoBackground === p.id ? "rgba(184,148,62,0.3)" : "rgba(255,255,255,0.08)", border: `1px solid ${videoBackground === p.id ? "rgba(184,148,62,0.7)" : "rgba(255,255,255,0.15)"}`, color: 'white' }}>
-                              {p.color ? <span className="inline-block w-3 h-3 rounded-sm mr-1 align-middle" style={{ background: p.color }} /> : p.icon + ' '}
+                              <span className="inline-block w-3 h-3 rounded-sm mr-1 align-middle" style={{ background: p.color === 'transparent' ? 'repeating-conic-gradient(rgba(255,255,255,0.15) 0% 25%, transparent 0% 50%) 50% / 6px 6px' : p.color.startsWith('linear') ? p.color : p.color, backgroundColor: (!p.color.startsWith('linear') && p.color !== 'transparent') ? p.color : undefined }} />
                               {p.label}
                             </button>
                           ))}

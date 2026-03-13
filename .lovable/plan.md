@@ -1,97 +1,72 @@
 
+## CRM System Upgrade — Implementation Status
 
-## Plan: Unified Photo Studio Pro Hub — All-in-One Suite
+### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-### Current State
-- `BeautyFilters.tsx` (917 lines) has 6 separate tabs (Edit, Face, Body, Hair, Outfit, Grid), each requiring its own photo upload — this is the core problem
-- `PhotoSuite.tsx` is a separate wrapper with 9 more tabs (Background AI, Beauty, Resize, etc.) — also fragmented
-- AI features are simulated (`simulateAI` just shows a toast with setTimeout) — not wired to real edge functions
-- Edge functions exist: `ai-background-remove`, `remove-background`, `ai-outfit-changer` — but are not connected to BeautyFilters
-- Remaining emojis in section labels (`💄`, `🧖`, `💪`, `✂️`, `🎨`, `👗`, `🧹`) and BackgroundAI presets
+#### Task 1: Full System Audit ✅
+- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
+- Identified 10 weaknesses (documented in plan)
 
-### Architecture Change
+#### Task 2: Leads Security Hardening ✅
+- CSV export no longer includes email/phone PII
+- Audit logging added to exports with user_agent tracking
+- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
 
-**Merge everything into one unified component** with a single photo upload at the top, a persistent preview canvas in the center, and a collapsible tool sidebar. No more per-section upload prompts.
+#### Task 3: Encryption Hardening ✅
+- CSV export stripped of `email_lower` and `phone_e164` fields
+- Export audit logged to both `crm_audit_logs` and `audit_logs`
 
-### Changes
+#### Task 4: Lead Lifecycle Upgrade ✅
+- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
+- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
+- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
 
-#### 1. Refactor `BeautyFilters.tsx` → Unified Photo Studio Pro
-- Remove `!image ? uploadZone` check from every tab — show upload zone ONLY at the very top, once
-- All tabs share the same `imagePreview` and `canvasRef`
-- Add new tabs: **Background**, **Create** (Canva-like: story/post/grid), **Share**
-- Remove all emoji section labels (`💄`, `🧖`, `💪`, `✂️`, `🎨`, `👗`, `🧹`) → Lucide icons
-- Wire `simulateAI` calls to actual edge functions:
-  - Face/Hair/Makeup/Body → `ai-background-remove` with `mode: "edit"` + image prompt
-  - Background removal → `ai-background-remove` (already built)
-  - Outfit change → `ai-outfit-changer` (already built)
+#### Task 5: CRM Structure Upgrade ✅
+- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
+- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
+- KanbanPipeline expanded to show all 17 relevant stages
 
-#### 2. Wire Real AI Processing
-- Replace `simulateAI` function with `processWithAI(action, prompt)` that:
-  - Converts canvas to base64
-  - Calls the appropriate edge function
-  - Receives modified image back
-  - Renders result on canvas
-- Actions: `remove-bg`, `change-outfit`, `change-hair`, `apply-makeup`, `reshape-body`, `change-background`
-- All use `ai-background-remove` edge function (already supports `mode` and `generationPrompt`)
+#### Task 6: Performance Optimization ✅
+- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
+- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
+- `crm_leads_updated_at_trigger` auto-updates `updated_at`
 
-#### 3. Add Social Sharing & Export Panel
-- New "Share" tab with:
-  - Download (already exists)
-  - Share by Email (mailto link with attachment or copy link)
-  - Social platform buttons: Instagram, Facebook, Snapchat, TikTok, WhatsApp, Twitter/X, LinkedIn, Telegram
-  - Each generates platform-optimized format (story 9:16, post 1:1, landscape 16:9)
-  - Copy to clipboard, Web Share API for mobile
-- Format presets: Instagram Story (1080x1920), Instagram Post (1080x1080), Facebook Cover (820x312), Snapchat (1080x1920), WhatsApp Status (1080x1920)
+#### Task 7: AI Intelligence Integration ✅
+- New edge function `ai-lead-intelligence` using Lovable AI gateway
+- Supports 3 modes: `score`, `summary`, `next_action`
+- Tool-calling for structured scoring output
+- JWT auth + CRM role validation
+- PII sanitized before sending to AI
 
-#### 4. Add "Create" Tab (Canva-like)
-- Quick actions: "Create Instagram Story", "Create Post", "Create Grid"
-- AI prompt field: "Describe what you want to create today"
-- Uses `ai-background-remove` with `mode: "generate"` and prompt
-- Animate photo option (placeholder for future video generation)
+#### Task 8: Workflow Automation ✅
+- Created `crm_automation_rules` table with RLS (owner manage, admin view)
+- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
 
-#### 5. Retire PhotoSuite.tsx Fragmentation
-- Keep `PhotoSuite.tsx` as an entry point but make "Beauty" tab load the unified BeautyFilters which now contains everything
-- Remove redundant Background AI / Resize tabs from PhotoSuite since they're now integrated
+#### Task 10: Role & Permission System ✅
+- RLS on automation rules: owner CRUD, admin read-only
+- CSV export restricted to owner_admin/founder roles
 
-### Files to Modify
+#### Task 12: Backend/Database Upgrade ✅
+- 3 new performance indexes
+- Auto-updated_at trigger on crm_leads
+- Duplicate hash computation trigger
+- Rate-limiting security function
 
-| File | Change |
+#### Task 13: Data Cleanliness ✅
+- `duplicate_hash` with auto-compute trigger prevents future duplicates
+- Partial unique index enforces uniqueness at DB level
+
+### Files Changed
+| File | Action |
 |------|--------|
-| `src/pages/toolkit/BeautyFilters.tsx` | Major refactor: single upload, unified preview, real AI calls, share tab, create tab, remove emojis |
-| `src/pages/toolkit/PhotoSuite.tsx` | Simplify — unified entry to BeautyFilters as main tool |
-| `src/pages/toolkit/BackgroundAI.tsx` | Remove emoji presets (`⬜`, `🔵`) → use color swatches |
-
-### Key Technical Details
-
-**Real AI call replacing simulateAI:**
-```typescript
-const processWithAI = async (action: string, prompt: string) => {
-  if (!canvasRef.current) return;
-  setIsProcessingAI(true);
-  const base64 = canvasRef.current.toDataURL('image/jpeg').split(',')[1];
-  const { data, error } = await supabase.functions.invoke('ai-background-remove', {
-    body: { mode: action, image: base64, generationPrompt: prompt }
-  });
-  if (data?.resultImage) {
-    // Load result back onto canvas
-    const img = new Image();
-    img.onload = () => { canvasRef.current.getContext('2d').drawImage(img, 0, 0); };
-    img.src = `data:image/png;base64,${data.resultImage}`;
-  }
-  setIsProcessingAI(false);
-};
-```
-
-**Share via Web Share API:**
-```typescript
-const handleShare = async (platform: string) => {
-  const blob = await new Promise<Blob>(r => canvasRef.current.toBlob(r, 'image/png'));
-  const file = new File([blob], 'photo.png', { type: 'image/png' });
-  if (navigator.share) {
-    await navigator.share({ files: [file], title: 'Photo Studio Pro' });
-  }
-};
-```
-
-This consolidation eliminates the fragmented per-section uploads, connects real AI processing, and adds full social media sharing — all in one unified hub.
-
+| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
+| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
+| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
+| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
+| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
+| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
+| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
+| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
+| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
