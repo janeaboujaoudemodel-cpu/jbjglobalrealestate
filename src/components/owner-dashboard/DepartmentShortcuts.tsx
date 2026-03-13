@@ -4,6 +4,7 @@ import {
   ClipboardList, 
   ShieldAlert,
   ChevronRight,
+  Building,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -38,6 +39,13 @@ const DEPARTMENTS: DepartmentCard[] = [
     color: "text-amber-600" 
   },
   { 
+    label: "Developer Hub", 
+    description: "Developer portal & change requests", 
+    icon: Building, 
+    path: "/developer-portal", 
+    color: "text-blue-600" 
+  },
+  { 
     label: "Security Console", 
     description: "Access & audit controls", 
     icon: ShieldAlert, 
@@ -52,7 +60,7 @@ export default function DepartmentShortcuts() {
   return (
     <div className="bg-white/70 border-2 border-[#C9A84C]/30 rounded-xl p-5 shadow-sm">
       <h3 className="text-sm font-semibold text-black mb-4">Departments & Admin</h3>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
         {DEPARTMENTS.map((dept) => (
           <button
             key={dept.path}

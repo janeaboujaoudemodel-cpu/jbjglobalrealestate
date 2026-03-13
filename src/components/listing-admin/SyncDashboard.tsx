@@ -1772,7 +1772,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                             className="bg-emerald-600 hover:bg-emerald-700 text-white"
                           >
                             <RefreshCw className="w-4 h-4 mr-2" />
-                            ⚡ Fix All Listings
+                            Extract & Repair All
                           </Button>
                         ) : (
                           <Button onClick={stopFixAllRunner} variant="outline" className="border-amber-400 text-amber-700">

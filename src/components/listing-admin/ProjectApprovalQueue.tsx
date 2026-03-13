@@ -9,11 +9,13 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { 
   Check, X, Clock, RefreshCw, Building2, MapPin, Calendar, 
   DollarSign, Bed, Ruler, FileText,
-  ChevronLeft, ChevronRight, Merge, Plus, CheckSquare
+  ChevronLeft, ChevronRight, Merge, Plus, CheckSquare,
+  Upload, Globe, Building, Timer
 } from "lucide-react";
 import { format } from "date-fns";
 import type { Json } from "@/integrations/supabase/types";
@@ -731,7 +733,10 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
     setIsBulkProcessing(true);
     setBulkAction("repair");
     setBulkDone(0);
-    setBulkTotal(totalNeedsWorkCount ?? totalCount ?? 0);
+    // Cap to actual pending count to prevent "repairing X on Y" where X > Y
+    const actualPending = totalCount ?? imports.length;
+    const estimated = Math.min(totalNeedsWorkCount ?? actualPending, actualPending);
+    setBulkTotal(estimated);
 
     let ok = 0;
     let failed = 0;
@@ -961,8 +966,10 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
             <p className="text-sm text-muted-foreground mt-1">
               <span className="font-medium">Showing {imports.length.toLocaleString()}</span> of <span className="font-bold text-foreground">{(totalCount ?? imports.length).toLocaleString()}</span> pending
               {sourceFilter !== "all" && (
-                <Badge variant="outline" className="ml-2 text-xs">
-                  {sourceFilter === "provident" ? "🏢 Provident" : sourceFilter === "reelly" ? "🔄 Reelly" : "📤 My Uploads"}
+                <Badge variant="outline" className="ml-2 text-xs gap-1">
+                  {sourceFilter === "provident" && <><Building className="h-3 w-3" /> Provident</>}
+                  {sourceFilter === "reelly" && <><Globe className="h-3 w-3" /> Reelly</>}
+                  {sourceFilter === "manual" && <><Upload className="h-3 w-3" /> My Uploads</>}
                 </Badge>
               )}
               {(totalCount ?? 0) > imports.length && (
@@ -1024,10 +1031,10 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                     variant="outline"
                     onClick={repairAllIncomplete}
                     disabled={isBulkProcessing || isLoading}
-                    className="border-primary/40 text-foreground hover:bg-muted"
+                    className="border-amber-400/60 text-amber-700 hover:bg-amber-50"
                   >
-                    <RefreshCw className="h-4 w-4 mr-2" />
-                    Fix All Listings
+                    <Timer className="h-4 w-4 mr-2" />
+                    Extract Missing Data
                   </Button>
                 )}
                 {selectedIds.size > 0 && (
@@ -1080,18 +1087,27 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
           <NewProjectDetector />
 
           {/* Source filter dropdown */}
-          <div className="flex items-center gap-2 p-2 bg-muted/50 border border-border rounded-lg mb-4">
+          <div className="flex items-center gap-3 p-2 bg-muted/50 border border-border rounded-lg mb-4">
             <span className="text-sm font-medium text-foreground">Source:</span>
-            <select
-              value={sourceFilter}
-              onChange={(e) => setSourceFilter(e.target.value as "all" | "reelly" | "manual" | "provident")}
-              className="text-sm border border-border rounded px-2 py-1 bg-background text-foreground"
-            >
-              <option value="all">All Sources</option>
-              <option value="manual">📤 My Uploads</option>
-              <option value="reelly">🔄 Auto-Imported (Reelly)</option>
-              <option value="provident">🏢 Provident</option>
-            </select>
+            <Select value={sourceFilter} onValueChange={(v) => setSourceFilter(v as any)}>
+              <SelectTrigger className="w-[220px] h-9 text-sm bg-background border-gold/30">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">
+                  <span className="flex items-center gap-2"><Globe className="h-3.5 w-3.5 text-muted-foreground" /> All Sources</span>
+                </SelectItem>
+                <SelectItem value="manual">
+                  <span className="flex items-center gap-2"><Upload className="h-3.5 w-3.5 text-primary" /> My Uploads</span>
+                </SelectItem>
+                <SelectItem value="reelly">
+                  <span className="flex items-center gap-2"><Globe className="h-3.5 w-3.5 text-blue-600" /> Auto-Imported (Reelly)</span>
+                </SelectItem>
+                <SelectItem value="provident">
+                  <span className="flex items-center gap-2"><Building className="h-3.5 w-3.5 text-amber-600" /> Provident</span>
+                </SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Inventory status cards */}
@@ -1099,8 +1115,11 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
             {/* Total Pending */}
             <div className="rounded-lg border border-primary/30 bg-primary/5 p-3 text-center">
               <div className="text-2xl font-bold text-foreground">{(totalCount ?? 0).toLocaleString()}</div>
-              <div className="text-xs text-muted-foreground">
-                {sourceFilter === "provident" ? "Provident Queue" : sourceFilter === "reelly" ? "Reelly Queue" : "Total Pending"}
+              <div className="text-xs text-muted-foreground flex items-center justify-center gap-1">
+                {sourceFilter === "provident" && <><Building className="h-3 w-3" /> Provident Queue</>}
+                {sourceFilter === "reelly" && <><Globe className="h-3 w-3" /> Reelly Queue</>}
+                {sourceFilter === "all" && "Total Pending"}
+                {sourceFilter === "manual" && <><Upload className="h-3 w-3" /> My Uploads</>}
               </div>
             </div>
             <button
@@ -1123,7 +1142,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
               }`}
             >
               <div className="text-2xl font-bold text-emerald-700">{totalCompleteCount ?? completeCount}</div>
-              <div className="text-xs text-emerald-600">Complete ✓</div>
+              <div className="text-xs text-emerald-600">Complete</div>
             </button>
             {/* Needs Work card - hide for Reelly (API data is complete) */}
             {sourceFilter !== "reelly" ? (
@@ -1140,7 +1159,9 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
             </button>
             ) : (
             <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-center">
-              <div className="text-2xl font-bold text-emerald-700">✓</div>
+              <div className="text-2xl font-bold text-emerald-700">
+                <Check className="h-6 w-6 mx-auto" />
+              </div>
               <div className="text-xs text-emerald-600">API Ready</div>
             </div>
             )}

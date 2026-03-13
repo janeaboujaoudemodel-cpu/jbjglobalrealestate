@@ -16781,6 +16781,84 @@ export type Database = {
         }
         Relationships: []
       }
+      project_audit_logs: {
+        Row: {
+          action: string
+          after_data: Json | null
+          before_data: Json | null
+          change_request_id: string | null
+          changed_by: string | null
+          changed_by_email: string | null
+          created_at: string
+          id: string
+          project_id: string
+        }
+        Insert: {
+          action: string
+          after_data?: Json | null
+          before_data?: Json | null
+          change_request_id?: string | null
+          changed_by?: string | null
+          changed_by_email?: string | null
+          created_at?: string
+          id?: string
+          project_id: string
+        }
+        Update: {
+          action?: string
+          after_data?: Json | null
+          before_data?: Json | null
+          change_request_id?: string | null
+          changed_by?: string | null
+          changed_by_email?: string | null
+          created_at?: string
+          id?: string
+          project_id?: string
+        }
+        Relationships: []
+      }
+      project_change_requests: {
+        Row: {
+          changes: Json
+          created_at: string
+          developer_rep_id: string | null
+          id: string
+          project_id: string
+          requested_by: string
+          review_notes: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          changes?: Json
+          created_at?: string
+          developer_rep_id?: string | null
+          id?: string
+          project_id: string
+          requested_by: string
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          changes?: Json
+          created_at?: string
+          developer_rep_id?: string | null
+          id?: string
+          project_id?: string
+          requested_by?: string
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       project_documents: {
         Row: {
           allow_download: boolean
