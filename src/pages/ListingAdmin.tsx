@@ -55,6 +55,7 @@ import { SourceCountsPanel } from "@/components/listing-admin/SourceCountsPanel"
 import { EnrichmentCenter } from "@/components/listing-admin/EnrichmentCenter";
 import { RefreshCw, Globe, Check, AlertTriangle, Zap } from "lucide-react";
 import { ProjectPreviewModal } from "@/components/listing-admin/ProjectPreviewModal";
+import { ProjectMediaManager } from "@/components/listing-admin/ProjectMediaManager";
 import { SafeImage } from "@/components/SafeImage";
 import type { UnifiedProject } from "@/types/unifiedProject";
 import { logAdminEdit, detectChangedFields, useLatestEditLogs, formatRelativeTime } from "@/hooks/useAdminEditLog";
