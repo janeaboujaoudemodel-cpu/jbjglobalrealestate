@@ -1,17 +1,37 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import { Crown, Sparkles, Lock, Mail, Phone } from "lucide-react";
+import { Link, useSearchParams } from "react-router-dom";
+import { Crown, Sparkles, Lock, Mail, Phone, Wrench, Clock, PartyPopper } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import InquiryFormModal from "@/components/InquiryFormModal";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useLanguage } from "@/contexts/LanguageContext";
 import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
 
-const ComingSoon = () => {
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [selectedRole, setSelectedRole] = useState<'buyer' | 'broker' | 'visitor' | undefined>(undefined);
-  const { t, isRTL } = useLanguage();
+type PageMode = 'coming-soon' | 'maintenance' | 'opening-soon' | 'welcome-back';
+
+const MODE_CONFIG: Record<PageMode, { title: string; subtitle: string; tagline: string }> = {
+  'coming-soon': {
+    title: 'Coming Soon',
+    subtitle: "We're crafting something extraordinary for you.",
+    tagline: 'UAE Real Estate Brokerage',
+  },
+  'maintenance': {
+    title: 'Under Maintenance',
+    subtitle: "We're upgrading our systems. We'll be back shortly.",
+    tagline: 'Scheduled Maintenance',
+  },
+  'opening-soon': {
+    title: 'Opening Soon',
+    subtitle: "Something extraordinary is on its way.",
+    tagline: 'A New Chapter Begins',
+  },
+  'welcome-back': {
+    title: 'Welcome Back',
+    subtitle: "We missed you. Great things await.",
+    tagline: 'Your Luxury Real Estate Partner',
+  },
+};
 
   const openForm = (role?: 'buyer' | 'broker' | 'visitor') => {
     setSelectedRole(role);
