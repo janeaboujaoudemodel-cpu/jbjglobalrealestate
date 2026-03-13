@@ -515,7 +515,7 @@ const AIHub = () => {
   const [toolFilter, setToolFilter] = useState<ToolCategory | 'all'>('all');
 
   // Combine all tools
-  const allTools = [...investorTools, ...productivityTools];
+  const allTools = [...investorTools, ...productivityTools, ...mediaAndCreativeTools, ...aiSalesTools, ...aiReportTools, ...aiCommTools, ...aiContentTools];
 
   // Filter tools by search and category
   const filteredTools = allTools.filter(tool => {
