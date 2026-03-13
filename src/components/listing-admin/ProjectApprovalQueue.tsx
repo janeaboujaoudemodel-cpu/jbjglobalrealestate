@@ -1112,8 +1112,11 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
             {/* Total Pending */}
             <div className="rounded-lg border border-primary/30 bg-primary/5 p-3 text-center">
               <div className="text-2xl font-bold text-foreground">{(totalCount ?? 0).toLocaleString()}</div>
-              <div className="text-xs text-muted-foreground">
-                {sourceFilter === "provident" ? "Provident Queue" : sourceFilter === "reelly" ? "Reelly Queue" : "Total Pending"}
+              <div className="text-xs text-muted-foreground flex items-center justify-center gap-1">
+                {sourceFilter === "provident" && <><Building className="h-3 w-3" /> Provident Queue</>}
+                {sourceFilter === "reelly" && <><Globe className="h-3 w-3" /> Reelly Queue</>}
+                {sourceFilter === "all" && "Total Pending"}
+                {sourceFilter === "manual" && <><Upload className="h-3 w-3" /> My Uploads</>}
               </div>
             </div>
             <button
