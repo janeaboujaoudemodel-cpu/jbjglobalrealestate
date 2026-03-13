@@ -84,7 +84,7 @@ function DesignCard({ item, onRemove }: { item: { id: string; item_name: string 
 }
 
 
-  const { user } = useAuth();
+  const Favorites = () => {
   const [searchParams] = useSearchParams();
   const defaultTab = searchParams.get("tab") === "shortlist" ? "shortlist" : searchParams.get("tab") === "designs" ? "designs" : "favorites";
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
