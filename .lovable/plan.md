@@ -1,72 +1,59 @@
 
-## CRM System Upgrade — Implementation Status
+Plan to fix both issues immediately (recent-research duplicates + broken bilingual stamp layout) without regressing existing behavior.
 
-### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
+1) Recent research: enforce true uniqueness and recency order
+- Root cause found:
+  - `ContinueSearching` intentionally triplicates items for marquee looping (`duplicated = [...items, ...items, ...items]`), so users visually see repeated listings.
+  - Global search is writing plain text queries into the same localStorage key used by recent listings (`jbj_recent_searches`), which can corrupt recent-item state.
+- Implementation:
+  - `src/components/ContinueSearching.tsx`: remove triplicated render path; render each unique listing once (no visual duplicates), keep smooth scrolling behavior without cloning cards.
+  - `src/hooks/useRecentSearches.ts`: strengthen canonical dedupe using normalized key (`type + normalized slug`, fallback to id), always keep newest-first.
+  - `src/components/GlobalSearchModal.tsx`: move query history to a separate key (e.g. `jbj_recent_queries`) so listing history remains clean and stable.
 
-#### Task 1: Full System Audit ✅
-- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
-- Identified 10 weaknesses (documented in plan)
+2) Standard stamp layout: fix Arabic/English arc logic and spacing rules
+- Root cause found:
+  - Bottom-arc math is wrong in both frontend and generator backend (`startDeg` centered at 270), which places “bottom” text on the top half.
+- Implementation:
+  - `src/lib/stampOfficialTemplate.ts`:
+    - Correct bottom-arc geometry (bottom hemisphere angles + upright rotation).
+    - Enforce strict mapping:
+      - Company: top Arabic only, bottom English only.
+      - Location: top Arabic only, bottom English only.
+    - Keep exactly 3 circles (outer, inner, center).
+    - Rebalance ring spacing so company band is larger than location band.
+    - Keep company font larger than location font.
+    - Keep separators on both sides between arcs.
+    - Add stricter fit constraints so text stays centered in the band and never touches borders.
+  - `supabase/functions/ai-stamp-generator/index.ts`:
+    - Apply the same corrected bottom-arc math and bilingual top/bottom mapping so generated designs follow the same standard rules.
 
-#### Task 2: Leads Security Hardening ✅
-- CSV export no longer includes email/phone PII
-- Audit logging added to exports with user_agent tracking
-- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
+3) Prevent multi-preview SVG cross-over bugs (major stability fix)
+- Root cause found:
+  - Repeated static SVG ids across many rendered stamps can cause arc/textPath collisions.
+- Implementation:
+  - `src/components/stamp-generator/StampSVGRenderer.tsx`: add per-instance SVG id scoping (prefix ids and all `url(#...)` / `href="#..."` references) before render.
 
-#### Task 3: Encryption Hardening ✅
-- CSV export stripped of `email_lower` and `phone_e164` fields
-- Export audit logged to both `crm_audit_logs` and `audit_logs`
+4) Ensure “standard” is always the baseline design
+- `src/lib/stampTemplates.ts` + `supabase/functions/ai-stamp-generator/index.ts`:
+  - Insert/keep an `owner-standard` concept as the first deterministic concept using the strict bilingual rules.
+  - Keep other generated concepts as variations, but never break baseline geometry.
 
-#### Task 4: Lead Lifecycle Upgrade ✅
-- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
-- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
-- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
+Technical file touch list
+- `src/components/ContinueSearching.tsx`
+- `src/hooks/useRecentSearches.ts`
+- `src/components/GlobalSearchModal.tsx`
+- `src/lib/stampOfficialTemplate.ts`
+- `src/components/stamp-generator/StampSVGRenderer.tsx`
+- `src/lib/stampTemplates.ts`
+- `supabase/functions/ai-stamp-generator/index.ts`
 
-#### Task 5: CRM Structure Upgrade ✅
-- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
-- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
-- KanbanPipeline expanded to show all 17 relevant stages
-
-#### Task 6: Performance Optimization ✅
-- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
-- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
-- `crm_leads_updated_at_trigger` auto-updates `updated_at`
-
-#### Task 7: AI Intelligence Integration ✅
-- New edge function `ai-lead-intelligence` using Lovable AI gateway
-- Supports 3 modes: `score`, `summary`, `next_action`
-- Tool-calling for structured scoring output
-- JWT auth + CRM role validation
-- PII sanitized before sending to AI
-
-#### Task 8: Workflow Automation ✅
-- Created `crm_automation_rules` table with RLS (owner manage, admin view)
-- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
-
-#### Task 10: Role & Permission System ✅
-- RLS on automation rules: owner CRUD, admin read-only
-- CSV export restricted to owner_admin/founder roles
-
-#### Task 12: Backend/Database Upgrade ✅
-- 3 new performance indexes
-- Auto-updated_at trigger on crm_leads
-- Duplicate hash computation trigger
-- Rate-limiting security function
-
-#### Task 13: Data Cleanliness ✅
-- `duplicate_hash` with auto-compute trigger prevents future duplicates
-- Partial unique index enforces uniqueness at DB level
-
-### Files Changed
-| File | Action |
-|------|--------|
-| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
-| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
-| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
-| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
-| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
-| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
-| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
-| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
-| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
+Validation checklist (post-implementation)
+- View same property 2, 10, 100 times → only one recent card for that listing, moved to newest position.
+- Continue Searching section shows no repeated visual duplicates.
+- Standard preview shows:
+  - Company Arabic top only, English bottom only.
+  - Location Arabic top only, English bottom only.
+  - 3 circles only.
+  - Company band text larger than location.
+  - No text touching any ring.
+- Generated concepts maintain the same arc logic and no overlay artifacts across grid cards.
