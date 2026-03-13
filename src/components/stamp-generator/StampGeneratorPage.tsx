@@ -583,6 +583,7 @@ export default function StampGeneratorPage() {
       });
   }, [user, projectId]);
 
+  function onAiPanelDragStart(e: React.MouseEvent) {
     e.preventDefault();
     setAiDragging(true);
     setAiDragStart({ mx: e.clientX, my: e.clientY, px: aiPanelPos.x, py: aiPanelPos.y });
