@@ -1162,7 +1162,7 @@ function ConceptCard({
           <Button size="sm"
             className={`flex-1 h-6 text-[9px] gap-0.5 ${isSelected ? 'bg-[hsl(var(--gold))] text-white' : 'bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90'}`}
             onClick={e => { e.stopPropagation(); onSelect(concept); }}>
-            {isSelected ? <><Check size={8}/> Preview</> : 'Select'}
+            {isSelected ? <><Check size={8}/> Selected</> : 'Select'}
           </Button>
           <Button size="sm" variant="outline"
             className="h-6 text-[9px] gap-0.5 border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] px-2"
@@ -1170,6 +1170,13 @@ function ConceptCard({
             <Type size={8}/> Edit
           </Button>
         </div>
+        {isSelected && onPreview && (
+          <Button size="sm" variant="outline"
+            className="w-full h-6 text-[9px] gap-0.5 border-[hsl(var(--gold)/0.3)] text-[hsl(var(--gold-dark))]"
+            onClick={e => { e.stopPropagation(); onPreview(concept); }}>
+            <Layers size={8}/> Preview on Documents
+          </Button>
+        )}
       </div>
     </div>
   );
