@@ -170,7 +170,7 @@ function renderBottomArcTextPath(
   const displayText = isArabic ? text : reversed;
   return `
     <defs><path id="${pathId}" d="${arcPath}"/></defs>
-    <text font-family="${font}" font-size="${fontSize}" fill="${ink}" 
+    <text data-stamp-element="${pathId}" font-family="${font}" font-size="${fontSize}" fill="${ink}" 
       letter-spacing="${letterSpacing}" font-weight="${fontWeight}">
       <textPath href="#${pathId}" startOffset="50%" text-anchor="middle">${displayText}</textPath>
     </text>
@@ -189,7 +189,7 @@ function renderTopArcTextPath(
   const arcPath = `M ${cx - r} ${cy} A ${r} ${r} 0 1 1 ${cx + r} ${cy}`;
   return `
     <defs><path id="${pathId}" d="${arcPath}"/></defs>
-    <text font-family="${font}" font-size="${fontSize}" fill="${ink}" 
+    <text data-stamp-element="${pathId}" font-family="${font}" font-size="${fontSize}" fill="${ink}" 
       letter-spacing="${letterSpacing}" font-weight="${fontWeight}">
       <textPath href="#${pathId}" startOffset="50%" text-anchor="middle">${text}</textPath>
     </text>
