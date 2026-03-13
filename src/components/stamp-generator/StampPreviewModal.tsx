@@ -355,8 +355,8 @@ export function StampPreviewModal({
                   <div className="absolute inset-0 p-7 flex items-stretch">
                     <div className={`flex-1 flex flex-col justify-between ${stampAlign === 'left' ? 'order-2 pl-6' : ''}`}>
                       <div>
-                        <p className="text-white font-bold text-xl leading-tight tracking-tight">{companyName}</p>
-                        {arabicName && <p className="text-white/70 text-sm mt-1" dir="rtl">{arabicName}</p>}
+                        <p className="text-gray-900 font-bold text-xl leading-tight tracking-tight">{companyName}</p>
+                        {arabicName && <p className="text-gray-500 text-sm mt-1" dir="rtl">{arabicName}</p>}
                       </div>
                       <div className="space-y-1">
                         <p className="text-white/60 text-xs font-medium uppercase tracking-widest">Chief Executive Officer</p>
