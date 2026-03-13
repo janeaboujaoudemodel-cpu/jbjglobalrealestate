@@ -359,8 +359,8 @@ export function StampPreviewModal({
                         {arabicName && <p className="text-gray-500 text-sm mt-1" dir="rtl">{arabicName}</p>}
                       </div>
                       <div className="space-y-1">
-                        <p className="text-white/60 text-xs font-medium uppercase tracking-widest">Chief Executive Officer</p>
-                        <p className="text-white/40 text-xs">{city}</p>
+                        <p className="text-gray-500 text-xs font-medium uppercase tracking-widest">Chief Executive Officer</p>
+                        <p className="text-gray-400 text-xs">{city}</p>
                       </div>
                     </div>
                     <div className={`flex items-center ${stampAlign === 'left' ? 'order-1 pr-6' : stampAlign === 'center' ? 'absolute inset-0 justify-center items-center' : 'justify-end pl-6'}`}>
