@@ -1116,7 +1116,7 @@ export default function StampGeneratorPage() {
 
 // ─── Concept Card ────────────────────────────────────────────────
 function ConceptCard({
-  concept, svgOverride, selectedId, tintColor, secondaryColor, accentColor, fontFamily, fontBold, fontItalic, manualFontSize, inkMode, togglingFav, onSelect, onToggleFav, onEditText
+  concept, svgOverride, selectedId, tintColor, secondaryColor, accentColor, fontFamily, fontBold, fontItalic, manualFontSize, inkMode, togglingFav, onSelect, onToggleFav, onEditText, onPreview
 }: {
   concept: StampDesignConcept;
   svgOverride?: string;
@@ -1133,6 +1133,7 @@ function ConceptCard({
   onSelect: (c: StampDesignConcept) => void;
   onToggleFav: (c: StampDesignConcept) => void;
   onEditText: (c: StampDesignConcept) => void;
+  onPreview?: (c: StampDesignConcept) => void;
 }) {
   const isSelected = selectedId === concept.id;
   const isFav = concept.isFavorite;
