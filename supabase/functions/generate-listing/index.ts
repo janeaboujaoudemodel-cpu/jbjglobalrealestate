@@ -386,7 +386,7 @@ MULTI-PROJECT RULE:
                 ];
                 const singleRes = await fetchAIWithTimeout("https://ai.gateway.lovable.dev/v1/chat/completions", {
                   method: "POST", headers: aiHeaders,
-                  body: JSON.stringify({ model: "google/gemini-2.5-pro", max_tokens: 8000, temperature: 0.05,
+                  body: JSON.stringify({ model: "google/gemini-2.5-pro", max_tokens: 8000, temperature: 0.05, // fallback to pro for single-file retries
                     messages: [{ role: "user", content: singleParts }],
                     tools: [{ type: "function", function: { name: "extract_projects", description: "Extract structured data for real estate projects.", parameters: { type: "object", properties: { projects: { type: "array", items: projectSchema } }, required: ["projects"] } } }],
                     tool_choice: { type: "function", function: { name: "extract_projects" } },
