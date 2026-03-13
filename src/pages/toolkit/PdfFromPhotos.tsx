@@ -940,8 +940,7 @@ function GoldCard({ children }: { children: React.ReactNode }) {
 function GoldPill({ onClick, children }: { onClick: () => void; children: React.ReactNode }) {
   return (
     <button
-      className="text-xs px-2.5 py-1 rounded-lg transition-colors"
-      style={{ color: "#C8A766", border: "1px solid rgba(200,167,102,0.22)", background: "transparent" }}
+      className="text-xs px-2.5 py-1 rounded-lg transition-colors text-violet-600 border border-violet-200 bg-violet-50 hover:bg-violet-100"
       onClick={onClick}
     >
       {children}
