@@ -177,14 +177,14 @@ export function DeveloperProjectReview({ developerId }: { developerId: string })
       if (error) throw error;
 
       // Log to audit
-      await supabase.from("project_audit_logs").insert({
+      await supabase.from("project_audit_logs").insert([{
         project_id: editingProject.id,
         action: "change_request_submitted",
         changed_by: user.id,
         changed_by_email: user.email,
-        before_data: editingProject,
-        after_data: changes,
-      });
+        before_data: editingProject as any,
+        after_data: changes as any,
+      }]);
 
       toast({ title: "Change Request Submitted", description: "Your edits have been submitted for approval" });
       setEditingProject(null);
