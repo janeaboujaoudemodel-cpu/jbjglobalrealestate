@@ -546,6 +546,109 @@ CRITICAL RULES:
       });
     }
 
+    // ── REFINE-IMAGE action — uses Gemini image model ─────────────────────
+    if (action === "refine-image") {
+      const { imageBase64, prompt } = body;
+      if (!prompt) {
+        return new Response(JSON.stringify({ error: "Prompt required" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      if (!LOVABLE_API_KEY) {
+        return new Response(JSON.stringify({ error: "AI not configured" }), {
+          status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      try {
+        const messages: any[] = [
+          {
+            role: "system",
+            content: "You are an expert stamp designer. Modify the provided stamp image based on the user's instructions. Return the modified stamp image. Keep the circular stamp shape, professional look, and clean typography.",
+          },
+        ];
+
+        const userContent: any[] = [
+          { type: "text", text: `Modify this stamp: ${prompt}` },
+        ];
+
+        if (imageBase64 && imageBase64.startsWith("data:")) {
+          const base64Data = imageBase64.split(",")[1];
+          const mimeMatch = imageBase64.match(/data:([^;]+);/);
+          const mimeType = mimeMatch ? mimeMatch[1] : "image/png";
+          userContent.unshift({
+            type: "image_url",
+            image_url: { url: `data:${mimeType};base64,${base64Data}` },
+          });
+        }
+
+        messages.push({ role: "user", content: userContent });
+
+        const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
+          body: JSON.stringify({
+            model: "google/gemini-3.1-flash-image-preview",
+            messages,
+            modalities: ["text", "image"],
+            stream: false,
+          }),
+        });
+
+        if (!aiRes.ok) {
+          if (aiRes.status === 429) {
+            return new Response(JSON.stringify({ error: "Rate limit exceeded. Please try again later." }), {
+              status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
+            });
+          }
+          if (aiRes.status === 402) {
+            return new Response(JSON.stringify({ error: "Credits exhausted. Please add funds." }), {
+              status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
+            });
+          }
+          const errText = await aiRes.text();
+          console.error("AI image refine error:", aiRes.status, errText);
+          return new Response(JSON.stringify({ error: "AI refinement failed" }), {
+            status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+
+        const aiJson = await aiRes.json();
+        const parts = aiJson.choices?.[0]?.message?.content;
+        let imageUrl = "";
+
+        // Handle multimodal response — find image part
+        if (Array.isArray(parts)) {
+          for (const part of parts) {
+            if (part.type === "image_url" && part.image_url?.url) {
+              imageUrl = part.image_url.url;
+              break;
+            }
+          }
+        } else if (typeof parts === "string") {
+          // Check if it contains a base64 image reference
+          const b64Match = parts.match(/data:image\/[^;]+;base64,[A-Za-z0-9+/=]+/);
+          if (b64Match) imageUrl = b64Match[0];
+        }
+
+        if (imageUrl) {
+          return new Response(JSON.stringify({ imageUrl }), {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+
+        return new Response(JSON.stringify({ error: "AI did not return an image. Try a different prompt." }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      } catch (e) {
+        console.error("refine-image error:", e);
+        return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }), {
+          status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    }
+
     return new Response(JSON.stringify({ error: "Unknown action" }), { 
       status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } 
     });

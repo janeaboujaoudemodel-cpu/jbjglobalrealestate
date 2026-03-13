@@ -493,7 +493,7 @@ export function getOwnerDefaultConfig(): OfficialStampConfig {
     inkColor: INK_BLUE,
     showRegistration: false,
     borderStyle: 'DOUBLE',
-    outerBorderWidth: OUTER_STROKE,
+    outerBorderWidth: 4,
     innerBorderWidth: MIDDLE_STROKE,
     dividerStyle: 'diamond',
     centerMode: 'monogram',

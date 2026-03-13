@@ -964,25 +964,47 @@ export default function StampGeneratorPage() {
                   </Badge>
                 )}
               </div>
-              <div className="flex items-center justify-center py-6 px-3 min-h-[320px] bg-[radial-gradient(circle_at_center,_hsl(var(--pearl-1))_0%,_white_70%)]">
+              {/* Welcome Banner */}
+              {showWelcomeBanner && !generating && (selectedSvg || allConcepts[0]?.svgSource) && (
+                <div className="mx-3 mt-2 mb-0 flex items-center gap-2 px-3 py-2 rounded-lg bg-gradient-to-r from-[hsl(var(--gold)/0.08)] to-[hsl(var(--champagne-1))] border border-[hsl(var(--gold)/0.2)]">
+                  <Sparkles size={12} className="text-[hsl(var(--gold))] flex-shrink-0"/>
+                  <p className="text-[9px] text-[hsl(var(--foreground))] flex-1">Your official stamp is ready — customize colors, text, upload your own, or refine with AI.</p>
+                  <button onClick={() => setShowWelcomeBanner(false)} className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]"><X size={10}/></button>
+                </div>
+              )}
+              <div className="relative flex items-center justify-center py-6 px-3 min-h-[320px] bg-[radial-gradient(circle_at_center,_hsl(var(--pearl-1))_0%,_white_70%)]">
                 {generating ? (
                   <div className="flex flex-col items-center gap-2 text-[hsl(var(--muted-foreground))]">
                     <Loader2 size={28} className="animate-spin text-[hsl(var(--gold))]"/>
                     <p className="text-[10px] font-medium">Generating…</p>
                   </div>
+                ) : uploadedStampUrl ? (
+                  <div className="relative">
+                    <img src={uploadedStampUrl} alt="Uploaded stamp" className="max-w-[320px] max-h-[320px] object-contain"/>
+                    {uploadedSignatureUrl && (
+                      <img src={uploadedSignatureUrl} alt="Signature" className="absolute h-10 object-contain pointer-events-none opacity-80"
+                        style={{ left: `${signatureX}%`, top: `${signatureY}%`, transform: 'translate(-50%, -50%)' }}/>
+                    )}
+                  </div>
                 ) : (selectedSvg || allConcepts[0]?.svgSource) ? (
-                  <StampSVGRenderer
-                    svgSource={selectedSvg || (svgOverrides[allConcepts[0]?.id] || allConcepts[0]?.svgSource) || ''}
-                    tintColor={primaryColor}
-                    secondaryColor={secondaryColor}
-                    accentColor={accentColor}
-                    fontFamily={fontFamily}
-                    fontWeight={fontBold ? 'bold' : 'normal'}
-                    fontStyle={fontItalic ? 'italic' : 'normal'}
-                    fontSize={manualFontSize}
-                    inkMode={inkMode}
-                    size={320}
-                  />
+                  <div className="relative">
+                    <StampSVGRenderer
+                      svgSource={selectedSvg || (svgOverrides[allConcepts[0]?.id] || allConcepts[0]?.svgSource) || ''}
+                      tintColor={primaryColor}
+                      secondaryColor={secondaryColor}
+                      accentColor={accentColor}
+                      fontFamily={fontFamily}
+                      fontWeight={fontBold ? 'bold' : 'normal'}
+                      fontStyle={fontItalic ? 'italic' : 'normal'}
+                      fontSize={manualFontSize}
+                      inkMode={inkMode}
+                      size={320}
+                    />
+                    {uploadedSignatureUrl && (
+                      <img src={uploadedSignatureUrl} alt="Signature" className="absolute h-10 object-contain pointer-events-none opacity-80"
+                        style={{ left: `${signatureX}%`, top: `${signatureY}%`, transform: 'translate(-50%, -50%)' }}/>
+                    )}
+                  </div>
                 ) : (
                   <div className="flex flex-col items-center gap-2 text-[hsl(var(--muted-foreground))]">
                     <Stamp size={32} className="opacity-20"/>
