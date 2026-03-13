@@ -702,7 +702,7 @@ const AIHub = () => {
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 <span className="text-white">JBJ </span>
-                <span className="text-white">Tools Hub</span>
+                <span className="text-white">Royal Tools Hub</span>
               </motion.h1>
 
               {/* Subtitle */}
