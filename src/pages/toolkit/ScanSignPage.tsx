@@ -690,7 +690,7 @@ export default function ScanSignPage() {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex flex-col items-center justify-center h-72" style={{ color: "rgba(255,255,255,0.2)" }}>
+                  <div className="flex flex-col items-center justify-center h-72 text-stone-300">
                     <ScanLine className="h-20 w-20 mb-4 opacity-20" />
                     <p className="text-base font-medium">Capture or upload pages to preview</p>
                     <p className="text-sm mt-1 opacity-60">Point camera at document or drag & drop files</p>
