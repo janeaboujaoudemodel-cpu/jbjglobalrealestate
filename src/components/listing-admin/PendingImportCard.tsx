@@ -279,17 +279,17 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
       {/* Incomplete badge with detail */}
       {isIncomplete && (
         <div className="absolute top-3 left-3 z-20 pointer-events-none">
-          <div className="inline-flex items-center gap-1 rounded bg-amber-500 text-white text-xs font-bold px-2.5 py-1 shadow" title={`Missing: ${missingFields.join(", ")}`}>
+          <div className="inline-flex items-center gap-1 rounded bg-amber-500 text-white text-xs font-bold px-2.5 py-1 shadow" title={`Core: ${coreMissing.join(", ")}${optionalMissing.length > 0 ? ` | Optional: ${optionalMissing.join(", ")}` : ""}`}>
             <AlertTriangle className="w-3 h-3" />
-            Needs Work ({missingFields.length})
+            {coreMissing.length > 0 ? `${coreMissing.length} Core Missing` : `${optionalMissing.length} Optional`}
           </div>
         </div>
       )}
       {/* Missing fields breakdown */}
-      {missingFields.length > 0 && (
+      {coreMissing.length > 0 && (
         <div className="absolute top-12 left-3 z-20 pointer-events-none flex flex-wrap gap-1 max-w-[80%]">
-          {missingFields.slice(0, 4).map((f) => (
-            <span key={f} className="rounded bg-black/60 text-white text-[9px] px-1.5 py-0.5 backdrop-blur">
+          {coreMissing.slice(0, 4).map((f) => (
+            <span key={f} className="rounded bg-red-600/80 text-white text-[9px] px-1.5 py-0.5 backdrop-blur font-medium">
               {f}
             </span>
           ))}
