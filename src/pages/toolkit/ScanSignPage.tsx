@@ -733,8 +733,8 @@ export default function ScanSignPage() {
               </Panel>
 
               {/* Export + Save Row */}
-              <div className="rounded-2xl p-4 space-y-3" style={{ background: "rgba(200,167,102,0.04)", border: "1px solid rgba(200,167,102,0.18)" }}>
-                <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "rgba(255,255,255,0.3)" }}>Export & Project Actions</p>
+              <div className="rounded-2xl p-4 space-y-3 bg-emerald-50/50 border border-emerald-100">
+                <p className="text-xs font-semibold uppercase tracking-widest mb-3 text-stone-400">Export & Project Actions</p>
                 <PrimaryBtn onClick={exportToPDF} disabled={pages.length === 0 || processing} className="w-full py-4 text-base">
                   {processing ? <><Loader2 className="w-5 h-5 animate-spin" /> Generating PDF…</> : <><Download className="w-5 h-5" /> Export to PDF ({pages.length} page{pages.length !== 1 ? 's' : ''})</>}
                 </PrimaryBtn>
