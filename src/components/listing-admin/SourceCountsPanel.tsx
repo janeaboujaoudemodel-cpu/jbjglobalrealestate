@@ -38,7 +38,7 @@ export function SourceCountsPanel({ reellyApiTotal }: SourceCountsPanelProps) {
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2 text-sm text-foreground">
               <Database className="w-4 h-4 text-gold" />
-              Source Portal
+              Provident Portal
               {selectedSource === "source-b" && (
                 <Badge variant="outline" className="ml-auto bg-gold/10 text-gold border-gold/40 text-[10px]">
                   Active
