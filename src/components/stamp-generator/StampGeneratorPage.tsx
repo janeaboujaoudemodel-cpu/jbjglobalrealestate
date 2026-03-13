@@ -1343,6 +1343,20 @@ export default function StampGeneratorPage() {
             )}
 
             {/* Export CTA */}
+            {/* Recently Deleted */}
+            <StampRecentlyDeleted
+              items={deletedStamps}
+              tintColor={primaryColor}
+              secondaryColor={secondaryColor}
+              accentColor={accentColor}
+              fontFamily={fontFamily}
+              inkMode={inkMode}
+              onRecover={recoverDeletedStamp}
+              onPermanentDelete={permanentDeleteStamp}
+              onAdaptAndSave={adaptAndSaveAsAsset}
+            />
+
+            {/* Export CTA */}
             {selectedId && !generating && (
               <div className="bg-gradient-to-r from-[hsl(var(--gold)/0.08)] to-[hsl(var(--champagne-1))] rounded-xl border border-[hsl(var(--gold)/0.2)] p-4 flex items-center justify-between flex-wrap gap-3">
                 <div>
@@ -1359,6 +1373,37 @@ export default function StampGeneratorPage() {
         </div>
       </div>
 
+      {/* Version Selector Modal */}
+      {showVersionSelector && projectId && (
+        <StampVersionSelector
+          projectId={projectId}
+          tintColor={primaryColor}
+          secondaryColor={secondaryColor}
+          accentColor={accentColor}
+          fontFamily={fontFamily}
+          inkMode={inkMode}
+          onSelectVersion={(v) => {
+            const newConcept: StampDesignConcept = {
+              id: v.id, templateKey: v.template_key,
+              label: v.template_key.replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase()),
+              tags: [], svgSource: v.svg_source,
+            };
+            setConcepts(prev => [newConcept, ...prev.filter(c => c.id !== v.id)]);
+            setSelectedId(v.id);
+            setShowVersionSelector(false);
+          }}
+          onDuplicate={(v) => {
+            const dup: StampDesignConcept = {
+              id: crypto.randomUUID(), templateKey: v.template_key,
+              label: `${v.template_key.replace(/-/g, ' ')} (restored)`, tags: [], svgSource: v.svg_source,
+            };
+            setConcepts(prev => [dup, ...prev]);
+            toast.success('Version duplicated');
+          }}
+          onUploadNew={() => { setShowVersionSelector(false); setLeftTab('mystamp'); }}
+          onClose={() => setShowVersionSelector(false)}
+        />
+      )}
       {/* AI Designer Floating Panel */}
       {chatOpen && (
         <div className="fixed z-[10050] flex flex-col bg-white rounded-2xl shadow-2xl border border-[hsl(var(--border))] overflow-hidden"
