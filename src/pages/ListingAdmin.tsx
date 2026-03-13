@@ -137,8 +137,10 @@ const ListingAdmin = () => {
   // UNIFIED: Now using 'data-ops' as the single entry for all sync/extraction views
   const [activeView, setActiveView] = useState<'chat' | 'projects' | 'editor' | 'data-ops'>('data-ops');
   
-  // Controlled sub-tab state for Data Ops tabs - responds to URL params
-  const [dataOpsTab, setDataOpsTab] = useState<string>("reelly");
+  // Controlled sub-tab state for Data Ops tabs - defaults to Provident enrichment
+  const [dataOpsTab, setDataOpsTab] = useState<string>("enrichment");
+  // Active source selection from SourceCountsPanel (provident or reelly)
+  const [activeSource, setActiveSource] = useState<string>("provident");
 
   // Allow deep-links like /listing-admin?view=data-ops&syncTab=approvals
   // Legacy URLs (sync, reelly, data-sources) all redirect to data-ops
