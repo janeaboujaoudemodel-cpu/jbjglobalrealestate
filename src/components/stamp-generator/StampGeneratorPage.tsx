@@ -569,7 +569,7 @@ export default function StampGeneratorPage() {
       <div className="flex-1 flex gap-0 overflow-hidden">
 
         {/* ── Left Panel: Style Controls (always visible, 200px) ──── */}
-        <div className="w-[200px] flex-shrink-0 border-r border-[hsl(var(--border))] bg-white/80 flex flex-col overflow-hidden">
+        <div className="w-[240px] flex-shrink-0 border-r border-[hsl(var(--border))] bg-white/80 flex flex-col overflow-hidden">
           {/* Tab switcher */}
           <div className="flex-shrink-0 p-2">
             <div className="flex bg-[hsl(var(--muted))] rounded-lg p-0.5 gap-0.5 flex-wrap">
