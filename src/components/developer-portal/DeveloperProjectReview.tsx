@@ -102,7 +102,7 @@ export function DeveloperProjectReview({ developerId }: { developerId: string })
       .order("created_at", { ascending: false })
       .limit(20);
 
-    setChangeRequests((data as ChangeRequest[]) || []);
+    setChangeRequests(((data || []) as unknown as ChangeRequest[]));
   };
 
   const startEdit = (project: ProjectForReview) => {
