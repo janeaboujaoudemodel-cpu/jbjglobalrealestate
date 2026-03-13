@@ -390,7 +390,7 @@ export function StampPreviewModal({
                       {arabicName && <p className="text-white/70 text-sm mt-0.5" dir="rtl">{arabicName}</p>}
                       <p className="text-white/60 text-xs mt-1">{city}</p>
                     </div>
-                    <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} size={70}/>
+                    <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} fontWeight={fontWeight} fontStyle={fontStyle} fontSize={fontSize} size={70}/>
                   </div>
                   <div className="px-8 py-6 space-y-4">
                     <div className="space-y-1">
