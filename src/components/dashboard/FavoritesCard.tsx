@@ -30,6 +30,8 @@ const FavoritesCard = () => {
 
   const isLoading = favoritesLoading || projectsLoading;
   const count = favorites?.length || 0;
+  const { data: designFavs } = useDesignFavorites();
+  const designCount = designFavs?.length || 0;
 
   return (
     <Card className="border border-gold/40 bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))] overflow-hidden">
