@@ -4,6 +4,7 @@ import { useFavorites, useShortlist, useToggleFavorite, useToggleShortlist } fro
 import { useGuestFavorites, useGuestShortlist } from "@/hooks/useGuestFavorites";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { toast } from "sonner";
+import { useActionGate } from "@/contexts/ActionGateContext";
 
 const isUUID = (id: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
 
@@ -21,6 +22,7 @@ const FavoriteButton = ({
   className = "" 
 }: FavoriteButtonProps) => {
   const { user } = useAuth();
+  const { gatedAction } = useActionGate();
   
   // For non-UUID project IDs (e.g. Reelly numeric IDs), always use guest/localStorage
   const useDb = user && isUUID(projectId);
@@ -64,26 +66,30 @@ const FavoriteButton = ({
     e.preventDefault();
     e.stopPropagation();
     
-    if (useDb) {
-      toggleUserFavorite.mutate({ projectId, isFavorite });
-    } else {
-      toggleGuestFavorite(String(projectId));
-      toast.success(isFavorite ? "Removed from favorites" : "Added to favorites");
-    }
+    gatedAction(() => {
+      if (useDb) {
+        toggleUserFavorite.mutate({ projectId, isFavorite });
+      } else {
+        toggleGuestFavorite(String(projectId));
+        toast.success(isFavorite ? "Removed from favorites" : "Added to favorites");
+      }
+    }, "save_favorite");
   };
 
   const handleShortlistClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     
-    if (useDb) {
-      toggleUserShortlist.mutate({ projectId, isShortlisted, currentCount: shortlistCount });
-    } else {
-      const success = toggleGuestShortlist(String(projectId));
-      if (success) {
-        toast.success(isShortlisted ? "Removed from shortlist" : "Added to shortlist");
+    gatedAction(() => {
+      if (useDb) {
+        toggleUserShortlist.mutate({ projectId, isShortlisted, currentCount: shortlistCount });
+      } else {
+        const success = toggleGuestShortlist(String(projectId));
+        if (success) {
+          toast.success(isShortlisted ? "Removed from shortlist" : "Added to shortlist");
+        }
       }
-    }
+    }, "add_shortlist");
   };
 
   return (
