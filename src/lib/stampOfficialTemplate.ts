@@ -77,10 +77,11 @@ const OUTER_R_PCT = 0.46;     // outer ring radius
 const MIDDLE_R_PCT = 0.33;    // middle ring — wide premium gap from outer (~13%)
 const INNER_R_PCT = 0.26;     // inner ring — tighter gap from middle
 
-// ── Stroke widths (tapering hierarchy) ──
-const OUTER_STROKE = 6;       // boldest
+// ── Stroke widths (tapering hierarchy — ministry-level precision) ──
+const OUTER_STROKE = 4;       // boldest — clean, not chunky (matches real UAE ministry stamps)
 const MIDDLE_STROKE = 2.5;    // medium
 const INNER_STROKE = 1.2;     // thinnest
+const DECORATIVE_STROKE = 0.5; // thin decorative ring just inside outer ring
 
 // ── Safe zone ──
 const SAFE_ZONE = 5;          // minimum px between text and ring strokes
