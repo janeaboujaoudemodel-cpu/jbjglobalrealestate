@@ -533,7 +533,7 @@ export default function ScanSignPage() {
 
                     {/* Cross-tool import buttons */}
                     <div className="mt-3 space-y-2">
-                      <p className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: G.textMuted }}>Import from Tools</p>
+                      <p className="text-[10px] font-semibold uppercase tracking-wider text-stone-400">Import from Tools</p>
                       <div className="grid grid-cols-3 gap-2">
                         <button
                           onClick={() => {
