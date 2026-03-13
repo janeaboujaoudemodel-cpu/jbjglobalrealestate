@@ -171,6 +171,16 @@ export default function StampProjectsDashboard() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            {projects.length > 0 && (
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-1.5 text-xs"
+                onClick={toggleSelectAll}
+              >
+                <CheckSquare size={13}/> {selectedIds.size === projects.length ? 'Deselect All' : 'Select All'}
+              </Button>
+            )}
             <Button
               variant="outline"
               size="sm"
