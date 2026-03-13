@@ -16,10 +16,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import ProjectCard from "@/components/ProjectCard";
 import { toast } from "sonner";
-import { Badge } from "@/components/ui/badge";
-import { Checkbox } from "@/components/ui/checkbox";
-import ProjectCard from "@/components/ProjectCard";
-import { toast } from "sonner";
 import {
   DropdownMenu,
   DropdownMenuContent,
