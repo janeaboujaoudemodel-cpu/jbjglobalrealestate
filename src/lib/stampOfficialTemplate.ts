@@ -73,8 +73,8 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   const enFont = config.fontFamily || ENGLISH_FONT;
 
   // Ring radii — generous spacing so text never clips
-  const outerR = S * 0.44;
-  const innerR = outerR - S * 0.035;
+  const outerR = S * 0.46;
+  const innerR = outerR - S * 0.05;
   const textArcR = (outerR + innerR) / 2; // text sits between the two rings
 
   // Inner circle for location text
