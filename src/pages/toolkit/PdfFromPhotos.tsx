@@ -951,18 +951,12 @@ function GoldPill({ onClick, children }: { onClick: () => void; children: React.
 function StepHeader({ n, title, sub, noMb }: { n: number; title: string; sub: string; noMb?: boolean }) {
   return (
     <div className={`flex items-start gap-3 ${noMb ? "" : "mb-1"}`}>
-      <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0 mt-0.5"
-        style={{
-          background: "rgba(200,167,102,0.15)",
-          color: "#C8A766",
-          border: "1px solid rgba(200,167,102,0.35)",
-          boxShadow: "0 0 16px rgba(200,167,102,0.15)",
-        }}>
+      <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0 mt-0.5 bg-violet-100 text-violet-700 border border-violet-200">
         {n}
       </div>
       <div>
-        <h3 className="text-white font-semibold text-base">{title}</h3>
-        <p className="text-sm mt-0.5" style={{ color: "rgba(255,255,255,0.45)" }}
+        <h3 className="text-stone-900 font-semibold text-base">{title}</h3>
+        <p className="text-sm mt-0.5 text-stone-500"
           dangerouslySetInnerHTML={{ __html: sub }} />
       </div>
     </div>
