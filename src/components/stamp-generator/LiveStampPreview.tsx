@@ -1,12 +1,13 @@
 /**
  * LiveStampPreview — real-time SVG stamp preview inside the wizard.
- * Renders a faithful stamp shape using the user's current form selections.
+ * Uses the Official Standard Template for bilingual stamps.
  * Uses corporate standard blue ink (#1B3A8C) as default.
  * Default bilingual: Arabic top / English bottom.
  */
 
 import React, { useMemo } from 'react';
 import { Eye } from 'lucide-react';
+import { generateOfficialStampSVG, OFFICIAL_INK_BLUE, type SeparatorStyle } from '@/lib/stampOfficialTemplate';
 
 type StampType = 'ROUND' | 'OVAL' | 'RECTANGLE' | 'SQUARE';
 type StyleTheme = 'CLASSIC' | 'MODERN' | 'MINIMAL' | 'LUXURY' | 'BOLD' | 'VINTAGE';
@@ -32,8 +33,16 @@ export interface LiveStampPreviewProps {
   languageReversed?: boolean;
   /** Whether to show license number */
   showLicenseNumber?: boolean;
+  /** Whether to show location */
+  showLocation?: boolean;
+  /** Separator style for arc dividers */
+  separatorStyle?: SeparatorStyle;
   /** Size of the SVG canvas in px */
   size?: number;
+  /** Ink color override */
+  inkColor?: string;
+  /** Arabic city text */
+  arabicCity?: string;
 }
 
 const FONT_FAMILIES: Record<TypographyStyle, string> = {
@@ -47,28 +56,15 @@ const FONT_FAMILIES: Record<TypographyStyle, string> = {
 
 /** Stroke width per theme */
 const THEME_STROKE: Record<StyleTheme, number> = {
-  CLASSIC: 1.8,
-  MODERN:  1.2,
-  MINIMAL: 0.8,
-  LUXURY:  2.5,
-  BOLD:    3.2,
-  VINTAGE: 1.6,
+  CLASSIC: 1.8, MODERN: 1.2, MINIMAL: 0.8, LUXURY: 2.5, BOLD: 3.2, VINTAGE: 1.6,
 };
 
 /** Whether a theme includes a secondary inner ring */
 const THEME_RING: Record<StyleTheme, boolean> = {
-  CLASSIC: true,
-  MODERN:  false,
-  MINIMAL: false,
-  LUXURY:  true,
-  BOLD:    false,
-  VINTAGE: true,
+  CLASSIC: true, MODERN: false, MINIMAL: false, LUXURY: true, BOLD: false, VINTAGE: true,
 };
 
-function trunc(s: string, max: number) {
-  if (!s) return '';
-  return s.length > max ? s.slice(0, max - 1) + '…' : s;
-}
+function trunc(s: string, max: number) { return !s ? '' : s.length > max ? s.slice(0, max - 1) + '…' : s; }
 
 function fitFontSize(text: string, baseSize: number, maxWidth: number, charWidthRatio = 0.6): number {
   if (!text) return baseSize;
@@ -115,16 +111,19 @@ export function LiveStampPreview({
   monogramText = '',
   uploadedLogoUrl = '',
   languageMode,
-  languageReversed = true, // AR top by default
+  languageReversed = true,
   showLicenseNumber = true,
+  showLocation = true,
+  separatorStyle = 'dot',
   size = 220,
+  inkColor,
+  arabicCity = '',
 }: LiveStampPreviewProps) {
   const displayName = companyName || 'Your Company Name';
   const fontFamily = FONT_FAMILIES[typographyStyle];
   const sw = THEME_STROKE[styleTheme];
   const hasRing = THEME_RING[styleTheme];
-  // Corporate standard: blue ink
-  const ink = '#1B3A8C';
+  const ink = inkColor || OFFICIAL_INK_BLUE;
 
   const svg = useMemo(() => {
     const S = size;
@@ -132,6 +131,45 @@ export function LiveStampPreview({
     const cy = S / 2;
     const pad = 10;
 
+    const isBilingual = languageMode === 'BILINGUAL';
+    const isArabic = languageMode === 'AR';
+    const isRound = stampType === 'ROUND' || stampType === 'OVAL';
+
+    // For ROUND bilingual stamps, use the Official Template
+    if (isRound && (isBilingual || isArabic)) {
+      const mono = monogramText || deriveMonogram(displayName);
+      const locationEn = showLocation ? [city, country].filter(Boolean).join(', ') || 'Dubai, UAE' : '';
+      
+      // Build Arabic city text
+      const ARABIC_CITY_MAP: Record<string, string> = {
+        'dubai': 'دبي، الإمارات', 'abu dhabi': 'أبوظبي، الإمارات',
+        'sharjah': 'الشارقة، الإمارات', 'ajman': 'عجمان، الإمارات',
+        'ras al khaimah': 'رأس الخيمة، الإمارات', 'fujairah': 'الفجيرة، الإمارات',
+        'umm al quwain': 'أم القيوين، الإمارات',
+      };
+      const locAr = arabicCity || (city ? ARABIC_CITY_MAP[city.toLowerCase()] || `${city}، الإمارات` : 'دبي، الإمارات');
+
+      return generateOfficialStampSVG({
+        companyNameEn: displayName,
+        companyNameAr: arabicCompanyName || displayName,
+        arabicOnTop: isArabic ? true : languageReversed,
+        locationTextEn: locationEn,
+        locationTextAr: locAr,
+        showLocation: showLocation && density >= 2,
+        separatorStyle,
+        monogramText: mono,
+        logoUrl: uploadedLogoUrl || undefined,
+        showMonogram: (iconStyle === 'MONOGRAM' || iconStyle === 'BOTH') && !!mono,
+        showLogo: (iconStyle === 'UPLOADED_LOGO' || iconStyle === 'BOTH') && !!uploadedLogoUrl,
+        inkColor: ink,
+        fontFamily,
+        size: S,
+        registrationNumber,
+        showRegistration: showLicenseNumber && density >= 3 && !!registrationNumber,
+      });
+    }
+
+    // ── Non-bilingual or non-round: existing rendering logic ──
     let outerRx = cx - pad;
     let outerRy = cy - pad;
     let innerRx = outerRx - 8 * (sw / 1.5);
@@ -143,7 +181,6 @@ export function LiveStampPreview({
     const isCustom = borderStyle === 'CUSTOM';
     const strokeDash = isDotted ? '2,2' : isRope ? '5,3' : isCustom ? '1,1,4,1' : 'none';
 
-    // Outer ring
     if (stampType === 'ROUND') {
       const r = cx - pad;
       const ri = r - 7 * (sw / 1.5);
@@ -185,130 +222,56 @@ export function LiveStampPreview({
       }
     }
 
-    // ── Text content ───────────────────────────────────────────────────────
-
+    // Text for EN-only round
     let textContent = '';
-
-    const isBilingual = languageMode === 'BILINGUAL';
-    const isArabic = languageMode === 'AR';
-    const isRound = stampType === 'ROUND' || stampType === 'OVAL';
-
-    // Arabic on top by default when reversed=true
-    const topIsArabic = isBilingual && languageReversed;
-
     if (isRound) {
       const arcR = innerRx - 6;
       const clipR = innerRx - 2;
       const topArcId = 'top-arc-lp';
       const botArcId = 'bot-arc-lp';
-      const botArcRevId = 'bot-arc-rev-lp';
       const clipId = 'lp-round-clip';
-
-      const topArcPath = arcPath(cx, cy, arcR, -177.5, 175);
-      const botArcPath = arcPath(cx, cy, arcR, 2.5, 175);
-      const botArcRevPath = arcPath(cx, cy, arcR, 177.5, -175);
-
+      const topArcP = arcPath(cx, cy, arcR, -177.5, 175);
+      const botArcP = arcPath(cx, cy, arcR, 2.5, 175);
       const arcLen = arcR * (175 * Math.PI / 180);
 
       textContent += `
         <defs>
           <clipPath id="${clipId}"><circle cx="${cx}" cy="${cy}" r="${clipR}"/></clipPath>
-          <path id="${topArcId}" d="${topArcPath}"/>
-          <path id="${botArcId}" d="${botArcPath}"/>
-          <path id="${botArcRevId}" d="${botArcRevPath}"/>
+          <path id="${topArcId}" d="${topArcP}"/>
+          <path id="${botArcId}" d="${botArcP}"/>
         </defs>
         <g clip-path="url(#${clipId})">`;
 
-      if (isBilingual && arabicCompanyName) {
-        if (topIsArabic) {
-          // Arabic on top arc, English on bottom
-          const arFontSize = Math.min(11, Math.max(5, fitFontSize(arabicCompanyName, 10, arcLen * 0.88, 0.65)));
-          textContent += `
-          <text font-family="${FONT_FAMILIES.ARABIC_MODERN}" font-size="${arFontSize}" fill="${ink}" letter-spacing="0.5">
-            <textPath href="#${topArcId}" startOffset="50%" text-anchor="middle">${trunc(arabicCompanyName, 36)}</textPath>
-          </text>`;
-          const nameFontSize = Math.min(11, Math.max(5, fitFontSize(displayName, 10, arcLen * 0.88, 0.58)));
-          textContent += `
-          <text font-family="${fontFamily}" font-size="${nameFontSize}" fill="${ink}" letter-spacing="1.5" font-weight="600">
-            <textPath href="#${botArcId}" startOffset="50%" text-anchor="middle">${trunc(displayName.toUpperCase(), 36)}</textPath>
-          </text>`;
-        } else {
-          // English on top, Arabic on bottom
-          const nameFontSize = Math.min(11, Math.max(5, fitFontSize(displayName, 10, arcLen * 0.88, 0.58)));
-          textContent += `
-          <text font-family="${fontFamily}" font-size="${nameFontSize}" fill="${ink}" letter-spacing="1.5" font-weight="600">
-            <textPath href="#${topArcId}" startOffset="50%" text-anchor="middle">${trunc(displayName.toUpperCase(), 36)}</textPath>
-          </text>`;
-          const arFontSize = Math.min(11, Math.max(5, fitFontSize(arabicCompanyName, 10, arcLen * 0.88, 0.65)));
-          textContent += `
-          <text font-family="${FONT_FAMILIES.ARABIC_MODERN}" font-size="${arFontSize}" fill="${ink}" letter-spacing="0.5">
-            <textPath href="#${botArcRevId}" startOffset="50%" text-anchor="middle">${trunc(arabicCompanyName, 36)}</textPath>
-          </text>`;
-        }
-      } else if (isArabic) {
-        const arabicDisplayName = arabicCompanyName || displayName;
-        const arNameFont = Math.min(11, Math.max(5, fitFontSize(arabicDisplayName, 10, arcLen * 0.88, 0.65)));
-        textContent += `
-        <text font-family="${FONT_FAMILIES.ARABIC_MODERN}" font-size="${arNameFont}" fill="${ink}" letter-spacing="0.5">
-          <textPath href="#${topArcId}" startOffset="50%" text-anchor="middle">${trunc(arabicDisplayName, 36)}</textPath>
-        </text>`;
-        const arabicCityText = city || '';
-        if (arabicCityText) {
-          const ARABIC_CITY_MAP: Record<string, string> = {
-            'dubai': 'دبي، الإمارات العربية المتحدة', 'abu dhabi': 'أبوظبي، الإمارات العربية المتحدة',
-            'sharjah': 'الشارقة، الإمارات العربية المتحدة', 'ajman': 'عجمان، الإمارات العربية المتحدة',
-            'ras al khaimah': 'رأس الخيمة، الإمارات العربية المتحدة', 'fujairah': 'الفجيرة، الإمارات العربية المتحدة',
-            'umm al quwain': 'أم القيوين، الإمارات العربية المتحدة',
-          };
-          const arabicCity = ARABIC_CITY_MAP[arabicCityText.toLowerCase()] || `${arabicCityText}، الإمارات العربية المتحدة`;
-          const cityFontSize = Math.min(10, Math.max(5, fitFontSize(arabicCity, 9.5, arcLen * 0.88, 0.65)));
-          textContent += `
-          <text font-family="${FONT_FAMILIES.ARABIC_MODERN}" font-size="${cityFontSize}" fill="${ink}" letter-spacing="0.5">
-            <textPath href="#${botArcRevId}" startOffset="50%" text-anchor="middle">${trunc(arabicCity, 36)}</textPath>
-          </text>`;
-        }
-      } else {
-        // English only
-        const nameFontSize = Math.min(11, Math.max(5, fitFontSize(displayName, 10, arcLen * 0.88, 0.58)));
-        textContent += `
+      const nameFontSize = Math.min(11, Math.max(5, fitFontSize(displayName, 10, arcLen * 0.88, 0.58)));
+      textContent += `
         <text font-family="${fontFamily}" font-size="${nameFontSize}" fill="${ink}" letter-spacing="1.5" font-weight="600">
           <textPath href="#${topArcId}" startOffset="50%" text-anchor="middle">${trunc(displayName.toUpperCase(), 36)}</textPath>
         </text>`;
-        if (density >= 2 && (city || country)) {
-          const cityLine = [city, country].filter(Boolean).join(' · ').toUpperCase();
-          const cityFontSize = Math.min(10, Math.max(5, fitFontSize(cityLine, 9.5, arcLen * 0.88, 0.55)));
-          textContent += `
-          <text font-family="${fontFamily}" font-size="${cityFontSize}" fill="${ink}" letter-spacing="1.5">
-            <textPath href="#${botArcId}" startOffset="50%" text-anchor="middle">${trunc(cityLine, 36)}</textPath>
-          </text>`;
-        }
+      if (density >= 2 && (city || country)) {
+        const cityLine = [city, country].filter(Boolean).join(' · ').toUpperCase();
+        const cityFontSize = Math.min(10, Math.max(5, fitFontSize(cityLine, 9.5, arcLen * 0.88, 0.55)));
+        textContent += `
+        <text font-family="${fontFamily}" font-size="${cityFontSize}" fill="${ink}" letter-spacing="1.5">
+          <textPath href="#${botArcId}" startOffset="50%" text-anchor="middle">${trunc(cityLine, 36)}</textPath>
+        </text>`;
       }
 
-      // Center: monogram or logo
       const mono = monogramText || deriveMonogram(displayName);
-      const showMonogram = iconStyle === 'MONOGRAM' || iconStyle === 'BOTH';
+      const showMono = iconStyle === 'MONOGRAM' || iconStyle === 'BOTH';
       const showLogo = (iconStyle === 'UPLOADED_LOGO' || iconStyle === 'BOTH') && uploadedLogoUrl;
 
-      if (showLogo && showMonogram && iconStyle === 'BOTH') {
-        const imgSize = innerRx * 0.45;
-        textContent += `<image href="${uploadedLogoUrl}" x="${cx - imgSize / 2}" y="${cy - imgSize / 2 - 8}" width="${imgSize}" height="${imgSize}" preserveAspectRatio="xMidYMid meet"/>`;
-        const monoSize = mono.length === 1 ? 14 : mono.length === 2 ? 11 : 9;
-        textContent += `<text x="${cx}" y="${cy + imgSize / 2 + 4}" font-family="${fontFamily}" font-size="${monoSize}" fill="${ink}" text-anchor="middle" dominant-baseline="central" font-weight="700" opacity="0.85">${mono}</text>`;
-      } else if (showLogo) {
+      if (showLogo) {
         const imgSize = innerRx * 0.85;
         textContent += `<image href="${uploadedLogoUrl}" x="${cx - imgSize / 2}" y="${cy - imgSize / 2}" width="${imgSize}" height="${imgSize}" preserveAspectRatio="xMidYMid meet" image-rendering="optimizeQuality"/>`;
-      } else if (showMonogram && mono) {
+      } else if (showMono && mono) {
         const monoSize = mono.length === 1 ? 28 : mono.length === 2 ? 22 : 17;
         textContent += `<text x="${cx}" y="${cy}" font-family="${fontFamily}" font-size="${monoSize}" fill="${ink}" text-anchor="middle" dominant-baseline="central" font-weight="700" opacity="0.85">${mono}</text>`;
       }
 
-      // Reg number
       if (showLicenseNumber && density >= 3 && registrationNumber) {
-        const regText = trunc(registrationNumber, 20);
-        textContent += `<text x="${cx}" y="${cy + innerRy * 0.45}" font-family="${fontFamily}" font-size="6.5" fill="${ink}" text-anchor="middle" opacity="0.75" letter-spacing="0.8">${regText}</text>`;
+        textContent += `<text x="${cx}" y="${cy + innerRy * 0.45}" font-family="${fontFamily}" font-size="6.5" fill="${ink}" text-anchor="middle" opacity="0.75" letter-spacing="0.8">${trunc(registrationNumber, 20)}</text>`;
       }
 
-      // Horizontal rule lines (dividers)
       if (density >= 2) {
         const rl = innerRx * 0.6;
         const ry1 = cy - innerRy * 0.3;
@@ -317,29 +280,13 @@ export function LiveStampPreview({
         textContent += `<line x1="${cx - rl}" y1="${ry2}" x2="${cx + rl}" y2="${ry2}" stroke="${ink}" stroke-width="0.6" opacity="0.5"/>`;
       }
       textContent += `</g>`;
-
     } else {
-      // Rectangular / Square: stacked text lines centered
+      // Rectangular / Square: stacked text
       const availW = (stampType === 'RECTANGLE' ? (S - pad * 2 - 18) : (S - pad * 2 - 14));
       const nameFontSize = Math.max(7, fitFontSize(displayName, 11.5, availW, 0.58));
       const nameDisplay = trunc(displayName.toUpperCase(), 28);
-
-      const lines: { text: string; size: number; weight: string; opacity?: number; isArabic?: boolean }[] = [];
-      
-      if (isBilingual && arabicCompanyName) {
-        if (topIsArabic) {
-          const arSize = Math.max(7, fitFontSize(arabicCompanyName, 10.5, availW, 0.65));
-          lines.push({ text: trunc(arabicCompanyName, 26), size: arSize, weight: '600', isArabic: true });
-          lines.push({ text: nameDisplay, size: nameFontSize, weight: '700' });
-        } else {
-          lines.push({ text: nameDisplay, size: nameFontSize, weight: '700' });
-          const arSize = Math.max(7, fitFontSize(arabicCompanyName, 10.5, availW, 0.65));
-          lines.push({ text: trunc(arabicCompanyName, 26), size: arSize, weight: '600', isArabic: true });
-        }
-      } else {
-        lines.push({ text: nameDisplay, size: nameFontSize, weight: '700' });
-      }
-      
+      const lines: { text: string; size: number; weight: string; opacity?: number; isAr?: boolean }[] = [];
+      lines.push({ text: nameDisplay, size: nameFontSize, weight: '700' });
       if (showLicenseNumber && density >= 2 && registrationNumber) {
         lines.push({ text: trunc(registrationNumber, 20), size: 7.5, weight: '400', opacity: 0.7 });
       }
@@ -347,29 +294,25 @@ export function LiveStampPreview({
         const loc = [city, country].filter(Boolean).join(' · ').toUpperCase();
         lines.push({ text: trunc(loc, 24), size: 7, weight: '400', opacity: 0.7 });
       }
-
       const lineH = 13;
       const totalH = lines.length * lineH;
       const startY = cy - totalH / 2 + 7;
-
       const mono = monogramText || deriveMonogram(displayName);
       let monoY = startY - 22;
-      const showMonogram = iconStyle === 'MONOGRAM' || iconStyle === 'BOTH';
+      const showMono = iconStyle === 'MONOGRAM' || iconStyle === 'BOTH';
       const showLogo = (iconStyle === 'UPLOADED_LOGO' || iconStyle === 'BOTH') && uploadedLogoUrl;
-
       if (showLogo) {
         const imgSize = 24;
         textContent += `<image href="${uploadedLogoUrl}" x="${cx - imgSize / 2}" y="${monoY - imgSize}" width="${imgSize}" height="${imgSize}" preserveAspectRatio="xMidYMid meet"/>`;
       }
-      if (showMonogram && mono) {
+      if (showMono && mono) {
         const monoSize = mono.length === 1 ? 18 : mono.length === 2 ? 14 : 11;
         textContent += `<text x="${cx}" y="${monoY}" font-family="${fontFamily}" font-size="${monoSize}" fill="${ink}" text-anchor="middle" dominant-baseline="central" font-weight="700" opacity="0.85">${mono}</text>`;
         textContent += `<line x1="${cx - 20}" y1="${monoY + 8}" x2="${cx + 20}" y2="${monoY + 8}" stroke="${ink}" stroke-width="0.6" opacity="0.5"/>`;
       }
-
       lines.forEach((ln, i) => {
         const y = startY + i * lineH;
-        const ff = ln.isArabic ? FONT_FAMILIES.ARABIC_MODERN : fontFamily;
+        const ff = ln.isAr ? FONT_FAMILIES.ARABIC_MODERN : fontFamily;
         textContent += `<text x="${cx}" y="${y}" font-family="${ff}" font-size="${ln.size}" fill="${ink}" text-anchor="middle" dominant-baseline="central" font-weight="${ln.weight}"${ln.opacity ? ` opacity="${ln.opacity}"` : ''}>${ln.text}</text>`;
         if (i === 0) {
           const sep = availW * 0.45;
@@ -386,7 +329,7 @@ export function LiveStampPreview({
     displayName, arabicCompanyName, city, country, registrationNumber,
     stampType, styleTheme, borderStyle, typographyStyle, density,
     iconStyle, monogramText, uploadedLogoUrl, languageMode, languageReversed,
-    showLicenseNumber, fontFamily, sw, hasRing, size, ink,
+    showLicenseNumber, showLocation, separatorStyle, fontFamily, sw, hasRing, size, ink, arabicCity,
   ]);
 
   return (
