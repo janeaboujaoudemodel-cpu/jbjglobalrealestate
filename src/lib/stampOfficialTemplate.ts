@@ -166,8 +166,11 @@ function renderBottomArcText(
   const n = chars.length;
   if (n === 0) return '';
 
-  const spreadDeg = Math.min(140, n * 8);
-  const startDeg = 270 - spreadDeg / 2;
+  // Bottom arc: characters placed along the lower semicircle
+  // In SVG coords, 270° = bottom. We spread from left-bottom to right-bottom.
+  // Characters read left-to-right naturally.
+  const spreadDeg = Math.min(160, n * 8);
+  const startDeg = 270 - spreadDeg / 2;  // e.g. 190° (left side, going clockwise)
   const stepDeg = n > 1 ? spreadDeg / (n - 1) : 0;
 
   let result = '';
@@ -176,7 +179,9 @@ function renderBottomArcText(
     const rad = (deg * Math.PI) / 180;
     const x = cx + r * Math.cos(rad);
     const y = cy + r * Math.sin(rad);
-    const rotation = deg + 90;
+    // Characters on bottom arc face outward: rotate by deg - 90
+    // so at 270° (bottom) character is upright
+    const rotation = deg - 90;
     result += `<text x="${x.toFixed(2)}" y="${y.toFixed(2)}" text-anchor="middle" dominant-baseline="central"
       font-family="${font}" font-size="${fontSize}" fill="${ink}" font-weight="${fontWeight}"
       letter-spacing="${letterSpacing}"
