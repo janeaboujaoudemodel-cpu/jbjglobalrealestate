@@ -308,6 +308,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Customer Happiness", href: "/customer-happiness", icon: SmilePlus },
   { label: "Security Console", href: "/security-console", icon: Shield },
   { label: "Company Comm", href: "/company-comm", icon: Mail },
+  { label: "Developer Hub", href: "/developer-portal", icon: Building },
   { label: "Executive Assistant", href: "/executive-assistant", icon: Bot },
   { label: "Call Review", href: "/call-review", icon: Phone },
   { label: "Video Builder", href: "/video-builder", icon: Video },
