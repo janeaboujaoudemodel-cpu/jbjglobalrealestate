@@ -1102,7 +1102,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
       documents_repaired: 0
     });
 
-    toast.info(silentResume ? "Resuming Fix All pipeline..." : "Fix All started — running 3-phase repair pipeline...");
+    toast.info(silentResume ? "Resuming daily sync pipeline..." : "Daily sync started — running full extraction pipeline...");
 
     try {
       // Phase 1: Extract all pending queue items
