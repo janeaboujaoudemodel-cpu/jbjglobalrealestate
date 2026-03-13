@@ -444,6 +444,7 @@ Return JSON in this exact format:
         projects_found: projects.length,
         projects_created: projectsCreated,
         projects_updated: projectsUpdated,
+        projects_deep_scraped: projectsDeepScraped,
         projects: projects.map(p => ({ name: p.name, slug: p.slug, images: p.image_urls?.length || 0 })),
       }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
