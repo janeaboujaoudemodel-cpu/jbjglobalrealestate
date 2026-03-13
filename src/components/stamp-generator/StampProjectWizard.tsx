@@ -593,7 +593,7 @@ export default function StampProjectWizard() {
                   {form.stamp_type === 'ROUND' && (form.language_mode === 'BILINGUAL' || form.language_mode === 'AR') && (
                     <div>
                       <Label className="text-[11px] font-medium mb-1.5 block">Arc Separators</Label>
-                      <div className="flex gap-1.5 flex-wrap">
+                      <div className="grid grid-cols-4 gap-1.5">
                         {SEPARATOR_OPTIONS.map(opt => (
                           <button key={opt.key} type="button" onClick={() => set('separator_style', opt.key)}
                             className={`flex items-center gap-1 px-2 py-1 rounded-lg border-2 text-xs font-medium transition-all ${

@@ -872,5 +872,54 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
     });
   }
 
+  // ────────────────────────────────────────────────────────────────
+  // T0: Owner Official Standard Model — ALWAYS PINNED FIRST
+  // Uses the Official Template with 3-ring tapering hierarchy
+  // ────────────────────────────────────────────────────────────────
+  {
+    const displayArabic = arabicName || '';
+    const mono = (project.monogram_text || name.slice(0, 2)).toUpperCase().slice(0, 3);
+    const locationEn = [project.city_optional, project.country_optional].filter(Boolean).join(', ') || 'Dubai, UAE';
+
+    const ARABIC_CITY_MAP: Record<string, string> = {
+      'dubai': 'دبي، الإمارات', 'abu dhabi': 'أبوظبي، الإمارات',
+      'sharjah': 'الشارقة، الإمارات', 'ajman': 'عجمان، الإمارات',
+      'ras al khaimah': 'رأس الخيمة، الإمارات', 'fujairah': 'الفجيرة، الإمارات',
+      'umm al quwain': 'أم القيوين، الإمارات',
+    };
+    const cityKey = (project.city_optional || '').toLowerCase();
+    const locAr = arabicCity || ARABIC_CITY_MAP[cityKey] || 'دبي، الإمارات';
+
+    const stdConfig: OfficialStampConfig = {
+      companyNameEn: name,
+      companyNameAr: displayArabic || name,
+      arabicOnTop: true,
+      locationTextEn: locationEn,
+      locationTextAr: locAr,
+      showLocation: true,
+      separatorStyle: 'star',
+      monogramText: mono,
+      showMonogram: hasMono || true,
+      showLogo: project.icon_style === 'UPLOADED_LOGO' && !!(project as any).uploaded_logo_url,
+      logoUrl: (project as any).uploaded_logo_url || undefined,
+      size: W,
+      registrationNumber: regNo || undefined,
+      showRegistration: !!regNo && project.density >= 3,
+      borderStyle: (project.border_style as any) || 'DOUBLE',
+      centerMode: project.icon_style === 'UPLOADED_LOGO' ? 'logo' : 'monogram',
+    };
+
+    const standardSvg = generateOfficialStampSVG(stdConfig);
+
+    // Always pin at position 0
+    concepts.unshift({
+      id: uid(),
+      templateKey: 'owner-official-standard',
+      label: 'Owner Official Standard',
+      tags: ['standard', 'official', 'bilingual', 'premium'],
+      svgSource: standardSvg,
+    });
+  }
+
   return concepts;
 }
