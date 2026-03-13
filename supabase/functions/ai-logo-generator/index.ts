@@ -42,11 +42,64 @@ serve(async (req) => {
     console.log(`AI Logo Generator request from user: ${userId}`);
     // ========================================
 
-    const { name, industry, style, font, colors, description, seed } = await req.json();
+    const body = await req.json();
+    const {
+      name, industry, style, font, colors, description, seed,
+      mode = "generate",
+      logoType = "full",
+      currentSvg,
+      refineInstruction,
+      websiteUrl,
+    } = body;
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
+    // ─── Mode: extract-colors ─────────────────────────────────────────────
+    if (mode === "extract-colors" && websiteUrl) {
+      const colorPrompt = `Analyze the website at ${websiteUrl} and suggest a professional 3-color brand palette. Return ONLY a JSON object with this exact format: {"primary":"#hex","secondary":"#hex","accent":"#hex"}. No explanation.`;
+      
+      const colorResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${LOVABLE_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "google/gemini-2.5-flash",
+          messages: [{ role: "user", content: colorPrompt }],
+          stream: false,
+          max_tokens: 200,
+        }),
+      });
+
+      if (!colorResp.ok) {
+        const errText = await colorResp.text();
+        console.error("Color extraction error:", errText);
+        return new Response(
+          JSON.stringify({ colors: null }),
+          { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
+      const colorResult = await colorResp.json();
+      const raw = colorResult.choices?.[0]?.message?.content?.trim() || "";
+      try {
+        const jsonMatch = raw.match(/\{[\s\S]*?\}/);
+        const extracted = jsonMatch ? JSON.parse(jsonMatch[0]) : null;
+        return new Response(
+          JSON.stringify({ colors: extracted }),
+          { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      } catch {
+        return new Response(
+          JSON.stringify({ colors: null }),
+          { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+    }
+
+    // ─── Common setup ─────────────────────────────────────────────────────
     const { primary, secondary, accent } = colors || {};
 
     const industryDNA: Record<string, string> = {
@@ -79,6 +132,13 @@ serve(async (req) => {
 
     const chosenFont = fontMap[font] || "Georgia, serif";
 
+    const logoTypeInstructions: Record<string, string> = {
+      "full": "Create BOTH a creative visual logomark AND the company name text",
+      "wordmark": "Create ONLY stylized text of the company name — NO icon or symbol, just beautifully designed typography",
+      "monogram": "Create ONLY a monogram using the company initials — NO full company name text, just the initials in a creative arrangement",
+      "icon": "Create ONLY an abstract symbol/icon — NO text at all, just a memorable visual mark",
+    };
+
     const systemPrompt = `You are a world-class professional SVG logo designer with 20+ years of experience. 
 Your logos appear in Fortune 500 companies, prestigious brands, and award-winning agencies.
 You create complete, self-contained, visually striking SVG logos.
@@ -89,28 +149,76 @@ ABSOLUTE RULES (never break these):
 3. Use ONLY these exact colors: Primary ${primary}, Secondary ${secondary}, Accent ${accent}
 4. Use ONLY these safe generic font families: Georgia, Arial, "Courier New", Palatino, serif, sans-serif, monospace
 5. ZERO external references: no <image> tags, no xlink:href to URLs, no external stylesheets
-6. The SVG MUST include BOTH a creative visual logomark AND the company name text
+6. ${logoTypeInstructions[logoType] || logoTypeInstructions["full"]}
 7. All elements must be contained within the 200×200 viewBox
 8. Use <defs> with gradients or clip-paths only — no external references
 
 DESIGN MANDATE:
-- Create a UNIQUE, MEMORABLE logomark (not just text in a box)
-- The logomark should be a creative geometric, abstract, or symbolic shape that represents the brand
+- Create a UNIQUE, MEMORABLE logo (not just text in a box)
 - Use the seed number to create genuine variety — different layouts, marks, and compositions each time`;
 
+    // ─── Mode: refine ─────────────────────────────────────────────────────
+    if (mode === "refine" && currentSvg && refineInstruction) {
+      const refineUserPrompt = `Here is the current SVG logo:
+\`\`\`
+${currentSvg}
+\`\`\`
+
+The user wants to modify this logo. Their instruction: "${refineInstruction}"
+
+Apply the requested changes to the SVG logo while maintaining the same overall style and colors (Primary ${primary}, Secondary ${secondary}, Accent ${accent}).
+Return ONLY the modified SVG element — start with <svg and end with </svg>.`;
+
+      const refineResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${LOVABLE_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "google/gemini-3-flash-preview",
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: refineUserPrompt },
+          ],
+          stream: false,
+          max_tokens: 4096,
+        }),
+      });
+
+      if (!refineResp.ok) {
+        if (refineResp.status === 429) {
+          return new Response(JSON.stringify({ error: "Rate limit exceeded. Try again in a moment." }),
+            { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+        }
+        const errText = await refineResp.text();
+        console.error("AI refine error:", refineResp.status, errText);
+        throw new Error("AI gateway error: " + refineResp.status);
+      }
+
+      const refineResult = await refineResp.json();
+      const refineRaw = refineResult.choices?.[0]?.message?.content?.trim() || "";
+      const refineSvgMatch = refineRaw.match(/<svg[\s\S]*?<\/svg>/i);
+      return new Response(
+        JSON.stringify({ svgContent: refineSvgMatch ? refineSvgMatch[0] : "" }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // ─── Mode: generate (default) ─────────────────────────────────────────
     const userPrompt = `Design a professional logo for: "${name}"
 Industry: ${industry} — ${industryDNA[industry] || "professional, distinctive"}
 Style: ${style} — ${styleDNA[style] || "clean and modern"}
-Typography: Use ${chosenFont} for the company name
+Logo Type: ${logoType} — ${logoTypeInstructions[logoType] || logoTypeInstructions["full"]}
+Typography: Use ${chosenFont} for any text
 Colors: Primary ${primary} | Secondary ${secondary} | Accent ${accent}
 ${description ? `Brand context: ${description}` : ""}
 Variation seed: ${seed} (use this to create a genuinely different composition, mark shape, and layout)
 
 The logo MUST have:
-1. A creative symbolic logomark (geometric shape, abstract mark, or icon) — NOT just a circle with a letter
-2. The company name "${name}" as styled text
-3. Professional spacing and visual balance
-4. Sophisticated use of the color palette with fills, strokes, and opacity variations
+1. ${logoType === "icon" ? "A creative symbolic mark only — NO text" : logoType === "monogram" ? "Creative initials arrangement — NO full name" : logoType === "wordmark" ? "Beautifully designed typography — NO icon" : "A creative symbolic logomark AND the company name"}
+2. Professional spacing and visual balance
+3. Sophisticated use of the color palette with fills, strokes, and opacity variations
 
 Return ONLY the SVG element.`;
 
@@ -151,8 +259,6 @@ Return ONLY the SVG element.`;
 
     const result = await response.json();
     const raw: string = result.choices?.[0]?.message?.content?.trim() || "";
-
-    // Extract SVG from the response (handle cases where AI wraps in markdown)
     const svgMatch = raw.match(/<svg[\s\S]*?<\/svg>/i);
     const svgContent = svgMatch ? svgMatch[0] : "";
 

@@ -7,6 +7,17 @@ export interface LogoData {
   timestamp: number;
 }
 
+export type LogoType = "full" | "wordmark" | "monogram" | "icon";
+
+export type ExportBg = "white" | "black" | "transparent" | "brand" | "custom";
+
+export interface ExportSize {
+  label: string;
+  width: number;
+  height: number;
+  category: string;
+}
+
 // ─── Constants ─────────────────────────────────────────────────────────────────
 export const INDUSTRIES = [
   { id: "real-estate",  label: "Real Estate",      icon: Building2,         dna: "Trustworthy, premium, architectural" },
@@ -53,6 +64,20 @@ export const FONTS = [
   { value: "Arial, sans-serif",     label: "Corporate",    desc: "Structured, formal" },
 ];
 
+export const EXPORT_SIZES: ExportSize[] = [
+  { label: "Favicon 16", width: 16, height: 16, category: "Favicon" },
+  { label: "Favicon 32", width: 32, height: 32, category: "Favicon" },
+  { label: "Small 64", width: 64, height: 64, category: "Standard" },
+  { label: "Medium 128", width: 128, height: 128, category: "Standard" },
+  { label: "Medium 256", width: 256, height: 256, category: "Standard" },
+  { label: "Large 512", width: 512, height: 512, category: "Standard" },
+  { label: "Large 1024", width: 1024, height: 1024, category: "Standard" },
+  { label: "Instagram 1080", width: 1080, height: 1080, category: "Social" },
+  { label: "FB Profile 180", width: 180, height: 180, category: "Social" },
+  { label: "FB Cover 820×312", width: 820, height: 312, category: "Social" },
+  { label: "LinkedIn 1584×396", width: 1584, height: 396, category: "Social" },
+];
+
 // ─── SVG Logo Renderer ────────────────────────────────────────────────────────
 export function LogoPreview({ svgContent, size = 200 }: { svgContent: string; size?: number }) {
   if (!svgContent) return null;
@@ -83,24 +108,177 @@ export function placeholderSVG(name: string, primary: string, secondary: string)
 </svg>`;
 }
 
-// ─── PNG helper ───────────────────────────────────────────────────────────────
-export function svgToPng(svgContent: string, size: number, bgColor?: string): Promise<Blob> {
+// ─── Recolor SVG (client-side, no AI call) ────────────────────────────────────
+export function recolorSVG(svgContent: string, oldColors: { primary: string; secondary: string; accent: string }, newColors: { primary: string; secondary: string; accent: string }): string {
+  let result = svgContent;
+  // Replace old hex colors with new ones (case-insensitive)
+  if (oldColors.primary && newColors.primary) {
+    result = result.replace(new RegExp(escapeRegex(oldColors.primary), "gi"), newColors.primary);
+  }
+  if (oldColors.secondary && newColors.secondary) {
+    result = result.replace(new RegExp(escapeRegex(oldColors.secondary), "gi"), newColors.secondary);
+  }
+  if (oldColors.accent && newColors.accent) {
+    result = result.replace(new RegExp(escapeRegex(oldColors.accent), "gi"), newColors.accent);
+  }
+  return result;
+}
+
+function escapeRegex(str: string): string {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+// ─── Auto-contrast: ensure logo is visible on dark backgrounds ────────────────
+export function getContrastColors(bgColor: string, colors: { primary: string; secondary: string; accent: string }): { primary: string; secondary: string; accent: string } {
+  const lum = getLuminance(bgColor);
+  if (lum > 0.4) return colors; // Light bg — no changes needed
+  // Dark bg — ensure text/secondary is light
+  return {
+    primary: getLuminance(colors.primary) < 0.3 ? invertForContrast(colors.primary) : colors.primary,
+    secondary: getLuminance(colors.secondary) < 0.3 ? "#ffffff" : colors.secondary,
+    accent: getLuminance(colors.accent) < 0.3 ? lightenColor(colors.accent) : colors.accent,
+  };
+}
+
+function getLuminance(hex: string): number {
+  const r = parseInt(hex.slice(1, 3), 16) / 255;
+  const g = parseInt(hex.slice(3, 5), 16) / 255;
+  const b = parseInt(hex.slice(5, 7), 16) / 255;
+  return 0.299 * r + 0.587 * g + 0.114 * b;
+}
+
+function invertForContrast(hex: string): string {
+  const r = 255 - parseInt(hex.slice(1, 3), 16);
+  const g = 255 - parseInt(hex.slice(3, 5), 16);
+  const b = 255 - parseInt(hex.slice(5, 7), 16);
+  return `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
+}
+
+function lightenColor(hex: string): string {
+  const r = Math.min(255, parseInt(hex.slice(1, 3), 16) + 120);
+  const g = Math.min(255, parseInt(hex.slice(3, 5), 16) + 120);
+  const b = Math.min(255, parseInt(hex.slice(5, 7), 16) + 120);
+  return `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
+}
+
+// ─── PNG helper (FIXED: proper full-canvas background fill) ───────────────────
+export function svgToPng(svgContent: string, width: number, height?: number, bgColor?: string): Promise<Blob> {
+  const h = height || width;
   return new Promise((resolve, reject) => {
-    const svgWithBg = bgColor
-      ? svgContent.replace(/<svg/, `<svg style="background:${bgColor}"`)
-      : svgContent;
-    const blob = new Blob([svgWithBg], { type: "image/svg+xml;charset=utf-8" });
+    const blob = new Blob([svgContent], { type: "image/svg+xml;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const img = new Image();
     img.onload = () => {
       const canvas = document.createElement("canvas");
-      canvas.width = size; canvas.height = size;
+      canvas.width = width;
+      canvas.height = h;
       const ctx = canvas.getContext("2d")!;
-      if (bgColor) { ctx.fillStyle = bgColor; ctx.fillRect(0, 0, size, size); }
-      ctx.drawImage(img, 0, 0, size, size);
-      canvas.toBlob(b => { URL.revokeObjectURL(url); if (b) resolve(b); else reject(new Error("toBlob failed")); }, "image/png");
+      // FIXED: Always fill the ENTIRE canvas with bg color first
+      if (bgColor) {
+        ctx.fillStyle = bgColor;
+        ctx.fillRect(0, 0, width, h);
+      }
+      // Draw SVG centered and covering the canvas
+      const scale = Math.min(width / img.naturalWidth, h / img.naturalHeight);
+      const drawW = img.naturalWidth * scale;
+      const drawH = img.naturalHeight * scale;
+      const offsetX = (width - drawW) / 2;
+      const offsetY = (h - drawH) / 2;
+      ctx.drawImage(img, offsetX, offsetY, drawW, drawH);
+      canvas.toBlob(
+        b => { URL.revokeObjectURL(url); if (b) resolve(b); else reject(new Error("toBlob failed")); },
+        "image/png"
+      );
     };
     img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("img load failed")); };
     img.src = url;
   });
+}
+
+// ─── JPG helper ───────────────────────────────────────────────────────────────
+export function svgToJpg(svgContent: string, width: number, height?: number, bgColor = "#ffffff"): Promise<Blob> {
+  const h = height || width;
+  return new Promise((resolve, reject) => {
+    const blob = new Blob([svgContent], { type: "image/svg+xml;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = h;
+      const ctx = canvas.getContext("2d")!;
+      ctx.fillStyle = bgColor;
+      ctx.fillRect(0, 0, width, h);
+      const scale = Math.min(width / img.naturalWidth, h / img.naturalHeight);
+      const drawW = img.naturalWidth * scale;
+      const drawH = img.naturalHeight * scale;
+      const offsetX = (width - drawW) / 2;
+      const offsetY = (h - drawH) / 2;
+      ctx.drawImage(img, offsetX, offsetY, drawW, drawH);
+      canvas.toBlob(
+        b => { URL.revokeObjectURL(url); if (b) resolve(b); else reject(new Error("toBlob failed")); },
+        "image/jpeg",
+        0.95
+      );
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("img load failed")); };
+    img.src = url;
+  });
+}
+
+// ─── Download trigger (FIXED: append to DOM for all browsers) ─────────────────
+export function triggerDownload(blob: Blob, filename: string) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.style.display = "none";
+  document.body.appendChild(a);
+  a.click();
+  // Cleanup after a tick
+  setTimeout(() => {
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, 100);
+}
+
+// ─── HEX ↔ RGB ↔ HSL converters ──────────────────────────────────────────────
+export function hexToRgb(hex: string): { r: number; g: number; b: number } {
+  const h = hex.replace("#", "");
+  return {
+    r: parseInt(h.slice(0, 2), 16),
+    g: parseInt(h.slice(2, 4), 16),
+    b: parseInt(h.slice(4, 6), 16),
+  };
+}
+
+export function rgbToHex(r: number, g: number, b: number): string {
+  return `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
+}
+
+export function hexToHsl(hex: string): { h: number; s: number; l: number } {
+  const { r: rr, g: gg, b: bb } = hexToRgb(hex);
+  const r = rr / 255, g = gg / 255, b = bb / 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  let h = 0, s = 0;
+  const l = (max + min) / 2;
+  if (max !== min) {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+    else if (max === g) h = ((b - r) / d + 2) / 6;
+    else h = ((r - g) / d + 4) / 6;
+  }
+  return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
+}
+
+export function hslToHex(h: number, s: number, l: number): string {
+  s /= 100; l /= 100;
+  const a = s * Math.min(l, 1 - l);
+  const f = (n: number) => {
+    const k = (n + h / 30) % 12;
+    const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+    return Math.round(255 * color).toString(16).padStart(2, "0");
+  };
+  return `#${f(0)}${f(8)}${f(4)}`;
 }
