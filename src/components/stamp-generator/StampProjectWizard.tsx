@@ -160,7 +160,7 @@ export default function StampProjectWizard() {
 
   const [form, setForm] = useState<FormState>(() => {
     try {
-      const saved = sessionStorage.getItem('stamp-wizard-form');
+      const saved = localStorage.getItem('stamp-wizard-form');
       if (saved) return JSON.parse(saved);
     } catch { /* ignore */ }
     return {
@@ -180,7 +180,7 @@ export default function StampProjectWizard() {
 
   // Persist form
   useEffect(() => {
-    try { sessionStorage.setItem('stamp-wizard-form', JSON.stringify(form)); } catch {}
+    try { localStorage.setItem('stamp-wizard-form', JSON.stringify(form)); } catch {}
   }, [form]);
 
   const set = (key: keyof FormState, val: any) => {
@@ -205,7 +205,7 @@ export default function StampProjectWizard() {
 
   const handleSaveDraft = useCallback(() => {
     try {
-      sessionStorage.setItem('stamp-wizard-form', JSON.stringify(form));
+      localStorage.setItem('stamp-wizard-form', JSON.stringify(form));
       const now = new Date();
       setDraftTime(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
       toast.success('Draft saved locally');
@@ -236,7 +236,7 @@ export default function StampProjectWizard() {
         })
         .select().single();
       if (error) throw error;
-      try { sessionStorage.removeItem('stamp-wizard-form'); } catch {}
+      try { localStorage.removeItem('stamp-wizard-form'); } catch {}
       toast.success('Project created!');
       navigate(`/toolkit/stamp-generator/${data.id}/generate?fresh=1`);
     } catch (error: any) {

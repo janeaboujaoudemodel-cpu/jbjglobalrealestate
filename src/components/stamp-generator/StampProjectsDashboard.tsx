@@ -4,8 +4,9 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
-import { Plus, Stamp, Trash2, ExternalLink, Clock, CheckCircle2, Copy, Images, History, LayoutGrid } from 'lucide-react';
+import { Plus, Stamp, Trash2, ExternalLink, Clock, CheckCircle2, Copy, Images, History, LayoutGrid, CheckSquare, X } from 'lucide-react';
 function formatDate(d: string) {
   return new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 }
@@ -28,6 +29,8 @@ export default function StampProjectsDashboard() {
   const [projects, setProjects] = useState<StampProject[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [bulkDeleting, setBulkDeleting] = useState(false);
   // Track whether we've waited at least one tick after auth resolved to prevent premature redirects
   const authSettledRef = useRef(false);
 
@@ -71,6 +74,49 @@ export default function StampProjectsDashboard() {
     setDeleting(null);
   }
 
+  function toggleSelect(id: string) {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  }
+
+  function toggleSelectAll() {
+    if (selectedIds.size === projects.length) setSelectedIds(new Set());
+    else setSelectedIds(new Set(projects.map(p => p.id)));
+  }
+
+  async function bulkDelete() {
+    if (selectedIds.size === 0) return;
+    setBulkDeleting(true);
+    const ids = [...selectedIds];
+    const { error } = await supabase.from('stamp_projects').delete().in('id', ids);
+    if (error) toast.error('Failed to delete some projects');
+    else {
+      toast.success(`${ids.length} project${ids.length > 1 ? 's' : ''} deleted`);
+      setProjects(prev => prev.filter(p => !selectedIds.has(p.id)));
+      setSelectedIds(new Set());
+    }
+    setBulkDeleting(false);
+  }
+
+  async function bulkDuplicate() {
+    if (selectedIds.size === 0) return;
+    const toDup = projects.filter(p => selectedIds.has(p.id));
+    let count = 0;
+    for (const project of toDup) {
+      const { data } = await supabase.from('stamp_projects').insert({
+        user_id: user!.id, project_name: `${project.project_name} (Copy)`,
+        company_name: project.company_name, stamp_type: project.stamp_type,
+        style_theme: project.style_theme, language_mode: project.language_mode,
+      }).select().single();
+      if (data) { setProjects(prev => [data, ...prev]); count++; }
+    }
+    toast.success(`${count} project${count > 1 ? 's' : ''} duplicated`);
+    setSelectedIds(new Set());
+  }
+
   async function duplicateProject(project: StampProject) {
     const { data, error } = await supabase
       .from('stamp_projects')
@@ -111,7 +157,7 @@ export default function StampProjectsDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))] pt-24 sm:pt-28 lg:pt-32">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))] pt-4">
       {/* Header */}
       <div className="border-b border-[hsl(var(--border))] bg-white/80 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -125,6 +171,16 @@ export default function StampProjectsDashboard() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            {projects.length > 0 && (
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-1.5 text-xs"
+                onClick={toggleSelectAll}
+              >
+                <CheckSquare size={13}/> {selectedIds.size === projects.length ? 'Deselect All' : 'Select All'}
+              </Button>
+            )}
             <Button
               variant="outline"
               size="sm"
@@ -178,8 +234,16 @@ export default function StampProjectsDashboard() {
             {projects.map(project => (
               <div
                 key={project.id}
-                className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm hover:shadow-md transition-all group"
+                className={`bg-white rounded-2xl border shadow-sm hover:shadow-md transition-all group relative ${selectedIds.has(project.id) ? 'border-[hsl(var(--gold))] ring-2 ring-[hsl(var(--gold)/0.2)]' : 'border-[hsl(var(--border))]'}`}
               >
+                {/* Selection checkbox */}
+                <div className="absolute top-2 left-2 z-10">
+                  <Checkbox
+                    checked={selectedIds.has(project.id)}
+                    onCheckedChange={() => toggleSelect(project.id)}
+                    className="border-[hsl(var(--gold)/0.5)] data-[state=checked]:bg-[hsl(var(--gold))] data-[state=checked]:border-[hsl(var(--gold))]"
+                  />
+                </div>
                 {/* Stamp Preview Placeholder */}
                 <div className="h-40 rounded-t-2xl bg-gradient-to-br from-[hsl(var(--pearl-1))] to-[hsl(var(--champagne-1))] flex items-center justify-center border-b border-[hsl(var(--border))]">
                   <div className="w-24 h-24 rounded-full border-2 border-[hsl(var(--gold)/0.5)] flex items-center justify-center">
@@ -250,6 +314,24 @@ export default function StampProjectsDashboard() {
           </div>
         )}
       </div>
+
+      {/* Floating bulk action bar */}
+      {selectedIds.size > 0 && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-white rounded-2xl border-2 border-[hsl(var(--gold)/0.4)] shadow-2xl px-5 py-3 flex items-center gap-3">
+          <span className="text-sm font-semibold text-[hsl(var(--foreground))]">{selectedIds.size} selected</span>
+          <div className="w-px h-5 bg-[hsl(var(--border))]"/>
+          <Button size="sm" variant="outline" className="gap-1.5 text-xs" onClick={bulkDuplicate}>
+            <Copy size={12}/> Duplicate
+          </Button>
+          <Button size="sm" variant="outline" className="gap-1.5 text-xs text-destructive hover:bg-destructive/10 border-destructive/30"
+            disabled={bulkDeleting} onClick={bulkDelete}>
+            <Trash2 size={12}/> Delete
+          </Button>
+          <Button size="sm" variant="ghost" className="h-7 w-7 p-0" onClick={() => setSelectedIds(new Set())}>
+            <X size={14}/>
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
