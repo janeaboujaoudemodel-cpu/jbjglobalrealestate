@@ -8,15 +8,23 @@ import { useNavigate } from "react-router-dom";
 
 interface SourceCountsPanelProps {
   reellyApiTotal?: number | null;
+  onSourceChange?: (source: string) => void;
+  activeSource?: string;
 }
 
 type SourceSelection = "none" | "source-a" | "source-b";
 
-export function SourceCountsPanel({ reellyApiTotal }: SourceCountsPanelProps) {
+export function SourceCountsPanel({ reellyApiTotal, onSourceChange, activeSource }: SourceCountsPanelProps) {
   const { liveCounts, refreshCounts } = useSyncJobs();
   const navigate = useNavigate();
-  // Default to Source Portal (left card) selected
+  // Default to Provident Portal (left card) selected
   const [selectedSource, setSelectedSource] = useState<SourceSelection>("source-b");
+
+  const handleSourceSelect = (source: SourceSelection) => {
+    setSelectedSource(source);
+    if (source === "source-b") onSourceChange?.("provident");
+    else if (source === "source-a") onSourceChange?.("reelly");
+  };
 
   const handleViewProjects = (status: 'pending' | 'approved', source: string) => {
     navigate(`/listing-admin?view=data-ops&syncTab=approvals&source=${source}&status=${status}`);
@@ -33,7 +41,7 @@ export function SourceCountsPanel({ reellyApiTotal }: SourceCountsPanelProps) {
               ? "border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-lg"
               : "border-border hover:border-gold/40 bg-card"
           }`}
-          onClick={() => setSelectedSource(selectedSource === "source-b" ? "none" : "source-b")}
+          onClick={() => handleSourceSelect(selectedSource === "source-b" ? "none" : "source-b")}
         >
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2 text-sm text-foreground">
@@ -81,7 +89,7 @@ export function SourceCountsPanel({ reellyApiTotal }: SourceCountsPanelProps) {
               ? "border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-lg"
               : "border-border hover:border-gold/40 bg-card opacity-75"
           }`}
-          onClick={() => setSelectedSource(selectedSource === "source-a" ? "none" : "source-a")}
+          onClick={() => handleSourceSelect(selectedSource === "source-a" ? "none" : "source-a")}
         >
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2 text-sm text-foreground">
