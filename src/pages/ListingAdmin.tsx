@@ -166,9 +166,14 @@ const ListingAdmin = () => {
       setShowChat(mappedView === "chat");
     }
     
-    // Handle syncTab URL param for Data Ops sub-tabs (updated tab names)
-    if (syncTab && ['reelly', 'approvals', 'updates', 'external', 'emergency', 'enrichment'].includes(syncTab)) {
+    // Handle syncTab URL param for Data Ops sub-tabs
+    if (syncTab && ['reelly', 'approvals', 'external', 'enrichment', 'dev-visibility'].includes(syncTab)) {
       setDataOpsTab(syncTab);
+    }
+    // Handle source param
+    const source = params.get("source");
+    if (source === "reelly" || source === "provident") {
+      setActiveSource(source);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.search]);
