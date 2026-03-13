@@ -121,6 +121,8 @@ export function LiveStampPreview({
   size = 220,
   inkColor,
   arabicCity = '',
+  centerMode,
+  centerIcon,
 }: LiveStampPreviewProps) {
   const displayName = companyName || 'Your Company Name';
   const fontFamily = FONT_FAMILIES[typographyStyle];
