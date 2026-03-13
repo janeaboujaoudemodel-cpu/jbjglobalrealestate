@@ -31,14 +31,14 @@ export interface LandingPageData {
 }
 
 const DEFAULT_SOCIAL_PLATFORMS = [
-  { platform: "LinkedIn", icon: "🔗" },
-  { platform: "Instagram", icon: "📸" },
-  { platform: "Twitter / X", icon: "𝕏" },
-  { platform: "Facebook", icon: "📘" },
-  { platform: "YouTube", icon: "▶️" },
-  { platform: "TikTok", icon: "🎵" },
-  { platform: "WhatsApp", icon: "💬" },
-  { platform: "Telegram", icon: "✈️" },
+  { platform: "LinkedIn", icon: "Li" },
+  { platform: "Instagram", icon: "Ig" },
+  { platform: "Twitter / X", icon: "X" },
+  { platform: "Facebook", icon: "Fb" },
+  { platform: "YouTube", icon: "Yt" },
+  { platform: "TikTok", icon: "Tt" },
+  { platform: "WhatsApp", icon: "Wa" },
+  { platform: "Telegram", icon: "Tg" },
 ];
 
 export const EMPTY_LANDING_PAGE: LandingPageData = {
