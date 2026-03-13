@@ -896,6 +896,8 @@ export default function GlobalVerticalNav() {
   const isRouteActive = (href: string) => {
     if (href === "#") return false;
     if (href === "/properties") return location.pathname === "/properties" || location.pathname.startsWith("/properties/");
+    // Prefix matching for toolkit sub-routes (stamp-generator, corporate-suite, etc.)
+    if (href.startsWith("/toolkit/")) return location.pathname === href || location.pathname.startsWith(href + "/");
     return location.pathname === href;
   };
 
