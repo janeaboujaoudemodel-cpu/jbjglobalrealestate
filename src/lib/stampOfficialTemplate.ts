@@ -385,7 +385,7 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
       if (config.registrationNumber) {
         const regSize = fitFontSize(config.registrationNumber, 11, innerR * 1.4, 0.6);
         centerContent = `
-          <text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
+          <text data-stamp-element="center" x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
             font-family="${enFont}" font-size="${regSize}" fill="${accColor}" 
             font-weight="700" letter-spacing="1">${config.registrationNumber}</text>
         `;
