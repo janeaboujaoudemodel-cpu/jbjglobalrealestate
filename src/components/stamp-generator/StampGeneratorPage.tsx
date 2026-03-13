@@ -1092,12 +1092,17 @@ function ConceptCard({
   const isFav = concept.isFavorite;
   const displaySvg = svgOverride || concept.svgSource;
 
+  // Detect stamp shape for frame
+  const svgStr = svgOverride || concept.svgSource;
+  const isRectShape = svgStr.includes('<rect') && !svgStr.match(/<circle[^>]*r="(9|10|11)/);
+  const displaySvg = svgStr;
+
   return (
     <div
       className={`group bg-card/80 rounded-xl border-2 transition-all shadow-sm hover:shadow-md cursor-pointer ${isSelected ? 'border-gold shadow-[0_0_0_3px_hsl(var(--gold)/0.15)]' : 'border-gold/30 hover:border-gold/50'}`}
       onClick={() => onSelect(concept)}
     >
-      <div className="relative p-3 flex items-center justify-center bg-[hsl(var(--pearl-1))] rounded-t-xl min-h-[140px]">
+      <div className={`relative p-3 flex items-center justify-center bg-[hsl(var(--pearl-1))] rounded-t-xl ${isRectShape ? 'min-h-[100px]' : 'min-h-[140px]'}`}>
         {isSelected && (
           <div className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-[hsl(var(--gold))] flex items-center justify-center z-10">
             <Check size={10} className="text-white"/>
@@ -1107,7 +1112,7 @@ function ConceptCard({
           className={`absolute top-1.5 left-1.5 z-10 w-6 h-6 rounded-full flex items-center justify-center transition-all ${isFav ? 'bg-rose-50 border border-rose-200 text-rose-500' : 'bg-white/80 border border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] opacity-0 group-hover:opacity-100'}`}>
           {togglingFav === concept.id ? <Loader2 size={9} className="animate-spin"/> : <Heart size={9} className={isFav ? 'fill-rose-500' : ''}/>}
         </button>
-        <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} fontWeight={fontBold ? 'bold' : 'normal'} fontStyle={fontItalic ? 'italic' : 'normal'} fontSize={manualFontSize} inkMode={inkMode} size={130}/>
+        <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} fontWeight={fontBold ? 'bold' : 'normal'} fontStyle={fontItalic ? 'italic' : 'normal'} fontSize={manualFontSize} inkMode={inkMode} size={isRectShape ? 160 : 130}/>
       </div>
       <div className="p-2 space-y-1.5">
         <p className="font-medium text-[11px] text-[hsl(var(--foreground))] truncate">{concept.label}</p>
