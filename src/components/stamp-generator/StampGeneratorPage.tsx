@@ -167,7 +167,17 @@ export default function StampGeneratorPage() {
   };
 
   // Left panel tab
-  const [leftTab, setLeftTab] = useState<'color' | 'fonts' | 'text' | 'centerart' | 'logo'>('color');
+  const [leftTab, setLeftTab] = useState<'color' | 'fonts' | 'text' | 'centerart' | 'logo' | 'mystamp'>('color');
+
+  // My Stamp tab state
+  const [uploadedStampUrl, setUploadedStampUrl] = useState<string>('');
+  const [uploadedSignatureUrl, setUploadedSignatureUrl] = useState<string>('');
+  const [signatureX, setSignatureX] = useState(50);
+  const [signatureY, setSignatureY] = useState(80);
+  const [signatureLocked, setSignatureLocked] = useState(false);
+  const [refinePrompt, setRefinePrompt] = useState('');
+  const [refiningImage, setRefiningImage] = useState(false);
+  const [showWelcomeBanner, setShowWelcomeBanner] = useState(true);
 
   // Center Art controls — logo persisted in localStorage
   const [localIconStyle, setLocalIconStyle] = useState<'NONE' | 'MONOGRAM' | 'UPLOADED_LOGO'>('MONOGRAM');
