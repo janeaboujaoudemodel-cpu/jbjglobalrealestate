@@ -6,12 +6,14 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useFavorites, useShortlist, useToggleShortlist } from "@/hooks/useFavorites";
 import { useGuestFavorites, useGuestShortlist } from "@/hooks/useGuestFavorites";
 import { useShortlistBadges } from "@/hooks/useShortlistBadges";
+import { useDesignFavorites, useDesignShortlist, useToggleDesignFavorite, groupByType, DESIGN_TYPE_LABELS, DesignItemType } from "@/hooks/useDesignFavorites";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
-import { ChevronLeft, Heart, ListPlus, ArrowRight, ArrowUpRight, Award, X, Mail, Share2, Sparkles, Users, CheckSquare, Download, MessageCircle, Copy } from "lucide-react";
+import { ChevronLeft, Heart, ListPlus, ArrowRight, ArrowUpRight, Award, X, Mail, Share2, Sparkles, Users, CheckSquare, Download, MessageCircle, Copy, Stamp, FileText, Briefcase, PenTool, File, ChevronDown, ChevronUp, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import ProjectCard from "@/components/ProjectCard";
 import { toast } from "sonner";
 import {
@@ -32,10 +34,61 @@ import { Label } from "@/components/ui/label";
 
 const INQUIRY_FORM_URL = "https://JBJ.ae/contact";
 
+const DESIGN_TYPE_ICONS: Record<string, React.ReactNode> = {
+  stamp: <Stamp className="w-4 h-4 text-gold" />,
+  business_card: <Briefcase className="w-4 h-4 text-gold" />,
+  letterhead: <FileText className="w-4 h-4 text-gold" />,
+  cv: <File className="w-4 h-4 text-gold" />,
+  logo: <PenTool className="w-4 h-4 text-gold" />,
+  cover_letter: <FileText className="w-4 h-4 text-gold" />,
+  document: <File className="w-4 h-4 text-gold" />,
+};
+const getDesignTypeIcon = (type: string) => DESIGN_TYPE_ICONS[type] || <File className="w-4 h-4 text-gold" />;
+
+const DESIGN_TYPE_ROUTES: Record<string, string> = {
+  stamp: "/toolkit/stamp-generator",
+  business_card: "/toolkit/business-card",
+  letterhead: "/toolkit/letterhead",
+  cv: "/toolkit/cv-builder",
+  logo: "/toolkit/logo-maker",
+};
+
+function DesignCard({ item, onRemove }: { item: { id: string; item_name: string | null; item_type: string; item_id: string; thumbnail_svg: string | null; created_at: string }; onRemove: () => void }) {
+  const route = DESIGN_TYPE_ROUTES[item.item_type];
+  return (
+    <div className="bg-white/70 rounded-xl border border-gold/20 overflow-hidden group hover:border-gold/40 transition-all">
+      <div className="aspect-square bg-[#F5F0E6] flex items-center justify-center p-4 relative">
+        {item.thumbnail_svg ? (
+          <div className="w-full h-full" dangerouslySetInnerHTML={{ __html: item.thumbnail_svg.slice(0, 50000) }} />
+        ) : (
+          <div className="text-gold/30">{getDesignTypeIcon(item.item_type)}</div>
+        )}
+        <button
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); onRemove(); }}
+          className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/80 border border-gold/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-50 hover:border-red-200"
+        >
+          <Trash2 className="w-3.5 h-3.5 text-red-400" />
+        </button>
+      </div>
+      <div className="p-3">
+        <p className="text-sm font-medium text-black truncate">{item.item_name || DESIGN_TYPE_LABELS[item.item_type as DesignItemType] || "Design"}</p>
+        <p className="text-xs text-black/40 mt-1">{new Date(item.created_at).toLocaleDateString()}</p>
+        {route && (
+          <Link to={`${route}/${item.item_id}`} className="text-xs text-gold hover:underline mt-1 inline-block">
+            Open in editor →
+          </Link>
+        )}
+      </div>
+    </div>
+  );
+}
+
+
 const Favorites = () => {
   const { user } = useAuth();
   const [searchParams] = useSearchParams();
-  const defaultTab = searchParams.get("tab") === "shortlist" ? "shortlist" : "favorites";
+  const defaultTab = searchParams.get("tab") === "shortlist" ? "shortlist" : searchParams.get("tab") === "designs" ? "designs" : "favorites";
+  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
   const [selectedFavorites, setSelectedFavorites] = useState<string[]>([]);
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [shareEmail, setShareEmail] = useState("");
@@ -46,6 +99,15 @@ const Favorites = () => {
   const { shortlist: guestShortlist, toggleShortlist: toggleGuestShortlist } = useGuestShortlist();
   const { setBadge, getBadge } = useShortlistBadges();
   const toggleShortlistMutation = useToggleShortlist();
+  const { data: designFavs } = useDesignFavorites();
+  const { data: designShorts } = useDesignShortlist();
+  const toggleDesign = useToggleDesignFavorite();
+  const designFavCount = designFavs?.length || 0;
+  const designShortCount = designShorts?.length || 0;
+  const designFavGroups = designFavs ? groupByType(designFavs) : {};
+  const designShortGroups = designShorts ? groupByType(designShorts) : {};
+
+  const toggleSection = (key: string) => setExpandedSections(prev => ({ ...prev, [key]: !prev[key] }));
 
   const favoriteIds = user 
     ? (userFavorites?.map(f => f.project_id) || [])
@@ -231,6 +293,13 @@ const Favorites = () => {
             >
               <ListPlus className="w-4 h-4 mr-2" />
               Shortlist ({shortlistCount})
+            </TabsTrigger>
+            <TabsTrigger
+              value="designs"
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border data-[state=active]:border-gold/30 text-black/50"
+            >
+              <PenTool className="w-4 h-4 mr-2" />
+              My Designs ({designFavCount + designShortCount})
             </TabsTrigger>
           </TabsList>
 
@@ -426,6 +495,90 @@ const Favorites = () => {
                     )}
                   </div>
                 </div>
+              </div>
+            )}
+          </TabsContent>
+
+          {/* ─── My Designs Tab ─── */}
+          <TabsContent value="designs">
+            {(designFavCount + designShortCount) === 0 ? (
+              <div className="text-center py-16 bg-white/60 rounded-2xl border border-gold/20">
+                <div className="max-w-md mx-auto px-4">
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 flex items-center justify-center mx-auto mb-6">
+                    <PenTool className="w-10 h-10 text-gold/70" />
+                  </div>
+                  <h3 className="text-black text-xl font-semibold mb-3">No Saved Designs Yet</h3>
+                  <p className="text-black/50 mb-8">Save your stamps, business cards, letterheads, CVs, and more from the toolkit by clicking the heart or shortlist icon.</p>
+                  <Link to="/toolkit">
+                    <Button className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black hover:brightness-95 border border-gold/30">
+                      Open Toolkit <ArrowUpRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-6">
+                {/* Favorites section */}
+                {designFavCount > 0 && (
+                  <div>
+                    <h2 className="text-black text-lg font-semibold mb-4 flex items-center gap-2">
+                      <Heart className="w-5 h-5 text-red-500" /> Favorite Designs ({designFavCount})
+                    </h2>
+                    {(Object.entries(designFavGroups) as [DesignItemType, typeof designFavs][]).map(([type, items]) => {
+                      if (!items || items.length === 0) return null;
+                      const isOpen = expandedSections[`fav-${type}`] !== false;
+                      return (
+                        <Collapsible key={`fav-${type}`} open={isOpen} onOpenChange={() => toggleSection(`fav-${type}`)}>
+                          <CollapsibleTrigger className="flex items-center justify-between w-full bg-white/60 rounded-xl p-4 border border-gold/20 mb-2 hover:bg-gold/5 transition-colors">
+                            <span className="flex items-center gap-2 text-black font-medium">
+                              {getDesignTypeIcon(type)}
+                              {DESIGN_TYPE_LABELS[type]} ({items.length})
+                            </span>
+                            {isOpen ? <ChevronUp className="w-4 h-4 text-black/40" /> : <ChevronDown className="w-4 h-4 text-black/40" />}
+                          </CollapsibleTrigger>
+                          <CollapsibleContent>
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4">
+                              {items!.map(item => (
+                                <DesignCard key={item.id} item={item} onRemove={() => toggleDesign.mutate({ itemType: item.item_type as DesignItemType, itemId: item.item_id, listType: 'favorite', isActive: true })} />
+                              ))}
+                            </div>
+                          </CollapsibleContent>
+                        </Collapsible>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* Shortlist section */}
+                {designShortCount > 0 && (
+                  <div>
+                    <h2 className="text-black text-lg font-semibold mb-4 flex items-center gap-2">
+                      <ListPlus className="w-5 h-5 text-gold" /> Shortlisted Designs ({designShortCount})
+                    </h2>
+                    {(Object.entries(designShortGroups) as [DesignItemType, typeof designShorts][]).map(([type, items]) => {
+                      if (!items || items.length === 0) return null;
+                      const isOpen = expandedSections[`short-${type}`] !== false;
+                      return (
+                        <Collapsible key={`short-${type}`} open={isOpen} onOpenChange={() => toggleSection(`short-${type}`)}>
+                          <CollapsibleTrigger className="flex items-center justify-between w-full bg-white/60 rounded-xl p-4 border border-gold/20 mb-2 hover:bg-gold/5 transition-colors">
+                            <span className="flex items-center gap-2 text-black font-medium">
+                              {getDesignTypeIcon(type)}
+                              {DESIGN_TYPE_LABELS[type]} ({items.length})
+                            </span>
+                            {isOpen ? <ChevronUp className="w-4 h-4 text-black/40" /> : <ChevronDown className="w-4 h-4 text-black/40" />}
+                          </CollapsibleTrigger>
+                          <CollapsibleContent>
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4">
+                              {items!.map(item => (
+                                <DesignCard key={item.id} item={item} onRemove={() => toggleDesign.mutate({ itemType: item.item_type as DesignItemType, itemId: item.item_id, listType: 'shortlist', isActive: true })} />
+                              ))}
+                            </div>
+                          </CollapsibleContent>
+                        </Collapsible>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             )}
           </TabsContent>

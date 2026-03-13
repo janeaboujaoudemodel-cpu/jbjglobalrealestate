@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { StampSVGRenderer } from '@/components/stamp-generator/StampSVGRenderer';
+import DesignFavoriteButton from '@/components/toolkit/DesignFavoriteButton';
 import { StampColorWheel } from '@/components/stamp-generator/StampColorWheel';
 import { StampTextEditor } from '@/components/stamp-generator/StampTextEditor';
 import { StampPreviewModal } from '@/components/stamp-generator/StampPreviewModal';
@@ -861,7 +862,7 @@ export default function StampGeneratorPage() {
                 )}
               </div>
               {(selectedSvg || allConcepts[0]) && !generating && (
-                <div className="border-t border-[hsl(var(--border))] px-3 py-2 flex gap-1.5">
+                <div className="border-t border-[hsl(var(--border))] px-3 py-2 flex items-center gap-1.5">
                   <Button size="sm"
                     className="flex-1 h-7 text-[10px] bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 gap-1"
                     onClick={() => { const c = selectedConcept || allConcepts[0]; if (c) { setSelectedId(c.id); setPreviewConcept(c); } }}>
@@ -873,6 +874,15 @@ export default function StampGeneratorPage() {
                       onClick={() => navigate(`/toolkit/stamp-generator/${projectId}/export/${savedDesignId || selectedId}`)}>
                       <Download size={9}/>
                     </Button>
+                  )}
+                  {selectedId && (
+                    <DesignFavoriteButton
+                      itemType="stamp"
+                      itemId={selectedId}
+                      itemName={(selectedConcept || allConcepts[0])?.label || "Stamp"}
+                      thumbnailSvg={(selectedSvg || allConcepts[0]?.svgSource || '').slice(0, 50000)}
+                      size="sm"
+                    />
                   )}
                 </div>
               )}
