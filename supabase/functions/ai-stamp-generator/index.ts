@@ -181,13 +181,13 @@ function buildSVG(project: any, templateKey: string): string {
     const arcLen = textR * Math.PI;
     const safeArc = arcLen * 0.70;
     
-    // Top: Arabic or name
+    // STRICT: Arabic on top, English on bottom — always
     const topText = isBilingual && arabicName ? arabicName : `✦  ${name}  ✦`;
     const topIsAr = isBilingual && !!arabicName;
     const topFont = topIsAr ? arabicFont : font;
     const topSize = fitFontSize(topText, topIsAr ? 10 : 8.5, safeArc, topIsAr ? 0.48 : 0.54);
     
-    // Bottom: English name (per-character)
+    // Bottom: English name (per-character, right-side up at bottom)
     const bottomText = isBilingual ? name : city;
     const bottomSize = fitFontSize(bottomText, 8, safeArc, 0.54);
     
