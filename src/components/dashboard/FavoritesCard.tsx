@@ -95,7 +95,7 @@ const FavoritesCard = () => {
         )}
 
         {/* Always-visible portal CTA */}
-        <div className="mt-4 pt-4 border-t border-gold/20">
+        <div className="mt-4 pt-4 border-t border-gold/20 space-y-2">
           <Link
             to="/favorites"
             className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#C8A766]/15 to-[#C8A766]/5 border border-[#C8A766]/30 hover:border-[#C8A766]/60 hover:from-[#C8A766]/25 hover:to-[#C8A766]/10 transition-all duration-300 group"
@@ -104,6 +104,15 @@ const FavoritesCard = () => {
             <span className="text-sm font-semibold text-[#C8A766]">Visit Favorites Portal</span>
             <ArrowRight className="w-4 h-4 text-[#C8A766] group-hover:translate-x-1 transition-transform" />
           </Link>
+          {designCount > 0 && (
+            <Link
+              to="/favorites?tab=designs"
+              className="flex items-center justify-center gap-2 w-full px-4 py-2 rounded-xl border border-gold/20 hover:border-gold/40 hover:bg-gold/5 transition-all duration-300 group"
+            >
+              <PenTool className="w-3.5 h-3.5 text-gold/70" />
+              <span className="text-xs font-medium text-gold/70">{designCount} Saved Design{designCount !== 1 ? 's' : ''}</span>
+            </Link>
+          )}
         </div>
       </CardContent>
     </Card>
