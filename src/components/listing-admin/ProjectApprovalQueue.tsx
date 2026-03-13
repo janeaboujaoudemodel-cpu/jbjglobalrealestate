@@ -1031,10 +1031,10 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                     variant="outline"
                     onClick={repairAllIncomplete}
                     disabled={isBulkProcessing || isLoading}
-                    className="border-primary/40 text-foreground hover:bg-muted"
+                    className="border-amber-400/60 text-amber-700 hover:bg-amber-50"
                   >
-                    <RefreshCw className="h-4 w-4 mr-2" />
-                    Fix All Listings
+                    <Timer className="h-4 w-4 mr-2" />
+                    Extract Missing Data
                   </Button>
                 )}
                 {selectedIds.size > 0 && (
