@@ -19,7 +19,7 @@ import {
 import { StampLicenseUploader } from '@/components/stamp-generator/StampLicenseUploader';
 import { LiveStampPreview } from '@/components/stamp-generator/LiveStampPreview';
 import { useStampHistory } from '@/hooks/useStampHistory';
-import { OFFICIAL_INK_BLUE, type SeparatorStyle } from '@/lib/stampOfficialTemplate';
+import { OFFICIAL_INK_BLUE, type SeparatorStyle, type BorderStyleType } from '@/lib/stampOfficialTemplate';
 
 // UAE phone normalization
 function normalizePhone(raw: string): string {
