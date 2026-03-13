@@ -1244,7 +1244,31 @@ export default function StampGeneratorPage() {
         </div>
 
         {/* ── Right: Concepts Grid (narrower, scrollable) ────── */}
-        <div className="w-[340px] xl:w-[400px] flex-shrink-0 min-w-0 flex flex-col overflow-hidden">
+        <div className="w-[340px] xl:w-[400px] flex-shrink-0 min-w-0 flex flex-col overflow-hidden relative">
+          {/* Variations overlay */}
+          {showVariations && (
+            <StampVariationsPanel
+              variations={variations}
+              loading={variationsLoading}
+              tintColor={primaryColor}
+              secondaryColor={secondaryColor}
+              accentColor={accentColor}
+              fontFamily={fontFamily}
+              inkMode={inkMode}
+              onSelectVariation={(v) => {
+                const newConcept: StampDesignConcept = { ...v, id: crypto.randomUUID() };
+                setConcepts(prev => [newConcept, ...prev]);
+                setSelectedId(newConcept.id);
+                setSvgOverrides(prev => ({ ...prev, [newConcept.id]: v.svgSource }));
+                setShowVariations(false);
+                toast.success('Variation applied as new concept');
+              }}
+              onDeleteVariation={(id) => setVariations(prev => prev.filter(v => v.id !== id))}
+              onDuplicateVariation={(v) => setVariations(prev => [...prev, { ...v, id: crypto.randomUUID(), label: `${v.label} (copy)` }])}
+              onClose={() => setShowVariations(false)}
+              onGenerate={generateVariations}
+            />
+          )}
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
 
             {/* Favorites */}
