@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { toast } from 'sonner';
 import { PDFDocument } from 'pdf-lib';
+import { SaveProjectBar } from '@/components/toolkit/SaveProjectBar';
 import {
   Camera, Upload, FileText, Pen, Download, Trash2, RotateCw,
   Loader2, CheckCircle2, Plus, Image as ImageIcon, Save, Sparkles, Wand2, X,
@@ -32,26 +33,26 @@ interface SignatureData {
   scale: number;
 }
 
-// ─── Champagne-Gold Palette ──────────────────────────────────────────────────
+// ─── Emerald Green Palette ──────────────────────────────────────────────────
 
 const G = {
-  gold: "#C8A766",
-  goldBright: "#E4C47A",
-  goldDim: "#A08040",
-  bg: "#0E1018",
-  card: "rgba(200,167,102,0.05)",
-  border: "rgba(200,167,102,0.2)",
-  borderHover: "rgba(200,167,102,0.45)",
-  accent: "#C8A766",
-  accentLight: "#E4C47A",
-  accentDim: "rgba(200,167,102,0.15)",
-  text: "#C8A766",
-  textMuted: "rgba(255,255,255,0.4)",
-  btnPrimary: "linear-gradient(135deg, #A08040, #C8A766)",
-  btnPrimaryShadow: "0 4px 20px rgba(200,167,102,0.3)",
-  btnOutline: { background: "rgba(200,167,102,0.1)", border: "1px solid rgba(200,167,102,0.35)", color: "#fff" },
-  outerBorder: "1px solid rgba(200,167,102,0.25)",
-  outerShadow: "0 0 60px rgba(200,167,102,0.06), 0 2px 40px rgba(0,0,0,0.6)",
+  gold: "#059669",
+  goldBright: "#10B981",
+  goldDim: "#047857",
+  bg: "#FFFFFF",
+  card: "rgba(5,150,105,0.03)",
+  border: "rgba(5,150,105,0.15)",
+  borderHover: "rgba(5,150,105,0.35)",
+  accent: "#059669",
+  accentLight: "#10B981",
+  accentDim: "rgba(5,150,105,0.12)",
+  text: "#059669",
+  textMuted: "rgba(0,0,0,0.4)",
+  btnPrimary: "linear-gradient(135deg, #047857, #059669)",
+  btnPrimaryShadow: "0 4px 20px rgba(5,150,105,0.25)",
+  btnOutline: { background: "rgba(5,150,105,0.06)", border: "1px solid rgba(5,150,105,0.25)", color: "#1F2937" },
+  outerBorder: "1px solid rgba(5,150,105,0.18)",
+  outerShadow: "0 2px 20px rgba(0,0,0,0.06)",
 };
 
 // ─── Button helpers ───────────────────────────────────────────────────────────
@@ -62,8 +63,8 @@ const PrimaryBtn = ({ onClick, disabled, children, className = "" }: {
   <button
     onClick={onClick}
     disabled={disabled}
-    className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed ${className}`}
-    style={{ background: G.btnPrimary, boxShadow: G.btnPrimaryShadow, color: "#0E1018" }}
+    className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed text-white ${className}`}
+    style={{ background: G.btnPrimary, boxShadow: G.btnPrimaryShadow }}
   >
     {children}
   </button>
@@ -109,7 +110,7 @@ const Panel = ({ children, className = "" }: { children: React.ReactNode; classN
 const PanelTitle = ({ icon: Icon, children }: { icon: React.ElementType; children: React.ReactNode }) => (
   <div className="flex items-center gap-2 mb-4">
     <Icon className="h-5 w-5" style={{ color: G.text }} />
-    <h3 className="text-white font-semibold text-base">{children}</h3>
+    <h3 className="text-stone-900 font-semibold text-base">{children}</h3>
   </div>
 );
 
@@ -445,31 +446,26 @@ export default function ScanSignPage() {
   const selectedPage = pages[selectedPageIndex];
 
   return (
-    <div className="min-h-screen" style={{ background: G.bg }}>
+    <div className="min-h-screen bg-white">
 
-      {/* ── Header — Champagne-Gold ── */}
-      <div style={{
-        background: "linear-gradient(180deg, rgba(200,167,102,0.13) 0%, rgba(200,167,102,0.03) 100%)",
-        borderBottom: "1px solid rgba(200,167,102,0.25)"
-      }}>
+      {/* ── Header — Emerald Green ── */}
+      <div className="border-b border-emerald-100 bg-gradient-to-b from-emerald-50/60 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-7">
           <div className="flex flex-col sm:flex-row sm:items-center gap-5">
             <div className="flex items-center gap-5">
-              <div className="w-16 h-16 rounded-2xl flex items-center justify-center shrink-0"
-                style={{ background: "rgba(200,167,102,0.12)", border: "1.5px solid rgba(200,167,102,0.4)", boxShadow: "0 0 40px rgba(200,167,102,0.2)" }}>
-                <ScanLine className="w-8 h-8" style={{ color: G.accentLight }} />
+              <div className="w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 bg-gradient-to-br from-emerald-500 to-green-600 shadow-lg shadow-emerald-500/20">
+                <ScanLine className="w-8 h-8 text-white" />
               </div>
               <div>
                 <div className="flex items-center gap-3 mb-1">
-                  <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-                    Scan <span style={{ color: G.accentLight }}>&</span> Sign
+                  <h1 className="text-3xl sm:text-4xl font-black text-stone-900 tracking-tight">
+                    Scan <span className="text-emerald-600">&</span> Sign
                   </h1>
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold"
-                    style={{ background: "rgba(200,167,102,0.15)", border: "1px solid rgba(200,167,102,0.35)", color: G.accentLight }}>
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 border border-emerald-200 text-emerald-700">
                     <Sparkles className="w-3 h-3" /> AI Enhanced
                   </span>
                 </div>
-                <p className="text-sm sm:text-base" style={{ color: "rgba(255,255,255,0.45)" }}>
+                <p className="text-sm sm:text-base text-stone-500">
                   Camera scan · Auto-detect edges · Crop & adjust · Add signature · Export PDF
                 </p>
               </div>
@@ -477,40 +473,16 @@ export default function ScanSignPage() {
 
             {/* Project Name + Save/Clear */}
             <div className="sm:ml-auto flex flex-col sm:flex-row items-start sm:items-center gap-3">
-              <div>
-                {editingName ? (
-                  <Input
-                    value={projectName}
-                    onChange={e => setProjectName(e.target.value)}
-                    onBlur={() => setEditingName(false)}
-                    onKeyDown={e => e.key === 'Enter' && setEditingName(false)}
-                    autoFocus
-                    className="text-sm font-semibold text-white bg-transparent border-b-2 rounded-none border-0 focus:ring-0 px-0 w-44"
-                    style={{ borderBottomColor: G.accent }}
-                  />
-                ) : (
-                  <button onClick={() => setEditingName(true)}
-                    className="flex items-center gap-2 text-sm font-semibold text-white hover:opacity-80 transition-opacity">
-                    <FolderOpen className="w-4 h-4" style={{ color: G.text }} />
-                    {projectName}
-                  </button>
-                )}
-                <p className="text-[11px] mt-0.5" style={{ color: "rgba(255,255,255,0.3)" }}>Click name to rename</p>
-              </div>
-              <div className="flex gap-2">
-                <OutlineBtn onClick={undo} disabled={historyIdx <= 0} className="text-xs px-3 py-2">
-                  <Undo className="w-3.5 h-3.5" />
-                </OutlineBtn>
-                <OutlineBtn onClick={redo} disabled={historyIdx >= history.length - 1} className="text-xs px-3 py-2">
-                  <Redo className="w-3.5 h-3.5" />
-                </OutlineBtn>
-                <OutlineBtn onClick={saveProject} disabled={pages.length === 0} className="text-xs px-3 py-2">
-                  <Save className="w-3.5 h-3.5" /> Save
-                </OutlineBtn>
-                <DangerBtn onClick={clearProject} disabled={pages.length === 0} className="text-xs px-3 py-2">
-                  <Trash2 className="w-3.5 h-3.5" /> Clear
-                </DangerBtn>
-              </div>
+              <SaveProjectBar
+                projectName={projectName}
+                onNameChange={setProjectName}
+                onSave={saveProject}
+                onClear={clearProject}
+                canSave={pages.length > 0}
+                accentColor="#059669"
+                accentBorder="rgba(5,150,105,0.2)"
+                toolId="scan-sign"
+              />
             </div>
           </div>
         </div>
@@ -518,8 +490,7 @@ export default function ScanSignPage() {
 
       {/* ── Main Content ── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-        <div className="rounded-3xl p-6 sm:p-8"
-          style={{ border: "1.5px solid rgba(200,167,102,0.2)", background: "rgba(200,167,102,0.02)", boxShadow: G.outerShadow }}>
+        <div className="rounded-2xl p-6 sm:p-8 bg-white border border-stone-200 shadow-sm">
           <div className="grid lg:grid-cols-3 gap-6">
 
             {/* ── Left Panel ── */}
@@ -555,14 +526,14 @@ export default function ScanSignPage() {
                       style={{ border: `2px dashed rgba(200,167,102,0.3)`, background: "rgba(200,167,102,0.04)" }}
                       onClick={() => fileInputRef.current?.click()}>
                       <Upload className="w-7 h-7 mx-auto mb-2" style={{ color: G.text }} />
-                      <p className="text-sm font-medium text-white">Upload Images / PDF</p>
-                      <p className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.35)" }}>Drag & drop or click · JPG, PNG, PDF</p>
+                      <p className="text-sm font-medium text-stone-800">Upload Images / PDF</p>
+                      <p className="text-xs mt-1 text-stone-400">Drag & drop or click · JPG, PNG, PDF</p>
                     </div>
                     <input ref={fileInputRef} type="file" accept="image/*,application/pdf" multiple className="hidden" onChange={handleFileUpload} />
 
                     {/* Cross-tool import buttons */}
                     <div className="mt-3 space-y-2">
-                      <p className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: G.textMuted }}>Import from Tools</p>
+                      <p className="text-[10px] font-semibold uppercase tracking-wider text-stone-400">Import from Tools</p>
                       <div className="grid grid-cols-3 gap-2">
                         <button
                           onClick={() => {
@@ -659,9 +630,9 @@ export default function ScanSignPage() {
             <div className="lg:col-span-2 space-y-4">
               <Panel>
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-white font-semibold text-base flex items-center gap-2">
+                  <h3 className="text-stone-900 font-semibold text-base flex items-center gap-2">
                     <span style={{ color: G.text }}>Preview</span>
-                    {selectedPage && <span className="text-white/50 text-sm font-normal">— Page {selectedPageIndex + 1} of {pages.length}</span>}
+                    {selectedPage && <span className="text-stone-400 text-sm font-normal">— Page {selectedPageIndex + 1} of {pages.length}</span>}
                   </h3>
                   {selectedPage && (
                     <div className="flex gap-2">
@@ -719,7 +690,7 @@ export default function ScanSignPage() {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex flex-col items-center justify-center h-72" style={{ color: "rgba(255,255,255,0.2)" }}>
+                  <div className="flex flex-col items-center justify-center h-72 text-stone-300">
                     <ScanLine className="h-20 w-20 mb-4 opacity-20" />
                     <p className="text-base font-medium">Capture or upload pages to preview</p>
                     <p className="text-sm mt-1 opacity-60">Point camera at document or drag & drop files</p>
@@ -746,9 +717,9 @@ export default function ScanSignPage() {
                   <div
                     className="w-full rounded-xl p-6 text-center cursor-pointer transition-all hover:opacity-90"
                     style={{ border: `2px dashed rgba(200,167,102,0.3)`, background: pages.length > 0 ? "rgba(200,167,102,0.05)" : "rgba(255,255,255,0.02)" }}
-                    onClick={pages.length > 0 ? startSignatureDrawing : undefined}>
-                    <Pen className="w-9 h-9 mx-auto mb-3" style={{ color: pages.length > 0 ? G.accentLight : "rgba(255,255,255,0.15)" }} />
-                    <p className="text-sm font-semibold" style={{ color: pages.length > 0 ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.25)" }}>
+                     onClick={pages.length > 0 ? startSignatureDrawing : undefined}>
+                    <Pen className="w-9 h-9 mx-auto mb-3" style={{ color: pages.length > 0 ? G.accentLight : "rgba(0,0,0,0.15)" }} />
+                    <p className="text-sm font-semibold" style={{ color: pages.length > 0 ? "rgba(0,0,0,0.7)" : "rgba(0,0,0,0.25)" }}>
                       {pages.length > 0 ? "Click to Draw Signature" : "Add pages first to sign"}
                     </p>
                   </div>
@@ -762,8 +733,8 @@ export default function ScanSignPage() {
               </Panel>
 
               {/* Export + Save Row */}
-              <div className="rounded-2xl p-4 space-y-3" style={{ background: "rgba(200,167,102,0.04)", border: "1px solid rgba(200,167,102,0.18)" }}>
-                <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "rgba(255,255,255,0.3)" }}>Export & Project Actions</p>
+              <div className="rounded-2xl p-4 space-y-3 bg-emerald-50/50 border border-emerald-100">
+                <p className="text-xs font-semibold uppercase tracking-widest mb-3 text-stone-400">Export & Project Actions</p>
                 <PrimaryBtn onClick={exportToPDF} disabled={pages.length === 0 || processing} className="w-full py-4 text-base">
                   {processing ? <><Loader2 className="w-5 h-5 animate-spin" /> Generating PDF…</> : <><Download className="w-5 h-5" /> Export to PDF ({pages.length} page{pages.length !== 1 ? 's' : ''})</>}
                 </PrimaryBtn>

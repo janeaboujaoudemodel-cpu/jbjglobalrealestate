@@ -21,19 +21,19 @@ export interface HistoryEntry {
   pages: PDFPage[];
 }
 
-/** Champagne-Gold palette */
+/** Clean Professional Blue palette */
 export const G = {
-  gold: "#C8A766",
-  goldBright: "#E4C47A",
-  goldDim: "#A08040",
-  bg: "rgba(200,167,102,0.06)",
-  bgHover: "rgba(200,167,102,0.12)",
-  border: "rgba(200,167,102,0.22)",
-  borderHover: "rgba(200,167,102,0.55)",
-  glow: "rgba(200,167,102,0.18)",
-  text: "#C8A766",
-  surface: "#0E1018",
-  surfaceCard: "#111520",
-  btnGradient: "linear-gradient(135deg, #A08040, #C8A766)",
-  btnShadow: "0 4px 20px rgba(200,167,102,0.3)",
+  gold: "#2563EB",
+  goldBright: "#3B82F6",
+  goldDim: "#1D4ED8",
+  bg: "rgba(37,99,235,0.04)",
+  bgHover: "rgba(37,99,235,0.08)",
+  border: "rgba(37,99,235,0.15)",
+  borderHover: "rgba(37,99,235,0.35)",
+  glow: "rgba(37,99,235,0.12)",
+  text: "#2563EB",
+  surface: "#FFFFFF",
+  surfaceCard: "#F8FAFC",
+  btnGradient: "linear-gradient(135deg, #2563EB, #3B82F6)",
+  btnShadow: "0 4px 20px rgba(37,99,235,0.25)",
 } as const;
