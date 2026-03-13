@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2, GripVertical } from "lucide-react";
+import { Plus, Trash2, GripVertical, Sparkles, Link2, Building2, Star, Linkedin, Instagram, Twitter, Facebook, Youtube, Music, MessageCircle, Send } from "lucide-react";
 
 export interface SocialLink {
   platform: string;
