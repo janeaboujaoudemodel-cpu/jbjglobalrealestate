@@ -109,6 +109,7 @@ const EmailClient = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [approvePreviewOpen, setApprovePreviewOpen] = useState(false);
   const [alsoNotifyChat, setAlsoNotifyChat] = useState(false);
+  const [showEmailSettings, setShowEmailSettings] = useState(false);
   const emailsPerPage = 20;
 
   const folders = [
