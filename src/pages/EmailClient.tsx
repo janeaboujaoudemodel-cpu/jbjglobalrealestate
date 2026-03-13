@@ -170,26 +170,58 @@ const EmailClient = () => {
 
   const currentSender = SENDER_IDENTITIES.find(s => s.id === composeSender) || SENDER_IDENTITIES[0];
 
-  const sendEmail = () => {
+  const [isSending, setIsSending] = useState(false);
+
+  const sendEmail = async () => {
     if (!newEmail.to || !newEmail.subject) {
       toast.error("Please fill in recipient and subject");
       return;
     }
-    const email: Email = {
-      id: Date.now().toString(),
-      from: currentSender.name,
-      fromEmail: currentSender.email,
-      to: newEmail.to,
-      subject: newEmail.subject,
-      body: newEmail.body,
-      date: new Date().toISOString(),
-      read: true, starred: false, folder: "sent", labels: [], hasAttachment: false,
-      account: currentSender.account,
-    };
-    setEmails([...emails, email]);
-    setNewEmail({ to: "", subject: "", body: "" });
-    setComposeOpen(false);
-    toast.success(sendViaResend ? "Email sent via Resend API" : "Email sent normally");
+    setIsSending(true);
+    try {
+      // Call backend edge function
+      const { data, error } = await supabase.functions.invoke("send-owner-email", {
+        body: {
+          to: newEmail.to,
+          subject: newEmail.subject,
+          body: newEmail.body,
+          senderId: currentSender.id,
+          senderName: currentSender.name,
+          senderEmail: currentSender.email,
+          senderTitle: currentSender.title,
+          account: currentSender.account,
+          useResend: sendViaResend,
+          alsoNotifyChat,
+        },
+      });
+
+      if (error) throw error;
+
+      // Add to local state for immediate UI feedback
+      const email: Email = {
+        id: Date.now().toString(),
+        from: currentSender.name,
+        fromEmail: currentSender.email,
+        to: newEmail.to,
+        subject: newEmail.subject,
+        body: newEmail.body,
+        date: new Date().toISOString(),
+        read: true, starred: false, folder: "sent", labels: [], hasAttachment: false,
+        account: currentSender.account,
+      };
+      setEmails([...emails, email]);
+      setNewEmail({ to: "", subject: "", body: "" });
+      setComposeOpen(false);
+      setAlsoNotifyChat(false);
+
+      const method = data?.sendMethod === "resend" ? "via Resend API" : "normally";
+      toast.success(`Email sent ${method}`);
+    } catch (err: any) {
+      console.error("Send email error:", err);
+      toast.error(err.message || "Failed to send email");
+    } finally {
+      setIsSending(false);
+    }
   };
 
   const formatDate = (dateString: string) => {
