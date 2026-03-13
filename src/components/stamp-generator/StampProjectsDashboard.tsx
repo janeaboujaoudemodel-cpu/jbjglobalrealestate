@@ -4,8 +4,9 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
-import { Plus, Stamp, Trash2, ExternalLink, Clock, CheckCircle2, Copy, Images, History, LayoutGrid } from 'lucide-react';
+import { Plus, Stamp, Trash2, ExternalLink, Clock, CheckCircle2, Copy, Images, History, LayoutGrid, CheckSquare, X } from 'lucide-react';
 function formatDate(d: string) {
   return new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 }
