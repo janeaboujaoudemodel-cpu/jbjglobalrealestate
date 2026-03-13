@@ -588,7 +588,7 @@ export default function StampGalleryPage() {
       )}
 
       {/* ── Gallery grid ──────────────────────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+      <div className="flex-1 overflow-y-auto max-w-7xl mx-auto px-4 sm:px-6 py-4 w-full">
         {designs.length === 0 ? (
           <div className="text-center py-24 space-y-4">
             <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[hsl(var(--gold)/0.15)] to-[hsl(var(--champagne-1))] flex items-center justify-center mx-auto">
