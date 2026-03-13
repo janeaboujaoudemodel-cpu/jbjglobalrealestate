@@ -223,6 +223,20 @@ export default function StampGeneratorPage() {
   // Undo/redo for svg overrides
   const svgHistory = useStampHistory<Record<string, string>>({});
 
+  // Variations panel
+  const [showVariations, setShowVariations] = useState(false);
+  const [variations, setVariations] = useState<StampDesignConcept[]>([]);
+  const [variationsLoading, setVariationsLoading] = useState(false);
+
+  // Recently deleted
+  const [deletedStamps, setDeletedStamps] = useState<DeletedStamp[]>([]);
+
+  // Version selector
+  const [showVersionSelector, setShowVersionSelector] = useState(false);
+
+  // Brand asset save
+  const saveBrandAsset = useSaveBrandAsset();
+
   const handleSvgUndoStudio = useCallback(() => {
     const prev = svgHistory.undo();
     if (prev) setSvgOverrides(prev);
