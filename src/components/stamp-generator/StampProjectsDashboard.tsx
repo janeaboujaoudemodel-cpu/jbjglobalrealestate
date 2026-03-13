@@ -234,8 +234,16 @@ export default function StampProjectsDashboard() {
             {projects.map(project => (
               <div
                 key={project.id}
-                className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm hover:shadow-md transition-all group"
+                className={`bg-white rounded-2xl border shadow-sm hover:shadow-md transition-all group relative ${selectedIds.has(project.id) ? 'border-[hsl(var(--gold))] ring-2 ring-[hsl(var(--gold)/0.2)]' : 'border-[hsl(var(--border))]'}`}
               >
+                {/* Selection checkbox */}
+                <div className="absolute top-2 left-2 z-10">
+                  <Checkbox
+                    checked={selectedIds.has(project.id)}
+                    onCheckedChange={() => toggleSelect(project.id)}
+                    className="border-[hsl(var(--gold)/0.5)] data-[state=checked]:bg-[hsl(var(--gold))] data-[state=checked]:border-[hsl(var(--gold))]"
+                  />
+                </div>
                 {/* Stamp Preview Placeholder */}
                 <div className="h-40 rounded-t-2xl bg-gradient-to-br from-[hsl(var(--pearl-1))] to-[hsl(var(--champagne-1))] flex items-center justify-center border-b border-[hsl(var(--border))]">
                   <div className="w-24 h-24 rounded-full border-2 border-[hsl(var(--gold)/0.5)] flex items-center justify-center">
