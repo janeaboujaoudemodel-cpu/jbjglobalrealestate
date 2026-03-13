@@ -1,72 +1,95 @@
 
-## CRM System Upgrade — Implementation Status
+Goal: Fix Business Card editor so it behaves like a real editable canvas (no duplicate “new” fields), supports reusable saved card info, reliably keeps typed data, and makes Front/Back actions visibly work.
 
-### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
+What I found (root causes):
+1) Edit Layout is currently dragging separate placeholder overlays (`≡ Name/Title/Company`) in `BusinessCardPreview.tsx` instead of the actual rendered text, which is why it feels like “new fields” are appearing.
+2) `Set Front` / `Set Back` in `BusinessCardCenterPanel.tsx` set template values but do not switch active editing side or show clear active-state feedback per click, so users think nothing changed.
+3) Typing instability comes from fragmented update paths (left inputs, inline editor, restore actions) with no draft guard/autosave recovery flow; there is no persistent draft buffer for active typing.
+4) Typography controls are mostly global and partly disconnected from real per-field rendering, so section-by-section editing is incomplete.
+5) Card info “presets/profiles” are not implemented as reusable user profiles.
 
-#### Task 1: Full System Audit ✅
-- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
-- Identified 10 weaknesses (documented in plan)
+Implementation plan
 
-#### Task 2: Leads Security Hardening ✅
-- CSV export no longer includes email/phone PII
-- Audit logging added to exports with user_agent tracking
-- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
+1) Stabilize state model for card text editing and prevent wipe-outs
+- File: `src/components/corporate-suite/useBusinessCardState.ts`
+- Introduce a single update API for card fields (e.g. `updateCardField(field, value)`), used by both left-panel inputs and inline editor.
+- Add guarded draft persistence:
+  - local draft key (business-card specific) with throttled autosave while typing
+  - safe hydrate-on-mount only once (no re-hydrate during active typing)
+- Add rollback-safe profile save/update/delete handlers (optimistic UI + rollback on error).
+- Add `selectedField` + per-field config state (position/locked/hidden/deleted + style overrides) so edits are field-level, not global-only.
+- Expand save/restore metadata to include new field config + typography/layout settings so saved cards reopen exactly as edited.
 
-#### Task 3: Encryption Hardening ✅
-- CSV export stripped of `email_lower` and `phone_e164` fields
-- Export audit logged to both `crm_audit_logs` and `audit_logs`
+2) Add reusable “Card Info Profiles” (ready initials/info presets)
+- Files:
+  - `src/components/corporate-suite/useBusinessCardState.ts`
+  - `src/components/corporate-suite/BusinessCardLeftPanel.tsx`
+- Reuse existing authenticated `design_assets` storage (no new table required):
+  - store profile rows as `asset_type = "business_card_profile"` with metadata containing card data + optional field style defaults.
+- Left panel UI additions:
+  - profile dropdown (Load profile)
+  - Save New Profile
+  - Update Current Profile
+  - Delete Profile
+  - Quick “New Blank” reset
+- Applying a profile updates the live card immediately (automatic reflection).
 
-#### Task 4: Lead Lifecycle Upgrade ✅
-- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
-- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
-- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
+3) Remove duplicate “new fields” in Edit Layout and drag real content
+- File: `src/components/corporate-suite/BusinessCardPreview.tsx`
+- Replace current draggable placeholder labels with draggable controls tied to actual text fields.
+- In edit mode, show selection outlines/handles on existing rendered text blocks (not separate fake labels).
+- Respect per-field lock/hidden/deleted:
+  - locked = cannot drag/edit
+  - hidden/deleted = not rendered
+  - restore action re-enables field
+- Keep logo drag behavior, but align it with same lock/edit model.
 
-#### Task 5: CRM Structure Upgrade ✅
-- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
-- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
-- KanbanPipeline expanded to show all 17 relevant stages
+4) Make per-field style editing real (section-by-section)
+- Files:
+  - `src/components/corporate-suite/BusinessCardRightPanel.tsx`
+  - `src/components/corporate-suite/BusinessCardPreview.tsx`
+  - `src/components/corporate-suite/businessCardTypes.ts`
+- Add “Field Inspector” in Typography panel:
+  - choose field (name/title/company/phone/email/website/address)
+  - edit color, size, weight, style, letter spacing, line height, alignment, underline per field
+  - lock/hide/delete/restore controls per field
+- Apply style overrides in renderer with fallback to global typography settings.
 
-#### Task 6: Performance Optimization ✅
-- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
-- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
-- `crm_leads_updated_at_trigger` auto-updates `updated_at`
+5) Fix Set Front / Set Back behavior and highlighting
+- File: `src/components/corporate-suite/BusinessCardCenterPanel.tsx`
+- On `Set Front` click:
+  - set front template
+  - also set active side to `front`
+  - show active visual state
+- On `Set Back` click:
+  - set back template
+  - also set active side to `back`
+  - show active visual state
+- Improve mobile/touch UX by making front/back assignment feedback always visible (not hover-only dependent).
 
-#### Task 7: AI Intelligence Integration ✅
-- New edge function `ai-lead-intelligence` using Lovable AI gateway
-- Supports 3 modes: `score`, `summary`, `next_action`
-- Tool-calling for structured scoring output
-- JWT auth + CRM role validation
-- PII sanitized before sending to AI
+6) Wire all edit inputs to same stable mutation path
+- Files:
+  - `BusinessCardLeftPanel.tsx`
+  - `BusinessCardCenterPanel.tsx`
+  - `useBusinessCardState.ts`
+- Left-panel typed inputs and inline preview editor both call the same updater.
+- Add lightweight debounce for expensive persistence only (not for on-screen typing), so typing stays instant and no “value bouncing”.
 
-#### Task 8: Workflow Automation ✅
-- Created `crm_automation_rules` table with RLS (owner manage, admin view)
-- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
+7) Keep save/export consistency
+- File: `useBusinessCardState.ts` (+ if needed `businessCardExport.ts`)
+- Ensure `handleSaveCard` stores full editable model (field configs + styles + profile linkage).
+- Ensure restored cards match current preview layout/styling (no lost positions/styles after reload).
 
-#### Task 10: Role & Permission System ✅
-- RLS on automation rules: owner CRUD, admin read-only
-- CSV export restricted to owner_admin/founder roles
+Technical details
+- No backend schema migration is required for this scope; we can reuse existing `design_assets` table + current RLS (user-scoped).
+- New profile asset payload will be versioned in metadata (`schema_version`) to keep backward compatibility with already saved card assets.
+- Field config structure will be centralized in `businessCardTypes.ts` defaults to avoid scattered magic values.
+- Drag system will be pointer-safe (mouse + touch), and lock-state checked before movement.
 
-#### Task 12: Backend/Database Upgrade ✅
-- 3 new performance indexes
-- Auto-updated_at trigger on crm_leads
-- Duplicate hash computation trigger
-- Rate-limiting security function
-
-#### Task 13: Data Cleanliness ✅
-- `duplicate_hash` with auto-compute trigger prevents future duplicates
-- Partial unique index enforces uniqueness at DB level
-
-### Files Changed
-| File | Action |
-|------|--------|
-| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
-| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
-| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
-| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
-| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
-| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
-| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
-| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
-| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
+Acceptance checklist
+1) Edit Layout no longer shows fake “new” company/title/name placeholders.
+2) Dragging moves real visible text, and lock/hide/delete/restore works per field.
+3) Front/Back buttons visibly switch and highlight the active side immediately.
+4) Typing name/email/other fields does not clear or reset while editing.
+5) User can save card info profile, load it later, edit and resave, or start new.
+6) Saved card reload reproduces layout + typography + field-level customizations.
