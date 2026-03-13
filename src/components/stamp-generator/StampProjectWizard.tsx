@@ -180,7 +180,7 @@ export default function StampProjectWizard() {
 
   // Persist form
   useEffect(() => {
-    try { sessionStorage.setItem('stamp-wizard-form', JSON.stringify(form)); } catch {}
+    try { localStorage.setItem('stamp-wizard-form', JSON.stringify(form)); } catch {}
   }, [form]);
 
   const set = (key: keyof FormState, val: any) => {
