@@ -138,7 +138,7 @@ export const ALL_SEPARATOR_STYLES: SeparatorStyle[] = [
   'dot', 'star', 'square', 'diamond', 'line', 'double-line', 'triangle', 'cross', 'floral', 'ornament', 'none'
 ];
 
-function renderSeparators(cx: number, cy: number, r: number, style: SeparatorStyle, ink: string): string {
+function renderSeparators(cx: number, cy: number, r: number, style: SeparatorStyle, ink: string, dataPrefix = 'separator'): string {
   if (style === 'none') return '';
   const glyph = separatorGlyph(style);
   // Scale font size based on separator type
@@ -146,9 +146,9 @@ function renderSeparators(cx: number, cy: number, r: number, style: SeparatorSty
     : (style === 'floral' || style === 'ornament') ? 14
     : 13;
   return `
-    <text x="${cx + r}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
+    <text data-stamp-element="${dataPrefix}-right" x="${cx + r}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
           font-size="${fontSize}" fill="${ink}" font-weight="bold">${glyph}</text>
-    <text x="${cx - r}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
+    <text data-stamp-element="${dataPrefix}-left" x="${cx - r}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
           font-size="${fontSize}" fill="${ink}" font-weight="bold">${glyph}</text>
   `;
 }
