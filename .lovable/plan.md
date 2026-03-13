@@ -1,72 +1,77 @@
 
-## CRM System Upgrade — Implementation Status
+Confirmed from your choices:
+- Priority: Stamp readability first
+- Studio behavior on your screen: fixed center preview + tabbed controls (no long scrolling)
+- Delete behavior: hide per design (undo restores)
 
-### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
+Root-cause audit (from current code):
+1) Text readability + thin lines  
+- `stampOfficialTemplate.ts` uses thin default strokes and limited fit logic.  
+- Border/style choices from wizard are mostly ignored for the bilingual official path.
+2) Bottom English arc direction  
+- Bottom arc path orientation in official template is causing reversed/uncomfortable reading.
+3) “I move empty layers” issue  
+- `InteractiveStampCanvas.tsx` uses rectangular overlay boxes, not actual SVG text/logo nodes.  
+- Layer state is also reset from form changes in `StampProjectWizard.tsx`, so edits feel broken.
+4) Layout crop/scroll problems  
+- Wizard uses stacked layout below `lg`; at 912px wide it falls into non-3-panel mode and causes scrolling/cropping perception.
+5) Sidebar active highlight issue  
+- `GlobalVerticalNav.tsx` only exact-matches most routes (`/toolkit/stamp-generator/new` not treated as active for `/toolkit/stamp-generator`).
 
-#### Task 1: Full System Audit ✅
-- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
-- Identified 10 weaknesses (documented in plan)
+Implementation plan (next pass):
+Phase A — Readability + official geometry (first)
+- Refactor `src/lib/stampOfficialTemplate.ts`:
+  - Enforce robust arc-safe text fitting (shrink, letter-spacing adjust, final ellipsis fallback).
+  - Increase minimum stroke widths and text weights for legibility.
+  - Fix bottom English path to left→right readable orientation (and same fix for location English arc).
+  - Keep Arabic top / English bottom default.
+  - Add explicit official border presets so SINGLE/DOUBLE/RING/DOTTED/ROPE visibly differ even on bilingual official mode.
+  - Keep default location “Dubai, UAE”; keep license hidden by default and optional toggle.
+- Wire style props fully from `LiveStampPreview.tsx` to official renderer so typography/border updates are immediate.
 
-#### Task 2: Leads Security Hardening ✅
-- CSV export no longer includes email/phone PII
-- Audit logging added to exports with user_agent tracking
-- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
+Phase B — Centered fixed frame (no long scrolling)
+- Rebuild wizard shell in `src/components/stamp-generator/StampProjectWizard.tsx` as fixed frame:
+  - Full studio viewport container with persistent centered preview.
+  - Tabbed side controls around the preview (Company, Style, Logo, Export/Actions), matching your “fixed center + tabs” choice.
+  - Independent panel scrolling only inside tabs (not full page).
+  - Stable top offsets so header never overlays/crops the studio.
+  - Visible frame border around the studio area.
 
-#### Task 3: Encryption Hardening ✅
-- CSV export stripped of `email_lower` and `phone_e164` fields
-- Export audit logged to both `crm_audit_logs` and `audit_logs`
+Phase C — True direct on-canvas editing (real elements, not empty boxes)
+- Upgrade `InteractiveStampCanvas.tsx` + official SVG ids:
+  - Give real SVG groups stable IDs (`topText`, `bottomText`, `locationTop`, `locationBottom`, `monogram/logo`, `separators`, `license`).
+  - Select/move/scale/hide these real groups directly; no fake rectangular overlay behavior.
+  - Delete = hide for current design only (as requested), with undo support.
+  - Preserve layer transforms/visibility across form edits (remove destructive reset behavior and merge state instead).
+- Extend history to include layer operations, not just form fields.
 
-#### Task 4: Lead Lifecycle Upgrade ✅
-- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
-- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
-- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
+Phase D — UX completeness + navigation + proof
+- Add clear labeled actions (not icon-only): Save Draft, Save Project, Print Preview, Export Kit.
+- Show draft state text (“Draft saved locally at HH:MM”).
+- Fix left sidebar active state in `GlobalVerticalNav.tsx` with prefix matching for stamp generator routes and keep section expanded.
+- Produce screenshot proof pack after implementation:
+  1) Readability inside circle (Arabic/English/location all fitting)
+  2) Centered frame at current viewport
+  3) Real element drag/resize/delete/hide behavior
+  4) Save/print/export visibility
+  5) Sidebar active highlight on stamp generator routes
 
-#### Task 5: CRM Structure Upgrade ✅
-- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
-- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
-- KanbanPipeline expanded to show all 17 relevant stages
+Technical details (implementation-specific):
+- Files to update:
+  - `src/lib/stampOfficialTemplate.ts`
+  - `src/components/stamp-generator/LiveStampPreview.tsx`
+  - `src/components/stamp-generator/InteractiveStampCanvas.tsx`
+  - `src/components/stamp-generator/StampProjectWizard.tsx`
+  - `src/components/navigation/GlobalVerticalNav.tsx`
+- No database migration required for this pass.
+- Existing backend generation can remain; this pass is focused on deterministic studio correctness and UI reliability first.
+- After this stabilization pass, we can do the deeper “tool/model/workflow/export kit automation expansion” safely without breaking core editing behavior again.
 
-#### Task 6: Performance Optimization ✅
-- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
-- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
-- `crm_leads_updated_at_trigger` auto-updates `updated_at`
-
-#### Task 7: AI Intelligence Integration ✅
-- New edge function `ai-lead-intelligence` using Lovable AI gateway
-- Supports 3 modes: `score`, `summary`, `next_action`
-- Tool-calling for structured scoring output
-- JWT auth + CRM role validation
-- PII sanitized before sending to AI
-
-#### Task 8: Workflow Automation ✅
-- Created `crm_automation_rules` table with RLS (owner manage, admin view)
-- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
-
-#### Task 10: Role & Permission System ✅
-- RLS on automation rules: owner CRUD, admin read-only
-- CSV export restricted to owner_admin/founder roles
-
-#### Task 12: Backend/Database Upgrade ✅
-- 3 new performance indexes
-- Auto-updated_at trigger on crm_leads
-- Duplicate hash computation trigger
-- Rate-limiting security function
-
-#### Task 13: Data Cleanliness ✅
-- `duplicate_hash` with auto-compute trigger prevents future duplicates
-- Partial unique index enforces uniqueness at DB level
-
-### Files Changed
-| File | Action |
-|------|--------|
-| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
-| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
-| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
-| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
-| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
-| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
-| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
-| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
-| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
+Acceptance criteria for this pass:
+- No text escapes rings in official template with long company names.
+- Bottom English reads naturally left→right on lower arc.
+- Preview stays centered while switching tabs; no full-page scrolling required for normal editing.
+- Clicking/dragging affects actual text/logo elements (not empty overlays).
+- Delete hides element per design and undo restores it.
+- Stamp Generator route is visibly active in left sidebar on `/toolkit/stamp-generator/new` and related subroutes.
+- Labeled save/print/export controls are visible and understandable.
