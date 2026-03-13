@@ -1496,7 +1496,7 @@ export default function StampGeneratorPage() {
 
 // ─── Concept Card ────────────────────────────────────────────────
 function ConceptCard({
-  concept, svgOverride, selectedId, tintColor, secondaryColor, accentColor, fontFamily, fontBold, fontItalic, manualFontSize, inkMode, togglingFav, onSelect, onToggleFav, onEditText, onPreview
+  concept, svgOverride, selectedId, tintColor, secondaryColor, accentColor, fontFamily, fontBold, fontItalic, manualFontSize, inkMode, togglingFav, onSelect, onToggleFav, onEditText, onPreview, onDelete, onDuplicate
 }: {
   concept: StampDesignConcept;
   svgOverride?: string;
@@ -1514,6 +1514,8 @@ function ConceptCard({
   onToggleFav: (c: StampDesignConcept) => void;
   onEditText: (c: StampDesignConcept) => void;
   onPreview?: (c: StampDesignConcept) => void;
+  onDelete?: (c: StampDesignConcept) => void;
+  onDuplicate?: (c: StampDesignConcept) => void;
 }) {
   const isSelected = selectedId === concept.id;
   const isFav = concept.isFavorite;
@@ -1535,6 +1537,23 @@ function ConceptCard({
           className={`absolute top-1.5 left-1.5 z-10 w-6 h-6 rounded-full flex items-center justify-center transition-all ${isFav ? 'bg-rose-50 border border-rose-200 text-rose-500' : 'bg-white/80 border border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] opacity-0 group-hover:opacity-100'}`}>
           {togglingFav === concept.id ? <Loader2 size={9} className="animate-spin"/> : <Heart size={9} className={isFav ? 'fill-rose-500' : ''}/>}
         </button>
+        {/* Delete + Duplicate buttons */}
+        <div className="absolute bottom-1.5 right-1.5 z-10 flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+          {onDuplicate && (
+            <button onClick={e => { e.stopPropagation(); onDuplicate(concept); }}
+              className="w-5 h-5 rounded bg-white/90 border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--gold)/0.1)]"
+              title="Duplicate">
+              <Copy size={8} className="text-[hsl(var(--muted-foreground))]"/>
+            </button>
+          )}
+          {onDelete && (
+            <button onClick={e => { e.stopPropagation(); onDelete(concept); }}
+              className="w-5 h-5 rounded bg-white/90 border border-destructive/30 flex items-center justify-center hover:bg-destructive/10"
+              title="Delete">
+              <Trash2 size={8} className="text-destructive/70"/>
+            </button>
+          )}
+        </div>
         <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} fontWeight={fontBold ? 'bold' : 'normal'} fontStyle={fontItalic ? 'italic' : 'normal'} fontSize={manualFontSize} inkMode={inkMode} size={isRectShape ? 160 : 130}/>
       </div>
       <div className="p-2 space-y-1.5">
@@ -1544,6 +1563,10 @@ function ConceptCard({
           )}
           {concept.label}
         </p>
+        {/* Shortlist badge */}
+        <div className="flex items-center gap-1">
+          <ShortlistBadgeButton projectId={concept.id} size="sm" showBadgeIndicator={true} />
+        </div>
         <div className="flex gap-1">
           <Button size="sm"
             className={`flex-1 h-6 text-[9px] gap-0.5 ${isSelected ? 'bg-[hsl(var(--gold))] text-white' : 'bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90'}`}
