@@ -57,6 +57,7 @@ const NAV_SECTIONS: NavSection[] = [
       { label: "Properties", icon: Building2, path: "/owner/properties" },
       { label: "Property Map", icon: Map, path: "/owner/map" },
       { label: "Listings Admin", icon: ClipboardList, path: "/owner/listing-admin" },
+      { label: "Developer Hub", icon: Building2, path: "/developer-portal" },
     ],
   },
   {

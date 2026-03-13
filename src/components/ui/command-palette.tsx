@@ -91,7 +91,32 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
     { id: 'presentations', title: 'Presentations', subtitle: 'AI slide deck builder', icon: <FileText className="w-4 h-4" />, action: () => go('/presentations', 'presentations'), category: 'AI Tools', keywords: ['presentation', 'slides', 'deck'] },
     { id: 'spreadsheet', title: 'Spreadsheet', subtitle: 'Smart spreadsheet editor', icon: <FileText className="w-4 h-4" />, action: () => go('/spreadsheet', 'spreadsheet'), category: 'AI Tools', keywords: ['spreadsheet', 'excel', 'data'] },
     { id: 'qr-generator', title: 'QR Code Generator', subtitle: 'Generate custom QR codes', icon: <Globe className="w-4 h-4" />, action: () => go('/qr-generator', 'qr-generator'), category: 'AI Tools', keywords: ['qr', 'code', 'generator'] },
+    
+    // Developer & Guides
+    { id: 'developer-hub', title: 'Developer Hub', subtitle: 'Developer portal & project submissions', icon: <Building2 className="w-4 h-4" />, action: () => go('/developer-portal', 'developer-hub'), category: 'Navigation', keywords: ['developer', 'hub', 'portal', 'submit', 'project', 'briefing', 'rep'] },
+    { id: 'golden-visa', title: 'Golden Visa Guide', subtitle: 'UAE residency & visa info', icon: <Globe className="w-4 h-4" />, action: () => go('/guides/golden-visa', 'golden-visa'), category: 'Navigation', keywords: ['visa', 'golden', 'residency', 'uae', 'consultation', 'eligibility'] },
+    { id: 'automations', title: 'Workflow Automation', subtitle: 'Automated rules & triggers', icon: <Zap className="w-4 h-4" />, action: () => go('/owner/automations', 'automations'), category: 'Navigation', keywords: ['automation', 'workflow', 'rules', 'triggers'] },
+    { id: 'marketing-hub', title: 'Marketing Hub', subtitle: 'Campaigns & content', icon: <TrendingUp className="w-4 h-4" />, action: () => go('/owner/marketing-hub', 'marketing-hub'), category: 'Navigation', keywords: ['marketing', 'campaigns', 'social', 'content'] },
+    { id: 'meeting-center', title: 'Meeting Hub', subtitle: 'Schedule & manage meetings', icon: <Video className="w-4 h-4" />, action: () => go('/meeting-center', 'meeting-center'), category: 'Navigation', keywords: ['meeting', 'schedule', 'zoom', 'conference'] },
+    { id: 'podcast-studio', title: 'Podcast Studio', subtitle: 'Record & manage podcasts', icon: <Mic className="w-4 h-4" />, action: () => go('/owner/podcast-studio', 'podcast-studio'), category: 'Navigation', keywords: ['podcast', 'audio', 'record', 'episode'] },
   ];
+
+  // Fuzzy matching: Levenshtein distance for typo tolerance
+  const fuzzyMatch = (source: string, target: string): boolean => {
+    source = source.toLowerCase();
+    target = target.toLowerCase();
+    if (target.includes(source) || source.includes(target)) return true;
+    if (source.length < 3) return false;
+    // Simple 1-edit distance check for short queries
+    if (Math.abs(source.length - target.length) > 2) return false;
+    let matches = 0;
+    const shorter = source.length <= target.length ? source : target;
+    const longer = source.length > target.length ? source : target;
+    for (let i = 0; i < shorter.length; i++) {
+      if (longer.includes(shorter[i])) matches++;
+    }
+    return matches / shorter.length >= 0.7;
+  };
 
   // Sort recently used to the top when no search
   const sortedCommands = search.trim() === '' 
@@ -107,11 +132,13 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
 
   const filteredCommands = search.trim() === '' 
     ? sortedCommands
-    : sortedCommands.filter(cmd => 
-        cmd.title.toLowerCase().includes(search.toLowerCase()) ||
-        cmd.subtitle?.toLowerCase().includes(search.toLowerCase()) ||
-        cmd.keywords?.some(k => k.toLowerCase().includes(search.toLowerCase()))
-      );
+    : sortedCommands.filter(cmd => {
+        const q = search.toLowerCase();
+        return cmd.title.toLowerCase().includes(q) ||
+          cmd.subtitle?.toLowerCase().includes(q) ||
+          cmd.keywords?.some(k => fuzzyMatch(q, k)) ||
+          fuzzyMatch(q, cmd.title);
+      });
 
   // Add "Recent" category for recently used items
   const groupedCommands = filteredCommands.reduce((acc, cmd) => {
