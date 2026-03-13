@@ -596,12 +596,13 @@ export default function StampProjectWizard() {
                       <div className="grid grid-cols-4 gap-1.5">
                         {SEPARATOR_OPTIONS.map(opt => (
                           <button key={opt.key} type="button" onClick={() => set('separator_style', opt.key)}
-                            className={`flex items-center gap-1 px-2 py-1 rounded-lg border-2 text-xs font-medium transition-all ${
+                            className={`flex flex-col items-center gap-0.5 px-1.5 py-1.5 rounded-lg border-2 text-xs font-medium transition-all ${
                               form.separator_style === opt.key
                                 ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)] text-[hsl(var(--gold-dark))]'
                                 : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]'
                             }`}>
-                            {opt.icon} {opt.label}
+                            <span className="text-sm">{opt.glyph}</span>
+                            <span className="text-[8px]">{opt.label}</span>
                           </button>
                         ))}
                       </div>
