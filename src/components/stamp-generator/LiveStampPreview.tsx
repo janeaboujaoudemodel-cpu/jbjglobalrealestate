@@ -224,8 +224,8 @@ export function LiveStampPreview({
     // Text for EN-only round
     let textContent = '';
     if (isRound) {
-      const arcR = innerRx - 6;
-      const clipR = innerRx - 2;
+      const arcR = innerRx - 10;
+      const clipR = innerRx - 4;
       const topArcId = 'top-arc-lp';
       const botArcId = 'bot-arc-lp';
       const clipId = 'lp-round-clip';
