@@ -1083,14 +1083,8 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                         color: selectedBackground === preset.id ? C.accentText : "rgba(255,255,255,0.88)",
                       }}
                     >
-                      {preset.color ? (
-                        <span className="w-7 h-7 rounded-lg flex-shrink-0 border border-white/10" style={{ backgroundColor: preset.color }} />
-                      ) : (
-                        <span className="w-7 h-7 rounded-lg flex-shrink-0 flex items-center justify-center text-base"
-                          style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}>
-                          {preset.icon}
-                        </span>
-                      )}
+                      <span className="w-7 h-7 rounded-lg flex-shrink-0 border border-white/10"
+                        style={{ background: preset.color === 'transparent' ? 'repeating-conic-gradient(rgba(255,255,255,0.15) 0% 25%, transparent 0% 50%) 50% / 10px 10px' : preset.color.startsWith('linear') ? preset.color : preset.color, backgroundColor: (!preset.color.startsWith('linear') && preset.color !== 'transparent') ? preset.color : undefined }} />
                       <div>
                         <div className="font-medium">{preset.label}</div>
                         <div className="text-xs opacity-60">{preset.desc}</div>
