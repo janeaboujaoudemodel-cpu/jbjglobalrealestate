@@ -16,6 +16,7 @@ import {
   Mail,
   MessagesSquare,
   Bot,
+  Crown,
   Sparkles,
   Zap,
   Video,
@@ -73,7 +74,7 @@ const NAV_SECTIONS: NavSection[] = [
     items: [
       { label: "Founder Assistant", icon: MessageSquare, path: "/owner/founder-assistant" },
       { label: "Recommendations", icon: Sparkles, path: "/owner/recommendations" },
-      { label: "JBJ AI Tools Hub", icon: Sparkles, path: "/ai-hub" },
+      { label: "JBJ Royal Tools Hub", icon: Crown, path: "/ai-hub" },
       { label: "Workflow Automation", icon: Zap, path: "/owner/automations" },
       { label: "Meeting Hub", icon: Video, path: "/meeting-center" },
       { label: "AI Meeting Summarizer", icon: Brain, path: "/ai-meeting-summarizer" },

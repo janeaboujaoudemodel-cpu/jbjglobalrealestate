@@ -647,9 +647,9 @@ const AIHub = () => {
   return (
     <>
       <SEOHead 
-        title="JBJ Tools Hub | Free AI Tools for Investors & Brokers"
-        description="Access free AI tools for property investment, comparison, mortgage calculation, and more. Your complete investor toolkit at JBJ Global Real Estate."
-        keywords="JBJ Tools Hub, property tools, Real Estate AI, investment tools Dubai, property analysis, JBJ Global Real Estate"
+        title="JBJ Royal Tools Hub | Free Tools for Investors & Brokers"
+        description="Access free tools for property investment, comparison, mortgage calculation, and more. Your complete investor toolkit at JBJ Global Real Estate."
+        keywords="JBJ Royal Tools Hub, property tools, investment tools Dubai, property analysis, JBJ Global Real Estate"
         canonicalPath="/ai-hub"
       />
       
@@ -702,7 +702,7 @@ const AIHub = () => {
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 <span className="text-white">JBJ </span>
-                <span className="text-white">Tools Hub</span>
+                <span className="text-white">Royal Tools Hub</span>
               </motion.h1>
 
               {/* Subtitle */}
@@ -717,7 +717,7 @@ const AIHub = () => {
                 className="text-zinc-400 text-base max-w-xl mx-auto mb-8"
                 variants={fadeInUp}
               >
-                Free AI tools • Property analysis • Investment calculators • Productivity suite
+                Free tools • Property analysis • Investment calculators • Productivity suite
               </motion.p>
 
               {/* Premium Gold Divider */}
@@ -1045,7 +1045,7 @@ const AIHub = () => {
                   )}
                 </h2>
                 <p className="text-zinc-600 mb-6 max-w-lg mx-auto">
-                  30+ free AI tools for property analysis, corporate documents, creative design, and productivity.
+                  30+ free tools for property analysis, corporate documents, creative design, and productivity.
                 </p>
                 {user ? (
                   <button 

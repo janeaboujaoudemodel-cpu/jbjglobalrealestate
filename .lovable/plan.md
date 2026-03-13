@@ -1,42 +1,72 @@
 
+## CRM System Upgrade — Implementation Status
 
-## Plan: Rename AI Hub + Remove "AI" from Amanda Labels
+### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-### What's happening now
+#### Task 1: Full System Audit ✅
+- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
+- Identified 10 weaknesses (documented in plan)
 
-1. **AI Hub page** (`/ai-hub`, `AIHub.tsx`): Title says "JBJ Tools Hub", SEO says "JBJ Tools Hub | Free AI Tools...". The owner sidebar label says "JBJ AI Tools Hub". You want it renamed to **"JBJ Royal Tools Hub"** everywhere — sidebar, page title, SEO.
+#### Task 2: Leads Security Hardening ✅
+- CSV export no longer includes email/phone PII
+- Audit logging added to exports with user_agent tracking
+- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
 
-2. **Amanda Clarke references**: In `EmailClient.tsx`, she's labeled "Amanda Clarke — AI Assistant" with an "Auto" badge. The word "AI" must be removed from all user-facing labels. She should appear as "Amanda Clarke — Executive Assistant" or similar. No mention of AI anywhere in the frontend for Amanda.
+#### Task 3: Encryption Hardening ✅
+- CSV export stripped of `email_lower` and `phone_e164` fields
+- Export audit logged to both `crm_audit_logs` and `audit_logs`
 
-3. **Legacy RoyalToolsHub**: The old champagne page (`RoyalToolsHub.tsx`) still exists as a file but is no longer routed from owner sidebar (it was redirected to `/ai-hub`). The merge of tools into `AIHub.tsx` was already completed. No action needed on the old page beyond confirming the redirect stays.
+#### Task 4: Lead Lifecycle Upgrade ✅
+- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
+- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
+- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
 
-### Changes
+#### Task 5: CRM Structure Upgrade ✅
+- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
+- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
+- KanbanPipeline expanded to show all 17 relevant stages
 
-**1. Owner Sidebar — rename label**
-- `OwnerSidebarNav.tsx` line 76: Change `"JBJ AI Tools Hub"` → `"JBJ Royal Tools Hub"`
+#### Task 6: Performance Optimization ✅
+- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
+- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
+- `crm_leads_updated_at_trigger` auto-updates `updated_at`
 
-**2. AIHub.tsx — rename page title and branding**
-- Line 650 SEO title: `"JBJ Royal Tools Hub | Free Tools for Investors & Brokers"`
-- Line 651 description: remove "AI" references, keep "tools"
-- Line 652 keywords: `"JBJ Royal Tools Hub"` instead of `"JBJ Tools Hub"`
-- Line 704-705 hero title: `"JBJ Royal Tools Hub"` 
-- Line 713 subtitle: keep as-is or adjust
-- Line 720: `"Free tools • Property analysis..."` (drop "AI" prefix)
-- Line 846: `"Discover All Free Tools"` (drop "AI")
-- Line 1047: `"30+ free tools for property analysis..."` (drop "AI")
+#### Task 7: AI Intelligence Integration ✅
+- New edge function `ai-lead-intelligence` using Lovable AI gateway
+- Supports 3 modes: `score`, `summary`, `next_action`
+- Tool-calling for structured scoring output
+- JWT auth + CRM role validation
+- PII sanitized before sending to AI
 
-**3. EmailClient.tsx — remove AI label from Amanda**
-- Line 634: `"Amanda Clarke — AI Assistant"` → `"Amanda Clarke — Executive Assistant"`
-- Any other "AI" references in Amanda's panel labels
+#### Task 8: Workflow Automation ✅
+- Created `crm_automation_rules` table with RLS (owner manage, admin view)
+- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
 
-**4. Premium exterior look (sidebar entry)**
-- The sidebar entry for "JBJ Royal Tools Hub" will use a `Crown` icon (from lucide-react) instead of `Sparkles` to look more premium and attract attention, matching the "Royal" branding.
+#### Task 10: Role & Permission System ✅
+- RLS on automation rules: owner CRUD, admin read-only
+- CSV export restricted to owner_admin/founder roles
 
-### Recommendation for the page interior (not applied, for your review)
+#### Task 12: Backend/Database Upgrade ✅
+- 3 new performance indexes
+- Auto-updated_at trigger on crm_leads
+- Duplicate hash computation trigger
+- Rate-limiting security function
 
-I have one recommendation for the AIHub page interior that I will NOT apply without your approval:
+#### Task 13: Data Cleanliness ✅
+- `duplicate_hash` with auto-compute trigger prevents future duplicates
+- Partial unique index enforces uniqueness at DB level
 
-**Recommendation**: Add a subtle animated gold crown/royal crest watermark behind the hero title, and replace the "Free for All Users" pill badge with a more premium "Royal Collection" badge with a crown icon. This would reinforce the "Royal Tools Hub" branding without changing any tool cards, categories, or layout structure. Everything else (colorful category sections, search, filters, glow effects) stays exactly as-is.
-
-Should I mock this up, or do you prefer to keep the interior exactly as it is now?
-
+### Files Changed
+| File | Action |
+|------|--------|
+| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
+| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
+| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
+| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
+| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
+| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
+| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
+| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
+| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
