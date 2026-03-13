@@ -7,8 +7,8 @@ import BusinessSuiteToolCard from "@/components/business-suite/BusinessSuiteTool
 const corporateTools = [
   {
     icon: Stamp,
-    title: "AI Stamp Generator",
-    description: "Create bilingual professional company stamps and seals with AI. Export as SVG, PNG, or PDF.",
+    title: "Smart Stamp Generator",
+    description: "Create bilingual professional company stamps and seals. Export as SVG, PNG, or PDF.",
     href: "/toolkit/stamp-generator",
     colorClass: "text-gold",
     borderColorClass: "border-gold/40",

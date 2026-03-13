@@ -289,7 +289,7 @@ export default function StampHistoryDashboard() {
             </h2>
             <p className="text-sm text-[hsl(var(--muted-foreground))] max-w-xs mx-auto">
               {rows.length === 0
-                ? 'Generate your first AI stamp concept to see it here.'
+                ? 'Generate your first stamp concept to see it here.'
                 : 'Try clearing filters or adjusting your search.'}
             </p>
             {rows.length === 0 && (

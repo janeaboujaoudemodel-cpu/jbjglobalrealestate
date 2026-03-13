@@ -24,7 +24,7 @@ const tools = [
   },
   {
     icon: Stamp,
-    title: "AI Stamp Generator",
+    title: "Smart Stamp Generator",
     description: "Generate professional bilingual company stamps with logo, monogram, and compliance text.",
     href: "/broker-toolkit/stamp",
     color: "from-emerald-600 to-teal-600",
