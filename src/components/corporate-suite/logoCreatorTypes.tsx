@@ -56,12 +56,16 @@ export const COLOR_PRESETS = [
 ];
 
 export const FONTS = [
-  { value: "Georgia, serif",        label: "Serif",        desc: "Classic, premium" },
-  { value: "Arial, sans-serif",     label: "Sans-serif",   desc: "Modern, clean" },
-  { value: "Courier New, monospace",label: "Monospace",    desc: "Tech, coding" },
-  { value: "Palatino, serif",       label: "Script",       desc: "Creative, fashion" },
-  { value: "Georgia, serif",        label: "Editorial",    desc: "Magazine, bold" },
-  { value: "Arial, sans-serif",     label: "Corporate",    desc: "Structured, formal" },
+  { value: "Georgia, serif",              label: "Georgia",          desc: "Classic serif, premium feel" },
+  { value: "Arial, sans-serif",           label: "Arial",            desc: "Clean, universal sans-serif" },
+  { value: "'Times New Roman', serif",    label: "Times New Roman",  desc: "Traditional, editorial" },
+  { value: "Palatino, serif",             label: "Palatino",         desc: "Elegant, book-style serif" },
+  { value: "'Courier New', monospace",    label: "Courier New",      desc: "Technical, monospaced" },
+  { value: "Verdana, sans-serif",         label: "Verdana",          desc: "Wide, highly readable" },
+  { value: "'Trebuchet MS', sans-serif",  label: "Trebuchet MS",     desc: "Modern, geometric" },
+  { value: "Garamond, serif",             label: "Garamond",         desc: "Refined, literary" },
+  { value: "'Impact', sans-serif",        label: "Impact",           desc: "Bold, headline-style" },
+  { value: "'Lucida Console', monospace", label: "Lucida Console",   desc: "Sharp, technical" },
 ];
 
 export const EXPORT_SIZES: ExportSize[] = [
@@ -106,6 +110,18 @@ export function placeholderSVG(name: string, primary: string, secondary: string)
   <text x="100" y="95" font-family="Georgia, serif" font-size="52" font-weight="700" fill="${secondary}" text-anchor="middle" dominant-baseline="middle">${initial}</text>
   <text x="100" y="150" font-family="Arial, sans-serif" font-size="13" font-weight="600" fill="${secondary}" text-anchor="middle" letter-spacing="3" opacity="0.7">${words}</text>
 </svg>`;
+}
+
+// ─── Refont SVG (client-side, no AI call) ─────────────────────────────────────
+export function refontSVG(svgContent: string, fontFamily: string): string {
+  if (!svgContent || !fontFamily) return svgContent;
+  let result = svgContent;
+  // Replace font-family in style attributes: font-family="..." or font-family='...'
+  result = result.replace(/font-family="[^"]*"/gi, `font-family="${fontFamily}"`);
+  result = result.replace(/font-family='[^']*'/gi, `font-family='${fontFamily}'`);
+  // Replace font-family in inline CSS: font-family:...;
+  result = result.replace(/font-family\s*:\s*[^;"'}]+/gi, `font-family: ${fontFamily}`);
+  return result;
 }
 
 // ─── Recolor SVG (client-side, no AI call) ────────────────────────────────────
