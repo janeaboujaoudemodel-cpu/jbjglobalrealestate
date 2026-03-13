@@ -60,7 +60,7 @@ function fitFontSize(text: string, baseSize: number, maxArcLen: number, charW = 
   const est = text.length * baseSize * charW;
   if (est <= maxArcLen) return baseSize;
   const fitted = maxArcLen / (text.length * charW);
-  return Math.max(6.5, fitted); // raised min from 7 to 6.5
+  return Math.max(6.5, fitted);
 }
 
 function wrapText(text: string, x: number, y: number, font: string, size: number, color: string, letterSpacing = 1): string {
@@ -89,21 +89,28 @@ function topArcText(id: string, cx: number, cy: number, r: number, text: string,
     </text>`;
 }
 
+/**
+ * Bottom arc text — per-character positioning along BOTTOM of circle.
+ * Characters placed at angles centered around 270° (SVG bottom).
+ * Rotation = deg + 90 so each character faces outward and reads L-to-R.
+ */
 function bottomArcTextChars(cx: number, cy: number, r: number, text: string, font: string, fontSize: number, color: string, isArabic = false): string {
   if (!text) return '';
   const chars = text.split('');
   const n = chars.length;
   if (n === 0) return '';
-  const spreadDeg = Math.min(150, n * 11);
-  const startDeg = 90 - spreadDeg / 2;
+  const spreadDeg = Math.min(150, n * 10);
+  // Center around 270° (bottom of SVG circle)
+  const startDeg = 270 - spreadDeg / 2;
   const stepDeg = n > 1 ? spreadDeg / (n - 1) : 0;
   let result = '';
   for (let i = 0; i < n; i++) {
-    const deg = n === 1 ? 90 : startDeg + i * stepDeg;
+    const deg = n === 1 ? 270 : startDeg + i * stepDeg;
     const rad = (deg * Math.PI) / 180;
     const x = cx + r * Math.cos(rad);
     const y = cy + r * Math.sin(rad);
-    const rotation = deg - 90;
+    // +90 so chars face outward (readable from outside the circle)
+    const rotation = deg + 90;
     result += `<text x="${x.toFixed(2)}" y="${y.toFixed(2)}" text-anchor="middle" dominant-baseline="central"
       font-family="${font}" font-size="${fontSize}" fill="${color}" font-weight="800"
       letter-spacing="${isArabic ? 1 : 2}"
@@ -114,8 +121,8 @@ function bottomArcTextChars(cx: number, cy: number, r: number, text: string, fon
 
 function separatorDots(cx: number, cy: number, r: number, color: string): string {
   return `
-    <text x="${cx + r}" y="${cy}" text-anchor="middle" dominant-baseline="central" font-size="13" fill="${color}" font-weight="bold">●</text>
-    <text x="${cx - r}" y="${cy}" text-anchor="middle" dominant-baseline="central" font-size="13" fill="${color}" font-weight="bold">●</text>`;
+    <text x="${cx + r}" y="${cy}" text-anchor="middle" dominant-baseline="central" font-size="10" fill="${color}" font-weight="bold">●</text>
+    <text x="${cx - r}" y="${cy}" text-anchor="middle" dominant-baseline="central" font-size="10" fill="${color}" font-weight="bold">●</text>`;
 }
 
 function divider(cx: number, y: number, color: string, width = 28, style: string = 'diamond'): string {
@@ -150,7 +157,6 @@ function borderAttrs(borderStyle: string, customOuterW?: number, customInnerW?: 
     case 'CUSTOM': base = { dash: 'none', outerWidth: 2.2, innerRing: true, innerDash: '2,4', innerWidth: 0.6 }; break;
     default: base = { dash: 'none', outerWidth: 2.2, innerRing: true, innerDash: 'none', innerWidth: 0.8 };
   }
-  // Override with custom widths if provided
   if (customOuterW != null) base.outerWidth = customOuterW;
   if (customInnerW != null && base.innerRing) base.innerWidth = customInnerW;
   return base;
@@ -174,7 +180,6 @@ function buildSVG(project: any, templateKey: string): string {
   const hasLogo = project.icon_style === 'UPLOADED_LOGO' && project.uploaded_logo_url;
   const isBilingual = project.language_mode === 'BILINGUAL' || project.language_mode === 'AR';
   
-  // Support custom border widths from layout_json
   const layoutJson = project.layout_json || {};
   const customOuterW = layoutJson.outerBorderWidth;
   const customInnerW = layoutJson.innerBorderWidth;
@@ -192,14 +197,12 @@ function buildSVG(project: any, templateKey: string): string {
     pathPrefix: string;
   }): string {
     const { outerR, innerR, extraRings = '', centerExtra = '', pathPrefix } = opts;
-    const textR = innerR + (outerR - innerR) * 0.5;
-    const arcLen = textR * Math.PI;
-    // Reduced from 0.70 to 0.65 for better text clearance
-    const safeArc = arcLen * 0.65;
+    const rawTextR = innerR + (outerR - innerR) * 0.5;
+    // Enforce 5px clearance from both rings
+    const effectiveTextR = Math.min(Math.max(rawTextR, innerR + 5), outerR - 5);
     
-    // Ensure minimum 3px clearance between text arc and ring
-    const clearTextR = Math.min(textR, innerR + (outerR - innerR) * 0.5 - 3);
-    const effectiveTextR = Math.max(clearTextR, innerR + 4);
+    const arcLen = effectiveTextR * Math.PI;
+    const safeArc = arcLen * 0.58;
     
     const topText = isBilingual && arabicName ? arabicName : `✦  ${name}  ✦`;
     const topIsAr = isBilingual && !!arabicName;
@@ -210,12 +213,13 @@ function buildSVG(project: any, templateKey: string): string {
     const bottomSize = fitFontSize(bottomText, 8, safeArc, 0.54);
     
     const locR = outerR * 0.44;
-    const locTextR = locR - 2;
+    // Location text with 5px clearance from location ring
+    const locTextR = Math.max(locR - 5, locR * 0.75);
     let locationContent = '';
     if (showLocation) {
       const locEn = city;
       const locAr = arabicCity || city;
-      const locArcLen = locTextR * Math.PI * 0.70;
+      const locArcLen = locTextR * Math.PI * 0.60;
       const locEnSize = fitFontSize(locEn, 7, locArcLen, 0.55);
       const locArSize = fitFontSize(locAr, 8, locArcLen, 0.48);
       locationContent = `
@@ -288,7 +292,6 @@ function buildSVG(project: any, templateKey: string): string {
       const rcx = rw / 2, rcy = rh / 2;
       const nameFontSize = autoFontSize(name, 11, 22);
       const arSize = autoFontSize(arabicName || name, 10, 18);
-      // 12px padding from inner border for rectangles
       return `<svg viewBox="0 0 ${rw} ${rh}" xmlns="http://www.w3.org/2000/svg">
         <rect x="${x1 + 2}" y="${y1 + 2}" width="${rw - 4}" height="${rh - 4}" rx="4" fill="none" stroke="${C_PRI}" stroke-width="${ba.outerWidth}" stroke-dasharray="${ba.dash}"/>
         ${ba.innerRing ? `<rect x="${x1 + 7}" y="${y1 + 7}" width="${rw - 14}" height="${rh - 14}" rx="2" fill="none" stroke="${C_SEC}" stroke-width="${ba.innerWidth}" stroke-dasharray="${ba.innerDash}"/>` : ''}
@@ -391,7 +394,6 @@ serve(async (req) => {
     if (action === "generate") {
       let orderedTemplates = [...TEMPLATES];
 
-      // Add bilingual template if needed
       const isBilingual = project?.language_mode === 'BILINGUAL' || project?.language_mode === 'AR';
       if (isBilingual) {
         orderedTemplates = [
@@ -400,11 +402,9 @@ serve(async (req) => {
         ];
       }
 
-      // Business type → smart reordering (deterministic, no AI call)
       const businessType = project?.business_type || '';
       const styleSuggestion = BUSINESS_STYLE_MAP[businessType];
       
-      // Deterministic reorder: put matching templates first
       if (styleSuggestion) {
         const matchingBorder = styleSuggestion.border;
         const borderTemplateMap: Record<string, string[]> = {
@@ -421,7 +421,6 @@ serve(async (req) => {
         }
       }
 
-      // Delete non-favorite existing designs for this project
       if (projectId) {
         await supabase.from("stamp_designs").delete().eq("project_id", projectId).eq("is_favorite", false);
       }
@@ -459,7 +458,7 @@ serve(async (req) => {
       }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    // ── REFINE action — uses fast AI model ────────────────────────────────────
+    // ── REFINE action — uses AI model ────────────────────────────────────
     if (action === "refine") {
       if (!instruction) {
         return new Response(JSON.stringify({ error: "Instruction required" }), { 
@@ -476,23 +475,24 @@ serve(async (req) => {
             method: "POST",
             headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
             body: JSON.stringify({
-              model: "google/gemini-3-flash-preview",
+              model: "google/gemini-3.1-pro-preview",
               messages: [
                 {
                   role: "system",
                   content: `You are an expert SVG stamp designer. You will receive an existing stamp SVG and instructions to modify it.
 Return ONLY the modified SVG code (starting with <svg) with NO explanation. Keep it as a valid SVG.
-Guidelines:
-- All text must stay inside the border rings with at least 3px clearance from any ring stroke
-- Do not add text that overlaps borders
-- Keep the stamp professional and clean
-- Use these specific color hex codes:
-  - Primary (borders, company name): #1a2744
-  - Secondary (inner rings, accents, location): #2a3a5c
-  - Accent (monogram, registration, dividers): #8b6914
-- Do not add any external images or base64 data
-- For bottom arc text, use individual <text> elements at calculated positions (per-character), NOT textPath
+
+CRITICAL RULES:
+- Text must NEVER touch or overlap border circles. Maintain minimum 5px clearance between all text and ring strokes.
+- Bottom arc English text must read left-to-right naturally. Use per-character <text> elements at angles centered around 270° (SVG bottom). Rotation for each char = angle + 90.
+- All structural colors must use these hex tokens:
+  Primary (borders, company name): #1a2744
+  Secondary (inner rings, accents, location): #2a3a5c
+  Accent (monogram, registration, dividers): #8b6914
+- Inner circle, location ring, and center elements must use Secondary (#2a3a5c) for strokes and Accent (#8b6914) for fill/text
+- Do not add external images or base64 data
 - Ensure minimum padding of 12px from rectangle borders for text content
+- For circular stamps, the company name band (between outer and inner rings) should be WIDER than the location band
 - Return ONLY the SVG, nothing else`,
                 },
                 {

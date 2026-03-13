@@ -45,13 +45,7 @@ const WelcomeModal = () => {
     setShouldShow(false);
   };
 
-  const handleContinueAsGuest = () => {
-    localStorage.setItem(WELCOME_MODAL_KEY, "true");
-    localStorage.setItem(RETURNING_USER_KEY, "true");
-    dismiss();
-    setShouldShow(false);
-    // No tour - just close and allow browsing
-  };
+  // Guest mode removed — users must sign in
 
   const handleLogin = () => {
     localStorage.setItem(WELCOME_MODAL_KEY, "true");
