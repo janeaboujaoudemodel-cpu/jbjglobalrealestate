@@ -1076,11 +1076,11 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
     
     if (!silentResume) {
       const confirmed = window.confirm(
-        "⚡ FIX ALL LISTINGS ⚡\n\n" +
-        "This will run a 3-phase repair pipeline:\n\n" +
+        "⚡ RUN DAILY SYNC ⚡\n\n" +
+        "This will run the full extraction pipeline:\n\n" +
         "Phase 1: Extract missing data for ALL pending queue items\n" +
-        "Phase 2: Repair approved projects (metadata, USPs, location, amenities, documents)\n" +
-        "Phase 3: Repair approved project images\n\n" +
+        "Phase 2: Sync approved projects (metadata, USPs, location, amenities, documents)\n" +
+        "Phase 3: Final image sync pass\n\n" +
         "This may take several minutes. Continue?"
       );
       if (!confirmed) return;
