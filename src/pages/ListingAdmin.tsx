@@ -716,7 +716,7 @@ const ListingAdmin = () => {
                 variant={activeView === 'data-ops' ? 'primary' : 'secondary'}
               >
                 <Database className="w-4 h-4 mr-2" />
-                Data Ops
+                Sync & Sources
               </Button>
               <Button
                 onClick={() => { handleCreateNew(); setActiveView('editor'); }}
