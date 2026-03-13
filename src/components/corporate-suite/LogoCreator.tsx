@@ -99,7 +99,7 @@ export default function LogoCreator() {
 
   useEffect(() => { generateRef.current = generate; }, [generate]);
 
-  // Auto-regenerate ONLY on style/industry/font changes (NOT color changes)
+  // Auto-regenerate ONLY on style/industry changes (NOT color or font changes)
   useEffect(() => {
     if (!logo || !name.trim()) return;
     const timer = setTimeout(() => {
@@ -109,7 +109,7 @@ export default function LogoCreator() {
     }, 600);
     return () => clearTimeout(timer);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [style, industry, font]);
+  }, [style, industry]);
 
   const regenerate = () => {
     const nextSeed = seed + 1;
