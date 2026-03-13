@@ -156,7 +156,7 @@ export default function DigitalLandingPageEditor({ data, onChange, primaryColor 
       )}
 
       {/* Social Links */}
-      {sectionBtn("social", "🔗 Social Links", data.socialLinks.length)}
+      {sectionBtn("social", "Social Links", data.socialLinks.length)}
       {openSection === "social" && (
         <div className="space-y-2 pl-1">
           {data.socialLinks.map((link, idx) => (
