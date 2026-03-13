@@ -341,9 +341,9 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
     case 'logo':
       if (config.logoUrl) {
         const imgSize = innerR * 1.5;
-        centerContent = `
+      centerContent = `
           <defs><clipPath id="center-clip"><circle cx="${cx}" cy="${cy}" r="${innerR - 2}"/></clipPath></defs>
-          <image href="${config.logoUrl}" 
+          <image data-stamp-element="center" href="${config.logoUrl}" 
             x="${cx - imgSize / 2}" y="${cy - imgSize / 2}" 
             width="${imgSize}" height="${imgSize}" 
             clip-path="url(#center-clip)"
