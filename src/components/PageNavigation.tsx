@@ -1,13 +1,23 @@
-import { useEffect, useState, useCallback, useContext, forwardRef } from "react";
+import { useEffect, useState, useCallback, useContext, forwardRef, useRef } from "react";
 import { ArrowUp, ArrowDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LanguageContext } from "@/contexts/LanguageContext";
 
-const PageNavigation = forwardRef<HTMLDivElement, Record<string, never>>((_, ref) => {
+interface PageNavigationProps {
+  isChatOpen?: boolean;
+}
+
+const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChatOpen = false }, ref) => {
   const languageContext = useContext(LanguageContext);
   const isRTL = languageContext?.isRTL ?? false;
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [showScrollBottom, setShowScrollBottom] = useState(true);
+
+  // Drag state
+  const [dragOffset, setDragOffset] = useState<{ x: number; y: number } | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragRef = useRef({ startX: 0, startY: 0, startOffX: 0, startOffY: 0, moved: false });
+  const buttonRef = useRef<HTMLDivElement>(null);
 
   const handleScroll = useCallback(() => {
     const scrollTop = window.scrollY;
@@ -22,10 +32,46 @@ const PageNavigation = forwardRef<HTMLDivElement, Record<string, never>>((_, ref
   useEffect(() => {
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
-    // Re-check after layout settles (dynamic content)
     const timer = setTimeout(handleScroll, 500);
     return () => { window.removeEventListener("scroll", handleScroll); clearTimeout(timer); };
   }, [handleScroll]);
+
+  function onPointerDown(e: React.PointerEvent) {
+    if (e.button !== undefined && e.button !== 0) return;
+    e.currentTarget.setPointerCapture(e.pointerId);
+    const curOff = dragOffset ?? { x: 0, y: 0 };
+    dragRef.current = { startX: e.clientX, startY: e.clientY, startOffX: curOff.x, startOffY: curOff.y, moved: false };
+    setIsDragging(true);
+  }
+
+  function onPointerMove(e: React.PointerEvent) {
+    if (!isDragging) return;
+    const dx = e.clientX - dragRef.current.startX;
+    const dy = e.clientY - dragRef.current.startY;
+    if (Math.abs(dx) > 4 || Math.abs(dy) > 4) {
+      dragRef.current.moved = true;
+    }
+    if (dragRef.current.moved) {
+      setDragOffset({ x: dragRef.current.startOffX + dx, y: dragRef.current.startOffY + dy });
+    }
+  }
+
+  function onPointerUp() {
+    setIsDragging(false);
+    if (dragRef.current.moved && buttonRef.current) {
+      // Clamp to viewport
+      const rect = buttonRef.current.getBoundingClientRect();
+      const margin = 20;
+      let adjX = 0, adjY = 0;
+      if (rect.left < margin) adjX = margin - rect.left;
+      if (rect.top < margin) adjY = margin - rect.top;
+      if (rect.right > window.innerWidth - margin) adjX = window.innerWidth - margin - rect.right;
+      if (rect.bottom > window.innerHeight - margin) adjY = window.innerHeight - margin - rect.bottom;
+      if (adjX !== 0 || adjY !== 0) {
+        setDragOffset(prev => prev ? { x: prev.x + adjX, y: prev.y + adjY } : null);
+      }
+    }
+  }
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -49,22 +95,38 @@ const PageNavigation = forwardRef<HTMLDivElement, Record<string, never>>((_, ref
   const showUp = showScrollTop;
   const showDown = !showScrollTop && showScrollBottom;
 
+  // Hide when chat is open
+  if (isChatOpen) return null;
   if (!showUp && !showDown) return null;
+
+  const transform = dragOffset ? `translate(${dragOffset.x}px, ${dragOffset.y}px)` : undefined;
 
   return (
     <div 
-      ref={ref}
+      ref={(node) => {
+        (buttonRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+        if (typeof ref === 'function') ref(node);
+        else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+      }}
       className={cn(
-        "fixed bottom-24 z-[9995] flex flex-col gap-2",
+        "fixed bottom-36 z-[10049] flex flex-col gap-2",
         "pointer-events-auto",
-        isRTL ? "left-4" : "left-4"
+        isRTL ? "left-4" : "right-6"
       )}
-      style={{ touchAction: "manipulation" }}
+      style={{ 
+        transform, 
+        transition: isDragging ? 'none' : 'transform 0.2s ease', 
+        cursor: isDragging ? 'grabbing' : 'grab',
+        touchAction: "manipulation" 
+      }}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
     >
       {showUp && (
         <button
           type="button"
-          onClick={scrollToTop}
+          onClick={(e) => { if (!dragRef.current.moved) scrollToTop(); e.stopPropagation(); }}
           className={buttonBaseClass}
           aria-label="Scroll to top"
         >
@@ -75,7 +137,7 @@ const PageNavigation = forwardRef<HTMLDivElement, Record<string, never>>((_, ref
       {showDown && (
         <button
           type="button"
-          onClick={scrollToBottom}
+          onClick={(e) => { if (!dragRef.current.moved) scrollToBottom(); e.stopPropagation(); }}
           className={buttonBaseClass}
           aria-label="Scroll to bottom"
         >

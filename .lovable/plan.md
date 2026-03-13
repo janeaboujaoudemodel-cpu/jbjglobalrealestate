@@ -1,94 +1,72 @@
 
+## CRM System Upgrade — Implementation Status
 
-## Plan: Navigation/Chat Positioning, Stamp SVG Fixes, Mobile Menu Completeness
+### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-### Issue Summary
+#### Task 1: Full System Audit ✅
+- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
+- Identified 10 weaknesses (documented in plan)
 
-1. **PageNavigation arrows** hidden behind sidebar — need to reposition to right side, above chat button, visible only when chat is closed
-2. **Both PageNavigation and Chat button** need drag-to-move with edge clamping (cannot exit viewport)
-3. **Stamp SVG** still showing company name twice in English on top — Arabic must be on top, English on bottom, never duplicated
-4. **Stamp wizard** should ask bilingual/language choice FIRST before anything else; add trade license toggle alongside location toggle
-5. **Mobile hamburger** missing ~90% of AI tools — the `mobileToolkitLinks` array only has 9 items vs the full toolkit
-6. **Mobile hamburger** has duplicate Sign Out (line 992 and line 1045) and monogram at bottom (line 1061-1067) — remove duplicates, remove monogram
-7. **PageNavigation** currently at `left-4` which overlaps with sidebar on desktop
+#### Task 2: Leads Security Hardening ✅
+- CSV export no longer includes email/phone PII
+- Audit logging added to exports with user_agent tracking
+- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
 
----
+#### Task 3: Encryption Hardening ✅
+- CSV export stripped of `email_lower` and `phone_e164` fields
+- Export audit logged to both `crm_audit_logs` and `audit_logs`
 
-### Implementation
+#### Task 4: Lead Lifecycle Upgrade ✅
+- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
+- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
+- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
 
-#### 1. PageNavigation — Reposition & Chat-Aware Visibility
+#### Task 5: CRM Structure Upgrade ✅
+- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
+- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
+- KanbanPipeline expanded to show all 17 relevant stages
 
-**File: `src/components/PageNavigation.tsx`**
-- Move from `left-4` to `right-6` (same side as chat)
-- Position at `bottom-36` (above the chat button at `bottom-20`)
-- Accept a new prop `isChatOpen: boolean` — hide arrows when chat is open
-- Add drag-to-move (same pointer capture pattern as `CollapsedChatButton`)
-- Clamp drag offset so the button cannot exit the viewport edges (check against `window.innerWidth/innerHeight` on pointer up)
+#### Task 6: Performance Optimization ✅
+- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
+- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
+- `crm_leads_updated_at_trigger` auto-updates `updated_at`
 
-**File: `src/components/MainLayout.tsx`**
-- Pass `isChatOpen={!effectiveCollapsed}` to `PageNavigation`
+#### Task 7: AI Intelligence Integration ✅
+- New edge function `ai-lead-intelligence` using Lovable AI gateway
+- Supports 3 modes: `score`, `summary`, `next_action`
+- Tool-calling for structured scoring output
+- JWT auth + CRM role validation
+- PII sanitized before sending to AI
 
-#### 2. CollapsedChatButton — Edge Clamping on Drag
+#### Task 8: Workflow Automation ✅
+- Created `crm_automation_rules` table with RLS (owner manage, admin view)
+- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
 
-**File: `src/components/chat/CollapsedChatButton.tsx`**
-- In `onPointerUp`, after calculating final `dragOffset`, clamp to ensure the button stays within viewport bounds (20px margin from edges)
-- Already has drag — just add the edge clamping logic
+#### Task 10: Role & Permission System ✅
+- RLS on automation rules: owner CRUD, admin read-only
+- CSV export restricted to owner_admin/founder roles
 
-#### 3. Stamp SVG — Fix Duplicate English / Arabic Rendering
+#### Task 12: Backend/Database Upgrade ✅
+- 3 new performance indexes
+- Auto-updated_at trigger on crm_leads
+- Duplicate hash computation trigger
+- Rate-limiting security function
 
-**File: `src/lib/stampOfficialTemplate.ts`**
+#### Task 13: Data Cleanliness ✅
+- `duplicate_hash` with auto-compute trigger prevents future duplicates
+- Partial unique index enforces uniqueness at DB level
 
-Current code (line 201-204):
-```
-const topText = config.companyNameAr;
-const bottomText = config.companyNameEn.toUpperCase();
-const topIsArabic = true;
-const bottomIsArabic = false;
-```
-
-This looks correct — Arabic on top, English on bottom. The bug is likely in the edge function's `buildSVG` or the `LiveStampPreview` component which may be rendering differently.
-
-**File: `src/components/stamp-generator/LiveStampPreview.tsx`**
-- Audit the rendering logic — ensure it respects `languageReversed` correctly and doesn't duplicate the English text on both arcs
-- When `languageMode === 'BILINGUAL'` and `languageReversed === true`: Arabic top, English bottom (default)
-
-**File: `supabase/functions/ai-stamp-generator/index.ts`**
-- Audit `bilingualCircularStamp` to ensure the same — Arabic top arc, English bottom arc, no duplication
-
-#### 4. Stamp Wizard — Language Choice First + Trade License Toggle
-
-**File: `src/components/stamp-generator/StampProjectWizard.tsx`**
-- Move the "Language Mode" selector to appear FIRST in the Details tab, before company name fields
-- Show the trade license toggle always (not just when `registration_number_optional` is filled) — label it "Show Trade License Number" with an input field that appears when toggled on
-- Add "Skip extraction" option next to the trade license upload button
-
-#### 5. Mobile Hamburger — Complete Tool List
-
-**File: `src/components/GlobalHeader.tsx`**
-- Expand `mobileToolkitLinks` to include ALL toolkit tools: Stamp Generator, Design Studio, Video Builder, Social Workshop, Document Scanner, Spreadsheet, Business Card Scanner, Executive Assistant, Property Coach, Mortgage Calculator, Property Evaluator, HR Manager, Video Meeting, etc.
-- Organize into sub-categories within the Tools collapsible (Creative, Documents, Communication, AI Assistants)
-- Remove duplicate Sign Out at line 1043-1049 (keep only the one at line 991-996)
-- Remove the monogram image at lines 1060-1067
-- End the menu content at the divider after Sign Out
-
-#### 6. Edge Function — Redeploy with SVG audit
-
-**File: `supabase/functions/ai-stamp-generator/index.ts`**
-- Verify `bilingualCircularStamp` function renders Arabic on top arc and English on bottom arc without duplication
-- Ensure `bottomArcTextChars` produces correct left-to-right English reading
-
----
-
-### Files to Modify
-
-| File | Changes |
-|------|---------|
-| `src/components/PageNavigation.tsx` | Move to right-6, add `isChatOpen` prop, add drag-to-move with edge clamping |
-| `src/components/MainLayout.tsx` | Pass `isChatOpen` to PageNavigation |
-| `src/components/chat/CollapsedChatButton.tsx` | Add viewport edge clamping to drag |
-| `src/lib/stampOfficialTemplate.ts` | Verify Arabic top / English bottom (already correct, audit for edge cases) |
-| `src/components/stamp-generator/LiveStampPreview.tsx` | Fix duplicate English text rendering |
-| `src/components/stamp-generator/StampProjectWizard.tsx` | Language mode first, always-visible trade license toggle |
-| `src/components/GlobalHeader.tsx` | Complete mobile tool list, remove duplicate sign-out & monogram |
-| `supabase/functions/ai-stamp-generator/index.ts` | Audit bilingual rendering |
-
+### Files Changed
+| File | Action |
+|------|--------|
+| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
+| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
+| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
+| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
+| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
+| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
+| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
+| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
+| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |

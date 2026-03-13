@@ -150,7 +150,7 @@ export function LiveStampPreview({
 
       return generateOfficialStampSVG({
         companyNameEn: displayName,
-        companyNameAr: arabicCompanyName || displayName,
+        companyNameAr: arabicCompanyName || (isArabic ? displayName : ''),
         arabicOnTop: isArabic ? true : languageReversed,
         locationTextEn: locationEn,
         locationTextAr: locAr,

@@ -44,23 +44,20 @@ const CollapsedChatButton = ({ onToggle, onMinimize, showAttentionPulse = false 
   function onPointerUp(e: React.PointerEvent) {
     setIsDragging(false);
     if (!dragRef.current.moved) {
-      // Treat as click
       onToggle();
       return;
     }
-    // Smart overlap detection: if covering a button/input, nudge up
+    // Clamp to viewport edges (20px margin)
     if (buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      const els = document.elementsFromPoint(cx, cy);
-      const blocked = els.some(el => {
-        if (el === buttonRef.current || buttonRef.current?.contains(el)) return false;
-        const tag = el.tagName.toLowerCase();
-        return tag === 'button' || tag === 'input' || tag === 'a' || tag === 'select';
-      });
-      if (blocked) {
-        setDragOffset(prev => prev ? { x: prev.x, y: prev.y - 80 } : null);
+      const margin = 20;
+      let adjX = 0, adjY = 0;
+      if (rect.left < margin) adjX = margin - rect.left;
+      if (rect.top < margin) adjY = margin - rect.top;
+      if (rect.right > window.innerWidth - margin) adjX = window.innerWidth - margin - rect.right;
+      if (rect.bottom > window.innerHeight - margin) adjY = window.innerHeight - margin - rect.bottom;
+      if (adjX !== 0 || adjY !== 0) {
+        setDragOffset(prev => prev ? { x: prev.x + adjX, y: prev.y + adjY } : null);
       }
     }
   }

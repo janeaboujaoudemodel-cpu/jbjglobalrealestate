@@ -372,6 +372,19 @@ export default function StampProjectWizard() {
             <TabsContent value="company" className="flex-1 min-h-0 m-0">
               <ScrollArea className="h-full">
                 <div className="p-4 space-y-3">
+                  {/* Language Mode — FIRST */}
+                  <div>
+                    <Label className="text-[11px] font-medium mb-1.5 block">Language Mode <span className="text-destructive">*</span></Label>
+                    <p className="text-[9px] text-[hsl(var(--muted-foreground))] mb-1.5">Select the language(s) for your stamp before entering details</p>
+                    <div className="flex gap-2">
+                      {(['EN', 'AR', 'BILINGUAL'] as LanguageMode[]).map(l => (
+                        <OptionButton key={l} selected={form.language_mode === l} onClick={() => set('language_mode', l)}>
+                          {l === 'EN' ? 'English Only' : l === 'AR' ? 'Arabic Only' : 'Bilingual (AR + EN)'}
+                        </OptionButton>
+                      ))}
+                    </div>
+                  </div>
+
                   {/* Smart Auto-Fill with guide tooltip */}
                   <div className="border-2 border-dashed border-[hsl(var(--gold)/0.5)] rounded-lg bg-[hsl(var(--gold)/0.04)] relative">
                     {!localStorage.getItem('stamp-autofill-dismissed') && !licenseOpen && (
@@ -475,17 +488,7 @@ export default function StampProjectWizard() {
                     </div>
                   </div>
 
-                  {/* Language Mode */}
-                  <div>
-                    <Label className="text-[11px] font-medium mb-1.5 block">Language Mode</Label>
-                    <div className="flex gap-2">
-                      {(['EN', 'AR', 'BILINGUAL'] as LanguageMode[]).map(l => (
-                        <OptionButton key={l} selected={form.language_mode === l} onClick={() => set('language_mode', l)}>
-                          {l === 'EN' ? 'English' : l === 'AR' ? 'Arabic' : 'Bilingual'}
-                        </OptionButton>
-                      ))}
-                    </div>
-                  </div>
+                  {/* Language Mode — already shown at top, just a reminder link */}
 
                   {/* Arabic fields */}
                   {(form.language_mode === 'AR' || form.language_mode === 'BILINGUAL') && (
@@ -517,15 +520,16 @@ export default function StampProjectWizard() {
                     <Switch checked={form.show_location} onCheckedChange={v => set('show_location', v)}/>
                   </div>
 
-                  {/* Toggle: Show License (only if entered) */}
-                  {form.registration_number_optional && (
-                    <div className="flex items-center justify-between px-3 py-2 rounded-lg border border-[hsl(var(--border))]">
-                      <div className="flex items-center gap-2">
-                        <FileText size={12} className="text-[hsl(var(--gold))]"/>
-                        <span className="text-[11px] font-medium">Show License Number</span>
-                      </div>
-                      <Switch checked={form.show_license_number} onCheckedChange={v => set('show_license_number', v)}/>
+                  {/* Toggle: Show License Number — always visible */}
+                  <div className="flex items-center justify-between px-3 py-2 rounded-lg border border-[hsl(var(--border))]">
+                    <div className="flex items-center gap-2">
+                      <FileText size={12} className="text-[hsl(var(--gold))]"/>
+                      <span className="text-[11px] font-medium">Show Trade License Number</span>
                     </div>
+                    <Switch checked={form.show_license_number} onCheckedChange={v => set('show_license_number', v)}/>
+                  </div>
+                  {form.show_license_number && !form.registration_number_optional && (
+                    <Input value={form.registration_number_optional} onChange={e => set('registration_number_optional', e.target.value)} placeholder="Enter trade license number" className="h-8 text-sm"/>
                   )}
                 </div>
               </ScrollArea>
