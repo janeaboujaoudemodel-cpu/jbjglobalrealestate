@@ -384,20 +384,15 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
 
       {/* ── Hero (standalone only) ── */}
       {!embedded && (
-        <section className="relative py-16 md:py-20 overflow-hidden">
-          <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full opacity-20"
-              style={{ background: `radial-gradient(ellipse, ${G.gold}, transparent 70%)` }} />
-          </div>
+        <section className="relative py-16 md:py-20 overflow-hidden bg-gradient-to-b from-violet-50/60 to-white">
           <div className="container mx-auto px-4 relative z-10 text-center">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold mb-5 border"
-              style={{ background: G.bg, color: G.gold, borderColor: G.border }}>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold mb-5 border bg-violet-50 text-violet-700 border-violet-200">
               <Sparkles className="h-3 w-3" /> Free Tool
             </span>
-            <h1 className="text-4xl md:text-6xl font-bold mb-4 tracking-tight">
-              Media <span style={{ color: G.gold }}>→ PDF</span> Merger
+            <h1 className="text-4xl md:text-6xl font-bold mb-4 tracking-tight text-stone-900">
+              Media <span className="text-violet-600">→ PDF</span> Merger
             </h1>
-            <p className="text-lg md:text-xl max-w-2xl mx-auto" style={{ color: "rgba(255,255,255,0.55)" }}>
+            <p className="text-lg md:text-xl max-w-2xl mx-auto text-stone-500">
               Combine images &amp; PDFs into one document. Reorder pages, set margins, export with zero white borders.
             </p>
           </div>
