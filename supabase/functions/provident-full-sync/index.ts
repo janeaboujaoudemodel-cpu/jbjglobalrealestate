@@ -311,6 +311,7 @@ Return JSON in this exact format:
       // Upsert projects
       let projectsCreated = 0;
       let projectsUpdated = 0;
+      let projectsDeepScraped = 0;
 
       for (const proj of projects) {
         const projectSlug = proj.slug.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
@@ -397,6 +398,43 @@ Return JSON in this exact format:
             });
           }
         }
+
+        // ═══════════════════════════════════════════════════════════
+        // INLINE DEEP SCRAPE: Immediately extract full detail for this project
+        // so the FIRST time it enters the DB, it has complete data.
+        // ═══════════════════════════════════════════════════════════
+        const projectPageUrl = proj.page_url || projectData.source_url;
+        if (projectId && projectPageUrl) {
+          try {
+            console.log(`[provident-full-sync] Deep scraping inline: ${proj.name}`);
+            const scrapeResponse = await fetch(`${supabaseUrl}/functions/v1/provident-scrape-project`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${supabaseServiceKey}`,
+              },
+              body: JSON.stringify({
+                projectUrl: projectPageUrl,
+                projectId: projectId,
+                projectName: proj.name,
+              }),
+            });
+
+            if (scrapeResponse.ok) {
+              const scrapeResult = await scrapeResponse.json();
+              if (scrapeResult.success) {
+                projectsDeepScraped++;
+                console.log(`[provident-full-sync] ✓ Deep scraped ${proj.name}: ${scrapeResult.images_found ?? 0} imgs`);
+              }
+            } else {
+              console.warn(`[provident-full-sync] ✗ Deep scrape failed for ${proj.name}: ${scrapeResponse.status}`);
+            }
+            // Brief pause to avoid rate limiting
+            await new Promise(r => setTimeout(r, 1500));
+          } catch (scrapeErr) {
+            console.warn(`[provident-full-sync] Deep scrape error for ${proj.name}:`, scrapeErr);
+          }
+        }
       }
 
       return new Response(JSON.stringify({
@@ -406,6 +444,7 @@ Return JSON in this exact format:
         projects_found: projects.length,
         projects_created: projectsCreated,
         projects_updated: projectsUpdated,
+        projects_deep_scraped: projectsDeepScraped,
         projects: projects.map(p => ({ name: p.name, slug: p.slug, images: p.image_urls?.length || 0 })),
       }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },

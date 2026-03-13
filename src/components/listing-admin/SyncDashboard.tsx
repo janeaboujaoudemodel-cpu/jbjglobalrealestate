@@ -1812,7 +1812,10 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                         Pending: {fixAllStats.pending_success} synced, {fixAllStats.pending_errors} errors
                       </div>
                       <div className="text-emerald-700">
-                        Approved: {fixAllStats.approved_repaired} updated, {fixAllStats.approved_errors} errors
+                        Approved: {fixAllStats.approved_repaired} synced, {fixAllStats.approved_errors} errors
+                        {fixAllStats.metadata_repaired ? ` • ${fixAllStats.metadata_repaired} metadata` : ""}
+                        {fixAllStats.images_repaired ? ` • ${fixAllStats.images_repaired} images` : ""}
+                        {fixAllStats.documents_repaired ? ` • ${fixAllStats.documents_repaired} docs` : ""}
                       </div>
                     </div>
                   )}
