@@ -406,10 +406,10 @@ export default function StampGalleryPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[hsl(var(--pearl-1))]">
+    <div className="h-[calc(100vh-52px)] flex flex-col bg-[hsl(var(--pearl-1))] overflow-hidden">
 
-      {/* ── Sticky header ─────────────────────────────────────────────────── */}
-      <div className="sticky top-0 lg:top-[48px] z-30 bg-white/95 backdrop-blur-sm border-b border-[hsl(var(--border))]">
+      {/* ── Header ────────────────────────────────────────────────────────── */}
+      <div className="flex-shrink-0 z-30 bg-white/95 backdrop-blur-sm border-b border-[hsl(var(--border))]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3 flex-wrap">
           <div className="flex items-center gap-3 min-w-0">
             <Button variant="ghost" size="sm" onClick={() => navigate(`/toolkit/stamp-generator/${projectId}/generate`)} className="gap-1.5 shrink-0">
@@ -588,7 +588,7 @@ export default function StampGalleryPage() {
       )}
 
       {/* ── Gallery grid ──────────────────────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+      <div className="flex-1 overflow-y-auto max-w-7xl mx-auto px-4 sm:px-6 py-4 w-full">
         {designs.length === 0 ? (
           <div className="text-center py-24 space-y-4">
             <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[hsl(var(--gold)/0.15)] to-[hsl(var(--champagne-1))] flex items-center justify-center mx-auto">
@@ -622,7 +622,12 @@ export default function StampGalleryPage() {
                 >
                   {/* Stamp preview */}
                   <div
-                    className="relative aspect-square bg-gradient-to-br from-[hsl(var(--pearl-1))] to-[hsl(var(--champagne-1)/0.5)] flex items-center justify-center overflow-hidden rounded-full mx-auto w-[85%]"
+                    className={`relative flex items-center justify-center overflow-hidden mx-auto ${
+                      // Detect stamp shape from SVG — rect without circle = rectangular frame
+                      (design.svg_source.includes('<rect') && !design.svg_source.match(/<circle[^>]*r="(9|10|11)/))
+                        ? 'w-[90%] aspect-[1.9/1] rounded-lg bg-gradient-to-br from-[hsl(var(--pearl-1))] to-[hsl(var(--champagne-1)/0.5)]'
+                        : 'aspect-square rounded-full w-[85%] bg-gradient-to-br from-[hsl(var(--pearl-1))] to-[hsl(var(--champagne-1)/0.5)]'
+                    }`}
                     style={{ cursor: batchMode ? (isMaxed ? 'not-allowed' : 'pointer') : 'zoom-in' }}
                     onClick={() => {
                       if (batchMode) { if (!isMaxed || isSelected) toggleSelect(design.id); }

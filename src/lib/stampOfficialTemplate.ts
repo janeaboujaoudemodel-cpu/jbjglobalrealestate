@@ -7,6 +7,11 @@
  * - Two dot separators at 3/9 o'clock positions
  * - Center area for monogram/logo with optional inner text ring for location
  * - Corporate Official Blue ink: #1B3A8C
+ * 
+ * Color tokens for StampSVGRenderer tinting:
+ * - #1a2744 → Primary (outer ring, company text, borders)
+ * - #2a3a5c → Secondary (inner rings, location text, decorative accents)
+ * - #8b6914 → Accent (monogram, registration, center dividers)
  */
 
 export type SeparatorStyle = 'dot' | 'star' | 'dash' | 'circle' | 'none';
@@ -33,6 +38,11 @@ export interface OfficialStampConfig {
 const ARABIC_FONT = '"Noto Naskh Arabic", "Arabic Typesetting", "Traditional Arabic", serif';
 const ENGLISH_FONT = 'Georgia, "Times New Roman", serif';
 const INK_BLUE = '#1B3A8C';
+
+// Color tokens — these are replaced by StampSVGRenderer
+const C_PRI = '#1a2744';
+const C_SEC = '#2a3a5c';
+const C_ACC = '#8b6914';
 
 function fitFontSize(text: string, baseSize: number, maxArcLen: number, charW = 0.6): number {
   if (!text) return baseSize;
@@ -67,7 +77,6 @@ function renderSeparators(cx: number, cy: number, r: number, style: SeparatorSty
 /**
  * Render text along the BOTTOM half of a circle, per-character,
  * so each character is right-side up (tops pointing outward).
- * Characters are distributed evenly across ~150° centered at 6 o'clock (270° in math coords = bottom).
  */
 function renderBottomArcText(
   text: string, cx: number, cy: number, r: number,
@@ -79,7 +88,6 @@ function renderBottomArcText(
   const n = chars.length;
   if (n === 0) return '';
 
-  // Spread across 150° of the bottom half, centered at 270° (6 o'clock)
   const spreadDeg = Math.min(150, n * 11);
   const startDeg = 270 - spreadDeg / 2;
   const stepDeg = n > 1 ? spreadDeg / (n - 1) : 0;
@@ -90,7 +98,6 @@ function renderBottomArcText(
     const rad = (deg * Math.PI) / 180;
     const x = cx + r * Math.cos(rad);
     const y = cy + r * Math.sin(rad);
-    // Rotate so character top points outward (away from center)
     const rotation = deg + 90;
     result += `<text x="${x.toFixed(2)}" y="${y.toFixed(2)}" text-anchor="middle" dominant-baseline="central"
       font-family="${font}" font-size="${fontSize}" fill="${ink}" font-weight="${fontWeight}"
@@ -102,7 +109,6 @@ function renderBottomArcText(
 
 /**
  * Render text along the TOP half of a circle using textPath.
- * For Arabic text this works naturally (LTR path, RTL rendering).
  */
 function renderTopArcTextPath(
   text: string, cx: number, cy: number, r: number,
@@ -110,7 +116,6 @@ function renderTopArcTextPath(
   isArabic: boolean, pathId: string, fontWeight = '800'
 ): string {
   if (!text) return '';
-  // Top arc: left to right over top half (clockwise sweep)
   const arcPath = `M ${cx - r} ${cy} A ${r} ${r} 0 1 1 ${cx + r} ${cy}`;
   return `
     <defs><path id="${pathId}" d="${arcPath}"/></defs>
@@ -128,18 +133,22 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   const ink = config.inkColor || INK_BLUE;
   const enFont = config.fontFamily || ENGLISH_FONT;
 
-  // Ring radii
+  // Use color tokens for tinting support
+  const priColor = C_PRI;
+  const secColor = C_SEC;
+  const accColor = C_ACC;
+
+  // Ring radii — outer and inner with 2px+ clearance for text
   const outerR = S * 0.46;
-  const innerR = outerR - S * 0.06;
-  // Text arc sits between inner and outer rings
+  const innerR = outerR - S * 0.07;  // wider gap for text breathing room
   const textArcR = innerR + (outerR - innerR) * 0.5;
 
-  // Inner circle for location text
-  const locationR = outerR * 0.46;
+  // Location ring — pushed further toward center with thin gap
+  const locationR = config.showLocation ? outerR * 0.40 : 0;
   const locationTextR = locationR - 3;
 
-  // Monogram/logo area
-  const centerR = config.showLocation ? locationR - 8 : outerR * 0.34;
+  // Center area — expands when location is off
+  const centerR = config.showLocation ? locationR - 6 : outerR * 0.34;
 
   // Determine top/bottom text
   const topText = config.arabicOnTop ? config.companyNameAr : config.companyNameEn.toUpperCase();
@@ -149,7 +158,7 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   const topFont = topIsArabic ? ARABIC_FONT : enFont;
   const bottomFont = bottomIsArabic ? ARABIC_FONT : enFont;
 
-  // Arc lengths for font sizing — use 70% of half-circle for safe text area
+  // Arc lengths for font sizing — 70% of half-circle
   const arcLen = textArcR * Math.PI;
   const safeArc = arcLen * 0.70;
   const topBaseFontSize = topIsArabic ? 16 : 15;
@@ -157,21 +166,21 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   const topFontSize = fitFontSize(topText, topBaseFontSize, safeArc, topIsArabic ? 0.50 : 0.54);
   const bottomFontSize = fitFontSize(bottomText, bottomBaseFontSize, safeArc, bottomIsArabic ? 0.50 : 0.54);
 
-  // Top arc text (textPath — works for both Arabic and English on top)
+  // Top arc text
   const topArcContent = renderTopArcTextPath(
     topText || (topIsArabic ? 'اسم الشركة' : 'COMPANY NAME'),
-    cx, cy, textArcR, topFontSize, topFont, ink,
+    cx, cy, textArcR, topFontSize, topFont, priColor,
     topIsArabic ? 1 : 2.5, topIsArabic, 'top-arc'
   );
 
-  // Bottom arc text (per-character placement for readability)
+  // Bottom arc text (per-character)
   const bottomArcContent = renderBottomArcText(
     bottomText || (bottomIsArabic ? 'اسم الشركة' : 'COMPANY NAME'),
-    cx, cy, textArcR, bottomFontSize, bottomFont, ink,
+    cx, cy, textArcR, bottomFontSize, bottomFont, priColor,
     bottomIsArabic ? 1 : 2.5, bottomIsArabic
   );
 
-  // Location text arcs (inner ring)
+  // Location ring content — adaptive
   let locationContent = '';
   if (config.showLocation) {
     const locEn = config.locationTextEn || 'Dubai, UAE';
@@ -180,25 +189,22 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
     const locFontSize = fitFontSize(locEn, 9, locArcLen, 0.55);
     const locArFontSize = fitFontSize(locAr, 10, locArcLen, 0.48);
 
-    // Location Arabic on top (textPath)
     const locTopArc = `M ${cx - locationTextR} ${cy} A ${locationTextR} ${locationTextR} 0 1 1 ${cx + locationTextR} ${cy}`;
-    
-    // Location English on bottom (per-character)
     const locEnContent = renderBottomArcText(
-      locEn.toUpperCase(), cx, cy, locationTextR, locFontSize, enFont, ink, 1.5, false, '700'
+      locEn.toUpperCase(), cx, cy, locationTextR, locFontSize, enFont, secColor, 1.5, false, '700'
     );
 
     locationContent = `
-      <circle cx="${cx}" cy="${cy}" r="${locationR}" fill="none" stroke="${ink}" stroke-width="1.5"/>
+      <circle cx="${cx}" cy="${cy}" r="${locationR}" fill="none" stroke="${secColor}" stroke-width="1.5"/>
       <defs><path id="loc-top" d="${locTopArc}"/></defs>
-      <text font-family="${ARABIC_FONT}" font-size="${locArFontSize}" fill="${ink}" letter-spacing="1" font-weight="700">
+      <text font-family="${ARABIC_FONT}" font-size="${locArFontSize}" fill="${secColor}" letter-spacing="1" font-weight="700">
         <textPath href="#loc-top" startOffset="50%" text-anchor="middle">${locAr}</textPath>
       </text>
       ${locEnContent}
     `;
   }
 
-  // Center content (monogram or logo)
+  // Center content (monogram or logo) — centered between arcs/circles
   let centerContent = '';
   const mono = config.monogramText || '';
 
@@ -217,28 +223,28 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
     const monoSize = mono.length === 1 ? centerR * 0.9 : mono.length === 2 ? centerR * 0.7 : centerR * 0.55;
     centerContent = `
       <text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
-        font-family="${enFont}" font-size="${monoSize}" fill="${ink}" 
+        font-family="${enFont}" font-size="${monoSize}" fill="${accColor}" 
         font-weight="700" letter-spacing="2">${mono.toUpperCase()}</text>
     `;
   }
 
-  // Registration number
+  // Registration number — positioned below center with clearance
   let regContent = '';
   if (config.showRegistration && config.registrationNumber) {
     const regY = cy + centerR + 5;
     if (regY < cy + innerR - 6) {
       regContent = `
         <text x="${cx}" y="${regY}" text-anchor="middle" font-family="${enFont}" 
-          font-size="7" fill="${ink}" letter-spacing="0.8" opacity="0.7">${config.registrationNumber}</text>
+          font-size="7" fill="${accColor}" letter-spacing="0.8" opacity="0.7">${config.registrationNumber}</text>
       `;
     }
   }
 
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${S} ${S}" width="${S}" height="${S}">
     <!-- Outer ring -->
-    <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="none" stroke="${ink}" stroke-width="5"/>
+    <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="none" stroke="${priColor}" stroke-width="5"/>
     <!-- Inner ring -->
-    <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${ink}" stroke-width="2.5"/>
+    <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${priColor}" stroke-width="2.5"/>
 
     <!-- Top arc text -->
     ${topArcContent}
@@ -247,7 +253,7 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
     ${bottomArcContent}
 
     <!-- Separators at 3 and 9 o'clock -->
-    ${renderSeparators(cx, cy, textArcR, config.separatorStyle, ink)}
+    ${renderSeparators(cx, cy, textArcR, config.separatorStyle, priColor)}
 
     <!-- Location inner ring (optional) -->
     ${locationContent}

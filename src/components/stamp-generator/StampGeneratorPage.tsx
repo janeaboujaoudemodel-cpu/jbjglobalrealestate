@@ -981,7 +981,7 @@ export default function StampGeneratorPage() {
       {/* AI Designer Floating Panel */}
       {chatOpen && (
         <div className="fixed z-[9000] flex flex-col bg-white rounded-2xl shadow-2xl border border-[hsl(var(--border))] overflow-hidden"
-          style={{ width: 340, maxHeight: aiPanelMinimized ? 'auto' : 'calc(100vh - 120px)', top: 80, right: 16,
+          style={{ width: 340, maxHeight: aiPanelMinimized ? 'auto' : 'calc(100vh - 120px)', top: 60, right: 16,
             transform: `translate(${aiPanelPos.x}px, ${aiPanelPos.y}px)` }}>
           <div className="flex items-center justify-between px-3 py-2.5 bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] cursor-grab active:cursor-grabbing select-none flex-shrink-0"
             onMouseDown={onAiPanelDragStart}>
@@ -1040,7 +1040,7 @@ export default function StampGeneratorPage() {
                     <StampSVGRenderer svgSource={refinedPreview.svgSource} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} size={110}/>
                   </div>
                   <div className="flex gap-1.5">
-                    <Button size="sm" className="flex-1 h-7 text-[10px] bg-[hsl(var(--gold))] text-white" onClick={() => applyRefinement('replace')} disabled={!selectedId}>
+                    <Button size="sm" className="flex-1 h-7 text-[10px] bg-[hsl(var(--gold))] text-white" onClick={() => { if (!selectedId) { toast.info('Select a stamp concept first, then click Replace'); return; } applyRefinement('replace'); }} >
                       Replace Selected
                     </Button>
                     <Button size="sm" variant="outline" className="flex-1 h-7 text-[10px] border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))]" onClick={() => applyRefinement('new')}>
@@ -1091,13 +1091,14 @@ function ConceptCard({
   const isSelected = selectedId === concept.id;
   const isFav = concept.isFavorite;
   const displaySvg = svgOverride || concept.svgSource;
+  const isRectShape = displaySvg.includes('<rect') && !displaySvg.match(/<circle[^>]*r="(9|10|11)/);
 
   return (
     <div
       className={`group bg-card/80 rounded-xl border-2 transition-all shadow-sm hover:shadow-md cursor-pointer ${isSelected ? 'border-gold shadow-[0_0_0_3px_hsl(var(--gold)/0.15)]' : 'border-gold/30 hover:border-gold/50'}`}
       onClick={() => onSelect(concept)}
     >
-      <div className="relative p-3 flex items-center justify-center bg-[hsl(var(--pearl-1))] rounded-t-xl min-h-[140px]">
+      <div className={`relative p-3 flex items-center justify-center bg-[hsl(var(--pearl-1))] rounded-t-xl ${isRectShape ? 'min-h-[100px]' : 'min-h-[140px]'}`}>
         {isSelected && (
           <div className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-[hsl(var(--gold))] flex items-center justify-center z-10">
             <Check size={10} className="text-white"/>
@@ -1107,7 +1108,7 @@ function ConceptCard({
           className={`absolute top-1.5 left-1.5 z-10 w-6 h-6 rounded-full flex items-center justify-center transition-all ${isFav ? 'bg-rose-50 border border-rose-200 text-rose-500' : 'bg-white/80 border border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] opacity-0 group-hover:opacity-100'}`}>
           {togglingFav === concept.id ? <Loader2 size={9} className="animate-spin"/> : <Heart size={9} className={isFav ? 'fill-rose-500' : ''}/>}
         </button>
-        <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} fontWeight={fontBold ? 'bold' : 'normal'} fontStyle={fontItalic ? 'italic' : 'normal'} fontSize={manualFontSize} inkMode={inkMode} size={130}/>
+        <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} fontWeight={fontBold ? 'bold' : 'normal'} fontStyle={fontItalic ? 'italic' : 'normal'} fontSize={manualFontSize} inkMode={inkMode} size={isRectShape ? 160 : 130}/>
       </div>
       <div className="p-2 space-y-1.5">
         <p className="font-medium text-[11px] text-[hsl(var(--foreground))] truncate">{concept.label}</p>
