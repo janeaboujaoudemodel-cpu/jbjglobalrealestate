@@ -1156,7 +1156,9 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
             </button>
             ) : (
             <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-center">
-              <div className="text-2xl font-bold text-emerald-700">✓</div>
+              <div className="text-2xl font-bold text-emerald-700">
+                <Check className="h-6 w-6 mx-auto" />
+              </div>
               <div className="text-xs text-emerald-600">API Ready</div>
             </div>
             )}
