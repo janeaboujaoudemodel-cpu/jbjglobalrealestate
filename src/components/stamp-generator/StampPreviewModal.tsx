@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 import { StampSVGRenderer } from './StampSVGRenderer';
 import { StampTextEditor } from './StampTextEditor';
 import { Button } from '@/components/ui/button';
-import { X, ArrowLeft, Download, CreditCard, FileText, Mail, Loader2, Maximize2, Type, ZoomIn, ZoomOut, RotateCcw, Scroll, Stamp, BookOpen, Layers, Lock, Unlock, PenTool, Book } from 'lucide-react';
+import { X, ArrowLeft, Download, CreditCard, FileText, Mail, Loader2, Maximize2, Type, ZoomIn, ZoomOut, RotateCcw, Scroll, Stamp, BookOpen, Layers, Lock, Unlock, PenTool, Book, AlignLeft, AlignCenter, AlignRight, Palette } from 'lucide-react';
 import { StampDesignConcept } from '@/lib/stampTemplates';
 
 interface Props {
@@ -47,6 +47,7 @@ export function StampPreviewModal({
   const [textScaleLocked, setTextScaleLocked] = useState(false);
   const [monoScale, setMonoScale] = useState(1.0);
   const [monoScaleLocked, setMonoScaleLocked] = useState(false);
+  const [stampAlign, setStampAlign] = useState<'left' | 'center' | 'right'>('right');
   const textEditorRef = useRef<HTMLDivElement>(null);
   const displaySvg = localSvg || svgOverride || concept.svgSource;
 
@@ -326,7 +327,25 @@ export function StampPreviewModal({
           </div>
 
           {/* Mockup area */}
-          <div data-mockup-area className="flex-1 flex items-center justify-center p-10 bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))] min-h-full">
+          <div data-mockup-area className="flex-1 flex flex-col items-center justify-center p-10 bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))] min-h-full overflow-y-auto jj-scrollbar-gold">
+            {/* Alignment controls */}
+            <div className="flex items-center gap-1.5 mb-4">
+              <span className="text-[9px] font-semibold text-[hsl(var(--muted-foreground))] uppercase mr-2">Stamp Position</span>
+              {([
+                { key: 'left' as const, icon: AlignLeft, label: 'Left' },
+                { key: 'center' as const, icon: AlignCenter, label: 'Center' },
+                { key: 'right' as const, icon: AlignRight, label: 'Right' },
+              ]).map(a => (
+                <button key={a.key} onClick={() => setStampAlign(a.key)}
+                  className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[10px] font-medium transition-all border ${
+                    stampAlign === a.key
+                      ? 'bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))] border-[hsl(var(--gold)/0.4)]'
+                      : 'text-[hsl(var(--muted-foreground))] border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'
+                  }`}>
+                  <a.icon size={11}/> {a.label}
+                </button>
+              ))}
+            </div>
 
             {/* Business Card Mockup */}
             {activeView === 'business-card' && (
@@ -334,7 +353,7 @@ export function StampPreviewModal({
                 <p className="text-xs text-[hsl(var(--muted-foreground))] text-center mb-4 uppercase tracking-wide">Business Card Preview</p>
                 <div className="relative rounded-2xl overflow-hidden shadow-2xl" style={{ aspectRatio: '1.75 / 1', background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' }}>
                   <div className="absolute inset-0 p-7 flex items-stretch">
-                    <div className="flex-1 flex flex-col justify-between">
+                    <div className={`flex-1 flex flex-col justify-between ${stampAlign === 'left' ? 'order-2 pl-6' : ''}`}>
                       <div>
                         <p className="text-white font-bold text-xl leading-tight tracking-tight">{companyName}</p>
                         {arabicName && <p className="text-white/70 text-sm mt-1" dir="rtl">{arabicName}</p>}
@@ -344,9 +363,9 @@ export function StampPreviewModal({
                         <p className="text-white/40 text-xs">{city}</p>
                       </div>
                     </div>
-                    <div className="flex items-center justify-end pl-6">
+                    <div className={`flex items-center ${stampAlign === 'left' ? 'order-1 pr-6' : stampAlign === 'center' ? 'absolute inset-0 justify-center items-center' : 'justify-end pl-6'}`}>
                       <div className="opacity-85">
-                        <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} size={100}/>
+                        <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} fontWeight={fontWeight} fontStyle={fontStyle} fontSize={fontSize} inkMode={false} size={100}/>
                       </div>
                     </div>
                   </div>
@@ -354,7 +373,7 @@ export function StampPreviewModal({
                 </div>
                 <div className="mt-4 relative rounded-2xl overflow-hidden shadow-xl flex items-center justify-center" style={{ aspectRatio: '1.75 / 1', background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' }}>
                   <div className="absolute inset-0" style={{ background: `radial-gradient(circle at center, ${tintColor}28 0%, transparent 70%)` }}/>
-                  <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} size={120}/>
+                  <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} fontWeight={fontWeight} fontStyle={fontStyle} fontSize={fontSize} size={120}/>
                 </div>
                 <p className="text-[10px] text-[hsl(var(--muted-foreground))] text-center mt-2">Front (top) · Back (bottom)</p>
               </div>
@@ -371,7 +390,7 @@ export function StampPreviewModal({
                       {arabicName && <p className="text-white/70 text-sm mt-0.5" dir="rtl">{arabicName}</p>}
                       <p className="text-white/60 text-xs mt-1">{city}</p>
                     </div>
-                    <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} size={70}/>
+                    <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} fontWeight={fontWeight} fontStyle={fontStyle} fontSize={fontSize} size={70}/>
                   </div>
                   <div className="px-8 py-6 space-y-4">
                     <div className="space-y-1">
@@ -394,7 +413,7 @@ export function StampPreviewModal({
                         <div className="h-1.5 w-20 rounded bg-gray-200 mt-1"/>
                       </div>
                       <div className="opacity-60">
-                        <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} size={60}/>
+                        <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} fontWeight={fontWeight} fontStyle={fontStyle} fontSize={fontSize} size={60}/>
                       </div>
                     </div>
                   </div>
@@ -417,8 +436,8 @@ export function StampPreviewModal({
                     <p className="text-gray-700 font-bold text-xs">{companyName}</p>
                     <p className="text-gray-500 text-[10px]">{city}</p>
                   </div>
-                  <div className="absolute top-5 right-7 opacity-90">
-                    <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} size={72}/>
+                  <div className={`absolute top-5 opacity-90 ${stampAlign === 'left' ? 'left-7' : stampAlign === 'center' ? 'left-1/2 -translate-x-1/2' : 'right-7'}`}>
+                    <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} fontWeight={fontWeight} fontStyle={fontStyle} fontSize={fontSize} size={72}/>
                   </div>
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="text-center space-y-0.5">
@@ -463,7 +482,7 @@ export function StampPreviewModal({
                         <p className="text-[9px] text-gray-400">Authorized Signature</p>
                       </div>
                       <div className="relative flex items-center justify-center" style={{ transform: 'rotate(-8deg)' }}>
-                        <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} size={80}/>
+                        <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} fontWeight={fontWeight} fontStyle={fontStyle} fontSize={fontSize} inkMode={true} size={80}/>
                       </div>
                     </div>
                   </div>
@@ -508,17 +527,9 @@ export function StampPreviewModal({
                           boxShadow: `inset 0 1px 4px rgba(255,255,255,0.1), inset 0 -1px 4px rgba(0,0,0,0.2)`,
                         }}
                       />
-                      {/* Second inner ring */}
-                      <div
-                        className="absolute rounded-full"
-                        style={{
-                          width: 176, height: 176,
-                          border: `1px solid rgba(255,255,255,0.08)`,
-                        }}
-                      />
-                      {/* Stamp impression */}
-                      <div className="relative z-10" style={{ filter: 'brightness(0) invert(1) opacity(0.9)', mixBlendMode: 'soft-light' }}>
-                        <StampSVGRenderer svgSource={displaySvg} tintColor="#ffffff" secondaryColor="#ffffff" accentColor="#ffffff" size={180}/>
+                      {/* Stamp impression — larger and prominent */}
+                      <div className="relative z-10" style={{ filter: 'brightness(0) invert(1) opacity(0.92)', mixBlendMode: 'soft-light' }}>
+                        <StampSVGRenderer svgSource={displaySvg} tintColor="#ffffff" secondaryColor="#ffffff" accentColor="#ffffff" fontFamily={fontFamily} fontWeight={fontWeight} fontStyle={fontStyle} fontSize={fontSize} size={200}/>
                       </div>
                       {/* Specular highlight */}
                       <div
@@ -561,7 +572,7 @@ export function StampPreviewModal({
                   <div className="ml-8 h-full flex flex-col items-center justify-center gap-5 p-6">
                     <div className="relative flex items-center justify-center p-4 rounded-full" style={{ background: 'rgba(255,255,255,0.08)', boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.2)' }}>
                       <div style={{ filter: 'brightness(0) invert(1) opacity(0.9)' }}>
-                        <StampSVGRenderer svgSource={displaySvg} tintColor="#ffffff" secondaryColor="#ffffff" accentColor="#ffffff" size={130}/>
+                        <StampSVGRenderer svgSource={displaySvg} tintColor="#ffffff" secondaryColor="#ffffff" accentColor="#ffffff" fontFamily={fontFamily} fontWeight={fontWeight} fontStyle={fontStyle} fontSize={fontSize} size={130}/>
                       </div>
                     </div>
                     <div className="text-center space-y-1.5">
@@ -594,7 +605,7 @@ export function StampPreviewModal({
                     {/* Stamp as emblem */}
                     <div className="relative flex items-center justify-center p-5 rounded-full" style={{ background: 'rgba(255,255,255,0.06)', boxShadow: 'inset 0 2px 10px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0.15)' }}>
                       <div style={{ filter: 'brightness(0) invert(1) opacity(0.92)' }}>
-                        <StampSVGRenderer svgSource={displaySvg} tintColor="#ffffff" secondaryColor="#ffffff" accentColor="#ffffff" size={140}/>
+                        <StampSVGRenderer svgSource={displaySvg} tintColor="#ffffff" secondaryColor="#ffffff" accentColor="#ffffff" fontFamily={fontFamily} fontWeight={fontWeight} fontStyle={fontStyle} fontSize={fontSize} size={140}/>
                       </div>
                     </div>
                     {/* Title area */}
@@ -619,7 +630,7 @@ export function StampPreviewModal({
         </div>
       </div>
 
-      {/* Fullscreen stamp overlay */}
+      {/* Fullscreen stamp overlay with editing toolbar */}
       {stampFullscreen && (
         <div
           className="fixed inset-0 z-[10100] bg-black/90 flex items-center justify-center"
@@ -637,8 +648,38 @@ export function StampPreviewModal({
               tintColor={tintColor}
               secondaryColor={secondaryColor}
               accentColor={accentColor}
+              fontFamily={fontFamily}
+              fontWeight={fontWeight}
+              fontStyle={fontStyle}
+              fontSize={fontSize}
+              inkMode={false}
               size={420}
             />
+          </div>
+          {/* Floating editing toolbar in fullscreen */}
+          <div className="absolute bottom-16 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur rounded-2xl shadow-2xl border border-[hsl(var(--border))] px-5 py-3 flex items-center gap-4" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center gap-2">
+              <span className="text-[9px] font-semibold text-[hsl(var(--muted-foreground))] uppercase">Colors</span>
+              <div className="w-6 h-6 rounded-full border-2 border-white shadow-sm cursor-pointer" style={{ backgroundColor: tintColor }} title="Primary color"/>
+              {secondaryColor && <div className="w-5 h-5 rounded-full border-2 border-white shadow-sm" style={{ backgroundColor: secondaryColor }} title="Secondary"/>}
+              {accentColor && <div className="w-5 h-5 rounded-full border-2 border-white shadow-sm" style={{ backgroundColor: accentColor }} title="Accent"/>}
+            </div>
+            <div className="w-px h-6 bg-[hsl(var(--border))]"/>
+            <div className="flex items-center gap-1.5">
+              <span className="text-[9px] font-semibold text-[hsl(var(--muted-foreground))] uppercase">Align</span>
+              {([
+                { key: 'left' as const, icon: AlignLeft },
+                { key: 'center' as const, icon: AlignCenter },
+                { key: 'right' as const, icon: AlignRight },
+              ]).map(a => (
+                <button key={a.key} onClick={() => setStampAlign(a.key)}
+                  className={`p-1.5 rounded-lg transition-all ${stampAlign === a.key ? 'bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold-dark))]' : 'text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))]'}`}>
+                  <a.icon size={13}/>
+                </button>
+              ))}
+            </div>
+            <div className="w-px h-6 bg-[hsl(var(--border))]"/>
+            <p className="text-[9px] text-[hsl(var(--muted-foreground))]">Expand for better editing</p>
           </div>
           <p className="absolute bottom-6 text-white/40 text-xs">Click outside to close</p>
         </div>

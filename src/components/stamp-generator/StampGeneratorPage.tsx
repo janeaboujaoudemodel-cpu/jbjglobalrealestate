@@ -353,6 +353,12 @@ export default function StampGeneratorPage() {
 
   function handleSelectConcept(concept: StampDesignConcept) {
     setSelectedId(concept.id);
+    // Only update the live preview — don't open the modal
+    toast.success('Design selected — click "Edit & Export" or expand preview to view on documents', { duration: 3000 });
+  }
+
+  function handleOpenPreview(concept: StampDesignConcept) {
+    setSelectedId(concept.id);
     setPreviewConcept(concept);
   }
 
@@ -942,7 +948,7 @@ export default function StampGeneratorPage() {
                     <ConceptCard key={c.id} concept={c} svgOverride={svgOverrides[c.id]}
                       selectedId={selectedId} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily}
                       fontBold={fontBold} fontItalic={fontItalic} manualFontSize={manualFontSize} inkMode={inkMode}
-                      togglingFav={togglingFav} onSelect={handleSelectConcept} onToggleFav={toggleFavorite} onEditText={handleEditText}/>
+                      togglingFav={togglingFav} onSelect={handleSelectConcept} onToggleFav={toggleFavorite} onEditText={handleEditText} onPreview={handleOpenPreview}/>
                   ))}
                 </div>
               </div>
@@ -984,7 +990,7 @@ export default function StampGeneratorPage() {
                     <ConceptCard key={concept.id} concept={concept} svgOverride={svgOverrides[concept.id]}
                       selectedId={selectedId} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily}
                       fontBold={fontBold} fontItalic={fontItalic} manualFontSize={manualFontSize} inkMode={inkMode}
-                      togglingFav={togglingFav} onSelect={handleSelectConcept} onToggleFav={toggleFavorite} onEditText={handleEditText}/>
+                      togglingFav={togglingFav} onSelect={handleSelectConcept} onToggleFav={toggleFavorite} onEditText={handleEditText} onPreview={handleOpenPreview}/>
                   ))}
                 </div>
               </>
@@ -1110,7 +1116,7 @@ export default function StampGeneratorPage() {
 
 // ─── Concept Card ────────────────────────────────────────────────
 function ConceptCard({
-  concept, svgOverride, selectedId, tintColor, secondaryColor, accentColor, fontFamily, fontBold, fontItalic, manualFontSize, inkMode, togglingFav, onSelect, onToggleFav, onEditText
+  concept, svgOverride, selectedId, tintColor, secondaryColor, accentColor, fontFamily, fontBold, fontItalic, manualFontSize, inkMode, togglingFav, onSelect, onToggleFav, onEditText, onPreview
 }: {
   concept: StampDesignConcept;
   svgOverride?: string;
@@ -1127,6 +1133,7 @@ function ConceptCard({
   onSelect: (c: StampDesignConcept) => void;
   onToggleFav: (c: StampDesignConcept) => void;
   onEditText: (c: StampDesignConcept) => void;
+  onPreview?: (c: StampDesignConcept) => void;
 }) {
   const isSelected = selectedId === concept.id;
   const isFav = concept.isFavorite;
@@ -1156,7 +1163,7 @@ function ConceptCard({
           <Button size="sm"
             className={`flex-1 h-6 text-[9px] gap-0.5 ${isSelected ? 'bg-[hsl(var(--gold))] text-white' : 'bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90'}`}
             onClick={e => { e.stopPropagation(); onSelect(concept); }}>
-            {isSelected ? <><Check size={8}/> Preview</> : 'Select'}
+            {isSelected ? <><Check size={8}/> Selected</> : 'Select'}
           </Button>
           <Button size="sm" variant="outline"
             className="h-6 text-[9px] gap-0.5 border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] px-2"
@@ -1164,6 +1171,13 @@ function ConceptCard({
             <Type size={8}/> Edit
           </Button>
         </div>
+        {isSelected && onPreview && (
+          <Button size="sm" variant="outline"
+            className="w-full h-6 text-[9px] gap-0.5 border-[hsl(var(--gold)/0.3)] text-[hsl(var(--gold-dark))]"
+            onClick={e => { e.stopPropagation(); onPreview(concept); }}>
+            <Layers size={8}/> Preview on Documents
+          </Button>
+        )}
       </div>
     </div>
   );
