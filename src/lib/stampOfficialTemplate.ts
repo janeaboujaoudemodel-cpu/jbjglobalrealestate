@@ -295,10 +295,10 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
     topIsArabic ? 1 : 2.5, topIsArabic, 'top-arc'
   );
 
-  const bottomArcContent = renderBottomArcText(
+  const bottomArcContent = renderBottomArcTextPath(
     bottomText || (bottomIsArabic ? 'اسم الشركة' : 'COMPANY NAME'),
     cx, cy, clampedTextArcR, bottomFontSize, bottomFont, priColor,
-    bottomIsArabic ? 1 : 4, bottomIsArabic
+    bottomIsArabic ? 1 : 4, bottomIsArabic, 'bottom-arc'
   );
 
   // ── Location text — BOTH Arabic and English as arcs ──
