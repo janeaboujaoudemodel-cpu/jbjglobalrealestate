@@ -205,7 +205,7 @@ export default function StampProjectWizard() {
 
   const handleSaveDraft = useCallback(() => {
     try {
-      sessionStorage.setItem('stamp-wizard-form', JSON.stringify(form));
+      localStorage.setItem('stamp-wizard-form', JSON.stringify(form));
       const now = new Date();
       setDraftTime(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
       toast.success('Draft saved locally');
