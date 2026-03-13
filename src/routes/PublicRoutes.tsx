@@ -205,9 +205,9 @@ export const PublicRoutes = () => (
     <Route path="/areas/:slug" element={<RedirectWithParams to="/area" />} />
     <Route path="/resale-properties" element={<ResaleProperties />} />
     <Route path="/map" element={<PropertyMap />} />
-    <Route path="/listing-portal" element={<ListingPortal />} />
-    <Route path="/listing-portal/submit" element={<ListingPortalSubmit />} />
-    <Route path="/listing-portal/my-listings" element={<ListingPortalMyListings />} />
+    <Route path="/listing-portal" element={<AuthRequiredRoute><ListingPortal /></AuthRequiredRoute>} />
+    <Route path="/listing-portal/submit" element={<AuthRequiredRoute><ListingPortalSubmit /></AuthRequiredRoute>} />
+    <Route path="/listing-portal/my-listings" element={<AuthRequiredRoute><ListingPortalMyListings /></AuthRequiredRoute>} />
     <Route path="/property-evaluator" element={<PropertyEvaluator />} />
     <Route path="/rental-index" element={<RentalIndex />} />
     <Route path="/sell" element={<SellWithUs />} />
