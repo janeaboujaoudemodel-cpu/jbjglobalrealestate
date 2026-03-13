@@ -323,9 +323,9 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   if (config.showLocation) {
     const locEn = config.locationTextEn || 'Dubai, UAE';
     const locAr = config.locationTextAr || 'دبي، الإمارات';
-    const locArcLen = clampedLocTextR * Math.PI * 0.60;
-    const locFontSize = fitFontSize(locEn, 8, locArcLen, 0.55);
-    const locArFontSize = fitFontSize(locAr, 9, locArcLen, 0.48);
+    const locArcLen = clampedLocTextR * Math.PI * 0.70;
+    const locFontSize = fitFontSize(locEn, 10, locArcLen, 0.55);
+    const locArFontSize = fitFontSize(locAr, 10, locArcLen, 0.48);
 
     // English location on TOP arc (between middle ring and inner ring)
     const locTopArc = `M ${cx - clampedLocTextR} ${cy} A ${clampedLocTextR} ${clampedLocTextR} 0 1 1 ${cx + clampedLocTextR} ${cy}`;
