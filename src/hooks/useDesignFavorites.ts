@@ -97,15 +97,15 @@ export function useToggleDesignFavorite() {
       } else {
         const { error } = await supabase
           .from("design_favorites")
-          .insert({
+          .insert([{
             user_id: user.id,
             item_type: itemType,
             item_id: itemId,
             item_name: itemName || null,
             thumbnail_svg: thumbnailSvg || null,
-            metadata: metadata || {},
+            metadata: (metadata || {}) as any,
             list_type: listType,
-          });
+          }]);
         if (error) throw error;
       }
     },
