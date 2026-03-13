@@ -45,13 +45,7 @@ const WelcomeModal = () => {
     setShouldShow(false);
   };
 
-  const handleContinueAsGuest = () => {
-    localStorage.setItem(WELCOME_MODAL_KEY, "true");
-    localStorage.setItem(RETURNING_USER_KEY, "true");
-    dismiss();
-    setShouldShow(false);
-    // No tour - just close and allow browsing
-  };
+  // Guest mode removed — users must sign in
 
   const handleLogin = () => {
     localStorage.setItem(WELCOME_MODAL_KEY, "true");
@@ -144,38 +138,23 @@ const WelcomeModal = () => {
               <div className="absolute left-1/2 -translate-x-1/2 -top-1.5 w-3 h-3 bg-gold/80 rotate-45" />
             </div>
 
-            {/* Action Buttons - Gold outline for primary (Sign In), White background for secondary (Guest) */}
-            <div className="space-y-4">
-              {/* Primary Button - Gold outline for Sign In */}
-              <Button
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  handleLogin();
-                }}
-                type="button"
-                className="w-full py-6 bg-transparent border-2 border-gold text-gold hover:bg-gold hover:text-black font-bold text-base shadow-xl rounded-xl group relative overflow-hidden transition-all duration-300"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-                <User className="w-5 h-5 mr-3 relative z-10" strokeWidth={2} />
-                <span className="flex-1 text-left relative z-10">Sign In / Create Account</span>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform relative z-10" strokeWidth={2} />
-              </Button>
-
-              {/* Secondary Button - White background for Guest */}
-              <Button
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  handleContinueAsGuest();
-                }}
-                type="button"
-                className="w-full py-6 bg-white hover:bg-zinc-100 text-black border border-gold/40 group rounded-xl transition-all duration-300 font-bold"
-              >
-                <span className="flex-1 text-left">Continue as Guest</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-all text-gold" strokeWidth={2} />
-              </Button>
-            </div>
+              {/* Action Button — Sign In Only */}
+              <div className="space-y-4">
+                <Button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleLogin();
+                  }}
+                  type="button"
+                  className="w-full py-6 bg-transparent border-2 border-gold text-gold hover:bg-gold hover:text-black font-bold text-base shadow-xl rounded-xl group relative overflow-hidden transition-all duration-300"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                  <User className="w-5 h-5 mr-3 relative z-10" strokeWidth={2} />
+                  <span className="flex-1 text-left relative z-10">Sign In / Create Account</span>
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform relative z-10" strokeWidth={2} />
+                </Button>
+              </div>
 
             {/* Footer text with copyright */}
             <p className="text-center text-zinc-500 text-xs mt-8">
