@@ -296,7 +296,7 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   const topArcContent = renderTopArcTextPath(
     topText || (topIsArabic ? 'اسم الشركة' : 'COMPANY NAME'),
     cx, cy, clampedTextArcR, topFontSize, topFont, priColor,
-    topIsArabic ? 1 : 2.5, topIsArabic, 'top-arc'
+    topIsArabic ? 3 : 2.5, topIsArabic, 'top-arc'
   );
 
   const bottomArcContent = renderBottomArcTextPath(
