@@ -417,8 +417,8 @@ export function VideoPreviewCanvas({
 
   const ASPECT_PILLS = [
     { ratio: '16:9' as const, label: '16:9', icon: '▶' },
-    { ratio: '9:16' as const, label: '9:16', icon: '📱' },
-    { ratio: '1:1' as const,  label: '1:1',  icon: '⬜' },
+    { ratio: '9:16' as const, label: '9:16', icon: '9' },
+    { ratio: '1:1' as const,  label: '1:1',  icon: '□' },
   ];
 
   return (
