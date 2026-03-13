@@ -347,6 +347,54 @@ export default function StampProjectWizard() {
     setSaving(false);
   }
 
+  // Logo upload with high-res scaling
+  const handleLogoUpload = useCallback((file: File) => {
+    if (!file) return;
+    
+    // For raster images, scale up to 512x512 minimum using canvas
+    if (file.type !== 'image/svg+xml') {
+      const img = new window.Image();
+      img.onload = () => {
+        const MIN = 512;
+        let w = img.width;
+        let h = img.height;
+        
+        if (w < MIN || h < MIN) {
+          toast.warning('Low resolution logo detected. Upscaling for better quality. Use SVG or 512×512+ for best results.', { duration: 5000 });
+        }
+        
+        // Create high-res canvas version
+        const canvas = document.createElement('canvas');
+        const targetSize = Math.max(MIN, Math.max(w, h));
+        canvas.width = targetSize;
+        canvas.height = targetSize;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.imageSmoothingEnabled = true;
+          ctx.imageSmoothingQuality = 'high';
+          // Center the image in the canvas
+          const scale = targetSize / Math.max(w, h);
+          const dw = w * scale;
+          const dh = h * scale;
+          ctx.drawImage(img, (targetSize - dw) / 2, (targetSize - dh) / 2, dw, dh);
+          const hiResUrl = canvas.toDataURL('image/png', 1.0);
+          setLogoPreview(hiResUrl);
+          set('uploaded_logo_url', hiResUrl);
+        }
+      };
+      img.src = URL.createObjectURL(file);
+    } else {
+      // SVG: read directly
+      const reader = new FileReader();
+      reader.onload = ev => {
+        const dataUrl = ev.target?.result as string;
+        setLogoPreview(dataUrl);
+        set('uploaded_logo_url', dataUrl);
+      };
+      reader.readAsDataURL(file);
+    }
+  }, []);
+
   // Shared preview props
   const previewProps = {
     companyName: form.company_name,
@@ -371,23 +419,53 @@ export default function StampProjectWizard() {
     arabicCity: form.arabic_city,
   };
 
+  // Determine preview size based on viewport
+  const previewSize = 320;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))]">
-      {/* Header */}
-      <div className="border-b border-[hsl(var(--border))] bg-white/80 backdrop-blur-sm sticky top-0 z-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-3">
+      {/* Sticky Header */}
+      <div className="border-b border-[hsl(var(--border))] bg-white/90 backdrop-blur-md sticky top-[52px] z-30">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 py-2.5 flex items-center gap-3">
           <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] flex items-center justify-center">
             <Stamp size={16} className="text-white"/>
           </div>
-          <h1 className="font-semibold text-[hsl(var(--foreground))]">Stamp Studio</h1>
+          <h1 className="font-semibold text-[hsl(var(--foreground))] text-sm">Stamp Studio</h1>
           {isOwner && (
-            <Badge className="bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold-dark))] border border-[hsl(var(--gold)/0.3)] text-[9px] ml-2">
+            <Badge className="bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold-dark))] border border-[hsl(var(--gold)/0.3)] text-[9px] ml-1">
               Owner
             </Badge>
           )}
+          
+          {/* Step indicator - compact */}
+          <div className="flex items-center gap-1.5 ml-4">
+            {STEPS.map((s, i) => (
+              <React.Fragment key={s}>
+                <button
+                  type="button"
+                  onClick={() => i < step && setStep(i)}
+                  className={`flex items-center gap-1 text-xs font-medium transition-colors ${
+                    i === step ? 'text-[hsl(var(--gold-dark))]' : i < step ? 'text-[hsl(var(--gold))] cursor-pointer' : 'text-[hsl(var(--muted-foreground))]'
+                  }`}
+                >
+                  <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] border ${
+                    i < step ? 'bg-[hsl(var(--gold))] border-[hsl(var(--gold))] text-white' :
+                    i === step ? 'border-[hsl(var(--gold))] text-[hsl(var(--gold-dark))]' :
+                    'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]'
+                  }`}>
+                    {i < step ? <Check size={8}/> : i + 1}
+                  </span>
+                  <span className="hidden md:inline">{s}</span>
+                </button>
+                {i < STEPS.length - 1 && <div className={`w-6 h-px ${i < step ? 'bg-[hsl(var(--gold))]' : 'bg-[hsl(var(--border))]'}`}/>}
+              </React.Fragment>
+            ))}
+          </div>
+
           <div className="flex-1"/>
+          
           {/* Undo/Redo/Reset toolbar */}
-          <div className="flex items-center gap-1 bg-white rounded-xl border border-[hsl(var(--border))] shadow-sm px-2 py-1">
+          <div className="flex items-center gap-0.5 bg-white rounded-lg border border-[hsl(var(--border))] shadow-sm px-1.5 py-1">
             <button onClick={handleUndo} disabled={!history.canUndo}
               className="w-7 h-7 rounded-lg flex items-center justify-center hover:bg-[hsl(var(--gold)/0.06)] transition-colors disabled:opacity-30"
               title="Undo"><Undo2 size={12}/></button>
@@ -405,463 +483,424 @@ export default function StampProjectWizard() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
-        {/* 3-zone layout: controls left, preview center, options right */}
-        <div className="flex flex-col lg:flex-row gap-6 items-start">
+      {/* Main content: preview centered, controls on sides */}
+      <div className="max-w-[1440px] mx-auto px-3 sm:px-6 py-4">
+        <div className="flex flex-col lg:flex-row gap-4 items-start">
 
-          {/* ── LEFT: Form column ── */}
-          <div className="flex-1 min-w-0 max-w-md space-y-5 order-2 lg:order-1">
-            {/* Progress */}
-            <div className="flex items-center gap-2">
-              {STEPS.map((s, i) => (
-                <React.Fragment key={s}>
-                  <button
-                    type="button"
-                    onClick={() => i < step && setStep(i)}
-                    className={`flex items-center gap-1.5 text-sm font-medium transition-colors ${
-                      i === step ? 'text-[hsl(var(--gold-dark))]' : i < step ? 'text-[hsl(var(--gold))] cursor-pointer' : 'text-[hsl(var(--muted-foreground))]'
-                    }`}
-                  >
-                    <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs border ${
-                      i < step ? 'bg-[hsl(var(--gold))] border-[hsl(var(--gold))] text-white' :
-                      i === step ? 'border-[hsl(var(--gold))] text-[hsl(var(--gold-dark))]' :
-                      'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]'
-                    }`}>
-                      {i < step ? <Check size={10}/> : i + 1}
-                    </span>
-                    <span className="hidden sm:inline">{s}</span>
-                  </button>
-                  {i < STEPS.length - 1 && <div className={`flex-1 h-px ${i < step ? 'bg-[hsl(var(--gold))]' : 'bg-[hsl(var(--border))]'}`}/>}
-                </React.Fragment>
-              ))}
-            </div>
+          {/* ── LEFT PANEL: Form controls ── */}
+          <div className="w-full lg:w-[340px] xl:w-[380px] flex-shrink-0 order-2 lg:order-1">
+            <div className="lg:sticky lg:top-[110px] space-y-4 max-h-[calc(100vh-130px)] overflow-y-auto pr-1 pb-8 scrollbar-thin">
+              <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm p-4 space-y-4">
 
-            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm p-5 space-y-4">
+                {/* Step 0: Company Details */}
+                {step === 0 && (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Building2 size={16} className="text-[hsl(var(--gold))]"/>
+                      <h2 className="font-semibold text-sm text-[hsl(var(--foreground))]">Company Details</h2>
+                    </div>
 
-              {/* Step 0: Company Details */}
-              {step === 0 && (
-                <div className="space-y-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Building2 size={18} className="text-[hsl(var(--gold))]"/>
-                    <h2 className="font-semibold text-[hsl(var(--foreground))]">Company Details</h2>
-                  </div>
+                    <StampLicenseUploader
+                      onExtracted={(data) => {
+                        if (data.company_name) set('company_name', data.company_name);
+                        if (data.arabic_company_name) { set('arabic_company_name', data.arabic_company_name); set('language_mode', 'BILINGUAL'); }
+                        if (data.registration_number) set('registration_number_optional', data.registration_number);
+                        const city = data.city || '';
+                        if (city) set('city_optional', city);
+                        const ARABIC_CITY_MAP: Record<string, string> = {
+                          'dubai': 'دبي', 'abu dhabi': 'أبوظبي', 'sharjah': 'الشارقة',
+                          'ajman': 'عجمان', 'ras al khaimah': 'رأس الخيمة',
+                          'fujairah': 'الفجيرة', 'umm al quwain': 'أم القيوين',
+                        };
+                        const mappedArabic = city ? ARABIC_CITY_MAP[city.toLowerCase()] : undefined;
+                        let arabicCityValue = data.arabic_city || '';
+                        if (arabicCityValue && /[a-zA-Z]/.test(arabicCityValue) && mappedArabic) {
+                          arabicCityValue = mappedArabic + '، الإمارات';
+                        } else if (!arabicCityValue && mappedArabic) {
+                          arabicCityValue = mappedArabic + '، الإمارات';
+                        }
+                        if (arabicCityValue) set('arabic_city', arabicCityValue);
+                        const rawCountry = data.country || '';
+                        const correctedCountry = correctCountry(rawCountry, city);
+                        set('country_optional', correctedCountry || 'UAE');
+                        if (data.phone) set('phone_optional', normalizePhone(data.phone));
+                        if (data.email) set('email_optional', data.email.toUpperCase());
+                        if ((data as any).business_type) set('business_type', (data as any).business_type);
+                      }}
+                    />
 
-                  <StampLicenseUploader
-                    onExtracted={(data) => {
-                      if (data.company_name) set('company_name', data.company_name);
-                      if (data.arabic_company_name) { set('arabic_company_name', data.arabic_company_name); set('language_mode', 'BILINGUAL'); }
-                      if (data.registration_number) set('registration_number_optional', data.registration_number);
-                      const city = data.city || '';
-                      if (city) set('city_optional', city);
-                      const ARABIC_CITY_MAP: Record<string, string> = {
-                        'dubai': 'دبي', 'abu dhabi': 'أبوظبي', 'sharjah': 'الشارقة',
-                        'ajman': 'عجمان', 'ras al khaimah': 'رأس الخيمة',
-                        'fujairah': 'الفجيرة', 'umm al quwain': 'أم القيوين',
-                      };
-                      const mappedArabic = city ? ARABIC_CITY_MAP[city.toLowerCase()] : undefined;
-                      let arabicCityValue = data.arabic_city || '';
-                      if (arabicCityValue && /[a-zA-Z]/.test(arabicCityValue) && mappedArabic) {
-                        arabicCityValue = mappedArabic + '، الإمارات';
-                      } else if (!arabicCityValue && mappedArabic) {
-                        arabicCityValue = mappedArabic + '، الإمارات';
-                      }
-                      if (arabicCityValue) set('arabic_city', arabicCityValue);
-                      const rawCountry = data.country || '';
-                      const correctedCountry = correctCountry(rawCountry, city);
-                      set('country_optional', correctedCountry || 'UAE');
-                      if (data.phone) set('phone_optional', normalizePhone(data.phone));
-                      if (data.email) set('email_optional', data.email.toUpperCase());
-                      if ((data as any).business_type) set('business_type', (data as any).business_type);
-                    }}
-                  />
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div className="sm:col-span-2">
-                      <Label className="text-xs font-medium mb-1.5 block">Project Name</Label>
-                      <Input value={form.project_name} onChange={e => set('project_name', e.target.value)} placeholder="e.g. Main Company Stamp"/>
-                    </div>
-                    <div className="sm:col-span-2">
-                      <Label className="text-xs font-medium mb-1.5 block">Company Name <span className="text-destructive">*</span></Label>
-                      <Input value={form.company_name} onChange={e => set('company_name', e.target.value)} placeholder="e.g. Acme Properties LLC"/>
-                    </div>
-                    <div>
-                      <Label className="text-xs font-medium mb-1.5 block">Trade Name</Label>
-                      <Input value={form.trade_name_optional} onChange={e => set('trade_name_optional', e.target.value)} placeholder="Optional"/>
-                    </div>
-                    <div>
-                      <Label className="text-xs font-medium mb-1.5 block">Registration No.</Label>
-                      <Input value={form.registration_number_optional} onChange={e => set('registration_number_optional', e.target.value)} placeholder="Optional"/>
-                    </div>
-                    <div>
-                      <Label className="text-xs font-medium mb-1.5 block">City</Label>
-                      <Input value={form.city_optional} onChange={e => set('city_optional', e.target.value)} placeholder="Dubai"/>
-                    </div>
-                    <div>
-                      <Label className="text-xs font-medium mb-1.5 block">Country</Label>
-                      <Input value={form.country_optional} onChange={e => set('country_optional', e.target.value)} placeholder="UAE"/>
-                    </div>
-                    <div>
-                      <Label className="text-xs font-medium mb-1.5 block">Phone</Label>
-                      <Input value={form.phone_optional} onChange={e => set('phone_optional', e.target.value)} placeholder="+971 XX XXX XXXX"/>
-                    </div>
-                    <div>
-                      <div className="flex items-center justify-between mb-1.5">
-                        <Label className="text-xs font-medium">Email</Label>
-                        <button type="button" onClick={() => setEmailUppercase(v => !v)}
-                          className="text-[10px] text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--gold-dark))] border border-[hsl(var(--border))] rounded px-1.5 py-0.5 flex items-center gap-1 transition-colors"
-                          title="Toggle uppercase"><Type size={9}/> {emailUppercase ? 'ABC' : 'abc'}</button>
+                    <div className="grid grid-cols-2 gap-2.5">
+                      <div className="col-span-2">
+                        <Label className="text-[11px] font-medium mb-1 block">Project Name</Label>
+                        <Input value={form.project_name} onChange={e => set('project_name', e.target.value)} placeholder="e.g. Main Company Stamp" className="h-8 text-sm"/>
                       </div>
-                      <Input
-                        value={form.email_optional}
-                        onChange={e => set('email_optional', emailUppercase ? e.target.value.toUpperCase() : e.target.value)}
-                        placeholder={emailUppercase ? 'INFO@COMPANY.COM' : 'info@company.com'}
-                        className={emailUppercase ? 'uppercase' : ''}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Business Type */}
-                  <div>
-                    <Label className="text-xs font-medium mb-2 block">Business Type</Label>
-                    <div className="flex gap-2 flex-wrap">
-                      {BUSINESS_TYPES.map(bt => (
-                        <OptionButton key={bt} selected={form.business_type === bt} onClick={() => set('business_type', bt)}>{bt}</OptionButton>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label className="text-xs font-medium mb-2 block">Language Mode</Label>
-                    <div className="flex gap-2 flex-wrap">
-                      {(['EN', 'AR', 'BILINGUAL'] as LanguageMode[]).map(l => (
-                        <OptionButton key={l} selected={form.language_mode === l} onClick={() => set('language_mode', l)}>
-                          {l === 'EN' ? 'English' : l === 'AR' ? 'Arabic' : 'Bilingual'}
-                        </OptionButton>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Arabic fields */}
-                  {(form.language_mode === 'AR' || form.language_mode === 'BILINGUAL') && (
-                    <div className="border border-[hsl(var(--gold)/0.3)] bg-[hsl(var(--gold)/0.04)] rounded-xl p-4 space-y-3">
-                      <p className="text-xs font-semibold text-[hsl(var(--gold-dark))]">Arabic Details</p>
-                      <div>
-                        <Label className="text-xs font-medium mb-1.5 block">Company Name in Arabic</Label>
-                        <Input value={form.arabic_company_name} onChange={e => set('arabic_company_name', e.target.value)} placeholder="اسم الشركة بالعربية" dir="rtl"/>
+                      <div className="col-span-2">
+                        <Label className="text-[11px] font-medium mb-1 block">Company Name <span className="text-destructive">*</span></Label>
+                        <Input value={form.company_name} onChange={e => set('company_name', e.target.value)} placeholder="e.g. Acme Properties LLC" className="h-8 text-sm"/>
                       </div>
                       <div>
-                        <Label className="text-xs font-medium mb-1.5 block">City in Arabic</Label>
-                        <Input value={form.arabic_city} onChange={e => set('arabic_city', e.target.value)} placeholder="دبي، الإمارات" dir="rtl"/>
+                        <Label className="text-[11px] font-medium mb-1 block">Trade Name</Label>
+                        <Input value={form.trade_name_optional} onChange={e => set('trade_name_optional', e.target.value)} placeholder="Optional" className="h-8 text-sm"/>
                       </div>
-                      {form.language_mode === 'BILINGUAL' && (
-                        <button type="button" onClick={() => set('language_reversed', !form.language_reversed)}
-                          className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl border-2 transition-all ${
-                            form.language_reversed ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'
-                          }`}>
-                          <RotateCcw size={14} className={form.language_reversed ? 'text-[hsl(var(--gold-dark))]' : 'text-[hsl(var(--muted-foreground))]'}/>
-                          <div className="text-left">
-                            <p className="text-[11px] font-semibold text-[hsl(var(--foreground))]">Language Order</p>
-                            <p className="text-[9px] text-[hsl(var(--muted-foreground))]">
-                              {form.language_reversed ? 'Arabic on top · English on bottom (Standard)' : 'English on top · Arabic on bottom'}
-                            </p>
-                          </div>
-                        </button>
-                      )}
+                      <div>
+                        <Label className="text-[11px] font-medium mb-1 block">Registration No.</Label>
+                        <Input value={form.registration_number_optional} onChange={e => set('registration_number_optional', e.target.value)} placeholder="Optional" className="h-8 text-sm"/>
+                      </div>
+                      <div>
+                        <Label className="text-[11px] font-medium mb-1 block">City</Label>
+                        <Input value={form.city_optional} onChange={e => set('city_optional', e.target.value)} placeholder="Dubai" className="h-8 text-sm"/>
+                      </div>
+                      <div>
+                        <Label className="text-[11px] font-medium mb-1 block">Country</Label>
+                        <Input value={form.country_optional} onChange={e => set('country_optional', e.target.value)} placeholder="UAE" className="h-8 text-sm"/>
+                      </div>
+                      <div>
+                        <Label className="text-[11px] font-medium mb-1 block">Phone</Label>
+                        <Input value={form.phone_optional} onChange={e => set('phone_optional', e.target.value)} placeholder="+971..." className="h-8 text-sm"/>
+                      </div>
+                      <div>
+                        <div className="flex items-center justify-between mb-1">
+                          <Label className="text-[11px] font-medium">Email</Label>
+                          <button type="button" onClick={() => setEmailUppercase(v => !v)}
+                            className="text-[9px] text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--gold-dark))] border border-[hsl(var(--border))] rounded px-1 py-0.5 flex items-center gap-0.5 transition-colors"
+                            title="Toggle uppercase"><Type size={8}/> {emailUppercase ? 'ABC' : 'abc'}</button>
+                        </div>
+                        <Input
+                          value={form.email_optional}
+                          onChange={e => set('email_optional', emailUppercase ? e.target.value.toUpperCase() : e.target.value)}
+                          placeholder={emailUppercase ? 'INFO@COMPANY.COM' : 'info@company.com'}
+                          className={`h-8 text-sm ${emailUppercase ? 'uppercase' : ''}`}
+                        />
+                      </div>
                     </div>
-                  )}
 
-                  {/* Show/hide location */}
-                  <button type="button" onClick={() => set('show_location', !form.show_location)}
-                    className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl border-2 transition-all ${
-                      form.show_location ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'
-                    }`}>
-                    <MapPin size={14} className={form.show_location ? 'text-[hsl(var(--gold-dark))]' : 'text-[hsl(var(--muted-foreground))]'}/>
-                    <div className="text-left">
-                      <p className="text-[11px] font-semibold text-[hsl(var(--foreground))]">Show Location on Stamp</p>
-                      <p className="text-[9px] text-[hsl(var(--muted-foreground))]">
-                        {form.show_location ? `Showing: ${form.city_optional || 'Dubai'}, ${form.country_optional || 'UAE'}` : 'Location hidden'}
-                      </p>
+                    {/* Business Type */}
+                    <div>
+                      <Label className="text-[11px] font-medium mb-1.5 block">Business Type</Label>
+                      <div className="flex gap-1.5 flex-wrap">
+                        {BUSINESS_TYPES.map(bt => (
+                          <OptionButton key={bt} selected={form.business_type === bt} onClick={() => set('business_type', bt)} className="text-xs px-2 py-1">{bt}</OptionButton>
+                        ))}
+                      </div>
                     </div>
-                  </button>
 
-                  {/* Show/hide license */}
-                  {form.registration_number_optional && (
-                    <button type="button" onClick={() => set('show_license_number', !form.show_license_number)}
-                      className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl border-2 transition-all ${
-                        form.show_license_number ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'
+                    <div>
+                      <Label className="text-[11px] font-medium mb-1.5 block">Language Mode</Label>
+                      <div className="flex gap-2 flex-wrap">
+                        {(['EN', 'AR', 'BILINGUAL'] as LanguageMode[]).map(l => (
+                          <OptionButton key={l} selected={form.language_mode === l} onClick={() => set('language_mode', l)}>
+                            {l === 'EN' ? 'English' : l === 'AR' ? 'Arabic' : 'Bilingual'}
+                          </OptionButton>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Arabic fields */}
+                    {(form.language_mode === 'AR' || form.language_mode === 'BILINGUAL') && (
+                      <div className="border border-[hsl(var(--gold)/0.3)] bg-[hsl(var(--gold)/0.04)] rounded-xl p-3 space-y-2.5">
+                        <p className="text-[11px] font-semibold text-[hsl(var(--gold-dark))]">Arabic Details</p>
+                        <div>
+                          <Label className="text-[11px] font-medium mb-1 block">Company Name in Arabic</Label>
+                          <Input value={form.arabic_company_name} onChange={e => set('arabic_company_name', e.target.value)} placeholder="اسم الشركة بالعربية" dir="rtl" className="h-8 text-sm"/>
+                        </div>
+                        <div>
+                          <Label className="text-[11px] font-medium mb-1 block">City in Arabic</Label>
+                          <Input value={form.arabic_city} onChange={e => set('arabic_city', e.target.value)} placeholder="دبي، الإمارات" dir="rtl" className="h-8 text-sm"/>
+                        </div>
+                        {form.language_mode === 'BILINGUAL' && (
+                          <button type="button" onClick={() => set('language_reversed', !form.language_reversed)}
+                            className={`w-full flex items-center gap-2 px-3 py-2 rounded-xl border-2 transition-all ${
+                              form.language_reversed ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'
+                            }`}>
+                            <RotateCcw size={12} className={form.language_reversed ? 'text-[hsl(var(--gold-dark))]' : 'text-[hsl(var(--muted-foreground))]'}/>
+                            <div className="text-left">
+                              <p className="text-[11px] font-semibold text-[hsl(var(--foreground))]">Language Order</p>
+                              <p className="text-[9px] text-[hsl(var(--muted-foreground))]">
+                                {form.language_reversed ? 'Arabic top · English bottom' : 'English top · Arabic bottom'}
+                              </p>
+                            </div>
+                          </button>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Show/hide location */}
+                    <button type="button" onClick={() => set('show_location', !form.show_location)}
+                      className={`w-full flex items-center gap-2 px-3 py-2 rounded-xl border-2 transition-all ${
+                        form.show_location ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'
                       }`}>
-                      <FileText size={14} className={form.show_license_number ? 'text-[hsl(var(--gold-dark))]' : 'text-[hsl(var(--muted-foreground))]'}/>
+                      <MapPin size={12} className={form.show_location ? 'text-[hsl(var(--gold-dark))]' : 'text-[hsl(var(--muted-foreground))]'}/>
                       <div className="text-left">
-                        <p className="text-[11px] font-semibold text-[hsl(var(--foreground))]">Show License Number</p>
+                        <p className="text-[11px] font-semibold text-[hsl(var(--foreground))]">Show Location</p>
                         <p className="text-[9px] text-[hsl(var(--muted-foreground))]">
-                          {form.show_license_number ? 'Visible on stamp' : 'Hidden from stamp'}
+                          {form.show_location ? `${form.city_optional || 'Dubai'}, ${form.country_optional || 'UAE'}` : 'Hidden'}
                         </p>
                       </div>
                     </button>
-                  )}
-                </div>
-              )}
 
-              {/* Step 1: Style */}
-              {step === 1 && (
-                <div className="space-y-5">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Palette size={18} className="text-[hsl(var(--gold))]"/>
-                    <h2 className="font-semibold text-[hsl(var(--foreground))]">Stamp Style</h2>
+                    {/* Show/hide license */}
+                    {form.registration_number_optional && (
+                      <button type="button" onClick={() => set('show_license_number', !form.show_license_number)}
+                        className={`w-full flex items-center gap-2 px-3 py-2 rounded-xl border-2 transition-all ${
+                          form.show_license_number ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'
+                        }`}>
+                        <FileText size={12} className={form.show_license_number ? 'text-[hsl(var(--gold-dark))]' : 'text-[hsl(var(--muted-foreground))]'}/>
+                        <div className="text-left">
+                          <p className="text-[11px] font-semibold text-[hsl(var(--foreground))]">Show License Number</p>
+                          <p className="text-[9px] text-[hsl(var(--muted-foreground))]">
+                            {form.show_license_number ? 'Visible on stamp' : 'Hidden'}
+                          </p>
+                        </div>
+                      </button>
+                    )}
                   </div>
+                )}
 
-                  {/* Shape */}
-                  <div>
-                    <Label className="text-xs font-medium mb-2 block">Shape</Label>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                      {(['ROUND', 'OVAL', 'RECTANGLE', 'SQUARE'] as StampType[]).map(t => (
-                        <button key={t} type="button" onClick={() => set('stamp_type', t)}
-                          className={`relative flex flex-col items-center gap-2 p-3 rounded-xl border-2 transition-all ${
-                            form.stamp_type === t ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]'
-                          }`}>
-                          {form.stamp_type === t && <Check size={10} className="absolute top-1 right-1 text-[hsl(var(--gold))]"/>}
-                          <ShapePreview type={t} selected={form.stamp_type === t}/>
-                          <span className="text-xs font-medium">{t.charAt(0) + t.slice(1).toLowerCase()}</span>
-                        </button>
-                      ))}
+                {/* Step 1: Style */}
+                {step === 1 && (
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Palette size={16} className="text-[hsl(var(--gold))]"/>
+                      <h2 className="font-semibold text-sm text-[hsl(var(--foreground))]">Stamp Style</h2>
                     </div>
-                  </div>
 
-                  {/* Theme */}
-                  <div>
-                    <Label className="text-xs font-medium mb-2 block">Theme</Label>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                      {(['CLASSIC', 'MODERN', 'MINIMAL', 'LUXURY', 'BOLD', 'VINTAGE'] as StyleTheme[]).map(t => (
-                        <button key={t} type="button" onClick={() => set('style_theme', t)}
-                          className={`relative flex items-center gap-3 p-3 rounded-xl border-2 transition-all text-left ${
-                            form.style_theme === t ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]'
-                          }`}>
-                          {form.style_theme === t && <Check size={10} className="absolute top-1 right-1 text-[hsl(var(--gold))]"/>}
-                          <ThemePreview type={t} selected={form.style_theme === t}/>
-                          <div>
-                            <p className="text-xs font-semibold leading-tight">{t.charAt(0) + t.slice(1).toLowerCase()}</p>
-                            <p className="text-[10px] text-[hsl(var(--muted-foreground))]">{THEME_META[t].desc}</p>
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Border */}
-                  <div>
-                    <Label className="text-xs font-medium mb-2 block">Border Style</Label>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                      {(['SINGLE', 'DOUBLE', 'RING', 'DOTTED', 'ROPE', 'CUSTOM'] as BorderStyle[]).map(b => (
-                        <button key={b} type="button" onClick={() => set('border_style', b)}
-                          className={`relative flex items-center gap-3 p-3 rounded-xl border-2 transition-all text-left ${
-                            form.border_style === b ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]'
-                          }`}>
-                          {form.border_style === b && <Check size={10} className="absolute top-1 right-1 text-[hsl(var(--gold))]"/>}
-                          <BorderPreview type={b} selected={form.border_style === b}/>
-                          <span className="text-xs font-medium">{b.charAt(0) + b.slice(1).toLowerCase()}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Separator Style (for round bilingual stamps) */}
-                  {form.stamp_type === 'ROUND' && (form.language_mode === 'BILINGUAL' || form.language_mode === 'AR') && (
+                    {/* Shape */}
                     <div>
-                      <Label className="text-xs font-medium mb-2 block">Arc Separators</Label>
-                      <div className="flex gap-2 flex-wrap">
-                        {SEPARATOR_OPTIONS.map(opt => (
-                          <button key={opt.key} type="button" onClick={() => set('separator_style', opt.key)}
-                            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl border-2 text-sm font-medium transition-all ${
-                              form.separator_style === opt.key
-                                ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)] text-[hsl(var(--gold-dark))]'
-                                : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]'
+                      <Label className="text-[11px] font-medium mb-1.5 block">Shape</Label>
+                      <div className="grid grid-cols-4 gap-1.5">
+                        {(['ROUND', 'OVAL', 'RECTANGLE', 'SQUARE'] as StampType[]).map(t => (
+                          <button key={t} type="button" onClick={() => set('stamp_type', t)}
+                            className={`relative flex flex-col items-center gap-1.5 p-2 rounded-xl border-2 transition-all ${
+                              form.stamp_type === t ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]'
                             }`}>
-                            {opt.icon} {opt.label}
+                            {form.stamp_type === t && <Check size={8} className="absolute top-1 right-1 text-[hsl(var(--gold))]"/>}
+                            <ShapePreview type={t} selected={form.stamp_type === t}/>
+                            <span className="text-[10px] font-medium">{t.charAt(0) + t.slice(1).toLowerCase()}</span>
                           </button>
                         ))}
                       </div>
                     </div>
-                  )}
 
-                  {/* Typography */}
-                  <div>
-                    <Label className="text-xs font-medium mb-2 block">Typography</Label>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                      {(Object.keys(FONT_META) as TypographyStyle[]).map(t => {
-                        const meta = FONT_META[t];
-                        return (
-                          <button key={t} type="button" onClick={() => set('typography_style', t)}
-                            className={`relative flex items-center gap-3 p-3 rounded-xl border-2 transition-all text-left ${
-                              form.typography_style === t ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]'
-                            }`}>
-                            {form.typography_style === t && <Check size={10} className="absolute top-1 right-1 text-[hsl(var(--gold))]"/>}
-                            <span className="text-2xl leading-none flex-shrink-0 w-10 text-center"
-                              style={{ fontFamily: meta.family, color: form.typography_style === t ? 'hsl(var(--gold-dark))' : 'hsl(var(--foreground))' }}
-                            >{meta.sample}</span>
-                            <span className="text-xs font-medium">{meta.label}</span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Density */}
-                  <div>
-                    <Label className="text-xs font-medium mb-2 block">Information Density</Label>
-                    <div className="grid grid-cols-5 gap-2">
-                      {([1, 2, 3, 4, 5] as const).map(d => {
-                        const labels: Record<number, string> = { 1: 'Name only', 2: '+ City', 3: '+ License', 4: '+ Phone', 5: 'All fields' };
-                        return (
-                          <button key={d} type="button" onClick={() => set('density', d)}
-                            className={`relative flex flex-col items-center gap-1.5 p-2 rounded-xl border-2 transition-all ${
-                              form.density === d ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]'
-                            }`}>
-                            {form.density === d && <Check size={10} className="absolute top-1 right-1 text-[hsl(var(--gold))]"/>}
-                            <DensityPreview d={d} selected={form.density === d}/>
-                            <span className="text-[9px] text-center text-[hsl(var(--muted-foreground))] leading-tight">{labels[d]}</span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Ink Color */}
-                  <div>
-                    <Label className="text-xs font-medium mb-2 block">Ink Color</Label>
-                    <div className="flex items-center gap-3">
-                      <input type="color" value={form.ink_color} onChange={e => set('ink_color', e.target.value)}
-                        className="w-10 h-10 rounded-xl border-2 border-[hsl(var(--border))] cursor-pointer p-0.5"/>
-                      <Input value={form.ink_color} onChange={e => set('ink_color', e.target.value)}
-                        className="w-28 font-mono text-xs uppercase" maxLength={7}/>
-                      <Button variant="outline" size="sm" onClick={handleStandardColor} className="text-xs gap-1.5">
-                        <RotateCcw size={10}/> Standard Blue
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Step 2: Logo / Monogram */}
-              {step === 2 && (
-                <div className="space-y-5">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Image size={18} className="text-[hsl(var(--gold))]"/>
-                    <h2 className="font-semibold text-[hsl(var(--foreground))]">Logo / Monogram</h2>
-                  </div>
-
-                  <div>
-                    <Label className="text-xs font-medium mb-2 block">Center Icon Style</Label>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      {[
-                        { key: 'NONE', label: 'No Icon', desc: 'Text only' },
-                        { key: 'MONOGRAM', label: 'Monogram', desc: '1–3 initials' },
-                        { key: 'UPLOADED_LOGO', label: 'Upload Logo', desc: 'Your own image' },
-                      ].map(opt => (
-                        <button key={opt.key} type="button" onClick={() => set('icon_style', opt.key as IconStyle)}
-                          className={`relative p-4 rounded-xl border-2 text-left transition-all ${
-                            form.icon_style === opt.key ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]'
-                          }`}>
-                          {form.icon_style === opt.key && <Check size={10} className="absolute top-2 right-2 text-[hsl(var(--gold))]"/>}
-                          <p className="font-medium text-sm">{opt.label}</p>
-                          <p className="text-xs text-[hsl(var(--muted-foreground))] mt-0.5">{opt.desc}</p>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {form.icon_style === 'MONOGRAM' && (
+                    {/* Theme */}
                     <div>
-                      <Label className="text-xs font-medium mb-1.5 block">Monogram Text (1–3 letters)</Label>
-                      <Input value={form.monogram_text} onChange={e => set('monogram_text', e.target.value.slice(0, 3))}
-                        placeholder={form.company_name.slice(0, 2) || 'JJ'} maxLength={3} className="uppercase"/>
-                      <p className="text-xs text-[hsl(var(--muted-foreground))] mt-1">Leave blank to auto-use company initials</p>
+                      <Label className="text-[11px] font-medium mb-1.5 block">Theme</Label>
+                      <div className="grid grid-cols-3 gap-1.5">
+                        {(['CLASSIC', 'MODERN', 'MINIMAL', 'LUXURY', 'BOLD', 'VINTAGE'] as StyleTheme[]).map(t => (
+                          <button key={t} type="button" onClick={() => set('style_theme', t)}
+                            className={`relative flex items-center gap-2 p-2 rounded-xl border-2 transition-all text-left ${
+                              form.style_theme === t ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]'
+                            }`}>
+                            {form.style_theme === t && <Check size={8} className="absolute top-1 right-1 text-[hsl(var(--gold))]"/>}
+                            <ThemePreview type={t} selected={form.style_theme === t}/>
+                            <div>
+                              <p className="text-[10px] font-semibold leading-tight">{t.charAt(0) + t.slice(1).toLowerCase()}</p>
+                              <p className="text-[8px] text-[hsl(var(--muted-foreground))]">{THEME_META[t].desc}</p>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
                     </div>
-                  )}
 
-                  {form.icon_style === 'UPLOADED_LOGO' && (
-                    <div className="space-y-3">
-                      <Label className="text-xs font-medium mb-1.5 block">Upload Your Logo</Label>
-                      <input ref={logoInputRef} type="file" accept="image/png,image/jpeg,image/svg+xml,image/webp"
-                        className="hidden"
-                        onChange={e => {
-                          const file = e.target.files?.[0];
-                          if (!file) return;
-                          if (file.type !== 'image/svg+xml') {
-                            const img = new window.Image();
-                            img.onload = () => {
-                              if (img.width < 200 || img.height < 200) {
-                                toast.warning('Low resolution logo. Use SVG or 512×512+ for best quality.', { duration: 5000 });
-                              }
-                            };
-                            img.src = URL.createObjectURL(file);
-                          }
-                          const reader = new FileReader();
-                          reader.onload = ev => {
-                            const dataUrl = ev.target?.result as string;
-                            setLogoPreview(dataUrl);
-                            set('uploaded_logo_url', dataUrl);
-                          };
-                          reader.readAsDataURL(file);
-                        }}
-                      />
-                      {logoPreview || form.uploaded_logo_url ? (
-                        <div className="relative inline-block">
-                          <div className="w-32 h-32 rounded-2xl border-2 border-[hsl(var(--gold)/0.5)] overflow-hidden bg-[hsl(var(--pearl-1))] flex items-center justify-center">
-                            <img src={logoPreview || form.uploaded_logo_url} alt="Logo preview" className="w-full h-full object-contain p-2"/>
-                          </div>
-                          <button type="button" onClick={() => { setLogoPreview(''); set('uploaded_logo_url', ''); }}
-                            className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-destructive text-white flex items-center justify-center hover:bg-destructive/80">
-                            <X size={10}/></button>
-                          <button type="button" onClick={() => logoInputRef.current?.click()}
-                            className="mt-2 text-xs text-[hsl(var(--gold-dark))] underline block text-center">Change image</button>
+                    {/* Border */}
+                    <div>
+                      <Label className="text-[11px] font-medium mb-1.5 block">Border Style</Label>
+                      <div className="grid grid-cols-3 gap-1.5">
+                        {(['SINGLE', 'DOUBLE', 'RING', 'DOTTED', 'ROPE', 'CUSTOM'] as BorderStyle[]).map(b => (
+                          <button key={b} type="button" onClick={() => set('border_style', b)}
+                            className={`relative flex items-center gap-2 p-2 rounded-xl border-2 transition-all text-left ${
+                              form.border_style === b ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]'
+                            }`}>
+                            {form.border_style === b && <Check size={8} className="absolute top-1 right-1 text-[hsl(var(--gold))]"/>}
+                            <BorderPreview type={b} selected={form.border_style === b}/>
+                            <span className="text-[10px] font-medium">{b.charAt(0) + b.slice(1).toLowerCase()}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Separator Style */}
+                    {form.stamp_type === 'ROUND' && (form.language_mode === 'BILINGUAL' || form.language_mode === 'AR') && (
+                      <div>
+                        <Label className="text-[11px] font-medium mb-1.5 block">Arc Separators</Label>
+                        <div className="flex gap-1.5 flex-wrap">
+                          {SEPARATOR_OPTIONS.map(opt => (
+                            <button key={opt.key} type="button" onClick={() => set('separator_style', opt.key)}
+                              className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg border-2 text-xs font-medium transition-all ${
+                                form.separator_style === opt.key
+                                  ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)] text-[hsl(var(--gold-dark))]'
+                                  : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]'
+                              }`}>
+                              {opt.icon} {opt.label}
+                            </button>
+                          ))}
                         </div>
-                      ) : (
-                        <button type="button" onClick={() => logoInputRef.current?.click()}
-                          className="w-full border-2 border-dashed border-[hsl(var(--gold)/0.4)] rounded-xl p-8 flex flex-col items-center gap-3 hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold)/0.04)] transition-all">
-                          <Upload size={28} className="text-[hsl(var(--gold))]"/>
-                          <div className="text-center">
-                            <p className="font-medium text-sm text-[hsl(var(--foreground))]">Click to upload logo</p>
-                            <p className="text-xs text-[hsl(var(--muted-foreground))] mt-0.5">PNG, JPG, SVG, WEBP — SVG or 512×512+ recommended</p>
-                          </div>
-                        </button>
-                      )}
+                      </div>
+                    )}
+
+                    {/* Typography */}
+                    <div>
+                      <Label className="text-[11px] font-medium mb-1.5 block">Typography</Label>
+                      <div className="grid grid-cols-3 gap-1.5">
+                        {(Object.keys(FONT_META) as TypographyStyle[]).map(t => {
+                          const meta = FONT_META[t];
+                          return (
+                            <button key={t} type="button" onClick={() => set('typography_style', t)}
+                              className={`relative flex items-center gap-2 p-2 rounded-xl border-2 transition-all text-left ${
+                                form.typography_style === t ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]'
+                              }`}>
+                              {form.typography_style === t && <Check size={8} className="absolute top-1 right-1 text-[hsl(var(--gold))]"/>}
+                              <span className="text-lg leading-none flex-shrink-0 w-8 text-center"
+                                style={{ fontFamily: meta.family, color: form.typography_style === t ? 'hsl(var(--gold-dark))' : 'hsl(var(--foreground))' }}
+                              >{meta.sample}</span>
+                              <span className="text-[10px] font-medium">{meta.label}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
-                  )}
 
-                  <div className="bg-[hsl(var(--pearl-1))] rounded-xl p-4 border border-[hsl(var(--border))]">
-                    <p className="text-xs text-[hsl(var(--muted-foreground))]">
-                      <strong>Ready to generate!</strong> Click below to create stamp designs based on your settings.
-                    </p>
+                    {/* Density */}
+                    <div>
+                      <Label className="text-[11px] font-medium mb-1.5 block">Information Density</Label>
+                      <div className="grid grid-cols-5 gap-1">
+                        {([1, 2, 3, 4, 5] as const).map(d => {
+                          const labels: Record<number, string> = { 1: 'Name', 2: '+ City', 3: '+ Lic.', 4: '+ Phone', 5: 'All' };
+                          return (
+                            <button key={d} type="button" onClick={() => set('density', d)}
+                              className={`relative flex flex-col items-center gap-1 p-1.5 rounded-lg border-2 transition-all ${
+                                form.density === d ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]'
+                              }`}>
+                              {form.density === d && <Check size={8} className="absolute top-0.5 right-0.5 text-[hsl(var(--gold))]"/>}
+                              <DensityPreview d={d} selected={form.density === d}/>
+                              <span className="text-[8px] text-center text-[hsl(var(--muted-foreground))] leading-tight">{labels[d]}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Ink Color */}
+                    <div>
+                      <Label className="text-[11px] font-medium mb-1.5 block">Ink Color</Label>
+                      <div className="flex items-center gap-2">
+                        <input type="color" value={form.ink_color} onChange={e => set('ink_color', e.target.value)}
+                          className="w-8 h-8 rounded-lg border-2 border-[hsl(var(--border))] cursor-pointer p-0.5"/>
+                        <Input value={form.ink_color} onChange={e => set('ink_color', e.target.value)}
+                          className="w-24 font-mono text-xs uppercase h-8" maxLength={7}/>
+                        <Button variant="outline" size="sm" onClick={handleStandardColor} className="text-[10px] gap-1 h-8 px-2">
+                          <RotateCcw size={9}/> Standard
+                        </Button>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
+                )}
 
-            {/* Navigation */}
-            <div className="flex justify-between">
-              <Button variant="outline" onClick={() => step === 0 ? navigate('/toolkit/stamp-generator/projects') : setStep(s => s - 1)} className="gap-1">
-                <ChevronLeft size={15}/> {step === 0 ? 'Back' : 'Previous'}
-              </Button>
-              {step < STEPS.length - 1 ? (
-                <Button onClick={() => { if (step === 0 && !form.company_name.trim()) { toast.error('Company name is required'); return; } setStep(s => s + 1); }}
-                  className="bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 gap-1">
-                  Next <ChevronRight size={15}/>
+                {/* Step 2: Logo / Monogram */}
+                {step === 2 && (
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Image size={16} className="text-[hsl(var(--gold))]"/>
+                      <h2 className="font-semibold text-sm text-[hsl(var(--foreground))]">Logo / Monogram</h2>
+                    </div>
+
+                    <div>
+                      <Label className="text-[11px] font-medium mb-1.5 block">Center Icon Style</Label>
+                      <div className="grid grid-cols-3 gap-2">
+                        {[
+                          { key: 'NONE', label: 'No Icon', desc: 'Text only' },
+                          { key: 'MONOGRAM', label: 'Monogram', desc: '1–3 initials' },
+                          { key: 'UPLOADED_LOGO', label: 'Upload Logo', desc: 'Your image' },
+                        ].map(opt => (
+                          <button key={opt.key} type="button" onClick={() => set('icon_style', opt.key as IconStyle)}
+                            className={`relative p-3 rounded-xl border-2 text-left transition-all ${
+                              form.icon_style === opt.key ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]'
+                            }`}>
+                            {form.icon_style === opt.key && <Check size={8} className="absolute top-1.5 right-1.5 text-[hsl(var(--gold))]"/>}
+                            <p className="font-medium text-xs">{opt.label}</p>
+                            <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-0.5">{opt.desc}</p>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {form.icon_style === 'MONOGRAM' && (
+                      <div>
+                        <Label className="text-[11px] font-medium mb-1 block">Monogram Text (1–3 letters)</Label>
+                        <Input value={form.monogram_text} onChange={e => set('monogram_text', e.target.value.slice(0, 3))}
+                          placeholder={form.company_name.slice(0, 2) || 'JJ'} maxLength={3} className="uppercase h-8 text-sm"/>
+                        <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-0.5">Leave blank for auto company initials</p>
+                      </div>
+                    )}
+
+                    {form.icon_style === 'UPLOADED_LOGO' && (
+                      <div className="space-y-2">
+                        <Label className="text-[11px] font-medium mb-1 block">Upload Your Logo</Label>
+                        <input ref={logoInputRef} type="file" accept="image/png,image/jpeg,image/svg+xml,image/webp"
+                          className="hidden"
+                          onChange={e => {
+                            const file = e.target.files?.[0];
+                            if (file) handleLogoUpload(file);
+                          }}
+                        />
+                        {logoPreview || form.uploaded_logo_url ? (
+                          <div className="relative inline-block">
+                            <div className="w-28 h-28 rounded-2xl border-2 border-[hsl(var(--gold)/0.5)] overflow-hidden bg-[hsl(var(--pearl-1))] flex items-center justify-center">
+                              <img src={logoPreview || form.uploaded_logo_url} alt="Logo preview" className="w-full h-full object-contain p-1.5" style={{ imageRendering: 'auto' }}/>
+                            </div>
+                            <button type="button" onClick={() => { setLogoPreview(''); set('uploaded_logo_url', ''); }}
+                              className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-destructive text-white flex items-center justify-center hover:bg-destructive/80">
+                              <X size={9}/></button>
+                            <button type="button" onClick={() => logoInputRef.current?.click()}
+                              className="mt-1.5 text-[10px] text-[hsl(var(--gold-dark))] underline block text-center">Change</button>
+                          </div>
+                        ) : (
+                          <button type="button" onClick={() => logoInputRef.current?.click()}
+                            className="w-full border-2 border-dashed border-[hsl(var(--gold)/0.4)] rounded-xl p-6 flex flex-col items-center gap-2 hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold)/0.04)] transition-all">
+                            <Upload size={24} className="text-[hsl(var(--gold))]"/>
+                            <div className="text-center">
+                              <p className="font-medium text-xs text-[hsl(var(--foreground))]">Click to upload</p>
+                              <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-0.5">SVG or 512×512+ recommended</p>
+                            </div>
+                          </button>
+                        )}
+                      </div>
+                    )}
+
+                    <div className="bg-[hsl(var(--pearl-1))] rounded-xl p-3 border border-[hsl(var(--border))]">
+                      <p className="text-[10px] text-[hsl(var(--muted-foreground))]">
+                        <strong>Ready to generate!</strong> Click below to create stamp designs based on your settings.
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Navigation */}
+              <div className="flex justify-between">
+                <Button variant="outline" size="sm" onClick={() => step === 0 ? navigate('/toolkit/stamp-generator/projects') : setStep(s => s - 1)} className="gap-1 text-xs h-8">
+                  <ChevronLeft size={13}/> {step === 0 ? 'Back' : 'Previous'}
                 </Button>
-              ) : (
-                <Button onClick={handleCreate} disabled={saving}
-                  className="bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 gap-1">
-                  <Wand2 size={15}/> {saving ? 'Creating...' : 'Generate Stamp Concepts'}
-                </Button>
-              )}
+                {step < STEPS.length - 1 ? (
+                  <Button size="sm" onClick={() => { if (step === 0 && !form.company_name.trim()) { toast.error('Company name is required'); return; } setStep(s => s + 1); }}
+                    className="bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 gap-1 text-xs h-8">
+                    Next <ChevronRight size={13}/>
+                  </Button>
+                ) : (
+                  <Button size="sm" onClick={handleCreate} disabled={saving}
+                    className="bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 gap-1 text-xs h-8">
+                    <Wand2 size={13}/> {saving ? 'Creating...' : 'Generate Concepts'}
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
 
-          {/* ── CENTER: Large live preview ── */}
-          <div className="flex-shrink-0 flex flex-col items-center gap-4 order-1 lg:order-2 w-full lg:w-auto">
-            <div className="lg:sticky lg:top-16 flex flex-col items-center gap-3">
-              <div className="bg-white rounded-2xl border border-[hsl(var(--gold)/0.3)] shadow-[0_8px_32px_hsl(var(--gold)/0.1)] p-4 sm:p-6">
+          {/* ── CENTER: Large live preview — ALWAYS VISIBLE ── */}
+          <div className="flex-1 min-w-0 flex justify-center order-1 lg:order-2">
+            <div className="lg:sticky lg:top-[110px] flex flex-col items-center gap-3">
+              <div className="bg-white rounded-2xl border border-[hsl(var(--gold)/0.25)] shadow-[0_8px_40px_hsl(var(--gold)/0.08)] p-5 sm:p-6">
                 <InteractiveStampCanvas
-                  size={280}
+                  size={previewSize}
                   layers={layers}
                   onLayersChange={setLayers}
                   onDeleteLayer={(id) => {
@@ -870,28 +909,20 @@ export default function StampProjectWizard() {
                   }}
                   interactive={true}
                 >
-                  <LiveStampPreview {...previewProps} size={280} />
+                  <LiveStampPreview {...previewProps} size={previewSize} />
                 </InteractiveStampCanvas>
               </div>
-              <p className="text-[9px] text-[hsl(var(--muted-foreground))] text-center max-w-[260px]">
+              <p className="text-[9px] text-[hsl(var(--muted-foreground))] text-center max-w-[280px]">
                 Click elements to select · Drag to move · Arrow keys for fine control
               </p>
-              {/* Quick tip */}
-              <div className="bg-[hsl(var(--gold)/0.06)] border border-[hsl(var(--gold)/0.2)] rounded-xl p-3 w-full max-w-[300px]">
-                <p className="text-[10px] text-[hsl(var(--muted-foreground))] leading-relaxed">
-                  {step === 0 && <>Type your company name to see it appear instantly. Upload a trade license for auto-fill.</>}
-                  {step === 1 && <>Every option updates the preview in real-time. Try different styles and separators.</>}
-                  {step === 2 && <>Choose a monogram or upload your logo to see it centered on the stamp.</>}
-                </p>
-              </div>
             </div>
           </div>
 
-          {/* ── RIGHT: Quick options panel (desktop) ── */}
-          <div className="hidden xl:flex flex-col gap-3 w-[200px] flex-shrink-0 order-3">
-            <div className="sticky top-16 space-y-3">
+          {/* ── RIGHT: Quick controls panel ── */}
+          <div className="hidden xl:flex flex-col gap-3 w-[180px] flex-shrink-0 order-3">
+            <div className="lg:sticky lg:top-[110px] space-y-3">
               <div className="bg-white rounded-xl border border-[hsl(var(--border))] p-3 space-y-2">
-                <p className="text-[10px] font-semibold text-[hsl(var(--foreground))] uppercase tracking-wider">Quick Controls</p>
+                <p className="text-[9px] font-semibold text-[hsl(var(--foreground))] uppercase tracking-wider">Quick Controls</p>
                 
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] text-[hsl(var(--muted-foreground))]">Location</span>
@@ -920,11 +951,11 @@ export default function StampProjectWizard() {
               {/* Separator quick-switch */}
               {form.stamp_type === 'ROUND' && (form.language_mode === 'BILINGUAL' || form.language_mode === 'AR') && (
                 <div className="bg-white rounded-xl border border-[hsl(var(--border))] p-3 space-y-2">
-                  <p className="text-[10px] font-semibold text-[hsl(var(--foreground))] uppercase tracking-wider">Separators</p>
+                  <p className="text-[9px] font-semibold text-[hsl(var(--foreground))] uppercase tracking-wider">Separators</p>
                   <div className="grid grid-cols-5 gap-1">
                     {SEPARATOR_OPTIONS.map(opt => (
                       <button key={opt.key} onClick={() => set('separator_style', opt.key)}
-                        className={`w-8 h-8 rounded-lg border flex items-center justify-center transition-all ${
+                        className={`w-7 h-7 rounded-lg border flex items-center justify-center transition-all ${
                           form.separator_style === opt.key
                             ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]'
                             : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]'
@@ -935,6 +966,15 @@ export default function StampProjectWizard() {
                   </div>
                 </div>
               )}
+
+              {/* Contextual tips */}
+              <div className="bg-[hsl(var(--gold)/0.05)] border border-[hsl(var(--gold)/0.15)] rounded-xl p-2.5">
+                <p className="text-[9px] text-[hsl(var(--muted-foreground))] leading-relaxed">
+                  {step === 0 && <>Type your company name to see it instantly on the stamp.</>}
+                  {step === 1 && <>Every option updates the preview in real-time.</>}
+                  {step === 2 && <>Upload your logo or enter monogram initials.</>}
+                </p>
+              </div>
             </div>
           </div>
 
