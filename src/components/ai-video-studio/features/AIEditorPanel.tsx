@@ -221,7 +221,7 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
       setAssembleResult(result);
       setAppliedTemplate(templateId);
       onApplyTemplate?.(templateId, result.editPlan);
-      toast.success(`✨ "${SMART_TEMPLATES.find(t => t.id === templateId)?.label}" assembled!`);
+      toast.success(`"${SMART_TEMPLATES.find(t => t.id === templateId)?.label}" assembled!`);
     } catch {
       // Fallback
       setAppliedTemplate(templateId);
