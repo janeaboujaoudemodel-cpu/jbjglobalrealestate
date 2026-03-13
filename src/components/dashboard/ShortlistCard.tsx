@@ -30,6 +30,8 @@ const ShortlistCard = () => {
 
   const isLoading = shortlistLoading || projectsLoading;
   const count = shortlist?.length || 0;
+  const { data: designShorts } = useDesignShortlist();
+  const designShortCount = designShorts?.length || 0;
 
   return (
     <Card className="border border-gold/40 bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))] overflow-hidden">
