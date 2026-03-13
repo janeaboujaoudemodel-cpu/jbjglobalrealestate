@@ -49,6 +49,7 @@ const PageNavigation = forwardRef<HTMLDivElement, Record<string, never>>((_, ref
   const showUp = showScrollTop;
   const showDown = !showScrollTop && showScrollBottom;
 
+  // Always render the container (even if hidden) so it stays mounted
   if (!showUp && !showDown) return null;
 
   return (

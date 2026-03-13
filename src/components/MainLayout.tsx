@@ -276,8 +276,8 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           <PopupLayer />
         </Suspense>
       )}
-      {/* Page navigation arrows — hidden when chat is open */}
-      {effectiveCollapsed && <PageNavigation />}
+      {/* Page navigation arrows — always visible, repositioned to avoid chat overlap */}
+      <PageNavigation />
       {!isBackOfficeRoute && (!isHomePage || popupsReady) && (
         <Suspense fallback={null}>
           <AIChatWidget
