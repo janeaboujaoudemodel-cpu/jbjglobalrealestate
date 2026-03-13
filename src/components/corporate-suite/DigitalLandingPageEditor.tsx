@@ -66,7 +66,7 @@ export default function DigitalLandingPageEditor({ data, onChange, primaryColor 
     update({
       socialLinks: [
         ...data.socialLinks,
-        { platform: unused?.platform || "Other", url: "", icon: unused?.icon || "🔗" },
+        { platform: unused?.platform || "Other", url: "", icon: unused?.icon || "Li" },
       ],
     });
   };
