@@ -1040,7 +1040,7 @@ export default function StampGeneratorPage() {
                     <StampSVGRenderer svgSource={refinedPreview.svgSource} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} size={110}/>
                   </div>
                   <div className="flex gap-1.5">
-                    <Button size="sm" className="flex-1 h-7 text-[10px] bg-[hsl(var(--gold))] text-white" onClick={() => applyRefinement('replace')} disabled={!selectedId}>
+                    <Button size="sm" className="flex-1 h-7 text-[10px] bg-[hsl(var(--gold))] text-white" onClick={() => { if (!selectedId) { toast.info('Select a stamp concept first, then click Replace'); return; } applyRefinement('replace'); }} >
                       Replace Selected
                     </Button>
                     <Button size="sm" variant="outline" className="flex-1 h-7 text-[10px] border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))]" onClick={() => applyRefinement('new')}>
