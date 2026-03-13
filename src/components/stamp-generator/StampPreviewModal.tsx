@@ -326,7 +326,7 @@ export function StampPreviewModal({
           </div>
 
           {/* Mockup area */}
-          <div data-mockup-area className="flex-1 flex items-center justify-center p-10 bg-white min-h-full">
+          <div data-mockup-area className="flex-1 flex items-center justify-center p-10 bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))] min-h-full">
 
             {/* Business Card Mockup */}
             {activeView === 'business-card' && (
