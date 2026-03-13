@@ -2,7 +2,10 @@
  * SVG Stamp Template Engine — Premium Edition v3
  * Filled rings, gradients, ornaments. Two new premium templates.
  * Safe zones enforced. Bilingual Arabic proper RTL.
+ * T0: Owner Official Standard Model — always pinned first.
  */
+
+import { generateOfficialStampSVG, type OfficialStampConfig } from './stampOfficialTemplate';
 
 export interface StampProject {
   company_name: string;
