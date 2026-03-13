@@ -24,7 +24,7 @@ interface ScrapedProjectDetail {
   payment_plan_url: string | null;
 }
 
-serve(async (req) => {
+Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
