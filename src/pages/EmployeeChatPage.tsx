@@ -42,8 +42,10 @@ const EmployeeChatPage: React.FC = () => {
     checkAuth();
   }, [navigate]);
 
-  const onlineCount = Math.floor(allTeamMembers.length * 0.7);
-  const totalEmployees = allTeamMembers.length;
+  // Only count real employees (not AI personas), except Amanda
+  const realMembers = allTeamMembers.filter(m => m.isAI === false || m.id === 'amanda-clarke');
+  const onlineCount = Math.floor(realMembers.length * 0.7);
+  const totalEmployees = realMembers.length;
 
   if (isLoading) {
     return (
