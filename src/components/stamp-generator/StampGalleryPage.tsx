@@ -622,7 +622,12 @@ export default function StampGalleryPage() {
                 >
                   {/* Stamp preview */}
                   <div
-                    className="relative aspect-square bg-gradient-to-br from-[hsl(var(--pearl-1))] to-[hsl(var(--champagne-1)/0.5)] flex items-center justify-center overflow-hidden rounded-full mx-auto w-[85%]"
+                    className={`relative flex items-center justify-center overflow-hidden mx-auto ${
+                      // Detect stamp shape from SVG — rect without circle = rectangular frame
+                      (design.svg_source.includes('<rect') && !design.svg_source.match(/<circle[^>]*r="(9|10|11)/))
+                        ? 'w-[90%] aspect-[1.9/1] rounded-lg bg-gradient-to-br from-[hsl(var(--pearl-1))] to-[hsl(var(--champagne-1)/0.5)]'
+                        : 'aspect-square rounded-full w-[85%] bg-gradient-to-br from-[hsl(var(--pearl-1))] to-[hsl(var(--champagne-1)/0.5)]'
+                    }`}
                     style={{ cursor: batchMode ? (isMaxed ? 'not-allowed' : 'pointer') : 'zoom-in' }}
                     onClick={() => {
                       if (batchMode) { if (!isMaxed || isSelected) toggleSelect(design.id); }
