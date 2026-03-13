@@ -165,13 +165,13 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   // Location text arc — centered between inner ring and center circle
   const locationTextR = (innerR + centerR) / 2;
 
-  // Determine top/bottom text
-  const topText = config.arabicOnTop ? config.companyNameAr : config.companyNameEn.toUpperCase();
-  const bottomText = config.arabicOnTop ? config.companyNameEn.toUpperCase() : config.companyNameAr;
-  const topIsArabic = config.arabicOnTop;
-  const bottomIsArabic = !config.arabicOnTop;
-  const topFont = topIsArabic ? ARABIC_FONT : enFont;
-  const bottomFont = bottomIsArabic ? ARABIC_FONT : enFont;
+  // STRICT RULE: Arabic on TOP, English on BOTTOM — always
+  const topText = config.companyNameAr;
+  const bottomText = config.companyNameEn.toUpperCase();
+  const topIsArabic = true;
+  const bottomIsArabic = false;
+  const topFont = ARABIC_FONT;
+  const bottomFont = enFont;
 
   // Arc lengths for font sizing — use 70% of half-circle
   const arcLen = textArcR * Math.PI;

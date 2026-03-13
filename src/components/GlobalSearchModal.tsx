@@ -40,12 +40,12 @@ const POPULAR_PAGES = [
   { label: "AI Home Finder", route: "/quiz", icon: Sparkles },
 ];
 
-const RECENT_SEARCHES_KEY = "jbj_recent_searches";
+const RECENT_QUERIES_KEY = "jbj_recent_queries";
 const MAX_RECENT_SEARCHES = 5;
 
 const getRecentSearches = (): string[] => {
   try {
-    const stored = localStorage.getItem(RECENT_SEARCHES_KEY);
+    const stored = localStorage.getItem(RECENT_QUERIES_KEY);
     return stored ? JSON.parse(stored) : [];
   } catch { return []; }
 };
@@ -55,11 +55,11 @@ const saveRecentSearch = (query: string) => {
   if (!trimmed || trimmed.length < 2) return;
   const existing = getRecentSearches().filter(s => s.toLowerCase() !== trimmed.toLowerCase());
   const updated = [trimmed, ...existing].slice(0, MAX_RECENT_SEARCHES);
-  localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(updated));
+  localStorage.setItem(RECENT_QUERIES_KEY, JSON.stringify(updated));
 };
 
 const clearRecentSearches = () => {
-  localStorage.removeItem(RECENT_SEARCHES_KEY);
+  localStorage.removeItem(RECENT_QUERIES_KEY);
 };
 
 // Debounce hook
