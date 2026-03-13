@@ -93,7 +93,7 @@ const App = () => {
               </Route>
               
               {/* ── Main Layout Routes (header + footer shell) ── */}
-              <Route element={<AdminBypass><MainLayoutWrapper /></AdminBypass>}>
+              <Route element={<MainLayoutWrapper />}>
                 <Route element={<Suspense fallback={<InlinePageLoader />}><Outlet /></Suspense>}>
                   {/* Public pages: properties, guides, services, company, user */}
                   {PublicRoutes()}

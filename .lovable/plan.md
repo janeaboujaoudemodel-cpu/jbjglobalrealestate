@@ -1,79 +1,72 @@
 
+## CRM System Upgrade — Implementation Status
 
-## Strategy: Freemium Browse with Action Gating
+### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-### Current State
-`MainLayoutWrapper` wraps **all** public routes with `AuthGate`, which hard-redirects every unauthenticated visitor to `/auth`. This means nobody can see any page without logging in first.
+#### Task 1: Full System Audit ✅
+- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
+- Identified 10 weaknesses (documented in plan)
 
-### New Model
-Split the platform into two tiers:
+#### Task 2: Leads Security Hardening ✅
+- CSV export no longer includes email/phone PII
+- Audit logging added to exports with user_agent tracking
+- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
 
-**Tier 1 — Browse Freely (no login required):**
-- Home page, Properties listing, Project details, Communities, Developers, Areas
-- Guides (buyer, seller, visa, rent, tenant, landlord)
-- Services pages, About, Founder, Awards, Team, News, FAQ, Legal pages
-- Market Intelligence, Education Hub, Pricing, Sitemap
-- Contact, Reviews, Partners
+#### Task 3: Encryption Hardening ✅
+- CSV export stripped of `email_lower` and `phone_e164` fields
+- Export audit logged to both `crm_audit_logs` and `audit_logs`
 
-**Tier 2 — Action-Gated (login required to interact):**
-- Dashboards (My Dashboard, Investor, Broker)
-- Favorites, Compare, Documents, Spreadsheet
-- Portals (Client, Broker, Developer, Listing)
-- AI tools, AI Hub, Broker Workspace
-- Profile, Account, Onboarding
-- All Owner/Admin routes (already separately guarded)
-- Any **action** on a browsable page (e.g. "Save to Favorites", "Request Callback", "Book Consultation", "Download Report")
+#### Task 4: Lead Lifecycle Upgrade ✅
+- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
+- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
+- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
 
-### Implementation Plan
+#### Task 5: CRM Structure Upgrade ✅
+- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
+- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
+- KanbanPipeline expanded to show all 17 relevant stages
 
-**1. Replace hard AuthGate with soft ActionGate system**
-- Remove `AuthGate` from `MainLayoutWrapper` so all main layout pages render for everyone
-- Create a new `ActionGateProvider` context that provides a `requireAuth(reason)` function
-- When an unauthenticated user triggers a gated action, show a premium signup modal instead of redirecting
-- The modal explains benefits: personalized recommendations, loyalty points, premium tools, tailored marketing, account safety
+#### Task 6: Performance Optimization ✅
+- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
+- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
+- `crm_leads_updated_at_trigger` auto-updates `updated_at`
 
-**2. Create `ActionGateModal` — the premium signup prompt**
-- Luxurious branded modal (matching existing black/gold design language)
-- Headline: "Unlock the Full JBJ Global Experience"
-- Benefits list: Loyalty points on every activity (redeemable on purchases/subscriptions), personalized project recommendations, portfolio tracking, exclusive market reports, priority access to launches
-- Two CTAs: "Create Free Account" and "Sign In"
-- Non-dismissible for action routes; dismissible (with "Continue Browsing") for inline actions
+#### Task 7: AI Intelligence Integration ✅
+- New edge function `ai-lead-intelligence` using Lovable AI gateway
+- Supports 3 modes: `score`, `summary`, `next_action`
+- Tool-calling for structured scoring output
+- JWT auth + CRM role validation
+- PII sanitized before sending to AI
 
-**3. Create `AuthRequiredRoute` wrapper for Tier 2 routes**
-- A lighter gate that redirects to `/auth` with returnTo for dashboard/portal routes
-- Applied only to the specific routes that are fully behind login (dashboards, portals, tools)
+#### Task 8: Workflow Automation ✅
+- Created `crm_automation_rules` table with RLS (owner manage, admin view)
+- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
 
-**4. Protect inline actions across browsable pages**
-- Wrap action buttons (Save, Compare, Download, Book, Request) with `requireAuth()` check
-- Common pattern: `onClick={() => user ? doAction() : requireAuth('save_favorite')}`
-- Create a `useActionGate()` hook that returns a `gatedAction(callback, reason)` wrapper
+#### Task 10: Role & Permission System ✅
+- RLS on automation rules: owner CRUD, admin read-only
+- CSV export restricted to owner_admin/founder roles
 
-**5. Session persistence (already implemented)**
-- Supabase client already has `persistSession: true` and `autoRefreshToken: true`
-- Returning users with valid session tokens are automatically logged in — no re-prompt
-- Session survives browser close, tab switch, and next-day return
+#### Task 12: Backend/Database Upgrade ✅
+- 3 new performance indexes
+- Auto-updated_at trigger on crm_leads
+- Duplicate hash computation trigger
+- Rate-limiting security function
 
-**6. Update WelcomeModal for browse mode**
-- Instead of only offering "Sign In", show a softer welcome that lets the user "Explore the Platform" or "Sign In for Full Access"
-- First-time visitors see the welcome, then browse freely
-- The action gate triggers naturally when they try to do something
+#### Task 13: Data Cleanliness ✅
+- `duplicate_hash` with auto-compute trigger prevents future duplicates
+- Partial unique index enforces uniqueness at DB level
 
-**7. Update memory rule**
-- The mandatory-authentication-standard memory will be updated to reflect the new "browse-free, action-gated" model
-
-### Security Model
-- All sensitive data remains behind RLS policies tied to `auth.uid()` — unauthenticated users cannot read private data
-- Browsable pages only show public project/listing data (already `is_published = true`)
-- No credentials are exposed; session tokens are handled entirely by the auth SDK
-- Owner/Admin routes remain fully guarded by `OwnerGuard` (unchanged)
-- Action gate is enforced both client-side (UX) and server-side (RLS blocks unauthorized writes)
-
-### Files to Create/Modify
-- **Create** `src/contexts/ActionGateContext.tsx` — provider + `useActionGate` hook
-- **Create** `src/components/ActionGateModal.tsx` — premium signup modal
-- **Create** `src/components/AuthRequiredRoute.tsx` — route-level gate for Tier 2
-- **Modify** `src/components/MainLayoutWrapper.tsx` — remove `AuthGate`, add `ActionGateProvider`
-- **Modify** `src/components/WelcomeModal.tsx` — add "Explore" option alongside "Sign In"
-- **Modify** `src/routes/PublicRoutes.tsx` — wrap Tier 2 routes with `AuthRequiredRoute`
-- **Modify** key action components across browsable pages to use `gatedAction()` for buttons like Save, Compare, Download, Book
-
+### Files Changed
+| File | Action |
+|------|--------|
+| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
+| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
+| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
+| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
+| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
+| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
+| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
+| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
+| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |

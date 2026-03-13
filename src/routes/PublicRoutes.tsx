@@ -5,6 +5,7 @@
 import { lazy } from "react";
 import { Route, Navigate } from "react-router-dom";
 import { RedirectWithParams } from "@/components/RedirectWithParams";
+import AuthRequiredRoute from "@/components/AuthRequiredRoute";
 
 // ── Property & Listing Pages ──
 const Index = lazy(() => import("@/pages/Index"));
@@ -204,9 +205,9 @@ export const PublicRoutes = () => (
     <Route path="/areas/:slug" element={<RedirectWithParams to="/area" />} />
     <Route path="/resale-properties" element={<ResaleProperties />} />
     <Route path="/map" element={<PropertyMap />} />
-    <Route path="/listing-portal" element={<ListingPortal />} />
-    <Route path="/listing-portal/submit" element={<ListingPortalSubmit />} />
-    <Route path="/listing-portal/my-listings" element={<ListingPortalMyListings />} />
+    <Route path="/listing-portal" element={<AuthRequiredRoute><ListingPortal /></AuthRequiredRoute>} />
+    <Route path="/listing-portal/submit" element={<AuthRequiredRoute><ListingPortalSubmit /></AuthRequiredRoute>} />
+    <Route path="/listing-portal/my-listings" element={<AuthRequiredRoute><ListingPortalMyListings /></AuthRequiredRoute>} />
     <Route path="/property-evaluator" element={<PropertyEvaluator />} />
     <Route path="/rental-index" element={<RentalIndex />} />
     <Route path="/sell" element={<SellWithUs />} />
@@ -324,61 +325,61 @@ export const PublicRoutes = () => (
     <Route path="/accessibility" element={<Accessibility />} />
     <Route path="/intellectual-property" element={<IntellectualProperty />} />
 
-    {/* ── User / Account ── */}
+    {/* ── User / Account (Tier 2 — login required) ── */}
     <Route path="/mortgage" element={<Navigate to="/mortgage-calculator" replace />} />
     <Route path="/mortgage-calculator" element={<MortgageCalculator />} />
-    <Route path="/favorites" element={<Favorites />} />
-    <Route path="/compare" element={<Compare />} />
+    <Route path="/favorites" element={<AuthRequiredRoute><Favorites /></AuthRequiredRoute>} />
+    <Route path="/compare" element={<AuthRequiredRoute><Compare /></AuthRequiredRoute>} />
     <Route path="/quiz" element={<Quiz />} />
     <Route path="/quiz-results" element={<QuizResults />} />
     <Route path="/dashboard" element={<Dashboard />} />
-    <Route path="/my-dashboard" element={<MyDashboard />} />
-    <Route path="/my-dashboard/progress" element={<MyDashboardProgress />} />
-    <Route path="/my-dashboard/activity" element={<MyDashboardActivity />} />
+    <Route path="/my-dashboard" element={<AuthRequiredRoute><MyDashboard /></AuthRequiredRoute>} />
+    <Route path="/my-dashboard/progress" element={<AuthRequiredRoute><MyDashboardProgress /></AuthRequiredRoute>} />
+    <Route path="/my-dashboard/activity" element={<AuthRequiredRoute><MyDashboardActivity /></AuthRequiredRoute>} />
     <Route path="/my-activity" element={<Navigate to="/my-dashboard/activity" replace />} />
-    <Route path="/investor-dashboard" element={<InvestorDashboard />} />
-    <Route path="/investor-dashboard/portfolio" element={<PortfolioViews />} />
-    <Route path="/investor-dashboard/reports" element={<ReportAccess />} />
+    <Route path="/investor-dashboard" element={<AuthRequiredRoute><InvestorDashboard /></AuthRequiredRoute>} />
+    <Route path="/investor-dashboard/portfolio" element={<AuthRequiredRoute><PortfolioViews /></AuthRequiredRoute>} />
+    <Route path="/investor-dashboard/reports" element={<AuthRequiredRoute><ReportAccess /></AuthRequiredRoute>} />
     <Route path="/owner-dashboard" element={<Navigate to="/owner" replace />} />
-    <Route path="/my-account" element={<BrokerAccount />} />
-    <Route path="/profile" element={<UserProfile />} />
+    <Route path="/my-account" element={<AuthRequiredRoute><BrokerAccount /></AuthRequiredRoute>} />
+    <Route path="/profile" element={<AuthRequiredRoute><UserProfile /></AuthRequiredRoute>} />
     <Route path="/account" element={<Navigate to="/my-account" replace />} />
     <Route path="/settings" element={<Navigate to="/profile?tab=settings" replace />} />
-    <Route path="/client-portal" element={<ClientPortal />} />
-    <Route path="/my-tickets" element={<MyTickets />} />
-    <Route path="/ticket-hub" element={<TicketHub />} />
-    <Route path="/reopen-ticket" element={<ReopenTicket />} />
+    <Route path="/client-portal" element={<AuthRequiredRoute><ClientPortal /></AuthRequiredRoute>} />
+    <Route path="/my-tickets" element={<AuthRequiredRoute><MyTickets /></AuthRequiredRoute>} />
+    <Route path="/ticket-hub" element={<AuthRequiredRoute><TicketHub /></AuthRequiredRoute>} />
+    <Route path="/reopen-ticket" element={<AuthRequiredRoute><ReopenTicket /></AuthRequiredRoute>} />
     <Route path="/join" element={<JoinApplication />} />
-    <Route path="/onboarding" element={<Onboarding />} />
-    <Route path="/onboarding/module/:moduleId" element={<OnboardingModule />} />
+    <Route path="/onboarding" element={<AuthRequiredRoute><Onboarding /></AuthRequiredRoute>} />
+    <Route path="/onboarding/module/:moduleId" element={<AuthRequiredRoute><OnboardingModule /></AuthRequiredRoute>} />
     <Route path="/verify-certificate/:token" element={<VerifyCertificate />} />
     <Route path="/verify-certificate/lookup" element={<VerifyCertificate />} />
     <Route path="/referral-onboarding" element={<ReferralOnboarding />} />
     <Route path="/redeem-referral" element={<RedeemReferral />} />
-    <Route path="/spreadsheet" element={<Spreadsheet />} />
-    <Route path="/documents" element={<Documents />} />
-    <Route path="/qr-generator" element={<QRCodeGenerator />} />
-    <Route path="/contract-forms" element={<ContractForms />} />
-    <Route path="/video-meeting" element={<VideoMeeting />} />
+    <Route path="/spreadsheet" element={<AuthRequiredRoute><Spreadsheet /></AuthRequiredRoute>} />
+    <Route path="/documents" element={<AuthRequiredRoute><Documents /></AuthRequiredRoute>} />
+    <Route path="/qr-generator" element={<AuthRequiredRoute><QRCodeGenerator /></AuthRequiredRoute>} />
+    <Route path="/contract-forms" element={<AuthRequiredRoute><ContractForms /></AuthRequiredRoute>} />
+    <Route path="/video-meeting" element={<AuthRequiredRoute><VideoMeeting /></AuthRequiredRoute>} />
     <Route path="/presentations" element={<Presentations />} />
 
-    {/* ── Broker Pages ── */}
-    <Route path="/broker-toolkit" element={<BrokerToolkit />} />
+    {/* ── Broker Pages (Tier 2 — login required) ── */}
+    <Route path="/broker-toolkit" element={<AuthRequiredRoute><BrokerToolkit /></AuthRequiredRoute>} />
     <Route path="/broker-toolkit/dashboard" element={<Navigate to="/broker-dashboard" replace />} />
-    <Route path="/broker-dashboard" element={<BrokerDashboard />} />
-    <Route path="/broker-resources" element={<BrokerResources />} />
-    <Route path="/broker/training" element={<BrokerTraining />} />
-    <Route path="/ai-broker-workspace" element={<AIBrokerWorkspace />} />
-    <Route path="/ai-hub" element={<AIHub />} />
+    <Route path="/broker-dashboard" element={<AuthRequiredRoute><BrokerDashboard /></AuthRequiredRoute>} />
+    <Route path="/broker-resources" element={<AuthRequiredRoute><BrokerResources /></AuthRequiredRoute>} />
+    <Route path="/broker/training" element={<AuthRequiredRoute><BrokerTraining /></AuthRequiredRoute>} />
+    <Route path="/ai-broker-workspace" element={<AuthRequiredRoute><AIBrokerWorkspace /></AuthRequiredRoute>} />
+    <Route path="/ai-hub" element={<AuthRequiredRoute><AIHub /></AuthRequiredRoute>} />
     <Route path="/assistant-hub" element={<Navigate to="/ai-hub" replace />} />
-    <Route path="/interior-design-ai" element={<InteriorDesignAI />} />
+    <Route path="/interior-design-ai" element={<AuthRequiredRoute><InteriorDesignAI /></AuthRequiredRoute>} />
     <Route path="/interior-design-studio" element={<Navigate to="/interior-design-ai" replace />} />
-    <Route path="/investor-hub" element={<InvestorHub />} />
-    <Route path="/broker-hub" element={<BrokerHub />} />
-    <Route path="/jbj-academy" element={<JBJAcademy />} />
+    <Route path="/investor-hub" element={<AuthRequiredRoute><InvestorHub /></AuthRequiredRoute>} />
+    <Route path="/broker-hub" element={<AuthRequiredRoute><BrokerHub /></AuthRequiredRoute>} />
+    <Route path="/jbj-academy" element={<AuthRequiredRoute><JBJAcademy /></AuthRequiredRoute>} />
     <Route path="/academy/graduates" element={<AcademyGraduates />} />
-    <Route path="/broker-portal" element={<BrokerPortal />} />
-    <Route path="/document-scanner" element={<ScanSignDocuments />} />
+    <Route path="/broker-portal" element={<AuthRequiredRoute><BrokerPortal /></AuthRequiredRoute>} />
+    <Route path="/document-scanner" element={<AuthRequiredRoute><ScanSignDocuments /></AuthRequiredRoute>} />
     <Route path="/scan-sign" element={<Navigate to="/document-scanner" replace />} />
     <Route path="/scan-sign-documents" element={<Navigate to="/document-scanner" replace />} />
     <Route path="/signature-studio" element={<Navigate to="/document-scanner" replace />} />

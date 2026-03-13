@@ -1,16 +1,18 @@
 import { Outlet } from "react-router-dom";
 import AdminBypass from "@/components/AdminBypass";
-import AuthGate from "@/components/AuthGate";
 import MainLayout from "@/components/MainLayout";
+import { ActionGateProvider } from "@/contexts/ActionGateContext";
+import ActionGateModal from "@/components/ActionGateModal";
 
 const MainLayoutWrapper = () => {
   return (
     <AdminBypass>
-      <AuthGate>
+      <ActionGateProvider>
         <MainLayout>
           <Outlet />
         </MainLayout>
-      </AuthGate>
+        <ActionGateModal />
+      </ActionGateProvider>
     </AdminBypass>
   );
 };
