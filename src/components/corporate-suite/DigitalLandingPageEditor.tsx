@@ -165,7 +165,7 @@ export default function DigitalLandingPageEditor({ data, onChange, primaryColor 
                 value={link.platform}
                 onChange={e => {
                   const match = DEFAULT_SOCIAL_PLATFORMS.find(p => p.platform === e.target.value);
-                  updateSocial(idx, { platform: e.target.value, icon: match?.icon || "🔗" });
+                  updateSocial(idx, { platform: e.target.value, icon: match?.icon || "Li" });
                 }}
                 className="w-28 shrink-0 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-2 py-1.5 text-[11px] text-[hsl(var(--foreground))]"
               >
