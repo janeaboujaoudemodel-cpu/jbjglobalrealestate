@@ -2,7 +2,7 @@
  * Owner Command Center routes — dedicated shell with sidebar
  */
 import React, { lazy, Suspense } from "react";
-import { Route } from "react-router-dom";
+import { Route, Navigate } from "react-router-dom";
 import OwnerGuard from "@/components/OwnerGuard";
 import ListingAdminGuard from "@/components/ListingAdminGuard";
 import PageLoader from "@/components/PageLoader";
