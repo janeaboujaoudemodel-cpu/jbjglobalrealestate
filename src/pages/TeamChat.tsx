@@ -127,6 +127,7 @@ const TeamChat = () => {
   });
   const [isInCall, setIsInCall] = useState(false);
   const [isInVideo, setIsInVideo] = useState(false);
+  const [alsoSendByEmail, setAlsoSendByEmail] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
