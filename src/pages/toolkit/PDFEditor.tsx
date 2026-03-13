@@ -73,13 +73,13 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
             ) : (
               <Upload className="h-12 w-12 mx-auto mb-4" style={{ color: G.goldDim }} />
             )}
-            <p className="text-white font-semibold text-lg mb-2">{ed.isLoading ? "Loading PDF..." : "Drop your PDF files here"}</p>
-            <p className="text-sm mb-4" style={{ color: "rgba(255,255,255,0.35)" }}>or click to browse your files</p>
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all"
-              style={{ background: G.btnGradient, color: "#0E1018", boxShadow: G.btnShadow }}>
+            <p className="text-stone-800 font-semibold text-lg mb-2">{ed.isLoading ? "Loading PDF..." : "Drop your PDF files here"}</p>
+            <p className="text-sm mb-4 text-stone-400">or click to browse your files</p>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all text-white"
+              style={{ background: G.btnGradient, boxShadow: G.btnShadow }}>
               <Upload className="h-4 w-4" />Browse PDF Files
             </div>
-            <p className="text-xs mt-4" style={{ color: "rgba(255,255,255,0.25)" }}>Supports multiple PDFs · All processing is local in your browser</p>
+            <p className="text-xs mt-4 text-stone-400">Supports multiple PDFs · All processing is local in your browser</p>
           </div>
         ) : (
           <div className="grid lg:grid-cols-[240px_1fr_320px] gap-5">
