@@ -760,8 +760,8 @@ const ListingAdmin = () => {
         {/* UNIFIED Data Ops View - All sync/extraction in one tabbed interface */}
         {activeView === 'data-ops' && (
           <div className="mx-auto px-2 py-6 space-y-6">
-            {/* SOURCE COUNTS PANEL - Reelly Only (Provident removed) */}
-            <SourceCountsPanel />
+            {/* SOURCE COUNTS PANEL — Provident primary, Reelly disabled */}
+            <SourceCountsPanel onSourceChange={(src) => setActiveSource(src)} activeSource={activeSource} />
             
             <Tabs value={dataOpsTab} onValueChange={setDataOpsTab} className="space-y-6">
               <TabsList className="w-full flex flex-nowrap overflow-x-auto scrollbar-hide bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] border border-gold/30 p-1 rounded-lg" style={{ overscrollBehaviorX: 'contain' }}>
