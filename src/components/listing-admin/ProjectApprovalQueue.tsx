@@ -1231,6 +1231,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                       formatPrice={formatPrice}
                       onReview={() => {
                         setSelectedImport(item);
+                        setCurrentImageIndex(0);
                       }}
                       onRepaired={() => {
                         fetchPendingImports();
