@@ -363,23 +363,23 @@ export const PublicRoutes = () => (
     <Route path="/video-meeting" element={<AuthRequiredRoute><VideoMeeting /></AuthRequiredRoute>} />
     <Route path="/presentations" element={<Presentations />} />
 
-    {/* ── Broker Pages ── */}
-    <Route path="/broker-toolkit" element={<BrokerToolkit />} />
+    {/* ── Broker Pages (Tier 2 — login required) ── */}
+    <Route path="/broker-toolkit" element={<AuthRequiredRoute><BrokerToolkit /></AuthRequiredRoute>} />
     <Route path="/broker-toolkit/dashboard" element={<Navigate to="/broker-dashboard" replace />} />
-    <Route path="/broker-dashboard" element={<BrokerDashboard />} />
-    <Route path="/broker-resources" element={<BrokerResources />} />
-    <Route path="/broker/training" element={<BrokerTraining />} />
-    <Route path="/ai-broker-workspace" element={<AIBrokerWorkspace />} />
-    <Route path="/ai-hub" element={<AIHub />} />
+    <Route path="/broker-dashboard" element={<AuthRequiredRoute><BrokerDashboard /></AuthRequiredRoute>} />
+    <Route path="/broker-resources" element={<AuthRequiredRoute><BrokerResources /></AuthRequiredRoute>} />
+    <Route path="/broker/training" element={<AuthRequiredRoute><BrokerTraining /></AuthRequiredRoute>} />
+    <Route path="/ai-broker-workspace" element={<AuthRequiredRoute><AIBrokerWorkspace /></AuthRequiredRoute>} />
+    <Route path="/ai-hub" element={<AuthRequiredRoute><AIHub /></AuthRequiredRoute>} />
     <Route path="/assistant-hub" element={<Navigate to="/ai-hub" replace />} />
-    <Route path="/interior-design-ai" element={<InteriorDesignAI />} />
+    <Route path="/interior-design-ai" element={<AuthRequiredRoute><InteriorDesignAI /></AuthRequiredRoute>} />
     <Route path="/interior-design-studio" element={<Navigate to="/interior-design-ai" replace />} />
-    <Route path="/investor-hub" element={<InvestorHub />} />
-    <Route path="/broker-hub" element={<BrokerHub />} />
-    <Route path="/jbj-academy" element={<JBJAcademy />} />
+    <Route path="/investor-hub" element={<AuthRequiredRoute><InvestorHub /></AuthRequiredRoute>} />
+    <Route path="/broker-hub" element={<AuthRequiredRoute><BrokerHub /></AuthRequiredRoute>} />
+    <Route path="/jbj-academy" element={<AuthRequiredRoute><JBJAcademy /></AuthRequiredRoute>} />
     <Route path="/academy/graduates" element={<AcademyGraduates />} />
-    <Route path="/broker-portal" element={<BrokerPortal />} />
-    <Route path="/document-scanner" element={<ScanSignDocuments />} />
+    <Route path="/broker-portal" element={<AuthRequiredRoute><BrokerPortal /></AuthRequiredRoute>} />
+    <Route path="/document-scanner" element={<AuthRequiredRoute><ScanSignDocuments /></AuthRequiredRoute>} />
     <Route path="/scan-sign" element={<Navigate to="/document-scanner" replace />} />
     <Route path="/scan-sign-documents" element={<Navigate to="/document-scanner" replace />} />
     <Route path="/signature-studio" element={<Navigate to="/document-scanner" replace />} />
