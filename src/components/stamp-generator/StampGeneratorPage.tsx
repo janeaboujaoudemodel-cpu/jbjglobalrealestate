@@ -24,9 +24,15 @@ import {
   Wand2, Loader2, Check, RefreshCw, Download, Stamp,
   ArrowLeft, ChevronRight, AlertTriangle, Heart, MessageSquare,
   Send, X, Sparkles, Palette, Layers, Type, Upload, ChevronDown,
-  Undo2, Redo2, RotateCw, Save, ChevronLeft
+  Undo2, Redo2, RotateCw, Save, ChevronLeft, Trash2, Copy,
+  Clock, Package, Award
 } from 'lucide-react';
 import { useStampHistory } from '@/hooks/useStampHistory';
+import { StampVariationsPanel } from './StampVariationsPanel';
+import { StampRecentlyDeleted, DeletedStamp } from './StampRecentlyDeleted';
+import { StampVersionSelector } from './StampVersionSelector';
+import { useSaveBrandAsset } from '@/components/brand-assets/BrandAssetPicker';
+import ShortlistBadgeButton from '@/components/ShortlistBadgeButton';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
