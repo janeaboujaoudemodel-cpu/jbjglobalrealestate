@@ -1,0 +1,145 @@
+import { useNavigate } from "react-router-dom";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
+import { Button } from "@/components/ui/button";
+import { useActionGate } from "@/contexts/ActionGateContext";
+import { Star, TrendingUp, Shield, Gift, Sparkles, ArrowRight, X } from "lucide-react";
+import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
+
+const REASON_HEADLINES: Record<string, string> = {
+  save_favorite: "Save Your Favourite Properties",
+  add_shortlist: "Build Your Personalised Shortlist",
+  compare: "Compare Properties Side by Side",
+  download: "Download Exclusive Reports",
+  book_consultation: "Book a Private Consultation",
+  request_callback: "Get a Priority Callback",
+  submit_form: "Submit Your Request",
+  access_dashboard: "Access Your Personal Dashboard",
+  access_portal: "Enter Your Private Portal",
+  access_tools: "Unlock Premium AI Tools",
+  view_documents: "Access Your Documents",
+  general: "Unlock the Full JBJ Global Experience",
+};
+
+const benefits = [
+  { icon: Gift, text: "Earn loyalty points on every activity — redeemable on purchases & subscriptions" },
+  { icon: Star, text: "Personalised property recommendations tailored to your preferences" },
+  { icon: TrendingUp, text: "Exclusive market reports & portfolio tracking tools" },
+  { icon: Sparkles, text: "Priority access to new launches & off-plan opportunities" },
+  { icon: Shield, text: "Secure account with saved searches, favourites & history" },
+];
+
+const ActionGateModal = () => {
+  const { isGateOpen, closeGate, gateReason } = useActionGate();
+  const navigate = useNavigate();
+
+  const headline = REASON_HEADLINES[gateReason || "general"] || REASON_HEADLINES.general;
+
+  const handleSignIn = () => {
+    closeGate();
+    const returnTo = encodeURIComponent(window.location.pathname + window.location.search);
+    navigate(`/auth?returnTo=${returnTo}`);
+  };
+
+  return (
+    <Dialog open={isGateOpen} onOpenChange={(open) => { if (!open) closeGate(); }}>
+      <DialogContent
+        className="bg-black/95 backdrop-blur-xl border border-gold/30 text-white max-w-lg p-0 overflow-hidden shadow-2xl rounded-2xl"
+        aria-describedby={undefined}
+      >
+        <VisuallyHidden.Root>
+          <DialogTitle>Sign in to continue</DialogTitle>
+        </VisuallyHidden.Root>
+
+        {/* Top gold accent */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
+
+        {/* Background */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-zinc-950 to-black" />
+
+        {/* Ambient glow */}
+        <div
+          className="absolute top-0 left-0 right-0 h-48 pointer-events-none opacity-25"
+          style={{ background: `radial-gradient(ellipse at 50% 0%, hsl(40 32% 51% / 0.5) 0%, transparent 70%)` }}
+        />
+
+        {/* Corner accents */}
+        <div className="absolute top-5 left-5 w-8 h-8 border-l-2 border-t-2 border-gold/50" />
+        <div className="absolute top-5 right-5 w-8 h-8 border-r-2 border-t-2 border-gold/50" />
+        <div className="absolute bottom-5 left-5 w-8 h-8 border-l-2 border-b-2 border-gold/40" />
+        <div className="absolute bottom-5 right-5 w-8 h-8 border-r-2 border-b-2 border-gold/40" />
+
+        <div className="relative px-8 py-10">
+          {/* Logo */}
+          <div className="flex justify-center mb-5">
+            <img src={jbjMonogramDarkBg} alt="JBJ Global Real Estate" className="h-20 w-auto object-contain" />
+          </div>
+
+          {/* Headline */}
+          <h2
+            className="text-center text-xl md:text-2xl font-bold text-gold mb-2 tracking-wide"
+            style={{ fontFamily: "Poppins, sans-serif" }}
+          >
+            {headline}
+          </h2>
+
+          <p className="text-center text-zinc-400 text-sm mb-6">
+            Create a free account to unlock premium features and start earning rewards
+          </p>
+
+          {/* Divider */}
+          <div className="relative h-px mb-6">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
+          </div>
+
+          {/* Benefits */}
+          <div className="space-y-3 mb-8">
+            {benefits.map((b, i) => (
+              <div key={i} className="flex items-start gap-3">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center mt-0.5">
+                  <b.icon className="w-4 h-4 text-gold" />
+                </div>
+                <p className="text-sm text-zinc-300 leading-relaxed">{b.text}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* CTAs */}
+          <div className="space-y-3">
+            <Button
+              onClick={handleSignIn}
+              className="w-full py-5 bg-gold hover:bg-gold/90 text-black font-bold text-base rounded-xl group relative overflow-hidden transition-all duration-300"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+              <Sparkles className="w-5 h-5 mr-2 relative z-10" />
+              <span className="relative z-10">Create Free Account</span>
+              <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform relative z-10" />
+            </Button>
+
+            <Button
+              onClick={handleSignIn}
+              variant="outline"
+              className="w-full py-5 bg-transparent border border-gold/40 text-gold hover:bg-gold/10 font-semibold text-sm rounded-xl transition-all duration-300"
+            >
+              Already have an account? Sign In
+            </Button>
+
+            <button
+              onClick={closeGate}
+              className="w-full text-center text-zinc-500 hover:text-zinc-400 text-xs mt-2 transition-colors"
+            >
+              Continue Browsing
+            </button>
+          </div>
+
+          {/* Footer */}
+          <p className="text-center text-zinc-600 text-[10px] mt-6">
+            Your activity earns loyalty points redeemable on purchases & subscriptions
+          </p>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export default ActionGateModal;
