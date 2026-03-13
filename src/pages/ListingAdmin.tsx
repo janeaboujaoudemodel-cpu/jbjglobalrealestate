@@ -1066,6 +1066,20 @@ const ListingAdmin = () => {
                           placeholder="e.g., Sobha Hartland II"
                           className="bg-zinc-50 border-zinc-300 text-black mt-1"
                         />
+                        {/* Duplicate detection when creating */}
+                        {isCreating && formData.name.length >= 3 && (
+                          <ProjectDuplicateInspector
+                            projectName={formData.name}
+                            onAction={(action) => {
+                              if (action === "stop") {
+                                setIsCreating(false);
+                                setActiveView("projects");
+                              }
+                            }}
+                            blocking={true}
+                            className="mt-2"
+                          />
+                        )}
                       </div>
 
                       {/* Developer */}
