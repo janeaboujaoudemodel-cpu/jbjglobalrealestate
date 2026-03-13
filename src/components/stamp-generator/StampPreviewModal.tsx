@@ -353,7 +353,7 @@ export function StampPreviewModal({
                 <p className="text-xs text-[hsl(var(--muted-foreground))] text-center mb-4 uppercase tracking-wide">Business Card Preview</p>
                 <div className="relative rounded-2xl overflow-hidden shadow-2xl" style={{ aspectRatio: '1.75 / 1', background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' }}>
                   <div className="absolute inset-0 p-7 flex items-stretch">
-                    <div className="flex-1 flex flex-col justify-between">
+                    <div className={`flex-1 flex flex-col justify-between ${stampAlign === 'left' ? 'order-2 pl-6' : ''}`}>
                       <div>
                         <p className="text-white font-bold text-xl leading-tight tracking-tight">{companyName}</p>
                         {arabicName && <p className="text-white/70 text-sm mt-1" dir="rtl">{arabicName}</p>}
@@ -363,9 +363,9 @@ export function StampPreviewModal({
                         <p className="text-white/40 text-xs">{city}</p>
                       </div>
                     </div>
-                    <div className="flex items-center justify-end pl-6">
+                    <div className={`flex items-center ${stampAlign === 'left' ? 'order-1 pr-6' : stampAlign === 'center' ? 'absolute inset-0 justify-center items-center' : 'justify-end pl-6'}`}>
                       <div className="opacity-85">
-                        <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} size={100}/>
+                        <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} fontWeight={fontWeight} fontStyle={fontStyle} fontSize={fontSize} inkMode={false} size={100}/>
                       </div>
                     </div>
                   </div>
@@ -373,7 +373,7 @@ export function StampPreviewModal({
                 </div>
                 <div className="mt-4 relative rounded-2xl overflow-hidden shadow-xl flex items-center justify-center" style={{ aspectRatio: '1.75 / 1', background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' }}>
                   <div className="absolute inset-0" style={{ background: `radial-gradient(circle at center, ${tintColor}28 0%, transparent 70%)` }}/>
-                  <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} size={120}/>
+                  <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} fontWeight={fontWeight} fontStyle={fontStyle} fontSize={fontSize} size={120}/>
                 </div>
                 <p className="text-[10px] text-[hsl(var(--muted-foreground))] text-center mt-2">Front (top) · Back (bottom)</p>
               </div>
