@@ -831,9 +831,9 @@ const ListingAdmin = () => {
 
         {/* Projects View - Grid */}
         {activeView === 'projects' && (
-          <div className="container mx-auto px-4 py-6">
-            {/* Published / Drafts Tabs */}
-            <div className="flex items-center gap-2 mb-4">
+          <div className="container mx-auto px-4 py-6 space-y-4">
+            {/* Horizontal filter row — replaces vertical sidebar */}
+            <div className="flex flex-wrap items-center gap-2">
               <Button
                 variant={projectsTab === "published" ? "primary" : "secondary"}
                 size="sm"
@@ -848,31 +848,26 @@ const ListingAdmin = () => {
               >
                 Drafts ({(allProjectsCount ?? 0) - (totalCount ?? 0)})
               </Button>
+
+              <div className="h-6 w-px bg-gold/30 mx-1" />
+
+              <ListingSearchFilters
+                developers={developers || []}
+                onSearchChange={setSearchQuery}
+                onDeveloperChange={setFilterDeveloper}
+                onEmirateChange={setFilterEmirate}
+                onLocationChange={setFilterLocation}
+                searchValue={searchQuery}
+                developerValue={filterDeveloper}
+                emirateValue={filterEmirate}
+                locationValue={filterLocation}
+                horizontal
+              />
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-              {/* Search Filters */}
-              <div className="lg:col-span-1">
-                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 sticky top-44 max-h-[calc(100vh-260px)] overflow-auto">
-                  <CardContent className="p-4">
-                    <ListingSearchFilters
-                      developers={developers || []}
-                      onSearchChange={setSearchQuery}
-                      onDeveloperChange={setFilterDeveloper}
-                      onEmirateChange={setFilterEmirate}
-                      onLocationChange={setFilterLocation}
-                      searchValue={searchQuery}
-                      developerValue={filterDeveloper}
-                      emirateValue={filterEmirate}
-                      locationValue={filterLocation}
-                    />
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* Project Grid */}
-              <div className="lg:col-span-3">
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            {/* Project Grid — no sidebar, full width */}
+            <div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                   {filteredProjects?.map((project) => (
                     <Card
                       key={project.id}
@@ -969,7 +964,6 @@ const ListingAdmin = () => {
                   </Button>
                 </div>
               </div>
-            </div>
           </div>
         )}
 

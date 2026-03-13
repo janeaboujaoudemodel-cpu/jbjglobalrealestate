@@ -26,6 +26,7 @@ interface ListingSearchFiltersProps {
   developerValue: string;
   emirateValue: string;
   locationValue: string;
+  horizontal?: boolean;
 }
 
 const EMIRATES = [
@@ -64,6 +65,7 @@ const ListingSearchFilters = ({
   developerValue,
   emirateValue,
   locationValue,
+  horizontal,
 }: ListingSearchFiltersProps) => {
   const { t } = useLanguage();
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
