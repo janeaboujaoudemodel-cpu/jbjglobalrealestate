@@ -38,6 +38,7 @@ import {
 import { toast } from "sonner";
 import { ProvidentSyncButton } from "@/components/admin/ProvidentSyncButton";
 import BriefingManagement from "@/components/admin/BriefingManagement";
+import DeveloperOverviewTab from "@/components/admin/DeveloperOverviewTab";
 
 interface Developer {
   id: string;
