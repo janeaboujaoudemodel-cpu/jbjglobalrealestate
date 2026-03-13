@@ -32,26 +32,26 @@ interface SignatureData {
   scale: number;
 }
 
-// ─── Champagne-Gold Palette ──────────────────────────────────────────────────
+// ─── Emerald Green Palette ──────────────────────────────────────────────────
 
 const G = {
-  gold: "#C8A766",
-  goldBright: "#E4C47A",
-  goldDim: "#A08040",
-  bg: "#0E1018",
-  card: "rgba(200,167,102,0.05)",
-  border: "rgba(200,167,102,0.2)",
-  borderHover: "rgba(200,167,102,0.45)",
-  accent: "#C8A766",
-  accentLight: "#E4C47A",
-  accentDim: "rgba(200,167,102,0.15)",
-  text: "#C8A766",
-  textMuted: "rgba(255,255,255,0.4)",
-  btnPrimary: "linear-gradient(135deg, #A08040, #C8A766)",
-  btnPrimaryShadow: "0 4px 20px rgba(200,167,102,0.3)",
-  btnOutline: { background: "rgba(200,167,102,0.1)", border: "1px solid rgba(200,167,102,0.35)", color: "#fff" },
-  outerBorder: "1px solid rgba(200,167,102,0.25)",
-  outerShadow: "0 0 60px rgba(200,167,102,0.06), 0 2px 40px rgba(0,0,0,0.6)",
+  gold: "#059669",
+  goldBright: "#10B981",
+  goldDim: "#047857",
+  bg: "#FFFFFF",
+  card: "rgba(5,150,105,0.03)",
+  border: "rgba(5,150,105,0.15)",
+  borderHover: "rgba(5,150,105,0.35)",
+  accent: "#059669",
+  accentLight: "#10B981",
+  accentDim: "rgba(5,150,105,0.12)",
+  text: "#059669",
+  textMuted: "rgba(0,0,0,0.4)",
+  btnPrimary: "linear-gradient(135deg, #047857, #059669)",
+  btnPrimaryShadow: "0 4px 20px rgba(5,150,105,0.25)",
+  btnOutline: { background: "rgba(5,150,105,0.06)", border: "1px solid rgba(5,150,105,0.25)", color: "#1F2937" },
+  outerBorder: "1px solid rgba(5,150,105,0.18)",
+  outerShadow: "0 2px 20px rgba(0,0,0,0.06)",
 };
 
 // ─── Button helpers ───────────────────────────────────────────────────────────
