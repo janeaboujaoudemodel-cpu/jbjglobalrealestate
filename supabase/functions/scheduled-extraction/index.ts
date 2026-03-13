@@ -375,7 +375,7 @@ serve(async (req) => {
     // Get existing listings for matching
     const { data: existingProjects } = await supabase
       .from("projects")
-      .select("id, name, developer, location, handover_date, price_from, price_to, amenities, description, rera_number");
+      .select("id, name, slug, developer_name, location, handover_date, price_from, price_to, amenities, description, rera_number, external_id");
 
     const allListings = (existingProjects || []).map(p => ({ ...p, _table: "projects" }));
 

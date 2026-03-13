@@ -44,6 +44,7 @@ import {
 } from "lucide-react";
 import ListingSearchFilters from "@/components/listing-admin/ListingSearchFilters";
 import ListingGenerator from "@/components/listing-admin/ListingGenerator";
+import { ProjectDuplicateInspector } from "@/components/listing-admin/ProjectDuplicateInspector";
 import { PendingUpdatesQueue } from "@/components/listing-admin/PendingUpdatesQueue";
 import { ProjectApprovalQueue } from "@/components/listing-admin/ProjectApprovalQueue";
 import { ExtractionJobsPanel } from "@/components/listing-admin/ExtractionJobsPanel";
@@ -649,8 +650,8 @@ const ListingAdmin = () => {
     <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] pt-0">
       {/* Premium Dashboard Shell — full bleed, no black gaps */}
       <div className="border-b border-[#C9A84C]/20 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-      {/* Header - Clean neutral style */}
-      <header className="border-b border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-0 z-40">
+      {/* Header - Clean neutral style — top offset accounts for owner shell header (64px + 48px utility bar) */}
+      <header className="border-b border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-0 z-20">
         <div className="max-w-[1200px] mx-auto px-4 py-4">
           {/* Row 1: Title and actions */}
           <div className="flex items-center justify-between gap-4 mb-4">
@@ -756,7 +757,7 @@ const ListingAdmin = () => {
             <SourceCountsPanel />
             
             <Tabs value={dataOpsTab} onValueChange={setDataOpsTab} className="space-y-6">
-              <TabsList className="w-full flex flex-nowrap overflow-x-auto scrollbar-hide bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30 p-1" style={{ overscrollBehaviorX: 'contain' }}>
+              <TabsList className="w-full flex flex-nowrap overflow-x-auto scrollbar-hide bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30 p-1 rounded-xl" style={{ overscrollBehaviorX: 'contain' }}>
                 <TabsTrigger 
                   value="reelly" 
                   className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
@@ -1066,6 +1067,20 @@ const ListingAdmin = () => {
                           placeholder="e.g., Sobha Hartland II"
                           className="bg-zinc-50 border-zinc-300 text-black mt-1"
                         />
+                        {/* Duplicate detection when creating */}
+                        {isCreating && formData.name.length >= 3 && (
+                          <ProjectDuplicateInspector
+                            projectName={formData.name}
+                            onAction={(action) => {
+                              if (action === "stop") {
+                                setIsCreating(false);
+                                setActiveView("projects");
+                              }
+                            }}
+                            blocking={true}
+                            className="mt-2"
+                          />
+                        )}
                       </div>
 
                       {/* Developer */}

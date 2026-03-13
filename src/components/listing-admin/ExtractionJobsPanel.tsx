@@ -35,12 +35,13 @@ export function ExtractionJobsPanel() {
   const [recentJobs, setRecentJobs] = useState<JobLog[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [runningSource, setRunningSource] = useState<string | null>(null);
+  const [reellyDisabled, setReellyDisabled] = useState(false);
   const { toast } = useToast();
 
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const [sourcesRes, jobsRes] = await Promise.all([
+      const [sourcesRes, jobsRes, settingRes] = await Promise.all([
         supabase
           .from("external_data_sources")
           .select("*")
@@ -50,6 +51,11 @@ export function ExtractionJobsPanel() {
           .select("*")
           .order("started_at", { ascending: false })
           .limit(10),
+        supabase
+          .from("app_settings")
+          .select("value")
+          .eq("key", "reelly_sync_enabled")
+          .maybeSingle(),
       ]);
 
       if (sourcesRes.error) throw sourcesRes.error;
@@ -57,6 +63,7 @@ export function ExtractionJobsPanel() {
 
       setSources(sourcesRes.data || []);
       setRecentJobs(jobsRes.data || []);
+      setReellyDisabled(settingRes.data?.value === "false");
     } catch (error) {
       console.error("Error fetching extraction data:", error);
       toast({
@@ -180,6 +187,11 @@ export function ExtractionJobsPanel() {
                       <Badge variant={source.is_active ? "default" : "secondary"}>
                         {source.is_active ? "Active" : "Inactive"}
                       </Badge>
+                      {reellyDisabled && source.name.toLowerCase().includes("reelly") && (
+                        <Badge variant="outline" className="text-[10px] border-muted-foreground/30 text-muted-foreground">
+                          Disabled by admin
+                        </Badge>
+                      )}
                     </div>
                     <div className="text-sm text-muted-foreground mt-1">
                       <span>{parseSchedule(source.extraction_schedule)}</span>
