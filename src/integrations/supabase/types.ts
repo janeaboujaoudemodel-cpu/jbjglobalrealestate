@@ -5798,6 +5798,42 @@ export type Database = {
         }
         Relationships: []
       }
+      design_favorites: {
+        Row: {
+          created_at: string
+          id: string
+          item_id: string
+          item_name: string | null
+          item_type: string
+          list_type: string
+          metadata: Json | null
+          thumbnail_svg: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          item_id: string
+          item_name?: string | null
+          item_type: string
+          list_type?: string
+          metadata?: Json | null
+          thumbnail_svg?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          item_id?: string
+          item_name?: string | null
+          item_type?: string
+          list_type?: string
+          metadata?: Json | null
+          thumbnail_svg?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       design_history: {
         Row: {
           changes_description: string | null
