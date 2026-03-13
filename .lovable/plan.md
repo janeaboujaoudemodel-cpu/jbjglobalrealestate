@@ -1,72 +1,109 @@
 
-## CRM System Upgrade — Implementation Status
 
-### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
+## Plan: AI Stamp Variations, Favorites/Shortlist, History, Recently Deleted & Brand Assets
 
-#### Task 1: Full System Audit ✅
-- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
-- Identified 10 weaknesses (documented in plan)
+### Current State
 
-#### Task 2: Leads Security Hardening ✅
-- CSV export no longer includes email/phone PII
-- Audit logging added to exports with user_agent tracking
-- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
+The stamp generator already has:
+- AI generation via `ai-stamp-generator` edge function (generate + refine actions)
+- Concepts grid on the right panel with favorites
+- Smart Designer floating chat panel for AI refinement
+- `design_favorites` table for cross-tool favorites/shortlist
+- `stamp_designs` table with `is_favorite` flag
+- `design_history` table exists in DB
+- Brand Assets pattern used across corporate suite (logo upload sections)
+- `StampHistoryDashboard` for viewing past designs
 
-#### Task 3: Encryption Hardening ✅
-- CSV export stripped of `email_lower` and `phone_e164` fields
-- Export audit logged to both `crm_audit_logs` and `audit_logs`
+### What Needs to Change
 
-#### Task 4: Lead Lifecycle Upgrade ✅
-- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
-- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
-- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
+#### 1. AI Variations Side Panel (Tasks 1-2)
 
-#### Task 5: CRM Structure Upgrade ✅
-- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
-- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
-- KanbanPipeline expanded to show all 17 relevant stages
+**Problem**: Currently, "Regenerate" replaces the concepts grid entirely. AI refinements from the Smart Designer replace the selected concept or add to the main grid.
 
-#### Task 6: Performance Optimization ✅
-- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
-- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
-- `crm_leads_updated_at_trigger` auto-updates `updated_at`
+**Solution**: Add a dedicated "AI Variations" panel that generates alternative designs WITHOUT touching the main preview or concepts grid.
 
-#### Task 7: AI Intelligence Integration ✅
-- New edge function `ai-lead-intelligence` using Lovable AI gateway
-- Supports 3 modes: `score`, `summary`, `next_action`
-- Tool-calling for structured scoring output
-- JWT auth + CRM role validation
-- PII sanitized before sending to AI
+- Add "Generate Variations" button in header (next to Regenerate)
+- When clicked, calls `ai-stamp-generator` with `action: 'variations'` passing current selected SVG
+- Results appear in a new slide-out panel on the right (overlays the concepts grid temporarily)
+- Variation types: separator styles, ring weights, monogram placements, color schemes, corporate/legal/officer styles
+- Each variation card has: Select (applies to main preview), Favorite, Shortlist, Delete
+- Main preview remains untouched — standard model stays in center
 
-#### Task 8: Workflow Automation ✅
-- Created `crm_automation_rules` table with RLS (owner manage, admin view)
-- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
+**Files**: `StampGeneratorPage.tsx` (add variations state + panel), `ai-stamp-generator` edge function (add `variations` action)
 
-#### Task 10: Role & Permission System ✅
-- RLS on automation rules: owner CRUD, admin read-only
-- CSV export restricted to owner_admin/founder roles
+#### 2. Favorite / Shortlist / Top Ranking (Task 3)
 
-#### Task 12: Backend/Database Upgrade ✅
-- 3 new performance indexes
-- Auto-updated_at trigger on crm_leads
-- Duplicate hash computation trigger
-- Rate-limiting security function
+**Problem**: Current favorites are per-`stamp_designs` table with a simple boolean. No shortlist or Top 1/2/3 ranking.
 
-#### Task 13: Data Cleanliness ✅
-- `duplicate_hash` with auto-compute trigger prevents future duplicates
-- Partial unique index enforces uniqueness at DB level
+**Solution**: Wire the existing `design_favorites` system + `useShortlistBadges` hook into the stamp concepts grid.
 
-### Files Changed
-| File | Action |
+- Each concept card gets: Heart (favorite via `design_favorites`), ListPlus (shortlist via `design_favorites`), Top 1/2/3 badges via `useShortlistBadges`
+- Add "Save Project" button (already exists as export), "Duplicate" (clone concept), "Delete" (soft-delete)
+- Reuse `DesignFavoriteButton` component already built for this purpose
+- Add Top 1/2/3 badge selector dropdown on each card
+
+**Files**: `StampGeneratorPage.tsx` (ConceptCard enhancement), existing hooks `useDesignFavorites`, `useShortlistBadges`
+
+#### 3. Recently Deleted Section (Task 4)
+
+**Solution**: Add soft-delete to stamp designs with a "Recently Deleted" collapsible section in the concepts panel.
+
+- New DB column: `deleted_at` (nullable timestamp) on `stamp_designs`
+- Deleted designs hidden from main grid, shown in "Recently Deleted" section
+- Actions: Recover, Permanent Delete, "Adapt & Save"
+- Auto-purge after 30 days (matches platform standard)
+
+**Migration**: `ALTER TABLE stamp_designs ADD COLUMN deleted_at timestamptz DEFAULT NULL;`
+
+**Files**: `StampGeneratorPage.tsx` (add deleted section), new component `StampRecentlyDeleted.tsx`
+
+#### 4. Brand Asset Integration (Tasks 5-6)
+
+**Problem**: No way to save a stamp design as a reusable brand asset.
+
+**Solution**: Create a `brand_assets` table and "Save as Brand Asset" action.
+
+- New table: `brand_assets` (id, user_id, asset_type enum [stamp/logo/business_card/signature/letterhead/email_signature], name, svg_content, thumbnail_url, metadata jsonb, created_at)
+- "Adapt & Save for Future Use" button on designs → saves to `brand_assets`
+- Brand Assets dashboard section at `/owner/brand-assets` listing all saved assets grouped by type
+- Other tools (document creator, business card, cover letter) can pull from `brand_assets` table via a shared picker component
+
+**Migration**: Create `brand_assets` table with RLS policies.
+
+**Files**: New `src/components/brand-assets/BrandAssetPicker.tsx`, new `src/pages/BrandAssets.tsx`, update `StampGeneratorPage.tsx`
+
+#### 5. Previous Versions Selector (Task 7)
+
+**Problem**: `StampHistoryDashboard` exists but is a separate page. No way to select from previous versions inline.
+
+**Solution**: Add "Select from Previous" dropdown/modal in the stamp generator.
+
+- New component `StampVersionSelector.tsx` — modal that loads all `stamp_designs` for the project ordered by `created_at`
+- Actions per version: Select & Use, Duplicate, Save Both (keep current + add this one)
+- "Upload New" button alongside "Select From Previous"
+- Shows thumbnail grid of all previous designs with date stamps
+
+**Files**: New `StampVersionSelector.tsx`, wire into `StampGeneratorPage.tsx` header
+
+### Files Summary
+
+| File | Change |
 |------|--------|
-| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
-| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
-| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
-| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
-| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
-| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
-| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
-| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
-| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
+| `StampGeneratorPage.tsx` | Add variations panel, enhanced ConceptCard with shortlist/badges/delete, recently deleted section, brand asset save, version selector trigger |
+| New: `StampVariationsPanel.tsx` | AI variations side panel component |
+| New: `StampRecentlyDeleted.tsx` | Recently deleted section with recover/delete/adapt |
+| New: `StampVersionSelector.tsx` | Previous versions modal picker |
+| New: `BrandAssetPicker.tsx` | Shared brand asset picker for all tools |
+| New: `BrandAssets.tsx` | Brand assets dashboard page |
+| `ai-stamp-generator` edge function | Add `variations` action |
+| DB Migration | Add `deleted_at` to `stamp_designs`, create `brand_assets` table |
+
+### Implementation Order
+
+1. DB migrations (deleted_at column + brand_assets table)
+2. StampVariationsPanel + wire to StampGeneratorPage
+3. Enhanced ConceptCard (favorites/shortlist/badges/delete)
+4. Recently Deleted section
+5. Brand Asset save flow
+6. Previous Version selector
+
