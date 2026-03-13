@@ -104,6 +104,8 @@ const EmailClient = () => {
   const [newEmail, setNewEmail] = useState({ to: "", subject: "", body: "" });
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [currentPage, setCurrentPage] = useState(1);
+  const [approvePreviewOpen, setApprovePreviewOpen] = useState(false);
+  const [alsoNotifyChat, setAlsoNotifyChat] = useState(false);
   const emailsPerPage = 20;
 
   const folders = [
