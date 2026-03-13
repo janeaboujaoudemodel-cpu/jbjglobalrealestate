@@ -669,13 +669,6 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
             </div>
           )}
 
-          {/* Continue as Guest */}
-          <div className="mt-6 pt-6 border-t border-gray-100">
-            <button onClick={() => navigate("/")} className="w-full h-12 border border-gray-200 hover:border-gold/50 rounded-xl text-black font-medium hover:bg-gray-50 transition-all duration-300">
-              Continue as Guest
-            </button>
-            <p className="text-center text-gray-400 text-xs mt-3">Save favorites and shortlist properties without an account</p>
-          </div>
         </div>
 
         <p className="text-center text-gray-400 text-xs mt-8">© {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.</p>
