@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useSearchParams } from "react-router-dom";
-import { Crown, Sparkles, Lock, Mail, Phone, Wrench, Clock, PartyPopper } from "lucide-react";
+import { Crown, Sparkles, Lock, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import InquiryFormModal from "@/components/InquiryFormModal";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -33,31 +33,12 @@ const MODE_CONFIG: Record<PageMode, { title: string; subtitle: string; tagline: 
   },
 };
 
-  const openForm = (role?: 'buyer' | 'broker' | 'visitor') => {
-    setSelectedRole(role);
-    setIsFormOpen(true);
-  };
-
-  return (
-    <>
-      <div className={`min-h-screen bg-black flex flex-col items-center justify-center px-4 py-12 md:py-16 relative overflow-hidden ${isRTL ? 'rtl' : 'ltr'}`}>
-        {/* Language Switcher - Top Right */}
-        <div className="absolute top-4 right-4 z-50">
-          <LanguageSwitcher variant="default" />
-        </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="relative z-10 text-center max-w-2xl mx-auto"
-        >
 const ComingSoon = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState<'buyer' | 'broker' | 'visitor' | undefined>(undefined);
   const { t, isRTL } = useLanguage();
   const [searchParams] = useSearchParams();
-  
+
   const mode = (searchParams.get('mode') as PageMode) || 'coming-soon';
   const config = MODE_CONFIG[mode] || MODE_CONFIG['coming-soon'];
 
@@ -101,7 +82,7 @@ const ComingSoon = () => {
             transition={{ delay: 0.4, duration: 0.6 }}
             className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 tracking-tight"
           >
-            {t(`comingSoon.title`, config.title)}
+            {t('comingSoon.title', config.title)}
           </motion.h1>
 
           {/* Company Name */}
@@ -121,10 +102,10 @@ const ComingSoon = () => {
             className="space-y-4"
           >
             <p className="text-lg md:text-xl text-white/60 font-light">
-              {t(`comingSoon.subtitle`, config.subtitle)}
+              {t('comingSoon.subtitle', config.subtitle)}
             </p>
             <p className="text-sm md:text-base text-white/40 tracking-[0.2em] uppercase">
-              {t(`comingSoon.tagline`, config.tagline)}
+              {t('comingSoon.tagline', config.tagline)}
             </p>
           </motion.div>
 
