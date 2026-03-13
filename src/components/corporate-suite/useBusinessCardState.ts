@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { EMPTY_LANDING_PAGE, type LandingPageData } from "@/components/corporate-suite/DigitalLandingPageEditor";
@@ -7,10 +7,19 @@ import {
   type Template, type CardShape, type QrPosition, type QrContentType, type TextAlign,
   type GradientDirection, type FinishEffect, type MockupScene, type CardData,
   type BilingualMode, type BilingualLanguage, type FieldPos, type AiDesignData,
+  type FieldConfigMap,
   BILINGUAL_LANGUAGES, COLOR_PRESETS, DEFAULT_FIELD_POSITIONS, DEFAULT_LOGO_POS,
-  buildQrData,
+  buildQrData, getDefaultFieldConfigs, saveDraftToStorage, loadDraftFromStorage, clearDraftFromStorage,
 } from "./businessCardTypes";
 import { exportCardAsPDF, exportDigitalCardAsHtml } from "./businessCardExport";
+
+// ─── Card Info Profile Types ──────────────────────────────────────────────────
+interface CardInfoProfile {
+  id: string;
+  name: string;
+  data: CardData;
+  created_at: string;
+}
 
 export function useBusinessCardState() {
   // Per-side independent templates
@@ -45,6 +54,10 @@ export function useBusinessCardState() {
   // Drag-to-rearrange
   const [editLayout, setEditLayout] = useState(false);
   const [fieldPositions, setFieldPositions] = useState({ ...DEFAULT_FIELD_POSITIONS });
+
+  // Per-field config (visibility, locked, style overrides)
+  const [fieldConfigs, setFieldConfigs] = useState<FieldConfigMap>(getDefaultFieldConfigs());
+  const [selectedField, setSelectedField] = useState<keyof CardData | null>(null);
 
   // QR Code
   const [qrOpen, setQrOpen]             = useState(false);
@@ -113,6 +126,11 @@ export function useBusinessCardState() {
     name: "", title: "", company: "", phone: "", email: "", website: "", address: "",
   });
 
+  // Card info profiles
+  const [cardProfiles, setCardProfiles] = useState<CardInfoProfile[]>([]);
+  const [activeProfileId, setActiveProfileId] = useState<string | null>(null);
+  const [isLoadingProfiles, setIsLoadingProfiles] = useState(false);
+
   // Bilingual
   const [bilingualMode, setBilingualMode] = useState<BilingualMode>("off");
   const [bilingualLang, setBilingualLang] = useState<BilingualLanguage>("ar");
@@ -137,6 +155,30 @@ export function useBusinessCardState() {
   const [mockupScene, setMockupScene] = useState<MockupScene>("none");
   const [mockupOpen, setMockupOpen] = useState(false);
 
+  // ── Draft persistence ───────────────────────────────────────────
+  const draftLoadedRef = useRef(false);
+  const draftTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Load draft on mount (once)
+  useEffect(() => {
+    if (draftLoadedRef.current) return;
+    draftLoadedRef.current = true;
+    const draft = loadDraftFromStorage();
+    if (draft && Object.values(draft).some(v => v && v !== "")) {
+      setData(draft);
+    }
+  }, []);
+
+  // Throttled autosave on data change
+  useEffect(() => {
+    if (!draftLoadedRef.current) return;
+    if (draftTimerRef.current) clearTimeout(draftTimerRef.current);
+    draftTimerRef.current = setTimeout(() => {
+      saveDraftToStorage(data);
+    }, 800);
+    return () => { if (draftTimerRef.current) clearTimeout(draftTimerRef.current); };
+  }, [data]);
+
   // ── Derived values ──────────────────────────────────────────
   const frontPreset = COLOR_PRESETS[frontColorIdx];
   const backPreset  = COLOR_PRESETS[backColorIdx];
@@ -157,9 +199,22 @@ export function useBusinessCardState() {
 
   const qrDataStr = buildQrData(qrContentType, data, qrCustomContent);
 
+  // ── Unified field updater ───────────────────────────────────
+  const updateCardField = useCallback((field: keyof CardData, value: string) => {
+    setData(prev => ({ ...prev, [field]: value }));
+  }, []);
+
+  // ── Field config updater ────────────────────────────────────
+  const updateFieldConfig = useCallback((field: keyof CardData, updates: Partial<FieldConfigMap[keyof CardData]>) => {
+    setFieldConfigs(prev => ({
+      ...prev,
+      [field]: { ...prev[field], ...updates },
+    }));
+  }, []);
+
   // ── Handlers ────────────────────────────────────────────────
   const set = (k: keyof CardData) => (e: React.ChangeEvent<HTMLInputElement>) =>
-    setData(prev => ({ ...prev, [k]: e.target.value }));
+    updateCardField(k, e.target.value);
 
   const handleExtractedCard = (extracted: Record<string, unknown>) => {
     setData(prev => ({
@@ -175,8 +230,91 @@ export function useBusinessCardState() {
   };
 
   const handleFieldMove = (field: keyof typeof DEFAULT_FIELD_POSITIONS, pos: FieldPos) => {
+    // Respect lock
+    if (fieldConfigs[field as keyof CardData]?.locked) return;
     setFieldPositions(prev => ({ ...prev, [field]: pos }));
   };
+
+  // ── Card Info Profiles ──────────────────────────────────────
+  const loadCardProfiles = useCallback(async () => {
+    setIsLoadingProfiles(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      const { data: assets, error } = await supabase
+        .from("design_assets")
+        .select("id, name, created_at, metadata")
+        .eq("user_id", user.id)
+        .eq("asset_type", "business_card_profile")
+        .order("created_at", { ascending: false })
+        .limit(20);
+      if (error) throw error;
+      const profiles: CardInfoProfile[] = (assets || []).map(a => ({
+        id: a.id,
+        name: a.name,
+        data: (a.metadata as any)?.cardData || { name: "", title: "", company: "", phone: "", email: "", website: "", address: "" },
+        created_at: a.created_at,
+      }));
+      setCardProfiles(profiles);
+    } catch (err) {
+      console.error("Failed to load profiles:", err);
+    } finally {
+      setIsLoadingProfiles(false);
+    }
+  }, []);
+
+  const saveCardProfile = useCallback(async (profileName: string) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { toast.error("Please sign in to save profiles."); return; }
+      const { error } = await supabase.from("design_assets").insert({
+        user_id: user.id,
+        asset_type: "business_card_profile",
+        file_url: "",
+        name: profileName,
+        metadata: { cardData: data, schema_version: 1 } as any,
+      });
+      if (error) throw error;
+      toast.success("Card info profile saved!");
+      loadCardProfiles();
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to save profile.");
+    }
+  }, [data, loadCardProfiles]);
+
+  const updateCardProfile = useCallback(async (profileId: string) => {
+    try {
+      const { error } = await supabase.from("design_assets")
+        .update({ metadata: { cardData: data, schema_version: 1 } as any })
+        .eq("id", profileId);
+      if (error) throw error;
+      toast.success("Profile updated!");
+      loadCardProfiles();
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to update profile.");
+    }
+  }, [data, loadCardProfiles]);
+
+  const deleteCardProfile = useCallback(async (profileId: string) => {
+    try {
+      const { error } = await supabase.from("design_assets").delete().eq("id", profileId);
+      if (error) throw error;
+      if (activeProfileId === profileId) setActiveProfileId(null);
+      setCardProfiles(prev => prev.filter(p => p.id !== profileId));
+      toast.success("Profile deleted.");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to delete profile.");
+    }
+  }, [activeProfileId]);
+
+  const applyCardProfile = useCallback((profile: CardInfoProfile) => {
+    setData(profile.data);
+    setActiveProfileId(profile.id);
+    toast.success(`Applied profile: ${profile.name}`);
+  }, []);
 
   const handleAiQrStyle = async () => {
     if (!qrAiPrompt.trim()) return;
@@ -328,6 +466,8 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
     if (metadata.logoSize) setLogoSize(metadata.logoSize);
     if (metadata.logoPos) setLogoPos(metadata.logoPos);
     if (metadata.aiDesignData !== undefined) setAiDesignData(metadata.aiDesignData);
+    if (metadata.fieldConfigs) setFieldConfigs(metadata.fieldConfigs);
+    if (metadata.fieldPositions) setFieldPositions(metadata.fieldPositions);
     toast.success("Card design restored!");
     setLoadSavedOpen(false);
   };
@@ -426,7 +566,7 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
       const cardState = {
         data, frontTemplate, backTemplate, frontColorIdx, backColorIdx, frontCustomColor, backCustomColor,
         cardShape, qrEnabled, qrContentType, qrCustomContent, qrSize, qrColor, qrBgColor, qrPosition,
-        logoUrl, logoSize, logoPos, aiDesignData,
+        logoUrl, logoSize, logoPos, aiDesignData, fieldConfigs, fieldPositions,
       };
 
       const { data: asset, error: assetErr } = await supabase.from("design_assets").insert({
@@ -453,6 +593,7 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
         }
       }
 
+      clearDraftFromStorage();
       toast.success("Card saved to Brand Assets!");
     } catch (err: any) {
       console.error(err);
@@ -555,6 +696,7 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
     logoUrl, setLogoUrl, logoSize, setLogoSize, logoPos, setLogoPos,
     cardShape, setCardShape, shapeOpen, setShapeOpen, nfcGuideOpen, setNfcGuideOpen,
     editLayout, setEditLayout, fieldPositions,
+    fieldConfigs, setFieldConfigs, selectedField, setSelectedField, updateFieldConfig,
     qrOpen, setQrOpen, qrEnabled, setQrEnabled,
     qrContentType, setQrContentType, qrCustomContent, setQrCustomContent,
     qrSize, setQrSize, qrColor, setQrColor, qrBgColor, setQrBgColor,
@@ -584,13 +726,17 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
     finishEffect, setFinishEffect, finishOpen, setFinishOpen,
     mockupScene, setMockupScene, mockupOpen, setMockupOpen,
 
+    // Card profiles
+    cardProfiles, activeProfileId, isLoadingProfiles,
+    loadCardProfiles, saveCardProfile, updateCardProfile, deleteCardProfile, applyCardProfile,
+
     // Derived
     frontPrimary, frontSecondary, frontAccent,
     backPrimary, backSecondary, backAccent,
     effectiveQrColor, activeTemplate, setActiveTemplate, qrDataStr,
 
     // Handlers
-    set, handleExtractedCard, handleFieldMove,
+    set, updateCardField, handleExtractedCard, handleFieldMove,
     handleAiQrStyle, handleGenerateDesign,
     handleGenerateGallery, toggleGalleryFavorite, applyGalleryDesign,
     handleTradeLicenseExtracted,

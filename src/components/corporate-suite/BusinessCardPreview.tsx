@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import {
   type Template, type CardShape, type QrPosition, type CardData,
-  type BilingualMode, type AiDesignData, type FieldPos,
+  type BilingualMode, type AiDesignData, type FieldPos, type FieldConfigMap,
   getShapeStyle, DEFAULT_FIELD_POSITIONS, SNAP_THRESHOLD,
-  buildQrUrl, QR_POSITION_STYLE,
+  buildQrUrl, QR_POSITION_STYLE, getDefaultFieldConfigs,
 } from "./businessCardTypes";
 
 // ─── Card Preview Component ───────────────────────────────────────────────────
@@ -371,6 +371,7 @@ export function CardCanvas({
   fontFamily, fontWeight, fontStyle, nameFontSize,
   bilingualMode, bilingualDir, secondaryData,
   onInlineEdit,
+  fieldConfigs,
 }: {
   data: CardData; template: Template; backTemplate: Template; primary: string; secondary: string; accent: string;
   backPrimary: string; backSecondary: string; backAccent: string;
@@ -385,6 +386,7 @@ export function CardCanvas({
   fontFamily?: string; fontWeight?: string; fontStyle?: string; nameFontSize?: number | null;
   bilingualMode?: BilingualMode; bilingualDir?: "rtl" | "ltr"; secondaryData?: CardData;
   onInlineEdit?: (field: keyof CardData) => void;
+  fieldConfigs?: FieldConfigMap;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const dragging = useRef<{
@@ -398,6 +400,7 @@ export function CardCanvas({
   const [qrLoaded, setQrLoaded] = useState(false);
   const [qrError, setQrError] = useState(false);
 
+  const configs = fieldConfigs || getDefaultFieldConfigs();
   const shapeStyle = getShapeStyle(cardShape);
 
   const activePrimary   = side === "back" ? backPrimary   : primary;
@@ -405,21 +408,33 @@ export function CardCanvas({
   const activeAccent    = side === "back" ? backAccent    : accent;
   const activeTemplate  = side === "back" ? backTemplate  : template;
 
-  const getFieldStyle = (field: keyof typeof DEFAULT_FIELD_POSITIONS): React.CSSProperties => ({
-    position: "absolute",
-    left: `${fieldPositions[field].x}%`,
-    top: `${fieldPositions[field].y}%`,
-    cursor: editLayout ? "grab" : "default",
-    border: editLayout ? "1.5px dashed rgba(255,255,255,0.6)" : "none",
-    borderRadius: 4,
-    padding: editLayout ? "2px 6px" : "0",
-    background: editLayout ? "rgba(0,0,0,0.25)" : "transparent",
-    backdropFilter: editLayout ? "blur(2px)" : "none",
-    zIndex: 10,
-    userSelect: "none",
-    touchAction: "none",
-    transition: editLayout ? "none" : "border 0.2s",
-  });
+  // Show the actual field content in draggable overlays instead of placeholder labels
+  const getFieldLabel = (field: keyof typeof DEFAULT_FIELD_POSITIONS): string => {
+    const value = data[field as keyof CardData];
+    if (value && value.trim()) return value;
+    // Fallback labels when empty
+    const labels: Record<string, string> = { name: "Your Name", title: "Job Title", company: "Company" };
+    return labels[field] || field;
+  };
+
+  const getFieldStyle = (field: keyof typeof DEFAULT_FIELD_POSITIONS): React.CSSProperties => {
+    const isLocked = configs[field as keyof CardData]?.locked;
+    return {
+      position: "absolute",
+      left: `${fieldPositions[field].x}%`,
+      top: `${fieldPositions[field].y}%`,
+      cursor: editLayout ? (isLocked ? "not-allowed" : "grab") : "default",
+      border: editLayout ? (isLocked ? "1.5px solid rgba(255,100,100,0.5)" : "1.5px dashed rgba(200,167,102,0.8)") : "none",
+      borderRadius: 4,
+      padding: editLayout ? "2px 8px" : "0",
+      background: editLayout ? (isLocked ? "rgba(255,0,0,0.15)" : "rgba(0,0,0,0.35)") : "transparent",
+      backdropFilter: editLayout ? "blur(2px)" : "none",
+      zIndex: 10,
+      userSelect: "none",
+      touchAction: "none",
+      transition: editLayout ? "none" : "border 0.2s",
+    };
+  };
 
   const startDrag = (
     type: "field" | "logo",
@@ -427,6 +442,8 @@ export function CardCanvas({
     field?: keyof typeof DEFAULT_FIELD_POSITIONS
   ) => {
     if (!editLayout) return;
+    // Don't drag locked fields
+    if (field && configs[field as keyof CardData]?.locked) return;
     e.preventDefault();
     e.stopPropagation();
 
@@ -474,6 +491,7 @@ export function CardCanvas({
     field?: keyof typeof DEFAULT_FIELD_POSITIONS
   ) => {
     if (!editLayout) return;
+    if (field && configs[field as keyof CardData]?.locked) return;
     e.preventDefault();
 
     const touch = e.touches[0];
@@ -574,24 +592,33 @@ export function CardCanvas({
         />
       )}
 
-      {/* Draggable field overlays — front side only */}
-      {side === "front" && (
+      {/* Draggable field overlays — front side only, showing REAL content */}
+      {side === "front" && editLayout && (
         <>
-          <div style={getFieldStyle("name")} onMouseDown={e => startDrag("field", e, "name")} onTouchStart={e => startTouchDrag("field", e, "name")}>
-            <span style={{ fontSize: "9px", fontWeight: 700, color: editLayout ? "#fff" : "transparent", whiteSpace: "nowrap", letterSpacing: 0.5 }}>
-              {editLayout ? "≡ Name" : ""}
-            </span>
-          </div>
-          <div style={getFieldStyle("title")} onMouseDown={e => startDrag("field", e, "title")} onTouchStart={e => startTouchDrag("field", e, "title")}>
-            <span style={{ fontSize: "9px", color: editLayout ? "#fff" : "transparent", whiteSpace: "nowrap" }}>
-              {editLayout ? "≡ Title" : ""}
-            </span>
-          </div>
-          <div style={getFieldStyle("company")} onMouseDown={e => startDrag("field", e, "company")} onTouchStart={e => startTouchDrag("field", e, "company")}>
-            <span style={{ fontSize: "9px", fontWeight: 700, color: editLayout ? "#fff" : "transparent", letterSpacing: 1.5, textTransform: "uppercase", whiteSpace: "nowrap" }}>
-              {editLayout ? "≡ Company" : ""}
-            </span>
-          </div>
+          {(Object.keys(DEFAULT_FIELD_POSITIONS) as (keyof typeof DEFAULT_FIELD_POSITIONS)[]).map(field => {
+            if (!configs[field as keyof CardData]?.visible) return null;
+            const isLocked = configs[field as keyof CardData]?.locked;
+            return (
+              <div
+                key={field}
+                style={getFieldStyle(field)}
+                onMouseDown={e => startDrag("field", e, field)}
+                onTouchStart={e => startTouchDrag("field", e, field)}
+              >
+                <span style={{
+                  fontSize: field === "name" ? "11px" : "9px",
+                  fontWeight: field === "name" ? 700 : 600,
+                  color: "#fff",
+                  whiteSpace: "nowrap",
+                  letterSpacing: field === "company" ? 1.5 : 0.5,
+                  textTransform: field === "company" ? "uppercase" : "none",
+                  textShadow: "0 1px 3px rgba(0,0,0,0.5)",
+                }}>
+                  {isLocked ? "🔒 " : "≡ "}{getFieldLabel(field)}
+                </span>
+              </div>
+            );
+          })}
         </>
       )}
 

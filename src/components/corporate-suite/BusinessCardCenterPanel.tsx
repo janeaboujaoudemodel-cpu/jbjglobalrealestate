@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import DigitalLandingPageEditor from "@/components/corporate-suite/DigitalLandingPageEditor";
 import {
   type CardData, type BilingualMode, type Template, type FinishEffect, type CardShape, type QrPosition,
+  type FieldConfigMap,
   BILINGUAL_LANGUAGES, TEMPLATES, CARD_SHAPES,
   getFinishOverlayStyle,
 } from "./businessCardTypes";
@@ -70,6 +71,8 @@ interface BusinessCardCenterPanelProps {
   isExportingHtml: boolean;
   handleExportHtml: () => void;
   bilingualLang: string;
+  // Field configs
+  fieldConfigs?: FieldConfigMap;
 }
 
 export function BusinessCardCenterPanel(props: BusinessCardCenterPanelProps) {
@@ -87,6 +90,7 @@ export function BusinessCardCenterPanel(props: BusinessCardCenterPanelProps) {
     finishEffect, frontColorIdx, backColorIdx, setFrontTemplate, setBackTemplate,
     landingPageData, setLandingPageData, digitalTab, setDigitalTab,
     isExportingHtml, handleExportHtml, bilingualLang,
+    fieldConfigs,
   } = props;
 
   const canvasProps = {
@@ -124,6 +128,18 @@ export function BusinessCardCenterPanel(props: BusinessCardCenterPanelProps) {
     bilingualDir,
     secondaryData,
     onInlineEdit: (field: keyof CardData) => setInlineEditField(field),
+    fieldConfigs,
+  };
+
+  // Set Front/Back template AND switch active side
+  const handleSetFront = (templateId: Template) => {
+    setFrontTemplate(templateId);
+    setSide("front");
+  };
+
+  const handleSetBack = (templateId: Template) => {
+    setBackTemplate(templateId);
+    setSide("back");
   };
 
   return (
@@ -290,64 +306,76 @@ export function BusinessCardCenterPanel(props: BusinessCardCenterPanelProps) {
       {/* All templates mini grid */}
       <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-5 shadow-sm">
         <Label className="text-[10px] font-bold uppercase tracking-[0.15em] text-[hsl(var(--muted-foreground))] mb-4 block">
-          All Templates Preview — click to set for {side === "front" ? "Front" : "Back"} side
+          All Templates Preview — click to assign
         </Label>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          {TEMPLATES.map(t => (
-            <div key={t.id} className="relative group">
-              <div
-                className={`relative rounded-xl overflow-hidden border-2 transition-all duration-200 ${
-                  frontTemplate === t.id || backTemplate === t.id
-                    ? "border-[hsl(var(--gold))] shadow-md"
-                    : "border-transparent hover:border-[hsl(var(--border))]"
-                }`}
-              >
-                <CardFace
-                  data={data}
-                  template={t.id}
-                  primary={frontPrimary}
-                  secondary={frontSecondary}
-                  accent={frontAccent}
-                  side="front"
-                  scale={0.45}
-                  shapeStyle={{ aspectRatio: "3.5 / 2", borderRadius: 0 }}
-                  aiDesignData={t.id === "ai-design" ? aiDesignData : null}
-                  fontFamily={cardFontFamily}
-                  fontWeight={cardFontBold ? "bold" : undefined}
-                  fontStyle={cardFontItalic ? "italic" : undefined}
-                  nameFontSize={cardFontSize}
-                />
-                <div className="absolute top-1 left-1 flex gap-0.5">
-                  {frontTemplate === t.id && (
-                    <span className="text-[8px] font-bold bg-[hsl(var(--gold))] text-white px-1 rounded">F</span>
+          {TEMPLATES.map(t => {
+            const isFront = frontTemplate === t.id;
+            const isBack = backTemplate === t.id;
+            return (
+              <div key={t.id} className="relative group">
+                <div
+                  className={`relative rounded-xl overflow-hidden border-2 transition-all duration-200 ${
+                    isFront || isBack
+                      ? "border-[hsl(var(--gold))] shadow-md"
+                      : "border-transparent hover:border-[hsl(var(--border))]"
+                  }`}
+                >
+                  <CardFace
+                    data={data}
+                    template={t.id}
+                    primary={frontPrimary}
+                    secondary={frontSecondary}
+                    accent={frontAccent}
+                    side="front"
+                    scale={0.45}
+                    shapeStyle={{ aspectRatio: "3.5 / 2", borderRadius: 0 }}
+                    aiDesignData={t.id === "ai-design" ? aiDesignData : null}
+                    fontFamily={cardFontFamily}
+                    fontWeight={cardFontBold ? "bold" : undefined}
+                    fontStyle={cardFontItalic ? "italic" : undefined}
+                    nameFontSize={cardFontSize}
+                  />
+                  <div className="absolute top-1 left-1 flex gap-0.5">
+                    {isFront && (
+                      <span className="text-[8px] font-bold bg-[hsl(var(--gold))] text-white px-1.5 py-0.5 rounded shadow-sm">Front</span>
+                    )}
+                    {isBack && (
+                      <span className="text-[8px] font-bold bg-[hsl(var(--foreground))] text-[hsl(var(--background))] px-1.5 py-0.5 rounded shadow-sm">Back</span>
+                    )}
+                  </div>
+                  {t.badge && (
+                    <div className="absolute top-1 right-1 text-[10px]">{t.badge}</div>
                   )}
-                  {backTemplate === t.id && (
-                    <span className="text-[8px] font-bold bg-[hsl(var(--foreground))] text-[hsl(var(--background))] px-1 rounded">B</span>
-                  )}
-                </div>
-                {t.badge && (
-                  <div className="absolute top-1 right-1 text-[10px]">{t.badge}</div>
-                )}
-                <p className="absolute bottom-0 left-0 right-0 text-center text-[9px] font-semibold py-1 bg-black/40 text-white">
-                  {t.label}
-                </p>
-                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1.5">
-                  <button
-                    onClick={() => setFrontTemplate(t.id)}
-                    className="text-[9px] font-bold bg-[hsl(var(--gold))] text-white px-2 py-1 rounded-full hover:opacity-90"
-                  >
-                    Set Front
-                  </button>
-                  <button
-                    onClick={() => setBackTemplate(t.id)}
-                    className="text-[9px] font-bold bg-white text-black px-2 py-1 rounded-full hover:opacity-90"
-                  >
-                    Set Back
-                  </button>
+                  <p className="absolute bottom-0 left-0 right-0 text-center text-[9px] font-semibold py-1 bg-black/40 text-white">
+                    {t.label}
+                  </p>
+                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1.5">
+                    <button
+                      onClick={() => handleSetFront(t.id)}
+                      className={`text-[9px] font-bold px-3 py-1 rounded-full hover:opacity-90 transition-all ${
+                        isFront
+                          ? "bg-[hsl(var(--gold))] text-white ring-2 ring-white/50"
+                          : "bg-[hsl(var(--gold)/0.8)] text-white"
+                      }`}
+                    >
+                      {isFront ? "✓ Front" : "Set Front"}
+                    </button>
+                    <button
+                      onClick={() => handleSetBack(t.id)}
+                      className={`text-[9px] font-bold px-3 py-1 rounded-full hover:opacity-90 transition-all ${
+                        isBack
+                          ? "bg-white text-black ring-2 ring-[hsl(var(--gold))]/50"
+                          : "bg-white/90 text-black"
+                      }`}
+                    >
+                      {isBack ? "✓ Back" : "Set Back"}
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 

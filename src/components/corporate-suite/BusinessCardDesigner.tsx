@@ -153,6 +153,7 @@ export default function BusinessCardDesigner() {
           setDigitalTab={s.setDigitalTab}
           isExportingHtml={s.isExportingHtml}
           handleExportHtml={s.handleExportHtml}
+          fieldConfigs={s.fieldConfigs}
         />
 
         {/* ── Right panel: Style Controls ──────────────────────── */}

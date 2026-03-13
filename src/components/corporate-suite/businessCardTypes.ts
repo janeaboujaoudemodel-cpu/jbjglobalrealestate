@@ -23,6 +23,44 @@ export interface CardData {
   address: string;
 }
 
+export const CARD_DATA_KEYS: (keyof CardData)[] = ["name", "title", "company", "phone", "email", "website", "address"];
+
+// ─── Per-field config ─────────────────────────────────────────────────────────
+export interface FieldStyleOverride {
+  color?: string;
+  fontSize?: number;
+  fontWeight?: string;
+  fontStyle?: string;
+  letterSpacing?: number;
+  textAlign?: TextAlign;
+  underline?: boolean;
+}
+
+export interface FieldConfig {
+  visible: boolean;
+  locked: boolean;
+  styleOverride?: FieldStyleOverride;
+}
+
+export type FieldConfigMap = Record<keyof CardData, FieldConfig>;
+
+export const DEFAULT_FIELD_CONFIG: FieldConfig = {
+  visible: true,
+  locked: false,
+};
+
+export function getDefaultFieldConfigs(): FieldConfigMap {
+  return {
+    name: { ...DEFAULT_FIELD_CONFIG },
+    title: { ...DEFAULT_FIELD_CONFIG },
+    company: { ...DEFAULT_FIELD_CONFIG },
+    phone: { ...DEFAULT_FIELD_CONFIG },
+    email: { ...DEFAULT_FIELD_CONFIG },
+    website: { ...DEFAULT_FIELD_CONFIG },
+    address: { ...DEFAULT_FIELD_CONFIG },
+  };
+}
+
 export type BilingualMode = "off" | "dual-side" | "single-card";
 export type BilingualLanguage = "ar" | "zh" | "hi" | "fr" | "de" | "es" | "ru" | "ja" | "ko" | "ur" | "fa" | "custom";
 
@@ -184,4 +222,33 @@ export function getFinishOverlayStyle(finish: FinishEffect): React.CSSProperties
     default:
       return {};
   }
+}
+
+// ─── Draft persistence ────────────────────────────────────────────────────────
+const DRAFT_KEY = "jbj_business_card_draft";
+
+export function saveDraftToStorage(data: CardData): void {
+  try {
+    localStorage.setItem(DRAFT_KEY, JSON.stringify({ data, ts: Date.now() }));
+  } catch { /* ignore */ }
+}
+
+export function loadDraftFromStorage(): CardData | null {
+  try {
+    const raw = localStorage.getItem(DRAFT_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    // Expire after 48 hours
+    if (Date.now() - parsed.ts > 48 * 60 * 60 * 1000) {
+      localStorage.removeItem(DRAFT_KEY);
+      return null;
+    }
+    return parsed.data || null;
+  } catch {
+    return null;
+  }
+}
+
+export function clearDraftFromStorage(): void {
+  try { localStorage.removeItem(DRAFT_KEY); } catch { /* ignore */ }
 }
