@@ -70,7 +70,7 @@ async function extractWithAI(content: string, prompt: string, lovableKey: string
       "Authorization": `Bearer ${lovableKey}`,
     },
     body: JSON.stringify({
-      model: "google/gemini-2.5-flash",
+      model: "google/gemini-3-flash-preview",
       messages: [
         { role: "system", content: "You are a data extraction specialist for UAE real estate. Extract structured data accurately. Always return valid JSON." },
         { role: "user", content: prompt + "\n\nContent to extract from:\n" + content.substring(0, 50000) },
