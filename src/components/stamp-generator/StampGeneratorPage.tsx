@@ -852,7 +852,7 @@ export default function StampGeneratorPage() {
                     fontStyle={fontItalic ? 'italic' : 'normal'}
                     fontSize={manualFontSize}
                     inkMode={inkMode}
-                    size={220}
+                    size={320}
                   />
                 ) : (
                   <div className="flex flex-col items-center gap-2 text-[hsl(var(--muted-foreground))]">
