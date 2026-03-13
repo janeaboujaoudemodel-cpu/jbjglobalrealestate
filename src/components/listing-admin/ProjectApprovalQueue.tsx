@@ -1319,14 +1319,14 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                     />
                   </div>
                   
-                  {selectedImport.images.length > 1 && (
+                  {validImages.length > 1 && (
                     <>
                       <Button
                         variant="outline"
                         size="icon"
                         className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80"
                         onClick={() => setCurrentImageIndex(i => 
-                          i === 0 ? selectedImport.images.length - 1 : i - 1
+                          i === 0 ? validImages.length - 1 : i - 1
                         )}
                       >
                         <ChevronLeft className="h-4 w-4" />
@@ -1336,17 +1336,17 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                         size="icon"
                         className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80"
                         onClick={() => setCurrentImageIndex(i => 
-                          i === selectedImport.images.length - 1 ? 0 : i + 1
+                          i === validImages.length - 1 ? 0 : i + 1
                         )}
                       >
                         <ChevronRight className="h-4 w-4" />
                       </Button>
                       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1 z-10">
-                        {selectedImport.images.slice(0, 5).map((_, idx) => (
+                        {validImages.slice(0, 5).map((_, idx) => (
                           <span
                             key={idx}
                             className={`w-1.5 h-1.5 rounded-full transition-colors ${
-                              idx === currentImageIndex ? 'bg-overlay' : 'bg-overlay/50'
+                              idx === safeIndex ? 'bg-overlay' : 'bg-overlay/50'
                             }`}
                           />
                         ))}
@@ -1354,34 +1354,35 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                     </>
                   )}
                 </div>
-              )}
 
-              {/* Thumbnail Strip */}
-              {selectedImport.images.length > 1 && (
-                <ScrollArea className="w-full">
-                  <div className="flex gap-2 py-2">
-                    {selectedImport.images.map((img, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => setCurrentImageIndex(idx)}
-                        className={`flex-shrink-0 w-20 h-14 rounded overflow-hidden border-2 transition-colors ${
-                          idx === currentImageIndex ? 'border-gold' : 'border-transparent'
-                        }`}
-                      >
-                        <img
-                          src={img.url}
-                          alt=""
-                          className="w-full h-full object-cover"
-                           referrerPolicy="no-referrer"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).src = '/placeholder.svg';
-                          }}
-                        />
-                      </button>
-                    ))}
-                  </div>
-                </ScrollArea>
-              )}
+                {/* Thumbnail Strip */}
+                {validImages.length > 1 && (
+                  <ScrollArea className="w-full">
+                    <div className="flex gap-2 py-2">
+                      {validImages.map((img, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => setCurrentImageIndex(idx)}
+                          className={`flex-shrink-0 w-20 h-14 rounded overflow-hidden border-2 transition-colors ${
+                            idx === safeIndex ? 'border-gold' : 'border-transparent'
+                          }`}
+                        >
+                          <img
+                            src={img.url}
+                            alt=""
+                            className="w-full h-full object-cover"
+                            referrerPolicy="no-referrer"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = '/placeholder.svg';
+                            }}
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  </ScrollArea>
+                )}
+                ) : null;
+              })()}
 
               <Separator />
 
