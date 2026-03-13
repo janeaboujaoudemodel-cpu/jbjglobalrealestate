@@ -1,72 +1,54 @@
 
-## CRM System Upgrade — Implementation Status
 
-### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
+## Stamp Generator — Layout, Arc Text, and Interaction Fix
 
-#### Task 1: Full System Audit ✅
-- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
-- Identified 10 weaknesses (documented in plan)
+### Problems Identified (from screenshot + code)
 
-#### Task 2: Leads Security Hardening ✅
-- CSV export no longer includes email/phone PII
-- Audit logging added to exports with user_agent tracking
-- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
+1. **Massive gap below header on generation page** — `StampGeneratorPage.tsx` line 466 has `pt-24 sm:pt-28 lg:pt-32` (128px padding-top on desktop), plus sticky header at `top-24/28/32`. This creates the huge empty gap visible in the screenshot. The page also uses `min-h-screen` with scrolling layout instead of a fixed viewport.
 
-#### Task 3: Encryption Hardening ✅
-- CSV export stripped of `email_lower` and `phone_e164` fields
-- Export audit logged to both `crm_audit_logs` and `audit_logs`
+2. **Bottom arc English text is still upside-down/unreadable** — In `stampOfficialTemplate.ts` line 108, the bottom arc path `M cx-r cy A r r 0 1 0 cx+r cy` renders text with characters pointing inward (toward center), which is upside-down from the reader's perspective. The same issue affects the location English text on the inner ring.
 
-#### Task 4: Lead Lifecycle Upgrade ✅
-- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
-- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
-- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
+3. **"Apply Logo to Stamp" doesn't work** — In `StampGeneratorPage.tsx` line 844-854, clicking "Apply Logo to Stamps" calls `generateConcepts(updated)` which triggers a full regeneration cycle (calls the edge function or `generateStampConcepts`). The existing concept cards don't update because the logo is stored in `project` state but `StampSVGRenderer` doesn't re-render the existing SVG strings — they're static SVG source strings baked at generation time.
 
-#### Task 5: CRM Structure Upgrade ✅
-- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
-- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
-- KanbanPipeline expanded to show all 17 relevant stages
+4. **Concept grid requires scrolling** — All 8-11 concepts render in a single grid with no pagination, forcing long vertical scroll.
 
-#### Task 6: Performance Optimization ✅
-- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
-- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
-- `crm_leads_updated_at_trigger` auto-updates `updated_at`
+5. **Left panel controls (Color/Fonts/Text/Art/Logo) are hidden on this viewport** — The left panel has `hidden lg:flex` (line 539) which hides it below 1024px. At the user's 1178px viewport it should show, but the `sticky top-[calc(theme(spacing.32)+56px)]` creates misalignment.
 
-#### Task 7: AI Intelligence Integration ✅
-- New edge function `ai-lead-intelligence` using Lovable AI gateway
-- Supports 3 modes: `score`, `summary`, `next_action`
-- Tool-calling for structured scoring output
-- JWT auth + CRM role validation
-- PII sanitized before sending to AI
+6. **InteractiveStampCanvas layers are disconnected** — Layer visibility toggles in the layers panel don't affect the SVG rendering because layers are empty overlay boxes, not connected to the actual SVG content.
 
-#### Task 8: Workflow Automation ✅
-- Created `crm_automation_rules` table with RLS (owner manage, admin view)
-- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
+### Implementation Plan
 
-#### Task 10: Role & Permission System ✅
-- RLS on automation rules: owner CRUD, admin read-only
-- CSV export restricted to owner_admin/founder roles
+**A. Fix generation page layout (StampGeneratorPage.tsx)**
+- Change the root container from `min-h-screen pt-24 sm:pt-28 lg:pt-32` to `h-[calc(100vh-52px)] overflow-hidden flex flex-col` (same pattern as the wizard).
+- Change sticky header from `sticky top-24 sm:top-28 lg:top-32` to `flex-shrink-0` (no sticky needed in a flex column layout).
+- Make the 3-column body `flex-1 overflow-hidden` with internal scroll only in the concepts grid area.
+- Remove `max-w-[1600px] mx-auto` wrapper; use direct flex children.
+- Change left panel from `hidden lg:flex` to always visible with narrower width (200px).
+- Change center preview from `hidden lg:flex` to always visible.
+- Make concepts grid area use `overflow-y-auto` with its own scroll.
 
-#### Task 12: Backend/Database Upgrade ✅
-- 3 new performance indexes
-- Auto-updated_at trigger on crm_leads
-- Duplicate hash computation trigger
-- Rate-limiting security function
+**B. Fix bottom arc text to be readable right-side up (stampOfficialTemplate.ts)**
+- Replace `textPath` for bottom arcs with per-character `<text>` elements positioned along the arc.
+- Each character is placed at coordinates `(cx + r*cos(θ), cy + r*sin(θ))` with rotation `θ + 90°` so the character top points outward (away from center).
+- Characters are distributed evenly across ~160° of the bottom half, centered at 6 o'clock.
+- Apply the same technique for the location English text on the inner ring.
+- Keep Arabic top arc using `textPath` (Arabic reads correctly on the top arc as-is).
 
-#### Task 13: Data Cleanliness ✅
-- `duplicate_hash` with auto-compute trigger prevents future duplicates
-- Partial unique index enforces uniqueness at DB level
+**C. Fix "Apply Logo to Stamp" (StampGeneratorPage.tsx)**
+- Instead of calling `generateConcepts(updated)`, update `project` state and then re-render all existing concepts by injecting the logo into their SVG source strings.
+- Create a helper `injectLogoIntoSvg(svgSource, logoUrl, monogramText, iconStyle)` that finds the center content area in the SVG and replaces/inserts the logo image or monogram text element.
+- Apply this to all concepts via `setSvgOverrides`.
 
-### Files Changed
-| File | Action |
-|------|--------|
-| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
-| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
-| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
-| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
-| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
-| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
-| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
-| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
-| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
+**D. Add pagination to concepts grid (StampGeneratorPage.tsx)**
+- Add `conceptPage` state, show 6 concepts per page.
+- Render prev/next buttons below the grid.
+- Keep favorites section always visible above.
+
+**E. Remove InteractiveStampCanvas from generation page**
+- Replace the `InteractiveStampCanvas` wrapper (lines 885-907) with direct `StampSVGRenderer` rendering, same as mobile view already does.
+- Remove the broken layers panel. Layer visibility (show/hide location, license, monogram) is already handled by project-level toggles.
+
+### Files to modify
+1. `src/lib/stampOfficialTemplate.ts` — per-character bottom arc rendering
+2. `src/components/stamp-generator/StampGeneratorPage.tsx` — layout, pagination, logo apply, remove broken canvas
+
