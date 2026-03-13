@@ -6,7 +6,7 @@
  */
 
 import React, { useMemo } from 'react';
-import { generateOfficialStampSVG, OFFICIAL_INK_BLUE, type SeparatorStyle, type BorderStyleType } from '@/lib/stampOfficialTemplate';
+import { generateOfficialStampSVG, OFFICIAL_INK_BLUE, type SeparatorStyle, type BorderStyleType, type CenterContentMode, type CenterIconType } from '@/lib/stampOfficialTemplate';
 
 type StampType = 'ROUND' | 'OVAL' | 'RECTANGLE' | 'SQUARE';
 type StyleTheme = 'CLASSIC' | 'MODERN' | 'MINIMAL' | 'LUXURY' | 'BOLD' | 'VINTAGE';
@@ -42,6 +42,10 @@ export interface LiveStampPreviewProps {
   inkColor?: string;
   /** Arabic city text */
   arabicCity?: string;
+  /** Center content mode */
+  centerMode?: CenterContentMode;
+  /** Center icon type (when centerMode = 'icon') */
+  centerIcon?: CenterIconType;
 }
 
 const FONT_FAMILIES: Record<TypographyStyle, string> = {
@@ -117,6 +121,8 @@ export function LiveStampPreview({
   size = 220,
   inkColor,
   arabicCity = '',
+  centerMode,
+  centerIcon,
 }: LiveStampPreviewProps) {
   const displayName = companyName || 'Your Company Name';
   const fontFamily = FONT_FAMILIES[typographyStyle];
@@ -166,6 +172,8 @@ export function LiveStampPreview({
         registrationNumber,
         showRegistration: showLicenseNumber && density >= 3 && !!registrationNumber,
         borderStyle: borderStyle as BorderStyleType,
+        centerMode: centerMode || (iconStyle === 'UPLOADED_LOGO' ? 'logo' : iconStyle === 'MONOGRAM' ? 'monogram' : undefined),
+        centerIcon,
       });
     }
 
@@ -330,6 +338,7 @@ export function LiveStampPreview({
     stampType, styleTheme, borderStyle, typographyStyle, density,
     iconStyle, monogramText, uploadedLogoUrl, languageMode, languageReversed,
     showLicenseNumber, showLocation, separatorStyle, fontFamily, sw, hasRing, size, ink, arabicCity,
+    centerMode, centerIcon,
   ]);
 
   return (

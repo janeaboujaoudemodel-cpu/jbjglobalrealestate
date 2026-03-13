@@ -19,7 +19,7 @@ import {
 import { StampLicenseUploader } from '@/components/stamp-generator/StampLicenseUploader';
 import { LiveStampPreview } from '@/components/stamp-generator/LiveStampPreview';
 import { useStampHistory } from '@/hooks/useStampHistory';
-import { OFFICIAL_INK_BLUE, type SeparatorStyle, type BorderStyleType } from '@/lib/stampOfficialTemplate';
+import { OFFICIAL_INK_BLUE, ALL_SEPARATOR_STYLES, separatorLabel, type SeparatorStyle, type BorderStyleType } from '@/lib/stampOfficialTemplate';
 
 // UAE phone normalization
 function normalizePhone(raw: string): string {
@@ -92,13 +92,17 @@ const BUSINESS_TYPES = [
   'Healthcare', 'Education', 'Food & Beverage', 'Tourism', 'Finance', 'Legal', 'Other'
 ];
 
-const SEPARATOR_OPTIONS: { key: SeparatorStyle; icon: React.ReactNode; label: string }[] = [
-  { key: 'dot', icon: <Circle size={10} className="fill-current"/>, label: 'Dots' },
-  { key: 'star', icon: <Star size={10} className="fill-current"/>, label: 'Stars' },
-  { key: 'dash', icon: <Minus size={10}/>, label: 'Dash' },
-  { key: 'circle', icon: <Hash size={10}/>, label: 'Ring' },
-  { key: 'none', icon: <X size={10}/>, label: 'None' },
-];
+const SEPARATOR_GLYPHS: Record<SeparatorStyle, string> = {
+  'dot': '●', 'star': '★', 'square': '■', 'diamond': '◆',
+  'line': '—', 'double-line': '═', 'triangle': '▲', 'cross': '✦',
+  'floral': '❀', 'ornament': '❖', 'dash': '—', 'circle': '◉', 'none': '⊘',
+};
+
+const SEPARATOR_OPTIONS: { key: SeparatorStyle; glyph: string; label: string }[] = ALL_SEPARATOR_STYLES.map(key => ({
+  key,
+  glyph: SEPARATOR_GLYPHS[key],
+  label: separatorLabel(key),
+}));
 
 const OptionButton = ({ selected, onClick, children, className = '' }: {
   selected: boolean; onClick: () => void; children: React.ReactNode; className?: string;
@@ -589,15 +593,16 @@ export default function StampProjectWizard() {
                   {form.stamp_type === 'ROUND' && (form.language_mode === 'BILINGUAL' || form.language_mode === 'AR') && (
                     <div>
                       <Label className="text-[11px] font-medium mb-1.5 block">Arc Separators</Label>
-                      <div className="flex gap-1.5 flex-wrap">
+                      <div className="grid grid-cols-4 gap-1.5">
                         {SEPARATOR_OPTIONS.map(opt => (
                           <button key={opt.key} type="button" onClick={() => set('separator_style', opt.key)}
-                            className={`flex items-center gap-1 px-2 py-1 rounded-lg border-2 text-xs font-medium transition-all ${
+                            className={`flex flex-col items-center gap-0.5 px-1.5 py-1.5 rounded-lg border-2 text-xs font-medium transition-all ${
                               form.separator_style === opt.key
                                 ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)] text-[hsl(var(--gold-dark))]'
                                 : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]'
                             }`}>
-                            {opt.icon} {opt.label}
+                            <span className="text-sm">{opt.glyph}</span>
+                            <span className="text-[8px]">{opt.label}</span>
                           </button>
                         ))}
                       </div>

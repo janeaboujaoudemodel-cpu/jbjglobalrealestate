@@ -1,105 +1,72 @@
 
+## CRM System Upgrade — Implementation Status
 
-## Plan: Stamp Generator — STANDARD MODEL Core Structure
+### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-### Current State
+#### Task 1: Full System Audit ✅
+- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
+- Identified 10 weaknesses (documented in plan)
 
-The stamp system already has a foundation in `src/lib/stampOfficialTemplate.ts` with a 3-ring layout, Arabic-top/English-bottom arcs, separators, location arcs, and center content. However it needs significant upgrades to match the reference image's premium corporate stamp quality.
+#### Task 2: Leads Security Hardening ✅
+- CSV export no longer includes email/phone PII
+- Audit logging added to exports with user_agent tracking
+- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
 
-**Key gaps:**
-- No "Standard Model" concept pinned as default first-load
-- Ring thickness hierarchy is flat (outer 4px, inner 2px, center 1.2px) — needs bolder outer, wider premium gap between ring 1→2, tighter gap between ring 2→3
-- Only 5 separator options (dot/star/dash/circle/none) — needs 10+
-- Center content limited to monogram/logo/none — needs initials, icon, license number options
-- Navy ink default exists in wizard but not enforced in generator studio page (defaults to `#1B3A8C` but labeled "Ink Blue" inconsistently)
-- Safe zone margins exist but are minimal (5px) — need strengthening
+#### Task 3: Encryption Hardening ✅
+- CSV export stripped of `email_lower` and `phone_e164` fields
+- Export audit logged to both `crm_audit_logs` and `audit_logs`
 
-### Implementation
+#### Task 4: Lead Lifecycle Upgrade ✅
+- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
+- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
+- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
 
-#### 1. Upgrade `stampOfficialTemplate.ts` — Ring Geometry + Separators + Center
+#### Task 5: CRM Structure Upgrade ✅
+- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
+- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
+- KanbanPipeline expanded to show all 17 relevant stages
 
-**Ring hierarchy (tapering thickness):**
-- Outer ring: `strokeWidth = 6` (boldest, authoritative)
-- Middle ring: `strokeWidth = 2.5` (medium, refined)
-- Inner ring: `strokeWidth = 1.2` (thinnest, elegant)
-- Gap between outer→middle: `~13%` of radius (premium wide gap)
-- Gap between middle→inner: `~8%` of radius (tighter, refined)
+#### Task 6: Performance Optimization ✅
+- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
+- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
+- `crm_leads_updated_at_trigger` auto-updates `updated_at`
 
-**Expand `SeparatorStyle` type:**
-```
-'dot' | 'star' | 'square' | 'diamond' | 'line' | 'double-line' | 'triangle' | 'cross' | 'floral' | 'ornament' | 'none'
-```
-Add corresponding glyph rendering for each (Unicode/SVG paths for floral and ornament).
+#### Task 7: AI Intelligence Integration ✅
+- New edge function `ai-lead-intelligence` using Lovable AI gateway
+- Supports 3 modes: `score`, `summary`, `next_action`
+- Tool-calling for structured scoring output
+- JWT auth + CRM role validation
+- PII sanitized before sending to AI
 
-**Expand center content system:**
-- Add `CenterContentMode` type: `'monogram' | 'initials' | 'logo' | 'icon' | 'license' | 'none'`
-- Update `OfficialStampConfig` interface with `centerMode` field
-- `initials` = first letter of each word (auto-derived, max 3)
-- `icon` = preset corporate icons (shield, crown, building, globe)
-- `license` = registration number displayed prominently in center
+#### Task 8: Workflow Automation ✅
+- Created `crm_automation_rules` table with RLS (owner manage, admin view)
+- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
 
-**Safe zone enforcement:**
-- Minimum 7px clearance between text and ring strokes (up from 5px)
-- Arc spread limit stays at 0.58 of semicircle
+#### Task 10: Role & Permission System ✅
+- RLS on automation rules: owner CRUD, admin read-only
+- CSV export restricted to owner_admin/founder roles
 
-#### 2. Pin "Standard Model" as first concept in `stampTemplates.ts`
+#### Task 12: Backend/Database Upgrade ✅
+- 3 new performance indexes
+- Auto-updated_at trigger on crm_leads
+- Duplicate hash computation trigger
+- Rate-limiting security function
 
-- Add a new template `T0: Owner Official Standard` at the top of `generateStampConcepts()`
-- Uses `generateOfficialStampSVG()` with project data, always `unshift`ed to position 0
-- Label: "Owner Official Standard" with tag `['standard', 'official', 'bilingual', 'premium']`
-- This replaces the current T12 "Bilingual Logo Center" as the pinned first entry
+#### Task 13: Data Cleanliness ✅
+- `duplicate_hash` with auto-compute trigger prevents future duplicates
+- Partial unique index enforces uniqueness at DB level
 
-#### 3. Update `StampGeneratorPage.tsx` — Default ink + reset button
-
-- Default `primaryColor` changes from `#1B3A8C` to the `OFFICIAL_INK_BLUE` constant (same value but uses the shared constant)
-- Ensure the "Reset to Standard (Ink Blue)" button resets all 3 color stops to navy ink values
-- Label the first concept card with a "Standard" badge so users know it's the default model
-- Auto-select the Standard Model concept on first load
-
-#### 4. Update `StampProjectWizard.tsx` — Separator picker UI
-
-- Expand the separator picker from 5 options to 10+ (matching the new `SeparatorStyle` type)
-- Add visual preview swatches for each separator type
-- Wire new separator styles through to `LiveStampPreview`
-
-#### 5. Update `LiveStampPreview.tsx`
-
-- Pass through the new separator styles and center content modes to `generateOfficialStampSVG()`
-- Update the props interface with `centerMode` option
-
-### Files Modified
-
-| File | Change |
+### Files Changed
+| File | Action |
 |------|--------|
-| `src/lib/stampOfficialTemplate.ts` | Ring geometry, 10+ separators, center content modes, safe zones |
-| `src/lib/stampTemplates.ts` | Pin Standard Model as T0 using official template |
-| `src/components/stamp-generator/StampGeneratorPage.tsx` | Navy ink default constant, Standard badge, auto-select |
-| `src/components/stamp-generator/StampProjectWizard.tsx` | Expanded separator picker UI |
-| `src/components/stamp-generator/LiveStampPreview.tsx` | New props for center mode and separators |
-
-### Spacing Logic (from reference image)
-
-```text
-┌─────────────────────────────────┐
-│  OUTER RING (6px stroke)        │
-│    ┌─── PREMIUM GAP (13%) ───┐  │
-│    │  MIDDLE RING (2.5px)    │  │
-│    │  ┌─ TIGHT GAP (8%) ─┐  │  │
-│    │  │ INNER RING (1.2px)│  │  │
-│    │  │  ┌─ CENTER ────┐  │  │  │
-│    │  │  │  Monogram/  │  │  │  │
-│    │  │  │  Logo/Init  │  │  │  │
-│    │  │  └─────────────┘  │  │  │
-│    │  │ Loc-AR ↑  Loc-EN ↓│  │  │
-│    │  └───────────────────┘  │  │
-│    │ AR Name ↑    EN Name ↓  │  │
-│    │ ★ separators at 3&9 ★   │  │
-│    └─────────────────────────┘  │
-└─────────────────────────────────┘
-```
-
-- Text never touches rings (7px minimum clearance)
-- Arabic arcs fill upper section proportionally (not thin/centered)
-- English bottom reads left-to-right (character-by-character rotation)
-- Default preview color: Navy Ink `#1B3A8C` everywhere
-
+| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
+| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
+| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
+| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
+| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
+| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
+| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
+| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
+| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |

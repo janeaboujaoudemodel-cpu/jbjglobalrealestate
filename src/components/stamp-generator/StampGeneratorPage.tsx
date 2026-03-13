@@ -316,6 +316,10 @@ export default function StampGeneratorPage() {
     const clientConcepts = generateStampConcepts(latestProject);
     if (clientConcepts[0]?.templateKey === 'blocked') { setBlocked(true); setGenerating(false); return; }
     setConcepts(clientConcepts);
+    // Auto-select the Standard Model (first concept) on first load
+    if (clientConcepts.length > 0 && !selectedId) {
+      setSelectedId(clientConcepts[0].id);
+    }
     setGenerating(false);
   }, [project, session, projectId]);
 
@@ -1173,7 +1177,12 @@ function ConceptCard({
         <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} fontWeight={fontBold ? 'bold' : 'normal'} fontStyle={fontItalic ? 'italic' : 'normal'} fontSize={manualFontSize} inkMode={inkMode} size={isRectShape ? 160 : 130}/>
       </div>
       <div className="p-2 space-y-1.5">
-        <p className="font-medium text-[11px] text-[hsl(var(--foreground))] truncate">{concept.label}</p>
+        <p className="font-medium text-[11px] text-[hsl(var(--foreground))] truncate">
+          {concept.templateKey === 'owner-official-standard' && (
+            <span className="inline-block mr-1 px-1 py-0 text-[7px] font-bold bg-[hsl(var(--gold))] text-white rounded uppercase">Standard</span>
+          )}
+          {concept.label}
+        </p>
         <div className="flex gap-1">
           <Button size="sm"
             className={`flex-1 h-6 text-[9px] gap-0.5 ${isSelected ? 'bg-[hsl(var(--gold))] text-white' : 'bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90'}`}
