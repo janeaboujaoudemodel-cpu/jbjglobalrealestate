@@ -47,6 +47,7 @@ export function StampPreviewModal({
   const [textScaleLocked, setTextScaleLocked] = useState(false);
   const [monoScale, setMonoScale] = useState(1.0);
   const [monoScaleLocked, setMonoScaleLocked] = useState(false);
+  const [stampAlign, setStampAlign] = useState<'left' | 'center' | 'right'>('right');
   const textEditorRef = useRef<HTMLDivElement>(null);
   const displaySvg = localSvg || svgOverride || concept.svgSource;
 
