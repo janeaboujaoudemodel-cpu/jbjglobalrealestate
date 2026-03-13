@@ -315,7 +315,7 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   const bottomArcContent = renderBottomArcText(
     bottomText || (bottomIsArabic ? 'اسم الشركة' : 'COMPANY NAME'),
     cx, cy, clampedTextArcR, bottomFontSize, bottomFont, priColor,
-    bottomIsArabic ? 1 : 2.5, bottomIsArabic
+    bottomIsArabic ? 1 : 4, bottomIsArabic
   );
 
   // ── Location text — BOTH Arabic and English as arcs ──
