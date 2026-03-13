@@ -96,7 +96,7 @@ async function extractWithAI(content: string, prompt: string, lovableKey: string
   throw new Error("No valid JSON found in AI response");
 }
 
-serve(async (req) => {
+Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }

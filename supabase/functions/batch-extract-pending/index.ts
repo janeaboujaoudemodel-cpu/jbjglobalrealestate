@@ -23,7 +23,7 @@ function extractSlugFromUrl(url: string): string {
 const PROVIDENT_BASE = "https://providentestate.com";
 const PROJECT_FILES_BUCKET = "project-files";
 
-serve(async (req) => {
+Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
