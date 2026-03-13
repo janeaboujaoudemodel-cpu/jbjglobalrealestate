@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import type { Json } from "@/integrations/supabase/types";
+import { sanitizeForDisplay } from "@/utils/contentSanitizer";
 import { PendingImportCard } from "@/components/listing-admin/PendingImportCard";
 import { ApprovalConfirmDialog } from "@/components/listing-admin/ApprovalConfirmDialog";
 import { NewProjectDetector } from "@/components/listing-admin/NewProjectDetector";

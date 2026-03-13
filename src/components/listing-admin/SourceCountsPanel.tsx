@@ -1,7 +1,8 @@
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Globe, RefreshCw, Database, CheckCircle, Clock, XCircle } from "lucide-react";
+import { Globe, RefreshCw, Database, CheckCircle, Clock, Layers } from "lucide-react";
 import { useSyncJobs } from "@/hooks/useSyncJobs";
 import { useNavigate } from "react-router-dom";
 
@@ -9,110 +10,140 @@ interface SourceCountsPanelProps {
   reellyApiTotal?: number | null;
 }
 
-/**
- * REELLY-ONLY COUNTS PANEL
- * 
- * Shows ONLY Reelly API source - Provident extraction is disabled per user mandate.
- * Displays:
- * - Expected count (from API)
- * - Total count (in queue)
- * - Approved count
- * - Pending count
- */
+type SourceSelection = "none" | "source-a" | "source-b";
+
 export function SourceCountsPanel({ reellyApiTotal }: SourceCountsPanelProps) {
   const { liveCounts, refreshCounts } = useSyncJobs();
   const navigate = useNavigate();
+  const [selectedSource, setSelectedSource] = useState<SourceSelection>("none");
 
-  const handleViewProjects = (status: 'pending' | 'approved') => {
-    // Navigate to approval queue with Reelly source filter
-    navigate(`/listing-admin?view=data-ops&syncTab=approvals&source=reelly&status=${status}`);
+  const handleViewProjects = (status: 'pending' | 'approved', source: string) => {
+    navigate(`/listing-admin?view=data-ops&syncTab=approvals&source=${source}&status=${status}`);
   };
 
   return (
     <div className="space-y-4">
-      {/* Reelly-Only Mode Banner */}
-      <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-emerald-50 to-emerald-100/50 border border-emerald-300/50 rounded-lg">
-        <CheckCircle className="w-5 h-5 text-emerald-600" />
-        <span className="text-emerald-800 font-medium text-sm">Reelly-Only Mode Active</span>
-        <span className="text-emerald-600 text-xs">All project data sourced exclusively from Reelly API</span>
+      {/* Source Selector */}
+      <div className="grid grid-cols-2 gap-4">
+        {/* External Source A */}
+        <Card
+          className={`cursor-pointer transition-all border-2 ${
+            selectedSource === "source-a"
+              ? "border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-lg"
+              : "border-border hover:border-gold/40 bg-card"
+          }`}
+          onClick={() => setSelectedSource(selectedSource === "source-a" ? "none" : "source-a")}
+        >
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2 text-sm text-foreground">
+              <Globe className="w-4 h-4 text-gold" />
+              External Source A
+              {selectedSource === "source-a" && (
+                <Badge variant="outline" className="ml-auto bg-gold/10 text-gold border-gold/40 text-[10px]">
+                  Selected
+                </Badge>
+              )}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="pt-0">
+            <div className="grid grid-cols-3 gap-2">
+              <div className="text-center p-2 bg-background/60 rounded border border-border">
+                <p className="text-[10px] text-muted-foreground font-medium">Expected</p>
+                <p className="text-base font-bold text-foreground">
+                  {reellyApiTotal?.toLocaleString() || liveCounts?.reelly_total_api?.toLocaleString() || "—"}
+                </p>
+              </div>
+              <div
+                className="text-center p-2 bg-background/60 rounded border border-border cursor-pointer hover:bg-accent/50 transition-colors"
+                onClick={(e) => { e.stopPropagation(); handleViewProjects('pending', 'reelly'); }}
+              >
+                <p className="text-[10px] text-amber-600 font-medium flex items-center justify-center gap-0.5">
+                  <Clock className="w-2.5 h-2.5" /> Pending
+                </p>
+                <p className="text-base font-bold text-amber-700">
+                  {liveCounts?.reelly_pending_queue?.toLocaleString() || "0"}
+                </p>
+              </div>
+              <div
+                className="text-center p-2 bg-background/60 rounded border border-border cursor-pointer hover:bg-accent/50 transition-colors"
+                onClick={(e) => { e.stopPropagation(); handleViewProjects('approved', 'reelly'); }}
+              >
+                <p className="text-[10px] text-emerald-600 font-medium flex items-center justify-center gap-0.5">
+                  <CheckCircle className="w-2.5 h-2.5" /> Approved
+                </p>
+                <p className="text-base font-bold text-emerald-700">
+                  {liveCounts?.reelly_approved?.toLocaleString() || "0"}
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* External Source B */}
+        <Card
+          className={`cursor-pointer transition-all border-2 ${
+            selectedSource === "source-b"
+              ? "border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-lg"
+              : "border-border hover:border-gold/40 bg-card"
+          }`}
+          onClick={() => setSelectedSource(selectedSource === "source-b" ? "none" : "source-b")}
+        >
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2 text-sm text-foreground">
+              <Database className="w-4 h-4 text-gold" />
+              External Source B
+              {selectedSource === "source-b" && (
+                <Badge variant="outline" className="ml-auto bg-gold/10 text-gold border-gold/40 text-[10px]">
+                  Selected
+                </Badge>
+              )}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="pt-0">
+            <div className="grid grid-cols-3 gap-2">
+              <div className="text-center p-2 bg-background/60 rounded border border-border">
+                <p className="text-[10px] text-muted-foreground font-medium">Expected</p>
+                <p className="text-base font-bold text-foreground">—</p>
+              </div>
+              <div
+                className="text-center p-2 bg-background/60 rounded border border-border cursor-pointer hover:bg-accent/50 transition-colors"
+                onClick={(e) => { e.stopPropagation(); handleViewProjects('pending', 'provident'); }}
+              >
+                <p className="text-[10px] text-amber-600 font-medium flex items-center justify-center gap-0.5">
+                  <Clock className="w-2.5 h-2.5" /> Pending
+                </p>
+                <p className="text-base font-bold text-amber-700">0</p>
+              </div>
+              <div
+                className="text-center p-2 bg-background/60 rounded border border-border cursor-pointer hover:bg-accent/50 transition-colors"
+                onClick={(e) => { e.stopPropagation(); handleViewProjects('approved', 'provident'); }}
+              >
+                <p className="text-[10px] text-emerald-600 font-medium flex items-center justify-center gap-0.5">
+                  <CheckCircle className="w-2.5 h-2.5" /> Approved
+                </p>
+                <p className="text-base font-bold text-emerald-700">0</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
-      {/* REELLY SOURCE - Full Width */}
-      <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-        <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-zinc-800">
-            <Globe className="w-5 h-5 text-gold" />
-            Reelly API Source
-            <Badge variant="outline" className="ml-auto bg-gold/10 text-gold border-gold/40">
-              Primary & Only
-            </Badge>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {/* API Stats Row */}
-          <div className="grid grid-cols-4 gap-3">
-            <div 
-              className="text-center p-3 bg-white rounded-lg border border-gold/30 cursor-pointer hover:border-gold hover:bg-gold/5 transition-colors"
-              onClick={() => navigate('/listing-admin?view=data-ops&syncTab=approvals&source=reelly')}
-              title="Click to view all Reelly projects"
-            >
-              <p className="text-xs text-zinc-600 mb-1 font-medium">Expected</p>
-              <p className="text-xl font-bold text-zinc-800">
-                {reellyApiTotal?.toLocaleString() || liveCounts?.reelly_total_api?.toLocaleString() || "—"}
-              </p>
-            </div>
-            
-            <div 
-              className="text-center p-3 bg-white rounded-lg border border-gold/30 cursor-pointer hover:border-gold hover:bg-amber-50/50 transition-colors"
-              onClick={() => handleViewProjects('pending')}
-              title="Click to view pending Reelly projects"
-            >
-              <p className="text-xs text-amber-600 mb-1 font-medium flex items-center justify-center gap-1">
-                <Clock className="w-3 h-3" />
-                Pending
-              </p>
-              <p className="text-xl font-bold text-amber-700">
-                {liveCounts?.reelly_pending_queue?.toLocaleString() || "0"}
-              </p>
-            </div>
-            
-            <div 
-              className="text-center p-3 bg-white rounded-lg border border-gold/30 cursor-pointer hover:border-gold hover:bg-emerald-50/50 transition-colors"
-              onClick={() => handleViewProjects('approved')}
-              title="Click to view approved Reelly projects"
-            >
-              <p className="text-xs text-emerald-600 mb-1 font-medium flex items-center justify-center gap-1">
-                <CheckCircle className="w-3 h-3" />
-                Approved
-              </p>
-              <p className="text-xl font-bold text-emerald-700">
-                {liveCounts?.reelly_approved?.toLocaleString() || "0"}
-              </p>
-            </div>
-            
-            <div className="text-center p-3 bg-white rounded-lg border border-gold/30">
-              <p className="text-xs text-zinc-600 mb-1 font-medium">Total</p>
-              <p className="text-xl font-bold text-zinc-800">
-                {((liveCounts?.reelly_pending_queue || 0) + (liveCounts?.reelly_approved || 0)).toLocaleString()}
-              </p>
-            </div>
-          </div>
-          
-          {/* Sync Status */}
-          <div className="flex items-center justify-between text-xs text-zinc-600">
-            <span>Data from Reelly REST API • api-reelly.up.railway.app</span>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => refreshCounts()}
-              className="h-6 text-xs text-gold hover:text-gold/80 hover:bg-gold/10"
-            >
-              <RefreshCw className="w-3 h-3 mr-1" />
-              Refresh
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Refresh */}
+      <div className="flex items-center justify-between text-xs text-muted-foreground">
+        <span className="flex items-center gap-1.5">
+          <Layers className="w-3.5 h-3.5" />
+          Select a source above to view detailed sync data
+        </span>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => refreshCounts()}
+          className="h-6 text-xs text-gold hover:text-gold/80 hover:bg-gold/10"
+        >
+          <RefreshCw className="w-3 h-3 mr-1" />
+          Refresh
+        </Button>
+      </div>
     </div>
   );
 }

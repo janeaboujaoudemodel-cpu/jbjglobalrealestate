@@ -33,7 +33,9 @@ import {
   Globe,
   Filter,
   Download,
-  FileText
+  FileText,
+  BarChart3,
+  Calendar
 } from "lucide-react";
 import { toast } from "sonner";
 import { ProvidentSyncButton } from "@/components/admin/ProvidentSyncButton";

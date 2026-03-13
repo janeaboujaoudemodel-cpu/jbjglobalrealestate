@@ -321,6 +321,15 @@ const ListingGenerator = () => {
     const newFiles: UploadedFile[] = [];
 
     for (const file of arr) {
+      // Duplicate detection: check name + size
+      const isDuplicate = files.some(
+        (existing) => existing.name === file.name && existing.file.size === file.size
+      );
+      if (isDuplicate) {
+        toast.error(`Duplicate file: "${file.name}" is already uploaded`, { duration: 4000 });
+        continue;
+      }
+
       const id = crypto.randomUUID();
       const reader = new FileReader();
       const base64 = await new Promise<string>((resolve) => {
