@@ -272,7 +272,7 @@ const productivityTools = [
   // ── Corporate Suite Tools (12 tools) ─────────────────────────────────────
   {
     id: "stamp-generator",
-    title: "JBJ AI Stamp Generator",
+    title: "JBJ Smart Stamp Generator",
     description: "Generate professional company stamps — bilingual, multiple shapes, full export pack.",
     icon: Award,
     link: "/toolkit/stamp-generator",

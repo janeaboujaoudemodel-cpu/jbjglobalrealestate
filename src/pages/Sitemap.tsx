@@ -240,7 +240,7 @@ const hubSections: HubSection[] = [
       { href: "/ai-contract-reviewer", label: "AI Contract Reviewer" },
       { href: "/e-signature", label: "E-Signature" },
       { href: "/toolkit/scan-sign", label: "Scan & Sign" },
-      { href: "/toolkit/stamp-generator", label: "AI Stamp Generator" },
+      { href: "/toolkit/stamp-generator", label: "Smart Stamp Generator" },
       { href: "/toolkit/corporate-suite/business-card", label: "Business Card Designer" },
       { href: "/toolkit/corporate-suite/logo-creator", label: "Logo Creator" },
       { href: "/toolkit/corporate-suite/cover-letter", label: "Cover Letter Generator" },

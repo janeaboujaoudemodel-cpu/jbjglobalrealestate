@@ -247,8 +247,8 @@ const TOOLS: ToolItem[] = [
     category: "documents",
   },
   {
-    name: "JBJ AI Stamp Generator",
-    description: "Create professional company stamps with AI",
+    name: "JBJ Smart Stamp Generator",
+    description: "Create professional company stamps with smart automation",
     icon: Shield,
     link: "/toolkit/stamp-generator",
     tier: "free",

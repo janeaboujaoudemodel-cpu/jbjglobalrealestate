@@ -161,7 +161,7 @@ export const ALL_TOOL_CATEGORIES: ToolCategory[] = [
     icon: CalendarDays,
     color: 'violet',
     tools: [
-      { id: 'ai-stamp', name: 'AI Stamp Generator', icon: Stamp, description: 'Create bilingual professional company stamps and seals', href: '/toolkit/stamp-generator' },
+      { id: 'ai-stamp', name: 'Smart Stamp Generator', icon: Stamp, description: 'Create bilingual professional company stamps and seals', href: '/toolkit/stamp-generator' },
       { id: 'business-card-designer', name: 'Business Card Designer', icon: CreditCard, description: 'Design premium digital and print-ready business cards', href: '/toolkit/corporate-suite/business-card' },
       { id: 'logo-maker', name: 'Logo Maker', icon: Palette, description: 'Generate AI-powered company logos with custom branding', href: '/toolkit/corporate-suite/logo' },
       { id: 'cv-builder', name: 'Resume Builder', icon: FileText, description: 'Build professional CVs with 12 international templates', href: '/toolkit/corporate-suite/cv-builder' },

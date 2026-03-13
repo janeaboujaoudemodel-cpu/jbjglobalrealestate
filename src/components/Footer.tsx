@@ -817,7 +817,7 @@ const Footer = () => {
                   { href: "/toolkit/photo-suite", label: "Photo & Image Suite" },
                   { href: "/toolkit/voice-suite", label: "Voice & Audio Suite" },
                   { href: "/toolkit/pdf-suite", label: "PDF & Documents Suite" },
-                  { href: "/toolkit/stamp-generator", label: "AI Stamp Generator" },
+                  { href: "/toolkit/stamp-generator", label: "Smart Stamp Generator" },
                   { href: "/toolkit/corporate-suite/business-card", label: "Business Card" },
                   { href: "/toolkit/corporate-suite/cv-resume", label: "CV Builder" },
                   { href: "/toolkit/corporate-suite/cover-letter", label: "Cover Letter" },

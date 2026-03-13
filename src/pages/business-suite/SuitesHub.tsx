@@ -66,7 +66,7 @@ const suites = [
     toolCount: 16,
     gradient: 'from-amber-600 to-yellow-700',
     glowColor: 'amber',
-    highlights: ['AI Stamp', 'Business Card', 'Logo Maker', 'CV Builder', 'E-Sign'],
+    highlights: ['Smart Stamp', 'Business Card', 'Logo Maker', 'CV Builder', 'E-Sign'],
   },
 ];
 
