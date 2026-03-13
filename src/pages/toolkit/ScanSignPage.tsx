@@ -526,8 +526,8 @@ export default function ScanSignPage() {
                       style={{ border: `2px dashed rgba(200,167,102,0.3)`, background: "rgba(200,167,102,0.04)" }}
                       onClick={() => fileInputRef.current?.click()}>
                       <Upload className="w-7 h-7 mx-auto mb-2" style={{ color: G.text }} />
-                      <p className="text-sm font-medium text-white">Upload Images / PDF</p>
-                      <p className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.35)" }}>Drag & drop or click · JPG, PNG, PDF</p>
+                      <p className="text-sm font-medium text-stone-800">Upload Images / PDF</p>
+                      <p className="text-xs mt-1 text-stone-400">Drag & drop or click · JPG, PNG, PDF</p>
                     </div>
                     <input ref={fileInputRef} type="file" accept="image/*,application/pdf" multiple className="hidden" onChange={handleFileUpload} />
 
