@@ -630,9 +630,9 @@ export default function ScanSignPage() {
             <div className="lg:col-span-2 space-y-4">
               <Panel>
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-white font-semibold text-base flex items-center gap-2">
+                  <h3 className="text-stone-900 font-semibold text-base flex items-center gap-2">
                     <span style={{ color: G.text }}>Preview</span>
-                    {selectedPage && <span className="text-white/50 text-sm font-normal">— Page {selectedPageIndex + 1} of {pages.length}</span>}
+                    {selectedPage && <span className="text-stone-400 text-sm font-normal">— Page {selectedPageIndex + 1} of {pages.length}</span>}
                   </h3>
                   {selectedPage && (
                     <div className="flex gap-2">
