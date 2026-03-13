@@ -195,7 +195,7 @@ export default function BrochureGeneratorPage() {
 
   // Preview mode — replaces auto-download
   const [previewPages, setPreviewPages] = useState<PreviewPage[]>([]);
-  const [previewPdfBytes, setPreviewPdfBytes] = useState<Uint8Array | null>(null);
+  const [previewPdfBytes, setPreviewPdfBytes] = useState<ArrayBuffer | null>(null);
   const [showPreview, setShowPreview] = useState(false);
 
   const imageInputRef = useRef<HTMLInputElement>(null);
