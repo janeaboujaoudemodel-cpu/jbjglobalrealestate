@@ -482,7 +482,7 @@ export function StampPreviewModal({
                         <p className="text-[9px] text-gray-400">Authorized Signature</p>
                       </div>
                       <div className="relative flex items-center justify-center" style={{ transform: 'rotate(-8deg)' }}>
-                        <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} size={80}/>
+                        <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} fontWeight={fontWeight} fontStyle={fontStyle} fontSize={fontSize} inkMode={true} size={80}/>
                       </div>
                     </div>
                   </div>
