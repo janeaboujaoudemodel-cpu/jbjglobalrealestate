@@ -99,7 +99,19 @@ export const AdminRoutes = () => (
     <Route path="/crm" element={<Navigate to="/owner/crm" replace />} />
     <Route path="/crm/*" element={<Navigate to="/owner/crm" replace />} />
     <Route path="/listing-admin" element={<Navigate to="/owner/listing-admin" replace />} />
-    <Route path="/listing-admin/preview/:id" element={<Navigate to="/owner/listing-admin" replace />} />
+    <Route path="/listing-admin/preview/:id" element={
+      <Suspense fallback={<PageLoader />}>
+        {React.createElement(React.lazy(() => {
+          // Redirect to owner route preserving the ID
+          return Promise.resolve({
+            default: () => {
+              const { id } = require("react-router-dom").useParams();
+              return React.createElement(Navigate, { to: `/owner/listing-admin/preview/${id}`, replace: true });
+            }
+          });
+        }))}
+      </Suspense>
+    } />
     <Route path="/automations" element={<Navigate to="/owner/automations" replace />} />
     <Route path="/founder-assistant" element={<Navigate to="/owner/founder-assistant" replace />} />
     <Route path="/hr-hub" element={<Navigate to="/employee-management" replace />} />
