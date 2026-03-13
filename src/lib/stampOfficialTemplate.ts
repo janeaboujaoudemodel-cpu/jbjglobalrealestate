@@ -301,8 +301,8 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   // Arc lengths — ARC_SPREAD_LIMIT for better text clearance from separators
   const arcLen = clampedTextArcR * Math.PI;
   const safeArc = arcLen * ARC_SPREAD_LIMIT;
-  const topBaseFontSize = topIsArabic ? 15 : 13;
-  const bottomBaseFontSize = bottomIsArabic ? 15 : 13;
+  const topBaseFontSize = topIsArabic ? 17 : 15;
+  const bottomBaseFontSize = bottomIsArabic ? 17 : 15;
   const topFontSize = fitFontSize(topText, topBaseFontSize, safeArc, topIsArabic ? 0.50 : 0.54);
   const bottomFontSize = fitFontSize(bottomText, bottomBaseFontSize, safeArc, bottomIsArabic ? 0.50 : 0.54);
 
