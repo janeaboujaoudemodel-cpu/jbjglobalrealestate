@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, lazy, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -22,10 +22,12 @@ import {
   RefreshCw, Mail, Building2, User, Sparkles, CheckCheck,
   MailOpen, ChevronLeft, ChevronRight, Shield, UserCircle,
   Headphones, Phone, Megaphone, Stamp, Signature, Zap, MessageSquare,
-  Calendar
+  Calendar, Settings
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
+import EmailSettingsPanel from "@/components/email/EmailSettingsPanel";
 
 // ─── Sender Identities ───
 interface SenderIdentity {
@@ -107,6 +109,7 @@ const EmailClient = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [approvePreviewOpen, setApprovePreviewOpen] = useState(false);
   const [alsoNotifyChat, setAlsoNotifyChat] = useState(false);
+  const [showEmailSettings, setShowEmailSettings] = useState(false);
   const emailsPerPage = 20;
 
   const folders = [
@@ -169,26 +172,58 @@ const EmailClient = () => {
 
   const currentSender = SENDER_IDENTITIES.find(s => s.id === composeSender) || SENDER_IDENTITIES[0];
 
-  const sendEmail = () => {
+  const [isSending, setIsSending] = useState(false);
+
+  const sendEmail = async () => {
     if (!newEmail.to || !newEmail.subject) {
       toast.error("Please fill in recipient and subject");
       return;
     }
-    const email: Email = {
-      id: Date.now().toString(),
-      from: currentSender.name,
-      fromEmail: currentSender.email,
-      to: newEmail.to,
-      subject: newEmail.subject,
-      body: newEmail.body,
-      date: new Date().toISOString(),
-      read: true, starred: false, folder: "sent", labels: [], hasAttachment: false,
-      account: currentSender.account,
-    };
-    setEmails([...emails, email]);
-    setNewEmail({ to: "", subject: "", body: "" });
-    setComposeOpen(false);
-    toast.success(sendViaResend ? "Email sent via Resend API" : "Email sent normally");
+    setIsSending(true);
+    try {
+      // Call backend edge function
+      const { data, error } = await supabase.functions.invoke("send-owner-email", {
+        body: {
+          to: newEmail.to,
+          subject: newEmail.subject,
+          body: newEmail.body,
+          senderId: currentSender.id,
+          senderName: currentSender.name,
+          senderEmail: currentSender.email,
+          senderTitle: currentSender.title,
+          account: currentSender.account,
+          useResend: sendViaResend,
+          alsoNotifyChat,
+        },
+      });
+
+      if (error) throw error;
+
+      // Add to local state for immediate UI feedback
+      const email: Email = {
+        id: Date.now().toString(),
+        from: currentSender.name,
+        fromEmail: currentSender.email,
+        to: newEmail.to,
+        subject: newEmail.subject,
+        body: newEmail.body,
+        date: new Date().toISOString(),
+        read: true, starred: false, folder: "sent", labels: [], hasAttachment: false,
+        account: currentSender.account,
+      };
+      setEmails([...emails, email]);
+      setNewEmail({ to: "", subject: "", body: "" });
+      setComposeOpen(false);
+      setAlsoNotifyChat(false);
+
+      const method = data?.sendMethod === "resend" ? "via Resend API" : "normally";
+      toast.success(`Email sent ${method}`);
+    } catch (err: any) {
+      console.error("Send email error:", err);
+      toast.error(err.message || "Failed to send email");
+    } finally {
+      setIsSending(false);
+    }
   };
 
   const formatDate = (dateString: string) => {
@@ -373,9 +408,11 @@ const EmailClient = () => {
                   <Button variant="outline" onClick={() => setApprovePreviewOpen(false)} className="border-[#C9A84C]/30">Back to Edit</Button>
                   <Button
                     onClick={() => { setApprovePreviewOpen(false); sendEmail(); }}
+                    disabled={isSending}
                     className="bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white px-6"
                   >
-                    <Send className="w-4 h-4 mr-2" /> Approve & Send
+                    {isSending ? <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> : <Send className="w-4 h-4 mr-2" />}
+                    {isSending ? "Sending…" : "Approve & Send"}
                   </Button>
                 </div>
               </div>
@@ -444,7 +481,32 @@ const EmailClient = () => {
             </button>
           ))}
         </div>
+
+        {/* Settings Button */}
+        <div className="p-2 border-t border-[#C9A84C]/15">
+          <Button
+            variant="ghost"
+            className="w-full justify-start text-sm text-black/60 hover:bg-[#C9A84C]/10 hover:text-black"
+            onClick={() => setShowEmailSettings(true)}
+          >
+            <Settings className="w-4 h-4 mr-2" />
+            Email Settings & API Keys
+          </Button>
+        </div>
       </div>
+
+      {/* Email Settings Dialog */}
+      <Dialog open={showEmailSettings} onOpenChange={setShowEmailSettings}>
+        <DialogContent className="bg-white border-2 border-[#C9A84C]/30 max-w-2xl max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-black flex items-center gap-2">
+              <Settings className="w-5 h-5 text-[#C9A84C]" />
+              Email Settings & API Integration
+            </DialogTitle>
+          </DialogHeader>
+          <EmailSettingsPanel />
+        </DialogContent>
+      </Dialog>
 
       {/* Email List */}
       <div className="w-[340px] border-r border-[#C9A84C]/15 flex flex-col bg-[#FDFBF7]">
