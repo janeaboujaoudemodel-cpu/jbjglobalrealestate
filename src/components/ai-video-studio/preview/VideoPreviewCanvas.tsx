@@ -272,7 +272,7 @@ export function VideoPreviewCanvas({
       setInternalAspectRatio(ratio);
     }
     // Show badge
-    const labels: Record<string, string> = { '16:9': '▶️ YouTube 16:9', '9:16': '📱 Reels 9:16', '1:1': '⬜ Square 1:1', '4:5': '📷 Portrait 4:5' };
+    const labels: Record<string, string> = { '16:9': 'YouTube 16:9', '9:16': 'Reels 9:16', '1:1': 'Square 1:1', '4:5': 'Portrait 4:5' };
     setFormatBadge(labels[ratio] ?? ratio);
     if (formatBadgeTimer.current) clearTimeout(formatBadgeTimer.current);
     formatBadgeTimer.current = setTimeout(() => setFormatBadge(null), 2000);
