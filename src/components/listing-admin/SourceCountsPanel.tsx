@@ -86,7 +86,7 @@ export function SourceCountsPanel({ reellyApiTotal }: SourceCountsPanelProps) {
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2 text-sm text-foreground">
               <Globe className="w-4 h-4 text-muted-foreground" />
-              Realporter API
+              Reelly Portal
               <Badge variant="outline" className="ml-auto border-muted-foreground/30 text-muted-foreground text-[10px] flex items-center gap-1">
                 <AlertTriangle className="w-2.5 h-2.5" />
                 Disabled
