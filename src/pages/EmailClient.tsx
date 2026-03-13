@@ -481,7 +481,32 @@ const EmailClient = () => {
             </button>
           ))}
         </div>
+
+        {/* Settings Button */}
+        <div className="p-2 border-t border-[#C9A84C]/15">
+          <Button
+            variant="ghost"
+            className="w-full justify-start text-sm text-black/60 hover:bg-[#C9A84C]/10 hover:text-black"
+            onClick={() => setShowEmailSettings(true)}
+          >
+            <Settings className="w-4 h-4 mr-2" />
+            Email Settings & API Keys
+          </Button>
+        </div>
       </div>
+
+      {/* Email Settings Dialog */}
+      <Dialog open={showEmailSettings} onOpenChange={setShowEmailSettings}>
+        <DialogContent className="bg-white border-2 border-[#C9A84C]/30 max-w-2xl max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-black flex items-center gap-2">
+              <Settings className="w-5 h-5 text-[#C9A84C]" />
+              Email Settings & API Integration
+            </DialogTitle>
+          </DialogHeader>
+          <EmailSettingsPanel />
+        </DialogContent>
+      </Dialog>
 
       {/* Email List */}
       <div className="w-[340px] border-r border-[#C9A84C]/15 flex flex-col bg-[#FDFBF7]">
