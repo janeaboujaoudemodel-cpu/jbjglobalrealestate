@@ -449,7 +449,7 @@ MULTI-PROJECT RULE:
       if (description) contentParts.push({ type: "text", text: `\n\n--- ADDITIONAL DESCRIPTION ---\n${description}` });
       contentParts.push({ type: "text", text: "\n\nExtract ALL project data now. If MULTIPLE distinct projects, return each separately." });
 
-      const model = "google/gemini-2.5-pro";
+      const model = "google/gemini-3-flash-preview";
       const aiRes = await fetchAIWithTimeout("https://ai.gateway.lovable.dev/v1/chat/completions", {
         method: "POST",
         headers: { "Authorization": `Bearer ${lovableApiKey}`, "Content-Type": "application/json" },
