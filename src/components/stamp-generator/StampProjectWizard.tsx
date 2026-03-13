@@ -372,6 +372,19 @@ export default function StampProjectWizard() {
             <TabsContent value="company" className="flex-1 min-h-0 m-0">
               <ScrollArea className="h-full">
                 <div className="p-4 space-y-3">
+                  {/* Language Mode — FIRST */}
+                  <div>
+                    <Label className="text-[11px] font-medium mb-1.5 block">Language Mode <span className="text-destructive">*</span></Label>
+                    <p className="text-[9px] text-[hsl(var(--muted-foreground))] mb-1.5">Select the language(s) for your stamp before entering details</p>
+                    <div className="flex gap-2">
+                      {(['EN', 'AR', 'BILINGUAL'] as LanguageMode[]).map(l => (
+                        <OptionButton key={l} selected={form.language_mode === l} onClick={() => set('language_mode', l)}>
+                          {l === 'EN' ? 'English Only' : l === 'AR' ? 'Arabic Only' : 'Bilingual (AR + EN)'}
+                        </OptionButton>
+                      ))}
+                    </div>
+                  </div>
+
                   {/* Smart Auto-Fill with guide tooltip */}
                   <div className="border-2 border-dashed border-[hsl(var(--gold)/0.5)] rounded-lg bg-[hsl(var(--gold)/0.04)] relative">
                     {!localStorage.getItem('stamp-autofill-dismissed') && !licenseOpen && (
