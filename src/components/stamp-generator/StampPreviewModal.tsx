@@ -436,8 +436,8 @@ export function StampPreviewModal({
                     <p className="text-gray-700 font-bold text-xs">{companyName}</p>
                     <p className="text-gray-500 text-[10px]">{city}</p>
                   </div>
-                  <div className="absolute top-5 right-7 opacity-90">
-                    <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} size={72}/>
+                  <div className={`absolute top-5 opacity-90 ${stampAlign === 'left' ? 'left-7' : stampAlign === 'center' ? 'left-1/2 -translate-x-1/2' : 'right-7'}`}>
+                    <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} fontWeight={fontWeight} fontStyle={fontStyle} fontSize={fontSize} size={72}/>
                   </div>
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="text-center space-y-0.5">
