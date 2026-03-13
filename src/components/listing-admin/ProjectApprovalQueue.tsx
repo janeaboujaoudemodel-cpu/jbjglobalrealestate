@@ -963,8 +963,10 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
             <p className="text-sm text-muted-foreground mt-1">
               <span className="font-medium">Showing {imports.length.toLocaleString()}</span> of <span className="font-bold text-foreground">{(totalCount ?? imports.length).toLocaleString()}</span> pending
               {sourceFilter !== "all" && (
-                <Badge variant="outline" className="ml-2 text-xs">
-                  {sourceFilter === "provident" ? "🏢 Provident" : sourceFilter === "reelly" ? "🔄 Reelly" : "📤 My Uploads"}
+                <Badge variant="outline" className="ml-2 text-xs gap-1">
+                  {sourceFilter === "provident" && <><Building className="h-3 w-3" /> Provident</>}
+                  {sourceFilter === "reelly" && <><Globe className="h-3 w-3" /> Reelly</>}
+                  {sourceFilter === "manual" && <><Upload className="h-3 w-3" /> My Uploads</>}
                 </Badge>
               )}
               {(totalCount ?? 0) > imports.length && (
