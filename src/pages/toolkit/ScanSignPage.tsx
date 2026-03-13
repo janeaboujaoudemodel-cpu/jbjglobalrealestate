@@ -1,5 +1,5 @@
 /**
- * Scan & Sign Tool — Champagne-Gold Premium Design
+ * Scan & Sign Tool — Emerald Green Premium Design
  * Camera document scanning (auto/manual), edge cropping, signature, stamp import, AI enhance, Save/Clear/Delete project
  */
 
@@ -10,6 +10,7 @@ import { Slider } from '@/components/ui/slider';
 import { toast } from 'sonner';
 import { PDFDocument } from 'pdf-lib';
 import { SaveProjectBar } from '@/components/toolkit/SaveProjectBar';
+import { InlineStampGenerator } from '@/components/toolkit/InlineStampGenerator';
 import {
   Camera, Upload, FileText, Pen, Download, Trash2, RotateCw,
   Loader2, CheckCircle2, Plus, Image as ImageIcon, Save, Sparkles, Wand2, X,
@@ -36,23 +37,18 @@ interface SignatureData {
 // ─── Emerald Green Palette ──────────────────────────────────────────────────
 
 const G = {
-  gold: "#059669",
-  goldBright: "#10B981",
-  goldDim: "#047857",
-  bg: "#FFFFFF",
+  accent: "#059669",
+  accentLight: "#10B981",
+  accentDim: "#047857",
   card: "rgba(5,150,105,0.03)",
   border: "rgba(5,150,105,0.15)",
   borderHover: "rgba(5,150,105,0.35)",
-  accent: "#059669",
-  accentLight: "#10B981",
-  accentDim: "rgba(5,150,105,0.12)",
   text: "#059669",
   textMuted: "rgba(0,0,0,0.4)",
   btnPrimary: "linear-gradient(135deg, #047857, #059669)",
   btnPrimaryShadow: "0 4px 20px rgba(5,150,105,0.25)",
   btnOutline: { background: "rgba(5,150,105,0.06)", border: "1px solid rgba(5,150,105,0.25)", color: "#1F2937" },
   outerBorder: "1px solid rgba(5,150,105,0.18)",
-  outerShadow: "0 2px 20px rgba(0,0,0,0.06)",
 };
 
 // ─── Button helpers ───────────────────────────────────────────────────────────
@@ -125,10 +121,12 @@ export default function ScanSignPage() {
   const [processing, setProcessing] = useState(false);
   const [isEnhancing, setIsEnhancing] = useState(false);
   const [projectName, setProjectName] = useState("Untitled Document");
-  const [editingName, setEditingName] = useState(false);
   const [cameraMode, setCameraMode] = useState<'manual' | 'auto'>('manual');
   const [autoScanCountdown, setAutoScanCountdown] = useState(0);
   const autoScanTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Inline stamp generator
+  const [stampModalOpen, setStampModalOpen] = useState(false);
 
   // Undo/Redo
   const [history, setHistory] = useState<{ pages: ScannedPage[]; sigs: SignatureData[] }[]>([]);
@@ -379,6 +377,17 @@ export default function ScanSignPage() {
     if (ctx) { ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, canvas.width, canvas.height); }
   }, []);
 
+  // ── Stamp callback ────────────────────────────────────────────────────────
+
+  const handleStampReady = useCallback((dataUrl: string) => {
+    setPages(prev => {
+      const n = [...prev, { id: `stamp-${Date.now()}`, imageData: dataUrl, rotation: 0, brightness: 100, contrast: 100 }];
+      setSelectedPageIndex(n.length - 1);
+      pushHistory(n, signatures);
+      return n;
+    });
+  }, [signatures, pushHistory]);
+
   // ── Project Actions ───────────────────────────────────────────────────────
 
   const saveProject = useCallback(() => {
@@ -450,29 +459,38 @@ export default function ScanSignPage() {
 
       {/* ── Header — Emerald Green ── */}
       <div className="border-b border-emerald-100 bg-gradient-to-b from-emerald-50/60 to-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-7">
-          <div className="flex flex-col sm:flex-row sm:items-center gap-5">
-            <div className="flex items-center gap-5">
-              <div className="w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 bg-gradient-to-br from-emerald-500 to-green-600 shadow-lg shadow-emerald-500/20">
-                <ScanLine className="w-8 h-8 text-white" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 bg-gradient-to-br from-emerald-500 to-green-600 shadow-lg shadow-emerald-500/20">
+                <ScanLine className="w-6 h-6 text-white" />
               </div>
               <div>
-                <div className="flex items-center gap-3 mb-1">
-                  <h1 className="text-3xl sm:text-4xl font-black text-stone-900 tracking-tight">
+                <div className="flex items-center gap-2 mb-0.5">
+                  <h1 className="text-2xl font-black text-stone-900 tracking-tight">
                     Scan <span className="text-emerald-600">&</span> Sign
                   </h1>
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 border border-emerald-200 text-emerald-700">
-                    <Sparkles className="w-3 h-3" /> AI Enhanced
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 border border-emerald-200 text-emerald-700">
+                    <Sparkles className="w-3 h-3" /> AI
                   </span>
                 </div>
-                <p className="text-sm sm:text-base text-stone-500">
-                  Camera scan · Auto-detect edges · Crop & adjust · Add signature · Export PDF
+                <p className="text-xs text-stone-500">
+                  Scan · Sign · Stamp · Enhance · Export PDF
                 </p>
               </div>
             </div>
 
-            {/* Project Name + Save/Clear */}
-            <div className="sm:ml-auto flex flex-col sm:flex-row items-start sm:items-center gap-3">
+            {/* Undo/Redo + Save */}
+            <div className="sm:ml-auto flex items-center gap-2">
+              <button onClick={undo} disabled={historyIdx <= 0}
+                className="p-2 rounded-lg border border-emerald-200 text-emerald-700 disabled:opacity-30 hover:bg-emerald-50 transition-all" title="Undo">
+                <Undo className="w-4 h-4" />
+              </button>
+              <button onClick={redo} disabled={historyIdx >= history.length - 1}
+                className="p-2 rounded-lg border border-emerald-200 text-emerald-700 disabled:opacity-30 hover:bg-emerald-50 transition-all" title="Redo">
+                <Redo className="w-4 h-4" />
+              </button>
+              <div className="w-px h-6 bg-emerald-200 mx-1" />
               <SaveProjectBar
                 projectName={projectName}
                 onNameChange={setProjectName}
@@ -488,265 +506,273 @@ export default function ScanSignPage() {
         </div>
       </div>
 
-      {/* ── Main Content ── */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-        <div className="rounded-2xl p-6 sm:p-8 bg-white border border-stone-200 shadow-sm">
-          <div className="grid lg:grid-cols-3 gap-6">
+      {/* ── Main Content — 3 Zone Layout ── */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+        <div className="grid lg:grid-cols-[280px_1fr_280px] gap-5">
 
-            {/* ── Left Panel ── */}
-            <div className="space-y-4">
-              {/* Capture */}
-              <Panel>
-                <PanelTitle icon={Camera}>Scan Document</PanelTitle>
-                {isCapturing ? (
-                  <div className="space-y-3">
-                    <div className="relative rounded-xl overflow-hidden" style={{ border: `1px solid ${G.border}` }}>
-                      <video ref={videoRef} autoPlay playsInline muted className="w-full rounded-xl" style={{ display: 'block', minHeight: 160, background: '#000' }} />
-                      {['top-1 left-1', 'top-1 right-1', 'bottom-1 left-1', 'bottom-1 right-1'].map((pos, i) => (
-                        <div key={i} className={`absolute ${pos} w-5 h-5`} style={{ border: `2px solid ${G.accentLight}`, borderRadius: 2, opacity: 0.8 }} />
-                      ))}
-                      {autoScanCountdown > 0 && (
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="text-7xl font-black" style={{ color: G.accentLight, textShadow: '0 0 30px rgba(200,167,102,0.7)' }}>
-                            {autoScanCountdown}
-                          </div>
+          {/* ── Left Panel: Scan + Pages ── */}
+          <div className="space-y-4 lg:max-h-[calc(100vh-180px)] lg:overflow-y-auto lg:pr-1">
+            {/* Capture */}
+            <Panel>
+              <PanelTitle icon={Camera}>Scan Document</PanelTitle>
+              {isCapturing ? (
+                <div className="space-y-3">
+                  <div className="relative rounded-xl overflow-hidden border border-emerald-200">
+                    <video ref={videoRef} autoPlay playsInline muted className="w-full rounded-xl" style={{ display: 'block', minHeight: 140, background: '#000' }} />
+                    {['top-1 left-1', 'top-1 right-1', 'bottom-1 left-1', 'bottom-1 right-1'].map((pos, i) => (
+                      <div key={i} className={`absolute ${pos} w-4 h-4 border-2 border-emerald-400 rounded-sm opacity-80`} />
+                    ))}
+                    {autoScanCountdown > 0 && (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="text-6xl font-black text-emerald-400" style={{ textShadow: '0 0 30px rgba(5,150,105,0.5)' }}>
+                          {autoScanCountdown}
                         </div>
-                      )}
-                    </div>
-                    <div className="flex gap-2">
-                      <PrimaryBtn onClick={capturePhoto} className="flex-1 text-xs"><Camera className="w-4 h-4" /> Capture</PrimaryBtn>
-                      <OutlineBtn onClick={startAutoScan} disabled={cameraMode === 'auto'} className="flex-1 text-xs"><ScanLine className="w-4 h-4" /> Auto (3s)</OutlineBtn>
-                    </div>
-                    <OutlineBtn onClick={stopCamera} className="w-full text-xs"><X className="w-4 h-4" /> Close Camera</OutlineBtn>
-                  </div>
-                ) : (
-                  <div className="space-y-3" onDrop={handleDropUpload} onDragOver={e => e.preventDefault()}>
-                    <PrimaryBtn onClick={startCamera} className="w-full"><Camera className="w-4 h-4" /> Open Camera</PrimaryBtn>
-                    <div className="w-full rounded-xl p-5 text-center cursor-pointer transition-all"
-                      style={{ border: `2px dashed rgba(200,167,102,0.3)`, background: "rgba(200,167,102,0.04)" }}
-                      onClick={() => fileInputRef.current?.click()}>
-                      <Upload className="w-7 h-7 mx-auto mb-2" style={{ color: G.text }} />
-                      <p className="text-sm font-medium text-stone-800">Upload Images / PDF</p>
-                      <p className="text-xs mt-1 text-stone-400">Drag & drop or click · JPG, PNG, PDF</p>
-                    </div>
-                    <input ref={fileInputRef} type="file" accept="image/*,application/pdf" multiple className="hidden" onChange={handleFileUpload} />
-
-                    {/* Cross-tool import buttons */}
-                    <div className="mt-3 space-y-2">
-                      <p className="text-[10px] font-semibold uppercase tracking-wider text-stone-400">Import from Tools</p>
-                      <div className="grid grid-cols-3 gap-2">
-                        <button
-                          onClick={() => {
-                            try {
-                              const svgRaw = sessionStorage.getItem('esignature_stamp_svg');
-                              if (!svgRaw) { toast.error('No stamp found. Generate one in the Stamp Generator first.'); return; }
-                              const svgBlob = new Blob([svgRaw], { type: 'image/svg+xml' });
-                              const reader = new FileReader();
-                              reader.onload = () => {
-                                const dataUrl = reader.result as string;
-                                setPages(prev => { const n = [...prev, { id: `stamp-${Date.now()}`, imageData: dataUrl, rotation: 0, brightness: 100, contrast: 100 }]; pushHistory(n, signatures); return n; });
-                                toast.success('Stamp imported');
-                              };
-                              reader.readAsDataURL(svgBlob);
-                            } catch { toast.error('Failed to import stamp'); }
-                          }}
-                          className="flex flex-col items-center gap-1 p-2 rounded-lg text-[10px] font-medium transition-all hover:scale-105"
-                          style={{ border: `1px solid ${G.border}`, background: G.card, color: G.text }}>
-                          <Stamp className="w-4 h-4" /> Stamp
-                        </button>
-                        <button
-                          onClick={() => {
-                            try {
-                              const raw = sessionStorage.getItem('jbj-business-card-export');
-                              if (!raw) { toast.error('No card found. Design one first.'); return; }
-                              const data = JSON.parse(raw);
-                              const imgData = data?.dataUrl || data?.imageData;
-                              if (!imgData) { toast.error('Invalid card data'); return; }
-                              setPages(prev => { const n = [...prev, { id: `card-${Date.now()}`, imageData: imgData, rotation: 0, brightness: 100, contrast: 100 }]; pushHistory(n, signatures); return n; });
-                              toast.success('Business card imported');
-                            } catch { toast.error('Failed to import card'); }
-                          }}
-                          className="flex flex-col items-center gap-1 p-2 rounded-lg text-[10px] font-medium transition-all hover:scale-105"
-                          style={{ border: `1px solid ${G.border}`, background: G.card, color: G.text }}>
-                          <FileText className="w-4 h-4" /> Card
-                        </button>
-                        <button
-                          onClick={() => {
-                            try {
-                              const raw = sessionStorage.getItem('jbj-qr-export');
-                              if (!raw) { toast.error('No QR code found. Generate one first.'); return; }
-                              const data = JSON.parse(raw);
-                              const imgData = data?.dataUrl || data?.imageData;
-                              if (!imgData) { toast.error('Invalid QR data'); return; }
-                              setPages(prev => { const n = [...prev, { id: `qr-${Date.now()}`, imageData: imgData, rotation: 0, brightness: 100, contrast: 100 }]; pushHistory(n, signatures); return n; });
-                              toast.success('QR code imported');
-                            } catch { toast.error('Failed to import QR'); }
-                          }}
-                          className="flex flex-col items-center gap-1 p-2 rounded-lg text-[10px] font-medium transition-all hover:scale-105"
-                          style={{ border: `1px solid ${G.border}`, background: G.card, color: G.text }}>
-                          <ScanLine className="w-4 h-4" /> QR
-                        </button>
                       </div>
+                    )}
+                  </div>
+                  <div className="flex gap-2">
+                    <PrimaryBtn onClick={capturePhoto} className="flex-1 text-xs"><Camera className="w-4 h-4" /> Capture</PrimaryBtn>
+                    <OutlineBtn onClick={startAutoScan} disabled={cameraMode === 'auto'} className="flex-1 text-xs"><ScanLine className="w-4 h-4" /> Auto</OutlineBtn>
+                  </div>
+                  <OutlineBtn onClick={stopCamera} className="w-full text-xs"><X className="w-4 h-4" /> Close</OutlineBtn>
+                </div>
+              ) : (
+                <div className="space-y-3" onDrop={handleDropUpload} onDragOver={e => e.preventDefault()}>
+                  <PrimaryBtn onClick={startCamera} className="w-full"><Camera className="w-4 h-4" /> Open Camera</PrimaryBtn>
+                  <div className="w-full rounded-xl p-4 text-center cursor-pointer transition-all border-2 border-dashed border-emerald-200 bg-emerald-50/30 hover:border-emerald-400"
+                    onClick={() => fileInputRef.current?.click()}>
+                    <Upload className="w-6 h-6 mx-auto mb-1.5 text-emerald-600" />
+                    <p className="text-xs font-medium text-stone-700">Upload Images / PDF</p>
+                    <p className="text-[10px] mt-0.5 text-stone-400">Drag & drop · JPG, PNG, PDF</p>
+                  </div>
+                  <input ref={fileInputRef} type="file" accept="image/*,application/pdf" multiple className="hidden" onChange={handleFileUpload} />
+                </div>
+              )}
+            </Panel>
+
+            {/* Import from Tools */}
+            <Panel>
+              <PanelTitle icon={FolderOpen}>Import from Tools</PanelTitle>
+              <div className="grid grid-cols-3 gap-2">
+                <button
+                  onClick={() => {
+                    // Try session first, then open inline generator
+                    const svgRaw = sessionStorage.getItem('esignature_stamp_svg');
+                    if (svgRaw) {
+                      const blob = new Blob([svgRaw], { type: 'image/svg+xml' });
+                      const reader = new FileReader();
+                      reader.onload = () => {
+                        handleStampReady(reader.result as string);
+                      };
+                      reader.readAsDataURL(blob);
+                    } else {
+                      setStampModalOpen(true);
+                    }
+                  }}
+                  className="flex flex-col items-center gap-1 p-2.5 rounded-lg text-[10px] font-medium transition-all hover:scale-105 border border-emerald-200 bg-emerald-50/30 text-emerald-700 hover:bg-emerald-100/50">
+                  <Stamp className="w-4 h-4" /> Stamp
+                </button>
+                <button
+                  onClick={() => {
+                    try {
+                      const raw = sessionStorage.getItem('jbj-business-card-export');
+                      if (!raw) { toast.error('No card found. Design one first.'); return; }
+                      const data = JSON.parse(raw);
+                      const imgData = data?.dataUrl || data?.imageData;
+                      if (!imgData) { toast.error('Invalid card data'); return; }
+                      setPages(prev => { const n = [...prev, { id: `card-${Date.now()}`, imageData: imgData, rotation: 0, brightness: 100, contrast: 100 }]; pushHistory(n, signatures); return n; });
+                      toast.success('Business card imported');
+                    } catch { toast.error('Failed to import card'); }
+                  }}
+                  className="flex flex-col items-center gap-1 p-2.5 rounded-lg text-[10px] font-medium transition-all hover:scale-105 border border-emerald-200 bg-emerald-50/30 text-emerald-700 hover:bg-emerald-100/50">
+                  <FileText className="w-4 h-4" /> Card
+                </button>
+                <button
+                  onClick={() => {
+                    try {
+                      const raw = sessionStorage.getItem('jbj-qr-export');
+                      if (!raw) { toast.error('No QR code found. Generate one first.'); return; }
+                      const data = JSON.parse(raw);
+                      const imgData = data?.dataUrl || data?.imageData;
+                      if (!imgData) { toast.error('Invalid QR data'); return; }
+                      setPages(prev => { const n = [...prev, { id: `qr-${Date.now()}`, imageData: imgData, rotation: 0, brightness: 100, contrast: 100 }]; pushHistory(n, signatures); return n; });
+                      toast.success('QR code imported');
+                    } catch { toast.error('Failed to import QR'); }
+                  }}
+                  className="flex flex-col items-center gap-1 p-2.5 rounded-lg text-[10px] font-medium transition-all hover:scale-105 border border-emerald-200 bg-emerald-50/30 text-emerald-700 hover:bg-emerald-100/50">
+                  <ScanLine className="w-4 h-4" /> QR
+                </button>
+              </div>
+              <button
+                onClick={() => setStampModalOpen(true)}
+                className="w-full mt-2 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-medium text-emerald-700 border border-dashed border-emerald-300 bg-emerald-50/20 hover:bg-emerald-100/30 transition-all"
+              >
+                <Plus className="w-3 h-3" /> Create New Stamp
+              </button>
+            </Panel>
+
+            {/* Pages */}
+            <Panel>
+              <PanelTitle icon={ImageIcon}>Pages ({pages.length})</PanelTitle>
+              <div className="grid grid-cols-3 gap-2 max-h-48 overflow-y-auto pr-1">
+                {pages.map((page, index) => (
+                  <div key={page.id} onClick={() => setSelectedPageIndex(index)}
+                    className={`relative cursor-pointer rounded-xl overflow-hidden transition-all border-2 ${
+                      selectedPageIndex === index ? 'border-emerald-500 shadow-sm shadow-emerald-500/20' : 'border-stone-200 hover:border-emerald-300'
+                    }`}>
+                    <img src={page.imageData} alt={`Page ${index + 1}`} className="w-full h-14 object-cover"
+                      style={{ transform: `rotate(${page.rotation}deg)`, filter: `brightness(${page.brightness}%) contrast(${page.contrast}%)` }} />
+                    <div className="absolute bottom-0 left-0 right-0 px-1 py-0.5 flex items-center justify-between bg-black/60">
+                      <span className="text-white text-[9px] font-bold">{index + 1}</span>
+                      {signatures.some(s => s.pageIndex === index) && <Pen className="w-2.5 h-2.5 text-emerald-400" />}
                     </div>
+                    {selectedPageIndex === index && (
+                      <div className="absolute top-0.5 right-0.5 w-3.5 h-3.5 rounded-full flex items-center justify-center bg-emerald-500">
+                        <CheckCircle2 className="w-2.5 h-2.5 text-white" />
+                      </div>
+                    )}
+                  </div>
+                ))}
+                {pages.length === 0 && (
+                  <div className="col-span-3 text-center py-6 text-stone-300">
+                    <ScanLine className="w-8 h-8 mx-auto mb-2 opacity-30" />
+                    <p className="text-xs">No pages yet</p>
                   </div>
                 )}
-              </Panel>
+              </div>
+            </Panel>
+          </div>
 
-              {/* Pages */}
-              <Panel>
-                <PanelTitle icon={ImageIcon}>Pages ({pages.length})</PanelTitle>
-                <div className="grid grid-cols-3 gap-2 max-h-72 overflow-y-auto pr-1">
-                  {pages.map((page, index) => (
-                    <div key={page.id} onClick={() => setSelectedPageIndex(index)}
-                      className="relative cursor-pointer rounded-xl overflow-hidden transition-all"
-                      style={{
-                        border: `2px solid ${selectedPageIndex === index ? G.accent : "rgba(255,255,255,0.1)"}`,
-                        boxShadow: selectedPageIndex === index ? `0 0 0 2px rgba(200,167,102,0.2)` : "none",
-                      }}>
-                      <img src={page.imageData} alt={`Page ${index + 1}`} className="w-full h-16 object-cover"
-                        style={{ transform: `rotate(${page.rotation}deg)`, filter: `brightness(${page.brightness}%) contrast(${page.contrast}%)` }} />
-                      <div className="absolute bottom-0 left-0 right-0 px-1 py-0.5 flex items-center justify-between" style={{ background: "rgba(0,0,0,0.65)" }}>
-                        <span className="text-white text-[9px] font-bold">{index + 1}</span>
-                        {signatures.some(s => s.pageIndex === index) && <Pen className="w-2.5 h-2.5" style={{ color: G.text }} />}
-                      </div>
-                      {selectedPageIndex === index && (
-                        <div className="absolute top-0.5 right-0.5 w-3 h-3 rounded-full flex items-center justify-center" style={{ background: G.accent }}>
-                          <CheckCircle2 className="w-2.5 h-2.5 text-white" />
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                  {pages.length === 0 && (
-                    <div className="col-span-3 text-center py-8" style={{ color: "rgba(255,255,255,0.25)" }}>
-                      <ScanLine className="w-10 h-10 mx-auto mb-2 opacity-30" />
-                      <p className="text-sm">No pages yet</p>
-                    </div>
-                  )}
-                </div>
-              </Panel>
-            </div>
-
-            {/* ── Center – Preview & Controls ── */}
-            <div className="lg:col-span-2 space-y-4">
-              <Panel>
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-stone-900 font-semibold text-base flex items-center gap-2">
-                    <span style={{ color: G.text }}>Preview</span>
-                    {selectedPage && <span className="text-stone-400 text-sm font-normal">— Page {selectedPageIndex + 1} of {pages.length}</span>}
-                  </h3>
-                  {selectedPage && (
-                    <div className="flex gap-2">
-                      <button onClick={() => rotatePage(selectedPage.id)} title="Rotate 90°"
-                        className="p-2 rounded-lg transition-all hover:scale-105"
-                        style={{ color: "rgba(255,255,255,0.5)", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}>
-                        <RotateCw className="w-4 h-4" />
-                      </button>
-                      <button onClick={() => deletePage(selectedPage.id)} title="Delete page"
-                        className="p-2 rounded-lg transition-all hover:scale-105"
-                        style={{ color: "#f87171", background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)" }}>
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  )}
-                </div>
-
-                {selectedPage ? (
-                  <div className="space-y-4">
-                    <div className="relative rounded-xl overflow-hidden flex items-center justify-center min-h-[340px]"
-                      style={{ background: "rgba(0,0,0,0.45)", border: `1px solid ${G.border}` }}>
-                      <img src={selectedPage.imageData} alt="Preview" className="max-w-full max-h-[340px] object-contain rounded-xl"
-                        style={{ transform: `rotate(${selectedPage.rotation}deg)`, filter: `brightness(${selectedPage.brightness}%) contrast(${selectedPage.contrast}%)` }} />
-                      {selectedPage.rotation > 0 && (
-                        <div className="absolute top-2 right-2 px-2 py-0.5 rounded-full text-xs font-semibold"
-                          style={{ background: "rgba(0,0,0,0.7)", color: G.text, border: G.outerBorder }}>
-                          {selectedPage.rotation}°
-                        </div>
-                      )}
-                    </div>
-
-                    {/* AI Auto-Enhance */}
-                    <button onClick={aiAutoEnhance} disabled={isEnhancing}
-                      className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-sm transition-all disabled:opacity-50 hover:opacity-90"
-                      style={{ background: "rgba(200,167,102,0.1)", border: `1px solid rgba(200,167,102,0.3)`, color: G.accentLight }}>
-                      {isEnhancing ? <><Loader2 className="w-4 h-4 animate-spin" /> Analyzing image…</> : <><Wand2 className="w-4 h-4" /> AI Auto-Enhance Scan</>}
+          {/* ── Center – Preview (Sticky) ── */}
+          <div className="lg:sticky lg:top-4 lg:self-start space-y-4">
+            <Panel>
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-stone-900 font-semibold text-sm flex items-center gap-2">
+                  <span className="text-emerald-600">Preview</span>
+                  {selectedPage && <span className="text-stone-400 text-xs font-normal">Page {selectedPageIndex + 1}/{pages.length}</span>}
+                </h3>
+                {selectedPage && (
+                  <div className="flex gap-1.5">
+                    <button onClick={() => rotatePage(selectedPage.id)} title="Rotate 90°"
+                      className="p-1.5 rounded-lg transition-all text-stone-500 bg-stone-100 hover:bg-emerald-100 hover:text-emerald-700 border border-stone-200">
+                      <RotateCw className="w-3.5 h-3.5" />
                     </button>
+                    <button onClick={() => deletePage(selectedPage.id)} title="Delete page"
+                      className="p-1.5 rounded-lg transition-all text-red-500 bg-red-50 hover:bg-red-100 border border-red-200">
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                )}
+              </div>
 
-                    {/* Adjustments */}
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label className="text-xs" style={{ color: "rgba(255,255,255,0.55)" }}>
-                          Brightness <span style={{ color: G.text }}>{selectedPage.brightness}%</span>
-                        </Label>
-                        <Slider value={[selectedPage.brightness]} min={50} max={160} step={5}
-                          onValueChange={([val]) => updatePageAdjustments(selectedPage.id, val, selectedPage.contrast)} />
+              {selectedPage ? (
+                <div className="space-y-3">
+                  <div className="relative rounded-xl overflow-hidden flex items-center justify-center bg-stone-100 border border-stone-200"
+                    style={{ minHeight: 300 }}>
+                    <img src={selectedPage.imageData} alt="Preview" className="max-w-full max-h-[380px] object-contain"
+                      style={{ transform: `rotate(${selectedPage.rotation}deg)`, filter: `brightness(${selectedPage.brightness}%) contrast(${selectedPage.contrast}%)` }} />
+                    {selectedPage.rotation > 0 && (
+                      <div className="absolute top-2 right-2 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-600 text-white">
+                        {selectedPage.rotation}°
                       </div>
-                      <div className="space-y-2">
-                        <Label className="text-xs" style={{ color: "rgba(255,255,255,0.55)" }}>
-                          Contrast <span style={{ color: G.text }}>{selectedPage.contrast}%</span>
-                        </Label>
-                        <Slider value={[selectedPage.contrast]} min={50} max={160} step={5}
-                          onValueChange={([val]) => updatePageAdjustments(selectedPage.id, selectedPage.brightness, val)} />
-                      </div>
-                    </div>
+                    )}
                   </div>
-                ) : (
-                  <div className="flex flex-col items-center justify-center h-72 text-stone-300">
-                    <ScanLine className="h-20 w-20 mb-4 opacity-20" />
-                    <p className="text-base font-medium">Capture or upload pages to preview</p>
-                    <p className="text-sm mt-1 opacity-60">Point camera at document or drag & drop files</p>
-                  </div>
-                )}
-              </Panel>
 
-              {/* Signature Panel */}
-              <Panel>
-                <PanelTitle icon={Pen}>Signature</PanelTitle>
-                {isDrawingSignature ? (
-                  <div className="space-y-3">
-                    <div className="rounded-xl overflow-hidden" style={{ background: "white", border: `2px solid ${G.border}` }}>
-                      <canvas ref={signatureCanvasRef} width={560} height={150} className="w-full cursor-crosshair touch-none" style={{ display: "block" }} />
-                    </div>
-                    <p className="text-xs text-center" style={{ color: "rgba(255,255,255,0.35)" }}>Draw your signature above using mouse or finger</p>
-                    <div className="flex gap-2">
-                      <PrimaryBtn onClick={saveSignature} className="flex-1"><Save className="w-4 h-4" /> Add to Page</PrimaryBtn>
-                      <OutlineBtn onClick={clearSignatureCanvas}><RefreshCcw className="w-4 h-4" /> Clear</OutlineBtn>
-                      <button onClick={() => setIsDrawingSignature(false)} className="px-3 py-2 rounded-xl text-sm transition-colors" style={{ color: "rgba(255,255,255,0.35)" }}>Cancel</button>
-                    </div>
-                  </div>
-                ) : (
-                  <div
-                    className="w-full rounded-xl p-6 text-center cursor-pointer transition-all hover:opacity-90"
-                    style={{ border: `2px dashed rgba(200,167,102,0.3)`, background: pages.length > 0 ? "rgba(200,167,102,0.05)" : "rgba(255,255,255,0.02)" }}
-                     onClick={pages.length > 0 ? startSignatureDrawing : undefined}>
-                    <Pen className="w-9 h-9 mx-auto mb-3" style={{ color: pages.length > 0 ? G.accentLight : "rgba(0,0,0,0.15)" }} />
-                    <p className="text-sm font-semibold" style={{ color: pages.length > 0 ? "rgba(0,0,0,0.7)" : "rgba(0,0,0,0.25)" }}>
-                      {pages.length > 0 ? "Click to Draw Signature" : "Add pages first to sign"}
-                    </p>
-                  </div>
-                )}
-                {signatures.length > 0 && (
-                  <p className="text-xs mt-3 text-center" style={{ color: G.text }}>
-                    <CheckCircle2 className="w-3.5 h-3.5 inline mr-1" />
-                    {signatures.length} signature{signatures.length > 1 ? 's' : ''} added
-                  </p>
-                )}
-              </Panel>
+                  {/* AI Auto-Enhance */}
+                  <button onClick={aiAutoEnhance} disabled={isEnhancing}
+                    className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl font-semibold text-sm transition-all disabled:opacity-50 bg-emerald-50 border border-emerald-200 text-emerald-700 hover:bg-emerald-100">
+                    {isEnhancing ? <><Loader2 className="w-4 h-4 animate-spin" /> Analyzing…</> : <><Wand2 className="w-4 h-4" /> AI Auto-Enhance</>}
+                  </button>
 
-              {/* Export + Save Row */}
-              <div className="rounded-2xl p-4 space-y-3 bg-emerald-50/50 border border-emerald-100">
-                <p className="text-xs font-semibold uppercase tracking-widest mb-3 text-stone-400">Export & Project Actions</p>
-                <PrimaryBtn onClick={exportToPDF} disabled={pages.length === 0 || processing} className="w-full py-4 text-base">
-                  {processing ? <><Loader2 className="w-5 h-5 animate-spin" /> Generating PDF…</> : <><Download className="w-5 h-5" /> Export to PDF ({pages.length} page{pages.length !== 1 ? 's' : ''})</>}
-                </PrimaryBtn>
-                <div className="flex gap-3">
-                  <OutlineBtn onClick={saveProject} disabled={pages.length === 0} className="flex-1"><Save className="w-4 h-4" /> Save Project</OutlineBtn>
-                  <DangerBtn onClick={clearProject} disabled={pages.length === 0} className="flex-1"><Trash2 className="w-4 h-4" /> Clear All</DangerBtn>
+                  {/* Adjustments */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1.5">
+                      <Label className="text-[10px] text-stone-500">
+                        Brightness <span className="text-emerald-600 font-semibold">{selectedPage.brightness}%</span>
+                      </Label>
+                      <Slider value={[selectedPage.brightness]} min={50} max={160} step={5}
+                        onValueChange={([val]) => updatePageAdjustments(selectedPage.id, val, selectedPage.contrast)} />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label className="text-[10px] text-stone-500">
+                        Contrast <span className="text-emerald-600 font-semibold">{selectedPage.contrast}%</span>
+                      </Label>
+                      <Slider value={[selectedPage.contrast]} min={50} max={160} step={5}
+                        onValueChange={([val]) => updatePageAdjustments(selectedPage.id, selectedPage.brightness, val)} />
+                    </div>
+                  </div>
                 </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center h-64 text-stone-300">
+                  <ScanLine className="h-16 w-16 mb-3 opacity-20" />
+                  <p className="text-sm font-medium text-stone-400">Scan or upload to preview</p>
+                  <p className="text-xs mt-1 text-stone-300">Point camera or drag & drop files</p>
+                </div>
+              )}
+            </Panel>
+          </div>
+
+          {/* ── Right Panel: Signature + Export ── */}
+          <div className="space-y-4 lg:max-h-[calc(100vh-180px)] lg:overflow-y-auto lg:pr-1">
+            {/* Signature Panel */}
+            <Panel>
+              <PanelTitle icon={Pen}>Signature</PanelTitle>
+              {isDrawingSignature ? (
+                <div className="space-y-3">
+                  <div className="rounded-xl overflow-hidden bg-white border-2 border-emerald-200">
+                    <canvas ref={signatureCanvasRef} width={560} height={150} className="w-full cursor-crosshair touch-none" style={{ display: "block" }} />
+                  </div>
+                  <p className="text-[10px] text-center text-stone-400">Draw your signature using mouse or finger</p>
+                  <div className="flex gap-2">
+                    <PrimaryBtn onClick={saveSignature} className="flex-1 text-xs"><Save className="w-3.5 h-3.5" /> Add</PrimaryBtn>
+                    <OutlineBtn onClick={clearSignatureCanvas} className="text-xs"><RefreshCcw className="w-3.5 h-3.5" /></OutlineBtn>
+                    <button onClick={() => setIsDrawingSignature(false)} className="px-2 py-1.5 rounded-xl text-xs text-stone-400 hover:text-stone-600">Cancel</button>
+                  </div>
+                </div>
+              ) : (
+                <div
+                  className={`w-full rounded-xl p-5 text-center transition-all border-2 border-dashed ${
+                    pages.length > 0
+                      ? 'border-emerald-200 bg-emerald-50/20 cursor-pointer hover:border-emerald-400'
+                      : 'border-stone-200 bg-stone-50/50'
+                  }`}
+                  onClick={pages.length > 0 ? startSignatureDrawing : undefined}>
+                  <Pen className={`w-7 h-7 mx-auto mb-2 ${pages.length > 0 ? 'text-emerald-500' : 'text-stone-300'}`} />
+                  <p className={`text-xs font-semibold ${pages.length > 0 ? 'text-stone-700' : 'text-stone-300'}`}>
+                    {pages.length > 0 ? "Click to Draw Signature" : "Add pages first"}
+                  </p>
+                </div>
+              )}
+              {signatures.length > 0 && (
+                <p className="text-xs mt-3 text-center text-emerald-600 font-medium">
+                  <CheckCircle2 className="w-3.5 h-3.5 inline mr-1" />
+                  {signatures.length} signature{signatures.length > 1 ? 's' : ''} added
+                </p>
+              )}
+            </Panel>
+
+            {/* Export */}
+            <div className="rounded-2xl p-4 space-y-3 bg-emerald-50/50 border border-emerald-100">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-stone-400">Export & Actions</p>
+              <PrimaryBtn onClick={exportToPDF} disabled={pages.length === 0 || processing} className="w-full py-3.5">
+                {processing ? <><Loader2 className="w-5 h-5 animate-spin" /> Generating…</> : <><Download className="w-5 h-5" /> Export PDF ({pages.length})</>}
+              </PrimaryBtn>
+              <div className="flex gap-2">
+                <OutlineBtn onClick={saveProject} disabled={pages.length === 0} className="flex-1 text-xs"><Save className="w-3.5 h-3.5" /> Save</OutlineBtn>
+                <DangerBtn onClick={clearProject} disabled={pages.length === 0} className="flex-1 text-xs"><Trash2 className="w-3.5 h-3.5" /> Clear</DangerBtn>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Inline Stamp Generator Modal */}
+      <InlineStampGenerator
+        open={stampModalOpen}
+        onClose={() => setStampModalOpen(false)}
+        onStampReady={handleStampReady}
+        accentColor="#059669"
+      />
 
       <canvas ref={canvasRef} className="hidden" />
     </div>
