@@ -371,8 +371,8 @@ export function StampPreviewModal({
                   </div>
                   <div className="absolute bottom-0 left-0 right-0 h-1" style={{ background: `linear-gradient(90deg, ${tintColor}88, ${tintColor}ff, ${tintColor}44)` }}/>
                 </div>
-                <div className="mt-4 relative rounded-2xl overflow-hidden shadow-xl flex items-center justify-center" style={{ aspectRatio: '1.75 / 1', background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' }}>
-                  <div className="absolute inset-0" style={{ background: `radial-gradient(circle at center, ${tintColor}28 0%, transparent 70%)` }}/>
+                <div className="mt-4 relative rounded-2xl overflow-hidden shadow-xl flex items-center justify-center" style={{ aspectRatio: '1.75 / 1', background: '#f8f7f4' }}>
+                  <div className="absolute inset-0" style={{ background: `radial-gradient(circle at center, ${tintColor}12 0%, transparent 70%)` }}/>
                   <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} fontWeight={fontWeight} fontStyle={fontStyle} fontSize={fontSize} size={120}/>
                 </div>
                 <p className="text-[10px] text-[hsl(var(--muted-foreground))] text-center mt-2">Front (top) · Back (bottom)</p>

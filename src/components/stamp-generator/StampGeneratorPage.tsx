@@ -942,8 +942,8 @@ export default function StampGeneratorPage() {
           )}
         </div>
 
-        {/* ── Right: Concepts Grid (scrollable) ────────────────── */}
-        <div className="flex-1 min-w-0 flex flex-col overflow-hidden">
+        {/* ── Right: Concepts Grid (narrower, scrollable) ────── */}
+        <div className="w-[340px] xl:w-[400px] flex-shrink-0 min-w-0 flex flex-col overflow-hidden">
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
 
             {/* Favorites */}
