@@ -819,8 +819,8 @@ export default function StampGeneratorPage() {
           </div>
         </div>
 
-        {/* ── Center: Live Preview (always visible, 280px) ─────── */}
-        <div className="w-[280px] flex-shrink-0 border-r border-[hsl(var(--border))] bg-white/60 flex flex-col overflow-y-auto">
+        {/* ── Center: Live Preview (dominant, flex-1) ─────── */}
+        <div className="flex-1 min-w-[300px] border-r border-[hsl(var(--border))] bg-white/60 flex flex-col overflow-y-auto">
           {/* Preview */}
           <div className="flex-shrink-0 p-3">
             <div className="bg-white rounded-xl border-2 border-[hsl(var(--gold)/0.25)] shadow-lg overflow-hidden">
@@ -835,7 +835,7 @@ export default function StampGeneratorPage() {
                   </Badge>
                 )}
               </div>
-              <div className="flex items-center justify-center py-4 px-3 min-h-[240px] bg-[radial-gradient(circle_at_center,_hsl(var(--pearl-1))_0%,_white_70%)]">
+              <div className="flex items-center justify-center py-6 px-3 min-h-[320px] bg-[radial-gradient(circle_at_center,_hsl(var(--pearl-1))_0%,_white_70%)]">
                 {generating ? (
                   <div className="flex flex-col items-center gap-2 text-[hsl(var(--muted-foreground))]">
                     <Loader2 size={28} className="animate-spin text-[hsl(var(--gold))]"/>
@@ -852,7 +852,7 @@ export default function StampGeneratorPage() {
                     fontStyle={fontItalic ? 'italic' : 'normal'}
                     fontSize={manualFontSize}
                     inkMode={inkMode}
-                    size={220}
+                    size={320}
                   />
                 ) : (
                   <div className="flex flex-col items-center gap-2 text-[hsl(var(--muted-foreground))]">
@@ -942,8 +942,8 @@ export default function StampGeneratorPage() {
           )}
         </div>
 
-        {/* ── Right: Concepts Grid (scrollable) ────────────────── */}
-        <div className="flex-1 min-w-0 flex flex-col overflow-hidden">
+        {/* ── Right: Concepts Grid (narrower, scrollable) ────── */}
+        <div className="w-[340px] xl:w-[400px] flex-shrink-0 min-w-0 flex flex-col overflow-hidden">
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
 
             {/* Favorites */}

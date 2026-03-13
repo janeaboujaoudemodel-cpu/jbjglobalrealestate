@@ -30,9 +30,6 @@ const fontMap: Record<string, string> = {
 const arabicFont = '"Noto Naskh Arabic", "Arabic Typesetting", "Traditional Arabic", serif';
 
 // ─── Color tokens ────────────────────────────────────────────────
-// Primary = #1a2744 — outer borders, main text
-// Secondary = #2a3a5c — inner rings, decorative accents, location text
-// Accent = #8b6914 — monogram, center dividers, registration number
 const C_PRI = "#1a2744";
 const C_SEC = "#2a3a5c";
 const C_ACC = "#8b6914";
@@ -63,7 +60,7 @@ function fitFontSize(text: string, baseSize: number, maxArcLen: number, charW = 
   const est = text.length * baseSize * charW;
   if (est <= maxArcLen) return baseSize;
   const fitted = maxArcLen / (text.length * charW);
-  return Math.max(7, fitted);
+  return Math.max(6.5, fitted); // raised min from 7 to 6.5
 }
 
 function wrapText(text: string, x: number, y: number, font: string, size: number, color: string, letterSpacing = 1): string {
@@ -83,7 +80,6 @@ function wrapText(text: string, x: number, y: number, font: string, size: number
   </text>`;
 }
 
-/** Top arc text via textPath — works for Arabic (RTL) and English */
 function topArcText(id: string, cx: number, cy: number, r: number, text: string, font: string, fontSize: number, color: string, isArabic = false): string {
   const arcPath = `M ${cx - r} ${cy} A ${r} ${r} 0 1 1 ${cx + r} ${cy}`;
   return `
@@ -93,8 +89,6 @@ function topArcText(id: string, cx: number, cy: number, r: number, text: string,
     </text>`;
 }
 
-/** Bottom arc text — per-character placement so English reads right-side up.
- *  Centers around 90° (bottom of circle in SVG coords). */
 function bottomArcTextChars(cx: number, cy: number, r: number, text: string, font: string, fontSize: number, color: string, isArabic = false): string {
   if (!text) return '';
   const chars = text.split('');
@@ -124,7 +118,17 @@ function separatorDots(cx: number, cy: number, r: number, color: string): string
     <text x="${cx - r}" y="${cy}" text-anchor="middle" dominant-baseline="central" font-size="13" fill="${color}" font-weight="bold">●</text>`;
 }
 
-function divider(cx: number, y: number, color: string, width = 28): string {
+function divider(cx: number, y: number, color: string, width = 28, style: string = 'diamond'): string {
+  if (style === 'line') {
+    return `<line x1="${cx - width}" y1="${y}" x2="${cx + width}" y2="${y}" stroke="${color}" stroke-width="0.8"/>`;
+  }
+  if (style === 'ornate') {
+    return `
+      <line x1="${cx - width}" y1="${y}" x2="${cx - 6}" y2="${y}" stroke="${color}" stroke-width="0.7"/>
+      <circle cx="${cx}" cy="${y}" r="2.5" fill="${color}" opacity="0.7"/>
+      <line x1="${cx + 6}" y1="${y}" x2="${cx + width}" y2="${y}" stroke="${color}" stroke-width="0.7"/>`;
+  }
+  // diamond (default)
   return `
     <line x1="${cx - width}" y1="${y}" x2="${cx - 5}" y2="${y}" stroke="${color}" stroke-width="0.7"/>
     <polygon points="${cx},${y - 3} ${cx + 4},${y} ${cx},${y + 3} ${cx - 4},${y}" fill="${color}"/>
@@ -135,16 +139,21 @@ function monogramEl(cx: number, cy: number, text: string, font: string, size: nu
   return `<text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" font-family="${font}" font-size="${size}" font-weight="bold" fill="${color}">${text.toUpperCase().slice(0, 3)}</text>`;
 }
 
-function borderAttrs(borderStyle: string): { dash: string; outerWidth: number; innerRing: boolean; innerDash: string; innerWidth: number } {
+function borderAttrs(borderStyle: string, customOuterW?: number, customInnerW?: number): { dash: string; outerWidth: number; innerRing: boolean; innerDash: string; innerWidth: number } {
+  let base;
   switch (borderStyle) {
-    case 'SINGLE': return { dash: 'none', outerWidth: 2.2, innerRing: false, innerDash: 'none', innerWidth: 0 };
-    case 'DOUBLE': return { dash: 'none', outerWidth: 2.2, innerRing: true, innerDash: 'none', innerWidth: 0.8 };
-    case 'RING': return { dash: 'none', outerWidth: 3.5, innerRing: true, innerDash: 'none', innerWidth: 2 };
-    case 'DOTTED': return { dash: '2,2', outerWidth: 2, innerRing: false, innerDash: 'none', innerWidth: 0 };
-    case 'ROPE': return { dash: '5,3', outerWidth: 2.5, innerRing: false, innerDash: 'none', innerWidth: 0 };
-    case 'CUSTOM': return { dash: 'none', outerWidth: 2.2, innerRing: true, innerDash: '2,4', innerWidth: 0.6 };
-    default: return { dash: 'none', outerWidth: 2.2, innerRing: true, innerDash: 'none', innerWidth: 0.8 };
+    case 'SINGLE': base = { dash: 'none', outerWidth: 2.2, innerRing: false, innerDash: 'none', innerWidth: 0 }; break;
+    case 'DOUBLE': base = { dash: 'none', outerWidth: 2.2, innerRing: true, innerDash: 'none', innerWidth: 0.8 }; break;
+    case 'RING': base = { dash: 'none', outerWidth: 3.5, innerRing: true, innerDash: 'none', innerWidth: 2 }; break;
+    case 'DOTTED': base = { dash: '2,2', outerWidth: 2, innerRing: false, innerDash: 'none', innerWidth: 0 }; break;
+    case 'ROPE': base = { dash: '5,3', outerWidth: 2.5, innerRing: false, innerDash: 'none', innerWidth: 0 }; break;
+    case 'CUSTOM': base = { dash: 'none', outerWidth: 2.2, innerRing: true, innerDash: '2,4', innerWidth: 0.6 }; break;
+    default: base = { dash: 'none', outerWidth: 2.2, innerRing: true, innerDash: 'none', innerWidth: 0.8 };
   }
+  // Override with custom widths if provided
+  if (customOuterW != null) base.outerWidth = customOuterW;
+  if (customInnerW != null && base.innerRing) base.innerWidth = customInnerW;
+  return base;
 }
 
 // ─── buildSVG — uses color tokens so StampSVGRenderer tinting works ──────────
@@ -164,11 +173,17 @@ function buildSVG(project: any, templateKey: string): string {
   const hasMono = project.icon_style === 'MONOGRAM';
   const hasLogo = project.icon_style === 'UPLOADED_LOGO' && project.uploaded_logo_url;
   const isBilingual = project.language_mode === 'BILINGUAL' || project.language_mode === 'AR';
-  const ba = borderAttrs(project.border_style || 'DOUBLE');
+  
+  // Support custom border widths from layout_json
+  const layoutJson = project.layout_json || {};
+  const customOuterW = layoutJson.outerBorderWidth;
+  const customInnerW = layoutJson.innerBorderWidth;
+  const dividerStyle = layoutJson.dividerStyle || 'diamond';
+  
+  const ba = borderAttrs(project.border_style || 'DOUBLE', customOuterW, customInnerW);
   const showLocation = project.show_location !== false;
   const showReg = project.show_license_number !== false && regNo;
 
-  // Common helper for bilingual circular stamps
   function bilingualCircularStamp(opts: {
     outerR: number;
     innerR: number;
@@ -179,19 +194,21 @@ function buildSVG(project: any, templateKey: string): string {
     const { outerR, innerR, extraRings = '', centerExtra = '', pathPrefix } = opts;
     const textR = innerR + (outerR - innerR) * 0.5;
     const arcLen = textR * Math.PI;
-    const safeArc = arcLen * 0.70;
+    // Reduced from 0.70 to 0.65 for better text clearance
+    const safeArc = arcLen * 0.65;
     
-    // STRICT: Arabic on top, English on bottom — always
+    // Ensure minimum 3px clearance between text arc and ring
+    const clearTextR = Math.min(textR, innerR + (outerR - innerR) * 0.5 - 3);
+    const effectiveTextR = Math.max(clearTextR, innerR + 4);
+    
     const topText = isBilingual && arabicName ? arabicName : `✦  ${name}  ✦`;
     const topIsAr = isBilingual && !!arabicName;
     const topFont = topIsAr ? arabicFont : font;
     const topSize = fitFontSize(topText, topIsAr ? 10 : 8.5, safeArc, topIsAr ? 0.48 : 0.54);
     
-    // Bottom: English name (per-character, right-side up at bottom)
     const bottomText = isBilingual ? name : city;
     const bottomSize = fitFontSize(bottomText, 8, safeArc, 0.54);
     
-    // Location ring
     const locR = outerR * 0.44;
     const locTextR = locR - 2;
     let locationContent = '';
@@ -210,7 +227,6 @@ function buildSVG(project: any, templateKey: string): string {
 
     const centerR = showLocation ? locR - 6 : outerR * 0.30;
     
-    // Center: monogram or logo
     let centerContent = '';
     if (hasLogo && project.uploaded_logo_url) {
       const imgS = centerR * 1.6;
@@ -223,7 +239,6 @@ function buildSVG(project: any, templateKey: string): string {
       centerContent = monogramEl(cx, cy, mono, font, monoSize, C_ACC);
     }
 
-    // Reg number
     let regContent = '';
     if (showReg) {
       const regY = cy + centerR + 4;
@@ -236,9 +251,9 @@ function buildSVG(project: any, templateKey: string): string {
       <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="none" stroke="${C_PRI}" stroke-width="${ba.outerWidth}" stroke-dasharray="${ba.dash}"/>
       ${ba.innerRing ? `<circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${C_PRI}" stroke-width="${ba.innerWidth}" stroke-dasharray="${ba.innerDash}"/>` : ''}
       ${extraRings}
-      ${topArcText(`${pathPrefix}-top`, cx, cy, textR, topText, topFont, topSize, C_PRI, topIsAr)}
-      ${bottomArcTextChars(cx, cy, textR, bottomText, font, bottomSize, C_PRI)}
-      ${separatorDots(cx, cy, textR, C_PRI)}
+      ${topArcText(`${pathPrefix}-top`, cx, cy, effectiveTextR, topText, topFont, topSize, C_PRI, topIsAr)}
+      ${bottomArcTextChars(cx, cy, effectiveTextR, bottomText, font, bottomSize, C_PRI)}
+      ${separatorDots(cx, cy, effectiveTextR, C_PRI)}
       ${locationContent}
       ${centerContent}
       ${centerExtra}
@@ -250,7 +265,7 @@ function buildSVG(project: any, templateKey: string): string {
     case "classic-double": {
       return bilingualCircularStamp({
         outerR: R, innerR: R - 10, pathPrefix: 'cd',
-        centerExtra: divider(cx, cy + (hasMono ? 16 : 8), C_SEC, 28),
+        centerExtra: divider(cx, cy + (hasMono ? 16 : 8), C_SEC, 28, dividerStyle),
       });
     }
     case "modern-minimal": {
@@ -264,7 +279,7 @@ function buildSVG(project: any, templateKey: string): string {
       return bilingualCircularStamp({
         outerR: r1, innerR: r3, pathPrefix: 'lr',
         extraRings: `<circle cx="${cx}" cy="${cy}" r="${r2}" fill="none" stroke="${C_SEC}" stroke-width="0.5"/>`,
-        centerExtra: `${divider(cx, cy + 34, C_SEC, 22)}<text x="${cx}" y="${cy + 44}" text-anchor="middle" font-family="${font}" font-size="6.5" fill="${C_SEC}" letter-spacing="5">EST.</text>`,
+        centerExtra: `${divider(cx, cy + 34, C_SEC, 22, dividerStyle)}<text x="${cx}" y="${cy + 44}" text-anchor="middle" font-family="${font}" font-size="6.5" fill="${C_SEC}" letter-spacing="5">EST.</text>`,
       });
     }
     case "bold-rectangle": {
@@ -273,6 +288,7 @@ function buildSVG(project: any, templateKey: string): string {
       const rcx = rw / 2, rcy = rh / 2;
       const nameFontSize = autoFontSize(name, 11, 22);
       const arSize = autoFontSize(arabicName || name, 10, 18);
+      // 12px padding from inner border for rectangles
       return `<svg viewBox="0 0 ${rw} ${rh}" xmlns="http://www.w3.org/2000/svg">
         <rect x="${x1 + 2}" y="${y1 + 2}" width="${rw - 4}" height="${rh - 4}" rx="4" fill="none" stroke="${C_PRI}" stroke-width="${ba.outerWidth}" stroke-dasharray="${ba.dash}"/>
         ${ba.innerRing ? `<rect x="${x1 + 7}" y="${y1 + 7}" width="${rw - 14}" height="${rh - 14}" rx="2" fill="none" stroke="${C_SEC}" stroke-width="${ba.innerWidth}" stroke-dasharray="${ba.innerDash}"/>` : ''}
@@ -288,7 +304,7 @@ function buildSVG(project: any, templateKey: string): string {
       return bilingualCircularStamp({
         outerR: R, innerR: R - 18, pathPrefix: 'vo',
         extraRings: `<circle cx="${cx}" cy="${cy}" r="${R - 12}" fill="none" stroke="${C_SEC}" stroke-width="0.6" stroke-dasharray="3,2.5"/>`,
-        centerExtra: divider(cx, cy + (hasMono ? 18 : 14), C_SEC, 24),
+        centerExtra: divider(cx, cy + (hasMono ? 18 : 14), C_SEC, 24, dividerStyle),
       });
     }
     case "bilingual-official": {
@@ -371,7 +387,7 @@ serve(async (req) => {
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
 
-    // ── GENERATE action ──────────────────────────────────────────────────────
+    // ── GENERATE action — INSTANT (no AI ordering) ───────────────────────────
     if (action === "generate") {
       let orderedTemplates = [...TEMPLATES];
 
@@ -384,46 +400,24 @@ serve(async (req) => {
         ];
       }
 
-      // Business type → style suggestion enrichment
+      // Business type → smart reordering (deterministic, no AI call)
       const businessType = project?.business_type || '';
       const styleSuggestion = BUSINESS_STYLE_MAP[businessType];
-      let styleHint = '';
+      
+      // Deterministic reorder: put matching templates first
       if (styleSuggestion) {
-        styleHint = ` Business type is "${businessType}" which works best with ${styleSuggestion.theme} theme and ${styleSuggestion.border} border.`;
-      }
-
-      // Smart ordering via AI
-      if (LOVABLE_API_KEY) {
-        try {
-          const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-            method: "POST",
-            headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
-            body: JSON.stringify({
-              model: "google/gemini-2.5-pro",
-              messages: [
-                { role: "system", content: `You are a stamp design expert. Order these template keys best to worst for the given project. Available: ${orderedTemplates.map(t => t.key).join(", ")}. Return ONLY JSON array like ["key1","key2",...] with ALL keys.` },
-                { role: "user", content: `Style: ${project.style_theme}, Shape: ${project.stamp_type}, Language: ${project.language_mode}, Border: ${project.border_style}, Typography: ${project.typography_style}.${styleHint}` },
-              ],
-              stream: false,
-            }),
-          });
-
-          if (aiRes.ok) {
-            const aiJson = await aiRes.json();
-            const raw = aiJson.choices?.[0]?.message?.content || "";
-            const match = raw.match(/\[.*\]/s);
-            if (match) {
-              const ordered: string[] = JSON.parse(match[0]);
-              const reordered = ordered.map((k: string) => orderedTemplates.find(t => t.key === k)).filter(Boolean) as typeof orderedTemplates;
-              if (reordered.length >= 4) orderedTemplates = reordered;
-            }
-          } else if (aiRes.status === 429) {
-            console.warn("AI rate limited, using default template order");
-          } else if (aiRes.status === 402) {
-            console.warn("AI credits exhausted, using default template order");
-          }
-        } catch (e) {
-          console.error("AI ordering error:", e);
+        const matchingBorder = styleSuggestion.border;
+        const borderTemplateMap: Record<string, string[]> = {
+          'RING': ['luxury-ring'],
+          'DOUBLE': ['classic-double', 'vintage-ornate', 'bilingual-official'],
+          'SINGLE': ['modern-minimal', 'geometric-modern'],
+          'ROPE': ['vintage-ornate'],
+        };
+        const preferred = borderTemplateMap[matchingBorder] || [];
+        if (preferred.length > 0) {
+          const first = orderedTemplates.filter(t => preferred.includes(t.key));
+          const rest = orderedTemplates.filter(t => !preferred.includes(t.key));
+          orderedTemplates = [...first, ...rest];
         }
       }
 
@@ -465,7 +459,7 @@ serve(async (req) => {
       }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    // ── REFINE action ─────────────────────────────────────────────────────────
+    // ── REFINE action — uses fast AI model ────────────────────────────────────
     if (action === "refine") {
       if (!instruction) {
         return new Response(JSON.stringify({ error: "Instruction required" }), { 
@@ -482,14 +476,14 @@ serve(async (req) => {
             method: "POST",
             headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
             body: JSON.stringify({
-              model: "google/gemini-2.5-pro",
+              model: "google/gemini-3-flash-preview",
               messages: [
                 {
                   role: "system",
                   content: `You are an expert SVG stamp designer. You will receive an existing stamp SVG and instructions to modify it.
 Return ONLY the modified SVG code (starting with <svg) with NO explanation. Keep it as a valid SVG.
 Guidelines:
-- All text must stay inside the border rings with at least 2px clearance
+- All text must stay inside the border rings with at least 3px clearance from any ring stroke
 - Do not add text that overlaps borders
 - Keep the stamp professional and clean
 - Use these specific color hex codes:
@@ -498,6 +492,7 @@ Guidelines:
   - Accent (monogram, registration, dividers): #8b6914
 - Do not add any external images or base64 data
 - For bottom arc text, use individual <text> elements at calculated positions (per-character), NOT textPath
+- Ensure minimum padding of 12px from rectangle borders for text content
 - Return ONLY the SVG, nothing else`,
                 },
                 {
