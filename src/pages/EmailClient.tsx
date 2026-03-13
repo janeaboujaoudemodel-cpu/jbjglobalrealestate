@@ -286,7 +286,7 @@ const EmailClient = () => {
                   <p className="text-[10px] text-black/40">{currentSender.title} · {currentSender.email}</p>
                 </div>
 
-                <div className="flex justify-between">
+                  <div className="flex justify-between">
                   <div className="flex gap-2">
                     <Button variant="ghost" size="sm" className="text-black/60 hover:bg-[#C9A84C]/10">
                       <Paperclip className="w-4 h-4 mr-1" /> Attach
@@ -300,10 +300,82 @@ const EmailClient = () => {
                   </div>
                   <div className="flex gap-2">
                     <Button variant="outline" onClick={() => setComposeOpen(false)} className="border-[#C9A84C]/30">Cancel</Button>
-                    <Button onClick={sendEmail} className="bg-gradient-to-r from-[#C9A84C] to-[#B8973F] hover:from-[#B8973F] hover:to-[#A78636] text-white">
-                      <Send className="w-4 h-4 mr-2" /> Send
+                    <Button onClick={() => setApprovePreviewOpen(true)} className="bg-gradient-to-r from-[#C9A84C] to-[#B8973F] hover:from-[#B8973F] hover:to-[#A78636] text-white">
+                      <CheckCheck className="w-4 h-4 mr-2" /> Preview & Send
                     </Button>
                   </div>
+                </div>
+
+                {/* Also notify in chat toggle — show if recipient might be internal */}
+                <div className="flex items-center justify-between bg-[#FDFBF7] border border-[#C9A84C]/20 rounded-lg px-3 py-2">
+                  <div className="flex items-center gap-2">
+                    <MessageSquare className="w-4 h-4 text-[#C9A84C]" />
+                    <span className="text-sm text-black">Also notify in Team Chat</span>
+                    <span className="text-[10px] text-black/40">(if internal user)</span>
+                  </div>
+                  <Switch checked={alsoNotifyChat} onCheckedChange={setAlsoNotifyChat} />
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+
+          {/* ── Approve & Send Confirmation Modal ── */}
+          <Dialog open={approvePreviewOpen} onOpenChange={setApprovePreviewOpen}>
+            <DialogContent className="bg-white border-2 border-[#C9A84C]/30 max-w-3xl max-h-[85vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle className="text-black flex items-center gap-2">
+                  <CheckCheck className="w-5 h-5 text-[#C9A84C]" />
+                  Approve & Send — Final Preview
+                </DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                {/* Send Method Badge */}
+                <div className="flex items-center gap-3">
+                  <Badge className={cn(
+                    "text-xs px-2 py-0.5",
+                    sendViaResend ? "bg-emerald-100 text-emerald-700 border-emerald-300" : "bg-zinc-100 text-zinc-600 border-zinc-300"
+                  )}>
+                    {sendViaResend ? "⚡ Resend API" : "📤 Normal Send"}
+                  </Badge>
+                  {alsoNotifyChat && (
+                    <Badge className="bg-blue-100 text-blue-700 border-blue-300 text-xs px-2 py-0.5">
+                      💬 + Team Chat Notification
+                    </Badge>
+                  )}
+                </div>
+
+                {/* Full email preview */}
+                <div className="border-2 border-[#C9A84C]/20 rounded-xl overflow-hidden">
+                  <div className="bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6] px-6 py-4 border-b border-[#C9A84C]/15">
+                    <p className="text-sm text-black/60">From: <strong className="text-black">{currentSender.name}</strong> &lt;{currentSender.email}&gt;</p>
+                    <p className="text-sm text-black/60">To: <strong className="text-black">{newEmail.to}</strong></p>
+                    <p className="text-sm text-black/60">Subject: <strong className="text-black">{newEmail.subject}</strong></p>
+                  </div>
+                  <div className="px-6 py-5 bg-white">
+                    <div className="whitespace-pre-wrap text-black leading-relaxed min-h-[120px]">
+                      {newEmail.body}
+                    </div>
+                  </div>
+                  {/* Signature Block */}
+                  <div className="px-6 py-4 bg-[#FDFBF7] border-t border-[#C9A84C]/15">
+                    <p className="text-sm text-black/70">Best regards,</p>
+                    <p className="text-sm font-semibold text-black mt-1">{currentSender.name}</p>
+                    <p className="text-xs text-black/50">{currentSender.title}</p>
+                    {currentSender.id !== "personal" && (
+                      <p className="text-xs text-black/50">JBJ Global Real Estate</p>
+                    )}
+                    <p className="text-xs text-[#C9A84C] mt-0.5">{currentSender.email}</p>
+                  </div>
+                </div>
+
+                <div className="flex justify-end gap-3 pt-2">
+                  <Button variant="outline" onClick={() => setApprovePreviewOpen(false)} className="border-[#C9A84C]/30">Back to Edit</Button>
+                  <Button
+                    onClick={() => { setApprovePreviewOpen(false); sendEmail(); }}
+                    className="bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white px-6"
+                  >
+                    <Send className="w-4 h-4 mr-2" /> Approve & Send
+                  </Button>
                 </div>
               </div>
             </DialogContent>
