@@ -236,7 +236,9 @@ export default function StampGeneratorPage() {
 
     setLocalIconStyle((data.icon_style as any) || 'MONOGRAM');
     setLocalMonogramText(data.monogram_text || data.company_name?.slice(0, 2)?.toUpperCase() || '');
-    setLocalLogoUrl((data as any).uploaded_logo_url || '');
+    // Restore logo from localStorage or project data
+    const savedLogo = projectId ? localStorage.getItem(`stamp-logo-${projectId}`) : null;
+    setLocalLogoUrlRaw(savedLogo || (data as any).uploaded_logo_url || '');
 
     const isFresh = new URLSearchParams(location.search).get('fresh') === '1';
 
