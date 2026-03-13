@@ -44,6 +44,7 @@ import {
 } from "lucide-react";
 import ListingSearchFilters from "@/components/listing-admin/ListingSearchFilters";
 import ListingGenerator from "@/components/listing-admin/ListingGenerator";
+import { ProjectDuplicateInspector } from "@/components/listing-admin/ProjectDuplicateInspector";
 import { PendingUpdatesQueue } from "@/components/listing-admin/PendingUpdatesQueue";
 import { ProjectApprovalQueue } from "@/components/listing-admin/ProjectApprovalQueue";
 import { ExtractionJobsPanel } from "@/components/listing-admin/ExtractionJobsPanel";
