@@ -8,8 +8,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import {
   Play, Pause, RefreshCw, Loader2, Database, Image,
-  FileText, Layers, CheckCircle2, AlertCircle, Zap, Globe, CloudOff
+  FileText, Layers, CheckCircle2, AlertCircle, Zap, Globe, CloudOff, Eye
 } from "lucide-react";
+import { EnrichmentAuditPanel } from "./EnrichmentAuditPanel";
 
 interface EnrichStats {
   total_projects: number;
