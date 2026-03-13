@@ -569,7 +569,7 @@ export default function StampGeneratorPage() {
       <div className="flex-1 flex gap-0 overflow-hidden">
 
         {/* ── Left Panel: Style Controls (always visible, 200px) ──── */}
-        <div className="w-[200px] flex-shrink-0 border-r border-[hsl(var(--border))] bg-white/80 flex flex-col overflow-hidden">
+        <div className="w-[240px] flex-shrink-0 border-r border-[hsl(var(--border))] bg-white/80 flex flex-col overflow-hidden">
           {/* Tab switcher */}
           <div className="flex-shrink-0 p-2">
             <div className="flex bg-[hsl(var(--muted))] rounded-lg p-0.5 gap-0.5 flex-wrap">
@@ -839,19 +839,25 @@ export default function StampGeneratorPage() {
             </div>
           </div>
 
-          {/* Trade License Auto-Fill */}
+          {/* Trade License Re-scan (collapsed by default since data already captured in wizard) */}
           <div className="flex-shrink-0 px-3 pb-3">
-            <div className="bg-white rounded-xl border border-[hsl(var(--border))] overflow-hidden">
-              <button onClick={() => setLicenseOpen(v => !v)}
-                className="w-full flex items-center justify-between px-3 py-2 hover:bg-[hsl(var(--pearl-1))] transition-colors">
-                <div className="flex items-center gap-1.5">
-                  <Upload size={11} className="text-[hsl(var(--gold))]"/>
-                  <span className="text-[10px] font-medium text-[hsl(var(--foreground))]">Smart Auto-Fill</span>
-                </div>
-                <ChevronDown size={11} className={`text-[hsl(var(--muted-foreground))] transition-transform ${licenseOpen ? 'rotate-180' : ''}`}/>
+            {!licenseOpen ? (
+              <button onClick={() => setLicenseOpen(true)}
+                className="w-full flex items-center gap-1.5 py-1.5 text-[10px] text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--gold-dark))] transition-colors">
+                <Upload size={10} className="text-[hsl(var(--gold))]"/>
+                <span>Re-scan Trade License</span>
               </button>
-              {licenseOpen && (
-                <div className="px-3 pb-3 border-t border-[hsl(var(--border))]">
+            ) : (
+              <div className="bg-white rounded-xl border border-[hsl(var(--border))] overflow-hidden">
+                <button onClick={() => setLicenseOpen(false)}
+                  className="w-full flex items-center justify-between px-3 py-2 hover:bg-[hsl(var(--pearl-1))] transition-colors">
+                  <div className="flex items-center gap-1.5">
+                    <Upload size={11} className="text-[hsl(var(--gold))]"/>
+                    <span className="text-[10px] font-medium text-[hsl(var(--foreground))]">Re-scan Trade License</span>
+                  </div>
+                  <X size={11} className="text-[hsl(var(--muted-foreground))]"/>
+                </button>
+                <div className="px-3 pt-2 pb-3 border-t border-[hsl(var(--border))]">
                   <StampLicenseUploader
                     onExtracted={(data) => {
                       const updatedProject = {
@@ -868,8 +874,8 @@ export default function StampGeneratorPage() {
                     }}
                   />
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
 
           {/* Blocked warning */}

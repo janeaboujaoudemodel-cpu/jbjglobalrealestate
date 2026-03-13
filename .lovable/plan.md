@@ -1,45 +1,72 @@
 
+## CRM System Upgrade — Implementation Status
 
-## Stamp Generator — Ink Texture, Multi-Color Export, Smart Auto-Fill, and Left Panel Width Fix
+### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-### Issues to Fix
+#### Task 1: Full System Audit ✅
+- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
+- Identified 10 weaknesses (documented in plan)
 
-1. **Ink Impression texture not working** — `StampSVGRenderer` injects the `inkTexture` SVG filter correctly, but DOMPurify strips critical filter elements. The `ADD_TAGS` list includes `feTurbulence`, `feComposite` etc., but `feComponentTransfer` and `feFuncA` may be getting stripped because DOMPurify's SVG profile is restrictive. Need to verify the sanitize config allows all filter primitives and the `opacity` attribute on `<g>`.
+#### Task 2: Leads Security Hardening ✅
+- CSV export no longer includes email/phone PII
+- Audit logging added to exports with user_agent tracking
+- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
 
-2. **Multi-color download at export time** — The Export page already has `PACK_COLORS` (line 194) but users need to select a color and download in that color on-the-fly. Add a "Download in Color" section to the Export page where users pick from the palette (Black, White, Gold, Ink Blue, etc.) and each download applies that tint before rendering.
+#### Task 3: Encryption Hardening ✅
+- CSV export stripped of `email_lower` and `phone_e164` fields
+- Export audit logged to both `crm_audit_logs` and `audit_logs`
 
-3. **Smart Auto-Fill showing again inside generator** — The `StampLicenseUploader` section (lines 842-873) is always visible in the center panel. Since trade license was already uploaded in the wizard step before reaching generation, this should be hidden by default. Only show a small "Re-upload License" link, not the full uploader panel.
+#### Task 4: Lead Lifecycle Upgrade ✅
+- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
+- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
+- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
 
-4. **Smart Auto-Fill padding issue** — When expanded, the `StampLicenseUploader` content (line 854) has `px-3 pb-3` but no `pt-2`, so content touches the top border divider.
+#### Task 5: CRM Structure Upgrade ✅
+- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
+- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
+- KanbanPipeline expanded to show all 17 relevant stages
 
-5. **Left panel tab labels broken/wrapping** — The tab switcher at line 575 uses `w-[200px]` panel with 5 tabs (`Colors`, `Fonts`, `Text`, `Art`, `Logo`). At 200px with padding, the text wraps to two lines. Need to widen the panel to 240px or abbreviate labels.
+#### Task 6: Performance Optimization ✅
+- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
+- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
+- `crm_leads_updated_at_trigger` auto-updates `updated_at`
 
-### Implementation
+#### Task 7: AI Intelligence Integration ✅
+- New edge function `ai-lead-intelligence` using Lovable AI gateway
+- Supports 3 modes: `score`, `summary`, `next_action`
+- Tool-calling for structured scoring output
+- JWT auth + CRM role validation
+- PII sanitized before sending to AI
 
-**A. Fix ink impression texture** (`StampSVGRenderer.tsx`)
-- Add `opacity` to `ADD_ATTR` list in DOMPurify config
-- Add `feFuncR`, `feFuncG`, `feFuncB` to `ADD_TAGS` for completeness
-- Verify the filter chain works by testing the `inkMode` toggle renders visible texture differences
+#### Task 8: Workflow Automation ✅
+- Created `crm_automation_rules` table with RLS (owner manage, admin view)
+- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
 
-**B. Multi-color download** (`StampExportPage.tsx`)
-- In the export UI, add a "Color Variant" selector showing the existing `PACK_COLORS` palette
-- When user selects a color, apply `tintSvgFull()` with that color as primary before generating PNG/SVG/PDF
-- Add a "Download All Colors" button that generates a ZIP with the stamp in every palette color
+#### Task 10: Role & Permission System ✅
+- RLS on automation rules: owner CRUD, admin read-only
+- CSV export restricted to owner_admin/founder roles
 
-**C. Hide Smart Auto-Fill by default** (`StampGeneratorPage.tsx`)
-- Change `licenseOpen` initial state to `false` (already is)
-- Collapse the entire uploader section to just a single-line "Re-scan Trade License" link
-- Remove the accordion-style card wrapper; show just a small text button
+#### Task 12: Backend/Database Upgrade ✅
+- 3 new performance indexes
+- Auto-updated_at trigger on crm_leads
+- Duplicate hash computation trigger
+- Rate-limiting security function
 
-**D. Fix padding** (`StampGeneratorPage.tsx`)
-- Add `pt-2` to the license uploader content div (line 854)
+#### Task 13: Data Cleanliness ✅
+- `duplicate_hash` with auto-compute trigger prevents future duplicates
+- Partial unique index enforces uniqueness at DB level
 
-**E. Widen left panel** (`StampGeneratorPage.tsx`)
-- Change `w-[200px]` to `w-[240px]` on the left panel (line 572)
-- This gives each of the 5 tabs enough room to display without wrapping
-
-### Files to modify
-1. `src/components/stamp-generator/StampSVGRenderer.tsx` — fix DOMPurify config for ink texture
-2. `src/components/stamp-generator/StampGeneratorPage.tsx` — widen panel, fix auto-fill UI/padding
-3. `src/components/stamp-generator/StampExportPage.tsx` — multi-color download feature
-
+### Files Changed
+| File | Action |
+|------|--------|
+| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
+| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
+| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
+| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
+| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
+| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
+| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
+| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
+| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
