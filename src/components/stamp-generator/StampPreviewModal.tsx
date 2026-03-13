@@ -527,17 +527,9 @@ export function StampPreviewModal({
                           boxShadow: `inset 0 1px 4px rgba(255,255,255,0.1), inset 0 -1px 4px rgba(0,0,0,0.2)`,
                         }}
                       />
-                      {/* Second inner ring */}
-                      <div
-                        className="absolute rounded-full"
-                        style={{
-                          width: 176, height: 176,
-                          border: `1px solid rgba(255,255,255,0.08)`,
-                        }}
-                      />
-                      {/* Stamp impression */}
-                      <div className="relative z-10" style={{ filter: 'brightness(0) invert(1) opacity(0.9)', mixBlendMode: 'soft-light' }}>
-                        <StampSVGRenderer svgSource={displaySvg} tintColor="#ffffff" secondaryColor="#ffffff" accentColor="#ffffff" size={180}/>
+                      {/* Stamp impression — larger and prominent */}
+                      <div className="relative z-10" style={{ filter: 'brightness(0) invert(1) opacity(0.92)', mixBlendMode: 'soft-light' }}>
+                        <StampSVGRenderer svgSource={displaySvg} tintColor="#ffffff" secondaryColor="#ffffff" accentColor="#ffffff" fontFamily={fontFamily} fontWeight={fontWeight} fontStyle={fontStyle} fontSize={fontSize} size={200}/>
                       </div>
                       {/* Specular highlight */}
                       <div
