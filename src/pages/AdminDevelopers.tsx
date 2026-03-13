@@ -396,8 +396,9 @@ const AdminDevelopers = () => {
             <TabsTrigger value="all" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
               All UAE ({filteredDevelopers.length})
             </TabsTrigger>
-            <TabsTrigger value="briefings" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
-              📅 Briefings
+            <TabsTrigger value="briefings" className="data-[state=active]:bg-white data-[state=active]:shadow-md flex items-center gap-1.5">
+              <Calendar className="w-4 h-4" />
+              Briefings
             </TabsTrigger>
           </TabsList>
 
