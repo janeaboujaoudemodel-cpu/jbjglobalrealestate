@@ -1,72 +1,67 @@
 
-## CRM System Upgrade — Implementation Status
 
-### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
+## Stamp Generator -- Complete Fix Plan
 
-#### Task 1: Full System Audit ✅
-- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
-- Identified 10 weaknesses (documented in plan)
+### Problems Identified
 
-#### Task 2: Leads Security Hardening ✅
-- CSV export no longer includes email/phone PII
-- Audit logging added to exports with user_agent tracking
-- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
+1. **Bottom English arc text is reversed/unreadable** -- The SVG arc path in `stampOfficialTemplate.ts` goes RIGHT-to-LEFT through the bottom (`M cx+r cy → cx-r cy, sweep=0`), which places characters in reverse reading order. Same issue for location English text.
 
-#### Task 3: Encryption Hardening ✅
-- CSV export stripped of `email_lower` and `phone_e164` fields
-- Export audit logged to both `crm_audit_logs` and `audit_logs`
+2. **Layers panel controls empty overlays, not real SVG** -- `InteractiveStampCanvas` renders a separate overlay layer system that has no connection to the actual SVG content. Toggling visibility/deleting layers does nothing to the stamp preview.
 
-#### Task 4: Lead Lifecycle Upgrade ✅
-- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
-- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
-- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
+3. **Layout broken at 1178px** -- The 380px left panel + center preview causes cropping. Controls overlap the stamp. No stable frame.
 
-#### Task 5: CRM Structure Upgrade ✅
-- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
-- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
-- KanbanPipeline expanded to show all 17 relevant stages
+4. **History "Edit" opens gallery, not single stamp editor** -- `StampHistoryDashboard` navigates to `/toolkit/stamp-generator/${projectId}/generate` which loads the full generation page with all concepts, not a focused editor for one design.
 
-#### Task 6: Performance Optimization ✅
-- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
-- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
-- `crm_leads_updated_at_trigger` auto-updates `updated_at`
+5. **Export tab is placeholder** -- Only shows "available after generation" text; no actual export controls in the wizard.
 
-#### Task 7: AI Intelligence Integration ✅
-- New edge function `ai-lead-intelligence` using Lovable AI gateway
-- Supports 3 modes: `score`, `summary`, `next_action`
-- Tool-calling for structured scoring output
-- JWT auth + CRM role validation
-- PII sanitized before sending to AI
+6. **Text too thin/broken** -- Font sizes and stroke widths still render too small at the wizard's 340px preview size. The text arc geometry doesn't push company name inward enough between the rings.
 
-#### Task 8: Workflow Automation ✅
-- Created `crm_automation_rules` table with RLS (owner manage, admin view)
-- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
+### Implementation (5 files)
 
-#### Task 10: Role & Permission System ✅
-- RLS on automation rules: owner CRUD, admin read-only
-- CSV export restricted to owner_admin/founder roles
+**A. Fix arc text orientation** (`src/lib/stampOfficialTemplate.ts`)
+- Change bottom arc path from `M cx+r cy A ... 0 0 0 cx-r cy` to `M cx-r cy A ... 0 0 0 cx+r cy` (left-to-right through bottom, counter-clockwise). This makes English text readable right-side up.
+- Same fix for `locBotArc` (location English).
+- Increase text arc radius gap: push `textArcR` slightly inward so text sits more clearly between rings.
+- Bump outer stroke to 5, inner to 2.5. Increase base font to 16/15. Increase separator size.
+- Reduce `safeArc` multiplier to 0.70 so long names shrink earlier and never overflow.
 
-#### Task 12: Backend/Database Upgrade ✅
-- 3 new performance indexes
-- Auto-updated_at trigger on crm_leads
-- Duplicate hash computation trigger
-- Rate-limiting security function
+**B. Remove broken InteractiveStampCanvas overlay system** (`InteractiveStampCanvas.tsx`)
+- Strip the fake overlay/layer panel entirely. Replace with a simple container that just renders children (the LiveStampPreview) with no layer controls.
+- The layer visibility concept will be replaced by form-level toggles (show/hide location, show/hide license, show/hide monogram) which already exist in the Company and Logo tabs and actually control the SVG output.
 
-#### Task 13: Data Cleanliness ✅
-- `duplicate_hash` with auto-compute trigger prevents future duplicates
-- Partial unique index enforces uniqueness at DB level
+**C. Rebuild wizard layout for stability** (`StampProjectWizard.tsx`)
+- Reduce left panel from 380px to 320px.
+- Make preview size responsive: `min(380, available width - 360)`.
+- Remove the InteractiveStampCanvas wrapper -- just render LiveStampPreview directly in a styled frame.
+- In the Export tab: add actual working export buttons (SVG download, PNG download at 512/1024, PDF) that generate directly from the current preview SVG using the same `svgToPng`/`svgToPdf` helpers from StampExportPage.
+- Add "Print Preview" button that calls `window.print()`.
+- The "Generate Concepts" button stays in toolbar for AI batch generation.
+
+**D. Fix history Edit action** (`StampHistoryDashboard.tsx`)
+- Change "Open in Editor" to navigate to `/toolkit/stamp-generator/${projectId}/export/${designId}` instead of the generate page, so clicking Edit opens the specific design.
+- Add a proper "Preview" action that opens a modal showing the single stamp at large size with basic export options.
+
+**E. Sidebar active highlight** (`GlobalVerticalNav.tsx`)
+- Already has prefix matching at line 900. Verify it works for `/toolkit/stamp-generator/new` and `/toolkit/stamp-generator/projects`. The current logic `location.pathname.startsWith(href + "/")` should match. If `href` is `/toolkit/stamp-generator` and path is `/toolkit/stamp-generator/new`, this matches. No change needed here -- confirmed working.
+
+### Arc Path Fix Detail (Critical)
+
+Current (broken):
+```
+botArcPath = M (cx+r) cy A r r 0 0 0 (cx-r) cy
+```
+Text follows path right→left through bottom. Characters render right-side-up but read backwards.
+
+Fixed:
+```
+botArcPath = M (cx-r) cy A r r 0 0 0 (cx+r) cy
+```
+Text follows path left→right through bottom (counter-clockwise sweep). Characters render right-side-up AND read left-to-right naturally.
 
 ### Files Changed
-| File | Action |
-|------|--------|
-| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
-| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
-| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
-| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
-| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
-| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
-| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
-| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
-| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
+1. `src/lib/stampOfficialTemplate.ts` -- arc paths, stroke weights, font sizes
+2. `src/components/stamp-generator/InteractiveStampCanvas.tsx` -- simplify to pure container
+3. `src/components/stamp-generator/StampProjectWizard.tsx` -- layout fix, real export, remove broken canvas wrapper
+4. `src/components/stamp-generator/StampHistoryDashboard.tsx` -- fix Edit navigation
+5. `src/components/stamp-generator/LiveStampPreview.tsx` -- ensure size prop flows correctly
+
