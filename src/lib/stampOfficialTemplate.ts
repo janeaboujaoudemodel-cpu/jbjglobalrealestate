@@ -3,7 +3,7 @@
  * 
  * Double-ring circular layout with:
  * - Arabic text arcing the TOP half (default)
- * - English text arcing the BOTTOM half — reads LEFT-TO-RIGHT naturally (right-side up)
+ * - English text arcing the BOTTOM half — per-character placement, readable right-side up
  * - Two dot separators at 3/9 o'clock positions
  * - Center area for monogram/logo with optional inner text ring for location
  * - Corporate Official Blue ink: #1B3A8C
@@ -64,6 +64,63 @@ function renderSeparators(cx: number, cy: number, r: number, style: SeparatorSty
   `;
 }
 
+/**
+ * Render text along the BOTTOM half of a circle, per-character,
+ * so each character is right-side up (tops pointing outward).
+ * Characters are distributed evenly across ~150° centered at 6 o'clock (270° in math coords = bottom).
+ */
+function renderBottomArcText(
+  text: string, cx: number, cy: number, r: number,
+  fontSize: number, font: string, ink: string, letterSpacing: number,
+  isArabic: boolean, fontWeight = '800'
+): string {
+  if (!text) return '';
+  const chars = text.split('');
+  const n = chars.length;
+  if (n === 0) return '';
+
+  // Spread across 150° of the bottom half, centered at 270° (6 o'clock)
+  const spreadDeg = Math.min(150, n * 11);
+  const startDeg = 270 - spreadDeg / 2;
+  const stepDeg = n > 1 ? spreadDeg / (n - 1) : 0;
+
+  let result = '';
+  for (let i = 0; i < n; i++) {
+    const deg = n === 1 ? 270 : startDeg + i * stepDeg;
+    const rad = (deg * Math.PI) / 180;
+    const x = cx + r * Math.cos(rad);
+    const y = cy + r * Math.sin(rad);
+    // Rotate so character top points outward (away from center)
+    const rotation = deg + 90;
+    result += `<text x="${x.toFixed(2)}" y="${y.toFixed(2)}" text-anchor="middle" dominant-baseline="central"
+      font-family="${font}" font-size="${fontSize}" fill="${ink}" font-weight="${fontWeight}"
+      letter-spacing="${letterSpacing}"
+      transform="rotate(${rotation.toFixed(2)}, ${x.toFixed(2)}, ${y.toFixed(2)})">${chars[i]}</text>\n`;
+  }
+  return result;
+}
+
+/**
+ * Render text along the TOP half of a circle using textPath.
+ * For Arabic text this works naturally (LTR path, RTL rendering).
+ */
+function renderTopArcTextPath(
+  text: string, cx: number, cy: number, r: number,
+  fontSize: number, font: string, ink: string, letterSpacing: number,
+  isArabic: boolean, pathId: string, fontWeight = '800'
+): string {
+  if (!text) return '';
+  // Top arc: left to right over top half (clockwise sweep)
+  const arcPath = `M ${cx - r} ${cy} A ${r} ${r} 0 1 1 ${cx + r} ${cy}`;
+  return `
+    <defs><path id="${pathId}" d="${arcPath}"/></defs>
+    <text font-family="${font}" font-size="${fontSize}" fill="${ink}" 
+      letter-spacing="${letterSpacing}" font-weight="${fontWeight}">
+      <textPath href="#${pathId}" startOffset="50%" text-anchor="middle">${text}</textPath>
+    </text>
+  `;
+}
+
 export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   const S = config.size || 320;
   const cx = S / 2;
@@ -74,7 +131,7 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   // Ring radii
   const outerR = S * 0.46;
   const innerR = outerR - S * 0.06;
-  // Push text arc inward so it sits well between rings
+  // Text arc sits between inner and outer rings
   const textArcR = innerR + (outerR - innerR) * 0.5;
 
   // Inner circle for location text
@@ -100,12 +157,19 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   const topFontSize = fitFontSize(topText, topBaseFontSize, safeArc, topIsArabic ? 0.50 : 0.54);
   const bottomFontSize = fitFontSize(bottomText, bottomBaseFontSize, safeArc, bottomIsArabic ? 0.50 : 0.54);
 
-  // Top arc: LEFT to RIGHT over the top half (clockwise sweep)
-  const topArcPath = `M ${cx - textArcR} ${cy} A ${textArcR} ${textArcR} 0 1 1 ${cx + textArcR} ${cy}`;
-  
-  // Bottom arc: LEFT to RIGHT through bottom half (counter-clockwise sweep)
-  // This makes text readable right-side up from outside the circle
-  const botArcPath = `M ${cx - textArcR} ${cy} A ${textArcR} ${textArcR} 0 1 0 ${cx + textArcR} ${cy}`;
+  // Top arc text (textPath — works for both Arabic and English on top)
+  const topArcContent = renderTopArcTextPath(
+    topText || (topIsArabic ? 'اسم الشركة' : 'COMPANY NAME'),
+    cx, cy, textArcR, topFontSize, topFont, ink,
+    topIsArabic ? 1 : 2.5, topIsArabic, 'top-arc'
+  );
+
+  // Bottom arc text (per-character placement for readability)
+  const bottomArcContent = renderBottomArcText(
+    bottomText || (bottomIsArabic ? 'اسم الشركة' : 'COMPANY NAME'),
+    cx, cy, textArcR, bottomFontSize, bottomFont, ink,
+    bottomIsArabic ? 1 : 2.5, bottomIsArabic
+  );
 
   // Location text arcs (inner ring)
   let locationContent = '';
@@ -116,23 +180,21 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
     const locFontSize = fitFontSize(locEn, 9, locArcLen, 0.55);
     const locArFontSize = fitFontSize(locAr, 10, locArcLen, 0.48);
 
-    // Location top arc (Arabic): left-to-right over top
+    // Location Arabic on top (textPath)
     const locTopArc = `M ${cx - locationTextR} ${cy} A ${locationTextR} ${locationTextR} 0 1 1 ${cx + locationTextR} ${cy}`;
-    // Location bottom arc (English): left-to-right through bottom (counter-clockwise)
-    const locBotArc = `M ${cx - locationTextR} ${cy} A ${locationTextR} ${locationTextR} 0 1 0 ${cx + locationTextR} ${cy}`;
+    
+    // Location English on bottom (per-character)
+    const locEnContent = renderBottomArcText(
+      locEn.toUpperCase(), cx, cy, locationTextR, locFontSize, enFont, ink, 1.5, false, '700'
+    );
 
     locationContent = `
       <circle cx="${cx}" cy="${cy}" r="${locationR}" fill="none" stroke="${ink}" stroke-width="1.5"/>
-      <defs>
-        <path id="loc-top" d="${locTopArc}"/>
-        <path id="loc-bot" d="${locBotArc}"/>
-      </defs>
+      <defs><path id="loc-top" d="${locTopArc}"/></defs>
       <text font-family="${ARABIC_FONT}" font-size="${locArFontSize}" fill="${ink}" letter-spacing="1" font-weight="700">
         <textPath href="#loc-top" startOffset="50%" text-anchor="middle">${locAr}</textPath>
       </text>
-      <text font-family="${enFont}" font-size="${locFontSize}" fill="${ink}" letter-spacing="1.5" font-weight="700">
-        <textPath href="#loc-bot" startOffset="50%" text-anchor="middle">${locEn.toUpperCase()}</textPath>
-      </text>
+      ${locEnContent}
     `;
   }
 
@@ -173,27 +235,16 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   }
 
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${S} ${S}" width="${S}" height="${S}">
-    <defs>
-      <path id="top-arc" d="${topArcPath}"/>
-      <path id="bot-arc" d="${botArcPath}"/>
-    </defs>
-
     <!-- Outer ring -->
     <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="none" stroke="${ink}" stroke-width="5"/>
     <!-- Inner ring -->
     <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${ink}" stroke-width="2.5"/>
 
     <!-- Top arc text -->
-    <text font-family="${topFont}" font-size="${topFontSize}" fill="${ink}" 
-      letter-spacing="${topIsArabic ? '1' : '2.5'}" font-weight="800">
-      <textPath href="#top-arc" startOffset="50%" text-anchor="middle">${topText || 'COMPANY NAME'}</textPath>
-    </text>
+    ${topArcContent}
 
-    <!-- Bottom arc text -->
-    <text font-family="${bottomFont}" font-size="${bottomFontSize}" fill="${ink}" 
-      letter-spacing="${bottomIsArabic ? '1' : '2.5'}" font-weight="800">
-      <textPath href="#bot-arc" startOffset="50%" text-anchor="middle">${bottomText || 'اسم الشركة'}</textPath>
-    </text>
+    <!-- Bottom arc text (per-character, right-side up) -->
+    ${bottomArcContent}
 
     <!-- Separators at 3 and 9 o'clock -->
     ${renderSeparators(cx, cy, textArcR, config.separatorStyle, ink)}
