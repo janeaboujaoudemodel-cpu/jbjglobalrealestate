@@ -114,6 +114,12 @@ export function StampSVGRenderer({
     tinted = tinted.replace(/<\/svg>/, '</g></svg>');
   }
 
+  // Scope SVG IDs to prevent cross-instance collisions in grids
+  const instanceId = React.useId().replace(/:/g, '');
+  tinted = tinted.replace(/\bid="([^"]+)"/g, (_, id) => `id="${instanceId}-${id}"`);
+  tinted = tinted.replace(/href="#([^"]+)"/g, (_, id) => `href="#${instanceId}-${id}"`);
+  tinted = tinted.replace(/url\(#([^)]+)\)/g, (_, id) => `url(#${instanceId}-${id})`);
+
   // Sanitize SVG before rendering — preserve clip-path, direction, unicode-bidi, image href
   // Allow data: URIs for uploaded logos (DOMPurify strips them by default)
   const clean = typeof window !== 'undefined'

@@ -93,22 +93,23 @@ function topArcText(id: string, cx: number, cy: number, r: number, text: string,
     </text>`;
 }
 
-/** Bottom arc text — per-character placement so English reads right-side up */
+/** Bottom arc text — per-character placement so English reads right-side up.
+ *  Centers around 90° (bottom of circle in SVG coords). */
 function bottomArcTextChars(cx: number, cy: number, r: number, text: string, font: string, fontSize: number, color: string, isArabic = false): string {
   if (!text) return '';
   const chars = text.split('');
   const n = chars.length;
   if (n === 0) return '';
   const spreadDeg = Math.min(150, n * 11);
-  const startDeg = 270 - spreadDeg / 2;
+  const startDeg = 90 - spreadDeg / 2;
   const stepDeg = n > 1 ? spreadDeg / (n - 1) : 0;
   let result = '';
   for (let i = 0; i < n; i++) {
-    const deg = n === 1 ? 270 : startDeg + i * stepDeg;
+    const deg = n === 1 ? 90 : startDeg + i * stepDeg;
     const rad = (deg * Math.PI) / 180;
     const x = cx + r * Math.cos(rad);
     const y = cy + r * Math.sin(rad);
-    const rotation = deg + 90;
+    const rotation = deg - 90;
     result += `<text x="${x.toFixed(2)}" y="${y.toFixed(2)}" text-anchor="middle" dominant-baseline="central"
       font-family="${font}" font-size="${fontSize}" fill="${color}" font-weight="800"
       letter-spacing="${isArabic ? 1 : 2}"
@@ -180,13 +181,13 @@ function buildSVG(project: any, templateKey: string): string {
     const arcLen = textR * Math.PI;
     const safeArc = arcLen * 0.70;
     
-    // Top: Arabic or name
+    // STRICT: Arabic on top, English on bottom — always
     const topText = isBilingual && arabicName ? arabicName : `✦  ${name}  ✦`;
     const topIsAr = isBilingual && !!arabicName;
     const topFont = topIsAr ? arabicFont : font;
     const topSize = fitFontSize(topText, topIsAr ? 10 : 8.5, safeArc, topIsAr ? 0.48 : 0.54);
     
-    // Bottom: English name (per-character)
+    // Bottom: English name (per-character, right-side up at bottom)
     const bottomText = isBilingual ? name : city;
     const bottomSize = fitFontSize(bottomText, 8, safeArc, 0.54);
     

@@ -23,8 +23,8 @@ const TYPE_CONFIG: Record<RecentItemType, { icon: typeof Home; label: string; pa
 // Walking strip that uses translateX transform like book marquee
 function WalkingStrip({ items, patchItem }: { items: RecentItem[]; patchItem: (id: string, type: RecentItemType, updates: Partial<RecentItem>) => void }) {
   const scrollRef = useRef<HTMLDivElement>(null);
-  // Triplicate items for seamless loop
-  const duplicated = [...items, ...items, ...items];
+  // Duplicate once for seamless loop (original + 1 copy)
+  const duplicated = [...items, ...items];
 
   useEffect(() => {
     const el = scrollRef.current;
