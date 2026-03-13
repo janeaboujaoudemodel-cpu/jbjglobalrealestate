@@ -73,9 +73,9 @@ const C_SEC = '#2a3a5c';
 const C_ACC = '#8b6914';
 
 // ── Ring geometry constants (as % of stamp radius) ──
-const OUTER_R_PCT = 0.46;     // outer ring radius
-const MIDDLE_R_PCT = 0.33;    // middle ring — 13% gap from outer
-const INNER_R_PCT = 0.25;     // inner ring — 8% gap from middle
+const OUTER_R_PCT = 0.47;     // outer ring radius (widened)
+const MIDDLE_R_PCT = 0.35;    // middle ring — wider premium gap from outer
+const INNER_R_PCT = 0.24;     // inner ring — refined gap from middle
 
 // ── Stroke widths (tapering hierarchy) ──
 const OUTER_STROKE = 6;       // boldest
@@ -84,7 +84,7 @@ const INNER_STROKE = 1.2;     // thinnest
 
 // ── Safe zone ──
 const SAFE_ZONE = 7;          // minimum px between text and ring strokes
-const ARC_SPREAD_LIMIT = 0.58; // max fraction of semicircle for text
+const ARC_SPREAD_LIMIT = 0.70; // max fraction of semicircle for text (widened)
 
 function fitFontSize(text: string, baseSize: number, maxArcLen: number, charW = 0.6): number {
   if (!text) return baseSize;
@@ -141,9 +141,9 @@ function renderSeparators(cx: number, cy: number, r: number, style: SeparatorSty
   if (style === 'none') return '';
   const glyph = separatorGlyph(style);
   // Scale font size based on separator type
-  const fontSize = (style === 'line' || style === 'double-line' || style === 'dash') ? 14
-    : (style === 'floral' || style === 'ornament') ? 12
-    : 10;
+  const fontSize = (style === 'line' || style === 'double-line' || style === 'dash') ? 16
+    : (style === 'floral' || style === 'ornament') ? 14
+    : 13;
   return `
     <text x="${cx + r}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
           font-size="${fontSize}" fill="${ink}" font-weight="bold">${glyph}</text>
@@ -166,8 +166,11 @@ function renderBottomArcText(
   const n = chars.length;
   if (n === 0) return '';
 
-  const spreadDeg = Math.min(140, n * 8);
-  const startDeg = 270 - spreadDeg / 2;
+  // Bottom arc: characters placed along the lower semicircle
+  // In SVG coords, 270° = bottom. We spread from left-bottom to right-bottom.
+  // Characters read left-to-right naturally.
+  const spreadDeg = Math.min(160, n * 8);
+  const startDeg = 270 - spreadDeg / 2;  // e.g. 190° (left side, going clockwise)
   const stepDeg = n > 1 ? spreadDeg / (n - 1) : 0;
 
   let result = '';
@@ -176,7 +179,9 @@ function renderBottomArcText(
     const rad = (deg * Math.PI) / 180;
     const x = cx + r * Math.cos(rad);
     const y = cy + r * Math.sin(rad);
-    const rotation = deg + 90;
+    // Characters on bottom arc face outward: rotate by deg - 90
+    // so at 270° (bottom) character is upright
+    const rotation = deg - 90;
     result += `<text x="${x.toFixed(2)}" y="${y.toFixed(2)}" text-anchor="middle" dominant-baseline="central"
       font-family="${font}" font-size="${fontSize}" fill="${ink}" font-weight="${fontWeight}"
       letter-spacing="${letterSpacing}"
@@ -296,8 +301,8 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   // Arc lengths — ARC_SPREAD_LIMIT for better text clearance from separators
   const arcLen = clampedTextArcR * Math.PI;
   const safeArc = arcLen * ARC_SPREAD_LIMIT;
-  const topBaseFontSize = topIsArabic ? 15 : 13;
-  const bottomBaseFontSize = bottomIsArabic ? 15 : 13;
+  const topBaseFontSize = topIsArabic ? 17 : 15;
+  const bottomBaseFontSize = bottomIsArabic ? 17 : 15;
   const topFontSize = fitFontSize(topText, topBaseFontSize, safeArc, topIsArabic ? 0.50 : 0.54);
   const bottomFontSize = fitFontSize(bottomText, bottomBaseFontSize, safeArc, bottomIsArabic ? 0.50 : 0.54);
 
@@ -310,7 +315,7 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   const bottomArcContent = renderBottomArcText(
     bottomText || (bottomIsArabic ? 'اسم الشركة' : 'COMPANY NAME'),
     cx, cy, clampedTextArcR, bottomFontSize, bottomFont, priColor,
-    bottomIsArabic ? 1 : 2.5, bottomIsArabic
+    bottomIsArabic ? 1 : 4, bottomIsArabic
   );
 
   // ── Location text — BOTH Arabic and English as arcs ──
@@ -318,9 +323,9 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   if (config.showLocation) {
     const locEn = config.locationTextEn || 'Dubai, UAE';
     const locAr = config.locationTextAr || 'دبي، الإمارات';
-    const locArcLen = clampedLocTextR * Math.PI * 0.60;
-    const locFontSize = fitFontSize(locEn, 8, locArcLen, 0.55);
-    const locArFontSize = fitFontSize(locAr, 9, locArcLen, 0.48);
+    const locArcLen = clampedLocTextR * Math.PI * 0.70;
+    const locFontSize = fitFontSize(locEn, 10, locArcLen, 0.55);
+    const locArFontSize = fitFontSize(locAr, 10, locArcLen, 0.48);
 
     // English location on TOP arc (between middle ring and inner ring)
     const locTopArc = `M ${cx - clampedLocTextR} ${cy} A ${clampedLocTextR} ${clampedLocTextR} 0 1 1 ${cx + clampedLocTextR} ${cy}`;
