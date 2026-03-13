@@ -989,7 +989,7 @@ export default function StampGeneratorPage() {
                   </div>
                 ) : (selectedSvg || allConcepts[0]?.svgSource) ? (
                   <div className="relative">
-                    <StampSVGRenderer
+                    <StampInteractivePreview
                       svgSource={selectedSvg || (svgOverrides[allConcepts[0]?.id] || allConcepts[0]?.svgSource) || ''}
                       tintColor={primaryColor}
                       secondaryColor={secondaryColor}
@@ -1000,6 +1000,43 @@ export default function StampGeneratorPage() {
                       fontSize={manualFontSize}
                       inkMode={inkMode}
                       size={320}
+                      onSvgChange={(newSvg) => {
+                        const id = selectedId || allConcepts[0]?.id;
+                        if (id) {
+                          const newOverrides = { ...svgOverrides, [id]: newSvg };
+                          setSvgOverrides(newOverrides);
+                          svgHistory.push(newOverrides);
+                        }
+                      }}
+                      onSeparatorChange={(style) => {
+                        // Regenerate with new separator style
+                        if (project) {
+                          const updated = { ...project, separator_style: style };
+                          setProject(updated);
+                          generateConcepts(updated);
+                        }
+                      }}
+                      onCenterModeChange={(mode, options) => {
+                        if (options?.icon) {
+                          // Just change icon
+                        }
+                        if (mode === 'logo') setLocalIconStyle('UPLOADED_LOGO');
+                        else if (mode === 'monogram' || mode === 'initials') setLocalIconStyle('MONOGRAM');
+                        else if (mode === 'none') setLocalIconStyle('NONE');
+                        // Apply to current stamp
+                        const id = selectedId || allConcepts[0]?.id;
+                        if (id) {
+                          const base = svgOverrides[id] || allConcepts.find(c => c.id === id)?.svgSource || '';
+                          const newSvg = injectCenterArt(base, 
+                            mode === 'logo' ? 'UPLOADED_LOGO' : mode === 'none' ? 'NONE' : 'MONOGRAM',
+                            localMonogramText, localLogoUrl);
+                          setSvgOverrides(prev => ({ ...prev, [id]: newSvg }));
+                        }
+                      }}
+                      currentSeparatorStyle={project?.separator_style}
+                      currentCenterMode={
+                        localIconStyle === 'UPLOADED_LOGO' ? 'logo' : localIconStyle === 'NONE' ? 'none' : 'monogram'
+                      }
                     />
                     {uploadedSignatureUrl && (
                       <img src={uploadedSignatureUrl} alt="Signature" className="absolute h-10 object-contain pointer-events-none opacity-80"
