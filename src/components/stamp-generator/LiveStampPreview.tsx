@@ -42,6 +42,10 @@ export interface LiveStampPreviewProps {
   inkColor?: string;
   /** Arabic city text */
   arabicCity?: string;
+  /** Center content mode */
+  centerMode?: CenterContentMode;
+  /** Center icon type (when centerMode = 'icon') */
+  centerIcon?: CenterIconType;
 }
 
 const FONT_FAMILIES: Record<TypographyStyle, string> = {
