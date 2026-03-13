@@ -480,7 +480,7 @@ export default function BrochureGeneratorPage() {
     setProcessing(true);
     try {
       const pdfBytes = await generatePDF();
-      setPreviewPdfBytes(new Uint8Array(pdfBytes) as unknown as Uint8Array);
+      setPreviewPdfBytes(pdfBytes);
 
       // Create preview images from PDF pages
       const blob = new Blob([new Uint8Array(pdfBytes)], { type: 'application/pdf' });
