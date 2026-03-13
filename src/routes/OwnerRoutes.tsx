@@ -35,7 +35,7 @@ const AdminLeads = lazy(() => import("@/pages/AdminLeads"));
 const MarketingHub = lazy(() => import("@/pages/admin/MarketingHub"));
 const JBJAnalyticsDashboard = lazy(() => import("@/pages/JBJAnalyticsDashboard"));
 const FoundersAssistant = lazy(() => import("@/pages/FoundersAssistant"));
-const RoyalToolsHub = lazy(() => import("@/pages/toolkit/RoyalToolsHub"));
+// RoyalToolsHub removed — /owner/toolkit now redirects to /ai-hub
 const Automations = lazy(() => import("@/pages/Automations"));
 const Studio = lazy(() => import("@/pages/Studio"));
 const StudioEditor = lazy(() => import("@/pages/StudioEditor"));
