@@ -172,6 +172,8 @@ export function LiveStampPreview({
         registrationNumber,
         showRegistration: showLicenseNumber && density >= 3 && !!registrationNumber,
         borderStyle: borderStyle as BorderStyleType,
+        centerMode: centerMode || (iconStyle === 'UPLOADED_LOGO' ? 'logo' : iconStyle === 'MONOGRAM' ? 'monogram' : undefined),
+        centerIcon,
       });
     }
 
