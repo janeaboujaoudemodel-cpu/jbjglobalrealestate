@@ -28,6 +28,7 @@ import {
 import SalesRepRegistration from "@/components/developer-portal/SalesRepRegistration";
 import BriefingRequestForm from "@/components/developer-portal/BriefingRequestForm";
 import DeveloperMessageForm from "@/components/developer-portal/DeveloperMessageForm";
+import ExistingProjectsReview from "@/components/developer-portal/ExistingProjectsReview";
 
 interface UploadedFile {
   name: string;
