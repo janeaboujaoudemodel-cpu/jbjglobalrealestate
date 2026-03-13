@@ -1764,7 +1764,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                           </Button>
                         )}
 
-                        {/* FIX ALL BUTTON - runs extraction + repairs approved projects */}
+                        {/* RUN DAILY SYNC BUTTON - triggers full extraction + provident mirror */}
                         {!isFixAllRunning ? (
                           <Button
                             onClick={() => startFixAllRunner(false)}
@@ -1772,12 +1772,12 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                             className="bg-emerald-600 hover:bg-emerald-700 text-white"
                           >
                             <RefreshCw className="w-4 h-4 mr-2" />
-                            Extract & Repair All
+                            Run Daily Sync Now
                           </Button>
                         ) : (
                           <Button onClick={stopFixAllRunner} variant="outline" className="border-amber-400 text-amber-700">
                             <Pause className="w-4 h-4 mr-2" />
-                            Stop Fix All
+                            Stop Sync
                           </Button>
                         )}
 
