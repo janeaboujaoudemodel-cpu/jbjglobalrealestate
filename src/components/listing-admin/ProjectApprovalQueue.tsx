@@ -1229,7 +1229,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                       }}
                       formatPrice={formatPrice}
                       onReview={() => {
-                        navigate(`/listing-admin/preview/${item.id}?from=approvals&statusFilter=${statusFilter}&sourceFilter=${sourceFilter}`);
+                        setSelectedImport(item);
                       }}
                       onRepaired={() => {
                         fetchPendingImports();
