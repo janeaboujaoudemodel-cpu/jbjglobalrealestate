@@ -16,7 +16,7 @@ import {
   Mail,
   MessagesSquare,
   Bot,
-  Sparkles,
+  Crown,
   Zap,
   Video,
   Kanban,
