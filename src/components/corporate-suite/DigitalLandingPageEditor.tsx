@@ -194,7 +194,7 @@ export default function DigitalLandingPageEditor({ data, onChange, primaryColor 
       )}
 
       {/* Featured Cards */}
-      {sectionBtn("featured", "🏢 Featured Projects / Listings", data.featuredCards.length)}
+      {sectionBtn("featured", "Featured Projects / Listings", data.featuredCards.length)}
       {openSection === "featured" && (
         <div className="space-y-3 pl-1">
           {data.featuredCards.map((card, idx) => (
