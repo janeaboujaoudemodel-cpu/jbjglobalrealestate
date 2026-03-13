@@ -1306,6 +1306,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                 const validImages = selectedImport.images.filter(i => !!i?.url && !excludePattern.test(i.url));
                 const safeIndex = Math.min(currentImageIndex, Math.max(0, validImages.length - 1));
                 return validImages.length > 0 ? (
+                <>
                 <div className="relative">
                   <div className="aspect-video bg-zinc-100 rounded-lg overflow-hidden">
                     <img
@@ -1355,7 +1356,6 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                   )}
                 </div>
 
-                {/* Thumbnail Strip */}
                 {validImages.length > 1 && (
                   <ScrollArea className="w-full">
                     <div className="flex gap-2 py-2">
@@ -1381,6 +1381,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                     </div>
                   </ScrollArea>
                 )}
+                </>
                 ) : null;
               })()}
 
