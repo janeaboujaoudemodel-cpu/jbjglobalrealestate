@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { toast } from 'sonner';
 import { PDFDocument } from 'pdf-lib';
+import { SaveProjectBar } from '@/components/toolkit/SaveProjectBar';
 import {
   Camera, Upload, FileText, Pen, Download, Trash2, RotateCw,
   Loader2, CheckCircle2, Plus, Image as ImageIcon, Save, Sparkles, Wand2, X,
