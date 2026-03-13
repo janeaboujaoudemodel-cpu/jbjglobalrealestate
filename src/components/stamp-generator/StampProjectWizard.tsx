@@ -19,7 +19,7 @@ import {
 import { StampLicenseUploader } from '@/components/stamp-generator/StampLicenseUploader';
 import { LiveStampPreview } from '@/components/stamp-generator/LiveStampPreview';
 import { useStampHistory } from '@/hooks/useStampHistory';
-import { OFFICIAL_INK_BLUE, type SeparatorStyle } from '@/lib/stampOfficialTemplate';
+import { OFFICIAL_INK_BLUE, type SeparatorStyle, type BorderStyleType } from '@/lib/stampOfficialTemplate';
 
 // UAE phone normalization
 function normalizePhone(raw: string): string {
@@ -372,16 +372,24 @@ export default function StampProjectWizard() {
             <TabsContent value="company" className="flex-1 min-h-0 m-0">
               <ScrollArea className="h-full">
                 <div className="p-4 space-y-3">
-                  {/* Collapsible Smart Auto-Fill */}
-                  <div className="border border-dashed border-gold/30 rounded-lg">
+                  {/* Smart Auto-Fill with guide tooltip */}
+                  <div className="border-2 border-dashed border-[hsl(var(--gold)/0.5)] rounded-lg bg-[hsl(var(--gold)/0.04)] relative">
+                    {!localStorage.getItem('stamp-autofill-dismissed') && !licenseOpen && (
+                      <div className="absolute -top-2 left-3 px-2 py-0.5 bg-[hsl(var(--gold))] text-white text-[8px] font-bold rounded-full uppercase tracking-wider z-10">
+                        ✦ Recommended
+                      </div>
+                    )}
                     <button
                       type="button"
-                      onClick={() => setLicenseOpen(!licenseOpen)}
-                      className="w-full flex items-center gap-2 px-3 py-2 text-[11px] font-medium text-[hsl(var(--gold-dark))] hover:bg-[hsl(var(--gold)/0.05)] rounded-lg transition-colors"
+                      onClick={() => { setLicenseOpen(!licenseOpen); try { localStorage.setItem('stamp-autofill-dismissed', '1'); } catch {} }}
+                      className="w-full flex items-center gap-2 px-3 py-2.5 text-[11px] font-semibold text-[hsl(var(--gold-dark))] hover:bg-[hsl(var(--gold)/0.08)] rounded-lg transition-colors"
                     >
-                      <FileText size={13} className="text-[hsl(var(--gold))]" />
-                      Smart Auto-Fill from Trade License
-                      <ChevronDown size={12} className={`ml-auto transition-transform ${licenseOpen ? 'rotate-180' : ''}`} />
+                      <FileText size={14} className="text-[hsl(var(--gold))]" />
+                      <div className="text-left flex-1">
+                        <p>Smart Auto-Fill from Trade License</p>
+                        <p className="text-[9px] font-normal text-[hsl(var(--muted-foreground))]">Upload your trade license to auto-fill all company details</p>
+                      </div>
+                      <ChevronDown size={12} className={`transition-transform ${licenseOpen ? 'rotate-180' : ''}`} />
                     </button>
                     {licenseOpen && (
                       <div className="px-3 pb-3 pt-2">

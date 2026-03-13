@@ -115,7 +115,7 @@ export function StampPreviewModal({
   ];
 
   return (
-    <div className="fixed inset-0 z-[9000] bg-black/80 backdrop-blur-sm flex flex-col">
+    <div className="fixed inset-0 z-[10050] bg-black/80 backdrop-blur-sm flex flex-col">
       {/* Header */}
       <div className="flex-shrink-0 bg-white border-b border-[hsl(var(--border))] px-6 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -326,7 +326,7 @@ export function StampPreviewModal({
           </div>
 
           {/* Mockup area */}
-          <div data-mockup-area className="flex-1 flex items-center justify-center p-10 bg-white min-h-full">
+          <div data-mockup-area className="flex-1 flex items-center justify-center p-10 bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))] min-h-full">
 
             {/* Business Card Mockup */}
             {activeView === 'business-card' && (
@@ -622,7 +622,7 @@ export function StampPreviewModal({
       {/* Fullscreen stamp overlay */}
       {stampFullscreen && (
         <div
-          className="fixed inset-0 z-[9999] bg-black/90 flex items-center justify-center"
+          className="fixed inset-0 z-[10100] bg-black/90 flex items-center justify-center"
           onClick={() => setStampFullscreen(false)}
         >
           <button

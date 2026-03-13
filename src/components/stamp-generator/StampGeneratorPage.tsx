@@ -168,10 +168,17 @@ export default function StampGeneratorPage() {
   // Left panel tab
   const [leftTab, setLeftTab] = useState<'color' | 'fonts' | 'text' | 'centerart' | 'logo'>('color');
 
-  // Center Art controls
+  // Center Art controls — logo persisted in localStorage
   const [localIconStyle, setLocalIconStyle] = useState<'NONE' | 'MONOGRAM' | 'UPLOADED_LOGO'>('MONOGRAM');
   const [localMonogramText, setLocalMonogramText] = useState<string>('');
-  const [localLogoUrl, setLocalLogoUrl] = useState<string>('');
+  const [localLogoUrl, setLocalLogoUrlRaw] = useState<string>('');
+  const setLocalLogoUrl = (v: string) => { setLocalLogoUrlRaw(v); if (projectId) { try { if (v) localStorage.setItem(`stamp-logo-${projectId}`, v); else localStorage.removeItem(`stamp-logo-${projectId}`); } catch {} } };
+
+  // Custom user color palette — up to 5 saved colors
+  const [customPalette, setCustomPaletteRaw] = useState<string[]>(() => { try { const v = localStorage.getItem('stamp-custom-palette'); return v ? JSON.parse(v) : []; } catch { return []; } });
+  const setCustomPalette = (v: string[]) => { setCustomPaletteRaw(v); try { localStorage.setItem('stamp-custom-palette', JSON.stringify(v)); } catch {} };
+  const addCustomColor = (hex: string) => { if (customPalette.length >= 5) { toast.error('Max 5 custom colors'); return; } if (customPalette.includes(hex)) return; setCustomPalette([...customPalette, hex]); toast.success('Color saved'); };
+  const removeCustomColor = (hex: string) => { setCustomPalette(customPalette.filter(c => c !== hex)); };
 
   // Preview modal
   const [previewConcept, setPreviewConcept] = useState<StampDesignConcept | null>(null);
@@ -229,7 +236,9 @@ export default function StampGeneratorPage() {
 
     setLocalIconStyle((data.icon_style as any) || 'MONOGRAM');
     setLocalMonogramText(data.monogram_text || data.company_name?.slice(0, 2)?.toUpperCase() || '');
-    setLocalLogoUrl((data as any).uploaded_logo_url || '');
+    // Restore logo from localStorage or project data
+    const savedLogo = projectId ? localStorage.getItem(`stamp-logo-${projectId}`) : null;
+    setLocalLogoUrlRaw(savedLogo || (data as any).uploaded_logo_url || '');
 
     const isFresh = new URLSearchParams(location.search).get('fresh') === '1';
 
@@ -640,6 +649,31 @@ export default function StampGeneratorPage() {
                     <p className="text-[8px] text-[hsl(var(--muted-foreground))]">Rubber stamp texture</p>
                   </div>
                 </button>
+                {/* Custom Color Palette */}
+                <div className="border-t border-[hsl(var(--border))] pt-2">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <p className="text-[9px] font-semibold text-[hsl(var(--muted-foreground))] uppercase">My Colors</p>
+                    <button onClick={() => addCustomColor(activeColor)}
+                      className="text-[8px] px-1.5 py-0.5 rounded border border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] hover:bg-[hsl(var(--gold)/0.06)]">
+                      + Save
+                    </button>
+                  </div>
+                  {customPalette.length > 0 ? (
+                    <div className="flex flex-wrap gap-1">
+                      {customPalette.map(hex => (
+                        <div key={hex} className="relative group/swatch">
+                          <button onClick={() => setActiveColor(hex)}
+                            className={`w-6 h-6 rounded-full border-2 transition-all hover:scale-110 ${activeColor === hex ? 'border-[hsl(var(--gold))] scale-110' : 'border-white shadow-sm'}`}
+                            style={{ backgroundColor: hex }}/>
+                          <button onClick={() => removeCustomColor(hex)}
+                            className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-destructive text-white text-[7px] flex items-center justify-center opacity-0 group-hover/swatch:opacity-100 transition-opacity">×</button>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-[8px] text-[hsl(var(--muted-foreground))]">Click "+ Save" to store current color (up to 5)</p>
+                  )}
+                </div>
               </>
             )}
 
@@ -986,7 +1020,7 @@ export default function StampGeneratorPage() {
 
       {/* AI Designer Floating Panel */}
       {chatOpen && (
-        <div className="fixed z-[9000] flex flex-col bg-white rounded-2xl shadow-2xl border border-[hsl(var(--border))] overflow-hidden"
+        <div className="fixed z-[10050] flex flex-col bg-white rounded-2xl shadow-2xl border border-[hsl(var(--border))] overflow-hidden"
           style={{ width: 340, maxHeight: aiPanelMinimized ? 'auto' : 'calc(100vh - 120px)', top: 60, right: 16,
             transform: `translate(${aiPanelPos.x}px, ${aiPanelPos.y}px)` }}>
           <div className="flex items-center justify-between px-3 py-2.5 bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] cursor-grab active:cursor-grabbing select-none flex-shrink-0"
