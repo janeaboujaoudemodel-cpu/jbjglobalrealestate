@@ -434,6 +434,10 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   const outerStrokeWidth = config.outerBorderWidth ?? OUTER_STROKE;
   const outerRingEl = renderOuterRing(cx, cy, outerR, priColor, bs, outerStrokeWidth);
 
+  // Decorative thin ring just inside outer ring (ministry double-line effect)
+  const decorativeR = outerR - outerStrokeWidth / 2 - 2;
+  const decorativeRingEl = `<circle cx="${cx}" cy="${cy}" r="${decorativeR}" fill="none" stroke="${priColor}" stroke-width="${DECORATIVE_STROKE}" opacity="0.5"/>`;
+
   const middleStrokeWidth = config.innerBorderWidth ?? MIDDLE_STROKE;
   const middleRingEl = `<circle cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${secColor}" stroke-width="${middleStrokeWidth}"/>`;
 
@@ -442,6 +446,8 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${S} ${S}" width="${S}" height="${S}">
     <!-- Outer ring (boldest — ${outerStrokeWidth}px) -->
     ${outerRingEl}
+    <!-- Decorative inner-outer ring (ministry double-line) -->
+    ${decorativeRingEl}
     <!-- Middle ring (medium — ${middleStrokeWidth}px) -->
     ${middleRingEl}
     <!-- Inner ring (thinnest — ${INNER_STROKE}px) -->
