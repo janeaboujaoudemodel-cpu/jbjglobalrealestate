@@ -381,7 +381,7 @@ const Footer = () => {
     { href: "/toolkit/captions-translate", label: "Captions & Translate" },
     { href: "/toolkit/background-ai", label: "Background Remover" },
     { href: "/toolkit/beauty-filters", label: "Beauty Filters" },
-    { href: "/toolkit/stamp-generator", label: "AI Stamp Generator" },
+    { href: "/toolkit/stamp-generator", label: "Smart Stamp Generator" },
     { href: "/toolkit/scan-sign", label: "Scan & Sign" },
     { href: "/e-signature", label: "JBJ E-Sign" },
     { href: "/studio", label: "Creative Suite" },
