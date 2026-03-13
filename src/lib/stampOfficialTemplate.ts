@@ -178,9 +178,9 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
     </defs>
 
     <!-- Outer ring -->
-    <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="none" stroke="${ink}" stroke-width="3.5"/>
+    <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="none" stroke="${ink}" stroke-width="4"/>
     <!-- Inner ring -->
-    <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${ink}" stroke-width="1.8"/>
+    <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${ink}" stroke-width="2.2"/>
 
     <!-- Top arc text -->
     <text font-family="${topFont}" font-size="${topFontSize}" fill="${ink}" 
