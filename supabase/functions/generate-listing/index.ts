@@ -356,7 +356,7 @@ MULTI-PROJECT RULE:
 
         try {
           const aiBody = JSON.stringify({
-            model: "google/gemini-2.5-pro",
+            model: "google/gemini-3-flash-preview",
             max_tokens: 16000,
             temperature: 0.05,
             messages: [{ role: "user", content: contentParts }],
