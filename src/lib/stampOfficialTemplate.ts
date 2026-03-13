@@ -357,7 +357,7 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
       if (mono) {
         const monoSize = mono.length === 1 ? innerR * 0.85 : mono.length === 2 ? innerR * 0.65 : innerR * 0.50;
         centerContent = `
-          <text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
+          <text data-stamp-element="center" x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
             font-family="${enFont}" font-size="${monoSize}" fill="${accColor}" 
             font-weight="700" letter-spacing="2">${mono.toUpperCase()}</text>
         `;
