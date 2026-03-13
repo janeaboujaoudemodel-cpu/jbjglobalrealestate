@@ -1139,7 +1139,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
               }`}
             >
               <div className="text-2xl font-bold text-emerald-700">{totalCompleteCount ?? completeCount}</div>
-              <div className="text-xs text-emerald-600">Complete ✓</div>
+              <div className="text-xs text-emerald-600">Complete</div>
             </button>
             {/* Needs Work card - hide for Reelly (API data is complete) */}
             {sourceFilter !== "reelly" ? (
