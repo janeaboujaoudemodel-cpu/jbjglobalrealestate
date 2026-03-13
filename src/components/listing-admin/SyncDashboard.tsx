@@ -1807,12 +1807,12 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
 
                   {isFixAllRunning && fixAllStats && (
                     <div className="rounded-lg border border-emerald-300 bg-emerald-50 p-3 text-xs space-y-1">
-                      <div className="font-medium text-emerald-800">Fix All in progress...</div>
+                      <div className="font-medium text-emerald-800">Daily Sync in progress...</div>
                       <div className="text-emerald-700">
-                        Pending: {fixAllStats.pending_success} fixed, {fixAllStats.pending_errors} errors
+                        Pending: {fixAllStats.pending_success} synced, {fixAllStats.pending_errors} errors
                       </div>
                       <div className="text-emerald-700">
-                        Approved: {fixAllStats.approved_repaired} repaired, {fixAllStats.approved_errors} errors
+                        Approved: {fixAllStats.approved_repaired} updated, {fixAllStats.approved_errors} errors
                       </div>
                     </div>
                   )}
