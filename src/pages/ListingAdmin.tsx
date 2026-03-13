@@ -964,7 +964,6 @@ const ListingAdmin = () => {
                   </Button>
                 </div>
               </div>
-            </div>
           </div>
         )}
 
