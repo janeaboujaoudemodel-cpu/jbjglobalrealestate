@@ -1,72 +1,42 @@
 
-## CRM System Upgrade — Implementation Status
 
-### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
+## Logo Creator — Font Decoupling, Upload & Layout Stability
 
-#### Task 1: Full System Audit ✅
-- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
-- Identified 10 weaknesses (documented in plan)
+### Issues Identified
 
-#### Task 2: Leads Security Hardening ✅
-- CSV export no longer includes email/phone PII
-- Audit logging added to exports with user_agent tracking
-- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
+1. **Font change triggers full AI regeneration** — Line 102-112 in `LogoCreator.tsx`: `useEffect` watches `[style, industry, font]` and calls `generate()` on any change. Font should apply client-side only (like colors do), not trigger regeneration.
 
-#### Task 3: Encryption Hardening ✅
-- CSV export stripped of `email_lower` and `phone_e164` fields
-- Export audit logged to both `crm_audit_logs` and `audit_logs`
+2. **FONTS array mixes actual fonts with style tones** — "Editorial" and "Corporate" are not fonts, they're design tones. These should be separated: actual font families in the Font section, style tones stay in the Style section.
 
-#### Task 4: Lead Lifecycle Upgrade ✅
-- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
-- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
-- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
+3. **No option to upload own logo** — User wants to upload an existing logo and refine it with AI prompts (e.g., "keep the monogram, improve the wordmark").
 
-#### Task 5: CRM Structure Upgrade ✅
-- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
-- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
-- KanbanPipeline expanded to show all 17 relevant stages
+4. **Right panel causes layout shift** — `StudioShell` uses `AnimatePresence` with `initial={{ opacity: 0, x: 40 }}` on the right panel, keyed by `activeSection`. Every section switch causes the panel to animate out and back in, which shifts the center canvas. The canvas itself also re-renders because the `preview` prop depends on state that changes during transitions.
 
-#### Task 6: Performance Optimization ✅
-- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
-- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
-- `crm_leads_updated_at_trigger` auto-updates `updated_at`
+---
 
-#### Task 7: AI Intelligence Integration ✅
-- New edge function `ai-lead-intelligence` using Lovable AI gateway
-- Supports 3 modes: `score`, `summary`, `next_action`
-- Tool-calling for structured scoring output
-- JWT auth + CRM role validation
-- PII sanitized before sending to AI
+### Implementation
 
-#### Task 8: Workflow Automation ✅
-- Created `crm_automation_rules` table with RLS (owner manage, admin view)
-- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
+**File: `src/components/corporate-suite/LogoCreator.tsx`**
 
-#### Task 10: Role & Permission System ✅
-- RLS on automation rules: owner CRUD, admin read-only
-- CSV export restricted to owner_admin/founder roles
+- **Remove `font` from the auto-regeneration useEffect** (line 112). Only `style` and `industry` trigger regeneration. Font changes apply client-side via a new `recolorAndRefontSVG` approach or by updating text elements in the SVG directly.
+- **Add client-side font application**: Create a `refontSVG(svg, fontFamily)` function that replaces `font-family` attributes in the SVG without calling the AI. Apply it alongside `recolorSVG` in the `displayLogo` computation.
+- **Add "Upload Logo" section** to the Brand panel: file input accepting SVG/PNG. For SVG uploads, inject directly as `logo.svgContent`. For PNG, wrap in an `<image>` SVG tag. Show the "Refine with AI" prompt below so users can describe desired modifications.
+- **Separate FONTS from style tones**: Keep only actual font families in `FONTS`. Move "Editorial" and "Corporate" labels to the existing `STYLES` array (or create a new "Tone" subsection in the Style panel).
 
-#### Task 12: Backend/Database Upgrade ✅
-- 3 new performance indexes
-- Auto-updated_at trigger on crm_leads
-- Duplicate hash computation trigger
-- Rate-limiting security function
+**File: `src/components/corporate-suite/logoCreatorTypes.tsx`**
 
-#### Task 13: Data Cleanliness ✅
-- `duplicate_hash` with auto-compute trigger prevents future duplicates
-- Partial unique index enforces uniqueness at DB level
+- **Add `refontSVG` utility**: Replace all `font-family` CSS/attribute values in SVG string with the selected font.
+- **Clean up FONTS array**: Remove duplicate entries (two "Georgia, serif" items). Add distinct font families (e.g., `'Playfair Display, serif'`, `'Inter, sans-serif'`, `'Roboto Slab, serif'`).
 
-### Files Changed
-| File | Action |
-|------|--------|
-| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
-| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
-| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
-| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
-| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
-| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
-| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
-| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
-| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
+**File: `src/components/ui/StudioShell.tsx`**
+
+- **Fix layout stability**: Remove the `key={activeSection}` from the right panel `motion.aside` so it doesn't unmount/remount on section change. Instead, use a crossfade on the inner content only, keeping the panel container static. This prevents the center canvas from shifting.
+- Same fix for the mobile bottom sheet.
+
+---
+
+### Files to Modify
+- `src/components/corporate-suite/LogoCreator.tsx` — remove font from auto-regen, add upload, separate tones
+- `src/components/corporate-suite/logoCreatorTypes.tsx` — add `refontSVG`, clean FONTS array
+- `src/components/ui/StudioShell.tsx` — stabilize right panel (no remount on section change)
+
