@@ -1685,7 +1685,7 @@ const DeveloperPortal = () => {
                                   <p className="text-xs text-gold font-medium">{s.developer_name}</p>
                                   {s.event_date && (
                                     <p className="text-xs text-muted-foreground mt-1">
-                                      📅 {format(new Date(s.event_date), "EEEE, MMM d, yyyy 'at' h:mm a")}
+                                      {format(new Date(s.event_date), "EEEE, MMM d, yyyy 'at' h:mm a")}
                                     </p>
                                   )}
                                   {s.event_location && <p className="text-xs text-muted-foreground">📍 {s.event_location}</p>}

@@ -240,7 +240,7 @@ export default function DigitalLandingPageEditor({ data, onChange, primaryColor 
       )}
 
       {/* Testimonials */}
-      {sectionBtn("testimonials", "⭐ Testimonials", data.testimonials.length)}
+      {sectionBtn("testimonials", "Testimonials", data.testimonials.length)}
       {openSection === "testimonials" && (
         <div className="space-y-3 pl-1">
           {data.testimonials.map((t, idx) => (

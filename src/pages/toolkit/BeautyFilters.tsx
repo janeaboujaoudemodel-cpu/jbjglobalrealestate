@@ -839,7 +839,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                     {/* Background Remove */}
                     <div className="rounded-2xl p-4" style={{ background: I.surface, border: `1px solid ${I.border}` }}>
                       <div className="flex items-center justify-between mb-3">
-                        <SectionLabel>🖼️ Background</SectionLabel>
+                        <SectionLabel>Background</SectionLabel>
                         <AIBadge label="AI" />
                       </div>
                       <div className="grid grid-cols-2 gap-2">

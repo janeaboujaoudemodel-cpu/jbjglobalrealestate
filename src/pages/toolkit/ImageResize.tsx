@@ -25,14 +25,14 @@ const SIZE_PRESETS = [
   { id: "instagram_portrait", name: "Instagram Portrait", ratio: "4:5", width: 1080, height: 1350, icon: "📱" },
   { id: "instagram_story", name: "Instagram Story/Reel", ratio: "9:16", width: 1080, height: 1920, icon: "📱" },
   { id: "facebook_post", name: "Facebook Post", ratio: "1.91:1", width: 1200, height: 630, icon: "📘" },
-  { id: "youtube_thumb", name: "YouTube Thumbnail", ratio: "16:9", width: 1280, height: 720, icon: "▶️" },
-  { id: "linkedin_post", name: "LinkedIn Post", ratio: "1.91:1", width: 1200, height: 628, icon: "💼" },
-  { id: "twitter_post", name: "X / Twitter Post", ratio: "16:9", width: 1600, height: 900, icon: "🐦" },
-  { id: "pinterest_pin", name: "Pinterest Pin", ratio: "2:3", width: 1000, height: 1500, icon: "📌" },
-  { id: "website_hero", name: "Website Hero", ratio: "16:9", width: 1920, height: 1080, icon: "🌐" },
-  { id: "business_card", name: "Business Card", ratio: "3.5:2", width: 1050, height: 600, icon: "🪪" },
-  { id: "a4_portrait", name: "A4 Portrait", ratio: "1:1.41", width: 2480, height: 3508, icon: "📄" },
-  { id: "og_image", name: "OG / Social Share", ratio: "1.91:1", width: 1200, height: 630, icon: "🔗" },
+  { id: "youtube_thumb", name: "YouTube Thumbnail", ratio: "16:9", width: 1280, height: 720, icon: "▶" },
+  { id: "linkedin_post", name: "LinkedIn Post", ratio: "1.91:1", width: 1200, height: 628, icon: "in" },
+  { id: "twitter_post", name: "X / Twitter Post", ratio: "16:9", width: 1600, height: 900, icon: "X" },
+  { id: "pinterest_pin", name: "Pinterest Pin", ratio: "2:3", width: 1000, height: 1500, icon: "P" },
+  { id: "website_hero", name: "Website Hero", ratio: "16:9", width: 1920, height: 1080, icon: "W" },
+  { id: "business_card", name: "Business Card", ratio: "3.5:2", width: 1050, height: 600, icon: "BC" },
+  { id: "a4_portrait", name: "A4 Portrait", ratio: "1:1.41", width: 2480, height: 3508, icon: "A4" },
+  { id: "og_image", name: "OG / Social Share", ratio: "1.91:1", width: 1200, height: 630, icon: "OG" },
 ];
 
 type FitMode = "crop" | "fit";

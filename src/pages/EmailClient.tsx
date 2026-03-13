@@ -90,7 +90,7 @@ const DEMO_EMAILS: Email[] = [
   {
     id: "4", from: "Amanda Clarke", fromEmail: "amanda@jbj.ae", to: "ceo@jbj.ae",
     subject: "Daily Summary — 5 pending approvals",
-    body: "Good morning,\n\nHere's your daily summary:\n\n✅ 3 new developer submissions\n⏳ 5 pending project approvals\n📊 CRM: 12 hot leads requiring follow-up\n📅 2 meetings scheduled today\n\nBest,\nAmanda",
+    body: "Good morning,\n\nHere's your daily summary:\n\n3 new developer submissions\n5 pending project approvals\nCRM: 12 hot leads requiring follow-up\n2 meetings scheduled today\n\nBest,\nAmanda",
     date: new Date(Date.now() - 1800000).toISOString(), read: false, starred: true, folder: "inbox", labels: ["important"], hasAttachment: false, account: "company",
   },
 ];

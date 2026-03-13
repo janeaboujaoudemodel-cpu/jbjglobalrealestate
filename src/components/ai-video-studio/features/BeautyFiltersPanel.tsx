@@ -510,7 +510,7 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
               <div className="rounded-lg bg-slate-800 overflow-hidden">
                 <div className="p-2 border-b border-slate-700 flex items-center justify-between">
                   <span className="text-xs text-white truncate">
-                    {isVideo ? '🎬 ' : '🖼️ '}{mediaFile.name}
+                    {mediaFile.name}
                   </span>
                   <Button 
                     variant="ghost" 

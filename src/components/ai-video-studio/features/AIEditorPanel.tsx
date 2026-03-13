@@ -473,7 +473,7 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
               </div>
               <p className="text-xs text-slate-300 leading-relaxed">{assembleResult.summary}</p>
               {assembleResult.musicSuggestion && (
-                <p className="text-xs text-slate-500">🎵 {assembleResult.musicSuggestion}</p>
+                <p className="text-xs text-slate-500">Music: {assembleResult.musicSuggestion}</p>
               )}
               <div className="space-y-1">
                 {assembleResult.editPlan.map((step, i) => (

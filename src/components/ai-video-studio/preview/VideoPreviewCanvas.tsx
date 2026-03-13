@@ -609,7 +609,7 @@ export function VideoPreviewCanvas({
                   className="absolute top-3 left-3 flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold bg-amber-500/90 text-black hover:bg-amber-400 transition-colors shadow-lg"
                   title="Click to clear beauty filter"
                 >
-                  ✨ Beauty: ON
+                  Beauty: ON
                 </button>
               )}
               {beautyFilter && beautyComparisonMode && (

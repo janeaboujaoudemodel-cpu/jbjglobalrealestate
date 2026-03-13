@@ -203,7 +203,7 @@ async function handleReportCommand(args: string, userId: string): Promise<Comman
 
   return {
     success: true,
-    message: `📊 **${reportType.charAt(0).toUpperCase() + reportType.slice(1)} Report Generated**\n\n• Total Leads: ${leadsCount || 0}\n• Tasks Completed: ${tasksCompleted || 0}\n• Date: ${today}\n\n[Full report available in Analytics tab]`,
+    message: `**${reportType.charAt(0).toUpperCase() + reportType.slice(1)} Report Generated**\n\n• Total Leads: ${leadsCount || 0}\n• Tasks Completed: ${tasksCompleted || 0}\n• Date: ${today}\n\n[Full report available in Analytics tab]`,
     action: 'report',
     data: { reportType, leadsCount, tasksCompleted }
   };

@@ -523,7 +523,7 @@ const Documents = () => {
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="bg-[hsl(var(--popover))] border-[hsl(var(--border))]">
-                  <DialogHeader><DialogTitle className="text-[hsl(var(--popover-foreground))]">✨ AI Document Editor</DialogTitle><DialogDescription>Write a prompt to modify your document.</DialogDescription></DialogHeader>
+                  <DialogHeader><DialogTitle className="text-[hsl(var(--popover-foreground))]">AI Document Editor</DialogTitle><DialogDescription>Write a prompt to modify your document.</DialogDescription></DialogHeader>
                   <Textarea value={aiPrompt} onChange={e => setAiPrompt(e.target.value)} placeholder="e.g. Make this more professional, translate to Arabic..." rows={4} />
                   <DialogFooter><Button onClick={handleAiPromptEdit} disabled={aiPromptLoading || !aiPrompt}>{aiPromptLoading ? <><Loader2 className="h-4 w-4 mr-1 animate-spin" /> Processing...</> : "Apply Changes"}</Button></DialogFooter>
                 </DialogContent>
