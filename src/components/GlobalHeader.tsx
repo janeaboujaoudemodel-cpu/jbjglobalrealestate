@@ -478,7 +478,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   const mobileToolkitLinks = [
     { href: "/toolkit", label: "AI Tools Hub", icon: Sparkles },
     // Creative Suite
-    { href: "/toolkit/stamp-generator", label: "Stamp Generator", icon: Stamp as any },
+    { href: "/toolkit/stamp-generator", label: "Stamp Generator", icon: Stamp },
     { href: "/toolkit/ai-video-studio", label: "AI Video Studio", icon: Building2 },
     { href: "/toolkit/video-resize-pack", label: "Video Resize Pack", icon: Building2 },
     { href: "/toolkit/voice-studio", label: "Voice Studio", icon: Cpu },
