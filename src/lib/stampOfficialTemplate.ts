@@ -92,21 +92,20 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   const topFont = topIsArabic ? ARABIC_FONT : enFont;
   const bottomFont = bottomIsArabic ? ARABIC_FONT : enFont;
 
-  // Arc lengths for font sizing — use 70% of half-circle for safe text area
+  // Arc lengths for font sizing — use 75% of half-circle for safe text area
   const arcLen = textArcR * Math.PI;
-  const safeArc = arcLen * 0.70;
-  const topBaseFontSize = topIsArabic ? 13 : 12;
-  const bottomBaseFontSize = bottomIsArabic ? 13 : 12;
+  const safeArc = arcLen * 0.75;
+  const topBaseFontSize = topIsArabic ? 15 : 14;
+  const bottomBaseFontSize = bottomIsArabic ? 15 : 14;
   const topFontSize = fitFontSize(topText, topBaseFontSize, safeArc, topIsArabic ? 0.52 : 0.56);
   const bottomFontSize = fitFontSize(bottomText, bottomBaseFontSize, safeArc, bottomIsArabic ? 0.52 : 0.56);
 
-  // Top arc: text reads left-to-right over the top half (standard)
+  // Top arc: text reads left-to-right over the top half
   const topArcPath = `M ${cx - textArcR} ${cy} A ${textArcR} ${textArcR} 0 1 1 ${cx + textArcR} ${cy}`;
   
-  // Bottom arc: text reads left-to-right along the bottom half
-  // Path goes LEFT to RIGHT through BOTTOM (clockwise sweep)
-  // Characters face center — standard for bottom-arc stamp text
-  const botArcPath = `M ${cx - textArcR} ${cy} A ${textArcR} ${textArcR} 0 0 1 ${cx + textArcR} ${cy}`;
+  // Bottom arc: RIGHT to LEFT through bottom (counter-clockwise) so text is RIGHT-SIDE UP
+  // This makes the English text readable from the outside, curving along the bottom
+  const botArcPath = `M ${cx + textArcR} ${cy} A ${textArcR} ${textArcR} 0 0 0 ${cx - textArcR} ${cy}`;
 
   // Location text arcs (inner ring)
   let locationContent = '';
