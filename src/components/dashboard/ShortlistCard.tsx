@@ -43,7 +43,7 @@ const ShortlistCard = () => {
           My Shortlists
         </CardTitle>
         <Badge variant="outline" className="border-gold/40 text-gold bg-gold/10">
-          {count} items
+          {count + designShortCount} items
         </Badge>
       </CardHeader>
       <CardContent>
