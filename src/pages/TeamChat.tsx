@@ -1,26 +1,29 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { 
   Send, Plus, Hash, Smile, Paperclip, Settings,
   Users, Search, Bell, Phone, Video, MoreVertical, MessageSquare,
   ArrowLeft, Menu, Building2, Lock, BellOff, Archive, Copy,
-  X, Check, Eye
+  X, Check, Eye, ChevronDown, ChevronRight, Sparkles, Star
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { allTeamMembers, TeamMember } from "@/config/team-members";
 
 interface Message {
   id: string;
   userId: string;
   userName: string;
+  userAvatar?: string;
   content: string;
   timestamp: string;
   channelId: string;
@@ -37,14 +40,8 @@ interface Channel {
   isPrivate?: boolean;
   dmUserId?: string;
   muted?: boolean;
-}
-
-interface User {
-  id: string;
-  name: string;
-  role: string;
-  department: string;
-  status: "online" | "away" | "offline";
+  avatar?: string;
+  role?: string;
 }
 
 interface ChatSettings {
@@ -54,24 +51,66 @@ interface ChatSettings {
   autoArchiveDays: number;
 }
 
+// Filter: only real employees + Amanda Clarke (executive assistant)
+const getTeamChatMembers = (): TeamMember[] => {
+  return allTeamMembers.filter(m => 
+    m.isAI === false || m.id === 'amanda-clarke'
+  );
+};
+
+// Group members by department
+const groupByDepartment = (members: TeamMember[]): Record<string, TeamMember[]> => {
+  const groups: Record<string, TeamMember[]> = {};
+  members.forEach(m => {
+    const dept = m.department || 'Other';
+    if (!groups[dept]) groups[dept] = [];
+    groups[dept].push(m);
+  });
+  // Sort departments alphabetically, but put Executive first
+  const sorted: Record<string, TeamMember[]> = {};
+  const keys = Object.keys(groups).sort((a, b) => {
+    if (a === 'Executive') return -1;
+    if (b === 'Executive') return 1;
+    return a.localeCompare(b);
+  });
+  keys.forEach(k => { sorted[k] = groups[k]; });
+  return sorted;
+};
+
+// Simulate random statuses for members
+const generateStatuses = (members: TeamMember[]): Record<string, 'online' | 'away' | 'offline'> => {
+  const statuses: Record<string, 'online' | 'away' | 'offline'> = {};
+  members.forEach(m => {
+    // Amanda is always online
+    if (m.id === 'amanda-clarke') {
+      statuses[m.id] = 'online';
+      return;
+    }
+    const rand = Math.random();
+    statuses[m.id] = rand < 0.5 ? 'online' : rand < 0.75 ? 'away' : 'offline';
+  });
+  return statuses;
+};
+
 const TeamChat = () => {
   const isMobile = useIsMobile();
+  const chatMembers = useMemo(() => getTeamChatMembers(), []);
+  const departmentGroups = useMemo(() => groupByDepartment(chatMembers), [chatMembers]);
+  const [memberStatuses] = useState(() => generateStatuses(chatMembers));
+  const [openDepts, setOpenDepts] = useState<Set<string>>(() => new Set(Object.keys(departmentGroups)));
+
   const [channels, setChannels] = useState<Channel[]>([
     { id: "general", name: "general", type: "channel", unread: 0, description: "Company-wide announcements and updates" },
     { id: "announcements", name: "announcements", type: "channel", unread: 2, description: "Official announcements from leadership", isPrivate: false },
     { id: "sales", name: "sales", type: "channel", unread: 5, description: "Sales team discussions and deal updates" },
     { id: "marketing", name: "marketing", type: "channel", unread: 1, description: "Marketing campaigns and strategies" },
     { id: "operations", name: "operations", type: "channel", unread: 0, description: "Day-to-day operations coordination" },
-    { id: "random", name: "random", type: "channel", unread: 0, description: "Off-topic and fun conversations" },
+    { id: "legal", name: "legal", type: "channel", unread: 0, description: "Legal team discussions" },
+    { id: "hr", name: "hr", type: "channel", unread: 0, description: "HR announcements and policies" },
   ]);
   const [activeChannel, setActiveChannel] = useState("general");
   const [messages, setMessages] = useState<Message[]>([
-    { id: "1", userId: "system", userName: "System", content: "Welcome to the JBJ Team Chat! This is the #general channel for company-wide updates.", timestamp: new Date().toISOString(), channelId: "general" },
-    { id: "2", userId: "1", userName: "Ahmed Hassan", content: "Good morning everyone! The Q2 targets have been shared in the sales channel.", timestamp: new Date(Date.now() - 3600000).toISOString(), channelId: "general" },
-    { id: "3", userId: "3", userName: "Mohammed Khan", content: "The new property listings for Dubai Marina are now live on the website.", timestamp: new Date(Date.now() - 1800000).toISOString(), channelId: "general" },
-    // DM messages
-    { id: "dm-1", userId: "1", userName: "Ahmed Hassan", content: "Hi Jane, I wanted to discuss the new commission structure.", timestamp: new Date(Date.now() - 900000).toISOString(), channelId: "dm-1", isDM: true },
-    { id: "dm-2", userId: "me", userName: "Jane Bou Jaoude", content: "Sure Ahmed, let's review it together.", timestamp: new Date(Date.now() - 600000).toISOString(), channelId: "dm-1", isDM: true },
+    { id: "1", userId: "system", userName: "System", content: "Welcome to the JBJ Workspace! This is the #general channel.", timestamp: new Date().toISOString(), channelId: "general" },
   ]);
   const [newMessage, setNewMessage] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -79,7 +118,7 @@ const TeamChat = () => {
   const [showMembers, setShowMembers] = useState(!isMobile);
   const [showSettings, setShowSettings] = useState(false);
   const [showNewDM, setShowNewDM] = useState(false);
-  const [currentUser] = useState<User>({ id: "me", name: "Jane Bou Jaoude", role: "Founder & CEO", department: "Leadership", status: "online" });
+  const [currentUser] = useState({ id: "me", name: "Jane Bou Jaoude", role: "Founder & CEO", department: "Leadership", status: "online" as const });
   const [settings, setSettings] = useState<ChatSettings>({
     ownerCopyEnabled: true,
     notificationsEnabled: true,
@@ -89,15 +128,6 @@ const TeamChat = () => {
   const [isInCall, setIsInCall] = useState(false);
   const [isInVideo, setIsInVideo] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  const users: User[] = [
-    { id: "1", name: "Ahmed Hassan", role: "Senior Sales Agent", department: "Sales", status: "online" },
-    { id: "2", name: "Sara Ali", role: "Marketing Manager", department: "Marketing", status: "away" },
-    { id: "3", name: "Mohammed Khan", role: "Operations Lead", department: "Operations", status: "online" },
-    { id: "4", name: "Fatima Omar", role: "Property Consultant", department: "Sales", status: "offline" },
-    { id: "5", name: "Khalid Ibrahim", role: "Finance Director", department: "Finance", status: "online" },
-    { id: "6", name: "Layla Mustafa", role: "HR Manager", department: "HR", status: "away" },
-  ];
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -116,18 +146,9 @@ const TeamChat = () => {
       isDM: activeChannelData?.type === "dm",
     };
     setMessages(prev => [...prev, message]);
-
-    // Owner copy — if enabled and this is a broker DM, mirror to owner
     if (settings.ownerCopyEnabled && activeChannelData?.type === "dm") {
-      const ownerCopy: Message = {
-        ...message,
-        id: `owner-${message.id}`,
-        ownerCopy: true,
-      };
-      // In a real app this would go to a separate owner inbox channel
-      console.log("[Owner Copy]", ownerCopy);
+      console.log("[Owner Copy]", { ...message, ownerCopy: true });
     }
-
     setNewMessage("");
   };
 
@@ -145,40 +166,36 @@ const TeamChat = () => {
     }
   };
 
-  const startDM = (user: User) => {
-    const dmId = `dm-${user.id}`;
+  const startDM = (member: TeamMember | { id: string; name: string; role: string; avatar?: string }) => {
+    const dmId = `dm-${member.id}`;
     const existing = channels.find(c => c.id === dmId);
     if (!existing) {
       setChannels(prev => [...prev, {
         id: dmId,
-        name: user.name,
+        name: member.name,
         type: "dm",
         unread: 0,
-        dmUserId: user.id,
+        dmUserId: member.id,
+        avatar: 'avatar' in member ? member.avatar : undefined,
+        role: member.role,
       }]);
     }
     setActiveChannel(dmId);
     setShowNewDM(false);
     if (isMobile) setShowSidebar(false);
-    toast.success(`DM with ${user.name} opened`);
+    toast.success(`DM with ${member.name} opened`);
   };
 
   const handleCall = () => {
     setIsInCall(true);
     toast.success("Voice call started...");
-    setTimeout(() => {
-      setIsInCall(false);
-      toast.info("Call ended");
-    }, 3000);
+    setTimeout(() => { setIsInCall(false); toast.info("Call ended"); }, 3000);
   };
 
   const handleVideo = () => {
     setIsInVideo(true);
     toast.success("Video call started...");
-    setTimeout(() => {
-      setIsInVideo(false);
-      toast.info("Video call ended");
-    }, 3000);
+    setTimeout(() => { setIsInVideo(false); toast.info("Video call ended"); }, 3000);
   };
 
   const channelMessages = messages.filter(m => m.channelId === activeChannel);
@@ -197,10 +214,28 @@ const TeamChat = () => {
     if (isMobile) setShowSidebar(false);
   };
 
-  const getInitials = (name: string) => name.split(" ").map(n => n[0]).join("");
+  const getInitials = (name: string) => name.split(" ").map(n => n[0]).join("").slice(0, 2);
+
+  const toggleDept = (dept: string) => {
+    setOpenDepts(prev => {
+      const next = new Set(prev);
+      if (next.has(dept)) next.delete(dept); else next.add(dept);
+      return next;
+    });
+  };
+
+  // Filter members by search
+  const filteredMembers = chatMembers.filter(m =>
+    m.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    m.role?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    m.department?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const onlineCount = Object.values(memberStatuses).filter(s => s === 'online').length;
+  const totalCount = chatMembers.length;
 
   return (
-    <div className="flex h-[calc(100vh-120px)] min-h-[600px] bg-white rounded-xl border-2 border-[#C9A84C]/20 overflow-hidden shadow-sm">
+    <div className="flex h-[calc(100vh-11rem)] min-h-[500px] bg-white rounded-xl border-2 border-[#C9A84C]/20 overflow-hidden shadow-sm">
 
       {/* ─── Channel Sidebar ─── */}
       <div className={cn(
@@ -216,7 +251,7 @@ const TeamChat = () => {
               </div>
               <div>
                 <h1 className="font-bold text-sm text-black">JBJ Workspace</h1>
-                <p className="text-[10px] text-black/50">Team Communication</p>
+                <p className="text-[10px] text-black/50">{onlineCount} online · {totalCount} members</p>
               </div>
             </div>
             <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#C9A84C]/10" onClick={() => setShowSettings(true)}>
@@ -230,7 +265,7 @@ const TeamChat = () => {
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/30" />
             <Input
-              placeholder="Search channels..."
+              placeholder="Search members & channels..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-9 bg-white border-[#C9A84C]/20 text-black placeholder:text-black/40 h-9 text-sm focus-visible:ring-[#C9A84C]/30"
@@ -238,8 +273,8 @@ const TeamChat = () => {
           </div>
         </div>
 
-        {/* Channels List */}
         <ScrollArea className="flex-1">
+          {/* Channels */}
           <div className="px-3 py-2">
             <div className="flex items-center justify-between mb-2">
               <span className="text-[11px] font-semibold text-black/40 uppercase tracking-wider">Channels</span>
@@ -275,7 +310,7 @@ const TeamChat = () => {
             ))}
           </div>
 
-          {/* Direct Messages */}
+          {/* Amanda Clarke — always pinned at top of DMs */}
           <div className="px-3 py-2 border-t border-[#C9A84C]/10 mt-1">
             <div className="flex items-center justify-between mb-2">
               <span className="text-[11px] font-semibold text-black/40 uppercase tracking-wider">Direct Messages</span>
@@ -283,8 +318,43 @@ const TeamChat = () => {
                 <Plus className="w-3.5 h-3.5 text-black/40" />
               </Button>
             </div>
-            {/* Existing DM channels */}
-            {dmChannels.map((dm) => (
+
+            {/* Amanda pinned */}
+            {(() => {
+              const amanda = chatMembers.find(m => m.id === 'amanda-clarke');
+              if (!amanda) return null;
+              const dmId = `dm-${amanda.id}`;
+              return (
+                <button
+                  className={cn(
+                    "w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200 mb-1",
+                    activeChannel === dmId
+                      ? "bg-gradient-to-r from-[#C9A84C]/15 to-[#C9A84C]/5 text-black font-medium border border-[#C9A84C]/25"
+                      : "text-black/60 hover:bg-[#C9A84C]/5 hover:text-black border border-transparent"
+                  )}
+                  onClick={() => startDM(amanda)}
+                >
+                  <div className="relative shrink-0">
+                    <Avatar className="h-7 w-7 border border-[#C9A84C]/20">
+                      <AvatarImage src={amanda.avatar} alt={amanda.name} />
+                      <AvatarFallback className="text-[9px] bg-[#C9A84C]/10 text-[#C9A84C] font-semibold">AC</AvatarFallback>
+                    </Avatar>
+                    <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-[#FDFBF7] bg-green-500" />
+                  </div>
+                  <div className="min-w-0 text-left">
+                    <span className="truncate flex items-center gap-1">
+                      Amanda Clarke
+                      <Sparkles className="w-3 h-3 text-[#C9A84C]" />
+                    </span>
+                    <p className="text-[10px] text-black/40 truncate">Executive Assistant · AI</p>
+                  </div>
+                  <Star className="w-3 h-3 text-[#C9A84C] ml-auto shrink-0" fill="currentColor" />
+                </button>
+              );
+            })()}
+
+            {/* Existing DM channels (excluding Amanda if already shown) */}
+            {dmChannels.filter(d => d.dmUserId !== 'amanda-clarke').map((dm) => (
               <button
                 key={dm.id}
                 className={cn(
@@ -297,6 +367,7 @@ const TeamChat = () => {
               >
                 <div className="relative shrink-0">
                   <Avatar className="h-6 w-6 border border-[#C9A84C]/15">
+                    {dm.avatar && <AvatarImage src={dm.avatar} />}
                     <AvatarFallback className="text-[9px] bg-[#C9A84C]/10 text-[#C9A84C] font-semibold">
                       {getInitials(dm.name)}
                     </AvatarFallback>
@@ -308,24 +379,6 @@ const TeamChat = () => {
                     {dm.unread}
                   </Badge>
                 )}
-              </button>
-            ))}
-            {/* Quick DM links to users */}
-            {users.filter(u => !dmChannels.some(d => d.dmUserId === u.id)).map((user) => (
-              <button
-                key={user.id}
-                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-black/60 hover:bg-[#C9A84C]/5 hover:text-black transition-all duration-200 mb-0.5"
-                onClick={() => startDM(user)}
-              >
-                <div className="relative shrink-0">
-                  <Avatar className="h-7 w-7 border border-[#C9A84C]/15">
-                    <AvatarFallback className="text-[10px] bg-[#C9A84C]/10 text-[#C9A84C] font-semibold">
-                      {getInitials(user.name)}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className={cn("absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-[#FDFBF7]", statusColors[user.status])} />
-                </div>
-                <span className="truncate">{user.name}</span>
               </button>
             ))}
           </div>
@@ -379,20 +432,10 @@ const TeamChat = () => {
             </div>
           </div>
           <div className="flex items-center gap-1">
-            <Button
-              variant="ghost"
-              size="icon"
-              className={cn("h-8 w-8 hidden sm:flex", isInCall ? "bg-green-500/20 text-green-600" : "hover:bg-[#C9A84C]/10")}
-              onClick={handleCall}
-            >
+            <Button variant="ghost" size="icon" className={cn("h-8 w-8 hidden sm:flex", isInCall ? "bg-green-500/20" : "hover:bg-[#C9A84C]/10")} onClick={handleCall}>
               <Phone className={cn("w-4 h-4", isInCall ? "text-green-600 animate-pulse" : "text-black/50")} />
             </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className={cn("h-8 w-8 hidden sm:flex", isInVideo ? "bg-blue-500/20 text-blue-600" : "hover:bg-[#C9A84C]/10")}
-              onClick={handleVideo}
-            >
+            <Button variant="ghost" size="icon" className={cn("h-8 w-8 hidden sm:flex", isInVideo ? "bg-blue-500/20" : "hover:bg-[#C9A84C]/10")} onClick={handleVideo}>
               <Video className={cn("w-4 h-4", isInVideo ? "text-blue-600 animate-pulse" : "text-black/50")} />
             </Button>
             <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#C9A84C]/10" onClick={() => setShowMembers(!showMembers)}>
@@ -404,7 +447,7 @@ const TeamChat = () => {
           </div>
         </div>
 
-        {/* Call / Video banner */}
+        {/* Call banner */}
         {(isInCall || isInVideo) && (
           <div className={cn(
             "px-4 py-2 flex items-center justify-between text-sm font-medium",
@@ -414,12 +457,8 @@ const TeamChat = () => {
               {isInCall ? <Phone className="w-4 h-4 animate-pulse" /> : <Video className="w-4 h-4 animate-pulse" />}
               {isInCall ? "Voice call in progress..." : "Video call in progress..."}
             </span>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-red-600 hover:bg-red-50 h-7"
-              onClick={() => { setIsInCall(false); setIsInVideo(false); toast.info("Call ended"); }}
-            >
+            <Button variant="ghost" size="sm" className="text-red-600 hover:bg-red-50 h-7"
+              onClick={() => { setIsInCall(false); setIsInVideo(false); toast.info("Call ended"); }}>
               End Call
             </Button>
           </div>
@@ -430,16 +469,16 @@ const TeamChat = () => {
           <div className="space-y-1">
             {channelMessages.map((message) => {
               const isOwn = message.userId === currentUser.id;
+              const memberData = chatMembers.find(m => m.id === message.userId);
               return (
                 <div key={message.id} className="group flex gap-3 hover:bg-[#C9A84C]/[0.03] rounded-lg p-2.5 -mx-2 transition-colors">
                   <Avatar className="h-9 w-9 mt-0.5 shrink-0 border border-[#C9A84C]/15">
+                    {memberData?.avatar && <AvatarImage src={memberData.avatar} />}
                     <AvatarFallback className={cn(
                       "text-xs font-semibold",
                       isOwn
                         ? "bg-gradient-to-br from-[#C9A84C] to-[#B8973F] text-white"
-                        : message.userId === "system"
-                          ? "bg-[#C9A84C]/10 text-[#C9A84C]"
-                          : "bg-[#C9A84C]/10 text-[#C9A84C]"
+                        : "bg-[#C9A84C]/10 text-[#C9A84C]"
                     )}>
                       {getInitials(message.userName)}
                     </AvatarFallback>
@@ -497,86 +536,73 @@ const TeamChat = () => {
         </div>
       </div>
 
-      {/* ─── Members Sidebar ─── */}
+      {/* ─── Members Sidebar (real employees by department) ─── */}
       {showMembers && !isMobile && (
-        <div className="w-60 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] border-l border-[#C9A84C]/15 flex flex-col">
+        <div className="w-64 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] border-l border-[#C9A84C]/15 flex flex-col">
           <div className="p-4 border-b border-[#C9A84C]/15">
-            <h3 className="text-xs font-semibold text-black/40 uppercase tracking-wider">Members — {users.length + 1}</h3>
+            <h3 className="text-xs font-semibold text-black/40 uppercase tracking-wider">
+              Team — {totalCount} members
+            </h3>
+            <p className="text-[10px] text-green-600 mt-0.5">{onlineCount} online</p>
           </div>
-          <ScrollArea className="flex-1 p-3">
-            <div className="space-y-0.5">
-              <p className="text-[10px] text-black/35 uppercase tracking-wider font-semibold mb-2 mt-1">
-                Online — {users.filter(u => u.status === 'online').length + 1}
-              </p>
-              {/* Current user */}
-              <div className="flex items-center gap-2.5 px-2 py-2 rounded-lg hover:bg-[#C9A84C]/5 transition-colors">
-                <div className="relative shrink-0">
-                  <Avatar className="h-8 w-8 border border-[#C9A84C]/20">
-                    <AvatarFallback className="bg-gradient-to-br from-[#C9A84C] to-[#B8973F] text-white text-xs font-semibold">JB</AvatarFallback>
-                  </Avatar>
-                  <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-[#FDFBF7] bg-green-500" />
-                </div>
-                <div className="min-w-0">
-                  <p className="text-sm text-black font-medium truncate">{currentUser.name}</p>
-                  <p className="text-[10px] text-black/40 truncate">{currentUser.role}</p>
-                </div>
-              </div>
-              {/* Online users */}
-              {users.filter(u => u.status === 'online').map((user) => (
-                <div
-                  key={user.id}
-                  className="flex items-center gap-2.5 px-2 py-2 rounded-lg hover:bg-[#C9A84C]/5 transition-colors cursor-pointer"
-                  onClick={() => startDM(user)}
-                >
-                  <div className="relative shrink-0">
-                    <Avatar className="h-8 w-8 border border-[#C9A84C]/15">
-                      <AvatarFallback className="bg-[#C9A84C]/10 text-[#C9A84C] text-xs font-semibold">
-                        {getInitials(user.name)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-[#FDFBF7] bg-green-500" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-sm text-black truncate">{user.name}</p>
-                    <p className="text-[10px] text-black/40 truncate">{user.role}</p>
-                  </div>
-                </div>
-              ))}
-
-              {/* Away / Offline */}
-              {users.filter(u => u.status !== 'online').length > 0 && (
-                <>
-                  <p className="text-[10px] text-black/35 uppercase tracking-wider font-semibold mb-2 mt-4">
-                    Away / Offline — {users.filter(u => u.status !== 'online').length}
-                  </p>
-                  {users.filter(u => u.status !== 'online').map((user) => (
-                    <div
-                      key={user.id}
-                      className="flex items-center gap-2.5 px-2 py-2 rounded-lg hover:bg-[#C9A84C]/5 transition-colors opacity-60 cursor-pointer"
-                      onClick={() => startDM(user)}
-                    >
-                      <div className="relative shrink-0">
-                        <Avatar className="h-8 w-8 border border-[#C9A84C]/15">
-                          <AvatarFallback className="bg-[#C9A84C]/10 text-[#C9A84C] text-xs font-semibold">
-                            {getInitials(user.name)}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className={cn("absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-[#FDFBF7]", statusColors[user.status])} />
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-sm text-black truncate">{user.name}</p>
-                        <p className="text-[10px] text-black/40 truncate">{user.role}</p>
-                      </div>
+          <ScrollArea className="flex-1 p-2">
+            {Object.entries(departmentGroups).map(([dept, members]) => {
+              const filteredDeptMembers = members.filter(m =>
+                filteredMembers.some(fm => fm.id === m.id)
+              );
+              if (filteredDeptMembers.length === 0) return null;
+              const isOpen = openDepts.has(dept);
+              return (
+                <div key={dept} className="mb-1">
+                  <button
+                    onClick={() => toggleDept(dept)}
+                    className="w-full flex items-center gap-1.5 px-2 py-1.5 text-[10px] font-semibold text-black/40 uppercase tracking-wider hover:text-black/60 transition-colors"
+                  >
+                    {isOpen ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
+                    {dept} ({filteredDeptMembers.length})
+                  </button>
+                  {isOpen && (
+                    <div className="space-y-0.5 ml-1">
+                      {filteredDeptMembers.map(member => {
+                        const status = memberStatuses[member.id] || 'offline';
+                        return (
+                          <div
+                            key={member.id}
+                            className={cn(
+                              "flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-[#C9A84C]/5 transition-colors cursor-pointer",
+                              status === 'offline' && "opacity-50"
+                            )}
+                            onClick={() => startDM(member)}
+                          >
+                            <div className="relative shrink-0">
+                              <Avatar className="h-7 w-7 border border-[#C9A84C]/15">
+                                <AvatarImage src={member.avatar} alt={member.name} />
+                                <AvatarFallback className="bg-[#C9A84C]/10 text-[#C9A84C] text-[9px] font-semibold">
+                                  {getInitials(member.name)}
+                                </AvatarFallback>
+                              </Avatar>
+                              <div className={cn("absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-[#FDFBF7]", statusColors[status])} />
+                            </div>
+                            <div className="min-w-0">
+                              <p className="text-xs text-black truncate flex items-center gap-1">
+                                {member.name}
+                                {member.id === 'amanda-clarke' && <Sparkles className="w-2.5 h-2.5 text-[#C9A84C]" />}
+                              </p>
+                              <p className="text-[9px] text-black/40 truncate">{member.role}</p>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
-                  ))}
-                </>
-              )}
-            </div>
+                  )}
+                </div>
+              );
+            })}
           </ScrollArea>
         </div>
       )}
 
-      {/* ─── Settings Dialog ─── */}
+      {/* Settings Dialog */}
       <Dialog open={showSettings} onOpenChange={setShowSettings}>
         <DialogContent className="bg-white border-2 border-[#C9A84C]/30">
           <DialogHeader>
@@ -591,64 +617,68 @@ const TeamChat = () => {
                 <Label className="text-black font-medium">Owner Copy</Label>
                 <p className="text-xs text-zinc-500">Receive copies of all broker DMs</p>
               </div>
-              <Switch
-                checked={settings.ownerCopyEnabled}
-                onCheckedChange={(v) => setSettings(s => ({ ...s, ownerCopyEnabled: v }))}
-              />
+              <Switch checked={settings.ownerCopyEnabled} onCheckedChange={(v) => setSettings(s => ({ ...s, ownerCopyEnabled: v }))} />
             </div>
             <div className="flex items-center justify-between">
               <div>
                 <Label className="text-black font-medium">Notifications</Label>
                 <p className="text-xs text-zinc-500">Push notifications for new messages</p>
               </div>
-              <Switch
-                checked={settings.notificationsEnabled}
-                onCheckedChange={(v) => setSettings(s => ({ ...s, notificationsEnabled: v }))}
-              />
+              <Switch checked={settings.notificationsEnabled} onCheckedChange={(v) => setSettings(s => ({ ...s, notificationsEnabled: v }))} />
             </div>
             <div className="flex items-center justify-between">
               <div>
                 <Label className="text-black font-medium">Sound Alerts</Label>
                 <p className="text-xs text-zinc-500">Play sound for new messages</p>
               </div>
-              <Switch
-                checked={settings.soundEnabled}
-                onCheckedChange={(v) => setSettings(s => ({ ...s, soundEnabled: v }))}
-              />
+              <Switch checked={settings.soundEnabled} onCheckedChange={(v) => setSettings(s => ({ ...s, soundEnabled: v }))} />
             </div>
           </div>
         </DialogContent>
       </Dialog>
 
-      {/* ─── New DM Dialog ─── */}
+      {/* New DM Dialog — shows real employees by department */}
       <Dialog open={showNewDM} onOpenChange={setShowNewDM}>
-        <DialogContent className="bg-white border-2 border-[#C9A84C]/30">
+        <DialogContent className="bg-white border-2 border-[#C9A84C]/30 max-h-[70vh]">
           <DialogHeader>
             <DialogTitle className="text-black flex items-center gap-2">
               <MessageSquare className="w-5 h-5 text-[#C9A84C]" />
               New Direct Message
             </DialogTitle>
           </DialogHeader>
-          <div className="space-y-2 py-2">
-            {users.map(user => (
-              <button
-                key={user.id}
-                onClick={() => startDM(user)}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#C9A84C]/5 border border-transparent hover:border-[#C9A84C]/20 transition-all"
-              >
-                <Avatar className="h-10 w-10 border border-[#C9A84C]/20">
-                  <AvatarFallback className="bg-[#C9A84C]/10 text-[#C9A84C] font-semibold">
-                    {getInitials(user.name)}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="text-left">
-                  <p className="text-sm font-medium text-black">{user.name}</p>
-                  <p className="text-xs text-zinc-500">{user.role} · {user.department}</p>
-                </div>
-                <div className={cn("ml-auto w-2.5 h-2.5 rounded-full", statusColors[user.status])} />
-              </button>
-            ))}
+          <div className="relative mb-3">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/30" />
+            <Input
+              placeholder="Search team members..."
+              className="pl-9 bg-[#FDFBF7] border-[#C9A84C]/20 text-black placeholder:text-black/40"
+            />
           </div>
+          <ScrollArea className="max-h-[50vh]">
+            <div className="space-y-1 py-2">
+              {chatMembers.map(member => (
+                <button
+                  key={member.id}
+                  onClick={() => startDM(member)}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[#C9A84C]/5 border border-transparent hover:border-[#C9A84C]/20 transition-all"
+                >
+                  <Avatar className="h-9 w-9 border border-[#C9A84C]/20">
+                    <AvatarImage src={member.avatar} alt={member.name} />
+                    <AvatarFallback className="bg-[#C9A84C]/10 text-[#C9A84C] font-semibold text-xs">
+                      {getInitials(member.name)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="text-left min-w-0">
+                    <p className="text-sm font-medium text-black truncate flex items-center gap-1">
+                      {member.name}
+                      {member.id === 'amanda-clarke' && <Sparkles className="w-3 h-3 text-[#C9A84C]" />}
+                    </p>
+                    <p className="text-xs text-zinc-500 truncate">{member.role} · {member.department}</p>
+                  </div>
+                  <div className={cn("ml-auto w-2.5 h-2.5 rounded-full shrink-0", statusColors[memberStatuses[member.id] || 'offline'])} />
+                </button>
+              ))}
+            </div>
+          </ScrollArea>
         </DialogContent>
       </Dialog>
     </div>
