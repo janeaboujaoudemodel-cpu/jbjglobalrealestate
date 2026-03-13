@@ -13,9 +13,11 @@ const PageNavigation = forwardRef<HTMLDivElement, Record<string, never>>((_, ref
     const scrollTop = window.scrollY;
     const scrollHeight = document.documentElement.scrollHeight;
     const clientHeight = document.documentElement.clientHeight;
+    const isScrollable = scrollHeight > clientHeight + 50;
     
     setShowScrollTop(scrollTop > 200);
-    setShowScrollBottom(scrollTop + clientHeight < scrollHeight - 100);
+    // Show down arrow only if page is actually scrollable and not at bottom
+    setShowScrollBottom(isScrollable && scrollTop + clientHeight < scrollHeight - 100);
   }, []);
 
   useEffect(() => {
