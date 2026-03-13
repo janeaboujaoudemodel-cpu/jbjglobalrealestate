@@ -40,6 +40,7 @@ interface NavItem {
   icon: React.ElementType;
   path: string;
   badge?: number;
+  premium?: boolean;
 }
 
 const NAV_SECTIONS: NavSection[] = [
