@@ -316,6 +316,10 @@ export default function StampGeneratorPage() {
     const clientConcepts = generateStampConcepts(latestProject);
     if (clientConcepts[0]?.templateKey === 'blocked') { setBlocked(true); setGenerating(false); return; }
     setConcepts(clientConcepts);
+    // Auto-select the Standard Model (first concept) on first load
+    if (clientConcepts.length > 0 && !selectedId) {
+      setSelectedId(clientConcepts[0].id);
+    }
     setGenerating(false);
   }, [project, session, projectId]);
 
