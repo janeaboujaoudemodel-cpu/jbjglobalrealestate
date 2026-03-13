@@ -1516,7 +1516,16 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
               <Separator />
 
               {/* Actions */}
-               <div className="flex items-center justify-end">
+               <div className="flex items-center justify-between">
+                 <Button
+                   variant="outline"
+                   size="sm"
+                   onClick={() => navigate(`/owner/listing-admin/preview/${selectedImport.id}`)}
+                   className="border-gold/30 text-gold hover:bg-gold/10"
+                 >
+                   <Eye className="h-4 w-4 mr-2" />
+                   View Internal Draft
+                 </Button>
                  <div className="flex items-center gap-2">
                   <Button
                     variant="outline"
