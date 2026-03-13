@@ -488,17 +488,7 @@ export default function StampProjectWizard() {
                     </div>
                   </div>
 
-                  {/* Language Mode */}
-                  <div>
-                    <Label className="text-[11px] font-medium mb-1.5 block">Language Mode</Label>
-                    <div className="flex gap-2">
-                      {(['EN', 'AR', 'BILINGUAL'] as LanguageMode[]).map(l => (
-                        <OptionButton key={l} selected={form.language_mode === l} onClick={() => set('language_mode', l)}>
-                          {l === 'EN' ? 'English' : l === 'AR' ? 'Arabic' : 'Bilingual'}
-                        </OptionButton>
-                      ))}
-                    </div>
-                  </div>
+                  {/* Language Mode — already shown at top, just a reminder link */}
 
                   {/* Arabic fields */}
                   {(form.language_mode === 'AR' || form.language_mode === 'BILINGUAL') && (
