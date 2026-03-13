@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
-import { Heart, ChevronRight, Building2, ArrowRight } from "lucide-react";
+import { Heart, ChevronRight, Building2, ArrowRight, PenTool } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useFavorites } from "@/hooks/useFavorites";
+import { useDesignFavorites } from "@/hooks/useDesignFavorites";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
