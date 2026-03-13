@@ -314,8 +314,8 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
     const locTopArc = `M ${cx - clampedLocTextR} ${cy} A ${clampedLocTextR} ${clampedLocTextR} 0 1 1 ${cx + clampedLocTextR} ${cy}`;
     
     // Arabic location on BOTTOM arc
-    const locArContent = renderBottomArcText(
-      locAr, cx, cy, clampedLocTextR, locArFontSize, ARABIC_FONT, secColor, 1, true, '600'
+    const locArContent = renderBottomArcTextPath(
+      locAr, cx, cy, clampedLocTextR, locArFontSize, ARABIC_FONT, secColor, 1, true, 'loc-bottom', '600'
     );
 
     // English location on TOP
