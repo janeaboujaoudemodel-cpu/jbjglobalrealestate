@@ -356,7 +356,7 @@ const ListingGenerator = () => {
     }
 
     setFiles((prev) => [...prev, ...newFiles]);
-  }, []);
+  }, [files]);
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
