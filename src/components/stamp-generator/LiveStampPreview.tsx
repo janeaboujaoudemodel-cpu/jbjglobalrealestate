@@ -6,7 +6,7 @@
  */
 
 import React, { useMemo } from 'react';
-import { generateOfficialStampSVG, OFFICIAL_INK_BLUE, type SeparatorStyle } from '@/lib/stampOfficialTemplate';
+import { generateOfficialStampSVG, OFFICIAL_INK_BLUE, type SeparatorStyle, type BorderStyleType } from '@/lib/stampOfficialTemplate';
 
 type StampType = 'ROUND' | 'OVAL' | 'RECTANGLE' | 'SQUARE';
 type StyleTheme = 'CLASSIC' | 'MODERN' | 'MINIMAL' | 'LUXURY' | 'BOLD' | 'VINTAGE';
