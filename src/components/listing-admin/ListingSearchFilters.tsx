@@ -26,6 +26,7 @@ interface ListingSearchFiltersProps {
   developerValue: string;
   emirateValue: string;
   locationValue: string;
+  horizontal?: boolean;
 }
 
 const EMIRATES = [
