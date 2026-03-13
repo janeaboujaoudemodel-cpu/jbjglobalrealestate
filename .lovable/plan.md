@@ -1,93 +1,72 @@
 
+## CRM System Upgrade — Implementation Status
 
-## Plan: Full Extraction Pipeline from External Source + Model Upgrades + Deploy All Functions
+### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-### Current State
+#### Task 1: Full System Audit ✅
+- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
+- Identified 10 weaknesses (documented in plan)
 
-1. **`daily-provident-auto-sync`** — DISABLED (returns "permanently disabled")
-2. **`daily-auto-extraction`** — Only processes `pending_project_imports` with missing fields; does NOT scrape source pages
-3. **`provident-full-sync`** — Full 4-step pipeline (developers → projects → detail → orchestrate) using Firecrawl + AI. Uses `gemini-2.5-flash`. Works but is never called automatically
-4. **`provident-scrape-project`** — Deep single-project scraper (images, videos, PDFs, amenities). Uses `gemini-2.5-flash`
-5. **`batch-extract-pending`** — Processes pending imports using shared Provident extractors
-6. **`generate-listing`** — Listing portal extraction engine. Already uses `gemini-2.5-pro` for extraction
-7. **65 edge functions** reference AI models — most use `gemini-2.5-flash`, some use `gemini-2.5-pro`
+#### Task 2: Leads Security Hardening ✅
+- CSV export no longer includes email/phone PII
+- Audit logging added to exports with user_agent tracking
+- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
 
-### What Needs to Happen
+#### Task 3: Encryption Hardening ✅
+- CSV export stripped of `email_lower` and `phone_e164` fields
+- Export audit logged to both `crm_audit_logs` and `audit_logs`
 
-#### 1. Re-enable & Upgrade Daily Auto-Sync (Phase B Core)
+#### Task 4: Lead Lifecycle Upgrade ✅
+- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
+- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
+- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
 
-**File: `supabase/functions/daily-provident-auto-sync/index.ts`**
-- Remove the "DISABLED" stub
-- Implement a complete daily sync pipeline that:
-  1. Calls `provident-full-sync` with `step: "full_sync"` to discover and scrape all developers + projects
-  2. For each newly discovered/updated project, calls `provident-scrape-project` for deep detail extraction (all images, PDFs, floor plans, videos, amenities, prices, handover, sizes)
-  3. Upserts directly into `projects` table (NOT `pending_project_imports`) — these are **mirrored listings**, not drafts
-  4. Sets `is_published: true`, `source: 'provident'` (admin-only field), strips source attribution from all public-facing fields
-  5. Logs run results to `extraction_job_logs`
-- Upgrade model to `google/gemini-3-flash-preview` for extraction calls
-- No "Fix" or "Repair" step — extract completely the first time
+#### Task 5: CRM Structure Upgrade ✅
+- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
+- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
+- KanbanPipeline expanded to show all 17 relevant stages
 
-#### 2. Upgrade `provident-full-sync` Model
+#### Task 6: Performance Optimization ✅
+- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
+- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
+- `crm_leads_updated_at_trigger` auto-updates `updated_at`
 
-**File: `supabase/functions/provident-full-sync/index.ts`**
-- Line 74: Change `gemini-2.5-flash` → `google/gemini-3-flash-preview`
-- Replace `serve()` import with `Deno.serve()` pattern (fix potential runtime errors)
+#### Task 7: AI Intelligence Integration ✅
+- New edge function `ai-lead-intelligence` using Lovable AI gateway
+- Supports 3 modes: `score`, `summary`, `next_action`
+- Tool-calling for structured scoring output
+- JWT auth + CRM role validation
+- PII sanitized before sending to AI
 
-#### 3. Upgrade `provident-scrape-project` Model
+#### Task 8: Workflow Automation ✅
+- Created `crm_automation_rules` table with RLS (owner manage, admin view)
+- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
 
-**File: `supabase/functions/provident-scrape-project/index.ts`**
-- Line 188: Change `gemini-2.5-flash` → `google/gemini-3-flash-preview`
-- Replace `serve()` import with `Deno.serve()` pattern
+#### Task 10: Role & Permission System ✅
+- RLS on automation rules: owner CRUD, admin read-only
+- CSV export restricted to owner_admin/founder roles
 
-#### 4. Upgrade `generate-listing` (Listing Portal Engine)
+#### Task 12: Backend/Database Upgrade ✅
+- 3 new performance indexes
+- Auto-updated_at trigger on crm_leads
+- Duplicate hash computation trigger
+- Rate-limiting security function
 
-**File: `supabase/functions/generate-listing/index.ts`**
-- Line 360, 390, 453: Already uses `gemini-2.5-pro` — upgrade to `google/gemini-3-flash-preview` for speed, keep `gemini-2.5-pro` as fallback
-- Replace `serve()` import with `Deno.serve()` pattern
+#### Task 13: Data Cleanliness ✅
+- `duplicate_hash` with auto-compute trigger prevents future duplicates
+- Partial unique index enforces uniqueness at DB level
 
-#### 5. Upgrade `ai-listing-extractor`
-
-**File: `supabase/functions/ai-listing-extractor/index.ts`**
-- Replace `serve()` import with `Deno.serve()`
-- Upgrade model references
-
-#### 6. Upgrade `batch-extract-pending`
-
-**File: `supabase/functions/batch-extract-pending/index.ts`**
-- Replace `serve()` import with `Deno.serve()`
-
-#### 7. Upgrade `daily-auto-extraction` to Chain with Provident Sync
-
-**File: `supabase/functions/daily-auto-extraction/index.ts`**
-- After processing pending imports, also trigger `daily-provident-auto-sync` for the full source mirror
-- This makes `daily-auto-extraction` the single daily cron entry point
-
-#### 8. Remove "Fix All" / "Repair" Language from Admin UI
-
-**File: `src/components/listing-admin/SyncDashboard.tsx`**
-- Change "Extract Missing Data" (formerly "Fix All") to "Run Daily Sync Now" as manual trigger
-- Show last sync timestamp and results from `extraction_job_logs`
-
-### Model Upgrade Strategy
-
-| Function | Current Model | New Model |
-|----------|--------------|-----------|
-| `provident-full-sync` | `gemini-2.5-flash` | `gemini-3-flash-preview` |
-| `provident-scrape-project` | `gemini-2.5-flash` | `gemini-3-flash-preview` |
-| `generate-listing` | `gemini-2.5-pro` | `gemini-2.5-pro` (keep — already best) |
-| `ai-listing-extractor` | implied `gemini-2.5-flash` | `gemini-3-flash-preview` |
-| `daily-provident-auto-sync` | N/A (disabled) | `gemini-3-flash-preview` |
-
-### Files to Create/Modify
-
+### Files Changed
 | File | Action |
 |------|--------|
-| `supabase/functions/daily-provident-auto-sync/index.ts` | Rewrite: full sync pipeline with deep extraction |
-| `supabase/functions/provident-full-sync/index.ts` | Upgrade model + Deno.serve() |
-| `supabase/functions/provident-scrape-project/index.ts` | Upgrade model + Deno.serve() |
-| `supabase/functions/generate-listing/index.ts` | Deno.serve() migration |
-| `supabase/functions/ai-listing-extractor/index.ts` | Upgrade model + Deno.serve() |
-| `supabase/functions/batch-extract-pending/index.ts` | Deno.serve() migration |
-| `supabase/functions/daily-auto-extraction/index.ts` | Chain provident sync |
-| `src/components/listing-admin/SyncDashboard.tsx` | Remove repair/fix language, add sync status |
-
+| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
+| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
+| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
+| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
+| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
+| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
+| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
+| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
+| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |

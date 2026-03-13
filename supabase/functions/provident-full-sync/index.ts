@@ -1,4 +1,3 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 const corsHeaders = {
@@ -71,7 +70,7 @@ async function extractWithAI(content: string, prompt: string, lovableKey: string
       "Authorization": `Bearer ${lovableKey}`,
     },
     body: JSON.stringify({
-      model: "google/gemini-2.5-flash",
+      model: "google/gemini-3-flash-preview",
       messages: [
         { role: "system", content: "You are a data extraction specialist for UAE real estate. Extract structured data accurately. Always return valid JSON." },
         { role: "user", content: prompt + "\n\nContent to extract from:\n" + content.substring(0, 50000) },
@@ -97,7 +96,7 @@ async function extractWithAI(content: string, prompt: string, lovableKey: string
   throw new Error("No valid JSON found in AI response");
 }
 
-serve(async (req) => {
+Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }

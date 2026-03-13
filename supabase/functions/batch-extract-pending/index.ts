@@ -1,4 +1,3 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { fetchWithRetry, sleep } from "../_shared/provident/http.ts";
 import { extractProvidentProjectFromScrape, type ExtractedProjectData } from "../_shared/provident/extract.ts";
@@ -24,7 +23,7 @@ function extractSlugFromUrl(url: string): string {
 const PROVIDENT_BASE = "https://providentestate.com";
 const PROJECT_FILES_BUCKET = "project-files";
 
-serve(async (req) => {
+Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }

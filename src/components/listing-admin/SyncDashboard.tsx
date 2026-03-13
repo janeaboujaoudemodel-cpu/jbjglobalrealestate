@@ -1076,11 +1076,11 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
     
     if (!silentResume) {
       const confirmed = window.confirm(
-        "⚡ FIX ALL LISTINGS ⚡\n\n" +
-        "This will run a 3-phase repair pipeline:\n\n" +
+        "⚡ RUN DAILY SYNC ⚡\n\n" +
+        "This will run the full extraction pipeline:\n\n" +
         "Phase 1: Extract missing data for ALL pending queue items\n" +
-        "Phase 2: Repair approved projects (metadata, USPs, location, amenities, documents)\n" +
-        "Phase 3: Repair approved project images\n\n" +
+        "Phase 2: Sync approved projects (metadata, USPs, location, amenities, documents)\n" +
+        "Phase 3: Final image sync pass\n\n" +
         "This may take several minutes. Continue?"
       );
       if (!confirmed) return;
@@ -1102,7 +1102,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
       documents_repaired: 0
     });
 
-    toast.info(silentResume ? "Resuming Fix All pipeline..." : "Fix All started — running 3-phase repair pipeline...");
+    toast.info(silentResume ? "Resuming daily sync pipeline..." : "Daily sync started — running full extraction pipeline...");
 
     try {
       // Phase 1: Extract all pending queue items
@@ -1764,7 +1764,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                           </Button>
                         )}
 
-                        {/* FIX ALL BUTTON - runs extraction + repairs approved projects */}
+                        {/* RUN DAILY SYNC BUTTON - triggers full extraction + provident mirror */}
                         {!isFixAllRunning ? (
                           <Button
                             onClick={() => startFixAllRunner(false)}
@@ -1772,12 +1772,12 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                             className="bg-emerald-600 hover:bg-emerald-700 text-white"
                           >
                             <RefreshCw className="w-4 h-4 mr-2" />
-                            Extract & Repair All
+                            Run Daily Sync Now
                           </Button>
                         ) : (
                           <Button onClick={stopFixAllRunner} variant="outline" className="border-amber-400 text-amber-700">
                             <Pause className="w-4 h-4 mr-2" />
-                            Stop Fix All
+                            Stop Sync
                           </Button>
                         )}
 
@@ -1807,12 +1807,12 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
 
                   {isFixAllRunning && fixAllStats && (
                     <div className="rounded-lg border border-emerald-300 bg-emerald-50 p-3 text-xs space-y-1">
-                      <div className="font-medium text-emerald-800">Fix All in progress...</div>
+                      <div className="font-medium text-emerald-800">Daily Sync in progress...</div>
                       <div className="text-emerald-700">
-                        Pending: {fixAllStats.pending_success} fixed, {fixAllStats.pending_errors} errors
+                        Pending: {fixAllStats.pending_success} synced, {fixAllStats.pending_errors} errors
                       </div>
                       <div className="text-emerald-700">
-                        Approved: {fixAllStats.approved_repaired} repaired, {fixAllStats.approved_errors} errors
+                        Approved: {fixAllStats.approved_repaired} updated, {fixAllStats.approved_errors} errors
                       </div>
                     </div>
                   )}
