@@ -160,7 +160,7 @@ export default function StampProjectWizard() {
 
   const [form, setForm] = useState<FormState>(() => {
     try {
-      const saved = sessionStorage.getItem('stamp-wizard-form');
+      const saved = localStorage.getItem('stamp-wizard-form');
       if (saved) return JSON.parse(saved);
     } catch { /* ignore */ }
     return {
