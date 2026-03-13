@@ -168,10 +168,17 @@ export default function StampGeneratorPage() {
   // Left panel tab
   const [leftTab, setLeftTab] = useState<'color' | 'fonts' | 'text' | 'centerart' | 'logo'>('color');
 
-  // Center Art controls
+  // Center Art controls — logo persisted in localStorage
   const [localIconStyle, setLocalIconStyle] = useState<'NONE' | 'MONOGRAM' | 'UPLOADED_LOGO'>('MONOGRAM');
   const [localMonogramText, setLocalMonogramText] = useState<string>('');
-  const [localLogoUrl, setLocalLogoUrl] = useState<string>('');
+  const [localLogoUrl, setLocalLogoUrlRaw] = useState<string>('');
+  const setLocalLogoUrl = (v: string) => { setLocalLogoUrlRaw(v); if (projectId) { try { if (v) localStorage.setItem(`stamp-logo-${projectId}`, v); else localStorage.removeItem(`stamp-logo-${projectId}`); } catch {} } };
+
+  // Custom user color palette — up to 5 saved colors
+  const [customPalette, setCustomPaletteRaw] = useState<string[]>(() => { try { const v = localStorage.getItem('stamp-custom-palette'); return v ? JSON.parse(v) : []; } catch { return []; } });
+  const setCustomPalette = (v: string[]) => { setCustomPaletteRaw(v); try { localStorage.setItem('stamp-custom-palette', JSON.stringify(v)); } catch {} };
+  const addCustomColor = (hex: string) => { if (customPalette.length >= 5) { toast.error('Max 5 custom colors'); return; } if (customPalette.includes(hex)) return; setCustomPalette([...customPalette, hex]); toast.success('Color saved'); };
+  const removeCustomColor = (hex: string) => { setCustomPalette(customPalette.filter(c => c !== hex)); };
 
   // Preview modal
   const [previewConcept, setPreviewConcept] = useState<StampDesignConcept | null>(null);
