@@ -224,8 +224,8 @@ export function LiveStampPreview({
     // Text for EN-only round
     let textContent = '';
     if (isRound) {
-      const arcR = innerRx - 6;
-      const clipR = innerRx - 2;
+      const arcR = innerRx - 10;
+      const clipR = innerRx - 4;
       const topArcId = 'top-arc-lp';
       const botArcId = 'bot-arc-lp';
       const clipId = 'lp-round-clip';
@@ -241,7 +241,7 @@ export function LiveStampPreview({
         </defs>
         <g clip-path="url(#${clipId})">`;
 
-      const nameFontSize = Math.min(11, Math.max(5, fitFontSize(displayName, 10, arcLen * 0.88, 0.58)));
+      const nameFontSize = Math.min(10, Math.max(5, fitFontSize(displayName, 10, arcLen * 0.88, 0.58)));
       textContent += `
         <text font-family="${fontFamily}" font-size="${nameFontSize}" fill="${ink}" letter-spacing="1.5" font-weight="600">
           <textPath href="#${topArcId}" startOffset="50%" text-anchor="middle">${trunc(displayName.toUpperCase(), 36)}</textPath>
