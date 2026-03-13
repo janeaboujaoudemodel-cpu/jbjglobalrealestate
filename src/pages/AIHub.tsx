@@ -717,7 +717,7 @@ const AIHub = () => {
                 className="text-zinc-400 text-base max-w-xl mx-auto mb-8"
                 variants={fadeInUp}
               >
-                Free AI tools • Property analysis • Investment calculators • Productivity suite
+                Free tools • Property analysis • Investment calculators • Productivity suite
               </motion.p>
 
               {/* Premium Gold Divider */}
