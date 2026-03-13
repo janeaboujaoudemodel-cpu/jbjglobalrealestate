@@ -8,15 +8,23 @@ import { useNavigate } from "react-router-dom";
 
 interface SourceCountsPanelProps {
   reellyApiTotal?: number | null;
+  onSourceChange?: (source: string) => void;
+  activeSource?: string;
 }
 
 type SourceSelection = "none" | "source-a" | "source-b";
 
-export function SourceCountsPanel({ reellyApiTotal }: SourceCountsPanelProps) {
+export function SourceCountsPanel({ reellyApiTotal, onSourceChange, activeSource }: SourceCountsPanelProps) {
   const { liveCounts, refreshCounts } = useSyncJobs();
   const navigate = useNavigate();
-  // Default to Source Portal (left card) selected
+  // Default to Provident Portal (left card) selected
   const [selectedSource, setSelectedSource] = useState<SourceSelection>("source-b");
+
+  const handleSourceSelect = (source: SourceSelection) => {
+    setSelectedSource(source);
+    if (source === "source-b") onSourceChange?.("provident");
+    else if (source === "source-a") onSourceChange?.("reelly");
+  };
 
   const handleViewProjects = (status: 'pending' | 'approved', source: string) => {
     navigate(`/listing-admin?view=data-ops&syncTab=approvals&source=${source}&status=${status}`);
