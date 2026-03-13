@@ -106,14 +106,14 @@ const PRESETS = [
 ];
 
 const HAIR_STYLES: HairStyle[] = [
-  { id: 'straight', name: 'Straight', emoji: '💇' },
-  { id: 'curly', name: 'Curly', emoji: '🌀' },
-  { id: 'wavy', name: 'Wavy', emoji: '〰️' },
-  { id: 'bald', name: 'Bald / Shaved', emoji: '🔵' },
-  { id: 'bangs', name: 'Bangs', emoji: '✂️' },
-  { id: 'bob', name: 'Bob Cut', emoji: '💁' },
-  { id: 'pixie', name: 'Pixie Cut', emoji: '⭐' },
-  { id: 'long', name: 'Long Flowing', emoji: '🌊' },
+  { id: 'straight', name: 'Straight', emoji: '—' },
+  { id: 'curly', name: 'Curly', emoji: '~' },
+  { id: 'wavy', name: 'Wavy', emoji: '≈' },
+  { id: 'bald', name: 'Bald / Shaved', emoji: '○' },
+  { id: 'bangs', name: 'Bangs', emoji: '/' },
+  { id: 'bob', name: 'Bob Cut', emoji: '◡' },
+  { id: 'pixie', name: 'Pixie Cut', emoji: '◇' },
+  { id: 'long', name: 'Long Flowing', emoji: '∿' },
 ];
 
 const HAIR_COLORS = [
