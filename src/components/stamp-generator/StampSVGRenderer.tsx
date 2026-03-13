@@ -119,14 +119,18 @@ export function StampSVGRenderer({
   const clean = typeof window !== 'undefined'
     ? DOMPurify.sanitize(tinted, {
         USE_PROFILES: { svg: true, svgFilters: true },
-        ADD_TAGS: ['image', 'filter', 'feTurbulence', 'feColorMatrix', 'feComponentTransfer', 'feFuncA', 'feComposite', 'feGaussianBlur', 'feMorphology'],
+        ADD_TAGS: [
+          'image', 'filter', 'feTurbulence', 'feColorMatrix', 'feComponentTransfer',
+          'feFuncA', 'feFuncR', 'feFuncG', 'feFuncB',
+          'feComposite', 'feGaussianBlur', 'feMorphology', 'feFlood', 'feMerge', 'feMergeNode',
+        ],
         ADD_ATTR: [
           'clip-path', 'dominant-baseline', 'unicode-bidi', 'direction', 'bidi-override',
           'letter-spacing', 'text-anchor', 'font-weight', 'font-size', 'font-family', 'font-style',
           'href', 'xlink:href', 'preserveAspectRatio', 'textLength', 'lengthAdjust',
           'filter', 'flood-color', 'flood-opacity', 'stdDeviation', 'baseFrequency',
           'numOctaves', 'seed', 'type', 'values', 'operator', 'radius', 'in', 'in2', 'result',
-          'tableValues', 'x', 'y', 'width', 'height',
+          'tableValues', 'x', 'y', 'width', 'height', 'opacity',
         ],
         ADD_DATA_URI_TAGS: ['image'],
         ADD_URI_SAFE_ATTR: ['href', 'xlink:href'],
