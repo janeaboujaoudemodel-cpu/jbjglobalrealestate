@@ -21,7 +21,7 @@ import {
   Pencil, Reply, ReplyAll, Forward, MoreVertical, Paperclip,
   RefreshCw, Mail, Building2, User, Sparkles, CheckCheck,
   MailOpen, ChevronLeft, ChevronRight, Shield, UserCircle,
-  Headphones, Phone, Megaphone, Stamp, Signature, Zap
+  Headphones, Phone, Megaphone, Stamp, Signature, Zap, MessageSquare
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
