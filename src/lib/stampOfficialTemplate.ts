@@ -141,9 +141,9 @@ function renderSeparators(cx: number, cy: number, r: number, style: SeparatorSty
   if (style === 'none') return '';
   const glyph = separatorGlyph(style);
   // Scale font size based on separator type
-  const fontSize = (style === 'line' || style === 'double-line' || style === 'dash') ? 14
-    : (style === 'floral' || style === 'ornament') ? 12
-    : 10;
+  const fontSize = (style === 'line' || style === 'double-line' || style === 'dash') ? 16
+    : (style === 'floral' || style === 'ornament') ? 14
+    : 13;
   return `
     <text x="${cx + r}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
           font-size="${fontSize}" fill="${ink}" font-weight="bold">${glyph}</text>
