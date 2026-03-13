@@ -506,29 +506,28 @@ const ProvidentEnrichmentPanel = () => {
 };
 
 // ========== MAIN ENRICHMENT CENTER ==========
-export const EnrichmentCenter = () => {
+interface EnrichmentCenterProps {
+  activeSource?: string;
+}
+
+export const EnrichmentCenter = ({ activeSource = "provident" }: EnrichmentCenterProps) => {
+  const defaultTab = activeSource === "reelly" ? "reelly" : "provident";
+  
   return (
     <div className="space-y-6">
       <div className="bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30 rounded-xl p-5">
         <h2 className="text-foreground font-bold text-lg flex items-center gap-2">
           <Zap className="w-5 h-5 text-gold" />
-          Project Enrichment Center
+          Project Enrichment & Extraction
         </h2>
         <p className="text-muted-foreground text-sm mt-1">
-          Automatically enrich all projects from multiple sources — images, documents, floor plans, amenities,
-          payment plans, unit types, descriptions, and more. Runs in background — safe to navigate away.
+          Enrich all projects from Provident Portal — images, documents, floor plans, amenities,
+          payment plans, unit types, and more. Runs in background — safe to navigate away.
         </p>
       </div>
 
-      <Tabs defaultValue="reelly" className="space-y-4">
+      <Tabs defaultValue={defaultTab} className="space-y-4">
         <TabsList className="bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30 p-1">
-          <TabsTrigger
-            value="reelly"
-            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
-          >
-            <Globe className="w-4 h-4 mr-2" />
-            Reelly API Enrichment
-          </TabsTrigger>
           <TabsTrigger
             value="provident"
             className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
@@ -536,25 +535,16 @@ export const EnrichmentCenter = () => {
             <Database className="w-4 h-4 mr-2" />
             Provident Website Enrichment
           </TabsTrigger>
+          {activeSource === "reelly" && (
+            <TabsTrigger
+              value="reelly"
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
+            >
+              <Globe className="w-4 h-4 mr-2" />
+              Reelly API Enrichment
+            </TabsTrigger>
+          )}
         </TabsList>
-
-        <TabsContent value="reelly" className="mt-0">
-          <Card className="bg-card border-2 border-gold/30">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-foreground text-base flex items-center gap-2">
-                <Globe className="w-5 h-5 text-gold" />
-                Reelly API Auto-Enrichment (Background)
-              </CardTitle>
-              <p className="text-muted-foreground text-sm">
-                Runs entirely on the server — processes all projects even if you close this page.
-                You'll receive notifications every 50 projects and when complete.
-              </p>
-            </CardHeader>
-            <CardContent>
-              <ReellyEnrichmentPanel />
-            </CardContent>
-          </Card>
-        </TabsContent>
 
         <TabsContent value="provident" className="mt-0">
           <Card className="bg-card border-2 border-gold/30">
@@ -564,7 +554,7 @@ export const EnrichmentCenter = () => {
                 Provident Website Enrichment
               </CardTitle>
               <p className="text-muted-foreground text-sm">
-                Synchronizes published projects with Provident's page-data API to fill gaps in amenities, payment plans,
+                Synchronizes published projects with Provident's page-data to fill gaps in amenities, payment plans,
                 FAQs, USPs, floor plans, location distances, images, and documents.
               </p>
             </CardHeader>
@@ -573,6 +563,25 @@ export const EnrichmentCenter = () => {
             </CardContent>
           </Card>
         </TabsContent>
+
+        {activeSource === "reelly" && (
+          <TabsContent value="reelly" className="mt-0">
+            <Card className="bg-card border-2 border-gold/30">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-foreground text-base flex items-center gap-2">
+                  <Globe className="w-5 h-5 text-gold" />
+                  Reelly API Auto-Enrichment (Background)
+                </CardTitle>
+                <p className="text-muted-foreground text-sm">
+                  Runs entirely on the server — processes all projects even if you close this page.
+                </p>
+              </CardHeader>
+              <CardContent>
+                <ReellyEnrichmentPanel />
+              </CardContent>
+            </Card>
+          </TabsContent>
+        )}
       </Tabs>
     </div>
   );

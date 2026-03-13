@@ -766,25 +766,18 @@ const ListingAdmin = () => {
             <Tabs value={dataOpsTab} onValueChange={setDataOpsTab} className="space-y-6">
               <TabsList className="w-full flex flex-nowrap overflow-x-auto scrollbar-hide bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] border border-gold/30 p-1 rounded-lg" style={{ overscrollBehaviorX: 'contain' }}>
                 <TabsTrigger 
-                  value="reelly" 
+                  value="enrichment"
                   className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
                 >
-                  <Globe className="w-3.5 h-3.5 mr-1.5" />
-                  Source Sync
+                  <Zap className="w-3.5 h-3.5 mr-1.5" />
+                  Enrichment & Extraction
                 </TabsTrigger>
                 <TabsTrigger 
                   value="approvals"
                   className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
                 >
                   <Check className="w-3.5 h-3.5 mr-1.5" />
-                  Approvals
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="updates"
-                  className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
-                >
-                  <RefreshCw className="w-3.5 h-3.5 mr-1.5" />
-                  Updates
+                  Approval Center
                 </TabsTrigger>
                 <TabsTrigger 
                   value="external"
@@ -793,20 +786,15 @@ const ListingAdmin = () => {
                   <Database className="w-3.5 h-3.5 mr-1.5" />
                   Sources
                 </TabsTrigger>
-                <TabsTrigger 
-                  value="enrichment"
-                  className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
-                >
-                  <Zap className="w-3.5 h-3.5 mr-1.5" />
-                  Enrichment
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="emergency"
-                  className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
-                >
-                  <AlertTriangle className="w-3.5 h-3.5 mr-1.5" />
-                  Mirror
-                </TabsTrigger>
+                {activeSource === "reelly" && (
+                  <TabsTrigger 
+                    value="reelly" 
+                    className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
+                  >
+                    <Globe className="w-3.5 h-3.5 mr-1.5" />
+                    Reelly Sync
+                  </TabsTrigger>
+                )}
                 <TabsTrigger 
                   value="dev-visibility"
                   className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
@@ -816,24 +804,23 @@ const ListingAdmin = () => {
                 </TabsTrigger>
               </TabsList>
               
-              <TabsContent value="reelly" className="mt-0">
-                <ReellyImportPanel />
+              <TabsContent value="enrichment" className="mt-0">
+                <EnrichmentCenter activeSource={activeSource} />
               </TabsContent>
               <TabsContent value="approvals" className="mt-0">
-                <ProjectApprovalQueue onRefresh={refetchProjects} />
-              </TabsContent>
-              <TabsContent value="updates" className="mt-0">
-                <PendingUpdatesQueue onRefresh={refetchProjects} />
+                <div className="space-y-6">
+                  <ProjectApprovalQueue onRefresh={refetchProjects} />
+                  <PendingUpdatesQueue onRefresh={refetchProjects} />
+                </div>
               </TabsContent>
               <TabsContent value="external" className="mt-0">
                 <ExtractionJobsPanel />
               </TabsContent>
-              <TabsContent value="enrichment" className="mt-0">
-                <EnrichmentCenter />
-              </TabsContent>
-              <TabsContent value="emergency" className="mt-0">
-                <EmergencyMirrorPanel />
-              </TabsContent>
+              {activeSource === "reelly" && (
+                <TabsContent value="reelly" className="mt-0">
+                  <ReellyImportPanel />
+                </TabsContent>
+              )}
               <TabsContent value="dev-visibility" className="mt-0">
                 <DeveloperVisibilityPanel />
               </TabsContent>
