@@ -236,7 +236,7 @@ export default function StampProjectWizard() {
         })
         .select().single();
       if (error) throw error;
-      try { sessionStorage.removeItem('stamp-wizard-form'); } catch {}
+      try { localStorage.removeItem('stamp-wizard-form'); } catch {}
       toast.success('Project created!');
       navigate(`/toolkit/stamp-generator/${data.id}/generate?fresh=1`);
     } catch (error: any) {

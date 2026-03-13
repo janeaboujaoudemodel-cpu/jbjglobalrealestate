@@ -55,7 +55,7 @@ const PageNavigation = forwardRef<HTMLDivElement, Record<string, never>>((_, ref
       className={cn(
         "fixed bottom-24 z-[9995] flex flex-col gap-2",
         "pointer-events-auto",
-        isRTL ? "right-4" : "right-4"
+        isRTL ? "left-4" : "left-4"
       )}
       style={{ touchAction: "manipulation" }}
     >

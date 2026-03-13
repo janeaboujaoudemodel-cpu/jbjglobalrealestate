@@ -314,6 +314,24 @@ export default function StampProjectsDashboard() {
           </div>
         )}
       </div>
+
+      {/* Floating bulk action bar */}
+      {selectedIds.size > 0 && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-white rounded-2xl border-2 border-[hsl(var(--gold)/0.4)] shadow-2xl px-5 py-3 flex items-center gap-3">
+          <span className="text-sm font-semibold text-[hsl(var(--foreground))]">{selectedIds.size} selected</span>
+          <div className="w-px h-5 bg-[hsl(var(--border))]"/>
+          <Button size="sm" variant="outline" className="gap-1.5 text-xs" onClick={bulkDuplicate}>
+            <Copy size={12}/> Duplicate
+          </Button>
+          <Button size="sm" variant="outline" className="gap-1.5 text-xs text-destructive hover:bg-destructive/10 border-destructive/30"
+            disabled={bulkDeleting} onClick={bulkDelete}>
+            <Trash2 size={12}/> Delete
+          </Button>
+          <Button size="sm" variant="ghost" className="h-7 w-7 p-0" onClick={() => setSelectedIds(new Set())}>
+            <X size={14}/>
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
