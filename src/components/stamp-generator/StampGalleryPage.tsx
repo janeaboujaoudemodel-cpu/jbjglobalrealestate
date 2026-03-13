@@ -5,6 +5,7 @@
  * and multi-select batch export (up to 5 designs → single ZIP with per-design folders).
  */
 import React, { useState, useEffect, useRef, WheelEvent } from 'react';
+import DesignFavoriteButton from '@/components/toolkit/DesignFavoriteButton';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
