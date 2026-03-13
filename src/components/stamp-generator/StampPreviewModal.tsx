@@ -351,7 +351,7 @@ export function StampPreviewModal({
             {activeView === 'business-card' && (
               <div className="w-full max-w-xl">
                 <p className="text-xs text-[hsl(var(--muted-foreground))] text-center mb-4 uppercase tracking-wide">Business Card Preview</p>
-                <div className="relative rounded-2xl overflow-hidden shadow-2xl" style={{ aspectRatio: '1.75 / 1', background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' }}>
+                <div className="relative rounded-2xl overflow-hidden shadow-2xl" style={{ aspectRatio: '1.75 / 1', background: '#ffffff' }}>
                   <div className="absolute inset-0 p-7 flex items-stretch">
                     <div className={`flex-1 flex flex-col justify-between ${stampAlign === 'left' ? 'order-2 pl-6' : ''}`}>
                       <div>
