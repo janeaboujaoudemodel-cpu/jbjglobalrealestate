@@ -37,7 +37,8 @@ const INQUIRY_FORM_URL = "https://JBJ.ae/contact";
 const Favorites = () => {
   const { user } = useAuth();
   const [searchParams] = useSearchParams();
-  const defaultTab = searchParams.get("tab") === "shortlist" ? "shortlist" : "favorites";
+  const defaultTab = searchParams.get("tab") === "shortlist" ? "shortlist" : searchParams.get("tab") === "designs" ? "designs" : "favorites";
+  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
   const [selectedFavorites, setSelectedFavorites] = useState<string[]>([]);
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [shareEmail, setShareEmail] = useState("");
