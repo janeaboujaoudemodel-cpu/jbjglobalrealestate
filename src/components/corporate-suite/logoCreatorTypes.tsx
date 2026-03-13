@@ -56,12 +56,16 @@ export const COLOR_PRESETS = [
 ];
 
 export const FONTS = [
-  { value: "Georgia, serif",        label: "Serif",        desc: "Classic, premium" },
-  { value: "Arial, sans-serif",     label: "Sans-serif",   desc: "Modern, clean" },
-  { value: "Courier New, monospace",label: "Monospace",    desc: "Tech, coding" },
-  { value: "Palatino, serif",       label: "Script",       desc: "Creative, fashion" },
-  { value: "Georgia, serif",        label: "Editorial",    desc: "Magazine, bold" },
-  { value: "Arial, sans-serif",     label: "Corporate",    desc: "Structured, formal" },
+  { value: "Georgia, serif",              label: "Georgia",          desc: "Classic serif, premium feel" },
+  { value: "Arial, sans-serif",           label: "Arial",            desc: "Clean, universal sans-serif" },
+  { value: "'Times New Roman', serif",    label: "Times New Roman",  desc: "Traditional, editorial" },
+  { value: "Palatino, serif",             label: "Palatino",         desc: "Elegant, book-style serif" },
+  { value: "'Courier New', monospace",    label: "Courier New",      desc: "Technical, monospaced" },
+  { value: "Verdana, sans-serif",         label: "Verdana",          desc: "Wide, highly readable" },
+  { value: "'Trebuchet MS', sans-serif",  label: "Trebuchet MS",     desc: "Modern, geometric" },
+  { value: "Garamond, serif",             label: "Garamond",         desc: "Refined, literary" },
+  { value: "'Impact', sans-serif",        label: "Impact",           desc: "Bold, headline-style" },
+  { value: "'Lucida Console', monospace", label: "Lucida Console",   desc: "Sharp, technical" },
 ];
 
 export const EXPORT_SIZES: ExportSize[] = [
