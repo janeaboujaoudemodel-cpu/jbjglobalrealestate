@@ -17,7 +17,7 @@ import { VoiceInputButton } from "@/components/ui/VoiceInputButton";
 import {
   INDUSTRIES, STYLES, FONTS,
   type LogoData, type LogoType,
-  LogoPreview, placeholderSVG, recolorSVG, getContrastColors, triggerDownload, svgToPng,
+  LogoPreview, placeholderSVG, recolorSVG, refontSVG, getContrastColors, triggerDownload, svgToPng,
   COLOR_PRESETS,
 } from "./logoCreatorTypes";
 import LogoColorPicker from "./LogoColorPicker";
