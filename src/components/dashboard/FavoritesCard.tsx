@@ -43,7 +43,7 @@ const FavoritesCard = () => {
           My Favorites
         </CardTitle>
         <Badge variant="outline" className="border-gold/40 text-gold bg-gold/10">
-          {count} saved
+          {count + designCount} saved
         </Badge>
       </CardHeader>
       <CardContent>
