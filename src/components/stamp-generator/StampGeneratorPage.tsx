@@ -167,7 +167,17 @@ export default function StampGeneratorPage() {
   };
 
   // Left panel tab
-  const [leftTab, setLeftTab] = useState<'color' | 'fonts' | 'text' | 'centerart' | 'logo'>('color');
+  const [leftTab, setLeftTab] = useState<'color' | 'fonts' | 'text' | 'centerart' | 'logo' | 'mystamp'>('color');
+
+  // My Stamp tab state
+  const [uploadedStampUrl, setUploadedStampUrl] = useState<string>('');
+  const [uploadedSignatureUrl, setUploadedSignatureUrl] = useState<string>('');
+  const [signatureX, setSignatureX] = useState(50);
+  const [signatureY, setSignatureY] = useState(80);
+  const [signatureLocked, setSignatureLocked] = useState(false);
+  const [refinePrompt, setRefinePrompt] = useState('');
+  const [refiningImage, setRefiningImage] = useState(false);
+  const [showWelcomeBanner, setShowWelcomeBanner] = useState(true);
 
   // Center Art controls — logo persisted in localStorage
   const [localIconStyle, setLocalIconStyle] = useState<'NONE' | 'MONOGRAM' | 'UPLOADED_LOGO'>('MONOGRAM');
@@ -599,6 +609,7 @@ export default function StampGeneratorPage() {
                 { key: 'text' as const, icon: Type, label: 'Text' },
                 { key: 'centerart' as const, icon: Stamp, label: 'Art' },
                 { key: 'logo' as const, icon: Upload, label: 'Logo' },
+                { key: 'mystamp' as const, icon: Sparkles, label: 'My Stamp' },
               ]).map(t => (
                 <button key={t.key} onClick={() => setLeftTab(t.key)}
                   className={`flex-1 flex items-center justify-center gap-0.5 py-1 rounded-md text-[9px] font-medium transition-all ${leftTab === t.key ? 'bg-white shadow-sm text-[hsl(var(--foreground))]' : 'text-[hsl(var(--muted-foreground))]'}`}>
@@ -825,6 +836,115 @@ export default function StampGeneratorPage() {
                 </button>
               </div>
             )}
+
+            {/* ── My Stamp tab ── */}
+            {leftTab === 'mystamp' && (
+              <div className="space-y-3">
+                {/* Upload Own Stamp */}
+                <div className="space-y-1.5">
+                  <p className="text-[10px] font-semibold text-[hsl(var(--foreground))]">Upload Your Stamp</p>
+                  <p className="text-[8px] text-[hsl(var(--muted-foreground))]">Upload your existing stamp image (PNG/JPG/SVG)</p>
+                  <label className="flex flex-col items-center gap-1.5 p-3 rounded-lg border-2 border-dashed border-[hsl(var(--gold)/0.4)] cursor-pointer hover:border-[hsl(var(--gold))] transition-all">
+                    <Upload size={16} className="text-[hsl(var(--gold))]"/>
+                    <span className="text-[9px] text-[hsl(var(--muted-foreground))]">{uploadedStampUrl ? 'Change Stamp' : 'Upload Stamp Image'}</span>
+                    <input type="file" accept="image/*,.svg" className="hidden"
+                      onChange={e => { const f = e.target.files?.[0]; if (!f) return; const r = new FileReader(); r.onload = () => { setUploadedStampUrl(r.result as string); toast.success('Stamp uploaded'); }; r.readAsDataURL(f); }}/>
+                  </label>
+                  {uploadedStampUrl && (
+                    <div className="flex items-center gap-2">
+                      <img src={uploadedStampUrl} alt="Uploaded stamp" className="w-12 h-12 rounded object-contain border border-[hsl(var(--border))]"/>
+                      <button onClick={() => setUploadedStampUrl('')} className="text-[9px] text-destructive underline">Remove</button>
+                    </div>
+                  )}
+                </div>
+
+                <div className="border-t border-[hsl(var(--border))]"/>
+
+                {/* AI Refine */}
+                <div className="space-y-1.5">
+                  <p className="text-[10px] font-semibold text-[hsl(var(--foreground))]">✨ AI Refine Stamp</p>
+                  <p className="text-[8px] text-[hsl(var(--muted-foreground))]">Describe how you want to modify your stamp</p>
+                  <textarea value={refinePrompt} onChange={e => setRefinePrompt(e.target.value)}
+                    placeholder="e.g. Make the border thicker, change text to uppercase..."
+                    className="w-full px-2 py-1.5 rounded-lg border-2 border-[hsl(var(--gold)/0.4)] bg-white text-[10px] text-[hsl(var(--foreground))] focus:outline-none focus:border-[hsl(var(--gold))] min-h-[50px] resize-none"/>
+                  <Button size="sm" disabled={refiningImage || (!uploadedStampUrl && !selectedSvg)}
+                    className="w-full h-7 text-[10px] bg-gradient-to-r from-violet-600 to-purple-700 text-white gap-1"
+                    onClick={async () => {
+                      if (!refinePrompt.trim()) { toast.error('Enter a prompt'); return; }
+                      setRefiningImage(true);
+                      try {
+                        const imageToRefine = uploadedStampUrl || '';
+                        const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-stamp-generator`, {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session?.access_token}` },
+                          body: JSON.stringify({ action: 'refine-image', imageBase64: imageToRefine, prompt: refinePrompt, projectId }),
+                        });
+                        if (res.ok) {
+                          const json = await res.json();
+                          if (json.imageUrl) {
+                            setUploadedStampUrl(json.imageUrl);
+                            toast.success('Stamp refined by AI!');
+                            setRefinePrompt('');
+                          } else {
+                            toast.error(json.error || 'Refinement failed');
+                          }
+                        } else if (res.status === 429) {
+                          toast.error('Rate limit exceeded. Try again shortly.');
+                        } else if (res.status === 402) {
+                          toast.error('Credits exhausted. Please add funds.');
+                        } else {
+                          toast.error('Refinement failed');
+                        }
+                      } catch { toast.error('Connection error'); }
+                      setRefiningImage(false);
+                    }}>
+                    {refiningImage ? <><Loader2 size={10} className="animate-spin"/> Refining…</> : <><Wand2 size={10}/> Refine with AI</>}
+                  </Button>
+                </div>
+
+                <div className="border-t border-[hsl(var(--border))]"/>
+
+                {/* Signature Overlay */}
+                <div className="space-y-1.5">
+                  <p className="text-[10px] font-semibold text-[hsl(var(--foreground))]">Signature Overlay</p>
+                  <label className="flex flex-col items-center gap-1 p-2 rounded-lg border-2 border-dashed border-[hsl(var(--gold)/0.4)] cursor-pointer hover:border-[hsl(var(--gold))] transition-all">
+                    <Upload size={14} className="text-[hsl(var(--gold))]"/>
+                    <span className="text-[8px] text-[hsl(var(--muted-foreground))]">{uploadedSignatureUrl ? 'Change' : 'Upload Signature'}</span>
+                    <input type="file" accept="image/*" className="hidden"
+                      onChange={e => { const f = e.target.files?.[0]; if (!f) return; const r = new FileReader(); r.onload = () => { setUploadedSignatureUrl(r.result as string); toast.success('Signature uploaded'); }; r.readAsDataURL(f); }}/>
+                  </label>
+                  {uploadedSignatureUrl && (
+                    <>
+                      <div className="flex items-center gap-2">
+                        <img src={uploadedSignatureUrl} alt="Signature" className="h-8 object-contain border border-[hsl(var(--border))] rounded"/>
+                        <button onClick={() => setUploadedSignatureUrl('')} className="text-[9px] text-destructive underline">Remove</button>
+                      </div>
+                      <div className="space-y-1">
+                        <div className="flex items-center justify-between">
+                          <label className="text-[8px] text-[hsl(var(--muted-foreground))]">Position X</label>
+                          <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{signatureX}%</span>
+                        </div>
+                        <input type="range" min={0} max={100} value={signatureX} disabled={signatureLocked}
+                          onChange={e => setSignatureX(parseInt(e.target.value))} className="w-full accent-[hsl(var(--gold))]"/>
+                        <div className="flex items-center justify-between">
+                          <label className="text-[8px] text-[hsl(var(--muted-foreground))]">Position Y</label>
+                          <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{signatureY}%</span>
+                        </div>
+                        <input type="range" min={0} max={100} value={signatureY} disabled={signatureLocked}
+                          onChange={e => setSignatureY(parseInt(e.target.value))} className="w-full accent-[hsl(var(--gold))]"/>
+                      </div>
+                      <button onClick={() => setSignatureLocked(v => !v)}
+                        className={`w-full flex items-center gap-2 px-2 py-1.5 rounded-lg border-2 transition-all text-[9px] ${signatureLocked ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)]' : 'border-[hsl(var(--border))]'}`}>
+                        <div className={`w-3.5 h-3.5 rounded text-[7px] font-bold flex items-center justify-center ${signatureLocked ? 'bg-[hsl(var(--gold))] text-white' : 'bg-[hsl(var(--muted))]'}`}>
+                          {signatureLocked ? '🔒' : ''}
+                        </div>
+                        {signatureLocked ? 'Locked — Unlock to move' : 'Lock position'}
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -844,25 +964,47 @@ export default function StampGeneratorPage() {
                   </Badge>
                 )}
               </div>
-              <div className="flex items-center justify-center py-6 px-3 min-h-[320px] bg-[radial-gradient(circle_at_center,_hsl(var(--pearl-1))_0%,_white_70%)]">
+              {/* Welcome Banner */}
+              {showWelcomeBanner && !generating && (selectedSvg || allConcepts[0]?.svgSource) && (
+                <div className="mx-3 mt-2 mb-0 flex items-center gap-2 px-3 py-2 rounded-lg bg-gradient-to-r from-[hsl(var(--gold)/0.08)] to-[hsl(var(--champagne-1))] border border-[hsl(var(--gold)/0.2)]">
+                  <Sparkles size={12} className="text-[hsl(var(--gold))] flex-shrink-0"/>
+                  <p className="text-[9px] text-[hsl(var(--foreground))] flex-1">Your official stamp is ready — customize colors, text, upload your own, or refine with AI.</p>
+                  <button onClick={() => setShowWelcomeBanner(false)} className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]"><X size={10}/></button>
+                </div>
+              )}
+              <div className="relative flex items-center justify-center py-6 px-3 min-h-[320px] bg-[radial-gradient(circle_at_center,_hsl(var(--pearl-1))_0%,_white_70%)]">
                 {generating ? (
                   <div className="flex flex-col items-center gap-2 text-[hsl(var(--muted-foreground))]">
                     <Loader2 size={28} className="animate-spin text-[hsl(var(--gold))]"/>
                     <p className="text-[10px] font-medium">Generating…</p>
                   </div>
+                ) : uploadedStampUrl ? (
+                  <div className="relative">
+                    <img src={uploadedStampUrl} alt="Uploaded stamp" className="max-w-[320px] max-h-[320px] object-contain"/>
+                    {uploadedSignatureUrl && (
+                      <img src={uploadedSignatureUrl} alt="Signature" className="absolute h-10 object-contain pointer-events-none opacity-80"
+                        style={{ left: `${signatureX}%`, top: `${signatureY}%`, transform: 'translate(-50%, -50%)' }}/>
+                    )}
+                  </div>
                 ) : (selectedSvg || allConcepts[0]?.svgSource) ? (
-                  <StampSVGRenderer
-                    svgSource={selectedSvg || (svgOverrides[allConcepts[0]?.id] || allConcepts[0]?.svgSource) || ''}
-                    tintColor={primaryColor}
-                    secondaryColor={secondaryColor}
-                    accentColor={accentColor}
-                    fontFamily={fontFamily}
-                    fontWeight={fontBold ? 'bold' : 'normal'}
-                    fontStyle={fontItalic ? 'italic' : 'normal'}
-                    fontSize={manualFontSize}
-                    inkMode={inkMode}
-                    size={320}
-                  />
+                  <div className="relative">
+                    <StampSVGRenderer
+                      svgSource={selectedSvg || (svgOverrides[allConcepts[0]?.id] || allConcepts[0]?.svgSource) || ''}
+                      tintColor={primaryColor}
+                      secondaryColor={secondaryColor}
+                      accentColor={accentColor}
+                      fontFamily={fontFamily}
+                      fontWeight={fontBold ? 'bold' : 'normal'}
+                      fontStyle={fontItalic ? 'italic' : 'normal'}
+                      fontSize={manualFontSize}
+                      inkMode={inkMode}
+                      size={320}
+                    />
+                    {uploadedSignatureUrl && (
+                      <img src={uploadedSignatureUrl} alt="Signature" className="absolute h-10 object-contain pointer-events-none opacity-80"
+                        style={{ left: `${signatureX}%`, top: `${signatureY}%`, transform: 'translate(-50%, -50%)' }}/>
+                    )}
+                  </div>
                 ) : (
                   <div className="flex flex-col items-center gap-2 text-[hsl(var(--muted-foreground))]">
                     <Stamp size={32} className="opacity-20"/>

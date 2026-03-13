@@ -77,10 +77,11 @@ const OUTER_R_PCT = 0.46;     // outer ring radius
 const MIDDLE_R_PCT = 0.33;    // middle ring — wide premium gap from outer (~13%)
 const INNER_R_PCT = 0.26;     // inner ring — tighter gap from middle
 
-// ── Stroke widths (tapering hierarchy) ──
-const OUTER_STROKE = 6;       // boldest
+// ── Stroke widths (tapering hierarchy — ministry-level precision) ──
+const OUTER_STROKE = 4;       // boldest — clean, not chunky (matches real UAE ministry stamps)
 const MIDDLE_STROKE = 2.5;    // medium
 const INNER_STROKE = 1.2;     // thinnest
+const DECORATIVE_STROKE = 0.5; // thin decorative ring just inside outer ring
 
 // ── Safe zone ──
 const SAFE_ZONE = 5;          // minimum px between text and ring strokes
@@ -433,6 +434,10 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   const outerStrokeWidth = config.outerBorderWidth ?? OUTER_STROKE;
   const outerRingEl = renderOuterRing(cx, cy, outerR, priColor, bs, outerStrokeWidth);
 
+  // Decorative thin ring just inside outer ring (ministry double-line effect)
+  const decorativeR = outerR - outerStrokeWidth / 2 - 2;
+  const decorativeRingEl = `<circle cx="${cx}" cy="${cy}" r="${decorativeR}" fill="none" stroke="${priColor}" stroke-width="${DECORATIVE_STROKE}" opacity="0.5"/>`;
+
   const middleStrokeWidth = config.innerBorderWidth ?? MIDDLE_STROKE;
   const middleRingEl = `<circle cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${secColor}" stroke-width="${middleStrokeWidth}"/>`;
 
@@ -441,6 +446,8 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${S} ${S}" width="${S}" height="${S}">
     <!-- Outer ring (boldest — ${outerStrokeWidth}px) -->
     ${outerRingEl}
+    <!-- Decorative inner-outer ring (ministry double-line) -->
+    ${decorativeRingEl}
     <!-- Middle ring (medium — ${middleStrokeWidth}px) -->
     ${middleRingEl}
     <!-- Inner ring (thinnest — ${INNER_STROKE}px) -->
@@ -486,7 +493,7 @@ export function getOwnerDefaultConfig(): OfficialStampConfig {
     inkColor: INK_BLUE,
     showRegistration: false,
     borderStyle: 'DOUBLE',
-    outerBorderWidth: OUTER_STROKE,
+    outerBorderWidth: 4,
     innerBorderWidth: MIDDLE_STROKE,
     dividerStyle: 'diamond',
     centerMode: 'monogram',
