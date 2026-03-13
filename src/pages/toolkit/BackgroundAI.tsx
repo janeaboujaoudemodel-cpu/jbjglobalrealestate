@@ -45,12 +45,12 @@ const C = {
 
 // ── Background presets ──
 const BG_PRESETS = [
-  { id: 'transparent', label: 'Transparent', icon: '⬜', desc: 'Remove background completely' },
+  { id: 'transparent', label: 'Transparent', color: 'transparent', desc: 'Remove background completely' },
   { id: 'white', label: 'White', color: '#FFFFFF', desc: 'Clean white background' },
   { id: 'black', label: 'Black', color: '#000000', desc: 'Dramatic black background' },
   { id: 'navy', label: 'Navy', color: '#1E3A5F', desc: 'Professional navy blue' },
   { id: 'gray', label: 'Gray', color: '#6B7280', desc: 'Neutral gray background' },
-  { id: 'gradient-blue', label: 'Blue Grad', icon: '🔵', desc: 'Blue to indigo gradient' },
+  { id: 'gradient-blue', label: 'Blue Grad', color: 'linear-gradient(135deg, #3B82F6, #4F46E5)', desc: 'Blue to indigo gradient' },
 ];
 
 // ── AI scene prompts ──
