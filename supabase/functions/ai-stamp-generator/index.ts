@@ -29,6 +29,21 @@ const fontMap: Record<string, string> = {
 
 const arabicFont = 'Arial, "Noto Naskh Arabic", sans-serif';
 
+/** Business type → recommended style mapping */
+const BUSINESS_STYLE_MAP: Record<string, { theme: string; border: string; density: number }> = {
+  'Real Estate': { theme: 'LUXURY', border: 'RING', density: 3 },
+  'General Trading': { theme: 'CLASSIC', border: 'DOUBLE', density: 3 },
+  'Technology': { theme: 'MODERN', border: 'SINGLE', density: 2 },
+  'Consulting': { theme: 'CLASSIC', border: 'DOUBLE', density: 3 },
+  'Construction': { theme: 'BOLD', border: 'DOUBLE', density: 3 },
+  'Healthcare': { theme: 'MODERN', border: 'DOUBLE', density: 3 },
+  'Education': { theme: 'CLASSIC', border: 'DOUBLE', density: 3 },
+  'Food & Beverage': { theme: 'VINTAGE', border: 'ROPE', density: 2 },
+  'Tourism': { theme: 'LUXURY', border: 'RING', density: 2 },
+  'Finance': { theme: 'LUXURY', border: 'RING', density: 3 },
+  'Legal': { theme: 'CLASSIC', border: 'DOUBLE', density: 4 },
+};
+
 function autoFontSize(text: string, base: number, maxChars = 20): number {
   if (text.length <= maxChars) return base;
   if (text.length <= maxChars + 8) return Math.round(base * 0.85);
@@ -83,7 +98,6 @@ function monogram(cx: number, cy: number, text: string, font: string, size: numb
   return `<text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" font-family="${font}" font-size="${size}" font-weight="bold" fill="${color}">${text.toUpperCase().slice(0, 3)}</text>`;
 }
 
-/** Get border stroke attributes based on border_style */
 function borderAttrs(borderStyle: string): { dash: string; outerWidth: number; innerRing: boolean; innerDash: string; innerWidth: number } {
   switch (borderStyle) {
     case 'SINGLE': return { dash: 'none', outerWidth: 2.2, innerRing: false, innerDash: 'none', innerWidth: 0 };
@@ -104,7 +118,6 @@ function buildSVG(project: any, templateKey: string): string {
   const name = (project.company_name || "COMPANY NAME").toUpperCase().trim();
   const arabicName = (project.arabic_company_name || '').trim();
   
-  // Fixed: city + country combined
   const cityParts = [project.city_optional, project.country_optional].filter(Boolean);
   const city = (cityParts.join(', ') || "UAE").toUpperCase();
   const arabicCity = (project.arabic_city || '').trim();
@@ -126,10 +139,9 @@ function buildSVG(project: any, templateKey: string): string {
         ${bottomArcText('cp1b', cx, cy, ringR, city, font, 8, COLOR)}
         ${hasMono ? monogram(cx, cy - 8, mono, font, 44, COLOR) : ''}
         ${hasMono
-          ? `<text x="${cx}" y="${cy + 30}" text-anchor="middle" font-family="${font}" font-size="7" fill="${COLOR}" letter-spacing="2">OFFICIAL STAMP</text>`
+          ? ''
           : wrapText(name, cx, cy - 4, font, nameFontSize, COLOR, 1.5)
         }
-        ${!hasMono ? `<text x="${cx}" y="${cy + 22}" text-anchor="middle" font-family="${font}" font-size="7.5" fill="${COLOR}" letter-spacing="3">OFFICIAL STAMP</text>` : ''}
         ${regNo ? `<text x="${cx}" y="${cy + (hasMono ? 44 : 36)}" text-anchor="middle" font-family="${font}" font-size="6.5" fill="${COLOR}">${regNo}</text>` : ''}
         ${divider(cx, cy + (hasMono ? 16 : 8), COLOR, 28)}
       </svg>`;
@@ -173,8 +185,7 @@ function buildSVG(project: any, templateKey: string): string {
         <line x1="${x1 + 14}" y1="${y1 + 34}" x2="${x1 + rw * 2 - 14}" y2="${y1 + 34}" stroke="${COLOR}" stroke-width="0.7"/>
         ${wrapText(name, cx, cy, font, nameFontSize, COLOR, 2)}
         <line x1="${x1 + 14}" y1="${y1 + rh * 2 - 34}" x2="${x1 + rw * 2 - 14}" y2="${y1 + rh * 2 - 34}" stroke="${COLOR}" stroke-width="0.7"/>
-        <text x="${cx}" y="${y1 + rh * 2 - 18}" text-anchor="middle" font-family="${font}" font-size="7.5" fill="${COLOR}" letter-spacing="3">OFFICIAL STAMP</text>
-        ${regNo ? `<text x="${cx}" y="${y1 + rh * 2 - 8}" text-anchor="middle" font-family="${font}" font-size="6.5" fill="${COLOR}">${regNo}</text>` : ''}
+        ${regNo ? `<text x="${cx}" y="${y1 + rh * 2 - 12}" text-anchor="middle" font-family="${font}" font-size="6.5" fill="${COLOR}">${regNo}</text>` : ''}
       </svg>`;
     }
     case "vintage-ornate": {
@@ -186,7 +197,6 @@ function buildSVG(project: any, templateKey: string): string {
         ${ringText('cp5', cx, cy, ringR, `⬥  ${name}  ⬥  ${city}  ⬥`, font, 8, COLOR, '50%')}
         ${hasMono ? monogram(cx, cy - 6, mono, font, 40, COLOR) : wrapText(name, cx, cy - 6, font, nameFontSize, COLOR, 1.5)}
         ${divider(cx, cy + (hasMono ? 18 : 14), COLOR, 24)}
-        <text x="${cx}" y="${cy + (hasMono ? 30 : 26)}" text-anchor="middle" font-family="${font}" font-size="7" fill="${COLOR}" letter-spacing="4">SINCE 2010</text>
       </svg>`;
     }
     case "bilingual-official": {
@@ -204,14 +214,12 @@ function buildSVG(project: any, templateKey: string): string {
         <text x="${cx}" y="${cy + 20}" text-anchor="middle" font-family="${arabicFont}" font-size="${arFontSize}" font-weight="bold" fill="${COLOR}" direction="rtl" unicode-bidi="bidi-override">${displayArabic}</text>
         <text x="${cx}" y="${cy + 34}" text-anchor="middle" font-family="${arabicFont}" font-size="8" fill="${COLOR}" direction="rtl">${displayArabicCity}</text>
         ${regNo ? `<text x="${cx}" y="${cy + 52}" text-anchor="middle" font-family="${font}" font-size="6.5" fill="${COLOR}">${regNo}</text>` : ''}
-        <text x="${cx}" y="${cy - 52}" text-anchor="middle" font-family="${font}" font-size="7" fill="${COLOR}" letter-spacing="2">OFFICIAL STAMP</text>
       </svg>`;
     }
     case "geometric-modern": {
       const r = R - 6;
       const nameFontSize = autoFontSize(name, 10, 20);
       return `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
-        <!-- Border style applied -->
         <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${COLOR}" stroke-width="${ba.outerWidth}" stroke-dasharray="${ba.dash}"/>
         ${ba.innerRing ? `<circle cx="${cx}" cy="${cy}" r="${r - 6}" fill="none" stroke="${COLOR}" stroke-width="${ba.innerWidth}" stroke-dasharray="${ba.innerDash}"/>` : `<circle cx="${cx}" cy="${cy}" r="${r - 6}" fill="none" stroke="${COLOR}" stroke-width="0.5"/>`}
         ${hasMono
@@ -233,8 +241,6 @@ function buildSVG(project: any, templateKey: string): string {
         ${wrapText(name, cx, cy + (hasMono ? 18 : 0), font, nameFontSize, COLOR, 1.5)}
         <text x="${cx}" y="${cy + (hasMono ? 38 : 18)}" text-anchor="middle" font-family="${font}" font-size="7.5" fill="${COLOR}" letter-spacing="3">${city}</text>
         ${regNo ? `<text x="${cx}" y="${cy + (hasMono ? 52 : 32)}" text-anchor="middle" font-family="${font}" font-size="6.5" fill="${COLOR}">${regNo}</text>` : ''}
-        <text x="${cx}" y="${cy - s + 18}" text-anchor="middle" font-family="${font}" font-size="7" fill="${COLOR}" letter-spacing="3">OFFICIAL STAMP</text>
-        <line x1="${cx - s + 10}" y1="${cy - s + 24}" x2="${cx + s - 10}" y2="${cy - s + 24}" stroke="${COLOR}" stroke-width="0.7"/>
       </svg>`;
     }
     default:
@@ -258,7 +264,9 @@ serve(async (req) => {
   try {
     const authHeader = req.headers.get("Authorization");
     if (!authHeader?.startsWith("Bearer ")) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: corsHeaders });
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { 
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } 
+      });
     }
 
     const supabase = createClient(
@@ -267,13 +275,15 @@ serve(async (req) => {
       { global: { headers: { Authorization: authHeader } } }
     );
 
-    const token = authHeader.replace("Bearer ", "");
-    const { data: authData, error: authError } = await supabase.auth.getClaims(token);
-    if (authError || !authData?.claims) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: corsHeaders });
+    // Use getUser() instead of getClaims() for reliable auth
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { 
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } 
+      });
     }
 
-    const userId = authData.claims.sub;
+    const userId = user.id;
     const body = await req.json();
     const { action, project, projectId, instruction, currentSvg } = body;
 
@@ -297,7 +307,15 @@ serve(async (req) => {
         ];
       }
 
-      // AI ordering
+      // Business type → style suggestion enrichment
+      const businessType = project?.business_type || '';
+      const styleSuggestion = BUSINESS_STYLE_MAP[businessType];
+      let styleHint = '';
+      if (styleSuggestion) {
+        styleHint = ` Business type is "${businessType}" which works best with ${styleSuggestion.theme} theme and ${styleSuggestion.border} border.`;
+      }
+
+      // Smart ordering via AI
       if (LOVABLE_API_KEY) {
         try {
           const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
@@ -307,11 +325,12 @@ serve(async (req) => {
               model: "google/gemini-3-flash-preview",
               messages: [
                 { role: "system", content: `You are a stamp design expert. Order these template keys best to worst for the given project. Available: ${orderedTemplates.map(t => t.key).join(", ")}. Return ONLY JSON array like ["key1","key2",...] with ALL keys.` },
-                { role: "user", content: `Style: ${project.style_theme}, Shape: ${project.stamp_type}, Language: ${project.language_mode}, Border: ${project.border_style}, Typography: ${project.typography_style}` },
+                { role: "user", content: `Style: ${project.style_theme}, Shape: ${project.stamp_type}, Language: ${project.language_mode}, Border: ${project.border_style}, Typography: ${project.typography_style}.${styleHint}` },
               ],
               stream: false,
             }),
           });
+
           if (aiRes.ok) {
             const aiJson = await aiRes.json();
             const raw = aiJson.choices?.[0]?.message?.content || "";
@@ -321,8 +340,14 @@ serve(async (req) => {
               const reordered = ordered.map((k: string) => orderedTemplates.find(t => t.key === k)).filter(Boolean) as typeof orderedTemplates;
               if (reordered.length >= 4) orderedTemplates = reordered;
             }
+          } else if (aiRes.status === 429) {
+            console.warn("AI rate limited, using default template order");
+          } else if (aiRes.status === 402) {
+            console.warn("AI credits exhausted, using default template order");
           }
-        } catch (_) {}
+        } catch (e) {
+          console.error("AI ordering error:", e);
+        }
       }
 
       // Delete non-favorite existing designs for this project
@@ -343,7 +368,7 @@ serve(async (req) => {
           project_id: projectId,
           user_id: userId,
           design_version: 1,
-          ai_prompt: `${project.style_theme} ${project.stamp_type} ${project.border_style}`,
+          ai_prompt: `${project.style_theme} ${project.stamp_type} ${project.border_style}${businessType ? ` [${businessType}]` : ''}`,
           style_snapshot_json: project,
           svg_source: c.svgSource,
           template_key: c.templateKey,
@@ -352,13 +377,23 @@ serve(async (req) => {
         await supabase.from("stamp_designs").insert(inserts);
       }
 
-      return new Response(JSON.stringify({ concepts }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      return new Response(JSON.stringify({ 
+        concepts,
+        styleSuggestion: styleSuggestion ? {
+          businessType,
+          recommendedTheme: styleSuggestion.theme,
+          recommendedBorder: styleSuggestion.border,
+          recommendedDensity: styleSuggestion.density,
+        } : null,
+      }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    // ── REFINE action (AI Designer Chat) ─────────────────────────────────────
+    // ── REFINE action ─────────────────────────────────────────────────────────
     if (action === "refine") {
       if (!instruction) {
-        return new Response(JSON.stringify({ error: "Instruction required" }), { status: 400, headers: corsHeaders });
+        return new Response(JSON.stringify({ error: "Instruction required" }), { 
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } 
+        });
       }
 
       let refinedSvg = currentSvg || buildSVG(project, "classic-double");
@@ -399,13 +434,22 @@ Guidelines:
             const svgMatch = raw.match(/<svg[\s\S]*<\/svg>/i);
             if (svgMatch) {
               refinedSvg = svgMatch[0];
-              message = `AI Designer applied: "${instruction}"`;
+              message = `Applied: "${instruction}"`;
             }
+          } else if (aiRes.status === 429) {
+            return new Response(JSON.stringify({ error: "Rate limit exceeded. Please try again in a moment." }), {
+              status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
+            });
+          } else if (aiRes.status === 402) {
+            return new Response(JSON.stringify({ error: "Credits exhausted. Please add funds." }), {
+              status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
+            });
           }
-        } catch (_) {}
+        } catch (e) {
+          console.error("AI refine error:", e);
+        }
       }
 
-      // Save the refined design to DB
       let savedId = crypto.randomUUID();
       if (projectId) {
         const { data } = await supabase.from("stamp_designs").insert({
@@ -415,7 +459,7 @@ Guidelines:
           ai_prompt: instruction,
           style_snapshot_json: project,
           svg_source: refinedSvg,
-          template_key: "ai-refined",
+          template_key: "refined",
           is_favorite: false,
         }).select("id").single();
         if (data) savedId = data.id;
@@ -426,9 +470,13 @@ Guidelines:
       });
     }
 
-    return new Response(JSON.stringify({ error: "Unknown action" }), { status: 400, headers: corsHeaders });
+    return new Response(JSON.stringify({ error: "Unknown action" }), { 
+      status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } 
+    });
   } catch (err) {
-    console.error(err);
-    return new Response(JSON.stringify({ error: String(err) }), { status: 500, headers: corsHeaders });
+    console.error("stamp-generator error:", err);
+    return new Response(JSON.stringify({ error: err instanceof Error ? err.message : String(err) }), { 
+      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } 
+    });
   }
 });
