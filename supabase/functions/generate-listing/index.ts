@@ -121,8 +121,8 @@ const projectSchema = {
 
 // ========== BATCH PROCESSING: Fetch files from storage & process in groups ==========
 
-const BATCH_SIZE = 4;
-const AI_FETCH_TIMEOUT_MS = 55000; // 55s to stay within edge function limits
+const BATCH_SIZE = 6;
+const AI_FETCH_TIMEOUT_MS = 40000; // 40s — flash model is faster
 
 async function updateJobProgress(supabase: any, jobId: string, progress: string) {
   await supabase.from("ai_job_master").update({
