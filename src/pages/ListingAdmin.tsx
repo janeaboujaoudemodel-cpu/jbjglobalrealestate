@@ -752,7 +752,7 @@ const ListingAdmin = () => {
 
         {/* UNIFIED Data Ops View - All sync/extraction in one tabbed interface */}
         {activeView === 'data-ops' && (
-          <div className="container mx-auto px-4 py-6 space-y-6">
+          <div className="mx-auto px-2 py-6 space-y-6">
             {/* SOURCE COUNTS PANEL - Reelly Only (Provident removed) */}
             <SourceCountsPanel />
             

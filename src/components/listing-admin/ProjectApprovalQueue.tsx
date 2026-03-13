@@ -1300,12 +1300,16 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                 </DialogTitle>
               </DialogHeader>
 
-              {/* Image Gallery */}
-              {selectedImport.images.length > 0 && (
+              {/* Image Gallery — filter broken URLs */}
+              {(() => {
+                const excludePattern = /(brochure|payment[-_]?plan|floor[-_]?plan|master[-_]?plan|pdf|document|General_Brochure)/i;
+                const validImages = selectedImport.images.filter(i => !!i?.url && !excludePattern.test(i.url));
+                const safeIndex = Math.min(currentImageIndex, Math.max(0, validImages.length - 1));
+                return validImages.length > 0 ? (
                 <div className="relative">
                   <div className="aspect-video bg-zinc-100 rounded-lg overflow-hidden">
                     <img
-                      src={selectedImport.images[currentImageIndex]?.url}
+                      src={validImages[safeIndex]?.url}
                       alt={selectedImport.name}
                       className="w-full h-full object-cover"
                       referrerPolicy="no-referrer"
