@@ -73,9 +73,9 @@ const C_SEC = '#2a3a5c';
 const C_ACC = '#8b6914';
 
 // ── Ring geometry constants (as % of stamp radius) ──
-const OUTER_R_PCT = 0.47;     // outer ring radius (widened)
-const MIDDLE_R_PCT = 0.35;    // middle ring — wider premium gap from outer
-const INNER_R_PCT = 0.24;     // inner ring — refined gap from middle
+const OUTER_R_PCT = 0.46;     // outer ring radius
+const MIDDLE_R_PCT = 0.33;    // middle ring — wide premium gap from outer (~13%)
+const INNER_R_PCT = 0.22;     // inner ring — refined gap from middle
 
 // ── Stroke widths (tapering hierarchy) ──
 const OUTER_STROKE = 6;       // boldest
@@ -83,8 +83,8 @@ const MIDDLE_STROKE = 2.5;    // medium
 const INNER_STROKE = 1.2;     // thinnest
 
 // ── Safe zone ──
-const SAFE_ZONE = 7;          // minimum px between text and ring strokes
-const ARC_SPREAD_LIMIT = 0.70; // max fraction of semicircle for text (widened)
+const SAFE_ZONE = 5;          // minimum px between text and ring strokes
+const ARC_SPREAD_LIMIT = 0.72; // max fraction of semicircle for text
 
 function fitFontSize(text: string, baseSize: number, maxArcLen: number, charW = 0.6): number {
   if (!text) return baseSize;
@@ -153,41 +153,24 @@ function renderSeparators(cx: number, cy: number, r: number, style: SeparatorSty
 }
 
 /**
- * Bottom arc text — characters placed individually along the BOTTOM half of a circle.
- * Each character is rotated so it reads naturally left-to-right when viewed from outside.
+ * Bottom arc text using SVG textPath — text follows the BOTTOM half of a circle.
+ * Path sweeps from right to left through the bottom, text reads left-to-right.
  */
-function renderBottomArcText(
+function renderBottomArcTextPath(
   text: string, cx: number, cy: number, r: number,
   fontSize: number, font: string, ink: string, letterSpacing: number,
-  isArabic: boolean, fontWeight = '800'
+  isArabic: boolean, pathId: string, fontWeight = '800'
 ): string {
   if (!text) return '';
-  const chars = text.split('');
-  const n = chars.length;
-  if (n === 0) return '';
-
-  // Bottom arc: characters placed along the lower semicircle
-  // In SVG coords, 270° = bottom. We spread from left-bottom to right-bottom.
-  // Characters read left-to-right naturally.
-  const spreadDeg = Math.min(160, n * 8);
-  const startDeg = 270 - spreadDeg / 2;  // e.g. 190° (left side, going clockwise)
-  const stepDeg = n > 1 ? spreadDeg / (n - 1) : 0;
-
-  let result = '';
-  for (let i = 0; i < n; i++) {
-    const deg = n === 1 ? 270 : startDeg + i * stepDeg;
-    const rad = (deg * Math.PI) / 180;
-    const x = cx + r * Math.cos(rad);
-    const y = cy + r * Math.sin(rad);
-    // Characters on bottom arc face outward: rotate by deg - 90
-    // so at 270° (bottom) character is upright
-    const rotation = deg - 90;
-    result += `<text x="${x.toFixed(2)}" y="${y.toFixed(2)}" text-anchor="middle" dominant-baseline="central"
-      font-family="${font}" font-size="${fontSize}" fill="${ink}" font-weight="${fontWeight}"
-      letter-spacing="${letterSpacing}"
-      transform="rotate(${rotation.toFixed(2)}, ${x.toFixed(2)}, ${y.toFixed(2)})">${chars[i]}</text>\n`;
-  }
-  return result;
+  // Bottom arc path: from (cx+r, cy) sweeping clockwise through bottom to (cx-r, cy)
+  const arcPath = `M ${cx + r} ${cy} A ${r} ${r} 0 1 1 ${cx - r} ${cy}`;
+  return `
+    <defs><path id="${pathId}" d="${arcPath}"/></defs>
+    <text font-family="${font}" font-size="${fontSize}" fill="${ink}" 
+      letter-spacing="${letterSpacing}" font-weight="${fontWeight}">
+      <textPath href="#${pathId}" startOffset="50%" text-anchor="middle">${text}</textPath>
+    </text>
+  `;
 }
 
 /**
@@ -312,10 +295,10 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
     topIsArabic ? 1 : 2.5, topIsArabic, 'top-arc'
   );
 
-  const bottomArcContent = renderBottomArcText(
+  const bottomArcContent = renderBottomArcTextPath(
     bottomText || (bottomIsArabic ? 'اسم الشركة' : 'COMPANY NAME'),
     cx, cy, clampedTextArcR, bottomFontSize, bottomFont, priColor,
-    bottomIsArabic ? 1 : 4, bottomIsArabic
+    bottomIsArabic ? 1 : 4, bottomIsArabic, 'bottom-arc'
   );
 
   // ── Location text — BOTH Arabic and English as arcs ──
@@ -331,8 +314,8 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
     const locTopArc = `M ${cx - clampedLocTextR} ${cy} A ${clampedLocTextR} ${clampedLocTextR} 0 1 1 ${cx + clampedLocTextR} ${cy}`;
     
     // Arabic location on BOTTOM arc
-    const locArContent = renderBottomArcText(
-      locAr, cx, cy, clampedLocTextR, locArFontSize, ARABIC_FONT, secColor, 1, true, '600'
+    const locArContent = renderBottomArcTextPath(
+      locAr, cx, cy, clampedLocTextR, locArFontSize, ARABIC_FONT, secColor, 1, true, 'loc-bottom', '600'
     );
 
     // English location on TOP
