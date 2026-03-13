@@ -51,7 +51,7 @@ import { ExtractionJobsPanel } from "@/components/listing-admin/ExtractionJobsPa
 import SyncDashboard from "@/components/listing-admin/SyncDashboard";
 import { ReellyImportPanel } from "@/components/listing-admin/ReellyImportPanel";
 import { SourceCountsPanel } from "@/components/listing-admin/SourceCountsPanel";
-import { EmergencyMirrorPanel } from "@/components/listing-admin/EmergencyMirrorPanel";
+// EmergencyMirrorPanel removed — Mirror tab dropped per user request
 import { EnrichmentCenter } from "@/components/listing-admin/EnrichmentCenter";
 import { RefreshCw, Globe, Check, AlertTriangle, Zap } from "lucide-react";
 import { ProjectPreviewModal } from "@/components/listing-admin/ProjectPreviewModal";
