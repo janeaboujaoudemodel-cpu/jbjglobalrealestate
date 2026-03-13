@@ -73,9 +73,9 @@ const C_SEC = '#2a3a5c';
 const C_ACC = '#8b6914';
 
 // ── Ring geometry constants (as % of stamp radius) ──
-const OUTER_R_PCT = 0.47;     // outer ring radius (widened)
-const MIDDLE_R_PCT = 0.35;    // middle ring — wider premium gap from outer
-const INNER_R_PCT = 0.24;     // inner ring — refined gap from middle
+const OUTER_R_PCT = 0.46;     // outer ring radius
+const MIDDLE_R_PCT = 0.33;    // middle ring — wide premium gap from outer (~13%)
+const INNER_R_PCT = 0.22;     // inner ring — refined gap from middle
 
 // ── Stroke widths (tapering hierarchy) ──
 const OUTER_STROKE = 6;       // boldest
@@ -83,8 +83,8 @@ const MIDDLE_STROKE = 2.5;    // medium
 const INNER_STROKE = 1.2;     // thinnest
 
 // ── Safe zone ──
-const SAFE_ZONE = 7;          // minimum px between text and ring strokes
-const ARC_SPREAD_LIMIT = 0.70; // max fraction of semicircle for text (widened)
+const SAFE_ZONE = 5;          // minimum px between text and ring strokes
+const ARC_SPREAD_LIMIT = 0.72; // max fraction of semicircle for text
 
 function fitFontSize(text: string, baseSize: number, maxArcLen: number, charW = 0.6): number {
   if (!text) return baseSize;
