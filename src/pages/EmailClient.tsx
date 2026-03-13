@@ -631,7 +631,7 @@ const EmailClient = () => {
               <div className="mt-8 p-4 rounded-xl border-2 border-[#C9A84C]/20 bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6]">
                 <div className="flex items-center gap-2 mb-3">
                   <Sparkles className="w-4 h-4 text-[#C9A84C]" />
-                  <span className="text-sm font-semibold text-black">Amanda Clarke — AI Assistant</span>
+                  <span className="text-sm font-semibold text-black">Amanda Clarke — Executive Assistant</span>
                   <Badge className="bg-[#C9A84C]/15 text-[#C9A84C] border-[#C9A84C]/30 text-[9px]">Auto</Badge>
                 </div>
                 

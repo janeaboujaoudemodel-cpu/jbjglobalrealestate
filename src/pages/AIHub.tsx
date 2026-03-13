@@ -1045,7 +1045,7 @@ const AIHub = () => {
                   )}
                 </h2>
                 <p className="text-zinc-600 mb-6 max-w-lg mx-auto">
-                  30+ free AI tools for property analysis, corporate documents, creative design, and productivity.
+                  30+ free tools for property analysis, corporate documents, creative design, and productivity.
                 </p>
                 {user ? (
                   <button 
