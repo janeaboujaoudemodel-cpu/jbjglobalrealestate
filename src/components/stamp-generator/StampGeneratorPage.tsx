@@ -1091,11 +1091,7 @@ function ConceptCard({
   const isSelected = selectedId === concept.id;
   const isFav = concept.isFavorite;
   const displaySvg = svgOverride || concept.svgSource;
-
-  // Detect stamp shape for frame
-  const svgStr = svgOverride || concept.svgSource;
-  const isRectShape = svgStr.includes('<rect') && !svgStr.match(/<circle[^>]*r="(9|10|11)/);
-  const displaySvg = svgStr;
+  const isRectShape = displaySvg.includes('<rect') && !displaySvg.match(/<circle[^>]*r="(9|10|11)/);
 
   return (
     <div
