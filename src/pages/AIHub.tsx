@@ -48,7 +48,19 @@ import {
   Newspaper,
   TrendingUp,
   MapPin,
-  UserCheck
+  UserCheck,
+  Play,
+  Mic,
+  FileImage,
+  Languages,
+  Wand2,
+  MessageSquare,
+  ClipboardList,
+  Scale,
+  PenTool,
+  Mail,
+  Building2,
+  ScanLine,
 } from "lucide-react";
 
 
@@ -368,7 +380,47 @@ const productivityTools = [
   },
 ];
 
-// SUPPORT & OPERATIONS - Human Personas (shown in Broker Hub preview)
+// ── MERGED FROM ROYAL TOOLS REGISTRY (deduplicated) ──
+const mediaAndCreativeTools = [
+  { id: "ai-video-studio", title: "JBJ Creative Video Suite", description: "Professional video editor with multi-track timeline, AI captions, voiceover, and effects.", icon: Play, link: "/toolkit/ai-video-studio", category: "design" as ToolCategory },
+  { id: "video-resize-pack", title: "JBJ Video Resize + Smart Reframe", description: "Resize videos for any social platform with AI-powered subject tracking.", icon: Video, link: "/toolkit/video-resize-pack", category: "design" as ToolCategory },
+  { id: "voice-studio", title: "JBJ Voice Studio", description: "AI voice generation, text-to-speech with multiple voices and languages.", icon: Mic, link: "/toolkit/voice-studio", category: "design" as ToolCategory },
+  { id: "pdf-from-photos", title: "JBJ Photo → PDF Generator", description: "Convert photos to professional PDFs with custom layouts and title pages.", icon: FileText, link: "/toolkit/pdf-from-photos", category: "design" as ToolCategory },
+  { id: "image-resize", title: "JBJ Image Resizer + Social Sizes", description: "Resize images for Instagram, Facebook, LinkedIn with preset dimensions.", icon: FileImage, link: "/toolkit/image-resize", category: "design" as ToolCategory },
+  { id: "captions-translate", title: "JBJ Captions & Translation", description: "Auto-transcribe video audio and translate captions to 100+ languages.", icon: Languages, link: "/toolkit/captions-translate", category: "design" as ToolCategory },
+  { id: "background-ai", title: "JBJ AI Background Remover", description: "Remove or replace backgrounds from photos instantly using AI.", icon: Wand2, link: "/toolkit/background-ai", category: "design" as ToolCategory },
+  { id: "beauty-filters", title: "JBJ Beauty Filters", description: "Apply professional beauty enhancements and filters to photos.", icon: Sparkles, link: "/toolkit/beauty-filters", category: "design" as ToolCategory },
+  { id: "virtual-staging-ai", title: "JBJ AI Virtual Staging", description: "Virtually stage empty properties with AI-generated furniture.", icon: Building2, link: "/virtual-staging-ai", category: "design" as ToolCategory },
+];
+
+const aiSalesTools = [
+  { id: "ai-followup-scheduler", title: "JBJ AI Follow-up Scheduler", description: "Smart follow-up scheduling based on lead behavior.", icon: Calendar, link: "/ai-followup-scheduler", category: "marketing" as ToolCategory },
+  { id: "ai-objection-handler", title: "JBJ AI Objection Handler", description: "Get AI-suggested responses to common objections.", icon: MessageSquare, link: "/ai-objection-handler", category: "marketing" as ToolCategory },
+  { id: "ai-client-matcher", title: "JBJ AI Client Matcher", description: "Match clients to properties using AI preferences analysis.", icon: Users, link: "/ai-client-matcher", category: "marketing" as ToolCategory },
+];
+
+const aiReportTools = [
+  { id: "ai-market-report", title: "JBJ AI Market Report", description: "Generate comprehensive market reports with AI analysis.", icon: BarChart3, link: "/ai-market-report", category: "property" as ToolCategory },
+  { id: "ai-competitor-analysis", title: "JBJ AI Competitor Analysis", description: "Analyze competitor listings and pricing strategies.", icon: TrendingUp, link: "/ai-competitor-analysis", category: "property" as ToolCategory },
+  { id: "ai-roi-calculator", title: "JBJ AI ROI Calculator", description: "Calculate investment returns with AI market predictions.", icon: Calculator, link: "/ai-roi-calculator", category: "property" as ToolCategory },
+  { id: "ai-investment-report", title: "JBJ AI Investment Report", description: "Generate detailed investment analysis reports.", icon: FileText, link: "/ai-investment-report", category: "property" as ToolCategory },
+];
+
+const aiCommTools = [
+  { id: "ai-meeting-summarizer", title: "JBJ AI Meeting Summarizer", description: "Summarize meetings and extract action items automatically.", icon: ClipboardList, link: "/ai-meeting-summarizer", category: "productivity" as ToolCategory },
+  { id: "ai-translation-hub", title: "JBJ AI Translation Hub", description: "Translate communications to any language instantly.", icon: Globe, link: "/ai-translation-hub", category: "productivity" as ToolCategory },
+  { id: "ai-video-tour-script", title: "JBJ AI Video Tour Script", description: "Generate professional video tour scripts for properties.", icon: Video, link: "/ai-video-tour-script", category: "productivity" as ToolCategory },
+  { id: "ai-email-generator", title: "JBJ AI Email Generator", description: "Generate professional emails for any occasion.", icon: Mail, link: "/ai-email-generator", category: "productivity" as ToolCategory },
+];
+
+const aiContentTools = [
+  { id: "ai-social-media", title: "JBJ AI Social Media", description: "Generate engaging social media content for properties.", icon: PenTool, link: "/ai-social-media", category: "marketing" as ToolCategory },
+  { id: "ai-description-writer", title: "JBJ AI Description Writer", description: "Write compelling property descriptions automatically.", icon: FileText, link: "/ai-description-writer", category: "marketing" as ToolCategory },
+  { id: "ai-contract-reviewer", title: "JBJ AI Contract Reviewer", description: "Review contracts and highlight important clauses.", icon: Scale, link: "/ai-contract-reviewer", category: "corporate" as ToolCategory },
+  { id: "ai-document-generator", title: "JBJ AI Document Generator", description: "Generate professional documents from templates.", icon: FileSignature, link: "/ai-document-generator", category: "corporate" as ToolCategory },
+];
+
+
 // These are human support roles, NOT AI tools - moved to Support/Operations section
 const supportOperationsTools = [
   {
@@ -463,7 +515,7 @@ const AIHub = () => {
   const [toolFilter, setToolFilter] = useState<ToolCategory | 'all'>('all');
 
   // Combine all tools
-  const allTools = [...investorTools, ...productivityTools];
+  const allTools = [...investorTools, ...productivityTools, ...mediaAndCreativeTools, ...aiSalesTools, ...aiReportTools, ...aiCommTools, ...aiContentTools];
 
   // Filter tools by search and category
   const filteredTools = allTools.filter(tool => {

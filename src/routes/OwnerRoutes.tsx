@@ -2,7 +2,7 @@
  * Owner Command Center routes — dedicated shell with sidebar
  */
 import React, { lazy, Suspense } from "react";
-import { Route } from "react-router-dom";
+import { Route, Navigate } from "react-router-dom";
 import OwnerGuard from "@/components/OwnerGuard";
 import ListingAdminGuard from "@/components/ListingAdminGuard";
 import PageLoader from "@/components/PageLoader";
@@ -35,7 +35,7 @@ const AdminLeads = lazy(() => import("@/pages/AdminLeads"));
 const MarketingHub = lazy(() => import("@/pages/admin/MarketingHub"));
 const JBJAnalyticsDashboard = lazy(() => import("@/pages/JBJAnalyticsDashboard"));
 const FoundersAssistant = lazy(() => import("@/pages/FoundersAssistant"));
-const RoyalToolsHub = lazy(() => import("@/pages/toolkit/RoyalToolsHub"));
+// RoyalToolsHub removed — /owner/toolkit now redirects to /ai-hub
 const Automations = lazy(() => import("@/pages/Automations"));
 const Studio = lazy(() => import("@/pages/Studio"));
 const StudioEditor = lazy(() => import("@/pages/StudioEditor"));
@@ -87,7 +87,7 @@ export const OwnerRoutes = () => (
     } />
     <Route path="founder-assistant" element={<FoundersAssistant />} />
     <Route path="recommendations" element={<GlobalRecommendationsHub />} />
-    <Route path="toolkit" element={<RoyalToolsHub />} />
+    <Route path="toolkit" element={<Navigate to="/ai-hub" replace />} />
     <Route path="automations" element={<Automations />} />
     <Route path="studio" element={<Studio />} />
     <Route path="studio/editor/:projectId" element={<StudioEditor />} />

@@ -21,7 +21,8 @@ import {
   Pencil, Reply, ReplyAll, Forward, MoreVertical, Paperclip,
   RefreshCw, Mail, Building2, User, Sparkles, CheckCheck,
   MailOpen, ChevronLeft, ChevronRight, Shield, UserCircle,
-  Headphones, Phone, Megaphone, Stamp, Signature, Zap
+  Headphones, Phone, Megaphone, Stamp, Signature, Zap, MessageSquare,
+  Calendar
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -104,6 +105,8 @@ const EmailClient = () => {
   const [newEmail, setNewEmail] = useState({ to: "", subject: "", body: "" });
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [currentPage, setCurrentPage] = useState(1);
+  const [approvePreviewOpen, setApprovePreviewOpen] = useState(false);
+  const [alsoNotifyChat, setAlsoNotifyChat] = useState(false);
   const emailsPerPage = 20;
 
   const folders = [
@@ -284,7 +287,7 @@ const EmailClient = () => {
                   <p className="text-[10px] text-black/40">{currentSender.title} · {currentSender.email}</p>
                 </div>
 
-                <div className="flex justify-between">
+                  <div className="flex justify-between">
                   <div className="flex gap-2">
                     <Button variant="ghost" size="sm" className="text-black/60 hover:bg-[#C9A84C]/10">
                       <Paperclip className="w-4 h-4 mr-1" /> Attach
@@ -298,10 +301,82 @@ const EmailClient = () => {
                   </div>
                   <div className="flex gap-2">
                     <Button variant="outline" onClick={() => setComposeOpen(false)} className="border-[#C9A84C]/30">Cancel</Button>
-                    <Button onClick={sendEmail} className="bg-gradient-to-r from-[#C9A84C] to-[#B8973F] hover:from-[#B8973F] hover:to-[#A78636] text-white">
-                      <Send className="w-4 h-4 mr-2" /> Send
+                    <Button onClick={() => setApprovePreviewOpen(true)} className="bg-gradient-to-r from-[#C9A84C] to-[#B8973F] hover:from-[#B8973F] hover:to-[#A78636] text-white">
+                      <CheckCheck className="w-4 h-4 mr-2" /> Preview & Send
                     </Button>
                   </div>
+                </div>
+
+                {/* Also notify in chat toggle — show if recipient might be internal */}
+                <div className="flex items-center justify-between bg-[#FDFBF7] border border-[#C9A84C]/20 rounded-lg px-3 py-2">
+                  <div className="flex items-center gap-2">
+                    <MessageSquare className="w-4 h-4 text-[#C9A84C]" />
+                    <span className="text-sm text-black">Also notify in Team Chat</span>
+                    <span className="text-[10px] text-black/40">(if internal user)</span>
+                  </div>
+                  <Switch checked={alsoNotifyChat} onCheckedChange={setAlsoNotifyChat} />
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+
+          {/* ── Approve & Send Confirmation Modal ── */}
+          <Dialog open={approvePreviewOpen} onOpenChange={setApprovePreviewOpen}>
+            <DialogContent className="bg-white border-2 border-[#C9A84C]/30 max-w-3xl max-h-[85vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle className="text-black flex items-center gap-2">
+                  <CheckCheck className="w-5 h-5 text-[#C9A84C]" />
+                  Approve & Send — Final Preview
+                </DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                {/* Send Method Badge */}
+                <div className="flex items-center gap-3">
+                  <Badge className={cn(
+                    "text-xs px-2 py-0.5",
+                    sendViaResend ? "bg-emerald-100 text-emerald-700 border-emerald-300" : "bg-zinc-100 text-zinc-600 border-zinc-300"
+                  )}>
+                    {sendViaResend ? "⚡ Resend API" : "📤 Normal Send"}
+                  </Badge>
+                  {alsoNotifyChat && (
+                    <Badge className="bg-blue-100 text-blue-700 border-blue-300 text-xs px-2 py-0.5">
+                      💬 + Team Chat Notification
+                    </Badge>
+                  )}
+                </div>
+
+                {/* Full email preview */}
+                <div className="border-2 border-[#C9A84C]/20 rounded-xl overflow-hidden">
+                  <div className="bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6] px-6 py-4 border-b border-[#C9A84C]/15">
+                    <p className="text-sm text-black/60">From: <strong className="text-black">{currentSender.name}</strong> &lt;{currentSender.email}&gt;</p>
+                    <p className="text-sm text-black/60">To: <strong className="text-black">{newEmail.to}</strong></p>
+                    <p className="text-sm text-black/60">Subject: <strong className="text-black">{newEmail.subject}</strong></p>
+                  </div>
+                  <div className="px-6 py-5 bg-white">
+                    <div className="whitespace-pre-wrap text-black leading-relaxed min-h-[120px]">
+                      {newEmail.body}
+                    </div>
+                  </div>
+                  {/* Signature Block */}
+                  <div className="px-6 py-4 bg-[#FDFBF7] border-t border-[#C9A84C]/15">
+                    <p className="text-sm text-black/70">Best regards,</p>
+                    <p className="text-sm font-semibold text-black mt-1">{currentSender.name}</p>
+                    <p className="text-xs text-black/50">{currentSender.title}</p>
+                    {currentSender.id !== "personal" && (
+                      <p className="text-xs text-black/50">JBJ Global Real Estate</p>
+                    )}
+                    <p className="text-xs text-[#C9A84C] mt-0.5">{currentSender.email}</p>
+                  </div>
+                </div>
+
+                <div className="flex justify-end gap-3 pt-2">
+                  <Button variant="outline" onClick={() => setApprovePreviewOpen(false)} className="border-[#C9A84C]/30">Back to Edit</Button>
+                  <Button
+                    onClick={() => { setApprovePreviewOpen(false); sendEmail(); }}
+                    className="bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white px-6"
+                  >
+                    <Send className="w-4 h-4 mr-2" /> Approve & Send
+                  </Button>
                 </div>
               </div>
             </DialogContent>
@@ -490,25 +565,54 @@ const EmailClient = () => {
                 {selectedEmail.body}
               </div>
 
-              {/* Amanda Suggestions Panel */}
+              {/* Amanda AI Panel — Bilingual Summaries & Actions */}
               <div className="mt-8 p-4 rounded-xl border-2 border-[#C9A84C]/20 bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6]">
                 <div className="flex items-center gap-2 mb-3">
                   <Sparkles className="w-4 h-4 text-[#C9A84C]" />
-                  <span className="text-sm font-semibold text-black">Amanda's Suggestions</span>
+                  <span className="text-sm font-semibold text-black">Amanda Clarke — AI Assistant</span>
+                  <Badge className="bg-[#C9A84C]/15 text-[#C9A84C] border-[#C9A84C]/30 text-[9px]">Auto</Badge>
                 </div>
-                <div className="space-y-2">
-                  <button className="w-full text-left text-sm px-3 py-2 rounded-lg bg-white/60 border border-[#C9A84C]/20 hover:border-[#C9A84C]/40 transition-colors text-black">
-                    Reply: "Thanks for reaching out. I've reviewed the details and would like to schedule a follow-up…"
-                  </button>
-                  <button className="w-full text-left text-sm px-3 py-2 rounded-lg bg-white/60 border border-[#C9A84C]/20 hover:border-[#C9A84C]/40 transition-colors text-black">
-                    Summarize this thread
-                  </button>
-                  <button className="w-full text-left text-sm px-3 py-2 rounded-lg bg-white/60 border border-[#C9A84C]/20 hover:border-[#C9A84C]/40 transition-colors text-black">
-                    Create task from this email
-                  </button>
-                  <button className="w-full text-left text-sm px-3 py-2 rounded-lg bg-white/60 border border-[#C9A84C]/20 hover:border-[#C9A84C]/40 transition-colors text-black">
-                    Add to calendar
-                  </button>
+                
+                {/* Summary EN/AR */}
+                <div className="grid grid-cols-2 gap-3 mb-3">
+                  <div className="bg-white/70 rounded-lg border border-[#C9A84C]/15 p-3">
+                    <p className="text-[10px] font-semibold text-black/40 uppercase tracking-wider mb-1">Summary (EN)</p>
+                    <p className="text-xs text-black/70 leading-relaxed">Sender requesting a meeting to discuss partnership terms. Mentions Q2 schedule and availability on two dates. Requires confirmation.</p>
+                  </div>
+                  <div className="bg-white/70 rounded-lg border border-[#C9A84C]/15 p-3" dir="rtl">
+                    <p className="text-[10px] font-semibold text-black/40 uppercase tracking-wider mb-1 text-right">ملخص (AR)</p>
+                    <p className="text-xs text-black/70 leading-relaxed text-right">المرسل يطلب اجتماعاً لمناقشة شروط الشراكة. يذكر جدول الربع الثاني وتوفره في تاريخين. يتطلب تأكيداً.</p>
+                  </div>
+                </div>
+
+                {/* Suggested Reply */}
+                <div className="bg-white/70 rounded-lg border border-[#C9A84C]/15 p-3 mb-3">
+                  <p className="text-[10px] font-semibold text-black/40 uppercase tracking-wider mb-1">Suggested Reply</p>
+                  <p className="text-xs text-black/70 leading-relaxed">"Thank you for reaching out. I've reviewed the details and would be happy to schedule a meeting. Please confirm the preferred date so I can block the time."</p>
+                  <div className="flex gap-2 mt-2">
+                    <Button variant="outline" size="sm" className="h-7 text-[10px] border-[#C9A84C]/30 text-[#C9A84C]">
+                      <Reply className="w-3 h-3 mr-1" /> Use as Reply
+                    </Button>
+                    <Button variant="outline" size="sm" className="h-7 text-[10px] border-[#C9A84C]/30 text-black/60">
+                      Edit Draft
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Quick Actions */}
+                <div className="flex flex-wrap gap-2">
+                  <Button variant="outline" size="sm" className="h-7 text-[10px] border-[#C9A84C]/20 text-black/60 hover:bg-[#C9A84C]/10">
+                    <CheckCheck className="w-3 h-3 mr-1" /> Create Task
+                  </Button>
+                  <Button variant="outline" size="sm" className="h-7 text-[10px] border-[#C9A84C]/20 text-black/60 hover:bg-[#C9A84C]/10">
+                    <Calendar className="w-3 h-3 mr-1" /> Add to Calendar
+                  </Button>
+                  <Button variant="outline" size="sm" className="h-7 text-[10px] border-[#C9A84C]/20 text-black/60 hover:bg-[#C9A84C]/10">
+                    <Star className="w-3 h-3 mr-1" /> Set Reminder
+                  </Button>
+                  <Button variant="outline" size="sm" className="h-7 text-[10px] border-[#C9A84C]/20 text-black/60 hover:bg-[#C9A84C]/10">
+                    <Tag className="w-3 h-3 mr-1" /> Needs Reply
+                  </Button>
                 </div>
               </div>
             </ScrollArea>
