@@ -29,6 +29,8 @@ export default function StampProjectsDashboard() {
   const [projects, setProjects] = useState<StampProject[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [bulkDeleting, setBulkDeleting] = useState(false);
   // Track whether we've waited at least one tick after auth resolved to prevent premature redirects
   const authSettledRef = useRef(false);
 
