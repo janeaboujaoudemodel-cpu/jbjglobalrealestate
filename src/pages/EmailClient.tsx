@@ -564,25 +564,54 @@ const EmailClient = () => {
                 {selectedEmail.body}
               </div>
 
-              {/* Amanda Suggestions Panel */}
+              {/* Amanda AI Panel — Bilingual Summaries & Actions */}
               <div className="mt-8 p-4 rounded-xl border-2 border-[#C9A84C]/20 bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6]">
                 <div className="flex items-center gap-2 mb-3">
                   <Sparkles className="w-4 h-4 text-[#C9A84C]" />
-                  <span className="text-sm font-semibold text-black">Amanda's Suggestions</span>
+                  <span className="text-sm font-semibold text-black">Amanda Clarke — AI Assistant</span>
+                  <Badge className="bg-[#C9A84C]/15 text-[#C9A84C] border-[#C9A84C]/30 text-[9px]">Auto</Badge>
                 </div>
-                <div className="space-y-2">
-                  <button className="w-full text-left text-sm px-3 py-2 rounded-lg bg-white/60 border border-[#C9A84C]/20 hover:border-[#C9A84C]/40 transition-colors text-black">
-                    Reply: "Thanks for reaching out. I've reviewed the details and would like to schedule a follow-up…"
-                  </button>
-                  <button className="w-full text-left text-sm px-3 py-2 rounded-lg bg-white/60 border border-[#C9A84C]/20 hover:border-[#C9A84C]/40 transition-colors text-black">
-                    Summarize this thread
-                  </button>
-                  <button className="w-full text-left text-sm px-3 py-2 rounded-lg bg-white/60 border border-[#C9A84C]/20 hover:border-[#C9A84C]/40 transition-colors text-black">
-                    Create task from this email
-                  </button>
-                  <button className="w-full text-left text-sm px-3 py-2 rounded-lg bg-white/60 border border-[#C9A84C]/20 hover:border-[#C9A84C]/40 transition-colors text-black">
-                    Add to calendar
-                  </button>
+                
+                {/* Summary EN/AR */}
+                <div className="grid grid-cols-2 gap-3 mb-3">
+                  <div className="bg-white/70 rounded-lg border border-[#C9A84C]/15 p-3">
+                    <p className="text-[10px] font-semibold text-black/40 uppercase tracking-wider mb-1">Summary (EN)</p>
+                    <p className="text-xs text-black/70 leading-relaxed">Sender requesting a meeting to discuss partnership terms. Mentions Q2 schedule and availability on two dates. Requires confirmation.</p>
+                  </div>
+                  <div className="bg-white/70 rounded-lg border border-[#C9A84C]/15 p-3" dir="rtl">
+                    <p className="text-[10px] font-semibold text-black/40 uppercase tracking-wider mb-1 text-right">ملخص (AR)</p>
+                    <p className="text-xs text-black/70 leading-relaxed text-right">المرسل يطلب اجتماعاً لمناقشة شروط الشراكة. يذكر جدول الربع الثاني وتوفره في تاريخين. يتطلب تأكيداً.</p>
+                  </div>
+                </div>
+
+                {/* Suggested Reply */}
+                <div className="bg-white/70 rounded-lg border border-[#C9A84C]/15 p-3 mb-3">
+                  <p className="text-[10px] font-semibold text-black/40 uppercase tracking-wider mb-1">Suggested Reply</p>
+                  <p className="text-xs text-black/70 leading-relaxed">"Thank you for reaching out. I've reviewed the details and would be happy to schedule a meeting. Please confirm the preferred date so I can block the time."</p>
+                  <div className="flex gap-2 mt-2">
+                    <Button variant="outline" size="sm" className="h-7 text-[10px] border-[#C9A84C]/30 text-[#C9A84C]">
+                      <Reply className="w-3 h-3 mr-1" /> Use as Reply
+                    </Button>
+                    <Button variant="outline" size="sm" className="h-7 text-[10px] border-[#C9A84C]/30 text-black/60">
+                      Edit Draft
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Quick Actions */}
+                <div className="flex flex-wrap gap-2">
+                  <Button variant="outline" size="sm" className="h-7 text-[10px] border-[#C9A84C]/20 text-black/60 hover:bg-[#C9A84C]/10">
+                    <CheckCheck className="w-3 h-3 mr-1" /> Create Task
+                  </Button>
+                  <Button variant="outline" size="sm" className="h-7 text-[10px] border-[#C9A84C]/20 text-black/60 hover:bg-[#C9A84C]/10">
+                    <Calendar className="w-3 h-3 mr-1" /> Add to Calendar
+                  </Button>
+                  <Button variant="outline" size="sm" className="h-7 text-[10px] border-[#C9A84C]/20 text-black/60 hover:bg-[#C9A84C]/10">
+                    <Star className="w-3 h-3 mr-1" /> Set Reminder
+                  </Button>
+                  <Button variant="outline" size="sm" className="h-7 text-[10px] border-[#C9A84C]/20 text-black/60 hover:bg-[#C9A84C]/10">
+                    <Tag className="w-3 h-3 mr-1" /> Needs Reply
+                  </Button>
                 </div>
               </div>
             </ScrollArea>
