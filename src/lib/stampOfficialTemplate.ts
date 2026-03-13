@@ -112,24 +112,24 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   if (config.showLocation) {
     const locEn = config.locationTextEn || 'Dubai, UAE';
     const locAr = config.locationTextAr || 'دبي، الإمارات';
-    const locArcLen = locationTextR * Math.PI * 0.70;
-    const locFontSize = fitFontSize(locEn, 8, locArcLen, 0.55);
-    const locArFontSize = fitFontSize(locAr, 9, locArcLen, 0.48);
+    const locArcLen = locationTextR * Math.PI * 0.75;
+    const locFontSize = fitFontSize(locEn, 9, locArcLen, 0.55);
+    const locArFontSize = fitFontSize(locAr, 10, locArcLen, 0.48);
 
     // Location bottom arc: RIGHT to LEFT through bottom so English text is right-side up
     const locBotArc = `M ${cx + locationTextR} ${cy} A ${locationTextR} ${locationTextR} 0 0 0 ${cx - locationTextR} ${cy}`;
     const locTopArc = `M ${cx - locationTextR} ${cy} A ${locationTextR} ${locationTextR} 0 1 1 ${cx + locationTextR} ${cy}`;
 
     locationContent = `
-      <circle cx="${cx}" cy="${cy}" r="${locationR}" fill="none" stroke="${ink}" stroke-width="1.2"/>
+      <circle cx="${cx}" cy="${cy}" r="${locationR}" fill="none" stroke="${ink}" stroke-width="1.5"/>
       <defs>
         <path id="loc-top" d="${locTopArc}"/>
         <path id="loc-bot" d="${locBotArc}"/>
       </defs>
-      <text font-family="${ARABIC_FONT}" font-size="${locArFontSize}" fill="${ink}" letter-spacing="0.5" font-weight="600">
+      <text font-family="${ARABIC_FONT}" font-size="${locArFontSize}" fill="${ink}" letter-spacing="1" font-weight="700">
         <textPath href="#loc-top" startOffset="50%" text-anchor="middle">${locAr}</textPath>
       </text>
-      <text font-family="${enFont}" font-size="${locFontSize}" fill="${ink}" letter-spacing="1.2" font-weight="700">
+      <text font-family="${enFont}" font-size="${locFontSize}" fill="${ink}" letter-spacing="1.5" font-weight="700">
         <textPath href="#loc-bot" startOffset="50%" text-anchor="middle">${locEn.toUpperCase()}</textPath>
       </text>
     `;
