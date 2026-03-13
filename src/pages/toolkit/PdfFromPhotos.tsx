@@ -380,7 +380,7 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
   // ── Render ────────────────────────────────────────────────────────────────
 
   return (
-    <div className={embedded ? "" : "min-h-screen"} style={{ background: G.surface, color: "#fff" }}>
+    <div className={embedded ? "" : "min-h-screen"} style={{ background: "#FFFFFF", color: "#1F2937" }}>
 
       {/* ── Hero (standalone only) ── */}
       {!embedded && (
