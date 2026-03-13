@@ -19229,6 +19229,7 @@ export type Database = {
           company_name: string
           country_optional: string | null
           created_at: string
+          deleted_at: string | null
           density: number
           email_optional: string | null
           icon_style: string
@@ -19264,6 +19265,7 @@ export type Database = {
           company_name: string
           country_optional?: string | null
           created_at?: string
+          deleted_at?: string | null
           density?: number
           email_optional?: string | null
           icon_style?: string
@@ -19299,6 +19301,7 @@ export type Database = {
           company_name?: string
           country_optional?: string | null
           created_at?: string
+          deleted_at?: string | null
           density?: number
           email_optional?: string | null
           icon_style?: string

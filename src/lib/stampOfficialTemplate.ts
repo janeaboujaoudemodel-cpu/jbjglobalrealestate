@@ -5,7 +5,7 @@
  * - Arabic company name arcing the TOP (between outer & inner rings)
  * - English company name arcing the BOTTOM (between outer & inner rings)
  * - Dot/star separators at 3 & 9 o'clock
- * - Location text between inner ring and center circle
+ * - Location text (Arabic arc on top, English arc on bottom) between inner ring and center circle
  * - Monogram/logo inside center circle
  * - Corporate Official Blue ink: #1B3A8C
  * 
@@ -73,7 +73,6 @@ function renderSeparators(cx: number, cy: number, r: number, style: SeparatorSty
   if (style === 'none') return '';
   const glyph = separatorGlyph(style);
   const fontSize = style === 'dash' ? 14 : 10;
-  // Clamp separator position to ensure 5px clearance from rings
   return `
     <text x="${cx + r}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
           font-size="${fontSize}" fill="${ink}" font-weight="bold">${glyph}</text>
@@ -86,8 +85,14 @@ function renderSeparators(cx: number, cy: number, r: number, style: SeparatorSty
  * Bottom arc text — characters placed individually along the BOTTOM half of a circle.
  * Each character is rotated so it reads naturally left-to-right when viewed from outside.
  * 
- * CRITICAL FIX: Characters are placed from left-to-right along the bottom arc (angles > 180°).
- * The rotation is `deg + 90` (not `deg - 90`) so characters face outward (readable from outside).
+ * CRITICAL: Characters go from left to right along the bottom arc.
+ * At the bottom of a circle (SVG coords), angles go clockwise:
+ * - Left side of bottom = ~210°
+ * - Center bottom = 270°  
+ * - Right side of bottom = ~330°
+ * 
+ * Characters are placed in reading order (char[0] at leftmost angle).
+ * Rotation = deg + 90 makes each character face outward (feet toward center).
  */
 function renderBottomArcText(
   text: string, cx: number, cy: number, r: number,
@@ -99,10 +104,8 @@ function renderBottomArcText(
   const n = chars.length;
   if (n === 0) return '';
 
-  // Place characters along the BOTTOM arc (from ~210° to ~330° in standard math, 
-  // which is the bottom half when Y-axis points down in SVG)
-  const spreadDeg = Math.min(150, n * 10);
-  // Center the spread around 270° (bottom of circle in SVG coordinates)
+  // Limit spread to prevent characters from wrapping too far
+  const spreadDeg = Math.min(140, n * 8);
   const startDeg = 270 - spreadDeg / 2;
   const stepDeg = n > 1 ? spreadDeg / (n - 1) : 0;
 
@@ -112,7 +115,7 @@ function renderBottomArcText(
     const rad = (deg * Math.PI) / 180;
     const x = cx + r * Math.cos(rad);
     const y = cy + r * Math.sin(rad);
-    // Rotate each character so it faces outward (readable from outside the circle)
+    // Characters face outward — readable from outside the stamp
     const rotation = deg + 90;
     result += `<text x="${x.toFixed(2)}" y="${y.toFixed(2)}" text-anchor="middle" dominant-baseline="central"
       font-family="${font}" font-size="${fontSize}" fill="${ink}" font-weight="${fontWeight}"
@@ -122,6 +125,10 @@ function renderBottomArcText(
   return result;
 }
 
+/**
+ * Top arc text using SVG textPath — text follows the top half of a circle.
+ * Works naturally for both Arabic (RTL) and English (LTR) via textPath.
+ */
 function renderTopArcTextPath(
   text: string, cx: number, cy: number, r: number,
   fontSize: number, font: string, ink: string, letterSpacing: number,
@@ -198,7 +205,7 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   const topFont = ARABIC_FONT;
   const bottomFont = enFont;
 
-  // Arc lengths — reduced to 0.58 for better text clearance
+  // Arc lengths — 0.58 for better text clearance from separators
   const arcLen = clampedTextArcR * Math.PI;
   const safeArc = arcLen * 0.58;
   const topBaseFontSize = topIsArabic ? 15 : 13;
@@ -218,7 +225,7 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
     bottomIsArabic ? 1 : 2.5, bottomIsArabic
   );
 
-  // ── Location text ──
+  // ── Location text — BOTH Arabic and English as arcs ──
   let locationContent = '';
   if (config.showLocation) {
     const locEn = config.locationTextEn || 'Dubai, UAE';
@@ -227,7 +234,10 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
     const locFontSize = fitFontSize(locEn, 8, locArcLen, 0.55);
     const locArFontSize = fitFontSize(locAr, 9, locArcLen, 0.48);
 
+    // Arabic location on TOP arc (between inner ring and center circle)
     const locTopArc = `M ${cx - locationTextR} ${cy} A ${locationTextR} ${locationTextR} 0 1 1 ${cx + locationTextR} ${cy}`;
+    
+    // English location on BOTTOM arc (between inner ring and center circle)
     const locEnContent = renderBottomArcText(
       locEn.toUpperCase(), cx, cy, locationTextR, locFontSize, enFont, secColor, 1.5, false, '600'
     );
@@ -280,7 +290,7 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   const outerRingEl = renderOuterRing(cx, cy, outerR, priColor, bs, outerStrokeWidth);
 
   const innerStrokeWidth = config.innerBorderWidth ?? (bs === 'SINGLE' ? 1.5 : bs === 'RING' ? 3 : 2);
-  const innerRingEl = `<circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${priColor}" stroke-width="${innerStrokeWidth}"/>`;
+  const innerRingEl = `<circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${secColor}" stroke-width="${innerStrokeWidth}"/>`;
 
   const centerCircleEl = `<circle cx="${cx}" cy="${cy}" r="${centerR}" fill="none" stroke="${secColor}" stroke-width="1.2"/>`;
 
@@ -292,10 +302,10 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
     <!-- Center circle -->
     ${centerCircleEl}
 
-    <!-- Top arc text (company name) -->
+    <!-- Top arc text (Arabic company name) -->
     ${topArcContent}
 
-    <!-- Bottom arc text (company name) -->
+    <!-- Bottom arc text (English company name) -->
     ${bottomArcContent}
 
     <!-- Separators at 3 and 9 o'clock -->
