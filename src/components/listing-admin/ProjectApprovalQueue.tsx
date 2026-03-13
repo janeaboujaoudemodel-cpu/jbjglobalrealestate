@@ -733,7 +733,10 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
     setIsBulkProcessing(true);
     setBulkAction("repair");
     setBulkDone(0);
-    setBulkTotal(totalNeedsWorkCount ?? totalCount ?? 0);
+    // Cap to actual pending count to prevent "repairing X on Y" where X > Y
+    const actualPending = totalCount ?? imports.length;
+    const estimated = Math.min(totalNeedsWorkCount ?? actualPending, actualPending);
+    setBulkTotal(estimated);
 
     let ok = 0;
     let failed = 0;
