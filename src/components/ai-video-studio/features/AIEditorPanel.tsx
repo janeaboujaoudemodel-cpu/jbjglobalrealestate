@@ -64,31 +64,31 @@ interface AIEditorPanelProps {
 const SMART_TEMPLATES = [
   {
     id: 'property-tour',
-    label: '🏡 Property Tour',
+    label: 'Property Tour',
     desc: '30-60s walkthrough with music',
     targetDuration: '30-60s',
-    icon: '🏡',
+    icon: 'PT',
   },
   {
     id: 'social-reel',
-    label: '📱 Social Reel',
+    label: 'Social Reel',
     desc: '15s fast-cut for Reels/TikTok',
     targetDuration: '15s',
-    icon: '📱',
+    icon: 'SR',
   },
   {
     id: 'youtube-intro',
-    label: '▶️ YouTube Intro',
+    label: 'YouTube Intro',
     desc: 'Hook + content structure',
     targetDuration: '45-60s',
-    icon: '▶️',
+    icon: 'YT',
   },
   {
     id: 'luxury-ad',
-    label: '✨ Luxury Ad',
+    label: 'Luxury Ad',
     desc: 'Cinematic 30s property ad',
     targetDuration: '30s',
-    icon: '✨',
+    icon: 'LA',
   },
 ];
 
