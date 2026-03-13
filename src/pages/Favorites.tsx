@@ -448,6 +448,90 @@ const Favorites = () => {
               </div>
             )}
           </TabsContent>
+
+          {/* ─── My Designs Tab ─── */}
+          <TabsContent value="designs">
+            {(designFavCount + designShortCount) === 0 ? (
+              <div className="text-center py-16 bg-white/60 rounded-2xl border border-gold/20">
+                <div className="max-w-md mx-auto px-4">
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 flex items-center justify-center mx-auto mb-6">
+                    <PenTool className="w-10 h-10 text-gold/70" />
+                  </div>
+                  <h3 className="text-black text-xl font-semibold mb-3">No Saved Designs Yet</h3>
+                  <p className="text-black/50 mb-8">Save your stamps, business cards, letterheads, CVs, and more from the toolkit by clicking the heart or shortlist icon.</p>
+                  <Link to="/toolkit">
+                    <Button className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black hover:brightness-95 border border-gold/30">
+                      Open Toolkit <ArrowUpRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-6">
+                {/* Favorites section */}
+                {designFavCount > 0 && (
+                  <div>
+                    <h2 className="text-black text-lg font-semibold mb-4 flex items-center gap-2">
+                      <Heart className="w-5 h-5 text-red-500" /> Favorite Designs ({designFavCount})
+                    </h2>
+                    {(Object.entries(designFavGroups) as [DesignItemType, typeof designFavs][]).map(([type, items]) => {
+                      if (!items || items.length === 0) return null;
+                      const isOpen = expandedSections[`fav-${type}`] !== false;
+                      return (
+                        <Collapsible key={`fav-${type}`} open={isOpen} onOpenChange={() => toggleSection(`fav-${type}`)}>
+                          <CollapsibleTrigger className="flex items-center justify-between w-full bg-white/60 rounded-xl p-4 border border-gold/20 mb-2 hover:bg-gold/5 transition-colors">
+                            <span className="flex items-center gap-2 text-black font-medium">
+                              {getDesignTypeIcon(type)}
+                              {DESIGN_TYPE_LABELS[type]} ({items.length})
+                            </span>
+                            {isOpen ? <ChevronUp className="w-4 h-4 text-black/40" /> : <ChevronDown className="w-4 h-4 text-black/40" />}
+                          </CollapsibleTrigger>
+                          <CollapsibleContent>
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4">
+                              {items!.map(item => (
+                                <DesignCard key={item.id} item={item} onRemove={() => toggleDesign.mutate({ itemType: item.item_type as DesignItemType, itemId: item.item_id, listType: 'favorite', isActive: true })} />
+                              ))}
+                            </div>
+                          </CollapsibleContent>
+                        </Collapsible>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* Shortlist section */}
+                {designShortCount > 0 && (
+                  <div>
+                    <h2 className="text-black text-lg font-semibold mb-4 flex items-center gap-2">
+                      <ListPlus className="w-5 h-5 text-gold" /> Shortlisted Designs ({designShortCount})
+                    </h2>
+                    {(Object.entries(designShortGroups) as [DesignItemType, typeof designShorts][]).map(([type, items]) => {
+                      if (!items || items.length === 0) return null;
+                      const isOpen = expandedSections[`short-${type}`] !== false;
+                      return (
+                        <Collapsible key={`short-${type}`} open={isOpen} onOpenChange={() => toggleSection(`short-${type}`)}>
+                          <CollapsibleTrigger className="flex items-center justify-between w-full bg-white/60 rounded-xl p-4 border border-gold/20 mb-2 hover:bg-gold/5 transition-colors">
+                            <span className="flex items-center gap-2 text-black font-medium">
+                              {getDesignTypeIcon(type)}
+                              {DESIGN_TYPE_LABELS[type]} ({items.length})
+                            </span>
+                            {isOpen ? <ChevronUp className="w-4 h-4 text-black/40" /> : <ChevronDown className="w-4 h-4 text-black/40" />}
+                          </CollapsibleTrigger>
+                          <CollapsibleContent>
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4">
+                              {items!.map(item => (
+                                <DesignCard key={item.id} item={item} onRemove={() => toggleDesign.mutate({ itemType: item.item_type as DesignItemType, itemId: item.item_id, listType: 'shortlist', isActive: true })} />
+                              ))}
+                            </div>
+                          </CollapsibleContent>
+                        </Collapsible>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
+          </TabsContent>
         </Tabs>
       </div>
 
