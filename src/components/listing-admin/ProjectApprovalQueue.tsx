@@ -1084,18 +1084,27 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
           <NewProjectDetector />
 
           {/* Source filter dropdown */}
-          <div className="flex items-center gap-2 p-2 bg-muted/50 border border-border rounded-lg mb-4">
+          <div className="flex items-center gap-3 p-2 bg-muted/50 border border-border rounded-lg mb-4">
             <span className="text-sm font-medium text-foreground">Source:</span>
-            <select
-              value={sourceFilter}
-              onChange={(e) => setSourceFilter(e.target.value as "all" | "reelly" | "manual" | "provident")}
-              className="text-sm border border-border rounded px-2 py-1 bg-background text-foreground"
-            >
-              <option value="all">All Sources</option>
-              <option value="manual">📤 My Uploads</option>
-              <option value="reelly">🔄 Auto-Imported (Reelly)</option>
-              <option value="provident">🏢 Provident</option>
-            </select>
+            <Select value={sourceFilter} onValueChange={(v) => setSourceFilter(v as any)}>
+              <SelectTrigger className="w-[220px] h-9 text-sm bg-background border-gold/30">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">
+                  <span className="flex items-center gap-2"><Globe className="h-3.5 w-3.5 text-muted-foreground" /> All Sources</span>
+                </SelectItem>
+                <SelectItem value="manual">
+                  <span className="flex items-center gap-2"><Upload className="h-3.5 w-3.5 text-primary" /> My Uploads</span>
+                </SelectItem>
+                <SelectItem value="reelly">
+                  <span className="flex items-center gap-2"><Globe className="h-3.5 w-3.5 text-blue-600" /> Auto-Imported (Reelly)</span>
+                </SelectItem>
+                <SelectItem value="provident">
+                  <span className="flex items-center gap-2"><Building className="h-3.5 w-3.5 text-amber-600" /> Provident</span>
+                </SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Inventory status cards */}
