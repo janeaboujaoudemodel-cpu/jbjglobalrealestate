@@ -112,6 +112,18 @@ export function placeholderSVG(name: string, primary: string, secondary: string)
 </svg>`;
 }
 
+// ─── Refont SVG (client-side, no AI call) ─────────────────────────────────────
+export function refontSVG(svgContent: string, fontFamily: string): string {
+  if (!svgContent || !fontFamily) return svgContent;
+  let result = svgContent;
+  // Replace font-family in style attributes: font-family="..." or font-family='...'
+  result = result.replace(/font-family="[^"]*"/gi, `font-family="${fontFamily}"`);
+  result = result.replace(/font-family='[^']*'/gi, `font-family='${fontFamily}'`);
+  // Replace font-family in inline CSS: font-family:...;
+  result = result.replace(/font-family\s*:\s*[^;"'}]+/gi, `font-family: ${fontFamily}`);
+  return result;
+}
+
 // ─── Recolor SVG (client-side, no AI call) ────────────────────────────────────
 export function recolorSVG(svgContent: string, oldColors: { primary: string; secondary: string; accent: string }, newColors: { primary: string; secondary: string; accent: string }): string {
   let result = svgContent;

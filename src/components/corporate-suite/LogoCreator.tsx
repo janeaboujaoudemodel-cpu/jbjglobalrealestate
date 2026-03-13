@@ -271,6 +271,45 @@ export default function LogoCreator() {
         {generating ? "Generating…" : logo ? "Regenerate" : "Generate Logo"}
       </Button>
 
+      {/* Upload Your Own Logo */}
+      <div className="space-y-1.5 pt-2 border-t border-[hsl(var(--border))]">
+        <label className="text-xs font-medium text-[hsl(var(--muted-foreground))] flex items-center gap-1">
+          <ImageIcon size={12} /> Upload Your Logo
+        </label>
+        <p className="text-[9px] text-[hsl(var(--muted-foreground))]">Upload an SVG or PNG to refine with AI</p>
+        <input
+          type="file"
+          accept=".svg,.png,.jpg,.jpeg"
+          className="w-full text-xs file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[hsl(var(--muted))] file:text-[hsl(var(--foreground))] hover:file:bg-[hsl(var(--gold))]/10 cursor-pointer"
+          onChange={async (e) => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+            if (file.name.endsWith('.svg')) {
+              const text = await file.text();
+              const uploaded: LogoData = { svgContent: text, name: name || 'Uploaded', timestamp: Date.now() };
+              setLogo(uploaded);
+              setGeneratedColors({ ...colors });
+              setLogoHistory(prev => [uploaded, ...prev].slice(0, 10));
+              toast.success("Logo uploaded — use Refine to modify it");
+            } else {
+              // PNG/JPG: wrap in SVG
+              const reader = new FileReader();
+              reader.onload = () => {
+                const dataUrl = reader.result as string;
+                const svgWrapped = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 200" width="200" height="200"><image href="${dataUrl}" width="200" height="200" preserveAspectRatio="xMidYMid meet"/></svg>`;
+                const uploaded: LogoData = { svgContent: svgWrapped, name: name || 'Uploaded', timestamp: Date.now() };
+                setLogo(uploaded);
+                setGeneratedColors({ ...colors });
+                setLogoHistory(prev => [uploaded, ...prev].slice(0, 10));
+                toast.success("Logo uploaded — use Refine to modify it");
+              };
+              reader.readAsDataURL(file);
+            }
+            e.target.value = '';
+          }}
+        />
+      </div>
+
       {/* AI Refinement Prompt */}
       {logo && (
         <div className="space-y-1.5 pt-2 border-t border-[hsl(var(--border))]">
@@ -281,7 +320,7 @@ export default function LogoCreator() {
             <Textarea
               value={refinePrompt}
               onChange={e => setRefinePrompt(e.target.value)}
-              placeholder="e.g. Make the icon bigger, add a home shape, remove the circle..."
+              placeholder="e.g. Keep the monogram, improve the wordmark styling..."
               rows={2}
               className="flex-1 text-sm resize-none"
             />
