@@ -41,7 +41,7 @@ export function SourceCountsPanel({ reellyApiTotal, onSourceChange, activeSource
               ? "border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-lg"
               : "border-border hover:border-gold/40 bg-card"
           }`}
-          onClick={() => setSelectedSource(selectedSource === "source-b" ? "none" : "source-b")}
+          onClick={() => handleSourceSelect(selectedSource === "source-b" ? "none" : "source-b")}
         >
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2 text-sm text-foreground">
