@@ -84,7 +84,7 @@ const INNER_STROKE = 1.2;     // thinnest
 
 // ── Safe zone ──
 const SAFE_ZONE = 7;          // minimum px between text and ring strokes
-const ARC_SPREAD_LIMIT = 0.58; // max fraction of semicircle for text
+const ARC_SPREAD_LIMIT = 0.70; // max fraction of semicircle for text (widened)
 
 function fitFontSize(text: string, baseSize: number, maxArcLen: number, charW = 0.6): number {
   if (!text) return baseSize;
