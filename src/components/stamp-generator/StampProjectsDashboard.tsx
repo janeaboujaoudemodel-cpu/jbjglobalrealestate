@@ -157,7 +157,7 @@ export default function StampProjectsDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))] pt-24 sm:pt-28 lg:pt-32">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))] pt-4">
       {/* Header */}
       <div className="border-b border-[hsl(var(--border))] bg-white/80 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
