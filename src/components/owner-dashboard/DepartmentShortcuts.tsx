@@ -4,6 +4,7 @@ import {
   ClipboardList, 
   ShieldAlert,
   ChevronRight,
+  Building,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -36,6 +37,13 @@ const DEPARTMENTS: DepartmentCard[] = [
     icon: ClipboardList, 
     path: "/owner/listing-admin", 
     color: "text-amber-600" 
+  },
+  { 
+    label: "Developer Hub", 
+    description: "Developer portal & change requests", 
+    icon: Building, 
+    path: "/developer-portal", 
+    color: "text-blue-600" 
   },
   { 
     label: "Security Console", 
