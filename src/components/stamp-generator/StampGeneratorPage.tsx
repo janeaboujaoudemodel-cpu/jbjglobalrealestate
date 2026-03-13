@@ -981,7 +981,7 @@ export default function StampGeneratorPage() {
       {/* AI Designer Floating Panel */}
       {chatOpen && (
         <div className="fixed z-[9000] flex flex-col bg-white rounded-2xl shadow-2xl border border-[hsl(var(--border))] overflow-hidden"
-          style={{ width: 340, maxHeight: aiPanelMinimized ? 'auto' : 'calc(100vh - 120px)', top: 80, right: 16,
+          style={{ width: 340, maxHeight: aiPanelMinimized ? 'auto' : 'calc(100vh - 120px)', top: 60, right: 16,
             transform: `translate(${aiPanelPos.x}px, ${aiPanelPos.y}px)` }}>
           <div className="flex items-center justify-between px-3 py-2.5 bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] cursor-grab active:cursor-grabbing select-none flex-shrink-0"
             onMouseDown={onAiPanelDragStart}>
