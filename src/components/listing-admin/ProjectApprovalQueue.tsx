@@ -1469,7 +1469,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                 <div>
                   <h4 className="font-medium mb-2">Description</h4>
                   <p className="text-sm text-zinc-600 line-clamp-4">
-                    {selectedImport.description}
+                    {sanitizeForDisplay(selectedImport.description)}
                   </p>
                 </div>
               )}
