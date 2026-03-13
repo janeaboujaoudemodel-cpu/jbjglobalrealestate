@@ -138,7 +138,7 @@ export const ALL_SEPARATOR_STYLES: SeparatorStyle[] = [
   'dot', 'star', 'square', 'diamond', 'line', 'double-line', 'triangle', 'cross', 'floral', 'ornament', 'none'
 ];
 
-function renderSeparators(cx: number, cy: number, r: number, style: SeparatorStyle, ink: string): string {
+function renderSeparators(cx: number, cy: number, r: number, style: SeparatorStyle, ink: string, dataPrefix = 'separator'): string {
   if (style === 'none') return '';
   const glyph = separatorGlyph(style);
   // Scale font size based on separator type
@@ -146,9 +146,9 @@ function renderSeparators(cx: number, cy: number, r: number, style: SeparatorSty
     : (style === 'floral' || style === 'ornament') ? 14
     : 13;
   return `
-    <text x="${cx + r}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
+    <text data-stamp-element="${dataPrefix}-right" x="${cx + r}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
           font-size="${fontSize}" fill="${ink}" font-weight="bold">${glyph}</text>
-    <text x="${cx - r}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
+    <text data-stamp-element="${dataPrefix}-left" x="${cx - r}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
           font-size="${fontSize}" fill="${ink}" font-weight="bold">${glyph}</text>
   `;
 }
@@ -170,7 +170,7 @@ function renderBottomArcTextPath(
   const displayText = isArabic ? text : reversed;
   return `
     <defs><path id="${pathId}" d="${arcPath}"/></defs>
-    <text font-family="${font}" font-size="${fontSize}" fill="${ink}" 
+    <text data-stamp-element="${pathId}" font-family="${font}" font-size="${fontSize}" fill="${ink}" 
       letter-spacing="${letterSpacing}" font-weight="${fontWeight}">
       <textPath href="#${pathId}" startOffset="50%" text-anchor="middle">${displayText}</textPath>
     </text>
@@ -189,7 +189,7 @@ function renderTopArcTextPath(
   const arcPath = `M ${cx - r} ${cy} A ${r} ${r} 0 1 1 ${cx + r} ${cy}`;
   return `
     <defs><path id="${pathId}" d="${arcPath}"/></defs>
-    <text font-family="${font}" font-size="${fontSize}" fill="${ink}" 
+    <text data-stamp-element="${pathId}" font-family="${font}" font-size="${fontSize}" fill="${ink}" 
       letter-spacing="${letterSpacing}" font-weight="${fontWeight}">
       <textPath href="#${pathId}" startOffset="50%" text-anchor="middle">${text}</textPath>
     </text>
@@ -328,7 +328,7 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
 
     // Optional location separator
     if (config.locationSeparatorStyle && config.locationSeparatorStyle !== 'none') {
-      locationContent += renderSeparators(cx, cy, clampedLocTextR, config.locationSeparatorStyle, secColor);
+      locationContent += renderSeparators(cx, cy, clampedLocTextR, config.locationSeparatorStyle, secColor, 'loc-separator');
     }
   }
 
@@ -341,9 +341,9 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
     case 'logo':
       if (config.logoUrl) {
         const imgSize = innerR * 1.5;
-        centerContent = `
+      centerContent = `
           <defs><clipPath id="center-clip"><circle cx="${cx}" cy="${cy}" r="${innerR - 2}"/></clipPath></defs>
-          <image href="${config.logoUrl}" 
+          <image data-stamp-element="center" href="${config.logoUrl}" 
             x="${cx - imgSize / 2}" y="${cy - imgSize / 2}" 
             width="${imgSize}" height="${imgSize}" 
             clip-path="url(#center-clip)"
@@ -357,7 +357,7 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
       if (mono) {
         const monoSize = mono.length === 1 ? innerR * 0.85 : mono.length === 2 ? innerR * 0.65 : innerR * 0.50;
         centerContent = `
-          <text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
+          <text data-stamp-element="center" x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
             font-family="${enFont}" font-size="${monoSize}" fill="${accColor}" 
             font-weight="700" letter-spacing="2">${mono.toUpperCase()}</text>
         `;
@@ -369,7 +369,7 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
       if (initials) {
         const initSize = initials.length === 1 ? innerR * 0.85 : initials.length === 2 ? innerR * 0.65 : innerR * 0.50;
         centerContent = `
-          <text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
+          <text data-stamp-element="center" x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
             font-family="${enFont}" font-size="${initSize}" fill="${accColor}" 
             font-weight="700" letter-spacing="2">${initials}</text>
         `;
@@ -385,7 +385,7 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
       if (config.registrationNumber) {
         const regSize = fitFontSize(config.registrationNumber, 11, innerR * 1.4, 0.6);
         centerContent = `
-          <text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
+          <text data-stamp-element="center" x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
             font-family="${enFont}" font-size="${regSize}" fill="${accColor}" 
             font-weight="700" letter-spacing="1">${config.registrationNumber}</text>
         `;
@@ -425,7 +425,7 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   if (config.showRegistration && config.registrationNumber && centerMode !== 'license') {
     const regY = cy + innerR * 0.55;
     regContent = `
-      <text x="${cx}" y="${regY}" text-anchor="middle" font-family="${enFont}" 
+      <text data-stamp-element="registration" x="${cx}" y="${regY}" text-anchor="middle" font-family="${enFont}" 
         font-size="6.5" fill="${accColor}" letter-spacing="0.8" opacity="0.7">${config.registrationNumber}</text>
     `;
   }

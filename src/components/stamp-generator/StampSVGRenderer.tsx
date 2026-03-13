@@ -137,6 +137,7 @@ export function StampSVGRenderer({
           'filter', 'flood-color', 'flood-opacity', 'stdDeviation', 'baseFrequency',
           'numOctaves', 'seed', 'type', 'values', 'operator', 'radius', 'in', 'in2', 'result',
           'tableValues', 'x', 'y', 'width', 'height', 'opacity',
+          'data-stamp-element',
         ],
         ADD_DATA_URI_TAGS: ['image'],
         ADD_URI_SAFE_ATTR: ['href', 'xlink:href'],
