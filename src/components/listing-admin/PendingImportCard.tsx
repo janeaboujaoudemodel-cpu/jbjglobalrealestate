@@ -385,7 +385,7 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
         <div className="h-5 mb-2">
           {item.developer_name && (
             <Link 
-              to="/developers"
+              to={`/developer/${encodeURIComponent(item.developer_name.toLowerCase().replace(/\s+/g, '-'))}`}
               onClick={(e) => e.stopPropagation()}
               className="text-sm text-gold truncate hover:underline inline-block"
             >

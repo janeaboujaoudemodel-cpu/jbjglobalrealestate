@@ -652,7 +652,7 @@ const ListingAdmin = () => {
       <div className="border-b border-[#C9A84C]/20 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
       {/* Header - Clean neutral style — top offset accounts for owner shell header (64px + 48px utility bar) */}
       <header className="border-b border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-0 z-20">
-        <div className="max-w-[1200px] mx-auto px-4 py-4">
+        <div className="max-w-[1200px] mx-auto px-4 pt-6 pb-4">
           {/* Row 1: Title and actions */}
           <div className="flex items-center justify-between gap-4 mb-4">
             <div className="flex items-center gap-4">
@@ -752,12 +752,12 @@ const ListingAdmin = () => {
 
         {/* UNIFIED Data Ops View - All sync/extraction in one tabbed interface */}
         {activeView === 'data-ops' && (
-          <div className="container mx-auto px-4 py-6 space-y-6">
+          <div className="mx-auto px-2 py-6 space-y-6">
             {/* SOURCE COUNTS PANEL - Reelly Only (Provident removed) */}
             <SourceCountsPanel />
             
             <Tabs value={dataOpsTab} onValueChange={setDataOpsTab} className="space-y-6">
-              <TabsList className="w-full flex flex-nowrap overflow-x-auto scrollbar-hide bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30 p-1 rounded-xl" style={{ overscrollBehaviorX: 'contain' }}>
+              <TabsList className="w-full flex flex-nowrap overflow-x-auto scrollbar-hide bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] border border-gold/30 p-1 rounded-lg" style={{ overscrollBehaviorX: 'contain' }}>
                 <TabsTrigger 
                   value="reelly" 
                   className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
