@@ -162,13 +162,17 @@ function renderBottomArcTextPath(
   isArabic: boolean, pathId: string, fontWeight = '800'
 ): string {
   if (!text) return '';
-  // Bottom arc path: from (cx+r, cy) sweeping clockwise through bottom to (cx-r, cy)
-  const arcPath = `M ${cx + r} ${cy} A ${r} ${r} 0 1 1 ${cx - r} ${cy}`;
+  // Bottom arc path: from (cx-r, cy) sweeping clockwise through bottom to (cx+r, cy)
+  // This makes text read left-to-right naturally (upright characters)
+  const arcPath = `M ${cx - r} ${cy} A ${r} ${r} 0 1 1 ${cx + r} ${cy}`;
+  // Reverse text so characters appear in correct reading order on the reversed path
+  const reversed = text.split('').reverse().join('');
+  const displayText = isArabic ? text : reversed;
   return `
     <defs><path id="${pathId}" d="${arcPath}"/></defs>
     <text font-family="${font}" font-size="${fontSize}" fill="${ink}" 
       letter-spacing="${letterSpacing}" font-weight="${fontWeight}">
-      <textPath href="#${pathId}" startOffset="50%" text-anchor="middle">${text}</textPath>
+      <textPath href="#${pathId}" startOffset="50%" text-anchor="middle">${displayText}</textPath>
     </text>
   `;
 }
