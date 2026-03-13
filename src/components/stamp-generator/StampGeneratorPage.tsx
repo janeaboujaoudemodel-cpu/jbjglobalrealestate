@@ -835,7 +835,7 @@ export default function StampGeneratorPage() {
                   </Badge>
                 )}
               </div>
-              <div className="flex items-center justify-center py-4 px-3 min-h-[240px] bg-[radial-gradient(circle_at_center,_hsl(var(--pearl-1))_0%,_white_70%)]">
+              <div className="flex items-center justify-center py-6 px-3 min-h-[320px] bg-[radial-gradient(circle_at_center,_hsl(var(--pearl-1))_0%,_white_70%)]">
                 {generating ? (
                   <div className="flex flex-col items-center gap-2 text-[hsl(var(--muted-foreground))]">
                     <Loader2 size={28} className="animate-spin text-[hsl(var(--gold))]"/>
