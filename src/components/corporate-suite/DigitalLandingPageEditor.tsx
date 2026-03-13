@@ -172,7 +172,7 @@ export default function DigitalLandingPageEditor({ data, onChange, primaryColor 
                 {DEFAULT_SOCIAL_PLATFORMS.map(p => (
                   <option key={p.platform} value={p.platform}>{p.icon} {p.platform}</option>
                 ))}
-                <option value="Other">🔗 Other</option>
+                <option value="Other">Other</option>
               </select>
               <Input
                 value={link.url}
