@@ -1,72 +1,91 @@
 
-## CRM System Upgrade — Implementation Status
 
-### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
+## Plan: Toolkit Favorites & Shortlist System
 
-#### Task 1: Full System Audit ✅
-- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
-- Identified 10 weaknesses (documented in plan)
+Currently, favorites/shortlists only support real estate properties (`project_id` referencing `projects` table). This plan extends the system to support saving any toolkit creation (stamps, business cards, letterheads, CVs, logos, etc.) and displays them in categorized sections on the Favorites page.
 
-#### Task 2: Leads Security Hardening ✅
-- CSV export no longer includes email/phone PII
-- Audit logging added to exports with user_agent tracking
-- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
+---
 
-#### Task 3: Encryption Hardening ✅
-- CSV export stripped of `email_lower` and `phone_e164` fields
-- Export audit logged to both `crm_audit_logs` and `audit_logs`
+### 1. New Database Table: `design_favorites`
 
-#### Task 4: Lead Lifecycle Upgrade ✅
-- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
-- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
-- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
+Create a generic table that stores any toolkit item as a favorite or shortlist entry:
 
-#### Task 5: CRM Structure Upgrade ✅
-- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
-- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
-- KanbanPipeline expanded to show all 17 relevant stages
+```sql
+CREATE TABLE public.design_favorites (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  item_type text NOT NULL,        -- 'stamp' | 'business_card' | 'letterhead' | 'cv' | 'logo' | 'cover_letter' | 'document'
+  item_id text NOT NULL,          -- the ID of the saved design (stamp_design id, etc.)
+  item_name text,                 -- display name: "My Company Stamp", "Business Card v2"
+  thumbnail_svg text,             -- optional SVG snapshot for preview
+  metadata jsonb DEFAULT '{}',    -- extra info (colors, template_key, etc.)
+  list_type text NOT NULL DEFAULT 'favorite',  -- 'favorite' | 'shortlist'
+  created_at timestamptz NOT NULL DEFAULT now(),
+  UNIQUE(user_id, item_type, item_id, list_type)
+);
+```
 
-#### Task 6: Performance Optimization ✅
-- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
-- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
-- `crm_leads_updated_at_trigger` auto-updates `updated_at`
+With RLS policies for user-own-data access only.
 
-#### Task 7: AI Intelligence Integration ✅
-- New edge function `ai-lead-intelligence` using Lovable AI gateway
-- Supports 3 modes: `score`, `summary`, `next_action`
-- Tool-calling for structured scoring output
-- JWT auth + CRM role validation
-- PII sanitized before sending to AI
+### 2. New Hook: `useDesignFavorites`
 
-#### Task 8: Workflow Automation ✅
-- Created `crm_automation_rules` table with RLS (owner manage, admin view)
-- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
+File: `src/hooks/useDesignFavorites.ts`
 
-#### Task 10: Role & Permission System ✅
-- RLS on automation rules: owner CRUD, admin read-only
-- CSV export restricted to owner_admin/founder roles
+- `useDesignFavorites(itemType?)` — query all design favorites, optionally filtered by type
+- `useDesignShortlist(itemType?)` — same for shortlist entries
+- `useToggleDesignFavorite()` — mutation to add/remove
+- `useToggleDesignShortlist()` — mutation to add/remove
+- Guest fallback via localStorage (`jbj_design_favorites`, `jbj_design_shortlist`)
 
-#### Task 12: Backend/Database Upgrade ✅
-- 3 new performance indexes
-- Auto-updated_at trigger on crm_leads
-- Duplicate hash computation trigger
-- Rate-limiting security function
+### 3. Add Save Buttons to Toolkit Pages
 
-#### Task 13: Data Cleanliness ✅
-- `duplicate_hash` with auto-compute trigger prevents future duplicates
-- Partial unique index enforces uniqueness at DB level
+Add a heart/shortlist button to each toolkit output:
 
-### Files Changed
-| File | Action |
-|------|--------|
-| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
-| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
-| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
-| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
-| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
-| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
-| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
-| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
-| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
+- **Stamp Generator** (`StampGeneratorPage.tsx`, `StampGalleryPage.tsx`): Save button on each stamp design card and the live preview. Captures `item_type: 'stamp'`, `item_id: design.id`, `thumbnail_svg: svgSource`.
+- **Business Card Designer**: Save button on completed card designs.
+- **Letterhead/Document Designer**: Save button on completed documents.
+- **CV Builder**: Save button on completed CVs.
+- **Logo Maker**: Save button on generated logos.
+
+Each uses a shared `<DesignFavoriteButton />` component similar to `FavoriteButton.tsx` but for toolkit items.
+
+### 4. Update Favorites Page with Categorized Sections
+
+File: `src/pages/Favorites.tsx`
+
+Add a third tab or expand existing tabs with category sections:
+
+```
+Tabs: [Properties] [My Designs] [Shortlist]
+```
+
+The **My Designs** tab shows categorized sections:
+- **Stamps** — grid of saved stamp designs with SVG thumbnails
+- **Business Cards** — saved card designs
+- **Letterheads** — saved letterhead designs
+- **CVs & Profiles** — saved CV/resume designs
+- **Logos** — saved logo designs
+- **Documents** — saved document templates
+
+Each section is collapsible, shows item count, and links to the respective toolkit editor for that item. Empty sections are hidden.
+
+### 5. Dashboard Cards Update
+
+Update `FavoritesCard.tsx` and `ShortlistCard.tsx` to show a combined count (properties + designs) and preview both types.
+
+---
+
+### Files to Create
+- `src/hooks/useDesignFavorites.ts` — hooks for design favorites CRUD
+- `src/components/toolkit/DesignFavoriteButton.tsx` — reusable save/shortlist button for toolkit items
+
+### Files to Modify
+- `src/pages/Favorites.tsx` — add "My Designs" tab with categorized sections
+- `src/components/dashboard/FavoritesCard.tsx` — show design favorites count
+- `src/components/dashboard/ShortlistCard.tsx` — show design shortlist count
+- `src/components/stamp-generator/StampGalleryPage.tsx` — add save-to-favorites button on stamp cards
+- `src/components/stamp-generator/StampGeneratorPage.tsx` — add save button on live preview
+
+### Database Migration
+- Create `design_favorites` table with RLS policies
+
