@@ -60,10 +60,10 @@ export default function LogoCreator() {
   const [fullscreenBg, setFullscreenBg] = useState<"white" | "black" | "brand" | "transparent">("white");
   const [licenseCode, setLicenseCode] = useState<string | null>(null);
 
-  // Client-side recolor: when colors change, recolor the existing logo SVG (NO AI call)
+  // Client-side recolor + refont: when colors/font change, apply without AI call
   const displayLogo = logo ? {
     ...logo,
-    svgContent: recolorSVG(logo.svgContent, generatedColors, colors),
+    svgContent: refontSVG(recolorSVG(logo.svgContent, generatedColors, colors), font),
   } : null;
 
   const generateRef = useRef<((seed?: number) => Promise<void>) | null>(null);
