@@ -1,72 +1,66 @@
 
-## CRM System Upgrade — Implementation Status
 
-### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
+## Plan: Stamp Fixes, Recently Deleted System, Extract Runtime Fix, Guest Removal
 
-#### Task 1: Full System Audit ✅
-- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
-- Identified 10 weaknesses (documented in plan)
+### 1. Fix `ai-stamp-extract` RUNTIME_ERROR
 
-#### Task 2: Leads Security Hardening ✅
-- CSV export no longer includes email/phone PII
-- Audit logging added to exports with user_agent tracking
-- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
+**Root cause**: The edge function has `has_blank_screen: true` with no logs — this means it crashes before executing any code. The `deno.lock` or the import `https://deno.land/std@0.168.0/http/server.ts` may be incompatible with the current edge runtime.
 
-#### Task 3: Encryption Hardening ✅
-- CSV export stripped of `email_lower` and `phone_e164` fields
-- Export audit logged to both `crm_audit_logs` and `audit_logs`
+**Fix** (`supabase/functions/ai-stamp-extract/index.ts`):
+- Replace `import { serve } from "https://deno.land/std@0.168.0/http/server.ts"` with the modern `Deno.serve()` pattern (no import needed)
+- Redeploy the function
 
-#### Task 4: Lead Lifecycle Upgrade ✅
-- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
-- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
-- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
+### 2. Arabic Top Arc + English Bottom Arc — Fix Rendering
 
-#### Task 5: CRM Structure Upgrade ✅
-- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
-- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
-- KanbanPipeline expanded to show all 17 relevant stages
+**File: `src/lib/stampOfficialTemplate.ts`**
 
-#### Task 6: Performance Optimization ✅
-- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
-- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
-- `crm_leads_updated_at_trigger` auto-updates `updated_at`
+Current issues:
+- Arabic text on top arc works via `renderTopArcTextPath` (textPath approach) — this should be correct
+- English bottom arc uses per-character placement centered at 270° with `rotation = deg + 90` — user reports text still looks wrong/mirrored in some cases
+- Location text (Arabic) needs to also be rendered as an arc (currently Arabic location uses `textPath` on top, but English location uses per-character bottom arc)
 
-#### Task 7: AI Intelligence Integration ✅
-- New edge function `ai-lead-intelligence` using Lovable AI gateway
-- Supports 3 modes: `score`, `summary`, `next_action`
-- Tool-calling for structured scoring output
-- JWT auth + CRM role validation
-- PII sanitized before sending to AI
+**Fixes**:
+- Verify `renderBottomArcText` outputs correctly: characters at `startDeg` (left side of bottom arc) should be the first character of the English text. The current implementation places `chars[0]` at `startDeg` and `chars[n-1]` at the end — this IS correct for left-to-right reading. The `rotation = deg + 90` makes characters face outward. If the text appears flipped, the issue may be that the spread angle or starting angle is wrong.
+- Reduce `spreadDeg` calculation to `Math.min(140, n * 8)` to prevent characters from wrapping too far
+- Ensure Arabic location also uses arc rendering (currently it does via textPath on top half)
 
-#### Task 8: Workflow Automation ✅
-- Created `crm_automation_rules` table with RLS (owner manage, admin view)
-- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
+### 3. Border Width Controls — Thinner Internal Borders
 
-#### Task 10: Role & Permission System ✅
-- RLS on automation rules: owner CRUD, admin read-only
-- CSV export restricted to owner_admin/founder roles
+Already partially implemented in `OfficialStampConfig` with `outerBorderWidth` and `innerBorderWidth`. Need to:
+- Ensure the UI sliders in `StampGeneratorPage.tsx` are wired and visible
+- Add more granular range (0.5-8 for outer, 0.3-4 for inner)
 
-#### Task 12: Backend/Database Upgrade ✅
-- 3 new performance indexes
-- Auto-updated_at trigger on crm_leads
-- Duplicate hash computation trigger
-- Rate-limiting security function
+### 4. Recently Deleted for Stamp Projects (30-day soft delete)
 
-#### Task 13: Data Cleanliness ✅
-- `duplicate_hash` with auto-compute trigger prevents future duplicates
-- Partial unique index enforces uniqueness at DB level
+**File: `src/components/stamp-generator/StampProjectsDashboard.tsx`**
 
-### Files Changed
-| File | Action |
-|------|--------|
-| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
-| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
-| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
-| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
-| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
-| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
-| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
-| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
-| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
+Currently does hard `DELETE`. Change to:
+- Add `deleted_at` column to `stamp_projects` table via migration
+- Soft-delete: set `deleted_at = now()` instead of hard delete
+- Add "Recently Deleted" tab showing soft-deleted items
+- Add "Recover" and "Permanently Delete" bulk actions
+- Auto-purge after 30 days (filter: `deleted_at IS NULL` for active, `deleted_at IS NOT NULL` for deleted)
+
+**DB Migration**: `ALTER TABLE stamp_projects ADD COLUMN deleted_at timestamptz DEFAULT NULL;`
+
+### 5. Remove "Continue as Guest" from Auth Page
+
+**File: `src/pages/Auth.tsx`** (lines 672-677)
+- Remove the guest button and its description text
+
+### 6. Edge Function Redeploy
+
+Redeploy `ai-stamp-extract` with the `Deno.serve()` pattern to fix the runtime error.
+
+---
+
+### Files to Modify
+
+| File | Changes |
+|------|---------|
+| `supabase/functions/ai-stamp-extract/index.ts` | Replace `serve()` import with `Deno.serve()` to fix runtime crash |
+| `src/lib/stampOfficialTemplate.ts` | Tighten bottom arc spread, verify character order, ensure location arcs work |
+| `src/components/stamp-generator/StampProjectsDashboard.tsx` | Soft-delete with Recently Deleted tab, bulk recover/permanent delete |
+| `src/pages/Auth.tsx` | Remove "Continue as Guest" button |
+| DB migration | Add `deleted_at` column to `stamp_projects` |
+
