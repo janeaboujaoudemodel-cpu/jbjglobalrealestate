@@ -1469,6 +1469,45 @@ export type Database = {
         }
         Relationships: []
       }
+      brand_assets: {
+        Row: {
+          asset_type: Database["public"]["Enums"]["brand_asset_type"]
+          created_at: string
+          id: string
+          metadata: Json | null
+          name: string
+          source_id: string | null
+          svg_content: string | null
+          thumbnail_url: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          asset_type: Database["public"]["Enums"]["brand_asset_type"]
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          name: string
+          source_id?: string | null
+          svg_content?: string | null
+          thumbnail_url?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          asset_type?: Database["public"]["Enums"]["brand_asset_type"]
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          name?: string
+          source_id?: string | null
+          svg_content?: string | null
+          thumbnail_url?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       briefing_attendance: {
         Row: {
           briefing_request_id: string
@@ -19340,6 +19379,7 @@ export type Database = {
         Row: {
           ai_prompt: string | null
           created_at: string
+          deleted_at: string | null
           design_version: number
           id: string
           is_favorite: boolean | null
@@ -19354,6 +19394,7 @@ export type Database = {
         Insert: {
           ai_prompt?: string | null
           created_at?: string
+          deleted_at?: string | null
           design_version?: number
           id?: string
           is_favorite?: boolean | null
@@ -19368,6 +19409,7 @@ export type Database = {
         Update: {
           ai_prompt?: string | null
           created_at?: string
+          deleted_at?: string | null
           design_version?: number
           id?: string
           is_favorite?: boolean | null
@@ -25662,6 +25704,13 @@ export type Database = {
         | "broker_jbj_only"
         | "locked_until_first_deal"
         | "public"
+      brand_asset_type:
+        | "stamp"
+        | "logo"
+        | "business_card"
+        | "signature"
+        | "letterhead"
+        | "email_signature"
       broker_channel: "whatsapp" | "email" | "sms" | "call" | "video"
       broker_conversation_status:
         | "active"
@@ -26093,6 +26142,14 @@ export const Constants = {
         "broker_jbj_only",
         "locked_until_first_deal",
         "public",
+      ],
+      brand_asset_type: [
+        "stamp",
+        "logo",
+        "business_card",
+        "signature",
+        "letterhead",
+        "email_signature",
       ],
       broker_channel: ["whatsapp", "email", "sms", "call", "video"],
       broker_conversation_status: [

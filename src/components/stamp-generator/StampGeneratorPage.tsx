@@ -24,9 +24,15 @@ import {
   Wand2, Loader2, Check, RefreshCw, Download, Stamp,
   ArrowLeft, ChevronRight, AlertTriangle, Heart, MessageSquare,
   Send, X, Sparkles, Palette, Layers, Type, Upload, ChevronDown,
-  Undo2, Redo2, RotateCw, Save, ChevronLeft
+  Undo2, Redo2, RotateCw, Save, ChevronLeft, Trash2, Copy,
+  Clock, Package, Award
 } from 'lucide-react';
 import { useStampHistory } from '@/hooks/useStampHistory';
+import { StampVariationsPanel } from './StampVariationsPanel';
+import { StampRecentlyDeleted, DeletedStamp } from './StampRecentlyDeleted';
+import { StampVersionSelector } from './StampVersionSelector';
+import { useSaveBrandAsset } from '@/components/brand-assets/BrandAssetPicker';
+import ShortlistBadgeButton from '@/components/ShortlistBadgeButton';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -216,6 +222,20 @@ export default function StampGeneratorPage() {
 
   // Undo/redo for svg overrides
   const svgHistory = useStampHistory<Record<string, string>>({});
+
+  // Variations panel
+  const [showVariations, setShowVariations] = useState(false);
+  const [variations, setVariations] = useState<StampDesignConcept[]>([]);
+  const [variationsLoading, setVariationsLoading] = useState(false);
+
+  // Recently deleted
+  const [deletedStamps, setDeletedStamps] = useState<DeletedStamp[]>([]);
+
+  // Version selector
+  const [showVersionSelector, setShowVersionSelector] = useState(false);
+
+  // Brand asset save
+  const saveBrandAsset = useSaveBrandAsset();
 
   const handleSvgUndoStudio = useCallback(() => {
     const prev = svgHistory.undo();
@@ -480,6 +500,89 @@ export default function StampGeneratorPage() {
     }
   }
 
+  // ─── Variations ─────────────────────────────────────────────
+  async function generateVariations() {
+    if (!project || !session?.access_token) return;
+    setVariationsLoading(true);
+    setShowVariations(true);
+    try {
+      const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-stamp-generator`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+        body: JSON.stringify({ action: 'variations', project, projectId }),
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.concepts) setVariations(prev => [...prev, ...json.concepts]);
+      }
+    } catch { toast.error('Failed to generate variations'); }
+    setVariationsLoading(false);
+  }
+
+  // ─── Soft Delete ────────────────────────────────────────────
+  async function softDeleteConcept(conceptId: string) {
+    const isDbId = conceptId.length === 36;
+    if (isDbId) {
+      await supabase.from('stamp_designs').update({ deleted_at: new Date().toISOString() } as any).eq('id', conceptId);
+      const deleted = concepts.find(c => c.id === conceptId) || favoriteConcepts.find(c => c.id === conceptId);
+      if (deleted) {
+        setDeletedStamps(prev => [...prev, { id: conceptId, svg_source: svgOverrides[conceptId] || deleted.svgSource, template_key: deleted.templateKey, deleted_at: new Date().toISOString(), label: deleted.label }]);
+      }
+    }
+    setConcepts(prev => prev.filter(c => c.id !== conceptId));
+    setFavoriteConcepts(prev => prev.filter(c => c.id !== conceptId));
+    if (selectedId === conceptId) setSelectedId(null);
+    toast.success('Moved to recently deleted');
+  }
+
+  async function recoverDeletedStamp(id: string) {
+    await supabase.from('stamp_designs').update({ deleted_at: null } as any).eq('id', id);
+    const item = deletedStamps.find(d => d.id === id);
+    if (item) {
+      setConcepts(prev => [...prev, { id: item.id, templateKey: item.template_key, label: item.label, tags: [], svgSource: item.svg_source }]);
+    }
+    setDeletedStamps(prev => prev.filter(d => d.id !== id));
+    toast.success('Design recovered');
+  }
+
+  async function permanentDeleteStamp(id: string) {
+    await supabase.from('stamp_designs').delete().eq('id', id);
+    setDeletedStamps(prev => prev.filter(d => d.id !== id));
+    toast.success('Permanently deleted');
+  }
+
+  async function adaptAndSaveAsAsset(item: DeletedStamp) {
+    await saveBrandAsset({ assetType: 'stamp', name: item.label || 'Stamp Design', svgContent: item.svg_source, sourceId: item.id });
+    setDeletedStamps(prev => prev.filter(d => d.id !== item.id));
+  }
+
+  // ─── Brand Asset Save ──────────────────────────────────────
+  async function saveCurrentAsBrandAsset() {
+    const concept = allConcepts.find(c => c.id === selectedId) || allConcepts[0];
+    if (!concept) return;
+    const svg = svgOverrides[concept.id] || concept.svgSource;
+    await saveBrandAsset({ assetType: 'stamp', name: concept.label || project?.company_name || 'Stamp', svgContent: svg, sourceId: concept.id });
+  }
+
+  // ─── Duplicate Concept ─────────────────────────────────────
+  function duplicateConcept(concept: StampDesignConcept) {
+    const dup: StampDesignConcept = { ...concept, id: crypto.randomUUID(), label: `${concept.label} (copy)` };
+    setConcepts(prev => [dup, ...prev]);
+    toast.success('Concept duplicated');
+  }
+
+  // ─── Load deleted stamps ───────────────────────────────────
+  useEffect(() => {
+    if (!user || !projectId) return;
+    supabase.from('stamp_designs').select('id, svg_source, template_key, deleted_at').eq('project_id', projectId).not('deleted_at', 'is', null).order('deleted_at', { ascending: false }).limit(20)
+      .then(({ data }) => {
+        if (data) setDeletedStamps(data.map((d: any) => ({
+          id: d.id, svg_source: d.svg_source || '', template_key: d.template_key || '', deleted_at: d.deleted_at,
+          label: (d.template_key || '').replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase()),
+        })));
+      });
+  }, [user, projectId]);
+
   function onAiPanelDragStart(e: React.MouseEvent) {
     e.preventDefault();
     setAiDragging(true);
@@ -585,6 +688,15 @@ export default function StampGeneratorPage() {
             <Button variant="outline" size="sm" onClick={() => generateConcepts()} disabled={generating} className="gap-1 text-[10px] h-7">
               <RefreshCw size={10} className={generating ? 'animate-spin' : ''}/>
               {generating ? 'Generating…' : 'Regenerate'}
+            </Button>
+            <Button variant="outline" size="sm" onClick={generateVariations} disabled={variationsLoading} className="gap-1 text-[10px] h-7 border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))]">
+              <Sparkles size={10}/> AI Variations
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => setShowVersionSelector(true)} className="gap-1 text-[10px] h-7">
+              <Clock size={10}/> Previous
+            </Button>
+            <Button variant="outline" size="sm" onClick={saveCurrentAsBrandAsset} disabled={!selectedId} className="gap-1 text-[10px] h-7">
+              <Package size={10}/> Save Asset
             </Button>
             {selectedId && (
               <Button size="sm" className="bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 gap-1 text-[10px] h-7"
@@ -1132,7 +1244,31 @@ export default function StampGeneratorPage() {
         </div>
 
         {/* ── Right: Concepts Grid (narrower, scrollable) ────── */}
-        <div className="w-[340px] xl:w-[400px] flex-shrink-0 min-w-0 flex flex-col overflow-hidden">
+        <div className="w-[340px] xl:w-[400px] flex-shrink-0 min-w-0 flex flex-col overflow-hidden relative">
+          {/* Variations overlay */}
+          {showVariations && (
+            <StampVariationsPanel
+              variations={variations}
+              loading={variationsLoading}
+              tintColor={primaryColor}
+              secondaryColor={secondaryColor}
+              accentColor={accentColor}
+              fontFamily={fontFamily}
+              inkMode={inkMode}
+              onSelectVariation={(v) => {
+                const newConcept: StampDesignConcept = { ...v, id: crypto.randomUUID() };
+                setConcepts(prev => [newConcept, ...prev]);
+                setSelectedId(newConcept.id);
+                setSvgOverrides(prev => ({ ...prev, [newConcept.id]: v.svgSource }));
+                setShowVariations(false);
+                toast.success('Variation applied as new concept');
+              }}
+              onDeleteVariation={(id) => setVariations(prev => prev.filter(v => v.id !== id))}
+              onDuplicateVariation={(v) => setVariations(prev => [...prev, { ...v, id: crypto.randomUUID(), label: `${v.label} (copy)` }])}
+              onClose={() => setShowVariations(false)}
+              onGenerate={generateVariations}
+            />
+          )}
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
 
             {/* Favorites */}
@@ -1147,7 +1283,8 @@ export default function StampGeneratorPage() {
                     <ConceptCard key={c.id} concept={c} svgOverride={svgOverrides[c.id]}
                       selectedId={selectedId} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily}
                       fontBold={fontBold} fontItalic={fontItalic} manualFontSize={manualFontSize} inkMode={inkMode}
-                      togglingFav={togglingFav} onSelect={handleSelectConcept} onToggleFav={toggleFavorite} onEditText={handleEditText} onPreview={handleOpenPreview}/>
+                      togglingFav={togglingFav} onSelect={handleSelectConcept} onToggleFav={toggleFavorite} onEditText={handleEditText} onPreview={handleOpenPreview}
+                      onDelete={softDeleteConcept ? (c) => softDeleteConcept(c.id) : undefined} onDuplicate={duplicateConcept}/>
                   ))}
                 </div>
               </div>
@@ -1189,7 +1326,8 @@ export default function StampGeneratorPage() {
                     <ConceptCard key={concept.id} concept={concept} svgOverride={svgOverrides[concept.id]}
                       selectedId={selectedId} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily}
                       fontBold={fontBold} fontItalic={fontItalic} manualFontSize={manualFontSize} inkMode={inkMode}
-                      togglingFav={togglingFav} onSelect={handleSelectConcept} onToggleFav={toggleFavorite} onEditText={handleEditText} onPreview={handleOpenPreview}/>
+                      togglingFav={togglingFav} onSelect={handleSelectConcept} onToggleFav={toggleFavorite} onEditText={handleEditText} onPreview={handleOpenPreview}
+                      onDelete={(c) => softDeleteConcept(c.id)} onDuplicate={duplicateConcept}/>
                   ))}
                 </div>
               </>
@@ -1205,6 +1343,20 @@ export default function StampGeneratorPage() {
                 </Button>
               </div>
             )}
+
+            {/* Export CTA */}
+            {/* Recently Deleted */}
+            <StampRecentlyDeleted
+              items={deletedStamps}
+              tintColor={primaryColor}
+              secondaryColor={secondaryColor}
+              accentColor={accentColor}
+              fontFamily={fontFamily}
+              inkMode={inkMode}
+              onRecover={recoverDeletedStamp}
+              onPermanentDelete={permanentDeleteStamp}
+              onAdaptAndSave={adaptAndSaveAsAsset}
+            />
 
             {/* Export CTA */}
             {selectedId && !generating && (
@@ -1223,6 +1375,37 @@ export default function StampGeneratorPage() {
         </div>
       </div>
 
+      {/* Version Selector Modal */}
+      {showVersionSelector && projectId && (
+        <StampVersionSelector
+          projectId={projectId}
+          tintColor={primaryColor}
+          secondaryColor={secondaryColor}
+          accentColor={accentColor}
+          fontFamily={fontFamily}
+          inkMode={inkMode}
+          onSelectVersion={(v) => {
+            const newConcept: StampDesignConcept = {
+              id: v.id, templateKey: v.template_key,
+              label: v.template_key.replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase()),
+              tags: [], svgSource: v.svg_source,
+            };
+            setConcepts(prev => [newConcept, ...prev.filter(c => c.id !== v.id)]);
+            setSelectedId(v.id);
+            setShowVersionSelector(false);
+          }}
+          onDuplicate={(v) => {
+            const dup: StampDesignConcept = {
+              id: crypto.randomUUID(), templateKey: v.template_key,
+              label: `${v.template_key.replace(/-/g, ' ')} (restored)`, tags: [], svgSource: v.svg_source,
+            };
+            setConcepts(prev => [dup, ...prev]);
+            toast.success('Version duplicated');
+          }}
+          onUploadNew={() => { setShowVersionSelector(false); setLeftTab('mystamp'); }}
+          onClose={() => setShowVersionSelector(false)}
+        />
+      )}
       {/* AI Designer Floating Panel */}
       {chatOpen && (
         <div className="fixed z-[10050] flex flex-col bg-white rounded-2xl shadow-2xl border border-[hsl(var(--border))] overflow-hidden"
@@ -1315,7 +1498,7 @@ export default function StampGeneratorPage() {
 
 // ─── Concept Card ────────────────────────────────────────────────
 function ConceptCard({
-  concept, svgOverride, selectedId, tintColor, secondaryColor, accentColor, fontFamily, fontBold, fontItalic, manualFontSize, inkMode, togglingFav, onSelect, onToggleFav, onEditText, onPreview
+  concept, svgOverride, selectedId, tintColor, secondaryColor, accentColor, fontFamily, fontBold, fontItalic, manualFontSize, inkMode, togglingFav, onSelect, onToggleFav, onEditText, onPreview, onDelete, onDuplicate
 }: {
   concept: StampDesignConcept;
   svgOverride?: string;
@@ -1333,6 +1516,8 @@ function ConceptCard({
   onToggleFav: (c: StampDesignConcept) => void;
   onEditText: (c: StampDesignConcept) => void;
   onPreview?: (c: StampDesignConcept) => void;
+  onDelete?: (c: StampDesignConcept) => void;
+  onDuplicate?: (c: StampDesignConcept) => void;
 }) {
   const isSelected = selectedId === concept.id;
   const isFav = concept.isFavorite;
@@ -1354,6 +1539,23 @@ function ConceptCard({
           className={`absolute top-1.5 left-1.5 z-10 w-6 h-6 rounded-full flex items-center justify-center transition-all ${isFav ? 'bg-rose-50 border border-rose-200 text-rose-500' : 'bg-white/80 border border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] opacity-0 group-hover:opacity-100'}`}>
           {togglingFav === concept.id ? <Loader2 size={9} className="animate-spin"/> : <Heart size={9} className={isFav ? 'fill-rose-500' : ''}/>}
         </button>
+        {/* Delete + Duplicate buttons */}
+        <div className="absolute bottom-1.5 right-1.5 z-10 flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+          {onDuplicate && (
+            <button onClick={e => { e.stopPropagation(); onDuplicate(concept); }}
+              className="w-5 h-5 rounded bg-white/90 border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--gold)/0.1)]"
+              title="Duplicate">
+              <Copy size={8} className="text-[hsl(var(--muted-foreground))]"/>
+            </button>
+          )}
+          {onDelete && (
+            <button onClick={e => { e.stopPropagation(); onDelete(concept); }}
+              className="w-5 h-5 rounded bg-white/90 border border-destructive/30 flex items-center justify-center hover:bg-destructive/10"
+              title="Delete">
+              <Trash2 size={8} className="text-destructive/70"/>
+            </button>
+          )}
+        </div>
         <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} fontWeight={fontBold ? 'bold' : 'normal'} fontStyle={fontItalic ? 'italic' : 'normal'} fontSize={manualFontSize} inkMode={inkMode} size={isRectShape ? 160 : 130}/>
       </div>
       <div className="p-2 space-y-1.5">
@@ -1363,6 +1565,10 @@ function ConceptCard({
           )}
           {concept.label}
         </p>
+        {/* Shortlist badge */}
+        <div className="flex items-center gap-1">
+          <ShortlistBadgeButton projectId={concept.id} size="sm" showBadgeIndicator={true} />
+        </div>
         <div className="flex gap-1">
           <Button size="sm"
             className={`flex-1 h-6 text-[9px] gap-0.5 ${isSelected ? 'bg-[hsl(var(--gold))] text-white' : 'bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90'}`}

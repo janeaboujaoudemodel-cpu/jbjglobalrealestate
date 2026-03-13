@@ -649,6 +649,43 @@ CRITICAL RULES:
       }
     }
 
+    // ── VARIATIONS action — generate style alternatives ─────────────────
+    if (action === "variations") {
+      const { variationType } = body;
+      const baseProject = { ...project };
+      const variationConfigs: { key: string; label: string; overrides: Record<string, any> }[] = [];
+
+      // Generate diverse variations
+      const separatorStyles = ['●', '✦', '★', '◆', '▪', '⬥', '✧', '❖', '⊕', '▲', '◎'];
+      const borderStyles = ['SINGLE', 'DOUBLE', 'RING', 'DOTTED', 'ROPE'];
+      const iconStyles = ['MONOGRAM', 'NONE'];
+
+      // Style variations
+      variationConfigs.push(
+        { key: 'luxury-ring', label: 'Luxury Triple Ring', overrides: { border_style: 'RING' } },
+        { key: 'modern-minimal', label: 'Modern Minimal', overrides: { border_style: 'SINGLE' } },
+        { key: 'vintage-ornate', label: 'Vintage Ornate', overrides: { border_style: 'DOUBLE', layout_json: { ...baseProject.layout_json, dividerStyle: 'ornate' } } },
+        { key: 'classic-double', label: 'Classic Professional', overrides: { border_style: 'DOUBLE' } },
+        { key: 'geometric-modern', label: 'Geometric Modern', overrides: { border_style: 'SINGLE' } },
+        { key: 'bold-rectangle', label: 'Corporate Rectangle', overrides: {} },
+      );
+
+      const concepts = variationConfigs.map(vc => {
+        const varProject = { ...baseProject, ...vc.overrides };
+        return {
+          id: crypto.randomUUID(),
+          templateKey: vc.key,
+          label: vc.label,
+          tags: ['variation', 'ai'],
+          svgSource: buildSVG(varProject, vc.key),
+        };
+      });
+
+      return new Response(JSON.stringify({ concepts }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     return new Response(JSON.stringify({ error: "Unknown action" }), { 
       status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } 
     });
