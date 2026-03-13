@@ -41,7 +41,7 @@ export function ExtractionJobsPanel() {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const [sourcesRes, jobsRes] = await Promise.all([
+      const [sourcesRes, jobsRes, settingRes] = await Promise.all([
         supabase
           .from("external_data_sources")
           .select("*")
@@ -51,6 +51,11 @@ export function ExtractionJobsPanel() {
           .select("*")
           .order("started_at", { ascending: false })
           .limit(10),
+        supabase
+          .from("app_settings")
+          .select("value")
+          .eq("key", "reelly_sync_enabled")
+          .maybeSingle(),
       ]);
 
       if (sourcesRes.error) throw sourcesRes.error;
@@ -58,6 +63,7 @@ export function ExtractionJobsPanel() {
 
       setSources(sourcesRes.data || []);
       setRecentJobs(jobsRes.data || []);
+      setReellyDisabled(settingRes.data?.value === "false");
     } catch (error) {
       console.error("Error fetching extraction data:", error);
       toast({
